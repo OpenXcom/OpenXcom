@@ -20,6 +20,7 @@
 #define OPENXCOM_RULEBASEFACILITY_H
 
 #include <string>
+#include <vector>
 #include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
@@ -34,12 +35,13 @@ namespace OpenXcom
 class RuleBaseFacility
 {
 private:
-	std::string _type, _requires;
+	std::string _type;
+	std::vector<std::string> _requires;
 	int _spriteShape, _spriteFacility;
 	bool _lift, _hyper, _mind, _grav;
 	int _size, _buildCost, _buildTime, _monthlyCost;
 	int _storage, _personnel, _aliens, _crafts, _labs, _workshops, _psiLabs;
-	int _radarRange, _radarChance, _defence, _hitRatio;
+	int _radarRange, _radarChance, _defense, _hitRatio;
 	std::string _mapName;
 public:
 	/// Creates a blank facility ruleset.
@@ -52,8 +54,8 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the facility's type.
 	std::string getType() const;
-	/// Gets the facility's requirement.
-	std::string getRequirement() const;
+	/// Gets the facility's requirements.
+	std::vector<std::string> getRequirements() const;
 	/// Gets the facility's shape sprite.
 	int getSpriteShape() const;
 	/// Gets the facility's content sprite.
@@ -61,13 +63,13 @@ public:
 	/// Gets the facility's size.
 	int getSize() const;
 	/// Gets if the facility is an access lift.
-	bool getLift() const;
+	bool isLift() const;
 	/// Gets if the facility has hyperwave detection.
-	bool getHyperwave() const;
+	bool isHyperwave() const;
 	/// Gets if the facility is a mind shield.
-	bool getMindShield() const;
+	bool isMindShield() const;
 	/// Gets if the facility is a grav shield.
-	bool getGravShield() const;
+	bool isGravShield() const;
 	/// Gets the facility's construction cost.
 	int getBuildCost() const;
 	/// Gets the facility's construction time.
@@ -92,8 +94,8 @@ public:
 	int getRadarRange() const;
 	/// Gets the facility's detection chance.
 	int getRadarChance() const;
-	/// Gets the facility's defence value.
-	int getDefenceValue() const;
+	/// Gets the facility's defense value.
+	int getDefenseValue() const;
 	/// Gets the facility's weapon hit ratio.
 	int getHitRatio() const;
 	/// Gets the facility's battlescape map name.

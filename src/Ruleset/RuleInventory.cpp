@@ -123,30 +123,12 @@ int RuleInventory::getX() const
 }
 
 /**
- * Changes the X position of the inventory section on the screen.
- * @param x Position in pixels.
- */
-void RuleInventory::setX(int x)
-{
-	_x = x;
-}
-
-/**
  * Returns the Y position of the inventory section on the screen.
  * @return Position in pixels.
  */
 int RuleInventory::getY() const
 {
 	return _y;
-}
-
-/**
- * Changes the Y position of the inventory section on the screen.
- * @param y Position in pixels.
- */
-void RuleInventory::setY(int y)
-{
-	_y = y;
 }
 
 /**
@@ -159,27 +141,6 @@ void RuleInventory::setY(int y)
 InventoryType RuleInventory::getType() const
 {
 	return _type;
-}
-
-/**
- * Changes the type of the inventory section.
- * @param type The inventory type.
- */
-void RuleInventory::setType(InventoryType type)
-{
-	_type = type;
-}
-
-/**
- * Adds a storage slot to the inventory section.
- * Each slot can only be occupied by one item (or part of one).
- * @param x X position in the grid.
- * @param y Y position in the grid.
- */
-void RuleInventory::addSlot(int x, int y)
-{
-	struct RuleSlot s = {x, y};
-	_slots.push_back(s);
 }
 
 /**
@@ -286,17 +247,6 @@ bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 		}
 		return (foundSlots == totalSlots);
 	}
-}
-
-/**
- * Adds a time unit cost to place an item from this
- * inventory section in another section.
- * @param slot The new section id.
- * @param cost The time unit cost.
- */
-void RuleInventory::addCost(const std::string &slot, int cost)
-{
-	_costs.insert(std::pair<std::string, int>(slot, cost));
 }
 
 /**

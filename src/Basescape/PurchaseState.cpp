@@ -38,7 +38,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
-#include "PurchaseErrorState.h"
+#include "../Menu/ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -237,7 +237,9 @@ void PurchaseState::btnOkClick(Action *action)
 				{
 					RuleCraft *rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
 					Transfer *t = new Transfer(rc->getTransferTime());
-					t->setCraft(new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3])));
+					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
+					craft->setStatus("STR_REFUELLING");
+					t->setCraft(craft);
 					_base->getTransfers()->push_back(t);
 				}
 			}
@@ -341,22 +343,22 @@ void PurchaseState::increase()
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
 		_timerInc->stop();
-		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_MONEY"));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel <= 2 && _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 	{
 		_timerInc->stop();
-		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_LIVING_SPACE"));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_LIVING_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 && _sel < 3 + _crafts.size() && _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
 	{
 		_timerInc->stop();
-		_game->pushState(new PurchaseErrorState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE"));
+		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else if (_sel >= 3 + _crafts.size() && _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
 	{
 		_timerInc->stop();
-		_game->pushState(new PurchaseErrorState(_game, "STR_NOT_ENOUGH_STORE_SPACE"));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
 	else
 	{

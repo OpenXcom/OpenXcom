@@ -59,7 +59,7 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	_txtName = new Text(200, 16, 36, 6);
 	_txtTus = new Text(40, 9, 250, 24);
 	_txtItem = new Text(100, 9, 0, 23);
-	_txtAmmo = new Text(44, 24, 272, 64);
+	_txtAmmo = new Text(64, 24, 256, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
 	_btnNext = new InteractiveSurface(23, 22, 297, 1);
@@ -100,6 +100,7 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 
 	_txtAmmo->setColor(Palette::blockOffset(4));
 	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
+	_txtAmmo->setAlign(ALIGN_CENTER);
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
@@ -112,7 +113,7 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	_inv->draw();
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getBattleGame()->getSelectedUnit());
-	_inv->onMouseClick((ActionHandler)&InventoryState::invClick);
+	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
 }
 
 /**
@@ -270,7 +271,14 @@ void InventoryState::invClick(Action *action)
 		}
 		else
 		{
-			_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
+			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
+			{
+				_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
+			}
+			else
+			{
+				_txtItem->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACT"));
+			}
 		}
 		std::wstringstream ss;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())

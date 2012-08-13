@@ -200,10 +200,17 @@ void CraftInfoState::init()
 
 		Surface *frame2 = texture->getFrame(39);
 		frame2->setY(0);
-		for (int i = 0, x = 0; i < c->getNumEquipment(); i += 4, x += 10)
+		int x = 0;
+		for (int i = 0; i < c->getNumEquipment(); i += 4, x += 10)
 		{
 			frame2->setX(x);
 			frame2->blit(_equip);
+		}
+		Surface *frame3 = texture->getFrame(40);
+		for (int i = 0; i < c->getNumVehicles(); ++i, x += 10)
+		{
+			frame3->setX(x);
+			frame3->blit(_equip);
 		}
 	}
 	else

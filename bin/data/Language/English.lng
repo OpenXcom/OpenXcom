@@ -20,9 +20,9 @@ THIS LAUNCHER FIRES A BALL SHAPED MISSILE POWERED BY ANTI-MATTER REACTION.  THE 
 STR_LASER_CANNON_UFOPEDIA
 THIS CONVENTIONAL LASER BEAM IS POWERED BY AN ANTI-MATTER REACTION CHAMBER.
 STR_PLASMA_BEAM_UFOPEDIA
-THE GRAVITY BEAM DIRECTS A FINELY CHANNELLED IMPLODING GRAVITY FIELD.
+THE GRAVITY BEAM DIRECTS A FINELY CHANNELED IMPLODING GRAVITY FIELD.
 STR_SECTOID_UFOPEDIA
-The Sectoid Hierarchy ranges from soldiers to leaders with powerful psionic abilities.  These psionic powers can be used to demoralise soldiers in combat, or even take control of their minds.  They tend to indulge in human abductions and cattle mutilation.  The abduction is used to extract genetic material for cross breeding and developing clones for infiltrating human society.  The cattle provide both nutrition and genetic material.  This race appears to want to develop superior genetic hybrids to increase the efficiency of their hive-like society.
+The Sectoid Hierarchy ranges from soldiers to leaders with powerful psionic abilities.  These psionic powers can be used to demoralize soldiers in combat, or even take control of their minds.  They tend to indulge in human abductions and cattle mutilation.  The abduction is used to extract genetic material for cross breeding and developing clones for infiltrating human society.  The cattle provide both nutrition and genetic material.  This race appears to want to develop superior genetic hybrids to increase the efficiency of their hive-like society.
 STR_SECTOID_AUTOPSY_UFOPEDIA
 The autopsy reveals vestigial digestive organs and a simple structure.  The brain and eyes are very well developed.  The structure suggests genetic alteration or mutation.  The small mouth and nose appear to have little function.  The webbing between the fingers, and the flat feet suggest aquatic origins.  There are no reproductive organs, and no clues as to how this species can reproduce.  They are most probably a genetically engineered species.
 STR_SNAKEMAN_UFOPEDIA
@@ -54,7 +54,7 @@ The Floaters are primarily soldiers and terror agents. They are naturally predat
 STR_FLOATER_AUTOPSY_UFOPEDIA
 The creature has been drastically altered by surgery.  The device which seems to form the core of the body is a life support system, taking over the function of heart, lungs and digestive system.  This would enable the creature to survive in extremely hostile environments.  The brain is smaller than ours, but the sensory organs are well developed.
 STR_REAPER_UFOPEDIA
-This bipedal carnivore has powerful jaws and a voracious appetite.  It has a number of brain implants which are used to control its activity.  The primitive predatory instincts of this creature are of little use except to terrorise and destroy.  Reapers are commonly associated with Floaters.
+This bipedal carnivore has powerful jaws and a voracious appetite.  It has a number of brain implants which are used to control its activity.  The primitive predatory instincts of this creature are of little use except to terrorize and destroy.  Reapers are commonly associated with Floaters.
 STR_REAPER_AUTOPSY_UFOPEDIA
 The Reaper contains two 'brains' and two 'hearts' which allow it to function even when heavily wounded.  However its furry skin is highly flammable, making the creature vulnerable to incendiary weapons.
 STR_SECTOPOD_UFOPEDIA
@@ -74,15 +74,15 @@ Alien craft consist of three main components - a power source, a navigation syst
 STR_ALIEN_FOOD_UFOPEDIA
 These chambers contain various enzymes which are used to digest the body parts of cattle, other animals and even humans.  The liquid is then consumed as ready digested food - probably direct to the bloodstream.  This suggests a certain dependence on earth for food - a symbiosis between earth and alien society.
 STR_ALIEN_REPRODUCTION_UFOPEDIA
-These chambers contain alien foetuses.  The design of these containers seems to suggest that the aliens which use this process rely completely on laboratory reproduction.  The rich nutrients ensure rapid development of the foetus.  This factory line system could generate thousands of alien clones in a short space of time.  The process could be easily adapted for human reproduction, or alien-human hybrids.
+These chambers contain alien fetuses.  The design of these containers seems to suggest that the aliens which use this process rely completely on laboratory reproduction.  The rich nutrients ensure rapid development of the fetus.  This factory line system could generate thousands of alien clones in a short space of time.  The process could be easily adapted for human reproduction, or alien-human hybrids.
 STR_ALIEN_ENTERTAINMENT_UFOPEDIA
 The most likely function of these spheres is recreational.  The psionic circuitry stimulates various centers of the brain.  The effect is similar to hallucinogenic drugs.  This is the only evidence that aliens have any cultural or recreational pastimes.
 STR_ALIEN_SURGERY_UFOPEDIA
 This surgical equipment uses laser cutters to extract certain body parts from cattle and other animals.  The widespread cattle mutilations can be accounted for by this bizarre alien activity.  It is likely that these parts are used for nutritional or genetic purposes.
 STR_EXAMINATION_ROOM_UFOPEDIA
-In the past many thousands of people have claimed to have been abducted by aliens, sometimes repeatedly.  The truth is far more horrific.  Humans are abducted, researched and monitored.  The best specimens have genetic material extracted.  Women have human-alien hybrid foetuses implanted, and then removed several months later.  Who knows what sinister motives the aliens have?
+In the past many thousands of people have claimed to have been abducted by aliens, sometimes repeatedly.  The truth is far more horrific.  Humans are abducted, researched and monitored.  The best specimens have genetic material extracted.  Women have human-alien hybrid fetuses implanted, and then removed several months later.  Who knows what sinister motives the aliens have?
 STR_ALIEN_ALLOYS_UFOPEDIA
-Alien craft are constructed from special alloys with unique properties.  They are extremely light and durable, and can be moulded by electro-magnetic methods.  This material can be reproduced and used in many kinds of manufacturing processes.
+Alien craft are constructed from special alloys with unique properties.  They are extremely light and durable, and can be molded by electro-magnetic methods.  This material can be reproduced and used in many kinds of manufacturing processes.
 STR_YOU_WILL_NEED_TO_RESEARCH_A
 You will need to research a{NEWLINE}
 STR_ELERIUM_115_UFOPEDIA
@@ -269,8 +269,8 @@ STR_HANGARS
 Hangars
 STR_SHORT_RANGE_DETECTION
 Short Range Detection
-STR_DEFENCE_STRENGTH
-Defence Strength
+STR_DEFENSE_STRENGTH
+Defense Strength
 STR_TRANSFERS_UC
 TRANSFERS
 STR_TRANSFERS
@@ -463,12 +463,12 @@ STR_UFO_GROUND_ASSAULT
 UFO GROUND ASSAULT
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Explore landing site and, if possible, gain entry to the UFO.  Mission will be successful when all enemy units have been eliminated or neutralized.  Recovery of UFO, artifacts and alien corpses can then be initiated.  To abort the mission return XCom operatives to transport vehicle and click on the 'Abort Mission' icon.
-STR_BASE_DEFENCE
-BASE DEFENCE
+STR_BASE_DEFENSE
+BASE DEFENSE
 STR_BASE_UC_
 BASE> 
-STR_BASE_DEFENCE_BRIEFING
-An Alien vessel has landed nearby.  Our base is in severe danger.  As per standard procedure all non combat personnel and XCom craft have been evacuated.  Alien units will enter the base via hangar doors or the access lift.  Defend the base and its vital installations at all costs - this is a fight to the death.  If you click on the 'abort mission' icon you will concede defeat and lose the base.
+STR_BASE_DEFENSE_BRIEFING
+An Alien vessel has landed nearby.  Our base is in severe danger.  As per standard procedure all non-combat personnel and XCom craft have been evacuated.  Alien units will enter the base via hangar doors or the access lift.  Defend the base and its vital installations at all costs - this is a fight to the death.  If you click on the 'abort mission' icon you will concede defeat and lose the base.
 STR_ALIEN_BASE_ASSAULT
 ALIEN BASE ASSAULT
 STR_ALIEN_BASE_ASSAULT_BRIEFING
@@ -478,7 +478,7 @@ You have arrived in Cydonia.  You gain entry to a large underground complex near
 STR_TERROR_MISSION
 TERROR MISSION
 STR_TERROR_MISSION_BRIEFING
-Mission will be successful when all enemy units have been eliminated or neutralized.  You must attempt to save the lives of any civilians in the area by neutralizing the alien menace.  To abort the mission return XCom operatives to transport vehicle and  click on the 'Abort Mission' icon.
+Mission will be successful when all enemy units have been eliminated or neutralized.  You must attempt to save the lives of any civilians in the area by neutralizing the alien menace.  To abort the mission return XCom operatives to transport vehicle and click on the 'Abort Mission' icon.
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
 NO FREE HANGARS FOR CRAFT PRODUCTION!{SMALLLINE}Each craft assigned to a base, transferred to a base, purchased or constructed uses one hangar.  Build a new hangar or transfer a craft to another base.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
@@ -488,7 +488,7 @@ NO FREE HANGARS FOR TRANSFER!{SMALLLINE}Each craft assigned to a base, transferr
 STR_CANNOT_BUILD_HERE
 CANNOT BUILD HERE!{SMALLLINE}You must build next to an existing base facility.
 STR_NO_FREE_ACCOMODATION
-NO FREE ACCOMODATION!{SMALLLINE}The destination base does not have enough space in living quarters.
+NO FREE ACCOMMODATION!{SMALLLINE}The destination base does not have enough space in living quarters.
 STR_NOT_ENOUGH_WORK_SPACE
 NOT ENOUGH WORK SPACE AVAILABLE!{SMALLLINE}Build a new workshop or reduce work on other projects.
 STR_NOT_ENOUGH_MONEY
@@ -518,7 +518,7 @@ OUT
 STR_REPAIRS
 REPAIRS
 STR_REFUELLING
-REFUELLING
+REFUELING
 STR_REARMING
 REARMING
 STR_TARGET
@@ -639,8 +639,8 @@ STR_EQUIPMENT_FOR
 Equipment for 
 STR_ARM
 Arm 
-STR_DEFENCE_VALUE
-Defence Value
+STR_DEFENSE_VALUE
+Defense Value
 STR_HIT_RATIO
 Hit Ratio
 STR_READY_TO_LAND_NEAR
@@ -746,7 +746,7 @@ The Martian Solution
 STR_CYDONIA_OR_BUST
 Cydonia or Bust
 STR_UFOPAEDIA
-UFOpaedia
+UFOpedia
 STR_XCOM_CRAFT_ARMAMENT
 XCOM CRAFT & ARMAMENT
 STR_HEAVY_WEAPONS_PLATFORMS
@@ -941,12 +941,12 @@ STR_PLASMA_CANNON
 Plasma Cannon
 STR_FUSION_MISSILE
 Fusion Missile
-STR_LASER_DEFENCE
-Laser Defence
-STR_PLASMA_DEFENCE
-Plasma Defence
-STR_FUSION_DEFENCE
-Fusion Defence
+STR_LASER_DEFENSE
+Laser Defense
+STR_PLASMA_DEFENSE
+Plasma Defense
+STR_FUSION_DEFENSE
+Fusion Defense
 STR_GRAV_SHIELD
 Grav Shield
 STR_MIND_SHIELD
@@ -1197,28 +1197,28 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 A small detection system has an effective radar range of 300 nautical miles and is linked to satellite systems for ground search.  Each system has a 5% chance of detecting an average sized object every 10 minutes.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 A large detection system has an effective range of 450 nautical miles and is linked to satellite systems for ground search.  Each system has a 5% chance of detecting an average sized object every 10 minutes.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Missile defenses provide some protection against incursion by hostile craft which are attempting to land near the base.
 STR_GENERAL_STORES_UFOPEDIA
 All equipment, weapons systems, munitions, recovered material and Heavy Weapons Platforms are placed in stores, with the exception of equipment assigned to craft in hangars.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-Living aliens are likely to require a special habitat to maintain their life systems.  The containment facility can keep up to 10 alien life forms in self contained units.
-STR_LASER_DEFENCES_UFOPEDIA
+Living aliens are likely to require a special habitat to maintain their life systems.  The containment facility can keep up to 10 alien life forms in self-contained units.
+STR_LASER_DEFENSES_UFOPEDIA
 Laser defenses provide protection against incursion by hostile craft.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Plasma beam defenses provide powerful and efficient protection against incursion by hostile craft.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
-Fusion missiles provide the most effective defence against alien attacks.  These missiles create an anti-matter implosion which destroys everything within a specific radius.
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
+Fusion missiles provide the most effective defense against alien attacks.  These missiles create an anti-matter implosion which destroys everything within a specific radius.
 STR_GRAV_SHIELD_UFOPEDIA
-The Gravity shield repels alien craft attempting to land near the base long enough for all defence systems to fire again.  In practice this will double the effectiveness of any defence systems at your base.
+The Gravity shield repels alien craft attempting to land near the base long enough for all defense systems to fire again.  In practice this will double the effectiveness of any defense systems at your base.
 STR_MIND_SHIELD_UFOPEDIA
 Since alien craft rely on brain waves to detect human presence then the most effective counter measure is to shield brain waves from the base.  This facility will drastically reduce the chances of detection by alien craft.
 STR_PSIONIC_LABORATORY_UFOPEDIA
-The psionics lab can assess the psionic potential of all soldiers at the base and give them the necessary training to utilise their psionic skills.  Each lab can train up to ten soldiers.  Training is allocated at the end of each month.  Psionic skills used in conjunction with a Psi-amp can be used for psionic attacks during combat.
+The psionics lab can assess the psionic potential of all soldiers at the base and give them the necessary training to utilize their psionic skills.  Each lab can train up to ten soldiers.  Training is allocated at the end of each month.  Psionic skills used in conjunction with a Psi-amp can be used for psionic attacks during combat.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
 Alien communications rely on a supra-dimensional wave which travels almost instantaneously.  The decoder facility intercepts UFO transmissions and decodes the information.  This will show the type of UFO, the alien race and the type of activity.
 STR_HANGAR_UFOPEDIA
-Each hangar can accommodate one craft.  There are facilities for maintenance, refuelling and repair of XCom craft.  Each craft stationed at a base must have a free hangar assigned to it which cannot be used by other craft, even if the assigned craft is out on a mission.
+Each hangar can accommodate one craft.  There are facilities for maintenance, refueling and repair of XCom craft.  Each craft stationed at a base must have a free hangar assigned to it which cannot be used by other craft, even if the assigned craft is out on a mission.
 STR_PISTOL_UFOPEDIA
 The standard issue XCom pistol is a high powered semi-automatic with a 12 round capacity.
 STR_RIFLE_UFOPEDIA
@@ -1244,7 +1244,7 @@ A proximity grenade can be thrown like an ordinary grenade but is triggered by n
 STR_HIGH_EXPLOSIVE_UFOPEDIA
 This explosive should only be used for demolition purposes.  Keep personnel clear of demolition sites.
 STR_MOTION_SCANNER_UFOPEDIA
-This sophisticated device uses a variety of detectors and advanced computer algorithms to identify moving enemy units. However, it requires some practice to use effectively. Click on the motion scanner icon on the tactical display. Select 'Use Scanner' from the menu.  The Scanner display shows an arrow in the centre which is the direction the soldier is facing (North is at the top). The flashing blobs show units which have moved recently. Large units, or fast moving units, will produce larger blobs. Static units will not be detected.
+This sophisticated device uses a variety of detectors and advanced computer algorithms to identify moving enemy units. However, it requires some practice to use effectively. Click on the motion scanner icon on the tactical display. Select 'Use Scanner' from the menu.  The Scanner display shows an arrow in the center which is the direction the soldier is facing (North is at the top). The flashing blobs show units which have moved recently. Large units, or fast moving units, will produce larger blobs. Static units will not be detected.
 STR_MEDI_KIT_UFOPEDIA
 The medi-kit combines a healing facility with pain killers and stimulants. In order to use the medi-kit you must face towards the soldier requiring treatment. If the soldier is stunned you must stand over the body. Click on the medi-kit icon and select 'use medi-kit' from the menu.{NEWLINE}HEALING> Red body parts show fatal wounds. Click on a body part that is wounded. Click on the 'Heal' button. One fatal wound will be cured and some health restored.{NEWLINE}STIMULANT> This will restore energy and revive unconscious (stunned) soldiers. In order to revive an unconscious soldier you must stand directly over the body.{NEWLINE}PAIN KILLER> This will restore the morale of wounded soldiers up to an amount equivalent to the soldier's lost health.
 STR_PSI_AMP_UFOPEDIA
@@ -1279,8 +1279,8 @@ STR_LARGE_SCOUT
 Large Scout
 STR_HARVESTER
 Harvester
-STR_ABDUCTER
-Abducter
+STR_ABDUCTOR
+Abductor
 STR_TERROR_SHIP
 Terror ship
 STR_BATTLESHIP
@@ -1314,7 +1314,7 @@ The council of funding nations is dissatisfied with your performance.  You must 
 STR_YOU_HAVE_NOT_SUCCEEDED
 You have not succeeded in dealing with the alien invasion and the council of funding nations has regrettably decided to terminate the project.  Each nation shall deal with the problem as they see fit.  We can only hope that we can come to some accommodation with these apparently hostile forces, and that the general population will come to terms with the alien visitors.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
- is particularly pleased with your ability to deal with the localised threat and has agreed to increase its funding.
+ is particularly pleased with your ability to deal with the localized threat and has agreed to increase its funding.
 STR_COUNTRIES_ARE_PARTICULARLY_HAPPY
  are particularly happy with your progress in dealing with local alien incursion and have agreed to increase their funding.
 STR_AND
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 New Game
 STR_LOAD_SAVED_GAME
-Load Saved Game
+Load Game
 STR_SELECT_DIFFICULTY_LEVEL
 Select Difficulty Level
 STR_1_BEGINNER
@@ -1540,7 +1540,7 @@ This automated heavy weapons platform is armed with powerful rockets.  This will
 STR_TANK_LASER_CANNON_UFOPEDIA
 Laser weapons are a useful addition for HWPs.  It combines heavy firepower with no ammunition restrictions.
 STR_HOVERTANK_PLASMA_UFOPEDIA
-Alien technology has given the HWP a new lease of life.  The added manoeuvrability of air travel and the power of plasma beams is a lethal combination.
+Alien technology has given the HWP a new lease of life.  The added maneuverability of air travel and the power of plasma beams is a lethal combination.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
 This hovertank has a fusion ball launcher that is capable of immense devastation.  Use it with great care.  You will have to manufacture the fusion balls to keep these HWPs fully armed.  A fusion ball is an intelligent guided weapon.  In order to fire it you select a number of 'way points' with the cursor and then click on the launch icon to fire the fusion ball.
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
@@ -1556,13 +1556,13 @@ The alien research mission is used for collecting basic data on earth and its in
 STR_ALIEN_HARVEST_UFOPEDIA
 The aliens have many uses for earth's fauna.  Animals are abducted secretly, and returned with various organs removed.  Cattle mutilations are predominantly reported along with UFO sightings.  This type of alien activity causes great concern by governments and considerable anxiety amongst the population.  This type of activity occurs mainly in farming land.  The theory behind the 'alien harvest' suggests that alien races originally 'seeded' the planet with its flora and fauna, and now they have returned to reap the harvest they have sown.
 STR_ALIEN_ABDUCTION_UFOPEDIA
-This is the most insidious form of alien activity.  The abduction by aliens is widely reported, despite the aliens' attempts to erase the experience from their victims' memories.  Abductees report being subject to humiliating physical examinations, including impregnation of alien foetuses and bizarre genetic experiments.  The purpose behind this activity appears to be linked to genetic mutation and manipulation of the aliens own genetic material.  This activity causes great alarm, and occurs in populated areas or cities
+This is the most insidious form of alien activity.  The abduction by aliens is widely reported, despite the aliens' attempts to erase the experience from their victims' memories.  Abductees report being subject to humiliating physical examinations, including impregnation of alien fetuses and bizarre genetic experiments.  The purpose behind this activity appears to be linked to genetic mutation and manipulation of the aliens own genetic material.  This activity causes great alarm, and occurs in populated areas or cities
 STR_ALIEN_INFILTRATION_UFOPEDIA
-Earth governments can be infiltrated by alien agents which are human in appearance.  This can result in official contact between aliens and governments at the highest level.  The climax of this activity is characterised by intense UFO activity in the vicinity of major cities.  The aliens will attempt to sign a pact with an earth government by offering knowledge of their superior technology.  In return the government will allow the aliens to conduct their activity unhindered.  This alien mission represents the worst threat to XCom.  If a government agrees to a pact then its funding will cease.
+Earth governments can be infiltrated by alien agents which are human in appearance.  This can result in official contact between aliens and governments at the highest level.  The climax of this activity is characterized by intense UFO activity in the vicinity of major cities.  The aliens will attempt to sign a pact with an earth government by offering knowledge of their superior technology.  In return the government will allow the aliens to conduct their activity unhindered.  This alien mission represents the worst threat to XCom.  If a government agrees to a pact then its funding will cease.
 STR_ALIEN_BASE_UFOPEDIA
 Aliens will construct secret underground bases in remote locations.  After some initial reconnaissance flights some intense UFO activity will occur as the base is being built.  These bases are known to contain experimental labs for human abductees, and supplies for further activity in the region.  The presence of alien bases will generate a large amount of reported alien activity without the presence of UFOs.  In order to locate a base an XCom craft must patrol an area for a few hours to stand some chance of detection.
 STR_ALIEN_TERROR_UFOPEDIA
-When the aliens terrorise a city they will deploy some special forces with awesome powers.  Civilians will be directly threatened, and governments will be forced to evacuate whole areas.  The main purpose behind this activity is to generate sufficient public hysteria so that governments will threaten the XCom project.
+When the aliens terrorize a city they will deploy some special forces with awesome powers.  Civilians will be directly threatened, and governments will be forced to evacuate whole areas.  The main purpose behind this activity is to generate sufficient public hysteria so that governments will threaten the XCom project.
 STR_ALIEN_RETALIATION_UFOPEDIA
 If XCom interceptors are being particularly successful in shooting down UFOs then the aliens may take some retaliatory action.  This could result in a direct attack against an XCom base.  However, the aliens have to find an XCom base in order to attack it, and provided UFOs are kept away then there should be little danger of an assault.
 STR_ALIEN_SUPPLY_UFOPEDIA
@@ -1575,8 +1575,8 @@ STR_LARGE_SCOUT_UFOPEDIA
 The largest alien scout craft is a general purpose vessel that is used in all types of alien mission.
 STR_HARVESTER_UFOPEDIA
 The harvester has a trap door in its base and is equipped with lifting gear to haul up cattle or other beasts.  Laser cutters are used to extract the desired material and the carcass is dumped on the ground.  There are also storage containers for body parts.
-STR_ABDUCTER_UFOPEDIA
-This vessel is equipped with an examination room for performing horrific experiments on human subjects.  The victim is normally paralysed by telepathic powers, but remains conscious while on the operating table.
+STR_ABDUCTOR_UFOPEDIA
+This vessel is equipped with an examination room for performing horrific experiments on human subjects.  The victim is normally paralyzed by telepathic powers, but remains conscious while on the operating table.
 STR_TERROR_SHIP_UFOPEDIA
 The terror ship has a containment facility for large alien terror weapons or creatures.  It is used to transport these alien terrorists into populated areas.
 STR_BATTLESHIP_UFOPEDIA
@@ -1598,7 +1598,7 @@ AMOUNT AT{NEWLINE}DESTINATION
 STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY
 Alien dies as there is no alien containment facility
 STR_NO_FREE_ACCOMODATION_CREW
-NO FREE ACCOMODATION!{SMALLLINE}The destination base does not have enough space in the living quarters for the crew assigned to the craft.
+NO FREE ACCOMMODATION!{SMALLLINE}The destination base does not have enough space in the living quarters for the crew assigned to the craft.
 STR_ITEMS_ARRIVING
 Items Arriving
 STR_PISTOL
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Sectopod Corpse
 STR_CYBERDISC_CORPSE
 Cyberdisc Corpse
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Not enough cannon rounds to arm HWP
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Not enough rockets to arm HWP
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Not enough fusion balls to arm HWP
+STR_TO_ARM_HWP
+ to arm HWP
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Not enough equipment to fully re-equip squad
 STR_MARS_CYDONIA_LANDING
@@ -1728,7 +1724,7 @@ UFO HIT!
 STR_UFO_CRASH_LANDS
 UFO CRASH LANDS!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Minimise at Standoff Range Only
+Minimize at Standoff Range Only
 STR_UFO_RETURN_FIRE
 UFO RETURN FIRE!
 STR_INTERCEPTOR_DAMAGED
@@ -1738,7 +1734,7 @@ STR_INTERCEPTOR_DESTROYED
 STR_UFO_OUTRUNNING_INTERCEPTOR
 UFO OUTRUNNING INTERCEPTOR!
 STR_ALIENS_TERRORISE
-ALIENS TERRORISE
+ALIENS TERRORIZE
 STR_LONG_RANGE_DETECTION
 Long Range Detection
 STR_STORES_UC
@@ -1752,14 +1748,8 @@ BASES
 STR_GRAPHS
 GRAPHS
 STR_UFOPAEDIA_UC
-UFOPAEDIA
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Options
-STR_OPTIONS
+UFOPEDIA
+STR_OPTIONS_UC
 OPTIONS
 STR_FUNDING_UC
 FUNDING
@@ -1904,7 +1894,7 @@ STIMULANT
 STR_HEAL
 HEAL
 STR_TUS
-TUs>
+TU>
 STR_ALIEN_ARTIFACT
 Alien Artifact
 STR_AMMO_ROUNDS_LEFT
@@ -2039,3 +2029,23 @@ STR_CORPSE
 Corpse
 STR_UNLOAD
 Unload
+STR_NEW_SAVED_GAME
+<NEW SAVED GAME>
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Options
+STR_TERRAIN
+TERRAIN
+STR_DARKNESS
+DARKNESS
+STR_DISPLAY_RESOLUTION
+Display Resolution
+STR_DISPLAY_MODE
+Display Mode
+STR_WINDOWED
+Windowed
+STR_FULLSCREEN
+Fullscreen
+STR_LANGUAGE
+LANGUAGE

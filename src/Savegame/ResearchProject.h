@@ -53,7 +53,7 @@ public:
 	/// set time cost of this ResearchProject
 	void setCost(int f);
 	/// get the ResearchProject Ruleset
-	const RuleResearch * getRuleResearch () const;
+	const RuleResearch * getRules () const;
 	/// load the ResearchProject from YAML
 	void load(const YAML::Node& node);
 	/// save the ResearchProject to YAML

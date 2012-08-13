@@ -53,10 +53,6 @@ public:
 	std::string getType() const;
 	/// Gets the region's base cost.
 	int getBaseCost() const;
-	/// Sets the region's base cost.
-	void setBaseCost(int cost);
-	/// Adds an area to the region.
-	void addArea(double lonMin, double lonMax, double latMin, double latMax);
 	/// Checks if a point is inside the region.
 	bool insideRegion(double lon, double lat) const;
 	/// Gets the cities in this region.

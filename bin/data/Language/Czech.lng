@@ -269,7 +269,7 @@ STR_HANGARS
 Hangáry
 STR_SHORT_RANGE_DETECTION
 Detekce kratkého dosahu
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Síla obrany
 STR_TRANSFERS_UC
 PŘESUNY
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 POZEMNÍ ÚTOK NA UFO
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Prozkoumejte mÍsto přistání a je-li to možné, zÍskejte přístup do UFO. Mise bude úspěšná, budou-li veškeré nepřátelské jednotky eliminovány či zneškodněny. Poté může být zahájen průzkum UFO, artefaktů a cizáckých mrtvol. Chcete-li předčasně ukončit misi, navraťte se s příslušníky Xcom do transportéru a klikněte na ikonu 'Zrušit misi'.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 OBRANA BÁZE
 STR_BASE_UC_
 BÁZE> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 Cizácký koráb přistál v blízkosti. Báze je ve velkém nebezpečí. Všichni civilní zaměstnanci a stroje Xcom byli evakuováni standardním postupem. Cizácké jednotky vstoupí do báze dveřmi hangáru nebo přístupovým výtahem. Ubraňte bázi a její životně důležité zařízení za každou cenu - je to boj na život a na smrt. Kliknete-li na ikonu 'Zrušit misi', vzdáte boj a ztratíte bázi.
 STR_ALIEN_BASE_ASSAULT
 ÚTOK NA CIZÁCKOU BÁZI
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Vybavení pro: 
 STR_ARM
 Vyzbrojit 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Kvalita obrany
 STR_HIT_RATIO
 Pravděpodobnost zásahu
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Plasmové dělo
 STR_FUSION_MISSILE
 Fúzní střela
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Laserová obrana
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Plasmová obrana
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Fúzní obrana
 STR_GRAV_SHIELD
 Gravitační štít
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Malý detekční systém disponuje radarem o efektivním dosahu 300 namořních mil a je spojen se satelitními systémy pro pozemní vyhledávání. Každý systém ma 5% šanci detekovat objekt běžné velikosti každých 10 minut.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Velký detekční systém disponuje radarem o efektivním dosahu 450 namořních mil a je spojen se satelitními systémy pro pozemní vyhledávání. Každý systém má 5% šanci detekovat objekt běžné velikosti každých 10 minut.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Raketová obrana poskytuje určitou ochranu před napadnutím nepřátelským strojem, který by se pokusil přistát v blízkosti báze.
 STR_GENERAL_STORES_UFOPEDIA
 veškeré vybavení, zbraňové systémy, munice, získáný materiál a těžké zbraně jsou umístěny ve skladech, s výjimkou vybavení strojů ustajených v hangárech.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Živí cizáci většinou potřebují zvláštní životní prostředi pro udržení jejich života. V této cele je možné v oddělených kójích vydržovat až 10 cizáckých forem života.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Laserová obrana poskytuje ochranu před napadnutím nepřátelským strojem.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Plazmová obrana poskytuje výkonnou a efektivní ochranu před napadnutím nepřátelským strojem.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Fúzní střely poskytují nejefektivnější možnou obranu před cizackými útoky. Tyto střely vytvářejí implozi antihmoty, která ničí vše v určitém okruhu.
 STR_GRAV_SHIELD_UFOPEDIA
 Gravitační štít odpuzuje cizácké stroje, které se pokoušejí přistát v blízkosti báze, dostatečně na to, aby mohly veškeré obranné systémy opakovat palbu. V praxi je tak efektivita jakéhokoliv obranného systému báze dvojnásobná.
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Velký Zvěd
 STR_HARVESTER
 Kombajn
-STR_ABDUCTER
+STR_ABDUCTOR
 Loď únosců
 STR_TERROR_SHIP
 Teroristická loď
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 Nová hra
 STR_LOAD_SAVED_GAME
-Nahrát uloženou hru
+Nahrát hru
 STR_SELECT_DIFFICULTY_LEVEL
 Vyber si úroveň obtížnosti
 STR_1_BEGINNER
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 Největší cizácká průzkumná loď je lodí obecného určení a je používána při všech typech cizackých misí.
 STR_HARVESTER_UFOPEDIA
 Kombajn má na spodní straně padací dveře a je vybaven výtahem pro vyzdvihování dobytka nebo jiných zvířat. Laserové skalpely se používají pro získání požadovaného materiálu a mršina je vržena na zem. Na lodi lze též nalézt zásobní kontejnery pro části těl.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Tato loď je vybavena výzkumnou místností pro provádění hrůzných experimentů na lidských subjektech. Oběť je běžně paralyzována telepatickými silami, ale zůstává při vědomí i na operačním stole.
 STR_TERROR_SHIP_UFOPEDIA
 Teroristická loď je vybavena kontejnery pro velké cizácké teroristické zbraně nebo kreatury. Používá se k transportu těchto cizáckých teroristů do osídlených oblastí.
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Mrtvola sektonoha
 STR_CYBERDISC_CORPSE
 Mrtvola kyberdisku
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Nedostatek nábojů do děla pro vyzbrojení tanku
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Nedostatek raket pro vyzbrojení tanku
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Nedostatek fúzních koulí k vyzbrojení tanku
+STR_TO_ARM_HWP
+ pro vyzbrojení tanku
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Nedostatek vybavení k plnému znovuvybavení jednotky
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1749,7 @@ STR_GRAPHS
 GRAFY
 STR_UFOPAEDIA_UC
 UFOPEDIE
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Volby
-STR_OPTIONS
+STR_OPTIONS_UC
 VOLBY
 STR_FUNDING_UC
 FINANCOVÁNÍ
@@ -2039,3 +2029,7 @@ STR_CORPSE
 Mrtvola
 STR_UNLOAD
 Vyndat náboje
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Volby

@@ -68,13 +68,13 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	std::wstring s;
 	switch(endType)
 	{
-	case PRODUCTION_PROGRESS_COMPLETE:
+	case PROGRESS_COMPLETE:
 		s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
 		break;
-	case PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY:
+	case PROGRESS_NOT_ENOUGH_MONEY:
 		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
 		break;
-	case PRODUCTION_PROGRESS_NOT_ENOUGH_MATERIALS:
+	case PROGRESS_NOT_ENOUGH_MATERIALS:
 		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
 		break;
 	default:
@@ -83,7 +83,7 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	s += item;
 	s += _game->getLanguage()->getString("STR__AT__");
 	s += base;
-	if(endType == PRODUCTION_PROGRESS_COMPLETE)
+	if(endType == PROGRESS_COMPLETE)
 	{
 		s += _game->getLanguage()->getString("STR_IS_COMPLETE");
 	}

@@ -34,8 +34,7 @@ class RuleSoldier
 {
 private:
 	std::string _type;
-	UnitStats _minStats;
-	UnitStats _maxStats;
+	UnitStats _minStats, _maxStats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _loftemps;
 public:
@@ -49,12 +48,6 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the unit's type.
 	std::string getType() const;
-	/// Sets the unit's stats.
-	void setStats(struct UnitStats minStats, struct UnitStats maxStats);
-	/// Sets the unit default armor.
-	void setArmor(const std::string &armor);
-	/// Sets the voxel parameters.
-	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
 	/// Get the minimum stats for the random stats generator.
 	UnitStats getMinStats() const;
 	/// Get the maximum stats for the random stats generator.

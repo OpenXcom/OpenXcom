@@ -34,7 +34,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Geoscape/GeoscapeState.h"
-#include "../Geoscape/GeoscapeErrorState.h"
+#include "ErrorMessageState.h"
 #include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
@@ -182,7 +182,7 @@ void LoadGameState::btnCancelClick(Action *action)
 void LoadGameState::lstSavesClick(Action *action)
 {
 	//Ruleset *r = new XcomRuleset();
-	SavedGame *s = new SavedGame(DIFF_BEGINNER);
+	SavedGame *s = new SavedGame();
 	try
 	{
 		//_game->setRuleset(r);
@@ -199,7 +199,10 @@ void LoadGameState::lstSavesClick(Action *action)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
 		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-		_game->pushState(new GeoscapeErrorState(_game, error));
+		if (_geo)
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			else
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 		//delete r;
 		delete s;
 		//_game->setRuleset(0);
@@ -209,7 +212,10 @@ void LoadGameState::lstSavesClick(Action *action)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
 		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-		_game->pushState(new GeoscapeErrorState(_game, error));
+		if (_geo)
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			else
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 		//delete r;
 		delete s;
 		//_game->setRuleset(0);

@@ -52,6 +52,8 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Savegame/Vehicle.h"
+#include "../Savegame/TerrorSite.h"
 #include "PatrolBAIState.h"
 
 namespace OpenXcom
@@ -67,6 +69,9 @@ BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game)
 	_res = _game->getResourcePack();
 	_ufo = 0;
 	_craft = 0;
+	_base = 0;
+	_terror = 0;
+	_terrain = 0;
 	_craftInventoryTile = 0;
 }
 
@@ -150,6 +155,16 @@ void BattlescapeGenerator::setBase(Base *base)
 	_base = base;
 }
 
+/**
+ * Sets the terror site involved in the battle.
+ * @param base Pointer to terror site.
+ */
+void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
+{
+	_terror = terror;
+	_terror->setInBattlescape(true);
+}
+
 
 /**
  * This will start the generator: it will fill up the battlescapesavegame with data.
@@ -167,7 +182,7 @@ void BattlescapeGenerator::run()
 	{
 		_terrain = _game->getRuleset()->getTerrain("URBAN");
 	}else
-	if (_save->getMissionType() == "STR_BASE_DEFENCE")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		_terrain = _game->getRuleset()->getTerrain("XBASE");
 		_worldShade = 5;
@@ -240,10 +255,20 @@ void BattlescapeGenerator::run()
 
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 		// however the item itself becomes the weapon it "holds".
-		//unit = addXCOMUnit(new BattleUnit(_game->getRuleset()->getUnit("TANK_CANNON"), FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(_game->getRuleset()->getUnit("TANK_CANNON")->getArmor())));
-		//addItem(_game->getRuleset()->getItem("STR_TANK_CANNON"), unit);
-		//addItem(_game->getRuleset()->getItem("STR_HWP_CANNON_SHELLS"), unit);
-		//unit->setTurretType(0);
+		// TODO: Convert base vehicles
+		if (_craft != 0)
+		{
+			for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
+			{
+				std::string vehicle = (*i)->getRules()->getType();
+				std::string ammo = (*i)->getRules()->getCompatibleAmmo()->front();
+				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
+				unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
+				addItem(_game->getRuleset()->getItem(vehicle), unit);
+				addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity((*i)->getAmmo());
+				unit->setTurretType(0);
+			}
+		}
 
 		// add soldiers that are in the craft or base
 		for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
@@ -266,16 +291,6 @@ void BattlescapeGenerator::run()
 				(*i)->setVisible(false);
 			}
 		}
-		
-		// test data - uncomment to easily debug a certain item
-		//addItem(_game->getRuleset()->getItem("STR_STUN_ROD"));
-		//addItem(_game->getRuleset()->getItem("STR_PLASMA_RIFLE"));
-		//addItem(_game->getRuleset()->getItem("STR_PLASMA_RIFLE_CLIP"));
-		//addItem(_game->getRuleset()->getItem("STR_HEAVY_PLASMA"));
-		//addItem(_game->getRuleset()->getItem("STR_HEAVY_PLASMA_CLIP"));
-		//addItem(_game->getRuleset()->getItem("STR_ALIEN_GRENADE"));
-		//addItem(_game->getRuleset()->getItem("STR_MIND_PROBE"));
-		//addItem(_game->getRuleset()->getItem("STR_PSI_AMP"));
 
 		if (_craft != 0)
 		{
@@ -296,7 +311,8 @@ void BattlescapeGenerator::run()
 			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
 			{
 				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
-				if (_game->getRuleset()->getItem((*i).first)->getBigSprite() > -1)
+				RuleItem *rule = _game->getRuleset()->getItem((*i).first);
+				if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE)
 				{
 					for (int count=0; count < (*i).second; count++)
 						addItem(_game->getRuleset()->getItem((*i).first))->setXCOMProperty(true);
@@ -319,7 +335,7 @@ void BattlescapeGenerator::run()
 		explodePowerSources();
 	}
 
-	if (_save->getMissionType() == "STR_BASE_DEFENCE")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 		{
@@ -786,7 +802,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 	/* determine positioning of base modules */
-	else if (_save->getMissionType() == "STR_BASE_DEFENCE")
+	else if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		for (std::vector<BaseFacility*>::const_iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
@@ -902,7 +918,7 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* making passages between blocks in a base map */
-	if (_save->getMissionType() == "STR_BASE_DEFENCE")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		MapDataSet *mds = _terrain->getMapDataSets()->at(1);
 		for (int i = 0; i < (_width / 10); ++i)

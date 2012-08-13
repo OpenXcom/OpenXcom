@@ -65,7 +65,7 @@ AlienTerrorState::AlienTerrorState(Game *game, City *city, GeoscapeState *state)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_SITE_TIME_5_SECS"));
 	_btnCentre->onMouseClick((ActionHandler)&AlienTerrorState::btnCentreClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);

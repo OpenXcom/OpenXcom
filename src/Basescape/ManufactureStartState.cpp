@@ -54,18 +54,18 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	int button_height = 16;
 
 	int button_width = (width - 5 * button_x_border) / 2;
-	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
+	_window = new Window(this, width, height, start_x, start_y);
 	_btnCancel = new TextButton (button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 	_txtTitle = new Text (width - 4 * button_x_border, button_height * 2, start_x + button_x_border, start_y + button_y_border);
 	_txtManHour = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 3);
 	_txtCost = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 4);
 	_txtWorkSpace = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 5);
 
-	_txtNeededItemsTitle = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 6);
+	_txtRequiredItemsTitle = new Text (width - 4 * button_x_border, button_height, start_x + button_x_border * 2, start_y + button_y_border * 6);
 	_txtItemNameColumn = new Text (6 * button_x_border, button_height, start_x + button_x_border * 3, start_y + button_y_border * 7);
 	_txtUnitRequiredColumn = new Text (6 * button_x_border, button_height, start_x + button_x_border * 14, start_y + button_y_border * 7);
 	_txtUnitAvailableColumn = new Text (6 * button_x_border, button_height, start_x + button_x_border * 22, start_y + button_y_border * 7);
-	_lstNeededItems = new TextList(width - 8 * button_x_border, height - (start_y + button_y_border * 11), start_x + button_x_border * 3, start_y + button_y_border * 9);
+	_lstRequiredItems = new TextList(width - 8 * button_x_border, height - (start_y + button_y_border * 11), start_x + button_x_border * 3, start_y + button_y_border * 9);
 
 	_btnStart = new TextButton (button_width, button_height, width - button_width - button_x_border, start_y + height - button_height - button_y_border);
 
@@ -78,11 +78,11 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	add(_txtWorkSpace);
 	add(_btnCancel);
 
-	add(_txtNeededItemsTitle);
+	add(_txtRequiredItemsTitle);
 	add(_txtItemNameColumn);
 	add(_txtUnitRequiredColumn);
 	add(_txtUnitAvailableColumn);
-	add(_lstNeededItems);
+	add(_lstRequiredItems);
 
 	add(_btnStart);
 
@@ -115,14 +115,14 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
 
-	const std::map<std::string, int> & neededItems (_item->getRequiredItems());
+	const std::map<std::string, int> & requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
 	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost ());
 	productionPossible &= (availableWorkSpace > 0);
 
-	_txtNeededItemsTitle->setColor(Palette::blockOffset(13)+10);
-	_txtNeededItemsTitle->setText(_game->getLanguage()->getString("STR_SPECIAL_MATERIALS_REQUIRED"));
-	_txtNeededItemsTitle->setAlign(ALIGN_CENTER);
+	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
+	_txtRequiredItemsTitle->setText(_game->getLanguage()->getString("STR_SPECIAL_MATERIALS_REQUIRED"));
+	_txtRequiredItemsTitle->setAlign(ALIGN_CENTER);
 	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
 	_txtItemNameColumn->setText(_game->getLanguage()->getString("STR_ITEM_REQUIRED"));
 	_txtUnitRequiredColumn->setColor(Palette::blockOffset(13)+10);
@@ -130,28 +130,30 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitAvailableColumn->setText(_game->getLanguage()->getString("STR_UNITS_AVAILABLE"));
 
-	_lstNeededItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
-	_lstNeededItems->setBackground(_window);
-	_lstNeededItems->setMargin(2);
-	_lstNeededItems->setColor(Palette::blockOffset(13));
-	_lstNeededItems->setArrowColor(Palette::blockOffset(13));
+	_lstRequiredItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
+	_lstRequiredItems->setBackground(_window);
+	_lstRequiredItems->setColor(Palette::blockOffset(13));
 
 	ItemContainer * itemContainer (base->getItems());
-	for(std::map<std::string, int>::const_iterator iter = neededItems.begin ();
-		iter != neededItems.end ();
+	int row = 0;
+	for(std::map<std::string, int>::const_iterator iter = requiredItems.begin ();
+		iter != requiredItems.end ();
 		++iter)
 	{
 		std::wstringstream s1, s2;
 		s1 << iter->second;
 		s2 << itemContainer->getItem(iter->first);
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
-		_lstNeededItems->addRow(3, _game->getLanguage()->getString(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
+		_lstRequiredItems->addRow(3, _game->getLanguage()->getString(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
+		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
+		_lstRequiredItems->addRow(1, L"");
+		row += 2;
 	}
-	_txtNeededItemsTitle->setVisible(!neededItems.empty());
-	_txtItemNameColumn->setVisible(!neededItems.empty());
-	_txtUnitRequiredColumn->setVisible(!neededItems.empty());
-	_txtUnitAvailableColumn->setVisible(!neededItems.empty());
-	_lstNeededItems->setVisible(!neededItems.empty());
+	_txtRequiredItemsTitle->setVisible(!requiredItems.empty());
+	_txtItemNameColumn->setVisible(!requiredItems.empty());
+	_txtUnitRequiredColumn->setVisible(!requiredItems.empty());
+	_txtUnitAvailableColumn->setVisible(!requiredItems.empty());
+	_lstRequiredItems->setVisible(!requiredItems.empty());
 
 	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(_game->getLanguage()->getString("STR_START_PRODUCTION"));

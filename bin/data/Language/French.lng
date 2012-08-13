@@ -269,7 +269,7 @@ STR_HANGARS
 Hangars
 STR_SHORT_RANGE_DETECTION
 Détection Courte Portée
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Force de Défense
 STR_TRANSFERS_UC
 TRANSFERTS
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 ATTAQUE AU SOL DE L'OVNI
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Explorez le lieu de l'atterrissage et, si possible, entrez dans l'OVNI.  La mission sera réussie quand toutes les unités ennemies auront été éliminées ou neutralisées.  La récupération de l'OVNI, des objets et des corps aliens pourra alors commencer.  Pour annuler la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Annuler Mission'.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 DEFENSE DE LA BASE
 STR_BASE_UC_
 BASE> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 Un vaisseau alien a atterri tout près.  Notre base court un grand danger.  Selon la procédure habituelle, tout le personnel non-combattant et les vaisseaux XCom ont été evacués.  Les unités aliennes vont entrer dans la base par les portes du hangar ou par l'ascenseur d'accès.  Défendez la base et ses installations vitales à tout prix - c'est un combat à mort.  Si vous cliquez sur l'icône 'Annuler Mission', vous serez vaincu et perdrez la base.
 STR_ALIEN_BASE_ASSAULT
 ATTAQUE DE LA BASE ALIENNE
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Equipement pour 
 STR_ARM
 Armer 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Valeur Défensive
 STR_HIT_RATIO
 Pourcentage de Touchés 
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Canon à Plasma
 STR_FUSION_MISSILE
 Missile à Fusion
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Défense Laser
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Défense à Plasma
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Défense à Fusion
 STR_GRAV_SHIELD
 Bouclier de Gravité
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Un petit système de détection a une portée radar de 300 miles nautiques et est relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Un grand système de détection a une portée de 450 miles nautiques et est relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Les défenses missiles protègent des incursions des vaisseaux ennemis qui essaient d'atterrir près de la base.
 STR_GENERAL_STORES_UFOPEDIA
 Tout l'équipement, les systèmes d'armes, les munitions, le matériel trouvé et les plates-formes d'armes lourdes sont placés dans les entrepôts, à part l'équipement destiné aux vaisseaux qui se trouve dans les hangars.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Les aliens vivants risquent de nécessiter un habitat spécial pour maintenir leurs systèmes de vie.  L'installation de détention peut contenir jusqu'à 10 formes de vie aliennes dans des unités indépendantes.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Les défenses laser protègent de l'incursion des vaisseaux ennemis.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Les rayons à plasma fournissent une protection puissante et efficace contre l'intrusion des vaisseaux ennemis.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Les missiles de fusion sont la défense la plus efficace contre les attaques aliennes.  Ces missiles créent une implosion anti-matière qui détruit tout dans un rayon spécifique.
 STR_GRAV_SHIELD_UFOPEDIA
 Le bouclier de gravité repousse les aliens qui essaient d'atterrir près de la base assez longtemps pour que tous les systèmes de défense puissent tirer à nouveau.  Dans la pratique, ceci double l'efficacité de tous les systèmes de défense de votre base.
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Grand Eclaireur
 STR_HARVESTER
 Moissonneur
-STR_ABDUCTER
+STR_ABDUCTOR
 Ravisseur
 STR_TERROR_SHIP
 Vaisseau de Terreur
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 Nouveau Jeu
 STR_LOAD_SAVED_GAME
-Charger Jeu Sauvegardé
+Charger Jeu
 STR_SELECT_DIFFICULTY_LEVEL
 Sélectionner Niveau de Difficulté
 STR_1_BEGINNER
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 Le vaisseau éclaireur alien le plus grand est un vaisseau utilisé dans tous les types de missions aliennes.
 STR_HARVESTER_UFOPEDIA
 Le moissonneur a une trappe à sa base et est équipé d'un treuil pour hisser le bétail ou d'autres animaux.  Les couteaux laser sont utilisés pour extraire les morceaux désirés et la carcasse est jetée au sol.  Il y a également des conteneurs de stockage pour les parties du corps.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Ce vaisseau est équipé d'une salle d'examen utilisée pour d'horribles expériences sur des sujets humains.  La victime est paralysée par des pouvoirs télépathiques, mais reste consciente sur la table d'opération.
 STR_TERROR_SHIP_UFOPEDIA
 Le vaisseau de terreur est équipé d'installations lui permettant de transporter de lourdes armes de terreur aliennes ou des créatures.  Il est utilisé pour transporter ces terroristes aliens jusque dans les zones peuplées.
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Corps Sectopode
 STR_CYBERDISC_CORPSE
 Corps Cyberdisc
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Pas assez de munitions pour armer PAL
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Pas assez de roquettes pour armer PAL
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Pas assez de boules de fusion pour armer PAL
+STR_TO_ARM_HWP
+ pour armer PAL
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Pas assez de matériel pour ré-équiper entièrement l'escouade
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1749,7 @@ STR_GRAPHS
 GRAPHIQUES
 STR_UFOPAEDIA_UC
 OVNIPEDIE
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Options
-STR_OPTIONS
+STR_OPTIONS_UC
 OPTIONS
 STR_FUNDING_UC
 BUDGET
@@ -2039,3 +2029,7 @@ STR_CORPSE
 Corps
 STR_UNLOAD
 Décharger
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Options

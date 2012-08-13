@@ -30,7 +30,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _altitude(1000), _direction("STR_NORTH"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0)
 {
 }
 
@@ -55,6 +55,7 @@ void Ufo::load(const YAML::Node &node)
 	node["direction"] >> _direction;
 	node["detected"] >> _detected;
 	node["hoursCrashed"] >> _hoursCrashed;
+	node["race"] >> _race;
 	node["inBattlescape"] >> _inBattlescape;
 
 	double lon, lat;
@@ -79,6 +80,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "direction" << YAML::Value << _direction;
 	out << YAML::Key << "detected" << YAML::Value << _detected;
 	out << YAML::Key << "hoursCrashed" << YAML::Value << _hoursCrashed;
+	out << YAML::Key << "race" << YAML::Value << _race;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::EndMap;
 }
@@ -134,8 +136,9 @@ std::wstring Ufo::getName(Language *lang) const
 	if (!isCrashed())
 	{
 		// apparently this string is never actually used ingame??
-		//if (_altitude == 0)
+		//if (_altitude == "STR_GROUND")
 		//	name << lang->getString("STR_LANDING_SITE_") << _id;
+		//else
 		name << lang->getString("STR_UFO_") << _id;
 	}
 	else
@@ -218,7 +221,7 @@ std::string Ufo::getDirection() const
  */
 std::string Ufo::getAltitude() const
 {
-	return "STR_HIGH_UC";
+	return _altitude;
 }
 
 /**
@@ -325,6 +328,24 @@ void Ufo::setInBattlescape(bool inbattle)
 }
 
 /**
+ * Returns the alien race currently residing in the UFO.
+ * @return Alien race.
+ */
+std::string Ufo::getAlienRace() const
+{
+	return _race;
+}
+
+/**
+ * Changes the alien race currently residing in the UFO.
+ * @param race Alien race.
+ */
+void Ufo::setAlienRace(const std::string &race)
+{
+	_race = race;
+}
+
+/**
  * Sets damage to UFO.
  * @param hit Amount of damage to be set..
  */
@@ -340,6 +361,42 @@ void Ufo::setHit(int hit)
 int Ufo::getHit() const
 {
 	return _hit;
+}
+
+/**
+ * Returns a UFO's visibility to radar detection.
+ * The UFO's size and altitude affect the chances
+ * of it being detected by radars.
+ * @return Visibility modifier.
+ */
+int Ufo::getVisibility() const
+{
+	int size = 0;
+	// size = 15*(3-ufosize);
+	if (_rules->getSize() == "STR_VERY_SMALL")
+		size = -30;
+	else if (_rules->getSize() == "STR_SMALL")
+		size = -15;
+	else if (_rules->getSize() == "STR_MEDIUM_UC")
+		size = 0;
+	else if (_rules->getSize() == "STR_LARGE")
+		size = 15;
+	else if (_rules->getSize() == "STR_VERY_LARGE")
+		size = 30;
+
+	int visibility = 0;
+	if (_altitude == "STR_GROUND")
+		visibility = -30;
+	else if (_altitude == "STR_VERY_LOW")
+		visibility = size - 20;
+	else if (_altitude == "STR_LOW_UC")
+		visibility = size - 10;
+	else if (_altitude == "STR_HIGH_UC")
+		visibility = size;
+	else if (_altitude == "STR_VERY_HIGH")
+		visibility = size - 10;
+
+	return visibility;
 }
 
 }

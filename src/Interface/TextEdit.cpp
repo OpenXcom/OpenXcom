@@ -267,7 +267,19 @@ void TextEdit::draw()
 	{
 		if (_isFocused && _blink)
 		{
-			int x = 0;
+			int x;
+			switch (_text->getAlign())
+			{
+			case ALIGN_LEFT:
+				x = 0;
+				break;
+			case ALIGN_CENTER:
+				x = (_text->getWidth() - _text->getTextWidth()) / 2;
+				break;
+			case ALIGN_RIGHT:
+				x = _text->getWidth() - _text->getTextWidth();
+				break;
+			}
 			for (unsigned int i = 0; i < _caretPos; ++i)
 			{
 				if (_value[i] == ' ')
@@ -403,6 +415,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			}
 			break;
 		case SDLK_RETURN:
+		case SDLK_KP_ENTER:
 			_isFocused = false;
 			_blink = false;
 			_timer->stop();

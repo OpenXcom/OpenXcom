@@ -99,25 +99,25 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	_numPsiSkill = new Text(18, 9, 150, 141);
 	_barPsiSkill = new Bar(170, 5, 170, 142);
 
-	_txtFrontArmour = new Text(120, 9, 8, 151);
-	_numFrontArmour= new Text(18, 9, 150, 151);
-	_barFrontArmour = new Bar(170, 5, 170, 152);
+	_txtFrontArmor = new Text(120, 9, 8, 151);
+	_numFrontArmor= new Text(18, 9, 150, 151);
+	_barFrontArmor = new Bar(170, 5, 170, 152);
 
-	_txtLeftArmour = new Text(120, 9, 8, 161);
-	_numLeftArmour = new Text(18, 9, 150, 161);
-	_barLeftArmour = new Bar(170, 5, 170, 162);
+	_txtLeftArmor = new Text(120, 9, 8, 161);
+	_numLeftArmor = new Text(18, 9, 150, 161);
+	_barLeftArmor = new Bar(170, 5, 170, 162);
 
-	_txtRightArmour = new Text(120, 9, 8, 171);
-	_numRightArmour = new Text(18, 9, 150, 171);
-	_barRightArmour = new Bar(170, 5, 170, 172);
+	_txtRightArmor = new Text(120, 9, 8, 171);
+	_numRightArmor = new Text(18, 9, 150, 171);
+	_barRightArmor = new Bar(170, 5, 170, 172);
 
-	_txtRearArmour = new Text(120, 9, 8, 181);
-	_numRearArmour = new Text(18, 9, 150, 181);
-	_barRearArmour = new Bar(170, 5, 170, 182);
+	_txtRearArmor = new Text(120, 9, 8, 181);
+	_numRearArmor = new Text(18, 9, 150, 181);
+	_barRearArmor = new Bar(170, 5, 170, 182);
 
-	_txtUnderArmour = new Text(120, 9, 8, 191);
-	_numUnderArmour = new Text(18, 9, 150, 191);
-	_barUnderArmour = new Bar(170, 5, 170, 192);
+	_txtUnderArmor = new Text(120, 9, 8, 191);
+	_numUnderArmor = new Text(18, 9, 150, 191);
+	_barUnderArmor = new Bar(170, 5, 170, 192);
 
 	add(_bg);
 	add(_txtName);
@@ -173,25 +173,25 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 		add(_barPsiSkill);
 	}
 
-	add(_txtFrontArmour);
-	add(_numFrontArmour);
-	add(_barFrontArmour);
+	add(_txtFrontArmor);
+	add(_numFrontArmor);
+	add(_barFrontArmor);
 
-	add(_txtLeftArmour);
-	add(_numLeftArmour);
-	add(_barLeftArmour);
+	add(_txtLeftArmor);
+	add(_numLeftArmor);
+	add(_barLeftArmor);
 
-	add(_txtRightArmour);
-	add(_numRightArmour);
-	add(_barRightArmour);
+	add(_txtRightArmor);
+	add(_numRightArmor);
+	add(_barRightArmor);
 
-	add(_txtRearArmour);
-	add(_numRearArmour);
-	add(_barRearArmour);
+	add(_txtRearArmor);
+	add(_numRearArmor);
+	add(_barRearArmor);
 
-	add(_txtUnderArmour);
-	add(_numUnderArmour);
-	add(_barUnderArmour);
+	add(_txtUnderArmor);
+	add(_numUnderArmor);
+	add(_barUnderArmor);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
@@ -322,55 +322,55 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	_barPsiSkill->setColor(Palette::blockOffset(12));
 	_barPsiSkill->setScale(1.0);
 
-	_txtFrontArmour->setColor(Palette::blockOffset(3));
-	_txtFrontArmour->setHighContrast(true);
-	_txtFrontArmour->setText(_game->getLanguage()->getString("STR_FRONT_ARMOR_UC"));
+	_txtFrontArmor->setColor(Palette::blockOffset(3));
+	_txtFrontArmor->setHighContrast(true);
+	_txtFrontArmor->setText(_game->getLanguage()->getString("STR_FRONT_ARMOR_UC"));
 
-	_numFrontArmour->setColor(Palette::blockOffset(9));
-	_numFrontArmour->setHighContrast(true);
+	_numFrontArmor->setColor(Palette::blockOffset(9));
+	_numFrontArmor->setHighContrast(true);
 
-	_barFrontArmour->setColor(Palette::blockOffset(5));
-	_barFrontArmour->setScale(1.0);
+	_barFrontArmor->setColor(Palette::blockOffset(5));
+	_barFrontArmor->setScale(1.0);
 
-	_txtLeftArmour->setColor(Palette::blockOffset(3));
-	_txtLeftArmour->setHighContrast(true);
-	_txtLeftArmour->setText(_game->getLanguage()->getString("STR_LEFT_ARMOR_UC"));
+	_txtLeftArmor->setColor(Palette::blockOffset(3));
+	_txtLeftArmor->setHighContrast(true);
+	_txtLeftArmor->setText(_game->getLanguage()->getString("STR_LEFT_ARMOR_UC"));
 
-	_numLeftArmour->setColor(Palette::blockOffset(9));
-	_numLeftArmour->setHighContrast(true);
+	_numLeftArmor->setColor(Palette::blockOffset(9));
+	_numLeftArmor->setHighContrast(true);
 
-	_barLeftArmour->setColor(Palette::blockOffset(5));
-	_barLeftArmour->setScale(1.0);
+	_barLeftArmor->setColor(Palette::blockOffset(5));
+	_barLeftArmor->setScale(1.0);
 
-	_txtRightArmour->setColor(Palette::blockOffset(3));
-	_txtRightArmour->setHighContrast(true);
-	_txtRightArmour->setText(_game->getLanguage()->getString("STR_RIGHT_ARMOR_UC"));
+	_txtRightArmor->setColor(Palette::blockOffset(3));
+	_txtRightArmor->setHighContrast(true);
+	_txtRightArmor->setText(_game->getLanguage()->getString("STR_RIGHT_ARMOR_UC"));
 
-	_numRightArmour->setColor(Palette::blockOffset(9));
-	_numRightArmour->setHighContrast(true);
+	_numRightArmor->setColor(Palette::blockOffset(9));
+	_numRightArmor->setHighContrast(true);
 
-	_barRightArmour->setColor(Palette::blockOffset(5));
-	_barRightArmour->setScale(1.0);
+	_barRightArmor->setColor(Palette::blockOffset(5));
+	_barRightArmor->setScale(1.0);
 
-	_txtRearArmour->setColor(Palette::blockOffset(3));
-	_txtRearArmour->setHighContrast(true);
-	_txtRearArmour->setText(_game->getLanguage()->getString("STR_REAR_ARMOR_UC"));
+	_txtRearArmor->setColor(Palette::blockOffset(3));
+	_txtRearArmor->setHighContrast(true);
+	_txtRearArmor->setText(_game->getLanguage()->getString("STR_REAR_ARMOR_UC"));
 
-	_numRearArmour->setColor(Palette::blockOffset(9));
-	_numRearArmour->setHighContrast(true);
+	_numRearArmor->setColor(Palette::blockOffset(9));
+	_numRearArmor->setHighContrast(true);
 
-	_barRearArmour->setColor(Palette::blockOffset(5));
-	_barRearArmour->setScale(1.0);
+	_barRearArmor->setColor(Palette::blockOffset(5));
+	_barRearArmor->setScale(1.0);
 
-	_txtUnderArmour->setColor(Palette::blockOffset(3));
-	_txtUnderArmour->setHighContrast(true);
-	_txtUnderArmour->setText(_game->getLanguage()->getString("STR_UNDER_ARMOR_UC"));
+	_txtUnderArmor->setColor(Palette::blockOffset(3));
+	_txtUnderArmor->setHighContrast(true);
+	_txtUnderArmor->setText(_game->getLanguage()->getString("STR_UNDER_ARMOR_UC"));
 
-	_numUnderArmour->setColor(Palette::blockOffset(9));
-	_numUnderArmour->setHighContrast(true);
+	_numUnderArmor->setColor(Palette::blockOffset(9));
+	_numUnderArmor->setHighContrast(true);
 
-	_barUnderArmour->setColor(Palette::blockOffset(5));
-	_barUnderArmour->setScale(1.0);
+	_barUnderArmor->setColor(Palette::blockOffset(5));
+	_barUnderArmor->setScale(1.0);
 
 }
 
@@ -473,33 +473,33 @@ void UnitInfoState::init()
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_FRONT);
-	_numFrontArmour->setText(ss.str());
-	_barFrontArmour->setMax(_unit->getArmor()->getFrontArmor());
-	_barFrontArmour->setValue(_unit->getArmor(SIDE_FRONT));
+	_numFrontArmor->setText(ss.str());
+	_barFrontArmor->setMax(_unit->getArmor()->getFrontArmor());
+	_barFrontArmor->setValue(_unit->getArmor(SIDE_FRONT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_LEFT);
-	_numLeftArmour->setText(ss.str());
-	_barLeftArmour->setMax(_unit->getArmor()->getSideArmor());
-	_barLeftArmour->setValue(_unit->getArmor(SIDE_LEFT));
+	_numLeftArmor->setText(ss.str());
+	_barLeftArmor->setMax(_unit->getArmor()->getSideArmor());
+	_barLeftArmor->setValue(_unit->getArmor(SIDE_LEFT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_RIGHT);
-	_numRightArmour->setText(ss.str());
-	_barRightArmour->setMax(_unit->getArmor()->getSideArmor());
-	_barRightArmour->setValue(_unit->getArmor(SIDE_RIGHT));
+	_numRightArmor->setText(ss.str());
+	_barRightArmor->setMax(_unit->getArmor()->getSideArmor());
+	_barRightArmor->setValue(_unit->getArmor(SIDE_RIGHT));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_REAR);
-	_numRearArmour->setText(ss.str());
-	_barRearArmour->setMax(_unit->getArmor()->getRearArmor());
-	_barRearArmour->setValue(_unit->getArmor(SIDE_REAR));
+	_numRearArmor->setText(ss.str());
+	_barRearArmor->setMax(_unit->getArmor()->getRearArmor());
+	_barRearArmor->setValue(_unit->getArmor(SIDE_REAR));
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_UNDER);
-	_numUnderArmour->setText(ss.str());
-	_barUnderArmour->setMax(_unit->getArmor()->getUnderArmor());
-	_barUnderArmour->setValue(_unit->getArmor(SIDE_UNDER));
+	_numUnderArmor->setText(ss.str());
+	_barUnderArmor->setMax(_unit->getArmor()->getUnderArmor());
+	_barUnderArmor->setValue(_unit->getArmor(SIDE_UNDER));
 }
 
 

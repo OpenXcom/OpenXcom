@@ -17,6 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Game.h"
+#ifdef _WIN32
+#include <Windows.h>
+#include <SDL_syswm.h>
+#endif
 #include <sstream>
 #include <iostream>
 #include <SDL_mixer.h>
@@ -50,11 +54,14 @@ namespace OpenXcom
  */
 Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
+	std::cout << "Initializing engine..." << std::endl;
+
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw Exception(SDL_GetError());
 	}
+	std::cout << "SDL initialized successfully." << std::endl;
 
 	if (!Options::getBool("mute"))
 	{
@@ -62,13 +69,20 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 		{
 			std::cerr << SDL_GetError() << std::endl;
+			std::cout << "No sound device detected, audio disabled." << std::endl;
 			Options::setBool("mute", true);
 		}
 		else
 		{
-			if (Mix_OpenAudio(22050, AUDIO_S16SYS, 2, 1024) != 0)
+			Uint16 format;
+			if (Options::getInt("audioBitDepth") == 8)
+				format = AUDIO_S8;
+			else
+				format = AUDIO_S16SYS;
+			if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
 			{
 				std::cerr << Mix_GetError() << std::endl;
+				std::cout << "No sound device detected, audio disabled." << std::endl;
 				Options::setBool("mute", true);
 			}
 			else
@@ -76,10 +90,25 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 				Mix_AllocateChannels(16);
 			}
 		}
+		std::cout << "SDL_mixer initialized successfully." << std::endl;
 	}
 
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
+
+#ifdef _WIN32
+	// Set the window icon
+	HINSTANCE handle = GetModuleHandle(NULL);
+	HICON icon = LoadIcon(handle, MAKEINTRESOURCE(103));
+
+	SDL_SysWMinfo wminfo;
+	SDL_VERSION(&wminfo.version)
+	if (SDL_GetWMInfo(&wminfo))
+	{
+		HWND hwnd = wminfo.window;
+		SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR)icon);
+	}
+#endif
 
 	// Set up keyboard events
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
@@ -97,6 +126,8 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 
 	// Create blank language
 	_lang = new Language();
+
+	std::cout << "Engine initialization completed." << std::endl;
 }
 
 /**

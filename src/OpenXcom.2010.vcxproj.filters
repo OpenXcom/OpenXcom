@@ -32,9 +32,6 @@
     <ClCompile Include="Basescape\BaseInfoState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\BasescapeErrorState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
     <ClCompile Include="Basescape\BasescapeState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -380,9 +377,6 @@
     <ClCompile Include="Battlescape\BulletSprite.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\PurchaseErrorState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\Transfer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -436,12 +430,6 @@
     </ClCompile>
     <ClCompile Include="Savegame\UfopaediaSaved.cpp">
       <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\CannotRearmState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp">
-      <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Geoscape\ProductionCompleteState.cpp">
       <Filter>Geoscape</Filter>
@@ -644,6 +632,15 @@
     <ClCompile Include="Menu\OptionsState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\ErrorMessageState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\CraftErrorState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\Vehicle.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -678,9 +675,6 @@
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\BaseInfoState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Basescape\BasescapeErrorState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\BasescapeState.h">
@@ -1029,9 +1023,6 @@
     <ClInclude Include="Battlescape\BulletSprite.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\PurchaseErrorState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\Transfer.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1085,12 +1076,6 @@
     </ClInclude>
     <ClInclude Include="Savegame\UfopaediaSaved.h">
       <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\CannotRearmState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
-    <ClInclude Include="Geoscape\GeoscapeErrorState.h">
-      <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\ProductionCompleteState.h">
       <Filter>Geoscape</Filter>
@@ -1251,21 +1236,6 @@
     <ClInclude Include="Savegame\CraftWeaponProjectile.h">
       <Filter>Savegame</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ShaderDraw.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ShaderDrawHelper.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ShaderMove.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ShaderRepeat.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ShaderRotate.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\NewBattleState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1305,6 +1275,15 @@
     <ClInclude Include="Menu\OptionsState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Menu\ErrorMessageState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\CraftErrorState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\Vehicle.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
@@ -1340,5 +1319,8 @@
     <Filter Include="Ufopaedia">
       <UniqueIdentifier>{41135935-090f-4179-a64d-0efbd66b5f5c}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\media\openxcom.ico" />
   </ItemGroup>
 </Project>

@@ -42,6 +42,14 @@ void RuleManufacture::load(const YAML::Node &node)
 		{
 			i.second() >> _name;
 		}
+		else if (key == "category")
+		{
+			i.second() >> _category;
+		}
+		else if (key == "requires")
+		{
+			i.second() >> _requires;
+		}
 		else if (key == "space")
 		{
 			i.second() >> _space;
@@ -69,6 +77,8 @@ void RuleManufacture::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "category" << YAML::Value << _category;
+	out << YAML::Key << "requires" << YAML::Value << _requires;
 	out << YAML::Key << "space" << YAML::Value << _space;
 	out << YAML::Key << "time" << YAML::Value << _time;
 	out << YAML::Key << "cost" << YAML::Value << _cost;
@@ -92,6 +102,16 @@ std::string RuleManufacture::getName () const
 std::string RuleManufacture::getCategory () const
 {
 	return _category;
+}
+
+/**
+ * Returns the list of research required to
+ * manufacture this object.
+ * @return List of research IDs.
+ */
+std::vector<std::string> RuleManufacture::getRequirements() const
+{
+	return _requires;
 }
 
 /**

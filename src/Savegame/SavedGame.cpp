@@ -61,7 +61,7 @@ findRuleResearch::findRuleResearch(RuleResearch * toFind) : _toFind(toFind)
 
 bool findRuleResearch::operator()(const ResearchProject *r) const
 {
-	return _toFind == r->getRuleResearch();
+	return _toFind == r->getRules();
 }
 
 struct equalProduction : public std::unary_function<Production *,
@@ -78,14 +78,13 @@ equalProduction::equalProduction(RuleManufacture * item) : _item(item)
 
 bool equalProduction::operator()(const Production * p) const
 {
-	return p->getRuleManufacture() == _item;
+	return p->getRules() == _item;
 }
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
- * @param difficulty Game difficulty.
  */
-SavedGame::SavedGame(GameDifficulty difficulty) : _difficulty(difficulty), _funds(0), _ids(), _countries(), _regions(), _bases(), _ufos(), _waypoints(), _terrorSites(), _battleGame(0)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _ids(), _countries(), _regions(), _bases(), _ufos(), _waypoints(), _terrorSites(), _battleGame(0), _discovered(), _debug(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -369,6 +368,24 @@ void SavedGame::save(const std::string &filename) const
 }
 
 /**
+ * Returns the game's difficulty level.
+ * @return Difficulty level.
+ */
+GameDifficulty SavedGame::getDifficulty() const
+{
+	return _difficulty;
+}
+
+/**
+ * Changes the game's difficulty to a new level.
+ * @param difficulty New difficulty.
+ */
+void SavedGame::setDifficulty(GameDifficulty difficulty)
+{
+	_difficulty = difficulty;
+}
+
+/**
  * Returns the player's current funds.
  * @return Current funds.
  */
@@ -620,7 +637,6 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 */
 void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const
 {
-	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	const std::vector<std::string> items (ruleset->getManufactureList ());
 	const std::vector<Production *> baseProductions (base->getProductions ());
 
@@ -629,7 +645,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 		++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
-		if(std::find(discovered.begin (), discovered.end (), ruleset->getResearch(*iter)) == discovered.end ())
+		if(!isResearched(m->getRequirements()))
 		{
 		 	continue;
 		}
@@ -729,11 +745,38 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
  */
 bool SavedGame::isResearched(const std::string &research) const
 {
-	if (research.empty())
+	if (research.empty() || _debug)
 		return true;
 	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
 	{
 		if ((*i)->getName() == research)
+			return true;
+	}
+
+	return false;
+}
+
+/**
+ * Returns if a certain list of research has been completed.
+ * @param research List of research IDs.
+ * @return Whether it's researched or not.
+ */
+bool SavedGame::isResearched(const std::vector<std::string> &research) const
+{
+	if (research.empty() || _debug)
+		return true;
+	std::vector<std::string> matches = research;
+	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		for (std::vector<std::string>::iterator j = matches.begin(); j != matches.end(); ++j)
+		{
+			if ((*i)->getName() == *j)
+			{
+				j = matches.erase(j);
+				break;
+			}
+		}
+		if (matches.empty())
 			return true;
 	}
 
@@ -846,11 +889,20 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 }
 
 /**
- * Returns game difficulty.
+ * Toggles debug mode.
  */
-GameDifficulty SavedGame::getDifficulty() const
+void SavedGame::setDebugMode()
 {
-	return _difficulty;
+	_debug = !_debug;
+}
+
+/**
+ * Gets the current debug mode.
+ * @return Debug mode.
+ */
+bool SavedGame::getDebugMode() const
+{
+	return _debug;
 }
 
 }

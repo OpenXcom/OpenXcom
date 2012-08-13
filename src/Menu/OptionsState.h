@@ -27,6 +27,8 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class TextEdit;
+class ArrowButton;
 
 /**
  * Options window that displays all
@@ -37,7 +39,18 @@ class OptionsState : public State
 private:
 	Window *_window;
 	Text *_txtTitle;
+	Text *_txtDisplayResolution, *_txtDisplayX;
+	TextEdit *_txtDisplayWidth, *_txtDisplayHeight;
+	ArrowButton *_btnDisplayUp, *_btnDisplayDown;
+	Text *_txtDisplayMode;
+	TextButton *_displayMode, *_btnDisplayWindowed, *_btnDisplayFullscreen;
+	Text *_txtMusicVolume;
+	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
+	Text *_txtSoundVolume;
+	TextButton *_soundVolume, *_btnSoundVolume1, *_btnSoundVolume2, *_btnSoundVolume3, *_btnSoundVolume4, *_btnSoundVolume5;
 	TextButton *_btnOk, *_btnCancel, *_btnLanguage;
+	SDL_Rect** _res;
+	int _resAmount, _resCurrent;
 public:
 	/// Creates the Options state.
 	OptionsState(Game *game);
@@ -47,6 +60,12 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Language button.
+	void btnLanguageClick(Action *action);
+	/// Handler for clicking the Next Resolution button.
+	void btnDisplayUpClick(Action *action);
+	/// Handler for clicking the Previous Resolution button.
+	void btnDisplayDownClick(Action *action);
 };
 
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "Base.h"
 #include <cmath>
 #include <algorithm>
@@ -32,6 +33,10 @@
 #include "Transfer.h"
 #include "ResearchProject.h"
 #include "Production.h"
+#include "Vehicle.h"
+#include "Target.h"
+#include "Ufo.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -334,6 +339,60 @@ void Base::setEngineers(int engineers)
 }
 
 /**
+ * Returns if a certain target is covered by the base's
+ * radar range, taking in account the range and chance.
+ * @param target Pointer to target to compare.
+ * @return True if it's within range, False otherwise.
+ */
+bool Base::detect(Target *target) const
+{
+	int chance = 0;
+	double distance = getDistance(target);
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180) >= distance)
+		{
+			if ((*i)->getRules()->isHyperwave())
+			{
+				return true;
+			}
+			chance += (*i)->getRules()->getRadarChance();
+		}
+	}
+	if (chance == 0)
+		return false;
+
+	Ufo *u = dynamic_cast<Ufo*>(target);
+	if (u != 0)
+	{
+		chance = (chance * 100 + u->getVisibility()) / 100;
+	}
+
+	int detection = RNG::generate(0, 100);
+	return (detection < chance);
+}
+
+/**
+ * Returns if a certain target is inside the base's
+ * radar range, taking in account the positions of both.
+ * @param target Pointer to target to compare.
+ * @return True if it's inside, False otherwise.
+ */
+bool Base::insideRadarRange(Target *target) const
+{
+	double range = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			range = std::max(range, (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180));
+		}
+	}
+	
+	return (getDistance(target) <= range);
+}
+
+/**
  * Returns the amount of soldiers contained
  * in the base without any assignments.
  * @return Number of soldiers.
@@ -475,6 +534,10 @@ int Base::getUsedStores() const
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		total += (*i)->getItems()->getTotalSize(_rule);
+		for (std::vector<Vehicle*>::const_iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+		{
+			total += (*j)->getRules()->getSize();
+		}
 	}
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
@@ -550,7 +613,7 @@ int Base::getUsedWorkshops() const
 	int usedWorkShop = 0;
 	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
 	{
-		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRuleManufacture()->getRequiredSpace ());
+		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRules()->getRequiredSpace ());
 	}
 	return usedWorkShop;
 }
@@ -586,6 +649,13 @@ int Base::getUsedHangars() const
 		if ((*i)->getType() == TRANSFER_CRAFT)
 		{
 			total += (*i)->getQuantity();
+		}
+	}
+	for (std::vector<Production*>::const_iterator i = _productions.begin(); i != _productions.end(); ++i)
+	{
+		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
+		{
+			total += (*i)->getAmountRemaining();
 		}
 	}
 	return total;
@@ -659,18 +729,18 @@ int Base::getAllocatedEngineers() const
 }
 
 /**
- * Returns the total defence value of all
+ * Returns the total defense value of all
  * the facilities in the base.
- * @return Defence value.
+ * @return Defense value.
  */
-int Base::getDefenceValue() const
+int Base::getDefenseValue() const
 {
 	int total = 0;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			total += (*i)->getRules()->getDefenceValue();
+			total += (*i)->getRules()->getDefenseValue();
 		}
 	}
 	return total;
@@ -679,7 +749,7 @@ int Base::getDefenceValue() const
 /**
  * Returns the total amount of short range
  * detection facilities in the base.
- * @return Defence value.
+ * @return Defense value.
  */
 int Base::getShortRangeDetection() const
 {
@@ -697,7 +767,7 @@ int Base::getShortRangeDetection() const
 /**
  * Returns the total amount of long range
  * detection facilities in the base.
- * @return Defence value.
+ * @return Defense value.
  */
 int Base::getLongRangeDetection() const
 {

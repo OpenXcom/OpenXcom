@@ -47,12 +47,8 @@ public:
 	std::string getName() const;
 	/// Gets the city's latitude.
 	double getLatitude() const;
-	/// Sets the city's latitude.
-	void setLatitude(double lat);
 	/// Gets the city's longitude.
 	double getLongitude() const;
-	/// Sets the city's longitude.
-	void setLongitude(double lon);
 };
 
 }

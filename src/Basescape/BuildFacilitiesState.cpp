@@ -28,6 +28,7 @@
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Savegame/SavedGame.h"
 #include "PlaceFacilityState.h"
 
 namespace OpenXcom
@@ -47,7 +48,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
 	_btnOk = new TextButton(112, 16, 200, 176);
 	_txtTitle = new Text(118, 16, 197, 48);
-	_lstFacilities = new TextList(115, 96, 200, 64);
+	_lstFacilities = new TextList(100, 96, 200, 64);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -72,7 +73,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 115);
+	_lstFacilities->setColumns(1, 100);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
@@ -82,7 +83,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	for (std::vector<std::string>::iterator i = facilities.begin(); i != facilities.end(); ++i)
 	{
 		RuleBaseFacility *rule = _game->getRuleset()->getBaseFacility(*i);
-		if (_game->getSavedGame()->isResearched(rule->getRequirement()) && !rule->getLift())
+		if (_game->getSavedGame()->isResearched(rule->getRequirements()) && !rule->isLift())
 			_facilities.push_back(rule);
 	}
 

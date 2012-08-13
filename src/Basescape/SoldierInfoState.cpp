@@ -387,7 +387,8 @@ void SoldierInfoState::init()
  */
 void SoldierInfoState::edtSoldierKeyPress(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	}

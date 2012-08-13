@@ -867,8 +867,15 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	// make sure there is an item, and the battlescape is in an idle state
 	if (item && !_battleGame->isBusy())
 	{
-		_battleGame->getCurrentAction()->weapon = item;
-		popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
+		{
+			_battleGame->getCurrentAction()->weapon = item;
+			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+		}
+		else
+		{
+			warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
+		}
 	}
 }
 

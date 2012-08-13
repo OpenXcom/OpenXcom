@@ -269,7 +269,7 @@ STR_HANGARS
 Hangars
 STR_SHORT_RANGE_DETECTION
 Kleines radarsystem
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Verteidigungsstärke
 STR_TRANSFERS_UC
 TRANSFERS
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 UFO-BODENANGRIFF
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Landeplatz untersuchen und, wenn möglich, Zugang zum UFO verschaffen.  Einsatz ist erfolgreich abgeschlossen, wenn alle gegnerischen Einheiten eliminiert oder neutralisiert sind.  Danach kann mit der Bergung des UFOs, der Artefakte und toten Außerirdischen begonnen werden.  Um die Mission abzubrechen, bringen Sie die XCom-Mitarbeiter zum Transporter zurück und klicken das Icon 'Mission abbrechen' an.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 STÜTZPUNKTVERTEIDIGUNG
 STR_BASE_UC_
 STÜTZPUNKT> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 Ein außerirdisches Raumschiff ist in der Nähe gelandet.  Unser Stützpunkt ist in großer Gefahr. Laut Standardverfahren wurden sämtliche Zivilpersonen und XCom-Raumschiffe evakuiert.  Die außerirdischen Einheiten werden den Stützpunkt über die Hangartüren oder den Hauptaufzug betreten.  Verteidigen Sie den Stützpunkt und seine Einrichtungen um jeden Preis - es ist ein Kampf auf Leben und Tod.  Wenn Sie das Icon 'Mission abbrechen' anklicken, verlieren Sie den Kampf und den Stützpunkt.
 STR_ALIEN_BASE_ASSAULT
 ANGRIFF AUF AUSSERIRDISCHEN-STÜTZPUNKT
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Ausrüstung für 
 STR_ARM
 Bewaffnen 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Verteidigungswert
 STR_HIT_RATIO
 Trefferquote
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Plasmageschütz
 STR_FUSION_MISSILE
 Fusionsrakete
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Laser-Abwehr
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Plasma-Abwehr
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Fusionsabwehr
 STR_GRAV_SHIELD
 Gravitationsschild
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Ein kleines Radarsystem mit einer Reichweite von 300 Seemeilen ist an ein Satellitensystem gekoppelt, das den Boden überwacht.  Jedes System kann mit einer 5%igen Wahrscheinlichkeit alle 10 Minuten ein Objekt mittlerer Größe entdecken.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Ein großes Radarsystem mit einer Reichweite von 450 Seemeilen ist an ein Satellitensystem gekoppelt, das den Boden überwacht.  Jedes System kann mit einer 5%igen Wahrscheinlichkeit alle 10 Minuten ein Objekt mittlerer Größe entdecken.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Raketenabwehreinrichtungen schützen vor gegnerischen Raumschiffen, die versuchen, in der Nähe des Stützpunktes zu landen.
 STR_GENERAL_STORES_UFOPEDIA
 Mit Ausnahme der für die Raumschiffe im Hangar vorgesehenen Gegenstände werden alle Ausrüstungen, Waffensysteme, Munition, geborgenen Gegenstände und SWT in Lagern aufbewahrt.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Lebende Außerirdische benötigen einen besonderen Lebensraum, um ihre Systeme auf der Erde zu erhalten.  In den abgeschlossenen Klimazellen ist Platz für bis zu 10 verschiedene Lebensformen.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Die Laser-Abwehr schützt vor dem Eindringen gegnerischer Raumschiffe.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Die Plasmastrahl-Abwehr bildet einen mächtigen und wirkungsvollen Schutz vor gegnerischen Raumschiffen.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Fusionsraketen bieten die effektivste Verteidigung gegen Angriffe der Außerirdischen.  Sie erzeugen eine Antimaterie-Implosion, die alles in einem bestimmten Radiuszerstört.
 STR_GRAV_SHIELD_UFOPEDIA
 Die Gravitationsschilde wehren so lange alle außerirdischen Raumschiffe ab, bis die Verteidigungssysteme wieder feuern können.  Dadurch wird die Wirksamkeit der Verteidigungssysteme Ihres Stützpunktes praktisch verdoppelt.
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Großer Aufklärer
 STR_HARVESTER
 Erntemaschine
-STR_ABDUCTER
+STR_ABDUCTOR
 Entführer
 STR_TERROR_SHIP
 Überfallraumschiff
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 Neues Spiel
 STR_LOAD_SAVED_GAME
-Gesichertes Spiel laden
+Spiel Laden
 STR_SELECT_DIFFICULTY_LEVEL
 Schwierigkeitsgrad wählen
 STR_1_BEGINNER
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 Das größte Aufklärungsschiff der Außerirdischen ist ein Mehrzweckraumschiff.  Die Außerirdischen setzen es bei allen Arten von Missionen ein.
 STR_HARVESTER_UFOPEDIA
 Die Erntemaschine hat eine Falltür im Unterteil ihres Rumpfes und ist mit einem Kran ausgerüstet, mit dem Rinder und anderes Vieh aufgenommen werden können.  Anschließend werden die gewünschten Körperteile mit Lasermessern herausgeschnitten und der Rest auf dem Boden zurückgelassen.  Die Organe werden in besonderen Behältern aufbewahrt.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Dieses Raumschiff ist mit einem Forschungsraum für die Ausführung gräßlicher Experimente an Menschen ausgerüstet.  Dabei wird das Opfer mit Hilfe telepathischer Kräfte gelähmt, bleibt jedoch während der Operation bei Bewußtsein.
 STR_TERROR_SHIP_UFOPEDIA
 Das Überfallraumschiff hat einen Laderaum, in dem große Terrorwaffen oder außerirdische Terroristen aufgenommen und in bewohnte Gebiete transportiert werden können.
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Toter Sektopod
 STR_CYBERDISC_CORPSE
 Tote Cyberdisc
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Nicht genügend Geschützmunition für SWT
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Nicht genügend Raketen für SWT
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Nicht genügend Fusionskugeln für SWT
+STR_TO_ARM_HWP
+ für SWT
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Nicht genügend Ausrüstung für die Truppe
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1749,7 @@ STR_GRAPHS
 DIAGRAMME
 STR_UFOPAEDIA_UC
 UFOPÄDIE
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Optionen
-STR_OPTIONS
+STR_OPTIONS_UC
 OPTIONEN
 STR_FUNDING_UC
 GELDER
@@ -2039,3 +2029,7 @@ STR_CORPSE
 Toter
 STR_UNLOAD
 Entladen
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Optionen

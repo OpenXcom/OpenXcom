@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a terror site.
  */
-TerrorSite::TerrorSite() : Target(), _id(0)
+TerrorSite::TerrorSite() : Target(), _id(0), _hoursActive(-1), _inBattlescape(false)
 {
 }
 
@@ -45,6 +45,9 @@ void TerrorSite::load(const YAML::Node &node)
 {
 	Target::load(node);
 	node["id"] >> _id;
+	node["hoursActive"] >> _hoursActive;
+	node["race"] >> _race;
+	node["inBattlescape"] >> _inBattlescape;
 }
 
 /**
@@ -55,6 +58,9 @@ void TerrorSite::save(YAML::Emitter &out) const
 {
 	Target::save(out);
 	out << YAML::Key << "id" << YAML::Value << _id;
+	out << YAML::Key << "hoursActive" << YAML::Value << _hoursActive;
+	out << YAML::Key << "race" << YAML::Value << _race;
+	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::EndMap;
 }
 
@@ -98,6 +104,60 @@ std::wstring TerrorSite::getName(Language *lang) const
 	std::wstringstream name;
 	name << lang->getString("STR_TERROR_SITE_UC") << _id;
 	return name.str();
+}
+
+/**
+ * Returns the amount of hours the terror site has been active for.
+ * @return Amount of hours.
+ */
+int TerrorSite::getHoursActive() const
+{
+	return _hoursActive;
+}
+
+/**
+ * Changes the amount of hours the terror site has been active for.
+ * @param hours Amount of hours.
+ */
+void TerrorSite::setHoursActive(int hours)
+{
+	_hoursActive = hours;
+}
+
+/**
+ * Returns the alien race currently residing in the terror site.
+ * @return Alien race.
+ */
+std::string TerrorSite::getAlienRace() const
+{
+	return _race;
+}
+
+/**
+ * Changes the alien race currently residing in the terror site.
+ * @param race Alien race.
+ */
+void TerrorSite::setAlienRace(const std::string &race)
+{
+	_race = race;
+}
+
+/**
+ * Gets the terror site's battlescape status.
+ * @return bool
+ */
+bool TerrorSite::isInBattlescape() const
+{
+	return _inBattlescape;
+}
+
+/**
+ * Sets the terror site's battlescape status.
+ * @param inbattle .
+ */
+void TerrorSite::setInBattlescape(bool inbattle)
+{
+	_inBattlescape = inbattle;
 }
 
 }

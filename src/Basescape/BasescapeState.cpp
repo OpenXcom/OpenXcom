@@ -33,7 +33,7 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Geoscape/GeoscapeState.h"
-#include "BasescapeErrorState.h"
+#include "../Menu/ErrorMessageState.h"
 #include "DismantleFacilityState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "BaseInfoState.h"
@@ -375,7 +375,7 @@ void BasescapeState::viewClick(Action *action)
 		int x = -1, y = -1, squares = 0;
 		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
-			if ((*i)->getRules()->getLift())
+			if ((*i)->getRules()->isLift())
 			{
 				x = (*i)->getX();
 				y = (*i)->getY();
@@ -387,12 +387,12 @@ void BasescapeState::viewClick(Action *action)
 		// Is facility in use?
 		if (fac->inUse())
 		{
-			_game->pushState(new BasescapeErrorState(_game, "STR_FACILITY_IN_USE"));
+			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		// Would base become disconnected? (occupied squares connected to Access Lift < total squares occupied by base)
 		else if (_view->countConnected(x, y, 0, fac) < squares)
 		{
-			_game->pushState(new BasescapeErrorState(_game, "STR_CANNOT_DISMANTLE_FACILITY"));
+			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
 		}
 		else
 		{

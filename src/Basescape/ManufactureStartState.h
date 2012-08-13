@@ -40,8 +40,8 @@ private:
 	RuleManufacture * _item;
 	Window * _window;
 	TextButton * _btnCancel, * _btnStart;
-	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtNeededItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
-	TextList * _lstNeededItems;
+	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtRequiredItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
+	TextList * _lstRequiredItems;
 public:
 	/// Create the State
 	ManufactureStartState(Game * game, Base * base, RuleManufacture * item);

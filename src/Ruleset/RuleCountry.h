@@ -49,22 +49,12 @@ public:
 	std::string getType() const;
 	/// Gets the country's minimum funding.
 	int getMinFunding() const;
-	/// Sets the country's minimum funding.
-	void setMinFunding(int funding);
 	/// Gets the country's maximum funding.
 	int getMaxFunding() const;
-	/// Sets the country's maximum funding.
-	void setMaxFunding(int funding);
-	/// Gets the country's funding change.
-	int getChange() const;
 	/// Gets the country's label X position.
 	double getLabelLongitude() const;
-	/// Sets the country's label X position.
-	void setLabelLongitude(double lon);
 	/// Gets the country's label Y position.
 	double getLabelLatitude() const;
-	/// Sets the country's label Y position.
-	void setLabelLatitude(double lat);
 };
 
 }

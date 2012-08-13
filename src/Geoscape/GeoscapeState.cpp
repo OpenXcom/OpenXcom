@@ -30,6 +30,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Options.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
@@ -64,7 +65,7 @@
 #include "MultipleTargetsState.h"
 #include "ConfirmLandingState.h"
 #include "ItemsArrivingState.h"
-#include "CannotRearmState.h"
+#include "CraftErrorState.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/ResearchProject.h"
 #include "ResearchCompleteState.h"
@@ -125,6 +126,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
 
+	_txtDebug = new Text(100, 8, 0, 0);
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -161,6 +164,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_txtDay);
 	add(_txtMonth);
 	add(_txtYear);
+
+	add(_txtDebug);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
@@ -272,6 +277,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtYear->setText(L"");
 	_txtYear->setAlign(ALIGN_CENTER);
 
+	_txtDebug->setColor(Palette::blockOffset(15)+4);
+
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_timer->start();
 
@@ -284,6 +291,32 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 GeoscapeState::~GeoscapeState()
 {
 	delete _timer;
+}
+
+/**
+ * Handle key shortcuts.
+ * @param action Pointer to an action.
+ */
+void GeoscapeState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		// "d" - enable debug mode
+		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d)
+		{
+			_game->getSavedGame()->setDebugMode();
+			if (_game->getSavedGame()->getDebugMode())
+			{
+				_txtDebug->setText(L"DEBUG MODE");
+			}
+			else
+			{
+				_txtDebug->setText(L"");
+			}
+		}
+	}
 }
 
 /**
@@ -532,6 +565,20 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
+	// Clean up terror sites
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end();)
+	{
+		if ((*i)->getHoursActive() == 0)
+		{
+			delete *i;
+			i = _game->getSavedGame()->getTerrorSites()->erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+
 	// Clean up unused waypoints
 	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
 	{
@@ -580,9 +627,20 @@ void GeoscapeState::time30Minutes()
 	// Spawn UFOs
 	std::vector<std::string> ufos = _game->getRuleset()->getUfosList();
 	int chance = RNG::generate(1, 100);
-	if (chance <= 50)
+	if (chance <= 40)
 	{
-		int type = RNG::generate(0, ufos.size()-1);
+		// Makes smallest UFO the more likely, biggest UFO the least likely
+		// eg. 0 - 0..6, 1 - 6..10, etc.
+		int range = RNG::generate(1, (ufos.size()*(ufos.size()+1))/2);
+		int type = 0;
+		for (int i = 0, j = 1; i < ufos.size(); ++i, j += ufos.size()-i)
+		{
+			if (j <= range && range < j + ufos.size()-i)
+			{
+				type = i;
+				break;
+			}
+		}
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(ufos[type]));
 		u->setLongitude(RNG::generate(0.0, 2*M_PI));
 		u->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
@@ -591,6 +649,11 @@ void GeoscapeState::time30Minutes()
 		w->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
 		u->setDestination(w);
 		u->setSpeed(RNG::generate(u->getRules()->getMaxSpeed() / 4, u->getRules()->getMaxSpeed() / 2));
+		int race = RNG::generate(1, 2);
+		if (race == 1)
+			u->setAlienRace("STR_SECTOID");
+		else
+			u->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 
@@ -615,7 +678,14 @@ void GeoscapeState::time30Minutes()
 					}
 					else
 					{
-						// TODO: No fuel popup
+						std::wstringstream ss;
+						ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
+						ss << _game->getLanguage()->getString(item);
+						ss << _game->getLanguage()->getString("STR_TO_REFUEL");
+						ss << (*j)->getName(_game->getLanguage());
+						ss << _game->getLanguage()->getString("STR_AT_");
+						ss << (*i)->getName();
+						popup(new CraftErrorState(_game, this, ss.str()));
 						(*j)->setStatus("STR_READY");
 					}
 				}
@@ -633,24 +703,15 @@ void GeoscapeState::time30Minutes()
 			bool detected = false;
 			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 			{
-				for (std::vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; ++f)
+				if ((*b)->detect(*u))
 				{
-					if ((*f)->getBuildTime() != 0)
-						continue;
-					if ((*f)->insideRadarRange(*u))
-					{
-						int chance = RNG::generate(1, 100);
-						if (chance <= (*f)->getRules()->getRadarChance())
-						{
-							detected = true;
-						}
-					}
+					detected = true;
 				}
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 				{
 					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
 						continue;
-					if ((*c)->insideRadarRange(*u))
+					if ((*c)->detect(*u))
 					{
 						detected = true;
 					}
@@ -667,13 +728,10 @@ void GeoscapeState::time30Minutes()
 			bool detected = false;
 			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 			{
-				for (std::vector<BaseFacility*>::iterator f = (*b)->getFacilities()->begin(); f != (*b)->getFacilities()->end() && !detected; ++f)
-				{
-					detected = detected || (*f)->insideRadarRange(*u);
-				}
+				detected = detected || (*b)->insideRadarRange(*u);
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 				{
-					detected = detected || (*c)->insideRadarRange(*u);
+					detected = detected || (*c)->detect(*u);
 				}
 			}
 			(*u)->setDetected(detected);
@@ -701,7 +759,14 @@ void GeoscapeState::time1Hour()
 				std::string s = (*j)->rearm();
 				if (s != "")
 				{
-					popup(new CannotRearmState(_game, this, _game->getLanguage()->getString(s), (*j)->getName(_game->getLanguage()), (*i)->getName()));
+					std::wstringstream ss;
+					ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
+					ss << _game->getLanguage()->getString(s);
+					ss << _game->getLanguage()->getString("STR_TO_REARM");
+					ss << (*j)->getName(_game->getLanguage());
+					ss << _game->getLanguage()->getString("STR_AT_");
+					ss << (*i)->getName();
+					popup(new CraftErrorState(_game, this, ss.str()));
 				}
 			}
 		}
@@ -713,6 +778,15 @@ void GeoscapeState::time1Hour()
 		if ((*i)->isCrashed() && (*i)->getHoursCrashed() > 0)
 		{
 			(*i)->setHoursCrashed((*i)->getHoursCrashed() - 1);
+		}
+	}
+
+	// Handle terror sites expiring
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		if ((*i)->getHoursActive() > 0)
+		{
+			(*i)->setHoursActive((*i)->getHoursActive() - 1);
 		}
 	}
 
@@ -739,14 +813,14 @@ void GeoscapeState::time1Hour()
 		std::map<Production*, productionProgress_e> toRemove;
 		for (std::vector<Production*>::const_iterator j = (*i)->getProductions().begin(); j != (*i)->getProductions().end(); ++j)
 		{
-			toRemove[(*j)] = (*j)->step((*i), _game->getSavedGame());
+			toRemove[(*j)] = (*j)->step((*i), _game->getSavedGame(), _game->getRuleset());
 		}
 		for (std::map<Production*, productionProgress_e>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
 		{
-			if (j->second > PRODUCTION_PROGRESS_NOT_COMPLETE)
+			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				_game->pushState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRuleManufacture()->getName()), (*i)->getName(), j->second));
+				popup(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRules()->getName()), (*i)->getName(), j->second));
 				timerReset();
 			}
 		}
@@ -760,8 +834,8 @@ void GeoscapeState::time1Hour()
 void GeoscapeState::time1Day()
 {
 	// Spawn terror sites
-	int chance = RNG::generate(1, 100);
-	if (chance <= 25)
+	int chance = RNG::generate(1, 20);
+	if (chance <= 2)
 	{
 		// Pick a city
 		RuleRegion* region = 0;
@@ -777,6 +851,12 @@ void GeoscapeState::time1Day()
 		t->setLongitude(city->getLongitude());
 		t->setLatitude(city->getLatitude());
 		t->setId(_game->getSavedGame()->getId("STR_TERROR_SITE"));
+		t->setHoursActive(24 + RNG::generate(0, 24));
+		int race = RNG::generate(1, 2);
+		if (race == 1)
+			t->setAlienRace("STR_SECTOID");
+		else
+			t->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 		popup(new AlienTerrorState(_game, city, this));
 	}
@@ -808,10 +888,10 @@ void GeoscapeState::time1Day()
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->removeResearch(*iter);
-			const RuleResearch * research = (*iter)->getRuleResearch ();
+			const RuleResearch * research = (*iter)->getRules ();
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
 			std::vector<RuleResearch *> newPossibleResearch;
-			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRuleResearch(), _game->getRuleset(), *i);
+			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
 			popup(new ResearchCompleteState (_game, research));
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));

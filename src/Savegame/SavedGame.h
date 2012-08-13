@@ -69,13 +69,14 @@ private:
 	SavedBattleGame *_battleGame;
 	UfopaediaSaved *_ufopaedia;
 	std::vector<const RuleResearch *> _discovered;
+	bool _debug;
 
 	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
 public:
-	/// Creates a new save with a certain difficulty.
-	SavedGame(GameDifficulty difficulty);
+	/// Creates a new saved game.
+	SavedGame();
 	/// Cleans up the saved game.
 	~SavedGame();
 	/// Gets list of saves in the user directory.
@@ -84,6 +85,10 @@ public:
 	void load(const std::string &filename, Ruleset *rule);
 	/// Saves a saved game to YAML.
 	void save(const std::string &filename) const;
+	/// Gets game difficulty.
+	GameDifficulty getDifficulty() const;
+	/// Sets game difficulty.
+	void setDifficulty(GameDifficulty difficulty);
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Sets new funds.
@@ -130,14 +135,18 @@ public:
 	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
+	/// Gets if a list of research has been unlocked.
+	bool isResearched(const std::vector<std::string> &research) const;
 	/// Gets the soldier matching this ID.
 	Soldier *const getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
-	/// Gets saved game difficulty.
-	GameDifficulty getDifficulty() const;
+	/// Sets debug mode.
+	void setDebugMode();
+	/// Gets debug mode.
+	bool getDebugMode() const;
 };
 
 }

@@ -187,6 +187,16 @@ void Text::setAlign(TextHAlign align)
 }
 
 /**
+ * Returns the way the text is aligned horizontally
+ * relative to the drawing area.
+ * @return Horizontal alignment.
+ */
+TextHAlign Text::getAlign() const
+{
+	return _align;
+}
+
+/**
  * Changes the way the text is aligned vertically
  * relative to the drawing area.
  * @param valign Vertical alignment.

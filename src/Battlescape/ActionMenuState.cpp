@@ -64,7 +64,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	RuleItem *weapon = _action->weapon->getRules();
 
 	// throwing (if not a fixed weapon)
-	if (!weapon->getFixed())
+	if (!weapon->isFixed())
 	{
 		addItem(BA_THROW, "STR_THROW", &id);
 	}
@@ -78,7 +78,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->getWaypoint())
+		if (weapon->isWaypoint())
 		{
 			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}

@@ -33,7 +33,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
-#include "../Geoscape/GeoscapeErrorState.h"
+#include "ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -166,7 +166,7 @@ void SaveGameState::init()
 	}
 	
 	_lstSaves->clearList();
-	_lstSaves->addRow(1, L"<NEW SAVED GAME>");
+	_lstSaves->addRow(1, _game->getLanguage()->getString("STR_NEW SAVED GAME"));
 	try
 	{
 		SavedGame::getList(_lstSaves, _game->getLanguage());
@@ -231,7 +231,8 @@ void SaveGameState::lstSavesClick(Action *action)
  */
 void SaveGameState::edtSaveKeyPress(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		try
 		{
@@ -250,13 +251,19 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 		{
 			std::cerr << "ERROR: " << e.what() << std::endl;
 			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-			_game->pushState(new GeoscapeErrorState(_game, error));
+			if (_geo)
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			else
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
 		catch (YAML::Exception &e)
 		{
 			std::cerr << "ERROR: " << e.what() << std::endl;
 			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-			_game->pushState(new GeoscapeErrorState(_game, error));
+			if (_geo)
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			else
+				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
 		_game->popState();
 	}

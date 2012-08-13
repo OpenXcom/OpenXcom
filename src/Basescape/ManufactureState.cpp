@@ -185,15 +185,15 @@ void ManufactureState::fillProductionList()
 		std::wstringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
 		std::wstringstream s2;
-		s2 << (*iter)->getNumberOfItemDone();
+		s2 << (*iter)->getAmountProduced();
 		std::wstringstream s3;
-		s3 << (*iter)->getNumberOfItemTodo();
+		s3 << (*iter)->getAmountRemaining();
 		std::wstringstream s4;
-		s4 << (*iter)->getRuleManufacture()->getManufactureCost();
+		s4 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wstringstream s5;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
-			int timeLeft = (*iter)->getNumberOfItemTodo () * (*iter)->getRuleManufacture()->getManufactureTime() - (*iter)->getTimeSpent ();
+			int timeLeft = (*iter)->getAmountRemaining () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
@@ -204,7 +204,7 @@ void ManufactureState::fillProductionList()
 
 			s5 << L"-";
 		}
-		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRuleManufacture()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
+		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
 	}
 	_lstManufacture->draw();
 	std::wstringstream ss;

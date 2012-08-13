@@ -56,9 +56,9 @@ private:
 	Text *_numQuarters, *_numStores, *_numLaboratories, *_numWorkshops, *_numHangars;
 	Bar *_barQuarters, *_barStores, *_barLaboratories, *_barWorkshops, *_barHangars;
 
-	Text *_txtDefence, *_txtShortRange, *_txtLongRange;
-	Text *_numDefence, *_numShortRange, *_numLongRange;
-	Bar *_barDefence, *_barShortRange, *_barLongRange;
+	Text *_txtDefense, *_txtShortRange, *_txtLongRange;
+	Text *_numDefense, *_numShortRange, *_numLongRange;
+	Bar *_barDefense, *_barShortRange, *_barLongRange;
 public:
 	/// Creates the Base Info state.
 	BaseInfoState(Game *game, Base *base, BasescapeState *state);

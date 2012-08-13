@@ -25,12 +25,15 @@
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Savegame/SavedGame.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
 #include "Base.h"
 #include "Ufo.h"
 #include "Waypoint.h"
 #include "TerrorSite.h"
+#include "Vehicle.h"
+#include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
@@ -65,6 +68,10 @@ Craft::~Craft()
 		delete *i;
 	}
 	delete _items;
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -138,6 +145,14 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	}
 
 	_items->load(node["items"]);
+	for (YAML::Iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
+	{
+		std::string type;
+		(*i)["type"] >> type;
+		Vehicle *v = new Vehicle(rule->getItem(type), 0);
+		v->load(*i);
+		_vehicles.push_back(v);
+	}
 	node["status"] >> _status;
 	node["lowFuel"] >> _lowFuel;
 	node["inBattlescape"] >> _inBattlescape;
@@ -172,6 +187,13 @@ void Craft::save(YAML::Emitter &out) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "items" << YAML::Value;
 	_items->save(out);
+	out << YAML::Key << "vehicles" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
 	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
@@ -197,6 +219,21 @@ void Craft::saveId(YAML::Emitter &out) const
 RuleCraft *const Craft::getRules() const
 {
 	return _rules;
+}
+
+/**
+ * Changes the ruleset for the craft's type.
+ * @return Pointer to ruleset.
+ * @note NOT TO BE USED IN NORMAL CIRCUMSTANCES.
+ */
+void Craft::setRules(RuleCraft *rules)
+{
+	_rules = rules;
+	_weapons.clear();
+	for (int i = 0; i < _rules->getWeapons(); ++i)
+	{
+		_weapons.push_back(0);
+	}
 }
 
 /**
@@ -330,7 +367,7 @@ int Craft::getNumEquipment() const
  */
 int Craft::getNumVehicles() const
 {
-	return 0;
+	return _vehicles.size();
 }
 
 /**
@@ -350,6 +387,16 @@ std::vector<CraftWeapon*> *const Craft::getWeapons()
 ItemContainer *const Craft::getItems()
 {
 	return _items;
+}
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the craft.
+ * @return Pointer to vehicle list.
+ */
+std::vector<Vehicle*> *const Craft::getVehicles()
+{
+	return &_vehicles;
 }
 
 /**
@@ -526,17 +573,17 @@ void Craft::think()
 }
 
 /**
- * Returns if a certain point is covered by the craft's
- * radar range, taking in account the positions of both.
+ * Returns if a certain target is detected by the craft's
+ * radar, taking in account the range and chance.
  * @param target Pointer to target to compare.
- * @return True if it's within range, False otherwise.
+ * @return True if it's detected, False otherwise.
  */
-bool Craft::insideRadarRange(Target *target) const
+bool Craft::detect(Target *target) const
 {
 	if (_rules->getRadarRange() == 0)
 		return false;
-	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	return (getDistance(target) <= newrange);
+	double range = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
+	return (getDistance(target) <= range);
 }
 
 /**
@@ -635,6 +682,45 @@ void Craft::setInBattlescape(bool inbattle)
 bool Craft::isDestroyed() const
 {
 	return (_damage >= _rules->getMaxDamage());
+}
+
+/**
+ * Returns the amount of space available for
+ * soldiers and vehicles.
+ * @return Space available.
+ */
+int Craft::getSpaceAvailable() const
+{
+	return _rules->getSoldiers() - getSpaceUsed();
+}
+
+/**
+ * Returns the amount of space in use by
+ * soldiers and vehicles.
+ * @return Space used.
+ */
+int Craft::getSpaceUsed() const
+{
+	return getNumSoldiers() + getNumVehicles() * 4;
+}
+
+/**
+ * Returns the total amount of vehicles of
+ * a certain type stored in the craft.
+ * @param vehicle Vehicle type.
+ * @return Number of vehicles.
+ */
+int Craft::getVehicleCount(const std::string &vehicle) const
+{
+	int total = 0;
+	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	{
+		if ((*i)->getRules()->getType() == vehicle)
+		{
+			total++;
+		}
+	}
+	return total;
 }
 
 }

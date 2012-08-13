@@ -42,7 +42,7 @@ private:
 	productionProgress_e _endType;
 public:
 	/// Creates the Production Complete state.
-	ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionProgress_e endType = PRODUCTION_PROGRESS_COMPLETE);
+	ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionProgress_e endType = PROGRESS_COMPLETE);
 	/// Cleans up the Production Complete state.
 	~ProductionCompleteState();
 	/// Updates the palette.

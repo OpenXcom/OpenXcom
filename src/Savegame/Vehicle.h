@@ -16,36 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_GEOSCAPEERRORSTATE_H
-#define OPENXCOM_GEOSCAPEERRORSTATE_H
+#ifndef OPENXCOM_VEHICLE_H
+#define OPENXCOM_VEHICLE_H
 
 #include <string>
-#include "../Engine/State.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
+class RuleItem;
 
 /**
- * Generic window used to display error messages
- * when the player is on the Geoscape.
+ * Represents a vehicle (tanks etc.) kept in a craft.
+ * Contains variable info about a vehicle like ammo.
+ * @sa RuleItem
  */
-class GeoscapeErrorState : public State
+class Vehicle
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtMessage;
+	RuleItem *_rules;
+	int _ammo;
 public:
-	/// Creates the Geoscape Error state.
-	GeoscapeErrorState(Game *game, std::wstring str);
-	/// Cleans up the Geoscape Error state.
-	~GeoscapeErrorState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	/// Creates a vehicle of the specified type.
+	Vehicle(RuleItem *rules, int ammo);
+	/// Cleans up the vehicle.
+	~Vehicle();
+	/// Loads the vehicle from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the vehicle to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Gets the vehicle's ruleset.
+	RuleItem *const getRules() const;
+	/// Gets the vehicle's ammo.
+	int getAmmo() const;
+	/// Sets the vehicle's ammo.
+	void setAmmo(int ammo);
 };
 
 }

@@ -108,25 +108,6 @@ std::string RuleSoldier::getType() const
 	return _type;
 }
 
-void RuleSoldier::setStats(struct UnitStats minStats, struct UnitStats maxStats)
-{
-	_minStats = minStats;
-	_maxStats = maxStats;
-}
-
-
-void RuleSoldier::setArmor(const std::string &armor)
-{
-	_armor = armor;
-}
-
-void RuleSoldier::setVoxelParameters(int standHeight, int kneelHeight, int loftemps)
-{
-	_standHeight = standHeight;
-	_kneelHeight = kneelHeight;
-	_loftemps = loftemps;
-}
-
 UnitStats RuleSoldier::getMinStats() const
 {
 	return _minStats;

@@ -56,6 +56,11 @@ FunctionEnd
 ;--------------------------------
 ;Interface Settings
 
+	!define MUI_HEADERIMAGE
+	!define MUI_HEADERIMAGE_BITMAP logo.bmp
+	!define MUI_HEADERIMAGE_UNBITMAP logo.bmp
+	!define MUI_WELCOMEFINISHPAGE_BITMAP side.bmp
+	!define MUI_UNWELCOMEFINISHPAGE_BITMAP side.bmp
 	!define MUI_ABORTWARNING
 
 ;--------------------------------
@@ -196,6 +201,7 @@ ${EndIf}
 	
 	;Write the uninstall keys for Windows
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayName" "${GAME_NAME} ${GAME_VERSION}"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayIcon" '"$INSTDIR\OpenXcom.exe",0'
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "DisplayVersion" "${GAME_VERSION}.0.0"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "InstallLocation" "$INSTDIR"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GAME_NAME}" "Publisher" "${GAME_AUTHOR}"

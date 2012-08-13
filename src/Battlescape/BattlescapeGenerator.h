@@ -39,6 +39,7 @@ class AlienRace;
 class AlienDeployment;
 class Game;
 class Base;
+class TerrorSite;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -52,6 +53,7 @@ private:
 	Craft *_craft;
 	Ufo *_ufo;
 	Base *_base;
+	TerrorSite *_terror;
 	RuleTerrain *_terrain;
 	int _width, _length, _height;
 	int _worldTexture, _worldShade;
@@ -99,6 +101,8 @@ public:
 	void setAlienItemlevel(int alienItemLevel);
 	/// Sets the xcom base.
 	void setBase(Base *base);
+	/// Sets the terror site.
+	void setTerrorSite(TerrorSite* site);
 	/// Runs the generator.
 	void run();
 

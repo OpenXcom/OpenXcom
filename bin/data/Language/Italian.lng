@@ -269,7 +269,7 @@ STR_HANGARS
 Hangar
 STR_SHORT_RANGE_DETECTION
 Intercettaz. breve raggio
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Forza difensiva
 STR_TRANSFERS_UC
 TRASFERIMENTI
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 ASSALTO DI TERRA DEGLI UFO
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Esplora la zona di atterraggio e, se possibile, entra dentro all'UFO. La missione sarà compiuta solo se tutte le unità nemiche verranno eliminate o neutralizzate. Solo allora si potrà iniziare il recupero dei resti dell'UFO, gli oggetti e i cadaveri degli alieni. Per interrompere la missione riporta gli operatori XCom al veicolo da trasporto e fai clic sull'icona "Interruzione missione."
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 DIFESA BASE
 STR_BASE_UC_
 BASE> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 Un veicolo alieno è atterrato nelle vicinanze. La nostra base è in grave pericolo.Secondo la procedura standard tutto il personale da combattimento è stato evacuato. Le unità aliene entreranno nella base attraverso le porte dell'hangar oppure dall'ascensore d'accesso. Difendi la base e le sue installazioni vitali a tutti i costi - è una questione di vita o di morte. Se fai clic sull'icona 'Interrompi la missione', dovrai considerarti sconfitto e perderai la base.
 STR_ALIEN_BASE_ASSAULT
 ASSALTO DI BASE ALIENA
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Armamenti per 
 STR_ARM
 Arma
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Valore difensivo
 STR_HIT_RATIO
 Qualità del colpo
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Cannone plasma
 STR_FUSION_MISSILE
 Missile a fusione
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Difesa con laser
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Difesa con plasma
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Difesa con fusione
 STR_GRAV_SHIELD
 Scudo gravitaz.
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Un sistema di identificazione piccolo dispone di un radar con un raggio di 300 miglia nautiche ed è collegato a sistemi di satelliti per la ricerca a terra. Ogni sistema ha il 5% di possibilità di individuare un oggetto di grandezza media ogni 10 minuti.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Un sistema di identificazione grande dispone di un radar con un raggio di 450 miglia nautiche ed è collegato a sistemi di satelliti per la ricerca a terra. Ogni sistema ha il 5% di possibilità di individuare un oggetto di grandezza media ogni 10 minuti.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Le difese missilistiche forniscono una certa protezione contro le incursioni da parte di veicoli spaziali nemici quando questi tentano di atterrare vicino alla base.
 STR_GENERAL_STORES_UFOPEDIA
 Tutto l'equipaggiamento - armi, munizioni, materiale recuperato e piattaforme per armi pesanti - è sistemato in magazzini, ad eccezione di quello assegnato ai veicoli che si trovano negli hangar
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Si puó pensare che gli alieni viventi richiedano uno speciale habitat per conservare il loro sistema vitale. La struttura di contenzione puó racchiudere fino a 10 forme di vita aliene in speciali alloggiamenti chiusi
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Le difese laser forniscono protezione contro le incursioni di veicoli nemici
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Le difese con raggio al plasma forniscono una potente protezione contro le incursioni di veicoli nemici
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 I missili a fusione forniscono un'efficace difesa contro gli alieni. Questi missili creano un'implosione antimaterica che distrugge tutto ció che si trova all'interno di un certo raggio
 STR_GRAV_SHIELD_UFOPEDIA
 Lo scudo antigravitazionale respinge i veicoli spaziali alieni, che cercano di atterrare vicino alla base, per tutto il tempo in cui si stanno allestendo tutti i sistemi di difesa. In pratica questo raddoppia l'efficacia dei vari sistemi difensivi della base
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Esploratore grande
 STR_HARVESTER
 Mietitore
-STR_ABDUCTER
+STR_ABDUCTOR
 Rapitore
 STR_TERROR_SHIP
 Nave del terrore
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 Nuovo gioco
 STR_LOAD_SAVED_GAME
-Carica gioco salvato
+Carica gioco
 STR_SELECT_DIFFICULTY_LEVEL
 Livello di difficoltà
 STR_1_BEGINNER
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 Il piú grande veicolo da esplorazione alieno è un tipo di macchina multiuso utilizzata in tutti i tipi di missioni aliene.
 STR_HARVESTER_UFOPEDIA
 Il mietitore ha una botola alla base ed è fornito di un congegno di sollevamento per issare a bordo vari tipi di animali. Vengono usati coltelli laser per estrarre il materiale che interessa. Poi le carcasse sono lasciate cadere a terra. Ci sono anche speciali contenitori dove si conservano i vari organi.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Questo veicolo è dotato di una sala per sperimentazioni dove si eseguono interventi orripilanti su soggetti umani. Generalmente le vittime vengono paralizzate per mezzo di forze telepatiche, ma restano coscienti per tutto il tempo in cui giacciono sul lettino operatorio.
 STR_TERROR_SHIP_UFOPEDIA
 La nave del terrore ha strutture apposite per contenere armi e creature aliene destinate a suscitare terrore. Viene usata per trasportare i terroristi alieni nelle aree fortemente abitate.
@@ -1691,7 +1691,7 @@ STR_SECTOPOD_CORPSE
 Cadavere Sectopodo
 STR_CYBERDISC_CORPSE
 Cadavere Cyberdisco
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
+STR_TO_ARM_HWP
 Proiettili PAP insufficienti
 STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
 Razzi PAP insufficienti
@@ -1753,13 +1753,7 @@ STR_GRAPHS
 GRAFICI
 STR_UFOPAEDIA_UC
 UFOPEDIA
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Opzioni
-STR_OPTIONS
+STR_OPTIONS_UC
 OPZIONI
 STR_FUNDING_UC
 FINANZIAMENTI
@@ -2039,3 +2033,9 @@ STR_CORPSE
 Cadavere
 STR_UNLOAD
 Scarica
+STR_NEW_BATTLE
+New Battle
+STR_THE_SIMULATRON
+THE SIMULATRON
+STR_OPTIONS
+Opzioni

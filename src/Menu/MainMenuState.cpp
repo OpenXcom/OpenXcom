@@ -44,10 +44,10 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnNewGame = new TextButton(96, 20, 64, 90);
-	_btnNewBattle = new TextButton(96, 20, 160, 90);
-	_btnLoad = new TextButton(96, 20, 64, 118);
-	_btnOptions = new TextButton(96, 20, 160, 118);
+	_btnNewGame = new TextButton(92, 20, 64, 90);
+	_btnNewBattle = new TextButton(92, 20, 164, 90);
+	_btnLoad = new TextButton(92, 20, 64, 118);
+	_btnOptions = new TextButton(92, 20, 164, 118);
 	_btnQuit = new TextButton(192, 20, 64, 146);
 	_txtTitle = new Text(256, 30, 32, 45);
 
@@ -80,7 +80,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
 	_btnOptions->setColor(Palette::blockOffset(8)+5);
-	_btnOptions->setText(_game->getLanguage()->getString("STR_OPTIONS_"));
+	_btnOptions->setText(_game->getLanguage()->getString("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+5);

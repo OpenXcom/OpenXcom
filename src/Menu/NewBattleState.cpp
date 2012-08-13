@@ -32,6 +32,13 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/BriefingState.h"
+#include "../Savegame/Ufo.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Ruleset/RuleCraft.h"
+#include "../Resource/ResourcePack.h"
+#include "../Engine/Music.h"
+#include "../Basescape/CraftInfoState.h"
 
 namespace OpenXcom
 {
@@ -40,16 +47,42 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game *game) : State(game)
+NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 8);
+	_txtTitle = new Text(320, 16, 0, 9);
+	_txtMissionType = new Text(100, 9, 5, 30);
+	_txtTerrainType = new Text(100, 9, 110, 30);
+	_txtAlienRace = new Text(100, 9, 215, 30);
+	_txtDifficulty = new Text(100, 9, 5, 80);
+	_txtDarkness = new Text(100, 9, 110, 80);
+	_txtCraft = new Text(100, 9, 215, 80);
+	_btnMissionType = new TextButton(100, 20, 5, 40);
+	_btnTerrainType = new TextButton(100, 20, 110, 40);
+	_btnAlienRace = new TextButton(100, 20, 215, 40);
+	_btnDifficulty = new TextButton(100, 20, 5, 90);
+	_btnDarkness = new TextButton(100, 20, 110, 90);
+	_btnCraft = new TextButton(100, 20, 215, 90);
+	_btnEquip = new TextButton(148, 16, 86, 154);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtMissionType);
+	add(_txtTerrainType);
+	add(_txtAlienRace);
+	add(_txtDifficulty);
+	add(_txtDarkness);
+	add(_txtCraft);
+	add(_btnMissionType);
+	add(_btnTerrainType);
+	add(_btnAlienRace);
+	add(_btnDifficulty);
+	add(_btnDarkness);
+	add(_btnCraft);
+	add(_btnEquip);
 	add(_btnOk);
 	add(_btnCancel);
 
@@ -57,10 +90,100 @@ NewBattleState::NewBattleState(Game *game) : State(game)
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_THE_SIMULATRON"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+
+	_txtMissionType->setColor(Palette::blockOffset(8)+10);
+	_txtMissionType->setText(_game->getLanguage()->getString("STR_MISSION"));
+
+	_txtTerrainType->setColor(Palette::blockOffset(8)+10);
+	_txtTerrainType->setText(_game->getLanguage()->getString("STR_TERRAIN"));
+
+	_txtAlienRace->setColor(Palette::blockOffset(8)+10);
+	_txtAlienRace->setText(_game->getLanguage()->getString("STR_RACE"));
+
+	_txtDifficulty->setColor(Palette::blockOffset(8)+10);
+	_txtDifficulty->setText(_game->getLanguage()->getString("STR_DIFFICULTY_LEVEL"));
+
+	_txtDarkness->setColor(Palette::blockOffset(8)+10);
+	_txtDarkness->setText(_game->getLanguage()->getString("STR_DARKNESS"));
+
+	_txtCraft->setColor(Palette::blockOffset(8)+10);
+	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
+
+	_selMission = 0;
+	_missionTypes = _game->getRuleset()->getDeploymentsList();
+	//TODO: Figure out how to generate base defenses
+	_missionTypes.pop_back();
+
+	_selTerrain = 0;
+	_terrainTypes.push_back("CULTA");
+	_terrainTypes.push_back("FOREST");
+	_terrainTypes.push_back("JUNGLE");
+	_terrainTypes.push_back("MOUNT");
+	_terrainTypes.push_back("DESERT");
+	_terrainTypes.push_back("POLAR");
+
+	_selAlien = 0;
+	//_alienRaces = _game->getRuleset()->getAlienRacesList();
+	_alienRaces.push_back("STR_SECTOID");
+	_alienRaces.push_back("STR_FLOATER");
+
+	_selDifficulty = 0;
+	_difficulty.push_back("STR_1_BEGINNER");
+	_difficulty.push_back("STR_2_EXPERIENCED");
+	_difficulty.push_back("STR_3_VETERAN");
+	_difficulty.push_back("STR_4_GENIUS");
+	_difficulty.push_back("STR_5_SUPERHUMAN");
+
+	_selDarkness = 0;
+	_darkness.push_back("0");
+	_darkness.push_back("3");
+	_darkness.push_back("6");
+	_darkness.push_back("9");
+	_darkness.push_back("12");
+	_darkness.push_back("15");
+
+	_selCraft = 0;
+	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	{
+		RuleCraft *rule = _game->getRuleset()->getCraft(*i);
+		if (rule->getSoldiers() > 0)
+		{
+			_crafts.push_back(*i);
+		}
+	}
+
+	_btnMissionType->setColor(Palette::blockOffset(15)-1);
+	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick);
+
+	_btnTerrainType->setColor(Palette::blockOffset(15)-1);
+	_btnTerrainType->setText(Language::utf8ToWstr(_terrainTypes[_selTerrain]));
+	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick);
+
+	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
+	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+	_btnAlienRace->onMouseClick((ActionHandler)&NewBattleState::btnAlienRaceClick);
+
+	_btnDifficulty->setColor(Palette::blockOffset(15)-1);
+	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	_btnDifficulty->onMouseClick((ActionHandler)&NewBattleState::btnDifficultyClick);
+
+	_btnDarkness->setColor(Palette::blockOffset(15)-1);
+	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+	_btnDarkness->onMouseClick((ActionHandler)&NewBattleState::btnDarknessClick);
+
+	_btnCraft->setColor(Palette::blockOffset(15)-1);
+	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
+	_btnCraft->onMouseClick((ActionHandler)&NewBattleState::btnCraftClick);
+
+	_btnEquip->setColor(Palette::blockOffset(8)+5);
+	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIP_CRAFT"));
+	_btnEquip->onMouseClick((ActionHandler)&NewBattleState::btnEquipClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -70,7 +193,7 @@ NewBattleState::NewBattleState(Game *game) : State(game)
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 
-	initSave();
+	_music = true;
 }
 
 /**
@@ -81,15 +204,42 @@ NewBattleState::~NewBattleState()
 	
 }
 
+/**
+ * Resets the menu music and savegame
+ * when coming back from the battlescape.
+ */
+void NewBattleState::init()
+{
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
+	// Set music
+	if (!_music)
+	{
+		_music = true;
+		_game->getResourcePack()->getMusic("GMSTORY")->play();
+	}
+
+	if (_craft == 0)
+	{
+		_game->setSavedGame(0);
+		initSave();
+	}
+}
+
+/**
+ * Initializes a new savegame with
+ * everything available.
+ */
 void NewBattleState::initSave()
 {
 	//_game->setRuleset(new XcomRuleset());
 	Ruleset *rule = _game->getRuleset();
-	SavedGame *save = new SavedGame(DIFF_BEGINNER);
+	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
 	save->getBases()->push_back(base);
-	Craft *craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, save->getId("STR_SKYRANGER"));
-	base->getCrafts()->push_back(craft);
+	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
+	base->getCrafts()->push_back(_craft);
 
 	// Generate soldiers
 	for (int i = 0; i < 30; ++i)
@@ -97,14 +247,22 @@ void NewBattleState::initSave()
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
 		if (i < 8)
-			soldier->setCraft(craft);
+			soldier->setCraft(_craft);
 	}
 
 	// Generate items
 	std::vector<std::string> items = rule->getItemsList();
 	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
-		base->getItems()->addItem(*i, 99);
+		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+		{
+			base->getItems()->addItem(*i, 99);
+			if (rule->getBattleType() != BT_NONE && !rule->isFixed())
+			{
+				_craft->getItems()->addItem(*i);
+			}
+		}
 	}
 
 	// Add research
@@ -123,19 +281,56 @@ void NewBattleState::initSave()
  */
 void NewBattleState::btnOkClick(Action *action)
 {
+	_music = false;
+
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
-	bgame->setMissionType("STR_TERROR_MISSION");
+	bgame->setMissionType(_missionTypes[_selMission]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-	bgen.setWorldTexture(1);
-	bgen.setWorldShade(0);
-	bgen.setCraft(_game->getSavedGame()->getBases()->at(0)->getCrafts()->at(0));
-	bgen.setBase(_game->getSavedGame()->getBases()->at(0));
-	bgen.setAlienRace("STR_SECTOID");
+
+	int textures[] = {1, 0, 0, 5, 7, 9};
+	bgen.setWorldTexture(textures[_selTerrain]);
+
+	if (_missionTypes[_selMission] == "STR_TERROR_MISSION")
+	{
+		TerrorSite *t = new TerrorSite();
+		t->setId(1);
+		_craft->setDestination(t);
+		bgen.setTerrorSite(t);
+		bgen.setCraft(_craft);
+	}
+	else if (_missionTypes[_selMission] == "STR_BASE_DEFENSE")
+	{
+		bgen.setBase(_craft->getBase());
+	}
+	else
+	{
+		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
+		u->setId(1);
+		_craft->setDestination(u);
+		bgen.setUfo(u);
+		bgen.setCraft(_craft);
+		if (_terrainTypes[_selTerrain] == "FOREST")
+		{
+			u->setLatitude(-0.5);
+		}
+	}
+
+	GameDifficulty diffs[] = {DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN};
+	_game->getSavedGame()->setDifficulty(diffs[_selDifficulty]);
+
+	std::stringstream ss;
+	int shade = 0;
+	ss << std::dec << _darkness[_selDarkness];
+	ss >> std::dec >> shade;
+	bgen.setWorldShade(shade);
+	bgen.setAlienRace(_alienRaces[_selAlien]);
 	bgen.setAlienItemlevel(0);
 	bgen.run();
 	_game->getSavedGame()->getBattleGame()->resetUnitTiles();
-	_game->pushState(new BattlescapeState(_game));
+	//_game->pushState(new BattlescapeState(_game));
+	_game->pushState(new BriefingState(_game, _craft));
+	_craft = 0;
 }
 
 /**
@@ -147,6 +342,78 @@ void NewBattleState::btnCancelClick(Action *action)
 	//_game->setRuleset(0);
 	_game->setSavedGame(0);
 	_game->popState();
+}
+
+/**
+ * Shows the Craft Info screen.
+ * @param action Pointer to an action.
+ */
+void NewBattleState::btnEquipClick(Action *action)
+{
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	_game->pushState(new CraftInfoState(_game, _game->getSavedGame()->getBases()->front(), 0));
+}
+
+void NewBattleState::btnMissionTypeClick(Action *action)
+{
+	_selMission++;
+	if (_selMission >= _missionTypes.size())
+	{
+		_selMission = 0;
+	}
+	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+}
+
+void NewBattleState::btnTerrainTypeClick(Action *action)
+{
+	_selTerrain++;
+	if (_selTerrain >= _terrainTypes.size())
+	{
+		_selTerrain = 0;
+	}
+	_btnTerrainType->setText(Language::utf8ToWstr(_terrainTypes[_selTerrain]));
+}
+
+void NewBattleState::btnAlienRaceClick(Action *action)
+{
+	_selAlien++;
+	if (_selAlien >= _alienRaces.size())
+	{
+		_selAlien = 0;
+	}
+	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+}
+
+void NewBattleState::btnDifficultyClick(Action *action)
+{
+	_selDifficulty++;
+	if (_selDifficulty >= _difficulty.size())
+	{
+		_selDifficulty = 0;
+	}
+	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+}
+
+void NewBattleState::btnDarknessClick(Action *action)
+{
+	_selDarkness++;
+	if (_selDarkness >= _darkness.size())
+	{
+		_selDarkness = 0;
+	}
+	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+}
+
+void NewBattleState::btnCraftClick(Action *action)
+{
+	_selCraft++;
+	if (_selCraft >= _crafts.size())
+	{
+		_selCraft = 0;
+	}
+	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
+	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
 }
 
 }

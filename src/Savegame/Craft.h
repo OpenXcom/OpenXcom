@@ -33,6 +33,7 @@ class CraftWeapon;
 class ItemContainer;
 class Ruleset;
 class SavedGame;
+class Vehicle;
 
 /**
  * Represents a craft stored in a base.
@@ -48,6 +49,7 @@ private:
 	int _id, _fuel, _damage;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
+	std::vector<Vehicle*> _vehicles;
 	std::string _status;
 	bool _lowFuel;
 	bool _inBattlescape;
@@ -64,6 +66,8 @@ public:
 	void saveId(YAML::Emitter& out) const;
 	/// Gets the craft's ruleset.
 	RuleCraft *const getRules() const;
+	/// Sets the craft's ruleset.
+	void setRules(RuleCraft *rules);
 	/// Gets the craft's ID.
 	int getId() const;
 	/// Gets the craft's name.
@@ -90,6 +94,8 @@ public:
 	std::vector<CraftWeapon*> *const getWeapons();
 	/// Gets the craft's items.
 	ItemContainer *const getItems();
+	/// Gets the craft's vehicles.
+	std::vector<Vehicle*> *const getVehicles();
 	/// Gets the craft's amount of fuel.
 	int getFuel() const;
 	/// Sets the craft's amount of fuel.
@@ -114,8 +120,8 @@ public:
 	int getFuelLimit() const;
 	/// Returns the craft to its base.
 	void returnToBase();
-	/// Checks if a target is inside the craft's radar.
-	bool insideRadarRange(Target *target) const;
+	/// Checks if a target is detected by the craft's radar.
+	bool detect(Target *target) const;
 	/// Handles craft logic.
 	void think();
 	/// Consumes the craft's fuel.
@@ -132,6 +138,12 @@ public:
 	bool isInBattlescape() const;
 	/// Gets if craft is destroyed during dogfights.
 	bool isDestroyed() const;
+	/// Gets the amount of space available inside a craft.
+	int getSpaceAvailable() const;
+	/// Gets the amount of space used inside a craft.
+	int getSpaceUsed() const;
+	/// Gets the craft's vehicles of a certain type.
+	int getVehicleCount(const std::string &vehicle) const;
 };
 
 }

@@ -95,13 +95,13 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
 
 	_txtUsed->setColor(Palette::blockOffset(15)+6);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
@@ -167,7 +167,7 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
 	}
-	else if (c->getRules()->getSoldiers() - c->getNumSoldiers() > 0 && s->getWoundRecovery() == 0)
+	else if (c->getSpaceAvailable() > 0 && s->getWoundRecovery() == 0)
 	{
 		s->setCraft(c);
 		_lstSoldiers->setCellText(row, 2, c->getName(_game->getLanguage()));
@@ -176,10 +176,10 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 	_lstSoldiers->setRowColor(row, color);
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
 }
 

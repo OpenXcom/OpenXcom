@@ -55,7 +55,8 @@ Font::~Font()
 void Font::load()
 {
 	_surface->lock();
-	for (unsigned int i = 0; i < _index.length(); ++i)
+	int length = _index.length();
+	for (unsigned int i = 0; i < length; ++i)
 	{
 		SDL_Rect rect;
 		int left = -1, right = -1;

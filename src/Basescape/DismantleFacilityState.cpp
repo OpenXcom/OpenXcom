@@ -95,7 +95,7 @@ DismantleFacilityState::~DismantleFacilityState()
  */
 void DismantleFacilityState::btnOkClick(Action *action)
 {
-	if (!_fac->getRules()->getLift())
+	if (!_fac->getRules()->isLift())
 	{
 		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{

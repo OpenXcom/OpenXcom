@@ -18,6 +18,7 @@
  */
 #include "CraftEquipmentState.h"
 #include <sstream>
+#include <algorithm>
 #include "../Engine/Game.h"
 #include "../Engine/Timer.h"
 #include "../Resource/ResourcePack.h"
@@ -35,6 +36,9 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Savegame/Vehicle.h"
+#include "../Savegame/SavedGame.h"
+#include "../Menu/ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -93,13 +97,13 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_txtAvailable->setColor(Palette::blockOffset(15)+1);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01'<< c->getRules()->getSoldiers() - c->getNumSoldiers();
+	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01'<< c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
 
 	_txtUsed->setColor(Palette::blockOffset(15)+1);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01'<< c->getNumSoldiers();
+	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
@@ -118,13 +122,27 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
+		// CHEAP HACK TO HIDE HWP AMMO
+		if ((*i).substr(0, 8) == "STR_HWP_")
+			continue;
+
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
-		if (rule->getBattleType() != BT_NONE && (_base->getItems()->getItem(*i) > 0 || c->getItems()->getItem(*i) > 0))
+		int cQty = 0;
+		if (rule->isFixed())
+		{
+			cQty = c->getVehicleCount(*i);
+		}
+		else
+		{
+			cQty = c->getItems()->getItem(*i);
+		}
+		if (rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && _game->getSavedGame()->isResearched(rule->getRequirements()) &&
+			(_base->getItems()->getItem(*i) > 0 || cQty > 0))
 		{
 			_items.push_back(*i);
 			std::wstringstream ss, ss2;
 			ss << _base->getItems()->getItem(*i);
-			ss2 << c->getItems()->getItem(*i);
+			ss2 << cQty;
 
 			std::wstring s = _game->getLanguage()->getString(*i);
 			if (rule->getBattleType() == BT_AMMO)
@@ -134,7 +152,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 			_lstEquipment->addRow(3, s.c_str(), ss.str().c_str(), ss2.str().c_str());
 
 			Uint8 color;
-			if (c->getItems()->getItem(*i) == 0)
+			if (cQty == 0)
 			{
 				if (rule->getBattleType() == BT_AMMO)
 				{
@@ -236,12 +254,22 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 void CraftEquipmentState::updateQuantity()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
+	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	int cQty = 0;
+	if (item->isFixed())
+	{
+		cQty = c->getVehicleCount(_items[_sel]);
+	}
+	else
+	{
+		cQty = c->getItems()->getItem(_items[_sel]);
+	}
 	std::wstringstream ss, ss2;
 	ss << _base->getItems()->getItem(_items[_sel]);
-	ss2 << c->getItems()->getItem(_items[_sel]);
+	ss2 << cQty;
 
 	Uint8 color;
-	if (c->getItems()->getItem(_items[_sel]) == 0)
+	if (cQty == 0)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(_items[_sel]);
 		if (rule->getBattleType() == BT_AMMO)
@@ -260,6 +288,13 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setRowColor(_sel, color);
 	_lstEquipment->setCellText(_sel, 1, ss.str());
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
+
+	std::wstringstream ss3;
+	ss3 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
+	_txtAvailable->setText(ss3.str());
+	std::wstringstream ss4;
+	ss4 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
+	_txtUsed->setText(ss4.str());
 }
 
 /**
@@ -268,10 +303,40 @@ void CraftEquipmentState::updateQuantity()
 void CraftEquipmentState::moveLeft()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
-	if (c->getItems()->getItem(_items[_sel]) > 0)
+	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	int cQty = 0;
+	if (item->isFixed())
 	{
-		_base->getItems()->addItem(_items[_sel]);
-		c->getItems()->removeItem(_items[_sel]);
+		cQty = c->getVehicleCount(_items[_sel]);
+	}
+	else
+	{
+		cQty = c->getItems()->getItem(_items[_sel]);
+	}
+	if (cQty > 0)
+	{
+		RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+		// Convert vehicle to item
+		if (item->isFixed())
+		{
+			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+			{
+				if ((*i)->getRules() == item)
+				{
+					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+					delete (*i);
+					c->getVehicles()->erase(i);
+					break;
+				}
+			}
+			_base->getItems()->addItem(_items[_sel]);
+		}
+		else
+		{
+			_base->getItems()->addItem(_items[_sel]);
+			c->getItems()->removeItem(_items[_sel]);
+		}
 		updateQuantity();
 	}
 }
@@ -282,10 +347,39 @@ void CraftEquipmentState::moveLeft()
 void CraftEquipmentState::moveRight()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
+	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
 	if (_base->getItems()->getItem(_items[_sel]) > 0)
 	{
-		_base->getItems()->removeItem(_items[_sel]);
-		c->getItems()->addItem(_items[_sel]);
+		// Convert item to vehicle
+		if (item->isFixed())
+		{
+			// Check if there's enough room
+			if (c->getNumVehicles() < c->getRules()->getVehicles() && c->getSpaceAvailable() >= 4)
+			{
+				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+				int qty = _base->getItems()->getItem(ammo->getType());
+				if (qty == 0)
+				{
+					std::wstringstream ss;
+					ss << _game->getLanguage()->getString("NOT_ENOUGH");
+					ss << _game->getLanguage()->getString(ammo->getType());
+					ss << _game->getLanguage()->getString("TO_ARM_HWP");
+					_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+				}
+				else
+				{
+					int newAmmo = std::min(qty, ammo->getClipSize());
+					c->getVehicles()->push_back(new Vehicle(item, newAmmo));
+					_base->getItems()->removeItem(ammo->getType(), newAmmo);
+					_base->getItems()->removeItem(_items[_sel]);
+				}
+			}
+		}
+		else
+		{
+			_base->getItems()->removeItem(_items[_sel]);
+			c->getItems()->addItem(_items[_sel]);
+		}
 		updateQuantity();
 	}
 }

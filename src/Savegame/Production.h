@@ -26,26 +26,27 @@ namespace OpenXcom
 class RuleManufacture;
 class Base;
 class SavedGame;
-enum productionProgress_e { PRODUCTION_PROGRESS_NOT_COMPLETE, PRODUCTION_PROGRESS_COMPLETE, PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY, PRODUCTION_PROGRESS_NOT_ENOUGH_MATERIALS, PRODUCTION_PROGRESS_MAX };
+class Ruleset;
+enum productionProgress_e { PROGRESS_NOT_COMPLETE, PROGRESS_COMPLETE, PROGRESS_NOT_ENOUGH_MONEY, PROGRESS_NOT_ENOUGH_MATERIALS, PROGRESS_MAX };
 class Production
 {
 public:
-	Production (RuleManufacture * item, int todo);
-	int getNumberOfItemTodo () const;
-	void setNumberOfItemTodo (int);
+	Production (RuleManufacture * rules, int amount);
+	int getAmountRemaining () const;
+	void setAmountRemaining (int);
 	int getTimeSpent () const;
 	void setTimeSpent (int);
-	int getNumberOfItemDone () const;
+	int getAmountProduced () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
-	productionProgress_e step(Base * b, SavedGame * g);
-	const RuleManufacture * getRuleManufacture() const;
+	productionProgress_e step(Base * b, SavedGame * g, Ruleset *r);
+	const RuleManufacture * getRules() const;
 	void startItem(Base * b, SavedGame * g);
 	void save(YAML::Emitter &out);
 	void load(const YAML::Node &node);
 private:
-	RuleManufacture * _item;
-	int _todo;
+	RuleManufacture * _rules;
+	int _amount;
 	int _timeSpent;
 	int _engineers;
 };
