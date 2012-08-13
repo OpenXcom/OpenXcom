@@ -166,7 +166,7 @@ void SaveGameState::init()
 	}
 	
 	_lstSaves->clearList();
-	_lstSaves->addRow(1, _game->getLanguage()->getString("STR_NEW SAVED GAME"));
+	_lstSaves->addRow(1, _game->getLanguage()->getString("STR_NEW_SAVED_GAME").c_str());
 	try
 	{
 		SavedGame::getList(_lstSaves, _game->getLanguage());
