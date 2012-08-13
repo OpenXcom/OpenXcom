@@ -20,6 +20,8 @@
 #define OPENXCOM_NEWBATTLESTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
+#include <string>
 
 namespace OpenXcom
 {
