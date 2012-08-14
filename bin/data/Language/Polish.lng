@@ -1812,35 +1812,35 @@ Pancerz dolny
 STR_ROUNDS
 Naboi
 STR_CURRENT_SAVE_ABORTED
-Current save aborted
+Aktualny zapis anulowano
 STR_CURRENT_LOAD_ABORTED
-Current load aborted
+Aktualne ładowanie anulowano
 STR_FORMAT
-FORMAT
+FORMATOWANIE
 STR_SAVING_GAME
-Saving game
+Zapisuję grę
 STR_LOADING_GAME
-Loading game
+Ładuję grę
 STR_PROCEED
-PROCEED
+KONTYNUUJĘ
 STR_NO_SAVED_GAME_PRESENT
-No saved game present
+Brak zapisanych gier
 STR_LOAD_UNSUCCESSFUL
-Load unsuccessful
+Ładowanie nie powiodło się
 STR_SAVE_UNSUCCESSFUL
-Save unsuccessful
+Zapis nie powiódł się
 STR_LOAD_SUCCESSFUL
-Load successful
+Ładowanie powiodło się
 STR_SAVE_SUCCESSFUL
-Save successful
+Zapis powiódł się
 STR_DELETE
-DELETE
+USUŃ
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
-Previous X-COM saved game detected
+Wykryto poprzedni zapis gry X-COM
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
-Is it OK to delete the saved game?
+Czy na pewno chcesz usunąć zapis gry?
 STR_SOUND_OPTIONS
-SOUND OPTIONS
+OPCJE DŹWIĘKOWE
 STR_MUSIC_VOLUME
 Muzyka
 STR_SFX_VOLUME
@@ -1852,9 +1852,9 @@ CONTROLLER MODE 1{NEWLINE}(HOTSPOT INTERFACE)
 STR_CONTROLLER_MODE_2_POINT_CLICK_INTERFACE
 CONTROLLER MODE 2{NEWLINE}(POINT & CLICK INTERFACE)
 STR_LOADING
-Loading...
+Ładowanie...
 STR_FORMAT_UNSUCCESSFUL
-Format Unsuccessful
+Formatowanie nieudane
 STR_UNIT
 JEDNOSTKA>
 STR_ENERGY
