@@ -18,7 +18,7 @@
  */
 #include "Game.h"
 #ifdef _WIN32
-#include <Windows.h>
+#include <windows.h>
 #include <SDL_syswm.h>
 #endif
 #include <sstream>
