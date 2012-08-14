@@ -5,10 +5,6 @@ set ( basescape_src
   Basescape/CraftSoldiersState.h
   Basescape/TransfersState.cpp
   Basescape/TransfersState.h
-  Basescape/BasescapeErrorState.h
-  Basescape/BasescapeErrorState.cpp
-  Basescape/PurchaseErrorState.h
-  Basescape/PurchaseErrorState.cpp
   Basescape/StoresState.cpp
   Basescape/StoresState.h
   Basescape/SellState.h
@@ -210,8 +206,6 @@ set ( geoscape_src
   Geoscape/UfoDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
-  Geoscape/GeoscapeErrorState.cpp
-  Geoscape/GeoscapeErrorState.h
   Geoscape/Polyline.h
   Geoscape/Polyline.cpp
   Geoscape/ConfirmNewBaseState.h
@@ -228,8 +222,8 @@ set ( geoscape_src
   Geoscape/BuildNewBaseState.cpp
   Geoscape/MonthlyReportState.cpp
   Geoscape/MonthlyReportState.h
-  Geoscape/CannotRearmState.cpp
-  Geoscape/CannotRearmState.h
+  Geoscape/CraftErrorState.cpp
+  Geoscape/CraftErrorState.h
   Geoscape/ProductionCompleteState.h
   Geoscape/ProductionCompleteState.cpp
   Geoscape/TargetInfoState.h
@@ -314,6 +308,8 @@ set ( menu_src
   Menu/NewBattleState.h
   Menu/OptionsState.cpp
   Menu/OptionsState.h
+  Menu/ErrorMessageState.cpp
+  Menu/ErrorMessageState.h
 )
 
 set ( resource_src
@@ -427,6 +423,8 @@ set ( savegame_src
   Savegame/Production.cpp
   Savegame/TerrorSite.h
   Savegame/TerrorSite.cpp
+  Savegame/Vehicle.h
+  Savegame/Vehicle.cpp
 )
 
 set ( ufopedia_src

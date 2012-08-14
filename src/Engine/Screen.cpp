@@ -19,6 +19,7 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
+#include <iostream>
 #include <SDL_rotozoom.h>
 #include "Exception.h"
 #include "Surface.h"
@@ -41,11 +42,13 @@ const double Screen::BASE_HEIGHT = 200.0;
 Screen::Screen(int width, int height, int bpp) : _scaleX(1.0), _scaleY(1.0), _fullscreen(false)
 {
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
+	std::cout << "Attempting to initialize display to " << width << "x" << height << "x" << bpp << "..." << std::endl;
 	_screen = SDL_SetVideoMode(width, height, bpp, _flags);
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
+	std::cout << "Display initialized to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << "." << std::endl;
 	_surface = new Surface(width, height);
 }
 
@@ -254,7 +257,26 @@ void Screen::clear()
 void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	_surface->setPalette(colors, firstcolor, ncolors);
-	SDL_SetColors(_screen, colors, firstcolor, ncolors);
+	if (SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+	{
+		std::cerr << "Display palette doesn't match requested palette" << std::endl;
+	}
+	// Sanity check
+	/*
+	SDL_Color *newcolors = _screen->format->palette->colors;
+	for (int i = firstcolor, j = 0; i < firstcolor + ncolors; i++, j++)
+	{
+		std::cout << (int)newcolors[i].r << " - " << (int)newcolors[i].g << " - " << (int)newcolors[i].b << std::endl;
+		std::cout << (int)colors[j].r << " + " << (int)colors[j].g << " + " << (int)colors[j].b << std::endl;
+		if (newcolors[i].r != colors[j].r ||
+			newcolors[i].g != colors[j].g ||
+			newcolors[i].b != colors[j].b)
+		{
+			std::cout << "WARNING: Display palette doesn't match requested palette" << std::endl;
+			break;
+		}
+	}
+	*/
 }
 
 /**
@@ -294,11 +316,13 @@ void Screen::setResolution(int width, int height)
 {
 	_scaleX = width / BASE_WIDTH;
 	_scaleY = height / BASE_HEIGHT;
+	std::cout << "Attempting to change display to " << width << "x" << height << "..." << std::endl;
 	_screen = SDL_SetVideoMode(width, height, _screen->format->BitsPerPixel, _flags);
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
+	std::cout << "Display changed to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << "." << std::endl;
 	setPalette(getPalette());
 }
 
@@ -309,6 +333,8 @@ void Screen::setResolution(int width, int height)
  */
 void Screen::setFullscreen(bool full)
 {
+	if (full == _fullscreen)
+		return;
 	_fullscreen = full;
 	if (_fullscreen)
 	{

@@ -611,14 +611,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\BasescapeErrorState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\BasescapeErrorState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Basescape\BasescapeState.cpp"
 				>
 			</File>
@@ -768,14 +760,6 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\ManufactureInfoState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\PurchaseErrorState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\PurchaseErrorState.h"
 				>
 			</File>
 			<File
@@ -1243,6 +1227,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\AlienTerrorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AlienTerrorState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\BaseNameState.cpp"
 				>
 			</File>
@@ -1259,11 +1251,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\CannotRearmState.cpp"
+				RelativePath=".\Geoscape\CraftErrorState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\CannotRearmState.h"
+				RelativePath=".\Geoscape\CraftErrorState.h"
 				>
 			</File>
 			<File
@@ -1328,14 +1320,6 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\GeoscapeCraftState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\GeoscapeErrorState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\GeoscapeErrorState.h"
 				>
 			</File>
 			<File
@@ -1579,6 +1563,14 @@
 			Name="Menu"
 			>
 			<File
+				RelativePath=".\Menu\ErrorMessageState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\ErrorMessageState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\LanguageState.cpp"
 				>
 			</File>
@@ -1603,6 +1595,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Menu\NewBattleState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\NewBattleState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\NewGameState.cpp"
 				>
 			</File>
@@ -1616,6 +1616,14 @@
 			</File>
 			<File
 				RelativePath=".\Menu\NoteState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\OptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\OptionsState.h"
 				>
 			</File>
 			<File
@@ -1807,6 +1815,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\TerrorSite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\TerrorSite.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Tile.cpp"
 				>
 			</File>
@@ -1844,6 +1860,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\Waypoint.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Vehicle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Vehicle.h"
 				>
 			</File>
 		</Filter>
@@ -1964,14 +1988,6 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\RuleCraftWeapon.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleGenUnit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleGenUnit.h"
 				>
 			</File>
 			<File

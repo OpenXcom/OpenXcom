@@ -174,54 +174,6 @@ std::string Unit::getType() const
 }
 
 /**
- * Sets the unit's stats data object.
- * @param Stats.
- */
-void Unit::setStats(struct UnitStats stats)
-{
-	_stats = stats;
-}
-
-/**
- * Sets the unit's armor type.
- * @param string.
- */
-void Unit::setArmor(const std::string &armor)
-{
-	_armor = armor;
-}
-
-/**
- * Set the unit's height at standing, kneeling and 3D template.
- * @param string.
- */
-void Unit::setVoxelParameters(int standHeight, int kneelHeight, int loftemps)
-{
-	_standHeight = standHeight;
-	_kneelHeight = kneelHeight;
-	_loftemps = loftemps;
-}
-
-/**
- * Set the unit's intelligence and aggression.
- * @param string.
- */
-void Unit::setAIParameters(int intelligence, int aggression)
-{
-	_intelligence = intelligence;
-	_aggression = aggression;
-}
-
-/**
- * Set the unit's special ability.
- * @param specab.
- */
-void Unit::setSpecialAbility(SpecialAbility specab)
-{
-	_specab = specab;
-}
-
-/**
  * Returns the unit's stats data object.
  * @return Stats.
  */
@@ -285,30 +237,12 @@ std::string Unit::getRank() const
 }
 
 /**
- * Set the unit's value - for scoring.
- * @param value.
- */
-void Unit::setValue(int value)
-{
-	_value = value;
-}
-
-/**
  * Get the unit's value - for scoring.
  * @return value.
  */
 int Unit::getValue() const
 {
 	return _value;
-}
-
-/**
- * Set the unit's death sound.
- * @param id.
- */
-void Unit::setDeathSound(int id)
-{
-	_deathSound = id;
 }
 
 /**

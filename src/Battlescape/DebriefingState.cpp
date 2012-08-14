@@ -37,6 +37,8 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Savegame/Vehicle.h"
+#include "../Savegame/TerrorSite.h"
 #include "PromotionsState.h"
 
 namespace OpenXcom
@@ -300,6 +302,17 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+	// terror site disappears
+	for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+	{
+		if ((*i)->isInBattlescape())
+		{
+			delete *i;
+			save->getTerrorSites()->erase(i);
+			break;
+		}
+	}
+
 	// lets see what happens with units
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
@@ -307,6 +320,7 @@ void DebriefingState::prepareDebriefing()
 		UnitFaction faction = (*j)->getFaction();
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
+		std::string type = (*j)->getType();
 
 		if (status == STATUS_DEAD)
 		{
@@ -333,6 +347,15 @@ void DebriefingState::prepareDebriefing()
 				{
 					// non soldier player = tank
 					addStat("STR_TANKS_DESTROYED", 1, -value);
+					for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+					{
+						if ((*i)->getRules()->getType() == "STR_" + type)
+						{
+							delete (*i);
+							craft->getVehicles()->erase(i);
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -355,13 +378,29 @@ void DebriefingState::prepareDebriefing()
 			else
 			{
 				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
-				for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+				if (soldier != 0)
 				{
-					if ((*i) == soldier)
+					for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 					{
-						delete (*i);
-						base->getSoldiers()->erase(i);
-						break;
+						if ((*i) == soldier)
+						{
+							delete (*i);
+							base->getSoldiers()->erase(i);
+							break;
+						}
+					}
+				}
+				else
+				{
+					// non soldier player = tank
+					for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+					{
+						if ((*i)->getRules()->getType() == "STR_" + type)
+						{
+							delete (*i);
+							craft->getVehicles()->erase(i);
+							break;
+						}
 					}
 				}
 			}
@@ -390,7 +429,7 @@ void DebriefingState::prepareDebriefing()
 
 	if (!aborted && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
-		if (battle->getMissionType() == "STR_BASE_DEFENCE")
+		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_SAVED"));
 		}
@@ -462,7 +501,7 @@ void DebriefingState::prepareDebriefing()
 	}
 	else
 	{
-		if (battle->getMissionType() == "STR_BASE_DEFENCE")
+		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_LOST"));
 		}
@@ -500,7 +539,6 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft,
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-
 		if ((*it)->getRules()->getRecoveryPoints())
 		{
 			if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
@@ -513,10 +551,13 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft,
 			}
 		}
 
-		if ((*it)->getXCOMProperty() && craft)
-			craft->getItems()->addItem((*it)->getRules()->getType(), 1);
-		else
-			base->getItems()->addItem((*it)->getRules()->getType(), 1);
+		if ((*it)->getRules()->isRecoverable())
+		{
+			if ((*it)->getXCOMProperty() && craft)
+				craft->getItems()->addItem((*it)->getRules()->getType(), 1);
+			else
+				base->getItems()->addItem((*it)->getRules()->getType(), 1);
+		}
 	}
 }
 

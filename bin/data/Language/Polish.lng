@@ -269,7 +269,7 @@ STR_HANGARS
 Hangary
 STR_SHORT_RANGE_DETECTION
 Radary krótkiego zasięgu
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Obronność
 STR_TRANSFERS_UC
 TRANSFERY
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 PRZEJĘCIE NOLa NA LĄDOWISKU
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Zbadaj lądowisko i, jeśli to możliwe, wejdź do NOLa. Misja będzie zakończona powodzeniem, gdy wszystkie jednostki wroga zostaną wyeliminowane lub zneutralizowane. Nastąpi wtedy przejęcie pozostałości NOLa, przedmiotów i ciał Obcych. By przerwać misję powróć żołnierzami X-COMu do transportowca i kliknij na ikonę ewakuacji.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 OBRONA BAZY
 STR_BASE_UC_
 BAZA> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 W pobliżu wylądował statek Obcych. Baza jest w wielkim niebezpieczeństwie. Standardową procedurą w takiej sytuacji jest ewakuacja całego niewalczącego personelu wszystkimi dostępnymi samolotami X-COMu. Jednostki Obcych mogły wejść do bazy przez drzwi hangaru lub windę. Obroń bazę i jej istotne instalacje za wszelką cenę. To jest walka aż do śmierci. Jeśli klikniesz na ikonę ewakuacji poniesiesz porażkę i stracisz bazę.
 STR_ALIEN_BASE_ASSAULT
 NAPAD NA BAZĘ OBCYCH
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Wybierz sprzęt>
 STR_ARM
 Broń 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Obronność
 STR_HIT_RATIO
 Celność
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Działko plazmowe
 STR_FUSION_MISSILE
 Wyrzutnia fuzyjna
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Obrona laserowa
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Obrona plazmowa
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Obrona fuzyjna
 STR_GRAV_SHIELD
 Odpychacz grawitacyjny
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Radar krótkiego zasięgu jest efektywny w promieniu ponad 550-ciu km i jest połączony z systemami satelitarnymi do poszukiwań obiektów naziemnych. Każdy radar ma 5% szans na wykrycie obiektu średniej wielkości w ciągu 10-ciu minut.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Radar dalekiego zasięgu jest efektywny w promieniu ponad 830-tu km i jest połączony z systemami satelitarnymi do poszukiwań obiektów naziemnych. Każdy radar ma 5% szans na wykrycie obiektu średniej wielkości w ciągu 10-ciu minut.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Obrona rakietowa stanowi jakąś ochronę przed wrogim statkiem, który próbuje lądować w pobliżu bazy.
 STR_GENERAL_STORES_UFOPEDIA
 Cały sprzęt, broń, amunicja, zdobyte materiały i Samobieżna Broń Ciężka, z wyjątkiem sprzętu na pokładach samolotów, są przechowywane w magazynach.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Izolatki dla Obcych posiadają specjalne środowisko utrzymujące Ich procesy życiowe. Instalacja ta może utrzymywać przy życiu do 10-ciu obcych form życia przebywających w oddzielnych pomieszczeniach.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Obrona laserowa, dzięki promieniowaniu laserowemu, jest dobrą ochroną przed wrogim statkiem.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Obrona plazmowa, dzięki rozpędzonym cząstkom, zapewnia mocną i skuteczną ochronę przed wrogim statkiem.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Obrona fuzyjna zapewnia najskuteczniejszą ochronę przed atakiem Obcych. Dzięki antymaterii pociski wytwarzają implozję, która niszczy wszystko w obrębie określonego promienia.
 STR_GRAV_SHIELD_UFOPEDIA
 Odpychacz grawitacyjny odpycha statek Obcych próbujący lądować w pobliżu bazy wystarczająco długo, by wszystkie systemy obronne bazy wystrzeliły ponownie. W praktyce podwaja to skuteczność każdego systemu obronnego bazy.
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Duży zwiadowca
 STR_HARVESTER
 Żniwiarka
-STR_ABDUCTER
+STR_ABDUCTOR
 Porywacz
 STR_TERROR_SHIP
 Terrorowiec
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 Największy statek zwiadowczy Obcych jest statkiem ogólnego przeznaczenia używanym we wszystkich typach misji Obcych.
 STR_HARVESTER_UFOPEDIA
 Żniwiarka ma w podstawie otwieraną podłogę oraz jest wyposażona w podnośnik do rozciągania bydła lub innych zwierząt. Noże laserowe są używane do wycinania żądanych narządów. Padlina jest zrzucana na ziemię. NOL zawiera również pojemniki do przechowywania części ciał.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Statek ten jest wyposażony w laboratorium do dokonywania przerażających eksperymentów na schwytanych ludziach. Normalnie ofiara jest paraliżowana siłą telepatyczną, lecz pozostaje świadoma na stole operacyjnym.
 STR_TERROR_SHIP_UFOPEDIA
 Terrorowiec ma ładownię dla dużej ilości terrorystycznych stworów i broni Obcych. Służy do transportowania terrorystów na zaludnione tereny.
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Części Sektopoda
 STR_CYBERDISC_CORPSE
 Części CyberDysku
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Za mało pocisków SBCa, aby uzbroić czołg.
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Za mało rakiet SBCa, aby uzbroić czołg rakietowy.
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Za mało rakiet fuzyjnych SBCa, aby uzbroić poduszkowiec fuzyjny.
+STR_TO_ARM_HWP
+ aby uzbroić czołg.
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Za mało sprzętu, aby w pełni uzbroić oddział.
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1749,7 @@ STR_GRAPHS
 STATYSTYKI
 STR_UFOPAEDIA_UC
 NOLOPEDIA
-STR_NEW_BATTLE
-Nowa potyczka
-STR_THE_SIMULATRON
-SYMULATRON
-STR_OPTIONS_
-Opcje
-STR_OPTIONS
+STR_OPTIONS_UC
 OPCJE
 STR_FUNDING_UC
 BUDŻET
@@ -2039,3 +2029,7 @@ STR_CORPSE
 Zwłoki
 STR_UNLOAD
 Rozładuj
+STR_NEW_BATTLE
+Nowa potyczka
+STR_OPTIONS
+Opcje

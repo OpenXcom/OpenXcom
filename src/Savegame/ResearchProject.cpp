@@ -55,7 +55,7 @@ void ResearchProject::setAssigned (int nb)
 	_assigned = nb;
 }
 
-const RuleResearch * ResearchProject::getRuleResearch () const
+const RuleResearch * ResearchProject::getRules () const
 {
 	return _project;
 }
@@ -129,7 +129,7 @@ void ResearchProject::load(const YAML::Node& node)
 void ResearchProject::save(YAML::Emitter& out) const
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "project" << YAML::Value << getRuleResearch ()->getName ();
+	out << YAML::Key << "project" << YAML::Value << getRules ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssigned ();
 	out << YAML::Key << "spent" << YAML::Value << getSpent ();
 	out << YAML::Key << "cost" << YAML::Value << getCost ();
@@ -142,7 +142,7 @@ void ResearchProject::save(YAML::Emitter& out) const
 */
 std::string ResearchProject::getResearchProgress () const
 {
-	float progress = (float)getSpent () / getRuleResearch ()->getCost();
+	float progress = (float)getSpent () / getRules ()->getCost();
 	if (getAssigned () == 0)
 	{
 		return "STR_NONE";
@@ -154,7 +154,7 @@ std::string ResearchProject::getResearchProgress () const
 	else
 	{
 		float rating = (float)getAssigned ();
-		rating /= getRuleResearch ()->getCost();
+		rating /= getRules ()->getCost();
 		if (rating < PROGRESS_LIMIT_POOR)
 		{
 			return "STR_POOR";

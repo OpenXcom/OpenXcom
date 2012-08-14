@@ -21,21 +21,23 @@
 #include "Base.h"
 #include "SavedGame.h"
 #include "ItemContainer.h"
+#include "Craft.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
-Production::Production (RuleManufacture * item, int todo) : _item(item), _todo(todo), _timeSpent(0), _engineers(0)
+Production::Production (RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _timeSpent(0), _engineers(0)
 {
 }
 
-int Production::getNumberOfItemTodo () const
+int Production::getAmountRemaining () const
 {
-	return _todo;
+	return _amount;
 }
 
-void Production::setNumberOfItemTodo (int todo)
+void Production::setAmountRemaining (int amount)
 {
-	_todo = todo;
+	_amount = amount;
 }
 
 int Production::getTimeSpent () const
@@ -58,54 +60,63 @@ void Production::setAssignedEngineers (int engineers)
 	_engineers = engineers;
 }
 
-productionProgress_e Production::step(Base * b, SavedGame * g)
+productionProgress_e Production::step(Base * b, SavedGame * g, Ruleset *r)
 {
-	int done = getNumberOfItemDone ();
+	int done = getAmountProduced ();
 	_timeSpent += _engineers;
-	if (done < getNumberOfItemDone ())
+	if (done < getAmountProduced ())
 	{
-		b->getItems ()->addItem(_item->getName (), 1);
+		if (_rules->getCategory() == "STR_CRAFT")
+		{
+			Craft *craft = new Craft(r->getCraft(_rules->getName()), b, g->getId(_rules->getName()));
+			craft->setStatus("STR_REFUELLING");
+			b->getCrafts()->push_back(craft);
+		}
+		else
+		{
+			b->getItems ()->addItem(_rules->getName (), 1);
+		}
 	}
-	if (getNumberOfItemDone () >= _todo)
+	if (getAmountProduced () >= _amount)
 	{
-		return PRODUCTION_PROGRESS_COMPLETE;
+		return PROGRESS_COMPLETE;
 	}
-	else if (done < getNumberOfItemDone ())
+	else if (done < getAmountProduced ())
 	{
 		// We need to ensure that player has enough cash/item to produce a new unit
-		if(g->getFunds() < _item->getManufactureCost ())
+		if(g->getFunds() < _rules->getManufactureCost ())
 		{
-			return PRODUCTION_PROGRESS_NOT_ENOUGH_MONEY;
+			return PROGRESS_NOT_ENOUGH_MONEY;
 		}
-		for(std::map<std::string,int>::const_iterator iter = _item->getRequiredItems ().begin (); iter != _item->getRequiredItems ().end (); ++iter)
+		for(std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems ().begin (); iter != _rules->getRequiredItems ().end (); ++iter)
 		{
 			if (b->getItems ()->getItem(iter->first) < iter->second)
 			{
-				return PRODUCTION_PROGRESS_NOT_ENOUGH_MATERIALS;
+				return PROGRESS_NOT_ENOUGH_MATERIALS;
 			}
 		}
-		//if (done < getNumberOfItemDone ())
+		//if (done < getAmountProduced ())
 		{
 			startItem(b, g);
 		}
 	}
-	return PRODUCTION_PROGRESS_NOT_COMPLETE;
+	return PROGRESS_NOT_COMPLETE;
 }
 
-int Production::getNumberOfItemDone () const
+int Production::getAmountProduced () const
 {
-	return _timeSpent / _item->getManufactureTime ();
+	return _timeSpent / _rules->getManufactureTime ();
 }
 
-const RuleManufacture * Production::getRuleManufacture() const
+const RuleManufacture * Production::getRules() const
 {
-	return _item;
+	return _rules;
 }
 
 void Production::startItem(Base * b, SavedGame * g)
 {
-	g->setFunds(g->getFunds() - _item->getManufactureCost ());
-	for(std::map<std::string,int>::const_iterator iter = _item->getRequiredItems ().begin (); iter != _item->getRequiredItems ().end (); ++iter)
+	g->setFunds(g->getFunds() - _rules->getManufactureCost ());
+	for(std::map<std::string,int>::const_iterator iter = _rules->getRequiredItems ().begin (); iter != _rules->getRequiredItems ().end (); ++iter)
 	{
 		b->getItems ()->removeItem(iter->first, iter->second);
 	}
@@ -114,10 +125,10 @@ void Production::startItem(Base * b, SavedGame * g)
 void Production::save(YAML::Emitter &out)
 {
 	out << YAML::BeginMap;
-	out << YAML::Key << "item" << YAML::Value << getRuleManufacture ()->getName ();
+	out << YAML::Key << "item" << YAML::Value << getRules ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
 	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
-	out << YAML::Key << "todo" << YAML::Value << getNumberOfItemTodo ();
+	out << YAML::Key << "amount" << YAML::Value << getAmountRemaining ();
 	out << YAML::EndMap;
 }
 
@@ -125,12 +136,12 @@ void Production::load(const YAML::Node &node)
 {
 	int assigned;
 	int spent;
-	int todo;
+	int amount;
 	node["assigned"] >> assigned;
 	node["spent"] >> spent;
-	node["todo"] >> todo;
+	node["amount"] >> amount;
 	setAssignedEngineers(assigned);
 	setTimeSpent(spent);
-	setNumberOfItemTodo(todo);
+	setAmountRemaining(amount);
 }
 };

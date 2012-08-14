@@ -31,7 +31,7 @@
 #include "../Savegame/BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
-#include "BasescapeErrorState.h"
+#include "../Menu/ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -142,12 +142,12 @@ void PlaceFacilityState::viewClick(Action *action)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new BasescapeErrorState(_game, "STR_CANNOT_BUILD_HERE", "BACK01.SCR"));
+		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
 		_game->popState();
-		_game->pushState(new BasescapeErrorState(_game, "STR_NOT_ENOUGH_MONEY", "BACK01.SCR"));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(15)+1, "BACK01.SCR", 6));
 	}
 	else
 	{

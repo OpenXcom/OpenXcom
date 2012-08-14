@@ -269,7 +269,7 @@ STR_HANGARS
 Hangars
 STR_SHORT_RANGE_DETECTION
 Short Range Detection
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Defence Strength
 STR_TRANSFERS_UC
 TRANSFERS
@@ -463,12 +463,12 @@ STR_UFO_GROUND_ASSAULT
 UFO GROUND ASSAULT
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Explore landing site and, if possible, gain entry to the UFO. Mission will be successful when all enemy units have been eliminated or neutralised. Recovery of UFO, artefacts and alien corpses can then be initiated. To abort the mission return XCom operatives to transport vehicle and click on the 'Abort Mission' icon.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 BASE DEFENCE
 STR_BASE_UC_
 BASE> 
-STR_BASE_DEFENCE_BRIEFING
-An Alien vessel has landed nearby. Our base is in severe danger. As per standard procedure all non combat personnel and XCom craft have been evacuated. Alien units will enter the base via hangar doors or the access lift. Defend the base and its vital installations at all costs - this is a fight to the death. If you click on the 'abort mission' icon you will concede defeat and lose the base.
+STR_BASE_DEFENSE_BRIEFING
+An Alien vessel has landed nearby. Our base is in severe danger. As per standard procedure all non-combat personnel and XCom craft have been evacuated. Alien units will enter the base via hangar doors or the access lift. Defend the base and its vital installations at all costs - this is a fight to the death. If you click on the 'abort mission' icon you will concede defeat and lose the base.
 STR_ALIEN_BASE_ASSAULT
 ALIEN BASE ASSAULT
 STR_ALIEN_BASE_ASSAULT_BRIEFING
@@ -478,7 +478,11 @@ You have arrived in Cydonia.  You gain entry to a large underground complex near
 STR_TERROR_MISSION
 TERROR MISSION
 STR_TERROR_MISSION_BRIEFING
+<<<<<<< HEAD
 Mission will be successful when all enemy units have been eliminated or neutralised.  You must attempt to save the lives of any civilians in the area by neutralising the alien menace.  To abort the mission return XCom operatives to transport vehicle and  click on the 'Abort Mission' icon.
+=======
+Mission will be successful when all enemy units have been eliminated or neutralised. You must attempt to save the lives of any civilians in the area by neutralising the alien menace.  To abort the mission return XCom operatives to transport vehicle and click on the 'Abort Mission' icon.
+>>>>>>> upstream/master
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
 NO FREE HANGARS FOR CRAFT PRODUCTION!{SMALLLINE}Each craft assigned to a base, transferred to a base, purchased or constructed uses one hangar.  Build a new hangar or transfer a craft to another base.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
@@ -488,7 +492,7 @@ NO FREE HANGARS FOR TRANSFER!{SMALLLINE}Each craft assigned to a base, transferr
 STR_CANNOT_BUILD_HERE
 CANNOT BUILD HERE!{SMALLLINE}You must build next to an existing base facility.
 STR_NO_FREE_ACCOMODATION
-NO FREE ACCOMODATION!{SMALLLINE}The destination base does not have enough space in living quarters.
+NO FREE ACCOMMODATION!{SMALLLINE}The destination base does not have enough space in living quarters.
 STR_NOT_ENOUGH_WORK_SPACE
 NOT ENOUGH WORK SPACE AVAILABLE!{SMALLLINE}Build a new workshop or reduce work on other projects.
 STR_NOT_ENOUGH_MONEY
@@ -639,7 +643,7 @@ STR_EQUIPMENT_FOR
 Equipment for 
 STR_ARM
 Arm 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Defence Value
 STR_HIT_RATIO
 Hit Ratio
@@ -941,11 +945,11 @@ STR_PLASMA_CANNON
 Plasma Cannon
 STR_FUSION_MISSILE
 Fusion Missile
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Laser Defence
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Plasma Defence
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Fusion Defence
 STR_GRAV_SHIELD
 Grav Shield
@@ -1197,17 +1201,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 A small detection system has an effective radar range of 300 nautical miles and is linked to satellite systems for ground search. Each system has a 5% chance of detecting an average sized object every 10 minutes.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 A large detection system has an effective range of 450 nautical miles and is linked to satellite systems for ground search. Each system has a 5% chance of detecting an average sized object every 10 minutes.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Missile defences provide some protection against incursion by hostile craft which are attempting to land near the base.
 STR_GENERAL_STORES_UFOPEDIA
 All equipment, weapons systems, munitions, recovered material and Heavy Weapons Platforms are placed in stores, with the exception of equipment assigned to craft in hangars.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-Living aliens are likely to require a special habitat to maintain their life systems.  The containment facility can keep up to 10 alien life forms in self contained units.
-STR_LASER_DEFENCES_UFOPEDIA
+Living aliens are likely to require a special habitat to maintain their life systems.  The containment facility can keep up to 10 alien life forms in self-contained units.
+STR_LASER_DEFENSES_UFOPEDIA
 Laser defences provide protection against incursion by hostile craft.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Plasma beam defences provide powerful and efficient protection against incursion by hostile craft.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Fusion missiles provide the most effective defence against alien attacks.  These missiles create an anti-matter implosion which destroys everything within a specific radius.
 STR_GRAV_SHIELD_UFOPEDIA
 The Gravity shield repels alien craft attempting to land near the base long enough for all defence systems to fire again.  In practice this will double the effectiveness of any defence systems at your base.
@@ -1279,8 +1283,8 @@ STR_LARGE_SCOUT
 Large Scout
 STR_HARVESTER
 Harvester
-STR_ABDUCTER
-Abducter
+STR_ABDUCTOR
+Abductor
 STR_TERROR_SHIP
 Terror ship
 STR_BATTLESHIP
@@ -1454,7 +1458,7 @@ Perth
 STR_NEW_GAME
 New Game
 STR_LOAD_SAVED_GAME
-Load Saved Game
+Load Game
 STR_SELECT_DIFFICULTY_LEVEL
 Select Difficulty Level
 STR_1_BEGINNER
@@ -1575,7 +1579,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 The largest alien scout craft is a general purpose vessel that is used in all types of alien mission.
 STR_HARVESTER_UFOPEDIA
 The harvester has a trap door in its base and is equipped with lifting gear to haul up cattle or other beasts.  Laser cutters are used to extract the desired material and the carcass is dumped on the. ground. There are also storage containers for body parts.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 This vessel is equipped with an examination room for performing horrific experiments on human subjects.  The victim is normally paralysed by telepathic powers, but remains conscious while on the operating table.
 STR_TERROR_SHIP_UFOPEDIA
 The terror ship has a containment facility for large alien terror weapons or creatures. It is used to transport these alien terrorists into populated areas.
@@ -1598,7 +1602,7 @@ AMOUNT AT{NEWLINE}DESTINATION
 STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY
 Alien dies as there is no alien containment facility
 STR_NO_FREE_ACCOMODATION_CREW
-NO FREE ACCOMODATION!{SMALLLINE}The destination base does not have enough space in the living quarters for the crew assigned to the craft.
+NO FREE ACCOMMODATION!{SMALLLINE}The destination base does not have enough space in the living quarters for the crew assigned to the craft.
 STR_ITEMS_ARRIVING
 Items Arriving
 STR_PISTOL
@@ -1691,12 +1695,8 @@ STR_SECTOPOD_CORPSE
 Sectopod Corpse
 STR_CYBERDISC_CORPSE
 Cyberdisc Corpse
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Not enough cannon rounds to arm HWP
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Not enough rockets to arm HWP
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Not enough fusion balls to arm HWP
+STR_TO_ARM_HWP
+ to arm HWP
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Not enough equipment to fully re-equip squad
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1753,7 @@ STR_GRAPHS
 GRAPHS
 STR_UFOPAEDIA_UC
 UFOPAEDIA
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Options
-STR_OPTIONS
+STR_OPTIONS_UC
 OPTIONS
 STR_FUNDING_UC
 FUNDING
@@ -1904,7 +1898,7 @@ STIMULANT
 STR_HEAL
 HEAL
 STR_TUS
-TUs>
+TU>
 STR_ALIEN_ARTIFACT
 Alien Artefact
 STR_AMMO_ROUNDS_LEFT
@@ -2039,3 +2033,23 @@ STR_CORPSE
 Corpse
 STR_UNLOAD
 Unload
+STR_NEW_SAVED_GAME
+<NEW SAVED GAME>
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Options
+STR_TERRAIN
+TERRAIN
+STR_DARKNESS
+DARKNESS
+STR_DISPLAY_RESOLUTION
+Display Resolution
+STR_DISPLAY_MODE
+Display Mode
+STR_WINDOWED
+Windowed
+STR_FULLSCREEN
+Fullscreen
+STR_LANGUAGE
+LANGUAGE

@@ -89,6 +89,10 @@ public:
 	int getEngineers() const;
 	/// Sets the base's engineers.
 	void setEngineers(int engineers);
+	/// Checks if a target is detected by the base's radar.
+	bool detect(Target *target) const;
+	/// Checks if a target is inside the base's radar range.
+	bool insideRadarRange(Target *target) const;
 	/// Gets the base's available soldiers.
 	int getAvailableSoldiers() const;
 	/// Gets the base's total soldiers.
@@ -129,8 +133,8 @@ public:
 	int getAllocatedScientists() const;
 
 	int getAllocatedEngineers() const;
-	/// Gets the base's defence value.
-	int getDefenceValue() const;
+	/// Gets the base's defense value.
+	int getDefenseValue() const;
 	/// Gets the base's short range detection.
 	int getShortRangeDetection() const;
 	/// Gets the base's long range detection.

@@ -55,50 +55,28 @@ public:
 	std::string getType() const;
 	/// Gets the UFO's size.
 	std::string getSize() const;
-	/// Sets the UFO's size.
-	void setSize(const std::string &size);
 	/// Gets the UFO's radius.
 	int getRadius() const;
 	/// Gets the UFO's sprite.
 	int getSprite() const;
-	/// Sets the UFO's sprite.
-	void setSprite(int sprite);
 	/// Gets the UFO's maximum damage.
 	int getMaxDamage() const;
-	/// Sets the UFO's maximum damage.
-	void setMaxDamage(int damage);
 	/// Gets the UFO's maximum speed.
 	int getMaxSpeed() const;
-	/// Sets the UFO's maximum speed.
-	void setMaxSpeed(int speed);
 	/// Gets the UFO's acceleration.
 	int getAcceleration() const;
-	/// Sets the UFO's acceleration.
-	void setAcceleration(int accel);
 	/// Gets the UFO's weapon power.
 	int getWeaponPower() const;
-	/// Sets the UFO's weapon power.
-	void setWeaponPower(int power);
 	/// Gets the UFO's weapon range.
 	int getWeaponRange() const;
-	/// Sets the UFO's weapon range.
-	void setWeaponRange(int range);
 	/// Gets the UFO's score.
 	int getScore() const;
-	/// Sets the UFO's score.
-	void setScore(int score);
 	/// Sets the battlescape terrain data ruleset for this UFO
 	RuleTerrain *getBattlescapeTerrainData();
-	/// Gets the battlescape terrain data ruleset for this UFO
-	void setBattlescapeTerrainData(RuleTerrain *t);
 	/// Get reload time of UFO weapon.
 	int getWeaponReload() const;
-	/// Set realod time of UFO weapon.
-	void setWeaponReload(int reload);
 	/// Get UFO escape time.
-	int getUFObreakOffTime() const;
-	/// Set UFO escape time.
-	void setUFObreakOffTime(int time);
+	int getBreakOffTime() const;
 };
 
 }

@@ -30,6 +30,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
+#include "../Menu/ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -72,7 +73,7 @@ void ManufactureInfoState::buildUi()
 	int button_height = 16;
 
 	int button_width = (width - 5 * button_x_border) / 2;
-	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
+	_window = new Window(this, width, height, start_x, start_y);
 	_txtTitle = new Text (width - 4 * button_x_border, button_height * 2, start_x + button_x_border, start_y + button_y_border);
 	_btnOk = new TextButton (button_width, button_height, width - button_width - button_x_border, start_y + height - button_height - button_y_border);
 	_btnStop = new TextButton (button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
@@ -84,10 +85,10 @@ void ManufactureInfoState::buildUi()
 	_txtEngineerDown = new Text(button_width, 2*button_height, start_x + 3*button_x_border, start_y + 7.5f * button_height);
 	_txtUnitUp = new Text(button_width, 2*button_height, width - button_width - button_x_border + 3*button_x_border, start_y + 6 * button_height);
 	_txtUnitDown = new Text(button_width, 2*button_height, width - button_width - button_x_border + 3*button_x_border, start_y + 7.5f * button_height);
-	_btnEngineerUp = new ArrowButton (ARROW_BIG_UP, 1.5f*button_x_border, button_height, width - button_width - 4*button_x_border, start_y + 6 * button_height);
-	_btnEngineerDown = new ArrowButton (ARROW_BIG_DOWN, 1.5f*button_x_border, button_height, width - button_width - 4*button_x_border, start_y + 7.5f * button_height);
-	_btnUnitUp = new ArrowButton (ARROW_BIG_UP, 1.5f*button_x_border, button_height, width - 4*button_x_border, start_y + 6 * button_height);
-	_btnUnitDown = new ArrowButton (ARROW_BIG_DOWN, 1.5f*button_x_border, button_height, width - 4*button_x_border, start_y + 7.5f * button_height);
+	_btnEngineerUp = new ArrowButton (ARROW_BIG_UP, 1.4f*button_x_border, button_height, width - button_width - 4*button_x_border, start_y + 6 * button_height);
+	_btnEngineerDown = new ArrowButton (ARROW_BIG_DOWN, 1.4f*button_x_border, button_height, width - button_width - 4*button_x_border, start_y + 7.5f * button_height);
+	_btnUnitUp = new ArrowButton (ARROW_BIG_UP, 1.4f*button_x_border, button_height, width - 4*button_x_border, start_y + 6 * button_height);
+	_btnUnitDown = new ArrowButton (ARROW_BIG_DOWN, 1.4f*button_x_border, button_height, width - 4*button_x_border, start_y + 7.5f * button_height);
 	_txtAllocated = new Text(button_width, 2*button_height, width - button_width - 5*button_x_border, start_y + 4 * button_height);
 	_txtTodo = new Text(button_width, 2*button_height, width - 5*button_x_border, start_y + 4 * button_height);
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -113,7 +114,7 @@ void ManufactureInfoState::buildUi()
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
-	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getName() : _production->getRuleManufacture()->getName()));
+	_txtTitle->setText(_game->getLanguage()->getString(_item ? _item->getName() : _production->getRules()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -238,7 +239,7 @@ void ManufactureInfoState::setAssignedEngineer()
 	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 	std::wstringstream s4;
-	s4 << L">\x01" << _production->getNumberOfItemTodo ();
+	s4 << L">\x01" << _production->getAmountRemaining ();
 	_txtTodo->setText(s4.str());
 }
 
@@ -349,9 +350,17 @@ void ManufactureInfoState::onLessEngineer()
  */
 void ManufactureInfoState::onMoreUnit()
 {
-	int more = _production->getNumberOfItemTodo ();
-	_production->setNumberOfItemTodo (++more);
-	setAssignedEngineer();
+	int more = _production->getAmountRemaining ();
+	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+	{
+		_timerMoreUnit->stop();
+		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+	}
+	else
+	{
+		_production->setAmountRemaining (++more);
+		setAssignedEngineer();
+	}
 }
 
 /**
@@ -359,10 +368,10 @@ void ManufactureInfoState::onMoreUnit()
  */
 void ManufactureInfoState::onLessUnit()
 {
-	int less = _production->getNumberOfItemTodo ();
-	if(less > (_production->getNumberOfItemDone () + 1))
+	int less = _production->getAmountRemaining ();
+	if(less > (_production->getAmountProduced () + 1))
 	{
-		_production->setNumberOfItemTodo (--less);
+		_production->setAmountRemaining (--less);
 		setAssignedEngineer();
 	}
 }

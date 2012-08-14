@@ -23,11 +23,11 @@
 #include <vector>
 #include <string>
 #include <yaml-cpp/yaml.h>
-#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
 
+class SavedGame;
 class SoldierNamePool;
 class RuleCountry;
 class RuleRegion;
@@ -79,7 +79,8 @@ protected:
 	std::map<std::string, RuleManufacture *> _manufacture;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::auto_ptr<YAML::Node> _startingBase;
-	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex, _armorsIndex, _researchIndex, _manufactureIndex;
+	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
+	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex;
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
@@ -90,7 +91,7 @@ public:
 	/// Saves a ruleset to YAML.
 	void save(const std::string &filename) const;
 	/// Generates the starting saved game.
-	virtual SavedGame *newSave(GameDifficulty diff) const;
+	virtual SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
 	std::vector<SoldierNamePool*> *const getPools();
 	/// Gets the ruleset for a country type.
@@ -131,8 +132,12 @@ public:
 	Unit *const getUnit(const std::string &name) const;
 	/// Gets alien race rules.
 	AlienRace *const getAlienRace(const std::string &name) const;
+	/// Gets the available alien races.
+	std::vector<std::string> getAlienRacesList() const;
 	/// Gets deployment rules.
 	AlienDeployment *const getDeployment(const std::string &name) const;
+	/// Gets the available alien deployments.
+	std::vector<std::string> getDeploymentsList() const;
 	/// Gets armor rules.
 	Armor *const getArmor(const std::string &name) const;
 	/// Gets the available armors.

@@ -130,7 +130,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			ss << "/";
 			if ((*j)->getNumVehicles() > 0)
 			{
-				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
+				ss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
 			}
 			else
 			{

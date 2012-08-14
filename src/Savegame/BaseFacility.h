@@ -26,7 +26,6 @@ namespace OpenXcom
 
 class RuleBaseFacility;
 class Base;
-class Target;
 class Ruleset;
 
 /**
@@ -66,8 +65,6 @@ public:
 	void setBuildTime(int time);
 	/// Builds up the facility.
 	void build();
-	/// Checks if a target is inside the facility's radar.
-	bool insideRadarRange(Target *target) const;
 	/// Checks if the facility is currently in use.
 	bool inUse() const;
 };

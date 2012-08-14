@@ -1,10 +1,21 @@
-Version 0.4 (??-??-????)
+Version 0.4 (13-08-2012)
 -------------------------
 New features:
 - Basescape:
 -- Research screens.
 -- Manufacture screens.
-
+-- Soldier improved stats.
+-- Tank equipping.
+-- Armor equipping.
+-- Wound recovery.
+- Geoscape:
+-- New globe shading.
+-- Craft pathfinding now uses great circles (more accurate).
+-- New radar detection formula (more accurate).
+-- Terror sites.
+-- UFOs of all sizes.
+-- Tied research requirements to everything.
+-- UFOs in dogfights fight back.
 - Battlescape:
 -- Abort screen.
 -- Debriefing screen.
@@ -31,9 +42,20 @@ New features:
 -- Added support for skyranger landing on non 0-level.
 -- Added support for multiple craft/ufo maps.
 -- Psi Amp.
-
-
-
+-- Added support for more alien races.
+-- Load Game button.
+- External rulesets.
+- Added entries for most entities in the game.
+- New Battle screen.
+- Options screen.
+- Startup logging.
+- 64-bit version.
+- Game icon and logo.
+- Support for multiple data folders.
+- Support for XDG specification.
+- Support for user soldier name pools.
+- Various new options (see docs).
+- Debug mode.
  
 Bugfixes:
 - Two duplicating ammo bugs.
@@ -60,7 +82,6 @@ Bugfixes:
 - Apply changes to the base / soldier name when user presses OK.
 - Incorrect globe zoom levels.
 - Incorrect UI strings.
-- Updated Romanian translation.
 - Incorrect colors in Battlescape UI.
 - Crash when starting mission on back side of globe.
 - Endless number of soldiers in Skyranger.
@@ -87,7 +108,37 @@ Bugfixes:
 - Fixed issue with dead alien count.
 - Fixed autoshot of HE ammo issue.
 - Save turn number in savegame.
-- Fixed free autoshot ammo. 
+- Fixed free autoshot ammo.
+- Fixed wrong UI colors.
+- Updated translations.
+- Fixed craft loading bug.
+- Fixed crash with invalid savegames.
+- Fixed savegame list not being sorted.
+- Game no longer crashes if no sound device is available.
+- Crafts that are outside of base no longer show in base view.
+- Fixed globe not redrawing properly sometimes.
+- Fixed various data loading bugs.
+- Sell screen now decreases item quantity.
+- Fixed craft pathing bugs.
+- Fixed bug in command-line parameters.
+- Various performance improvements.
+- Added fallback if no soldier name pools are available.
+- Fixed radar detection.
+- Fixed some bugs in globe.
+- Fixed inventory crash with certain armor types.
+- Fixed crash with loading DOS sounds.
+- Fixed battlescape buttons responding to wrong mouse button.
+- Improved mouse click handling.
+- Fixed Language dialog having wrong height.
+- Game no longer crashes if language isn't found.
+- Game no longer crashes if User directory is unavailable.
+- Game now shows an error if no languages are available.
+- Fixed various bugs with text strings not fitting.
+- Fixed text caret not always aligning properly.
+- Fixed crash with UI buttons.
+- Fixed Intercept string not always showing correct stats.
+- Fixed colors in Target Info and Items Arriving windows.
+- Fixed various savegame bugs.
 
 Version 0.3 (01-09-2011)
 -------------------------

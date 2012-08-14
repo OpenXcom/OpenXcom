@@ -32,7 +32,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
-											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0), _recoveryPoints(0), _armor(20)
+											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _energy(0), _stun(0), _tuUse(0), _recoveryPoints(0), _armor(20), _recover(true)
 {
 }
 
@@ -61,6 +61,10 @@ void RuleItem::load(const YAML::Node &node)
 		else if (key == "name")
 		{
 			i.second() >> _name;
+		}
+		else if (key == "requires")
+		{
+			i.second() >> _requires;
 		}
 		else if (key == "size")
 		{
@@ -228,6 +232,10 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _armor;
 		}
+		else if (key == "recover")
+		{
+			i.second() >> _recover;
+		}
 	}
 }
 
@@ -240,6 +248,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "name" << YAML::Value << _name;
+	out << YAML::Key << "requires" << YAML::Value << _requires;
 	out << YAML::Key << "size" << YAML::Value << _size;
 	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
 	out << YAML::Key << "costSell" << YAML::Value << _costSell;
@@ -281,6 +290,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "tuUse" << YAML::Value << _tuUse;
 	out << YAML::Key << "recoveryPoints" << YAML::Value << _recoveryPoints;
 	out << YAML::Key << "armor" << YAML::Value << _armor;
+	out << YAML::Key << "recover" << YAML::Value << _recover;
 	out << YAML::EndMap;
 }
 
@@ -301,6 +311,16 @@ std::string RuleItem::getType() const
 std::string RuleItem::getName() const
 {
 	return _name;
+}
+
+/**
+ * Returns the list of research required to
+ * use this item.
+ * @return List of research IDs.
+ */
+std::vector<std::string> RuleItem::getRequirements() const
+{
+	return _requires;
 }
 
 /**
@@ -383,7 +403,7 @@ int RuleItem::getHandSprite() const
  * Returns whether this item is held with two hands.
  * @return Is it two-handed?
  */
-bool RuleItem::getTwoHanded() const
+bool RuleItem::isTwoHanded() const
 {
 	return _twoHanded;
 }
@@ -392,7 +412,7 @@ bool RuleItem::getTwoHanded() const
  * Returns whether this uses waypoints.
  * @return Uses waypoints?
  */
-bool RuleItem::getWaypoint() const
+bool RuleItem::isWaypoint() const
 {
 	return _waypoint;
 }
@@ -402,7 +422,7 @@ bool RuleItem::getWaypoint() const
  * You can't move/throw/drop fixed weapons - ie. HWP turrets.
  * @return Is it fixed weapon?
  */
-bool RuleItem::getFixed() const
+bool RuleItem::isFixed() const
 {
 	return _fixedWeapon;
 }
@@ -703,6 +723,16 @@ int RuleItem::getRecoveryPoints() const
 int RuleItem::getArmor() const
 {
 	return _armor;
+}
+
+/**
+ * Returns if the item should be recoverable
+ * from the battlescape.
+ * @return Is it recoverable.
+ */
+bool RuleItem::isRecoverable() const
+{
+	return _recover;
 }
 
 }

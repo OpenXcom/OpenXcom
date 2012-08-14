@@ -85,9 +85,9 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_numHangars = new Text(40, 9, 126, 123);
 	_barHangars = new Bar(150, 5, 166, 125);
 
-	_txtDefence = new Text(114, 9, 8, 138);
-	_numDefence = new Text(40, 9, 126, 138);
-	_barDefence = new Bar(150, 5, 166, 140);
+	_txtDefense = new Text(114, 9, 8, 138);
+	_numDefense = new Text(40, 9, 126, 138);
+	_barDefense = new Bar(150, 5, 166, 140);
 	_txtShortRange = new Text(130, 9, 8, 153);
 	_numShortRange = new Text(40, 9, 126, 153);
 	_barShortRange = new Bar(150, 5, 166, 155);
@@ -131,9 +131,9 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_numHangars);
 	add(_barHangars);
 
-	add(_txtDefence);
-	add(_numDefence);
-	add(_barDefence);
+	add(_txtDefense);
+	add(_numDefense);
+	add(_barDefense);
 	add(_txtShortRange);
 	add(_numShortRange);
 	add(_barShortRange);
@@ -249,13 +249,13 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barHangars->setScale(18.0);
 
 
-	_txtDefence->setColor(Palette::blockOffset(13)+5);
-	_txtDefence->setText(_game->getLanguage()->getString("STR_DEFENCE_STRENGTH"));
+	_txtDefense->setColor(Palette::blockOffset(13)+5);
+	_txtDefense->setText(_game->getLanguage()->getString("STR_DEFENSE_STRENGTH"));
 
-	_numDefence->setColor(Palette::blockOffset(13));
+	_numDefense->setColor(Palette::blockOffset(13));
 
-	_barDefence->setColor(Palette::blockOffset(2));
-	_barDefence->setScale(0.125);
+	_barDefense->setColor(Palette::blockOffset(2));
+	_barDefense->setScale(0.125);
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
 	_txtShortRange->setText(_game->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
@@ -356,11 +356,11 @@ void BaseInfoState::init()
 
 
 	std::wstringstream ss9;
-	ss9 << _base->getDefenceValue();
-	_numDefence->setText(ss9.str());
+	ss9 << _base->getDefenseValue();
+	_numDefense->setText(ss9.str());
 
-	_barDefence->setMax(_base->getDefenceValue());
-	_barDefence->setValue(_base->getDefenceValue());
+	_barDefense->setMax(_base->getDefenseValue());
+	_barDefense->setValue(_base->getDefenseValue());
 
 	std::wstringstream ss10;
 	ss10 << _base->getShortRangeDetection();
@@ -383,7 +383,8 @@ void BaseInfoState::init()
  */
 void BaseInfoState::edtBaseKeyPress(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		_base->setName(_edtBase->getText());
 	}

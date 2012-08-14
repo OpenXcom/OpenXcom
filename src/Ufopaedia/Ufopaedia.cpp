@@ -19,6 +19,7 @@
 
 #include "Ufopaedia.h"
 #include "UfopaediaStartState.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/UfopaediaSaved.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleState.h"
@@ -181,7 +182,7 @@ namespace OpenXcom
 
 		// init game
 		game->setRuleset(new XcomRuleset());
-		game->setSavedGame(game->getRuleset()->newSave(DIFF_BEGINNER));
+		game->setSavedGame(game->getRuleset()->newSave());
 
 		// open Ufopaedia
 		open(game);

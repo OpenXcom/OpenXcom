@@ -132,30 +132,6 @@ int RuleRegion::getBaseCost() const
 }
 
 /**
- * Changes the cost of building a base inside this region.
- * @param cost Construction cost.
- */
-void RuleRegion::setBaseCost(int cost)
-{
-	_cost = cost;
-}
-
-/**
- * Adds a rectangular area that this region covers.
- * @param lonMin Minimum longitude.
- * @param lonMax Maximum longitude.
- * @param latMin Minimum latitude.
- * @param latMax Maximum latitude.
- */
-void RuleRegion::addArea(double lonMin, double lonMax, double latMin, double latMax)
-{
-	_lonMin.push_back(lonMin);
-	_lonMax.push_back(lonMax);
-	_latMin.push_back(latMin);
-	_latMax.push_back(latMax);
-}
-
-/**
  * Checks if a point is inside this region.
  * @param lon Longitude in radians.
  * @param lat Latitude in radians.

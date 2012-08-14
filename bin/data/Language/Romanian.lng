@@ -269,7 +269,7 @@ STR_HANGARS
 Hangare
 STR_SHORT_RANGE_DETECTION
 Detecție Cu Rază Scurtă
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Putere Sistem Defensiv
 STR_TRANSFERS_UC
 TRANSFERURI
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 ATAC TERESTRU ASUPRA OZN
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Explorează zona și, dacă e posibil, pătrunde în OZN.  Misiunea va avea succes numai atunci când toți inamicii au fost eliminați sau neutralizați.  După aceea poate fi inițiată recuperarea resturilor de OZN, a artefactelor și cadavrelor extratereștrilor.  Pentru a anula misiunea soldații XCom trebuie să se întoarcă în vehicolul de transport după care apasă pe butonul 'Anulează Misiunea'.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 APĂRAREA BAZEI
 STR_BASE_UC_
 BAZĂ> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 O navă extraterestră a aterizat în apropiere.  Baza noastră este în pericol.  Tot personalul necombatant a fost evacuat cu navele XCom.  Extratereștrii vor pătrunde în bază prin porțile hangarelor sau liftul de acces.  Apară baza și instalațiile vitale cu orice preț - aceasta este o luptă pe viață și pe moarte.  Dacă apeși pe butonul 'Anulează Misiunea' vei capitula și vei pierde baza.
 STR_ALIEN_BASE_ASSAULT
 ATAC ASUPRA BAZEI EXTRATERESTRE
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Echipament pentru 
 STR_ARM
 Înarmează 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Valoare Defensivă
 STR_HIT_RATIO
 Rata De Lovire
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Tun Cu Plasmă
 STR_FUSION_MISSILE
 Rachetă Cu Fuziune
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Defensivă Cu Laser
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Defensivă Cu Plasmă
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Defensivă Cu Fuziune
 STR_GRAV_SHIELD
 Scut Gravitațional
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Un mic sistem de detecție cu o rază de acțiune de 300 de mile marine legat la sistemele de sateliți pentru căutarea la sol.  Fiecare sistem are o șansă de 5% la fiecare 10 minute de a detecta un obiect de dimensiune medie.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Un sistem mare de detecție cu o rază de acțiune efectivă de 450 de mile marine legat la sistemele de sateliți pentru căutarea la sol.  Fiecare sistem are o șansă de 5% la fiecare 10 minute de a detecta un obiect de dimensiune medie.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Furnizează o oarecare protecție împotriva incursiunilor navelor forțelor ostile care încearcă să aterizeze lângă bază.
 STR_GENERAL_STORES_UFOPEDIA
 Toate echipamentele, armele, munițiile, materialele recuperate și tancurile sunt păstrate în depozite, cu excepția echipamentelor atribuite navelor din hangare.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Extratereștrii vii pot necesita un habitat special pentru a se menține în viață.  Instalația poate păstra până la 10 forme de viață extraterestre în unități autonome.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Furnizează protecție împotriva incursiunilor navelor inamice.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Furnizează o protecție puternică și eficientă împotriva incursiunilor navelor inamice.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Bombele cu fuziune furnizează cea mai eficientă defensivă împotriva atacurilor extraterestre.  Aceste rachete pot crea implozii antimateriale care distrug totul pe o anumita rază.
 STR_GRAV_SHIELD_UFOPEDIA
 Scutul respinge navele extraterestre care încearcă să aterizeze lângă bază suficient de mult timp pentru ca sistemele defensive să mai tragă odată.  Practic, acest sistem va dubla efectul oricărui sistem defensiv din bază.
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Navă De Observare Mare
 STR_HARVESTER
 Navă De Recoltare
-STR_ABDUCTER
+STR_ABDUCTOR
 Navă De Răpire
 STR_TERROR_SHIP
 Navă De Terorizare
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 Joc Nou
 STR_LOAD_SAVED_GAME
-Încarcă Joc Salvat
+Încarcă Joc
 STR_SELECT_DIFFICULTY_LEVEL
 Alege Nivelul De Dificultate
 STR_1_BEGINNER
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 Cea mai mare navă de observare extraterestră este o navă cu scop general care este folosită în toate tipurile de misiuni ale extratereștrilor.
 STR_HARVESTER_UFOPEDIA
 Nava de recoltare prezintă o poartă de acces la baza ei și este echipată cu mecanisme de manipulare a vitelor sau altor ființe.  Unelte laser de tăiat sunt folosite pentru a extrage materialele dorite iar corpul este aruncat la pământ.  Prezintă de asemenea recipiente pentru organe.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Această navă prezintă o cameră de examinare în care au loc experimente groaznice pe subiecți umani.  În mod obișnuit victima este paralizată cu ajutorul puterilor telepatice dar rămâne conștientă pe masa de operație.
 STR_TERROR_SHIP_UFOPEDIA
 Nava de terorizare prezintă o cameră mare pentru arme sau creaturi de groază.  Este folosită pentru a trasporta acești extratereștrii în zone populate.
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Cadavru Sectopod
 STR_CYBERDISC_CORPSE
 Cadavru Cyberdisc
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Cartușe de tun insuficiente pentru înarmare Tanc
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Rachete insuficiente pentru înarmare Tanc
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Bombe cu fuziune insuficiente pentru înarmare Tanc
+STR_TO_ARM_HWP
+ pentru înarmare Tanc
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Articole insuficiente pentru reechiparea trupei
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1749,7 @@ STR_GRAPHS
 GRAFICE
 STR_UFOPAEDIA_UC
 UFOPEDIA
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Options
-STR_OPTIONS
+STR_OPTIONS_UC
 OPȚIUNI
 STR_FUNDING_UC
 FINANȚARE
@@ -2039,3 +2029,7 @@ STR_CORPSE
 Cadavru
 STR_UNLOAD
 Descarcă
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Opțiuni

@@ -35,7 +35,7 @@ public:
 	/// Cleans up the X-Com ruleset.
 	~XcomRuleset();
 	/// Generates a saved game with starting equipment.
-	SavedGame *newSave(GameDifficulty diff) const;
+	SavedGame *newSave() const;
 };
 
 }

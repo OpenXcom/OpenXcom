@@ -16,12 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include "BaseFacility.h"
-#include <cmath>
 #include "../Ruleset/RuleBaseFacility.h"
 #include "Base.h"
-#include "Target.h"
 
 namespace OpenXcom
 {
@@ -142,20 +139,6 @@ void BaseFacility::setBuildTime(int time)
 void BaseFacility::build()
 {
 	_buildTime--;
-}
-
-/**
- * Returns if a certain target is covered by the facility's
- * radar range, taking in account the positions of both.
- * @param target Pointer to target to compare.
- * @return True if it's within range, False otherwise.
- */
-bool BaseFacility::insideRadarRange(Target *target) const
-{
-	if (_rules->getRadarRange() == 0)
-		return false;
-	double newrange = _rules->getRadarRange() * (1 / 60.0) * (M_PI / 180);
-	return (_base->getDistance(target) <= newrange);
 }
 
 /**

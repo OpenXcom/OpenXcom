@@ -20,6 +20,8 @@
 #define OPENXCOM_NEWBATTLESTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
+#include <string>
 
 namespace OpenXcom
 {
@@ -27,7 +29,7 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class Selector;
+class Craft;
 
 /**
  * New Battle that displays a list
@@ -38,20 +40,40 @@ class NewBattleState : public State
 {
 private:
 	Window *_window;
-	Text *_txtTitle, *_txtMissionType, *_txtMissionOption, *_txtAlien, *_txtSunlight, *_txtCraft;
-	Selector *_selMissionType, *_selMissionOption, *_selAlienRace, *_selSunlight, *_selCraft;
-	TextButton *_btnOk, *_btnCancel, *_btnCraft;
+	Text *_txtTitle, *_txtMissionType, *_txtTerrainType, *_txtAlienRace, *_txtDifficulty, *_txtDarkness, *_txtCraft;
+	TextButton *_btnMissionType, *_btnTerrainType, *_btnAlienRace, *_btnDifficulty, *_btnDarkness, *_btnCraft;
+	TextButton *_btnOk, *_btnCancel, *_btnEquip;
+	std::vector<std::string> _missionTypes, _terrainTypes, _alienRaces, _difficulty, _darkness, _crafts;
+	size_t _selMission, _selTerrain, _selAlien, _selDifficulty, _selDarkness, _selCraft;
+	bool _music;
+	Craft *_craft;
 public:
 	/// Creates the New Battle state.
 	NewBattleState(Game *game);
 	/// Cleans up the New Battle state.
 	~NewBattleState();
+	/// Resets state.
+	void init();
 	/// Initializes a blank savegame.
 	void initSave();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Equip Craft button.
+	void btnEquipClick(Action *action);
+	/// Handler for clicking the Mission Type button.
+	void btnMissionTypeClick(Action *action);
+	/// Handler for clicking the Mission Option button.
+	void btnTerrainTypeClick(Action *action);
+	/// Handler for clicking the Alien Race button.
+	void btnAlienRaceClick(Action *action);
+	/// Handler for clicking the Difficulty button.
+	void btnDifficultyClick(Action *action);
+	/// Handler for clicking the Darkness button.
+	void btnDarknessClick(Action *action);
+	/// Handler for clicking the Craft button.
+	void btnCraftClick(Action *action);
 };
 
 }

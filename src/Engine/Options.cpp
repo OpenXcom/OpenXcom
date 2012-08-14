@@ -22,6 +22,7 @@
 #include <map>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 #include <yaml-cpp/yaml.h>
 #include "Exception.h"
 #include "CrossPlatform.h"
@@ -65,13 +66,14 @@ void createDefault()
 	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5
 	setInt("battleXcomSpeed", 40); // 60, 50, 40, 30, 20, 10
 	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10
-	// set to true if you want to play with the alternative grenade handling
-	setBool("battleAltGrenade", false);
+	setBool("battleAltGrenade", false); // set to true if you want to play with the alternative grenade handling
 	setBool("battlePreviewPath", false);
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
+	setInt("audioSampleRate", 22050);
+	setInt("audioBitDepth", 16);
 }
 
 /**
@@ -119,6 +121,7 @@ void loadArgs(int argc, char** args)
  */
 void init(int argc, char** args)
 {
+	std::cout << "Loading options..." << std::endl;
 	createDefault();
 	loadArgs(argc, args);
 	if (_dataFolder == "")
@@ -170,6 +173,10 @@ void init(int argc, char** args)
 			save();
 		}
 	}
+	std::cout << "Data folder is: " << _dataFolder << std::endl;
+	std::cout << "User folder is: " << _userFolder << std::endl;
+	std::cout << "Config folder is: " << _configFolder << std::endl;
+	std::cout << "Options loaded successfully." << std::endl;
 }
 
 /**

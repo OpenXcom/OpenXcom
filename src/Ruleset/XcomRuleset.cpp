@@ -328,12 +328,11 @@ XcomRuleset::~XcomRuleset()
 /**
  * Generates a brand new saved game with the default countries
  * and a base with all the starting equipment.
- * @param diff Difficulty for the save.
  * @return New saved game.
  */
-SavedGame *XcomRuleset::newSave(GameDifficulty diff) const
+SavedGame *XcomRuleset::newSave() const
 {
-	SavedGame *save = Ruleset::newSave(diff);
+	SavedGame *save = Ruleset::newSave();
 
 	// init savedgame articles
 	save->getUfopaedia()->insertArticle(getUfopaediaArticle("STR_SKYRANGER"));

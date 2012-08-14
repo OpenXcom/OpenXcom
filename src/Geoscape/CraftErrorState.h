@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PURCHASEERRORSTATE_H
-#define OPENXCOM_PURCHASEERRORSTATE_H
+#ifndef OPENXCOM_CRAFTERRORSTATE_H
+#define OPENXCOM_CRAFTERRORSTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+#include "../Engine/State.h"
 
 namespace OpenXcom
 {
@@ -28,24 +28,30 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class GeoscapeState;
 
 /**
- * Generic window used to display error messages
- * when the player is on the Purchase screen.
+ * Window used to notify the player when
+ * an error occurs with a craft procedure.
  */
-class PurchaseErrorState : public State
+class CraftErrorState : public State
 {
 private:
-	TextButton *_btnOk;
+	GeoscapeState *_state;
+	TextButton *_btnOk, *_btnOk5Secs;
 	Window *_window;
-	Text *_txtError;
+	Text *_txtMessage;
 public:
-	/// Creates the Purchase Error state.
-	PurchaseErrorState(Game *game, std::string str);
-	/// Cleans up the Purchase Error state.
-	~PurchaseErrorState();
+	/// Creates the Craft Error state.
+	CraftErrorState(Game *game, GeoscapeState *state, const std::wstring &msg);
+	/// Cleans up the Craft Error state.
+	~CraftErrorState();
+	/// Updates the palette.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the OK 5 Secs button.
+	void btnOk5SecsClick(Action *action);
 };
 
 }

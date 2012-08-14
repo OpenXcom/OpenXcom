@@ -43,6 +43,7 @@ class RuleItem
 {
 private:
 	std::string _type, _name; // two types of objects can have the same name
+	std::vector<std::string> _requires;
 	float _size;
 	int _costBuy, _costSell, _transferTime, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
@@ -61,6 +62,7 @@ private:
 	int _tuUse;
 	int _recoveryPoints;
 	int _armor;
+	bool _recover;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -74,6 +76,8 @@ public:
 	std::string getType() const;
 	/// Gets the item's name.
 	std::string getName() const;
+	/// Gets the item's requirements.
+	std::vector<std::string> getRequirements() const;
 	/// Gets the item's size.
 	float getSize() const;
 	/// Gets the item's purchase cost.
@@ -91,11 +95,11 @@ public:
 	/// Gets the item's reference in HANDOB.PCK for use in inventory.
 	int getHandSprite() const;
 	/// Gets if the item is two-handed.
-	bool getTwoHanded() const;
+	bool isTwoHanded() const;
 	/// Gets if the item is a launcher.
-	bool getWaypoint() const;
+	bool isWaypoint() const;
 	/// Gets if the item is fixed.
-	bool getFixed() const;
+	bool isFixed() const;
 	/// Gets the item's bullet sprite reference.
 	int getBulletSprite() const;
 	/// Gets the item's fire sound.
@@ -158,6 +162,8 @@ public:
 	int getRecoveryPoints() const;
 	/// Gets the item's armor
 	int getArmor() const;
+	/// Gets the item's recoverability.
+	bool isRecoverable() const;
 };
 
 }

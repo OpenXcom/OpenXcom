@@ -130,7 +130,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setWorldShade(_shade);
 		bgen.setCraft(_craft);
 		bgen.setUfo(u);
-		bgen.setAlienRace("STR_SECTOID");
+		bgen.setAlienRace(u->getAlienRace());
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 
@@ -145,7 +145,8 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setWorldTexture(_texture);
 		bgen.setWorldShade(_shade);
 		bgen.setCraft(_craft);
-		bgen.setAlienRace("STR_SECTOID");
+		bgen.setTerrorSite(t);
+		bgen.setAlienRace(t->getAlienRace());
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 

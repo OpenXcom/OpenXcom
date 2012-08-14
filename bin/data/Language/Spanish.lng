@@ -269,7 +269,7 @@ STR_HANGARS
 Hangares
 STR_SHORT_RANGE_DETECTION
 Detección de corto alcance
-STR_DEFENCE_STRENGTH
+STR_DEFENSE_STRENGTH
 Fuerza defensiva
 STR_TRANSFERS_UC
 TRASLADOS
@@ -463,11 +463,11 @@ STR_UFO_GROUND_ASSAULT
 ASALTO A OVNI EN TIERRA
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Explora el punto de aterrizaje y, si es posible, entra en el ovni. El fin de la misión es eliminar o neutralizar todas las unidades enemigas. Después se podrá iniciar la recuperación de los restos del ovni , los artefactos y los cadáveres alienígenas. Para cancelar la misión lleva a los hombres de XCom al vehículo de transporte y pulsa sobre el icono de 'Cancelar misión'.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 DEFENSA DE LA BASE
 STR_BASE_UC_
 BASE> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 Una nave alienígena ha aterrizado cerca de aquí. Nuestra base está en peligro. Según el procedimiento normal, se ha evacuado todo el personal no combatiente y las naves de XCom. Los alienígenas accederán a la base por las puertas del hangar o por el ascensor de acceso. Defiende la base y sus instalaciones vitales a toda costa, es una lucha a vida o muerte. Si pulsas en el icono de 'Cancelar misión' aceptarás la derrota y perderás la base.
 STR_ALIEN_BASE_ASSAULT
 ASALTO A BASE ALIENíGENA
@@ -639,7 +639,7 @@ STR_EQUIPMENT_FOR
 Equipo para 
 STR_ARM
 Bli.
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Eficacia defensiva
 STR_HIT_RATIO
 Media de impactos
@@ -941,11 +941,11 @@ STR_PLASMA_CANNON
 Cañón de plasma
 STR_FUSION_MISSILE
 Misil de fusión
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Defensas láser
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Defensas de plasma
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Defensas de fusión
 STR_GRAV_SHIELD
 Escudo de gravedad
@@ -1197,17 +1197,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Un sistema de detección pequeño tiene un alcance efectivo de 300 millas náuticas y está conectado a sistemas satélites para el análisis de la superficie. Cada sistema tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Un sistema de detección grande cubre una zona de más de 450 millas náuticas y está conectado a sistemas satélites para el análisis de la superficie. Cada  sistema tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Los sistemas de defensa basados en misiles proporcionan protección contra las incursiones de naves hostiles que intenten aterrizar en la base.
 STR_GENERAL_STORES_UFOPEDIA
 Todo se guarda en los almacenes:  equipo, sistemas de armas, munición, material recuperado y plataformas de armamento pesado (PAP); se exceptúa el equipo destinado a las naves que hay en los hangares.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Es probable que los alienígenas capturados con vida necesiten un  hábitat especial para mantener sus sistemas vitales. En cada unidad de retención caben 10 alienígenas metidos en otras tantas unidades independientes.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Las defensas basadas en rayos láser proporcionan protección contra incursiones de naves hostiles.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Las defensas basadas en rayos de plasma constituyen una protección eficaz y poderosa contra las incursiones de naves hostiles.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Los misiles de fusión ofrecen la mejor protección contra ataques  alienígenas. Estos misiles originan una implosión de antimateria que destruye todo lo que se encuentra en su radio de acción.
 STR_GRAV_SHIELD_UFOPEDIA
 El escudo de gravedad evita que las naves alienígenas intenten aterrizar cerca de la base, de manera que aterricen a una distancia suficiente como para que los sistemas de defensa vuelvan a abrir fuego. En la práctica, dobla la eficacia de cualquier sistema de defensa de tu base.
@@ -1279,7 +1279,7 @@ STR_LARGE_SCOUT
 Explorador grande
 STR_HARVESTER
 Segador
-STR_ABDUCTER
+STR_ABDUCTOR
 Raptor
 STR_TERROR_SHIP
 Nave del terror
@@ -1454,7 +1454,7 @@ Perth
 STR_NEW_GAME
 Partida nueva
 STR_LOAD_SAVED_GAME
-Cargar partida guardada
+Cargar partida
 STR_SELECT_DIFFICULTY_LEVEL
 Seleccionar nivel de dificultad
 STR_1_BEGINNER
@@ -1575,7 +1575,7 @@ STR_LARGE_SCOUT_UFOPEDIA
 La nave exploradora más grande se usa en todo tipo de misiones alienígenas.
 STR_HARVESTER_UFOPEDIA
 La cosechadora tiene una escotilla en la parte de abajo y está equipada con aparatos para subir a bordo ganado u otras bestias. Extirpan el material deseado con unas cortadoras de rayos láser y luego tiran el cadáver al suelo. También incluye contenedores para las partes del cuerpo extirpadas.
-STR_ABDUCTER_UFOPEDIA
+STR_ABDUCTOR_UFOPEDIA
 Este buque va equipado con una sala de examen para realizar horribles experimentos con humanos. Normalmente las víctimas son paralizadas por medios telepáticos, pero permanecen conscientes mientras están en la mesa de operaciones
 STR_TERROR_SHIP_UFOPEDIA
 La nave del terror tiene una instalación de confinamiento para criaturas o armas de terror alienígenas de gran tamaño. Sirven para transportar a estos terroristas alienígenas a zonas pobladas.
@@ -1691,12 +1691,8 @@ STR_SECTOPOD_CORPSE
 Cadáver de sectópodo
 STR_CYBERDISC_CORPSE
 Cadáver de ciberdisco
-STR_NOT_ENOUGH_CANNON_ROUNDS_TO_ARM_HWP
-Munición insuficiente para una PAP
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Cohetes insuficientes para una PAP
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Bolas de fusión insuficientes para una PAP
+STR_TO_ARM_HWP
+ para una PAP
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Equipo insuficiente para todo el escuadrón
 STR_MARS_CYDONIA_LANDING
@@ -1753,13 +1749,7 @@ STR_GRAPHS
 GRáFICOS
 STR_UFOPAEDIA_UC
 OVNICLOPEDIA
-STR_NEW_BATTLE
-New Battle
-STR_THE_SIMULATRON
-THE SIMULATRON
-STR_OPTIONS_
-Opciones
-STR_OPTIONS
+STR_OPTIONS_UC
 OPCIONES
 STR_FUNDING_UC
 FINANCIACIóN
@@ -2039,3 +2029,7 @@ STR_CORPSE
 Cadáver
 STR_UNLOAD
 Descargar
+STR_NEW_BATTLE
+New Battle
+STR_OPTIONS
+Opciones

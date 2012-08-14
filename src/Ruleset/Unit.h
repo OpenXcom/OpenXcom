@@ -63,16 +63,6 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the unit's type.
 	std::string getType() const;
-	/// Sets the unit's stats.
-	void setStats(struct UnitStats stats);
-	/// Sets the unit default armor.
-	void setArmor(const std::string &armor);
-	/// Sets the voxel parameters.
-	void setVoxelParameters(int standHeight, int kneelHeight, int loftemps);
-	/// Sets various AI parameters.
-	void setAIParameters(int intelligence, int aggression);
-	/// Sets various AI parameters.
-	void setSpecialAbility(SpecialAbility specab);
 	/// Get the unit's stats.
 	UnitStats *getStats();
 	/// Get the unit's height when standing.
@@ -87,12 +77,8 @@ public:
 	std::string getRace() const;
 	/// Get the alien rank.
 	std::string getRank() const;
-	/// Set the value - for score calculation.
-	void setValue(int value);
 	/// Get the value - for score calculation.
 	int getValue() const;
-	/// Set the death sound id.
-	void setDeathSound(int id);
 	/// Get the death sound id.
 	int getDeathSound() const;
 	/// Get the intelligence. This is the number of turns AI remembers your troops position.

@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of base facility.
  * @param type String defining the type.
  */
-RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(""), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defence(0), _hitRatio(0)
+RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defense(0), _hitRatio(0)
 {
 }
 
@@ -131,9 +131,9 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		{
 			i.second() >> _radarChance;
 		}
-		else if (key == "defence")
+		else if (key == "defense")
 		{
-			i.second() >> _defence;
+			i.second() >> _defense;
 		}
 		else if (key == "hitRatio")
 		{
@@ -174,7 +174,7 @@ void RuleBaseFacility::save(YAML::Emitter &out) const
 	out << YAML::Key << "psiLabs" << YAML::Value << _psiLabs;
 	out << YAML::Key << "radarRange" << YAML::Value << _radarRange;
 	out << YAML::Key << "radarChance" << YAML::Value << _radarChance;
-	out << YAML::Key << "defence" << YAML::Value << _defence;
+	out << YAML::Key << "defense" << YAML::Value << _defense;
 	out << YAML::Key << "hitRatio" << YAML::Value << _hitRatio;
 	out << YAML::Key << "mapName" << YAML::Value << _mapName;
 	out << YAML::EndMap;
@@ -192,11 +192,11 @@ std::string RuleBaseFacility::getType() const
 }
 
 /**
- * Returns the research required to be able to
+ * Returns the list of research required to
  * build this base facility.
- * @return Research ID or "" if none.
+ * @return List of research IDs..
  */
-std::string RuleBaseFacility::getRequirement() const
+std::vector<std::string> RuleBaseFacility::getRequirements() const
 {
 	return _requires;
 }
@@ -236,7 +236,7 @@ int RuleBaseFacility::getSize() const
  * facilities have to be connected to it.
  * @return True if it's a lift, False otherwise.
  */
-bool RuleBaseFacility::getLift() const
+bool RuleBaseFacility::isLift() const
 {
 	return _lift;
 }
@@ -246,7 +246,7 @@ bool RuleBaseFacility::getLift() const
  * capabilities. This allows it to get extra details about UFOs.
  * @return Hyperwave flag.
  */
-bool RuleBaseFacility::getHyperwave() const
+bool RuleBaseFacility::isHyperwave() const
 {
 	return _hyper;
 }
@@ -256,7 +256,7 @@ bool RuleBaseFacility::getHyperwave() const
  * which covers your base from alien detection.
  * @return Mind Shield flag.
  */
-bool RuleBaseFacility::getMindShield() const
+bool RuleBaseFacility::isMindShield() const
 {
 	return _mind;
 }
@@ -266,7 +266,7 @@ bool RuleBaseFacility::getMindShield() const
  * which doubles base defense's fire ratio.
  * @return Grav Shield flag.
  */
-bool RuleBaseFacility::getGravShield() const
+bool RuleBaseFacility::isGravShield() const
 {
 	return _grav;
 }
@@ -391,13 +391,13 @@ int RuleBaseFacility::getRadarChance() const
 }
 
 /**
- * Returns the defence value of this facility's weaponry
+ * Returns the defense value of this facility's weaponry
  * against UFO invasions on the base.
- * @return Defence value.
+ * @return Defense value.
  */
-int RuleBaseFacility::getDefenceValue() const
+int RuleBaseFacility::getDefenseValue() const
 {
-	return _defence;
+	return _defense;
 }
 
 /**

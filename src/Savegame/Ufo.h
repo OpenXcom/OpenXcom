@@ -38,10 +38,11 @@ class Ufo : public MovingTarget
 {
 private:
 	RuleUfo *_rules;
-	int _id, _damage, _altitude;
-	std::string _direction;
+	int _id, _damage;
+	std::string _direction, _altitude;
 	bool _detected;
 	int _hoursCrashed;
+	std::string _race;
 	bool _inBattlescape;
 	int _hit;
 
@@ -92,10 +93,16 @@ public:
 	void setInBattlescape(bool inbattle);
 	/// Gets if the UFO is in battlescape.
 	bool isInBattlescape() const;
+	/// Gets the UFO's alien race.
+	std::string getAlienRace() const;
+	/// Sets the UFO's alien race.
+	void setAlienRace(const std::string &race);
 	/// Set hit status.
 	void setHit(int hit);
 	/// Get hit status.
 	int getHit() const;
+	/// Gets the UFO's visibility.
+	int getVisibility() const;
 };
 
 }

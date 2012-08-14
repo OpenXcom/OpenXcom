@@ -33,6 +33,9 @@ class TerrorSite : public Target
 {
 private:
 	int _id;
+	int _hoursActive;
+	std::string _race;
+	bool _inBattlescape;
 public:
 	/// Creates a terror site.
 	TerrorSite();
@@ -50,6 +53,18 @@ public:
 	void setId(int id);
 	/// Gets the terror site's name.
 	std::wstring getName(Language *lang) const;
+	/// Gets the terror site's amount of active hours.
+	int getHoursActive() const;
+	/// Sets the terror site's amount of active hours.
+	void setHoursActive(int hours);
+	/// Gets the terror site's alien race.
+	std::string getAlienRace() const;
+	/// Sets the terror site's alien race.
+	void setAlienRace(const std::string &race);
+	/// Sets the UFO's battlescape status.
+	void setInBattlescape(bool inbattle);
+	/// Gets if the UFO is in battlescape.
+	bool isInBattlescape() const;
 };
 
 }

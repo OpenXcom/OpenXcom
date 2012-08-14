@@ -95,30 +95,12 @@ double City::getLatitude() const
 }
 
 /**
- * Changes the latitude coordinate of the city.
- * @param lat Latitude in radian.
- */
-void City::setLatitude(double lat)
-{
-	_lat = lat;
-}
-
-/**
  * Returns the longitude coordinate of the city.
  * @return Longitude in radian.
  */
 double City::getLongitude() const
 {
 	return _lon;
-}
-
-/**
- * Changes the longitude coordinate of the city.
- * @param lon Longitude in radian.
- */
-void City::setLongitude(double lon)
-{
-	_lon = lon;
 }
 
 }

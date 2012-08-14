@@ -55,7 +55,7 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	std::string mission = _game->getSavedGame()->getBattleGame()->getMissionType();
 
 	// Set palette
-	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENCE")
+	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
@@ -106,10 +106,10 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 	}
 
-	if (mission == "STR_BASE_DEFENCE")
+	if (mission == "STR_BASE_DEFENSE")
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_DEFENCE"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_BASE_DEFENCE_BRIEFING"));
+		_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE"));
+		_txtBriefing->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE_BRIEFING"));
 	}
 	else if (mission == "STR_TERROR_MISSION")
 	{

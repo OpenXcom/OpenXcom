@@ -32,7 +32,7 @@
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/Base.h"
 #include "BaseNameState.h"
-#include "GeoscapeErrorState.h"
+#include "../Menu/ErrorMessageState.h"
 
 namespace OpenXcom
 {
@@ -120,7 +120,7 @@ void ConfirmNewBaseState::btnOkClick(Action *action)
 	}
 	else
 	{
-		_game->pushState(new GeoscapeErrorState(_game, _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY")));
+		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(8)+10, "BACK01.SCR", 0));
 	}
 }
 

@@ -459,7 +459,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)&DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getUFObreakOffTime() + RNG::generate(1, _ufo->getRules()->getUFObreakOffTime()) - 30 * _game->getSavedGame()->getDifficulty()) * 20;
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime()) - 30 * _game->getSavedGame()->getDifficulty()) * 20;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	// Load UFO top views.

@@ -82,8 +82,12 @@ void StartState::think()
 	case LOADING_STARTED:
 		try
 		{
+			std::cout << "Loading resources..." << std::endl;
 			_game->setResourcePack(new XcomResourcePack());
+			std::cout << "Resources loaded successfully." << std::endl;
+			std::cout << "Loading ruleset..." << std::endl;
 			_game->setRuleset(new XcomRuleset());
+			std::cout << "Ruleset loaded successfully." << std::endl;
 			std::vector<std::string> langs = Language::getList(0);
 			if (langs.empty())
 			{
@@ -108,6 +112,7 @@ void StartState::think()
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
+		std::cout << std::endl << "OpenXcom started successfully. Enjoy!" << std::endl;
 		if (Options::getString("language") == "" || Options::getString("language") == "~")
 		{
 			_game->setState(new NoteState(_game));

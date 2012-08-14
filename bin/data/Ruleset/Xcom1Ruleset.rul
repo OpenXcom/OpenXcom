@@ -546,7 +546,8 @@ facilities:
     aliens: 10
     mapName: XBASE_08
   - type: STR_LASER_DEFENSES
-    requires: STR_LASER_DEFENSES
+    requires:
+      - STR_LASER_DEFENSES
     spriteShape: 3
     spriteFacility: 26
     buildCost: 400000
@@ -556,7 +557,8 @@ facilities:
     hitRatio: 60
     mapName: XBASE_09
   - type: STR_PLASMA_DEFENSES
-    requires: STR_PLASMA_DEFENSES
+    requires:
+      - STR_PLASMA_DEFENSES
     spriteShape: 3
     spriteFacility: 27
     buildCost: 600000
@@ -566,7 +568,8 @@ facilities:
     hitRatio: 70
     mapName: XBASE_10
   - type: STR_FUSION_BALL_DEFENSES
-    requires: STR_FUSION_BALL_DEFENSES
+    requires:
+      - STR_FUSION_BALL_DEFENSES
     spriteShape: 3
     spriteFacility: 28
     buildCost: 800000
@@ -576,7 +579,8 @@ facilities:
     hitRatio: 80
     mapName: XBASE_11
   - type: STR_GRAV_SHIELD
-    requires: STR_GRAV_SHIELD
+    requires:
+      - STR_GRAV_SHIELD
     grav: true
     spriteShape: 2
     spriteFacility: 29
@@ -585,7 +589,8 @@ facilities:
     monthlyCost: 15000
     mapName: XBASE_12
   - type: STR_MIND_SHIELD
-    requires: STR_MIND_SHIELD
+    requires:
+      - STR_MIND_SHIELD
     mind: true
     spriteShape: 2
     spriteFacility: 30
@@ -594,7 +599,8 @@ facilities:
     monthlyCost: 5000
     mapName: XBASE_13
   - type: STR_PSIONIC_LABORATORY
-    requires: STR_PSIONIC_LABORATORY
+    requires:
+      - STR_PSIONIC_LABORATORY
     spriteShape: 1
     spriteFacility: 31
     buildCost: 750000
@@ -603,7 +609,8 @@ facilities:
     psiLabs: 50
     mapName: XBASE_14
   - type: STR_HYPER_WAVE_DECODER
-    requires: STR_HYPER_WAVE_DECODER
+    requires:
+      - STR_HYPER_WAVE_DECODER
     hyper: true
     spriteShape: 2
     spriteFacility: 32
@@ -676,6 +683,15 @@ crafts:
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
     score: 300
+    battlescapeTerrainData:
+      name: LIGHTNIN
+      mapDataSets:
+        - BLANKS
+        - LIGHTNIN
+      mapBlocks:
+        - name: LIGHTNIN
+          width: 20
+          length: 10
   - type: STR_AVENGER
     sprite: 2
     fuelMax: 60
@@ -688,6 +704,15 @@ crafts:
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
     score: 400
+    battlescapeTerrainData:
+      name: AVENGER
+      mapDataSets:
+        - BLANKS
+        - AVENGER
+      mapBlocks:
+        - name: AVENGER
+          width: 10
+          length: 20
 craftWeapons:
   - type: STR_STINGRAY
     sprite: 0
@@ -847,19 +872,46 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_TANK_ROCKET_LAUNCHER
     size: 6
     costBuy: 480000
     costSell: 360000
     transferTime: 96
     weight: 1
+    bigSprite: 42
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 0
+    fireSound: 52
+    compatibleAmmo:
+      - STR_HWP_ROCKETS
+    accuracySnap: 55
+    accuracyAimed: 115
+    tuSnap: 45
+    tuAimed: 75
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
   - type: STR_HWP_ROCKETS
     size: 0.6
     costBuy: 3000
     costSell: 2250
     transferTime: 48
     weight: 1
+    bigSprite: 16
+    floorSprite: 16
+    hitSound: 0
+    hitAnimation: 0
+    power: 85
+    damageType: 3
+    clipSize: 8
+    battleType: 2
+    invWidth: 1
+    invHeight: 3
+    armor: 20
   - type: STR_TANK_LASER_CANNON
     size: 6
     costSell: 594000
@@ -898,7 +950,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    armor: 20    
+    armor: 20
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 70
@@ -912,7 +964,7 @@ items:
     damageType: 1
     clipSize: 12
     battleType: 2
-    armor: 12    
+    armor: 12
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -935,7 +987,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_RIFLE_CLIP
     size: 0.1
     costBuy: 200
@@ -949,7 +1001,7 @@ items:
     damageType: 1
     clipSize: 20
     battleType: 2
-    armor: 20    
+    armor: 20
   - type: STR_HEAVY_CANNON
     size: 0.3
     costBuy: 6400
@@ -972,7 +1024,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_HC_AP_AMMO
     size: 0.1
     costBuy: 300
@@ -988,7 +1040,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -1004,7 +1056,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -1020,7 +1072,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -1045,7 +1097,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_AC_AP_AMMO
     size: 0.1
     costBuy: 500
@@ -1061,7 +1113,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_AC_HE_AMMO
     size: 0.1
     costBuy: 700
@@ -1077,7 +1129,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_AC_I_AMMO
     size: 0.1
     costBuy: 650
@@ -1093,7 +1145,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -1116,7 +1168,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_SMALL_ROCKET
     size: 0.2
     costBuy: 600
@@ -1132,7 +1184,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_LARGE_ROCKET
     size: 0.2
     costBuy: 900
@@ -1148,7 +1200,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_INCENDIARY_ROCKET
     size: 0.2
     costBuy: 1200
@@ -1164,7 +1216,7 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_LASER_PISTOL
     size: 0.1
     costSell: 20000
@@ -1188,7 +1240,7 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    armor: 20    
+    armor: 20
   - type: STR_LASER_RIFLE
     size: 0.2
     costSell: 36900
@@ -1213,7 +1265,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_HEAVY_LASER
     size: 0.3
     costSell: 61000
@@ -1236,7 +1288,7 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_GRENADE
     size: 0.1
     costBuy: 300
@@ -1247,7 +1299,7 @@ items:
     power: 50
     damageType: 3
     battleType: 4
-    armor: 20    
+    armor: 20
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1258,7 +1310,7 @@ items:
     power: 60
     damageType: 9
     battleType: 4
-    armor: 20    
+    armor: 20
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1269,7 +1321,7 @@ items:
     power: 70
     damageType: 3
     battleType: 5
-    armor: 20    
+    armor: 20
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1282,7 +1334,7 @@ items:
     battleType: 4
     invWidth: 2
     invHeight: 1
-    armor: 20    
+    armor: 20
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -1291,7 +1343,7 @@ items:
     floorSprite: 23
     battleType: 7
     tuUse: 25
-    armor: 20    
+    armor: 20
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -1309,8 +1361,10 @@ items:
     stun: 4
     energy: 10
     tuUse: 10
-    armor: 20    
+    armor: 20
   - type: STR_PSI_AMP
+    requires:
+      - STR_PSI_AMP
     size: 0.1
     costSell: 194700
     weight: 10
@@ -1324,7 +1378,7 @@ items:
     invWidth: 1
     invHeight: 3
     tuUse: 25
-    armor: 20    
+    armor: 20
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
@@ -1343,7 +1397,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    armor: 20    
+    armor: 20
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -1353,14 +1407,15 @@ items:
     floorSprite: 72
     power: 15
     battleType: 10
-    armor: 8    
+    armor: 8
   - type: STR_CORPSE
     weight: 22
     bigSprite: 45
     floorSprite: 39
     invWidth: 2
     invHeight: 3
-    armor: 20    
+    armor: 20
+    recover: false
   - type: STR_CORPSE_ARMOR
     name: STR_CORPSE
     weight: 24
@@ -1368,7 +1423,8 @@ items:
     floorSprite: 40
     invWidth: 2
     invHeight: 3
-    armor: 30    
+    armor: 30
+    recover: false
   - type: STR_CORPSE_SUIT
     name: STR_CORPSE
     weight: 26
@@ -1376,8 +1432,11 @@ items:
     floorSprite: 41
     invWidth: 2
     invHeight: 3
-    armor: 40    
+    armor: 40
+    recover: false
   - type: STR_HEAVY_PLASMA
+    requires:
+      - STR_HEAVY_PLASMA
     size: 0.2
     costSell: 171600
     weight: 8
@@ -1399,8 +1458,10 @@ items:
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5
-    armor: 50    
+    armor: 50
   - type: STR_HEAVY_PLASMA_CLIP
+    requires:
+      - STR_HEAVY_PLASMA_CLIP
     size: 0.3
     costSell: 9590
     weight: 3
@@ -1413,8 +1474,10 @@ items:
     clipSize: 35
     battleType: 2
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_PLASMA_RIFLE
+    requires:
+      - STR_PLASMA_RIFLE
     size: 0.2
     costSell: 126500
     weight: 5
@@ -1436,8 +1499,10 @@ items:
     invWidth: 1
     invHeight: 3
     recoveryPoints: 4
-    armor: 50    
+    armor: 50
   - type: STR_PLASMA_RIFLE_CLIP
+    requires:
+      - STR_PLASMA_RIFLE_CLIP
     size: 0.1
     costSell: 6290
     weight: 3
@@ -1450,8 +1515,10 @@ items:
     clipSize: 28
     battleType: 2
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_PLASMA_PISTOL
+    requires:
+      - STR_PLASMA_PISTOL
     size: 0.1
     costSell: 84000
     weight: 3
@@ -1472,8 +1539,10 @@ items:
     invWidth: 1
     invHeight: 2
     recoveryPoints: 3
-    armor: 45    
+    armor: 45
   - type: STR_PLASMA_PISTOL_CLIP
+    requires:
+      - STR_PLASMA_PISTOL_CLIP
     size: 0.1
     costSell: 4440
     weight: 3
@@ -1486,8 +1555,10 @@ items:
     clipSize: 26
     battleType: 2
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_BLASTER_LAUNCHER
+    requires:
+      - STR_BLASTER_LAUNCHER
     size: 0.3
     costSell: 144000
     weight: 16
@@ -1506,8 +1577,10 @@ items:
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5
-    armor: 40    
+    armor: 40
   - type: STR_BLASTER_BOMB
+    requires:
+      - STR_BLASTER_BOMB
     size: 0.2
     costSell: 17028
     weight: 3
@@ -1522,8 +1595,10 @@ items:
     invWidth: 1
     invHeight: 2
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_SMALL_LAUNCHER
+    requires:
+      - STR_SMALL_LAUNCHER
     size: 0.2
     costSell: 120000
     weight: 10
@@ -1543,8 +1618,10 @@ items:
     invWidth: 2
     invHeight: 2
     recoveryPoints: 4
-    armor: 20    
+    armor: 20
   - type: STR_STUN_BOMB
+    requires:
+      - STR_STUN_BOMB
     size: 0.1
     costSell: 15200
     weight: 3
@@ -1557,8 +1634,10 @@ items:
     clipSize: 1
     battleType: 2
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_ALIEN_GRENADE
+    requires:
+      - STR_ALIEN_GRENADE
     size: 0.1
     costSell: 14850
     weight: 3
@@ -1568,7 +1647,7 @@ items:
     damageType: 3
     battleType: 4
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -1577,8 +1656,10 @@ items:
     floorSprite: 37
     invWidth: 2
     invHeight: 2
-    armor: 20    
+    armor: 20
   - type: STR_MIND_PROBE
+    requires:
+      - STR_MIND_PROBE
     size: 0.1
     costSell: 304000
     weight: 5
@@ -1591,7 +1672,7 @@ items:
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
-    armor: 20    
+    armor: 20
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1602,7 +1683,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
-    armor: 26    
+    armor: 26
   - type: STR_SNAKEMAN_CORPSE
     size: 0.4
     costSell: 20000
@@ -1612,8 +1693,8 @@ items:
     invWidth: 2
     invHeight: 3
     recoveryPoints: 5
-    battleType: 11    
-    armor: 26    
+    battleType: 11
+    armor: 26
   - type: STR_ETHEREAL_CORPSE
     size: 0.4
     costSell: 20000
@@ -1624,7 +1705,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
-    armor: 26    
+    armor: 26
   - type: STR_MUTON_CORPSE
     size: 0.4
     costSell: 20000
@@ -1635,7 +1716,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
-    armor: 26    
+    armor: 26
   - type: STR_FLOATER_CORPSE
     size: 0.4
     costSell: 20000
@@ -1646,7 +1727,7 @@ items:
     invHeight: 3
     recoveryPoints: 5
     battleType: 11
-    armor: 26    
+    armor: 26
   - type: STR_CELATID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1657,7 +1738,7 @@ items:
     invHeight: 3
     recoveryPoints: 3
     battleType: 11
-    armor: 26    
+    armor: 26
   - type: STR_SILACOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1668,7 +1749,7 @@ items:
     invHeight: 3
     recoveryPoints: 3
     battleType: 11
-    armor: 26    
+    armor: 26
   - type: STR_CHRYSSALID_CORPSE
     size: 0.4
     costSell: 20000
@@ -1678,14 +1759,14 @@ items:
     invWidth: 2
     invHeight: 3
     recoveryPoints: 3
-    battleType: 11    
-    armor: 20    
+    battleType: 11
+    armor: 20
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
     recoveryPoints: 3
-    battleType: 11    
-    armor: 20    
+    battleType: 11
+    armor: 20
   - type: REAPER_CORPSE_1
     floorSprite: 52
     invWidth: 0
@@ -1706,7 +1787,7 @@ items:
     size: 1
     costSell: 20000
     recoveryPoints: 3
-    battleType: 11   
+    battleType: 11
     armor: 20
   - type: SECTOPOD_CORPSE_1
     floorSprite: 60
@@ -1728,7 +1809,7 @@ items:
     size: 1
     costSell: 20000
     recoveryPoints: 3
-    battleType: 11   
+    battleType: 11
     armor: 20
   - type: CYBERDISC_CORPSE_1
     floorSprite: 56
@@ -1750,34 +1831,42 @@ items:
     floorSprite: 64
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: HOVERTANK_CORPSE_2
     floorSprite: 65
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: HOVERTANK_CORPSE_3
     floorSprite: 66
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: HOVERTANK_CORPSE_4
     floorSprite: 67
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: TANK_CORPSE_1
     floorSprite: 68
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: TANK_CORPSE_2
     floorSprite: 69
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: TANK_CORPSE_3
     floorSprite: 70
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: TANK_CORPSE_4
     floorSprite: 71
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: CIVM_CORPSE
     name: STR_CORPSE
     weight: 30
@@ -1785,7 +1874,8 @@ items:
     floorSprite: 50
     invWidth: 2
     invHeight: 3
-    armor: 12    
+    armor: 12
+    recover: false
   - type: CIVF_CORPSE
     name: STR_CORPSE
     weight: 50
@@ -1793,7 +1883,8 @@ items:
     floorSprite: 51
     invWidth: 2
     invHeight: 3
-    armor: 12    
+    armor: 12
+    recover: false
   - type: STR_UFO_POWER_SOURCE
     size: 0.7
     costSell: 250000
@@ -1853,6 +1944,7 @@ items:
     fixedWeapon: true
     invWidth: 1
     invHeight: 2
+    recover: false
   - type: REAPER_WEAPON
     weight: 3
     bigSprite: 32
@@ -1870,6 +1962,7 @@ items:
     fixedWeapon: true
     invWidth: 1
     invHeight: 2
+    recover: false
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
@@ -1935,7 +2028,7 @@ ufos:
         - name: UFO_120
           width: 20
           length: 20
-  - type: STR_ABDUCTER
+  - type: STR_ABDUCTOR
     size: STR_MEDIUM_UC
     sprite: 3
     damageMax: 500
@@ -2002,8 +2095,8 @@ ufos:
         - U_BITS
       mapBlocks:
         - name: UFO_170
-          width: 20
-          length: 30
+          width: 30
+          length: 20
   - type: STR_TERROR_SHIP
     size: STR_LARGE
     sprite: 6
@@ -2025,8 +2118,8 @@ ufos:
         - U_BITS
       mapBlocks:
         - name: UFO_150
-          width: 20
-          length: 30
+          width: 30
+          length: 20
   - type: STR_BATTLESHIP
     size: STR_VERY_LARGE
     sprite: 7
@@ -3002,6 +3095,26 @@ units:
     loftemps: 4
     value: 20
     deathSound: 23
+  - type: TANK_ROCKET_LAUNCHER
+    race: STR_TANK_ROCKET_LAUNCHER
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 0
+    armor: TANK_ARMOR
+    standHeight: 15
+    kneelHeight: 15
+    loftemps: 4
+    value: 20
+    deathSound: 23
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -3292,7 +3405,7 @@ alienDeployments:
     width: 50
     length: 50
     height: 4
-  - type: STR_ABDUCTER
+  - type: STR_ABDUCTOR
     data:
       - alienRank: 5
         lowQty: 1
@@ -3563,7 +3676,7 @@ alienDeployments:
     width: 50
     length: 50
     height: 4
-  - type: STR_BASE_DEFENCE
+  - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
         lowQty: 4
@@ -3647,7 +3760,7 @@ research:
     dependencies:
       - STR_POWER_SUIT
       - STR_UFO_NAVIGATION
-  - name: STR_FUSION_DEFENCE
+  - name: STR_FUSION_DEFENSE
     cost: 800
     dependencies:
       - STR_BLASTER_LAUNCHER
@@ -3655,7 +3768,7 @@ research:
   - name: STR_FUSION_MISSILE
     cost: 880
     dependencies:
-      - STR_FUSION_DEFENCE
+      - STR_FUSION_DEFENSE
   - name: STR_GRAV_SHIELD
     cost: 930
     dependencies:
@@ -3696,15 +3809,15 @@ research:
     cost: 180
     dependencies:
       - STR_ALIEN_ALLOYS
-  - name: STR_PLASMA_BEAM
+  - name: STR_PLASMA_CANNON
     cost: 660
     dependencies:
-      - STR_PLASMA_BEAM_DEP1
-      - STR_PLASMA_BEAM_DEP2
-  - name: STR_PLASMA_DEFENCE
+      - STR_PLASMA_CANNON_DEP1
+      - STR_PLASMA_CANNON_DEP2
+  - name: STR_PLASMA_DEFENSE
     cost: 620
     dependencies:
-      - STR_PLASMA_BEAM
+      - STR_PLASMA_CANNON
   - name: STR_PLASMA_PISTOL
     cost: 600
     needItem: true
@@ -3910,51 +4023,334 @@ research:
     needItem: true
     unlocks:
       - STR_PSI_LAB
-  - name: STR_PLASMA_BEAM_DEP1
+  - name: STR_PLASMA_CANNON_DEP1
     cost: 0
     dependencies:
       - STR_HEAVY_PLASMA
       - STR_HEAVY_PLASMA_CLIP
     unlocks:
-      - STR_PLASMA_BEAM
-  - name: STR_PLASMA_BEAM_DEP2
+      - STR_PLASMA_CANNON
+  - name: STR_PLASMA_CANNON_DEP2
     cost: 0
     dependencies:
       - STR_PLASMA_RIFLE
       - STR_PLASMA_RIFLE_CLIP
     unlocks:
-      - STR_PLASMA_BEAM
+      - STR_PLASMA_CANNON
 manufacture:
-  - name: STR_ALIEN_ALLOYS
-    category: STR_EQUIPMENT
-    space: 2
+  - name: STR_FUSION_BALL_LAUNCHER
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_FUSION_MISSILE
+    space: 6
+    time: 400
+    cost: 242000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_LASER_CANNON
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_LASER_CANNON
+    space: 6
     time: 300
-    cost: 8000
-  - name: STR_PERSONAL_ARMOR
-    category: STR_EQUIPMENT
-    space: 2
-    time: 300
-    cost: 8000
+    cost: 182000
+  - name: STR_PLASMA_BEAM
+    category: STR_CRAFT_WEAPON
+    requires:
+      - STR_PLASMA_CANNON
+    space: 8
+    time: 500
+    cost: 226000
+    requiredItems:
+      STR_ELERIUM_115: 15
+  - name: STR_FUSION_BALL
+    category: STR_CRAFT_AMMUNITION
+    requires:
+      - STR_FUSION_MISSILE
+    space: 6
+    time: 600
+    cost: 28000
+    requiredItems:
+      STR_ELERIUM_115: 4
+  - name: STR_TANK_LASER_CANNON
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_LASER_CANNON
+    space: 25
+    time: 1200
+    cost: 500000
+  - name: STR_HOVERTANK_PLASMA
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_PLASMA_CANNON
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 1200
+    cost: 850000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 30
+  - name: STR_HOVERTANK_LAUNCHER
+    category: STR_HEAVY_WEAPONS_PLATFORM
+    requires:
+      - STR_FUSION_MISSILE
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 1200
+    cost: 900000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 25
+  - name: STR_HWP_FUSION_BOMB
+    category: STR_HWP_CANNON_SHELLS
+    requires:
+      - STR_FUSION_MISSILE
+      - STR_NEW_FIGHTER_CRAFT
+    space: 25
+    time: 400
+    cost: 15000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+      STR_ELERIUM_115: 5
   - name: STR_LASER_PISTOL
     category: STR_WEAPON
+    requires:
+      - STR_LASER_PISTOL
     space: 2
     time: 300
     cost: 8000
   - name: STR_LASER_RIFLE
     category: STR_WEAPON
-    space: 2
-    time: 300
-    cost: 8000
-  - name: STR_MEDI_KIT
+    requires:
+      - STR_LASER_RIFLE
+    space: 3
+    time: 400
+    cost: 20000
+  - name: STR_HEAVY_LASER
     category: STR_WEAPON
-    space: 2
-    time: 300
-    cost: 8000
+    requires:
+      - STR_HEAVY_LASER
+    space: 4
+    time: 700
+    cost: 32000
   - name: STR_MOTION_SCANNER
+    category: STR_EQUIPMENT
+    requires:
+      - STR_MOTION_SCANNER
+    space: 4
+    time: 220
+    cost: 34000
+  - name: STR_MEDI_KIT
+    category: STR_EQUIPMENT
+    requires:
+      - STR_MEDI_KIT
+    space: 4
+    time: 420
+    cost: 28000
+  - name: STR_PSI_AMP
+    category: STR_EQUIPMENT
+    requires:
+      - STR_PSI_AMP
+    space: 6
+    time: 500
+    cost: 160000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_HEAVY_PLASMA
     category: STR_WEAPON
-    space: 2
-    time: 300
+    requires:
+      - STR_HEAVY_PLASMA
+    space: 4
+    time: 1000
+    cost: 122000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_HEAVY_PLASMA_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_HEAVY_PLASMA_CLIP
+    space: 4
+    time: 80
+    cost: 6000
+    requiredItems:
+      STR_ELERIUM_115: 3
+  - name: STR_PLASMA_RIFLE
+    category: STR_WEAPON
+    requires:
+      - STR_PLASMA_RIFLE
+    space: 4
+    time: 820
+    cost: 88000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_PLASMA_RIFLE_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_PLASMA_RIFLE_CLIP
+    space: 4
+    time: 80
+    cost: 3000
+    requiredItems:
+      STR_ELERIUM_115: 2
+  - name: STR_PLASMA_PISTOL
+    category: STR_WEAPON
+    requires:
+      - STR_PLASMA_PISTOL
+    space: 3
+    time: 600
+    cost: 56000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_PLASMA_PISTOL_CLIP
+    category: STR_AMMUNITION
+    requires:
+      - STR_PLASMA_PISTOL_CLIP
+    space: 4
+    time: 60
+    cost: 2000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_BLASTER_LAUNCHER
+    category: STR_WEAPON
+    requires:
+      - STR_BLASTER_LAUNCHER
+    space: 5
+    time: 1200
+    cost: 90000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_BLASTER_BOMB
+    category: STR_AMMUNITION
+    requires:
+      - STR_BLASTER_BOMB
+    space: 3
+    time: 220
     cost: 8000
+    requiredItems:
+      STR_ELERIUM_115: 3
+  - name: STR_SMALL_LAUNCHER
+    category: STR_WEAPON
+    requires:
+      - STR_SMALL_LAUNCHER
+    space: 3
+    time: 900
+    cost: 78000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_STUN_BOMB
+    category: STR_AMMUNITION
+    requires:
+      - STR_STUN_BOMB
+    space: 2
+    time: 200
+    cost: 7000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_ALIEN_GRENADE
+    category: STR_WEAPON
+    requires:
+      - STR_ALIEN_GRENADE
+    space: 2
+    time: 200
+    cost: 6700
+    requiredItems:
+      STR_ELERIUM_115: 2
+  - name: STR_MIND_PROBE
+    category: STR_EQUIPMENT
+    requires:
+      - STR_MIND_PROBE
+    space: 4
+    time: 1200
+    cost: 262000
+    requiredItems:
+      STR_ELERIUM_115: 1
+  - name: STR_PERSONAL_ARMOR
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_PERSONAL_ARMOR
+    space: 12
+    time: 800
+    cost: 22000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+  - name: STR_POWER_SUIT
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_POWER_SUIT
+    space: 16
+    time: 1000
+    cost: 42000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 4
+  - name: STR_FLYING_SUIT
+    category: STR_PERSONAL_ARMOR
+    requires:
+      - STR_FLYING_SUIT
+    space: 16
+    time: 1400
+    cost: 58000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 5
+  - name: STR_ALIEN_ALLOYS
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_ALIEN_ALLOYS
+    space: 10
+    time: 100
+    cost: 3000
+  - name: STR_UFO_POWER_SOURCE
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_UFO_POWER_SOURCE
+    space: 22
+    time: 1400
+    cost: 130000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 16
+  - name: STR_UFO_NAVIGATION
+    category: STR_UFO_COMPONENT
+    requires:
+      - STR_UFO_NAVIGATION
+    space: 18
+    time: 1600
+    cost: 150000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 3
+  - name: STR_FIRESTORM
+    category: STR_CRAFT
+    requires:
+      - STR_NEW_FIGHTER_CRAFT
+    space: 30
+    time: 14000
+    cost: 400000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 65
+      STR_UFO_POWER_SOURCE: 1
+      STR_UFO_NAVIGATION: 1
+  - name: STR_LIGHTNING
+    category: STR_CRAFT
+    requires:
+      - STR_NEW_FIGHTER_TRANSPORTER
+    space: 34
+    time: 18000
+    cost: 600000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 85
+      STR_UFO_POWER_SOURCE: 1
+      STR_UFO_NAVIGATION: 1
+  - name: STR_AVENGER
+    category: STR_CRAFT
+    requires:
+      - STR_ULTIMATE_CRAFT
+    space: 36
+    time: 34000
+    cost: 900000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 120
+      STR_UFO_POWER_SOURCE: 2
+      STR_UFO_NAVIGATION: 1
 startingBase:
   - lon: 0.0
     lat: 0.0
@@ -4020,6 +4416,8 @@ startingBase:
           STR_PISTOL_CLIP: 5
           STR_RIFLE: 6
           STR_RIFLE_CLIP: 12
+        vehicles:
+          []
         status: STR_READY
         lowFuel: false
         inBattlescape: false
@@ -4042,6 +4440,8 @@ startingBase:
             rearming: false
         items:
           {}
+        vehicles:
+          []
         status: STR_READY
         lowFuel: false
         inBattlescape: false
@@ -4064,6 +4464,8 @@ startingBase:
             rearming: false
         items:
           {}
+        vehicles:
+          []
         status: STR_READY
         lowFuel: false
         inBattlescape: false

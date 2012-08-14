@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "CannotRearmState.h"
+#include "CraftErrorState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -34,11 +34,9 @@ namespace OpenXcom
  * Initializes all the elements in a Cannot Rearm window.
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
- * @param ammo Ammo missing.
- * @param craft Craft rearming.
- * @param base Base the craft belongs to.
+ * @param msg Error message.
  */
-CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::wstring &ammo, const std::wstring &craft, const std::wstring &base) : State(game), _state(state)
+CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::wstring &msg) : State(game), _state(state)
 {
 	_screen = false;
 
@@ -62,30 +60,24 @@ CannotRearmState::CannotRearmState(Game *game, GeoscapeState *state, const std::
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&CannotRearmState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)&CraftErrorState::btnOkClick);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
-	_btnOk5Secs->onMouseClick((ActionHandler)&CannotRearmState::btnOk5SecsClick);
+	_btnOk5Secs->onMouseClick((ActionHandler)&CraftErrorState::btnOk5SecsClick);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	std::wstring s = _game->getLanguage()->getString("STR_NOT_ENOUGH");
-	s += ammo;
-	s += _game->getLanguage()->getString("STR_TO_REARM");
-	s += craft;
-	s += _game->getLanguage()->getString("STR_AT_");
-	s += base;
-	_txtMessage->setText(s);
+	_txtMessage->setText(msg);
 }
 
 /**
  *
  */
-CannotRearmState::~CannotRearmState()
+CraftErrorState::~CraftErrorState()
 {
 
 }
@@ -93,7 +85,7 @@ CannotRearmState::~CannotRearmState()
 /**
  * Resets the palette.
  */
-void CannotRearmState::init()
+void CraftErrorState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 }
@@ -102,7 +94,7 @@ void CannotRearmState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void CannotRearmState::btnOkClick(Action *action)
+void CraftErrorState::btnOkClick(Action *action)
 {
 	_game->popState();
 }
@@ -111,7 +103,7 @@ void CannotRearmState::btnOkClick(Action *action)
  * Closes the window.
  * @param action Pointer to an action.
  */
-void CannotRearmState::btnOk5SecsClick(Action *action)
+void CraftErrorState::btnOk5SecsClick(Action *action)
 {
 	_state->timerReset();
 	_game->popState();

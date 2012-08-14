@@ -48,9 +48,9 @@ private:
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barFatalWounds, *_barBravery, *_barMorale, *_barReactions, *_barFiring, *_barThrowing, *_barStrength;
 	Bar *_barPsiStrength, *_barPsiSkill;
 
-	Text *_txtFrontArmour, *_txtLeftArmour, *_txtRightArmour, *_txtRearArmour, *_txtUnderArmour;
-	Text *_numFrontArmour, *_numLeftArmour, *_numRightArmour, *_numRearArmour, *_numUnderArmour;
-	Bar *_barFrontArmour, *_barLeftArmour, *_barRightArmour, *_barRearArmour, *_barUnderArmour;
+	Text *_txtFrontArmor, *_txtLeftArmor, *_txtRightArmor, *_txtRearArmor, *_txtUnderArmor;
+	Text *_numFrontArmor, *_numLeftArmor, *_numRightArmor, *_numRearArmor, *_numUnderArmor;
+	Bar *_barFrontArmor, *_barLeftArmor, *_barRightArmor, *_barRearArmor, *_barUnderArmor;
 public:
 	/// Creates the Unit Info state.
 	UnitInfoState(Game *game, BattleUnit *unit);

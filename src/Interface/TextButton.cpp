@@ -223,7 +223,8 @@ void TextButton::mousePress(Action *action, State *state)
 		{
 			TextButton *old = *_group;
 			*_group = this;
-			old->draw();
+			if (old != 0)
+				old->draw();
 		}
 	}
 

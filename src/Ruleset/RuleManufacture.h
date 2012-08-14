@@ -31,7 +31,8 @@ namespace OpenXcom
 class RuleManufacture
 {
 private:
-	std::string _category, _name;
+	std::string _name, _category;
+	std::vector<std::string> _requires;
 	int _space, _time, _cost;
 	std::map<std::string, int> _requiredItems;
 public:
@@ -45,6 +46,8 @@ public:
 	std::string getName () const;
 	///Get the manufacture category
 	std::string getCategory () const;
+	/// Gets the manufacture's requirements.
+	std::vector<std::string> getRequirements () const;
 	///Get the required workshop space
 	int getRequiredSpace () const;
 	///Get the time required to manufacture one object

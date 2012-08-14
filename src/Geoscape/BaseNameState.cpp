@@ -106,7 +106,8 @@ void BaseNameState::nameBase()
  */
 void BaseNameState::edtNameKeyPress(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		nameBase();
 	}

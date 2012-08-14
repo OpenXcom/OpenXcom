@@ -53,8 +53,6 @@ openxcom_CXXFLAGS = \
 openxcom_SOURCES = \
 	src/Basescape/BaseInfoState.cpp \
 	src/Basescape/BaseInfoState.h \
-	src/Basescape/BasescapeErrorState.cpp \
-	src/Basescape/BasescapeErrorState.h \
 	src/Basescape/BasescapeState.cpp \
 	src/Basescape/BasescapeState.h \
 	src/Basescape/BaseView.cpp \
@@ -93,8 +91,6 @@ openxcom_SOURCES = \
 	src/Basescape/PlaceFacilityState.h \
 	src/Basescape/PlaceLiftState.cpp \
 	src/Basescape/PlaceLiftState.h \
-	src/Basescape/PurchaseErrorState.cpp \
-	src/Basescape/PurchaseErrorState.h \
 	src/Basescape/PurchaseState.cpp \
 	src/Basescape/PurchaseState.h \
 	src/Basescape/ResearchInfoState.cpp \
@@ -256,8 +252,8 @@ openxcom_SOURCES = \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
 	src/Geoscape/BuildNewBaseState.h \
-	src/Geoscape/CannotRearmState.cpp \
-	src/Geoscape/CannotRearmState.h \
+	src/Geoscape/CraftErrorState.cpp \
+	src/Geoscape/CraftErrorState.h \
 	src/Geoscape/ConfirmDestinationState.cpp \
 	src/Geoscape/ConfirmDestinationState.h \
 	src/Geoscape/ConfirmLandingState.cpp \
@@ -272,8 +268,6 @@ openxcom_SOURCES = \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \
 	src/Geoscape/GeoscapeCraftState.h \
-	src/Geoscape/GeoscapeErrorState.cpp \
-	src/Geoscape/GeoscapeErrorState.h \
 	src/Geoscape/GeoscapeState.cpp \
 	src/Geoscape/GeoscapeState.h \
 	src/Geoscape/Globe.cpp \
@@ -333,6 +327,8 @@ openxcom_SOURCES = \
 	src/Interface/Window.cpp \
 	src/Interface/Window.h \
 	src/main.cpp \
+	src/Menu/ErrorMessageState.cpp \
+	src/Menu/ErrorMessageState.h \
 	src/Menu/LanguageState.cpp \
 	src/Menu/LanguageState.h \
 	src/Menu/LoadGameState.cpp \
@@ -451,6 +447,8 @@ openxcom_SOURCES = \
 	src/Savegame/Ufo.h \
 	src/Savegame/UfopaediaSaved.cpp \
 	src/Savegame/UfopaediaSaved.h \
+	src/Savegame/Vehicle.cpp \
+	src/Savegame/Vehicle.h \
 	src/Savegame/Waypoint.cpp \
 	src/Savegame/Waypoint.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \

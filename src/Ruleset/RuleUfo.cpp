@@ -152,15 +152,6 @@ std::string RuleUfo::getSize() const
 }
 
 /**
- * Changes the size of this type of UFO.
- * @param size Size.
- */
-void RuleUfo::setSize(const std::string &size)
-{
-	_size = size;
-}
-
-/**
  * Returns the radius of this type of UFO
  * on the dogfighting window.
  * @return Radius in pixels.
@@ -200,16 +191,6 @@ int RuleUfo::getSprite() const
 	return _sprite;
 }
 
-/*
- * Changes the ID of the sprite used to draw the UFO
- * in the Dogfight window.
- * @param sprite Sprite ID.
- */
-void RuleUfo::setSprite(int sprite)
-{
-	_sprite = sprite;
-}
-
 /**
  * Returns the maximum damage (damage the UFO can take)
  * of the UFO.
@@ -218,16 +199,6 @@ void RuleUfo::setSprite(int sprite)
 int RuleUfo::getMaxDamage() const
 {
 	return _damageMax;
-}
-
-/**
- * Changes the maximum damage (damage the UFO can take)
- * of the UFO.
- * @param damage Damage.
- */
-void RuleUfo::setMaxDamage(int damage)
-{
-	_damageMax = damage;
 }
 
 /**
@@ -241,16 +212,6 @@ int RuleUfo::getMaxSpeed() const
 }
 
 /**
- * Changes the maximum speed of the UFO flying
- * around the Geoscape.
- * @param speed Speed.
- */
-void RuleUfo::setMaxSpeed(int speed)
-{
-	_speedMax = speed;
-}
-
-/**
  * Returns the acceleration of the UFO for
  * taking off / stopping.
  * @return Acceleration.
@@ -258,16 +219,6 @@ void RuleUfo::setMaxSpeed(int speed)
 int RuleUfo::getAcceleration() const
 {
 	return _accel;
-}
-
-/**
- * Changes the acceleration of the UFO for
- * taking off / stopping.
- * @param accel Acceleration.
- */
-void RuleUfo::setAcceleration(int accel)
-{
-	_accel = accel;
 }
 
 /**
@@ -281,16 +232,6 @@ int RuleUfo::getWeaponPower() const
 }
 
 /**
- * Changes the maximum damage done by the
- * UFO's weapons per shot.
- * @param power Weapon power.
- */
-void RuleUfo::setWeaponPower(int power)
-{
-	_power = power;
-}
-
-/**
  * Returns the maximum range for the
  * UFO's weapons.
  * @return Weapon range.
@@ -298,16 +239,6 @@ void RuleUfo::setWeaponPower(int power)
 int RuleUfo::getWeaponRange() const
 {
 	return _range;
-}
-
-/**
- * Changes the maximum range for the
- * UFO's weapons.
- * @param range Weapon range.
- */
-void RuleUfo::setWeaponRange(int range)
-{
-	_range = range;
 }
 
 /**
@@ -321,31 +252,12 @@ int RuleUfo::getScore() const
 }
 
 /**
- * Changes the amount of points the player
- * gets for shooting down the UFO.
- * @param score Score.
- */
-void RuleUfo::setScore(int score)
-{
-	_score = score;
-}
-
-/**
  * Returns the terrain data needed to draw the UFO in the battlescape.
  * @return RuleTerrain.
  */
 RuleTerrain *RuleUfo::getBattlescapeTerrainData()
 {
 	return _battlescapeTerrainData;
-}
-
-/**
- * Changes the terrain data needed to draw the UFO in the battlescape.
- * @param t Terrain.
- */
-void RuleUfo::setBattlescapeTerrainData(RuleTerrain *t)
-{
-	_battlescapeTerrainData = t;
 }
 
 /**
@@ -358,30 +270,12 @@ int RuleUfo::getWeaponReload() const
 }
 
 /**
- * Gets weapon reload time for UFO ships.
- * @param reload Reload time used for UFO weapon.
- */
-void RuleUfo::setWeaponReload(int reload)
-{
-	_reload = reload;
-}
-
-/**
  * Gets UFO break off time.
  * @return UFO break off time in game seconds.
  */
-int RuleUfo::getUFObreakOffTime() const
+int RuleUfo::getBreakOffTime() const
 {
 	return _breakOffTime;
-}
-
-/**
- * Sets UFO break off time.
- * @param time UFO break off time in game seconds.
- */
-void RuleUfo::setUFObreakOffTime(int time)
-{
-	_breakOffTime = time;
 }
 
 }

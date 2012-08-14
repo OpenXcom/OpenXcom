@@ -79,6 +79,8 @@ public:
 	void setHighContrast(bool contrast);
 	/// Sets the text's horizontal alignment.
 	void setAlign(TextHAlign align);
+	/// Gets the text's horizontal alignment.
+	TextHAlign getAlign() const;
 	/// Sets the text's vertical alignment.
 	void setVerticalAlign(TextVAlign valign);
 	/// Sets the text's color.

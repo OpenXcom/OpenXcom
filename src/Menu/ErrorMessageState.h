@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BASESCAPEERRORSTATE_H
-#define OPENXCOM_BASESCAPEERRORSTATE_H
+#ifndef OPENXCOM_ERRORMESSAGESTATE_H
+#define OPENXCOM_ERRORMESSAGESTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+#include "../Engine/State.h"
 
 namespace OpenXcom
 {
@@ -30,20 +30,23 @@ class Window;
 class Text;
 
 /**
- * Generic window used to display error messages
- * when the player is on the Basescape.
+ * Generic window used to display error messages.
  */
-class BasescapeErrorState : public State
+class ErrorMessageState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtError;
+	Text *_txtMessage;
+
+	void create(const std::string &str, const std::wstring &wstr, Uint8 color, std::string bg, Uint8 bgColor);
 public:
-	/// Creates the Basescape Error state.
-	BasescapeErrorState(Game *game, const std::string &msg, const std::string &bg = "BACK13.SCR");
-	/// Cleans up the Basescape Error state.
-	~BasescapeErrorState();
+	/// Creates the Error state.
+	ErrorMessageState(Game *game, const std::string &id, Uint8 color, std::string bg, Uint8 bgColor);
+	/// Creates the Error state.
+	ErrorMessageState(Game *game, const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor);
+	/// Cleans up the Error state.
+	~ErrorMessageState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };

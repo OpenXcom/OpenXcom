@@ -47,8 +47,8 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	// Create objects
 	_screen = false;
 	_window = new Window(this, 320, 144, 0, 0);
-	_txtInExit = new Text(250, 16, 60, 25);
-	_txtOutsideExit = new Text(250, 16, 60, 50);
+	_txtInExit = new Text(304, 16, 16, 25);
+	_txtOutsideExit = new Text(304, 16, 16, 50);
 	_txtAbort = new Text(320, 16, 0, 75);
 	_btnOk = new TextButton(120, 16, 16, 110);
 	_btnCancel = new TextButton(120, 16, 184, 110);

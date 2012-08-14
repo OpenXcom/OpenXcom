@@ -48,12 +48,15 @@ private:
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer;
 	bool _pause, _music;
+	Text *_txtDebug;
 	std::vector<State*> _popups;
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
 	/// Cleans up the Geoscape state.
 	~GeoscapeState();
+	/// Handle keypresses.
+	void handle(Action *action);
 	/// Updates the palette and timer.
 	void init();
 	/// Runs the timer.

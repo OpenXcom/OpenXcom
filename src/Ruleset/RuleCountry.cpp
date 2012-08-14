@@ -107,31 +107,12 @@ int RuleCountry::getMinFunding() const
 }
 
 /**
- * Changes the country's minimum starting funding,
- * in thousands.
- * @param funding Monthly funding.
- */
-void RuleCountry::setMinFunding(int funding)
-{
-	_fundingMin = funding;
-}
-
-/**
  * Returns the country's maximum starting funding.
  * @return Monthly funding.
  */
 int RuleCountry::getMaxFunding() const
 {
 	return _fundingMax;
-}
-
-/**
- * Changes the country's maximum starting funding.
- * @param funding Monthly funding.
- */
-void RuleCountry::setMaxFunding(int funding)
-{
-	_fundingMax = funding;
 }
 
 /**
@@ -144,30 +125,12 @@ double RuleCountry::getLabelLongitude() const
 }
 
 /**
- * Changes the longitude of the country's label on the globe.
- * @param lon Longitude in radians.
- */
-void RuleCountry::setLabelLongitude(double lon)
-{
-	_labelLon = lon;
-}
-
-/**
  * Returns the latitude of the country's label on the globe.
  * @return Latitude in radians.
  */
 double RuleCountry::getLabelLatitude() const
 {
 	return _labelLat;
-}
-
-/**
- * Changes the latitude of the country's label on the globe.
- * @param lat Latitude in radians.
- */
-void RuleCountry::setLabelLatitude(double lat)
-{
-	_labelLat = lat;
 }
 
 }

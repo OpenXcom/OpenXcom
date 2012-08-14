@@ -193,7 +193,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Basescape\BaseInfoState.cpp" />
-    <ClCompile Include="Basescape\BasescapeErrorState.cpp" />
     <ClCompile Include="Basescape\BasescapeState.cpp" />
     <ClCompile Include="Basescape\BaseView.cpp" />
     <ClCompile Include="Basescape\BuildFacilitiesState.cpp" />
@@ -213,7 +212,6 @@
     <ClCompile Include="Basescape\PlaceFacilityState.cpp" />
     <ClCompile Include="Basescape\PlaceLiftState.cpp" />
     <ClCompile Include="Basescape\ManufactureStartState.cpp" />
-    <ClCompile Include="Basescape\PurchaseErrorState.cpp" />
     <ClCompile Include="Basescape\PurchaseState.cpp" />
     <ClCompile Include="Basescape\ResearchInfoState.cpp" />
     <ClCompile Include="Basescape\ResearchState.cpp" />
@@ -294,7 +292,7 @@
     <ClCompile Include="Geoscape\AlienTerrorState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
-    <ClCompile Include="Geoscape\CannotRearmState.cpp" />
+    <ClCompile Include="Geoscape\CraftErrorState.cpp" />
     <ClCompile Include="Geoscape\ConfirmDestinationState.cpp" />
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
@@ -303,7 +301,6 @@
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp" />
     <ClCompile Include="Geoscape\FundingState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp" />
-    <ClCompile Include="Geoscape\GeoscapeErrorState.cpp" />
     <ClCompile Include="Geoscape\NewPossibleResearchState.cpp" />
     <ClCompile Include="Geoscape\ProductionCompleteState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeState.cpp" />
@@ -333,6 +330,7 @@
     <ClCompile Include="Interface\TextList.cpp" />
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\ErrorMessageState.cpp" />
     <ClCompile Include="Menu\LanguageState.cpp" />
     <ClCompile Include="Menu\LoadGameState.cpp" />
     <ClCompile Include="Menu\MainMenuState.cpp" />
@@ -394,6 +392,7 @@
     <ClCompile Include="Savegame\Transfer.cpp" />
     <ClCompile Include="Savegame\Ufo.cpp" />
     <ClCompile Include="Savegame\UfopaediaSaved.cpp" />
+    <ClCompile Include="Savegame\Vehicle.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
     <ClCompile Include="Ufopaedia\ArticleState.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateArmor.cpp" />
@@ -410,7 +409,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basescape\BaseInfoState.h" />
-    <ClInclude Include="Basescape\BasescapeErrorState.h" />
     <ClInclude Include="Basescape\BasescapeState.h" />
     <ClInclude Include="Basescape\BaseView.h" />
     <ClInclude Include="Basescape\BuildFacilitiesState.h" />
@@ -430,7 +428,6 @@
     <ClInclude Include="Basescape\PlaceFacilityState.h" />
     <ClInclude Include="Basescape\PlaceLiftState.h" />
     <ClInclude Include="Basescape\ManufactureStartState.h" />
-    <ClInclude Include="Basescape\PurchaseErrorState.h" />
     <ClInclude Include="Basescape\PurchaseState.h" />
     <ClInclude Include="Basescape\ResearchInfoState.h" />
     <ClInclude Include="Basescape\ResearchState.h" />
@@ -502,11 +499,6 @@
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
     <ClInclude Include="Engine\Screen.h" />
-    <ClInclude Include="Engine\ShaderDraw.h" />
-    <ClInclude Include="Engine\ShaderDrawHelper.h" />
-    <ClInclude Include="Engine\ShaderMove.h" />
-    <ClInclude Include="Engine\ShaderRepeat.h" />
-    <ClInclude Include="Engine\ShaderRotate.h" />
     <ClInclude Include="Engine\Sound.h" />
     <ClInclude Include="Engine\SoundSet.h" />
     <ClInclude Include="Engine\State.h" />
@@ -517,7 +509,7 @@
     <ClInclude Include="Geoscape\AlienTerrorState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
-    <ClInclude Include="Geoscape\CannotRearmState.h" />
+    <ClInclude Include="Geoscape\CraftErrorState.h" />
     <ClInclude Include="Geoscape\ConfirmDestinationState.h" />
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
@@ -525,7 +517,6 @@
     <ClInclude Include="Geoscape\DogfightState.h" />
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
-    <ClInclude Include="Geoscape\GeoscapeErrorState.h" />
     <ClInclude Include="Geoscape\NewPossibleResearchState.h" />
     <ClInclude Include="Geoscape\ProductionCompleteState.h" />
     <ClInclude Include="Geoscape\GeoscapeState.h" />
@@ -555,6 +546,7 @@
     <ClInclude Include="Interface\TextEdit.h" />
     <ClInclude Include="Interface\TextList.h" />
     <ClInclude Include="Interface\Window.h" />
+    <ClInclude Include="Menu\ErrorMessageState.h" />
     <ClInclude Include="Menu\LanguageState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />
     <ClInclude Include="Menu\MainMenuState.h" />
@@ -617,6 +609,7 @@
     <ClInclude Include="Savegame\Transfer.h" />
     <ClInclude Include="Savegame\Ufo.h" />
     <ClInclude Include="Savegame\UfopaediaSaved.h" />
+    <ClInclude Include="Savegame\Vehicle.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
     <ClInclude Include="Ufopaedia\ArticleState.h" />
     <ClInclude Include="Ufopaedia\ArticleStateArmor.h" />
@@ -633,6 +626,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\media\openxcom.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

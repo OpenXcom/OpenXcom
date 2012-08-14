@@ -1063,7 +1063,7 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	if (_kneeled)
 		result *= 1.15;
 
-	if (item->getRules()->getTwoHanded())
+	if (item->getRules()->isTwoHanded())
 	{
 		// two handed weapon, means one hand should be empty
 		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)

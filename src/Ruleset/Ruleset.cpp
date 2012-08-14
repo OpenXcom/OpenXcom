@@ -40,6 +40,7 @@
 #include "RuleInventory.h"
 #include "RuleResearch.h"
 #include "RuleManufacture.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
@@ -421,6 +422,7 @@ void Ruleset::load(const std::string &filename)
 				{
 					rule = new AlienRace(type);
 					_alienRaces[type] = rule;
+					_aliensIndex.push_back(type);
 				}
 				rule->load(*j);
 			}
@@ -440,6 +442,7 @@ void Ruleset::load(const std::string &filename)
 				{
 					rule = new AlienDeployment(type);
 					_alienDeployments[type] = rule;
+					_deploymentsIndex.push_back(type);
 				}
 				rule->load(*j);
 			}
@@ -652,12 +655,11 @@ void Ruleset::save(const std::string &filename) const
 
 /**
  * Generates a brand new saved game with starting data.
- * @param diff Difficulty for the save.
  * @return New saved game.
  */
-SavedGame *Ruleset::newSave(GameDifficulty diff) const
+SavedGame *Ruleset::newSave() const
 {
-	SavedGame *save = new SavedGame(diff);
+	SavedGame *save = new SavedGame();
 
 	// Add countries
 	for (std::vector<std::string>::const_iterator i = _countriesIndex.begin(); i != _countriesIndex.end(); ++i)
@@ -920,6 +922,16 @@ AlienRace *const Ruleset::getAlienRace(const std::string &name) const
 }
 
 /**
+ * Returns the list of all alien races
+ * provided by the ruleset.
+ * @return List of alien races.
+ */
+std::vector<std::string> Ruleset::getAlienRacesList() const
+{
+	return _aliensIndex;
+}
+
+/**
  * Returns the info about a specific deployment
  * @param name Deployment name.
  * @return Rules for the deployment.
@@ -927,6 +939,16 @@ AlienRace *const Ruleset::getAlienRace(const std::string &name) const
 AlienDeployment *const Ruleset::getDeployment(const std::string &name) const
 {
 	return _alienDeployments.find(name)->second;
+}
+
+/**
+ * Returns the list of all alien deployments
+ * provided by the ruleset.
+ * @return List of alien deployments.
+ */
+std::vector<std::string> Ruleset::getDeploymentsList() const
+{
+	return _deploymentsIndex;
 }
 
 /**
