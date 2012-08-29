@@ -258,7 +258,7 @@ void NewBattleState::initSave()
 		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
 		{
 			base->getItems()->addItem(*i, 99);
-			if (rule->getBattleType() != BT_NONE && !rule->isFixed())
+			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
 				_craft->getItems()->addItem(*i);
 			}
@@ -327,7 +327,6 @@ void NewBattleState::btnOkClick(Action *action)
 	bgen.setAlienRace(_alienRaces[_selAlien]);
 	bgen.setAlienItemlevel(0);
 	bgen.run();
-	_game->getSavedGame()->getBattleGame()->resetUnitTiles();
 	//_game->pushState(new BattlescapeState(_game));
 	_game->pushState(new BriefingState(_game, _craft));
 	_craft = 0;

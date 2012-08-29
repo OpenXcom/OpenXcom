@@ -152,6 +152,7 @@ void MiniMapView::draw()
 int MiniMapView::up ()
 {
 	_camera->setViewHeight(_camera->getViewHeight()+1);
+	_redraw = true;
 	return _camera->getViewHeight();
 }
 
@@ -161,6 +162,7 @@ int MiniMapView::up ()
 int MiniMapView::down ()
 {
 	_camera->setViewHeight(_camera->getViewHeight()-1);
+	_redraw = true;
 	return _camera->getViewHeight();
 }
 
@@ -172,17 +174,27 @@ int MiniMapView::down ()
 void MiniMapView::mouseClick (Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
-	int origX = action->getRelativeXMouse() / action->getXScale();
-	int origY = action->getRelativeYMouse() / action->getYScale();
-	// get offset (in cells) of the click relative to center of screen
-	int xOff = (origX / CELL_WIDTH) - ((getWidth() / 2) / CELL_WIDTH);
-	int yOff = (origY / CELL_HEIGHT) - ((getHeight() / 2) / CELL_HEIGHT);
-	// center the camera on this new position
-	int newX = _camera->getCenterPosition().x + xOff;
-	int newY = _camera->getCenterPosition().y + yOff;
-	_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
-
-	_redraw = true;
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		int origX = action->getRelativeXMouse() / action->getXScale();
+		int origY = action->getRelativeYMouse() / action->getYScale();
+		// get offset (in cells) of the click relative to center of screen
+		int xOff = (origX / CELL_WIDTH) - ((getWidth() / 2) / CELL_WIDTH);
+		int yOff = (origY / CELL_HEIGHT) - ((getHeight() / 2) / CELL_HEIGHT);
+		// center the camera on this new position
+		int newX = _camera->getCenterPosition().x + xOff;
+		int newY = _camera->getCenterPosition().y + yOff;
+		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
+		_redraw = true;
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
+		up();
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		down();
+	}
 }
 
 /**

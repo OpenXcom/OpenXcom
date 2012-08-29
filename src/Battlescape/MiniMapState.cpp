@@ -18,6 +18,7 @@
  */
 #include "MiniMapState.h"
 #include <iostream>
+#include <sstream>
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
@@ -31,7 +32,7 @@
 #include "Map.h"
 #include "Camera.h"
 #include "../Engine/Timer.h"
-#include <sstream>
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -69,6 +70,19 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
 	_timerAnimate->start();
 	_miniMapView->draw();
+}
+
+/**
+ * Closes the window on right-click.
+ * @param action Pointer to an action.
+ */
+void MiniMapState::handle(Action *action)
+{
+	State::handle(action);
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_game->popState();
+	}
 }
 
 /**

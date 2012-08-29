@@ -473,6 +473,10 @@ void GeoscapeState::time5Seconds()
 		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0)
 		{
 			(*i)->setDetected(false);
+			if (!(*i)->getFollowers()->empty())
+			{
+				popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+			}
 		}
 	}
 
@@ -490,7 +494,6 @@ void GeoscapeState::time5Seconds()
 					Waypoint *w = new Waypoint();
 					w->setLongitude(u->getLongitude());
 					w->setLatitude(u->getLatitude());
-					popup(new UfoLostState(_game, u->getName(_game->getLanguage())));
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
 			}

@@ -72,7 +72,7 @@ private:
 	BattleUnit *addAlien(Unit *rules, int alienRank, bool outside);
 	BattleUnit *addCivilian(Unit *rules);
 	/// Add an item to the game
-	BattleItem* addItem(RuleItem *item);
+	BattleItem* addItem(BattleItem *item);
 	// Add an item to a unit
 	BattleItem* addItem(RuleItem *item, BattleUnit *unit);
 	/// loads an XCOM MAP file

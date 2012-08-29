@@ -328,7 +328,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				addStat("STR_ALIENS_KILLED", 1, value);
 			}
-			if (faction == FACTION_PLAYER)
+			else if (faction == FACTION_PLAYER)
 			{
 				if (soldier != 0)
 				{
@@ -358,6 +358,10 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
+			else if (faction == FACTION_NEUTRAL)
+			{
+				addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);
+			}
 		}
 		else if (status == STATUS_UNCONSCIOUS)
 		{
@@ -365,44 +369,55 @@ void DebriefingState::prepareDebriefing()
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value);
 			}
-		}
-		else if (faction == FACTION_PLAYER)
-		{
-			playersSurvived++;
-			if ((*j)->isInExitArea() || !aborted)
+			else if (faction == FACTION_NEUTRAL)
 			{
-				playerInExitArea++;
-				(*j)->postMissionProcedures(save);
-				recoverItems((*j)->getInventory(), craft, base);		
+				addStat("STR_CIVILIANS_SAVED", 1, value);
 			}
-			else
+		}
+		else
+		{
+			if (faction == FACTION_PLAYER)
 			{
-				addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
-				if (soldier != 0)
+				playersSurvived++;
+				if ((*j)->isInExitArea() || !aborted)
 				{
-					for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
-					{
-						if ((*i) == soldier)
-						{
-							delete (*i);
-							base->getSoldiers()->erase(i);
-							break;
-						}
-					}
+					playerInExitArea++;
+					(*j)->postMissionProcedures(save);
+					recoverItems((*j)->getInventory(), craft, base);		
 				}
 				else
 				{
-					// non soldier player = tank
-					for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+					addStat("STR_XCOM_OPERATIVES_MISSING_IN_ACTION", 1, -value);
+					if (soldier != 0)
 					{
-						if ((*i)->getRules()->getType() == "STR_" + type)
+						for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 						{
-							delete (*i);
-							craft->getVehicles()->erase(i);
-							break;
+							if ((*i) == soldier)
+							{
+								delete (*i);
+								base->getSoldiers()->erase(i);
+								break;
+							}
+						}
+					}
+					else
+					{
+						// non soldier player = tank
+						for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+						{
+							if ((*i)->getRules()->getType() == "STR_" + type)
+							{
+								delete (*i);
+								craft->getVehicles()->erase(i);
+								break;
+							}
 						}
 					}
 				}
+			}
+			else if (faction == FACTION_NEUTRAL)
+			{
+				addStat("STR_CIVILIANS_SAVED", 1, value);
 			}
 		}
 	}
@@ -520,7 +535,6 @@ void DebriefingState::prepareDebriefing()
 
 		if (playersSurvived > 0)
 		{
-			//
 			// recover items from the craft floor
 			for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
 			{
@@ -539,7 +553,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft,
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		if ((*it)->getRules()->getRecoveryPoints())
+		if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty())
 		{
 			if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 			{
@@ -551,7 +565,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft,
 			}
 		}
 
-		if ((*it)->getRules()->isRecoverable())
+		if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
 		{
 			if ((*it)->getXCOMProperty() && craft)
 				craft->getItems()->addItem((*it)->getRules()->getType(), 1);

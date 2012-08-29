@@ -543,6 +543,10 @@ void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
  */
 Uint8 Surface::getPixel(int x, int y) const
 {
+	if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
+	{
+		return 0;
+	}
 	return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
 }
 

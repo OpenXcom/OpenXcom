@@ -136,7 +136,8 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 		{
 			cQty = c->getItems()->getItem(*i);
 		}
-		if (rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && _game->getSavedGame()->isResearched(rule->getRequirements()) &&
+		if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE &&
+			_game->getSavedGame()->isResearched(rule->getRequirements()) &&
 			(_base->getItems()->getItem(*i) > 0 || cQty > 0))
 		{
 			_items.push_back(*i);
@@ -361,10 +362,11 @@ void CraftEquipmentState::moveRight()
 				if (qty == 0)
 				{
 					std::wstringstream ss;
-					ss << _game->getLanguage()->getString("NOT_ENOUGH");
+					ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
 					ss << _game->getLanguage()->getString(ammo->getType());
-					ss << _game->getLanguage()->getString("TO_ARM_HWP");
+					ss << _game->getLanguage()->getString("STR_TO_ARM_HWP");
 					_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_timerRight->stop();
 				}
 				else
 				{

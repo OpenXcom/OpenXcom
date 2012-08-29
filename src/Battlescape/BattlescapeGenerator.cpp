@@ -299,7 +299,7 @@ void BattlescapeGenerator::run()
 			{
 				for (int count=0; count < (*i).second; count++)
 				{
-					addItem(_game->getRuleset()->getItem((*i).first))->setXCOMProperty(true);
+					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem((*i).first), _save->getCurrentItemId()));
 				}
 			}
 			// inventory of craft is now cleared
@@ -312,14 +312,34 @@ void BattlescapeGenerator::run()
 			{
 				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
 				RuleItem *rule = _game->getRuleset()->getItem((*i).first);
-				if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE)
+				if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && !rule->isFixed())
 				{
 					for (int count=0; count < (*i).second; count++)
-						addItem(_game->getRuleset()->getItem((*i).first))->setXCOMProperty(true);
+					{
+						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem((*i).first), _save->getCurrentItemId()));
+					}
 				}
 			}
 		}
 
+		// auto-equip soldiers
+		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+		{
+			addItem(*i);
+		}
+		// clean up moved items
+		RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
+		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end();)
+		{
+			if ((*i)->getSlot() != ground)
+			{
+				i = _craftInventoryTile->getInventory()->erase(i);
+			}
+			else
+			{
+				++i;
+			}
+		}
 	}
 
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
@@ -504,29 +524,19 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
  /*** TODO - refactoring - the two below functions are very similar, should try to join them ***/
 
 /**
- * Adds an item to the game.
+ * Adds an item to an X-Com soldier.
  * @param item pointer to the Item
  */
-BattleItem* BattlescapeGenerator::addItem(RuleItem *item)
+BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 {
-	BattleItem *bi = new BattleItem(item, _save->getCurrentItemId());
-	bool placed = false;
+	bool placed = false, loaded = false;
 
-	switch (item->getBattleType())
+	switch (item->getRules()->getBattleType())
 	{
 	case BT_AMMO:
-		// find equipped weapons that can be loaded with this ammo
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		if (item->getSlot() == _game->getRuleset()->getInventory("STR_RIGHT_HAND"))
 		{
-			BattleItem *weapon = (*i)->getItem("STR_RIGHT_HAND");
-			if (weapon && weapon->getAmmoItem() == 0)
-			{
-				if (weapon->setAmmoItem(bi) == 0)
-				{
-					placed = true;
-					break;
-				}
-			}
+			placed = true;
 		}
 		break;
 	case BT_GRENADE:
@@ -539,8 +549,8 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item)
 
 			if (!(*i)->getItem("STR_BELT"))
 			{
-				bi->moveToOwner((*i));
-				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				item->moveToOwner((*i));
+				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
 				placed = true;
 				break;
 			}
@@ -548,25 +558,31 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item)
 		break;
 	case BT_FIREARM:
 	case BT_MELEE:
-		// find the first soldier with a free right hand to equip weapons
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		// maybe we find ammo on the ground to load it with
+		if (item->getRules()->getCompatibleAmmo()->empty())
 		{
-			if (!(*i)->getItem("STR_RIGHT_HAND"))
+			loaded = true;
+		}
+		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end() && !loaded; ++i)
+		{
+			if (item->setAmmoItem((*i)) == 0)
 			{
-				bi->moveToOwner((*i));
-				bi->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
-				placed = true;
-				break;
+				(*i)->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+				loaded = true;
 			}
 		}
-		// maybe we find ammo on the ground to load it with
-		if (placed)
+		if (loaded)
 		{
-			for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+			// find the first soldier with a free right hand to equip weapons
+			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 			{
-				if (bi->setAmmoItem((*i)) == 0)
+				if ((*i)->getArmor()->getSize() > 1) continue;
+
+				if (!(*i)->getItem("STR_RIGHT_HAND"))
 				{
-					_craftInventoryTile->removeItem(*i);
+					item->moveToOwner((*i));
+					item->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+					placed = true;
 					break;
 				}
 			}
@@ -580,29 +596,30 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item)
 
 			if (!(*i)->getItem("STR_BELT",3,0))
 			{
-				bi->moveToOwner((*i));
-				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-				bi->setSlotX(3);
-				bi->setSlotY(0);
+				item->moveToOwner((*i));
+				item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				item->setSlotX(3);
+				item->setSlotY(0);
 				placed = true;
 				break;
 			}
 		}
 		break;
-	case BT_NONE:
+	default:
+		placed = false;
 		break;
 	}
 
-	_save->getItems()->push_back(bi);
+	_save->getItems()->push_back(item);
+	item->setXCOMProperty(true);
 
 	// if we did not auto equip the item, place it on the ground
 	if (!placed)
 	{
-		bi->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
-		_craftInventoryTile->addItem(bi);
+		item->setSlot(_game->getRuleset()->getInventory("STR_GROUND"));
 	}
 
-	return bi;
+	return item;
 }
 
 

@@ -680,7 +680,6 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 		{
 			return false;
 		}
-		++iter;
 	}
 
 	return true;

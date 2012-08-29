@@ -1151,6 +1151,10 @@ void DogfightState::drawUfo()
 	{
 		for(int x = 0; x < 13; ++x)
 		{
+			if (currentUfoXposition + x + 3 > _window->getWidth() || currentUfoYposition + y + 3 > _window->getWidth())
+			{
+				continue;
+			}
 			Uint8 pixelOffset = _ufoBlobs[_ufoSize + _ufo->getHit()][y][x];
 			if(_ufoSize + hitFrame > 7 || _ufoSize + hitFrame < 0) std::cout << _ufoSize + hitFrame << "\n";
 			if(pixelOffset == 0)
