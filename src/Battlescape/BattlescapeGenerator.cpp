@@ -530,11 +530,12 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 {
 	bool placed = false, loaded = false;
+	RuleInventory *righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 
 	switch (item->getRules()->getBattleType())
 	{
 	case BT_AMMO:
-		if (item->getSlot() == _game->getRuleset()->getInventory("STR_RIGHT_HAND"))
+		if (item->getSlot() == righthand)
 		{
 			placed = true;
 		}
@@ -565,9 +566,9 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 		}
 		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end() && !loaded; ++i)
 		{
-			if (item->setAmmoItem((*i)) == 0)
+			if ((*i)->getSlot() != righthand && item->setAmmoItem((*i)) == 0)
 			{
-				(*i)->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+				(*i)->setSlot(righthand);
 				loaded = true;
 			}
 		}
@@ -581,7 +582,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 				if (!(*i)->getItem("STR_RIGHT_HAND"))
 				{
 					item->moveToOwner((*i));
-					item->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+					item->setSlot(righthand);
 					placed = true;
 					break;
 				}

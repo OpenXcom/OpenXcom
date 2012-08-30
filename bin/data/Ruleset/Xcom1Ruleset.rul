@@ -1566,7 +1566,7 @@ items:
     floorSprite: 34
     handSprite: 56
     bulletSprite: 10
-    fireSound: 52
+    fireSound: 53
     compatibleAmmo:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
@@ -1606,7 +1606,7 @@ items:
     floorSprite: 36
     handSprite: 64
     bulletSprite: 9
-    fireSound: 52
+    fireSound: 53
     compatibleAmmo:
       - STR_STUN_BOMB
     accuracySnap: 65
@@ -1771,18 +1771,22 @@ items:
     floorSprite: 52
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: REAPER_CORPSE_2
     floorSprite: 53
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: REAPER_CORPSE_3
     floorSprite: 54
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: REAPER_CORPSE_4
     floorSprite: 55
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: STR_SECTOPOD_CORPSE
     size: 1
     costSell: 20000
@@ -1793,18 +1797,22 @@ items:
     floorSprite: 60
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: SECTOPOD_CORPSE_2
     floorSprite: 61
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: SECTOPOD_CORPSE_3
     floorSprite: 62
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: SECTOPOD_CORPSE_4
     floorSprite: 63
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
@@ -1815,18 +1823,22 @@ items:
     floorSprite: 56
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: CYBERDISC_CORPSE_2
     floorSprite: 57
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: CYBERDISC_CORPSE_3
     floorSprite: 58
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: CYBERDISC_CORPSE_4
     floorSprite: 59
     invWidth: 0
     invHeight: 0
+    recover: false
   - type: HOVERTANK_CORPSE_1
     floorSprite: 64
     invWidth: 0
@@ -2786,6 +2798,17 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
   - type: STR_PERSONAL_ARMOR_UC
     spriteSheet: XCOM_1.PCK
     spriteInv: MAN_1
@@ -2795,6 +2818,17 @@ armors:
     sideArmor: 40
     rearArmor: 40
     underArmor: 30
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.9
+      - 1.0
+      - 1.1
+      - 1.0
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2
@@ -2804,6 +2838,17 @@ armors:
     sideArmor: 80
     rearArmor: 70
     underArmor: 60
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 1.0
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
@@ -2814,6 +2859,17 @@ armors:
     rearArmor: 80
     underArmor: 70
     movementType: 1
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 1.0
   - type: SECTOID_ARMOR0
     spriteSheet: SECTOID.PCK
     corpseItem: STR_SECTOID_CORPSE
@@ -2821,6 +2877,17 @@ armors:
     sideArmor: 3
     rearArmor: 2
     underArmor: 2
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
   - type: FLOATER_ARMOR0
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -2830,25 +2897,58 @@ armors:
     underArmor: 12
     drawingRoutine: 1
     movementType: 1
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
     corpseItem: CYBERDISC_CORPSE_
-    frontArmor: 90
-    sideArmor: 75
-    rearArmor: 60
-    underArmor: 60
+    frontArmor: 34
+    sideArmor: 34
+    rearArmor: 34
+    underArmor: 34
     drawingRoutine: 3
     movementType: 1
     size: 2
     damageModifier:
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.6
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+  - type: REAPER_ARMOR
+    spriteSheet: X_REAP.PCK
+    corpseItem: REAPER_CORPSE_
+    frontArmor: 28
+    sideArmor: 28
+    rearArmor: 28
+    underArmor: 4
+    drawingRoutine: 5
+    size: 2
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.7
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
     corpseItem: TANK_CORPSE_
@@ -2859,14 +2959,16 @@ armors:
     drawingRoutine: 2
     size: 2
     damageModifier:
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
+      - 1.0
+      - 1.0
+      - 0.4
+      - 0.75
+      - 1.0
+      - 1.0
+      - 0.0
+      - 0.9
+      - 0.4
+      - 1.0
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseItem: CIVM_CORPSE
@@ -2875,6 +2977,17 @@ armors:
     rearArmor: 2
     underArmor: 2
     drawingRoutine: 4
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseItem: CIVF_CORPSE
@@ -2883,6 +2996,17 @@ armors:
     rearArmor: 2
     underArmor: 2
     drawingRoutine: 4
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
 soldiers:
   - type: XCOM
     minStats:
@@ -2986,14 +3110,14 @@ units:
   - type: CYBERDISC
     race: STR_CYBERDISC
     stats:
-      tu: 70
-      stamina: 100
-      health: 90
+      tu: 62
+      stamina: 90
+      health: 120
       bravery: 110
-      reactions: 20
+      reactions: 64
       firing: 60
       throwing: 0
-      strength: 60
+      strength: 90
       psiStrength: 100
       psiSkill: 0
       melee: 0
@@ -3075,6 +3199,29 @@ units:
     deathSound: 10
     intelligence: 5
     aggression: 2
+  - type: REAPER
+    race: STR_REAPER
+    stats:
+      tu: 62
+      stamina: 90
+      health: 148
+      bravery: 90
+      reactions: 64
+      firing: 0
+      throwing: 0
+      strength: 90
+      psiStrength: 35
+      psiSkill: 0
+      melee: 80
+    armor: REAPER_ARMOR
+    standHeight: 23
+    kneelHeight: 16
+    loftemps: 4
+    value: 25
+    deathSound: 48
+    intelligence: 2
+    aggression: 2
+    specab: 1
   - type: TANK_CANNON
     race: STR_TANK_CANNON
     stats:

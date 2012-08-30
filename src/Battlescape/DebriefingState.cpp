@@ -322,6 +322,21 @@ void DebriefingState::prepareDebriefing()
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
 
+		if (faction == FACTION_NEUTRAL)
+		{
+			// civilians are all dead if mission fails
+			if (aborted || playersSurvived == 0 || status == STATUS_DEAD)
+			{
+				addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);
+			}
+			// otherwise save the live ones
+			else
+			{
+				addStat("STR_CIVILIANS_SAVED", 1, value);
+			}
+		}
+
+
 		if (status == STATUS_DEAD)
 		{
 			if (faction == FACTION_HOSTILE)
@@ -358,20 +373,12 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (faction == FACTION_NEUTRAL)
-			{
-				addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);
-			}
 		}
 		else if (status == STATUS_UNCONSCIOUS)
 		{
 			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value);
-			}
-			else if (faction == FACTION_NEUTRAL)
-			{
-				addStat("STR_CIVILIANS_SAVED", 1, value);
 			}
 		}
 		else
@@ -414,10 +421,6 @@ void DebriefingState::prepareDebriefing()
 						}
 					}
 				}
-			}
-			else if (faction == FACTION_NEUTRAL)
-			{
-				addStat("STR_CIVILIANS_SAVED", 1, value);
 			}
 		}
 	}

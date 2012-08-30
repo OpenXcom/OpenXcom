@@ -493,7 +493,7 @@ void UnitSprite::drawRoutine4()
 }
 
 /**
- * Drawing routine for sectopods.
+ * Drawing routine for sectopods and reapers.
  */
 void UnitSprite::drawRoutine5()
 {

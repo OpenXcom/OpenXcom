@@ -87,8 +87,6 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast(true);
 	_txtMessage->setText(_game->getLanguage()->getString("STR_PRESS_BUTTON_TO_CONTINUE"));
-
-	_game->getCursor()->setVisible(_battleGame->getSide() == FACTION_PLAYER);
 }
 
 /**
@@ -110,8 +108,6 @@ void NextTurnState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		_game->popState();
-
-		_game->getCursor()->setVisible(_battleGame->getSide() == FACTION_PLAYER);
 
 		// if all units from either faction are killed - the mission is over.
 		int liveAliens = 0;
