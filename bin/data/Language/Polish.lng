@@ -94,7 +94,7 @@ Nasze badania wykazują teraz, że baza operacyjna Obcych jest na Marsie. Jest o
 STR_CYDONIA_OR_BUST_UFOPEDIA
 Teraz jest jasne, że hordy Obcych są kontrolowane z podziemnej bazy Cydonii. Jest to niezwykłye miejsce na Marsie, cechujące się pięciobocznymi piramidami i dużą formacją przypominającą ludzką twarz. Miliony lat temu na Marsie kwitła cydońska cywilizacja. Nie wiemy jednak dlaczego wymarła ani jakie jest jej powiązanie z ostatnią aktywnością Obcych na tamtym obszarze. Jakby nie było musimy wysłać ekspedycję na Cydonię. Jest to jedyny sposób by pokonać Obcych. Musimy zniszczyć główny kontrolujący 'Mózg'. Potrzebujemy Niszczyciela wyposażonego w najbardziej dewastacyjne bronie jakie mamy do dyspozycji. Nic więcej nie ma tu do odkrycja - pozostaje jedynie nadzieja w ataku na Cydonię.
 STR_TERROR_SITE
-Miejsce terroru-
+Akt terroru-
 STR_CENTER_ON_SITE_TIME_5_SECS
 WSKAŻ MIEJSCE - CZAS: 5 SEK.
 STR_CANCEL_UC
@@ -564,15 +564,15 @@ PRĘDKOŚĆ>
 STR_MAXIMUM_SPEED_UC
 PRĘDKOŚĆ MAKSYMALNA>
 STR_ALTITUDE_
-WYSOKOŚĆ>
+PUŁAP>
 STR_VERY_LOW
-NIZIUTKA
+BARDZO NISKO
 STR_LOW_UC
-NISKA
+NISKO
 STR_HIGH_UC
-ŚREDNIA
+WYSOKO
 STR_VERY_HIGH
-DUŻA
+BARDZO WYSOKO
 STR_FUEL
 PALIWO>
 STR_WEAPON_1
@@ -644,7 +644,7 @@ Obronność
 STR_HIT_RATIO
 Celność
 STR_READY_TO_LAND_NEAR
-jest gotowy{NEWLINE}wylądować przy:
+jest gotowy by{NEWLINE}wylądować przy:
 STR_BEGIN_MISSION
 Zacząć misję?
 STR_SELECT_ARMAMENT
@@ -708,7 +708,7 @@ ZOSTAŁ WYKRYTY.
 STR_SIZE_UC
 WIELKOŚĆ
 STR_ALTITUDE
-WYSOKOŚĆ
+PUŁAP
 STR_HEADING
 KURS
 STR_SPEED
@@ -732,7 +732,7 @@ LĄDOWISKO NOLa-
 STR_WAY_POINT_
 PUNKT KONTROLNY-
 STR_TERROR_SITE_UC
-MIEJSCE TERRORU-
+AKT TERRORU-
 STR_HAS_REACHED
 osiągnął
 STR_DESTINATION
@@ -810,7 +810,7 @@ TYP STRZAŁU
 STR_ACCURACY_UC
 CELNOŚĆ
 STR_TU_COST
-CZAS
+Koszt PR
 STR_DAMAGE_UC
 SIŁA RAŻENIA
 STR_AMMO
@@ -1508,7 +1508,7 @@ ZABITYCH>
 STR_WOUND_RECOVERY
 CZAS KURACJI> 
 STR_TIME_UNITS
-SZYBKOŚĆ
+PUNKTY RUCHU
 STR_STAMINA
 WYTRZYMAŁOŚĆ
 STR_HEALTH
@@ -1894,7 +1894,7 @@ STYMULACJA
 STR_HEAL
 LECZENIE
 STR_TUS
-Czas>
+PR>
 STR_ALIEN_ARTIFACT
 Artefakt Obcych
 STR_AMMO_ROUNDS_LEFT
@@ -1960,7 +1960,7 @@ STRONA>
 STR_X_COM
 NOL: Nieznany wróg
 STR_PRESS_BUTTON_TO_CONTINUE
-Naciśnij jakiś klawisz by kontynuować
+Naciśnij klawisz by kontynuować
 STR_MIND_CONTROL
 Hipnoza
 STR_PANIC_UNIT
