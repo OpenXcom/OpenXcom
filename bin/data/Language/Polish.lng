@@ -1924,7 +1924,7 @@ Odpal rakietę
 STR_ACC
 Cel>
 STR_NOT_ENOUGH_TIME_UNITS
-Za mało czasu!
+Za mało Punktów Ruchu!
 STR_NOT_ENOUGH_ENERGY
 Za duże zmęczenie!
 STR_NO_ROUNDS_LEFT
@@ -2014,11 +2014,11 @@ RANY ŚMIERTELNE
 STR_UNDER_ARMOR_UC
 PANCERZ DOLNY
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
-Zarezerwowano czas dla strzału pośpiesznego.
+Zarezerwowano PR dla strzału pośpiesznego.
 STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
-Zarezerwowano czas dla strzału seryjnego.
+Zarezerwowano PR dla strzału seryjnego.
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
-Zarezerwowano czas dla strzału wycelowanego.
+Zarezerwowano PR dla strzału wycelowanego.
 STR_UNITS_IN_EXIT_AREA
  na terenie ewakuacji
 STR_UNITS_OUTSIDE_EXIT_AREA
