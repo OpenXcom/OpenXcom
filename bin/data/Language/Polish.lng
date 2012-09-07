@@ -94,7 +94,7 @@ Nasze badania wykazują teraz, że baza operacyjna Obcych jest na Marsie. Jest o
 STR_CYDONIA_OR_BUST_UFOPEDIA
 Teraz jest jasne, że hordy Obcych są kontrolowane z podziemnej bazy Cydonii. Jest to niezwykłye miejsce na Marsie, cechujące się pięciobocznymi piramidami i dużą formacją przypominającą ludzką twarz. Miliony lat temu na Marsie kwitła cydońska cywilizacja. Nie wiemy jednak dlaczego wymarła ani jakie jest jej powiązanie z ostatnią aktywnością Obcych na tamtym obszarze. Jakby nie było musimy wysłać ekspedycję na Cydonię. Jest to jedyny sposób by pokonać Obcych. Musimy zniszczyć główny kontrolujący 'Mózg'. Potrzebujemy Niszczyciela wyposażonego w najbardziej dewastacyjne bronie jakie mamy do dyspozycji. Nic więcej nie ma tu do odkrycja - pozostaje jedynie nadzieja w ataku na Cydonię.
 STR_TERROR_SITE
-Miejsce terroru-
+Akt terroru-
 STR_CENTER_ON_SITE_TIME_5_SECS
 WSKAŻ MIEJSCE - CZAS: 5 SEK.
 STR_CANCEL_UC
@@ -564,15 +564,15 @@ PRĘDKOŚĆ>
 STR_MAXIMUM_SPEED_UC
 PRĘDKOŚĆ MAKSYMALNA>
 STR_ALTITUDE_
-WYSOKOŚĆ>
+PUŁAP>
 STR_VERY_LOW
-NIZIUTKA
+BARDZO NISKO
 STR_LOW_UC
-NISKA
+NISKO
 STR_HIGH_UC
-ŚREDNIA
+WYSOKO
 STR_VERY_HIGH
-DUŻA
+BARDZO WYSOKO
 STR_FUEL
 PALIWO>
 STR_WEAPON_1
@@ -644,7 +644,7 @@ Obronność
 STR_HIT_RATIO
 Celność
 STR_READY_TO_LAND_NEAR
-jest gotowy{NEWLINE}wylądować przy:
+jest gotowy by{NEWLINE}wylądować przy:
 STR_BEGIN_MISSION
 Zacząć misję?
 STR_SELECT_ARMAMENT
@@ -708,7 +708,7 @@ ZOSTAŁ WYKRYTY.
 STR_SIZE_UC
 WIELKOŚĆ
 STR_ALTITUDE
-WYSOKOŚĆ
+PUŁAP
 STR_HEADING
 KURS
 STR_SPEED
@@ -732,7 +732,7 @@ LĄDOWISKO NOLa-
 STR_WAY_POINT_
 PUNKT KONTROLNY-
 STR_TERROR_SITE_UC
-MIEJSCE TERRORU-
+AKT TERRORU-
 STR_HAS_REACHED
 osiągnął
 STR_DESTINATION
@@ -810,7 +810,7 @@ TYP STRZAŁU
 STR_ACCURACY_UC
 CELNOŚĆ
 STR_TU_COST
-CZAS
+Koszt PR
 STR_DAMAGE_UC
 SIŁA RAŻENIA
 STR_AMMO
@@ -1508,7 +1508,7 @@ ZABITYCH>
 STR_WOUND_RECOVERY
 CZAS KURACJI> 
 STR_TIME_UNITS
-SZYBKOŚĆ
+PUNKTY RUCHU
 STR_STAMINA
 WYTRZYMAŁOŚĆ
 STR_HEALTH
@@ -1812,39 +1812,39 @@ Pancerz dolny
 STR_ROUNDS
 Naboi
 STR_CURRENT_SAVE_ABORTED
-Current save aborted
+Aktualny zapis anulowano
 STR_CURRENT_LOAD_ABORTED
-Current load aborted
+Aktualne ładowanie anulowano
 STR_FORMAT
-FORMAT
+FORMATOWANIE
 STR_SAVING_GAME
-Saving game
+Zapisuję grę
 STR_LOADING_GAME
-Loading game
+Ładuję grę
 STR_PROCEED
-PROCEED
+KONTYNUUJĘ
 STR_NO_SAVED_GAME_PRESENT
-No saved game present
+Brak zapisanych gier
 STR_LOAD_UNSUCCESSFUL
-Load unsuccessful
+Ładowanie nie powiodło się
 STR_SAVE_UNSUCCESSFUL
-Save unsuccessful
+Zapis nie powiódł się
 STR_LOAD_SUCCESSFUL
-Load successful
+Ładowanie powiodło się
 STR_SAVE_SUCCESSFUL
-Save successful
+Zapis powiódł się
 STR_DELETE
-DELETE
+USUŃ
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
-Previous X-COM saved game detected
+Wykryto poprzedni zapis gry X-COM
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
-Is it OK to delete the saved game?
+Czy na pewno chcesz usunąć zapis gry?
 STR_SOUND_OPTIONS
-SOUND OPTIONS
+OPCJE DŹWIĘKOWE
 STR_MUSIC_VOLUME
-Music volume
+Muzyka
 STR_SFX_VOLUME
-SFX volume
+Efekty
 STR_CONTROLLER_OPTIONS
 CONTROLLER OPTIONS
 STR_CONTROLLER_MODE_1_HOTSPOT_INTERFACE
@@ -1852,9 +1852,9 @@ CONTROLLER MODE 1{NEWLINE}(HOTSPOT INTERFACE)
 STR_CONTROLLER_MODE_2_POINT_CLICK_INTERFACE
 CONTROLLER MODE 2{NEWLINE}(POINT & CLICK INTERFACE)
 STR_LOADING
-Loading...
+Ładowanie...
 STR_FORMAT_UNSUCCESSFUL
-Format Unsuccessful
+Formatowanie nieudane
 STR_UNIT
 JEDNOSTKA>
 STR_ENERGY
@@ -1894,7 +1894,7 @@ STYMULACJA
 STR_HEAL
 LECZENIE
 STR_TUS
-Czas>
+PR>
 STR_ALIEN_ARTIFACT
 Artefakt Obcych
 STR_AMMO_ROUNDS_LEFT
@@ -1924,7 +1924,7 @@ Odpal rakietę
 STR_ACC
 Cel>
 STR_NOT_ENOUGH_TIME_UNITS
-Za mało czasu!
+Za mało Punktów Ruchu!
 STR_NOT_ENOUGH_ENERGY
 Za duże zmęczenie!
 STR_NO_ROUNDS_LEFT
@@ -1960,7 +1960,7 @@ STRONA>
 STR_X_COM
 NOL: Nieznany wróg
 STR_PRESS_BUTTON_TO_CONTINUE
-Naciśnij jakiś klawisz by kontynuować
+Naciśnij klawisz by kontynuować
 STR_MIND_CONTROL
 Hipnoza
 STR_PANIC_UNIT
@@ -2014,11 +2014,11 @@ RANY ŚMIERTELNE
 STR_UNDER_ARMOR_UC
 PANCERZ DOLNY
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
-Zarezerwowano czas dla strzału pośpiesznego.
+Zarezerwowano PR dla strzału pośpiesznego.
 STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
-Zarezerwowano czas dla strzału seryjnego.
+Zarezerwowano PR dla strzału seryjnego.
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
-Zarezerwowano czas dla strzału wycelowanego.
+Zarezerwowano PR dla strzału wycelowanego.
 STR_UNITS_IN_EXIT_AREA
  na terenie ewakuacji
 STR_UNITS_OUTSIDE_EXIT_AREA
@@ -2029,7 +2029,23 @@ STR_CORPSE
 Zwłoki
 STR_UNLOAD
 Rozładuj
+STR_NEW_SAVED_GAME
+<Nowy Zapis Gry>
 STR_NEW_BATTLE
 Nowa potyczka
 STR_OPTIONS
 Opcje
+STR_TERRAIN
+Teren
+STR_DARKNESS
+Zaciemnienie
+STR_DISPLAY_RESOLUTION
+Rozdzielczość ekranu
+STR_DISPLAY_MODE
+Tryb wyświetlania
+STR_WINDOWED
+W oknie
+STR_FULLSCREEN
+Pełny ekran
+STR_LANGUAGE
+Wybór języka
