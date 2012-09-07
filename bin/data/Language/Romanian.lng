@@ -94,7 +94,7 @@ Cercetările noastre indică Marte ca fiind baza de operațiuni a extratereștri
 STR_CYDONIA_OR_BUST_UFOPEDIA
 Acum este evident că hoardele extraterestre sunt controlate dintr-o bază subterană din Cydonia - o suprafață neobișnuită de pe planeta Marte înfățișând piramide și o formațiune mare semănând cu o față umană.  Civilizația din Cydonia a înflorit pe Marte acum milioane de ani, dar nu știm de ce a murit sau care este legatura cu activitățile desfășurate de extraterștrii acolo.  Oricare ar fi explicația trebuie să trimitem o expediție catre Cydonia.  Acesta este singurul mod în care putem să înfrângem extratereștrii.  Trebuie să distrugem 'creierul'.  Avem nevoie de o navă Avenger echipată cu cele mai puternice arme aflate la dispoziția noastră.  Nu mai putem afla nimic de aici - trebuie sa așteptăm rezultatul atacului din Cydonia.
 STR_TERROR_SITE
-Zonă terorizată-
+Zonă Terorizată-
 STR_CENTER_ON_SITE_TIME_5_SECS
 CENTREAZĂ ZONA-TIMP=5 Sec
 STR_CANCEL_UC
@@ -138,7 +138,7 @@ Nume
 STR_AREA
 Zona
 STR_BUILD_NEW_BASE
-Construiește O Nouă Bază
+Construiește o Nouă Bază
 STR_CANCEL
 Anulează
 STR_COST_UC
@@ -158,7 +158,7 @@ Cercetători Disponibili>
 STR_SCIENTISTS_ALLOCATED
 Cercetători Alocați>
 STR_LABORATORY_SPACE_AVAILABLE
-Spațiu Disponibil În Laborator>
+Spațiu Disponibil în Laborator>
 STR_RESEARCH_PROJECT
 PROIECT DE CERCETARE
 STR_SCIENTISTS_ALLOCATED_UC
@@ -186,9 +186,9 @@ Ingineri Disponibili>
 STR_ENGINEERS_ALLOCATED
 Ingineri Alocați>
 STR_WORKSHOP_SPACE_AVAILABLE
-Spațiu Disponibil În Atelier>
+Spațiu Disponibil în Atelier>
 STR_CURRENT_FUNDS
-Fonduri>
+Fonduri Curente>
 STR_ITEM
 ARTICOL
 STR_ENGINEERS__ALLOCATED
@@ -196,7 +196,7 @@ Ingineri{NEWLINE}Alocați
 STR_UNITS_PRODUCED
 Unități{NEWLINE}Produse
 STR_TOTAL_TO_PRODUCE
-Total De{NEWLINE}Produs
+Total de{NEWLINE}Produs
 STR_COST__PER__UNIT
 Cost{NEWLINE}Unitar
 STR_DAYS_HOURS_LEFT
@@ -204,17 +204,17 @@ Zile/Ore{NEWLINE}Rămase
 STR_NEW_PRODUCTION
 Producție Nouă
 STR_PRODUCTION_ITEMS
-Articole De Producție
+Articole de Producție
 STR_CATEGORY
 CATEGORIE
 STR_START_PRODUCTION
 PORNEȘTE PRODUCȚIA
 STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT
- Ore pentru a produce un articol
+ ore pentru a produce un articol
 STR_COST_PER_UNIT_
 Cost Unitar>$
 STR_WORK_SPACE_REQUIRED
-Spațiu De Lucru Necesar>
+Spațiu de Lucru Necesar>
 STR_SPECIAL_MATERIALS_REQUIRED
 MATERIALE SPECIALE NECESARE
 STR_ITEM_REQUIRED
@@ -238,7 +238,7 @@ CREȘTE
 STR_DECREASE_UC
 SCADE
 STR_UNITS_TO
-Unități De
+Unități de
 STR_PRODUCE
 Produs 
 STR_PURCHASE_HIRE_PERSONNEL
@@ -268,7 +268,7 @@ Ateliere
 STR_HANGARS
 Hangare
 STR_SHORT_RANGE_DETECTION
-Detecție Cu Rază Scurtă
+Detecție cu Rază Scurtă
 STR_DEFENSE_STRENGTH
 Putere Sistem Defensiv
 STR_TRANSFERS_UC
@@ -306,7 +306,7 @@ Cunoștințele dobândite în cadrul proiectului XCom sunt pierdute pentru totde
 STR_VICTORY_4
 Creierul extraterestru este întrerupt de o explozie de plasmă fierbinte, forțele armate extraterestre fiind înfrânte.
 STR_VICTORY_5
-Odată ce au pierdut lupta pe Marte au pierdut și Pământul.  În scurt timp cercetările XCom permit umanității să înflorească și să revendice planeta Marte. Amenințarea extraterestră a dispărut, dar pentru cât timp, nimeni nu poate ști...
+Odată ce extratereștrii au pierdut lupta pe Marte au pierdut și Pământul.  În scurt timp cercetările XCom permit umanității să înflorească și să revendice planeta Marte. Amenințarea extraterestră a dispărut, dar pentru cât timp, nimeni nu poate ști...
 STR_YOU_HAVE_FAILED
 Ai eșuat în încercarea de a opri atacul extraterestru. Una după una, țările finanțatoare semnează pacte cu extratereștrii, aceștia promițând tehnologie, prosperitate și pace.  Totuși, în scurt timp devine clar că extratereștrii au alte planuri...
 STR_TOTAL_UC
@@ -320,13 +320,13 @@ STR_MAINTENANCE
 STR_BALANCE
 Balanță
 STR_UFO_ACTIVITY_IN_AREAS
-Activități OZN În Zone
+Activități OZN în Zone
 STR_UFO_ACTIVITY_IN_COUNTRIES
-Activități OZN În Țări
+Activități OZN în Țări
 STR_XCOM_ACTIVITY_IN_AREAS
-Activități XCom În Zone
+Activități XCom în Zone
 STR_XCOM_ACTIVITY_IN_COUNTRIES
-Activități XCom În Țări
+Activități XCom în Țări
 STR_FINANCE
 Finanțe
 STR_ST
@@ -402,7 +402,7 @@ Baza extraterestră distrusă
 STR_ALIENS_KILLED
 EXTRATEREȘTRII UCIȘI
 STR_ALIEN_CORPSES_RECOVERED
-CADAVRE DE EXTRATEREȘTRII
+CADAVRE EXTRATERESTRE
 STR_LIVE_ALIENS_RECOVERED
 EXTRATEREȘTRII VII
 STR_ALIEN_ARTIFACTS_RECOVERED
@@ -522,7 +522,7 @@ REALIMENTARE
 STR_REARMING
 REÎNARMARE
 STR_TARGET
-ȚINTA: 
+ȚINTĂ: 
 STR_TARGET_WAY_POINT
 ȚINTĂ: PUNCT RUTĂ
 STR_ARE_YOU_SURE_CYDONIA
@@ -626,7 +626,7 @@ Colonel
 STR_COMMANDER
 Comandant
 STR_SELECT_SQUAD_FOR
-Alege Echipa Din 
+Alege Echipa din 
 STR_SPACE_AVAILABLE
 SPAȚIU DISPONIBIL>
 STR_SPACE_USED
@@ -642,7 +642,7 @@ STR_ARM
 STR_DEFENSE_VALUE
 Valoare Defensivă
 STR_HIT_RATIO
-Rata De Lovire
+Rata de Lovire
 STR_READY_TO_LAND_NEAR
 gata să{NEWLINE}aterizeze lângă
 STR_BEGIN_MISSION
@@ -668,7 +668,7 @@ COSTUM DE PUTERE
 STR_FLYING_SUIT_UC
 COSTUM DE ZBOR
 STR_SELECT_ARMOR
-Selectează armura
+Selectează Armura
 STR_NORTH
 NORD
 STR_NORTH_EAST
@@ -744,7 +744,7 @@ Originile Extratereștrilor
 STR_THE_MARTIAN_SOLUTION
 Soluția Marțiană
 STR_CYDONIA_OR_BUST
-Cydonia Sau Nimic
+Cydonia sau Nimic
 STR_UFOPAEDIA
 UFOpedia
 STR_XCOM_CRAFT_ARMAMENT
@@ -786,13 +786,13 @@ Putere
 STR_RANGE
 Rază De Acțiune
 STR_KM
-km
+ km
 STR_ACCURACY
 Precizie
 STR_RE_LOAD_TIME
 Timp Reîncărcare
 STR_S
-sec
+s
 STR_ARMOR_PIERCING
 PERCUTANT
 STR_INCENDIARY
@@ -834,15 +834,15 @@ Mediu
 STR_HIGH
 Mare
 STR_CRAFT_WEAPON
-Armă Pentru Nave
+Armă pentru Nave
 STR_CRAFT_AMMUNITION
-Muniție Pentru Nave
+Muniție pentru Nave
 STR_HEAVY_WEAPONS_PLATFORM
 Tancuri
 STR_WEAPON
 Armă
 STR_AMMUNITION
-MUNIȚIE
+Muniție
 STR_EQUIPMENT
 Echipament
 STR_ALIEN_CORPSE
@@ -854,7 +854,7 @@ Armură Personală
 STR_RAW_MATERIALS
 Materii Prime
 STR_HWP_CANNON_SHELLS
-Proiectile De Tanc
+Proiectile de Tanc
 STR_ALIEN
 Extraterestru
 STR_SECTOID
@@ -894,9 +894,9 @@ STR_LIVE_SOLDIER
 STR_LIVE_TERRORIST
  Terorist
 STR_UFO_POWER_SOURCE
-Sursa De Energie OZN
+Sursa de Energie OZN
 STR_UFO_NAVIGATION
-Sistem De Navigație OZN
+Sistem de Navigație OZN
 STR_UFO_CONSTRUCTION
 Structura OZN
 STR_ALIEN_FOOD
@@ -908,25 +908,25 @@ Recreerea Extraterestră
 STR_ALIEN_SURGERY
 Chirurgia Extraterestră
 STR_EXAMINATION_ROOM
-Camera De Examinări
+Camera de Examinări
 STR_ALIEN_ALLOYS
 Aliaje Extraterestre
 STR_ALIEN_HABITAT
 Habitatul Extraterestru
 STR_POWER_SUIT
-Costum De Putere
+Costum de Putere
 STR_FLYING_SUIT
-Costum De Zbor
+Costum de Zbor
 STR_HWP_ROCKETS
 Rachete (Tanc)
 STR_HWP_FUSION_BOMB
-Bombă Cu Fuziune (Tanc)
+Bombă cu Fuziune (Tanc)
 STR_LASER_WEAPONS
 Arme Laser
 STR_NEW_FIGHTER_CRAFT
-Navă Nouă De Luptă
+Nouă Navă de Luptă
 STR_NEW_FIGHTER_TRANSPORTER
-Transportor Nou De Luptă
+Nou Transportor de Luptă
 STR_ULTIMATE_CRAFT
 Nava Supremă
 STR_LASER_PISTOL
@@ -938,15 +938,15 @@ Laser Greu
 STR_LASER_CANNON
 Tun Laser
 STR_PLASMA_CANNON
-Tun Cu Plasmă
+Tun cu Plasmă
 STR_FUSION_MISSILE
-Rachetă Cu Fuziune
+Rachetă cu Fuziune
 STR_LASER_DEFENSE
-Defensivă Cu Laser
+Defensivă cu Laser
 STR_PLASMA_DEFENSE
-Defensivă Cu Plasmă
+Defensivă cu Plasmă
 STR_FUSION_DEFENSE
-Defensivă Cu Fuziune
+Defensivă cu Fuziune
 STR_GRAV_SHIELD
 Scut Gravitațional
 STR_MIND_SHIELD
@@ -954,9 +954,9 @@ Scut Mental
 STR_PSI_LAB
 Laborator Psi
 STR_MOTION_SCANNER
-Detector De Mișcare
+Detector de Mișcare
 STR_MEDI_KIT
-Trusă De Prim Ajutor
+Trusă de Prim Ajutor
 STR_TANK_CANNON
 Tanc/Tun
 STR_TANK_ROCKET_LAUNCHER
@@ -974,7 +974,7 @@ Lansator Avalanche
 STR_CANNON
 Tun
 STR_FUSION_BALL_LAUNCHER
-Lansator De Sfere Cu Fuziune
+Lansator de Sfere cu Fuziune
 STR_PLASMA_BEAM
 Fascicul Plasmă
 STR_STINGRAY_MISSILES
@@ -982,9 +982,9 @@ Rachete Stingray
 STR_AVALANCHE_MISSILES
 Rachete Avalanche
 STR_CANNON_ROUNDS_X50
-Cartușe De Tun(x50)
+Cartușe de Tun(x50)
 STR_FUSION_BALL
-Sferă Cu Fuziune
+Sferă cu Fuziune
 STR_SOLDIER
 Soldat
 STR_SCIENTIST
@@ -992,23 +992,23 @@ Cercetător
 STR_ENGINEER
 Inginer
 STR_NORTH_AMERICA
-America De Nord
+America de Nord
 STR_ARCTIC
 Oceanul Arctic
 STR_ANTARCTICA
 Antarctica
 STR_SOUTH_AMERICA
-America De Sud
+America de Sud
 STR_EUROPE
 Europa
 STR_NORTH_AFRICA
-Africa De Nord
+Africa de Nord
 STR_SOUTHERN_AFRICA
-Africa De Sud
+Africa de Sud
 STR_CENTRAL_ASIA
 Asia Centrală
 STR_SOUTH_EAST_ASIA
-Asia De Sud-Est
+Asia de Sud-Est
 STR_SIBERIA
 Siberia
 STR_AUSTRALASIA
@@ -1016,9 +1016,9 @@ Australasia
 STR_PACIFIC
 Pacific
 STR_NORTH_ATLANTIC
-Atlanticul De Nord
+Atlanticul de Nord
 STR_SOUTH_ATLANTIC
-Atlanticul De Sud
+Atlanticul de Sud
 STR_INDIAN_OCEAN
 Oceanul Indian
 STR_ALIEN_RESEARCH
@@ -1070,9 +1070,9 @@ Rezistență Avarii
 STR_WEAPON_POWER
 Putere Arme
 STR_WEAPON_RANGE
-Rază De Acțiune
+Rază de Acțiune
 STR_ACCESS_LIFT
-Lift De Acces
+Lift de Acces
 STR_LABORATORY
 Laborator
 STR_WORKSHOP
@@ -1082,17 +1082,17 @@ System Radar Mic
 STR_LARGE_RADAR_SYSTEM
 Sistem Radar Mare
 STR_MISSILE_DEFENSES
-Defensivă Cu Rachete
+Defensivă cu Rachete
 STR_GENERAL_STORES
 Depozite
 STR_ALIEN_CONTAINMENT
 Carantină Extraterestrii
 STR_LASER_DEFENSES
-Defensivă Cu Laser
+Defensivă cu Laser
 STR_PLASMA_DEFENSES
-Defensivă Cu Plasmă
+Defensivă cu Plasmă
 STR_FUSION_BALL_DEFENSES
-Defensivă Cu Sfere Cu Fuziune
+Defensivă cu Sfere cu Fuziune
 STR_PSIONIC_LABORATORY
 Laborator Psionic
 STR_HYPER_WAVE_DECODER
@@ -1272,21 +1272,21 @@ Un mic lansator care proiectează bombe paralizante.  Foarte folositor pentru ca
 STR_ALIEN_GRENADE_UFOPEDIA
 Acest dispozitiv funcționează asemenea unei grenade pământene - numai că este mult mai puternică.
 STR_SMALL_SCOUT
-Navă De Observare Mică
+Navă de Observare mică
 STR_MEDIUM_SCOUT
-Navă De Observare Medie
+Navă de Observare medie
 STR_LARGE_SCOUT
-Navă De Observare Mare
+Navă de Observare mare
 STR_HARVESTER
-Navă De Recoltare
+Navă de Recoltare
 STR_ABDUCTOR
-Navă De Răpire
+Navă de Răpire
 STR_TERROR_SHIP
-Navă De Terorizare
+Navă de Terorizare
 STR_BATTLESHIP
-Navă De Luptă
+Navă de Luptă
 STR_SUPPLY_SHIP
-Navă De Aprovizionare
+Navă de Aprovizionare
 STR_RATING
 EVALUARE> 
 STR_RATING_TERRIBLE
@@ -1454,9 +1454,9 @@ Perth
 STR_NEW_GAME
 Joc Nou
 STR_LOAD_SAVED_GAME
-Încarcă Joc
+Încarcă Joc Salvat
 STR_SELECT_DIFFICULTY_LEVEL
-Alege Nivelul De Dificultate
+Alege Nivelul de Dificultate
 STR_1_BEGINNER
 1> Începător
 STR_2_EXPERIENCED
@@ -1472,13 +1472,13 @@ Timp
 STR_DATE
 Dată
 STR_SELECT_GAME_TO_LOAD
-Alege Jocul De Încărcat
+Alege Jocul de Încărcat
 STR_SELECT_SAVE_POSITION
-Alege Locația De Salvat
+Alege Locația de Salvat
 STR_PSIONIC_TRAINING
 ANTRENAMENT PSIONIC
 STR_REMAINING_PSI_LAB_CAPACITY
-Spațiu Liber În Laborator> 
+Spațiu liber în Laborator> 
 STR_PSIONIC__STRENGTH
 Rezistență{NEWLINE}Psionică
 STR_PSIONIC_SKILL_IMPROVEMENT
@@ -1590,7 +1590,7 @@ INSTALAȚIE ÎN FOLOSINȚĂ
 STR_CANNOT_DISMANTLE_FACILITY
 NU SE POATE DEZAFECTA!{SMALLLINE}Toate instalațiile trebuie să aibă legături către liftul de acces.
 STR_TRANSFER_ITEMS_TO
-Transferă Articole La 
+Transferă Articole la 
 STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER
 NU EXISTĂ CARANTINĂ PENTRU TRANSFER!{SMALLLINE}Extratereștrii vii au nevoie de o carantină pentru a supraviețui.
 STR_AMOUNT_AT_DESTINATION
@@ -1694,7 +1694,7 @@ Cadavru Cyberdisc
 STR_TO_ARM_HWP
  pentru înarmare Tanc
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
-Articole insuficiente pentru reechiparea trupei
+Echipamente insuficiente pentru utilarea trupelor
 STR_MARS_CYDONIA_LANDING
 Marte: Aterizarea În Cydonia
 STR_MARS_CYDONIA_LANDING_BRIEFING
@@ -1786,7 +1786,7 @@ Salarii
 STR_BASE_MAINTENANCE
 Întreținerea bazei
 STR_COST_PER_UNIT
-Cost pe unitate
+Cost unitar
 STR_QUANTITY
 Cantitate
 STR_TOTAL
@@ -1796,7 +1796,7 @@ STR_DAY
 STR_DAYS
  zile
 STR_IN_PSIONIC_TRAINING
-Antrenament Psionic
+Sub Antrenament Psionic
 STR_BLASTER_BOMB_UFOPEDIA
 Acest dispozitiv este o rachetă explozivă dotată cu un sistem inteligent de ghidare.  Este proiectată de un lansator de bombe.
 STR_FRONT_ARMOR
@@ -1898,7 +1898,7 @@ UT>
 STR_ALIEN_ARTIFACT
 Artefact Extraterestru
 STR_AMMO_ROUNDS_LEFT
-MUNIȚIE{NEWLINE}RĂMASĂ:{NEWLINE} 
+MUNIȚIE:{NEWLINE}SALVE{NEWLINE}RĂMASE=
 STR_THROW
 Aruncă
 STR_AUTO_SHOT
@@ -1924,7 +1924,7 @@ Lansează Racheta
 STR_ACC
 Pr>
 STR_NOT_ENOUGH_TIME_UNITS
-Unități De Timp Insuficiente!
+Unități de Timp Insuficiente!
 STR_NOT_ENOUGH_ENERGY
 Energie Insuficientă!
 STR_NO_ROUNDS_LEFT
@@ -1932,13 +1932,13 @@ Salve Terminate!
 STR_NO_AMMUNITION_LOADED
 Arma este descărcată!
 STR_WRONG_AMMUNITION_FOR_THIS_WEAPON
-Muniție improprie pentru această armă!
+Muniție improprie pentru această Armă!
 STR_WEAPON_IS_ALREADY_LOADED
 Arma este deja încărcată!
 STR_NO_LINE_OF_FIRE
-Linie De Foc Blocată!
+Linie de Foc Blocată!
 STR_GRENADE_IS_ACTIVATED
-Grenada Este Amorsată!
+Grenada este Amorsată!
 STR_THERE_IS_NO_ONE_THERE
 Nu este nimeni acolo!
 STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED
@@ -1960,7 +1960,7 @@ ECHIPA>
 STR_X_COM
 X-COM
 STR_PRESS_BUTTON_TO_CONTINUE
-Apasă pe buton pentru a continua
+Apasă pentru a continua
 STR_MIND_CONTROL
 Control Mental
 STR_PANIC_UNIT
@@ -1968,9 +1968,9 @@ Panicare Unitate
 STR_MIND_CONTROL_SUCCESSFUL
 Control Mental Reușit
 STR_HAS_GONE_BERSERK
-este cuprins de Furie
+a Înnebunit
 STR_HAS_PANICKED
-a intrat în Panica
+s-a Panicat
 STR_XCOM
 XCom
 STR_ALIENS
@@ -1988,7 +1988,7 @@ RUCSAC
 STR_BELT
 CENTURĂ
 STR_IS_UNDER_ALIEN_CONTROL
-este controlat de extratereștrii
+se află sub control străin
 STR_SCROLL_SPEED
 VITEZĂ DERULARE
 STR_SCROLL_TYPE
@@ -2004,9 +2004,9 @@ VITEZĂ MIȘCARE XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VITEZĂ MIȘCARE EXTRATEREȘTRII
 STR_HAS_BECOME_UNCONSCIOUS
- este inconștient/ă
+ și-a pierdut cunoștința
 STR_HAS_DIED_FROM_A_FATAL_WOUND
- a murit din cauza ranilor grave
+ a murit din cauza rănilor grave
 STR_USE_MIND_PROBE
 Folosește Sonda Mentală
 STR_FATAL_WOUNDS
@@ -2029,7 +2029,23 @@ STR_CORPSE
 Cadavru
 STR_UNLOAD
 Descarcă
+STR_NEW_SAVED_GAME
+<SALVARE NOUĂ>
 STR_NEW_BATTLE
-New Battle
+Luptă Nouă
 STR_OPTIONS
 Opțiuni
+STR_TERRAIN
+TEREN
+STR_DARKNESS
+ÎNTUNERIC
+STR_DISPLAY_RESOLUTION
+Rezoluție Afișare
+STR_DISPLAY_MODE
+Mod Afișare
+STR_WINDOWED
+În Fereastră
+STR_FULLSCREEN
+Pe Tot Ecranul
+STR_LANGUAGE
+LIMBĂ
