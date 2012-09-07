@@ -2030,6 +2030,20 @@ STR_CORPSE
 STR_UNLOAD
 Разрядить
 STR_NEW_BATTLE
-New Battle
+Новая битва
 STR_OPTIONS
 Параметры
+STR_TERRAIN
+МЕСТНОСТЬ
+STR_DARKNESS
+УРОВЕНЬ ТЕМНОТЫ
+STR_DISPLAY_RESOLUTION
+Разрешение экрана
+STR_DISPLAY_MODE
+Режим экрана
+STR_WINDOWED
+Оконный
+STR_FULLSCREEN
+Полноэкранный
+STR_LANGUAGE
+ЯЗЫК
