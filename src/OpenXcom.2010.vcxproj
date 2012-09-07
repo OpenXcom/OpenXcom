@@ -329,6 +329,7 @@
     <ClCompile Include="Interface\TextEdit.cpp" />
     <ClCompile Include="Interface\TextList.cpp" />
     <ClCompile Include="Interface\Window.cpp" />
+    <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
     <ClCompile Include="Menu\LanguageState.cpp" />
@@ -546,6 +547,7 @@
     <ClInclude Include="Interface\TextEdit.h" />
     <ClInclude Include="Interface\TextList.h" />
     <ClInclude Include="Interface\Window.h" />
+    <ClInclude Include="lodepng.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
     <ClInclude Include="Menu\LanguageState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />

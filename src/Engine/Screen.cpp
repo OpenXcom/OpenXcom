@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <iostream>
 #include <SDL_rotozoom.h>
+#include "../lodepng.h"
 #include "Exception.h"
 #include "Surface.h"
 #include "Action.h"
@@ -88,11 +89,27 @@ void Screen::handle(Action *action)
 		do
 		{
 			ss.str("");
-			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".bmp";
+			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
 			i++;
 		}
 		while (CrossPlatform::fileExists(ss.str()));
-		SDL_SaveBMP(_screen, ss.str().c_str());
+
+		std::vector<unsigned char> image;
+		SDL_Color *palette = getPalette();
+
+		for (int y = 0; y < getHeight(); ++y)
+		{
+			for (int x = 0; x < getWidth(); ++x)
+			{
+				Uint8 color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
+				image.push_back(palette[color].r);
+				image.push_back(palette[color].g);
+				image.push_back(palette[color].b);
+			}
+		}
+
+		unsigned error = lodepng::encode(ss.str(), image, getWidth(), getHeight(), LCT_RGB);
+		if (error) std::cerr << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
 	}
 }
 

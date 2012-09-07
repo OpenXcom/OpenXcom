@@ -641,6 +641,7 @@
     <ClCompile Include="Savegame\Vehicle.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="lodepng.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1284,6 +1285,7 @@
     <ClInclude Include="Savegame\Vehicle.h">
       <Filter>Savegame</Filter>
     </ClInclude>
+    <ClInclude Include="lodepng.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

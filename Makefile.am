@@ -326,6 +326,8 @@ openxcom_SOURCES = \
 	src/Interface/TextList.h \
 	src/Interface/Window.cpp \
 	src/Interface/Window.h \
+	src/lodepng.cpp \
+	src/lodepng.h \
 	src/main.cpp \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
