@@ -43,7 +43,7 @@ namespace OpenXcom
 NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game), _base(base)
 {
 	int width = 230;
-	int height = 140;
+	int height = 136; //multiplicity of the 8 pixels [17x8=136]
 	int max_width = 320;
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
@@ -57,7 +57,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
 	_btnOK = new TextButton(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
-	_lstResearch = new TextList(width - 4 * button_x_border, height - 2 * button_height - 2 * button_y_border, start_x + button_x_border, start_y + button_y_border + button_height);
+	_lstResearch = new TextList(width - 4 * button_x_border, height - 2 * button_height - 2 * button_y_border, start_x + button_x_border, start_y + button_y_border + button_height - 4);
 
 	add(_window);
 	add(_btnOK);
