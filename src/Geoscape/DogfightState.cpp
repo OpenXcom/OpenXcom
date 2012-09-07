@@ -637,7 +637,7 @@ void DogfightState::move()
 					}
 					else
 					{
-						p->setMissed(true);
+						p->remove();
 					}
 				}
 			}
