@@ -396,7 +396,11 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		for (int i = 0; i < _height * _length * _width; i++)
 		{
 			// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-			if (_save->getTiles()[i] && _save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && !_save->getTiles()[i]->getMapData(MapData::O_OBJECT))
+			if (_save->getTiles()[i] && 
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && 
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
+				!_save->getTiles()[i]->getMapData(MapData::O_OBJECT) &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
 			{
 				if (_craftInventoryTile == 0)
 					_craftInventoryTile = _save->getTiles()[i];

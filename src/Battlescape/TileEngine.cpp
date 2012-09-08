@@ -539,6 +539,7 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
 		}
 		else
 		{
+			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
 			Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
 			if (below)
 			{
@@ -562,6 +563,7 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
 			unit->addFiringExp();
 		}
 	}
+	applyItemGravity(tile);
 	calculateSunShading(); // roofs could have been destroyed
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
@@ -699,6 +701,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
 			(*i)->detonate();
+			applyItemGravity((*i));
 		}
 	}
 
@@ -1179,6 +1182,10 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 		}
 		++i;
 	}
+	if (!storeTrajectory && trajectory != 0)
+	{ // store the position of impact
+		trajectory->push_back(Position(x, y, z));
+	}
 	return -1;
 }
 
@@ -1328,6 +1335,39 @@ bool TileEngine::psiAttack(BattleAction *action)
 		}
 	}
 	return false;
+}
+
+/**
+ * Apply gravity to a tile. Causes items to drop. (not units)
+ * @param t Tile
+ * @return Tile where the items end up in eventually.
+ */
+Tile *TileEngine::applyItemGravity(Tile *t)
+{
+	if (t->getInventory()->size() == 0) return t; // skip this if there are no items
+
+	Position p = t->getPosition();
+	Tile *rt = t;
+
+	while (rt->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
+	{
+		p.z--;
+		rt = _save->getTile(p);
+	}
+
+	if (t != rt)
+	{
+		// copy items
+		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+		{
+			rt->addItem(*it);
+		}
+
+		// clear tile
+		t->getInventory()->clear();
+	}
+
+	return rt;
 }
 
 }

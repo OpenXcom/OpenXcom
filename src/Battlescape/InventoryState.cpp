@@ -186,6 +186,7 @@ void InventoryState::btnOkClick(Action *action)
 	{
 		_battleGame->resetUnitTiles();
 	}
+	_battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 }
 

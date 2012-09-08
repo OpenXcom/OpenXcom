@@ -354,10 +354,20 @@ bool Pathfinding::isBlocked(Tile *tile, const int part)
 {
 	if (tile == 0) return true; // probably outside the map here
 
+	if (part == O_BIGWALL)
+	{
+		if (tile->getMapData(MapData::O_OBJECT) &&
+			tile->getMapData(MapData::O_OBJECT)->isBigWall() &&
+			tile->getTUCost(MapData::O_OBJECT, _movementType) == 255)
+			return true; // blocking part
+		else
+			return false;
+	}
+
 	if (part == MapData::O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit != 0 && unit != _unit) return true;
+		if (unit != 0 && unit != _unit && unit->getVisible()) return true; // only visible units block the path
 	}
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
@@ -396,7 +406,7 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_WESTWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileNorth),MapData::O_OBJECT) && isBlocked(_save->getTile(pos1 + oneTileNorth),MapData::O_OBJECT)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL)) return true;
 		break;
 	case 2: // east
 		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
@@ -406,7 +416,7 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_WESTWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_OBJECT) && isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_OBJECT)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileEast),O_BIGWALL)) return true;
 		break;
 	case 4: // south
 		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
@@ -416,7 +426,7 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_WESTWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_OBJECT) && isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_OBJECT)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL)) return true;
 		break;
 	case 6: // west
 		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
@@ -426,7 +436,7 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 		if (isBlocked(startTile,MapData::O_NORTHWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileNorth),MapData::O_WESTWALL)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileNorth),MapData::O_OBJECT) && isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_OBJECT)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL)) return true;
 		break;
 	}
 

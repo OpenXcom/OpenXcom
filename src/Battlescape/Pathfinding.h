@@ -55,6 +55,7 @@ private:
 public:
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
+	static const int O_BIGWALL = -1;
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);
 	/// Cleans up the Pathfinding.

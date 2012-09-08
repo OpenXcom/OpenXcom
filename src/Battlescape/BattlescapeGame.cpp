@@ -1176,11 +1176,6 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	if (_save->getTile(p) == 0)
 		return;
 
-	while (_save->getTile(p)->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
-	{
-		p.z--;
-	}
-
 	_save->getTile(p)->addItem(item);
 
 	if(newItem)
@@ -1190,6 +1185,8 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 
 	item->setSlot(getRuleset()->getInventory("STR_GROUND"));
 	item->setOwner(0);
+
+	getTileEngine()->applyItemGravity(_save->getTile(p));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
