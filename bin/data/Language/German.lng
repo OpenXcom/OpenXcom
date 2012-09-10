@@ -2029,7 +2029,23 @@ STR_CORPSE
 Toter
 STR_UNLOAD
 Entladen
+STR_NEW_SAVED_GAME
+<Neuer Spielstand>
 STR_NEW_BATTLE
-New Battle
+Neuer Kampf
 STR_OPTIONS
 Optionen
+STR_TERRAIN
+TERRAIN
+STR_DARKNESS
+Dunkelheit
+STR_DISPLAY_RESOLUTION
+Bildschirmauflösung
+STR_DISPLAY_MODE
+Anzeigemodus
+STR_WINDOWED
+Fenster
+STR_FULLSCREEN
+Vollbild
+STR_LANGUAGE
+Sprache
