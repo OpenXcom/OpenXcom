@@ -225,6 +225,15 @@ std::string Ufo::getAltitude() const
 }
 
 /**
+ * Changes the current altitude of the UFO.
+ * @param altitude Altitude.
+ */
+void Ufo::setAltitude(std::string altitude)
+{
+	_altitude = altitude;
+}
+
+/**
  * Returns if this UFO took enough damage
  * to cause it to crash.
  * @return Crashed status.

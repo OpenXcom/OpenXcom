@@ -295,6 +295,23 @@ void Craft::setStatus(const std::string &status)
 }
 
 /**
+ * Returns the current altitude of the craft.
+ * @return Altitude.
+ */
+std::string Craft::getAltitude() const
+{
+	Ufo *u = dynamic_cast<Ufo*>(_dest);
+	if (u)
+	{
+		return u->getAltitude();
+	}
+	else
+	{
+		return "STR_VERY_LOW";
+	}
+}
+
+/**
  * Changes the destination the craft is heading to.
  * @param dest Pointer to new destination.
  */

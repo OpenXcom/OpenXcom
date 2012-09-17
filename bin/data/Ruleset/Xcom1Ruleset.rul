@@ -1962,14 +1962,12 @@ items:
     bigSprite: 32
     floorSprite: 31
     handSprite: 104
-    bulletSprite: 8
-    fireSound: 18
-    power: 90
     hitSound: 48
     hitAnimation: 36
+    power: 90
+    damageType: 7
     accuracyMelee: 80
     tuMelee: 15
-    clipSize: -1
     battleType: 3
     fixedWeapon: true
     invWidth: 1
@@ -2042,7 +2040,7 @@ ufos:
           length: 20
   - type: STR_ABDUCTOR
     size: STR_MEDIUM_UC
-    sprite: 3
+    sprite: 4
     damageMax: 500
     speedMax: 4000
     accel: 8
@@ -2065,7 +2063,7 @@ ufos:
           length: 20
   - type: STR_HARVESTER
     size: STR_MEDIUM_UC
-    sprite: 4
+    sprite: 3
     damageMax: 500
     speedMax: 4300
     accel: 8
@@ -2088,7 +2086,7 @@ ufos:
           length: 20
   - type: STR_SUPPLY_SHIP
     size: STR_LARGE
-    sprite: 5
+    sprite: 7
     damageMax: 2200
     speedMax: 3200
     accel: 6
@@ -2111,7 +2109,7 @@ ufos:
           length: 20
   - type: STR_TERROR_SHIP
     size: STR_LARGE
-    sprite: 6
+    sprite: 5
     damageMax: 1200
     speedMax: 4800
     accel: 6
@@ -2134,7 +2132,7 @@ ufos:
           length: 20
   - type: STR_BATTLESHIP
     size: STR_VERY_LARGE
-    sprite: 7
+    sprite: 6
     damageMax: 3200
     speedMax: 5000
     accel: 6
@@ -3221,7 +3219,6 @@ units:
     deathSound: 48
     intelligence: 2
     aggression: 2
-    specab: 1
   - type: TANK_CANNON
     race: STR_TANK_CANNON
     stats:

@@ -53,19 +53,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	// Create objects
 	_window = new Window(this, 240, 184, 8, 8, POPUP_BOTH);
-	if (_waypoint != 0)
-	{
-		_btnBase = new TextButton(224, 12, 16, 132);
-		_btnTarget = new TextButton(224, 12, 16, 164);
-		_btnPatrol = new TextButton(224, 12, 16, 148);
-	}
-	else
-	{
-		_btnBase = new TextButton(192, 12, 32, 116);
-		_btnTarget = new TextButton(192, 12, 32, 132);
-		_btnPatrol = new TextButton(192, 12, 32, 148);
-	}
-	_btnCancel = new TextButton(192, 12, 32, 164);
+	_btnBase = new TextButton(192, 12, 32, 124);
+	_btnTarget = new TextButton(192, 12, 32, 140);
+	_btnPatrol = new TextButton(192, 12, 32, 156);
+	_btnCancel = new TextButton(192, 12, 32, 172);
 	_txtTitle = new Text(200, 16, 32, 20);
 	_txtStatus = new Text(200, 9, 32, 36);
 	_txtBase = new Text(200, 9, 32, 52);
@@ -128,7 +119,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_STATUS_") << L'\x01';
-	if (_craft->getLowFuel())
+	if (_waypoint != 0)
+	{
+		ss << _game->getLanguage()->getString("STR_INTERCEPTING_UFO") << _waypoint->getId();
+	}
+	else if (_craft->getLowFuel())
 	{
 		ss << _game->getLanguage()->getString("STR_LOW_FUEL_RETURNING_TO_BASE");
 	}
@@ -182,7 +177,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss5;
-	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01';
+	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(_craft->getAltitude());
 	_txtAltitude->setText(ss5.str());
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
@@ -256,8 +251,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	}
 	else
 	{
-		_btnCancel->setVisible(false);
-		_btnTarget->setText(_game->getLanguage()->getString("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
+		_btnCancel->setText(_game->getLanguage()->getString("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
 
 	if (_craft->getLowFuel())
@@ -301,19 +295,9 @@ void GeoscapeCraftState::btnBaseClick(Action *action)
  */
 void GeoscapeCraftState::btnTargetClick(Action *action)
 {
+	delete _waypoint;
 	_game->popState();
-	// Go to the last known UFO position
-	if (_waypoint != 0)
-	{
-		_waypoint->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
-		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);
-		_craft->setDestination(_waypoint);
-	}
-	// Select a new destination for the craft
-	else
-	{
-		_game->pushState(new SelectDestinationState(_game, _craft, _globe));
-	}
+	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
 }
 
 /**
@@ -333,8 +317,19 @@ void GeoscapeCraftState::btnPatrolClick(Action *action)
  */
 void GeoscapeCraftState::btnCancelClick(Action *action)
 {
-	delete _waypoint;
-	_game->popState();
+	// Go to the last known UFO position
+	if (_waypoint != 0)
+	{
+		_waypoint->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
+		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);
+		_craft->setDestination(_waypoint);
+	}
+	// Cancel
+	else
+	{
+		delete _waypoint;
+		_game->popState();
+	}
 }
 
 }

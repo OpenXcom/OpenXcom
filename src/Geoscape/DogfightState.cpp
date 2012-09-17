@@ -848,6 +848,7 @@ void DogfightState::move()
 		_targetRadius = 0;
 		_end = true;
 		_ufo->setSpeed(0);
+		_ufo->setAltitude("STR_GROUND");
 	}
 }
 

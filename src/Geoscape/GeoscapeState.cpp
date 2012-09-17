@@ -494,6 +494,7 @@ void GeoscapeState::time5Seconds()
 					Waypoint *w = new Waypoint();
 					w->setLongitude(u->getLongitude());
 					w->setLatitude(u->getLatitude());
+					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
 			}
@@ -571,7 +572,7 @@ void GeoscapeState::time5Seconds()
 	// Clean up terror sites
 	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end();)
 	{
-		if ((*i)->getHoursActive() == 0)
+		if ((*i)->getHoursActive() == 0 && (*i)->getFollowers()->empty()) // CHEEKY EXPLOIT
 		{
 			delete *i;
 			i = _game->getSavedGame()->getTerrorSites()->erase(i);
@@ -738,6 +739,10 @@ void GeoscapeState::time30Minutes()
 				}
 			}
 			(*u)->setDetected(detected);
+			if (!detected && !(*u)->getFollowers()->empty())
+			{
+				popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
+			}
 		}
 	}
 }
