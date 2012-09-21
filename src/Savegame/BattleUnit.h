@@ -204,6 +204,8 @@ public:
 	void clearVisibleTiles();
 	/// Calculate firing accuracy.
 	double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
+	/// Calculate accuracy modifier.
+	double getAccuracyModifier();
 	/// Calculate throwing accuracy.
 	double getThrowingAccuracy();
 	/// Set armor value.

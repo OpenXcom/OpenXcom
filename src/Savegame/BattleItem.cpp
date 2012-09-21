@@ -70,6 +70,7 @@ void BattleItem::load(const YAML::Node &node)
 	node["painKiller"] >> _painKiller;
 	node["heal"] >> _heal;
 	node["stimulant"] >> _stimulant;
+	node["explodeTurn"] >> _explodeTurn;
 }
 
 /**
@@ -131,6 +132,7 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
 	out << YAML::Key << "heal" << YAML::Value << _heal;
 	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
+	out << YAML::Key << "explodeTurn" << YAML::Value << _explodeTurn;
 
 	out << YAML::EndMap;
 }

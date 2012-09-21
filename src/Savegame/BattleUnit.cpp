@@ -1072,7 +1072,17 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 		}
 	}
 
-	result *= ((double)_health/(double)getStats()->health);
+	return result * getAccuracyModifier();
+}
+
+/**
+ * To calculate firing accuracy. Takes health and fatal wounds into account.
+ * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
+ * @return modifier
+ */
+double BattleUnit::getAccuracyModifier()
+{
+	double result = ((double)_health/(double)getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
@@ -1085,22 +1095,11 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 
 /**
  * Calculate throwing accuracy.
- * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
  * @return throwing Accuracy
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	double result = (double)(getStats()->firing/100.0);
-
-	result *= ((double)_health/(double)getStats()->health);
-
-	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
-	if (wounds > 9)
-		wounds = 9;
-
-	result *= 1 + (-0.1*wounds);
-
-	return result;
+	return (double)(getStats()->throwing/100.0) * getAccuracyModifier();
 }
 
 /**

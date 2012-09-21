@@ -266,11 +266,24 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
 			}
 
+			int wallcost = 0; // walking through rubble walls
+			if (direction == 7 || direction == 0 || direction == 1)
+				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+			if (direction == 1 || direction == 2 || direction == 3)
+				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+			if (direction == 3 || direction == 4 || direction == 5)
+				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+			if (direction == 5 || direction == 6 || direction == 7)
+				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
+
 			// diagonal walking (uneven directions) costs 50% more tu's
 			if (direction & 1)
 			{
+				wallcost /= 2;
 				cost = (int)((double)cost * 1.5);
 			}
+
+			cost += wallcost;
 
 			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel())
 			{
