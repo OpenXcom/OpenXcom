@@ -181,11 +181,18 @@ void BattlescapeGenerator::run()
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
 		_terrain = _game->getRuleset()->getTerrain("URBAN");
-	}else
+	}
+	else
 	if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		_terrain = _game->getRuleset()->getTerrain("XBASE");
 		_worldShade = 5;
+	}
+	else
+	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+	{
+		_terrain = _game->getRuleset()->getTerrain("UBASE");
+		_worldShade = 15;
 	}
 	else
 	{
@@ -395,13 +402,14 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 {
 //	unit->setId(_unitCount++);
 
-	if (_craft == 0)
+	if (_craft == 0 || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
 		Node* node = _save->getSpawnNode(NR_XCOM, unit);
 		if (node)
 		{
 			_save->setUnitPosition(unit, node->getPosition());
 		}
+		_craftInventoryTile = _save->getTile(node->getPosition());
 		unit->setDirection(RNG::generate(0,7));
 	}
 	else
@@ -418,10 +426,14 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				if (_craftInventoryTile == 0)
 					_craftInventoryTile = _save->getTiles()[i];
 
-				if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
+				// for bigger units, line them up with the first tile of the craft
+				if (unit->getArmor()->getSize() == 1 || _craftInventoryTile == 0 || _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
 				{
-					_save->getTileEngine()->calculateFOV(unit);
-					break;
+					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
+					{
+						_save->getTileEngine()->calculateFOV(unit);
+						break;
+					}
 				}
 			}
 		}
@@ -759,7 +771,8 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* Determine Craft landingzone */
-	if (_craft != 0)
+	/* alien base assault has no craft landing zone */
+	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT"))
 	{
 		// pick a random craft mapblock, can have all kinds of sizes
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
@@ -877,6 +890,35 @@ void BattlescapeGenerator::generateMap()
 
 		blocksToDo = 0;
 	}
+	/* determine positioning of base modules */
+	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+	{
+		int randX = RNG::generate(0, (_length/10)- 2);
+		int randY = RNG::generate(0, (_width/10)- 2);
+		// add the command center
+		blocks[randX][randY] = _terrain->getRandomMapBlock(20, MT_UBASECOMM);
+		blocksToDo--;
+		// mark mapblocks as used
+		blocks[randX + 1][randY] = dummy;
+		blocksToDo--;
+		blocks[randX + 1][randY + 1] = dummy;
+		blocksToDo--;
+		blocks[randX][randY + 1] = dummy;
+		blocksToDo--;
+		// add two lifts (not on top of the command center)
+		for (int i = 0; i < 2; i++)
+		{
+			while ((int)blocks[randX][randY] != 0)
+			{
+				randX = RNG::generate(0, (_length/10)- 1);
+				randY = RNG::generate(0, (_width/10)- 1);
+			}
+			// add the lift
+			blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
+			blocksToDo--;
+		}
+	}
+
 
 	x = 0;
 	y = 0;
@@ -953,9 +995,19 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* making passages between blocks in a base map */
-	if (_save->getMissionType() == "STR_BASE_DEFENSE")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
-		MapDataSet *mds = _terrain->getMapDataSets()->at(1);
+		int ewallfix = 14, swallfix = 13;
+		int ewallfixSet = 1, swallfixSet = 1;
+		if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		{
+			ewallfix = 17;
+			swallfix = 18;
+			ewallfixSet = 2;
+			swallfixSet = 2;
+		}
+
+		MapDataSet *mds = _terrain->getMapDataSets()->at(ewallfixSet);
 		for (int i = 0; i < (_width / 10); ++i)
 		{
 			for (int j = 0; j < (_length / 10); ++j)
@@ -995,8 +1047,8 @@ void BattlescapeGenerator::generateMap()
 					_save->getTile(Position((i*10)+9,(j*10)+5,0))->setMapData(0, 0, 0, MapData::O_OBJECT);
 					if (_save->getTile(Position((i*10)+9,(j*10)+2,0))->getMapData(MapData::O_OBJECT))
 					{
-						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(mds->getObjects()->at(14), 14, 1, MapData::O_NORTHWALL); //wallfix
-						_save->getTile(Position((i*10)+9,(j*10)+6,0))->setMapData(mds->getObjects()->at(14), 14, 1, MapData::O_NORTHWALL); //wallfix
+						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL); //wallfix
+						_save->getTile(Position((i*10)+9,(j*10)+6,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL); //wallfix
 					}
 				}
 				// south
@@ -1010,8 +1062,8 @@ void BattlescapeGenerator::generateMap()
 					_save->getTile(Position((i*10)+5,(j*10)+9,0))->setMapData(0, 0, 0, MapData::O_OBJECT);
 					if (_save->getTile(Position((i*10)+2,(j*10)+9,0))->getMapData(MapData::O_OBJECT))
 					{
-						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(mds->getObjects()->at(13), 13, 1, MapData::O_WESTWALL); //wallfix
-						_save->getTile(Position((i*10)+6,(j*10)+9,0))->setMapData(mds->getObjects()->at(13), 13, 1, MapData::O_WESTWALL); //wallfix
+						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL); //wallfix
+						_save->getTile(Position((i*10)+6,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL); //wallfix
 					}
 				}
 			}
@@ -1038,7 +1090,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	if (_craft != 0)
+	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT"))
 	{
 		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{

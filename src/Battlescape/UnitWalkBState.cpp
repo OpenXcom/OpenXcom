@@ -221,7 +221,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
-			if (tu > _unit->getStats()->tu && !_parent->dontSpendTUs())
+			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();

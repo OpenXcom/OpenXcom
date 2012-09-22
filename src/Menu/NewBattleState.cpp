@@ -303,6 +303,15 @@ void NewBattleState::btnOkClick(Action *action)
 	{
 		bgen.setBase(_craft->getBase());
 	}
+	else if (_missionTypes[_selMission] == "STR_ALIEN_BASE_ASSAULT")
+	{
+		// should be fixed to be an alien base, not a terror site
+		TerrorSite *t = new TerrorSite();
+		t->setId(1);
+		_craft->setDestination(t);
+		bgen.setTerrorSite(t);
+		bgen.setCraft(_craft);
+	}
 	else
 	{
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
