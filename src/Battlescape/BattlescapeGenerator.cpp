@@ -129,7 +129,7 @@ void BattlescapeGenerator::setWorldShade(int shade)
  * Sets the alien race on the mission. This is used to determine the various alien types to spawn.
  * @param alienRace Alien (main)race.
  */
-void BattlescapeGenerator::setAlienRace(std::string alienRace)
+void BattlescapeGenerator::setAlienRace(const std::string &alienRace)
 {
 	_alienRace = alienRace;
 }
@@ -708,8 +708,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 			placed = true;
 		}
 		break;
-	case BT_NONE:
-		break;
+	default: break;
 	}
 
 	// if we did not auto equip the item, place it on the ground

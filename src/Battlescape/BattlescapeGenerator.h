@@ -96,7 +96,7 @@ public:
 	/// Sets the polygon shade.
 	void setWorldShade(int shade);
 	/// Set the alien race.
-	void setAlienRace(std::string alienRace);
+	void setAlienRace(const std::string &alienRace);
 	/// Set the alien item level.
 	void setAlienItemlevel(int alienItemLevel);
 	/// Sets the xcom base.

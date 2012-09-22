@@ -130,7 +130,7 @@ public:
 		earth_data.resize(radius.size());
 
 		//filling normal field for each radius
-		for(int r = 0; r<radius.size(); ++r)
+		for(unsigned int r = 0; r<radius.size(); ++r)
 		{
 			earth_data[r].resize(earth_size.first * earth_size.second);
 			for(int j=0; j<earth_size.second; ++j)
@@ -145,7 +145,7 @@ public:
 		//filling random noise "texture"
 		const int random_surf_size = 60;
 		random_noise_data.resize(random_surf_size * random_surf_size);
-		for(int i=0; i< random_noise_data.size(); ++i)
+		for(unsigned int i=0; i< random_noise_data.size(); ++i)
 			random_noise_data[i] = rand()%4;
 		random_noise = new ShaderRepeat<Sint16>(random_noise_data, random_surf_size, random_surf_size );
 
@@ -196,7 +196,7 @@ public:
 	}
 	~GlobeStaticData()
 	{
-		for(int i=0; i< earth.size(); ++i)
+		for(unsigned int i=0; i< earth.size(); ++i)
 			delete earth[i];
 		delete random_noise;
 	}

@@ -30,7 +30,6 @@ class Window;
 class Text;
 class TextList;
 class RuleManufacture;
-class ManufactureState;
 
 /**
  * Screen which list possible productions.
@@ -43,7 +42,6 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtCategory;
 	TextList *_lstManufacture;
-	ManufactureState * _manufactureState;
 	std::vector<RuleManufacture *> _possibleProductions;
 
 public:

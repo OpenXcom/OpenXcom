@@ -928,7 +928,7 @@ Map *BattlescapeState::getMap() const
  * Show a debug message in the topleft corner.
  * @param message Debug message.
  */
-void BattlescapeState::debug(const std::wstring message)
+void BattlescapeState::debug(const std::wstring &message)
 {
 	if (_save->getDebugMode())
 	{
@@ -936,7 +936,7 @@ void BattlescapeState::debug(const std::wstring message)
 	}
 }
 
-void BattlescapeState::warning(std::string message)
+void BattlescapeState::warning(const std::string &message)
 {
 	_warning->showMessage(_game->getLanguage()->getString(message));
 }

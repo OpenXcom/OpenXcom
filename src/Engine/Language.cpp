@@ -314,16 +314,18 @@ std::wstring Language::getString(const std::string &id) const
 /**
  * Outputs all the language IDs and strings
  * to an HTML table.
+ * @param filename HTML file.
  */
-void Language::toHtml() const
+void Language::toHtml(const std::string &filename) const
 {
-	std::ofstream htmlFile ("lang.html", std::ios::out);
+	std::ofstream htmlFile (filename, std::ios::out);
 	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
 	for (std::map<std::string, std::wstring>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
-		for (std::wstring::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
+		std::string s = wstrToUtf8(i->second);
+		for (std::string::const_iterator j = s.begin(); j != s.end(); ++j)
 		{
 			if (*j == 2 || *j == '\n')
 			{

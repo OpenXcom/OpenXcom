@@ -57,7 +57,7 @@ public:
 	/// Gets a string from the language.
 	std::wstring getString(const std::string &id) const;
 	/// Outputs the language to a HTML file.
-	void toHtml() const;
+	void toHtml(const std::string &filename) const;
 };
 
 }

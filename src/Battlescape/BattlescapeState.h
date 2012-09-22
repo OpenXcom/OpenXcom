@@ -149,9 +149,9 @@ public:
 	/// Get map.
 	Map *getMap() const;
 	/// Show debug message.
-	void debug(const std::wstring message);
+	void debug(const std::wstring &message);
 	/// Show warning message.
-	void warning(std::string message);
+	void warning(const std::string &message);
 	/// Handle keypresses.
 	void handle(Action *action);
 	/// Displays a popup window.

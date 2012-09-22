@@ -634,9 +634,9 @@ void GeoscapeState::time30Minutes()
 	{
 		// Makes smallest UFO the more likely, biggest UFO the least likely
 		// eg. 0 - 0..6, 1 - 6..10, etc.
-		int range = RNG::generate(1, (ufos.size()*(ufos.size()+1))/2);
-		int type = 0;
-		for (int i = 0, j = 1; i < ufos.size(); ++i, j += ufos.size()-i)
+		unsigned int range = RNG::generate(1, (ufos.size()*(ufos.size()+1))/2);
+		unsigned int type = 0;
+		for (unsigned int i = 0, j = 1; i < ufos.size(); ++i, j += ufos.size()-i)
 		{
 			if (j <= range && range < j + ufos.size()-i)
 			{

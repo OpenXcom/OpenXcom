@@ -18,6 +18,7 @@
  */
 #include "Font.h"
 #include <fstream>
+#include <iostream>
 #include "Exception.h"
 #include "Surface.h"
 #include "Language.h"
@@ -55,8 +56,7 @@ Font::~Font()
 void Font::load()
 {
 	_surface->lock();
-	int length = _index.length();
-	for (unsigned int i = 0; i < length; ++i)
+	for (unsigned int i = 0; i < _index.length(); ++i)
 	{
 		SDL_Rect rect;
 		int left = -1, right = -1;
@@ -120,6 +120,8 @@ void Font::loadIndex(const std::string &filename)
 	}
 
 	_index = Language::utf8ToWstr(buffer);
+	if (sizeof(_index[0]) == 1)
+		_index = _index.substr(0, 256);
 	txtFile.close();
 }
 

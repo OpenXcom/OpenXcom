@@ -95,6 +95,7 @@ namespace OpenXcom
 			case UFOPAEDIA_TYPE_UFO:
 				return new ArticleStateUfo(game, static_cast<ArticleDefinitionUfo *> (article));
 				break;
+			default: break;
 		}
 		return 0;
 	}

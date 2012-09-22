@@ -272,7 +272,7 @@ void Map::drawTerrain(Surface *surface)
 		}
 	}
 
-	if (_waypoints.size() > 0)
+	if (!_waypoints.empty())
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());

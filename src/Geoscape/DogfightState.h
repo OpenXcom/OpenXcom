@@ -52,12 +52,12 @@ private:
 	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius, _ufoFireInterval, _paletteOffset;
+	int _timeout, _currentDist, _targetDist, _currentRadius, _targetRadius, _ufoFireInterval;
 	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff;
 	std::vector<CraftWeaponProjectile*> _projectiles;
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
-	int _ufoSize, _ufoHitFrame;
+	int _paletteOffset, _ufoSize, _ufoHitFrame;
 
 public:
 	/// Creates the Dogfight state.

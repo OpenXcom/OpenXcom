@@ -67,6 +67,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	case RANK_CAPTAIN:   rankbonus =  3; break;
 	case RANK_COLONEL:   rankbonus =  6; break;
 	case RANK_COMMANDER: rankbonus = 10; break;
+	default:             rankbonus =  0; break;
 	}
 
 	_value = 20 + soldier->getMissions() + rankbonus;

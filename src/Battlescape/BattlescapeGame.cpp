@@ -861,6 +861,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	unit->abortTurn(); //makes the unit go to status STANDING :p
 
 	int flee = RNG::generate(0,100);
+	BattleAction ba;
 	switch (status)
 	{
 	case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
@@ -890,7 +891,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		}
 		break;
 	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
-		BattleAction ba;
 		for (int i= 0; i < 4; i++)
 		{
 			ba.actor = unit;
@@ -913,6 +913,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		}
 		ba.type = BA_NONE;
 		break;
+	default: break;
 	}
 	unit->setTimeUnits(0);
 	unit->moraleChange(+15);
@@ -948,14 +949,14 @@ bool BattlescapeGame::cancelCurrentAction()
 	{
 		if (_currentAction.targeting)
 		{
-			if (_currentAction.type == BA_LAUNCH && _currentAction.waypoints.size() > 0)
+			if (_currentAction.type == BA_LAUNCH && !_currentAction.waypoints.empty())
 			{
 				_currentAction.waypoints.pop_back();
-				if (getMap()->getWaypoints()->size() > 0)
+				if (!getMap()->getWaypoints()->empty())
 				{
 					getMap()->getWaypoints()->pop_back();
 				}
-				if (_currentAction.waypoints.size() == 0)
+				if (_currentAction.waypoints.empty())
 				{
 					_parentState->showLaunchButton(false);
 				}

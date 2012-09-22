@@ -419,6 +419,8 @@ openxcom_SOURCES = \
 	src/Savegame/Craft.h \
 	src/Savegame/CraftWeapon.cpp \
 	src/Savegame/CraftWeapon.h \
+	src/Savegame/CraftWeaponProjectile.cpp \
+	src/Savegame/CraftWeaponProkectile.h \
 	src/Savegame/GameTime.cpp \
 	src/Savegame/GameTime.h \
 	src/Savegame/ItemContainer.cpp \
@@ -443,6 +445,8 @@ openxcom_SOURCES = \
 	src/Savegame/Soldier.h \
 	src/Savegame/Target.cpp \
 	src/Savegame/Target.h \
+	src/Savegame/TerrorSite.cpp \
+	src/Savegame/TerrorSite.h \
 	src/Savegame/Tile.cpp \
 	src/Savegame/Tile.h \
 	src/Savegame/Transfer.cpp \

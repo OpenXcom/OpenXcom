@@ -84,7 +84,7 @@ public:
 	/// Gets the UFO's altitude.
 	std::string getAltitude() const;
 	/// Sets the UFO's altitude.
-	void setAltitude(std::string altitude);
+	void setAltitude(const std::string &altitude);
 	/// Gets if the UFO has crashed.
 	bool isCrashed() const;
 	/// Gets if the UFO has been destroyed.

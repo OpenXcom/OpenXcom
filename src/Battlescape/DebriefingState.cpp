@@ -498,7 +498,8 @@ void DebriefingState::prepareDebriefing()
 						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
 					case ALIEN_HABITAT:
 						addStat("STR_ALIEN_HABITAT", 1, 1); break;
-					case MUST_DESTROY:break; // this is the brain
+					case MUST_DESTROY: break; // this is the brain
+					default: break;
 					}
 
 				}

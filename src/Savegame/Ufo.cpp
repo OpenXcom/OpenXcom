@@ -228,7 +228,7 @@ std::string Ufo::getAltitude() const
  * Changes the current altitude of the UFO.
  * @param altitude Altitude.
  */
-void Ufo::setAltitude(std::string altitude)
+void Ufo::setAltitude(const std::string &altitude)
 {
 	_altitude = altitude;
 }

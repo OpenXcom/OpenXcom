@@ -204,6 +204,7 @@ namespace OpenXcom
 				ss << defs->item->getPower();
 				_txtAmmoDamage[0]->setText(ss.str().c_str());
 				break;
+			default: break;
 		}
 	}
 

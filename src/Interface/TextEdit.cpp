@@ -267,7 +267,7 @@ void TextEdit::draw()
 	{
 		if (_isFocused && _blink)
 		{
-			int x;
+			int x = 0;
 			switch (_text->getAlign())
 			{
 			case ALIGN_LEFT:
@@ -377,6 +377,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 				_value += _ascii;
 			}
 			break;
+		default: break;
 		}
 	}
 	else if (Options::getInt("keyboardMode") == KEYBOARD_ON)

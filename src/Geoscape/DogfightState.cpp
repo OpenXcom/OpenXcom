@@ -610,7 +610,7 @@ void DogfightState::move()
 		if(p->getDirection() == D_UP)
 		{
 			// Projectile reached the UFO - determine if it's been hit.
-			if(p->getPosition() >= _currentDist && !_ufo->isCrashed() && !p->getMissed() || (p->getGlobalType() == CWPGT_BEAM && p->getState() == 0))
+			if(p->getPosition() >= _currentDist && !_ufo->isCrashed() && (!p->getMissed() || (p->getGlobalType() == CWPGT_BEAM && p->getState() == 0)))
 			{
 				int acc = RNG::generate(1, 100);
 				// UFO hit.
@@ -1192,7 +1192,7 @@ void DogfightState::drawUfo()
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* p) {
 	int xPos = _battle->getWidth() / 2 + p->getHorizontalPosition();
-	int type = p->getType();
+	//int type = p->getType();
 	// Draw missiles.
 	if(p->getGlobalType() == CWPGT_MISSILE)
 	{

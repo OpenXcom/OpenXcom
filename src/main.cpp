@@ -25,7 +25,7 @@
 #include "Menu/StartState.h"
 
 /** @mainpage
- * @author SupSuper
+ * @author OpenXcom Developers
  *
  * OpenXcom is an open-source reimplementation of the original X-Com
  * written entirely in C++ and SDL. This documentation contains info
