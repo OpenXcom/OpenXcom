@@ -442,13 +442,13 @@ void UnitInfoState::init()
 	_barReactions->setValue(_unit->getStats()->reactions);
 
 	ss.str(L"");
-	ss << int(_unit->getStats()->firing * _unit->getAccuracyModifier());
+	ss << (int)(_unit->getStats()->firing * _unit->getAccuracyModifier());
 	_numFiring->setText(ss.str());
 	_barFiring->setMax(_unit->getStats()->firing);
 	_barFiring->setValue(_unit->getStats()->firing * _unit->getAccuracyModifier());
 
 	ss.str(L"");
-	ss << int(_unit->getStats()->throwing * _unit->getAccuracyModifier());
+	ss << (int)(_unit->getStats()->throwing * _unit->getAccuracyModifier());
 	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(_unit->getStats()->throwing);
 	_barThrowing->setValue(_unit->getStats()->throwing * _unit->getAccuracyModifier());
