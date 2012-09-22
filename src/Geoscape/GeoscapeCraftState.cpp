@@ -284,9 +284,9 @@ void GeoscapeCraftState::init()
  */
 void GeoscapeCraftState::btnBaseClick(Action *action)
 {
-	delete _waypoint;
 	_game->popState();
 	_craft->returnToBase();
+	delete _waypoint;
 }
 
 /**
@@ -295,9 +295,9 @@ void GeoscapeCraftState::btnBaseClick(Action *action)
  */
 void GeoscapeCraftState::btnTargetClick(Action *action)
 {
-	delete _waypoint;
 	_game->popState();
 	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
+	delete _waypoint;
 }
 
 /**
@@ -306,9 +306,9 @@ void GeoscapeCraftState::btnTargetClick(Action *action)
  */
 void GeoscapeCraftState::btnPatrolClick(Action *action)
 {
-	delete _waypoint;
 	_game->popState();
 	_craft->setDestination(0);
+	delete _waypoint;
 }
 
 /**
@@ -325,11 +325,7 @@ void GeoscapeCraftState::btnCancelClick(Action *action)
 		_craft->setDestination(_waypoint);
 	}
 	// Cancel
-	else
-	{
-		delete _waypoint;
-		_game->popState();
-	}
+	_game->popState();
 }
 
 }

@@ -642,6 +642,9 @@
       <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="lodepng.cpp" />
+    <ClCompile Include="Battlescape\CannotReequipState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1286,6 +1289,9 @@
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="Battlescape\CannotReequipState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

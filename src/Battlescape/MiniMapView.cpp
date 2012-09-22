@@ -187,14 +187,6 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
 		_redraw = true;
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-	{
-		up();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		down();
-	}
 }
 
 /**

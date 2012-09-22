@@ -56,6 +56,8 @@ Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rule
 	{
 		_weapons.push_back(0);
 	}
+	_lon = base->getLongitude();
+	_lat = base->getLatitude();
 }
 
 /**
@@ -317,8 +319,11 @@ std::string Craft::getAltitude() const
  */
 void Craft::setDestination(Target *dest)
 {
+	if (dest == 0)
+		setSpeed(_rules->getMaxSpeed()/2);
+	else
+		setSpeed(_rules->getMaxSpeed());
 	MovingTarget::setDestination(dest);
-	setSpeed(_rules->getMaxSpeed());
 }
 
 /**
@@ -583,8 +588,8 @@ void Craft::think()
 		{
 			_status = "STR_REFUELLING";
 		}
-		setSpeed(0);
 		setDestination(0);
+		setSpeed(0);
 		_lowFuel = false;
 	}
 }

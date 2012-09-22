@@ -21,6 +21,7 @@
 
 #include "../Engine/State.h"
 #include <string>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -35,6 +36,7 @@ class Base;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
+struct ReequipStat { std::string item; int qty; std::wstring craft; };
 
 /**
  * Debriefing screen shown after a Battlescape
@@ -48,9 +50,11 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
 	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
+	std::vector<ReequipStat> _missingItems;
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
-	void recoverItems(std::vector<BattleItem*> *from, Craft *craft, Base *base);
+	void recoverItems(std::vector<BattleItem*> *from, Base *base);
+	void reequipCraft(Base *base, Craft *craft);
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

@@ -154,6 +154,8 @@ set ( battlescape_src
   Battlescape/PromotionsState.h
   Battlescape/BattlescapeGame.cpp
   Battlescape/BattlescapeGame.h
+  Battlescape/CannotReequipState.cpp
+  Battlescape/CannotReequipState.h
 )
 
 set ( engine_src

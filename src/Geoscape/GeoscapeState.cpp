@@ -532,7 +532,6 @@ void GeoscapeState::time5Seconds()
 				else if (w != 0)
 				{
 					popup(new CraftPatrolState(_game, (*j), _globe));
-					(*j)->setSpeed((*j)->getRules()->getMaxSpeed() / 2);
 					(*j)->setDestination(0);
 				}
 				else if (t != 0)

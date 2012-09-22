@@ -273,7 +273,8 @@ void BattlescapeGenerator::run()
 		// add soldiers that are in the craft or base
 		for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 		{
-			if (_craft == 0 || (*i)->getCraft() == _craft)
+			if ((*i)->getCraft() == _craft ||
+				(_craft == 0 && (*i)->getWoundRecovery() == 0 && ((*i)->getCraft() == 0 || (*i)->getCraft()->getStatus() != "STR_OUT")))
 			{
 				unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
 				if (!_save->getSelectedUnit())
@@ -297,13 +298,11 @@ void BattlescapeGenerator::run()
 			// add items that are in the craft
 			for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
 			{
-				for (int count=0; count < (*i).second; count++)
+				for (int count=0; count < i->second; count++)
 				{
-					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem((*i).first), _save->getCurrentItemId()));
+					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()));
 				}
 			}
-			// inventory of craft is now cleared
-			_craft->getItems()->getContents()->clear();
 		}
 		else
 		{
@@ -311,12 +310,26 @@ void BattlescapeGenerator::run()
 			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
 			{
 				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
-				RuleItem *rule = _game->getRuleset()->getItem((*i).first);
+				RuleItem *rule = _game->getRuleset()->getItem(i->first);
 				if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && !rule->isFixed())
 				{
-					for (int count=0; count < (*i).second; count++)
+					for (int count=0; count < i->second; count++)
 					{
-						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem((*i).first), _save->getCurrentItemId()));
+						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()));
+					}
+					_base->getItems()->removeItem(i->first, i->second);
+				}
+			}
+			// add items from crafts in base
+			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			{
+				if ((*c)->getStatus() == "STR_OUT")
+					continue;
+				for (std::map<std::string, int>::iterator i = (*c)->getItems()->getContents()->begin(); i != (*c)->getItems()->getContents()->end(); ++i)
+				{
+					for (int count=0; count < i->second; count++)
+					{
+						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()));
 					}
 				}
 			}

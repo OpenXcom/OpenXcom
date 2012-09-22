@@ -975,6 +975,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\CannotReequipState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\CannotReequipState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\DebriefingState.cpp"
 				>
 			</File>

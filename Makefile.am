@@ -203,6 +203,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ScannerView.h \
 	src/Battlescape/ScannerState.cpp \
 	src/Battlescape/ScannerState.h \
+	src/Battlescape/CannotReequipState.cpp \
+	src/Battlescape/CannotReequipState.h \
 	src/dirent.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \

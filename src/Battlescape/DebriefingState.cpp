@@ -35,11 +35,13 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/TerrorSite.h"
 #include "PromotionsState.h"
+#include "CannotReequipState.h"
 
 namespace OpenXcom
 {
@@ -208,6 +210,10 @@ void DebriefingState::btnOkClick(Action *action)
 	{
 		_game->pushState(new PromotionsState(_game));
 	}
+	if (!_missingItems.empty())
+	{
+		_game->pushState(new CannotReequipState(_game, _missingItems));
+	}
 }
 
 
@@ -275,7 +281,6 @@ void DebriefingState::prepareDebriefing()
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
-
 		// in case we have a craft - check which craft it is about
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
@@ -378,7 +383,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
-				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value);
+				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value*2);
 			}
 		}
 		else
@@ -390,7 +395,7 @@ void DebriefingState::prepareDebriefing()
 				{
 					playerInExitArea++;
 					(*j)->postMissionProcedures(save);
-					recoverItems((*j)->getInventory(), craft, base);		
+					recoverItems((*j)->getInventory(), base);		
 				}
 				else
 				{
@@ -426,7 +431,7 @@ void DebriefingState::prepareDebriefing()
 	}
 	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0)) && craft != 0)
 	{
-		addStat("STR_XCOM_CRAFT_LOST", 1, -200);
+		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
 		delete craft;
 		base->getCrafts()->erase(craftIterator);
 		for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end();)
@@ -475,9 +480,10 @@ void DebriefingState::prepareDebriefing()
 					{
 					case UFO_POWER_SOURCE:
 						addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
-					case DESTROY_OBJECTIVE:break; // this is the brain
 					case UFO_NAVIGATION:
 						addStat("STR_UFO_NAVIGATION", 1, 5); break;
+					case UFO_CONSTRUCTION:
+						addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
 					case ALIEN_FOOD:
 						addStat("STR_ALIEN_FOOD", 1, 2); break;
 					case ALIEN_REPRODUCTION:
@@ -486,18 +492,19 @@ void DebriefingState::prepareDebriefing()
 						addStat("STR_ALIEN_ENTERTAINMENT", 1, 2); break;
 					case ALIEN_SURGERY:
 						addStat("STR_ALIEN_SURGERY", 1, 2); break;
-					case UNKNOWN09:
-						addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
-					case ALIEN_ALLOYS:
-						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
 					case EXAM_ROOM:
 						addStat("STR_EXAMINATION_ROOM", 1, 2); break;
+					case ALIEN_ALLOYS:
+						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
+					case ALIEN_HABITAT:
+						addStat("STR_ALIEN_HABITAT", 1, 1); break;
+					case MUST_DESTROY:break; // this is the brain
 					}
 
 				}
 			}
 			// recover items from the floor
-			recoverItems(battle->getTiles()[i]->getInventory(), craft, base);		
+			recoverItems(battle->getTiles()[i]->getInventory(), base);		
 		}
 
 		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
@@ -542,21 +549,55 @@ void DebriefingState::prepareDebriefing()
 			for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
 			{
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
-					recoverItems(battle->getTiles()[i]->getInventory(), craft, base);		
+					recoverItems(battle->getTiles()[i]->getInventory(), base);		
 			}
 
 		}
 	}
 
+	// reequip crafts
+	if (craft)
+	{
+		reequipCraft(base, craft);
+	}
+	else
+	{
+		for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
+		{
+			if ((*c)->getStatus() != "STR_OUT")
+				reequipCraft(base, *c);
+		}
+	}
+}
 
+void DebriefingState::reequipCraft(Base *base, Craft *craft)
+{
+	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
+	for (std::map<std::string, int>::iterator i = craftItems.begin(); i != craftItems.end(); ++i)
+	{
+		int qty = base->getItems()->getItem(i->first);
+		if (qty >= i->second)
+		{
+			base->getItems()->removeItem(i->first, i->second);
+		}
+		else
+		{
+			int missing = i->second - qty;
+			base->getItems()->removeItem(i->first, qty);
+			craft->getItems()->removeItem(i->first, missing);
+			ReequipStat stat = {i->first, missing, craft->getName(_game->getLanguage())};
+			_missingItems.push_back(stat);
+		}
+	}
 }
 
 /* converts battlescape inventory into geoscape itemcontainer */
-void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft, Base *base)
+void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty())
+		// only "recover" unresearched items
+		if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty() && _game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
 		{
 			if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 			{
@@ -567,13 +608,15 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Craft *craft,
 				addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
 			}
 		}
-
+		// put items back in the base
 		if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
 		{
-			if ((*it)->getXCOMProperty() && craft)
-				craft->getItems()->addItem((*it)->getRules()->getType(), 1);
-			else
-				base->getItems()->addItem((*it)->getRules()->getType(), 1);
+			base->getItems()->addItem((*it)->getRules()->getType(), 1);
+			if ((*it)->getAmmoItem())
+			{
+				base->getItems()->addItem((*it)->getAmmoItem()->getRules()->getType(), 1);
+				// TODO: account for ammo remaining in the clip
+			}
 		}
 	}
 }

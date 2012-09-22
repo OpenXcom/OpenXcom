@@ -79,9 +79,20 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 void MiniMapState::handle(Action *action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		_game->popState();
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			_game->popState();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		{
+			btnLevelUpClick(action);
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		{
+			btnLevelDownClick(action);
+		}
 	}
 }
 
