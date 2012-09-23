@@ -285,7 +285,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		}
 	}
 
-	int newChecksum = 0;
+	size_t newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
 		newChecksum += (*i)->getPosition().x*100 + (*i)->getPosition().y;
 

@@ -907,7 +907,7 @@ void BattlescapeGenerator::generateMap()
 		// add two lifts (not on top of the command center)
 		for (int i = 0; i < 2; i++)
 		{
-			while ((int)blocks[randX][randY] != 0)
+			while (blocks[randX][randY] != NULL)
 			{
 				randX = RNG::generate(0, (_length/10)- 1);
 				randY = RNG::generate(0, (_width/10)- 1);

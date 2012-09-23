@@ -318,8 +318,8 @@ std::wstring Language::getString(const std::string &id) const
  */
 void Language::toHtml(const std::string &filename) const
 {
-	std::ofstream htmlFile (filename, std::ios::out);
-	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
+	std::ofstream htmlFile (filename.c_str(), std::ios::out);
+	htmlFile << "<table border=\"1\" width=\"100\%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
 	for (std::map<std::string, std::wstring>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
 	{

@@ -687,9 +687,9 @@ int BattleUnit::getMorale() const
  */
 void BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
 {
-	UnitSide side;
+	UnitSide side = SIDE_FRONT;
 	int impactheight;
-	UnitBodyPart bodypart;
+	UnitBodyPart bodypart = BODYPART_TORSO;
 
 	if (power <= 0)
 	{
