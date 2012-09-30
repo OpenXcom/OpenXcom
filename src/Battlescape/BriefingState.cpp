@@ -69,7 +69,15 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	add(_txtTarget);
+	if (mission == "STR_ALIEN_BASE_ASSAULT")
+	{
+		_txtCraft->setY(40);
+		_txtBriefing->setY(56);
+	}
+	else
+	{
+		add(_txtTarget);
+	}
 	add(_txtCraft);
 	add(_txtBriefing);
 

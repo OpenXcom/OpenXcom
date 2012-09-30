@@ -383,6 +383,15 @@ void BattlescapeGenerator::run()
 		}
 	}
 
+	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+	{
+		for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+		{
+			if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+				_save->getTiles()[i]->setDiscovered(true, 2);
+		}
+	}
+
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	_save->setGlobalShade(_worldShade);

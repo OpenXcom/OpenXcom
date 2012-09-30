@@ -1105,7 +1105,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		{
 			int result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE)
 					   + verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
-			if (result != 0)
+			if (result > 127)
 			{
 				return result;
 			}
