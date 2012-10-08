@@ -46,6 +46,8 @@
 #include "../Savegame/Country.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
+#include "../Ufopaedia/Ufopaedia.h"
+#include "../Savegame/UfopaediaSaved.h"
 
 namespace OpenXcom
 {
@@ -487,6 +489,40 @@ void Ruleset::load(const std::string &filename)
 				rule->load(*j);
 			}
 		}
+		else if (key == "ufopaedia")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string id;
+				(*j)["id"] >> id;
+				ArticleDefinition *rule;
+				if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
+				{
+					rule = _ufopaediaArticles[id];
+				}
+				else
+				{
+					int type;
+					(*j)["type_id"] >> type;
+					switch ((UfopaediaTypeId)type)
+					{
+					case UFOPAEDIA_TYPE_UNKNOWN: rule = 0; break;
+					case UFOPAEDIA_TYPE_CRAFT: rule = new ArticleDefinitionCraft(); break;
+					case UFOPAEDIA_TYPE_CRAFT_WEAPON: rule = new ArticleDefinitionCraftWeapon(); break;
+					case UFOPAEDIA_TYPE_VEHICLE: rule = new ArticleDefinitionVehicle(); break;
+					case UFOPAEDIA_TYPE_ITEM: rule = new ArticleDefinitionItem(); break;
+					case UFOPAEDIA_TYPE_ARMOR: rule = new ArticleDefinitionArmor(); break;
+					case UFOPAEDIA_TYPE_BASE_FACILITY: rule = new ArticleDefinitionBaseFacility(); break;
+					case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
+					case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
+					case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
+					}
+					_ufopaediaArticles[id] = rule;
+					_ufopaediaIndex.push_back(id);
+				}
+				rule->load(*j, this);
+			}
+		}
 		else if (key == "startingBase")
 		{
 			//_startingBase->load(i.second(), 0);
@@ -642,6 +678,13 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "ufopaedia" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
 	/*out << YAML::Key << "startingBase" << YAML::Value;
 	_startingBase->save(out);*/
 	out << YAML::Key << "costSoldier" << YAML::Value << _costSoldier;
@@ -697,7 +740,12 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	// Generate soldiers
-	for (int i = 0; i < 8; ++i)
+	int soldiers = 0;
+	if (const YAML::Node *pName = (*_startingBase->begin()).FindValue("randomSoldiers"))
+	{
+		(*pName) >> soldiers;
+	}
+	for (int i = 0; i < soldiers; ++i)
 	{
 		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
 		soldier->setCraft(base->getCrafts()->front());
@@ -705,6 +753,12 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	save->getBases()->push_back(base);
+	
+	//TODO: Tie this to research
+	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
+	{
+		save->getUfopaedia()->insertArticle(getUfopaediaArticle(*i));
+	}
 
 	return save;
 }

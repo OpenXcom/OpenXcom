@@ -31,6 +31,7 @@
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
 #include "ArticleStateUfo.h"
+#include "ArticleStateVehicle.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 
@@ -76,6 +77,9 @@ namespace OpenXcom
 				break;
 			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
 				return new ArticleStateCraftWeapon(game, static_cast<ArticleDefinitionCraftWeapon *> (article));
+				break;
+			case UFOPAEDIA_TYPE_VEHICLE:
+				return new ArticleStateVehicle(game, static_cast<ArticleDefinitionVehicle *> (article));
 				break;
 			case UFOPAEDIA_TYPE_ITEM:
 				return new ArticleStateItem(game, static_cast<ArticleDefinitionItem *> (article));

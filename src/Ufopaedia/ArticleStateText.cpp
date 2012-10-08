@@ -54,11 +54,9 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(15)+4);
 		_txtTitle->setBig();
-		_txtTitle->setAlign(ALIGN_LEFT);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
-		_txtInfo->setAlign(ALIGN_LEFT);
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 	}

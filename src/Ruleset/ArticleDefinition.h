@@ -22,22 +22,25 @@
 
 #include <string>
 #include <vector>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
+	class Ruleset;
 	class RuleCraft;
 	class RuleCraftWeapon;
 	class RuleBaseFacility;
 	class RuleItem;
 	class RuleUfo;
 	class Armor;
+	class Unit;
 
 	/// define article types
 	enum UfopaediaTypeId {
 		UFOPAEDIA_TYPE_UNKNOWN         = 0,
 		UFOPAEDIA_TYPE_CRAFT           = 1,
 		UFOPAEDIA_TYPE_CRAFT_WEAPON    = 2,
-		UFOPAEDIA_TYPE_HWP             = 3,
+		UFOPAEDIA_TYPE_VEHICLE         = 3,
 		UFOPAEDIA_TYPE_ITEM            = 4,
 		UFOPAEDIA_TYPE_ARMOR           = 5,
 		UFOPAEDIA_TYPE_BASE_FACILITY   = 6,
@@ -61,9 +64,12 @@ namespace OpenXcom
 	public:
 		/// destructor
 		virtual ~ArticleDefinition();
-
 		/// get the type of article definition.
 		UfopaediaTypeId getType() const;
+		/// Loads the article from YAML.
+		virtual void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		virtual void save(YAML::Emitter& out) const;
 
 		std::string id;
 		std::string title;
@@ -86,6 +92,8 @@ namespace OpenXcom
 		int width;
 		int height;
 	};
+	void operator>> (const YAML::Node& node, ArticleDefinitionRect& rect);
+	YAML::Emitter& operator<< (YAML::Emitter& out, const ArticleDefinitionRect& rect);
 
 	/**
 	 * ArticleDefinitionCraft defines articles for craft, e.g. SKYRANGER.
@@ -97,6 +105,10 @@ namespace OpenXcom
 	public:
 		/// Constructor
 		ArticleDefinitionCraft();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		std::string image_id;
 		ArticleDefinitionRect rect_stats;
@@ -115,6 +127,10 @@ namespace OpenXcom
 	public:
 		/// Constructor
 		ArticleDefinitionCraftWeapon();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		std::string image_id;
 		std::string text;
@@ -130,6 +146,10 @@ namespace OpenXcom
 		public:
 		/// Constructor
 		ArticleDefinitionText();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		std::string text;
 	};
@@ -144,6 +164,10 @@ namespace OpenXcom
 		public:
 		/// Constructor
 		ArticleDefinitionTextImage();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		std::string image_id;
 		std::string text;
@@ -160,6 +184,11 @@ namespace OpenXcom
 	public:
 		/// Constructor
 		ArticleDefinitionBaseFacility();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
+
 		RuleBaseFacility *facility;
 		std::string text;
 	};
@@ -174,6 +203,10 @@ namespace OpenXcom
 	public:
 		/// Constructor
 		ArticleDefinitionItem();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		RuleItem *item;
 		std::string text;
@@ -189,6 +222,10 @@ namespace OpenXcom
 	public:
 		/// Constructor
 		ArticleDefinitionUfo();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		RuleUfo *ufo;
 		std::string text;
@@ -196,7 +233,7 @@ namespace OpenXcom
 
 	/**
 	 * ArticleDefinitionArmor defines articles for Armor, e.g. Personal Armor, Flying Suit, etc.
-	 * They have an image (found ???) and a stats block.
+	 * They have an image (found in MAN_*.SPK) and a stats block.
 	 */
 
 	class ArticleDefinitionArmor : public ArticleDefinition
@@ -204,9 +241,33 @@ namespace OpenXcom
 	public:
 		/// Constructor
 		ArticleDefinitionArmor();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
 
 		Armor *armor;
 	};
+
+	/**
+	 * ArticleDefinitionVehicle defines articles for Vehicles, e.g. Tanks, etc.
+	 * They have a text description and a stats block.
+	 */
+
+	class ArticleDefinitionVehicle : public ArticleDefinition
+	{
+	public:
+		/// Constructor
+		ArticleDefinitionVehicle();
+		/// Loads the article from YAML.
+		void load(const YAML::Node& node, const Ruleset *rule);
+		/// Saves the article to YAML.
+		void save(YAML::Emitter& out) const;
+
+		Unit *unit;
+		std::string text;
+	};
+
 
 }
 

@@ -27,6 +27,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -55,19 +56,18 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
-		_txtTitle->setAlign(ALIGN_LEFT);
 		_txtTitle->setWordWrap(true);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
 		_image = new Surface(320, 200, 0, 0);
 		add(_image);
 
-		std::string look = "MAN_1M0.SPK";
-		// TODO: add this background sprite to Armor
-		// personal armor: MAN_1M0.SKP
-		// power suit: MAN_2.SPK
-		// flying suit: MAN_3.SPK
-
+		std::string look = defs->armor->getSpriteInventory();
+		look += "M0.SPK";
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		{
+			look = defs->armor->getSpriteInventory() + ".SPK";
+		}
 		_game->getResourcePack()->getSurface(look)->blit(_image);
 
 

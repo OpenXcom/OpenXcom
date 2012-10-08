@@ -19,8 +19,10 @@
 
 #include "UfopaediaStartState.h"
 #include "UfopaediaSelectState.h"
+#include "Ufopaedia.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Engine/Game.h"
+#include "../Engine/Action.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -31,6 +33,16 @@
 
 namespace OpenXcom
 {
+	const std::string UfopaediaStartState::SECTIONS[] = {UFOPAEDIA_XCOM_CRAFT_ARMAMENT,
+	                                                     UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS,
+	                                                     UFOPAEDIA_WEAPONS_AND_EQUIPMENT,
+	                                                     UFOPAEDIA_ALIEN_ARTIFACTS,
+	                                                     UFOPAEDIA_BASE_FACILITIES,
+	                                                     UFOPAEDIA_ALIEN_LIFE_FORMS,
+	                                                     UFOPAEDIA_ALIEN_RESEARCH,
+	                                                     UFOPAEDIA_UFO_COMPONENTS,
+	                                                     UFOPAEDIA_UFOS};
+	
 	UfopaediaStartState::UfopaediaStartState(Game *game) : State(game)
 	{
 		_screen = false;
@@ -42,26 +54,24 @@ namespace OpenXcom
 		_txtTitle = new Text(224, 16, 48, 33);
 
 		// set buttons
-		_btnOk = new TextButton(224, 12, 48, 167);
-		_btnCraftArmament = new TextButton(224, 12, 48, 50);
-		_btnWeaponsEquipment = new TextButton(224, 12, 48, 76);
-		_btnBaseFacilities = new TextButton(224, 12, 48, 102);
-		_btnAlienLifeforms = new TextButton(224, 12, 48, 115);
-		_btnAlienResearch = new TextButton(224, 12, 48, 128);
-		_btnUfos = new TextButton(224, 12, 48, 154);
+		int y = 50;
+		for (int i = 0; i < NUM_SECTIONS; ++i)
+		{
+			_btnSection[i] = new TextButton(224, 12, 48, y);
+			y += 13;
+		}
+		_btnOk = new TextButton(224, 12, 48, y);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 		add(_window);
 		add(_txtTitle);
+		for (int i = 0; i < NUM_SECTIONS; ++i)
+		{
+			add(_btnSection[i]);
+		}
 		add(_btnOk);
-		add(_btnCraftArmament);
-		add(_btnWeaponsEquipment);
-		add(_btnBaseFacilities);
-		add(_btnAlienLifeforms);
-		add(_btnAlienResearch);
-		add(_btnUfos);
 
 		_window->setColor(Palette::blockOffset(15)-1);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -70,34 +80,17 @@ namespace OpenXcom
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);
 		_txtTitle->setText(_game->getLanguage()->getString("STR_UFOPAEDIA"));
+		
+		for (int i = 0; i < NUM_SECTIONS; ++i)
+		{
+			_btnSection[i]->setColor(Palette::blockOffset(8)+5);
+			_btnSection[i]->setText(_game->getLanguage()->getString(SECTIONS[i]));
+			_btnSection[i]->onMouseClick((ActionHandler)&UfopaediaStartState::btnSectionClick);
+		}		
 
 		_btnOk->setColor(Palette::blockOffset(8)+5);
 		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
-
-		_btnCraftArmament->setColor(Palette::blockOffset(8)+5);
-		_btnCraftArmament->setText(_game->getLanguage()->getString("STR_XCOM_CRAFT_ARMAMENT"));
-		_btnCraftArmament->onMouseClick((ActionHandler)&UfopaediaStartState::btnCraftArmamentClick);
-
-		_btnWeaponsEquipment->setColor(Palette::blockOffset(8)+5);
-		_btnWeaponsEquipment->setText(_game->getLanguage()->getString("STR_WEAPONS_AND_EQUIPMENT"));
-		_btnWeaponsEquipment->onMouseClick((ActionHandler)&UfopaediaStartState::btnWeaponsEquipmentClick);
-
-		_btnBaseFacilities->setColor(Palette::blockOffset(8)+5);
-		_btnBaseFacilities->setText(_game->getLanguage()->getString("STR_BASE_FACILITIES"));
-		_btnBaseFacilities->onMouseClick((ActionHandler)&UfopaediaStartState::btnBaseFacilitiesClick);
-
-		_btnAlienLifeforms->setColor(Palette::blockOffset(8)+5);
-		_btnAlienLifeforms->setText(_game->getLanguage()->getString("STR_ALIEN_LIFE_FORMS"));
-		_btnAlienLifeforms->onMouseClick((ActionHandler)&UfopaediaStartState::btnAlienLifeformsClick);
-
-		_btnAlienResearch->setColor(Palette::blockOffset(8)+5);
-		_btnAlienResearch->setText(_game->getLanguage()->getString("STR_ALIEN_RESEARCH_UC"));
-		_btnAlienResearch->onMouseClick((ActionHandler)&UfopaediaStartState::btnAlienResearchClick);
-
-		_btnUfos->setColor(Palette::blockOffset(8)+5);
-		_btnUfos->setText(_game->getLanguage()->getString("STR_UFOS"));
-		_btnUfos->onMouseClick((ActionHandler)&UfopaediaStartState::btnUfosClick);
 	}
 
 	UfopaediaStartState::~UfopaediaStartState()
@@ -114,57 +107,19 @@ namespace OpenXcom
 	}
 
 	/**
-	 *
+	 * Displays the list of articles for this section.
 	 * @param action Pointer to an action.
 	 */
-	void UfopaediaStartState::btnCraftArmamentClick(Action *action)
+	void UfopaediaStartState::btnSectionClick(Action *action)
 	{
-		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_XCOM_CRAFT_ARMAMENT));
-	}
-
-	/**
-	 *
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnWeaponsEquipmentClick(Action *action)
-	{
-		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_WEAPONS_AND_EQUIPMENT));
-	}
-
-	/**
-	 *
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnBaseFacilitiesClick(Action *action)
-	{
-		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_BASE_FACILITIES));
-	}
-
-	/**
-	 *
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnAlienLifeformsClick(Action *action)
-	{
-		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_ALIEN_LIFE_FORMS));
-	}
-
-	/**
-	 *
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnAlienResearchClick(Action *action)
-	{
-		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_ALIEN_RESEARCH));
-	}
-
-	/**
-	 *
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnUfosClick(Action *action)
-	{
-		_game->pushState(new UfopaediaSelectState(_game, UFOPAEDIA_UFOS));
+		for (int i = 0; i < NUM_SECTIONS; ++i)
+		{
+			if (action->getSender() == _btnSection[i])
+			{
+				_game->pushState(new UfopaediaSelectState(_game, SECTIONS[i]));
+				break;
+			}
+		}
 	}
 
 }

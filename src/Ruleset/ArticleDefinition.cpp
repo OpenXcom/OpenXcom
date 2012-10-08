@@ -18,6 +18,7 @@
  */
 
 #include "ArticleDefinition.h"
+#include "Ruleset.h"
 
 namespace OpenXcom
 {
@@ -45,6 +46,51 @@ namespace OpenXcom
 	}
 
 	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinition::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		int a = 0;
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "id")
+			{
+				i.second() >> id;
+				i.second() >> title;
+			}
+			else if (key == "type_id")
+			{
+				i.second() >> a;
+				_type_id = (UfopaediaTypeId)a;
+			}
+			else if (key == "title")
+			{
+				i.second() >> title;
+			}
+			else if (key == "section")
+			{
+				i.second() >> section;
+			}
+		}
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinition::save(YAML::Emitter &out) const
+	{
+		out << YAML::BeginMap;
+		out << YAML::Key << "id" << YAML::Value << id;
+		out << YAML::Key << "type_id" << YAML::Value << _type_id;
+		out << YAML::Key << "title" << YAML::Value << title;
+		out << YAML::Key << "section" << YAML::Value << section;
+	}
+
+	/**
 	 * Constructor
 	 */
 	ArticleDefinitionRect::ArticleDefinitionRect() : x(0), y(0), width(0), height(0) {}
@@ -60,11 +106,75 @@ namespace OpenXcom
 		height = set_height;
 	}
 
+	void operator>> (const YAML::Node& node, ArticleDefinitionRect& rect)
+	{
+		node["x"] >> rect.x;
+		node["y"] >> rect.y;
+		node["width"] >> rect.width;
+		node["height"] >> rect.height;
+	}
+
+	YAML::Emitter& operator<< (YAML::Emitter& out, const ArticleDefinitionRect& rect)
+	{
+		out << YAML::BeginMap;
+		out << YAML::Key << "x" << YAML::Value << rect.x;
+		out << YAML::Key << "y" << YAML::Value << rect.y;
+		out << YAML::Key << "width" << YAML::Value << rect.width;
+		out << YAML::Key << "height" << YAML::Value << rect.height;
+		out << YAML::EndMap;
+		return out;
+	}
+
 	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionCraft::ArticleDefinitionCraft() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT), craft(0)
 	{}
+
+	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionCraft::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "image_id")
+			{
+				i.second() >> image_id;
+			}
+			else if (key == "rect_stats")
+			{
+				i.second() >> rect_stats;
+			}
+			else if (key == "rect_text")
+			{
+				i.second() >> rect_text;
+			}
+			else if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+		craft = rule->getCraft(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionCraft::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "image_id" << YAML::Value << image_id;
+		out << YAML::Key << "rect_stats" << YAML::Value << rect_stats;
+		out << YAML::Key << "rect_text" << YAML::Value << rect_text;
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
 
 	/**
 	 * Constructor (only setting type of base class)
@@ -73,10 +183,74 @@ namespace OpenXcom
 	{}
 
 	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionCraftWeapon::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "image_id")
+			{
+				i.second() >> image_id;
+			}
+			else if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+		weapon = rule->getCraftWeapon(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionCraftWeapon::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "image_id" << YAML::Value << image_id;
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
+
+	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionText::ArticleDefinitionText() : ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
 	{}
+
+	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionText::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionText::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
 
 	/**
 	 * Constructor (only setting type of base class)
@@ -85,10 +259,74 @@ namespace OpenXcom
 	{}
 
 	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionTextImage::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "image_id")
+			{
+				i.second() >> image_id;
+			}
+			else if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionTextImage::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "image_id" << YAML::Value << image_id;
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
+
+	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY), facility(0)
 	{}
+
+	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionBaseFacility::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+		facility = rule->getBaseFacility(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionBaseFacility::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
 
 	/**
 	 * Constructor (only setting type of base class)
@@ -97,15 +335,131 @@ namespace OpenXcom
 	{}
 
 	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionItem::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+		item = rule->getItem(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionItem::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
+
+	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO), ufo(0)
 	{}
 
 	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionUfo::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+		ufo = rule->getUfo(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionUfo::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
+
+	/**
 	 * Constructor (only setting type of base class)
 	 */
 	ArticleDefinitionArmor::ArticleDefinitionArmor() : ArticleDefinition(UFOPAEDIA_TYPE_ARMOR), armor(0)
 	{}
+
+	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionArmor::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		armor = rule->getArmor(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionArmor::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::EndMap;
+	}
+
+	/**
+	 * Constructor (only setting type of base class)
+	 */
+	ArticleDefinitionVehicle::ArticleDefinitionVehicle() : ArticleDefinition(UFOPAEDIA_TYPE_VEHICLE), unit(0)
+	{}
+
+	/**
+	 * Loads the article definition from a YAML file.
+	 * @param node YAML node.
+	 */
+	void ArticleDefinitionVehicle::load(const YAML::Node &node, const Ruleset *rule)
+	{
+		ArticleDefinition::load(node, rule);
+		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+		{
+			std::string key;
+			i.first() >> key;
+			if (key == "text")
+			{
+				i.second() >> text;
+			}
+		}
+		unit = rule->getUnit(id);
+	}
+
+	/**
+	 * Saves the article definition to a YAML file.
+	 * @param out YAML emitter.
+	 */
+	void ArticleDefinitionVehicle::save(YAML::Emitter &out) const
+	{
+		ArticleDefinition::save(out);
+		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::EndMap;
+	}
 
 }

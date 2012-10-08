@@ -1654,8 +1654,8 @@ items:
     weight: 3
     bigSprite: 56
     floorSprite: 37
-    invWidth: 2
-    invHeight: 2
+    invWidth: 1
+    invHeight: 1
     armor: 20
   - type: STR_MIND_PROBE
     requires:
@@ -4543,6 +4543,303 @@ manufacture:
       STR_ALIEN_ALLOYS: 120
       STR_UFO_POWER_SOURCE: 2
       STR_UFO_NAVIGATION: 1
+ufopaedia:
+  - id: STR_SKYRANGER
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP004.SPK
+    rect_stats:
+      x: 160
+      y: 5
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 140
+      height: 100
+    text: STR_SKYRANGER_UFOPEDIA
+  - id: STR_LIGHTNING
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP003.SPK
+    rect_stats:
+      x: 5
+      y: 132
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 310
+      height: 60
+    text: STR_LIGHTNING_UFOPEDIA
+  - id: STR_AVENGER
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP001.SPK
+    rect_stats:
+      x: 160
+      y: 5
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 140
+      height: 100
+    text: STR_AVENGER_UFOPEDIA
+  - id: STR_INTERCEPTOR
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP002.SPK
+    rect_stats:
+      x: 5
+      y: 110
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 210
+      height: 60
+    text: STR_INTERCEPTOR_UFOPEDIA
+  - id: STR_FIRESTORM
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP005.SPK
+    rect_stats:
+      x: 160
+      y: 5
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 140
+      height: 100
+    text: STR_FIRESTORM_UFOPEDIA
+  - id: STR_STINGRAY
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP006.SPK
+    text: STR_STINGRAY_UFOPEDIA
+  - id: STR_AVALANCHE
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP007.SPK
+    text: STR_AVALANCHE_UFOPEDIA
+  - id: STR_CANNON_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP008.SPK
+    text: STR_CANNON_UFOPEDIA
+  - id: STR_FUSION_BALL_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP009.SPK
+    text: STR_FUSION_BALL_UFOPEDIA
+  - id: STR_LASER_CANNON_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP010.SPK
+    text: STR_LASER_CANNON_UFOPEDIA
+  - id: STR_PLASMA_BEAM_UC
+    type_id: 2
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: UP011.SPK
+    text: STR_PLASMA_BEAM_UFOPEDIA
+  - id: TANK_CANNON
+    title: STR_TANK_CANNON
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_TANK_CANNON_UFOPEDIA
+  - id: TANK_ROCKET_LAUNCHER
+    title: STR_TANK_ROCKET_LAUNCHER
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
+  - id: TANK_LASER_CANNON
+    title: STR_TANK_LASER_CANNON
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_TANK_LASER_CANNON_UFOPEDIA
+  - id: HOVERTANK_PLASMA
+    title: STR_HOVERTANK_PLASMA
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_HOVERTANK_PLASMA_UFOPEDIA
+  - id: HOVERTANK_LAUNCHER
+    title: STR_HOVERTANK_LAUNCHER
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    text: STR_HOVERTANK_LAUNCHER_UFOPEDIA
+  - id: STR_PERSONAL_ARMOR_UC
+    type_id: 5
+    section: STR_WEAPONS_AND_EQUIPMENT
+  - id: STR_POWER_SUIT_UC
+    type_id: 5
+    section: STR_WEAPONS_AND_EQUIPMENT
+  - id: STR_FLYING_SUIT_UC
+    type_id: 5
+    section: STR_WEAPONS_AND_EQUIPMENT
+  - id: STR_PISTOL
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_PISTOL_UFOPEDIA
+  - id: STR_PISTOL_CLIP
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_RIFLE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_RIFLE_UFOPEDIA
+  - id: STR_RIFLE_CLIP
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HEAVY_CANNON
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_HEAVY_CANNON_UFOPEDIA
+  - id: STR_HC_AP_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HC_HE_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_HC_I_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_AUTO_CANNON
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_AUTO_CANNON_UFOPEDIA
+  - id: STR_AC_AP_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_AC_HE_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_AC_I_AMMO
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_ROCKET_LAUNCHER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_ROCKET_LAUNCHER_UFOPEDIA
+  - id: STR_SMALL_ROCKET
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_LARGE_ROCKET
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_INCENDIARY_ROCKET
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_ROCKET_LAUNCHER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_ROCKET_LAUNCHER_UFOPEDIA
+  - id: STR_LASER_PISTOL
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_LASER_PISTOL_UFOPEDIA
+  - id: STR_LASER_RIFLE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_LASER_RIFLE_UFOPEDIA
+  - id: STR_HEAVY_LASER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_HEAVY_LASER_UFOPEDIA
+  - id: STR_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_GRENADE_UFOPEDIA
+  - id: STR_SMOKE_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_SMOKE_GRENADE_UFOPEDIA
+  - id: STR_PROXIMITY_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_PROXIMITY_GRENADE_UFOPEDIA
+  - id: STR_HIGH_EXPLOSIVE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_HIGH_EXPLOSIVE_UFOPEDIA
+  - id: STR_MOTION_SCANNER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_MOTION_SCANNER_UFOPEDIA
+  - id: STR_MEDI_KIT
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_MEDI_KIT_UFOPEDIA
+  - id: STR_PSI_AMP
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_PSI_AMP_UFOPEDIA
+  - id: STR_STUN_ROD
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_STUN_ROD_UFOPEDIA
+  - id: STR_ELECTRO_FLARE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_ELECTRO_FLARE_UFOPEDIA
+  - id: STR_HEAVY_PLASMA
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_PLASMA_RIFLE_UFOPEDIA
+  - id: STR_HEAVY_PLASMA_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_HEAVY_PLASMA_CLIP_UFOPEDIA
+  - id: STR_PLASMA_RIFLE
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_PLASMA_RIFLE_UFOPEDIA
+  - id: STR_PLASMA_RIFLE_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_PLASMA_RIFLE_CLIP_UFOPEDIA
+  - id: STR_PLASMA_PISTOL
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_PLASMA_PISTOL_UFOPEDIA
+  - id: STR_PLASMA_PISTOL_CLIP
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_PLASMA_PISTOL_CLIP_UFOPEDIA
+  - id: STR_BLASTER_LAUNCHER
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_BLASTER_LAUNCHER_UFOPEDIA
+  - id: STR_BLASTER_BOMB
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_BLASTER_BOMB_UFOPEDIA
+  - id: STR_SMALL_LAUNCHER
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_SMALL_LAUNCHER_UFOPEDIA
+  - id: STR_STUN_BOMB
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_STUN_BOMB_UFOPEDIA
+  - id: STR_ALIEN_GRENADE
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_ALIEN_GRENADE_UFOPEDIA
+  - id: STR_ELERIUM_115
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_ELERIUM_115_UFOPEDIA
+  - id: STR_MIND_PROBE
+    type_id: 4
+    section: STR_ALIEN_ARTIFACTS
+    text: STR_MIND_PROBE_UFOPEDIA
 startingBase:
   - lon: 0.0
     lat: 0.0
@@ -4584,6 +4881,7 @@ startingBase:
         x: 1
         y: 3
         buildTime: 0
+    randomSoldiers: 8
     soldiers:
       []
     crafts:

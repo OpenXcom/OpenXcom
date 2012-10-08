@@ -30,6 +30,11 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Transfer.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/CraftWeapon.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "GeoscapeState.h"
 
 namespace OpenXcom
@@ -104,6 +109,26 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 		{
 			if ((*j)->getHours() == 0)
 			{
+				// Check if it's ammo to reload a craft
+				if ((*j)->getType() == TRANSFER_ITEM && _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
+				{
+					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
+					{
+						if ((*c)->getStatus() != "STR_READY")
+							continue;
+						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						{
+						
+							if ((*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							{
+								(*w)->setRearming(true);
+								(*c)->setStatus("STR_REARMING");
+							}
+						}
+					}
+				}
+
+				// Remove transfer
 				std::wstringstream ss;
 				ss << (*j)->getQuantity();
 				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());

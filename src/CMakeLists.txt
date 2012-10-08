@@ -454,6 +454,8 @@ set ( ufopedia_src
   Ufopaedia/ArticleStateTextImage.h
   Ufopaedia/ArticleStateArmor.cpp
   Ufopaedia/ArticleStateArmor.h
+  Ufopaedia/ArticleStateVehicle.cpp
+  Ufopaedia/ArticleStateVehicle.h
 )
 
 set ( data_install_dir bin )

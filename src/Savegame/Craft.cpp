@@ -664,13 +664,13 @@ std::string Craft::rearm()
 			{
 				(*i)->rearm();
 				_base->getItems()->removeItem((*i)->getRules()->getClipItem());
-				break;
 			}
 			else
 			{
 				ammo = (*i)->getRules()->getClipItem();
 				(*i)->setRearming(false);
 			}
+			break;
 		}
 	}
 	return ammo;

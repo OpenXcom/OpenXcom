@@ -1,18 +1,18 @@
 FRANÇAIS
 STR_AVENGER_UFOPEDIA
-VAISSEAU DE TRANSPORT ET DE COMBAT.  LA DERNIERE REPLIQUE DE LA TECHNOLOGIE ALIENNE.
+VAISSEAU SPATIAL POUR LE TRANSPORT ET LE COMBAT.  L'ULTIME RÉPLICATION DE LA TECHNOLOGIE EXTRATERRESTRE.
 STR_INTERCEPTOR_UFOPEDIA
-COMBAT AERIEN AVEC MOTEURS A DETONATION A IMPULSIONS DOUBLES ET DES SYSTEMES ELECTRONIQUES AVEC PROTECTION SPECIALE.  LA TECHNOLOGIE TERRESTRE LA PLUS SOPHISTIQUEE.
+CHASSEUR AVEC MOTEURS À DÉTONATION PULSÉES ET DES SYSTEMES BLINDAGE ÉLECTRONIQUES.  LA PLUS SOPHISTIQUÉE TECHNOLOGIE SUR LE MONDE.
 STR_LIGHTNING_UFOPEDIA
-VAISSEAU DE TRANSPORT ET DE COMBAT.  UNE REPLIQUE GROSSIERE MAIS EFFICACE DES SYSTEMES DE PROPULSION ALIENS.
+VAISSEAU SPATIAL POUR LE TRANSPORT ET LE COMBAT. UNE RÉPLIQUE RUDIMENTAIRE, MAIS AVEC DES SYSTEMES EFFICACE DE PROPULSION EXTRATERRESTRES.
 STR_SKYRANGER_UFOPEDIA
-TRANSPORTEUR DE TROUPES.  LE PLUS RAPIDE DANS SON GENRE, AVEC CAPACITE DE DECOLLAGE ET D'ATTERRISSAGE A LA VERTICALE (C.D.A.V.).
+TRANSPORTEUR DE TROUPES.  UN AVION-CARGO TRÈS RAPIDE, AVEC LA CAPACITÉ D'AÉRONEF À DECOLLAGE ET D'ATTERRISSAGE VERTICAUX (A.D.A.V.).
 STR_FIRESTORM_UFOPEDIA
-VAISSEAU DE COMBAT.  CE CHASSEUR MONOPLACE EST LA REPLIQUE DE LA SOUCOUPE VOLANTE ALIENNE CLASSIQUE, AVEC UNITE CENTRALE DE PROPULSION.
+VAISSEAU SPATIAL DE COMBAT.  UNE RÉPLIQUE DE LA SOUCOUPE VOLANTE EXTRATERRESTRE CLASSIQUE, AVEC UNITE CENTRALE DE PROPULSION.
 STR_STINGRAY_UFOPEDIA
-MISSILE AIR-AIR SOPHISTIQUE AVEC DES SYSTEMES ELECTRONIQUES SPECIALEMENT PROTEGES.
+MISSILE AIR-AIR SOPHISTIQUÉ AVEC DES SYSTEMES BLINDAGE ÉLECTRONIQUES.
 STR_AVALANCHE_UFOPEDIA
-MISSILE AIR-AIR A TETE NUCLEAIRE, MAIS D'UN POIDS TRES ELEVE.
+MISSILE AIR-AIR A OGIVE NUCLEAIRE, MAIS D'UN POIDS TRES ELEVE.
 STR_CANNON_UFOPEDIA
 CANON TRES PUISSANT QUI TIRE DES BALLES CAPABLES DE PERCER DES ARMURES ET DE PENETRER DANS DE L'ACIER DE 40 CM.
 STR_FUSION_BALL_UFOPEDIA
@@ -42,7 +42,7 @@ Cette forme de vie a la mystérieuse capacité naturelle de flotter dans l'air. 
 STR_CELATID_AUTOPSY_UFOPEDIA
 Le coeur contient un petit système bio-mécanique qui semble être un système de propulsion anti-gravité s'étant développé naturellement.  Le sac de venin est l'organe le plus grand et il ne semble pas y avoir de structure cérébrale séparée.  Il n'y a pas de système digestif ou de reproduction visible.  Un petit organe contient des embryons qui peuvent se développer rapidement en un nouvel être.
 STR_SILACOID_UFOPEDIA
-Cette forme de vie à base de silicone génère une énorme quantité de chaleur.  Elle a la force d'écraser des rochers qui peuvent ensuite être ingérés par le coeur chaud.  Elle a une et peut être contrôlée par des implants ou par des êtres télépathiques.  Elle travaille avec la race alienne Muton.
+Cette forme de vie à base de silicone génère une énorme quantité de chaleur.  Elle a la force d'écraser des rochers qui peuvent ensuite être ingérés par le coeur chaud.  Elle a une et peut être contrôlée par des implants ou par des êtres télépathiques.  Elle travaille avec la race Muton.
 STR_SILACOID_AUTOPSY_UFOPEDIA
 Le coeur de cette créature est extrêmement chaud et semble être la base d'un système digestif.  Son système musculaire unique a une énorme puissance et une vitesse très grande.  Sa peau, semblable à du roc, est invulnérable au feu ou aux munitions incendiaires.
 STR_CHRYSSALID_UFOPEDIA
@@ -58,41 +58,41 @@ Ce carnivore bipède a des mâchoires puissantes et un appétit vorace.  Il a pl
 STR_REAPER_AUTOPSY_UFOPEDIA
 Le Reaper possède deux 'cerveaux' et deux 'coeurs' qui lui permettent de fonctionner même lorsqu'il est gravement blessé.  Cependant, sa fourrure est hautement inflammable, ce qui le rend vulnérable aux armes incendiaires.
 STR_SECTOPOD_UFOPEDIA
-Les Sectopodes sont des robots possédant une arme à rayon à plasma très puissante.  Ces bêtes mécaniques sont contrôlées par les Ethereals par lien télépathique.  Les Sectopodes représentent l'arme de terreur la plus puissante des forces aliennes.
+Les Sectopodes sont des robots possédant une arme à rayon à plasma très puissante.  Ces bêtes mécaniques sont contrôlées par les Ethereals par lien télépathique.  Les Sectopodes représentent l'arme de terreur la plus puissante des forces extraterrestres.
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 Le robot est solidement construit avec une armure puissante capable de résister à la plupart des formes d'attaque, en particulier aux armes à plasma.  Cependant, le système sensitif semble particulièrement vulnérable aux armes laser.
 STR_CYBERDISC_UFOPEDIA
 La soucoupe volante miniature est une arme de terreur automatique munie d'un puissant rayon à plasma.  La propulsion anti-gravitationnelle lui donne un avantage certain en terrain difficile.  Sa fonction essentielle est la destruction et la terreur au service de la race sectoïde.
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
-Le Cyberdisc est bien protégé et résiste particulièrement bien aux munitions explosives.  Le système anti-gravitationnel principal est trop endommagé pour que l'on puisse comprendre son fonctionnement.
+Le Cyberdisque est bien protégé et résiste particulièrement bien aux munitions explosives.  Le système anti-gravitationnel principal est trop endommagé pour que l'on puisse comprendre son fonctionnement.
 STR_UFO_POWER_SOURCE_UFOPEDIA
-La source d'énergie du vaisseau alien est un réacteur anti-matière qui utilise de l'Elerium (élément 115) pour générer des ondes puissantes de gravité ainsi que d'autres formes d'énergie.  La conversion de la matière en énergie est, chose incroyable, efficace à 99%, et de petites quantités d'Elerium peuvent donc produire une quantité énorme d'énergie.  Cette unité peut être facilement reproduite avec les alliages aliens.
+La source d'énergie du vaisseau extraterrestres est un réacteur anti-matière qui utilise de l'Elerium (élément 115) pour générer des ondes puissantes de gravité ainsi que d'autres formes d'énergie.  La conversion de la matière en énergie est, chose incroyable, efficace à 99%, et de petites quantités d'Elerium peuvent donc produire une quantité énorme d'énergie.  Cette unité peut être facilement reproduite avec les alliages extraterrestres.
 STR_UFO_NAVIGATION_UFOPEDIA
-Le vaisseau alien utilise des ordinateurs sophistiqués pour naviguer sur la Terre et dans l'espace.  Le système est basé sur des processeurs optiques installés en réseaux.  L'interface de contrôle est relativement simple: le navigateur contrôle la direction des ondes de gravité générées par la source d'énergie pour déplacer le vaisseau dans n'importe quelle direction.  Ce système peut facilement être utilisé par les humains, et peut être reproduit en utilisant les alliages aliens et d'autres composants.
+Le vaisseau extraterrestre utilise des ordinateurs sophistiqués pour naviguer sur la Terre et dans l'espace.  Le système est basé sur des processeurs optiques installés en réseaux.  L'interface de contrôle est relativement simple: le navigateur contrôle la direction des ondes de gravité générées par la source d'énergie pour déplacer le vaisseau dans n'importe quelle direction.  Ce système peut facilement être utilisé par les humains, et peut être reproduit en utilisant les alliages extraterrestres et d'autres composants.
 STR_UFO_CONSTRUCTION_UFOPEDIA
-Le vaisseau alien est constitué de trois composants principaux: une source d'énergie, un système de navigation et une coque faite d'alliages aliens.  La coque est spécialement conçue pour que les ondes de gravité puissent être contrôlées.  De plus, une petite quantité d'Elerium est nécessaire pour alimenter la source d'énergie.  Une fois que les principes de construction ont été compris, et que l'on connaît les fonctions de chaque composant, il est alors possible de construire ce type de vaisseau.
+Le vaisseau extraterrestre est constitué de trois composants principaux: une source d'énergie, un système de navigation et une coque faite d'alliages extraterrestres.  La coque est spécialement conçue pour que les ondes de gravité puissent être contrôlées.  De plus, une petite quantité d'Elerium est nécessaire pour alimenter la source d'énergie.  Une fois que les principes de construction ont été compris, et que l'on connaît les fonctions de chaque composant, il est alors possible de construire ce type de vaisseau.
 STR_ALIEN_FOOD_UFOPEDIA
-Ces chambres contiennent plusieurs enzymes utilisées pour digérer les parties du corps du bétail, d'autres animaux et même des humains.  Le liquide est ensuite consommé comme aliment déjà digéré, et est probablement directement injecté dans le système sanguin.  Cela suggère une certaine dépendance sur la Terre vis-à-vis de la nourriture, une symbiose entre la Terre et la société alienne.
+Ces chambres contiennent plusieurs enzymes utilisées pour digérer les parties du corps du bétail, d'autres animaux et même des humains.  Le liquide est ensuite consommé comme aliment déjà digéré, et est probablement directement injecté dans le système sanguin.  Cela suggère une certaine dépendance sur la Terre vis-à-vis de la nourriture, une symbiose entre la Terre et la société extraterrestre.
 STR_ALIEN_REPRODUCTION_UFOPEDIA
-Ces chambres contiennent des foetus aliens.  La forme de ces containers semble suggérer que les aliens qui utilisent ceprocédé dépendent totalement de la reproduction en laboratoire.  Les aliments riches assurent le développement rapide du foetus.  Cette reproduction à la chaîne peut générer des milliers de clones aliens en très peu de temps.  Le procédé pourrait facilement être appliqué pour la reproduction humaine, ou pour des hybrides aliens-humains.
+Ces chambres contiennent des foetus extraterrestres.  La forme de ces containers semble suggérer que les extraterrestres qui utilisent ceprocédé dépendent totalement de la reproduction en laboratoire.  Les aliments riches assurent le développement rapide du foetus.  Cette reproduction à la chaîne peut générer des milliers de clones extraterrestres en très peu de temps.  Le procédé pourrait facilement être appliqué pour la reproduction humaine, ou pour des hybrides extraterrestres-humains.
 STR_ALIEN_ENTERTAINMENT_UFOPEDIA
-La fonction la plus probable de ces sphères est une fonction récréative.  Le circuit psionique stimule plusieurs centres du cerveau.  L'effet est similaire aux drogues hallucinogènes.  C'est la seule preuve qui montre que les aliens ont des passe-temps et une vie culturelle.
+La fonction la plus probable de ces sphères est une fonction récréative.  Le circuit psionique stimule plusieurs centres du cerveau.  L'effet est similaire aux drogues hallucinogènes.  C'est la seule preuve qui montre que les extraterrestres ont des passe-temps et une vie culturelle.
 STR_ALIEN_SURGERY_UFOPEDIA
-Cet équipement chirurgical utilise des couteaux laser pour extraire des parties du corps du bétail et d'autres animaux.  Les mutilations répandues du bétail sont dues à cette activité étrange des aliens.  Il est vraisemblable que ces morceaux sont utilisés à des fins nutritionnelles ou génétiques.
+Cet équipement chirurgical utilise des couteaux laser pour extraire des parties du corps du bétail et d'autres animaux.  Les mutilations répandues du bétail sont dues à cette activité étrange des extraterrestres.  Il est vraisemblable que ces morceaux sont utilisés à des fins nutritionnelles ou génétiques.
 STR_EXAMINATION_ROOM_UFOPEDIA
-Dans le passé, des milliers de gens ont prétendu avoir été enlevés par des aliens, et quelque fois à plusieurs reprises.  La vérité est beaucoup plus horrible encore.  Les humains sont enlevés, étudiés et contrôlés.  On enlève des codes génétiques aux  meilleurs spécimens.  On implante des foetus humains-aliens à des femmes, et on les enlève plusieurs mois après.  Qui connaît le but sinistre poursuivi par les aliens?
+Dans le passé, des milliers de gens ont prétendu avoir été enlevés par des extraterrestres, et quelque fois à plusieurs reprises.  La vérité est beaucoup plus horrible encore.  Les humains sont enlevés, étudiés et contrôlés.  On enlève des codes génétiques aux  meilleurs spécimens.  On implante des foetus humains-extraterrestres à des femmes, et on les enlève plusieurs mois après.  Qui connaît le but sinistre poursuivi par les extraterrestres?
 STR_ALIEN_ALLOYS_UFOPEDIA
-Le vaisseau alien est composé d'alliages spéciaux aux propriétés uniques.  Ils sont extrêmement légers et solides, et peuvent être modelés grâce à des méthodes électro-magnétiques.  Ces métaux peuvent être reproduits et utilisés dans de nombreux procédés de fabrication.
+Le vaisseau extraterrestre est composé d'alliages spéciaux aux propriétés uniques.  Ils sont extrêmement légers et solides, et peuvent être modelés grâce à des méthodes électro-magnétiques.  Ces métaux peuvent être reproduits et utilisés dans de nombreux procédés de fabrication.
 STR_YOU_WILL_NEED_TO_RESEARCH_A
 Vous devez étudier{NEWLINE}   
 STR_ELERIUM_115_UFOPEDIA
 Cet élément à une propriété inhabituelle: il génère de l'énergie anti-matière lorsqu'on le bombarde de certaines particules.  Cela crée des ondes de gravité et d'autres formes d'énergie.  Cet élément ne se trouve pas naturellement dans notre système solaire et ne peut être reproduit.
 STR_ALIEN_ORIGINS_UFOPEDIA
-Il est clair que nous nous engageons dans une bataille perdue d'avance sur la Terre.  Les hordes aliennes sont beaucoup plus nombreuses.  La meilleure chose à faire est de ralentir leur progression.  Le seul espoir pour l'humanité est de combattre les aliens à la source.  Nos recherches semblent nous indiquer une base d'opérations toute proche dans notre système solaire.  Les aliens considèrent cet endroit comme le centre d'une ancienne civilisation, antérieure à l'histoire humaine.  Nous devons localiser cette base le plus tôt possible.  Cependant, il nous faut capturer et interroger un leader alien pour obtenir plus d'informations.  Les OVNIS les plus grands contiennent probablement au moins un leader alien.
+Il est clair que nous nous engageons dans une bataille perdue d'avance sur la Terre.  Les hordes extraterrestres sont beaucoup plus nombreuses.  La meilleure chose à faire est de ralentir leur progression.  Le seul espoir pour l'humanité est de combattre les extraterrestres à la source.  Nos recherches semblent nous indiquer une base d'opérations toute proche dans notre système solaire.  Les extraterrestres considèrent cet endroit comme le centre d'une ancienne civilisation, antérieure à l'histoire humaine.  Nous devons localiser cette base le plus tôt possible.  Cependant, il nous faut capturer et interroger un leader extraterrestre pour obtenir plus d'informations.  Les OVNIS les plus grands contiennent probablement au moins un leader extraterrestre.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
-Nos recherches nous indiquent maintenant que Mars est la base des opérations aliennes.  La base est bien cachée, et contient tous les procédés de fabrication et de clonage nécessaires à l'infiltration de la Terre.  Elle semble également posséder un ordinateur de contrôle responsable de toute l'opération.  Il semble que la société alienne, organisée comme une ruche, ait une sorte de reine.  C'est leur point faible: si nous pouvons éliminer le 'cerveau', alors le corps mourra.  Pour progresser, nous devons capturer les aliens les plus hauts placés - les commandants - qui résident dans les bases aliennes.
+Nos recherches nous indiquent maintenant que Mars est la base des opérations extraterrestres.  La base est bien cachée, et contient tous les procédés de fabrication et de clonage nécessaires à l'infiltration de la Terre.  Elle semble également posséder un ordinateur de contrôle responsable de toute l'opération.  Il semble que la société extraterrestre, organisée comme une ruche, ait une sorte de reine.  C'est leur point faible: si nous pouvons éliminer le 'cerveau', alors le corps mourra.  Pour progresser, nous devons capturer les extraterrestres les plus hauts placés - les commandants - qui résident dans les bases extraterrestres.
 STR_CYDONIA_OR_BUST_UFOPEDIA
-Il est maintenant clair que les hordes aliennes sont contrôlées d'une base souterraine à Cydonia, qui est une zone étrange de Mars comprenant des pyramides à cinq côtés et une large formation ressemblant à un visage humain.  Il y a des millions d'années de cela, la civilisation cydonianne était florissante sur Mars, mais nous ne savons pas pourquoi elle s'est éteinte, ou quel est le lien avec l'activité alienne qui y règne aujourd'hui.  Quelle que soit l'explication, nous devons envoyer une expédition à Cydonia.  C'est le seul moyen de vaincre les aliens.  Nous devons détruire le 'cerveau' contrôlant toute l'opération.  Il nous faut équiper un vaisseau Avenger avec les armes de destruction les plus puissantes que nous ayons. Nous ne pouvons rien apprendre de plus ici.  Il nous faut attendre le résultat de l'attaque cydonianne.
+Il est maintenant clair que les hordes extraterrestres sont contrôlées d'une base souterraine à Cydonia, qui est une zone étrange de Mars comprenant des pyramides à cinq côtés et une large formation ressemblant à un visage humain.  Il y a des millions d'années de cela, la civilisation cydonianne était florissante sur Mars, mais nous ne savons pas pourquoi elle s'est éteinte, ou quel est le lien avec l'activité extraterrestre qui y règne aujourd'hui.  Quelle que soit l'explication, nous devons envoyer une expédition à Cydonia.  C'est le seul moyen de vaincre les extraterrestres.  Nous devons détruire le 'cerveau' contrôlant toute l'opération.  Il nous faut équiper un vaisseau Avenger avec les armes de destruction les plus puissantes que nous ayons. Nous ne pouvons rien apprendre de plus ici.  Il nous faut attendre le résultat de l'attaque cydonianne.
 STR_TERROR_SITE
 Site de Terreur-
 STR_CENTER_ON_SITE_TIME_5_SECS
@@ -224,7 +224,7 @@ UNITES{NEWLINE}NECESSAIRES
 STR_UNITS_AVAILABLE
 UNITES{NEWLINE}DISPONIBLES
 STR_STOP_PRODUCTION
-ARRETER PRODUCTION
+ARRÊTER PRODUCTION
 STR_ENGINEERS_AVAILABLE_UC
 INGENIEURS DISPONIBLES>
 STR_WORKSHOP_SPACE_AVAILABLE_UC
@@ -294,21 +294,21 @@ Sélectionner Base de Destination
 STR_COST
 Prix
 STR_VICTORY_1
-En entrant dans la pièce, vous voyez le cerveau alien, objet de votre quête.  Avant que vous ayez eu le temps de tirer, il vous parle à travers un écran placé à sa base.  Il vous implore de l'épargner et d'écouter ses arguments avant que vous décidiez d'appuyer sur la détente...
+En entrant dans la pièce, vous voyez le cerveau extraterrestre, objet de votre quête.  Avant que vous ayez eu le temps de tirer, il vous parle à travers un écran placé à sa base.  Il vous implore de l'épargner et d'écouter ses arguments avant que vous décidiez d'appuyer sur la détente...
 STR_VICTORY_2
 Le cerveau parle: 'Il y a des millions d'années de cela, la planète que vous appelez Mars était vivante.  Cette vie fut apportée à une planète stérile par notre civilisation comme ce fut le cas pour vous.  Pendant des millions d'années, nous avons visité votre planète et développé génétiquement votre espèce.  Vous ne pouvez pas nous tuer, vous faites partie de nous...
 STR_VICTORY_3
 Vous êtes ici au centre de la civilisation martienne - les pyramides construites il y a des millions d'années avant vous - par une espèce qui est en fait votre ancêtre.  Aucune planète n'est hors de portée de notre pouvoir.  Ce pouvoir pourrait devenir le vôtre bientôt.  Tout ce que nous demandons, c'est votre coopération...
 STR_GAME_OVER_1
-Les aliens essaient d'exterminer l'humanité tout entière, détruisant les villes et empoisonnant l'air et la mer.  La résistance des armées terrestres est futile face à une technologie hautement supérieure.  Les générations survivantes souffrent de mutations horribles alors qu'elles fuient la destruction alienne.  Elles sont parquées dans des camps d'esclavage destinés à faire de la Terre une colonie alienne soumise à quelque empire inconnu.
+Les extraterrestres essaient d'exterminer l'humanité tout entière, détruisant les villes et empoisonnant l'air et la mer.  La résistance des armées terrestres est futile face à une technologie hautement supérieure.  Les générations survivantes souffrent de mutations horribles alors qu'elles fuient la destruction extraterrestre.  Elles sont parquées dans des camps d'esclavage destinés à faire de la Terre une colonie extraterrestre soumise à quelque empire inconnu.
 STR_GAME_OVER_2
 La connaissance amassée grâce au projet XCom est à jamais perdue.  Vous n'avez pas réussi à sauver la Terre.
 STR_VICTORY_4
-Le cerveau alien est interrompu par une explosion de plasma chaud, et toute la force alienne est vaincue.
+Le cerveau extraterrestre est interrompu par une explosion de plasma chaud, et toute la force extraterrestre est vaincue.
 STR_VICTORY_5
-Une fois que les aliens ont perdu Mars, ils ont perdu la Terre.  Bientôt, la recherche XCom permettra à l'humanité de prospérer à nouveau, et de revendiquer la propriété de Mars.  La menace alienne a disparu, mais pour combien de temps, personne ne le sait...
+Une fois que les extraterrestres ont perdu Mars, ils ont perdu la Terre.  Bientôt, la recherche XCom permettra à l'humanité de prospérer à nouveau, et de revendiquer la propriété de Mars.  La menace extraterrestre a disparu, mais pour combien de temps, personne ne le sait...
 STR_YOU_HAVE_FAILED
-Vous n'avez pas réussi à stopper l'attaque alienne.  L'une après l'autre, les nations qui vous finançaient signent des pactes avec les aliens, qui leur offrent la technologie, la prospérité et la paix.  Cependant, il devient rapidement évident que les aliens ont d'autres plans...
+Vous n'avez pas réussi à stopper l'attaque extraterrestre.  L'une après l'autre, les nations qui vous finançaient signent des pactes avec les extraterrestres, qui leur offrent la technologie, la prospérité et la paix.  Cependant, il devient rapidement évident que les extraterrestres ont d'autres plans...
 STR_TOTAL_UC
 TOTAL
 STR_INCOME
@@ -390,29 +390,29 @@ Le vaisseau est perdu
 STR_TERROR_CONTINUES
 La terreur continue
 STR_ALIENS_DEFEATED
-Aliens vaincus
+Extraterrestres vaincus
 STR_BASE_IS_LOST
 La base est perdue
 STR_BASE_IS_SAVED
 La base est sauvée
 STR_ALIEN_BASE_STILL_INTACT
-Base alienne toujours intacte
+Base extraterrestre toujours intacte
 STR_ALIEN_BASE_DESTROYED
-Base alienne détruite
+Base extraterrestre détruite
 STR_ALIENS_KILLED
-ALIENS TUES
+EXTRATERRESTRES TUÉS
 STR_ALIEN_CORPSES_RECOVERED
-CORPS ALIENS RECUPERES
+CORPS EXTRATERRESTRES RECUPERES
 STR_LIVE_ALIENS_RECOVERED
-ALIENS VIVANTS RECUPERES
+EXTRATERRESTRES VIVANTS RECUPERES
 STR_ALIEN_ARTIFACTS_RECOVERED
-OBJETS ALIENS RECUPERES
+OBJETS EXTRATERRESTRES RECUPERES
 STR_ALIEN_BASE_CONTROL_DESTROYED
-CONTROLE DE BASE ALIENNE DETRUIT
+CONTROLE DE BASE EXTRATERRESTRE DETRUIT
 STR_CIVILIANS_KILLED_BY_ALIENS
-CIVILS TUES PAR DES ALIENS
+CIVILS TUÉS PAR DES EXTRATERRESTRES
 STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES
-CIVILS TUES PAR DES AGENTS XCOM
+CIVILS TUÉS PAR DES AGENTS XCOM
 STR_CIVILIANS_SAVED
 CIVILS SAUVES
 STR_XCOM_OPERATIVES_KILLED
@@ -422,13 +422,13 @@ AGENTS XCOM S'ETANT RETIRES APRES BLESSURES
 STR_XCOM_OPERATIVES_MISSING_IN_ACTION
 AGENTS XCOM DISPARUS PENDANT L'ACTION
 STR_TANKS_DESTROYED
-TANKS DETRUITS
+CHAR D'ASSAUTS DETRUITS
 STR_XCOM_CRAFT_LOST
 VAISSEAU XCOM PERDU
 STR_UFO_RECOVERY
 RECUPERATION OVNI
 STR_ALIEN_BASE_RECOVERY
-RECUPERATION BASE ALIENNE
+RECUPERATION BASE EXTRATERRESTRE
 STR_UNDER_ATTACK
  sous attaque!
 STR_BASE_DEFENSES_INITIATED
@@ -458,27 +458,27 @@ VAISSEAU>
 STR_UFO_CRASH_RECOVERY
 RECUPERATION
 STR_UFO_CRASH_RECOVERY_BRIEFING
-Avertissement - Il peut y avoir des agents dans l'OVNI ou autour du lieu du crash.  La mission sera réussie quand toutes les unités ennemies auront été éliminées ou neutralisées.  La récupération des restes de l'OVNI, des objets et des corps aliens pourra alors commencer.  Pour annuler la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Annuler Mission'.
+Avertissement - Il peut y avoir des agents dans l'OVNI ou autour du lieu du crash.  La mission sera réussie quand toutes les unités ennemies auront été éliminées ou neutralisées.  La récupération des restes de l'OVNI, des objets et des corps extraterrestres pourra alors commencer.  Pour abandonner la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Abandonner Mission'.
 STR_UFO_GROUND_ASSAULT
 ATTAQUE AU SOL DE L'OVNI
 STR_UFO_GROUND_ASSAULT_BRIEFING
-Explorez le lieu de l'atterrissage et, si possible, entrez dans l'OVNI.  La mission sera réussie quand toutes les unités ennemies auront été éliminées ou neutralisées.  La récupération de l'OVNI, des objets et des corps aliens pourra alors commencer.  Pour annuler la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Annuler Mission'.
+Explorez le lieu de l'atterrissage et, si possible, entrez dans l'OVNI.  La mission sera réussie quand toutes les unités ennemies auront été éliminées ou neutralisées.  La récupération de l'OVNI, des objets et des corps extraterrestres pourra alors commencer.  Pour abandonner la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Abandonner Mission'.
 STR_BASE_DEFENSE
 DEFENSE DE LA BASE
 STR_BASE_UC_
 BASE> 
 STR_BASE_DEFENSE_BRIEFING
-Un vaisseau alien a atterri tout près.  Notre base court un grand danger.  Selon la procédure habituelle, tout le personnel non-combattant et les vaisseaux XCom ont été evacués.  Les unités aliennes vont entrer dans la base par les portes du hangar ou par l'ascenseur d'accès.  Défendez la base et ses installations vitales à tout prix - c'est un combat à mort.  Si vous cliquez sur l'icône 'Annuler Mission', vous serez vaincu et perdrez la base.
+Un vaisseau extraterrestres a atterri tout près.  Notre base court un grand danger.  Selon la procédure habituelle, tout le personnel non-combattant et les vaisseaux XCom ont été evacués.  Les unités extraterrestres vont entrer dans la base par les portes du hangar ou par l'ascenseur d'accès.  Défendez la base et ses installations vitales à tout prix - c'est un combat à mort.  Si vous cliquez sur l'icône 'Abandonner Mission', vous serez vaincu et perdrez la base.
 STR_ALIEN_BASE_ASSAULT
-ATTAQUE DE LA BASE ALIENNE
+ASSAUT DE BASE E.T.
 STR_ALIEN_BASE_ASSAULT_BRIEFING
-Les agents XCom ont pénétré dans une base alienne.  Le centre de contrôle doit être détruit pour rendre la base inopérante.  La mission sera terminée quand tous les ennemis auront été éliminés, ou quand votre escouade sera revenue à la zone verte de sortie (cliquez sur l'icône 'Annuler Mission' pour sortir).
+Les agents XCom ont pénétré dans une base extraterrestre.  Le centre de contrôle doit être détruit pour rendre la base inopérante.  La mission sera terminée quand tous les ennemis auront été éliminés, ou quand votre escouade sera revenue à la zone verte de sortie (cliquez sur l'icône 'Abandonner Mission' pour sortir).
 STR_CYDONIA_BRIEFING
-Vous êtes arrivé à Cydonia.  Vous pénétrez dans un grand complexe souterrain près du Sphinx martien.  Vous devez détruire le Cerveau Alien qui contrôle toute l'activité alienne.  Le sort de l'humanité est entre vos mains....
+Vous êtes arrivé à Cydonia.  Vous pénétrez dans un grand complexe souterrain près du Sphinx martien.  Vous devez détruire le Cerveau Extraterrestre qui contrôle toute l'activité extraterrestre.  Le sort de l'humanité est entre vos mains....
 STR_TERROR_MISSION
 MISSION DE TERREUR
 STR_TERROR_MISSION_BRIEFING
-La mission sera réussie lorsque toutes les unités ennemies auront été éliminées ou neutralisées.  Vous devez essayer de sauver les vies de tous les civils de la région en neutralisant la menace alienne.  Pour annuler la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Annuler Mission'.
+La mission sera réussie lorsque toutes les unités ennemies auront été éliminées ou neutralisées.  Vous devez essayer de sauver les vies de tous les civils de la région en neutralisant la menace extraterrestre.  Pour abandonner la mission, ramenez les agents XCom au véhicule de transport et cliquez sur l'icône 'Abandonner Mission'.
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
 PAS DE HANGAR DE LIBRE POUR LA PRODUCTION DE VAISSEAU!{SMALLLINE}Tout vaisseau affecté à une base, transféré à une base, acheté ou construit, a besoin d'un hangar.  Construisez un nouveau hangar ou transférez un vaisseau à une autre base.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
@@ -592,11 +592,11 @@ AMICAL
 STR_COMMITTED
 ENGAGE
 STR_GAME_OPTIONS
-OPTIONS DE JEU
+OPTIONS
 STR_LOAD_GAME
-CHARGER JEU
+CHARGER
 STR_SAVE_GAME
-SAUVEGARDER JEU
+SAUVEGARDER
 STR_INTERCEPTION_CRAFT
 VAISSEAU D'INTERCEPTION
 STR_BASE_
@@ -724,7 +724,7 @@ ALLER A LA DERNIERE POSITION CONNUE DE L'OVNI
 STR_UFO_
 OVNI-
 STR_ALIEN_BASE_
-BASE ALIENNE-
+BASE EXTRATERRESTRES-
 STR_CRASH_SITE_
 LIEU DU CRASH-
 STR_LANDING_SITE_
@@ -740,7 +740,7 @@ Destination
 STR_NOW_PATROLLING
 En patrouille
 STR_ALIEN_ORIGINS
-Origines Aliennes
+Origines Extraterrestre
 STR_THE_MARTIAN_SOLUTION
 La Solution Martienne
 STR_CYDONIA_OR_BUST
@@ -754,13 +754,13 @@ PLATES-FORMES D'ARMES LOURDES
 STR_WEAPONS_AND_EQUIPMENT
 ARMES ET EQUIPEMENT
 STR_ALIEN_ARTIFACTS
-OBJETS ALIENS
+OBJETS EXTRATERRESTRES
 STR_BASE_FACILITIES
 INSTALLATIONS DE BASE
 STR_ALIEN_LIFE_FORMS
-FORMES DE VIE ALIENNES
+FORMES DE VIE EXTRATERRESTRES
 STR_ALIEN_RESEARCH_UC
-RECHERCHE SUR LES ALIENS
+RECHERCHE SUR LES EXTRATERRESTRES
 STR_UFO_COMPONENTS
 COMPOSANTS DES OVNIS
 STR_UFOS
@@ -846,7 +846,7 @@ Munitions
 STR_EQUIPMENT
 Equipement
 STR_ALIEN_CORPSE
-Corps Alien
+Corps Extraterrestre
 STR_UFO_COMPONENT
 Composant d'OVNI
 STR_PERSONAL_ARMOR
@@ -856,7 +856,7 @@ Matières Premières
 STR_HWP_CANNON_SHELLS
 Obus PAL
 STR_ALIEN
-Alien
+Extraterrestre
 STR_SECTOID
 Sectoïde
 STR_SNAKEMAN
@@ -878,7 +878,7 @@ Reaper
 STR_SECTOPOD
 Sectopode
 STR_CYBERDISC
-Cyberdisc
+Cyberdisque
 STR_LIVE_COMMANDER
  Commandant
 STR_LIVE_LEADER
@@ -900,19 +900,19 @@ Navigation OVNI
 STR_UFO_CONSTRUCTION
 Construction OVNI
 STR_ALIEN_FOOD
-Nourriture Alienne
+Nourriture Extraterrestre
 STR_ALIEN_REPRODUCTION
-Reproduction Alienne
+Reproduction Extraterrestre
 STR_ALIEN_ENTERTAINMENT
-Divertissement Alien
+Divertissement Extraterrestre
 STR_ALIEN_SURGERY
-Chirurgie Alienne
+Chirurgie Extraterrestre
 STR_EXAMINATION_ROOM
 Salle d'examen
 STR_ALIEN_ALLOYS
-Alliages Aliens
+Alliages Extraterrestre
 STR_ALIEN_HABITAT
-Habitat Alien
+Habitat Extraterrestre
 STR_POWER_SUIT
 Combinaison d'Energie
 STR_FLYING_SUIT
@@ -958,15 +958,15 @@ Scanner de Mouvement
 STR_MEDI_KIT
 Trousse de Soins
 STR_TANK_CANNON
-Tank/Canon
+Char d'Assaut/Canon
 STR_TANK_ROCKET_LAUNCHER
-Tank/Lance-Roquettes
+Char d'Assaut/Lance-Roquettes
 STR_TANK_LASER_CANNON
-Tank/Canon Laser
+Char d'Assaut/Canon Laser
 STR_HOVERTANK_PLASMA
-Hovertank/Plasma
+Aérochar/Plasma
 STR_HOVERTANK_LAUNCHER
-Hovertank/Lanceur
+Aérochar/Lanceur
 STR_STINGRAY_LAUNCHER
 Lanceur de Stingray
 STR_AVALANCHE_LAUNCHER
@@ -1022,21 +1022,21 @@ Atlantique Sud
 STR_INDIAN_OCEAN
 Océan Indien
 STR_ALIEN_RESEARCH
-Recherche sur les Aliens
+Recherche sur les Extraterrestres
 STR_ALIEN_HARVEST
-Moisson Alienne
+Moisson Extraterrestre
 STR_ALIEN_ABDUCTION
-Enlèvement Alien
+Enlèvement Extraterrestre
 STR_ALIEN_INFILTRATION
-Infiltration Alienne
+Infiltration Extraterrestre
 STR_ALIEN_BASE
-Base Alienne
+Base Extraterrestre
 STR_ALIEN_TERROR
-Terreur Alienne
+Terreur Extraterrestre
 STR_ALIEN_RETALIATION
-Représailles Aliennes
+Représailles Extraterrestres
 STR_ALIEN_SUPPLY
-Réserves Aliennes
+Réserves Extraterrestres
 STR_POWER_SOURCES
 Sources d'Energie
 STR_MAXIMUM_SPEED
@@ -1086,7 +1086,7 @@ Défenses Missiles
 STR_GENERAL_STORES
 Entrepôts
 STR_ALIEN_CONTAINMENT
-Détention des Aliens
+Détention des Extraterrestres
 STR_LASER_DEFENSES
 Défenses Laser
 STR_PLASMA_DEFENSES
@@ -1100,7 +1100,7 @@ Décodeur d'Hyper-Ondes
 STR_HANGAR
 Hangar
 STR_USA
-U.S.A.
+ÉTATS-UNIS
 STR_RUSSIA
 RUSSIE
 STR_UK
@@ -1120,7 +1120,7 @@ JAPON
 STR_INDIA
 INDE
 STR_BRAZIL
-BRESIL
+BRÉSIL
 STR_AUSTRALIA
 AUSTRALIE
 STR_NIGERIA
@@ -1128,7 +1128,7 @@ NIGERIA
 STR_SOUTH_AFRICA
 AFRIQUE DU SUD
 STR_EGYPT
-EGYPTE
+ÉGYPTE
 STR_CANADA
 CANADA
 STR_FLOATER_SOLDIER
@@ -1178,7 +1178,7 @@ Pays
 STR_FUNDING
 Budget
 STR_CHANGE
-Différence
+Écart
 STR_WEAPON_SYSTEMS
 SYSTEMES{NEWLINE}D'ARMES
 STR_HWPS
@@ -1202,21 +1202,21 @@ Les défenses missiles protègent des incursions des vaisseaux ennemis qui essai
 STR_GENERAL_STORES_UFOPEDIA
 Tout l'équipement, les systèmes d'armes, les munitions, le matériel trouvé et les plates-formes d'armes lourdes sont placés dans les entrepôts, à part l'équipement destiné aux vaisseaux qui se trouve dans les hangars.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-Les aliens vivants risquent de nécessiter un habitat spécial pour maintenir leurs systèmes de vie.  L'installation de détention peut contenir jusqu'à 10 formes de vie aliennes dans des unités indépendantes.
+Les extraterrestres vivants risquent de nécessiter un habitat spécial pour maintenir leurs systèmes de vie.  L'installation de détention peut contenir jusqu'à 10 formes de vie extraterrestres dans des unités indépendantes.
 STR_LASER_DEFENSES_UFOPEDIA
 Les défenses laser protègent de l'incursion des vaisseaux ennemis.
 STR_PLASMA_DEFENSES_UFOPEDIA
 Les rayons à plasma fournissent une protection puissante et efficace contre l'intrusion des vaisseaux ennemis.
 STR_FUSION_BALL_DEFENSES_UFOPEDIA
-Les missiles de fusion sont la défense la plus efficace contre les attaques aliennes.  Ces missiles créent une implosion anti-matière qui détruit tout dans un rayon spécifique.
+Les missiles de fusion sont la défense la plus efficace contre les attaques extraterrestres.  Ces missiles créent une implosion anti-matière qui détruit tout dans un rayon spécifique.
 STR_GRAV_SHIELD_UFOPEDIA
-Le bouclier de gravité repousse les aliens qui essaient d'atterrir près de la base assez longtemps pour que tous les systèmes de défense puissent tirer à nouveau.  Dans la pratique, ceci double l'efficacité de tous les systèmes de défense de votre base.
+Le bouclier de gravité repousse les extraterrestres qui essaient d'atterrir près de la base assez longtemps pour que tous les systèmes de défense puissent tirer à nouveau.  Dans la pratique, ceci double l'efficacité de tous les systèmes de défense de votre base.
 STR_MIND_SHIELD_UFOPEDIA
-Comme les vaisseaux aliens détectent les humains grâce aux ondes cérébrales, la contre-mesure la plus efficace consiste à protéger la base de ces ondes.  Ceci réduira de façon importante les chances de détection par les vaisseaux aliens.
+Comme les vaisseaux extraterrestres détectent les humains grâce aux ondes cérébrales, la contre-mesure la plus efficace consiste à protéger la base de ces ondes.  Ceci réduira de façon importante les chances de détection par les vaisseaux extraterrestres.
 STR_PSIONIC_LABORATORY_UFOPEDIA
 Le labo psionique peut évaluer le potentiel psionique de tous les soldats de la base et leur donner l'entraînement nécessaire pour utiliser leurs compétences psioniques.  Chaque labo peut entraîner jusqu'à 10 soldats.  L'entraînement est attribué à la fin de chaque mois.  Les compétences psioniques utilisées en association avec un Psi-Amp peuvent être utilisées pour les attaques psioniques pendant le combat.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
-Les communications aliennes se font par ondes supra-dimensionnelles qui voyagent presque instantanément.  Le décodeur intercepte les transmissions d'OVNIS et décode l'information.  Celle-ci indique le type de l'OVNI, la race alienne et le type d'activité.
+Les communications extraterrestres se font par ondes supra-dimensionnelles qui voyagent presque instantanément.  Le décodeur intercepte les transmissions d'OVNIS et décode l'information.  Celle-ci indique le type de l'OVNI, la race extraterrestre et le type d'activité.
 STR_HANGAR_UFOPEDIA
 Chaque hangar peut contenir un vaisseau.  Il y a des installations pour l'entretien, le ravitaillement et la réparation des vaisseaux XCom.  Chaque vaisseau posté dans une base doit avoir un hangar libre qui lui est affecté et qui ne peut être utilisé par aucun autre vaisseau, même si le premier vaisseau est parti en mission.
 STR_PISTOL_UFOPEDIA
@@ -1254,9 +1254,9 @@ Cet objet ne peut être utilisé que dans le combat rapproché.  Il permet d'ass
 STR_THE_SUBJECT_HAS_DIED
 Le sujet est mort suite au traumatisme de l'interrogatoire.
 STR_MIND_PROBE_UFOPEDIA
-La sonde d'esprit est une technique de communication alienne qui est utilisée pour prendre l'information directement des ondes cérébrales.  Les unités XCom peuvent utiliser cette technique durant le combat pour connaître les caractéristiques des aliens.  Cliquez sur la sonde d'esprit et l'option 'utiliser'.  Puis, cliquez sur un alien avec le curseur.
+La sonde d'esprit est une technique de communication extraterrestre qui est utilisée pour prendre l'information directement des ondes cérébrales.  Les unités XCom peuvent utiliser cette technique durant le combat pour connaître les caractéristiques des extraterrestres.  Cliquez sur la sonde d'esprit et l'option 'utiliser'.  Puis, cliquez sur un extraterrestre avec le curseur.
 STR_PLASMA_PISTOL_UFOPEDIA
-Les pistolets à plasma sont une arme alienne fatale basée sur l'accélération des particules à l'intérieur d'un minuscule champ anti-gravitationnel.
+Les pistolets à plasma sont une arme extraterrestre fatale basée sur l'accélération des particules à l'intérieur d'un minuscule champ anti-gravitationnel.
 STR_PLASMA_RIFLE_UFOPEDIA
 C'est une arme puissante et dévastatrice basée sur l'accélération des particules à l'intérieur d'un minuscule champ anti-gravitationnnel.
 STR_SIZE
@@ -1266,9 +1266,9 @@ Il faudrait examiner le corps pour un rapport complet d'autopsie.
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
 Pas assez de munitions pour charger
 STR_BLASTER_LAUNCHER_UFOPEDIA
-C'est un lance-missiles guidé alien qui tire de puissantes 'bombes blaster'. Lorsque vous cliquez pour tirer, vous voyez apparaître les points de repère que la bombe blaster suivra.  Lorsque vous avez positionné assez de points de repère, cliquez sur l'icône lancement spécial.
+C'est un lance-missiles guidé extraterrestre qui tire de puissantes 'bombes blaster'. Lorsque vous cliquez pour tirer, vous voyez apparaître les points de repère que la bombe blaster suivra.  Lorsque vous avez positionné assez de points de repère, cliquez sur l'icône lancement spécial.
 STR_SMALL_LAUNCHER_UFOPEDIA
-Un petit lanceur qui tire des bombes assommantes.  Très utile pour capturer des aliens vivants.
+Un petit lanceur qui tire des bombes assommantes.  Très utile pour capturer des extraterrestres vivants.
 STR_ALIEN_GRENADE_UFOPEDIA
 Cette arme fonctionne de la même façon qu'une grenade terrestre - mais elle est plus puissante.
 STR_SMALL_SCOUT
@@ -1286,7 +1286,7 @@ Vaisseau de Terreur
 STR_BATTLESHIP
 Vaisseau de Combat
 STR_SUPPLY_SHIP
-Vaisseau de Ravitaillement
+Vaisseau Cargo
 STR_RATING
 EVALUATION> 
 STR_RATING_TERRIBLE
@@ -1310,25 +1310,25 @@ Le Conseil des Nations participant au financement est jusqu'ici satisfait de vos
 STR_COUNCIL_IS_VERY_PLEASED
 Le Conseil des Nations participant au financement est très satisfait de vos excellents progrès.  Continuez comme ça.
 STR_COUNCIL_IS_DISSATISFIED
-Le Conseil des Nations participant au financement n'est pas satisfait de votre travail.  Vous devez améliorer votre efficacité à combattre la menace alienne, sinon, il risque de mettre fin au projet.
+Le Conseil des Nations participant au financement n'est pas satisfait de votre travail.  Vous devez améliorer votre efficacité à combattre la menace extraterrestre, sinon, il risque de mettre fin au projet.
 STR_YOU_HAVE_NOT_SUCCEEDED
-Vous n'avez pas réussi à combattre l'invasion alienne et le conseil des nations participant au financement a malheureusement décidé de mettre fin au projet.  Chaque nation va s'occuper elle-même du problème comme elle l'entend.  Nous ne pouvons qu'espérer arriver à un accord avec ces forces apparemment hostiles, et souhaiter que la population s'entendra avec les visiteurs aliens.
+Vous n'avez pas réussi à combattre l'invasion extraterrestre et le conseil des nations participant au financement a malheureusement décidé de mettre fin au projet.  Chaque nation va s'occuper elle-même du problème comme elle l'entend.  Nous ne pouvons qu'espérer arriver à un accord avec ces forces apparemment hostiles, et souhaiter que la population s'entendra avec les visiteurs extraterrestres.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
  est particulièrement satisfait de votre aptitude à combattre la menace localisée et est d'accord pour augmenter votre budget.
 STR_COUNTRIES_ARE_PARTICULARLY_HAPPY
- sont particulièrement satisfaits de vos progrès dans le combat contre les incursions aliennes localisées et sont d'accord pour augmenter votre budget.
+ sont particulièrement satisfaits de vos progrès dans le combat contre les incursions extraterrestres localisées et sont d'accord pour augmenter votre budget.
 STR_AND
  et 
 STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY
- n'est pas satisfait de votre aptitude à combattre l'activité alienne sur son territoire et a décidé de réduire sa participation financière.
+ n'est pas satisfait de votre aptitude à combattre l'activité extraterrestre sur son territoire et a décidé de réduire sa participation financière.
 STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY
- ne sont pas satisfaits de votre aptitude à combattre l'activité alienne sur leur territoire et ont décidé de réduire leur participation financière.
+ ne sont pas satisfaits de votre aptitude à combattre l'activité extraterrestre sur leur territoire et ont décidé de réduire leur participation financière.
 STR_KNOTS
 noeuds
 STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
- a signé un pacte secret avec des forces aliennes inconnues et s'est retiré du projet.
+ a signé un pacte secret avec des forces extraterrestres inconnues et s'est retiré du projet.
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
- ont signé un pacte secret avec des forces aliennes inconnues et se sont retirés du projet.
+ ont signé un pacte secret avec des forces extraterrestres inconnues et se sont retirés du projet.
 STR_MONTHLY_RATING
 Evaluation Mensuelle> 
 STR_FUNDING_CHANGE
@@ -1458,23 +1458,23 @@ Charger Jeu
 STR_SELECT_DIFFICULTY_LEVEL
 Sélectionner Niveau de Difficulté
 STR_1_BEGINNER
-1> Débutant
+1> Facile
 STR_2_EXPERIENCED
-2> Expérimenté
+2> Moyen
 STR_3_VETERAN
-3> Vétéran
+3> Difficile
 STR_4_GENIUS
-4> Génie
+4> Très Difficile
 STR_5_SUPERHUMAN
-5> Surhumain
+5> Impossible
 STR_TIME
 Heure
 STR_DATE
 Date
 STR_SELECT_GAME_TO_LOAD
-Sélectionner Jeu à Charger
+Charger une sauvegarde
 STR_SELECT_SAVE_POSITION
-Sélectionner Position de Sauvegarde
+Sauvegarde le jeu
 STR_PSIONIC_TRAINING
 ENTRAINEMENT PSIONIQUE
 STR_REMAINING_PSI_LAB_CAPACITY
@@ -1534,55 +1534,55 @@ Promotions
 STR_SOLDIERS_UC
 SOLDATS
 STR_TANK_CANNON_UFOPEDIA
-Les plates-formes d'armes lourdes automatiques sont faites pour aider l'escouade XCom.  Ces unités, ayant à la fois une grande puissance de feu et un blindage résistant, sont idéales pour les combats à terrain ouvert.  Assurez-vous que vous avez suffisamment d'obus dans vos stocks pour réarmer les tanks.  Ils s'arment automatiquement lorsque vous les affectez à une escouade.
+Les plates-formes d'armes lourdes automatiques sont faites pour aider l'escouade XCom.  Ces unités, ayant à la fois une grande puissance de feu et un blindage résistant, sont idéales pour les combats à terrain ouvert.  Assurez-vous que vous avez suffisamment d'obus dans vos stocks pour réarmer les char d'assauts.  Ils s'arment automatiquement lorsque vous les affectez à une escouade.
 STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
-Cette plate-forme d'armes lourdes automatiques est armée de puissantes roquettes.  C'est une arme dévastatrice pour tout ennemi alien.  Assurez-vous que vos stocks sont approvisionnés en roquettes PAL.
+Cette plate-forme d'armes lourdes automatiques est armée de puissantes roquettes.  C'est une arme dévastatrice pour tout ennemi extraterrestre.  Assurez-vous que vos stocks sont approvisionnés en roquettes PAL.
 STR_TANK_LASER_CANNON_UFOPEDIA
 Les armes laser sont un complément utile aux PAL.  Elles ont une grande puissance de feu et n'ont pas de limite de munitions.
 STR_HOVERTANK_PLASMA_UFOPEDIA
-La technologie alienne a fait revivre les PAL.  La maniabilité du voyage aérien et la puissance des rayons à plasma est une combinaison mortelle.
+La technologie extraterrestre a fait revivre les PAL.  La maniabilité du voyage aérien et la puissance des rayons à plasma est une combinaison mortelle.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
-Cet hovertank a un lanceur de boules de fusion capable de faire d'immenses dégâts.  Utilisez-le avec beaucoup de précaution.  Il vous faudra fabriquer les boules de fusion pour charger ces PAL.  Une boule de fusion est une arme guidée intelligente.  Pour tirer, vous devez sélectionner un certain nombre de 'points de repère' avec le curseur puis cliquer sur l'icône lancer pour tirer la boule de fusion.
+Cet aérochar a un lanceur de boules de fusion capable de faire d'immenses dégâts.  Utilisez-le avec beaucoup de précaution.  Il vous faudra fabriquer les boules de fusion pour charger ces PAL.  Une boule de fusion est une arme guidée intelligente.  Pour tirer, vous devez sélectionner un certain nombre de 'points de repère' avec le curseur puis cliquer sur l'icône lancer pour tirer la boule de fusion.
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
 Cet objet compact est utilisé comme munition pour un canon lourd à plasma.  Il contient une petite quantité d'Elerium.
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
-Ce petit objet est utilisé comme source d'énergie pour un fusil à plasma - une arme alienne de puissance moyenne.  Contient une petite quantité d'Elerium.
+Ce petit objet est utilisé comme source d'énergie pour un fusil à plasma - une arme extraterrestre de puissance moyenne.  Contient une petite quantité d'Elerium.
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
-Source d'énergie pour le petit pistolet à plasma alien.  Contient de l'Elerium - source de toute puissance alienne.
+Source d'énergie pour le petit pistolet à plasma extraterrestre.  Contient de l'Elerium - source de toute puissance extraterrestre.
 STR_STUN_BOMB_UFOPEDIA
-La bombe assommante est utilisée pour capturer des spécimens humains vivants, mais elle peut aussi être utilisée contre la plupart des races aliennes.  On la tire d'un petit lanceur.
+La bombe assommante est utilisée pour capturer des spécimens humains vivants, mais elle peut aussi être utilisée contre la plupart des races extraterrestres.  On la tire d'un petit lanceur.
 STR_ALIEN_RESEARCH_UFOPEDIA
-La mission de recherche alienne est faite pour rassembler des données de base sur la Terre et ses habitants.  Ils utilisent généralement des petits véhicules, et atterrissent parfois dans les zones désertes.  Ce type d'activité alienne est une moindre menace pour XCom, et ne touche pas beaucoup les gouvernements ou les populations.
+La mission de recherche extraterrestre est faite pour rassembler des données de base sur la Terre et ses habitants.  Ils utilisent généralement des petits véhicules, et atterrissent parfois dans les zones désertes.  Ce type d'activité extraterrestre est une moindre menace pour XCom, et ne touche pas beaucoup les gouvernements ou les populations.
 STR_ALIEN_HARVEST_UFOPEDIA
-Les aliens utilisent la faune terrienne de différentes façons.  Les animaux sont secrètement enlevés, puis ramenés après qu'on leur ait enlevé plusieurs organes.  Les témoignages de mutilations du bétail coïncident généralement avec des appararitions d'OVNIS.  Ce type d'activité alienne préoccupe beaucoup les gouvernements et provoque une grande inquiétude parmi la population.  Ce type d'activité se produit généralement en campagne.  La théorie derrière cette 'moisson alienne' serait que les races aliennes ont à l'origine 'ensemencé' la planète de sa flore et de sa faune, et qu'ils reviennent aujourd'hui pour récolter les fruits qu'ils ont semés.
+Les extraterrestres utilisent la faune terrienne de différentes façons.  Les animaux sont secrètement enlevés, puis ramenés après qu'on leur ait enlevé plusieurs organes.  Les témoignages de mutilations du bétail coïncident généralement avec des appararitions d'OVNIS.  Ce type d'activité extraterrestre préoccupe beaucoup les gouvernements et provoque une grande inquiétude parmi la population.  Ce type d'activité se produit généralement en campagne.  La théorie derrière cette 'moisson extraterrestre' serait que les races extraterrestres ont à l'origine 'ensemencé' la planète de sa flore et de sa faune, et qu'ils reviennent aujourd'hui pour récolter les fruits qu'ils ont semés.
 STR_ALIEN_ABDUCTION_UFOPEDIA
-C'est le type d'activité alienne le plus insidieux.  De nombreux témoignages font état d'enlèvements par les aliens, et ceci malgré les efforts faits par les aliens pour effacer cette expérience de la mémoire de leurs victimes.  Les personnes enlevées disent avoir été soumises à des examens physiques humiliants, et parlent même d'implantations de foetus aliens et d'expériences génétiques étranges.  Le but de cette activité semble être lié à la mutation génétique et à la manipulation du propre code génétique des aliens.  Cette activité provoque une vive inquiétude, et se produit dans les zones peuplées ou les villes.
+C'est le type d'activité extraterrestre le plus insidieux.  De nombreux témoignages font état d'enlèvements par les extraterrestres, et ceci malgré les efforts faits par les extraterrestres pour effacer cette expérience de la mémoire de leurs victimes.  Les personnes enlevées disent avoir été soumises à des examens physiques humiliants, et parlent même d'implantations de foetus extraterrestres et d'expériences génétiques étranges.  Le but de cette activité semble être lié à la mutation génétique et à la manipulation du propre code génétique des extraterrestres.  Cette activité provoque une vive inquiétude, et se produit dans les zones peuplées ou les villes.
 STR_ALIEN_INFILTRATION_UFOPEDIA
-Les gouvernements de la Terre peuvent être infiltrés par des agents aliens ayant une apparence humaine.  Cela peut aboutir à des contacts entre aliens et gouvernements au plus haut niveau.  Cette activité se caractérise à son plus haut point par une intense activité des OVNIS dans les environs des grandes villes.  Les aliens vont essayer de signer un pacte avec un gouvernement terrien en lui offrant la connaissance de leur technologie supérieure.  En échange, le gouvernement permettra aux aliens de continuer leurs activités en toute tranquillité.  Cette mission alienne représente la pire menace pour XCom.  Si un gouvernement accepte de signer un pacte, alors il cessera de financer XCom.
+Les gouvernements de la Terre peuvent être infiltrés par des agents extraterrestres ayant une apparence humaine.  Cela peut aboutir à des contacts entre extraterrestres et gouvernements au plus haut niveau.  Cette activité se caractérise à son plus haut point par une intense activité des OVNIS dans les environs des grandes villes.  Les extraterrestres vont essayer de signer un pacte avec un gouvernement terrien en lui offrant la connaissance de leur technologie supérieure.  En échange, le gouvernement permettra aux extraterrestres de continuer leurs activités en toute tranquillité.  Cette mission extraterrestre représente la pire menace pour XCom.  Si un gouvernement accepte de signer un pacte, alors il cessera de financer XCom.
 STR_ALIEN_BASE_UFOPEDIA
-Les aliens vont construire des bases souterraines secrètes dans des endroits isolés.  Après quelques vols de reconnaissance, une intense activité des OVNIS se produira pendant la construction de la base.  On sait que ces bases ont des laboratoires d'expérimentations pour les humains qui ont été enlevés, et du ravitaillement pour une activité plus poussée dans la région.  La présence de bases aliennes va créer une intense activité alienne sans la présence d'OVNIS.  Afin de localiser une base, un vaisseau XCom doit patrouiller dans une région pendant quelques heures pour avoir une chance de la détecter.
+Les extraterrestres vont construire des bases souterraines secrètes dans des endroits isolés.  Après quelques vols de reconnaissance, une intense activité des OVNIS se produira pendant la construction de la base.  On sait que ces bases ont des laboratoires d'expérimentations pour les humains qui ont été enlevés, et du ravitaillement pour une activité plus poussée dans la région.  La présence de bases extraterrestres va créer une intense activité extraterrestre sans la présence d'OVNIS.  Afin de localiser une base, un vaisseau XCom doit patrouiller dans une région pendant quelques heures pour avoir une chance de la détecter.
 STR_ALIEN_TERROR_UFOPEDIA
-Pour terroriser une ville, les aliens vont déployer des forces spéciales avec des pouvoirs terrifiants.  Les civils seront directement menacés, et les gouvernements seront forcés d'évacuer des zones entières.  Le but essentiel de cette activité est de créer suffisamment d'hystérie collective pour que les gouvernements menacent le projet XCom.
+Pour terroriser une ville, les extraterrestres vont déployer des forces spéciales avec des pouvoirs terrifiants.  Les civils seront directement menacés, et les gouvernements seront forcés d'évacuer des zones entières.  Le but essentiel de cette activité est de créer suffisamment d'hystérie collective pour que les gouvernements menacent le projet XCom.
 STR_ALIEN_RETALIATION_UFOPEDIA
-Si les intercepteurs XCom réussissent particulièrement bien à abattre des OVNIS, alors les aliens pourraient commettre des actions de représailles.  Cela pourrait aboutir à une attaque directe contre une base XCom.  Cependant, les aliens doivent trouver cette base avant de l'attaquer, et tant que les OVNIS sont tenus à l'écart, il y a peu de risque d'une attaque.
+Si les intercepteurs XCom réussissent particulièrement bien à abattre des OVNIS, alors les extraterrestres pourraient commettre des actions de représailles.  Cela pourrait aboutir à une attaque directe contre une base XCom.  Cependant, les extraterrestres doivent trouver cette base avant de l'attaquer, et tant que les OVNIS sont tenus à l'écart, il y a peu de risque d'une attaque.
 STR_ALIEN_SUPPLY_UFOPEDIA
-Une fois qu'une base alienne est construite, elle est régulièrement approvisionnée par un vaisseau de ravitaillement spécial.  Si l'un de ses vaisseaux est détecté lors de son atterrissage, vous pouvez alors être certain qu'il y a une base alienne à proximité.
+Une fois qu'une base extraterrestre est construite, elle est régulièrement approvisionnée par un vaisseau cargo spécial.  Si l'un de ses vaisseaux est détecté lors de son atterrissage, vous pouvez alors être certain qu'il y a une base extraterrestre à proximité.
 STR_SMALL_SCOUT_UFOPEDIA
-Ce minuscule vaisseau est utilisé essentiellement pour la reconnaissance ou la recherche.  Il précède normalement des vaisseaux plus grands au début d'une mission alienne.
+Ce minuscule vaisseau est utilisé essentiellement pour la reconnaissance ou la recherche.  Il précède normalement des vaisseaux plus grands au début d'une mission extraterrestre.
 STR_MEDIUM_SCOUT_UFOPEDIA
 Un vaisseau éclaireur de taille moyenne qui ne représente pas une grande menace pour les forces terrestres.  Il apparaît normalement avant des vaisseaux plus grands durant les missions.
 STR_LARGE_SCOUT_UFOPEDIA
-Le vaisseau éclaireur alien le plus grand est un vaisseau utilisé dans tous les types de missions aliennes.
+Le vaisseau éclaireur extraterrestre le plus grand est un vaisseau utilisé dans tous les types de missions extraterrestres.
 STR_HARVESTER_UFOPEDIA
 Le moissonneur a une trappe à sa base et est équipé d'un treuil pour hisser le bétail ou d'autres animaux.  Les couteaux laser sont utilisés pour extraire les morceaux désirés et la carcasse est jetée au sol.  Il y a également des conteneurs de stockage pour les parties du corps.
 STR_ABDUCTOR_UFOPEDIA
 Ce vaisseau est équipé d'une salle d'examen utilisée pour d'horribles expériences sur des sujets humains.  La victime est paralysée par des pouvoirs télépathiques, mais reste consciente sur la table d'opération.
 STR_TERROR_SHIP_UFOPEDIA
-Le vaisseau de terreur est équipé d'installations lui permettant de transporter de lourdes armes de terreur aliennes ou des créatures.  Il est utilisé pour transporter ces terroristes aliens jusque dans les zones peuplées.
+Le vaisseau de terreur est équipé d'installations lui permettant de transporter de lourdes armes de terreur extraterrestres ou des créatures.  Il est utilisé pour transporter ces terroristes extraterrestres jusque dans les zones peuplées.
 STR_BATTLESHIP_UFOPEDIA
-Le vaisseau de combat est le vaisseau alien le plus grand et le plus puissant.  C'est normalement le vaisseau principal des missions aliennes, il est équipé d'armes puissantes et de nombreux membres d'équipage.
+Le vaisseau de combat est le vaisseau extraterrestre le plus grand et le plus puissant.  C'est normalement le vaisseau principal des missions extraterrestres, il est équipé d'armes puissantes et de nombreux membres d'équipage.
 STR_SUPPLY_SHIP_UFOPEDIA
-Le vaisseau de ravitaillement est utilisé durant la construction de bases aliennes ou pour l'approvisionnement de bases existantes.  Il transporte des conteneurs de nourriture alienne et des chambres de reproduction.
+Le vaisseau cargo est utilisé durant la construction de bases extraterrestres ou pour l'approvisionnement de bases existantes.  Il transporte des conteneurs de nourriture extraterrestre et des chambres de reproduction.
 STR_DISMANTLE
 Démonter
 STR_FACILITY_IN_USE
@@ -1592,11 +1592,11 @@ IMPOSSIBLE DE DEMONTER INSTALLATION!{SMALLLINE}Toutes les installations de la ba
 STR_TRANSFER_ITEMS_TO
 Transférer objets vers 
 STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER
-PAS D'INSTALLATION DE DETENTION DES ALIENS POUR TRANSFERER!{SMALLLINE}Les aliens vivants ont besoin d'une installation de détention des aliens pour survivre 
+PAS D'INSTALLATION DE DETENTION DES EXTRATERRESTRES POUR TRANSFERER!{SMALLLINE}Les extraterrestres vivants ont besoin d'une installation de détention des extraterrestres pour survivre 
 STR_AMOUNT_AT_DESTINATION
 QUANTITE A{NEWLINE}DESTINATION
 STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY
-L'alien meurt car il n'y a pas d'installation de détention des aliens
+L'extraterrestre meurt car il n'y a pas d'installation de détention des extraterrestres
 STR_NO_FREE_ACCOMODATION_CREW
 PAS DE LOGEMENT DE LIBRE!{SMALLLINE}La base de destination n'a pas assez de place dans les quartiers d'habitation pour l'équipage affecté au vaisseau.
 STR_ITEMS_ARRIVING
@@ -1664,7 +1664,7 @@ Petit Lanceur
 STR_STUN_BOMB
 Bombe Assommante
 STR_ALIEN_GRENADE
-Grenade Alienne
+Grenade Extraterrestre
 STR_ELERIUM_115
 Elerium-115
 STR_MIND_PROBE
@@ -1690,7 +1690,7 @@ Corps Reaper
 STR_SECTOPOD_CORPSE
 Corps Sectopode
 STR_CYBERDISC_CORPSE
-Corps Cyberdisc
+Corps Cyberdisque
 STR_TO_ARM_HWP
  pour armer PAL
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
@@ -1698,17 +1698,17 @@ Pas assez de matériel pour ré-équiper entièrement l'escouade
 STR_MARS_CYDONIA_LANDING
 Mars: Atterrissage sur Cydonia
 STR_MARS_CYDONIA_LANDING_BRIEFING
-Votre vaisseau Avenger a atterri dans la région de Cydonia, sur la surface de Mars.  Nos informations indiquent que l'une des pyramides contient un ascenseur vert menant à un complexe souterrain.  Lorsque vous aurez rassemblé tous vos soldats près de l'ascenseur, cliquez sur l'icône 'Annuler mission' pour passer à l'étape suivante.
+Votre vaisseau Avenger a atterri dans la région de Cydonia, sur la surface de Mars.  Nos informations indiquent que l'une des pyramides contient un ascenseur vert menant à un complexe souterrain.  Lorsque vous aurez rassemblé tous vos soldats près de l'ascenseur, cliquez sur l'icône 'Abandonner mission' pour passer à l'étape suivante.
 STR_MARS_THE_FINAL_ASSAULT
 Mars: L'assaut final
 STR_MARS_THE_FINAL_ASSAULT_BRIEFING
-L'ascenseur de la pyramide emmène vos soldats fatigués sous la surface de la planète.  Ils arrivent au coeur d'un grand complexe de tunnels et de salles.  Le cerveau alien est caché quelque part dans le labyrinthe.  Il doit être détruit si vous voulez sauver la Terre de l'esclavage alien.{NEWLINE}{NEWLINE}Bonne chance!
+L'ascenseur de la pyramide emmène vos soldats fatigués sous la surface de la planète.  Ils arrivent au coeur d'un grand complexe de tunnels et de salles.  Le cerveau extraterrestre est caché quelque part dans le labyrinthe.  Il doit être détruit si vous voulez sauver la Terre de l'esclavage extraterrestre.{NEWLINE}{NEWLINE}Bonne chance!
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
 {NEWLINE}pour utiliser ou produire{NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
-Les aliens ont détruit la base nondéfendue 
+Les extraterrestres ont détruit la base nondéfendue 
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
-Les agents Xcom ont localisé une base alien sur 
+Les agents Xcom ont localisé une base extraterrestre sur 
 STR_STANDOFF
 ATTENTE
 STR_CAUTIOUS_ATTACK
@@ -1734,7 +1734,7 @@ STR_INTERCEPTOR_DESTROYED
 STR_UFO_OUTRUNNING_INTERCEPTOR
 L'OVNI DEPASSE L'INTERCEPTEUR!
 STR_ALIENS_TERRORISE
-TERREUR ALIENNE
+TERREUR EXTRATERRESTRE
 STR_LONG_RANGE_DETECTION
 Détection longue portée
 STR_STORES_UC
@@ -1896,7 +1896,7 @@ SOIGNER
 STR_TUS
 UT>
 STR_ALIEN_ARTIFACT
-Objet alien
+Objet extraterrestre
 STR_AMMO_ROUNDS_LEFT
 MUNITIONS:{NEWLINE}CARTOUCHES{NEWLINE}RESTANTES=
 STR_THROW
@@ -1942,7 +1942,7 @@ La Grenade est Activée!
 STR_THERE_IS_NO_ONE_THERE
 Il n'y a Personne ici!
 STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED
-Impossible d'Utiliser Objet Alien avant son Etude!
+Impossible d'utiliser Objet Extraterrestre sans recherche!
 STR_OUT_OF_RANGE
 Hors de Portée!
 STR_UNABLE_TO_THROW_HERE
@@ -1952,7 +1952,7 @@ Nombre de Cartouches?
 STR_SET_TIMER
 Détonateur
 STR_HIDDEN_MOVEMENT
-DEPLACEMENT CACHE
+MOUVEMENT INAPERÇU
 STR_TURN
 TOUR>
 STR_SIDE
@@ -1960,7 +1960,7 @@ CAMP>
 STR_X_COM
 X-COM
 STR_PRESS_BUTTON_TO_CONTINUE
-Appuyez sur le bouton pour continuer
+Cliquez à continuer
 STR_MIND_CONTROL
 Contrôle de l'Esprit
 STR_PANIC_UNIT
@@ -1968,27 +1968,27 @@ Panique de l'Unité
 STR_MIND_CONTROL_SUCCESSFUL
 Contrôle de l'Esprit Réussi
 STR_HAS_GONE_BERSERK
-est devenu Fou
+est délirant/e
 STR_HAS_PANICKED
-A Paniqué
+a paniqué
 STR_XCOM
 Xcom
 STR_ALIENS
-Aliens
+Extraterrestres
 STR_RIGHT_HAND
 MAIN DROITE
 STR_LEFT_HAND
 MAIN GAUCHE
 STR_RIGHT_SHOULDER
-EPAULE DROITE
+ÉPAULE DROITE
 STR_LEFT_SHOULDER
-EPAULE GAUCHE
+ÉPAULE GAUCHE
 STR_BACK_PACK
-SAC A DOS
+SAC À DOS
 STR_BELT
 CEINTURE
 STR_IS_UNDER_ALIEN_CONTROL
-est sous contrôle alien
+est en contrôle extraterrestre
 STR_SCROLL_SPEED
 VITESSE DE DEFILEMENT
 STR_SCROLL_TYPE
@@ -2000,9 +2000,9 @@ DEFILEMENT AUTOMATIQUE
 STR_FIRE_SPEED
 VITESSE DE TIR
 STR_XCOM_MOVEMENT_SPEED
-VITESSE DE DEPLACEMENT XCOM
+VITESSE DE MOUVEMENT XCOM
 STR_ALIEN_MOVEMENT_SPEED
-VITESSE DE DEPLACEMENT ALIEN
+VITESSE DE MOUVEMENT EXTRATERRESTRES
 STR_HAS_BECOME_UNCONSCIOUS
  a perdu conscience
 STR_HAS_DIED_FROM_A_FATAL_WOUND
@@ -2024,12 +2024,28 @@ STR_UNITS_IN_EXIT_AREA
 STR_UNITS_OUTSIDE_EXIT_AREA
  Unités hors de la zone de sortie
 STR_ABORT_MISSION
-Annuler mission?
+Abandonner mission?
 STR_CORPSE
 Corps
 STR_UNLOAD
 Décharger
+STR_NEW_SAVED_GAME
+<NOUVELLE SAUVEGARDE>
 STR_NEW_BATTLE
-New Battle
+Nouveau Combat
 STR_OPTIONS
 Options
+STR_TERRAIN
+Terrain
+STR_DARKNESS
+Obscurité
+STR_DISPLAY_RESOLUTION
+Définition d'écran
+STR_DISPLAY_MODE
+Mode d'écran
+STR_WINDOWED
+Fenêtré
+STR_FULLSCREEN
+Plein Écran
+STR_LANGUAGE
+Choisir Langue

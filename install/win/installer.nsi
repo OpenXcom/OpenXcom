@@ -11,7 +11,7 @@
 ;General
 
 	!define GAME_NAME "OpenXcom"
-	!define GAME_VERSION "0.4"
+	!define GAME_VERSION "0.4.5"
 	!define GAME_AUTHOR "OpenXcom Developers"
 
 	;Name and file
@@ -172,6 +172,8 @@ ${EndIf}
 	File "..\..\bin\data\Language\French.lng"
 	File "..\..\bin\data\Language\German.geo"
 	File "..\..\bin\data\Language\German.lng"
+	File "..\..\bin\data\Language\Hungarian.geo"
+	File "..\..\bin\data\Language\Hungarian.lng"
 	File "..\..\bin\data\Language\Italian.geo"
 	File "..\..\bin\data\Language\Italian.lng"
 	File "..\..\bin\data\Language\Polish.geo"

@@ -22,6 +22,8 @@ language_DATA = \
 	bin/data/Language/French.lng \
 	bin/data/Language/German.geo \
 	bin/data/Language/German.lng \
+	bin/data/Language/Hungarian.geo \
+	bin/data/Language/Hungarian.lng \
 	bin/data/Language/Italian.geo \
 	bin/data/Language/Italian.lng \
 	bin/data/Language/Polish.geo \
@@ -477,6 +479,8 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateUfo.h \
 	src/Ufopaedia/ArticleStateArmor.cpp \
 	src/Ufopaedia/ArticleStateArmor.h \
+	src/Ufopaedia/ArticleStateVehicle.cpp \
+	src/Ufopaedia/ArticleStateVehicle.h \
 	src/Ufopaedia/Ufopaedia.cpp \
 	src/Ufopaedia/Ufopaedia.h \
 	src/Ufopaedia/UfopaediaSelectState.cpp \

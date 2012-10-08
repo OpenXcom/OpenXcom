@@ -1,6 +1,6 @@
-#################
-# OpenXcom v0.4 #
-#################
+###################
+# OpenXcom v0.4.5 #
+###################
 
 OpenXcom is an open-source reimplementation of the popular
 UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by

@@ -235,6 +235,12 @@ void InventoryState::btnUnloadClick(Action *action)
 		_inv->unload();
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
+		if (_tu)
+		{
+			std::wstringstream ss;
+			ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
+			_txtTus->setText(ss.str());
+		}
 	}
 }
 
