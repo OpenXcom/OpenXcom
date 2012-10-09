@@ -22,6 +22,7 @@
 #include "Ufopaedia.h"
 #include "ArticleStateArmor.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -38,6 +39,8 @@ namespace OpenXcom
 
 	ArticleStateArmor::ArticleStateArmor(Game *game, ArticleDefinitionArmor *defs) : ArticleState(game, defs->id)
 	{
+		Armor *armor = _game->getRuleset()->getArmor(defs->id);
+
 		// add screen elements
 		_txtTitle = new Text(300, 32, 5, 24);
 
@@ -62,11 +65,11 @@ namespace OpenXcom
 		_image = new Surface(320, 200, 0, 0);
 		add(_image);
 
-		std::string look = defs->armor->getSpriteInventory();
+		std::string look = armor->getSpriteInventory();
 		look += "M0.SPK";
 		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
 		{
-			look = defs->armor->getSpriteInventory() + ".SPK";
+			look = armor->getSpriteInventory() + ".SPK";
 		}
 		_game->getResourcePack()->getSurface(look)->blit(_image);
 
@@ -80,27 +83,27 @@ namespace OpenXcom
 
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
-		ss << defs->armor->getFrontArmor();
+		ss << armor->getFrontArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_FRONT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->armor->getSideArmor();
+		ss << armor->getSideArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_LEFT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->armor->getSideArmor();
+		ss << armor->getSideArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RIGHT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->armor->getRearArmor();
+		ss << armor->getRearArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_REAR_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->armor->getUnderArmor();
+		ss << armor->getUnderArmor();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_UNDER_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 

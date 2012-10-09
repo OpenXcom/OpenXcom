@@ -39,6 +39,10 @@ namespace OpenXcom
 
 	ArticleStateVehicle::ArticleStateVehicle(Game *game, ArticleDefinitionVehicle *defs) : ArticleState(game, defs->id)
 	{
+		Unit *unit = _game->getRuleset()->getUnit(defs->id);
+		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
+		RuleItem *item = _game->getRuleset()->getItem(defs->title);
+
 		// add screen elements
 		_txtTitle = new Text(310, 16, 5, 24);
 		_txtInfo = new Text(300, 150, 10, 120);
@@ -74,14 +78,13 @@ namespace OpenXcom
 		_lstStats->setDot(true);
 		
 		std::wstringstream ss;
-		ss << defs->unit->getStats()->tu;
+		ss << unit->getStats()->tu;
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_TIME_UNITS").c_str(), ss.str().c_str());
 		
 		std::wstringstream ss2;
-		ss2 << defs->unit->getStats()->health;
+		ss2 << unit->getStats()->health;
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_HEALTH").c_str(), ss2.str().c_str());
 		
-		Armor *armor = _game->getRuleset()->getArmor(defs->unit->getArmor());
 		std::wstringstream ss3;
 		ss3 << armor->getFrontArmor();
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_FRONT_ARMOR").c_str(), ss3.str().c_str());
@@ -102,22 +105,22 @@ namespace OpenXcom
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
-		RuleItem *item = _game->getRuleset()->getItem(defs->title);
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON").c_str(), _game->getLanguage()->getString(item->getName()).c_str());
 		
 		std::wstringstream ss8;
-		ss8 << defs->unit->getStats()->tu;
+		ss8 << unit->getStats()->tu;
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 		
 		if (item->getClipSize() != -1)
 		{
-			_lstStats->addRow(2, _game->getLanguage()->getString("STR_AMMUNITION").c_str(), _game->getLanguage()->getString(item->getCompatibleAmmo()->front()).c_str());
+			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+			_lstStats->addRow(2, _game->getLanguage()->getString("STR_AMMUNITION").c_str(), _game->getLanguage()->getString(ammo->getName()).c_str());
 			
 			std::wstringstream ss9;
-			ss9 << item->getClipSize();
+			ss9 << ammo->getClipSize();
 			_lstStats->addRow(2, _game->getLanguage()->getString("STR_ROUNDS").c_str(), ss9.str().c_str());
 			
-			_txtInfo->setY(136);
+			_txtInfo->setY(138);
 		}
 	}
 

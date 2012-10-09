@@ -26,15 +26,6 @@
 
 namespace OpenXcom
 {
-	class Ruleset;
-	class RuleCraft;
-	class RuleCraftWeapon;
-	class RuleBaseFacility;
-	class RuleItem;
-	class RuleUfo;
-	class Armor;
-	class Unit;
-
 	/// define article types
 	enum UfopaediaTypeId {
 		UFOPAEDIA_TYPE_UNKNOWN         = 0,
@@ -67,7 +58,7 @@ namespace OpenXcom
 		/// get the type of article definition.
 		UfopaediaTypeId getType() const;
 		/// Loads the article from YAML.
-		virtual void load(const YAML::Node& node, const Ruleset *rule);
+		virtual void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		virtual void save(YAML::Emitter& out) const;
 
@@ -106,14 +97,13 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionCraft();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
 		std::string image_id;
 		ArticleDefinitionRect rect_stats;
 		ArticleDefinitionRect rect_text;
-		RuleCraft *craft;
 		std::string text;
 	};
 
@@ -128,13 +118,12 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionCraftWeapon();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
 		std::string image_id;
 		std::string text;
-		RuleCraftWeapon *weapon;
 	};
 
 	/**
@@ -147,7 +136,7 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionText();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
@@ -165,7 +154,7 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionTextImage();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
@@ -185,11 +174,10 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionBaseFacility();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
-		RuleBaseFacility *facility;
 		std::string text;
 	};
 
@@ -204,11 +192,10 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionItem();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
-		RuleItem *item;
 		std::string text;
 	};
 
@@ -223,11 +210,10 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionUfo();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 
-		RuleUfo *ufo;
 		std::string text;
 	};
 
@@ -242,11 +228,9 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionArmor();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
-
-		Armor *armor;
 	};
 
 	/**
@@ -260,11 +244,9 @@ namespace OpenXcom
 		/// Constructor
 		ArticleDefinitionVehicle();
 		/// Loads the article from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node);
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
-
-		Unit *unit;
 		std::string text;
 	};
 

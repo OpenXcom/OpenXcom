@@ -22,6 +22,7 @@
 #include "Ufopaedia.h"
 #include "ArticleStateCraftWeapon.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -37,6 +38,8 @@ namespace OpenXcom
 
 	ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *defs) : ArticleState(game, defs->id)
 	{
+		RuleCraftWeapon *weapon = _game->getRuleset()->getCraftWeapon(defs->id);
+
 		// add screen elements
 		_txtTitle = new Text(200, 32, 5, 24);
 
@@ -76,23 +79,23 @@ namespace OpenXcom
 		_lstInfo->setBig();
 
 		ss.str(L"");ss.clear();
-		ss << defs->weapon->getDamage();
+		ss << weapon->getDamage();
 
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DAMAGE").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->weapon->getRange() << _game->getLanguage()->getString("STR_KM").c_str();
+		ss << weapon->getRange() << _game->getLanguage()->getString("STR_KM").c_str();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RANGE").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->weapon->getAccuracy() << "%";
+		ss << weapon->getAccuracy() << "%";
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ACCURACY").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
-		ss << defs->weapon->getStandardReload() << _game->getLanguage()->getString("STR_S").c_str();
+		ss << weapon->getStandardReload() << _game->getLanguage()->getString("STR_S").c_str();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RE_LOAD_TIME").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 	}

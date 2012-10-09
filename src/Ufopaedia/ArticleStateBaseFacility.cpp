@@ -22,6 +22,7 @@
 #include "Ufopaedia.h"
 #include "ArticleStateBaseFacility.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -38,6 +39,8 @@ namespace OpenXcom
 
 	ArticleStateBaseFacility::ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *defs) : ArticleState(game, defs->id)
 	{
+		RuleBaseFacility *facility = _game->getRuleset()->getBaseFacility(defs->id);
+
 		// add screen elements
 		_txtTitle = new Text(190, 32, 10, 24);
 
@@ -71,7 +74,7 @@ namespace OpenXcom
 		int x_pos, y_pos;
 		int num;
 
-		if (defs->facility->getSize()==1)
+		if (facility->getSize()==1)
 		{
 			x_offset = y_offset = tile_size/2;
 		}
@@ -82,19 +85,19 @@ namespace OpenXcom
 
 		num = 0;
 		y_pos = y_offset;
-		for (int y = 0; y < defs->facility->getSize(); ++y)
+		for (int y = 0; y < facility->getSize(); ++y)
 		{
 			x_pos = x_offset;
-			for (int x = 0; x < defs->facility->getSize(); ++x)
+			for (int x = 0; x < facility->getSize(); ++x)
 			{
-				frame = graphic->getFrame(defs->facility->getSpriteShape() + num);
+				frame = graphic->getFrame(facility->getSpriteShape() + num);
 				frame->setX(x_pos);
 				frame->setY(y_pos);
 				frame->blit(_image);
 
-				if (defs->facility->getSize()==1)
+				if (facility->getSize()==1)
 				{
-					frame = graphic->getFrame(defs->facility->getSpriteFacility() + num);
+					frame = graphic->getFrame(facility->getSpriteFacility() + num);
 					frame->setX(x_pos);
 					frame->setY(y_pos);
 					frame->blit(_image);
@@ -122,8 +125,8 @@ namespace OpenXcom
 
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
-		ss << defs->facility->getBuildTime();
-		if (defs->facility->getBuildTime() != 1)
+		ss << facility->getBuildTime();
+		if (facility->getBuildTime() != 1)
 			ss << _game->getLanguage()->getString("STR_DAYS");
 		else
 			ss << _game->getLanguage()->getString("STR_DAY");
@@ -131,12 +134,12 @@ namespace OpenXcom
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
 
 		ss.str(L"");ss.clear();
-		ss << Text::formatFunding(defs->facility->getBuildCost());
+		ss << Text::formatFunding(facility->getBuildCost());
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);
 
 		ss.str(L"");ss.clear();
-		ss << Text::formatFunding(defs->facility->getMonthlyCost());
+		ss << Text::formatFunding(facility->getMonthlyCost());
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAINTENANCE_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
 	}

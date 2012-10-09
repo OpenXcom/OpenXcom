@@ -39,6 +39,8 @@ namespace OpenXcom
 
 	ArticleStateItem::ArticleStateItem(Game *game, ArticleDefinitionItem *defs) : ArticleState(game, defs->id)
 	{
+		RuleItem *item = _game->getRuleset()->getItem(defs->id);
+
 		// add screen elements
 		_txtTitle = new Text(140, 32, 5, 24);
 
@@ -65,12 +67,12 @@ namespace OpenXcom
 		_image = new Surface(32, 48, 157, 5);
 		add(_image);
 
-		defs->item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
+		item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
 
-		std::vector<std::string> *ammo_data = defs->item->getCompatibleAmmo();
+		std::vector<std::string> *ammo_data = item->getCompatibleAmmo();
 
 		// SHOT STATS TABLE (for firearms only)
-		if (defs->item->getBattleType() == BT_FIREARM)
+		if (item->getBattleType() == BT_FIREARM)
 		{
 			_txtShotType = new Text(75, 16, 8, 66);
 			add(_txtShotType);
@@ -98,32 +100,32 @@ namespace OpenXcom
 			_lstInfo->setBig();
 
 			int current_row = 0;
-			if (defs->item->getAccuracyAuto()>0)
+			if (item->getAccuracyAuto()>0)
 			{
 				_lstInfo->addRow(3,
 								 _game->getLanguage()->getString("STR_AUTO").c_str(),
-								 Text::formatPercentage(defs->item->getAccuracyAuto()).c_str(),
-								 Text::formatPercentage(defs->item->getTUAuto()).c_str());
+								 Text::formatPercentage(item->getAccuracyAuto()).c_str(),
+								 Text::formatPercentage(item->getTUAuto()).c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
 
-			if (defs->item->getAccuracySnap()>0)
+			if (item->getAccuracySnap()>0)
 			{
 				_lstInfo->addRow(3,
 								 _game->getLanguage()->getString("STR_SNAP").c_str(),
-								 Text::formatPercentage(defs->item->getAccuracySnap()).c_str(),
-								 Text::formatPercentage(defs->item->getTUSnap()).c_str());
+								 Text::formatPercentage(item->getAccuracySnap()).c_str(),
+								 Text::formatPercentage(item->getTUSnap()).c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
 
-			if (defs->item->getAccuracyAimed()>0)
+			if (item->getAccuracyAimed()>0)
 			{
 				_lstInfo->addRow(3,
 								 _game->getLanguage()->getString("STR_AIMED").c_str(),
-								 Text::formatPercentage(defs->item->getAccuracyAimed()).c_str(),
-								 Text::formatPercentage(defs->item->getTUAimed()).c_str());
+								 Text::formatPercentage(item->getAccuracyAimed()).c_str(),
+								 Text::formatPercentage(item->getTUAimed()).c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
@@ -164,7 +166,7 @@ namespace OpenXcom
 			add(_imageAmmo[i]);
 		}
 
-		switch (defs->item->getBattleType())
+		switch (item->getBattleType())
 		{
 			case BT_FIREARM:
 				_txtDamage = new Text(80, 10, 200, 7);
@@ -196,10 +198,10 @@ namespace OpenXcom
 				break;
 			case BT_AMMO:
 			case BT_GRENADE:
-				setDamageTypeText(_txtAmmoType[0], defs->item);
+				setDamageTypeText(_txtAmmoType[0], item);
 
 				ss.str(L"");ss.clear();
-				ss << defs->item->getPower();
+				ss << item->getPower();
 				_txtAmmoDamage[0]->setText(ss.str().c_str());
 				break;
 			default: break;

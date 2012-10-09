@@ -22,6 +22,7 @@
 #include "Ufopaedia.h"
 #include "ArticleStateUfo.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -37,6 +38,8 @@ namespace OpenXcom
 
 	ArticleStateUfo::ArticleStateUfo(Game *game, ArticleDefinitionUfo *defs) : ArticleState(game, defs->id)
 	{
+		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
+
 		// add screen elements
 		_txtTitle = new Text(160, 32, 5, 24);
 
@@ -79,7 +82,7 @@ namespace OpenXcom
 		graphic->getCrop()->h = 29;
 		graphic->blit(_image);
 */
-		graphic->getCrop()->y = 140 + 52 * defs->ufo->getSprite();
+		graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
 		graphic->getCrop()->h = 52;
 		graphic->blit(_image);
 
@@ -101,19 +104,19 @@ namespace OpenXcom
 
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
-		ss << defs->ufo->getMaxDamage();
+		ss << ufo->getMaxDamage();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DAMAGE_CAPACITY").c_str(), ss.str().c_str());
 
 		ss.str(L"");ss.clear();
-		ss << defs->ufo->getWeaponPower();
+		ss << ufo->getWeaponPower();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss.str().c_str());
 
 		ss.str(L"");ss.clear();
-		ss << defs->ufo->getWeaponRange();
+		ss << ufo->getWeaponRange();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
 
 		ss.str(L"");ss.clear();
-		ss << defs->ufo->getMaxSpeed();
+		ss << ufo->getMaxSpeed();
 		ss << " ";
 		ss << _game->getLanguage()->getString("STR_KNOTS");
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAXIMUM_SPEED").c_str(), ss.str().c_str());

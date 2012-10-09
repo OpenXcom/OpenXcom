@@ -520,7 +520,7 @@ void Ruleset::load(const std::string &filename)
 					_ufopaediaArticles[id] = rule;
 					_ufopaediaIndex.push_back(id);
 				}
-				rule->load(*j, this);
+				rule->load(*j);
 			}
 		}
 		else if (key == "startingBase")

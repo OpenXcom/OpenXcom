@@ -18,7 +18,6 @@
  */
 
 #include "ArticleDefinition.h"
-#include "Ruleset.h"
 
 namespace OpenXcom
 {
@@ -49,7 +48,7 @@ namespace OpenXcom
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinition::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinition::load(const YAML::Node &node)
 	{
 		int a = 0;
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
@@ -128,16 +127,16 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionCraft::ArticleDefinitionCraft() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT), craft(0)
+	ArticleDefinitionCraft::ArticleDefinitionCraft() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionCraft::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionCraft::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -159,7 +158,6 @@ namespace OpenXcom
 				i.second() >> text;
 			}
 		}
-		craft = rule->getCraft(id);
 	}
 
 	/**
@@ -179,16 +177,16 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON), weapon(0)
+	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionCraftWeapon::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionCraftWeapon::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -202,7 +200,6 @@ namespace OpenXcom
 				i.second() >> text;
 			}
 		}
-		weapon = rule->getCraftWeapon(id);
 	}
 
 	/**
@@ -227,9 +224,9 @@ namespace OpenXcom
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionText::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionText::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -262,9 +259,9 @@ namespace OpenXcom
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionTextImage::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionTextImage::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -276,6 +273,10 @@ namespace OpenXcom
 			else if (key == "text")
 			{
 				i.second() >> text;
+			}
+			else if (key == "text_width")
+			{
+				i.second() >> text_width;
 			}
 		}
 	}
@@ -289,22 +290,23 @@ namespace OpenXcom
 		ArticleDefinition::save(out);
 		out << YAML::Key << "image_id" << YAML::Value << image_id;
 		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::Key << "text_width" << YAML::Value << text_width;
 		out << YAML::EndMap;
 	}
 
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY), facility(0)
+	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionBaseFacility::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionBaseFacility::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -314,7 +316,6 @@ namespace OpenXcom
 				i.second() >> text;
 			}
 		}
-		facility = rule->getBaseFacility(id);
 	}
 
 	/**
@@ -331,16 +332,16 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionItem::ArticleDefinitionItem() : ArticleDefinition(UFOPAEDIA_TYPE_ITEM), item(0)
+	ArticleDefinitionItem::ArticleDefinitionItem() : ArticleDefinition(UFOPAEDIA_TYPE_ITEM)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionItem::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionItem::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -350,7 +351,6 @@ namespace OpenXcom
 				i.second() >> text;
 			}
 		}
-		item = rule->getItem(id);
 	}
 
 	/**
@@ -367,16 +367,16 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO), ufo(0)
+	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionUfo::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionUfo::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -386,7 +386,6 @@ namespace OpenXcom
 				i.second() >> text;
 			}
 		}
-		ufo = rule->getUfo(id);
 	}
 
 	/**
@@ -403,17 +402,16 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionArmor::ArticleDefinitionArmor() : ArticleDefinition(UFOPAEDIA_TYPE_ARMOR), armor(0)
+	ArticleDefinitionArmor::ArticleDefinitionArmor() : ArticleDefinition(UFOPAEDIA_TYPE_ARMOR)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionArmor::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionArmor::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
-		armor = rule->getArmor(id);
+		ArticleDefinition::load(node);
 	}
 
 	/**
@@ -429,16 +427,16 @@ namespace OpenXcom
 	/**
 	 * Constructor (only setting type of base class)
 	 */
-	ArticleDefinitionVehicle::ArticleDefinitionVehicle() : ArticleDefinition(UFOPAEDIA_TYPE_VEHICLE), unit(0)
+	ArticleDefinitionVehicle::ArticleDefinitionVehicle() : ArticleDefinition(UFOPAEDIA_TYPE_VEHICLE)
 	{}
 
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
 	 */
-	void ArticleDefinitionVehicle::load(const YAML::Node &node, const Ruleset *rule)
+	void ArticleDefinitionVehicle::load(const YAML::Node &node)
 	{
-		ArticleDefinition::load(node, rule);
+		ArticleDefinition::load(node);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -448,7 +446,6 @@ namespace OpenXcom
 				i.second() >> text;
 			}
 		}
-		unit = rule->getUnit(id);
 	}
 
 	/**

@@ -22,6 +22,7 @@
 #include "Ufopaedia.h"
 #include "ArticleStateCraft.h"
 #include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -36,6 +37,8 @@ namespace OpenXcom
 
 	ArticleStateCraft::ArticleStateCraft(Game *game, ArticleDefinitionCraft *defs) : ArticleState(game, defs->id)
 	{
+		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
+
 		// add screen elements
 		_txtTitle = new Text(140, 32, 5, 24);
 
@@ -72,13 +75,13 @@ namespace OpenXcom
 		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << L'\x01' << defs->craft->getMaxSpeed() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_ACCELERATION") << L'\x01' << defs->craft->getAcceleration() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_FUEL_CAPACITY") << L'\x01' << defs->craft->getMaxFuel() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_WEAPON_PODS") << L'\x01' << defs->craft->getWeapons() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC") << L'\x01' << defs->craft->getMaxDamage() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << defs->craft->getSoldiers() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << defs->craft->getVehicles();
+		ss << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << L'\x01' << craft->getMaxSpeed() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_ACCELERATION") << L'\x01' << craft->getAcceleration() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_FUEL_CAPACITY") << L'\x01' << craft->getMaxFuel() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_WEAPON_PODS") << L'\x01' << craft->getWeapons() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC") << L'\x01' << craft->getMaxDamage() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << craft->getSoldiers() << L'\x01' << L'\n';
+		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << craft->getVehicles();
 		_txtStats->setText(ss.str());
 	}
 
