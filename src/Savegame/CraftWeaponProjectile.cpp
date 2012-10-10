@@ -143,6 +143,7 @@ void CraftWeaponProjectile::move()
 		if(_state > 10)
 		{
 			_state = 0;
+			_toBeRemoved = true;
 		}
 	}
 }
