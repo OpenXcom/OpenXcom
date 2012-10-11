@@ -134,6 +134,7 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 	p->setType(this->getRules()->getType());
 	p->setAccuracy(this->getRules()->getAccuracy());
 	p->setDamage(this->getRules()->getDamage());
+	p->setRange(this->getRules()->getRange());
 	return p;
 }
 
