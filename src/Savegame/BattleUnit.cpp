@@ -171,6 +171,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expPsiSkill"] >> _expPsiSkill;
 	node["expMelee"] >> _expMelee;
 	node["turretType"] >> _turretType;
+	node["visible"] >> _visible;
 
 }
 
@@ -214,6 +215,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "expPsiSkill" << YAML::Value << _expPsiSkill;
 	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
 	out << YAML::Key << "turretType" << YAML::Value << _turretType;
+	out << YAML::Key << "visible" << YAML::Value << _visible;
 
 	if (getCurrentAIState())
 	{

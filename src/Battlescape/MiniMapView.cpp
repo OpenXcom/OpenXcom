@@ -82,26 +82,28 @@ void MiniMapView::draw()
 				Tile * t = 0;
 				Position p (px, py, lvl);
 				t = _battleGame->getTile(p);
-				if (!t || !t->isDiscovered(2))
+				if (!t)
 				{
 					px++;
 					continue;
 				}
-				for(int i = 0; i < 4; i++)
+				if (t->isDiscovered(2))
 				{
-					data = t->getMapData(i);
+					for(int i = 0; i < 4; i++)
+					{
+						data = t->getMapData(i);
 
-					Surface * s = 0;
-					if(data && data->getMiniMapIndex())
-					{
-						s = _set->getFrame (data->getMiniMapIndex()+35);
-					}
-					if(s)
-					{
-						s->blitNShade(this, x, y, t->getShade());
+						Surface * s = 0;
+						if(data && data->getMiniMapIndex())
+						{
+							s = _set->getFrame (data->getMiniMapIndex()+35);
+						}
+						if(s)
+						{
+							s->blitNShade(this, x, y, t->getShade());
+						}
 					}
 				}
-
 				// alive units
 				if (t->getUnit() && t->getUnit()->getVisible())
 				{
