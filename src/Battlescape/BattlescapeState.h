@@ -72,6 +72,9 @@ private:
 	std::vector<State*> _popups;
 	BattlescapeGame *_battleGame;
 	bool firstInit;
+	bool isMouseScrolling;
+	bool isMouseScrolled;
+  int xBeforeMouseScrolling, yBeforeMouseScrolling;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);
@@ -86,6 +89,10 @@ public:
 	void init();
 	/// think
 	void think();
+	/// Handler for moving mouse over the map.
+	void mapOver(Action *action);
+	/// Handler for pressing the map.
+	void mapPress(Action *action);
 	/// Handler for clicking the map.
 	void mapClick(Action *action);
 	/// Handler for clicking the Unit Up button.

@@ -229,6 +229,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_save = _game->getSavedGame()->getBattleGame();
 	_map->init();
+	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
+	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
@@ -330,6 +332,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_battleGame = new BattlescapeGame(_save, this);
 
 	firstInit = true;
+
+	isMouseScrolling = false;
+	isMouseScrolled = false;
 }
 
 
@@ -394,13 +399,57 @@ void BattlescapeState::think()
 }
 
 /**
+ * Processes any mouse moving over the map
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::mapOver(Action *action)
+{
+	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
+	{
+    isMouseScrolled = true;
+    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+    SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+    SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+    _map->getCamera()->scrollXY(-action->getDetails()->motion.xrel, -action->getDetails()->motion.yrel, false);
+    action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+    _game->getCursor()->handle(action);
+	}
+}
+
+/**
+ * Processes any presses on the map
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::mapPress(Action *action)
+{
+	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
+	int my = int(action->getAbsoluteYMouse());
+	int mx = int(action->getAbsoluteXMouse());
+	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
+
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		isMouseScrolling = true;
+    isMouseScrolled = false;
+    SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
+	}
+}
+
+/**
  * Processes any clicks on the map to
  * command units.
  * @param action Pointer to an action.
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	// right-click aborts walking state
+	// right-button release: release mouse-scroll-mode
+	if (isMouseScrolling)
+	{
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) isMouseScrolling = false; else return;
+    if (isMouseScrolled) return;
+	}
+
+  // right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_battleGame->cancelCurrentAction())

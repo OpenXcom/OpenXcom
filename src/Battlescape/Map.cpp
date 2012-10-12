@@ -687,7 +687,8 @@ void Map::keyboardPress(Action *action, State *state)
  */
 void Map::mouseOver(Action *action, State *state)
 {
-	int posX = action->getXMouse();
+	InteractiveSurface::mouseOver(action, state);
+  int posX = action->getXMouse();
 	int posY = action->getYMouse();
 
 	_camera->mouseOver(action, state);
