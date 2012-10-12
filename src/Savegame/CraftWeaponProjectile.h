@@ -45,6 +45,7 @@ private:
 	int _state;
 	int _accuracy;
 	int _damage;
+	int _range;
 	bool _toBeRemoved;
 	bool _missed;
 
@@ -90,6 +91,10 @@ public:
 	void setMissed(const bool &missed);
 	/// Gets the projectile missed status.
 	bool getMissed() const;
+	/// Sets maximum range of projectile.
+	void setRange(const int &range);
+	/// Gets maximum range of projectile.
+	int getRange() const;
 	
 };
 
