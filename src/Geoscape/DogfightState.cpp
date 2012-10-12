@@ -228,16 +228,16 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _ufoSize(0)
+DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _weapon1Enabled(true), _weapon2Enabled(true)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Surface(160, 96, 80, 52);
 	_battle = new Surface(77, 74, 83, 55);
-	_weapon1 = new Surface(15, 17, 84, 104);
+	_weapon1 = new InteractiveSurface(15, 17, 84, 104);
 	_range1 = new Surface(21, 74, 99, 55);
-	_weapon2 = new Surface(15, 17, 144, 104);
+	_weapon2 = new InteractiveSurface(15, 17, 144, 104);
 	_range2 = new Surface(21, 74, 123, 55);
 	_damage = new Surface(22, 25, 173, 92);
 
@@ -261,6 +261,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_mode = _btnStandoff;
 	_ufoWtimer = new Timer(0);
 	_ufoEscapeTimer = new Timer(0);
+	_craftDamageAnimTimer = new Timer(500);
 
 	add(_window);
 	add(_battle);
@@ -379,6 +380,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 
 		// Draw weapon icon
 		Surface *frame = set->getFrame(w->getRules()->getSprite() + 5);
+		
 		frame->setX(0);
 		frame->setY(0);
 		frame->blit(weapon);
@@ -457,6 +459,8 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime()) - 30 * _game->getSavedGame()->getDifficulty()) * 20;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
+	_craftDamageAnimTimer->onTimer((StateHandler)&DogfightState::animateCraftDamage);
+
 	// Set UFO size - going to be moved to Ufo class to implement simultanous dogfights.
 	std::string ufoSize = _ufo->getRules()->getSize();
 	if(ufoSize.compare("STR_VERY_SMALL") == 0)
@@ -479,6 +483,21 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	{
 		_ufoSize = 4;
 	}
+
+	// Get crafts height. Used for damage indication.
+	int x =_damage->getWidth() / 2;
+	for(int y = 0; y < _damage->getHeight(); ++y)
+	{
+		Uint8 pixelColor = _damage->getPixel(x, y);
+		if(pixelColor >= Palette::blockOffset(10) || pixelColor < Palette::blockOffset(11))
+		{
+			++_craftHeight;
+		}
+	}
+
+	// Used for weapon toggling.
+	_weapon1->onMouseClick((ActionHandler)&DogfightState::weapon1Click);
+	_weapon2->onMouseClick((ActionHandler)&DogfightState::weapon2Click);
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMINTER")->play();
@@ -513,6 +532,64 @@ void DogfightState::think()
 	_w2Timer->think(this, 0);
 	_ufoWtimer->think(this, 0);
 	_ufoEscapeTimer->think(this, 0);
+	_craftDamageAnimTimer->think(this, 0);
+}
+
+/**
+ * Animates interceptor damage by changing the color and redrawing the image.
+ */
+void DogfightState::animateCraftDamage()
+{
+	--_currentCraftDamageColor;
+	if(_currentCraftDamageColor < 13)
+	{
+		_currentCraftDamageColor = 14;
+	}
+	drawCraftDamage();
+}
+
+/**
+ * Draws interceptor damage according to percentage of HP's left.
+ */
+void DogfightState::drawCraftDamage()
+{
+	if(_craft->getDamagePercentage() != 0)
+	{
+		int damagePercentage = _craft->getDamagePercentage();
+		int rowsToColor = (int)floor((double)_craftHeight * (double)(damagePercentage / 100.));
+		if(rowsToColor == 0)
+		{
+			return;
+		}
+		int rowsColored = 0;
+		bool rowColored = false;
+		for(int y = 0; y < _damage->getHeight(); ++y)
+		{
+			rowColored = false;
+			for(int x = 0; x < _damage->getWidth(); ++x)
+			{
+				int pixelColor = _damage->getPixel(x, y);
+				if(pixelColor == 13 || pixelColor == 14)
+				{
+					_damage->setPixel(x, y, _currentCraftDamageColor);
+					rowColored = true;
+				}
+				if(pixelColor >= Palette::blockOffset(10) && pixelColor < Palette::blockOffset(11))
+				{
+					_damage->setPixel(x, y, _currentCraftDamageColor);
+					rowColored = true;
+				}
+			}
+			if(rowColored)
+			{
+				++rowsColored;
+			}
+			if(rowsColored == rowsToColor)
+			{
+				break;
+			}
+		}
+	}
 }
 
 /**
@@ -546,7 +623,7 @@ void DogfightState::animate()
 		drawUfo();
 	}
 
-	// Draw weapon shots.
+	// Draw projectiles.
 	for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
 	{
 		drawProjectile((*it));
@@ -669,7 +746,7 @@ void DogfightState::move()
 		// Projectiles fired by UFO.
 		else if(p->getDirection() == D_DOWN)
 		{
-			if(p->getGlobalType() == CWPGT_MISSILE || (p->getGlobalType() == CWPGT_BEAM && p->getState() == 0))
+			if(p->getGlobalType() == CWPGT_MISSILE || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()))
 			{
 				int acc = RNG::generate(1, 100);
 				if(acc <= p->getAccuracy())
@@ -677,6 +754,11 @@ void DogfightState::move()
 					// Formula delivered by Volutar
 					int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
 					_craft->setDamage(_craft->getDamage() + damage);
+					if(!_craftDamageAnimTimer->isRunning())
+					{
+						_craftDamageAnimTimer->start();
+					}
+					drawCraftDamage();
 					setStatus("STR_INTERCEPTOR_DAMAGED");
 					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
 				}
@@ -865,19 +947,22 @@ void DogfightState::move()
  */
 void DogfightState::fireWeapon1()
 {
-	CraftWeapon *w1 = _craft->getWeapons()->at(0);
-	w1->setAmmo(w1->getAmmo() - 1);
+	if(_weapon1Enabled)
+	{
+		CraftWeapon *w1 = _craft->getWeapons()->at(0);
+		w1->setAmmo(w1->getAmmo() - 1);
 
-	std::wstringstream ss;
-	ss << w1->getAmmo();
-	_txtAmmo1->setText(ss.str());
+		std::wstringstream ss;
+		ss << w1->getAmmo();
+		_txtAmmo1->setText(ss.str());
 
-	CraftWeaponProjectile *p = w1->fire();
-	p->setDirection(D_UP);
-	p->setHorizontalPosition(HP_LEFT);
-	_projectiles.push_back(p);
+		CraftWeaponProjectile *p = w1->fire();
+		p->setDirection(D_UP);
+		p->setHorizontalPosition(HP_LEFT);
+		_projectiles.push_back(p);
 
-	_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w1->getRules()->getSound())->play();
+		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w1->getRules()->getSound())->play();
+	}
 }
 
 /**
@@ -886,19 +971,22 @@ void DogfightState::fireWeapon1()
  */
 void DogfightState::fireWeapon2()
 {
-	CraftWeapon *w2 = _craft->getWeapons()->at(1);
-	w2->setAmmo(w2->getAmmo() - 1);
+	if(_weapon2Enabled)
+	{
+		CraftWeapon *w2 = _craft->getWeapons()->at(1);
+		w2->setAmmo(w2->getAmmo() - 1);
 
-	std::wstringstream ss;
-	ss << w2->getAmmo();
-	_txtAmmo2->setText(ss.str());
+		std::wstringstream ss;
+		ss << w2->getAmmo();
+		_txtAmmo2->setText(ss.str());
 
-	CraftWeaponProjectile *p = w2->fire();
-	p->setDirection(D_UP);
-	p->setHorizontalPosition(HP_RIGHT);
-	_projectiles.push_back(p);
+		CraftWeaponProjectile *p = w2->fire();
+		p->setDirection(D_UP);
+		p->setHorizontalPosition(HP_RIGHT);
+		_projectiles.push_back(p);
 
-	_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w2->getRules()->getSound())->play();
+		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w2->getRules()->getSound())->play();
+	}
 }
 
 /// Fires a shot from UFO's weapon. 
@@ -1227,6 +1315,66 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p) {
 			}
 			_battle->setPixel(xPos, y, color);
 		}
+	}
+}
+
+/**
+ * Toggles usage of weapon number 1.
+ */
+void DogfightState::weapon1Click(Action *action)
+{
+	_weapon1Enabled = !_weapon1Enabled;
+	recolor(0, _weapon1Enabled);
+}
+
+/**
+ * Toggles usage of weapon number 2.
+ */
+void DogfightState::weapon2Click(Action *action)
+{
+	_weapon2Enabled = !_weapon2Enabled;
+	recolor(1, _weapon2Enabled);
+}
+
+/**
+ * Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
+ * @param weaponNo - number of weapon for which colors must be changed.
+ * @param currentState - state of weapon (enabled = true, disabled = false).
+ */
+void DogfightState::recolor(const int weaponNo, const bool currentState)
+{
+	InteractiveSurface *weapon = 0;
+	Text *ammo = 0;
+	Surface *range = 0;
+	int weaponAndAmmoOffset = 24, rangeOffset = 7;
+	if(weaponNo == 0)
+	{
+		weapon = _weapon1;
+		ammo = _txtAmmo1;
+		range = _range1;
+	}
+	else if(weaponNo == 1)
+	{
+		weapon = _weapon2;
+		ammo = _txtAmmo2;
+		range = _range2;
+	}
+	else
+	{
+		return;
+	}
+
+	if(currentState)
+	{
+		weapon->offset(-weaponAndAmmoOffset);
+		ammo->offset(-weaponAndAmmoOffset);
+		range->offset(-rangeOffset);
+	}
+	else
+	{
+		weapon->offset(weaponAndAmmoOffset);
+		ammo->offset(weaponAndAmmoOffset);
+		range->offset(rangeOffset);
 	}
 }
 

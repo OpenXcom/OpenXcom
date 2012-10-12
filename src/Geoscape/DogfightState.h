@@ -43,9 +43,9 @@ class CraftWeaponProjectile;
 class DogfightState : public State
 {
 private:
-	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer, *_ufoWtimer, *_ufoEscapeTimer, *_ufoHitBlingTimer;
-	Surface *_window, *_battle, *_weapon1, *_range1, *_weapon2, *_range2, *_damage;
-	InteractiveSurface *_btnMinimize, *_preview;
+	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer, *_ufoWtimer, *_ufoEscapeTimer, *_ufoHitBlingTimer, *_craftDamageAnimTimer;
+	Surface *_window, *_battle, *_range1, *_range2, *_damage;
+	InteractiveSurface *_btnMinimize, *_preview, *_weapon1, *_weapon2;
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
 	ImageButton *_mode;
 	Text *_txtAmmo1, *_txtAmmo2, *_txtDistance, *_txtStatus;
@@ -53,11 +53,11 @@ private:
 	Craft *_craft;
 	Ufo *_ufo;
 	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval;
-	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff;
+	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled;
 	std::vector<CraftWeaponProjectile*> _projectiles;
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
-	int _ufoSize;
+	int _ufoSize, _craftHeight, _currentCraftDamageColor;;
 
 public:
 	/// Creates the Dogfight state.
@@ -104,6 +104,16 @@ public:
 	void drawUfo();
 	/// Draws projectiles.
 	void drawProjectile(const CraftWeaponProjectile* p);
+	/// Animates craft damage.
+	void animateCraftDamage();
+	/// Updates craft damage.
+	void drawCraftDamage();
+	/// Toggles usage of weapon 1.
+	void weapon1Click(Action *action);
+	/// Toggles usage of weapon 2.
+	void weapon2Click(Action *action);
+	/// Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
+	void recolor(const int weaponNo, const bool currentState);
 };
 
 }
