@@ -24,7 +24,7 @@
 
 namespace OpenXcom {
 
-CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _toBeRemoved(false), _missed(false)
+CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _toBeRemoved(false), _missed(false), _range(0)
 {
 }
 
@@ -71,14 +71,14 @@ void CraftWeaponProjectile::setType(const std::string &type)
 		_type = CWPT_LASER_BEAM;
 		_globalType = CWPGT_BEAM;
 		_speed = 0;
-		_state = 0;
+		_state = 8;
 	}
 	else if(type.compare("STR_PLASMA_BEAM_UC") == 0)
 	{
 		_type = CWPT_PLASMA_BEAM;
 		_globalType = CWPGT_BEAM;
 		_speed = 0;
-		_state = 0;
+		_state = 8;
 	}
 }
 
@@ -139,10 +139,10 @@ void CraftWeaponProjectile::move()
 	}
 	else if(_globalType == CWPGT_BEAM)
 	{
-		_state += 2;
-		if(_state > 10)
+		_state /= 2;
+		if(_state == 1)
 		{
-			_state = 0;
+			_toBeRemoved = true;
 		}
 	}
 }
@@ -253,6 +253,22 @@ void CraftWeaponProjectile::setMissed(const bool &missed)
 bool CraftWeaponProjectile::getMissed() const
 {
 	return _missed;
+}
+
+/*
+ * Sets maximum range of projectile.
+ */
+void CraftWeaponProjectile::setRange(const int &range)
+{
+	_range = range;
+}
+
+/*
+ * Returns maximum range of projectile.
+ */
+int CraftWeaponProjectile::getRange() const
+{
+	return _range;
 }
 
 }
