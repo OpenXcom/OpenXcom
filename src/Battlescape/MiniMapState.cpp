@@ -73,7 +73,7 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 }
 
 /**
- * Closes the window on right-click.
+ * Handles mouse-wheeling.
  * @param action Pointer to an action.
  */
 void MiniMapState::handle(Action *action)
@@ -81,11 +81,7 @@ void MiniMapState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
-			_game->popState();
-		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		{
 			btnLevelUpClick(action);
 		}
