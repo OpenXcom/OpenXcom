@@ -68,10 +68,14 @@ public:
 	void morePress(Action *action);
 	/// Handler for releasing the More button.
 	void moreRelease(Action *action);
+	/// Handler for clicking the More button.
+	void moreClick(Action *action);
 	/// Handler for pressing the Less button.
 	void lessPress(Action *action);
 	/// Handler for releasing the Less button.
 	void lessRelease(Action *action);
+	/// Handler for clicking the Less button.
+	void lessClick(Action *action);
 	/// Runs state functionality every cycle(used to update the timer).
 	void think();
 };

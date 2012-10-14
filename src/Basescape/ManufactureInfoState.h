@@ -54,18 +54,26 @@ private:
 	void moreEngineerPress(Action * action);
 	/// Handler for releasing the more engineer button
 	void moreEngineerRelease(Action * action);
+	/// Handler for clicking the more engineer button
+	void moreEngineerClick(Action * action);
 	/// Handler for pressing the more unit button
 	void moreUnitPress(Action * action);
 	/// Handler for releasing the more unit button
 	void moreUnitRelease(Action * action);
+	/// Handler for clicking the more unit button
+	void moreUnitClick(Action * action);
 	/// Handler for pressing the less engineer button
 	void lessEngineerPress(Action * action);
 	/// Handler for releasing the less engineer button
 	void lessEngineerRelease(Action * action);
+	/// Handler for clicking the less engineer button
+	void lessEngineerClick(Action * action);
 	/// Handler for pressing the less unit button
 	void lessUnitPress(Action * action);
 	/// Handler for releasing the less unit button
 	void lessUnitRelease(Action * action);
+	/// Handler for clicking the less unit button
+	void lessUnitClick(Action * action);
 	/// Add one engineer to production (if possible)
 	void onMoreEngineer();
 	/// Remove one engineer to production (if possible)

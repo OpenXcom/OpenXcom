@@ -64,10 +64,14 @@ public:
 	void lstEquipmentLeftArrowPress(Action *action);
 	/// Handler for releasing a Move Left arrow in the list.
 	void lstEquipmentLeftArrowRelease(Action *action);
+	/// Handler for clicking a Move Left arrow in the list.
+	void lstEquipmentLeftArrowClick(Action *action);
 	/// Handler for pressing a Move Right arrow in the list.
 	void lstEquipmentRightArrowPress(Action *action);
 	/// Handler for releasing a Move Right arrow in the list.
 	void lstEquipmentRightArrowRelease(Action *action);
+	/// Handler for clicking a Move Right arrow in the list.
+	void lstEquipmentRightArrowClick(Action *action);
 	/// Moves an item to the base.
 	void moveLeft();
 	/// Moves an item to the craft.

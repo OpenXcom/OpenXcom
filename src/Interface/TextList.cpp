@@ -210,14 +210,14 @@ void TextList::addRow(int cols, ...)
 		ArrowButton *a1 = new ArrowButton(shape1, 11, 8, getX() + _arrowPos, getY());
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
-		a1->onMouseClick(_leftClick);
+		a1->onMouseClick(_leftClick, 0);
 		a1->onMousePress(_leftPress);
 		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
 		ArrowButton *a2 = new ArrowButton(shape2, 11, 8, getX() + _arrowPos + 12, getY());
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
-		a2->onMouseClick(_rightClick);
+		a2->onMouseClick(_rightClick, 0);
 		a2->onMousePress(_rightPress);
 		a2->onMouseRelease(_rightRelease);
 		_arrowRight.push_back(a2);
@@ -497,7 +497,7 @@ void TextList::onLeftArrowClick(ActionHandler handler)
 	_leftClick = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); ++i)
 	{
-		(*i)->onMouseClick(handler);
+		(*i)->onMouseClick(handler, 0);
 	}
 }
 
@@ -536,7 +536,7 @@ void TextList::onRightArrowClick(ActionHandler handler)
 	_rightClick = handler;
 	for (std::vector<ArrowButton*>::iterator i = _arrowRight.begin(); i < _arrowRight.end(); ++i)
 	{
-		(*i)->onMouseClick(handler);
+		(*i)->onMouseClick(handler, 0);
 	}
 }
 

@@ -19,6 +19,7 @@
 #include "TransferItemsState.h"
 #include <sstream>
 #include <cmath>
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -115,8 +116,10 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->setMargin(2);
 	_lstItems->onLeftArrowPress((ActionHandler)&TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&TransferItemsState::lstItemsLeftArrowRelease);
+	_lstItems->onLeftArrowClick((ActionHandler)&TransferItemsState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&TransferItemsState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&TransferItemsState::lstItemsRightArrowRelease);
+	_lstItems->onRightArrowClick((ActionHandler)&TransferItemsState::lstItemsRightArrowClick);
 
 	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
@@ -315,7 +318,7 @@ void TransferItemsState::btnCancelClick(Action *action)
 void TransferItemsState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	_timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerInc->start();
 }
 
 /**
@@ -324,7 +327,65 @@ void TransferItemsState::lstItemsLeftArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 {
-	_timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerInc->stop();
+}
+
+/**
+ * Increase the item to max on right-click.
+ * @param action Pointer to an action.
+ */
+void TransferItemsState::lstItemsLeftArrowClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+  {
+	  if ((_sel < _soldiers.size()) || (_sel >= _soldiers.size() + _crafts.size() && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+    {
+      int freeQuarters = _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters() - _pQty;
+      int toBeAdded = getQuantity() - _qtys[_sel];
+      int canBeAdded = std::min(freeQuarters, toBeAdded);
+      if (0 < canBeAdded)
+      {
+        _pQty += canBeAdded;
+		    _qtys[_sel] += canBeAdded;
+		    _total += getCost() * canBeAdded;
+      }
+	  }
+	  else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+	  {
+		  Craft *craft = _crafts[_sel - _soldiers.size()];
+		  if ((_cQty + 1 <= _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
+		  &&  (_pQty + craft->getNumSoldiers() <= _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
+      &&  (_qtys[_sel] < getQuantity()))
+      {
+			  _cQty++;
+			  _pQty += craft->getNumSoldiers();
+		    _qtys[_sel]++;
+		    _total += getCost();
+      }
+	  }
+	  else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset)
+    {
+      float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
+      float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
+      if (0 < freeStores)
+      {
+        int freeStoresForItem;
+        if (0 == storesNeededPerItem) freeStoresForItem = INT_MAX;
+        else freeStoresForItem = floor(freeStores / storesNeededPerItem);
+        int toBeAdded = getQuantity() - _qtys[_sel];
+        int canBeAdded = std::min(freeStoresForItem, toBeAdded);
+        if (0 < canBeAdded)
+	      {
+			    _iQty += ((float)(canBeAdded)) * storesNeededPerItem;
+		      _qtys[_sel] += canBeAdded;
+		      _total += getCost() * canBeAdded;
+	      }
+      }
+    }
+		std::wstringstream ss;
+		ss << _qtys[_sel];
+		_lstItems->setCellText(_sel, 2, ss.str());
+  }
 }
 
 /**
@@ -334,7 +395,7 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 void TransferItemsState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	_timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerDec->start();
 }
 
 /**
@@ -343,7 +404,43 @@ void TransferItemsState::lstItemsRightArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 {
-	_timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerDec->stop();
+}
+
+/**
+ * Decrease the item to 0 on right-click.
+ * @param action Pointer to an action.
+ */
+void TransferItemsState::lstItemsRightArrowClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+  {
+	  if (_qtys[_sel] > 0)
+	  {
+		  // Personnel count
+		  if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+		  {
+			  _pQty -= _qtys[_sel];
+		  }
+		  // Craft count
+		  else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+		  {
+			  Craft *craft = _crafts[_sel - _soldiers.size()];
+			  _cQty--;
+			  _pQty -= craft->getNumSoldiers();
+		  }
+		  // Item count
+		  else
+		  {
+			  _iQty -= _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() * ((float)(_qtys[_sel]));
+		  }
+		  _total -= getCost() * _qtys[_sel];
+		  _qtys[_sel] = 0;
+		  std::wstringstream ss;
+		  ss << _qtys[_sel];
+		  _lstItems->setCellText(_sel, 2, ss.str());
+	  }
+  }
 }
 
 /**
@@ -401,7 +498,7 @@ int TransferItemsState::getQuantity()
 }
 
 /**
- * Increases the quantity of the selected item to sell.
+ * Increases the quantity of the selected item to transfer.
  */
 void TransferItemsState::increase()
 {
@@ -409,27 +506,31 @@ void TransferItemsState::increase()
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+    return;
 	}
-	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+	if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
 	{
 		Craft *craft =  _crafts[_sel - _soldiers.size()];
 		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+      return;
 		}
-		else if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
+		if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+      return;
 		}
 	}
-	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _iQty + _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() > _baseTo->getAvailableStores() - _baseTo->getUsedStores())
+	if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _iQty + _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() > _baseTo->getAvailableStores() - _baseTo->getUsedStores())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+    return;
 	}
-	else if (_qtys[_sel] < getQuantity())
+	if (_qtys[_sel] < getQuantity())
 	{
 		// Personnel count
 		if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
@@ -457,7 +558,7 @@ void TransferItemsState::increase()
 }
 
 /**
- * Decreases the quantity of the selected item to sell.
+ * Decreases the quantity of the selected item to transfer.
  */
 void TransferItemsState::decrease()
 {
