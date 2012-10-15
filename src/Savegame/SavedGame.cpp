@@ -36,7 +36,6 @@
 #include "Region.h"
 #include "Ufo.h"
 #include "Waypoint.h"
-#include "UfopaediaSaved.h"
 #include "../Ruleset/RuleResearch.h"
 #include "ResearchProject.h"
 #include "ItemContainer.h"
@@ -84,11 +83,10 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _ids(), _countries(), _regions(), _bases(), _ufos(), _waypoints(), _terrorSites(), _battleGame(0), _discovered(), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _battleGame(0), _debug(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
-	_ufopaedia = new UfopaediaSaved();
 }
 
 /**
@@ -122,7 +120,6 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	delete _battleGame;
-	delete _ufopaedia;
 }
 
 /**
@@ -195,7 +192,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	parser.GetNextDocument(doc);
 	std::string v;
 	doc["version"] >> v;
-	if (v != Options::getVersion())
+	if (v.substr(0, 3) != Options::getVersion().substr(0, 3))
 	{
 		throw Exception("Version mismatch");
 	}
@@ -270,10 +267,6 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_battleGame->load(*pName, rule, this);
 	}
 
-	if (const YAML::Node *pName = doc.FindValue("ufopaedia"))
-	{
-		_ufopaedia->load(*pName, rule);
-	}
 	fin.close();
 }
 
@@ -293,7 +286,6 @@ void SavedGame::save(const std::string &filename) const
 	YAML::Emitter out;
 
 	// Saves the brief game info used in the saves list
-	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
 	out << YAML::Key << "version" << YAML::Value << Options::getVersion();
 	out << YAML::Key << "time" << YAML::Value;
@@ -360,8 +352,6 @@ void SavedGame::save(const std::string &filename) const
 		out << YAML::Key << "battleGame" << YAML::Value;
 		_battleGame->save(out);
 	}
-	out << YAML::Key << "ufopaedia" << YAML::Value;
-	_ufopaedia->save(out);
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();
@@ -542,15 +532,6 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 {
 	delete _battleGame;
 	_battleGame = battleGame;
-}
-
-/**
- * Get pointer to the ufopaedia object.
- * @return Pointer to the ufopaedia object.
- */
-UfopaediaSaved *SavedGame::getUfopaedia()
-{
-	return _ufopaedia;
 }
 
 /**

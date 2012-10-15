@@ -1,4 +1,3 @@
----
 countries:
   - type: STR_USA
     fundingMin: 600
@@ -526,7 +525,7 @@ facilities:
     buildCost: 200000
     buildTime: 16
     monthlyCost: 5000
-    defence: 500
+    defense: 500
     hitRatio: 50
     mapName: XBASE_06
   - type: STR_GENERAL_STORES
@@ -553,7 +552,7 @@ facilities:
     buildCost: 400000
     buildTime: 24
     monthlyCost: 10000
-    defence: 600
+    defense: 600
     hitRatio: 60
     mapName: XBASE_09
   - type: STR_PLASMA_DEFENSES
@@ -564,7 +563,7 @@ facilities:
     buildCost: 600000
     buildTime: 34
     monthlyCost: 12000
-    defence: 900
+    defense: 900
     hitRatio: 70
     mapName: XBASE_10
   - type: STR_FUSION_BALL_DEFENSES
@@ -575,7 +574,7 @@ facilities:
     buildCost: 800000
     buildTime: 34
     monthlyCost: 14000
-    defence: 1200
+    defense: 1200
     hitRatio: 80
     mapName: XBASE_11
   - type: STR_GRAV_SHIELD
@@ -4840,6 +4839,342 @@ ufopaedia:
     type_id: 4
     section: STR_ALIEN_ARTIFACTS
     text: STR_MIND_PROBE_UFOPEDIA
+  - id: STR_ACCESS_LIFT
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_ACCESS_LIFT_UFOPEDIA
+  - id: STR_LIVING_QUARTERS
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_LIVING_QUARTERS_UFOPEDIA
+  - id: STR_LABORATORY
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_LABORATORY_UFOPEDIA
+  - id: STR_WORKSHOP
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_WORKSHOP_UFOPEDIA
+  - id: STR_SMALL_RADAR_SYSTEM
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_SMALL_RADAR_SYSTEM_UFOPEDIA
+  - id: STR_LARGE_RADAR_SYSTEM
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_LARGE_RADAR_SYSTEM_UFOPEDIA
+  - id: STR_MISSILE_DEFENSES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_MISSILE_DEFENSES_UFOPEDIA
+  - id: STR_GENERAL_STORES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_GENERAL_STORES_UFOPEDIA
+  - id: STR_ALIEN_CONTAINMENT
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_ALIEN_CONTAINMENT_UFOPEDIA
+  - id: STR_LASER_DEFENSES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_LASER_DEFENSES_UFOPEDIA
+  - id: STR_PLASMA_DEFENSES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_PLASMA_DEFENSES_UFOPEDIA
+  - id: STR_FUSION_BALL_DEFENSES
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_FUSION_BALL_DEFENSES_UFOPEDIA
+  - id: STR_GRAV_SHIELD
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_GRAV_SHIELD_UFOPEDIA
+  - id: STR_MIND_SHIELD
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_MIND_SHIELD_UFOPEDIA
+  - id: STR_PSIONIC_LABORATORY
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_PSIONIC_LABORATORY_UFOPEDIA
+  - id: STR_HYPER_WAVE_DECODER
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_HYPER_WAVE_DECODER_UFOPEDIA
+  - id: STR_HANGAR
+    type_id: 6
+    section: STR_BASE_FACILITIES
+    text: STR_HANGAR_UFOPEDIA
+  - id: STR_SECTOID
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP024.SPK
+    text: STR_SECTOID_UFOPEDIA
+    text_width: 155
+  - id: STR_SECTOID
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP024.SPK
+    text: STR_SECTOID_UFOPEDIA
+    text_width: 155
+  - id: STR_SECTOID_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP025.SPK
+    text: STR_SECTOID_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_SNAKEMAN
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP030.SPK
+    text: STR_SNAKEMAN_UFOPEDIA
+    text_width: 155
+  - id: STR_SNAKEMAN_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP031.SPK
+    text: STR_SNAKEMAN_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_ETHEREAL
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP016.SPK
+    text: STR_ETHEREAL_UFOPEDIA
+    text_width: 155
+  - id: STR_ETHEREAL_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP017.SPK
+    text: STR_ETHEREAL_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_MUTON
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP020.SPK
+    text: STR_MUTON_UFOPEDIA
+    text_width: 155
+  - id: STR_MUTON_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP021.SPK
+    text: STR_MUTON_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_FLOATER
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP018.SPK
+    text: STR_FLOATER_UFOPEDIA
+    text_width: 155
+  - id: STR_FLOATER_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP019.SPK
+    text: STR_FLOATER_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_CELATID
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP012.SPK
+    text: STR_CELATID_UFOPEDIA
+    text_width: 155
+  - id: STR_CELATID_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP013.SPK
+    text: STR_CELATID_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_SILACOID
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP028.SPK
+    text: STR_SILACOID_UFOPEDIA
+    text_width: 155
+  - id: STR_SILACOID_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP029.SPK
+    text: STR_SILACOID_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_CHRYSSALID
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP012.SPK
+    text: STR_CHRYSSALID_UFOPEDIA
+    text_width: 155
+  - id: STR_CHRYSSALID_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP013.SPK
+    text: STR_CHRYSSALID_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_REAPER
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP022.SPK
+    text: STR_REAPER_UFOPEDIA
+    text_width: 155
+  - id: STR_REAPER_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP023.SPK
+    text: STR_REAPER_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_SECTOPOD
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP026.SPK
+    text: STR_SECTOPOD_UFOPEDIA
+    text_width: 155
+  - id: STR_SECTOPOD_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP027.SPK
+    text: STR_SECTOPOD_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_CYBERDISC
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP041.SPK
+    text: STR_CYBERDISC_UFOPEDIA
+    text_width: 155
+  - id: STR_CYBERDISC_AUTOPSY
+    type_id: 7
+    section: STR_ALIEN_LIFE_FORMS
+    image_id: UP042.SPK
+    text: STR_CYBERDISC_AUTOPSY_UFOPEDIA
+    text_width: 155
+  - id: STR_ALIEN_ORIGINS
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_ORIGINS_UFOPEDIA
+  - id: STR_THE_MARTIAN_SOLUTION
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_THE_MARTIAN_SOLUTION_UFOPEDIA
+  - id: STR_CYDONIA_OR_BUST
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_CYDONIA_OR_BUST_UFOPEDIA
+  - id: STR_ALIEN_RESEARCH
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_RESEARCH_UFOPEDIA
+  - id: STR_ALIEN_HARVEST
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_HARVEST_UFOPEDIA
+  - id: STR_ALIEN_ABDUCTION
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_ABDUCTION_UFOPEDIA
+  - id: STR_ALIEN_INFILTRATION
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_INFILTRATION_UFOPEDIA
+  - id: STR_ALIEN_BASE
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_BASE_UFOPEDIA
+  - id: STR_ALIEN_TERROR
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_TERROR_UFOPEDIA
+  - id: STR_ALIEN_RETALIATION
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_RETALIATION_UFOPEDIA
+  - id: STR_ALIEN_SUPPLY
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    text: STR_ALIEN_SUPPLY_UFOPEDIA
+  - id: STR_UFO_POWER_SOURCE
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP032.SPK
+    text: STR_UFO_POWER_SOURCE_UFOPEDIA
+    text_width: 160
+  - id: STR_UFO_NAVIGATION
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP033.SPK
+    text: STR_UFO_NAVIGATION_UFOPEDIA
+    text_width: 145
+  - id: STR_UFO_CONSTRUCTION
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP034.SPK
+    text: STR_UFO_CONSTRUCTION_UFOPEDIA
+    text_width: 145
+  - id: STR_ALIEN_FOOD
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP035.SPK
+    text: STR_ALIEN_FOOD_UFOPEDIA
+    text_width: 170
+  - id: STR_ALIEN_REPRODUCTION
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP036.SPK
+    text: STR_ALIEN_REPRODUCTION_UFOPEDIA
+    text_width: 165
+  - id: STR_ALIEN_ENTERTAINMENT
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP037.SPK
+    text: STR_ALIEN_ENTERTAINMENT_UFOPEDIA
+    text_width: 145
+  - id: STR_ALIEN_SURGERY
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP038.SPK
+    text: STR_ALIEN_SURGERY_UFOPEDIA
+    text_width: 105
+  - id: STR_EXAMINATION_ROOM
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP039.SPK
+    text: STR_EXAMINATION_ROOM_UFOPEDIA
+    text_width: 150
+  - id: STR_ALIEN_ALLOYS
+    type_id: 7
+    section: STR_UFO_COMPONENTS
+    image_id: UP040.SPK
+    text: STR_ALIEN_ALLOYS_UFOPEDIA
+    text_width: 145
+  - id: STR_SMALL_SCOUT
+    type_id: 9
+    section: STR_UFOS
+    text: STR_SMALL_SCOUT_UFOPEDIA
+  - id: STR_MEDIUM_SCOUT
+    type_id: 9
+    section: STR_UFOS
+    text: STR_MEDIUM_SCOUT_UFOPEDIA
+  - id: STR_LARGE_SCOUT
+    type_id: 9
+    section: STR_UFOS
+    text: STR_LARGE_SCOUT_UFOPEDIA
+  - id: STR_HARVESTER
+    type_id: 9
+    section: STR_UFOS
+    text: STR_HARVESTER_UFOPEDIA
+  - id: STR_ABDUCTOR
+    type_id: 9
+    section: STR_UFOS
+    text: STR_ABDUCTOR_UFOPEDIA
+  - id: STR_TERROR_SHIP
+    type_id: 9
+    section: STR_UFOS
+    text: STR_TERROR_SHIP_UFOPEDIA
+  - id: STR_BATTLESHIP
+    type_id: 9
+    section: STR_UFOS
+    text: STR_BATTLESHIP_UFOPEDIA
+  - id: STR_SUPPLY_SHIP
+    type_id: 9
+    section: STR_UFOS
+    text: STR_SUPPLY_SHIP_UFOPEDIA
 startingBase:
   - lon: 0.0
     lat: 0.0

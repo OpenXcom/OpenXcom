@@ -144,6 +144,8 @@ public:
 	std::vector<std::string> getArmorsList() const;
 	/// Gets Ufopaedia article definition.
 	ArticleDefinition *const getUfopaediaArticle(const std::string &name) const;
+	/// Gets the available articles.
+	std::vector<std::string> getUfopaediaList() const;
 	/// Gets the inventory list.
 	std::map<std::string, RuleInventory*> *const getInventories();
 	/// Gets the ruleset for a specific inventory.

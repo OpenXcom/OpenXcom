@@ -324,8 +324,6 @@ set ( resource_src
 set ( ruleset_src
   Ruleset/RuleCraft.cpp
   Ruleset/RuleCraft.h
-  Ruleset/XcomRuleset.cpp
-  Ruleset/XcomRuleset.h
   Ruleset/Armor.cpp
   Ruleset/Armor.h
   Ruleset/MapDataSet.h
@@ -413,8 +411,6 @@ set ( savegame_src
   Savegame/SavedGame.cpp
   Savegame/Soldier.h
   Savegame/Soldier.cpp
-  Savegame/UfopaediaSaved.cpp
-  Savegame/UfopaediaSaved.h
   Savegame/Waypoint.h
   Savegame/Waypoint.cpp
   Savegame/Target.h

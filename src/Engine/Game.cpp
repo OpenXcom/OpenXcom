@@ -443,13 +443,17 @@ Ruleset *const Game::getRuleset() const
 }
 
 /**
- * Sets a new ruleset for the game to use.
- * @param rules Pointer to the ruleset.
+ * Changes the ruleset currently in use by the game.
+ * @param filename Filename of the language file.
  */
-void Game::setRuleset(Ruleset *rules)
+void Game::loadRuleset()
 {
-	delete _rules;
-	_rules = rules;
+	_rules = new Ruleset();
+	std::vector<std::string> rulesets = Options::getRulesets();
+	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
+	{
+		_rules->load(*i);
+	}
 }
 
 /**

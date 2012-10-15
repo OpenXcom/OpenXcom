@@ -47,7 +47,6 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
-#include "../Savegame/UfopaediaSaved.h"
 
 namespace OpenXcom
 {
@@ -55,8 +54,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _names(), _countries(), _regions(), _facilities(), _crafts(), _craftWeapons(), _items(), _ufos(),
-					 _terrains(), _mapDataSets(), _soldiers(), _units(), _invs(), _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
 	// Add soldier names
 	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
@@ -564,7 +562,6 @@ void Ruleset::save(const std::string &filename) const
 
 	YAML::Emitter out;
 
-	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
 	out << YAML::Key << "countries" << YAML::Value;
 	out << YAML::BeginSeq;
@@ -753,12 +750,6 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	save->getBases()->push_back(base);
-	
-	//TODO: Tie this to research
-	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
-	{
-		save->getUfopaedia()->insertArticle(getUfopaediaArticle(*i));
-	}
 
 	return save;
 }
@@ -1073,6 +1064,16 @@ int Ruleset::getPersonnelTime() const
 ArticleDefinition *const Ruleset::getUfopaediaArticle(const std::string &name) const
 {
 	return _ufopaediaArticles.find(name)->second;
+}
+
+/**
+ * Returns the list of all articles
+ * provided by the ruleset.
+ * @return List of articles.
+ */
+std::vector<std::string> Ruleset::getUfopaediaList() const
+{
+	return _ufopaediaIndex;
 }
 
 /**

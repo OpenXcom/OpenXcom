@@ -36,7 +36,6 @@ class Waypoint;
 class SavedBattleGame;
 class TextList;
 class Language;
-class UfopaediaSaved;
 class RuleResearch;
 class ResearchProject;
 class Soldier;
@@ -67,7 +66,6 @@ private:
 	std::vector<Waypoint*> _waypoints;
 	std::vector<TerrorSite*> _terrorSites;
 	SavedBattleGame *_battleGame;
-	UfopaediaSaved *_ufopaedia;
 	std::vector<const RuleResearch *> _discovered;
 	bool _debug;
 
@@ -121,8 +119,6 @@ public:
 	SavedBattleGame *const getBattleGame();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
-	/// Gets the current Ufopaedia parameters.
-	UfopaediaSaved *getUfopaedia();
 	/// Add a finished ResearchProject
 	void addFinishedResearch (const RuleResearch * r, Ruleset * ruleset = NULL);
 	/// Get the list of already discovered research projects

@@ -19,13 +19,13 @@
 #include "NewBattleState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Ruleset/XcomRuleset.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -233,7 +233,6 @@ void NewBattleState::init()
  */
 void NewBattleState::initSave()
 {
-	//_game->setRuleset(new XcomRuleset());
 	Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);

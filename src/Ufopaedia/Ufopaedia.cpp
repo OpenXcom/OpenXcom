@@ -20,7 +20,7 @@
 #include "Ufopaedia.h"
 #include "UfopaediaStartState.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/UfopaediaSaved.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleState.h"
 #include "ArticleStateBaseFacility.h"
@@ -37,10 +37,11 @@
 
 // these are for runStandalone...
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/XcomRuleset.h"
 
 namespace OpenXcom
 {
+	size_t Ufopaedia::_current_index = 0;
+
 	/**
 	 * Adds a new article to the visible list, mainly after a successful research.
 	 * @param game Pointer to actual game.
@@ -59,7 +60,26 @@ namespace OpenXcom
 	 */
 	bool Ufopaedia::isArticleAvailable(Game *game, std::string &article_id)
 	{
-		return game->getSavedGame()->getUfopaedia()->isArticleAvailable(article_id);
+		return game->getSavedGame()->isResearched(article_id);
+	}
+
+	/**
+	 * Gets the index of the selected article_id in the visible list.
+	 * If the id is not found, returns -1.
+	 * @param article_id Article id to find.
+	 * @returns Index of the given article id in the internal list, -1 if not found.
+	 */
+	size_t Ufopaedia::getArticleIndex(Game *game, const std::string &article_id)
+	{
+		ArticleDefinitionList articles = getAvailableArticles(game);
+		for (size_t it=0; it<articles.size(); ++it)
+		{
+			if (articles[it]->id == article_id)
+			{
+				return it;
+			}
+		}
+		return -1;
 	}
 
 	/**
@@ -111,7 +131,7 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::openArticle(Game *game, ArticleDefinition *article)
 	{
-		game->getSavedGame()->getUfopaedia()->setCurrentArticle(article);
+		_current_index = getArticleIndex(game, article->id);
 		game->pushState(createArticleState(game, article));
 	}
 
@@ -141,12 +161,18 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::next(Game *game)
 	{
-		ArticleDefinition *article = game->getSavedGame()->getUfopaedia()->goNextArticle();
-		if (article)
+		ArticleDefinitionList articles = getAvailableArticles(game);
+		if (_current_index >= articles.size() - 1)
 		{
-			game->popState();
-			game->pushState(createArticleState(game, article));
+			// goto first
+			_current_index = 0;
 		}
+		else
+		{
+			_current_index++;
+		}
+		game->popState();
+		game->pushState(createArticleState(game, articles[_current_index]));
 	}
 
 	/**
@@ -155,12 +181,55 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::prev(Game *game)
 	{
-		ArticleDefinition *article = game->getSavedGame()->getUfopaedia()->goPrevArticle();
-		if (article)
+		ArticleDefinitionList articles = getAvailableArticles(game);
+		if (_current_index == 0)
 		{
-			game->popState();
-			game->pushState(createArticleState(game, article));
+			// goto last
+			_current_index = articles.size() - 1;
 		}
+		else
+		{
+			_current_index--;
+		}
+		game->popState();
+		game->pushState(createArticleState(game, articles[_current_index]));
+	}
+
+	/**
+	 * Fill an ArticleList with the currently visible ArticleIds of the given section.
+	 * @param game Pointer to actual game.
+	 * @param section Article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
+	 * @param data Article definition list object to fill data in.
+	 */
+	void Ufopaedia::list(Game *game, const std::string &section, ArticleDefinitionList &data)
+	{
+		ArticleDefinitionList articles = getAvailableArticles(game);
+		for (ArticleDefinitionList::iterator it=articles.begin(); it!=articles.end(); ++it)
+		{
+			if ((*it)->section == section)
+			{
+				data.push_back(*it);
+			}
+		}
+	}
+
+	/**
+	 * Return an ArticleList with all the currently visible ArticleIds.
+	 * @param game Pointer to actual game.
+	 */
+	ArticleDefinitionList Ufopaedia::getAvailableArticles(Game *game)
+	{
+		std::vector<std::string> list = game->getRuleset()->getUfopaediaList();
+		ArticleDefinitionList articles;
+		for (std::vector<std::string>::iterator it=list.begin(); it!=list.end(); ++it)
+		{
+			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(*it);
+			if (/*isArticleAvailable(game, *it) && */article->section != UFOPAEDIA_NOT_AVAILABLE)
+			{
+				articles.push_back(article);
+			}
+		}
+		return articles;
 	}
 
 	/**
@@ -186,7 +255,7 @@ namespace OpenXcom
 		game->loadLanguage("English");
 
 		// init game
-		game->setRuleset(new XcomRuleset());
+		game->loadRuleset();
 		game->setSavedGame(game->getRuleset()->newSave());
 
 		// open Ufopaedia

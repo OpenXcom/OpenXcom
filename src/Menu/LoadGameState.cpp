@@ -25,7 +25,6 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
-#include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
@@ -181,7 +180,6 @@ void LoadGameState::btnCancelClick(Action *action)
  */
 void LoadGameState::lstSavesClick(Action *action)
 {
-	//Ruleset *r = new XcomRuleset();
 	SavedGame *s = new SavedGame();
 	try
 	{
@@ -203,9 +201,7 @@ void LoadGameState::lstSavesClick(Action *action)
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			else
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
-		//delete r;
 		delete s;
-		//_game->setRuleset(0);
 		_game->setSavedGame(0);
 	}
 	catch (YAML::Exception &e)
@@ -216,9 +212,7 @@ void LoadGameState::lstSavesClick(Action *action)
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			else
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
-		//delete r;
 		delete s;
-		//_game->setRuleset(0);
 		_game->setSavedGame(0);
 	}
 }
