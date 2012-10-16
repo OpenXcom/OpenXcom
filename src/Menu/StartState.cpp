@@ -17,11 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
+#include <iostream>
 #include <SDL.h>
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
-#include "../Ruleset/XcomRuleset.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
@@ -86,7 +86,7 @@ void StartState::think()
 			_game->setResourcePack(new XcomResourcePack());
 			std::cout << "Resources loaded successfully." << std::endl;
 			std::cout << "Loading ruleset..." << std::endl;
-			_game->setRuleset(new XcomRuleset());
+			_game->loadRuleset();
 			std::cout << "Ruleset loaded successfully." << std::endl;
 			std::vector<std::string> langs = Language::getList(0);
 			if (langs.empty())

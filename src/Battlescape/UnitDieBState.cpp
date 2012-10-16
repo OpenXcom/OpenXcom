@@ -28,10 +28,10 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
-#include "../Ruleset/XcomRuleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 

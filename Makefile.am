@@ -405,8 +405,6 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
-	src/Ruleset/XcomRuleset.cpp \
-	src/Ruleset/XcomRuleset.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -455,8 +453,6 @@ openxcom_SOURCES = \
 	src/Savegame/Transfer.h \
 	src/Savegame/Ufo.cpp \
 	src/Savegame/Ufo.h \
-	src/Savegame/UfopaediaSaved.cpp \
-	src/Savegame/UfopaediaSaved.h \
 	src/Savegame/Vehicle.cpp \
 	src/Savegame/Vehicle.h \
 	src/Savegame/Waypoint.cpp \

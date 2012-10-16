@@ -45,7 +45,7 @@ namespace OpenXcom
 
 		// add screen elements
 		_txtTitle = new Text(310, 16, 5, 24);
-		_txtInfo = new Text(300, 150, 10, 120);
+		_txtInfo = new Text(300, 150, 10, 80);
 		_lstStats = new TextList(300, 89, 10, 48);
 
 		// Set palette

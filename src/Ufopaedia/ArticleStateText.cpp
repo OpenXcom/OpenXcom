@@ -33,8 +33,8 @@ namespace OpenXcom
 	ArticleStateText::ArticleStateText(Game *game, ArticleDefinitionText *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
-		_txtTitle = new Text(310, 16, 5, 24);
-		_txtInfo = new Text(300, 150, 10, 48);
+		_txtTitle = new Text(296, 16, 5, 24);
+		_txtInfo = new Text(296, 150, 10, 48);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());

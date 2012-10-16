@@ -78,6 +78,9 @@ namespace OpenXcom
 		/// article navigation to previous article.
 		static void prev(Game *game);
 
+		/// load a vector with article ids that are currently visible of a given section.
+		static void list(Game *game, const std::string &section, ArticleDefinitionList &data);
+
 		/// build a text string from a string template using current game settings.
 		static std::wstring buildText(Game *game, std::string &str_template);
 
@@ -85,6 +88,15 @@ namespace OpenXcom
 		static void runStandalone(Game *game);
 
 	protected:
+
+		/// current selected article index (for prev/next navigation).
+		static size_t _current_index;
+
+		/// get index of the given article id in the visible list.
+		static size_t getArticleIndex(Game *game, const std::string &article_id);
+
+		/// get list of researched articles
+		static ArticleDefinitionList getAvailableArticles(Game *game);
 
 		/// create a new state object from article definition.
 		static ArticleState *createArticleState(Game *game, ArticleDefinition *article);

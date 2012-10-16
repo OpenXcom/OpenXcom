@@ -69,6 +69,8 @@ namespace Options
 	void setInt(const std::string& id, int value);
 	/// Sets a boolean option.
 	void setBool(const std::string& id, bool value);
+	/// Gets the list of rulesets to use.
+	std::vector<std::string> getRulesets();
 }
 
 }

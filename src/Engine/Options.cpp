@@ -39,6 +39,7 @@ std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _options;
+std::vector<std::string> _rulesets;
 
 /**
  * Creates a default set of options based on the system.
@@ -57,6 +58,7 @@ void createDefault()
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
 	setBool("debug", false);
+	setBool("debugUi", false);
 	setBool("mute", false);
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
@@ -74,6 +76,8 @@ void createDefault()
 	setBool("globeSeasons", false);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
+
+	_rulesets.push_back("Xcom1Ruleset");
 }
 
 /**
@@ -196,12 +200,23 @@ void load(const std::string &filename)
 	YAML::Node doc;
 
 	parser.GetNextDocument(doc);
-	for (YAML::Iterator i = doc.begin(); i != doc.end(); ++i)
+	const YAML::Node *options = doc.FindValue("options");
+	if (!options)
+	{
+		options = &doc;
+	}
+
+	for (YAML::Iterator i = options->begin(); i != options->end(); ++i)
 	{
 		std::string key, value;
 		i.first() >> key;
 		i.second() >> value;
 		_options[key] = value;
+	}
+
+	if (const YAML::Node *pName = doc.FindValue("rulesets"))
+	{
+		(*pName) >> _rulesets;
 	}
 
 	fin.close();
@@ -222,8 +237,10 @@ void save(const std::string &filename)
 	}
 	YAML::Emitter out;
 
-	out << YAML::BeginDoc;
-	out << _options;
+	out << YAML::BeginMap;
+	out << YAML::Key << "options" << YAML::Value << _options;
+	out << YAML::Key << "rulesets" << YAML::Value << _rulesets;
+	out << YAML::EndMap;
 
 	sav << out.c_str();
 	sav.close();
@@ -347,6 +364,15 @@ void setBool(const std::string& id, bool value)
 	std::stringstream ss;
 	ss << std::boolalpha << value;
 	_options[id] = ss.str();
+}
+
+/**
+ * Returns the list of rulesets to be used by the game.
+ * @return Ruleset list.
+ */
+std::vector<std::string> getRulesets()
+{
+	return _rulesets;
 }
 
 }

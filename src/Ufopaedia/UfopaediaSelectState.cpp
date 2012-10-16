@@ -21,7 +21,6 @@
 #include "UfopaediaSelectState.h"
 #include "../Ruleset/ArticleDefinition.h"
 #include "ArticleState.h"
-#include "../Savegame/UfopaediaSaved.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -107,7 +106,7 @@ namespace OpenXcom
 		ArticleDefinitionList::iterator it;
 
 		_article_list.clear();
-		_game->getSavedGame()->getUfopaedia()->getSectionList(_section, _article_list);
+		Ufopaedia::list(_game, _section, _article_list);
 		for(it = _article_list.begin(); it!=_article_list.end(); ++it)
 		{
 			_lstSelection->addRow(1, Ufopaedia::buildText(_game, (*it)->title).c_str());

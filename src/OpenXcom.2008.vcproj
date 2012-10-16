@@ -1855,14 +1855,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\UfopaediaSaved.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\UfopaediaSaved.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Waypoint.cpp"
 				>
 			</File>
@@ -2084,14 +2076,6 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\SoldierNamePool.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\XcomRuleset.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\XcomRuleset.h"
 				>
 			</File>
 		</Filter>

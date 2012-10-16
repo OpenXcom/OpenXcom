@@ -152,9 +152,6 @@
     <ClCompile Include="Ruleset\RuleUfo.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\XcomRuleset.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -427,9 +424,6 @@
     </ClCompile>
     <ClCompile Include="Ruleset\ArticleDefinition.cpp">
       <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Savegame\UfopaediaSaved.cpp">
-      <Filter>Savegame</Filter>
     </ClCompile>
     <ClCompile Include="Geoscape\ProductionCompleteState.cpp">
       <Filter>Geoscape</Filter>
@@ -804,9 +798,6 @@
     <ClInclude Include="Ruleset\RuleUfo.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\XcomRuleset.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Ruleset\RuleBaseFacility.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
@@ -1080,9 +1071,6 @@
     </ClInclude>
     <ClInclude Include="Ruleset\ArticleDefinition.h">
       <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\UfopaediaSaved.h">
-      <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\ProductionCompleteState.h">
       <Filter>Geoscape</Filter>

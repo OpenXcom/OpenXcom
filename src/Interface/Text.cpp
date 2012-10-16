@@ -19,6 +19,7 @@
 #include "Text.h"
 #include <sstream>
 #include "../Engine/Font.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -339,7 +340,7 @@ void Text::processText()
 			word += font->getChar(*c)->getCrop()->w + font->getSpacing();
 
 			// Wordwrap if the last word doesn't fit the line
-			if (_wrap && width > getWidth())
+			if (_wrap && width > getWidth() && space != s->begin())
 			{
 				// Go back to the last space and put a linebreak there
 				*space = L'\n';
@@ -362,6 +363,22 @@ void Text::draw()
 	if (_text.empty() || _font == 0)
 	{
 		return;
+	}
+
+	// Show text borders for debugging
+	if (Options::getBool("debugUi"))
+	{
+		SDL_Rect r;
+		r.w = getWidth();
+		r.h = getHeight();
+		r.x = 0;
+		r.y = 0;
+		this->drawRect(&r, 5);
+		r.w-=2;
+		r.h-=2;
+		r.x++;
+		r.y++;
+		this->drawRect(&r, 0);
 	}
 
 	int x = 0, y = 0, line = 0, height = 0;

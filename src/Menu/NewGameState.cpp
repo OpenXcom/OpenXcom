@@ -19,13 +19,13 @@
 #include "NewGameState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Ruleset/XcomRuleset.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 
@@ -99,7 +99,6 @@ NewGameState::~NewGameState()
  */
 void NewGameState::newGame(GameDifficulty diff)
 {
-	//_game->setRuleset(new XcomRuleset());
 	_game->setSavedGame(_game->getRuleset()->newSave());
 	_game->getSavedGame()->setDifficulty(diff);
 	GeoscapeState *gs = new GeoscapeState(_game);

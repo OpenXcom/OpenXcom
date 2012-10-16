@@ -42,7 +42,7 @@ namespace OpenXcom
 		Armor *armor = _game->getRuleset()->getArmor(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(300, 32, 5, 24);
+		_txtTitle = new Text(300, 16, 5, 24);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -59,7 +59,6 @@ namespace OpenXcom
 
 		_txtTitle->setColor(Palette::blockOffset(14)+15);
 		_txtTitle->setBig();
-		_txtTitle->setWordWrap(true);
 		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
 		_image = new Surface(320, 200, 0, 0);

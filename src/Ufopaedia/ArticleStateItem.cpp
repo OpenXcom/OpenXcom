@@ -42,7 +42,7 @@ namespace OpenXcom
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(140, 32, 5, 24);
+		_txtTitle = new Text(150, 32, 5, 24);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -131,7 +131,7 @@ namespace OpenXcom
 			}
 
 			// text_info is BELOW the info table
-			_txtInfo = new Text((ammo_data->size()<3 ? 300 : 180), 60, 8, 138);
+			_txtInfo = new Text((ammo_data->size()<3 ? 300 : 180), 56, 8, 138);
 		}
 		else
 		{
@@ -183,7 +183,7 @@ namespace OpenXcom
 
 				for (unsigned int i = 0; i < ammo_data->size(); ++i)
 				{
-					if (Ufopaedia::isArticleAvailable(_game, (*ammo_data)[i]))
+					/*if (Ufopaedia::isArticleAvailable(_game, (*ammo_data)[i]))*/
 					{
 						RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
 						setDamageTypeText(_txtAmmoType[i], ammo_rule);
