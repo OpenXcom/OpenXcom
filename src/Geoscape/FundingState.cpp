@@ -43,10 +43,10 @@ FundingState::FundingState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(50, 12, 135, 180);
-	_txtTitle = new Text(280, 16, 32, 8);
-	_txtCountry = new Text(100, 16, 32, 24);
-	_txtFunding = new Text(120, 16, 140, 24);
-	_txtChange = new Text(120, 16, 240, 24);
+	_txtTitle = new Text(320, 16, 0, 8);
+	_txtCountry = new Text(100, 16, 32, 30);
+	_txtFunding = new Text(120, 16, 140, 30);
+	_txtChange = new Text(120, 16, 240, 30);
 	_lstCountries = new TextList(280, 136, 32, 40);
 
 	// Set palette
@@ -69,23 +69,17 @@ FundingState::FundingState(Game *game) : State(game)
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_INTERNATIONAL_RELATIONS"));
 
-	_txtCountry->setColor(Palette::blockOffset(15)-1);
-	_txtCountry->setBig();
+	_txtCountry->setColor(Palette::blockOffset(8)+5);
 	_txtCountry->setText(_game->getLanguage()->getString("STR_COUNTRY"));
 
-	_txtFunding->setColor(Palette::blockOffset(15)-1);
-	_txtFunding->setBig();
+	_txtFunding->setColor(Palette::blockOffset(8)+5);
 	_txtFunding->setText(_game->getLanguage()->getString("STR_FUNDING"));
-	if (_game->getLanguage()->getName() == L"ITALIANO")
-	{
-		_txtFunding->setX(125);
-	}
 
-	_txtChange->setColor(Palette::blockOffset(15)-1);
-	_txtChange->setBig();
+	_txtChange->setColor(Palette::blockOffset(8)+5);
 	_txtChange->setText(_game->getLanguage()->getString("STR_CHANGE"));
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
