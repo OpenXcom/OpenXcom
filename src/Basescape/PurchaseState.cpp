@@ -18,6 +18,8 @@
  */
 #include "PurchaseState.h"
 #include <sstream>
+#include <climits>
+#include <cmath>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
