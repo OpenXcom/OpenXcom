@@ -22,6 +22,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/ArrowButton.h"
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -145,18 +146,22 @@ void ManufactureInfoState::buildUi()
 	_btnEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerUp->onMousePress((ActionHandler)&ManufactureInfoState::moreEngineerPress);
 	_btnEngineerUp->onMouseRelease((ActionHandler)&ManufactureInfoState::moreEngineerRelease);
+	_btnEngineerUp->onMouseClick((ActionHandler)&ManufactureInfoState::moreEngineerClick, 0);
 
 	_btnEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerDown->onMousePress((ActionHandler)&ManufactureInfoState::lessEngineerPress);
 	_btnEngineerDown->onMouseRelease((ActionHandler)&ManufactureInfoState::lessEngineerRelease);
+	_btnEngineerDown->onMouseClick((ActionHandler)&ManufactureInfoState::lessEngineerClick, 0);
 
 	_btnUnitUp->setColor(Palette::blockOffset(15)+1);
 	_btnUnitUp->onMousePress((ActionHandler)&ManufactureInfoState::moreUnitPress);
 	_btnUnitUp->onMouseRelease((ActionHandler)&ManufactureInfoState::moreUnitRelease);
+	_btnUnitUp->onMouseClick((ActionHandler)&ManufactureInfoState::moreUnitClick, 0);
 
 	_btnUnitDown->setColor(Palette::blockOffset(15)+1);
 	_btnUnitDown->onMousePress((ActionHandler)&ManufactureInfoState::lessUnitPress);
 	_btnUnitDown->onMouseRelease((ActionHandler)&ManufactureInfoState::lessUnitRelease);
+	_btnUnitDown->onMouseClick((ActionHandler)&ManufactureInfoState::lessUnitClick, 0);
 
 	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
 	_txtUnitUp->setText(_game->getLanguage()->getString("STR_INCREASE_UC"));
@@ -249,7 +254,7 @@ void ManufactureInfoState::setAssignedEngineer()
 */
 void ManufactureInfoState::moreEngineerPress(Action * action)
 {
-	_timerMoreEngineer->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMoreEngineer->start();
 }
 
 /**
@@ -258,7 +263,28 @@ void ManufactureInfoState::moreEngineerPress(Action * action)
 */
 void ManufactureInfoState::moreEngineerRelease(Action * action)
 {
-	_timerMoreEngineer->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMoreEngineer->stop();
+}
+
+/**
+ * Allocate all engineers
+ * @param action a pointer to an Action
+*/
+void ManufactureInfoState::moreEngineerClick(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+	  int assigned = _production->getAssignedEngineers();
+	  int availableEngineer = _base->getAvailableEngineers();
+	  int availableWorkSpace = _base->getFreeWorkshops();
+	  if (availableEngineer > 0 && availableWorkSpace > 0)
+	  {
+		  int change=std::min(availableEngineer, availableWorkSpace);
+      _production->setAssignedEngineers(assigned+=change);
+		  _base->setEngineers(_base->getEngineers()-change);
+		  setAssignedEngineer();
+	  }
+	}
 }
 
 /**
@@ -267,7 +293,7 @@ void ManufactureInfoState::moreEngineerRelease(Action * action)
 */
 void ManufactureInfoState::lessEngineerPress(Action * action)
 {
-	_timerLessEngineer->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLessEngineer->start();
 }
 
 /**
@@ -276,7 +302,25 @@ void ManufactureInfoState::lessEngineerPress(Action * action)
 */
 void ManufactureInfoState::lessEngineerRelease(Action * action)
 {
-	_timerLessEngineer->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLessEngineer->stop();
+}
+
+/**
+ * Allocate 0 engineers
+ * @param action a pointer to an Action
+*/
+void ManufactureInfoState::lessEngineerClick(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+	  int assigned = _production->getAssignedEngineers();
+	  if (assigned > 0)
+	  {
+		  _production->setAssignedEngineers(0);
+		  _base->setEngineers(_base->getEngineers()+assigned);
+		  setAssignedEngineer();
+	  }
+	}
 }
 
 /**
@@ -285,7 +329,7 @@ void ManufactureInfoState::lessEngineerRelease(Action * action)
 */
 void ManufactureInfoState::moreUnitPress(Action * action)
 {
-	_timerMoreUnit->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMoreUnit->start();
 }
 
 /**
@@ -294,7 +338,36 @@ void ManufactureInfoState::moreUnitPress(Action * action)
 */
 void ManufactureInfoState::moreUnitRelease(Action * action)
 {
-	_timerMoreUnit->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMoreUnit->stop();
+}
+
+/**
+ * This could set a virtual infinite value for units
+ * which could mean produce & sell automatically just like in UFOextender. :)
+ * Perhaps someone will implement that feature later.
+ * @param action a pointer to an Action
+*/
+void ManufactureInfoState::moreUnitClick(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+    // TODO: virtual infinite value for produce & sell automatically
+    // now it just raises the value to 999 or max-available-hangars on crafts
+	  int more = _production->getAmountRemaining ();
+	  if (_production->getRules()->getCategory() == "STR_CRAFT")
+	  {
+		  if (_base->getAvailableHangars() - _base->getUsedHangars() > 0)
+      {
+		    _production->setAmountRemaining(std::max(more,_base->getAvailableHangars() - _base->getUsedHangars()));
+		    setAssignedEngineer();
+      }
+	  }
+	  else
+	  {
+		  _production->setAmountRemaining(std::max(more,999));
+		  setAssignedEngineer();
+	  }
+	}
 }
 
 /**
@@ -303,7 +376,7 @@ void ManufactureInfoState::moreUnitRelease(Action * action)
 */
 void ManufactureInfoState::lessUnitPress(Action * action)
 {
-	_timerLessUnit->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLessUnit->start();
 }
 
 /**
@@ -312,7 +385,24 @@ void ManufactureInfoState::lessUnitPress(Action * action)
 */
 void ManufactureInfoState::lessUnitRelease(Action * action)
 {
-	_timerLessUnit->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLessUnit->stop();
+}
+
+/**
+ * Build no more unit
+ * @param action a pointer to an Action
+*/
+void ManufactureInfoState::lessUnitClick(Action * action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+	  int less = _production->getAmountRemaining ();
+	  if (less > (_production->getAmountProduced () + 1))
+	  {
+		  _production->setAmountRemaining(_production->getAmountProduced () + 1);
+		  setAssignedEngineer();
+	  }
+	}
 }
 
 /**

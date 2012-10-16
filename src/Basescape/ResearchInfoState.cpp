@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ResearchInfoState.h"
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -138,8 +139,10 @@ void ResearchInfoState::buildUi ()
 	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)&ResearchInfoState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)&ResearchInfoState::moreRelease);
+	_btnMore->onMouseClick((ActionHandler)&ResearchInfoState::moreClick, 0);
 	_btnLess->onMousePress((ActionHandler)&ResearchInfoState::lessPress);
 	_btnLess->onMouseRelease((ActionHandler)&ResearchInfoState::lessRelease);
+	_btnLess->onMouseClick((ActionHandler)&ResearchInfoState::lessClick, 0);
 
 	_timerMore = new Timer(50);
 	_timerMore->onTimer((StateHandler)&ResearchInfoState::more);
@@ -182,7 +185,7 @@ void ResearchInfoState::SetAssignedScientist()
  */
 void ResearchInfoState::morePress(Action *action)
 {
-	_timerMore->start ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMore->start();
 }
 
 /**
@@ -191,7 +194,28 @@ void ResearchInfoState::morePress(Action *action)
  */
 void ResearchInfoState::moreRelease(Action *action)
 {
-	_timerMore->stop ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMore->stop();
+}
+
+/**
+ * Allocate all scientists on right-click
+ * @param action a Pointer to an Action
+ */
+void ResearchInfoState::moreClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+	  int assigned = _project->getAssigned ();
+	  int freeScientist = _base->getAvailableScientists();
+	  int freeSpaceLab = _base->getFreeLaboratories();
+	  if (freeScientist > 0 && freeSpaceLab > 0)
+	  {
+		  int change=std::min(freeScientist, freeSpaceLab);
+      _project->setAssigned(assigned+=change);
+		  _base->setScientists(_base->getScientists()-change);
+		  SetAssignedScientist();
+	  }
+	}
 }
 
 /**
@@ -200,7 +224,7 @@ void ResearchInfoState::moreRelease(Action *action)
  */
 void ResearchInfoState::lessPress(Action *action)
 {
-	_timerLess->start ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLess->start ();
 }
 
 /**
@@ -209,7 +233,25 @@ void ResearchInfoState::lessPress(Action *action)
  */
 void ResearchInfoState::lessRelease(Action *action)
 {
-	_timerLess->stop ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLess->stop ();
+}
+
+/**
+ * Allocate 0 scientists on right-click
+ * @param action a Pointer to an Action
+ */
+void ResearchInfoState::lessClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+	  int assigned = _project->getAssigned();
+	  if (assigned > 0)
+	  {
+		  _project->setAssigned(0);
+		  _base->setScientists(_base->getScientists()+assigned);
+		  SetAssignedScientist();
+	  }
+	}
 }
 
 /**
