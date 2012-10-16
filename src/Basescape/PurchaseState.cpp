@@ -122,8 +122,10 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setMargin(2);
 	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
+	_lstItems->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
+	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
 
 	_qtys.push_back(0);
 	std::wstringstream ss;
@@ -272,7 +274,7 @@ void PurchaseState::btnCancelClick(Action *action)
 void PurchaseState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	_timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerInc->start();
 }
 
 /**
@@ -281,7 +283,59 @@ void PurchaseState::lstItemsLeftArrowPress(Action *action)
  */
 void PurchaseState::lstItemsLeftArrowRelease(Action *action)
 {
-	_timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerInc->stop();
+}
+
+/**
+ * Increases the item to max on right-click.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsLeftArrowClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+  {
+	  int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
+	  int canBeBought = 0;
+    if (_sel <= 2)
+	  {
+		  // Personnel count
+      int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
+			canBeBought = std::min(maxByMoney, maxByQuarters);
+      if (0 < canBeBought) _pQty += canBeBought;
+	  }
+	  else if (_sel >= 3 && _sel < 3 + _crafts.size())
+	  {
+		  // Craft count
+      int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
+			canBeBought = std::min(maxByMoney, maxByHangars);
+      if (0 < canBeBought) _cQty += canBeBought;
+	  }
+	  else if (_sel >= 3 + _crafts.size())
+	  {
+		  // Item count
+      float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
+      float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
+      if (0 < freeStores)
+      {
+        int maxByStores;
+        if (0 == storesNeededPerItem) maxByStores = INT_MAX;
+        else maxByStores = floor(freeStores / storesNeededPerItem);
+			  canBeBought = std::min(maxByMoney, maxByStores);
+        if (0 < canBeBought) _iQty += ((float)(canBeBought)) * storesNeededPerItem;
+      }
+	  }
+    if (0 < canBeBought)
+    {
+		  _qtys[_sel] += canBeBought;
+		  std::wstringstream ss;
+		  ss << _qtys[_sel];
+		  _lstItems->setCellText(_sel, 3, ss.str());
+		  _total += getPrice() * canBeBought;
+		  std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+		  s += L'\x01' + Text::formatFunding(_total);
+		  _txtPurchases->setText(s);
+    }
+  }
 }
 
 /**
@@ -291,7 +345,7 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
 void PurchaseState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	_timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerDec->start();
 }
 
 /**
@@ -300,7 +354,44 @@ void PurchaseState::lstItemsRightArrowPress(Action *action)
  */
 void PurchaseState::lstItemsRightArrowRelease(Action *action)
 {
-	_timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerDec->stop();
+}
+
+/**
+ * Decreases the item to 0 on right-click.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsRightArrowClick(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+  {
+	  if (_qtys[_sel] > 0)
+	  {
+		  // Personnel count
+		  if (_sel <= 2)
+		  {
+			  _pQty -= _qtys[_sel];
+		  }
+		  // Craft count
+		  else if (_sel >= 3 && _sel < 3 + _crafts.size())
+		  {
+			  _cQty -= _qtys[_sel];
+		  }
+		  // Item count
+		  else
+		  {
+			  _iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(_qtys[_sel]));
+		  }
+		  _total -= getPrice() * _qtys[_sel];
+		  std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+		  s += L'\x01' + Text::formatFunding(_total);
+		  _txtPurchases->setText(s);
+		  _qtys[_sel] = 0;
+		  std::wstringstream ss;
+		  ss << _qtys[_sel];
+		  _lstItems->setCellText(_sel, 3, ss.str());
+	  }
+  }
 }
 
 /**

@@ -73,10 +73,14 @@ public:
 	void lstItemsLeftArrowPress(Action *action);
 	/// Handler for releasing an Increase arrow in the list.
 	void lstItemsLeftArrowRelease(Action *action);
+	/// Handler for clicking an Increase arrow in the list.
+	void lstItemsLeftArrowClick(Action *action);
 	/// Handler for pressing a Decrease arrow in the list.
 	void lstItemsRightArrowPress(Action *action);
 	/// Handler for releasing a Decrease arrow in the list.
 	void lstItemsRightArrowRelease(Action *action);
+	/// Handler for clicking a Decrease arrow in the list.
+	void lstItemsRightArrowClick(Action *action);
 	/// Increases the quantity of an item.
 	void increase();
 	/// Decreases the quantity of an item.

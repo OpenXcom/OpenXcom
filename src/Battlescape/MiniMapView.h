@@ -41,8 +41,16 @@ class MiniMapView : public InteractiveSurface
 	SavedBattleGame * _battleGame;
 	int _frame;
 	SurfaceSet * _set;
+	// these two are required for right-button scrolling on the minimap
+  bool isMouseScrolling;
+	bool isMouseScrolled;
+  int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	/// Handle pressing on the MiniMap
+	void mousePress(Action *action, State *state);
 	/// Handle clicking on the MiniMap
-	void mouseClick (Action *action, State *state);
+	void mouseClick(Action *action, State *state);
+	/// Handle moving mouse over the MiniMap
+	void mouseOver(Action *action, State *state);
 public:
 	/// Create the MiniMapView
 	MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame);
