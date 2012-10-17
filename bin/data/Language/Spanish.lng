@@ -23,46 +23,68 @@ STR_PLASMA_BEAM_UFOPEDIA
 EL RAYO DE GRAVEDAD DA LUGAR A UN CAMPO DE GRAVEDAD CANALIZADO CON GRAN PRECISIÓN Y QUE PROVOCA UNA IMPLOSIÓN.
 STR_SECTOID_UFOPEDIA
 La jerarquía sectoide va desde los soldados a los jefes de grupo con poderosas habilidades psiónicas. Estos poderes pueden servir para desmoralizar a los soldados que están combatiendo e incluso para controlar sus mentes. Se dan con frecuencia al rapto de humanos y a la mutilación de ganado. Gracias a los raptos obtienen material genético para realizar cruces y crear clones que luego serán infiltrados en la sociedad humana. El ganado proporciona alimentos y material genético. Parece que esta raza quiere desarrollar híbridos genéticamente superiores para aumentar la eficacia de su sociedad tipo colmena.
+STR_SECTOID_AUTOPSY
+Autopsia de Sectoide
 STR_SECTOID_AUTOPSY_UFOPEDIA
 La autopsia revela unos órganos digestivos vestigiales y una estructura sencilla. El cerebro y los ojos están muy desarrollados. La estructura sugiere una alteración o mutación genética. La boca y la nariz pequeñas parecen tener poca utilidad. Las membranas entre los dedos y los pies planos sugieren un origen acuático. No hay órganos reproductores ni ninguna pista que indique cómo se reproduce esta especie. Lo más probable es que sea una especie creada por ingeniería genética.
 STR_SNAKEMAN_UFOPEDIA
 Esta raza se ha desarrollado en un medio extremadamente hostil. Son muy resistentes y pueden aguantar cambios extremos de temperatura. Su movilidad depende de un gigantesco pie en forma de serpiente que protege todos los órganos vitales. Parecen ser puros depredadores bajo el control de alguna otra especie inteligente que dirige sus incursiones de estilo militar en la Tierra.
+STR_SNAKEMAN_AUTOPSY
+Autopsia de Hombre-serpiente
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
 La piel es muy dura y resistente al calor. El sistema cardio-vascular es parte del sistema muscular que utiliza el principio hidráulico para crear movimiento. El único músculo verdadero es el "corazón". El sistema reproductor parece diferente. La reproducción es asexual; cada hombre-serpiente lleva cincuenta huevos dentro de su cuerpo en todo momento. Si se les dejara solos, supondrían una amenaza seria para la vida en la Tierra.
 STR_ETHEREAL_UFOPEDIA
 Esta criatura tiene poderes mentales asombrosos que le permiten comunicarse telepáticamente y le proporcionan habilidad para la telequinesia. Estos poderes mentales sostienen al cuerpo, aparentemente débil. No comprendemos cómo funcionan estos poderes para la telequinesia, ya que parecen desafiar las leyes de la física que conocemos. En una situación de combate son muy peligrosos, ya que cuentan con su poderes mentales para combatir. Es muy raro verlos en la Tierra, porque parecen contar con otras razas para conseguir sus objetivos.
+STR_ETHEREAL_AUTOPSY
+Autopsia de Etéreo
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
 Este ser no ha evolucionado físicamente, parece incapaz de realizar cualquier función vital. Los músculos están muy atrofiados y parece que los órganos internos no están desarrollados. Los órganos sensoriales, incluyendo los ojos, parecen no funcionar en absoluto. Sin embargo, el cerebro está bien desarrollado y utiliza una gran proporción del suministro sanguíneo total del cuerpo. Cómo esta criatura puede sobrevivir sin ayuda exterior es un misterio.
 STR_MUTON_UFOPEDIA
 Esta criatura humanoide tiene una constitución física fuerte y es inteligente. Le gusta especialmente la carne cruda de cualquier tipo, que necesita para sobrevivir puesto que pertenece a una raza carnívora basada en la Tierra. Parece que dependen de órdenes telepáticas enviadas por una raza conocida como etéreos. Si se rompe esta unión telepática, su sistema nervioso parece colapsarse y la criatura muere. Los implantes cibernéticos sirven para mejorar su actuación durante el combate. Está claro que son soldados de a pie al servicio de una raza de inteligencia superior.
+STR_MUTON_AUTOPSY
+Autopsia de Muton
 STR_MUTON_AUTOPSY_UFOPEDIA
 La piel de esta criatura parece ser una armadura protectora creada orgánicamente e injertada en el cuerpo. Hay muchos implantes cibernéticos que sirven para mejorar el sistema cardio-vascular y los sentidos. Según parece, los órganos reproductores han sido extirpados. Es evidente que la vida de estas criaturas desafortunadas se limita a la guerra y a la conquista. La munición perforadora de blindaje (PB) no es muy eficaz contra esta piel reforzada.
 STR_CELATID_UFOPEDIA
 Esta forma de vida tiene una misteriosa habilidad para flotar en el aire. Parece detectar las ondas mentales humanas, gracias a lo cual puede dirigirse hacia su blanco, aunque éste esté bien escondido. Una vez que ha detectado el blanco, el celátido aterriza y dispara pequeños glóbulos de veneno altamente corrosivo. Esta criatura es capaz de crear clones de sí misma a un ritmo alarmante. Suele acompañar a la raza muton en sus correrías.
+STR_CELATID_AUTOPSY
+Autopsia de Celátido
 STR_CELATID_AUTOPSY_UFOPEDIA
 En el centro hay un pequeño dispositivo biomecánico que parece ser un sistema de propulsión antigravedad, resultado de la evolución natural de la criatura. La bolsa de veneno es el órgano más grande y no parece haber ninguna estructura cerebral independiente. No se distingue ningún sistema digestivo ni reproductor. Un órgano pequeño contiene embriones capaces de convertirse rápidamente en criaturas adultas.
 STR_SILACOID_UFOPEDIA
 Esta forma de vida basada en el silicio genera una cantidad enorme de calor. Es capaz de romper rocas y digerirlas en su interior a alta temperatura. Se trata de una inteligencia primitiva que puede ser controlada con implantes o por parte de seres con poderes telepáticos. Trabaja con la raza alienígena de los mutones.
+STR_SILACOID_AUTOPSY
+Autopsia de Silacoide
 STR_SILACOID_AUTOPSY_UFOPEDIA
 El interior de esta criatura está muy caliente, lo que parece ser la base de su sistema digestivo. Su sistema muscular sin igual le permite ser tremendamente fuerte y rápido. Su piel, dura como la piedra, no se ve afectada por la munición incendiaria (I) ni por el fuego.
 STR_CHRYSSALID_UFOPEDIA
 Las garras tipo cangrejo de esta criatura son un arma poderosa en el combate cuerpo a cuerpo. Su evolucionado metabolismo y su gran fuerza le proporcionan velocidad y destreza. En vez de matar a su víctima, le inserta un huevo y le inyecta un veneno que la convierte en un zombi andante. Poco después de que la víctima ha sido inyectada, un nuevo crisálido surgirá de ella. Los crisálidos están asociados con la raza de los hombres-serpiente.
+STR_CHRYSSALID_AUTOPSY
+Autopsia de Crisálido
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 El exoesqueleto de esta criatura es muy duro pero, curiosamente, vulnerable a la munición explosiva. El cerebro está muy desarrollado y el ritmo de crecimiento de sus células muy alto. Lleva veinte huevos, que deposita en otros organismos. Constituye un arma de terror muy eficaz.
 STR_FLOATER_UFOPEDIA
 Los flotadores son soldados y agentes del terror. Son bestias depredadoras por naturaleza, pero gracias a la cibernética y a la ingeniería genética, se han convertido en unos guerreros formidables. Se les han extirpado la parte inferior del cuerpo y la mayoría de los órganos internos, y se les ha instalado un sistema de respiración artificial. Este implante contiene una unidad antigravitatoria que permite a la criatura flotar en el aire, aunque de forma inestable.
+STR_FLOATER_AUTOPSY
+Autopsia de Flotador
 STR_FLOATER_AUTOPSY_UFOPEDIA
 Esta criatura ha sufrido numerosas alteraciones por medio de la cirugía. El aparato que parece formar el centro de su cuerpo es un sistema de respiración artificial que hace las veces de corazón, pulmones y aparato digestivo. Dicho aparato permite a la criatura sobrevivir en medios extremadamente hostiles. El cerebro es más pequeño que el nuestro, pero sus órganos sensoriales están muy desarrollados.
 STR_REAPER_UFOPEDIA
 Este carnívoro bípedo tiene unas mandíbulas poderosas y un apetito voraz. Tiene varios implantes cerebrales que sirven para controlar sus actividades. Los instintos depredadores de esta criatura son de poca utilidad, excepto para aterrorizar y destruir. Los segadores suelen asociarse con los flotadores.
+STR_REAPER_AUTOPSY
+Autopsia de Segador
 STR_REAPER_AUTOPSY_UFOPEDIA
 El segador tiene dos cerebros y dos corazones, que le permiten seguir moviéndose incluso cuando está gravemente herido. Sin embargo, su piel peluda es altamente inflamable, por lo que esta criatura es vulnerable a las armas incendiarias (I).
 STR_SECTOPOD_UFOPEDIA
 Los sectópodos son robots equipados con una potente arma de rayos de plasma. Los etéreos controlan a estas bestias mecánicas conectando con ellas telepáticamente. Los sectópodos constituyen el arma de terror más potente a disposición de las fuerzas alienígenas.
+STR_SECTOPOD_AUTOPSY
+Autopsia de Sectópodo
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 Éste es un robot de construcción sólida con un blindaje capaz de resistir la mayoría de las formas de ataque, sobre todo las armas de plasma. Sin embargo, sus circuitos sensores parecen ser particularmente vulnerables a las armas de rayos láser.
 STR_CYBERDISC_UFOPEDIA
 Este platillo volante en miniatura es un arma de terror automática, equipada con un potente rayo de plasma. Su propulsión antigravedad le da una gran ventaja en terrenos difíciles. Su principal función es sembrar la destrucción y el terror, al servicio de los sectoides.
+STR_CYBERDISC_AUTOPSY
+Autopsia de Ciberdisco
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
 El blindaje de los ciberdiscos es muy bueno, por lo que resisten bien los ataques con munición explosiva. El sistema de antigravedad de este ejemplar está demasiado dañado como para averiguar su funcionamiento.
 STR_UFO_POWER_SOURCE_UFOPEDIA
@@ -557,7 +579,7 @@ STR_INTERCEPTING_UFO
 INTERCEPTANDO A UN OVNI-
 STR_RETURNING_TO_BASE
 REGRESANDO A LA BASE
-STR_DESTINATION_UC
+STR_DESTINATION_UC_
 DESTINO: 
 STR_SPEED_
 VELOCIDAD>
@@ -767,8 +789,6 @@ STR_UFOS
 OVNIS
 STR_SELECT_ITEM
 SELECCIONAR ARTÍCULO
-STR_AUTOPSY
-Autopsia de 
 STR_ACCELERATION
 ACELERACIÓN>
 STR_FUEL_CAPACITY
@@ -1601,6 +1621,8 @@ STR_NO_FREE_ACCOMODATION_CREW
 NO HAY ALOJAMIENTO{SMALLLINE}La base de destino no tiene suficiente espacio para la tripulación de la nave.
 STR_ITEMS_ARRIVING
 Artículos trasladados
+STR_DESTINATION_UC
+DESTINO
 STR_PISTOL
 Pistola
 STR_PISTOL_CLIP
@@ -2029,7 +2051,35 @@ STR_CORPSE
 Cadáver
 STR_UNLOAD
 Descargar
+STR_NEW_SAVED_GAME
+<NEW SAVED GAME>
 STR_NEW_BATTLE
 New Battle
 STR_OPTIONS
 Opciones
+STR_TERRAIN
+TERRAIN
+STR_DARKNESS
+DARKNESS
+STR_DISPLAY_RESOLUTION
+Display Resolution
+STR_DISPLAY_MODE
+Display Mode
+STR_WINDOWED
+Windowed
+STR_FULLSCREEN
+Fullscreen
+STR_LANGUAGE
+LANGUAGE
+STR_FARM
+Farm
+STR_FOREST
+Forest
+STR_JUNGLE
+Jungle
+STR_MOUNTAIN
+Mountain
+STR_DESERT
+Desert
+STR_POLAR
+Polar

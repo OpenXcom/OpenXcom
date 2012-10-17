@@ -23,46 +23,68 @@ STR_PLASMA_BEAM_UFOPEDIA
 A GRAVITÁCIÓS SUGÁR FINOMAN VÁLTOZÓ BEROBBANÓ GRAVITÁCIÓS MEZŐT IRÁNYÍT.
 STR_SECTOID_UFOPEDIA
 A szektoid hierachia a katonáktól a vezetőkig erőteljes pszionikus képességekkel rendelkezik.  Ezek segítségével demoralizálhatják katonáinkat, sőt képesek átvenni az irányítást felettük.  Hajlamosak megengedni maguknak az emberrablást és állatcsonkítást.  A rablás genetikai anyagok beszerzésére irányul keresztezés és klónok előállítása céljából, mely klónok emberi közösségekbe szivároghatnak be.  Az állatok egyaránt jelentenek genetikai anyagokat és táplálékforrást.  Ez a faj felsőbbrendű genetikus hibrideket akar kifejleszteni, hogy növelje a kaptárszerű közösségük hatékonyságát.
+STR_SECTOID_AUTOPSY
+Boncolása Szektoid
 STR_SECTOID_AUTOPSY_UFOPEDIA
 A boncolás felfedi a lény egyszerű felépítését és az emésztőszervek maradékát.  Az agy és a szemek igen fejlettek.  A felépítés genetikai beavatkozást vagy mutációt sugall.  A kis száj és orr - úgy tűnik - nem sok szerepet tölt be.  Az ujjak közti hártya és a lapult láb vízi eredetre utal.  Nincsenek szaporítószervek, és fogalmunk sincs, hogyan szaporodhat ez a faj.  A legvalószínűbb, hogy genetikai sokszorosítással készített egyedek.
 STR_SNAKEMAN_UFOPEDIA
 Ez a faj rendkívül ellenséges környezetben fejlődött ki.  Szívósak és ellenállnak nagymértékű hőmérséklet-változásnak is.  A mozgásuk egy kígyószerű óriási lábbal történik, amely megvédi minden élő szervüket.  A céljuk szimpla vérengzés, és úgy látszik, hogy valamilyen magasabbrendű intelligencia rendelkezik velük, amely katonai jellegű portyázásaikat irányítja a Földön.
+STR_SNAKEMAN_AUTOPSY
+Boncolása Kígyóember
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
 A bőr rendkívül szívós és hőálló.  A szív-érrendszer az izomrendszer része, amely hidraulikus elv alapján hozza létre a mozgást.  Az egyetlen igazi izom a 'szív'.  A szaporítószervek nagyon hatékonynak tűnnek.  A szaporodás aszexuális, minden kígyóember legföljebb 50 tojást hordoz egyszerre a testében.  Ezek az egyedek a sorsukra hagyva komoly veszélyt jelentenek a földi életre.
 STR_ETHEREAL_UFOPEDIA
 Ennek az életformának félelmetes mentális ereje van, mely segítségével kommunikálhat és távmozgatásra képes.  A gyenge fizikumát a mentális ereje segítségével támogatja.  Nem értjük ezeknek a telekinetikus erőknek a működését, mivel úgy tűnik ellentmondanak a jelenleg ismert fizikai törvényeknek.  Rendkívül veszélyesek bármilyen harci helyzetben, mert mentális erejüket is használják.  Ritkán jelennek meg a Földön mivel úgy néz ki, hogy más fajokat használnak fel céljaik elérése érdekében.
+STR_ETHEREAL_AUTOPSY
+Boncolása Éteri
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
 Fizikailag visszamaradt életforma és látszólag képtelen fenntartani az életfunkcióit.  Az izmok csökevényesek és a belső szervek fejletlennek látszanak.  Az érzékelő szervek - a szemeket is beleértve - úgy tűnik, hogy egyáltalán nem funkcionálnak.  Az agy mindezek ellenére igen fejlett és a test vérellátásának nagy része az agyé.  Rejtély, hogyan képes ez a teremtmény életben maradni külső ellátás nélkül.
 STR_MUTON_UFOPEDIA
 Ez a humanoid erőteljes fizikumú és intelligens.  Különös étvágyuk van bármilyen nyers húsra, ami a fennmaradásukhoz szükséges, hasonlóan a földi húsevőkhöz.  Az Éteriekkel vannak telepatikus kapcsolatban, parancsaikat teljesitik.  Amint ez a kapcsolat megszűnik, az elméjük leáll és meghalnak.  A kibernetikus protézisek növelik a harci teljesítményüket.  Tisztán látszik, hogy egy magasabb intelligenciának a bábjai.
+STR_MUTON_AUTOPSY
+Boncolása Muton
 STR_MUTON_AUTOPSY_UFOPEDIA
 Ennek a teremtménynek a 'bőre' egy szerves alapú páncélzat, mely a testre van ránövesztve.  Számos kibernetikus egység van belé ültetve, mely az érzékelő és keringési rendszer hatékonyságát növeli.  Úgy tűnik a szaporítószervek sebészeti úton el lettek távolítva.  Ezeknek a szerencsétlen teremtményeknek az élete egyértelműen egy hódítás vagy egy háború idejére van korlátozva.  A páncéltörő lőszerek nem igazán hatásosak az edzett bőrükkel szemben.
 STR_CELATID_UFOPEDIA
 Ez a életforma titokzatos természetes képessége a lebegés.  Az emberi agyhullámokat képes érzékelni, ezért akkor is megtalálja célpontját, ha az jól elrejtőzött.  Ha a Celatid felfedezte a célpontját, leszáll, és egy kis korrozív, rendkívül mérgező gömböcskét lő ki.  A teremtmény képes önmagát veszélyes mértékben klónozni.  A Muton fajt kíséri felfedezésein.
+STR_CELATID_AUTOPSY
+Boncolása Kelatid
 STR_CELATID_AUTOPSY_UFOPEDIA
 A belseje egy kis biomechanikus eszközt tartalmaz, mely egy természetes úton kifejlődött anti-gravitációs rendszer.  A méregtasak a legnagyobb szerv és úgy tűnik nincs elkülönült agyszerkezete.  Nincs felismerhető emésztő- és szaporítószerve. Egy kis szerv embriókat tartalmaz, melyek képesek nagyon gyorsan új egyeddé felnőni.
 STR_SILACOID_UFOPEDIA
 Ez a szilikon alapú életforma nagy mennyiségű hőt generál.  Megvan az ereje hozzá, hogy sziklákat zúzzon össze, amit a forró belsejében emészt meg.  Az intelligenciája kezdetleges, kibernetikus pótlékok vagy telepatikus egyedek által irányítható. A Mutonokkal együtt dolgozik.
+STR_SILACOID_AUTOPSY
+Boncolása Szilakoid
 STR_SILACOID_AUTOPSY_UFOPEDIA
 A teremtmény belseje rendkívül forró és úgy látszik ez egyben az emésztőrendszere is.  Egyedi izomrendszere borzasztó erővel és sebességgel bír.  Kőszerű bőre ellenáll a tűznek és a gyújtólőszereknek.
 STR_CHRYSSALID_UFOPEDIA
 A rákszerű ollók hatékony fegyverek közelharcban.  Ennek a teremtménynek a fejlett anyagcseréje és az ereje gyorssá és ügyessé teszi.  Áldozata megölése helyett egy tojást helyez el benne és mérget fecskendez belé, amely zombivá változtatja.  Egy új Chryssalid fog hamarosan kitörni a beültetés után.  A Chryssalidokat a kígyóemberekkel együtt szokták emlegetni.
+STR_CHRYSSALID_AUTOPSY
+Boncolása Krisszalid
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 Ennek a teremtménynek a csontváza rendkívül szívós, de meglepően sérülékeny robbanó lőszerrel szemben.  Az agy igen fejlett, és sejtjei nagyon gyorsan szaporodnak.  A teremtmény húsz tojást hordoz a belsejében, melyeket más élőlényekbe helyez.  Ez a teremtmény egy nagyon hatékony terrorizáló fegyver.
 STR_FLOATER_UFOPEDIA
 A Lebegők elsődlegesen katonák és terroristák. Természetileg ragadozó bestiák, genetikai és kibernetikai beavatkozással lettek feljesztve rettentő harcosokká. A test alsó fele és több belső szerv sebészetileg lett eltávolítva, és egy életfunkció-ellátó rendszer helyettesíti azokat.  Ez a rendszer tartalmazza az anti-gravitációs egységet, mely bizonytalanul bár, de lehetővé teszi a teremtmény számára a lebegést.
+STR_FLOATER_AUTOPSY
+Boncolása Lebegő
 STR_FLOATER_AUTOPSY_UFOPEDIA
 Ez a teremtmény sebészetileg drasztikusan meg lett változtatva.  A lény belsejét formáló eszköz a létfenntartó rendszer, átveszi a szív, a tüdők és az emésztőrendszer szerepét.  Ez teszi lehetővé, hogy teljesen ellenséges körülmények között is túléljen.  Az agya kisebb, mint a miénk, de az érzékelőszervei igen fejlettek.
 STR_REAPER_UFOPEDIA
 Ennek a kétlábú húsevőnek erőteljes állkapcsai és hatalmas étvágya van.  Számos beültetés van az agyában, melyek aktivitását irányítják.  Ennek a teremtménynek a primitív ragadozóösztönei csak a terrorban és a pusztításban kerülnek kiélésre. Az Aratókat általában a Lebegőkkel együtt szokták emlegetni.
+STR_REAPER_AUTOPSY
+Boncolása Arató
 STR_REAPER_AUTOPSY_UFOPEDIA
 Az Arató két 'aggyal' és 'szívvel' rendelkezik, így még komolyan megsebesülve is képes ellátni feladatát.  Szőrös bőre azonban erősen gyúlékony, sérülékennyé téve a gyújtólőszerekkel szemben.
 STR_SECTOPOD_UFOPEDIA
 A Sectopodok robotlények, erőteljes plazmafegyverrel.  Ezeket a mechanikus bestiákat az Éteriek irányítják telepatikus kapcsolataikon keresztül.  A Sectopodok az idegen erők legerőteljesebb terrorizáló fegyverei.
+STR_SECTOPOD_AUTOPSY
+Boncolása Szektopod
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 A robot strapabíró, erőpáncélja a támadás legtöbb formájának ellenáll, különösen a plazmafegyvereknek.  Azonban az érzékelő áramkör sérülékenynek tűnik lézerfegyverekkel szemben.
 STR_CYBERDISC_UFOPEDIA
 Ez a miniatűr repülő csészealj egy automatizált terror-fegyver nagyteljesítményű plazmasugárral.  Az anti-gravitációs meghajtás nagy előnnyel látja el nehéz terepen.  Elsődleges funkciója a rombolás és a terror a Szektoid faj szolgálatában.
+STR_CYBERDISC_AUTOPSY
+Boncolása Kiberkorong
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
 A kiberkorong erősen felvértezett és különösen ellenálló robbanó lőszerrel szemben.  Az elsődleges anti-gravitációs rendszer túlságosan megsérült, hogy bármit is megértsünk működéséből.
 STR_UFO_POWER_SOURCE_UFOPEDIA
@@ -557,7 +579,7 @@ STR_INTERCEPTING_UFO
 ELFOGÁS: UFO-
 STR_RETURNING_TO_BASE
 VISSZATÉR A BÁZISRA
-STR_DESTINATION_UC
+STR_DESTINATION_UC_
 CÉLPONT: 
 STR_SPEED_
 SEBESSÉG>
@@ -767,8 +789,6 @@ STR_UFOS
 UFOk
 STR_SELECT_ITEM
 VÁLASSZ TÉTELT
-STR_AUTOPSY
- boncolása
 STR_ACCELERATION
 GYORSULÁS>
 STR_FUEL_CAPACITY
@@ -1601,6 +1621,8 @@ STR_NO_FREE_ACCOMODATION_CREW
 NINCS SZABAD LAKÓHELY!{SMALLLINE}A célbázis nem rendelkezik elég lakóhellyel a lakónegyedeiben, hogy képes legyen befogadni a géphez rendelt legénységet.
 STR_ITEMS_ARRIVING
 Érkező tételek
+STR_DESTINATION_UC
+CÉLPONT
 STR_PISTOL
 Pisztoly
 STR_PISTOL_CLIP
@@ -2049,3 +2071,15 @@ STR_FULLSCREEN
 Teljesképernyő
 STR_LANGUAGE
 NYELV
+STR_FARM
+Farm
+STR_FOREST
+Forest
+STR_JUNGLE
+Jungle
+STR_MOUNTAIN
+Mountain
+STR_DESERT
+Desert
+STR_POLAR
+Polar

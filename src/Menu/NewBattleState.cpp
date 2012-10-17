@@ -119,12 +119,12 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_missionTypes.pop_back();
 
 	_selTerrain = 0;
-	_terrainTypes.push_back("CULTA");
-	_terrainTypes.push_back("FOREST");
-	_terrainTypes.push_back("JUNGLE");
-	_terrainTypes.push_back("MOUNT");
-	_terrainTypes.push_back("DESERT");
-	_terrainTypes.push_back("POLAR");
+	_terrainTypes.push_back("STR_FARM");
+	_terrainTypes.push_back("STR_FOREST");
+	_terrainTypes.push_back("STR_JUNGLE");
+	_terrainTypes.push_back("STR_MOUNTAIN");
+	_terrainTypes.push_back("STR_DESERT");
+	_terrainTypes.push_back("STR_POLAR");
 
 	_selAlien = 0;
 	//_alienRaces = _game->getRuleset()->getAlienRacesList();
@@ -162,7 +162,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick);
 
 	_btnTerrainType->setColor(Palette::blockOffset(15)-1);
-	_btnTerrainType->setText(Language::utf8ToWstr(_terrainTypes[_selTerrain]));
+	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
 	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick);
 
 	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
@@ -318,7 +318,7 @@ void NewBattleState::btnOkClick(Action *action)
 		_craft->setDestination(u);
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
-		if (_terrainTypes[_selTerrain] == "FOREST")
+		if (_terrainTypes[_selTerrain] == "STR_FOREST")
 		{
 			u->setLatitude(-0.5);
 		}
@@ -379,7 +379,7 @@ void NewBattleState::btnTerrainTypeClick(Action *action)
 	{
 		_selTerrain = 0;
 	}
-	_btnTerrainType->setText(Language::utf8ToWstr(_terrainTypes[_selTerrain]));
+	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
 }
 
 void NewBattleState::btnAlienRaceClick(Action *action)

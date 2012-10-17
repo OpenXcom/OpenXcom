@@ -95,7 +95,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
 
 	_txtDestination->setColor(Palette::blockOffset(8)+5);
-	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION"));
+	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION_UC"));
 
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setColumns(3, 155, 35, 98);

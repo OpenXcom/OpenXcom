@@ -146,12 +146,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 			}
 			else
 			{
-				ss << _game->getLanguage()->getString("STR_DESTINATION_UC") << u->getName(_game->getLanguage());
+				ss << _game->getLanguage()->getString("STR_DESTINATION_UC_") << u->getName(_game->getLanguage());
 			}
 		}
 		else
 		{
-			ss << _game->getLanguage()->getString("STR_DESTINATION_UC") << _craft->getDestination()->getName(_game->getLanguage());
+			ss << _game->getLanguage()->getString("STR_DESTINATION_UC_") << _craft->getDestination()->getName(_game->getLanguage());
 		}
 	}
 	_txtStatus->setText(ss.str());

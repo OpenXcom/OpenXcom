@@ -23,46 +23,68 @@ STR_PLASMA_BEAM_UFOPEDIA
 DER GRAVITATIONSSTRAHL SETZT EIN GENAU AUSGERICHTETES IMPLODIERENDES GRAVITATIONSFELD EIN.
 STR_SECTOID_UFOPEDIA
 Die Hierarchie der Sektoiden reicht von Soldaten bis zu Anführern mit starken psionischen Kräften.  Diese Kräfte können eingesetzt werden, um Soldaten im Kampf zu demoralisieren oder sogar ihre Gedanken zu kontrollieren.  Sektoiden entführen gern Menschen und verstümmeln Rinder.  Die Entführungen dienen der Gewinnung genetischen Materials, aus dem sie Hybrid-Züchtungen und Klonen entwickeln und in die menschliche Gesellschaft einschleusen.  Dieses Volk scheint überlegene genetische Mischformen entwickeln zu wollen, um die Effektivität seiner bienenstockartigen Gesellschaft zu erhöhen.
+STR_SECTOID_AUTOPSY
+Autopsie Sektoid
 STR_SECTOID_AUTOPSY_UFOPEDIA
 Die Autopsie zeigt rudimentäre Verdauungsorgane und eine einfache Struktur.  Das Gehirn und die Augen sind sehr stark entwickelt.  Die Struktur weist auf genetische Veränderung oder Mutation hin.  Der kleine Mund und die ebenso winzige Nase scheinen kaum eine Funktion zu haben.  Die Haut zwischen den Fingern und die flachen Füße deuten auf aquatische Herkunft hin.  Es gibt keine Fortpflanzungsorgane und keinen Hinweis darauf, wie sich diese Spezies vermehrt.  Vermutlich handelt es sich um eine durch Genmanipulation erschaffene Spezies.
 STR_SNAKEMAN_UFOPEDIA
 Diese Spezies hat sich in einer äußerst feindseligen Umwelt entwickelt.  Die Geschöpfe sind sehr widerstandsfähig und können hohe Temperaturschwankungen überstehen.  Ihre Mobilität verdanken sie einem riesigen schlangenähnlichen 'Fuß', der alle wichtigen Organe schützt.  Ihre Absichten scheinen rein räuberischer Natur zu sein, und sie werden vermutlich von einer anderen Intelligenz gelenkt, die die militärischen Übergriffe auf die Erde steuert.
+STR_SNAKEMAN_AUTOPSY
+Autopsie Schlangenmensch
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
 Die Haut ist äußerst fest und hitzebeständig.  Das Herz- und Kreislaufsystem ist Bestandteil des Muskelsystems, das nach dem hydraulischen Prinzip Bewegungen erzeugt.  Der einzige wirkliche Muskel ist das 'Herz'.  Das Fortpflanzungssystem scheint sehr effektiv zu sein.  Die Fortpflanzung geschieht asexuell: Jeder Schlangenmensch trägt ständig bis zu fünfzig Eier in seinem Körper.  Ließe man diese Spezies gewähren, würde sie eine ernsthafte Bedrohung für das Leben auf der Erde darstellen.
 STR_ETHEREAL_UFOPEDIA
 Dieses Wesen hat eindrucksvolle mentale Kräfte, die die telepathische Kommunikation und telekinetische Fähigkeiten ermöglichen.  Der schwache Körper dieser Kreaturen wird durch ihre geistigen Kräfte erhalten.  Wir wissen nicht, wie diese telekinetischen Kräfte funktionieren, da sie den physikalischen Gesetzen, wie wir sie kennen, zuwiderzulaufen scheinen.  Im Kampf, wo sie ihre mentalen Kräfte einsetzen, sind diese Wesen äußerst gefährlich.  Sie erscheinen selten selbst auf der Erde, da sie anscheinend andere Völker dafür einzusetzen scheinen, ihre Ziele zu verfolgen.
+STR_ETHEREAL_AUTOPSY
+Autopsie Ätherer
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
 Dieses Wesen ist körperlich kaum entwickelt und scheint nicht in der Lage zu sein, Lebensfunktionen zu erhalten.  Die Muskeln sind stark verkümmert, die inneren Organe kaum ausgebildet.  Die Wahrnehmungsorgane, einschließlich der Augen, scheinen völlig funktionsuntüchtig zu sein.  Das Gehirn dagegen ist gut entwickelt und zieht einen Großteil der Blutversorgung des Körpers auf sich.  Es ist ein Rätsel, wie sich diese Kreatur ohne äußere Hilfe am Leben erhalten kann.
 STR_MUTON_UFOPEDIA
 Diese humanoiden Geschöpfe besitzen Körperkraft und Intelligenz.  Sie verzehren besonders gern rohes Fleisch jeder Art, das ähnlich den Raubtieren auf der Erde ihre Nahrung bildet.  Sie scheinen von den telepathischen Befehlen eines als 'Ätherer' bekannten Volkes abhängig zu sein.  Sobald diese telepathische Verbindung gelöst wird, brechen ihre Gehirnfunktionen zusammen, und sie sterben. Die kybernetischen Implantate verbessern ihre Kampfleistung.  Diese Wesen dienen eindeutig als Ausführungsorgane einer höheren Intelligenz.
+STR_MUTON_AUTOPSY
+Autopsie Mutone
 STR_MUTON_AUTOPSY_UFOPEDIA
 Die 'Haut' dieses Wesens scheint eine organisch geschaffene Schutzpanzerung zu sein, die auf den Körper aufgepflanzt ist.  Es sind zahlreiche kybernetische Implantate vorhanden, die das Herz-Kreislauf-System und die Sinne stärken.  Die Fortpflanzungsorgane scheinen chirurgisch entfernt worden zu sein.  Offensichtlich sind diese unglückseligen Geschöpfe für ein Leben des Kampfes und der Eroberung bestimmt.  Panzerbrechende Munition ist gegen ihre verstärkte Außenhaut wenig wirksam.
 STR_CELATID_UFOPEDIA
 Diese Lebensform hat die geheimnisvolle natürliche Fähigkeit, durch die Luft zu treiben.  Sie fangen menschliche Gehirnströme auf und bewegen sich auf das menschliche Ziel zu, selbst wenn es gut versteckt ist.  Sobald der Celatid ein Ziel entdeckt hat, landet er und feuert kleine Kugeln mit stark ätzendem Gift ab.  Das Geschöpf kann sich mit erschreckender Schnelligkeit selbst klonen.  Es begleitet das Volk der Mutonen bei seinen Wanderungen.
+STR_CELATID_AUTOPSY
+Autopsie Celatid
 STR_CELATID_AUTOPSY_UFOPEDIA
 Im Kern befindet sich eine kleine biomechanische Vorrichtung, bei der es sich um ein natürlich entwickeltes Antischwerkraft-Antriebssystem handelt.  Der Giftbeutel ist das größte Organ, und es scheint keine separate Gehirnstruktur zu geben.  Verdauungs- oder Fortpflanzungssysteme sind nicht zu entdecken.  Ein kleines Organ enthält Embryos, die rasch zu neuen Wesen heranwachsen können.
 STR_SILACOID_UFOPEDIA
 Diese Lebensform auf Silikonbasis erzeugt eine ungeheure Hitze.  Sie hat die Kraft, Felsen zu zertrümmern, die dann von ihrem heißen Kern verzehrt werden können.  Sie besitzt eine primitive Intelligenz, die durch Implantate oder telepathische Wesen kontrolliert werden kann.  Sie arbeitet mit den Mutonen zusammen.
+STR_SILACOID_AUTOPSY
+Autopsie Silakoid
 STR_SILACOID_AUTOPSY_UFOPEDIA
 Der Kern dieser Geschöpfe ist sehr heiß und scheint die Grundlage für ihr Verdauungssystem zu bilden.  Ihr einzigartiges Muskelsystem besitzt ungeheure Kraft und Geschwindigkeit.  Ihre felsenartige Haut kann weder durch Feuer noch durch Brandmunition verletzt werden.
 STR_CHRYSSALID_UFOPEDIA
 Die Krebsscheren dieses Wesens sind eine mächtige Waffe im Nahkampf.  Ein schneller Stoffwechsel und außergewöhnliche Körperkraft verleihen diesem Geschöpf Schnelligkeit und Gewandtheit.  Anstatt seine Opfer zu töten, legt es ein Ei in ihnen ab und injiziert ein Gift, das sie zu wandelnden Zombies macht.  Kurz nach dieser Befruchtung bricht ein neuer Chryssalid aus dem Opfer hervor.  Die Chryssaliden arbeiten mit den Schlangenmenschen zusammen.
+STR_CHRYSSALID_AUTOPSY
+Autopsie Chryssalid
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 Das Außenskelett dieses Wesens ist äußerst hart, jedoch erstaunlich empfindlich gegenüber Sprengstoffen.  Das Gehirn ist gut entwickelt und die Wachstumsrate der Zellen sehr hoch.  Das Wesen trägt zwanzig Eier bei sich, die es in anderen Organismen ablegt.  Diese Kreaturen sind eine tödliche Terror-Waffe.
 STR_FLOATER_UFOPEDIA
 Die Treiber sind vorwiegend Soldaten und Terror-Agenten.  Sie sind von Natur aus räuberisch veranlagt, jedoch durch genetische und kybernetische Veränderungen in furchterregende Krieger verwandelt worden.  Die untere Körperhälfte und die meisten inneren Organe wurden chirurgisch entfernt und durch ein Lebenserhaltungssystem ersetzt.  Dieses Implantat enthält eine Antischwerkraft-Einheit, die dem Wesen ermöglicht, mehr oder weniger sicher durch die Luft zu treiben.
+STR_FLOATER_AUTOPSY
+Autopsie Treiber
 STR_FLOATER_AUTOPSY_UFOPEDIA
 Das Geschöpf wurde durch chirurgische Eingriffe stark verändert.  Den Kern des Körpers scheint ein Lebenserhaltungssystem zu bilden, das die Funktionen von Herz, Lunge und Verdauungstrakt übernimmt.  Dadurch kann das Wesen in einer äußerst feindseligen Umwelt überleben.  Das Gehirn ist kleiner als unseres, doch die Sinnesorgane sind gut entwickelt.
 STR_REAPER_UFOPEDIA
 Dieser zweibeinige Fleischfresser hat mächtige Kiefer und einen ungeheuren Appetit.  Seine Handlungen werden durch eine Reihe von Gehirn-Implantaten gesteuert.  Die primitiven räuberischen Instinkte dieses Geschöpfes können lediglich für Terror- und Vernichtungsakte genutzt werden.  Schnitter werden im allgemeinen mit Treibern in Verbindung gebracht.
+STR_REAPER_AUTOPSY
+Autopsie Schnitter
 STR_REAPER_AUTOPSY_UFOPEDIA
 Der Schnitter besitzt zwei 'Herzen' und zwei 'Gehirne' und kann daher auch dann noch weiter agieren, wenn er schwer verwundet ist.  Die fellbedeckte Haut ist jedoch leicht entflammbar, was dieses Wesen gegenüber Brandwaffen sehr empfindlich macht.
 STR_SECTOPOD_UFOPEDIA
 Sektopoden sind Roboterwesen mit einer mächtigen Plasmastrahlenwaffe.  Diese mechanischen Ungeheuer werden durch eine telepathische Verbindung von ihren Beherrschern, den Ätherern, gesteuert.  Sektopoden sind die vernichtendsten Terrorwaffen, die den Außerirdischen zur Verfügung stehen.
+STR_SECTOPOD_AUTOPSY
+Autopsie Sektopod
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 Der Roboter ist stabil konstruiert, und seine kraftbetriebene Panzerung kann den meisten Angriffen widerstehen, insbesondere Plasmawaffen.  Die Sensorenkreise scheinen jedoch sehr empfindlich gegenüber Laserwaffen zu sein.
 STR_CYBERDISC_UFOPEDIA
 Diese fliegende Untertasse im Kleinformat ist eine mit einem mächtigen Plasmastrahl ausgerüstete Terrorwaffe.  Der Antischwerkraft-Antrieb bringt ihr große Vorteile in schwierigem Gelände.  Ihre Hauptaufgaben sind Zerstörung und Terror im Auftrag des Sektoiden-Volkes.
+STR_CYBERDISC_AUTOPSY
+Autopsie Cyberdisc
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
 Die Cyberdisc besitzt wirksame Schutzschilde und ist vor allem vor Sprengstoffangriffen gut geschützt.  Das Antischwerkraft-System ist zu stark beschädigt, um seine Funktionsweise erkennen zu können.
 STR_UFO_POWER_SOURCE_UFOPEDIA
@@ -557,7 +579,7 @@ STR_INTERCEPTING_UFO
 ABFANGVORGANG UFO-
 STR_RETURNING_TO_BASE
 RÜCKKEHR ZUM STÜTZPUNKT
-STR_DESTINATION_UC
+STR_DESTINATION_UC_
 ZIEL: 
 STR_SPEED_
 GESCHWINDIGKEIT>
@@ -767,8 +789,6 @@ STR_UFOS
 UFOs
 STR_SELECT_ITEM
 GEGENSTAND WÄHLEN
-STR_AUTOPSY
--Autopsie
 STR_ACCELERATION
 BESCHLEUNIGUNG>
 STR_FUEL_CAPACITY
@@ -1601,6 +1621,8 @@ STR_NO_FREE_ACCOMODATION_CREW
 KEINE FREIEN QUARTIERE!{SMALLLINE}Zielstützpunkt hat nicht genügend Quartiere für die dem Raumschiff zugewiesene Besatzung.
 STR_ITEMS_ARRIVING
 Ankommende Gegenstände
+STR_DESTINATION_UC
+ZIEL
 STR_PISTOL
 Pistole
 STR_PISTOL_CLIP
@@ -2048,4 +2070,15 @@ Fenster
 STR_FULLSCREEN
 Vollbild
 STR_LANGUAGE
-Sprache
+SpracheSTR_FARM
+Farm
+STR_FOREST
+Forest
+STR_JUNGLE
+Jungle
+STR_MOUNTAIN
+Mountain
+STR_DESERT
+Desert
+STR_POLAR
+Polar
