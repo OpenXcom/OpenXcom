@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -95,7 +95,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -160,6 +160,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["energy"] >> _energy;
 	node["morale"] >> _morale;
 	node["kneeled"] >> _kneeled;
+	node["floating"] >> _floating;
 	for (int i=0; i < 5; i++)
 		node["armor"][i] >> _currentArmor[i];
 	for (int i=0; i < 6; i++)
@@ -172,6 +173,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expMelee"] >> _expMelee;
 	node["turretType"] >> _turretType;
 	node["visible"] >> _visible;
+
 
 }
 
@@ -199,6 +201,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "energy" << YAML::Value << _energy;
 	out << YAML::Key << "morale" << YAML::Value << _morale;
 	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
+	out << YAML::Key << "floating" << YAML::Value << _floating;
 	out << YAML::Key << "armor" << YAML::Value;
 	out << YAML::Flow << YAML::BeginSeq;
 	for (int i=0; i < 5; i++) out << _currentArmor[i];
@@ -338,7 +341,14 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 	}
 
 	if (!_tile->getMapData(MapData::O_FLOOR))
+	{
 		_status = STATUS_FLYING;
+		_floating = true;
+	}
+	else
+	{
+		_floating = false;
+	}
 
 	_walkPhase = 0;
 	_destination = destination;
@@ -629,6 +639,15 @@ void BattleUnit::kneel(bool kneeled)
 bool BattleUnit::isKneeled() const
 {
 	return _kneeled;
+}
+
+/**
+ * Is floating? A unit is floating when there is no ground under him/her.
+ * @return true/false
+ */
+bool BattleUnit::isFloating() const
+{
+	return _floating;
 }
 
 /**
@@ -1354,9 +1373,15 @@ void BattleUnit::setTile(Tile *tile)
 
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING && !_tile->getMapData(MapData::O_FLOOR))
+	{
 		_status = STATUS_FLYING;
+		_floating = true;
+	}
 	else if (_status == STATUS_FLYING && _tile->getMapData(MapData::O_FLOOR))
+	{
 		_status = STATUS_WALKING;
+		_floating = false;
+	}
 }
 
 /**

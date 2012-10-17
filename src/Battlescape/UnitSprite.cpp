@@ -136,7 +136,7 @@ void UnitSprite::drawRoutine0()
 
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0;
 	// magic numbers
-	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264;
+	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264, legsFloat = 275;
 	const int larmStand = 0, rarmStand = 8, rarm1H = 232, larm2H = 240, ramr2H = 248, rarmShoot = 256;
 	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
 	const int larmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
@@ -159,7 +159,15 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (_unit->getGender() == GENDER_FEMALE)
+	if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+	{
+		torso = _unitSurface->getFrame(maleTorso + _unit->getDirection());
+	}
+	else if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC")
+	{
+		torso = _unitSurface->getFrame(femaleTorso + _unit->getDirection());
+	}
+	else if (_unit->getGender() == GENDER_FEMALE)
 	{
 		torso = _unitSurface->getFrame(femaleTorso + _unit->getDirection());
 	}
@@ -181,6 +189,10 @@ void UnitSprite::drawRoutine0()
 		if (_unit->isKneeled())
 		{
 			legs = _unitSurface->getFrame(legsKneel + _unit->getDirection());
+		}
+		else if (_unit->isFloating())
+		{
+			legs = _unitSurface->getFrame(legsFloat + _unit->getDirection());
 		}
 		else
 		{

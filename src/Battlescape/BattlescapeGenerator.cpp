@@ -1030,23 +1030,10 @@ void BattlescapeGenerator::generateMap()
 					_craftInventoryTile = _save->getTile(Position(i*10,(j*10)+5,1));
 				}
 
-				// north
-				if (j > 0 && blocks[i][j-1] != dirt)
+				// drill east
+				if (i < (_width / 10)-1 && blocks[i+1][j] != dirt && _save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT))
 				{
-					_save->getTile(Position((i*10)+3,j*10,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
-					_save->getTile(Position((i*10)+4,j*10,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
-					_save->getTile(Position((i*10)+5,j*10,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
-				}
-				// west
-				if (i > 0 && blocks[i-1][j] != dirt)
-				{
-					_save->getTile(Position((i*10),(j*10)+3,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
-					_save->getTile(Position((i*10),(j*10)+4,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
-					_save->getTile(Position((i*10),(j*10)+5,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
-				}
-				// east
-				if (i < (_width / 10)-1 && blocks[i+1][j] != dirt)
-				{
+					// remove stuff
 					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
 					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0, 0, 0, MapData::O_OBJECT);
 					_save->getTile(Position((i*10)+9,(j*10)+4,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
@@ -1055,13 +1042,24 @@ void BattlescapeGenerator::generateMap()
 					_save->getTile(Position((i*10)+9,(j*10)+5,0))->setMapData(0, 0, 0, MapData::O_OBJECT);
 					if (_save->getTile(Position((i*10)+9,(j*10)+2,0))->getMapData(MapData::O_OBJECT))
 					{
-						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL); //wallfix
-						_save->getTile(Position((i*10)+9,(j*10)+6,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL); //wallfix
+						//wallfix
+						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL);
+						_save->getTile(Position((i*10)+9,(j*10)+6,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL);
 					}
+					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+					{
+						//wallcornerfix
+						_save->getTile(Position(((i+1)*10),(j*10)+3,0))->setMapData(mds->getObjects()->at(swallfix+1), swallfix+1, swallfixSet, MapData::O_OBJECT);
+					}
+					// remove more stuff
+					_save->getTile(Position(((i+1)*10),(j*10)+3,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
+					_save->getTile(Position(((i+1)*10),(j*10)+4,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
+					_save->getTile(Position(((i+1)*10),(j*10)+5,0))->setMapData(0, 0, 0, MapData::O_WESTWALL);
 				}
-				// south
-				if (j < (_length / 10)-1 && blocks[i][j+1] != dirt)
+				// drill south
+				if (j < (_length / 10)-1 && blocks[i][j+1] != dirt && _save->getTile(Position((i*10)+4,(j*10)+9,0))->getMapData(MapData::O_OBJECT))
 				{
+					// remove stuff
 					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
 					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0, 0, 0, MapData::O_OBJECT);
 					_save->getTile(Position((i*10)+4,(j*10)+9,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
@@ -1070,9 +1068,19 @@ void BattlescapeGenerator::generateMap()
 					_save->getTile(Position((i*10)+5,(j*10)+9,0))->setMapData(0, 0, 0, MapData::O_OBJECT);
 					if (_save->getTile(Position((i*10)+2,(j*10)+9,0))->getMapData(MapData::O_OBJECT))
 					{
-						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL); //wallfix
-						_save->getTile(Position((i*10)+6,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL); //wallfix
+						// wallfix
+						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL);
+						_save->getTile(Position((i*10)+6,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL);
 					}
+					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+					{
+						// wallcornerfix
+						_save->getTile(Position((i*10)+3,((j+1)*10),0))->setMapData(mds->getObjects()->at(swallfix+1), swallfix+1, swallfixSet, MapData::O_OBJECT);
+					}
+					// remove more stuff
+					_save->getTile(Position((i*10)+3,(j+1)*10,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
+					_save->getTile(Position((i*10)+4,(j+1)*10,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
+					_save->getTile(Position((i*10)+5,(j+1)*10,0))->setMapData(0, 0, 0, MapData::O_NORTHWALL);
 				}
 			}
 		}

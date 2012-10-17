@@ -70,7 +70,7 @@ private:
 	std::vector<BattleUnit *> _visibleUnits;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
-	bool _kneeled, _dontReselect;
+	bool _kneeled, _floating, _dontReselect;
 	int _currentArmor[5];
 	int _fatalWounds[6];
 	int _fire;
@@ -158,6 +158,8 @@ public:
 	void kneel(bool kneeled);
 	/// Is kneeled?
 	bool isKneeled() const;
+	/// Is floating?
+	bool isFloating() const;
 	/// Aim.
 	void aim(bool aiming);
 	/// Gets the unit's time units.

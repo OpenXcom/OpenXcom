@@ -238,6 +238,16 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (!destinationTile)
 				return 255;
 
+			int wallcost = 0; // walking through rubble walls
+			if (direction == 7 || direction == 0 || direction == 1)
+				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+			if (direction == 1 || direction == 2 || direction == 3)
+				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+			if (direction == 3 || direction == 4 || direction == 5)
+				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+			if (direction == 5 || direction == 6 || direction == 7)
+				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
+
 			// check if we have floor, else fall down
 			while (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs) && x==0 && y==0)
 			{
@@ -265,16 +275,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			{
 				cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
 			}
-
-			int wallcost = 0; // walking through rubble walls
-			if (direction == 7 || direction == 0 || direction == 1)
-				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 1 || direction == 2 || direction == 3)
-				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			if (direction == 3 || direction == 4 || direction == 5)
-				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-			if (direction == 5 || direction == 6 || direction == 7)
-				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
 			// diagonal walking (uneven directions) costs 50% more tu's
 			if (direction & 1)

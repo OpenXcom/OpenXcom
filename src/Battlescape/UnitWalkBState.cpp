@@ -116,6 +116,13 @@ void UnitWalkBState::think()
 				}
 			}
 		}
+		if (_unit->getVisible() && _unit->getStatus() == STATUS_FLYING)
+		{
+			if (_unit->getWalkingPhase() == 0)
+			{
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(15)->play();
+			}
+		}
 
 		_unit->keepWalking(); // advances the phase
 
