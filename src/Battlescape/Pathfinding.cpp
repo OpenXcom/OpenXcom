@@ -203,6 +203,12 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
 				return 255;
 
+			// can't walk on top of other units
+			if (_save->getTile(*endPosition + Position(x,y,-1))
+				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit())
+				return 255;
+
+
 			if (direction < DIR_UP)
 			{
 				// check if we can go this way

@@ -89,7 +89,7 @@ public:
 	Position getMapOffset();
 	int toggleShowAllLayers();
 	bool getShowAllLayers() const;
-
+	bool isOnScreen(const Position &mapPos) const;
 };
 }
 #endif

@@ -356,4 +356,16 @@ bool Camera::getShowAllLayers() const
 	return _showAllLayers;
 }
 
+/**
+ * Check if map coordinates X,Y,Z are on screen
+ */
+bool Camera::isOnScreen(const Position &mapPos) const
+{
+	Position screenPos;
+	convertMapToScreen(mapPos, &screenPos);
+	screenPos.x += _mapOffset.x;
+	screenPos.y += _mapOffset.y;
+	return screenPos.x > 0 && screenPos.x < _screenWidth && screenPos.y > 0 && screenPos.y < _screenHeight;
+}
+
 }
