@@ -926,7 +926,7 @@ Reproduction Extraterrestre
 STR_ALIEN_ENTERTAINMENT
 Divertissement Extraterrestre
 STR_ALIEN_SURGERY
-Chirurgie Extraterrestre
+Chirurgie E.T.
 STR_EXAMINATION_ROOM
 Salle d'examen
 STR_ALIEN_ALLOYS
@@ -952,7 +952,7 @@ Vaisseau Suprême
 STR_LASER_PISTOL
 Pistolet Laser
 STR_LASER_RIFLE
-Revolver Laser
+Fusil Laser
 STR_HEAVY_LASER
 Laser Lourd
 STR_LASER_CANNON
@@ -1252,7 +1252,7 @@ Le lance-roquettes est un système guidé au laser qui peut tirer trois types di
 STR_LASER_PISTOL_UFOPEDIA
 Le pistolet laser est une réalisation efficace de la technologie moderne.  Il conjugue la commodité d'un pistolet avec un tir plus rapide et plus précis.
 STR_LASER_RIFLE_UFOPEDIA
-Le revolver laser est une version plus puissante et plus précise du pistolet décrit précédemment.
+Le fusil laser est une version plus puissante et plus précise du pistolet décrit précédemment.
 STR_HEAVY_LASER_UFOPEDIA
 Le laser lourd est encombrant, mais extrêmement efficace.
 STR_GRENADE_UFOPEDIA

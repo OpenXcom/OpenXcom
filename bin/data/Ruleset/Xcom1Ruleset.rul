@@ -4912,139 +4912,133 @@ ufopaedia:
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP024.SPK
     text: STR_SECTOID_UFOPEDIA
-    text_width: 155
-  - id: STR_SECTOID
-    type_id: 7
-    section: STR_ALIEN_LIFE_FORMS
-    image_id: UP024.SPK
-    text: STR_SECTOID_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SECTOID_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP025.SPK
     text: STR_SECTOID_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SNAKEMAN
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP030.SPK
     text: STR_SNAKEMAN_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SNAKEMAN_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP031.SPK
     text: STR_SNAKEMAN_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_ETHEREAL
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP016.SPK
     text: STR_ETHEREAL_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_ETHEREAL_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP017.SPK
     text: STR_ETHEREAL_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_MUTON
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP020.SPK
     text: STR_MUTON_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_MUTON_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP021.SPK
     text: STR_MUTON_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_FLOATER
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP018.SPK
     text: STR_FLOATER_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_FLOATER_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP019.SPK
     text: STR_FLOATER_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_CELATID
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP012.SPK
     text: STR_CELATID_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_CELATID_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP013.SPK
     text: STR_CELATID_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SILACOID
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP028.SPK
     text: STR_SILACOID_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SILACOID_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP029.SPK
     text: STR_SILACOID_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_CHRYSSALID
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP012.SPK
     text: STR_CHRYSSALID_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_CHRYSSALID_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP013.SPK
     text: STR_CHRYSSALID_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_REAPER
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP022.SPK
     text: STR_REAPER_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_REAPER_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP023.SPK
     text: STR_REAPER_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SECTOPOD
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP026.SPK
     text: STR_SECTOPOD_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_SECTOPOD_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP027.SPK
     text: STR_SECTOPOD_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_CYBERDISC
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP041.SPK
     text: STR_CYBERDISC_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_CYBERDISC_AUTOPSY
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     image_id: UP042.SPK
     text: STR_CYBERDISC_AUTOPSY_UFOPEDIA
-    text_width: 155
+    text_width: 158
   - id: STR_ALIEN_ORIGINS
     type_id: 8
     section: STR_ALIEN_RESEARCH_UC
@@ -5106,7 +5100,7 @@ ufopaedia:
     section: STR_UFO_COMPONENTS
     image_id: UP034.SPK
     text: STR_UFO_CONSTRUCTION_UFOPEDIA
-    text_width: 145
+    text_width: 148
   - id: STR_ALIEN_FOOD
     type_id: 7
     section: STR_UFO_COMPONENTS

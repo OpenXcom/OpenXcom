@@ -1102,7 +1102,7 @@ void Globe::drawDetail()
 	// Draw the country names
 	if (_zoom >= 2)
 	{
-		Text *label = new Text(80, 9, 0, 0);
+		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
 		label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 		label->setAlign(ALIGN_CENTER);
