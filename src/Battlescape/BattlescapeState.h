@@ -74,7 +74,7 @@ private:
 	bool firstInit;
 	bool isMouseScrolling;
 	bool isMouseScrolled;
-  int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	int xBeforeMouseScrolling, yBeforeMouseScrolling;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);

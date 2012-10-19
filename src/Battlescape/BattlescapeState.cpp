@@ -406,13 +406,13 @@ void BattlescapeState::mapOver(Action *action)
 {
 	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-    isMouseScrolled = true;
-    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-    SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
-    SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
-    _map->getCamera()->scrollXY(-action->getDetails()->motion.xrel, -action->getDetails()->motion.yrel, false);
-    action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
-    _game->getCursor()->handle(action);
+		isMouseScrolled = true;
+		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		_map->getCamera()->scrollXY(-action->getDetails()->motion.xrel, -action->getDetails()->motion.yrel, false);
+		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+		_game->getCursor()->handle(action);
 	}
 }
 
@@ -430,8 +430,8 @@ void BattlescapeState::mapPress(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		isMouseScrolling = true;
-    isMouseScrolled = false;
-    SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
+		isMouseScrolled = false;
+		SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
 	}
 }
 
@@ -446,10 +446,10 @@ void BattlescapeState::mapClick(Action *action)
 	if (isMouseScrolling)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) isMouseScrolling = false; else return;
-    if (isMouseScrolled) return;
+		if (isMouseScrolled) return;
 	}
 
-  // right-click aborts walking state
+	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_battleGame->cancelCurrentAction())
