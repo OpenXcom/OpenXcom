@@ -126,6 +126,8 @@ public:
 	bool detect(Target *target) const;
 	/// Handles craft logic.
 	void think();
+	/// Does a craft full checkup.
+	void checkup();
 	/// Consumes the craft's fuel.
 	void consumeFuel();
 	/// Repairs the craft.
