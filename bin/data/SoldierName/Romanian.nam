@@ -3,13 +3,13 @@ maleFirst:
   - Alexandru
   - Andrei
   - Bogdan
-  - Catalin
+  - Cătălin
   - Claudiu
   - Constantin
   - Cornel
   - Cosmin
   - Daniel
-  - Dragos
+  - Dragoş
   - Dumitru
   - Emil
   - Eugen
@@ -33,7 +33,7 @@ maleFirst:
   - Sergiu
   - Silviu
   - Sorin
-  - Stefan
+  - Ştefan
   - Tiberiu
   - Tudor
   - Vasile
@@ -47,7 +47,7 @@ femaleFirst:
   - Andreea
   - Angela
   - Carmen
-  - Catalina
+  - Cătălina
   - Claudia
   - Corina
   - Dana
@@ -77,12 +77,12 @@ femaleFirst:
   - Rodica
   - Roxana
   - Simona
-  - Stefania
+  - Ştefania
   - Violeta
   - Viorica
 maleLast:
   - Anton
-  - Banica
+  - Bănică
   - Barbu
   - Cojocaru
   - Constantin
@@ -97,27 +97,27 @@ maleLast:
   - Ilie
   - Ionescu
   - Iordan
-  - Lazar
+  - Lazăr
   - Luca
   - Marinescu
   - Mihalcea
   - Munteanu
-  - Nastase
+  - Năstase
   - Nicolae
   - Nistor
   - Olaru
   - Olteanu
-  - Parvu
+  - Pârvu
   - Petre
   - Popescu
   - Preda
   - Radu
-  - Sabau
+  - Sabău
   - Savu
-  - Serban
+  - Şerban
   - Stanciu
-  - Stanescu
-  - Tanase
+  - Stănescu
+  - Tănase
   - Tudor
   - Ungureanu
   - Voinea
