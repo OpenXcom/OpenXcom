@@ -180,8 +180,8 @@ void MiniMapView::mousePress(Action *action, State *state)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		isMouseScrolling = true;
-    isMouseScrolled = false;
-    SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
+		isMouseScrolled = false;
+		SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
 	}
 }
 
@@ -198,7 +198,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	if (isMouseScrolling)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) isMouseScrolling = false; else return;
-    if (isMouseScrolled) return;
+		if (isMouseScrolled) return;
 	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -214,7 +214,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
 		_redraw = true;
 	}
-  else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
     // Closes the window on right-click.
 		_game->popState();
@@ -233,18 +233,18 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-    isMouseScrolled = true;
-    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-    SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
-    SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		isMouseScrolled = true;
+		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 		int newX = _camera->getCenterPosition().x + action->getDetails()->motion.xrel;
 		int newY = _camera->getCenterPosition().y + action->getDetails()->motion.yrel;
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
 		_redraw = true;
 
-    action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
-    _game->getCursor()->handle(action);
+		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+		_game->getCursor()->handle(action);
 	}
 }
 

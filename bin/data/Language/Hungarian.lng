@@ -376,7 +376,7 @@ OKÉ - 5 Mp.
 STR_RESEARCH_COMPLETED
 Kutatás befejezve
 STR_VIEW_REPORTS
-JELENTÉS ELOLVASÁSA
+JELENTÉS
 STR_WE_CAN_NOW_RESEARCH
 Most már tudunk kutatni:
 STR_WE_CAN_NOW_PRODUCE
@@ -500,7 +500,7 @@ Megérkeztél Cydoniába.  Belépést nyersz egy hatalmas földalatti komplexumb
 STR_TERROR_MISSION
 TERROR KÜLDETÉS
 STR_TERROR_MISSION_BRIEFING
-A küldetés sikeres teljesítésének feltétele: az összes ellenséges egység megsemmisítése vagy semlegesítése.  Meg kell próbálnod megmenteni bármilyen civil életét, semlegesítve a területen az idegen fenyegetést.	A küldetés megszakításához az XCom ügynökeinek vissza kell térni a szállítóeszközbe, majd kattints a 'Küldetés megszakítása' ikonra.
+A küldetés sikeres teljesítésének feltétele: az összes ellenséges egység megsemmisítése vagy semlegesítése.  Meg kell próbálnod megmenteni bármilyen civil életét, semlegesítve a területen az idegen fenyegetést.  A küldetés megszakításához az XCom ügynökeinek vissza kell térni a szállítóeszközbe, majd kattints a 'Küldetés megszakítása' ikonra.
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
 NINCS SZABAD HANGÁR A GÉPGYÁRTÁSHOZ!{SMALLLINE}Minden gép egy bázishoz van rendelve; átszállítva, vásárolva, vagy építve, egy hangárt foglal el.  Építs egy új hangárt vagy szállíts át egy gépet egy másik bázisra.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
@@ -976,7 +976,7 @@ Pszi-Labor
 STR_MOTION_SCANNER
 Mozgásérzékelő
 STR_MEDI_KIT
-Elsősegély-csomag
+Elsősegély-Csomag
 STR_TANK_CANNON
 Tank/Ágyú
 STR_TANK_ROCKET_LAUNCHER
@@ -1092,7 +1092,7 @@ Tűzerő
 STR_WEAPON_RANGE
 Hatótávolság
 STR_ACCESS_LIFT
-Központi lift
+Központi Lift
 STR_LABORATORY
 Laboratórium
 STR_WORKSHOP
@@ -1678,13 +1678,13 @@ Plazmapisztoly
 STR_PLASMA_PISTOL_CLIP
 Plazmapisztoly Tár
 STR_BLASTER_LAUNCHER
-Pusztító bomba kilövő
+Pusztító Bomba Kilövő
 STR_BLASTER_BOMB
-Pusztító bomba
+Pusztító Bomba
 STR_SMALL_LAUNCHER
-Kis kilövő
+Kis Kilövő
 STR_STUN_BOMB
-Bénító bomba
+Bénító Bomba
 STR_ALIEN_GRENADE
 Idegen Gránát
 STR_ELERIUM_115
@@ -1796,7 +1796,7 @@ Teljesítmény értékelés
 STR_VICTORY_DATE
 Győzelem dátuma
 STR_ELECTRO_FLARE
-Elektro-fáklya
+Elektro-Fáklya
 STR_ELECTRO_FLARE_UFOPEDIA
 Ez a kis eszköz éles fényt produkál eldobása után.  Az éjszakai bevetéseken megvilágítja az ellenséges egységeket maga körül.
 STR_MONTHLY_COSTS

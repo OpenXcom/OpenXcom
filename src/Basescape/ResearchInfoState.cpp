@@ -185,7 +185,7 @@ void ResearchInfoState::SetAssignedScientist()
  */
 void ResearchInfoState::morePress(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMore->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMore->start();
 }
 
 /**
@@ -194,7 +194,7 @@ void ResearchInfoState::morePress(Action *action)
  */
 void ResearchInfoState::moreRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerMore->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMore->stop();
 }
 
 /**
@@ -205,16 +205,16 @@ void ResearchInfoState::moreClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-	  int assigned = _project->getAssigned ();
-	  int freeScientist = _base->getAvailableScientists();
-	  int freeSpaceLab = _base->getFreeLaboratories();
-	  if (freeScientist > 0 && freeSpaceLab > 0)
-	  {
-		  int change=std::min(freeScientist, freeSpaceLab);
-      _project->setAssigned(assigned+=change);
-		  _base->setScientists(_base->getScientists()-change);
-		  SetAssignedScientist();
-	  }
+		int assigned = _project->getAssigned ();
+		int freeScientist = _base->getAvailableScientists();
+		int freeSpaceLab = _base->getFreeLaboratories();
+		if (freeScientist > 0 && freeSpaceLab > 0)
+		{
+			int change=std::min(freeScientist, freeSpaceLab);
+			_project->setAssigned(assigned+=change);
+			_base->setScientists(_base->getScientists()-change);
+			SetAssignedScientist();
+		}
 	}
 }
 
@@ -224,7 +224,7 @@ void ResearchInfoState::moreClick(Action *action)
  */
 void ResearchInfoState::lessPress(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLess->start ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLess->start ();
 }
 
 /**
@@ -233,7 +233,7 @@ void ResearchInfoState::lessPress(Action *action)
  */
 void ResearchInfoState::lessRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLess->stop ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLess->stop ();
 }
 
 /**
@@ -244,13 +244,13 @@ void ResearchInfoState::lessClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-	  int assigned = _project->getAssigned();
-	  if (assigned > 0)
-	  {
-		  _project->setAssigned(0);
-		  _base->setScientists(_base->getScientists()+assigned);
-		  SetAssignedScientist();
-	  }
+		int assigned = _project->getAssigned();
+		if (assigned > 0)
+		{
+			_project->setAssigned(0);
+			_base->setScientists(_base->getScientists()+assigned);
+			SetAssignedScientist();
+		}
 	}
 }
 
