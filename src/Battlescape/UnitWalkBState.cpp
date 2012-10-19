@@ -214,7 +214,7 @@ void UnitWalkBState::think()
 			return;
 		}
 
-		if (_unit->getVisible())
+		if (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 		{
 			setNormalWalkSpeed();
 		}

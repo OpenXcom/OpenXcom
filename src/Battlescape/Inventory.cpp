@@ -545,7 +545,7 @@ void Inventory::arrangeGround()
 	int x = 0;
 	int y = 0;
 	bool ok = false;
-	int xLastItem = 0;
+	int xMax = 0;
 
 	if (_selUnit != 0)
 	{
@@ -568,16 +568,23 @@ void Inventory::arrangeGround()
 				ok = true; // assume we can put the item here, if one of the following checks fails, we can't.
 				for (int xd = 0; xd < (*i)->getRules()->getInventoryWidth() && ok; xd++)
 				{
-					for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+					if ((x + xd) % slotsX < x % slotsX)
 					{
-						ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+						ok = false;
+					}
+					else
+					{
+						for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+						{
+							ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+						}
 					}
 				}
 				if (ok)
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
-					xLastItem = x + (*i)->getRules()->getInventoryWidth();
+					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
 				}
 				else
 				{
@@ -591,7 +598,7 @@ void Inventory::arrangeGround()
 			}
 		}
 	}
-	if (xLastItem > _groundOffset + slotsX)
+	if (xMax >= _groundOffset + slotsX)
 	{
 		_groundOffset += slotsX;
 	}

@@ -1192,7 +1192,7 @@ STR_NOV
 STR_DEC
 дек
 STR_INTERNATIONAL_RELATIONS
-    Участники проекта
+Участники проекта
 STR_COUNTRY
 Страна
 STR_FUNDING
@@ -2051,7 +2051,8 @@ STR_CORPSE
 Труп
 STR_UNLOAD
 Разрядить
-STR_NEW_SAVED_GAME<НОВОЕ СОХРАНЕНИЕ>
+STR_NEW_SAVED_GAME
+<НОВОЕ СОХРАНЕНИЕ>
 STR_NEW_BATTLE
 Новая битва
 STR_OPTIONS
@@ -2070,13 +2071,15 @@ STR_FULLSCREEN
 Полноэкранный
 STR_LANGUAGE
 ЯЗЫК
+STR_FARM
+Ферма
 STR_FOREST
-Forest
+Лес
 STR_JUNGLE
-Jungle
+Джунгли
 STR_MOUNTAIN
-Mountain
+Горы
 STR_DESERT
-Desert
+Пустыня
 STR_POLAR
-Polar
+Заполярье

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsState.h"
+#include <iostream>
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -79,10 +80,11 @@ OptionsState::OptionsState(Game *game) : State(game)
 	{
 		int i;
 		int width = Options::getInt("displayWidth");
+		int height = Options::getInt("displayHeight");
 		_resCurrent = -1;
 		for (i = 0; _res[i]; ++i)
 		{
-			if (_res[i]->w < width)
+			if (_resCurrent == -1 && ((_res[i]->w == width && _res[i]->h <= height) || _res[i]->w < width))
 			{
 				_resCurrent = i;
 			}

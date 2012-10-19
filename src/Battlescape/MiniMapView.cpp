@@ -117,7 +117,7 @@ void MiniMapView::draw()
 					s->blitNShade(this, x, y, 0);
 				}
 				// perhaps (at least one) item on this tile?
-				if (!t->getInventory()->empty())
+				if (t->isDiscovered(2) && !t->getInventory()->empty())
 				{
 					int frame = 9 + _frame;
 					Surface * s = _set->getFrame(frame);
