@@ -71,6 +71,10 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
+	Uint8 _scrollButton;  // this is a cache for Options::getString("battleScrollButton")
+	int _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
+	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
+	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -164,6 +168,14 @@ public:
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Set or try to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
+	/// get ScrollButton
+	Uint8 getScrollButton() const;
+	/// get ScrollButtonInvertMode
+	int getScrollButtonInvertMode() const;
+	/// get ScrollButtonTimeTolerancy
+	int getScrollButtonTimeTolerancy() const;
+	/// get ScrollButtonPixelTolerancy
+	int getScrollButtonPixelTolerancy() const;
 };
 
 }

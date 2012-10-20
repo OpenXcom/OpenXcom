@@ -75,6 +75,10 @@ private:
 	bool isMouseScrolling;
 	bool isMouseScrolled;
 	int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	Position mapOffsetBeforeMouseScrolling;
+	Uint32 mouseScrollingStartTime;
+	int absMouseMoveX, absMouseMoveY;
+	bool mouseMovedOverThreshold;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);
