@@ -171,6 +171,8 @@ public:
 	void finishBattle(bool abort);
 	/// show launch button
 	void showLaunchButton(bool show);
+	/// Clears mouse-scrolling state
+	void clearMouseScrollingState();
 
 };
 
