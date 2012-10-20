@@ -597,26 +597,34 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		// only "recover" unresearched items
-		if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty() && _game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
+		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
 		{
-			if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
-			{
-				addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
-			}
-			else
-			{
-				addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
-			}
+			// special case of an item counted as a stat
+			addStat("STR_ELERIUM_115", 50, 5);
 		}
-		// put items back in the base
-		if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
+		else
 		{
-			base->getItems()->addItem((*it)->getRules()->getType(), 1);
-			if ((*it)->getAmmoItem())
+			// only "recover" unresearched items
+			if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty() && _game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
 			{
-				base->getItems()->addItem((*it)->getAmmoItem()->getRules()->getType(), 1);
-				// TODO: account for ammo remaining in the clip
+				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
+				{
+					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+				}
+				else
+				{
+					addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+				}
+			}
+			// put items back in the base
+			if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
+			{
+				base->getItems()->addItem((*it)->getRules()->getType(), 1);
+				if ((*it)->getAmmoItem())
+				{
+					base->getItems()->addItem((*it)->getAmmoItem()->getRules()->getType(), 1);
+					// TODO: account for ammo remaining in the clip
+				}
 			}
 		}
 	}

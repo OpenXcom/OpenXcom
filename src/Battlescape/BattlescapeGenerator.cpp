@@ -370,6 +370,8 @@ void BattlescapeGenerator::run()
 	}
 
 
+	fuelPowerSources();
+
 	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
 	{
 		explodePowerSources();
@@ -1330,6 +1332,21 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 
 	mapFile.close();
 }
+
+/**
+ * Fill power sources with an elerium-115 object.
+ */
+void BattlescapeGenerator::fuelPowerSources()
+{
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	{
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) && _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
+		{
+			_save->getTiles()[i]->addItem(new BattleItem(_game->getRuleset()->getItem("STR_ELERIUM_115"), _save->getCurrentItemId()));
+		}
+	}
+}
+
 
 /**
  * When a UFO crashes, there is a 75% chance for each powersource to explode.

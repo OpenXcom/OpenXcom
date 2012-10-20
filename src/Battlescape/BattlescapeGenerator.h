@@ -79,6 +79,7 @@ private:
 	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false);
 	/// loads an XCOM RMP file
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
+	void fuelPowerSources();
 	void explodePowerSources();
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	void deployCivilians(int max);
