@@ -65,6 +65,10 @@ void createDefault()
 	setString("language", "");
 	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
 	setInt("battleScrollType", SCROLL_AUTO);
+	setString("battleScrollButton", "RMB"); // RMB, MMB, None  (Right-Mouse-Button, Middle-Mouse-Button, None)
+	setString("battleScrollButtonInvertMode", "Normal"); // Normal, Inverted
+	setInt("battleScrollButtonTimeTolerancy", 300); // miliSecond
+	setInt("battleScrollButtonPixelTolerancy", 10); // count of pixels
 	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5
 	setInt("battleXcomSpeed", 40); // 60, 50, 40, 30, 20, 10
 	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10

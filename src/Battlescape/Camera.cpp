@@ -340,9 +340,32 @@ int Camera::getViewHeight() const
 	return _mapOffset.z;
 }
 
+/**
+ * Get the map width
+ * @return the map width
+*/
+int Camera::getMapWidth() const
+{
+	return _mapWidth;
+}
+
+/**
+ * Get the map length
+ * @return the map length
+*/
+int Camera::getMapLength() const
+{
+	return _mapLength;
+}
+
 Position Camera::getMapOffset()
 {
 	return _mapOffset;
+}
+
+void Camera::setMapOffset(Position pos)
+{
+	_mapOffset = pos;
 }
 
 int Camera::toggleShowAllLayers()

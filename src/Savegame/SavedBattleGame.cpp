@@ -34,6 +34,7 @@
 #include "../Battlescape/PatrolBAIState.h"
 #include "../Battlescape/AggroBAIState.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 #include "../Savegame/NodeLink.h"
 
 
@@ -45,6 +46,16 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
 {
+	std::string temp;
+	temp = Options::getString("battleScrollButton");
+	if ("RMB" == temp) _scrollButton = SDL_BUTTON_RIGHT;
+	else if ("MMB" == temp) _scrollButton = SDL_BUTTON_MIDDLE;
+	else _scrollButton = -1;
+	temp = Options::getString("battleScrollButtonInvertMode");
+	if ("Normal" == temp) _scrollButtonInvertMode = 1;
+	else _scrollButtonInvertMode = -1;
+	_scrollButtonTimeTolerancy = Options::getInt("battleScrollButtonTimeTolerancy");
+	_scrollButtonPixelTolerancy = Options::getInt("battleScrollButtonPixelTolerancy");
 }
 
 /**
@@ -1118,6 +1129,42 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 	}
 
 	return true;
+}
+
+/**
+ * Gets the ScrollButton type. (which mouse button is the scroll-button)
+ * @return ScrollButton type.
+ */
+Uint8 SavedBattleGame::getScrollButton() const
+{
+	return _scrollButton;
+}
+
+/**
+ * Gets the ScrollButton InvertMode.
+ * @return ScrollButton InvertMode.
+ */
+int SavedBattleGame::getScrollButtonInvertMode() const
+{
+	return _scrollButtonInvertMode;
+}
+
+/**
+ * Gets the ScrollButton TimeTolerancy.
+ * @return ScrollButton TimeTolerancy.
+ */
+int SavedBattleGame::getScrollButtonTimeTolerancy() const
+{
+	return _scrollButtonTimeTolerancy;
+}
+
+/**
+ * Gets the ScrollButton PixelTolerancy.
+ * @return ScrollButton PixelTolerancy.
+ */
+int SavedBattleGame::getScrollButtonPixelTolerancy() const
+{
+	return _scrollButtonPixelTolerancy;
 }
 
 }

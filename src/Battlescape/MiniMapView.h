@@ -45,6 +45,11 @@ class MiniMapView : public InteractiveSurface
 	bool isMouseScrolling;
 	bool isMouseScrolled;
 	int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	int mouseScrollX, mouseScrollY;
+	Position posBeforeMouseScrolling;
+	Uint32 mouseScrollingStartTime;
+	int absMouseMoveX, absMouseMoveY;
+	bool mouseMovedOverThreshold;
 	/// Handle pressing on the MiniMap
 	void mousePress(Action *action, State *state);
 	/// Handle clicking on the MiniMap
