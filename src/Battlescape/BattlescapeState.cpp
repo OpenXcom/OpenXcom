@@ -429,7 +429,7 @@ void BattlescapeState::mapPress(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		isMouseScrolling = true;
+		//isMouseScrolling = true;
 		isMouseScrolled = false;
 		SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
 	}
