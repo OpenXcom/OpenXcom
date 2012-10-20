@@ -59,6 +59,7 @@ void ScannerView::draw()
 
 	clear();
 
+	this->lock();
 	for (int x = -9; x < 10; x++)
 	{
 		for (int y = -9; y < 10; y++)
@@ -66,12 +67,12 @@ void ScannerView::draw()
 			Tile *t = _game->getSavedGame()->getBattleGame()->getTile(Position(x,y,0) + _unit->getPosition());
 			if (t && t->getUnit() && t->getUnit()->getMotionPoints())
 			{
-				int frame = (t->getUnit()->getMotionPoints() / 5) - 1;
+				int frame = (t->getUnit()->getMotionPoints() / 5);
 				if (frame >= 0)
 				{
 					if (frame > 5) frame = 5;
 					surface = set->getFrame(frame + _frame);
-					surface->blitNShade(this, ((9+x)*8)-4, ((9+y)*8)-4, 0);
+					surface->blitNShade(this, Surface::getX()+((9+x)*8)-4, Surface::getY()+((9+y)*8)-4, 0);
 				}
 			}
 		}
@@ -80,7 +81,8 @@ void ScannerView::draw()
 	// the arrow of the direction the unit is pointed
 	surface = set->getFrame(7 + _unit->getDirection());
 
-	surface->blitNShade(this, (9*8)-4, (9*8)-4, 0);
+	surface->blitNShade(this, Surface::getX()+(9*8)-4, Surface::getY()+(9*8)-4, 0);
+	this->unlock();
 
 
 }
