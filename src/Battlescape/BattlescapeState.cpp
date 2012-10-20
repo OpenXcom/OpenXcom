@@ -1082,5 +1082,13 @@ void BattlescapeState::showLaunchButton(bool show)
 	_btnLaunch->setVisible(show);
 }
 
+/**
+ * Clears mouse-scrolling state (isMouseScrolling)
+ */
+void BattlescapeState::clearMouseScrollingState()
+{
+	isMouseScrolling = false;
+}
+
 
 }
