@@ -410,7 +410,7 @@ void BattlescapeState::mapOver(Action *action)
 		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
 		SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
 		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
-		_map->getCamera()->scrollXY(-action->getDetails()->motion.xrel, -action->getDetails()->motion.yrel, false);
+		_map->getCamera()->scrollXY(-action->getDetails()->motion.xrel, -action->getDetails()->motion.yrel, false, Options::getBool("reverseMouseScrolling"));
 		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
 		_game->getCursor()->handle(action);
 	}

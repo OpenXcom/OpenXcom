@@ -187,24 +187,38 @@ void Camera::mouseOver(Action *action, State *state)
  */
 void Camera::scroll()
 {
-	scrollXY(_scrollX, _scrollY, true);
+	scrollXY(_scrollX, _scrollY, true, false);
 }
 
 /**
  * Handle scrolling with given deviation.
  */
-void Camera::scrollXY(int x, int y, bool redraw)
+void Camera::scrollXY(int x, int y, bool redraw, bool reversescrolling)
 {
-	_mapOffset.x += x;
-	_mapOffset.y += y;
+	if (reversescrolling)
+	{
+		_mapOffset.x -= x;
+		_mapOffset.y -= y;
+	} else
+	{
+		_mapOffset.x += x;
+		_mapOffset.y += y;
+	}
 
 	convertScreenToMap((_screenWidth / 2), (_screenHeight / 2), &_center.x, &_center.y);
 
 	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
 	if (_center.x > _mapWidth - 1 || _center.y > _mapLength - 1 || _center.x < 0 || _center.y < 0)
 	{
-		_mapOffset.x -= x;
-		_mapOffset.y -= y;
+		if (reversescrolling)
+		{
+			_mapOffset.x += x;
+			_mapOffset.y += y;
+		} else
+		{
+			_mapOffset.x -= x;
+			_mapOffset.y -= y;
+		}
 	}
 	if (redraw) _map->draw();
 }
