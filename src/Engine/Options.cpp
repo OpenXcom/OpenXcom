@@ -74,6 +74,7 @@ void createDefault()
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
+	setBool("reverseMouseScrolling", false);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 
