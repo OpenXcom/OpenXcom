@@ -327,7 +327,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param direction Which way to walk.
  * @param destination The position we should end up on.
  */
-void BattleUnit::startWalking(int direction, const Position &destination)
+void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile)
 {
 	if (direction < Pathfinding::DIR_UP)
 	{
@@ -340,7 +340,7 @@ void BattleUnit::startWalking(int direction, const Position &destination)
 		_status = STATUS_FLYING;
 	}
 
-	if (!_tile->getMapData(MapData::O_FLOOR))
+	if (!_tile->getMapData(MapData::O_FLOOR) || (direction >= Pathfinding::DIR_UP && !destinationTile->getMapData(MapData::O_FLOOR)))
 	{
 		_status = STATUS_FLYING;
 		_floating = true;

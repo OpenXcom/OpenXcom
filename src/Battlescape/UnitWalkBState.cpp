@@ -271,7 +271,7 @@ void UnitWalkBState::think()
 			{
 				if (_unit->spendEnergy(tu, _parent->dontSpendTUs()))
 				{
-					_unit->startWalking(dir, destination);
+					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination));
 				}
 				else
 				{
