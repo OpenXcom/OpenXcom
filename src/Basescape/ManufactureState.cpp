@@ -57,8 +57,8 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtItem = new Text(80, 9, 10, 52);
 	_txtEngineers = new Text(46, 18, 90, 44);
 	_txtProduced = new Text(42, 18, 137, 44);
-	_txtTotal = new Text(42, 18, 180, 44);
-	_txtCost = new Text(42, 27, 223, 44);
+	_txtTotal = new Text(47, 18, 180, 44);
+	_txtCost = new Text(42, 27, 228, 44);
 	_txtTimeLeft = new Text(54, 18, 265, 44);
 	_lstManufacture = new TextList(300, 90, 8, 80);
 
