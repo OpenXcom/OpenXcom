@@ -519,6 +519,7 @@ void BattlescapeState::btnUnitUpClick(Action *action)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
 	{
+		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_UP);
 	}
 }
@@ -531,6 +532,7 @@ void BattlescapeState::btnUnitDownClick(Action *action)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
 	{
+		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_DOWN);
 	}
 }

@@ -129,7 +129,7 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase
-	void startWalking(int direction, const Position &destination);
+	void startWalking(int direction, const Position &destination, Tile *destinationTile);
 	/// Increase the walkingPhase
 	void keepWalking();
 	/// Gets the walking phase for animation and sound
