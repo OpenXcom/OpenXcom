@@ -40,7 +40,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to  the action.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action) : State(game), _action(action)
+PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 
@@ -124,7 +124,7 @@ void PrimeGrenadeState::handle(Action *action)
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_action->value = -1;
+		if (!_inInventoryView) _action->value = -1;
 		_game->popState();
 	}
 }
@@ -140,7 +140,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_action->value = btnID;
+		if (!_inInventoryView) _action->value = btnID;
 		_game->popState();
 		return;
 	}
@@ -156,9 +156,10 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (btnID != -1)
 	{
-		_action->value = btnID;
+		if (_inInventoryView) _grenadeInInventory->setExplodeTurn(1 + btnID);
+		else _action->value = btnID;
 		_game->popState();
-		_game->popState();
+		if (!_inInventoryView) _game->popState();
 	}
 }
 
