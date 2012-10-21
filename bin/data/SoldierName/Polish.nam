@@ -3,18 +3,18 @@ maleFirst:
   - Andrzej
   - Piotr
   - Krzysztof
-  - Stanislaw
+  - Stanisław
   - Tomasz
-  - Pawel
-  - Jozef
+  - Paweł
+  - Józef
   - Marcin
   - Marek
-  - Michal
+  - Michał
   - Grzegorz
   - Jerzy
   - Tadeusz
   - Adam
-  - Lukasz
+  - Łukasz
   - Zbigniew
   - Ryszard
   - Dariusz
@@ -25,20 +25,20 @@ maleFirst:
   - Robert
   - Mateusz
   - Marian
-  - Rafal
+  - Rafał
   - Jacek
   - Janusz
-  - Miroslaw  
+  - Mirosław
 femaleFirst:
   - Anna
   - Maria
   - Katarzyna
-  - Malgorzata
+  - Małgorzata
   - Agnieszka
   - Krystyna
   - Barbara
   - Ewa
-  - Elzbieta
+  - Elżbieta
   - Zofia
   - Janina
   - Teresa
@@ -55,24 +55,24 @@ femaleFirst:
   - Marta
   - Dorota
   - Marianna
-  - Grazyna
+  - Grażyna
   - Jolanta
-  - Stanislawa
+  - Stanisława
   - Iwona
   - Karolina
 maleLast:
   - Nowak
   - Kowalski
-  - Wisniewski
-  - Dabrowski
+  - Wiśniewski
+  - Dąbrowski
   - Lewandowski
-  - Wojcik
-  - Kaminski
+  - Wójcik
+  - Kamiński
   - Kowalczyk
-  - Zielinski
-  - Szymanski
-  - Wozniak
-  - Kozlowski
+  - Zieliński
+  - Szymański
+  - Woźniak
+  - Kozłowski
   - Jankowski
   - Wojciechowski
   - Kwiatkowski
@@ -82,28 +82,28 @@ maleLast:
   - Piotrowski
   - Grabowski
   - Nowakowski
-  - Pawlowski
+  - Pawłowski
   - Michalski
   - Nowicki
   - Adamczyk
   - Dudek
-  - Zajac
+  - Zając
   - Wieczorek
-  - Jablonski
-  - Krol
+  - Jabłoński
+  - Król
 femaleLast:
   - Nowak
   - Kowalska
-  - Wisniewska
-  - Dabrowska
+  - Wiśniewska
+  - Dąbrowska
   - Lewandowska
-  - Wojcik
-  - Kaminska
+  - Wójcik
+  - Kamińska
   - Kowalczyk
-  - Zielinska
-  - Szymanska
-  - Wozniak
-  - Kozlowska
+  - Zielińska
+  - Szymańska
+  - Woźniak
+  - Kozłowska
   - Jankowska
   - Wojciechowska
   - Kwiatkowska
@@ -113,12 +113,12 @@ femaleLast:
   - Piotrowska
   - Grabowska
   - Nowakowska
-  - Pawlowska
+  - Pawłowska
   - Michalska
   - Nowicka
   - Adamczyk
   - Dudek
-  - Zajac
+  - Zając
   - Wieczorek
-  - Jablonska
-  - Krol
+  - Jabłońska
+  - Król
