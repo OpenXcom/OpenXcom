@@ -63,7 +63,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtSpeed = new Text(200, 9, 32, 60);
 	_txtMaxSpeed = new Text(200, 9, 32, 68);
 	_txtAltitude = new Text(200, 9, 32, 76);
-	_txtFuel = new Text(200, 9, 32, 84);
+	_txtFuel = new Text(120, 9, 32, 84);
+	_txtDamage = new Text(75, 9, 164, 84);
 	_txtW1Name = new Text(120, 9, 32, 92);
 	_txtW1Ammo = new Text(60, 9, 164, 92);
 	_txtW2Name = new Text(120, 9, 32, 100);
@@ -85,6 +86,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	add(_txtMaxSpeed);
 	add(_txtAltitude);
 	add(_txtFuel);
+	add(_txtDamage);
 	add(_txtW1Name);
 	add(_txtW1Ammo);
 	add(_txtW2Name);
@@ -185,6 +187,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	std::wstringstream ss6;
 	ss6 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << _craft->getFuelPercentage() << "%";
 	_txtFuel->setText(ss6.str());
+
+	_txtDamage->setColor(Palette::blockOffset(15)-1);
+	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
+	std::wstringstream ss62;
+	ss62 << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
+	_txtDamage->setText(ss62.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
