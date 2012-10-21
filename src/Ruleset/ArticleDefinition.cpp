@@ -73,6 +73,10 @@ namespace OpenXcom
 			{
 				i.second() >> section;
 			}
+			else if (key == "requires")
+			{
+				i.second() >> requires;
+			}
 		}
 	}
 
@@ -87,6 +91,7 @@ namespace OpenXcom
 		out << YAML::Key << "type_id" << YAML::Value << _type_id;
 		out << YAML::Key << "title" << YAML::Value << title;
 		out << YAML::Key << "section" << YAML::Value << section;
+		out << YAML::Key << "requires" << YAML::Value << requires;
 	}
 
 	/**

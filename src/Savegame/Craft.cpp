@@ -304,7 +304,7 @@ void Craft::setStatus(const std::string &status)
 std::string Craft::getAltitude() const
 {
 	Ufo *u = dynamic_cast<Ufo*>(_dest);
-	if (u)
+	if (u && u->getAltitude() != "STR_GROUND")
 	{
 		return u->getAltitude();
 	}

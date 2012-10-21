@@ -44,9 +44,9 @@ FundingState::FundingState(Game *game) : State(game)
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(320, 16, 0, 8);
-	_txtCountry = new Text(100, 16, 32, 30);
-	_txtFunding = new Text(120, 16, 140, 30);
-	_txtChange = new Text(120, 16, 240, 30);
+	_txtCountry = new Text(100, 9, 32, 30);
+	_txtFunding = new Text(100, 9, 140, 30);
+	_txtChange = new Text(72, 9, 240, 30);
 	_lstCountries = new TextList(280, 136, 32, 40);
 
 	// Set palette

@@ -26,6 +26,8 @@
 namespace OpenXcom
 {
 
+enum SoldierGender;
+
 /**
  * Pool of soldier names to generate random names.
  * Each pool contains a set of first names (male or female) and last names.
@@ -44,7 +46,7 @@ public:
 	/// Loads the pool from YAML.
 	void load(const std::string &filename);
 	/// Generates a new name from the pool.
-	std::wstring genName(int *gender) const;
+	std::wstring genName(SoldierGender *gender) const;
 };
 
 }

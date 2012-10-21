@@ -346,7 +346,6 @@ void NewBattleState::btnOkClick(Action *action)
  */
 void NewBattleState::btnCancelClick(Action *action)
 {
-	//_game->setRuleset(0);
 	_game->setSavedGame(0);
 	_game->popState();
 }
@@ -357,8 +356,6 @@ void NewBattleState::btnCancelClick(Action *action)
  */
 void NewBattleState::btnEquipClick(Action *action)
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->pushState(new CraftInfoState(_game, _game->getSavedGame()->getBases()->front(), 0));
 }
 

@@ -55,11 +55,11 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtSpace = new Text(150, 9, 8, 34);
 	_txtFunds = new Text(150, 9, 160, 34);
 	_txtItem = new Text(80, 9, 10, 52);
-	_txtEngineers = new Text(46, 18, 90, 44);
-	_txtProduced = new Text(42, 18, 137, 44);
-	_txtTotal = new Text(42, 18, 180, 44);
-	_txtCost = new Text(42, 27, 223, 44);
-	_txtTimeLeft = new Text(54, 18, 265, 44);
+	_txtEngineers = new Text(50, 18, 70, 44);
+	_txtProduced = new Text(56, 18, 120, 44);
+	_txtTotal = new Text(50, 18, 176, 44);
+	_txtCost = new Text(40, 27, 227, 44);
+	_txtTimeLeft = new Text(55, 18, 265, 44);
 	_lstManufacture = new TextList(300, 90, 8, 80);
 
 	// Set palette

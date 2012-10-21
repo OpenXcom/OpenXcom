@@ -83,7 +83,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _battleGame(0), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _globeLon(0.0), _globeLat(0.0), _battleGame(0), _debug(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -192,7 +192,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	parser.GetNextDocument(doc);
 	std::string v;
 	doc["version"] >> v;
-	if (v.substr(0, 3) != Options::getVersion().substr(0, 3))
+	if (v != Options::getVersion())
 	{
 		throw Exception("Version mismatch");
 	}
@@ -204,6 +204,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
 	doc["funds"] >> _funds;
+	doc["globeLon"] >> _globeLon;
+	doc["globeLat"] >> _globeLat;
 	doc["ids"] >> _ids;
 
 	for (YAML::Iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
@@ -297,6 +299,8 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
 	out << YAML::Key << "funds" << YAML::Value << _funds;
+	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
+	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
 	out << YAML::Key << "ids" << YAML::Value << _ids;
 	out << YAML::Key << "countries" << YAML::Value;
 	out << YAML::BeginSeq;
@@ -391,6 +395,42 @@ int SavedGame::getFunds() const
 void SavedGame::setFunds(int funds)
 {
 	_funds = funds;
+}
+
+/**
+ * Returns the current longitude of the Geoscape globe.
+ * @return Longitude.
+ */
+double SavedGame::getGlobeLongitude() const
+{
+	return _globeLon;
+}
+
+/**
+ * Changes the current longitude of the Geoscape globe.
+ * @param lon Longitude.
+ */
+void SavedGame::setGlobeLongitude(double lon)
+{
+	_globeLon = lon;
+}
+
+/**
+ * Returns the current latitude of the Geoscape globe.
+ * @return Latitude.
+ */
+double SavedGame::getGlobeLatitude() const
+{
+	return _globeLat;
+}
+
+/**
+ * Changes the current latitude of the Geoscape globe.
+ * @param lat Latitude.
+ */
+void SavedGame::setGlobeLatitude(double lat)
+{
+	_globeLat = lat;
 }
 
 /**

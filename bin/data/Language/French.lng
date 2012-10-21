@@ -32,7 +32,7 @@ Cette race évolué dans un environnement extrêmement hostile.  Ils sont très 
 STR_SNAKEMAN_AUTOPSY
 Autopsie d'Homme-Serpent
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
-L'épiderme d'homme-serpent est extrêmement dure et résistante à la chaleur. Le système cardiovasculaire fait partie du système musculaire qui utilise le principe hydraulique pour leurs mouvement, et le seul vrai muscle est le 'coeur'.  Le système de reproduction semble très efficace: le reproduction est asexuée, et chaque homme-serpent porte jusqu'à cinquante oeufs à la fois dans leur corps.  Par conséquent, cette espèce représente une grave menace pour la vie sur la Terre.
+L'épiderme d'homme-serpent est extrêmement dure et résistante à la chaleur. Le système cardiovasculaire fait partie du système musculaire qui utilise le principe hydraulique pour leurs mouvement, et le seul vrai muscle est le 'cœur'.  Le système de reproduction semble très efficace: le reproduction est asexuée, et chaque homme-serpent porte jusqu'à cinquante oeufs à la fois dans leur corps.  Par conséquent, cette espèce représente une grave menace pour la vie sur la Terre.
 STR_ETHEREAL_UFOPEDIA
 Ils ont les capacités mental terrifiant, qui permettant la communication télépathique et la télékinésie.  Les capacités physiques faibles sont compensées par un pouvoir mental que défie les lois physiques, pour autant que nous sachions.  Naturellement, les ethereals sont extrêmement dangereux dans le combat à cause de ces pouvoirs.  Ils apparaissent rarement sur Terre, mais ils comptent sur d'autres races pour poursuivre leurs objectifs.
 STR_ETHEREAL_AUTOPSY
@@ -50,13 +50,13 @@ Cette organisme a la mystérieuse capacité naturelle de lévitation.  Il détec
 STR_CELATID_AUTOPSY
 Autopsie du Celatid
 STR_CELATID_AUTOPSY_UFOPEDIA
-Le coeur contient un petit système bio-mécanique pour propulsion antigravité, qui développé naturellement.  Le sac de venin est l'organe le plus grand, et il ne semble pas y avoir de structure cérébrale séparée.  Il manques de système digestif ou de reproduction visible, mais contient un organe avec les embryons qui peuvent se développer rapidement aux nouveaux organismes.
+Le cœur contient un petit système bio-mécanique pour propulsion antigravité, qui développé naturellement.  Le sac de venin est l'organe le plus grand, et il ne semble pas y avoir de structure cérébrale séparée.  Il manques de système digestif ou de reproduction visible, mais contient un organe avec les embryons qui peuvent se développer rapidement aux nouveaux organismes.
 STR_SILACOID_UFOPEDIA
 Cette organisme à base de silicone génère une énorme quantité de chaleur.  Elle a la force d'écraser des roches, quel est ingérés dans son centre chaud.  Elle est contrôlée par des implants ou des télépathiques, et travaille avec la race Muton.
 STR_SILACOID_AUTOPSY
 Autopsie du Silacoïde
 STR_SILACOID_AUTOPSY_UFOPEDIA
-Le coeur de cette créature est extrêmement chaud, et est la base d'un système digestif.  Son système musculaire unique a une énorme puissance et une très grande vitesse.  Sa peau, ressembler au roc, est invulnérable au feu et aux munitions incendiaires.
+Le cœur de cette créature est extrêmement chaud, et est la base d'un système digestif.  Son système musculaire unique a une énorme puissance et une très grande vitesse.  Sa peau, ressembler au roc, est invulnérable au feu et aux munitions incendiaires.
 STR_CHRYSSALID_UFOPEDIA
 Les pinces de cette créature sont une arme puissante dans le combat rapproché.  Le métabolisme puissant et la force de cette créature lui donnent de la vitesse et de la dextérité.  Au lieu de tuer sa victime, elle l'imprègne d'un oeuf et injecte un venin quel transforme la victime au mort-vivant.  Finalement, un nouveau Chryssalid sortira de la victime.  Les Chryssalids sont associés à la race des hommes-serpents.
 STR_CHRYSSALID_AUTOPSY
@@ -68,13 +68,13 @@ Les Flottants sont des soldats et des agents de terreur.  Ils sont des prédateu
 STR_FLOATER_AUTOPSY
 Autopsie du Flottant
 STR_FLOATER_AUTOPSY_UFOPEDIA
-La créature a été fortement modifiée par la chirurgie.  L'appareil qui former le centre du corps est un système de survie, ayant à la fois les fonctions de coeur, des poumons et de système digestif.  Cela permet à la créature de survivre dans des environnements extrêmement hostiles.  Le cerveau est plus petit par rapport au nôtre, mais les organes sensoriels sont très développés.
+La créature a été fortement modifiée par la chirurgie.  L'appareil qui former le centre du corps est un système de survie, ayant à la fois les fonctions de cœur, des poumons et de système digestif.  Cela permet à la créature de survivre dans des environnements extrêmement hostiles.  Le cerveau est plus petit par rapport au nôtre, mais les organes sensoriels sont très développés.
 STR_REAPER_UFOPEDIA
 Ce carnivore bipède a des mâchoires puissantes et un appétit vorace.  Il y a plusieurs implants cérébraux qui sont utilisés pour contrôler son activité.  Ses instincts primitifs de prédateur sont de peu d'utilité, à l'exception de terroriser et détruire.  Les Reapers sont généralement associés aux Flottants.
 STR_REAPER_AUTOPSY
 Autopsie du Reaper
 STR_REAPER_AUTOPSY_UFOPEDIA
-Le Reaper possède deux 'cerveaux' et deux 'coeurs' qui lui permettent de fonctionner lorsqu'il est gravement blessé.  Cependant, sa fourrure est hautement inflammable, ce qui le rend vulnérable aux armes incendiaires.
+Le Reaper possède deux 'cerveaux' et deux 'cœurs' qui lui permettent de fonctionner lorsqu'il est gravement blessé.  Cependant, sa fourrure est hautement inflammable, ce qui le rend vulnérable aux armes incendiaires.
 STR_SECTOPOD_UFOPEDIA
 Les Sectopodes sont des robots avec un rayon à plasma très puissante.  Ces bêtes mécaniques sont contrôlées par les Ethereals par lien télépathique.  Les Sectopodes représentent un armement de terreur, de la plus puissante des forces extraterrestres.
 STR_SECTOPOD_AUTOPSY
@@ -1240,21 +1240,21 @@ Les communications extraterrestres se font par ondes supra-dimensionnelles qui v
 STR_HANGAR_UFOPEDIA
 Chaque hangar peut contenir un vaisseau.  Il y a des installations pour l'entretien, le ravitaillement et la réparation des vaisseaux XCom.  Chaque vaisseau posté dans une base doit avoir un hangar libre qui lui est affecté et qui ne peut être utilisé par aucun autre vaisseau, même si le premier vaisseau est parti en mission.
 STR_PISTOL_UFOPEDIA
-Le pistolet XCom standard est un semi-automatique à forte puissance pouvant contenir 12 cartouches.
+Le pistolet XCom standard est un puissante pistolet semi-automatique à 12 coups.
 STR_RIFLE_UFOPEDIA
-Ce fusil de tir embusqué à haute précision a un viseur guidé au laser et peut contenir 20 cartouches de 6,7mm.
+Un fusil à 20 coups de 6,7mm, avec tir haute précision et un viseur guidé au laser.
 STR_HEAVY_CANNON_UFOPEDIA
-Le canon lourd est une arme dévastatrice mais encombrante.  Sa versatilité vient du fait qu'il peut contenir trois types de munitions: à perçage d'armure, incendiaires et explosives.
+Le canon lourd est une arme dévastatrice, mais très encombrante.  Il y a trois types de munitions pour cette arme: à perçage d'armure, incendiaires et explosives.
 STR_AUTO_CANNON_UFOPEDIA
-Le canon automatique combine la versatilité et la puissance d'un canon lourd avec une cadence de tir plus rapide.
+Le canon automatique avec la versatilité et la puissance d'un canon lourd, et une cadence de tir plus rapide.
 STR_ROCKET_LAUNCHER_UFOPEDIA
-Le lance-roquettes est un système guidé au laser qui peut tirer trois types différents de missiles.
+Le lance-roquettes est un système guidé au laser, et il y a trois types différents de missiles.
 STR_LASER_PISTOL_UFOPEDIA
-Le pistolet laser est une réalisation efficace de la technologie moderne.  Il conjugue la commodité d'un pistolet avec un tir plus rapide et plus précis.
+Le pistolet laser est une réalisation efficace de la technologie moderne.  Il est un pistolet avec un une cadence de tir plus rapide et plus précis.
 STR_LASER_RIFLE_UFOPEDIA
-Le fusil laser est une version plus puissante et plus précise du pistolet décrit précédemment.
+Le fusil laser est une version du pistolet qu'est plus puissante et plus précise.
 STR_HEAVY_LASER_UFOPEDIA
-Le laser lourd est encombrant, mais extrêmement efficace.
+Le laser lourd est très massif, mais extrêmement puissant.
 STR_GRENADE_UFOPEDIA
 Cette grenade standard a un détonateur précis et sophistiqué, permettant un contrôle de précision.
 STR_SMOKE_GRENADE_UFOPEDIA
@@ -1724,7 +1724,7 @@ Votre vaisseau Avenger a atterri dans la région de Cydonia, sur la surface de M
 STR_MARS_THE_FINAL_ASSAULT
 Mars: L'assaut final
 STR_MARS_THE_FINAL_ASSAULT_BRIEFING
-L'ascenseur de la pyramide emmène vos soldats fatigués sous la surface de la planète.  Ils arrivent au coeur d'un grand complexe de tunnels et de salles.  Le cerveau extraterrestre est caché quelque part dans le labyrinthe.  Il doit être détruit si vous voulez sauver la Terre de l'esclavage extraterrestre.{NEWLINE}{NEWLINE}Bonne chance!
+L'ascenseur de la pyramide emmène vos soldats fatigués sous la surface de la planète.  Ils arrivent au cœur d'un grand complexe de tunnels et de salles.  Le cerveau extraterrestre est caché quelque part dans le labyrinthe.  Il doit être détruit si vous voulez sauver la Terre de l'esclavage extraterrestre.{NEWLINE}{NEWLINE}Bonne chance!
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
 {NEWLINE}pour utiliser ou produire{NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
@@ -1814,9 +1814,9 @@ Quantité
 STR_TOTAL
 Total
 STR_DAY
-jour
+ jour
 STR_DAYS
-jours
+ jours
 STR_IN_PSIONIC_TRAINING
 En entraînement psionique
 STR_BLASTER_BOMB_UFOPEDIA

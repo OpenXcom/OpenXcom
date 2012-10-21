@@ -74,7 +74,7 @@ namespace OpenXcom
 		// SHOT STATS TABLE (for firearms only)
 		if (item->getBattleType() == BT_FIREARM)
 		{
-			_txtShotType = new Text(75, 16, 8, 66);
+			_txtShotType = new Text(100, 16, 8, 66);
 			add(_txtShotType);
 			_txtShotType->setColor(Palette::blockOffset(14)+15);
 			_txtShotType->setWordWrap(true);
@@ -86,7 +86,7 @@ namespace OpenXcom
 			_txtAccuracy->setWordWrap(true);
 			_txtAccuracy->setText(_game->getLanguage()->getString("STR_ACCURACY_UC").c_str());
 
-			_txtTuCost = new Text(75, 16, 160, 66);
+			_txtTuCost = new Text(60, 16, 160, 66);
 			add(_txtTuCost);
 			_txtTuCost->setColor(Palette::blockOffset(14)+15);
 			_txtTuCost->setWordWrap(true);
@@ -181,18 +181,30 @@ namespace OpenXcom
 				_txtAmmo->setAlign(ALIGN_CENTER);
 				_txtAmmo->setText(_game->getLanguage()->getString("STR_AMMO").c_str());
 
-				for (unsigned int i = 0; i < ammo_data->size(); ++i)
+				if (item->getClipSize() == -1)
 				{
-					/*if (Ufopaedia::isArticleAvailable(_game, (*ammo_data)[i]))*/
+					setDamageTypeText(_txtAmmoType[0], item);
+
+					ss.str(L"");ss.clear();
+					ss << item->getPower();
+					_txtAmmoDamage[0]->setText(ss.str().c_str());
+				}
+				else
+				{
+					for (unsigned int i = 0; i < ammo_data->size(); ++i)
 					{
-						RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
-						setDamageTypeText(_txtAmmoType[i], ammo_rule);
+						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+						if (Ufopaedia::isArticleAvailable(_game, ammo_article))
+						{
+							RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
+							setDamageTypeText(_txtAmmoType[i], ammo_rule);
 
-						ss.str(L"");ss.clear();
-						ss << ammo_rule->getPower();
-						_txtAmmoDamage[i]->setText(ss.str().c_str());
+							ss.str(L"");ss.clear();
+							ss << ammo_rule->getPower();
+							_txtAmmoDamage[i]->setText(ss.str().c_str());
 
-						ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
+							ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
+						}
 					}
 				}
 				break;

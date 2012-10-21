@@ -332,6 +332,7 @@ void GeoscapeState::init()
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->focus();
+	_globe->center(_game->getSavedGame()->getGlobeLongitude(), _game->getSavedGame()->getGlobeLatitude());
 	_globe->draw();
 
 	// Set music if it's not already playing

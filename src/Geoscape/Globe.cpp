@@ -710,6 +710,8 @@ void Globe::center(double lon, double lat)
 {
 	_cenLon = lon;
 	_cenLat = lat;
+	_game->getSavedGame()->setGlobeLongitude(_cenLon);
+	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 	cachePolygons();
 }
 
@@ -939,6 +941,8 @@ void Globe::rotate()
 {
 	_cenLon += _rotLon;
 	_cenLat += _rotLat;
+	_game->getSavedGame()->setGlobeLongitude(_cenLon);
+	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 	cachePolygons();
 }
 

@@ -87,8 +87,8 @@ void ResearchInfoState::buildUi ()
 	_txtAvailableScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
 	_txtAvailableSpace = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
 	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
-	_txtMore = new Text(width - 3 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
-	_txtLess = new Text(width - 3 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
+	_txtMore = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
+	_txtLess = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
 	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
 
 	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
@@ -111,6 +111,8 @@ void ResearchInfoState::buildUi ()
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRules ()->getName()));
+	if (_txtTitle->getTextWidth() > _txtTitle->getWidth())
+		_txtTitle->setSmall();
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
 
@@ -177,6 +179,8 @@ void ResearchInfoState::SetAssignedScientist()
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAllocatedScientist->setText(s3.str());
+	if (_txtAllocatedScientist->getTextWidth() > _txtAllocatedScientist->getWidth())
+		_txtAllocatedScientist->setSmall();
 }
 
 /**

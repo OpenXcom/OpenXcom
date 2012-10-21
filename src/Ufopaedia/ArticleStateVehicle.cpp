@@ -44,7 +44,7 @@ namespace OpenXcom
 		RuleItem *item = _game->getRuleset()->getItem(defs->title);
 
 		// add screen elements
-		_txtTitle = new Text(310, 16, 5, 24);
+		_txtTitle = new Text(310, 16, 5, 23);
 		_txtInfo = new Text(300, 150, 10, 80);
 		_lstStats = new TextList(300, 89, 10, 48);
 

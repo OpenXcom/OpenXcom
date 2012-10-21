@@ -43,24 +43,14 @@ namespace OpenXcom
 	size_t Ufopaedia::_current_index = 0;
 
 	/**
-	 * Adds a new article to the visible list, mainly after a successful research.
-	 * @param game Pointer to actual game.
-	 * @param article_id Article id to release.
-	 */
-	void Ufopaedia::releaseArticle(Game *game, std::string &article_id)
-	{
-		// TODO: get definition from Ruleset and add it to UPSaved...
-	}
-
-	/**
 	 * Checks, if an article has already been released.
 	 * @param game Pointer to actual game.
-	 * @param article_id Article id to release.
+	 * @param article Article definition to release.
 	 * @returns true, if the article is available.
 	 */
-	bool Ufopaedia::isArticleAvailable(Game *game, std::string &article_id)
+	bool Ufopaedia::isArticleAvailable(Game *game, ArticleDefinition *article)
 	{
-		return game->getSavedGame()->isResearched(article_id);
+		return game->getSavedGame()->isResearched(article->requires);
 	}
 
 	/**
@@ -132,7 +122,10 @@ namespace OpenXcom
 	void Ufopaedia::openArticle(Game *game, ArticleDefinition *article)
 	{
 		_current_index = getArticleIndex(game, article->id);
-		game->pushState(createArticleState(game, article));
+		if (_current_index != -1)
+		{
+			game->pushState(createArticleState(game, article));
+		}
 	}
 
 	/**
@@ -143,7 +136,12 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::openArticle(Game *game, std::string &article_id)
 	{
-		// TODO: look if article id is available!
+		_current_index = getArticleIndex(game, article_id);
+		if (_current_index != -1)
+		{
+			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(article_id);
+			game->pushState(createArticleState(game, article));
+		}
 	}
 
 	/**
@@ -224,7 +222,7 @@ namespace OpenXcom
 		for (std::vector<std::string>::iterator it=list.begin(); it!=list.end(); ++it)
 		{
 			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(*it);
-			if (/*isArticleAvailable(game, *it) && */article->section != UFOPAEDIA_NOT_AVAILABLE)
+			if (isArticleAvailable(game, article) && article->section != UFOPAEDIA_NOT_AVAILABLE)
 			{
 				articles.push_back(article);
 			}

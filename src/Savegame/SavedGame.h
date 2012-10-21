@@ -58,6 +58,7 @@ private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
 	int _funds;
+	double _globeLon, _globeLat;
 	std::map<std::string, int> _ids;
 	std::vector<Country*> _countries;
 	std::vector<Region*> _regions;
@@ -91,6 +92,14 @@ public:
 	int getFunds() const;
 	/// Sets new funds.
 	void setFunds(int funds);
+	/// Gets the current globe longitude.
+	double getGlobeLongitude() const;
+	/// Sets the new globe longitude.
+	void setGlobeLongitude(double lon);
+	/// Gets the current globe latitude.
+	double getGlobeLatitude() const;
+	/// Sets the new globe latitude.
+	void setGlobeLatitude(double lat);
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.

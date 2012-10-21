@@ -51,10 +51,10 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_txtAvailable = new Text(150, 9, 10, 24);
 	_txtAllocated = new Text(150, 9, 160, 24);
 	_txtSpace = new Text(300, 9, 10, 34);
-	_txtProject = new Text(106, 9, 10, 44);
-	_txtScientists = new Text(135, 9, 115, 44);
-	_txtProgress = new Text(64, 9, 238, 44);
-	_lstResearch = new TextList(288, 120, 8, 54);
+	_txtProject = new Text(110, 16, 10, 44);
+	_txtScientists = new Text(110, 16, 120, 44);
+	_txtProgress = new Text(80, 9, 230, 44);
+	_lstResearch = new TextList(288, 112, 8, 62);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -99,9 +99,11 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
+	_txtProject->setWordWrap(true);
 	_txtProject->setText(_game->getLanguage()->getString("STR_RESEARCH_PROJECT"));
 
 	_txtScientists->setColor(Palette::blockOffset(13)+10);
+	_txtScientists->setWordWrap(true);
 	_txtScientists->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED_UC"));
 
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
@@ -109,7 +111,7 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(3, 158, 70, 58);
+	_lstResearch->setColumns(3, 158, 62, 66);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);

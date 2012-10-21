@@ -65,7 +65,7 @@ namespace OpenXcom
 		std::string id;
 		std::string title;
 		std::string section;
-		int sort_key;
+		std::vector<std::string> requires;
 
 	protected:
 		UfopaediaTypeId _type_id;
