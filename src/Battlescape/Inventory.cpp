@@ -25,6 +25,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -37,6 +38,7 @@
 #include "../Engine/Sound.h"
 #include "WarningMessage.h"
 #include "../Savegame/Tile.h"
+#include "PrimeGrenadeState.h"
 
 namespace OpenXcom
 {
@@ -497,8 +499,38 @@ void Inventory::mouseClick(Action *action, State *state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		// Return item to original position
-		setSelectedItem(0);
+		if (_selItem == 0)
+		{
+			if (!_tu)
+			{
+				int x = (int)floor(action->getAbsoluteXMouse()),
+					y = (int)floor(action->getAbsoluteYMouse());
+				RuleInventory *slot = getSlotInPosition(&x, &y);
+				if (slot != 0)
+				{
+					if (slot->getType() == INV_GROUND)
+					{
+						x += _groundOffset;
+					}
+					BattleItem *item = _selUnit->getItem(slot, x, y);
+					if (item != 0)
+					{
+						BattleType itemType = item->getRules()->getBattleType();
+						if ((BT_GRENADE == itemType || BT_PROXIMITYGRENADE == itemType) && 0 == item->getExplodeTurn())
+						{
+							// Prime that grenade!
+							if (Options::getBool("battleAltGrenade") || BT_PROXIMITYGRENADE == itemType) item->setExplodeTurn(1);
+							else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			// Return item to original position
+			setSelectedItem(0);
+		}
 	}
 	InteractiveSurface::mouseClick(action, state);
 }

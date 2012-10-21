@@ -206,7 +206,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			else
 			{
-				_game->pushState(new PrimeGrenadeState(_game, _action));
+				_game->pushState(new PrimeGrenadeState(_game, _action, false, 0));
 			}
 		}
 		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
