@@ -125,7 +125,7 @@ void Inventory::draw()
 void Inventory::drawGrid()
 {
 	_grid->clear();
-	Text text = Text(100, 9, 0, 0);
+	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
 	text.setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	text.setColor(Palette::blockOffset(4)-1);

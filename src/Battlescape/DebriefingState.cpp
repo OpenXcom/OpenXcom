@@ -60,7 +60,7 @@ DebriefingState::DebriefingState(Game *game) : State(game)
 	_txtQuantity = new Text(60, 9, 200, 24);
 	_txtScore = new Text(50, 9, 260, 24);
 	_txtUfoRecovery = new Text(180, 9, 16, 60);
-	_txtRating = new Text(100, 9, 64, 180);
+	_txtRating = new Text(120, 9, 64, 180);
 	_lstStats = new TextList(280, 80, 16, 32);
 	_lstUfoRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);

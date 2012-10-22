@@ -752,6 +752,8 @@ void Globe::toggleDetail()
 bool Globe::targetNear(Target* target, int x, int y) const
 {
 	Sint16 tx, ty;
+	if (pointBack(target->getLongitude(), target->getLatitude()))
+		return false;
 	polarToCart(target->getLongitude(), target->getLatitude(), &tx, &ty);
 
 	int dx = x - tx;

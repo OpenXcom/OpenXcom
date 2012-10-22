@@ -1256,41 +1256,41 @@ Le fusil laser est une version du pistolet qu'est plus puissante et plus précis
 STR_HEAVY_LASER_UFOPEDIA
 Le laser lourd est très massif, mais extrêmement puissant.
 STR_GRENADE_UFOPEDIA
-Cette grenade standard a un détonateur précis et sophistiqué, permettant un contrôle de précision.
+Cette grenade standard a un détonateur précis et sophistiqué, avec un contrôle de précision.
 STR_SMOKE_GRENADE_UFOPEDIA
-Les grenades fumigènes sont utiles pour le camouflage durant des combats exposés.  A utiliser avec précaution car elles peuvent également avantager l'ennemi.
+Les grenades fumigènes produisent le camouflage pour les combats exposés.  Utilisez-vous avec précaution ou elles peuvent également un avantage aux ennemis.
 STR_PROXIMITY_GRENADE_UFOPEDIA
-Une grenade de proximité peut être lancée comme une grenade ordinaire mais elle est déclenchée par tout mouvement à proximité après être tombée.  Il faut beaucoup d'habileté et de précaution pour utiliser correctement ces armes.
+Une grenade de proximité est lancée comme une grenade ordinaire mais elle est déclenchée par tout mouvement à proximité.  Ces grenades doivent beaucoup d'habileté et de précaution pour usage correct.
 STR_HIGH_EXPLOSIVE_UFOPEDIA
-Cet explosif ne doit être utilisé que pour démolir.  Dégagez les lieux de démolition.
+Cet explosif être utilisé pour la démolition.  Lorsque actif, dégagez tes soldats!
 STR_MOTION_SCANNER_UFOPEDIA
-Cet appareil sophistiqué utilise toutes sortes de détecteurs et d'algorithmes informatiques compliqués pour identifier les mouvements des unités ennemies. Cependant, il faut de l'expérience pour l'utiliser correctement. Cliquez sur l'icône scanner de mouvement sur l'affichage tactique. Sélectionnez 'Utiliser Scanner' dans le menu.  L'affichage Scanner montre une flèche au centre qui représente la direction vers laquelle le soldat est tourné (Le Nord est en haut). Les points clignotants montrent les unités qui ont récemment changé de position. Des unités importantes, ou des unités se déplaçant rapidement, seront représentées par des points plus grands. Les unités statiques ne seront pas détectées.
+Cet appareil sophistiqué utilise toutes sortes de détecteurs et d'algorithmes informatiques compliqués pour identifier les mouvements des unités ennemies. Cependant, il faut de l'expérience pour l'utiliser correctement. Cliquez sur l'icône scanner de mouvement sur l'affichage tactique. Sélectionnez 'Utiliser Scanner' dans le menu.  L'affichage Scanner montre une flèche au centre qui représente la direction que le soldat est tourné (Le Nord est en haut). Les points clignotants sont les unités, qui récemment, ont changé de position. Des unités importantes, ou des unités très rapides, seront représentées par des points plus grands. Les unités statiques ne seront pas détectées.
 STR_MEDI_KIT_UFOPEDIA
-La trousse de soins contient des médicaments, des calmants et des stimulants. Pour utiliser la trousse de soins, vous devez vous tourner vers le soldat ayant besoin d'un traitement. Si le soldat est assommé, vous devez vous pencher sur le corps. Cliquez sur l'icône trousse de soins et sélectionnez 'utiliser trousse de soins' dans le menu.{NEWLINE}SOIGNER> Les parties du corps en rouge représentent des blessures. Cliquez sur une partie du corps qui est blessée. Cliquez sur le bouton 'Soigner'. La blessure sera soignée et cela redonnera un peu de santé à la personne blessée.{NEWLINE}STIMULANT> Il redonne de l'énergie et fait reprendre conscience aux soldats ayant été assommés. Pour faire reprendre conscience à un soldat assommé, penchez-vous directement sur le corps.{NEWLINE}CALMANT> Il ramène le moral des soldats blessés à un niveau équivalent à la santé perdue du soldat.
+La trousse de soins contient des médicaments, des calmants et des stimulants. Pour utiliser la trousse de soins, vous tourner vers le soldat ayant besoin d'un traitement. Si le soldat est inconscient, vous devez pencher sur le corps. Cliquez sur l'icône trousse de soins et sélectionnez 'utiliser trousse de soins' dans le menu.{NEWLINE}SOIGNER> Les parties du corps en rouge représentent des blessures. Cliquez sur une blessure, lors cliquez sur le bouton 'Soigner'. La blessure sera soignée et redonner un peu de santé à la personne blessée.{NEWLINE}STIMULANT> Il redonne de l'énergie et/ou réveille les soldats inconscients. Pour réveille un soldat inconscients, penchez-vous directement sur le corps.{NEWLINE}CALMANT> Il ramène le moral des soldats blessés à un niveau équivalent à la santé perdue du soldat.
 STR_PSI_AMP_UFOPEDIA
-Le Psi-Amp ne peut être utilisé que par des soldats ayant des compétences psioniques. Durant le combat, cliquez sur le Psi-Amp, sélectionnez le type d'attaque et une unité cible avec le curseur. Il y a deux types d'attaques psioniques:{NEWLINE}PANIQUE DE L'UNITE> Si l'attaque réussit, cela réduira le moral de la cible et pourra la faire paniquer.{NEWLINE}CONTROLE DE L'ESPRIT> Si cela marche, vous prendrez alors le contrôle immédiat de l'unité ennemie comme si c'était l'une des vôtres (mais vous ne pouvez pas accéder à l'écran objets). Ce type d'attaque est plus difficile à réussir.
+Le Psi-Amp est utilisée par des soldats avec compétences psioniques. Durant le combat, cliquez sur le Psi-Amp et sélectionnez le type d'attaque et une unité cible avec le curseur. Il y a deux types d'attaques psioniques:{NEWLINE}PANIQUE DE L'UNITÉ> Si l'attaque réussit, cela réduira le moral de la cible et pourra la faire paniquer.{NEWLINE}CONTRÔLE DE L'ESPRIT> Si l'attaque réussit, immédiatement vous contrôlez l'unité ennemie comme c'était l'une des vôtres (mais vous ne pouvez pas accéder à l'écran objets). Succès avec cet attaque est très difficile.
 STR_STUN_ROD_UFOPEDIA
-Cet objet ne peut être utilisé que dans le combat rapproché.  Il permet d'assommer un organisme vivant sans le tuer grâce à des chocs électriques.
+Cet objet est utilisée dans le combat rapproché.  Il assomme un organisme vivant sans le tuer via des chocs électriques.
 STR_THE_SUBJECT_HAS_DIED
 Le sujet est mort suite au traumatisme de l'interrogatoire.
 STR_MIND_PROBE_UFOPEDIA
-La sonde d'esprit est une technique de communication extraterrestre qui est utilisée pour prendre l'information directement des ondes cérébrales.  Les unités XCom peuvent utiliser cette technique durant le combat pour connaître les caractéristiques des extraterrestres.  Cliquez sur la sonde d'esprit et l'option 'utiliser'.  Puis, cliquez sur un extraterrestre avec le curseur.
+La sonde d'esprit est une technique de communication extraterrestre qu'est utilisée pour prendre l'information directement des ondes cérébrales.  Les unités XCom peuvent utiliser cette technique durant le combat pour connaître les caractéristiques des extraterrestres.  Cliquez sur la sonde d'esprit, cliquez 'utiliser', lorsque cliquez sur un extraterrestre avec le curseur.
 STR_PLASMA_PISTOL_UFOPEDIA
-Les pistolets à plasma sont une arme extraterrestre fatale basée sur l'accélération des particules à l'intérieur d'un minuscule champ anti-gravitationnel.
+Les pistolets à plasma sont une arme extraterrestre mortel, et basée sur l'accélération des particules à l'intérieur d'un minuscule champ antigravitationnel.
 STR_PLASMA_RIFLE_UFOPEDIA
-C'est une arme puissante et dévastatrice basée sur l'accélération des particules à l'intérieur d'un minuscule champ anti-gravitationnnel.
+C'est une arme puissante et dévastatrice, et basée sur l'accélération des particules à l'intérieur d'un minuscule champ antigravitationnel.
 STR_SIZE
 Taille
 STR_THE_CORPSE_MAY_BE_RESEARCHED
-Il faudrait examiner le corps pour un rapport complet d'autopsie.
+Il faudrait recherche le corps pour un rapport complet d'autopsie.
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
-Pas assez de munitions pour charger
+Pas assez de munitions pour recharger
 STR_BLASTER_LAUNCHER_UFOPEDIA
-C'est un lance-missiles guidé extraterrestre qui tire de puissantes 'bombes blaster'. Lorsque vous cliquez pour tirer, vous voyez apparaître les points de repère que la bombe blaster suivra.  Lorsque vous avez positionné assez de points de repère, cliquez sur l'icône lancement spécial.
+Un lance-missiles guidé extraterrestre qui tire de puissantes 'bombes blaster'. Cliquant tirer, vous voyez apparaître les points de repère que la bombe blaster suivra.  Lorsque vous avez positionné assez de points de repère, cliquez sur l'icône lancement spécial.
 STR_SMALL_LAUNCHER_UFOPEDIA
-Un petit lanceur qui tire des bombes assommantes.  Très utile pour capturer des extraterrestres vivants.
+Un petit lanceur qui tire des bombes assommantes.  C'est très utile pour capturer des extraterrestres vivants.
 STR_ALIEN_GRENADE_UFOPEDIA
-Cette arme fonctionne de la même façon qu'une grenade terrestre - mais elle est plus puissante.
+Cette grenade fonctionner même une grenade terrestre, mais naturellement, elle est plus puissante.
 STR_SMALL_SCOUT
 Petit Eclaireur
 STR_MEDIUM_SCOUT

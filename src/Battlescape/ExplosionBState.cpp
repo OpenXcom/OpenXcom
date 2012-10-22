@@ -70,10 +70,12 @@ void ExplosionBState::init()
 	if (_item == 0 || _item->getRules()->getHitAnimation() == 0)
 	{
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		for (int i = 0; i < _item->getRules()->getPower()/5; i++)
+		// TODO: Cheap fix, must be reviewed by Daiky
+		int power = (_item == 0) ? 32 : _item->getRules()->getPower();
+		for (int i = 0; i < power/5; i++)
 		{
-			int X = RNG::generate(-_item->getRules()->getPower()/2,_item->getRules()->getPower()/2);
-			int Y = RNG::generate(-_item->getRules()->getPower()/2,_item->getRules()->getPower()/2);
+			int X = RNG::generate(-power/2,power/2);
+			int Y = RNG::generate(-power/2,power/2);
 			Position p = _center;
 			p.x += X; p.y += Y;
 			Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
@@ -81,7 +83,7 @@ void ExplosionBState::init()
 			_parent->getMap()->getExplosions()->insert(explosion);
 		}
 		// explosion sound
-		if (_item->getRules()->getPower() <= 80)
+		if (power <= 80)
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(12)->play();
 		else
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(5)->play();

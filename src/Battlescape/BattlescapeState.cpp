@@ -432,7 +432,10 @@ void BattlescapeState::mapOver(Action *action)
 		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
 		_game->getCursor()->handle(action);
 	}
-	_save->setCameraPosition(_map->getCamera()->getCenterPosition());
+	if (_game->getCursor()->getVisible() && _save->getSide() == FACTION_PLAYER)
+	{
+		_save->setCameraPosition(_map->getCamera()->getCenterPosition());
+	}
 }
 
 /**
