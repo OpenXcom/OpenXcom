@@ -361,11 +361,9 @@ void BattlescapeState::init()
 	if (firstInit && playableUnitSelected())
 	{
 		_battleGame->setupCursor();
-		if (_save->getCameraPosition().x == -10)
-			_save->setCameraPosition(_save->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
 	}
-	_map->getCamera()->centerOnPosition(_save->getCameraPosition());
 }
 
 /**
@@ -429,10 +427,6 @@ void BattlescapeState::mapOver(Action *action)
 		// We don't want to look the mouse-cursor jumping :)
 		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
 		_game->getCursor()->handle(action);
-	}
-	if (_game->getCursor()->getVisible() && _save->getSide() == FACTION_PLAYER)
-	{
-		_save->setCameraPosition(_map->getCamera()->getCenterPosition());
 	}
 }
 

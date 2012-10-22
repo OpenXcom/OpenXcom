@@ -316,7 +316,7 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _cenLon(0.0), _cenLat(0.0), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _zoom(0), _game(game), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _cacheLand()
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -420,6 +420,10 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_mkAlienSite->setPixel(2, 1, 1);
 	_mkAlienSite->setPixel(1, 2, 1);
 	_mkAlienSite->unlock();
+
+	_cenLon = _game->getSavedGame()->getGlobeLongitude();
+	_cenLat = _game->getSavedGame()->getGlobeLatitude();
+	_zoom = _game->getSavedGame()->getGlobeZoom();
 
 	cachePolygons();
 	
@@ -666,6 +670,7 @@ void Globe::zoomIn()
 	if (_zoom < static_data.getRadiusNum() - 1)
 	{
 		_zoom++;
+		_game->getSavedGame()->setGlobeZoom(_zoom);
 		cachePolygons();
 	}
 }
@@ -678,6 +683,7 @@ void Globe::zoomOut()
 	if (_zoom > 0)
 	{
 		_zoom--;
+		_game->getSavedGame()->setGlobeZoom(_zoom);
 		cachePolygons();
 	}
 }
@@ -688,6 +694,7 @@ void Globe::zoomOut()
 void Globe::zoomMin()
 {
 	_zoom = 0;
+	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
 
@@ -697,6 +704,7 @@ void Globe::zoomMin()
 void Globe::zoomMax()
 {
 	_zoom = static_data.getRadiusNum() - 1;
+	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
 

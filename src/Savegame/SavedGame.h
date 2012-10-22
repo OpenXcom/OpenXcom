@@ -59,6 +59,7 @@ private:
 	GameTime *_time;
 	int _funds;
 	double _globeLon, _globeLat;
+	int _globeZoom;
 	std::map<std::string, int> _ids;
 	std::vector<Country*> _countries;
 	std::vector<Region*> _regions;
@@ -100,6 +101,10 @@ public:
 	double getGlobeLatitude() const;
 	/// Sets the new globe latitude.
 	void setGlobeLatitude(double lat);
+	/// Gets the current globe zoom.
+	int getGlobeZoom() const;
+	/// Sets the new globe zoom.
+	void setGlobeZoom(int zoom);
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.
