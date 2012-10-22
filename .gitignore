@@ -71,4 +71,3 @@ build/
 Dependencies/
 #Ignore Vim swap files
 *.swp
-bin
