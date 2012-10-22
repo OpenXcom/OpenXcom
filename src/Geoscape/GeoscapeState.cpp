@@ -71,6 +71,7 @@
 #include "ResearchCompleteState.h"
 #include "../Ruleset/RuleResearch.h"
 #include "NewPossibleResearchState.h"
+#include "NewPossibleManufactureState.h"
 #include "../Savegame/Production.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/ItemContainer.h"
@@ -900,9 +901,15 @@ void GeoscapeState::time1Day()
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
+			std::vector<RuleManufacture *> newPossibleManufacture;
+			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
 			popup(new ResearchCompleteState (_game, research));
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			if (!newPossibleManufacture.empty())
+			{
+				popup(new NewPossibleManufactureState(_game, *i, newPossibleManufacture));
+			}
 			delete(*iter);
 		}
 		// Handle soldier wounds

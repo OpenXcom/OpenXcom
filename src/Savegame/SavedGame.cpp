@@ -20,6 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 #include <yaml-cpp/yaml.h>
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
@@ -754,6 +755,27 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 			else
 			{
 			}
+		}
+	}
+}
+
+/**
+   Get the list of newly available manufacture projects once a ResearchProject has been completed. This function check for fake ResearchProject.
+   * @param dependables the list of RuleManufacture which are now available.
+   * @param research The RuleResearch which has just been discovered
+   * @param ruleset the Game Ruleset
+   * @param base a pointer to a Base
+*/
+void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+{
+	std::vector<std::string> mans = ruleset->getManufactureList();
+	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)
+	{
+		RuleManufacture *m = ruleset->getManufacture(*iter);
+		std::vector<std::string> reqs = m->getRequirements();
+		if(isResearched(m->getRequirements()) && std::find(reqs.begin(), reqs.end(), research->getName()) != reqs.end())
+		{
+			dependables.push_back(m);
 		}
 	}
 }

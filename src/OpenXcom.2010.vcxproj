@@ -299,6 +299,7 @@
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftPatrolState.cpp" />
     <ClCompile Include="Geoscape\DogfightState.cpp" />
+    <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp" />
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp" />
     <ClCompile Include="Geoscape\FundingState.cpp" />
     <ClCompile Include="Geoscape\GeoscapeCraftState.cpp" />
@@ -519,6 +520,7 @@
     <ClInclude Include="Geoscape\DogfightState.h" />
     <ClInclude Include="Geoscape\FundingState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
+    <ClInclude Include="Geoscape\NewPossibleManufactureState.h" />
     <ClInclude Include="Geoscape\NewPossibleResearchState.h" />
     <ClInclude Include="Geoscape\ProductionCompleteState.h" />
     <ClInclude Include="Geoscape\GeoscapeState.h" />

@@ -361,13 +361,11 @@ void BattlescapeState::init()
 	if (firstInit && playableUnitSelected())
 	{
 		_battleGame->setupCursor();
-		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		if (_save->getCameraPosition().x == -10)
+			_save->setCameraPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
 	}
-	else
-	{
-		_map->getCamera()->centerOnPosition(_save->getCameraPosition());
-	}
+	_map->getCamera()->centerOnPosition(_save->getCameraPosition());
 }
 
 /**

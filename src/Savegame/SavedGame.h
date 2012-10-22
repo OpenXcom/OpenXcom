@@ -138,6 +138,8 @@ public:
 	void getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available research projects once a research has been completed.
 	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	/// Get the list of newly available manufacture projects once a research has been completed.
+	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets if a list of research has been unlocked.
