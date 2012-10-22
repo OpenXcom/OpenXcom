@@ -44,7 +44,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
+SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _camera(0, 0, 0)
 {
 	std::string temp;
 	temp = Options::getString("battleScrollButton");
@@ -104,6 +104,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	node["globalshade"] >> _globalShade;
 	node["turn"] >> _turn;
 	node["selectedUnit"] >> selectedUnit;
+	node["camera"] >> _camera;
 
 	for (YAML::Iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
@@ -297,6 +298,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "globalshade" << YAML::Value << _globalShade;
 	out << YAML::Key << "turn" << YAML::Value << _turn;
 	out << YAML::Key << "selectedUnit" << YAML::Value << (_selectedUnit?_selectedUnit->getId():-1);
+	out << YAML::Key << "camera" << YAML::Value << _camera;
 
 	out << YAML::Key << "mapdatasets" << YAML::Value;
 	out << YAML::BeginSeq;
@@ -1129,6 +1131,24 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 	}
 
 	return true;
+}
+
+/**
+ * Sets the camera position.
+ * @param camera Center position.
+ */
+void SavedBattleGame::setCameraPosition(Position pos)
+{
+	_camera = pos;
+}
+
+/**
+ * Gets the camera position.
+ * @return Center position.
+ */
+Position SavedBattleGame::getCameraPosition() const
+{
+	return _camera;
 }
 
 /**

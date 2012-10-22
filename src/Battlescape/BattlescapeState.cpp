@@ -364,6 +364,10 @@ void BattlescapeState::init()
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
 	}
+	else
+	{
+		_map->getCamera()->centerOnPosition(_save->getCameraPosition());
+	}
 }
 
 /**
@@ -428,6 +432,7 @@ void BattlescapeState::mapOver(Action *action)
 		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
 		_game->getCursor()->handle(action);
 	}
+	_save->setCameraPosition(_map->getCamera()->getCenterPosition());
 }
 
 /**

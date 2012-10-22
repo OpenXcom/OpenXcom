@@ -21,12 +21,10 @@
 
 #include <string>
 #include <vector>
-#include <yaml-cpp/yaml.h>
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
-
-enum SoldierGender;
 
 /**
  * Pool of soldier names to generate random names.
