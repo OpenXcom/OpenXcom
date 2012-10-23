@@ -30,7 +30,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _shotDownByCraftId(-1)
 {
 }
 
@@ -357,19 +357,30 @@ void Ufo::setAlienRace(const std::string &race)
 /**
  * Sets damage to UFO.
  * @param hit Amount of damage to be set..
- */
+ *//*
 void Ufo::setHit(int hit)
 {
 	_hit = hit;
 }
-
+*/
 /**
  * Gets damage of UFO.
  * @return Amount of damage taken by the UFO.
- */
+ *//*
 int Ufo::getHit() const
 {
 	return _hit;
+}
+*/
+
+void Ufo::setShotDownByCraftId(const int id)
+{
+	_shotDownByCraftId = id;
+}
+
+int Ufo::getShotDownByCraftId() const
+{
+	return _shotDownByCraftId;
 }
 
 /**

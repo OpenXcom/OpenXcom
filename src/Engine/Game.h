@@ -48,7 +48,7 @@ private:
 	Screen *_screen;
 	Cursor *_cursor;
 	Language *_lang;
-	std::list<State*> _states, _deleted;
+	std::list<State*> _states, _deleted, _paused;
 	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
@@ -80,6 +80,8 @@ public:
 	void pushState(State *state);
 	/// Pops the last state from the state stack.
 	void popState();
+	/// Pauses the last state in the stack. Currently used only for synchronous dogfights.
+	void pauseState();
 	/// Gets the currently loaded language.
 	Language *const getLanguage() const;
 	/// Loads a new language for the game.

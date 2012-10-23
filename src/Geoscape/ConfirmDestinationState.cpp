@@ -31,6 +31,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/Target.h"
 #include "../Savegame/Waypoint.h"
+#include "../Savegame/Base.h"
 
 namespace OpenXcom
 {
@@ -116,6 +117,18 @@ void ConfirmDestinationState::btnOkClick(Action *action)
 	}
 	_craft->setDestination(_target);
 	_craft->setStatus("STR_OUT");
+	int maxInterceptionOrder = 0;
+	for(std::vector<Base*>::iterator baseIt = _game->getSavedGame()->getBases()->begin(); baseIt != _game->getSavedGame()->getBases()->end(); ++baseIt)
+	{
+		for(std::vector<Craft*>::iterator craftIt = (*baseIt)->getCrafts()->begin(); craftIt != (*baseIt)->getCrafts()->end(); ++craftIt)
+		{
+			if((*craftIt)->getInterceptionOrder() > maxInterceptionOrder)
+			{
+				maxInterceptionOrder = (*craftIt)->getInterceptionOrder();
+			}
+		}
+	}
+	_craft->setInterceptionOrder(++maxInterceptionOrder);
 	_game->popState();
 	_game->popState();
 }

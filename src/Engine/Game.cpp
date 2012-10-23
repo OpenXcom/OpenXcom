@@ -52,7 +52,7 @@ namespace OpenXcom
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _paused(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
 	std::cout << "Initializing engine..." << std::endl;
 
@@ -363,6 +363,16 @@ void Game::popState()
 	_init = false;
 }
 
+/**
+ * Pauses the last state from the top of the stack. Currently it is only used
+ * for synchronous dogfights.
+ */
+void Game::pauseState()
+{
+	_paused.push_back(_states.back());
+	_states.pop_back();
+	_init = false;
+}
 /**
  * Returns the language currently in use by the game.
  * @return Pointer to the language.
