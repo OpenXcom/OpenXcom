@@ -47,8 +47,8 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_window = new Window(this, 224, 168, 16, 16, POPUP_BOTH);
 	_btnOk = new TextButton(140, 12, 58, 144);
 	_btnRedirect = new TextButton(140, 12, 58, 160);
-	_txtDestination = new Text(140, 64, 58, 48);
-	_txtPatrolling = new Text(160, 16, 48, 120);
+	_txtDestination = new Text(224, 64, 16, 48);
+	_txtPatrolling = new Text(224, 16, 16, 120);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

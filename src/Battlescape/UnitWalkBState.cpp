@@ -116,6 +116,13 @@ void UnitWalkBState::think()
 				}
 			}
 		}
+		if (_unit->getVisible() && _unit->getStatus() == STATUS_FLYING)
+		{
+			if (_unit->getWalkingPhase() == 0)
+			{
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(15)->play();
+			}
+		}
 
 		_unit->keepWalking(); // advances the phase
 
@@ -207,7 +214,7 @@ void UnitWalkBState::think()
 			return;
 		}
 
-		if (_unit->getVisible())
+		if (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 		{
 			setNormalWalkSpeed();
 		}
@@ -264,7 +271,7 @@ void UnitWalkBState::think()
 			{
 				if (_unit->spendEnergy(tu, _parent->dontSpendTUs()))
 				{
-					_unit->startWalking(dir, destination);
+					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination));
 				}
 				else
 				{

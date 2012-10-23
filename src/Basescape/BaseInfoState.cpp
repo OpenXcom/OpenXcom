@@ -88,10 +88,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtDefense = new Text(114, 9, 8, 138);
 	_numDefense = new Text(40, 9, 126, 138);
 	_barDefense = new Bar(150, 5, 166, 140);
-	_txtShortRange = new Text(130, 9, 8, 153);
+	_txtShortRange = new Text(114, 9, 8, 153);
 	_numShortRange = new Text(40, 9, 126, 153);
 	_barShortRange = new Bar(150, 5, 166, 155);
-	_txtLongRange = new Text(130, 9, 8, 163);
+	_txtLongRange = new Text(114, 9, 8, 163);
 	_numLongRange = new Text(40, 9, 126, 163);
 	_barLongRange = new Bar(150, 5, 166, 165);
 
@@ -261,10 +261,6 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtShortRange->setText(_game->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
-	if (_game->getLanguage()->getName() == L"DEUTSCH")
-	{
-		_numShortRange->setX(137);
-	}
 
 	_barShortRange->setColor(Palette::blockOffset(8));
 	_barShortRange->setScale(25.0);
@@ -273,10 +269,6 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtLongRange->setText(_game->getLanguage()->getString("STR_LONG_RANGE_DETECTION"));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
-	if (_game->getLanguage()->getName() == L"DEUTSCH")
-	{
-		_numLongRange->setX(137);
-	}
 
 	_barLongRange->setColor(Palette::blockOffset(8));
 	_barLongRange->setScale(25.0);

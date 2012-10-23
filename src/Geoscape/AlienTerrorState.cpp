@@ -48,7 +48,7 @@ AlienTerrorState::AlienTerrorState(Game *game, City *city, GeoscapeState *state)
 	_window = new Window(this, 256, 200, 0, 0, POPUP_BOTH);
 	_btnCentre = new TextButton(200, 16, 28, 140);
 	_btnCancel = new TextButton(200, 16, 28, 160);
-	_txtTitle = new Text(246, 16, 5, 56);
+	_txtTitle = new Text(246, 32, 5, 48);
 	_txtCity = new Text(246, 16, 5, 80);
 
 	// Set palette
@@ -75,6 +75,7 @@ AlienTerrorState::AlienTerrorState(Game *game, City *city, GeoscapeState *state)
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_ALIENS_TERRORISE"));
 
 	_txtCity->setColor(Palette::blockOffset(8)+5);

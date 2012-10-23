@@ -340,9 +340,32 @@ int Camera::getViewHeight() const
 	return _mapOffset.z;
 }
 
+/**
+ * Get the map width
+ * @return the map width
+*/
+int Camera::getMapWidth() const
+{
+	return _mapWidth;
+}
+
+/**
+ * Get the map length
+ * @return the map length
+*/
+int Camera::getMapLength() const
+{
+	return _mapLength;
+}
+
 Position Camera::getMapOffset()
 {
 	return _mapOffset;
+}
+
+void Camera::setMapOffset(Position pos)
+{
+	_mapOffset = pos;
 }
 
 int Camera::toggleShowAllLayers()
@@ -354,6 +377,18 @@ int Camera::toggleShowAllLayers()
 bool Camera::getShowAllLayers() const
 {
 	return _showAllLayers;
+}
+
+/**
+ * Check if map coordinates X,Y,Z are on screen
+ */
+bool Camera::isOnScreen(const Position &mapPos) const
+{
+	Position screenPos;
+	convertMapToScreen(mapPos, &screenPos);
+	screenPos.x += _mapOffset.x;
+	screenPos.y += _mapOffset.y;
+	return screenPos.x > 0 && screenPos.x < _screenWidth && screenPos.y > 0 && screenPos.y < _screenHeight;
 }
 
 }

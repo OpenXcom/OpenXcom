@@ -85,11 +85,15 @@ public:
 	bool didCameraFollow();
 	/// Get the map displayed level
 	int getViewHeight() const;
+	int getMapWidth() const;
+	int getMapLength() const;
 	/// Get the map x/y screen offset
 	Position getMapOffset();
+	/// Set the map x/y screen offset
+	void setMapOffset(Position pos);
 	int toggleShowAllLayers();
 	bool getShowAllLayers() const;
-
+	bool isOnScreen(const Position &mapPos) const;
 };
 }
 #endif

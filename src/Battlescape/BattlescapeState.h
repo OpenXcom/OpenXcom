@@ -74,7 +74,11 @@ private:
 	bool firstInit;
 	bool isMouseScrolling;
 	bool isMouseScrolled;
-  int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	Position mapOffsetBeforeMouseScrolling;
+	Uint32 mouseScrollingStartTime;
+	int absMouseMoveX, absMouseMoveY;
+	bool mouseMovedOverThreshold;
 
 	void selectNextPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);
@@ -167,6 +171,8 @@ public:
 	void finishBattle(bool abort);
 	/// show launch button
 	void showLaunchButton(bool show);
+	/// Clears mouse-scrolling state
+	void clearMouseScrollingState();
 
 };
 

@@ -640,12 +640,6 @@ void Map::drawTerrain(Surface *surface)
 				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
-				// if the projectile is outside the viewport - center it back on it
-				if (bulletPositionScreen.x < -_spriteWidth || bulletPositionScreen.x > surface->getWidth() ||
-					bulletPositionScreen.y < -_spriteHeight || bulletPositionScreen.y > surface->getHeight()  )
-				{
-					_camera->centerOnPosition(Position(voxelPos.x/16, voxelPos.y/16, voxelPos.z/24), false);
-				}
 			}
 			else
 			{
@@ -688,7 +682,7 @@ void Map::keyboardPress(Action *action, State *state)
 void Map::mouseOver(Action *action, State *state)
 {
 	InteractiveSurface::mouseOver(action, state);
-  int posX = action->getXMouse();
+	int posX = action->getXMouse();
 	int posY = action->getYMouse();
 
 	_camera->mouseOver(action, state);

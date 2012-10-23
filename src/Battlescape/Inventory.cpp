@@ -25,6 +25,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -37,6 +38,7 @@
 #include "../Engine/Sound.h"
 #include "WarningMessage.h"
 #include "../Savegame/Tile.h"
+#include "PrimeGrenadeState.h"
 
 namespace OpenXcom
 {
@@ -123,7 +125,7 @@ void Inventory::draw()
 void Inventory::drawGrid()
 {
 	_grid->clear();
-	Text text = Text(100, 9, 0, 0);
+	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
 	text.setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	text.setColor(Palette::blockOffset(4)-1);
@@ -497,8 +499,38 @@ void Inventory::mouseClick(Action *action, State *state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		// Return item to original position
-		setSelectedItem(0);
+		if (_selItem == 0)
+		{
+			if (!_tu)
+			{
+				int x = (int)floor(action->getAbsoluteXMouse()),
+					y = (int)floor(action->getAbsoluteYMouse());
+				RuleInventory *slot = getSlotInPosition(&x, &y);
+				if (slot != 0)
+				{
+					if (slot->getType() == INV_GROUND)
+					{
+						x += _groundOffset;
+					}
+					BattleItem *item = _selUnit->getItem(slot, x, y);
+					if (item != 0)
+					{
+						BattleType itemType = item->getRules()->getBattleType();
+						if ((BT_GRENADE == itemType || BT_PROXIMITYGRENADE == itemType) && 0 == item->getExplodeTurn())
+						{
+							// Prime that grenade!
+							if (Options::getBool("battleAltGrenade") || BT_PROXIMITYGRENADE == itemType) item->setExplodeTurn(1);
+							else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			// Return item to original position
+			setSelectedItem(0);
+		}
 	}
 	InteractiveSurface::mouseClick(action, state);
 }
@@ -545,7 +577,7 @@ void Inventory::arrangeGround()
 	int x = 0;
 	int y = 0;
 	bool ok = false;
-	int xLastItem = 0;
+	int xMax = 0;
 
 	if (_selUnit != 0)
 	{
@@ -568,16 +600,23 @@ void Inventory::arrangeGround()
 				ok = true; // assume we can put the item here, if one of the following checks fails, we can't.
 				for (int xd = 0; xd < (*i)->getRules()->getInventoryWidth() && ok; xd++)
 				{
-					for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+					if ((x + xd) % slotsX < x % slotsX)
 					{
-						ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+						ok = false;
+					}
+					else
+					{
+						for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+						{
+							ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+						}
 					}
 				}
 				if (ok)
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
-					xLastItem = x + (*i)->getRules()->getInventoryWidth();
+					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
 				}
 				else
 				{
@@ -591,7 +630,7 @@ void Inventory::arrangeGround()
 			}
 		}
 	}
-	if (xLastItem > _groundOffset + slotsX)
+	if (xMax >= _groundOffset + slotsX)
 	{
 		_groundOffset += slotsX;
 	}

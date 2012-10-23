@@ -58,7 +58,7 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(200, 16, 36, 6);
 	_txtTus = new Text(40, 9, 250, 24);
-	_txtItem = new Text(100, 9, 0, 23);
+	_txtItem = new Text(200, 9, 0, 23);
 	_txtAmmo = new Text(64, 24, 256, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);

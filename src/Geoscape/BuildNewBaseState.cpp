@@ -58,7 +58,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(54, 12, 186, 8);
-	_txtTitle = new Text(200, 16, 8, 6);
+	_txtTitle = new Text(180, 16, 8, 6);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

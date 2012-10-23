@@ -14,8 +14,11 @@ ruleset_DATA = \
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
+	bin/data/Language/Czech.geo \
 	bin/data/Language/Czech.lng \
+	bin/data/Language/English.geo \
 	bin/data/Language/English.lng \
+	bin/data/Language/EnglishUk.geo \
 	bin/data/Language/EnglishUk.lng \
 	bin/data/Language/Font.dat \
 	bin/data/Language/French.geo \
@@ -28,6 +31,7 @@ language_DATA = \
 	bin/data/Language/Italian.lng \
 	bin/data/Language/Polish.geo \
 	bin/data/Language/Polish.lng \
+	bin/data/Language/Romanian.geo \
 	bin/data/Language/Romanian.lng \
 	bin/data/Language/Russian.geo \
 	bin/data/Language/Russian.lng \
@@ -39,10 +43,17 @@ namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
 	bin/data/SoldierName/American.nam \
 	bin/data/SoldierName/British.nam \
+	bin/data/SoldierName/Czech.nam \
+	bin/data/SoldierName/Danish.nam \
+	bin/data/SoldierName/Finnish.nam \
 	bin/data/SoldierName/French.nam \
 	bin/data/SoldierName/German.nam \
 	bin/data/SoldierName/Japanese.nam \
-	bin/data/SoldierName/Russian.nam
+	bin/data/SoldierName/Polish.nam \
+	bin/data/SoldierName/Portuguese.nam \
+	bin/data/SoldierName/Romanian.nam \
+	bin/data/SoldierName/Russian.nam \
+	bin/data/SoldierName/Swedish.nam
 
 bin_PROGRAMS = openxcom
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
@@ -288,6 +299,8 @@ openxcom_SOURCES = \
 	src/Geoscape/MonthlyReportState.h \
 	src/Geoscape/MultipleTargetsState.cpp \
 	src/Geoscape/MultipleTargetsState.h \
+	src/Geoscape/NewPossibleManufactureState.cpp \
+	src/Geoscape/NewPossibleManufactureState.h \
 	src/Geoscape/NewPossibleResearchState.cpp \
 	src/Geoscape/NewPossibleResearchState.h \
 	src/Geoscape/GeoscapeOptionsState.cpp \

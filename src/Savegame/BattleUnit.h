@@ -70,7 +70,7 @@ private:
 	std::vector<BattleUnit *> _visibleUnits;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
-	bool _kneeled, _dontReselect;
+	bool _kneeled, _floating, _dontReselect;
 	int _currentArmor[5];
 	int _fatalWounds[6];
 	int _fire;
@@ -129,7 +129,7 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase
-	void startWalking(int direction, const Position &destination);
+	void startWalking(int direction, const Position &destination, Tile *destinationTile);
 	/// Increase the walkingPhase
 	void keepWalking();
 	/// Gets the walking phase for animation and sound
@@ -158,6 +158,8 @@ public:
 	void kneel(bool kneeled);
 	/// Is kneeled?
 	bool isKneeled() const;
+	/// Is floating?
+	bool isFloating() const;
 	/// Aim.
 	void aim(bool aiming);
 	/// Gets the unit's time units.

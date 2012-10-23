@@ -42,9 +42,14 @@ class MiniMapView : public InteractiveSurface
 	int _frame;
 	SurfaceSet * _set;
 	// these two are required for right-button scrolling on the minimap
-  bool isMouseScrolling;
+	bool isMouseScrolling;
 	bool isMouseScrolled;
-  int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	int mouseScrollX, mouseScrollY;
+	Position posBeforeMouseScrolling;
+	Uint32 mouseScrollingStartTime;
+	int absMouseMoveX, absMouseMoveY;
+	bool mouseMovedOverThreshold;
 	/// Handle pressing on the MiniMap
 	void mousePress(Action *action, State *state);
 	/// Handle clicking on the MiniMap

@@ -1758,7 +1758,7 @@ UFO ENTKOMMT!
 STR_ALIENS_TERRORISE
 TERRORANGRIFF DER AUSSERIRDISCHEN
 STR_LONG_RANGE_DETECTION
-Langstrecken-Radarsystem
+Großes radarsystem
 STR_STORES_UC
 LAGER
 STR_DIFFICULTY_LEVEL
@@ -2042,9 +2042,9 @@ Zeiteinheiten für Auto-Schuß
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Zeiteinheiten für Zielschuß
 STR_UNITS_IN_EXIT_AREA
- Einheiten im Ausgangsbereich
+Einheiten im Ausgangsbereich
 STR_UNITS_OUTSIDE_EXIT_AREA
- Einheiten außerhalb des Ausgangsbereichs
+Einheiten außerhalb des Ausgangsbereichs
 STR_ABORT_MISSION
 Mission abbrechen?
 STR_CORPSE
@@ -2070,15 +2070,16 @@ Fenster
 STR_FULLSCREEN
 Vollbild
 STR_LANGUAGE
-SpracheSTR_FARM
+Sprache
+STR_FARM
 Farm
 STR_FOREST
-Forest
+Wald
 STR_JUNGLE
 Jungle
 STR_MOUNTAIN
-Mountain
+Berg
 STR_DESERT
-Desert
+Wüste
 STR_POLAR
-Polar
+Arktis

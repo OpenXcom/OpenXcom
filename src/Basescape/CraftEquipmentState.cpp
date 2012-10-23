@@ -220,7 +220,7 @@ void CraftEquipmentState::btnOkClick(Action *action)
 void CraftEquipmentState::lstEquipmentLeftArrowPress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLeft->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLeft->start();
 }
 
 /**
@@ -229,7 +229,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowPress(Action *action)
  */
 void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerLeft->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLeft->stop();
 }
 
 /**
@@ -239,45 +239,45 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-  {
-	  Craft *c = _base->getCrafts()->at(_craft);
-	  RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
-	  int cQty = 0;
-	  if (item->isFixed())
-	  {
-		  cQty = c->getVehicleCount(_items[_sel]);
-      if (cQty > 0)
-      {
-			  while (cQty > 0)
-        {
-          RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-			    for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
-			    {
-				    if ((*i)->getRules() == item)
-				    {
-					    _base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
-					    delete (*i);
-					    c->getVehicles()->erase(i);
-					    break;
-				    }
-			    }
-			    _base->getItems()->addItem(_items[_sel]);
-          cQty = c->getVehicleCount(_items[_sel]);
-        }
-        updateQuantity();
-      }
-	  }
-	  else
-	  {
-		  cQty = c->getItems()->getItem(_items[_sel]);
-      if (cQty > 0)
-      {
-			  _base->getItems()->addItem(_items[_sel], cQty);
-			  c->getItems()->removeItem(_items[_sel], cQty);
-        updateQuantity();
-      }
-	  }
-  }
+	{
+		Craft *c = _base->getCrafts()->at(_craft);
+		RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+		int cQty = 0;
+		if (item->isFixed())
+		{
+			cQty = c->getVehicleCount(_items[_sel]);
+			if (cQty > 0)
+			{
+				while (cQty > 0)
+				{
+					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+					for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+					{
+						if ((*i)->getRules() == item)
+						{
+							_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+							delete (*i);
+							c->getVehicles()->erase(i);
+							break;
+						}
+					}
+					_base->getItems()->addItem(_items[_sel]);
+					cQty = c->getVehicleCount(_items[_sel]);
+				}
+				updateQuantity();
+			}
+		}
+		else
+		{
+			cQty = c->getItems()->getItem(_items[_sel]);
+			if (cQty > 0)
+			{
+				_base->getItems()->addItem(_items[_sel], cQty);
+				c->getItems()->removeItem(_items[_sel], cQty);
+				updateQuantity();
+			}
+		}
+	}
 }
 
 /**
@@ -287,7 +287,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 void CraftEquipmentState::lstEquipmentRightArrowPress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerRight->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerRight->start();
 }
 
 /**
@@ -296,7 +296,7 @@ void CraftEquipmentState::lstEquipmentRightArrowPress(Action *action)
  */
 void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerRight->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerRight->stop();
 }
 
 /**
@@ -306,47 +306,47 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-  {
-	  Craft *c = _base->getCrafts()->at(_craft);
-	  RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
-    int bqty = _base->getItems()->getItem(_items[_sel]);
-    if (bqty > 0)
-	  {
-		  // Do we need to convert item to vehicle?
-		  if (item->isFixed())
-		  {
-			  // Check if there's enough room
-			  int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
-        if (room > 0)
-			  {
-				  RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-				  int baqty = _base->getItems()->getItem(ammo->getType());
-				  int vehiclesCount = std::min(std::min(bqty, room), baqty);
-          if (vehiclesCount > 0)
-				  {
-					  int newAmmoPerVehicle = std::min(baqty / vehiclesCount, ammo->getClipSize());;
-            int remainder = baqty - (vehiclesCount * newAmmoPerVehicle);
-            if (ammo->getClipSize() == newAmmoPerVehicle) remainder = 0;
-            int newAmmo;
-            for (int i=0; i < vehiclesCount; ++i)
-            {
-              newAmmo = newAmmoPerVehicle;
-              if (i<remainder) ++newAmmo;
-					    c->getVehicles()->push_back(new Vehicle(item, newAmmo));
-					    _base->getItems()->removeItem(ammo->getType(), newAmmo);
-					    _base->getItems()->removeItem(_items[_sel]);
-            }
-				  }
-			  }
-		  }
-		  else
-		  {
-			  _base->getItems()->removeItem(_items[_sel],bqty);
-			  c->getItems()->addItem(_items[_sel],bqty);
-		  }
-		  updateQuantity();
-	  }
-  }
+	{
+		Craft *c = _base->getCrafts()->at(_craft);
+		RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+		int bqty = _base->getItems()->getItem(_items[_sel]);
+		if (bqty > 0)
+		{
+			// Do we need to convert item to vehicle?
+			if (item->isFixed())
+			{
+				// Check if there's enough room
+				int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
+				if (room > 0)
+				{
+					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+					int baqty = _base->getItems()->getItem(ammo->getType());
+					int vehiclesCount = std::min(std::min(bqty, room), baqty);
+					if (vehiclesCount > 0)
+					{
+						int newAmmoPerVehicle = std::min(baqty / vehiclesCount, ammo->getClipSize());;
+						int remainder = baqty - (vehiclesCount * newAmmoPerVehicle);
+						if (ammo->getClipSize() == newAmmoPerVehicle) remainder = 0;
+						int newAmmo;
+						for (int i=0; i < vehiclesCount; ++i)
+						{
+							newAmmo = newAmmoPerVehicle;
+							if (i<remainder) ++newAmmo;
+							c->getVehicles()->push_back(new Vehicle(item, newAmmo));
+							_base->getItems()->removeItem(ammo->getType(), newAmmo);
+							_base->getItems()->removeItem(_items[_sel]);
+						}
+					}
+				}
+			}
+			else
+			{
+				_base->getItems()->removeItem(_items[_sel],bqty);
+				c->getItems()->addItem(_items[_sel],bqty);
+			}
+			updateQuantity();
+		}
+	}
 }
 
 /**

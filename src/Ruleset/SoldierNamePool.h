@@ -21,7 +21,7 @@
 
 #include <string>
 #include <vector>
-#include <yaml-cpp/yaml.h>
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
@@ -44,7 +44,7 @@ public:
 	/// Loads the pool from YAML.
 	void load(const std::string &filename);
 	/// Generates a new name from the pool.
-	std::wstring genName(int *gender) const;
+	std::wstring genName(SoldierGender *gender) const;
 };
 
 }

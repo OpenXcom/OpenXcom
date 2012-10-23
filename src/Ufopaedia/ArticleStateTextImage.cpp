@@ -34,7 +34,7 @@ namespace OpenXcom
 	ArticleStateTextImage::ArticleStateTextImage(Game *game, ArticleDefinitionTextImage *defs) : ArticleState(game, defs->id)
 	{
 		// add screen elements
-		_txtTitle = new Text(defs->text_width, 32, 5, 24);
+		_txtTitle = new Text(defs->text_width, 32, 5, 22);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
@@ -57,7 +57,7 @@ namespace OpenXcom
 
 		int text_height = _txtTitle->getTextHeight();
 
-		_txtInfo = new Text(defs->text_width, 150, 5, 25 + text_height);
+		_txtInfo = new Text(defs->text_width, 162, 5, 23 + text_height);
 		add(_txtInfo);
 
 		_txtInfo->setColor(Palette::blockOffset(15)-1);

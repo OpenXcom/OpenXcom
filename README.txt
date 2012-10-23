@@ -118,7 +118,7 @@ can cause incorrect behaviour or game crashes.
 
 F5 - Turns on/off FPS counter in top-left corner.
 
-F12 - Saves BMP screenshot to User folder.
+F12 - Saves PNG screenshot to User folder.
 
 ALT-ENTER - Turns on/off fullscreen mode.
 

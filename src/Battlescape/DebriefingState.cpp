@@ -60,7 +60,7 @@ DebriefingState::DebriefingState(Game *game) : State(game)
 	_txtQuantity = new Text(60, 9, 200, 24);
 	_txtScore = new Text(50, 9, 260, 24);
 	_txtUfoRecovery = new Text(180, 9, 16, 60);
-	_txtRating = new Text(100, 9, 64, 180);
+	_txtRating = new Text(120, 9, 64, 180);
 	_lstStats = new TextList(280, 80, 16, 32);
 	_lstUfoRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);
@@ -597,26 +597,34 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
-		// only "recover" unresearched items
-		if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty() && _game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
+		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
 		{
-			if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
-			{
-				addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
-			}
-			else
-			{
-				addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
-			}
+			// special case of an item counted as a stat
+			addStat("STR_ELERIUM_115", 50, 5);
 		}
-		// put items back in the base
-		if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
+		else
 		{
-			base->getItems()->addItem((*it)->getRules()->getType(), 1);
-			if ((*it)->getAmmoItem())
+			// only "recover" unresearched items
+			if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty() && _game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
 			{
-				base->getItems()->addItem((*it)->getAmmoItem()->getRules()->getType(), 1);
-				// TODO: account for ammo remaining in the clip
+				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
+				{
+					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+				}
+				else
+				{
+					addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+				}
+			}
+			// put items back in the base
+			if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed())
+			{
+				base->getItems()->addItem((*it)->getRules()->getType(), 1);
+				if ((*it)->getAmmoItem())
+				{
+					base->getItems()->addItem((*it)->getAmmoItem()->getRules()->getType(), 1);
+					// TODO: account for ammo remaining in the clip
+				}
 			}
 		}
 	}

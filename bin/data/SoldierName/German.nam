@@ -1,44 +1,72 @@
 maleFirst:
-  - Dieter
-  - Franz
-  - Gerhard
-  - Gunter
-  - Hans
-  - Jurgen
-  - Klaus
-  - Manfred
+  - Thomas
+  - Andreas
+  - Michael
+  - Frank
+  - Peter
+  - Jorg
+  - Uwe
   - Matthias
-  - Otto
-  - Rudi
-  - Siegfried
   - Stefan
-  - Werner
+  - Jurgen
+  - Ralf
+  - Bernd
+  - Klaus
+  - Torsten
+  - Hans
+  - Rainer
+  - Jens
+  - Martin
+  - Dirk
   - Wolfgang
+  - Norbert
+  - Holger
+  - Kai
+  - Joachim
+  - Christian
+  - Karsten
+  - Dieter
 femaleFirst:
-  - Christel
-  - Gudrun
-  - Helga
+  - Susanne
+  - Sabine
+  - Petra
+  - Birgit
+  - Andrea
+  - Gabriele
+  - Martina
+  - Heike
+  - Ute
+  - Barbara
+  - Bettina
   - Karin
-  - Uta
+  - Angelika
+  - Monika
+  - Angela
 maleLast:
-  - Berger
-  - Brehme
-  - Esser
-  - Faerber
-  - Geisler
-  - Gunkel
-  - Hafner
-  - Heinsch
-  - Keller
-  - Krause
-  - Mederow
+  - Muller
+  - Schmidt
+  - Schneider
+  - Fischer
+  - Weber
   - Meyer
+  - Wagner
+  - Becker
+  - Schulz
+  - Hoffmann
+  - Schafer
+  - Koch
+  - Bauer
   - Richter
-  - Schultz
-  - Seidler
-  - Steinbach
-  - Ulbricht
-  - Unger
-  - Vogel
-  - Zander
-  
+  - Klein
+  - Wolf
+  - Schroder 
+  - Neumann
+  - Schwarz
+  - Zimmermann
+  - Braun
+  - Kruger
+  - Hartmann
+  - Lange
+  - Schmitz
+  - Krause
+  - Meier

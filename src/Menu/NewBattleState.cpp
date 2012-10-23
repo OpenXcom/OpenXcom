@@ -38,6 +38,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Music.h"
+#include "../Engine/Action.h"
 #include "../Basescape/CraftInfoState.h"
 
 namespace OpenXcom
@@ -159,27 +160,27 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 
 	_btnMissionType->setColor(Palette::blockOffset(15)-1);
 	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
-	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick);
+	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick, 0);
 
 	_btnTerrainType->setColor(Palette::blockOffset(15)-1);
 	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
-	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick);
+	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick, 0);
 
 	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
-	_btnAlienRace->onMouseClick((ActionHandler)&NewBattleState::btnAlienRaceClick);
+	_btnAlienRace->onMouseClick((ActionHandler)&NewBattleState::btnAlienRaceClick, 0);
 
 	_btnDifficulty->setColor(Palette::blockOffset(15)-1);
 	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
-	_btnDifficulty->onMouseClick((ActionHandler)&NewBattleState::btnDifficultyClick);
+	_btnDifficulty->onMouseClick((ActionHandler)&NewBattleState::btnDifficultyClick, 0);
 
 	_btnDarkness->setColor(Palette::blockOffset(15)-1);
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
-	_btnDarkness->onMouseClick((ActionHandler)&NewBattleState::btnDarknessClick);
+	_btnDarkness->onMouseClick((ActionHandler)&NewBattleState::btnDarknessClick, 0);
 
 	_btnCraft->setColor(Palette::blockOffset(15)-1);
 	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
-	_btnCraft->onMouseClick((ActionHandler)&NewBattleState::btnCraftClick);
+	_btnCraft->onMouseClick((ActionHandler)&NewBattleState::btnCraftClick, 0);
 
 	_btnEquip->setColor(Palette::blockOffset(8)+5);
 	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIP_CRAFT"));
@@ -202,6 +203,29 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 NewBattleState::~NewBattleState()
 {
 	
+}
+
+/**
+ * Updates one of the list indexes.
+ * @param index Index value.
+ * @param list List the index belongs to.
+ * @param change Amount to change the index.
+ */
+void NewBattleState::updateIndex(size_t &index, std::vector<std::string> &list, int change)
+{
+	int i = index;
+	if (i + change >= (int)list.size())
+	{
+		index = 0;
+	}
+	else if (i + change < 0)
+	{
+		index = list.size() - 1;
+	}
+	else
+	{
+		index += change;
+	}
 }
 
 /**
@@ -346,7 +370,6 @@ void NewBattleState::btnOkClick(Action *action)
  */
 void NewBattleState::btnCancelClick(Action *action)
 {
-	//_game->setRuleset(0);
 	_game->setSavedGame(0);
 	_game->popState();
 }
@@ -357,67 +380,107 @@ void NewBattleState::btnCancelClick(Action *action)
  */
 void NewBattleState::btnEquipClick(Action *action)
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->pushState(new CraftInfoState(_game, _game->getSavedGame()->getBases()->front(), 0));
 }
 
+/**
+ * Changes mission type.
+ * @param action Pointer to an action.
+ */
 void NewBattleState::btnMissionTypeClick(Action *action)
 {
-	_selMission++;
-	if (_selMission >= _missionTypes.size())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_selMission = 0;
+		updateIndex(_selMission, _missionTypes, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selMission, _missionTypes, -1);
 	}
 	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
 }
 
+/**
+ * Changes terrain type.
+ * @param action Pointer to an action.
+ */
 void NewBattleState::btnTerrainTypeClick(Action *action)
 {
-	_selTerrain++;
-	if (_selTerrain >= _terrainTypes.size())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_selTerrain = 0;
+		updateIndex(_selTerrain, _terrainTypes, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selTerrain, _terrainTypes, -1);
 	}
 	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
 }
 
+/**
+ * Changes alien race.
+ * @param action Pointer to an action.
+ */
 void NewBattleState::btnAlienRaceClick(Action *action)
 {
-	_selAlien++;
-	if (_selAlien >= _alienRaces.size())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_selAlien = 0;
+		updateIndex(_selAlien, _alienRaces, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selAlien, _alienRaces, -1);
 	}
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
 }
 
+/**
+ * Changes difficulty level.
+ * @param action Pointer to an action.
+ */
 void NewBattleState::btnDifficultyClick(Action *action)
 {
-	_selDifficulty++;
-	if (_selDifficulty >= _difficulty.size())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_selDifficulty = 0;
+		updateIndex(_selDifficulty, _difficulty, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selDifficulty, _difficulty, -1);
 	}
 	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
 }
 
+/**
+ * Changes darkness level
+ * @param action Pointer to an action.
+ */
 void NewBattleState::btnDarknessClick(Action *action)
 {
-	_selDarkness++;
-	if (_selDarkness >= _darkness.size())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_selDarkness = 0;
+		updateIndex(_selDarkness, _darkness, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selDarkness, _darkness, -1);
 	}
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
 }
 
+/**
+ * Changes player craft.
+ * @param action Pointer to an action.
+ */
 void NewBattleState::btnCraftClick(Action *action)
 {
-	_selCraft++;
-	if (_selCraft >= _crafts.size())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_selCraft = 0;
+		updateIndex(_selCraft, _crafts, 1);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		updateIndex(_selCraft, _crafts, -1);
 	}
 	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));

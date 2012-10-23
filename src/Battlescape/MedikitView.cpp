@@ -71,14 +71,16 @@ void MedikitView::draw()
 	int fatal_wound = _unit->getFatalWound(_selectedPart);
 	std::wstringstream ss, ss1;
 	int red = 3;
-
+	
+	this->lock();
 	for (int i = 0; i < set->getTotalFrames(); i++)
 	{
 		int wound = _unit->getFatalWound(i);
 		Surface * surface = set->getFrame (i);
 		int baseColor = wound ? red : 0;
-		surface->blitNShade(this, x, y, 0, false, baseColor);
+		surface->blitNShade(this, Surface::getX(), Surface::getY(), 0, false, baseColor);
 	}
+	this->unlock();
 
 	_redraw = false;
 	if (_selectedPart == -1)

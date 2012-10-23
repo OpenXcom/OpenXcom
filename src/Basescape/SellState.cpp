@@ -94,6 +94,8 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELL_ITEMS_SACK_PERSONNEL"));
+	if (_txtTitle->getTextWidth() > _txtTitle->getWidth())
+		_txtTitle->setSmall();
 
 	std::wstring s1 = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 	s1 += Text::formatFunding(_total);
@@ -306,7 +308,7 @@ void SellState::btnCancelClick(Action *action)
 void SellState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->start();
 }
 
 /**
@@ -315,7 +317,7 @@ void SellState::lstItemsLeftArrowPress(Action *action)
  */
 void SellState::lstItemsLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->stop();
 }
 
 /**
@@ -325,22 +327,22 @@ void SellState::lstItemsLeftArrowRelease(Action *action)
 void SellState::lstItemsLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-  {
-	  if (_qtys[_sel] < getQuantity())
-	  {
-		  int change = getQuantity() - _qtys[_sel];
-      _qtys[_sel] = getQuantity();
-		  std::wstringstream ss, ss2;
-		  ss << _qtys[_sel];
-		  _lstItems->setCellText(_sel, 2, ss.str());
-		  ss2 << 0;
-		  _lstItems->setCellText(_sel, 1, ss2.str());
-		  _total += getPrice() * change;
-		  std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
-		  s += Text::formatFunding(_total);
-		  _txtSales->setText(s);
-	  }
-  }
+	{
+		if (_qtys[_sel] < getQuantity())
+		{
+			int change = getQuantity() - _qtys[_sel];
+			_qtys[_sel] = getQuantity();
+			std::wstringstream ss, ss2;
+			ss << _qtys[_sel];
+			_lstItems->setCellText(_sel, 2, ss.str());
+			ss2 << 0;
+			_lstItems->setCellText(_sel, 1, ss2.str());
+			_total += getPrice() * change;
+			std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+			s += Text::formatFunding(_total);
+			_txtSales->setText(s);
+		}
+	}
 }
 
 /**
@@ -350,7 +352,7 @@ void SellState::lstItemsLeftArrowClick(Action *action)
 void SellState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->start();
 }
 
 /**
@@ -359,7 +361,7 @@ void SellState::lstItemsRightArrowPress(Action *action)
  */
 void SellState::lstItemsRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)	_timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->stop();
 }
 
 /**
@@ -369,21 +371,21 @@ void SellState::lstItemsRightArrowRelease(Action *action)
 void SellState::lstItemsRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-  {
-	  if (_qtys[_sel] > 0)
-	  {
-		  _total -= getPrice() * _qtys[_sel];
-		  _qtys[_sel] = 0;
-		  std::wstringstream ss, ss2;
-		  ss << 0;
-		  _lstItems->setCellText(_sel, 2, ss.str());
-		  ss2 << getQuantity();
-		  _lstItems->setCellText(_sel, 1, ss2.str());
-		  std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
-		  s += Text::formatFunding(_total);
-		  _txtSales->setText(s);
-	  }
-  }
+	{
+		if (_qtys[_sel] > 0)
+		{
+			_total -= getPrice() * _qtys[_sel];
+			_qtys[_sel] = 0;
+			std::wstringstream ss, ss2;
+			ss << 0;
+			_lstItems->setCellText(_sel, 2, ss.str());
+			ss2 << getQuantity();
+			_lstItems->setCellText(_sel, 1, ss2.str());
+			std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+			s += Text::formatFunding(_total);
+			_txtSales->setText(s);
+		}
+	}
 }
 
 /**

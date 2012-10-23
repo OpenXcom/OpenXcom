@@ -49,6 +49,16 @@ InteractiveSurface::~InteractiveSurface()
 	delete[] _buttonsPressed;
 }
 
+bool InteractiveSurface::isButtonPressed()
+{
+	for (int i = 0; i <= NUM_BUTTONS; ++i)
+	{
+		if (_buttonsPressed[i])
+			return true;
+	}
+	return false;
+}
+
 /**
  * Changes the visibility of the surface. A hidden surface
  * isn't blitted nor receives events.
@@ -160,9 +170,12 @@ void InteractiveSurface::focus()
  */
 void InteractiveSurface::unpress(State *state)
 {
-	if (_buttonsPressed[SDL_BUTTON_LEFT])
+	if (isButtonPressed())
 	{
-		_buttonsPressed[SDL_BUTTON_LEFT] = false;
+		for (int i = 0; i <= NUM_BUTTONS; ++i)
+		{
+			_buttonsPressed[i] = false;
+		}
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONUP;
 		ev.button.button = SDL_BUTTON_LEFT;

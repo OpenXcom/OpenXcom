@@ -58,6 +58,8 @@ private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
 	int _funds;
+	double _globeLon, _globeLat;
+	int _globeZoom;
 	std::map<std::string, int> _ids;
 	std::vector<Country*> _countries;
 	std::vector<Region*> _regions;
@@ -91,6 +93,18 @@ public:
 	int getFunds() const;
 	/// Sets new funds.
 	void setFunds(int funds);
+	/// Gets the current globe longitude.
+	double getGlobeLongitude() const;
+	/// Sets the new globe longitude.
+	void setGlobeLongitude(double lon);
+	/// Gets the current globe latitude.
+	double getGlobeLatitude() const;
+	/// Sets the new globe latitude.
+	void setGlobeLatitude(double lat);
+	/// Gets the current globe zoom.
+	int getGlobeZoom() const;
+	/// Sets the new globe zoom.
+	void setGlobeZoom(int zoom);
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.
@@ -129,6 +143,8 @@ public:
 	void getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available research projects once a research has been completed.
 	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	/// Get the list of newly available manufacture projects once a research has been completed.
+	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets if a list of research has been unlocked.

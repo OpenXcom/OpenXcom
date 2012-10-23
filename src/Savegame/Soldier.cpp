@@ -58,9 +58,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 
 		if (!names->empty())
 		{
-			int gender;
-			_name = names->at(RNG::generate(0, names->size()-1))->genName(&gender);
-			_gender = (SoldierGender)gender;
+			_name = names->at(RNG::generate(0, names->size()-1))->genName(&_gender);
 		}
 		else
 		{

@@ -41,7 +41,7 @@ namespace OpenXcom
 		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
 
 		// add screen elements
-		_txtTitle = new Text(160, 32, 5, 24);
+		_txtTitle = new Text(155, 32, 5, 24);
 
 		// Set palette
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -93,11 +93,11 @@ namespace OpenXcom
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
-		_lstInfo = new TextList(300, 60, 10, 68);
+		_lstInfo = new TextList(300, 64, 10, 68);
 		add(_lstInfo);
 
 		_lstInfo->setColor(Palette::blockOffset(8)+5);
-		_lstInfo->setColumns(2, 180, 120);
+		_lstInfo->setColumns(2, 200, 100);
 //		_lstInfo->setCondensed(true);
 		_lstInfo->setBig();
 		_lstInfo->setDot(true);

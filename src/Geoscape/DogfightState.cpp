@@ -543,6 +543,8 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo, i
 		}
 	}
 
+	drawCraftDamage();
+
 	// Used for weapon toggling.
 	_weapon1->onMouseClick((ActionHandler)&DogfightState::weapon1Click);
 	_weapon2->onMouseClick((ActionHandler)&DogfightState::weapon2Click);
@@ -607,6 +609,10 @@ void DogfightState::drawCraftDamage()
 {
 	if(_craft->getDamagePercentage() != 0)
 	{
+		if(!_craftDamageAnimTimer->isRunning())
+		{
+			_craftDamageAnimTimer->start();
+		}
 		int damagePercentage = _craft->getDamagePercentage();
 		int rowsToColor = (int)floor((double)_craftHeight * (double)(damagePercentage / 100.));
 		if(rowsToColor == 0)
@@ -810,10 +816,6 @@ void DogfightState::move()
 					// Formula delivered by Volutar
 					int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
 					_craft->setDamage(_craft->getDamage() + damage);
-					if(!_craftDamageAnimTimer->isRunning())
-					{
-						_craftDamageAnimTimer->start();
-					}
 					drawCraftDamage();
 					setStatus("STR_INTERCEPTOR_DAMAGED");
 					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10

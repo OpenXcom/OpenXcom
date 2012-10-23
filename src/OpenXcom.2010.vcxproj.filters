@@ -642,6 +642,9 @@
     <ClCompile Include="Ufopaedia\ArticleStateVehicle.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
+    <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1285,6 +1288,9 @@
     </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateVehicle.h">
       <Filter>Ufopaedia</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\NewPossibleManufactureState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

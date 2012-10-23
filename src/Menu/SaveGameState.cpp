@@ -266,6 +266,7 @@ void SaveGameState::edtSaveKeyPress(Action *action)
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
 		_game->popState();
+		_game->popState();
 	}
 }
 

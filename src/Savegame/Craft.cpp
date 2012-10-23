@@ -56,8 +56,7 @@ Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rule
 	{
 		_weapons.push_back(0);
 	}
-	_lon = base->getLongitude();
-	_lat = base->getLatitude();
+	setBase(base);
 }
 
 /**
@@ -280,6 +279,8 @@ Base *const Craft::getBase() const
 void Craft::setBase(Base *base)
 {
 	_base = base;
+	_lon = base->getLongitude();
+	_lat = base->getLatitude();
 }
 
 /**
@@ -307,7 +308,7 @@ void Craft::setStatus(const std::string &status)
 std::string Craft::getAltitude() const
 {
 	Ufo *u = dynamic_cast<Ufo*>(_dest);
-	if (u)
+	if (u && u->getAltitude() != "STR_GROUND")
 	{
 		return u->getAltitude();
 	}
@@ -564,37 +565,46 @@ void Craft::think()
 	move();
 	if (reachedDestination() && _dest == (Target*)_base)
 	{
-		int available = 0, full = 0;
-		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
-		{
-			if ((*i) == 0)
-				continue;
-			available++;
-			if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-			{
-				full++;
-			}
-			else
-			{
-				(*i)->setRearming(true);
-			}
-		}
-
-		if (_damage > 0)
-		{
-			_status = "STR_REPAIRS";
-		}
-		else if (available != full)
-		{
-			_status = "STR_REARMING";
-		}
-		else
-		{
-			_status = "STR_REFUELLING";
-		}
+		checkup();
 		setDestination(0);
 		setSpeed(0);
 		_lowFuel = false;
+	}
+}
+
+/**
+ * Checks the condition of all the craft's systems
+ * to define its new status (eg. when arriving at base).
+ */
+void Craft::checkup()
+{
+	int available = 0, full = 0;
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+	{
+		if ((*i) == 0)
+			continue;
+		available++;
+		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
+		{
+			full++;
+		}
+		else
+		{
+			(*i)->setRearming(true);
+		}
+	}
+
+	if (_damage > 0)
+	{
+		_status = "STR_REPAIRS";
+	}
+	else if (available != full)
+	{
+		_status = "STR_REARMING";
+	}
+	else
+	{
+		_status = "STR_REFUELLING";
 	}
 }
 

@@ -47,6 +47,8 @@ private:
 	size_t _selMission, _selTerrain, _selAlien, _selDifficulty, _selDarkness, _selCraft;
 	bool _music;
 	Craft *_craft;
+
+	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
 public:
 	/// Creates the New Battle state.
 	NewBattleState(Game *game);

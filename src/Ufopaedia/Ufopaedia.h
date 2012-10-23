@@ -57,11 +57,8 @@ namespace OpenXcom
 	class Ufopaedia
 	{
 	public:
-		/// give the user access to a certain article (after research mostly).
-		static void releaseArticle(Game *game, std::string &article_id);
-
 		/// check, if a specific article is currently available.
-		static bool isArticleAvailable(Game *game, std::string &article_id);
+		static bool isArticleAvailable(Game *game, ArticleDefinition *article);
 
 		/// open Ufopaedia on a certain entry.
 		static void openArticle(Game *game, std::string &article_id);

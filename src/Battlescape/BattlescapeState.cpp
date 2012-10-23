@@ -406,13 +406,27 @@ void BattlescapeState::mapOver(Action *action)
 {
 	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-    isMouseScrolled = true;
-    SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-    SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
-    SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
-    _map->getCamera()->scrollXY(-action->getDetails()->motion.xrel, -action->getDetails()->motion.yrel, false);
-    action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
-    _game->getCursor()->handle(action);
+		isMouseScrolled = true;
+
+		// Set the mouse cursor back
+		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		
+		// Check the threshold
+		if (!mouseMovedOverThreshold)
+		{
+			absMouseMoveX += action->getDetails()->motion.xrel;
+			absMouseMoveY += action->getDetails()->motion.yrel;
+			mouseMovedOverThreshold = ((std::abs(absMouseMoveX) > _save->getScrollButtonPixelTolerancy()) || (std::abs(absMouseMoveY) > _save->getScrollButtonPixelTolerancy()));
+		}
+
+		// Scrolling
+		_map->getCamera()->scrollXY(-action->getDetails()->motion.xrel * _save->getScrollButtonInvertMode(), -action->getDetails()->motion.yrel * _save->getScrollButtonInvertMode(), false);
+		
+		// We don't want to look the mouse-cursor jumping :)
+		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+		_game->getCursor()->handle(action);
 	}
 }
 
@@ -427,11 +441,18 @@ void BattlescapeState::mapPress(Action *action)
 	int mx = int(action->getAbsoluteXMouse());
 	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
 
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (-1 != _save->getScrollButton())
 	{
-		isMouseScrolling = true;
-    isMouseScrolled = false;
-    SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
+		if (action->getDetails()->button.button == _save->getScrollButton())
+		{
+			isMouseScrolling = true;
+			isMouseScrolled = false;
+			SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
+			mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
+			absMouseMoveX = 0; absMouseMoveY = 0;
+			mouseMovedOverThreshold = false;
+			mouseScrollingStartTime = SDL_GetTicks();
+		}
 	}
 }
 
@@ -442,14 +463,21 @@ void BattlescapeState::mapPress(Action *action)
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	// right-button release: release mouse-scroll-mode
+	// Right-button release: release mouse-scroll-mode
 	if (isMouseScrolling)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) isMouseScrolling = false; else return;
-    if (isMouseScrolled) return;
+		// While scrolling, other buttons are ineffective
+		if (action->getDetails()->button.button == _save->getScrollButton()) isMouseScrolling = false; else return;
+		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= _save->getScrollButtonTimeTolerancy()))
+		{
+			isMouseScrolled = false;
+			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+		}
+		if (isMouseScrolled) return;
 	}
 
-  // right-click aborts walking state
+	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (_battleGame->cancelCurrentAction())
@@ -491,6 +519,7 @@ void BattlescapeState::btnUnitUpClick(Action *action)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
 	{
+		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_UP);
 	}
 }
@@ -503,6 +532,7 @@ void BattlescapeState::btnUnitDownClick(Action *action)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
 	{
+		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_DOWN);
 	}
 }
@@ -1052,6 +1082,14 @@ void BattlescapeState::finishBattle(bool abort)
 void BattlescapeState::showLaunchButton(bool show)
 {
 	_btnLaunch->setVisible(show);
+}
+
+/**
+ * Clears mouse-scrolling state (isMouseScrolling)
+ */
+void BattlescapeState::clearMouseScrollingState()
+{
+	isMouseScrolling = false;
 }
 
 
