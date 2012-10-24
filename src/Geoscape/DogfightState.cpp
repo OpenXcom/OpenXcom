@@ -712,6 +712,7 @@ void DogfightState::move()
 		if(_ufo->getSpeed() > _craft->getSpeed())
 		{
 			_ufoBreakingOff = true;
+			_end = true;
 			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 		}
 	}
