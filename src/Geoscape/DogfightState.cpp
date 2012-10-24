@@ -968,7 +968,6 @@ void DogfightState::move()
 		_ufo->setSpeed(0);
 		_ufo->setAltitude("STR_GROUND");
 	}
-	// End dogfight if craft is disengaging.
 }
 
 /**
