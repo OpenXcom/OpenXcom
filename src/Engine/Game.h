@@ -48,7 +48,7 @@ private:
 	Screen *_screen;
 	Cursor *_cursor;
 	Language *_lang;
-	std::list<State*> _states, _deleted, _paused;
+	std::list<State*> _states, _deleted;
 	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
