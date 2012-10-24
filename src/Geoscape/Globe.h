@@ -148,6 +148,10 @@ public:
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.
 	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade);
+	/// Checks if current globe zoom level is at maximum.
+	bool isZoomedInToMax() const;
+	/// Checks if current globe zoom level is at minimum.
+	bool isZoomedOutToMax() const;
 
 };
 

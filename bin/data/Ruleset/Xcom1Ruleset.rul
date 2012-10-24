@@ -5418,6 +5418,8 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
       - lon: 0.0
         lat: 0.0
         speedLon: 0
@@ -5442,6 +5444,8 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
       - lon: 0.0
         lat: 0.0
         speedLon: 0
@@ -5466,6 +5470,8 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
     items:
       STR_AC_AP_AMMO: 6
       STR_AUTO_CANNON: 1

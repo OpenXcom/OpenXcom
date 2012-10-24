@@ -44,7 +44,7 @@ private:
 	int _hoursCrashed;
 	std::string _race;
 	bool _inBattlescape;
-	int _hit;
+	int _shotDownByCraftId;
 
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
@@ -99,10 +99,10 @@ public:
 	std::string getAlienRace() const;
 	/// Sets the UFO's alien race.
 	void setAlienRace(const std::string &race);
-	/// Set hit status.
-	void setHit(int hit);
-	/// Get hit status.
-	int getHit() const;
+	/// Sets the ID of craft which shot down the UFO.
+	void setShotDownByCraftId(const int id);
+	/// Gets the ID of craft which shot down the UFO.
+	int getShotDownByCraftId() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
 };
