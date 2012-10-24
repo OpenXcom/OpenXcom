@@ -48,7 +48,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(312, 16, 7, 7);
+	_txtTitle = new Text(320, 9, 0, 10);
 	_txtName = new Text(114, 9, 7, 32);
 	_txtRank = new Text(102, 9, 121, 32);
 	_txtCraft = new Text(82, 9, 222, 32);
@@ -77,8 +77,8 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
 
-	_txtTitle->setColor(Palette::blockOffset(15)+6);
-	_txtTitle->setBig();
+	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setAlign(ALIGN_CENTER);
 	Craft *c = _base->getCrafts()->at(_craft);
 	std::wstring s;
 	s = _game->getLanguage()->getString("STR_SELECT_SQUAD_FOR") + c->getName(_game->getLanguage());
