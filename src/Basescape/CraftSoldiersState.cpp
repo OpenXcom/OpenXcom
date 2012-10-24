@@ -48,13 +48,13 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(300, 16, 16, 7);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 130, 32);
+	_txtTitle = new Text(312, 16, 7, 7);
+	_txtName = new Text(114, 9, 7, 32);
+	_txtRank = new Text(102, 9, 121, 32);
 	_txtCraft = new Text(82, 9, 222, 32);
-	_txtAvailable = new Text(110, 9, 16, 24);
-	_txtUsed = new Text(110, 9, 130, 24);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_txtAvailable = new Text(110, 9, 7, 24);
+	_txtUsed = new Text(110, 9, 121, 24);
+	_lstSoldiers = new TextList(289, 128, 6, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -107,11 +107,11 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstSoldiers->setArrowColumn(186, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 114, 92, 74);
+	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
+	_lstSoldiers->setColumns(3, 114, 101, 74);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setMargin(1);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)&CraftSoldiersState::lstItemsLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)&CraftSoldiersState::lstItemsRightArrowClick);
 	_lstSoldiers->onMouseClick((ActionHandler)&CraftSoldiersState::lstSoldiersClick);
