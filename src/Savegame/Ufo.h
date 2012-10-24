@@ -99,10 +99,6 @@ public:
 	std::string getAlienRace() const;
 	/// Sets the UFO's alien race.
 	void setAlienRace(const std::string &race);
-	/// Set hit status.
-	///void setHit(int hit);
-	/// Get hit status.
-	///int getHit() const;
 	/// Sets the ID of craft which shot down the UFO.
 	void setShotDownByCraftId(const int id);
 	/// Gets the ID of craft which shot down the UFO.

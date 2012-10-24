@@ -354,25 +354,6 @@ void Ufo::setAlienRace(const std::string &race)
 	_race = race;
 }
 
-/**
- * Sets damage to UFO.
- * @param hit Amount of damage to be set..
- *//*
-void Ufo::setHit(int hit)
-{
-	_hit = hit;
-}
-*/
-/**
- * Gets damage of UFO.
- * @return Amount of damage taken by the UFO.
- *//*
-int Ufo::getHit() const
-{
-	return _hit;
-}
-*/
-
 void Ufo::setShotDownByCraftId(const int id)
 {
 	_shotDownByCraftId = id;
