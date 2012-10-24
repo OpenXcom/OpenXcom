@@ -364,16 +364,6 @@ void Game::popState()
 }
 
 /**
- * Pauses the last state from the top of the stack. Currently it is only used
- * for synchronous dogfights.
- */
-void Game::pauseState()
-{
-	_paused.push_back(_states.back());
-	_states.pop_back();
-	_init = false;
-}
-/**
  * Returns the language currently in use by the game.
  * @return Pointer to the language.
  */

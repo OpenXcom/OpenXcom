@@ -130,6 +130,10 @@ public:
 	void zoomInEffect();
 	/// Globe zoom out effect for dogfights.
 	void zoomOutEffect();
+	/// Multi-dogfights logic handling.
+	void handleDogfights();
+	/// Gets the number of minimized dogfights.
+	int minimizedDogfightsCount();
 };
 
 }

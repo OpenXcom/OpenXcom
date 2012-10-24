@@ -237,28 +237,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo, i
 	
 	_craft->setInDogfight(true);
 	// Create objects
-	/*
-	_window = new Surface(160, 96, 80, 52);
-	_battle = new Surface(77, 74, 83, 55);
-	_weapon1 = new InteractiveSurface(15, 17, 84, 104);
-	_range1 = new Surface(21, 74, 99, 55);
-	_weapon2 = new InteractiveSurface(15, 17, 144, 104);
-	_range2 = new Surface(21, 74, 123, 55);
-	_damage = new Surface(22, 25, 173, 92);
-	_btnMinimize = new InteractiveSurface(12, 12, 80, 52);
-	_preview = new InteractiveSurface(160, 96, 80, 52);
-	_btnStandoff = new ImageButton(36, 15, 163, 56);
-	_btnCautious = new ImageButton(36, 15, 200, 56);
-	_btnStandard = new ImageButton(36, 15, 163, 72);
-	_btnAggressive = new ImageButton(36, 15, 200, 72);
-	_btnDisengage = new ImageButton(36, 15, 200, 88);
-	_btnUfo = new ImageButton(36, 17, 200, 104);
-	_txtAmmo1 = new Text(16, 9, 84, 122);
-	_txtAmmo2 = new Text(16, 9, 144, 122);
-	_txtDistance = new Text(40, 9, 196, 124);
-	_txtStatus = new Text(150, 9, 84, 137);
-	_btnMinimizedIcon = new ImageButton(32, 20, 5, 5);
-	*/
+	
 	calculateWindowPosition();
 
 	_window = new Surface(160, 96, _x, _y);
@@ -577,7 +556,7 @@ DogfightState::~DogfightState()
  */
 void DogfightState::think()
 {
-	if(!_minimized && !_endDogfight)
+	if(!_endDogfight)
 	{
 		_animTimer->think(this, 0);
 		_moveTimer->think(this, 0);
@@ -607,6 +586,10 @@ void DogfightState::animateCraftDamage()
  */
 void DogfightState::drawCraftDamage()
 {
+	if(_minimized)
+	{
+		return;
+	}
 	if(_craft->getDamagePercentage() != 0)
 	{
 		if(!_craftDamageAnimTimer->isRunning())
@@ -717,7 +700,7 @@ void DogfightState::animate()
 
 /**
  * Moves the craft towards the UFO according to
- * the current interception mode.
+ * the current interception mode. Handles projectile movements as well.
  */
 void DogfightState::move()
 {
@@ -930,35 +913,8 @@ void DogfightState::move()
 		if (_destroyUfo)
 		{
 			_craft->returnToBase();
-			/*
-			// Disengage any other craft.
-			while (_ufo->getFollowers()->size() > 0)
-			{
-				for (std::vector<Target*>::iterator i = _ufo->getFollowers()->begin(); i != _ufo->getFollowers()->end(); ++i)
-				{
-					Craft *c = dynamic_cast<Craft*>(*i);
-					if (c)
-					{
-						c->returnToBase();
-						break;
-					}
-				}
-			}
-			
-			// Clear UFO
-			for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
-			{
-				if (*i == _ufo)
-				{
-					delete *i;
-					_game->getSavedGame()->getUfos()->erase(i);
-					break;
-				}
-			}*/
-			
 		}
 		_endDogfight = true;
-		//_game->popState();
 	}
 
 	// End dogfight if craft is destroyed.
@@ -1062,7 +1018,6 @@ void DogfightState::fireWeapon2()
 	}
 }
 
-/// Fires a shot from UFO's weapon. 
 /**
  *	Each time a UFO will try to fire it's cannons
  *	a calculation is made. There's only 10% chance
@@ -1300,7 +1255,7 @@ void DogfightState::btnUfoClick(Action *action)
 }
 
 /**
- * Shows a front view of the UFO.
+ * Hides the front view of the UFO.
  * @param action Pointer to an action.
  */
 void DogfightState::previewClick(Action *action)
@@ -1334,7 +1289,7 @@ void DogfightState::ufoBreakOff()
  */
 void DogfightState::drawUfo()
 {
-	if(_ufoSize < 0 || _ufo->isDestroyed())
+	if(_ufoSize < 0 || _ufo->isDestroyed() || _minimized)
 	{
 		return;
 	}
@@ -1374,6 +1329,10 @@ void DogfightState::drawUfo()
  * original sized blobs 3 x 6 pixels.
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* p) {
+	if(_minimized)
+	{
+		return;
+	}
 	int xPos = _battle->getWidth() / 2 + p->getHorizontalPosition();
 	// Draw missiles.
 	if(p->getGlobalType() == CWPGT_MISSILE)
@@ -1481,7 +1440,7 @@ void DogfightState::recolor(const int weaponNo, const bool currentState)
 	}
 }
 
-/*
+/**
  * Returns true if state is minimized. Otherwise returns false.
  */
 bool DogfightState::isMinimized() const
@@ -1489,7 +1448,7 @@ bool DogfightState::isMinimized() const
 	return _minimized;
 }
 
-/*
+/**
  * Sets the state to minimized/maximized status.
  */
 void DogfightState::setMinimized(const bool minimized)
@@ -1497,14 +1456,13 @@ void DogfightState::setMinimized(const bool minimized)
 	_minimized = minimized;
 }
 
-/*
+/**
  * Maximizes the interception window.
  */
 void DogfightState::btnMinimizedIconClick(Action *action)
 {
 	setMinimized(false);
 	_window->setVisible(true);
-	_preview->setVisible(false);
 	_btnStandoff->setVisible(true);
 	_btnCautious->setVisible(true);
 	_btnStandard->setVisible(true);
@@ -1521,13 +1479,13 @@ void DogfightState::btnMinimizedIconClick(Action *action)
 	_txtAmmo1->setVisible(true);
 	_txtAmmo2->setVisible(true);
 	_txtDistance->setVisible(true);
-	_preview->setVisible(true);
 	_txtStatus->setVisible(true);
 	_btnMinimizedIcon->setVisible(false);
 	_txtInterceptionNumber->setVisible(false);
+	_preview->setVisible(false);
 }
 
-/*
+/**
  * Sets interception number. Used to draw proper number when window minimized.
  */
 void DogfightState::setInterceptionNumber(const int number)
@@ -1535,7 +1493,7 @@ void DogfightState::setInterceptionNumber(const int number)
 	_interceptionNumber = number;
 }
 
-/*
+/**
  * Sets interceptions count. Used to properly position the window.
  */
 void DogfightState::setInterceptionsCount(const int count)
@@ -1545,6 +1503,10 @@ void DogfightState::setInterceptionsCount(const int count)
 	moveWindow();
 }
 
+/**
+ * Calculates dogfight window position according to
+ * number of active interceptions.
+ */
 void DogfightState::calculateWindowPosition()
 {
 	_minimizedIconX = 5;
@@ -1611,6 +1573,11 @@ void DogfightState::calculateWindowPosition()
 	}
 }
 
+/**
+ * Relocates all dogfight window elements to
+ * calculated position. This is used when multiple
+ * interceptions are running.
+ */
 void DogfightState::moveWindow()
 {
 	_window->setX(_x); _window->setY(_y);
@@ -1636,11 +1603,19 @@ void DogfightState::moveWindow()
 	_txtInterceptionNumber->setX(_minimizedIconX + 18); _txtInterceptionNumber->setY(_minimizedIconY + 6);
 }
 
+/**
+ * Checks whether the dogfight should end.
+ * @return Returns true if the dogfight should end, otherwise returns false.
+ */
 bool DogfightState::endDogfight() const
 {
 	return _endDogfight;
 }
 
+/**
+ * Returns the UFO associated to this dogfight.
+ * @return Returns pointer to UFO object associated to this dogfight.
+ */
 Ufo* DogfightState::getUfo() const
 {
 	return _ufo;

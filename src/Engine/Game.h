@@ -80,8 +80,6 @@ public:
 	void pushState(State *state);
 	/// Pops the last state from the state stack.
 	void popState();
-	/// Pauses the last state in the stack. Currently used only for synchronous dogfights.
-	void pauseState();
 	/// Gets the currently loaded language.
 	Language *const getLanguage() const;
 	/// Loads a new language for the game.
