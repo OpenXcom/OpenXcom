@@ -51,7 +51,7 @@ private:
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone;
 	Text *_txtDebug;
 	std::vector<State*> _popups;
-	std::vector<DogfightState*> _dogfights;
+	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 
 public:
 	/// Creates the Geoscape state.

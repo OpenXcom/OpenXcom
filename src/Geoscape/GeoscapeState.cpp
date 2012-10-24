@@ -87,7 +87,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _zoomInEffectDone(false), _zoomOutEffectDone(false)
+	GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -380,8 +380,15 @@ void GeoscapeState::think()
 
 	_zoomInEffectTimer->think(this, 0);
 	_zoomOutEffectTimer->think(this, 0);
-
-	if (_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
+	if(!_dogfightsToBeStarted.empty())
+	{
+		while(!_dogfightsToBeStarted.empty())
+		{
+			_dogfights.push_back(_dogfightsToBeStarted.back());
+			_dogfightsToBeStarted.pop_back();
+		}
+	}
+	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
 		_timer->think(this, 0);
@@ -569,7 +576,7 @@ void GeoscapeState::time5Seconds()
 								timerReset();
 								_music = false;
 								_zoomInEffectDone = false;
-								_dogfights.push_back(new DogfightState(_game, _globe, (*j), u, _dogfights.size() + 1));
+								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u, _dogfightsToBeStarted.size() + 1));
 							}
 						}
 					}
