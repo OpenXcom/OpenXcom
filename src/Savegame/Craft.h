@@ -46,13 +46,14 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage;
+	int _id, _fuel, _damage, _interceptionOrder;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
 	std::string _status;
 	bool _lowFuel;
 	bool _inBattlescape;
+	bool _inDogfight;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, Base *base, int id = 0);
@@ -148,6 +149,14 @@ public:
 	int getSpaceUsed() const;
 	/// Gets the craft's vehicles of a certain type.
 	int getVehicleCount(const std::string &vehicle) const;
+	/// Sets the craft's dogfight status.
+	void setInDogfight(const bool inDogfight);
+	/// Gets if the craft is in dogfight.
+	bool isInDogfight() const;
+	/// Sets interception order (first craft to leave the base gets 1, second 2, etc.).
+	void setInterceptionOrder(const int order);
+	/// Gets interception number.
+	int getInterceptionOrder() const;
 };
 
 }
