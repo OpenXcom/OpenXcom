@@ -52,7 +52,7 @@ private:
 	Text *_txtDebug;
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights;
-	int _zoomEffectState;
+
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);

@@ -254,7 +254,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo, i
 	_btnCautious = new ImageButton(36, 15, _x + 120, _y + 4);
 	_btnStandard = new ImageButton(36, 15, _x + 83, _y + 20);
 	_btnAggressive = new ImageButton(36, 15, _x + 120, _y + 20);
-	_btnDisengage = new ImageButton(36, 15, _x + 120, _y + 33);
+	_btnDisengage = new ImageButton(36, 15, _x + 120, _y + 36);
 	_btnUfo = new ImageButton(36, 17, _x + 120, _y + 52);
 	_txtAmmo1 = new Text(16, 9, _x + 4, _y + 70);
 	_txtAmmo2 = new Text(16, 9, _x + 64, _y + 70);
@@ -887,7 +887,6 @@ void DogfightState::move()
 	// Check when battle is over.
 	if (_end == true && ((_currentDist > 640 && (_mode == _btnDisengage || _ufoBreakingOff == true)) || (_timeout == 0 && (_ufo->isCrashed() || _craft->isDestroyed()))))
 	{
-		_craft->setInDogfight(false);
 		if(_ufoBreakingOff)
 		{
 			_ufo->move();
@@ -910,10 +909,11 @@ void DogfightState::move()
 			}
 		}
 		
-		if (_destroyUfo)
+		if (_destroyUfo || _mode == _btnDisengage)
 		{
 			_craft->returnToBase();
 		}
+		_craft->setInDogfight(false);
 		_endDogfight = true;
 	}
 
@@ -968,6 +968,7 @@ void DogfightState::move()
 		_ufo->setSpeed(0);
 		_ufo->setAltitude("STR_GROUND");
 	}
+	// End dogfight if craft is disengaging.
 }
 
 /**
@@ -1146,8 +1147,8 @@ void DogfightState::btnStandoffClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
+		_end = false;
 		setStatus("STR_STANDOFF");
-		_craft->setInDogfight(true);
 		_targetDist = STANDOFF_DIST;
 	}
 }
@@ -1160,6 +1161,7 @@ void DogfightState::btnCautiousClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
+		_end = false;
 		setStatus("STR_CAUTIOUS_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
@@ -1170,7 +1172,6 @@ void DogfightState::btnCautiousClick(Action *action)
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 75);
 		}
 		minimumDistance();
-		_craft->setInDogfight(true);
 		_ufoEscapeTimer->start();
 	}
 }
@@ -1183,6 +1184,7 @@ void DogfightState::btnStandardClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
+		_end = false;
 		setStatus("STR_STANDARD_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
@@ -1193,7 +1195,6 @@ void DogfightState::btnStandardClick(Action *action)
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 75);
 		}
 		maximumDistance();
-		_craft->setInDogfight(true);
 		_ufoEscapeTimer->start();
 	}
 }
@@ -1206,6 +1207,7 @@ void DogfightState::btnAggressiveClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
+		_end = false;
 		setStatus("STR_AGGRESSIVE_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
@@ -1216,7 +1218,6 @@ void DogfightState::btnAggressiveClick(Action *action)
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 75);
 		}
 		_targetDist = 64;
-		_craft->setInDogfight(true);
 		_ufoEscapeTimer->start();
 	}
 }
@@ -1229,11 +1230,10 @@ void DogfightState::btnDisengageClick(Action *action)
 {
 	if (!_ufo->isCrashed())
 	{
+		_end = true;
 		setStatus("STR_DISENGAGING");
 		_targetDist = 800;
 		_ufoEscapeTimer->stop();
-		_craft->setInDogfight(false);
-		_craft->returnToBase();
 	}
 }
 
@@ -1593,7 +1593,7 @@ void DogfightState::moveWindow()
 	_btnCautious->setX(_x + 120); _btnCautious->setY(_y + 4);
 	_btnStandard->setX(_x + 83); _btnStandard->setY(_y + 20);
 	_btnAggressive->setX(_x + 120); _btnAggressive->setY(_y + 20);
-	_btnDisengage->setX(_x + 120); _btnDisengage->setY(_y + 33);
+	_btnDisengage->setX(_x + 120); _btnDisengage->setY(_y + 36);
 	_btnUfo->setX(_x + 120); _btnUfo->setY(_y + 52);
 	_txtAmmo1->setX(_x + 4); _txtAmmo1->setY(_y + 70);
 	_txtAmmo2->setX(_x + 64); _txtAmmo2->setY(_y + 70);

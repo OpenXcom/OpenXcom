@@ -87,7 +87,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _zoomEffectState(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _zoomInEffectDone(false), _zoomOutEffectDone(false)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -539,7 +539,7 @@ void GeoscapeState::time5Seconds()
 			{
 				(*j)->think();
 			}
-			if ((*j)->reachedDestination())
+			if((*j)->reachedDestination())
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
@@ -568,8 +568,6 @@ void GeoscapeState::time5Seconds()
 							{
 								timerReset();
 								_music = false;
-								_zoomEffectState = 0;
-								_zoomInEffectTimer->stop();
 								_zoomInEffectDone = false;
 								_dogfights.push_back(new DogfightState(_game, _globe, (*j), u, _dogfights.size() + 1));
 							}
@@ -581,11 +579,9 @@ void GeoscapeState::time5Seconds()
 						{
 							if(!(*j)->isInDogfight())
 							{
-								if(_zoomOutEffectDone)
+								if(_globe->isZoomedOutToMax())
 								{
-									_zoomOutEffectTimer->stop();
 									_zoomOutEffectDone = false;
-									_zoomEffectState = 0;
 									// look up polygons texture
 									int texture, shade;
 									_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
@@ -1242,6 +1238,7 @@ void GeoscapeState::zoomInEffect()
 	if(_globe->isZoomedInToMax())
 	{
 		_zoomInEffectDone = true;
+		_zoomInEffectTimer->stop();
 	}
 }
 
@@ -1254,6 +1251,7 @@ void GeoscapeState::zoomOutEffect()
 	if(_globe->isZoomedOutToMax())
 	{
 		_zoomOutEffectDone = true;
+		_zoomOutEffectTimer->stop();
 	}
 }
 
