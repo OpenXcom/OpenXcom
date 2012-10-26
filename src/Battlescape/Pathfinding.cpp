@@ -35,27 +35,23 @@ namespace OpenXcom
 Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false)
 {
 	_size = _save->getHeight() * _save->getLength() * _save->getWidth();
-	/* allocate the array and the objects in it */
-	_nodes = new PathfindingNode*[_size];
-	int x, y, z;
+	// Initialize one node per tile
+	_nodes.reserve(_size);
+	Position p;
 	for (int i = 0; i < _size; ++i)
 	{
-		_save->getTileCoords(i, &x, &y, &z);
-		_nodes[i] = new PathfindingNode(Position(x, y, z));
+		_save->getTileCoords(i, &p.x, &p.y, &p.z);
+		_nodes.push_back(PathfindingNode(p));
 	}
 }
 
 /**
  * Deletes the Pathfinding.
+ * @internal This is required to be here because it requires the PathfindingNode class definition.
  */
 Pathfinding::~Pathfinding()
 {
-	for (int i = 0; i < _size; ++i)
-	{
-		delete _nodes[i];
-	}
-	delete[] _nodes;
-
+	// Nothing more to do here.
 }
 
 /**
@@ -65,7 +61,7 @@ Pathfinding::~Pathfinding()
  */
 PathfindingNode *Pathfinding::getNode(const Position& pos)
 {
-	return _nodes[_save->getTileIndex(pos)];
+	return &_nodes[_save->getTileIndex(pos)];
 }
 
 /**
@@ -116,8 +112,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 	_path.clear();
 
 	// reset every node, so we have to check them all
-	for (int i = 0; i < _size; ++i)
-		_nodes[i]->reset();
+	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+		it->reset();
 
 	// start position is the first one in our "open" list
 	openList.push_back(getNode(startPosition));
