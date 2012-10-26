@@ -705,6 +705,12 @@ void DogfightState::move()
 	{
 		endDogfight();
 	}
+	// Check if crafts destination hasn't been changed when window minimized.
+	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
+	if(u == 0)
+	{
+		endDogfight();
+	}
 	// Check if UFO is not breaking off.
 	if(_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())
 	{

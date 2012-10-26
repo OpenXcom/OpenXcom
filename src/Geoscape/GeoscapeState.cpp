@@ -322,7 +322,10 @@ void GeoscapeState::blit()
  */
 void GeoscapeState::handle(Action *action)
 {
-	State::handle(action);
+	if(_dogfights.size() == minimizedDogfightsCount())
+	{
+		State::handle(action);
+	}
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
