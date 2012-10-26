@@ -384,23 +384,7 @@ void GeoscapeState::think()
 	_zoomInEffectTimer->think(this, 0);
 	_zoomOutEffectTimer->think(this, 0);
 	_dogfightStartTimer->think(this, 0);
-	/*
-	if(!_dogfightsToBeStarted.empty())
-	{
-		while(!_dogfightsToBeStarted.empty())
-		{
-			_dogfights.push_back(_dogfightsToBeStarted.back());
-			_dogfightsToBeStarted.pop_back();
-			_dogfights.back()->setInterceptionNumber(getFirstFreeDogfightSlot());
-			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
-		}
-	}
-	*/
-	// Set correct number of interceptions for every dogfight.
-	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
-	{
-		(*d)->setInterceptionsCount(_dogfights.size());
-	}
+
 	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
@@ -579,7 +563,7 @@ void GeoscapeState::time5Seconds()
 							clock_t startClock = clock();
 							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 							double diff = clock() - startClock;
-							std::cout << "Took: " << diff / (double)CLOCKS_PER_SEC << "s\n";
+							std::cout << "Took: " << diff / (double)CLOCKS_PER_SEC << "s. Why sooooooooo long?\n";
 
 							if(!_dogfightStartTimer->isRunning())
 							{
@@ -588,23 +572,6 @@ void GeoscapeState::time5Seconds()
 								startDogfight();
 								_dogfightStartTimer->start();
 							}
-							/*
-							if(!_globe->isZoomedInToMax())
-							{
-								if(!_zoomInEffectTimer->isRunning())
-								{
-									_globe->center((*j)->getLongitude(), (*j)->getLatitude());
-									_zoomInEffectTimer->start();
-								}
-							}
-							else
-							{
-								timerReset();
-								_music = false;
-								_zoomInEffectDone = false;
-								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
-							}
-							*/
 						}
 					}
 					else
@@ -1327,29 +1294,6 @@ void GeoscapeState::handleDogfights()
 	{
 		_zoomOutEffectTimer->start();
 	}
-	/*
-	// Remove all UFO's that were destroyed during dogfights.
-	for(std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
-	{
-		if((*u)->isDestroyed())
-		{
-			bool removeUfo = true;
-			for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
-			{
-				// Wait until all dogfights using this UFO are deleted.
-				if((*d)->getUfo() == *u)
-				{
-					removeUfo = false;
-					break;
-				}
-			}
-			if(removeUfo)
-			{
-				delete *u;
-				u = _game->getSavedGame()->getUfos()->erase(u);
-			}
-		}
-	}*/
 }
 
 /**
@@ -1361,7 +1305,6 @@ int GeoscapeState::minimizedDogfightsCount()
 	int minimizedDogfights = 0;
 	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
-		//(*d)->setInterceptionsCount(_dogfights.size());
 		if((*d)->isMinimized())
 		{
 			++minimizedDogfights;
@@ -1394,6 +1337,11 @@ void GeoscapeState::startDogfight()
 			_dogfightsToBeStarted.pop_back();
 			_dogfights.back()->setInterceptionNumber(getFirstFreeDogfightSlot());
 			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
+		}
+		// Set correct number of interceptions for every dogfight.
+		for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+		{
+			(*d)->setInterceptionsCount(_dogfights.size());
 		}
 	}
 }
