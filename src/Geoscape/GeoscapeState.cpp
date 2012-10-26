@@ -388,6 +388,11 @@ void GeoscapeState::think()
 			_dogfightsToBeStarted.pop_back();
 		}
 	}
+	// Set correct number of interceptions for every dogfight.
+	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	{
+		(*d)->setInterceptionsCount(_dogfights.size());
+	}
 	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
@@ -1326,7 +1331,7 @@ int GeoscapeState::minimizedDogfightsCount()
 	int minimizedDogfights = 0;
 	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
-		(*d)->setInterceptionsCount(_dogfights.size());
+		//(*d)->setInterceptionsCount(_dogfights.size());
 		if((*d)->isMinimized())
 		{
 			++minimizedDogfights;

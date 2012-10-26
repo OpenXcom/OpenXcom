@@ -238,8 +238,6 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo, i
 	_craft->setInDogfight(true);
 	// Create objects
 	
-	calculateWindowPosition();
-
 	_window = new Surface(160, 96, _x, _y);
 	_battle = new Surface(77, 74, _x + 3, _y + 3);
 	_weapon1 = new InteractiveSurface(15, 17, _x + 4, _y + 52);
@@ -1527,7 +1525,8 @@ void DogfightState::calculateWindowPosition()
 		else // 2
 		{
 			_x = 80;
-			_y = (_game->getScreen()->getHeight() / 2) - 96;
+			//_y = (_game->getScreen()->getHeight() / 2) - 96;
+			_y = 200 - 96;
 		}
 	}
 	else if(_interceptionsCount == 3)
@@ -1540,12 +1539,15 @@ void DogfightState::calculateWindowPosition()
 		else if(_interceptionNumber == 2)
 		{
 			_x = 0;
-			_y = (_game->getScreen()->getHeight() / 2) - 96;
+			//_y = (_game->getScreen()->getHeight() / 2) - 96;
+			_y = 200 - 96;
 		}
 		else // 3
 		{
-			_x = (_game->getScreen()->getWidth() / 2) - 160;
-			_y = (_game->getScreen()->getHeight() / 2) - 96;
+			//_x = (_game->getScreen()->getWidth() / 2) - 160;
+			//_y = (_game->getScreen()->getHeight() / 2) - 96;
+			_x = 320 - 160;
+			_y = 200 - 96;
 		}
 	}
 	else
@@ -1557,18 +1559,22 @@ void DogfightState::calculateWindowPosition()
 		}
 		else if(_interceptionNumber == 2)
 		{
-			_x = (_game->getScreen()->getWidth() / 2) - 160;
+			//_x = (_game->getScreen()->getWidth() / 2) - 160;
+			_x = 320 - 160;
 			_y = 0;
 		}
 		else if(_interceptionNumber == 3)
 		{
 			_x = 0;
-			_y = (_game->getScreen()->getHeight() / 2) - 96;
+			//_y = (_game->getScreen()->getHeight() / 2) - 96;
+			_y = 200 - 96;
 		}
 		else // 4
 		{
-			_x = (_game->getScreen()->getWidth() / 2) - 160;
-			_y = (_game->getScreen()->getHeight() / 2) - 96;
+			//_x = (_game->getScreen()->getWidth() / 2) - 160;
+			//_y = (_game->getScreen()->getHeight() / 2) - 96;
+			_x = 320 - 160;
+			_y = 200 - 96;
 		}
 	}
 }
