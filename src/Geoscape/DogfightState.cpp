@@ -1526,7 +1526,7 @@ void DogfightState::calculateWindowPosition()
 		{
 			_x = 80;
 			//_y = (_game->getScreen()->getHeight() / 2) - 96;
-			_y = 200 - 96;
+			_y = 200 - _window->getHeight();//96;
 		}
 	}
 	else if(_interceptionsCount == 3)
@@ -1540,14 +1540,14 @@ void DogfightState::calculateWindowPosition()
 		{
 			_x = 0;
 			//_y = (_game->getScreen()->getHeight() / 2) - 96;
-			_y = 200 - 96;
+			_y = 200 - _window->getHeight();//96;
 		}
 		else // 3
 		{
 			//_x = (_game->getScreen()->getWidth() / 2) - 160;
 			//_y = (_game->getScreen()->getHeight() / 2) - 96;
-			_x = 320 - 160;
-			_y = 200 - 96;
+			_x = 320 - _window->getWidth();//160;
+			_y = 200 - _window->getHeight();//96;
 		}
 	}
 	else
@@ -1560,21 +1560,21 @@ void DogfightState::calculateWindowPosition()
 		else if(_interceptionNumber == 2)
 		{
 			//_x = (_game->getScreen()->getWidth() / 2) - 160;
-			_x = 320 - 160;
+			_x = 320 - _window->getWidth();//160;
 			_y = 0;
 		}
 		else if(_interceptionNumber == 3)
 		{
 			_x = 0;
 			//_y = (_game->getScreen()->getHeight() / 2) - 96;
-			_y = 200 - 96;
+			_y = 200 - _window->getHeight();//96;
 		}
 		else // 4
 		{
 			//_x = (_game->getScreen()->getWidth() / 2) - 160;
 			//_y = (_game->getScreen()->getHeight() / 2) - 96;
-			_x = 320 - 160;
-			_y = 200 - 96;
+			_x = 320 - _window->getWidth();//160;
+			_y = 200 - _window->getHeight();//96;
 		}
 	}
 }

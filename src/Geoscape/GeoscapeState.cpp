@@ -129,6 +129,7 @@ namespace OpenXcom
 
 	_zoomInEffectTimer = new Timer(250);
 	_zoomOutEffectTimer = new Timer(250);
+	_dogfightStartTimer = new Timer(250);
 
 	_txtDebug = new Text(100, 8, 0, 0);
 
@@ -288,6 +289,7 @@ namespace OpenXcom
 
 	_zoomInEffectTimer->onTimer((StateHandler)&GeoscapeState::zoomInEffect);
 	_zoomOutEffectTimer->onTimer((StateHandler)&GeoscapeState::zoomOutEffect);
+	_dogfightStartTimer->onTimer((StateHandler)&GeoscapeState::startDogfight);
 
 	timeDisplay();
 }
@@ -581,7 +583,7 @@ void GeoscapeState::time5Seconds()
 								timerReset();
 								_music = false;
 								_zoomInEffectDone = false;
-								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u, _dogfightsToBeStarted.size() + 1));
+								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u, _dogfights.size() + _dogfightsToBeStarted.size() + 1));
 							}
 						}
 					}
@@ -1338,6 +1340,14 @@ int GeoscapeState::minimizedDogfightsCount()
 		}
 	}
 	return minimizedDogfights;
+}
+
+/**
+ * Starts a new dogfight.
+ */
+void GeoscapeState::startDogfight()
+{
+
 }
 
 }

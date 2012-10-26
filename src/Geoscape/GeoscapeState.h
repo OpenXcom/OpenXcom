@@ -47,7 +47,7 @@ private:
 	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
-	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer;
+	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone;
 	Text *_txtDebug;
 	std::vector<State*> _popups;
@@ -134,6 +134,8 @@ public:
 	void handleDogfights();
 	/// Gets the number of minimized dogfights.
 	int minimizedDogfightsCount();
+	/// Starts a new dogfight.
+	void startDogfight();
 };
 
 }
