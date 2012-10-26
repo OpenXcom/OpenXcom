@@ -388,6 +388,8 @@ void GeoscapeState::think()
 		{
 			_dogfights.push_back(_dogfightsToBeStarted.back());
 			_dogfightsToBeStarted.pop_back();
+			_dogfights.back()->setInterceptionNumber(getFirstFreeDogfightSlot());
+			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
 		}
 	}
 	// Set correct number of interceptions for every dogfight.
@@ -583,7 +585,7 @@ void GeoscapeState::time5Seconds()
 								timerReset();
 								_music = false;
 								_zoomInEffectDone = false;
-								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u, _dogfights.size() + _dogfightsToBeStarted.size() + 1));
+								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 							}
 						}
 					}
@@ -1285,7 +1287,7 @@ void GeoscapeState::handleDogfights()
 	while(d != _dogfights.end())
 	{
 		(*d)->think();
-		if((*d)->endDogfight())
+		if((*d)->dogfightEnded())
 		{
 			delete *d;
 			d = _dogfights.erase(d);
@@ -1348,6 +1350,22 @@ int GeoscapeState::minimizedDogfightsCount()
 void GeoscapeState::startDogfight()
 {
 
+}
+
+/**
+ * Returns the first free dogfight slot.
+ */
+int GeoscapeState::getFirstFreeDogfightSlot()
+{
+	int slotNo = 1;
+	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	{
+		if((*d)->getInterceptionNumber() == slotNo)
+		{
+			++slotNo;
+		}
+	}
+	return slotNo;
 }
 
 }

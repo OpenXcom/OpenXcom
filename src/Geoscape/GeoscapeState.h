@@ -136,6 +136,8 @@ public:
 	int minimizedDogfightsCount();
 	/// Starts a new dogfight.
 	void startDogfight();
+	/// Get first free dogfight slot.
+	int getFirstFreeDogfightSlot();
 };
 
 }

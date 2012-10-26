@@ -63,9 +63,12 @@ private:
 	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
 	int _x, _y, _minimizedIconX, _minimizedIconY;
 
+	// Ends the dogfight.
+	void endDogfight();
+
 public:
 	/// Creates the Dogfight state.
-	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo, int interceptionsCount);
+	DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo);
 	/// Cleans up the Dogfight state.
 	~DogfightState();
 	/// Runs the timers.
@@ -124,6 +127,8 @@ public:
 	void setMinimized(const bool minimized);
 	/// Handler for clicking the minimized interception window icon.
 	void btnMinimizedIconClick(Action *action);
+	/// Gets interception number.
+	int getInterceptionNumber() const;
 	/// Sets interception number.
 	void setInterceptionNumber(const int number);
 	/// Sets interceptions count.
@@ -133,9 +138,10 @@ public:
 	/// Moves window to new position.
 	void moveWindow();
 	/// Checks if the dogfight should be ended.
-	bool endDogfight() const;
+	bool dogfightEnded() const;
 	/// Gets pointer to the UFO in this dogfight.
 	Ufo* getUfo() const;
+	
 };
 
 }

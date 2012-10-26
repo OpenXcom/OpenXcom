@@ -228,13 +228,13 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo, int interceptionsCount) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _interceptionNumber(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0), _endDogfight(false), _ufoHitFrame(0)
+DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0), _endDogfight(false), _ufoHitFrame(0)
 {
 	_screen = false;
-
+	/*
 	_interceptionsCount = interceptionsCount;
 	_interceptionNumber = interceptionsCount;
-	
+	*/
 	_craft->setInDogfight(true);
 	// Create objects
 	
@@ -702,6 +702,11 @@ void DogfightState::animate()
  */
 void DogfightState::move()
 {
+	// Check if UFO is not lost or craft is not low on fuel.
+	if(!_ufo->getDetected() || _craft->getLowFuel())
+	{
+		_endDogfight = true;
+	}
 	// Check if UFO is not breaking off.
 	if(_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())
 	{
@@ -1613,7 +1618,7 @@ void DogfightState::moveWindow()
  * Checks whether the dogfight should end.
  * @return Returns true if the dogfight should end, otherwise returns false.
  */
-bool DogfightState::endDogfight() const
+bool DogfightState::dogfightEnded() const
 {
 	return _endDogfight;
 }
@@ -1625,6 +1630,23 @@ bool DogfightState::endDogfight() const
 Ufo* DogfightState::getUfo() const
 {
 	return _ufo;
+}
+
+/**
+ * Ends the dogfight.
+ */
+void DogfightState::endDogfight()
+{
+	_craft->setInDogfight(false);
+	_endDogfight = true;
+}
+
+/**
+ * Returns interception number.
+ */
+int DogfightState::getInterceptionNumber() const
+{
+	return _interceptionNumber;
 }
 
 }
