@@ -554,13 +554,16 @@ void DogfightState::think()
 {
 	if(!_endDogfight)
 	{
-		_animTimer->think(this, 0);
 		_moveTimer->think(this, 0);
-		_w1Timer->think(this, 0);
-		_w2Timer->think(this, 0);
-		_ufoWtimer->think(this, 0);
-		_ufoEscapeTimer->think(this, 0);
-		_craftDamageAnimTimer->think(this, 0);
+		if(!_minimized)
+		{
+			_animTimer->think(this, 0);
+			_w1Timer->think(this, 0);
+			_w2Timer->think(this, 0);
+			_ufoWtimer->think(this, 0);
+			_ufoEscapeTimer->think(this, 0);
+			_craftDamageAnimTimer->think(this, 0);
+		}
 	}
 }
 
@@ -569,6 +572,10 @@ void DogfightState::think()
  */
 void DogfightState::animateCraftDamage()
 {
+	if(_minimized)
+	{
+		return;
+	}
 	--_currentCraftDamageColor;
 	if(_currentCraftDamageColor < 13)
 	{
@@ -634,6 +641,10 @@ void DogfightState::drawCraftDamage()
  */
 void DogfightState::animate()
 {
+	if(_minimized)
+	{
+		return;
+	}
 	// Animate radar waves and other stuff.
 	for(int x = 0; x < _window->getWidth(); ++x)
 	{
@@ -700,14 +711,14 @@ void DogfightState::animate()
  */
 void DogfightState::move()
 {
-	// Check if craft is not low on fuel.
+	// Check if craft is not low on fuel when window minimized.
 	if(_craft->getLowFuel())
 	{
 		endDogfight();
 	}
 	// Check if crafts destination hasn't been changed when window minimized.
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	if(u == 0)
+	if(u != _ufo)
 	{
 		endDogfight();
 	}
@@ -723,173 +734,175 @@ void DogfightState::move()
 			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 		}
 	}
-
-	// Update distance
-	if(!_ufoBreakingOff)
+	if(!_minimized)
 	{
-		if (_currentDist < _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
+		// Update distance
+		if(!_ufoBreakingOff)
+		{
+			if (_currentDist < _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
+			{
+				_currentDist += 4;
+			}
+			else if (_currentDist > _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
+			{
+				_currentDist -= 2;
+			}
+		}
+		else
 		{
 			_currentDist += 4;
 		}
-		else if (_currentDist > _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
-		{
-			_currentDist -= 2;
-		}
-	}
-	else
-	{
-		_currentDist += 4;
-	}
 
-	std::wstringstream ss;
-	ss << _currentDist;
-	_txtDistance->setText(ss.str());
+		std::wstringstream ss;
+		ss << _currentDist;
+		_txtDistance->setText(ss.str());
 
-	// Move projectiles and check for hits.
-	for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
-	{
-		CraftWeaponProjectile *p = (*it);
-		p->move();
-		// Projectiles fired by interceptor.
-		if(p->getDirection() == D_UP)
+		// Move projectiles and check for hits.
+		for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
 		{
-			// Projectile reached the UFO - determine if it's been hit.
-			if((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()) && !_ufo->isCrashed())
+			CraftWeaponProjectile *p = (*it);
+			p->move();
+			// Projectiles fired by interceptor.
+			if(p->getDirection() == D_UP)
 			{
-				int acc = RNG::generate(1, 100);
-				// UFO hit.
-				if (acc <= p->getAccuracy())
+				// Projectile reached the UFO - determine if it's been hit.
+				if((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()) && !_ufo->isCrashed())
 				{
-					// Formula delivered by Volutar
-					int damage = RNG::generate(p->getDamage() / 2, p->getDamage());
-					_ufo->setDamage(_ufo->getDamage() + damage);
-					if(_ufo->isCrashed())
+					int acc = RNG::generate(1, 100);
+					// UFO hit.
+					if (acc <= p->getAccuracy())
 					{
-						_ufo->setShotDownByCraftId(_craft->getId());
-					}
-					if(_ufoHitFrame == 0)
-					{
-						_ufoHitFrame = 3;
-					}
-					setStatus("STR_UFO_HIT");
-					_currentRadius += 4;
-					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play(); //12
-					p->remove();
-				}
-				// Missed.
-				else
-				{
-					if(p->getGlobalType() == CWPGT_BEAM)
-					{
+						// Formula delivered by Volutar
+						int damage = RNG::generate(p->getDamage() / 2, p->getDamage());
+						_ufo->setDamage(_ufo->getDamage() + damage);
+						if(_ufo->isCrashed())
+						{
+							_ufo->setShotDownByCraftId(_craft->getId());
+						}
+						if(_ufoHitFrame == 0)
+						{
+							_ufoHitFrame = 3;
+						}
+						setStatus("STR_UFO_HIT");
+						_currentRadius += 4;
+						_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play(); //12
 						p->remove();
 					}
+					// Missed.
 					else
 					{
-						p->setMissed(true);
+						if(p->getGlobalType() == CWPGT_BEAM)
+						{
+							p->remove();
+						}
+						else
+						{
+							p->setMissed(true);
+						}
 					}
 				}
-			}
 
-			// Check if projectile passed it's maximum range.
-			if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
-			{
-				p->remove();
-			}
-		}
-		// Projectiles fired by UFO.
-		else if(p->getDirection() == D_DOWN)
-		{
-			if(p->getGlobalType() == CWPGT_MISSILE || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()))
-			{
-				int acc = RNG::generate(1, 100);
-				if(acc <= p->getAccuracy())
+				// Check if projectile passed it's maximum range.
+				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
 				{
-					// Formula delivered by Volutar
-					int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
-					_craft->setDamage(_craft->getDamage() + damage);
-					drawCraftDamage();
-					setStatus("STR_INTERCEPTOR_DAMAGED");
-					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
+					p->remove();
 				}
-				p->remove();
+			}
+			// Projectiles fired by UFO.
+			else if(p->getDirection() == D_DOWN)
+			{
+				if(p->getGlobalType() == CWPGT_MISSILE || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()))
+				{
+					int acc = RNG::generate(1, 100);
+					if(acc <= p->getAccuracy())
+					{
+						// Formula delivered by Volutar
+						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
+						_craft->setDamage(_craft->getDamage() + damage);
+						drawCraftDamage();
+						setStatus("STR_INTERCEPTOR_DAMAGED");
+						_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
+					}
+					p->remove();
+				}
 			}
 		}
-	}
 		
-	// Remove projectiles that hit or missed their target.
-	for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end();)
-	{
-		if((*it)->toBeRemoved() == true || ((*it)->getMissed() == true && (*it)->getPosition() <= 0))
+		// Remove projectiles that hit or missed their target.
+		for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end();)
 		{
-			delete *it;
-			it = _projectiles.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-
-	// Handle weapons and craft distance.
-	for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
-	{
-		CraftWeapon *w = _craft->getWeapons()->at(i);
-		if (w == 0)
-		{
-			continue;
-		}
-		Timer *wTimer = 0;
-		if (i == 0)
-		{
-			wTimer = _w1Timer;
-		}
-		else
-		{
-			wTimer = _w2Timer;
-		}
-
-		// Handle weapon firing
-		if (!wTimer->isRunning() && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
-			&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
-		{
-			wTimer->start();
-			if (i == 0)
+			if((*it)->toBeRemoved() == true || ((*it)->getMissed() == true && (*it)->getPosition() <= 0))
 			{
-				fireWeapon1();
+				delete *it;
+				it = _projectiles.erase(it);
 			}
 			else
 			{
-				fireWeapon2();
+				++it;
 			}
 		}
-		else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || w->getAmmo() == 0 || _mode == _btnStandoff
-			|| _mode == _btnDisengage || _ufo->isCrashed() || _craft->isDestroyed()))
-		{
-			wTimer->stop();
-			// Handle craft distance according to option set by user and available ammo.
-			if (w->getAmmo() == 0 && !_craft->isDestroyed())
-			{
-				if (_mode == _btnCautious)
-				{
-					minimumDistance();
-				}
-				else if (_mode == _btnStandard)
-				{
-					maximumDistance();
-				}
-			}
-		}
-	}
 
-	// Handle UFO firing.
-	if(!_ufoWtimer->isRunning() && _currentDist <= _ufo->getRules()->getWeaponRange() * 8 && !_ufo->isCrashed() && !_craft->isDestroyed())
-	{
-		_ufoWtimer->start();
-		ufoFireWeapon();
-	}
-	else if(_ufoWtimer->isRunning() && (_currentDist > _ufo->getRules()->getWeaponRange() * 8 || _ufo->isCrashed() || _craft->isDestroyed()))
-	{
-		_ufoWtimer->stop();
+		// Handle weapons and craft distance.
+		for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
+		{
+			CraftWeapon *w = _craft->getWeapons()->at(i);
+			if (w == 0)
+			{
+				continue;
+			}
+			Timer *wTimer = 0;
+			if (i == 0)
+			{
+				wTimer = _w1Timer;
+			}
+			else
+			{
+				wTimer = _w2Timer;
+			}
+
+			// Handle weapon firing
+			if (!wTimer->isRunning() && _currentDist <= w->getRules()->getRange() * 8 && w->getAmmo() > 0 && _mode != _btnStandoff 
+				&& _mode != _btnDisengage && !_ufo->isCrashed() && !_craft->isDestroyed())
+			{
+				wTimer->start();
+				if (i == 0)
+				{
+					fireWeapon1();
+				}
+				else
+				{
+					fireWeapon2();
+				}
+			}
+			else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || w->getAmmo() == 0 || _mode == _btnStandoff
+				|| _mode == _btnDisengage || _ufo->isCrashed() || _craft->isDestroyed()))
+			{
+				wTimer->stop();
+				// Handle craft distance according to option set by user and available ammo.
+				if (w->getAmmo() == 0 && !_craft->isDestroyed())
+				{
+					if (_mode == _btnCautious)
+					{
+						minimumDistance();
+					}
+					else if (_mode == _btnStandard)
+					{
+						maximumDistance();
+					}
+				}
+			}
+		}
+
+		// Handle UFO firing.
+		if(!_ufoWtimer->isRunning() && _currentDist <= _ufo->getRules()->getWeaponRange() * 8 && !_ufo->isCrashed() && !_craft->isDestroyed())
+		{
+			_ufoWtimer->start();
+			ufoFireWeapon();
+		}
+		else if(_ufoWtimer->isRunning() && (_currentDist > _ufo->getRules()->getWeaponRange() * 8 || _ufo->isCrashed() || _craft->isDestroyed()))
+		{
+			_ufoWtimer->stop();
+		}
 	}
 
 	// Check when battle is over.

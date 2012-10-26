@@ -54,6 +54,7 @@ private:
 	Text *_txtDebug;
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
+	int _minimizedDogfights;
 
 public:
 	/// Creates the Geoscape state.

@@ -88,7 +88,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-	GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false)
+	GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -322,7 +322,7 @@ void GeoscapeState::blit()
  */
 void GeoscapeState::handle(Action *action)
 {
-	if(_dogfights.size() == minimizedDogfightsCount())
+	if(_dogfights.size() == _minimizedDogfights)
 	{
 		State::handle(action);
 	}
@@ -349,6 +349,7 @@ void GeoscapeState::handle(Action *action)
 		{
 			(*it)->handle(action);
 		}
+		_minimizedDogfights = minimizedDogfightsCount();
 	}
 }
 
@@ -1273,7 +1274,7 @@ void GeoscapeState::zoomOutEffect()
 void GeoscapeState::handleDogfights()
 {
 	// If all dogfights are minimized rotate the golbe, etc.
-	if(_dogfights.size() == minimizedDogfightsCount())
+	if(_dogfights.size() == _minimizedDogfights)
 	{
 		_pause = false;
 		_timer->think(this, 0);
