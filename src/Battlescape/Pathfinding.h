@@ -39,7 +39,7 @@ class Pathfinding
 {
 private:
 	SavedBattleGame *_save;
-	PathfindingNode **_nodes;
+	std::vector<PathfindingNode> _nodes;
 	int _size;
 	std::vector<int> _path;
 	MovementType _movementType;
