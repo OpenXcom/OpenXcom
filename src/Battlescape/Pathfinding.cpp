@@ -65,18 +65,14 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 }
 
 /**
- * Calculate the shortest path using a simple A-Star algorithm.
+ * Calculate the shortest path.
  * @param unit
  * @param endPosition
  */
 
 void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 {
-	std::list<PathfindingNode*> openList;
-	PathfindingNode *currentNode, *nextNode;
-	Position currentPos, nextPos, startPosition = unit->getPosition();
-	int tuCost, totalTuCost = 0;
-
+	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
 	_unit = unit;
 
@@ -109,6 +105,20 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 		return;
 	}
 
+	// Now try through A*.
+	aStarPath(startPosition, endPosition);
+}
+
+/**
+ * Calculate the shortest path using a simple A-Star algorithm.
+ * The unit information and movement type must have already been set.
+ * The path information is set only if a valid path is found.
+ * @param startPosition The position to start from.
+ * @param endPosition The position we want to reach.
+ * @return True if a path exists, false otherwise.
+ */
+bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition)
+{
 	_path.clear();
 
 	// reset every node, so we have to check them all
@@ -116,22 +126,24 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 		it->reset();
 
 	// start position is the first one in our "open" list
+	std::list<PathfindingNode*> openList;
 	openList.push_back(getNode(startPosition));
 	openList.front()->check(0, 0, 0, 0);
 
 	// if the open list is empty, we've reached the end
 	while(!openList.empty())
 	{
-		currentPos = openList.front()->getPosition();
-		currentNode = getNode(currentPos);
+		Position currentPos = openList.front()->getPosition();
+		PathfindingNode *currentNode = getNode(currentPos);
 		// this algorithm expands in all directions
 		for (int direction = 0; direction < 10; direction++)
 		{
-			tuCost = getTUCost(currentPos, direction, &nextPos, unit);
+			Position nextPos;
+			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit);
 			if(tuCost < 255) // check if we can go to this node (ie is not blocked)
 			{
-				nextNode = getNode(nextPos);
-				totalTuCost = currentNode->getTUCost() + tuCost;
+				PathfindingNode *nextNode = getNode(nextPos);
+				int totalTuCost = currentNode->getTUCost() + tuCost;
 				// if we haven't checked this node, or the current cost tu cost is lower than our previous path, push this node in the open list to visit later.
 				if( (!nextNode->isChecked() || nextNode->getTUCost() > totalTuCost)
 					&& // this will keep pushing back nodes, as long as we did not reach the end position or there are still possible shorter paths
@@ -149,7 +161,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 		openList.pop_front();
 	}
 
-	if(!getNode(endPosition)->isChecked()) return;
+	if(!getNode(endPosition)->isChecked()) return false;
 
 	//Backward tracking of the path
 	PathfindingNode* pf = getNode(endPosition);
@@ -158,7 +170,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
 		_path.push_back(pf->getPrevDir());
 		pf=pf->getPrevNode();
 	}
-
+	return true;
 }
 
 /**
