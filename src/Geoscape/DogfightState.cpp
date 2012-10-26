@@ -231,10 +231,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0), _endDogfight(false), _ufoHitFrame(0)
 {
 	_screen = false;
-	/*
-	_interceptionsCount = interceptionsCount;
-	_interceptionNumber = interceptionsCount;
-	*/
+
 	_craft->setInDogfight(true);
 	// Create objects
 	

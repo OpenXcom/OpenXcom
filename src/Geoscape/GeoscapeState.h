@@ -32,6 +32,8 @@ class InteractiveSurface;
 class Text;
 class Timer;
 class DogfightState;
+class Craft;
+class Ufo;
 
 /**
  * Geoscape screen which shows an overview of

@@ -565,6 +565,7 @@ void Craft::think()
 	move();
 	if (reachedDestination() && _dest == (Target*)_base)
 	{
+		setInterceptionOrder(0);
 		checkup();
 		setDestination(0);
 		setSpeed(0);

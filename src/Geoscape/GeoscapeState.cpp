@@ -79,6 +79,7 @@
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/City.h"
 #include "AlienTerrorState.h"
+#include <ctime>
 
 namespace OpenXcom
 {
@@ -382,6 +383,8 @@ void GeoscapeState::think()
 
 	_zoomInEffectTimer->think(this, 0);
 	_zoomOutEffectTimer->think(this, 0);
+	_dogfightStartTimer->think(this, 0);
+	/*
 	if(!_dogfightsToBeStarted.empty())
 	{
 		while(!_dogfightsToBeStarted.empty())
@@ -392,6 +395,7 @@ void GeoscapeState::think()
 			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
 		}
 	}
+	*/
 	// Set correct number of interceptions for every dogfight.
 	for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
 	{
@@ -560,7 +564,6 @@ void GeoscapeState::time5Seconds()
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
-				Base* b = dynamic_cast<Base*>((*j)->getDestination());
 				if (u != 0)
 				{
 					if (!u->isCrashed())
@@ -572,6 +575,20 @@ void GeoscapeState::time5Seconds()
 						}
 						if(!(*j)->isInDogfight())
 						{
+							std::cout << "Starting dogfight...\n";
+							clock_t startClock = clock();
+							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
+							double diff = clock() - startClock;
+							std::cout << "Took: " << diff / (double)CLOCKS_PER_SEC << "s\n";
+
+							if(!_dogfightStartTimer->isRunning())
+							{
+								timerReset();
+								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
+								startDogfight();
+								_dogfightStartTimer->start();
+							}
+							/*
 							if(!_globe->isZoomedInToMax())
 							{
 								if(!_zoomInEffectTimer->isRunning())
@@ -587,6 +604,7 @@ void GeoscapeState::time5Seconds()
 								_zoomInEffectDone = false;
 								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 							}
+							*/
 						}
 					}
 					else
@@ -633,10 +651,6 @@ void GeoscapeState::time5Seconds()
 					{
 						(*j)->returnToBase();
 					}
-				}
-				else if(b != 0)
-				{
-					(*j)->setInterceptionOrder(0);
 				}
 			}
 		}
@@ -1361,7 +1375,27 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
-
+	if(!_globe->isZoomedInToMax())
+	{
+		if(!_zoomInEffectTimer->isRunning())
+		{
+			_zoomInEffectTimer->start();
+		}
+	}
+	else
+	{
+		_dogfightStartTimer->stop();
+		_zoomInEffectTimer->stop();
+		timerReset();
+		_music = false;
+		while(!_dogfightsToBeStarted.empty())
+		{
+			_dogfights.push_back(_dogfightsToBeStarted.back());
+			_dogfightsToBeStarted.pop_back();
+			_dogfights.back()->setInterceptionNumber(getFirstFreeDogfightSlot());
+			_dogfights.back()->setInterceptionsCount(_dogfights.size() + _dogfightsToBeStarted.size());
+		}
+	}
 }
 
 /**
