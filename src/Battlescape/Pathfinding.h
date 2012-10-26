@@ -54,6 +54,8 @@ private:
 	bool _pathPreviewed;
 	///Try to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target);
+	///Try to find a path between two positions.
+	bool aStarPath(const Position& origin, const Position& target);
 public:
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
