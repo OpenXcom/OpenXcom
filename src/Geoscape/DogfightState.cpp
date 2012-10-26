@@ -547,6 +547,7 @@ DogfightState::~DogfightState()
 		delete _projectiles.back();
 		_projectiles.pop_back();
 	}
+	_craft->setInDogfight(false);
 }
 
 /**
@@ -702,10 +703,10 @@ void DogfightState::animate()
  */
 void DogfightState::move()
 {
-	// Check if UFO is not lost or craft is not low on fuel.
-	if(!_ufo->getDetected() || _craft->getLowFuel())
+	// Check if craft is not low on fuel.
+	if(_craft->getLowFuel())
 	{
-		_endDogfight = true;
+		endDogfight();
 	}
 	// Check if UFO is not breaking off.
 	if(_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())
@@ -917,8 +918,7 @@ void DogfightState::move()
 		{
 			_craft->returnToBase();
 		}
-		_craft->setInDogfight(false);
-		_endDogfight = true;
+		endDogfight();
 	}
 
 	// End dogfight if craft is destroyed.

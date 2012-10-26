@@ -642,11 +642,23 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
-	// Clean up dead UFOs
+	// Clean up dead UFOs and end dogfights which were minimized.
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0)
+		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0 || (*i)->isDestroyed())
 		{
+			for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
+			{
+				if((*d)->getUfo() == (*i))
+				{
+					delete *d;
+					d = _dogfights.erase(d);
+				}
+				else
+				{
+					++d;
+				}
+			}
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
 		}
@@ -1301,7 +1313,7 @@ void GeoscapeState::handleDogfights()
 	{
 		_zoomOutEffectTimer->start();
 	}
-
+	/*
 	// Remove all UFO's that were destroyed during dogfights.
 	for(std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
@@ -1323,7 +1335,7 @@ void GeoscapeState::handleDogfights()
 				u = _game->getSavedGame()->getUfos()->erase(u);
 			}
 		}
-	}
+	}*/
 }
 
 /**

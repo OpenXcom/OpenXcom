@@ -200,7 +200,7 @@ void Craft::save(YAML::Emitter &out) const
 	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	out << YAML::Key << "inDogfight" << YAML::Value << _inDogfight;
+	out << YAML::Key << "inDogfight" << YAML::Value << false;
 	out << YAML::Key << "interceptionOrder" << YAML::Value << _interceptionOrder;
 	out << YAML::EndMap;
 }
