@@ -114,5 +114,19 @@ void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir
 	}
 }
 
+/**
+ * Connect node. This will connect the node to the previous node along the path.
+ * @param tuCost The total cost of the path so far.
+ * @param prevNode The previous node along the path.
+ * @param prevDir The direction FROM the previous node.
+*/
+void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir)
+{
+	_tuCost = tuCost;
+	_prevNode = prevNode;
+	_prevDir = prevDir;
+	_tuGuess = 0;
+}
+
 
 }

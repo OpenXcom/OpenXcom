@@ -725,5 +725,61 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 	return true;
 }
 
+/**
+ * Use Dijkstra's algorithm to locate all tiles reachable to @a *unit with a TU cost no more than @a tuMax.
+ * @param unit Pointer to the unit.
+ * @param tuMax The maximum cost of the path to each tile.
+ * @return An array of reachable tiles, sorted in ascending order of cost. The first tile is the start location.
+ */
+std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
+{
+	const Position &start = unit->getPosition();
+
+	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+	{
+		it->reset();
+	}
+	PathfindingNode *startNode = getNode(start);
+	startNode->connect(0, 0, 0);
+	PathfindingOpenSet unvisited;
+	unvisited.push(startNode);
+	std::vector<PathfindingNode*> reachable;
+	while (!unvisited.empty())
+	{
+		PathfindingNode *currentNode = unvisited.pop();
+		Position const &currentPos = currentNode->getPosition();
+
+		// Try all reachable neighbours.
+		for (int direction = 0; direction < 10; direction++)
+		{
+			Position nextPos;
+			int tuCost = getTUCost(currentPos, direction, &nextPos, unit);
+			if (tuCost == 255) // Skip unreachable / blocked
+				continue;
+			if (tuCost > tuMax) // Run out of TUs
+				continue;
+			PathfindingNode *nextNode = getNode(nextPos);
+			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
+				continue;
+			int totalTuCost = currentNode->getTUCost() + tuCost;
+			// If this node is unvisited or visited from a better path.
+			if (!nextNode->inOpenSet() || nextNode->getTUCost() > totalTuCost)
+			{
+				nextNode->connect(totalTuCost, currentNode, direction);
+				unvisited.push(nextNode);
+			}
+		}
+		currentNode->setChecked();
+		reachable.push_back(currentNode);
+	}
+	std::sort(reachable.begin(), reachable.end(), MinNodeCosts());
+	std::vector<int> tiles;
+	tiles.reserve(reachable.size());
+	for (std::vector<PathfindingNode*>::const_iterator it = reachable.begin(); it != reachable.end(); ++it)
+	{
+		tiles.push_back(_save->getTileIndex((*it)->getPosition()));
+	}
+	return tiles;
+}
 
 }

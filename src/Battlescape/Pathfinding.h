@@ -79,7 +79,8 @@ public:
 	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
 	bool previewPath(bool bRemove = false);
 	bool removePreview();
-
+	/// Get all reachable tiles, based on cost.
+	std::vector<int> findReachable(BattleUnit *unit, int tuMax);
 };
 
 }
