@@ -152,13 +152,23 @@ Ruleset::~Ruleset()
 }
 
 /**
+ * Loads a ruleset's contents from the given source.
+ * @param source The source to use.
+ */
+void Ruleset::load(const std::string &source)
+{
+	std::string filename = Options::getDataFolder() + "Ruleset/" + source + ".rul";
+	loadFile(filename);
+}
+
+/**
  * Loads a ruleset's contents from a YAML file.
+ * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
  */
-void Ruleset::load(const std::string &filename)
+void Ruleset::loadFile(const std::string &filename)
 {
-	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
-	std::ifstream fin(s.c_str());
+	std::ifstream fin(filename.c_str());
 	if (!fin)
 	{
 		throw Exception("Failed to load ruleset");
