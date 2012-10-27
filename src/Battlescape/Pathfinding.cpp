@@ -19,6 +19,7 @@
 #include <list>
 #include "Pathfinding.h"
 #include "PathfindingNode.h"
+#include "PathfindingOpenSet.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
@@ -119,58 +120,55 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
  */
 bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition)
 {
-	_path.clear();
-
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 		it->reset();
 
 	// start position is the first one in our "open" list
-	std::list<PathfindingNode*> openList;
-	openList.push_back(getNode(startPosition));
-	openList.front()->check(0, 0, 0, 0);
+	PathfindingNode *start = getNode(startPosition);
+	start->connect(0, 0, 0, endPosition);
+	PathfindingOpenSet openList;
+	openList.push(start);
 
 	// if the open list is empty, we've reached the end
 	while(!openList.empty())
 	{
-		Position currentPos = openList.front()->getPosition();
-		PathfindingNode *currentNode = getNode(currentPos);
-		// this algorithm expands in all directions
+		PathfindingNode *currentNode = openList.pop();
+		Position const &currentPos = currentNode->getPosition();
+		currentNode->setChecked();
+		if (currentPos == endPosition) // We found our target.
+		{
+			_path.clear();
+			PathfindingNode *pf = currentNode;
+			while (pf->getPrevNode())
+			{
+				_path.push_back(pf->getPrevDir());
+				pf = pf->getPrevNode();
+			}
+			return true;
+		}
+
+		// Try all reachable neighbours.
 		for (int direction = 0; direction < 10; direction++)
 		{
 			Position nextPos;
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit);
-			if(tuCost < 255) // check if we can go to this node (ie is not blocked)
+			if (tuCost == 255) // Skip unreachable / blocked
+				continue;
+			PathfindingNode *nextNode = getNode(nextPos);
+			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
+				continue;
+			int totalTuCost = currentNode->getTUCost() + tuCost;
+			// If this node is unvisited or visited from a better path.
+			if (!nextNode->inOpenSet() || nextNode->getTUCost() > totalTuCost)
 			{
-				PathfindingNode *nextNode = getNode(nextPos);
-				int totalTuCost = currentNode->getTUCost() + tuCost;
-				// if we haven't checked this node, or the current cost tu cost is lower than our previous path, push this node in the open list to visit later.
-				if( (!nextNode->isChecked() || nextNode->getTUCost() > totalTuCost)
-					&& // this will keep pushing back nodes, as long as we did not reach the end position or there are still possible shorter paths
-					(!getNode(endPosition)->isChecked() || getNode(endPosition)->getTUCost() > totalTuCost)
-				)
-				{
-					nextNode->check(totalTuCost,
-									currentNode->getStepsNum() + 1,
-									currentNode,
-									direction);
-					openList.push_back(nextNode);
-				}
+				nextNode->connect(totalTuCost, currentNode, direction, endPosition);
+				openList.push(nextNode);
 			}
 		}
-		openList.pop_front();
 	}
-
-	if(!getNode(endPosition)->isChecked()) return false;
-
-	//Backward tracking of the path
-	PathfindingNode* pf = getNode(endPosition);
-	for (int i = getNode(endPosition)->getStepsNum(); i > 0; i--)
-	{
-		_path.push_back(pf->getPrevDir());
-		pf=pf->getPrevNode();
-	}
-	return true;
+	// Unble to reach the target
+	return false;
 }
 
 /**
