@@ -24,6 +24,9 @@
 namespace OpenXcom
 {
 
+class PathfindingOpenSet;
+class OpenSetEntry;
+
 /**
  * A class that holds pathfinding info for a certain node on the map.
  */
@@ -35,6 +38,11 @@ private:
 	int _tuCost, _stepsNum;
 	PathfindingNode* _prevNode;
 	int _prevDir;
+	/// Approximate cost to reach goal position.
+	int _tuGuess;
+	// Invasive field needed by PathfindingOpenSet
+	OpenSetEntry *_openentry;
+	friend class PathfindingOpenSet;
 public:
 	/// Creates a new PathfindingNode class
 	PathfindingNode(Position pos);
@@ -44,10 +52,10 @@ public:
 	const Position &getPosition() const;
 	/// Reset node.
 	void reset();
-	/// Check node.
-	void check(int tuCost, int stepsNum, PathfindingNode* prevNode, int prevDir);
 	/// is checked?
 	bool isChecked() const;
+	/// Mark as checked
+	void setChecked() { _checked = true; }
 	/// get TU cost
 	int getTUCost() const;
 	/// get steps num
@@ -56,6 +64,12 @@ public:
 	PathfindingNode* getPrevNode() const;
 	/// get previous walking direction
 	int getPrevDir() const;
+	/// Is this node already in a PathfindingOpenSet?
+	bool inOpenSet() const { return _openentry; }
+	/// Get approximate cost to reach target position.
+	int getTUGuess() const { return _tuGuess; }
+	/// Connect to previous node along the path.
+	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position &target);
 };
 
 }
