@@ -157,8 +157,11 @@ Ruleset::~Ruleset()
  */
 void Ruleset::load(const std::string &source)
 {
-	std::string filename = Options::getDataFolder() + "Ruleset/" + source + ".rul";
-	loadFile(filename);
+	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
+	if (!CrossPlatform::folderExists(dirname))
+		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
+	else
+		loadFiles(dirname);
 }
 
 /**
@@ -555,6 +558,20 @@ void Ruleset::loadFile(const std::string &filename)
 	}
 
 	fin.close();
+}
+
+/**
+ * Load the contents of all rule files in the given directory.
+ * @param dirname The name of an existing directory containing rule files.
+ */
+void Ruleset::loadFiles(const std::string &dirname)
+{
+	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
+
+	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	{
+		loadFile(dirname + *i);
+	}
 }
 
 /**
