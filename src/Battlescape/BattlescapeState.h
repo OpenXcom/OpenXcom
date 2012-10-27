@@ -22,7 +22,7 @@
 #include "../Engine/State.h"
 #include "Position.h"
 
-#include <vector>
+#include <queue>
 #include <string>
 
 namespace OpenXcom
@@ -69,7 +69,7 @@ private:
 	Timer *_animTimer, *_gameTimer;
 	SavedBattleGame *_save;
 	Text *_txtDebug;
-	std::vector<State*> _popups;
+	std::queue<State*> _popups;
 	BattlescapeGame *_battleGame;
 	bool firstInit;
 	bool isMouseScrolling;

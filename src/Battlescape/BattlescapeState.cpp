@@ -343,6 +343,11 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
  */
 BattlescapeState::~BattlescapeState()
 {
+	while (!_popups.empty())
+	{
+		delete _popups.front();
+		_popups.pop();
+	}
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;
@@ -390,8 +395,8 @@ void BattlescapeState::think()
 		else
 		{
 			// Handle popups
-			_game->pushState(*_popups.begin());
-			_popups.erase(_popups.begin());
+			_game->pushState(_popups.front());
+			_popups.pop();
 			popped = true;
 			return;
 		}
@@ -1055,7 +1060,7 @@ void BattlescapeState::handle(Action *action)
  */
 void BattlescapeState::popup(State *state)
 {
-	_popups.push_back(state);
+	_popups.push(state);
 }
 
 /**
@@ -1065,7 +1070,11 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort)
 {
-	_popups.clear();
+	while (!_popups.empty())
+	{
+		delete _popups.front();
+		_popups.pop();
+	}
 	_animTimer->stop();
 	_gameTimer->stop();
 	_save->setAborted(abort);
