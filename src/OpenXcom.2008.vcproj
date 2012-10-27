@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="OpenXcom"
 	ProjectGUID="{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}"
 	RootNamespace="OpenXcom"
@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="_SCL_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -96,7 +96,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -205,7 +205,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="_SCL_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -256,7 +256,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -691,11 +691,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\NewManufactureListState.cpp"
+				RelativePath=".\Basescape\ManufactureInfoState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Basescape\NewManufactureListState.h"
+				RelativePath=".\Basescape\ManufactureInfoState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ManufactureStartState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\ManufactureStartState.h"
 				>
 			</File>
 			<File
@@ -723,6 +731,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\NewManufactureListState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\NewManufactureListState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\NewResearchListState.cpp"
 				>
 			</File>
@@ -744,22 +760,6 @@
 			</File>
 			<File
 				RelativePath=".\Basescape\PlaceLiftState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\ManufactureStartState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\ManufactureStartState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\ManufactureInfoState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Basescape\ManufactureInfoState.h"
 				>
 			</File>
 			<File
@@ -1259,14 +1259,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\CraftErrorState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\CraftErrorState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\ConfirmDestinationState.cpp"
 				>
 			</File>
@@ -1291,6 +1283,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\CraftErrorState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\CraftErrorState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\CraftPatrolState.cpp"
 				>
 			</File>
@@ -1307,14 +1307,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\ResearchCompleteState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\ResearchCompleteState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\FundingState.cpp"
 				>
 			</File>
@@ -1328,6 +1320,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\GeoscapeCraftState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeOptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\GeoscapeOptionsState.h"
 				>
 			</File>
 			<File
@@ -1395,14 +1395,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\NewPossibleResearchState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\NewPossibleResearchState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\NewPossibleManufactureState.cpp"
 				>
 			</File>
@@ -1411,11 +1403,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\GeoscapeOptionsState.cpp"
+				RelativePath=".\Geoscape\NewPossibleResearchState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\GeoscapeOptionsState.h"
+				RelativePath=".\Geoscape\NewPossibleResearchState.h"
 				>
 			</File>
 			<File
@@ -1440,6 +1432,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\ProductionCompleteState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ResearchCompleteState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ResearchCompleteState.h"
 				>
 			</File>
 			<File
@@ -1735,14 +1735,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\GenUnit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\GenUnit.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\ItemContainer.cpp"
 				>
 			</File>
@@ -1863,19 +1855,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Savegame\Waypoint.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\Waypoint.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Savegame\Vehicle.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Savegame\Vehicle.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Waypoint.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\Waypoint.h"
 				>
 			</File>
 		</Filter>
@@ -1902,6 +1894,30 @@
 		<Filter
 			Name="Ruleset"
 			>
+			<File
+				RelativePath=".\Ruleset\AlienDeployment.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\AlienDeployment.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\AlienRace.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\AlienRace.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Armor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Armor.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Ruleset\ArticleDefinition.cpp"
 				>
@@ -1940,30 +1956,6 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\MapDataSet.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\AlienDeployment.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\AlienDeployment.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\AlienRace.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\AlienRace.h"
-				>
-			</File>			
-			<File
-				RelativePath=".\Ruleset\Armor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\Armor.h"
 				>
 			</File>
 			<File
@@ -2063,14 +2055,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Ruleset\Unit.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\Unit.h"
-				>
-			</File>			
-			<File
 				RelativePath=".\Ruleset\RuleUfo.cpp"
 				>
 			</File>
@@ -2086,9 +2070,53 @@
 				RelativePath=".\Ruleset\SoldierNamePool.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ruleset\Unit.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\Unit.h"
+				>
+			</File>
 		</Filter>
 		<File
+			RelativePath=".\Ufopaedia\ArticleStateVehicle.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Ufopaedia\ArticleStateVehicle.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Geoscape\Cord.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Savegame\CraftWeaponProjectile.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Savegame\CraftWeaponProjectile.h"
+			>
+		</File>
+		<File
 			RelativePath=".\dirent.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\FixedFloat.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\GraphSubset.h"
+			>
+		</File>
+		<File
+			RelativePath=".\lodepng.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\lodepng.h"
 			>
 		</File>
 		<File
@@ -2101,6 +2129,26 @@
 		</File>
 		<File
 			RelativePath=".\resource.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\ShaderDraw.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\ShaderDrawHelper.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\ShaderMove.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\ShaderRepeat.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\ShaderRotate.h"
 			>
 		</File>
 	</Files>
