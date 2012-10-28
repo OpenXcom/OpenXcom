@@ -25,7 +25,7 @@
 #include "Options.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 namespace OpenXcom

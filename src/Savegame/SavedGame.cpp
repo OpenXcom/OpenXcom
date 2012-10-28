@@ -45,7 +45,7 @@
 #include "Production.h"
 #include "TerrorSite.h"
 #ifdef _MSC_VER
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 namespace OpenXcom
