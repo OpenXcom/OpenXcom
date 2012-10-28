@@ -156,6 +156,8 @@ set ( battlescape_src
   Battlescape/BattlescapeGame.h
   Battlescape/CannotReequipState.cpp
   Battlescape/CannotReequipState.h
+  Battlescape/PathfindingOpenSet.cpp
+  Battlescape/PathfindingOpenSet.h
 )
 
 set ( engine_src
