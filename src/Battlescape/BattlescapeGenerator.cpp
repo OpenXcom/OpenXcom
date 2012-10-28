@@ -1338,11 +1338,17 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
  */
 void BattlescapeGenerator::fuelPowerSources()
 {
+	BattleItem *item;
+	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
+	RuleItem *elerium = _game->getRuleset()->getItem("STR_ELERIUM_115");
 	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) && _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
-			_save->getTiles()[i]->addItem(new BattleItem(_game->getRuleset()->getItem("STR_ELERIUM_115"), _save->getCurrentItemId()));
+			item = new BattleItem(elerium, _save->getCurrentItemId());
+			_save->getTiles()[i]->addItem(item);
+			_save->getItems()->push_back(item);
+			item->setSlot(ground);
 		}
 	}
 }
