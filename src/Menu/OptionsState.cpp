@@ -51,7 +51,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	_txtDisplayResolution = new Text(120, 9, 8, 32);
 	_txtDisplayWidth = new TextEdit(48, 16, 16, 42);
-	_txtDisplayX = new Text(8, 16, 64, 42);
+	_txtDisplayX = new Text(16, 16, 60, 42);
 	_txtDisplayHeight = new TextEdit(48, 16, 72, 42);
 	_btnDisplayUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 120, 32);
 	_btnDisplayDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 120, 50);
@@ -177,6 +177,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
 	_txtDisplayWidth->setBig();
 	_txtDisplayWidth->setText(Language::utf8ToWstr(Options::getString("displayWidth")));
+	_txtDisplayWidth->setNumerical(true);
 
 	_txtDisplayX->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayX->setAlign(ALIGN_CENTER);
@@ -187,6 +188,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayHeight->setAlign(ALIGN_CENTER);
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setText(Language::utf8ToWstr(Options::getString("displayHeight")));
+	_txtDisplayHeight->setNumerical(true);
 
 	_btnDisplayUp->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayUp->onMouseClick((ActionHandler)&OptionsState::btnDisplayUpClick);

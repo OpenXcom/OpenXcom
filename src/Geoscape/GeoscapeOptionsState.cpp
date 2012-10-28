@@ -20,14 +20,13 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
-#include "../Menu/LoadGameState.h"
-#include "../Menu/SaveGameState.h"
+#include "../Menu/LoadState.h"
+#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
@@ -108,7 +107,7 @@ void GeoscapeOptionsState::init()
  */
 void GeoscapeOptionsState::btnLoadClick(Action *action)
 {
-	_game->pushState(new LoadGameState(_game, true));
+	_game->pushState(new LoadState(_game, true));
 }
 
 /**
@@ -117,7 +116,7 @@ void GeoscapeOptionsState::btnLoadClick(Action *action)
  */
 void GeoscapeOptionsState::btnSaveClick(Action *action)
 {
-	_game->pushState(new SaveGameState(_game, true));
+	_game->pushState(new SaveState(_game, true));
 }
 
 /**

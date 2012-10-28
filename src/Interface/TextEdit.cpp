@@ -33,7 +33,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0)
+TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0), _numerical(false)
 {
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
@@ -170,6 +170,15 @@ void TextEdit::setAlign(TextHAlign align)
 void TextEdit::setVerticalAlign(TextVAlign valign)
 {
 	_text->setVerticalAlign(valign);
+}
+
+/**
+ * Restricts the text to only numerical input.
+ * @param numerical Numerical restriction.
+ */
+void TextEdit::setNumerical(bool numerical)
+{
+	_numerical = numerical;
 }
 
 /**
@@ -422,13 +431,13 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			_timer->stop();
 			break;
 		default:
-			if (action->getDetails()->key.keysym.unicode != 0)
+			Uint16 key = action->getDetails()->key.keysym.unicode;
+			if (((_numerical && key >= L'0' && key <= L'9') ||
+				(!_numerical && (key >= L' ' && key <= L'~') || key >= 160)) &&
+				!exceedsMaxWidth((wchar_t)key))
 			{
-				if (action->getDetails()->key.keysym.unicode >= L' ' && action->getDetails()->key.keysym.unicode <= L'~' && !exceedsMaxWidth((wchar_t)action->getDetails()->key.keysym.unicode))
-				{
-					_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
-					_caretPos++;
-				}
+				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
+				_caretPos++;
 			}
 		}
 	}

@@ -44,6 +44,9 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "TerrorSite.h"
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
 
 namespace OpenXcom
 {
@@ -156,7 +159,16 @@ void SavedGame::getList(TextList *list, Language *lang)
 			saveDay << time.getDay() << lang->getString(time.getDayString());
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
-			list->addRow(5, Language::utf8ToWstr(file.substr(0, file.length()-4)).c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+
+			std::string s = file.substr(0, file.length()-4);
+#ifdef _MSC_VER
+			int size = MultiByteToWideChar(CP_ACP, 0, &s[0], (int)s.size(), NULL, 0);
+			std::wstring wstr(size, 0);
+			MultiByteToWideChar(CP_ACP, 0, &s[0], (int)s.size(), &wstr[0], size);
+#else
+			std::wstring wstr = Language::utf8ToWstr(s);
+#endif
+			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 			fin.close();
 		}
 		catch (Exception &e)
@@ -181,7 +193,14 @@ void SavedGame::getList(TextList *list, Language *lang)
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
+#ifdef _MSC_VER
+	int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), NULL, 0);
+    std::wstring wstr(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &wstr[0], size);
+	std::ifstream fin(wstr);
+#else
 	std::ifstream fin(s.c_str());
+#endif
 	if (!fin)
 	{
 		throw Exception("Failed to load savegame");
@@ -281,7 +300,14 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 void SavedGame::save(const std::string &filename) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
+#ifdef _MSC_VER
+	int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), NULL, 0);
+    std::wstring wstr(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &wstr[0], size);
+	std::ofstream sav(wstr);
+#else
 	std::ofstream sav(s.c_str());
+#endif
 	if (!sav)
 	{
 		throw Exception("Failed to save savegame");

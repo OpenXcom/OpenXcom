@@ -32,7 +32,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
