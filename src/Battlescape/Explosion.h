@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class ResourcePack;
 class BattleItem;
 class SavedBattleGame;
 
@@ -36,9 +35,6 @@ class SavedBattleGame;
 class Explosion
 {
 private:
-	ResourcePack *_res;
-	SavedBattleGame *_save;
-	BattleItem *_item;
 	Position _position;
 	int _currentFrame, _startFrame;
 	bool _big;
