@@ -20,6 +20,7 @@
 #define OPENXCOM__SAVEDGAMESTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
