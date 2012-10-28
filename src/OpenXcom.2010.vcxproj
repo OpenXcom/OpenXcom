@@ -254,6 +254,7 @@
     <ClCompile Include="Battlescape\NextTurnState.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
+    <ClCompile Include="Battlescape\PathfindingOpenSet.cpp" />
     <ClCompile Include="Battlescape\PatrolBAIState.cpp" />
     <ClCompile Include="Battlescape\Position.cpp" />
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp" />
@@ -472,6 +473,7 @@
     <ClInclude Include="Battlescape\NextTurnState.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
+    <ClInclude Include="Battlescape\PathfindingOpenSet.h" />
     <ClInclude Include="Battlescape\PatrolBAIState.h" />
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\PrimeGrenadeState.h" />

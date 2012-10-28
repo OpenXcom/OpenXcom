@@ -326,6 +326,9 @@
     <ClCompile Include="Battlescape\PathfindingNode.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\PathfindingOpenSet.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
     <ClCompile Include="Savegame\BattleItem.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -973,6 +976,9 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\PathfindingNode.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\PathfindingOpenSet.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\BattleItem.h">
