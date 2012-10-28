@@ -21,7 +21,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -111,8 +110,6 @@ void ResearchInfoState::buildUi ()
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRules ()->getName()));
-	if (_txtTitle->getTextWidth() > _txtTitle->getWidth())
-		_txtTitle->setSmall();
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
 
@@ -179,8 +176,6 @@ void ResearchInfoState::SetAssignedScientist()
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAllocatedScientist->setText(s3.str());
-	if (_txtAllocatedScientist->getTextWidth() > _txtAllocatedScientist->getWidth())
-		_txtAllocatedScientist->setSmall();
 }
 
 /**

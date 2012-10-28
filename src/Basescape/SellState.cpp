@@ -23,7 +23,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -94,8 +93,6 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELL_ITEMS_SACK_PERSONNEL"));
-	if (_txtTitle->getTextWidth() > _txtTitle->getWidth())
-		_txtTitle->setSmall();
 
 	std::wstring s1 = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
 	s1 += Text::formatFunding(_total);

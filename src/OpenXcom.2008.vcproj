@@ -1595,11 +1595,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Menu\LoadGameState.cpp"
+				RelativePath=".\Menu\LoadState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Menu\LoadGameState.h"
+				RelativePath=".\Menu\LoadState.h"
 				>
 			</File>
 			<File
@@ -1643,11 +1643,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Menu\SaveGameState.cpp"
+				RelativePath=".\Menu\SaveState.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Menu\SaveGameState.h"
+				RelativePath=".\Menu\SaveState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\SavedGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\SavedGameState.h"
 				>
 			</File>
 			<File

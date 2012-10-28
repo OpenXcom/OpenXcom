@@ -30,7 +30,7 @@
 #include "../Engine/Options.h"
 #include "NewGameState.h"
 #include "NewBattleState.h"
-#include "LoadGameState.h"
+#include "LoadState.h"
 #include "OptionsState.h"
 
 namespace OpenXcom
@@ -140,7 +140,7 @@ void MainMenuState::btnNewBattleClick(Action *action)
  */
 void MainMenuState::btnLoadClick(Action *action)
 {
-	_game->pushState(new LoadGameState(_game, true));
+	_game->pushState(new LoadState(_game, true));
 }
 
 /**

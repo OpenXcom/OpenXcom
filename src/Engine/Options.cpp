@@ -23,6 +23,7 @@
 #include <sstream>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 #include <yaml-cpp/yaml.h>
 #include "Exception.h"
 #include "CrossPlatform.h"
@@ -94,24 +95,38 @@ void loadArgs(int argc, char** args)
 {
 	for (int i = 1; i < argc; ++i)
 	{
-		if (argc > i + 1)
+		std::string arg = args[i];
+		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
 		{
-			std::string arg = args[i];
-			if (arg[0] == '-' && argc > i + 1)
+			std::string argname;
+			if (arg[1] == '-' && arg.length() > 2)
+				argname = arg.substr(2, arg.length()-1);
+			else
+				argname = arg.substr(1, arg.length()-1);
+			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
+			if (argc > i + 1)
 			{
-				std::map<std::string, std::string>::iterator it = _options.find(arg.substr(1, arg.length()-1));
+				std::map<std::string, std::string>::iterator it = _options.find(argname);
 				if (it != _options.end())
 				{
 					it->second = args[i+1];
 				}
-				else if (arg == "-data")
+				else if (argname == "data")
 				{
 					_dataFolder = CrossPlatform::endPath(args[i+1]);
 				}
-				else if (arg == "-user")
+				else if (argname == "user")
 				{
 					_userFolder = CrossPlatform::endPath(args[i+1]);
 				}
+				else
+				{
+					std::cout << "Unknown option: " << argname << std::endl;
+				}
+			}
+			else
+			{
+				std::cout << "Unknown option: " << argname << std::endl;
 			}
 		}
 	}
@@ -121,16 +136,59 @@ void loadArgs(int argc, char** args)
 	}
 }
 
+/*
+ * Displays command-line help when appropriate.
+ * @param argc Number of arguments.
+ * @param args Array of argument strings.
+ */
+bool showHelp(int argc, char** args)
+{
+	std::stringstream help;
+	help << "OpenXcom v" << Options::getVersion() << std::endl;
+	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
+	help << "-data PATH" << std::endl;
+	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "-user PATH" << std::endl;
+	help << "        use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "-KEY VALUE" << std::endl;
+	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
+	help << "-help" << std::endl;
+	help << "-?" << std::endl;
+	help << "        show command-line help" << std::endl;
+	for (int i = 1; i < argc; ++i)
+	{
+		std::string arg = args[i];
+		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
+		{
+			std::string argname;
+			if (arg[1] == '-' && arg.length() > 2)
+				argname = arg.substr(2, arg.length()-1);
+			else
+				argname = arg.substr(1, arg.length()-1);
+			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
+			if (argname == "help" || argname == "?")
+			{
+				std::cout << help.str();
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 /**
  * Handles the initialization of setting up default options
  * and finding and loading any existing ones.
  * @param argc Number of arguments.
  * @param args Array of argument strings.
  */
-void init(int argc, char** args)
+bool init(int argc, char** args)
 {
-	std::cout << "Loading options..." << std::endl;
+	if (showHelp(argc, args))
+		return false;
+	std::cout << "Starting OpenXcom..." << std::endl << std::endl;
 	createDefault();
+	std::cout << "Loading options..." << std::endl;
 	loadArgs(argc, args);
 	if (_dataFolder == "")
 	{
@@ -185,6 +243,7 @@ void init(int argc, char** args)
 	std::cout << "User folder is: " << _userFolder << std::endl;
 	std::cout << "Config folder is: " << _configFolder << std::endl;
 	std::cout << "Options loaded successfully." << std::endl;
+	return true;
 }
 
 /**

@@ -42,7 +42,7 @@ enum KeyboardType { KEYBOARD_ON, KEYBOARD_VIRTUAL, KEYBOARD_OFF };
 namespace Options
 {
 	/// Initializes the options settings.
-	void init(int argc, char** args);
+	bool init(int argc, char** args);
 	/// Loads options from YAML.
 	void load(const std::string &filename = "options");
 	/// Saves options to YAML.

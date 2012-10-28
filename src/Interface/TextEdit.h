@@ -42,6 +42,7 @@ private:
 	Timer *_timer;
 	wchar_t _ascii;
 	size_t _caretPos;
+	bool _numerical;
 
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);
@@ -72,6 +73,8 @@ public:
 	void setAlign(TextHAlign align);
 	/// Sets the text edit's vertical alignment.
 	void setVerticalAlign(TextVAlign valign);
+	/// Sets the text edit to numerical input.
+	void setNumerical(bool numerical);
 	/// Sets the text edit's color.
 	void setColor(Uint8 color);
 	/// Gets the text edit's color.

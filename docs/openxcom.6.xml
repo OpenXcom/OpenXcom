@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://docbook.org/xml/4.5/docbookx.dtd" [
+
+  <!ENTITY dhdate	"<date>2012.10.25</date>">
+  <!ENTITY dhyear	"2012">
+  <!ENTITY dhsection	"6">
+  <!ENTITY dhpackage	"openxcom">
+  <!ENTITY dhversion	"0.4.5">
+  <!ENTITY dhauthor	"OpenXcom Developers">
+]>
+
+<refentry>
+
+	<refentryinfo>
+		<address>
+			<email>openxcom@gmail.com</email>
+		</address>
+		<copyright>
+			<year>&dhyear;</year>
+			<holder>&dhauthor;</holder>
+		</copyright>
+		&dhdate;
+	</refentryinfo>
+	
+	<refmeta>
+		<refentrytitle>&dhpackage;</refentrytitle>
+		<manvolnum>&dhsection;</manvolnum>
+		<refmiscinfo class="manual">User's Manual</refmiscinfo>
+		<refmiscinfo class="version">&dhversion;</refmiscinfo>
+	</refmeta>
+	
+	<refnamediv>
+		<refname>&dhpackage;</refname>
+		<refpurpose>
+			An open-source reimplementation of the original "UFO: Enemy Unknown"
+		</refpurpose>
+	</refnamediv>
+	
+	<refsynopsisdiv>
+		<cmdsynopsis>
+			<command>&dhpackage;</command>
+			<arg><replaceable>OPTIONS</replaceable></arg>
+		</cmdsynopsis>
+	</refsynopsisdiv>
+	
+	<refsect1>
+		<title>DESCRIPTION</title>
+		<para>
+			<command>&dhpackage;</command> is an open-source
+			reimplementation of the popular	UFO: Enemy Unknown
+			(X-Com: UFO Defense in USA) videogame by Microprose,
+			licensed under the GPL and written in C++ / SDL.
+		</para>
+	</refsect1>
+	
+	<refsect1>
+		<title>OPTIONS</title>
+		<variablelist>
+			<varlistentry>
+				<term><option>-data</option> <replaceable>PATH</replaceable></term>
+				<listitem>
+				<para>
+					use <replaceable>PATH</replaceable> as the default User Folder instead of auto-detecting
+				</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><option>-user</option> <replaceable>PATH</replaceable></term>
+				<listitem>
+				<para>
+					use <replaceable>PATH</replaceable> as the default Data Folder instead of auto-detecting
+				</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><option>-<replaceable>KEY</replaceable></option> <replaceable>VALUE</replaceable></term>
+				<listitem>
+				<para>
+					set option <replaceable>KEY</replaceable> to <replaceable>VALUE</replaceable>
+					instead of default/loaded value (eg. <literal>-displayWidth 640</literal>)
+				</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term><option>-help</option></term>
+				<term><option>-?</option></term>
+				<listitem>
+				<para>
+					show command-line help
+				</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</refsect1>
+	<refsect1>
+		<title>AUTHOR</title>
+		<para>
+			&dhauthor;
+		</para>
+	</refsect1>
+	<refsect1>
+		<title>SEE ALSO</title>
+		<para>
+			<ulink url="http://openxcom.org" />,
+			<ulink url="http://ufopaedia.org/index.php?title=OpenXcom" />
+		</para>
+	</refsect1>
+</refentry>

@@ -16,45 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEGAMESTATE_H
-#define OPENXCOM__SAVEGAMESTATE_H
+#ifndef OPENXCOM__SAVESTATE_H
+#define OPENXCOM__SAVESTATE_H
 
 #include <string>
-#include "../Engine/State.h"
+#include "SavedGameState.h"
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class TextEdit;
 
 /**
  * Save Game screen for listing info on available
  * saved games and saving them.
  */
-class SaveGameState : public State
+class SaveState : public SavedGameState
 {
 private:
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
-	TextList *_lstSaves;
 	TextEdit *_edtSave;
 	std::string _selected;
-	bool _geo;
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
-	SaveGameState(Game *game, bool geo);
+	SaveState(Game *game, bool geo);
 	/// Cleans up the Save Game state.
-	~SaveGameState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	~SaveState();
+	/// Updates the savegame list.
+	void updateList();
 	/// Handler for pressing a key on the Save edit.
 	void edtSaveKeyPress(Action *action);
 	/// Handler for clicking the Saves list.

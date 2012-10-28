@@ -27,8 +27,8 @@
 #include "../Interface/Text.h"
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
-#include "../Menu/LoadGameState.h"
-#include "../Menu/SaveGameState.h"
+#include "../Menu/LoadState.h"
+#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
@@ -433,7 +433,7 @@ void BattlescapeOptionsState::btnOkClick(Action *action)
  */
 void BattlescapeOptionsState::btnLoadClick(Action *action)
 {
-	_game->pushState(new LoadGameState(_game, false));
+	_game->pushState(new LoadState(_game, false));
 }
 
 /**
@@ -442,7 +442,7 @@ void BattlescapeOptionsState::btnLoadClick(Action *action)
  */
 void BattlescapeOptionsState::btnSaveClick(Action *action)
 {
-	_game->pushState(new SaveGameState(_game, false));
+	_game->pushState(new SaveState(_game, false));
 }
 
 }

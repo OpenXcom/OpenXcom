@@ -43,7 +43,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
@@ -871,13 +870,11 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			if (item)
 			{
 				dropItem(unit->getPosition(), item);
-				item->moveToOwner(0);
 			}
 			item = unit->getItem("STR_LEFT_HAND");
 			if (item)
 			{
 				dropItem(unit->getPosition(), item);
-				item->moveToOwner(0);
 			}
 			unit->setCache(0);
 			BattleAction ba;
@@ -1185,7 +1182,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	}
 
 	item->setSlot(getRuleset()->getInventory("STR_GROUND"));
-	item->setOwner(0);
+	item->moveToOwner(0);
 
 	getTileEngine()->applyItemGravity(_save->getTile(p));
 

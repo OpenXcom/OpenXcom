@@ -23,7 +23,6 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Interface/ImageButton.h"
@@ -853,22 +852,6 @@ void DogfightState::move()
 			_ufo->move();
 			_craft->setDestination(_ufo);
 		}
-		if(_destroyCraft)
-		{
-			// Remove the craft.
-			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
-			{
-				for(std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
-				{
-					if(*c == _craft)
-					{
-						delete *c;
-						(*b)->getCrafts()->erase(c);
-						break;
-					}
-				}
-			}
-		}
 
 		if (_destroyUfo)
 		{
@@ -898,6 +881,24 @@ void DogfightState::move()
 				}
 			}
 		}
+
+		
+		if(_destroyCraft)
+		{
+			// Remove the craft.
+			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+			{
+				for(std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
+				{
+					if(*c == _craft)
+					{
+						delete *c;
+						(*b)->getCrafts()->erase(c);
+						break;
+					}
+				}
+			}
+		}
 		_game->popState();
 	}
 
@@ -917,6 +918,7 @@ void DogfightState::move()
 	// End dogfight if UFO is crashed or destroyed.
 	if (!_end && _ufo->isCrashed())
 	{
+		_ufoEscapeTimer->stop();
 		if (_ufo->isDestroyed())
 		{
 			setStatus("STR_UFO_DESTROYED");

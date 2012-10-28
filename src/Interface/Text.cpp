@@ -350,6 +350,13 @@ void Text::processText()
 		}
 	}
 
+	// If big text won't fit the space, try small text
+	if (_font == _big && getTextWidth() > getWidth())
+	{
+		_font = _small;
+		processText();
+	}
+
 	_redraw = true;
 }
 

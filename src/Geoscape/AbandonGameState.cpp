@@ -21,7 +21,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -90,7 +89,6 @@ void AbandonGameState::btnYesClick(Action *action)
 {
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
-	//_game->setRuleset(0);
 }
 
 /**

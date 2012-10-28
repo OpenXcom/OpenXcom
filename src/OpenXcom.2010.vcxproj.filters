@@ -347,12 +347,6 @@
     <ClCompile Include="Ruleset\SoldierNamePool.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
-    <ClCompile Include="Menu\LoadGameState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\SaveGameState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\NoteState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -644,6 +638,15 @@
     </ClCompile>
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp">
       <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\LoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\SaveState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\SavedGameState.cpp">
+      <Filter>Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -996,12 +999,6 @@
     <ClInclude Include="Ruleset\SoldierNamePool.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Menu\LoadGameState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\SaveGameState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
     <ClInclude Include="Menu\NoteState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1291,6 +1288,15 @@
     </ClInclude>
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\LoadState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SaveState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\SavedGameState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
