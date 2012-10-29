@@ -222,7 +222,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				(*i)["position"][1] >> pos.y;
 				(*i)["position"][2] >> pos.z;
 				if (pos.x != -1)
-					getTile(pos)->addItem(item);
+					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
 			}
 			_items.push_back(item);
 		}

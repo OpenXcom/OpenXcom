@@ -1360,7 +1360,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		// copy items
 		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 		{
-			rt->addItem(*it);
+			rt->addItem(*it, (*it)->getSlot());
 		}
 
 		// clear tile

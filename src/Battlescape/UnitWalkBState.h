@@ -38,6 +38,7 @@ private:
 	TileEngine *_terrain;
 	void postPathProcedures();
 	void setNormalWalkSpeed();
+	void playMovementSound();
 public:
 	/// Creates a new UnitWalkBState class
 	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);

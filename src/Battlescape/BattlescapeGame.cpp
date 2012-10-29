@@ -1177,14 +1177,13 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	if (_save->getTile(p) == 0)
 		return;
 
-	_save->getTile(p)->addItem(item);
+	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
 
 	if(newItem)
 	{
 		_save->getItems()->push_back(item);
 	}
 
-	item->setSlot(getRuleset()->getInventory("STR_GROUND"));
 	item->setOwner(0);
 
 	getTileEngine()->applyItemGravity(_save->getTile(p));

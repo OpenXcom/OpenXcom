@@ -49,7 +49,7 @@ private:
 	UnitStats _stats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _loftemps;
-	int _value, _deathSound;
+	int _value, _deathSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 public:
@@ -81,6 +81,8 @@ public:
 	int getValue() const;
 	/// Get the death sound id.
 	int getDeathSound() const;
+	/// Get the move sound id.
+	int getMoveSound() const;
 	/// Get the intelligence. This is the number of turns AI remembers your troops position.
 	int getIntelligence() const;
 	/// Get the aggression. Determines the chance of revenge and taking cover.

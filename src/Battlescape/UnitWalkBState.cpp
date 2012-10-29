@@ -76,53 +76,9 @@ void UnitWalkBState::think()
 		return;
 	}
 
-	// during a walking cycle we make step sounds
 	if (_unit->getStatus() == STATUS_WALKING || _unit->getStatus() == STATUS_FLYING)
 	{
-
-		if (_unit->getVisible() && _unit->getStatus() == STATUS_WALKING)
-		{
-			if (_unit->getArmor()->getSize() > 1)
-			{
-				// play hwp engine sound
-				if (_unit->getWalkingPhase() == 0)
-				{
-					// tank with threads "walks"
-					if (_unit->getArmor()->getMovementType() == MT_WALK)
-						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(14)->play();
-					else // hovering tank hovers
-						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(40)->play();
-				}
-			}
-			else
-			{
-				// play footstep sound 1
-				if (_unit->getWalkingPhase() == 3)
-				{
-					Tile *tile = _unit->getTile();
-					if (tile->getFootstepSound())
-					{
-						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
-					}
-				}
-				// play footstep sound 2
-				if (_unit->getWalkingPhase() == 7)
-				{
-					Tile *tile = _unit->getTile();
-					if (tile->getFootstepSound())
-					{
-						_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
-					}
-				}
-			}
-		}
-		if (_unit->getVisible() && _unit->getStatus() == STATUS_FLYING)
-		{
-			if (_unit->getWalkingPhase() == 0)
-			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(15)->play();
-			}
-		}
+		playMovementSound();
 
 		_unit->keepWalking(); // advances the phase
 
@@ -343,6 +299,56 @@ void UnitWalkBState::setNormalWalkSpeed()
 			_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 		else
 			_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
+	}
+}
+
+
+/*
+ * Handle the stepping sounds.
+ */
+void UnitWalkBState::playMovementSound()
+{
+	if (!_unit->getVisible()) return;
+
+	if (_unit->getMoveSound() != -1)
+	{
+		// if a sound is configured in the ruleset, play that one
+		if (_unit->getWalkingPhase() == 0)
+		{
+			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getMoveSound())->play();
+		}
+	}
+	else
+	{
+		if (_unit->getStatus() == STATUS_WALKING)
+		{
+			// play footstep sound 1
+			if (_unit->getWalkingPhase() == 3)
+			{
+				Tile *tile = _unit->getTile();
+				if (tile->getFootstepSound())
+				{
+					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+				}
+			}
+			// play footstep sound 2
+			if (_unit->getWalkingPhase() == 7)
+			{
+				Tile *tile = _unit->getTile();
+				if (tile->getFootstepSound())
+				{
+					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+				}
+			}
+		}
+		else
+		{
+			// play default flying sound
+			if (_unit->getWalkingPhase() == 0)
+			{
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(15)->play();
+			}
+		}
 	}
 }
 

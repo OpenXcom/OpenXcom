@@ -60,7 +60,7 @@ YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _intelligence(0), _aggression(0), _specab(SPECAB_NONE)
+Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE)
 {
 }
 
@@ -124,6 +124,10 @@ void Unit::load(const YAML::Node &node)
 		{
 			i.second() >> _deathSound;
 		}
+		else if (key == "moveSound")
+		{
+			i.second() >> _moveSound;
+		}
 		else if (key == "intelligence")
 		{
 			i.second() >> _intelligence;
@@ -157,6 +161,7 @@ void Unit::save(YAML::Emitter &out) const
 	out << YAML::Key << "loftemps" << YAML::Value << _loftemps;
 	out << YAML::Key << "value" << YAML::Value << _value;
 	out << YAML::Key << "deathSound" << YAML::Value << _deathSound;
+	out << YAML::Key << "moveSound" << YAML::Value << _moveSound;
 	out << YAML::Key << "intelligence" << YAML::Value << _intelligence;
 	out << YAML::Key << "aggression" << YAML::Value << _aggression;
 	out << YAML::Key << "specab" << YAML::Value << _specab;
@@ -253,6 +258,16 @@ int Unit::getDeathSound() const
 {
 	return _deathSound;
 }
+
+/**
+ * Get the unit's move sound.
+ * @return id.
+ */
+int Unit::getMoveSound() const
+{
+	return _moveSound;
+}
+
 
 /**
  * Get the intelligence. This is the number of turns AI remembers your troops position.
