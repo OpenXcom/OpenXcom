@@ -18,11 +18,15 @@
  */
 #include "Language.h"
 #include <iostream>
+#include <locale>
 #include <fstream>
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Options.h"
 #include "../Interface/TextList.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 namespace OpenXcom
 {
@@ -46,105 +50,126 @@ Language::~Language()
 /**
  * Takes an 8-bit string encoded in UTF-8 and converts it
  * to a wide-character string.
- * @note Adapted from http://www.linuxquestions.org/questions/programming-9/wstring-utf8-conversion-in-pure-c-701084/
+ * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
  * @param src UTF-8 string.
  * @return Wide-character string.
  */
 std::wstring Language::utf8ToWstr(const std::string& src)
 {
-	std::wstring dest;
-	wchar_t w = 0;
-	int bytes = 0;
-	wchar_t err = 0xfffd;
-	for (size_t i = 0; i < src.size(); ++i)
-	{
-		unsigned char c = (unsigned char)src[i];
-		if (c <= 0x7f) //first byte
-		{
-			if (bytes)
-			{
-				dest.push_back(err);
-				bytes = 0;
-			}
-			dest.push_back((wchar_t)c);
-		}
-		else if (c <= 0xbf) //second/third/etc byte
-		{
-			if (bytes)
-			{
-				w = ((w << 6)|(c & 0x3f));
-				bytes--;
-				if (bytes == 0)
-					dest.push_back(w);
-			}
-			else
-				dest.push_back(err);
-		}
-		else if (c <= 0xdf) //2byte sequence start
-		{
-			bytes = 1;
-			w = c & 0x1f;
-		}
-		else if (c <= 0xef) //3byte sequence start
-		{
-			bytes = 2;
-			w = c & 0x0f;
-		}
-		else if (c <= 0xf7) //4byte sequence start
-		{
-			bytes = 3;
-			w = c & 0x07;
-		}
-		else
-		{
-			dest.push_back(err);
-			bytes = 0;
-		}
-	}
-	if (bytes)
-		dest.push_back(err);
-	return dest;
+	if (src.empty())
+		return L"";
+#ifdef _WIN32
+	int size = MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0);
+    std::wstring wstr(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &wstr[0], size);
+	return wstr;
+#else
+	std::wstring out;
+    unsigned int codepoint = 0;
+    int following = 0;
+    for (std::string::const_iterator i = src.begin(); i != src.end(); ++i)
+    {
+        unsigned char ch = *i;
+        if (ch <= 0x7f)
+        {
+            codepoint = ch;
+            following = 0;
+        }
+        else if (ch <= 0xbf)
+        {
+            if (following > 0)
+            {
+                codepoint = (codepoint << 6) | (ch & 0x3f);
+                --following;
+            }
+        }
+        else if (ch <= 0xdf)
+        {
+            codepoint = ch & 0x1f;
+            following = 1;
+        }
+        else if (ch <= 0xef)
+        {
+            codepoint = ch & 0x0f;
+            following = 2;
+        }
+        else
+        {
+            codepoint = ch & 0x07;
+            following = 3;
+        }
+        if (following == 0)
+        {
+            if (codepoint > 0xffff)
+            {
+                out.append(1, static_cast<wchar_t>(0xd800 + (codepoint >> 10)));
+                out.append(1, static_cast<wchar_t>(0xdc00 + (codepoint & 0x03ff)));
+            }
+            else
+                out.append(1, static_cast<wchar_t>(codepoint));
+            codepoint = 0;
+        }
+    }
+    return out;
+#endif
 }
 
 /**
  * Takes a wide-character string and converts it
  * to a 8-bit string encoded in UTF-8.
- * @note Adapted from http://www.linuxquestions.org/questions/programming-9/wstring-utf8-conversion-in-pure-c-701084/
+ * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
  * @param src Wide-character string.
  * @return UTF-8 string.
  */
 std::string Language::wstrToUtf8(const std::wstring& src)
 {
-	std::string dest;
-	for (size_t i = 0; i < src.size(); ++i)
-	{
-		wchar_t w = src[i];
-		if (w <= 0x7f)
-		{
-			dest.push_back((char)w);
-		}
-		else if (w <= 0x7ff)
-		{
-			dest.push_back(0xc0 | ((w >> 6)& 0x1f));
-			dest.push_back(0x80 | (w & 0x3f));
-		}
-		else if (w <= 0xffff)
-		{
-			dest.push_back(0xe0 | ((w >> 12)& 0x0f));
-			dest.push_back(0x80 | ((w >> 6) & 0x3f));
-			dest.push_back(0x80 | (w & 0x3f));
-		}
-		else if (w <= 0x10ffff)
-		{
-			dest.push_back(0xf0 | ((w >> 18)& 0x07));
-			dest.push_back(0x80 | ((w >> 12) & 0x3f));
-			dest.push_back(0x80 | ((w >> 6) & 0x3f));
-			dest.push_back(0x80 | (w & 0x3f));
-		}
-		else
-			dest.push_back('?');
-	}
-	return dest;
+	if (src.empty())
+		return "";
+#ifdef _WIN32
+	int size = WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
+    std::string str(size, 0);
+	WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
+	return str;
+#else
+	std::string out;
+    unsigned int codepoint = 0;
+    for (std::wstring::const_iterator i = src.begin(); i != src.end(); ++i)
+    {
+		wchar_t ch = *i;
+        if (ch >= 0xd800 && ch <= 0xdbff)
+            codepoint = ((ch - 0xd800) << 10) + 0x10000;
+        else
+        {
+            if (ch >= 0xdc00 && ch <= 0xdfff)
+                codepoint |= ch - 0xdc00;
+            else
+                codepoint = ch;
+
+            if (codepoint <= 0x7f)
+                out.append(1, static_cast<char>(codepoint));
+            else if (codepoint <= 0x7ff)
+            {
+                out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            else if (codepoint <= 0xffff)
+            {
+                out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
+                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            else
+            {
+                out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
+                out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            codepoint = 0;
+        }
+    }
+    return out;
+#endif
 }
 
 /**
@@ -319,7 +344,7 @@ std::wstring Language::getString(const std::string &id) const
 void Language::toHtml(const std::string &filename) const
 {
 	std::ofstream htmlFile (filename.c_str(), std::ios::out);
-	htmlFile << "<table border=\"1\" width=\"100\%\">" << std::endl;
+	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
 	for (std::map<std::string, std::wstring>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
 	{

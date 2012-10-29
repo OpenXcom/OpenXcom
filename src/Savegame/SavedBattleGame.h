@@ -71,7 +71,6 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	Position _camera;
 	Uint8 _scrollButton;  // this is a cache for Options::getString("battleScrollButton")
 	int _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
 	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
@@ -169,10 +168,6 @@ public:
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Set or try to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-	/// Gets the current camera position.
-	Position getCameraPosition() const;
-	/// Sets the current camera position.
-	void setCameraPosition(Position pos);
 	/// get ScrollButton
 	Uint8 getScrollButton() const;
 	/// get ScrollButtonInvertMode

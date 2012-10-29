@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__SAVEGAMESTATE_H
-#define OPENXCOM__SAVEGAMESTATE_H
+#ifndef OPENXCOM__SAVEDGAMESTATE_H
+#define OPENXCOM__SAVEDGAMESTATE_H
 
-#include <string>
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -29,36 +29,32 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
-class TextEdit;
 
 /**
- * Save Game screen for listing info on available
- * saved games and saving them.
+ * Base class for saved game screens which
+ * provides the common layout and listing.
  */
-class SaveGameState : public State
+class SavedGameState : public State
 {
-private:
+protected:
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
+	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus;
 	TextList *_lstSaves;
-	TextEdit *_edtSave;
-	std::string _selected;
 	bool _geo;
-	int _previousSelectedRow, _selectedRow;
 public:
-	/// Creates the Save Game state.
-	SaveGameState(Game *game, bool geo);
-	/// Cleans up the Save Game state.
-	~SaveGameState();
+	/// Creates the Saved Game state.
+	SavedGameState(Game *game, bool geo);
+	/// Cleans up the Saved Game state.
+	virtual ~SavedGameState();
 	/// Updates the palette.
 	void init();
+	/// Updates the savegame list.
+	virtual void updateList();
+	/// Updates the status message.
+	void updateStatus(const std::string &msg);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
-	/// Handler for pressing a key on the Save edit.
-	void edtSaveKeyPress(Action *action);
-	/// Handler for clicking the Saves list.
-	void lstSavesClick(Action *action);
 };
 
 }

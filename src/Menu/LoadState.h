@@ -16,40 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__LOADGAMESTATE_H
-#define OPENXCOM__LOADGAMESTATE_H
+#ifndef OPENXCOM__LOADSTATE_H
+#define OPENXCOM__LOADSTATE_H
 
-#include "../Engine/State.h"
+#include "SavedGameState.h"
 
 namespace OpenXcom
 {
-
-class TextButton;
-class Window;
-class Text;
-class TextList;
 
 /**
  * Load Game screen for listing info on available
  * saved games and loading them.
  */
-class LoadGameState : public State
+class LoadState : public SavedGameState
 {
-private:
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate;
-	TextList *_lstSaves;
-	bool _geo;
 public:
 	/// Creates the Load Game state.
-	LoadGameState(Game *game, bool geo);
+	LoadState(Game *game, bool geo);
 	/// Cleans up the Load Game state.
-	~LoadGameState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	~LoadState();
 	/// Handler for clicking the Saves list.
 	void lstSavesClick(Action *action);
 };

@@ -26,7 +26,6 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
@@ -333,7 +332,6 @@ void GeoscapeState::init()
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
 	_globe->focus();
-	_globe->center(_game->getSavedGame()->getGlobeLongitude(), _game->getSavedGame()->getGlobeLatitude());
 	_globe->draw();
 
 	// Set music if it's not already playing

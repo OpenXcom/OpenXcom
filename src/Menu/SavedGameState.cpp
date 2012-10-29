@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "LoadGameState.h"
+#include "SavedGameState.h"
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 #include "../Savegame/SavedGame.h"
@@ -24,9 +24,9 @@
 #include "../Engine/Game.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
+#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -40,11 +40,11 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Load Game screen.
+ * Initializes all the elements in the Saved Game screen.
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
+SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 {
 	// Create objects
 	WindowPopup p = POPUP_BOTH;
@@ -56,6 +56,7 @@ LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
 	_txtName = new Text(150, 9, 16, 24);
 	_txtTime = new Text(30, 9, 184, 24);
 	_txtDate = new Text(30, 9, 214, 24);
+	_txtStatus = new Text(320, 16, 0, 92);
 	_lstSaves = new TextList(288, 128, 8, 32);
 
 	// Set palette
@@ -71,6 +72,7 @@ LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
 	add(_txtTime);
 	add(_txtDate);
 	add(_lstSaves);
+	add(_txtStatus);
 
 	// Set up objects
 	if (_geo)
@@ -87,6 +89,8 @@ LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_txtTime->setColor(Palette::blockOffset(15)-1);
 
 		_txtDate->setColor(Palette::blockOffset(15)-1);
+
+		_txtStatus->setColor(Palette::blockOffset(8)+5);
 
 		_lstSaves->setColor(Palette::blockOffset(8)+10);
 	}
@@ -111,16 +115,18 @@ LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_txtDate->setColor(Palette::blockOffset(0));
 		_txtDate->setHighContrast(true);
 
+		_txtStatus->setColor(Palette::blockOffset(0));
+		_txtStatus->setHighContrast(true);
+
 		_lstSaves->setColor(Palette::blockOffset(0));
 		_lstSaves->setHighContrast(true);
 	}
 
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&LoadGameState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
 
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
 
@@ -128,17 +134,19 @@ LoadGameState::LoadGameState(Game *game, bool geo) : State(game), _geo(geo)
 
 	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
 
+	_txtStatus->setBig();
+	_txtStatus->setAlign(ALIGN_CENTER);
+
 	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
-	_lstSaves->onMouseClick((ActionHandler)&LoadGameState::lstSavesClick);
 }
 
 /**
  *
  */
-LoadGameState::~LoadGameState()
+SavedGameState::~SavedGameState()
 {
 
 }
@@ -146,75 +154,53 @@ LoadGameState::~LoadGameState()
 /**
  * Resets the palette and refreshes saves.
  */
-void LoadGameState::init()
+void SavedGameState::init()
 {
+	_txtStatus->setText(L"");
+
 	if (_geo)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	}
 
-	_lstSaves->clearList();
 	try
 	{
-		SavedGame::getList(_lstSaves, _game->getLanguage());
+		updateList();
 	}
 	catch (Exception &e)
 	{
 		std::cerr << "ERROR: " << e.what() << std::endl;
-		std::cerr << Options::getUserFolder() << std::endl;
 	}
+}
+
+/**
+ * Updates the save game list with a current list
+ * of available savegames.
+ */
+void SavedGameState::updateList()
+{
+	_lstSaves->clearList();
+	SavedGame::getList(_lstSaves, _game->getLanguage());
+}
+
+/**
+ * Updates the status message in the center of the screen.
+ * @param msg New message ID.
+ */
+void SavedGameState::updateStatus(const std::string &msg)
+{
+	_txtStatus->setText(_game->getLanguage()->getString(msg));
+	blit();
+	_game->getScreen()->flip();
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void LoadGameState::btnCancelClick(Action *action)
+void SavedGameState::btnCancelClick(Action *action)
 {
 	_game->popState();
-}
-
-/**
- * Loads the selected save.
- * @param action Pointer to an action.
- */
-void LoadGameState::lstSavesClick(Action *action)
-{
-	SavedGame *s = new SavedGame();
-	try
-	{
-		//_game->setRuleset(r);
-		s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), _game->getRuleset());
-		_game->setSavedGame(s);
-		_game->setState(new GeoscapeState(_game));
-		if (_game->getSavedGame()->getBattleGame() != 0)
-		{
-			_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
-			_game->pushState(new BattlescapeState(_game));
-		}
-	}
-	catch (Exception &e)
-	{
-		std::cerr << "ERROR: " << e.what() << std::endl;
-		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-		if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
-		delete s;
-		_game->setSavedGame(0);
-	}
-	catch (YAML::Exception &e)
-	{
-		std::cerr << "ERROR: " << e.what() << std::endl;
-		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-		if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
-		delete s;
-		_game->setSavedGame(0);
-	}
 }
 
 }

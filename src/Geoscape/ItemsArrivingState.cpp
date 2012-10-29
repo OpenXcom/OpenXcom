@@ -21,7 +21,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -119,7 +118,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 						{
 						
-							if ((*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							if ((*w) != 0 && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
 							{
 								(*w)->setRearming(true);
 								(*c)->setStatus("STR_REARMING");

@@ -16,20 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "SaveGameState.h"
+#include "SaveState.h"
 #include <iostream>
 #include <yaml-cpp/yaml.h>
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Engine/Exception.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
@@ -43,155 +39,60 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-SaveGameState::SaveGameState(Game *game, bool geo) : State(game), _selected(""), _geo(geo)
+SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected("")
 {
 	// Create objects
-	WindowPopup p = POPUP_BOTH;
-	if (!geo)
-		p = POPUP_NONE;
-	_window = new Window(this, 320, 200, 0, 0, p);
-	_btnCancel = new TextButton(80, 16, 120, 172);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtName = new Text(150, 9, 16, 24);
-	_txtTime = new Text(30, 9, 184, 24);
-	_txtDate = new Text(30, 9, 214, 24);
-	_lstSaves = new TextList(288, 128, 8, 32);
+	
 	_edtSave = new TextEdit(168, 9, 0, 0);
-
-	// Set palette
-	if (_geo)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-	}
 
 	_previousSelectedRow = -1;
 	_selectedRow = -1;
 
-	add(_window);
-	add(_btnCancel);
-	add(_txtTitle);
-	add(_txtName);
-	add(_txtTime);
-	add(_txtDate);
-	add(_lstSaves);
 	add(_edtSave);
 
 	// Set up objects
 	if (_geo)
 	{
-		_window->setColor(Palette::blockOffset(8)+5);
-		_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
-
-		_btnCancel->setColor(Palette::blockOffset(8)+5);
-
-		_txtTitle->setColor(Palette::blockOffset(15)-1);
-
-		_txtName->setColor(Palette::blockOffset(15)-1);
-
-		_txtTime->setColor(Palette::blockOffset(15)-1);
-
-		_txtDate->setColor(Palette::blockOffset(15)-1);
-
-		_lstSaves->setColor(Palette::blockOffset(8)+10);
-
 		_edtSave->setColor(Palette::blockOffset(8)+10);
 	}
 	else
 	{
-		_window->setColor(Palette::blockOffset(0));
-		_window->setHighContrast(true);
-		_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
-
-		_btnCancel->setColor(Palette::blockOffset(0));
-		_btnCancel->setHighContrast(true);
-
-		_txtTitle->setColor(Palette::blockOffset(0));
-		_txtTitle->setHighContrast(true);
-
-		_txtName->setColor(Palette::blockOffset(0));
-		_txtName->setHighContrast(true);
-
-		_txtTime->setColor(Palette::blockOffset(0));
-		_txtTime->setHighContrast(true);
-
-		_txtDate->setColor(Palette::blockOffset(0));
-		_txtDate->setHighContrast(true);
-
-		_lstSaves->setColor(Palette::blockOffset(0));
-		_lstSaves->setHighContrast(true);
-
 		_edtSave->setColor(Palette::blockOffset(0));
 		_edtSave->setHighContrast(true);
 	}
 
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&SaveGameState::btnCancelClick);
-
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SAVE_POSITION"));
 
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
-
-	_txtTime->setText(_game->getLanguage()->getString("STR_TIME"));
-
-	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
-
-	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
-	_lstSaves->setSelectable(true);
-	_lstSaves->setBackground(_window);
-	_lstSaves->setMargin(8);
-	_lstSaves->onMouseClick((ActionHandler)&SaveGameState::lstSavesClick);
+	_lstSaves->onMouseClick((ActionHandler)&SaveState::lstSavesClick);
 
 	_edtSave->setVisible(false);
-	_edtSave->onKeyboardPress((ActionHandler)&SaveGameState::edtSaveKeyPress);
+	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
 }
 
 /**
  *
  */
-SaveGameState::~SaveGameState()
+SaveState::~SaveState()
 {
 
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
+ * Updates the save game list with a current list
+ * of available savegames.
  */
-void SaveGameState::init()
+void SaveState::updateList()
 {
-	if (_geo)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-	}
-	
 	_lstSaves->clearList();
 	_lstSaves->addRow(1, _game->getLanguage()->getString("STR_NEW_SAVED_GAME").c_str());
-	try
-	{
-		SavedGame::getList(_lstSaves, _game->getLanguage());
-	}
-	catch (Exception &e)
-	{
-		std::cerr << "ERROR: " << e.what() << std::endl;
-		std::cerr << Options::getUserFolder() << std::endl;
-	}
-}
-
-/**
- * Returns to the previous screen.
- * @param action Pointer to an action.
- */
-void SaveGameState::btnCancelClick(Action *action)
-{
-	_game->popState();
+	SavedGame::getList(_lstSaves, _game->getLanguage());
 }
 
 /**
  * Names the selected save.
  * @param action Pointer to an action.
  */
-void SaveGameState::lstSavesClick(Action *action)
+void SaveState::lstSavesClick(Action *action)
 {
 	_previousSelectedRow = _selectedRow;
 	_selectedRow = _lstSaves->getSelectedRow();
@@ -201,7 +102,7 @@ void SaveGameState::lstSavesClick(Action *action)
 		case -1:	// first click on the savegame list
 			break;
 		case 0:
-			_lstSaves->setCellText(_previousSelectedRow	, 0, L"<NEW SAVED GAME>");
+			_lstSaves->setCellText(_previousSelectedRow	, 0, _game->getLanguage()->getString("STR_NEW_SAVED_GAME"));
 			break;
 		default:
 			_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
@@ -229,11 +130,12 @@ void SaveGameState::lstSavesClick(Action *action)
  * Saves the selected save.
  * @param action Pointer to an action.
  */
-void SaveGameState::edtSaveKeyPress(Action *action)
+void SaveState::edtSaveKeyPress(Action *action)
 {
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
+		updateStatus("STR_SAVING_GAME");
 		try
 		{
 			if (_selectedRow > 0)

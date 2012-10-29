@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <exception>
-#include <iostream>
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Screen.h"
@@ -49,8 +48,8 @@ int main(int argc, char** args)
 	try
 	{
 #endif
-		std::cout << "Starting OpenXcom..." << std::endl << std::endl;
-		Options::init(argc, args);
+		if (!Options::init(argc, args))
+			return EXIT_SUCCESS;
 		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 8);
 		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
