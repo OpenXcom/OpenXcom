@@ -897,12 +897,12 @@ void GeoscapeState::time1Day()
 			std::vector<RuleManufacture *> newPossibleManufacture;
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
-			_game->pushState(new ResearchCompleteState (_game, research));
-			_game->pushState(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			if (!newPossibleManufacture.empty())
 			{
 				_game->pushState(new NewPossibleManufactureState(_game, *i, newPossibleManufacture));
 			}
+			_game->pushState(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			_game->pushState(new ResearchCompleteState (_game, research));
 			delete(*iter);
 		}
 		// Handle soldier wounds
