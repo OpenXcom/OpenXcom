@@ -163,6 +163,11 @@ Game::~Game()
 void Game::run()
 {
 	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
+	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
+	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	int pauseMode = Options::getInt("pauseMode");
+	if (pauseMode > 3)
+		pauseMode = 3;
 	while (!_quit)
 	{
 		// Clean up states
@@ -202,14 +207,13 @@ void Game::run()
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
 						case SDL_APPACTIVE:
-							runningState =
-							Options::getBool("pauseInactive") ? PAUSED : SLOWED;
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : runningState;
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[pauseMode];
 							break;
 						case SDL_APPMOUSEFOCUS:
+							// We consiously ignore it.
+							break;
 						case SDL_APPINPUTFOCUS:
-							runningState = Options::getBool("pauseInactive") ? PAUSED : RUNNING;
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : runningState;
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[pauseMode];
 							break;
 					}
 					break;

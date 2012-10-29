@@ -81,7 +81,7 @@ void createDefault()
 	setBool("globeSeasons", false);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
-	setBool("pauseInactive", false);
+	setInt("pauseMode", 0);
 
 	_rulesets.push_back("Xcom1Ruleset");
 }
