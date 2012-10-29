@@ -162,7 +162,7 @@ Game::~Game()
  */
 void Game::run()
 {
-	enum ApplicationState { RUNNING = 0, PAUSED } runningState = RUNNING;
+	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
 	while (!_quit)
 	{
 		// Clean up states
@@ -202,9 +202,14 @@ void Game::run()
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
 						case SDL_APPACTIVE:
+							runningState =
+							Options::getBool("pauseInactive") ? PAUSED : SLOWED;
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : runningState;
+							break;
 						case SDL_APPMOUSEFOCUS:
 						case SDL_APPINPUTFOCUS:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : PAUSED;
+							runningState = Options::getBool("pauseInactive") ? PAUSED : RUNNING;
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : runningState;
 							break;
 					}
 					break;
@@ -255,7 +260,8 @@ void Game::run()
 		switch (runningState)
 		{
 			case RUNNING: SDL_Delay(1); break; //Save CPU from going 100%
-			case PAUSED: SDL_Delay(100); break; //More slowing down.
+			case SLOWED: case PAUSED:
+				SDL_Delay(100); break; //More slowing down.
 		}
 	}
 }
