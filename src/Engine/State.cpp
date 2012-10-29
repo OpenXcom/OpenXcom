@@ -141,6 +141,16 @@ void State::init()
 }
 
 /**
+ * Signals the state that a new state will run.
+ * The state is not destroyed, just not executing.
+ * @sa enter()
+ */
+void State::leave()
+{
+
+}
+
+/**
  * Runs any code the state needs to keep updating every
  * game cycle, like timers and other real-time elements.
  */
