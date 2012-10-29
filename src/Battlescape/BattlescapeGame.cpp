@@ -869,12 +869,12 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			BattleItem *item = unit->getItem("STR_RIGHT_HAND");
 			if (item)
 			{
-				dropItem(unit->getPosition(), item);
+				dropItem(unit->getPosition(), item, false, true);
 			}
 			item = unit->getItem("STR_LEFT_HAND");
 			if (item)
 			{
-				dropItem(unit->getPosition(), item);
+				dropItem(unit->getPosition(), item, false, true);
 			}
 			unit->setCache(0);
 			BattleAction ba;
@@ -1165,8 +1165,9 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
  * @param position Position to spawn the item.
  * @param item Pointer to the item.
  * @param newItem Bool whether this is a new item.
+ * @param removeItem Bool whether to remove the item from owner.
  */
-void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool newItem)
+void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool newItem, bool removeItem)
 {
 	Position p = position;
 
@@ -1182,7 +1183,14 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	}
 
 	item->setSlot(getRuleset()->getInventory("STR_GROUND"));
-	item->moveToOwner(0);
+	if (removeItem)
+	{
+		item->moveToOwner(0);
+	}
+	else
+	{
+		item->setOwner(0);
+	}
 
 	getTileEngine()->applyItemGravity(_save->getTile(p));
 

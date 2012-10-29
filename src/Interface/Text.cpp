@@ -128,6 +128,12 @@ void Text::setText(const std::wstring &text)
 {
 	_text = text;
 	processText();
+	// If big text won't fit the space, try small text
+	if (_font == _big && getTextWidth() > getWidth())
+	{
+		setSmall();
+		processText();
+	}
 }
 
 /**
@@ -348,13 +354,6 @@ void Text::processText()
 				width -= word + font->getWidth() / 2;
 			}
 		}
-	}
-
-	// If big text won't fit the space, try small text
-	if (_font == _big && getTextWidth() > getWidth())
-	{
-		_font = _small;
-		processText();
 	}
 
 	_redraw = true;

@@ -110,7 +110,7 @@ public:
 	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
 	/// Add item & affect with gravity.
-	void dropItem(const Position &position, BattleItem *item, bool newItem = false);
+	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
 	/// Check whether TUs should be spent.
 	bool dontSpendTUs();
 	/// Handle kneeling action.
