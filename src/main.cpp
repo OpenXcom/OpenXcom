@@ -54,9 +54,7 @@ int main(int argc, char** args)
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;
-		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 8);
-		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
-		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
+		game = new Game("OpenXcom " + Options::getVersion());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 		game->setState(new StartState(game));
 		game->run();

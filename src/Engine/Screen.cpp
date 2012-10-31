@@ -39,18 +39,19 @@ const double Screen::BASE_HEIGHT = 200.0;
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param bpp Bits-per-pixel.
+ * @param fullscreen Fullscreen mode.
+ * @warning Currently the game is designed for 8bpp, so there's no telling what'll
+ * happen if you use a different value.
  */
-Screen::Screen(int width, int height, int bpp) : _scaleX(1.0), _scaleY(1.0), _fullscreen(false)
+Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen)
 {
+	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT);
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
-	Log(LOG_INFO) << "Attempting to initialize display to " << width << "x" << height << "x" << bpp << "...";
-	_screen = SDL_SetVideoMode(width, height, bpp, _flags);
-	if (_screen == 0)
+	if (_fullscreen)
 	{
-		throw Exception(SDL_GetError());
+		_flags |= SDL_FULLSCREEN;
 	}
-	Log(LOG_INFO) << "Display initialized to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
-	_surface = new Surface(width, height);
+	setResolution(width, height);
 }
 
 /**
@@ -336,13 +337,13 @@ void Screen::setResolution(int width, int height)
 {
 	_scaleX = width / BASE_WIDTH;
 	_scaleY = height / BASE_HEIGHT;
-	Log(LOG_INFO) << "Attempting to change display to " << width << "x" << height << "...";
-	_screen = SDL_SetVideoMode(width, height, _screen->format->BitsPerPixel, _flags);
+	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
+	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
-	Log(LOG_INFO) << "Display changed to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
+	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
 	setPalette(getPalette());
 }
 

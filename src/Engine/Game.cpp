@@ -47,13 +47,8 @@ namespace OpenXcom
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
- * @param width Width of the display screen.
- * @param height Height of the display screen.
- * @param bpp Bits-per-pixel of the display screen.
- * @warning Currently the game is designed for 8bpp, so there's no telling what'll
- * happen if you use a different value.
  */
-Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
 	Log(LOG_INFO) << "Initializing engine...";
 
@@ -116,7 +111,7 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 	SDL_EnableUNICODE(1);
 
 	// Create display
-	_screen = new Screen(width, height, bpp);
+	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 8, Options::getBool("fullscreen"));
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
