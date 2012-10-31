@@ -17,14 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Language.h"
-#include <iostream>
 #include <locale>
 #include <fstream>
 #include "CrossPlatform.h"
+#include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 
@@ -232,7 +233,7 @@ std::vector<std::string> Language::getList(TextList *list)
 		}
 		catch (Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			i = langs.erase(i);
 			continue;
 		}
@@ -327,7 +328,7 @@ std::wstring Language::getString(const std::string &id) const
 	std::map<std::string, std::wstring>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
-		std::wcout << "WARNING: " << utf8ToWstr(id) << " not found in " << _name << std::endl;
+		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
 		return utf8ToWstr(id);
 	}
 	else

@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <exception>
+#include "Engine/Logger.h"
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Screen.h"
@@ -47,6 +48,9 @@ int main(int argc, char** args)
 #ifndef _DEBUG
 	try
 	{
+		Logger::reportingLevel() = LOG_INFO;
+#else
+		Logger::reportingLevel() = LOG_DEBUG;
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;

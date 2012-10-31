@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
+#include "../Engine/Logger.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
@@ -45,6 +46,7 @@
 #include "Production.h"
 #include "TerrorSite.h"
 #ifdef _MSC_VER
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 
@@ -173,12 +175,12 @@ void SavedGame::getList(TextList *list, Language *lang)
 		}
 		catch (Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			continue;
 		}
 		catch (YAML::Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			continue;
 		}
 	}

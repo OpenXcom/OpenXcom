@@ -1298,6 +1298,9 @@
     <ClInclude Include="Menu\SavedGameState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Logger.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

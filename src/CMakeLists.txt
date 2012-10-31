@@ -199,6 +199,7 @@ set ( engine_src
   Engine/SurfaceSet.h
   Engine/Screen.cpp
   Engine/Screen.h
+  Engine/Logger.h
 )
 
 set ( geoscape_src

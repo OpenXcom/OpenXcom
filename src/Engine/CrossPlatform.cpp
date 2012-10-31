@@ -17,12 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
-#include <iostream>
 #include <algorithm>
 #include "../dirent.h"
+#include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
@@ -63,22 +64,8 @@ void showError(const std::string &error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
-#else
-	std::cerr << "ERROR: " << error << std::endl;
 #endif
-}
-
-/**
- * Displays a message box with an error message.
- * @param error Error message.
- */
-void showError(const std::wstring &error)
-{
-#ifdef _WIN32
-	MessageBoxW(NULL, error.c_str(), L"OpenXcom Error", MB_ICONERROR | MB_OK);
-#else
-	std::wcerr << L"ERROR: " << error << std::endl;
-#endif
+	Log(LOG_FATAL) << error;
 }
 
 /**

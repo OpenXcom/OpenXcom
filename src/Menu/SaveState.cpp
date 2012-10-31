@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SaveState.h"
-#include <iostream>
 #include <yaml-cpp/yaml.h>
+#include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -151,7 +151,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 		}
 		catch (Exception &e)
 		{
-			std::cerr << "ERROR: " << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
 			if (_geo)
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
@@ -160,7 +160,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 		}
 		catch (YAML::Exception &e)
 		{
-			std::cerr << "ERROR: " << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
 			if (_geo)
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));

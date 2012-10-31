@@ -498,6 +498,7 @@
     <ClInclude Include="Engine\GMCat.h" />
     <ClInclude Include="Engine\InteractiveSurface.h" />
     <ClInclude Include="Engine\Language.h" />
+    <ClInclude Include="Engine\Logger.h" />
     <ClInclude Include="Engine\Music.h" />
     <ClInclude Include="Engine\Options.h" />
     <ClInclude Include="Engine\Palette.h" />

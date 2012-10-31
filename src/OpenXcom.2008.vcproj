@@ -419,6 +419,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\Logger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Music.cpp"
 				>
 			</File>

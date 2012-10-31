@@ -238,6 +238,7 @@ openxcom_SOURCES = \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
+	src/Engine/Logger.h \
 	src/Engine/Music.cpp \
 	src/Engine/Music.h \
 	src/Engine/Options.cpp \

@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "StartState.h"
-#include <iostream>
 #include <SDL.h>
+#include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/XcomResourcePack.h"
@@ -82,12 +82,12 @@ void StartState::think()
 	case LOADING_STARTED:
 		try
 		{
-			std::cout << "Loading resources..." << std::endl;
+			Log(LOG_INFO) << "Loading resources...";
 			_game->setResourcePack(new XcomResourcePack());
-			std::cout << "Resources loaded successfully." << std::endl;
-			std::cout << "Loading ruleset..." << std::endl;
+			Log(LOG_INFO) << "Resources loaded successfully.";
+			Log(LOG_INFO) << "Loading ruleset...";
 			_game->loadRuleset();
-			std::cout << "Ruleset loaded successfully." << std::endl;
+			Log(LOG_INFO) << "Ruleset loaded successfully.";
 			std::vector<std::string> langs = Language::getList(0);
 			if (langs.empty())
 			{
@@ -106,13 +106,15 @@ void StartState::think()
 			_surface->drawString(0, 48, "correctly.", 1);
 			_surface->drawString(0, 72, "Check the README for more details.", 1);
 			_surface->drawString(76, 192, "Press any key to quit", 1);
+			Log(LOG_ERROR) << e.what();
 		}
 		break;
 	case LOADING_NONE:
 		_load = LOADING_STARTED;
 		break;
 	case LOADING_SUCCESSFUL:
-		std::cout << std::endl << "OpenXcom started successfully. Enjoy!" << std::endl;
+		Log(LOG_INFO) << "-------------------------";
+		Log(LOG_INFO) << "OpenXcom started successfully. Enjoy!";
 		if (Options::getString("language") == "" || Options::getString("language") == "~")
 		{
 			_game->setState(new NoteState(_game));
