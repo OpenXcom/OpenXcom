@@ -632,16 +632,31 @@ void GeoscapeState::time5Seconds()
 	{
 		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0 || (*i)->isDestroyed())
 		{
-			for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
+			if(!(*i)->getFollowers()->empty())
 			{
-				if((*d)->getUfo() == (*i))
+				// Remove all dogfights with this UFO.
+				for(std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
 				{
-					delete *d;
-					d = _dogfights.erase(d);
+					if((*d)->getUfo() == (*i))
+					{
+						delete *d;
+						d = _dogfights.erase(d);
+					}
+					else
+					{
+						++d;
+					}
 				}
-				else
+				// Send all crafts engaging this UFO back to base.
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 				{
-					++d;
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
+					{
+						if((*c)->getDestination() == (*i))
+						{
+							(*c)->returnToBase();
+						}
+					}
 				}
 			}
 			delete *i;
@@ -1265,6 +1280,7 @@ void GeoscapeState::zoomOutEffect()
 	{
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
+		init();
 	}
 }
 
