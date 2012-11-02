@@ -129,10 +129,9 @@ void Text::setText(const std::wstring &text)
 	_text = text;
 	processText();
 	// If big text won't fit the space, try small text
-	if (_font == _big && getTextWidth() > getWidth())
+	if (_font == _big && getTextWidth() > getWidth() && _text.back() != L'.')
 	{
 		setSmall();
-		processText();
 	}
 }
 
@@ -312,6 +311,7 @@ void Text::processText()
 
 	int width = 0, word = 0;
 	std::wstring::iterator space = s->begin();
+	bool start = true;
 	Font *font = _font;
 
 	// Go through the text character by character
@@ -325,6 +325,7 @@ void Text::processText()
 			_lineHeight.push_back(font->getHeight() + font->getSpacing());
 			width = 0;
 			word = 0;
+			start = true;
 
 			if (c == s->end())
 				break;
@@ -338,6 +339,7 @@ void Text::processText()
 			space = c;
 			width += font->getWidth() / 2;
 			word = 0;
+			start = false;
 		}
 		// Keep track of the width of the last line and word
 		else if (*c != 1)
@@ -346,12 +348,15 @@ void Text::processText()
 			word += font->getChar(*c)->getCrop()->w + font->getSpacing();
 
 			// Wordwrap if the last word doesn't fit the line
-			if (_wrap && width > getWidth() && space != s->begin())
+			if (_wrap && width > getWidth() && !start)
 			{
 				// Go back to the last space and put a linebreak there
 				*space = L'\n';
-				c = space - 1;
 				width -= word + font->getWidth() / 2;
+				_lineWidth.push_back(width);
+				_lineHeight.push_back(font->getHeight() + font->getSpacing());
+				width = word;
+				start = true;
 			}
 		}
 	}
