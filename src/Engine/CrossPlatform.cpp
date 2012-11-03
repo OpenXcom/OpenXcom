@@ -416,6 +416,11 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	return files;
 }
 
+/**
+ * Checks if a certain path exists and is a folder.
+ * @param path Full path to folder.
+ * @return Does it exist?
+ */
 bool folderExists(const std::string &path)
 {
 #ifdef _WIN32
@@ -426,6 +431,11 @@ bool folderExists(const std::string &path)
 #endif
 }
 
+/**
+ * Checks if a certain path exists and is a file.
+ * @param path Full path to file.
+ * @return Does it exist?
+ */
 bool fileExists(const std::string &path)
 {
 #ifdef _WIN32
@@ -433,6 +443,23 @@ bool fileExists(const std::string &path)
 #else
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
+#endif
+}
+
+/**
+ * Removes a file from the specified path.
+ * @param path Full path to file.
+ * @return True if the operation succeeded, False otherwise.
+ */
+bool deleteFile(const std::string &path)
+{
+#ifdef _WIN32
+	int size = MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), NULL, 0);
+    std::wstring wstr(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), &wstr[0], size);
+	return (DeleteFileW(wstr.c_str()) != 0);
+#else
+	return (remove(path.c_str()) != 0);
 #endif
 }
 

@@ -45,10 +45,6 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "TerrorSite.h"
-#ifdef _MSC_VER
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#endif
 
 namespace OpenXcom
 {
@@ -164,9 +160,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 
 			std::string s = file.substr(0, file.length()-4);
 #ifdef _MSC_VER
-			int size = MultiByteToWideChar(CP_ACP, 0, &s[0], (int)s.size(), NULL, 0);
-			std::wstring wstr(size, 0);
-			MultiByteToWideChar(CP_ACP, 0, &s[0], (int)s.size(), &wstr[0], size);
+			std::wstring wstr = Language::cpToWstr(s);
 #else
 			std::wstring wstr = Language::utf8ToWstr(s);
 #endif
@@ -196,10 +190,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 #ifdef _MSC_VER
-	int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &wstr[0], size);
-	std::ifstream fin(wstr);
+	std::wstring wstr = Language::utf8ToWstr(s);
+	std::ifstream fin(wstr.c_str());
 #else
 	std::ifstream fin(s.c_str());
 #endif
@@ -303,10 +295,8 @@ void SavedGame::save(const std::string &filename) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 #ifdef _MSC_VER
-	int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &wstr[0], size);
-	std::ofstream sav(wstr);
+	std::wstring wstr = Language::utf8ToWstr(s);
+	std::ofstream sav(wstr.c_str());
 #else
 	std::ofstream sav(s.c_str());
 #endif

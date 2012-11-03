@@ -19,6 +19,7 @@
 #include "SaveState.h"
 #include <yaml-cpp/yaml.h>
 #include "../Engine/Logger.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -39,14 +40,11 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected("")
+SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
 	
 	_edtSave = new TextEdit(168, 9, 0, 0);
-
-	_previousSelectedRow = -1;
-	_selectedRow = -1;
 
 	add(_edtSave);
 
@@ -119,11 +117,11 @@ void SaveState::lstSavesClick(Action *action)
 	{
 		_edtSave->setText(Language::utf8ToWstr(_selected));
 	}
-	_edtSave->setX(_lstSaves->getX() + _lstSaves->getMargin());
-	_edtSave->setY(_lstSaves->getY() + _lstSaves->getSelectedRow() * 8);
+	_edtSave->setX(_lstSaves->getColumnX(0));
+	_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 	_edtSave->setVisible(true);
 	_edtSave->focus();
-	//_edtSave->caretAtEnd();
+	_lstSaves->setScrolling(false);
 }
 
 /**
@@ -138,19 +136,22 @@ void SaveState::edtSaveKeyPress(Action *action)
 		updateStatus("STR_SAVING_GAME");
 		try
 		{
-			if (_selectedRow > 0)
+			_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
+			std::string oldName = Options::getUserFolder() + _selected + ".sav";
+			std::string newName = Options::getUserFolder() + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
+			if (_selectedRow > 0 && oldName != newName)
 			{
-				std::string oldName = Options::getUserFolder() + _selected + ".sav";
-				std::string newName = Options::getUserFolder() + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
-				if (rename(oldName.c_str(), newName.c_str()) != 0)
+				if (!CrossPlatform::deleteFile(oldName))
 				{
 					throw Exception("Failed to overwrite save");
 				}
 			}
-			_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
+			_game->popState();
+			_game->popState();
 		}
 		catch (Exception &e)
 		{
+			_edtSave->setVisible(false);
 			Log(LOG_ERROR) << e.what();
 			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
 			if (_geo)
@@ -160,6 +161,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 		}
 		catch (YAML::Exception &e)
 		{
+			_edtSave->setVisible(false);
 			Log(LOG_ERROR) << e.what();
 			std::wstring error = _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
 			if (_geo)
@@ -167,8 +169,6 @@ void SaveState::edtSaveKeyPress(Action *action)
 			else
 				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
-		_game->popState();
-		_game->popState();
 	}
 }
 

@@ -51,6 +51,8 @@ namespace CrossPlatform
 	bool folderExists(const std::string &path);
 	/// Checks if the path is an existing file.
 	bool fileExists(const std::string &path);
+	/// Deletes the specified file.
+	bool deleteFile(const std::string &path);
 }
 
 }

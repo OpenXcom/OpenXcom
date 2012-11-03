@@ -48,6 +48,66 @@ Language::~Language()
 
 }
 
+
+
+/**
+ * Takes a wide-character string and converts it
+ * to a 8-bit string encoded in UTF-8.
+ * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
+ * @param src Wide-character string.
+ * @return UTF-8 string.
+ */
+std::string Language::wstrToUtf8(const std::wstring& src)
+{
+	if (src.empty())
+		return "";
+#ifdef _WIN32
+	int size = WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
+    std::string str(size, 0);
+	WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
+	return str;
+#else
+	std::string out;
+    unsigned int codepoint = 0;
+    for (std::wstring::const_iterator i = src.begin(); i != src.end(); ++i)
+    {
+		wchar_t ch = *i;
+        if (ch >= 0xd800 && ch <= 0xdbff)
+            codepoint = ((ch - 0xd800) << 10) + 0x10000;
+        else
+        {
+            if (ch >= 0xdc00 && ch <= 0xdfff)
+                codepoint |= ch - 0xdc00;
+            else
+                codepoint = ch;
+
+            if (codepoint <= 0x7f)
+                out.append(1, static_cast<char>(codepoint));
+            else if (codepoint <= 0x7ff)
+            {
+                out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            else if (codepoint <= 0xffff)
+            {
+                out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
+                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            else
+            {
+                out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
+                out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+            }
+            codepoint = 0;
+        }
+    }
+    return out;
+#endif
+}
+
 /**
  * Takes an 8-bit string encoded in UTF-8 and converts it
  * to a wide-character string.
@@ -116,60 +176,26 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 }
 
 /**
- * Takes a wide-character string and converts it
- * to a 8-bit string encoded in UTF-8.
- * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
- * @param src Wide-character string.
- * @return UTF-8 string.
+ * Takes an 8-bit string encoded in the current system codepage
+ * and converts it to a wide-character string.
+ * @param src Codepage string.
+ * @return Wide-character string.
  */
-std::string Language::wstrToUtf8(const std::wstring& src)
+std::wstring Language::cpToWstr(const std::string& src)
 {
 	if (src.empty())
-		return "";
-#ifdef _WIN32
-	int size = WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
-    std::string str(size, 0);
-	WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
-	return str;
+		return L"";
+#ifndef _WIN32
+	int size = MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0);
+    std::wstring wstr(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &wstr[0], size);
+	return wstr;
 #else
-	std::string out;
-    unsigned int codepoint = 0;
-    for (std::wstring::const_iterator i = src.begin(); i != src.end(); ++i)
-    {
-		wchar_t ch = *i;
-        if (ch >= 0xd800 && ch <= 0xdbff)
-            codepoint = ((ch - 0xd800) << 10) + 0x10000;
-        else
-        {
-            if (ch >= 0xdc00 && ch <= 0xdfff)
-                codepoint |= ch - 0xdc00;
-            else
-                codepoint = ch;
-
-            if (codepoint <= 0x7f)
-                out.append(1, static_cast<char>(codepoint));
-            else if (codepoint <= 0x7ff)
-            {
-                out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            else if (codepoint <= 0xffff)
-            {
-                out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            else
-            {
-                out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            codepoint = 0;
-        }
-    }
-    return out;
+	const int MAX = 500;
+	wchar_t buffer[MAX];
+	mbstowcs(buffer, src.c_str(), sizeof(buffer));
+	std::wstring wstr(buffer);
+	return wstr;
 #endif
 }
 

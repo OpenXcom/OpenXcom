@@ -46,6 +46,8 @@ public:
 	static std::string wstrToUtf8(const std::wstring& src);
 	/// Converts a UTF-8 string to wide-string.
 	static std::wstring utf8ToWstr(const std::string& src);
+	/// Converts a local-codepage string to wide-string.
+	static std::wstring cpToWstr(const std::string& src);
 	/// Replaces a substring.
 	static void replace(std::string &str, const std::string &find, const std::string &replace);
 	/// Gets list of languages in the data directory.
