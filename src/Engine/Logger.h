@@ -25,6 +25,9 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#ifndef LOCALE_INVARIANT
+#define LOCALE_INVARIANT 0x007f
+#endif
 #else
 #include <time.h>
 #endif
