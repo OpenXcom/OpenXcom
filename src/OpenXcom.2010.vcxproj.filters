@@ -648,6 +648,9 @@
     <ClCompile Include="Menu\SavedGameState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\EquipmentLayoutItem.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1300,6 +1303,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Logger.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\EquipmentLayoutItem.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

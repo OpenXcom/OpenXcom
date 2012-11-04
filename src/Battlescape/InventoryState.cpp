@@ -32,6 +32,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/EquipmentLayoutItem.h"
 #include "Inventory.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
@@ -173,6 +174,46 @@ void InventoryState::init()
 }
 
 /**
+ * Saves the soldiers' equipment-layout.
+ */
+void InventoryState::saveEquipmentLayout()
+{
+	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	{
+		// we need X-Com soldiers only
+		if (0 == (*i)->getGeoscapeSoldier()) continue;
+
+		std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+
+		// clear the previous save
+		if (!layoutItems->empty())
+		{
+			for (std::vector<EquipmentLayoutItem*>::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
+				delete *j;
+			layoutItems->clear();
+		}
+
+		// save the soldier's items
+		// note: with using getInventory() we are skipping the ammos loaded, (they're not owned) because we handle the loaded-ammos separately (inside)
+		for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
+		{
+			std::string ammo;
+			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem()) ammo = (*j)->getAmmoItem()->getRules()->getType();
+			else ammo = "NONE";
+			layoutItems->push_back(new EquipmentLayoutItem(
+				(*j)->getRules()->getType(),
+				(*j)->getSlot()->getId(),
+				(*j)->getSlotX(),
+				(*j)->getSlotY(),
+				ammo,
+				(*j)->getExplodeTurn()
+			));
+		}
+	}
+
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -183,6 +224,7 @@ void InventoryState::btnOkClick(Action *action)
 	_game->popState();
 	if (!_tu)
 	{
+		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
 	}
 	_battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());

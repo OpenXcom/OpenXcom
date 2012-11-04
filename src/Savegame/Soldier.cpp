@@ -20,6 +20,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/EquipmentLayoutItem.h"
 #include "../Ruleset/SoldierNamePool.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
@@ -35,7 +36,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor), _equipmentLayout()
 {
 	if (names != 0)
 	{
@@ -78,6 +79,10 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
  */
 Soldier::~Soldier()
 {
+	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -106,6 +111,9 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	std::string armor;
 	node["armor"] >> armor;
 	_armor = rule->getArmor(armor);
+	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
+		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
+			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
 }
 
 /**
@@ -131,6 +139,14 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "kills" << YAML::Value << _kills;
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
 	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
+	if (!_equipmentLayout.empty())
+	{
+		out << YAML::Key << "equipmentLayout" << YAML::Value;
+		out << YAML::BeginSeq;
+		for (std::vector<EquipmentLayoutItem*>::const_iterator j = _equipmentLayout.begin(); j != _equipmentLayout.end(); ++j)
+			(*j)->save(out);
+		out << YAML::EndSeq;
+	}
 	out << YAML::EndMap;
 }
 
@@ -406,6 +422,15 @@ void Soldier::setWoundRecovery(int recovery)
 void Soldier::heal()
 {
 	_recovery--;
+}
+
+/**
+ * Returns the list of EquipmentLayoutItems of a soldier.
+ * @return Pointer to the EquipmentLayoutItem list.
+ */
+std::vector<EquipmentLayoutItem*> *const Soldier::getEquipmentLayout()
+{
+	return &_equipmentLayout;
 }
 
 }

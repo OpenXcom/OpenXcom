@@ -428,6 +428,8 @@ set ( savegame_src
   Savegame/TerrorSite.cpp
   Savegame/Vehicle.h
   Savegame/Vehicle.cpp
+  Savegame/EquipmentLayoutItem.h
+  Savegame/EquipmentLayoutItem.cpp
 )
 
 set ( ufopedia_src
