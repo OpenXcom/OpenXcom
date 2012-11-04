@@ -217,6 +217,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	int a = 0;
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
+	doc["seed"] >> a;
+	RNG::init(a);
 	doc["funds"] >> _funds;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
@@ -318,6 +320,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
+	out << YAML::Key << "seed" << YAML::Value << RNG::getSeed();
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;

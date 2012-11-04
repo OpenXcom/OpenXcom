@@ -232,6 +232,7 @@ void InventoryState::btnUnloadClick(Action *action)
 	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
 		_inv->unload();
+		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
 		if (_tu)

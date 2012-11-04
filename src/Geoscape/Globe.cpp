@@ -118,7 +118,7 @@ public:
 	
 	//initialization	
 	GlobeStaticData():
-			earth_size(std::make_pair(260, 200))
+			earth_size(std::make_pair(260, 200)), is_seasons(false)
 	{
 		
 		radius.push_back(90);

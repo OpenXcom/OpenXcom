@@ -191,7 +191,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 	{
 		return;
 	}
-	int row = _lstSoldiers->getSelectedRow();
+	unsigned int row = _lstSoldiers->getSelectedRow();
 	if (row < _base->getSoldiers()->size() - 1 )
 	{
 		Soldier *s = _base->getSoldiers()->at(row);

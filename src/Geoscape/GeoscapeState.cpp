@@ -1003,6 +1003,7 @@ void GeoscapeState::btnInterceptClick(Action *action)
  */
 void GeoscapeState::btnBasesClick(Action *action)
 {
+	timerReset();
 	if (_game->getSavedGame()->getBases()->size() > 0)
 	{
 		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));

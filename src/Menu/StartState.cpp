@@ -126,7 +126,7 @@ void StartState::think()
 				_game->loadLanguage(Options::getString("language"));
 				_game->setState(new MainMenuState(_game));
 			}
-			catch (Exception e)
+			catch (Exception &e)
 			{
 				_game->setState(new LanguageState(_game));
 			}

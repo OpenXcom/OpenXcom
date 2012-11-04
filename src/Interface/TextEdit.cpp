@@ -433,7 +433,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 		default:
 			Uint16 key = action->getDetails()->key.keysym.unicode;
 			if (((_numerical && key >= L'0' && key <= L'9') ||
-				(!_numerical && (key >= L' ' && key <= L'~') || key >= 160)) &&
+				(!_numerical && (key >= L' ' && key <= L'~' || key >= 160))) &&
 				!exceedsMaxWidth((wchar_t)key))
 			{
 				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);

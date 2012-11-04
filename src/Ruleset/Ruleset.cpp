@@ -504,7 +504,6 @@ void Ruleset::load(const std::string &filename)
 					(*j)["type_id"] >> type;
 					switch ((UfopaediaTypeId)type)
 					{
-					case UFOPAEDIA_TYPE_UNKNOWN: rule = 0; break;
 					case UFOPAEDIA_TYPE_CRAFT: rule = new ArticleDefinitionCraft(); break;
 					case UFOPAEDIA_TYPE_CRAFT_WEAPON: rule = new ArticleDefinitionCraftWeapon(); break;
 					case UFOPAEDIA_TYPE_VEHICLE: rule = new ArticleDefinitionVehicle(); break;
@@ -514,6 +513,7 @@ void Ruleset::load(const std::string &filename)
 					case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
 					case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
 					case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
+					default: rule = 0; break;
 					}
 					_ufopaediaArticles[id] = rule;
 					_ufopaediaIndex.push_back(id);

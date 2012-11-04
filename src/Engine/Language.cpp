@@ -185,7 +185,7 @@ std::wstring Language::cpToWstr(const std::string& src)
 {
 	if (src.empty())
 		return L"";
-#ifndef _WIN32
+#ifdef _WIN32
 	int size = MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0);
     std::wstring wstr(size, 0);
     MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &wstr[0], size);

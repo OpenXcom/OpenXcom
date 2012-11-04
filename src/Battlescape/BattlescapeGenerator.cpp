@@ -63,16 +63,9 @@ namespace OpenXcom
  * Sets up a BattlescapeGenerator.
  * @param game pointer to Game object.
  */
-BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game)
+BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getBattleGame()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _terrain(0),
+														 _width(0), _length(0), _height(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0)
 {
-	_save = _game->getSavedGame()->getBattleGame();
-	_res = _game->getResourcePack();
-	_ufo = 0;
-	_craft = 0;
-	_base = 0;
-	_terror = 0;
-	_terrain = 0;
-	_craftInventoryTile = 0;
 }
 
 /**
