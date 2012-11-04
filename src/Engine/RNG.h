@@ -19,6 +19,8 @@
 #ifndef OPENXCOM_RNG_H
 #define OPENXCOM_RNG_H
 
+#include <yaml-cpp/yaml.h>
+
 namespace OpenXcom
 {
 
@@ -31,9 +33,11 @@ namespace OpenXcom
 namespace RNG
 {
 	/// Initializes the generator.
-	void init(int seed = -1);
-	/// Gets the generator's seed.
-	int getSeed();
+	void init(long count = -1, unsigned int seed = 0);
+	/// Loads the RNG from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the RNG to YAML.
+	void save(YAML::Emitter& out);
 	/// Generates a random integer number.
 	int generate(int min, int max);
 	/// Generates a random decimal number.

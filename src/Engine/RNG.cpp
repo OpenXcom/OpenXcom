@@ -27,33 +27,57 @@ namespace OpenXcom
 namespace RNG
 {
 
-int _seed = 0;
+unsigned int _seed = 0;
+long _count = 0;
 
 /**
  * Seeds the random generator with a new number.
  * Defaults to the current time if none is set.
  * @param seed New seed.
  */
-void init(int seed)
+void init(long count, unsigned int seed)
 {
-	if (seed == -1)
+	_seed = seed;
+	_count = count;
+	if (count == -1)
 	{
-		_seed = (int)time(NULL);
+		_seed = (unsigned int)time(NULL);
+		_count = 0;
+		srand(_seed);
 	}
 	else
 	{
-		_seed = seed;
+		srand(_seed);
+		for (long i = 0; i < count; ++i)
+		{
+			rand();
+		}
 	}
-	srand(_seed);
 }
 
 /**
- * Returns the last seed used by the generator.
- * @return Generator seed.
+ * Loads the RNG from a YAML file.
+ * @param node YAML node.
  */
-int getSeed()
+void RNG::load(const YAML::Node &node)
 {
-	return _seed;
+	int count, seed;
+	if (node.FindValue("rngCount") != 0)
+	{
+		node["rngCount"] >> count;
+		node["rngSeed"] >> seed;
+		init(count, seed);
+	}
+}
+
+/**
+ * Saves the RNG to a YAML file.
+ * @param out YAML emitter.
+ */
+void RNG::save(YAML::Emitter &out)
+{
+	out << YAML::Key << "rngCount" << YAML::Value << _count;
+	out << YAML::Key << "rngSeed" << YAML::Value << _seed;
 }
 
 /**
@@ -64,8 +88,9 @@ int getSeed()
  */
 int generate(int min, int max)
 {
-	_seed = rand();
-	return (_seed % (max - min + 1) + min);
+	_count++;
+	int num = rand();
+	return (num % (max - min + 1) + min);
 }
 
 /**
@@ -76,8 +101,9 @@ int generate(int min, int max)
  */
 double generate(double min, double max)
 {
-	_seed = rand();
-	return (_seed * (max - min) / RAND_MAX + min);
+	_count++;
+	int num = rand();
+	return (num * (max - min) / RAND_MAX + min);
 }
 
 /**

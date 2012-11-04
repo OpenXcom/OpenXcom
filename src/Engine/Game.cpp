@@ -50,8 +50,6 @@ namespace OpenXcom
  */
 Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
-	Log(LOG_INFO) << "Initializing engine...";
-
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -122,8 +120,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// Create blank language
 	_lang = new Language();
-
-	Log(LOG_INFO) << "Engine initialization completed.";
 }
 
 /**

@@ -61,6 +61,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		}
 		else if (key == "mapDataSets")
 		{
+			_mapDataSets.clear();
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string name;
@@ -70,6 +71,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		}
 		else if (key == "mapBlocks")
 		{
+			_mapBlocks.clear();
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::string name;

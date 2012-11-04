@@ -3219,7 +3219,7 @@ units:
     kneelHeight: 16
     loftemps: 4
     value: 25
-    deathSound: 23
+    deathSound: 48
     intelligence: 2
     aggression: 2
   - type: TANK_CANNON

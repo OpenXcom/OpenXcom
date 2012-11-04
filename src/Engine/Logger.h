@@ -35,7 +35,7 @@
 namespace OpenXcom
 {
 
-inline std::string Now();
+inline std::string now();
 
 /**
  * Defines the various severity levels of
@@ -64,6 +64,7 @@ public:
     std::ostringstream& get(SeverityLevel level = LOG_INFO);
 	
     static SeverityLevel& reportingLevel();
+	static std::string& logFile();
     static std::string toString(SeverityLevel level);
 protected:
     std::ostringstream os;
@@ -78,7 +79,6 @@ inline Logger::Logger()
 
 inline std::ostringstream& Logger::get(SeverityLevel level)
 {
-    os << "[" << Now() << "]" << "\t";
 	os << "[" << toString(level) << "]" << "\t";
     return os;
 }
@@ -88,6 +88,12 @@ inline Logger::~Logger()
     os << std::endl;
     fprintf(stderr, "%s", os.str().c_str());
     fflush(stderr);
+	std::stringstream ss;
+	ss << "[" << now() << "]" << "\t" << os.str();
+	FILE *file = fopen(logFile().c_str(), "a");
+	fprintf(file, "%s", ss.str().c_str());
+    fflush(file);
+	fclose(file);
 }
 
 inline SeverityLevel& Logger::reportingLevel()
@@ -96,9 +102,15 @@ inline SeverityLevel& Logger::reportingLevel()
     return reportingLevel;
 }
 
+inline std::string& Logger::logFile()
+{
+    static std::string logFile = "openxcom.log";
+    return logFile;
+}
+
 inline std::string Logger::toString(SeverityLevel level)
 {
-	static const char* const buffer[] = {"FATAL", "ERROR", "WARNING", "INFO", "DEBUG"};
+	static const char* const buffer[] = {"FATAL", "ERROR", "WARN", "INFO", "DEBUG"};
     return buffer[level];
 }
 
@@ -106,7 +118,7 @@ inline std::string Logger::toString(SeverityLevel level)
     if (level > Logger::reportingLevel()) ; \
     else Logger().get(level)
 
-inline std::string Now()
+inline std::string now()
 {
     const int MAX_LEN = 25, MAX_RESULT = 80;
 #ifdef _WIN32

@@ -19,6 +19,7 @@
 
 #include "Options.h"
 #include <SDL_mixer.h>
+#include <stdio.h>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -187,10 +188,7 @@ bool init(int argc, char** args)
 {
 	if (showHelp(argc, args))
 		return false;
-	Log(LOG_INFO) << "Starting OpenXcom...";
-	Log(LOG_INFO) << "-------------------------";
 	createDefault();
-	Log(LOG_INFO) << "Loading options...";
 	loadArgs(argc, args);
 	if (_dataFolder == "")
 	{
@@ -241,6 +239,12 @@ bool init(int argc, char** args)
 			save();
 		}
 	}
+	std::string s = getUserFolder();
+	s += "openxcom.log";
+	Logger::logFile() = s;
+	FILE *file = fopen(Logger::logFile().c_str(), "w");
+    fflush(file);
+	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{

@@ -1107,7 +1107,8 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 	{
 		for (int y = size; y >= 0; y--)
 		{
-			if (getTile(position + Position(x,y,0))->getUnit() != 0 && getTile(position + Position(x,y,0))->getUnit() != bu)
+			Tile *t = getTile(position + Position(x,y,0));
+			if (t == 0 || (t->getUnit() != 0 && t->getUnit() != bu))
 			{
 				return false;
 			}
