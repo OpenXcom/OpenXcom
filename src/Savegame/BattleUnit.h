@@ -100,6 +100,7 @@ private:
 	Armor *_armor;
 	SoldierGender _gender;
 	std::string _activeHand;
+	Soldier *_geoscapeSoldier;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -317,6 +318,8 @@ public:
 	int getSpecialAbility() const;
 	/// Get the units's rank string.
 	std::string getRankString() const;
+	/// Get the geoscape-soldier object.
+	Soldier *getGeoscapeSoldier() const;
 	/// Add a kill to the counter.
 	void addKillCount();
 	/// Get unit type.

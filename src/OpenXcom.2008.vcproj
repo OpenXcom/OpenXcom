@@ -1771,6 +1771,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\EquipmentLayoutItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\EquipmentLayoutItem.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\GameTime.cpp"
 				>
 			</File>
