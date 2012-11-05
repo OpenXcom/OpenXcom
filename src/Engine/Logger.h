@@ -86,8 +86,11 @@ inline std::ostringstream& Logger::get(SeverityLevel level)
 inline Logger::~Logger()
 {
     os << std::endl;
-    fprintf(stderr, "%s", os.str().c_str());
-    fflush(stderr);
+	if (reportingLevel() == LOG_DEBUG)
+	{
+		fprintf(stderr, "%s", os.str().c_str());
+		fflush(stderr);
+	}
 	std::stringstream ss;
 	ss << "[" << now() << "]" << "\t" << os.str();
 	FILE *file = fopen(logFile().c_str(), "a");
