@@ -227,11 +227,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param craft Pointer to the craft intercepting.
  * @param ufo Pointer to the UFO being intercepted.
  */
-<<<<<<< HEAD
 DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13), _weapon1Enabled(true), _weapon2Enabled(true), _minimized(false), _interceptionNumber(0), _interceptionsCount(0), _x(0), _y(0), _minimizedIconX(0), _minimizedIconY(0), _endDogfight(false), _ufoHitFrame(0)
-=======
-DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) : State(game), _globe(globe), _craft(craft), _ufo(ufo), _timeout(50), _currentDist(640), _targetDist(560), _end(false), _destroyUfo(false), _destroyCraft(false), _ufoBreakingOff(false), _weapon1Enabled(true), _weapon2Enabled(true), _ufoSize(0), _craftHeight(0), _currentCraftDamageColor(13)
->>>>>>> SupSuper_Origin/master
 {
 	_screen = false;
 
@@ -916,7 +912,6 @@ void DogfightState::move()
 			_ufo->move();
 			_craft->setDestination(_ufo);
 		}
-<<<<<<< HEAD
 		if(_destroyCraft)
 		{
 			// Remove the craft.
@@ -935,36 +930,10 @@ void DogfightState::move()
 		}
 		
 		if (_destroyUfo || _mode == _btnDisengage)
-=======
-
-		if (_destroyUfo)
->>>>>>> SupSuper_Origin/master
 		{
 			_craft->returnToBase();
 		}
-<<<<<<< HEAD
 		endDogfight();
-=======
-
-		
-		if(_destroyCraft)
-		{
-			// Remove the craft.
-			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
-			{
-				for(std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
-				{
-					if(*c == _craft)
-					{
-						delete *c;
-						(*b)->getCrafts()->erase(c);
-						break;
-					}
-				}
-			}
-		}
-		_game->popState();
->>>>>>> SupSuper_Origin/master
 	}
 
 	// End dogfight if craft is destroyed.
