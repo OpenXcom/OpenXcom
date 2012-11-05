@@ -26,7 +26,6 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
@@ -1103,6 +1102,7 @@ void GeoscapeState::btnInterceptClick(Action *action)
  */
 void GeoscapeState::btnBasesClick(Action *action)
 {
+	timerReset();
 	if (_game->getSavedGame()->getBases()->size() > 0)
 	{
 		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));

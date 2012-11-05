@@ -93,7 +93,7 @@ private:
 	std::wstring _name;
 	UnitStats _stats;
 	int _standHeight, _kneelHeight, _loftemps;
-	int _value, _deathSound;
+	int _value, _deathSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 	Armor *_armor;
@@ -302,6 +302,8 @@ public:
 	int getValue() const;
 	/// Get the unit's death sound.
 	int getDeathSound() const;
+	/// Get the unit's move sound.
+	int getMoveSound() const;
 	/// Get whether the unit is affected by fatal wounds.
 	bool isWoundable() const;
 	/// Get whether the unit is affected by fear.

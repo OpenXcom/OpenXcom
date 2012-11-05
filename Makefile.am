@@ -53,6 +53,7 @@ name_DATA = \
 	bin/data/SoldierName/Portuguese.nam \
 	bin/data/SoldierName/Romanian.nam \
 	bin/data/SoldierName/Russian.nam \
+	bin/data/SoldierName/Spanish.nam \
 	bin/data/SoldierName/Swedish.nam
 
 bin_PROGRAMS = openxcom
@@ -237,6 +238,7 @@ openxcom_SOURCES = \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
+	src/Engine/Logger.h \
 	src/Engine/Music.cpp \
 	src/Engine/Music.h \
 	src/Engine/Options.cpp \
@@ -350,8 +352,8 @@ openxcom_SOURCES = \
 	src/Menu/ErrorMessageState.h \
 	src/Menu/LanguageState.cpp \
 	src/Menu/LanguageState.h \
-	src/Menu/LoadGameState.cpp \
-	src/Menu/LoadGameState.h \
+	src/Menu/LoadState.cpp \
+	src/Menu/LoadState.h \
 	src/Menu/MainMenuState.cpp \
 	src/Menu/MainMenuState.h \
 	src/Menu/NewBattleState.cpp \
@@ -362,8 +364,10 @@ openxcom_SOURCES = \
 	src/Menu/NoteState.h \
 	src/Menu/OptionsState.cpp \
 	src/Menu/OptionsState.h \
-	src/Menu/SaveGameState.cpp \
-	src/Menu/SaveGameState.h \
+	src/Menu/SaveState.cpp \
+	src/Menu/SaveState.h \
+	src/Menu/SavedGameState.cpp \
+	src/Menu/SavedGameState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \

@@ -118,6 +118,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 	//TODO: Figure out how to generate base defenses
 	_missionTypes.pop_back();
+	_missionTypes.pop_back();
 
 	_selTerrain = 0;
 	_terrainTypes.push_back("STR_FARM");

@@ -199,6 +199,7 @@ set ( engine_src
   Engine/SurfaceSet.h
   Engine/Screen.cpp
   Engine/Screen.h
+  Engine/Logger.h
 )
 
 set ( geoscape_src
@@ -302,10 +303,10 @@ set ( menu_src
   Menu/TestState.cpp
   Menu/LanguageState.h
   Menu/LanguageState.cpp
-  Menu/SaveGameState.cpp
-  Menu/SaveGameState.h
-  Menu/LoadGameState.cpp
-  Menu/LoadGameState.h
+  Menu/SaveState.cpp
+  Menu/SaveState.h
+  Menu/LoadState.cpp
+  Menu/LoadState.h
   Menu/NewGameState.cpp
   Menu/NewGameState.h
   Menu/NewBattleState.cpp
@@ -314,6 +315,8 @@ set ( menu_src
   Menu/OptionsState.h
   Menu/ErrorMessageState.cpp
   Menu/ErrorMessageState.h
+  Menu/SavedGameState.cpp
+  Menu/SavedGameState.h
 )
 
 set ( resource_src

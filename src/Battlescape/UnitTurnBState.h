@@ -31,7 +31,7 @@ class UnitTurnBState : public BattleState
 {
 private:
 	BattleUnit *_unit;
-	bool turret;
+	bool _turret;
 public:
 	/// Creates a new UnitTurnBState class
 	UnitTurnBState(BattlescapeGame *parent, BattleAction action);

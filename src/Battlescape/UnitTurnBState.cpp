@@ -38,7 +38,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitTurnBState.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0)
+UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _turret(false)
 {
 
 }
@@ -60,9 +60,9 @@ void UnitTurnBState::init()
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
-	turret = (_unit->getTurretType() != -1) && _action.targeting;
+	_turret = (_unit->getTurretType() != -1) && _action.targeting;
 
-	_unit->lookAt(_action.target, turret);
+	_unit->lookAt(_action.target, _turret);
 
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
@@ -93,7 +93,7 @@ void UnitTurnBState::think()
 
 	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
 	{
-		_unit->turn(turret);
+		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)

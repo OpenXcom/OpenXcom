@@ -19,10 +19,10 @@
 #include "CraftSoldiersState.h"
 #include <string>
 #include <sstream>
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -49,10 +49,10 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_btnOk = new TextButton(288, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 130, 32);
-	_txtCraft = new Text(82, 9, 222, 32);
+	_txtRank = new Text(102, 9, 122, 32);
+	_txtCraft = new Text(84, 9, 224, 32);
 	_txtAvailable = new Text(110, 9, 16, 24);
-	_txtUsed = new Text(110, 9, 130, 24);
+	_txtUsed = new Text(110, 9, 122, 24);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 
 	// Set palette
@@ -106,11 +106,37 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstSoldiers->setColumns(3, 114, 92, 74);
+	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
+	_lstSoldiers->setColumns(3, 106, 102, 72);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)&CraftSoldiersState::lstItemsLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler)&CraftSoldiersState::lstItemsRightArrowClick);
 	_lstSoldiers->onMouseClick((ActionHandler)&CraftSoldiersState::lstSoldiersClick);
+	populateList();
+}
+
+/**
+ *
+ */
+CraftSoldiersState::~CraftSoldiersState()
+{
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void CraftSoldiersState::btnOkClick(Action *action)
+{
+	_game->popState();
+}
+
+void CraftSoldiersState::populateList()
+{
+	Craft *c = _base->getCrafts()->at(_craft);
+	_lstSoldiers->clearList();
 
 	int row = 0;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
@@ -136,19 +162,43 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 }
 
 /**
- *
+ * Reorders a soldier
+ * @param action Pointer to an action.
  */
-CraftSoldiersState::~CraftSoldiersState()
+void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 {
+	if (action->getDetails()->button.button != SDL_BUTTON_LEFT)
+	{
+		return;
+	}
+	int row = _lstSoldiers->getSelectedRow();
+	if (row > 0 )
+	{
+		Soldier *s = _base->getSoldiers()->at(row);
+		_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row-1);
+		_base->getSoldiers()->at(row-1) = s;
+	}
+	populateList();
 }
 
 /**
- * Returns to the previous screen.
+ * Reorders a soldier
  * @param action Pointer to an action.
  */
-void CraftSoldiersState::btnOkClick(Action *action)
+void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 {
-	_game->popState();
+	if (action->getDetails()->button.button != SDL_BUTTON_LEFT)
+	{
+		return;
+	}
+	unsigned int row = _lstSoldiers->getSelectedRow();
+	if (row < _base->getSoldiers()->size() - 1 )
+	{
+		Soldier *s = _base->getSoldiers()->at(row);
+		_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row+1);
+		_base->getSoldiers()->at(row+1) = s;
+	}
+	populateList();
 }
 
 /**
@@ -157,6 +207,11 @@ void CraftSoldiersState::btnOkClick(Action *action)
  */
 void CraftSoldiersState::lstSoldiersClick(Action *action)
 {
+	int mx = (action->getXMouse() / action->getXScale());
+	if ( mx >= 186 && mx < 220 )
+	{
+		return;
+	}
 	int row = _lstSoldiers->getSelectedRow();
 	Craft *c = _base->getCrafts()->at(_craft);
 	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());

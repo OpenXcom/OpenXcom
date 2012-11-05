@@ -19,11 +19,11 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
-#include <iostream>
 #include <SDL_rotozoom.h>
 #include "../lodepng.h"
 #include "Exception.h"
 #include "Surface.h"
+#include "Logger.h"
 #include "Action.h"
 #include "Options.h"
 #include "CrossPlatform.h"
@@ -39,18 +39,19 @@ const double Screen::BASE_HEIGHT = 200.0;
  * @param width Width in pixels.
  * @param height Height in pixels.
  * @param bpp Bits-per-pixel.
+ * @param fullscreen Fullscreen mode.
+ * @warning Currently the game is designed for 8bpp, so there's no telling what'll
+ * happen if you use a different value.
  */
-Screen::Screen(int width, int height, int bpp) : _scaleX(1.0), _scaleY(1.0), _fullscreen(false)
+Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen)
 {
+	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT);
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
-	std::cout << "Attempting to initialize display to " << width << "x" << height << "x" << bpp << "..." << std::endl;
-	_screen = SDL_SetVideoMode(width, height, bpp, _flags);
-	if (_screen == 0)
+	if (_fullscreen)
 	{
-		throw Exception(SDL_GetError());
+		_flags |= SDL_FULLSCREEN;
 	}
-	std::cout << "Display initialized to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << "." << std::endl;
-	_surface = new Surface(width, height);
+	setResolution(width, height);
 }
 
 /**
@@ -109,7 +110,10 @@ void Screen::handle(Action *action)
 		}
 
 		unsigned error = lodepng::encode(ss.str(), image, getWidth(), getHeight(), LCT_RGB);
-		if (error) std::cerr << "encoder error " << error << ": "<< lodepng_error_text(error) << std::endl;
+		if (error)
+		{
+			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+		}
 	}
 }
 
@@ -276,20 +280,20 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 	_surface->setPalette(colors, firstcolor, ncolors);
 	if (SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
 	{
-		std::cerr << "Display palette doesn't match requested palette" << std::endl;
+		Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 	}
 	// Sanity check
 	/*
 	SDL_Color *newcolors = _screen->format->palette->colors;
 	for (int i = firstcolor, j = 0; i < firstcolor + ncolors; i++, j++)
 	{
-		std::cout << (int)newcolors[i].r << " - " << (int)newcolors[i].g << " - " << (int)newcolors[i].b << std::endl;
-		std::cout << (int)colors[j].r << " + " << (int)colors[j].g << " + " << (int)colors[j].b << std::endl;
+		Log(LOG_DEBUG) << (int)newcolors[i].r << " - " << (int)newcolors[i].g << " - " << (int)newcolors[i].b;
+		Log(LOG_DEBUG) << (int)colors[j].r << " + " << (int)colors[j].g << " + " << (int)colors[j].b;
 		if (newcolors[i].r != colors[j].r ||
 			newcolors[i].g != colors[j].g ||
 			newcolors[i].b != colors[j].b)
 		{
-			std::cout << "WARNING: Display palette doesn't match requested palette" << std::endl;
+			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 			break;
 		}
 	}
@@ -333,13 +337,13 @@ void Screen::setResolution(int width, int height)
 {
 	_scaleX = width / BASE_WIDTH;
 	_scaleY = height / BASE_HEIGHT;
-	std::cout << "Attempting to change display to " << width << "x" << height << "..." << std::endl;
-	_screen = SDL_SetVideoMode(width, height, _screen->format->BitsPerPixel, _flags);
+	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
+	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
-	std::cout << "Display changed to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << "." << std::endl;
+	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
 	setPalette(getPalette());
 }
 

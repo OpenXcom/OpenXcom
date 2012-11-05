@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <exception>
-#include <iostream>
+#include "Engine/Logger.h"
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Screen.h"
@@ -48,12 +48,13 @@ int main(int argc, char** args)
 #ifndef _DEBUG
 	try
 	{
+		Logger::reportingLevel() = LOG_INFO;
+#else
+		Logger::reportingLevel() = LOG_DEBUG;
 #endif
-		std::cout << "Starting OpenXcom..." << std::endl << std::endl;
-		Options::init(argc, args);
-		game = new Game("OpenXcom " + Options::getVersion(), 320, 200, 8);
-		game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
-		game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
+		if (!Options::init(argc, args))
+			return EXIT_SUCCESS;
+		game = new Game("OpenXcom " + Options::getVersion());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 		game->setState(new StartState(game));
 		game->run();

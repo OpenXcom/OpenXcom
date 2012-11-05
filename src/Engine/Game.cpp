@@ -18,15 +18,16 @@
  */
 #include "Game.h"
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <SDL_syswm.h>
 #endif
 #include <sstream>
-#include <iostream>
 #include <SDL_mixer.h>
 #include "State.h"
 #include "Screen.h"
 #include "Language.h"
+#include "Logger.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Resource/ResourcePack.h"
@@ -46,30 +47,23 @@ namespace OpenXcom
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
- * @param width Width of the display screen.
- * @param height Height of the display screen.
- * @param bpp Bits-per-pixel of the display screen.
- * @warning Currently the game is designed for 8bpp, so there's no telling what'll
- * happen if you use a different value.
  */
-Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
-	std::cout << "Initializing engine..." << std::endl;
-
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw Exception(SDL_GetError());
 	}
-	std::cout << "SDL initialized successfully." << std::endl;
+	Log(LOG_INFO) << "SDL initialized successfully.";
 
 	if (!Options::getBool("mute"))
 	{
 		// Initialize SDL_mixer
 		if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 		{
-			std::cerr << SDL_GetError() << std::endl;
-			std::cout << "No sound device detected, audio disabled." << std::endl;
+			Log(LOG_ERROR) << SDL_GetError();
+			Log(LOG_WARNING) << "No sound device detected, audio disabled.";
 			Options::setBool("mute", true);
 		}
 		else
@@ -81,8 +75,8 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 				format = AUDIO_S16SYS;
 			if (Mix_OpenAudio(Options::getInt("audioSampleRate"), format, 2, 1024) != 0)
 			{
-				std::cerr << Mix_GetError() << std::endl;
-				std::cout << "No sound device detected, audio disabled." << std::endl;
+				Log(LOG_ERROR) << Mix_GetError();
+				Log(LOG_WARNING) << "No sound device detected, audio disabled.";
 				Options::setBool("mute", true);
 			}
 			else
@@ -90,7 +84,7 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 				Mix_AllocateChannels(16);
 			}
 		}
-		std::cout << "SDL_mixer initialized successfully." << std::endl;
+		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 	}
 
 	// Set the window caption
@@ -115,7 +109,7 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 	SDL_EnableUNICODE(1);
 
 	// Create display
-	_screen = new Screen(width, height, bpp);
+	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 8, Options::getBool("fullscreen"));
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
@@ -126,8 +120,6 @@ Game::Game(const std::string &title, int width, int height, int bpp) : _screen(0
 
 	// Create blank language
 	_lang = new Language();
-
-	std::cout << "Engine initialization completed." << std::endl;
 }
 
 /**

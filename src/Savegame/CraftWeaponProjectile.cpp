@@ -24,7 +24,7 @@
 
 namespace OpenXcom {
 
-CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _toBeRemoved(false), _missed(false), _range(0)
+CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _range(0), _toBeRemoved(false), _missed(false)
 {
 }
 

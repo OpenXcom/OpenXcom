@@ -16,42 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_UNITWALKBSTATE_H
-#define OPENXCOM_UNITWALKBSTATE_H
+#ifndef OPENXCOM__SAVESTATE_H
+#define OPENXCOM__SAVESTATE_H
 
-#include "BattleState.h"
-#include "Position.h"
+#include <string>
+#include "SavedGameState.h"
 
 namespace OpenXcom
 {
 
-class BattleUnit;
-class Pathfinding;
-class TileEngine;
+class TextEdit;
 
-class UnitWalkBState : public BattleState
+/**
+ * Save Game screen for listing info on available
+ * saved games and saving them.
+ */
+class SaveState : public SavedGameState
 {
 private:
-	Position _target;
-	BattleUnit *_unit;
-	Pathfinding *_pf;
-	TileEngine *_terrain;
-	void postPathProcedures();
-	void setNormalWalkSpeed();
-	void playMovementSound();
+	TextEdit *_edtSave;
+	std::string _selected;
+	int _previousSelectedRow, _selectedRow;
 public:
-	/// Creates a new UnitWalkBState class
-	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
-	/// Cleans up the UnitWalkBState.
-	~UnitWalkBState();
-	/// Set the target to walk to.
-	void setTarget(Position target);
-	/// Initializes the state.
-	void init();
-	/// Handles a cancels request.
-	void cancel();
-	/// Runs state functionality every cycle. Returns false when finished.
-	void think();
+	/// Creates the Save Game state.
+	SaveState(Game *game, bool geo);
+	/// Cleans up the Save Game state.
+	~SaveState();
+	/// Updates the savegame list.
+	void updateList();
+	/// Handler for pressing a key on the Save edit.
+	void edtSaveKeyPress(Action *action);
+	/// Handler for clicking the Saves list.
+	void lstSavesClick(Action *action);
 };
 
 }

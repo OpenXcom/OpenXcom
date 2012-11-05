@@ -65,8 +65,6 @@ MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *u
  */
 void MedikitView::draw()
 {
-	int x = 0;
-	int y = 0;
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 	int fatal_wound = _unit->getFatalWound(_selectedPart);
 	std::wstringstream ss, ss1;

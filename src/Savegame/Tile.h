@@ -33,6 +33,7 @@ class Surface;
 class MapData;
 class BattleUnit;
 class BattleItem;
+class RuleInventory;
 
 /**
  * Basic element of which a battle map is build.
@@ -135,7 +136,7 @@ public:
 	/// Get fire and smoke animation offset.
 	int getAnimationOffset() const;
 	/// Add item
-	void addItem(BattleItem *item);
+	void addItem(BattleItem *item, RuleInventory *ground);
 	/// Remove item
 	void removeItem(BattleItem *item);
 	/// Get top-most item

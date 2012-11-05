@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
+#include "../Engine/Logger.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
@@ -156,17 +157,24 @@ void SavedGame::getList(TextList *list, Language *lang)
 			saveDay << time.getDay() << lang->getString(time.getDayString());
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
-			list->addRow(5, Language::utf8ToWstr(file.substr(0, file.length()-4)).c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+
+			std::string s = file.substr(0, file.length()-4);
+#ifdef _MSC_VER
+			std::wstring wstr = Language::cpToWstr(s);
+#else
+			std::wstring wstr = Language::utf8ToWstr(s);
+#endif
+			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 			fin.close();
 		}
 		catch (Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			continue;
 		}
 		catch (YAML::Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			continue;
 		}
 	}
@@ -181,7 +189,12 @@ void SavedGame::getList(TextList *list, Language *lang)
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
+#ifdef _MSC_VER
+	std::wstring wstr = Language::utf8ToWstr(s);
+	std::ifstream fin(wstr.c_str());
+#else
 	std::ifstream fin(s.c_str());
+#endif
 	if (!fin)
 	{
 		throw Exception("Failed to load savegame");
@@ -204,6 +217,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	int a = 0;
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
+	RNG::load(doc);
 	doc["funds"] >> _funds;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
@@ -281,7 +295,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 void SavedGame::save(const std::string &filename) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
+#ifdef _MSC_VER
+	std::wstring wstr = Language::utf8ToWstr(s);
+	std::ofstream sav(wstr.c_str());
+#else
 	std::ofstream sav(s.c_str());
+#endif
 	if (!sav)
 	{
 		throw Exception("Failed to save savegame");
@@ -300,6 +319,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
+	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;

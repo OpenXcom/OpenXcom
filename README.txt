@@ -6,6 +6,7 @@ OpenXcom is an open-source reimplementation of the popular
 UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
 Microprose, licensed under the GPL and written in C++ / SDL.
 See more info at the website: http://openxcom.org
+And the wiki: http://ufopaedia.org/index.php?title=OpenXcom
 
 Uses modified code from SDL_gfx (LGPL) with permission from author.
 
@@ -117,9 +118,7 @@ can cause incorrect behaviour or game crashes.
 ------------------------
 
 F5 - Turns on/off FPS counter in top-left corner.
-
 F12 - Saves PNG screenshot to User folder.
-
 ALT-ENTER - Turns on/off fullscreen mode.
 
 2.3. Custom Music

@@ -32,7 +32,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
@@ -74,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -85,7 +84,6 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollTimer = new Timer(SCROLL_INTERVAL);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
 	_camera->setScrollTimer(_scrollTimer);
-
 }
 
 /**
@@ -94,7 +92,6 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 Map::~Map()
 {
 	delete _scrollTimer;
-
 	delete _arrow;
 
 	for (int i = 0; i < 36; ++i)

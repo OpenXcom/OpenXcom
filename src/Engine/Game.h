@@ -57,7 +57,7 @@ private:
 	bool _mouseActive;
 public:
 	/// Creates a new game and initializes SDL.
-	Game(const std::string &title, int width, int height, int bpp);
+	Game(const std::string &title);
 	/// Cleans up all the game's resources and shuts down SDL.
 	~Game();
 	/// Starts the game's state machine.

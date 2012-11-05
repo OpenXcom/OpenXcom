@@ -17,10 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Sound.h"
-#include <iostream>
 #include <SDL.h>
 #include "Exception.h"
 #include "Options.h"
+#include "Logger.h"
 
 namespace OpenXcom
 {
@@ -75,7 +75,7 @@ void Sound::play() const
 {
 	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1)
 	{
-		std::cerr << Mix_GetError() << std::endl;
+		Log(LOG_WARNING) << Mix_GetError();
 	}
 }
 

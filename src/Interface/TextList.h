@@ -51,6 +51,7 @@ private:
 	Surface *_bg, *_selector;
 	ArrowButton *_up, *_down;
 	int _margin;
+	bool _scrolling;
 	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
 	int _arrowPos;
 	ArrowOrientation _arrowType;
@@ -73,6 +74,10 @@ public:
 	std::wstring getCellText(int row, int column) const;
 	/// Sets the text of a certain cell.
 	void setCellText(int row, int column, const std::wstring &text);
+	/// Gets the X position of a certain column.
+	int getColumnX(int column) const;
+	/// Gets the Y position of a certain row.
+	int getRowY(int row) const;
 	/// Adds a new row to the text list.
 	void addRow(int cols, ...);
 	/// Sets the columns in the text list.
@@ -133,6 +138,8 @@ public:
 	void scrollUp();
 	/// Scrolls the list down.
 	void scrollDown();
+	/// Sets the list scrolling.
+	void setScrolling(bool scrolling);
 	/// Draws the text onto the text list.
 	void draw();
 	/// Blits the text list onto another surface.
