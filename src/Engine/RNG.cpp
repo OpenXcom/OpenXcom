@@ -59,7 +59,7 @@ void init(long count, unsigned int seed)
  * Loads the RNG from a YAML file.
  * @param node YAML node.
  */
-void RNG::load(const YAML::Node &node)
+void load(const YAML::Node &node)
 {
 	int count, seed;
 	if (node.FindValue("rngCount") != 0)
@@ -74,7 +74,7 @@ void RNG::load(const YAML::Node &node)
  * Saves the RNG to a YAML file.
  * @param out YAML emitter.
  */
-void RNG::save(YAML::Emitter &out)
+void save(YAML::Emitter &out)
 {
 	out << YAML::Key << "rngCount" << YAML::Value << _count;
 	out << YAML::Key << "rngSeed" << YAML::Value << _seed;
