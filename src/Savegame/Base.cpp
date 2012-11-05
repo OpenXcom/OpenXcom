@@ -37,6 +37,7 @@
 #include "Target.h"
 #include "Ufo.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -83,20 +84,23 @@ Base::~Base()
  * @param node YAML node.
  * @param save Pointer to saved game.
  */
-void Base::load(const YAML::Node &node, SavedGame *save)
+void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 {
 	Target::load(node);
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
 
-	for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+	if (!newGame || !Options::getBool("customInitialBase") )
 	{
-		std::string type;
-		(*i)["type"] >> type;
-		BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
-		f->load(*i);
-		_facilities.push_back(f);
+		for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+		{
+			std::string type;
+			(*i)["type"] >> type;
+			BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
+			f->load(*i);
+			_facilities.push_back(f);
+		}
 	}
 
 	for (YAML::Iterator i = node["crafts"].begin(); i != node["crafts"].end(); ++i)

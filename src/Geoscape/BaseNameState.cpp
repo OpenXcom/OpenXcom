@@ -28,6 +28,7 @@
 #include "../Interface/TextButton.h"
 #include "../Savegame/Base.h"
 #include "../Basescape/PlaceLiftState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -95,7 +96,10 @@ void BaseNameState::nameBase()
 	if (!_first)
 	{
 		_game->popState();
-		_game->pushState(new PlaceLiftState(_game, _base, _globe));
+	}
+	if (!_first || Options::getBool("customInitialBase") )
+	{
+		_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
 	}
 }
 

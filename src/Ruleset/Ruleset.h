@@ -166,6 +166,8 @@ public:
 	RuleManufacture *getManufacture (const std::string &id) const;
 	/// Get the list of all manufacture projects.
 	std::vector<std::string> getManufactureList () const;
+	/// Get facilities for custom bases.
+	std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
 };
 
 }
