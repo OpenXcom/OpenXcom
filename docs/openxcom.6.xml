@@ -4,7 +4,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://docbook.org/xml/4.5/docbookx.dtd" [
 
-  <!ENTITY dhdate	"<date>2012.10.25</date>">
+  <!ENTITY dhdate	"<date>2012.11.05</date>">
   <!ENTITY dhyear	"2012">
   <!ENTITY dhsection	"6">
   <!ENTITY dhpackage	"openxcom">

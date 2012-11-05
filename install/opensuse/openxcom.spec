@@ -12,12 +12,12 @@
 # norootforbuild
 
 Name:           openxcom
-Version:        0.4
+Version:        0.4.5
 Release:        0
 Group:          Amusements/Games/Strategy/Turn Based 
 License:        GPL
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-URL:            http://openxcom.ninex.info/
+URL:            http://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz
 Summary:        Open source X-Com
 BuildRequires:  cmake 
