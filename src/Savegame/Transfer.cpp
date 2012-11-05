@@ -56,28 +56,31 @@ Transfer::~Transfer()
 void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 {
 	node["hours"] >> _hours;
-	if (const YAML::Node *pName = node.FindValue("soldier"))
+	const YAML::Node *pName;
+	if ((pName = node.FindValue("soldier")))
 	{
-		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(*pName, rule);
+		std::auto_ptr<Soldier> s(new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC")));
+		s->load(*pName, rule);
+		_soldier = s.release();
 	}
-	else if (const YAML::Node *pName = node.FindValue("craft"))
+	else if ((pName = node.FindValue("craft")))
 	{
 		std::string type;
 		(*pName)["type"] >> type;
-		_craft = new Craft(rule->getCraft(type), base);
-		_craft->load(*pName, rule, 0);
+		std::auto_ptr<Craft> c(new Craft(rule->getCraft(type), base));
+		c->load(*pName, rule, 0);
+		_craft = c.release();
 	}
-	else if (const YAML::Node *pName = node.FindValue("itemId"))
+	else if ((pName = node.FindValue("itemId")))
 	{
 		*pName >> _itemId;
 		node["itemQty"] >> _itemQty;
 	}
-	else if (const YAML::Node *pName = node.FindValue("scientists"))
+	else if ((pName = node.FindValue("scientists")))
 	{
 		*pName >> _scientists;
 	}
-	else if (const YAML::Node *pName = node.FindValue("engineers"))
+	else if ((pName = node.FindValue("engineers")))
 	{
 		*pName >> _engineers;
 	}
