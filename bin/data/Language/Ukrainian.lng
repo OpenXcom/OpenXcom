@@ -1,0 +1,2085 @@
+УКРАÏНСЬКА
+STR_AVENGER_UFOPEDIA
+ТРАНСПОРТНО-БОЙОВИЙ КОСМIЧНИЙ КОРАБЕЛЬ. ПОБУДОВАНИЙ НА ОСНОВI ПЕРЕДОВИХ IНОПЛАНЕТНИХ ТЕХНОЛОГIЙ.
+STR_INTERCEPTOR_UFOPEDIA
+БОЙОВИЙ ЛIТАК. ОСНАЩЕНИЙ ЗДВОЄНИМ IМПУЛЬСНИМ ДВИГУНОМ ТА СПЕЦIАЛЬНО ЕКРАНОВНИМИ ЕЛЕКТРОННИМИ СИСТЕМАМИ. НАЙКРАЩА З ДОСТУПНИХ ЗЕМНИХ ТЕХНОЛОГIЙ.
+STR_LIGHTNING_UFOPEDIA
+ТРАНСПОРТНО-БОЙОВИЙ ЛIТАЛЬНИЙ АПАРАТ. ВИКОРИСТОВУЄ ГРУБУ, АЛЕ ЕФЕКТИВНУ КОПIЮ РУХОВИХ СИСТЕМ ПРИБУЛЬЦIВ.
+STR_SKYRANGER_UFOPEDIA
+ТРАНСПОРТНИЙ ЛIТАК. НАЙШВИДШИЙ В СВОЄМУ КЛАСI, З ВЕРТИКАЛНИМ ЗЛЬОТОМ ТА ПОСАДКОЮ.
+STR_FIRESTORM_UFOPEDIA
+БОЙОВИЙ ЛIТАЛЬНИЙ АПАРАТ. В ЦЬМУ ОДНОМIСНОМУ ВИНИЩУВАЧI ВIДТВОРЕНА КОНСТРУКЦIЯ КЛАСИЧНИХ "ЛIТАЮЧИХ ТАРIЛОК" ПРИБУЛЬЦIВ, З ЦЕНТРАЛЬНИМ РОЗТАШУВАННЯМ ДВИГУНА.
+STR_STINGRAY_UFOPEDIA
+ПЕРЕДОВА РАКЕТА ПОВIТРЯ-ПОВIТРЯ ЗI СПЕЦIАЛЬНО ЕКРАНОВНИМИ ЕЛЕКТРОННИМИ СИСТЕМАМИ.
+STR_AVALANCHE_UFOPEDIA
+РАКЕТА КЛАСУ ПОВIТРЯ-ПОВIТРЯ З ЯДЕРНОЮ БОЄГОЛОВКОЮ. ВIДЗНАЧАЄТЬСЯ ВКРАЙ ПОВIЛЬНОЮ ПЕРЕЗАРЯДКОЮ.
+STR_CANNON_UFOPEDIA
+АВТОМАТИЧНА ГАРМАТА ВЕЛИКОÏ ПОТУЖНОСТI. СТРIЛЯЄ БРОНЕБIЙНИМИ СНАРЯДАМИ, ЗДАТНИМИ ПРОБИТИ 400-МIЛIМЕТРОВУ СТАЛЬ.
+STR_FUSION_BALL_UFOPEDIA
+ЦЯ ПУСКОВА УСТАНОВКА СТРIЛЯЄ КУЛЕПОДIБНИМИ РАКЕТАМИ, ЯКI ПРАЦЮЮТЬ НА ОСНОВI РЕАКЦIÏ АНТИМАТЕРIÏ. СНАРЯД ВРАЖАЄ ЦIЛЬ ГРАВIТАЦIЙНИМ IМПУЛЬСОМ.
+STR_LASER_CANNON_UFOPEDIA
+ЦЕ СТАНДАРТНИЙ ЛАЗЕРНИЙ ВИПРОМIНЮВАЧ. ЖИВИТЬСЯ ЕНЕРГIЄЮ РЕАКТОРА, ЯКИЙ ПРАЦЮЄ НА АНТИМАТЕРIÏ.
+STR_PLASMA_BEAM_UFOPEDIA
+ПЛАЗМОВИЙ ВИПРОМIНЮВАЧ. СТВОРЮЄ ВУЗЬКИЙ КАНАЛ РУЙНIВНОГО ГРАВIТАЦIЙНОГО ПОЛЯ.
+STR_SECTOID_UFOPEDIA
+Iєрархiя сектоïдiв простягається вiд солдатiв до лiдерiв, якi володiють потужними псiонiчними здiбностями. Цi псiонiчнi здiбностi можуть бути використанi для деморалiзацiï солдатiв чи, навiть, для встановлення контролю над ïх свiдомiстю. Як правило, Сектоïди займаються викраденням людей i дослiдами над худобою. Викрадення використовуються для отримання генетичного матерiалу для мiжвидового схрещування, та для розробки клонiв для проникнення в людське суспiльство. Худоба використовується в якостi ïжi та генетичного матерiалу.  Схоже ця раса хочу розробити досконалi генетичнi гiбриди для збiльшення ефективностi ïх вуликоподiбного суспiльства.
+STR_SECTOID_AUTOPSY
+Розтин Сектоïда
+STR_SECTOID_AUTOPSY_UFOPEDIA
+Розтин виявив рудиментарнi органи травлення та просту будову. Мозок та очi дуже добре розвиненi. Будова органiзму свiдчить про генетичнi змiни або мутацiï. Нiс та рот малих розмiрiв, схоже, виконуть незначнi функцiï. Перетинки мiж пальцями i плоскi стопи вказують на водяне походження. Репродуктивнi органи вiдсутнi, спосiб розмноження даного виду незрозумiлий. Найiмовiрнiше, це генетично спроектований вид.
+STR_SNAKEMAN_UFOPEDIA
+Ця раса сформувалась в надзвичайно ворожому середовищi. Вони надзвичайно мiцнi та можуть витримувати екстремальнi коливання температури. Ïх мобiльнiсть забезпечужться змiєподiбною "ногою", яка захищає всi життєво важливi органи. Схоже на те, що iх цiллю є виключно полювання, i що ïх контролює iнший розум, який керує ïх воєнними нальотами на Землю.
+STR_SNAKEMAN_AUTOPSY
+Розтин Людинозмiï
+STR_SNAKEMAN_AUTOPSY_UFOPEDIA
+Шкiра надзвичайно жорстка та термостiйка. Серцево-судинна система є частиною м'язовоï системи, яка використовує гiдравлiчний принцип для здiйснення рухiв. Єдиним справжнiм м'язом є "серце". Репродуктивна система здається вкрай ефективною. Розмноження не залежить вiд статi, в будь-який момент всерединi кожноï Людинозмiï є до п'ятдесяти яєць. Залишений без нагляду, цей вид мiг би бути серйозною загрозою життю на Землi.
+STR_ETHEREAL_UFOPEDIA
+Ця iстота володiє страхiтливими ментальними силами, якi включають телепатичне спiлкування та здатнiсть до телекiнезу. Дуже слабкий фiзичний розвиток цiєï iстоти компенсується силою розуму. Ми не розумiємо принцип роботи телекiнезу, оскiльки це явище суперечить вiдомим нам законам фiзики. Вони надзвичайно небезпечнi в будь-якiй бойовiй ситуацiï, де вони покладаються на своï менталнi сили. Вони рiдко з'являються на Землi, оскiльки використовують iншi раси для досягнення своïх цiлей.
+STR_ETHEREAL_AUTOPSY
+Розтин Небесного
+STR_ETHEREAL_AUTOPSY_UFOPEDIA
+Ця iстота фiзично деградувала та здається не здатною пiдтримувати якiсь життєвi функцiï. М'язи сильно атрофованi, внутрiшнi органи слабо розвиненi. Органи чуттiв, включаючи очi, схоже зовсiм не функцiонують. Мозок, однак, добре розвинений та щедро забезпечується кров'ю. Незрозумiло, як ця iстота могла пiдтримувати свою життєдiяльнiсть без сторонньоï допомоги.
+STR_MUTON_UFOPEDIA
+Ця людиноподiбна iстота розвинена фiзично i розумово. Вони з особливим апетитом поïдають сире м'ясо будь-якого виду, яке потрiбне ïм для пiдтримання життя, як земним хижакам. Схоже, що цi iстоти покладаються на телепатичнi команди вiд раси, вiдмоï як "Небеснi". Переривання телепатичного зв'язку призводить до порушення функцiонування ïх нервовоï системи i вони гинуть. Знайденi кiбернетичнi iмпланти, якi використовуються для покращення ïх бойових якостей. Очевидно, що цi iстоти не бiльше нiж рядовi солдати для вищого розуму.
+STR_MUTON_AUTOPSY
+Розтин Мутона
+STR_MUTON_AUTOPSY_UFOPEDIA
+"Шкiра" цiєï iстоти є органiчно створеною броньою, вживленою в тiло. Наявнi численнi кiбернетичнi iмпланти, призначенi для пiдсилення серцево-судинноï системи i органiв чуттiв. Репродуктивнi органи, схоже, були видаленi хiрургiчним шляхом. Очевидно, життя цих нещасних iстот обмежена боями i завоюваннми. Бронебiйнi снаряди малоефективнi проти ïхньоï мiцноï шкiри.
+STR_CELATID_UFOPEDIA
+Ця життєва форма володiє загадковою природною здатнiстю лiтати в провiтрi. Вона здатна виявляти активнiсть людського мозку i таким чином знаходить людську цiль, навiть якщо вона добре захована. Пiсля виявлення цiлi Селатид приземляється i стрiляє маленькими капсулами, якi мiстять надзвичайно ïдку отруту. Цi iстоти можуть клонувати себе з надзвичайною швидкiстю. Вони супроводжують расу Мутонiв в ïхнiх подорожах.
+STR_CELATID_AUTOPSY
+Розтин Селатида
+STR_CELATID_AUTOPSY_UFOPEDIA
+Ядро мiстить маленький бiо-механiчний пристрiй, який схоже є природнiм способом вирощеною антигравiтацiйною руховою системою. Найбiльшим внутрiшнiм органом є залоза, яка виробляє отруту, i вiдсутня окрема мозкова структура. Також не знайдено ознак травноï та репродуктивноï систем. Маленький орган мiстить ембрiони, якi можуть швидко розвиватись в нову iстоту.
+STR_SILACOID_UFOPEDIA
+Ця форма життя на кремнiєвiй основi видiляє величезну кiлькiсть тепла. Вона має силу для руйнування каменiв, якi потiм будуть поглинутi гарячим ядром. Цi iстоти мають примiтивний iнтелект та можуть контролюватись iмплантами або iстотами, якi мають телепатичнi здiбностi. Вони дiють спiльно з iнопланетною расою Мутонiв.
+STR_SILACOID_AUTOPSY
+Розтин Силакоïда
+STR_SILACOID_AUTOPSY_UFOPEDIA
+Ядро цiєï iстоти надзвичайно гаряче i, схоже, є основою його травноï системи. Його унiкальна м'язова система має величезну силу i швидкiсть. Каменеподiбна шкiра цiєï iстоти не вразлива для вогню чи запалювальних снарядiв.
+STR_CHRYSSALID_UFOPEDIA
+Крабоподiбнi клешнi цiєï iстоти є могутньою зброєю в ближньому бою. Високий метаболiзм i сила цiєï iстоти надають йому високу  швидкiсть та спритнiсть. Замiсьть того щоб вбивати своïх жертв, воно заплiднює ïï яйцем та вприскує отруту, яка перетворює жертву в ходячого зомбi. Молодий Крисалiд вилупиться з жертви невдовзi пiсля заплiднення. Крисалiди асоцiюються з расою Людинозмiй.
+STR_CHRYSSALID_AUTOPSY
+Розтин Крисалiда
+STR_CHRYSSALID_AUTOPSY_UFOPEDIA
+Екзоскелет цiєï iстоти надзвичайно мiцний, однак на диво вразливий для вибухових снарядiв. Мозок добре розвинений i темп подiлу його клiтин дуже високий. Iстота несе двадцять яєць, котрi вiдкладаються всередину iнших органiзмiв. Ця iстота є дуже ефективною зброєю для терору.
+STR_FLOATER_UFOPEDIA
+Летуни є перш за все солдатами i терористами. Вони хижаки по своïй природi, якi були перетворенi в грiзних воïнiв генетичними модифiкацiями та кiбернетичними пiдсиленнями. Нижня частина тiла та бiльшiсть внутрiшнiх органiв хiрургiчно видаленi, натомiсть встановлена система життєзабезпечення. Цей iмплант включає в себе антигравiтацiйний пристрiй, який дозволяє цiй iстотi, хочi i невпевнено, лiтати в повiтрi.
+STR_FLOATER_AUTOPSY
+Розтин Летуна
+STR_FLOATER_AUTOPSY_UFOPEDIA
+Ця iстота була кардинально змiнена хiрургiчно. Пристроєм, який є ядром органiзму, є система життєзабезпечення, яка виконує функцiï серця, легенiв i системи травлення. Це дозволяє iстотi виживати в надзвичайно ворожих умовах. Мозок меннший, нiж наш, але органи чуттiв розвиненi добре.
+STR_REAPER_UFOPEDIA
+Ця двонога м'ясоïдна тварина має мiцнi щелепи та надзвичайно ненажерлива. Вона має низку мозкових iмплантiв, якi використовуються для контролю за його дiяльнiстю. Примiтивнi хижацькi iнстинкти цiєï iстоти навряд чи пiдходять для чогось, крiм як терору та руйнування. Рипери зазвичай асоцiюються з Летунами.
+STR_REAPER_AUTOPSY
+Розтин Рипера
+STR_REAPER_AUTOPSY_UFOPEDIA
+Рипер має два "мозки" i два "серця", що дозволяє йому дiяти навiть з сильними ранами. Однак, його покрита шерстю шкiра легко спалахує, що робить цю iстоту вразливою для запалювальноï зброï.
+STR_SECTOPOD_UFOPEDIA
+Сектоподи - це роботи, оснащенi потужною плазмовою зброєю. Цi механiчнi монстри управляються телепатично ïх контролерами, Небесними. Сектоподи є найпотужнiшою зброєю терору, яка доступна озброєним силам прибульцiв.
+STR_SECTOPOD_AUTOPSY
+Розтин Сектопода
+STR_SECTOPOD_AUTOPSY_UFOPEDIA
+Робот був створений з використанням мiцноï бронi, здатноï протидiяти бiльшостi видiв атак, особливо плазмовiй зброï. Однак, система iндикацiï напрямку виглядає частково вразливою для лазерноï зброï.
+STR_CYBERDISC_UFOPEDIA
+Ця "лiтаюча тарiлка" в мiнiатюрi є автоматичним пристроєм для терору, озброєним потужним плазмовим випромiнювачем. Антигравiтацiйний двигун дає йому велику перевагу на важкопрохiднiй мiсцевостi. Основним призначенням є руйнування i терор на службi в раси Сектоïдiв.
+STR_CYBERDISC_AUTOPSY
+Розтин Кiбердиска
+STR_CYBERDISC_AUTOPSY_UFOPEDIA
+Кiбердиск добре захищений i практично невразливий для вибухiвки. Антигравiтацiйна система надто пошкоджена, щоб зрозумiти принцип ïï функцiонування.
+STR_UFO_POWER_SOURCE_UFOPEDIA
+Джерело енергiï, яке використовується на кораблях прибульцiв, базується на реакторi антиматерiï, який використовує Елерiум (елемент 115) i генерує потужнi гравiтацiйнi хвилi та iншi форми енергiï. ККД перетворення матерiï в енергiю сягає 99%, тому навiть незначна кiлькiсть елерiуму може виробити величезну кiлькiсть енергiï. Цей пристрiй можна легко вiдтворити, використовуючи сплави прибульцiв.
+STR_UFO_NAVIGATION_UFOPEDIA
+Польотом iнопланетних кораблiв керують потужнi комп'ютери. Система базується на оптичних процесорах, об'єднаних в мережу. Iнтерфейс управлiння вiдносно простий - навiгатор мiняє напрям гравiтацiйних хвиль, генерованих реактором, щоб рухати корабель в потрiбному напрямку. Ця система може бути освоєна людиною. Для виробництва системи необхiднi сплави прибульцiв та ряд iнших компонентiв.
+STR_UFO_CONSTRUCTION_UFOPEDIA
+Корабель прибульцiв складається з трьох основних частин - джерела енергiï, навiгацiйноï системи та корпуса. Особлива форма корпуса дозволяє спрямовувати гравiтацiйнi хвилi в довiльному напрямку. Для джерела енергiï потрiбна невелика кiлькiсть елерiуму. Знаючи будову всiх компонентiв корабля, чи зможем будувати апарати схожого типу.
+STR_ALIEN_FOOD_UFOPEDIA
+Камери мiстять розчин ензимiв, призначений для розщеплення тканин тваринного походження (чи навiть людських органiв). Вироблений в камерах розчин використовувався в якостi ïжi. Ймовiрний спосiб вживання - пряма iн'єкцiя в кровотiк. Це передбачає деяку залежнiсть прибульцiв вiд Землi для виробництва ïжi.
+STR_ALIEN_REPRODUCTION_UFOPEDIA
+В капсулах знаходяться зародки iнопланетних органiзмiв. Будова цих iнкубаторiв свiдчить про те, що прибульцi повнiстю перейшли на штучний метод вiдтворення.  Велика кiлькiсть поживних речовин забезпечує швидкий розвиток зародкiв. Така "виробнича лiнiя" може робити тисячi клонiв за короткий час. Процес може бути легко адаптований для людського чи гiбридного органiзму.
+STR_ALIEN_ENTERTAINMENT_UFOPEDIA
+Найбiльш ймовiрна функцiя цих сфер - розважальна. Псiонiчний контур стимулює рiзнi центри мозку. Результуючий ефект схожий на дiю галюциногенних наркотикiв. Це єдиний доказ того, що прибульцi мають культурне чи розважальне дозвiлля.
+STR_ALIEN_SURGERY_UFOPEDIA
+Це хiрургiчне обладнання використовує лазерний скальпель для вилучення органiвю. Поширенi випадки калiчення худоби, ймовiрно, вiдбуваються з використанням цих дивних пристроïв. Скорiш за все, органи використовуються для ïжi та генетичних дослiдiв.
+STR_EXAMINATION_ROOM_UFOPEDIA
+В минулому тисячi людей стверджували, що були викраденi прибульцями, iнколи неодноразово. Правда значно жахливiша. Людей викрадають, вивчають та спостерiгають. Найкращi екземпляри слугують джерелом генетичного матерiалу. Жiнкам iмплантуються iнопланетнi гiбриднi ембрiони, якi виймають пiсля кiлькох мiсяцiв розвитку. Невiдомо, якими зловiсними мотивами керуються прибульцi.
+STR_ALIEN_ALLOYS_UFOPEDIA
+Кораблi прибульцiв побудованi з особливих сплавiв, якi мають унiкальнi властивостi. Вони надзвичайно легкi та мiцнi. Цей матерiал можна вiдтворити, використовуючи методи електрометалургiï, та використати в низцi виробничих процесiв.
+STR_YOU_WILL_NEED_TO_RESEARCH_A
+Необхiдно дослiдити{NEWLINE}
+STR_ELERIUM_115_UFOPEDIA
+Цей елемент має незвичайну здатнiсть генерувати антиматерiю при бомбардуваннi певними частинками. Це викликає появу гравiтацiйних хвиль та iнших форм енергiï. Елерiум-115 не знайдено в нашiй Сонячнiй системi, i ми також не можемо синтезувати його штучно.
+STR_ALIEN_ORIGINS_UFOPEDIA
+Очевидно, що подальша боротьба за Землю безперспективна. Ворог переважає нас кiлькiстю. Найбiльше, що ми можемо зробити - це сповiльнити його просування. Єдиний шанс перемогти - це знищити джерело вторгнення. Дослiдження показують, що воно знаходиться в межах нашоï Сонячноï системи. Прибульцi описують це мiсце як центр древньоï цивiлiзацiï, яка виникла набагато ранiше людства. Ми мусимо якнайшвидше знайти це мiсце. Для отримання детальноï iнформацiï необхiдно захопити прибульця-лiдера. Ймовiрно, на великих кораблях ворога має бути принаймнi один лiдер.
+STR_THE_MARTIAN_SOLUTION_UFOPEDIA
+Нашi дослiдження вказуть на Марс, як на основну базу прибульцiв. База добре замаскована i має всi засоби для виробництва технiки та живоï сили для проникнення на Землю. Також там знаходиться якийсь керуючий комп'ютерний центр, який керує всiма операцiями ворога. Роєподiбне по своïй структурi суспiльство прибульцiв має "королеву рою", i в цьому ïхня фундаментальна слабкiсть - якщо ми зможем знищити цей "мозок", вся армiя загине, як одна iстота. Ми повиннi прискорити дослiдження в цьому напрямку, поки не пiзно. Для досягнення успiху, нам необхiдно допитати прибульцiв найвищого рангу - командирiв, якi постiйно знаходяться на базах.
+STR_CYDONIA_OR_BUST_UFOPEDIA
+Встановлено, що армiя прибульцiв управляється з пiдземноï бази в Кiдонiï - дивноï областi Марса, вiдомоï розташованими там пiрамiдами та утворенням, яке нагадує людське лице. Кiдонiйська цивiлiзацiя процвiтала мiльйони рокiв тому, причини ïï загибелi невiдомi, як i зв'язок цiєï цивiлiзацiï з активнiстю прибульцiв в наш час. Якими б не були пояснення нам необхiдно летiти в Кiдонiю. Є лише один спосiб перемогти прибульцiв - знищити центральний керуючий "мозок". Нам буде потрiбен "Месник" - транспорт, обладнаний найкращим доступним озброєнням, здатний доставити десант на Марс. Ми не можемо дiзнатись бiльше, залишаючись тут, i змушенi чекати результатiв штурму Кiдонiï.
+STR_TERROR_SITE
+Дiлянка терору-
+STR_CENTER_ON_SITE_TIME_5_SECS
+ЦЕНТР НА ДIЛЯНЦI, ЧАС=5 Сек
+STR_CANCEL_UC
+СКАСУВАТИ
+STR_NONE
+Нiчого
+STR_UNKNOWN
+Невiдомо
+STR_POOR
+Погано
+STR_AVERAGE
+Посередньо
+STR_GOOD
+Добре
+STR_EXCELLENT
+Прекрасно
+STR_BUILD_NEW_BASE_UC
+БУДУВАТИ НОВУ БАЗУ
+STR_BASE_INFORMATION
+IНФОРМАЦIЯ ПРО БАЗИ
+STR_EQUIP_CRAFT
+СПОРЯДИТИ КОРАБЕЛЬ
+STR_BUILD_FACILITIES
+БУДУВАТИ МОДУЛI
+STR_RESEARCH
+ДОСЛIДЖЕННЯ
+STR_MANUFACTURE
+ВИРОБНИЦТВО
+STR_TRANSFER_UC
+ПЕРЕДАЧА
+STR_PURCHASE_RECRUIT
+ЗАКУПIВЛЯ/НАЙМ
+STR_SELL_SACK_UC
+ПРОДАЖ/ЗВIЛЬНЕННЯ
+STR_GEOSCAPE
+ГЛОБУС
+STR_XCOM_BASES
+Бази X-COM
+STR_NAME
+Назва
+STR_AREA
+Регiон
+STR_BUILD_NEW_BASE
+Будувати нову базу
+STR_CANCEL
+Скасувати
+STR_COST_UC
+ВАРТIСТЬ>
+STR_CONSTRUCTION_TIME_UC
+ЧАС БУДIВНИЦТВА>
+STR_MAINTENANCE_UC
+ОБСЛУГОВУВАННЯ>
+STR_OK
+OK
+STR_INSTALLATION
+Будувати:
+STR_CURRENT_RESEARCH
+ПОТОЧНI ДОСЛIДЖЕННЯ
+STR_SCIENTISTS_AVAILABLE
+Вчених Вiльно>
+STR_SCIENTISTS_ALLOCATED
+Вчених Зайнято>
+STR_LABORATORY_SPACE_AVAILABLE
+Мiсця в Лабораторiях Вiльно>
+STR_RESEARCH_PROJECT
+ПРОЕКТ ДОСЛIДЖЕНЬ
+STR_SCIENTISTS_ALLOCATED_UC
+ВЧЕНИХ ЗАЙНЯТО
+STR_PROGRESS
+ПРОГРЕС
+STR_NEW_PROJECT
+Новий Проект
+STR_NEW_RESEARCH_PROJECTS
+НОВI ПРОЕКТИ ДОСЛIДЖЕНЬ
+STR_SCIENTISTS_AVAILABLE_UC
+ВЧЕНИХ ВIЛЬНО>
+STR_LABORATORY_SPACE_AVAILABLE_UC
+МIСЦЯ В ЛАБОРАТОРIЯХ ВIЛЬНО>
+STR_INCREASE
+Збiльшити
+STR_DECREASE
+Зменшити
+STR_START_PROJECT
+ПОЧАТИ ПРОЕКТ
+STR_CURRENT_PRODUCTION
+ПОТОЧНЕ ВИРОБНИЦТВО
+STR_ENGINEERS_AVAILABLE
+Iнженерiв Вiльно>
+STR_ENGINEERS_ALLOCATED
+Iнженерiв Зайнято>
+STR_WORKSHOP_SPACE_AVAILABLE
+Мiсця в Майстернях Вiльно>
+STR_CURRENT_FUNDS
+Поточнi Фонди>
+STR_ITEM
+ОДИНИЦЯ
+STR_ENGINEERS__ALLOCATED
+Iнженерiв{NEWLINE}Зайнято
+STR_UNITS_PRODUCED
+Одиниць{NEWLINE}Готово
+STR_TOTAL_TO_PRODUCE
+Всього до{NEWLINE}Виготовл.
+STR_COST__PER__UNIT
+ Вартiсть{NEWLINE} Одиницi
+STR_DAYS_HOURS_LEFT
+Днiв/Год.{NEWLINE}Залишилось
+STR_NEW_PRODUCTION
+Нове Виробництво
+STR_PRODUCTION_ITEMS
+Виготовити Вирiб
+STR_CATEGORY
+КАТЕГОРIЯ
+STR_START_PRODUCTION
+ПОЧАТИ ВИРОБНИЦТВО
+STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT
+ Людино-годин для виготовлення одиницi
+STR_COST_PER_UNIT_
+Вартiсть одиницi>$
+STR_WORK_SPACE_REQUIRED
+Робочого мiсця необхiдно>
+STR_SPECIAL_MATERIALS_REQUIRED
+НЕОБХIДНI СПЕЦIАЛЬНI МАТЕРIАЛИ
+STR_ITEM_REQUIRED
+ВИРОБIВ{NEWLINE}НЕОБХIДНО
+STR_UNITS_REQUIRED
+ОДИНИЦЬ{NEWLINE}НЕОБХIДНО
+STR_UNITS_AVAILABLE
+ОДИНИЦЬ{NEWLINE}AVAILABLE
+STR_STOP_PRODUCTION
+ЗУПИНИТИ ВИРОБНИЦТВО
+STR_ENGINEERS_AVAILABLE_UC
+IНЖЕНЕРIВ ВIЛЬНО>
+STR_WORKSHOP_SPACE_AVAILABLE_UC
+МIСЦЯ В МАЙСТЕРНЯХ ВIЛЬНО>
+STR_ENGINEERS
+Iнженери
+STR_ALLOCATED
+Зайнято
+STR_INCREASE_UC
+ЗБIЛЬШИТИ
+STR_DECREASE_UC
+ЗМЕНШИТИ
+STR_UNITS_TO
+Одиниць в
+STR_PRODUCE
+Виготовити
+STR_PURCHASE_HIRE_PERSONNEL
+Закупiвля/Найм Персоналу
+STR_COST_OF_PURCHASES
+Вартiсть Закупiвлi>
+STR_COST_PER_UNIT_UC
+  ВАРТIСТЬ
+STR_QUANTITY_UC
+КIЛЬКIСТЬ
+STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL
+ЧОЛОВIК ВIЛЬНО:ЧОЛОВIК ВСЬОГО>
+STR_SOLDIERS
+Солдати
+STR_SCIENTISTS
+Вченi
+STR_SPACE_USED_SPACE_AVAILABLE
+МIСЦЯ ЗАЙНЯТО:МIСЦЯ ВСЬОГО>
+STR_LIVING_QUARTERS
+Житловi модулi
+STR_STORES
+Сховища
+STR_LABORATORIES
+Лабораторiï
+STR_WORK_SHOPS
+Майстернi
+STR_HANGARS
+Ангари
+STR_SHORT_RANGE_DETECTION
+Ближнє виявлення
+STR_DEFENSE_STRENGTH
+Захист (ППО)
+STR_TRANSFERS_UC
+ПЕРЕДАЧI
+STR_TRANSFERS
+Передачi
+STR_ARRIVAL_TIME_HOURS
+Час прибуття (годин)
+STR_COST_
+Вартiсть>$
+STR_AREA_
+Область>
+STR_BASE_NAME
+Назва Бази?
+STR_SELECT_POSITION_FOR_ACCESS_LIFT
+ВИБЕРIТЬ МIСЦЕ ДЛЯ ВХIДНОГО ЛIФТА
+STR_TRANSFER
+Передача
+STR_AMOUNT_TO_TRANSFER
+ПЕРЕДАТИ
+STR_SELECT_DESTINATION_BASE
+Виберiть Мiсце Призначення
+STR_COST
+Варт.
+STR_VICTORY_1
+Зайшовши в зал, ви бачите iнопланетний Мозок - цiль ваших пошукiв. Перш нiж ви встигаєте вистелити, Мозок звертається до вас через екран, що знаходиться в примiщеннi. Вiн просить вислухати аргументи на свiй захист перш, нiж ви натиснете на спусковий гачок...
+STR_VICTORY_2
+"...Багато мiльонiв рокiв тому планета, яку ви називаєте Марс, була живою. Це життя було принесене на безплiдну планету нашою цивiлiзацiєю. Протягом мiльонiв рокiв ми вiдвiдували вашу планету i генетично розробили ваш вид. Ви не можете знищити нас, ви - частина нас...
+STR_VICTORY_3
+...Тут центр Марсiанськоï цивiлiзацiï - пiрамiди, побудованi за мiйльони рокiв до вас видом, який є вашим предком. Немає такоï планети якоï ми не моглиб досягнути. Ця сила скоро може стати вашою. Все що ми просимо - ваша спiвпраця...
+STR_GAME_OVER_1
+Прибульцi взялися за винищення людства, зруйнували мiста, отруïли повiтря та океани. Опiр земних армiй марний проти переважаючих iнопланетних технологiй. Поколiння, якi виживуть, перенесуть жахливi мутацiï, уникнувши знищення прибульцями. Вони стануть рабами i будуть використанi для перетворення Землi в колонiю прибульцiв - частину якоïсь невiдомоï iмперiï.
+STR_GAME_OVER_2
+Знання, здобутi проектом X-COM, втрачено назажди. Ви не змогли захистити Землю.
+STR_VICTORY_4
+Мозок знищено зарядом гарячоï плазми, сили прибульцiв переможено.
+STR_VICTORY_5
+Прибульцi втратили Марс, а отже i Землю. Незабаром розробленi в X-COM технологiï дозволять людству почати самостiйно освоювати Марс та досягнути небувалого розквiту. Iнопланетна загроза усунута, та чи на довго, нiхто не знає...
+STR_YOU_HAVE_FAILED
+Ви не змогли зупинити вторгнення. Одна за одною передовi держави пiдпишуть пакт з прибульцями, якi обiцяють дати новi технологiï, мир i процвiтання. Однак швидко стане зрозумiло, що в прибульцiв iншi плани...
+STR_TOTAL_UC
+ВСЬОГО
+STR_INCOME
+Прибуток
+STR_EXPENDITURE
+Витрати
+STR_MAINTENANCE
+Обслуговування
+STR_BALANCE
+Баланс
+STR_UFO_ACTIVITY_IN_AREAS
+Активн. НЛО в Регiонах
+STR_UFO_ACTIVITY_IN_COUNTRIES
+Активн. НЛО в Краïнах
+STR_XCOM_ACTIVITY_IN_AREAS
+Активн. X-COM в Регiонах
+STR_XCOM_ACTIVITY_IN_COUNTRIES
+Активн. X-COM в Краïнах
+STR_FINANCE
+Фiнанси
+STR_ST
+е
+STR_ND
+е
+STR_RD
+є
+STR_TH
+е
+STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE
+Бракує спецiальних матерiалiв для виробництва{NEWLINE}
+STR_NOT_ENOUGH_MONEY_TO_PRODUCE
+Бракує грошей для виробництва{NEWLINE}
+STR_PRODUCTION_COMPLETE
+Завершено виробництво:{NEWLINE}
+STR_PRODUCTION_OF
+Виробництво{NEWLINE}
+STR__AT__
+{NEWLINE}в{NEWLINE}
+STR_IS_COMPLETE
+{NEWLINE} завершено
+STR_OK_5_SECS
+OK - 5 сек
+STR_RESEARCH_COMPLETED
+Дослiдження завершено
+STR_VIEW_REPORTS
+ЗВIТ
+STR_WE_CAN_NOW_RESEARCH
+Ми можемо дослiджувати
+STR_WE_CAN_NOW_PRODUCE
+Ми можемо виробляти
+STR_SUNDAY
+НЕДIЛЯ
+STR_MONDAY
+ПОНЕДIЛОК
+STR_TUESDAY
+ВIВТОРОК
+STR_WEDNESDAY
+СЕРЕДА
+STR_THURSDAY
+ЧЕТВЕР
+STR_FRIDAY
+П'ЯТНИЦЯ
+STR_SATURDAY
+СУБОТА
+STR_NOT_ENOUGH
+Немає 
+STR_TO_REFUEL
+ для 
+STR_TO_REARM
+ для 
+STR_AT_
+ на 
+STR_UFO_IS_NOT_RECOVERED
+НЛО не захплений
+STR_UFO_IS_RECOVERED
+НЛО захплений
+STR_CRAFT_IS_LOST
+Корабель втрачений
+STR_TERROR_CONTINUES
+Терор продовжується
+STR_ALIENS_DEFEATED
+Прибульцi переможенi
+STR_BASE_IS_LOST
+База втрачена
+STR_BASE_IS_SAVED
+База збережена
+STR_ALIEN_BASE_STILL_INTACT
+База Прибульцiв не знищена
+STR_ALIEN_BASE_DESTROYED
+База Прибульцiв знищена
+STR_ALIENS_KILLED
+ПРИБУЛЬЦIВ ВБИТО
+STR_ALIEN_CORPSES_RECOVERED
+ТРУПIВ ПРИБУЛЬЦIВ ЗНАЙДЕНО
+STR_LIVE_ALIENS_RECOVERED
+ЖИВИХ ПРИБУЛЬЦIВ ЗНАЙДЕНО
+STR_ALIEN_ARTIFACTS_RECOVERED
+АРТЕФАКТIВ ПРИБУЛЬЦIВ ЗНАЙДЕНО
+STR_ALIEN_BASE_CONTROL_DESTROYED
+БАЗА ПРИБУЛЬЦIВ ЗНИЩЕНА
+STR_CIVILIANS_KILLED_BY_ALIENS
+ЦИВIЛЬНИХ ВБИТО ПРИБУЛЬЦЯМИ
+STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES
+ЦИВIЛЬНИХ ВБИТО СОЛДАТАМИ X-COM
+STR_CIVILIANS_SAVED
+ЦИВIЛЬНИХ ВРЯТОВАНО
+STR_XCOM_OPERATIVES_KILLED
+СОЛДАТIВ X-COM ВБИТО
+STR_XCOM_OPERATIVES_RETIRED_THROUGH_INJURY
+СОЛДАТIВ X-COM ПIШЛО В ВIДСТАВКУ ПО СТАНУ ЗДОРОВ'Я
+STR_XCOM_OPERATIVES_MISSING_IN_ACTION
+СОЛДАТIВ X-COM ЗНИКЛО БЕЗ ВIСТI
+STR_TANKS_DESTROYED
+ТАНКIВ ЗНИЩЕНО
+STR_XCOM_CRAFT_LOST
+КОРАБЕЛЬ X-COM ВТРАЧЕНО
+STR_UFO_RECOVERY
+ЗIБРАНО В НЛО
+STR_ALIEN_BASE_RECOVERY
+БАЗА ПРИБУЛЬЦIВ ЗНАЙДЕНА
+STR_UNDER_ATTACK
+ атаковано!
+STR_BASE_DEFENSES_INITIATED
+ЗАДIЯНО ЗАХИСТ БАЗИ
+STR_GRAV_SHIELD_REPELS_UFO
+ГРАВ. ЩИТ ВIДШТОВХНУВ НЛО!
+STR_FIRING
+ВИСТРIЛ
+STR_HIT
+ПОПАДАННЯ!
+STR_UFO_DESTROYED
+НЛО ЗНИЩЕНИЙ!
+STR_MISSED
+ПРОМАХ!
+STR_SELL_ITEMS_SACK_PERSONNEL
+Продаж/Звiльнення Персоналу
+STR_VALUE_OF_SALES
+ВАРТIСТЬ ПРОДАНОГО>
+STR_FUNDS
+ФОНДИ>
+STR_SELL_SACK
+Продати/Звiльнити
+STR_VALUE
+Цiна
+STR_CRAFT_
+КОРАБЕЛЬ>
+STR_UFO_CRASH_RECOVERY
+ЗАХОПЛЕННЯ ЗБИТОГО НЛО
+STR_UFO_CRASH_RECOVERY_BRIEFING
+Будьте обережнi - прибульцi можуть бути в НЛО чи поблизу нього. Мiсiя завершиться коли всi прибульцi будуть вбитi або нейтралiзованi. Пiсля цього знайденi рештки НЛО, тiла прибульцiв та ïх спорядження будуть евакуйованi. Для припинення мiсiï повернiть бiйцiв в транспорт i натиснiть кнопку "Перервати Мiсiю".
+STR_UFO_GROUND_ASSAULT
+ШТУРМ НЛО
+STR_UFO_GROUND_ASSAULT_BRIEFING
+Вивчiть мiсце посадки i, при можливостi, отримайте доступ до НЛО. Мiсiя завершиться коли всi прибульцi будуть вбитi або нейтралiзованi. Пiсля цього знайденi рештки НЛО, тiла прибульцiв та ïх спорядження будуть евакуйованi. Для припинення мiсiï повернiть бiйцiв в транспорт i натиснiть кнопку "Перервати Мiсiю".
+STR_BASE_DEFENSE
+ЗАХИСТ БАЗИ
+STR_BASE_UC_
+БАЗА>
+STR_BASE_DEFENSE_BRIEFING
+Неподалiк приземлився корабель прибульцiв. Наша база в серйознiй небезпецi. Згiдно зi стандартною процедурою, небойовий персонал та кораблi X-COM були евакуйованi. Прибульцi будуть проникати на базу через ангари та вхiдний лiфт. Захищайте базу будь-якою цiною - це битва на смерть. В випадку вiдступу Ви втратите базу.
+STR_ALIEN_BASE_ASSAULT
+ШТУРМ БАЗИ ПРИБУЛЬЦIВ
+STR_ALIEN_BASE_ASSAULT_BRIEFING
+Бiйцi X-COM проникнули на базу прибульцiв. Для лiквiдацiï бази потрiбно знищити центр керування. Всi прибульцi, присутнi на базi, мають бути знищенi або нейтралiзованi. Для припинення мiсiï повернiть бiйцiв в зелену зону висадки та натиснiть кнопку "Перервати Мiсiю".
+STR_CYDONIA_BRIEFING
+Ви прибули в Кiдонiю. Необхiдно проникнути в пiдземний комплекс, який знаходиться бiля Марсiанського Сфiнкса. Ви мусите знайти i знищити Iнопланетний Мозок, який керує вторгненням. Доля людства у ваших руках...
+STR_TERROR_MISSION
+ПРИДУШЕННЯ ТЕРОРУ
+STR_TERROR_MISSION_BRIEFING
+Необхiдно знищити або нейтралiзувати всiх прибульцiв. Намагайтеся врятувати життя цивiльних в зонi терору, нейтралiзуючи iнопланетну загрозу. Для припинення мiсiï повернiть бiйцiв в транспорт i натиснiть кнопку "Перервати Мiсiю".
+STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
+НЕМАЄ ВIЛЬНОГО АНГАРУ ДЛЯ БУДIВНИЦТВА КОРАБЛЯ!{SMALLLINE}Кожний корабель приписаний до бази, транспортований на базу, придбаний або такий, який тiльки будується, використовує один ангар. Будуйте новий ангар або транспортуйте на iншу базу.
+STR_NO_FREE_HANGARS_FOR_PURCHASE
+НЕМАЄ ВIЛЬНОГО АНГАРУ ДЛЯ КУПIВЛI КОРАБЛЯ!{SMALLLINE}Кожний корабель приписаний до бази, транспортований на базу, придбаний або такий, який тiльки будується, використовує один ангар. Будуйте новий ангар або транспортуйте на iншу базу.
+STR_NO_FREE_HANGARS_FOR_TRANSFER
+НЕМАЄ ВIЛЬНОГО АНГАРУ ДЛЯ ТРАНСПОРТУВАННЯ!{SMALLLINE}Кожний корабель приписаний до бази, транспортований на базу, придбаний або такий, який тiльки будується, використовує один ангар. Будуйте новий ангар або транспортуйте на iншу базу.
+STR_CANNOT_BUILD_HERE
+НЕ МОЖНА БУДУВАТИ ТУТ!{SMALLLINE}Будiвництво можливе лише поруч з вже iснуючим модулем.
+STR_NO_FREE_ACCOMODATION
+НЕМАЄ ВIЛЬНОГО РОЗМIЩЕННЯ!{SMALLLINE}База-адресат не має достатньо мiсця в житлових модулях.
+STR_NOT_ENOUGH_WORK_SPACE
+НЕ ДОСТАТНЬО РОБОЧОГО МIСЦЯ!{SMALLLINE}Будуйте нову майстерню або зменшуйте роботи над iншими проектами.
+STR_NOT_ENOUGH_MONEY
+НЕ ДОСТАТНЬО ГРОШЕЙ!
+STR_NOT_ENOUGH_TRANSFER_SUPPORT
+ЗАБАГАТО ТРАНСПОРТУВАНЬ!{SMALLLINE}Дочекайтесь прибуття вантажiв, якi транспортуються, або купуйте на мiсцi призначення.
+STR_NO_MORE_SOLDIERS_ALLOWED
+ЛIМIТ СОЛДАТIВ ВИЧЕРПАНО!{SMALLLINE}Ви вже завербували максимально допустиму кiлькiсть солдатiв.
+STR_NOT_ENOUGH_STORE_SPACE
+ЗАМАЛО МIСЦЯ В СХОВИЩАХ!{SMALLLINE}Будуйте новi сховища або транспортуйте на iншi бази.
+STR_NOT_ENOUGH_LIVING_SPACE
+ЗАМАЛО ЖИТЛОВОÏ ПЛОЩI!{SMALLLINE}Будуйте житловi модулi або транспортуйте персонал на iншi бази.
+STR_NO_MORE_EQUIPMENT_ALLOWED_ON_BOARD
+ЗАБАГАТО СПОРЯДЖЕННЯ!{SMALLLINE}На завдання можна взяти не бiльше нiж 80 одиниць спорядження.
+STR_LAUNCH_INTERCEPTION
+ПОЧАТИ ПЕРЕХОПЛЕННЯ
+STR_CRAFT
+КОРАБЕЛЬ
+STR_STATUS
+СТАТУС
+STR_BASE
+БАЗА
+STR_READY
+ГОТОВИЙ
+STR_OUT
+НА ВИЛЬОТI
+STR_REPAIRS
+РЕМОНТ
+STR_REFUELLING
+ЗАПРАВКА
+STR_REARMING
+ПЕРЕЗАРЯДКА
+STR_TARGET
+ЦIЛЬ:
+STR_TARGET_WAY_POINT
+ЦIЛЬ: ВКАЗАНА ТОЧКА
+STR_ARE_YOU_SURE_CYDONIA
+Ви впевненi, що бажаєте вiдправити експедицiю на Кiдонiю?
+STR_YES
+ТАК
+STR_NO
+НI
+STR_SELECT_DESTINATION
+ВИБЕРIТЬ ЦIЛЬ
+STR_CYDONIA
+КIДОНIЯ
+STR_SELECT_SITE_FOR_NEW_BASE
+ВИБЕРIТЬ МIСЦЕ ДЛЯ НОВОÏ БАЗИ
+STR_RETURN_TO_BASE
+ПОВЕРНУТИСЬ НА БАЗУ
+STR_SELECT_NEW_TARGET
+ОБРАТИ НОВУ ЦIЛЬ
+STR_PATROL
+ПАТРУЛЮВАТИ
+STR_STATUS_
+СТАТУС>
+STR_DAMAGED_RETURNING_TO_BASE
+ПОШКОДЖЕННЯ - ПОВЕРТАЮСЬ НА БАЗУ
+STR_LOW_FUEL_RETURNING_TO_BASE
+МАЛО ПАЛЬНОГО - ПОВЕРТАЮСЬ НА БАЗУ
+STR_PATROLLING
+ПАТРУЛЮВАННЯ
+STR_TAILING_UFO
+ПЕРЕСЛIДУВАННЯ НЛО
+STR_INTERCEPTING_UFO
+ПЕРЕХОПЛЕННЯ НЛО-
+STR_RETURNING_TO_BASE
+ПОВЕРНЕННЯ НА БАЗУ
+STR_DESTINATION_UC_
+ПУНКТ ПРИЗНАЧЕННЯ: 
+STR_SPEED_
+ШВИДКIСТЬ>
+STR_MAXIMUM_SPEED_UC
+МАКСИМАЛЬНА ШВИДКIСТЬ>
+STR_ALTITUDE_
+ВИСОТА>
+STR_VERY_LOW
+ДУЖЕ МАЛА
+STR_LOW_UC
+МАЛА
+STR_HIGH_UC
+ВЕЛИКА
+STR_VERY_HIGH
+ДУЖЕ ВЕЛИКА
+STR_FUEL
+ПАЛЬНЕ>
+STR_WEAPON_1
+ЗБРОЯ-1>
+STR_NONE_UC
+НЕМАЄ
+STR_ROUNDS_
+БОЄЗАПАС>
+STR_WEAPON_2
+ЗБРОЯ-2>
+STR_HOSTILE
+ВОРОЖИЙ
+STR_NEUTRAL
+НЕЙТРАЛЬНИЙ
+STR_FRIENDLY
+ДРУЖНIЙ
+STR_COMMITTED
+ВIДДАНИЙ
+STR_GAME_OPTIONS
+НАЛАШТУВАННЯ
+STR_LOAD_GAME
+ЗАВАНТАЖИТИ ГРУ
+STR_SAVE_GAME
+ЗБЕРЕГТИ ГРУ
+STR_INTERCEPTION_CRAFT
+Виберiть корабель
+STR_BASE_
+База>
+STR_NAME_UC
+IМ'Я
+STR_AMMO_
+ЗБРОЯ>
+STR_CREW
+ЕКIПАЖ
+STR_EQUIPMENT_UC
+СПОРЯДЖЕННЯ
+STR_ARMOR
+БРОНЯ
+STR_MAX
+МАКС>
+STR_ROOKIE
+Новобранець
+STR_SQUADDIE
+Рядовий
+STR_SERGEANT
+Сержант
+STR_CAPTAIN
+Капiтан
+STR_COLONEL
+Полковник
+STR_COMMANDER
+Командуючий
+STR_SELECT_SQUAD_FOR
+Команда для 
+STR_SPACE_AVAILABLE
+МIСЦЯ ДОСТУПНО>
+STR_SPACE_USED
+МIСЦЯ ЗАЙНЯТО>
+STR_RANK
+ЗВАННЯ
+STR_WOUNDED
+ПОРАНЕННЯ
+STR_EQUIPMENT_FOR
+Спорядження для 
+STR_ARM
+Зброя
+STR_DEFENSE_VALUE
+Ступiнь Захисту
+STR_HIT_RATIO
+Точнiсть
+STR_READY_TO_LAND_NEAR
+готовий до{NEWLINE}посадки коло
+STR_BEGIN_MISSION
+Почати Операцiю?
+STR_SELECT_ARMAMENT
+Виберiть Зброю
+STR_AMMUNITION_UC
+БОЄЗАПАС
+STR_ARMAMENT
+ЗБРОЯ
+STR_AVAILABLE
+ДОСТУПНО
+STR_NOT_AVAILABLE
+НЕМАЄ
+STR_SELECT_ARMOR_FOR
+ВИБЕРIТЬ БРОНЮ ДЛЯ
+STR_TYPE
+ТИП
+STR_PERSONAL_ARMOR_UC
+БРОНЕКОСТЮМ
+STR_POWER_SUIT_UC
+ЕНЕРГОСКАФАНДР
+STR_FLYING_SUIT_UC
+ЛIТАЮЧИЙ СКАФАНДР
+STR_SELECT_ARMOR
+Виберiть Броню
+STR_NORTH
+ПIВНIЧ
+STR_NORTH_EAST
+ПIВНIЧНИЙ СХIД
+STR_EAST
+СХIД
+STR_SOUTH_EAST
+ПIВДЕННИЙ СХIД
+STR_SOUTH
+ПIВДЕНЬ
+STR_SOUTH_WEST
+ПIВДЕННИЙ ЗАХIД
+STR_WEST
+ЗАХIД
+STR_NORTH_WEST
+ПIВНIЧНИЙ ЗАХIД
+STR_SELECT_ACTION
+ВИБЕРIТЬ ЗАВДАННЯ
+STR_CONTINUE_INTERCEPTION_PURSUIT
+ПРОДОВЖИТИ ПЕРЕХОПЛЕННЯ
+STR_PURSUE_WITHOUT_INTERCEPTION
+ПЕРЕСЛIДУВАТИ БЕЗ ПЕРЕХОПЛЕННЯ
+STR_VERY_LARGE
+ДУЖЕ ВЕЛИКИЙ
+STR_LARGE
+ВЕЛИКИЙ
+STR_MEDIUM_UC
+СЕРЕДНIЙ
+STR_SMALL
+МАЛИЙ
+STR_VERY_SMALL
+ДУЖЕ МАЛИЙ
+STR_GROUND
+НА ЗЕМЛI
+STR_DETECTED
+Виявлено
+STR_SIZE_UC
+РОЗМIР
+STR_ALTITUDE
+ВИСОТА
+STR_HEADING
+НАПРЯМ
+STR_SPEED
+ШВИДКIСТЬ
+STR_CENTER_ON_UFO_TIME_5_SECS
+ЦЕНТР НА НЛО, ЧАС=5 Сек
+STR_TRACKING_LOST
+ВТРАЧЕНО
+STR_REDIRECT_CRAFT
+ПЕРЕНАПРАВИТИ КОРАБЕЛЬ
+STR_GO_TO_LAST_KNOWN_UFO_POSITION
+ЛЕТIТИ ДО ОСТАННЬОÏ ВIДОМОÏ ПОЗИЦIÏ НЛО
+STR_UFO_
+НЛО-
+STR_ALIEN_BASE_
+БАЗА ПРИБУЛЬЦIВ-
+STR_CRASH_SITE_
+МIСЦЕ АВАРIÏ-
+STR_LANDING_SITE_
+МIСЦЕ ПОСАДКИ-
+STR_WAY_POINT_
+ВКАЗАНА ТОЧКА-
+STR_TERROR_SITE_UC
+МIСЦЕ ТЕРОРУ-
+STR_HAS_REACHED
+досяг
+STR_DESTINATION
+Пункт призначення
+STR_NOW_PATROLLING
+Патрулювання
+STR_ALIEN_ORIGINS
+Походження Прибульцiв
+STR_THE_MARTIAN_SOLUTION
+Вирiшення Марсiанського питання
+STR_CYDONIA_OR_BUST
+Кiдонiя або Нiчого
+STR_UFOPAEDIA
+НЛОпедiя
+STR_XCOM_CRAFT_ARMAMENT
+КОРАБЛI X-COM I ÏХ ОЗБРОЄННЯ
+STR_HEAVY_WEAPONS_PLATFORMS
+ВАЖКI БОЙОВI ПЛАТФОРМИ (ВБП)
+STR_WEAPONS_AND_EQUIPMENT
+ЗБРОЯ I СПОРЯДЖЕННЯ
+STR_ALIEN_ARTIFACTS
+АРТЕФАКТИ ПРИБУЛЬЦIВ
+STR_BASE_FACILITIES
+МОДУЛI БАЗИ
+STR_ALIEN_LIFE_FORMS
+ПОЗАЗЕМНI ФОРМИ ЖИТТЯ
+STR_ALIEN_RESEARCH_UC
+ДIЯЛЬНIСТЬ ПРИБУЛЬЦIВ
+STR_UFO_COMPONENTS
+КОМПОНЕНТИ НЛО
+STR_UFOS
+НЛО
+STR_SELECT_ITEM
+ВИБЕРIТЬ ПРЕДМЕТ
+STR_ACCELERATION
+ПРИСКОРЕННЯ>
+STR_FUEL_CAPACITY
+ЗАПАС ПАЛЬНОГО>
+STR_WEAPON_PODS
+ПIДВIСОК ДЛЯ ЗБРОÏ>
+STR_DAMAGE_CAPACITY_UC
+РIВЕНЬ ЗАХИСТУ>
+STR_CARGO_SPACE
+ОБ'ЄМ ВАНТАЖНОГО ВIДСIКУ>
+STR_HWP_CAPACITY
+КIЛЬКIСТЬ ВБП>
+STR_DAMAGE
+Пошкодження
+STR_RANGE
+Радiус ураження
+STR_KM
+ км
+STR_ACCURACY
+Точнiсть
+STR_RE_LOAD_TIME
+Час перезарядки
+STR_S
+с
+STR_ARMOR_PIERCING
+БРОНЕБIЙНИЙ
+STR_INCENDIARY
+ЗАПАЛЮВАЛЬНИЙ
+STR_HIGH_EXPLOSIVE_UC
+ВИБУХОВИЙ
+STR_LASER_BEAM
+ЛАЗЕРНИЙ ПРОМIНЬ
+STR_PLASMA_BEAM_UC
+ПЛАЗМОВИЙ ПРОМIНЬ
+STR_STUN_UC
+ПАРАЛIЗАЦIЯ
+STR_SHOT_TYPE
+ТИП ПОСТРIЛУ
+STR_ACCURACY_UC
+ТОЧНIСТЬ
+STR_TU_COST
+ЧАС
+STR_DAMAGE_UC
+ПОШКОДЖЕННЯ
+STR_AMMO
+ЗАРЯД
+STR_AUTO
+Черга
+STR_SNAP
+Поспiхом
+STR_AIMED
+Прицiльно
+STR_CONSTRUCTION_TIME
+Час будiвництва
+STR_CONSTRUCTION_COST
+Вартiсть будiвництва
+STR_MAINTENANCE_COST
+Вартiсть утримання
+STR_LOW
+Низький
+STR_MEDIUM
+Середнiй
+STR_HIGH
+Високий
+STR_CRAFT_WEAPON
+Озброєння Кораблiв
+STR_CRAFT_AMMUNITION
+Боєприпаси Кораблiв
+STR_HEAVY_WEAPONS_PLATFORM
+Важка Бойова Платформа
+STR_WEAPON
+Зброя
+STR_AMMUNITION
+Боєприпаси
+STR_EQUIPMENT
+Спорядження
+STR_ALIEN_CORPSE
+Труп прибульця
+STR_UFO_COMPONENT
+Компонент НЛО
+STR_PERSONAL_ARMOR
+Бронекостюм
+STR_RAW_MATERIALS
+Вихiднi Матерiали
+STR_HWP_CANNON_SHELLS
+Гарматнi снаряди ВБП
+STR_ALIEN
+Прибулець
+STR_SECTOID
+Сектоïд
+STR_SNAKEMAN
+Людинозмiя
+STR_ETHEREAL
+Небесний
+STR_MUTON
+Мутон
+STR_FLOATER
+Летун
+STR_CELATID
+Селатид
+STR_SILACOID
+Силакоïд
+STR_CHRYSSALID
+Крисалiд
+STR_REAPER
+Рипер
+STR_SECTOPOD
+Сектопод
+STR_CYBERDISC
+Кiбердиск
+STR_LIVE_COMMANDER
+ Командуючий
+STR_LIVE_LEADER
+ Лiдер
+STR_LIVE_ENGINEER
+ Iнженер
+STR_LIVE_MEDIC
+ Медик
+STR_LIVE_NAVIGATOR
+ Навiгатор
+STR_LIVE_SOLDIER
+ Соладт
+STR_LIVE_TERRORIST
+ Терорист
+STR_UFO_POWER_SOURCE
+Джерело Енергiï НЛО
+STR_UFO_NAVIGATION
+Навiгацiя НЛО
+STR_UFO_CONSTRUCTION
+Конструкцiя НЛО
+STR_ALIEN_FOOD
+Ïжа Прибульцiв
+STR_ALIEN_REPRODUCTION
+Iнкубатор Прибульцiв
+STR_ALIEN_ENTERTAINMENT
+Розваги Прибульцiв
+STR_ALIEN_SURGERY
+Хiрургiя Прибульцiв
+STR_EXAMINATION_ROOM
+Кiмната Допиту
+STR_ALIEN_ALLOYS
+Сплави Прибульцiв
+STR_ALIEN_HABITAT
+Мiсце  Проживання Прибульцiв
+STR_POWER_SUIT
+Енергоскафандр
+STR_FLYING_SUIT
+Лiтаючий Скафандр
+STR_HWP_ROCKETS
+Ракета ВБП
+STR_HWP_FUSION_BOMB
+Бластер-ракета ВБП
+STR_LASER_WEAPONS
+Лазерна Зброя
+STR_NEW_FIGHTER_CRAFT
+Новий Винищувач
+STR_NEW_FIGHTER_TRANSPORTER
+Новий Винищувач/Транспорт
+STR_ULTIMATE_CRAFT
+"Месник" (Винищувач/Транспорт)
+STR_LASER_PISTOL
+Лазерний Пiстолет
+STR_LASER_RIFLE
+Лазерна Гвинтiвка
+STR_HEAVY_LASER
+Важкий Лазер
+STR_LASER_CANNON
+Лазерна Гармата
+STR_PLASMA_CANNON
+Плазмова Гармата
+STR_FUSION_MISSILE
+Бластерна Ракета
+STR_LASER_DEFENSE
+Лазерна система ППО
+STR_PLASMA_DEFENSE
+Плазмова система ППО
+STR_FUSION_DEFENSE
+Бластерна система ППО
+STR_GRAV_SHIELD
+Гравiтацiйний Щит
+STR_MIND_SHIELD
+Ментальний Щит
+STR_PSI_LAB
+Псi-Лабораторiя
+STR_MOTION_SCANNER
+Сканер Руху
+STR_MEDI_KIT
+Мед-Комплект
+STR_TANK_CANNON
+Танк/Гармата
+STR_TANK_ROCKET_LAUNCHER
+Танк/Ракетна установка
+STR_TANK_LASER_CANNON
+Танк/Лазерна гармата
+STR_HOVERTANK_PLASMA
+Плазмовий Ховертанк
+STR_HOVERTANK_LAUNCHER
+Бластерний Ховертанк
+STR_STINGRAY_LAUNCHER
+Пускова установка "Скат"
+STR_AVALANCHE_LAUNCHER
+Пускова установка "Лавина"
+STR_CANNON
+Авiагармата
+STR_FUSION_BALL_LAUNCHER
+Бластерна Гармата
+STR_PLASMA_BEAM
+Плазмова Гармата
+STR_STINGRAY_MISSILES
+Ракета "Скат"
+STR_AVALANCHE_MISSILES
+Ракета "Лавина"
+STR_CANNON_ROUNDS_X50
+Снаряди для Авiагармати(x50)
+STR_FUSION_BALL
+Бластерний Снаряд
+STR_SOLDIER
+Солдат
+STR_SCIENTIST
+Вчений
+STR_ENGINEER
+Iнженер
+STR_NORTH_AMERICA
+Пiвнiчна Америка
+STR_ARCTIC
+Арктика
+STR_ANTARCTICA
+Антарктика
+STR_SOUTH_AMERICA
+Пiвденна Америка
+STR_EUROPE
+Європа
+STR_NORTH_AFRICA
+Пiвнiчна Африка
+STR_SOUTHERN_AFRICA
+Пiвденна Африка
+STR_CENTRAL_ASIA
+Центральна Азiя
+STR_SOUTH_EAST_ASIA
+Пiвденно-Схiдна Азiя
+STR_SIBERIA
+Сибiр
+STR_AUSTRALASIA
+Австралiя
+STR_PACIFIC
+Тихий Океан
+STR_NORTH_ATLANTIC
+Пiвнiчна Атлантика
+STR_SOUTH_ATLANTIC
+Пiвденна Атлантика
+STR_INDIAN_OCEAN
+Iндiйський Океан
+STR_ALIEN_RESEARCH
+Дослiдження
+STR_ALIEN_HARVEST
+Збiр Врожаю
+STR_ALIEN_ABDUCTION
+Викрадення
+STR_ALIEN_INFILTRATION
+Проникнення
+STR_ALIEN_BASE
+База Прибульцiв
+STR_ALIEN_TERROR
+Терор
+STR_ALIEN_RETALIATION
+Удар у вiдповiдь
+STR_ALIEN_SUPPLY
+Постачання Прибульцiв
+STR_POWER_SOURCES
+Джерела Енергiï
+STR_MAXIMUM_SPEED
+Макс. швидкiсть
+STR_HYPER_WAVE_DECODER_UC
+ГIПЕРХВИЛЬОВИЙ ДЕКОДЕР
+STR_SKYRANGER
+РЕЙНДЖЕР
+STR_LIGHTNING
+БЛИСКАВКА
+STR_AVENGER
+МЕСНИК
+STR_INTERCEPTOR
+ПЕРЕХОПЛЮВАЧ
+STR_FIRESTORM
+ВОГНЯНИЙ ШТОРМ
+STR_UFO
+НЛО
+STR_STINGRAY
+СКАТ
+STR_AVALANCHE
+ЛАВИНА
+STR_CANNON_UC
+АВIАГАРМАТА
+STR_FUSION_BALL_UC
+БЛАСТЕРНА ГАРМАТА
+STR_LASER_CANNON_UC
+ЛАЗЕРНА ГАРМАТА
+STR_DAMAGE_CAPACITY
+Рiвень Захисту
+STR_WEAPON_POWER
+Потужнiсть Зброï
+STR_WEAPON_RANGE
+Дальнiсть Зброï
+STR_ACCESS_LIFT
+Вхiдний Лiфт
+STR_LABORATORY
+Лабораторiя
+STR_WORKSHOP
+Майстерня
+STR_SMALL_RADAR_SYSTEM
+Ближнiй Радар
+STR_LARGE_RADAR_SYSTEM
+Дальнiй Радар
+STR_MISSILE_DEFENSES
+Ракетний Захист
+STR_GENERAL_STORES
+Сховище
+STR_ALIEN_CONTAINMENT
+Тюрма для Прибульцiв
+STR_LASER_DEFENSES
+Лазений Захист
+STR_PLASMA_DEFENSES
+Плазмовий Захист
+STR_FUSION_BALL_DEFENSES
+Бластерний Захист
+STR_PSIONIC_LABORATORY
+Псi-Лабораторiя
+STR_HYPER_WAVE_DECODER
+Гiперхвильовий Декодер
+STR_HANGAR
+Ангар
+STR_USA
+США
+STR_RUSSIA
+РОСIЯ
+STR_UK
+ВЕЛИКА БРИТАНIЯ
+STR_FRANCE
+ФРАНЦIЯ
+STR_GERMANY
+НIМЕЧЧИНА
+STR_ITALY
+IТАЛIЯ
+STR_SPAIN
+IСПАНIЯ
+STR_CHINA
+КИТАЙ
+STR_JAPAN
+ЯПОНIЯ
+STR_INDIA
+IНДIЯ
+STR_BRAZIL
+БРАЗИЛIЯ
+STR_AUSTRALIA
+АВСТРАЛIЯ
+STR_NIGERIA
+НIГЕРIЯ
+STR_SOUTH_AFRICA
+ПIВДЕННА АФРИКА
+STR_EGYPT
+ЄГИПЕТ
+STR_CANADA
+КАНАДА
+STR_FLOATER_SOLDIER
+Летун Солдат
+STR_FLOATER_NAVIGATOR
+Летун Навiгатор
+STR_FLOATER_MEDIC
+Летун Медик
+STR_FLOATER_ENGINEER
+Летун Iнженер
+STR_FLOATER_LEADER
+Летун Лiдер
+STR_FLOATER_COMMANDER
+Летун Командуючий
+STR_TANK
+Танк
+STR_CIVILIAN
+Цивiльний
+STR_JAN
+Сiч
+STR_FEB
+Лют
+STR_MAR
+Бер
+STR_APR
+Квi
+STR_MAY
+Тра
+STR_JUN
+Чер
+STR_JUL
+Лип
+STR_AUG
+Сер
+STR_SEP
+Вер
+STR_OCT
+Жов
+STR_NOV
+Лис
+STR_DEC
+Гру
+STR_INTERNATIONAL_RELATIONS
+     Учасники Проекту
+STR_COUNTRY
+Краïна
+STR_FUNDING
+Фонди
+STR_CHANGE
+Змiна
+STR_WEAPON_SYSTEMS
+ЗБРОЙНI{NEWLINE}СИСТЕМИ
+STR_HWPS
+ВБП
+STR_DAMAGE_UC_
+ПОШКОДЖЕННЯ>
+STR_ACCESS_LIFT_UFOPEDIA
+Вхiдний лiфт використовується для доставки персоналу та обладнання в пiдземну базу. Створення новоï бази починається з будiвництва цього модуля. Лiфт вразливий для проникнення потенцiйного противника.
+STR_LIVING_QUARTERS_UFOPEDIA
+Житловий блок забезпечує розмiщення до 50 чоловiк. Тут знаходяться кiмната вiдпочинку, ïдальня та спальнi примiщення.
+STR_LABORATORY_UFOPEDIA
+В лабораторiï можуть працювати до 50 вчених. Лабораторiï оснащенi найсучаснiшими технологiями для проведення фiзичних, бiохiмiчних та космологiчних дослiджень. Передбачений зв'язок з кращими дослiдницькими центрами свiту, включаючи вiйськовi установи.
+STR_WORKSHOP_UFOPEDIA
+Майстерня обладнана всiм необхiдним для виробництва спорядження i технiки, розробленоï в лабораторiях. В майстернi можуть працювати до 50 iнженерiв, в залежностi вiд того скiльки мiсця займає обладнання, яке виготовляють.
+STR_SMALL_RADAR_SYSTEM_UFOPEDIA
+Радарна система ближнього виявлення має ефективний радiус дiï в 550 кiлометрiв, i зв'язана зi супутниковими системами для пошуку наземних об'єктiв. Кожна така система виявляє цiль середнього розмiру з ймовiрнiстю 5% кожнi 10 хвилин. Можлива спiльна робота кiлькох радарних блокiв, що збiльшує шанси на виявлення цiлей.
+STR_LARGE_RADAR_SYSTEM_UFOPEDIA
+Радарна система дальнього виявлення має ефективний радiус дiï в 830 кiлометрiв, i зв'язана зi супутниковими системами для пошуку наземних об'єктiв. Кожна така система виявляє цiль середнього розмiру з ймовiрнiстю 5% кожнi 10 хвилин. Можлива спiльна робота кiлькох радарних блокiв, що збiльшує шанси на виявлення цiлей.
+STR_MISSILE_DEFENSES_UFOPEDIA
+Ракетна система ППО забезпечує деякий захист проти лiтальних апаратiв, якi намагаються сiсти неподалiк вiд бази.
+STR_GENERAL_STORES_UFOPEDIA
+Все спорядження, збройнi системи, боєприпаси, добутi матерiли та Важкi Бойовi Платформи розмiщуються в сховищах (за вийнятком кораблiв, якi розмiщуються в ангарах).
+STR_ALIEN_CONTAINMENT_UFOPEDIA
+Для пiдтримання життєдiяльностi прибульцiв необхiднi спецiальнi умови. Тюрма для прибульцiв дозволяє безпечно утримувати до 10 iнопланетних органiзмiв в iзольованих камерах.
+STR_LASER_DEFENSES_UFOPEDIA
+Лазерна система протиповiтряноï оборони (ППО) забазпечує захист проти ворожих лiтальних апаратiв.
+STR_PLASMA_DEFENSES_UFOPEDIA
+Плазмо-променева система протиповiтряноï оборони (ППО) забезпечує ефективний захист проти ворожих лiтальних апаратiв.
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
+Бластер-ракети забезпечують найбiльш ефективний захист проти атак прибульцiв. Пiд час вибуху цi ракети викидають антиматерiю, яка, аннiгiлюючи, знищує все в певному радiусi.
+STR_GRAV_SHIELD_UFOPEDIA
+Гравiтацiйний щит вiдштовхує лiтальнi апарати противника при спробi сiсти неподалiк вiд бази, даючи можливiсть захисним системам вистрелити знову. Це фактично подвоює ефективнiсть систем ППО бази. 
+STR_MIND_SHIELD_UFOPEDIA
+Для виявлення присутностi людей прибульцi покладаються на характернi хвилi, якi випромiнює людський мозок. Ментальний щит екранує цi мозковi хвилi, сильно зменшуючи ймовiрнiсть виявлення противником.
+STR_PSIONIC_LABORATORY_UFOPEDIA
+Псi-Лабораторiя дозволяє провести оцiнку псiонiчного потенцiалу всiх бiйцiв на базi, а також необхiдне для розвитку псi-навикiв навчання. Кожна лабораторiя може тренувати до 10 чоловiк одночасно, розподiл на тренування вiдбувається в кiнцi мiсяця. Для бойового використання псiонiчних навикiв необхiдно спорядити бiйцiв псi-пiдсилювачами.
+STR_HYPER_WAVE_DECODER_UFOPEDIA
+Засоби зв'язку прибульцiв базуються на використаннi гiперпросторових хвиль, якi поширюються майже миттєво. Декодер дозволяє здiйснювати перехоплення та розшифрування переговорiв НЛО. Можна визначити тип НЛО, расу прибульцiв i тип виконуваного завдання.
+STR_HANGAR_UFOPEDIA
+Кожен ангар вмiщає один корабель. Тут є обладнання для обслуговування, дозаправки та ремонту кораблiв X-COM. Кожному кораблю, приписаному до бази, має бути призначений свiй ангар, який не може бути використаний для розмiщення iнших кораблiв, навiть якщо призначений корабель на вильотi.
+STR_PISTOL_UFOPEDIA
+Штатний напiвавтоматичний дванадцятизарядний пiстолет X-COM.
+STR_RIFLE_UFOPEDIA
+Високоточна снайперська гвинтiвка калiбру 6.7мм, оснащена лазерним прицiлом. Магазин вмiщує 20 паторнiв.
+STR_HEAVY_CANNON_UFOPEDIA
+Важка гармата - потужна, але громiздка зброя. Вона вiдзначається можливiстю використання трьох видiв боєприпасiв - бронебiйних, запалювальних та розривних.
+STR_AUTO_CANNON_UFOPEDIA
+Авто-гармата поєднує експлуатацiйну гнучкiсть та потужнiсть важкоï гармати з можливiстю автоматичноï стрiльби.
+STR_ROCKET_LAUNCHER_UFOPEDIA
+Пускова ракетна установка з лазерною системою наведення. Може стрiляти трьома видами ракет.
+STR_LASER_PISTOL_UFOPEDIA
+Лазерний пiстолет - ефективна реалiзацiя новоï технологiï. Поєднує зручнiсть пiстолета з бiльшою точнiстю та скорострiльнiстю.
+STR_LASER_RIFLE_UFOPEDIA
+Лазерна гвинтiвка - бiльш потужна та точна зброя, що базується на розробках лазерного пiстолета.
+STR_HEAVY_LASER_UFOPEDIA
+Важкий лазер - громiздка, але напродчуд ефективна зброя.
+STR_GRENADE_UFOPEDIA
+Стандартна осколочна граната з точним таймером для запалу.
+STR_SMOKE_GRENADE_UFOPEDIA
+Димовi гранати використовуються для забезпечення прикриття в складних бойових ситуацiях. Використовуйте з обережнiстю, оскiльки ворог теж може використати низьку видимiсть в диму.
+STR_PROXIMITY_GRENADE_UFOPEDIA
+Сенсорна граната використовується так само, як i звичайна, але пiсля приземлення ïï запалом керує сенсор, що реагує на рух. Правильне використання вимагає хорошого навику та особливоï обережностi.
+STR_HIGH_EXPLOSIVE_UFOPEDIA
+Заряд вибухiвки, який використовується для знищення об'єктiв. Евакуююйте персонал вiд мiсця вибуху.
+STR_MOTION_SCANNER_UFOPEDIA
+Цей складний пристрiй використовує потужнi алгоритми обробки даних, якi надходять з рiзних сенсорiв, для виявлення рухомих об'єктiв. Для використання сканера натиснiть "Використати Сканер" в меню дiй, пiд час тактичноï мiсiï. Стрiлка на екранi пристрою показує напрям погляду бiйця, який використовує сканер (Пiвнiч знаходиться вгорi). Миготливi плями - це об'єкти, якi нещодавно рухались. Великi плями вiдповiдають великим об'єктам, чи таким, якi швидко рухаються. Нерухомi об'єкти сканером не фiксуються.
+STR_MEDI_KIT_UFOPEDIA
+Мед-комплект мiстить засоби для зупинки кровотеч, а також знеболюючi та стимулюючi препарати.{NEWLINE} Для застосування мед-комплекту потрiбно стати навпроти солдата який потребує лiкування. Якщо солдат лежить, потрiбно встати над ним. При використаннi виберiть:{NEWLINE}ОБРОБКА РАН> Частини тiла, якi мають смертельнi рани, позначенi червоним. Виберiть уражену частину та натиснiть кнопку, щоб зупинити кровотечу.{NEWLINE}СТИМУЛЯТОР> Iн'єкцiя стимуятора вiдновлює енергiю бiйця, може використовуватись для повернення потерпiлих до свiдомостi (для цього потрiбно стояти над тiлом).{NEWLINE}ЗНЕБОЛЮЮЧЕ> Введення комплексу знеболюючих препаратiв допомагає покращити моральний стан поранених.
+STR_PSI_AMP_UFOPEDIA
+Псi-пiдсилювач можуть використовувати лише солдати з псiонiчними навиками. Для використання виберiть тип атаки, а далi - цiль атаки. Можливi два типи атаки:{NEWLINE}ПАНIКА> При успiшнiй атацi противник буде деморалiзовний i може впасти в стан панiки.{NEWLINE}КОНТРОЛЬ РОЗУМУ> При успiшнiй атацi ви отримуєте безпосереднiй контроль над дiями ворога, так нiби вiн є одним iз ваших солдат. Це найскладнiший тип псi-атаки.
+STR_STUN_ROD_UFOPEDIA
+Цей пристрiй призначений для паралiзацiï противника електричним розрядом, при безпосередньому контактi. При цьому противник залишається живим.
+STR_THE_SUBJECT_HAS_DIED
+Суб'єкт помер пiд час допиту.
+STR_MIND_PROBE_UFOPEDIA
+Ментальний зонд - це засiб зв'язку прибульцiв, що дозволяє отримувати iнформацiю прямо з хвиль, якi випромiнює мозок. Бiйцi X-COM можуть використовувати цей пристрiй для визначення характеристик ворожих бiйцiв. Для використання виберiть "Використати" в меню дiй та клiкнiть по солдату противника.
+STR_PLASMA_PISTOL_UFOPEDIA
+Плазмовий пiстолет - це смертоносна зброя прибульцiв, яка базується на принципi прискорення частинок антигравiтацiйним полем.
+STR_PLASMA_RIFLE_UFOPEDIA
+Руйнiвна плазмова зброя прибульцiв, яка базується на принципi прискорення частинок антигравiтацiйним полем.
+STR_SIZE
+Розмiр
+STR_THE_CORPSE_MAY_BE_RESEARCHED
+Труп може бути дослiдженим для отримання вiдомостей про внутрiшню будову.
+STR_NOT_ENOUGH_AMMUNITION_TO_ARM
+Не вистачає беєприпасiв
+STR_BLASTER_LAUNCHER_UFOPEDIA
+Ця пускова установка прибульцiв стрiляє потужними керованими "бластерними ракетами". Траєкторiя польоту ракети задається безпосередньо перед пострiлом. Пiсля задання траєкторiï натиснiть спецiальну кнопку пуску ракети.
+STR_SMALL_LAUNCHER_UFOPEDIA
+Невелика пускова установка, яка стрiляє паралiзуючими бомбами. Надзвичайно корисна для захоплення живих iнопланетян.
+STR_ALIEN_GRENADE_UFOPEDIA
+Граната прибульцiв працює таким самим чином, як i земна граната, однак має бiльшу потужнiсть.
+STR_SMALL_SCOUT
+Малий Розвiдник
+STR_MEDIUM_SCOUT
+Середнiй Розвiдник
+STR_LARGE_SCOUT
+Великий Розвiдник
+STR_HARVESTER
+Жнець
+STR_ABDUCTOR
+Викрадач
+STR_TERROR_SHIP
+Корабель Терору
+STR_BATTLESHIP
+Лiнкор
+STR_SUPPLY_SHIP
+Корабель Постачання
+STR_RATING
+ОЦIНКА>
+STR_RATING_TERRIBLE
+ЖАХЛИВО!
+STR_RATING_POOR
+ПОГАНО!
+STR_RATING_OK
+OK
+STR_RATING_GOOD
+ДОБРЕ!
+STR_RATING_EXCELLENT
+ПРЕКРАСНО!
+STR_SCORE
+РАХУНОК
+STR_XCOM_PROJECT_MONTHLY_REPORT
+ЗВIТ ПРОЕКТУ X-COM ЗА МIСЯЦЬ
+STR_MONTH
+Мiсяць>
+STR_COUNCIL_IS_GENERALLY_SATISFIED
+Рада фiнансуючих держав в загальному задоволена вашими дiями.
+STR_COUNCIL_IS_VERY_PLEASED
+Рада фiнансуючих держав дуже задоволена вашими дiями. Продовжуйте в тому ж дусi.
+STR_COUNCIL_IS_DISSATISFIED
+Рада фiнансуючих держав незадоволена вашими дiями. Ви мусите збiльшити ефективнiсть протидiï iнопланетнiй загрозi, або проект буде згорнутий.
+STR_YOU_HAVE_NOT_SUCCEEDED
+Ви не досягли успiху в боротьбi з вторгненням прибульцiв i рада фiнансуючих держав з прикрiстю прийняла рiшення про закриття проекту. Вiдтепер кожна держава буде вирiшувати цю проблему по-своєму. Ми можемо тiльки надiятись, що прийдемо до якоïсь угоди з явно ворожими силами, i що суспiльство прийме умови, запропонованi прибульцями.
+STR_COUNTRY_IS_PARTICULARLY_PLEASED
+ особливо задоволена вашими успiхами в боротьбi з загрозою на ïï територiï та погодилась збiльшити фiнансування.
+STR_COUNTRIES_ARE_PARTICULARLY_HAPPY
+ особливо задоволенi вашими успiхами в боротьбi з вторгненням на ïх територiï та та погодились збiльшити фiнансування.
+STR_AND
+ i
+STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY
+ незадоволена заходами, вжитими вами для протидiï активностi прибульцiв на ïï територiï, i вирiшила урiзати фiнансування.
+STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY
+ незадоволенi заходами, вжитими вами для протидiï активностi прибульцiв на ïх територiï, i вирiшили урiзати фiнансування.
+STR_KNOTS
+вузли
+STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
+ пiдписала секретний пакт з невiдомими iнопланетними силами та вийшла з проекту.
+STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
+ пiдписали секретний пакт з невiдомими iнопланетними силами та вийшли з проекту.
+STR_MONTHLY_RATING
+Поточний рейтинг>
+STR_FUNDING_CHANGE
+Змiна фондiв>
+STR_COUNCIL_REDUCE_DEBTS
+Рада з фiнансування не задоволена вашим фiнансовим станом. Ви мусите скоротити борги до 2 мiльйонiв доларiв, або проект буде закритий.
+STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED
+ГIПЕРХВИЛЬОВА ПЕРЕДАЧА ДЕКОДОВАНА
+STR_CRAFT_TYPE
+ТИП КОРАБЛЯ
+STR_RACE
+РАСА
+STR_MISSION
+ЗАВДАННЯ
+STR_ZONE
+ЗОНА
+STR_ALLOCATE_RESEARCH
+Почати Дослiдження
+STR_ALLOCATE_MANUFACTURE
+Почати Виробництво
+STR_NEW_YORK
+Нью-Йорк
+STR_WASHINGTON
+Вашингтон
+STR_LOS_ANGELES
+Лос-Анджелес
+STR_MONTREAL
+Монреаль
+STR_HAVANA
+Гавана
+STR_MEXICO_CITY
+Мехiко
+STR_CHICAGO
+Чикаго
+STR_VANCOUVER
+Ванкувер
+STR_DALLAS
+Даллас
+STR_BRASILIA
+Бразiлiа
+STR_BOGOTA
+Богота
+STR_BUENOS_AIRES
+Буенос-Айрес
+STR_SANTIAGO
+Сантьяго
+STR_RIO_DE_JANEIRO
+Рiо-де-Жанейро
+STR_LIMA
+Лiма
+STR_CARACAS
+Каракас
+STR_LONDON
+Лондон
+STR_PARIS
+Париж
+STR_BERLIN
+Берлiн
+STR_MOSCOW
+Москва
+STR_ROME
+Рим
+STR_MADRID
+Мадрид
+STR_BUDAPEST
+Будапешт
+STR_LAGOS
+Лагос
+STR_CAIRO
+Каïр
+STR_CASABLANCA
+Касабланка
+STR_PRETORIA
+Преторiя
+STR_NAIROBI
+Найробi
+STR_CAPE_TOWN
+Кейптаун
+STR_KINSHASA
+Кiншаса
+STR_ANKARA
+Анкара
+STR_DELHI
+Делi
+STR_KARACHI
+Карачi
+STR_BAGHDAD
+Багдад
+STR_TEHRAN
+Тегеран
+STR_BOMBAY
+Бомбей
+STR_CALCUTTA
+Калькутта
+STR_TOKYO
+Токiо
+STR_BEIJING
+Пекiн
+STR_BANGKOK
+Бангкок
+STR_MANILA
+Манiла
+STR_SEOUL
+Сеул
+STR_SINGAPORE
+Сiнгапур
+STR_JAKARTA
+Джакарта
+STR_SHANGHAI
+Шанхай
+STR_HONG_KONG
+Гонконг
+STR_NOVOSIBIRSK
+Новосибiрськ
+STR_CANBERRA
+Канберра
+STR_WELLINGTON
+Веллiнгтон
+STR_MELBOURNE
+Мельбурн
+STR_PERTH
+Перт
+STR_NEW_GAME
+Нова Гра
+STR_LOAD_SAVED_GAME
+Завантажити Гру
+STR_SELECT_DIFFICULTY_LEVEL
+Виберiть рiвень складностi
+STR_1_BEGINNER
+1> Початкiвець
+STR_2_EXPERIENCED
+2> Досвiдчений
+STR_3_VETERAN
+3> Ветеран
+STR_4_GENIUS
+4> Генiй
+STR_5_SUPERHUMAN
+5> Надлюдина
+STR_TIME
+Час
+STR_DATE
+Дата
+STR_SELECT_GAME_TO_LOAD
+Виберiть гру для завантаження
+STR_SELECT_SAVE_POSITION
+Виберiть слот для збереження
+STR_PSIONIC_TRAINING
+ПСIОНIЧНЕ ТРЕНУВАННЯ
+STR_REMAINING_PSI_LAB_CAPACITY
+Мiсця в Псi-Лабораторiï>
+STR_PSIONIC__STRENGTH
+Псiонiчна{NEWLINE}Сила
+STR_PSIONIC_SKILL_IMPROVEMENT
+Псi-навик{NEWLINE}/Полiпшення
+STR_PSI_AMP
+Псi-Пiдсилювач
+STR_IN_TRAINING
+На{NEWLINE}Тренув.?
+STR_TARGETTED_BY
+ЦIЛЬ ДЛЯ:
+STR_WEAPONS_CREW_HWPS
+ЗБРОЯ/{NEWLINE}ЕКIПАЖ/ВБП
+STR_ABANDON_GAME
+ВIДМОВИТИСЬ ВIД ГРИ
+STR_QUIT
+Вийти
+STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE
+закiнчується пальне,{NEWLINE}повертаюсь на базу
+STR_SOLDIER_LIST
+Список Солдатiв
+STR_RANK_
+ЗВАННЯ>
+STR_MISSIONS
+ЗАВДАНЬ>
+STR_KILLS
+ВБИВСТВ>
+STR_WOUND_RECOVERY
+ЛIКУВАННЯ>
+STR_TIME_UNITS
+ОДИНИЦI ЧАСУ
+STR_STAMINA
+ВИТРИВАЛIСТЬ
+STR_HEALTH
+ЗДОРОВ'Я
+STR_BRAVERY
+ХОРОБРIСТЬ
+STR_REACTIONS
+РЕАКЦIЯ
+STR_FIRING_ACCURACY
+ТОЧНIСТЬ СТРIЛЬБИ
+STR_THROWING_ACCURACY
+ТОЧНIСТЬ КИДАННЯ
+STR_STRENGTH
+СИЛА
+STR_PSIONIC_STRENGTH
+ПСIОНIЧНА СИЛА
+STR_PSIONIC_SKILL
+ПСIОНIЧНИЙ НАВИК
+STR_NEW_RANK
+НОВЕ ЗВАННЯ
+STR_PROMOTIONS
+Присвоєнi звання:
+STR_SOLDIERS_UC
+СОЛДАТИ
+STR_TANK_CANNON_UFOPEDIA
+Автоматизованi важкi бойовi платформи (ВБП) розробленi для пiдсилення загонiв X-COM. Поєднання великоï вгневоï потужностi та мiцноï брронi робить цi механiзми незамiнними в бою на вiдкритiй територiï. Слiдкуйте за наявнiстю достатньоï кiлькостi боєприпасiв для ВБП у сховищах. Зарядка ВБП боєприпасами вiдбувається автоматично, при призначеннi до загону.
+STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
+Ця автоматична важка бойова платформа озброєна потужними ракетами. Вона може знищити будь-якого ворога. Слiдкуйте за наявнiстю ракет для ВБП у сховищах.
+STR_TANK_LASER_CANNON_UFOPEDIA
+Бойовий лазер - корисне вдосконалення для ВБП. Вiн завдає сильних пошкоджень, не вимагаючи боєприпасiв.
+STR_HOVERTANK_PLASMA_UFOPEDIA
+Iнопланетна технологiя вдихнула в ВБП нове життя. Здатнiсть лiтати та сила плазмовоï зброï утворюють смертоносну комбiнацiю.
+STR_HOVERTANK_LAUNCHER_UFOPEDIA
+Цей ширяючий танк обладнаний бластерною пусковою установкою величезноï потужностi. Використовуйте його з великою обережнiстю. Для озброєння цiєï ВБП необхiдно виготовляти бластернi ракети. Бластернi ракети - це високоточна керована зброя, яка дозволяє перед вистрiлом задавати траєкторiю руху снаряду.
+STR_HEAVY_PLASMA_CLIP_UFOPEDIA
+Цей компактний пристрiй є джерелом енергiï для важкоï плазми. Мiстить невелику кiлькiсть елерiуму.
+STR_PLASMA_RIFLE_CLIP_UFOPEDIA
+Цей маленький об'єкт є джерелом енергiï для плазмовоï гвинтiвки - зброï прибульцiв середньоï потужностi. Мiстить невелику кiлькiсть елерiуму.
+STR_PLASMA_PISTOL_CLIP_UFOPEDIA
+Джерело енергiï для невиликого плазмового пiстолета. Мiстить елерiум - джерело енергiï всiх iнопланетних технологiй.
+STR_STUN_BOMB_UFOPEDIA
+Паралiзуюча бомба використовується для захоплення живими людей, але може використовуватись i для захоплення прибульцiв. Це боєзапас для Малоï Установки.
+STR_ALIEN_RESEARCH_UFOPEDIA
+Метою дослiдницьких мiсiй прибульцiв є збiр даних про Землю i ïï жителiв. Використовуються переважно малi кораблi, якi iнодi сiдають в пустельних землях. Цей тип активностi прибульцiв становить найменшу небезпеку, з малим впливом на занепокоєння уряду та суспiльства.
+STR_ALIEN_HARVEST_UFOPEDIA
+Прибульцi широко використовують земну фауну в своïх цiлях. Тварин таємно викрадають та повертають пiсля видалення рiзних органiв. Здебiльшого випадки калiцтва худоби спiвпадають з випадками спостереження НЛО. Цей тип дiяльностi прибульцiв викликає найбiльше занепокоєння в урядiв i тривогу серед населення. Найчастiше така активнiсть проявляється в сiльскогосподарських регiонах. Теорiя "збору врожаю" передбачає, що прибульцi колись "засiяли" планету зразками своєï флори i фауни i тепер повернулись, щоб зiбрати "врожай".
+STR_ALIEN_ABDUCTION_UFOPEDIA
+Найбiльш пiдступний вид дiяльностi прибульцiв. Випадки викрадення людей прибульцями широко вiдомi, незважаючи на спроби прибульцiв стирати спогади з пам'ятi жертв. Викраденi розказують про проведенi над ними фiзiологiчнi дослiди, включаючи заплiднення зардоками iнопланетних органiзмiв i рiзнi генетичнi експерименти. Переслiдувана прибульцями цiль, ймовiрно, має вiдношення до мутацiй i манiпулювання ïх власним генетичним матерiлом. Цi iнциденти викликають велике занепокоєння i вiдбуваються в населених мiсцях або мiстах.
+STR_ALIEN_INFILTRATION_UFOPEDIA
+В земнi уряди можуть проникнути агенти прибульцiв, якi ззовнi виглядають як люди. Це може призвести до встановлення звязку мiж прибульцями та урядом на найвищому рiвнi. Ознакою пiдготовки такоï операцiï може бути висока активнiсть НЛО поблизу великих мiст. Прибульцi намагатимуться пiдписати пакт з урядом, пропонуючи передачу своïх технологiй в обмiн на можливiсть безперешкодно дiяти на данiй територiï. Цей тип мiсiй прибульцiв являє найбiльшу загрозу для X-COM. Якщо уряд погодиться - фiнансування з його сторони буде припинене.
+STR_ALIEN_BASE_UFOPEDIA
+Прибульцi будуть будувати таємнi пiдземнi бази у вiддалених районах. Пiсля перiоду розвiдувальних польотiв буде вiдзначатись висока активнiсть НЛО в мiсцi будiвництва бази. На базах розмiщуються експерииментальнi лабораторiï для вивчення людей, а також засоби для подальшоï дiяльностi прибульцiв в регiонi. Присутнiсть бази буде супроводжуватись великою кiлькiстю повiдомлень про дiï прибульцiв при вiдносно малiй кiлькостi випадкiв спостереження НЛО. Щоб виявити базу, корабель X-COM має патрулювати область протягом кiлькох годин.
+STR_ALIEN_TERROR_UFOPEDIA
+Коли прибульцi тероризують мiсто, вони використовують спецiальнi загони великоï сили. Через наявнiсть беспосередньоï небезпеки для цивiльних, уряд змушений евакуювати цiлi райони. Основна цiль цих акцiй - викликати досить велику панiку серед людей, через що уряди можуть чинити суттєвий тиск на проект X-COM.
+STR_ALIEN_RETALIATION_UFOPEDIA
+У випадку особливо успiшних дiй перехоплювачiв X-COM, прибульцi будуть вживати заходи у вiдповiдь. Результатом може стати напад на базу X-COM. Однак прибульцям потрiбно спершу виявити базу. Тому ризик можна суттєво знизити, якщо не пiдпускати НЛО-розвiдники до бази.
+STR_ALIEN_SUPPLY_UFOPEDIA
+Пiсля того як база прибульцiв побудована, ïï постачання здiйснюється на регулярнiй основi спецiальним вантажним транспортом. Виявивши такий корабель на землi, можна бути певним, що неподалiк є база прибульцiв.
+STR_SMALL_SCOUT_UFOPEDIA
+Цей крихiтний корабель використовується для розвiдки чи дослiджень. Його польоти зазвичай передують бiльшим кораблям на початку мiсiй прибульцiв.
+STR_MEDIUM_SCOUT_UFOPEDIA
+Середнiй за розмiром розвiдувальний корабель, який не становить великоï небезпеки. Зазвичай з'являється перед бiльшими кораблями пiд час мiсiï прибульцiв.
+STR_LARGE_SCOUT_UFOPEDIA
+Найбiльший розвiдувальний корабель прибульцiв, який є кораблем загального призначення i використовується у всiх типах мiсiй.
+STR_HARVESTER_UFOPEDIA
+Жнець має люк в нижнiй частинi корпуса i оснащений пiдйомним механiзмом для худоби та iнших тварин. Необхiдний бiоматерiл виймається з використанням лазерних скальпелiв, пiсля чого туша скидається на землю. Також наявнi контейнери для зберiгання здобутих органiв.
+STR_ABDUCTOR_UFOPEDIA
+Цей корабель обладнано кiмнатою для проведення допитiв i жахливих експериментiв над людьми. Зазвичай жертва телепатично паралiзується, але залишається при свiдомостi на операцiйному столi.
+STR_TERROR_SHIP_UFOPEDIA
+Корабель терору має вiдсiки для перевезення великих iстот або технiки загонiв залякування. Вiн використовується для доставки цих iнопланетних терористiв в населенi райони.
+STR_BATTLESHIP_UFOPEDIA
+Лiнкор - найбiльший i найпотужнiший корабель прибульцiв. Вiн є основним бойовим кораблем в будь-якiй мiсiï, несе на борту потужну зброю та численний екiпаж.
+STR_SUPPLY_SHIP_UFOPEDIA
+Корабель постачання використовується при закладаннi нових баз i постачаннi iснуючих. Перевозить контейнери з ïжею та репродукцiйнi камери.
+STR_DISMANTLE
+Демонтувати
+STR_FACILITY_IN_USE
+МОДУЛЬ ВИКОРИСТОВУЄТЬСЯ
+STR_CANNOT_DISMANTLE_FACILITY
+НЕ МОЖУ ДЕМОНТУВАТИ МОДУЛЬ!{SMALLLINE}Всi модулi мають бути з'єднанi з вхiдним лiфтом.
+STR_TRANSFER_ITEMS_TO
+Вiдправити на базу
+STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER
+НЕМАЄ ТЮРМИ ДЛЯ ПРИБУЛЬЦIВ ДЛЯ ПЕРЕДАЧI!{SMALLLINE}Для утримання живих прибульцiв необхiдний спецiальний модуль.
+STR_AMOUNT_AT_DESTINATION
+НА МIСЦI {NEWLINE}ПРИЗНАЧЕННЯ
+STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY
+Прибулець загинув, оскiльки немає модуля для його утримання.
+STR_NO_FREE_ACCOMODATION_CREW
+НЕМАЄ ВIЛЬНОГО МIСЦЯ!{SMALLLINE}База призначення не має достатньоï кiлькостi мiсця в житлових модулях для екiпажу, призначеного на корабель.
+STR_ITEMS_ARRIVING
+Прибуття
+STR_DESTINATION_UC
+ПУНКТ ПРИЗНАЧЕННЯ
+STR_PISTOL
+Пiстолет
+STR_PISTOL_CLIP
+Магазин для пiстолета
+STR_RIFLE
+Гвинтiвка
+STR_RIFLE_CLIP
+Магазин для гвинтiвки
+STR_HEAVY_CANNON
+Важка Гармата 
+STR_HC_AP_AMMO
+ВГ-ББ магазин
+STR_HC_HE_AMMO
+ВГ-В магазин
+STR_HC_I_AMMO
+ВГ-З магазин
+STR_AUTO_CANNON
+Авто-гармата
+STR_AC_AP_AMMO
+АГ-ББ магазин
+STR_AC_HE_AMMO
+АГ-В магазин
+STR_AC_I_AMMO
+АГ-З магазин
+STR_ROCKET_LAUNCHER
+Ракетна Установка
+STR_SMALL_ROCKET
+Легка Ракета
+STR_LARGE_ROCKET
+Важка Ракета
+STR_INCENDIARY_ROCKET
+Запалювальна Ракета
+STR_GRENADE
+Граната
+STR_SMOKE_GRENADE
+Димова Граната
+STR_PROXIMITY_GRENADE
+Сенсорна Граната
+STR_HIGH_EXPLOSIVE
+Вибухiвка
+STR_STUN_ROD
+Електрошоковий Кийок
+STR_HEAVY_PLASMA
+Важка Плазма
+STR_HEAVY_PLASMA_CLIP
+Магазин для важ. плазми
+STR_PLASMA_RIFLE
+Плазмова Гвинтiвка
+STR_PLASMA_RIFLE_CLIP
+Магазин для плаз. гвинтiвки
+STR_PLASMA_PISTOL
+Плазмовий Пiстолет
+STR_PLASMA_PISTOL_CLIP
+Магазин для плаз. пiстолета
+STR_BLASTER_LAUNCHER
+Бластерна Установка
+STR_BLASTER_BOMB
+Бластерна Бомба
+STR_SMALL_LAUNCHER
+Маленька Установка
+STR_STUN_BOMB
+Паралiзуюча Бомба
+STR_ALIEN_GRENADE
+Граната Прибульцiв
+STR_ELERIUM_115
+Елерiум-115
+STR_MIND_PROBE
+Ментальний Зонд
+STR_SECTOID_CORPSE
+Труп Сектоïда
+STR_SNAKEMAN_CORPSE
+Труп Людинозмiï
+STR_ETHEREAL_CORPSE
+Труп Небесного
+STR_MUTON_CORPSE
+Труп Мутона
+STR_FLOATER_CORPSE
+Труп Летуна
+STR_CELATID_CORPSE
+Труп Селатида
+STR_SILACOID_CORPSE
+Труп Силакоïда
+STR_CHRYSSALID_CORPSE
+Труп Крисалiда
+STR_REAPER_CORPSE
+Труп Рипера
+STR_SECTOPOD_CORPSE
+Труп Сектопода
+STR_CYBERDISC_CORPSE
+Труп Кiбердиска
+STR_TO_ARM_HWP
+ для озброєння ВБП
+STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
+Недостатньо спорядження для екiпiрування загону
+STR_MARS_CYDONIA_LANDING
+Марс: Десантування в Кiдонiï
+STR_MARS_CYDONIA_LANDING_BRIEFING
+Ваш корабель "Месник" приземлився на поверхню Маррсу в районi Кiдонiï. За нашою iнформацiєю, в однiй iз пiрамiдальних споруд знаходиться лiфт, що веде в пiдземний комплекс. Зберiть загiн в лiфтi (зелена область) i натиснiть кнопку "Перервати завдання" для переходу на наступний рiвень.
+STR_MARS_THE_FINAL_ASSAULT
+Марс: Фiнальна Битва
+STR_MARS_THE_FINAL_ASSAULT_BRIEFING
+Лiфт пiрамiди доправив ваших змучених битвою солдатiв глибоко пiд поверхню планети. Вони прибули в серце великого комплексу лабiринтiв та камер. Десь там схований iнопланетний Мозок. Вiн мусить бути знищений, щоб врятувати Землю вiд навали iнопланетян.{NEWLINE}{NEWLINE}Удачi!
+STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
+{NEWLINE}для використання чи виробництва{NEWLINE}
+STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
+Прибульцi зруйнували незахищену базу
+STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
+Агенти X-COM виявили базу прибульцiв в
+STR_STANDOFF
+НА БЕЗПЕЧНIЙ ВIДСТАНI
+STR_CAUTIOUS_ATTACK
+ОБЕРЕЖНА АТАКА
+STR_STANDARD_ATTACK
+ЗВИЧАЙНА АТАКА
+STR_AGGRESSIVE_ATTACK
+АГРЕСИВНА АТАКА
+STR_DISENGAGING
+ВIДДАЛЕННЯ
+STR_UFO_HIT
+НЛО ВРАЖЕНИЙ!
+STR_UFO_CRASH_LANDS
+НЛО ПIДБИТИЙ!
+STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
+Переслiдувати на безпечнiй дистанцiï
+STR_UFO_RETURN_FIRE
+НЛО СТРIЛЯЄ!
+STR_INTERCEPTOR_DAMAGED
+>>> ПЕРЕХОПЛЮВАЧ ПОШКОДЖЕНО <<<
+STR_INTERCEPTOR_DESTROYED
+>>> ПЕРЕХОПЛЮВАЧ ЗНИЩЕНО <<<
+STR_UFO_OUTRUNNING_INTERCEPTOR
+НЛО ВIДIРВАВСЯ ВIД ПЕРЕХОПЛЮВАЧА!
+STR_ALIENS_TERRORISE
+ПРИБУЛЬЦI ТЕРОРИЗУЮТЬ
+STR_LONG_RANGE_DETECTION
+Дальнє виявлення
+STR_STORES_UC
+ЗАПАСИ
+STR_DIFFICULTY_LEVEL
+Рiвень складностi
+STR_INTERCEPT
+ПЕРЕХОПЛЕННЯ
+STR_BASES
+БАЗИ
+STR_GRAPHS
+ГРАФIКИ
+STR_UFOPAEDIA_UC
+НЛОПЕДIЯ
+STR_OPTIONS_UC
+НАЛАШТУВАННЯ
+STR_FUNDING_UC
+ФIНАНСИ
+STR_5_SECS
+5 сек
+STR_1_MIN
+1 хв
+STR_5_MINS
+5 хв
+STR_30_MINS
+30 хв
+STR_1_HOUR
+1 год
+STR_1_DAY
+1 день
+STR_XCOM_PERFORMANCE_ROSTER
+Виконання завдань X-COM
+STR_ENTER_NAME
+Введiть iм'я
+STR_PERFORMANCE_RATING
+Оцiнка виконання
+STR_VICTORY_DATE
+День Перемоги
+STR_ELECTRO_FLARE
+Освiтлювач
+STR_ELECTRO_FLARE_UFOPEDIA
+Цей компактний пристрiй випромiнює яскраве свiтло, будучи кинутим куди-небудь. Вiн корисний пiд час виконання завдань в темний час доби.
+STR_MONTHLY_COSTS
+Мiсячнi Витрати
+STR_CRAFT_RENTAL
+Аренда кораблiв
+STR_SALARIES
+Зарплати
+STR_BASE_MAINTENANCE
+Обслуговування бази
+STR_COST_PER_UNIT
+Цiна одиницi
+STR_QUANTITY
+Кiльк.
+STR_TOTAL
+Всього
+STR_DAY
+ день
+STR_DAYS
+ днi(в)
+STR_IN_PSIONIC_TRAINING
+Тренуються в Псi-Лабораторiï
+STR_BLASTER_BOMB_UFOPEDIA
+Потужна ракета, оснащена програмованою системою управлiння. Призначена для стрiльби з бластерноï пусковоï установки.
+STR_FRONT_ARMOR
+Передня броня
+STR_LEFT_ARMOR
+Лiва броня
+STR_RIGHT_ARMOR
+Права броня
+STR_REAR_ARMOR
+Задня броня
+STR_UNDER_ARMOR
+Нижня броня
+STR_ROUNDS
+Боєзапас
+STR_CURRENT_SAVE_ABORTED
+Прточне зберiгання скасоване
+STR_CURRENT_LOAD_ABORTED
+Поточне завантаження скасоване
+STR_FORMAT
+ФОРМАТУВАННЯ
+STR_SAVING_GAME
+Збереження гри
+STR_LOADING_GAME
+Завантаження гри
+STR_PROCEED
+ПРОДОВЖИТИ
+STR_NO_SAVED_GAME_PRESENT
+Немає збереженоï гри
+STR_LOAD_UNSUCCESSFUL
+Завантаження не вдалось
+STR_SAVE_UNSUCCESSFUL
+Збереження не вдалось
+STR_LOAD_SUCCESSFUL
+Завантаження successful
+STR_SAVE_SUCCESSFUL
+Збереження successful
+STR_DELETE
+ВИДАЛИТИ
+STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
+Виявлено попереднє збереження X-COM
+STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
+Видалити збережену гру?
+STR_SOUND_OPTIONS
+НАЛАШТУВАННЯ ЗВУКУ
+STR_MUSIC_VOLUME
+Гучнiсть музики
+STR_SFX_VOLUME
+Гучнiсть ефектiв
+STR_CONTROLLER_OPTIONS
+НАЛАШТУВАННЯ УПРАВЛIННЯ
+STR_CONTROLLER_MODE_1_HOTSPOT_INTERFACE
+CONTROLLER MODE 1{NEWLINE}(HOTSPOT INTERFACE)
+STR_CONTROLLER_MODE_2_POINT_CLICK_INTERFACE
+CONTROLLER MODE 2{NEWLINE}(POINT & CLICK INTERFACE)
+STR_LOADING
+Завантаження...
+STR_FORMAT_UNSUCCESSFUL
+Форматування не вдалось
+STR_UNIT
+ОДИНИЦI>
+STR_ENERGY
+ЕНЕРГIЯ
+STR_MORALE
+МОРАЛЬ
+STR_ARMOR_
+БРОНЯ>
+STR_FRONT_ARMOR_UC
+ПЕРЕДНЯ БРОНЯ
+STR_LEFT_ARMOR_UC
+ЛIВА БРОНЯ
+STR_RIGHT_ARMOR_UC
+ПРАВА БРОНЯ
+STR_REAR_ARMOR_UC
+ЗАДНЯ БРОНЯ
+STR_SKILLS
+НАВИКИ>
+STR_LEVEL
+РIВЕНЬ>
+STR_HEAD
+ГОЛОВА
+STR_TORSO
+ТОРС
+STR_RIGHT_ARM
+ПРАВА РУКА
+STR_LEFT_ARM
+ЛIВА РУКА
+STR_RIGHT_LEG
+ПРАВА НОГА
+STR_LEFT_LEG
+ЛIВА НОГА
+STR_PAIN_KILLER
+ЗНЕБОЛЮЮЧЕ
+STR_STIMULANT
+СТИМУЛЯТОР
+STR_HEAL
+ЛIКУВАННЯ
+STR_TUS
+ОЧ>
+STR_ALIEN_ARTIFACT
+Артефакт прибульцiв
+STR_AMMO_ROUNDS_LEFT
+В ЗБРОÏ:{NEWLINE}ПАТРОНIВ{NEWLINE}ЗАЛ.=
+STR_THROW
+Кинути
+STR_AUTO_SHOT
+Черга
+STR_SNAP_SHOT
+Поспiхом
+STR_AIMED_SHOT
+Прицiльно
+STR_OPEN
+Вiдкити
+STR_CLOSE
+Закрити
+STR_STUN
+Паралiзувати
+STR_PRIME_GRENADE
+Активувати
+STR_USE_SCANNER
+Використати
+STR_USE_MEDI_KIT
+Використати
+STR_LAUNCH_MISSILE
+Пуск ракети
+STR_ACC
+Точ>
+STR_NOT_ENOUGH_TIME_UNITS
+Не достатньо часу!
+STR_NOT_ENOUGH_ENERGY
+Не достатньо енергiï!
+STR_NO_ROUNDS_LEFT
+Немає боєприпасiв!
+STR_NO_AMMUNITION_LOADED
+Зброя не заряджена!
+STR_WRONG_AMMUNITION_FOR_THIS_WEAPON
+Боєприпаси вiд iншоï зброï!
+STR_WEAPON_IS_ALREADY_LOADED
+Зброя вже заряджена!
+STR_NO_LINE_OF_FIRE
+Немає лiнiï вогню!
+STR_GRENADE_IS_ACTIVATED
+Граната активована!
+STR_THERE_IS_NO_ONE_THERE
+Там нiкого немає!
+STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED
+Не дослiджений артефакт прибульцiв!
+STR_OUT_OF_RANGE
+Надто далеко!
+STR_UNABLE_TO_THROW_HERE
+Не можу сюди кинути!
+STR_NUMBER_OF_ROUNDS
+Кiлькiсть ходiв?
+STR_SET_TIMER
+Виставити таймер
+STR_HIDDEN_MOVEMENT
+ПРИХОВАНI ПЕРЕМIЩЕННЯ
+STR_TURN
+ХIД>
+STR_SIDE
+СТОРОНА>
+STR_X_COM
+X-COM
+STR_PRESS_BUTTON_TO_CONTINUE
+Натиснiсть будь-яку кнопку...
+STR_MIND_CONTROL
+Контроль свiдомостi
+STR_PANIC_UNIT
+Панiка
+STR_MIND_CONTROL_SUCCESSFUL
+Успiшно взято пiд контроль
+STR_HAS_GONE_BERSERK
+втрачає глузд
+STR_HAS_PANICKED
+панiкує
+STR_XCOM
+X-COM
+STR_ALIENS
+Прибульцi
+STR_RIGHT_HAND
+ПРАВА РУКА
+STR_LEFT_HAND
+ЛIВА РУКА
+STR_RIGHT_SHOULDER
+ПРАВЕ ПЛЕЧЕ
+STR_LEFT_SHOULDER
+ЛIВЕ ПЛЕЧЕ
+STR_BACK_PACK
+РАНЕЦЬ
+STR_BELT
+ПОЯС
+STR_IS_UNDER_ALIEN_CONTROL
+пiд контролем прибульцiв
+STR_SCROLL_SPEED
+ШВИДКIСТЬ СКРОЛIНГУ
+STR_SCROLL_TYPE
+ТИП СКРОЛIНГУ
+STR_TRIGGER_SCROLL
+ВРУЧНУ
+STR_AUTO_SCROLL
+АВТО
+STR_FIRE_SPEED
+ШВИДКIСТЬ СНАРЯДIВ
+STR_XCOM_MOVEMENT_SPEED
+ШВИДКIСТЬ ПЕРЕМIЩЕННЯ X-COM
+STR_ALIEN_MOVEMENT_SPEED
+ШВИДКIСТЬ ПЕРЕМIЩЕННЯ ПРИБУЛЬЦIВ
+STR_HAS_BECOME_UNCONSCIOUS
+ втрачає свiдомiсть
+STR_HAS_DIED_FROM_A_FATAL_WOUND
+ помирає вiд смертельних ран
+STR_USE_MIND_PROBE
+Використати
+STR_FATAL_WOUNDS
+СМЕРТЕЛЬНI РАНИ
+STR_UNDER_ARMOR_UC
+НИЖНЯ БРОНЯ
+STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
+Очки Часу зекономлено для пострiлу навмання
+STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
+Очки Часу зекономлено для стрiльби чергою
+STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
+Очки Часу зекономлено для прицiльного пострiлу
+STR_UNITS_IN_EXIT_AREA
+ в Зонi Виходу
+STR_UNITS_OUTSIDE_EXIT_AREA
+ поза Зоною Виходу
+STR_ABORT_MISSION
+Перервати мiсiю?
+STR_CORPSE
+Труп
+STR_UNLOAD
+Розрядити
+STR_NEW_SAVED_GAME
+<НОВА ЗБЕРЕЖЕНА ГРА>
+STR_NEW_BATTLE
+Нова Битва
+STR_OPTIONS
+Налаштування
+STR_TERRAIN
+МIСЦЕВIСТЬ
+STR_DARKNESS
+РIВЕНЬ ТЕМРЯВИ
+STR_DISPLAY_RESOLUTION
+Роздiльна Здатнiсть
+STR_DISPLAY_MODE
+Режим Екрана
+STR_WINDOWED
+Вiконний
+STR_FULLSCREEN
+Повноекранний
+STR_LANGUAGE
+МОВА
+STR_FARM
+Ферма
+STR_FOREST
+Лiс
+STR_JUNGLE
+Джунглi
+STR_MOUNTAIN
+Гори
+STR_DESERT
+Пустеля
+STR_POLAR
+Заполяр'я
