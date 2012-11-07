@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PLACELIFTSTATE_H
-#define OPENXCOM_PLACELIFTSTATE_H
+#ifndef OPENXCOM_PLACESTARTFACILITYSTATE_H
+#define OPENXCOM_PLACESTARTFACILITYSTATE_H
 
 #include "../Engine/State.h"
 
@@ -25,27 +25,38 @@ namespace OpenXcom
 {
 
 class Base;
-class BaseView;
-class Text;
 class Globe;
+class RuleBaseFacility;
+class BaseView;
+class TextButton;
+class Window;
+class Text;
+class SelectStartFacilityState;
 
 /**
- * Screen shown when the player has to
- * place the access lift of a base.
+ * Window shown when the player tries to
+ * build a facility.
  */
-class PlaceLiftState : public State
+class PlaceStartFacilityState : public State
 {
 private:
 	Base *_base;
 	Globe *_globe;
+	RuleBaseFacility *_rule;
+	SelectStartFacilityState *_select;
+
 	BaseView *_view;
-	Text *_txtTitle;
-	bool _first;
+	TextButton *_btnCancel;
+	Window *_window;
+	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
+
 public:
-	/// Creates the Place Lift state.
-	PlaceLiftState(Game *game, Base *base, Globe *globe, bool first);
-	/// Cleans up the Place Lift state.
-	~PlaceLiftState();
+	/// Creates the Place Facility state.
+	PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule);
+	/// Cleans up the Place Facility state.
+	~PlaceStartFacilityState();
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 	/// Handler for clicking the base view.
 	void viewClick(Action *action);
 };
