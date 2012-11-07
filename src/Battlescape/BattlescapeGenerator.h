@@ -71,6 +71,8 @@ private:
 	/// Add an alien to the game
 	BattleUnit *addAlien(Unit *rules, int alienRank, bool outside);
 	BattleUnit *addCivilian(Unit *rules);
+	/// Place an item to a soldier based on equipment layout
+	BattleItem* placeItemByLayout(BattleItem *item);
 	/// Add an item to the game
 	BattleItem* addItem(BattleItem *item);
 	// Add an item to a unit
