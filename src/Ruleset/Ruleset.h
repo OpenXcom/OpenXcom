@@ -81,14 +81,19 @@ protected:
 	std::auto_ptr<YAML::Node> _startingBase;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex;
+
+	/// Loads a ruleset from a YAML file.
+	void loadFile(const std::string &filename);
+	/// Loads all ruleset files from a directory.
+	void loadFiles(const std::string &dirname);
 public:
 	/// Creates a blank ruleset.
 	Ruleset();
 	/// Cleans up the ruleset.
 	virtual ~Ruleset();
-	/// Loads a ruleset from YAML.
-	void load(const std::string &filename);
-	/// Saves a ruleset to YAML.
+	/// Loads a ruleset from the given source.
+	void load(const std::string &source);
+	/// Saves a ruleset to a YAML file.
 	void save(const std::string &filename) const;
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave() const;

@@ -152,13 +152,26 @@ Ruleset::~Ruleset()
 }
 
 /**
+ * Loads a ruleset's contents from the given source.
+ * @param source The source to use.
+ */
+void Ruleset::load(const std::string &source)
+{
+	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
+	if (!CrossPlatform::folderExists(dirname))
+		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
+	else
+		loadFiles(dirname);
+}
+
+/**
  * Loads a ruleset's contents from a YAML file.
+ * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
  */
-void Ruleset::load(const std::string &filename)
+void Ruleset::loadFile(const std::string &filename)
 {
-	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
-	std::ifstream fin(s.c_str());
+	std::ifstream fin(filename.c_str());
 	if (!fin)
 	{
 		throw Exception("Failed to load ruleset");
@@ -545,6 +558,20 @@ void Ruleset::load(const std::string &filename)
 	}
 
 	fin.close();
+}
+
+/**
+ * Load the contents of all rule files in the given directory.
+ * @param dirname The name of an existing directory containing rule files.
+ */
+void Ruleset::loadFiles(const std::string &dirname)
+{
+	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
+
+	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	{
+		loadFile(dirname + *i);
+	}
 }
 
 /**
