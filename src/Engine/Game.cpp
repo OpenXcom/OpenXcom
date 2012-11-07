@@ -154,6 +154,12 @@ Game::~Game()
  */
 void Game::run()
 {
+	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
+	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
+	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	int pauseMode = Options::getInt("pauseMode");
+	if (pauseMode > 3)
+		pauseMode = 3;
 	while (!_quit)
 	{
 		// Clean up states
@@ -186,59 +192,73 @@ void Game::run()
 		// Process events
 		while (SDL_PollEvent(&_event))
 		{
-			// Skip mouse events if they're disabled
-			if (!_mouseActive &&
-				(_event.type == SDL_MOUSEMOTION ||
-				 _event.type == SDL_MOUSEBUTTONDOWN ||
-				 _event.type == SDL_MOUSEBUTTONUP))
+			switch (_event.type)
 			{
-				continue;
-			}
-
-			if (_event.type == SDL_QUIT)
-			{
-				_quit = true;
-			}
-			else
-			{
-				Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
-				_screen->handle(&action);
-				_cursor->handle(&action);
-				_fpsCounter->handle(&action);
-				_states.back()->handle(&action);
+				case SDL_QUIT: _quit = true; break;
+				case SDL_ACTIVEEVENT:
+					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
+					{
+						case SDL_APPACTIVE:
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[pauseMode];
+							break;
+						case SDL_APPMOUSEFOCUS:
+							// We consiously ignore it.
+							break;
+						case SDL_APPINPUTFOCUS:
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[pauseMode];
+							break;
+					}
+					break;
+				case SDL_MOUSEMOTION:
+				case SDL_MOUSEBUTTONDOWN:
+				case SDL_MOUSEBUTTONUP:
+					// Skip mouse events if they're disabled
+					if (!_mouseActive) continue;
+					// Go on, feed the event to others
+				default:
+					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
+					_screen->handle(&action);
+					_cursor->handle(&action);
+					_fpsCounter->handle(&action);
+					_states.back()->handle(&action);
+					break;
 			}
 		}
-
-		// Process logic
-		_fpsCounter->think();
-		_states.back()->think();
 
 		// Process rendering
-		if (_init)
+		if (runningState != PAUSED)
 		{
-			_screen->clear();
-			std::list<State*>::iterator i = _states.end();
-			do
-			{
-				--i;
-			}
-			while(i != _states.begin() && !(*i)->isScreen());
+			// Process logic
+			_fpsCounter->think();
+			_states.back()->think();
 
-			for (; i != _states.end(); ++i)
+			if (_init)
 			{
-				(*i)->blit();
+				_screen->clear();
+				std::list<State*>::iterator i = _states.end();
+				do
+				{
+					--i;
+				}
+				while(i != _states.begin() && !(*i)->isScreen());
+
+				for (; i != _states.end(); ++i)
+				{
+					(*i)->blit();
+				}
+				_fpsCounter->blit(_screen->getSurface());
+				_cursor->blit(_screen->getSurface());
 			}
-			_fpsCounter->blit(_screen->getSurface());
-			_cursor->blit(_screen->getSurface());
+			_screen->flip();
 		}
-		_screen->flip();
 
 		// Save on CPU
-		Uint8 state = SDL_GetAppState();
-		if (state == SDL_APPACTIVE || !state)
-			SDL_Delay(100);
-		else
-			SDL_Delay(1);
+		switch (runningState)
+		{
+			case RUNNING: SDL_Delay(1); break; //Save CPU from going 100%
+			case SLOWED: case PAUSED:
+				SDL_Delay(100); break; //More slowing down.
+		}
 	}
 }
 
