@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_SELECTSTARTFACILITYSTATE_H
 #define OPENXCOM_SELECTSTARTFACILITYSTATE_H
 
-#include "../Engine/State.h"
+#include "BuildFacilitiesState.h"
 
 namespace OpenXcom
 {
@@ -36,31 +36,20 @@ class RuleBaseFacility;
  * Window shown with all the facilities
  * available to build.
  */
-class SelectStartFacilityState : public State
+class SelectStartFacilityState : public BuildFacilitiesState
 {
 private:
-	Base *_base;
 	Globe *_globe;
-	State *_state;
 	std::vector<RuleBaseFacility*> _facilities;
-
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
-	TextList *_lstFacilities;
 public:
 	/// Creates the Build Facilities state.
 	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities);
 	/// Cleans up the Build Facilities state.
 	~SelectStartFacilityState();
 	/// Populate the build option list
-	void PopulateBuildList();
-	/// Updates the base stats.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	virtual void PopulateBuildList();
 	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(Action *action);
+	virtual void lstFacilitiesClick(Action *action);
 	/// Handler for when facility actually built
 	void FacilityBuilt();
 };

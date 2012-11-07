@@ -38,7 +38,7 @@ class RuleBaseFacility;
  */
 class BuildFacilitiesState : public State
 {
-private:
+protected:
 	Base *_base;
 	State *_state;
 	std::vector<RuleBaseFacility*> _facilities;
@@ -52,12 +52,14 @@ public:
 	BuildFacilitiesState(Game *game, Base *base, State *state);
 	/// Cleans up the Build Facilities state.
 	~BuildFacilitiesState();
+	/// Populate the build option list
+	virtual void PopulateBuildList();
 	/// Updates the base stats.
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(Action *action);
+	virtual void lstFacilitiesClick(Action *action);
 };
 
 }

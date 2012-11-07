@@ -40,46 +40,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities) : State(game), _base(base), _state(state), _globe(globe), _facilities(Facilities)
+SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities) : BuildFacilitiesState(game, base, state), _globe(globe), _facilities(Facilities)
 {
-	_screen = false;
-
-	// Create objects
-	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
-	_btnOk = new TextButton(112, 16, 200, 176);
-	_txtTitle = new Text(118, 16, 197, 48);
-	_lstFacilities = new TextList(100, 96, 200, 64);
-
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-
-	add(_window);
-	add(_btnOk);
-	add(_txtTitle);
-	add(_lstFacilities);
-
-	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+5);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
-
-	_btnOk->setColor(Palette::blockOffset(13)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);
-
-	_txtTitle->setColor(Palette::blockOffset(13));
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_INSTALLATION"));
-
-	_lstFacilities->setColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 100);
-	_lstFacilities->setSelectable(true);
-	_lstFacilities->setBackground(_window);
-	_lstFacilities->setMargin(2);
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
-
-	PopulateBuildList();
 }
 
 /**
@@ -100,26 +64,6 @@ void SelectStartFacilityState::PopulateBuildList()
 	{
 		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
 	}
-}
-
-
-/**
- * The player can change the selected base
- * or change info on other screens.
- */
-void SelectStartFacilityState::init()
-{
-	_state->init();
-}
-
-/**
- * Returns to the previous screen.
- * @param action Pointer to an action.
- */
-void SelectStartFacilityState::btnOkClick(Action *action)
-{
-	_game->popState();
-	// _game->pushState(new BasescapeState(_game, _base, _globe));
 }
 
 /**
