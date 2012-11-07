@@ -3124,6 +3124,7 @@ units:
     loftemps: 4
     value: 20
     deathSound: 23
+    moveSound: 40
     intelligence: 5
     aggression: 1
     specab: 1
@@ -3148,6 +3149,7 @@ units:
     loftemps: 3
     value: 12
     deathSound: 10
+    moveSound: 15
     intelligence: 4
     aggression: 2
   - type: FLOATER_ENGINEER
@@ -3171,6 +3173,7 @@ units:
     loftemps: 3
     value: 12
     deathSound: 10
+    moveSound: 15
     intelligence: 7
     aggression: 2
   - type: FLOATER_NAVIGATOR
@@ -3194,6 +3197,7 @@ units:
     loftemps: 3
     value: 12
     deathSound: 10
+    moveSound: 15
     intelligence: 5
     aggression: 2
   - type: REAPER
@@ -3238,6 +3242,7 @@ units:
     loftemps: 4
     value: 20
     deathSound: 23
+    moveSound: 14	
   - type: TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -3258,6 +3263,7 @@ units:
     loftemps: 4
     value: 20
     deathSound: 23
+    moveSound: 14	
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -5418,8 +5424,6 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
-        inDogfight: false
-        interceptionOrder: 0
       - lon: 0.0
         lat: 0.0
         speedLon: 0
@@ -5444,8 +5448,6 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
-        inDogfight: false
-        interceptionOrder: 0
       - lon: 0.0
         lat: 0.0
         speedLon: 0
@@ -5470,8 +5472,6 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
-        inDogfight: false
-        interceptionOrder: 0
     items:
       STR_AC_AP_AMMO: 6
       STR_AUTO_CANNON: 1
