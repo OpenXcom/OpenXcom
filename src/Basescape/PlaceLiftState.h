@@ -40,9 +40,10 @@ private:
 	Globe *_globe;
 	BaseView *_view;
 	Text *_txtTitle;
+	bool _first;
 public:
 	/// Creates the Place Lift state.
-	PlaceLiftState(Game *game, Base *base, Globe *globe);
+	PlaceLiftState(Game *game, Base *base, Globe *globe, bool first);
 	/// Cleans up the Place Lift state.
 	~PlaceLiftState();
 	/// Handler for clicking the base view.

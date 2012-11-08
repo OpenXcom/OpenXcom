@@ -268,7 +268,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
-		b->load(*i, this);
+		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
 

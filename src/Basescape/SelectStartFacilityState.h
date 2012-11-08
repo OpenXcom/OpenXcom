@@ -16,50 +16,35 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BUILDFACILITIESSTATE_H
-#define OPENXCOM_BUILDFACILITIESSTATE_H
+#ifndef OPENXCOM_SELECTSTARTFACILITYSTATE_H
+#define OPENXCOM_SELECTSTARTFACILITYSTATE_H
 
-#include <vector>
-#include "../Engine/State.h"
+#include "BuildFacilitiesState.h"
 
 namespace OpenXcom
 {
 
-class Base;
-class TextButton;
-class Window;
-class Text;
-class TextList;
-class RuleBaseFacility;
+class Globe;
 
 /**
  * Window shown with all the facilities
  * available to build.
  */
-class BuildFacilitiesState : public State
+class SelectStartFacilityState : public BuildFacilitiesState
 {
-protected:
-	Base *_base;
-	State *_state;
-	std::vector<RuleBaseFacility*> _facilities;
-
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
-	TextList *_lstFacilities;
+private:
+	Globe *_globe;
 public:
 	/// Creates the Build Facilities state.
-	BuildFacilitiesState(Game *game, Base *base, State *state);
+	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities);
 	/// Cleans up the Build Facilities state.
-	~BuildFacilitiesState();
+	~SelectStartFacilityState();
 	/// Populate the build option list
 	virtual void PopulateBuildList();
-	/// Updates the base stats.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
 	/// Handler for clicking the Facilities list.
-	virtual void lstFacilitiesClick(Action *action);
+	void lstFacilitiesClick(Action *action);
+	/// Handler for when facility actually built
+	void FacilityBuilt();
 };
 
 }

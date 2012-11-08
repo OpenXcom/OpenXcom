@@ -78,6 +78,22 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_lstFacilities->setMargin(2);
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);
 
+	PopulateBuildList();
+}
+
+/**
+ *
+ */
+BuildFacilitiesState::~BuildFacilitiesState()
+{
+
+}
+
+/**
+ * Populates the build list from the current "available" facilities
+ */
+void BuildFacilitiesState::PopulateBuildList()
+{
 	std::vector<std::string> facilities = _game->getRuleset()->getBaseFacilitiesList();
 	for (std::vector<std::string>::iterator i = facilities.begin(); i != facilities.end(); ++i)
 	{
@@ -90,14 +106,6 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	{
 		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
 	}
-}
-
-/**
- *
- */
-BuildFacilitiesState::~BuildFacilitiesState()
-{
-
 }
 
 /**

@@ -37,7 +37,9 @@ language_DATA = \
 	bin/data/Language/Russian.lng \
 	bin/data/Language/Small.fnt \
 	bin/data/Language/Spanish.geo \
-	bin/data/Language/Spanish.lng
+	bin/data/Language/Spanish.lng \
+	bin/data/Language/Ukranian.geo \
+	bin/data/Language/Ukranian.lng
 
 namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
@@ -48,6 +50,8 @@ name_DATA = \
 	bin/data/SoldierName/Finnish.nam \
 	bin/data/SoldierName/French.nam \
 	bin/data/SoldierName/German.nam \
+	bin/data/SoldierName/Hungarian.nam \
+	bin/data/SoldierName/Italian.nam \
 	bin/data/SoldierName/Japanese.nam \
 	bin/data/SoldierName/Polish.nam \
 	bin/data/SoldierName/Portuguese.nam \
@@ -105,6 +109,10 @@ openxcom_SOURCES = \
 	src/Basescape/PlaceFacilityState.h \
 	src/Basescape/PlaceLiftState.cpp \
 	src/Basescape/PlaceLiftState.h \
+	src/Basescape/PlaceStartFacilityState.cpp \
+	src/Basescape/PlaceStartFacilityState.h \
+	src/Basescape/SelectStartFacilityState.cpp \
+	src/Basescape/SelectStartFacilityState.h \
 	src/Basescape/PurchaseState.cpp \
 	src/Basescape/PurchaseState.h \
 	src/Basescape/ResearchInfoState.cpp \

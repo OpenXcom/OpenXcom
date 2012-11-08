@@ -755,7 +755,7 @@ SavedGame *Ruleset::newSave() const
 
 	// Set up starting base
 	Base *base = new Base(this);
-	base->load(*_startingBase->begin(), save);
+	base->load(*_startingBase->begin(), save, true);
 
 	// Correct IDs
 	for (std::vector<Craft*>::const_iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
@@ -1158,6 +1158,27 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
 std::vector<std::string> Ruleset::getManufactureList () const
 {
 	return _manufactureIndex;
+}
+
+/**
+ * Returns a list of facilities for custom bases.
+ * @return The list of facilities for custom bases.
+ */
+std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
+{
+	const YAML::Node &node = *_startingBase->begin();
+	std::vector<OpenXcom::RuleBaseFacility*> PlaceList;
+
+	for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+	{
+		std::string type;
+		(*i)["type"] >> type;
+		if (type != "STR_ACCESS_LIFT")
+		{
+			PlaceList.push_back(getBaseFacility(type));
+		}
+	}
+	return PlaceList;
 }
 
 }

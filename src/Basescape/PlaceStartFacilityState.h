@@ -16,42 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PLACEFACILITYSTATE_H
-#define OPENXCOM_PLACEFACILITYSTATE_H
+#ifndef OPENXCOM_PLACESTARTFACILITYSTATE_H
+#define OPENXCOM_PLACESTARTFACILITYSTATE_H
 
-#include "../Engine/State.h"
+#include "PlaceFacilityState.h"
+#include "SelectStartFacilityState.h"
 
 namespace OpenXcom
 {
 
-class Base;
-class RuleBaseFacility;
-class BaseView;
-class TextButton;
-class Window;
-class Text;
+class Globe;
 
 /**
  * Window shown when the player tries to
  * build a facility.
  */
-class PlaceFacilityState : public State
+class PlaceStartFacilityState : public PlaceFacilityState
 {
-protected:
-	Base *_base;
-	RuleBaseFacility *_rule;
+private:
+	Globe *_globe;
+	SelectStartFacilityState *_select;
 
-	BaseView *_view;
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 public:
 	/// Creates the Place Facility state.
-	PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule);
+	PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule);
 	/// Cleans up the Place Facility state.
-	~PlaceFacilityState();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	~PlaceStartFacilityState();
 	/// Handler for clicking the base view.
 	void viewClick(Action *action);
 };
