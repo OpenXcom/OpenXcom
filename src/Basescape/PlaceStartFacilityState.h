@@ -19,44 +19,29 @@
 #ifndef OPENXCOM_PLACESTARTFACILITYSTATE_H
 #define OPENXCOM_PLACESTARTFACILITYSTATE_H
 
-#include "../Engine/State.h"
+#include "PlaceFacilityState.h"
+#include "SelectStartFacilityState.h"
 
 namespace OpenXcom
 {
 
-class Base;
 class Globe;
-class RuleBaseFacility;
-class BaseView;
-class TextButton;
-class Window;
-class Text;
-class SelectStartFacilityState;
 
 /**
  * Window shown when the player tries to
  * build a facility.
  */
-class PlaceStartFacilityState : public State
+class PlaceStartFacilityState : public PlaceFacilityState
 {
 private:
-	Base *_base;
 	Globe *_globe;
-	RuleBaseFacility *_rule;
 	SelectStartFacilityState *_select;
-
-	BaseView *_view;
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtFacility, *_txtCost, *_numCost, *_txtTime, *_numTime, *_txtMaintenance, *_numMaintenance;
 
 public:
 	/// Creates the Place Facility state.
 	PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule);
 	/// Cleans up the Place Facility state.
 	~PlaceStartFacilityState();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
 	/// Handler for clicking the base view.
 	void viewClick(Action *action);
 };

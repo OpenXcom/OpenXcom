@@ -43,72 +43,11 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : State(game), _base(base), _select(select), _rule(rule)
+PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(game, base, rule), _select(select)
 {
-	_screen = false;
-
-	// Create objects
-	_window = new Window(this, 128, 200, 192, 0);
-	_view = new BaseView(192, 192, 0, 8);
-	_btnCancel = new TextButton(112, 16, 200, 176);
-	_txtFacility = new Text(110, 9, 202, 50);
-	_txtCost = new Text(110, 9, 202, 62);
-	_numCost = new Text(110, 16, 202, 70);
-	_txtTime = new Text(110, 9, 202, 90);
-	_numTime = new Text(110, 16, 202, 98);
-	_txtMaintenance = new Text(110, 9, 202, 118);
-	_numMaintenance = new Text(110, 16, 202, 126);
-
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
-
-	add(_window);
-	add(_view);
-	add(_btnCancel);
-	add(_txtFacility);
-	add(_txtCost);
-	add(_numCost);
-	add(_txtTime);
-	add(_numTime);
-	add(_txtMaintenance);
-	add(_numMaintenance);
-
-	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+10);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-
-	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->setBase(_base);
-	_view->setSelectable(rule->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceStartFacilityState::viewClick);
-
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&PlaceStartFacilityState::btnCancelClick);
-
-	_txtFacility->setColor(Palette::blockOffset(13)+10);
-	_txtFacility->setText(_game->getLanguage()->getString(_rule->getType()));
-
-	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getLanguage()->getString("STR_COST_UC"));
-
-	_numCost->setColor(Palette::blockOffset(13));
-	_numCost->setBig();
 	_numCost->setText(_game->getLanguage()->getString("STR_NONE"));
-
-	_txtTime->setColor(Palette::blockOffset(13)+10);
-	_txtTime->setText(_game->getLanguage()->getString("STR_CONSTRUCTION_TIME_UC"));
-
-	_numTime->setColor(Palette::blockOffset(13));
-	_numTime->setBig();
 	_numTime->setText(_game->getLanguage()->getString("STR_NONE"));
-
-	_txtMaintenance->setColor(Palette::blockOffset(13)+10);
-	_txtMaintenance->setText(_game->getLanguage()->getString("STR_MAINTENANCE_UC"));
-
-	_numMaintenance->setColor(Palette::blockOffset(13));
-	_numMaintenance->setBig();
-	_numMaintenance->setText(Text::formatFunding(_rule->getMonthlyCost()));
 }
 
 /**
@@ -117,15 +56,6 @@ PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectS
 PlaceStartFacilityState::~PlaceStartFacilityState()
 {
 
-}
-
-/**
- * Returns to the previous screen.
- * @param action Pointer to an action.
- */
-void PlaceStartFacilityState::btnCancelClick(Action *action)
-{
-	_game->popState();
 }
 
 /**

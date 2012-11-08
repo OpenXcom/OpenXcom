@@ -37,7 +37,7 @@ class Text;
  */
 class PlaceFacilityState : public State
 {
-private:
+protected:
 	Base *_base;
 	RuleBaseFacility *_rule;
 

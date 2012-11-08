@@ -24,13 +24,7 @@
 namespace OpenXcom
 {
 
-class Base;
 class Globe;
-class TextButton;
-class Window;
-class Text;
-class TextList;
-class RuleBaseFacility;
 
 /**
  * Window shown with all the facilities
@@ -40,7 +34,6 @@ class SelectStartFacilityState : public BuildFacilitiesState
 {
 private:
 	Globe *_globe;
-	std::vector<RuleBaseFacility*> _facilities;
 public:
 	/// Creates the Build Facilities state.
 	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities);
@@ -49,7 +42,7 @@ public:
 	/// Populate the build option list
 	virtual void PopulateBuildList();
 	/// Handler for clicking the Facilities list.
-	virtual void lstFacilitiesClick(Action *action);
+	void lstFacilitiesClick(Action *action);
 	/// Handler for when facility actually built
 	void FacilityBuilt();
 };
