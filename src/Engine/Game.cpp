@@ -358,6 +358,8 @@ void Game::setState(State *state)
  */
 void Game::pushState(State *state)
 {
+	if (!_states.empty())
+		_states.back()->leave();
 	_states.push_back(state);
 	_init = false;
 }
