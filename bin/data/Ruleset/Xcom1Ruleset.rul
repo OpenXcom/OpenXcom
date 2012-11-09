@@ -5495,6 +5495,28 @@ research:
   - name: STR_SUPPLY_SHIP
     cost: 0
     points: 50
+  - name: STR_SECTOID_AUTOPSY
+    cost: 0
+  - name: STR_SNAKEMAN_AUTOPSY
+    cost: 0
+  - name: STR_FLOATER_AUTOPSY
+    cost: 0
+  - name: STR_MUTON_AUTOPSY
+    cost: 0
+  - name: STR_ETHEREAL_AUTOPSY
+    cost: 0
+  - name: STR_CYBERDISC_AUTOPSY
+    cost: 0
+  - name: STR_CHRYSSALID_AUTOPSY
+    cost: 0
+  - name: STR_REAPER_AUTOPSY
+    cost: 0
+  - name: STR_CELATID_AUTOPSY
+    cost: 0
+  - name: STR_SILACOID_AUTOPSY
+    cost: 0
+  - name: STR_SECTOPOD_AUTOPSY
+    cost: 0
 manufacture:
   - name: STR_FUSION_BALL_LAUNCHER
     category: STR_CRAFT_WEAPON
