@@ -23,7 +23,7 @@
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-enum AlienRank{AR_COMMANDER, AR_LEADER, AR_ENGINEER, AR_MEDIC, AR_NAVIGATOR, AR_SOLDIER, AR_TERRORIST};
+enum AlienRank{AR_COMMANDER, AR_LEADER, AR_ENGINEER, AR_MEDIC, AR_NAVIGATOR, AR_SOLDIER, AR_TERRORIST, AR_TERRORIST2};
 
 namespace OpenXcom
 {

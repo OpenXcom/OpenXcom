@@ -517,10 +517,12 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
  * @param power Power of the explosion.
  * @param type The damage type of the explosion.
  * @param unit The unit that caused the explosion.
+ * @return The Unit that got hit
  */
-void TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
+BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
+	BattleUnit *bu = tile->getUnit();
 	int part = voxelCheck(center, unit);
 	if (part >= 0 && part <= 3)
 	{
@@ -532,7 +534,6 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
 	{
 		// power 0 - 200%
 		int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
-		BattleUnit *bu = tile->getUnit();
 		if (bu)
 		{
 			bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
@@ -567,6 +568,7 @@ void TileEngine::hit(const Position &center, int power, ItemDamageType type, Bat
 	calculateSunShading(); // roofs could have been destroyed
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
+	return bu;
 }
 
 /**
@@ -920,6 +922,8 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 		for (int y = 0; y < size; y++)
 		{
 			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,0));
+			if (!tile) continue;
+
 			if (unit->getDirection() == 0 || unit->getDirection() == 1 || unit->getDirection() == 7) // north, northeast or northwest
 			{
 				door = tile->openDoor(MapData::O_NORTHWALL);

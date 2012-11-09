@@ -37,6 +37,7 @@ private:
 	BattleUnit *_unit;
 	ItemDamageType _damageType;
 	bool _noSound;
+	int _originalDir;
 public:
 	/// Creates a new UnitDieBState class
 	UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);

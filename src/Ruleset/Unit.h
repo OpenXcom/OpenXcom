@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_MORPHONDEATH, SPECAB_BURNFLOOR };
+enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR };
 /**
  * This struct holds some plain unit attribute data together.
  */
@@ -52,6 +52,7 @@ private:
 	int _value, _deathSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
+	std::string _zombieUnit, _spawnUnit;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type, std::string race, std::string rank);
@@ -89,6 +90,11 @@ public:
 	int getAggression() const;
 	/// Get the alien's special ability.
 	int getSpecialAbility() const;
+	/// Gets the unit's zombie unit.
+	std::string getZombieUnit() const;
+	/// Gets the unit's spawn unit.
+	std::string getSpawnUnit() const;
+
 };
 
 }

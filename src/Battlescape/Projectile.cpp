@@ -86,6 +86,21 @@ int Projectile::calculateTrajectory(double accuracy)
 	int direction;
 	int dirYshift[8] = {1, 4, 12, 15, 15, 15, 8, 1 };
 	int dirXshift[8] = {12, 14, 15, 15, 8, 1, 1, 1 };
+	
+	if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !_action.weapon->getRules()->isTwoHanded())
+	{
+	dirYshift[0] = 2;
+	dirYshift[1] = 0;
+	dirYshift[4] = 22;
+	dirYshift[5] = 20;
+	dirYshift[6] = 20;
+	dirXshift[0] = 6;
+	dirXshift[2] = 18;
+	dirXshift[3] = 19;
+	dirXshift[5] = -1;
+	dirXshift[6] = -1;
+	dirXshift[7] = -5;
+	}
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
@@ -207,7 +222,7 @@ bool Projectile::calculateThrow(double accuracy)
 	bool foundCurve = false;
 
 	// object blocking - can't throw here
-	if (_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	if (_action.type == BA_THROW &&_save->getTile(_action.target) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT) && _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		return false;
 	}
@@ -215,6 +230,8 @@ bool Projectile::calculateThrow(double accuracy)
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+	if(!bu)
+		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
 	originVoxel.z += bu->getHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
