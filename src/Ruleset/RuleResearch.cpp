@@ -21,7 +21,7 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false), _points(0), _getOneFree(0), _lookup("")
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false), _points(0), _getOneFree(0), _lookup(""), _stringTemplate(0)
 {
 }
 
@@ -67,6 +67,10 @@ void RuleResearch::load(const YAML::Node &node)
 		{
 			i.second() >> _lookup;
 		}
+		else if (key == "stringTemplate")
+		{
+			i.second() >> _stringTemplate;
+		}
 	}
 }
 
@@ -85,6 +89,7 @@ void RuleResearch::save(YAML::Emitter &out) const
 	out << YAML::Key << "unlocks" << YAML::Value << _unlocks;
 	out << YAML::Key << "getOneFree" << YAML::Value << _getOneFree;
 	out << YAML::Key << "lookup" << YAML::Value << _lookup;
+	out << YAML::Key << "stringTemplate" << YAML::Value << _stringTemplate;
 	out << YAML::EndMap;
 }
 
@@ -154,5 +159,13 @@ const std::vector<std::string> & RuleResearch::getGetOneFree () const
 const std::string RuleResearch::getLookup () const
 {
 	return _lookup;
+}
+
+/**
+   @return The String Template for concatenation.
+*/
+const std::vector<std::string> & RuleResearch::getStringTemplate() const
+{
+	return _stringTemplate;
 }
 }

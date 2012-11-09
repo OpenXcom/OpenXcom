@@ -34,6 +34,7 @@
 #include "../Interface/ArrowButton.h"
 #include "../Engine/Timer.h"
 #include "../Engine/RNG.h"
+#include "../Savegame/ItemContainer.h"
 
 #include <sstream>
 
@@ -109,7 +110,17 @@ void ResearchInfoState::buildUi ()
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
-	_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRules ()->getName()));
+	if(_project->getRules()->getStringTemplate().size() == 0 && _rule->getStringTemplate().size() == 0)
+		_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRules ()->getName()));
+	else
+	{
+		std::wstring ss;
+		for(int st = 0; st != _project->getRules()->getStringTemplate().size(); ++st)
+		{
+			ss += _game->getLanguage()->getString(_project->getRules()->getStringTemplate().at(st));
+		}
+		_txtTitle->setText(ss.c_str());
+	}
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
 
@@ -154,11 +165,14 @@ void ResearchInfoState::buildUi ()
 }
 
 /**
+ * Destroys the item and 
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void ResearchInfoState::btnOkClick(Action *action)
 {
+	if(_project->getRules()->needItem())
+		_base->getItems()->removeItem(_project->getRules()->getName(), 1);
 	_game->popState();
 }
 

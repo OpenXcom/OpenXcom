@@ -3982,7 +3982,12 @@ research:
   - name: STR_ALIEN_ORIGINS
     cost: 300
     points: 60
-    needItem: true
+    dependencies:
+      - STR_SECTOID
+      - STR_FLOATER
+      - STR_MUTON
+      - STR_SNAKEMAN
+      - STR_ETHEREAL
   - name: STR_ALIEN_REPRODUCTION
     cost: 150
     points: 30
@@ -4212,11 +4217,17 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_FLOATER_NAVIGATOR
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_HYPER_WAVE_DECODER
@@ -4233,6 +4244,9 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_MEDIC
     needItem: true
     getOneFree:
       - STR_SNAKEMAN
@@ -4259,11 +4273,17 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_LEADER
     needItem: true
   - name: STR_FLOATER_ENGINEER
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_ENGINEER
     needItem: true
     getOneFree:
       - STR_SMALL_SCOUT
@@ -4278,16 +4298,25 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_COMMANDER
     needItem: true
   - name: STR_SNAKEMAN_SOLDIER
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_SNAKEMAN_NAVIGATOR
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_HYPER_WAVE_DECODER
@@ -4304,6 +4333,9 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_MEDIC
     needItem: true
     getOneFree:
       - STR_SNAKEMAN
@@ -4330,10 +4362,17 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_LEADER
     needItem: true
   - name: STR_SNAKEMAN_ENGINEER
     cost: 192
     points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_ENGINEER
     needItem: true
     getOneFree:
       - STR_SMALL_SCOUT
@@ -4348,16 +4387,25 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_COMMANDER
     needItem: true
   - name: STR_MUTON_SOLDIER
     cost: 192
     points: 50
     lookup: STR_MUTON
+    stringTemplate:
+      - STR_MUTON
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_MUTON_NAVIGATOR
     cost: 192
     points: 50
     lookup: STR_MUTON
+    stringTemplate:
+      - STR_MUTON
+      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_HYPER_WAVE_DECODER
@@ -4374,6 +4422,9 @@ research:
     cost: 192
     points: 50
     lookup: STR_MUTON
+    stringTemplate:
+      - STR_MUTON
+      - STR_LIVE_ENGINEER
     needItem: true
     getOneFree:
       - STR_SMALL_SCOUT
@@ -4388,11 +4439,17 @@ research:
     cost: 192
     points: 50
     lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_SECTOID_NAVIGATOR
     cost: 192
     points: 50
     needItem: true
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_NAVIGATOR
     lookup: STR_SECTOID
     unlocks:
       - STR_HYPER_WAVE_DECODER
@@ -4410,6 +4467,9 @@ research:
     points: 50
     needItem: true
     lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_MEDIC
     getOneFree:
       - STR_SNAKEMAN
       - STR_MUTON
@@ -4436,12 +4496,18 @@ research:
     points: 50
     needItem: true
     lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_LEADER
     unlocks:
       - STR_PSI_LAB
   - name: STR_SECTOID_ENGINEER
     cost: 192
     needItem: true
     lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_ENGINEER
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -4456,12 +4522,18 @@ research:
     points: 50
     needItem: true
     lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_COMMANDER
     unlocks:
       - STR_PSI_LAB
   - name: STR_ETHEREAL_SOLDIER
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
+    stringTemplate:
+      - STR_ETHEREAL
+      - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
       - STR_PSI_LAB
@@ -4469,6 +4541,9 @@ research:
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
+    stringTemplate:
+      - STR_ETHEREAL
+      - STR_LIVE_LEADER
     needItem: true
     unlocks:
       - STR_PSI_LAB
@@ -4476,6 +4551,9 @@ research:
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
+    stringTemplate:
+      - STR_ETHEREAL
+      - STR_LIVE_COMMANDER
     needItem: true
     unlocks:
       - STR_PSI_LAB
@@ -4494,34 +4572,53 @@ research:
     unlocks:
       - STR_PLASMA_CANNON
   - name: STR_SECTOID
+    unlocks:
+      - STR_ALIEN_ORIGINS
     cost: 0
     points: 50
   - name: STR_FLOATER
     cost: 0
     points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN
     cost: 0
     points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_MUTON
     cost: 0
     points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_ETHEREAL
     cost: 0
     points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_CYBERDISC
     cost: 0
     points: 50
+    stringTemplate:
+      - STR_CYBERDISC
+      - STR_LIVE_TERRORIST
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_REAPER
     cost: 170
     points: 50
     needItem: true
+    stringTemplate:
+      - STR_REAPER
+      - STR_LIVE_TERRORIST
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID
     cost: 170
     points: 50
+    stringTemplate:
+      - STR_CHRYSSALID
+      - STR_LIVE_TERRORIST
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -4529,17 +4626,26 @@ research:
     cost: 170
     points: 50
     needItem: true
+    stringTemplate:
+      - STR_SILACOID
+      - STR_LIVE_TERRORIST
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CELATID
     cost: 170
     points: 50
+    stringTemplate:
+      - STR_CELATID
+      - STR_LIVE_TERRORIST
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD
     cost: 0
     points: 50
+    stringTemplate:
+      - STR_SECTOPOD
+      - STR_LIVE_TERRORIST
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_ALIEN_RESEARCH

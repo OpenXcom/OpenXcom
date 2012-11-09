@@ -40,7 +40,7 @@ class RuleResearch
  private:
 	std::string _name, _lookup;
 	int _cost, _points;
-	std::vector<std::string> _dependencies, _unlocks, _getOneFree;
+	std::vector<std::string> _dependencies, _unlocks, _getOneFree, _stringTemplate;
 	bool _needItem;
 public:
 	RuleResearch(const std::string & name);
@@ -64,6 +64,7 @@ public:
 	const std::vector<std::string> & getGetOneFree() const;
 	/// what to look up on ufopedia
 	const std::string getLookup () const;
+	const std::vector<std::string> & getStringTemplate() const;
 };
 }
 
