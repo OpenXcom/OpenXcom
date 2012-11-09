@@ -38,7 +38,7 @@ private:
 	Position _origin;
 	int _autoshotCounter;
 	int _projectileImpact;
-	void createNewProjectile();
+	bool createNewProjectile();
 	bool _initialized;
 public:
 	/// Creates a new ProjectileFly class

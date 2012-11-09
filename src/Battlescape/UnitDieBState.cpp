@@ -34,6 +34,7 @@
 #include "../Engine/RNG.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
+#include "PatrolBAIState.h"
 
 namespace OpenXcom
 {
@@ -56,6 +57,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	{
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		_originalDir = _unit->getDirection();
 		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 	}
 
@@ -95,6 +97,7 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
+	
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		_unit->turn();
@@ -110,7 +113,16 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
-		convertUnitToCorpse();
+		if (!_unit->getSpawnUnit().empty())
+		{
+			// converts the dead zombie to a chryssalid
+			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
+			newUnit->lookAt(_originalDir);
+		}
+		else 
+		{
+			convertUnitToCorpse();
+		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 		if (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
@@ -132,8 +144,6 @@ void UnitDieBState::cancel()
 
 /*
  * Convert unit to corpse(item).
- * @param unit
- * @param terrain
  */
 void UnitDieBState::convertUnitToCorpse()
 {

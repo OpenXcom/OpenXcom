@@ -189,6 +189,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Pathfinding.h \
 	src/Battlescape/PathfindingNode.cpp \
 	src/Battlescape/PathfindingNode.h \
+	src/Battlescape/PathfindingOpenSet.cpp \
+	src/Battlescape/PathfindingOpenSet.h \
 	src/Battlescape/PatrolBAIState.cpp \
 	src/Battlescape/PatrolBAIState.h \
 	src/Battlescape/Position.cpp \

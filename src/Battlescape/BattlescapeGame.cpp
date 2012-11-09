@@ -178,17 +178,24 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	_AIActionCounter++;
 
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
-	
+
 	BattleAction action;
 	unit->think(&action);
 	if (action.type == BA_WALK)
 	{
+		if (unit->getType() == "CHRYSSALID" && aggro)
+		{
+			// if the unit is in aggro state and starts walking (to get in melee range) play this aggro sound
+			// todo: put the aggro sound in the ruleset
+			getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(49)->play();
+		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
 		statePushBack(new UnitWalkBState(this, action));
 	}
 
-	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW)
+	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW || action.type == BA_HIT)
 	{
+		action.actor->lookAt(action.target);
 		statePushBack(new ProjectileFlyBState(this, action));
 	}
 
@@ -691,7 +698,7 @@ void BattlescapeGame::popState()
 						_currentAction.waypoints.clear();
 					}
 
-					cancelCurrentAction();
+					cancelCurrentAction(true);
 				}
 				_parentState->getGame()->getCursor()->setVisible(true);
 				setupCursor();
@@ -704,7 +711,7 @@ void BattlescapeGame::popState()
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
 				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
-				if (_AIActionCounter > 1 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					_AIActionCounter = 0;
 					if (_save->selectNextPlayerUnit(true) == 0)
@@ -901,11 +908,14 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		}
 		if (_save->getTile(ba.target) != 0)
 		{
-			ba.type = BA_SNAPSHOT;
 			ba.weapon = unit->getMainHandWeapon();
-			for (int i= 0; i < 10; i++)
+			if(ba.weapon)
 			{
-				statePushBack(new ProjectileFlyBState(this, ba));
+				ba.type = BA_SNAPSHOT;
+				for (int i= 0; i < 10; i++)
+				{
+					statePushBack(new ProjectileFlyBState(this, ba));
+				}
 			}
 		}
 		ba.type = BA_NONE;
@@ -936,13 +946,13 @@ bool BattlescapeGame::dontSpendTUs()
   * This will cancel the current action the user had selected (firing, throwing,..)
   * @return Whether an action was cancelled or not.
   */
-bool BattlescapeGame::cancelCurrentAction()
+bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
 	bool bPreviewed = Options::getBool("battlePreviewPath");
 
 	if (_save->getPathfinding()->removePreview() && bPreviewed) return true;
 
-	if (_states.empty())
+	if (_states.empty() || bForce)
 	{
 		if (_currentAction.targeting)
 		{
@@ -1013,7 +1023,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else if (_currentAction.type == BA_USE && _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
-			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
+			if (_save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
 				_parentState->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_currentAction.weapon->getRules()->getHitSound())->play();
 				_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
@@ -1175,6 +1185,10 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	if (_save->getTile(p) == 0)
 		return;
 
+	// don't ever drop fixed items
+	if (item->getRules()->isFixed())
+		return;
+
 	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
 
 	if(newItem)
@@ -1199,6 +1213,52 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	}
 
 }
+
+/*
+ * Convert a unit into a unit of another type.
+ */
+BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
+{
+	// in case the unit was unconscious
+	getSave()->removeUnconsciousBodyItem(unit);
+	unit->instaKill();
+	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
+	{
+		dropItem(unit->getPosition(), (*i));
+	}
+
+	unit->getInventory()->clear();
+
+	// remove unit-tile link
+	unit->setTile(0);
+
+	getSave()->getTile(unit->getPosition())->setUnit(0);
+	std::stringstream newArmor;
+	newArmor << newType;
+	newArmor << "_ARMOR";
+	std::stringstream newWeapon;
+	newWeapon << newType;
+	newWeapon << "_WEAPON";
+	
+	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, getSave()->getUnits()->size(), getRuleset()->getArmor(newArmor.str()));
+	RuleItem *newItem = getRuleset()->getItem(newWeapon.str());
+
+	getSave()->getTile(unit->getPosition())->setUnit(_newUnit);
+	_newUnit->setPosition(unit->getPosition());
+	_newUnit->setCache(0);
+	getSave()->getUnits()->push_back(_newUnit);
+	getMap()->cacheUnit(_newUnit);
+	_newUnit->setAIState(new PatrolBAIState(getSave(), _newUnit, 0));
+	
+	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
+	bi->moveToOwner(_newUnit);
+	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
+	getSave()->getItems()->push_back(bi);
+
+	return _newUnit;
+
+}
+
 
 /**
  * Get map

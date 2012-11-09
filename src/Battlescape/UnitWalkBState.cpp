@@ -108,6 +108,12 @@ void UnitWalkBState::think()
 		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
+			// if the unit burns floortiles, burn floortiles
+			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+			{
+				_unit->getTile()->destroy(MapData::O_FLOOR);
+			}
+
 			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
 			unitspotted = _terrain->calculateFOV(_unit);
@@ -289,17 +295,10 @@ void UnitWalkBState::postPathProcedures()
  */
 void UnitWalkBState::setNormalWalkSpeed()
 {
-	if (_parent->getSave()->getDebugMode())
-	{
-		_parent->setStateInterval(1);
-	}
+	if (_unit->getFaction() == FACTION_PLAYER)
+		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 	else
-	{
-		if (_unit->getFaction() == FACTION_PLAYER)
-			_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
-		else
-			_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
-	}
+		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 }
 
 
@@ -308,7 +307,7 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if (!_unit->getVisible()) return;
+	if (!_unit->getVisible() && !_parent->getSave()->getDebugMode()) return;
 
 	if (_unit->getMoveSound() != -1)
 	{

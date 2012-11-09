@@ -1107,6 +1107,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\PathfindingOpenSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PathfindingOpenSet.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\PatrolBAIState.cpp"
 				>
 			</File>

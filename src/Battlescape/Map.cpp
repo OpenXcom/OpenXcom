@@ -151,7 +151,7 @@ void Map::draw()
 	Surface::draw();
 	Tile *t;
 
-	projectileInFOV = false;
+	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
@@ -160,7 +160,7 @@ void Map::draw()
 			projectileInFOV = true;
 		}
 	}
-	explosionInFOV = false;
+	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
@@ -491,7 +491,7 @@ void Map::drawTerrain(Surface *surface)
 							{
 								offset.y += 4;
 							}
-							if (unit == (BattleUnit*)_save->getSelectedUnit() && _save->getSide() == FACTION_PLAYER && part == 0)
+							if (unit == (BattleUnit*)_save->getSelectedUnit() && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && part == 0)
 							{
 								_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 							}
@@ -525,7 +525,7 @@ void Map::drawTerrain(Surface *surface)
 								{
 									offset.y += 4;
 								}
-								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _save->getSide() == FACTION_PLAYER && part == 0)
+								if (tunit == (BattleUnit*)_save->getSelectedUnit() && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && part == 0)
 								{
 									_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 								}
@@ -912,12 +912,19 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache->setPalette(this->getPalette());
 			}
 			unitSprite->setBattleUnit(unit, i);
-			BattleItem *handItem = unit->getItem(unit->getActiveHand());
-			if (handItem)
+
+			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
+			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
+			if (rhandItem)
 			{
-				unitSprite->setBattleItem(handItem);
+				unitSprite->setBattleItem(rhandItem);
 			}
-			else
+			if (lhandItem)
+			{
+				unitSprite->setBattleItem(lhandItem);
+			}
+			
+			if(!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}

@@ -60,7 +60,7 @@ YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE)
+Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
 {
 }
 
@@ -141,6 +141,14 @@ void Unit::load(const YAML::Node &node)
 			i.second() >> a;
 			_specab = (SpecialAbility)a;
 		}
+		else if (key == "zombieUnit")
+		{
+			i.second() >> _zombieUnit;
+		}
+		else if (key == "spawnUnit")
+		{
+			i.second() >> _spawnUnit;
+		}
 	}
 }
 
@@ -165,6 +173,8 @@ void Unit::save(YAML::Emitter &out) const
 	out << YAML::Key << "intelligence" << YAML::Value << _intelligence;
 	out << YAML::Key << "aggression" << YAML::Value << _aggression;
 	out << YAML::Key << "specab" << YAML::Value << _specab;
+	out << YAML::Key << "zombieUnit" << YAML::Value << _zombieUnit;
+	out << YAML::Key << "spawnUnit" << YAML::Value << _spawnUnit;
 	out << YAML::EndMap;
 }
 
@@ -294,6 +304,24 @@ int Unit::getAggression() const
 int Unit::getSpecialAbility() const
 {
 	return (int)_specab;
+}
+
+/**
+ * Get the unit that the victim is morphed into when attacked.
+ * @return unit.
+ */
+std::string Unit::getZombieUnit() const
+{
+	return _zombieUnit;
+}
+
+/**
+ * Get the unit that is spawned when this one dies.
+ * @return unit.
+ */
+std::string Unit::getSpawnUnit() const
+{
+	return _spawnUnit;
 }
 
 }
