@@ -316,7 +316,7 @@ void DebriefingState::prepareDebriefing()
 	// terror site disappears
 	for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
 	{
-		if ((*i)->isInBattlescape())
+		if ((*i)->isInBattlescape() && !aborted)
 		{
 			delete *i;
 			save->getTerrorSites()->erase(i);
@@ -327,7 +327,7 @@ void DebriefingState::prepareDebriefing()
 	// alien base disappears
 	for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 	{
-		if ((*i)->isInBattlescape())
+		if ((*i)->isInBattlescape() && !aborted)
 		{
 			delete *i;
 			save->getAlienBases()->erase(i);

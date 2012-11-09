@@ -696,6 +696,19 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
 		if (itDiscovered != discovered.end ())
 		{
+			int check = 0;
+			std::vector<std::string> free = ruleset->getResearch(*iter)->getGetOneFree();
+			if(free.size() > 0)
+			{
+				for(std::vector<std::string>::const_iterator iter = free.begin (); iter != free.end (); ++ iter)
+				{
+					if((*itDiscovered)->getName() == *iter)
+						check++;
+				}
+				if(check == free.size())
+					continue;
+			}
+			else
 			continue;
 		}
 		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearch(research)) != baseResearchProjects.end ())
@@ -746,6 +759,8 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 */
 bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const
 {
+	if(r->getCost() == 0)
+		return false;
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	if(std::find(unlocked.begin (), unlocked.end (),
