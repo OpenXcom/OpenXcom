@@ -672,6 +672,9 @@
     <ClCompile Include="Savegame\AlienBase.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\PathfindingOpenSet.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Basescape\ManufactureState.h">
@@ -1347,6 +1350,9 @@
     </ClInclude>
     <ClInclude Include="Savegame\AlienBase.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\PathfindingOpenSet.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

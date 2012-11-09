@@ -1963,6 +1963,7 @@ items:
     handSprite: 104
     hitSound: 48
     hitAnimation: 36
+    clipSize: -1
     power: 90
     damageType: 7
     accuracyMelee: 80
@@ -1971,6 +1972,99 @@ items:
     fixedWeapon: true
     invWidth: 1
     invHeight: 2
+    recover: false
+  - type: CHRYSSALID_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    hitSound: 48
+    hitAnimation: 36
+    clipSize: -1
+    power: 114
+    damageType: 7
+    accuracyMelee: 80
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2
+    recover: false
+  - type: CELATID_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    bulletSprite: 8
+    fireSound: 51
+    hitSound: 19
+    hitAnimation: 36
+    power: 140
+    damageType: 8
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2
+    clipSize: -1
+    recover: false
+  - type: SILACOID_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    hitSound: 48
+    hitAnimation: 36
+    power: 70
+    damageType: 2
+    accuracyMelee: 92
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2
+    recover: false
+  - type: SECTOPOD_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    hitSound: 48
+    hitAnimation: 36
+    power: 100
+    damageType: 4
+    accuracyAuto: 50
+    accuracySnap: 75
+    accuracyAimed: 110
+    tuAuto: 35
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2
+    clipSize: -1
+    bulletSprite: 9
+    recover: false
+  - type: ZOMBIE_WEAPON
+    weight: 3
+    bigSprite: 32
+    floorSprite: 31
+    handSprite: 104
+    hitSound: 48
+    hitAnimation: 36
+    power: 84
+    damageType: 7
+    accuracyMelee: 80
+    tuMelee: 15
+    battleType: 3
+    fixedWeapon: true
+    invWidth: 1
+    invHeight: 2
+    clipSize: -1
     recover: false
   - type: STR_SECTOID_SOLDIER
     recover: true
@@ -2012,6 +2106,51 @@ items:
     recover: true
     liveAlien: true
   - type: STR_REAPER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_CHRYSSALID
+    recover: true
+    liveAlien: true
+  - type: STR_MUTON_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_MUTON_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_MUTON_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_ETHEREAL_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_ETHEREAL_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_ETHEREAL_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_SILACOID
+    recover: true
+    liveAlien: true
+  - type: STR_CELATID
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOPOD
     recover: true
     liveAlien: true
 ufos:
@@ -2988,6 +3127,27 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+  - type: SECTOPOD_ARMOR
+    spriteSheet: X_ROB.PCK
+    corpseItem: SECTOPOD_CORPSE_
+    frontArmor: 145
+    sideArmor: 130
+    rearArmor: 100
+    underArmor: 90
+    drawingRoutine: 5
+    size: 2
+    modifiedWalk: 23
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
     corpseItem: TANK_CORPSE_
@@ -3042,9 +3202,254 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+  - type: SNAKEMAN_ARMOR0
+    spriteSheet: SNAKEMAN.PCK
+    corpseItem: STR_SNAKEMAN_CORPSE
+    frontArmor: 20
+    sideArmor: 18
+    rearArmor: 16
+    underArmor: 12
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0
+      - 1.2
+      - 0.7
+      - 1.1
+      - 0.8
+      - 0.8
       - 1.0
       - 1.2
       - 1.6
+      - 1.0
+  - type: SNAKEMAN_ARMOR1
+    spriteSheet: SNAKEMAN.PCK
+    corpseItem: STR_SNAKEMAN_CORPSE
+    frontArmor: 20
+    sideArmor: 24
+    rearArmor: 22
+    underArmor: 20
+    drawingRoutine: 6
+    damageModifier:
+      - 0.9
+      - 1.1
+      - 0.6
+      - 1.0
+      - 0.7
+      - 0.7
+      - 0.9
+      - 1.1
+      - 1.5
+      - 0.9
+  - type: SNAKEMAN_ARMOR2
+    spriteSheet: SNAKEMAN.PCK
+    corpseItem: STR_SNAKEMAN_CORPSE
+    frontArmor: 26
+    sideArmor: 26
+    rearArmor: 22
+    underArmor: 20
+    drawingRoutine: 6
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.5
+      - 0.9
+      - 0.6
+      - 0.6
+      - 0.8
+      - 1.0
+      - 1.4
+      - 0.8
+  - type: MUTON_ARMOR0
+    spriteSheet: MUTON.PCK
+    corpseItem: STR_MUTON_CORPSE
+    frontArmor: 20
+    sideArmor: 20
+    rearArmor: 20
+    underArmor: 10
+    drawingRoutine: 10
+    damageModifier:
+      - 0.9
+      - 0.7
+      - 0.9
+      - 0.7
+      - 0.8
+      - 1.0
+      - 0.9
+      - 0.8
+      - 0.9
+      - 0.9
+  - type: MUTON_ARMOR1
+    spriteSheet: MUTON.PCK
+    corpseItem: STR_MUTON_CORPSE
+    frontArmor: 24
+    sideArmor: 24
+    rearArmor: 24
+    underArmor: 15
+    drawingRoutine: 10
+    damageModifier:
+      - 0.8
+      - 0.6
+      - 0.8
+      - 0.6
+      - 0.7
+      - 0.9
+      - 0.8
+      - 0.7
+      - 0.8
+      - 0.8
+  - type: MUTON_ARMOR2
+    spriteSheet: MUTON.PCK
+    corpseItem: STR_MUTON_CORPSE
+    frontArmor: 28
+    sideArmor: 28
+    rearArmor: 28
+    underArmor: 20
+    drawingRoutine: 10
+    damageModifier:
+      - 0.7
+      - 0.5
+      - 0.7
+      - 0.5
+      - 0.6
+      - 0.8
+      - 0.7
+      - 0.6
+      - 0.7
+      - 0.7  
+  - type: ETHEREAL_ARMOR0
+    spriteSheet: ETHEREAL.PCK
+    corpseItem: STR_ETHEREAL_CORPSE
+    frontArmor: 35
+    sideArmor: 35
+    rearArmor: 35
+    underArmor: 35
+    drawingRoutine: 4
+    damageModifier:
+      - 0.9
+      - 0.9
+      - 1.1
+      - 0.9
+      - 1.0
+      - 0.8
+      - 0.9
+      - 0.9
+      - 1.0
+      - 0.9
+  - type: ETHEREAL_ARMOR1
+    spriteSheet: ETHEREAL.PCK
+    corpseItem: STR_ETHEREAL_CORPSE
+    frontArmor: 40
+    sideArmor: 40
+    rearArmor: 40
+    underArmor: 40
+    drawingRoutine: 4
+    damageModifier:
+      - 0.8
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.9
+      - 0.7
+      - 0.8
+      - 0.8
+      - 0.9
+      - 0.8
+  - type: ETHEREAL_ARMOR2
+    spriteSheet: ETHEREAL.PCK
+    corpseItem: STR_ETHEREAL_CORPSE
+    frontArmor: 40
+    sideArmor: 40
+    rearArmor: 40
+    underArmor: 40
+    drawingRoutine: 4
+    damageModifier:
+      - 0.7
+      - 0.7
+      - 0.9
+      - 0.7
+      - 0.8
+      - 0.6
+      - 0.7
+      - 0.7
+      - 0.8
+      - 0.7
+  - type: CHRYSSALID_ARMOR
+    spriteSheet: CHRYS.PCK
+    corpseItem: STR_CHRYSSALID_CORPSE
+    frontArmor: 34
+    sideArmor: 34
+    rearArmor: 34
+    underArmor: 34
+    drawingRoutine: 7
+    damageModifier:
+      - 1.0
+      - 0.9
+      - 1.0
+      - 0.9
+      - 0.7
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+  - type: ZOMBIE_ARMOR
+    spriteSheet: ZOMBIE.PCK
+    corpseItem: STR_ZOMBIE_CORPSE
+    frontArmor: 4
+    sideArmor: 4
+    rearArmor: 4
+    underArmor: 4
+    drawingRoutine: 4
+    damageModifier:
+      - 1.0
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.7
+      - 0.7
+      - 0.0
+      - 1.0
+      - 1.0
+      - 1.0
+  - type: SILACOID_ARMOR
+    spriteSheet: SILACOID.PCK
+    corpseItem: STR_SILACOID_CORPSE
+    frontArmor: 50
+    sideArmor: 50
+    rearArmor: 50
+    underArmor: 10
+    drawingRoutine: 8
+    modifiedWalk: 47
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.0
+      - 1.3
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+  - type: CELATID_ARMOR
+    spriteSheet: CELATID.PCK
+    corpseItem: STR_CELATID_CORPSE
+    frontArmor: 50
+    sideArmor: 50
+    rearArmor: 50
+    underArmor: 10
+    drawingRoutine: 9
+    modifiedWalk: 16
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
       - 1.0
 soldiers:
   - type: XCOM
@@ -3346,6 +3751,384 @@ units:
     loftemps: 3
     value: 30
     intelligence: 4
+  - type: SNAKEMAN_SOLDIER
+    race: STR_SNAKEMAN
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 40
+      stamina: 80
+      health: 45
+      bravery: 80
+      reactions: 45
+      firing: 58
+      throwing: 65
+      strength: 47
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SNAKEMAN_ARMOR0
+    standHeight: 18
+    kneelHeight: 18
+    loftemps: 3
+    value: 15
+    deathSound: 8
+    moveSound: 0
+    intelligence: 2
+    aggression: 2
+  - type: SNAKEMAN_NAVIGATOR
+    race: STR_SNAKEMAN
+    rank: STR_LIVE_NAVIGATOR
+    stats:
+      tu: 40
+      stamina: 80
+      health: 45
+      bravery: 80
+      reactions: 45
+      firing: 58
+      throwing: 65
+      strength: 47
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SNAKEMAN_ARMOR0
+    standHeight: 18
+    kneelHeight: 18
+    loftemps: 3
+    value: 17
+    deathSound: 8
+    moveSound: 0
+    intelligence: 3
+    aggression: 2
+  - type: SNAKEMAN_ENGINEER
+    race: STR_SNAKEMAN
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 40
+      stamina: 80
+      health: 45
+      bravery: 80
+      reactions: 45
+      firing: 58
+      throwing: 65
+      strength: 47
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SNAKEMAN_ARMOR0
+    standHeight: 18
+    kneelHeight: 18
+    loftemps: 3
+    value: 20
+    deathSound: 8
+    moveSound: 0
+    intelligence: 4
+    aggression: 2
+  - type: SNAKEMAN_LEADER
+    race: STR_SNAKEMAN
+    rank: STR_LIVE_LEADER
+    stats:
+      tu: 40
+      stamina: 80
+      health: 45
+      bravery: 80
+      reactions: 55
+      firing: 65
+      throwing: 65
+      strength: 47
+      psiStrength: 45
+      psiSkill: 0
+      melee: 76
+    armor: SNAKEMAN_ARMOR1
+    standHeight: 18
+    kneelHeight: 18
+    loftemps: 3
+    value: 28
+    deathSound: 8
+    moveSound: 0
+    intelligence: 5
+    aggression: 2  
+  - type: SNAKEMAN_COMMANDER
+    race: STR_SNAKEMAN
+    rank: STR_LIVE_COMMANDER
+    stats:
+      tu: 45
+      stamina: 84
+      health: 55
+      bravery: 80
+      reactions: 65
+      firing: 58
+      throwing: 65
+      strength: 47
+      psiStrength: 50
+      psiSkill: 0
+      melee: 76
+    armor: SNAKEMAN_ARMOR2
+    standHeight: 18
+    kneelHeight: 18
+    loftemps: 3
+    value: 36
+    deathSound: 8
+    moveSound: 0
+    intelligence: 6
+    aggression: 2 
+  - type: MUTON_SOLDIER
+    race: STR_MUTON
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 56
+      stamina: 90
+      health: 125
+      bravery: 80
+      reactions: 60
+      firing: 54
+      throwing: 62
+      strength: 70
+      psiStrength: 25
+      psiSkill: 0
+      melee: 76
+    armor: MUTON_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 15
+    deathSound: 6
+    intelligence: 2
+    aggression: 2
+  - type: MUTON_NAVIGATOR
+    race: STR_MUTON
+    rank: STR_LIVE_NAVIGATOR
+    stats:
+      tu: 56
+      stamina: 90
+      health: 125
+      bravery: 80
+      reactions: 60
+      firing: 54
+      throwing: 62
+      strength: 70
+      psiStrength: 25
+      psiSkill: 0
+      melee: 76
+    armor: MUTON_ARMOR1
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 17
+    deathSound: 6
+    intelligence: 3
+    aggression: 2 
+  - type: MUTON_ENGINEER
+    race: STR_MUTON
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 56
+      stamina: 90
+      health: 125
+      bravery: 80
+      reactions: 60
+      firing: 54
+      throwing: 62
+      strength: 70
+      psiStrength: 25
+      psiSkill: 0
+      melee: 76
+    armor: MUTON_ARMOR2
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 19
+    deathSound: 6
+    intelligence: 4
+    aggression: 2 
+  - type: ETHEREAL_SOLDIER
+    race: STR_ETHEREAL
+    rank: STR_LIVE_SOLDIER
+    stats:
+      tu: 68
+      stamina: 96
+      health: 55
+      bravery: 80
+      reactions: 75
+      firing: 74
+      throwing: 80
+      strength: 48
+      psiStrength: 50
+      psiSkill: 40
+      melee: 85
+    armor: ETHEREAL_ARMOR0
+    standHeight: 20
+    kneelHeight: 15
+    loftemps: 3
+    value: 20
+    deathSound: 9
+    intelligence: 6
+    aggression: 1     
+  - type: ETHEREAL_LEADER
+    race: STR_ETHEREAL
+    rank: STR_LIVE_LEADER
+    stats:
+      tu: 68
+      stamina: 96
+      health: 55
+      bravery: 80
+      reactions: 75
+      firing: 74
+      throwing: 80
+      strength: 48
+      psiStrength: 60
+      psiSkill: 45
+      melee: 85
+    armor: ETHEREAL_ARMOR1
+    standHeight: 20
+    kneelHeight: 15
+    loftemps: 3
+    value: 30
+    deathSound: 9
+    intelligence: 7
+    aggression: 1    
+  - type: ETHEREAL_COMMANDER
+    race: STR_ETHEREAL
+    rank: STR_LIVE_COMMANDER
+    stats:
+      tu: 68
+      stamina: 96
+      health: 55
+      bravery: 80
+      reactions: 75
+      firing: 74
+      throwing: 80
+      strength: 48
+      psiStrength: 65
+      psiSkill: 50
+      melee: 85
+    armor: ETHEREAL_ARMOR2
+    standHeight: 20
+    kneelHeight: 15
+    loftemps: 3
+    value: 40
+    deathSound: 9
+    intelligence: 8
+    aggression: 1 
+  - type: CHRYSSALID
+    race: STR_CHRYSSALID
+    rank: STR_LIVE_TERRORIST
+    stats:
+      tu: 110
+      stamina: 140
+      health: 96
+      bravery: 100
+      reactions: 70
+      firing: 0
+      throwing: 0
+      strength: 110
+      psiStrength: 50
+      psiSkill: 0
+      melee: 80
+    armor: CHRYSSALID_ARMOR
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 4
+    value: 25
+    deathSound: 49
+    intelligence: 4
+    aggression: 1
+    zombieUnit: ZOMBIE
+  - type: SILACOID
+    race: STR_SILACOID
+    rank: STR_LIVE_TERRORIST
+    stats:
+      tu: 40
+      stamina: 80
+      health: 114
+      bravery: 100
+      reactions: 40
+      firing: 0
+      throwing: 0
+      strength: 70
+      psiStrength: 80
+      psiSkill: 0
+      melee: 80
+    armor: SILACOID_ARMOR
+    standHeight: 10
+    kneelHeight: 10
+    loftemps: 2
+    value: 20
+    deathSound: 51
+    moveSound: 47
+    intelligence: 3
+    aggression: 2
+    specab: 2
+  - type: CELATID
+    race: STR_CELATID
+    rank: STR_LIVE_TERRORIST
+    stats:
+      tu: 70
+      stamina: 90
+      health: 68
+      bravery: 90
+      reactions: 40
+      firing: 100
+      throwing: 0
+      strength: 70
+      psiStrength: 80
+      psiSkill: 0
+      melee: 80
+    armor: CELATID_ARMOR
+    standHeight: 10
+    kneelHeight: 10
+    loftemps: 2
+    value: 20
+    deathSound: 51
+    moveSound: 16
+    intelligence: 3
+    aggression: 2
+  - type: SECTOPOD
+    race: STR_SECTOPOD
+    rank: STR_LIVE_TERRORIST
+    stats:
+      tu: 62
+      stamina: 90
+      health: 96
+      bravery: 110
+      reactions: 64
+      firing: 60
+      throwing: 0
+      strength: 90
+      psiStrength: 100
+      psiSkill: 0
+      melee: 80
+    armor: SECTOPOD_ARMOR
+    standHeight: 23
+    kneelHeight: 16
+    loftemps: 2
+    value: 30
+    deathSound: 23
+    intelligence: 4
+    aggression: 1
+  - type: ZOMBIE
+    race: STR_ZOMBIE
+    rank: STR_LIVE_TERRORIST
+    stats:
+      tu: 40
+      stamina: 110
+      health: 84
+      bravery: 110
+      reactions: 40
+      firing: 0
+      throwing: 0
+      strength: 84
+      psiStrength: 80
+      psiSkill: 0
+      melee: 80
+    armor: ZOMBIE_ARMOR
+    standHeight: 18
+    kneelHeight: 18
+    loftemps: 2
+    value: 18
+    deathSound: 48
+    intelligence: 3
+    aggression: 2
+    spawnUnit: CHRYSSALID
 alienRaces:
   - id: STR_SECTOID
     members:
@@ -3385,8 +4168,8 @@ alienRaces:
       - MUTON_SOLDIER
       - MUTON_NAVIGATOR
       - MUTON_SOLDIER
-      - CELATID
       - SILACOID
+      - CELATID
   - id: STR_FLOATER
     members:
       - FLOATER_COMMANDER
@@ -3399,14 +4182,14 @@ alienRaces:
       - REAPER
   - id: STR_MIXED
     members:
-      - ETHEREAL_SOLDIER
-      - ETHEREAL_LEADER
       - ETHEREAL_COMMANDER
+      - ETHERIAL_LEADER
+      - SNAKEMAN_SOLDIER
       - CHRYSSALID
-      - SILACOID
-      - CELATID
-      - SECTOPOD
       - FLOATER_SOLDIER
+      - MUTON_SOLDIER
+      - REAPER
+      - SECTOPOD
 alienDeployments:
   - type: STR_SMALL_SCOUT
     data:
@@ -3725,6 +4508,14 @@ alienDeployments:
         itemSets:
           -
             []			
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []			
     width: 50
     length: 50
     height: 4
@@ -3865,6 +4656,14 @@ alienDeployments:
             - STR_PLASMA_PISTOL_CLIP
             - STR_ALIEN_GRENADE
       - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 2
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+      - alienRank: 7
         lowQty: 1
         highQty: 3
         dQty: 2
@@ -5422,8 +6221,6 @@ ufopaedia:
   - id: STR_FUSION_BALL_DEFENSES
     type_id: 6
     section: STR_BASE_FACILITIES
-    requires:
-      - STR_FUSION_BALL_DEFENSES
     text: STR_FUSION_BALL_DEFENSES_UFOPEDIA
   - id: STR_GRAV_SHIELD
     type_id: 6
