@@ -1972,6 +1972,48 @@ items:
     invWidth: 1
     invHeight: 2
     recover: false
+  - type: STR_SECTOID_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_MEDIC
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_CYBERDISC
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_MEDIC
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_REAPER
+    recover: true
+    liveAlien: true
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL

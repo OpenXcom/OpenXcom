@@ -51,6 +51,7 @@ private:
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
 	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
+	bool _noContainment;
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);

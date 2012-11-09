@@ -54,7 +54,7 @@ private:
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
 	int _clipSize, _accuracyMelee, _tuMelee;
 	BattleType _battleType;
-	bool _twoHanded, _waypoint, _fixedWeapon;
+	bool _twoHanded, _waypoint, _fixedWeapon, _liveAlien;
 	int _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
 	int _healAmount, _healthAmount;
@@ -164,6 +164,8 @@ public:
 	int getArmor() const;
 	/// Gets the item's recoverability.
 	bool isRecoverable() const;
+	/// is this a live alien?
+	bool getAlien() const;
 };
 
 }

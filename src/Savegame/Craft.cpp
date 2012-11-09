@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _patrol(false)
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -755,4 +755,22 @@ int Craft::getVehicleCount(const std::string &vehicle) const
 	return total;
 }
 
+
+/**
+ * Sets a craft to patrol status, or not
+ * @param true or false.
+ */
+void Craft::setPatrol(bool patrol)
+{
+	_patrol = patrol;
+}
+
+/**
+ * Checks a craft's patrol status.
+ * @return true or false.
+ */
+bool Craft::getPatrol() const
+{
+	return _patrol;
+}
 }

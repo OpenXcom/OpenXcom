@@ -41,6 +41,7 @@ class ResearchProject;
 class Soldier;
 class RuleManufacture;
 class TerrorSite;
+class AlienBase;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -70,6 +71,7 @@ private:
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	bool _debug;
+	std::vector<AlienBase*> _alienBases;
 
 	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
@@ -159,6 +161,8 @@ public:
 	void setDebugMode();
 	/// Gets debug mode.
 	bool getDebugMode() const;
+	///  Returns the list of alien bases.
+	std::vector<AlienBase*> *const getAlienBases();
 };
 
 }
