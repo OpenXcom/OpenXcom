@@ -34,6 +34,7 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
+#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -119,6 +120,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 	_game->popState();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
 	if (u != 0)
 	{
 		SavedBattleGame *bgame = new SavedBattleGame();
@@ -146,6 +148,22 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setCraft(_craft);
 		bgen.setTerrorSite(t);
 		bgen.setAlienRace(t->getAlienRace());
+		bgen.setAlienItemlevel(0);
+		bgen.run();
+
+		_game->pushState(new BriefingState(_game, _craft));
+	}
+	else if (b != 0)
+	{
+		SavedBattleGame *bgame = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(bgame);
+		bgame->setMissionType("STR_ALIEN_BASE_ASSAULT");
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.setWorldTexture(_texture);
+		bgen.setWorldShade(_shade);
+		bgen.setCraft(_craft);
+		bgen.setAlienBase(b);
+		bgen.setAlienRace(b->getAlienRace());
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 

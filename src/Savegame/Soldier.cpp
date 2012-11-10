@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor)
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor), _psiTraining(false)
 {
 	if (names != 0)
 	{
@@ -408,4 +408,34 @@ void Soldier::heal()
 	_recovery--;
 }
 
+/**
+ * Trains a soldier's Psychic abilities
+ */
+void Soldier::trainPsi()
+{
+	if(_currentStats.psiSkill <= 16)
+		_currentStats.psiSkill += RNG::generate(16, 24);
+	else if(_currentStats.psiSkill <= 16)
+		_currentStats.psiSkill += RNG::generate(5, 12);
+	else if(_currentStats.psiSkill < 100)
+		_currentStats.psiSkill += RNG::generate(1, 3);
+	if(_currentStats.psiSkill > 100)
+		_currentStats.psiSkill = 100;
+}
+
+/**
+ * returns whether or not the unit is in psi training
+ */
+bool Soldier::isInPsiTraining()
+{
+	return _psiTraining;
+}
+
+/**
+ * changes whether or not the unit is in psi training
+ */
+void Soldier::setPsiTraining()
+{
+	_psiTraining = !_psiTraining;
+}
 }

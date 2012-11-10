@@ -174,7 +174,17 @@ void ResearchState::fillProjectList()
 		sstr << (*iter)->getAssigned ();
 		const RuleResearch *r = (*iter)->getRules();
 		std::wstring wstr = _game->getLanguage()->getString(r->getName ());
-		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
+		if((*iter)->getRules()->getStringTemplate().size() == 0)
+			_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
+		else
+		{
+			std::wstring ss;
+			for(int st = 0; st != (*iter)->getRules()->getStringTemplate().size(); ++st)
+			{
+				ss += _game->getLanguage()->getString((*iter)->getRules()->getStringTemplate().at(st));
+			}
+			_lstResearch->addRow(3, ss.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
+		}
 	}
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();

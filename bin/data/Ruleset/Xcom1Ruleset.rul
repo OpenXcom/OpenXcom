@@ -2066,6 +2066,93 @@ items:
     invHeight: 2
     clipSize: -1
     recover: false
+  - type: STR_SECTOID_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_MEDIC
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOID_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_CYBERDISC
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_MEDIC
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_FLOATER_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_REAPER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_SNAKEMAN_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_CHRYSSALID
+    recover: true
+    liveAlien: true
+  - type: STR_MUTON_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_MUTON_NAVIGATOR
+    recover: true
+    liveAlien: true
+  - type: STR_MUTON_ENGINEER
+    recover: true
+    liveAlien: true
+  - type: STR_ETHEREAL_SOLDIER
+    recover: true
+    liveAlien: true
+  - type: STR_ETHEREAL_LEADER
+    recover: true
+    liveAlien: true
+  - type: STR_ETHEREAL_COMMANDER
+    recover: true
+    liveAlien: true
+  - type: STR_SILACOID
+    recover: true
+    liveAlien: true
+  - type: STR_CELATID
+    recover: true
+    liveAlien: true
+  - type: STR_SECTOPOD
+    recover: true
+    liveAlien: true
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
@@ -4653,66 +4740,90 @@ alienDeployments:
 research:
   - name: STR_LASER_WEAPONS
     cost: 50
+    points: 10
   - name: STR_LASER_PISTOL
     cost: 100
+    points: 10
     dependencies:
       - STR_LASER_WEAPONS
   - name: STR_LASER_RIFLE
     cost: 300
+    points: 10
     dependencies:
       - STR_LASER_PISTOL
   - name: STR_LASER_CANNON
     cost: 420
+    points: 10
     dependencies:
       - STR_LASER_RIFLE
   - name: STR_MOTION_SCANNER
     cost: 180
+    points: 20
   - name: STR_MEDI_KIT
     cost: 210
+    points: 20
   - name: STR_ALIEN_ALLOYS
     cost: 400
+    points: 30
     needItem: true
   - name: STR_ALIEN_ENTERTAINMENT
     cost: 150
+    points: 30
     needItem: true
   - name: STR_ALIEN_FOOD
     cost: 150
+    points: 30
     needItem: true
   - name: STR_ALIEN_GRENADE
     cost: 200
+    points: 20
     needItem: true
   - name: STR_ALIEN_ORIGINS
     cost: 300
-    needItem: true
+    points: 60
+    dependencies:
+      - STR_SECTOID
+      - STR_FLOATER
+      - STR_MUTON
+      - STR_SNAKEMAN
+      - STR_ETHEREAL
   - name: STR_ALIEN_REPRODUCTION
     cost: 150
+    points: 30
     needItem: true
   - name: STR_ALIEN_SURGERY
     cost: 150
+    points: 30
     needItem: true
   - name: STR_BLASTER_BOMB
     cost: 300
+    points: 10
     needItem: true
   - name: STR_BLASTER_LAUNCHER
     cost: 900
+    points: 10
     needItem: true
   - name: STR_CYDONIA_OR_BUST
     cost: 600
+    points: 60
     dependencies:
       - STR_THE_MARTIAN_SOLUTION
   - name: STR_ELERIUM_115
     cost: 450
+    points: 60
     needItem: true
   - name: STR_EXAMINATION_ROOM
     cost: 150
     needItem: true
   - name: STR_FLYING_SUIT
     cost: 330
+    points: 20
     dependencies:
       - STR_POWER_SUIT
       - STR_UFO_NAVIGATION
   - name: STR_FUSION_DEFENSE
     cost: 800
+    points: 25
     dependencies:
       - STR_BLASTER_LAUNCHER
       - STR_BLASTER_BOMB
@@ -4722,6 +4833,7 @@ research:
       - STR_FUSION_DEFENSE
   - name: STR_GRAV_SHIELD
     cost: 930
+    points: 25
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
   - name: STR_HEAVY_LASER
@@ -4736,6 +4848,7 @@ research:
     needItem: true
   - name: STR_HYPER_WAVE_DECODER
     cost: 670
+    points: 25
     dependencies:
       - STR_FLOATER_NAVIGATOR
       - STR_SNAKEMAN_NAVIGATOR
@@ -4743,56 +4856,70 @@ research:
       - STR_SECTOID_NAVIGATOR
   - name: STR_MIND_PROBE
     cost: 600
+    points: 25
     needItem: true
   - name: STR_MIND_SHIELD
     cost: 360
+    points: 25
     dependencies:
       - STR_PSI_LAB
   - name: STR_NEW_FIGHTER_CRAFT
     cost: 600
+    points: 30
     dependencies:
       - STR_UFO_CONSTRUCTION
   - name: STR_NEW_FIGHTER_TRANSPORTER
     cost: 700
+    points: 30
     dependencies:
       - STR_NEW_FIGHTER_CRAFT
   - name: STR_PERSONAL_ARMOR
     cost: 180
+    points: 20
     dependencies:
       - STR_ALIEN_ALLOYS
   - name: STR_PLASMA_CANNON
     cost: 660
+    points: 25
     dependencies:
       - STR_PLASMA_CANNON_DEP1
       - STR_PLASMA_CANNON_DEP2
   - name: STR_PLASMA_DEFENSE
     cost: 620
+    points: 25
     dependencies:
       - STR_PLASMA_CANNON
   - name: STR_PLASMA_PISTOL
     cost: 600
+    points: 20
     needItem: true
   - name: STR_PLASMA_PISTOL_CLIP
     cost: 400
+    points: 5
     needItem: true
   - name: STR_PLASMA_RIFLE
     cost: 700
+    points: 25
     needItem: true
   - name: STR_PLASMA_RIFLE_CLIP
     cost: 400
+    points: 6
     needItem: true
   - name: STR_POWER_SUIT
     cost: 205
+    points: 20
     dependencies:
       - STR_ELERIUM_115
       - STR_UFO_POWER_SOURCE
       - STR_PERSONAL_ARMOR
   - name: STR_PSI_AMP
     cost: 500
+    points: 20
     dependencies:
       - STR_PSI_LAB
   - name: STR_PSI_LAB
     cost: 420
+    points: 25
     dependencies:
       - STR_ETHEREAL_COMMANDER
       - STR_ETHEREAL_ENGINEER
@@ -4804,16 +4931,20 @@ research:
       - STR_SECTOID_COMMANDER
   - name: STR_SMALL_LAUNCHER
     cost: 550
+    points: 30
     needItem: true
   - name: STR_STUN_BOMB
     cost: 180
+    points: 10
     needItem: true
   - name: STR_THE_MARTIAN_SOLUTION
     cost: 500
+    points: 60
     dependencies:
       - STR_ALIEN_ORIGINS
   - name: STR_UFO_CONSTRUCTION
     cost: 450
+    points: 30
     dependencies:
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
@@ -4821,156 +4952,407 @@ research:
       - STR_UFO_NAVIGATION
   - name: STR_UFO_NAVIGATION
     cost: 450
+    points: 30
     needItem: true
   - name: STR_UFO_POWER_SOURCE
     cost: 450
     needItem: true
   - name: STR_ULTIMATE_CRAFT
     cost: 900
+    points: 30
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
   - name: STR_ZOMBIE_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_ZOMBIE_AUTOPSY
     needItem: true
   - name: STR_CELATID_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_CELATID_AUTOPSY
     needItem: true
   - name: STR_ETHEREAL_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_ETHEREAL_AUTOPSY
     needItem: true
   - name: STR_SILACOID_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_SILACOID_AUTOPSY
     needItem: true
   - name: STR_REAPER_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_REAPER_AUTOPSY
     needItem: true
   - name: STR_SNAKEMAN_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_SNAKEMAN_AUTOPSY
     needItem: true
   - name: STR_SECTOID_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_SECTOID_AUTOPSY
     needItem: true
   - name: STR_SECTOPOD_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_SECTOPOD_AUTOPSY
     needItem: true
   - name: STR_MUTON_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_MUTON_AUTOPSY
     needItem: true
   - name: STR_FLOATER_CORPSE
     cost: 180
+    points: 50
+    lookup: STR_FLOATER_AUTOPSY
     needItem: true
   - name: STR_FLOATER_SOLDIER
     cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_FLOATER_NAVIGATOR
     cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_HYPER_WAVE_DECODER
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
   - name: STR_FLOATER_MEDIC
     cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_MEDIC
     needItem: true
+    getOneFree:
+      - STR_SNAKEMAN
+      - STR_MUTON
+      - STR_ETHEREAL
+      - STR_FLOATER
+      - STR_CHRYSSALID
+      - STR_SECTOPOD
+      - STR_CYBERDISC
+      - STR_SILACOID
+      - STR_CELATID
+      - STR_REAPER
+      - STR_SNAKEMAN_CORPSE
+      - STR_MUTON_CORPSE
+      - STR_ETHEREAL_CORPSE
+      - STR_FLOATER_CORPSE
+      - STR_CHRYSSALID_CORPSE
+      - STR_SECTOPOD_CORPSE
+      - STR_CYBERDISC_CORPSE
+      - STR_SILACOID_CORPSE
+      - STR_CELATID_CORPSE
+      - STR_REAPER_CORPSE
   - name: STR_FLOATER_LEADER
     cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_LEADER
     needItem: true
   - name: STR_FLOATER_ENGINEER
     cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_ENGINEER
     needItem: true
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
   - name: STR_FLOATER_COMMANDER
     cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    stringTemplate:
+      - STR_FLOATER
+      - STR_LIVE_COMMANDER
     needItem: true
   - name: STR_SNAKEMAN_SOLDIER
     cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_SNAKEMAN_NAVIGATOR
     cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_HYPER_WAVE_DECODER
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
   - name: STR_SNAKEMAN_MEDIC
     cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_MEDIC
     needItem: true
+    getOneFree:
+      - STR_SNAKEMAN
+      - STR_MUTON
+      - STR_ETHEREAL
+      - STR_FLOATER
+      - STR_CHRYSSALID
+      - STR_SECTOPOD
+      - STR_CYBERDISC
+      - STR_SILACOID
+      - STR_CELATID
+      - STR_REAPER
+      - STR_SNAKEMAN_CORPSE
+      - STR_MUTON_CORPSE
+      - STR_ETHEREAL_CORPSE
+      - STR_FLOATER_CORPSE
+      - STR_CHRYSSALID_CORPSE
+      - STR_SECTOPOD_CORPSE
+      - STR_CYBERDISC_CORPSE
+      - STR_SILACOID_CORPSE
+      - STR_CELATID_CORPSE
+      - STR_REAPER_CORPSE
   - name: STR_SNAKEMAN_LEADER
     cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_LEADER
     needItem: true
   - name: STR_SNAKEMAN_ENGINEER
     cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_ENGINEER
     needItem: true
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
   - name: STR_SNAKEMAN_COMMANDER
     cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    stringTemplate:
+      - STR_SNAKEMAN
+      - STR_LIVE_COMMANDER
     needItem: true
   - name: STR_MUTON_SOLDIER
     cost: 192
+    points: 50
+    lookup: STR_MUTON
+    stringTemplate:
+      - STR_MUTON
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_MUTON_NAVIGATOR
     cost: 192
+    points: 50
+    lookup: STR_MUTON
+    stringTemplate:
+      - STR_MUTON
+      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_HYPER_WAVE_DECODER
-  - name: STR_MUTON_MEDIC
-    cost: 192
-    needItem: true
-  - name: STR_MUTON_LEADER
-    cost: 192
-    needItem: true
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
   - name: STR_MUTON_ENGINEER
     cost: 192
+    points: 50
+    lookup: STR_MUTON
+    stringTemplate:
+      - STR_MUTON
+      - STR_LIVE_ENGINEER
     needItem: true
-  - name: STR_MUTON_COMMANDER
-    cost: 192
-    needItem: true
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
   - name: STR_SECTOID_SOLDIER
     cost: 192
+    points: 50
+    lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_SECTOID_NAVIGATOR
     cost: 192
+    points: 50
     needItem: true
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_NAVIGATOR
+    lookup: STR_SECTOID
     unlocks:
       - STR_HYPER_WAVE_DECODER
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
   - name: STR_SECTOID_MEDIC
     cost: 192
+    points: 50
     needItem: true
+    lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_MEDIC
+    getOneFree:
+      - STR_SNAKEMAN
+      - STR_MUTON
+      - STR_ETHEREAL
+      - STR_FLOATER
+      - STR_CHRYSSALID
+      - STR_SECTOPOD
+      - STR_CYBERDISC
+      - STR_SILACOID
+      - STR_CELATID
+      - STR_REAPER
+      - STR_SNAKEMAN_CORPSE
+      - STR_MUTON_CORPSE
+      - STR_ETHEREAL_CORPSE
+      - STR_FLOATER_CORPSE
+      - STR_CHRYSSALID_CORPSE
+      - STR_SECTOPOD_CORPSE
+      - STR_CYBERDISC_CORPSE
+      - STR_SILACOID_CORPSE
+      - STR_CELATID_CORPSE
+      - STR_REAPER_CORPSE
   - name: STR_SECTOID_LEADER
     cost: 192
+    points: 50
     needItem: true
+    lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_LEADER
     unlocks:
       - STR_PSI_LAB
   - name: STR_SECTOID_ENGINEER
     cost: 192
     needItem: true
+    lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_ENGINEER
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
   - name: STR_SECTOID_COMMANDER
     cost: 190
+    points: 50
     needItem: true
+    lookup: STR_SECTOID
+    stringTemplate:
+      - STR_SECTOID
+      - STR_LIVE_COMMANDER
     unlocks:
       - STR_PSI_LAB
   - name: STR_ETHEREAL_SOLDIER
     cost: 192
-    needItem: true
-    unlocks:
-      - STR_PSI_LAB
-  - name: STR_ETHEREAL_NAVIGATOR
-    cost: 192
-    needItem: true
-    unlocks:
-      - STR_HYPER_WAVE_DECODER
-      - STR_PSI_LAB
-  - name: STR_ETHEREAL_MEDIC
-    cost: 192
+    points: 50
+    lookup: STR_ETHEREAL
+    stringTemplate:
+      - STR_ETHEREAL
+      - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
       - STR_PSI_LAB
   - name: STR_ETHEREAL_LEADER
     cost: 192
-    needItem: true
-    unlocks:
-      - STR_PSI_LAB
-  - name: STR_ETHEREAL_ENGINEER
-    cost: 192
+    points: 50
+    lookup: STR_ETHEREAL
+    stringTemplate:
+      - STR_ETHEREAL
+      - STR_LIVE_LEADER
     needItem: true
     unlocks:
       - STR_PSI_LAB
   - name: STR_ETHEREAL_COMMANDER
     cost: 192
+    points: 50
+    lookup: STR_ETHEREAL
+    stringTemplate:
+      - STR_ETHEREAL
+      - STR_LIVE_COMMANDER
     needItem: true
     unlocks:
       - STR_PSI_LAB
@@ -4988,6 +5370,153 @@ research:
       - STR_PLASMA_RIFLE_CLIP
     unlocks:
       - STR_PLASMA_CANNON
+  - name: STR_SECTOID
+    unlocks:
+      - STR_ALIEN_ORIGINS
+    cost: 0
+    points: 50
+  - name: STR_FLOATER
+    cost: 0
+    points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_SNAKEMAN
+    cost: 0
+    points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_MUTON
+    cost: 0
+    points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_ETHEREAL
+    cost: 0
+    points: 50
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_CYBERDISC
+    cost: 0
+    points: 50
+    stringTemplate:
+      - STR_CYBERDISC
+      - STR_LIVE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_REAPER
+    cost: 170
+    points: 50
+    needItem: true
+    stringTemplate:
+      - STR_REAPER
+      - STR_LIVE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_CHRYSSALID
+    cost: 170
+    points: 50
+    stringTemplate:
+      - STR_CHRYSSALID
+      - STR_LIVE_TERRORIST
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_SILACOID
+    cost: 170
+    points: 50
+    needItem: true
+    stringTemplate:
+      - STR_SILACOID
+      - STR_LIVE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_CELATID
+    cost: 170
+    points: 50
+    stringTemplate:
+      - STR_CELATID
+      - STR_LIVE_TERRORIST
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_SECTOPOD
+    cost: 0
+    points: 50
+    stringTemplate:
+      - STR_SECTOPOD
+      - STR_LIVE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_ALIEN_RESEARCH
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_HARVEST
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_ABDUCTION
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_INFILTRATION
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_BASE
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_TERROR
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_RETALIATION
+    cost: 0
+    points: 50
+  - name: STR_ALIEN_SUPPLY
+    cost: 0
+    points: 50
+  - name: STR_SMALL_SCOUT
+    cost: 0
+    points: 50
+  - name: STR_MEDIUM_SCOUT
+    cost: 0
+    points: 50
+  - name: STR_LARGE_SCOUT
+    cost: 0
+    points: 50
+  - name: STR_HARVESTER
+    cost: 0
+    points: 50
+  - name: STR_ABDUCTOR
+    cost: 0
+    points: 50
+  - name: STR_TERROR_SHIP
+    cost: 0
+    points: 50
+  - name: STR_BATTLESHIP
+    cost: 0
+    points: 50
+  - name: STR_SUPPLY_SHIP
+    cost: 0
+    points: 50
+  - name: STR_SECTOID_AUTOPSY
+    cost: 0
+  - name: STR_SNAKEMAN_AUTOPSY
+    cost: 0
+  - name: STR_FLOATER_AUTOPSY
+    cost: 0
+  - name: STR_MUTON_AUTOPSY
+    cost: 0
+  - name: STR_ETHEREAL_AUTOPSY
+    cost: 0
+  - name: STR_CYBERDISC_AUTOPSY
+    cost: 0
+  - name: STR_CHRYSSALID_AUTOPSY
+    cost: 0
+  - name: STR_REAPER_AUTOPSY
+    cost: 0
+  - name: STR_CELATID_AUTOPSY
+    cost: 0
+  - name: STR_SILACOID_AUTOPSY
+    cost: 0
+  - name: STR_SECTOPOD_AUTOPSY
+    cost: 0
 manufacture:
   - name: STR_FUSION_BALL_LAUNCHER
     category: STR_CRAFT_WEAPON

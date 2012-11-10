@@ -84,7 +84,7 @@ void InteractiveSurface::setVisible(bool visible)
  */
 void InteractiveSurface::handle(Action *action, State *state)
 {
-	if (!_visible || _hidden)
+	if (!_visible || _hidden || action->getDetails()->button.button >= 6) // because the forward/back buttons on my mouse crash the game.
 		return;
 
 	action->setSender(this);

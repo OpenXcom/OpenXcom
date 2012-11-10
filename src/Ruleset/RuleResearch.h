@@ -38,9 +38,9 @@ namespace OpenXcom
 class RuleResearch
 {
  private:
-	std::string _name;
-	int _cost;
-	std::vector<std::string> _dependencies, _unlocks;
+	std::string _name, _lookup;
+	int _cost, _points;
+	std::vector<std::string> _dependencies, _unlocks, _getOneFree, _stringTemplate;
 	bool _needItem;
 public:
 	RuleResearch(const std::string & name);
@@ -50,6 +50,8 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Get time needed to discover this ResearchProject
 	int getCost() const;
+	/// Get points earned for discovering this ResearchProject
+	int getPoints() const;
 	/// Get the research name
 	const std::string & getName () const;
 	/// Get the research dependencies
@@ -58,6 +60,11 @@ public:
 	bool needItem() const;
 	/// Get the list of ResearchProjects unlocked by this research
 	const std::vector<std::string> & getUnlocked () const;
+	/// get the list of ResearchProjects granted at random for free by this research
+	const std::vector<std::string> & getGetOneFree() const;
+	/// what to look up on ufopedia
+	const std::string getLookup () const;
+	const std::vector<std::string> & getStringTemplate() const;
 };
 }
 

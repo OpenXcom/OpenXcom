@@ -161,6 +161,14 @@ public:
 	void removeProduction (Production * p);
 	/// Get the list of Base Production's
 	const std::vector<Production *> & getProductions () const;
+	/// Checks if this base is hyper-wave equipped.
+	bool getHyperDetection() const;
+	/// Gets the base's used psi lab space.
+	int getUsedPsiLabs() const;
+	/// Gets the base's total available psi lab space.
+	int getAvailablePsiLabs() const;
+	/// Gets the total amount of Containment Space
+	int getAvailableContainment() const;
 };
 
 }

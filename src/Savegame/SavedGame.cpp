@@ -45,6 +45,7 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "TerrorSite.h"
+#include "AlienBase.h"
 
 namespace OpenXcom
 {
@@ -118,6 +119,10 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	for (std::vector<TerrorSite*>::iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	{
+		delete *i;
+	}
+	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
 	{
 		delete *i;
 	}
@@ -265,6 +270,13 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
+
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -363,6 +375,13 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "terrorSites" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienBases" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -677,6 +696,19 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
 		if (itDiscovered != discovered.end ())
 		{
+			int check = 0;
+			std::vector<std::string> free = ruleset->getResearch(*iter)->getGetOneFree();
+			if(free.size() > 0)
+			{
+				for(std::vector<std::string>::const_iterator iter = free.begin (); iter != free.end (); ++ iter)
+				{
+					if((*itDiscovered)->getName() == *iter)
+						check++;
+				}
+				if(check == free.size())
+					continue;
+			}
+			else
 			continue;
 		}
 		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearch(research)) != baseResearchProjects.end ())
@@ -727,6 +759,8 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 */
 bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const
 {
+	if(r->getCost() == 0)
+		return false;
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	if(std::find(unlocked.begin (), unlocked.end (),
@@ -987,4 +1021,12 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
+/**
+ * Returns the list of alien bases.
+ * @return Pointer to alien base list.
+ */
+std::vector<AlienBase*> *const SavedGame::getAlienBases()
+{
+	return &_alienBases;
+}
 }

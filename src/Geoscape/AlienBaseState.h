@@ -16,38 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_RESEARCHCOMPLETESTATE
-#define OPENXCOM_RESEARCHCOMPLETESTATE
+#ifndef OPENXCOM_ALIENBASESTATE_H
+#define OPENXCOM_ALIENBASESTATE_H
 
 #include "../Engine/State.h"
+
 namespace OpenXcom
 {
-class Game;
-class Window;
+
+class Region;
 class TextButton;
+class Window;
 class Text;
-class Base;
-class RuleResearch;
+class GeoscapeState;
+class AlienBase;
 
 /**
- * Window which inform the player that a research project is finished.
- * Allow him to view information about the project(Ufopaedia).
+ * Displays info on a terror site.
  */
-class ResearchCompleteState : public State
+class AlienBaseState : public State
 {
+private:
+	Region *_region;
+	GeoscapeState *_state;
+	AlienBase *_base;
+	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
-    TextButton *_btnReport, *_btnOk;
-	const RuleResearch * _research, *_bonus;
 public:
-	/// Creates the EndResearch state.
-	ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus);
-	/// Updates the palette.
-	void init();
+	/// Creates the Ufo Detected state.
+	AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state);
+	/// Cleans up the Ufo Detected state.
+	~AlienBaseState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// Handler for clicking the Report button.
-	void btnReportClick(Action *action);
 };
+
 }
+
 #endif
