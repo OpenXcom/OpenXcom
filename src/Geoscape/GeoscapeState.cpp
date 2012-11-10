@@ -993,6 +993,8 @@ void GeoscapeState::time1Day()
 					std::string winner = possibilities.at(lottoPick);
 					bonus = _game->getRuleset()->getResearch(winner);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
+					if(bonus->getLookup() != "")
+						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
 				}
 			}
 			if(research->getLookup() == "")
