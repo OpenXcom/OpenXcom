@@ -40,9 +40,9 @@ private:
 	RuleUfo *_rules;
 	int _id, _damage;
 	std::string _direction, _altitude;
-	bool _detected;
+	bool _detected, _hyperDetected;
 	int _hoursCrashed;
-	std::string _race;
+	std::string _race, _mission;
 	bool _inBattlescape;
 	int _hit;
 
@@ -105,6 +105,14 @@ public:
 	int getHit() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
+	/// Gets the UFO's Mission.
+	std::string getMission() const;
+	/// Sets the UFO's Mission.
+	void setMission(const std::string &mission);
+	/// Gets the UFO's hyper detection status.
+	bool getHyperDetected() const;
+	/// Sets the UFO's hyper detection status.
+	void setHyperDetected(bool hyperdetected);
 };
 
 }

@@ -331,6 +331,8 @@ openxcom_SOURCES = \
 	src/Geoscape/TargetInfoState.h \
 	src/Geoscape/UfoDetectedState.cpp \
 	src/Geoscape/UfoDetectedState.h \
+	src/Geoscape/UfoHyperDetectedState.cpp \
+	src/Geoscape/UfoHyperDetectedState.h \
 	src/Geoscape/UfoLostState.cpp \
 	src/Geoscape/UfoLostState.h \
 	src/Interface/ArrowButton.cpp \

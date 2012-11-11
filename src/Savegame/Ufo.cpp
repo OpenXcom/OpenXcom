@@ -30,7 +30,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0)
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0), _hyperDetected(false), _mission("STR_ALIEN_RESEARCH")
 {
 }
 
@@ -54,6 +54,7 @@ void Ufo::load(const YAML::Node &node)
 	node["altitude"] >> _altitude;
 	node["direction"] >> _direction;
 	node["detected"] >> _detected;
+	node["hyperDetected"] >> _hyperDetected;
 	node["hoursCrashed"] >> _hoursCrashed;
 	node["race"] >> _race;
 	node["inBattlescape"] >> _inBattlescape;
@@ -79,6 +80,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "altitude" << YAML::Value << _altitude;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
 	out << YAML::Key << "detected" << YAML::Value << _detected;
+	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
 	out << YAML::Key << "hoursCrashed" << YAML::Value << _hoursCrashed;
 	out << YAML::Key << "race" << YAML::Value << _race;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
@@ -408,4 +410,40 @@ int Ufo::getVisibility() const
 	return visibility;
 }
 
+
+/**
+ * Returns the Mission of the UFO.
+ * @return Mission.
+ */
+std::string Ufo::getMission() const
+{
+	return _mission;
+}
+
+/**
+ * Changes the mission of the UFO.
+ * @param mission Mission.
+ */
+void Ufo::setMission(const std::string &mission)
+{
+	_mission = mission;
+}
+
+/**
+ * Returns whether this UFO has been detected by hyper-wave.
+ * @return Detection status.
+ */
+bool Ufo::getHyperDetected() const
+{
+	return _hyperDetected;
+}
+
+/**
+ * Changes whether this UFO has been detected by hyper-wave.
+ * @param detected Detection status.
+ */
+void Ufo::setHyperDetected(bool hyperdetected)
+{
+	_hyperDetected = hyperdetected;
+}
 }

@@ -161,6 +161,8 @@ public:
 	void removeProduction (Production * p);
 	/// Get the list of Base Production's
 	const std::vector<Production *> & getProductions () const;
+	/// Checks if this base is hyper-wave equipped.
+	bool getHyperDetection() const;
 };
 
 }

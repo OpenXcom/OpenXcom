@@ -926,4 +926,21 @@ const std::vector<Production *> & Base::getProductions () const
 	return _productions;
 }
 
+
+/**
+ * Returns whether or not this base
+ * is equipped with hyper-wave
+ * detection facilities.
+ */
+bool Base::getHyperDetection() const
+{
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isHyperwave())
+		{
+			return true;
+		}		
+	}
+	return false;
+}
 }
