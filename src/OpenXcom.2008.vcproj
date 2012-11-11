@@ -1247,6 +1247,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\AlienBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AlienBaseState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\AlienTerrorState.cpp"
 				>
 			</File>
@@ -1690,6 +1698,14 @@
 		<Filter
 			Name="Savegame"
 			>
+			<File
+				RelativePath=".\Savegame\AlienBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienBase.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
