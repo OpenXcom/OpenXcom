@@ -137,9 +137,13 @@ void MultipleTargetsState::popupTarget(Target *target)
 		else if (u != 0)
 		{
 			if(!(u->getHyperDetected()))
+			{
 				_game->pushState(new UfoDetectedState(_game, u, _state, false));
+			}
 			else
+			{
 				_game->pushState(new UfoHyperDetectedState(_game, u, _state, false));
+			}
 		}
 		else
 		{

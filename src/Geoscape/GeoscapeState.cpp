@@ -712,7 +712,9 @@ void GeoscapeState::time30Minutes()
 				{
 					detected = true;
 					if((*b)->getHyperDetection())
+					{
 						(*u)->setHyperDetected(true);
+					}
 				}
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 				{
@@ -728,9 +730,13 @@ void GeoscapeState::time30Minutes()
 			{
 				(*u)->setDetected(detected);
 				if(!(*u)->getHyperDetected())
+				{
 					popup(new UfoDetectedState(_game, (*u), this, true));
+				}
 				else
+				{
 					popup(new UfoHyperDetectedState(_game, (*u), this, true));
+				}
 			}
 		}
 		else
@@ -741,16 +747,21 @@ void GeoscapeState::time30Minutes()
 			{
 				detected = detected || (*b)->insideRadarRange(*u);
 				if((*b)->getHyperDetection())
+				{
 					(*u)->setHyperDetected(true);
+				}
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 				{
 					detected = detected || (*c)->detect(*u);
 				}
 			}
 			(*u)->setDetected(detected);
-			if (!detected && !(*u)->getFollowers()->empty())
+			if (!detected && (*u)->getHyperDetected())
 			{
 				(*u)->setHyperDetected(false);
+			}
+			if (!detected && !(*u)->getFollowers()->empty())
+			{
 				popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 			}
 		}
