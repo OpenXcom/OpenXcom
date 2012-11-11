@@ -79,6 +79,7 @@
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/City.h"
 #include "AlienTerrorState.h"
+#include "AlienBaseState.h"
 
 namespace OpenXcom
 {
@@ -505,6 +506,7 @@ void GeoscapeState::time5Seconds()
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
 				if (u != 0)
 				{
 					if (!u->isCrashed())
@@ -549,6 +551,24 @@ void GeoscapeState::time5Seconds()
 					else
 					{
 						(*j)->returnToBase();
+					}
+				}
+				else if (b != 0)
+				{
+					if (b->isDiscovered())
+					{
+						if((*j)->getNumSoldiers() > 0)
+						{
+							int texture, shade;
+							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
+							_music = false;
+							timerReset();
+							popup(new ConfirmLandingState(_game, *j, texture, shade));
+						}
+						else
+						{
+							(*j)->returnToBase();
+						}
 					}
 				}
 			}
@@ -661,11 +681,35 @@ void GeoscapeState::time30Minutes()
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 
-	// Handle craft maintenance
+	// Handle craft maintenance and alien base detection
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
+			if ((*j)->getStatus() == "STR_OUT")
+			{
+				if ((*j)->getDestination() == 0)
+				{
+					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					{
+						if ((*j)->getDistance(*b) < 1500 * (1 / 60.0) * (M_PI / 180))
+						{
+							chance = 5;
+							for (int it = 1500; it != 0; it -= 100)
+							{
+								if ((*j)->getDistance(*b) < it * (1 / 60.0) * (M_PI / 180))
+								{
+									chance += 5;
+								}
+							}
+							if(RNG::generate(1,100) <= chance)
+							{
+							(*b)->setDiscovered(true);
+							}
+						}
+					}
+				}
+			}
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
@@ -980,6 +1024,21 @@ void GeoscapeState::timerReset()
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
 	_btn5Secs->mousePress(&act, this);
+	// Handle Xcom Operatives discovering bases
+	if(_game->getSavedGame()->getAlienBases()->size())
+	{
+		bool _baseDiscovered = false;
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			int number = RNG::generate(1, 100);
+			if(!(*b)->isDiscovered() && number <= 5 && !_baseDiscovered)
+			{
+				(*b)->setDiscovered(true);
+				_baseDiscovered = true;
+				popup(new AlienBaseState(_game, *b, this));
+			}
+		}
+	}
 }
 
 /**
