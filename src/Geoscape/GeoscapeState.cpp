@@ -56,6 +56,7 @@
 #include "MonthlyReportState.h"
 #include "ProductionCompleteState.h"
 #include "UfoDetectedState.h"
+#include "UfoHyperDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "DogfightState.h"
 #include "UfoLostState.h"
@@ -704,11 +705,14 @@ void GeoscapeState::time30Minutes()
 		if (!(*u)->getDetected())
 		{
 			bool detected = false;
+			bool hyperDetected = false;
 			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 			{
 				if ((*b)->detect(*u))
 				{
 					detected = true;
+					if((*b)->getHyperDetection())
+						(*u)->setHyperDetected(true);
 				}
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 				{
@@ -723,15 +727,21 @@ void GeoscapeState::time30Minutes()
 			if (detected)
 			{
 				(*u)->setDetected(detected);
-				popup(new UfoDetectedState(_game, (*u), this, true));
+				if(!(*u)->getHyperDetected())
+					popup(new UfoDetectedState(_game, (*u), this, true));
+				else
+					popup(new UfoHyperDetectedState(_game, (*u), this, true));
 			}
 		}
 		else
 		{
 			bool detected = false;
+			bool hyperDetected = false;
 			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 			{
 				detected = detected || (*b)->insideRadarRange(*u);
+				if((*b)->getHyperDetection())
+					(*u)->setHyperDetected(true);
 				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 				{
 					detected = detected || (*c)->detect(*u);
@@ -740,6 +750,7 @@ void GeoscapeState::time30Minutes()
 			(*u)->setDetected(detected);
 			if (!detected && !(*u)->getFollowers()->empty())
 			{
+				(*u)->setHyperDetected(false);
 				popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 			}
 		}

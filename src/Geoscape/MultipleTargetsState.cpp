@@ -33,6 +33,7 @@
 #include "ConfirmDestinationState.h"
 #include "InterceptState.h"
 #include "UfoDetectedState.h"
+#include "UfoHyperDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "TargetInfoState.h"
 
@@ -135,7 +136,10 @@ void MultipleTargetsState::popupTarget(Target *target)
 		}
 		else if (u != 0)
 		{
-			_game->pushState(new UfoDetectedState(_game, u, _state, false));
+			if(!(u->getHyperDetected()))
+				_game->pushState(new UfoDetectedState(_game, u, _state, false));
+			else
+				_game->pushState(new UfoHyperDetectedState(_game, u, _state, false));
 		}
 		else
 		{
