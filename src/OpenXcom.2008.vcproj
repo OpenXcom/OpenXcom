@@ -1479,6 +1479,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\UfoHyperDetectedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoHyperDetectedState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\UfoLostState.cpp"
 				>
 			</File>
