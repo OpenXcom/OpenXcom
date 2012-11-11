@@ -35,6 +35,7 @@
 #include "../Battlescape/BriefingState.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Music.h"
@@ -329,11 +330,10 @@ void NewBattleState::btnOkClick(Action *action)
 	}
 	else if (_missionTypes[_selMission] == "STR_ALIEN_BASE_ASSAULT")
 	{
-		// should be fixed to be an alien base, not a terror site
-		TerrorSite *t = new TerrorSite();
-		t->setId(1);
-		_craft->setDestination(t);
-		bgen.setTerrorSite(t);
+		AlienBase *b = new AlienBase();
+		b->setId(1);
+		_craft->setDestination(b);
+		bgen.setAlienBase(b);
 		bgen.setCraft(_craft);
 	}
 	else
