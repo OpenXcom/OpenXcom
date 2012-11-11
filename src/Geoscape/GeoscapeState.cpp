@@ -75,6 +75,7 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/City.h"
 #include "AlienTerrorState.h"
@@ -866,6 +867,42 @@ void GeoscapeState::time1Day()
 			t->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 		popup(new AlienTerrorState(_game, city, this));
+	}
+	else if (chance == 20 && _game->getSavedGame()->getAlienBases()->size() < 9)
+	{
+		// Pick a city
+		RuleRegion* region = 0;
+		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+		do
+		{
+			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
+		}
+		while (region->getCities()->empty());
+		City *city = (*region->getCities())[RNG::generate(0, region->getCities()->size()-1)];
+		double lon;
+		double lat;
+		int tries = 0;
+		do
+		{
+			double ran = RNG::generate(-100, 100)*.001;
+			double ran2 = RNG::generate(-100, 100)*.001;
+			lon = city->getLongitude() + ran;
+			lat = city->getLatitude() + ran2;
+			tries++;
+		}
+		while(!_globe->insideLand(lon, lat) && tries < 100);
+		AlienBase *b = new AlienBase();
+		b->setLongitude(lon);
+		b->setLatitude(lat);
+		b->setSupplyTime(0);
+		b->setDiscovered(false);
+		b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
+		int race = RNG::generate(1, 2);
+		if (race == 1)
+			b->setAlienRace("STR_SECTOID");
+		else if (race == 2)
+			b->setAlienRace("STR_FLOATER");
+		_game->getSavedGame()->getAlienBases()->push_back(b);
 	}
 
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
