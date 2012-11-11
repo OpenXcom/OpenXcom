@@ -935,13 +935,13 @@ void DogfightState::move()
 			}
 			else
 			{
-				_ufo->setHoursCrashed(24 + RNG::generate(0, 72));
+				_ufo->setAltitude("STR_GROUND");
+				_ufo->setTimeOnGround(24 + RNG::generate(0, 72));
 			}
 		}
 		_timeout += 30;
 		_end = true;
 		_ufo->setSpeed(0);
-		_ufo->setAltitude("STR_GROUND");
 	}
 }
 

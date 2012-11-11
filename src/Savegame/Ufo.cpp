@@ -30,7 +30,11 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0), _hyperDetected(false), _mission("STR_ALIEN_RESEARCH")
+Ufo::Ufo(RuleUfo *rules)
+  : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH")
+  , _altitude("STR_HIGH_UC"), _detected(false), _hyperDetected(false)
+  , _mission("STR_ALIEN_RESEARCH"), _status(FLYING), _timeLeftOnGround(-1)
+  , _inBattlescape(false), _hit(0)
 {
 }
 
@@ -55,7 +59,7 @@ void Ufo::load(const YAML::Node &node)
 	node["direction"] >> _direction;
 	node["detected"] >> _detected;
 	node["hyperDetected"] >> _hyperDetected;
-	node["hoursCrashed"] >> _hoursCrashed;
+	node["timeOnGround"] >> _timeLeftOnGround;
 	node["race"] >> _race;
 	node["inBattlescape"] >> _inBattlescape;
 
@@ -65,6 +69,22 @@ void Ufo::load(const YAML::Node &node)
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);
 	_dest->setLatitude(lat);
+	if (_altitude == "STR_GROUND")
+	{
+		_status = LANDED;
+	}
+	else
+	{
+		_status = FLYING;
+	}
+	if (_damage >= _rules->getMaxDamage())
+	{
+		_status = DESTROYED;
+	}
+	else if (_damage >= _rules->getMaxDamage() / 2)
+	{
+		_status = CRASHED;
+	}
 }
 
 /**
@@ -81,7 +101,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "direction" << YAML::Value << _direction;
 	out << YAML::Key << "detected" << YAML::Value << _detected;
 	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
-	out << YAML::Key << "hoursCrashed" << YAML::Value << _hoursCrashed;
+	out << YAML::Key << "timeOnGround" << YAML::Value << _timeLeftOnGround;
 	out << YAML::Key << "race" << YAML::Value << _race;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::EndMap;
@@ -135,18 +155,23 @@ void Ufo::setId(int id)
 std::wstring Ufo::getName(Language *lang) const
 {
 	std::wstringstream name;
-	if (!isCrashed())
+	switch (_status)
 	{
-		// apparently this string is never actually used ingame??
-		//if (_altitude == "STR_GROUND")
-		//	name << lang->getString("STR_LANDING_SITE_") << _id;
-		//else
-		name << lang->getString("STR_UFO_") << _id;
+	case FLYING:
+		name << lang->getString("STR_UFO_");
+		break;
+	case LANDED:
+		name << lang->getString("STR_LANDING_SITE_");
+		break;
+	case CRASHED:
+		name << lang->getString("STR_CRASH_SITE_");
+		break;
+	case DESTROYED:
+		assert(0 && "Should never happen");
+		name << "Destroyed Ufo!";
+		break;
 	}
-	else
-	{
-		name << lang->getString("STR_CRASH_SITE_") << _id;
-	}
+	name << _id;
 	return name.str();
 }
 
@@ -170,6 +195,14 @@ void Ufo::setDamage(int damage)
 	{
 		_damage = 0;
 	}
+	if (_damage >= _rules->getMaxDamage())
+	{
+		_status = DESTROYED;
+	}
+	else if (_damage >= _rules->getMaxDamage() / 2)
+	{
+		_status = CRASHED;
+	}
 }
 
 /**
@@ -191,21 +224,25 @@ void Ufo::setDetected(bool detected)
 }
 
 /**
- * Returns the amount of hours the UFO has been crashed for.
+ * Returns the amount of remaining hours the UFO has left on the ground.
+ * After this many hours thet UFO will take off, if landed, or disappear, if
+ * crashed.
  * @return Amount of hours.
  */
-int Ufo::getHoursCrashed() const
+int Ufo::getTimeOnGround() const
 {
-	return _hoursCrashed;
+	return _timeLeftOnGround;
 }
 
 /**
- * Changes the amount of hours the UFO has been crashed for.
+ * Changes the amount of remaining hours the UFO has left on the ground.
+ * After this many hours thet UFO will take off, if landed, or disappear, if
+ * crashed.
  * @param hours Amount of hours.
  */
-void Ufo::setHoursCrashed(int hours)
+void Ufo::setTimeOnGround(int hours)
 {
-	_hoursCrashed = hours;
+	_timeLeftOnGround = hours;
 }
 
 /**
@@ -233,6 +270,14 @@ std::string Ufo::getAltitude() const
 void Ufo::setAltitude(const std::string &altitude)
 {
 	_altitude = altitude;
+	if (_altitude != "STR_GROUND")
+	{
+		_status = FLYING;
+	}
+	else
+	{
+		_status = isCrashed() ? CRASHED : LANDED;
+	}
 }
 
 /**
@@ -310,13 +355,20 @@ void Ufo::calculateSpeed()
  */
 void Ufo::think()
 {
-	if (!isCrashed())
+	switch (_status)
 	{
+	case FLYING:
 		move();
 		if (reachedDestination())
 		{
 			setSpeed(0);
 		}
+		break;
+	case LANDED:
+	case CRASHED:
+	case DESTROYED:
+		// Do nothing
+		break;
 	}
 }
 
@@ -446,4 +498,5 @@ void Ufo::setHyperDetected(bool hyperdetected)
 {
 	_hyperDetected = hyperdetected;
 }
+
 }
