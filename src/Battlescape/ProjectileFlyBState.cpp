@@ -42,11 +42,11 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _projectileImpact(0), _autoshotCounter(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _autoshotCounter(0), _projectileImpact(0), _initialized(false)
 {
 }
 
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _projectileImpact(0), _autoshotCounter(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _autoshotCounter(0), _projectileImpact(0), _initialized(false)
 {
 	;
 }
@@ -351,7 +351,7 @@ void ProjectileFlyBState::cancel()
  */
 bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 {
-	// Throwing Distance roughly = 2.5 × Strength / Weight
+	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
 	double maxDistance = 2.5 * action->actor->getStats()->strength / action->weapon->getRules()->getWeight();
 	int xdiff = action->target.x - action->actor->getPosition().x;
