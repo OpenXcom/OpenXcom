@@ -710,7 +710,7 @@ void DogfightState::move()
 		if(p->getDirection() == D_UP)
 		{
 			// Projectile reached the UFO - determine if it's been hit.
-			if((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()) && !_ufo->isCrashed())
+			if(((p->getPosition() >= _currentDist) || (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved())) && !_ufo->isCrashed())
 			{
 				int acc = RNG::generate(1, 100);
 				// UFO hit.
