@@ -657,8 +657,8 @@
     <ClCompile Include="Basescape\PlaceStartFacilityState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp">
-      <Filter>Geoscape</Filter>
+    <ClCompile Include="Battlescape\NoContainmentState.cpp">
+      <Filter>Battlescape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1322,8 +1322,8 @@
     <ClInclude Include="Basescape\PlaceStartFacilityState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\UfoHyperDetectedState.h">
-      <Filter>Geoscape</Filter>
+    <ClInclude Include="Battlescape\NoContainmentState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

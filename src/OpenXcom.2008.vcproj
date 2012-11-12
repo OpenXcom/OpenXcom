@@ -1091,6 +1091,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\NoContainmentState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\NoContainmentState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Pathfinding.cpp"
 				>
 			</File>
@@ -1476,14 +1484,6 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\UfoDetectedState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\UfoHyperDetectedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\UfoHyperDetectedState.h"
 				>
 			</File>
 			<File

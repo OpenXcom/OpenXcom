@@ -254,6 +254,7 @@
     <ClCompile Include="Battlescape\MiniMapState.cpp" />
     <ClCompile Include="Battlescape\MiniMapView.cpp" />
     <ClCompile Include="Battlescape\NextTurnState.cpp" />
+    <ClCompile Include="Battlescape\NoContainmentState.cpp" />
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
     <ClCompile Include="Battlescape\PathfindingOpenSet.cpp" />
@@ -322,7 +323,6 @@
     <ClCompile Include="Geoscape\SelectDestinationState.cpp" />
     <ClCompile Include="Geoscape\TargetInfoState.cpp" />
     <ClCompile Include="Geoscape\UfoDetectedState.cpp" />
-    <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp" />
     <ClCompile Include="Geoscape\UfoLostState.cpp" />
     <ClCompile Include="Interface\ArrowButton.cpp" />
     <ClCompile Include="Interface\Bar.cpp" />
@@ -477,6 +477,7 @@
     <ClInclude Include="Battlescape\MiniMapState.h" />
     <ClInclude Include="Battlescape\MiniMapView.h" />
     <ClInclude Include="Battlescape\NextTurnState.h" />
+    <ClInclude Include="Battlescape\NoContainmentState.h" />
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
     <ClInclude Include="Battlescape\PathfindingOpenSet.h" />
@@ -547,7 +548,6 @@
     <ClInclude Include="Geoscape\SelectDestinationState.h" />
     <ClInclude Include="Geoscape\TargetInfoState.h" />
     <ClInclude Include="Geoscape\UfoDetectedState.h" />
-    <ClInclude Include="Geoscape\UfoHyperDetectedState.h" />
     <ClInclude Include="Geoscape\UfoLostState.h" />
     <ClInclude Include="Interface\ArrowButton.h" />
     <ClInclude Include="Interface\Bar.h" />
