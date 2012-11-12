@@ -21,7 +21,7 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false)
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false), _points(0), _getOneFree(0), _lookup(""), _stringTemplate(0)
 {
 }
 
@@ -55,6 +55,22 @@ void RuleResearch::load(const YAML::Node &node)
 		{
 			i.second() >> _unlocks;
 		}
+		else if (key == "points")
+		{
+			i.second() >> _points;
+		}
+		else if (key == "getOneFree")
+		{
+			i.second() >> _getOneFree;
+		}
+		else if (key == "lookup")
+		{
+			i.second() >> _lookup;
+		}
+		else if (key == "stringTemplate")
+		{
+			i.second() >> _stringTemplate;
+		}
 	}
 }
 
@@ -70,6 +86,10 @@ void RuleResearch::save(YAML::Emitter &out) const
 	out << YAML::Key << "needItem" << YAML::Value << _needItem;
 	out << YAML::Key << "dependencies" << YAML::Value << _dependencies;
 	out << YAML::Key << "unlocks" << YAML::Value << _unlocks;
+	out << YAML::Key << "points" << YAML::Value << _points;
+	out << YAML::Key << "getOneFree" << YAML::Value << _getOneFree;
+	out << YAML::Key << "lookup" << YAML::Value << _lookup;
+	out << YAML::Key << "stringTemplate" << YAML::Value << _stringTemplate;
 	out << YAML::EndMap;
 }
 
@@ -115,6 +135,39 @@ bool RuleResearch::needItem() const
 const std::vector<std::string> & RuleResearch::getUnlocked () const
 {
 	return _unlocks;
+}
+
+/**
+ * Get the points earned for this ResearchProject
+ * @return points for this ResearchProject
+ */
+int RuleResearch::getPoints() const
+{
+	return _points;
+}
+
+/**
+ *@return The list of ResearchProject unlocked by this research project.
+ */
+const std::vector<std::string> & RuleResearch::getGetOneFree () const
+{
+	return _getOneFree;
+}
+
+/**
+ * @return what article to look up on the ufopaedia
+ */
+const std::string RuleResearch::getLookup () const
+{
+	return _lookup;
+}
+
+/**
+ * @return The String Template for concatenation.
+ */
+const std::vector<std::string> & RuleResearch::getStringTemplate() const
+{
+	return _stringTemplate;
 }
 
 }
