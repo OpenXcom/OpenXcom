@@ -120,7 +120,19 @@ void NewResearchListState::fillProjectList ()
 	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
 	for (std::vector<RuleResearch *>::iterator it = _projects.begin (); it != _projects.end (); ++it)
 	{
-		_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
+		if((*it)->getStringTemplate().size() == 0)
+		{
+			_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
+		}
+		else
+		{
+			std::wstring ss;
+			for(int st = 0; st != (*it)->getStringTemplate().size(); ++st)
+			{
+				ss += _game->getLanguage()->getString((*it)->getStringTemplate().at(st));
+			}
+			_lstResearch->addRow(1, ss.c_str());
+		}
 	}
 }
 }
