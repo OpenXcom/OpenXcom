@@ -499,6 +499,10 @@ void GeoscapeState::time5Seconds()
 					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
+				if((*j)->getPatrolTime() != 0)
+				{
+					(*j)->setPatrolTime(0);
+				}
 			}
 			(*j)->think();
 			if ((*j)->reachedDestination())
@@ -702,12 +706,14 @@ void GeoscapeState::time30Minutes()
 									chance += 5;
 								}
 							}
+							chance += (*j)->getPatrolTime()*5;
 							if(RNG::generate(1,100) <= chance)
 							{
 							(*b)->setDiscovered(true);
 							}
 						}
 					}
+					(*j)->setPatrolTime((*j)->getPatrolTime() + 1);
 				}
 			}
 			if ((*j)->getStatus() == "STR_REFUELLING")
