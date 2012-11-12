@@ -1298,17 +1298,20 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (int)value[0], mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
-		for (int j=0;j<5;++j)
+		if( (int)value[0] < mapblock->getLength() && (int)value[1] < mapblock->getWidth() && (int)value[2] < _height )
 		{
-			int connectID = (int)((signed char)value[4 + j*3]);
-			if (connectID > -1)
+			Node *node = new Node(nodeOffset + id, Position(xoff + (int)value[1], yoff + (int)value[0], mapblock->getHeight() - 1 - (int)value[2]), segment, (int)value[19], (int)value[20], (int)value[21], (int)value[22], (int)value[23]);
+			for (int j=0;j<5;++j)
 			{
-				connectID += nodeOffset;
+				int connectID = (int)((signed char)value[4 + j*3]);
+				if (connectID > -1)
+				{
+					connectID += nodeOffset;
+				}
+				node->assignNodeLink(new NodeLink(connectID, (int)value[5 + j*3], (int)value[6 + j*3]), j);
 			}
-			node->assignNodeLink(new NodeLink(connectID, (int)value[5 + j*3], (int)value[6 + j*3]), j);
+			_save->getNodes()->push_back(node);
 		}
-		_save->getNodes()->push_back(node);
 		id++;
 	}
 
