@@ -193,7 +193,7 @@ std::wstring Language::cpToWstr(const std::string& src)
 #else
 	const int MAX = 500;
 	wchar_t buffer[MAX];
-	mbstowcs(buffer, src.c_str(), sizeof(buffer));
+	mbstowcs(buffer, src.c_str(), strlen(src.c_str()));
 	std::wstring wstr(buffer);
 	return wstr;
 #endif
