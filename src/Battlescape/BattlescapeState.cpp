@@ -468,7 +468,7 @@ void BattlescapeState::mapClick(Action *action)
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _save->getScrollButton()) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= _save->getScrollButtonTimeTolerancy()))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getScrollButtonTimeTolerancy())))
 		{
 			isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
