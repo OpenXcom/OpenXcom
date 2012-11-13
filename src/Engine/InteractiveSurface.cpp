@@ -227,7 +227,7 @@ void InteractiveSurface::mouseClick(Action *action, State *state)
 	{
 		(state->*_clicks[0])(action);
 	}
-	if (_clicks[action->getDetails()->button.button] != 0)
+	if (action->getDetails()->button.button <= NUM_BUTTONS && _clicks[action->getDetails()->button.button] != 0)
 	{
 		(state->*_clicks[action->getDetails()->button.button])(action);
 	}
