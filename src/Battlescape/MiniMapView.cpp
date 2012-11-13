@@ -211,7 +211,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _battleGame->getScrollButton()) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= _battleGame->getScrollButtonTimeTolerancy()))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_battleGame->getScrollButtonTimeTolerancy())))
 		{
 			isMouseScrolled = false;
 			_camera->centerOnPosition(posBeforeMouseScrolling);
