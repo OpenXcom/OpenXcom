@@ -191,7 +191,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnEquip->onMouseClick((ActionHandler)&NewBattleState::btnEquipClick);
 
 	_btnRandom->setColor(Palette::blockOffset(8)+5);
-	_btnRandom->setText(L"Random Battle");
+	_btnRandom->setText(_game->getLanguage()->getString("STR_RANDOM_BATTLE"));
 	_btnRandom->onMouseClick((ActionHandler)&NewBattleState::btnRandomClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
