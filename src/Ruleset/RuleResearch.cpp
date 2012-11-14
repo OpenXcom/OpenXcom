@@ -21,7 +21,7 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false), _points(0), _getOneFree(0), _lookup(""), _stringTemplate(0)
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _cost(0), _needItem(false), _points(0), _getOneFree(0), _lookup(""), _stringTemplate(0), _requires(0)
 {
 }
 
@@ -71,6 +71,10 @@ void RuleResearch::load(const YAML::Node &node)
 		{
 			i.second() >> _stringTemplate;
 		}
+		else if (key == "requires")
+		{
+			i.second() >> _requires;
+		}
 	}
 }
 
@@ -90,6 +94,7 @@ void RuleResearch::save(YAML::Emitter &out) const
 	out << YAML::Key << "getOneFree" << YAML::Value << _getOneFree;
 	out << YAML::Key << "lookup" << YAML::Value << _lookup;
 	out << YAML::Key << "stringTemplate" << YAML::Value << _stringTemplate;
+	out << YAML::Key << "requires" << YAML::Value << _requires;
 	out << YAML::EndMap;
 }
 
@@ -168,6 +173,14 @@ const std::string RuleResearch::getLookup () const
 const std::vector<std::string> & RuleResearch::getStringTemplate() const
 {
 	return _stringTemplate;
+}
+
+/**
+ * @return The requirement for this research.
+ */
+const std::vector<std::string> & RuleResearch::getRequirements() const
+{
+	return _requires;
 }
 
 }

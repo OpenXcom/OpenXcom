@@ -2067,90 +2067,119 @@ items:
     clipSize: -1
     recover: false
   - type: STR_SECTOID_SOLDIER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SECTOID_ENGINEER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SECTOID_MEDIC
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SECTOID_NAVIGATOR
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SECTOID_LEADER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SECTOID_COMMANDER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_CYBERDISC
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_FLOATER_SOLDIER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_FLOATER_ENGINEER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_FLOATER_MEDIC
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_FLOATER_NAVIGATOR
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_FLOATER_LEADER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_FLOATER_COMMANDER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_REAPER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SNAKEMAN_SOLDIER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SNAKEMAN_ENGINEER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SNAKEMAN_NAVIGATOR
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SNAKEMAN_LEADER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SNAKEMAN_COMMANDER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_CHRYSSALID
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_MUTON_SOLDIER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_MUTON_NAVIGATOR
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_MUTON_ENGINEER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_ETHEREAL_SOLDIER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_ETHEREAL_LEADER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_ETHEREAL_COMMANDER
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SILACOID
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_CELATID
+    size: 0.0
     recover: true
     liveAlien: true
   - type: STR_SECTOPOD
+    size: 0.0
     recover: true
     liveAlien: true
 ufos:
@@ -4780,8 +4809,37 @@ research:
     needItem: true
   - name: STR_ALIEN_ORIGINS
     cost: 300
-    needItem: true
     points: 60
+    dependencies:
+      - STR_SECTOID_COMMANDER
+      - STR_SECTOID_LEADER
+      - STR_SECTOID_ENGINEER
+      - STR_SECTOID_MEDIC
+      - STR_SECTOID_NAVIGATOR
+      - STR_SECTOID_SOLDIER
+      - STR_CYBERDISC
+      - STR_SNAKEMAN_COMMANDER
+      - STR_SNAKEMAN_LEADER
+      - STR_SNAKEMAN_ENGINEER
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_SNAKEMAN_SOLDIER
+      - STR_CHRYSSALID
+      - STR_ETHEREAL_COMMANDER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_SOLDIER
+      - STR_SECTOPOD
+      - STR_MUTON_ENGINEER
+      - STR_MUTON_NAVIGATOR
+      - STR_MUTON_SOLDIER
+      - STR_SILACOID
+      - STR_CELATID
+      - STR_FLOATER_COMMANDER
+      - STR_FLOATER_LEADER
+      - STR_FLOATER_ENGINEER
+      - STR_FLOATER_MEDIC
+      - STR_FLOATER_NAVIGATOR
+      - STR_FLOATER_SOLDIER
+      - STR_REAPER
   - name: STR_ALIEN_REPRODUCTION
     cost: 150
     points: 30
@@ -4802,7 +4860,20 @@ research:
     cost: 600
     points: 60
     dependencies:
-      - STR_THE_MARTIAN_SOLUTION
+      - STR_CYDONIA_DEP
+  - name: STR_CYDONIA_DEP
+    cost: 0
+    points: 0
+    dependencies:
+    unlocks:
+      - STR_CYDONIA_OR_BUST
+    requires:
+      - STR_THE_MARTIAN_SOLUTION    
+    dependencies:
+      - STR_SECTOID_COMMANDER
+      - STR_SNAKEMAN_COMMANDER
+      - STR_ETHEREAL_COMMANDER
+      - STR_FLOATER_COMMANDER
   - name: STR_ELERIUM_115
     cost: 450
     points: 60
@@ -4937,6 +5008,20 @@ research:
     points: 60
     dependencies:
       - STR_ALIEN_ORIGINS
+      - STR_LEADER_PLUS
+  - name: STR_LEADER_PLUS
+    cost: 0
+    requires:
+      - STR_ALIEN_ORIGINS
+    dependencies:
+      - STR_SECTOID_COMMANDER
+      - STR_SECTOID_LEADER
+      - STR_SNAKEMAN_COMMANDER
+      - STR_SNAKEMAN_LEADER
+      - STR_ETHEREAL_COMMANDER
+      - STR_ETHEREAL_LEADER
+      - STR_FLOATER_COMMANDER
+      - STR_FLOATER_LEADER
   - name: STR_UFO_CONSTRUCTION
     cost: 450
     points: 30
@@ -5015,6 +5100,8 @@ research:
       - STR_FLOATER
       - STR_LIVE_SOLDIER
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_FLOATER_NAVIGATOR
     cost: 192
     points: 50
@@ -5024,6 +5111,7 @@ research:
       - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
+      - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
     getOneFree:
       - STR_ALIEN_RESEARCH
@@ -5042,6 +5130,8 @@ research:
       - STR_FLOATER
       - STR_LIVE_MEDIC
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     getOneFree:
       - STR_SNAKEMAN
       - STR_MUTON
@@ -5067,6 +5157,9 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
     stringTemplate:
       - STR_FLOATER
       - STR_LIVE_LEADER
@@ -5079,6 +5172,8 @@ research:
       - STR_FLOATER
       - STR_LIVE_ENGINEER
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -5096,6 +5191,10 @@ research:
       - STR_FLOATER
       - STR_LIVE_COMMANDER
     needItem: true
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_CYDONIA_DEP
+      - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_SOLDIER
     cost: 192
     points: 50
@@ -5104,6 +5203,8 @@ research:
       - STR_SNAKEMAN
       - STR_LIVE_SOLDIER
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_NAVIGATOR
     cost: 192
     points: 50
@@ -5113,6 +5214,7 @@ research:
       - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
+      - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
     getOneFree:
       - STR_ALIEN_RESEARCH
@@ -5131,6 +5233,8 @@ research:
       - STR_SNAKEMAN
       - STR_LIVE_MEDIC
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     getOneFree:
       - STR_SNAKEMAN
       - STR_MUTON
@@ -5160,6 +5264,9 @@ research:
       - STR_SNAKEMAN
       - STR_LIVE_LEADER
     needItem: true
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_ENGINEER
     cost: 192
     points: 50
@@ -5168,6 +5275,8 @@ research:
       - STR_SNAKEMAN
       - STR_LIVE_ENGINEER
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -5185,6 +5294,10 @@ research:
       - STR_SNAKEMAN
       - STR_LIVE_COMMANDER
     needItem: true
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_CYDONIA_DEP
+      - STR_ALIEN_ORIGINS
   - name: STR_MUTON_SOLDIER
     cost: 192
     points: 50
@@ -5193,6 +5306,8 @@ research:
       - STR_MUTON
       - STR_LIVE_SOLDIER
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_MUTON_NAVIGATOR
     cost: 192
     points: 50
@@ -5202,6 +5317,7 @@ research:
       - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
+      - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
     getOneFree:
       - STR_ALIEN_RESEARCH
@@ -5220,6 +5336,8 @@ research:
       - STR_MUTON
       - STR_LIVE_ENGINEER
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -5233,6 +5351,8 @@ research:
     cost: 192
     points: 50
     lookup: STR_SECTOID
+    unlocks:
+      - STR_ALIEN_ORIGINS
     stringTemplate:
       - STR_SECTOID
       - STR_LIVE_SOLDIER
@@ -5240,13 +5360,14 @@ research:
   - name: STR_SECTOID_NAVIGATOR
     cost: 192
     points: 50
+    lookup: STR_SECTOID
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+      - STR_HYPER_WAVE_DECODER
     stringTemplate:
       - STR_SECTOID
       - STR_LIVE_NAVIGATOR
-    lookup: STR_SECTOID
-    unlocks:
-      - STR_HYPER_WAVE_DECODER
     getOneFree:
       - STR_ALIEN_RESEARCH
       - STR_ALIEN_HARVEST
@@ -5260,6 +5381,8 @@ research:
     cost: 192
     points: 50
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
     stringTemplate:
       - STR_SECTOID
@@ -5289,15 +5412,19 @@ research:
     cost: 192
     points: 50
     needItem: true
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_PSI_LAB
+      - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
     stringTemplate:
       - STR_SECTOID
       - STR_LIVE_LEADER
-    unlocks:
-      - STR_PSI_LAB
   - name: STR_SECTOID_ENGINEER
     cost: 192
     needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
     stringTemplate:
       - STR_SECTOID
@@ -5316,11 +5443,14 @@ research:
     points: 50
     needItem: true
     lookup: STR_SECTOID
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_CYDONIA_DEP
+      - STR_ALIEN_ORIGINS
+      - STR_PSI_LAB
     stringTemplate:
       - STR_SECTOID
       - STR_LIVE_COMMANDER
-    unlocks:
-      - STR_PSI_LAB
   - name: STR_ETHEREAL_SOLDIER
     cost: 192
     points: 50
@@ -5330,6 +5460,7 @@ research:
       - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
+      - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_ETHEREAL_LEADER
     cost: 192
@@ -5340,6 +5471,8 @@ research:
       - STR_LIVE_LEADER
     needItem: true
     unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_ETHEREAL_COMMANDER
     cost: 192
@@ -5350,6 +5483,9 @@ research:
       - STR_LIVE_COMMANDER
     needItem: true
     unlocks:
+      - STR_LEADER_PLUS
+      - STR_CYDONIA_DEP
+      - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_PLASMA_CANNON_DEP1
     cost: 0
@@ -5366,38 +5502,32 @@ research:
     unlocks:
       - STR_PLASMA_CANNON
   - name: STR_SECTOID
-    unlocks:
-      - STR_ALIEN_ORIGINS
     cost: 0
     points: 50
+    needItem: true
   - name: STR_FLOATER
     cost: 0
     points: 50
-    unlocks:
-      - STR_ALIEN_ORIGINS
+    needItem: true
   - name: STR_SNAKEMAN
     cost: 0
     points: 50
-    unlocks:
-      - STR_ALIEN_ORIGINS
+    needItem: true
   - name: STR_MUTON
     cost: 0
     points: 50
-    unlocks:
-      - STR_ALIEN_ORIGINS
+    needItem: true
   - name: STR_ETHEREAL
     cost: 0
     points: 50
-    unlocks:
-      - STR_ALIEN_ORIGINS
+    needItem: true
   - name: STR_CYBERDISC
     cost: 0
     points: 50
+    needItem: true
     stringTemplate:
       - STR_CYBERDISC
       - STR_LIVE_TERRORIST
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_REAPER
     cost: 170
     points: 50
@@ -5445,73 +5575,100 @@ research:
   - name: STR_ALIEN_RESEARCH
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_HARVEST
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_ABDUCTION
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_INFILTRATION
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_BASE
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_TERROR
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_RETALIATION
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ALIEN_SUPPLY
     cost: 0
     points: 50
+    needItem: true
   - name: STR_SMALL_SCOUT
     cost: 0
     points: 50
+    needItem: true
   - name: STR_MEDIUM_SCOUT
     cost: 0
     points: 50
+    needItem: true
   - name: STR_LARGE_SCOUT
     cost: 0
     points: 50
+    needItem: true
   - name: STR_HARVESTER
     cost: 0
     points: 50
+    needItem: true
   - name: STR_ABDUCTOR
     cost: 0
     points: 50
+    needItem: true
   - name: STR_TERROR_SHIP
     cost: 0
     points: 50
+    needItem: true
   - name: STR_BATTLESHIP
     cost: 0
     points: 50
+    needItem: true
   - name: STR_SUPPLY_SHIP
     cost: 0
     points: 50
+    needItem: true
   - name: STR_SECTOID_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_SNAKEMAN_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_FLOATER_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_MUTON_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_ETHEREAL_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_CYBERDISC_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_REAPER_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_CELATID_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_SILACOID_AUTOPSY
     cost: 0
+    needItem: true
   - name: STR_SECTOPOD_AUTOPSY
     cost: 0
+    needItem: true
 manufacture:
   - name: STR_FUSION_BALL_LAUNCHER
     category: STR_CRAFT_WEAPON
