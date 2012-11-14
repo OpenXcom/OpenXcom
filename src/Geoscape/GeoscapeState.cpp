@@ -917,14 +917,67 @@ void GeoscapeState::time1Day()
 		for(std::vector<ResearchProject*>::const_iterator iter = finished.begin (); iter != finished.end (); ++iter)
 		{
 			(*i)->removeResearch(*iter);
+			RuleResearch * bonus = 0;
 			const RuleResearch * research = (*iter)->getRules ();
-			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			if((*iter)->getRules()->getGetOneFree().size() != 0)
+			{
+				std::vector<std::string> possibilities;
+				for(std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
+				{
+					bool newFound = true;
+					for(std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin(); discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
+					{
+						if(*f == (*discovered)->getName())
+						{
+							newFound = false;
+						}
+					}
+					if(newFound)
+					{
+						possibilities.push_back(*f);
+					}
+				}
+				if(possibilities.size() !=0)
+				{
+					int pick = RNG::generate(0, possibilities.size()-1);
+					std::string sel = possibilities.at(pick);
+					bonus = _game->getRuleset()->getResearch(sel);
+					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
+					if(bonus->getLookup() != "")
+					{
+						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
+					}
+				}
+			}
+			if(research->getLookup() == "")
+			{
+				if(!Ufopaedia::isArticleAvailable(_game, _game->getRuleset()->getUfopaediaArticle(research->getName())))
+				{
+					popup(new ResearchCompleteState(_game, research, bonus));
+				}
+				else
+				{
+					popup(new ResearchCompleteState(_game, bonus, 0));
+				}
+			}
+			else if(!Ufopaedia::isArticleAvailable(_game, _game->getRuleset()->getUfopaediaArticle(research->getLookup())))
+			{
+				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
+				popup(new ResearchCompleteState(_game, _game->getRuleset()->getResearch(research->getLookup()), bonus));
+			}
+			else
+			{
+				popup(new ResearchCompleteState(_game, bonus, 0));
+			}
+			if(!_game->getSavedGame()->isResearched(research->getName()))
+			{
+				_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			}
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
-			popup(new ResearchCompleteState (_game, research));
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			if (!newPossibleManufacture.empty())
 			{

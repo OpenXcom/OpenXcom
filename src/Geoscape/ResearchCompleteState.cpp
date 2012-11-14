@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param research Pointer to the completed research.
  */
-ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research) : State (game), _research(research)
+ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus): State (game), _research(research), _bonus(bonus)
 {
 	_screen = false;
 
@@ -94,8 +94,16 @@ void ResearchCompleteState::btnOkClick(Action *action)
 void ResearchCompleteState::btnReportClick(Action *action)
 {
 	_game->popState();
+	if(_bonus)
+	{
+		std::string bonusName = _bonus->getName();
+		Ufopaedia::openArticle(_game, bonusName);
+	}
+	if(_research)
+	{
 	std::string name (_research->getName ());
 	Ufopaedia::openArticle(_game, name);
+	}
 }
 
 }
