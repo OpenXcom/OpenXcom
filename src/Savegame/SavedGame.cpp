@@ -631,9 +631,21 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
 		}
 		for(std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
 		{
-			if((*it)->getCost() == 0)
+			if((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
 			{
 				addFinishedResearch(*it, ruleset);
+			}
+			else if((*it)->getCost() == 0)
+			{
+				int entry(0);
+				for(std::vector<std::string>::const_iterator iter = (*it)->getRequirements().begin (); iter != (*it)->getRequirements().end (); ++iter)
+				{
+					if((*it)->getRequirements().at(entry) == (*iter))
+					{
+						addFinishedResearch(*it, ruleset);
+					}
+					entry++;
+				}
 			}
 		}
 	}
@@ -685,6 +697,20 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		if (research->needItem() && base->getItems()->getItem(research->getName ()) == 0)
 		{
+			continue;
+		}
+		if (research->getRequirements().size() != 0)
+		{
+			int tally(0);
+			for(int itreq = 0; itreq != research->getRequirements().size(); ++itreq)
+			{
+				itDiscovered = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(research->getRequirements().at(itreq)));
+				if (itDiscovered != discovered.end ())
+				{
+					tally++;
+				}
+			}
+			if(tally != research->getRequirements().size())
 			continue;
 		}
 		projects.push_back (research);
