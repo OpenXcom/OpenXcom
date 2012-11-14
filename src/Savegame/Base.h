@@ -165,6 +165,8 @@ public:
 	bool getHyperDetection() const;
 	/// Gets the total amount of Containment Space
 	int getAvailableContainment() const;
+	/// Gets the total amount of used Containment Space
+	int getUsedContainment() const;
 };
 
 }

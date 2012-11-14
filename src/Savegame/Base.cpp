@@ -962,4 +962,32 @@ int Base::getAvailableContainment() const
 	return total;
 }
 
+/**
+ * Returns the total amount of used 
+ * Containment Space in the base.
+ * @return Containment Lab space.
+ */
+int Base::getUsedContainment() const
+{
+	int total = 0;
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
+	{
+		if (_rule->getItem((i)->first)->getAlien())
+		{
+			total += (i)->second;
+		}
+	}
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_ITEM)
+		{
+			if(_rule->getItem((*i)->getItems())->getAlien())
+			{
+				total += (*i)->getQuantity();
+			}
+		}
+	}	
+	return total;
+}
+
 }
