@@ -50,6 +50,8 @@ public:
 	~InventoryState();
 	/// Updates the soldier info.
 	void init();
+	/// Saves the soldiers' equipment-layout.
+	void saveEquipmentLayout();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Previous button.

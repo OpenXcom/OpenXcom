@@ -191,8 +191,10 @@ void Camera::scroll()
 /**
  * Handle scrolling with given deviation.
  */
-void Camera::scrollXY(int x, int y, bool redraw)
+bool Camera::scrollXY(int x, int y, bool redraw)
 {
+	bool result = true;
+
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
@@ -203,8 +205,10 @@ void Camera::scrollXY(int x, int y, bool redraw)
 	{
 		_mapOffset.x -= x;
 		_mapOffset.y -= y;
+		result = false;
 	}
 	if (redraw) _map->draw();
+	return result;
 }
 
 /**

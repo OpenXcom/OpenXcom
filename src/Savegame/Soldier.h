@@ -36,6 +36,7 @@ class Ruleset;
 class RuleSoldier;
 class Armor;
 class Language;
+class EquipmentLayoutItem;
 
 /**
  * Represents a soldier hired by the player.
@@ -56,6 +57,7 @@ private:
 	int _missions, _kills, _recovery;
 	bool _recentlyPromoted;
 	Armor *_armor;
+	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
@@ -115,6 +117,8 @@ public:
 	void setWoundRecovery(int recovery);
 	/// Heals wound recoveries.
 	void heal();
+	/// Gets the soldier's equipment-layout.
+	std::vector<EquipmentLayoutItem*> *const getEquipmentLayout();
 };
 
 }

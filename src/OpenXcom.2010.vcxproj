@@ -294,6 +294,7 @@
     <ClCompile Include="Engine\SurfaceSet.cpp" />
     <ClCompile Include="Engine\Timer.cpp" />
     <ClCompile Include="Geoscape\AbandonGameState.cpp" />
+    <ClCompile Include="Geoscape\AlienBaseState.cpp" />
     <ClCompile Include="Geoscape\AlienTerrorState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
@@ -375,6 +376,7 @@
     <ClCompile Include="Ruleset\RuleUfo.cpp" />
     <ClCompile Include="Ruleset\RuleTerrain.cpp" />
     <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
+    <ClCompile Include="Savegame\AlienBase.cpp" />
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
@@ -383,6 +385,7 @@
     <ClCompile Include="Savegame\Craft.cpp" />
     <ClCompile Include="Savegame\CraftWeapon.cpp" />
     <ClCompile Include="Savegame\CraftWeaponProjectile.cpp" />
+    <ClCompile Include="Savegame\EquipmentLayoutItem.cpp" />
     <ClCompile Include="Savegame\GameTime.cpp" />
     <ClCompile Include="Savegame\ItemContainer.cpp" />
     <ClCompile Include="Savegame\MovingTarget.cpp" />
@@ -520,6 +523,7 @@
     <ClInclude Include="Engine\SurfaceSet.h" />
     <ClInclude Include="Engine\Timer.h" />
     <ClInclude Include="Geoscape\AbandonGameState.h" />
+    <ClInclude Include="Geoscape\AlienBaseState.h" />
     <ClInclude Include="Geoscape\AlienTerrorState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
@@ -601,6 +605,7 @@
     <ClInclude Include="Ruleset\RuleUfo.h" />
     <ClInclude Include="Ruleset\RuleTerrain.h" />
     <ClInclude Include="Ruleset\SoldierNamePool.h" />
+    <ClInclude Include="Savegame\AlienBase.h" />
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
@@ -609,6 +614,7 @@
     <ClInclude Include="Savegame\Craft.h" />
     <ClInclude Include="Savegame\CraftWeapon.h" />
     <ClInclude Include="Savegame\CraftWeaponProjectile.h" />
+    <ClInclude Include="Savegame\EquipmentLayoutItem.h" />
     <ClInclude Include="Savegame\GameTime.h" />
     <ClInclude Include="Savegame\ItemContainer.h" />
     <ClInclude Include="Savegame\MovingTarget.h" />

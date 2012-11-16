@@ -275,6 +275,8 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
+	src/Geoscape/AlienBaseState.cpp \
+	src/Geoscape/AlienBaseState.h \
 	src/Geoscape/AlienTerrorState.cpp \
 	src/Geoscape/AlienTerrorState.h \
 	src/Geoscape/BaseNameState.cpp \
@@ -436,6 +438,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
+	src/Savegame/AlienBase.cpp \
+	src/Savegame/AlienBase.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -452,6 +456,8 @@ openxcom_SOURCES = \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/CraftWeaponProjectile.cpp \
 	src/Savegame/CraftWeaponProkectile.h \
+	src/Savegame/EquipmentLayoutItem.cpp \
+	src/Savegame/EquipmentLayoutItem.h \
 	src/Savegame/GameTime.cpp \
 	src/Savegame/GameTime.h \
 	src/Savegame/ItemContainer.cpp \

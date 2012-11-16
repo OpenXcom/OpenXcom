@@ -72,7 +72,7 @@ private:
 	bool _aborted;
 	int _itemId;
 	Uint8 _scrollButton;  // this is a cache for Options::getString("battleScrollButton")
-	int _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
+	bool _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
 	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
 	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
 public:
@@ -171,7 +171,7 @@ public:
 	/// get ScrollButton
 	Uint8 getScrollButton() const;
 	/// get ScrollButtonInvertMode
-	int getScrollButtonInvertMode() const;
+	bool getScrollButtonInvertMode() const;
 	/// get ScrollButtonTimeTolerancy
 	int getScrollButtonTimeTolerancy() const;
 	/// get ScrollButtonPixelTolerancy
