@@ -705,7 +705,6 @@ void GeoscapeState::time30Minutes()
 		if (!(*u)->getDetected())
 		{
 			bool detected = false;
-			bool hyperDetected = false;
 			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 			{
 				if ((*b)->detect(*u))
@@ -742,7 +741,6 @@ void GeoscapeState::time30Minutes()
 		else
 		{
 			bool detected = false;
-			bool hyperDetected = false;
 			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 			{
 				detected = detected || (*b)->insideRadarRange(*u);

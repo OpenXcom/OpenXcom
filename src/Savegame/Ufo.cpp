@@ -30,7 +30,7 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hoursCrashed(-1), _inBattlescape(false), _hit(0), _hyperDetected(false), _mission("STR_ALIEN_RESEARCH")
+Ufo::Ufo(RuleUfo *rules) : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH"), _altitude("STR_HIGH_UC"), _detected(false), _hyperDetected(false), _hoursCrashed(-1), _mission("STR_ALIEN_RESEARCH"), _inBattlescape(false), _hit(0)
 {
 }
 

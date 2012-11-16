@@ -169,10 +169,12 @@ void AggroBAIState::think(BattleAction *action)
 		
 		// we're using melee, so CHAAAAAAAARGE!!!!!
 		if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
+		{
 			if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 1)
 				takeCover = true;
 			else
 				takeCover = false;
+		}
 		//if distance ==1 attack instead
 		if (!takeCover)
 		{
@@ -250,8 +252,6 @@ void AggroBAIState::think(BattleAction *action)
 			// unless we use melee, in which case, try to get within one tile of our target asap.
 			action->type = BA_WALK;
 			int tries = 0;
-			int i = -1;
-			int j = -1;
 			bool coverFound = false;
 			if(action->actor->getMainHandWeapon() && action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE )
 			{

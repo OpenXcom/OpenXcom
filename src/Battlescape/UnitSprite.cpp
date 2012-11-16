@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0), _unitSurface(0), _itemSurface(0), _part(0), _animationFrame(0), _itema(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _item(0), _itema(0), _unitSurface(0), _itemSurface(0), _part(0), _animationFrame(0)
 {
 
 
@@ -615,7 +615,6 @@ void UnitSprite::drawRoutine4()
 
 	Surface *s = 0, *item = 0, *itema = 0;
 	const int stand = 0, walk = 8, die = 72;
-	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0}; // bobbing up and down
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
 	const int offX2[8] = { -8, 3, 5, 12, 6, -1, -5, -13 }; // for the weapons
@@ -862,7 +861,7 @@ void UnitSprite::drawRoutine6()
 void UnitSprite::drawRoutine7()
 {
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *item = 0, *itema = 0;
+	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0;
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 224;
 	const int larmStand = 0, rarmStand = 8;
