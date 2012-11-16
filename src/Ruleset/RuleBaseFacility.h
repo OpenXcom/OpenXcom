@@ -55,7 +55,7 @@ public:
 	/// Gets the facility's type.
 	std::string getType() const;
 	/// Gets the facility's requirements.
-	std::vector<std::string> getRequirements() const;
+	const std::vector<std::string> &getRequirements() const;
 	/// Gets the facility's shape sprite.
 	int getSpriteShape() const;
 	/// Gets the facility's content sprite.
