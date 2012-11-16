@@ -41,6 +41,7 @@ class ResearchProject;
 class Soldier;
 class RuleManufacture;
 class TerrorSite;
+class AlienBase;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -67,6 +68,7 @@ private:
 	std::vector<Ufo*> _ufos;
 	std::vector<Waypoint*> _waypoints;
 	std::vector<TerrorSite*> _terrorSites;
+	std::vector<AlienBase*> _alienBases;
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	bool _debug;
@@ -155,6 +157,8 @@ public:
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
+	///  Returns the list of alien bases.
+	std::vector<AlienBase*> *const getAlienBases();
 	/// Sets debug mode.
 	void setDebugMode();
 	/// Gets debug mode.

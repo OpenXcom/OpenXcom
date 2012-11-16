@@ -269,6 +269,8 @@ set ( geoscape_src
   Geoscape/ResearchCompleteState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
+  Geoscape/AlienBaseState.h
+  Geoscape/AlienBaseState.cpp
   Geoscape/AlienTerrorState.h
   Geoscape/AlienTerrorState.cpp
   Geoscape/NewPossibleManufactureState.h
@@ -384,6 +386,8 @@ set ( ruleset_src
 )
 
 set ( savegame_src
+  Savegame/AlienBase.h
+  Savegame/AlienBase.cpp
   Savegame/BattleItem.h
   Savegame/BattleItem.cpp
   Savegame/Ufo.cpp

@@ -54,6 +54,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 #include "PatrolBAIState.h"
 
 namespace OpenXcom
@@ -1380,4 +1381,13 @@ void BattlescapeGenerator::deployCivilians(int max)
 	}
 }
 
+/**
+ * Sets the alien base involved in the battle.
+ * @param base Pointer to alien base.
+ */
+void BattlescapeGenerator::setAlienBase(AlienBase *base)
+{
+	_alienBase = base;
+	_alienBase->setInBattlescape(true);
+}
 }
