@@ -52,8 +52,7 @@ SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles()
 	else if ("MMB" == temp) _scrollButton = SDL_BUTTON_MIDDLE;
 	else _scrollButton = -1;
 	temp = Options::getString("battleScrollButtonInvertMode");
-	if ("Normal" == temp) _scrollButtonInvertMode = 1;
-	else _scrollButtonInvertMode = -1;
+	_scrollButtonInvertMode = ("Normal" != temp);
 	_scrollButtonTimeTolerancy = Options::getInt("battleScrollButtonTimeTolerancy");
 	_scrollButtonPixelTolerancy = Options::getInt("battleScrollButtonPixelTolerancy");
 }
@@ -1145,7 +1144,7 @@ Uint8 SavedBattleGame::getScrollButton() const
  * Gets the ScrollButton InvertMode.
  * @return ScrollButton InvertMode.
  */
-int SavedBattleGame::getScrollButtonInvertMode() const
+bool SavedBattleGame::getScrollButtonInvertMode() const
 {
 	return _scrollButtonInvertMode;
 }
