@@ -46,7 +46,7 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage;
+	int _id, _fuel, _damage, _patrolTime;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
@@ -148,6 +148,10 @@ public:
 	int getSpaceUsed() const;
 	/// Gets the craft's vehicles of a certain type.
 	int getVehicleCount(const std::string &vehicle) const;
+	/// Gets how long this craft has been patrolling
+	int getPatrolTime() const;
+	/// Sets how long this craft has been patrolling
+	void setPatrolTime(int time);
 };
 
 }

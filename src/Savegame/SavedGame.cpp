@@ -45,6 +45,7 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "TerrorSite.h"
+#include "AlienBase.h"
 
 namespace OpenXcom
 {
@@ -119,6 +120,10 @@ SavedGame::~SavedGame()
 	}
 	for (std::vector<TerrorSite*>::iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
 	{
+		delete *i;
+	}
+	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+ 	{
 		delete *i;
 	}
 	delete _battleGame;
@@ -265,6 +270,12 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -363,6 +374,13 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "terrorSites" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienBases" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -968,6 +986,15 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 			}
 		}
 	}
+}
+
+/**
+  * Returns the list of alien bases.
+  * @return Pointer to alien base list.
+  */
+std::vector<AlienBase*> *const SavedGame::getAlienBases()
+{
+	return &_alienBases;
 }
 
 /**
