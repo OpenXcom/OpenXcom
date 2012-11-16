@@ -136,6 +136,10 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 			set = true;
 		}
 	}
+	if(!set)
+	{
+		_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString("STR_UNKNOWN").c_str());
+	}
 	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 }
 
