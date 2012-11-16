@@ -215,6 +215,8 @@ set ( geoscape_src
   Geoscape/GeoscapeCraftState.h
   Geoscape/UfoDetectedState.h
   Geoscape/UfoDetectedState.cpp
+  Geoscape/UfoHyperDetectedState.h
+  Geoscape/UfoHyperDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
   Geoscape/Polyline.h
