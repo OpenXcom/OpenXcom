@@ -122,7 +122,7 @@ namespace OpenXcom
 	void Ufopaedia::openArticle(Game *game, ArticleDefinition *article)
 	{
 		_current_index = getArticleIndex(game, article->id);
-		if (_current_index != -1)
+		if (_current_index != (size_t) -1)
 		{
 			game->pushState(createArticleState(game, article));
 		}
@@ -137,7 +137,7 @@ namespace OpenXcom
 	void Ufopaedia::openArticle(Game *game, std::string &article_id)
 	{
 		_current_index = getArticleIndex(game, article_id);
-		if (_current_index != -1)
+		if (_current_index != (size_t) -1)
 		{
 			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(article_id);
 			game->pushState(createArticleState(game, article));

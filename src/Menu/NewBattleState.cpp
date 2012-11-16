@@ -39,6 +39,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Music.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Action.h"
 #include "../Basescape/CraftInfoState.h"
 
@@ -49,7 +50,7 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
+NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -66,7 +67,8 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnDifficulty = new TextButton(100, 20, 5, 90);
 	_btnDarkness = new TextButton(100, 20, 110, 90);
 	_btnCraft = new TextButton(100, 20, 215, 90);
-	_btnEquip = new TextButton(148, 16, 86, 154);
+	_btnEquip = new TextButton(148, 16, 8, 154);
+	_btnRandom = new TextButton(148, 16, 164, 154);
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 
@@ -85,6 +87,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	add(_btnDarkness);
 	add(_btnCraft);
 	add(_btnEquip);
+	add(_btnRandom);
 	add(_btnOk);
 	add(_btnCancel);
 
@@ -187,6 +190,10 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_btnEquip->setColor(Palette::blockOffset(8)+5);
 	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIP_CRAFT"));
 	_btnEquip->onMouseClick((ActionHandler)&NewBattleState::btnEquipClick);
+
+	_btnRandom->setColor(Palette::blockOffset(8)+5);
+	_btnRandom->setText(_game->getLanguage()->getString("STR_RANDOM_BATTLE"));
+	_btnRandom->onMouseClick((ActionHandler)&NewBattleState::btnRandomClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -358,7 +365,8 @@ void NewBattleState::btnOkClick(Action *action)
 	ss >> std::dec >> shade;
 	bgen.setWorldShade(shade);
 	bgen.setAlienRace(_alienRaces[_selAlien]);
-	bgen.setAlienItemlevel(0);
+    bgen.setAlienItemlevel(_alienEquipLevel);
+
 	bgen.run();
 	//_game->pushState(new BattlescapeState(_game));
 	_game->pushState(new BriefingState(_game, _craft));
@@ -373,6 +381,111 @@ void NewBattleState::btnCancelClick(Action *action)
 {
 	_game->setSavedGame(0);
 	_game->popState();
+}
+
+/**
+ * Randomize the state
+ * @param action Pointer to an action.
+ */
+void NewBattleState::btnRandomClick(Action *action)
+{
+	_selMission = RNG::generate(0,_missionTypes.size()-1) ;
+	_selAlien   = RNG::generate(0,1) ;
+	_selTerrain = RNG::generate(0,5) ;
+	_selCraft   = RNG::generate(0,_crafts.size()-1) ;
+	_selDifficulty = RNG::generate(0,4) ;
+	_selDarkness = RNG::generate(0,5) ;
+
+	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
+	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
+	
+	
+	/// 0-2, 3 is out of range + triggers crash
+        _alienEquipLevel = RNG::generate(0,2);
+
+	Ruleset *rule = _game->getRuleset();
+	SavedGame *save = new SavedGame();
+	Base *base = new Base(rule);
+	save->getBases()->push_back(base);
+	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
+
+	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
+
+	base->getCrafts()->push_back(_craft);
+
+	// Generate soldiers
+	for (int i = 0; i < 30; ++i)
+	{
+		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), rule->getPools(), save->getId("STR_SOLDIER"));
+        
+        for (int n = 0; n < 5; ++n) 
+        {
+            if (RNG::generate(0, 100) < 70)
+                break;
+            soldier->promoteRank();
+            
+            UnitStats* stats = soldier->getCurrentStats();
+            stats->tu        += RNG::generate(0, 5);
+            stats->stamina   += RNG::generate(0, 5);
+            stats->health    += RNG::generate(0, 5);
+            stats->bravery   += 0; /// Later
+            stats->reactions += RNG::generate(0, 5);
+            stats->firing    += RNG::generate(0, 5);
+            stats->throwing  += RNG::generate(0, 5);
+            stats->strength  += RNG::generate(0, 5);
+            stats->psiStrength += RNG::generate(0, 5);
+            stats->melee     += RNG::generate(0, 5);
+            stats->psiSkill  += 0;
+        }
+
+		base->getSoldiers()->push_back(soldier);
+		if (i < 8)
+			soldier->setCraft(_craft);
+	}
+
+	// Add research
+	std::vector<std::string> research = rule->getResearchList();
+	for (std::vector<std::string>::iterator i = research.begin(); i != research.end(); ++i)
+	{
+        if ((RNG::generate(0, 5) > 2))
+            save->addFinishedResearch(rule->getResearch(*i));
+	}
+
+	// Generate (usable) items
+	std::vector<std::string> items = rule->getItemsList();
+	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	{
+		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		if (!save->isResearched(rule->getRequirements()))
+			continue;
+		for (std::vector<std::string>::iterator j = rule->getCompatibleAmmo()->begin(); j != rule->getCompatibleAmmo()->end(); ++j)
+		{
+        	RuleItem *ammo = _game->getRuleset()->getItem(*i);
+        	if (!save->isResearched(ammo->getRequirements()))
+				continue;
+        }
+
+        if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+		{
+            size_t num_items = RNG::generate(0, 14) ; 
+            if (num_items > 0) 
+            {
+                base->getItems()->addItem(*i, num_items);
+                if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
+                {
+                    _craft->getItems()->addItem(*i);
+                }
+            }
+		}
+	}
+
+
+
+	_game->setSavedGame(save);
 }
 
 /**
