@@ -39,7 +39,7 @@ namespace OpenXcom
 	class ArticleStateBaseFacility : public ArticleState
 	{
 	public:
-		ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *article_defs);
+		ArticleStateBaseFacility(Game *game, ArticleDefinitionBaseFacility *article_defs, int palSwitch);
 		virtual ~ArticleStateBaseFacility();
 
 	protected:

@@ -18,6 +18,7 @@
  */
 
 #include "Ufopaedia.h"
+#include <sstream>
 #include "ArticleState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Surface.h"
@@ -34,8 +35,8 @@ namespace OpenXcom
 	 * @param game Pointer to current game.
 	 * @param article_id The article id of this article state instance.
 	 */
-	ArticleState::ArticleState(Game *game, std::string article_id) :
-		State(game), _id(article_id)
+	ArticleState::ArticleState(Game *game, std::string article_id, int palSwitch) :
+		State(game), _id(article_id), _palSwitch(palSwitch)
 	{
 		// init background and navigation elements
 		_bg = new Surface(320, 200, 0, 0);
@@ -75,7 +76,9 @@ namespace OpenXcom
 	void ArticleState::btnOkClick(Action *action)
 	{
 		_game->popState();
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+		std::stringstream ss;
+		ss << "PALETTES.DAT_" << _palSwitch;
+		_game->setPalette(_game->getResourcePack()->getPalette(ss.str())->getColors());
 	}
 
 	/**
