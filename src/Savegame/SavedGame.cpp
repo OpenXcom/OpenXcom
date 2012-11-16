@@ -687,7 +687,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
-		if (itDiscovered != discovered.end ())
+		if (itDiscovered != discovered.end () && research->getStringTemplate().size() == 0)
 		{
 			continue;
 		}

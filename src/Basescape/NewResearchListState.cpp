@@ -31,6 +31,7 @@
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
 #include "ResearchInfoState.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -99,6 +100,11 @@ void NewResearchListState::init()
 void NewResearchListState::onSelectProject(Action *action)
 {
 	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
+	RuleResearch *_proj = _projects[_lstResearch->getSelectedRow()];
+	if((_proj)->needItem())
+	{
+		_base->getItems()->removeItem(_proj->getName(), 1);
+	}
 }
 
 /**

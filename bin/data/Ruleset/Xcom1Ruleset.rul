@@ -5092,6 +5092,16 @@ research:
     points: 50
     lookup: STR_FLOATER_AUTOPSY
     needItem: true
+  - name: STR_CYBERDISC_CORPSE
+    cost: 180
+    points: 50
+    lookup: STR_CYBERDISC_AUTOPSY
+    needItem: true
+  - name: STR_CHRYSSALID_CORPSE
+    cost: 180
+    points: 50
+    lookup: STR_CHRYSSALID_AUTOPSY
+    needItem: true
   - name: STR_FLOATER_SOLDIER
     cost: 192
     points: 50
@@ -5133,16 +5143,17 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
+      - STR_SECTOID
       - STR_SNAKEMAN
       - STR_MUTON
       - STR_ETHEREAL
-      - STR_FLOATER
       - STR_CHRYSSALID
       - STR_SECTOPOD
       - STR_CYBERDISC
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
+      - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
       - STR_MUTON_CORPSE
       - STR_ETHEREAL_CORPSE
@@ -5236,7 +5247,7 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
-      - STR_SNAKEMAN
+      - STR_SECTOID
       - STR_MUTON
       - STR_ETHEREAL
       - STR_FLOATER
@@ -5246,6 +5257,7 @@ research:
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
+      - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
       - STR_MUTON_CORPSE
       - STR_ETHEREAL_CORPSE
@@ -5398,6 +5410,7 @@ research:
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
+      - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
       - STR_MUTON_CORPSE
       - STR_ETHEREAL_CORPSE
@@ -5570,6 +5583,7 @@ research:
     stringTemplate:
       - STR_SECTOPOD
       - STR_LIVE_TERRORIST
+    needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_ALIEN_RESEARCH
@@ -6541,7 +6555,7 @@ ufopaedia:
     section: STR_ALIEN_LIFE_FORMS
     requires:
       - STR_CHRYSSALID
-    image_id: UP012.SPK
+    image_id: UP014.SPK
     text: STR_CHRYSSALID_UFOPEDIA
     text_width: 158
   - id: STR_CHRYSSALID_AUTOPSY
@@ -6549,7 +6563,7 @@ ufopaedia:
     section: STR_ALIEN_LIFE_FORMS
     requires:
       - STR_CHRYSSALID_CORPSE
-    image_id: UP013.SPK
+    image_id: UP015.SPK
     text: STR_CHRYSSALID_AUTOPSY_UFOPEDIA
     text_width: 158
   - id: STR_REAPER

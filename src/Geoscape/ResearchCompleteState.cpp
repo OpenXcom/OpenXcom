@@ -94,15 +94,23 @@ void ResearchCompleteState::btnOkClick(Action *action)
 void ResearchCompleteState::btnReportClick(Action *action)
 {
 	_game->popState();
+	std::string name;
+	std::string bonusName;
 	if(_bonus)
 	{
-		std::string bonusName = _bonus->getName();
+		if (_bonus->getLookup() == "")
+			bonusName = _bonus->getName();
+		else
+			bonusName = _bonus->getLookup();
 		Ufopaedia::openArticle(_game, bonusName);
 	}
 	if(_research)
 	{
-	std::string name (_research->getName ());
-	Ufopaedia::openArticle(_game, name);
+		if (_research->getLookup() == "")
+			name = _research->getName ();
+		else
+			name = _research->getLookup();
+		Ufopaedia::openArticle(_game, name);
 	}
 }
 

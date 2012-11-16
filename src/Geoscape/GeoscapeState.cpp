@@ -949,30 +949,19 @@ void GeoscapeState::time1Day()
 					}
 				}
 			}
-			if(research->getLookup() == "")
-			{
-				if(!Ufopaedia::isArticleAvailable(_game, _game->getRuleset()->getUfopaediaArticle(research->getName())))
-				{
-					popup(new ResearchCompleteState(_game, research, bonus));
-				}
-				else
-				{
-					popup(new ResearchCompleteState(_game, bonus, 0));
-				}
-			}
-			else if(!Ufopaedia::isArticleAvailable(_game, _game->getRuleset()->getUfopaediaArticle(research->getLookup())))
-			{
-				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
-				popup(new ResearchCompleteState(_game, _game->getRuleset()->getResearch(research->getLookup()), bonus));
-			}
-			else
-			{
-				popup(new ResearchCompleteState(_game, bonus, 0));
-			}
 			if(!_game->getSavedGame()->isResearched(research->getName()))
 			{
 				_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+				if(research->getLookup() != "")
+				{
+					_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
+				}
 			}
+			else
+			{
+				research = 0;
+			}
+			popup(new ResearchCompleteState(_game, research, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
