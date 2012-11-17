@@ -858,7 +858,7 @@ void GeoscapeState::time10Minutes()
 void GeoscapeState::time30Minutes()
 {
 	// Spawn UFOs
-	std::vector<std::string> ufos = _game->getRuleset()->getUfosList();
+	const std::vector<std::string> &ufos = _game->getRuleset()->getUfosList();
 	int chance = RNG::generate(1, 100);
 	if (chance <= 40)
 	{
@@ -1164,7 +1164,7 @@ void GeoscapeState::time1Day()
 	{
 		// Pick a city
 		RuleRegion* region = 0;
-		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+		const std::vector<std::string> &regions = _game->getRuleset()->getRegionsList();
 		do
 		{
 			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
@@ -1204,7 +1204,7 @@ void GeoscapeState::time1Day()
 	{
 		// Pick a city
 		RuleRegion* region = 0;
-		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+		const std::vector<std::string> &regions = _game->getRuleset()->getRegionsList();
 		do
 		{
 			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);

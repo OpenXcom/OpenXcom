@@ -747,7 +747,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 */
 void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const
 {
-	const std::vector<std::string> items (ruleset->getManufactureList ());
+	const std::vector<std::string> &items = ruleset->getManufactureList ();
 	const std::vector<Production *> baseProductions (base->getProductions ());
 
 	for(std::vector<std::string>::const_iterator iter = items.begin ();
@@ -856,11 +856,11 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 */
 void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
 {
-	std::vector<std::string> mans = ruleset->getManufactureList();
+	const std::vector<std::string> &mans = ruleset->getManufactureList();
 	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
-		std::vector<std::string> reqs = m->getRequirements();
+		const std::vector<std::string> &reqs = m->getRequirements();
 		if(isResearched(m->getRequirements()) && std::find(reqs.begin(), reqs.end(), research->getName()) != reqs.end())
 		{
 			dependables.push_back(m);
