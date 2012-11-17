@@ -55,7 +55,7 @@ private:
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills, _recovery;
-	bool _recentlyPromoted;
+	bool _recentlyPromoted, _psiTraining;
 	Armor *_armor;
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 public:
@@ -119,6 +119,12 @@ public:
 	void heal();
 	/// Gets the soldier's equipment-layout.
 	std::vector<EquipmentLayoutItem*> *const getEquipmentLayout();
+	/// Trains a soldier's psychic stats
+	void trainPsi();
+	/// Returns whether the unit is in psi training or not
+	bool isInPsiTraining();
+	/// set the psi training status
+	void setPsiTraining();
 };
 
 }
