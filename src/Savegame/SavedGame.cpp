@@ -637,7 +637,7 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
  * Add a ResearchProject to the list of already discovered ResearchProject
  * @param r The newly found ResearchProject
 */
-void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
+void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
 	if(itDiscovered == _discovered.end())
@@ -688,7 +688,7 @@ const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() con
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const
+void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	std::vector<std::string> researchProjects = ruleset->getResearchList();
@@ -745,7 +745,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const
+void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<std::string> &items = ruleset->getManufactureList ();
 	const std::vector<Production *> baseProductions (base->getProductions ());
@@ -773,7 +773,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
    * @param unlocked the list of currently unlocked RuleResearch
    * @return true if the RuleResearch can be researched
 */
-bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const
+bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
@@ -802,7 +802,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
 	for(std::vector<const RuleResearch *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
@@ -824,7 +824,7 @@ void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	std::vector<RuleResearch *> possibleProjects;
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
@@ -854,7 +854,7 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<std::string> &mans = ruleset->getManufactureList();
 	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)

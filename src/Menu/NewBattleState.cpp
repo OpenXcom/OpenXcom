@@ -266,7 +266,7 @@ void NewBattleState::init()
  */
 void NewBattleState::initSave()
 {
-	Ruleset *rule = _game->getRuleset();
+	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
 	save->getBases()->push_back(base);
@@ -407,7 +407,7 @@ void NewBattleState::btnRandomClick(Action *action)
 	/// 0-2, 3 is out of range + triggers crash
         _alienEquipLevel = RNG::generate(0,2);
 
-	Ruleset *rule = _game->getRuleset();
+	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
 	save->getBases()->push_back(base);

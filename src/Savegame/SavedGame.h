@@ -74,8 +74,8 @@ private:
 	bool _debug;
 
 	/// Check whether a ResearchProject can be researched
-	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
-	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const;
+	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
 	/// Creates a new saved game.
 	SavedGame();
@@ -136,17 +136,17 @@ public:
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject
-	void addFinishedResearch (const RuleResearch * r, Ruleset * ruleset = NULL);
+	void addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset = NULL);
 	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearch *> & getDiscoveredResearch() const;
 	/// Get the list of ResearchProject which can be researched in a Base
-	void getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const;
+	void getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of Productions which can be manufactured in a Base
-	void getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const;
+	void getAvailableProductions (std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available research projects once a research has been completed.
-	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available manufacture projects once a research has been completed.
-	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets if a list of research has been unlocked.
