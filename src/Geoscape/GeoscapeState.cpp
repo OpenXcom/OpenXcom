@@ -76,9 +76,11 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/City.h"
 #include "AlienTerrorState.h"
+#include "AlienBaseState.h"
 
 namespace OpenXcom
 {
@@ -528,6 +530,10 @@ void GeoscapeState::time5Seconds()
 					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
+				if((*j)->getPatrolTime() != 0)
+				{
+					(*j)->setPatrolTime(0);
+				}
 			}
 			(*j)->think();
 			if ((*j)->reachedDestination())
@@ -535,6 +541,7 @@ void GeoscapeState::time5Seconds()
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				Waypoint *w = dynamic_cast<Waypoint*>((*j)->getDestination());
 				TerrorSite* t = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
 				if (u != 0)
 				{
 					switch (u->getStatus())
@@ -582,6 +589,24 @@ void GeoscapeState::time5Seconds()
 					else
 					{
 						(*j)->returnToBase();
+					}
+				}
+				else if (b != 0)
+				{
+					if (b->isDiscovered())
+					{
+						if((*j)->getNumSoldiers() > 0)
+						{
+							int texture, shade;
+							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
+							_music = false;
+							timerReset();
+							popup(new ConfirmLandingState(_game, *j, texture, shade));
+						}
+						else
+						{
+							(*j)->returnToBase();
+						}
 					}
 				}
 			}
@@ -694,11 +719,37 @@ void GeoscapeState::time30Minutes()
 		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 
-	// Handle craft maintenance
+	// Handle craft maintenance and alien base detection
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
+			if ((*j)->getStatus() == "STR_OUT")
+			{
+				if ((*j)->getDestination() == 0)
+				{
+					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					{
+						if ((*j)->getDistance(*b) < 1500 * (1 / 60.0) * (M_PI / 180))
+						{
+							chance = 5;
+							for (int it = 1500; it != 0; it -= 100)
+							{
+								if ((*j)->getDistance(*b) < it * (1 / 60.0) * (M_PI / 180))
+								{
+									chance += 5;
+								}
+							}
+							chance += (*j)->getPatrolTime()*5;
+							if(RNG::generate(1,100) <= chance)
+							{
+							(*b)->setDiscovered(true);
+							}
+						}
+					}
+					(*j)->setPatrolTime((*j)->getPatrolTime() + 1);
+				}
+			}
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
@@ -950,6 +1001,42 @@ void GeoscapeState::time1Day()
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 		popup(new AlienTerrorState(_game, city, this));
 	}
+	else if (chance == 20 && _game->getSavedGame()->getAlienBases()->size() < 9)
+	{
+		// Pick a city
+		RuleRegion* region = 0;
+		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+		do
+		{
+			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
+		}
+		while (region->getCities()->empty());
+		City *city = (*region->getCities())[RNG::generate(0, region->getCities()->size()-1)];
+		double lon;
+		double lat;
+		int tries = 0;
+		do
+		{
+			double ran = RNG::generate(-100, 100)*.001;
+			double ran2 = RNG::generate(-100, 100)*.001;
+			lon = city->getLongitude() + ran;
+			lat = city->getLatitude() + ran2;
+			tries++;
+		}
+		while(!_globe->insideLand(lon, lat) && tries < 100);
+		AlienBase *b = new AlienBase();
+		b->setLongitude(lon);
+		b->setLatitude(lat);
+		b->setSupplyTime(0);
+		b->setDiscovered(false);
+		b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
+		int race = RNG::generate(1, 2);
+		if (race == 1)
+			b->setAlienRace("STR_SECTOID");
+		else if (race == 2)
+			b->setAlienRace("STR_FLOATER");
+		_game->getSavedGame()->getAlienBases()->push_back(b);
+	}
 
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
@@ -1026,6 +1113,21 @@ void GeoscapeState::timerReset()
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
 	_btn5Secs->mousePress(&act, this);
+	// Handle Xcom Operatives discovering bases
+	if(_game->getSavedGame()->getAlienBases()->size())
+	{
+		bool _baseDiscovered = false;
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			int number = RNG::generate(1, 100);
+			if(!(*b)->isDiscovered() && number <= 5 && !_baseDiscovered)
+			{
+				(*b)->setDiscovered(true);
+				_baseDiscovered = true;
+				popup(new AlienBaseState(_game, *b, this));
+			}
+		}
+	}
 }
 
 /**

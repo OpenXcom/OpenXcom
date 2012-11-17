@@ -48,6 +48,7 @@
 #include "../Engine/ShaderRepeat.h"
 #include "../Engine/Options.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -828,6 +829,17 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+ 	{
+		if (!(*i)->isDiscovered())
+		{
+			continue;
+		}
+		if (targetNear((*i), x, y))
+		{
+			v.push_back(*i);
+		}
+	}
 	return v;
 }
 
@@ -1295,6 +1307,21 @@ void Globe::drawMarkers()
 		_mkAlienSite->setX(x - 1);
 		_mkAlienSite->setY(y - 1);
 		_mkAlienSite->blit(_markers);
+	}
+	// Draw the Alien Base markers
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		if ((*i)->isDiscovered())
+		{
+			_mkAlienBase->setX(x - 1);
+			_mkAlienBase->setY(y - 1);
+			_mkAlienBase->blit(_markers);
+		}
 	}
 }
 

@@ -654,8 +654,17 @@
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\EquipmentLayoutItem.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
     <ClCompile Include="Basescape\PlaceStartFacilityState.cpp">
       <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\AlienBase.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\AlienBaseState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
     <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp">
       <Filter>Geoscape</Filter>
@@ -1322,8 +1331,17 @@
     <ClInclude Include="Basescape\PlaceStartFacilityState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
+    <ClInclude Include="Savegame\AlienBase.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\AlienBaseState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
     <ClInclude Include="Geoscape\UfoHyperDetectedState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\EquipmentLayoutItem.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

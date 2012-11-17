@@ -992,4 +992,14 @@ std::vector<Position> *Map::getWaypoints()
 	return &_waypoints;
 }
 
+/**
+ * Set mouse-buttons' pressed state
+ * @param button index of the button
+ * @param pressed is the state
+ */
+void Map::setButtonsPressed(Uint8 button, bool pressed)
+{
+	_buttonsPressed[button] = pressed;
+}
+
 }

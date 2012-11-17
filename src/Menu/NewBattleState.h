@@ -42,10 +42,11 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtMissionType, *_txtTerrainType, *_txtAlienRace, *_txtDifficulty, *_txtDarkness, *_txtCraft;
 	TextButton *_btnMissionType, *_btnTerrainType, *_btnAlienRace, *_btnDifficulty, *_btnDarkness, *_btnCraft;
-	TextButton *_btnOk, *_btnCancel, *_btnEquip;
+	TextButton *_btnOk, *_btnCancel, *_btnEquip, *_btnRandom;
 	std::vector<std::string> _missionTypes, _terrainTypes, _alienRaces, _difficulty, _darkness, _crafts;
 	size_t _selMission, _selTerrain, _selAlien, _selDifficulty, _selDarkness, _selCraft;
 	bool _music;
+	size_t _alienEquipLevel;
 	Craft *_craft;
 
 	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
@@ -62,6 +63,8 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Randomize button.
+	void btnRandomClick(Action *action);
 	/// Handler for clicking the Equip Craft button.
 	void btnEquipClick(Action *action);
 	/// Handler for clicking the Mission Type button.

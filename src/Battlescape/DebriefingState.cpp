@@ -40,6 +40,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 #include "PromotionsState.h"
 #include "CannotReequipState.h"
 
@@ -318,6 +319,19 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+	// alien base disappears (if you didn't abort)
+	if(!aborted)
+	{
+		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+		{
+			if ((*i)->isInBattlescape())
+			{
+				delete *i;
+				save->getAlienBases()->erase(i);
+				break;
+			}
+		}
+	}
 	// lets see what happens with units
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
