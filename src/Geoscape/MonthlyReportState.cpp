@@ -27,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
+#include "PsiTrainingState.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game *game) : State(game)
+MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi(psi)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -141,6 +142,10 @@ void MonthlyReportState::init()
 void MonthlyReportState::btnOkClick(Action *action)
 {
 	_game->popState();
+	if(_psi)
+	{
+		_game->pushState (new PsiTrainingState(_game));
+	}
 }
 
 }

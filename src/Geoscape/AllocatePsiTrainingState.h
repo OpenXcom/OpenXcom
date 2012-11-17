@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MONTHLYREPORTSTATE_H
-#define OPENXCOM_MONTHLYREPORTSTATE_H
+#ifndef OPENXCOM_ALLOCATEPSITRAININGSTATE_H
+#define OPENXCOM_ALLOCATEPSITRAININGSTATE_H
 
 #include "../Engine/State.h"
 
@@ -27,27 +27,37 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class Base;
+class TextList;
+class Soldier;
 
 /**
  * Report screen shown monthly to display
  * changes in the player's performance and funding.
  */
-class MonthlyReportState : public State
+class AllocatePsiTrainingState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc;
-	bool _psi;
+	Text *_txtTitle, *_txtTraining, *_txtName, *_txtCraft;
+	TextList *_lstSoldiers;
+	std::vector<Soldier*> _soldiers;
+	unsigned int _sel;
+	Base *_base;
 public:
-	/// Creates the Monthly Report state.
-	MonthlyReportState(Game *game, bool psi);
-	/// Cleans up the Monthly Report state.
-	~MonthlyReportState();
+	/// Creates the Psi Training state.
+	AllocatePsiTrainingState(Game *game, Base *base);
+	/// Cleans up the Psi Training state.
+	~AllocatePsiTrainingState();
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	void btnBase1Click();
+	void lstSoldiersPress(Action *action);
+	void lstSoldiersRelease(Action *action);
+	void lstSoldiersClick(Action *action);
 };
 
 }

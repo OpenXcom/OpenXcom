@@ -231,6 +231,10 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*s == _soldiers[i])
 					{
+						 if((*s)->isInPsiTraining())
+						 {
+							 (*s)->setPsiTraining();
+						 }
 						Transfer *t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
@@ -249,6 +253,10 @@ void TransferItemsState::completeTransfer()
 				{
 					if ((*s)->getCraft() == craft)
 					{
+						 if((*s)->isInPsiTraining())
+						 {
+							 (*s)->setPsiTraining();
+						 }
 						Transfer *t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);

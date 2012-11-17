@@ -163,6 +163,10 @@ public:
 	const std::vector<Production *> & getProductions () const;
 	/// Checks if this base is hyper-wave equipped.
 	bool getHyperDetection() const;
+	/// Gets the base's used psi lab space.
+	int getUsedPsiLabs() const;
+	/// Gets the base's total available psi lab space.
+	int getAvailablePsiLabs() const;
 };
 
 }
