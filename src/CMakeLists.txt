@@ -269,6 +269,10 @@ set ( geoscape_src
   Geoscape/ResearchCompleteState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
+  Geoscape/AllocatePsiTrainingState.h
+  Geoscape/AllocatePsiTrainingState.cpp
+  Geoscape/PsiTrainingState.h
+  Geoscape/PsiTrainingState.cpp
   Geoscape/AlienBaseState.h
   Geoscape/AlienBaseState.cpp
   Geoscape/AlienTerrorState.h
