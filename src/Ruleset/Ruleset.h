@@ -98,7 +98,7 @@ public:
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
-	std::vector<SoldierNamePool*> *const getPools();
+	const std::vector<SoldierNamePool*> &getPools() const;
 	/// Gets the ruleset for a country type.
 	RuleCountry *const getCountry(const std::string &id) const;
 	/// Gets the available countries.

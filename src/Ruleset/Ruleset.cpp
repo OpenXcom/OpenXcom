@@ -785,9 +785,9 @@ SavedGame *Ruleset::newSave() const
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-std::vector<SoldierNamePool*> *const Ruleset::getPools()
+const std::vector<SoldierNamePool*> &Ruleset::getPools() const
 {
-	return &_names;
+	return _names;
 }
 
 /**
