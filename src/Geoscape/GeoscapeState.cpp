@@ -1051,22 +1051,12 @@ void GeoscapeState::time1Month()
 			}
 		}
 	}
+
 	// Handle funding
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
 	popup(new MonthlyReportState(_game, psi));
-}
 
-/**
- * Slows down the timer back to minimum speed,
- * for when important events occur.
- */
-void GeoscapeState::timerReset()
-{
-	SDL_Event ev;
-	ev.button.button = SDL_BUTTON_LEFT;
-	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
-	_btn5Secs->mousePress(&act, this);
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
 	{
@@ -1082,6 +1072,18 @@ void GeoscapeState::timerReset()
 			}
 		}
 	}
+}
+
+/**
+ * Slows down the timer back to minimum speed,
+ * for when important events occur.
+ */
+void GeoscapeState::timerReset()
+{
+	SDL_Event ev;
+	ev.button.button = SDL_BUTTON_LEFT;
+	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
+	_btn5Secs->mousePress(&act, this);
 }
 
 /**
