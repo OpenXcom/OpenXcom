@@ -943,4 +943,40 @@ bool Base::getHyperDetection() const
 	}
 	return false;
 }
+
+/**
+ * Returns the total amount of Psi Lab Space
+ * available in the base.
+ * @return Psi Lab space.
+ */
+int Base::getAvailablePsiLabs() const
+{
+	int total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			total += (*i)->getRules()->getPsiLaboratories();
+		}
+	}
+	return total;
+}
+
+/**
+ * Returns the total amount of used
+ * Psi Lab Space in the base.
+ * @return used Psi Lab space.
+ */
+int Base::getUsedPsiLabs() const
+{
+	int total = 0;
+	for (std::vector<Soldier*>::const_iterator s = _soldiers.begin(); s != _soldiers.end(); ++s)
+	{
+		if ((*s)->isInPsiTraining())
+		{
+			total ++;
+		}
+	}
+	return total;
+}
 }
