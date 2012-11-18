@@ -53,7 +53,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	_txtPsiSkill = new Text(80, 20, 188, 32);
 	_txtTraining = new Text(48, 20, 270, 32);
 	_btnOk = new TextButton(160, 14, 80, 174);
-	_lstSoldiers = new TextList(286, 112, 8, 52);
+	_lstSoldiers = new TextList(290, 112, 8, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -106,7 +106,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(-1, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(4, 116, 80, 72, 24);
+	_lstSoldiers->setColumns(4, 116, 80, 72, 30);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(2);
