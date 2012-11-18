@@ -277,6 +277,8 @@ openxcom_SOURCES = \
 	src/Geoscape/AlienBaseState.h \
 	src/Geoscape/AlienTerrorState.cpp \
 	src/Geoscape/AlienTerrorState.h \
+	src/Geoscape/AllocatePsiTrainingState.cpp \
+	src/Geoscape/AllocatePsiTrainingState.h \
 	src/Geoscape/BaseNameState.cpp \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
@@ -325,6 +327,8 @@ openxcom_SOURCES = \
 	src/Geoscape/Polyline.h \
 	src/Geoscape/ProductionCompleteState.cpp \
 	src/Geoscape/ProductionCompleteState.h \
+	src/Geoscape/PsiTrainingState.cpp \
+	src/Geoscape/PsiTrainingState.h \
 	src/Geoscape/ResearchCompleteState.cpp \
 	src/Geoscape/ResearchCompleteState.h \
 	src/Geoscape/SelectDestinationState.cpp \
