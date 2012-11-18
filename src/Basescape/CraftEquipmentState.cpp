@@ -249,12 +249,24 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 			{
 				while (cQty > 0)
 				{
-					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-					for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+					if(item->getClipSize() != -1)
 					{
-						if ((*i)->getRules() == item)
+						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+						for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
 						{
-							_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+							if ((*i)->getRules() == item)
+							{
+								_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+								delete (*i);
+								c->getVehicles()->erase(i);
+								break;
+							}
+						}
+					}
+					else
+					{
+						for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+						{
 							delete (*i);
 							c->getVehicles()->erase(i);
 							break;
@@ -318,22 +330,37 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 				int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
 				if (room > 0)
 				{
-					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-					int baqty = _base->getItems()->getItem(ammo->getType());
-					int vehiclesCount = std::min(std::min(bqty, room), baqty);
-					if (vehiclesCount > 0)
+					if(item->getClipSize() != -1)
 					{
-						int newAmmoPerVehicle = std::min(baqty / vehiclesCount, ammo->getClipSize());;
-						int remainder = baqty - (vehiclesCount * newAmmoPerVehicle);
-						if (ammo->getClipSize() == newAmmoPerVehicle) remainder = 0;
-						int newAmmo;
-						for (int i=0; i < vehiclesCount; ++i)
+						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+						int baqty = _base->getItems()->getItem(ammo->getType());
+						int vehiclesCount = std::min(std::min(bqty, room), baqty);
+						if (vehiclesCount > 0)
 						{
-							newAmmo = newAmmoPerVehicle;
-							if (i<remainder) ++newAmmo;
-							c->getVehicles()->push_back(new Vehicle(item, newAmmo));
-							_base->getItems()->removeItem(ammo->getType(), newAmmo);
-							_base->getItems()->removeItem(_items[_sel]);
+							int newAmmoPerVehicle = std::min(baqty / vehiclesCount, ammo->getClipSize());;
+							int remainder = baqty - (vehiclesCount * newAmmoPerVehicle);
+							if (ammo->getClipSize() == newAmmoPerVehicle) remainder = 0;
+							int newAmmo;
+							for (int i=0; i < vehiclesCount; ++i)
+							{
+								newAmmo = newAmmoPerVehicle;
+								if (i<remainder) ++newAmmo;
+								c->getVehicles()->push_back(new Vehicle(item, newAmmo));
+								_base->getItems()->removeItem(ammo->getType(), newAmmo);
+								_base->getItems()->removeItem(_items[_sel]);
+							}
+						}
+					}
+					else
+					{
+						int vehiclesCount = std::min(bqty, room);
+						if (vehiclesCount > 0)
+						{
+							for (int i=0; i < vehiclesCount; ++i)
+							{
+								c->getVehicles()->push_back(new Vehicle(item, 255));
+								_base->getItems()->removeItem(_items[_sel]);
+							}
 						}
 					}
 				}
@@ -420,15 +447,30 @@ void CraftEquipmentState::moveLeft()
 		// Convert vehicle to item
 		if (item->isFixed())
 		{
-			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+			if(item->getClipSize() != -1)
 			{
-				if ((*i)->getRules() == item)
+				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+				for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
 				{
-					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
-					delete (*i);
-					c->getVehicles()->erase(i);
-					break;
+					if ((*i)->getRules() == item)
+					{
+						_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+						delete (*i);
+						c->getVehicles()->erase(i);
+						break;
+					}
+				}
+			}
+			else
+			{
+				for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+				{
+					if ((*i)->getRules() == item)
+					{
+						delete (*i);
+						c->getVehicles()->erase(i);
+						break;
+					}
 				}
 			}
 			_base->getItems()->addItem(_items[_sel]);
@@ -457,22 +499,30 @@ void CraftEquipmentState::moveRight()
 			// Check if there's enough room
 			if (c->getNumVehicles() < c->getRules()->getVehicles() && c->getSpaceAvailable() >= 4)
 			{
-				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-				int qty = _base->getItems()->getItem(ammo->getType());
-				if (qty == 0)
+				if(item->getClipSize() != -1)
 				{
-					std::wstringstream ss;
-					ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
-					ss << _game->getLanguage()->getString(ammo->getType());
-					ss << _game->getLanguage()->getString("STR_TO_ARM_HWP");
-					_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
-					_timerRight->stop();
+					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+					int qty = _base->getItems()->getItem(ammo->getType());
+					if (qty == 0)
+					{
+						std::wstringstream ss;
+						ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
+						ss << _game->getLanguage()->getString(ammo->getType());
+						ss << _game->getLanguage()->getString("STR_TO_ARM_HWP");
+						_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+						_timerRight->stop();
+					}
+					else
+					{
+						int newAmmo = std::min(qty, ammo->getClipSize());
+						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
+						_base->getItems()->removeItem(ammo->getType(), newAmmo);
+						_base->getItems()->removeItem(_items[_sel]);
+					}
 				}
 				else
 				{
-					int newAmmo = std::min(qty, ammo->getClipSize());
-					c->getVehicles()->push_back(new Vehicle(item, newAmmo));
-					_base->getItems()->removeItem(ammo->getType(), newAmmo);
+					c->getVehicles()->push_back(new Vehicle(item, 255));
 					_base->getItems()->removeItem(_items[_sel]);
 				}
 			}
