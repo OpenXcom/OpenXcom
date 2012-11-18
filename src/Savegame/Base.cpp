@@ -943,4 +943,51 @@ bool Base::getHyperDetection() const
 	}
 	return false;
 }
+
+/**
+ * Returns the total amount of Containment Space
+ * available in the base.
+ * @return Containment Lab space.
+ */
+int Base::getAvailableContainment() const
+{
+	int total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			total += (*i)->getRules()->getAliens();
+		}
+	}
+	return total;
+}
+
+/**
+ * Returns the total amount of used 
+ * Containment Space in the base.
+ * @return Containment Lab space.
+ */
+int Base::getUsedContainment() const
+{
+	int total = 0;
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
+	{
+		if (_rule->getItem((i)->first)->getAlien())
+		{
+			total += (i)->second;
+		}
+	}
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_ITEM)
+		{
+			if(_rule->getItem((*i)->getItems())->getAlien())
+			{
+				total += (*i)->getQuantity();
+			}
+		}
+	}	
+	return total;
+}
+
 }

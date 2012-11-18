@@ -52,7 +52,7 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	unsigned int _sel;
-	int _total, _sOffset, _eOffset, _pQty, _cQty;
+	int _total, _sOffset, _eOffset, _pQty, _cQty, _aOffset;
 	float _iQty;
 	double _distance;
 	Timer *_timerInc, *_timerDec;

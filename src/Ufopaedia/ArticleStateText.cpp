@@ -30,7 +30,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateText::ArticleStateText(Game *game, ArticleDefinitionText *defs) : ArticleState(game, defs->id)
+	ArticleStateText::ArticleStateText(Game *game, ArticleDefinitionText *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
 	{
 		// add screen elements
 		_txtTitle = new Text(296, 16, 5, 23);

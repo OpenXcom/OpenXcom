@@ -38,7 +38,7 @@ namespace OpenXcom
 	class ArticleStateCraft : public ArticleState
 	{
 	public:
-		ArticleStateCraft(Game *game, ArticleDefinitionCraft *article_defs);
+		ArticleStateCraft(Game *game, ArticleDefinitionCraft *article_defs, int palSwitch);
 		virtual ~ArticleStateCraft();
 
 	protected:
