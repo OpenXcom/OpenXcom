@@ -605,7 +605,7 @@ facilities:
     buildCost: 750000
     buildTime: 24
     monthlyCost: 16000
-    psiLabs: 50
+    psiLabs: 10
     mapName: XBASE_14
   - type: STR_HYPER_WAVE_DECODER
     requires:
