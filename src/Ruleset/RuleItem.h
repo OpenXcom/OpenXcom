@@ -63,6 +63,7 @@ private:
 	int _recoveryPoints;
 	int _armor;
 	bool _recover;
+	int _turretType;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -164,6 +165,8 @@ public:
 	int getArmor() const;
 	/// Gets the item's recoverability.
 	bool isRecoverable() const;
+	/// Gets the item's turret type
+	int getTurretType() const;
 };
 
 }
