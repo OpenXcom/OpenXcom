@@ -1772,7 +1772,7 @@ items:
     invHeight: 0
     recover: false
   - type: REAPER_CORPSE_2
-    floorSprite: 53
+    floorSprite: 55
     invWidth: 0
     invHeight: 0
     recover: false
@@ -1782,7 +1782,7 @@ items:
     invHeight: 0
     recover: false
   - type: REAPER_CORPSE_4
-    floorSprite: 55
+    floorSprite: 53
     invWidth: 0
     invHeight: 0
     recover: false
