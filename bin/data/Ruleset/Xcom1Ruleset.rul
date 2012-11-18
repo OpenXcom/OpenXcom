@@ -925,12 +925,12 @@ items:
     fireSound: 11
     hitSound: 19
     hitAnimation: 36
-    power: 100
+    power: 110
     damageType: 4
-    accuracySnap: 60
-    accuracyAimed: 120
-    tuSnap: 25
-    tuAimed: 50
+    accuracySnap: 50
+    accuracyAimed: 85
+    tuSnap: 33
+    tuAimed: 75
     battleType: 1
     fixedWeapon: true
     clipSize: -1
@@ -949,13 +949,13 @@ items:
     bulletSprite: 8
     fireSound: 11
     hitSound: 19
-    power: 150
+    power: 110
     damageType: 5
     hitAnimation: 46
-    accuracySnap: 60
-    accuracyAimed: 120
-    tuSnap: 40
-    tuAimed: 80
+    accuracySnap: 85
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
     battleType: 1
     fixedWeapon: true
     clipSize: -1
@@ -975,8 +975,8 @@ items:
     fireSound: 53
     compatibleAmmo:
       - STR_HWP_FUSION_BOMB
-    accuracyAimed: 120
-    tuAimed: 80
+    accuracyAimed: 100
+    tuAimed: 66
     battleType: 1
     fixedWeapon: true
     waypoint: true
@@ -994,7 +994,7 @@ items:
     floorSprite: 35
     hitSound: 0
     hitAnimation: 0
-    power: 200
+    power: 140
     damageType: 3
     clipSize: 8
     battleType: 2
@@ -3719,11 +3719,11 @@ units:
   - type: TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
-      tu: 100
+      tu: 70
       stamina: 100
-      health: 100
+      health: 90
       bravery: 110
-      reactions: 30
+      reactions: 20
       firing: 60
       throwing: 0
       strength: 60
@@ -3742,7 +3742,7 @@ units:
     stats:
       tu: 100
       stamina: 100
-      health: 100
+      health: 90
       bravery: 110
       reactions: 30
       firing: 60
@@ -3763,7 +3763,7 @@ units:
     stats:
       tu: 100
       stamina: 100
-      health: 100
+      health: 90
       bravery: 110
       reactions: 30
       firing: 60
