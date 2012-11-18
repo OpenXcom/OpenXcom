@@ -1034,19 +1034,17 @@ void GeoscapeState::time1Day()
 					}
 				}
 			}
-			if(!_game->getSavedGame()->isResearched(research->getName()))
+			const RuleResearch * newResearch = research;
+			if(_game->getSavedGame()->isResearched(research->getName()))
 			{
-				_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
-				if(research->getLookup() != "")
-				{
-					_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
-				}
+				newResearch = 0;
 			}
-			else
+			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			if(research->getLookup() != "")
 			{
-				research = 0;
+				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
 			}
-			popup(new ResearchCompleteState(_game, research, bonus));
+			popup(new ResearchCompleteState(_game, newResearch, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;

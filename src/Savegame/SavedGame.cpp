@@ -639,7 +639,11 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 */
 void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
 {
-	_discovered.push_back(r);
+	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
+	if(itDiscovered == _discovered.end())
+	{
+		_discovered.push_back(r);
+	}
 	if(ruleset)
 	{
 		std::vector<RuleResearch*> availableResearch;
