@@ -1091,6 +1091,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\NoContainmentState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\NoContainmentState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Pathfinding.cpp"
 				>
 			</File>
@@ -1260,6 +1268,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\AlienTerrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AllocatePsiTrainingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AllocatePsiTrainingState.h"
 				>
 			</File>
 			<File
@@ -1452,6 +1468,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\ProductionCompleteState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\PsiTrainingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\PsiTrainingState.h"
 				>
 			</File>
 			<File

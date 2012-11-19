@@ -167,7 +167,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
-		if (qty > 0)
+		if (qty > 0 && !_game->getRuleset()->getItem(*i)->getAlien())
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);

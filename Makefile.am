@@ -185,6 +185,8 @@ openxcom_SOURCES = \
 	src/Battlescape/MiniMapView.h \
 	src/Battlescape/NextTurnState.cpp \
 	src/Battlescape/NextTurnState.h \
+	src/Battlescape/NoContainmentState.cpp \
+	src/Battlescape/NoContainmentState.h \
 	src/Battlescape/Pathfinding.cpp \
 	src/Battlescape/Pathfinding.h \
 	src/Battlescape/PathfindingNode.cpp \
@@ -277,6 +279,8 @@ openxcom_SOURCES = \
 	src/Geoscape/AlienBaseState.h \
 	src/Geoscape/AlienTerrorState.cpp \
 	src/Geoscape/AlienTerrorState.h \
+	src/Geoscape/AllocatePsiTrainingState.cpp \
+	src/Geoscape/AllocatePsiTrainingState.h \
 	src/Geoscape/BaseNameState.cpp \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
@@ -325,6 +329,8 @@ openxcom_SOURCES = \
 	src/Geoscape/Polyline.h \
 	src/Geoscape/ProductionCompleteState.cpp \
 	src/Geoscape/ProductionCompleteState.h \
+	src/Geoscape/PsiTrainingState.cpp \
+	src/Geoscape/PsiTrainingState.h \
 	src/Geoscape/ResearchCompleteState.cpp \
 	src/Geoscape/ResearchCompleteState.h \
 	src/Geoscape/SelectDestinationState.cpp \

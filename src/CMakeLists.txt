@@ -118,6 +118,8 @@ set ( battlescape_src
   Battlescape/UnitWalkBState.cpp
   Battlescape/NextTurnState.cpp
   Battlescape/NextTurnState.h
+  Battlescape/NoContainmentState.cpp
+  Battlescape/NoContainmentState.h
   Battlescape/AggroBAIState.cpp
   Battlescape/AggroBAIState.h
   Battlescape/BattleAIState.cpp
@@ -269,6 +271,10 @@ set ( geoscape_src
   Geoscape/ResearchCompleteState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
+  Geoscape/AllocatePsiTrainingState.h
+  Geoscape/AllocatePsiTrainingState.cpp
+  Geoscape/PsiTrainingState.h
+  Geoscape/PsiTrainingState.cpp
   Geoscape/AlienBaseState.h
   Geoscape/AlienBaseState.cpp
   Geoscape/AlienTerrorState.h

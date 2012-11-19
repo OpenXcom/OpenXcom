@@ -40,7 +40,7 @@ namespace OpenXcom
 	class ArticleStateItem : public ArticleState
 	{
 	public:
-		ArticleStateItem(Game *game, ArticleDefinitionItem *article_defs);
+		ArticleStateItem(Game *game, ArticleDefinitionItem *article_defs, int palSwitch);
 		virtual ~ArticleStateItem();
 
 	protected:

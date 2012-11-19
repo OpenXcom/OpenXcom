@@ -16,33 +16,42 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef OPENXCOM_NOCONTAINMENTSTATE_H
+#define OPENXCOM_NOCONTAINMENTSTATE_H
 
-#ifndef OPENXCOM_ARTICLESTATETEXT_H
-#define OPENXCOM_ARTICLESTATETEXT_H
-
+#include "../Engine/State.h"
+#include "DebriefingState.h"
+#include <vector>
 #include <string>
-#include "ArticleState.h"
 
 namespace OpenXcom
 {
-	class Game;
-	class Text;
-	class ArticleDefinitionText;
 
-	/**
-	 * ArticleStateText has only a caption and a text.
-	 */
+class TextButton;
+class Window;
+class Text;
+class TextList;
 
-	class ArticleStateText : public ArticleState
-	{
-	public:
-		ArticleStateText(Game *game, ArticleDefinitionText *article_defs, int palSwitch);
-		virtual ~ArticleStateText();
+/**
+ * Screen shown when there's not enough equipment
+ * to re-equip a craft after a mission.
+ */
+class NoContainmentState : public State
+{
+private:
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtCraft;
+	TextList *_lstItems;
+public:
+	/// Creates the Cannot Reequip state.
+	NoContainmentState(Game *game);
+	/// Cleans up the Cannot Reequip state.
+	~NoContainmentState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+};
 
-	protected:
-		Text *_txtTitle;
-		Text *_txtInfo;
-	};
 }
 
 #endif

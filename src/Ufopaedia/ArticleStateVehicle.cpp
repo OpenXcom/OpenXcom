@@ -37,7 +37,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateVehicle::ArticleStateVehicle(Game *game, ArticleDefinitionVehicle *defs) : ArticleState(game, defs->id)
+	ArticleStateVehicle::ArticleStateVehicle(Game *game, ArticleDefinitionVehicle *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
 	{
 		Unit *unit = _game->getRuleset()->getUnit(defs->id);
 		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
@@ -45,7 +45,7 @@ namespace OpenXcom
 
 		// add screen elements
 		_txtTitle = new Text(310, 16, 5, 23);
-		_txtInfo = new Text(300, 150, 10, 80);
+		_txtInfo = new Text(300, 150, 10, 122);
 		_lstStats = new TextList(300, 89, 10, 48);
 
 		// Set palette
