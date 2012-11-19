@@ -31,6 +31,7 @@
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
 #include "ResearchInfoState.h"
+#include "../Savegame/ItemContainer.h"
 
 namespace OpenXcom
 {
@@ -99,6 +100,11 @@ void NewResearchListState::init()
 void NewResearchListState::onSelectProject(Action *action)
 {
 	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
+	RuleResearch *_proj = _projects[_lstResearch->getSelectedRow()];
+	if((_proj)->needItem())
+	{
+		_base->getItems()->removeItem(_proj->getName(), 1);
+	}
 }
 
 /**
@@ -118,9 +124,30 @@ void NewResearchListState::fillProjectList ()
 	_projects.clear();
 	_lstResearch->clearList();
 	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
-	for (std::vector<RuleResearch *>::iterator it = _projects.begin (); it != _projects.end (); ++it)
+	std::vector<RuleResearch *>::iterator it = _projects.begin ();
+	while  ( it != _projects.end ())
 	{
-		_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
+		if((*it)->getRequirements().size() == 0)
+		{
+			if((*it)->getStringTemplate().size() == 0)
+			{
+				_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
+			}
+			else
+			{
+				std::wstring ss;
+				for(int st = 0; st != (*it)->getStringTemplate().size(); ++st)
+				{
+					ss += _game->getLanguage()->getString((*it)->getStringTemplate().at(st));
+				}
+				_lstResearch->addRow(1, ss.c_str());
+			}
+			++it;
+		}
+		else
+		{
+			it = _projects.erase(it);
+		}
 	}
 }
 }

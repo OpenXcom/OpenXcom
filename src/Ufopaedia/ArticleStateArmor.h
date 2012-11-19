@@ -39,7 +39,7 @@ namespace OpenXcom
 	class ArticleStateArmor : public ArticleState
 	{
 	public:
-		ArticleStateArmor(Game *game, ArticleDefinitionArmor *article_defs);
+		ArticleStateArmor(Game *game, ArticleDefinitionArmor *article_defs, int palSwitch);
 		virtual ~ArticleStateArmor();
 
 	protected:

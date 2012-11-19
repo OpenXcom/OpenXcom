@@ -1091,6 +1091,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\NoContainmentState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\NoContainmentState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Pathfinding.cpp"
 				>
 			</File>

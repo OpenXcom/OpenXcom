@@ -185,6 +185,8 @@ openxcom_SOURCES = \
 	src/Battlescape/MiniMapView.h \
 	src/Battlescape/NextTurnState.cpp \
 	src/Battlescape/NextTurnState.h \
+	src/Battlescape/NoContainmentState.cpp \
+	src/Battlescape/NoContainmentState.h \
 	src/Battlescape/Pathfinding.cpp \
 	src/Battlescape/Pathfinding.h \
 	src/Battlescape/PathfindingNode.cpp \
