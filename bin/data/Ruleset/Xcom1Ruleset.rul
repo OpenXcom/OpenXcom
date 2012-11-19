@@ -855,6 +855,7 @@ items:
     invWidth: 2
     invHeight: 3
     armor: 20
+    turretType: 0
   - type: STR_HWP_CANNON_SHELLS
     size: 0.1
     costBuy: 200
@@ -894,6 +895,7 @@ items:
     invWidth: 2
     invHeight: 3
     armor: 20
+    turretType: 1
   - type: STR_HWP_ROCKETS
     size: 0.6
     costBuy: 3000
@@ -916,20 +918,89 @@ items:
     costSell: 594000
     transferTime: 96
     weight: 1
+    bigSprite: 54
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 5
+    fireSound: 11
+    hitSound: 19
+    hitAnimation: 36
+    power: 110
+    damageType: 4
+    accuracySnap: 50
+    accuracyAimed: 85
+    tuSnap: 33
+    tuAimed: 75
+    battleType: 1
+    fixedWeapon: true
+    clipSize: -1
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 2
   - type: STR_HOVERTANK_PLASMA
     size: 6
     costSell: 980000
     transferTime: 96
+    weight: 1
+    bigSprite: 43
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 8
+    fireSound: 11
+    hitSound: 19
+    power: 110
+    damageType: 5
+    hitAnimation: 46
+    accuracySnap: 85
+    accuracyAimed: 100
+    tuSnap: 30
+    tuAimed: 60
+    battleType: 1
+    fixedWeapon: true
+    clipSize: -1
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 3
   - type: STR_HOVERTANK_LAUNCHER
     size: 6
     costSell: 1043000
     transferTime: 96
     weight: 1
+    bigSprite: 40
+    floorSprite: 0
+    handSprite: 0
+    bulletSprite: 10
+    fireSound: 53
+    compatibleAmmo:
+      - STR_HWP_FUSION_BOMB
+    accuracyAimed: 100
+    tuAimed: 66
+    battleType: 1
+    fixedWeapon: true
+    waypoint: true
+    invWidth: 2
+    invHeight: 3
+    armor: 20
+    turretType: 4
   - type: STR_HWP_FUSION_BOMB
     size: 6
     costSell: 31500
     transferTime: 48
     weight: 1
+    weight: 3
+    bigSprite: 36
+    floorSprite: 35
+    hitSound: 0
+    hitAnimation: 0
+    power: 140
+    damageType: 3
+    clipSize: 8
+    battleType: 2
+    invWidth: 1
+    invHeight: 1
+    armor: 20
   - type: STR_PISTOL
     size: 0.1
     costBuy: 800
@@ -3081,6 +3152,27 @@ armors:
       - 0.9
       - 0.4
       - 1.0
+  - type: HOVERTANK_ARMOR
+    spriteSheet: TANKS.PCK
+    corpseItem: HOVERTANK_CORPSE_
+    frontArmor: 130
+    sideArmor: 130
+    rearArmor: 130
+    underArmor: 100
+    drawingRoutine: 2
+    movementType: 1
+    size: 2
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 0.4
+      - 0.75
+      - 1.0
+      - 1.0
+      - 0.0
+      - 0.9
+      - 0.4
+      - 1.0
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseItem: CIVM_CORPSE
@@ -3623,7 +3715,70 @@ units:
     loftemps: 4
     value: 20
     deathSound: 23
-    moveSound: 14	
+    moveSound: 14
+  - type: TANK_LASER_CANNON
+    race: STR_TANK_LASER_CANNON
+    stats:
+      tu: 70
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 20
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 0
+    armor: TANK_ARMOR
+    standHeight: 15
+    kneelHeight: 15
+    loftemps: 4
+    value: 20
+    deathSound: 23
+    moveSound: 14
+  - type: HOVERTANK_PLASMA
+    race: STR_HOVERTANK_PLASMA
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 0
+    armor: HOVERTANK_ARMOR
+    standHeight: 15
+    kneelHeight: 15
+    loftemps: 4
+    value: 20
+    deathSound: 23
+    moveSound: 15
+  - type: HOVERTANK_LAUNCHER
+    race: STR_HOVERTANK_LAUNCHER
+    stats:
+      tu: 100
+      stamina: 100
+      health: 90
+      bravery: 110
+      reactions: 30
+      firing: 60
+      throwing: 0
+      strength: 60
+      psiStrength: 100
+      psiSkill: 0
+      melee: 0
+    armor: HOVERTANK_ARMOR
+    standHeight: 15
+    kneelHeight: 15
+    loftemps: 4
+    value: 20
+    deathSound: 23
+    moveSound: 15
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -5430,29 +5585,29 @@ ufopaedia:
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
-#  - id: TANK_LASER_CANNON
-#    title: STR_TANK_LASER_CANNON
-#    type_id: 3
-#    section: STR_HEAVY_WEAPONS_PLATFORMS
-#    requires:
-#      - STR_LASER_CANNON
-#    text: STR_TANK_LASER_CANNON_UFOPEDIA
-#  - id: HOVERTANK_PLASMA
-#    title: STR_HOVERTANK_PLASMA
-#    type_id: 3
-#    section: STR_HEAVY_WEAPONS_PLATFORMS
-#    requires:
-#      - STR_PLASMA_CANNON
-#      - STR_NEW_FIGHTER_CRAFT
-#    text: STR_HOVERTANK_PLASMA_UFOPEDIA
-#  - id: HOVERTANK_LAUNCHER
-#    title: STR_HOVERTANK_LAUNCHER
-#    type_id: 3
-#    section: STR_HEAVY_WEAPONS_PLATFORMS
-#    requires:
-#      - STR_FUSION_MISSILE
-#      - STR_NEW_FIGHTER_CRAFT
-#    text: STR_HOVERTANK_LAUNCHER_UFOPEDIA
+  - id: TANK_LASER_CANNON
+    title: STR_TANK_LASER_CANNON
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    requires:
+      - STR_LASER_CANNON
+    text: STR_TANK_LASER_CANNON_UFOPEDIA
+  - id: HOVERTANK_PLASMA
+    title: STR_HOVERTANK_PLASMA
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    requires:
+      - STR_PLASMA_CANNON
+      - STR_NEW_FIGHTER_CRAFT
+    text: STR_HOVERTANK_PLASMA_UFOPEDIA
+  - id: HOVERTANK_LAUNCHER
+    title: STR_HOVERTANK_LAUNCHER
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    requires:
+      - STR_FUSION_MISSILE
+      - STR_NEW_FIGHTER_CRAFT
+    text: STR_HOVERTANK_LAUNCHER_UFOPEDIA
   - id: STR_PERSONAL_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
