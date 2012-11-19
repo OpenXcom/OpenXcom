@@ -1436,4 +1436,36 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 	}
 }
 
+/**
+ * Checks if the globe is zoomed in to it's maximum.
+ * @return Returns true if globe is at max zoom, otherwise returns false.
+ */
+bool Globe::isZoomedInToMax() const
+{
+	if(_zoom == static_data.getRadiusNum() - 1)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+ * Checks if the globe is zoomed out to it's maximum.
+ * @return Returns true if globe is at max zoom, otherwise returns false.
+ */
+bool Globe::isZoomedOutToMax() const
+{
+	if(_zoom == 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 }

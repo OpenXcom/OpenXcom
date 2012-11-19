@@ -26,6 +26,8 @@
 namespace OpenXcom
 {
 
+const int STANDOFF_DIST = 560;
+
 class ImageButton;
 class Text;
 class Surface;
@@ -48,16 +50,21 @@ private:
 	InteractiveSurface *_btnMinimize, *_preview, *_weapon1, *_weapon2;
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
 	ImageButton *_mode;
-	Text *_txtAmmo1, *_txtAmmo2, *_txtDistance, *_txtStatus;
+	ImageButton *_btnMinimizedIcon;
+	Text *_txtAmmo1, *_txtAmmo2, *_txtDistance, *_txtStatus, *_txtInterceptionNumber;
 	Globe *_globe;
 	Craft *_craft;
 	Ufo *_ufo;
-	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval;
-	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled;
+	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval, _ufoHitFrame;
+	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled, _minimized, _endDogfight;
 	std::vector<CraftWeaponProjectile*> _projectiles;
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
-	int _ufoSize, _craftHeight, _currentCraftDamageColor;
+	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
+	int _x, _y, _minimizedIconX, _minimizedIconY;
+
+	// Ends the dogfight.
+	void endDogfight();
 
 public:
 	/// Creates the Dogfight state.
@@ -114,6 +121,27 @@ public:
 	void weapon2Click(Action *action);
 	/// Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
 	void recolor(const int weaponNo, const bool currentState);
+	/// Returns true if state is minimized.
+	bool isMinimized() const;
+	/// Sets state minimized or maximized.
+	void setMinimized(const bool minimized);
+	/// Handler for clicking the minimized interception window icon.
+	void btnMinimizedIconClick(Action *action);
+	/// Gets interception number.
+	int getInterceptionNumber() const;
+	/// Sets interception number.
+	void setInterceptionNumber(const int number);
+	/// Sets interceptions count.
+	void setInterceptionsCount(const int count);
+	/// Calculates window position according to opened interception windows.
+	void calculateWindowPosition();
+	/// Moves window to new position.
+	void moveWindow();
+	/// Checks if the dogfight should be ended.
+	bool dogfightEnded() const;
+	/// Gets pointer to the UFO in this dogfight.
+	Ufo* getUfo() const;
+	
 };
 
 }

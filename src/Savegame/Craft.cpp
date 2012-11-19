@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _patrolTime(0)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _patrolTime(0), _inDogfight(false), _interceptionOrder(0)
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -157,6 +157,8 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	node["status"] >> _status;
 	node["lowFuel"] >> _lowFuel;
 	node["inBattlescape"] >> _inBattlescape;
+	node["inDogfight"] >> _inDogfight;
+	node["interceptionOrder"] >> _interceptionOrder;
 }
 
 /**
@@ -198,6 +200,8 @@ void Craft::save(YAML::Emitter &out) const
 	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
+	out << YAML::Key << "inDogfight" << YAML::Value << false;
+	out << YAML::Key << "interceptionOrder" << YAML::Value << _interceptionOrder;
 	out << YAML::EndMap;
 }
 
@@ -561,6 +565,7 @@ void Craft::think()
 	move();
 	if (reachedDestination() && _dest == (Target*)_base)
 	{
+		setInterceptionOrder(0);
 		checkup();
 		setDestination(0);
 		setSpeed(0);
@@ -775,4 +780,39 @@ void Craft::setPatrolTime(int time)
 {
 	_patrolTime = time;
 }
+
+/**
+ * Returns the craft's dogfight status.
+ * @return Is the craft ion a dogfight?
+ */
+bool Craft::isInDogfight() const
+{
+	return _inDogfight;
+}
+
+/**
+ * Changes the craft's dogfight status.
+ * @param inDogfight True if it's in dogfight, False otherwise.
+ */
+void Craft::setInDogfight(bool inDogfight)
+{
+	_inDogfight = inDogfight;
+}
+
+/**
+ * Sets interception order (first craft to leave the base gets 1, second 2, etc.).
+ */
+void Craft::setInterceptionOrder(const int order)
+{
+	_interceptionOrder = order;
+}
+
+/**
+ * Gets interception order.
+ */
+int Craft::getInterceptionOrder() const
+{
+	return _interceptionOrder;
+}
+
 }

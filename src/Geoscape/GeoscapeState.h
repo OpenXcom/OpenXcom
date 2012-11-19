@@ -31,6 +31,9 @@ class ImageButton;
 class InteractiveSurface;
 class Text;
 class Timer;
+class DogfightState;
+class Craft;
+class Ufo;
 
 /**
  * Geoscape screen which shows an overview of
@@ -46,10 +49,13 @@ private:
 	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
-	Timer *_timer;
-	bool _pause, _music;
+	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
+	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone;
 	Text *_txtDebug;
 	std::vector<State*> _popups;
+	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
+	int _minimizedDogfights;
+
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
@@ -121,6 +127,20 @@ public:
 	void btnZoomOutLeftClick(Action *action);
 	/// Handler for right-clicking the Zoom Out icon.
 	void btnZoomOutRightClick(Action *action);
+	/// Blit method - renders the state and dogfights.
+	void blit();
+	/// Globe zoom in effect for dogfights.
+	void zoomInEffect();
+	/// Globe zoom out effect for dogfights.
+	void zoomOutEffect();
+	/// Multi-dogfights logic handling.
+	void handleDogfights();
+	/// Gets the number of minimized dogfights.
+	int minimizedDogfightsCount();
+	/// Starts a new dogfight.
+	void startDogfight();
+	/// Get first free dogfight slot.
+	int getFirstFreeDogfightSlot();
 };
 
 }
