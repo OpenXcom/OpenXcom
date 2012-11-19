@@ -58,6 +58,7 @@ void Ufo::load(const YAML::Node &node)
 	node["hoursCrashed"] >> _hoursCrashed;
 	node["race"] >> _race;
 	node["inBattlescape"] >> _inBattlescape;
+	node["mission"] >> _mission;
 
 	double lon, lat;
 	node["dest"]["lon"] >> lon;
@@ -84,6 +85,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "hoursCrashed" << YAML::Value << _hoursCrashed;
 	out << YAML::Key << "race" << YAML::Value << _race;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
+	out << YAML::Key << "mission" << YAML::Value << _mission;
 	out << YAML::EndMap;
 }
 
