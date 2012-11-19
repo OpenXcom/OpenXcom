@@ -1034,10 +1034,29 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
+
+	// Handle Psi-Training, if applicable
+	bool psi = false;
+	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+	{
+		if((*b)->getAvailablePsiLabs() > 0)
+		{
+			psi = true;
+		}
+		for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
+		{
+			if((*s)->isInPsiTraining())
+			{
+				(*s)->trainPsi();
+			}
+		}
+	}
+
 	// Handle funding
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
-	popup(new MonthlyReportState(_game));
+	popup(new MonthlyReportState(_game, psi));
+
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
 	{
