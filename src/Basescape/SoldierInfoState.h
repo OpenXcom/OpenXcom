@@ -46,9 +46,9 @@ private:
 	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery;
 	TextEdit *_edtSoldier;
 
-	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength;
-	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numStrength;
-	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength;
+	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength, *_txtPsiStrength, *_txtPsiSkill;
+	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numStrength, *_numPsiStrength, *_numPsiSkill;
+	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength, *_barPsiStrength, *_barPsiSkill;
 public:
 	/// Creates the Soldier Info state.
 	SoldierInfoState(Game *game, Base *base, size_t soldier);

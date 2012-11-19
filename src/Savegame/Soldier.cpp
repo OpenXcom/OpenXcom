@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor), _equipmentLayout()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _armor(armor), _equipmentLayout(), _psiTraining(false), _improvement(0)
 {
 	if (names != 0)
 	{
@@ -111,6 +111,7 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	std::string armor;
 	node["armor"] >> armor;
 	_armor = rule->getArmor(armor);
+	node["psiTraining"] >> _psiTraining;
 	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
 		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
@@ -139,6 +140,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "kills" << YAML::Value << _kills;
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
 	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
+	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
 	if (!_equipmentLayout.empty())
 	{
 		out << YAML::Key << "equipmentLayout" << YAML::Value;
@@ -433,4 +435,44 @@ std::vector<EquipmentLayoutItem*> *const Soldier::getEquipmentLayout()
 	return &_equipmentLayout;
 }
 
+/**
+ * Trains a soldier's Psychic abilities
+ */
+void Soldier::trainPsi()
+{
+	_improvement = 0;
+	if(_currentStats.psiSkill <= 16)
+		_improvement = RNG::generate(16, 24);
+	else if(_currentStats.psiSkill <= 50)
+		_improvement = RNG::generate(5, 12);
+	else if(_currentStats.psiSkill < 100)
+		_improvement = RNG::generate(1, 3);
+	_currentStats.psiSkill += _improvement;
+	if(_currentStats.psiSkill > 100)
+		_currentStats.psiSkill = 100;
+}
+
+/**
+ * returns whether or not the unit is in psi training
+ */
+bool Soldier::isInPsiTraining()
+{
+	return _psiTraining;
+}
+
+/**
+ * changes whether or not the unit is in psi training
+ */
+void Soldier::setPsiTraining()
+{
+	_psiTraining = !_psiTraining;
+}
+
+/**
+ * returns this soldier's psionic improvement score for this month.
+ */
+int Soldier::getImprovement()
+{
+	return _improvement;
+}
 }

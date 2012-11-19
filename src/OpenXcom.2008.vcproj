@@ -1263,6 +1263,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\AllocatePsiTrainingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AllocatePsiTrainingState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\BaseNameState.cpp"
 				>
 			</File>
@@ -1452,6 +1460,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\ProductionCompleteState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\PsiTrainingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\PsiTrainingState.h"
 				>
 			</File>
 			<File
