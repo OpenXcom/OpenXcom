@@ -36,6 +36,7 @@ class Ruleset;
 class RuleSoldier;
 class Armor;
 class Language;
+class EquipmentLayoutItem;
 
 /**
  * Represents a soldier hired by the player.
@@ -46,7 +47,7 @@ class Soldier
 {
 private:
 	std::wstring _name;
-	int _id;
+	int _id, _improvement;
 	RuleSoldier *_rules;
 	UnitStats _initialStats, _currentStats;
 	SoldierRank _rank;
@@ -54,8 +55,9 @@ private:
 	SoldierGender _gender;
 	SoldierLook _look;
 	int _missions, _kills, _recovery;
-	bool _recentlyPromoted;
+	bool _recentlyPromoted, _psiTraining;
 	Armor *_armor;
+	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 public:
 	/// Creates a new soldier.
 	Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
@@ -115,6 +117,16 @@ public:
 	void setWoundRecovery(int recovery);
 	/// Heals wound recoveries.
 	void heal();
+	/// Gets the soldier's equipment-layout.
+	std::vector<EquipmentLayoutItem*> *const getEquipmentLayout();
+	/// Trains a soldier's psychic stats
+	void trainPsi();
+	/// Returns whether the unit is in psi training or not
+	bool isInPsiTraining();
+	/// set the psi training status
+	void setPsiTraining();
+	/// returns this soldier's psionic improvement score for this month.
+	int getImprovement();
 };
 
 }

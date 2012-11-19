@@ -231,6 +231,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _reentering(false)
 	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
 	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
 	_map->onMouseClick((ActionHandler)&BattlescapeState::mapClick, 0);
+	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
 	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
@@ -402,25 +403,45 @@ void BattlescapeState::mapOver(Action *action)
 	{
 		isMouseScrolled = true;
 
-		// Set the mouse cursor back
-		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
-		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
-		
-		// Check the threshold
-		if (!mouseMovedOverThreshold)
+		if (!_save->getScrollButtonInvertMode())
 		{
-			absMouseMoveX += action->getDetails()->motion.xrel;
-			absMouseMoveY += action->getDetails()->motion.yrel;
-			mouseMovedOverThreshold = ((std::abs(absMouseMoveX) > _save->getScrollButtonPixelTolerancy()) || (std::abs(absMouseMoveY) > _save->getScrollButtonPixelTolerancy()));
+			// Set the mouse cursor back
+			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+			SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
+		// Check the threshold
+		totalMouseMoveX += action->getDetails()->motion.xrel;
+		totalMouseMoveY += action->getDetails()->motion.yrel;
+		if (!mouseMovedOverThreshold)
+			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _save->getScrollButtonPixelTolerancy()) || (std::abs(totalMouseMoveY) > _save->getScrollButtonPixelTolerancy()));
 
 		// Scrolling
-		_map->getCamera()->scrollXY(-action->getDetails()->motion.xrel * _save->getScrollButtonInvertMode(), -action->getDetails()->motion.yrel * _save->getScrollButtonInvertMode(), false);
-		
-		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
-		_game->getCursor()->handle(action);
+		if (!_save->getScrollButtonInvertMode())
+		{
+			_map->getCamera()->scrollXY(
+				-action->getDetails()->motion.xrel,
+				-action->getDetails()->motion.yrel, false);
+
+			// We don't want to look the mouse-cursor jumping :)
+			action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+			_game->getCursor()->handle(action);
+		}
+		else
+		{
+			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+			if (_map->getCamera()->scrollXY(
+				(int)((double)totalMouseMoveX / action->getXScale()),
+				(int)((double)totalMouseMoveY / action->getYScale()), false))
+			{
+				lastSucTotalMouseMoveX = totalMouseMoveX;
+				lastSucTotalMouseMoveY = totalMouseMoveY;
+			}
+			else
+				_map->getCamera()->scrollXY(
+					(int)((double)lastSucTotalMouseMoveX / action->getXScale()),
+					(int)((double)lastSucTotalMouseMoveY / action->getYScale()), false);
+		}
 	}
 }
 
@@ -443,7 +464,8 @@ void BattlescapeState::mapPress(Action *action)
 			isMouseScrolled = false;
 			SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
 			mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
-			absMouseMoveX = 0; absMouseMoveY = 0;
+			totalMouseMoveX = 0; totalMouseMoveY = 0;
+			lastSucTotalMouseMoveX = 0; lastSucTotalMouseMoveY = 0;
 			mouseMovedOverThreshold = false;
 			mouseScrollingStartTime = SDL_GetTicks();
 		}
@@ -463,7 +485,7 @@ void BattlescapeState::mapClick(Action *action)
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _save->getScrollButton()) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= _save->getScrollButtonTimeTolerancy()))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getScrollButtonTimeTolerancy())))
 		{
 			isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
@@ -503,6 +525,16 @@ void BattlescapeState::mapClick(Action *action)
 			_battleGame->secondaryAction(pos);
 		}
 	}
+}
+
+/**
+ * Processes when mouse enters to the map surface
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::mapIn(Action *action)
+{
+	isMouseScrolling = false;
+	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
 }
 
 /**

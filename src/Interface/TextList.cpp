@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _contrast(false),
-																								   _selRow(0), _bg(0), _selector(0), _margin(0), _arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
@@ -133,6 +133,26 @@ void TextList::setCellText(int row, int column, const std::wstring &text)
 {
 	_texts[row][column]->setText(text);
 	_redraw = true;
+}
+
+/**
+ * Returns the X position of a specific text column in the list.
+ * @param column Column number.
+ * @return X position in pixels.
+ */
+int TextList::getColumnX(int column) const
+{
+	return getX() + _texts[0][column]->getX();
+}
+
+/**
+ * Returns the Y position of a specific text row in the list.
+ * @param row Row number.
+ * @return Y position in pixels.
+ */
+int TextList::getRowY(int row) const
+{
+	return getY() + _texts[row][0]->getY();
 }
 
 /**
@@ -587,6 +607,8 @@ void TextList::clearList()
  */
 void TextList::scrollUp()
 {
+	if (!_scrolling)
+		return;
 	if (_texts.size() > _visibleRows && _scroll > 0)
 	{
 		_scroll--;
@@ -600,6 +622,8 @@ void TextList::scrollUp()
  */
 void TextList::scrollDown()
 {
+	if (!_scrolling)
+		return;
 	if (_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows)
 	{
 		_scroll++;
@@ -616,6 +640,15 @@ void TextList::updateArrows()
 {
 	_up->setVisible((_texts.size() > _visibleRows && _scroll > 0));
 	_down->setVisible((_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows));
+}
+
+/**
+ * Changes whether the list can be scrolled.
+ * @param scrolling True to allow scrolling, false otherwise.
+ */
+void TextList::setScrolling(bool scrolling)
+{
+	_scrolling = scrolling;
 }
 
 /**

@@ -62,7 +62,8 @@ private:
 	int _tuUse;
 	int _recoveryPoints;
 	int _armor;
-	bool _recover;
+	int _turretType;
+	bool _recover, _liveAlien;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -164,6 +165,10 @@ public:
 	int getArmor() const;
 	/// Gets the item's recoverability.
 	bool isRecoverable() const;
+	/// Gets the item's turret type
+	int getTurretType() const;
+	/// is this a live alien?
+	bool getAlien() const;
 };
 
 }

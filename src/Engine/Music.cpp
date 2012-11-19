@@ -17,9 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Music.h"
-#include <iostream>
 #include "Exception.h"
 #include "Options.h"
+#include "Logger.h"
 
 namespace OpenXcom
 {
@@ -75,7 +75,7 @@ void Music::play() const
 {
 	if (!Options::getBool("mute") && _music != 0 && Mix_PlayMusic(_music, -1) == -1)
 	{
-		std::cerr << Mix_GetError() << std::endl;
+		Log(LOG_WARNING) << Mix_GetError();
 	}
 }
 

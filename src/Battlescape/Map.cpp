@@ -73,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -84,7 +84,6 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollTimer = new Timer(SCROLL_INTERVAL);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
 	_camera->setScrollTimer(_scrollTimer);
-
 }
 
 /**
@@ -93,7 +92,6 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 Map::~Map()
 {
 	delete _scrollTimer;
-
 	delete _arrow;
 
 	for (int i = 0; i < 36; ++i)
@@ -153,7 +151,7 @@ void Map::draw()
 	Surface::draw();
 	Tile *t;
 
-	projectileInFOV = false;
+	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
@@ -162,7 +160,7 @@ void Map::draw()
 			projectileInFOV = true;
 		}
 	}
-	explosionInFOV = false;
+	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
@@ -493,7 +491,7 @@ void Map::drawTerrain(Surface *surface)
 							{
 								offset.y += 4;
 							}
-							if (unit == (BattleUnit*)_save->getSelectedUnit() && _save->getSide() == FACTION_PLAYER && part == 0)
+							if (unit == (BattleUnit*)_save->getSelectedUnit() && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && part == 0)
 							{
 								_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 							}
@@ -527,7 +525,7 @@ void Map::drawTerrain(Surface *surface)
 								{
 									offset.y += 4;
 								}
-								if (tunit == (BattleUnit*)_save->getSelectedUnit() && _save->getSide() == FACTION_PLAYER && part == 0)
+								if (tunit == (BattleUnit*)_save->getSelectedUnit() && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && part == 0)
 								{
 									_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 								}
@@ -914,12 +912,19 @@ void Map::cacheUnit(BattleUnit *unit)
 				cache->setPalette(this->getPalette());
 			}
 			unitSprite->setBattleUnit(unit, i);
-			BattleItem *handItem = unit->getItem(unit->getActiveHand());
-			if (handItem)
+
+			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
+			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
+			if (rhandItem)
 			{
-				unitSprite->setBattleItem(handItem);
+				unitSprite->setBattleItem(rhandItem);
 			}
-			else
+			if (lhandItem)
+			{
+				unitSprite->setBattleItem(lhandItem);
+			}
+			
+			if(!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}
@@ -985,6 +990,16 @@ void Map::scroll()
 std::vector<Position> *Map::getWaypoints()
 {
 	return &_waypoints;
+}
+
+/**
+ * Set mouse-buttons' pressed state
+ * @param button index of the button
+ * @param pressed is the state
+ */
+void Map::setButtonsPressed(Uint8 button, bool pressed)
+{
+	_buttonsPressed[button] = pressed;
 }
 
 }

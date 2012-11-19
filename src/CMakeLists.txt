@@ -63,6 +63,10 @@ set ( basescape_src
   Basescape/ManufactureStartState.cpp
   Basescape/ManufactureInfoState.h
   Basescape/ManufactureInfoState.cpp
+  Basescape/PlaceStartFacilityState.h
+  Basescape/PlaceStartFacilityState.cpp
+  Basescape/SelectStartFacilityState.h
+  Basescape/SelectStartFacilityState.cpp
 )
 
 set ( battlescape_src
@@ -114,6 +118,8 @@ set ( battlescape_src
   Battlescape/UnitWalkBState.cpp
   Battlescape/NextTurnState.cpp
   Battlescape/NextTurnState.h
+  Battlescape/NoContainmentState.cpp
+  Battlescape/NoContainmentState.h
   Battlescape/AggroBAIState.cpp
   Battlescape/AggroBAIState.h
   Battlescape/BattleAIState.cpp
@@ -156,6 +162,8 @@ set ( battlescape_src
   Battlescape/BattlescapeGame.h
   Battlescape/CannotReequipState.cpp
   Battlescape/CannotReequipState.h
+  Battlescape/PathfindingOpenSet.cpp
+  Battlescape/PathfindingOpenSet.h
 )
 
 set ( engine_src
@@ -199,6 +207,7 @@ set ( engine_src
   Engine/SurfaceSet.h
   Engine/Screen.cpp
   Engine/Screen.h
+  Engine/Logger.h
 )
 
 set ( geoscape_src
@@ -206,6 +215,8 @@ set ( geoscape_src
   Geoscape/GeoscapeCraftState.h
   Geoscape/UfoDetectedState.h
   Geoscape/UfoDetectedState.cpp
+  Geoscape/UfoHyperDetectedState.h
+  Geoscape/UfoHyperDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
   Geoscape/Polyline.h
@@ -260,6 +271,12 @@ set ( geoscape_src
   Geoscape/ResearchCompleteState.cpp
   Geoscape/NewPossibleResearchState.h
   Geoscape/NewPossibleResearchState.cpp
+  Geoscape/AllocatePsiTrainingState.h
+  Geoscape/AllocatePsiTrainingState.cpp
+  Geoscape/PsiTrainingState.h
+  Geoscape/PsiTrainingState.cpp
+  Geoscape/AlienBaseState.h
+  Geoscape/AlienBaseState.cpp
   Geoscape/AlienTerrorState.h
   Geoscape/AlienTerrorState.cpp
   Geoscape/NewPossibleManufactureState.h
@@ -375,6 +392,8 @@ set ( ruleset_src
 )
 
 set ( savegame_src
+  Savegame/AlienBase.h
+  Savegame/AlienBase.cpp
   Savegame/BattleItem.h
   Savegame/BattleItem.cpp
   Savegame/Ufo.cpp
@@ -427,6 +446,8 @@ set ( savegame_src
   Savegame/TerrorSite.cpp
   Savegame/Vehicle.h
   Savegame/Vehicle.cpp
+  Savegame/EquipmentLayoutItem.h
+  Savegame/EquipmentLayoutItem.cpp
 )
 
 set ( ufopedia_src

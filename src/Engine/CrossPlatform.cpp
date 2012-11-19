@@ -17,12 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "CrossPlatform.h"
-#include <iostream>
 #include <algorithm>
 #include "../dirent.h"
+#include "Logger.h"
 #include "Exception.h"
 #include "Options.h"
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
 #include <shlwapi.h>
@@ -63,22 +64,8 @@ void showError(const std::string &error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
-#else
-	std::cerr << "ERROR: " << error << std::endl;
 #endif
-}
-
-/**
- * Displays a message box with an error message.
- * @param error Error message.
- */
-void showError(const std::wstring &error)
-{
-#ifdef _WIN32
-	MessageBoxW(NULL, error.c_str(), L"OpenXcom Error", MB_ICONERROR | MB_OK);
-#else
-	std::wcerr << L"ERROR: " << error << std::endl;
-#endif
+	Log(LOG_FATAL) << error;
 }
 
 /**
@@ -429,6 +416,11 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	return files;
 }
 
+/**
+ * Checks if a certain path exists and is a folder.
+ * @param path Full path to folder.
+ * @return Does it exist?
+ */
 bool folderExists(const std::string &path)
 {
 #ifdef _WIN32
@@ -439,6 +431,11 @@ bool folderExists(const std::string &path)
 #endif
 }
 
+/**
+ * Checks if a certain path exists and is a file.
+ * @param path Full path to file.
+ * @return Does it exist?
+ */
 bool fileExists(const std::string &path)
 {
 #ifdef _WIN32
@@ -446,6 +443,23 @@ bool fileExists(const std::string &path)
 #else
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
+#endif
+}
+
+/**
+ * Removes a file from the specified path.
+ * @param path Full path to file.
+ * @return True if the operation succeeded, False otherwise.
+ */
+bool deleteFile(const std::string &path)
+{
+#ifdef _WIN32
+	int size = MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), NULL, 0);
+    std::wstring wstr(size, 0);
+    MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), &wstr[0], size);
+	return (DeleteFileW(wstr.c_str()) != 0);
+#else
+	return (remove(path.c_str()) != 0);
 #endif
 }
 

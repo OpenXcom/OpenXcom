@@ -116,6 +116,8 @@ public:
 	void scroll();
 	/// Get waypoints vector
 	std::vector<Position> *getWaypoints();
+	/// Set mouse-buttons' pressed state
+	void setButtonsPressed(Uint8 button, bool pressed);
 
 };
 

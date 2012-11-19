@@ -1,3 +1,122 @@
+Version 0.4.5 (04-11-2012)
+---------------------------
+New features:
+- Ufopaedia.
+- Hungarian translation.
+- Rightclick mouse scrolling.
+- Rightclick arrow buttons to min/max values.
+- Weapons can be toggled on/off during dogfights.
+- Modular rulesets (specified in options.cfg).
+- Soldier reordering.
+- New options.
+- Man page / command-line help.
+- Logging.
+
+Bugfixes:
+- Updated translations.
+- Updated soldier names.
+- Various string clipping issues.
+- Various UI issues.
+- Infinite error message when tanks didn't have ammo.
+- Tanks getting it on in the storage room (recovered when mission ended).
+- Multiple "Tracking Lost" windows per UFO.
+- Improved auto-equipping to ignore empty weapons and load weapons on the ground.
+- Brought alien weapons counted towards score.
+- Civilians didn't count towards score.
+- Crash when completing a research.
+- Crash during dogfights.
+- Wrong mouse input in minimap.
+- Starting inventory didn't work correctly in mission simulator.
+- HWP ammo popped up in soldier inventory.
+- Incorrect armor damage modifiers.
+- Workaround for big corpse pieces being recovered.
+- Missing rules for Reaper (crashed terror missions).
+- Ammo being reused after loaded.
+- Civilians counting as saved when mission failed.
+- Projectiles went through UFO if missed.
+- Weird avenger spawn point.
+- Item in elevator crash.
+- Diagonally walking through trees.
+- Items flying in the air when flying unit drops items.
+- Fixed proximity grenade.
+- Wrong craft speed when patrolling.
+- Crash when patrolling after UFO lost.
+- "Go to last known UFO position" button not working.
+- Incorrect UFO recovery items.
+- Ammo in weapons wasn't recovered after missions.
+- Crafts were fully unloaded after missions.
+- New crafts don't start in base position.
+- Ammo graphics weren't cleared after unloading weapon.
+- Minimap doesn't update level when using scroll wheel.
+- Missing "Not enough equipment to fully re-equip squad" screen.
+- Incorrect title in Promotions screen.
+- Various changes to item creation/recovery in Battlescape.
+- Wrong UFO graphics in interception window.
+- Wrong craft/UFO altitudes.
+- "UFO tracking lost" window missing sometimes.
+- Crash when targeted terror site disappears.
+- Reapers having incorrect behavior.
+- Soldiers can turn without TUs.
+- Walking through knocked down walls takes 4 TUs.
+- Primed state of a grenade is not saved in the savegame.
+- Firing and throwing accuracy does not decrease on injury.
+- Diagonal line of sight through windows.
+- Minimap not showing visible aliens on invisible tiles.
+- Visible units not stored in save.
+- Beam weapons not dealing any damage to UFOs.
+- Rewritten dogfight radar animation.
+- Dogfight UFO hit animation.
+- Dogfight UFO crash animation.
+- Dogfight projectiles animation.
+- Projectiles could hit UFO even if it was out of their range.
+- Added craft damage indication.
+- Added translated terrain names to New Battle.
+- Sound and graphics of flying suit.
+- Small pathfinding issue.
+- Segfault when mindprobing empty space.
+- Untranslated Geoscape sidebar.
+- Implemented faster unit walk speed off screen.
+- Items visible on minimap on undiscovered tiles.
+- Units walking on top of each other.
+- Incorrect behavior with ground items in inventory.
+- Options screen and resolution selection.
+- Craft has wrong position when transferred.
+- Craft doesn't reequip when transferred.
+- Game returns to the actual game after saving (instead of previous menu).
+- Drawing issue in medikit and scanner view.
+- Improved explosion animation scaling with power.
+- Explosion sound.
+- Added Elerium-115 to battlescape.
+- Vertical pathfinding.
+- Cancel firing mode when pressing move up/down.
+- Flying up/down graphics.
+- Show damage percent of craft on its state-panel.
+- Buttons not pressing with right-clicks.
+- Bugs in soldier name generation.
+- Added geoscape position to saves.
+- Added "We can now produce" Geoscape window.
+- Walk/move sounds.
+- Proper ammo accounting after battles.
+- Added "loading/saving..." messages to savegame screens.
+- Being able to input text in resolution.
+- Non-ASCII character input.
+- Non-ASCII savegame names.
+- Crash when trying to rearm crafts with empty weapon slots.
+- Weapons glitching when dropped by panicked soldiers.
+- UFO trying to escape after being destroyed.
+- Freeze in wordwrapping.
+- Big text automatically switches to small if string doesn't fit.
+- Battlescape crash when items were dropped.
+- Unlimited ammo weapons being incorrectly recovered.
+- Mouse being restricted to 320x200 area in some systems.
+- Not being able to overwrite saves with non-ASCII names.
+- Save list not synchronizing with text input.
+- Weapon unload not clearing text.
+- Basescape not resetting time to 5 Secs.
+- Random seed missing in saves.
+- Crash when large units tried to move outside the map.
+- Wrong reaper sound.
+
 Version 0.4 (13-08-2012)
 -------------------------
 New features:

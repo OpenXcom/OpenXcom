@@ -111,12 +111,14 @@ public:
 	void handleAI(BattleUnit *unit);
 	/// Add item & affect with gravity.
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
+	/// Convert a unit into a unit of another type.
+	BattleUnit *convertUnit(BattleUnit *unit, std::string newType);
 	/// Check whether TUs should be spent.
 	bool dontSpendTUs();
 	/// Handle kneeling action.
 	void kneel(BattleUnit *bu);
 	/// Cancel whatever action we were going at.
-	bool cancelCurrentAction();
+	bool cancelCurrentAction(bool bForce = false);
 	/// Get pointer to access action members directly.
 	BattleAction *getCurrentAction();
 	/// Is there currently an action going on.

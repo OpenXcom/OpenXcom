@@ -38,9 +38,10 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc;
+	bool _psi;
 public:
 	/// Creates the Monthly Report state.
-	MonthlyReportState(Game *game);
+	MonthlyReportState(Game *game, bool psi);
 	/// Cleans up the Monthly Report state.
 	~MonthlyReportState();
 	/// Updates the palette.

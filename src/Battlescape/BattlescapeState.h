@@ -76,7 +76,8 @@ private:
 	int xBeforeMouseScrolling, yBeforeMouseScrolling;
 	Position mapOffsetBeforeMouseScrolling;
 	Uint32 mouseScrollingStartTime;
-	int absMouseMoveX, absMouseMoveY;
+	int totalMouseMoveX, totalMouseMoveY;
+	int lastSucTotalMouseMoveX, lastSucTotalMouseMoveY;
 	bool mouseMovedOverThreshold;
 	bool _reentering;
 	void selectNextPlayerUnit(bool checkReselect);
@@ -100,6 +101,8 @@ public:
 	void mapPress(Action *action);
 	/// Handler for clicking the map.
 	void mapClick(Action *action);
+	/// Handler for entering with mouse to the map surface.
+	void mapIn(Action *action);
 	/// Handler for clicking the Unit Up button.
 	void btnUnitUpClick(Action *action);
 	/// Handler for clicking the Unit Down button.

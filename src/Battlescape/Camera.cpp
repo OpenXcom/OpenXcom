@@ -32,11 +32,9 @@ namespace OpenXcom
 /**
  * Sets up a camera.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _scrollX(0), _scrollY(0), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
+Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()),
+																																_mapOffset(-250,250,0), _center(), _scrollX(0), _scrollY(0), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
 {
-	_mapOffset = Position(-250,250,0);
-	_screenWidth = _map->getWidth();
-	_screenHeight = _map->getHeight();
 }
 
 /**
@@ -193,8 +191,10 @@ void Camera::scroll()
 /**
  * Handle scrolling with given deviation.
  */
-void Camera::scrollXY(int x, int y, bool redraw)
+bool Camera::scrollXY(int x, int y, bool redraw)
 {
+	bool result = true;
+
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
@@ -205,8 +205,10 @@ void Camera::scrollXY(int x, int y, bool redraw)
 	{
 		_mapOffset.x -= x;
 		_mapOffset.y -= y;
+		result = false;
 	}
 	if (redraw) _map->draw();
+	return result;
 }
 
 /**

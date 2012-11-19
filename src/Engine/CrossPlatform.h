@@ -33,8 +33,6 @@ namespace CrossPlatform
 {
 	/// Displays an error message.
 	void showError(const std::string &error);
-	/// Displays an error message.
-	void showError(const std::wstring &error);
 	/// Finds the game's data folders in the system.
 	std::vector<std::string> findDataFolders();
 	/// Finds the game's user folders in the system.
@@ -53,6 +51,8 @@ namespace CrossPlatform
 	bool folderExists(const std::string &path);
 	/// Checks if the path is an existing file.
 	bool fileExists(const std::string &path);
+	/// Deletes the specified file.
+	bool deleteFile(const std::string &path);
 }
 
 }

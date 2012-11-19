@@ -42,13 +42,14 @@ private:
 	static const double BASE_HEIGHT;
 	Surface *_surface;
 	SDL_Surface *_screen;
+	int _bpp;
 	double _scaleX, _scaleY;
 	Uint32 _flags;
 	bool _fullscreen;
 	int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
 public:
 	/// Creates a new display screen with the specified resolution.
-	Screen(int width, int height, int bpp);
+	Screen(int width, int height, int bpp, bool fullscreen);
 	/// Cleans up the display screen.
 	~Screen();
 	/// Gets the internal buffer.

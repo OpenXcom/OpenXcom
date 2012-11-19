@@ -52,7 +52,7 @@ public:
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Show Soldiers in list.
-	void PopulateList();
+	void populateList();
 	/// Handler for clicking the Soldiers reordering button.
 	void lstItemsLeftArrowClick(Action *action);
 	/// Handler for clicking the Soldiers reordering button.

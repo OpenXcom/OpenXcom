@@ -42,13 +42,13 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _origin(origin), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _autoshotCounter(0), _projectileImpact(0), _initialized(false)
 {
 }
 
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _autoshotCounter(0), _projectileImpact(0), _initialized(false)
 {
-	_origin = action.actor->getPosition();
+	;
 }
 
 
@@ -151,15 +151,16 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
-	createNewProjectile();
-
-	BattleAction action;
-	BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
-	if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
+	if (createNewProjectile() == true)
 	{
-		if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+		BattleAction action;
+		BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
+		if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
 		{
-			_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+			if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+			{
+				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+			}
 		}
 	}
 }
@@ -167,8 +168,9 @@ void ProjectileFlyBState::init()
 /**
  * - create a projectile sprite & add it to the map
  * - calculate it's trajectory
+ * @return whether it succeeded
  */
-void ProjectileFlyBState::createNewProjectile()
+bool ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
 	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
@@ -197,7 +199,28 @@ void ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_parent->popState();
-			return;
+			return false;
+		}
+	}
+	else if (_unit->getType() == "CELATID") // special code for the "spit" trajectory
+	{
+		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
+		{
+			// set the soldier in an aiming position
+			_unit->aim(true);
+			_parent->getMap()->cacheUnit(_unit);
+			// and we have a lift-off
+			if (_action.weapon->getRules()->getFireSound() != -1)
+				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+		}
+		else
+		{
+			// no line of fire
+			delete projectile;
+			_parent->getMap()->setProjectile(0);
+			_action.result = "STR_NO_LINE_OF_FIRE";
+			_parent->popState();
+			return false;
 		}
 	}
 	else
@@ -224,9 +247,11 @@ void ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
-			return;
+			return false;
 		}
 	}
+
+	return true;
 }
 
 /**
@@ -326,7 +351,7 @@ void ProjectileFlyBState::cancel()
  */
 bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 {
-	// Throwing Distance roughly = 2.5 × Strength / Weight
+	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
 	double maxDistance = 2.5 * action->actor->getStats()->strength / action->weapon->getRules()->getWeight();
 	int xdiff = action->target.x - action->actor->getPosition().x;

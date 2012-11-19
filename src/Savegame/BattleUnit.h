@@ -96,9 +96,11 @@ private:
 	int _value, _deathSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
+	std::string _zombieUnit, _spawnUnit;
 	Armor *_armor;
 	SoldierGender _gender;
 	std::string _activeHand;
+	Soldier *_geoscapeSoldier;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -316,6 +318,8 @@ public:
 	int getSpecialAbility() const;
 	/// Get the units's rank string.
 	std::string getRankString() const;
+	/// Get the geoscape-soldier object.
+	Soldier *getGeoscapeSoldier() const;
 	/// Add a kill to the counter.
 	void addKillCount();
 	/// Get unit type.
@@ -325,6 +329,12 @@ public:
 	std::string getActiveHand() const;
 	/// Convert's unit to a faction
 	void convertToFaction(UnitFaction f);
+	/// Set health to 0 and set status dead
+	void instaKill();
+	/// Gets the unit's zombie unit.
+	std::string getZombieUnit() const;
+	/// Gets the unit's spawn unit.
+	std::string getSpawnUnit() const;
 };
 
 }

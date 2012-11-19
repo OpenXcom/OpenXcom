@@ -93,6 +93,14 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_txtStrength = new Text(120, 9, 6, 166);
 	_numStrength = new Text(18, 9, 131, 166);
 	_barStrength = new Bar(170, 7, 150, 166);
+	
+	_txtPsiStrength = new Text(120, 9, 6, 178);
+	_numPsiStrength = new Text(18, 9, 131, 178);
+	_barPsiStrength = new Bar(170, 7, 150, 178);
+	
+	_txtPsiSkill = new Text(120, 9, 6, 190);
+	_numPsiSkill = new Text(18, 9, 131, 190);
+	_barPsiSkill = new Bar(170, 7, 150, 190);
 
 	add(_bg);
 	add(_rank);
@@ -139,7 +147,16 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtStrength);
 	add(_numStrength);
 	add(_barStrength);
+	if(_base->getSoldiers()->at(_soldier)->getCurrentStats()->psiSkill > 0)
+	{
+	add(_txtPsiStrength);
+	add(_numPsiStrength);
+	add(_barPsiStrength);
 
+	add(_txtPsiSkill);
+	add(_numPsiSkill);
+	add(_barPsiSkill);
+	}
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
@@ -260,6 +277,26 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barStrength->setColor2(Palette::blockOffset(5)+4);
 	_barStrength->setScale(1.0);
 	_barStrength->setInvert(true);
+
+	_txtPsiStrength->setColor(Palette::blockOffset(15)+1);
+	_txtPsiStrength->setText(_game->getLanguage()->getString("STR_PSIONIC_STRENGTH"));
+
+	_numPsiStrength->setColor(Palette::blockOffset(13));
+
+	_barPsiStrength->setColor(Palette::blockOffset(11)+4);
+	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
+	_barPsiStrength->setScale(1.0);
+	_barPsiStrength->setInvert(true);
+
+	_txtPsiSkill->setColor(Palette::blockOffset(15)+1);
+	_txtPsiSkill->setText(_game->getLanguage()->getString("STR_PSIONIC_SKILL"));
+
+	_numPsiSkill->setColor(Palette::blockOffset(13));
+
+	_barPsiSkill->setColor(Palette::blockOffset(11)+4);
+	_barPsiSkill->setColor2(Palette::blockOffset(11)+4);
+	_barPsiSkill->setScale(1.0);
+	_barPsiSkill->setInvert(true);
 }
 
 /**
@@ -378,6 +415,20 @@ void SoldierInfoState::init()
 	{
 		_txtRecovery->setText(L"");
 	}
+	
+	std::wstringstream ss14;
+	ss14 << current->psiStrength;
+	_numPsiStrength->setText(ss14.str());
+	_barPsiStrength->setMax(current->psiStrength);
+	_barPsiStrength->setValue(current->psiStrength);
+	_barPsiStrength->setValue2(initial->psiStrength);
+
+	std::wstringstream ss15;
+	ss15 << current->psiSkill;
+	_numPsiSkill->setText(ss15.str());
+	_barPsiSkill->setMax(current->psiSkill);
+	_barPsiSkill->setValue(current->psiSkill);
+	_barPsiSkill->setValue2(initial->psiSkill);
 }
 
 /**

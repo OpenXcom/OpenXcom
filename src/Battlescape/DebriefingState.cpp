@@ -40,8 +40,10 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/TerrorSite.h"
+#include "../Savegame/AlienBase.h"
 #include "PromotionsState.h"
 #include "CannotReequipState.h"
+#include "NoContainmentState.h"
 
 namespace OpenXcom
 {
@@ -50,7 +52,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game)
+DebriefingState::DebriefingState(Game *game) : State(game), _noContainment(false)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -214,6 +216,10 @@ void DebriefingState::btnOkClick(Action *action)
 	{
 		_game->pushState(new CannotReequipState(_game, _missingItems));
 	}
+	if (_noContainment)
+	{
+		_game->pushState (new NoContainmentState(_game));
+	}
 }
 
 
@@ -318,6 +324,19 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
+	// alien base disappears (if you didn't abort)
+	if(!aborted)
+	{
+		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+		{
+			if ((*i)->isInBattlescape())
+			{
+				delete *i;
+				save->getAlienBases()->erase(i);
+				break;
+			}
+		}
+	}
 	// lets see what happens with units
 	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
@@ -384,6 +403,16 @@ void DebriefingState::prepareDebriefing()
 			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value*2);
+				if(base->getAvailableContainment())
+				{
+					std::stringstream ss;
+					ss << "STR_" << (*j)->getType();
+					base->getItems()->addItem(ss.str(), 1);
+				}
+				else
+				{
+					_noContainment = true;
+				}
 			}
 		}
 		else
@@ -631,7 +660,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						// It's a weapon, count any rounds left in the clip.
 						{
 							BattleItem *clip = (*it)->getAmmoItem();
-							if (clip && (*it)->getRules()->getClipSize() > 0)
+							if (clip && (*it)->getRules()->getClipSize() != -1)
 							{
 								rounds[clip->getRules()] += clip->getAmmoQuantity();
 							}

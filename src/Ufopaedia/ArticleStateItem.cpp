@@ -37,7 +37,7 @@
 namespace OpenXcom
 {
 
-	ArticleStateItem::ArticleStateItem(Game *game, ArticleDefinitionItem *defs) : ArticleState(game, defs->id)
+	ArticleStateItem::ArticleStateItem(Game *game, ArticleDefinitionItem *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
 	{
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 

@@ -55,6 +55,7 @@ private:
 	void prepareDebriefing();
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
 	void reequipCraft(Base *base, Craft *craft);
+	bool _noContainment;
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);

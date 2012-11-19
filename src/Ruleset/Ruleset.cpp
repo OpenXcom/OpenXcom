@@ -152,13 +152,26 @@ Ruleset::~Ruleset()
 }
 
 /**
+ * Loads a ruleset's contents from the given source.
+ * @param source The source to use.
+ */
+void Ruleset::load(const std::string &source)
+{
+	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
+	if (!CrossPlatform::folderExists(dirname))
+		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
+	else
+		loadFiles(dirname);
+}
+
+/**
  * Loads a ruleset's contents from a YAML file.
+ * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
  */
-void Ruleset::load(const std::string &filename)
+void Ruleset::loadFile(const std::string &filename)
 {
-	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
-	std::ifstream fin(s.c_str());
+	std::ifstream fin(filename.c_str());
 	if (!fin)
 	{
 		throw Exception("Failed to load ruleset");
@@ -504,7 +517,6 @@ void Ruleset::load(const std::string &filename)
 					(*j)["type_id"] >> type;
 					switch ((UfopaediaTypeId)type)
 					{
-					case UFOPAEDIA_TYPE_UNKNOWN: rule = 0; break;
 					case UFOPAEDIA_TYPE_CRAFT: rule = new ArticleDefinitionCraft(); break;
 					case UFOPAEDIA_TYPE_CRAFT_WEAPON: rule = new ArticleDefinitionCraftWeapon(); break;
 					case UFOPAEDIA_TYPE_VEHICLE: rule = new ArticleDefinitionVehicle(); break;
@@ -514,6 +526,7 @@ void Ruleset::load(const std::string &filename)
 					case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
 					case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
 					case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
+					default: rule = 0; break;
 					}
 					_ufopaediaArticles[id] = rule;
 					_ufopaediaIndex.push_back(id);
@@ -545,6 +558,20 @@ void Ruleset::load(const std::string &filename)
 	}
 
 	fin.close();
+}
+
+/**
+ * Load the contents of all rule files in the given directory.
+ * @param dirname The name of an existing directory containing rule files.
+ */
+void Ruleset::loadFiles(const std::string &dirname)
+{
+	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
+
+	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	{
+		loadFile(dirname + *i);
+	}
 }
 
 /**
@@ -728,7 +755,7 @@ SavedGame *Ruleset::newSave() const
 
 	// Set up starting base
 	Base *base = new Base(this);
-	base->load(*_startingBase->begin(), save);
+	base->load(*_startingBase->begin(), save, true);
 
 	// Correct IDs
 	for (std::vector<Craft*>::const_iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
@@ -1131,6 +1158,27 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
 std::vector<std::string> Ruleset::getManufactureList () const
 {
 	return _manufactureIndex;
+}
+
+/**
+ * Returns a list of facilities for custom bases.
+ * @return The list of facilities for custom bases.
+ */
+std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
+{
+	const YAML::Node &node = *_startingBase->begin();
+	std::vector<OpenXcom::RuleBaseFacility*> PlaceList;
+
+	for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+	{
+		std::string type;
+		(*i)["type"] >> type;
+		if (type != "STR_ACCESS_LIFT")
+		{
+			PlaceList.push_back(getBaseFacility(type));
+		}
+	}
+	return PlaceList;
 }
 
 }

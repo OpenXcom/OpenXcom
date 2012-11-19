@@ -43,7 +43,7 @@ class CraftWeaponProjectile;
 class DogfightState : public State
 {
 private:
-	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer, *_ufoWtimer, *_ufoEscapeTimer, *_ufoHitBlingTimer, *_craftDamageAnimTimer;
+	Timer *_animTimer, *_moveTimer, *_w1Timer, *_w2Timer, *_ufoWtimer, *_ufoEscapeTimer, *_craftDamageAnimTimer;
 	Surface *_window, *_battle, *_range1, *_range2, *_damage;
 	InteractiveSurface *_btnMinimize, *_preview, *_weapon1, *_weapon2;
 	ImageButton *_btnStandoff, *_btnCautious, *_btnStandard, *_btnAggressive, *_btnDisengage, *_btnUfo;
@@ -57,7 +57,7 @@ private:
 	std::vector<CraftWeaponProjectile*> _projectiles;
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
-	int _ufoSize, _craftHeight, _currentCraftDamageColor;;
+	int _ufoSize, _craftHeight, _currentCraftDamageColor;
 
 public:
 	/// Creates the Dogfight state.

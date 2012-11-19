@@ -48,7 +48,7 @@ class MiniMapView : public InteractiveSurface
 	int mouseScrollX, mouseScrollY;
 	Position posBeforeMouseScrolling;
 	Uint32 mouseScrollingStartTime;
-	int absMouseMoveX, absMouseMoveY;
+	int totalMouseMoveX, totalMouseMoveY;
 	bool mouseMovedOverThreshold;
 	/// Handle pressing on the MiniMap
 	void mousePress(Action *action, State *state);
@@ -56,6 +56,8 @@ class MiniMapView : public InteractiveSurface
 	void mouseClick(Action *action, State *state);
 	/// Handle moving mouse over the MiniMap
 	void mouseOver(Action *action, State *state);
+	/// Handle moving the mouse in to the MiniMap surface.
+	void mouseIn(Action *action, State *state);
 public:
 	/// Create the MiniMapView
 	MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame);

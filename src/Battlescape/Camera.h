@@ -44,7 +44,6 @@ private:
 	int _screenWidth, _screenHeight;
 	Position _mapOffset, _center;
 	int _scrollX, _scrollY;
-	bool _cameraFollowed;
 	int _visibleMapHeight;
 	bool _showAllLayers;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
@@ -64,7 +63,7 @@ public:
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// Scrolls the view (when mouse-scrolling)
-	void scrollXY(int x, int y, bool redraw);
+	bool scrollXY(int x, int y, bool redraw);
 	/// move map layer up
 	void up();
 	/// move map layer down

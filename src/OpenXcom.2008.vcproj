@@ -419,6 +419,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\Logger.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Music.cpp"
 				>
 			</File>
@@ -1087,6 +1091,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\NoContainmentState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\NoContainmentState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\Pathfinding.cpp"
 				>
 			</File>
@@ -1100,6 +1112,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\PathfindingNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PathfindingOpenSet.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\PathfindingOpenSet.h"
 				>
 			</File>
 			<File
@@ -1235,11 +1255,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\AlienBaseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AlienBaseState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\AlienTerrorState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Geoscape\AlienTerrorState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AllocatePsiTrainingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\AllocatePsiTrainingState.h"
 				>
 			</File>
 			<File
@@ -1435,6 +1471,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\PsiTrainingState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\PsiTrainingState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\ResearchCompleteState.cpp"
 				>
 			</File>
@@ -1464,6 +1508,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\UfoDetectedState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoHyperDetectedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\UfoHyperDetectedState.h"
 				>
 			</File>
 			<File
@@ -1643,19 +1695,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Menu\SaveState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Menu\SaveState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Menu\SavedGameState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Menu\SavedGameState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\SaveState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\SaveState.h"
 				>
 			</File>
 			<File
@@ -1678,6 +1730,14 @@
 		<Filter
 			Name="Savegame"
 			>
+			<File
+				RelativePath=".\Savegame\AlienBase.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienBase.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
@@ -1732,6 +1792,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\CraftWeapon.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\EquipmentLayoutItem.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\EquipmentLayoutItem.h"
 				>
 			</File>
 			<File
@@ -2136,7 +2204,23 @@
 			>
 		</File>
 		<File
+			RelativePath=".\Basescape\PlaceStartFacilityState.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Basescape\PlaceStartFacilityState.h"
+			>
+		</File>
+		<File
 			RelativePath=".\resource.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Basescape\SelectStartFacilityState.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Basescape\SelectStartFacilityState.h"
 			>
 		</File>
 		<File

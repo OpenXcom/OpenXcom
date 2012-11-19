@@ -18,7 +18,7 @@ Cannone ad alta potenza che spara proiettili perforanti in grado di penetrare 35
 STR_FUSION_BALL_UFOPEDIA
 Questo lanciamissili lancia proiettili azionati da antimateria. Il bersaglio viene distrutto con un'implosione di onda gravitazionale.
 STR_LASER_CANNON_UFOPEDIA
-Questo raggio laser convenzionale è azionato da una camera a reazione antimaterica.
+Questo raggio laser convenzionale è azionato da una camera a reazione ad antimateria.
 STR_PLASMA_BEAM_UFOPEDIA
 Il raggio di gravità gestisce con precisione un campo di implosione gravitazionale.
 STR_SECTOID_UFOPEDIA
@@ -28,19 +28,19 @@ Autopsia di Sectoide
 STR_SECTOID_AUTOPSY_UFOPEDIA
 L'autopsia rivela organi digestivi vestigiali e una struttura semplice. Il cervello e gli occhi sono ben sviluppati. La struttura fa pensare ad alterazioni o mutazioni genetiche. La bocca e il naso piccoli sembrano non avere alcuna specifica funzione. Il tessuto tra le dita e i piedi piatti fanno ipotizzare origini acquatiche. Non sono forniti di apparato riproduttivo, e non si capisce pertanto come si riproducano. Si tratta molto probabilmente di una specie geneticamente modificata.
 STR_SNAKEMAN_UFOPEDIA
-Questa razza si è sviluppata in un ambiente estremamente ostile. Sono esseri molto robusti e riescono a resistere a forti variazioni di temperatura. La loro mobilità dipende da una specie di 'piede' simile a un serpente che protegge gli organi vitali. I loro obiettivi sembrano essere unicamente predatori, inoltre sembra agiscono dietro comando di qualche entità intelligente che guida le loro incursioni a carattere militare sulla Terra.
+Questa razza si è sviluppata in un ambiente estremamente ostile. Sono esseri molto robusti e riescono a resistere a forti variazioni di temperatura. La loro mobilità dipende da una specie di "piede" simile a un serpente che protegge gli organi vitali. I loro obiettivi sembrano essere unicamente predatori, inoltre sembra agiscono dietro comando di qualche entità intelligente che guida le loro incursioni a carattere militare sulla Terra.
 STR_SNAKEMAN_AUTOPSY
 Autopsia di Uomo-serpente
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
-La pelle è estremamente solida e resistente al calore. Il sistema cardiovascolare fa parte del sistema muscolare che usa principi idraulici per creare il moto. L'unico muscolo vero e proprio è il 'cuore'. L'apparato riproduttivo sembra essere molto efficiente. La riproduzione è asessuata, con ogni uomo-serpente che porta sempre fino a cinquanta uova all'interno del suo corpo. Lasciata indisturbata, questa specie costituirebbe una seria minaccia per la vita sulla Terra.
+La pelle è estremamente solida e resistente al calore. Il sistema cardiovascolare fa parte del sistema muscolare che usa principi idraulici per creare il moto. L'unico muscolo vero e proprio è il "cuore". L'apparato riproduttivo sembra essere molto efficiente. La riproduzione è asessuata, con ogni uomo-serpente che porta sempre fino a cinquanta uova all'interno del suo corpo. Lasciata indisturbata, questa specie costituirebbe una seria minaccia per la vita sulla Terra.
 STR_ETHEREAL_UFOPEDIA
-Questo essere ha incredibili doti mentali che gli forniscono facoltà telepatiche e telecinetiche. Le debolezze fisiche di quetsa creatura sono sostenute dalle sue capacità mentali. Non riusciamo a comprendere come funzionino queste doti telecinetiche, perché sembrano sfidare le leggi fisiche finora note. Sono estremamente pericolosi in qualsiasi azione di combattimento, dove utilizzano i loro poteri mentali per combattere. Compaiono raramente sulla Terra, in quanto sembra si affidino ad altre razze per raggiungere i propri obiettivi.
+Questo essere ha incredibili doti mentali che gli forniscono facoltà telepatiche e telecinetiche. Le debolezze fisiche di questa creatura sono sostenute dalle sue capacità mentali. Non riusciamo a comprendere come funzionino queste doti telecinetiche, perché sembrano sfidare le leggi fisiche finora note. Sono estremamente pericolosi in qualsiasi azione di combattimento, dove utilizzano i loro poteri mentali per combattere. Compaiono raramente sulla Terra, in quanto sembra si affidino ad altre razze per raggiungere i propri obiettivi.
 STR_ETHEREAL_AUTOPSY
 Autopsia di Etereo
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
 Questo essere è fisicamente ritardato e sembra incapace di sostenere qualsiasi funzione vitale. I suoi muscoli sono pesantemente atrofizzati e gli organi interni appaiono sottosviluppati. Gli organi di senso, tra cui gli occhi, non sembrano funzionare per nulla. Il cervello, tuttavia, è ben sviluppato e assorbe la maggior parte del sangue. Rimane un mistero il modo con il quale questa creatura riesca a mantenersi senza un aiuto esterno.
 STR_MUTON_UFOPEDIA
-Questo umanoide è intelligente e potente sul piano fisico. E' particolarmente avido di carne cruda di qualsiasi tipo, di cui ha necessità, come i carnivori della Terra. Sembra far affidamento su comandi telepatici provenienti da esseri chamati 'Eterei'. Una volta isolato dalla comunicazione telepatica, il suo sistema mentale si deteriora, causandone la morte. Per potenziare le sue prestazioni in combattimento, ricorre a impianti cibernetici. E' chiaramente un soldato semplice al comando di intelligenze superiori.
+Questo umanoide è intelligente e potente sul piano fisico. È particolarmente avido di carne cruda di qualsiasi tipo, di cui ha necessità, come i carnivori della Terra. Sembra far affidamento su comandi telepatici provenienti da esseri chiamati "Eterei". Una volta isolato dalla comunicazione telepatica, il suo sistema mentale si deteriora, causandone la morte. Per potenziare le sue prestazioni in combattimento, ricorre a impianti cibernetici. È chiaramente un soldato semplice al comando di intelligenze superiori.
 STR_MUTON_AUTOPSY
 Autopsia di Muton
 STR_MUTON_AUTOPSY_UFOPEDIA
@@ -50,13 +50,13 @@ Questa particolare forma di vita possiede la misteriosa abilità di librarsi nel
 STR_CELATID_AUTOPSY
 Autopsia di Celatide
 STR_CELATID_AUTOPSY_UFOPEDIA
-Il nucleo contiene un piccolo congegno bio-meccanico che sembra costituire la naturale evoluzione di una sorta di sistema antigravitazionale a propulsione. La sacca di veleno è l'organo piú grande; non si evidenzia una struttura cerebrale a sé stante. Non si osserva nemmeno la presenza di un sistema digerente nè di un sistema riproduttivo. Un piccolo organo contiene embrioni che possono trasformarsi rapidamente in nuovi esseri.
+Il nucleo contiene un piccolo congegno bio-meccanico che sembra costituire la naturale evoluzione di una sorta di sistema antigravitazionale a propulsione. La sacca di veleno è l'organo più grande; non si evidenzia una struttura cerebrale a sé stante. Non si osserva nemmeno la presenza di un sistema digerente né di un sistema riproduttivo. Un piccolo organo contiene embrioni che possono trasformarsi rapidamente in nuovi esseri.
 STR_SILACOID_UFOPEDIA
-Questa forma di vita a base di silicone genera una quantità enorme di calore. Ha la forza di sbriciolare le rocce, che vengono poi ingerite dal nucleo rovente. Ha un'intelligenza primitiva e puó essere controllata da impianti o da esseri telepatici. Agisce con la razza aliena dei Mutoni.
+Questa forma di vita a base di silicone genera una quantità enorme di calore. Ha la forza di sbriciolare le rocce, che vengono poi ingerite dal nucleo rovente. Ha un'intelligenza primitiva e può essere controllata da impianti o da esseri telepatici. Agisce con la razza aliena dei Mutoni.
 STR_SILACOID_AUTOPSY
 Autopsia di Silacoide
 STR_SILACOID_AUTOPSY_UFOPEDIA
-Il nucleo di questa creatura è estremamente caldo, e sembra costituire la base del sitema digestivo. Il suo particolare sistema muscolare ha energia e velocità stupefacenti. La sua epidermide 'rocciosa' non viene scalfita dal fuoco o da proiettili incendiari.
+Il nucleo di questa creatura è estremamente caldo, e sembra costituire la base del sistema digestivo. Il suo particolare sistema muscolare ha energia e velocità stupefacenti. La sua epidermide "rocciosa" non viene scalfita dal fuoco o da proiettili incendiari.
 STR_CHRYSSALID_UFOPEDIA
 Le pinze da granchio di questa creatura sono un'arma temibile nel combattimento ravvicinato. La rapidità del metabolismo e la forza conferiscono a questa creatura velocità e destrezza. Invece di uccidere la vittima, questo essere preferisce fecondarla con un uovo, iniettando poi del veleno che la trasforma in un vero zombi. Poco dopo la vittima genererà una nuova Crisalide. Le Crisalidi sono associate alla razza degli Uomini-serpente.
 STR_CHRYSSALID_AUTOPSY
@@ -68,19 +68,19 @@ I Fluttuanti sono sostanzialmente soldati e agenti del terrore. Sono bestie natu
 STR_FLOATER_AUTOPSY
 Autopsia di Fluttuante
 STR_FLOATER_AUTOPSY_UFOPEDIA
-Questa creatura è stata drasticamente trasformata dalla chirurgia. Il suo nucleo è costituito da un sistema di supporto vitale che sopperisce alle funzioni di cuore, polmoni e apparato digerente. Così questo essere puó sopravvivere in ambienti estremamente ostili. Il cervello è piú piccolo del nostro, ma gli organi sensoriali sono ben sviluppati.
+Questa creatura è stata drasticamente trasformata dalla chirurgia. Il suo nucleo è costituito da un sistema di supporto vitale che sopperisce alle funzioni di cuore, polmoni e apparato digerente. Così questo essere può sopravvivere in ambienti estremamente ostili. Il cervello è più piccolo del nostro, ma gli organi sensoriali sono ben sviluppati.
 STR_REAPER_UFOPEDIA
 Questo bipede carnivoro ha potenti mandibole e un appetito vorace. Ha un certo numero di impianti cerebrali che vengono usati per controllare la sua attività. Gli istinti predatori primitivi di questa creatura non risultano utili se non per terrorizzare e distruggere. I Mietitori sono associati ai Fluttuanti.
 STR_REAPER_AUTOPSY
 Autopsia di Mietitore
 STR_REAPER_AUTOPSY_UFOPEDIA
-Il Mietitore contiene due 'cervelli' e due 'cuori' che gli permettono di agire anche quando è gravemente ferito. La sua epidermide pelosa peró è altamente infiammabile e rende questa creatura vulnerabile alle armi incendiarie.
+Il Mietitore contiene due "cervelli" e due "cuori" che gli permettono di agire anche quando è gravemente ferito. La sua epidermide pelosa però è altamente infiammabile e rende questa creatura vulnerabile alle armi incendiarie.
 STR_SECTOPOD_UFOPEDIA
-I Sectopodi sono creature robot con una potente arma al plasma. Il controllo di questi esseri meccanici avviene attraverso collegamenti telepatici con i loro controllori, gli Eterei. I Sectopodi sono l'arma piú temibile a disposizione delle forze aliene.
+I Sectopodi sono creature robot con una potente arma al plasma. Il controllo di questi esseri meccanici avviene attraverso collegamenti telepatici con i loro controllori, gli Eterei. I Sectopodi sono l'arma più temibile a disposizione delle forze aliene.
 STR_SECTOPOD_AUTOPSY
 Autopsia di Sectopode
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
-Il robot è costruito molto solidamente e dispone di un'armatura capace di resistere a molte forme di attacchi, in particolare alle armi al plasma. I suoi circuiti sensoriali risultano peró piuttosto vunerabili alle armi laser.
+Il robot è costruito molto solidamente e dispone di un'armatura capace di resistere a molte forme di attacchi, in particolare alle armi al plasma. I suoi circuiti sensoriali risultano però piuttosto vulnerabili alle armi laser.
 STR_CYBERDISC_UFOPEDIA
 Questo disco volante in miniatura è una terrificante arma automatica dotata di un potente raggio al plasma. La propulsione antigravitazionale costituisce un grande vantaggio sui terreni difficili. La sua funzione primaria consiste nel distruggere e spargere terrore al servizio della razza Sectoide.
 STR_CYBERDISC_AUTOPSY
@@ -88,33 +88,33 @@ Autopsia di Cyberdisco
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
 Il Cyberdisco è ben schermato e particolarmente adatto a sostenere l'attacco con esplosivi. Il sistema primario antigravitazionale è danneggiato in modo troppo grave per poter capire qualcosa di più del suo funzionamento.
 STR_UFO_POWER_SOURCE_UFOPEDIA
-La fonte energetica dei veicoli alieni deriva dal reattore antimaterico, che usa l'Elerio (elemento 115) per generare potenti onde gravitazionali e altre forme di energia. La conversione di materia in energia è efficiente al 99%, per cui minuscole quantità di Elerio possono produrre una quantità di energia enorme. Questa unità puó essere riprodotta facilmente usando le leghe aliene.
+La fonte energetica dei veicoli alieni deriva dal reattore ad antimateria, che usa l'Elerium (elemento 115) per generare potenti onde gravitazionali e altre forme di energia. La conversione di materia in energia è efficiente al 99%, per cui minuscole quantità di Elerium possono produrre una quantità di energia enorme. Questa unità può essere riprodotta facilmente usando le leghe aliene.
 STR_UFO_NAVIGATION_UFOPEDIA
-I veicoli degli alieni usano computer sofisticati per navigare sulla Terra e attraverso lo spazio. Il sistema è basato su processori ottici collegati in rete. L'interfaccia di controllo è relativamente semplice - il navigatore controlla la direzione delle onde gravitazionali generate dalla fonte di energia per muovere il veicolo in qualsiasi direzione. Questo sistema puó essere usato facilmente dagli umani e puó essere riprodotto usando le leghe aliene e altri componenti.
+I veicoli degli alieni usano computer sofisticati per navigare sulla Terra e attraverso lo spazio. Il sistema è basato su processori ottici collegati in rete. L'interfaccia di controllo è relativamente semplice - il navigatore controlla la direzione delle onde gravitazionali generate dalla fonte di energia per muovere il veicolo in qualsiasi direzione. Questo sistema può essere usato facilmente dagli umani e può essere riprodotto usando le leghe aliene e altri componenti.
 STR_UFO_CONSTRUCTION_UFOPEDIA
-I veicoli degli alieni consistono di tre componenti - una fonte di energia, un sistema di navigazione e uno scafo costruito con leghe aliene. Lo scafo in particolare è studiato in modo da permettere alle onde gravitazionali di essere guidate e controllate. E' necessaria anche una piccola quantità di Elerio per attivare la fonte di energia. Una volta compresi i principi costruttivi e individuate le funzioni di ogni componente, risulta possibile costruire questo tipo di veicolo.
+I veicoli degli alieni consistono di tre componenti - una fonte di energia, un sistema di navigazione e uno scafo costruito con leghe aliene. Lo scafo in particolare è studiato in modo da permettere alle onde gravitazionali di essere guidate e controllate. È necessaria anche una piccola quantità di Elerium per attivare la fonte di energia. Una volta compresi i principi costruttivi e individuate le funzioni di ogni componente, risulta possibile costruire questo tipo di veicolo.
 STR_ALIEN_FOOD_UFOPEDIA
 Queste celle contengono diversi enzimi che vengono usati per digerire le varie parti di bovini, di altri tipi di animali e persino degli umani. Il liquido viene poi consumato come riserva di cibo predigerito, che viene assorbito direttamente dal sangue. Questo fa pensare a una certa dipendenza dal cibo terrestre - una forma di simbiosi tra la Terra e la società aliena.
 STR_ALIEN_REPRODUCTION_UFOPEDIA
-Queste celle contengono feti di alieni. La forma di questi contenitori fa pensare che gli alieni che usano questo processo contino esclusivamente sulla riproduzione in laboratorio. Le ricche sostanze nutritive assicurano uno sviluppo rapido del feto. Il sistema a catena di montaggio puó generare migliaia di cloni alieni in un breve spazio di tempo. Il processo potrebbe essere facilmente adattato alla riproduzione umana, oppure a qualche forma di ibrido alieno-uomo.
+Queste celle contengono feti di alieni. La forma di questi contenitori fa pensare che gli alieni che usano questo processo contino esclusivamente sulla riproduzione in laboratorio. Le ricche sostanze nutritive assicurano uno sviluppo rapido del feto. Il sistema a catena di montaggio può generare migliaia di cloni alieni in un breve spazio di tempo. Il processo potrebbe essere facilmente adattato alla riproduzione umana, oppure a qualche forma di ibrido alieno-uomo.
 STR_ALIEN_ENTERTAINMENT_UFOPEDIA
-La funzione piú probabile di queste sfere è quella ricreativa. Il circuito psionico stimola vari centri cerebrali. L'effetto è simile a quello degli allucinogeni. Questo è l'unico elemento che ci puó far pensare che gli alieni abbiano dei momenti culturali o di svago.
+La funzione più probabile di queste sfere è quella ricreativa. Il circuito psionico stimola vari centri cerebrali. L'effetto è simile a quello degli allucinogeni. Questo è l'unico elemento che ci può far pensare che gli alieni abbiano dei momenti culturali o di svago.
 STR_ALIEN_SURGERY_UFOPEDIA
-Le apparecchiature chirurgiche sono dotate di bisturi a raggio laser per estrarre gli organi dal bestiame e dagli uomini. L'aumento delle mutilazioni nei bovini si spiega con questa bizzarra attività aliena. E' probabile che queste parti vengano usate a scopo alimentare o genetico.
+Le apparecchiature chirurgiche sono dotate di bisturi a raggio laser per estrarre gli organi dal bestiame e dagli uomini. L'aumento delle mutilazioni nei bovini si spiega con questa bizzarra attività aliena. È probabile che queste parti vengano usate a scopo alimentare o genetico.
 STR_EXAMINATION_ROOM_UFOPEDIA
-Nel passato moltissime persone hanno denunciato di essere state rapite dagli alieni, spesso piú di una volta. La verità è ancora piú drammatica; si è trattato di rapimenti seguiti da ricerche e monitoraggi. Agli esemplari migliori viene tolto del materiale genetico. Alle donne vengono impiantati feti ibridi uomo-alieno che sono tolti diversi mesi dopo. Non è facile capire quali finalità muovano gli alieni a svolgere questo tipo di attività.
+Nel passato moltissime persone hanno denunciato di essere state rapite dagli alieni, spesso più di una volta. La verità è ancora più drammatica; si è trattato di rapimenti seguiti da ricerche e monitoraggi. Agli esemplari migliori viene tolto del materiale genetico. Alle donne vengono impiantati feti ibridi uomo-alieno che sono tolti diversi mesi dopo. Non è facile capire quali finalità muovano gli alieni a svolgere questo tipo di attività.
 STR_ALIEN_ALLOYS_UFOPEDIA
-I veicoli alieni sono costruiti con speciali leghe dalle proprietà uniche. Sono estremamente leggeri e resistenti, e possono essere costruiti con metodi elettro-magnetici. Questo materiale puó essere riprodotto e usato in vari processi costruttivi.
+I veicoli alieni sono costruiti con speciali leghe dalle proprietà uniche. Sono estremamente leggeri e resistenti, e possono essere costruiti con metodi elettro-magnetici. Questo materiale può essere riprodotto e usato in vari processi costruttivi.
 STR_YOU_WILL_NEED_TO_RESEARCH_A
-Dovrai ricercare un{NEWLINE}
+È necessario ricercare un{NEWLINE}
 STR_ELERIUM_115_UFOPEDIA
-Questo elemento ha l'insolita proprietà di generare energia antimaterica quando viene bombardato da certe particelle. Questo crea onde gravitazionali e altre forme di energia. Non si trova naturalmente nel nostro sistema solare e non puó essere riprodotto.
+Questo elemento ha l'insolita proprietà di generare energia ad antimateria quando viene bombardato da certe particelle. Questo crea onde gravitazionali e altre forme di energia. Non si trova naturalmente nel nostro sistema solare e non può essere riprodotto.
 STR_ALIEN_ORIGINS_UFOPEDIA
-E' chiaro che stiamo combattendo una battaglia perduta qui sulla Terra. Gli alieni sono numericamente molto superiori. L'unica cosa che possiamo fare è rallentare la loro avanzata. L'unica speranza per l'umanità è cercare di affrontarli nelle loro basi. Le nostre ricerche sembrano indicare una base operativa all'interno del nostro sistema solare. Gli alieni ritengono che questo luogo sia il centro di un'antica civiltà che ha preceduto la storia umana. Dobbiamo localizzare questo luogo nel piú breve tempo possibile. Dobbiamo peró catturare e interrogare un leader alieno per ricavare informazioni piú dettagliate. Probabilmente gli UFO piú grandi contengono almeno un leader alieno.
+È chiaro che stiamo combattendo una battaglia perduta qui sulla Terra. Gli alieni sono numericamente molto superiori. L'unica cosa che possiamo fare è rallentare la loro avanzata. L'unica speranza per l'umanità è cercare di affrontarli nelle loro basi. Le nostre ricerche sembrano indicare una base operativa all'interno del nostro sistema solare. Gli alieni ritengono che questo luogo sia il centro di un'antica civiltà che ha preceduto la storia umana. Dobbiamo localizzare questo luogo nel più breve tempo possibile. Dobbiamo però catturare e interrogare un leader alieno per ricavare informazioni più dettagliate. Probabilmente gli UFO più grandi contengono almeno un leader alieno.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
-La nostra ricerca rileva che in questo momento Marte costituisce la base operativa degli alieni. La base è ben nascosta e contiene tutte le attrezzature per la fabbricazione di strumenti e le strutture per la clonazione. Sembra certa la presenza di un computer adibitoal controllo di tutte le operazioni. Sembra che questa comunità, operosa come un alveare, abbia anche una specie di ape regina. Questa potrebbe costituire peró la loro debolezza, perchè eliminando la 'mente', cioè la regina, l'intero corpo potrebbe morire. Dobbiamo potenziare le ricerche prima che sia troppo tardi. Per aver qualche successo dobbiamo catturare gli alieni di rango piú alto - i comandanti - che risiedono soltanto nelle basi aliene.
+La nostra ricerca rileva che in questo momento Marte costituisce la base operativa degli alieni. La base è ben nascosta e contiene tutte le attrezzature per la fabbricazione di strumenti e le strutture per la clonazione. Sembra certa la presenza di un computer adibito al controllo di tutte le operazioni. Sembra che questa comunità, operosa come un alveare, abbia anche una specie di ape regina. Questa potrebbe costituire però la loro debolezza, perché eliminando la "mente", cioè la regina, l'intero corpo potrebbe morire. Dobbiamo potenziare le ricerche prima che sia troppo tardi. Per aver qualche successo dobbiamo catturare gli alieni di rango più alto - i comandanti - che risiedono soltanto nelle basi aliene.
 STR_CYDONIA_OR_BUST_UFOPEDIA
-E' chiaro ormai che le orde di alieni vengono controllate da una base sotterranea situata a Cydonia - un'area isolata di Marte in cui si trovano piramidi a cinque lati e una enorme struttura con il volto umano. Un tempo, milioni di anni fa, su Marte fiorì la civiltà Cydonia, ma si ignora il motivo per cui questa civiltà in seguito sia scomparsa, e anche quali connessioni possa avere con l'attuale attività degli alieni in questa zona. In ogni caso è bene inviare una spedizione a Cydonia per cercare di distruggere la "mente", il controllore supremo, e sconfiggere gli alieni. Dovremo fornirci di un veicolo Avenger, attrezzato con le piú temibili e potenti armi a nostra disposizione. Non abbiamo piú niente da imparare qui. Dobbiamo soltanto attendere l'esito dell'assato a Cydonia.
+È chiaro ormai che le orde di alieni vengono controllate da una base sotterranea situata a Cydonia - un'area isolata di Marte in cui si trovano piramidi a cinque lati e una enorme struttura con il volto umano. Un tempo, milioni di anni fa, su Marte fiorì la civiltà Cydonia, ma si ignora il motivo per cui questa civiltà in seguito sia scomparsa, e anche quali connessioni possa avere con l'attuale attività degli alieni in questa zona. In ogni caso è bene inviare una spedizione a Cydonia per cercare di distruggere la "mente", il controllore supremo, e sconfiggere gli alieni. Dovremo fornirci di un veicolo Avenger, attrezzato con le più temibili e potenti armi a nostra disposizione. Non abbiamo più niente da imparare qui. Dobbiamo soltanto attendere l'esito dell'assalto a Cydonia.
 STR_TERROR_SITE
 Luogo del terrore-
 STR_CENTER_ON_SITE_TIME_5_SECS
@@ -242,9 +242,9 @@ MATERIALI SPECIALI RICHIESTI
 STR_ITEM_REQUIRED
 OGGETTO{NEWLINE}RICHIESTO
 STR_UNITS_REQUIRED
-UNITA'{NEWLINE}RICHIESTE
+Unità{NEWLINE}RICHIESTE
 STR_UNITS_AVAILABLE
-UNITA'{NEWLINE}DISPONIBILI
+Unità{NEWLINE}DISPONIBILI
 STR_STOP_PRODUCTION
 INTERROMPI PRODUZIONE
 STR_ENGINEERS_AVAILABLE_UC
@@ -260,7 +260,7 @@ AUMENTA
 STR_DECREASE_UC
 DIMINUISCI
 STR_UNITS_TO
-Unita' da 
+Unità da 
 STR_PRODUCE
 Produrre 
 STR_PURCHASE_HIRE_PERSONNEL
@@ -268,9 +268,9 @@ Acquista/Assumi Personale
 STR_COST_OF_PURCHASES
 Costo acquisti>
 STR_COST_PER_UNIT_UC
-COSTO PER UNITA'
+COSTO PER Unità
 STR_QUANTITY_UC
-QUANTITA'
+QUANTITÀ
 STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL
 PERSONALE DISPONIBILE:PERSONALE TOTALE>
 STR_SOLDIERS
@@ -310,7 +310,7 @@ SELEZIONA LUOGO ASCENSORE D'ACCESSO
 STR_TRANSFER
 Trasferisci
 STR_AMOUNT_TO_TRANSFER
-QUANTITA' DA{NEWLINE} TRASFERIRE
+QUANTITÀ DA{NEWLINE} TRASFERIRE
 STR_SELECT_DESTINATION_BASE
 Seleziona base di destinazione
 STR_COST
@@ -318,11 +318,11 @@ Costo
 STR_VICTORY_1
 Quando entri nella sala vedi il cervello alieno - l'obiettivo della tua ricerca. Prima di poter sparare, il cervello comunica con te per mezzo di uno schermo che sta alla sua base. Ti supplica di ascoltare le sue ragioni, per convincerti a risparmiargli la vita prima che tu decida di premere il grilletto...
 STR_VICTORY_2
-Il cervello parla: 'Molti milioni di anni fa, sul pianeta che voi chiamate Marte, c'era la vita. Noi stessi avevamo portato la vita in quelle lande desolate, come avevamo fatto con la vostra Terra. Per milioni di anni noi abbiamo fatto visita al vostro pianeta e abbiamo sviluppato nuove specie. Non potete ucciderci, siete parte di noi...
+Il cervello parla: Molti milioni di anni fa, sul pianeta che voi chiamate Marte, c'era la vita. Noi stessi avevamo portato la vita in quelle lande desolate, come avevamo fatto con la vostra Terra. Per milioni di anni noi abbiamo fatto visita al vostro pianeta e abbiamo sviluppato nuove specie. Non potete ucciderci, siete parte di noi...
 STR_VICTORY_3
 Ecco il cuore della civiltà marziana - le piramidi costruite milioni di anni prima delle vostre - da creature che possono essere considerate i vostri progenitori. Non c'è pianeta che sia fuori dalla nostra portata. Presto questo nostro potere potrebbe diventare vostro. Vi chiediamo soltanto un po' di collaborazione.
 STR_GAME_OVER_1
-Gli alieni tentano di sterminare tutta l'umanità, distruggendo città e avvelenando l'aria e il mare. La resistenza degli eserciti terrestri è del tutto inutile di fronte all'innegabile superiorità tecnica degli alieni. Le generazioni sopravissute subiscono terribili mutazioni mentre cercano di sfuggire alla distruzione. Gli uomini finiscono poi in campi di concentramento, trattati come schiavi e costretti a collaborare alla trasformazione della Terra in una colonia aliena, che costituirà parte di un piú vasto impero ignoto.
+Gli alieni tentano di sterminare tutta l'umanità, distruggendo città e avvelenando l'aria e il mare. La resistenza degli eserciti terrestri è del tutto inutile di fronte all'innegabile superiorità tecnica degli alieni. Le generazioni sopravvissute subiscono terribili mutazioni mentre cercano di sfuggire alla distruzione. Gli uomini finiscono poi in campi di concentramento, trattati come schiavi e costretti a collaborare alla trasformazione della Terra in una colonia aliena, che costituirà parte di un più vasto impero ignoto.
 STR_GAME_OVER_2
 Le conoscenze acquisite con il progetto XCom sono perse per sempre. Non sei riuscito a salvare la Terra.
 STR_VICTORY_4
@@ -384,15 +384,15 @@ Ora possiamo produrre
 STR_SUNDAY
 DOMENICA
 STR_MONDAY
-LUNEDI'
+LUNEDÌ
 STR_TUESDAY
-MARTEDI'
+MARTEDÌ
 STR_WEDNESDAY
-MERCOLEDI'
+MERCOLEDÌ
 STR_THURSDAY
-GIOVEDI'
+GIOVEDÌ
 STR_FRIDAY
-VENERDI'
+VENERDÌ
 STR_SATURDAY
 SABATO
 STR_NOT_ENOUGH
@@ -480,7 +480,7 @@ VEICOLO>
 STR_UFO_CRASH_RECOVERY
 RECUPERO UFO PRECIPITATO
 STR_UFO_CRASH_RECOVERY_BRIEFING
-Attenzione - Potrebbero esserci alieni dentro all'UFO o intorno al luogo dello schianto. La missione sarà compiuta solo se tutte le unità nemiche verranno eliminate o neutralizzate. Allora si potrà iniziare il recupero dei resti dell'UFO, degli oggetti e dei cadaveri degli alieni. Per interrompere la missione, riporta gli operatori XCom al veicolo da trasporto e fai clic sull'icona 'Interruzione missione'.
+Attenzione - Potrebbero esserci alieni dentro all'UFO o intorno al luogo dello schianto. La missione sarà compiuta solo se tutte le unità nemiche verranno eliminate o neutralizzate. Allora si potrà iniziare il recupero dei resti dell'UFO, degli oggetti e dei cadaveri degli alieni. Per interrompere la missione, riporta gli operatori XCom al veicolo da trasporto e fai clic sull'icona "Interruzione missione".
 STR_UFO_GROUND_ASSAULT
 ASSALTO DI TERRA DEGLI UFO
 STR_UFO_GROUND_ASSAULT_BRIEFING
@@ -490,17 +490,17 @@ DIFESA BASE
 STR_BASE_UC_
 BASE> 
 STR_BASE_DEFENSE_BRIEFING
-Un veicolo alieno è atterrato nelle vicinanze. La nostra base è in grave pericolo. Secondo la procedura standard tutto il personale non combattente è stato evacuato. Le unità aliene entreranno nella base attraverso le porte dell'hangar oppure dall'ascensore d'accesso. Difendi la base e le sue installazioni vitali a tutti i costi - è una questione di vita o di morte. Se fai clic sull'icona 'Interrompi la missione', dovrai considerarti sconfitto e perderai la base.
+Un veicolo alieno è atterrato nelle vicinanze. La nostra base è in grave pericolo. Secondo la procedura standard tutto il personale non combattente è stato evacuato. Le unità aliene entreranno nella base attraverso le porte dell'hangar oppure dall'ascensore d'accesso. Difendi la base e le sue installazioni vitali a tutti i costi - è una questione di vita o di morte. Se fai clic sull'icona "Interrompi la missione", dovrai considerarti sconfitto e perderai la base.
 STR_ALIEN_BASE_ASSAULT
 ASSALTO DI BASE ALIENA
 STR_ALIEN_BASE_ASSAULT_BRIEFING
-Operatori XCom sono penetrati in una base aliena. Il centro di controllo deve essere distrutto perché la base non sia piú operativa. La Missione sarà compiuta quando tutti i nemici saranno stati eliminati oppure quando la tua squadra sarà ritornata all'area verde di uscita (per uscire, premi sull'icona 'Interrompi la missione').
+Operatori XCom sono penetrati in una base aliena. Il centro di controllo deve essere distrutto perché la base non sia più operativa. La Missione sarà compiuta quando tutti i nemici saranno stati eliminati oppure quando la tua squadra sarà ritornata all'area verde di uscita (per uscire, premi sull'icona "Interrompi la missione").
 STR_CYDONIA_BRIEFING
 Sei arrivato a Cydonia. Entri in un grande complesso sotterraneo vicino alla Sfinge di Marte. Devi distruggere il Cervello che controlla tutte le attività degli alieni. Le sorti dell'umanità sono nelle tue mani....
 STR_TERROR_MISSION
 MISSIONE DEL TERRORE
 STR_TERROR_MISSION_BRIEFING
-La Missione potrà dirsi riuscita soltanto se tutte le unità nemiche saranno state eliminate o neutralizzate. Devi cercare di salvare la vita di tutti i civili che si trovano nella zona, neutralizzando la minaccia aliena. Per interrompere la missione riporta gli operatori XCom al veicolo da trasporto e premi sull'icona 'Interrompi la missione'.
+La Missione potrà dirsi riuscita soltanto se tutte le unità nemiche saranno state eliminate o neutralizzate. Devi cercare di salvare la vita di tutti i civili che si trovano nella zona, neutralizzando la minaccia aliena. Per interrompere la missione riporta gli operatori XCom al veicolo da trasporto e premi sull'icona "Interrompi la missione".
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
 NESSUN HANGAR LIBERO PER LA PRODUZIONE DI VEICOLI!{SMALLLINE}Ogni veicolo assegnato alla base, trasferito a una base, acquistato o costruito, usa un hangar. Costruisci un nuovo hangar o trasferisci un veicolo in un'altra base.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
@@ -512,7 +512,7 @@ NON PUOI COSTRUIRE QUI!{SMALLLINE}Devi costruire vicino ad una struttura della b
 STR_NO_FREE_ACCOMODATION
 SPAZI ABITATIVI OCCUPATI!{SMALLLINE}La base di destinazione non ha sufficiente spazio nelle aree abitative.
 STR_NOT_ENOUGH_WORK_SPACE
-SPAZIO OFFICINA NON DISPONIBILE!{SMALLLINE}Crea un' altra officina oppure riduci il lavoro in altri progetti.
+SPAZIO OFFICINA NON DISPONIBILE!{SMALLLINE}Crea un'altra officina oppure riduci il lavoro in altri progetti.
 STR_NOT_ENOUGH_MONEY
 DENARO INSUFFICIENTE!
 STR_NOT_ENOUGH_TRANSFER_SUPPORT
@@ -550,7 +550,7 @@ OBIETTIVO: PUNTO PROGRAMM.
 STR_ARE_YOU_SURE_CYDONIA
 Vuoi davvero mandare questo veicolo spaziale in missione a Cydonia?
 STR_YES
-SI'
+SI
 STR_NO
 NO
 STR_SELECT_DESTINATION
@@ -582,9 +582,9 @@ RITORNO ALLA BASE
 STR_DESTINATION_UC_
 DESTINAZIONE: 
 STR_SPEED_
-VELOCITA'>
+VELOCITÀ>
 STR_MAXIMUM_SPEED_UC
-VELOCITA' MASSIMA>
+VELOCITÀ MASSIMA>
 STR_ALTITUDE_
 ALTITUDINE>
 STR_VERY_LOW
@@ -734,7 +734,7 @@ ALTITUDINE
 STR_HEADING
 DIRETTO A
 STR_SPEED
-VELOCITA'
+VELOCITÀ
 STR_CENTER_ON_UFO_TIME_5_SECS
 CENTRO SU UFO-TEMPO=5 Sec.
 STR_TRACKING_LOST
@@ -792,15 +792,15 @@ SCEGLI UN OGGETTO
 STR_ACCELERATION
 ACCELERAZIONE>
 STR_FUEL_CAPACITY
-CAPACITA' SERBATOIO>
+CAPACITÀ SERBATOIO>
 STR_WEAPON_PODS
 CAPSULE ARMI>
 STR_DAMAGE_CAPACITY_UC
-CAPACITA' DI DANNO>
+CAPACITÀ DI DANNO>
 STR_CARGO_SPACE
 SPAZIO CARGO>
 STR_HWP_CAPACITY
-CAPACITA' TANK>
+CAPACITÀ TANK>
 STR_DAMAGE
 Danno
 STR_RANGE
@@ -1012,17 +1012,17 @@ Scienziato
 STR_ENGINEER
 Tecnico
 STR_NORTH_AMERICA
-Nordamerica
+Nord America
 STR_ARCTIC
 Artico
 STR_ANTARCTICA
 Antartico
 STR_SOUTH_AMERICA
-Sudamerica
+Sud America
 STR_EUROPE
 Europa
 STR_NORTH_AFRICA
-Nordafrica
+Nord Africa
 STR_SOUTHERN_AFRICA
 Sudafrica
 STR_CENTRAL_ASIA
@@ -1086,7 +1086,7 @@ Palla a fusione
 STR_LASER_CANNON_UC
 Cannone laser
 STR_DAMAGE_CAPACITY
-CAPACITA' DI DANNO
+CAPACITÀ DI DANNO
 STR_WEAPON_POWER
 Potenza arma
 STR_WEAPON_RANGE
@@ -1202,15 +1202,15 @@ Modifiche
 STR_WEAPON_SYSTEMS
 SISTEMA{NEWLINE}ARMI
 STR_HWPS
-Tanks
+TANK
 STR_DAMAGE_UC_
 DANNI>
 STR_ACCESS_LIFT_UFOPEDIA
-L'ascensore di accesso permette all'equipaggiamento e al personale di essere trasferito fuori e dentro ad una base sotterranea. E' la struttura che viene costruita per prima quando si decide di costruire una base. L'area dell'ascensore è vulnerabile all' intrusione di forze potenzialmente ostili.
+L'ascensore di accesso permette all'equipaggiamento e al personale di essere trasferito fuori e dentro ad una base sotterranea. È la struttura che viene costruita per prima quando si decide di costruire una base. L'area dell'ascensore è vulnerabile all'intrusione di forze potenzialmente ostili.
 STR_LIVING_QUARTERS_UFOPEDIA
 Ogni blocco abitativo contiene fino a 50 persone. La struttura fornisce aree per alimentarsi, per il sonno e lo svago.
 STR_LABORATORY_UFOPEDIA
-In un laboratorio possono lavorare fino a 50 scienziati. I laboratori possono contare sulle piú recenti tecnologie per la ricerca sulla biochimica e l'astrofisica. Puó contare su un accesso privilegiato ai migliori laboratori di ricerca in tutto il mondo, compresi quelli militari.
+In un laboratorio possono lavorare fino a 50 scienziati. I laboratori possono contare sulle più recenti tecnologie per la ricerca sulla biochimica e l'astrofisica. Può contare su un accesso privilegiato ai migliori laboratori di ricerca in tutto il mondo, compresi quelli militari.
 STR_WORKSHOP_UFOPEDIA
 Un'officina contiene tutte le attrezzature necessarie per costruire l'equipaggiamento disegnato nei laboratori. Possono occupare un'officina fino a 50 tecnici, anche se un certo spazio è ovviamente occupato dal materiale stesso.
 STR_SMALL_RADAR_SYSTEM_UFOPEDIA
@@ -1222,13 +1222,13 @@ Le difese missilistiche forniscono una certa protezione contro le incursioni da 
 STR_GENERAL_STORES_UFOPEDIA
 Tutto l'equipaggiamento - armi, munizioni, materiale recuperato e piattaforme per armi pesanti(tank) - è sistemato in magazzini, ad eccezione di quello assegnato ai veicoli che si trovano negli hangar
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-Si puó pensare che gli alieni viventi richiedano uno speciale habitat per conservare il loro sistema vitale. La struttura di contenzione puó racchiudere fino a 10 forme di vita aliene in speciali alloggiamenti chiusi
+Si può pensare che gli alieni viventi richiedano uno speciale habitat per conservare il loro sistema vitale. La struttura di contenzione può racchiudere fino a 10 forme di vita aliene in speciali alloggiamenti chiusi
 STR_LASER_DEFENSES_UFOPEDIA
 Le difese laser forniscono protezione contro le incursioni di veicoli nemici
 STR_PLASMA_DEFENSES_UFOPEDIA
 Le difese con raggio al plasma forniscono una potente protezione contro le incursioni di veicoli nemici
 STR_FUSION_BALL_DEFENSES_UFOPEDIA
-I missili a fusione forniscono un'efficace difesa contro gli alieni. Questi missili creano un'implosione antimaterica che distrugge tutto ció che si trova all'interno di un certo raggio
+I missili a fusione forniscono un'efficace difesa contro gli alieni. Questi missili creano un'implosione ad antimateria che distrugge tutto ciò che si trova all'interno di un certo raggio
 STR_GRAV_SHIELD_UFOPEDIA
 Lo scudo gravitazionale respinge i veicoli spaziali alieni, che cercano di atterrare vicino alla base, per tutto il tempo in cui si stanno allestendo tutti i sistemi di difesa. In pratica questo raddoppia l'efficacia dei vari sistemi difensivi della base
 STR_MIND_SHIELD_UFOPEDIA
@@ -1236,45 +1236,45 @@ Dato che i veicoli alieni si affidano alle onde mentali per intercettare la pres
 STR_PSIONIC_LABORATORY_UFOPEDIA
 Il laboratorio psionico valuta il potenziale psichico di tutti i soldati della base e dà loro l'addestramento necessario all'uso ottimale delle facoltà psioniche. Questo addestramento viene messo a punto alla fine di ogni mese. Le abilità psioniche, congiunte all'amplificatore psionico, possono essere usate per attacchi fondati su tali facoltà nel corso delle varie azioni militari.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
-La comunicazione degli alieni si affida ad un'onda di tipo extradimensionale che permette di trasmettere un messaggio quasi istantaneamente. Lo strumento per la decodificazione intercetta le trasmissioni UFO e decodifica le informazioni. Con questa tecnica è possibile rilevare il tipo di UFO, la razza aliena e il genere di attività
+La comunicazione degli alieni si affida ad un'onda di tipo extra dimensionale che permette di trasmettere un messaggio quasi istantaneamente. Lo strumento per la decodificazione intercetta le trasmissioni UFO e decodifica le informazioni. Con questa tecnica è possibile rilevare il tipo di UFO, la razza aliena e il genere di attività
 STR_HANGAR_UFOPEDIA
-Ogni hangar puó ospitare un solo veicolo. Ci sono costruzioni per l'ordinaria manutenzione dei veicoli XCom, il rifornimento di carburante e le riparazioni. Ogni veicolo spaziale fermo alla base deve avere la piena disponibilità di un hangar che non puó essere usato da altri veicoli, anche se il veicolo a cui è riservata la struttura si trova fuori in missione.
+Ogni hangar può ospitare un solo veicolo. Ci sono costruzioni per l'ordinaria manutenzione dei veicoli XCom, il rifornimento di carburante e le riparazioni. Ogni veicolo spaziale fermo alla base deve avere la piena disponibilità di un hangar che non può essere usato da altri veicoli, anche se il veicolo a cui è riservata la struttura si trova fuori in missione.
 STR_PISTOL_UFOPEDIA
 La pistola standard XCom è un'arma semiautomatica ad alto potenziale, a 12 proiettili.
 STR_RIFLE_UFOPEDIA
 Questo fucile con mirino laser offre una visibilità eccezionale, per cui il tiro risulta estremamente preciso.Usa munizioni da 6,7mm in caricatori da 2O colpi.
 STR_HEAVY_CANNON_UFOPEDIA
-Il cannone pesante è un'arma devastante ma voluminosa. E' molto versatile, potendo portare tre tipi di munizioni: quelle per penetranti, quelle incendiarie e quelle altamente esplosive.
+Il cannone pesante è un'arma devastante ma voluminosa. È molto versatile, potendo portare tre tipi di munizioni: quelle per penetranti, quelle incendiarie e quelle altamente esplosive.
 STR_AUTO_CANNON_UFOPEDIA
 Il cannone automatico combina la versatilità e la potenza del cannone pesante con una maggiore velocità di fuoco.
 STR_ROCKET_LAUNCHER_UFOPEDIA
-Il lanciarazzi è un congegno guidato dal laser, che puó lanciare missili di tre diverse dimensioni.
+Il lanciarazzi è un congegno guidato dal laser, che può lanciare missili di tre diverse dimensioni.
 STR_LASER_PISTOL_UFOPEDIA
-La pistola a laser si avvale delle ultimissime scoperte tecnologiche. Ha la maneggevolezza di una pistola, ma con un tiro piú veloce e accurato.
+La pistola a laser si avvale delle ultimissime scoperte tecnologiche. Ha la maneggevolezza di una pistola, ma con un tiro più veloce e accurato.
 STR_LASER_RIFLE_UFOPEDIA
-Il fucile laser è una versione piú accurata e piú potente della precedente pistola.
+Il fucile laser è una versione più accurata e più potente della precedente pistola.
 STR_HEAVY_LASER_UFOPEDIA
 Questo laser pesante è voluminoso ma estremamente efficace.
 STR_GRENADE_UFOPEDIA
 Questa granata standard ha un timer accurato e sofisticato per il controllo di precisione.
 STR_SMOKE_GRENADE_UFOPEDIA
-Le granate fumogene sono utili perché forniscono protezione in situazioni di esposizione all'attacco nemico. E' necessario usarle con cura perché anche il nemico puó beneficiare delle loro prestazioni.
+Le granate fumogene sono utili perché forniscono protezione in situazioni di esposizione all'attacco nemico. È necessario usarle con cura perché anche il nemico può beneficiare delle loro prestazioni.
 STR_PROXIMITY_GRENADE_UFOPEDIA
-Una granata di prossimità puó essere lanciata come una normale granata ma esplode quando rileva movimento nelle sue vicinanze.Quetsa granata va usata con molta attenzione.
+Una granata di prossimità può essere lanciata come una normale granata ma esplode quando rileva movimento nelle sue vicinanze. Questa granata va usata con molta attenzione.
 STR_HIGH_EXPLOSIVE_UFOPEDIA
-Questo esplosivo dovrebbe essere usato soltanto per demolizioni. E' importante che il personale venga tenuto lontano dai luoghi di demolizione.
+Questo esplosivo dovrebbe essere usato soltanto per demolizioni. È importante che il personale venga tenuto lontano dai luoghi di demolizione.
 STR_MOTION_SCANNER_UFOPEDIA
-Questo congegno usa diversi rivelatori e algoritmi di computer per identificare le unità mobili nemiche. Seleziona lo scanner di movimento nella modalità tattica, poi seleziona "Usa Scanner" dal menu. Lo scanner mostra una freccia nel centro che rappresentala la direzione verso cui è rivolto il soldato (il nord si trova in alto). I puntini lampeggianti rappresentano le unità che hai mosso per ultime. Unità grandi o in movimento veloce verranno indicate con un punto lampeggiante piú grande. Le unità fisse non vengono rilevate.
+Questo congegno usa diversi rivelatori e algoritmi di computer per identificare le unità mobili nemiche. Seleziona lo scanner di movimento nella modalità tattica, poi seleziona "Usa Scanner" dal menu. Lo scanner mostra una freccia nel centro che rappresentala la direzione verso cui è rivolto il soldato (il nord si trova in alto). I puntini lampeggianti rappresentano le unità che hai mosso per ultime. Unità grandi o in movimento veloce verranno indicate con un punto lampeggiante più grande. Le unità fisse non vengono rilevate.
 STR_MEDI_KIT_UFOPEDIA
-Il medi-kit combina la semplicità curativa con antidolorifici e stimolanti. Utilizzalo quando sei rivolto verso l'agente X-Com infortunato o sopra il corpo di un soldato stordito.{NEWLINE}GUARIRE>Rosso indica le ferite. Clicca su una parte del corpo che è ferita, dopodichè clicca su 'Guarire'. Una ferita letale verrà guarita e la salute verrà ripristinata.{NEWLINE}STIMOLANTI>Rigenera energia e migliora le condizioni dei soldati storditi. Per riprendere un soldato svenuto devi posizionarti davanti a lui.{NEWLINE}MEDICINA>Ripristina il morale dei soldati feriti.
+Il medi-kit combina la semplicità curativa con antidolorifici e stimolanti. Utilizzalo quando sei rivolto verso l'agente X-Com infortunato o sopra il corpo di un soldato stordito.{NEWLINE}GUARIRE>Rosso indica le ferite. Clicca su una parte del corpo che è ferita, dopodiché clicca su "Guarire". Una ferita letale verrà guarita e la salute verrà ripristinata.{NEWLINE}STIMOLANTI>Rigenera energia e migliora le condizioni dei soldati storditi. Per riprendere un soldato svenuto devi posizionarti davanti a lui.{NEWLINE}MEDICINA>Ripristina il morale dei soldati feriti.
 STR_PSI_AMP_UFOPEDIA
-L'amplificatore psionico puó essere usato soltanto da soldati che hanno doti psioniche. Durante il combattimento, fai clic su Psi-Amp, scegli il tipo di attacco e poi scegli una unità bersaglio con il cursore. Ci sono due tipi di attacco psionico:{NEWLINE}UNITA' IN PANICO> Se l'attacco ha successo, influenzerà pesantemente il morale delle forze nemiche e farà sì che queste entrino in stato di panico{NEWLINE}CONTROLLO MENTALE> Se l'attacco ha successo si ottiene il controllo immediato dell'unità nemica, come se fosse una propria unità (non si ha però accesso al suo inventario).
+L'amplificatore psionico può essere usato soltanto da soldati che hanno doti psioniche. Durante il combattimento, fai clic su Psi-Amp, scegli il tipo di attacco e poi scegli una unità bersaglio con il cursore. Ci sono due tipi di attacco psionico:{NEWLINE}Unità IN PANICO> Se l'attacco ha successo, influenzerà pesantemente il morale delle forze nemiche e farà sì che queste entrino in stato di panico{NEWLINE}CONTROLLO MENTALE> Se l'attacco ha successo si ottiene il controllo immediato dell'unità nemica, come se fosse una propria unità (non si ha però accesso al suo inventario).
 STR_STUN_ROD_UFOPEDIA
-Questo strumento puó essere usato soltanto nel combattimento ravvicinato per tramortire un organismo vivente senza ucciderlo .
+Questo strumento può essere usato soltanto nel combattimento ravvicinato per tramortire un organismo vivente senza ucciderlo .
 STR_THE_SUBJECT_HAS_DIED
 Il soggetto è morto in seguito al trauma dell'interrogatorio
 STR_MIND_PROBE_UFOPEDIA
-La sonda mentale è un congegno che serve per comunicare. E' usato dagli alieni per ricavare informazioni direttamente dalle onde cerebrali. Le unità XCom possono usarlo in combattimento per mettere in evidenza le caratteristiche degli alieni. Fai clic sulla sonda mentale e l'opzione 'Usa'. Poi fai clic sopra un alieno con il cursore.
+La sonda mentale è un congegno che serve per comunicare. È usato dagli alieni per ricavare informazioni direttamente dalle onde cerebrali. Le unità XCom possono usarlo in combattimento per mettere in evidenza le caratteristiche degli alieni. Fai clic sulla sonda mentale e l'opzione "Usa". Poi fai clic sopra un alieno con il cursore.
 STR_PLASMA_PISTOL_UFOPEDIA
 Le pistole al plasma sono un'arma aliena letale, basata sull'accelerazione di particelle all'interno di un piccolo campo antigravitazionale.
 STR_PLASMA_RIFLE_UFOPEDIA
@@ -1286,11 +1286,11 @@ Si possono svolgere ricerche sul cadavere per poter redigere un referto autoptic
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
 Le munizioni non sono sufficienti
 STR_BLASTER_LAUNCHER_UFOPEDIA
-Quest'arma puó sparare 'bombe devastanti' molto potenti. Quando clicchi per far fuoco appariranno dei punti di rotta da seguire con l'arma. Quando sei posizionato sui punti di rotta premi START per evidenziare l'icona. Premi CROCE per lanciare.
+Quest'arma può sparare "bombe devastanti" molto potenti. Quando clicchi per far fuoco appariranno dei punti di rotta da seguire con l'arma. Quando sei posizionato sui punti di rotta premi START per evidenziare l'icona. Premi CROCE per lanciare.
 STR_SMALL_LAUNCHER_UFOPEDIA
-Un piccolo lanciaproiettili che spara bombe in grado di tramortire gli alieni. E' utilissimo per catturare vivi gli alieni.
+Un piccolo lancia proiettili che spara bombe in grado di tramortire gli alieni. È utilissimo per catturare vivi gli alieni.
 STR_ALIEN_GRENADE_UFOPEDIA
-Questo congegno funziona in modo abbastanza simile ad una granata di terrestre, ma è decisamente piú potente.
+Questo congegno funziona in modo abbastanza simile ad una granata di terrestre, ma è decisamente più potente.
 STR_SMALL_SCOUT
 Esploratore piccolo
 STR_MEDIUM_SCOUT
@@ -1330,9 +1330,9 @@ Il consiglio delle nazioni esprime una generale soddisfazione per i tuoi progres
 STR_COUNCIL_IS_VERY_PLEASED
 Il consiglio delle nazioni esprime grande soddisfazione per i tuoi eccellenti progressi. Continua a lavorare così.
 STR_COUNCIL_IS_DISSATISFIED
-Il consiglio delle nazioni esprime la propria insoddisfazione nei confronti dei tuoi risultati. Devi mostrarti piú efficace nel contrastare la minaccia aliena o rischierai di dover porre termine al tuo progetto.
+Il consiglio delle nazioni esprime la propria insoddisfazione nei confronti dei tuoi risultati. Devi mostrarti più efficace nel contrastare la minaccia aliena o rischierai di dover porre termine al tuo progetto.
 STR_YOU_HAVE_NOT_SUCCEEDED
-Non sei riuscito ad opporti alla minaccia aliena e il consiglio delle nazioni ha deciso di porre termine al progetto. Ogni paese tratterà il problema nel modo piú opportuno. Si puó solo sperare che si giunga a qualche tipo di accordo con queste forze apparentemente ostili, e che la popolazione riesca a trattare con i visitatori alieni.
+Non sei riuscito ad opporti alla minaccia aliena e il consiglio delle nazioni ha deciso di porre termine al progetto. Ogni paese tratterà il problema nel modo più opportuno. Si può solo sperare che si giunga a qualche tipo di accordo con queste forze apparentemente ostili, e che la popolazione riesca a trattare con i visitatori alieni.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
  esprime una particolare soddisfazione per la tua abilità nell'opporti alla minaccia - che sei riuscito a localizzare - e ha deliberato di aumentare i finanziamenti.
 STR_COUNTRIES_ARE_PARTICULARLY_HAPPY
@@ -1514,7 +1514,7 @@ ARMI/{NEWLINE}EQUIPAGGI/Tank
 STR_ABANDON_GAME
 ABBANDONA IL GIOCO
 STR_QUIT
-Torna
+Esci
 STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE
 è a corto di carburante,{NEWLINE}sta tornando alla base
 STR_SOLDIER_LIST
@@ -1528,7 +1528,7 @@ UCCISIONI>
 STR_WOUND_RECOVERY
 GUARIGIONE FERITI> 
 STR_TIME_UNITS
-UNITA' DI TEMPO
+Unità DI TEMPO
 STR_STAMINA
 RESISTENZA
 STR_HEALTH
@@ -1546,7 +1546,7 @@ FORZA
 STR_PSIONIC_STRENGTH
 FORZA PSIONICA
 STR_PSIONIC_SKILL
-ABILITA' PSIONICA
+ABILITÀ PSIONICA
 STR_NEW_RANK
 NUOVO RANGO
 STR_PROMOTIONS
@@ -1562,23 +1562,23 @@ Le armi laser sono un utile complemento per i Tank. Costituiscono un mezzo di fu
 STR_HOVERTANK_PLASMA_UFOPEDIA
 La tecnologia aliena ha dato nuove possibilità ai Tank. La facilità di manovra in aria e la potenza dei raggi al plasma costituiscono una combinazione letale.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
-Questo hovertank ha un lanciabombe a fusione capace di provocare grandi devastazioni. Usalo con molta attenzione. Dovrai costruire i proiettili a fusione per tenere ben armati Tank. Una palla a fusione è un'arma intelligente. Quando vuoi sparare, devi selezionare con il cursore una serie di 'destinazioni programmate' e poi fare clic sull'icona di lancio per far partire la palla.
+Questo hovertank ha un lanciabombe a fusione capace di provocare grandi devastazioni. Usalo con molta attenzione. Dovrai costruire i proiettili a fusione per tenere ben armati Tank. Una palla a fusione è un'arma intelligente. Quando vuoi sparare, devi selezionare con il cursore una serie di "destinazioni programmate" e poi fare clic sull'icona di lancio per far partire la palla.
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
-Questo caricatore viene usato dal fucile pesante al plasma. Contiene una piccola quantità di Elerio.
+Questo caricatore viene usato dal fucile pesante al plasma. Contiene una piccola quantità di Elerium.
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
-Questo caricatore viene usato come fonte di energia per un fucile al plasma - un'arma aliena di media potenza. Contiene una piccola quantità di Elerio.
+Questo caricatore viene usato come fonte di energia per un fucile al plasma - un'arma aliena di media potenza. Contiene una piccola quantità di Elerium.
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
-Caricatore per la piccola pistola aliena al plasma. Contiene Elerio - la fonte di energia aliena.
+Caricatore per la piccola pistola aliena al plasma. Contiene Elerium - la fonte di energia aliena.
 STR_STUN_BOMB_UFOPEDIA
-La bomba stordente è usata per catturare vivi gli esemplari umani, ma puó essere usata anche contro la maggior parte delle specie aliene. Viene sparata da un piccolo lanciabombe.
+La bomba stordente è usata per catturare vivi gli esemplari umani, ma può essere usata anche contro la maggior parte delle specie aliene. Viene sparata da un piccolo lanciabombe.
 STR_ALIEN_RESEARCH_UFOPEDIA
 La missione di ricerca degli alieni ha come scopo la raccolta di informazioni sulla Terra e i suoi abitanti. Vengono usati principalmente veicoli piccoli, che possono atterrare occasionalmente in aree deserte. Non pare che l'organizzazione XCom, i governi e il pubblico, si preoccupino molto di questa minaccia.
 STR_ALIEN_HARVEST_UFOPEDIA
-Gli alieni considerano interessante la fauna terrestre per svariate ragioni. Gli animali sono rapiti in segreto e restituiti poi privi di alcuni organi che sono stati espiantati. Questi fatti vengono denunciati particolarmente dopo avvistamenti di UFO. Questa attività aliena suscita preoccupazione presso i governi e grande ansia nella popolazione. Si verifica soprattutto nelle aree agricole. Il concetto di 'mietitura aliena' fa pensare ad una possibile 'semina' di flora e fauna sulla Terra, da parte degli alieni, i quali adesso verrebbero a falciare il raccolto a loro dovuto.
+Gli alieni considerano interessante la fauna terrestre per svariate ragioni. Gli animali sono rapiti in segreto e restituiti poi privi di alcuni organi che sono stati espiantati. Questi fatti vengono denunciati particolarmente dopo avvistamenti di UFO. Questa attività aliena suscita preoccupazione presso i governi e grande ansia nella popolazione. Si verifica soprattutto nelle aree agricole. Il concetto di "mietitura aliena" fa pensare ad una possibile "semina" di flora e fauna sulla Terra, da parte degli alieni, i quali adesso verrebbero a falciare il raccolto a loro dovuto.
 STR_ALIEN_ABDUCTION_UFOPEDIA
-Questa è l'attività aliena piú insidiosa. Spesso vengono denunciati rapimenti da parte degli alieni, nonostante il tentativo di questi di rimuovere il ricordo dei fatti dalla memoria delle vittime. I rapiti dichiarano di essere stati sottoposti a umilianti esami fisici, e di aver perfino dovuto subire la fecondazione e altri bizzarri esperimenti genetici. Lo scopo di tutto questo sembra correlato ad esperimenti di mutazione genetica e di manipolazione del materiale genetico degli alieni stessi. Questa attività suscita grande allarme, e si verifica particolarmente nelle aree popolose e nelle grandi città.
+Questa è l'attività aliena più insidiosa. Spesso vengono denunciati rapimenti da parte degli alieni, nonostante il tentativo di questi di rimuovere il ricordo dei fatti dalla memoria delle vittime. I rapiti dichiarano di essere stati sottoposti a umilianti esami fisici, e di aver perfino dovuto subire la fecondazione e altri bizzarri esperimenti genetici. Lo scopo di tutto questo sembra correlato ad esperimenti di mutazione genetica e di manipolazione del materiale genetico degli alieni stessi. Questa attività suscita grande allarme, e si verifica particolarmente nelle aree popolose e nelle grandi città.
 STR_ALIEN_INFILTRATION_UFOPEDIA
-I governi della Terra possono essere infiltrati da agenti alieni, umani solo nell'aspetto. Questo puó avere come conseguenza incontri ad alto livello tra gli alieni e i vari governi. Il punto culminante di questa attività si accompagna ad un'intensa presenza di UFO nelle aree prossime alle città. Gli alieni di solito firmano un accordo con un governo della Terra, offrendo conoscenze di alta tecnologia. In cambio, il governo lascerà svolgere l'attività degli UFO senza ostacolarli. Questa missione aliena rappresenta la minaccia piú grave per il progetto XCom. Se un governo accetta questo tipo di patto, il finanziamento da parte del rispettivo stato cesserà.
+I governi della Terra possono essere infiltrati da agenti alieni, umani solo nell'aspetto. Questo può avere come conseguenza incontri ad alto livello tra gli alieni e i vari governi. Il punto culminante di questa attività si accompagna ad un'intensa presenza di UFO nelle aree prossime alle città. Gli alieni di solito firmano un accordo con un governo della Terra, offrendo conoscenze di alta tecnologia. In cambio, il governo lascerà svolgere l'attività degli UFO senza ostacolarli. Questa missione aliena rappresenta la minaccia più grave per il progetto XCom. Se un governo accetta questo tipo di patto, il finanziamento da parte del rispettivo stato cesserà.
 STR_ALIEN_BASE_UFOPEDIA
 Gli alieni costruiscono basi sotterranee segrete in località remote. Dopo alcuni voli di ricognizione, si avrà un'intensa attività di UFO durante tutto il periodo della costruzione. Si sa che queste basi contengono laboratori per la sperimentazione su umani rapiti, oltre che rifornimenti per altre attività nella zona. La presenza di basi aliene fa sì che si rilevi un'intensa attività aliena nel territorio, ma senza la presenza di UFO. Per poter localizzare una base, i mezzi XCom dovranno perlustrare la zona per alcune ore nella speranza di individuarla.
 STR_ALIEN_TERROR_UFOPEDIA
@@ -1586,13 +1586,13 @@ Quando gli alieni vogliono seminare il terrore in una città mettono in campo fo
 STR_ALIEN_RETALIATION_UFOPEDIA
 Gli intercettatori XCom stanno avendo grande successo nell'azione di abbattimento degli UFO, per cui ci potrebbe essere una decisa rappresaglia da parte degli alieni. Potrebbe esserci un attacco diretto contro la base XCom. Tuttavia, per poter attaccare una base, gli alieni devono prima scoprirla. Se si riuscirà a tener lontani gli UFO, si neutralizzerà il pericolo di un assalto.
 STR_ALIEN_SUPPLY_UFOPEDIA
-Una volta che è stata costruita la base aliena, questa è rifornita con regolarità da uno speciale veicolo. Se, al momento dell'atterraggio, viene individuato uno di questi veicoli da rifornimento, si puó star certi che nelle vicinanze si troverà una base aliena.
+Una volta che è stata costruita la base aliena, questa è rifornita con regolarità da uno speciale veicolo. Se, al momento dell'atterraggio, viene individuato uno di questi veicoli da rifornimento, si può star certi che nelle vicinanze si troverà una base aliena.
 STR_SMALL_SCOUT_UFOPEDIA
-Questo piccolo veicolo è usato principalmente per ricognizioni o ricerche. Di solito precede veicoli piú grandi all'inizio di una missione aliena.
+Questo piccolo veicolo è usato principalmente per ricognizioni o ricerche. Di solito precede veicoli più grandi all'inizio di una missione aliena.
 STR_MEDIUM_SCOUT_UFOPEDIA
-Un veicolo da esplorazione di dimensioni medie che non appare troppo minaccioso alle forze terrestri. Di solito anticipa i veicoli di dimensioni piú grandi durante le missioni.
+Un veicolo da esplorazione di dimensioni medie che non appare troppo minaccioso alle forze terrestri. Di solito anticipa i veicoli di dimensioni più grandi durante le missioni.
 STR_LARGE_SCOUT_UFOPEDIA
-Il piú grande veicolo da esplorazione alieno è un tipo di macchina multiuso utilizzata in tutti i tipi di missioni aliene.
+Il più grande veicolo da esplorazione alieno è un tipo di macchina multiuso utilizzata in tutti i tipi di missioni aliene.
 STR_HARVESTER_UFOPEDIA
 Il mietitore ha una botola alla base ed è fornito di un congegno di sollevamento per issare a bordo vari tipi di animali. Vengono usati coltelli laser per estrarre il materiale che interessa. Poi le carcasse sono lasciate cadere a terra. Ci sono anche speciali contenitori dove si conservano i vari organi.
 STR_ABDUCTOR_UFOPEDIA
@@ -1600,7 +1600,7 @@ Questo veicolo è dotato di una sala per sperimentazioni dove si eseguono interv
 STR_TERROR_SHIP_UFOPEDIA
 La nave del terrore ha strutture apposite per contenere armi e creature aliene destinate a suscitare terrore. Viene usata per trasportare i terroristi alieni nelle aree fortemente abitate.
 STR_BATTLESHIP_UFOPEDIA
-La nave da guerra è il veicolo alieno piú potente. Il suo uso è fondamentale per le missioni degli alieni. Porta armi potentissime e un equipaggio composto da numerosi alieni.
+La nave da guerra è il veicolo alieno più potente. Il suo uso è fondamentale per le missioni degli alieni. Porta armi potentissime e un equipaggio composto da numerosi alieni.
 STR_SUPPLY_SHIP_UFOPEDIA
 Il veicolo da rifornimento viene usato nel corso della costruzione delle basi aliene oppure per rifornire basi già in funzione. Porta dei container pieni di cibo alieno e celle di riproduzione.
 STR_DISMANTLE
@@ -1634,19 +1634,19 @@ Caricat. fucile
 STR_HEAVY_CANNON
 Cannone pesante
 STR_HC_AP_AMMO
-Muniz. Cann. Pes. AP
+Colpi HC-AP
 STR_HC_HE_AMMO
-Muniz. Cann. Pes. HE
+Colpi HC-HE
 STR_HC_I_AMMO
-Muniz. Cann. Pes. Inc.
+Colpi HC-I
 STR_AUTO_CANNON
 Cannone automatico
 STR_AC_AP_AMMO
-Muniz. Cann. Autom. AP
+Colpi AC-AP
 STR_AC_HE_AMMO
-Muniz. Cann. Autom. HE
+Colpi AC-HE
 STR_AC_I_AMMO
-Muniz. Cann. Autom. Inc.
+Colpi AC-I
 STR_ROCKET_LAUNCHER
 Lanciarazzi
 STR_SMALL_ROCKET
@@ -1688,7 +1688,7 @@ Bomba stordente
 STR_ALIEN_GRENADE
 Granata aliena
 STR_ELERIUM_115
-Elerio-115
+Elerium-115
 STR_MIND_PROBE
 Sonda mentale
 STR_SECTOID_CORPSE
@@ -1724,11 +1724,11 @@ Armamenti per riarmo intera squadra insufficiente
 STR_MARS_CYDONIA_LANDING
 Marte: Approdo a Cydonia
 STR_MARS_CYDONIA_LANDING_BRIEFING
-Il tuo veicolo Avenger è atterrato a Cydonia, sulla superficie di Marte. Le nostre informazioni dicono che una delle piramidi contiene un ascensore che accede ad un complesso sotterraneo. Dopo aver raccolto tutti i tuoi soldati nell'area dell'ascensore, fai clic sull'icona indicata con 'Interrompi la missione' per continuare con la fase seguente.
+Il tuo veicolo Avenger è atterrato a Cydonia, sulla superficie di Marte. Le nostre informazioni dicono che una delle piramidi contiene un ascensore che accede ad un complesso sotterraneo. Dopo aver raccolto tutti i tuoi soldati nell'area dell'ascensore, fai clic sull'icona indicata con "Interrompi la missione" per continuare con la fase seguente.
 STR_MARS_THE_FINAL_ASSAULT
 Marte: l'Assalto Finale
 STR_MARS_THE_FINAL_ASSAULT_BRIEFING
-L'ascensore della piramide porta i tuoi stanchi soldati nelle viscere del pianeta, dove trovano un labirinto di tunnel e celle. Il cervello alieno si trova nascosto in qualche punto del labirinto. Se si vuole che la Terra non venga ridotta in stato di schiavitú, bisogna che questo cervello venga distrutto.{NEWLINE}{NEWLINE}Buona fortuna!
+L'ascensore della piramide porta i tuoi stanchi soldati nelle viscere del pianeta, dove trovano un labirinto di tunnel e celle. Il cervello alieno si trova nascosto in qualche punto del labirinto. Se si vuole che la Terra non venga ridotta in stato di schiavitù, bisogna che questo cervello venga distrutto.{NEWLINE}{NEWLINE}Buona fortuna!
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
 {NEWLINE}per poter usare o produrre{NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
@@ -1824,7 +1824,7 @@ STR_DAYS
 STR_IN_PSIONIC_TRAINING
 In training psionico
 STR_BLASTER_BOMB_UFOPEDIA
-Questo congegno è una bomba ad alto potenziale esplosivo che viene comandata da un sistema intelligente. E' lanciato da un lancia-bombe apposito.
+Questo congegno è una bomba ad alto potenziale esplosivo che viene comandata da un sistema intelligente. È lanciato da un lancia-bombe apposito.
 STR_FRONT_ARMOR
 Armatura frontale
 STR_LEFT_ARMOR
@@ -1874,15 +1874,15 @@ Volume effetti sonori
 STR_CONTROLLER_OPTIONS
 OPZIONI CONTROLLER
 STR_CONTROLLER_MODE_1_HOTSPOT_INTERFACE
-Controller modalita' 1{NEWLINE}(Interfaccia automatica)
+Controller modalità 1{NEWLINE}(Interfaccia automatica)
 STR_CONTROLLER_MODE_2_POINT_CLICK_INTERFACE
-Controller modalita' 2{NEWLINE}(Interfaccia Evidenzia e seleziona)
+Controller modalità 2{NEWLINE}(Interfaccia Evidenzia e seleziona)
 STR_LOADING
 Caricamento...
 STR_FORMAT_UNSUCCESSFUL
 Formattazione fallita
 STR_UNIT
-UNITA'>
+Unità>
 STR_ENERGY
 ENERGIA
 STR_MORALE
@@ -1898,7 +1898,7 @@ ARMATURA DESTRA
 STR_REAR_ARMOR_UC
 ARMATURA POSTERIORE
 STR_SKILLS
-ABILITA'>
+ABILITÀ>
 STR_LEVEL
 LIVELLO>
 STR_HEAD
@@ -1954,7 +1954,7 @@ Unità tempo insufficienti!
 STR_NOT_ENOUGH_ENERGY
 Energia insufficiente!
 STR_NO_ROUNDS_LEFT
-Non ci sono piú colpi!
+Non ci sono più colpi!
 STR_NO_AMMUNITION_LOADED
 Munizioni non caricate!
 STR_WRONG_AMMUNITION_FOR_THIS_WEAPON
@@ -1996,7 +1996,7 @@ Controllo mentale riuscito
 STR_HAS_GONE_BERSERK
 è impazzito
 STR_HAS_PANICKED
-E' in stato di panico
+È in stato di panico
 STR_XCOM
 XCom
 STR_ALIENS
@@ -2016,7 +2016,7 @@ CINTURA
 STR_IS_UNDER_ALIEN_CONTROL
 è sotto controllo alieno
 STR_SCROLL_SPEED
-VELOCITA' SCORRIMENTO
+VELOCITÀ SCORRIMENTO
 STR_SCROLL_TYPE
 TIPO SCORRIMENTO
 STR_TRIGGER_SCROLL
@@ -2024,11 +2024,11 @@ SCORRIMENTO AZIONE ARMA
 STR_AUTO_SCROLL
 SCORRIMENTO AUTOMATICO
 STR_FIRE_SPEED
-VELOCITA' FUOCO
+VELOCITÀ FUOCO
 STR_XCOM_MOVEMENT_SPEED
-VELOCITA' MOVIMENTO XCOM
+VELOCITÀ MOVIMENTO XCOM
 STR_ALIEN_MOVEMENT_SPEED
-VELOCITA' MOVIMENTO ALIENI
+VELOCITÀ MOVIMENTO ALIENI
 STR_HAS_BECOME_UNCONSCIOUS
  ha perso coscienza
 STR_HAS_DIED_FROM_A_FATAL_WOUND
@@ -2060,32 +2060,32 @@ STR_NEW_SAVED_GAME
 STR_NEW_BATTLE
 Nuova Battaglia
 STR_THE_SIMULATRON
-THE SIMULATRON
+IL SIMULATRON
 STR_OPTIONS
 Opzioni
 STR_TERRAIN
-TERRAIN
+TERRENO
 STR_DARKNESS
-DARKNESS
+OSCURITÀ
 STR_DISPLAY_RESOLUTION
-Display Resolution
+Risoluzione Display
 STR_DISPLAY_MODE
 Display Mode
 STR_WINDOWED
-Windowed
+A finestra
 STR_FULLSCREEN
-Fullscreen
+A pieno schermo
 STR_LANGUAGE
-LANGUAGE
+LINGUA
 STR_FARM
-Farm
+Fattoria
 STR_FOREST
-Forest
+Foresta
 STR_JUNGLE
-Jungle
+Giungla
 STR_MOUNTAIN
-Mountain
+Montagna
 STR_DESERT
-Desert
+Deserto
 STR_POLAR
-Polar
+Polare

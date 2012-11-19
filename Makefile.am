@@ -37,7 +37,9 @@ language_DATA = \
 	bin/data/Language/Russian.lng \
 	bin/data/Language/Small.fnt \
 	bin/data/Language/Spanish.geo \
-	bin/data/Language/Spanish.lng
+	bin/data/Language/Spanish.lng \
+	bin/data/Language/Ukranian.geo \
+	bin/data/Language/Ukranian.lng
 
 namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
@@ -48,6 +50,8 @@ name_DATA = \
 	bin/data/SoldierName/Finnish.nam \
 	bin/data/SoldierName/French.nam \
 	bin/data/SoldierName/German.nam \
+	bin/data/SoldierName/Hungarian.nam \
+	bin/data/SoldierName/Italian.nam \
 	bin/data/SoldierName/Japanese.nam \
 	bin/data/SoldierName/Polish.nam \
 	bin/data/SoldierName/Portuguese.nam \
@@ -105,6 +109,10 @@ openxcom_SOURCES = \
 	src/Basescape/PlaceFacilityState.h \
 	src/Basescape/PlaceLiftState.cpp \
 	src/Basescape/PlaceLiftState.h \
+	src/Basescape/PlaceStartFacilityState.cpp \
+	src/Basescape/PlaceStartFacilityState.h \
+	src/Basescape/SelectStartFacilityState.cpp \
+	src/Basescape/SelectStartFacilityState.h \
 	src/Basescape/PurchaseState.cpp \
 	src/Basescape/PurchaseState.h \
 	src/Basescape/ResearchInfoState.cpp \
@@ -177,10 +185,14 @@ openxcom_SOURCES = \
 	src/Battlescape/MiniMapView.h \
 	src/Battlescape/NextTurnState.cpp \
 	src/Battlescape/NextTurnState.h \
+	src/Battlescape/NoContainmentState.cpp \
+	src/Battlescape/NoContainmentState.h \
 	src/Battlescape/Pathfinding.cpp \
 	src/Battlescape/Pathfinding.h \
 	src/Battlescape/PathfindingNode.cpp \
 	src/Battlescape/PathfindingNode.h \
+	src/Battlescape/PathfindingOpenSet.cpp \
+	src/Battlescape/PathfindingOpenSet.h \
 	src/Battlescape/PatrolBAIState.cpp \
 	src/Battlescape/PatrolBAIState.h \
 	src/Battlescape/Position.cpp \
@@ -238,6 +250,7 @@ openxcom_SOURCES = \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
+	src/Engine/Logger.h \
 	src/Engine/Music.cpp \
 	src/Engine/Music.h \
 	src/Engine/Options.cpp \
@@ -262,8 +275,12 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
+	src/Geoscape/AlienBaseState.cpp \
+	src/Geoscape/AlienBaseState.h \
 	src/Geoscape/AlienTerrorState.cpp \
 	src/Geoscape/AlienTerrorState.h \
+	src/Geoscape/AllocatePsiTrainingState.cpp \
+	src/Geoscape/AllocatePsiTrainingState.h \
 	src/Geoscape/BaseNameState.cpp \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
@@ -312,6 +329,8 @@ openxcom_SOURCES = \
 	src/Geoscape/Polyline.h \
 	src/Geoscape/ProductionCompleteState.cpp \
 	src/Geoscape/ProductionCompleteState.h \
+	src/Geoscape/PsiTrainingState.cpp \
+	src/Geoscape/PsiTrainingState.h \
 	src/Geoscape/ResearchCompleteState.cpp \
 	src/Geoscape/ResearchCompleteState.h \
 	src/Geoscape/SelectDestinationState.cpp \
@@ -320,6 +339,8 @@ openxcom_SOURCES = \
 	src/Geoscape/TargetInfoState.h \
 	src/Geoscape/UfoDetectedState.cpp \
 	src/Geoscape/UfoDetectedState.h \
+	src/Geoscape/UfoHyperDetectedState.cpp \
+	src/Geoscape/UfoHyperDetectedState.h \
 	src/Geoscape/UfoLostState.cpp \
 	src/Geoscape/UfoLostState.h \
 	src/Interface/ArrowButton.cpp \
@@ -421,6 +442,8 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
+	src/Savegame/AlienBase.cpp \
+	src/Savegame/AlienBase.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -437,6 +460,8 @@ openxcom_SOURCES = \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/CraftWeaponProjectile.cpp \
 	src/Savegame/CraftWeaponProkectile.h \
+	src/Savegame/EquipmentLayoutItem.cpp \
+	src/Savegame/EquipmentLayoutItem.h \
 	src/Savegame/GameTime.cpp \
 	src/Savegame/GameTime.h \
 	src/Savegame/ItemContainer.cpp \

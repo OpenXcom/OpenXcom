@@ -37,6 +37,7 @@
 #include "Target.h"
 #include "Ufo.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -83,20 +84,23 @@ Base::~Base()
  * @param node YAML node.
  * @param save Pointer to saved game.
  */
-void Base::load(const YAML::Node &node, SavedGame *save)
+void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 {
 	Target::load(node);
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
 
-	for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+	if (!newGame || !Options::getBool("customInitialBase") )
 	{
-		std::string type;
-		(*i)["type"] >> type;
-		BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
-		f->load(*i);
-		_facilities.push_back(f);
+		for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+		{
+			std::string type;
+			(*i)["type"] >> type;
+			BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
+			f->load(*i);
+			_facilities.push_back(f);
+		}
 	}
 
 	for (YAML::Iterator i = node["crafts"].begin(); i != node["crafts"].end(); ++i)
@@ -922,4 +926,103 @@ const std::vector<Production *> & Base::getProductions () const
 	return _productions;
 }
 
+
+/**
+ * Returns whether or not this base
+ * is equipped with hyper-wave
+ * detection facilities.
+ */
+bool Base::getHyperDetection() const
+{
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isHyperwave())
+		{
+			return true;
+		}		
+	}
+	return false;
+}
+
+/**
+ * Returns the total amount of Psi Lab Space
+ * available in the base.
+ * @return Psi Lab space.
+ */
+int Base::getAvailablePsiLabs() const
+{
+	int total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			total += (*i)->getRules()->getPsiLaboratories();
+		}
+	}
+	return total;
+}
+
+/**
+ * Returns the total amount of used
+ * Psi Lab Space in the base.
+ * @return used Psi Lab space.
+ */
+int Base::getUsedPsiLabs() const
+{
+	int total = 0;
+	for (std::vector<Soldier*>::const_iterator s = _soldiers.begin(); s != _soldiers.end(); ++s)
+	{
+		if ((*s)->isInPsiTraining())
+		{
+			total ++;
+		}
+	}
+	return total;
+}
+
+/**
+ * Returns the total amount of used 
+ * Containment Space in the base.
+ * @return Containment Lab space.
+ */
+int Base::getUsedContainment() const
+{
+	int total = 0;
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
+	{
+		if (_rule->getItem((i)->first)->getAlien())
+		{
+			total += (i)->second;
+		}
+	}
+	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		if ((*i)->getType() == TRANSFER_ITEM)
+		{
+			if(_rule->getItem((*i)->getItems())->getAlien())
+			{
+				total += (*i)->getQuantity();
+			}
+		}
+	}	
+	return total;
+}
+
+/**
+ * Returns the total amount of Containment Space
+ * available in the base.
+ * @return Containment Lab space.
+ */
+int Base::getAvailableContainment() const
+{
+	int total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			total += (*i)->getRules()->getAliens();
+		}
+	}
+	return total;
+}
 }

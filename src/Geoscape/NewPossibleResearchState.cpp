@@ -69,18 +69,29 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	if (!possibilities.empty ())
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
-	}
 
 	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
+	
+	int tally(0);
 	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
-		_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
+		
+		if((*iter)->getRequirements().size() == 0 && (*iter)->getStringTemplate().size() == 0 )
+		{
+			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
+		}
+		else
+		{
+			tally++;
+		}
+	}
+
+	if (!(tally == possibilities.size () || possibilities.empty ()))
+	{
+		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
 	}
 }
 

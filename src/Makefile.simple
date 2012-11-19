@@ -20,7 +20,7 @@ BIN = openxcom
 endif
 
 # Compiler settings
-CXXFLAGS ?= -Wall -O2
+CXXFLAGS ?= -Wall -O2 -rdynamic
 CXXFLAGS += $(addprefix -D,$(TARGET))
 CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 

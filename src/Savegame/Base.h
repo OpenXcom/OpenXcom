@@ -62,7 +62,7 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.
-	void load(const YAML::Node& node, SavedGame *save);
+	void load(const YAML::Node& node, SavedGame *save, bool newGame);
 	/// Saves the base to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the base's ID to YAML.
@@ -161,6 +161,16 @@ public:
 	void removeProduction (Production * p);
 	/// Get the list of Base Production's
 	const std::vector<Production *> & getProductions () const;
+	/// Checks if this base is hyper-wave equipped.
+	bool getHyperDetection() const;
+	/// Gets the base's used psi lab space.
+	int getUsedPsiLabs() const;
+	/// Gets the base's total available psi lab space.
+	int getAvailablePsiLabs() const;
+	/// Gets the total amount of Containment Space
+	int getAvailableContainment() const;
+	/// Gets the total amount of used Containment Space
+	int getUsedContainment() const;
 };
 
 }

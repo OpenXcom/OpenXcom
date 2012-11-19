@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
+#include "../Engine/Logger.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
@@ -44,9 +45,7 @@
 #include "../Ruleset/RuleManufacture.h"
 #include "Production.h"
 #include "TerrorSite.h"
-#ifdef _MSC_VER
-#include <windows.h>
-#endif
+#include "AlienBase.h"
 
 namespace OpenXcom
 {
@@ -123,6 +122,10 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+ 	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 
@@ -162,9 +165,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 
 			std::string s = file.substr(0, file.length()-4);
 #ifdef _MSC_VER
-			int size = MultiByteToWideChar(CP_ACP, 0, &s[0], (int)s.size(), NULL, 0);
-			std::wstring wstr(size, 0);
-			MultiByteToWideChar(CP_ACP, 0, &s[0], (int)s.size(), &wstr[0], size);
+			std::wstring wstr = Language::cpToWstr(s);
 #else
 			std::wstring wstr = Language::utf8ToWstr(s);
 #endif
@@ -173,12 +174,12 @@ void SavedGame::getList(TextList *list, Language *lang)
 		}
 		catch (Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			continue;
 		}
 		catch (YAML::Exception &e)
 		{
-			std::cerr << e.what() << std::endl;
+			Log(LOG_ERROR) << e.what();
 			continue;
 		}
 	}
@@ -194,10 +195,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 #ifdef _MSC_VER
-	int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &wstr[0], size);
-	std::ifstream fin(wstr);
+	std::wstring wstr = Language::utf8ToWstr(s);
+	std::ifstream fin(wstr.c_str());
 #else
 	std::ifstream fin(s.c_str());
 #endif
@@ -223,6 +222,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	int a = 0;
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
+	RNG::load(doc);
 	doc["funds"] >> _funds;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
@@ -270,10 +270,16 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
-		b->load(*i, this);
+		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
 
@@ -301,10 +307,8 @@ void SavedGame::save(const std::string &filename) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 #ifdef _MSC_VER
-	int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &wstr[0], size);
-	std::ofstream sav(wstr);
+	std::wstring wstr = Language::utf8ToWstr(s);
+	std::ofstream sav(wstr.c_str());
 #else
 	std::ofstream sav(s.c_str());
 #endif
@@ -326,6 +330,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
+	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
@@ -369,6 +374,13 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "terrorSites" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienBases" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -627,7 +639,11 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 */
 void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
 {
-	_discovered.push_back(r);
+	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
+	if(itDiscovered == _discovered.end())
+	{
+		_discovered.push_back(r);
+	}
 	if(ruleset)
 	{
 		std::vector<RuleResearch*> availableResearch;
@@ -637,9 +653,21 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
 		}
 		for(std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
 		{
-			if((*it)->getCost() == 0)
+			if((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
 			{
 				addFinishedResearch(*it, ruleset);
+			}
+			else if((*it)->getCost() == 0)
+			{
+				int entry(0);
+				for(std::vector<std::string>::const_iterator iter = (*it)->getRequirements().begin (); iter != (*it)->getRequirements().end (); ++iter)
+				{
+					if((*it)->getRequirements().at(entry) == (*iter))
+					{
+						addFinishedResearch(*it, ruleset);
+					}
+					entry++;
+				}
 			}
 		}
 	}
@@ -681,7 +709,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
-		if (itDiscovered != discovered.end ())
+		if (itDiscovered != discovered.end () && research->getStringTemplate().size() == 0)
 		{
 			continue;
 		}
@@ -691,6 +719,20 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		if (research->needItem() && base->getItems()->getItem(research->getName ()) == 0)
 		{
+			continue;
+		}
+		if (research->getRequirements().size() != 0)
+		{
+			int tally(0);
+			for(int itreq = 0; itreq != research->getRequirements().size(); ++itreq)
+			{
+				itDiscovered = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(research->getRequirements().at(itreq)));
+				if (itDiscovered != discovered.end ())
+				{
+					tally++;
+				}
+			}
+			if(tally != research->getRequirements().size())
 			continue;
 		}
 		projects.push_back (research);
@@ -974,6 +1016,15 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 			}
 		}
 	}
+}
+
+/**
+  * Returns the list of alien bases.
+  * @return Pointer to alien base list.
+  */
+std::vector<AlienBase*> *const SavedGame::getAlienBases()
+{
+	return &_alienBases;
 }
 
 /**

@@ -27,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
+#include "PsiTrainingState.h"
 
 namespace OpenXcom
 {
@@ -35,7 +36,7 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game *game) : State(game)
+MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi(psi)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -61,7 +62,7 @@ MonthlyReportState::MonthlyReportState(Game *game) : State(game)
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+13);
+	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 
@@ -141,6 +142,10 @@ void MonthlyReportState::init()
 void MonthlyReportState::btnOkClick(Action *action)
 {
 	_game->popState();
+	if(_psi)
+	{
+		_game->pushState (new PsiTrainingState(_game));
+	}
 }
 
 }

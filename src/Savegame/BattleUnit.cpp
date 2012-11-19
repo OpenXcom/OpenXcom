@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _geoscapeSoldier(soldier), _faction(faction), _originalFaction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -96,7 +96,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _geoscapeSoldier(0), _faction(faction), _originalFaction(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -110,6 +110,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_intelligence = unit->getIntelligence();
 	_aggression = unit->getAggression();
 	_specab = (SpecialAbility) unit->getSpecialAbility();
+	_zombieUnit = unit->getZombieUnit();
+	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
 
@@ -951,7 +953,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
  */
 bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 {
-	if (debugmode && _faction == FACTION_PLAYER) return true;
+	if (debugmode) return true;
 
 	if (tu <= _tu)
 	{
@@ -1900,11 +1902,37 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
+ * Get the unit that the victim is morphed into when attacked.
+ * @return unit.
+ */
+std::string BattleUnit::getZombieUnit() const
+{
+	return _zombieUnit;
+}
+
+/**
+ * Get the unit that is spawned when this one dies.
+ * @return unit.
+ */
+std::string BattleUnit::getSpawnUnit() const
+{
+	return _spawnUnit;
+}
+
+/**
 /// Get the units's rank string.
  */
 std::string BattleUnit::getRankString() const
 {
 	return _rank;
+}
+
+/**
+/// Get the geoscape-soldier object.
+ */
+Soldier *BattleUnit::getGeoscapeSoldier() const
+{
+	return _geoscapeSoldier;
 }
 
 /**
@@ -1932,7 +1960,7 @@ void BattleUnit::setActiveHand(const std::string &hand)
 	_activeHand = hand;
 }
 /**
-/// Get unit's active hand.
+ * Get unit's active hand.
  */
 std::string BattleUnit::getActiveHand() const
 {
@@ -1941,9 +1969,21 @@ std::string BattleUnit::getActiveHand() const
 	return "STR_RIGHT_HAND";
 }
 
+/**
+ * Converts unit to another faction (original faction is still stored).
+ */
 void BattleUnit::convertToFaction(UnitFaction f)
 {
 	_faction = f;
+}
+
+/**
+ * Set health to 0 and set status dead - used when getting zombified.
+ */
+void BattleUnit::instaKill()
+{
+	_health = 0;
+	_status = STATUS_DEAD;
 }
 
 }

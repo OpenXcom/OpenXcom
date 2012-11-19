@@ -31,6 +31,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/Ruleset.h"
 #include "BasescapeState.h"
+#include "SelectStartFacilityState.h"
 
 namespace OpenXcom
 {
@@ -41,7 +42,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param globe Pointer to the Geoscape globe.
  */
-PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
+PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
 	// Create objects
 	_view = new BaseView(192, 192, 0, 8);
@@ -83,7 +84,13 @@ void PlaceLiftState::viewClick(Action *action)
 	fac->setY(_view->getGridY());
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
-	_game->pushState(new BasescapeState(_game, _base, _globe));
+	BasescapeState *bState = new BasescapeState(_game, _base, _globe);
+	_game->pushState(bState);
+	if (_first)
+	{
+		std::vector<OpenXcom::RuleBaseFacility*> PlaceList = _game->getRuleset()->getCustomBaseFacilities();
+		_game->pushState(new SelectStartFacilityState(_game, _base, bState, _globe, PlaceList));
+	}
 }
 
 }

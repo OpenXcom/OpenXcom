@@ -23,7 +23,7 @@ namespace OpenXcom
 {
 
 
-Node::Node()
+Node::Node() : _id(0), _segment(0), _type(0), _rank(0), _flags(0), _reserved(0), _priority(0), _allocated(false)
 {
 
 }

@@ -19,13 +19,15 @@
 
 #include "Options.h"
 #include <SDL_mixer.h>
+#include <stdio.h>
+#include <iostream>
 #include <map>
 #include <sstream>
 #include <fstream>
-#include <iostream>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
 #include "Exception.h"
+#include "Logger.h"
 #include "CrossPlatform.h"
 
 namespace OpenXcom
@@ -81,6 +83,8 @@ void createDefault()
 	setBool("globeSeasons", false);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
+	setInt("pauseMode", 0);
+	setBool("customInitialBase", false);
 
 	_rulesets.push_back("Xcom1Ruleset");
 }
@@ -121,12 +125,12 @@ void loadArgs(int argc, char** args)
 				}
 				else
 				{
-					std::cout << "Unknown option: " << argname << std::endl;
+					Log(LOG_WARNING) << "Unknown option: " << argname;
 				}
 			}
 			else
 			{
-				std::cout << "Unknown option: " << argname << std::endl;
+				Log(LOG_WARNING) << "Unknown option: " << argname;
 			}
 		}
 	}
@@ -186,9 +190,7 @@ bool init(int argc, char** args)
 {
 	if (showHelp(argc, args))
 		return false;
-	std::cout << "Starting OpenXcom..." << std::endl << std::endl;
 	createDefault();
-	std::cout << "Loading options..." << std::endl;
 	loadArgs(argc, args);
 	if (_dataFolder == "")
 	{
@@ -239,10 +241,20 @@ bool init(int argc, char** args)
 			save();
 		}
 	}
-	std::cout << "Data folder is: " << _dataFolder << std::endl;
-	std::cout << "User folder is: " << _userFolder << std::endl;
-	std::cout << "Config folder is: " << _configFolder << std::endl;
-	std::cout << "Options loaded successfully." << std::endl;
+	std::string s = getUserFolder();
+	s += "openxcom.log";
+	Logger::logFile() = s;
+	FILE *file = fopen(Logger::logFile().c_str(), "w");
+    fflush(file);
+	fclose(file);
+	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
+	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
+	{
+		Log(LOG_INFO) << *i;
+	}
+	Log(LOG_INFO) << "User folder is: " << _userFolder;
+	Log(LOG_INFO) << "Config folder is: " << _configFolder;
+	Log(LOG_INFO) << "Options loaded successfully.";
 	return true;
 }
 

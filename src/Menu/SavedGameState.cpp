@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SavedGameState.h"
-#include <iostream>
 #include <yaml-cpp/yaml.h>
+#include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
@@ -169,7 +169,7 @@ void SavedGameState::init()
 	}
 	catch (Exception &e)
 	{
-		std::cerr << "ERROR: " << e.what() << std::endl;
+		Log(LOG_ERROR) << e.what();
 	}
 }
 
