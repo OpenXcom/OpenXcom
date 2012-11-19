@@ -1483,6 +1483,10 @@ void GeoscapeState::handleDogfights()
 		(*d)->think();
 		if((*d)->dogfightEnded())
 		{
+			if((*d)->isMinimized())
+			{
+				_minimizedDogfights--;
+			}
 			delete *d;
 			d = _dogfights.erase(d);
 		}

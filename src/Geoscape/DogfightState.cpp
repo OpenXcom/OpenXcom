@@ -563,6 +563,10 @@ void DogfightState::think()
 			_ufoEscapeTimer->think(this, 0);
 			_craftDamageAnimTimer->think(this, 0);
 		}
+		else if(_craft->getDestination() != _ufo)
+		{
+			endDogfight();
+		}
 	}
 }
 
