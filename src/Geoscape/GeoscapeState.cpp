@@ -467,14 +467,44 @@ void GeoscapeState::time5Seconds()
 	// Handle UFO logic
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
-		(*i)->think();
-		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0)
+		switch ((*i)->getStatus())
 		{
-			(*i)->setDetected(false);
-			if (!(*i)->getFollowers()->empty())
+		case Ufo::FLYING:
+			(*i)->think();
+			if ((*i)->reachedDestination())
 			{
-				_game->pushState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+				if (_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*i)->setAltitude("STR_GROUND");
+					(*i)->setTimeOnGround(16 + RNG::generate(0, 24));
+				}
+				else
+				{
+					// This is only required because we are
+					// faking the UFO flight patterns.
+					(*i)->setStatus(Ufo::DESTROYED);
+					(*i)->setDetected(false);
+					if (!(*i)->getFollowers()->empty())
+					{
+						_game->pushState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+					}
+				}
 			}
+			break;
+		case Ufo::LANDED:
+		case Ufo::CRASHED:
+			if ((*i)->getTimeOnGround() == 0)
+			{
+				(*i)->setDetected(false);
+				if (!(*i)->getFollowers()->empty())
+				{
+					_game->pushState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+				}
+				(*i)->setStatus(Ufo::DESTROYED);
+			}
+			break;
+		case Ufo::DESTROYED:
+			break;
 		}
 	}
 
@@ -509,14 +539,16 @@ void GeoscapeState::time5Seconds()
 				AlienBase* b = dynamic_cast<AlienBase*>((*j)->getDestination());
 				if (u != 0)
 				{
-					if (!u->isCrashed())
+					switch (u->getStatus())
 					{
+					case Ufo::FLYING:
 						timerReset();
 						_music = false;
 						_game->pushState(new DogfightState(_game, _globe, (*j), u));
-					}
-					else
-					{
+						break;
+					case Ufo::LANDED:
+					case Ufo::CRASHED:
+					case Ufo::DESTROYED: // Just before expiration
 						if ((*j)->getNumSoldiers() > 0)
 						{
 							// look up polygons texture
@@ -530,6 +562,7 @@ void GeoscapeState::time5Seconds()
 						{
 							(*j)->returnToBase();
 						}
+						break;
 					}
 				}
 				else if (w != 0)
@@ -578,7 +611,7 @@ void GeoscapeState::time5Seconds()
 	// Clean up dead UFOs
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*i)->reachedDestination() || (*i)->getHoursCrashed() == 0)
+		if ((*i)->getStatus() == Ufo::DESTROYED)
 		{
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
@@ -746,68 +779,87 @@ void GeoscapeState::time30Minutes()
 	// Handle UFO detection
 	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
-		if ((*u)->isCrashed())
-			continue;
-		if (!(*u)->getDetected())
+		switch ((*u)->getStatus())
 		{
-			bool detected = false;
-			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+		case Ufo::FLYING:
+		case Ufo::LANDED:
+			if (!(*u)->getDetected())
 			{
-				if ((*b)->detect(*u))
+				bool detected = false;
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 				{
-					detected = true;
+					if ((*b)->detect(*u))
+					{
+						detected = true;
+						if((*b)->getHyperDetection())
+						{
+							(*u)->setHyperDetected(true);
+						}
+					}
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+					{
+						if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
+							continue;
+						if ((*c)->detect(*u))
+						{
+							detected = true;
+						}
+						for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+						{
+							if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
+								continue;
+							if ((*c)->detect(*u))
+							{
+								detected = true;
+							}
+						}
+					}
+				}
+				if (detected)
+				{
+					(*u)->setDetected(detected);
+					if(!(*u)->getHyperDetected())
+					{
+						_game->pushState(new UfoDetectedState(_game, (*u), this, true));
+					}
+					else
+					{
+						_game->pushState(new UfoHyperDetectedState(_game, (*u), this, true));
+					}
+				}
+			}
+			else
+			{
+				bool detected = false;
+				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+				{
+					detected = detected || (*b)->insideRadarRange(*u);
 					if((*b)->getHyperDetection())
 					{
 						(*u)->setHyperDetected(true);
 					}
-				}
-				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
-				{
-					if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
-						continue;
-					if ((*c)->detect(*u))
+					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 					{
-						detected = true;
+						detected = detected || (*c)->detect(*u);
+					}
+				}
+				if (!detected)
+				{
+					(*u)->setDetected(detected);
+					if ((*u)->getHyperDetected())
+					{
+						(*u)->setHyperDetected(false);
+					}
+					if (!(*u)->getFollowers()->empty())
+					{
+						_game->pushState(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 					}
 				}
 			}
-			if (detected)
-			{
-				(*u)->setDetected(detected);
-				if(!(*u)->getHyperDetected())
-				{
-					_game->pushState(new UfoDetectedState(_game, (*u), this, true));
-				}
-				else
-				{
-					_game->pushState(new UfoHyperDetectedState(_game, (*u), this, true));
-				}
-			}
-		}
-		else
-		{
-			bool detected = false;
-			for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
-			{
-				detected = detected || (*b)->insideRadarRange(*u);
-				if((*b)->getHyperDetection())
-				{
-					(*u)->setHyperDetected(true);
-				}
-				for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
-				{
-					detected = detected || (*c)->detect(*u);
-				}
-			}
-			(*u)->setDetected(detected);
-			if (!detected && (*u)->getHyperDetected())
-			{
-				(*u)->setHyperDetected(false);
-			}
-			if (!detected && !(*u)->getFollowers()->empty())
-			{
-				_game->pushState(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
-			}
+			break;
+		case Ufo::CRASHED:
+		case Ufo::DESTROYED:
+			break;
 		}
 	}
 }
@@ -848,9 +900,20 @@ void GeoscapeState::time1Hour()
 	// Handle crashed UFOs expiring
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
-		if ((*i)->isCrashed() && (*i)->getHoursCrashed() > 0)
+		switch ((*i)->getStatus())
 		{
-			(*i)->setHoursCrashed((*i)->getHoursCrashed() - 1);
+		case Ufo::FLYING:
+			break;
+		case Ufo::LANDED:
+		case Ufo::CRASHED:
+			if ((*i)->getTimeOnGround() > 0)
+			{
+				(*i)->setTimeOnGround((*i)->getTimeOnGround() - 1);
+			}
+			break;
+		case Ufo::DESTROYED:
+			assert(0 && "Timing destroyed UFO.");
+			break;
 		}
 	}
 
