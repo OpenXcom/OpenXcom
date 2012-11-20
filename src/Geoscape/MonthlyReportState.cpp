@@ -28,6 +28,8 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/GameTime.h"
 #include "PsiTrainingState.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/Country.h"
 
 namespace OpenXcom
 {
@@ -69,6 +71,8 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_PROJECT_MONTHLY_REPORT"));
+
+	CalculateChanges();
 
 	int month = _game->getSavedGame()->getTime()->getMonth() - 1, year = _game->getSavedGame()->getTime()->getYear();
 	if (month == 0)
@@ -148,4 +152,17 @@ void MonthlyReportState::btnOkClick(Action *action)
 	}
 }
 
+void MonthlyReportState::CalculateChanges()
+{
+	// update activity counters
+	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	{
+		(*k)->newMonth();
+	}
+	// update activity counters
+	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+	{
+		(*k)->newMonth();
+	}
+}
 }

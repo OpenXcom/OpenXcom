@@ -635,6 +635,22 @@ void GeoscapeState::time5Seconds()
 	{
 		if ((*i)->getHoursActive() == 0 && (*i)->getFollowers()->empty()) // CHEEKY EXPLOIT
 		{
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityAlien(1000);
+					//kids, tell your folks... don't ignore terror sites.
+				}
+			}
+		
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityAlien(1000);
+				}
+			}
 			delete *i;
 			i = _game->getSavedGame()->getTerrorSites()->erase(i);
 		}
@@ -806,7 +822,6 @@ void GeoscapeState::time30Minutes()
 			// Get country
 			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 			{
-				double lat = (*k)->getRules()->getLabelLatitude();
 				if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 				{
 					//one point per UFO in-flight per half hour
@@ -1025,6 +1040,21 @@ void GeoscapeState::time1Day()
 			t->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 		popup(new AlienTerrorState(_game, city, this));
+		
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideRegion((t)->getLongitude(), (t)->getLatitude()))
+			{
+				(*k)->addActivityAlien(10);
+			}
+		}
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideCountry((t)->getLongitude(), (t)->getLatitude()))
+			{
+				(*k)->addActivityAlien(10);
+			}
+		}
 	}
 	else if (chance == 20 && _game->getSavedGame()->getAlienBases()->size() < 9)
 	{
@@ -1061,6 +1091,21 @@ void GeoscapeState::time1Day()
 		else if (race == 2)
 			b->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getAlienBases()->push_back(b);
+		
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideRegion((b)->getLongitude(), (b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(50);
+			}
+		}
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideCountry((b)->getLongitude(), (b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(50);
+			}
+		}
 	}
 
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1151,6 +1196,28 @@ void GeoscapeState::time1Day()
 			if ((*j)->getWoundRecovery() > 0)
 			{
 				(*j)->heal();
+			}
+		}
+	}
+	// handle regional points for alien bases
+	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	{
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(5);
+			}
+		}
+	}
+	// handle country points for alien bases
+	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+	{
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(5);
 			}
 		}
 	}
