@@ -1260,24 +1260,27 @@ void Globe::drawMarkers()
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
-
-		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-		if ((*i)->getDetected())
+		Surface *marker = 0;
+		switch ((*i)->getStatus())
 		{
-			if ((*i)->isCrashed())
-			{
-				_mkCrashedUfo->setX(x - 1);
-				_mkCrashedUfo->setY(y - 1);
-				_mkCrashedUfo->blit(_markers);
-			}
-			else
-			{
-				_mkFlyingUfo->setX(x - 1);
-				_mkFlyingUfo->setY(y - 1);
-				_mkFlyingUfo->blit(_markers);
-			}
+		case Ufo::DESTROYED:
+			continue;
+		case Ufo::FLYING:
+			if (!(*i)->getDetected()) continue;
+			marker = _mkFlyingUfo;
+			break;
+		case Ufo::LANDED:
+			if (!(*i)->getDetected()) continue;
+			marker = _mkLandedUfo;
+			break;
+		case Ufo::CRASHED:
+			marker = _mkCrashedUfo;
+			break;
 		}
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+		marker->setX(x - 1);
+		marker->setY(y - 1);
+		marker->blit(_markers);
 	}
 
 	// Draw the waypoint markers

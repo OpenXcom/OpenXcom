@@ -36,13 +36,16 @@ class RuleUfo;
  */
 class Ufo : public MovingTarget
 {
+public:
+	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
 private:
 	RuleUfo *_rules;
 	int _id, _damage;
 	std::string _direction, _altitude;
 	bool _detected, _hyperDetected;
-	int _hoursCrashed;
 	std::string _race, _mission;
+	enum UfoStatus _status;
+	int _timeLeftOnGround;
 	bool _inBattlescape;
 	int _shotDownByCraftId;
 
@@ -75,16 +78,20 @@ public:
 	bool getDetected() const;
 	/// Sets the UFO's detection status.
 	void setDetected(bool detected);
-	/// Gets the UFO's amount of crashed hours.
-	int getHoursCrashed() const;
-	/// Sets the UFO's amount of crashed hours.
-	void setHoursCrashed(int hours);
+	/// Gets the UFO's hours left on the ground.
+	int getTimeOnGround() const;
+	/// Sets the UFO's hours left on the ground.
+	void setTimeOnGround(int hours);
 	/// Gets the UFO's direction.
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.
 	std::string getAltitude() const;
 	/// Sets the UFO's altitude.
 	void setAltitude(const std::string &altitude);
+	/// Gets the UFO status
+	enum UfoStatus getStatus() const { return _status; }
+	/// Set the UFO's status.
+	void setStatus(enum UfoStatus status) {_status = status; }
 	/// Gets if the UFO has crashed.
 	bool isCrashed() const;
 	/// Gets if the UFO has been destroyed.
