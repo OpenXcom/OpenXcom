@@ -136,7 +136,7 @@ void NewResearchListState::fillProjectList ()
 			else
 			{
 				std::wstring ss;
-				for(int st = 0; st != (*it)->getStringTemplate().size(); ++st)
+				for(size_t st = 0; st != (*it)->getStringTemplate().size(); ++st)
 				{
 					ss += _game->getLanguage()->getString((*it)->getStringTemplate().at(st));
 				}

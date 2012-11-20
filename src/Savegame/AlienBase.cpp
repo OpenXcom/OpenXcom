@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes an alien base
  */
-AlienBase::AlienBase() : Target(), _id(0), _hoursActive(-1), _inBattlescape(false), _discovered(false), _supplyTime(0)
+AlienBase::AlienBase() : Target(), _id(0), _hoursActive(-1), _supplyTime(0), _inBattlescape(false), _discovered(false)
 {
 }
 
