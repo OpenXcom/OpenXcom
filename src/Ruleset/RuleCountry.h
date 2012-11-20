@@ -36,6 +36,7 @@ private:
 	std::string _type;
 	int _fundingMin, _fundingMax;
 	double _labelLon, _labelLat;
+	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
 public:
 	/// Creates a blank country ruleset.
 	RuleCountry(const std::string &type);
@@ -55,6 +56,8 @@ public:
 	double getLabelLongitude() const;
 	/// Gets the country's label Y position.
 	double getLabelLatitude() const;
+	/// Checks if a point is inside the country.
+	bool insideCountry(double lon, double lat) const;
 };
 
 }

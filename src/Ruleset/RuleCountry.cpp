@@ -67,6 +67,22 @@ void RuleCountry::load(const YAML::Node &node)
 		{
 			i.second() >> _labelLat;
 		}
+		else if (key == "lonMin")
+		{
+			i.second() >> _lonMin;
+		}
+		else if (key == "lonMax")
+		{
+			i.second() >> _lonMax;
+		}
+		else if (key == "latMin")
+		{
+			i.second() >> _latMin;
+		}
+		else if (key == "latMax")
+		{
+			i.second() >> _latMax;
+		}
 	}
 }
 
@@ -82,6 +98,10 @@ void RuleCountry::save(YAML::Emitter &out) const
 	out << YAML::Key << "fundingMax" << YAML::Value << _fundingMax;
 	out << YAML::Key << "labelLon" << YAML::Value << _labelLon;
 	out << YAML::Key << "labelLat" << YAML::Value << _labelLat;
+	out << YAML::Key << "lonMin" << YAML::Value << _lonMin;
+	out << YAML::Key << "lonMax" << YAML::Value << _lonMax;
+	out << YAML::Key << "latMin" << YAML::Value << _latMin;
+	out << YAML::Key << "latMax" << YAML::Value << _latMax;
 	out << YAML::EndMap;
 }
 
@@ -133,4 +153,28 @@ double RuleCountry::getLabelLatitude() const
 	return _labelLat;
 }
 
+/**
+ * Checks if a point is inside this country.
+ * @param lon Longitude in radians.
+ * @param lat Latitude in radians.
+ * @return True if it's inside, False if it's outside.
+ */
+bool RuleCountry::insideCountry(double lon, double lat) const
+{
+	for (unsigned int i = 0; i < _lonMin.size(); ++i)
+	{
+		bool inLon, inLat;
+
+		if (_lonMin[i] <= _lonMax[i])
+			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
+		else
+			inLon = ((lon >= _lonMin[i] && lon < 6.283) || (lon >= 0 && lon < _lonMax[i]));
+
+		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
+
+		if (inLon && inLat)
+			return true;
+	}
+	return false;
+}
 }
