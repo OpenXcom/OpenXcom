@@ -125,7 +125,10 @@ void ConfirmLandingState::btnYesClick(Action *action)
 	{
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
-		bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+		if(u->getStatus() == Ufo::CRASHED)
+			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+		else
+			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setWorldTexture(_texture);
 		bgen.setWorldShade(_shade);
