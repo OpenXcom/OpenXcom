@@ -88,7 +88,7 @@ FundingState::FundingState(Game *game) : State(game)
 	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
-		ss << L'\x01' << Text::formatFunding((*i)->getFunding()) << L'\x01';
+		ss << L'\x01' << Text::formatFunding((*i)->getFunding(0)) << L'\x01';
 		ss2 << (*i)->getChange();
 		_lstCountries->addRow(3, _game->getLanguage()->getString((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}

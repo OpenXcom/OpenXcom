@@ -28,12 +28,14 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0), _activityXcom(0), _activityAlien(0)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0)
 {
 	if (gen)
 	{
-		_funding = RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000;
+		_funding.push_back(RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000);
 	}
+		_activityAlien.push_back(0);
+		_activityXcom.push_back(0);
 }
 
 /**
@@ -83,9 +85,9 @@ RuleCountry *const Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-int Country::getFunding() const
+int Country::getFunding(int month) const
 {
-	return _funding;
+	return _funding[month];
 }
 
 /**
@@ -94,7 +96,7 @@ int Country::getFunding() const
  */
 void Country::setFunding(int funding)
 {
-	_funding = funding;
+	_funding[0] = funding;
 }
 
 /**
@@ -106,21 +108,13 @@ int Country::getChange() const
 	return _change;
 }
 
-/**
- * Sets the country's funding change since last month.
- */
-void Country::setChange(int change)
-{
-	_change = change;
-}
-
 /*
  * Keith Richards would be so proud
  * @return satisfaction level.
  */
 int Country::getSatisfaction()
 {
-	return _activityXcom - _activityAlien;
+	return _activityXcom[0] - _activityAlien[0];
 }
 
 /**
@@ -128,7 +122,7 @@ int Country::getSatisfaction()
  */
 void Country::addActivityXcom(int activity)
 {
-	_activityXcom += activity;
+	_activityXcom[0] += activity;
 }
 
 /**
@@ -136,25 +130,48 @@ void Country::addActivityXcom(int activity)
  */
 void Country::addActivityAlien(int activity)
 {
-	_activityAlien += activity;
+	_activityAlien[0] += activity;
 }
 
 /**
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-int Country::getActivityXcom() const
+int Country::getActivityXcom(int month) const
 {
-	return _activityXcom;
+	return _activityXcom[month];
 }
 
 /**
  * Gets the country's alien activity level.
  * @return activity level.
  */
-int Country::getActivityAlien() const
+int Country::getActivityAlien(int month) const
 {
-	return _activityAlien;
+	return _activityAlien[month];
 }
 
+/**
+ * reset all the counters,
+ * calculate this month's funding,
+ * set the change value for the month.
+ */
+
+void Country::newMonth()
+{
+	int newFunding=0;
+	_activityAlien.push_back(_activityAlien[0]);
+	_activityAlien[0]=0;
+	_activityXcom.push_back(_activityXcom[0]);
+	_activityXcom[0]=0;
+	_funding.push_back(_funding[0]);
+	_funding[0] = newFunding;
+	_change = _funding[1] - _funding[0];
+	if(_activityAlien.size() > 12)
+		_activityAlien.erase(_activityAlien.end()-1);
+	if(_activityXcom.size() > 12)
+		_activityXcom.erase(_activityXcom.end()-1);
+	if(_funding.size() > 12)
+		_funding.erase(_funding.end()-1);
+}
 }

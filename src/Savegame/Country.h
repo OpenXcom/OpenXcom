@@ -35,8 +35,8 @@ class Country
 {
 private:
 	RuleCountry *_rules;
-	int _funding, _change;
-	int _activityXcom, _activityAlien;
+	int _change;
+	std::vector<int> _funding, _activityXcom, _activityAlien;
 public:
 	/// Creates a new country of the specified type.
 	Country(RuleCountry *rules, bool gen = true);
@@ -49,13 +49,11 @@ public:
 	/// Gets the country's ruleset.
 	RuleCountry *const getRules() const;
 	/// Gets the country's funding.
-	int getFunding() const;
+	int getFunding(int month) const;
 	/// Sets the country's funding.
 	void setFunding(int funding);
 	/// Gets the country's funding change.
 	int getChange() const;
-	/// resets the country's funding change for this month
-	void setChange(int change);
 	/// get the country's satisfaction level
 	int getSatisfaction();
 	/// add xcom activity in this country
@@ -63,9 +61,11 @@ public:
 	/// add alien activity in this country
 	void addActivityAlien(int activity);
 	/// get xcom activity to this country
-	int getActivityXcom() const;
+	int getActivityXcom(int month) const;
 	/// get xcom activity to this country
-	int getActivityAlien() const;
+	int getActivityAlien(int month) const;
+	/// store last month's counters, start new counters, set this month's change.
+	void newMonth();
 };
 
 }

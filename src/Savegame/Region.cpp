@@ -26,8 +26,10 @@ namespace OpenXcom
  * Initializes a region of the specified type.
  * @param rules Pointer to ruleset.
  */
-Region::Region(RuleRegion *rules): _rules(rules), _activityXcom(0), _activityAlien(0)
+Region::Region(RuleRegion *rules): _rules(rules)
 {
+		_activityAlien.push_back(0);
+		_activityXcom.push_back(0);
 }
 
 /**
@@ -74,7 +76,7 @@ RuleRegion *const Region::getRules() const
  */
 void Region::addActivityXcom(int activity)
 {
-	_activityXcom += activity;
+	_activityXcom[0] += activity;
 }
 
 /**
@@ -82,24 +84,36 @@ void Region::addActivityXcom(int activity)
  */
 void Region::addActivityAlien(int activity)
 {
-	_activityAlien += activity;
+	_activityAlien[0] += activity;
 }
 
 /**
  * Gets the region's xcom activity level.
  * @return activity level.
  */
-int Region::getActivityXcom() const
+int Region::getActivityXcom(int month) const
 {
-	return _activityXcom;
+	return _activityXcom[month];
 }
 
 /**
  * Gets the region's alien activity level.
  * @return activity level.
  */
-int Region::getActivityAlien() const
+int Region::getActivityAlien(int month) const
 {
-	return _activityAlien;
+	return _activityAlien[month];
+}
+
+void Region::newMonth()
+{
+	_activityAlien.push_back(_activityAlien[0]);
+	_activityAlien[0]=0;
+	_activityXcom.push_back(_activityXcom[0]);
+	_activityXcom[0]=0;
+	if(_activityAlien.size() > 12)
+		_activityAlien.erase(_activityAlien.end()-1);
+	if(_activityXcom.size() > 12)
+		_activityXcom.erase(_activityXcom.end()-1);
 }
 }

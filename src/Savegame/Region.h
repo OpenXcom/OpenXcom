@@ -36,7 +36,7 @@ class Region
 {
 private:
 	RuleRegion *_rules;
-	int _activityXcom, _activityAlien;
+	std::vector<int> _activityXcom, _activityAlien;
 public:
 	/// Creates a new region of the specified type.
 	Region(RuleRegion *rules);
@@ -53,9 +53,11 @@ public:
 	/// add alien activity in this region
 	void addActivityAlien(int activity);
 	/// get xcom activity to this region
-	int getActivityXcom() const;
+	int getActivityXcom(int month) const;
 	/// get xcom activity to this region
-	int getActivityAlien() const;
+	int getActivityAlien(int month) const;
+	/// store last month's counters, start new counters.
+	void newMonth();
 };
 
 }

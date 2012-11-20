@@ -550,7 +550,7 @@ int SavedGame::getCountryFunding() const
 	int total = 0;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
-		total += (*i)->getFunding();
+		total += (*i)->getFunding(0);
 	}
 	return total;
 }
