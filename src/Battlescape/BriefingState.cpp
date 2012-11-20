@@ -131,7 +131,7 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	else
 	{
 		Ufo* u = dynamic_cast<Ufo*>(craft->getDestination());
-		if (u->isCrashed())
+		if (u->getStatus() == Ufo::CRASHED)
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
 			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));

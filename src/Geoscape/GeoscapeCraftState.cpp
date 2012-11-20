@@ -141,7 +141,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
 		if (u != 0)
 		{
-			if (!u->isCrashed())
+			if (u->getStatus() == Ufo::FLYING)
 			{
 				ss << _game->getLanguage()->getString("STR_INTERCEPTING_UFO") << u->getId();
 			}
