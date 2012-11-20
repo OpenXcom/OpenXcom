@@ -69,4 +69,37 @@ RuleRegion *const Region::getRules() const
 	return _rules;
 }
 
+/**
+ * Adds to the region's xcom activity level.
+ */
+void Region::addActivityXcom(int activity)
+{
+	_activityXcom += activity;
+}
+
+/**
+ * Adds to the region's alien activity level.
+ */
+void Region::addActivityAlien(int activity)
+{
+	_activityAlien += activity;
+}
+
+/**
+ * Gets the region's xcom activity level.
+ * @return activity level.
+ */
+int Region::getActivityXcom() const
+{
+	return _activityXcom;
+}
+
+/**
+ * Gets the region's alien activity level.
+ * @return activity level.
+ */
+int Region::getActivityAlien() const
+{
+	return _activityAlien;
+}
 }

@@ -54,6 +54,18 @@ public:
 	void setFunding(int funding);
 	/// Gets the country's funding change.
 	int getChange() const;
+	/// resets the country's funding change for this month
+	void setChange(int change);
+	/// get the country's satisfaction level
+	int getSatisfaction();
+	/// add xcom activity in this country
+	void addActivityXcom(int activity);
+	/// add alien activity in this country
+	void addActivityAlien(int activity);
+	/// get xcom activity to this country
+	int getActivityXcom() const;
+	/// get xcom activity to this country
+	int getActivityAlien() const;
 };
 
 }

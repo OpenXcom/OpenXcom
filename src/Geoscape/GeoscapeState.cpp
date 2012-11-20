@@ -81,6 +81,9 @@
 #include "../Ruleset/City.h"
 #include "AlienTerrorState.h"
 #include "AlienBaseState.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/Country.h"
+#include "../Ruleset/RuleCountry.h"
 
 namespace OpenXcom
 {
@@ -748,11 +751,30 @@ void GeoscapeState::time30Minutes()
 		}
 	}
 
-	// Handle UFO detection
+	// Handle UFO detection and give aliens points
 	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
 		if ((*u)->isCrashed())
 			continue;
+		// Get area
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
+			{
+				//one point per UFO in-flight per half hour
+				(*k)->addActivityAlien(1);
+			}
+		}
+		// Get country
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+		{
+			double lat = (*k)->getRules()->getLabelLatitude();
+			if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
+			{
+				//one point per UFO in-flight per half hour
+				(*k)->addActivityAlien(1);
+			}
+		}
 		if (!(*u)->getDetected())
 		{
 			bool detected = false;

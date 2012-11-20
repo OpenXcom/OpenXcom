@@ -106,4 +106,55 @@ int Country::getChange() const
 	return _change;
 }
 
+/**
+ * Sets the country's funding change since last month.
+ */
+void Country::setChange(int change)
+{
+	_change = change;
+}
+
+/*
+ * Keith Richards would be so proud
+ * @return satisfaction level.
+ */
+int Country::getSatisfaction()
+{
+	return _activityXcom - _activityAlien;
+}
+
+/**
+ * Adds to the country's xcom activity level.
+ */
+void Country::addActivityXcom(int activity)
+{
+	_activityXcom += activity;
+}
+
+/**
+ * Adds to the country's alien activity level.
+ */
+void Country::addActivityAlien(int activity)
+{
+	_activityAlien += activity;
+}
+
+/**
+ * Gets the country's xcom activity level.
+ * @return activity level.
+ */
+int Country::getActivityXcom() const
+{
+	return _activityXcom;
+}
+
+/**
+ * Gets the country's alien activity level.
+ * @return activity level.
+ */
+int Country::getActivityAlien() const
+{
+	return _activityAlien;
+}
+
 }
