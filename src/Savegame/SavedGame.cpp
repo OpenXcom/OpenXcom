@@ -723,8 +723,8 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		if (research->getRequirements().size() != 0)
 		{
-			int tally(0);
-			for(int itreq = 0; itreq != research->getRequirements().size(); ++itreq)
+			size_t tally(0);
+			for(size_t itreq = 0; itreq != research->getRequirements().size(); ++itreq)
 			{
 				itDiscovered = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(research->getRequirements().at(itreq)));
 				if (itDiscovered != discovered.end ())

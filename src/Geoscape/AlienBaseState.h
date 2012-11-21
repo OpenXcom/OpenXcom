@@ -37,7 +37,6 @@ class AlienBase;
 class AlienBaseState : public State
 {
 private:
-	Region *_region;
 	GeoscapeState *_state;
 	AlienBase *_base;
 	TextButton *_btnOk;

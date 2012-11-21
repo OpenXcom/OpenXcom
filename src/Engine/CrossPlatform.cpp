@@ -118,6 +118,9 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
+#ifdef __HAIKU__
+	list.push_back("/boot/apps/OpenXcom/data/");
+#endif
 	char const *home = getHome();
 	char path[MAXPATHLEN];
 
@@ -198,6 +201,9 @@ std::vector<std::string> findUserFolders()
 		list.push_back(path);
 	}
 #else
+#ifdef __HAIKU__
+	list.push_back("/boot/apps/OpenXcom/");
+#endif
 	char const *home = getHome();
 	char path[MAXPATHLEN];
 	
@@ -235,6 +241,8 @@ std::string findConfigFolder()
 {
 #if defined(_WIN32) || defined(__APPLE__)
 	return "";
+#elif defined (__HAIKU__)
+	return "/boot/home/config/settings/openxcom/";
 #else
 	char const *home = getHome();
 	char path[MAXPATHLEN];
