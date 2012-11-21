@@ -35,7 +35,7 @@ class Country
 {
 private:
 	RuleCountry *_rules;
-	bool _pact;
+	bool _pact, _newPact;
 	std::vector<int> _funding, _activityXcom, _activityAlien;
 public:
 	/// Creates a new country of the specified type.
@@ -64,6 +64,8 @@ public:
 	std::vector<int>  getActivityAlien() const;
 	/// store last month's counters, start new counters, set this month's change.
 	void newMonth(int diff);
+	/// is this a new pact?
+	bool isNewPact();
 };
 
 }

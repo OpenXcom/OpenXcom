@@ -37,8 +37,10 @@ class MonthlyReportState : public State
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc;
+	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtRatingTxt;
 	bool _psi;
+	int _ratingTotal, _fundingDiff, _generalSatisfaction;
+	std::vector<std::string> _happyList, _sadList, _pactList;
 public:
 	/// Creates the Monthly Report state.
 	MonthlyReportState(Game *game, bool psi);

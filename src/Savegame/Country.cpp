@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false), _newPact(false)
 {
 	if (gen)
 	{
@@ -163,6 +163,10 @@ std::vector<int> Country::getActivityAlien() const
 
 void Country::newMonth(int diff)
 {
+	if(_newPact)
+	{
+		_newPact = false;
+	}
 	int increase(0);
 	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
 	int lastDifference = 0;
@@ -187,8 +191,9 @@ void Country::newMonth(int diff)
 	{
 		lastDifference = _activityXcom[_activityXcom.size()-2]- _activityAlien[_activityAlien.size()-2];
 	}
-	if(difference <= -500 - (100*diff) && lastDifference <= -500 - (100*diff))
+	if(difference <= -500 - (100*diff) && lastDifference <= -500 - (100*diff) && !_pact)
 	{
+		_newPact = true;
 		_pact = true;
 	}
 	int newFunding = _funding[_funding.size()-1] + ((_funding[_funding.size()-1]/100) * increase);
@@ -201,5 +206,13 @@ void Country::newMonth(int diff)
 		_activityXcom.erase(_activityXcom.begin());
 	if(_funding.size() > 12)
 		_funding.erase(_funding.begin());
+}
+
+/**
+ * @return if this is a new pact.
+ */
+bool Country::isNewPact()
+{
+	return _newPact;
 }
 }
