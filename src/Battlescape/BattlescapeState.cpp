@@ -705,7 +705,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		_game->pushState(new UnitInfoState(_game, _save->getSelectedUnit()));
+		_game->addState(new UnitInfoState(_game, _save->getSelectedUnit()));
 	}
 }
 
@@ -975,7 +975,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
 		{
 			_battleGame->getCurrentAction()->weapon = item;
-			_game->pushState(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+			_game->addState(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
 		}
 		else
 		{
