@@ -53,7 +53,7 @@ public:
 	operator std::wstring const& () const OX_REQUIRED_RESULT;
 	/// Return the UTF-8 representation of this string.
 	std::string asUTF8() const OX_REQUIRED_RESULT;
-	/// @deprecated
+	/// Get a pointer to underlying wchat_t data.
 	const wchar_t *c_str() const OX_REQUIRED_RESULT { return _text.c_str(); }
 
 	// Argument substitution.
@@ -151,7 +151,7 @@ LocalizedText &LocalizedText::arg(T val)
 	return *this;
 }
 
-/// @deprecated
+/// Allow streaming of LocalizedText objects.
 inline std::wostream &operator<<(std::wostream &os, const LocalizedText &txt)
 {
 	os << static_cast<std::wstring const &>(txt);
