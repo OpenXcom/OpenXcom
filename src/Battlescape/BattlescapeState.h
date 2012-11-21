@@ -69,7 +69,6 @@ private:
 	Timer *_animTimer, *_gameTimer;
 	SavedBattleGame *_save;
 	Text *_txtDebug;
-	std::vector<State*> _popups;
 	BattlescapeGame *_battleGame;
 	bool firstInit;
 	bool isMouseScrolling;
@@ -80,7 +79,7 @@ private:
 	int totalMouseMoveX, totalMouseMoveY;
 	int lastSucTotalMouseMoveX, lastSucTotalMouseMoveY;
 	bool mouseMovedOverThreshold;
-
+	bool _reentering;
 	void selectNextPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
@@ -92,6 +91,8 @@ public:
 	~BattlescapeState();
 	/// init
 	void init();
+	/// pause
+	void leave();
 	/// think
 	void think();
 	/// Handler for moving mouse over the map.
@@ -168,8 +169,6 @@ public:
 	void warning(const std::string &message);
 	/// Handle keypresses.
 	void handle(Action *action);
-	/// Displays a popup window.
-	void popup(State *state);
 	/// Finishes a battle.
 	void finishBattle(bool abort);
 	/// show launch button
