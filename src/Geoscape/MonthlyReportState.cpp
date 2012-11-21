@@ -162,7 +162,7 @@ void MonthlyReportState::CalculateChanges()
 	// update activity counters
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
-		(*k)->newMonth();
+		(*k)->newMonth(_game->getSavedGame()->getDifficulty());
 	}
 }
 }

@@ -28,8 +28,8 @@ namespace OpenXcom
  */
 Region::Region(RuleRegion *rules): _rules(rules)
 {
-		_activityAlien.push_back(0);
-		_activityXcom.push_back(0);
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
 }
 
 /**
@@ -76,7 +76,7 @@ RuleRegion *const Region::getRules() const
  */
 void Region::addActivityXcom(int activity)
 {
-	_activityXcom[0] += activity;
+	_activityXcom[_activityXcom.size()-1] += activity;
 }
 
 /**
@@ -84,36 +84,34 @@ void Region::addActivityXcom(int activity)
  */
 void Region::addActivityAlien(int activity)
 {
-	_activityAlien[0] += activity;
+	_activityAlien[_activityAlien.size()-1] += activity;
 }
 
 /**
  * Gets the region's xcom activity level.
  * @return activity level.
  */
-int Region::getActivityXcom(int month) const
+std::vector<int> Region::getActivityXcom() const
 {
-	return _activityXcom[month];
+	return _activityXcom;
 }
 
 /**
  * Gets the region's alien activity level.
  * @return activity level.
  */
-int Region::getActivityAlien(int month) const
+std::vector<int> Region::getActivityAlien() const
 {
-	return _activityAlien[month];
+	return _activityAlien;
 }
 
 void Region::newMonth()
 {
-	_activityAlien.push_back(_activityAlien[0]);
-	_activityAlien[0]=0;
-	_activityXcom.push_back(_activityXcom[0]);
-	_activityXcom[0]=0;
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
 	if(_activityAlien.size() > 12)
-		_activityAlien.erase(_activityAlien.end()-1);
+		_activityAlien.erase(_activityAlien.begin());
 	if(_activityXcom.size() > 12)
-		_activityXcom.erase(_activityXcom.end()-1);
+		_activityXcom.erase(_activityXcom.begin());
 }
 }

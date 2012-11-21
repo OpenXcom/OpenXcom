@@ -28,14 +28,14 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0), _pact(false)
 {
 	if (gen)
 	{
 		_funding.push_back(RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000);
 	}
-		_activityAlien.push_back(0);
-		_activityXcom.push_back(0);
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
 }
 
 /**
@@ -55,6 +55,7 @@ void Country::load(const YAML::Node &node)
 	node["change"] >> _change;
 	node["activityXcom"] >> _activityXcom;
 	node["activityAlien"] >> _activityAlien;
+	node["pact"] >> _pact;
 }
 
 /**
@@ -69,6 +70,7 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::Key << "change" << YAML::Value << _change;
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
+	out << YAML::Key << "pact" << YAML::Value << _pact;
 	out << YAML::EndMap;
 }
 
@@ -85,9 +87,9 @@ RuleCountry *const Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-int Country::getFunding(int month) const
+std::vector<int> Country::getFunding() const
 {
-	return _funding[month];
+	return _funding;
 }
 
 /**
@@ -96,7 +98,7 @@ int Country::getFunding(int month) const
  */
 void Country::setFunding(int funding)
 {
-	_funding[0] = funding;
+	_funding[_funding.size()-1] = funding;
 }
 
 /**
@@ -110,68 +112,106 @@ int Country::getChange() const
 
 /*
  * Keith Richards would be so proud
- * @return satisfaction level.
+ * @param diff the difficulty level.
+ * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
  */
-int Country::getSatisfaction()
+int Country::getSatisfaction(int diff)
 {
-	return _activityXcom[0] - _activityAlien[0];
+	if(_pact)
+		return 0;
+	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
+	if(difference >= 500 +(100*diff))
+		return 3;
+	else if(difference <= -500 +(100*diff))
+	{
+		return 1;
+	}
+	return 2;
 }
 
 /**
  * Adds to the country's xcom activity level.
+ * @param activity how many points to add.
  */
 void Country::addActivityXcom(int activity)
 {
-	_activityXcom[0] += activity;
+	_activityXcom[_activityXcom.size()-1] += activity;
 }
 
 /**
  * Adds to the country's alien activity level.
+ * @param activity how many points to add.
  */
 void Country::addActivityAlien(int activity)
 {
-	_activityAlien[0] += activity;
+	_activityAlien[_activityAlien.size()-1] += activity;
 }
 
 /**
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-int Country::getActivityXcom(int month) const
+std::vector<int> Country::getActivityXcom() const
 {
-	return _activityXcom[month];
+	return _activityXcom;
 }
 
 /**
  * Gets the country's alien activity level.
  * @return activity level.
  */
-int Country::getActivityAlien(int month) const
+std::vector<int> Country::getActivityAlien() const
 {
-	return _activityAlien[month];
+	return _activityAlien;
 }
 
 /**
  * reset all the counters,
  * calculate this month's funding,
  * set the change value for the month.
+ * @param diff the difficulty level.
  */
 
-void Country::newMonth()
+void Country::newMonth(int diff)
 {
-	int newFunding=0;
-	_activityAlien.push_back(_activityAlien[0]);
-	_activityAlien[0]=0;
-	_activityXcom.push_back(_activityXcom[0]);
-	_activityXcom[0]=0;
-	_funding.push_back(_funding[0]);
-	_funding[0] = newFunding;
-	_change = _funding[1] - _funding[0];
+	int increase(0);
+	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
+	int lastDifference = 0;
+	switch(getSatisfaction(diff))
+	{
+	case 0:
+		increase = -100;
+		break;
+	case 1:
+		increase = 0 - RNG::generate(5, 20);
+		break;
+	case 2:
+		increase = 0;
+		break;
+	case 3:
+		increase = RNG::generate(5, 20);
+		break;
+	default:
+		break;
+	}
+	if(_activityXcom.size() > 1)
+	{
+		lastDifference = _activityXcom[_activityXcom.size()-2]- _activityAlien[_activityAlien.size()-2];
+	}
+	if(difference <= -500 - (100*diff) && lastDifference <= -500 - (100*diff))
+	{
+		_pact = true;
+	}
+	int newFunding = _funding[_funding.size()-1] + ((_funding[_funding.size()-1]/100) * increase);
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
+	_change = newFunding - _funding[_funding.size()-1];
+	_funding.push_back(newFunding);
 	if(_activityAlien.size() > 12)
-		_activityAlien.erase(_activityAlien.end()-1);
+		_activityAlien.erase(_activityAlien.begin());
 	if(_activityXcom.size() > 12)
-		_activityXcom.erase(_activityXcom.end()-1);
+		_activityXcom.erase(_activityXcom.begin());
 	if(_funding.size() > 12)
-		_funding.erase(_funding.end()-1);
+		_funding.erase(_funding.begin());
 }
 }

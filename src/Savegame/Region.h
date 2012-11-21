@@ -53,9 +53,9 @@ public:
 	/// add alien activity in this region
 	void addActivityAlien(int activity);
 	/// get xcom activity to this region
-	int getActivityXcom(int month) const;
+	std::vector<int> getActivityXcom() const;
 	/// get xcom activity to this region
-	int getActivityAlien(int month) const;
+	std::vector<int> getActivityAlien() const;
 	/// store last month's counters, start new counters.
 	void newMonth();
 };
