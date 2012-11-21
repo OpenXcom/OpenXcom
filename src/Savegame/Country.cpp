@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0), _pact(false)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false)
 {
 	if (gen)
 	{
@@ -52,7 +52,6 @@ Country::~Country()
 void Country::load(const YAML::Node &node)
 {
 	node["funding"] >> _funding;
-	node["change"] >> _change;
 	node["activityXcom"] >> _activityXcom;
 	node["activityAlien"] >> _activityAlien;
 	node["pact"] >> _pact;
@@ -67,7 +66,6 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	out << YAML::Key << "funding" << YAML::Value << _funding;
-	out << YAML::Key << "change" << YAML::Value << _change;
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
 	out << YAML::Key << "pact" << YAML::Value << _pact;
@@ -99,15 +97,6 @@ std::vector<int> Country::getFunding() const
 void Country::setFunding(int funding)
 {
 	_funding[_funding.size()-1] = funding;
-}
-
-/**
- * Returns the country's funding change since last month.
- * @return Funding change.
- */
-int Country::getChange() const
-{
-	return _change;
 }
 
 /*
@@ -205,7 +194,6 @@ void Country::newMonth(int diff)
 	int newFunding = _funding[_funding.size()-1] + ((_funding[_funding.size()-1]/100) * increase);
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
-	_change = newFunding - _funding[_funding.size()-1];
 	_funding.push_back(newFunding);
 	if(_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());

@@ -35,7 +35,6 @@ class Country
 {
 private:
 	RuleCountry *_rules;
-	int _change;
 	bool _pact;
 	std::vector<int> _funding, _activityXcom, _activityAlien;
 public:
@@ -53,8 +52,6 @@ public:
 	std::vector<int>  getFunding() const;
 	/// Sets the country's funding.
 	void setFunding(int funding);
-	/// Gets the country's funding change.
-	int getChange() const;
 	/// get the country's satisfaction level
 	int getSatisfaction(int diff);
 	/// add xcom activity in this country

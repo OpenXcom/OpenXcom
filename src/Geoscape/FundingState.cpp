@@ -89,7 +89,14 @@ FundingState::FundingState(Game *game) : State(game)
 	{
 		std::wstringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
-		ss2 << (*i)->getChange();
+		if((*i)->getFunding().size() > 1)
+		{
+			ss2 << ((*i)->getFunding().at((*i)->getFunding().size()-1)- (*i)->getFunding().at((*i)->getFunding().size()-2));
+		}
+		else
+		{
+			ss2 << "0";
+		}
 		_lstCountries->addRow(3, _game->getLanguage()->getString((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
 	_lstCountries->addRow(2, _game->getLanguage()->getString("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
