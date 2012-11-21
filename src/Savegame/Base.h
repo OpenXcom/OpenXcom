@@ -56,6 +56,7 @@ private:
 	int _scientists, _engineers;
 	std::vector<ResearchProject *> _research;
 	std::vector<Production *> _productions;
+	bool _inBattlescape;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -171,6 +172,10 @@ public:
 	int getAvailableContainment() const;
 	/// Gets the total amount of used Containment Space
 	int getUsedContainment() const;
+	/// Sets the craft's battlescape status.
+	void setInBattlescape(bool inbattle);
+	/// Gets if the craft is in battlescape.
+	bool isInBattlescape() const;
 };
 
 }

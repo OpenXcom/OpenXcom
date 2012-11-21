@@ -7171,6 +7171,7 @@ startingBase:
   - lon: 0.0
     lat: 0.0
     name: ""
+    inBattlescape: false
     facilities:
       - type: STR_ACCESS_LIFT
         x: 2
