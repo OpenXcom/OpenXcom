@@ -168,7 +168,7 @@ void InventoryState::init()
 	if (_tu)
 	{
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << unit->getTimeUnits();
+		ss << tr("STR_TUS") << L'\x01' << unit->getTimeUnits();
 		_txtTus->setText(ss.str());
 	}
 }
@@ -280,7 +280,7 @@ void InventoryState::btnUnloadClick(Action *action)
 		if (_tu)
 		{
 			std::wstringstream ss;
-			ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
+			ss << tr("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
 			_txtTus->setText(ss.str());
 		}
 	}
@@ -324,17 +324,17 @@ void InventoryState::invClick(Action *action)
 		{
 			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
 			{
-				_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
+				_txtItem->setText(tr(item->getRules()->getName()));
 			}
 			else
 			{
-				_txtItem->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACT"));
+				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 			}
 		}
 		std::wstringstream ss;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
@@ -350,14 +350,14 @@ void InventoryState::invClick(Action *action)
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
+			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}
 		_txtAmmo->setText(ss.str());
 	}
 	if (_tu)
 	{
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
+		ss << tr("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
 		_txtTus->setText(ss.str());
 	}
 }

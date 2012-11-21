@@ -95,11 +95,11 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SelectDestinationState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION"));
+	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 }
 
 /**

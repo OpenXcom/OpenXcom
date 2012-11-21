@@ -84,7 +84,7 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	_window->setColor(Palette::blockOffset(15)-1);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
@@ -97,7 +97,7 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
+	ss << tr("STR_CRAFT_") << craft->getName(_game->getLanguage());
 	_txtCraft->setText(ss.str());
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
@@ -115,31 +115,31 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 
 	if (mission == "STR_BASE_DEFENSE")
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE_BRIEFING"));
+		_txtTitle->setText(tr("STR_BASE_DEFENSE"));
+		_txtBriefing->setText(tr("STR_BASE_DEFENSE_BRIEFING"));
 	}
 	else if (mission == "STR_TERROR_MISSION")
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_TERROR_MISSION"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_TERROR_MISSION_BRIEFING"));
+		_txtTitle->setText(tr("STR_TERROR_MISSION"));
+		_txtBriefing->setText(tr("STR_TERROR_MISSION_BRIEFING"));
 	}
 	else if (mission == "STR_ALIEN_BASE_ASSAULT")
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_ASSAULT"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_ASSAULT_BRIEFING"));
+		_txtTitle->setText(tr("STR_ALIEN_BASE_ASSAULT"));
+		_txtBriefing->setText(tr("STR_ALIEN_BASE_ASSAULT_BRIEFING"));
 	}
 	else
 	{
 		Ufo* u = dynamic_cast<Ufo*>(craft->getDestination());
 		if (u->getStatus() == Ufo::CRASHED)
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
-			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));
+			_txtTitle->setText(tr("STR_UFO_CRASH_RECOVERY"));
+			_txtBriefing->setText(tr("STR_UFO_CRASH_RECOVERY_BRIEFING"));
 		}
 		else
 		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT"));
-			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT_BRIEFING"));
+			_txtTitle->setText(tr("STR_UFO_GROUND_ASSAULT"));
+			_txtBriefing->setText(tr("STR_UFO_GROUND_ASSAULT_BRIEFING"));
 		}
 	}
 }

@@ -82,39 +82,39 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_SELL_SACK"));
+	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELL_ITEMS_SACK_PERSONNEL"));
+	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
-	std::wstring s1 = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+	std::wstring s1 = tr("STR_VALUE_OF_SALES");
 	s1 += Text::formatFunding(_total);
 	_txtSales->setColor(Palette::blockOffset(13)+10);
 	_txtSales->setText(s1);
 
-	std::wstring s2 = _game->getLanguage()->getString("STR_FUNDS");
+	std::wstring s2 = tr("STR_FUNDS");
 	s2 += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setText(s2);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSell->setColor(Palette::blockOffset(13)+10);
-	_txtSell->setText(_game->getLanguage()->getString("STR_SELL_SACK"));
+	_txtSell->setText(tr("STR_SELL_SACK"));
 
 	_txtValue->setColor(Palette::blockOffset(13)+10);
-	_txtValue->setText(_game->getLanguage()->getString("STR_VALUE"));
+	_txtValue->setText(tr("STR_VALUE"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(189, ARROW_VERTICAL);
@@ -153,7 +153,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		_sOffset++;
 		std::wstringstream ss;
 		ss << _base->getAvailableScientists();
-		_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
 	if (_base->getAvailableEngineers() > 0)
 	{
@@ -161,7 +161,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		_eOffset++;
 		std::wstringstream ss;
 		ss << _base->getAvailableEngineers();
-		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
@@ -174,7 +174,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
 			std::wstringstream ss;
 			ss << qty;
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str());
+			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str());
 		}
 	}
 
@@ -335,7 +335,7 @@ void SellState::lstItemsLeftArrowClick(Action *action)
 			ss2 << 0;
 			_lstItems->setCellText(_sel, 1, ss2.str());
 			_total += getPrice() * change;
-			std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+			std::wstring s = tr("STR_VALUE_OF_SALES");
 			s += Text::formatFunding(_total);
 			_txtSales->setText(s);
 		}
@@ -378,7 +378,7 @@ void SellState::lstItemsRightArrowClick(Action *action)
 			_lstItems->setCellText(_sel, 2, ss.str());
 			ss2 << getQuantity();
 			_lstItems->setCellText(_sel, 1, ss2.str());
-			std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+			std::wstring s = tr("STR_VALUE_OF_SALES");
 			s += Text::formatFunding(_total);
 			_txtSales->setText(s);
 		}
@@ -444,7 +444,7 @@ void SellState::increase()
 		ss2 << getQuantity() - _qtys[_sel];
 		_lstItems->setCellText(_sel, 1, ss2.str());
 		_total += getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+		std::wstring s = tr("STR_VALUE_OF_SALES");
 		s += Text::formatFunding(_total);
 		_txtSales->setText(s);
 	}
@@ -464,7 +464,7 @@ void SellState::decrease()
 		ss2 << getQuantity() - _qtys[_sel];
 		_lstItems->setCellText(_sel, 1, ss2.str());
 		_total -= getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+		std::wstring s = tr("STR_VALUE_OF_SALES");
 		s += Text::formatFunding(_total);
 		_txtSales->setText(s);
 	}

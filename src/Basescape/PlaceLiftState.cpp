@@ -62,7 +62,7 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
 	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
+	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
 }
 
 /**

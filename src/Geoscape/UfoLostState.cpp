@@ -54,7 +54,7 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&UfoLostState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
@@ -62,7 +62,7 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	std::wstring s = _id;
 	s += L'\n';
-	s += _game->getLanguage()->getString("STR_TRACKING_LOST");
+	s += tr("STR_TRACKING_LOST");
 	_txtTitle->setText(s);
 }
 

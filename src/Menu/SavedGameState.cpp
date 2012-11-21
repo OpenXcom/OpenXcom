@@ -122,17 +122,17 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_lstSaves->setHighContrast(true);
 	}
 
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
+	_txtName->setText(tr("STR_NAME"));
 
-	_txtTime->setText(_game->getLanguage()->getString("STR_TIME"));
+	_txtTime->setText(tr("STR_TIME"));
 
-	_txtDate->setText(_game->getLanguage()->getString("STR_DATE"));
+	_txtDate->setText(tr("STR_DATE"));
 
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
@@ -189,7 +189,7 @@ void SavedGameState::updateList()
  */
 void SavedGameState::updateStatus(const std::string &msg)
 {
-	_txtStatus->setText(_game->getLanguage()->getString(msg));
+	_txtStatus->setText(tr(msg));
 	blit();
 	_game->getScreen()->flip();
 }

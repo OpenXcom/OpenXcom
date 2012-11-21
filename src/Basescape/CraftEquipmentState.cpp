@@ -78,32 +78,32 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
 	std::wstringstream s;
-	s << _game->getLanguage()->getString("STR_EQUIPMENT_FOR") << c->getName(_game->getLanguage());
+	s << tr("STR_EQUIPMENT_FOR") << c->getName(_game->getLanguage());
 	_txtTitle->setText(s.str());
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtStores->setColor(Palette::blockOffset(15)+1);
-	_txtStores->setText(_game->getLanguage()->getString("STR_STORES"));
+	_txtStores->setText(tr("STR_STORES"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+1);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01'<< c->getSpaceAvailable();
+	ss << tr("STR_SPACE_AVAILABLE") << L'\x01'<< c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
 
 	_txtUsed->setColor(Palette::blockOffset(15)+1);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
+	ss2 << tr("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
@@ -147,7 +147,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 			ss << _base->getItems()->getItem(*i);
 			ss2 << cQty;
 
-			std::wstring s = _game->getLanguage()->getString(*i);
+			std::wstring s = tr(*i);
 			if (rule->getBattleType() == BT_AMMO)
 			{
 				s.insert(0, L"  ");
@@ -418,10 +418,10 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
 
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
+	ss3 << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
 	_txtAvailable->setText(ss3.str());
 	std::wstringstream ss4;
-	ss4 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
+	ss4 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
 	_txtUsed->setText(ss4.str());
 }
 
@@ -506,9 +506,9 @@ void CraftEquipmentState::moveRight()
 					if (qty == 0)
 					{
 						std::wstringstream ss;
-						ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
-						ss << _game->getLanguage()->getString(ammo->getType());
-						ss << _game->getLanguage()->getString("STR_TO_ARM_HWP");
+						ss << tr("STR_NOT_ENOUGH");
+						ss << tr(ammo->getType());
+						ss << tr("STR_TO_ARM_HWP");
 						_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 						_timerRight->stop();
 					}

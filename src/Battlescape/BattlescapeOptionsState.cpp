@@ -183,11 +183,11 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+	_txtTitle->setText(tr("STR_GAME_OPTIONS"));
 
 	_txtScrollSpeed->setColor(Palette::blockOffset(0));
 	_txtScrollSpeed->setHighContrast(true);
-	_txtScrollSpeed->setText(_game->getLanguage()->getString("STR_SCROLL_SPEED"));
+	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
 	_btnScrollSpeed1->setColor(Palette::blockOffset(0));
 	_btnScrollSpeed1->setHighContrast(true);
@@ -216,15 +216,15 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_txtScrollType->setColor(Palette::blockOffset(0));
 	_txtScrollType->setHighContrast(true);
-	_txtScrollType->setText(_game->getLanguage()->getString("STR_SCROLL_TYPE"));
+	_txtScrollType->setText(tr("STR_SCROLL_TYPE"));
 
 	_txtTriggerScroll->setColor(Palette::blockOffset(0));
 	_txtTriggerScroll->setHighContrast(true);
-	_txtTriggerScroll->setText(_game->getLanguage()->getString("STR_TRIGGER_SCROLL"));
+	_txtTriggerScroll->setText(tr("STR_TRIGGER_SCROLL"));
 
 	_txtAutoScroll->setColor(Palette::blockOffset(0));
 	_txtAutoScroll->setHighContrast(true);
-	_txtAutoScroll->setText(_game->getLanguage()->getString("STR_AUTO_SCROLL"));
+	_txtAutoScroll->setText(tr("STR_AUTO_SCROLL"));
 
 	_btnScrollType1->setColor(Palette::blockOffset(0));
 	_btnScrollType1->setHighContrast(true);
@@ -238,7 +238,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_txtFireSpeed->setColor(Palette::blockOffset(0));
 	_txtFireSpeed->setHighContrast(true);
-	_txtFireSpeed->setText(_game->getLanguage()->getString("STR_FIRE_SPEED"));
+	_txtFireSpeed->setText(tr("STR_FIRE_SPEED"));
 
 	_btnFireSpeed1->setColor(Palette::blockOffset(0));
 	_btnFireSpeed1->setHighContrast(true);
@@ -272,7 +272,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_txtXcomSpeed->setColor(Palette::blockOffset(0));
 	_txtXcomSpeed->setHighContrast(true);
-	_txtXcomSpeed->setText(_game->getLanguage()->getString("STR_XCOM_MOVEMENT_SPEED"));
+	_txtXcomSpeed->setText(tr("STR_XCOM_MOVEMENT_SPEED"));
 
 	_btnXcomSpeed1->setColor(Palette::blockOffset(0));
 	_btnXcomSpeed1->setHighContrast(true);
@@ -306,7 +306,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_txtAlienSpeed->setColor(Palette::blockOffset(0));
 	_txtAlienSpeed->setHighContrast(true);
-	_txtAlienSpeed->setText(_game->getLanguage()->getString("STR_ALIEN_MOVEMENT_SPEED"));
+	_txtAlienSpeed->setText(tr("STR_ALIEN_MOVEMENT_SPEED"));
 
 	_btnAlienSpeed1->setColor(Palette::blockOffset(0));
 	_btnAlienSpeed1->setHighContrast(true);
@@ -340,17 +340,17 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(0));
 	_btnOk->setHighContrast(true);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnOkClick);
 
 	_btnLoad->setColor(Palette::blockOffset(0));
 	_btnLoad->setHighContrast(true);
-	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
+	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(0));
 	_btnSave->setHighContrast(true);
-	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
+	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
 }
 

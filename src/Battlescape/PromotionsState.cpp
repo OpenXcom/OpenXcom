@@ -63,22 +63,22 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PromotionsState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_PROMOTIONS"));
+	_txtTitle->setText(tr("STR_PROMOTIONS"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
 	_txtName->setColor(Palette::blockOffset(15)-1);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
+	_txtName->setText(tr("STR_NAME"));
 
 	_txtRank->setColor(Palette::blockOffset(15)-1);
-	_txtRank->setText(_game->getLanguage()->getString("STR_NEW_RANK"));
+	_txtRank->setText(tr("STR_NEW_RANK"));
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
-	_txtBase->setText(_game->getLanguage()->getString("STR_BASE"));
+	_txtBase->setText(tr("STR_BASE"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(3, 114, 90, 84);
@@ -92,7 +92,7 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 		{
 			if ((*j)->isPromoted())
 			{
-				_lstSoldiers->addRow(3, (*j)->getName().c_str(), _game->getLanguage()->getString((*j)->getRankString()).c_str(), (*i)->getName().c_str());
+				_lstSoldiers->addRow(3, (*j)->getName().c_str(), tr((*j)->getRankString()).c_str(), (*i)->getName().c_str());
 			}
 		}
 	}

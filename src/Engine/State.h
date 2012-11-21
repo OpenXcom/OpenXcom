@@ -21,6 +21,7 @@
 #define OPENXCOM_STATE_H
 
 #include <vector>
+#include <string>
 #include <SDL.h>
 
 namespace OpenXcom
@@ -29,6 +30,7 @@ namespace OpenXcom
 class Game;
 class Surface;
 class Action;
+class LocalizedText;
 
 /**
  * A game state that receives user input and reacts accordingly.
@@ -70,6 +72,10 @@ public:
 	void showAll();
 	/// Resets all the state surfaces.
 	void resetAll();
+	/// Get the localized text.
+	const LocalizedText &tr(const std::string &id) const;
+	/// Get the localized text.
+	LocalizedText tr(const std::string &id, unsigned n) const;
 };
 
 }

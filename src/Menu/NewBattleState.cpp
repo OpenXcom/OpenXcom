@@ -98,25 +98,25 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+	_txtTitle->setText(tr("STR_GAME_OPTIONS"));
 
 	_txtMissionType->setColor(Palette::blockOffset(8)+10);
-	_txtMissionType->setText(_game->getLanguage()->getString("STR_MISSION"));
+	_txtMissionType->setText(tr("STR_MISSION"));
 
 	_txtTerrainType->setColor(Palette::blockOffset(8)+10);
-	_txtTerrainType->setText(_game->getLanguage()->getString("STR_TERRAIN"));
+	_txtTerrainType->setText(tr("STR_TERRAIN"));
 
 	_txtAlienRace->setColor(Palette::blockOffset(8)+10);
-	_txtAlienRace->setText(_game->getLanguage()->getString("STR_RACE"));
+	_txtAlienRace->setText(tr("STR_RACE"));
 
 	_txtDifficulty->setColor(Palette::blockOffset(8)+10);
-	_txtDifficulty->setText(_game->getLanguage()->getString("STR_DIFFICULTY_LEVEL"));
+	_txtDifficulty->setText(tr("STR_DIFFICULTY_LEVEL"));
 
 	_txtDarkness->setColor(Palette::blockOffset(8)+10);
-	_txtDarkness->setText(_game->getLanguage()->getString("STR_DARKNESS"));
+	_txtDarkness->setText(tr("STR_DARKNESS"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+10);
-	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_selMission = 0;
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
@@ -164,19 +164,19 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	}
 
 	_btnMissionType->setColor(Palette::blockOffset(15)-1);
-	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+	_btnMissionType->setText(tr(_missionTypes[_selMission]));
 	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick, 0);
 
 	_btnTerrainType->setColor(Palette::blockOffset(15)-1);
-	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
+	_btnTerrainType->setText(tr(_terrainTypes[_selTerrain]));
 	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick, 0);
 
 	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
-	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
 	_btnAlienRace->onMouseClick((ActionHandler)&NewBattleState::btnAlienRaceClick, 0);
 
 	_btnDifficulty->setColor(Palette::blockOffset(15)-1);
-	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDifficulty->onMouseClick((ActionHandler)&NewBattleState::btnDifficultyClick, 0);
 
 	_btnDarkness->setColor(Palette::blockOffset(15)-1);
@@ -184,23 +184,23 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnDarkness->onMouseClick((ActionHandler)&NewBattleState::btnDarknessClick, 0);
 
 	_btnCraft->setColor(Palette::blockOffset(15)-1);
-	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
+	_btnCraft->setText(tr(_crafts[_selCraft]));
 	_btnCraft->onMouseClick((ActionHandler)&NewBattleState::btnCraftClick, 0);
 
 	_btnEquip->setColor(Palette::blockOffset(8)+5);
-	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIP_CRAFT"));
+	_btnEquip->setText(tr("STR_EQUIP_CRAFT"));
 	_btnEquip->onMouseClick((ActionHandler)&NewBattleState::btnEquipClick);
 
 	_btnRandom->setColor(Palette::blockOffset(8)+5);
-	_btnRandom->setText(_game->getLanguage()->getString("STR_RANDOM_BATTLE"));
+	_btnRandom->setText(tr("STR_RANDOM_BATTLE"));
 	_btnRandom->onMouseClick((ActionHandler)&NewBattleState::btnRandomClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewBattleState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
 
 	_music = true;
@@ -396,12 +396,12 @@ void NewBattleState::btnRandomClick(Action *action)
 	_selDifficulty = RNG::generate(0,4) ;
 	_selDarkness = RNG::generate(0,5) ;
 
-	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
-	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
-	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
-	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	_btnMissionType->setText(tr(_missionTypes[_selMission]));
+	_btnTerrainType->setText(tr(_terrainTypes[_selTerrain]));
+	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
+	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
-	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
+	_btnCraft->setText(tr(_crafts[_selCraft]));
 	
 	
 	/// 0-2, 3 is out of range + triggers crash
@@ -511,7 +511,7 @@ void NewBattleState::btnMissionTypeClick(Action *action)
 	{
 		updateIndex(_selMission, _missionTypes, -1);
 	}
-	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+	_btnMissionType->setText(tr(_missionTypes[_selMission]));
 }
 
 /**
@@ -528,7 +528,7 @@ void NewBattleState::btnTerrainTypeClick(Action *action)
 	{
 		updateIndex(_selTerrain, _terrainTypes, -1);
 	}
-	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
+	_btnTerrainType->setText(tr(_terrainTypes[_selTerrain]));
 }
 
 /**
@@ -545,7 +545,7 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 	{
 		updateIndex(_selAlien, _alienRaces, -1);
 	}
-	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
 }
 
 /**
@@ -562,7 +562,7 @@ void NewBattleState::btnDifficultyClick(Action *action)
 	{
 		updateIndex(_selDifficulty, _difficulty, -1);
 	}
-	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
 }
 
 /**
@@ -596,7 +596,7 @@ void NewBattleState::btnCraftClick(Action *action)
 	{
 		updateIndex(_selCraft, _crafts, -1);
 	}
-	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
+	_btnCraft->setText(tr(_crafts[_selCraft]));
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
 }
 

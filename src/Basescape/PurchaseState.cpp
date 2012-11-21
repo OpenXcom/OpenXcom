@@ -82,38 +82,38 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_PURCHASE_HIRE_PERSONNEL"));
+	_txtTitle->setText(tr("STR_PURCHASE_HIRE_PERSONNEL"));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s1 = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
+	std::wstring s1 = tr("STR_CURRENT_FUNDS");
 	s1 += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s1);
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
 	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s2 = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+	std::wstring s2 = tr("STR_COST_OF_PURCHASES");
 	s2 += L'\x01' + Text::formatFunding(_total);
 	_txtPurchases->setText(s2);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getLanguage()->getString("STR_COST_PER_UNIT_UC"));
+	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
@@ -131,15 +131,15 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_qtys.push_back(0);
 	std::wstringstream ss;
 	ss << _base->getTotalSoldiers();
-	_lstItems->addRow(4, _game->getLanguage()->getString("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
+	_lstItems->addRow(4, tr("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
 	_qtys.push_back(0);
 	std::wstringstream ss2;
 	ss2 << _base->getTotalScientists();
-	_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
+	_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
 	_qtys.push_back(0);
 	std::wstringstream ss3;
 	ss3 << _base->getTotalEngineers();
-	_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
+	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
 	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
@@ -156,7 +156,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			}
 			std::wstringstream ss4;
 			ss4 << crafts;
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
+			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
@@ -168,7 +168,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			_qtys.push_back(0);
 			std::wstringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
 		}
 	}
 
@@ -332,7 +332,7 @@ void PurchaseState::lstItemsLeftArrowClick(Action *action)
 			ss << _qtys[_sel];
 			_lstItems->setCellText(_sel, 3, ss.str());
 			_total += getPrice() * canBeBought;
-			std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+			std::wstring s = tr("STR_COST_OF_PURCHASES");
 			s += L'\x01' + Text::formatFunding(_total);
 			_txtPurchases->setText(s);
 		}
@@ -384,7 +384,7 @@ void PurchaseState::lstItemsRightArrowClick(Action *action)
 				_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(_qtys[_sel]));
 			}
 			_total -= getPrice() * _qtys[_sel];
-			std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+			std::wstring s = tr("STR_COST_OF_PURCHASES");
 			s += L'\x01' + Text::formatFunding(_total);
 			_txtPurchases->setText(s);
 			_qtys[_sel] = 0;
@@ -474,7 +474,7 @@ void PurchaseState::increase()
 		ss << _qtys[_sel];
 		_lstItems->setCellText(_sel, 3, ss.str());
 		_total += getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+		std::wstring s = tr("STR_COST_OF_PURCHASES");
 		s += L'\x01' + Text::formatFunding(_total);
 		_txtPurchases->setText(s);
 	}
@@ -507,7 +507,7 @@ void PurchaseState::decrease()
 		ss << _qtys[_sel];
 		_lstItems->setCellText(_sel, 3, ss.str());
 		_total -= getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+		std::wstring s = tr("STR_COST_OF_PURCHASES");
 		s += L'\x01' + Text::formatFunding(_total);
 		_txtPurchases->setText(s);
 	}

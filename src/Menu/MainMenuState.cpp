@@ -68,23 +68,23 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnNewGame->setColor(Palette::blockOffset(8)+5);
-	_btnNewGame->setText(_game->getLanguage()->getString("STR_NEW_GAME"));
+	_btnNewGame->setText(tr("STR_NEW_GAME"));
 	_btnNewGame->onMouseClick((ActionHandler)&MainMenuState::btnNewGameClick);
 
 	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
-	_btnNewBattle->setText(_game->getLanguage()->getString("STR_NEW_BATTLE"));
+	_btnNewBattle->setText(tr("STR_NEW_BATTLE"));
 	_btnNewBattle->onMouseClick((ActionHandler)&MainMenuState::btnNewBattleClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+5);
-	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_SAVED_GAME"));
+	_btnLoad->setText(tr("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
 	_btnOptions->setColor(Palette::blockOffset(8)+5);
-	_btnOptions->setText(_game->getLanguage()->getString("STR_OPTIONS"));
+	_btnOptions->setText(tr("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+5);
-	_btnQuit->setText(_game->getLanguage()->getString("STR_QUIT"));
+	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);

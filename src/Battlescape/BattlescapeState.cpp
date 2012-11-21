@@ -1048,7 +1048,7 @@ void BattlescapeState::debug(const std::wstring &message)
 
 void BattlescapeState::warning(const std::string &message)
 {
-	_warning->showMessage(_game->getLanguage()->getString(message));
+	_warning->showMessage(tr(message));
 }
 
 /**

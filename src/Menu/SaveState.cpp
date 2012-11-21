@@ -59,7 +59,7 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 		_edtSave->setHighContrast(true);
 	}
 
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SAVE_POSITION"));
+	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
 	_lstSaves->onMouseClick((ActionHandler)&SaveState::lstSavesClick);
 
@@ -82,7 +82,7 @@ SaveState::~SaveState()
 void SaveState::updateList()
 {
 	_lstSaves->clearList();
-	_lstSaves->addRow(1, _game->getLanguage()->getString("STR_NEW_SAVED_GAME").c_str());
+	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
 	SavedGame::getList(_lstSaves, _game->getLanguage());
 }
 
@@ -100,7 +100,7 @@ void SaveState::lstSavesClick(Action *action)
 		case -1:	// first click on the savegame list
 			break;
 		case 0:
-			_lstSaves->setCellText(_previousSelectedRow	, 0, _game->getLanguage()->getString("STR_NEW_SAVED_GAME"));
+			_lstSaves->setCellText(_previousSelectedRow	, 0, tr("STR_NEW_SAVED_GAME"));
 			break;
 		default:
 			_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
@@ -154,7 +154,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 			_edtSave->setVisible(false);
 			Log(LOG_ERROR) << e.what();
 			std::wstringstream error;
-			error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 			if (_geo)
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			else
@@ -166,7 +166,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 			Log(LOG_ERROR) << e.what();
 			std::wstringstream error;
 			error <<
-			_game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+			tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 			if (_geo)
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			else

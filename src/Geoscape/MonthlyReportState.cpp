@@ -63,12 +63,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_PROJECT_MONTHLY_REPORT"));
+	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 
 	int month = _game->getSavedGame()->getTime()->getMonth() - 1, year = _game->getSavedGame()->getTime()->getYear();
 	if (month == 0)
@@ -94,21 +94,21 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	}
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_MONTH") << L'\x01' << _game->getLanguage()->getString(m) << L" " << year;
+	ss << tr("STR_MONTH") << L'\x01' << tr(m) << L" " << year;
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
 	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtMonth->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_MONTHLY_RATING") << L'\x01' << 0;
+	ss2 << tr("STR_MONTHLY_RATING") << L'\x01' << 0;
 
 	_txtRating->setColor(Palette::blockOffset(15)-1);
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(ss2.str());
 
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01' << 0;
+	ss3 << tr("STR_FUNDING_CHANGE") << L'\x01' << 0;
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -116,7 +116,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 
 	_txtDesc->setColor(Palette::blockOffset(8)+10);
 	_txtDesc->setWordWrap(true);
-	_txtDesc->setText(_game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED"));
+	_txtDesc->setText(tr("STR_COUNCIL_IS_GENERALLY_SATISFIED"));
 }
 
 /**

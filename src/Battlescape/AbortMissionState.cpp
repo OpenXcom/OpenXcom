@@ -85,29 +85,29 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_txtInExit->setBig();
 	_txtInExit->setHighContrast(true);
 	std::wstringstream ss;
-	ss << _inExitArea << _game->getLanguage()->getString("STR_UNITS_IN_EXIT_AREA");
+	ss << _inExitArea << tr("STR_UNITS_IN_EXIT_AREA");
 	_txtInExit->setText(ss.str());
 
 	_txtOutsideExit->setColor(Palette::blockOffset(0));
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setHighContrast(true);
 	ss.str(L"");
-	ss << _outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
+	ss << _outExitArea << tr("STR_UNITS_OUTSIDE_EXIT_AREA");
 	_txtOutsideExit->setText(ss.str());
 
 	_txtAbort->setColor(Palette::blockOffset(0));
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
 	_txtAbort->setHighContrast(true);
-	_txtAbort->setText(_game->getLanguage()->getString("STR_ABORT_MISSION"));
+	_txtAbort->setText(tr("STR_ABORT_MISSION"));
 
 	_btnOk->setColor(Palette::blockOffset(0));
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(0));
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);
 

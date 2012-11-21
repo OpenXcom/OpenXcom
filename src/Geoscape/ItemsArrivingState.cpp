@@ -75,26 +75,26 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_ITEMS_ARRIVING"));
+	_txtTitle->setText(tr("STR_ITEMS_ARRIVING"));
 
 	_txtItem->setColor(Palette::blockOffset(8)+5);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtDestination->setColor(Palette::blockOffset(8)+5);
-	_txtDestination->setText(_game->getLanguage()->getString("STR_DESTINATION_UC"));
+	_txtDestination->setText(tr("STR_DESTINATION_UC"));
 
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setColumns(3, 155, 35, 98);
