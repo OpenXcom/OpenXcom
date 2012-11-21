@@ -89,7 +89,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _music(false)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _music(false), _pause(false)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -407,6 +407,7 @@ void GeoscapeState::timeDisplay()
  */
 void GeoscapeState::timeAdvance()
 {
+	_pause = false;
 	int timeSpan = 0;
 	if (_timeSpeed == _btn5Secs)
 	{
@@ -433,7 +434,7 @@ void GeoscapeState::timeAdvance()
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 	}
 
-	for (int i = 0; i < timeSpan; ++i)
+	for (int i = 0; i < timeSpan && !_pause; ++i)
 	{
 		TimeTrigger trigger;
 		trigger = _game->getSavedGame()->getTime()->advance();
@@ -1182,6 +1183,7 @@ void GeoscapeState::timerReset()
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
 	_btn5Secs->mousePress(&act, this);
+	_pause = true;
 }
 
 /**
