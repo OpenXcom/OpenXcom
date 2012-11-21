@@ -48,7 +48,7 @@ private:
 	Screen *_screen;
 	Cursor *_cursor;
 	Language *_lang;
-	std::list<State*> _states, _deleted;
+	std::list<State*> _states, _deleted, _added;
 	ResourcePack *_res;
 	SavedGame *_save;
 	Ruleset *_rules;
@@ -76,10 +76,12 @@ public:
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.
 	void setState(State *state);
-	/// Pushes a new state into the state stack.
+	/// Pushes a new state into the state stack, in LIFO order.
 	void pushState(State *state);
 	/// Pops the last state from the state stack.
 	void popState();
+	/// Add a new state to the state stack, in FIFO order.
+	void addState(State *state);
 	/// Gets the currently loaded language.
 	Language *const getLanguage() const;
 	/// Loads a new language for the game.

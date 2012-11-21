@@ -387,6 +387,7 @@ UnitInfoState::~UnitInfoState()
  */
 void UnitInfoState::init()
 {
+	showAll();
 	std::wstringstream ss;
 	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
@@ -501,6 +502,13 @@ void UnitInfoState::init()
 	_barUnderArmor->setValue(_unit->getArmor(SIDE_UNDER));
 }
 
+/**
+ * Hide everything when we are not active.
+ */
+void UnitInfoState::leave()
+{
+	hideAll();
+}
 
 /**
  * Closes the window on right-click.

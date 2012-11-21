@@ -65,6 +65,8 @@ public:
 	void handle(Action *action);
 	/// Updates the palette and timer.
 	void init();
+	/// Pause the actions.
+	void leave();
 	/// Runs the timer.
 	void think();
 	/// Displays the game time/date.
@@ -85,8 +87,6 @@ public:
 	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
-	/// Displays a popup window.
-	void popup(State *state);
 	/// Gets the Geoscape globe.
 	Globe *const getGlobe() const;
 	/// Handler for clicking the globe.

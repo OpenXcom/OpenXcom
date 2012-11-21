@@ -90,7 +90,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-	GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _music(false), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -288,7 +288,6 @@ namespace OpenXcom
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
-	_timer->start();
 
 	_zoomInEffectTimer->onTimer((StateHandler)&GeoscapeState::zoomInEffect);
 	_zoomOutEffectTimer->onTimer((StateHandler)&GeoscapeState::zoomOutEffect);
@@ -378,6 +377,7 @@ void GeoscapeState::init()
 		_game->getResourcePack()->getMusic(ss.str())->play();
 		_music = true;
 	}
+	_timer->start();
 }
 
 /**
@@ -386,12 +386,11 @@ void GeoscapeState::init()
 void GeoscapeState::think()
 {
 	State::think();
-
 	_zoomInEffectTimer->think(this, 0);
 	_zoomOutEffectTimer->think(this, 0);
 	_dogfightStartTimer->think(this, 0);
 
-	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
+	if(_dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
 		_timer->think(this, 0);
@@ -402,14 +401,15 @@ void GeoscapeState::think()
 		{
 			handleDogfights();
 		}
-		if(!_popups.empty())
-		{
-			// Handle popups
-			_globe->rotateStop();
-			_game->pushState(*_popups.begin());
-			_popups.erase(_popups.begin());
-		}
 	}
+}
+/**
+ * Pause until we are resumed.
+ */
+void GeoscapeState::leave()
+{
+	_globe->rotateStop();
+	_timer->stop();
 }
 
 /**
@@ -453,6 +453,7 @@ void GeoscapeState::timeDisplay()
  */
 void GeoscapeState::timeAdvance()
 {
+	bool doOnce = false;
 	int timeSpan = 0;
 	if (_timeSpeed == _btn5Secs)
 	{
@@ -479,7 +480,7 @@ void GeoscapeState::timeAdvance()
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 	}
 
-	for (int i = 0; i < timeSpan && !_pause; ++i)
+	for (int i = 0; i < timeSpan; ++i)
 	{
 		TimeTrigger trigger;
 		trigger = _game->getSavedGame()->getTime()->advance();
@@ -498,8 +499,13 @@ void GeoscapeState::timeAdvance()
 		case TIME_5SEC:
 			time5Seconds();
 		}
+		if(doOnce)
+		{
+			doOnce = false;
+			break;
+		}
 	}
-	_pause = false;
+
 	timeDisplay();
 	_globe->draw();
 }
@@ -534,8 +540,9 @@ void GeoscapeState::time5Seconds()
 						(*i)->setDetected(false);
 						if (!(*i)->getFollowers()->empty())
 						{
-							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+							_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 						}
+
 					}
 				}
 			}
@@ -547,7 +554,7 @@ void GeoscapeState::time5Seconds()
 				(*i)->setDetected(false);
 				if (!(*i)->getFollowers()->empty())
 				{
-					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+					_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 				}
 				(*i)->setStatus(Ufo::DESTROYED);
 			}
@@ -572,7 +579,7 @@ void GeoscapeState::time5Seconds()
 					w->setLongitude(u->getLongitude());
 					w->setLatitude(u->getLatitude());
 					w->setId(u->getId());
-					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					_game->addState(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
 				if((*j)->getPatrolTime() != 0)
 				{
@@ -615,9 +622,6 @@ void GeoscapeState::time5Seconds()
 								_dogfightStartTimer->start();
 							}
 						}
-						//timerReset();
-						//_music = false;
-						//popup(new DogfightState(_game, _globe, (*j), u));
 						break;
 					case Ufo::LANDED:
 					case Ufo::CRASHED:
@@ -634,7 +638,7 @@ void GeoscapeState::time5Seconds()
 									_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 									_music = false;
 									timerReset();
-									popup(new ConfirmLandingState(_game, *j, texture, shade));
+									_game->addState(new ConfirmLandingState(_game, *j, texture, shade));
 								}
 							}
 						}
@@ -647,7 +651,7 @@ void GeoscapeState::time5Seconds()
 				}
 				else if (w != 0)
 				{
-					popup(new CraftPatrolState(_game, (*j), _globe));
+					_game->addState(new CraftPatrolState(_game, (*j), _globe));
 					(*j)->setDestination(0);
 				}
 				else if (t != 0)
@@ -659,7 +663,7 @@ void GeoscapeState::time5Seconds()
 						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
 						_music = false;
 						timerReset();
-						popup(new ConfirmLandingState(_game, *j, texture, shade));
+						_game->addState(new ConfirmLandingState(_game, *j, texture, shade));
 					}
 					else
 					{
@@ -676,7 +680,7 @@ void GeoscapeState::time5Seconds()
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
 							_music = false;
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade));
+							_game->addState(new ConfirmLandingState(_game, *j, texture, shade));
 						}
 						else
 						{
@@ -775,7 +779,7 @@ void GeoscapeState::time10Minutes()
 				{
 					(*j)->setLowFuel(true);
 					(*j)->returnToBase();
-					popup(new LowFuelState(_game, (*j), this));
+					_game->addState(new LowFuelState(_game, (*j), this));
 				}
 			}
 		}
@@ -875,7 +879,7 @@ void GeoscapeState::time30Minutes()
 						ss << (*j)->getName(_game->getLanguage());
 						ss << _game->getLanguage()->getString("STR_AT_");
 						ss << (*i)->getName();
-						popup(new CraftErrorState(_game, this, ss.str()));
+						_game->addState(new CraftErrorState(_game, this, ss.str()));
 						(*j)->setStatus("STR_READY");
 					}
 				}
@@ -927,11 +931,11 @@ void GeoscapeState::time30Minutes()
 					(*u)->setDetected(detected);
 					if(!(*u)->getHyperDetected())
 					{
-						popup(new UfoDetectedState(_game, (*u), this, true));
+						_game->addState(new UfoDetectedState(_game, (*u), this, true));
 					}
 					else
 					{
-						popup(new UfoHyperDetectedState(_game, (*u), this, true));
+						_game->addState(new UfoHyperDetectedState(_game, (*u), this, true));
 					}
 				}
 			}
@@ -959,7 +963,7 @@ void GeoscapeState::time30Minutes()
 					}
 					if (!(*u)->getFollowers()->empty())
 					{
-						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
+						_game->addState(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 					}
 				}
 			}
@@ -998,7 +1002,7 @@ void GeoscapeState::time1Hour()
 					ss << (*j)->getName(_game->getLanguage());
 					ss << _game->getLanguage()->getString("STR_AT_");
 					ss << (*i)->getName();
-					popup(new CraftErrorState(_game, this, ss.str()));
+					_game->addState(new CraftErrorState(_game, this, ss.str()));
 				}
 			}
 		}
@@ -1048,7 +1052,7 @@ void GeoscapeState::time1Hour()
 	}
 	if (window)
 	{
-		popup(new ItemsArrivingState(_game, this));
+		_game->addState(new ItemsArrivingState(_game, this));
 	}
 	// Handle Production
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1063,7 +1067,7 @@ void GeoscapeState::time1Hour()
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				popup(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRules()->getName()), (*i)->getName(), j->second));
+				_game->addState(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRules()->getName()), (*i)->getName(), j->second));
 				timerReset();
 			}
 		}
@@ -1101,7 +1105,7 @@ void GeoscapeState::time1Day()
 		else
 			t->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
-		popup(new AlienTerrorState(_game, city, this));
+		_game->addState(new AlienTerrorState(_game, city, this));
 	}
 	else if (chance == 20 && _game->getSavedGame()->getAlienBases()->size() < 9)
 	{
@@ -1151,7 +1155,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					popup(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRules()->getType()), (*i)->getName()));
+					_game->addState(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRules()->getType()), (*i)->getName()));
 				}
 			}
 		}
@@ -1209,16 +1213,16 @@ void GeoscapeState::time1Day()
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
 			}
-			popup(new ResearchCompleteState(_game, newResearch, bonus));
 			std::vector<RuleResearch *> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch (newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
 			std::vector<RuleManufacture *> newPossibleManufacture;
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
 			timerReset();
-			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
+			_game->addState(new ResearchCompleteState (_game, newResearch, bonus));
+			_game->addState(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 			if (!newPossibleManufacture.empty())
 			{
-				popup(new NewPossibleManufactureState(_game, *i, newPossibleManufacture));
+				_game->addState(new NewPossibleManufactureState(_game, *i, newPossibleManufacture));
 			}
 			delete(*iter);
 		}
@@ -1260,7 +1264,7 @@ void GeoscapeState::time1Month()
 	// Handle funding
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
-	popup(new MonthlyReportState(_game, psi));
+	_game->addState(new MonthlyReportState(_game, psi));
 
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
@@ -1273,7 +1277,7 @@ void GeoscapeState::time1Month()
 			{
 				(*b)->setDiscovered(true);
 				_baseDiscovered = true;
-				popup(new AlienBaseState(_game, *b, this));
+				_game->addState(new AlienBaseState(_game, *b, this));
 			}
 		}
 	}
@@ -1289,18 +1293,6 @@ void GeoscapeState::timerReset()
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
 	_btn5Secs->mousePress(&act, this);
-}
-
-/**
- * Adds a new popup window to the queue
- * (this prevents popups from overlapping)
- * and pauses the game timer respectively.
- * @param state Pointer to popup state.
- */
-void GeoscapeState::popup(State *state)
-{
-	_pause = true;
-	_popups.push_back(state);
 }
 
 /**
@@ -1329,7 +1321,7 @@ void GeoscapeState::globeClick(Action *action)
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, false);
 		if (!v.empty())
 		{
-			_game->pushState(new MultipleTargetsState(_game, v, 0, this));
+			_game->addState(new MultipleTargetsState(_game, v, 0, this));
 		}
 	}
 }
@@ -1340,7 +1332,7 @@ void GeoscapeState::globeClick(Action *action)
  */
 void GeoscapeState::btnInterceptClick(Action *action)
 {
-	_game->pushState(new InterceptState(_game, _globe));
+	_game->addState(new InterceptState(_game, _globe));
 }
 
 /**
@@ -1352,11 +1344,11 @@ void GeoscapeState::btnBasesClick(Action *action)
 	timerReset();
 	if (_game->getSavedGame()->getBases()->size() > 0)
 	{
-		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+		_game->addState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
 	}
 	else
 	{
-		_game->pushState(new BasescapeState(_game, 0, _globe));
+		_game->addState(new BasescapeState(_game, 0, _globe));
 	}
 }
 
@@ -1366,7 +1358,7 @@ void GeoscapeState::btnBasesClick(Action *action)
  */
 void GeoscapeState::btnGraphsClick(Action *action)
 {
-	_game->pushState(new GraphsState(_game));
+	_game->addState(new GraphsState(_game));
 }
 
 /**
@@ -1384,7 +1376,7 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
  */
 void GeoscapeState::btnOptionsClick(Action *action)
 {
-	_game->pushState(new GeoscapeOptionsState(_game));
+	_game->addState(new GeoscapeOptionsState(_game));
 }
 
 /**
@@ -1393,7 +1385,7 @@ void GeoscapeState::btnOptionsClick(Action *action)
  */
 void GeoscapeState::btnFundingClick(Action *action)
 {
-	_game->pushState(new FundingState(_game));
+	_game->addState(new FundingState(_game));
 }
 
 /**

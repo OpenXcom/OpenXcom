@@ -181,7 +181,7 @@ void ResearchState::fillProjectList()
 		else
 		{
 			std::wstring ss;
-			for(int st = 0; st != (*iter)->getRules()->getStringTemplate().size(); ++st)
+			for(size_t st = 0; st != (*iter)->getRules()->getStringTemplate().size(); ++st)
 			{
 				ss += _game->getLanguage()->getString((*iter)->getRules()->getStringTemplate().at(st));
 			}
