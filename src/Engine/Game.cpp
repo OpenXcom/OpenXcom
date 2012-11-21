@@ -169,6 +169,12 @@ void Game::run()
 			_deleted.pop_back();
 		}
 
+		if (!_added.empty())
+		{
+			pushState(_added.front());
+			_added.pop_front();
+		}
+
 		// Initialize active state
 		if (!_init)
 		{
@@ -358,6 +364,8 @@ void Game::setState(State *state)
  */
 void Game::pushState(State *state)
 {
+	if (!_states.empty())
+		_states.back()->leave();
 	_states.push_back(state);
 	_init = false;
 }
@@ -478,6 +486,17 @@ void Game::setMouseActive(bool active)
 {
 	_mouseActive = active;
 	_cursor->setVisible(active);
+}
+
+/**
+ * Add a new state to execute, in FIFO order.
+ * States added through this function will execute one after the other, in the
+ * order given. This is used to provide popup windows in the proper order.
+ * @param state A pointer to the state to execute.
+ */
+void Game::addState(State *state)
+{
+	_added.push_back(state);
 }
 
 }

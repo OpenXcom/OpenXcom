@@ -56,8 +56,10 @@ public:
 	bool isScreen() const;
 	/// Toggles whether the state is a full-screen.
 	void toggleScreen();
-	/// Initializes the state.
+	/// Prepare the state to start/continue.
 	virtual void init();
+	/// Prepare the state to pause.
+	virtual void leave();
 	/// Handles any events.
 	virtual void handle(Action *action);
 	/// Runs state functionality every cycle.
