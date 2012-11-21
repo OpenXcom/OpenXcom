@@ -1715,10 +1715,6 @@ STR_CYBERDISC_CORPSE
 Cadavere Cyberdisco
 STR_TO_ARM_HWP
 Proiettili Tank insufficienti
-STR_NOT_ENOUGH_ROCKETS_TO_ARM_HWP
-Razzi Tank insufficienti
-STR_NOT_ENOUGH_FUSION_BALLS_TO_ARM_HWP
-Palle a fusione per Tank insufficienti
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Armamenti per riarmo intera squadra insufficiente
 STR_MARS_CYDONIA_LANDING
@@ -2059,8 +2055,6 @@ STR_NEW_SAVED_GAME
 <NEW SAVED GAME>
 STR_NEW_BATTLE
 Nuova Battaglia
-STR_THE_SIMULATRON
-IL SIMULATRON
 STR_OPTIONS
 Opzioni
 STR_TERRAIN
@@ -2089,3 +2083,5 @@ STR_DESERT
 Deserto
 STR_POLAR
 Polare
+STR_RANDOM_BATTLE
+Battaglia Random

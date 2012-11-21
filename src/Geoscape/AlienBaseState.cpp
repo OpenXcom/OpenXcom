@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param base Pointer to the alien base to get info from.
  * @param state Pointer to the Geoscape.
  */
-AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state) : State(game), _base(base), _state(state)
+AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state) : State(game), _state(state), _base(base)
 {
 	
 	// Create objects

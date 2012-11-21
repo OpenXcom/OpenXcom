@@ -116,7 +116,7 @@ void ResearchInfoState::buildUi ()
 	else
 	{
 		std::wstring ss;
-		for(int st = 0; st != _project->getRules()->getStringTemplate().size(); ++st)
+		for(size_t st = 0; st != _project->getRules()->getStringTemplate().size(); ++st)
 		{
 			ss += _game->getLanguage()->getString(_project->getRules()->getStringTemplate().at(st));
 		}
