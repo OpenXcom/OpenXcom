@@ -90,7 +90,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _music(false), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _music(false), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0), _pause(false)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -453,7 +453,7 @@ void GeoscapeState::timeDisplay()
  */
 void GeoscapeState::timeAdvance()
 {
-	bool doOnce = false;
+	_pause = false;
 	int timeSpan = 0;
 	if (_timeSpeed == _btn5Secs)
 	{
@@ -480,7 +480,7 @@ void GeoscapeState::timeAdvance()
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 	}
 
-	for (int i = 0; i < timeSpan; ++i)
+	for (int i = 0; i < timeSpan && !_pause; ++i)
 	{
 		TimeTrigger trigger;
 		trigger = _game->getSavedGame()->getTime()->advance();
@@ -499,11 +499,6 @@ void GeoscapeState::timeAdvance()
 		case TIME_5SEC:
 			time5Seconds();
 		}
-		if(doOnce)
-		{
-			doOnce = false;
-			break;
-		}
 	}
 
 	timeDisplay();
@@ -516,54 +511,6 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
-	// Handle UFO logic
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
-	{
-		switch ((*i)->getStatus())
-		{
-		case Ufo::FLYING:
-			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
-			{
-				(*i)->think();
-				if ((*i)->reachedDestination())
-				{
-					if (_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()))
-					{
-						(*i)->setAltitude("STR_GROUND");
-						(*i)->setTimeOnGround(16 + RNG::generate(0, 24));
-					}
-					else
-					{
-						// This is only required because we are
-						// faking the UFO flight patterns.
-						(*i)->setStatus(Ufo::DESTROYED);
-						(*i)->setDetected(false);
-						if (!(*i)->getFollowers()->empty())
-						{
-							_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
-						}
-
-					}
-				}
-			}
-			break;
-		case Ufo::LANDED:
-		case Ufo::CRASHED:
-			if ((*i)->getTimeOnGround() == 0)
-			{
-				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty())
-				{
-					_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
-				}
-				(*i)->setStatus(Ufo::DESTROYED);
-			}
-			break;
-		case Ufo::DESTROYED:
-			break;
-		}
-	}
-
 	// Handle craft logic
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
@@ -690,6 +637,52 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			}
+		}
+	}
+	// Handle UFO logic
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	{
+		switch ((*i)->getStatus())
+		{
+		case Ufo::FLYING:
+			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
+			{
+				(*i)->think();
+				if ((*i)->reachedDestination())
+				{
+					if (_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()))
+					{
+						(*i)->setAltitude("STR_GROUND");
+						(*i)->setTimeOnGround(16 + RNG::generate(0, 24));
+					}
+					else
+					{
+						if (!(*i)->getFollowers()->empty())
+						{
+							_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+						}						
+						// This is only required because we are
+						// faking the UFO flight patterns.
+						(*i)->setStatus(Ufo::DESTROYED);
+						(*i)->setDetected(false);
+					}
+				}
+			}
+			break;
+		case Ufo::LANDED:
+		case Ufo::CRASHED:
+			if ((*i)->getTimeOnGround() == 0)
+			{
+				(*i)->setDetected(false);
+				if (!(*i)->getFollowers()->empty())
+				{
+					_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+				}
+				(*i)->setStatus(Ufo::DESTROYED);
+			}
+			break;
+		case Ufo::DESTROYED:
+			break;
 		}
 	}
 
@@ -932,10 +925,12 @@ void GeoscapeState::time30Minutes()
 					(*u)->setDetected(true);
 					if(!(*u)->getHyperDetected())
 					{
+						_pause = true;
 						_game->addState(new UfoDetectedState(_game, (*u), this, true));
 					}
 					else
 					{
+						_pause = true;
 						_game->addState(new UfoHyperDetectedState(_game, (*u), this, true));
 					}
 				}
@@ -964,6 +959,7 @@ void GeoscapeState::time30Minutes()
 					}
 					if (!(*u)->getFollowers()->empty())
 					{
+						_pause = true;
 						_game->addState(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 					}
 				}
@@ -1294,6 +1290,7 @@ void GeoscapeState::timerReset()
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
 	_btn5Secs->mousePress(&act, this);
+	_pause = true;
 }
 
 /**
