@@ -1167,6 +1167,24 @@ void GeoscapeState::time1Day()
 					}
 				}
 			}
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
+					if(bonus)
+						(*k)->addActivityXcom(bonus->getPoints());
+				}
+			}
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
+					if(bonus)
+						(*k)->addActivityXcom(bonus->getPoints());
+				}
+			}
 			const RuleResearch * newResearch = research;
 			if(_game->getSavedGame()->isResearched(research->getName()))
 			{
