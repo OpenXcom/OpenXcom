@@ -47,7 +47,7 @@ private:
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer;
-	bool _music, _pause;
+	bool _music, _interruptLoop;
 	Text *_txtDebug;
 public:
 	/// Creates the Geoscape state.
@@ -120,6 +120,8 @@ public:
 	void btnZoomOutLeftClick(Action *action);
 	/// Handler for right-clicking the Zoom Out icon.
 	void btnZoomOutRightClick(Action *action);
+	/// Add a popup.
+	void popup(State *state);
 };
 
 }
