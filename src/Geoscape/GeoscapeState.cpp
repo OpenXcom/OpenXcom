@@ -805,15 +805,6 @@ void GeoscapeState::time30Minutes()
 						{
 							detected = true;
 						}
-						for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
-						{
-							if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
-								continue;
-							if ((*c)->detect(*u))
-							{
-								detected = true;
-							}
-						}
 					}
 				}
 				if (detected)
