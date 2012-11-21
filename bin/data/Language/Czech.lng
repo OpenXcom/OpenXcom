@@ -1813,10 +1813,10 @@ STR_QUANTITY
 Množství
 STR_TOTAL
 Celkem
-STR_DAY
- den
-STR_DAYS
- dni
+STR_DAY_1
+{N} den
+STR_DAY_2
+{N} dni
 STR_IN_PSIONIC_TRAINING
 V psionickém tréninku
 STR_BLASTER_BOMB_UFOPEDIA

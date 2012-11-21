@@ -1813,10 +1813,10 @@ STR_QUANTITY
 Кільк.
 STR_TOTAL
 Всього
-STR_DAY
- день
-STR_DAYS
- дні(в)
+STR_DAY_1
+{N} день
+STR_DAY_2
+{N} дні(в)
 STR_IN_PSIONIC_TRAINING
 Тренуються в Псі-Лабораторії
 STR_BLASTER_BOMB_UFOPEDIA

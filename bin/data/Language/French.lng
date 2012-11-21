@@ -1813,10 +1813,10 @@ STR_QUANTITY
 Quantité
 STR_TOTAL
 Total
-STR_DAY
- jour
-STR_DAYS
- jours
+STR_DAY_1
+{N} jour
+STR_DAY_2
+{N} jours
 STR_IN_PSIONIC_TRAINING
 En entraînement psionique
 STR_BLASTER_BOMB_UFOPEDIA
