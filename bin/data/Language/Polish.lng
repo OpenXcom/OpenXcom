@@ -1813,10 +1813,10 @@ STR_QUANTITY
   Sztuk
 STR_TOTAL
 Razem
-STR_DAY
- dzień
-STR_DAYS
- dni
+STR_DAY_1
+{N} dzień
+STR_DAY_2
+{N} dni
 STR_IN_PSIONIC_TRAINING
 W treningu psionicznym
 STR_BLASTER_BOMB_UFOPEDIA

@@ -1813,10 +1813,10 @@ STR_QUANTITY
 Cantitate
 STR_TOTAL
 Total
-STR_DAY
- zi
-STR_DAYS
- zile
+STR_DAY_1
+{N} zi
+STR_DAY_2
+{N} zile
 STR_IN_PSIONIC_TRAINING
 Sub Antrenament Psionic
 STR_BLASTER_BOMB_UFOPEDIA

@@ -122,17 +122,10 @@ namespace OpenXcom
 		_lstInfo->setColumns(2, 140, 60);
 		_lstInfo->setDot(true);
 
-		std::wstringstream ss;
-		ss.str(L"");ss.clear();
-		ss << facility->getBuildTime();
-		if (facility->getBuildTime() != 1)
-			ss << tr("STR_DAYS");
-		else
-			ss << tr("STR_DAY");
-		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_TIME").c_str(), tr("STR_DAY", facility->getBuildTime()).c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
 
-		ss.str(L"");ss.clear();
+		std::wstringstream ss;
 		ss << Text::formatFunding(facility->getBuildCost());
 		_lstInfo->addRow(2, tr("STR_CONSTRUCTION_COST").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);

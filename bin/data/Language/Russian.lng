@@ -1813,10 +1813,10 @@ STR_QUANTITY
 Кол-во
 STR_TOTAL
 Плата
-STR_DAY
- День
-STR_DAYS
- Дни
+STR_DAY_1
+{N} День
+STR_DAY_2
+{N} Дни
 STR_IN_PSIONIC_TRAINING
 Тренируются в пси-лаборатории 
 STR_BLASTER_BOMB_UFOPEDIA
