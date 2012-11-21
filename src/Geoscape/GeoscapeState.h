@@ -47,8 +47,9 @@ private:
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer;
-	bool _music;
+	bool _pause, _music;
 	Text *_txtDebug;
+	std::vector<State*> _popups;
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
@@ -58,8 +59,6 @@ public:
 	void handle(Action *action);
 	/// Updates the palette and timer.
 	void init();
-	/// Pause the actions.
-	void leave();
 	/// Runs the timer.
 	void think();
 	/// Displays the game time/date.
@@ -80,6 +79,8 @@ public:
 	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
+	/// Displays a popup window.
+	void popup(State *state);
 	/// Gets the Geoscape globe.
 	Globe *const getGlobe() const;
 	/// Handler for clicking the globe.

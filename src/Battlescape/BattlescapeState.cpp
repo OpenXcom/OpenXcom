@@ -80,7 +80,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game) : State(game), _reentering(false)
+BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 {
 	//game->getScreen()->setScale(1.0);
 	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
@@ -367,28 +367,33 @@ void BattlescapeState::init()
 }
 
 /**
- * Pause battlescapestate.
- */
-void BattlescapeState::leave()
-{
-	_reentering = true;
-}
-
-/**
   * think
   */
 void BattlescapeState::think()
 {
+	static bool popped = false;
+
 	if (_gameTimer->isRunning())
 	{
-		State::think();
-		_battleGame->think();
-		_animTimer->think(this, 0);
-		_gameTimer->think(this, 0);
-		if (_reentering)
+		if (_popups.empty())
 		{
-			_battleGame->handleNonTargetAction();
-			_reentering = false;
+			State::think();
+			_battleGame->think();
+			_animTimer->think(this, 0);
+			_gameTimer->think(this, 0);
+			if (popped)
+			{
+				_battleGame->handleNonTargetAction();
+				popped = false;
+			}
+		}
+		else
+		{
+			// Handle popups
+			_game->pushState(*_popups.begin());
+			_popups.erase(_popups.begin());
+			popped = true;
+			return;
 		}
 	}
 }
@@ -705,7 +710,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		_game->addState(new UnitInfoState(_game, _save->getSelectedUnit()));
+		popup(new UnitInfoState(_game, _save->getSelectedUnit()));
 	}
 }
 
@@ -975,7 +980,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
 		{
 			_battleGame->getCurrentAction()->weapon = item;
-			_game->addState(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
 		}
 		else
 		{
@@ -1075,12 +1080,23 @@ void BattlescapeState::handle(Action *action)
 }
 
 /**
+ * Adds a new popup window to the queue
+ * (this prevents popups from overlapping)
+ * @param state Pointer to popup state.
+ */
+void BattlescapeState::popup(State *state)
+{
+	_popups.push_back(state);
+}
+
+/**
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing the screen for the mission.
  * @param abort Was the mission aborted?
  */
 void BattlescapeState::finishBattle(bool abort)
 {
+	_popups.clear();
 	_animTimer->stop();
 	_gameTimer->stop();
 	_save->setAborted(abort);

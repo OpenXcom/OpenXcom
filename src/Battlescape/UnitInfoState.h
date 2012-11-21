@@ -58,8 +58,6 @@ public:
 	~UnitInfoState();
 	/// Updates the unit info.
 	void init();
-	/// Hide this screen
-	void leave();
 	/// Handler for clicking the button.
 	void handle(Action *action);
 };
