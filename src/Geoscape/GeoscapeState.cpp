@@ -90,11 +90,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-<<<<<<< HEAD
-GeoscapeState::GeoscapeState(Game *game) : State(game), _music(false), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0), _pause(false)
-=======
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups()
->>>>>>> upstream/master
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -390,44 +386,30 @@ void GeoscapeState::init()
 void GeoscapeState::think()
 {
 	State::think();
-<<<<<<< HEAD
+
 	_zoomInEffectTimer->think(this, 0);
 	_zoomOutEffectTimer->think(this, 0);
 	_dogfightStartTimer->think(this, 0);
 
-	if(_dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
-=======
-
-	if (_popups.empty())
->>>>>>> upstream/master
+	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
 		_timer->think(this, 0);
 	}
 	else
 	{
-<<<<<<< HEAD
 		if(!_dogfights.empty())
 		{
 			handleDogfights();
 		}
+		if(!_popups.empty())
+		{
+			// Handle popups
+			_globe->rotateStop();
+			_game->pushState(*_popups.begin());
+			_popups.erase(_popups.begin());
+		}
 	}
-}
-/**
- * Pause until we are resumed.
- */
-void GeoscapeState::leave()
-{
-	_globe->rotateStop();
-	_timer->stop();
-=======
-		// Handle popups
-		_globe->rotateStop();
-		_game->pushState(*_popups.begin());
-		_popups.erase(_popups.begin());
-	}
-
->>>>>>> upstream/master
 }
 
 /**
@@ -530,8 +512,6 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
-<<<<<<< HEAD
-=======
 	// Handle UFO logic
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
@@ -548,14 +528,14 @@ void GeoscapeState::time5Seconds()
 				}
 				else
 				{
-					// This is only required because we are
-					// faking the UFO flight patterns.
-					(*i)->setStatus(Ufo::DESTROYED);
-					(*i)->setDetected(false);
 					if (!(*i)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
+					// This is only required because we are
+					// faking the UFO flight patterns.
+					(*i)->setStatus(Ufo::DESTROYED);
+					(*i)->setDetected(false);
 				}
 			}
 			break;
@@ -576,7 +556,6 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
->>>>>>> upstream/master
 	// Handle craft logic
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
@@ -614,7 +593,6 @@ void GeoscapeState::time5Seconds()
 					switch (u->getStatus())
 					{
 					case Ufo::FLYING:
-<<<<<<< HEAD
 						// Not more than 4 interceptions at a time.
 						if(_dogfights.size() >= 4 || _dogfightsToBeStarted.size() >=4 || _dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
@@ -637,18 +615,12 @@ void GeoscapeState::time5Seconds()
 								_dogfightStartTimer->start();
 							}
 						}
-=======
-						timerReset();
-						_music = false;
-						popup(new DogfightState(_game, _globe, (*j), u));
->>>>>>> upstream/master
 						break;
 					case Ufo::LANDED:
 					case Ufo::CRASHED:
 					case Ufo::DESTROYED: // Just before expiration
 						if ((*j)->getNumSoldiers() > 0)
 						{
-<<<<<<< HEAD
 							if(!(*j)->isInDogfight())
 							{
 								if(_globe->isZoomedOutToMax())
@@ -659,17 +631,9 @@ void GeoscapeState::time5Seconds()
 									_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
 									_music = false;
 									timerReset();
-									_game->addState(new ConfirmLandingState(_game, *j, texture, shade));
+									popup(new ConfirmLandingState(_game, *j, texture, shade));
 								}
 							}
-=======
-							// look up polygons texture
-							int texture, shade;
-							_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
-							_music = false;
-							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade));
->>>>>>> upstream/master
 						}
 						else
 						{
@@ -740,7 +704,7 @@ void GeoscapeState::time5Seconds()
 					{
 						if (!(*i)->getFollowers()->empty())
 						{
-							_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 						}						
 						// This is only required because we are
 						// faking the UFO flight patterns.
@@ -757,7 +721,7 @@ void GeoscapeState::time5Seconds()
 				(*i)->setDetected(false);
 				if (!(*i)->getFollowers()->empty())
 				{
-					_game->addState(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 				}
 				(*i)->setStatus(Ufo::DESTROYED);
 			}
@@ -1006,21 +970,11 @@ void GeoscapeState::time30Minutes()
 					(*u)->setDetected(true);
 					if(!(*u)->getHyperDetected())
 					{
-<<<<<<< HEAD
-						_pause = true;
-						_game->addState(new UfoDetectedState(_game, (*u), this, true));
-					}
-					else
-					{
-						_pause = true;
-						_game->addState(new UfoHyperDetectedState(_game, (*u), this, true));
-=======
 						popup(new UfoDetectedState(_game, (*u), this, true));
 					}
 					else
 					{
 						popup(new UfoHyperDetectedState(_game, (*u), this, true));
->>>>>>> upstream/master
 					}
 				}
 			}
@@ -1048,12 +1002,8 @@ void GeoscapeState::time30Minutes()
 					}
 					if (!(*u)->getFollowers()->empty())
 					{
-<<<<<<< HEAD
-						_pause = true;
-						_game->addState(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
-=======
+
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
->>>>>>> upstream/master
 					}
 				}
 			}
