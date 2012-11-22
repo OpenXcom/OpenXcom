@@ -570,7 +570,7 @@ std::wstring Language::getName() const
 const LocalizedText &Language::getString(const std::string &id) const
 {
 	static LocalizedText hack(L"");
-	assert(!id.empty());
+	// assert(!id.empty()); // Isn't an empty ID an error?
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
@@ -616,6 +616,37 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
 	replace(txt, marker, val);
 	return txt;
+}
+
+/**
+ * Outputs all the language IDs and strings
+ * to an HTML table.
+ * @param filename HTML file.
+ */
+void Language::toHtml(const std::string &filename) const
+{
+	std::ofstream htmlFile (filename.c_str(), std::ios::out);
+	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
+	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
+	for (std::map<std::string, LocalizedText>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
+	{
+		htmlFile << "<tr><td>" << i->first << "</td><td>";
+		std::string s = wstrToUtf8(i->second);
+		for (std::string::const_iterator j = s.begin(); j != s.end(); ++j)
+		{
+			if (*j == 2 || *j == '\n')
+			{
+				htmlFile << "<br />";
+			}
+			else
+			{
+				htmlFile << *j;
+			}
+		}
+		htmlFile << "</td></tr>" << std::endl;
+	}
+	htmlFile << "</table>" << std::endl;
+	htmlFile.close();
 }
 
 }
