@@ -2080,8 +2080,6 @@ Sarkvidék
 STR_RANDOM_BATTLE
 Random Csata
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Nincs elég {1} NFP fegyverzéséhez
+Nincs elég {1} az NFP fegyverzéséhez
 STR_DAY_1
-{N} nap
-STR_DAY_2
 {N} nap
