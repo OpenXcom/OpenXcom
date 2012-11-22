@@ -405,10 +405,6 @@ void GeoscapeState::think()
 		{
 			handleDogfights();
 		}
-		else if(_minimizedDogfights == 0 && _battleMusic)
-		{
-			_battleMusic = false;
-		}
 		if(!_popups.empty())
 		{
 			// Handle popups
@@ -416,6 +412,11 @@ void GeoscapeState::think()
 			_game->pushState(*_popups.begin());
 			_popups.erase(_popups.begin());
 		}
+	}
+	if (_minimizedDogfights == 0 && _dogfights.empty() &&_battleMusic)
+	{
+		_battleMusic = false;
+		_music = false;
 	}
 }
 
@@ -605,7 +606,7 @@ void GeoscapeState::time5Seconds()
 						{
 							continue;
 						}
-						if(!(*j)->isInDogfight())
+						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
 							std::cout << "Starting dogfight...\n";
 							clock_t startClock = clock();
