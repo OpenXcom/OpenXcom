@@ -499,57 +499,36 @@ void Language::loadLng(const std::string &filename)
 	{
 		throw Exception("Failed to load LNG");
 	}
+	txtFile.exceptions(std::ios::badbit);
 
-	char value;
-	std::string buffer, bufid, language;
-	std::wstring bufstr;
-	bool first = true, id = true;
-
-	while (txtFile.read(&value, 1))
+	try
 	{
-		if (value != '\n')
+		std::string id, u8msg;
+		std::string language;
+		// Get language name
+		std::getline(txtFile, language);
+		_name = utf8ToWstr(language);
+		// Read lines in pairs.
+		while (!std::getline(txtFile, id).eof())
 		{
-			buffer += value;
-		}
-		else
-		{
-			// Get language name
-			if (first)
+			if (std::getline(txtFile, u8msg).fail())
 			{
-				language = buffer;
-				_name = utf8ToWstr(buffer);
-				first = false;
+				throw Exception("Invalid data from file");
 			}
-			else
-			{
-				// Get ID
-				if (id)
-				{
-					bufid = buffer;
-				}
-				// Get string
-				else
-				{
-					replace(buffer, "{NEWLINE}", "\n");
-					replace(buffer, "{SMALLLINE}", "\x02");
-					replace(buffer, "{ALT}", "\x01");
-					bufstr = utf8ToWstr(buffer);
-					_strings[bufid] = LocalizedText(bufstr);
-				}
-				id = !id;
-			}
-			buffer.clear();
+			replace(u8msg, "{NEWLINE}", "\n");
+			replace(u8msg, "{SMALLLINE}", "\x02");
+			replace(u8msg, "{ALT}", "\x01");
+			_strings[id] = utf8ToWstr(u8msg);
 		}
+		delete _handler;
+		_handler = PluralityRules::create(language);
 	}
-
-	if (!txtFile.eof())
+	catch (std::ifstream::failure e)
 	{
 		throw Exception("Invalid data from file");
 	}
 
 	txtFile.close();
-	delete _handler;
-	_handler = PluralityRules::create(language);
 }
 
 /**
