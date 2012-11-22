@@ -505,11 +505,8 @@ void CraftEquipmentState::moveRight()
 					int qty = _base->getItems()->getItem(ammo->getType());
 					if (qty == 0)
 					{
-						std::wstringstream ss;
-						ss << tr("STR_NOT_ENOUGH");
-						ss << tr(ammo->getType());
-						ss << tr("STR_TO_ARM_HWP");
-						_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+						LocalizedText msg(tr("STR_NOT_ENOUGH_ammotype_TO_ARM_HWP").arg(tr(ammo->getType())));
+						_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 						_timerRight->stop();
 					}
 					else

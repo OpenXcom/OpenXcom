@@ -1713,8 +1713,8 @@ STR_SECTOPOD_CORPSE
 Труп сектопода
 STR_CYBERDISC_CORPSE
 Труп кибердиска
-STR_TO_ARM_HWP
- для вооружения ТБП
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Нет {1} для вооружения ТБП
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Недостаточно снаряжения для экипировки команды
 STR_MARS_CYDONIA_LANDING
