@@ -298,19 +298,15 @@ void MonthlyReportState::btnOkClick(Action *action)
 
 void MonthlyReportState::CalculateChanges()
 {
-	int divisorA = 0;
-	int divisorB = 0;
 	// update activity counters
 	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 	{
-		divisorA++;
 		(*k)->newMonth();
 		_ratingTotal += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-2)-(*k)->getActivityAlien().at((*k)->getActivityAlien().size()-2);
 	}
 	// update activity counters
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
-		divisorB++;
 		_generalSatisfaction += (*k)->getSatisfaction(_game->getSavedGame()->getDifficulty());
 		_ratingTotal += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-1)-(*k)->getActivityAlien().at((*k)->getActivityAlien().size()-1);
 		switch((*k)->getSatisfaction(_game->getSavedGame()->getDifficulty()))
@@ -333,7 +329,7 @@ void MonthlyReportState::CalculateChanges()
 		(*k)->newMonth(_game->getSavedGame()->getDifficulty());
 		_fundingDiff += (*k)->getFunding().at((*k)->getFunding().size()-1)-(*k)->getFunding().at((*k)->getFunding().size()-2);
 	}
-	_ratingTotal = _ratingTotal / (divisorA + divisorB);
-	_generalSatisfaction = _generalSatisfaction / divisorB;
+	_ratingTotal = _ratingTotal / (_game->getSavedGame()->getRegions()->size() + _game->getSavedGame()->getCountries()->size());
+	_generalSatisfaction = _generalSatisfaction / _game->getSavedGame()->getCountries()->size();
 }
 }
