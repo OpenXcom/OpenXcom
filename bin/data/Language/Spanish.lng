@@ -1713,8 +1713,8 @@ STR_SECTOPOD_CORPSE
 Cadáver de sectópodo
 STR_CYBERDISC_CORPSE
 Cadáver de ciberdisco
-STR_TO_ARM_HWP
- para una PAP
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Insuficiente {1} para una PAP
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Equipo insuficiente para reequipar el escuadrón
 STR_MARS_CYDONIA_LANDING
