@@ -97,9 +97,9 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 		{
 			std::string type;
 			(*i)["type"] >> type;
-			BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
+			std::auto_ptr<BaseFacility> f(new BaseFacility(_rule->getBaseFacility(type), this));
 			f->load(*i);
-			_facilities.push_back(f);
+			_facilities.push_back(f.release());
 		}
 	}
 
@@ -107,14 +107,14 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 	{
 		std::string type;
 		(*i)["type"] >> type;
-		Craft *c = new Craft(_rule->getCraft(type), this);
+		std::auto_ptr<Craft> c(new Craft(_rule->getCraft(type), this));
 		c->load(*i, _rule, save);		
-		_crafts.push_back(c);
+		_crafts.push_back(c.release());
 	}
 
 	for (YAML::Iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
-		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
+		std::auto_ptr<Soldier> s(new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC")));
 		s->load(*i, _rule);
 		if (const YAML::Node *pName = (*i).FindValue("craft"))
 		{
@@ -135,7 +135,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 		{
 			s->setCraft(0);
 		}
-		_soldiers.push_back(s);
+		_soldiers.push_back(s.release());
 	}
 
 	_items->load(node["items"]);
@@ -146,27 +146,27 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 	{
 		int hours;
 		(*i)["hours"] >> hours;
-		Transfer *t = new Transfer(hours);
+		std::auto_ptr<Transfer> t(new Transfer(hours));
 		t->load(*i, this, _rule);
-		_transfers.push_back(t);
+		_transfers.push_back(t.release());
 	}
 
 	for (YAML::Iterator i = node["research"].begin(); i != node["research"].end(); ++i)
 	{
 		std::string research;
 		(*i)["project"] >> research;
-		ResearchProject *r = new ResearchProject(_rule->getResearch(research));
+		std::auto_ptr<ResearchProject> r(new ResearchProject(_rule->getResearch(research)));
 		r->load(*i);
-		_research.push_back(r);
+		_research.push_back(r.release());
 	}
 
 	for (YAML::Iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
 	{
 		std::string item;
 		(*i)["item"] >> item;
-		Production *p = new Production(_rule->getManufacture(item), 0);
+		std::auto_ptr<Production> p(new Production(_rule->getManufacture(item), 0));
 		p->load(*i);
-		_productions.push_back(p);
+		_productions.push_back(p.release());
 	}
 }
 
