@@ -139,9 +139,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		(*i)["type"] >> type;
 		if (type != "0")
 		{
-			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+			std::auto_ptr<CraftWeapon> w(new CraftWeapon(rule->getCraftWeapon(type), 0));
 			w->load(*i);
-			_weapons[j++] = w;
+			_weapons[j++] = w.release();
 		}
 	}
 
@@ -150,9 +150,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	{
 		std::string type;
 		(*i)["type"] >> type;
-		Vehicle *v = new Vehicle(rule->getItem(type), 0);
+		std::auto_ptr<Vehicle> v(new Vehicle(rule->getItem(type), 0));
 		v->load(*i);
-		_vehicles.push_back(v);
+		_vehicles.push_back(v.release());
 	}
 	node["status"] >> _status;
 	node["lowFuel"] >> _lowFuel;
