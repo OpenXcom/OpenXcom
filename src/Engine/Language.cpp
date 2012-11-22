@@ -180,6 +180,22 @@ const char *RusianRules::getSuffix(unsigned n) const
 	return "_3";
 }
 
+/**
+ * Plurality rules for Hungarian.
+ * @langsuffixes _1 for everything.
+ */
+class HungarianRules: public Language::PluralityRules
+{
+public:
+	virtual const char *getSuffix(unsigned n) const;
+	static PluralityRules *create() { return new RusianRules; }
+};
+
+const char *HungarianRules::getSuffix(unsigned n) const
+{
+	return "_1";
+}
+
 }
 
 namespace OpenXcom {
@@ -209,6 +225,7 @@ Language::PluralityRules *Language::PluralityRules::create(const std::string &la
 		s_factoryFunctions.insert(std::make_pair("POLSKI", &PolishRules::create));
 		s_factoryFunctions.insert(std::make_pair("ROMÂNĂ", &RomanianRules::create));
 		s_factoryFunctions.insert(std::make_pair("РУССКИЙ", &RusianRules::create));
+		s_factoryFunctions.insert(std::make_pair("MAGYAR", &HungarianRules::create));
 	}
 	PFCreate creator = &ManyOneMany::create;
 	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);
@@ -651,6 +668,7 @@ according to the language rules. The rest of the suffixes depend on the language
 <tr><td>Russian</td><td><tt>_1</tt> n % 10 == 1 && n % 100 != 11,
  <tt>_2</tt> 2 <= n % 10 <= 4 && (n % 100 < 10 || n % 100 > 20),
  <tt>_3</tt> otherwise</td></tr>
+<tr><td>Hungarian</td><td><tt>_1</tt> for every case.</td></tr>
 <tr><td><i>Other languages</i></th><td><tt>_1</tt> n == 1, <tt>_2</tt> otherwise</td></tr>
 </table>
 
