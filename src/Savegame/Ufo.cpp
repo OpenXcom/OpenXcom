@@ -34,7 +34,7 @@ Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _detected(false), _hyperDetected(false)
   , _mission("STR_ALIEN_RESEARCH"), _status(FLYING), _timeLeftOnGround(-1)
-  , _inBattlescape(false), _hit(0)
+  , _inBattlescape(false), _shotDownByCraftId(-1)
 {
 }
 
@@ -410,22 +410,14 @@ void Ufo::setAlienRace(const std::string &race)
 	_race = race;
 }
 
-/**
- * Sets damage to UFO.
- * @param hit Amount of damage to be set..
- */
-void Ufo::setHit(int hit)
+void Ufo::setShotDownByCraftId(const int id)
 {
-	_hit = hit;
+	_shotDownByCraftId = id;
 }
 
-/**
- * Gets damage of UFO.
- * @return Amount of damage taken by the UFO.
- */
-int Ufo::getHit() const
+int Ufo::getShotDownByCraftId() const
 {
-	return _hit;
+	return _shotDownByCraftId;
 }
 
 /**

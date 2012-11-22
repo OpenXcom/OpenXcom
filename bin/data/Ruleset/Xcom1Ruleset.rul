@@ -7239,6 +7239,8 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
       - lon: 0.0
         lat: 0.0
         speedLon: 0
@@ -7263,6 +7265,8 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
       - lon: 0.0
         lat: 0.0
         speedLon: 0
@@ -7287,6 +7291,112 @@ startingBase:
         status: STR_READY
         lowFuel: false
         inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_INTERCEPTOR
+        id: 3
+        fuel: 1000
+        damage: 0
+        weapons:
+          - type: STR_STINGRAY
+            ammo: 6
+            rearming: false
+          - type: STR_CANNON_UC
+            ammo: 200
+            rearming: false
+        items:
+          {}
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_INTERCEPTOR
+        id: 4
+        fuel: 1000
+        damage: 0
+        weapons:
+          - type: STR_STINGRAY
+            ammo: 6
+            rearming: false
+          - type: STR_CANNON_UC
+            ammo: 200
+            rearming: false
+        items:
+          {}
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_INTERCEPTOR
+        id: 5
+        fuel: 1000
+        damage: 0
+        weapons:
+          - type: STR_STINGRAY
+            ammo: 6
+            rearming: false
+          - type: STR_CANNON_UC
+            ammo: 200
+            rearming: false
+        items:
+          {}
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
+      - lon: 0.0
+        lat: 0.0
+        speedLon: 0
+        speedLat: 0
+        speedRadian: 0
+        speed: 0
+        type: STR_INTERCEPTOR
+        id: 6
+        fuel: 1000
+        damage: 0
+        weapons:
+          - type: STR_STINGRAY
+            ammo: 6
+            rearming: false
+          - type: STR_CANNON_UC
+            ammo: 200
+            rearming: false
+        items:
+          {}
+        vehicles:
+          []
+        status: STR_READY
+        lowFuel: false
+        inBattlescape: false
+        inDogfight: false
+        interceptionOrder: 0
     items:
       STR_AC_AP_AMMO: 6
       STR_AUTO_CANNON: 1
