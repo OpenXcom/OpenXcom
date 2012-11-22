@@ -50,7 +50,7 @@ private:
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
-	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone;
+	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
 	Text *_txtDebug;
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;

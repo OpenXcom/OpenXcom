@@ -521,9 +521,6 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	// Used for weapon toggling.
 	_weapon1->onMouseClick((ActionHandler)&DogfightState::weapon1Click);
 	_weapon2->onMouseClick((ActionHandler)&DogfightState::weapon2Click);
-
-	// Set music
-	_game->getResourcePack()->getMusic("GMINTER")->play();
 }
 
 /**

@@ -90,7 +90,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _battleMusic(false),  _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -371,7 +371,7 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	// Set music if it's not already playing
-	if (!_music)
+	if (!_music && !_battleMusic)
 	{
 		std::stringstream ss;
 		ss << "GMGEO" << RNG::generate(1, 2);
@@ -401,6 +401,10 @@ void GeoscapeState::think()
 		if(!_dogfights.empty())
 		{
 			handleDogfights();
+		}
+		else if(_minimizedDogfights == 0 && _battleMusic)
+		{
+			_battleMusic = false;
 		}
 		if(!_popups.empty())
 		{
@@ -528,6 +532,7 @@ void GeoscapeState::time5Seconds()
 				}
 				else
 				{
+					(*i)->setDetected(false);
 					if (!(*i)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
@@ -535,7 +540,6 @@ void GeoscapeState::time5Seconds()
 					// This is only required because we are
 					// faking the UFO flight patterns.
 					(*i)->setStatus(Ufo::DESTROYED);
-					(*i)->setDetected(false);
 				}
 			}
 			break;
@@ -613,6 +617,12 @@ void GeoscapeState::time5Seconds()
 								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
 								startDogfight();
 								_dogfightStartTimer->start();
+							}
+							if(!_battleMusic)
+							{
+								// Set music
+								_game->getResourcePack()->getMusic("GMINTER")->play();
+								_battleMusic = true;
 							}
 						}
 						break;
