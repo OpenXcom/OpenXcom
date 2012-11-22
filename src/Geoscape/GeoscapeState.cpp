@@ -398,7 +398,7 @@ void GeoscapeState::think()
 	}
 	else
 	{
-		if(!_dogfights.empty())
+		if(!_dogfights.empty() || _minimizedDogfights != 0)
 		{
 			handleDogfights();
 		}
@@ -1597,9 +1597,14 @@ void GeoscapeState::handleDogfights()
 		_timer->think(this, 0);
 	}
 	// Handle dogfights logic.
+	_minimizedDogfights = 0;
 	std::vector<DogfightState*>::iterator d = _dogfights.begin();
 	while(d != _dogfights.end())
 	{
+		if((*d)->isMinimized())
+		{
+			_minimizedDogfights++;
+		}
 		(*d)->think();
 		if((*d)->dogfightEnded())
 		{
