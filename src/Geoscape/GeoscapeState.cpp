@@ -545,10 +545,10 @@ void GeoscapeState::time5Seconds()
 			break;
 		case Ufo::LANDED:
 		case Ufo::CRASHED:
-			if ((*i)->getTimeOnGround() == 0)
+			if ((*i)->getTimeOnGround() <= 0)
 			{
 				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty())
+				if (!(*i)->getFollowers()->empty() && (*i)->getTimeOnGround() == 0)
 				{
 					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 				}
@@ -726,10 +726,10 @@ void GeoscapeState::time5Seconds()
 			break;
 		case Ufo::LANDED:
 		case Ufo::CRASHED:
-			if ((*i)->getTimeOnGround() == 0)
+			if ((*i)->getTimeOnGround() <= 0)
 			{
 				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty())
+				if (!(*i)->getFollowers()->empty() && (*i)->getTimeOnGround() == 0)
 				{
 					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 				}

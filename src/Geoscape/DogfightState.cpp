@@ -972,6 +972,7 @@ void DogfightState::move()
 			}
 			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 			{
+				_ufo->setTimeOnGround(-1);
 				_destroyUfo = true;
 			}
 			else
