@@ -1713,8 +1713,6 @@ STR_SECTOPOD_CORPSE
 Cadáver de sectópodo
 STR_CYBERDISC_CORPSE
 Cadáver de ciberdisco
-STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Insuficiente {1} para una PAP
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Equipo insuficiente para reequipar el escuadrón
 STR_MARS_CYDONIA_LANDING
@@ -1813,10 +1811,6 @@ STR_QUANTITY
 Cantidad
 STR_TOTAL
 Total
-STR_DAY_1
-{N} día
-STR_DAY_2
-{N} días
 STR_IN_PSIONIC_TRAINING
 En entrenamiento psiónico
 STR_BLASTER_BOMB_UFOPEDIA
@@ -2083,3 +2077,9 @@ STR_DESERT
 Desierto
 STR_POLAR
 Polar
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Insuficiente {1} para una PAP
+STR_DAY_1
+{N} día
+STR_DAY_2
+{N} días

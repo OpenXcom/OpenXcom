@@ -1713,8 +1713,6 @@ STR_SECTOPOD_CORPSE
 Toter Sektopod
 STR_CYBERDISC_CORPSE
 Tote Cyberdisc
-STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Nicht genug {1} für SWT
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Nicht genügend Ausrüstung für die Truppe
 STR_MARS_CYDONIA_LANDING
@@ -1813,10 +1811,6 @@ STR_QUANTITY
 Menge
 STR_TOTAL
 Gesamt
-STR_DAY_1
-{N} Tag
-STR_DAY_2
-{N} Tage
 STR_IN_PSIONIC_TRAINING
 Im psionischen Training
 STR_BLASTER_BOMB_UFOPEDIA
@@ -2083,3 +2077,9 @@ STR_DESERT
 Wüste
 STR_POLAR
 Arktis
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Nicht genug {1} für SWT
+STR_DAY_1
+{N} Tag
+STR_DAY_2
+{N} Tage
