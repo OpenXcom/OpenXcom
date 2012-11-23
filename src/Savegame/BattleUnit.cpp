@@ -1019,7 +1019,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit*> *const BattleUnit::getVisibleUnits()
+std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }
@@ -1047,7 +1047,7 @@ bool BattleUnit::addToVisibleTiles(Tile *tile)
  * Get the pointer to the vector of visible tiles.
  * @return pointer to vector.
  */
-std::vector<Tile*> *const BattleUnit::getVisibleTiles()
+std::vector<Tile*> *BattleUnit::getVisibleTiles()
 {
 	return &_visibleTiles;
 }
@@ -1303,7 +1303,7 @@ int BattleUnit::getFire() const
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem*> *const BattleUnit::getInventory()
+std::vector<BattleItem*> *BattleUnit::getInventory()
 {
 	return &_inventory;
 }

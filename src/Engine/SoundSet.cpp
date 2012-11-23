@@ -118,7 +118,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
  * @param i Sound number in the set.
  * @return Pointer to the respective sound.
  */
-Sound *const SoundSet::getSound(unsigned int i) const
+Sound *SoundSet::getSound(unsigned int i) const
 {
 	if (i >= _sounds.size())
 	{

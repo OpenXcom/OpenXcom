@@ -44,7 +44,7 @@ public:
 	/// Loads an X-Com CAT set of sound files.
 	void loadCat(const std::string &filename, bool wav = true);
 	/// Gets a particular sound from the set.
-	Sound *const getSound(unsigned int i) const;
+	Sound *getSound(unsigned int i) const;
 	/// Gets the total sounds in the set.
 	size_t getTotalSounds() const;
 };

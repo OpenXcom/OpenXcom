@@ -795,7 +795,7 @@ const std::vector<SoldierNamePool*> &Ruleset::getPools() const
  * @param id Country type.
  * @return Rules for the country.
  */
-RuleCountry *const Ruleset::getCountry(const std::string &id) const
+RuleCountry *Ruleset::getCountry(const std::string &id) const
 {
 	return _countries.find(id)->second;
 }
@@ -815,7 +815,7 @@ const std::vector<std::string> &Ruleset::getCountriesList() const
  * @param id Region type.
  * @return Rules for the region.
  */
-RuleRegion *const Ruleset::getRegion(const std::string &id) const
+RuleRegion *Ruleset::getRegion(const std::string &id) const
 {
 	return _regions.find(id)->second;
 }
@@ -835,7 +835,7 @@ const std::vector<std::string> &Ruleset::getRegionsList() const
  * @param id Facility type.
  * @return Rules for the facility.
  */
-RuleBaseFacility *const Ruleset::getBaseFacility(const std::string &id) const
+RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
 {
 	return _facilities.find(id)->second;
 }
@@ -855,7 +855,7 @@ const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
  * @param id Craft type.
  * @return Rules for the craft.
  */
-RuleCraft *const Ruleset::getCraft(const std::string &id) const
+RuleCraft *Ruleset::getCraft(const std::string &id) const
 {
 	return _crafts.find(id)->second;
 }
@@ -875,7 +875,7 @@ const std::vector<std::string> &Ruleset::getCraftsList() const
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
  */
-RuleCraftWeapon *const Ruleset::getCraftWeapon(const std::string &id) const
+RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
 {
 	return _craftWeapons.find(id)->second;
 }
@@ -895,7 +895,7 @@ const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
  * @param id Item type.
  * @return Rules for the item. Or 0 when the item is not found.
  */
-RuleItem *const Ruleset::getItem(const std::string &id) const
+RuleItem *Ruleset::getItem(const std::string &id) const
 {
 	if (_items.find(id) != _items.end())
 		return _items.find(id)->second;
@@ -918,7 +918,7 @@ const std::vector<std::string> &Ruleset::getItemsList() const
  * @param id UFO type.
  * @return Rules for the UFO.
  */
-RuleUfo *const Ruleset::getUfo(const std::string &id) const
+RuleUfo *Ruleset::getUfo(const std::string &id) const
 {
 	return _ufos.find(id)->second;
 }
@@ -938,7 +938,7 @@ const std::vector<std::string> &Ruleset::getUfosList() const
  * @param name terrain name.
  * @return Rules for the terrain.
  */
-RuleTerrain *const Ruleset::getTerrain(const std::string &name) const
+RuleTerrain *Ruleset::getTerrain(const std::string &name) const
 {
 	return _terrains.find(name)->second;
 }
@@ -948,7 +948,7 @@ RuleTerrain *const Ruleset::getTerrain(const std::string &name) const
  * @param name datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *const Ruleset::getMapDataSet(const std::string &name)
+MapDataSet *Ruleset::getMapDataSet(const std::string &name)
 {
 	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
 	if (map == _mapDataSets.end())
@@ -968,7 +968,7 @@ MapDataSet *const Ruleset::getMapDataSet(const std::string &name)
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
+RuleSoldier *Ruleset::getSoldier(const std::string &name) const
 {
 	return _soldiers.find(name)->second;
 }
@@ -978,7 +978,7 @@ RuleSoldier *const Ruleset::getSoldier(const std::string &name) const
  * @param name Unit name.
  * @return Rules for the units.
  */
-Unit *const Ruleset::getUnit(const std::string &name) const
+Unit *Ruleset::getUnit(const std::string &name) const
 {
 	return _units.find(name)->second;
 }
@@ -988,7 +988,7 @@ Unit *const Ruleset::getUnit(const std::string &name) const
  * @param name Race name.
  * @return Rules for the race.
  */
-AlienRace *const Ruleset::getAlienRace(const std::string &name) const
+AlienRace *Ruleset::getAlienRace(const std::string &name) const
 {
 	return _alienRaces.find(name)->second;
 }
@@ -1008,7 +1008,7 @@ const std::vector<std::string> &Ruleset::getAlienRacesList() const
  * @param name Deployment name.
  * @return Rules for the deployment.
  */
-AlienDeployment *const Ruleset::getDeployment(const std::string &name) const
+AlienDeployment *Ruleset::getDeployment(const std::string &name) const
 {
 	return _alienDeployments.find(name)->second;
 }
@@ -1028,7 +1028,7 @@ const std::vector<std::string> &Ruleset::getDeploymentsList() const
  * @param name Armor name.
  * @return Rules for the armor.
  */
-Armor *const Ruleset::getArmor(const std::string &name) const
+Armor *Ruleset::getArmor(const std::string &name) const
 {
 	return _armors.find(name)->second;
 }
@@ -1088,7 +1088,7 @@ int Ruleset::getPersonnelTime() const
  * @param name Article name.
  * @return Article definition.
  */
-ArticleDefinition *const Ruleset::getUfopaediaArticle(const std::string &name) const
+ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
 {
 	return _ufopaediaArticles.find(name)->second;
 }
@@ -1107,7 +1107,7 @@ const std::vector<std::string> &Ruleset::getUfopaediaList() const
  * Returns the list of inventories.
  * @return Pointer to inventory list.
  */
-std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
+std::map<std::string, RuleInventory*> *Ruleset::getInventories()
 {
 	return &_invs;
 }
@@ -1117,7 +1117,7 @@ std::map<std::string, RuleInventory*> *const Ruleset::getInventories()
  * @param id Inventory type.
  * @return Inventory ruleset.
  */
-RuleInventory *const Ruleset::getInventory(const std::string &id) const
+RuleInventory *Ruleset::getInventory(const std::string &id) const
 {
 	return _invs.find(id)->second;
 }

@@ -76,7 +76,7 @@ void Country::save(YAML::Emitter &out) const
  * Returns the ruleset for the country's type.
  * @return Pointer to ruleset.
  */
-RuleCountry *const Country::getRules() const
+RuleCountry *Country::getRules() const
 {
 	return _rules;
 }
