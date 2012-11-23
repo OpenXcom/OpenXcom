@@ -131,7 +131,7 @@ void Font::loadIndex(const std::string &filename)
  * @return Pointer to the font's surface with the respective
  * cropping rectangle set up.
  */
-Surface *const Font::getChar(wchar_t c)
+Surface *Font::getChar(wchar_t c)
 {
 	if (_chars.find(c) == _chars.end())
 	{
@@ -177,7 +177,7 @@ int Font::getSpacing() const
  * actual graphic into the font.
  * @return Pointer to the internal surface.
  */
-Surface *const Font::getSurface() const
+Surface *Font::getSurface() const
 {
 	return _surface;
 }

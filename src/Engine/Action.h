@@ -64,11 +64,11 @@ public:
 	/// Gets the mouse's relative Y position.
 	double getRelativeYMouse() const;
 	/// Gets the sender of the action.
-	InteractiveSurface *const getSender() const;
+	InteractiveSurface *getSender() const;
 	/// Sets the sender of the action.
 	void setSender(InteractiveSurface *sender);
 	/// Gets the details of the action.
-	SDL_Event *const getDetails() const;
+	SDL_Event *getDetails() const;
 };
 
 }

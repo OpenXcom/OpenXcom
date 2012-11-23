@@ -63,7 +63,7 @@ public:
 	/// Saves the UFO's ID to YAML.
 	void saveId(YAML::Emitter& out) const;
 	/// Gets the UFO's ruleset.
-	RuleUfo *const getRules() const;
+	RuleUfo *getRules() const;
 	/// Gets the UFO's ID.
 	int getId() const;
 	/// Sets the UFO's ID.

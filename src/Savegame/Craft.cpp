@@ -221,7 +221,7 @@ void Craft::saveId(YAML::Emitter &out) const
  * Returns the ruleset for the craft's type.
  * @return Pointer to ruleset.
  */
-RuleCraft *const Craft::getRules() const
+RuleCraft *Craft::getRules() const
 {
 	return _rules;
 }
@@ -267,7 +267,7 @@ std::wstring Craft::getName(Language *lang) const
  * Returns the base the craft belongs to.
  * @return Pointer to base.
  */
-Base *const Craft::getBase() const
+Base *Craft::getBase() const
 {
 	return _base;
 }
@@ -402,7 +402,7 @@ int Craft::getNumVehicles() const
  * in the craft.
  * @return Pointer to weapon list.
  */
-std::vector<CraftWeapon*> *const Craft::getWeapons()
+std::vector<CraftWeapon*> *Craft::getWeapons()
 {
 	return &_weapons;
 }
@@ -411,7 +411,7 @@ std::vector<CraftWeapon*> *const Craft::getWeapons()
  * Returns the list of items in the craft.
  * @return Pointer to the item list.
  */
-ItemContainer *const Craft::getItems()
+ItemContainer *Craft::getItems()
 {
 	return _items;
 }
@@ -421,7 +421,7 @@ ItemContainer *const Craft::getItems()
  * in the craft.
  * @return Pointer to vehicle list.
  */
-std::vector<Vehicle*> *const Craft::getVehicles()
+std::vector<Vehicle*> *Craft::getVehicles()
 {
 	return &_vehicles;
 }
