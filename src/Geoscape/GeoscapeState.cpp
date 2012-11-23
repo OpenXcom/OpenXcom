@@ -637,16 +637,12 @@ void GeoscapeState::time5Seconds()
 						{
 							if(!(*j)->isInDogfight())
 							{
-								if(_globe->isZoomedOutToMax())
-								{
-									_zoomOutEffectDone = false;
-									// look up polygons texture
-									int texture, shade;
-									_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
-									_music = false;
-									timerReset();
-									popup(new ConfirmLandingState(_game, *j, texture, shade));
-								}
+								// look up polygons texture
+								int texture, shade;
+								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
+								_music = false;
+								timerReset();
+								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
 						}
 						else
