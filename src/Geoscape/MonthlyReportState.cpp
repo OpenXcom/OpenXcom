@@ -329,7 +329,8 @@ void MonthlyReportState::CalculateChanges()
 		(*k)->newMonth(_game->getSavedGame()->getDifficulty());
 		_fundingDiff += (*k)->getFunding().at((*k)->getFunding().size()-1)-(*k)->getFunding().at((*k)->getFunding().size()-2);
 	}
-	_ratingTotal = _ratingTotal / (_game->getSavedGame()->getRegions()->size() + _game->getSavedGame()->getCountries()->size());
+	int areas = (_game->getSavedGame()->getRegions()->size()) + (_game->getSavedGame()->getCountries()->size());
+	_ratingTotal = _ratingTotal / areas;
 	_generalSatisfaction = _generalSatisfaction / _game->getSavedGame()->getCountries()->size();
 }
 }
