@@ -20,6 +20,7 @@
 #define OPENXCOM_MONTHLYREPORTSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
