@@ -44,6 +44,10 @@
 #include "PromotionsState.h"
 #include "CannotReequipState.h"
 #include "NoContainmentState.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/Country.h"
+#include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/RuleCountry.h"
 
 namespace OpenXcom
 {
@@ -148,6 +152,12 @@ DebriefingState::DebriefingState(Game *game) : State(game), _noContainment(false
 	std::wstringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
+
+	// add the points to our activity score
+	if(_region)
+		_region->addActivityXcom(total);
+	if(_country)
+		_country->addActivityXcom(total);
 
 	if (recoveryY > 0)
 	{
@@ -292,6 +302,16 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*j)->isInBattlescape())
 			{
+				for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+				{
+					if((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+						_region = (*k);
+				}
+				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+				{
+					if((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+						_country = (*k);
+				}
 				craft = (*j);
 				base = (*i);
 				craftIterator = j;
@@ -300,30 +320,49 @@ void DebriefingState::prepareDebriefing()
 				craft->setInBattlescape(false);
 			}
 		}
+		// in case we DON'T have a craft (base defense)
+		if((*i)->isInBattlescape())
+		{
+				for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+				{
+					if((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+						_region = (*k);
+				}
+				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+				{
+					if((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+						_country = (*k);
+				}
+		}
 	}
 
 	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+	if(!aborted)
 	{
-		if ((*i)->isInBattlescape())
+		for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 		{
-			delete *i;
-			save->getUfos()->erase(i);
-			break;
+			if ((*i)->isInBattlescape())
+			{
+				delete *i;
+				save->getUfos()->erase(i);
+				break;
+			}
 		}
 	}
 
 	// terror site disappears
-	for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+	if(!aborted)
 	{
-		if ((*i)->isInBattlescape())
+		for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
 		{
-			delete *i;
-			save->getTerrorSites()->erase(i);
-			break;
+			if ((*i)->isInBattlescape())
+			{
+				delete *i;
+				save->getTerrorSites()->erase(i);
+				break;
+			}
 		}
 	}
-
 	// alien base disappears (if you didn't abort)
 	if(!aborted)
 	{

@@ -26,8 +26,10 @@ namespace OpenXcom
  * Initializes a region of the specified type.
  * @param rules Pointer to ruleset.
  */
-Region::Region(RuleRegion *rules): _rules(rules), _activityXcom(0), _activityAlien(0)
+Region::Region(RuleRegion *rules): _rules(rules)
 {
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
 }
 
 /**
@@ -69,4 +71,47 @@ RuleRegion *const Region::getRules() const
 	return _rules;
 }
 
+/**
+ * Adds to the region's xcom activity level.
+ */
+void Region::addActivityXcom(int activity)
+{
+	_activityXcom[_activityXcom.size()-1] += activity;
+}
+
+/**
+ * Adds to the region's alien activity level.
+ */
+void Region::addActivityAlien(int activity)
+{
+	_activityAlien[_activityAlien.size()-1] += activity;
+}
+
+/**
+ * Gets the region's xcom activity level.
+ * @return activity level.
+ */
+std::vector<int> Region::getActivityXcom() const
+{
+	return _activityXcom;
+}
+
+/**
+ * Gets the region's alien activity level.
+ * @return activity level.
+ */
+std::vector<int> Region::getActivityAlien() const
+{
+	return _activityAlien;
+}
+
+void Region::newMonth()
+{
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
+	if(_activityAlien.size() > 12)
+		_activityAlien.erase(_activityAlien.begin());
+	if(_activityXcom.size() > 12)
+		_activityXcom.erase(_activityXcom.begin());
+}
 }

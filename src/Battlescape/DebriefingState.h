@@ -33,6 +33,8 @@ class TextList;
 class BattleItem;
 class Craft;
 class Base;
+class Region;
+class Country;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -45,6 +47,8 @@ struct ReequipStat { std::string item; int qty; std::wstring craft; };
 class DebriefingState : public State
 {
 private:
+	Region *_region;
+	Country *_country;
 	std::vector<DebriefingStat*> _stats;
 	TextButton *_btnOk;
 	Window *_window;

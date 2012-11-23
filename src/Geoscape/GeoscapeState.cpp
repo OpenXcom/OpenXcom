@@ -81,6 +81,9 @@
 #include "../Ruleset/City.h"
 #include "AlienTerrorState.h"
 #include "AlienBaseState.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/Country.h"
+#include "../Ruleset/RuleCountry.h"
 #include <ctime>
 
 namespace OpenXcom
@@ -788,6 +791,22 @@ void GeoscapeState::time5Seconds()
 	{
 		if ((*i)->getHoursActive() == 0 && (*i)->getFollowers()->empty()) // CHEEKY EXPLOIT
 		{
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityAlien(1000);
+					//kids, tell your folks... don't ignore terror sites.
+				}
+			}
+		
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityAlien(1000);
+				}
+			}
 			delete *i;
 			i = _game->getSavedGame()->getTerrorSites()->erase(i);
 		}
@@ -937,13 +956,34 @@ void GeoscapeState::time30Minutes()
 		}
 	}
 
-	// Handle UFO detection
+	// Handle UFO detection and give aliens points
 	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
+		int points = 0;
 		switch ((*u)->getStatus())
 		{
-		case Ufo::FLYING:
 		case Ufo::LANDED:
+			points++;
+		case Ufo::FLYING:
+			points++;
+			// Get area
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
+				{
+					//one point per UFO in-flight per half hour
+					(*k)->addActivityAlien(points);
+				}
+			}
+			// Get country
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
+				{
+					//one point per UFO in-flight per half hour
+					(*k)->addActivityAlien(points);
+				}
+			}
 			if (!(*u)->getDetected())
 			{
 				bool detected = false;
@@ -1148,6 +1188,21 @@ void GeoscapeState::time1Day()
 			t->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getTerrorSites()->push_back(t);
 		popup(new AlienTerrorState(_game, city, this));
+		
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideRegion((t)->getLongitude(), (t)->getLatitude()))
+			{
+				(*k)->addActivityAlien(10);
+			}
+		}
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideCountry((t)->getLongitude(), (t)->getLatitude()))
+			{
+				(*k)->addActivityAlien(10);
+			}
+		}
 	}
 	else if (chance == 20 && _game->getSavedGame()->getAlienBases()->size() < 9)
 	{
@@ -1165,8 +1220,8 @@ void GeoscapeState::time1Day()
 		int tries = 0;
 		do
 		{
-			double ran = RNG::generate(-100, 100)*.001;
-			double ran2 = RNG::generate(-100, 100)*.001;
+			double ran = RNG::generate(-100, 100) * 0.125 * M_PI / 180;
+			double ran2 = RNG::generate(-100, 100) * 0.125 * M_PI / 180;
 			lon = city->getLongitude() + ran;
 			lat = city->getLatitude() + ran2;
 			tries++;
@@ -1184,6 +1239,21 @@ void GeoscapeState::time1Day()
 		else if (race == 2)
 			b->setAlienRace("STR_FLOATER");
 		_game->getSavedGame()->getAlienBases()->push_back(b);
+		
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideRegion((b)->getLongitude(), (b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(50);
+			}
+		}
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+		{
+			if ((*k)->getRules()->insideCountry((b)->getLongitude(), (b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(50);
+			}
+		}
 	}
 
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1245,6 +1315,24 @@ void GeoscapeState::time1Day()
 					}
 				}
 			}
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
+					if(bonus)
+						(*k)->addActivityXcom(bonus->getPoints());
+				}
+			}
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
+				{
+					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
+					if(bonus)
+						(*k)->addActivityXcom(bonus->getPoints());
+				}
+			}
 			const RuleResearch * newResearch = research;
 			if(_game->getSavedGame()->isResearched(research->getName()))
 			{
@@ -1274,6 +1362,28 @@ void GeoscapeState::time1Day()
 			if ((*j)->getWoundRecovery() > 0)
 			{
 				(*j)->heal();
+			}
+		}
+	}
+	// handle regional points for alien bases
+	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	{
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(5);
+			}
+		}
+	}
+	// handle country points for alien bases
+	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+	{
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
+			{
+				(*k)->addActivityAlien(5);
 			}
 		}
 	}
@@ -1307,7 +1417,36 @@ void GeoscapeState::time1Month()
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
 	popup(new MonthlyReportState(_game, psi));
-
+	for(std::vector<Country*>::iterator c = _game->getSavedGame()->getCountries()->begin(); c !=  _game->getSavedGame()->getCountries()->end(); ++c)
+	{
+		if((*c)->isNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9);
+		{
+			double lon;
+			double lat;
+			int tries = 0;
+			do
+			{
+				double ran = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
+				double ran2 = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
+				lon = (*c)->getRules()->getLabelLongitude() + ran;
+				lat = (*c)->getRules()->getLabelLatitude()  + ran2;
+				tries++;
+			}
+			while(!_globe->insideLand(lon, lat) && !(*c)->getRules()->insideCountry(lon, lat) && tries < 100);
+			AlienBase *b = new AlienBase();
+			b->setLongitude(lon);
+			b->setLatitude(lat);
+			b->setSupplyTime(0);
+			b->setDiscovered(false);
+			b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
+			int race = RNG::generate(1, 2);
+			if (race == 1)
+				b->setAlienRace("STR_SECTOID");
+			else if (race == 2)
+				b->setAlienRace("STR_FLOATER");
+			_game->getSavedGame()->getAlienBases()->push_back(b);
+		}
+	}
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
 	{

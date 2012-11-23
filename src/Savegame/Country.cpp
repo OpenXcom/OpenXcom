@@ -28,12 +28,14 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _change(0), _activityXcom(0), _activityAlien(0)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false), _newPact(false)
 {
 	if (gen)
 	{
-		_funding = RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000;
+		_funding.push_back(RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000);
 	}
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
 }
 
 /**
@@ -50,9 +52,9 @@ Country::~Country()
 void Country::load(const YAML::Node &node)
 {
 	node["funding"] >> _funding;
-	node["change"] >> _change;
 	node["activityXcom"] >> _activityXcom;
 	node["activityAlien"] >> _activityAlien;
+	node["pact"] >> _pact;
 }
 
 /**
@@ -64,9 +66,9 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	out << YAML::Key << "funding" << YAML::Value << _funding;
-	out << YAML::Key << "change" << YAML::Value << _change;
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
+	out << YAML::Key << "pact" << YAML::Value << _pact;
 	out << YAML::EndMap;
 }
 
@@ -83,7 +85,7 @@ RuleCountry *const Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-int Country::getFunding() const
+std::vector<int> Country::getFunding() const
 {
 	return _funding;
 }
@@ -94,16 +96,123 @@ int Country::getFunding() const
  */
 void Country::setFunding(int funding)
 {
-	_funding = funding;
+	_funding[_funding.size()-1] = funding;
+}
+
+/*
+ * Keith Richards would be so proud
+ * @param diff the difficulty level.
+ * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
+ */
+int Country::getSatisfaction(int diff)
+{
+	if(_pact)
+		return 0;
+	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
+	if(difference >= 500 +(100*diff))
+		return 3;
+	else if(difference <= -500 +(100*diff))
+	{
+		return 1;
+	}
+	return 2;
 }
 
 /**
- * Returns the country's funding change since last month.
- * @return Funding change.
+ * Adds to the country's xcom activity level.
+ * @param activity how many points to add.
  */
-int Country::getChange() const
+void Country::addActivityXcom(int activity)
 {
-	return _change;
+	_activityXcom[_activityXcom.size()-1] += activity;
 }
 
+/**
+ * Adds to the country's alien activity level.
+ * @param activity how many points to add.
+ */
+void Country::addActivityAlien(int activity)
+{
+	_activityAlien[_activityAlien.size()-1] += activity;
+}
+
+/**
+ * Gets the country's xcom activity level.
+ * @return activity level.
+ */
+std::vector<int> Country::getActivityXcom() const
+{
+	return _activityXcom;
+}
+
+/**
+ * Gets the country's alien activity level.
+ * @return activity level.
+ */
+std::vector<int> Country::getActivityAlien() const
+{
+	return _activityAlien;
+}
+
+/**
+ * reset all the counters,
+ * calculate this month's funding,
+ * set the change value for the month.
+ * @param diff the difficulty level.
+ */
+
+void Country::newMonth(int diff)
+{
+	if(_newPact)
+	{
+		_newPact = false;
+	}
+	int increase(0);
+	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
+	int lastDifference = 0;
+	switch(getSatisfaction(diff))
+	{
+	case 0:
+		increase = -100;
+		break;
+	case 1:
+		increase = 0 - RNG::generate(5, 20);
+		break;
+	case 2:
+		increase = 0;
+		break;
+	case 3:
+		increase = RNG::generate(5, 20);
+		break;
+	default:
+		break;
+	}
+	if(_activityXcom.size() > 1)
+	{
+		lastDifference = _activityXcom[_activityXcom.size()-2]- _activityAlien[_activityAlien.size()-2];
+	}
+	if(difference <= -500 - (100*diff) && lastDifference <= -500 - (100*diff) && !_pact)
+	{
+		_newPact = true;
+		_pact = true;
+	}
+	int newFunding = _funding[_funding.size()-1] + ((_funding[_funding.size()-1]/100) * increase);
+	_activityAlien.push_back(0);
+	_activityXcom.push_back(0);
+	_funding.push_back(newFunding);
+	if(_activityAlien.size() > 12)
+		_activityAlien.erase(_activityAlien.begin());
+	if(_activityXcom.size() > 12)
+		_activityXcom.erase(_activityXcom.begin());
+	if(_funding.size() > 12)
+		_funding.erase(_funding.begin());
+}
+
+/**
+ * @return if this is a new pact.
+ */
+bool Country::isNewPact()
+{
+	return _newPact;
+}
 }

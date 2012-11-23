@@ -46,7 +46,7 @@ namespace OpenXcom
  * Initializes an empty base.
  * @param rule Pointer to ruleset.
  */
-Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0)
+Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0), _inBattlescape(false)
 {
 	_items = new ItemContainer();
 }
@@ -141,6 +141,7 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 	_items->load(node["items"]);
 	node["scientists"] >> _scientists;
 	node["engineers"] >> _engineers;
+	node["inBattlescape"] >> _inBattlescape;
 
 	for (YAML::Iterator i = node["transfers"].begin(); i != node["transfers"].end(); ++i)
 	{
@@ -203,6 +204,7 @@ void Base::save(YAML::Emitter &out) const
 	_items->save(out);
 	out << YAML::Key << "scientists" << YAML::Value << _scientists;
 	out << YAML::Key << "engineers" << YAML::Value << _engineers;
+	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::Key << "transfers" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
@@ -1024,5 +1026,23 @@ int Base::getAvailableContainment() const
 		}
 	}
 	return total;
+}
+
+/**
+ * Returns the base's battlescape status.
+ * @return Is the craft on the battlescape?
+ */
+bool Base::isInBattlescape() const
+{
+	return _inBattlescape;
+}
+
+/**
+ * Changes the base's battlescape status.
+ * @param inbattle True if it's in battle, False otherwise.
+ */
+void Base::setInBattlescape(bool inbattle)
+{
+	_inBattlescape = inbattle;
 }
 }

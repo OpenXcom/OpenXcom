@@ -4,81 +4,293 @@ countries:
     fundingMax: 1200
     labelLon: 4.53786
     labelLat: -0.698132
+    lonMin:
+      - 4.10152374
+      - 4.45058959
+      - 4.53785605
+      - 4.83456202
+      - 4.84328867
+      - 4.99164166
+    lonMax:
+      - 4.45058959
+      - 4.84328867
+      - 4.62512251
+      - 4.88692190
+      - 4.99164166
+      - 5.10508806
+    latMin:
+      - -0.85521133
+      - -0.85521133
+      - -0.50614548
+      - -0.55850536
+      - -0.76794487
+      - -0.79412480
+    latMax:
+      - -0.55850536
+      - -0.50614548
+      - -0.45378560
+      - -0.43633231
+      - -0.55850536
+      - -0.69813170
   - type: STR_RUSSIA
     fundingMin: 230
     fundingMax: 460
     labelLon: 1.0472
     labelLat: -1.0472
+    lonMin:
+      - 0.52359877
+      - 0.41887902
+      - 0.87266462
+      - 1.30899693
+      - 2.87979326
+    lonMax:
+      - 0.87266462
+      - 0.52359877
+      - 1.30899693
+      - 2.87979326
+      - 2.96705972
+    latMin:
+      - -1.22173047
+      - -1.04719755
+      - -1.34390352
+      - -1.39626340
+      - -1.22173047
+    latMax:
+      - -0.78539816
+      - -0.73303828
+      - -0.69813170
+      - -0.87266462
+      - -1.02974425
   - type: STR_UK
     fundingMin: 240
     fundingMax: 480
     labelLon: 6.24828
     labelLat: -0.935933
+    lonMin:
+      - 6.14355896
+    lonMax:
+      - 0.03490658
+    latMin:
+      - -1.04719755
+    latMax:
+      - -0.87266462
   - type: STR_FRANCE
     fundingMin: 320
     fundingMax: 640
     labelLon: 0.0436332
     labelLat: -0.811578
+    lonMin:
+      - 6.19591884
+    lonMax:
+      - 0.12217304
+    latMin:
+      - -0.87266462
+    latMax:
+      - -0.75049157
   - type: STR_GERMANY
     fundingMin: 250
     fundingMax: 500
     labelLon: 0.200713
     labelLat: -0.872665
+    lonMin:
+      - 0.10471975
+    lonMax:
+      - 0.26179938
+    latMin:
+      - -0.95993108
+    latMax:
+      - -0.82903139
   - type: STR_ITALY
     fundingMin: 160
     fundingMax: 320
     labelLon: 0.218166
     labelLat: -0.765763
+    lonMin:
+      - 0.12217304
+      - 0.19198621
+    lonMax:
+      - 0.26179938
+      - 0.31415926
+    latMin:
+      - -0.81157810
+      - -0.75049157
+    latMax:
+      - -0.75049157
+      - -0.64577182
   - type: STR_SPAIN
     fundingMin: 140
     fundingMax: 280
     labelLon: 6.23955
     labelLat: -0.743947
+    lonMin:
+      - 6.16101225
+      - 6.12610567
+    lonMax:
+      - 0.05235987
+      - 6.16101225
+    latMin:
+      - -0.75049157
+      - -0.75049157
+    latMax:
+      - -0.63704517
+      - -0.73740160
   - type: STR_CHINA
     fundingMin: 245
     fundingMax: 490
     labelLon: 1.74533
     labelLat: -0.610865
+    lonMin:
+      - 1.30899693
+      - 1.71042266
+      - 2.12930168
+    lonMax:
+      - 1.71042266
+      - 2.12930168
+      - 2.32128790
+    latMin:
+      - -0.87266462
+      - -0.87266462
+      - -0.94247779
+    latMax:
+      - -0.52359877
+      - -0.38397243
+      - -0.69813170
   - type: STR_JAPAN
     fundingMin: 400
     fundingMax: 800
     labelLon: 2.40855
     labelLat: -0.667588
+    lonMin:
+      - 2.26892802
+      - 2.40855436
+    lonMax:
+      - 2.49582083
+      - 2.56563400
+    latMin:
+      - -0.69813170
+      - -0.80285145
+    latMax:
+      - -0.52359877
+      - -0.69813170
   - type: STR_INDIA
     fundingMin: 150
     fundingMax: 300
     labelLon: 1.39626
     labelLat: -0.418879
+    lonMin:
+      - 1.22173047
+      - 1.29154364
+      - 1.48352986
+    lonMax:
+      - 1.48352986
+      - 1.37881010
+      - 1.65806278
+    latMin:
+      - -0.52359877
+      - -0.61086523
+      - -0.47123889
+    latMax:
+      - -0.13962634
+      - -0.52359877
+      - -0.34906585
   - type: STR_BRAZIL
     fundingMin: 300
     fundingMax: 600
     labelLon: 5.32325
     labelLat: 0.0872665
+    lonMin:
+      - 5.06145483
+      - 5.27089434
+      - 5.41052068
+      - 5.32325421
+    lonMax:
+      - 5.27089434
+      - 5.41052068
+      - 5.67232006
+      - 5.46288055
+    latMin:
+      - -0.04363323
+      - -0.04363323
+      - 0
+      - 0.38397243
+    latMax:
+      - 0.29670597
+      - 0.38397243
+      - 0.41887902
+      - 0.41887902
   - type: STR_AUSTRALIA
     fundingMin: 280
     fundingMax: 560
     labelLon: 2.35619
     labelLat: 0.436332
+    lonMin:
+      - 1.91986217
+    lonMax:
+      - 2.72271363
+    latMin:
+      - 0.17453292
+    latMax:
+      - 0.69813170
   - type: STR_NIGERIA
     fundingMin: 180
     fundingMax: 360
     labelLon: 0.1309
     labelLat: -0.174533
+    lonMin:
+      - 0.05235987
+    lonMax:
+      - 0.24434609
+    latMin:
+      - -0.24434609
+    latMax:
+      - -0.06981317
   - type: STR_SOUTH_AFRICA
     fundingMin: 230
     fundingMax: 460
     labelLon: 0.436332
     labelLat: 0.523599
+    lonMin:
+      - 0.26179938
+      - 0.43633231
+    lonMax:
+      - 0.43633231
+      - 0.56723200
+    latMin:
+      - 0.45378560
+      - 0.38397243
+    latMax:
+      - 0.61086523
+      - 0.61086523
   - type: STR_EGYPT
     fundingMin: 230
     fundingMax: 460
     labelLon: 0.506145
     labelLat: -0.453786
+    lonMin:
+      - 0.43633231
+    lonMax:
+      - 0.38397243
+    latMin:
+      - -0.41887902
+    latMax:
+      - -0.38397243
   - type: STR_CANADA
     fundingMin: 230
     fundingMax: 460
     labelLon: 4.53786
     labelLat: -0.959931
+    lonMin:
+      - 3.82227106
+      - 4.01425727
+    lonMax:
+      - 4.01425727
+      - 5.32325421
+    latMin:
+      - -1.22173047
+      - -1.30899693
+    latMax:
+      - -0.95993108
+      - -0.69813170
 regions:
   - type: STR_NORTH_AMERICA
     cost: 800000
@@ -6959,6 +7171,7 @@ startingBase:
   - lon: 0.0
     lat: 0.0
     name: ""
+    inBattlescape: false
     facilities:
       - type: STR_ACCESS_LIFT
         x: 2
