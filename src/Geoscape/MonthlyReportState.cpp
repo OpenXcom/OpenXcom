@@ -39,14 +39,7 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), 
-_psi(psi), 
-_ratingTotal(0), 
-_fundingDiff(0), 
-_generalSatisfaction(0), 
-_happyList(0), 
-_sadList(0), 
-_pactList(0)
+MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi(psi), _ratingTotal(0), _fundingDiff(0), _generalSatisfaction(0), _happyList(0), _sadList(0), _pactList(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

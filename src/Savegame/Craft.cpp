@@ -45,19 +45,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), 
-_rules(rules), 
-_base(base), 
-_id(0), 
-_fuel(0), 
-_damage(0), 
-_patrolTime(0), 
-_interceptionOrder(0), 
-_weapons(), 
-_status("STR_READY"), 
-_lowFuel(false), 
-_inBattlescape(false), 
-_inDogfight(false)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _patrolTime(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false)
 {
 	_items = new ItemContainer();
 	if (id != 0)
