@@ -40,7 +40,7 @@ namespace OpenXcom
  * Initializes all the elements in the Graphs screen.
  * @param game Pointer to the core game.
  */
-GraphsState::GraphsState(Game *game) : State(game)
+GraphsState::GraphsState(Game *game) : State(game), _scale(10)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -54,16 +54,16 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_txtTitle = new Text(200, 16, 118, 28);
 	_txtMonths = new TextList(205, 8, 115, 183);
 	_txtYears = new TextList(200, 8, 121, 191);
-	_txtScale9 = new Text(22, 16, 104, 45);
-	_txtScale8 = new Text(22, 16, 104, 59);
-	_txtScale7 = new Text(22, 16, 104, 73);
-	_txtScale6 = new Text(22, 16, 104, 87);
-	_txtScale5 = new Text(22, 16, 104, 101);
-	_txtScale4 = new Text(22, 16, 104, 115);
-	_txtScale3 = new Text(22, 16, 104, 129);
-	_txtScale2 = new Text(22, 16, 104, 143);
-	_txtScale1 = new Text(22, 16, 104, 157);
-	_txtScale0 = new Text(22, 16, 104, 171);
+	_txtScale9 = new Text(42, 16, 84, 45);
+	_txtScale8 = new Text(42, 16, 84, 59);
+	_txtScale7 = new Text(42, 16, 84, 73);
+	_txtScale6 = new Text(42, 16, 84, 87);
+	_txtScale5 = new Text(42, 16, 84, 101);
+	_txtScale4 = new Text(42, 16, 84, 115);
+	_txtScale3 = new Text(42, 16, 84, 129);
+	_txtScale2 = new Text(42, 16, 84, 143);
+	_txtScale1 = new Text(42, 16, 84, 157);
+	_txtScale0 = new Text(42, 16, 84, 171);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
@@ -119,7 +119,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	}
 
 	std::string months[] = {"STR_JAN", "STR_FEB", "STR_MAR", "STR_APR", "STR_MAY", "STR_JUN", "STR_JUL", "STR_AUG", "STR_SEP", "STR_OCT", "STR_NOV", "STR_DEC"};
-	int month = game->getSavedGame()->getTime()->getMonth();
+	int month = _game->getSavedGame()->getTime()->getMonth();
 	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance.
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
@@ -135,92 +135,40 @@ GraphsState::GraphsState(Game *game) : State(game)
 		{
 			month = 0;
 			std::wstringstream ss;
-			ss << game->getSavedGame()->getTime()->getYear();
+			ss << _game->getSavedGame()->getTime()->getYear();
 			_txtYears->setCellText(0, iter/2, ss.str());
 			if(iter > 2)
 			{
 				std::wstringstream ss2;
-				ss2 << (game->getSavedGame()->getTime()->getYear()-1);
+				ss2 << (_game->getSavedGame()->getTime()->getYear()-1);
 				_txtYears->setCellText(0, 0, ss2.str());
 			}
 		}
-		_txtMonths->setCellText(0, iter, game->getLanguage()->getString(months[month]));
+		_txtMonths->setCellText(0, iter, _game->getLanguage()->getString(months[month]));
 		++month;
 	}
-	int highest = 0;
-	for(std::vector<Country *>::iterator iter = game->getSavedGame()->getCountries()->begin(); iter != game->getSavedGame()->getCountries()->end(); ++iter)
-	{
-		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
-		{
-			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
-			{
-				highest = (*iter)->getActivityAlien().at(numberOfMonths);
-			}
-			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
-			{
-				highest = (*iter)->getActivityXcom().at(numberOfMonths);
-			}
-		}
-	}
-	for(std::vector<Region *>::iterator iter = game->getSavedGame()->getRegions()->begin(); iter != game->getSavedGame()->getRegions()->end(); ++iter)
-	{
-		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
-		{
-			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
-			{
-				highest = (*iter)->getActivityAlien().at(numberOfMonths);
-			}
-			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
-			{
-				highest = (*iter)->getActivityXcom().at(numberOfMonths);
-			}
-		}
-	}
-	int scale = (highest/9)+1;
-	if(scale < 10)
-		scale = 10;
-	//oh god this is horrible, what am i even doing here?
-	//there has to be an easier way to convert an integer to a wstring
-	std::wstringstream ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9;
-	ss9 << scale*9 << " ";
-	_txtScale9->setText(ss9.str());
+
 	_txtScale9->setAlign(ALIGN_RIGHT);
 	_txtScale9->setColor(Palette::blockOffset(6)+8);
-	ss8 << scale*8 << " ";
-	_txtScale8->setText(ss8.str());
 	_txtScale8->setAlign(ALIGN_RIGHT);
 	_txtScale8->setColor(Palette::blockOffset(6)+8);
-	ss7 << scale*7 << " ";
-	_txtScale7->setText(ss7.str());
 	_txtScale7->setAlign(ALIGN_RIGHT);
 	_txtScale7->setColor(Palette::blockOffset(6)+8);
-	ss6 << scale*6 << " ";
-	_txtScale6->setText(ss6.str());
 	_txtScale6->setAlign(ALIGN_RIGHT);
 	_txtScale6->setColor(Palette::blockOffset(6)+8);
-	ss5 << scale*5 << " ";
-	_txtScale5->setText(ss5.str());
 	_txtScale5->setAlign(ALIGN_RIGHT);
 	_txtScale5->setColor(Palette::blockOffset(6)+8);
-	ss4 << scale*4 << " ";
-	_txtScale4->setText(ss4.str());
 	_txtScale4->setAlign(ALIGN_RIGHT);
 	_txtScale4->setColor(Palette::blockOffset(6)+8);
-	ss3 << scale*3 << " ";
-	_txtScale3->setText(ss3.str());
 	_txtScale3->setAlign(ALIGN_RIGHT);
 	_txtScale3->setColor(Palette::blockOffset(6)+8);
-	ss2 << scale*2 << " ";
-	_txtScale2->setText(ss2.str());
 	_txtScale2->setAlign(ALIGN_RIGHT);
 	_txtScale2->setColor(Palette::blockOffset(6)+8);
-	ss1 << scale << " ";
-	_txtScale1->setText(ss1.str());
 	_txtScale1->setAlign(ALIGN_RIGHT);
 	_txtScale1->setColor(Palette::blockOffset(6)+8);
-	_txtScale0->setText(L"0 ");
 	_txtScale0->setAlign(ALIGN_RIGHT);
 	_txtScale0->setColor(Palette::blockOffset(6)+8);
+	btnUfoRegionClick(0);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
@@ -252,27 +200,136 @@ void GraphsState::btnGeoscapeClick(Action *action)
 }
 void GraphsState::btnUfoRegionClick(Action *action)
 {
-	_game->popState();
+	int highest = 0;
+	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
+		{
+			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityAlien().at(numberOfMonths);
+			}
+		}
+	}
+	_scale = (highest/9)+1;
+	if(_scale < 10)
+		_scale = 10;	
+	updateScale();
 }
 void GraphsState::btnUfoCountryClick(Action *action)
 {
-	_game->popState();
+	int highest = 0;
+	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
+		{
+			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityAlien().at(numberOfMonths);
+			}
+		}
+	}
+	_scale = (highest/9)+1;
+	if(_scale < 10)
+		_scale = 10;
+	updateScale();
 }
 void GraphsState::btnXcomRegionClick(Action *action)
 {
-	_game->popState();
+	int highest = 0;
+	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityXcom().size(); ++numberOfMonths)
+		{
+			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityXcom().at(numberOfMonths);
+			}
+		}
+	}
+	_scale = (highest/9)+1;
+	if(_scale < 10)
+		_scale = 10;
+	updateScale();
 }
 void GraphsState::btnXcomCountryClick(Action *action)
 {
-	_game->popState();
+	int highest = 0;
+	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityXcom().size(); ++numberOfMonths)
+		{
+			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityXcom().at(numberOfMonths);
+			}
+		}
+	}
+	_scale = (highest/9)+1;
+	if(_scale < 10)
+		_scale = 10;
+	updateScale();
 }
 void GraphsState::btnIncomeClick(Action *action)
 {
-	_game->popState();
+	int highest = 0;
+	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getFunding().size(); ++numberOfMonths)
+		{
+			if((*iter)->getFunding().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getFunding().at(numberOfMonths);
+			}
+		}
+	}
+	_scale = (highest/9)+1;
+	if(_scale < 10)
+		_scale = 10;
+	updateScale();
 }
 void GraphsState::btnFinanceClick(Action *action)
 {
-	_game->popState();
+	int highest = 0;
+	for(int numberOfMonths = 0; numberOfMonths != _game->getSavedGame()->getFundsList().size(); ++numberOfMonths)
+	{
+		if(_game->getSavedGame()->getFundsList().at(numberOfMonths) > highest)
+		{
+			highest = _game->getSavedGame()->getFundsList().at(numberOfMonths);
+		}
+	}
+	
+	_scale = (highest/9)+1;
+	if(_scale < 10)
+		_scale = 10;
+	updateScale();
 }
 
+void GraphsState::updateScale()
+{
+	//can't use numbertext here, it lacks text alignment
+	//so i'd have to do it with a bunch of if statements
+	//and setx and getx calls. 
+	// strigstreams are ugly but they suit my specific needs here.
+	std::wstringstream ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9;
+	ss9 << _scale*9 << " ";
+	_txtScale9->setText(ss9.str());
+	ss8 << _scale*8 << " ";
+	_txtScale8->setText(ss8.str());
+	ss7 << _scale*7 << " ";
+	_txtScale7->setText(ss7.str());
+	ss6 << _scale*6 << " ";
+	_txtScale6->setText(ss6.str());
+	ss5 << _scale*5 << " ";
+	_txtScale5->setText(ss5.str());
+	ss4 << _scale*4 << " ";
+	_txtScale4->setText(ss4.str());
+	ss3 << _scale*3 << " ";
+	_txtScale3->setText(ss3.str());
+	ss2 << _scale*2 << " ";
+	_txtScale2->setText(ss2.str());
+	ss1 << _scale << " ";
+	_txtScale1->setText(ss1.str());
+	_txtScale0->setText(L"0 ");
+}
 }
