@@ -22,6 +22,10 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/InteractiveSurface.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/Region.h"
+#include "../Ruleset/RuleCountry.h"
+#include "../Ruleset/RuleRegion.h"
 
 namespace OpenXcom
 {
@@ -38,6 +42,35 @@ GraphsState::GraphsState(Game *game) : State(game)
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
+
+	// set up the grid
+	SDL_Rect current;
+	current.w = 188;
+	current.h = 127;
+	current.x = 125;
+	current.y = 49;
+	_bg->drawRect(&current, Palette::blockOffset(10));
+
+	for(int scale = 0; scale !=5; ++scale)
+	{
+	current.w = 16 - (scale*2);
+	current.h = 13 - (scale*2);
+		for(int y = 50 + scale; y <= 163 + scale; y += 14)
+		{
+			current.y = y;
+			for(int x = 126 + scale; x <= 297 + scale; x += 17)
+			{
+				current.x = x;
+				Uint8 color = Palette::blockOffset(10)+scale+1;
+				if(scale == 4)
+				{
+					color = 0;
+				} 
+				_bg->drawRect(&current, color);
+			}
+		}
+	}
+
 
 	add(_bg);
 	add(_btnGeoscape);

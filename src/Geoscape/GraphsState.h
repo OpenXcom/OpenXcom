@@ -26,6 +26,7 @@ namespace OpenXcom
 
 class Surface;
 class InteractiveSurface;
+class SurfaceSet;
 
 /**
  * Graphs screen for displaying graphs of various
