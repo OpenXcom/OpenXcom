@@ -20,13 +20,14 @@
 #define OPENXCOM_GRAPHSSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
 
 class Surface;
 class InteractiveSurface;
-class SurfaceSet;
+class Text;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -37,6 +38,9 @@ class GraphsState : public State
 private:
 	Surface *_bg;
 	InteractiveSurface *_btnGeoscape;
+	InteractiveSurface *_btnXcomCountry, *_btnUfoCountry;
+	InteractiveSurface *_btnXcomRegion, *_btnUfoRegion;
+	InteractiveSurface *_btnIncome, *_btnFinance;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -44,6 +48,12 @@ public:
 	~GraphsState();
 	/// Handler for clicking the Geoscape icon.
 	void btnGeoscapeClick(Action *action);
+	void btnUfoRegionClick(Action *action);
+	void btnUfoCountryClick(Action *action);
+	void btnXcomRegionClick(Action *action);
+	void btnXcomCountryClick(Action *action);
+	void btnIncomeClick(Action *action);
+	void btnFinanceClick(Action *action);
 };
 
 }
