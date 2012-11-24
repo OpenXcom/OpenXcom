@@ -38,8 +38,8 @@ language_DATA = \
 	bin/data/Language/Small.fnt \
 	bin/data/Language/Spanish.geo \
 	bin/data/Language/Spanish.lng \
-	bin/data/Language/Ukranian.geo \
-	bin/data/Language/Ukranian.lng
+	bin/data/Language/Ukrainian.geo \
+	bin/data/Language/Ukrainian.lng
 
 namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
