@@ -86,10 +86,11 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_funds.push_back(0);
 }
 
 /**
@@ -426,6 +427,15 @@ void SavedGame::setDifficulty(GameDifficulty difficulty)
  */
 int SavedGame::getFunds() const
 {
+	return _funds[_funds.size()-1];
+}
+
+/**
+ * Returns the player's funds for the last 12 months.
+ * @return funds.
+ */
+std::vector<int> SavedGame::getFundsList() const
+{
 	return _funds;
 }
 
@@ -435,7 +445,7 @@ int SavedGame::getFunds() const
  */
 void SavedGame::setFunds(int funds)
 {
-	_funds = funds;
+	_funds[_funds.size()-1] = funds;
 }
 
 /**
@@ -498,7 +508,10 @@ void SavedGame::setGlobeZoom(int zoom)
  */
 void SavedGame::monthlyFunding()
 {
-	_funds += getCountryFunding() - getBaseMaintenance();
+	_funds[_funds.size()-1] += getCountryFunding() - getBaseMaintenance();
+	_funds.push_back(_funds[_funds.size()-1]);
+	if(_funds.size() > 12)
+		_funds.erase(_funds.begin());
 }
 
 /**
