@@ -28,6 +28,7 @@
 #include "../Ruleset/RuleRegion.h"
 #include "../Interface/Text.h"
 #include "../Engine/Language.h"
+#include "../Interface/TextButton.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/TextList.h"
@@ -64,6 +65,43 @@ GraphsState::GraphsState(Game *game) : State(game), _scale(10)
 	_txtScale2 = new Text(42, 16, 84, 143);
 	_txtScale1 = new Text(42, 16, 84, 157);
 	_txtScale0 = new Text(42, 16, 84, 171);
+
+	//create buttons (sooooo many buttons)
+	_rgnBtn1 = new TextButton(80, 11, 0, 0);
+	_rgnBtn2 = new TextButton(80, 11, 0, 11);
+	_rgnBtn3 = new TextButton(80, 11, 0, 22);
+	_rgnBtn4 = new TextButton(80, 11, 0, 33);
+	_rgnBtn5 = new TextButton(80, 11, 0, 44);
+	_rgnBtn6 = new TextButton(80, 11, 0, 55);
+	_rgnBtn7 = new TextButton(80, 11, 0, 66);
+	_rgnBtn8 = new TextButton(80, 11, 0, 77);
+	_rgnBtn9 = new TextButton(80, 11, 0, 88);
+	_rgnBtn10 = new TextButton(80, 11, 0, 99);
+	_rgnBtn11 = new TextButton(80, 11, 0, 110);
+	_rgnBtn12 = new TextButton(80, 11, 0, 121);
+	_rgnBtn13 = new TextButton(80, 11, 0, 132);
+	_rgnBtn14 = new TextButton(80, 11, 0, 143);
+	_rgnBtn15 = new TextButton(80, 11, 0, 154);
+	_btnRegionTotal = new TextButton(80, 11, 0, 165);
+
+	
+	_cntBtn1 = new TextButton(70, 11, 0, 0);
+	_cntBtn2 = new TextButton(70, 11, 0, 11);
+	_cntBtn3 = new TextButton(70, 11, 0, 22);
+	_cntBtn4 = new TextButton(70, 11, 0, 33);
+	_cntBtn5 = new TextButton(70, 11, 0, 44);
+	_cntBtn6 = new TextButton(70, 11, 0, 55);
+	_cntBtn7 = new TextButton(70, 11, 0, 66);
+	_cntBtn8 = new TextButton(70, 11, 0, 77);
+	_cntBtn9 = new TextButton(70, 11, 0, 88);
+	_cntBtn10 = new TextButton(70, 11, 0, 99);
+	_cntBtn11 = new TextButton(70, 11, 0, 110);
+	_cntBtn12 = new TextButton(70, 11, 0, 121);
+	_cntBtn13 = new TextButton(70, 11, 0, 132);
+	_cntBtn14 = new TextButton(70, 11, 0, 143);
+	_cntBtn15 = new TextButton(70, 11, 0, 154);
+	_cntBtn16 = new TextButton(70, 11, 0, 165);
+	_btnCountryTotal = new TextButton(70, 11, 0, 176);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
