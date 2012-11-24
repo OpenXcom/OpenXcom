@@ -176,12 +176,9 @@ GraphsState::GraphsState(Game *game) : State(game)
 			}
 		}
 	}
-	int scale = 10;
-	for(int iter = 90; iter <= highest; iter += 100)
-	{
-		scale += 10;
-	}
-
+	int scale = (highest/9)+1;
+	if(scale < 10)
+		scale = 10;
 	//oh god this is horrible, what am i even doing here?
 	//there has to be an easier way to convert an integer to a wstring
 	std::wstringstream ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9;
