@@ -26,6 +26,11 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Interface/Text.h"
+#include "../Engine/Language.h"
+#include "../Savegame/GameTime.h"
+#include "../Savegame/SavedGame.h"
+#include "../Interface/TextList.h"
 
 namespace OpenXcom
 {
@@ -45,6 +50,8 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnIncome = new InteractiveSurface(32, 24, 222, 0);
 	_btnFinance = new InteractiveSurface(32, 24, 255, 0);
 	_btnGeoscape = new InteractiveSurface(32, 24, 288, 0);
+	_txtTitle = new Text(200, 16, 118, 28);
+	_txtMonths = new TextList(320, 8, 115, 183);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
@@ -57,6 +64,8 @@ GraphsState::GraphsState(Game *game) : State(game)
 	add(_btnIncome);
 	add(_btnFinance);
 	add(_btnGeoscape);
+	add(_txtMonths);
+	add(_txtTitle);
 
 	// set up the grid
 	SDL_Rect current;
@@ -84,6 +93,21 @@ GraphsState::GraphsState(Game *game) : State(game)
 				_bg->drawRect(&current, color);
 			}
 		}
+	}
+
+	std::string months[] = {"STR_JAN", "STR_FEB", "STR_MAR", "STR_APR", "STR_MAY", "STR_JUN", "STR_JUL", "STR_AUG", "STR_SEP", "STR_OCT", "STR_NOV", "STR_DEC"};
+	int month = game->getSavedGame()->getTime()->getMonth();
+	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
+	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance.
+	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
+	_txtMonths->addRow(12, "", "", "", "", "", "", "", "", "", "", "", "");
+	_txtMonths->setRowColor(0, Palette::blockOffset(6)+8);
+	for(int iter = 0; iter != 12; ++iter)
+	{
+		if(month > 11)
+			month = 0;
+		_txtMonths->setCellText(0, iter, game->getLanguage()->getString(months[month]));
+		++month;
 	}
 
 

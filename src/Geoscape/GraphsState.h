@@ -28,6 +28,7 @@ namespace OpenXcom
 class Surface;
 class InteractiveSurface;
 class Text;
+class TextList;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -41,6 +42,8 @@ private:
 	InteractiveSurface *_btnXcomCountry, *_btnUfoCountry;
 	InteractiveSurface *_btnXcomRegion, *_btnUfoRegion;
 	InteractiveSurface *_btnIncome, *_btnFinance;
+	Text *_txtTitle;
+	TextList *_txtMonths;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
