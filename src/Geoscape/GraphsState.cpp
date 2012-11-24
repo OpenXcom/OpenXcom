@@ -31,6 +31,7 @@
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/TextList.h"
+#include <sstream>
 
 namespace OpenXcom
 {
@@ -51,7 +52,18 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnFinance = new InteractiveSurface(32, 24, 255, 0);
 	_btnGeoscape = new InteractiveSurface(32, 24, 288, 0);
 	_txtTitle = new Text(200, 16, 118, 28);
-	_txtMonths = new TextList(320, 8, 115, 183);
+	_txtMonths = new TextList(205, 8, 115, 183);
+	_txtYears = new TextList(200, 8, 121, 191);
+	_txtScale9 = new Text(22, 16, 104, 45);
+	_txtScale8 = new Text(22, 16, 104, 59);
+	_txtScale7 = new Text(22, 16, 104, 73);
+	_txtScale6 = new Text(22, 16, 104, 87);
+	_txtScale5 = new Text(22, 16, 104, 101);
+	_txtScale4 = new Text(22, 16, 104, 115);
+	_txtScale3 = new Text(22, 16, 104, 129);
+	_txtScale2 = new Text(22, 16, 104, 143);
+	_txtScale1 = new Text(22, 16, 104, 157);
+	_txtScale0 = new Text(22, 16, 104, 171);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
@@ -65,7 +77,18 @@ GraphsState::GraphsState(Game *game) : State(game)
 	add(_btnFinance);
 	add(_btnGeoscape);
 	add(_txtMonths);
+	add(_txtYears);
 	add(_txtTitle);
+	add(_txtScale9);
+	add(_txtScale8);
+	add(_txtScale7);
+	add(_txtScale6);
+	add(_txtScale5);
+	add(_txtScale4);
+	add(_txtScale3);
+	add(_txtScale2);
+	add(_txtScale1);
+	add(_txtScale0);
 
 	// set up the grid
 	SDL_Rect current;
@@ -102,14 +125,105 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
 	_txtMonths->addRow(12, "", "", "", "", "", "", "", "", "", "", "", "");
 	_txtMonths->setRowColor(0, Palette::blockOffset(6)+8);
+	_txtYears->setColumns(6, 34, 34, 34, 34, 34, 34);
+	_txtYears->addRow(6, " ", " ", " ", " ", " ", " ");
+	_txtYears->setRowColor(0, Palette::blockOffset(6)+8);
+
 	for(int iter = 0; iter != 12; ++iter)
 	{
 		if(month > 11)
+		{
 			month = 0;
+			std::wstringstream ss;
+			ss << game->getSavedGame()->getTime()->getYear();
+			_txtYears->setCellText(0, iter/2, ss.str());
+			if(iter > 2)
+			{
+				std::wstringstream ss2;
+				ss2 << (game->getSavedGame()->getTime()->getYear()-1);
+				_txtYears->setCellText(0, 0, ss2.str());
+			}
+		}
 		_txtMonths->setCellText(0, iter, game->getLanguage()->getString(months[month]));
 		++month;
 	}
+	int highest = 0;
+	for(std::vector<Country *>::iterator iter = game->getSavedGame()->getCountries()->begin(); iter != game->getSavedGame()->getCountries()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
+		{
+			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityAlien().at(numberOfMonths);
+			}
+			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityXcom().at(numberOfMonths);
+			}
+		}
+	}
+	for(std::vector<Region *>::iterator iter = game->getSavedGame()->getRegions()->begin(); iter != game->getSavedGame()->getRegions()->end(); ++iter)
+	{
+		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
+		{
+			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityAlien().at(numberOfMonths);
+			}
+			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
+			{
+				highest = (*iter)->getActivityXcom().at(numberOfMonths);
+			}
+		}
+	}
+	int scale = 10;
+	for(int iter = 90; iter <= highest; iter += 100)
+	{
+		scale += 10;
+	}
 
+	//oh god this is horrible, what am i even doing here?
+	//there has to be an easier way to convert an integer to a wstring
+	std::wstringstream ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9;
+	ss9 << scale*9 << " ";
+	_txtScale9->setText(ss9.str());
+	_txtScale9->setAlign(ALIGN_RIGHT);
+	_txtScale9->setColor(Palette::blockOffset(6)+8);
+	ss8 << scale*8 << " ";
+	_txtScale8->setText(ss8.str());
+	_txtScale8->setAlign(ALIGN_RIGHT);
+	_txtScale8->setColor(Palette::blockOffset(6)+8);
+	ss7 << scale*7 << " ";
+	_txtScale7->setText(ss7.str());
+	_txtScale7->setAlign(ALIGN_RIGHT);
+	_txtScale7->setColor(Palette::blockOffset(6)+8);
+	ss6 << scale*6 << " ";
+	_txtScale6->setText(ss6.str());
+	_txtScale6->setAlign(ALIGN_RIGHT);
+	_txtScale6->setColor(Palette::blockOffset(6)+8);
+	ss5 << scale*5 << " ";
+	_txtScale5->setText(ss5.str());
+	_txtScale5->setAlign(ALIGN_RIGHT);
+	_txtScale5->setColor(Palette::blockOffset(6)+8);
+	ss4 << scale*4 << " ";
+	_txtScale4->setText(ss4.str());
+	_txtScale4->setAlign(ALIGN_RIGHT);
+	_txtScale4->setColor(Palette::blockOffset(6)+8);
+	ss3 << scale*3 << " ";
+	_txtScale3->setText(ss3.str());
+	_txtScale3->setAlign(ALIGN_RIGHT);
+	_txtScale3->setColor(Palette::blockOffset(6)+8);
+	ss2 << scale*2 << " ";
+	_txtScale2->setText(ss2.str());
+	_txtScale2->setAlign(ALIGN_RIGHT);
+	_txtScale2->setColor(Palette::blockOffset(6)+8);
+	ss1 << scale << " ";
+	_txtScale1->setText(ss1.str());
+	_txtScale1->setAlign(ALIGN_RIGHT);
+	_txtScale1->setColor(Palette::blockOffset(6)+8);
+	_txtScale0->setText(L"0 ");
+	_txtScale0->setAlign(ALIGN_RIGHT);
+	_txtScale0->setColor(Palette::blockOffset(6)+8);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);

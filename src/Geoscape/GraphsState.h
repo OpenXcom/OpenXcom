@@ -43,7 +43,9 @@ private:
 	InteractiveSurface *_btnXcomRegion, *_btnUfoRegion;
 	InteractiveSurface *_btnIncome, *_btnFinance;
 	Text *_txtTitle;
-	TextList *_txtMonths;
+	TextList *_txtMonths, *_txtYears;
+	Text *_txtScale0, *_txtScale1, *_txtScale2, *_txtScale3, *_txtScale4;
+	Text *_txtScale5, *_txtScale6, *_txtScale7, *_txtScale8, *_txtScale9;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
