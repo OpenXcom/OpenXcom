@@ -30,6 +30,7 @@ class InteractiveSurface;
 class Text;
 class TextButton;
 class TextList;
+class Region;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -45,17 +46,11 @@ private:
 	InteractiveSurface *_btnIncome, *_btnFinance;
 	Text *_txtTitle;
 	TextList *_txtMonths, *_txtYears;
-	Text *_txtScale0, *_txtScale1, *_txtScale2, *_txtScale3, *_txtScale4;
-	Text *_txtScale5, *_txtScale6, *_txtScale7, *_txtScale8, *_txtScale9;
-	TextButton *_rgnBtn1, *_rgnBtn2, *_rgnBtn3, *_rgnBtn4, *_rgnBtn5;
-	TextButton *_rgnBtn6, *_rgnBtn7, *_rgnBtn8, *_rgnBtn9, *_rgnBtn10;
-	TextButton *_rgnBtn11, *_rgnBtn12, *_rgnBtn13, *_rgnBtn14, *_rgnBtn15;
-	TextButton *_btnRegionTotal;
-	TextButton *_cntBtn1, *_cntBtn2, *_cntBtn3, *_cntBtn4, *_cntBtn5;
-	TextButton *_cntBtn6, *_cntBtn7, *_cntBtn8, *_cntBtn9, *_cntBtn10;
-	TextButton *_cntBtn11, *_cntBtn12, *_cntBtn13, *_cntBtn14, *_cntBtn15;
-	TextButton *_cntBtn16, *_btnCountryTotal;
+	std::vector<Text *> _txtScale;
+	std::vector<TextButton *> _btnRegions, _btnCountries;
+	TextButton *_btnRegionTotal, *_btnCountryTotal;
 	int _scale;
+	bool _xcom;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -70,6 +65,7 @@ public:
 	void btnIncomeClick(Action *action);
 	void btnFinanceClick(Action *action);
 	void updateScale();
+	void btnRegionClick(Action *action);
 };
 
 }
