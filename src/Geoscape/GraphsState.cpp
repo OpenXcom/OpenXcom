@@ -63,7 +63,19 @@ GraphsState::GraphsState(Game *game) : State(game)
 	}
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
-
+	
+	//add all our elements
+	add(_bg);
+	add(_btnUfoRegion);
+	add(_btnUfoCountry);
+	add(_btnXcomRegion);
+	add(_btnXcomCountry);
+	add(_btnIncome);
+	add(_btnFinance);
+	add(_btnGeoscape);
+	add(_txtMonths);
+	add(_txtYears);
+	add(_txtTitle);
 	//create buttons (sooooo many buttons)
 	int offset = 0;
 	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
@@ -75,6 +87,8 @@ GraphsState::GraphsState(Game *game) : State(game)
 		_btnRegions.at(offset)->onMouseClick((ActionHandler)&GraphsState::btnRegionClick);
 		add(_btnRegions.at(offset));
 		_btnRegions.at(offset)->setVisible(false);
+		_alienRegionLines.push_back(new Surface(320,200,0,0));
+		add(_alienRegionLines.at(offset));
 		++offset;
 	}
 	_btnRegionTotal = new TextButton(80, 11, 0, offset*11);
@@ -83,6 +97,9 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
 	_btnRegionTotal->setText(_game->getLanguage()->getString("STR_TOTAL_UC"));
 	_btnRegionTotal->setVisible(false);
+	_alienRegionLines.push_back(new Surface(320,200,0,0));
+	add(_alienRegionLines.at(offset));
+	add(_btnRegionTotal);
 	
 	offset = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
@@ -102,21 +119,6 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
 	_btnCountryTotal->setText(_game->getLanguage()->getString("STR_TOTAL_UC"));
 	_btnCountryTotal->setVisible(false);
-
-
-	//add all our elements (god damn that's a lot of elements)
-	add(_bg);
-	add(_btnUfoRegion);
-	add(_btnUfoCountry);
-	add(_btnXcomRegion);
-	add(_btnXcomCountry);
-	add(_btnIncome);
-	add(_btnFinance);
-	add(_btnGeoscape);
-	add(_txtMonths);
-	add(_txtYears);
-	add(_txtTitle);
-	add(_btnRegionTotal);
 	add(_btnCountryTotal);
 
 	// set up the grid
@@ -199,6 +201,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnIncome->onMouseClick((ActionHandler)&GraphsState::btnIncomeClick);
 	_btnFinance->onMouseClick((ActionHandler)&GraphsState::btnFinanceClick);
 	_btnGeoscape->onMouseClick((ActionHandler)&GraphsState::btnGeoscapeClick);
+
 }
 
 /**
@@ -258,6 +261,57 @@ void GraphsState::btnUfoRegionClick(Action *action)
 	updateScale();
 	_xcom = false;
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
+	
+	// set up lines
+	int counter = 0;
+	int total[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	for(std::vector<Region*>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
+	{
+		std::vector<Sint16> newLineVector;
+		for(int iter2 = 0; iter2 != 12; ++iter2)
+		{
+			int x = 312 - (iter2*17);
+			int y = 175;
+			if(iter2 < (*iter)->getActivityAlien().size() && (*iter)->getActivityAlien().at(iter2))
+			{
+				double dscale = _scale;
+				double units = dscale / 140;
+				int reduction = (*iter)->getActivityAlien().at(iter2) / units;
+				y -= reduction;
+				total[iter2] += (*iter)->getActivityAlien().at(iter2);
+			}
+			newLineVector.push_back(y);
+			int offset = 0;
+			if(counter % 2)
+				offset = 8;
+			if(newLineVector.size() > 1)
+				_alienRegionLines.at(counter)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset((counter/2)+1)+offset);
+		}
+		_alienRegionLines.at(counter)->setVisible(_btnRegionToggles.at(counter));
+		++counter;
+	}
+	
+	std::vector<Sint16> newLineVector;
+	for(int iter = 0; iter != 12; ++iter)
+	{
+		total[iter] /= _game->getSavedGame()->getRegions()->size();
+		int x = 312 - (iter*17);
+		int y = 175;
+		if(total[iter] > 0)
+		{
+			double dscale = _scale;
+			double units = dscale / 140;
+			int reduction = total[iter] / units;
+			y -= reduction;
+		}
+		newLineVector.push_back(y);
+		int offset = 0;
+		if(counter % 2)
+			offset = 8;
+		if(newLineVector.size() > 1)
+			_alienRegionLines.at(_alienRegionLines.size()-1)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+	}
+	_alienRegionLines.at(_alienRegionLines.size()-1)->setVisible(_btnRegionToggles.at(_alienRegionLines.size()-1));
 }
 void GraphsState::btnUfoCountryClick(Action *action)
 {
@@ -600,11 +654,13 @@ void GraphsState::btnRegionClick(Action *action)
 	{
 		button->setColor(Palette::blockOffset(9)+7);
 		_btnRegionToggles.at(number) = false;
+		_alienRegionLines.at(number)->setVisible(false);
 	}
 	else
 	{
 		button->invert(adjustment);
 		_btnRegionToggles.at(number) = true;
+		_alienRegionLines.at(number)->setVisible(true);
 	}
 }
 void GraphsState::btnCountryClick(Action *action)

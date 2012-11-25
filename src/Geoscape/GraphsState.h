@@ -50,6 +50,7 @@ private:
 	std::vector<TextButton *> _btnRegions, _btnCountries;
 	std::vector<bool> _btnRegionToggles, _btnCountryToggles;
 	TextButton *_btnRegionTotal, *_btnCountryTotal;
+	std::vector<Surface *> _alienRegionLines;
 	int _scale;
 	bool _xcom;
 public:
