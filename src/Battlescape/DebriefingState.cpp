@@ -56,7 +56,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game), _noContainment(false), _regionPoints(false), _countryPoints(false)
+DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -154,10 +154,14 @@ DebriefingState::DebriefingState(Game *game) : State(game), _noContainment(false
 	_lstTotal->addRow(2, _game->getLanguage()->getString("STR_TOTAL_UC").c_str(), ss3.str().c_str());
 
 	// add the points to our activity score
-	if(_regionPoints)
+	if (_region)
+	{
 		_region->addActivityXcom(total);
-	if(_countryPoints)
+	}
+	if (_country)
+	{
 		_country->addActivityXcom(total);
+	}
 
 	if (recoveryY > 0)
 	{
@@ -307,7 +311,6 @@ void DebriefingState::prepareDebriefing()
 					if((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_region = (*k);
-						_regionPoints = true;
 					}
 				}
 				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
@@ -315,7 +318,6 @@ void DebriefingState::prepareDebriefing()
 					if((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
-						_countryPoints = true;
 					}
 				}
 				craft = (*j);
