@@ -52,7 +52,7 @@ GraphsState::GraphsState(Game *game) : State(game), _scale(10)
 	_btnIncome = new InteractiveSurface(32, 24, 222, 0);
 	_btnFinance = new InteractiveSurface(32, 24, 255, 0);
 	_btnGeoscape = new InteractiveSurface(32, 24, 288, 0);
-	_txtTitle = new Text(200, 16, 118, 28);
+	_txtTitle = new Text(220, 16, 100, 28);
 	_txtMonths = new TextList(205, 8, 115, 183);
 	_txtYears = new TextList(200, 8, 121, 191);
 	_txtScale9 = new Text(42, 16, 84, 45);
@@ -128,6 +128,8 @@ GraphsState::GraphsState(Game *game) : State(game), _scale(10)
 	add(_txtScale1);
 	add(_txtScale0);
 
+	_txtTitle->setBig();
+	_txtTitle->setColor(Palette::blockOffset(8)+8);
 	// set up the grid
 	SDL_Rect current;
 	current.w = 188;
@@ -238,79 +240,128 @@ void GraphsState::btnGeoscapeClick(Action *action)
 }
 void GraphsState::btnUfoRegionClick(Action *action)
 {
-	int highest = 0;
+	_scale = 0;
 	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
 		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
 		{
-			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
+			if((*iter)->getActivityAlien().at(numberOfMonths) > _scale)
 			{
-				highest = (*iter)->getActivityAlien().at(numberOfMonths);
+				_scale = (*iter)->getActivityAlien().at(numberOfMonths);
 			}
 		}
 	}
-	_scale = (highest/9)+1;
-	if(_scale < 10)
-		_scale = 10;	
+	
+	if(_scale < 90)
+		_scale = 100;
+	else if(_scale < 180)
+		_scale = 200;
+	else if(_scale < 360)
+		_scale = 400;
+	else if(_scale < 720)
+		_scale = 800;
+	else if(_scale < 1440)
+		_scale = 1600;
+	else if(_scale < 2880)
+		_scale = 3400;
+	else if(_scale < 5760) //this should never occur but what the heck.
+		_scale = 6800;
 	updateScale();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
 }
 void GraphsState::btnUfoCountryClick(Action *action)
 {
-	int highest = 0;
+	_scale = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
 		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityAlien().size(); ++numberOfMonths)
 		{
-			if((*iter)->getActivityAlien().at(numberOfMonths) > highest)
+			if((*iter)->getActivityAlien().at(numberOfMonths) > _scale)
 			{
-				highest = (*iter)->getActivityAlien().at(numberOfMonths);
+				_scale = (*iter)->getActivityAlien().at(numberOfMonths);
 			}
 		}
 	}
-	_scale = (highest/9)+1;
-	if(_scale < 10)
-		_scale = 10;
+	if(_scale < 90)
+		_scale = 100;
+	else if(_scale < 180)
+		_scale = 200;
+	else if(_scale < 360)
+		_scale = 400;
+	else if(_scale < 720)
+		_scale = 800;
+	else if(_scale < 1440)
+		_scale = 1600;
+	else if(_scale < 2880)
+		_scale = 3400;
+	else if(_scale < 5760) //this should never occur but what the heck.
+		_scale = 6800;
 	updateScale();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
 }
 void GraphsState::btnXcomRegionClick(Action *action)
 {
-	int highest = 0;
+	_scale = 0;
 	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
 		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityXcom().size(); ++numberOfMonths)
 		{
-			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
+			if((*iter)->getActivityXcom().at(numberOfMonths) > _scale)
 			{
-				highest = (*iter)->getActivityXcom().at(numberOfMonths);
+				_scale = (*iter)->getActivityXcom().at(numberOfMonths);
 			}
 		}
 	}
-	_scale = (highest/9)+1;
-	if(_scale < 10)
-		_scale = 10;
+	if(_scale < 90)
+		_scale = 100;
+	else if(_scale < 180)
+		_scale = 200;
+	else if(_scale < 360)
+		_scale = 400;
+	else if(_scale < 720)
+		_scale = 800;
+	else if(_scale < 1440)
+		_scale = 1600;
+	else if(_scale < 2880)
+		_scale = 3400;
+	else if(_scale < 5760) //this should never occur but what the heck.
+		_scale = 6800;
 	updateScale();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_AREAS"));
 }
 void GraphsState::btnXcomCountryClick(Action *action)
 {
-	int highest = 0;
+	_scale = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
 		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getActivityXcom().size(); ++numberOfMonths)
 		{
-			if((*iter)->getActivityXcom().at(numberOfMonths) > highest)
+			if((*iter)->getActivityXcom().at(numberOfMonths) > _scale)
 			{
-				highest = (*iter)->getActivityXcom().at(numberOfMonths);
+				_scale = (*iter)->getActivityXcom().at(numberOfMonths);
 			}
 		}
 	}
-	_scale = (highest/9)+1;
-	if(_scale < 10)
-		_scale = 10;
+	if(_scale < 90)
+		_scale = 100;
+	else if(_scale < 180)
+		_scale = 200;
+	else if(_scale < 360)
+		_scale = 400;
+	else if(_scale < 720)
+		_scale = 800;
+	else if(_scale < 1440)
+		_scale = 1600;
+	else if(_scale < 2880)
+		_scale = 3400;
+	else if(_scale < 5760) //this should never occur but what the heck.
+		_scale = 6800;
 	updateScale();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
 }
 void GraphsState::btnIncomeClick(Action *action)
 {
-	int highest = 0;
+	double highest = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
 		for(int numberOfMonths = 0; numberOfMonths != (*iter)->getFunding().size(); ++numberOfMonths)
@@ -321,14 +372,71 @@ void GraphsState::btnIncomeClick(Action *action)
 			}
 		}
 	}
-	_scale = (highest/9)+1;
-	if(_scale < 10)
-		_scale = 10;
+	
+	if(highest > 999999999)
+	{
+		highest /= 100000000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 100000000;
+	}
+	else if(highest > 99999999)
+	{
+		highest /= 10000000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 10000000;
+	}
+	else if(highest > 9999999)
+	{
+		highest /= 1000000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 1000000;
+	}
+	else if(highest > 999999)
+	{
+		highest /= 100000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 100000;
+	}
+	else if(highest > 99999)
+	{
+		highest /= 10000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 10000;
+	}
+	else if(highest > 9999)
+	{
+		highest /= 1000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 1000;
+	}
+	else if(highest > 999)
+	{
+		highest /= 100;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 100;
+	}
+	else if(highest > 99)
+	{
+		highest /= 10;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 10;
+	}
+	if(_scale < 90)
+		_scale = 90;
 	updateScale();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_INCOME"));
 }
 void GraphsState::btnFinanceClick(Action *action)
 {
-	int highest = 0;
+	double highest = 0;
 	for(int numberOfMonths = 0; numberOfMonths != _game->getSavedGame()->getFundsList().size(); ++numberOfMonths)
 	{
 		if(_game->getSavedGame()->getFundsList().at(numberOfMonths) > highest)
@@ -336,11 +444,67 @@ void GraphsState::btnFinanceClick(Action *action)
 			highest = _game->getSavedGame()->getFundsList().at(numberOfMonths);
 		}
 	}
-	
-	_scale = (highest/9)+1;
-	if(_scale < 10)
-		_scale = 10;
+
+	if(highest > 999999999)
+	{
+		highest /= 100000000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 100000000;
+	}
+	else if(highest > 99999999)
+	{
+		highest /= 10000000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 10000000;
+	}
+	else if(highest > 9999999)
+	{
+		highest /= 1000000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 1000000;
+	}
+	else if(highest > 999999)
+	{
+		highest /= 100000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 100000;
+	}
+	else if(highest > 99999)
+	{
+		highest /= 10000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 10000;
+	}
+	else if(highest > 9999)
+	{
+		highest /= 1000;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 1000;
+	}
+	else if(highest > 999)
+	{
+		highest /= 100;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 100;
+	}
+	else if(highest > 99)
+	{
+		highest /= 10;
+		highest = (highest/9)*10;
+		_scale = ++highest;
+		_scale *= 10;
+	}
+	if(_scale < 90)
+		_scale = 90;
 	updateScale();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_FINANCE"));
 }
 
 void GraphsState::updateScale()
@@ -350,23 +514,23 @@ void GraphsState::updateScale()
 	//and setx and getx calls. 
 	// strigstreams are ugly but they suit my specific needs here.
 	std::wstringstream ss1, ss2, ss3, ss4, ss5, ss6, ss7, ss8, ss9;
-	ss9 << _scale*9 << " ";
+	ss9 << (_scale/10)*9<< " ";
 	_txtScale9->setText(ss9.str());
-	ss8 << _scale*8 << " ";
+	ss8 << (_scale/10)*8 << " ";
 	_txtScale8->setText(ss8.str());
-	ss7 << _scale*7 << " ";
+	ss7 << (_scale/10)*7 << " ";
 	_txtScale7->setText(ss7.str());
-	ss6 << _scale*6 << " ";
+	ss6 << (_scale/10)*6 << " ";
 	_txtScale6->setText(ss6.str());
-	ss5 << _scale*5 << " ";
+	ss5 << (_scale/10)*5 << " ";
 	_txtScale5->setText(ss5.str());
-	ss4 << _scale*4 << " ";
+	ss4 << (_scale/10)*4 << " ";
 	_txtScale4->setText(ss4.str());
-	ss3 << _scale*3 << " ";
+	ss3 << (_scale/10)*3 << " ";
 	_txtScale3->setText(ss3.str());
-	ss2 << _scale*2 << " ";
+	ss2 << (_scale/10)*2 << " ";
 	_txtScale2->setText(ss2.str());
-	ss1 << _scale << " ";
+	ss1 << _scale/10 << " ";
 	_txtScale1->setText(ss1.str());
 	_txtScale0->setText(L"0 ");
 }
