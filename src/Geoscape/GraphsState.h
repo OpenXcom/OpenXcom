@@ -48,6 +48,7 @@ private:
 	TextList *_txtMonths, *_txtYears;
 	std::vector<Text *> _txtScale;
 	std::vector<TextButton *> _btnRegions, _btnCountries;
+	std::vector<bool> _btnRegionToggles, _btnCountryToggles;
 	TextButton *_btnRegionTotal, *_btnCountryTotal;
 	int _scale;
 	bool _xcom;
@@ -66,6 +67,7 @@ public:
 	void btnFinanceClick(Action *action);
 	void updateScale();
 	void btnRegionClick(Action *action);
+	void btnCountryClick(Action *action);
 };
 
 }

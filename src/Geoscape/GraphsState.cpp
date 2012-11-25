@@ -32,6 +32,7 @@
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
 #include "../Interface/TextList.h"
+#include "../Engine/Action.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -60,19 +61,26 @@ GraphsState::GraphsState(Game *game) : State(game)
 		_txtScale.push_back(new Text(42, 16, 84, 171 - (scaleText*14)));
 		add(_txtScale.at(scaleText));
 	}
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
+
 	//create buttons (sooooo many buttons)
 	int offset = 0;
 	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
 		_btnRegions.push_back(new TextButton(80, 11, 0, offset*11));
+		_btnRegionToggles.push_back(false);
+		_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnRegions.at(offset)->setText(_game->getLanguage()->getString((*iter)->getRules()->getType()));
-		_btnRegions.at(offset)->setColor(Palette::blockOffset(6)-1);
+		_btnRegions.at(offset)->onMouseClick((ActionHandler)&GraphsState::btnRegionClick);
 		add(_btnRegions.at(offset));
 		_btnRegions.at(offset)->setVisible(false);
 		++offset;
 	}
 	_btnRegionTotal = new TextButton(80, 11, 0, offset*11);
-	_btnRegionTotal->setColor(Palette::blockOffset(6)-1);
+	_btnRegionToggles.push_back(false);
+	_btnRegionTotal->onMouseClick((ActionHandler)&GraphsState::btnRegionClick);
+	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
 	_btnRegionTotal->setText(_game->getLanguage()->getString("STR_TOTAL_UC"));
 	_btnRegionTotal->setVisible(false);
 	
@@ -80,19 +88,21 @@ GraphsState::GraphsState(Game *game) : State(game)
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
 		_btnCountries.push_back(new TextButton(70, 11, 0, offset*11));
+		_btnCountryToggles.push_back(false);
+		_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnCountries.at(offset)->setText(_game->getLanguage()->getString((*iter)->getRules()->getType()));
-		_btnCountries.at(offset)->setColor(Palette::blockOffset(6)-1);
+		_btnCountries.at(offset)->onMouseClick((ActionHandler)&GraphsState::btnCountryClick);
 		add(_btnCountries.at(offset));
 		_btnCountries.at(offset)->setVisible(false);
 		++offset;
 	}
 	_btnCountryTotal = new TextButton(70, 11, 0, offset*11);
-	_btnCountryTotal->setColor(Palette::blockOffset(6)-1);
+	_btnCountryToggles.push_back(false);
+	_btnCountryTotal->onMouseClick((ActionHandler)&GraphsState::btnCountryClick);
+	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
 	_btnCountryTotal->setText(_game->getLanguage()->getString("STR_TOTAL_UC"));
 	_btnCountryTotal->setVisible(false);
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
 
 	//add all our elements (god damn that's a lot of elements)
 	add(_bg);
@@ -209,6 +219,16 @@ void GraphsState::btnGeoscapeClick(Action *action)
 }
 void GraphsState::btnUfoRegionClick(Action *action)
 {
+	for(std::vector<TextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+	for(std::vector<TextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+	_btnRegionTotal->setVisible(true);
+	_btnCountryTotal->setVisible(false);
 	_scale = 0;
 	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
@@ -241,6 +261,16 @@ void GraphsState::btnUfoRegionClick(Action *action)
 }
 void GraphsState::btnUfoCountryClick(Action *action)
 {
+	for(std::vector<TextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+	for(std::vector<TextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+	_btnRegionTotal->setVisible(false);
+	_btnCountryTotal->setVisible(true);
 	_scale = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
@@ -272,6 +302,16 @@ void GraphsState::btnUfoCountryClick(Action *action)
 }
 void GraphsState::btnXcomRegionClick(Action *action)
 {
+	for(std::vector<TextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+	for(std::vector<TextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+	_btnRegionTotal->setVisible(true);
+	_btnCountryTotal->setVisible(false);
 	_scale = 0;
 	for(std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 	{
@@ -303,6 +343,16 @@ void GraphsState::btnXcomRegionClick(Action *action)
 }
 void GraphsState::btnXcomCountryClick(Action *action)
 {
+	for(std::vector<TextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+	for(std::vector<TextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+	_btnRegionTotal->setVisible(false);
+	_btnCountryTotal->setVisible(true);
 	_scale = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
@@ -334,6 +384,16 @@ void GraphsState::btnXcomCountryClick(Action *action)
 }
 void GraphsState::btnIncomeClick(Action *action)
 {
+	for(std::vector<TextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+	for(std::vector<TextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+	_btnRegionTotal->setVisible(false);
+	_btnCountryTotal->setVisible(true);
 	double highest = 0;
 	for(std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 	{
@@ -409,6 +469,16 @@ void GraphsState::btnIncomeClick(Action *action)
 }
 void GraphsState::btnFinanceClick(Action *action)
 {
+	for(std::vector<TextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+	for(std::vector<TextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+	_btnRegionTotal->setVisible(false);
+	_btnCountryTotal->setVisible(true);
 	double highest = 0;
 	for(int numberOfMonths = 0; numberOfMonths != _game->getSavedGame()->getFundsList().size(); ++numberOfMonths)
 	{
@@ -494,6 +564,52 @@ void GraphsState::updateScale()
 
 void GraphsState::btnRegionClick(Action *action)
 {
-	
+	int number = action->getSender()->getY()/11;
+	TextButton *button = 0;
+	int adjustment = -42 + (4*number);
+	if(number == _btnRegions.size())
+	{
+		button = _btnRegionTotal;
+		adjustment = 22;
+	}
+	else
+	{
+		button = _btnRegions.at(number);
+	}
+	if(_btnRegionToggles.at(number))
+	{
+		button->setColor(Palette::blockOffset(9)+7);
+		_btnRegionToggles.at(number) = false;
+	}
+	else
+	{
+		button->invert(adjustment);
+		_btnRegionToggles.at(number) = true;
+	}
+}
+void GraphsState::btnCountryClick(Action *action)
+{
+	int number = action->getSender()->getY()/11;
+	TextButton *button = 0;
+	int adjustment = -42 + (4*number);
+	if(number == _btnCountries.size())
+	{
+		button = _btnCountryTotal;
+		adjustment = 22;
+	}
+	else
+	{
+		button = _btnCountries.at(number);
+	}
+	if(_btnCountryToggles.at(number))
+	{
+		button->setColor(Palette::blockOffset(9)+7);
+		_btnCountryToggles.at(number) = false;
+	}
+	else
+	{
+		button->invert(adjustment);
+		_btnCountryToggles.at(number) = true;
+	}
 }
 }
