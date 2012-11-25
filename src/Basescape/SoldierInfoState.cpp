@@ -401,7 +401,7 @@ void SoldierInfoState::init()
 		ss12 << s->getCraft()->getName(_game->getLanguage());
 	_txtCraft->setText(ss12.str());
 
-	if (s->getWoundRecovery() > 1)
+	if (s->getWoundRecovery() > 0)
 	{
 		std::wstringstream ss13;
 		ss13 << _game->getLanguage()->getString("STR_WOUND_RECOVERY") << L'\x01' << s->getWoundRecovery();

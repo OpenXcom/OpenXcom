@@ -162,23 +162,26 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		}
 		else if (b->getStatus() != STATUS_DEAD)
 		{
-			std::string state;
-			BattleAIState *aiState;
-			(*i)["AI"]["state"] >> state;
-			if (state == "PATROL")
+			if (const YAML::Node *ai = (*i).FindValue("AI"))
 			{
-				aiState = new PatrolBAIState(this, b, 0);
+				std::string state;
+				BattleAIState *aiState;
+				(*ai)["state"] >> state;
+				if (state == "PATROL")
+				{
+					aiState = new PatrolBAIState(this, b, 0);
+				}
+				else if (state == "AGGRO")
+				{
+					aiState = new AggroBAIState(this, b);
+				}
+				else
+				{
+					continue;
+				}
+				aiState->load((*ai));
+				b->setAIState(aiState);
 			}
-			else if (state == "AGGRO")
-			{
-				aiState = new AggroBAIState(this, b);
-			}
-			else
-			{
-				continue;
-			}
-			aiState->load((*i)["AI"]);
-			b->setAIState(aiState);
 		}
 	}
 

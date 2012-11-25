@@ -1415,7 +1415,7 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi));
 	for(std::vector<Country*>::iterator c = _game->getSavedGame()->getCountries()->begin(); c !=  _game->getSavedGame()->getCountries()->end(); ++c)
 	{
-		if((*c)->isNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9);
+		if((*c)->isNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9)
 		{
 			double lon;
 			double lat;
