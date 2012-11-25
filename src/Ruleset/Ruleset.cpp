@@ -47,6 +47,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../Savegame/AlienStrategy.h"
 
 namespace OpenXcom
 {
@@ -777,6 +778,8 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	save->getBases()->push_back(base);
+	// Setup alien strategy
+	save->getAlienStrategy().init(this);
 
 	return save;
 }

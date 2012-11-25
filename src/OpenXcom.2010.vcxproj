@@ -379,6 +379,7 @@
     <ClCompile Include="Ruleset\RuleTerrain.cpp" />
     <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
     <ClCompile Include="Savegame\AlienBase.cpp" />
+    <ClCompile Include="Savegame\AlienStrategy.cpp" />
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
@@ -406,6 +407,7 @@
     <ClCompile Include="Savegame\Ufo.cpp" />
     <ClCompile Include="Savegame\Vehicle.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
+    <ClCompile Include="Savegame\WeightedOptions.cpp" />
     <ClCompile Include="Ufopaedia\ArticleState.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateArmor.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateBaseFacility.cpp" />
@@ -610,6 +612,7 @@
     <ClInclude Include="Ruleset\RuleTerrain.h" />
     <ClInclude Include="Ruleset\SoldierNamePool.h" />
     <ClInclude Include="Savegame\AlienBase.h" />
+    <ClInclude Include="Savegame\AlienStrategy.h" />
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
@@ -637,6 +640,7 @@
     <ClInclude Include="Savegame\Ufo.h" />
     <ClInclude Include="Savegame\Vehicle.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
+    <ClInclude Include="Savegame\WeightedOptions.h" />
     <ClInclude Include="Ufopaedia\ArticleState.h" />
     <ClInclude Include="Ufopaedia\ArticleStateArmor.h" />
     <ClInclude Include="Ufopaedia\ArticleStateBaseFacility.h" />

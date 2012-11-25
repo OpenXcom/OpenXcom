@@ -678,6 +678,12 @@
     <ClCompile Include="Battlescape\NoContainmentState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\WeightedOptions.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\AlienStrategy.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1360,6 +1366,12 @@
     </ClInclude>
     <ClInclude Include="Battlescape\NoContainmentState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\WeightedOptions.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\AlienStrategy.h">
+      <Filter>Savegame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

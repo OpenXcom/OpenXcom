@@ -444,6 +444,8 @@ openxcom_SOURCES = \
 	src/Ruleset/SoldierNamePool.h \
 	src/Savegame/AlienBase.cpp \
 	src/Savegame/AlienBase.h \
+	src/Savegame/AlienStrategy.cpp \
+	src/Savegame/AlienStrategy.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -498,6 +500,8 @@ openxcom_SOURCES = \
 	src/Savegame/Vehicle.h \
 	src/Savegame/Waypoint.cpp \
 	src/Savegame/Waypoint.h \
+	src/Savegame/WeightedOptions.cpp \
+	src/Savegame/WeightedOptions.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \
 	src/Ufopaedia/ArticleStateBaseFacility.h \
 	src/Ufopaedia/ArticleState.cpp \

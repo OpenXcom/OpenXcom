@@ -46,6 +46,10 @@
 #include "Production.h"
 #include "TerrorSite.h"
 #include "AlienBase.h"
+#include "AlienStrategy.h"
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
 
 namespace OpenXcom
 {
@@ -90,6 +94,7 @@ SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_alienStrategy = new AlienStrategy();
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 }
@@ -128,6 +133,7 @@ SavedGame::~SavedGame()
  	{
 		delete *i;
 	}
+	delete _alienStrategy;
 	delete _battleGame;
 }
 
@@ -293,6 +299,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_discovered.push_back(rule->getResearch(research));
 	}
 
+	_alienStrategy->load(rule, doc["alienStrategy"]);
+
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
 		_battleGame = new SavedBattleGame();
@@ -396,6 +404,8 @@ void SavedGame::save(const std::string &filename) const
 		out << (*i)->getName ();
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "alienStrategy" << YAML::Value;
+	_alienStrategy->save(out);
 	if (_battleGame != 0)
 	{
 		out << YAML::Key << "battleGame" << YAML::Value;

@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of region.
  * @param type String defining the type.
  */
-RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities()
+RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0)
 {
 }
 
@@ -85,6 +85,14 @@ void RuleRegion::load(const YAML::Node &node)
 				_cities.push_back(rule);
 			}
 		}
+		else if (key == "regionWeight")
+		{
+			i.second() >> _regionWeight;
+		}
+		else if (key == "missionWeights")
+		{
+			_missionWeights.load(i.second());
+		}
 	}
 }
 
@@ -108,6 +116,9 @@ void RuleRegion::save(YAML::Emitter &out) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "regionWeight" << YAML::Value << _regionWeight;
+	out << YAML::Key << "missionWeights" << YAML::Value;
+	_missionWeights.save(out);
 	out << YAML::EndMap;
 }
 
@@ -163,6 +174,16 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 std::vector<City*> *RuleRegion::getCities()
 {
 	return &_cities;
+}
+
+/**
+ * Returns the weight of this region for mission selection.
+ * This is only used when creating a new game, since these weights change in the cource of the game.
+ * @return The initial weight of this region.
+ */
+unsigned RuleRegion::getWeight() const
+{
+	return _regionWeight;
 }
 
 }

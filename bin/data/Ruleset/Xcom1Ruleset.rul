@@ -338,6 +338,13 @@ regions:
       - name: STR_DALLAS
         lon: 4.59676
         lat: -0.571595
+    regionWeight: 18
+    missionWeights:
+      STR_ALIEN_RESEARCH: 14
+      STR_ALIEN_HARVEST: 17
+      STR_ALIEN_ABDUCTION: 20
+      STR_ALIEN_INFILTRATION: 20
+      STR_ALIEN_BASE: 20
   - type: STR_ARCTIC
     cost: 950000
     lonMin:
@@ -348,6 +355,10 @@ regions:
       - -1.5708
     latMax:
       - -1.22391
+    regionWeight: 4
+    missionWeights:
+      STR_ALIEN_RESEARCH: 25
+      STR_ALIEN_BASE: 35
   - type: STR_ANTARCTICA
     cost: 900000
     lonMin:
@@ -358,6 +369,10 @@ regions:
       - 1.0472
     latMax:
       - 1.5708
+    regionWeight: 4
+    missionWeights:
+      STR_ALIEN_RESEARCH: 25
+      STR_ALIEN_BASE: 35
   - type: STR_SOUTH_AMERICA
     cost: 600000
     lonMin:
@@ -398,6 +413,13 @@ regions:
       - name: STR_CARACAS
         lon: 5.116
         lat: -0.18326
+    regionWeight: 10
+    missionWeights:
+      STR_ALIEN_RESEARCH: 10
+      STR_ALIEN_HARVEST: 24
+      STR_ALIEN_ABDUCTION: 12
+      STR_ALIEN_INFILTRATION: 18
+      STR_ALIEN_BASE: 22
   - type: STR_EUROPE
     cost: 1000000
     lonMin:
@@ -430,6 +452,13 @@ regions:
       - name: STR_BUDAPEST
         lon: 0.333794
         lat: -0.829031
+    regionWeight: 16
+    missionWeights:
+      STR_ALIEN_RESEARCH: 10
+      STR_ALIEN_HARVEST: 10
+      STR_ALIEN_ABDUCTION: 15
+      STR_ALIEN_INFILTRATION: 20
+      STR_ALIEN_BASE: 6
   - type: STR_NORTH_AFRICA
     cost: 650000
     lonMin:
@@ -454,6 +483,13 @@ regions:
       - name: STR_CASABLANCA
         lon: 6.1501
         lat: -0.584685
+    regionWeight: 12
+    missionWeights:
+      STR_ALIEN_RESEARCH: 8
+      STR_ALIEN_HARVEST: 8
+      STR_ALIEN_ABDUCTION: 8
+      STR_ALIEN_INFILTRATION: 8
+      STR_ALIEN_BASE: 19
   - type: STR_SOUTHERN_AFRICA
     cost: 550000
     lonMin:
@@ -477,6 +513,13 @@ regions:
       - name: STR_KINSHASA
         lon: 0.268344
         lat: 0.0763582
+    regionWeight: 8
+    missionWeights:
+      STR_ALIEN_RESEARCH: 7
+      STR_ALIEN_HARVEST: 8
+      STR_ALIEN_ABDUCTION: 8
+      STR_ALIEN_INFILTRATION: 8
+      STR_ALIEN_BASE: 9
   - type: STR_CENTRAL_ASIA
     cost: 500000
     lonMin:
@@ -517,6 +560,13 @@ regions:
       - name: STR_CALCUTTA
         lon: 1.54243
         lat: -0.394881
+    regionWeight: 12
+    missionWeights:
+      STR_ALIEN_RESEARCH: 5
+      STR_ALIEN_HARVEST: 5
+      STR_ALIEN_ABDUCTION: 6
+      STR_ALIEN_INFILTRATION: 10
+      STR_ALIEN_BASE: 8
   - type: STR_SOUTH_EAST_ASIA
     cost: 750000
     lonMin:
@@ -559,6 +609,13 @@ regions:
       - name: STR_HONG_KONG
         lon: 1.99186
         lat: -0.388336
+    regionWeight: 15
+    missionWeights:
+      STR_ALIEN_RESEARCH: 8
+      STR_ALIEN_HARVEST: 13
+      STR_ALIEN_ABDUCTION: 21
+      STR_ALIEN_INFILTRATION: 13
+      STR_ALIEN_BASE: 8
   - type: STR_SIBERIA
     cost: 800000
     lonMin:
@@ -573,6 +630,11 @@ regions:
       - name: STR_NOVOSIBIRSK
         lon: 1.44426
         lat: -0.959931
+    regionWeight: 10
+    missionWeights:
+      STR_ALIEN_RESEARCH: 6
+      STR_ALIEN_ABDUCTION: 4
+      STR_ALIEN_BASE: 9
   - type: STR_AUSTRALASIA
     cost: 750000
     lonMin:
@@ -596,6 +658,13 @@ regions:
       - name: STR_PERTH
         lon: 2.02022
         lat: 0.558505
+    regionWeight: 10
+    missionWeights:
+      STR_ALIEN_RESEARCH: 15
+      STR_ALIEN_HARVEST: 11
+      STR_ALIEN_ABDUCTION: 4
+      STR_ALIEN_INFILTRATION: 8
+      STR_ALIEN_BASE: 16
   - type: STR_PACIFIC
     cost: 600000
     lonMin:
@@ -626,6 +695,10 @@ regions:
       - -0.00218166
       - 1.04502
       - -0.0894481
+    regionWeight: 5
+    missionWeights:
+      STR_ALIEN_RESEARCH: 15
+      STR_ALIEN_BASE: 27
   - type: STR_NORTH_ATLANTIC
     cost: 500000
     lonMin:

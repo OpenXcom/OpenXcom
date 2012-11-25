@@ -1946,6 +1946,22 @@
 				RelativePath=".\Savegame\Waypoint.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Savegame\WeightedOptions.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\WeightedOptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource"

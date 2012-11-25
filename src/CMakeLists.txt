@@ -448,6 +448,10 @@ set ( savegame_src
   Savegame/Vehicle.cpp
   Savegame/EquipmentLayoutItem.h
   Savegame/EquipmentLayoutItem.cpp
+  Savegame/WeightedOptions.cpp
+  Savegame/WeightedOptions.h
+  Savegame/AlienStrategy.cpp
+  Savegame/AlienStrategy.h
 )
 
 set ( ufopedia_src

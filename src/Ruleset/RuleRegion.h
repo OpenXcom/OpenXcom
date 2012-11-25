@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
 {
@@ -40,6 +41,8 @@ private:
 	int _cost;
 	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
 	std::vector<City*> _cities;
+	WeightedOptions _missionWeights;
+	unsigned _regionWeight;
 public:
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
@@ -57,6 +60,10 @@ public:
 	bool insideRegion(double lon, double lat) const;
 	/// Gets the cities in this region.
 	std::vector<City*> *getCities();
+	/// Gets the weight of this region for mission selection.
+	unsigned getWeight() const;
+	/// Gets the weighted list of missions for this region.
+	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
 };
 
 }

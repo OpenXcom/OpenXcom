@@ -42,6 +42,7 @@ class Soldier;
 class RuleManufacture;
 class TerrorSite;
 class AlienBase;
+class AlienStrategy;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -69,6 +70,7 @@ private:
 	std::vector<Waypoint*> _waypoints;
 	std::vector<TerrorSite*> _terrorSites;
 	std::vector<AlienBase*> _alienBases;
+	AlienStrategy *_alienStrategy;
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	bool _debug;
@@ -167,6 +169,11 @@ public:
 	bool getDebugMode() const;
 	/// return a list of maintenance costs
 	std::vector<int> getMaintenances();
+	/// Full access to the alien strategy data.
+	AlienStrategy &getAlienStrategy() { return *_alienStrategy; }
+	/// Read-only access to the alien strategy data.
+	const AlienStrategy &getAlienStrategy() const { return *_alienStrategy; }
+
 };
 
 }
