@@ -28,6 +28,7 @@ namespace OpenXcom
 {
 
 class City;
+struct MissionZone;
 
 /**
  * Represents a specific region of the world.
@@ -43,6 +44,7 @@ private:
 	std::vector<City*> _cities;
 	WeightedOptions _missionWeights;
 	unsigned _regionWeight;
+	std::vector<MissionZone> _missionZones;
 public:
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
@@ -64,6 +66,8 @@ public:
 	unsigned getWeight() const;
 	/// Gets the weighted list of missions for this region.
 	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
+	/// Gets a random point inside a mission site.
+	std::pair<double, double> getRandomPoint(unsigned site) const;
 };
 
 }

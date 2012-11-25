@@ -18,9 +18,55 @@
  */
 #include "RuleRegion.h"
 #include "City.h"
+#include "../Engine/Exception.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
+
+struct MissionArea
+{
+	double lonMin, lonMax, latMin, latMax;
+};
+
+YAML::Emitter &operator<<(YAML::Emitter &out, const MissionArea &ma)
+{
+	out << YAML::Flow << YAML::BeginSeq;
+	out << ma.lonMin << ma.lonMax << ma.latMin << ma.latMax;
+	out << YAML::EndSeq;
+	return out;
+}
+
+const YAML::Node &operator>>(const YAML::Node &nd, MissionArea &ma)
+{
+	nd[0] >> ma.lonMin;
+	nd[1] >> ma.lonMax;
+	nd[2] >> ma.latMin;
+	nd[3] >> ma.latMax;
+	return nd;
+}
+
+struct MissionZone
+{
+	std::vector<MissionArea> areas;
+
+	void swap(MissionZone &other)
+	{
+		areas.swap(other.areas);
+	}
+};
+
+YAML::Emitter &operator<<(YAML::Emitter &out, const MissionZone &mz)
+{
+	out << mz.areas;
+	return out;
+}
+
+const YAML::Node &operator>>(const YAML::Node &nd, MissionZone &mz)
+{
+	nd >> mz.areas;
+	return nd;
+}
 
 /**
  * Creates a blank ruleset for a certain
@@ -93,6 +139,10 @@ void RuleRegion::load(const YAML::Node &node)
 		{
 			_missionWeights.load(i.second());
 		}
+		else if (key == "missionZones")
+		{
+			i.second() >> _missionZones;
+		}
 	}
 }
 
@@ -120,6 +170,7 @@ void RuleRegion::save(YAML::Emitter &out) const
 	out << YAML::Key << "missionWeights" << YAML::Value;
 	_missionWeights.save(out);
 	out << YAML::EndMap;
+	out << YAML::Key << "missionZones" << YAML::Value << _missionZones;
 }
 
 /**
@@ -184,6 +235,33 @@ std::vector<City*> *RuleRegion::getCities()
 unsigned RuleRegion::getWeight() const
 {
 	return _regionWeight;
+}
+
+/**
+ * Returns a random point that is guaranteed to be inside the give zone.
+ * If the region contains cities, they are the sites of zone 0 and the rest of the zones get one index higher.
+ * @return A pair of longtitude and latitude.
+ */
+std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
+{
+	if (zone == 0 && _cities.size() > 0)
+	{
+		unsigned p = RNG::generate(0, _cities.size() - 1);
+		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());
+	}
+	if (zone != 0)
+	{
+		--zone;
+	}
+	if (zone < _missionZones.size())
+	{
+		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
+		double lon = RNG::generate(_missionZones[zone].areas[a].lonMin, _missionZones[zone].areas[a].lonMax);
+		double lat = RNG::generate(_missionZones[zone].areas[a].latMin, _missionZones[zone].areas[a].latMax);
+		return std::make_pair(lon, lat);
+	}
+	assert(0 && "Invalid zone number");
+	return std::make_pair(0.0, 0.0);
 }
 
 }

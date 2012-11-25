@@ -48,6 +48,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
+#include "UfoTrajectory.h"
 
 namespace OpenXcom
 {
@@ -147,6 +148,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -556,6 +561,24 @@ void Ruleset::loadFile(const std::string &filename)
 		{
 			i.second() >> _timePersonnel;
 		}
+		else if (key == "ufoTrajectories")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string id;
+				(*j)["id"] >> id;
+				if (_ufoTrajectories.find(id) != _ufoTrajectories.end())
+				{
+					_ufoTrajectories[id]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<UfoTrajectory> rule(new UfoTrajectory);
+					rule->load(*j);
+					_ufoTrajectories[id] = rule.release();
+				}
+			}
+		}
 	}
 
 	fin.close();
@@ -706,6 +729,13 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "ufopaedia" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "ufoTrajectories" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.begin(); i != _ufoTrajectories.end(); ++i)
 	{
 		i->second->save(out);
 	}
@@ -1182,6 +1212,16 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 		}
 	}
 	return PlaceList;
+}
+
+/**
+ * Returns the data for the specified ufo trajectory.
+ * @param id Ufo trajectory id.
+ * @return A pointer to the data for the specified ufo trajectory.
+ */
+const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
+{
+	return _ufoTrajectories.find(id)->second;
 }
 
 }

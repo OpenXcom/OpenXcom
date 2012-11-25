@@ -389,6 +389,8 @@ set ( ruleset_src
   Ruleset/AlienRace.cpp
   Ruleset/Unit.h
   Ruleset/Unit.cpp
+  Ruleset/UfoTrajectory.cpp
+  Ruleset/UfoTrajectory.h
 )
 
 set ( savegame_src

@@ -2163,6 +2163,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\UfoTrajectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\UfoTrajectory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\Unit.cpp"
 				>
 			</File>

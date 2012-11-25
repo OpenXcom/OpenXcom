@@ -684,6 +684,9 @@
     <ClCompile Include="Savegame\AlienStrategy.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\UfoTrajectory.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1372,6 +1375,9 @@
     </ClInclude>
     <ClInclude Include="Savegame\AlienStrategy.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\UfoTrajectory.h">
+      <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

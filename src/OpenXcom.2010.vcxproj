@@ -378,6 +378,7 @@
     <ClCompile Include="Ruleset\RuleUfo.cpp" />
     <ClCompile Include="Ruleset\RuleTerrain.cpp" />
     <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
+    <ClCompile Include="Ruleset\UfoTrajectory.cpp" />
     <ClCompile Include="Savegame\AlienBase.cpp" />
     <ClCompile Include="Savegame\AlienStrategy.cpp" />
     <ClCompile Include="Savegame\Base.cpp" />
@@ -611,6 +612,7 @@
     <ClInclude Include="Ruleset\RuleUfo.h" />
     <ClInclude Include="Ruleset\RuleTerrain.h" />
     <ClInclude Include="Ruleset\SoldierNamePool.h" />
+    <ClInclude Include="Ruleset\UfoTrajectory.h" />
     <ClInclude Include="Savegame\AlienBase.h" />
     <ClInclude Include="Savegame\AlienStrategy.h" />
     <ClInclude Include="Savegame\Base.h" />
