@@ -299,6 +299,26 @@ void GraphsState::btnUfoCountryClick(Action *action)
 	updateScale();
 	_xcom = false;
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
+	
+	// set up lines
+		for(std::vector<Country*>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
+	{
+		std::vector<Sint16> newLineVector;
+		for(int iter2 = 0; iter2 != 12; ++iter2)
+		{
+			int x = 312 - (iter2*17);
+			int y = 175;
+			if(iter2 < (*iter)->getActivityAlien().size() && (*iter)->getActivityAlien().at(iter2))
+			{
+				double dscale = _scale;
+				double units = dscale / 140;
+				int reduction = (*iter)->getActivityAlien().at(iter2) / units;
+				y -= reduction;
+			}
+			_bg->setPixel(x, y, Palette::blockOffset(iter2+1));
+			newLineVector.push_back(y);
+		}
+	}
 }
 void GraphsState::btnXcomRegionClick(Action *action)
 {
