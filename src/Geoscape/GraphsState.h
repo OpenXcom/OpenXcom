@@ -24,8 +24,10 @@
 namespace OpenXcom
 {
 
-class Surface;
 class InteractiveSurface;
+class Window;
+class TextList;
+class Text;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -34,8 +36,14 @@ class InteractiveSurface;
 class GraphsState : public State
 {
 private:
-	Surface *_bg;
+	Window *_window;
 	InteractiveSurface *_btnGeoscape;
+	InteractiveSurface *_btnUFO_Activity_Areas;
+	InteractiveSurface *_btnUFO_Activity_Countries;
+	InteractiveSurface *_btnXCOM_Activity_Areas;
+	InteractiveSurface *_btnXCOM_Activity_Countries;
+	TextList *_lstResults;
+	Text *_txtLabel;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -43,6 +51,10 @@ public:
 	~GraphsState();
 	/// Handler for clicking the Geoscape icon.
 	void btnGeoscapeClick(Action *action);
+	void btnUFO_Activity_AreasClick(Action *action);
+	void btnUFO_Activity_CountriesClick(Action *action);
+	void btnXCOM_Activity_AreasClick(Action *action);
+	void btnXCOM_Activity_CountriesClick(Action *action);
 };
 
 }
