@@ -44,22 +44,19 @@ private:
 	InteractiveSurface *_btnXcomCountry, *_btnUfoCountry;
 	InteractiveSurface *_btnXcomRegion, *_btnUfoRegion;
 	InteractiveSurface *_btnIncome, *_btnFinance;
-	Text *_txtTitle;
+	Text *_txtTitle, *_txtFactor;
 	TextList *_txtMonths, *_txtYears;
 	std::vector<Text *> _txtScale;
-	std::vector<TextButton *> _btnAlienRegions, _btnAlienCountries;
-	std::vector<TextButton *> _btnXcomRegions, _btnXcomCountries;
-	std::vector<TextButton *> _btnFinanceButtons, _btnIncomeCountries;
-	std::vector<bool> _btnAlienRegionToggles, _btnAlienCountryToggles;
-	std::vector<bool> _btnXcomRegionToggles, _btnXcomCountryToggles;
-	std::vector<bool> _btnFinanceToggles, _btnIncomeToggles;
-	TextButton *_btnAlienRegionTotal, *_btnAlienCountryTotal;
-	TextButton *_btnXcomRegionTotal, *_btnXcomCountryTotal;
-	TextButton *_btnFinanceTotal, *_btnIncomeTotal;
+	std::vector<TextButton *> _btnRegions, _btnCountries;
+	std::vector<TextButton *> _btnFinances;
+	std::vector<bool> _regionToggles, _countryToggles;
+	std::vector<bool> _financeToggles;
+	TextButton *_btnRegionTotal, *_btnCountryTotal;
 	std::vector<Surface *> _alienRegionLines, _alienCountryLines;
 	std::vector<Surface *> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface *> _financeLines, _incomeLines;
 	int _scale;
+	bool _alien, _income, _country;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -73,13 +70,12 @@ public:
 	void btnXcomCountryClick(Action *action);
 	void btnIncomeClick(Action *action);
 	void btnFinanceClick(Action *action);
-	void updateScale();
-	void btnAlienRegionListClick(Action *action);
-	void btnAlienCountryListClick(Action *action);
-	void btnXcomRegionListClick(Action *action);
-	void btnXcomCountryListClick(Action *action);
-	void btnIncomeListClick(Action *action);
+	void btnRegionListClick(Action *action);
+	void btnCountryListClick(Action *action);
+	void btnFinanceListClick(Action *action);
 	void resetScreen();
+	void updateScale(int factor);
+	void drawLines();
 };
 
 }
