@@ -47,12 +47,19 @@ private:
 	Text *_txtTitle;
 	TextList *_txtMonths, *_txtYears;
 	std::vector<Text *> _txtScale;
-	std::vector<TextButton *> _btnRegions, _btnCountries;
-	std::vector<bool> _btnRegionToggles, _btnCountryToggles;
-	TextButton *_btnRegionTotal, *_btnCountryTotal;
-	std::vector<Surface *> _alienRegionLines;
+	std::vector<TextButton *> _btnAlienRegions, _btnAlienCountries;
+	std::vector<TextButton *> _btnXcomRegions, _btnXcomCountries;
+	std::vector<TextButton *> _btnFinanceButtons, _btnIncomeCountries;
+	std::vector<bool> _btnAlienRegionToggles, _btnAlienCountryToggles;
+	std::vector<bool> _btnXcomRegionToggles, _btnXcomCountryToggles;
+	std::vector<bool> _btnFinanceToggles, _btnIncomeToggles;
+	TextButton *_btnAlienRegionTotal, *_btnAlienCountryTotal;
+	TextButton *_btnXcomRegionTotal, *_btnXcomCountryTotal;
+	TextButton *_btnFinanceTotal, *_btnIncomeTotal;
+	std::vector<Surface *> _alienRegionLines, _alienCountryLines;
+	std::vector<Surface *> _xcomRegionLines, _xcomCountryLines;
+	std::vector<Surface *> _financeLines, _incomeLines;
 	int _scale;
-	bool _xcom;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -67,8 +74,12 @@ public:
 	void btnIncomeClick(Action *action);
 	void btnFinanceClick(Action *action);
 	void updateScale();
-	void btnRegionClick(Action *action);
-	void btnCountryClick(Action *action);
+	void btnAlienRegionListClick(Action *action);
+	void btnAlienCountryListClick(Action *action);
+	void btnXcomRegionListClick(Action *action);
+	void btnXcomCountryListClick(Action *action);
+	void btnIncomeListClick(Action *action);
+	void resetScreen();
 };
 
 }
