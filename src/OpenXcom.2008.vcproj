@@ -2178,6 +2178,14 @@
 				RelativePath=".\Ruleset\Unit.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.h"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\Ufopaedia\ArticleStateVehicle.cpp"

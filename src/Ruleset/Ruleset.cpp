@@ -49,6 +49,7 @@
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
 #include "UfoTrajectory.h"
+#include "RuleAlienMission.h"
 
 namespace OpenXcom
 {
@@ -152,6 +153,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -579,6 +584,25 @@ void Ruleset::loadFile(const std::string &filename)
 				}
 			}
 		}
+		else if (key == "alienMissions")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				if (_alienMissions.find(type) != _alienMissions.end())
+				{
+					_alienMissions[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<RuleAlienMission> rule(new RuleAlienMission());
+					rule->load(*j);
+					_alienMissions[type] = rule.release();
+					_alienMissionsIndex.push_back(type);
+				}
+			}
+		}
 	}
 
 	fin.close();
@@ -736,6 +760,13 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "ufoTrajectories" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.begin(); i != _ufoTrajectories.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
 		i->second->save(out);
 	}
@@ -1222,6 +1253,25 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
 {
 	return _ufoTrajectories.find(id)->second;
+}
+
+/**
+ * Returns the rules for the specified alien mission.
+ * @param id Alien mission type.
+ * @return Rules for the alien mission.
+ */
+const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
+{
+	return _alienMissions.find(id)->second;
+}
+
+/**
+ * Returns the list of alien mission types.
+ * @return The list of alien mission types.
+ */
+const std::vector<std::string> &Ruleset::getAlienMissionList() const
+{
+	return _alienMissionsIndex;
 }
 
 }

@@ -391,6 +391,8 @@ set ( ruleset_src
   Ruleset/Unit.cpp
   Ruleset/UfoTrajectory.cpp
   Ruleset/UfoTrajectory.h
+  Ruleset/RuleAlienMission.cpp
+  Ruleset/RuleAlienMission.h
 )
 
 set ( savegame_src

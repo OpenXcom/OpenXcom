@@ -414,6 +414,8 @@ openxcom_SOURCES = \
 	src/Ruleset/Armor.h \
 	src/Ruleset/Unit.cpp \
 	src/Ruleset/Unit.h \
+	src/Ruleset/RuleAlienMission.cpp \
+	src/Ruleset/RuleAlienMission.h \
 	src/Ruleset/RuleBaseFacility.cpp \
 	src/Ruleset/RuleBaseFacility.h \
 	src/Ruleset/RuleCountry.cpp \

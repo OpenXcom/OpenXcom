@@ -355,6 +355,7 @@
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="Resource\ResourcePack.cpp" />
     <ClCompile Include="Resource\XcomResourcePack.cpp" />
+    <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
     <ClCompile Include="Ruleset\MapBlock.cpp" />
@@ -598,6 +599,7 @@
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
+    <ClInclude Include="Ruleset\RuleAlienMission.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />
     <ClInclude Include="Ruleset\RuleCountry.h" />
     <ClInclude Include="Ruleset\RuleCraft.h" />
