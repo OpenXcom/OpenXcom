@@ -177,7 +177,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 				{
 					ss4 << _game->getLanguage()->getString("STR_AND");
 				}
-				if(_happyList.size() > 3)
+				if(_happyList.size() > 2)
 				{
 					if(happy != _happyList.end() - 1 && happy != _happyList.end() - 2)
 					{
@@ -210,7 +210,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 				{
 					ss4 << _game->getLanguage()->getString("STR_AND");
 				}
-				if(_sadList.size() > 3)
+				if(_sadList.size() > 2)
 				{
 					if(sad != _sadList.end() - 1 && sad != _sadList.end() - 2)
 					{
@@ -243,7 +243,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 				{
 					ss4 << _game->getLanguage()->getString("STR_AND");
 				}
-				if(_pactList.size() > 3)
+				if(_pactList.size() > 2)
 				{
 					if(pact != _pactList.end() - 1 && pact != _pactList.end() - 2)
 					{

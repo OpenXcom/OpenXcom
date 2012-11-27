@@ -35,7 +35,7 @@ class Country
 {
 private:
 	RuleCountry *_rules;
-	bool _pact, _newPact;
+	bool _pact, _newPact, _pactFlag;
 	std::vector<int> _funding, _activityXcom, _activityAlien;
 public:
 	/// Creates a new country of the specified type.
