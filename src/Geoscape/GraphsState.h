@@ -56,7 +56,7 @@ private:
 	std::vector<Surface *> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface *> _financeLines, _incomeLines;
 	int _scale;
-	bool _alien, _income, _country;
+	bool _alien, _income, _country, _finance;
 public:
 	/// Creates the Graphs state.
 	GraphsState(Game *game);
@@ -76,6 +76,9 @@ public:
 	void resetScreen();
 	void updateScale(int factor);
 	void drawLines();
+	void drawRegionLines();
+	void drawCountryLines();
+	void drawFinanceLines();
 };
 
 }
