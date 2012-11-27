@@ -93,7 +93,7 @@ public:
 	void setDifficulty(GameDifficulty difficulty);
 	/// Gets the current funds.
 	int getFunds() const;
-	/// Gets the current funds.
+	/// Gets the list of funds from previous months.
 	std::vector<int> getFundsList() const;
 	/// Sets new funds.
 	void setFunds(int funds);
@@ -165,6 +165,7 @@ public:
 	void setDebugMode();
 	/// Gets debug mode.
 	bool getDebugMode() const;
+	/// return a list of maintenance costs
 	std::vector<int> getMaintenances();
 };
 

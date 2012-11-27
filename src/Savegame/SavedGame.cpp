@@ -1063,6 +1063,10 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
+/**
+ * return the list of monthly maintenance costs
+ * @return list of maintenances.
+ */
 std::vector<int> SavedGame::getMaintenances()
 {
 	return _maintenance;

@@ -64,20 +64,35 @@ public:
 	~GraphsState();
 	/// Handler for clicking the Geoscape icon.
 	void btnGeoscapeClick(Action *action);
+	/// Handler for clicking the ufo region icon.
 	void btnUfoRegionClick(Action *action);
+	/// Handler for clicking the ufo country icon.
 	void btnUfoCountryClick(Action *action);
+	/// Handler for clicking the xcom region icon.
 	void btnXcomRegionClick(Action *action);
+	/// Handler for clicking the xcom country icon.
 	void btnXcomCountryClick(Action *action);
+	/// Handler for clicking the income icon.
 	void btnIncomeClick(Action *action);
+	/// Handler for clicking the finance icon.
 	void btnFinanceClick(Action *action);
+	/// Handler for clicking on a region button.
 	void btnRegionListClick(Action *action);
+	/// Handler for clicking on a country button.
 	void btnCountryListClick(Action *action);
+	/// Handler for clicking  on a finances button.
 	void btnFinanceListClick(Action *action);
+	/// Reset all the elements on screen.
 	void resetScreen();
+	/// Update the scale 
 	void updateScale(int factor);
+	/// Decide which lines to draw
 	void drawLines();
+	/// Draw Region Lines.
 	void drawRegionLines();
+	/// Draw Country Lines.
 	void drawCountryLines();
+	/// Draw Finances Lines.
 	void drawFinanceLines();
 };
 
