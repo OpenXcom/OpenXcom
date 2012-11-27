@@ -58,7 +58,7 @@ class SavedGame
 private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
-	int _funds;
+	std::vector<int> _funds, _maintenance;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -93,6 +93,8 @@ public:
 	void setDifficulty(GameDifficulty difficulty);
 	/// Gets the current funds.
 	int getFunds() const;
+	/// Gets the list of funds from previous months.
+	std::vector<int> getFundsList() const;
 	/// Sets new funds.
 	void setFunds(int funds);
 	/// Gets the current globe longitude.
@@ -163,6 +165,8 @@ public:
 	void setDebugMode();
 	/// Gets debug mode.
 	bool getDebugMode() const;
+	/// return a list of maintenance costs
+	std::vector<int> getMaintenances();
 };
 
 }
