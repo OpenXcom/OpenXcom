@@ -821,6 +821,9 @@ void GraphsState::drawFinanceLines()
 		int roof = 0;
 		int incomeTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		int balanceTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		int expendTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		int maintTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		int scoreTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		for(int button = 0; button != 5; ++button)
 		{
 			_financeLines.at(button)->setVisible(_financeToggles.at(button));
@@ -828,18 +831,35 @@ void GraphsState::drawFinanceLines()
 		}
 		for(int entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 		{
-			balanceTotals[entry] += _game->getSavedGame()->getFundsList().at(_game->getSavedGame()->getFundsList().size()-(1+entry));
-			for(int iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			maintTotals[entry] = _game->getSavedGame()->getMaintenances().at(_game->getSavedGame()->getMaintenances().size() -(1+entry));
+			balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(_game->getSavedGame()->getFundsList().size()-(1+entry));
+			for(std::vector<Country*>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 			{
-				Country *country = _game->getSavedGame()->getCountries()->at(iter);
-				incomeTotals[entry] += country->getFunding().at(country->getFunding().size()-(1+entry));
+				scoreTotals[entry] += (*iter)->getActivityXcom().at(entry) - (*iter)->getActivityAlien().at(entry);
+				incomeTotals[entry] += (*iter)->getFunding().at((*iter)->getFunding().size()-(1+entry));
 				if(_financeToggles.at(0) && incomeTotals[entry] > roof)
 					roof = incomeTotals[entry];
 			}
+			for(std::vector<Region*>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
+			{
+				scoreTotals[entry] += (*iter)->getActivityXcom().at(entry) - (*iter)->getActivityAlien().at(entry);
+			}
+			
+			if(_financeToggles.at(2) && maintTotals[entry] > roof)
+				roof = maintTotals[entry];
 			if(_financeToggles.at(3) && balanceTotals[entry] > roof)
 				roof = balanceTotals[entry];
+			if(_financeToggles.at(4) && scoreTotals[entry] > roof)
+				roof = scoreTotals[entry];
 		}
-
+		maintTotals[0] = _game->getSavedGame()->getBaseMaintenance();
+		expendTotals[0] = balanceTotals[1] - balanceTotals[0];
+		for(int entry = 1; entry != _game->getSavedGame()->getFundsList().size()-1; ++entry)
+		{
+			expendTotals[entry] = ((balanceTotals[entry+1] + incomeTotals[entry]) - maintTotals[entry])-balanceTotals[entry];
+			if(_financeToggles.at(1) && expendTotals[entry] > roof)
+				roof = expendTotals[entry];
+		}
 		for(int check = 100000; check <= 1000000000; check *= 10)
 		{
 			if(roof < check - (check/10))
@@ -851,30 +871,33 @@ void GraphsState::drawFinanceLines()
 		
 		double dscale = _scale;
 		double units = dscale / 140;
-		for(int button = 0; button != 4; ++button)
+		for(int button = 0; button != 5; ++button)
 		{
 			std::vector<Sint16> newLineVector;
 			for(int iter = 0; iter != 12; ++iter)
 			{
 				int x = 312 - (iter*17);
 				int y = 175;
+				int reduction = 0;
 				switch(button)
 				{
 				case 0:
-					if(incomeTotals[iter] > 0)
-					{
-						int reduction = incomeTotals[iter] / units;
-						y -= reduction;
-					}
+					reduction = incomeTotals[iter] / units;
+					break;
+				case 1:
+					reduction = expendTotals[iter] / units;
+					break;
+				case 2:
+					reduction = maintTotals[iter] / units;
 					break;
 				case 3:
-					if(balanceTotals[iter] > 0)
-					{
-						int reduction = balanceTotals[iter] / units;
-						y -= reduction;
-					}
+					reduction = balanceTotals[iter] / units;
+					break;
+				case 4:
+					reduction = scoreTotals[iter] / units;
 					break;
 				}
+				y -= reduction;
 				newLineVector.push_back(y);
 				int offset = 0;
 				if(button % 2)

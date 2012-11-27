@@ -58,7 +58,7 @@ class SavedGame
 private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
-	std::vector<int> _funds;
+	std::vector<int> _funds, _maintenance;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -165,6 +165,7 @@ public:
 	void setDebugMode();
 	/// Gets debug mode.
 	bool getDebugMode() const;
+	std::vector<int> getMaintenances();
 };
 
 }
