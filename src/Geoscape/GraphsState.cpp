@@ -391,7 +391,7 @@ void GraphsState::btnFinanceClick(Action *action)
  */
 void GraphsState::btnRegionListClick(Action *action)
 {
-	int number = action->getSender()->getY()/11;
+	size_t number = action->getSender()->getY()/11;
 	TextButton *button = 0;
 	int adjustment = -42 + (4*number);
 
@@ -424,7 +424,7 @@ void GraphsState::btnRegionListClick(Action *action)
  */
 void GraphsState::btnCountryListClick(Action *action)
 {
-	int number = action->getSender()->getY()/11;
+	size_t number = action->getSender()->getY()/11;
 	TextButton *button = 0;
 	int adjustment = -42 + (4*number);
 
@@ -573,12 +573,12 @@ void GraphsState::drawCountryLines()
 	//calculate the totals, and set up our upward maximum
 	int roof = 0;
 	int totals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	for(int entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
+	for(size_t entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
 		int total = 0;
 		if(_alien)
 		{
-			for(int iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			for(size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
 			{
 				total += _game->getSavedGame()->getCountries()->at(iter)->getActivityAlien().at(entry);
 				if(_game->getSavedGame()->getCountries()->at(iter)->getActivityAlien().at(entry) > roof && _countryToggles.at(iter))
@@ -589,7 +589,7 @@ void GraphsState::drawCountryLines()
 		}
 		else if(_income)
 		{
-			for(int iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			for(size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
 			{
 				total += _game->getSavedGame()->getCountries()->at(iter)->getFunding().at(entry);
 				if(_game->getSavedGame()->getCountries()->at(iter)->getFunding().at(entry) > roof && _countryToggles.at(iter))
@@ -600,7 +600,7 @@ void GraphsState::drawCountryLines()
 		}
 		else
 		{
-			for(int iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
+			for(size_t iter = 0; iter != _game->getSavedGame()->getCountries()->size(); ++iter)
 			{
 				total += _game->getSavedGame()->getCountries()->at(iter)->getActivityXcom().at(entry);
 				if(_game->getSavedGame()->getCountries()->at(iter)->getActivityXcom().at(entry) > roof && _countryToggles.at(iter))
@@ -640,7 +640,7 @@ void GraphsState::drawCountryLines()
 	double units = dscale / 140;
 
 	// draw country lines
-	for(int entry = 0; entry != _game->getSavedGame()->getCountries()->size(); ++entry)
+	for(size_t entry = 0; entry != _game->getSavedGame()->getCountries()->size(); ++entry)
 	{
 		Country *country = _game->getSavedGame()->getCountries()->at(entry);
 		_alienCountryLines.at(entry)->clear();
@@ -648,7 +648,7 @@ void GraphsState::drawCountryLines()
 		_incomeLines.at(entry)->clear();
 		std::vector<Sint16> newLineVector;
 		int reduction = 0;
-		for(int iter = 0; iter != 12; ++iter)
+		for(size_t iter = 0; iter != 12; ++iter)
 		{
 			int x = 312 - (iter*17);
 			int y = 175;
@@ -745,12 +745,12 @@ void GraphsState::drawRegionLines()
 	//calculate the totals, and set up our upward maximum
 	int roof = 0;
 	int totals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	for(int entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
+	for(size_t entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
 		int total = 0;
 		if(_alien)
 		{
-			for(int iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+			for(size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
 			{
 				total += _game->getSavedGame()->getRegions()->at(iter)->getActivityAlien().at(entry);
 				if(_game->getSavedGame()->getRegions()->at(iter)->getActivityAlien().at(entry) > roof && _regionToggles.at(iter))
@@ -761,7 +761,7 @@ void GraphsState::drawRegionLines()
 		}
 		else
 		{
-			for(int iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
+			for(size_t iter = 0; iter != _game->getSavedGame()->getRegions()->size(); ++iter)
 			{
 				total += _game->getSavedGame()->getRegions()->at(iter)->getActivityXcom().at(entry);
 				if(_game->getSavedGame()->getRegions()->at(iter)->getActivityXcom().at(entry) > roof && _regionToggles.at(iter))
@@ -787,14 +787,14 @@ void GraphsState::drawRegionLines()
 	double units = dscale / 140;
 
 	// draw region lines
-	for(int entry = 0; entry != _game->getSavedGame()->getRegions()->size(); ++entry)
+	for(size_t entry = 0; entry != _game->getSavedGame()->getRegions()->size(); ++entry)
 	{
 		Region *region = _game->getSavedGame()->getRegions()->at(entry);
 		_alienRegionLines.at(entry)->clear();
 		_xcomRegionLines.at(entry)->clear();
 		std::vector<Sint16> newLineVector;
 		int reduction = 0;
-		for(int iter = 0; iter != 12; ++iter)
+		for(size_t iter = 0; iter != 12; ++iter)
 		{
 			int x = 312 - (iter*17);
 			int y = 175;
@@ -879,7 +879,7 @@ void GraphsState::drawFinanceLines()
 
 	// start filling those arrays with score values
 	// determine which is the highest one being displayed, so we can adjust the scale
-	for(int entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
+	for(size_t entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
 		maintTotals[entry] = _game->getSavedGame()->getMaintenances().at(_game->getSavedGame()->getMaintenances().size() -(1+entry));
 		balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(_game->getSavedGame()->getFundsList().size()-(1+entry));
@@ -906,7 +906,7 @@ void GraphsState::drawFinanceLines()
 	maintTotals[0] = _game->getSavedGame()->getBaseMaintenance();
 	expendTotals[0] = balanceTotals[1] - balanceTotals[0];
 
-	for(int entry = 1; entry != _game->getSavedGame()->getFundsList().size()-1; ++entry)
+	for(size_t entry = 1; entry != _game->getSavedGame()->getFundsList().size()-1; ++entry)
 	{
 		expendTotals[entry] = ((balanceTotals[entry+1] + incomeTotals[entry]) - maintTotals[entry])-balanceTotals[entry];
 		if(_financeToggles.at(1) && expendTotals[entry] > roof)
