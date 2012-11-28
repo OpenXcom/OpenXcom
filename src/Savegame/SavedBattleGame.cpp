@@ -628,7 +628,7 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
  * Gets the list of nodes.
  * @return pointer to the list of nodes
  */
-std::vector<Node*> *const SavedBattleGame::getNodes()
+std::vector<Node*> *SavedBattleGame::getNodes()
 {
 	return &_nodes;
 }
@@ -637,7 +637,7 @@ std::vector<Node*> *const SavedBattleGame::getNodes()
  * Gets the list of units.
  * @return pointer to the list of units
  */
-std::vector<BattleUnit*> *const SavedBattleGame::getUnits()
+std::vector<BattleUnit*> *SavedBattleGame::getUnits()
 {
 	return &_units;
 }
@@ -646,7 +646,7 @@ std::vector<BattleUnit*> *const SavedBattleGame::getUnits()
  * Gets the list of items.
  * @return pointer to the list of items
  */
-std::vector<BattleItem*> *const SavedBattleGame::getItems()
+std::vector<BattleItem*> *SavedBattleGame::getItems()
 {
 	return &_items;
 }
@@ -655,7 +655,7 @@ std::vector<BattleItem*> *const SavedBattleGame::getItems()
  * Get the pathfinding object.
  * @return pointer to the pathfinding object
  */
-Pathfinding *const SavedBattleGame::getPathfinding() const
+Pathfinding *SavedBattleGame::getPathfinding() const
 {
 	return _pathfinding;
 }
@@ -664,7 +664,7 @@ Pathfinding *const SavedBattleGame::getPathfinding() const
  * Get the terrain modifier object.
  * @return pointer to the terrain modifier object
  */
-TileEngine *const SavedBattleGame::getTileEngine() const
+TileEngine *SavedBattleGame::getTileEngine() const
 {
 	return _tileEngine;
 }
@@ -673,7 +673,7 @@ TileEngine *const SavedBattleGame::getTileEngine() const
 * gets a pointer to the array of mapblock
 * @return pointer to the array of mapblocks
 */
-std::vector<MapDataSet*> *const SavedBattleGame::getMapDataSets()
+std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataSets;
 }

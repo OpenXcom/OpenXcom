@@ -66,7 +66,7 @@ void Region::save(YAML::Emitter &out) const
  * Returns the ruleset for the region's type.
  * @return Pointer to ruleset.
  */
-RuleRegion *const Region::getRules() const
+RuleRegion *Region::getRules() const
 {
 	return _rules;
 }

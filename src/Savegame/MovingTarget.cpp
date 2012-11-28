@@ -69,7 +69,7 @@ void MovingTarget::save(YAML::Emitter &out) const
  * Returns the destination the moving target is heading to.
  * @return Pointer to destination.
  */
-Target *const MovingTarget::getDestination() const
+Target *MovingTarget::getDestination() const
 {
 	return _dest;
 }

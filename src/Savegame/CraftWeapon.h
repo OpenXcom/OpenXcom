@@ -49,7 +49,7 @@ public:
 	/// Saves the craft weapon to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft weapon's ruleset.
-	RuleCraftWeapon *const getRules() const;
+	RuleCraftWeapon *getRules() const;
 	/// Gets the craft weapon's ammo.
 	int getAmmo() const;
 	/// Sets the craft weapon's ammo.

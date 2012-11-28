@@ -49,7 +49,7 @@ public:
 	/// Saves the moving target to YAML.
 	virtual void save(YAML::Emitter& out) const;
 	/// Gets the moving target's destination.
-	Target *const getDestination() const;
+	Target *getDestination() const;
 	/// Sets the moving target's destination.
 	virtual void setDestination(Target *dest);
 	/// Gets the moving target's speed.

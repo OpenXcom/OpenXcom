@@ -66,7 +66,7 @@ void CraftWeapon::save(YAML::Emitter &out) const
  * Returns the ruleset for the craft weapon's type.
  * @return Pointer to ruleset.
  */
-RuleCraftWeapon *const CraftWeapon::getRules() const
+RuleCraftWeapon *CraftWeapon::getRules() const
 {
 	return _rules;
 }

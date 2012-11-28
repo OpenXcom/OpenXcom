@@ -53,7 +53,7 @@ public:
 	/// Loads the character index for every font.
 	static void loadIndex(const std::string &filename);
 	/// Gets a particular character from the font, with its real size.
-	Surface *const getChar(wchar_t c);
+	Surface *getChar(wchar_t c);
 	/// Gets the font's character width.
 	int getWidth() const;
 	/// Gets the font's character height.
@@ -61,7 +61,7 @@ public:
 	/// Gets the horizontal spacing between characters.
 	int getSpacing() const;
 	/// Gets the font's surface.
-	Surface *const getSurface() const;
+	Surface *getSurface() const;
 };
 
 }

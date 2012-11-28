@@ -524,7 +524,7 @@ void SavedGame::monthlyFunding()
  * Returns the current time of the game.
  * @return Pointer to the game time.
  */
-GameTime *const SavedGame::getTime() const
+GameTime *SavedGame::getTime() const
 {
 	return _time;
 }
@@ -555,7 +555,7 @@ void SavedGame::initIds(const std::map<std::string, int> &ids)
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::vector<Country*> *const SavedGame::getCountries()
+std::vector<Country*> *SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -578,7 +578,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::vector<Region*> *const SavedGame::getRegions()
+std::vector<Region*> *SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -587,7 +587,7 @@ std::vector<Region*> *const SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-std::vector<Base*> *const SavedGame::getBases()
+std::vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;
 }
@@ -610,7 +610,7 @@ int SavedGame::getBaseMaintenance() const
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
-std::vector<Ufo*> *const SavedGame::getUfos()
+std::vector<Ufo*> *SavedGame::getUfos()
 {
 	return &_ufos;
 }
@@ -619,7 +619,7 @@ std::vector<Ufo*> *const SavedGame::getUfos()
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
-std::vector<Waypoint*> *const SavedGame::getWaypoints()
+std::vector<Waypoint*> *SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }
@@ -628,7 +628,7 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
  * Returns the list of terror sites.
  * @return Pointer to terror site list.
  */
-std::vector<TerrorSite*> *const SavedGame::getTerrorSites()
+std::vector<TerrorSite*> *SavedGame::getTerrorSites()
 {
 	return &_terrorSites;
 }
@@ -637,7 +637,7 @@ std::vector<TerrorSite*> *const SavedGame::getTerrorSites()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *const SavedGame::getBattleGame()
+SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battleGame;
 }
@@ -937,7 +937,7 @@ bool SavedGame::isResearched(const std::vector<std::string> &research) const
  * @param id A soldier's unique id.
  * @return Pointer to Soldier.
  */
-Soldier *const SavedGame::getSoldier(int id) const
+Soldier *SavedGame::getSoldier(int id) const
 {
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
@@ -1041,7 +1041,7 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
   * Returns the list of alien bases.
   * @return Pointer to alien base list.
   */
-std::vector<AlienBase*> *const SavedGame::getAlienBases()
+std::vector<AlienBase*> *SavedGame::getAlienBases()
 {
 	return &_alienBases;
 }

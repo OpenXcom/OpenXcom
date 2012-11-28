@@ -47,7 +47,7 @@ public:
 	/// Saves the region to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the region's ruleset.
-	RuleRegion *const getRules() const;
+	RuleRegion *getRules() const;
 	/// add xcom activity in this region
 	void addActivityXcom(int activity);
 	/// add alien activity in this region
