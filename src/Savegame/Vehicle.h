@@ -47,7 +47,7 @@ public:
 	/// Saves the vehicle to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the vehicle's ruleset.
-	RuleItem *const getRules() const;
+	RuleItem *getRules() const;
 	/// Gets the vehicle's ammo.
 	int getAmmo() const;
 	/// Sets the vehicle's ammo.

@@ -197,13 +197,13 @@ public:
 	/// Add unit to visible units.
 	bool addToVisibleUnits(BattleUnit *unit);
 	/// Get the list of visible units.
-	std::vector<BattleUnit*> *const getVisibleUnits();
+	std::vector<BattleUnit*> *getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
 	/// Add unit to visible tiles.
 	bool addToVisibleTiles(Tile *tile);
 	/// Get the list of visible tiles.
-	std::vector<Tile*> *const getVisibleTiles();
+	std::vector<Tile*> *getVisibleTiles();
 	/// Clear visible tiles.
 	void clearVisibleTiles();
 	/// Calculate firing accuracy.
@@ -233,7 +233,7 @@ public:
 	/// Get fire.
 	int getFire() const;
 	/// Get the list of items in the inventory.
-	std::vector<BattleItem*> *const getInventory();
+	std::vector<BattleItem*> *getInventory();
 	/// Let AI do their thing.
 	void think(BattleAction *action);
 	/// Get current AI state.

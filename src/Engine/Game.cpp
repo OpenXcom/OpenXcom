@@ -291,7 +291,7 @@ void Game::setVolume(int sound, int music)
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
  */
-Screen *const Game::getScreen() const
+Screen *Game::getScreen() const
 {
 	return _screen;
 }
@@ -300,7 +300,7 @@ Screen *const Game::getScreen() const
  * Returns the mouse cursor used by the game.
  * @return Pointer to the cursor.
  */
-Cursor *const Game::getCursor() const
+Cursor *Game::getCursor() const
 {
 	return _cursor;
 }
@@ -309,7 +309,7 @@ Cursor *const Game::getCursor() const
  * Returns the FpsCounter used by the game.
  * @return Pointer to the FpsCounter.
  */
-FpsCounter *const Game::getFpsCounter() const
+FpsCounter *Game::getFpsCounter() const
 {
 	return _fpsCounter;
 }
@@ -379,7 +379,7 @@ void Game::popState()
  * Returns the language currently in use by the game.
  * @return Pointer to the language.
  */
-Language *const Game::getLanguage() const
+Language *Game::getLanguage() const
 {
 	return _lang;
 }
@@ -412,7 +412,7 @@ void Game::loadLanguage(const std::string &filename)
  * Returns the resource pack currently in use by the game.
  * @return Pointer to the resource pack.
  */
-ResourcePack *const Game::getResourcePack() const
+ResourcePack *Game::getResourcePack() const
 {
 	return _res;
 }
@@ -430,7 +430,7 @@ void Game::setResourcePack(ResourcePack *res)
  * Returns the saved game currently in use by the game.
  * @return Pointer to the saved game.
  */
-SavedGame *const Game::getSavedGame() const
+SavedGame *Game::getSavedGame() const
 {
 	return _save;
 }
@@ -449,7 +449,7 @@ void Game::setSavedGame(SavedGame *save)
  * Returns the ruleset currently in use by the game.
  * @return Pointer to the ruleset.
  */
-Ruleset *const Game::getRuleset() const
+Ruleset *Game::getRuleset() const
 {
 	return _rules;
 }

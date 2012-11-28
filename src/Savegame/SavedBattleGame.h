@@ -89,7 +89,7 @@ public:
 	/// initialises pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
-	std::vector<MapDataSet*> *const getMapDataSets();
+	std::vector<MapDataSet*> *getMapDataSets();
 	/// Set the mission type.
 	void setMissionType(const std::string &missionType);
 	/// Get the mission type.
@@ -101,11 +101,11 @@ public:
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile **getTiles() const;
 	/// Get pointer to the list of nodes.
-	std::vector<Node*> *const getNodes();
+	std::vector<Node*> *getNodes();
 	/// Get pointer to the list of items.
-	std::vector<BattleItem*> *const getItems();
+	std::vector<BattleItem*> *getItems();
 	/// Get pointer to the list of units.
-	std::vector<BattleUnit*> *const getUnits();
+	std::vector<BattleUnit*> *getUnits();
 	/// Gets terrain width.
 	int getWidth() const;
 	/// Gets terrain length.
@@ -131,9 +131,9 @@ public:
 	/// select unit with position on map
 	BattleUnit *selectUnit(Tile *tile);
 	/// get the pathfinding object
-	Pathfinding *const getPathfinding() const;
+	Pathfinding *getPathfinding() const;
 	/// get a pointer to the tileengine
-	TileEngine *const getTileEngine() const;
+	TileEngine *getTileEngine() const;
 	/// get the playing side
 	UnitFaction getSide() const;
 	/// get the turn number

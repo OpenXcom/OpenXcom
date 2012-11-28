@@ -64,7 +64,7 @@ public:
 	/// Sets the text size to small.
 	void setSmall();
 	/// Gets the text's current font.
-	Font *const getFont() const;
+	Font *getFont() const;
 	/// Sets the text's various fonts.
 	void setFonts(Font *big, Font *small);
 	/// Sets the text's string.

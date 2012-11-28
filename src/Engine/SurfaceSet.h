@@ -51,7 +51,7 @@ public:
 	/// Loads an X-Com DAT image file.
 	void loadDat(const std::string &filename);
 	/// Gets a particular frame from the set.
-	Surface *const getFrame(int i) const;
+	Surface *getFrame(int i) const;
 	/// Gets the width of all frames.
 	int getWidth() const;
 	/// Gets the height of all frames.

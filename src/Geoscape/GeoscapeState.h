@@ -87,7 +87,7 @@ public:
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Gets the Geoscape globe.
-	Globe *const getGlobe() const;
+	Globe *getGlobe() const;
 	/// Handler for clicking the globe.
 	void globeClick(Action *action);
 	/// Handler for clicking the Intercept button.
