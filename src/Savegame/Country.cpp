@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false), _newPact(false), _pactFlag(false)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _pact(false), _newPact(false), _pactFlag(false), _funding(0)
 {
 	if (gen)
 	{
