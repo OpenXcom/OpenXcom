@@ -177,7 +177,7 @@ public:
 	/// Gets if the craft is in battlescape.
 	bool isInBattlescape() const;
 	/// Gets the base's region.
-	const std::string &getRegion() const;
+	std::string getRegion() const;
 };
 
 }

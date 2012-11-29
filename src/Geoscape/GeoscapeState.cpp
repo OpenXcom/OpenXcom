@@ -1727,7 +1727,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// Alien Research at base's region.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
-		const std::string &targetRegion = _game->getSavedGame()->getBases()->front()->getRegion();
+		std::string targetRegion = _game->getSavedGame()->getBases()->front()->getRegion();
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
 		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());

@@ -1051,7 +1051,7 @@ void Base::setInBattlescape(bool inbattle)
  * Find the region for this base's location.
  * @return The region ID.
  */
-const std::string &Base::getRegion() const
+std::string Base::getRegion() const
 {
 	const std::vector<std::string> &rlist = _rule->getRegionsList();
 	for (std::vector<std::string>::const_iterator ii = rlist.begin(); ii != rlist.end(); ++ii)

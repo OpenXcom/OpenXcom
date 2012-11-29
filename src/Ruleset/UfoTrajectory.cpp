@@ -93,7 +93,7 @@ void UfoTrajectory::save(YAML::Emitter &out) const
 }
 
 /// Gets the altitude at a waypoint.
-const char *UfoTrajectory::getAltitude(unsigned wp) const
+std::string UfoTrajectory::getAltitude(unsigned wp) const
 {
 	return altitudeString[_waypoints[wp].altitude];
 }
