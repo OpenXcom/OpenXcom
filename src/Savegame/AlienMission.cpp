@@ -305,4 +305,19 @@ void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, c
 	}
 }
 
+/**
+ * The new time must be a multiple of 30 minutes, and more than 0.
+ * Calling this on a finished mission has no effect.
+ * @param minutes The minutes until the next UFO wave will spawn.
+ */
+void AlienMission::setWaveCountdown(unsigned minutes)
+{
+	assert(minutes != 0 && minutes % 30 == 0);
+	if (isOver())
+	{
+		return;
+	}
+	_spawnCountdown = minutes;
+}
+
 }

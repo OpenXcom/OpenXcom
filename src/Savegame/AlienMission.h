@@ -83,6 +83,10 @@ public:
 	void ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
 	/// Handle UFO shot down.
 	void ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game);
+	/// Gets the minutes until next wave spawns.
+	unsigned getWaveCountdown() const { return _spawnCountdown; }
+	/// Sets the minutes until next wave spawns.
+	void setWaveCountdown(unsigned minutes);
 };
 
 }
