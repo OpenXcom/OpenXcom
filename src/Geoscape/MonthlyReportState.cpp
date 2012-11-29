@@ -177,13 +177,13 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 			ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_DISSATISFIED");
 		}
 	}
-	else if(_ratingTotal > difficulty_threshold)
-	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED");
-	}
 	else if(_ratingTotal > 500)
 	{
 		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_VERY_PLEASED");
+	}
+	else
+	{
+		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
 
 	if(resetWarning && _game->getSavedGame()->getWarned())
@@ -345,8 +345,8 @@ void MonthlyReportState::CalculateChanges()
 	{
 		if((*k)->getActivityXcom().size() >1)
 			_lastMonthsRating += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-2)-(*k)->getActivityAlien().at((*k)->getActivityAlien().size()-2);
-		xcomTotal = (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-1);
-		alienTotal = (*k)->getActivityAlien().at((*k)->getActivityAlien().size()-1);
+		xcomTotal += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-1);
+		alienTotal += (*k)->getActivityAlien().at((*k)->getActivityAlien().size()-1);
 	}
 
 	//calculate total, and average scores.
