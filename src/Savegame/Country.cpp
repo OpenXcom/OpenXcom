@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false), _newPact(false)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _pact(false), _newPact(false), _pactFlag(false), _funding(0)
 {
 	if (gen)
 	{
@@ -55,6 +55,8 @@ void Country::load(const YAML::Node &node)
 	node["activityXcom"] >> _activityXcom;
 	node["activityAlien"] >> _activityAlien;
 	node["pact"] >> _pact;
+	node["newPact"] >> _newPact;
+	node["pactFlag"] >> _pactFlag;
 }
 
 /**
@@ -69,6 +71,8 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
 	out << YAML::Key << "pact" << YAML::Value << _pact;
+	out << YAML::Key << "newPact" << YAML::Value << _pact;
+	out << YAML::Key << "pactFlag" << YAML::Value << _pactFlag;
 	out << YAML::EndMap;
 }
 
@@ -85,7 +89,7 @@ RuleCountry *Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-std::vector<int> Country::getFunding() const
+const std::vector<int> &Country::getFunding() const
 {
 	return _funding;
 }
@@ -140,7 +144,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-std::vector<int> Country::getActivityXcom() const
+const std::vector<int> &Country::getActivityXcom() const
 {
 	return _activityXcom;
 }
@@ -149,7 +153,7 @@ std::vector<int> Country::getActivityXcom() const
  * Gets the country's alien activity level.
  * @return activity level.
  */
-std::vector<int> Country::getActivityAlien() const
+const std::vector<int> &Country::getActivityAlien() const
 {
 	return _activityAlien;
 }
@@ -178,9 +182,6 @@ void Country::newMonth(int diff)
 	case 1:
 		increase = 0 - RNG::generate(5, 20);
 		break;
-	case 2:
-		increase = 0;
-		break;
 	case 3:
 		increase = RNG::generate(5, 20);
 		break;
@@ -193,10 +194,24 @@ void Country::newMonth(int diff)
 	}
 	if(difference <= -500 - (100*diff) && lastDifference <= -500 - (100*diff) && !_pact)
 	{
-		_newPact = true;
-		_pact = true;
+		if(_pactFlag)
+		{
+			_pactFlag = false;
+			_newPact = true;
+			_pact = true;
+		}
+		else
+		{
+			_pactFlag = true;
+		}
+	}
+	else if(_pactFlag)
+	{
+		_pactFlag = false;
 	}
 	int newFunding = _funding[_funding.size()-1] + ((_funding[_funding.size()-1]/100) * increase);
+	if(increase == -100)
+		newFunding = 0;
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
 	_funding.push_back(newFunding);

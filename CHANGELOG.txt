@@ -1,3 +1,23 @@
+Pre-Release 0.5.0
+New features:
+- Live alien capture and interrogation.
+- Psionic training.
+- Hyper-wave decoding.
+- Geoscape alien base handling.
+- All missing units implemented, both alien units and xcom tanks.
+- Scoring for both aliens and Xcom.
+- Funding nation decision making.
+- Multiple dogfight handling.
+- Graphs screen.
+- Equipment loadout saving.
+- "Random Battle" mode.
+- Proper A* pathfinding.
+- Battlescape RMB scrolling improved.
+
+Bugfixes:
+- Updated translations.
+- Updated soldier names.
+
 Version 0.4.5 (04-11-2012)
 ---------------------------
 New features:

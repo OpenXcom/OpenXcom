@@ -574,7 +574,8 @@ void BattlescapeState::btnUnitDownClick(Action *action)
  */
 void BattlescapeState::btnMapUpClick(Action *action)
 {
-	_map->getCamera()->up();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_map->getCamera()->up();
 }
 
 /**
@@ -583,7 +584,8 @@ void BattlescapeState::btnMapUpClick(Action *action)
  */
 void BattlescapeState::btnMapDownClick(Action *action)
 {
-	_map->getCamera()->down();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_map->getCamera()->down();
 }
 
 /**
@@ -593,7 +595,8 @@ void BattlescapeState::btnMapDownClick(Action *action)
 void BattlescapeState::btnShowMapClick(Action *action)
 {
 	//MiniMapState
-	_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
 }
 
 /**
@@ -602,10 +605,13 @@ void BattlescapeState::btnShowMapClick(Action *action)
  */
 void BattlescapeState::btnKneelClick(Action *action)
 {
-	BattleUnit *bu = _save->getSelectedUnit();
-	if (bu)
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 	{
-		_battleGame->kneel(bu);
+		BattleUnit *bu = _save->getSelectedUnit();
+		if (bu)
+		{
+			_battleGame->kneel(bu);
+		}
 	}
 }
 
@@ -639,7 +645,8 @@ void BattlescapeState::btnCenterClick(Action *action)
  */
 void BattlescapeState::btnNextSoldierClick(Action *action)
 {
-	selectNextPlayerUnit(false);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		selectNextPlayerUnit(false);
 }
 
 /**
@@ -648,7 +655,8 @@ void BattlescapeState::btnNextSoldierClick(Action *action)
  */
 void BattlescapeState::btnNextStopClick(Action *action)
 {
-	selectNextPlayerUnit(true);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		selectNextPlayerUnit(true);
 }
 
 /**
@@ -657,13 +665,16 @@ void BattlescapeState::btnNextStopClick(Action *action)
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
 {
-	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-	BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
-	updateSoldierInfo();
-	if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
-	_battleGame->cancelCurrentAction();
-	_battleGame->getCurrentAction()->actor = unit;
-	_battleGame->setupCursor();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	{
+		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
+		updateSoldierInfo();
+		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		_battleGame->cancelCurrentAction();
+		_battleGame->getCurrentAction()->actor = unit;
+		_battleGame->setupCursor();
+	}
 }
 
 /**
@@ -671,8 +682,9 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
  * @param action Pointer to an action.
  */
 void BattlescapeState::btnShowLayersClick(Action *action)
-{
-	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
+{	
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
 
 /**
@@ -681,7 +693,8 @@ void BattlescapeState::btnShowLayersClick(Action *action)
  */
 void BattlescapeState::btnHelpClick(Action *action)
 {
-	_game->pushState(new BattlescapeOptionsState(_game));
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
 /**
@@ -691,7 +704,8 @@ void BattlescapeState::btnHelpClick(Action *action)
  */
 void BattlescapeState::btnEndTurnClick(Action *action)
 {
-	_battleGame->requestEndTurn();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->requestEndTurn();
 }
 /**
  * Abort game.
@@ -699,7 +713,8 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  */
 void BattlescapeState::btnAbortClick(Action *action)
 {
-	_game->pushState(new AbortMissionState(_game, _save, this));
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_game->pushState(new AbortMissionState(_game, _save, this));
 }
 
 /**
@@ -789,7 +804,8 @@ void BattlescapeState::btnLaunchClick(Action *action)
  */
 void BattlescapeState::btnReserveNoneClick(Action *action)
 {
-	_battleGame->setTUReserved(BA_NONE);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_NONE);
 }
 
 /**
@@ -798,7 +814,8 @@ void BattlescapeState::btnReserveNoneClick(Action *action)
  */
 void BattlescapeState::btnReserveSnapClick(Action *action)
 {
-	_battleGame->setTUReserved(BA_SNAPSHOT);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_SNAPSHOT);
 }
 
 /**
@@ -807,7 +824,8 @@ void BattlescapeState::btnReserveSnapClick(Action *action)
  */
 void BattlescapeState::btnReserveAimedClick(Action *action)
 {
-	_battleGame->setTUReserved(BA_AIMEDSHOT);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_AIMEDSHOT);
 }
 
 /**
@@ -816,7 +834,8 @@ void BattlescapeState::btnReserveAimedClick(Action *action)
  */
 void BattlescapeState::btnReserveAutoClick(Action *action)
 {
-	_battleGame->setTUReserved(BA_AUTOSHOT);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_AUTOSHOT);
 }
 
 /**

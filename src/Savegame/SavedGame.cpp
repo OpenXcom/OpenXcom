@@ -86,10 +86,12 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_funds.push_back(0);
+	_maintenance.push_back(0);
 }
 
 /**
@@ -224,6 +226,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_difficulty = (GameDifficulty)a;
 	RNG::load(doc);
 	doc["funds"] >> _funds;
+	doc["maintenance"] >> _maintenance;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
 	doc["globeZoom"] >> _globeZoom;
@@ -332,6 +335,7 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
+	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
 	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
@@ -426,6 +430,15 @@ void SavedGame::setDifficulty(GameDifficulty difficulty)
  */
 int SavedGame::getFunds() const
 {
+	return _funds[_funds.size()-1];
+}
+
+/**
+ * Returns the player's funds for the last 12 months.
+ * @return funds.
+ */
+const std::vector<int> &SavedGame::getFundsList() const
+{
 	return _funds;
 }
 
@@ -435,7 +448,7 @@ int SavedGame::getFunds() const
  */
 void SavedGame::setFunds(int funds)
 {
-	_funds = funds;
+	_funds[_funds.size()-1] = funds;
 }
 
 /**
@@ -498,7 +511,13 @@ void SavedGame::setGlobeZoom(int zoom)
  */
 void SavedGame::monthlyFunding()
 {
-	_funds += getCountryFunding() - getBaseMaintenance();
+	_funds[_funds.size()-1] += getCountryFunding() - getBaseMaintenance();
+	_funds.push_back(_funds[_funds.size()-1]);
+	_maintenance[_maintenance.size()-1] = getBaseMaintenance();
+	_maintenance.push_back(0);
+
+	if(_funds.size() > 12)
+		_funds.erase(_funds.begin());
 }
 
 /**
@@ -1044,4 +1063,12 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
+/**
+ * return the list of monthly maintenance costs
+ * @return list of maintenances.
+ */
+std::vector<int> SavedGame::getMaintenances()
+{
+	return _maintenance;
+}
 }
