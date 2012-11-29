@@ -27,8 +27,29 @@
 #include "Waypoint.h"
 #include "SavedGame.h"
 #include "TerrorSite.h"
+#include "../Geoscape/Globe.h"
 #include <algorithm>
 #include <functional>
+
+namespace {
+/**
+ * Get a random point inside the given region zone.
+ * The point will be used to land a UFO, so it HAS to be on land.
+ * @note This is only until we fix our zone data.
+ */
+std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
+{
+	std::pair<double, double> pos;
+	do
+	{
+		pos = region.getRandomPoint(zone);
+	}
+	while (!globe.insideLand(pos.first, pos.second));
+	return pos;
+
+}
+
+}
 
 namespace OpenXcom
 {
@@ -99,7 +120,7 @@ bool AlienMission::isOver() const
 	return false;
 }
 
-void AlienMission::think(const Ruleset &rules, SavedGame &game)
+void AlienMission::think(const Ruleset &rules, SavedGame &game, const Globe &globe)
 {
 	if (_nextWave == _rule.getWaveCount())
 		return;
@@ -120,7 +141,14 @@ void AlienMission::think(const Ruleset &rules, SavedGame &game)
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 	Waypoint *wp = new Waypoint();
-	pos = region->getRandomPoint(traj->getZone(1));
+	if (traj->getAltitude(1) == "STR_GROUND")
+	{
+		pos = getLandPoint(globe, *region, traj->getZone(1));
+	}
+	else
+	{
+		pos = region->getRandomPoint(traj->getZone(1));
+	}
 	wp->setLongitude(pos.first);
 	wp->setLatitude(pos.second);
 	ufo->setDestination(wp);
@@ -160,7 +188,7 @@ void AlienMission::start(unsigned initialCount)
 	}
 }
 
-void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game)
+void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe)
 {
 	if (ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1)
 	{
@@ -176,7 +204,15 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame 
 		Waypoint *wp = new Waypoint();
 		RuleRegion *region = rules.getRegion(_region);
 		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
-		std::pair<double, double> pos = region->getRandomPoint(ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()));
+		std::pair<double, double> pos;
+		if (ufo.getTrajectory().getAltitude(ufo.getTrajectoryPoint()) == "STR_GROUND")
+		{
+			pos = getLandPoint(globe, *region, ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()));
+		}
+		else
+		{
+			pos = region->getRandomPoint(ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()));
+		}
 		wp->setLongitude(pos.first);
 		wp->setLatitude(pos.second);
 		ufo.setDestination(wp);
@@ -227,7 +263,7 @@ void AlienMission::ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game)
 	}
 }
 
-void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game)
+void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe)
 {
 	switch (ufo.getStatus())
 	{
@@ -249,7 +285,15 @@ void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game)
 			// Set next waypoint.
 			Waypoint *wp = new Waypoint();
 			RuleRegion *region = rules.getRegion(_region);
-			std::pair<double, double> pos = region->getRandomPoint(ufo.getTrajectory().getZone(ufo.getTrajectoryPoint() + 1));
+			std::pair<double, double> pos;
+			if (ufo.getTrajectory().getAltitude(ufo.getTrajectoryPoint() + 1) == "STR_GROUND")
+			{
+				pos = getLandPoint(globe, *region, ufo.getTrajectory().getZone(ufo.getTrajectoryPoint() + 1));
+			}
+			else
+			{
+				pos = region->getRandomPoint(ufo.getTrajectory().getZone(ufo.getTrajectoryPoint() + 1));
+			}
 			wp->setLongitude(pos.first);
 			wp->setLatitude(pos.second);
 			ufo.setDestination(wp);
@@ -265,4 +309,5 @@ void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game)
 		break;
 	}
 }
+
 }

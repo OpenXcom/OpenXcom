@@ -547,7 +547,7 @@ void GeoscapeState::time5Seconds()
 					unsigned terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
 					AlienMission *mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
-					mission->ufoReachedWaypoint(**i, *_game->getRuleset(), *_game->getSavedGame());
+					mission->ufoReachedWaypoint(**i, *_game->getRuleset(), *_game->getSavedGame(), *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
@@ -568,7 +568,7 @@ void GeoscapeState::time5Seconds()
 			{
 				AlienMission *mission = (*i)->getMission();
 				bool detected = (*i)->getDetected();
-				mission->ufoLifting(**i, *_game->getRuleset(), *_game->getSavedGame());
+				mission->ufoLifting(**i, *_game->getRuleset(), *_game->getSavedGame(), *_globe);
 				if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 				{
 					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
@@ -859,11 +859,12 @@ struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, boo
 class callThink: public std::unary_function<AlienMission*, void>
 {
 public:
-	callThink(const Ruleset &ruleset, SavedGame &save) : _ruleset(ruleset), _save(save) { /* Empty by design. */ }
-	void operator()(AlienMission *am) { am->think(_ruleset, _save); }
+	callThink(const Ruleset &ruleset, SavedGame &save, const Globe &globe) : _ruleset(ruleset), _save(save), _globe(globe) { /* Empty by design. */ }
+	void operator()(AlienMission *am) { am->think(_ruleset, _save, _globe); }
 private:
 	const Ruleset &_ruleset;
 	SavedGame &_save;
+	const Globe &_globe;
 };
 
 /**
@@ -875,7 +876,7 @@ void GeoscapeState::time30Minutes()
 	// Decrease mission countdowns
 	std::for_each(_game->getSavedGame()->getAlienMissions().begin(),
 		      _game->getSavedGame()->getAlienMissions().end(),
-		      callThink(*_game->getRuleset(), *_game->getSavedGame()));
+		      callThink(*_game->getRuleset(), *_game->getSavedGame(), *_globe));
 	// Remove finished missions
 	std::vector<AlienMission*>::iterator last =
 	    std::remove_if(_game->getSavedGame()->getAlienMissions().begin(),

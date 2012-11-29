@@ -29,6 +29,7 @@ class RuleAlienMission;
 class Ruleset;
 class SavedGame;
 class Ufo;
+class Globe;
 
 /**
  * Represents an ongoing alien mission.
@@ -69,7 +70,7 @@ public:
 	/// Is this mission over?
 	bool isOver() const;
 	/// Handle UFO spawning for the mission.
-	void think(const Ruleset &rules, SavedGame &game);
+	void think(const Ruleset &rules, SavedGame &game, const Globe &globe);
 	/// Initialize with values from rules.
 	void start(unsigned initialCount = 0);
 	/// Increase number of live UFOs.
@@ -77,9 +78,9 @@ public:
 	/// Decrease number of live UFOs.
 	void decreaseLiveUfos() { --_liveUfos; }
 	/// Handle UFO reaching a waypoint.
-	void ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game);
+	void ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game);
+	void ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
 	/// Handle UFO shot down.
 	void ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game);
 };
