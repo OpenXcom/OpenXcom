@@ -50,6 +50,7 @@ class AlienRace;
 class AlienDeployment;
 class UfoTrajectory;
 class RuleAlienMission;
+class City;
 
 /**
  * Set of rules and stats for a game.
@@ -184,6 +185,8 @@ public:
 	const RuleAlienMission *getAlienMission(const std::string &id) const;
 	/// Get the list of all alien missions.
 	const std::vector<std::string> &getAlienMissionList() const;
+	/// Get the city at the specified coordinates.
+	const City *locateCity(double lon, double lat) const;
 };
 
 }

@@ -36,7 +36,7 @@ class GeoscapeState;
 class AlienTerrorState : public State
 {
 private:
-	City *_city;
+	const City *_city;
 	GeoscapeState *_state;
 
 	TextButton *_btnCentre, *_btnCancel;
@@ -44,7 +44,7 @@ private:
 	Text *_txtTitle, *_txtCity;
 public:
 	/// Creates the Ufo Detected state.
-	AlienTerrorState(Game *game, City *city, GeoscapeState *state);
+	AlienTerrorState(Game *game, const City *city, GeoscapeState *state);
 	/// Cleans up the Ufo Detected state.
 	~AlienTerrorState();
 	/// Updates the palette.

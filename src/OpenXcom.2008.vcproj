@@ -1739,6 +1739,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\AlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienMission.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
 			</File>

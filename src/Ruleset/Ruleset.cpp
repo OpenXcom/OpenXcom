@@ -50,6 +50,9 @@
 #include "../Savegame/AlienStrategy.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
+#include "City.h"
+#include "../Engine/Logger.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -1272,6 +1275,36 @@ const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
 const std::vector<std::string> &Ruleset::getAlienMissionList() const
 {
 	return _alienMissionsIndex;
+}
+
+class EqualCoordinates: std::unary_function<const City *, bool>
+{
+public:
+	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
+	bool operator()(const City *city) const { return city->getLongitude() == _lon && city->getLatitude() == _lat; }
+private:
+	double _lon, _lat;
+};
+
+/**
+ * Find the city at coordinates @a lon, @a lat.
+ * The search will only match exact coordinates.
+ * @param lon The longtitude.
+ * @param lat The latitude.
+ * @return A pointer to the city information, or 0 if no city was found.
+ */
+const City *Ruleset::locateCity(double lon, double lat) const
+{
+	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
+	{
+		const std::vector<City*> &cities = *rr->second->getCities();
+		std::vector<City *>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
+		if (citer != cities.end())
+		{
+			return *citer;
+		}
+	}
+	return 0;
 }
 
 }

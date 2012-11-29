@@ -398,6 +398,8 @@ set ( ruleset_src
 set ( savegame_src
   Savegame/AlienBase.h
   Savegame/AlienBase.cpp
+  Savegame/AlienMission.cpp
+  Savegame/AlienMission.h
   Savegame/BattleItem.h
   Savegame/BattleItem.cpp
   Savegame/Ufo.cpp

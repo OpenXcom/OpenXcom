@@ -56,6 +56,10 @@ public:
 	void load(const YAML::Node &node);
 	/// Saves the alien mission data to YAML.
 	void save(YAML::Emitter &out) const;
+	/// Get the number of waves.
+	unsigned getWaveCount() const { return _waves.size(); }
+	/// Gets the full wave information.
+	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
 private:
 	std::string _type;
 	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;

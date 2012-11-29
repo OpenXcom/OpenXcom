@@ -365,7 +365,7 @@ void NewBattleState::btnOkClick(Action *action)
 	ss >> std::dec >> shade;
 	bgen.setWorldShade(shade);
 	bgen.setAlienRace(_alienRaces[_selAlien]);
-    bgen.setAlienItemlevel(_alienEquipLevel);
+	bgen.setAlienItemlevel(_alienEquipLevel);
 
 	bgen.run();
 	//_game->pushState(new BattlescapeState(_game));

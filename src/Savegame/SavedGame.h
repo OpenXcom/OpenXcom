@@ -43,6 +43,7 @@ class RuleManufacture;
 class TerrorSite;
 class AlienBase;
 class AlienStrategy;
+class AlienMission;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -73,6 +74,7 @@ private:
 	AlienStrategy *_alienStrategy;
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
+	std::vector<AlienMission*> _activeMissions;
 	bool _debug;
 
 	/// Check whether a ResearchProject can be researched
@@ -173,7 +175,12 @@ public:
 	AlienStrategy &getAlienStrategy() { return *_alienStrategy; }
 	/// Read-only access to the alien strategy data.
 	const AlienStrategy &getAlienStrategy() const { return *_alienStrategy; }
-
+	/// Full access to the current alien missions.
+	std::vector<AlienMission*> &getAlienMissions() { return _activeMissions; }
+	/// Read-only access to the current alien missions.
+	const std::vector<AlienMission*> &getAlienMissions() const { return _activeMissions; }
+	/// Gets a mission matching region and type.
+	AlienMission *getAlienMission(const std::string &region, const std::string &type) const;
 };
 
 }

@@ -446,6 +446,8 @@ openxcom_SOURCES = \
 	src/Ruleset/SoldierNamePool.h \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
+	src/Savegame/AlienMission.cpp \
+	src/Savegame/AlienMission.h \
 	src/Savegame/AlienBase.cpp \
 	src/Savegame/AlienBase.h \
 	src/Savegame/AlienStrategy.cpp \

@@ -47,6 +47,7 @@
 #include "TerrorSite.h"
 #include "AlienBase.h"
 #include "AlienStrategy.h"
+#include "AlienMission.h"
 #ifdef _MSC_VER
 #include <windows.h>
 #endif
@@ -256,12 +257,24 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_regions.push_back(r);
 	}
 
+	// Missions must be loaded before UFOs.
+	const YAML::Node &missions = *doc.FindValue("alienMissions");
+	for (YAML::Iterator it = missions.begin(); it != missions.end(); ++it)
+	{
+		std::string missionType;
+		(*it)["type"] >> missionType;
+		const RuleAlienMission &mRule = *rule->getAlienMission(missionType);
+		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
+		mission->load(*it);
+		_activeMissions.push_back(mission.release());
+	}
+
 	for (YAML::Iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type;
 		(*i)["type"] >> type;
 		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(*i);
+		u->load(*i, *rule, *this);
 		_ufos.push_back(u);
 	}
 
@@ -365,6 +378,14 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "bases" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// Missions must be saved before UFOs.
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -1071,6 +1092,25 @@ void SavedGame::setDebugMode()
 bool SavedGame::getDebugMode() const
 {
 	return _debug;
+}
+
+struct matchRegionAndType: public std::unary_function<AlienMission *, bool>
+{
+	const std::string &_region;
+	const std::string &_type;
+	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	bool operator()(const AlienMission *mis) const
+	{
+		return mis->getRegion() == _region && mis->getType() == _type;
+	}
+};
+
+AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
+{
+	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
+	if (ii == _activeMissions.end())
+		return 0;
+	return *ii;
 }
 
 /**
