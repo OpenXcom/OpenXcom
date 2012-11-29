@@ -184,8 +184,9 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	}
 
 	// don't go over the cap
-	if(newFunding + funding > getRules()->getMaxFunding())
-		newFunding = getRules()->getMaxFunding() - funding;
+	int cap = this->getRules()->getMaxFunding()*1000;
+	if(funding + newFunding > cap)
+		newFunding = cap - funding;
 
 	// set the new funding and reset the activity meters
 	if(_pact)
