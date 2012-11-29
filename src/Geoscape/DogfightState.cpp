@@ -46,6 +46,7 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Savegame/AlienMission.h"
 #include <cstdlib>
 
 namespace OpenXcom
@@ -1018,14 +1019,15 @@ void DogfightState::move()
 			}
 			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
 			{
-				_ufo->setTimeOnGround(-1);
+				_ufo->setStatus(Ufo::DESTROYED);
 				_destroyUfo = true;
 			}
 			else
 			{
 				_ufo->setAltitude("STR_GROUND");
-				_ufo->setTimeOnGround(24 + RNG::generate(0, 72));
 			}
+			AlienMission *mission = _ufo->getMission();
+			mission->ufoShotDown(*_ufo, *_game->getRuleset(), *_game->getSavedGame());
 		}
 		_timeout += 30;
 		if(_ufo->getShotDownByCraftId() != _craft->getId())

@@ -389,11 +389,17 @@ set ( ruleset_src
   Ruleset/AlienRace.cpp
   Ruleset/Unit.h
   Ruleset/Unit.cpp
+  Ruleset/UfoTrajectory.cpp
+  Ruleset/UfoTrajectory.h
+  Ruleset/RuleAlienMission.cpp
+  Ruleset/RuleAlienMission.h
 )
 
 set ( savegame_src
   Savegame/AlienBase.h
   Savegame/AlienBase.cpp
+  Savegame/AlienMission.cpp
+  Savegame/AlienMission.h
   Savegame/BattleItem.h
   Savegame/BattleItem.cpp
   Savegame/Ufo.cpp
@@ -448,6 +454,10 @@ set ( savegame_src
   Savegame/Vehicle.cpp
   Savegame/EquipmentLayoutItem.h
   Savegame/EquipmentLayoutItem.cpp
+  Savegame/WeightedOptions.cpp
+  Savegame/WeightedOptions.h
+  Savegame/AlienStrategy.cpp
+  Savegame/AlienStrategy.h
 )
 
 set ( ufopedia_src

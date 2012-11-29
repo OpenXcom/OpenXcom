@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes a terror site.
  */
-TerrorSite::TerrorSite() : Target(), _id(0), _hoursActive(-1), _inBattlescape(false)
+TerrorSite::TerrorSite() : Target(), _id(0), _secondsRemaining(0), _inBattlescape(false)
 {
 }
 
@@ -45,7 +45,7 @@ void TerrorSite::load(const YAML::Node &node)
 {
 	Target::load(node);
 	node["id"] >> _id;
-	node["hoursActive"] >> _hoursActive;
+	node["secondsRemaining"] >> _secondsRemaining;
 	node["race"] >> _race;
 	node["inBattlescape"] >> _inBattlescape;
 }
@@ -58,7 +58,7 @@ void TerrorSite::save(YAML::Emitter &out) const
 {
 	Target::save(out);
 	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "hoursActive" << YAML::Value << _hoursActive;
+	out << YAML::Key << "secondsRemaining" << YAML::Value << _secondsRemaining;
 	out << YAML::Key << "race" << YAML::Value << _race;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::EndMap;
@@ -107,21 +107,21 @@ std::wstring TerrorSite::getName(Language *lang) const
 }
 
 /**
- * Returns the amount of hours the terror site has been active for.
- * @return Amount of hours.
+ * Returns the number of seconds remaining before the terror site expires.
+ * @return Amount of seconds.
  */
-int TerrorSite::getHoursActive() const
+unsigned TerrorSite::getSecondsRemaining() const
 {
-	return _hoursActive;
+	return _secondsRemaining;
 }
 
 /**
- * Changes the amount of hours the terror site has been active for.
- * @param hours Amount of hours.
+ * Changes the number of seconds before the terror site expires.
+ * @param seconds Amount of seconds.
  */
-void TerrorSite::setHoursActive(int hours)
+void TerrorSite::setSecondsRemaining(unsigned seconds)
 {
-	_hoursActive = hours;
+	_secondsRemaining = seconds;
 }
 
 /**
