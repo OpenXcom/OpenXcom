@@ -58,7 +58,7 @@ class SavedGame
 private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
-	std::vector<int> _funds, _maintenance;
+	std::vector<int> _funds, _maintenance, _researchScores;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -71,7 +71,7 @@ private:
 	std::vector<AlienBase*> _alienBases;
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
-	bool _debug;
+	bool _debug, _warned;
 
 	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
@@ -167,6 +167,12 @@ public:
 	bool getDebugMode() const;
 	/// return a list of maintenance costs
 	std::vector<int> getMaintenances();
+	/// sets the research score for the month
+	void setResearchScore(int score);
+	/// gets the list of research scores
+	std::vector<int> getResearchScores();
+	bool getWarned();
+	void setWarned(bool warned);
 };
 
 }
