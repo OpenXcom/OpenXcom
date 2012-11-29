@@ -1268,7 +1268,6 @@ void GeoscapeState::time1Month()
 	// Handle funding
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
-	popup(new MonthlyReportState(_game, psi));
 	for(std::vector<Country*>::iterator c = _game->getSavedGame()->getCountries()->begin(); c !=  _game->getSavedGame()->getCountries()->end(); ++c)
 	{
 		if((*c)->getNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9)
@@ -1299,6 +1298,7 @@ void GeoscapeState::time1Month()
 			_game->getSavedGame()->getAlienBases()->push_back(b);
 		}
 	}
+	popup(new MonthlyReportState(_game, psi));
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
 	{
