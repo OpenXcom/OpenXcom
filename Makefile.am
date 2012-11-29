@@ -414,6 +414,8 @@ openxcom_SOURCES = \
 	src/Ruleset/Armor.h \
 	src/Ruleset/Unit.cpp \
 	src/Ruleset/Unit.h \
+	src/Ruleset/RuleAlienMission.cpp \
+	src/Ruleset/RuleAlienMission.h \
 	src/Ruleset/RuleBaseFacility.cpp \
 	src/Ruleset/RuleBaseFacility.h \
 	src/Ruleset/RuleCountry.cpp \
@@ -442,8 +444,14 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
+	src/Ruleset/UfoTrajectory.cpp \
+	src/Ruleset/UfoTrajectory.h \
+	src/Savegame/AlienMission.cpp \
+	src/Savegame/AlienMission.h \
 	src/Savegame/AlienBase.cpp \
 	src/Savegame/AlienBase.h \
+	src/Savegame/AlienStrategy.cpp \
+	src/Savegame/AlienStrategy.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -498,6 +506,8 @@ openxcom_SOURCES = \
 	src/Savegame/Vehicle.h \
 	src/Savegame/Waypoint.cpp \
 	src/Savegame/Waypoint.h \
+	src/Savegame/WeightedOptions.cpp \
+	src/Savegame/WeightedOptions.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \
 	src/Ufopaedia/ArticleStateBaseFacility.h \
 	src/Ufopaedia/ArticleState.cpp \

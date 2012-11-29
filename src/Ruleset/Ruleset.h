@@ -48,6 +48,9 @@ class RuleResearch;
 class RuleManufacture;
 class AlienRace;
 class AlienDeployment;
+class UfoTrajectory;
+class RuleAlienMission;
+class City;
 
 /**
  * Set of rules and stats for a game.
@@ -77,10 +80,13 @@ protected:
 	std::map<std::string, RuleInventory*> _invs;
 	std::map<std::string, RuleResearch *> _research;
 	std::map<std::string, RuleManufacture *> _manufacture;
+	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
+	std::map<std::string, RuleAlienMission *> _alienMissions;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::auto_ptr<YAML::Node> _startingBase;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex;
+	std::vector<std::string> _alienMissionsIndex;
 
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
@@ -173,6 +179,14 @@ public:
 	const std::vector<std::string> &getManufactureList () const;
 	/// Get facilities for custom bases.
 	std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
+	/// Gets a specific UfoTrajectory.
+	const UfoTrajectory *getUfoTrajectory(const std::string &id) const;
+	/// Gets the ruleset for a specific alien mission.
+	const RuleAlienMission *getAlienMission(const std::string &id) const;
+	/// Get the list of all alien missions.
+	const std::vector<std::string> &getAlienMissionList() const;
+	/// Get the city at the specified coordinates.
+	const City *locateCity(double lon, double lat) const;
 };
 
 }

@@ -1739,6 +1739,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\AlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienMission.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
 			</File>
@@ -1946,6 +1954,22 @@
 				RelativePath=".\Savegame\Waypoint.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Savegame\WeightedOptions.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\WeightedOptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource"
@@ -2147,11 +2171,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\UfoTrajectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\UfoTrajectory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\Unit.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Ruleset\Unit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.h"
 				>
 			</File>
 		</Filter>

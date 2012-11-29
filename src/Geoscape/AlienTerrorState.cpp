@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param city Pointer to the city to get info from.
  * @param state Pointer to the Geoscape.
  */
-AlienTerrorState::AlienTerrorState(Game *game, City *city, GeoscapeState *state) : State(game), _city(city), _state(state)
+AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *state) : State(game), _city(city), _state(state)
 {
 	_screen = false;
 
