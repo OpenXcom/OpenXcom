@@ -48,7 +48,7 @@ class AlienMission;
 /**
  * Enumerator containing all the possible game difficulties.
  */
-enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
+enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
 /**
  * The game data that gets written to disk when the game is saved.
