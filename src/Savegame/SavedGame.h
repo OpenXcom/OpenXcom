@@ -44,6 +44,7 @@ class TerrorSite;
 class AlienBase;
 class AlienStrategy;
 class AlienMission;
+class Target;
 
 /**
  * Enumerator containing all the possible game difficulties.
@@ -187,6 +188,10 @@ public:
 	const std::vector<AlienMission*> &getAlienMissions() const { return _activeMissions; }
 	/// Gets a mission matching region and type.
 	AlienMission *getAlienMission(const std::string &region, const std::string &type) const;
+	/// Locate a region containing a position.
+	Region *locateRegion(double lon, double lat) const;
+	/// Locate a region containing a Target.
+	Region *locateRegion(const Target &target) const;
 };
 
 }

@@ -48,6 +48,7 @@
 #include "AlienBase.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"
+#include "../Ruleset/RuleRegion.h"
 #ifdef _MSC_VER
 #include <windows.h>
 #endif
@@ -1154,4 +1155,41 @@ void SavedGame::setWarned(bool warned)
 {
 	_warned = warned;
 }
+
+class ContainsPoint: public std::unary_function<const Region *, bool>
+{
+public:
+	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	/// Check is the point is in the region.
+	bool operator()(const Region *region) { return region->getRules()->insideRegion(_lon, _lat); }
+private:
+	double _lon, _lat;
+};
+
+/**
+ * Find the region containing this location.
+ * @param lon The longtitude.
+ * @param lat The latitude.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(double lon, double lat) const
+{
+	std::vector<Region *>::const_iterator found = std::find_if(_regions.begin(), _regions.end(), ContainsPoint(lon, lat));
+	if (found != _regions.end())
+	{
+		return *found;
+	}
+	return 0;
+}
+
+/**
+ * Find the region containing this target.
+ * @param target The target to locate.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(const Target &target) const
+{
+	return locateRegion(target.getLongitude(), target.getLatitude());
+}
+
 }

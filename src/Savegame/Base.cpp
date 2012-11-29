@@ -38,7 +38,6 @@
 #include "Ufo.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/RuleRegion.h"
 
 namespace OpenXcom
 {
@@ -1045,25 +1044,6 @@ bool Base::isInBattlescape() const
 void Base::setInBattlescape(bool inbattle)
 {
 	_inBattlescape = inbattle;
-}
-
-/**
- * Find the region for this base's location.
- * @return The region ID.
- */
-std::string Base::getRegion() const
-{
-	const std::vector<std::string> &rlist = _rule->getRegionsList();
-	for (std::vector<std::string>::const_iterator ii = rlist.begin(); ii != rlist.end(); ++ii)
-	{
-		const RuleRegion *region = _rule->getRegion(*ii);
-		if (region->insideRegion(getLongitude(), getLatitude()))
-		{
-			return *ii;
-		}
-	}
-	assert(0 && "Base in no region!");
-	return rlist[0];
 }
 
 }
