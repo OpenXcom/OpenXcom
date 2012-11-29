@@ -273,7 +273,7 @@ void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, c
 		break;
 	case Ufo::LANDED:
 		{
-			assert(ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1);
+			assert(ufo.getTrajectoryPoint() != ufo.getTrajectory().getWaypointCount() - 1);
 			ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
 			ufo.setAltitude("STR_VERY_LOW");
 			// Set next waypoint.
