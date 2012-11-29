@@ -192,6 +192,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame 
 {
 	if (ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1)
 	{
+		//TODO: We should probably score alien points here.
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
 		return;
@@ -272,14 +273,7 @@ void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, c
 		break;
 	case Ufo::LANDED:
 		{
-			//TODO: We should score alien points here.
-			if (ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1)
-			{
-				// Escaped to freedom!
-				ufo.setDetected(false);
-				ufo.setStatus(Ufo::DESTROYED);
-				return;
-			}
+			assert(ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1);
 			ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
 			ufo.setAltitude("STR_VERY_LOW");
 			// Set next waypoint.
@@ -297,6 +291,7 @@ void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, c
 			wp->setLongitude(pos.first);
 			wp->setLatitude(pos.second);
 			ufo.setDestination(wp);
+			ufo.setTrajectoryPoint(ufo.getTrajectoryPoint() + 1);
 		}
 		break;
 	case Ufo::CRASHED:
