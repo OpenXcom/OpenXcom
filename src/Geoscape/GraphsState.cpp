@@ -904,11 +904,19 @@ void GraphsState::drawFinanceLines()
 			roof = scoreTotals[entry];
 	}
 	maintTotals[0] = _game->getSavedGame()->getBaseMaintenance();
+	if(_financeToggles.at(2) && maintTotals[0] > roof)
+		roof = maintTotals[0];
 	expendTotals[0] = balanceTotals[1] - balanceTotals[0];
+	if(expendTotals[0] < 0)
+		expendTotals[0] = 0;
+	if(_financeToggles.at(1) && expendTotals[0] > roof)
+		roof = expendTotals[0];
 
-	for(size_t entry = 1; entry != _game->getSavedGame()->getFundsList().size()-1; ++entry)
+	for(size_t entry = 1; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
 		expendTotals[entry] = ((balanceTotals[entry+1] + incomeTotals[entry]) - maintTotals[entry])-balanceTotals[entry];
+		if(expendTotals[entry] < 0)
+			expendTotals[entry] = 0;
 		if(_financeToggles.at(1) && expendTotals[entry] > roof)
 			roof = expendTotals[entry];
 	}
