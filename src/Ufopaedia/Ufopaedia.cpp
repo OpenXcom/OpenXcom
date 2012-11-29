@@ -217,9 +217,9 @@ namespace OpenXcom
 	 */
 	ArticleDefinitionList Ufopaedia::getAvailableArticles(Game *game)
 	{
-		std::vector<std::string> list = game->getRuleset()->getUfopaediaList();
+		const std::vector<std::string> &list = game->getRuleset()->getUfopaediaList();
 		ArticleDefinitionList articles;
-		for (std::vector<std::string>::iterator it=list.begin(); it!=list.end(); ++it)
+		for (std::vector<std::string>::const_iterator it=list.begin(); it!=list.end(); ++it)
 		{
 			ArticleDefinition *article = game->getRuleset()->getUfopaediaArticle(*it);
 			if (isArticleAvailable(game, article) && article->section != UFOPAEDIA_NOT_AVAILABLE)

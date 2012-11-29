@@ -141,8 +141,8 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
-	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
-	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		if (_game->getRuleset()->getCraft(*i)->getBuyCost() > 0)
 		{
@@ -159,8 +159,8 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
-	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		if (_game->getRuleset()->getItem(*i)->getBuyCost() > 0)
 		{
@@ -215,7 +215,7 @@ void PurchaseState::btnOkClick(Action *action)
 				for (int s = 0; s < _qtys[i]; s++)
 				{
 					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
-					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), _game->getRuleset()->getPools(), _game->getSavedGame()->getId("STR_SOLDIER")));
+					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), &_game->getRuleset()->getPools(), _game->getSavedGame()->getId("STR_SOLDIER")));
 					_base->getTransfers()->push_back(t);
 				}
 			}
