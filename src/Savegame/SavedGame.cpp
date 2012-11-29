@@ -91,13 +91,14 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
 	_funds.push_back(0);
 	_maintenance.push_back(0);
+	_researchScores.push_back(0);
 }
 
 /**
@@ -234,6 +235,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	RNG::load(doc);
 	doc["funds"] >> _funds;
 	doc["maintenance"] >> _maintenance;
+	doc["researchScores"] >> _researchScores;
+	doc["warned"] >> _warned;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
 	doc["globeZoom"] >> _globeZoom;
@@ -357,6 +360,8 @@ void SavedGame::save(const std::string &filename) const
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
+	out << YAML::Key << "researchScores" << YAML::Value << _researchScores;
+	out << YAML::Key << "warned" << YAML::Value << _warned;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
 	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
@@ -1120,5 +1125,33 @@ AlienMission *SavedGame::getAlienMission(const std::string &region, const std::s
 std::vector<int> SavedGame::getMaintenances()
 {
 	return _maintenance;
+}
+
+/**
+ * adds to this month's research score
+ * @param score the amount to add.
+ */
+void SavedGame::setResearchScore(int score)
+{
+	_researchScores.at(_researchScores.size()-1) += score;
+}
+
+/**
+ * return the list of research scores
+ * @return list of research scores.
+ */
+std::vector<int> SavedGame::getResearchScores()
+{
+	return _researchScores;
+}
+
+bool SavedGame::getWarned()
+{
+	return _warned;
+}
+
+void SavedGame::setWarned(bool warned)
+{
+	_warned = warned;
 }
 }
