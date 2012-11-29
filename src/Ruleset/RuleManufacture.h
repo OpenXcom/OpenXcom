@@ -47,7 +47,7 @@ public:
 	///Get the manufacture category
 	std::string getCategory () const;
 	/// Gets the manufacture's requirements.
-	std::vector<std::string> getRequirements () const;
+	const std::vector<std::string> &getRequirements () const;
 	///Get the required workshop space
 	int getRequiredSpace () const;
 	///Get the time required to manufacture one object

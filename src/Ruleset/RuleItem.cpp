@@ -328,7 +328,7 @@ std::string RuleItem::getName() const
  * use this item.
  * @return List of research IDs.
  */
-std::vector<std::string> RuleItem::getRequirements() const
+const std::vector<std::string> &RuleItem::getRequirements() const
 {
 	return _requires;
 }

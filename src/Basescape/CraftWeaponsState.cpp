@@ -105,8 +105,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_lstWeapons->addRow(1, _game->getLanguage()->getString("STR_NONE_UC").c_str());
 	_weapons.push_back(0);
 
-	std::vector<std::string> weapons = _game->getRuleset()->getCraftWeaponsList();
-	for (std::vector<std::string>::iterator i = weapons.begin(); i != weapons.end(); ++i)
+	const std::vector<std::string> &weapons = _game->getRuleset()->getCraftWeaponsList();
+	for (std::vector<std::string>::const_iterator i = weapons.begin(); i != weapons.end(); ++i)
 	{
 		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(*i);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)

@@ -1298,7 +1298,7 @@ ResourcePack *BattlescapeGame::getResourcePack()
 /**
  * Get ruleset
  */
-Ruleset *BattlescapeGame::getRuleset()
+const Ruleset *BattlescapeGame::getRuleset() const
 {
 	return _parentState->getGame()->getRuleset();
 }

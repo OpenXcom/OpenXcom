@@ -109,7 +109,7 @@ std::string RuleManufacture::getCategory () const
  * manufacture this object.
  * @return List of research IDs.
  */
-std::vector<std::string> RuleManufacture::getRequirements() const
+const std::vector<std::string> &RuleManufacture::getRequirements() const
 {
 	return _requires;
 }

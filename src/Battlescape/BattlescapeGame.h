@@ -143,7 +143,7 @@ public:
 	TileEngine *getTileEngine();
 	Pathfinding *getPathfinding();
 	ResourcePack *getResourcePack();
-	Ruleset *getRuleset();
+	const Ruleset *getRuleset() const;
 };
 
 }

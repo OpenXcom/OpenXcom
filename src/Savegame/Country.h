@@ -50,7 +50,7 @@ public:
 	/// Gets the country's ruleset.
 	RuleCountry *getRules() const;
 	/// Gets the country's funding.
-	std::vector<int>  getFunding() const;
+	const std::vector<int> &getFunding() const;
 	/// Sets the country's funding.
 	void setFunding(int funding);
 	/// get the country's satisfaction level
@@ -60,9 +60,9 @@ public:
 	/// add alien activity in this country
 	void addActivityAlien(int activity);
 	/// get xcom activity to this country
-	std::vector<int>  getActivityXcom() const;
+	const std::vector<int>&getActivityXcom() const;
 	/// get xcom activity to this country
-	std::vector<int>  getActivityAlien() const;
+	const std::vector<int> &getActivityAlien() const;
 	/// store last month's counters, start new counters, set this month's change.
 	void newMonth(int xcomTotal, int alienTotal);
 	/// are we signing a new pact?

@@ -78,7 +78,7 @@ public:
 	/// Gets the item's name.
 	std::string getName() const;
 	/// Gets the item's requirements.
-	std::vector<std::string> getRequirements() const;
+	const std::vector<std::string> &getRequirements() const;
 	/// Gets the item's size.
 	float getSize() const;
 	/// Gets the item's purchase cost.

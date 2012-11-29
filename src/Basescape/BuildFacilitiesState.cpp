@@ -94,8 +94,8 @@ BuildFacilitiesState::~BuildFacilitiesState()
  */
 void BuildFacilitiesState::PopulateBuildList()
 {
-	std::vector<std::string> facilities = _game->getRuleset()->getBaseFacilitiesList();
-	for (std::vector<std::string>::iterator i = facilities.begin(); i != facilities.end(); ++i)
+	const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+	for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
 	{
 		RuleBaseFacility *rule = _game->getRuleset()->getBaseFacility(*i);
 		if (_game->getSavedGame()->isResearched(rule->getRequirements()) && !rule->isLift())

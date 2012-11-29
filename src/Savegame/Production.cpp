@@ -26,7 +26,7 @@
 
 namespace OpenXcom
 {
-Production::Production (RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _timeSpent(0), _engineers(0)
+Production::Production (const RuleManufacture * rules, int amount) : _rules(rules), _amount(amount), _timeSpent(0), _engineers(0)
 {
 }
 
@@ -60,7 +60,7 @@ void Production::setAssignedEngineers (int engineers)
 	_engineers = engineers;
 }
 
-productionProgress_e Production::step(Base * b, SavedGame * g, Ruleset *r)
+productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 {
 	int done = getAmountProduced ();
 	_timeSpent += _engineers;
