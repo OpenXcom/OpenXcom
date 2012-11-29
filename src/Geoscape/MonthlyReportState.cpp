@@ -155,12 +155,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	{
 		if(_game->getSavedGame()->getWarned())
 		{
-			ss4 << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
+			ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 			// game over man
 		}
 		else
 		{
-			ss4 << _game->getLanguage()->getString("STR_COUNCIL_REDUCE_DEBTS");
+			ss4 << tr("STR_COUNCIL_REDUCE_DEBTS");
 			_game->getSavedGame()->setWarned(true);
 			resetWarning = false;
 		}
@@ -169,21 +169,21 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	{
 		if(_lastMonthsRating <= difficulty_threshold)
 		{
-			ss4 << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
+			ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 			// game over man
 		}
 		else
 		{
-			ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_DISSATISFIED");
+			ss4 << tr("STR_COUNCIL_IS_DISSATISFIED");
 		}
 	}
 	else if(_ratingTotal > difficulty_threshold)
 	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED");
+		ss4 << tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
 	else if(_ratingTotal > 500)
 	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_VERY_PLEASED");
+		ss4 << tr("STR_COUNCIL_IS_VERY_PLEASED");
 	}
 
 	if(resetWarning && _game->getSavedGame()->getWarned())
@@ -194,7 +194,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 		ss4 << "\n\n";
 		for(std::vector<std::string>::iterator happy = _happyList.begin(); happy != _happyList.end(); ++happy)
 		{
-			ss4 << _game->getLanguage()->getString(*happy);
+			ss4 << tr(*happy);
 			if(_happyList.size() > 1)
 			{
 				if(happy == _happyList.end()-2)
@@ -227,7 +227,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 		ss4 << "\n\n";
 		for(std::vector<std::string>::iterator sad = _sadList.begin(); sad != _sadList.end(); ++sad)
 		{
-			ss4 << _game->getLanguage()->getString(*sad);
+			ss4 << tr(*sad);
 			if(_sadList.size() > 1)
 			{
 				if(sad == _sadList.end()-2)

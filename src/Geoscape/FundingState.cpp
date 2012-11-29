@@ -97,7 +97,7 @@ FundingState::FundingState(Game *game) : State(game)
 		{
 			ss2 << "0";
 		}
-		_lstCountries->addRow(3, _game->getLanguage()->getString((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
 	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
