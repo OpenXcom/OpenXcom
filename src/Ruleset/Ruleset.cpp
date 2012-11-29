@@ -852,9 +852,9 @@ SavedGame *Ruleset::newSave() const
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-std::vector<SoldierNamePool*> *Ruleset::getPools()
+const std::vector<SoldierNamePool*> &Ruleset::getPools() const
 {
-	return &_names;
+	return _names;
 }
 
 /**
@@ -872,7 +872,7 @@ RuleCountry *Ruleset::getCountry(const std::string &id) const
  * provided by the ruleset.
  * @return List of countries.
  */
-std::vector<std::string> Ruleset::getCountriesList() const
+const std::vector<std::string> &Ruleset::getCountriesList() const
 {
 	return _countriesIndex;
 }
@@ -892,7 +892,7 @@ RuleRegion *Ruleset::getRegion(const std::string &id) const
  * provided by the ruleset.
  * @return List of regions.
  */
-std::vector<std::string> Ruleset::getRegionsList() const
+const std::vector<std::string> &Ruleset::getRegionsList() const
 {
 	return _regionsIndex;
 }
@@ -912,7 +912,7 @@ RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
  * provided by the ruleset.
  * @return List of base faciliies.
  */
-std::vector<std::string> Ruleset::getBaseFacilitiesList() const
+const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
 {
 	return _facilitiesIndex;
 }
@@ -932,7 +932,7 @@ RuleCraft *Ruleset::getCraft(const std::string &id) const
  * provided by the ruleset.
  * @return List of crafts.
  */
-std::vector<std::string> Ruleset::getCraftsList() const
+const std::vector<std::string> &Ruleset::getCraftsList() const
 {
 	return _craftsIndex;
 }
@@ -952,7 +952,7 @@ RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
  * provided by the ruleset.
  * @return List of craft weapons.
  */
-std::vector<std::string> Ruleset::getCraftWeaponsList() const
+const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
 {
 	return _craftWeaponsIndex;
 }
@@ -975,7 +975,7 @@ RuleItem *Ruleset::getItem(const std::string &id) const
  * provided by the ruleset.
  * @return List of items.
  */
-std::vector<std::string> Ruleset::getItemsList() const
+const std::vector<std::string> &Ruleset::getItemsList() const
 {
 	return _itemsIndex;
 }
@@ -995,7 +995,7 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
  * provided by the ruleset.
  * @return List of ufos.
  */
-std::vector<std::string> Ruleset::getUfosList() const
+const std::vector<std::string> &Ruleset::getUfosList() const
 {
 	return _ufosIndex;
 }
@@ -1065,7 +1065,7 @@ AlienRace *Ruleset::getAlienRace(const std::string &name) const
  * provided by the ruleset.
  * @return List of alien races.
  */
-std::vector<std::string> Ruleset::getAlienRacesList() const
+const std::vector<std::string> &Ruleset::getAlienRacesList() const
 {
 	return _aliensIndex;
 }
@@ -1085,7 +1085,7 @@ AlienDeployment *Ruleset::getDeployment(const std::string &name) const
  * provided by the ruleset.
  * @return List of alien deployments.
  */
-std::vector<std::string> Ruleset::getDeploymentsList() const
+const std::vector<std::string> &Ruleset::getDeploymentsList() const
 {
 	return _deploymentsIndex;
 }
@@ -1105,7 +1105,7 @@ Armor *Ruleset::getArmor(const std::string &name) const
  * provided by the ruleset.
  * @return List of armors.
  */
-std::vector<std::string> Ruleset::getArmorsList() const
+const std::vector<std::string> &Ruleset::getArmorsList() const
 {
 	return _armorsIndex;
 }
@@ -1165,7 +1165,7 @@ ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
  * provided by the ruleset.
  * @return List of articles.
  */
-std::vector<std::string> Ruleset::getUfopaediaList() const
+const std::vector<std::string> &Ruleset::getUfopaediaList() const
 {
 	return _ufopaediaIndex;
 }
@@ -1203,7 +1203,7 @@ RuleResearch *Ruleset::getResearch (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-std::vector<std::string> Ruleset::getResearchList () const
+const std::vector<std::string> &Ruleset::getResearchList () const
 {
 	return _researchIndex;
 }
@@ -1222,13 +1222,15 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-std::vector<std::string> Ruleset::getManufactureList () const
+const std::vector<std::string> &Ruleset::getManufactureList () const
 {
 	return _manufactureIndex;
 }
 
 /**
- * Returns a list of facilities for custom bases.
+ * Generates and returns a list of facilities for custom bases.
+ * The list contains all the facilities that are listed in the 'startingBase'
+ * part of the ruleset.
  * @return The list of facilities for custom bases.
  */
 std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const

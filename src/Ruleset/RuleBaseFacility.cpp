@@ -196,7 +196,7 @@ std::string RuleBaseFacility::getType() const
  * build this base facility.
  * @return List of research IDs..
  */
-std::vector<std::string> RuleBaseFacility::getRequirements() const
+const std::vector<std::string> &RuleBaseFacility::getRequirements() const
 {
 	return _requires;
 }

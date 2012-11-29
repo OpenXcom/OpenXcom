@@ -91,7 +91,7 @@ void Region::addActivityAlien(int activity)
  * Gets the region's xcom activity level.
  * @return activity level.
  */
-std::vector<int> Region::getActivityXcom() const
+const std::vector<int> &Region::getActivityXcom() const
 {
 	return _activityXcom;
 }
@@ -100,7 +100,7 @@ std::vector<int> Region::getActivityXcom() const
  * Gets the region's alien activity level.
  * @return activity level.
  */
-std::vector<int> Region::getActivityAlien() const
+const std::vector<int> &Region::getActivityAlien() const
 {
 	return _activityAlien;
 }

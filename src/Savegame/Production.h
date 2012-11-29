@@ -31,7 +31,7 @@ enum productionProgress_e { PROGRESS_NOT_COMPLETE, PROGRESS_COMPLETE, PROGRESS_N
 class Production
 {
 public:
-	Production (RuleManufacture * rules, int amount);
+	Production (const RuleManufacture * rules, int amount);
 	int getAmountRemaining () const;
 	void setAmountRemaining (int);
 	int getTimeSpent () const;
@@ -39,13 +39,13 @@ public:
 	int getAmountProduced () const;
 	int getAssignedEngineers() const;
 	void setAssignedEngineers (int);
-	productionProgress_e step(Base * b, SavedGame * g, Ruleset *r);
+	productionProgress_e step(Base * b, SavedGame * g, const Ruleset *r);
 	const RuleManufacture * getRules() const;
 	void startItem(Base * b, SavedGame * g);
 	void save(YAML::Emitter &out);
 	void load(const YAML::Node &node);
 private:
-	RuleManufacture * _rules;
+	const RuleManufacture * _rules;
 	int _amount;
 	int _timeSpent;
 	int _engineers;
