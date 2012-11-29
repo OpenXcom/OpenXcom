@@ -596,7 +596,7 @@ void GeoscapeState::time5Seconds()
 	// Handle terror sites expiring
 	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
 	{
-		if ((*i)->getSecondsRemaining() > 5)
+		if ((*i)->getSecondsRemaining() >= 5)
 		{
 			(*i)->setSecondsRemaining((*i)->getSecondsRemaining() - 5);
 		}
