@@ -58,7 +58,7 @@ class SavedGame
 private:
 	GameDifficulty _difficulty;
 	GameTime *_time;
-	int _funds;
+	std::vector<int> _funds, _maintenance, _researchScores;
 	double _globeLon, _globeLat;
 	int _globeZoom;
 	std::map<std::string, int> _ids;
@@ -71,7 +71,7 @@ private:
 	std::vector<AlienBase*> _alienBases;
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
-	bool _debug;
+	bool _debug, _warned;
 
 	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
@@ -93,6 +93,8 @@ public:
 	void setDifficulty(GameDifficulty difficulty);
 	/// Gets the current funds.
 	int getFunds() const;
+	/// Gets the list of funds from previous months.
+	std::vector<int> getFundsList() const;
 	/// Sets new funds.
 	void setFunds(int funds);
 	/// Gets the current globe longitude.
@@ -110,29 +112,29 @@ public:
 	/// Handles monthly funding.
 	void monthlyFunding();
 	/// Gets the current game time.
-	GameTime *const getTime() const;
+	GameTime *getTime() const;
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
 	/// Initializes te IDs list.
 	void initIds(const std::map<std::string, int> &ids);
 	/// Gets the list of countries.
-	std::vector<Country*> *const getCountries();
+	std::vector<Country*> *getCountries();
 	/// Gets the total country funding.
 	int getCountryFunding() const;
 	/// Gets the list of regions.
-	std::vector<Region*> *const getRegions();
+	std::vector<Region*> *getRegions();
 	/// Gets the list of bases.
-	std::vector<Base*> *const getBases();
+	std::vector<Base*> *getBases();
 	/// Gets the total base maintenance.
 	int getBaseMaintenance() const;
 	/// Gets the list of UFOs.
-	std::vector<Ufo*> *const getUfos();
+	std::vector<Ufo*> *getUfos();
 	/// Gets the list of waypoints.
-	std::vector<Waypoint*> *const getWaypoints();
+	std::vector<Waypoint*> *getWaypoints();
 	/// Gets the list of terror sites.
-	std::vector<TerrorSite*> *const getTerrorSites();
+	std::vector<TerrorSite*> *getTerrorSites();
 	/// Gets the current battle game.
-	SavedBattleGame *const getBattleGame();
+	SavedBattleGame *getBattleGame();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject
@@ -152,17 +154,25 @@ public:
 	/// Gets if a list of research has been unlocked.
 	bool isResearched(const std::vector<std::string> &research) const;
 	/// Gets the soldier matching this ID.
-	Soldier *const getSoldier(int id) const;
+	Soldier *getSoldier(int id) const;
 	/// Handles the higher promotions.
 	bool handlePromotions();
 	/// Checks how many soldiers of a rank exist and which one has the highest score.
 	void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
 	///  Returns the list of alien bases.
-	std::vector<AlienBase*> *const getAlienBases();
+	std::vector<AlienBase*> *getAlienBases();
 	/// Sets debug mode.
 	void setDebugMode();
 	/// Gets debug mode.
 	bool getDebugMode() const;
+	/// return a list of maintenance costs
+	std::vector<int> getMaintenances();
+	/// sets the research score for the month
+	void setResearchScore(int score);
+	/// gets the list of research scores
+	std::vector<int> getResearchScores();
+	bool getWarned();
+	void setWarned(bool warned);
 };
 
 }

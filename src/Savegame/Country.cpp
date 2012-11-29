@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _funding(0), _pact(false), _newPact(false)
+Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _pact(false), _newPact(false), _funding(0), _satisfaction(2)
 {
 	if (gen)
 	{
@@ -55,6 +55,7 @@ void Country::load(const YAML::Node &node)
 	node["activityXcom"] >> _activityXcom;
 	node["activityAlien"] >> _activityAlien;
 	node["pact"] >> _pact;
+	node["newPact"] >> _newPact;
 }
 
 /**
@@ -69,6 +70,7 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
 	out << YAML::Key << "pact" << YAML::Value << _pact;
+	out << YAML::Key << "newPact" << YAML::Value << _pact;
 	out << YAML::EndMap;
 }
 
@@ -76,7 +78,7 @@ void Country::save(YAML::Emitter &out) const
  * Returns the ruleset for the country's type.
  * @return Pointer to ruleset.
  */
-RuleCountry *const Country::getRules() const
+RuleCountry *Country::getRules() const
 {
 	return _rules;
 }
@@ -104,18 +106,11 @@ void Country::setFunding(int funding)
  * @param diff the difficulty level.
  * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
  */
-int Country::getSatisfaction(int diff)
+int Country::getSatisfaction()
 {
 	if(_pact)
 		return 0;
-	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
-	if(difference >= 500 +(100*diff))
-		return 3;
-	else if(difference <= -500 +(100*diff))
-	{
-		return 1;
-	}
-	return 2;
+	return _satisfaction;
 }
 
 /**
@@ -158,48 +153,49 @@ std::vector<int> Country::getActivityAlien() const
  * reset all the counters,
  * calculate this month's funding,
  * set the change value for the month.
- * @param diff the difficulty level.
+ * @param xcomTotal the council's xcom score
+ * @param alienTotal the council's alien score
  */
 
-void Country::newMonth(int diff)
+void Country::newMonth(int xcomTotal, int alienTotal)
 {
-	if(_newPact)
+	int newFunding = 0;
+	int funding = getFunding().at(getFunding().size()-1);
+	int good = (xcomTotal / 10) + _activityXcom[_activityXcom.size()-1];
+	int bad = (alienTotal / 20) + _activityAlien[_activityAlien.size()-1];
+
+	if(good > bad + 30 && bad < RNG::generate(0, good))
+	{
+		// happy
+		newFunding = (_funding.at(_funding.size()-1)/100) * RNG::generate(5, 20);
+		_satisfaction = 3;
+	}
+	else if(good < bad + 30 && good < RNG::generate(0, bad))
+	{
+		//sad
+		newFunding -= (_funding.at(_funding.size()-1)/100) * RNG::generate(5, 20);
+		_satisfaction = 1;
+	}
+	// about to be in cahoots
+	if(_newPact && !_pact)
 	{
 		_newPact = false;
-	}
-	int increase(0);
-	int difference = _activityXcom[_activityXcom.size()-1]- _activityAlien[_activityAlien.size()-1];
-	int lastDifference = 0;
-	switch(getSatisfaction(diff))
-	{
-	case 0:
-		increase = -100;
-		break;
-	case 1:
-		increase = 0 - RNG::generate(5, 20);
-		break;
-	case 2:
-		increase = 0;
-		break;
-	case 3:
-		increase = RNG::generate(5, 20);
-		break;
-	default:
-		break;
-	}
-	if(_activityXcom.size() > 1)
-	{
-		lastDifference = _activityXcom[_activityXcom.size()-2]- _activityAlien[_activityAlien.size()-2];
-	}
-	if(difference <= -500 - (100*diff) && lastDifference <= -500 - (100*diff) && !_pact)
-	{
-		_newPact = true;
 		_pact = true;
 	}
-	int newFunding = _funding[_funding.size()-1] + ((_funding[_funding.size()-1]/100) * increase);
+
+	// don't go over the cap
+	int cap = this->getRules()->getMaxFunding()*1000;
+	if(funding + newFunding > cap)
+		newFunding = cap - funding;
+
+	// set the new funding and reset the activity meters
+	if(_pact)
+		_funding.push_back(0);
+	else
+		_funding.push_back(funding + newFunding);
+	
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
-	_funding.push_back(newFunding);
 	if(_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());
 	if(_activityXcom.size() > 12)
@@ -209,10 +205,28 @@ void Country::newMonth(int diff)
 }
 
 /**
- * @return if this is a new pact.
+ * @return if we will sign a new pact.
  */
-bool Country::isNewPact()
+bool Country::getNewPact()
 {
 	return _newPact;
+}
+
+/**
+ * sign a new pact at month's end.
+ */
+void Country::setNewPact()
+{
+	 _newPact = true;
+}
+
+/**
+ * no setter for this one, as it gets set automatically
+ * at month's end if _newPact is set.
+ * @return if we have signed a pact.
+ */
+bool Country::getPact()
+{
+	return _pact;
 }
 }

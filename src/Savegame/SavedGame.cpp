@@ -86,10 +86,13 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_funds.push_back(0);
+	_maintenance.push_back(0);
+	_researchScores.push_back(0);
 }
 
 /**
@@ -224,6 +227,9 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_difficulty = (GameDifficulty)a;
 	RNG::load(doc);
 	doc["funds"] >> _funds;
+	doc["maintenance"] >> _maintenance;
+	doc["researchScores"] >> _researchScores;
+	doc["warned"] >> _warned;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
 	doc["globeZoom"] >> _globeZoom;
@@ -332,6 +338,9 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
+	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
+	out << YAML::Key << "researchScores" << YAML::Value << _researchScores;
+	out << YAML::Key << "warned" << YAML::Value << _warned;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
 	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
@@ -426,6 +435,15 @@ void SavedGame::setDifficulty(GameDifficulty difficulty)
  */
 int SavedGame::getFunds() const
 {
+	return _funds[_funds.size()-1];
+}
+
+/**
+ * Returns the player's funds for the last 12 months.
+ * @return funds.
+ */
+std::vector<int> SavedGame::getFundsList() const
+{
 	return _funds;
 }
 
@@ -435,7 +453,7 @@ int SavedGame::getFunds() const
  */
 void SavedGame::setFunds(int funds)
 {
-	_funds = funds;
+	_funds[_funds.size()-1] = funds;
 }
 
 /**
@@ -498,14 +516,20 @@ void SavedGame::setGlobeZoom(int zoom)
  */
 void SavedGame::monthlyFunding()
 {
-	_funds += getCountryFunding() - getBaseMaintenance();
+	_funds[_funds.size()-1] += getCountryFunding() - getBaseMaintenance();
+	_funds.push_back(_funds[_funds.size()-1]);
+	_maintenance[_maintenance.size()-1] = getBaseMaintenance();
+	_maintenance.push_back(0);
+
+	if(_funds.size() > 12)
+		_funds.erase(_funds.begin());
 }
 
 /**
  * Returns the current time of the game.
  * @return Pointer to the game time.
  */
-GameTime *const SavedGame::getTime() const
+GameTime *SavedGame::getTime() const
 {
 	return _time;
 }
@@ -536,7 +560,7 @@ void SavedGame::initIds(const std::map<std::string, int> &ids)
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::vector<Country*> *const SavedGame::getCountries()
+std::vector<Country*> *SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -559,7 +583,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::vector<Region*> *const SavedGame::getRegions()
+std::vector<Region*> *SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -568,7 +592,7 @@ std::vector<Region*> *const SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-std::vector<Base*> *const SavedGame::getBases()
+std::vector<Base*> *SavedGame::getBases()
 {
 	return &_bases;
 }
@@ -591,7 +615,7 @@ int SavedGame::getBaseMaintenance() const
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
-std::vector<Ufo*> *const SavedGame::getUfos()
+std::vector<Ufo*> *SavedGame::getUfos()
 {
 	return &_ufos;
 }
@@ -600,7 +624,7 @@ std::vector<Ufo*> *const SavedGame::getUfos()
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
-std::vector<Waypoint*> *const SavedGame::getWaypoints()
+std::vector<Waypoint*> *SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }
@@ -609,7 +633,7 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
  * Returns the list of terror sites.
  * @return Pointer to terror site list.
  */
-std::vector<TerrorSite*> *const SavedGame::getTerrorSites()
+std::vector<TerrorSite*> *SavedGame::getTerrorSites()
 {
 	return &_terrorSites;
 }
@@ -618,7 +642,7 @@ std::vector<TerrorSite*> *const SavedGame::getTerrorSites()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *const SavedGame::getBattleGame()
+SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battleGame;
 }
@@ -918,7 +942,7 @@ bool SavedGame::isResearched(const std::vector<std::string> &research) const
  * @param id A soldier's unique id.
  * @return Pointer to Soldier.
  */
-Soldier *const SavedGame::getSoldier(int id) const
+Soldier *SavedGame::getSoldier(int id) const
 {
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
@@ -1022,7 +1046,7 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
   * Returns the list of alien bases.
   * @return Pointer to alien base list.
   */
-std::vector<AlienBase*> *const SavedGame::getAlienBases()
+std::vector<AlienBase*> *SavedGame::getAlienBases()
 {
 	return &_alienBases;
 }
@@ -1044,4 +1068,40 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
+/**
+ * return the list of monthly maintenance costs
+ * @return list of maintenances.
+ */
+std::vector<int> SavedGame::getMaintenances()
+{
+	return _maintenance;
+}
+
+/**
+ * adds to this month's research score
+ * @param score the amount to add.
+ */
+void SavedGame::setResearchScore(int score)
+{
+	_researchScores.at(_researchScores.size()-1) += score;
+}
+
+/**
+ * return the list of research scores
+ * @return list of research scores.
+ */
+std::vector<int> SavedGame::getResearchScores()
+{
+	return _researchScores;
+}
+
+bool SavedGame::getWarned()
+{
+	return _warned;
+}
+
+void SavedGame::setWarned(bool warned)
+{
+	_warned = warned;
+}
 }

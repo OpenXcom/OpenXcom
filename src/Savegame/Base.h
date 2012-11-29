@@ -73,15 +73,15 @@ public:
 	/// Sets the base's name.
 	void setName(const std::wstring &name);
 	/// Gets the base's facilities.
-	std::vector<BaseFacility*> *const getFacilities();
+	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.
-	std::vector<Soldier*> *const getSoldiers();
+	std::vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
-	std::vector<Craft*> *const getCrafts();
+	std::vector<Craft*> *getCrafts();
 	/// Gets the base's transfers.
-	std::vector<Transfer*> *const getTransfers();
+	std::vector<Transfer*> *getTransfers();
 	/// Gets the base's items.
-	ItemContainer *const getItems();
+	ItemContainer *getItems();
 	/// Gets the base's scientists.
 	int getScientists() const;
 	/// Sets the base's scientists.

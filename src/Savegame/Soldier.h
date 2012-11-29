@@ -72,7 +72,7 @@ public:
 	/// Sets the soldier's name.
 	void setName(const std::wstring &name);
 	/// Gets the soldier's craft.
-	Craft *const getCraft() const;
+	Craft *getCraft() const;
 	/// Sets the soldier's craft.
 	void setCraft(Craft *craft);
 	/// Gets the soldier's craft string.
@@ -108,7 +108,7 @@ public:
 	/// Get whether the unit was recently promoted.
 	bool isPromoted();
 	/// Gets the soldier armor.
-	Armor *const getArmor() const;
+	Armor *getArmor() const;
 	/// Sets the soldier armor.
 	void setArmor(Armor *armor);
 	/// Gets the soldier's wound recovery time.
@@ -118,7 +118,7 @@ public:
 	/// Heals wound recoveries.
 	void heal();
 	/// Gets the soldier's equipment-layout.
-	std::vector<EquipmentLayoutItem*> *const getEquipmentLayout();
+	std::vector<EquipmentLayoutItem*> *getEquipmentLayout();
 	/// Trains a soldier's psychic stats
 	void trainPsi();
 	/// Returns whether the unit is in psi training or not

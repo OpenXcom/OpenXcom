@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OpenXcom
+Comment=
+Exec=openxcom
+Terminal=false
+Icon=openxcom
+Categories=Game;StrategyGame

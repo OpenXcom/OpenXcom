@@ -141,7 +141,7 @@ void BattleItem::save(YAML::Emitter &out) const
  * Returns the ruleset for the item's type.
  * @return Pointer to ruleset.
  */
-RuleItem *const BattleItem::getRules() const
+RuleItem *BattleItem::getRules() const
 {
 	return _rules;
 }

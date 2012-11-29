@@ -93,7 +93,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _battleMusic(false),  _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -637,16 +637,12 @@ void GeoscapeState::time5Seconds()
 						{
 							if(!(*j)->isInDogfight())
 							{
-								if(_globe->isZoomedOutToMax())
-								{
-									_zoomOutEffectDone = false;
-									// look up polygons texture
-									int texture, shade;
-									_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
-									_music = false;
-									timerReset();
-									popup(new ConfirmLandingState(_game, *j, texture, shade));
-								}
+								// look up polygons texture
+								int texture, shade;
+								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
+								_music = false;
+								timerReset();
+								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
 						}
 						else
@@ -1309,28 +1305,11 @@ void GeoscapeState::time1Day()
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
+					_game->getSavedGame()->setResearchScore(bonus->getPoints());
 					if(bonus->getLookup() != "")
 					{
 						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
 					}
-				}
-			}
-			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
-					if(bonus)
-						(*k)->addActivityXcom(bonus->getPoints());
-				}
-			}
-			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
-					if(bonus)
-						(*k)->addActivityXcom(bonus->getPoints());
 				}
 			}
 			const RuleResearch * newResearch = research;
@@ -1339,6 +1318,7 @@ void GeoscapeState::time1Day()
 				newResearch = 0;
 			}
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			_game->getSavedGame()->setResearchScore(research->getPoints());
 			if(research->getLookup() != "")
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
@@ -1419,7 +1399,7 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi));
 	for(std::vector<Country*>::iterator c = _game->getSavedGame()->getCountries()->begin(); c !=  _game->getSavedGame()->getCountries()->end(); ++c)
 	{
-		if((*c)->isNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9);
+		if((*c)->getNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9)
 		{
 			double lon;
 			double lat;
@@ -1493,7 +1473,7 @@ void GeoscapeState::popup(State *state)
  * access by other substates.
  * @return Pointer to globe.
  */
-Globe *const GeoscapeState::getGlobe() const
+Globe *GeoscapeState::getGlobe() const
 {
 	return _globe;
 }
