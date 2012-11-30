@@ -14,6 +14,7 @@ ruleset_DATA = \
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
+	bin/data/Language/Bulgarian.lng \
 	bin/data/Language/Czech.geo \
 	bin/data/Language/Czech.lng \
 	bin/data/Language/English.geo \
