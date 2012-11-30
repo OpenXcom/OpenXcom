@@ -94,11 +94,14 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	_txtTarget->setBig();
 	_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 
-	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setBig();
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
-	_txtCraft->setText(ss.str());
+	if (craft)
+	{
+		_txtCraft->setColor(Palette::blockOffset(8)+5);
+		_txtCraft->setBig();
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
+		_txtCraft->setText(ss.str());
+	}
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
