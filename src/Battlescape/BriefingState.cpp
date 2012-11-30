@@ -92,10 +92,10 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 
 	_txtTarget->setColor(Palette::blockOffset(8)+5);
 	_txtTarget->setBig();
-	_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 
 	if (craft)
 	{
+		_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 		_txtCraft->setColor(Palette::blockOffset(8)+5);
 		_txtCraft->setBig();
 		std::wstringstream ss;
