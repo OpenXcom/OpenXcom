@@ -630,6 +630,15 @@ std::vector<Base*> *SavedGame::getBases()
 }
 
 /**
+ * Returns an immutable list of player bases.
+ * @return Pointer to base list.
+ */
+const std::vector<Base*> *SavedGame::getBases() const
+{
+	return &_bases;
+}
+
+/**
  * Adds up the monthly maintenance of all the bases.
  * @return Total maintenance.
  */
