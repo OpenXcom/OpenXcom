@@ -47,6 +47,8 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/AlienMission.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Savegame/AlienStrategy.h"
 #include <cstdlib>
 
 namespace OpenXcom
@@ -975,6 +977,33 @@ void DogfightState::move()
 		// Delay next wave
 		_ufo->getMission()->setWaveCountdown(_ufo->getMission()->getWaveCountdown() + 30 * (RNG::generate(0, 48) + 400));
 
+		// Check for retaliation trigger.
+		if (RNG::generate(0, 100) > 4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))
+		{
+			// Spawn retaliation mission.
+			std::string targetRegion;
+			if (RNG::generate(0, 100) <= 50 - 6 * static_cast<int>(_game->getSavedGame()->getDifficulty()))
+			{
+				// Attack on UFO's mission region
+				targetRegion = _ufo->getMission()->getRegion();
+			}
+			else
+			{
+				// Try to find and attack the originating base.
+				targetRegion = _game->getSavedGame()->locateRegion(*_craft->getBase())->getRules()->getType();
+				// TODO: If the base is removed, the mission is canceled.
+			}
+			// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
+			if (!_game->getSavedGame()->getAlienMission("STR_ALIEN_RETALIATION", targetRegion))
+			{
+				const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+				AlienMission *mission = new AlienMission(rule);
+				mission->setRegion(targetRegion);
+				mission->setRace(_ufo->getAlienRace());
+				mission->start();
+				_game->getSavedGame()->getAlienMissions().push_back(mission);
+			}
+		}
 		_ufoEscapeTimer->stop();
 		if (_ufo->isDestroyed())
 		{
@@ -1031,7 +1060,7 @@ void DogfightState::move()
 				_ufo->setAltitude("STR_GROUND");
 			}
 			AlienMission *mission = _ufo->getMission();
-			mission->ufoShotDown(*_ufo, *_game->getRuleset(), *_game->getSavedGame());
+			mission->ufoShotDown(*_ufo, *_game, *_globe);
 		}
 		_timeout += 30;
 		if(_ufo->getShotDownByCraftId() != _craft->getId())

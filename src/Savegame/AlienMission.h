@@ -26,10 +26,13 @@ namespace OpenXcom
 {
 
 class RuleAlienMission;
-class Ruleset;
-class SavedGame;
 class Ufo;
 class Globe;
+class Game;
+class SavedGame;
+class Ruleset;
+class RuleUfo;
+class UfoTrajectory;
 
 /**
  * Represents an ongoing alien mission.
@@ -47,6 +50,8 @@ private:
 	unsigned _spawnCountdown;
 	unsigned _liveUfos;
 public:
+	// Data
+
 	/// Creates a mission of the specified type.
 	AlienMission(const RuleAlienMission &rule);
 	/// Cleans up the mission info.
@@ -67,10 +72,17 @@ public:
 	const std::string &getRace() const { return _race; }
 	/// Sets the mission's race.
 	void setRace(const std::string &race) { _race = race; }
+	/// Gets the minutes until next wave spawns.
+	unsigned getWaveCountdown() const { return _spawnCountdown; }
+	/// Sets the minutes until next wave spawns.
+	void setWaveCountdown(unsigned minutes);
+
+	// Behaviour
+
 	/// Is this mission over?
 	bool isOver() const;
 	/// Handle UFO spawning for the mission.
-	void think(const Ruleset &rules, SavedGame &game, const Globe &globe);
+	void think(Game &engine, const Globe &globe);
 	/// Initialize with values from rules.
 	void start(unsigned initialCount = 0);
 	/// Increase number of live UFOs.
@@ -78,15 +90,14 @@ public:
 	/// Decrease number of live UFOs.
 	void decreaseLiveUfos() { --_liveUfos; }
 	/// Handle UFO reaching a waypoint.
-	void ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
+	void ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
+	void ufoLifting(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO shot down.
-	void ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game);
-	/// Gets the minutes until next wave spawns.
-	unsigned getWaveCountdown() const { return _spawnCountdown; }
-	/// Sets the minutes until next wave spawns.
-	void setWaveCountdown(unsigned minutes);
+	void ufoShotDown(Ufo &ufo, Game &engine, const Globe &globe);
+private:
+	/// Spawns a UFO, based on mission rules.
+	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
 };
 
 }

@@ -7924,6 +7924,11 @@ ufoTrajectories:
     waypoints:
       - [5, 4, 80]
       - [5, 0, 100]
+  - id: __RETALIATION_ASSAULT_RUN
+    groundTimer: 1000
+    waypoints:
+      - [5, 4, 100] #This should always be 5, 4, 100
+      - [5, 0, 100] #only the 0 altitude matters
 alienMissions:
   - type: STR_ALIEN_RESEARCH
     raceWeights:
@@ -8205,32 +8210,7 @@ alienMissions:
         trajectory: P7
         timer: 9000
   - type: STR_ALIEN_RETALIATION
-    raceWeights:
-      0:
-          STR_SECTOID: 60
-          STR_SNAKEMAN: 20
-          STR_FLOATER: 20
-      1:
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 30
-          STR_FLOATER: 40
-      3:
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 20
-          STR_MUTON: 40
-          STR_FLOATER: 20
-      5:
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 20
-          STR_ETHEREAL: 20
-          STR_MUTON: 20
-          STR_FLOATER: 20
-      7:
-          STR_SECTOID: 10
-          STR_SNAKEMAN: 10
-          STR_ETHEREAL: 40
-          STR_MUTON: 20
-          STR_FLOATER: 20
+    raceWeights: {} #Special case, race comes from trigger UFO.
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1

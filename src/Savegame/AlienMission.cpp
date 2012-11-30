@@ -17,17 +17,23 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AlienMission.h"
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/BriefingState.h"
+#include "../Engine/Game.h"
+#include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
+#include "../Geoscape/Globe.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
-#include "Ufo.h"
-#include "Waypoint.h"
+#include "Base.h"
+#include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "TerrorSite.h"
-#include "../Geoscape/Globe.h"
+#include "Ufo.h"
+#include "Waypoint.h"
 #include <algorithm>
 #include <functional>
 
@@ -120,9 +126,23 @@ bool AlienMission::isOver() const
 	return false;
 }
 
-void AlienMission::think(const Ruleset &rules, SavedGame &game, const Globe &globe)
+/**
+ * Find an XCOM base in this region that is marked for retaliation.
+ */
+class FindMarkedXCOMBase: public std::unary_function<const Base *, bool>
 {
-	if (_nextWave == _rule.getWaveCount())
+public:
+	FindMarkedXCOMBase(const RuleRegion &region) : _region(region) { /* Empty by design. */ }
+	bool operator()(const Base *base) const { return _region.insideRegion(base->getLongitude(), base->getLatitude()); }
+private:
+	const RuleRegion &_region;
+};
+
+void AlienMission::think(Game &engine, const Globe &globe)
+{
+	const Ruleset &ruleset = *engine.getRuleset();
+	SavedGame &game = *engine.getSavedGame();
+	if (_nextWave >= _rule.getWaveCount())
 		return;
 	if (_spawnCountdown > 30)
 	{
@@ -130,29 +150,14 @@ void AlienMission::think(const Ruleset &rules, SavedGame &game, const Globe &glo
 		return;
 	}
 	const MissionWave &wave = _rule.getWave(_nextWave);
-	RuleUfo *ufoRule = rules.getUfo(wave.ufoType);
-	const UfoTrajectory *traj = rules.getUfoTrajectory(wave.trajectory);
-	Ufo *ufo = new Ufo(ufoRule);
-	ufo->setMissionInfo(this, traj);
-	RuleRegion *region = rules.getRegion(_region);
-	std::pair<double, double> pos = region->getRandomPoint(traj->getZone(0));
-	ufo->setAltitude(traj->getAltitude(0));
-	ufo->setSpeed(traj->getSpeedPercentage(0) * ufoRule->getMaxSpeed());
-	ufo->setLongitude(pos.first);
-	ufo->setLatitude(pos.second);
-	Waypoint *wp = new Waypoint();
-	if (traj->getAltitude(1) == "STR_GROUND")
+	RuleUfo &ufoRule = *ruleset.getUfo(wave.ufoType);
+	const UfoTrajectory &trajectory = *ruleset.getUfoTrajectory(wave.trajectory);
+	Ufo *ufo = spawnUfo(game, ruleset, globe, ufoRule, trajectory);
+	if (ufo)
 	{
-		pos = getLandPoint(globe, *region, traj->getZone(1));
+		//Some missions may not spawn a UFO!
+		game.getUfos()->push_back(ufo);
 	}
-	else
-	{
-		pos = region->getRandomPoint(traj->getZone(1));
-	}
-	wp->setLongitude(pos.first);
-	wp->setLatitude(pos.second);
-	ufo->setDestination(wp);
-	game.getUfos()->push_back(ufo);
 	++_nextUfoCounter;
 	if (_nextUfoCounter == wave.ufoCount)
 	{
@@ -172,6 +177,66 @@ void AlienMission::think(const Ruleset &rules, SavedGame &game, const Globe &glo
 	}
 }
 
+/**
+ * This function will spawn a UFO according the the mission rules.
+ * @param game The saved game information.
+ * @param ruleset The ruleset.
+ * @param globe The globe, for land checks.
+ * @param ufoRule The rule for the desired UFO.
+ * @param trajectory The rule for the desired trajectory.
+ * @return Pointer to the spawned UFO. If the mission does not desire to spawn a UFO, 0 is returned.
+ */
+Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory)
+{
+	if (_rule.getType() == "STR_ALIEN_RETALIATION")
+	{
+		const RuleRegion &regionRules = *ruleset.getRegion(_region);
+		std::vector<Base *>::const_iterator found =
+		    std::find_if(game.getBases()->begin(), game.getBases()->end(),
+				 FindMarkedXCOMBase(regionRules));
+		if (found != game.getBases()->end())
+		{
+			// Spawn a battleship straight for the XCOM base.
+			const RuleUfo &battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
+			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
+			Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
+			ufo->setMissionInfo(this, &assaultTrajectory);
+			std::pair<double, double> pos = regionRules.getRandomPoint(assaultTrajectory.getZone(0));
+			ufo->setAltitude(assaultTrajectory.getAltitude(0));
+			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+			ufo->setLongitude(pos.first);
+			ufo->setLatitude(pos.second);
+			Waypoint *wp = new Waypoint();
+			wp->setLongitude((*found)->getLongitude());
+			wp->setLatitude((*found)->getLatitude());
+			ufo->setDestination(wp);
+			return ufo;
+		}
+	}
+	// Spawn according to sequence.
+	Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+	ufo->setMissionInfo(this, &trajectory);
+	const RuleRegion &regionRules = *ruleset.getRegion(_region);
+	std::pair<double, double> pos = regionRules.getRandomPoint(trajectory.getZone(0));
+	ufo->setAltitude(trajectory.getAltitude(0));
+	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+	ufo->setLongitude(pos.first);
+	ufo->setLatitude(pos.second);
+	Waypoint *wp = new Waypoint();
+	if (trajectory.getAltitude(1) == "STR_GROUND")
+	{
+		pos = getLandPoint(globe, regionRules, trajectory.getZone(1));
+	}
+	else
+	{
+		pos = regionRules.getRandomPoint(trajectory.getZone(1));
+	}
+	wp->setLongitude(pos.first);
+	wp->setLatitude(pos.second);
+		ufo->setDestination(wp);
+	return ufo;
+}
+
 void AlienMission::start(unsigned initialCount)
 {
 	_nextWave = 0;
@@ -188,8 +253,19 @@ void AlienMission::start(unsigned initialCount)
 	}
 }
 
-void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe)
+class LocateXCOMBase: public std::unary_function<const Base *, bool>
 {
+public:
+	LocateXCOMBase(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	bool operator()(const Base *base) { return _lon == base->getLongitude() && _lat == base->getLatitude(); }
+private:
+	double _lon, _lat;
+};
+
+void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe)
+{
+	const Ruleset &rules = *engine.getRuleset();
+	SavedGame &game = *engine.getSavedGame();
 	if (ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1)
 	{
 		//TODO: We should probably score alien points here.
@@ -221,8 +297,10 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame 
 	else
 	{
 		// UFO landed.
+
 		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()) == 0)
 		{
+			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.
 			ufo.setStatus(Ufo::DESTROYED);
 			ufo.setDetected(false);
@@ -236,6 +314,32 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame 
 			assert(city);
 			game.getTerrorSites()->push_back(terrorSite);
 		}
+		else if (_rule.getType() == "STR_ALIEN_RETALIATION" && ufo.getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
+		{
+			// Ignore what the trajectory might say, this is a base assault.
+			// Remove UFO, replace with Base defense.
+			ufo.setStatus(Ufo::DESTROYED);
+			ufo.setDetected(false);
+			std::vector<Base *>::const_iterator found =
+			    std::find_if(game.getBases()->begin(), game.getBases()->end(),
+					 LocateXCOMBase(ufo.getLongitude(), ufo.getLatitude()));
+			if (found == game.getBases()->end())
+			{
+				// Only spawn mission if the base is still there.
+				return;
+			}
+			(*found)->setRetaliationTarget(false);
+			Log(LOG_INFO) << "TODO: Implement XCOM base defensive fire.";
+			SavedBattleGame *bgame = new SavedBattleGame();
+			game.setBattleGame(bgame);
+			bgame->setMissionType("STR_BASE_DEFENSE");
+			BattlescapeGenerator bgen(&engine);
+			bgen.setBase(*found);
+			bgen.setAlienRace(_race);
+			bgen.setAlienItemlevel(0); //TODO: How does this change?
+			bgen.run();
+			engine.pushState(new BriefingState(&engine, 0));
+		}
 		else
 		{
 			// Set timer for UFO on the ground.
@@ -244,7 +348,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame 
 	}
 }
 
-void AlienMission::ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game)
+void AlienMission::ufoShotDown(Ufo &ufo, Game &, const Globe &)
 {
 	switch (ufo.getStatus())
 	{
@@ -264,8 +368,9 @@ void AlienMission::ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game)
 	}
 }
 
-void AlienMission::ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe)
+void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 {
+	const Ruleset &rules = *engine.getRuleset();
 	switch (ufo.getStatus())
 	{
 	case Ufo::FLYING:

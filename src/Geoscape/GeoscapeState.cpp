@@ -87,6 +87,7 @@
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Savegame/AlienMission.h"
+#include "../Ruleset/UfoTrajectory.h"
 #include <ctime>
 #include <algorithm>
 #include <functional>
@@ -547,7 +548,7 @@ void GeoscapeState::time5Seconds()
 					unsigned terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
 					AlienMission *mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
-					mission->ufoReachedWaypoint(**i, *_game->getRuleset(), *_game->getSavedGame(), *_globe);
+					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
@@ -568,7 +569,7 @@ void GeoscapeState::time5Seconds()
 			{
 				AlienMission *mission = (*i)->getMission();
 				bool detected = (*i)->getDetected();
-				mission->ufoLifting(**i, *_game->getRuleset(), *_game->getSavedGame(), *_globe);
+				mission->ufoLifting(**i, *_game, *_globe);
 				if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 				{
 					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
@@ -820,6 +821,51 @@ void GeoscapeState::time5Seconds()
 }
 
 /**
+ * Functor that attempt to detect an XCOM base.
+ */
+class DetectXCOMBase: public std::unary_function<Ufo *, bool>
+{
+public:
+	/// Create a detector for the given base.
+	DetectXCOMBase(const Base &base) : _base(base) { /* Empty by design.  */ }
+	/// Attempt detection
+	bool operator()(const Ufo *ufo) const;
+private:
+	const Base &_base;	//!< The target base.
+};
+
+/**
+ * Only UFOs within detection range of the base have a chance to detect it.
+ * @param ufo Pointer to the UFO attempting detection.
+ * @return If the base is detected by @a ufo.
+ */
+bool DetectXCOMBase::operator()(const Ufo *ufo) const
+{
+	// UFOs building a base don't detect!
+	if (ufo->getTrajectory().getID() == "P5")
+	{
+		return false;
+	}
+
+	// UFOs have a detection range of 80 XCOM units.
+	if (_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))
+	{
+		return false;
+	}
+	return ((int)_base.getDetectionChance() < RNG::generate(0, 100));
+}
+
+/**
+ * Functor that marks an XCOM base for retaliation.
+ * This is required because of the iterator type.
+ */
+struct SetRetaliationTarget: public std::unary_function<std::map<const Region *, Base *>::value_type, void>
+{
+	/// Mark as a valid retaliation target.
+	void operator()(const argument_type &iter) const { iter.second->setRetaliationTarget(true); }
+};
+
+/**
  * Takes care of any game logic that has to
  * run every game ten minutes, like fuel consumption.
  */
@@ -827,6 +873,7 @@ void GeoscapeState::time10Minutes()
 {
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
+		// Fuel consumption for XCOM craft.
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->getStatus() == "STR_OUT")
@@ -840,6 +887,36 @@ void GeoscapeState::time10Minutes()
 				}
 			}
 		}
+	}
+	if (Options::getBool("aggressiveRetaliation"))
+	{
+		// Detect as many bases as possible.
+		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
+		{
+			// Find a UFO that detected this base, if any.
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			if (uu != _game->getSavedGame()->getUfos()->end())
+			{
+				// Base found
+				(*iBase)->setRetaliationTarget(true);
+			}
+		}
+	}
+	else
+	{
+		// Only remember last base in each region.
+		std::map<const Region *, Base *> discovered;
+		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
+		{
+			// Find a UFO that detected this base, if any.
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			if (uu != _game->getSavedGame()->getUfos()->end())
+			{
+				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
+			}
+		}
+		// Now mark the bases as discovered.
+		std::for_each(discovered.begin(), discovered.end(), SetRetaliationTarget());
 	}
 }
 
@@ -859,11 +936,10 @@ struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, boo
 class callThink: public std::unary_function<AlienMission*, void>
 {
 public:
-	callThink(const Ruleset &ruleset, SavedGame &save, const Globe &globe) : _ruleset(ruleset), _save(save), _globe(globe) { /* Empty by design. */ }
-	void operator()(AlienMission *am) { am->think(_ruleset, _save, _globe); }
+	callThink(Game &game, const Globe &globe) : _game(game), _globe(globe) { /* Empty by design. */ }
+	void operator()(AlienMission *am) { am->think(_game, _globe); }
 private:
-	const Ruleset &_ruleset;
-	SavedGame &_save;
+	Game &_game;
 	const Globe &_globe;
 };
 
@@ -876,7 +952,7 @@ void GeoscapeState::time30Minutes()
 	// Decrease mission countdowns
 	std::for_each(_game->getSavedGame()->getAlienMissions().begin(),
 		      _game->getSavedGame()->getAlienMissions().end(),
-		      callThink(*_game->getRuleset(), *_game->getSavedGame(), *_globe));
+		      callThink(*_game, *_globe));
 	// Remove finished missions
 	std::vector<AlienMission*>::iterator last =
 	    std::remove_if(_game->getSavedGame()->getAlienMissions().begin(),

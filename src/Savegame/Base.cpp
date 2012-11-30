@@ -46,7 +46,7 @@ namespace OpenXcom
  * Initializes an empty base.
  * @param rule Pointer to ruleset.
  */
-Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0), _inBattlescape(false)
+Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _scientists(0), _engineers(0), _inBattlescape(false), _retaliationTarget(false)
 {
 	_items = new ItemContainer();
 }
@@ -169,6 +169,11 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 		p->load(*i);
 		_productions.push_back(p);
 	}
+
+	if (const YAML::Node *pNode = node.FindValue("retaliationTarget"))
+	{
+		*pNode >> _retaliationTarget;
+	}
 }
 
 /**
@@ -228,6 +233,7 @@ void Base::save(YAML::Emitter &out) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "retaliationTarget" << YAML::Value << _retaliationTarget;
 	out << YAML::EndMap;
 }
 
@@ -1044,6 +1050,59 @@ bool Base::isInBattlescape() const
 void Base::setInBattlescape(bool inbattle)
 {
 	_inBattlescape = inbattle;
+}
+
+/**
+ * Mark the base as a valid alien retaliation target.
+ * @param mark Mark (if @c true) or unmark (if @c false) the base.
+ */
+void Base::setRetaliationTarget(bool mark)
+{
+	_retaliationTarget = mark;
+}
+
+/**
+ * Get the base's retaliation status.
+ * @return If the base is a valid target for alien retaliation.
+ */
+bool Base::getRetaliationTarget() const
+{
+	return _retaliationTarget;
+}
+
+/**
+ * Functor to check for mind shield capability.
+ */
+struct isMindShield: public std::unary_function<BaseFacility*, bool>
+{
+	/// Check isMindShield() for @a facility.
+	bool operator()(const BaseFacility *facility) const;
+};
+
+/**
+ * Only fully operational facilities are checked.
+ * @param facility Pointer to the facility to check.
+ * @return If @a facility can act as a mind shield.
+ */
+bool isMindShield::operator()(const BaseFacility *facility) const
+{
+	if (facility->getBuildTime() != 0)
+	{
+		// Still building this
+		return false;
+	}
+	return (facility->getRules()->isMindShield());
+}
+
+/**
+ * Calculate the detection chance of this base.
+ * Big bases without mindshields are easier to detect.
+ * @return The detection chance.
+ */
+unsigned Base::getDetectionChance() const
+{
+	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
+	return (_facilities.size()/6 + 16) / (mindShields + 1);
 }
 
 }
