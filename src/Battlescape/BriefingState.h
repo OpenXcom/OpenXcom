@@ -29,6 +29,7 @@ class Window;
 class Text;
 class Craft;
 class Base;
+class Ufo;
 
 /**
  * Briefing screen which displays info
@@ -42,7 +43,7 @@ private:
 	Text *_txtTitle, *_txtTarget, *_txtCraft, *_txtBriefing;
 public:
 	/// Creates the Briefing state.
-	BriefingState(Game *game, Craft *craft, Base *base);
+	BriefingState(Game *game, Craft *craft = 0, Base *base = 0, Ufo *ufo = 0);
 	/// Cleans up the Briefing state.
 	~BriefingState();
 	/// Handler for clicking the Ok button.

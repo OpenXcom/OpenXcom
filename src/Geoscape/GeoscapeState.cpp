@@ -87,6 +87,9 @@
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Savegame/AlienStrategy.h"
 #include "../Savegame/AlienMission.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/BriefingState.h"
 #include "../Ruleset/UfoTrajectory.h"
 #include "BaseDefenseState.h"
 #include <ctime>
@@ -561,29 +564,27 @@ void GeoscapeState::time5Seconds()
 						assert(city);
 						popup(new AlienTerrorState(_game, city, this));
 					}
-/*
-					Base* b = dynamic_cast<Base*>((*i)->getDestination());
-					if(ufo is the battleship of the retaliation mission, and the base is detected)
+					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
-						if((*b)->getDefenses())
-							popup(new BaseDefenseState(_game, *b, *i));
+						(*i)->setDestination(0); // Make sure we don't delete the base.
+						if (base->getDefenses())
+						{
+							popup(new BaseDefenseState(_game, base, *i));
+						}
 						else
 						{
 							SavedBattleGame *bgame = new SavedBattleGame();
 							_game->getSavedGame()->setBattleGame(bgame);
 							bgame->setMissionType("STR_BASE_DEFENSE");
 							BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-							bgen.setBase((*b));
-							bgen.setUfo((*i));
+							bgen.setBase(base);
 							bgen.setAlienRace((*i)->getAlienRace());
-							bgen.setAlienItemlevel(0);
+							bgen.setAlienItemlevel(0); //TODO: What is the proper value?
 							bgen.run();
 
-							popup(new BriefingState(_game, 0, _base));
-							}
+							popup(new BriefingState(_game, 0, base, *i));
 						}
 					}
-*/
 				}
 			}
 			break;

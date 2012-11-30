@@ -17,8 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AlienMission.h"
-#include "../Battlescape/BattlescapeGenerator.h"
-#include "../Battlescape/BriefingState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
@@ -29,7 +27,6 @@
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
 #include "Base.h"
-#include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "TerrorSite.h"
 #include "Ufo.h"
@@ -318,27 +315,17 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		{
 			// Ignore what the trajectory might say, this is a base assault.
 			// Remove UFO, replace with Base defense.
-			ufo.setStatus(Ufo::DESTROYED);
 			ufo.setDetected(false);
 			std::vector<Base *>::const_iterator found =
 			    std::find_if(game.getBases()->begin(), game.getBases()->end(),
 					 LocateXCOMBase(ufo.getLongitude(), ufo.getLatitude()));
 			if (found == game.getBases()->end())
 			{
+				ufo.setStatus(Ufo::DESTROYED);
 				// Only spawn mission if the base is still there.
 				return;
 			}
-			(*found)->setRetaliationTarget(false);
-			Log(LOG_INFO) << "TODO: Implement XCOM base defensive fire.";
-			SavedBattleGame *bgame = new SavedBattleGame();
-			game.setBattleGame(bgame);
-			bgame->setMissionType("STR_BASE_DEFENSE");
-			BattlescapeGenerator bgen(&engine);
-			bgen.setBase(*found);
-			bgen.setAlienRace(_race);
-			bgen.setAlienItemlevel(0); //TODO: How does this change?
-			bgen.run();
-			engine.pushState(new BriefingState(&engine, 0, 0));
+			ufo.setDestination(*found);
 		}
 		else
 		{
