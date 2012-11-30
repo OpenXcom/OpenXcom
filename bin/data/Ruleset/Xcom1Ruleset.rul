@@ -1249,6 +1249,8 @@ facilities:
     monthlyCost: 5000
     defense: 500
     hitRatio: 50
+    fireSound: 53
+    hitSound: 5
     mapName: XBASE_06
   - type: STR_GENERAL_STORES
     spriteShape: 1
@@ -1276,6 +1278,8 @@ facilities:
     monthlyCost: 10000
     defense: 600
     hitRatio: 60
+    fireSound: 11
+    hitSound: 19
     mapName: XBASE_09
   - type: STR_PLASMA_DEFENSES
     requires:
@@ -1287,6 +1291,8 @@ facilities:
     monthlyCost: 12000
     defense: 900
     hitRatio: 70
+    fireSound: 18
+    hitSound: 19
     mapName: XBASE_10
   - type: STR_FUSION_BALL_DEFENSES
     requires:
@@ -1298,6 +1304,8 @@ facilities:
     monthlyCost: 14000
     defense: 1200
     hitRatio: 80
+    fireSound: 53
+    hitSound: 5
     mapName: XBASE_11
   - type: STR_GRAV_SHIELD
     requires:

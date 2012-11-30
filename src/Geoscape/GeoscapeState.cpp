@@ -88,6 +88,7 @@
 #include "../Savegame/AlienStrategy.h"
 #include "../Savegame/AlienMission.h"
 #include "../Ruleset/UfoTrajectory.h"
+#include "BaseDefenseState.h"
 #include <ctime>
 #include <algorithm>
 #include <functional>
@@ -560,6 +561,29 @@ void GeoscapeState::time5Seconds()
 						assert(city);
 						popup(new AlienTerrorState(_game, city, this));
 					}
+/*
+					Base* b = dynamic_cast<Base*>((*i)->getDestination());
+					if(ufo is the battleship of the retaliation mission, and the base is detected)
+					{
+						if((*b)->getDefenses())
+							popup(new BaseDefenseState(_game, *b, *i));
+						else
+						{
+							SavedBattleGame *bgame = new SavedBattleGame();
+							_game->getSavedGame()->setBattleGame(bgame);
+							bgame->setMissionType("STR_BASE_DEFENSE");
+							BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+							bgen.setBase((*b));
+							bgen.setUfo((*i));
+							bgen.setAlienRace((*i)->getAlienRace());
+							bgen.setAlienItemlevel(0);
+							bgen.run();
+
+							popup(new BriefingState(_game, 0, _base));
+							}
+						}
+					}
+*/
 				}
 			}
 			break;

@@ -138,7 +138,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 
-		_game->pushState(new BriefingState(_game, _craft));
+		_game->pushState(new BriefingState(_game, _craft, 0));
 	}
 	else if (t != 0)
 	{
@@ -154,7 +154,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 
-		_game->pushState(new BriefingState(_game, _craft));
+		_game->pushState(new BriefingState(_game, _craft, 0));
 	}
 	else if (b != 0)
 	{
@@ -170,7 +170,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
 		bgen.setAlienItemlevel(0);
 		bgen.run();
 
-		_game->pushState(new BriefingState(_game, _craft));
+		_game->pushState(new BriefingState(_game, _craft, 0));
 	}
 }
 

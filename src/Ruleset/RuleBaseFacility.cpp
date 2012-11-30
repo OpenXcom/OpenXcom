@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of base facility.
  * @param type String defining the type.
  */
-RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defense(0), _hitRatio(0)
+RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defense(0), _hitRatio(0), _fireSound(0), _hitSound(0)
 {
 }
 
@@ -139,6 +139,14 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		{
 			i.second() >> _hitRatio;
 		}
+		else if (key == "fireSound")
+		{
+			i.second() >> _fireSound;
+		}
+		else if (key == "hitSound")
+		{
+			i.second() >> _hitSound;
+		}
 		else if (key == "mapName")
 		{
 			i.second() >> _mapName;
@@ -176,6 +184,8 @@ void RuleBaseFacility::save(YAML::Emitter &out) const
 	out << YAML::Key << "radarChance" << YAML::Value << _radarChance;
 	out << YAML::Key << "defense" << YAML::Value << _defense;
 	out << YAML::Key << "hitRatio" << YAML::Value << _hitRatio;
+	out << YAML::Key << "fireSound" << YAML::Value << _fireSound;
+	out << YAML::Key << "hitSound" << YAML::Value << _hitSound;
 	out << YAML::Key << "mapName" << YAML::Value << _mapName;
 	out << YAML::EndMap;
 }
@@ -420,4 +430,21 @@ std::string RuleBaseFacility::getMapName() const
 	return _mapName;
 }
 
+/**
+ * Returns the hit sound of this facility's weaponry
+ * @return Sound index number.
+ */
+int RuleBaseFacility::getHitSound() const
+{
+	return _hitSound;
+}
+
+/**
+ * Returns the fire sound of this facility's weaponry
+ * @return Sound index number.
+ */
+int RuleBaseFacility::getFireSound() const
+{
+	return _fireSound;
+}
 }

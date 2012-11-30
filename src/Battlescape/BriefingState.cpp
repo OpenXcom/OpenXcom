@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Base.h"
 #include "../Engine/Music.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -41,7 +42,7 @@ namespace OpenXcom
  * Initializes all the elements in the Briefing screen.
  * @param game Pointer to the core game.
  */
-BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
+BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -96,10 +97,18 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	if (craft)
 	{
 		_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
-		_txtCraft->setColor(Palette::blockOffset(8)+5);
-		_txtCraft->setBig();
+		_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+
 		std::wstringstream ss;
 		ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
+		_txtCraft->setColor(Palette::blockOffset(8)+5);
+		_txtCraft->setBig();
+		_txtCraft->setText(ss.str());
+	}
+	else if(base)
+	{
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_BASE_UC_") << base->getName();
 		_txtCraft->setText(ss.str());
 	}
 

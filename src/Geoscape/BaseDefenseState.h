@@ -52,6 +52,8 @@ public:
 	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// wait half a second before next action
+	void delay();
 };
 
 }

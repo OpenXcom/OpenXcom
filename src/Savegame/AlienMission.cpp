@@ -338,7 +338,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			bgen.setAlienRace(_race);
 			bgen.setAlienItemlevel(0); //TODO: How does this change?
 			bgen.run();
-			engine.pushState(new BriefingState(&engine, 0));
+			engine.pushState(new BriefingState(&engine, 0, 0));
 		}
 		else
 		{

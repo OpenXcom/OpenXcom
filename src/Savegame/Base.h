@@ -183,6 +183,10 @@ public:
 	bool getRetaliationTarget() const;
 	/// Get the detection chance for this base.
 	unsigned getDetectionChance() const;
+	/// Gets how many Grav Shields the base has
+	int getGravShields() const;
+	/// Get a list of Defensive Facilities
+	std::vector<BaseFacility*> *getDefenses();
 };
 
 }
