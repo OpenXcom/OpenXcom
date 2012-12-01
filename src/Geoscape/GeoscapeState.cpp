@@ -143,8 +143,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
 
-	_zoomInEffectTimer = new Timer(250);
-	_zoomOutEffectTimer = new Timer(250);
+	_zoomInEffectTimer = new Timer(50);
+	_zoomOutEffectTimer = new Timer(50);
 	_dogfightStartTimer = new Timer(250);
 
 	_txtDebug = new Text(100, 8, 0, 0);
@@ -656,18 +656,14 @@ void GeoscapeState::time5Seconds()
 					{
 					case Ufo::FLYING:
 						// Not more than 4 interceptions at a time.
-						if(_dogfights.size() >= 4 || _dogfightsToBeStarted.size() >=4 || _dogfights.size() + _dogfightsToBeStarted.size() >= 4)
+						if(_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
 							continue;
 						}
 						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
-							std::cout << "Starting dogfight...\n";
-							clock_t startClock = clock();
 							std::auto_ptr<DogfightState> d(new DogfightState(_game, _globe, (*j), u));
 							_dogfightsToBeStarted.push_back(d.release());
-							double diff = clock() - startClock;
-							std::cout << "Took: " << diff / (double)CLOCKS_PER_SEC << "s. Why sooooooooo long?\n";
 
 							if(!_dogfightStartTimer->isRunning())
 							{
@@ -698,10 +694,6 @@ void GeoscapeState::time5Seconds()
 								timerReset();
 								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
-						}
-						else
-						{
-							(*j)->returnToBase();
 						}
 						break;
 					}
