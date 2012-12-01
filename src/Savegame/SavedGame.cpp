@@ -1188,7 +1188,7 @@ public:
 	/// Remember the coordinates.
 	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
 	/// Check is the region contains the stored point.
-	bool operator()(const Region *region) { return region->getRules()->insideRegion(_lon, _lat); }
+	bool operator()(const Region *region) const { return region->getRules()->insideRegion(_lon, _lat); }
 private:
 	double _lon, _lat;
 };

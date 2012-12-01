@@ -66,7 +66,7 @@ public:
 	/// Store ID for later comparisons.
 	matchMissionID(int id) : _id(id) { /* Empty by design. */ }
 	/// Match with stored ID.
-	bool operator()(const AlienMission *am) { return am->getUniqueID() == _id; }
+	bool operator()(const AlienMission *am) const { return am->getUniqueID() == _id; }
 private:
 	int _id;
 };

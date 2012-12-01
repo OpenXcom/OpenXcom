@@ -253,7 +253,7 @@ public:
 	/// Remember the query coordinates.
 	MatchBaseCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
 	/// Match with base's coordinates.
-	bool operator()(const Base *base) { return _lon == base->getLongitude() && _lat == base->getLatitude(); }
+	bool operator()(const Base *base) const { return _lon == base->getLongitude() && _lat == base->getLatitude(); }
 private:
 	double _lon, _lat;
 };

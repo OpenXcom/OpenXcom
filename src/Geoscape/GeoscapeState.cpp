@@ -955,7 +955,7 @@ struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, boo
 	 * @param am A pointer to the mission to check.
 	 * @return true if @a am was deleted.
 	 */
-	bool operator()(AlienMission *am)
+	bool operator()(AlienMission *am) const
 	{
 		if (am->isOver())
 		{
@@ -979,7 +979,7 @@ public:
 	 */
 	callThink(Game &game, const Globe &globe) : _game(game), _globe(globe) { /* Empty by design. */ }
 	/// Call AlienMission::think() with stored parameters.
-	void operator()(AlienMission *am) { am->think(_game, _globe); }
+	void operator()(AlienMission *am) const { am->think(_game, _globe); }
 private:
 	Game &_game;
 	const Globe &_globe;
