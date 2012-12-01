@@ -368,9 +368,8 @@ void AlienMission::ufoShotDown(Ufo &ufo, Game &, const Globe &)
 	case Ufo::DESTROYED:
 		if (_nextWave != _rule.getWaveCount())
 		{
-			const MissionWave &nwave = _rule.getWave(_nextWave);
-			int half = nwave.spawnTimer/2;
-			_spawnCountdown += (2 * RNG::generate(0, 1) - 1) * half/2 + half;
+			// Delay next wave
+			_spawnCountdown += 30 * (RNG::generate(0, 48) + 400);
 		}
 		break;
 	}

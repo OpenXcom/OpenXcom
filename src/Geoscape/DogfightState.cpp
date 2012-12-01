@@ -974,9 +974,6 @@ void DogfightState::move()
 	// End dogfight if UFO is crashed or destroyed.
 	if (!_end && _ufo->isCrashed())
 	{
-		// Delay next wave
-		_ufo->getMission()->setWaveCountdown(_ufo->getMission()->getWaveCountdown() + 30 * (RNG::generate(0, 48) + 400));
-
 		// Check for retaliation trigger.
 		if (RNG::generate(0, 100) > 4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))
 		{
