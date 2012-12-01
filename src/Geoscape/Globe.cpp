@@ -49,6 +49,7 @@
 #include "../Engine/Options.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
+#include "../Engine/LocalizedText.h"
 
 namespace OpenXcom
 {
@@ -1146,7 +1147,7 @@ void Globe::drawDetail()
 
 			label->setX(x - 40);
 			label->setY(y);
-			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
+			label->setText(tr((*i)->getRules()->getType()));
 			label->blit(_countries);
 		}
 
@@ -1181,7 +1182,7 @@ void Globe::drawDetail()
 
 				label->setX(x - 40);
 				label->setY(y + 2);
-				label->setText(_game->getLanguage()->getString((*j)->getName()));
+				label->setText(tr((*j)->getName()));
 				label->blit(_countries);
 			}
 		}
@@ -1469,6 +1470,29 @@ bool Globe::isZoomedOutToMax() const
 	{
 		return false;
 	}
+}
+
+/**
+ * Get the localized text for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string &).
+ * @param id The dictionary key to search for.
+ * @return A reference to the localized text.
+ */
+const LocalizedText &Globe::tr(const std::string &id) const
+{
+	return _game->getLanguage()->getString(id);
+}
+
+/**
+ * Get a modifiable copy of the localized text for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string &, unsigned).
+ * @param id The dictionary key to search for.
+ * @param n The number to use for the proper version.
+ * @return A copy of the localized text.
+ */
+LocalizedText Globe::tr(const std::string &id, unsigned n) const
+{
+	return _game->getLanguage()->getString(id, n);
 }
 
 }
