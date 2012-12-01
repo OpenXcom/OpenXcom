@@ -816,6 +816,7 @@ SavedGame *Ruleset::newSave() const
 	ids["STR_WAYPOINT"] = 1;
 	ids["STR_TERROR_SITE"] = 1;
 	ids["STR_SOLDIER"] = 1;
+	ids["ALIEN_MISSIONS"] = 1;
 	save->initIds(ids);
 
 	// Set up starting base
@@ -1279,10 +1280,15 @@ const std::vector<std::string> &Ruleset::getAlienMissionList() const
 	return _alienMissionsIndex;
 }
 
+/** @brief Match a city based on coordinates.
+ * This function object compare a city's coordinates with the stored coordinates.
+ */
 class EqualCoordinates: std::unary_function<const City *, bool>
 {
 public:
+	/// Remember the coordinates.
 	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
+	/// Compare with stored coordinates.
 	bool operator()(const City *city) const { return city->getLongitude() == _lon && city->getLatitude() == _lat; }
 private:
 	double _lon, _lat;

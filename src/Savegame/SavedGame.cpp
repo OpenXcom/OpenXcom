@@ -48,6 +48,7 @@
 #include "AlienBase.h"
 #include "AlienStrategy.h"
 #include "AlienMission.h"
+#include "../Ruleset/RuleRegion.h"
 #ifdef _MSC_VER
 #include <windows.h>
 #endif
@@ -260,6 +261,14 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_regions.push_back(r);
 	}
 
+	// Alien bases must be loaded before alien missions
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
+
 	// Missions must be loaded before UFOs.
 	const YAML::Node &missions = *doc.FindValue("alienMissions");
 	for (YAML::Iterator it = missions.begin(); it != missions.end(); ++it)
@@ -268,7 +277,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		(*it)["type"] >> missionType;
 		const RuleAlienMission &mRule = *rule->getAlienMission(missionType);
 		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
-		mission->load(*it);
+		mission->load(*it, *this);
 		_activeMissions.push_back(mission.release());
 	}
 
@@ -295,12 +304,6 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
-	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
-	}
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -387,21 +390,6 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
-	// Missions must be saved before UFOs.
-	out << YAML::Key << "alienMissions" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "ufos" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
 	out << YAML::Key << "waypoints" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
@@ -416,9 +404,26 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	// Alien bases must be saved before alien missions.
 	out << YAML::Key << "alienBases" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// Missions must be saved before UFOs, but after alien bases.
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// UFOs must be after missions
+	out << YAML::Key << "ufos" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -624,6 +629,15 @@ std::vector<Region*> *SavedGame::getRegions()
  * @return Pointer to base list.
  */
 std::vector<Base*> *SavedGame::getBases()
+{
+	return &_bases;
+}
+
+/**
+ * Returns an immutable list of player bases.
+ * @return Pointer to base list.
+ */
+const std::vector<Base*> *SavedGame::getBases() const
 {
 	return &_bases;
 }
@@ -1099,17 +1113,31 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
-struct matchRegionAndType: public std::unary_function<AlienMission *, bool>
+/** @brief Match a mission based on region and type.
+ * This function object will match alien missions based on region and type.
+ */
+class matchRegionAndType: public std::unary_function<AlienMission *, bool>
 {
-	const std::string &_region;
-	const std::string &_type;
+public:
+	/// Store the region and type.
 	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	/// Match against stored values.
 	bool operator()(const AlienMission *mis) const
 	{
 		return mis->getRegion() == _region && mis->getType() == _type;
 	}
+private:
+
+	const std::string &_region;
+	const std::string &_type;
 };
 
+/**
+ * Find a mission from the active alien missions.
+ * @param region The region ID.
+ * @param type The mission type ID.
+ * @return A pointer to the mission, or 0 if no mission matched.
+ */
 AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
 {
 	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
@@ -1154,4 +1182,45 @@ void SavedGame::setWarned(bool warned)
 {
 	_warned = warned;
 }
+
+/** @brief Check if a point is contained in a region.
+ * This function object checks if a point is contained inside a region.
+ */
+class ContainsPoint: public std::unary_function<const Region *, bool>
+{
+public:
+	/// Remember the coordinates.
+	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	/// Check is the region contains the stored point.
+	bool operator()(const Region *region) const { return region->getRules()->insideRegion(_lon, _lat); }
+private:
+	double _lon, _lat;
+};
+
+/**
+ * Find the region containing this location.
+ * @param lon The longtitude.
+ * @param lat The latitude.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(double lon, double lat) const
+{
+	std::vector<Region *>::const_iterator found = std::find_if(_regions.begin(), _regions.end(), ContainsPoint(lon, lat));
+	if (found != _regions.end())
+	{
+		return *found;
+	}
+	return 0;
+}
+
+/**
+ * Find the region containing this target.
+ * @param target The target to locate.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(const Target &target) const
+{
+	return locateRegion(target.getLongitude(), target.getLatitude());
+}
+
 }

@@ -85,6 +85,7 @@ void createDefault()
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("customInitialBase", false);
+	setBool("aggressiveRetaliation", false);
 
 	_rulesets.push_back("Xcom1Ruleset");
 }

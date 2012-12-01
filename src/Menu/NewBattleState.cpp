@@ -369,7 +369,13 @@ void NewBattleState::btnOkClick(Action *action)
 
 	bgen.run();
 	//_game->pushState(new BattlescapeState(_game));
-	_game->pushState(new BriefingState(_game, _craft));
+	Base *base = 0;
+	if (_missionTypes[_selMission] == "STR_BASE_DEFENSE")
+	{
+		base = _craft->getBase();
+		_craft = 0;
+	}
+	_game->pushState(new BriefingState(_game, _craft, base));
 	_craft = 0;
 }
 

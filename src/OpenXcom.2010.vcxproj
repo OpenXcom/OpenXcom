@@ -297,6 +297,7 @@
     <ClCompile Include="Geoscape\AlienBaseState.cpp" />
     <ClCompile Include="Geoscape\AlienTerrorState.cpp" />
     <ClCompile Include="Geoscape\AllocatePsiTrainingState.cpp" />
+    <ClCompile Include="Geoscape\BaseDefenseState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftErrorState.cpp" />
@@ -533,6 +534,7 @@
     <ClInclude Include="Geoscape\AlienBaseState.h" />
     <ClInclude Include="Geoscape\AlienTerrorState.h" />
     <ClInclude Include="Geoscape\AllocatePsiTrainingState.h" />
+    <ClInclude Include="Geoscape\BaseDefenseState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
     <ClInclude Include="Geoscape\CraftErrorState.h" />

@@ -41,7 +41,7 @@ private:
 	bool _lift, _hyper, _mind, _grav;
 	int _size, _buildCost, _buildTime, _monthlyCost;
 	int _storage, _personnel, _aliens, _crafts, _labs, _workshops, _psiLabs;
-	int _radarRange, _radarChance, _defense, _hitRatio;
+	int _radarRange, _radarChance, _defense, _hitRatio, _fireSound, _hitSound;
 	std::string _mapName;
 public:
 	/// Creates a blank facility ruleset.
@@ -100,6 +100,10 @@ public:
 	int getHitRatio() const;
 	/// Gets the facility's battlescape map name.
 	std::string getMapName() const;
+	/// Gets the facility's fire sound
+	int getFireSound() const;
+	/// Gets the facility's hit sound
+	int getHitSound() const;
 };
 
 }

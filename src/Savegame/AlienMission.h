@@ -26,10 +26,14 @@ namespace OpenXcom
 {
 
 class RuleAlienMission;
-class Ruleset;
-class SavedGame;
 class Ufo;
 class Globe;
+class Game;
+class SavedGame;
+class Ruleset;
+class RuleUfo;
+class UfoTrajectory;
+class AlienBase;
 
 /**
  * Represents an ongoing alien mission.
@@ -46,17 +50,19 @@ private:
 	unsigned _nextUfoCounter;
 	unsigned _spawnCountdown;
 	unsigned _liveUfos;
+	int _uniqueID;
+	const AlienBase *_base;
 public:
+	// Data
+
 	/// Creates a mission of the specified type.
 	AlienMission(const RuleAlienMission &rule);
 	/// Cleans up the mission info.
 	~AlienMission();
 	/// Loads the mission from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, SavedGame &game);
 	/// Saves the mission to YAML.
 	void save(YAML::Emitter& out) const;
-	/// Saves the mission's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
 	/// Gets the mission's type.
 	const std::string &getType() const;
 	/// Gets the mission's region.
@@ -67,10 +73,25 @@ public:
 	const std::string &getRace() const { return _race; }
 	/// Sets the mission's race.
 	void setRace(const std::string &race) { _race = race; }
+	/// Gets the minutes until next wave spawns.
+	unsigned getWaveCountdown() const { return _spawnCountdown; }
+	/// Sets the minutes until next wave spawns.
+	void setWaveCountdown(unsigned minutes);
+	/// Sets the unique ID for this mission.
+	void setUniqueID(SavedGame &game);
+	/// Gets the unique ID for this mission.
+	int getUniqueID() const;
+	/// Gets the alien base for this mission.
+	const AlienBase *getAlienBase() const;
+	/// Sets the alien base for this mission.
+	void setAlienBase(const AlienBase *base);
+
+	// Behaviour
+
 	/// Is this mission over?
 	bool isOver() const;
 	/// Handle UFO spawning for the mission.
-	void think(const Ruleset &rules, SavedGame &game, const Globe &globe);
+	void think(Game &engine, const Globe &globe);
 	/// Initialize with values from rules.
 	void start(unsigned initialCount = 0);
 	/// Increase number of live UFOs.
@@ -78,11 +99,14 @@ public:
 	/// Decrease number of live UFOs.
 	void decreaseLiveUfos() { --_liveUfos; }
 	/// Handle UFO reaching a waypoint.
-	void ufoReachedWaypoint(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
+	void ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO lifting from the ground.
-	void ufoLifting(Ufo &ufo, const Ruleset &rules, SavedGame &game, const Globe &globe);
+	void ufoLifting(Ufo &ufo, Game &engine, const Globe &globe);
 	/// Handle UFO shot down.
-	void ufoShotDown(Ufo &ufo, const Ruleset &rules, SavedGame &game);
+	void ufoShotDown(Ufo &ufo, Game &engine, const Globe &globe);
+private:
+	/// Spawns a UFO, based on mission rules.
+	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
 };
 
 }

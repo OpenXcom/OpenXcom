@@ -44,11 +44,12 @@ class TerrorSite;
 class AlienBase;
 class AlienStrategy;
 class AlienMission;
+class Target;
 
 /**
  * Enumerator containing all the possible game difficulties.
  */
-enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
+enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
 /**
  * The game data that gets written to disk when the game is saved.
@@ -129,6 +130,8 @@ public:
 	std::vector<Region*> *getRegions();
 	/// Gets the list of bases.
 	std::vector<Base*> *getBases();
+	/// Gets the list of bases.
+	const std::vector<Base*> *getBases() const;
 	/// Gets the total base maintenance.
 	int getBaseMaintenance() const;
 	/// Gets the list of UFOs.
@@ -187,6 +190,10 @@ public:
 	const std::vector<AlienMission*> &getAlienMissions() const { return _activeMissions; }
 	/// Gets a mission matching region and type.
 	AlienMission *getAlienMission(const std::string &region, const std::string &type) const;
+	/// Locate a region containing a position.
+	Region *locateRegion(double lon, double lat) const;
+	/// Locate a region containing a Target.
+	Region *locateRegion(const Target &target) const;
 };
 
 }

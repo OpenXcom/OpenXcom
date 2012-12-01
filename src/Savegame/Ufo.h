@@ -132,6 +132,8 @@ public:
 	const UfoTrajectory &getTrajectory() const { return *_trajectory; }
 	/// Gets the UFO's mission object.
 	AlienMission *getMission() const { return _mission; }
+	/// Sets the UFO's destination.
+	void setDestination(Target *dest);
 };
 
 }
