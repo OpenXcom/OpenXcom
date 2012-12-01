@@ -1274,6 +1274,42 @@ void GeoscapeState::time1Hour()
 }
 
 /**
+ * This class will attempt to generate a supply mission for a base.
+ * Each alien base has a 6/101 chance to generate a supply mission.
+ */
+class GenerateSupplyMission: public std::unary_function<const AlienBase *, void>
+{
+public:
+	/// Store rules and game data references for later use.
+	GenerateSupplyMission(const Ruleset &ruleset, SavedGame &save) : _ruleset(ruleset), _save(save) { /* Empty by design */ }
+	/// Check and spawn mission.
+	void operator()(const AlienBase *base) const;
+private:
+	const Ruleset &_ruleset;
+	SavedGame &_save;
+};
+
+/**
+ * Check and create supply mission for the given base.
+ * There is a 6/101 chance of the mission spawning.
+ * @param base A pointer to the alien base.
+ */
+void GenerateSupplyMission::operator()(const AlienBase *base) const
+{
+	if (RNG::generate(0, 100) < 6)
+	{
+		//Spawn supply mission for this base.
+		const RuleAlienMission &rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
+		AlienMission *mission = new AlienMission(rule);
+		mission->setRegion(_save.locateRegion(*base)->getRules()->getType());
+		mission->setRace(base->getAlienRace());
+		mission->setAlienBase(base);
+		mission->start();
+		_save.getAlienMissions().push_back(mission);
+	}
+}
+
+/**
  * Takes care of any game logic that has to
  * run every game day, like constructions.
  */
@@ -1383,6 +1419,7 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
+
 	// handle country points for alien bases
 	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
@@ -1394,6 +1431,10 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
+
+	// Handle resupply of alien bases.
+	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
+		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 }
 
 /**
@@ -1444,7 +1485,6 @@ void GeoscapeState::time1Month()
 			AlienBase *b = new AlienBase();
 			b->setLongitude(lon);
 			b->setLatitude(lat);
-			b->setSupplyTime(0);
 			b->setDiscovered(false);
 			b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
 			int race = RNG::generate(1, 2);

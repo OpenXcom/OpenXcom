@@ -17,6 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "AlienMission.h"
+#include "AlienBase.h"
+#include "Base.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
@@ -26,7 +29,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
-#include "Base.h"
 #include "SavedGame.h"
 #include "TerrorSite.h"
 #include "Ufo.h"
@@ -57,7 +59,7 @@ std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenX
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _uniqueID(0)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _uniqueID(0), _base(0)
 {
 	// Empty by design.
 }
@@ -67,7 +69,22 @@ AlienMission::~AlienMission()
 	// Empty by design.
 }
 
-void AlienMission::load(const YAML::Node& node)
+class matchById: public std::unary_function<const AlienBase *, bool>
+{
+public:
+	/// Remember ID.
+	matchById(int id) : _id(id) { /* Empty by design. */ }
+	/// Match with stored ID.
+	bool operator()(const AlienBase *ab) const { return ab->getId() == _id; }
+private:
+	int _id;
+};
+
+/**
+ * @param node The YAML node containing the data.
+ * @param game The game data, required to locate the alien base.
+ */
+void AlienMission::load(const YAML::Node& node, SavedGame &game)
 {
 	node["region"] >> _region;
 	node["race"] >> _race;
@@ -76,6 +93,18 @@ void AlienMission::load(const YAML::Node& node)
 	node["spawnCountdown"] >> _spawnCountdown;
 	node["liveUfos"] >> _liveUfos;
 	node["uniqueID"] >> _uniqueID;
+	if (const YAML::Node *bnode = node.FindValue("alienBase"))
+	{
+		int id;
+		(*bnode) >> id;
+		std::vector<AlienBase*>::const_iterator found = std::find_if(game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
+		if (found == game.getAlienBases()->end())
+		{
+			throw Exception("Corrupted save: Invalid base for mission.");
+		}
+		_base = *found;
+	}
+
 }
 
 void AlienMission::save(YAML::Emitter& out) const
@@ -89,6 +118,10 @@ void AlienMission::save(YAML::Emitter& out) const
 	out << YAML::Key << "spawnCountdown" << YAML::Value << _spawnCountdown;
 	out << YAML::Key << "liveUfos" << YAML::Value << _liveUfos;
 	out << YAML::Key << "uniqueID" << YAML::Value << _uniqueID;
+	if (_base)
+	{
+		out << YAML::Key << "alienBase" << YAML::Value << _base->getId();
+	}
 	out << YAML::EndMap;
 }
 
@@ -170,6 +203,8 @@ void AlienMission::think(Game &engine, const Globe &globe)
 
 /**
  * This function will spawn a UFO according the the mission rules.
+ * Some code is duplicated between cases, that's ok for now. It's on different
+ * code paths and the function is MUCH easier to read written this way.
  * @param game The saved game information.
  * @param ruleset The ruleset.
  * @param globe The globe, for land checks.
@@ -203,6 +238,47 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			ufo->setDestination(wp);
 			return ufo;
 		}
+	}
+	else if (_rule.getType() == "STR_ALIEN_SUPPLY")
+	{
+		Log(LOG_DEBUG) << __FILE__ << ':' << __LINE__ << ' ' << _base;
+		if (ufoRule.getType() == "STR_SUPPLY_SHIP" && !_base)
+		{
+			// No base to supply!
+			return 0;
+		}
+		// Our destination is always an alien base.
+		Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
+		ufo->setMissionInfo(this, &trajectory);
+		const RuleRegion &regionRules = *ruleset.getRegion(_region);
+		std::pair<double, double> pos = regionRules.getRandomPoint(trajectory.getZone(0));
+		ufo->setAltitude(trajectory.getAltitude(0));
+		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+		ufo->setLongitude(pos.first);
+		ufo->setLatitude(pos.second);
+		Waypoint *wp = new Waypoint();
+		if (trajectory.getAltitude(1) == "STR_GROUND")
+		{
+			if (ufoRule.getType() == "STR_SUPPLY_SHIP")
+			{
+				// Supply ships on supply missions land on bases, ignore trajectory zone.
+				pos.first = _base->getLongitude();
+				pos.second = _base->getLatitude();
+			}
+			else
+			{
+				// Other ships can land where they want.
+				pos = getLandPoint(globe, regionRules, trajectory.getZone(1));
+			}
+		}
+		else
+		{
+			pos = regionRules.getRandomPoint(trajectory.getZone(1));
+		}
+		wp->setLongitude(pos.first);
+		wp->setLatitude(pos.second);
+		ufo->setDestination(wp);
+		return ufo;
 	}
 	// Spawn according to sequence.
 	Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
@@ -454,4 +530,22 @@ int AlienMission::getUniqueID() const
 	return _uniqueID;
 }
 
+/**
+ * Sets the alien base associated with this mission.
+ * Only the alien supply missions care about this.
+ * @param base A pointer to an alien base.
+ */
+void AlienMission::setAlienBase(const AlienBase *base)
+{
+	_base = base;
+}
+
+/**
+ * Only alien supply missions ever have a valid pointer.
+ * @return A pointer (possibly 0) of the AlienBase for this mission.
+ */
+const AlienBase *AlienMission::getAlienBase() const
+{
+	return _base;
+}
 }

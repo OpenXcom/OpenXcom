@@ -261,6 +261,14 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_regions.push_back(r);
 	}
 
+	// Alien bases must be loaded before alien missions
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
+
 	// Missions must be loaded before UFOs.
 	const YAML::Node &missions = *doc.FindValue("alienMissions");
 	for (YAML::Iterator it = missions.begin(); it != missions.end(); ++it)
@@ -269,7 +277,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		(*it)["type"] >> missionType;
 		const RuleAlienMission &mRule = *rule->getAlienMission(missionType);
 		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
-		mission->load(*it);
+		mission->load(*it, *this);
 		_activeMissions.push_back(mission.release());
 	}
 
@@ -296,12 +304,6 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
-	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
-	}
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -388,21 +390,6 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
-	// Missions must be saved before UFOs.
-	out << YAML::Key << "alienMissions" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "ufos" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
 	out << YAML::Key << "waypoints" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
@@ -417,9 +404,26 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	// Alien bases must be saved before alien missions.
 	out << YAML::Key << "alienBases" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// Missions must be saved before UFOs, but after alien bases.
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// UFOs must be after missions
+	out << YAML::Key << "ufos" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		(*i)->save(out);
 	}

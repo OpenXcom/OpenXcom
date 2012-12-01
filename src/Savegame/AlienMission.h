@@ -33,6 +33,7 @@ class SavedGame;
 class Ruleset;
 class RuleUfo;
 class UfoTrajectory;
+class AlienBase;
 
 /**
  * Represents an ongoing alien mission.
@@ -50,6 +51,7 @@ private:
 	unsigned _spawnCountdown;
 	unsigned _liveUfos;
 	int _uniqueID;
+	const AlienBase *_base;
 public:
 	// Data
 
@@ -58,7 +60,7 @@ public:
 	/// Cleans up the mission info.
 	~AlienMission();
 	/// Loads the mission from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, SavedGame &game);
 	/// Saves the mission to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the mission's type.
@@ -79,6 +81,10 @@ public:
 	void setUniqueID(SavedGame &game);
 	/// Gets the unique ID for this mission.
 	int getUniqueID() const;
+	/// Gets the alien base for this mission.
+	const AlienBase *getAlienBase() const;
+	/// Sets the alien base for this mission.
+	void setAlienBase(const AlienBase *base);
 
 	// Behaviour
 
