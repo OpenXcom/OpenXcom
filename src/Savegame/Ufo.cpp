@@ -407,10 +407,12 @@ void Ufo::think()
 		}
 		break;
 	case LANDED:
-	case CRASHED:
 		assert(_secondsRemaining >= 5 && "Wrong time management.");
 		_secondsRemaining -= 5;
 		break;
+	case CRASHED:
+		// This gets handled in GeoscapeState::time30Minutes()
+		// Because the original game processes it every 30 minutes!
 	case DESTROYED:
 		// Do nothing
 		break;

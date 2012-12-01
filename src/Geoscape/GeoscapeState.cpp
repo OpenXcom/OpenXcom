@@ -618,15 +618,6 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
-	// Handle terror sites expiring
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
-	{
-		if ((*i)->getSecondsRemaining() >= 5)
-		{
-			(*i)->setSecondsRemaining((*i)->getSecondsRemaining() - 5);
-		}
-	}
-
 	// Handle craft logic
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
@@ -799,36 +790,6 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
-	// Clean up terror sites
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end();)
-	{
-		if ((*i)->getSecondsRemaining() < 5 && (*i)->getFollowers()->empty()) // CHEEKY EXPLOIT
-		{
-			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityAlien(1000);
-					//kids, tell your folks... don't ignore terror sites.
-				}
-			}
-		
-			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityAlien(1000);
-				}
-			}
-			delete *i;
-			i = _game->getSavedGame()->getTerrorSites()->erase(i);
-		}
-		else
-		{
-			++i;
-		}
-	}
-
 	// Clean up unused waypoints
 	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
 	{
@@ -985,6 +946,71 @@ private:
 	const Globe &_globe;
 };
 
+/** @brief Process a TerrorSite.
+ * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
+ */
+class ProcessTerrorSite: public std::unary_function<TerrorSite*, bool>
+{
+public:
+	/// Remember data for invocations.
+	ProcessTerrorSite(SavedGame &game) : _game(game) { /* Empty by design. */ }
+	/// Count down for expiration and handle it.
+	bool operator()(TerrorSite *ts) const;
+private:
+	SavedGame &_game;
+};
+
+bool ProcessTerrorSite::operator()(TerrorSite *ts) const
+{
+	if (ts->getSecondsRemaining() >= 30 * 60)
+	{
+		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
+		return false;
+	}
+	if (!ts->getFollowers()->empty()) // CHEEKY EXPLOIT
+	{
+		return false;
+	}
+	// Score and delete it.
+	Region *region = _game.locateRegion(*ts);
+	if (region)
+	{
+		//TODO: This should come from mission rules!
+		region->addActivityAlien(1000);
+		//kids, tell your folks... don't ignore terror sites.
+	}
+	for (std::vector<Country*>::iterator k = _game.getCountries()->begin(); k != _game.getCountries()->end(); ++k)
+	{
+		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
+		{
+			(*k)->addActivityAlien(1000);
+		}
+	}
+	delete ts;
+	return true;
+}
+
+/** @brief Advance time for crashed UFOs.
+ * This function object will decrease the expiration timer for crashed UFOs.
+ */
+struct expireCrashedUfo: public std::unary_function<Ufo*, void>
+{
+	/// Decrease UFO expiration timer.
+	void operator()(Ufo *ufo) const
+	{
+		if (ufo->getStatus() == Ufo::CRASHED)
+		{
+			if (ufo->getSecondsRemaining() >= 30 * 60)
+			{
+				ufo->setSecondsRemaining(ufo->getSecondsRemaining() - 30 * 60);
+				return;
+			}
+			// Marked expired UFOs for removal.
+			ufo->setStatus(Ufo::DESTROYED);
+		}
+	}
+};
+
 /**
  * Takes care of any game logic that has to
  * run every game half hour, like UFO detection.
@@ -1001,6 +1027,12 @@ void GeoscapeState::time30Minutes()
 			   _game->getSavedGame()->getAlienMissions().end(),
 			   deleteFinishedAlienMission());
 	_game->getSavedGame()->getAlienMissions().erase(last, _game->getSavedGame()->getAlienMissions().end());
+
+	// Handle crashed UFOs expiration
+	std::for_each(_game->getSavedGame()->getUfos()->begin(),
+		      _game->getSavedGame()->getUfos()->end(),
+		      expireCrashedUfo());
+
 
 	// Handle craft maintenance and alien base detection
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1162,6 +1194,13 @@ void GeoscapeState::time30Minutes()
 			break;
 		}
 	}
+
+	// Processes TerrorSites
+	std::vector<TerrorSite*>::iterator lastTerrorSite =
+	    std::remove_if( _game->getSavedGame()->getTerrorSites()->begin(),
+			    _game->getSavedGame()->getTerrorSites()->end(),
+			    ProcessTerrorSite(*_game->getSavedGame()));
+	_game->getSavedGame()->getTerrorSites()->erase(lastTerrorSite, _game->getSavedGame()->getTerrorSites()->end());
 }
 
 /**
