@@ -1816,6 +1816,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
 	const std::string &terrorRace = terrorRules.generateRace(*_game->getSavedGame()->getTime());
 	AlienMission *terrorMission = new AlienMission(terrorRules);
+	terrorMission->setUniqueID(*_game->getSavedGame());
 	terrorMission->setRegion(region->getType());
 	terrorMission->setRace(terrorRace);
 	terrorMission->start();
@@ -1833,6 +1834,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
 		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());
 		AlienMission *otherMission = new AlienMission(missionRules);
+		otherMission->setUniqueID(*_game->getSavedGame());
 		otherMission->setRegion(targetRegion);
 		otherMission->setRace(missionRace);
 		otherMission->start();
@@ -1852,6 +1854,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
 		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());
 		AlienMission *otherMission = new AlienMission(missionRules);
+		otherMission->setUniqueID(*_game->getSavedGame());
 		otherMission->setRegion(targetRegion);
 		otherMission->setRace(missionRace);
 		otherMission->start(150);

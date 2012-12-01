@@ -49,6 +49,7 @@ private:
 	unsigned _nextUfoCounter;
 	unsigned _spawnCountdown;
 	unsigned _liveUfos;
+	int _uniqueID;
 public:
 	// Data
 
@@ -60,8 +61,6 @@ public:
 	void load(const YAML::Node& node);
 	/// Saves the mission to YAML.
 	void save(YAML::Emitter& out) const;
-	/// Saves the mission's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
 	/// Gets the mission's type.
 	const std::string &getType() const;
 	/// Gets the mission's region.
@@ -76,6 +75,10 @@ public:
 	unsigned getWaveCountdown() const { return _spawnCountdown; }
 	/// Sets the minutes until next wave spawns.
 	void setWaveCountdown(unsigned minutes);
+	/// Sets the unique ID for this mission.
+	void setUniqueID(SavedGame &game);
+	/// Gets the unique ID for this mission.
+	int getUniqueID() const;
 
 	// Behaviour
 

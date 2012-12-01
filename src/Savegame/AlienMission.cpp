@@ -57,7 +57,7 @@ std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenX
 namespace OpenXcom
 {
 
-AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule)
+AlienMission::AlienMission(const RuleAlienMission &rule) : _rule(rule), _uniqueID(0)
 {
 	// Empty by design.
 }
@@ -75,6 +75,7 @@ void AlienMission::load(const YAML::Node& node)
 	node["nextUfoCounter"] >> _nextUfoCounter;
 	node["spawnCountdown"] >> _spawnCountdown;
 	node["liveUfos"] >> _liveUfos;
+	node["uniqueID"] >> _uniqueID;
 }
 
 void AlienMission::save(YAML::Emitter& out) const
@@ -87,17 +88,10 @@ void AlienMission::save(YAML::Emitter& out) const
 	out << YAML::Key << "nextUfoCounter" << YAML::Value << _nextUfoCounter;
 	out << YAML::Key << "spawnCountdown" << YAML::Value << _spawnCountdown;
 	out << YAML::Key << "liveUfos" << YAML::Value << _liveUfos;
+	out << YAML::Key << "uniqueID" << YAML::Value << _uniqueID;
 	out << YAML::EndMap;
 }
 
-/// Saves the mission's ID to YAML.
-void AlienMission::saveId(YAML::Emitter& out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _rule.getType();
-	out << YAML::Key << "region" << YAML::Value << _region;
-	out << YAML::EndMap;
-}
 const std::string &AlienMission::getType() const
 {
 	return _rule.getType();
@@ -438,6 +432,26 @@ void AlienMission::setWaveCountdown(unsigned minutes)
 		return;
 	}
 	_spawnCountdown = minutes;
+}
+
+/**
+ * Assigns a unique ID to this mission.
+ * It is an error to assign two IDs to the same mission.
+ * @param game The game data, used to get a unique ID.
+ */
+void AlienMission::setUniqueID(SavedGame &game)
+{
+	assert(_uniqueID == 0 && "Reassigning ID!");
+	_uniqueID = game.getId("ALIEN_MISSIONS");
+}
+
+/**
+ * @return The unique ID assigned to this mission.
+ */
+int AlienMission::getUniqueID() const
+{
+	assert(_uniqueID != 0 && "Uninitalized mission!");
+	return _uniqueID;
 }
 
 }

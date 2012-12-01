@@ -18,6 +18,7 @@
  */
 #include "Ufo.h"
 #include "AlienMission.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Language.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
@@ -26,6 +27,7 @@
 #include "Waypoint.h"
 #include <cmath>
 #include <sstream>
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -54,6 +56,20 @@ Ufo::~Ufo()
 	Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
 	delete wp;
 }
+
+/**
+ * Match AlienMission based on the unique ID.
+ */
+class matchMissionID: public std::unary_function<const AlienMission *, bool>
+{
+public:
+	/// Store ID for later comparisons.
+	matchMissionID(int id) : _id(id) { /* Empty by design. */ }
+	/// Match with stored ID.
+	bool operator()(const AlienMission *am) { return am->getUniqueID() == _id; }
+private:
+	int _id;
+};
 
 /**
  * Loads the UFO from a YAML file.
@@ -94,10 +110,16 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	{
 		_status = CRASHED;
 	}
-	std::string mtype, mregion;
-	node["mission"]["region"] >> mregion;
-	node["mission"]["type"] >> mtype;
-	_mission = game.getAlienMission(mregion, mtype);
+	int missionID;
+	node["mission"] >> missionID;
+	std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+	if (found == game.getAlienMissions().end())
+	{
+		// Corrupt save file.
+		throw Exception("Unknown mission, save file is corrupt.");
+	}
+	_mission = *found;
+
 	std::string tid;
 	node["trajectory"] >> tid;
 	_trajectory = ruleset.getUfoTrajectory(tid);
@@ -120,11 +142,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
 	out << YAML::Key << "secondsRemaining" << YAML::Value << _secondsRemaining;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	if (_mission)
-	{
-		out << YAML::Key << "mission" << YAML::Value;
-		_mission->saveId(out);
-	}
+	out << YAML::Key << "mission" << _mission->getUniqueID();
 	out << YAML::Key << "trajectory" << YAML::Value << _trajectory->getID();
 	out << YAML::Key << "trajectoryPoint" << YAML::Value << _trajectoryPoint;
 	out << YAML::EndMap;
