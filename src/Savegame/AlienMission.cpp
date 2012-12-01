@@ -193,6 +193,22 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		// Infiltrations loop for ever.
 		_nextWave = 0;
 	}
+	if (_rule.getType() == "STR_ALIEN_BASE" && _nextWave == _rule.getWaveCount())
+	{
+		// Once the last UFO is spawned, the aliens build their base.
+		// TODO: Find out what should actually be the location.
+		// For now we use the last non-exit zone of the last UFO for the location.
+		assert(ufo);
+		const RuleRegion &regionRules = *ruleset.getRegion(_region);
+		unsigned zone = ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2);
+		std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
+		AlienBase *ab = new AlienBase();
+		ab->setAlienRace(_race);
+		ab->setId(game.getId("STR_ALIEN_BASE"));
+		ab->setLongitude(pos.first);
+		ab->setLatitude(pos.second);
+		game.getAlienBases()->push_back(ab);
+	}
 	if (_nextWave != _rule.getWaveCount())
 	{
 		const MissionWave &nwave = _rule.getWave(_nextWave);
