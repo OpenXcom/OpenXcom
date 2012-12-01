@@ -695,6 +695,10 @@ void GeoscapeState::time5Seconds()
 								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
 						}
+						else if (u->getStatus() != Ufo::LANDED)
+						{
+							(*j)->returnToBase();
+						}
 						break;
 					}
 				}
