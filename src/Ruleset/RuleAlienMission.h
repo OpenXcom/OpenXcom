@@ -31,18 +31,38 @@ class WeightedOptions;
 class Region;
 class GameTime;
 
+/** @brief Information about a mission wave.
+ * Mission waves control the UFOs that will be generated during an alien mission.
+ */
 struct MissionWave
 {
+	/// The type of the spawned UFOs.
 	std::string ufoType;
+	/// The number of UFOs that will be generated.
+	/** The UFOs are generated sequentially, one every @a spawnTimer minutes.
+	 */
 	unsigned ufoCount;
+	/// The trajectory ID for this wave's UFOs.
+	/** Trajectories control the way UFOs fly around the Geoscape.
+	 */
 	std::string trajectory;
+	/// Number of minutes between UFOs in the wave.
+	/** The actual value used is spawnTimer/4 or 3*spawnTimer/4.
+	 */
 	unsigned spawnTimer;
 };
 
 
+/// Output a MissionWave on YAML.
 void operator<<(YAML::Emitter &emitter, const MissionWave &wave);
+/// Load a MissionWave from YAML.
 void operator>>(const YAML::Node &node, MissionWave &wave);
 
+/**
+ * Store fixed information about a mission type.
+ * It stores the mission waves and the distribution of the races that can
+ * undertake the mission based on game date
+ */
 class RuleAlienMission
 {
 public:
@@ -61,8 +81,11 @@ public:
 	/// Gets the full wave information.
 	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
 private:
+	/// The mission's type ID.
 	std::string _type;
+	/// The race distribution over game time.
 	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;
+	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 
 };

@@ -944,8 +944,17 @@ void GeoscapeState::time10Minutes()
 	}
 }
 
+/** @brief Delete a finished mission.
+ * This function object will delete an alien mission if it is over.
+ */
 struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, bool>
 {
+	/// Delete a mission if it's finished.
+	/**
+	 * Delete a mission if it has no UFOs and is not going to create any more.
+	 * @param am A pointer to the mission to check.
+	 * @return true if @a am was deleted.
+	 */
 	bool operator()(AlienMission *am)
 	{
 		if (am->isOver())
@@ -957,10 +966,19 @@ struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, boo
 	}
 };
 
+/** @brief Call AlienMission::think() with proper parameters.
+ * This function object calls AlienMission::think() with the proper parameters.
+ */
 class callThink: public std::unary_function<AlienMission*, void>
 {
 public:
+	/// Store the parameters.
+	/**
+	 * @param game The game engine.
+	 * @param game The globe object.
+	 */
 	callThink(Game &game, const Globe &globe) : _game(game), _globe(globe) { /* Empty by design. */ }
+	/// Call AlienMission::think() with stored parameters.
 	void operator()(AlienMission *am) { am->think(_game, _globe); }
 private:
 	Game &_game;

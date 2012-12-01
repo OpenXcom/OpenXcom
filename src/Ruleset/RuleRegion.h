@@ -42,9 +42,10 @@ private:
 	int _cost;
 	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
 	std::vector<City*> _cities;
+	/// Weighted list of the different mission types for this region.
 	WeightedOptions _missionWeights;
-	unsigned _regionWeight;
-	std::vector<MissionZone> _missionZones;
+	unsigned _regionWeight; ///< Weight of this region when selecting regions for alien missions.
+	std::vector<MissionZone> _missionZones; ///< All the mission zones in this region.
 public:
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);

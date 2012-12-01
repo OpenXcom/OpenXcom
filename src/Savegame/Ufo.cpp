@@ -58,6 +58,8 @@ Ufo::~Ufo()
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
+ * @param ruleset The game rules. Use to access the trajectory rules.
+ * @param game The game data. Used to find the UFO's mission.
  */
 void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 {
@@ -481,8 +483,12 @@ const std::string &Ufo::getMissionType() const
 }
 
 /**
- * Changes the mission of the UFO.
+ * Sets the mission information of the UFO.
+ * The UFO will start at the first point of the trajectory. The actual UFO
+ * information is not changed here, this only sets the information kept on
+ * behalf of the mission.
  * @param mission Pointer to the actual mission object.
+ * @param trajectory Pointer to the actual mission trajectory.
  */
 void Ufo::setMissionInfo(AlienMission *mission, const UfoTrajectory *trajectory)
 {
@@ -514,7 +520,6 @@ void Ufo::setHyperDetected(bool hyperdetected)
 /**
  * Handle destination changes, making sure to delete old waypoint destinations.
  * @param dest Pointer to the new destination.
- * @overrides MovingTarget::setDestination
  */
 void Ufo::setDestination(Target *dest)
 {

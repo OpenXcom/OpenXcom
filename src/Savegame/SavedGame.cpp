@@ -1109,17 +1109,31 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
-struct matchRegionAndType: public std::unary_function<AlienMission *, bool>
+/** @brief Match a mission based on region and type.
+ * This function object will match alien missions based on region and type.
+ */
+class matchRegionAndType: public std::unary_function<AlienMission *, bool>
 {
-	const std::string &_region;
-	const std::string &_type;
+public:
+	/// Store the region and type.
 	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	/// Match against stored values.
 	bool operator()(const AlienMission *mis) const
 	{
 		return mis->getRegion() == _region && mis->getType() == _type;
 	}
+private:
+
+	const std::string &_region;
+	const std::string &_type;
 };
 
+/**
+ * Find a mission from the active alien missions.
+ * @param region The region ID.
+ * @param type The mission type ID.
+ * @return A pointer to the mission, or 0 if no mission matched.
+ */
 AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
 {
 	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
@@ -1165,11 +1179,15 @@ void SavedGame::setWarned(bool warned)
 	_warned = warned;
 }
 
+/** @brief Check if a point is contained in a region.
+ * This function object checks if a point is contained inside a region.
+ */
 class ContainsPoint: public std::unary_function<const Region *, bool>
 {
 public:
+	/// Remember the coordinates.
 	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
-	/// Check is the point is in the region.
+	/// Check is the region contains the stored point.
 	bool operator()(const Region *region) { return region->getRules()->insideRegion(_lon, _lat); }
 private:
 	double _lon, _lat;

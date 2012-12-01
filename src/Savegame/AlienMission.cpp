@@ -250,15 +250,29 @@ void AlienMission::start(unsigned initialCount)
 	}
 }
 
-class LocateXCOMBase: public std::unary_function<const Base *, bool>
+/** @brief Match a base from it's coordinates.
+ * This function object uses coordinates to match a base.
+ */
+class MatchBaseCoordinates: public std::unary_function<const Base *, bool>
 {
 public:
-	LocateXCOMBase(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	/// Remember the query coordinates.
+	MatchBaseCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	/// Match with base's coordinates.
 	bool operator()(const Base *base) { return _lon == base->getLongitude() && _lat == base->getLatitude(); }
 private:
 	double _lon, _lat;
 };
 
+/**
+ * This function is called when one of the mission's UFOs arrives at it's current destination.
+ * It takes care of sending the UFO to the next waypoint, landing UFOs and
+ * marking them for removal as required. It must set the game data in a way that the rest of the code
+ * understands what to do.
+ * @param ufo The UFO that reached it's waypoint.
+ * @param engine The game engine, required to get access to game data and game rules.
+ * @param globe The earth globe, required to get access to land checks.
+ */
 void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe)
 {
 	const Ruleset &rules = *engine.getRuleset();
@@ -318,7 +332,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			ufo.setDetected(false);
 			std::vector<Base *>::const_iterator found =
 			    std::find_if(game.getBases()->begin(), game.getBases()->end(),
-					 LocateXCOMBase(ufo.getLongitude(), ufo.getLatitude()));
+					 MatchBaseCoordinates(ufo.getLongitude(), ufo.getLatitude()));
 			if (found == game.getBases()->end())
 			{
 				ufo.setStatus(Ufo::DESTROYED);
@@ -335,6 +349,13 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	}
 }
 
+/**
+ * This function is called when one of the mission's UFOs is shot down (crashed or destroyed).
+ * Currently the only thing that happens is delaying the next UFO in the mission sequence.
+ * @param ufo The UFO that was shot down.
+ * @param engine The game engine, unused for now.
+ * @param globe The earth globe, unused for now.
+ */
 void AlienMission::ufoShotDown(Ufo &ufo, Game &, const Globe &)
 {
 	switch (ufo.getStatus())
@@ -355,6 +376,14 @@ void AlienMission::ufoShotDown(Ufo &ufo, Game &, const Globe &)
 	}
 }
 
+/**
+ * This function is called when one of the mission's UFOs has finished it's time on the ground.
+ * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
+ * It must set the game data in a way that the rest of the code understands what to do.
+ * @param ufo The UFO that reached it's waypoint.
+ * @param engine The game engine, required to get access to game data and game rules.
+ * @param globe The earth globe, required to get access to land checks.
+ */
 void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 {
 	const Ruleset &rules = *engine.getRuleset();

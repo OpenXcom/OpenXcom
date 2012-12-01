@@ -78,7 +78,6 @@ void WeightedOptions::set(const std::string &id, unsigned weight)
  * The weight option list is not replaced, only values in @a nd will be added /
  * changed.
  * @param nd The YAML node (containing a map) with the new values.
- * @param wo The list to change.
  */
 void WeightedOptions::load(const YAML::Node &nd)
 {

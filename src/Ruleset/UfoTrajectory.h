@@ -26,10 +26,16 @@
 namespace OpenXcom
 {
 
+/**
+ * Information for points on a UFO trajectory.
+ */
 struct TrajectoryWaypoint
 {
+	/// The mission zone.
 	unsigned zone;
+	/// The altitude to reach.
 	unsigned altitude;
+	/// The speed percentage ([0..100])
 	unsigned speed;
 };
 
