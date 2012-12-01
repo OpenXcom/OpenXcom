@@ -75,18 +75,18 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
 	_btnOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	std::wstringstream ss;
-	ss << _base->getName() << _game->getLanguage()->getString("STR_UNDER_ATTACK");
+	ss << _base->getName() << tr("STR_UNDER_ATTACK");
 	_txtTitle->setText(ss.str());
 
 	_txtInit->setColor(Palette::blockOffset(13)+10);
-	_txtInit->setText(_game->getLanguage()->getString("STR_BASE_DEFENSES_INITIATED"));
+	_txtInit->setText(tr("STR_BASE_DEFENSES_INITIATED"));
 
 	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
@@ -96,31 +96,31 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 	{
 		if(pass)
 		{
-			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str(),"","");
+			_lstDefenses->addRow(3, tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),"","");
 			++row;
 		}
 		for(std::vector<BaseFacility*>::iterator def = _base->getDefenses()->begin(); def != _base->getDefenses()->end(); ++def)
 		{
 			delay();
-			_lstDefenses->addRow(3, _game->getLanguage()->getString((*def)->getRules()->getType()).c_str(),"","");
+			_lstDefenses->addRow(3, tr((*def)->getRules()->getType()).c_str(),"","");
 			++row;
 			delay();
-			_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_FIRING"));
+			_lstDefenses->setCellText(row, 2, tr("STR_FIRING"));
 			_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
 			delay();
 			if(RNG::generate(1, 100) > (*def)->getRules()->getHitRatio())
 			{
-				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_MISSED"));
+				_lstDefenses->setCellText(row, 3, tr("STR_MISSED"));
 			}
 			else
 			{
-				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_HIT"));
+				_lstDefenses->setCellText(row, 3, tr("STR_HIT"));
 				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (*def)->getRules()->getDefenseValue());
 				if(_ufo->getStatus() == 3)
 				{
 					delay();
-					_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),"","");
+					_lstDefenses->addRow(3, tr("STR_UFO_DESTROYED").c_str(),"","");
 					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(5)->play();
 					continue;
 				}

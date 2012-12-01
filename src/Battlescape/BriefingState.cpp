@@ -108,7 +108,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 	else if(base)
 	{
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_BASE_UC_") << base->getName();
+		ss << tr("STR_BASE_UC_") << base->getName();
 		_txtCraft->setText(ss.str());
 	}
 
