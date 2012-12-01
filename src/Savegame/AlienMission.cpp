@@ -529,18 +529,18 @@ void AlienMission::setWaveCountdown(unsigned minutes)
 /**
  * Assigns a unique ID to this mission.
  * It is an error to assign two IDs to the same mission.
- * @param game The game data, used to get a unique ID.
+ * @param id The UD to assign.
  */
-void AlienMission::setUniqueID(SavedGame &game)
+void AlienMission::setId(int id)
 {
 	assert(_uniqueID == 0 && "Reassigning ID!");
-	_uniqueID = game.getId("ALIEN_MISSIONS");
+	_uniqueID = id;
 }
 
 /**
  * @return The unique ID assigned to this mission.
  */
-int AlienMission::getUniqueID() const
+int AlienMission::getId() const
 {
 	assert(_uniqueID != 0 && "Uninitalized mission!");
 	return _uniqueID;
