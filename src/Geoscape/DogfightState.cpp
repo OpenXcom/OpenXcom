@@ -1024,6 +1024,7 @@ void DogfightState::move()
 			}
 			else
 			{
+				_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
 				_ufo->setAltitude("STR_GROUND");
 			}
 			AlienMission *mission = _ufo->getMission();

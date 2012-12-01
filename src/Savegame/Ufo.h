@@ -87,7 +87,7 @@ public:
 	/// Gets the UFO's seconds left on the ground.
 	int getSecondsRemaining() const;
 	/// Sets the UFO's seconds left on the ground.
-	void setSecondsRemaining(int hours);
+	void setSecondsRemaining(int seconds);
 	/// Gets the UFO's direction.
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.
