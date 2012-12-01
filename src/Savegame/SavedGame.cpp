@@ -46,6 +46,12 @@
 #include "Production.h"
 #include "TerrorSite.h"
 #include "AlienBase.h"
+#include "AlienStrategy.h"
+#include "AlienMission.h"
+#include "../Ruleset/RuleRegion.h"
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
 
 namespace OpenXcom
 {
@@ -90,6 +96,7 @@ SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_alienStrategy = new AlienStrategy();
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 	_researchScores.push_back(0);
@@ -129,6 +136,7 @@ SavedGame::~SavedGame()
  	{
 		delete *i;
 	}
+	delete _alienStrategy;
 	delete _battleGame;
 }
 
@@ -253,12 +261,32 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_regions.push_back(r);
 	}
 
+	// Alien bases must be loaded before alien missions
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
+
+	// Missions must be loaded before UFOs.
+	const YAML::Node &missions = *doc.FindValue("alienMissions");
+	for (YAML::Iterator it = missions.begin(); it != missions.end(); ++it)
+	{
+		std::string missionType;
+		(*it)["type"] >> missionType;
+		const RuleAlienMission &mRule = *rule->getAlienMission(missionType);
+		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
+		mission->load(*it, *this);
+		_activeMissions.push_back(mission.release());
+	}
+
 	for (YAML::Iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type;
 		(*i)["type"] >> type;
 		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(*i);
+		u->load(*i, *rule, *this);
 		_ufos.push_back(u);
 	}
 
@@ -276,12 +304,6 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
-	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
-	}
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -295,6 +317,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		*it >> research;
 		_discovered.push_back(rule->getResearch(research));
 	}
+
+	_alienStrategy->load(rule, doc["alienStrategy"]);
 
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
@@ -366,13 +390,6 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
-	out << YAML::Key << "ufos" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
 	out << YAML::Key << "waypoints" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
@@ -387,9 +404,26 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	// Alien bases must be saved before alien missions.
 	out << YAML::Key << "alienBases" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// Missions must be saved before UFOs, but after alien bases.
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// UFOs must be after missions
+	out << YAML::Key << "ufos" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -401,6 +435,8 @@ void SavedGame::save(const std::string &filename) const
 		out << (*i)->getName ();
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "alienStrategy" << YAML::Value;
+	_alienStrategy->save(out);
 	if (_battleGame != 0)
 	{
 		out << YAML::Key << "battleGame" << YAML::Value;
@@ -442,7 +478,7 @@ int SavedGame::getFunds() const
  * Returns the player's funds for the last 12 months.
  * @return funds.
  */
-std::vector<int> SavedGame::getFundsList() const
+const std::vector<int> &SavedGame::getFundsList() const
 {
 	return _funds;
 }
@@ -598,6 +634,15 @@ std::vector<Base*> *SavedGame::getBases()
 }
 
 /**
+ * Returns an immutable list of player bases.
+ * @return Pointer to base list.
+ */
+const std::vector<Base*> *SavedGame::getBases() const
+{
+	return &_bases;
+}
+
+/**
  * Adds up the monthly maintenance of all the bases.
  * @return Total maintenance.
  */
@@ -661,7 +706,7 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
  * Add a ResearchProject to the list of already discovered ResearchProject
  * @param r The newly found ResearchProject
 */
-void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
+void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
 	if(itDiscovered == _discovered.end())
@@ -712,7 +757,7 @@ const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() con
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const
+void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	std::vector<std::string> researchProjects = ruleset->getResearchList();
@@ -769,9 +814,9 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const
+void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const
 {
-	const std::vector<std::string> items (ruleset->getManufactureList ());
+	const std::vector<std::string> &items = ruleset->getManufactureList ();
 	const std::vector<Production *> baseProductions (base->getProductions ());
 
 	for(std::vector<std::string>::const_iterator iter = items.begin ();
@@ -797,7 +842,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
    * @param unlocked the list of currently unlocked RuleResearch
    * @return true if the RuleResearch can be researched
 */
-bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const
+bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
@@ -826,7 +871,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
 	for(std::vector<const RuleResearch *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
@@ -848,7 +893,7 @@ void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	std::vector<RuleResearch *> possibleProjects;
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
@@ -878,13 +923,13 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
-	std::vector<std::string> mans = ruleset->getManufactureList();
+	const std::vector<std::string> &mans = ruleset->getManufactureList();
 	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
-		std::vector<std::string> reqs = m->getRequirements();
+		const std::vector<std::string> &reqs = m->getRequirements();
 		if(isResearched(m->getRequirements()) && std::find(reqs.begin(), reqs.end(), research->getName()) != reqs.end())
 		{
 			dependables.push_back(m);
@@ -1068,6 +1113,39 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
+/** @brief Match a mission based on region and type.
+ * This function object will match alien missions based on region and type.
+ */
+class matchRegionAndType: public std::unary_function<AlienMission *, bool>
+{
+public:
+	/// Store the region and type.
+	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	/// Match against stored values.
+	bool operator()(const AlienMission *mis) const
+	{
+		return mis->getRegion() == _region && mis->getType() == _type;
+	}
+private:
+
+	const std::string &_region;
+	const std::string &_type;
+};
+
+/**
+ * Find a mission from the active alien missions.
+ * @param region The region ID.
+ * @param type The mission type ID.
+ * @return A pointer to the mission, or 0 if no mission matched.
+ */
+AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
+{
+	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
+	if (ii == _activeMissions.end())
+		return 0;
+	return *ii;
+}
+
 /**
  * return the list of monthly maintenance costs
  * @return list of maintenances.
@@ -1104,4 +1182,45 @@ void SavedGame::setWarned(bool warned)
 {
 	_warned = warned;
 }
+
+/** @brief Check if a point is contained in a region.
+ * This function object checks if a point is contained inside a region.
+ */
+class ContainsPoint: public std::unary_function<const Region *, bool>
+{
+public:
+	/// Remember the coordinates.
+	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	/// Check is the region contains the stored point.
+	bool operator()(const Region *region) const { return region->getRules()->insideRegion(_lon, _lat); }
+private:
+	double _lon, _lat;
+};
+
+/**
+ * Find the region containing this location.
+ * @param lon The longtitude.
+ * @param lat The latitude.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(double lon, double lat) const
+{
+	std::vector<Region *>::const_iterator found = std::find_if(_regions.begin(), _regions.end(), ContainsPoint(lon, lat));
+	if (found != _regions.end())
+	{
+		return *found;
+	}
+	return 0;
+}
+
+/**
+ * Find the region containing this target.
+ * @param target The target to locate.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(const Target &target) const
+{
+	return locateRegion(target.getLongitude(), target.getLatitude());
+}
+
 }

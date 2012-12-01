@@ -47,6 +47,12 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
+#include "../Savegame/AlienStrategy.h"
+#include "UfoTrajectory.h"
+#include "RuleAlienMission.h"
+#include "City.h"
+#include "../Engine/Logger.h"
+#include <algorithm>
 
 namespace OpenXcom
 {
@@ -146,6 +152,14 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -555,6 +569,43 @@ void Ruleset::loadFile(const std::string &filename)
 		{
 			i.second() >> _timePersonnel;
 		}
+		else if (key == "ufoTrajectories")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string id;
+				(*j)["id"] >> id;
+				if (_ufoTrajectories.find(id) != _ufoTrajectories.end())
+				{
+					_ufoTrajectories[id]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<UfoTrajectory> rule(new UfoTrajectory);
+					rule->load(*j);
+					_ufoTrajectories[id] = rule.release();
+				}
+			}
+		}
+		else if (key == "alienMissions")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				if (_alienMissions.find(type) != _alienMissions.end())
+				{
+					_alienMissions[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<RuleAlienMission> rule(new RuleAlienMission());
+					rule->load(*j);
+					_alienMissions[type] = rule.release();
+					_alienMissionsIndex.push_back(type);
+				}
+			}
+		}
 	}
 
 	fin.close();
@@ -709,6 +760,20 @@ void Ruleset::save(const std::string &filename) const
 		i->second->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "ufoTrajectories" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.begin(); i != _ufoTrajectories.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
+	{
+		i->second->save(out);
+	}
+	out << YAML::EndSeq;
 	/*out << YAML::Key << "startingBase" << YAML::Value;
 	_startingBase->save(out);*/
 	out << YAML::Key << "costSoldier" << YAML::Value << _costSoldier;
@@ -751,6 +816,7 @@ SavedGame *Ruleset::newSave() const
 	ids["STR_WAYPOINT"] = 1;
 	ids["STR_TERROR_SITE"] = 1;
 	ids["STR_SOLDIER"] = 1;
+	ids["ALIEN_MISSIONS"] = 1;
 	save->initIds(ids);
 
 	// Set up starting base
@@ -777,6 +843,8 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	save->getBases()->push_back(base);
+	// Setup alien strategy
+	save->getAlienStrategy().init(this);
 
 	return save;
 }
@@ -785,9 +853,9 @@ SavedGame *Ruleset::newSave() const
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-std::vector<SoldierNamePool*> *Ruleset::getPools()
+const std::vector<SoldierNamePool*> &Ruleset::getPools() const
 {
-	return &_names;
+	return _names;
 }
 
 /**
@@ -805,7 +873,7 @@ RuleCountry *Ruleset::getCountry(const std::string &id) const
  * provided by the ruleset.
  * @return List of countries.
  */
-std::vector<std::string> Ruleset::getCountriesList() const
+const std::vector<std::string> &Ruleset::getCountriesList() const
 {
 	return _countriesIndex;
 }
@@ -825,7 +893,7 @@ RuleRegion *Ruleset::getRegion(const std::string &id) const
  * provided by the ruleset.
  * @return List of regions.
  */
-std::vector<std::string> Ruleset::getRegionsList() const
+const std::vector<std::string> &Ruleset::getRegionsList() const
 {
 	return _regionsIndex;
 }
@@ -845,7 +913,7 @@ RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
  * provided by the ruleset.
  * @return List of base faciliies.
  */
-std::vector<std::string> Ruleset::getBaseFacilitiesList() const
+const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
 {
 	return _facilitiesIndex;
 }
@@ -865,7 +933,7 @@ RuleCraft *Ruleset::getCraft(const std::string &id) const
  * provided by the ruleset.
  * @return List of crafts.
  */
-std::vector<std::string> Ruleset::getCraftsList() const
+const std::vector<std::string> &Ruleset::getCraftsList() const
 {
 	return _craftsIndex;
 }
@@ -885,7 +953,7 @@ RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
  * provided by the ruleset.
  * @return List of craft weapons.
  */
-std::vector<std::string> Ruleset::getCraftWeaponsList() const
+const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
 {
 	return _craftWeaponsIndex;
 }
@@ -908,7 +976,7 @@ RuleItem *Ruleset::getItem(const std::string &id) const
  * provided by the ruleset.
  * @return List of items.
  */
-std::vector<std::string> Ruleset::getItemsList() const
+const std::vector<std::string> &Ruleset::getItemsList() const
 {
 	return _itemsIndex;
 }
@@ -928,7 +996,7 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
  * provided by the ruleset.
  * @return List of ufos.
  */
-std::vector<std::string> Ruleset::getUfosList() const
+const std::vector<std::string> &Ruleset::getUfosList() const
 {
 	return _ufosIndex;
 }
@@ -998,7 +1066,7 @@ AlienRace *Ruleset::getAlienRace(const std::string &name) const
  * provided by the ruleset.
  * @return List of alien races.
  */
-std::vector<std::string> Ruleset::getAlienRacesList() const
+const std::vector<std::string> &Ruleset::getAlienRacesList() const
 {
 	return _aliensIndex;
 }
@@ -1018,7 +1086,7 @@ AlienDeployment *Ruleset::getDeployment(const std::string &name) const
  * provided by the ruleset.
  * @return List of alien deployments.
  */
-std::vector<std::string> Ruleset::getDeploymentsList() const
+const std::vector<std::string> &Ruleset::getDeploymentsList() const
 {
 	return _deploymentsIndex;
 }
@@ -1038,7 +1106,7 @@ Armor *Ruleset::getArmor(const std::string &name) const
  * provided by the ruleset.
  * @return List of armors.
  */
-std::vector<std::string> Ruleset::getArmorsList() const
+const std::vector<std::string> &Ruleset::getArmorsList() const
 {
 	return _armorsIndex;
 }
@@ -1098,7 +1166,7 @@ ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
  * provided by the ruleset.
  * @return List of articles.
  */
-std::vector<std::string> Ruleset::getUfopaediaList() const
+const std::vector<std::string> &Ruleset::getUfopaediaList() const
 {
 	return _ufopaediaIndex;
 }
@@ -1136,7 +1204,7 @@ RuleResearch *Ruleset::getResearch (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-std::vector<std::string> Ruleset::getResearchList () const
+const std::vector<std::string> &Ruleset::getResearchList () const
 {
 	return _researchIndex;
 }
@@ -1155,13 +1223,15 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-std::vector<std::string> Ruleset::getManufactureList () const
+const std::vector<std::string> &Ruleset::getManufactureList () const
 {
 	return _manufactureIndex;
 }
 
 /**
- * Returns a list of facilities for custom bases.
+ * Generates and returns a list of facilities for custom bases.
+ * The list contains all the facilities that are listed in the 'startingBase'
+ * part of the ruleset.
  * @return The list of facilities for custom bases.
  */
 std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
@@ -1179,6 +1249,70 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 		}
 	}
 	return PlaceList;
+}
+
+/**
+ * Returns the data for the specified ufo trajectory.
+ * @param id Ufo trajectory id.
+ * @return A pointer to the data for the specified ufo trajectory.
+ */
+const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
+{
+	return _ufoTrajectories.find(id)->second;
+}
+
+/**
+ * Returns the rules for the specified alien mission.
+ * @param id Alien mission type.
+ * @return Rules for the alien mission.
+ */
+const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
+{
+	return _alienMissions.find(id)->second;
+}
+
+/**
+ * Returns the list of alien mission types.
+ * @return The list of alien mission types.
+ */
+const std::vector<std::string> &Ruleset::getAlienMissionList() const
+{
+	return _alienMissionsIndex;
+}
+
+/** @brief Match a city based on coordinates.
+ * This function object compare a city's coordinates with the stored coordinates.
+ */
+class EqualCoordinates: std::unary_function<const City *, bool>
+{
+public:
+	/// Remember the coordinates.
+	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
+	/// Compare with stored coordinates.
+	bool operator()(const City *city) const { return city->getLongitude() == _lon && city->getLatitude() == _lat; }
+private:
+	double _lon, _lat;
+};
+
+/**
+ * Find the city at coordinates @a lon, @a lat.
+ * The search will only match exact coordinates.
+ * @param lon The longtitude.
+ * @param lat The latitude.
+ * @return A pointer to the city information, or 0 if no city was found.
+ */
+const City *Ruleset::locateCity(double lon, double lat) const
+{
+	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
+	{
+		const std::vector<City*> &cities = *rr->second->getCities();
+		std::vector<City *>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
+		if (citer != cities.end())
+		{
+			return *citer;
+		}
+	}
+	return 0;
 }
 
 }

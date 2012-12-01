@@ -298,6 +298,7 @@
     <ClCompile Include="Geoscape\AlienBaseState.cpp" />
     <ClCompile Include="Geoscape\AlienTerrorState.cpp" />
     <ClCompile Include="Geoscape\AllocatePsiTrainingState.cpp" />
+    <ClCompile Include="Geoscape\BaseDefenseState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftErrorState.cpp" />
@@ -356,6 +357,7 @@
     <ClCompile Include="Menu\TestState.cpp" />
     <ClCompile Include="Resource\ResourcePack.cpp" />
     <ClCompile Include="Resource\XcomResourcePack.cpp" />
+    <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
     <ClCompile Include="Ruleset\MapBlock.cpp" />
@@ -379,7 +381,10 @@
     <ClCompile Include="Ruleset\RuleUfo.cpp" />
     <ClCompile Include="Ruleset\RuleTerrain.cpp" />
     <ClCompile Include="Ruleset\SoldierNamePool.cpp" />
+    <ClCompile Include="Ruleset\UfoTrajectory.cpp" />
     <ClCompile Include="Savegame\AlienBase.cpp" />
+    <ClCompile Include="Savegame\AlienStrategy.cpp" />
+    <ClCompile Include="Savegame\AlienMission.cpp" />
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
@@ -407,6 +412,7 @@
     <ClCompile Include="Savegame\Ufo.cpp" />
     <ClCompile Include="Savegame\Vehicle.cpp" />
     <ClCompile Include="Savegame\Waypoint.cpp" />
+    <ClCompile Include="Savegame\WeightedOptions.cpp" />
     <ClCompile Include="Ufopaedia\ArticleState.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateArmor.cpp" />
     <ClCompile Include="Ufopaedia\ArticleStateBaseFacility.cpp" />
@@ -530,6 +536,7 @@
     <ClInclude Include="Geoscape\AlienBaseState.h" />
     <ClInclude Include="Geoscape\AlienTerrorState.h" />
     <ClInclude Include="Geoscape\AllocatePsiTrainingState.h" />
+    <ClInclude Include="Geoscape\BaseDefenseState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
     <ClInclude Include="Geoscape\CraftErrorState.h" />
@@ -597,6 +604,7 @@
     <ClInclude Include="Ruleset\AlienRace.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
+    <ClInclude Include="Ruleset\RuleAlienMission.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />
     <ClInclude Include="Ruleset\RuleCountry.h" />
     <ClInclude Include="Ruleset\RuleCraft.h" />
@@ -611,7 +619,10 @@
     <ClInclude Include="Ruleset\RuleUfo.h" />
     <ClInclude Include="Ruleset\RuleTerrain.h" />
     <ClInclude Include="Ruleset\SoldierNamePool.h" />
+    <ClInclude Include="Ruleset\UfoTrajectory.h" />
     <ClInclude Include="Savegame\AlienBase.h" />
+    <ClInclude Include="Savegame\AlienStrategy.h" />
+    <ClInclude Include="Savegame\AlienMission.h" />
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
@@ -639,6 +650,7 @@
     <ClInclude Include="Savegame\Ufo.h" />
     <ClInclude Include="Savegame\Vehicle.h" />
     <ClInclude Include="Savegame\Waypoint.h" />
+    <ClInclude Include="Savegame\WeightedOptions.h" />
     <ClInclude Include="Ufopaedia\ArticleState.h" />
     <ClInclude Include="Ufopaedia\ArticleStateArmor.h" />
     <ClInclude Include="Ufopaedia\ArticleStateBaseFacility.h" />

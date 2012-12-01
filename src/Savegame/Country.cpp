@@ -87,7 +87,7 @@ RuleCountry *Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-std::vector<int> Country::getFunding() const
+const std::vector<int> &Country::getFunding() const
 {
 	return _funding;
 }
@@ -135,7 +135,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-std::vector<int> Country::getActivityXcom() const
+const std::vector<int> &Country::getActivityXcom() const
 {
 	return _activityXcom;
 }
@@ -144,7 +144,7 @@ std::vector<int> Country::getActivityXcom() const
  * Gets the country's alien activity level.
  * @return activity level.
  */
-std::vector<int> Country::getActivityAlien() const
+const std::vector<int> &Country::getActivityAlien() const
 {
 	return _activityAlien;
 }

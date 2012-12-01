@@ -136,7 +136,7 @@ std::vector<Target*> *Target::getFollowers()
  * @param target Pointer to other target.
  * @returns Distance in radian.
  */
-double Target::getDistance(Target *target) const
+double Target::getDistance(const Target *target) const
 {
 	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
 }

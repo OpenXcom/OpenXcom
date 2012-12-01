@@ -153,8 +153,8 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_darkness.push_back("15");
 
 	_selCraft = 0;
-	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
-	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *rule = _game->getRuleset()->getCraft(*i);
 		if (rule->getSoldiers() > 0)
@@ -266,7 +266,7 @@ void NewBattleState::init()
  */
 void NewBattleState::initSave()
 {
-	Ruleset *rule = _game->getRuleset();
+	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
 	save->getBases()->push_back(base);
@@ -276,15 +276,15 @@ void NewBattleState::initSave()
 	// Generate soldiers
 	for (int i = 0; i < 30; ++i)
 	{
-		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), rule->getPools(), save->getId("STR_SOLDIER"));
+		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
 		if (i < 8)
 			soldier->setCraft(_craft);
 	}
 
 	// Generate items
-	std::vector<std::string> items = rule->getItemsList();
-	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string> &items = rule->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
@@ -298,8 +298,8 @@ void NewBattleState::initSave()
 	}
 
 	// Add research
-	std::vector<std::string> research = rule->getResearchList();
-	for (std::vector<std::string>::iterator i = research.begin(); i != research.end(); ++i)
+	const std::vector<std::string> &research = rule->getResearchList();
+	for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
 	{
 		save->addFinishedResearch(rule->getResearch(*i));
 	}
@@ -365,11 +365,17 @@ void NewBattleState::btnOkClick(Action *action)
 	ss >> std::dec >> shade;
 	bgen.setWorldShade(shade);
 	bgen.setAlienRace(_alienRaces[_selAlien]);
-    bgen.setAlienItemlevel(_alienEquipLevel);
+	bgen.setAlienItemlevel(_alienEquipLevel);
 
 	bgen.run();
 	//_game->pushState(new BattlescapeState(_game));
-	_game->pushState(new BriefingState(_game, _craft));
+	Base *base = 0;
+	if (_missionTypes[_selMission] == "STR_BASE_DEFENSE")
+	{
+		base = _craft->getBase();
+		_craft = 0;
+	}
+	_game->pushState(new BriefingState(_game, _craft, base));
 	_craft = 0;
 }
 
@@ -407,7 +413,7 @@ void NewBattleState::btnRandomClick(Action *action)
 	/// 0-2, 3 is out of range + triggers crash
         _alienEquipLevel = RNG::generate(0,2);
 
-	Ruleset *rule = _game->getRuleset();
+	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
 	save->getBases()->push_back(base);
@@ -420,7 +426,7 @@ void NewBattleState::btnRandomClick(Action *action)
 	// Generate soldiers
 	for (int i = 0; i < 30; ++i)
 	{
-		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), rule->getPools(), save->getId("STR_SOLDIER"));
+		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
         
         for (int n = 0; n < 5; ++n) 
         {
@@ -448,16 +454,16 @@ void NewBattleState::btnRandomClick(Action *action)
 	}
 
 	// Add research
-	std::vector<std::string> research = rule->getResearchList();
-	for (std::vector<std::string>::iterator i = research.begin(); i != research.end(); ++i)
+	const std::vector<std::string> &research = rule->getResearchList();
+	for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
 	{
-        if ((RNG::generate(0, 5) > 2))
-            save->addFinishedResearch(rule->getResearch(*i));
+		if ((RNG::generate(0, 5) > 2))
+			save->addFinishedResearch(rule->getResearch(*i));
 	}
 
 	// Generate (usable) items
-	std::vector<std::string> items = rule->getItemsList();
-	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string> &items = rule->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		if (!save->isResearched(rule->getRequirements()))

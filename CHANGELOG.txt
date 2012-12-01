@@ -1,4 +1,5 @@
-Pre-Release 0.5.0
+Version 0.5.0 Pre-Release
+---------------------------
 New features:
 - Live alien capture and interrogation.
 - Psionic training.
@@ -13,10 +14,26 @@ New features:
 - "Random Battle" mode.
 - Proper A* pathfinding.
 - Battlescape RMB scrolling improved.
+- Custom Initial Base Building Option.
+- Landing Ufos/Ground Assault missions.
+- Geoscape AI.
+- Multi-Part Ruleset support.
+- Pause Game on Loss of Focus.
+- Ukranian translation.
+- Italian Soldier Names.
+- Hungarian Soldier Names.
 
 Bugfixes:
 - Updated translations.
 - Updated soldier names.
+- Added support for native cyrillic letters.
+- Fixed bug in map generator regarding nodes outside the map.
+- Fix for horizontal scroll-wheels.
+- Research consumes items properly.
+- Reaper Corpse tiles now arranged correctly.
+- Support for Haiku folder paths.
+- Battlescape buttons now unavailable during alien turn.
+
 
 Version 0.4.5 (04-11-2012)
 ---------------------------

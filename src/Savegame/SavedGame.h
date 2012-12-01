@@ -42,11 +42,14 @@ class Soldier;
 class RuleManufacture;
 class TerrorSite;
 class AlienBase;
+class AlienStrategy;
+class AlienMission;
+class Target;
 
 /**
  * Enumerator containing all the possible game difficulties.
  */
-enum GameDifficulty { DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
+enum GameDifficulty { DIFF_BEGINNER = 0, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN };
 
 /**
  * The game data that gets written to disk when the game is saved.
@@ -69,13 +72,15 @@ private:
 	std::vector<Waypoint*> _waypoints;
 	std::vector<TerrorSite*> _terrorSites;
 	std::vector<AlienBase*> _alienBases;
+	AlienStrategy *_alienStrategy;
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
+	std::vector<AlienMission*> _activeMissions;
 	bool _debug, _warned;
 
 	/// Check whether a ResearchProject can be researched
-	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const;
-	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const;
+	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
 	/// Creates a new saved game.
 	SavedGame();
@@ -94,7 +99,7 @@ public:
 	/// Gets the current funds.
 	int getFunds() const;
 	/// Gets the list of funds from previous months.
-	std::vector<int> getFundsList() const;
+	const std::vector<int> &getFundsList() const;
 	/// Sets new funds.
 	void setFunds(int funds);
 	/// Gets the current globe longitude.
@@ -125,6 +130,8 @@ public:
 	std::vector<Region*> *getRegions();
 	/// Gets the list of bases.
 	std::vector<Base*> *getBases();
+	/// Gets the list of bases.
+	const std::vector<Base*> *getBases() const;
 	/// Gets the total base maintenance.
 	int getBaseMaintenance() const;
 	/// Gets the list of UFOs.
@@ -138,17 +145,17 @@ public:
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject
-	void addFinishedResearch (const RuleResearch * r, Ruleset * ruleset = NULL);
+	void addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset = NULL);
 	/// Get the list of already discovered research projects
 	const std::vector<const RuleResearch *> & getDiscoveredResearch() const;
 	/// Get the list of ResearchProject which can be researched in a Base
-	void getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const;
+	void getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of Productions which can be manufactured in a Base
-	void getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const;
+	void getAvailableProductions (std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available research projects once a research has been completed.
-	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available manufacture projects once a research has been completed.
-	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const;
+	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets if a list of research has been unlocked.
@@ -173,6 +180,20 @@ public:
 	std::vector<int> getResearchScores();
 	bool getWarned();
 	void setWarned(bool warned);
+	/// Full access to the alien strategy data.
+	AlienStrategy &getAlienStrategy() { return *_alienStrategy; }
+	/// Read-only access to the alien strategy data.
+	const AlienStrategy &getAlienStrategy() const { return *_alienStrategy; }
+	/// Full access to the current alien missions.
+	std::vector<AlienMission*> &getAlienMissions() { return _activeMissions; }
+	/// Read-only access to the current alien missions.
+	const std::vector<AlienMission*> &getAlienMissions() const { return _activeMissions; }
+	/// Gets a mission matching region and type.
+	AlienMission *getAlienMission(const std::string &region, const std::string &type) const;
+	/// Locate a region containing a position.
+	Region *locateRegion(double lon, double lat) const;
+	/// Locate a region containing a Target.
+	Region *locateRegion(const Target &target) const;
 };
 
 }

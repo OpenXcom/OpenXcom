@@ -110,8 +110,8 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstCrafts->setColumns(4, 125, 70, 45, 60);
 	_lstCrafts->setDot(true);
 
-	std::vector<std::string> crafts = _game->getRuleset()->getCraftsList();
-	for (std::vector<std::string>::iterator i = crafts.begin(); i != crafts.end(); ++i)
+	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
+	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
 		if (craft->getBuyCost() > 0)

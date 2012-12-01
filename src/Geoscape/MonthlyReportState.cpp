@@ -39,7 +39,7 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi(psi), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _pactList(0), _happyList(0), _sadList(0)
+MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi(psi), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -99,7 +99,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	case 11: m = "STR_NOV"; break;
 	case 12: m = "STR_DEC"; break;
 	}
-	int difficulty_threshold= 100*(_game->getSavedGame()->getDifficulty()-8);
+	int difficulty_threshold = 100*(_game->getSavedGame()->getDifficulty()-9);
 
 	std::wstringstream ss;
 	ss << tr("STR_MONTH") << L'\x01' << tr(m) << L" " << year;
@@ -121,19 +121,19 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	{
 		rating = tr("STR_RATING_TERRIBLE");
 	}
-	else if (_ratingTotal > difficulty_threshold-300)
+	if (_ratingTotal > difficulty_threshold-300)
 	{
 		rating = tr("STR_RATING_POOR");
 	}
-	else if (_ratingTotal > difficulty_threshold)
+	if (_ratingTotal > difficulty_threshold)
 	{
 		rating = tr("STR_RATING_OK");
 	}
-	else if (_ratingTotal > 0)
+	if (_ratingTotal > 0)
 	{
 		rating = tr("STR_RATING_GOOD");
 	}
-	else if (_ratingTotal > 500)
+	if (_ratingTotal > 500)
 	{
 		rating = tr("STR_RATING_EXCELLENT");
 	}
@@ -177,13 +177,13 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 			ss4 << tr("STR_COUNCIL_IS_DISSATISFIED");
 		}
 	}
-	else if(_ratingTotal > difficulty_threshold)
-	{
-		ss4 << tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
-	}
 	else if(_ratingTotal > 500)
 	{
 		ss4 << tr("STR_COUNCIL_IS_VERY_PLEASED");
+	}
+	else
+	{
+		ss4 << tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
 
 	if(resetWarning && _game->getSavedGame()->getWarned())
@@ -345,8 +345,8 @@ void MonthlyReportState::CalculateChanges()
 	{
 		if((*k)->getActivityXcom().size() >1)
 			_lastMonthsRating += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-2)-(*k)->getActivityAlien().at((*k)->getActivityAlien().size()-2);
-		xcomTotal = (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-1);
-		alienTotal = (*k)->getActivityAlien().at((*k)->getActivityAlien().size()-1);
+		xcomTotal += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-1);
+		alienTotal += (*k)->getActivityAlien().at((*k)->getActivityAlien().size()-1);
 	}
 
 	//calculate total, and average scores.

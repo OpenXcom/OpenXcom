@@ -17,37 +17,38 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DebriefingState.h"
-#include <sstream>
-#include <map>
+#include "CannotReequipState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Engine/Music.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Ufo.h"
-#include "../Savegame/Tile.h"
-#include "../Savegame/ItemContainer.h"
+#include "../Interface/Window.h"
+#include "NoContainmentState.h"
+#include "PromotionsState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Savegame/Vehicle.h"
-#include "../Savegame/TerrorSite.h"
-#include "../Savegame/AlienBase.h"
-#include "PromotionsState.h"
-#include "CannotReequipState.h"
-#include "NoContainmentState.h"
-#include "../Savegame/Region.h"
-#include "../Savegame/Country.h"
 #include "../Ruleset/RuleRegion.h"
-#include "../Ruleset/RuleCountry.h"
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/AlienMission.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Savegame/Tile.h"
+#include "../Savegame/Ufo.h"
+#include "../Savegame/Vehicle.h"
+#include <sstream>
+#include <map>
 
 namespace OpenXcom
 {
@@ -258,6 +259,33 @@ void DebriefingState::addStat(const std::string &name, int quantity, int score)
 }
 
 /**
+ * Clear the alien base from supply missions that use it.
+ */
+class ClearAlienBase: public std::unary_function<AlienMission *, void>
+{
+public:
+	/// Remember the base.
+	ClearAlienBase(const AlienBase *base) : _base(base) { /* Empty by design. */ }
+	/// Clear the base if required.
+	void operator()(AlienMission *am) const;
+private:
+	const AlienBase *_base;
+};
+
+/**
+ * This function will remove the association between the alien mission and the alien base,
+ * if one existed.
+ * @param am Pointer to the alien mission.
+ */
+void ClearAlienBase::operator()(AlienMission *am) const
+{
+	if (am->getAlienBase() == _base)
+	{
+		am->setAlienBase(0);
+	}
+}
+
+/**
  * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
  * Adds the items to the craft.
  * Also calculates the soldiers experience, and possible promotions.
@@ -378,6 +406,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i)->isInBattlescape())
 			{
+				// Take care to remove supply missions for this base.
+				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
+					      ClearAlienBase(*i));
 				delete *i;
 				save->getAlienBases()->erase(i);
 				break;

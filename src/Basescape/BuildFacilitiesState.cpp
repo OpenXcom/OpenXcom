@@ -39,21 +39,29 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state) : State(game), _base(base), _state(state), _facilities()
+BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state, bool cancellable) : State(game), _base(base), _state(state), _facilities()
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
-	_btnOk = new TextButton(112, 16, 200, 176);
+	if (cancellable)
+	{
+		_btnOk = new TextButton(112, 16, 200, 176);
+		_lstFacilities = new TextList(100, 96, 200, 64);
+	} else {
+		_lstFacilities = new TextList(100, 128, 200, 64);
+	}
 	_txtTitle = new Text(118, 16, 197, 48);
-	_lstFacilities = new TextList(100, 96, 200, 64);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
+	if (cancellable)
+	{
+		add(_btnOk);
+	}
 	add(_txtTitle);
 	add(_lstFacilities);
 
@@ -61,9 +69,12 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state)
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
+	if (cancellable)
+	{
+		_btnOk->setColor(Palette::blockOffset(13)+5);
+		_btnOk->setText(tr("STR_OK"));
+		_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
+	}
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
@@ -94,8 +105,8 @@ BuildFacilitiesState::~BuildFacilitiesState()
  */
 void BuildFacilitiesState::PopulateBuildList()
 {
-	std::vector<std::string> facilities = _game->getRuleset()->getBaseFacilitiesList();
-	for (std::vector<std::string>::iterator i = facilities.begin(); i != facilities.end(); ++i)
+	const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+	for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
 	{
 		RuleBaseFacility *rule = _game->getRuleset()->getBaseFacility(*i);
 		if (_game->getSavedGame()->isResearched(rule->getRequirements()) && !rule->isLift())

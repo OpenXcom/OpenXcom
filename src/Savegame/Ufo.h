@@ -27,6 +27,10 @@ namespace OpenXcom
 {
 
 class RuleUfo;
+class AlienMission;
+class UfoTrajectory;
+class SavedGame;
+class Ruleset;
 
 /**
  * Represents an alien UFO on the map.
@@ -42,12 +46,14 @@ private:
 	RuleUfo *_rules;
 	int _id, _damage;
 	std::string _direction, _altitude;
-	bool _detected, _hyperDetected;
-	std::string _race, _mission;
 	enum UfoStatus _status;
-	int _timeLeftOnGround;
+	unsigned _secondsRemaining;
 	bool _inBattlescape;
 	int _shotDownByCraftId;
+	AlienMission *_mission;
+	const UfoTrajectory *_trajectory;
+	unsigned _trajectoryPoint;
+	bool _detected, _hyperDetected;
 
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
@@ -57,7 +63,7 @@ public:
 	/// Cleans up the UFO.
 	~Ufo();
 	/// Loads the UFO from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, const Ruleset &ruleset, SavedGame &game);
 	/// Saves the UFO to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the UFO's ID to YAML.
@@ -78,10 +84,10 @@ public:
 	bool getDetected() const;
 	/// Sets the UFO's detection status.
 	void setDetected(bool detected);
-	/// Gets the UFO's hours left on the ground.
-	int getTimeOnGround() const;
-	/// Sets the UFO's hours left on the ground.
-	void setTimeOnGround(int hours);
+	/// Gets the UFO's seconds left on the ground.
+	int getSecondsRemaining() const;
+	/// Sets the UFO's seconds left on the ground.
+	void setSecondsRemaining(int seconds);
 	/// Gets the UFO's direction.
 	std::string getDirection() const;
 	/// Gets the UFO's altitude.
@@ -103,23 +109,31 @@ public:
 	/// Gets if the UFO is in battlescape.
 	bool isInBattlescape() const;
 	/// Gets the UFO's alien race.
-	std::string getAlienRace() const;
-	/// Sets the UFO's alien race.
-	void setAlienRace(const std::string &race);
+	const std::string &getAlienRace() const;
 	/// Sets the ID of craft which shot down the UFO.
 	void setShotDownByCraftId(const int id);
 	/// Gets the ID of craft which shot down the UFO.
 	int getShotDownByCraftId() const;
 	/// Gets the UFO's visibility.
 	int getVisibility() const;
-	/// Gets the UFO's Mission.
-	std::string getMission() const;
-	/// Sets the UFO's Mission.
-	void setMission(const std::string &mission);
+	/// Gets the UFO's Mission type.
+	const std::string &getMissionType() const;
+	/// Sets the UFO's mission information.
+	void setMissionInfo(AlienMission *mission, const UfoTrajectory *trajectory);
 	/// Gets the UFO's hyper detection status.
 	bool getHyperDetected() const;
 	/// Sets the UFO's hyper detection status.
 	void setHyperDetected(bool hyperdetected);
+	/// Gets the UFO's progress on the trajectory track.
+	unsigned getTrajectoryPoint() const { return _trajectoryPoint; }
+	/// Sets the UFO's progress on the trajectory track.
+	void setTrajectoryPoint(unsigned np) { _trajectoryPoint = np; }
+	/// Gets the UFO's trajectory.
+	const UfoTrajectory &getTrajectory() const { return *_trajectory; }
+	/// Gets the UFO's mission object.
+	AlienMission *getMission() const { return _mission; }
+	/// Sets the UFO's destination.
+	void setDestination(Target *dest);
 };
 
 }

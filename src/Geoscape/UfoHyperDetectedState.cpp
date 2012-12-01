@@ -125,7 +125,7 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
 	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), tr(_ufo->getAlienRace()).c_str());
 	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMission()).c_str());
+	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMissionType()).c_str());
 	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
 	bool set = false;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
