@@ -43,7 +43,6 @@ namespace OpenXcom
 	SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities) : BuildFacilitiesState(game, base, state, false), _globe(globe)
 {
 	_facilities = Facilities;
-	//_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
 	PopulateBuildList();
 }
