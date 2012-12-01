@@ -66,7 +66,7 @@ public:
 	/// Store ID for later comparisons.
 	matchMissionID(int id) : _id(id) { /* Empty by design. */ }
 	/// Match with stored ID.
-	bool operator()(const AlienMission *am) const { return am->getUniqueID() == _id; }
+	bool operator()(const AlienMission *am) const { return am->getId() == _id; }
 private:
 	int _id;
 };
@@ -142,7 +142,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
 	out << YAML::Key << "secondsRemaining" << YAML::Value << _secondsRemaining;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	out << YAML::Key << "mission" << _mission->getUniqueID();
+	out << YAML::Key << "mission" << YAML::Value << _mission->getId();
 	out << YAML::Key << "trajectory" << YAML::Value << _trajectory->getID();
 	out << YAML::Key << "trajectoryPoint" << YAML::Value << _trajectoryPoint;
 	out << YAML::EndMap;
