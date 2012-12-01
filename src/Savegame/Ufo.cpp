@@ -142,7 +142,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
 	out << YAML::Key << "secondsRemaining" << YAML::Value << _secondsRemaining;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	out << YAML::Key << "mission" << _mission->getUniqueID();
+	out << YAML::Key << "mission" << YAML::Value << _mission->getUniqueID();
 	out << YAML::Key << "trajectory" << YAML::Value << _trajectory->getID();
 	out << YAML::Key << "trajectoryPoint" << YAML::Value << _trajectoryPoint;
 	out << YAML::EndMap;
