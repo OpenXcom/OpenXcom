@@ -42,6 +42,7 @@ Ufo::Ufo(RuleUfo *rules)
 }
 
 /**
+ * Make sure our mission forget's us, and we only delete targets we own (waypoints).
  *
  */
 Ufo::~Ufo()
@@ -50,7 +51,8 @@ Ufo::~Ufo()
 	{
 		_mission->decreaseLiveUfos();
 	}
-	delete _dest;
+	Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
+	delete wp;
 }
 
 /**
@@ -507,6 +509,18 @@ bool Ufo::getHyperDetected() const
 void Ufo::setHyperDetected(bool hyperdetected)
 {
 	_hyperDetected = hyperdetected;
+}
+
+/**
+ * Handle destination changes, making sure to delete old waypoint destinations.
+ * @param dest Pointer to the new destination.
+ * @overrides MovingTarget::setDestination
+ */
+void Ufo::setDestination(Target *dest)
+{
+	Waypoint *old = dynamic_cast<Waypoint*>(_dest);
+	MovingTarget::setDestination(dest);
+	delete old;
 }
 
 }

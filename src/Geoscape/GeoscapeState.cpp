@@ -566,7 +566,6 @@ void GeoscapeState::time5Seconds()
 					}
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
-						(*i)->setDestination(0); // Make sure we don't delete the base.
 						if (base->getDefenses())
 						{
 							popup(new BaseDefenseState(_game, base, *i));
