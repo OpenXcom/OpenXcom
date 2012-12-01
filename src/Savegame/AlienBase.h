@@ -33,7 +33,6 @@ class AlienBase : public Target
 {
 private:
 	int _id;
-	int _hoursActive, _supplyTime;
 	std::string _race;
 	bool _inBattlescape, _discovered;
 public:
@@ -61,14 +60,10 @@ public:
 	void setInBattlescape(bool inbattle);
 	/// Gets the alien base's battlescape status.
 	bool isInBattlescape() const;
-    /// Gets the alien base's discovered status.
+	/// Gets the alien base's discovered status.
 	bool isDiscovered() const;
-    /// Sets the alien base's discovered status.
+	/// Sets the alien base's discovered status.
 	void setDiscovered(bool discovered);
-	/// Gets the alien base's time since last resupply.
-	int getSupplyTime () const;
-	/// resets the alien base's resupply counter.
-	void setSupplyTime (int time);
 };
 
 }

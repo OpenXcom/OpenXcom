@@ -259,6 +259,8 @@ set ( geoscape_src
   Geoscape/GeoscapeOptionsState.cpp
   Geoscape/BaseNameState.cpp
   Geoscape/BaseNameState.h
+  Geoscape/BaseDefenseState.cpp
+  Geoscape/BaseDefenseState.h
   Geoscape/MultipleTargetsState.cpp
   Geoscape/MultipleTargetsState.h
   Geoscape/ItemsArrivingState.cpp

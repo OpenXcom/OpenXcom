@@ -17,22 +17,23 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BriefingState.h"
-#include <sstream>
+#include "BattlescapeState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Savegame/Craft.h"
-#include "../Engine/Music.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Ufo.h"
-#include "BattlescapeState.h"
-#include "NextTurnState.h"
+#include "../Interface/Window.h"
 #include "InventoryState.h"
+#include "NextTurnState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
+#include <sstream>
 
 namespace OpenXcom
 {
@@ -41,7 +42,7 @@ namespace OpenXcom
  * Initializes all the elements in the Briefing screen.
  * @param game Pointer to the core game.
  */
-BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
+BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -92,13 +93,24 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 
 	_txtTarget->setColor(Palette::blockOffset(8)+5);
 	_txtTarget->setBig();
-	_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 
-	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setBig();
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
-	_txtCraft->setText(ss.str());
+	if (craft)
+	{
+		_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+		_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
+		_txtCraft->setColor(Palette::blockOffset(8)+5);
+		_txtCraft->setBig();
+		_txtCraft->setText(ss.str());
+	}
+	else if(base)
+	{
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_BASE_UC_") << base->getName();
+		_txtCraft->setText(ss.str());
+	}
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
@@ -141,6 +153,13 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT"));
 			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT_BRIEFING"));
 		}
+	}
+	if (mission == "STR_BASE_DEFENSE")
+	{
+		// Mark as destroyed any way, to remove it from Geoscape.
+		ufo->setStatus(Ufo::DESTROYED);
+		// And make sure the base is unmarked.
+		base->setRetaliationTarget(false);
 	}
 }
 

@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BRIEFINGSTATE_H
-#define OPENXCOM_BRIEFINGSTATE_H
+#ifndef OPENXCOM_BASEDEFENSESTATE_H
+#define OPENXCOM_BASEDEFENSESTATE_H
 
 #include "../Engine/State.h"
 
@@ -27,27 +27,33 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class Craft;
 class Base;
 class Ufo;
+class TextList;
 
 /**
- * Briefing screen which displays info
- * about a Crash Site mission.
+ * Base Defense Screen for when ufos try to attack.
  */
-class BriefingState : public State
+class BaseDefenseState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtTarget, *_txtCraft, *_txtBriefing;
+	Text *_txtTitle, *_txtInit;
+	TextList *_lstDefenses;
+	Base *_base;
+	Ufo *_ufo;
 public:
-	/// Creates the Briefing state.
-	BriefingState(Game *game, Craft *craft = 0, Base *base = 0, Ufo *ufo = 0);
-	/// Cleans up the Briefing state.
-	~BriefingState();
-	/// Handler for clicking the Ok button.
+	/// Creates the Base Defense state.
+	BaseDefenseState(Game *game, Base *base, Ufo *ufo);
+	/// Cleans up the Base Defense state.
+	~BaseDefenseState();
+	/// Updates the palette.
+	void init();
+	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// wait half a second before next action
+	void delay();
 };
 
 }

@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * Initializes an alien base
  */
-AlienBase::AlienBase() : Target(), _id(0), _hoursActive(-1), _supplyTime(0), _inBattlescape(false), _discovered(false)
+AlienBase::AlienBase() : Target(), _id(0), _inBattlescape(false), _discovered(false)
 {
 }
 
@@ -48,7 +48,6 @@ void AlienBase::load(const YAML::Node &node)
 	node["race"] >> _race;
 	node["inBattlescape"] >> _inBattlescape;
 	node["discovered"] >> _discovered;
-	node["supplyTime"] >> _supplyTime;
 }
 
 /**
@@ -62,7 +61,6 @@ void AlienBase::save(YAML::Emitter &out) const
 	out << YAML::Key << "race" << YAML::Value << _race;
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::Key << "discovered" << YAML::Value << _discovered;
-	out << YAML::Key << "supplyTime" << YAML::Value << _supplyTime;
 	out << YAML::EndMap;
 }
 
@@ -162,20 +160,4 @@ void AlienBase::setDiscovered(bool discovered)
 	_discovered = discovered;
 }
 
-/**
- * Gets the alien base's time since last resupply.
- * @return int.
- */
-int AlienBase::getSupplyTime() const
-{
-	return _supplyTime;
-}
-
-/**
- * Resets the alien base's time since last resupply.
- */
-void AlienBase::setSupplyTime(int time)
-{
-	_supplyTime = time;
-}
 }

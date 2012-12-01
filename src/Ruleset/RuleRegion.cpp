@@ -24,11 +24,16 @@
 namespace OpenXcom
 {
 
+/**
+ * Defines a rectangle in polar coordinates.
+ * It is used to define areas for a mission zone.
+ */
 struct MissionArea
 {
 	double lonMin, lonMax, latMin, latMax;
 };
 
+/// Write a MissionArea to YAML.
 YAML::Emitter &operator<<(YAML::Emitter &out, const MissionArea &ma)
 {
 	out << YAML::Flow << YAML::BeginSeq;
@@ -37,6 +42,7 @@ YAML::Emitter &operator<<(YAML::Emitter &out, const MissionArea &ma)
 	return out;
 }
 
+/// Read a MissionArea from YAML.
 const YAML::Node &operator>>(const YAML::Node &nd, MissionArea &ma)
 {
 	nd[0] >> ma.lonMin;
@@ -46,6 +52,9 @@ const YAML::Node &operator>>(const YAML::Node &nd, MissionArea &ma)
 	return nd;
 }
 
+/**
+ * A zone (set of areas) on the globe.
+ */
 struct MissionZone
 {
 	std::vector<MissionArea> areas;
@@ -56,12 +65,14 @@ struct MissionZone
 	}
 };
 
+/// Write a MissionZone to YAML.
 YAML::Emitter &operator<<(YAML::Emitter &out, const MissionZone &mz)
 {
 	out << mz.areas;
 	return out;
 }
 
+/// Read a MissionZone from YAML.
 const YAML::Node &operator>>(const YAML::Node &nd, MissionZone &mz)
 {
 	nd >> mz.areas;
@@ -69,8 +80,7 @@ const YAML::Node &operator>>(const YAML::Node &nd, MissionZone &mz)
 }
 
 /**
- * Creates a blank ruleset for a certain
- * type of region.
+ * Creates a blank ruleset for a certain type of region.
  * @param type String defining the type.
  */
 RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0)
