@@ -170,7 +170,22 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
+	
+	std::string lbms[] = {"PICT1.LBM",
+						  "PICT2.LBM",
+						  "PICT3.LBM",
+						  "PICT4.LBM",
+						  "PICT5.LBM",
+						  "PICT6.LBM",
+						  "PICT7.LBM"};
 
+	for (int i = 0; i < 7; ++i)
+	{
+		std::stringstream s;
+		s << "UFOINTRO/" << lbms[i];
+		_surfaces[lbms[i]] = new Surface(320, 200);
+		_surfaces[lbms[i]]->loadLbm(CrossPlatform::getDataFile(s.str()));
+	}
 	// Load surface sets
 	std::string sets[] = {"BASEBITS.PCK",
 						  "INTICON.PCK",
