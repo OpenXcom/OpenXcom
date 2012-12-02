@@ -14,6 +14,7 @@ ruleset_DATA = \
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
+	bin/data/Language/Bulgarian.lng \
 	bin/data/Language/Czech.geo \
 	bin/data/Language/Czech.lng \
 	bin/data/Language/English.geo \
@@ -38,8 +39,8 @@ language_DATA = \
 	bin/data/Language/Small.fnt \
 	bin/data/Language/Spanish.geo \
 	bin/data/Language/Spanish.lng \
-	bin/data/Language/Ukranian.geo \
-	bin/data/Language/Ukranian.lng
+	bin/data/Language/Ukrainian.geo \
+	bin/data/Language/Ukrainian.lng
 
 namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
