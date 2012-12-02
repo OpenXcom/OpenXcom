@@ -78,9 +78,9 @@ public:
 	/// Sets the minutes until next wave spawns.
 	void setWaveCountdown(unsigned minutes);
 	/// Sets the unique ID for this mission.
-	void setUniqueID(SavedGame &game);
+	void setId(int id);
 	/// Gets the unique ID for this mission.
-	int getUniqueID() const;
+	int getId() const;
 	/// Gets the alien base for this mission.
 	const AlienBase *getAlienBase() const;
 	/// Sets the alien base for this mission.
