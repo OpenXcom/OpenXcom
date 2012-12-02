@@ -93,7 +93,6 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
 {
-	int a,b;
 	int selectedUnit = 0;
 
 	node["width"] >> _width;
@@ -125,13 +124,14 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
 	{
-		Node *n = new Node();
+		std::auto_ptr<Node> n(new Node());
 		n->load(*i);
-		_nodes.push_back(n);
+		_nodes.push_back(n.release());
 	}
 
 	for (YAML::Iterator i = node["units"].begin(); i != node["units"].end(); ++i)
 	{
+		int a;
 		UnitFaction faction;
 
 		(*i)["faction"] >> a;
@@ -139,11 +139,11 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 		(*i)["soldierId"] >> a;
 
-		BattleUnit *b;
+		std::auto_ptr<BattleUnit> bu;
 		if (a < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
 			// look up the matching soldier
-			b = new BattleUnit(savedGame->getSoldier(a), faction);
+			bu.reset(new BattleUnit(savedGame->getSoldier(a), faction));
 		}
 		else
 		{
@@ -151,37 +151,37 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			(*i)["genUnitType"] >> type;
 			(*i)["genUnitArmor"] >> armor;
 			// create a new Unit.
-			b = new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor));
+			bu.reset(new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor)));
 		}
-		b->load(*i);
-		_units.push_back(b);
+		bu->load(*i);
 		if (faction == FACTION_PLAYER)
 		{
-			if (b->getId() == selectedUnit)
-				_selectedUnit = b;
+			if (bu->getId() == selectedUnit)
+				_selectedUnit = bu.get();
 		}
-		else if (b->getStatus() != STATUS_DEAD)
+		else if (bu->getStatus() != STATUS_DEAD)
 		{
 			if (const YAML::Node *ai = (*i).FindValue("AI"))
 			{
 				std::string state;
-				BattleAIState *aiState;
+				std::auto_ptr<BattleAIState> aiState;
 				(*ai)["state"] >> state;
 				if (state == "PATROL")
 				{
-					aiState = new PatrolBAIState(this, b, 0);
+					aiState.reset(new PatrolBAIState(this, bu.get(), 0));
 				}
 				else if (state == "AGGRO")
 				{
-					aiState = new AggroBAIState(this, b);
+					aiState.reset(new AggroBAIState(this, bu.get()));
 				}
 				else
 				{
 					continue;
 				}
 				aiState->load((*ai));
-				b->setAIState(aiState);
+				bu->setAIState(aiState.release());
 			}
+			_units.push_back(bu.release());
 		}
 	}
 
@@ -190,11 +190,12 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 	for (YAML::Iterator i = node["items"].begin(); i != node["items"].end(); ++i)
 	{
+		int a,b;
 		std::string type;
 		(*i)["type"] >> type;
 		if (type != "0")
 		{
-			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
+			std::auto_ptr<BattleItem> item(new BattleItem(rule->getItem(type), &_itemId));
 			item->load(*i);
 			(*i)["inventoryslot"] >> type;
 			if (type != "NULL")
@@ -223,9 +224,9 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				(*i)["position"][1] >> pos.y;
 				(*i)["position"][2] >> pos.z;
 				if (pos.x != -1)
-					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
+					getTile(pos)->addItem(item.get(), rule->getInventory("STR_GROUND"));
 			}
-			_items.push_back(item);
+			_items.push_back(item.release());
 		}
 	}
 
@@ -233,6 +234,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
 	for (YAML::Iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
 	{
+		int a;
 		(*i)["ammoItem"] >> a;
 		if (a != -1)
 		{
