@@ -43,7 +43,7 @@ namespace OpenXcom
 LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
 {
 	// Set up objects
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
+	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 
 	_lstSaves->onMouseClick((ActionHandler)&LoadState::lstSavesClick);
 }
@@ -78,22 +78,24 @@ void LoadState::lstSavesClick(Action *action)
 	catch (Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+		std::wstringstream error;
+		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 		if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 		delete s;
 		_game->setSavedGame(0);
 	}
 	catch (YAML::Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+		std::wstringstream error;
+		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 		if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 		delete s;
 		_game->setSavedGame(0);
 	}

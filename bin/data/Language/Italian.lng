@@ -1713,8 +1713,6 @@ STR_SECTOPOD_CORPSE
 Cadavere Sectopode
 STR_CYBERDISC_CORPSE
 Cadavere Cyberdisco
-STR_TO_ARM_HWP
-Proiettili Tank insufficienti
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Armamenti per riarmo intera squadra insufficiente
 STR_MARS_CYDONIA_LANDING
@@ -1813,10 +1811,6 @@ STR_QUANTITY
 Quantità
 STR_TOTAL
 Totale
-STR_DAY
- giorno
-STR_DAYS
- giorni
 STR_IN_PSIONIC_TRAINING
 In training psionico
 STR_BLASTER_BOMB_UFOPEDIA
@@ -2085,3 +2079,9 @@ STR_POLAR
 Polare
 STR_RANDOM_BATTLE
 Battaglia Random
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Insufficiente {1} Proiettili Tank insufficienti
+STR_DAY_1
+{N} giorno
+STR_DAY_2
+{N} giorni

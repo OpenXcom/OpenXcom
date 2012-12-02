@@ -68,12 +68,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_PROJECT_MONTHLY_REPORT"));
+	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 
 	CalculateChanges();
 
@@ -102,14 +102,14 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	int difficulty_threshold = 100*(_game->getSavedGame()->getDifficulty()-9);
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_MONTH") << L'\x01' << _game->getLanguage()->getString(m) << L" " << year;
+	ss << tr("STR_MONTH") << L'\x01' << tr(m) << L" " << year;
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
 	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtMonth->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_MONTHLY_RATING") << L'\x01' << _ratingTotal;
+	ss2 << tr("STR_MONTHLY_RATING") << L'\x01' << _ratingTotal;
 
 	_txtRating->setColor(Palette::blockOffset(15)-1);
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -119,29 +119,29 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	std::wstring rating;
 	if (_ratingTotal <= difficulty_threshold-300)
 	{
-		rating = _game->getLanguage()->getString("STR_RATING_TERRIBLE");
+		rating = tr("STR_RATING_TERRIBLE");
 	}
 	if (_ratingTotal > difficulty_threshold-300)
 	{
-		rating = _game->getLanguage()->getString("STR_RATING_POOR");
+		rating = tr("STR_RATING_POOR");
 	}
 	if (_ratingTotal > difficulty_threshold)
 	{
-		rating = _game->getLanguage()->getString("STR_RATING_OK");
+		rating = tr("STR_RATING_OK");
 	}
 	if (_ratingTotal > 0)
 	{
-		rating = _game->getLanguage()->getString("STR_RATING_GOOD");
+		rating = tr("STR_RATING_GOOD");
 	}
 	if (_ratingTotal > 500)
 	{
-		rating = _game->getLanguage()->getString("STR_RATING_EXCELLENT");
+		rating = tr("STR_RATING_EXCELLENT");
 	}
 	_txtRatingTxt->setColor(Palette::blockOffset(15)-1);
 	_txtRatingTxt->setText(rating);
 
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01' << _fundingDiff;
+	ss3 << tr("STR_FUNDING_CHANGE") << L'\x01' << _fundingDiff;
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -155,12 +155,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	{
 		if(_game->getSavedGame()->getWarned())
 		{
-			ss4 << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
+			ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 			// game over man
 		}
 		else
 		{
-			ss4 << _game->getLanguage()->getString("STR_COUNCIL_REDUCE_DEBTS");
+			ss4 << tr("STR_COUNCIL_REDUCE_DEBTS");
 			_game->getSavedGame()->setWarned(true);
 			resetWarning = false;
 		}
@@ -169,21 +169,21 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	{
 		if(_lastMonthsRating <= difficulty_threshold)
 		{
-			ss4 << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
+			ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 			// game over man
 		}
 		else
 		{
-			ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_DISSATISFIED");
+			ss4 << tr("STR_COUNCIL_IS_DISSATISFIED");
 		}
 	}
 	else if(_ratingTotal > 500)
 	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_VERY_PLEASED");
+		ss4 << tr("STR_COUNCIL_IS_VERY_PLEASED");
 	}
 	else
 	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED");
+		ss4 << tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
 
 	if(resetWarning && _game->getSavedGame()->getWarned())
@@ -194,12 +194,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 		ss4 << "\n\n";
 		for(std::vector<std::string>::iterator happy = _happyList.begin(); happy != _happyList.end(); ++happy)
 		{
-			ss4 << _game->getLanguage()->getString(*happy);
+			ss4 << tr(*happy);
 			if(_happyList.size() > 1)
 			{
 				if(happy == _happyList.end()-2)
 				{
-					ss4 << _game->getLanguage()->getString("STR_AND");
+					ss4 << tr("STR_AND");
 				}
 				if(_happyList.size() > 2)
 				{
@@ -213,11 +213,11 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 			{
 				if(_happyList.size() > 1)
 				{
-					ss4 << _game->getLanguage()->getString("STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");	
+					ss4 << tr("STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");	
 				}
 				else
 				{
-					ss4 << _game->getLanguage()->getString("STR_COUNTRY_IS_PARTICULARLY_PLEASED");
+					ss4 << tr("STR_COUNTRY_IS_PARTICULARLY_PLEASED");
 				}
 			}
 		}
@@ -227,12 +227,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 		ss4 << "\n\n";
 		for(std::vector<std::string>::iterator sad = _sadList.begin(); sad != _sadList.end(); ++sad)
 		{
-			ss4 << _game->getLanguage()->getString(*sad);
+			ss4 << tr(*sad);
 			if(_sadList.size() > 1)
 			{
 				if(sad == _sadList.end()-2)
 				{
-					ss4 << _game->getLanguage()->getString("STR_AND");
+					ss4 << tr("STR_AND");
 				}
 				if(_sadList.size() > 2)
 				{
@@ -246,11 +246,11 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 			{
 				if(_sadList.size() > 1)
 				{
-					ss4 << _game->getLanguage()->getString("STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");	
+					ss4 << tr("STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");	
 				}
 				else
 				{
-					ss4 << _game->getLanguage()->getString("STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY");
+					ss4 << tr("STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY");
 				}
 			}
 		}
@@ -260,12 +260,12 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 		ss4 << "\n\n";
 		for(std::vector<std::string>::iterator pact = _pactList.begin(); pact != _pactList.end(); ++pact)
 		{
-			ss4 << _game->getLanguage()->getString(*pact);
+			ss4 << tr(*pact);
 			if(_pactList.size() > 1)
 			{
 				if(pact == _pactList.end()-2)
 				{
-					ss4 << _game->getLanguage()->getString("STR_AND");
+					ss4 << tr("STR_AND");
 				}
 				if(_pactList.size() > 2)
 				{
@@ -279,11 +279,11 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 			{
 				if(_pactList.size() > 1)
 				{
-					ss4 << _game->getLanguage()->getString("STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");	
+					ss4 << tr("STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");	
 				}
 				else
 				{
-					ss4 << _game->getLanguage()->getString("STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT");
+					ss4 << tr("STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT");
 				}
 			}
 		}

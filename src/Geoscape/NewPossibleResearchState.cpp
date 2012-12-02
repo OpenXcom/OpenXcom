@@ -61,10 +61,10 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
 	_btnResearch->setColor(Palette::blockOffset(8)+5);
-	_btnResearch->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
+	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -81,7 +81,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 		
 		if((*iter)->getRequirements().size() == 0 && (*iter)->getStringTemplate().size() == 0 )
 		{
-			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
+			_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
 		}
 		else
 		{
@@ -91,7 +91,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 
 	if (!(tally == possibilities.size () || possibilities.empty ()))
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_RESEARCH"));
+		_txtTitle->setText(tr("STR_WE_CAN_NOW_RESEARCH"));
 	}
 }
 

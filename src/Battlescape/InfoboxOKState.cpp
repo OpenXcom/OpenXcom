@@ -51,7 +51,7 @@ InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string messag
 	_window->setColor(Palette::blockOffset(6)+11);
 
 	_btnOk->setColor(Palette::blockOffset(1)-1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&InfoboxOKState::btnOkClick);
 	_btnOk->setHighContrast(true);
 
@@ -62,7 +62,7 @@ InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string messag
 	_txtTitle->setWordWrap(true);
 	std::wstring s = _name;
 	s += L'\n';
-	s += _game->getLanguage()->getString(_message);
+	s += tr(_message);
 	_txtTitle->setText(s);
 
 	_game->getCursor()->setVisible(true);

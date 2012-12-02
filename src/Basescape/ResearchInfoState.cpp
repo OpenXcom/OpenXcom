@@ -111,14 +111,14 @@ void ResearchInfoState::buildUi ()
 	_txtTitle->setBig();
 	if(_project->getRules()->getStringTemplate().size() == 0)
 	{
-		_txtTitle->setText(_rule ? _game->getLanguage()->getString(_rule->getName()) : _game->getLanguage()->getString(_project->getRules ()->getName()));
+		_txtTitle->setText(_rule ? tr(_rule->getName()) : tr(_project->getRules ()->getName()));
 	}
 	else
 	{
 		std::wstring ss;
 		for(size_t st = 0; st != _project->getRules()->getStringTemplate().size(); ++st)
 		{
-			ss += _game->getLanguage()->getString(_project->getRules()->getStringTemplate().at(st));
+			ss += tr(_project->getRules()->getStringTemplate().at(st));
 		}
 		_txtTitle->setText(ss.c_str());
 	}
@@ -132,8 +132,8 @@ void ResearchInfoState::buildUi ()
 	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocatedScientist->setBig();
 
-	_txtMore->setText(_game->getLanguage()->getString("STR_INCREASE"));
-	_txtLess->setText(_game->getLanguage()->getString("STR_DECREASE"));
+	_txtMore->setText(tr("STR_INCREASE"));
+	_txtLess->setText(tr("STR_DECREASE"));
 
 	_txtMore->setColor(Palette::blockOffset(13)+5);
 	_txtLess->setColor(Palette::blockOffset(13)+5);
@@ -161,7 +161,7 @@ void ResearchInfoState::buildUi ()
 	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 }
 
@@ -180,11 +180,11 @@ void ResearchInfoState::btnOkClick(Action *action)
 void ResearchInfoState::SetAssignedScientist()
 {
 	std::wstringstream s1;
-	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
+	s1 << tr("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
 	std::wstringstream s2;
-	s2 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << _base->getFreeLaboratories();
+	s2 << tr("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << _base->getFreeLaboratories();
 	std::wstringstream s3;
-	s3 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _project->getAssigned ();
+	s3 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _project->getAssigned ();
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAllocatedScientist->setText(s3.str());

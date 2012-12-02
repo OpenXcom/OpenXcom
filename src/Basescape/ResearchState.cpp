@@ -76,17 +76,17 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnNew->setColor(Palette::blockOffset(15)+6);
-	_btnNew->setText(_game->getLanguage()->getString("STR_NEW_PROJECT"));
+	_btnNew->setText(tr("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchState::btnOkClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_CURRENT_RESEARCH"));
+	_txtTitle->setText(tr("STR_CURRENT_RESEARCH"));
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
@@ -99,14 +99,14 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
 	_txtProject->setWordWrap(true);
-	_txtProject->setText(_game->getLanguage()->getString("STR_RESEARCH_PROJECT"));
+	_txtProject->setText(tr("STR_RESEARCH_PROJECT"));
 
 	_txtScientists->setColor(Palette::blockOffset(13)+10);
 	_txtScientists->setWordWrap(true);
-	_txtScientists->setText(_game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED_UC"));
+	_txtScientists->setText(tr("STR_SCIENTISTS_ALLOCATED_UC"));
 
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
-	_txtProgress->setText(_game->getLanguage()->getString("STR_PROGRESS"));
+	_txtProgress->setText(tr("STR_PROGRESS"));
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
@@ -175,27 +175,27 @@ void ResearchState::fillProjectList()
 		const RuleResearch *r = (*iter)->getRules();
 		if((*iter)->getRules()->getStringTemplate().size() == 0)
 		{
-			std::wstring wstr = _game->getLanguage()->getString(r->getName ());
-			_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
+			std::wstring wstr = tr(r->getName ());
+			_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 		}
 		else
 		{
 			std::wstring ss;
 			for(size_t st = 0; st != (*iter)->getRules()->getStringTemplate().size(); ++st)
 			{
-				ss += _game->getLanguage()->getString((*iter)->getRules()->getStringTemplate().at(st));
+				ss += tr((*iter)->getRules()->getStringTemplate().at(st));
 			}
-			_lstResearch->addRow(3, ss.c_str(), sstr.str().c_str(), _game->getLanguage()->getString((*iter)->getResearchProgress()).c_str());
+			_lstResearch->addRow(3, ss.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 		}
 	}
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
+	ss << tr("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
 	_txtAvailable->setText(ss.str());
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
+	ss2 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
 	_txtAllocated->setText(ss2.str());
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
+	ss3 << tr("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
 	_txtSpace->setText(ss3.str());
 }
 }

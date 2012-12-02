@@ -83,27 +83,27 @@ namespace OpenXcom
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
 		ss << armor->getFrontArmor();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_FRONT_ARMOR").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
 		ss << armor->getSideArmor();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_LEFT_ARMOR").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
 		ss << armor->getSideArmor();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RIGHT_ARMOR").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
 		ss << armor->getRearArmor();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_REAR_ARMOR").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
 		ss.str(L"");ss.clear();
 		ss << armor->getUnderArmor();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_UNDER_ARMOR").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 
 		_lstInfo->draw();

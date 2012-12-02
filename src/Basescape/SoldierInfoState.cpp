@@ -161,7 +161,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
@@ -173,7 +173,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
-	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
@@ -199,7 +199,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
-	_txtTimeUnits->setText(_game->getLanguage()->getString("STR_TIME_UNITS"));
+	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
 	_numTimeUnits->setColor(Palette::blockOffset(13));
 
@@ -209,7 +209,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barTimeUnits->setInvert(true);
 
 	_txtStamina->setColor(Palette::blockOffset(15)+1);
-	_txtStamina->setText(_game->getLanguage()->getString("STR_STAMINA"));
+	_txtStamina->setText(tr("STR_STAMINA"));
 
 	_numStamina->setColor(Palette::blockOffset(13));
 
@@ -219,7 +219,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barStamina->setInvert(true);
 
 	_txtHealth->setColor(Palette::blockOffset(15)+1);
-	_txtHealth->setText(_game->getLanguage()->getString("STR_HEALTH"));
+	_txtHealth->setText(tr("STR_HEALTH"));
 
 	_numHealth->setColor(Palette::blockOffset(13));
 
@@ -229,7 +229,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barHealth->setInvert(true);
 
 	_txtBravery->setColor(Palette::blockOffset(15)+1);
-	_txtBravery->setText(_game->getLanguage()->getString("STR_BRAVERY"));
+	_txtBravery->setText(tr("STR_BRAVERY"));
 
 	_numBravery->setColor(Palette::blockOffset(13));
 
@@ -239,7 +239,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barBravery->setInvert(true);
 
 	_txtReactions->setColor(Palette::blockOffset(15)+1);
-	_txtReactions->setText(_game->getLanguage()->getString("STR_REACTIONS"));
+	_txtReactions->setText(tr("STR_REACTIONS"));
 
 	_numReactions->setColor(Palette::blockOffset(13));
 
@@ -249,7 +249,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barReactions->setInvert(true);
 
 	_txtFiring->setColor(Palette::blockOffset(15)+1);
-	_txtFiring->setText(_game->getLanguage()->getString("STR_FIRING_ACCURACY"));
+	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
 	_numFiring->setColor(Palette::blockOffset(13));
 
@@ -259,7 +259,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barFiring->setInvert(true);
 
 	_txtThrowing->setColor(Palette::blockOffset(15)+1);
-	_txtThrowing->setText(_game->getLanguage()->getString("STR_THROWING_ACCURACY"));
+	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
 	_numThrowing->setColor(Palette::blockOffset(13));
 
@@ -269,7 +269,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barThrowing->setInvert(true);
 
 	_txtStrength->setColor(Palette::blockOffset(15)+1);
-	_txtStrength->setText(_game->getLanguage()->getString("STR_STRENGTH"));
+	_txtStrength->setText(tr("STR_STRENGTH"));
 
 	_numStrength->setColor(Palette::blockOffset(13));
 
@@ -279,7 +279,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barStrength->setInvert(true);
 
 	_txtPsiStrength->setColor(Palette::blockOffset(15)+1);
-	_txtPsiStrength->setText(_game->getLanguage()->getString("STR_PSIONIC_STRENGTH"));
+	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
 	_numPsiStrength->setColor(Palette::blockOffset(13));
 
@@ -289,7 +289,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barPsiStrength->setInvert(true);
 
 	_txtPsiSkill->setColor(Palette::blockOffset(15)+1);
-	_txtPsiSkill->setText(_game->getLanguage()->getString("STR_PSIONIC_SKILL"));
+	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 
 	_numPsiSkill->setColor(Palette::blockOffset(13));
 
@@ -379,24 +379,24 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 	_barStrength->setValue2(initial->strength);
 
-	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
+	_txtArmor->setText(tr(s->getArmor()->getType()));
 
 	std::wstringstream ss9;
-	ss9 << _game->getLanguage()->getString("STR_RANK_") << L'\x01' << _game->getLanguage()->getString(s->getRankString());
+	ss9 << tr("STR_RANK_") << L'\x01' << tr(s->getRankString());
 	_txtRank->setText(ss9.str());
 
 	std::wstringstream ss10;
-	ss10 << _game->getLanguage()->getString("STR_MISSIONS") << L'\x01' << s->getMissions();
+	ss10 << tr("STR_MISSIONS") << L'\x01' << s->getMissions();
 	_txtMissions->setText(ss10.str());
 
 	std::wstringstream ss11;
-	ss11 << _game->getLanguage()->getString("STR_KILLS") << L'\x01' << s->getKills();
+	ss11 << tr("STR_KILLS") << L'\x01' << s->getKills();
 	_txtKills->setText(ss11.str());
 
 	std::wstringstream ss12;
-	ss12 << _game->getLanguage()->getString("STR_CRAFT_") << L'\x01';
+	ss12 << tr("STR_CRAFT_") << L'\x01';
 	if (s->getCraft() == 0)
-		ss12 << _game->getLanguage()->getString("STR_NONE_UC");
+		ss12 << tr("STR_NONE_UC");
 	else
 		ss12 << s->getCraft()->getName(_game->getLanguage());
 	_txtCraft->setText(ss12.str());
@@ -404,11 +404,7 @@ void SoldierInfoState::init()
 	if (s->getWoundRecovery() > 0)
 	{
 		std::wstringstream ss13;
-		ss13 << _game->getLanguage()->getString("STR_WOUND_RECOVERY") << L'\x01' << s->getWoundRecovery();
-		if (s->getWoundRecovery() > 1)
-			ss13 << _game->getLanguage()->getString("STR_DAYS");
-		else
-			ss13 << _game->getLanguage()->getString("STR_DAY");
+		ss13 << tr("STR_WOUND_RECOVERY") << L'\x01' << tr("STR_DAY", s->getWoundRecovery());
 		_txtRecovery->setText(ss13.str());
 	}
 	else

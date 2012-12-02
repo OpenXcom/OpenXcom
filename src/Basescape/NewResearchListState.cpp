@@ -69,12 +69,12 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOK->setColor(Palette::blockOffset(15)+6);
-	_btnOK->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOK->setText(tr("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_NEW_RESEARCH_PROJECTS"));
+	_txtTitle->setText(tr("STR_NEW_RESEARCH_PROJECTS"));
 
 	_lstResearch->setColor(Palette::blockOffset(13));
 	_lstResearch->setColumns(1, width - 4 * button_x_border);
@@ -131,14 +131,14 @@ void NewResearchListState::fillProjectList ()
 		{
 			if((*it)->getStringTemplate().size() == 0)
 			{
-				_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
+				_lstResearch->addRow(1, tr((*it)->getName ()).c_str());
 			}
 			else
 			{
 				std::wstring ss;
 				for(size_t st = 0; st != (*it)->getStringTemplate().size(); ++st)
 				{
-					ss += _game->getLanguage()->getString((*it)->getStringTemplate().at(st));
+					ss += tr((*it)->getStringTemplate().at(st));
 				}
 				_lstResearch->addRow(1, ss.c_str());
 			}

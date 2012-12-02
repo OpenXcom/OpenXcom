@@ -456,12 +456,12 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDay() << _game->getLanguage()->getString(_game->getSavedGame()->getTime()->getDayString());
+	ss4 << _game->getSavedGame()->getTime()->getDay() << tr(_game->getSavedGame()->getTime()->getDayString());
 	_txtDay->setText(ss4.str());
 
-	_txtWeekday->setText(_game->getLanguage()->getString(_game->getSavedGame()->getTime()->getWeekdayString()));
+	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
 
-	_txtMonth->setText(_game->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString()));
+	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
@@ -1078,11 +1078,11 @@ void GeoscapeState::time30Minutes()
 					else
 					{
 						std::wstringstream ss;
-						ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
-						ss << _game->getLanguage()->getString(item);
-						ss << _game->getLanguage()->getString("STR_TO_REFUEL");
+						ss << tr("STR_NOT_ENOUGH");
+						ss << tr(item);
+						ss << tr("STR_TO_REFUEL");
 						ss << (*j)->getName(_game->getLanguage());
-						ss << _game->getLanguage()->getString("STR_AT_");
+						ss << tr("STR_AT_");
 						ss << (*i)->getName();
 						popup(new CraftErrorState(_game, this, ss.str()));
 						(*j)->setStatus("STR_READY");
@@ -1220,11 +1220,11 @@ void GeoscapeState::time1Hour()
 				if (s != "")
 				{
 					std::wstringstream ss;
-					ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
-					ss << _game->getLanguage()->getString(s);
-					ss << _game->getLanguage()->getString("STR_TO_REARM");
+					ss << tr("STR_NOT_ENOUGH");
+					ss << tr(s);
+					ss << tr("STR_TO_REARM");
 					ss << (*j)->getName(_game->getLanguage());
-					ss << _game->getLanguage()->getString("STR_AT_");
+					ss << tr("STR_AT_");
 					ss << (*i)->getName();
 					popup(new CraftErrorState(_game, this, ss.str()));
 				}
@@ -1262,7 +1262,7 @@ void GeoscapeState::time1Hour()
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				popup(new ProductionCompleteState(_game, _game->getLanguage()->getString(j->first->getRules()->getName()), (*i)->getName(), j->second));
+				popup(new ProductionCompleteState(_game, tr(j->first->getRules()->getName()), (*i)->getName(), j->second));
 				timerReset();
 			}
 		}
@@ -1322,7 +1322,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					popup(new ProductionCompleteState(_game, _game->getLanguage()->getString((*j)->getRules()->getType()), (*i)->getName()));
+					popup(new ProductionCompleteState(_game, tr((*j)->getRules()->getType()), (*i)->getName()));
 				}
 			}
 		}

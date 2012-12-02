@@ -75,17 +75,17 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (_detected)
 	{
-		_txtDetected->setText(_game->getLanguage()->getString("STR_DETECTED"));
+		_txtDetected->setText(tr("STR_DETECTED"));
 	}
 	else
 	{
@@ -99,15 +99,15 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 82, 94);
 	_lstInfo->setDot(true);
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SIZE_UC").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
+	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ALTITUDE").c_str(), _game->getLanguage()->getString(_ufo->getAltitude()).c_str());
+	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(_ufo->getAltitude()).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HEADING").c_str(), _game->getLanguage()->getString(_ufo->getDirection()).c_str());
+	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(_ufo->getDirection()).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
 	std::wstringstream ss;
 	ss << _ufo->getSpeed();
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SPEED").c_str(), ss.str().c_str());
+	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 }
 

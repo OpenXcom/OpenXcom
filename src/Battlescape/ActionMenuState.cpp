@@ -155,9 +155,9 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
 	if (acc > 0)
-		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
-	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
-	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
+		ss1 << tr("STR_ACC") << acc << "%";
+	ss2 << tr("STR_TUS") << tu;
+	_actionMenu[*id]->setAction(ba, tr(name), ss1.str(), ss2.str(), tu);
 	_actionMenu[*id]->setVisible(true);
 	(*id)++;
 }

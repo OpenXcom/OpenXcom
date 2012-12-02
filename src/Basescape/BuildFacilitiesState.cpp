@@ -72,14 +72,14 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 	if (cancellable)
 	{
 		_btnOk->setColor(Palette::blockOffset(13)+5);
-		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
 	}
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_INSTALLATION"));
+	_txtTitle->setText(tr("STR_INSTALLATION"));
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
@@ -115,7 +115,7 @@ void BuildFacilitiesState::PopulateBuildList()
 
 	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
+		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
 	}
 }
 

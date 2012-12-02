@@ -155,23 +155,23 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_OPTIONS_UC"));
+	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
 
 	_btnLanguage->setColor(Palette::blockOffset(8)+5);
-	_btnLanguage->setText(_game->getLanguage()->getString("STR_LANGUAGE"));
+	_btnLanguage->setText(tr("STR_LANGUAGE"));
 	_btnLanguage->onMouseClick((ActionHandler)&OptionsState::btnLanguageClick);
 
 
 	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
-	_txtDisplayResolution->setText(_game->getLanguage()->getString("STR_DISPLAY_RESOLUTION"));
+	_txtDisplayResolution->setText(tr("STR_DISPLAY_RESOLUTION"));
 
 	_txtDisplayWidth->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
@@ -197,19 +197,19 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnDisplayDown->onMouseClick((ActionHandler)&OptionsState::btnDisplayDownClick);
 
 	_txtDisplayMode->setColor(Palette::blockOffset(8)+10);
-	_txtDisplayMode->setText(_game->getLanguage()->getString("STR_DISPLAY_MODE"));
+	_txtDisplayMode->setText(tr("STR_DISPLAY_MODE"));
 
 	_btnDisplayWindowed->setColor(Palette::blockOffset(15)-1);
-	_btnDisplayWindowed->setText(_game->getLanguage()->getString("STR_WINDOWED"));
+	_btnDisplayWindowed->setText(tr("STR_WINDOWED"));
 	_btnDisplayWindowed->setGroup(&_displayMode);
 
 	_btnDisplayFullscreen->setColor(Palette::blockOffset(15)-1);
-	_btnDisplayFullscreen->setText(_game->getLanguage()->getString("STR_FULLSCREEN"));
+	_btnDisplayFullscreen->setText(tr("STR_FULLSCREEN"));
 	_btnDisplayFullscreen->setGroup(&_displayMode);
 
 
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
-	_txtMusicVolume->setText(_game->getLanguage()->getString("STR_MUSIC_VOLUME"));
+	_txtMusicVolume->setText(tr("STR_MUSIC_VOLUME"));
 
 	_btnMusicVolume1->setColor(Palette::blockOffset(15)-1);
 	_btnMusicVolume1->setText(L"1");
@@ -233,7 +233,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 
 	_txtSoundVolume->setColor(Palette::blockOffset(8)+10);
-	_txtSoundVolume->setText(_game->getLanguage()->getString("STR_SFX_VOLUME"));
+	_txtSoundVolume->setText(tr("STR_SFX_VOLUME"));
 
 	_btnSoundVolume1->setColor(Palette::blockOffset(15)-1);
 	_btnSoundVolume1->setText(L"1");

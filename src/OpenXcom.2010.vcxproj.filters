@@ -89,6 +89,9 @@
     <ClCompile Include="Engine\Language.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\LocalizedText.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Engine\Music.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -790,6 +793,9 @@
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Language.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LocalizedText.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Music.h">

@@ -1,4 +1,4 @@
-	/*
+/*
  * Copyright 2010-2012 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -360,7 +360,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_txtDistance->setText(L"640");
 
 	_txtStatus->setColor(Palette::blockOffset(5)+9);
-	_txtStatus->setText(_game->getLanguage()->getString("STR_STANDOFF"));
+	_txtStatus->setText(tr("STR_STANDOFF"));
 
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 
@@ -1201,7 +1201,7 @@ void DogfightState::maximumDistance()
  */
 void DogfightState::setStatus(const std::string &status)
 {
-	_txtStatus->setText(_game->getLanguage()->getString(status));
+	_txtStatus->setText(tr(status));
 	_timeout = 50;
 }
 
