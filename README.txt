@@ -65,6 +65,8 @@ http://www.libsdl.org/projects/SDL_mixer/
 http://timidity.sourceforge.net/
 - SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later:
 http://www.ferzkopp.net/joomla/content/view/19/14/
+- SDL_image (libsdl-image1.2)
+http://www.libsdl.org/projects/SDL_image/
 - yaml-cpp, version 0.2.6 or later:
 http://code.google.com/p/yaml-cpp/
 
@@ -142,6 +144,8 @@ http://www.libsdl.org
 http://www.libsdl.org/projects/SDL_mixer/
 - SDL_gfx (libsdl-gfx1.2), version 2.0.22 or later:
 http://www.ferzkopp.net/joomla/content/view/19/14/
+- SDL_image (libsdl-image1.2):
+http://www.libsdl.org/projects/SDL_image/
 - yaml-cpp, version 0.2.6 or later:
 http://code.google.com/p/yaml-cpp/
 
