@@ -26,12 +26,15 @@
 #include "../Geoscape/Globe.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "TerrorSite.h"
 #include "Ufo.h"
+#include "Region.h"
+#include "Country.h"
 #include "Waypoint.h"
 #include <algorithm>
 #include <functional>
@@ -208,6 +211,7 @@ void AlienMission::think(Game &engine, const Globe &globe)
 		ab->setLongitude(pos.first);
 		ab->setLatitude(pos.second);
 		game.getAlienBases()->push_back(ab);
+		addScore(pos.first, pos.second, engine);
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
@@ -399,6 +403,7 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		{
 			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.
+			addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			ufo.setStatus(Ufo::DESTROYED);
 			ufo.setDetected(false);
 			TerrorSite *terrorSite = new TerrorSite();
@@ -479,6 +484,11 @@ void AlienMission::ufoLifting(Ufo &ufo, Game &engine, const Globe &globe)
 		break;
 	case Ufo::LANDED:
 		{
+			if ((ufo.getRules()->getType() == "STR_HARVESTER" && _rule.getType() == "STR_ALIEN_HARVEST") || 
+				(ufo.getRules()->getType() == "STR_ABDUCTOR" && _rule.getType() == "STR_ALIEN_ABDUCTION"))
+			{
+				addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
+			}
 			assert(ufo.getTrajectoryPoint() != ufo.getTrajectory().getWaypointCount() - 1);
 			ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
 			ufo.setAltitude("STR_VERY_LOW");
@@ -563,5 +573,30 @@ void AlienMission::setAlienBase(const AlienBase *base)
 const AlienBase *AlienMission::getAlienBase() const
 {
 	return _base;
+}
+
+/**
+ * Add alien points to the country and region at the coordinates given
+ * @param lon Longitudinal coordinates to check
+ * @param lat Lattitudinal coordinates to check
+ */
+void AlienMission::addScore(const double lon, const double lat, Game &engine)
+{
+	for (std::vector<Region *>::iterator region = engine.getSavedGame()->getRegions()->begin(); region != engine.getSavedGame()->getRegions()->end(); ++region)
+	{
+		if ((*region)->getRules()->insideRegion(lon, lat))
+		{
+			(*region)->addActivityAlien(_rule.getPoints());
+			break;
+		}
+	}
+	for (std::vector<Country *>::iterator country = engine.getSavedGame()->getCountries()->begin(); country != engine.getSavedGame()->getCountries()->end(); ++country)
+	{
+		if ((*country)->getRules()->insideCountry(lon, lat))
+		{
+			(*country)->addActivityAlien(_rule.getPoints());
+			break;
+		}
+	}
 }
 }

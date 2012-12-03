@@ -32,6 +32,7 @@ namespace OpenXcom
 void RuleAlienMission::load(const YAML::Node &node)
 {
 	node["type"] >> _type;
+	node["points"] >> _points;
 	//Only allow full replacement of mission racial distribution.
 	if (const YAML::Node *pNode = node.FindValue("raceWeights"))
 	{
@@ -134,6 +135,14 @@ RuleAlienMission::~RuleAlienMission()
 	{
 		delete ii->second;
 	}
+}
+
+/**
+ * Return the Alien score for this mission.
+ */
+const int RuleAlienMission::getPoints() const
+{
+	return _points;
 }
 
 void operator<<(YAML::Emitter &out, const MissionWave &wave)

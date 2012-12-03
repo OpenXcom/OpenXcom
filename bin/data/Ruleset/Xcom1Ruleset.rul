@@ -7939,6 +7939,7 @@ ufoTrajectories:
       - [5, 0, 100] #only the 0 altitude matters
 alienMissions:
   - type: STR_ALIEN_RESEARCH
+    points: 0
     raceWeights:
       0:
           STR_SECTOID: 70
@@ -7977,6 +7978,7 @@ alienMissions:
         trajectory: P4
         timer: 9000
   - type: STR_ALIEN_HARVEST
+    points: 30
     raceWeights:
       0:
           STR_SECTOID: 50
@@ -8031,6 +8033,7 @@ alienMissions:
         trajectory: P2
         timer: 1500
   - type: STR_ALIEN_ABDUCTION
+    points: 50
     raceWeights:
       0:
           STR_SECTOID: 60
@@ -8069,6 +8072,7 @@ alienMissions:
         trajectory: P4
         timer: 60
   - type: STR_ALIEN_INFILTRATION
+    points: 0
     raceWeights:
       0:
           STR_SECTOID: 60
@@ -8129,6 +8133,7 @@ alienMissions:
         trajectory: P7
         timer: 60
   - type: STR_ALIEN_BASE
+    points: 50
     raceWeights:
       0:
           STR_SECTOID: 30
@@ -8177,6 +8182,7 @@ alienMissions:
         trajectory: P6
         timer: 60
   - type: STR_ALIEN_TERROR
+    points: 10
     raceWeights:
       0:
           STR_SECTOID: 30
@@ -8218,6 +8224,7 @@ alienMissions:
         trajectory: P7
         timer: 9000
   - type: STR_ALIEN_RETALIATION
+    points: 0
     raceWeights: {} #Special case, race comes from trigger UFO.
     waves:
       - ufo: STR_SMALL_SCOUT
@@ -8237,6 +8244,7 @@ alienMissions:
         trajectory: P8
         timer: 3000
   - type: STR_ALIEN_SUPPLY
+    points: 0
     raceWeights: {} #Special case, race comes from base.
     waves:
       - ufo: STR_SUPPLY_SHIP

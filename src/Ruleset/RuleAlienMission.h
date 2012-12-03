@@ -80,6 +80,8 @@ public:
 	unsigned getWaveCount() const { return _waves.size(); }
 	/// Gets the full wave information.
 	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
+	/// Gets the score for this mission.
+	const int getPoints() const;
 private:
 	/// The mission's type ID.
 	std::string _type;
@@ -87,6 +89,8 @@ private:
 	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
+	/// The mission's points
+	int _points;
 
 };
 

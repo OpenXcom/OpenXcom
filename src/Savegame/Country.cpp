@@ -181,6 +181,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	{
 		_newPact = false;
 		_pact = true;
+		addActivityAlien(150);
 	}
 
 	// don't go over the cap
