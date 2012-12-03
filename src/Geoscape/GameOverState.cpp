@@ -34,27 +34,34 @@ namespace OpenXcom
  * Initializes all the elements in the GameOver screen.
  * @param game Pointer to the core game.
  */
-GameOverState::GameOverState(Game *game) : State(game)
+GameOverState::GameOverState(Game *game) : State(game), _screenNumber(0)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_txtText = new Text(320, 16, 0, 8);
+	_window = new Window(this, 330, 210, -5, -5);
+	_txtText.push_back(new Text(195, 56, 5, 0));
+	_txtText.push_back(new Text(232, 56, 88, 144));
+	_txtText.push_back(new Text(254, 48, 66, 152));
+	_txtText.push_back(new Text(300, 200, 5, 0));
+	_txtText.push_back(new Text(310, 42, 5, 158));
 	_screen = new InteractiveSurface(320, 200, 0, 0);
 
-	_game->setPalette(_game->getResourcePack()->getSurface("PICT1.LBM")->getPalette());
-
 	add(_window);
-	add(_txtText);
 	add(_screen);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(0));
-	_window->setBackground(_game->getResourcePack()->getSurface("PICT1.LBM"));
-
 	_screen->onMouseClick((ActionHandler)&GameOverState::windowClick);
+	
+	for (int text = 0; text != 5; ++text)
+	{
+		std::stringstream ss2;
+		ss2 << "STR_VICTORY_" << text+1;
+		_txtText[text]->setText(_game->getLanguage()->getString(ss2.str()));
+		_txtText[text]->setWordWrap(true);
+		add(_txtText[text]);
+		_txtText[text]->setVisible(false);
+	}
 
-	_txtText->setColor(Palette::blockOffset(1));
-	_txtText->setText(_game->getLanguage()->getString("STR_VICTORY_1"));
+	nextScreen();
 }
 
 /**
@@ -71,7 +78,28 @@ GameOverState::~GameOverState()
  */
 void GameOverState::windowClick(Action *action)
 {
-	_game->popState();
+	if(_screenNumber == 5)
+		_game->popState();
+	else
+		nextScreen();
+}
+
+void GameOverState::nextScreen()
+{
+	++_screenNumber;
+	int offset = 0;
+	if(_screenNumber>3)
+		offset = 2;
+	std::stringstream ss;
+	ss << "PICT" << _screenNumber+offset << ".LBM";
+	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_window->setBackground(_game->getResourcePack()->getSurface(ss.str()));
+	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
+	_txtText[_screenNumber-1]->setVisible(true);
+	if (_screenNumber > 1)
+		_txtText[_screenNumber-2]->setVisible(false);
 }
 
 }

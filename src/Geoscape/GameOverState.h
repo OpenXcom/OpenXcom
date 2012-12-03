@@ -36,7 +36,8 @@ class GameOverState : public State
 private:
 	Window *_window;
 	InteractiveSurface *_screen;
-	Text *_txtText;
+	std::vector<Text*> _txtText;
+	int _screenNumber;
 public:
 	/// Creates the GameOver state.
 	GameOverState(Game *game);
@@ -44,6 +45,7 @@ public:
 	~GameOverState();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
+	void nextScreen();
 };
 
 }
