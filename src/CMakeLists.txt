@@ -283,6 +283,10 @@ set ( geoscape_src
   Geoscape/AlienTerrorState.cpp
   Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleManufactureState.cpp
+  Geoscape/VictoryState.h
+  Geoscape/VictoryState.cpp
+  Geoscape/DefeatState.h
+  Geoscape/DefeatState.cpp
 )
 
 set ( interface_src
@@ -583,7 +587,7 @@ if ( WIN32 )
   endif ()
   set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
 endif ()
-target_link_libraries ( openxcom ${system_libs} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
+target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
@@ -608,6 +612,7 @@ endif ()
 if ( APPLE AND CREATE_BUNDLE )
   list ( APPEND frameworks "${SDLGFX_LIBRARY}" )
   list ( APPEND frameworks "${SDLMIXER_LIBRARY}" )
+  list ( APPEND frameworks "${SDLIMAGE_LIBRARY}" )
   list ( APPEND frameworks "${SDL_LIBRARY}" )
   list ( APPEND frameworks "${YAMLCPP_LIBRARY}" )
 

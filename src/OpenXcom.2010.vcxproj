@@ -96,7 +96,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cppd.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -305,7 +305,9 @@
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
     <ClCompile Include="Geoscape\ConfirmNewBaseState.cpp" />
     <ClCompile Include="Geoscape\CraftPatrolState.cpp" />
+    <ClCompile Include="Geoscape\DefeatState.cpp" />
     <ClCompile Include="Geoscape\DogfightState.cpp" />
+    <ClCompile Include="Geoscape\VictoryState.cpp" />
     <ClCompile Include="Geoscape\NewPossibleManufactureState.cpp" />
     <ClCompile Include="Geoscape\PsiTrainingState.cpp" />
     <ClCompile Include="Geoscape\ResearchCompleteState.cpp" />
@@ -542,8 +544,10 @@
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />
     <ClInclude Include="Geoscape\ConfirmNewBaseState.h" />
     <ClInclude Include="Geoscape\CraftPatrolState.h" />
+    <ClInclude Include="Geoscape\DefeatState.h" />
     <ClInclude Include="Geoscape\DogfightState.h" />
     <ClInclude Include="Geoscape\FundingState.h" />
+    <ClInclude Include="Geoscape\VictoryState.h" />
     <ClInclude Include="Geoscape\GeoscapeCraftState.h" />
     <ClInclude Include="Geoscape\NewPossibleManufactureState.h" />
     <ClInclude Include="Geoscape\NewPossibleResearchState.h" />

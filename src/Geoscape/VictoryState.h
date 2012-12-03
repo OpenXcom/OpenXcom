@@ -16,42 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_MONTHLYREPORTSTATE_H
-#define OPENXCOM_MONTHLYREPORTSTATE_H
+#ifndef OPENXCOM_VICTORYSTATE_H
+#define OPENXCOM_VICTORYSTATE_H
 
 #include "../Engine/State.h"
-#include <string>
 
 namespace OpenXcom
 {
 
-class TextButton;
 class Window;
+class InteractiveSurface;
 class Text;
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Game Over Screens.
  */
-class MonthlyReportState : public State
+class VictoryState : public State
 {
 private:
-	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtRatingTxt, *_txtFailure;
-	bool _psi, _gameOver;
-	int _ratingTotal, _fundingDiff, _lastMonthsRating;
-	std::vector<std::string> _happyList, _sadList, _pactList;
+	InteractiveSurface *_screen;
+	std::vector<Text*> _txtText;
+	int _screenNumber;
 public:
-	/// Creates the Monthly Report state.
-	MonthlyReportState(Game *game, bool psi);
-	/// Cleans up the Monthly Report state.
-	~MonthlyReportState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	void CalculateChanges();
+	/// Creates the Victory state.
+	VictoryState(Game *game);
+	/// Cleans up the Victory state.
+	~VictoryState();
+	/// Handler for clicking the screen.
+	void windowClick(Action *action);
+	void nextScreen();
 };
 
 }
