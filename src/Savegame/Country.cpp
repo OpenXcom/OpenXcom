@@ -98,7 +98,7 @@ const std::vector<int> &Country::getFunding() const
  */
 void Country::setFunding(int funding)
 {
-	_funding[_funding.size()-1] = funding;
+	_funding.back() = funding;
 }
 
 /*
@@ -119,7 +119,7 @@ int Country::getSatisfaction()
  */
 void Country::addActivityXcom(int activity)
 {
-	_activityXcom[_activityXcom.size()-1] += activity;
+	_activityXcom.back() += activity;
 }
 
 /**
@@ -128,7 +128,7 @@ void Country::addActivityXcom(int activity)
  */
 void Country::addActivityAlien(int activity)
 {
-	_activityAlien[_activityAlien.size()-1] += activity;
+	_activityAlien.back() += activity;
 }
 
 /**
@@ -160,20 +160,20 @@ const std::vector<int> &Country::getActivityAlien() const
 void Country::newMonth(int xcomTotal, int alienTotal)
 {
 	int newFunding = 0;
-	int funding = getFunding().at(getFunding().size()-1);
-	int good = (xcomTotal / 10) + _activityXcom[_activityXcom.size()-1];
-	int bad = (alienTotal / 20) + _activityAlien[_activityAlien.size()-1];
+	int funding = getFunding().back();
+	int good = (xcomTotal / 10) + _activityXcom.back();
+	int bad = (alienTotal / 20) + _activityAlien.back();
 
 	if(good > bad + 30 && bad < RNG::generate(0, good))
 	{
 		// happy
-		newFunding = (_funding.at(_funding.size()-1)/100) * RNG::generate(5, 20);
+		newFunding = (_funding.back()/100) * RNG::generate(5, 20);
 		_satisfaction = 3;
 	}
 	else if(good < bad + 30 && good < RNG::generate(0, bad))
 	{
 		//sad
-		newFunding -= (_funding.at(_funding.size()-1)/100) * RNG::generate(5, 20);
+		newFunding -= (_funding.back()/100) * RNG::generate(5, 20);
 		_satisfaction = 1;
 	}
 	// about to be in cahoots

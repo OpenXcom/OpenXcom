@@ -356,7 +356,7 @@ void MonthlyReportState::btnOkClick(Action *action)
 void MonthlyReportState::CalculateChanges()
 {
 	//set up score and apply research bonuses
-	_ratingTotal = 400 + _game->getSavedGame()->getResearchScores().at(_game->getSavedGame()->getResearchScores().size()-1);
+	_ratingTotal = 400 + _game->getSavedGame()->getResearchScores().back();
 	if(_game->getSavedGame()->getResearchScores().size() >1)
 		_lastMonthsRating = 400 + _game->getSavedGame()->getResearchScores().at(_game->getSavedGame()->getResearchScores().size()-2);
 	_game->getSavedGame()->getResearchScores().push_back(0);
@@ -378,8 +378,8 @@ void MonthlyReportState::CalculateChanges()
 	{
 		if((*k)->getActivityXcom().size() >1)
 			_lastMonthsRating += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-2)-(*k)->getActivityAlien().at((*k)->getActivityAlien().size()-2);
-		xcomTotal += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-1);
-		alienTotal += (*k)->getActivityAlien().at((*k)->getActivityAlien().size()-1);
+		xcomTotal += (*k)->getActivityXcom().back();
+		alienTotal += (*k)->getActivityAlien().back();
 	}
 
 	//calculate total, and average scores.
@@ -406,7 +406,7 @@ void MonthlyReportState::CalculateChanges()
 
 		// and after they've made their decisions, calculate the difference, and add
 		// them to the appropriate lists.
-		_fundingDiff += (*k)->getFunding().at((*k)->getFunding().size()-1)-(*k)->getFunding().at((*k)->getFunding().size()-2);
+		_fundingDiff += (*k)->getFunding().back()-(*k)->getFunding().at((*k)->getFunding().size()-2);
 		switch((*k)->getSatisfaction())
 		{
 		case 1:

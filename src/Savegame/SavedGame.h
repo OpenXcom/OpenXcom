@@ -175,10 +175,12 @@ public:
 	/// return a list of maintenance costs
 	std::vector<int> getMaintenances();
 	/// sets the research score for the month
-	void setResearchScore(int score);
+	void addResearchScore(int score);
 	/// gets the list of research scores
 	std::vector<int> getResearchScores();
-	bool getWarned();
+	/// gets whether or not the player has been warned
+	bool getWarned() const;
+	/// sets whether or not the player has been warned
 	void setWarned(bool warned);
 	/// Full access to the alien strategy data.
 	AlienStrategy &getAlienStrategy() { return *_alienStrategy; }

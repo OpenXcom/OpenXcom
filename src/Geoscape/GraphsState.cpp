@@ -654,7 +654,7 @@ void GraphsState::drawCountryLines()
 			int y = 175;
 			if(_alien)
 			{
-				if(iter < country->getActivityAlien().size() && country->getActivityAlien().at(iter))
+				if(iter < country->getActivityAlien().size())
 				{
 					reduction = country->getActivityAlien().at(country->getActivityAlien().size()-(1+iter)) / units;
 					y -= reduction;
@@ -663,7 +663,7 @@ void GraphsState::drawCountryLines()
 			}
 			else if(_income)
 			{
-				if(iter < country->getFunding().size() && country->getFunding().at(iter))
+				if(iter < country->getFunding().size())
 				{
 					reduction = country->getFunding().at(country->getFunding().size()-(1+iter)) / units;
 					y -= reduction;
@@ -672,13 +672,15 @@ void GraphsState::drawCountryLines()
 			}
 			else
 			{
-				if(iter < country->getActivityXcom().size() && country->getActivityXcom().at(iter))
+				if(iter < country->getActivityXcom().size())
 				{
 					reduction = country->getActivityXcom().at(country->getActivityXcom().size()-(1+iter)) / units;
 					y -= reduction;
 					totals[iter] += country->getActivityXcom().at(country->getActivityXcom().size()-(1+iter));
 				}
 			}
+			if (y >=175)
+				y = 175;
 			newLineVector.push_back(y);
 			int offset = 0;
 			if(entry % 2)
@@ -800,7 +802,7 @@ void GraphsState::drawRegionLines()
 			int y = 175;
 			if(_alien)
 			{
-				if(iter < region->getActivityAlien().size() && region->getActivityAlien().at(iter))
+				if(iter < region->getActivityAlien().size())
 				{
 					reduction = region->getActivityAlien().at(region->getActivityAlien().size()-(1+iter)) / units;
 					y -= reduction;
@@ -809,13 +811,15 @@ void GraphsState::drawRegionLines()
 			}
 			else
 			{
-				if(iter < region->getActivityXcom().size() && region->getActivityXcom().at(iter))
+				if(iter < region->getActivityXcom().size())
 				{
 					reduction = region->getActivityXcom().at(region->getActivityXcom().size()-(1+iter)) / units;
 					y -= reduction;
 					totals[iter] += region->getActivityXcom().at(region->getActivityXcom().size()-(1+iter));
 				}
 			}
+			if (y >=175)
+				y = 175;
 			newLineVector.push_back(y);
 			int offset = 0;
 			if(entry % 2)

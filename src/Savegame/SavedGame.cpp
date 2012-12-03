@@ -472,7 +472,7 @@ void SavedGame::setDifficulty(GameDifficulty difficulty)
  */
 int SavedGame::getFunds() const
 {
-	return _funds[_funds.size()-1];
+	return _funds.back();
 }
 
 /**
@@ -490,7 +490,7 @@ const std::vector<int> &SavedGame::getFundsList() const
  */
 void SavedGame::setFunds(int funds)
 {
-	_funds[_funds.size()-1] = funds;
+	_funds.back() = funds;
 }
 
 /**
@@ -553,13 +553,15 @@ void SavedGame::setGlobeZoom(int zoom)
  */
 void SavedGame::monthlyFunding()
 {
-	_funds[_funds.size()-1] += getCountryFunding() - getBaseMaintenance();
-	_funds.push_back(_funds[_funds.size()-1]);
-	_maintenance[_maintenance.size()-1] = getBaseMaintenance();
+	_funds.back() += getCountryFunding() - getBaseMaintenance();
+	_funds.push_back(_funds.back());
+	_maintenance.back() = getBaseMaintenance();
 	_maintenance.push_back(0);
 
 	if(_funds.size() > 12)
 		_funds.erase(_funds.begin());
+	if(_maintenance.size() > 12)
+		_maintenance.erase(_maintenance.begin());
 }
 
 /**
@@ -611,7 +613,7 @@ int SavedGame::getCountryFunding() const
 	int total = 0;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
-		total += (*i)->getFunding().at((*i)->getFunding().size()-1);
+		total += (*i)->getFunding().back();
 	}
 	return total;
 }
@@ -713,6 +715,7 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 	if(itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
+		addResearchScore(r->getPoints());
 	}
 	if(ruleset)
 	{
@@ -1160,9 +1163,9 @@ std::vector<int> SavedGame::getMaintenances()
  * adds to this month's research score
  * @param score the amount to add.
  */
-void SavedGame::setResearchScore(int score)
+void SavedGame::addResearchScore(int score)
 {
-	_researchScores.at(_researchScores.size()-1) += score;
+	_researchScores.back() += score;
 }
 
 /**
@@ -1174,11 +1177,20 @@ std::vector<int> SavedGame::getResearchScores()
 	return _researchScores;
 }
 
-bool SavedGame::getWarned()
+/**
+ * return if the player has been 
+ * warned about poor performance.
+ * @return true or false.
+ */
+bool SavedGame::getWarned() const
 {
 	return _warned;
 }
 
+/**
+ * sets the player's "warned" status.
+ * @param warned set "warned" to this.
+ */
 void SavedGame::setWarned(bool warned)
 {
 	_warned = warned;

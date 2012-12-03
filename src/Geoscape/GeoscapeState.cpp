@@ -1367,7 +1367,6 @@ void GeoscapeState::time1Day()
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
-					_game->getSavedGame()->setResearchScore(bonus->getPoints());
 					if(bonus->getLookup() != "")
 					{
 						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
@@ -1380,7 +1379,6 @@ void GeoscapeState::time1Day()
 				newResearch = 0;
 			}
 			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
-			_game->getSavedGame()->setResearchScore(research->getPoints());
 			if(research->getLookup() != "")
 			{
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
