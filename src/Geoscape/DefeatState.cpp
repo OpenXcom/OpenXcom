@@ -26,6 +26,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/SavedGame.h"
+#include "../Menu/MainMenuState.h"
 
 namespace OpenXcom
 {
@@ -76,7 +77,11 @@ DefeatState::~DefeatState()
 void DefeatState::windowClick(Action *action)
 {
 	if(_screenNumber == 2)
+	{
 		_game->popState();
+		_game->setState(new MainMenuState(_game));
+		_game->setSavedGame(0);
+	}
 	else
 		nextScreen();
 }
