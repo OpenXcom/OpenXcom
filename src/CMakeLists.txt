@@ -283,6 +283,10 @@ set ( geoscape_src
   Geoscape/AlienTerrorState.cpp
   Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleManufactureState.cpp
+  Geoscape/VictoryState.h
+  Geoscape/VictoryState.cpp
+  Geoscape/DefeatState.h
+  Geoscape/DefeatState.cpp
 )
 
 set ( interface_src

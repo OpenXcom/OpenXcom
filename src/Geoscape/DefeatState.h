@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_GAMEOVERSTATE_H
-#define OPENXCOM_GAMEOVERSTATE_H
+#ifndef OPENXCOM_DEFEATSTATE_H
+#define OPENXCOM_DEFEATSTATE_H
 
 #include "../Engine/State.h"
 
@@ -31,7 +31,7 @@ class Text;
 /**
  * Game Over Screens.
  */
-class GameOverState : public State
+class DefeatState : public State
 {
 private:
 	Window *_window;
@@ -39,10 +39,10 @@ private:
 	std::vector<Text*> _txtText;
 	int _screenNumber;
 public:
-	/// Creates the GameOver state.
-	GameOverState(Game *game);
-	/// Cleans up the GameOver state.
-	~GameOverState();
+	/// Creates the Defeat state.
+	DefeatState(Game *game);
+	/// Cleans up the Defeat state.
+	~DefeatState();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
 	void nextScreen();

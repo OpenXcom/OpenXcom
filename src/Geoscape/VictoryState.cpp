@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "GameOverState.h"
+#include "VictoryState.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -31,10 +31,10 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the GameOver screen.
+ * Initializes all the elements in the Victory screen.
  * @param game Pointer to the core game.
  */
-GameOverState::GameOverState(Game *game) : State(game), _screenNumber(0)
+VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 {
 	// Create objects
 	_window = new Window(this, 330, 210, -5, -5);
@@ -49,7 +49,7 @@ GameOverState::GameOverState(Game *game) : State(game), _screenNumber(0)
 	add(_screen);
 
 	// Set up objects
-	_screen->onMouseClick((ActionHandler)&GameOverState::windowClick);
+	_screen->onMouseClick((ActionHandler)&VictoryState::windowClick);
 	
 	for (int text = 0; text != 5; ++text)
 	{
@@ -67,7 +67,7 @@ GameOverState::GameOverState(Game *game) : State(game), _screenNumber(0)
 /**
  *
  */
-GameOverState::~GameOverState()
+VictoryState::~VictoryState()
 {
 
 }
@@ -76,7 +76,7 @@ GameOverState::~GameOverState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void GameOverState::windowClick(Action *action)
+void VictoryState::windowClick(Action *action)
 {
 	if(_screenNumber == 5)
 		_game->popState();
@@ -84,7 +84,7 @@ void GameOverState::windowClick(Action *action)
 		nextScreen();
 }
 
-void GameOverState::nextScreen()
+void VictoryState::nextScreen()
 {
 	++_screenNumber;
 	int offset = 0;

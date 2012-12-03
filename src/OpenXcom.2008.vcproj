@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -145,7 +145,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -303,7 +303,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -1343,6 +1343,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\DefeatState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\DefeatState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\DogfightState.cpp"
 				>
 			</File>
@@ -1532,6 +1540,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\UfoLostState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\VictoryState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\VictoryState.h"
 				>
 			</File>
 		</Filter>
