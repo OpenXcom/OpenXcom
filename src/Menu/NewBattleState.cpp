@@ -311,7 +311,7 @@ void NewBattleState::initSave()
  * Starts the battle.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnOkClick(Action *action)
+void NewBattleState::btnOkClick(Action *)
 {
 	_music = false;
 
@@ -383,7 +383,7 @@ void NewBattleState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnCancelClick(Action *action)
+void NewBattleState::btnCancelClick(Action *)
 {
 	_game->setSavedGame(0);
 	_game->popState();
@@ -393,7 +393,7 @@ void NewBattleState::btnCancelClick(Action *action)
  * Randomize the state
  * @param action Pointer to an action.
  */
-void NewBattleState::btnRandomClick(Action *action)
+void NewBattleState::btnRandomClick(Action *)
 {
 	_selMission = RNG::generate(0,_missionTypes.size()-1) ;
 	_selAlien   = RNG::generate(0,1) ;
@@ -498,7 +498,7 @@ void NewBattleState::btnRandomClick(Action *action)
  * Shows the Craft Info screen.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnEquipClick(Action *action)
+void NewBattleState::btnEquipClick(Action *)
 {
 	_game->pushState(new CraftInfoState(_game, _game->getSavedGame()->getBases()->front(), 0));
 }

@@ -165,7 +165,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
  * Return to previous screen
  * @param action a pointer to an Action
 */
-void ManufactureStartState::btnCancelClick(Action * action)
+void ManufactureStartState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -174,7 +174,7 @@ void ManufactureStartState::btnCancelClick(Action * action)
  * Go to the Production settings screen
  * @param action a pointer to an Action
 */
-void ManufactureStartState::btnStartClick(Action * action)
+void ManufactureStartState::btnStartClick(Action *)
 {
 	_game->pushState(new ManufactureInfoState(_game, _base, _item));
 }

@@ -125,7 +125,7 @@ AbortMissionState::~AbortMissionState()
  * Confirms to abort the mission.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnOkClick(Action *action)
+void AbortMissionState::btnOkClick(Action *)
 {
 	_game->popState();
 	_state->finishBattle(true);
@@ -135,7 +135,7 @@ void AbortMissionState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnCancelClick(Action *action)
+void AbortMissionState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

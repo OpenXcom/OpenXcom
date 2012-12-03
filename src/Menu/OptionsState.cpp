@@ -268,7 +268,7 @@ OptionsState::~OptionsState()
  * Saves the options.
  * @param action Pointer to an action.
  */
-void OptionsState::btnOkClick(Action *action)
+void OptionsState::btnOkClick(Action *)
 {
 	Options::setString("displayWidth", Language::wstrToUtf8(_txtDisplayWidth->getText()));
 	Options::setString("displayHeight", Language::wstrToUtf8(_txtDisplayHeight->getText()));
@@ -312,7 +312,7 @@ void OptionsState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsState::btnCancelClick(Action *action)
+void OptionsState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -321,7 +321,7 @@ void OptionsState::btnCancelClick(Action *action)
  * Shows the Language screen.
  * @param action Pointer to an action.
  */
-void OptionsState::btnLanguageClick(Action *action)
+void OptionsState::btnLanguageClick(Action *)
 {
 	_game->setState(new LanguageState(_game));
 }
@@ -330,7 +330,7 @@ void OptionsState::btnLanguageClick(Action *action)
  * Selects a bigger resolution.
  * @param action Pointer to an action.
  */
-void OptionsState::btnDisplayUpClick(Action *action)
+void OptionsState::btnDisplayUpClick(Action *)
 {
 	if (_resAmount == 0)
 		return;
@@ -353,7 +353,7 @@ void OptionsState::btnDisplayUpClick(Action *action)
  * Selects a smaller resolution.
  * @param action Pointer to an action.
  */
-void OptionsState::btnDisplayDownClick(Action *action)
+void OptionsState::btnDisplayDownClick(Action *)
 {
 	if (_resAmount == 0)
 		return;

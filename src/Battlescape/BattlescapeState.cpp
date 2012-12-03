@@ -536,7 +536,7 @@ void BattlescapeState::mapClick(Action *action)
  * Processes when mouse enters to the map surface
  * @param action Pointer to an action.
  */
-void BattlescapeState::mapIn(Action *action)
+void BattlescapeState::mapIn(Action *)
 {
 	isMouseScrolling = false;
 	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
@@ -546,7 +546,7 @@ void BattlescapeState::mapIn(Action *action)
  * Move unit up.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnUnitUpClick(Action *action)
+void BattlescapeState::btnUnitUpClick(Action *)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
 	{
@@ -559,7 +559,7 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  * Move unit down.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnUnitDownClick(Action *action)
+void BattlescapeState::btnUnitDownClick(Action *)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
 	{
@@ -572,7 +572,7 @@ void BattlescapeState::btnUnitDownClick(Action *action)
  * Show next map layer.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnMapUpClick(Action *action)
+void BattlescapeState::btnMapUpClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_map->getCamera()->up();
@@ -582,7 +582,7 @@ void BattlescapeState::btnMapUpClick(Action *action)
  * Show previous map layer.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnMapDownClick(Action *action)
+void BattlescapeState::btnMapDownClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_map->getCamera()->down();
@@ -592,7 +592,7 @@ void BattlescapeState::btnMapDownClick(Action *action)
  * Show minimap.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnShowMapClick(Action *action)
+void BattlescapeState::btnShowMapClick(Action *)
 {
 	//MiniMapState
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
@@ -603,7 +603,7 @@ void BattlescapeState::btnShowMapClick(Action *action)
  * Kneel/Standup.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnKneelClick(Action *action)
+void BattlescapeState::btnKneelClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 	{
@@ -619,7 +619,7 @@ void BattlescapeState::btnKneelClick(Action *action)
  * Go to soldier info screen.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnInventoryClick(Action *action)
+void BattlescapeState::btnInventoryClick(Action *)
 {
 	if (playableUnitSelected() && _save->getSelectedUnit()->getArmor()->getSize() == 1)
 	{
@@ -631,7 +631,7 @@ void BattlescapeState::btnInventoryClick(Action *action)
  * Center on currently selected soldier.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnCenterClick(Action *action)
+void BattlescapeState::btnCenterClick(Action *)
 {
 	if (playableUnitSelected())
 	{
@@ -643,7 +643,7 @@ void BattlescapeState::btnCenterClick(Action *action)
  * Select next soldier.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnNextSoldierClick(Action *action)
+void BattlescapeState::btnNextSoldierClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		selectNextPlayerUnit(false);
@@ -653,7 +653,7 @@ void BattlescapeState::btnNextSoldierClick(Action *action)
  * Don't reselect current soldier and select next soldier.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnNextStopClick(Action *action)
+void BattlescapeState::btnNextStopClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		selectNextPlayerUnit(true);
@@ -681,7 +681,7 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
  * Show/hide all map layers.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnShowLayersClick(Action *action)
+void BattlescapeState::btnShowLayersClick(Action *)
 {	
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
@@ -691,7 +691,7 @@ void BattlescapeState::btnShowLayersClick(Action *action)
  * Show options.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnHelpClick(Action *action)
+void BattlescapeState::btnHelpClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_game->pushState(new BattlescapeOptionsState(_game));
@@ -702,7 +702,7 @@ void BattlescapeState::btnHelpClick(Action *action)
  * so all ongoing actions, like explosions are finished first before really switching turn.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnEndTurnClick(Action *action)
+void BattlescapeState::btnEndTurnClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_battleGame->requestEndTurn();
@@ -711,7 +711,7 @@ void BattlescapeState::btnEndTurnClick(Action *action)
  * Abort game.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnAbortClick(Action *action)
+void BattlescapeState::btnAbortClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_game->pushState(new AbortMissionState(_game, _save, this));
@@ -721,7 +721,7 @@ void BattlescapeState::btnAbortClick(Action *action)
  * Show selected soldier info.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnStatsClick(Action *action)
+void BattlescapeState::btnStatsClick(Action *)
 {
 	if (playableUnitSelected())
 	{
@@ -733,7 +733,7 @@ void BattlescapeState::btnStatsClick(Action *action)
  * Shows action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnLeftHandItemClick(Action *action)
+void BattlescapeState::btnLeftHandItemClick(Action *)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
@@ -750,7 +750,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
  * Shows action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnRightHandItemClick(Action *action)
+void BattlescapeState::btnRightHandItemClick(Action *)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
@@ -802,7 +802,7 @@ void BattlescapeState::btnLaunchClick(Action *action)
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveNoneClick(Action *action)
+void BattlescapeState::btnReserveNoneClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_battleGame->setTUReserved(BA_NONE);
@@ -812,7 +812,7 @@ void BattlescapeState::btnReserveNoneClick(Action *action)
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveSnapClick(Action *action)
+void BattlescapeState::btnReserveSnapClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_battleGame->setTUReserved(BA_SNAPSHOT);
@@ -822,7 +822,7 @@ void BattlescapeState::btnReserveSnapClick(Action *action)
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveAimedClick(Action *action)
+void BattlescapeState::btnReserveAimedClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_battleGame->setTUReserved(BA_AIMEDSHOT);
@@ -832,7 +832,7 @@ void BattlescapeState::btnReserveAimedClick(Action *action)
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveAutoClick(Action *action)
+void BattlescapeState::btnReserveAutoClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_battleGame->setTUReserved(BA_AUTOSHOT);

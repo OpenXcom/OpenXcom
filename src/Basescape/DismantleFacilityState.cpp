@@ -92,7 +92,7 @@ DismantleFacilityState::~DismantleFacilityState()
  * to the previous screen.
  * @param action Pointer to an action.
  */
-void DismantleFacilityState::btnOkClick(Action *action)
+void DismantleFacilityState::btnOkClick(Action *)
 {
 	if (!_fac->getRules()->isLift())
 	{
@@ -126,7 +126,7 @@ void DismantleFacilityState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DismantleFacilityState::btnCancelClick(Action *action)
+void DismantleFacilityState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

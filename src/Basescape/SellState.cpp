@@ -208,7 +208,7 @@ void SellState::think()
  * Sells the selected items.
  * @param action Pointer to an action.
  */
-void SellState::btnOkClick(Action *action)
+void SellState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
@@ -293,7 +293,7 @@ void SellState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SellState::btnCancelClick(Action *action)
+void SellState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

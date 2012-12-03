@@ -219,7 +219,7 @@ DebriefingState::~DebriefingState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DebriefingState::btnOkClick(Action *action)
+void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();

@@ -1209,7 +1209,7 @@ void DogfightState::setStatus(const std::string &status)
  * Minimizes the dogfight window.
  * @param action Pointer to an action.
  */
-void DogfightState::btnMinimizeClick(Action *action)
+void DogfightState::btnMinimizeClick(Action *)
 {
 	if(_currentDist == STANDOFF_DIST)
 	{
@@ -1243,7 +1243,7 @@ void DogfightState::btnMinimizeClick(Action *action)
  * Switches to Standoff mode (maximum range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnStandoffClick(Action *action)
+void DogfightState::btnStandoffClick(Action *)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -1257,7 +1257,7 @@ void DogfightState::btnStandoffClick(Action *action)
  * Switches to Cautious mode (maximum weapon range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnCautiousClick(Action *action)
+void DogfightState::btnCautiousClick(Action *)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -1280,7 +1280,7 @@ void DogfightState::btnCautiousClick(Action *action)
  * Switches to Standard mode (minimum weapon range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnStandardClick(Action *action)
+void DogfightState::btnStandardClick(Action *)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -1303,7 +1303,7 @@ void DogfightState::btnStandardClick(Action *action)
  * Switches to Aggressive mode (minimum range).
  * @param action Pointer to an action.
  */
-void DogfightState::btnAggressiveClick(Action *action)
+void DogfightState::btnAggressiveClick(Action *)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -1326,7 +1326,7 @@ void DogfightState::btnAggressiveClick(Action *action)
  * Disengages from the UFO.
  * @param action Pointer to an action.
  */
-void DogfightState::btnDisengageClick(Action *action)
+void DogfightState::btnDisengageClick(Action *)
 {
 	if (!_ufo->isCrashed())
 	{
@@ -1341,7 +1341,7 @@ void DogfightState::btnDisengageClick(Action *action)
  * Shows a front view of the UFO.
  * @param action Pointer to an action.
  */
-void DogfightState::btnUfoClick(Action *action)
+void DogfightState::btnUfoClick(Action *)
 {
 	_preview->setVisible(true);
 	// Disable all other buttons to prevent misclicks
@@ -1358,7 +1358,7 @@ void DogfightState::btnUfoClick(Action *action)
  * Hides the front view of the UFO.
  * @param action Pointer to an action.
  */
-void DogfightState::previewClick(Action *action)
+void DogfightState::previewClick(Action *)
 {
 	_preview->setVisible(false);
 	// Reenable all other buttons to prevent misclicks
@@ -1483,7 +1483,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p) {
 /**
  * Toggles usage of weapon number 1.
  */
-void DogfightState::weapon1Click(Action *action)
+void DogfightState::weapon1Click(Action *)
 {
 	_weapon1Enabled = !_weapon1Enabled;
 	recolor(0, _weapon1Enabled);
@@ -1492,7 +1492,7 @@ void DogfightState::weapon1Click(Action *action)
 /**
  * Toggles usage of weapon number 2.
  */
-void DogfightState::weapon2Click(Action *action)
+void DogfightState::weapon2Click(Action *)
 {
 	_weapon2Enabled = !_weapon2Enabled;
 	recolor(1, _weapon2Enabled);
@@ -1559,7 +1559,7 @@ void DogfightState::setMinimized(const bool minimized)
 /**
  * Maximizes the interception window.
  */
-void DogfightState::btnMinimizedIconClick(Action *action)
+void DogfightState::btnMinimizedIconClick(Action *)
 {
 	setMinimized(false);
 	_window->setVisible(true);

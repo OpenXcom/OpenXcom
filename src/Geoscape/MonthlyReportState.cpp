@@ -311,7 +311,7 @@ void MonthlyReportState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MonthlyReportState::btnOkClick(Action *action)
+void MonthlyReportState::btnOkClick(Action *)
 {
 	_game->popState();
 	if(_psi)

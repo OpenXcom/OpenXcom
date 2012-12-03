@@ -141,7 +141,7 @@ void CraftArmorState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftArmorState::btnOkClick(Action *action)
+void CraftArmorState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -150,7 +150,7 @@ void CraftArmorState::btnOkClick(Action *action)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstSoldiersClick(Action *action)
+void CraftArmorState::lstSoldiersClick(Action *)
 {
 	_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
 }

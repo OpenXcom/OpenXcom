@@ -258,7 +258,7 @@ GraphsState::~GraphsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void GraphsState::btnGeoscapeClick(Action *action)
+void GraphsState::btnGeoscapeClick(Action *)
 {
 	_game->popState();
 }
@@ -266,7 +266,7 @@ void GraphsState::btnGeoscapeClick(Action *action)
 /**
  * Swtiches to the ufo country activity screen
  */
-void GraphsState::btnUfoRegionClick(Action *action)
+void GraphsState::btnUfoRegionClick(Action *)
 {
 	_alien = true;
 	_income = false;
@@ -286,7 +286,7 @@ void GraphsState::btnUfoRegionClick(Action *action)
 /**
  * Swtiches to the ufo country activity screen
  */
-void GraphsState::btnUfoCountryClick(Action *action)
+void GraphsState::btnUfoCountryClick(Action *)
 {
 	_alien = true;
 	_income = false;
@@ -306,7 +306,7 @@ void GraphsState::btnUfoCountryClick(Action *action)
 /**
  * Swtiches to the xcom region activity screen
  */
-void GraphsState::btnXcomRegionClick(Action *action)
+void GraphsState::btnXcomRegionClick(Action *)
 {
 	_alien = false;
 	_income = false;
@@ -326,7 +326,7 @@ void GraphsState::btnXcomRegionClick(Action *action)
 /**
  * Swtiches to the xcom country activity screen
  */
-void GraphsState::btnXcomCountryClick(Action *action)
+void GraphsState::btnXcomCountryClick(Action *)
 {
 	_alien = false;
 	_income = false;
@@ -346,7 +346,7 @@ void GraphsState::btnXcomCountryClick(Action *action)
 /**
  * Swtiches to the income screen
  */
-void GraphsState::btnIncomeClick(Action *action)
+void GraphsState::btnIncomeClick(Action *)
 {
 	_alien = false;
 	_income = true;
@@ -367,7 +367,7 @@ void GraphsState::btnIncomeClick(Action *action)
 /**
  * Swtiches to the finances screen
  */
-void GraphsState::btnFinanceClick(Action *action)
+void GraphsState::btnFinanceClick(Action *)
 {
 	_alien = false;
 	_income = false;
@@ -389,7 +389,7 @@ void GraphsState::btnFinanceClick(Action *action)
 /**
  * handles a click on a region button
  */
-void GraphsState::btnRegionListClick(Action *action)
+void GraphsState::btnRegionListClick(Action * action)
 {
 	size_t number = action->getSender()->getY()/11;
 	TextButton *button = 0;
@@ -422,7 +422,7 @@ void GraphsState::btnRegionListClick(Action *action)
 /**
  * handles a click on a country button
  */
-void GraphsState::btnCountryListClick(Action *action)
+void GraphsState::btnCountryListClick(Action * action)
 {
 	size_t number = action->getSender()->getY()/11;
 	TextButton *button = 0;

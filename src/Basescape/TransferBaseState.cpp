@@ -132,7 +132,7 @@ TransferBaseState::~TransferBaseState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferBaseState::btnCancelClick(Action *action)
+void TransferBaseState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -141,7 +141,7 @@ void TransferBaseState::btnCancelClick(Action *action)
  * Shows Transfer screen for the selected base.
  * @param action Pointer to an action.
  */
-void TransferBaseState::lstBasesClick(Action *action)
+void TransferBaseState::lstBasesClick(Action *)
 {
 	_game->pushState(new TransferItemsState(_game, _base, _bases[_lstBases->getSelectedRow()]));
 }

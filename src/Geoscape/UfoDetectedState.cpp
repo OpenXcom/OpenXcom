@@ -131,7 +131,7 @@ void UfoDetectedState::init()
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoDetectedState::btnCentreClick(Action *action)
+void UfoDetectedState::btnCentreClick(Action *)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
@@ -142,7 +142,7 @@ void UfoDetectedState::btnCentreClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoDetectedState::btnCancelClick(Action *action)
+void UfoDetectedState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

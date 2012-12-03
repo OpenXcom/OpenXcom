@@ -127,7 +127,7 @@ SoldierArmorState::~SoldierArmorState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierArmorState::btnCancelClick(Action *action)
+void SoldierArmorState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -136,7 +136,7 @@ void SoldierArmorState::btnCancelClick(Action *action)
  * Equips the armor on the soldier and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierArmorState::lstArmorClick(Action *action)
+void SoldierArmorState::lstArmorClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
 	if (soldier->getArmor()->getStoreItem() != "STR_NONE")

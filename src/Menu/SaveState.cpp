@@ -90,7 +90,7 @@ void SaveState::updateList()
  * Names the selected save.
  * @param action Pointer to an action.
  */
-void SaveState::lstSavesClick(Action *action)
+void SaveState::lstSavesClick(Action *)
 {
 	_previousSelectedRow = _selectedRow;
 	_selectedRow = _lstSaves->getSelectedRow();

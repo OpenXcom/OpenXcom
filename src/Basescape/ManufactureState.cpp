@@ -158,7 +158,7 @@ void ManufactureState::init ()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ManufactureState::btnOkClick(Action *action)
+void ManufactureState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -167,7 +167,7 @@ void ManufactureState::btnOkClick(Action *action)
  * Open the screen with the list of possible productions
  * @param action Pointer to an action.
 */
-void ManufactureState::btnNewProductionClick(Action * action)
+void ManufactureState::btnNewProductionClick(Action *)
 {
 	_game->pushState(new NewManufactureListState(_game, _base));
 }
@@ -221,7 +221,7 @@ void ManufactureState::fillProductionList()
  * Open the screen displaying production settings.
  * @param action Pointer to an action.
 */
-void ManufactureState::lstManufactureClick(Action * action)
+void ManufactureState::lstManufactureClick(Action *)
 {
 	const std::vector<Production *> productions(_base->getProductions ());
 	_game->pushState(new ManufactureInfoState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
