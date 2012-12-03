@@ -696,6 +696,9 @@
     <ClCompile Include="Geoscape\BaseDefenseState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Geoscape\GameOverState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1395,6 +1398,9 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\BaseDefenseState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\GameOverState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
