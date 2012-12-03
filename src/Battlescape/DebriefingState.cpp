@@ -339,6 +339,7 @@ void DebriefingState::prepareDebriefing()
 					if((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_region = (*k);
+						break;
 					}
 				}
 				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
@@ -346,6 +347,7 @@ void DebriefingState::prepareDebriefing()
 					if((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
+						break;
 					}
 				}
 				craft = (*j);

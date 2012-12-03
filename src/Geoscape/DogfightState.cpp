@@ -934,6 +934,7 @@ void DogfightState::move()
 							if((*country)->getRules()->insideCountry((*c)->getLongitude(), (*c)->getLatitude()))
 							{
 								(*country)->addActivityXcom(0-(*c)->getRules()->getScore());
+								break;
 							}
 						}
 						for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
@@ -941,6 +942,7 @@ void DogfightState::move()
 							if((*region)->getRules()->insideRegion((*c)->getLongitude(), (*c)->getLatitude()))
 							{
 								(*region)->addActivityXcom(0-(*c)->getRules()->getScore());
+								break;
 							}
 						}
 						delete *c;
@@ -1012,6 +1014,7 @@ void DogfightState::move()
 					if((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
 						(*country)->addActivityXcom(_ufo->getRules()->getScore()*2);
+						break;
 					}
 				}
 				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
@@ -1019,6 +1022,7 @@ void DogfightState::move()
 					if((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
 						(*region)->addActivityXcom(_ufo->getRules()->getScore()*2);
+						break;
 					}
 				}
 				setStatus("STR_UFO_DESTROYED");
@@ -1037,6 +1041,7 @@ void DogfightState::move()
 					if((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
 						(*country)->addActivityXcom(_ufo->getRules()->getScore());
+						break;
 					}
 				}
 				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
@@ -1044,6 +1049,7 @@ void DogfightState::move()
 					if((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
 						(*region)->addActivityXcom(_ufo->getRules()->getScore());
+						break;
 					}
 				}
 			}

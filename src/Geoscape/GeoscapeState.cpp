@@ -980,6 +980,7 @@ bool ProcessTerrorSite::operator()(TerrorSite *ts) const
 		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
 		{
 			(*k)->addActivityAlien(1000);
+			break;
 		}
 	}
 	delete ts;
@@ -1109,6 +1110,7 @@ void GeoscapeState::time30Minutes()
 				{
 					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
+					break;
 				}
 			}
 			// Get country
@@ -1118,6 +1120,7 @@ void GeoscapeState::time30Minutes()
 				{
 					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
+					break;
 				}
 			}
 			if (!(*u)->getDetected())
@@ -1404,26 +1407,23 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
-	// handle regional points for alien bases
-	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	// handle regional and country points for alien bases
+	for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 	{
-		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+				break;
 			}
 		}
-	}
-
-	// handle country points for alien bases
-	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-	{
-		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+				break;
 			}
 		}
 	}
