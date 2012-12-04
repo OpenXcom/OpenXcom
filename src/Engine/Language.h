@@ -22,6 +22,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include "LocalizedText.h"
 
 namespace OpenXcom
 {
@@ -34,10 +35,8 @@ class TextList;
  */
 class Language
 {
-private:
-	std::wstring _name;
-	std::map<std::string, std::wstring> _strings;
 public:
+	class PluralityRules;
 	/// Creates a blank language.
 	Language();
 	/// Cleans up the language.
@@ -50,16 +49,24 @@ public:
 	static std::wstring cpToWstr(const std::string& src);
 	/// Replaces a substring.
 	static void replace(std::string &str, const std::string &find, const std::string &replace);
+	/// Replaces a substring.
+	static void replace(std::wstring &str, const std::wstring &find, const std::wstring &replace);
 	/// Gets list of languages in the data directory.
 	static std::vector<std::string> getList(TextList *list);
 	/// Loads an OpenXcom language file.
 	void loadLng(const std::string &filename);
 	/// Gets the language's name.
 	std::wstring getName() const;
-	/// Gets a string from the language.
-	std::wstring getString(const std::string &id) const;
 	/// Outputs the language to a HTML file.
 	void toHtml(const std::string &filename) const;
+	/// Get a localized text.
+	const LocalizedText &getString(const std::string &id) const;
+	/// Get a quantity-depended localized text.
+	LocalizedText getString(const std::string &id, unsigned n) const;
+private:
+	std::wstring _name;
+	std::map<std::string, LocalizedText> _strings;
+	PluralityRules *_handler;
 };
 
 }

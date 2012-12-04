@@ -419,6 +419,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\LocalizedText.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\LocalizedText.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Logger.h"
 				>
 			</File>

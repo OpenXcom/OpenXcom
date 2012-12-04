@@ -208,6 +208,8 @@ set ( engine_src
   Engine/Screen.cpp
   Engine/Screen.h
   Engine/Logger.h
+  Engine/LocalizedText.cpp
+  Engine/LocalizedText.h
 )
 
 set ( geoscape_src
