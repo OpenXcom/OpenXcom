@@ -247,26 +247,26 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		std::string type;
 		(*i)["type"] >> type;
-		std::auto_ptr<Country> c(new Country(rule->getCountry(type), false));
+		Country *c = new Country(rule->getCountry(type), false);
 		c->load(*i);
-		_countries.push_back(c.release());
+		_countries.push_back(c);
 	}
 
 	for (YAML::Iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
 		std::string type;
 		(*i)["type"] >> type;
-		std::auto_ptr<Region> r(new Region(rule->getRegion(type)));
+		Region *r = new Region(rule->getRegion(type));
 		r->load(*i);
-		_regions.push_back(r.release());
+		_regions.push_back(r);
 	}
 
 	// Alien bases must be loaded before alien missions
 	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
 	{
-		std::auto_ptr<AlienBase> b(new AlienBase());
+		AlienBase *b = new AlienBase();
 		b->load(*i);
-		_alienBases.push_back(b.release());
+		_alienBases.push_back(b);
 	}
 
 	// Missions must be loaded before UFOs.
@@ -285,30 +285,30 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		std::string type;
 		(*i)["type"] >> type;
-		std::auto_ptr<Ufo> u(new Ufo(rule->getUfo(type)));
+		Ufo *u = new Ufo(rule->getUfo(type));
 		u->load(*i, *rule, *this);
-		_ufos.push_back(u.release());
+		_ufos.push_back(u);
 	}
 
 	for (YAML::Iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
 	{
-		std::auto_ptr<Waypoint> w(new Waypoint());
+		Waypoint *w = new Waypoint();
 		w->load(*i);
-		_waypoints.push_back(w.release());
+		_waypoints.push_back(w);
 	}
 
 	for (YAML::Iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
-		std::auto_ptr<TerrorSite> t(new TerrorSite());
+		TerrorSite *t = new TerrorSite();
 		t->load(*i);
-		_terrorSites.push_back(t.release());
+		_terrorSites.push_back(t);
 	}
 
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
-		std::auto_ptr<Base> b(new Base(rule));
+		Base *b = new Base(rule);
 		b->load(*i, this, false);
-		_bases.push_back(b.release());
+		_bases.push_back(b);
 	}
 
 	for(YAML::Iterator it=doc["discovered"].begin();it!=doc["discovered"].end();++it)
@@ -322,9 +322,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
-		std::auto_ptr<SavedBattleGame> guard(new SavedBattleGame());
-		guard->load(*pName, rule, this);
-		_battleGame = guard.release();
+		_battleGame = new SavedBattleGame();
+		_battleGame->load(*pName, rule, this);
 	}
 
 	fin.close();
