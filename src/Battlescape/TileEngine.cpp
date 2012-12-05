@@ -471,7 +471,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			}
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
-				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore)
+				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore && (*i)->getMainHandWeapon())
 				{
 					// I see you!
 					highestReactionScore = (*i)->getReactionScore();
@@ -481,7 +481,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		}
 	}
 
-	if (action->actor && highestReactionScore > unit->getReactionScore())
+	if (action->actor && highestReactionScore > unit->getReactionScore() &&
+		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
+		(action->actor->getMainHandWeapon()->getRules()->getTUMelee() &&
+		distance(action->actor->getPosition(), unit->getPosition()) == 1)))
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
