@@ -44,15 +44,20 @@ namespace {
  * Get a random point inside the given region zone.
  * The point will be used to land a UFO, so it HAS to be on land.
  * @note This is only until we fix our zone data.
+ * @additional note: atlantic region gets stuck in an infinite loop
+ * because it can't find land. limiting the tries to 1000 will result in
+ * ships landing in the sea, but this is better than causing the game to hang.
  */
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
 {
 	std::pair<double, double> pos;
+	int tries = 0;
 	do
 	{
 		pos = region.getRandomPoint(zone);
+		++tries;
 	}
-	while (!globe.insideLand(pos.first, pos.second));
+	while (!globe.insideLand(pos.first, pos.second) && tries < 1000);
 	return pos;
 
 }
