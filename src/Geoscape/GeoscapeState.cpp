@@ -605,10 +605,6 @@ void GeoscapeState::time5Seconds()
 			if ((*i)->getSecondsRemaining() == 0)
 			{
 				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty())
-				{
-					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
-				}
 				(*i)->setStatus(Ufo::DESTROYED);
 			}
 			break;
@@ -662,11 +658,11 @@ void GeoscapeState::time5Seconds()
 						}
 						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
-							std::auto_ptr<DogfightState> d(new DogfightState(_game, _globe, (*j), u));
-							_dogfightsToBeStarted.push_back(d.release());
+							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 
 							if(!_dogfightStartTimer->isRunning())
 							{
+								_pause = true;
 								timerReset();
 								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
 								startDogfight();
