@@ -33,6 +33,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
@@ -163,7 +164,7 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty() && victim)
+			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1)
 			{
 				// converts the victim to a zombie
 				_parent->convertUnit(victim, _unit->getZombieUnit());
