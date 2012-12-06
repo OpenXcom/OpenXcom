@@ -609,7 +609,7 @@ void GraphsState::drawCountryLines()
 				}
 			}
 		}
-		if(_countryToggles[_countryToggles.size()-1] && total > roof)
+		if(_countryToggles.back() && total > roof)
 			roof = total;
 	}
 
@@ -700,11 +700,11 @@ void GraphsState::drawCountryLines()
 			_xcomCountryLines.at(entry)->setVisible(_countryToggles.at(entry));
 	}
 	if(_alien)
-		_alienCountryLines.at(_alienCountryLines.size()-1)->clear();
+		_alienCountryLines.back()->clear();
 	else if(_income)
-		_incomeLines.at(_incomeLines.size()-1)->clear();
+		_incomeLines.back()->clear();
 	else
-		_xcomCountryLines.at(_xcomCountryLines.size()-1)->clear();
+		_xcomCountryLines.back()->clear();
 
 	// set up the "total" line
 	std::vector<Sint16> newLineVector;
@@ -723,19 +723,19 @@ void GraphsState::drawCountryLines()
 		if(newLineVector.size() > 1)
 		{
 			if(_alien)
-				_alienCountryLines.at(_alienCountryLines.size()-1)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_alienCountryLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
 			else if(_income)
-				_incomeLines.at(_incomeLines.size()-1)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_incomeLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
 			else
-				_xcomCountryLines.at(_xcomCountryLines.size()-1)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_xcomCountryLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
 		}
 	}
 	if(_alien)
-		_alienCountryLines.at(_alienCountryLines.size()-1)->setVisible(_countryToggles.at(_alienCountryLines.size()-1));
+		_alienCountryLines.back()->setVisible(_countryToggles.back());
 	else if(_income)
-		_incomeLines.at(_incomeLines.size()-1)->setVisible(_countryToggles.at(_incomeLines.size()-1));
+		_incomeLines.back()->setVisible(_countryToggles.back());
 	else
-		_xcomCountryLines.at(_xcomCountryLines.size()-1)->setVisible(_countryToggles.at(_xcomCountryLines.size()-1));
+		_xcomCountryLines.back()->setVisible(_countryToggles.back());
 }
 
 /**
@@ -772,7 +772,7 @@ void GraphsState::drawRegionLines()
 				}
 			}
 		}
-		if(_regionToggles[_regionToggles.size()-1] && total > roof)
+		if(_regionToggles.back() && total > roof)
 				roof = total;
 	}
 
@@ -838,9 +838,9 @@ void GraphsState::drawRegionLines()
 
 	// set up the "total" line
 	if(_alien)
-		_alienRegionLines.at(_alienRegionLines.size()-1)->clear();
+		_alienRegionLines.back()->clear();
 	else
-		_xcomRegionLines.at(_xcomRegionLines.size()-1)->clear();
+		_xcomRegionLines.back()->clear();
 
 	std::vector<Sint16> newLineVector;
 	for(int iter = 0; iter != 12; ++iter)
@@ -856,15 +856,15 @@ void GraphsState::drawRegionLines()
 		if(newLineVector.size() > 1)
 		{
 			if(_alien)
-				_alienRegionLines.at(_alienRegionLines.size()-1)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_alienRegionLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
 			else
-				_xcomRegionLines.at(_xcomRegionLines.size()-1)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
+				_xcomRegionLines.back()->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset(9));
 		}
 	}
 	if(_alien)
-		_alienRegionLines.at(_alienRegionLines.size()-1)->setVisible(_regionToggles.at(_alienRegionLines.size()-1));
+		_alienRegionLines.back()->setVisible(_regionToggles.back());
 	else
-		_xcomRegionLines.at(_xcomRegionLines.size()-1)->setVisible(_regionToggles.at(_xcomRegionLines.size()-1));
+		_xcomRegionLines.back()->setVisible(_regionToggles.back());
 }
 
 /**

@@ -76,7 +76,7 @@ RuleRegion *Region::getRules() const
  */
 void Region::addActivityXcom(int activity)
 {
-	_activityXcom[_activityXcom.size()-1] += activity;
+	_activityXcom.back() += activity;
 }
 
 /**
@@ -84,7 +84,7 @@ void Region::addActivityXcom(int activity)
  */
 void Region::addActivityAlien(int activity)
 {
-	_activityAlien[_activityAlien.size()-1] += activity;
+	_activityAlien.back() += activity;
 }
 
 /**
