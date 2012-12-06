@@ -69,6 +69,10 @@ public:
 	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
 	/// Gets a random point inside a mission site.
 	std::pair<double, double> getRandomPoint(unsigned site) const;
+	const std::vector<double> getLonMax() const { return _lonMax; }
+	const std::vector<double> getLonMin() const { return _lonMin; }
+	const std::vector<double> getLatMax() const { return _latMax; }
+	const std::vector<double> getLatMin() const { return _latMin; }
 };
 
 }
