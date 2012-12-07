@@ -557,6 +557,10 @@ void SavedGame::monthlyFunding()
 	_maintenance.back() = getBaseMaintenance();
 	_maintenance.push_back(0);
 
+	_researchScores.push_back(0);
+	if (_researchScores.size() > 12)
+		_researchScores.erase(_researchScores.begin());
+
 	if(_funds.size() > 12)
 		_funds.erase(_funds.begin());
 	if(_maintenance.size() > 12)
