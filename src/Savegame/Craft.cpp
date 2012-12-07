@@ -655,6 +655,14 @@ void Craft::refuel()
 	if (_fuel >= _rules->getMaxFuel())
 	{
 		_status = "STR_READY";
+		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+		{
+			if (*i && (*i)->isRearming())
+			{
+				_status = "STR_REARMING";
+				break;
+			}
+		}
 	}
 }
 
