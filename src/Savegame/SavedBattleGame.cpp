@@ -1061,20 +1061,23 @@ void SavedBattleGame::reviveUnconsciousUnits()
 
 	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
-		Position originalPosition = (*i)->getPosition();
-		for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+		if ((*i)->getArmor()->getSize() == 1)
 		{
-			Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
-			if (t && t->getUnit() == 0 && !t->hasNoFloor())
+			Position originalPosition = (*i)->getPosition();
+			for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
 			{
-				// recover from unconscious
-				(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
-				getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
-				(*i)->turn(false); // makes the unit stand up again
-				(*i)->setCache(0);
-				getTileEngine()->calculateFOV((*i));
-				getTileEngine()->calculateUnitLighting();
-				removeUnconsciousBodyItem((*i));
+				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
+				if (t && t->getUnit() == 0 && !t->hasNoFloor())
+				{
+					// recover from unconscious
+					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
+					getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
+					(*i)->turn(false); // makes the unit stand up again
+					(*i)->setCache(0);
+					getTileEngine()->calculateFOV((*i));
+					getTileEngine()->calculateUnitLighting();
+					removeUnconsciousBodyItem((*i));
+				}
 			}
 		}
 	}
