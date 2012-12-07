@@ -83,7 +83,7 @@ namespace OpenXcom
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false)
 {
 	_tuReserved = BA_NONE;
 	_debugPlay = false;
@@ -176,18 +176,20 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	_AIActionCounter++;
-
+	if (_AIActionCounter == 1 && _playedAggroSound)
+	{
+		_playedAggroSound = false;
+	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 
 	BattleAction action;
 	unit->think(&action);
 	if (action.type == BA_WALK)
 	{
-		if (unit->getType() == "CHRYSSALID" && aggro)
+		if (unit->getAggroSound() && aggro && !_playedAggroSound)
 		{
-			// if the unit is in aggro state and starts walking (to get in melee range) play this aggro sound
-			// todo: put the aggro sound in the ruleset
-			getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(49)->play();
+			getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(unit->getAggroSound())->play();
+			_playedAggroSound = true;
 		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
 		statePushBack(new UnitWalkBState(this, action));

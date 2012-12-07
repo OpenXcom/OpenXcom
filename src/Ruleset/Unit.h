@@ -49,7 +49,7 @@ private:
 	UnitStats _stats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _loftemps;
-	int _value, _deathSound, _moveSound;
+	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 	std::string _zombieUnit, _spawnUnit;
@@ -94,7 +94,8 @@ public:
 	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
-
+	/// Gets the unit's war cry.
+	int getAggroSound() const;
 };
 
 }

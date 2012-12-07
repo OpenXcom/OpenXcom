@@ -5125,6 +5125,7 @@ units:
     loftemps: 4
     value: 25
     deathSound: 49
+    aggroSound: 49
     intelligence: 4
     aggression: 1
     zombieUnit: ZOMBIE
