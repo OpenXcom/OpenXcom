@@ -324,7 +324,6 @@ void BattlescapeGenerator::run()
 						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
 							_game->getRuleset()->getInventory("STR_GROUND"));
 					}
-					_base->getItems()->removeItem(i->first, i->second);
 				}
 			}
 			// add items from crafts in base

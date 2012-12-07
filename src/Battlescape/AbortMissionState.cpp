@@ -94,7 +94,11 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	ss.str(L"");
 	ss << _outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
 	_txtOutsideExit->setText(ss.str());
-
+	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
+	{
+		_txtInExit->setVisible(false);
+		_txtOutsideExit->setVisible(false);
+	}
 	_txtAbort->setColor(Palette::blockOffset(0));
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
