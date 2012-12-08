@@ -77,6 +77,7 @@ private:
 	bool noActionsPending(BattleUnit *bu);
 	std::vector<InfoboxOKState*> _infoboxQueue;
 	void showInfoBoxQueue();
+	bool _playedAggroSound;
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);

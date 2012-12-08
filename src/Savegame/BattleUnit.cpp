@@ -53,6 +53,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_loftemps = soldier->getRules()->getLoftemps();
 	_deathSound = 0; // this one is hardcoded
+	_aggroSound = 0;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
 	_aggression = 1;
@@ -106,6 +107,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_kneelHeight = unit->getKneelHeight();
 	_loftemps = unit->getLoftemps();
 	_deathSound = unit->getDeathSound();
+	_aggroSound = unit->getAggroSound();
 	_moveSound = unit->getMoveSound();
 	_intelligence = unit->getIntelligence();
 	_aggression = unit->getAggression();
@@ -1986,5 +1988,12 @@ void BattleUnit::instaKill()
 	_status = STATUS_DEAD;
 }
 
+/**
+ * Set health to 0 and set status dead - used when getting zombified.
+ */
+int BattleUnit::getAggroSound() const
+{
+	return _aggroSound;
+}
 }
 

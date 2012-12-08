@@ -92,6 +92,7 @@
 #include "../Battlescape/BriefingState.h"
 #include "../Ruleset/UfoTrajectory.h"
 #include "BaseDefenseState.h"
+#include "DefeatState.h"
 #include <ctime>
 #include <algorithm>
 #include <functional>
@@ -538,6 +539,12 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
+	// Game over if there are no more bases.
+	if (_game->getSavedGame()->getBases()->size() == 0)
+	{
+		_game->pushState (new DefeatState(_game));
+	}
+
 	// Handle UFO logic
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
@@ -566,6 +573,7 @@ void GeoscapeState::time5Seconds()
 					}
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
+						base->setInBattlescape(true);
 						if (base->getDefenses())
 						{
 							popup(new BaseDefenseState(_game, base, *i));
@@ -605,10 +613,6 @@ void GeoscapeState::time5Seconds()
 			if ((*i)->getSecondsRemaining() == 0)
 			{
 				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty())
-				{
-					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
-				}
 				(*i)->setStatus(Ufo::DESTROYED);
 			}
 			break;
@@ -662,11 +666,11 @@ void GeoscapeState::time5Seconds()
 						}
 						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
-							std::auto_ptr<DogfightState> d(new DogfightState(_game, _globe, (*j), u));
-							_dogfightsToBeStarted.push_back(d.release());
+							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 
 							if(!_dogfightStartTimer->isRunning())
 							{
+								_pause = true;
 								timerReset();
 								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
 								startDogfight();
@@ -1301,6 +1305,7 @@ void GenerateSupplyMission::operator()(const AlienBase *base) const
 		const RuleAlienMission &rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
 		AlienMission *mission = new AlienMission(rule);
 		mission->setRegion(_save.locateRegion(*base)->getRules()->getType());
+		mission->setId(_save.getId("ALIEN_MISSIONS"));
 		mission->setRace(base->getAlienRace());
 		mission->setAlienBase(base);
 		mission->start();

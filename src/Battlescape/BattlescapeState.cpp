@@ -693,7 +693,6 @@ void BattlescapeState::btnShowLayersClick(Action *action)
  */
 void BattlescapeState::btnHelpClick(Action *action)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		_game->pushState(new BattlescapeOptionsState(_game));
 }
 

@@ -359,9 +359,6 @@ void MonthlyReportState::CalculateChanges()
 	_ratingTotal = 400 + _game->getSavedGame()->getResearchScores().back();
 	if(_game->getSavedGame()->getResearchScores().size() >1)
 		_lastMonthsRating = 400 + _game->getSavedGame()->getResearchScores().at(_game->getSavedGame()->getResearchScores().size()-2);
-	_game->getSavedGame()->getResearchScores().push_back(0);
-	if (_game->getSavedGame()->getResearchScores().size() > 12)
-		_game->getSavedGame()->getResearchScores().erase(_game->getSavedGame()->getResearchScores().begin());
 
 	// update activity meters
 	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)

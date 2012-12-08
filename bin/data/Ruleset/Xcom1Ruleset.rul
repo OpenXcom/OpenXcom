@@ -217,7 +217,7 @@ countries:
       - 0.29670597
       - 0.38397243
       - 0.41887902
-      - 0.41887902
+      - 0.55850536
   - type: STR_AUSTRALIA
     fundingMin: 280
     fundingMax: 560
@@ -269,9 +269,9 @@ countries:
     lonMin:
       - 0.43633231
     lonMax:
-      - 0.38397243
+      - 0.61086523
     latMin:
-      - -0.41887902
+      - -0.55850536
     latMax:
       - -0.38397243
   - type: STR_CANADA
@@ -281,9 +281,9 @@ countries:
     labelLat: -0.959931
     lonMin:
       - 3.82227106
-      - 4.01425727
+      - 4.01425728
     lonMax:
-      - 4.01425727
+      - 4.01425728
       - 5.32325421
     latMin:
       - -1.22173047
@@ -3916,6 +3916,46 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+  - type: FLOATER_ARMOR1
+    spriteSheet: FLOATER.PCK
+    corpseItem: STR_FLOATER_CORPSE
+    frontArmor: 16
+    sideArmor: 12
+    rearArmor: 8
+    underArmor: 12
+    drawingRoutine: 1
+    movementType: 1
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
+  - type: FLOATER_ARMOR2
+    spriteSheet: FLOATER.PCK
+    corpseItem: STR_FLOATER_CORPSE
+    frontArmor: 24
+    sideArmor: 18
+    rearArmor: 12
+    underArmor: 16
+    drawingRoutine: 1
+    movementType: 1
+    damageModifier:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.2
+      - 1.6
+      - 1.0
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
     corpseItem: CYBERDISC_CORPSE_
@@ -4379,6 +4419,29 @@ units:
     deathSound: 10
     intelligence: 6
     aggression: 2
+  - type: SECTOID_MEDIC
+    race: STR_SECTOID
+    rank: STR_LIVE_MEDIC
+    stats:
+      tu: 54
+      stamina: 90
+      health: 30
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 30
+      psiStrength: 40
+      psiSkill: 0
+      melee: 76
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    loftemps: 2
+    value: 14
+    deathSound: 10
+    intelligence: 5
+    aggression: 1
   - type: SECTOID_NAVIGATOR
     race: STR_SECTOID
     rank: STR_LIVE_NAVIGATOR
@@ -4402,6 +4465,52 @@ units:
     deathSound: 10
     intelligence: 4
     aggression: 2
+  - type: SECTOID_LEADER
+    race: STR_SECTOID
+    rank: STR_LIVE_LEADER
+    stats:
+      tu: 54
+      stamina: 90
+      health: 30
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 30
+      psiStrength: 40
+      psiSkill: 50
+      melee: 76
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    loftemps: 2
+    value: 20
+    deathSound: 10
+    intelligence: 7
+    aggression: 1
+  - type: SECTOID_COMMANDER
+    race: STR_SECTOID
+    rank: STR_LIVE_COMMANDER
+    stats:
+      tu: 54
+      stamina: 90
+      health: 30
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 30
+      psiStrength: 40
+      psiSkill: 60
+      melee: 76
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    loftemps: 2
+    value: 25
+    deathSound: 10
+    intelligence: 8
+    aggression: 0
   - type: CYBERDISC
     race: STR_CYBERDISC
     stats:
@@ -4498,6 +4607,78 @@ units:
     moveSound: 15
     intelligence: 5
     aggression: 2
+  - type: FLOATER_MEDIC
+    race: STR_FLOATER
+    rank: STR_LIVE_MEDIC
+    stats:
+      tu: 50
+      stamina: 90
+      health: 35
+      bravery: 80
+      reactions: 50
+      firing: 50
+      throwing: 58
+      strength: 40
+      psiStrength: 35
+      psiSkill: 0
+      melee: 70
+    armor: FLOATER_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 16
+    deathSound: 10
+    moveSound: 15
+    intelligence: 6
+    aggression: 1
+  - type: FLOATER_LEADER
+    race: STR_FLOATER
+    rank: STR_LIVE_LEADER
+    stats:
+      tu: 55
+      stamina: 95
+      health: 40
+      bravery: 80
+      reactions: 60
+      firing: 60
+      throwing: 58
+      strength: 47
+      psiStrength: 40
+      psiSkill: 0
+      melee: 70
+    armor: FLOATER_ARMOR1
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 25
+    deathSound: 10
+    moveSound: 15
+    intelligence: 8
+    aggression: 0
+  - type: FLOATER_COMMANDER
+    race: STR_FLOATER
+    rank: STR_LIVE_COMMANDER
+    stats:
+      tu: 60
+      stamina: 100
+      health: 45
+      bravery: 80
+      reactions: 66
+      firing: 63
+      throwing: 65
+      strength: 48
+      psiStrength: 45
+      psiSkill: 0
+      melee: 76
+    armor: FLOATER_ARMOR2
+    standHeight: 21
+    kneelHeight: 16
+    loftemps: 3
+    value: 35
+    deathSound: 10
+    moveSound: 15
+    intelligence: 8
+    aggression: 0
   - type: REAPER
     race: STR_REAPER
     stats:
@@ -4944,6 +5125,7 @@ units:
     loftemps: 4
     value: 25
     deathSound: 49
+    aggroSound: 49
     intelligence: 4
     aggression: 1
     zombieUnit: ZOMBIE
@@ -6566,6 +6748,27 @@ research:
     cost: 0
     needItem: true
   - name: STR_SECTOPOD_AUTOPSY
+    cost: 0
+    needItem: true
+  - name: REAPER_WEAPON
+    cost: 0
+    needItem: true
+  - name: CHRYSSALID_WEAPON
+    cost: 0
+    needItem: true
+  - name: SILACOID_WEAPON
+    cost: 0
+    needItem: true
+  - name: CELATID_WEAPON
+    cost: 0
+    needItem: true
+  - name: CYBERDISC_WEAPON
+    cost: 0
+    needItem: true
+  - name: SECTOPOD_WEAPON
+    cost: 0
+    needItem: true
+  - name: ZOMBIE_WEAPON
     cost: 0
     needItem: true
 manufacture:

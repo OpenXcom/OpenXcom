@@ -1215,6 +1215,66 @@ void Globe::drawDetail()
 			}
 		}
 	}
+	
+	int color = 0;
+	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+	{
+		color += 10;
+		for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+		{
+			double lon1 = (*i)->getRules()->getLonMax().at(k);
+			double lon2 = (*i)->getRules()->getLonMin().at(k);
+			double lat1 = (*i)->getRules()->getLatMax().at(k);
+			double lat2 = (*i)->getRules()->getLatMin().at(k);
+			double diff = 0;
+			if ((*i)->getRules()->getType() == "STR_RUSSIA" || (*i)->getRules()->getType() == "STR_CHINA" || (*i)->getRules()->getType() == "STR_CANADA")
+				diff = (lon1-lon2)/2;
+			if (!pointBack(lon2, lat2)&&!pointBack(lon1, lat1))
+			{
+				Sint16 x1, x2, x3, x4, x5, x6, y1, y2, y3, y4, y5, y6;
+				polarToCart(lon1, lat1, &x1, &y1);
+				polarToCart(lon1-diff, lat1, &x2, &y2);
+				polarToCart(lon2, lat1, &x3, &y3);
+
+				polarToCart(lon2, lat2, &x4, &y4);
+				polarToCart(lon1-diff, lat2, &x5, &y5);
+				polarToCart(lon1, lat2, &x6, &y6);
+
+				_countries->drawLine(x1, y1, x2, y2, color);
+				_countries->drawLine(x2, y2, x3, y3, color);
+				_countries->drawLine(x3, y3, x4, y4, color);
+				_countries->drawLine(x4, y4, x5, y5, color);
+				_countries->drawLine(x5, y5, x6, y6, color);
+				_countries->drawLine(x6, y6, x1, y1, color);
+			}
+		}
+	}
+
+	int color = 0;
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+	{
+		color += 10;
+		for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+		{
+			double lon1 = (*i)->getRules()->getLonMax().at(k);
+			double lon2 = (*i)->getRules()->getLonMin().at(k);
+			double lat1 = (*i)->getRules()->getLatMax().at(k);
+			double lat2 = (*i)->getRules()->getLatMin().at(k);
+	
+			if (!pointBack(lon2, lat2)&&!pointBack(lon1, lat1))
+			{
+				Sint16 x1, x2, x3, x4, y1, y2, y3, y4;
+				polarToCart(lon1, lat1, &x1, &y1);
+				polarToCart(lon1, lat2, &x2, &y2);
+				polarToCart(lon2, lat2, &x3, &y3);
+				polarToCart(lon2, lat1, &x4, &y4);
+				_countries->drawLine(x1, y1, x2, y2, color);
+				_countries->drawLine(x2, y2, x3, y3, color);
+				_countries->drawLine(x3, y3, x4, y4, color);
+				_countries->drawLine(x4, y4, x1, y1, color);
+			}
+		}
+	}
 	*/
 }
 

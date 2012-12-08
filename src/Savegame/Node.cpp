@@ -79,9 +79,8 @@ void Node::load(const YAML::Node &node)
 	for (int i=0; i < 5; i++)
 	{
 		node["links"][i]["connectedNodeId"] >> a;
-		std::auto_ptr<NodeLink> n(new NodeLink(a, 0, 0));
-		n->load(node["links"][i]);
-		_nodeLinks[i] = n.release();
+		_nodeLinks[i] = new NodeLink(a, 0, 0);
+		_nodeLinks[i]->load(node["links"][i]);
 	}
 }
 

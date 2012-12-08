@@ -2083,3 +2083,7 @@ STR_DESERT
 Desierto
 STR_POLAR
 Polar
+STR_RANDOM_BATTLE
+batalla aleatorio
+STR_MIXED
+Mixto
