@@ -227,7 +227,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	if (unit->isOut())
 		return false;
-
+	Position pos = unit->getPosition();
+	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) > 24)
+		++pos.z;
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
 		if (unit->getDirection()%2)
@@ -267,7 +269,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
-							if (calculateLine(unit->getPosition(), test, false, 0, unit, false) <= 0)
+							if (calculateLine(pos, test, false, 0, unit, false) <= 0)
 							{
 								unit->addToVisibleTiles(_save->getTile(test));
 								_save->getTile(test)->setDiscovered(true, 2);
