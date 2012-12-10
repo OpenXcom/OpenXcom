@@ -355,7 +355,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	{
 		targetVoxel.z = i;
 		_trajectory.clear();
-		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit);
+		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit, true, true);
 		if (test == 4)
 		{
 			Position hitPosition = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
@@ -1031,7 +1031,7 @@ int TileEngine::closeUfoDoors()
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool LOSCalc)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -1099,6 +1099,15 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		if (doVoxelCheck)
 		{
 			int result = voxelCheck(Position(cx, cy, cz), excludeUnit);
+			if (LOSCalc)
+			{
+				int result2 = voxelCheck(Position(cx, cy, cz-1), excludeUnit);
+				int result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
+				if (result2 != -1)
+					result = result2;
+				if (result3 != -1)
+					result = result3;
+			}
 			if (result != -1)
 			{
 				if (!storeTrajectory && trajectory != 0)
