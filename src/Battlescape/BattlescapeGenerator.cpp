@@ -369,11 +369,7 @@ void BattlescapeGenerator::run()
 
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
-	if (_save->getMissionType() ==  "STR_TERROR_MISSION")
-	{
-		deployCivilians(16);
-	}
-
+	deployCivilians(_game->getRuleset()->getDeployment(_save->getMissionType())->getCivilians());
 
 	fuelPowerSources();
 
@@ -1449,17 +1445,20 @@ void BattlescapeGenerator::explodePowerSources()
  */
 void BattlescapeGenerator::deployCivilians(int max)
 {
-	int number = RNG::generate(1, max);
-
-	for (int i = 0; i < number; ++i)
+	if (max)
 	{
-		if (RNG::generate(0,100) < 50)
+		int number = RNG::generate(1, max);
+
+		for (int i = 0; i < number; ++i)
 		{
-			addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-		}
-		else
-		{
-			addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+			if (RNG::generate(0,100) < 50)
+			{
+				addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
+			}
+			else
+			{
+				addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+			}
 		}
 	}
 }

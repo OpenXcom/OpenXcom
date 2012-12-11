@@ -6093,6 +6093,7 @@ alienDeployments:
     width: 50
     length: 50
     height: 4
+    civilians: 16
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 5
