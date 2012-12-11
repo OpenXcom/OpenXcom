@@ -169,7 +169,7 @@ void ResearchInfoState::buildUi ()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchInfoState::btnOkClick(Action *action)
+void ResearchInfoState::btnOkClick(Action *)
 {
 	_game->popState();
 }

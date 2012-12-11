@@ -448,7 +448,7 @@ void SoldierInfoState::edtSoldierKeyPress(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnOkClick(Action *action)
+void SoldierInfoState::btnOkClick(Action *)
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_game->popState();
@@ -458,7 +458,7 @@ void SoldierInfoState::btnOkClick(Action *action)
  * Goes to the previous soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnPrevClick(Action *action)
+void SoldierInfoState::btnPrevClick(Action *)
 {
 	if (_soldier == 0)
 		_soldier = _base->getSoldiers()->size() - 1;
@@ -471,7 +471,7 @@ void SoldierInfoState::btnPrevClick(Action *action)
  * Goes to the next soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnNextClick(Action *action)
+void SoldierInfoState::btnNextClick(Action *)
 {
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())
@@ -483,7 +483,7 @@ void SoldierInfoState::btnNextClick(Action *action)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnArmorClick(Action *action)
+void SoldierInfoState::btnArmorClick(Action *)
 {
 	_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 }

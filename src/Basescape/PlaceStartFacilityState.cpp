@@ -62,7 +62,7 @@ PlaceStartFacilityState::~PlaceStartFacilityState()
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceStartFacilityState::viewClick(Action *action)
+void PlaceStartFacilityState::viewClick(Action *)
 {
 	if (!_view->isPlaceable(_rule))
 	{

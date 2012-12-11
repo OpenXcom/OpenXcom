@@ -132,7 +132,7 @@ void BuildFacilitiesState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BuildFacilitiesState::btnOkClick(Action *action)
+void BuildFacilitiesState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -141,7 +141,7 @@ void BuildFacilitiesState::btnOkClick(Action *action)
  * Places the selected facility.
  * @param action Pointer to an action.
  */
-void BuildFacilitiesState::lstFacilitiesClick(Action *action)
+void BuildFacilitiesState::lstFacilitiesClick(Action *)
 {
 	_game->pushState(new PlaceFacilityState(_game, _base, _facilities[_lstFacilities->getSelectedRow()]));
 }

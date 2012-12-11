@@ -191,7 +191,7 @@ void BuildNewBaseState::globeClick(Action *action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateLeftPress(Action *action)
+void BuildNewBaseState::btnRotateLeftPress(Action *)
 {
 	_globe->rotateLeft();
 }
@@ -200,7 +200,7 @@ void BuildNewBaseState::btnRotateLeftPress(Action *action)
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateLeftRelease(Action *action)
+void BuildNewBaseState::btnRotateLeftRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -209,7 +209,7 @@ void BuildNewBaseState::btnRotateLeftRelease(Action *action)
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateRightPress(Action *action)
+void BuildNewBaseState::btnRotateRightPress(Action *)
 {
 	_globe->rotateRight();
 }
@@ -218,7 +218,7 @@ void BuildNewBaseState::btnRotateRightPress(Action *action)
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateRightRelease(Action *action)
+void BuildNewBaseState::btnRotateRightRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -227,7 +227,7 @@ void BuildNewBaseState::btnRotateRightRelease(Action *action)
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateUpPress(Action *action)
+void BuildNewBaseState::btnRotateUpPress(Action *)
 {
 	_globe->rotateUp();
 }
@@ -236,7 +236,7 @@ void BuildNewBaseState::btnRotateUpPress(Action *action)
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateUpRelease(Action *action)
+void BuildNewBaseState::btnRotateUpRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -245,7 +245,7 @@ void BuildNewBaseState::btnRotateUpRelease(Action *action)
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateDownPress(Action *action)
+void BuildNewBaseState::btnRotateDownPress(Action *)
 {
 	_globe->rotateDown();
 }
@@ -254,7 +254,7 @@ void BuildNewBaseState::btnRotateDownPress(Action *action)
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateDownRelease(Action *action)
+void BuildNewBaseState::btnRotateDownRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -263,7 +263,7 @@ void BuildNewBaseState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInLeftClick(Action *action)
+void BuildNewBaseState::btnZoomInLeftClick(Action *)
 {
 	_globe->zoomIn();
 }
@@ -272,7 +272,7 @@ void BuildNewBaseState::btnZoomInLeftClick(Action *action)
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInRightClick(Action *action)
+void BuildNewBaseState::btnZoomInRightClick(Action *)
 {
 	_globe->zoomMax();
 }
@@ -281,7 +281,7 @@ void BuildNewBaseState::btnZoomInRightClick(Action *action)
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutLeftClick(Action *action)
+void BuildNewBaseState::btnZoomOutLeftClick(Action *)
 {
 	_globe->zoomOut();
 }
@@ -290,7 +290,7 @@ void BuildNewBaseState::btnZoomOutLeftClick(Action *action)
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutRightClick(Action *action)
+void BuildNewBaseState::btnZoomOutRightClick(Action *)
 {
 	_globe->zoomMin();
 }
@@ -299,7 +299,7 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnCancelClick(Action *action)
+void BuildNewBaseState::btnCancelClick(Action *)
 {
 	delete _base;
 	_game->popState();

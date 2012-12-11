@@ -96,7 +96,7 @@ void MiniMapState::handle(Action *action)
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void MiniMapState::btnOkClick (Action * action)
+void MiniMapState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -105,7 +105,7 @@ void MiniMapState::btnOkClick (Action * action)
  * Change the currently displayed minimap level
  * @param action Pointer to an action.
  */
-void MiniMapState::btnLevelUpClick (Action * action)
+void MiniMapState::btnLevelUpClick(Action *)
 {
 	std::wstringstream s;
 	s << _miniMapView->up();
@@ -116,7 +116,7 @@ void MiniMapState::btnLevelUpClick (Action * action)
  * Change the currently displayed minimap level
  * @param action Pointer to an action.
  */
-void MiniMapState::btnLevelDownClick (Action * action)
+void MiniMapState::btnLevelDownClick(Action *)
 {
 	std::wstringstream s;
 	s << _miniMapView->down ();

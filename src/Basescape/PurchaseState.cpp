@@ -202,7 +202,7 @@ void PurchaseState::think()
  * Purchases the selected items.
  * @param action Pointer to an action.
  */
-void PurchaseState::btnOkClick(Action *action)
+void PurchaseState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
@@ -263,7 +263,7 @@ void PurchaseState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PurchaseState::btnCancelClick(Action *action)
+void PurchaseState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

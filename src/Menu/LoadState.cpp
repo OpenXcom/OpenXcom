@@ -60,7 +60,7 @@ LoadState::~LoadState()
  * Loads the selected save.
  * @param action Pointer to an action.
  */
-void LoadState::lstSavesClick(Action *action)
+void LoadState::lstSavesClick(Action *)
 {
 	updateStatus("STR_LOADING_GAME");
 	SavedGame *s = new SavedGame();

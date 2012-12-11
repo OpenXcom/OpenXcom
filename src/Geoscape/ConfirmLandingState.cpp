@@ -115,7 +115,7 @@ ConfirmLandingState::~ConfirmLandingState()
  * Enters the mission.
  * @param action Pointer to an action.
  */
-void ConfirmLandingState::btnYesClick(Action *action)
+void ConfirmLandingState::btnYesClick(Action *)
 {
 	_game->popState();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
@@ -178,7 +178,7 @@ void ConfirmLandingState::btnYesClick(Action *action)
  * Returns the craft to base and closes the window.
  * @param action Pointer to an action.
  */
-void ConfirmLandingState::btnNoClick(Action *action)
+void ConfirmLandingState::btnNoClick(Action *)
 {
 	_craft->returnToBase();
 	_game->popState();

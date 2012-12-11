@@ -161,16 +161,16 @@ void AllocatePsiTrainingState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AllocatePsiTrainingState::btnOkClick(Action *action)
+void AllocatePsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
 	_game->pushState (new PsiTrainingState(_game));
 }
 
-void AllocatePsiTrainingState::lstSoldiersPress(Action *action)
+void AllocatePsiTrainingState::lstSoldiersPress(Action *)
 {
 }
-void AllocatePsiTrainingState::lstSoldiersRelease(Action *action)
+void AllocatePsiTrainingState::lstSoldiersRelease(Action *)
 {
 }
 void AllocatePsiTrainingState::lstSoldiersClick(Action *action)

@@ -86,7 +86,7 @@ void UfoLostState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoLostState::btnOkClick(Action *action)
+void UfoLostState::btnOkClick(Action *)
 {
 	_game->popState();
 }

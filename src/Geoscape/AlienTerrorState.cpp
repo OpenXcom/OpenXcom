@@ -103,7 +103,7 @@ void AlienTerrorState::init()
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AlienTerrorState::btnCentreClick(Action *action)
+void AlienTerrorState::btnCentreClick(Action *)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_city->getLongitude(), _city->getLatitude());
@@ -114,7 +114,7 @@ void AlienTerrorState::btnCentreClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AlienTerrorState::btnCancelClick(Action *action)
+void AlienTerrorState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

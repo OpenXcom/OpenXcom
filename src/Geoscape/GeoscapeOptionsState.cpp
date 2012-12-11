@@ -105,7 +105,7 @@ void GeoscapeOptionsState::init()
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
-void GeoscapeOptionsState::btnLoadClick(Action *action)
+void GeoscapeOptionsState::btnLoadClick(Action *)
 {
 	_game->pushState(new LoadState(_game, true));
 }
@@ -114,7 +114,7 @@ void GeoscapeOptionsState::btnLoadClick(Action *action)
  * Opens the Save Game screen.
  * @param action Pointer to an action.
  */
-void GeoscapeOptionsState::btnSaveClick(Action *action)
+void GeoscapeOptionsState::btnSaveClick(Action *)
 {
 	_game->pushState(new SaveState(_game, true));
 }
@@ -123,7 +123,7 @@ void GeoscapeOptionsState::btnSaveClick(Action *action)
  * Opens the Abandon Game window.
  * @param action Pointer to an action.
  */
-void GeoscapeOptionsState::btnAbandonClick(Action *action)
+void GeoscapeOptionsState::btnAbandonClick(Action *)
 {
 	_game->pushState(new AbandonGameState(_game));
 }
@@ -132,7 +132,7 @@ void GeoscapeOptionsState::btnAbandonClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void GeoscapeOptionsState::btnCancelClick(Action *action)
+void GeoscapeOptionsState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

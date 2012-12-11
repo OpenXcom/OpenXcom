@@ -106,7 +106,7 @@ ConfirmDestinationState::~ConfirmDestinationState()
  * Confirms the selected target for the craft.
  * @param action Pointer to an action.
  */
-void ConfirmDestinationState::btnOkClick(Action *action)
+void ConfirmDestinationState::btnOkClick(Action *)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)
@@ -139,7 +139,7 @@ void ConfirmDestinationState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmDestinationState::btnCancelClick(Action *action)
+void ConfirmDestinationState::btnCancelClick(Action *)
 {
 	Waypoint *w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)

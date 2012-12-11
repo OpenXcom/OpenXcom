@@ -77,7 +77,7 @@ PlaceLiftState::~PlaceLiftState()
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceLiftState::viewClick(Action *action)
+void PlaceLiftState::viewClick(Action *)
 {
 	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
 	fac->setX(_view->getGridX());

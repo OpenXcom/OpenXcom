@@ -107,7 +107,7 @@ CannotReequipState::~CannotReequipState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CannotReequipState::btnOkClick(Action *action)
+void CannotReequipState::btnOkClick(Action *)
 {
 	_game->popState();
 }

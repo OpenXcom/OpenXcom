@@ -110,7 +110,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
  * Closes the window.
  * @param action Pointer to an action.
  */
-void ErrorMessageState::btnOkClick(Action *action)
+void ErrorMessageState::btnOkClick(Action *)
 {
 	_game->popState();
 }

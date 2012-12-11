@@ -303,7 +303,7 @@ void CraftInfoState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnOkClick(Action *action)
+void CraftInfoState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -313,7 +313,7 @@ void CraftInfoState::btnOkClick(Action *action)
  * the first weapon.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnW1Click(Action *action)
+void CraftInfoState::btnW1Click(Action *)
 {
 	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 0));
 }
@@ -323,7 +323,7 @@ void CraftInfoState::btnW1Click(Action *action)
  * the second weapon.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnW2Click(Action *action)
+void CraftInfoState::btnW2Click(Action *)
 {
 	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 1));
 }
@@ -332,7 +332,7 @@ void CraftInfoState::btnW2Click(Action *action)
  * Goes to the Select Squad screen.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnCrewClick(Action *action)
+void CraftInfoState::btnCrewClick(Action *)
 {
 	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
 }
@@ -341,7 +341,7 @@ void CraftInfoState::btnCrewClick(Action *action)
  * Goes to the Select Equipment screen.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnEquipClick(Action *action)
+void CraftInfoState::btnEquipClick(Action *)
 {
 	_game->pushState(new CraftEquipmentState(_game, _base, _craft));
 }
@@ -350,7 +350,7 @@ void CraftInfoState::btnEquipClick(Action *action)
  * Goes to the Select Armor screen.
  * @param action Pointer to an action.
  */
-void CraftInfoState::btnArmorClick(Action *action)
+void CraftInfoState::btnArmorClick(Action *)
 {
 	_game->pushState(new CraftArmorState(_game, _base, _craft));
 }

@@ -76,7 +76,7 @@ NoteState::~NoteState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void NoteState::btnOkClick(Action *action)
+void NoteState::btnOkClick(Action *)
 {
 	_game->setState(new LanguageState(_game));
 }
