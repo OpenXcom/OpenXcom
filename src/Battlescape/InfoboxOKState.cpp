@@ -87,7 +87,7 @@ void InfoboxOKState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void InfoboxOKState::btnOkClick(Action *action)
+void InfoboxOKState::btnOkClick(Action *)
 {
 	_game->popState();
 }

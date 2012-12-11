@@ -120,7 +120,7 @@ void MainMenuState::init()
  * Opens the New Game window.
  * @param action Pointer to an action.
  */
-void MainMenuState::btnNewGameClick(Action *action)
+void MainMenuState::btnNewGameClick(Action *)
 {
 	_game->setState(new NewGameState(_game));
 }
@@ -129,7 +129,7 @@ void MainMenuState::btnNewGameClick(Action *action)
  * Opens the New Battle screen.
  * @param action Pointer to an action.
  */
-void MainMenuState::btnNewBattleClick(Action *action)
+void MainMenuState::btnNewBattleClick(Action *)
 {
 	_game->pushState(new NewBattleState(_game));
 }
@@ -138,7 +138,7 @@ void MainMenuState::btnNewBattleClick(Action *action)
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
-void MainMenuState::btnLoadClick(Action *action)
+void MainMenuState::btnLoadClick(Action *)
 {
 	_game->pushState(new LoadState(_game, true));
 }
@@ -147,7 +147,7 @@ void MainMenuState::btnLoadClick(Action *action)
  * Opens the Options screen.
  * @param action Pointer to an action.
  */
-void MainMenuState::btnOptionsClick(Action *action)
+void MainMenuState::btnOptionsClick(Action *)
 {
 	_game->pushState(new OptionsState(_game));
 }
@@ -156,7 +156,7 @@ void MainMenuState::btnOptionsClick(Action *action)
  * Quits the game.
  * @param action Pointer to an action.
  */
-void MainMenuState::btnQuitClick(Action *action)
+void MainMenuState::btnQuitClick(Action *)
 {
 	_game->quit();
 }

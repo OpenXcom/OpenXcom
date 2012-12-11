@@ -94,7 +94,7 @@ TargetInfoState::~TargetInfoState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void TargetInfoState::btnOkClick(Action *action)
+void TargetInfoState::btnOkClick(Action *)
 {
 	_game->popState();
 }

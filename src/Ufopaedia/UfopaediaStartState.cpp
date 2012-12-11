@@ -100,7 +100,7 @@ namespace OpenXcom
 	 * Returns to the previous screen.
 	 * @param action Pointer to an action.
 	 */
-	void UfopaediaStartState::btnOkClick(Action *action)
+	void UfopaediaStartState::btnOkClick(Action *)
 	{
 		_game->popState();
 //		_game->quit();

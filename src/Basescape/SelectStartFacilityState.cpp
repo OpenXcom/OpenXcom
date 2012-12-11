@@ -71,7 +71,7 @@ void SelectStartFacilityState::PopulateBuildList()
  * Places the selected facility.
  * @param action Pointer to an action.
  */
-void SelectStartFacilityState::lstFacilitiesClick(Action *action)
+void SelectStartFacilityState::lstFacilitiesClick(Action *)
 {
 	_game->pushState(new PlaceStartFacilityState(_game, _base, this, _facilities[_lstFacilities->getSelectedRow()]));
 }

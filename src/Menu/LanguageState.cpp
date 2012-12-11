@@ -74,7 +74,7 @@ LanguageState::~LanguageState()
  * the Main Menu window.
  * @param action Pointer to an action.
  */
-void LanguageState::lstLanguagesClick(Action *action)
+void LanguageState::lstLanguagesClick(Action *)
 {
 	_game->loadLanguage(_langs[_lstLanguages->getSelectedRow()]);
 	_game->setState(new MainMenuState(_game));

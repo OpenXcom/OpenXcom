@@ -117,7 +117,7 @@ StoresState::~StoresState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void StoresState::btnOkClick(Action *action)
+void StoresState::btnOkClick(Action *)
 {
 	_game->popState();
 }

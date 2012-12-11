@@ -107,7 +107,7 @@ void NewPossibleResearchState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void NewPossibleResearchState::btnOkClick(Action *action)
+void NewPossibleResearchState::btnOkClick(Action *)
 {
 	_game->popState ();
 }
@@ -116,7 +116,7 @@ void NewPossibleResearchState::btnOkClick(Action *action)
  * Open the ResearchState so the player can dispatch available scientist.
  * @param action Pointer to an action.
  */
-void NewPossibleResearchState::btnResearchClick(Action *action)
+void NewPossibleResearchState::btnResearchClick(Action *)
 {
 	_game->popState();
 	_game->pushState (new ResearchState(_game, _base));

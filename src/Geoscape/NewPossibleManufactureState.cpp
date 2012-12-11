@@ -93,7 +93,7 @@ void NewPossibleManufactureState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void NewPossibleManufactureState::btnOkClick(Action *action)
+void NewPossibleManufactureState::btnOkClick(Action *)
 {
 	_game->popState ();
 }
@@ -102,7 +102,7 @@ void NewPossibleManufactureState::btnOkClick(Action *action)
  * Open the ManufactureState so the player can dispatch available scientist.
  * @param action Pointer to an action.
  */
-void NewPossibleManufactureState::btnManufactureClick(Action *action)
+void NewPossibleManufactureState::btnManufactureClick(Action *)
 {
 	_game->popState();
 	_game->pushState (new ManufactureState(_game, _base));

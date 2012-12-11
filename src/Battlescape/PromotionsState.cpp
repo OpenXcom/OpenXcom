@@ -109,7 +109,7 @@ PromotionsState::~PromotionsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PromotionsState::btnOkClick(Action *action)
+void PromotionsState::btnOkClick(Action *)
 {
 	_game->popState();
 }

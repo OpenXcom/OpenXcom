@@ -1571,7 +1571,7 @@ void GeoscapeState::globeClick(Action *action)
  * Opens the Intercept window.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnInterceptClick(Action *action)
+void GeoscapeState::btnInterceptClick(Action *)
 {
 	_game->pushState(new InterceptState(_game, _globe));
 }
@@ -1580,7 +1580,7 @@ void GeoscapeState::btnInterceptClick(Action *action)
  * Goes to the Basescape screen.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnBasesClick(Action *action)
+void GeoscapeState::btnBasesClick(Action *)
 {
 	timerReset();
 	if (_game->getSavedGame()->getBases()->size() > 0)
@@ -1597,7 +1597,7 @@ void GeoscapeState::btnBasesClick(Action *action)
  * Goes to the Graphs screen.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnGraphsClick(Action *action)
+void GeoscapeState::btnGraphsClick(Action *)
 {
 	_game->pushState(new GraphsState(_game));
 }
@@ -1606,7 +1606,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
  * Goes to the Ufopaedia window.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnUfopaediaClick(Action *action)
+void GeoscapeState::btnUfopaediaClick(Action *)
 {
 	Ufopaedia::open(_game);
 }
@@ -1615,7 +1615,7 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
  * Opens the Options window.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnOptionsClick(Action *action)
+void GeoscapeState::btnOptionsClick(Action *)
 {
 	_game->pushState(new GeoscapeOptionsState(_game));
 }
@@ -1624,7 +1624,7 @@ void GeoscapeState::btnOptionsClick(Action *action)
  * Goes to the Funding screen.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnFundingClick(Action *action)
+void GeoscapeState::btnFundingClick(Action *)
 {
 	_game->pushState(new FundingState(_game));
 }
@@ -1633,7 +1633,7 @@ void GeoscapeState::btnFundingClick(Action *action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateLeftPress(Action *action)
+void GeoscapeState::btnRotateLeftPress(Action *)
 {
 	_globe->rotateLeft();
 }
@@ -1642,7 +1642,7 @@ void GeoscapeState::btnRotateLeftPress(Action *action)
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateLeftRelease(Action *action)
+void GeoscapeState::btnRotateLeftRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1651,7 +1651,7 @@ void GeoscapeState::btnRotateLeftRelease(Action *action)
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateRightPress(Action *action)
+void GeoscapeState::btnRotateRightPress(Action *)
 {
 	_globe->rotateRight();
 }
@@ -1660,7 +1660,7 @@ void GeoscapeState::btnRotateRightPress(Action *action)
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateRightRelease(Action *action)
+void GeoscapeState::btnRotateRightRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1669,7 +1669,7 @@ void GeoscapeState::btnRotateRightRelease(Action *action)
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateUpPress(Action *action)
+void GeoscapeState::btnRotateUpPress(Action *)
 {
 	_globe->rotateUp();
 }
@@ -1678,7 +1678,7 @@ void GeoscapeState::btnRotateUpPress(Action *action)
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateUpRelease(Action *action)
+void GeoscapeState::btnRotateUpRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1687,7 +1687,7 @@ void GeoscapeState::btnRotateUpRelease(Action *action)
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateDownPress(Action *action)
+void GeoscapeState::btnRotateDownPress(Action *)
 {
 	_globe->rotateDown();
 }
@@ -1696,7 +1696,7 @@ void GeoscapeState::btnRotateDownPress(Action *action)
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateDownRelease(Action *action)
+void GeoscapeState::btnRotateDownRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1705,7 +1705,7 @@ void GeoscapeState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInLeftClick(Action *action)
+void GeoscapeState::btnZoomInLeftClick(Action *)
 {
 	_globe->zoomIn();
 }
@@ -1714,7 +1714,7 @@ void GeoscapeState::btnZoomInLeftClick(Action *action)
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInRightClick(Action *action)
+void GeoscapeState::btnZoomInRightClick(Action *)
 {
 	_globe->zoomMax();
 }
@@ -1723,7 +1723,7 @@ void GeoscapeState::btnZoomInRightClick(Action *action)
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutLeftClick(Action *action)
+void GeoscapeState::btnZoomOutLeftClick(Action *)
 {
 	_globe->zoomOut();
 }
@@ -1732,7 +1732,7 @@ void GeoscapeState::btnZoomOutLeftClick(Action *action)
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutRightClick(Action *action)
+void GeoscapeState::btnZoomOutRightClick(Action *)
 {
 	_globe->zoomMin();
 }

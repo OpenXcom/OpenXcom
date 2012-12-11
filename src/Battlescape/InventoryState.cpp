@@ -217,7 +217,7 @@ void InventoryState::saveEquipmentLayout()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void InventoryState::btnOkClick(Action *action)
+void InventoryState::btnOkClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -235,7 +235,7 @@ void InventoryState::btnOkClick(Action *action)
  * Selects the previous soldier.
  * @param action Pointer to an action.
  */
-void InventoryState::btnPrevClick(Action *action)
+void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -252,7 +252,7 @@ void InventoryState::btnPrevClick(Action *action)
  * Selects the next soldier.
  * @param action Pointer to an action.
  */
-void InventoryState::btnNextClick(Action *action)
+void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -269,7 +269,7 @@ void InventoryState::btnNextClick(Action *action)
  * Unloads the selected weapon.
  * @param action Pointer to an action.
  */
-void InventoryState::btnUnloadClick(Action *action)
+void InventoryState::btnUnloadClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
@@ -290,7 +290,7 @@ void InventoryState::btnUnloadClick(Action *action)
  * Shows more ground items / rearranges them.
  * @param action Pointer to an action.
  */
-void InventoryState::btnGroundClick(Action *action)
+void InventoryState::btnGroundClick(Action *)
 {
 	_inv->arrangeGround();
 }
@@ -299,7 +299,7 @@ void InventoryState::btnGroundClick(Action *action)
  * Shows the unit info screen.
  * @param action Pointer to an action.
  */
-void InventoryState::btnRankClick(Action *action)
+void InventoryState::btnRankClick(Action *)
 {
 	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
 }
@@ -308,7 +308,7 @@ void InventoryState::btnRankClick(Action *action)
  * Updates item info.
  * @param action Pointer to an action.
  */
-void InventoryState::invClick(Action *action)
+void InventoryState::invClick(Action *)
 {
 	BattleItem *item = _inv->getSelectedItem();
 	_txtItem->setText(L"");

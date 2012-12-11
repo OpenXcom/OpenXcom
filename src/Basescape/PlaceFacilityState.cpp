@@ -127,7 +127,7 @@ PlaceFacilityState::~PlaceFacilityState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PlaceFacilityState::btnCancelClick(Action *action)
+void PlaceFacilityState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -136,7 +136,7 @@ void PlaceFacilityState::btnCancelClick(Action *action)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceFacilityState::viewClick(Action *action)
+void PlaceFacilityState::viewClick(Action *)
 {
 	if (!_view->isPlaceable(_rule))
 	{

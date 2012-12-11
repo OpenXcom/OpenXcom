@@ -215,7 +215,7 @@ void TransferItemsState::think()
  * Transfers the selected items.
  * @param action Pointer to an action.
  */
-void TransferItemsState::btnOkClick(Action *action)
+void TransferItemsState::btnOkClick(Action *)
 {
 	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
 }
@@ -317,7 +317,7 @@ void TransferItemsState::completeTransfer()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferItemsState::btnCancelClick(Action *action)
+void TransferItemsState::btnCancelClick(Action *)
 {
 	_game->popState();
 	_game->popState();

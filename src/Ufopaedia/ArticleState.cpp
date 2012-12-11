@@ -73,7 +73,7 @@ namespace OpenXcom
 	 * Returns to the previous screen.
 	 * @param action Pointer to an action.
 	 */
-	void ArticleState::btnOkClick(Action *action)
+	void ArticleState::btnOkClick(Action *)
 	{
 		_game->popState();
 		std::stringstream ss;
@@ -85,7 +85,7 @@ namespace OpenXcom
 	 * Shows the previous available article.
 	 * @param action Pointer to an action.
 	 */
-	void ArticleState::btnPrevClick(Action *action)
+	void ArticleState::btnPrevClick(Action *)
 	{
 		Ufopaedia::prev(_game);
 	}
@@ -94,7 +94,7 @@ namespace OpenXcom
 	 * Shows the next available article. Loops to the first.
 	 * @param action Pointer to an action.
 	 */
-	void ArticleState::btnNextClick(Action *action)
+	void ArticleState::btnNextClick(Action *)
 	{
 		Ufopaedia::next(_game);
 	}

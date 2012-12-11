@@ -158,7 +158,7 @@ InterceptState::~InterceptState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void InterceptState::btnCancelClick(Action *action)
+void InterceptState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -167,7 +167,7 @@ void InterceptState::btnCancelClick(Action *action)
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
  */
-void InterceptState::lstCraftsClick(Action *action)
+void InterceptState::lstCraftsClick(Action *)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
