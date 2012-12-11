@@ -1465,36 +1465,8 @@ void GeoscapeState::time1Month()
 	// Handle funding
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
-	for(std::vector<Country*>::iterator c = _game->getSavedGame()->getCountries()->begin(); c !=  _game->getSavedGame()->getCountries()->end(); ++c)
-	{
-		if((*c)->getNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9)
-		{
-			double lon;
-			double lat;
-			int tries = 0;
-			do
-			{
-				double ran = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-				double ran2 = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-				lon = (*c)->getRules()->getLabelLongitude() + ran;
-				lat = (*c)->getRules()->getLabelLatitude()  + ran2;
-				tries++;
-			}
-			while(!_globe->insideLand(lon, lat) && !(*c)->getRules()->insideCountry(lon, lat) && tries < 100);
-			AlienBase *b = new AlienBase();
-			b->setLongitude(lon);
-			b->setLatitude(lat);
-			b->setDiscovered(false);
-			b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
-			int race = RNG::generate(1, 2);
-			if (race == 1)
-				b->setAlienRace("STR_SECTOID");
-			else if (race == 2)
-				b->setAlienRace("STR_FLOATER");
-			_game->getSavedGame()->getAlienBases()->push_back(b);
-		}
-	}
-	popup(new MonthlyReportState(_game, psi));
+	popup(new MonthlyReportState(_game, psi, _globe));
+
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
 	{

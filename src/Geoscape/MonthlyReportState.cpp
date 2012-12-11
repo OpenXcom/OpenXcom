@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "MonthlyReportState.h"
 #include <sstream>
+#include <cmath>
+#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -32,6 +35,8 @@
 #include "../Savegame/Country.h"
 #include "../Ruleset/RuleCountry.h"
 #include "DefeatState.h"
+#include "Globe.h"
+#include "../Savegame/AlienBase.h"
 
 namespace OpenXcom
 {
@@ -40,8 +45,9 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi(psi), _gameOver(false), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
+MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : State(game), _psi(psi), _gameOver(false), _ratingTotal(0), _fundingDiff(0), _lastMonthsRating(0), _happyList(0), _sadList(0), _pactList(0)
 {
+	_globe = globe;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(50, 12, 135, 180);
@@ -126,11 +132,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 	_txtRating->setText(ss2.str());
 	
 	// Calculate rating
-	std::wstring rating;
-	if (_ratingTotal <= difficulty_threshold-300)
-	{
-		rating = _game->getLanguage()->getString("STR_RATING_TERRIBLE");
-	}
+	std::wstring rating = _game->getLanguage()->getString("STR_RATING_TERRIBLE");
 	if (_ratingTotal > difficulty_threshold-300)
 	{
 		rating = _game->getLanguage()->getString("STR_RATING_POOR");
@@ -159,149 +161,155 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi) : State(game), _psi
 
 	_txtDesc->setColor(Palette::blockOffset(8)+10);
 	_txtDesc->setWordWrap(true);
+
+	// calculate satisfaction
 	std::wstringstream ss4;
+	std::wstring satisFactionString = _game->getLanguage()->getString("STR_COUNCIL_IS_DISSATISFIED");
 	bool resetWarning = true;
-	if(_game->getSavedGame()->getFunds() <= -1000000)
+	if (_ratingTotal > difficulty_threshold)
 	{
-		if(_game->getSavedGame()->getWarned())
-		{
-			ss4 << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
-			_gameOver = true;
-		}
-		else
-		{
-			ss4 << _game->getLanguage()->getString("STR_COUNCIL_REDUCE_DEBTS");
-			_game->getSavedGame()->setWarned(true);
-			resetWarning = false;
-		}
+		satisFactionString = _game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
-	else if(_ratingTotal <= difficulty_threshold)
+	if (_ratingTotal > 500)
 	{
-		if(_lastMonthsRating <= difficulty_threshold)
-		{
-			ss4 << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
-			_gameOver = true;
-		}
-		else
-		{
-			ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_DISSATISFIED");
-		}
+		satisFactionString = _game->getLanguage()->getString("STR_COUNCIL_IS_VERY_PLEASED");
 	}
-	else if(_ratingTotal > 500)
+	if (_lastMonthsRating <= difficulty_threshold && _ratingTotal <= difficulty_threshold)
 	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_VERY_PLEASED");
+		satisFactionString = _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
+		_pactList.erase(_pactList.begin(), _pactList.end());
+		_happyList.erase(_happyList.begin(), _happyList.end());
+		_sadList.erase(_sadList.begin(), _sadList.end());
+		_gameOver = true;
 	}
-	else
+	ss4 << satisFactionString;
+
+	if (!_gameOver)
 	{
-		ss4 << _game->getLanguage()->getString("STR_COUNCIL_IS_GENERALLY_SATISFIED");
+		if (_game->getSavedGame()->getFunds() <= -1000000)
+		{
+			if (_game->getSavedGame()->getWarned())
+			{
+				ss4 << "\n\n" << _game->getLanguage()->getString("STR_YOU_HAVE_NOT_SUCCEEDED");
+				_pactList.erase(_pactList.begin(), _pactList.end());
+				_happyList.erase(_happyList.begin(), _happyList.end());
+				_sadList.erase(_sadList.begin(), _sadList.end());
+				_gameOver = true;
+			}
+			else
+			{
+				ss4 << "\n\n" << _game->getLanguage()->getString("STR_COUNCIL_REDUCE_DEBTS");
+				_game->getSavedGame()->setWarned(true);
+				resetWarning = false;
+			}
+		}
 	}
 
-	if(resetWarning && _game->getSavedGame()->getWarned())
+	if (resetWarning && _game->getSavedGame()->getWarned())
 		_game->getSavedGame()->setWarned(false);
-	if(!_gameOver)
+
+	if (_happyList.size())
 	{
-		if(_happyList.size())
+		ss4 << "\n\n";
+		for (std::vector<std::string>::iterator happy = _happyList.begin(); happy != _happyList.end(); ++happy)
 		{
-			ss4 << "\n\n";
-			for(std::vector<std::string>::iterator happy = _happyList.begin(); happy != _happyList.end(); ++happy)
+			ss4 << _game->getLanguage()->getString(*happy);
+			if (_happyList.size() > 1)
 			{
-				ss4 << _game->getLanguage()->getString(*happy);
-				if(_happyList.size() > 1)
+				if (happy == _happyList.end()-2)
 				{
-					if(happy == _happyList.end()-2)
-					{
-						ss4 << _game->getLanguage()->getString("STR_AND");
-					}
-					if(_happyList.size() > 2)
-					{
-						if(happy != _happyList.end() - 1 && happy != _happyList.end() - 2)
-						{
-							ss4 << ", ";
-						}
-					}
+					ss4 << _game->getLanguage()->getString("STR_AND");
 				}
-				if(happy == _happyList.end()-1)
+				if (_happyList.size() > 2)
 				{
-					if(_happyList.size() > 1)
+					if (happy != _happyList.end() - 1 && happy != _happyList.end() - 2)
 					{
-						ss4 << _game->getLanguage()->getString("STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");	
-					}
-					else
-					{
-						ss4 << _game->getLanguage()->getString("STR_COUNTRY_IS_PARTICULARLY_PLEASED");
+						ss4 << ", ";
 					}
 				}
 			}
-		}
-		if(_sadList.size())
-		{
-			ss4 << "\n\n";
-			for(std::vector<std::string>::iterator sad = _sadList.begin(); sad != _sadList.end(); ++sad)
+			if (happy == _happyList.end()-1)
 			{
-				ss4 << _game->getLanguage()->getString(*sad);
-				if(_sadList.size() > 1)
+				if (_happyList.size() > 1)
 				{
-					if(sad == _sadList.end()-2)
-					{
-						ss4 << _game->getLanguage()->getString("STR_AND");
-					}
-					if(_sadList.size() > 2)
-					{
-						if(sad != _sadList.end() - 1 && sad != _sadList.end() - 2)
-						{
-							ss4 << ", ";
-						}
-					}
+					ss4 << _game->getLanguage()->getString("STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");	
 				}
-				if(sad == _sadList.end()-1)
+				else
 				{
-					if(_sadList.size() > 1)
-					{
-						ss4 << _game->getLanguage()->getString("STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");	
-					}
-					else
-					{
-						ss4 << _game->getLanguage()->getString("STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY");
-					}
+					ss4 << _game->getLanguage()->getString("STR_COUNTRY_IS_PARTICULARLY_PLEASED");
 				}
 			}
 		}
-		if(_pactList.size())
+	}
+	if (_sadList.size())
+	{
+		ss4 << "\n\n";
+		for (std::vector<std::string>::iterator sad = _sadList.begin(); sad != _sadList.end(); ++sad)
 		{
-			ss4 << "\n\n";
-			for(std::vector<std::string>::iterator pact = _pactList.begin(); pact != _pactList.end(); ++pact)
+			ss4 << _game->getLanguage()->getString(*sad);
+			if (_sadList.size() > 1)
 			{
-				ss4 << _game->getLanguage()->getString(*pact);
-				if(_pactList.size() > 1)
+				if (sad == _sadList.end()-2)
 				{
-					if(pact == _pactList.end()-2)
+					ss4 << _game->getLanguage()->getString("STR_AND");
+				}
+				if (_sadList.size() > 2)
+				{
+					if (sad != _sadList.end() - 1 && sad != _sadList.end() - 2)
 					{
-						ss4 << _game->getLanguage()->getString("STR_AND");
-					}
-					if(_pactList.size() > 2)
-					{
-						if(pact != _pactList.end() - 1 && pact != _pactList.end() - 2)
-						{
-							ss4 << ", ";
-						}
+						ss4 << ", ";
 					}
 				}
-				if(pact == _pactList.end()-1)
+			}
+			if (sad == _sadList.end()-1)
+			{
+				if (_sadList.size() > 1)
 				{
-					if(_pactList.size() > 1)
+					ss4 << _game->getLanguage()->getString("STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");	
+				}
+				else
+				{
+					ss4 << _game->getLanguage()->getString("STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY");
+				}
+			}
+		}
+	}
+	if (_pactList.size())
+	{
+		ss4 << "\n\n";
+		for (std::vector<std::string>::iterator pact = _pactList.begin(); pact != _pactList.end(); ++pact)
+		{
+			ss4 << _game->getLanguage()->getString(*pact);
+			if (_pactList.size() > 1)
+			{
+				if (pact == _pactList.end()-2)
+				{
+					ss4 << _game->getLanguage()->getString("STR_AND");
+				}
+				if (_pactList.size() > 2)
+				{
+					if (pact != _pactList.end() - 1 && pact != _pactList.end() - 2)
 					{
-						ss4 << _game->getLanguage()->getString("STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");	
+						ss4 << ", ";
 					}
-					else
-					{
-						ss4 << _game->getLanguage()->getString("STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT");
-					}
+				}
+			}
+			if (pact == _pactList.end()-1)
+			{
+				if (_pactList.size() > 1)
+				{
+					ss4 << _game->getLanguage()->getString("STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");	
+				}
+				else
+				{
+					ss4 << _game->getLanguage()->getString("STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT");
 				}
 			}
 		}
 	}
 	_txtDesc->setText(ss4.str());
 }
+
 
 /**
  *
@@ -326,7 +334,11 @@ void MonthlyReportState::init()
 void MonthlyReportState::btnOkClick(Action *action)
 {
 	if (!_gameOver)
+	{
 		_game->popState();
+		if (_psi)
+			_game->pushState (new PsiTrainingState(_game));
+	}
 	else
 	{
 		if (_txtFailure->getVisible())
@@ -346,43 +358,45 @@ void MonthlyReportState::btnOkClick(Action *action)
 			_txtFailure->setVisible(true);
 		}
 	}
-
-	if (_psi && !_gameOver)
-	{
-		_game->pushState (new PsiTrainingState(_game));
-	}
 }
 
+/**
+ * Update all our activity counters, gather all our scores, 
+ * get our countries to make sign pacts, adjust their fundings,
+ * assess their satisfaction, and finally calculate our overall
+ * total score, with thanks to Volutar for the formulae.
+ */
 void MonthlyReportState::CalculateChanges()
 {
-	//set up score and apply research bonuses
-	_ratingTotal = 400 + _game->getSavedGame()->getResearchScores().back();
-	if(_game->getSavedGame()->getResearchScores().size() >1)
-		_lastMonthsRating = 400 + _game->getSavedGame()->getResearchScores().at(_game->getSavedGame()->getResearchScores().size()-2);
+	// initialize all our variables.
+	_lastMonthsRating = 0;
+	int xcomSubTotal = 0;
+	int xcomTotal = 0;
+	int alienTotal = 0;
+	int monthOffset = _game->getSavedGame()->getFundsList().size() - 2;
+	int lastMonthOffset = _game->getSavedGame()->getFundsList().size() - 3;
+	if (lastMonthOffset < 0)
+		lastMonthOffset += 2;
 
-	// update activity meters
+	// update activity meters, calculate a total score based on regional activity
+	// and gather last month's score
 	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 	{
 		(*k)->newMonth();
+		if ((*k)->getActivityXcom().size() > 2)
+			_lastMonthsRating += (*k)->getActivityXcom().at(lastMonthOffset)-(*k)->getActivityAlien().at(lastMonthOffset);
+		xcomSubTotal += (*k)->getActivityXcom().at(monthOffset);
+		alienTotal += (*k)->getActivityAlien().at(monthOffset);
 	}
 
+	// apply research bonus AFTER calculating our total, because this bonus applies to the council ONLY,
+	// and shouldn't influence each country's decision.
 
-	// gather scores from all of the countries combined, store them seperately
-	// and calculate a total.
-	int xcomTotal = 0;
-	int alienTotal = 0;
-	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-	{
-		if((*k)->getActivityXcom().size() >1)
-			_lastMonthsRating += (*k)->getActivityXcom().at((*k)->getActivityXcom().size()-2)-(*k)->getActivityAlien().at((*k)->getActivityAlien().size()-2);
-		xcomTotal += (*k)->getActivityXcom().back();
-		alienTotal += (*k)->getActivityAlien().back();
-	}
+	xcomTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xcomSubTotal;
+	_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
+	if (_game->getSavedGame()->getResearchScores().size() > 2)
+		_lastMonthsRating += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
 
-	//calculate total, and average scores.
-	int countries = _game->getSavedGame()->getCountries()->size();
-	_ratingTotal += (xcomTotal - alienTotal) / countries;
-	_lastMonthsRating /= countries;
 
 	// now that we have our totals we can send the relevant info to the countries
 	// and have them make their decisions weighted on the council's perspective.
@@ -392,9 +406,31 @@ void MonthlyReportState::CalculateChanges()
 		// this is done BEFORE initiating a new month
 		// because the _newPact flag will be reset in the
 		// process
-		if((*k)->getNewPact())
+		if ((*k)->getNewPact())
 		{
-			_pactList.push_back((*k)->getRules()->getType());
+			_pactList.push_back((*k)->getRules()->getType());		
+			if (_game->getSavedGame()->getAlienBases()->size() < 9)
+			{
+				double lon;
+				double lat;
+				int tries = 0;
+				do
+				{
+					double ran = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
+					double ran2 = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
+					lon = (*k)->getRules()->getLabelLongitude() + ran;
+					lat = (*k)->getRules()->getLabelLatitude()  + ran2;
+					tries++;
+				}
+				while(!_globe->insideLand(lon, lat) && !(*k)->getRules()->insideCountry(lon, lat) && tries < 100);
+				AlienBase *b = new AlienBase();
+				b->setLongitude(lon);
+				b->setLatitude(lat);
+				b->setDiscovered(false);
+				b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
+				b->setAlienRace("STR_SECTOID");
+				_game->getSavedGame()->getAlienBases()->push_back(b);
+			}
 		}
 
 		// determine satisfaction level, sign pacts, adjust funding
@@ -416,5 +452,10 @@ void MonthlyReportState::CalculateChanges()
 			break;
 		}
 	}
+
+	//calculate total.
+	_ratingTotal = xcomTotal - alienTotal + 400;
+
+
 }
 }

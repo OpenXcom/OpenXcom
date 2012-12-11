@@ -159,23 +159,38 @@ const std::vector<int> &Country::getActivityAlien() const
 
 void Country::newMonth(int xcomTotal, int alienTotal)
 {
-	int newFunding = 0;
 	int funding = getFunding().back();
 	int good = (xcomTotal / 10) + _activityXcom.back();
 	int bad = (alienTotal / 20) + _activityAlien.back();
+	int newFunding = (_funding.back()/100) * RNG::generate(5, 20);
 
-	if(good > bad + 30 && bad < RNG::generate(0, good))
+	if (bad <= good + 30)
 	{
-		// happy
-		newFunding = (_funding.back()/100) * RNG::generate(5, 20);
-		_satisfaction = 3;
+		if (good > bad + 30)
+		{
+			if (RNG::generate(0, good) > bad)
+			{
+				// don't go over the cap
+				int cap = getRules()->getMaxFunding()*1000;
+				if (funding + newFunding > cap)
+					newFunding = cap - funding;
+				if (newFunding)
+					_satisfaction = 3;
+			}
+		}
 	}
-	else if(good < bad + 30 && good < RNG::generate(0, bad))
+	else
 	{
-		//sad
-		newFunding -= (_funding.back()/100) * RNG::generate(5, 20);
-		_satisfaction = 1;
+		if (RNG::generate(0, bad) > good)
+		{
+			if (newFunding)
+			{
+				newFunding = 0 - newFunding;
+				_satisfaction = 1;
+			}
+		}
 	}
+
 	// about to be in cahoots
 	if(_newPact && !_pact)
 	{
@@ -184,10 +199,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 		addActivityAlien(150);
 	}
 
-	// don't go over the cap
-	int cap = this->getRules()->getMaxFunding()*1000;
-	if(funding + newFunding > cap)
-		newFunding = cap - funding;
+
 
 	// set the new funding and reset the activity meters
 	if(_pact)
