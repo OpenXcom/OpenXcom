@@ -77,7 +77,7 @@ VictoryState::~VictoryState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void VictoryState::windowClick(Action *action)
+void VictoryState::windowClick(Action *)
 {
 	if(_screenNumber == 5)
 	{

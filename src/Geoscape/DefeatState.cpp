@@ -74,7 +74,7 @@ DefeatState::~DefeatState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DefeatState::windowClick(Action *action)
+void DefeatState::windowClick(Action *)
 {
 	if(_screenNumber == 2)
 	{

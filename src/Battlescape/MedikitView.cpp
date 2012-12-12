@@ -96,7 +96,7 @@ void MedikitView::draw()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void MedikitView::mouseClick (Action *action, State *state)
+void MedikitView::mouseClick (Action *action, State *)
 {
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 	int x = action->getRelativeXMouse() / action->getXScale();

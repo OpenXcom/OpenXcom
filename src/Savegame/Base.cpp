@@ -254,7 +254,7 @@ void Base::saveId(YAML::Emitter &out) const
  * @param lang Language to get strings from.
  * @return Name.
  */
-std::wstring Base::getName(Language *lang) const
+std::wstring Base::getName(Language *) const
 {
 	return _name;
 }
