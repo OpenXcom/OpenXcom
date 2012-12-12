@@ -74,11 +74,28 @@ void Tile::load(const YAML::Node &node)
 		node["mapDataID"][i] >> _mapDataID[i];
 		node["mapDataSetID"][i] >> _mapDataSetID[i];
 	}
-	node["fire"] >> _fire;
-	node["smoke"] >> _smoke;
-	node["discovered"][0] >> _discovered[0];
-	node["discovered"][1] >> _discovered[1];
-	node["discovered"][2] >> _discovered[2];
+	if(const YAML::Node *pName = node.FindValue("fire"))
+	{
+		*pName >> _fire;
+	}
+	else
+	{
+		_fire = 0;
+	}
+	if(const YAML::Node *pName = node.FindValue("smoke"))
+	{
+		*pName >> _smoke;
+	}
+	else
+	{
+		_smoke = 0;
+	}
+	if(const YAML::Node *pName = node.FindValue("discovered"))
+	{
+		node["discovered"][0] >> _discovered[0];
+		node["discovered"][1] >> _discovered[1];
+		node["discovered"][2] >> _discovered[2];
+	}
 }
 
 /**
@@ -93,10 +110,15 @@ void Tile::save(YAML::Emitter &out) const
 	out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
 	out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _mapDataSetID[0] << _mapDataSetID[1] << _mapDataSetID[2] << _mapDataSetID[3] << YAML::EndSeq;
-	out << YAML::Key << "smoke" << YAML::Value << _smoke;
-	out << YAML::Key << "fire" << YAML::Value << _fire;
-	out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+	if (_smoke)
+		out << YAML::Key << "smoke" << YAML::Value << _smoke;
+	if (_fire)
+		out << YAML::Key << "fire" << YAML::Value << _fire;
+	if (_discovered[0] || _discovered[0] || _discovered[0])
+	{
+		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
+		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+	}
 	out << YAML::EndMap;
 }
 
