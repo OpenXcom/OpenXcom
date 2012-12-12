@@ -930,7 +930,7 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base *) const
 {
 	const std::vector<std::string> &mans = ruleset->getManufactureList();
 	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)

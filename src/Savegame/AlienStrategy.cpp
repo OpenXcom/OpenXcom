@@ -71,7 +71,7 @@ void AlienStrategy::init(const Ruleset *rules)
  * @param rules Pointer to the game ruleset.
  * @param node YAML node.
  */
-void AlienStrategy::load(const Ruleset *rules, const YAML::Node &node)
+void AlienStrategy::load(const Ruleset *, const YAML::Node &node)
 {
 	// Free allocated memory.
 	for (MissionsByRegion::iterator ii = _regionMissions.begin(); ii != _regionMissions.end(); ++ii)
