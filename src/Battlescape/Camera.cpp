@@ -74,7 +74,7 @@ void Camera::minMaxInt(int *value, const int minValue, const int maxValue) const
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::mouseClick(Action *action, State *state)
+void Camera::mouseClick(Action *action, State *)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
@@ -92,7 +92,7 @@ void Camera::mouseClick(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::mouseOver(Action *action, State *state)
+void Camera::mouseOver(Action *action, State *)
 {
 	if (_map->getCursorType() == CT_NONE)
 	{
