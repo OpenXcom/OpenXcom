@@ -337,6 +337,9 @@ public:
 	std::string getSpawnUnit() const;
 	/// Gets the unit's aggro sound.
 	int getAggroSound() const;
+	/// Sets the unit's energy level.
+	void setEnergy(int energy);
+	void halveArmor();
 };
 
 }

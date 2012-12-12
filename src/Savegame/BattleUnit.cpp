@@ -1995,5 +1995,23 @@ int BattleUnit::getAggroSound() const
 {
 	return _aggroSound;
 }
+/**
+ * Set a specific number of timeunits.
+ * @param tu
+ */
+void BattleUnit::setEnergy(int energy)
+{
+	_energy = energy;
+}
+
+void BattleUnit::halveArmor()
+{
+	_currentArmor[0] /= 2;
+	_currentArmor[1] /= 2;
+	_currentArmor[2] /= 2;
+	_currentArmor[3] /= 2;
+	_currentArmor[4] /= 2;
+}
+
 }
 
