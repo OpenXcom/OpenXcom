@@ -155,7 +155,7 @@ void Map::draw()
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
-		if (t && t->getVisible())
+		if (t && t->isDiscovered(0))
 		{
 			projectileInFOV = true;
 		}
@@ -165,7 +165,7 @@ void Map::draw()
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
 		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
-		if (t && t->getVisible())
+		if (t && t->isDiscovered(0))
 		{
 			explosionInFOV = true;
 		}
@@ -724,7 +724,9 @@ void Map::animate(bool redraw)
 	// animate certain units (large flying units have a propultion animation)
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if ((*i)->getArmor()->getSize() > 1 && (*i)->getArmor()->getMovementType() == MT_FLY)
+		if (((*i)->getArmor()->getSize() > 1 && (*i)->getArmor()->getMovementType() == MT_FLY) 
+			|| (*i)->getArmor()->getDrawingRoutine() == 8
+			|| (*i)->getArmor()->getDrawingRoutine() == 9)
 		{
 			(*i)->setCache(0);
 			cacheUnit(*i);

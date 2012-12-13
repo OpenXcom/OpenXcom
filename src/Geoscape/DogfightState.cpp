@@ -547,7 +547,8 @@ DogfightState::~DogfightState()
 		delete _projectiles.back();
 		_projectiles.pop_back();
 	}
-	_craft->setInDogfight(false);
+	if (_craft)
+		_craft->setInDogfight(false);
 }
 
 /**
@@ -558,7 +559,7 @@ void DogfightState::think()
 	if(!_endDogfight)
 	{
 		_moveTimer->think(this, 0);
-		if(!_minimized)
+		if(!_endDogfight && !_minimized) // check _endDogfight again, because moveTimer can change it
 		{
 			_animTimer->think(this, 0);
 			_w1Timer->think(this, 0);
@@ -567,7 +568,7 @@ void DogfightState::think()
 			_ufoEscapeTimer->think(this, 0);
 			_craftDamageAnimTimer->think(this, 0);
 		}
-		else if(_craft->getDestination() != _ufo)
+		else if(!_endDogfight && _craft->getDestination() != _ufo)
 		{
 			endDogfight();
 		}
@@ -947,6 +948,7 @@ void DogfightState::move()
 						}
 						delete *c;
 						(*b)->getCrafts()->erase(c);
+						_craft = 0;
 						break;
 					}
 				}
@@ -1740,7 +1742,8 @@ Ufo* DogfightState::getUfo() const
  */
 void DogfightState::endDogfight()
 {
-	_craft->setInDogfight(false);
+	if (_craft)
+		_craft->setInDogfight(false);
 	_endDogfight = true;
 }
 

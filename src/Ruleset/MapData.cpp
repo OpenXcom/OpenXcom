@@ -144,7 +144,11 @@ void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigW
 int MapData::getBlock(ItemDamageType type) const
 {
 	if (type == DT_NONE)
+	{
+		if (_stopLOS)
+			return 256;  // ULTIMATE blockage.
 		return _block[1];
+	}
 	if (type == DT_HE)
 		return _block[2];
 	if (type == DT_SMOKE)

@@ -369,11 +369,7 @@ void BattlescapeGenerator::run()
 
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
-	if (_save->getMissionType() ==  "STR_TERROR_MISSION")
-	{
-		deployCivilians(16);
-	}
-
+	deployCivilians(_game->getRuleset()->getDeployment(_save->getMissionType())->getCivilians());
 
 	fuelPowerSources();
 
@@ -514,8 +510,10 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
  */
 BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
-	if (alienRank > 6)
-		alienRank = 6;
+	int difficulty = _game->getSavedGame()->getDifficulty();
+	int divider = 1;
+	if (!difficulty)
+		divider = 2;
 	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
 	Node *node = 0;
 
@@ -543,11 +541,28 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
+
+		UnitStats *stats = unit->getStats();
+
+		// adjust the unit's stats according to the difficulty level.
+		stats->tu += 4 * difficulty * stats->tu / 100;
+		unit->setTimeUnits(stats->tu);
+		stats->stamina += 4 * difficulty * stats->stamina / 100;
+		unit->setEnergy(stats->stamina);
+		stats->reactions += 6 * difficulty * stats->reactions / 100;
+		stats->strength += 2 * difficulty * stats->strength / 100;
+		stats->firing = (stats->firing + 6 * difficulty * stats->firing / 100) / divider;
+		stats->strength += 2 * difficulty * stats->strength / 100;
+		stats->melee += 4 * difficulty * stats->melee / 100;
+		stats->psiSkill += 4 * difficulty * stats->psiSkill / 100;
+		stats->psiStrength += 4 * difficulty * stats->psiStrength / 100;
+		if (divider > 1)
+			unit->halveArmor();
+
+		// we only add a unit if it has a node to spawn on.
+		// (stops them spawning at 0,0,0)
+		_save->getUnits()->push_back(unit);
 	}
-
-
-	_save->getUnits()->push_back(unit);
-
 	return unit;
 }
 
@@ -1449,17 +1464,20 @@ void BattlescapeGenerator::explodePowerSources()
  */
 void BattlescapeGenerator::deployCivilians(int max)
 {
-	int number = RNG::generate(1, max);
-
-	for (int i = 0; i < number; ++i)
+	if (max)
 	{
-		if (RNG::generate(0,100) < 50)
+		int number = RNG::generate(1, max);
+
+		for (int i = 0; i < number; ++i)
 		{
-			addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-		}
-		else
-		{
-			addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+			if (RNG::generate(0,100) < 50)
+			{
+				addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
+			}
+			else
+			{
+				addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+			}
 		}
 	}
 }

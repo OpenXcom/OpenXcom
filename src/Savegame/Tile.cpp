@@ -26,6 +26,7 @@
 #include "BattleUnit.h"
 #include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -74,11 +75,28 @@ void Tile::load(const YAML::Node &node)
 		node["mapDataID"][i] >> _mapDataID[i];
 		node["mapDataSetID"][i] >> _mapDataSetID[i];
 	}
-	node["fire"] >> _fire;
-	node["smoke"] >> _smoke;
-	node["discovered"][0] >> _discovered[0];
-	node["discovered"][1] >> _discovered[1];
-	node["discovered"][2] >> _discovered[2];
+	if(const YAML::Node *pName = node.FindValue("fire"))
+	{
+		*pName >> _fire;
+	}
+	else
+	{
+		_fire = 0;
+	}
+	if(const YAML::Node *pName = node.FindValue("smoke"))
+	{
+		*pName >> _smoke;
+	}
+	else
+	{
+		_smoke = 0;
+	}
+	if(const YAML::Node *pName = node.FindValue("discovered"))
+	{
+		node["discovered"][0] >> _discovered[0];
+		node["discovered"][1] >> _discovered[1];
+		node["discovered"][2] >> _discovered[2];
+	}
 }
 
 /**
@@ -93,10 +111,15 @@ void Tile::save(YAML::Emitter &out) const
 	out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
 	out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _mapDataSetID[0] << _mapDataSetID[1] << _mapDataSetID[2] << _mapDataSetID[3] << YAML::EndSeq;
-	out << YAML::Key << "smoke" << YAML::Value << _smoke;
-	out << YAML::Key << "fire" << YAML::Value << _fire;
-	out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+	if (_smoke)
+		out << YAML::Key << "smoke" << YAML::Value << _smoke;
+	if (_fire)
+		out << YAML::Key << "fire" << YAML::Value << _fire;
+	if (_discovered[0] || _discovered[0] || _discovered[0])
+	{
+		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
+		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+	}
 	out << YAML::EndMap;
 }
 
@@ -156,7 +179,11 @@ bool Tile::isVoid() const
 int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
+	{
+		if (_objects[part]->isUFODoor() && _currentFrame[part] != 1)
+			return 0;
 		return _objects[part]->getTUCost(movementType);
+	}
 	else
 		return 0;
 }
@@ -231,14 +258,16 @@ int Tile::getFootstepSound() const
 /**
  * Open a door on this tile.
  * @param part
- * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening
+ * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
  */
-int Tile::openDoor(int part)
+int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 {
 	if (!_objects[part]) return -1;
 
 	if (_objects[part]->isDoor())
 	{
+		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) && !debug)
+			return 4;
 		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()), _objects[part]->getAltMCD(), _mapDataSetID[part],
 				   _objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
 		setMapData(0, -1, -1, part);
@@ -246,6 +275,8 @@ int Tile::openDoor(int part)
 	}
 	if (_objects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
 	{
+		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) && !debug)
+			return 4;
 		_currentFrame[part] = 1; // start opening door
 		return 1;
 	}
