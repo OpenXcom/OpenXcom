@@ -91,11 +91,11 @@ FundingState::FundingState(Game *game) : State(game)
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
 		if((*i)->getFunding().size() > 1)
 		{
-			ss2 << ((*i)->getFunding().at((*i)->getFunding().size()-1)- (*i)->getFunding().at((*i)->getFunding().size()-2));
+			ss2 << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)- (*i)->getFunding().at((*i)->getFunding().size()-2));
 		}
 		else
 		{
-			ss2 << "0";
+			ss2 << L"$0";
 		}
 		_lstCountries->addRow(3, _game->getLanguage()->getString((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
