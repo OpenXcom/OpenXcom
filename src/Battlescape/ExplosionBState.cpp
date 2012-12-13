@@ -23,6 +23,7 @@
 #include "TileEngine.h"
 #include "UnitDieBState.h"
 #include "Map.h"
+#include "Camera.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
@@ -118,7 +119,9 @@ void ExplosionBState::init()
 		// bullet hit sound
 		_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 	}
-
+	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
+	if (t->isDiscovered(0))
+		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 }
 
 /*
