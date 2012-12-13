@@ -88,7 +88,7 @@ public:
 	/// Gets the floor object footstep sound.
 	int getFootstepSound() const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
-	int openDoor(int part);
+	int openDoor(int part, BattleUnit *Unit = 0, bool debug = false);
 	/// Check if ufo door is open.
 	bool isUfoDoorOpen(int part) const;
 	/// Close ufo door.

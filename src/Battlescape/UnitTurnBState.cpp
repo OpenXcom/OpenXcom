@@ -67,7 +67,7 @@ void UnitTurnBState::init()
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
 		// try to open a door
-		int door = _parent->getTileEngine()->unitOpensDoor(_unit);
+		int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 		if (door == 0)
 		{
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
@@ -75,6 +75,10 @@ void UnitTurnBState::init()
 		if (door == 1)
 		{
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
+		}
+		if (door == 4)
+		{
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		}
 		_parent->popState();
 	}
