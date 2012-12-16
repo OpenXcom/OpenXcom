@@ -1443,20 +1443,53 @@ void GeoscapeState::time1Day()
 void GeoscapeState::time1Month()
 {
 	_game->getSavedGame()->addMonth();
+
+	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
+	bool newRetaliation = false;
+
 	// Determine alien mission for this month.
 	determineAlienMissions();
+	if (monthsPassed > 5)
+		determineAlienMissions();
+	if (monthsPassed >= 14 - _game->getSavedGame()->getDifficulty()
+		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
+	{
+		newRetaliation = true;
+	}
 
-	// Handle Psi-Training, if applicable
+	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
 	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
-		if((*b)->getAvailablePsiLabs() > 0)
+		if (newRetaliation)
+		{
+			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+			{
+				if ((*i)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
+				{
+					if (!_game->getSavedGame()->getAlienMission((*i)->getRules()->getType(), "STR_ALIEN_RETALIATION"))
+					{
+						const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+						AlienMission *mission = new AlienMission(rule);
+						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+						mission->setRegion((*i)->getRules()->getType());
+						int race = RNG::generate(0, _game->getRuleset()->getAlienRacesList().size()-2); // -2 to avoid "MIXED" race
+						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
+						mission->start();
+						_game->getSavedGame()->getAlienMissions().push_back(mission);
+						newRetaliation = false;
+					}
+					break;
+				}
+			}
+		}
+		if (!psi && (*b)->getAvailablePsiLabs() > 0)
 		{
 			psi = true;
 		}
 		for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
 		{
-			if((*s)->isInPsiTraining())
+			if ((*s)->isInPsiTraining())
 			{
 				(*s)->trainPsi();
 			}
