@@ -165,7 +165,7 @@ class FindMarkedXCOMBase: public std::unary_function<const Base *, bool>
 {
 public:
 	FindMarkedXCOMBase(const RuleRegion &region) : _region(region) { /* Empty by design. */ }
-	bool operator()(const Base *base) const { return _region.insideRegion(base->getLongitude(), base->getLatitude()); }
+	bool operator()(const Base *base) const { return (_region.insideRegion(base->getLongitude(), base->getLatitude()) && base->getRetaliationTarget()); }
 private:
 	const RuleRegion &_region;
 };
