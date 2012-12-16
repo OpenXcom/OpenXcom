@@ -553,7 +553,10 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node)
 	{
-		_save->setUnitPosition(unit, node->getPosition());
+		if (unit->getArmor()->getSize() > 1)
+			_save->setUnitPosition(unit, Position(node->getPosition().x, node->getPosition().y-1, node->getPosition().z));
+		else
+			_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 
