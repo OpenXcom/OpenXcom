@@ -705,6 +705,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i) == base)
 			{
+				(*i)->~Base();
 				_game->getSavedGame()->getBases()->erase(i);
 				break;
 			}
