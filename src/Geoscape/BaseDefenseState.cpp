@@ -28,6 +28,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+#include "../Ruleset/RuleSet.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Ufo.h"
 #include "../Interface/TextList.h"
@@ -158,6 +159,9 @@ void BaseDefenseState::btnOkClick(Action *)
 	if(_ufo->getStatus() != 3)
 	{
 		_game->popState();
+		int month = _game->getSavedGame()->getMonthsPassed();
+		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+			month = _game->getRuleset()->getAlienItemLevels().size()-1;
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_BASE_DEFENSE");
@@ -165,7 +169,7 @@ void BaseDefenseState::btnOkClick(Action *)
 		bgen.setBase(_base);
 		bgen.setUfo(_ufo);
 		bgen.setAlienRace(_ufo->getAlienRace());
-		bgen.setAlienItemlevel(0);
+		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 
 		_game->pushState(new BriefingState(_game, 0, _base));

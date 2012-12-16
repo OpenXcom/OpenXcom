@@ -405,14 +405,11 @@ void GeoscapeState::think()
 	_zoomOutEffectTimer->think(this, 0);
 	_dogfightStartTimer->think(this, 0);
 
-	if (_game->getSavedGame()->getTime()->getSecond() == 0 &&
-	    _game->getSavedGame()->getTime()->getMinute() == 0 &&
-	    _game->getSavedGame()->getTime()->getHour() == 12 &&
-	    _game->getSavedGame()->getTime()->getDay() == 1 &&
-	    _game->getSavedGame()->getTime()->getMonth() == 1 &&
-	    _game->getSavedGame()->getTime()->getYear() == 1999)
+	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	{
+		_game->getSavedGame()->addMonth();
 		determineAlienMissions(true);
-
+	}
 	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
@@ -580,13 +577,16 @@ void GeoscapeState::time5Seconds()
 						}
 						else
 						{
+							int month = _game->getSavedGame()->getMonthsPassed();
+							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+								month = _game->getRuleset()->getAlienItemLevels().size()-1;
 							SavedBattleGame *bgame = new SavedBattleGame();
 							_game->getSavedGame()->setBattleGame(bgame);
 							bgame->setMissionType("STR_BASE_DEFENSE");
 							BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 							bgen.setBase(base);
 							bgen.setAlienRace((*i)->getAlienRace());
-							bgen.setAlienItemlevel(0); //TODO: What is the proper value?
+							bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 							bgen.run();
 
 							popup(new BriefingState(_game, 0, base, *i));
@@ -1442,6 +1442,7 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
+	_game->getSavedGame()->addMonth();
 	// Determine alien mission for this month.
 	determineAlienMissions();
 
