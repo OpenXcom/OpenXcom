@@ -369,7 +369,7 @@ void BattlescapeGenerator::run()
 
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
-	deployCivilians(_game->getRuleset()->getDeployment(_save->getMissionType())->getCivilians());
+	deployCivilians(ruleDeploy->getCivilians());
 
 	fuelPowerSources();
 
