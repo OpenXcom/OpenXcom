@@ -811,6 +811,9 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
+				if ((_currentDist / 8) <= p->getRange())
+					p->setMissed(true);
+
 				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
 				{
 					p->remove();
