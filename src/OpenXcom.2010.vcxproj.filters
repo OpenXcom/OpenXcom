@@ -702,6 +702,9 @@
     <ClCompile Include="Geoscape\DefeatState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\DeleteGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1408,6 +1411,9 @@
     </ClInclude>
     <ClInclude Include="Geoscape\DefeatState.h">
       <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\DeleteGameState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

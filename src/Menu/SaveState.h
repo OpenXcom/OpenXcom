@@ -47,7 +47,7 @@ public:
 	/// Handler for pressing a key on the Save edit.
 	void edtSaveKeyPress(Action *action);
 	/// Handler for clicking the Saves list.
-	void lstSavesClick(Action *action);
+	void lstSavesPress(Action *action);
 };
 
 }

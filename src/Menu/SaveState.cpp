@@ -31,6 +31,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
 #include "ErrorMessageState.h"
+#include "DeleteGameState.h"
 
 namespace OpenXcom
 {
@@ -61,7 +62,7 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SAVE_POSITION"));
 
-	_lstSaves->onMouseClick((ActionHandler)&SaveState::lstSavesClick);
+	_lstSaves->onMousePress((ActionHandler)&SaveState::lstSavesPress);
 
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
@@ -90,38 +91,48 @@ void SaveState::updateList()
  * Names the selected save.
  * @param action Pointer to an action.
  */
-void SaveState::lstSavesClick(Action *)
+void SaveState::lstSavesPress(Action *action)
 {
-	_previousSelectedRow = _selectedRow;
-	_selectedRow = _lstSaves->getSelectedRow();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_previousSelectedRow = _selectedRow;
+		_selectedRow = _lstSaves->getSelectedRow();
 
-	switch (_previousSelectedRow)
-	{
-		case -1:	// first click on the savegame list
-			break;
-		case 0:
-			_lstSaves->setCellText(_previousSelectedRow	, 0, _game->getLanguage()->getString("STR_NEW_SAVED_GAME"));
-			break;
-		default:
-			_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
-	}
+		switch (_previousSelectedRow)
+		{
+			case -1:	// first click on the savegame list
+				break;
+			case 0:
+				_lstSaves->setCellText(_previousSelectedRow	, 0, _game->getLanguage()->getString("STR_NEW_SAVED_GAME"));
+				break;
+			default:
+				_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
+		}
 
-	_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
-	_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
-	if (_lstSaves->getSelectedRow() == 0)
-	{
-		_edtSave->setText(L"");
-		_selected = "";
+		_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+		_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
+		if (_lstSaves->getSelectedRow() == 0)
+		{
+			_edtSave->setText(L"");
+			_selected = "";
+		}
+		else
+		{
+			_edtSave->setText(Language::utf8ToWstr(_selected));
+		}
+		_edtSave->setX(_lstSaves->getColumnX(0));
+		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
+		_edtSave->setVisible(true);
+		_edtSave->focus();
+		_lstSaves->setScrolling(false);
 	}
-	else
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _selectedRow)
 	{
-		_edtSave->setText(Language::utf8ToWstr(_selected));
+		if(_geo)
+			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(8)+10, "BACK01.SCR", 6, this));
+		else
+			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(0), "TAC00.SCR", -1, this));
 	}
-	_edtSave->setX(_lstSaves->getColumnX(0));
-	_edtSave->setY(_lstSaves->getRowY(_selectedRow));
-	_edtSave->setVisible(true);
-	_edtSave->focus();
-	_lstSaves->setScrolling(false);
 }
 
 /**

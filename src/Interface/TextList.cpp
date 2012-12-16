@@ -740,7 +740,7 @@ void TextList::think()
  */
 void TextList::mousePress(Action *action, State *state)
 {
-	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_selectable && (action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT))
 	{
 		if (_selRow < _texts.size())
 		{
