@@ -131,7 +131,7 @@ void BattlescapeGenerator::setAlienRace(const std::string &alienRace)
 
 /**
  * Sets the alien item level. This is used to determine how advanced the equipment of the aliens will be.
- * - this value should be from 0 to 3.
+ * - this value should be from 0 to 2.
  * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
  * - how quick a race evolves varies per race? TODO
  * @param alienItemLevel AlienItemLevel.
