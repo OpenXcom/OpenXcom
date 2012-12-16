@@ -540,6 +540,7 @@ void GeoscapeState::time5Seconds()
 	if (_game->getSavedGame()->getBases()->size() == 0)
 	{
 		_game->pushState (new DefeatState(_game));
+		return;
 	}
 
 	// Handle UFO logic
