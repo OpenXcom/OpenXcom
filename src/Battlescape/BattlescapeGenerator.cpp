@@ -257,10 +257,25 @@ void BattlescapeGenerator::run()
 
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 		// however the item itself becomes the weapon it "holds".
-		// TODO: Convert base vehicles
 		if (_craft != 0)
 		{
 			for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
+			{
+				std::string vehicle = (*i)->getRules()->getType();
+				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
+				unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
+				addItem(_game->getRuleset()->getItem(vehicle), unit);
+				if((*i)->getRules()->getClipSize() != -1)
+				{
+					std::string ammo = (*i)->getRules()->getCompatibleAmmo()->front();
+					addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity((*i)->getAmmo());
+				}
+				unit->setTurretType((*i)->getRules()->getTurretType());
+			}
+		}
+		else if (_base != 0)
+		{
+			for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 			{
 				std::string vehicle = (*i)->getRules()->getType();
 				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
