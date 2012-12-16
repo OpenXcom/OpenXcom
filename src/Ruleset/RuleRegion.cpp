@@ -266,8 +266,22 @@ std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 	if (zone < _missionZones.size())
 	{
 		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
-		double lon = RNG::generate(_missionZones[zone].areas[a].lonMin, _missionZones[zone].areas[a].lonMax);
-		double lat = RNG::generate(_missionZones[zone].areas[a].latMin, _missionZones[zone].areas[a].latMax);
+		double lonMin = _missionZones[zone].areas[a].lonMin;
+		double lonMax = _missionZones[zone].areas[a].lonMax;
+		double latMin = _missionZones[zone].areas[a].latMin;
+		double latMax = _missionZones[zone].areas[a].latMax; 
+		if (lonMin > lonMax)
+		{
+			lonMin = _missionZones[zone].areas[a].lonMax;
+			lonMax = _missionZones[zone].areas[a].lonMin;
+		}
+		if (latMin > latMax)
+		{
+			latMin = _missionZones[zone].areas[a].latMax;
+			latMax = _missionZones[zone].areas[a].latMin;
+		}
+		double lon = RNG::generate(lonMin, lonMax);
+		double lat = RNG::generate(latMin, latMax);
 		return std::make_pair(lon, lat);
 	}
 	assert(0 && "Invalid zone number");
