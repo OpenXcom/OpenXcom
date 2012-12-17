@@ -28,7 +28,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleSet.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Ufo.h"
 #include "../Interface/TextList.h"
