@@ -5278,9 +5278,9 @@ alienRaces:
       - REAPER
   - id: STR_MIXED
     members:
-      - ETHEREAL_COMMANDER
-      - ETHEREAL_LEADER
       - ETHEREAL_SOLDIER
+      - ETHEREAL_LEADER
+      - ETHEREAL_COMMANDER
       - CHRYSSALID
       - SILACOID
       - CELATID
@@ -5719,7 +5719,11 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            []			
+            []
+          -
+            []
+          -
+            []
       - alienRank: 7
         lowQty: 1
         highQty: 3
@@ -5727,7 +5731,11 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            []			
+            []
+          -
+            []
+          -
+            []
     width: 50
     length: 50
     height: 4
@@ -6081,7 +6089,11 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            []			
+            []
+          -
+            []
+          -
+            []
       - alienRank: 7
         lowQty: 1
         highQty: 3
@@ -6089,7 +6101,11 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            []	
+            []
+          -
+            []
+          -
+            []
     width: 50
     length: 50
     height: 4
@@ -6223,6 +6239,10 @@ alienDeployments:
         itemSets:
           -
             []
+          -
+            []
+          -
+            []
       - alienRank: 7
         lowQty: 0
         highQty: 2
@@ -6230,7 +6250,11 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            []			
+            []
+          -
+            []
+          -
+            []
     width: 50
     length: 50
     height: 4
@@ -6366,13 +6390,21 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
-            []			
+            []
+          -
+            []
+          -
+            []
       - alienRank: 7
         lowQty: 0
         highQty: 2
         dQty: 1
         percentageOutsideUfo: 50
         itemSets:
+          -
+            []
+          -
+            []
           -
             []
     width: 60
@@ -6434,6 +6466,10 @@ alienDeployments:
         dQty: 0
         percentageOutsideUfo: 100
         itemSets:
+          -
+            []
+          -
+            []
           -
             []
     width: 60
@@ -6515,12 +6551,20 @@ alienDeployments:
         itemSets:
           -
             []
+          -
+            []
+          -
+            []
       - alienRank: 4
         lowQty: 3
         highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
         itemSets:
+          -
+            []
+          -
+            []
           -
             []
       - alienRank: 5
@@ -6531,12 +6575,20 @@ alienDeployments:
         itemSets:
           -
             []
+          -
+            []
+          -
+            []
       - alienRank: 6
         lowQty: 1
         highQty: 4
         dQty: 0
         percentageOutsideUfo: 0
         itemSets:
+          -
+            []
+          -
+            []
           -
             []
     width: 60
@@ -9163,3 +9215,14 @@ alienMissions:
         count: 1
         trajectory: P9
         timer: 6000
+alienItemLevels:
+  - [0, 0, 0, 0, 0, 0, 0, 1, 1, 2]
+  - [0, 0, 0, 0, 0, 1, 1, 1, 2, 2]
+  - [0, 0, 0, 1, 1, 1, 1, 2, 2, 2]
+  - [0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
+  - [0, 0, 1, 1, 1, 2, 2, 2, 2, 2]
+  - [0, 1, 1, 1, 2, 2, 2, 2, 2, 2]
+  - [1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
+  - [1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
+  - [1, 1, 2, 2, 2, 2, 2, 2, 2, 2]
+  - [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]

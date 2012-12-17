@@ -77,6 +77,7 @@ private:
 	std::vector<const RuleResearch *> _discovered;
 	std::vector<AlienMission*> _activeMissions;
 	bool _debug, _warned;
+	int _monthsPassed;
 
 	/// Check whether a ResearchProject can be researched
 	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const;
@@ -196,6 +197,11 @@ public:
 	Region *locateRegion(double lon, double lat) const;
 	/// Locate a region containing a Target.
 	Region *locateRegion(const Target &target) const;
+	/// Return the month counter.
+	int getMonthsPassed() const;
+	/// Increment the month counter.
+	void addMonth();
+
 };
 
 }

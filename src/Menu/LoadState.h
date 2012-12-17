@@ -30,13 +30,15 @@ namespace OpenXcom
  */
 class LoadState : public SavedGameState
 {
+private:
+	bool _geo;
 public:
 	/// Creates the Load Game state.
 	LoadState(Game *game, bool geo);
 	/// Cleans up the Load Game state.
 	~LoadState();
 	/// Handler for clicking the Saves list.
-	void lstSavesClick(Action *action);
+	void lstSavesPress(Action *action);
 };
 
 }

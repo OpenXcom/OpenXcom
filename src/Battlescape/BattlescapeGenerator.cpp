@@ -131,7 +131,7 @@ void BattlescapeGenerator::setAlienRace(const std::string &alienRace)
 
 /**
  * Sets the alien item level. This is used to determine how advanced the equipment of the aliens will be.
- * - this value should be from 0 to 3.
+ * - this value should be from 0 to 2.
  * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
  * - how quick a race evolves varies per race? TODO
  * @param alienItemLevel AlienItemLevel.
@@ -257,10 +257,25 @@ void BattlescapeGenerator::run()
 
 		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
 		// however the item itself becomes the weapon it "holds".
-		// TODO: Convert base vehicles
 		if (_craft != 0)
 		{
 			for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
+			{
+				std::string vehicle = (*i)->getRules()->getType();
+				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
+				unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
+				addItem(_game->getRuleset()->getItem(vehicle), unit);
+				if((*i)->getRules()->getClipSize() != -1)
+				{
+					std::string ammo = (*i)->getRules()->getCompatibleAmmo()->front();
+					addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity((*i)->getAmmo());
+				}
+				unit->setTurretType((*i)->getRules()->getTurretType());
+			}
+		}
+		else if (_base != 0)
+		{
+			for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 			{
 				std::string vehicle = (*i)->getRules()->getType();
 				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
@@ -538,7 +553,10 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node)
 	{
-		_save->setUnitPosition(unit, node->getPosition());
+		if (unit->getArmor()->getSize() > 1)
+			_save->setUnitPosition(unit, Position(node->getPosition().x, node->getPosition().y-1, node->getPosition().z));
+		else
+			_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 

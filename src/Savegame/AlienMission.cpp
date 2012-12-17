@@ -165,7 +165,7 @@ class FindMarkedXCOMBase: public std::unary_function<const Base *, bool>
 {
 public:
 	FindMarkedXCOMBase(const RuleRegion &region) : _region(region) { /* Empty by design. */ }
-	bool operator()(const Base *base) const { return _region.insideRegion(base->getLongitude(), base->getLatitude()); }
+	bool operator()(const Base *base) const { return (_region.insideRegion(base->getLongitude(), base->getLatitude()) && base->getRetaliationTarget()); }
 private:
 	const RuleRegion &_region;
 };
@@ -198,6 +198,14 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_rule.getType() == "STR_ALIEN_INFILTRATION" && _nextWave == _rule.getWaveCount())
 	{
+		for (std::vector<Country*>::iterator c = game.getCountries()->begin(); c != game.getCountries()->end(); ++c)
+		{
+			if (!(*c)->getPact() && !(*c)->getNewPact() && ruleset.getRegion(_region)->insideRegion((*c)->getRules()->getLabelLongitude(), (*c)->getRules()->getLabelLatitude()))
+			{
+				(*c)->setNewPact();
+				break;
+			}
+		}
 		// Infiltrations loop for ever.
 		_nextWave = 0;
 	}
@@ -374,7 +382,6 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	SavedGame &game = *engine.getSavedGame();
 	if (ufo.getTrajectoryPoint() == ufo.getTrajectory().getWaypointCount() - 1)
 	{
-		//TODO: We should probably score alien points here.
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
 		return;

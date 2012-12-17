@@ -38,6 +38,7 @@ class Ruleset;
 class SavedGame;
 class ResearchProject;
 class Production;
+class Vehicle;
 
 /**
  * Represents a player base on the globe.
@@ -58,6 +59,7 @@ private:
 	std::vector<Production *> _productions;
 	bool _inBattlescape;
 	bool _retaliationTarget;
+	std::vector<Vehicle*> _vehicles;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -187,6 +189,8 @@ public:
 	int getGravShields() const;
 	/// Get a list of Defensive Facilities
 	std::vector<BaseFacility*> *getDefenses();
+	/// Gets the base's vehicles.
+	std::vector<Vehicle*> *getVehicles();
 };
 
 }
