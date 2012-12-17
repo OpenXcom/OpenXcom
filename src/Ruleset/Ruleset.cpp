@@ -785,7 +785,7 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::EndSeq;
 	out << YAML::Key << "alienItemLevels" << YAML::Value;
 	out << YAML::BeginSeq;
-	for ( std::vector<std::vector<int>>::const_iterator i = _alienItemLevels.begin(); i != _alienItemLevels.end(); ++i)
+	for ( std::vector<std::vector<int> >::const_iterator i = _alienItemLevels.begin(); i != _alienItemLevels.end(); ++i)
 	{
 		out << *i;
 	}
