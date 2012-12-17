@@ -375,6 +375,8 @@ openxcom_SOURCES = \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
+	src/Menu/DeleteGameState.cpp \
+	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
 	src/Menu/LanguageState.cpp \

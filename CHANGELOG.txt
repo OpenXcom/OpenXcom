@@ -31,6 +31,9 @@ New features:
 - Certain units now "Yell" when engaging another unit.
 - Enemy unit stats and armour are now affected by difficulty.
 - Aliens progress their equipment levels, races and aggression over time.
+- Added "Alien Research" button in New Battle menu to set alien item level.
+- Added "Right Click to Delete" function in save/load menus.
+
 
 Bugfixes:
 - Updated translations.

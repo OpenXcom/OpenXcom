@@ -337,6 +337,8 @@ set ( menu_src
   Menu/OptionsState.h
   Menu/ErrorMessageState.cpp
   Menu/ErrorMessageState.h
+  Menu/DeleteGameState.cpp
+  Menu/DeleteGameState.h
   Menu/SavedGameState.cpp
   Menu/SavedGameState.h
 )
