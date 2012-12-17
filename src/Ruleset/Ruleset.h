@@ -87,7 +87,7 @@ protected:
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex;
 	std::vector<std::string> _alienMissionsIndex;
-	std::vector<std::vector<int>> _alienItemLevels;
+	std::vector<std::vector<int> > _alienItemLevels;
 
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
@@ -189,7 +189,7 @@ public:
 	/// Get the city at the specified coordinates.
 	const City *locateCity(double lon, double lat) const;
 	/// Get the alien item level table
-	const std::vector<std::vector<int>> getAlienItemLevels() const;
+	const std::vector<std::vector<int> > getAlienItemLevels() const;
 };
 
 }
