@@ -20,6 +20,7 @@ New features:
 - Custom Initial Base Building Option.
 - Landing Ufos/Ground Assault missions.
 - Alien Mission Generation.
+- Base Defense Screens.
 - Multi-Part Ruleset support.
 - Pause Game on Loss of Focus.
 - Ukranian translation.
@@ -33,7 +34,6 @@ New features:
 - Aliens progress their equipment levels, races and aggression over time.
 - Added "Alien Research" button in New Battle menu to set alien item level.
 - Added "Right Click to Delete" function in save/load menus.
-
 
 Bugfixes:
 - Updated translations.
@@ -52,6 +52,7 @@ Bugfixes:
 - UFO walls can no longer be seen through from certain angles.
 - Units on stairs will now correctly reveal tiles on the level above.
 - Opening doors now uses time units correctly.
+- (hopefully) Fixed Large unit spawning inside walls.
 
 Version 0.4.5 (04-11-2012)
 ---------------------------

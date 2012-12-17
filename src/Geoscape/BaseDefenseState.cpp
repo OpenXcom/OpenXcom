@@ -107,7 +107,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			++row;
 			delay();
 			_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_FIRING"));
-			_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
+			_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
 			delay();
 			if(RNG::generate(1, 100) > (*def)->getRules()->getHitRatio())
 			{
@@ -116,13 +116,13 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			else
 			{
 				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_HIT"));
-				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
+				_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (*def)->getRules()->getDefenseValue());
 				if(_ufo->getStatus() == 3)
 				{
 					delay();
 					_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),"","");
-					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(5)->play();
+					_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound(11)->play();
 					continue;
 				}
 			}
