@@ -60,6 +60,11 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
+	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_CYDONIA")
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+	}
 	else
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -69,7 +74,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	if (mission == "STR_ALIEN_BASE_ASSAULT")
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
 	{
 		_txtCraft->setY(40);
 		_txtBriefing->setY(56);
@@ -78,7 +83,10 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 	{
 		add(_txtTarget);
 	}
-	add(_txtCraft);
+	if (mission != "STR_CYDONIA")
+	{
+		add(_txtCraft);
+	}
 	add(_txtBriefing);
 
 	// Set up objects
@@ -99,7 +107,10 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 	std::wstringstream ss;
 	if (craft)
 	{
-		_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+		if (craft->getDestination())
+		{
+			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+		}
 
 		ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
 	}
@@ -122,35 +133,11 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 	}
 
-	if (mission == "STR_BASE_DEFENSE")
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE_BRIEFING"));
-	}
-	else if (mission == "STR_TERROR_MISSION")
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_TERROR_MISSION"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_TERROR_MISSION_BRIEFING"));
-	}
-	else if (mission == "STR_ALIEN_BASE_ASSAULT")
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_ASSAULT"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_ASSAULT_BRIEFING"));
-	}
-	else
-	{
-		Ufo* u = dynamic_cast<Ufo*>(craft->getDestination());
-		if (u->getStatus() == Ufo::CRASHED)
-		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
-			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));
-		}
-		else
-		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT"));
-			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT_BRIEFING"));
-		}
-	}
+	_txtTitle->setText(_game->getLanguage()->getString(mission));
+	std::stringstream briefingtext;
+	briefingtext << mission.c_str() << "_BRIEFING";
+	_txtBriefing->setText(_game->getLanguage()->getString(briefingtext.str()));
+
 	if (mission == "STR_BASE_DEFENSE")
 	{
 		// Mark as destroyed any way, to remove it from Geoscape.

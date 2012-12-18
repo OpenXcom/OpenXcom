@@ -120,9 +120,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 
 	_selMission = 0;
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
-	//TODO: Figure out how to generate base defenses
-	_missionTypes.pop_back();
-	_missionTypes.pop_back();
 
 	_selTerrain = 0;
 	_terrainTypes.push_back("STR_FARM");
@@ -134,8 +131,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 
 	_selAlien = 0;
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
-	//_alienRaces.push_back("STR_SECTOID");
-	//_alienRaces.push_back("STR_FLOATER");
 
 	_selDifficulty = 0;
 	_difficulty.push_back("STR_1_BEGINNER");
@@ -343,6 +338,10 @@ void NewBattleState::btnOkClick(Action *)
 		bgen.setAlienBase(b);
 		bgen.setCraft(_craft);
 	}
+	else if (_missionTypes[_selMission] == "STR_MARS_CYDONIA_LANDING" || _missionTypes[_selMission] == "STR_CYDONIA")
+	{
+		bgen.setCraft(_craft);
+	}
 	else
 	{
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
@@ -354,6 +353,8 @@ void NewBattleState::btnOkClick(Action *)
 		{
 			u->setLatitude(-0.5);
 		}
+		// either ground assault or ufo crash
+		bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 	}
 
 	GameDifficulty diffs[] = {DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN};
