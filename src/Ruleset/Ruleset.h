@@ -189,7 +189,7 @@ public:
 	/// Get the city at the specified coordinates.
 	const City *locateCity(double lon, double lat) const;
 	/// Get the alien item level table
-	const std::vector<std::vector<int> > getAlienItemLevels() const;
+	const std::vector<std::vector<int> > &getAlienItemLevels() const;
 };
 
 }
