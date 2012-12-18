@@ -18,6 +18,7 @@
  */
 #include "ConfirmLandingState.h"
 #include <sstream>
+#include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -121,6 +122,9 @@ void ConfirmLandingState::btnYesClick(Action *)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
+	int month = _game->getSavedGame()->getMonthsPassed();
+	if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+		month = _game->getRuleset()->getAlienItemLevels().size()-1;
 	if (u != 0)
 	{
 		SavedBattleGame *bgame = new SavedBattleGame();
@@ -135,7 +139,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setCraft(_craft);
 		bgen.setUfo(u);
 		bgen.setAlienRace(u->getAlienRace());
-		bgen.setAlienItemlevel(0);
+		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 
 		_game->pushState(new BriefingState(_game, _craft, 0));
@@ -151,7 +155,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setCraft(_craft);
 		bgen.setTerrorSite(t);
 		bgen.setAlienRace(t->getAlienRace());
-		bgen.setAlienItemlevel(0);
+		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 
 		_game->pushState(new BriefingState(_game, _craft, 0));
@@ -167,7 +171,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgen.setCraft(_craft);
 		bgen.setAlienBase(b);
 		bgen.setAlienRace(b->getAlienRace());
-		bgen.setAlienItemlevel(0);
+		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 
 		_game->pushState(new BriefingState(_game, _craft, 0));

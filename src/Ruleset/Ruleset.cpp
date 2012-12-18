@@ -606,6 +606,15 @@ void Ruleset::loadFile(const std::string &filename)
 				}
 			}
 		}
+		else if (key == "alienItemLevels")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::vector<int> type;
+				(*j) >> type;
+				_alienItemLevels.push_back(type);
+			}
+		}
 	}
 
 	fin.close();
@@ -772,6 +781,13 @@ void Ruleset::save(const std::string &filename) const
 	for (std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
 		i->second->save(out);
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "alienItemLevels" << YAML::Value;
+	out << YAML::BeginSeq;
+	for ( std::vector<std::vector<int> >::const_iterator i = _alienItemLevels.begin(); i != _alienItemLevels.end(); ++i)
+	{
+		out << *i;
 	}
 	out << YAML::EndSeq;
 	/*out << YAML::Key << "startingBase" << YAML::Value;
@@ -1315,4 +1331,8 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	return 0;
 }
 
+const std::vector<std::vector<int> > Ruleset::getAlienItemLevels() const
+{
+	return _alienItemLevels;
+}
 }

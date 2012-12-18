@@ -1655,6 +1655,14 @@
 			Name="Menu"
 			>
 			<File
+				RelativePath=".\Menu\DeleteGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\DeleteGameState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\ErrorMessageState.cpp"
 				>
 			</File>

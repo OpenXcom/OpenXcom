@@ -325,7 +325,7 @@ void Ufo::setAltitude(const std::string &altitude)
  */
 bool Ufo::isCrashed() const
 {
-	return (_damage >= _rules->getMaxDamage() / 2);
+	return (_damage > _rules->getMaxDamage() / 2);
 }
 
 /**

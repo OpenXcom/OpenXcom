@@ -27,6 +27,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
+#include "../Engine/Music.h"
 
 namespace OpenXcom
 {
@@ -49,6 +50,8 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 	// Set up objects
 	_screen->onMouseClick((ActionHandler)&DefeatState::windowClick);
 	
+	_game->getResourcePack()->getMusic("GMWIN")->play();
+
 	for (int text = 0; text != 2; ++text)
 	{
 		std::stringstream ss2;

@@ -1131,4 +1131,27 @@ std::vector<BaseFacility*> *Base::getDefenses()
 	}
 	return total;
 }
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the base.
+ * @return Pointer to vehicle list.
+ */
+std::vector<Vehicle*> *Base::getVehicles()
+{
+	for (std::vector<Vehicle*>::iterator v = _vehicles.begin(); v < _vehicles.end(); ++v)
+	{
+		delete (*v);
+	}
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
+	{
+		if (_rule->getItem((i)->first)->isFixed())
+		{
+			std::string type = _rule->getItem((i)->first)->getType();
+			Vehicle *v = new Vehicle(_rule->getItem((i)->first), 0);
+			_vehicles.push_back(v);
+		}
+	}
+	return &_vehicles;
+}
 }

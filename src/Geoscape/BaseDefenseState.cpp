@@ -28,6 +28,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Ufo.h"
 #include "../Interface/TextList.h"
@@ -106,7 +107,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			++row;
 			delay();
 			_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_FIRING"));
-			_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
+			_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
 			delay();
 			if(RNG::generate(1, 100) > (*def)->getRules()->getHitRatio())
 			{
@@ -115,13 +116,13 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			else
 			{
 				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_HIT"));
-				_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
+				_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (*def)->getRules()->getDefenseValue());
 				if(_ufo->getStatus() == 3)
 				{
 					delay();
 					_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),"","");
-					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(5)->play();
+					_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound(11)->play();
 					continue;
 				}
 			}
@@ -158,6 +159,9 @@ void BaseDefenseState::btnOkClick(Action *)
 	if(_ufo->getStatus() != 3)
 	{
 		_game->popState();
+		int month = _game->getSavedGame()->getMonthsPassed();
+		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+			month = _game->getRuleset()->getAlienItemLevels().size()-1;
 		SavedBattleGame *bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_BASE_DEFENSE");
@@ -165,7 +169,7 @@ void BaseDefenseState::btnOkClick(Action *)
 		bgen.setBase(_base);
 		bgen.setUfo(_ufo);
 		bgen.setAlienRace(_ufo->getAlienRace());
-		bgen.setAlienItemlevel(0);
+		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 
 		_game->pushState(new BriefingState(_game, 0, _base));

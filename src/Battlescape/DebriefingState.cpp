@@ -223,17 +223,20 @@ void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
-	if (_game->getSavedGame()->handlePromotions())
+	if (!_destroyBase)
 	{
-		_game->pushState(new PromotionsState(_game));
-	}
-	if (!_missingItems.empty())
-	{
-		_game->pushState(new CannotReequipState(_game, _missingItems));
-	}
-	if (_noContainment)
-	{
-		_game->pushState (new NoContainmentState(_game));
+		if (_game->getSavedGame()->handlePromotions())
+		{
+			_game->pushState(new PromotionsState(_game));
+		}
+		if (!_missingItems.empty())
+		{
+			_game->pushState(new CannotReequipState(_game, _missingItems));
+		}
+		if (_noContainment)
+		{
+			_game->pushState (new NoContainmentState(_game));
+		}
 	}
 }
 
@@ -705,6 +708,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i) == base)
 			{
+				(*i)->~Base();
 				_game->getSavedGame()->getBases()->erase(i);
 				break;
 			}

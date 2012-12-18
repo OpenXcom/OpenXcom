@@ -113,6 +113,17 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
+		if (!_unit->getVisibleUnits()->empty())
+		{
+			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
+			{
+				(*i)->setVisible(false);
+			}
+			for (std::vector<BattleUnit*>::iterator i = _parent->getSave()->getUnits()->begin(); i != _parent->getSave()->getUnits()->end(); ++i)
+			{
+				_parent->getTileEngine()->calculateFOV(*i);
+			}
+		}
 		if (!_unit->getSpawnUnit().empty())
 		{
 			// converts the dead zombie to a chryssalid
