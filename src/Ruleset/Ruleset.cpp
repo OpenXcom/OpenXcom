@@ -1331,7 +1331,7 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	return 0;
 }
 
-const std::vector<std::vector<int> > Ruleset::getAlienItemLevels() const
+const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
