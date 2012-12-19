@@ -301,6 +301,7 @@
     <ClCompile Include="Geoscape\BaseDestroyedState.cpp" />
     <ClCompile Include="Geoscape\BaseNameState.cpp" />
     <ClCompile Include="Geoscape\BuildNewBaseState.cpp" />
+    <ClCompile Include="Geoscape\ConfimCydoniaState.cpp" />
     <ClCompile Include="Geoscape\CraftErrorState.cpp" />
     <ClCompile Include="Geoscape\ConfirmDestinationState.cpp" />
     <ClCompile Include="Geoscape\ConfirmLandingState.cpp" />
@@ -542,6 +543,7 @@
     <ClInclude Include="Geoscape\BaseDestroyedState.h" />
     <ClInclude Include="Geoscape\BaseNameState.h" />
     <ClInclude Include="Geoscape\BuildNewBaseState.h" />
+    <ClInclude Include="Geoscape\ConfirmCydoniaState.h" />
     <ClInclude Include="Geoscape\CraftErrorState.h" />
     <ClInclude Include="Geoscape\ConfirmDestinationState.h" />
     <ClInclude Include="Geoscape\ConfirmLandingState.h" />

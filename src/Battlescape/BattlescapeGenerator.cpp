@@ -178,7 +178,7 @@ void BattlescapeGenerator::nextStage()
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_width, &_length, &_height);
-	if (_save->getMissionType() == "STR_CYDONIA")
+	if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_terrain = _game->getRuleset()->getTerrain("UBASE");
 		_worldShade = 15;
@@ -238,7 +238,7 @@ void BattlescapeGenerator::run()
 		_worldShade = 5;
 	}
 	else
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_terrain = _game->getRuleset()->getTerrain("UBASE");
 		_worldShade = 15;
@@ -461,7 +461,7 @@ void BattlescapeGenerator::run()
 		}
 	}
 
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 		{
@@ -489,7 +489,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 {
 //	unit->setId(_unitCount++);
 
-	if (_craft == 0 || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+	if (_craft == 0 || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		Node* node = _save->getSpawnNode(NR_XCOM, unit);
 		if (node)
@@ -946,7 +946,7 @@ void BattlescapeGenerator::generateMap()
 
 	/* Determine Craft landingzone */
 	/* alien base assault has no craft landing zone */
-	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT") && ( _save->getMissionType() != "STR_CYDONIA"))
+	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT") && ( _save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
 	{
 		// pick a random craft mapblock, can have all kinds of sizes
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
@@ -1065,12 +1065,12 @@ void BattlescapeGenerator::generateMap()
 		blocksToDo = 0;
 	}
 	/* determine positioning of base modules */
-	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		int randX = RNG::generate(0, (_length/10)- 2);
 		int randY = RNG::generate(0, (_width/10)- 2);
 		// add the command center
-		blocks[randX][randY] = _terrain->getRandomMapBlock(20, (_save->getMissionType() == "STR_CYDONIA")?MT_FINALCOMM:MT_UBASECOMM);
+		blocks[randX][randY] = _terrain->getRandomMapBlock(20, (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")?MT_FINALCOMM:MT_UBASECOMM);
 		blocksToDo--;
 		// mark mapblocks as used
 		blocks[randX + 1][randY] = dummy;
@@ -1183,11 +1183,11 @@ void BattlescapeGenerator::generateMap()
 	}
 
 	/* making passages between blocks in a base map */
-	if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+	if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		int ewallfix = 14, swallfix = 13;
 		int ewallfixSet = 1, swallfixSet = 1;
-		if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+		if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			ewallfix = 17;
 			swallfix = 18;
@@ -1226,7 +1226,7 @@ void BattlescapeGenerator::generateMap()
 						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL);
 						_save->getTile(Position((i*10)+9,(j*10)+6,0))->setMapData(mds->getObjects()->at(ewallfix), ewallfix, ewallfixSet, MapData::O_NORTHWALL);
 					}
-					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 					{
 						//wallcornerfix
 						_save->getTile(Position(((i+1)*10),(j*10)+3,0))->setMapData(mds->getObjects()->at(swallfix+1), swallfix+1, swallfixSet, MapData::O_OBJECT);
@@ -1252,7 +1252,7 @@ void BattlescapeGenerator::generateMap()
 						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL);
 						_save->getTile(Position((i*10)+6,(j*10)+9,0))->setMapData(mds->getObjects()->at(swallfix), swallfix, swallfixSet, MapData::O_WESTWALL);
 					}
-					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_CYDONIA")
+					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 					{
 						// wallcornerfix
 						_save->getTile(Position((i*10)+3,((j+1)*10),0))->setMapData(mds->getObjects()->at(swallfix+1), swallfix+1, swallfixSet, MapData::O_OBJECT);
@@ -1286,7 +1286,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT") && (_save->getMissionType() != "STR_CYDONIA"))
+	if (_craft != 0 && (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT") && (_save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
 	{
 		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{

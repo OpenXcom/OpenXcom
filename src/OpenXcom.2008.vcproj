@@ -1311,6 +1311,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\ConfirmCydoniaState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmCydoniaState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\ConfirmDestinationState.cpp"
 				>
 			</File>

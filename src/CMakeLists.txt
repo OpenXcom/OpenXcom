@@ -253,6 +253,8 @@ set ( geoscape_src
   Geoscape/AbandonGameState.h
   Geoscape/GraphsState.cpp
   Geoscape/GraphsState.h
+  Geoscape/ConfirmCydoniaState.cpp
+  Geoscape/ConfirmCydoniaState.h
   Geoscape/ConfirmLandingState.cpp
   Geoscape/ConfirmLandingState.h
   Geoscape/GeoscapeOptionsState.h

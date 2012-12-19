@@ -60,9 +60,14 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_CYDONIA")
+	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+	}
+	else if (mission == "STR_MARS_CYDONIA_LANDING")
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
 	}
 	else
@@ -83,7 +88,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 	{
 		add(_txtTarget);
 	}
-	if (mission != "STR_CYDONIA")
+	if (mission != "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		add(_txtCraft);
 	}
@@ -124,7 +129,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 	_txtBriefing->setWordWrap(true);
 
 	// Show respective mission briefing
-	if (mission == "STR_ALIEN_BASE_ASSAULT")
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	}

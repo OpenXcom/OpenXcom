@@ -34,6 +34,7 @@ New features:
 - Aliens progress their equipment levels, races and aggression over time.
 - Added "Alien Research" button in New Battle menu to set alien item level.
 - Added "Right Click to Delete" function in save/load menus.
+- Game is now finishable.
 
 Bugfixes:
 - Updated translations.

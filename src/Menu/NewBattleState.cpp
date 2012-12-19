@@ -356,7 +356,7 @@ void NewBattleState::btnOkClick(Action *)
 		bgen.setAlienBase(b);
 		bgen.setCraft(_craft);
 	}
-	else if (_missionTypes[_selMission] == "STR_MARS_CYDONIA_LANDING" || _missionTypes[_selMission] == "STR_CYDONIA")
+	else if (_missionTypes[_selMission] == "STR_MARS_CYDONIA_LANDING" || _missionTypes[_selMission] == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		bgen.setCraft(_craft);
 	}

@@ -30,6 +30,10 @@
 #include "../Interface/TextButton.h"
 #include "../Savegame/Waypoint.h"
 #include "MultipleTargetsState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Craft.h"
+#include "../Ruleset/RuleCraft.h"
+#include "ConfirmCydoniaState.h"
 
 namespace OpenXcom
 {
@@ -54,6 +58,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(60, 12, 110, 8);
+	_btnCydonia = new TextButton(60, 12, 180, 8);
 	_txtTitle = new Text(100, 9, 10, 10);
 
 	// Set palette
@@ -68,7 +73,9 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	add(_window);
 	add(_btnCancel);
+	add(_btnCydonia);
 	add(_txtTitle);
+
 
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&SelectDestinationState::globeClick);
@@ -100,6 +107,17 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION"));
+
+	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
+	{
+		_btnCydonia->setVisible(false);
+	}
+	else
+	{
+		_btnCydonia->setColor(Palette::blockOffset(8)+5);
+		_btnCydonia->setText(_game->getLanguage()->getString("STR_MARS_THE_FINAL_ASSAULT"));
+		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
+	}
 }
 
 /**
@@ -286,4 +304,9 @@ void SelectDestinationState::btnCancelClick(Action *)
 	_game->popState();
 }
 
+void SelectDestinationState::btnCydoniaClick(Action *)
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(5)), Palette::backPos, 16);
+	_game->pushState(new ConfirmCydoniaState(_game, _craft));
+}
 }

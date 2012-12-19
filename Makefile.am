@@ -292,6 +292,8 @@ openxcom_SOURCES = \
 	src/Geoscape/BuildNewBaseState.h \
 	src/Geoscape/CraftErrorState.cpp \
 	src/Geoscape/CraftErrorState.h \
+	src/Geoscape/ConfirmCydoniaState.cpp \
+	src/Geoscape/ConfirmCydoniaState.h \
 	src/Geoscape/ConfirmDestinationState.cpp \
 	src/Geoscape/ConfirmDestinationState.h \
 	src/Geoscape/ConfirmLandingState.cpp \

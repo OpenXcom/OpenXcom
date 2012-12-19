@@ -429,7 +429,7 @@ std::string SavedBattleGame::getNextStage() const
 {
 	if (_missionType == "STR_MARS_CYDONIA_LANDING")
 	{
-		return "STR_CYDONIA";
+		return "STR_MARS_THE_FINAL_ASSAULT";
 	}
 	else
 		return "";

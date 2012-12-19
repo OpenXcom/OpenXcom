@@ -44,7 +44,7 @@ private:
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
 	Window *_window;
 	Text *_txtTitle;
-	TextButton *_btnCancel;
+	TextButton *_btnCancel, *_btnCydonia;
 public:
 	/// Creates the Select Destination state.
 	SelectDestinationState(Game *game, Craft *craft, Globe *globe);
@@ -84,6 +84,9 @@ public:
 	void btnZoomOutRightClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Cydonia mission button.
+	void btnCydoniaClick(Action *action);
+
 };
 
 }
