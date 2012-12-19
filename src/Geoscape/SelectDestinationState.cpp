@@ -115,7 +115,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	else
 	{
 		_btnCydonia->setColor(Palette::blockOffset(8)+5);
-		_btnCydonia->setText(_game->getLanguage()->getString("STR_MARS_THE_FINAL_ASSAULT"));
+		_btnCydonia->setText(_game->getLanguage()->getString("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
 	}
 }
