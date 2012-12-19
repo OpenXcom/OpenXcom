@@ -25,6 +25,7 @@
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Unit.h"
+#include "../Ruleset/MapData.h"
 #include "Soldier.h"
 
 namespace OpenXcom
@@ -257,7 +258,7 @@ public:
 	/// Gets a grenade from the belt, if any.
 	BattleItem *getGrenadeFromBelt() const;
 	/// Check if this unit is in the exit area
-	bool isInExitArea() const;
+	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
 	/// Adds one to the reaction exp counter.

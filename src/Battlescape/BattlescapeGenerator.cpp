@@ -162,6 +162,60 @@ void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
 
 
 /**
+ * Switch an existing battlescapesavegame to a new stage.
+ */
+void BattlescapeGenerator::nextStage()
+{
+	// kill all units not in endpoint area
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if (!(*j)->isInExitArea(END_POINT))
+		{
+			(*j)->instaKill();
+			(*j)->setTile(0);
+		}
+	}
+
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
+	ruleDeploy->getDimensions(&_width, &_length, &_height);
+	if (_save->getMissionType() == "STR_CYDONIA")
+	{
+		_terrain = _game->getRuleset()->getTerrain("UBASE");
+		_worldShade = 15;
+	}
+
+	_save->initMap(_width, _length, _height);
+	generateMap();
+
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if (!(*j)->isOut())
+		{
+			Node* node = _save->getSpawnNode(NR_XCOM, (*j));
+			if (node)
+			{
+				_save->setUnitPosition((*j), node->getPosition());
+				(*j)->getVisibleTiles()->clear();
+			}
+		}
+	}
+
+	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
+
+	deployCivilians(ruleDeploy->getCivilians());
+
+	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	{
+		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			_save->getTiles()[i]->setDiscovered(true, 2);
+	}
+	_save->setGlobalShade(_worldShade);
+	_save->getTileEngine()->calculateSunShading();
+	_save->getTileEngine()->calculateTerrainLighting();
+	_save->getTileEngine()->calculateUnitLighting();
+}
+
+/**
  * This will start the generator: it will fill up the battlescapesavegame with data.
  */
 void BattlescapeGenerator::run()
@@ -1037,6 +1091,20 @@ void BattlescapeGenerator::generateMap()
 			blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
 			blocksToDo--;
 		}
+	}
+	else if (_save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
+	{
+		int randX = RNG::generate(0, (_length/10)- 2);
+		int randY = RNG::generate(0, (_width/10)- 2);
+		// add one lift
+		while (blocks[randX][randY] != NULL)
+		{
+			randX = RNG::generate(0, (_length/10)- 1);
+			randY = RNG::generate(0, (_width/10)- 1);
+		}
+		// add the lift
+		blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
+		blocksToDo--;
 	}
 
 

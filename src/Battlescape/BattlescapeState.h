@@ -171,7 +171,7 @@ public:
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Finishes a battle.
-	void finishBattle(bool abort);
+	void finishBattle(bool abort, int inExitArea);
 	/// show launch button
 	void showLaunchButton(bool show);
 	/// Clears mouse-scrolling state

@@ -3542,6 +3542,7 @@ terrains:
       - name: MARS10
         width: 10
         length: 10
+        type: 6
   - name: MOUNT
     mapDataSets:
       - BLANKS

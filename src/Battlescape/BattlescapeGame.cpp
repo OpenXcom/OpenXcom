@@ -326,6 +326,13 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
+	if (_save->isObjectiveDestroyed())
+	{
+		_parentState->finishBattle(false,liveSoldiers);
+		return;
+	}
+
+
 	if (liveAliens > 0 && liveSoldiers > 0)
 	{
 		showInfoBoxQueue();

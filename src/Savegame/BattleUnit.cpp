@@ -1518,9 +1518,9 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 * Check if this unit is in the exit area.
 * @return Is in the exit area?
 */
-bool BattleUnit::isInExitArea() const
+bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
-	return _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT);
+	return _tile && _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt);
 }
 
 /**

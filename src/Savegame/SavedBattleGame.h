@@ -75,6 +75,7 @@ private:
 	bool _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
 	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
 	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
+	bool _objectiveDestroyed;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -94,6 +95,8 @@ public:
 	void setMissionType(const std::string &missionType);
 	/// Get the mission type.
 	std::string getMissionType() const;
+	/// Get the next mission type.
+	std::string getNextStage() const;
 	/// Set the global shade.
 	void setGlobalShade(int shade);
 	/// Get the global shade.
@@ -154,6 +157,10 @@ public:
 	void setAborted(bool flag);
 	/// Whether the mission was aborted.
 	bool isAborted();
+	/// Whether the objective is destroyed.
+	void setObjectiveDestroyed(bool flag);
+	/// Whether the objective is detroyed.
+	bool isObjectiveDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
 	/// Gets a spawn node.

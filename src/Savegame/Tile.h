@@ -104,15 +104,15 @@ public:
 	/// Get the shade amount.
 	int getShade() const;
 	/// Destroy a tile part.
-	void destroy(int part);
+	bool destroy(int part);
 	/// Damage a tile part.
-	void damage(int part, int power);
+	bool damage(int part, int power);
 	/// Set a "virtual" explosive on this tile, to detonate later.
 	void setExplosive(int power);
 	/// Get explosive power of this tile.
 	int getExplosive() const;
 	/// Apply the explosive power to the tile parts.
-	void detonate();
+	bool detonate();
 	/// Animated the tile parts.
 	void animate();
 	/// Get object sprites.
@@ -142,7 +142,7 @@ public:
 	/// Get top-most item
 	int getTopItemSprite();
 	/// Decrease fire and smoke timers.
-	void prepareNewTurn();
+	bool prepareNewTurn();
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
 	/// Set the tile marker color.

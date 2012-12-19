@@ -65,7 +65,7 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
-			if ((*i)->isInExitArea())
+			if ((_battleGame->getNextStage() != "" && (*i)->isInExitArea(END_POINT)) || ((*i)->isInExitArea() && _battleGame->getNextStage() == ""))
 			{
 				_inExitArea++;
 			}
@@ -132,7 +132,7 @@ AbortMissionState::~AbortMissionState()
 void AbortMissionState::btnOkClick(Action *)
 {
 	_game->popState();
-	_state->finishBattle(true);
+	_state->finishBattle(true, _inExitArea);
 }
 
 /**

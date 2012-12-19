@@ -127,7 +127,7 @@ void NextTurnState::handle(Action *action)
 
 		if (liveAliens == 0 || liveSoldiers == 0)
 		{
-			_state->finishBattle(false);
+			_state->finishBattle(false, liveSoldiers);
 		}
 
 		_state->btnCenterClick(0);

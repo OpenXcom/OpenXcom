@@ -533,7 +533,8 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 25% to 75%
 		int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
-		tile->damage(part, rndPower);
+		if (tile->damage(part, rndPower))
+			_save->setObjectiveDestroyed(true);
 	}
 	else if (part == 4)
 	{
@@ -707,7 +708,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	{
 		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
-			(*i)->detonate();
+			if ((*i)->detonate())
+				_save->setObjectiveDestroyed(true);
 			applyItemGravity((*i));
 		}
 	}

@@ -72,6 +72,10 @@
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
 #include "MiniMapState.h"
+#include "BattlescapeGenerator.h"
+#include "BriefingState.h"
+#include "../Geoscape/DefeatState.h"
+#include "../Geoscape/VictoryState.h"
 
 namespace OpenXcom
 {
@@ -1111,17 +1115,57 @@ void BattlescapeState::popup(State *state)
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing the screen for the mission.
  * @param abort Was the mission aborted?
+ * @param number of soldiers in exit area OR number of survivors when battle finished due to either all aliens or objective was destroyed
  */
-void BattlescapeState::finishBattle(bool abort)
+void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	_popups.clear();
-	_animTimer->stop();
-	_gameTimer->stop();
-	_save->setAborted(abort);
-	_game->popState();
-	_game->pushState(new DebriefingState(_game));
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	if (_save->getNextStage() != "" && inExitArea)
+	{
+		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
+		_popups.clear();
+		_save->setMissionType(_save->getNextStage());
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.setAlienRace("STR_MIXED");
+		bgen.nextStage();
+		_game->popState();
+		_game->pushState(new BriefingState(_game, 0, 0));
+	}
+	else
+	{
+		_popups.clear();
+		_animTimer->stop();
+		_gameTimer->stop();
+		_save->setAborted(abort);
+		_game->popState();
+		if (abort || (!abort  && inExitArea == 0))
+		{
+			// abort was done or no player is still alive
+			// this concludes to defeat when in mars or mars landing mission
+			if (_save->getMissionType() == "STR_CYDONIA" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
+			{
+				_game->pushState (new DefeatState(_game));
+			}
+			else
+			{
+				_game->pushState(new DebriefingState(_game));
+			}
+		}
+		else
+		{
+			// no abort was done and at least a player is still alive
+			// this concludes to victory when in mars mission
+			if (_save->getMissionType() == "STR_CYDONIA")
+			{
+				_game->pushState (new VictoryState(_game));
+			}
+			else
+			{
+				_game->pushState(new DebriefingState(_game));
+			}
+		}
+		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	}
 }
 
 /**

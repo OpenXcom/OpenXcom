@@ -396,11 +396,14 @@ int Tile::getShade() const
  * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
  * @param part
+ * @return bool Return true objective was destroyed
  */
-void Tile::destroy(int part)
+bool Tile::destroy(int part)
 {
+	bool _objective = false;
 	if (_objects[part])
 	{
+		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
 		MapData *originalPart = _objects[part];
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(0, -1, -1, part);
@@ -420,13 +423,18 @@ void Tile::destroy(int part)
 		/* replace with scorched earth */
 		setMapData(MapDataSet::getScourgedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
+	return _objective;
 }
 
-/* damage terrain  - check against armor*/
-void Tile::damage(int part, int power)
+/* damage terrain  - check against armor
+ * @return bool Return true objective was destroyed
+ */
+bool Tile::damage(int part, int power)
 {
+	bool objective = false;
 	if (power >= _objects[part]->getArmor())
-		destroy(part);
+		objective = destroy(part);
+	return objective;
 }
 
 
@@ -455,11 +463,13 @@ int Tile::getExplosive() const
 
 /**
  * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
+ * @return bool Return true objective was destroyed
  */
-void Tile::detonate()
+bool Tile::detonate()
 {
 	int explosive = _explosive;
 	_explosive = 0;
+	bool objective = false;
 
 	if (explosive)
 	{
@@ -472,11 +482,11 @@ void Tile::detonate()
 				if ((explosive) >= _objects[i]->getArmor())
 				{
 					int decrease = _objects[i]->getArmor();
-					destroy(i);
+					objective = destroy(i);
 					addSmoke(2);
 					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
 					{
-						destroy(i);
+						objective = destroy(i);
 					}
 				}
 			}
@@ -492,6 +502,8 @@ void Tile::detonate()
 			}
 		}
 	}
+
+	return objective;
 }
 
 /*
@@ -700,9 +712,12 @@ int Tile::getTopItemSprite()
 
 /**
  * New turn preparations. Decrease smoke and fire timers.
+ * @return bool Return true objective was destroyed
  */
-void Tile::prepareNewTurn()
+bool Tile::prepareNewTurn()
 {
+	bool objective = false;
+
 	_smoke--;
 	if (_smoke < 0) _smoke = 0;
 
@@ -716,7 +731,7 @@ void Tile::prepareNewTurn()
 			{
 				if (_objects[i]->getFlammable() < 255)
 				{
-					destroy(i);
+					objective = destroy(i);
 				}
 			}
 		}
@@ -734,6 +749,8 @@ void Tile::prepareNewTurn()
 		_fire--;
 		if (_fire < 0) _fire = 0;
 	}
+
+	return objective;
 }
 
 /**
