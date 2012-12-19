@@ -1433,6 +1433,7 @@ crafts:
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
     score: 400
+    spacecraft: true
     battlescapeTerrainData:
       name: AVENGER
       mapDataSets:

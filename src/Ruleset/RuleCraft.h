@@ -45,6 +45,7 @@ private:
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
 	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
+	bool _spacecraft;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(const std::string &type);
@@ -88,6 +89,7 @@ public:
 	int getScore() const;
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
+	bool getSpacecraft() const { return _spacecraft; }
 };
 
 }
