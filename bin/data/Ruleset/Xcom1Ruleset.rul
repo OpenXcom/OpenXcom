@@ -6507,7 +6507,7 @@ alienDeployments:
     width: 60
     length: 60
     height: 4
-  - type: STR_CYDONIA
+  - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0
         lowQty: 2
