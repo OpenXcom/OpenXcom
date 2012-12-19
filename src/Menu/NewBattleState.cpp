@@ -415,7 +415,7 @@ void NewBattleState::btnCancelClick(Action *)
 void NewBattleState::btnRandomClick(Action *)
 {
 	_selMission = RNG::generate(0,_missionTypes.size()-1) ;
-	_selAlien   = RNG::generate(0,1) ;
+	_selAlien   = RNG::generate(0,_alienRaces.size()-1) ;
 	_selTerrain = RNG::generate(0,5) ;
 	_selCraft   = RNG::generate(0,_crafts.size()-1) ;
 	_selDifficulty = RNG::generate(0,4) ;
