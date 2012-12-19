@@ -47,12 +47,10 @@ Bugfixes:
 - Battlescape buttons now unavailable during alien turn.
 - Fixed Craft not rearming after refuelling.
 - Fixed strange spawn behaviour.
-- Fixed jumbled Reaper corpse.
 - Camera now correctly centers on explosions, and properly detects explosion visibility.
 - UFO walls can no longer be seen through from certain angles.
 - Units on stairs will now correctly reveal tiles on the level above.
 - Opening doors now uses time units correctly.
-- (hopefully) Fixed Large unit spawning inside walls.
 
 Version 0.4.5 (04-11-2012)
 ---------------------------

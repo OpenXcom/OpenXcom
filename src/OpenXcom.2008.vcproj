@@ -1279,6 +1279,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\BaseDefenseState.cpp"
 				>
 			</File>

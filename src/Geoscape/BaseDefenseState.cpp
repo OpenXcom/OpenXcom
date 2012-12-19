@@ -39,6 +39,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
+#include "BaseDestroyedState.h"
 #include <ctime>
 
 namespace OpenXcom
@@ -156,23 +157,30 @@ void BaseDefenseState::btnOkClick(Action *)
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
-	if(_ufo->getStatus() != 3)
+	if(_ufo->getStatus() != 3 && _base->getSoldiers())
 	{
 		_game->popState();
-		int month = _game->getSavedGame()->getMonthsPassed();
-		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-			month = _game->getRuleset()->getAlienItemLevels().size()-1;
-		SavedBattleGame *bgame = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(bgame);
-		bgame->setMissionType("STR_BASE_DEFENSE");
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setBase(_base);
-		bgen.setUfo(_ufo);
-		bgen.setAlienRace(_ufo->getAlienRace());
-		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-		bgen.run();
+		if (_base->getSoldiers())
+		{
+			int month = _game->getSavedGame()->getMonthsPassed();
+			if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+				month = _game->getRuleset()->getAlienItemLevels().size()-1;
+			SavedBattleGame *bgame = new SavedBattleGame();
+			_game->getSavedGame()->setBattleGame(bgame);
+			bgame->setMissionType("STR_BASE_DEFENSE");
+			BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+			bgen.setBase(_base);
+			bgen.setUfo(_ufo);
+			bgen.setAlienRace(_ufo->getAlienRace());
+			bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+			bgen.run();
 
-		_game->pushState(new BriefingState(_game, 0, _base));
+			_game->pushState(new BriefingState(_game, 0, _base));
+		}
+		else
+		{
+			_game->pushState(new BaseDestroyedState(_game, _base));
+		}
 	}
 }
 

@@ -92,6 +92,7 @@
 #include "../Battlescape/BriefingState.h"
 #include "../Ruleset/UfoTrajectory.h"
 #include "BaseDefenseState.h"
+#include "BaseDestroyedState.h"
 #include "DefeatState.h"
 #include <ctime>
 #include <algorithm>
@@ -576,7 +577,7 @@ void GeoscapeState::time5Seconds()
 						{
 							popup(new BaseDefenseState(_game, base, *i));
 						}
-						else
+						else if (base->getSoldiers())
 						{
 							int month = _game->getSavedGame()->getMonthsPassed();
 							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
@@ -591,6 +592,10 @@ void GeoscapeState::time5Seconds()
 							bgen.run();
 
 							popup(new BriefingState(_game, 0, base, *i));
+						}
+						else
+						{
+							popup(new BaseDestroyedState(_game, base));
 						}
 					}
 				}

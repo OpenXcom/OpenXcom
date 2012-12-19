@@ -282,6 +282,8 @@ openxcom_SOURCES = \
 	src/Geoscape/AlienTerrorState.h \
 	src/Geoscape/AllocatePsiTrainingState.cpp \
 	src/Geoscape/AllocatePsiTrainingState.h \
+	src/Geoscape/BaseDestroyedState.cpp \
+	src/Geoscape/BaseDestroyedState.h \
 	src/Geoscape/BaseDefenseState.cpp \
 	src/Geoscape/BaseDefenseState.h \
 	src/Geoscape/BaseNameState.cpp \
