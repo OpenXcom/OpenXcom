@@ -342,13 +342,13 @@ Entretien
 STR_BALANCE
 Solde
 STR_UFO_ACTIVITY_IN_AREAS
-Activité des OVNIS par Région
+Activité des E.T. (Régions)
 STR_UFO_ACTIVITY_IN_COUNTRIES
-Activité des OVNIS par Pays
+Activité des E.T. (Pays)
 STR_XCOM_ACTIVITY_IN_AREAS
-Activité XCom par Région
+Activité XCom (Régions)
 STR_XCOM_ACTIVITY_IN_COUNTRIES
-Activité XCom par Pays
+Activité XCom (Pays)
 STR_FINANCE
 Finances
 STR_ST
@@ -360,9 +360,9 @@ STR_RD
 STR_TH
 
 STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE
-Pas assez de matériaux spéciaux pour produire{NEWLINE}
+Insuffisant matériaux spéciaux pour produire{NEWLINE}
 STR_NOT_ENOUGH_MONEY_TO_PRODUCE
-Pas assez d'argent pour produire{NEWLINE}
+Insuffisant argent pour produire{NEWLINE}
 STR_PRODUCTION_COMPLETE
 Production Terminée:{NEWLINE}
 STR_PRODUCTION_OF
@@ -396,7 +396,7 @@ VENDREDI
 STR_SATURDAY
 SAMEDI
 STR_NOT_ENOUGH
-Pas assez 
+Insuffisant 
 STR_TO_REFUEL
  pour ravitailler 
 STR_TO_REARM
@@ -404,9 +404,9 @@ STR_TO_REARM
 STR_AT_
  à 
 STR_UFO_IS_NOT_RECOVERED
-L'OVNI n'a pas été récupéré
+L'OVNI ne récupéré pas
 STR_UFO_IS_RECOVERED
-L'OVNI a été récupéré
+L'OVNI est récupéré
 STR_CRAFT_IS_LOST
 Le vaisseau est perdu
 STR_TERROR_CONTINUES
@@ -512,17 +512,17 @@ IMPOSSIBLE DE CONSTRUIRE ICI!{SMALLLINE}Vous devez construire à côté d'une in
 STR_NO_FREE_ACCOMODATION
 PAS DE LOGEMENT DE LIBRE!{SMALLLINE}La base de destination n'a pas assez de place dans les baraquements.
 STR_NOT_ENOUGH_WORK_SPACE
-PAS ASSEZ D'ESPACE DE TRAVAIL!{SMALLLINE}Construisez un nouvel atelier ou réduisez le travail sur d'autres projets.
+INSUFFISANT ESPACE DE TRAVAIL!{SMALLLINE}Construisez un nouvel atelier ou réduisez le travail sur d'autres projets.
 STR_NOT_ENOUGH_MONEY
-PAS ASSEZ D'ARGENT!
+INSUFFISANT ARGENT!
 STR_NOT_ENOUGH_TRANSFER_SUPPORT
-PAS ASSEZ DE DISPONIBILITÉ!{SMALLLINE}Attendez que des transferts en cours ou des achats arrivent à destination.
+PAS ASSEZ DE DISPONIBILITÉ!{SMALLLINE}Attendez que des transferts en cours ou des achats arrivent à la destination.
 STR_NO_MORE_SOLDIERS_ALLOWED
 NE PEUT ACCEPTER PLUS DE SOLDATS!{SMALLLINE}Vous avez déjà recruté le nombre maximum de soldats.
 STR_NOT_ENOUGH_STORE_SPACE
-PAS ASSEZ DE PLACE POUR STOCKER!{SMALLLINE}Construisez un nouvel entrepôt ou transférez les stocks existants vers d'autres bases.
+PAS ASSEZ DE PLACE POUR STOCKER!{SMALLLINE}Construisez un nouvel entrepôt ou transférez les stocks existants aux autres bases.
 STR_NOT_ENOUGH_LIVING_SPACE
-PAS ASSEZ D'ESPACE VITAL!{SMALLLINE}Construisez de nouveaux baraquements ou transférez du personnel vers d'autres bases.
+PAS ASSEZ D'ESPACE VITAL!{SMALLLINE}Construisez de nouveaux baraquements ou transférez le personnel aux autres bases.
 STR_NO_MORE_EQUIPMENT_ALLOWED_ON_BOARD
 NE PLUS CHARGER D'ÉQUIPEMENTS À BORD!{SMALLLINE}Vous n'avez droit qu'à un maximum de 80 objets pour les missions.
 STR_LAUNCH_INTERCEPTION
@@ -534,15 +534,15 @@ STATUT
 STR_BASE
 BASE
 STR_READY
-PRÊT
+Prêt
 STR_OUT
-ABSENT
+Absent
 STR_REPAIRS
-RÉPARATIONS
+Réparations
 STR_REFUELLING
-RAVITAILLEMENT
+Ravitaillement
 STR_REARMING
-RÉARMEMENT
+Réarmement
 STR_TARGET
 CIBLE: 
 STR_TARGET_WAY_POINT
@@ -1284,7 +1284,7 @@ Taille
 STR_THE_CORPSE_MAY_BE_RESEARCHED
 Il faudrait examiner le corps pour un rapport complet d'autopsie.
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
-Pas assez de munitions pour recharger
+Insuffisant munitions pour recharger
 STR_BLASTER_LAUNCHER_UFOPEDIA
 Un lance-missiles guidé extraterrestre qui tire de puissantes 'bombes blaster'.  Lorsque vous cliquez pour tirer, vous voyez apparaître les points de repère que la bombe blaster suivra.  Lorsque vous avez positionné assez de points de repère, cliquez sur l'icône lancement spécial.
 STR_SMALL_LAUNCHER_UFOPEDIA
@@ -1322,7 +1322,7 @@ EXCELLENT!
 STR_SCORE
 SCORE
 STR_XCOM_PROJECT_MONTHLY_REPORT
-RAPPORT MENSUEL DU PROJET XCOM
+RAPPORT MENSUEL DE XCOM
 STR_MONTH
 Mois> 
 STR_COUNCIL_IS_GENERALLY_SATISFIED
@@ -1350,9 +1350,9 @@ STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
  ont signé un pacte secret avec des forces extraterrestres inconnues et se sont retirés du projet.
 STR_MONTHLY_RATING
-Évaluation Mensuelle> 
+Score Mensuel> 
 STR_FUNDING_CHANGE
-Différence de Budget> 
+Écart de Budget> 
 STR_COUNCIL_REDUCE_DEBTS
 Le conseil budgétaire n'est pas satisfait de votre situation financière.  Vous devez réduire vos dettes à moins de 2 millions de dollars ou le projet cessera.
 STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED
@@ -1716,7 +1716,7 @@ Corps Cyberdisque
 STR_TO_ARM_HWP
  pour armer PAL
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
-Pas assez de matériel pour rééquiper entièrement l'escouade
+Insuffisant matériel pour rééquiper entièrement l'escouade
 STR_MARS_CYDONIA_LANDING
 Mars: Atterrissage sur Cydonia
 STR_MARS_CYDONIA_LANDING_BRIEFING
@@ -1946,9 +1946,9 @@ Lancer Missile
 STR_ACC
 Préc>
 STR_NOT_ENOUGH_TIME_UNITS
-Pas Assez d'Unités de Temps!
+Insuffisant Unités de Temps!
 STR_NOT_ENOUGH_ENERGY
-Pas Assez d'Énergie!
+Insuffisant Énergie!
 STR_NO_ROUNDS_LEFT
 Plus de Munitions!
 STR_NO_AMMUNITION_LOADED
@@ -2070,7 +2070,7 @@ Fenêtré
 STR_FULLSCREEN
 Plein Écran
 STR_LANGUAGE
-Choisir Langue
+LANGUE
 STR_FARM
 Ferme
 STR_FOREST
@@ -2086,6 +2086,6 @@ Polaire
 STR_RANDOM_BATTLE
 RANDOMISER
 STR_MIXED
-Mixte
+Divers
 STR_RIGHT_CLICK_TO_DELETE
-Faites un clic droit supprimer.
+Supprimer avec un clic droit.
