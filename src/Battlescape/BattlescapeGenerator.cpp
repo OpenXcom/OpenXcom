@@ -166,15 +166,22 @@ void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
  */
 void BattlescapeGenerator::nextStage()
 {
-	// kill all units not in endpoint area
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	// if you didn't win by killing everything.
+	if (_game->getSavedGame()->getBattleGame()->isAborted())
 	{
-		if (!(*j)->isInExitArea(END_POINT))
+		// kill all units not in endpoint area
+		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			(*j)->instaKill();
-			(*j)->setTile(0);
+			if (!(*j)->isInExitArea(END_POINT))
+			{
+				(*j)->instaKill();
+				(*j)->setTile(0);
+			}
 		}
 	}
+
+	if (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
+		_game->getSavedGame()->getBattleGame()->endTurn();
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_width, &_length, &_height);
