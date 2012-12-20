@@ -81,7 +81,7 @@ public:
 	/// Gets the full wave information.
 	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
 	/// Gets the score for this mission.
-	const int getPoints() const;
+	int getPoints() const;
 private:
 	/// The mission's type ID.
 	std::string _type;
