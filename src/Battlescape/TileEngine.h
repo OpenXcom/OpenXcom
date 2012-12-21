@@ -90,6 +90,7 @@ public:
 	bool inTeamFOV(const Position &pos, UnitFaction team);
 	bool psiAttack(BattleAction *action);
 	Tile *applyItemGravity(Tile *t);
+	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
 };
 
 }
