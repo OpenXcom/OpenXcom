@@ -1141,7 +1141,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING" && _game->getSavedGame()->getMonthsPassed() > -1)
+			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new DefeatState(_game));
 			}

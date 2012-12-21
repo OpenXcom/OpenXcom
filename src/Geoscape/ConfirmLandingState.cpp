@@ -122,7 +122,7 @@ void ConfirmLandingState::btnYesClick(Action *)
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
-	int month = _game->getSavedGame()->getMonthsPassed();
+	size_t month = _game->getSavedGame()->getMonthsPassed();
 	if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
 		month = _game->getRuleset()->getAlienItemLevels().size()-1;
 	if (u != 0)
