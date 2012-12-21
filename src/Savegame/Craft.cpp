@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _patrolTime(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false)
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -766,27 +766,6 @@ int Craft::getVehicleCount(const std::string &vehicle) const
 		}
 	}
 	return total;
-}
-
-
-/**
- * Returns the total amount of 
- * time spent patrolling by the craft.
- * @return Time spent patrolling in half hour increments.
- */
-int Craft::getPatrolTime() const
-{
-	return _patrolTime;
-}
-
-
-/**
- * Changes the craft's Patrol timer.
- * @param time number of half hour blocks to increment this timer by.
- */
-void Craft::setPatrolTime(int time)
-{
-	_patrolTime = time;
 }
 
 /**

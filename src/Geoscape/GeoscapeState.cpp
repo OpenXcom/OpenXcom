@@ -645,10 +645,6 @@ void GeoscapeState::time5Seconds()
 					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
-				if((*j)->getPatrolTime() != 0)
-				{
-					(*j)->setPatrolTime(0);
-				}
 			}
 			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
 			{
@@ -876,6 +872,21 @@ void GeoscapeState::time10Minutes()
 					(*j)->returnToBase();
 					popup(new LowFuelState(_game, (*j), this));
 				}
+
+				if ((*j)->getDestination() == 0)
+				{
+					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					{
+						if ((*j)->getDistance(*b) <= (1696 * (1 / 60.0) * (M_PI / 180) ))
+						{
+							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
+							if ((50-((*j)->getDistance(*b) / (1696 * (1 / 60.0) * (M_PI / 180) )) * 50 >= RNG::generate(0, 100)) && !(*b)->isDiscovered())
+							{
+								(*b)->setDiscovered(true);
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1046,32 +1057,6 @@ void GeoscapeState::time30Minutes()
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			if ((*j)->getStatus() == "STR_OUT")
-			{
-				if ((*j)->getDestination() == 0)
-				{
-					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
-					{
-						if ((*j)->getDistance(*b) < 1500 * (1 / 60.0) * (M_PI / 180))
-						{
-							int chance = 5;
-							for (int it = 1500; it != 0; it -= 100)
-							{
-								if ((*j)->getDistance(*b) < it * (1 / 60.0) * (M_PI / 180))
-								{
-									chance += 5;
-								}
-							}
-							chance += (*j)->getPatrolTime()*5;
-							if(RNG::generate(1,100) <= chance)
-							{
-							(*b)->setDiscovered(true);
-							}
-						}
-					}
-					(*j)->setPatrolTime((*j)->getPatrolTime() + 1);
-				}
-			}
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
