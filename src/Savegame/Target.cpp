@@ -107,15 +107,15 @@ double Target::getLatitude() const
 void Target::setLatitude(double lat)
 {
 	_lat = lat;
-	// Keep between -PI and PI
-	while (_lat < -M_PI)
+	// Keep between -PI/2 and PI/2
+	if (_lat < -M_PI/2)
 	{
-		_lat = 2*M_PI - _lat;
+		_lat = M_PI - _lat;
 		setLongitude(_lon + M_PI);
 	}
-	while (_lat > M_PI)
+	else if (_lat > M_PI/2)
 	{
-		_lat = -2*M_PI + _lat;
+		_lat = -M_PI + _lat;
 		setLongitude(_lon - M_PI);
 	}
 }
