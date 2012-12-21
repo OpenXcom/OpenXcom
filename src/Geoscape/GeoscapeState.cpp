@@ -579,7 +579,7 @@ void GeoscapeState::time5Seconds()
 						}
 						else if (base->getSoldiers())
 						{
-							int month = _game->getSavedGame()->getMonthsPassed();
+							size_t month = _game->getSavedGame()->getMonthsPassed();
 							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
 								month = _game->getRuleset()->getAlienItemLevels().size()-1;
 							SavedBattleGame *bgame = new SavedBattleGame();
