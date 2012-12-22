@@ -495,13 +495,16 @@ void BattlescapeGenerator::run()
 BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 {
 //	unit->setId(_unitCount++);
-
+	
 	if (_craft == 0 || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		Node* node = _save->getSpawnNode(NR_XCOM, unit);
 		if (node)
 		{
-			_save->setUnitPosition(unit, node->getPosition());
+			if (unit->getArmor()->getSize() > 1 &&  _save->getMissionType() == "STR_BASE_DEFENSE")
+				_save->setUnitPosition(unit, Position(node->getPosition().x, node->getPosition().y - 1, node->getPosition().z));
+			else
+				_save->setUnitPosition(unit, node->getPosition());
 		}
 		_craftInventoryTile = _save->getTile(node->getPosition());
 		unit->setDirection(RNG::generate(0,7));
@@ -608,7 +611,8 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
 	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
 	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
-	{ 2, 5, 3, 4, 6, 8, 0 } }; //terrorist
+	{ 2, 5, 3, 4, 6, 8, 0 }, //terrorist
+	{ 2, 5, 3, 4, 6, 8, 0 }  }; //also terrorist
 
 	for (int i = 0; i < 7 && node == 0; i++)
 	{

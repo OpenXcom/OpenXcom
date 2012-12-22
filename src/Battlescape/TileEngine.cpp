@@ -34,6 +34,7 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -485,8 +486,8 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	if (action->actor && highestReactionScore > unit->getReactionScore() &&
 		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
-		(action->actor->getMainHandWeapon()->getRules()->getTUMelee() &&
-		distance(action->actor->getPosition(), unit->getPosition()) == 1)))
+		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+		validMeleeRange(unit, action->actor))))
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
@@ -1406,5 +1407,23 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 
 	return rt;
 }
-
+/*
+ * Validate the melee range.
+ * @return true when range is valid.
+ */
+bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
+{
+	Position p;
+	Pathfinding::directionToVector(unit->getDirection(), &p);
+	for (int x = 0; x != unit->getArmor()->getSize(); ++x)
+	{
+		for (int y = 0; y != unit->getArmor()->getSize(); ++y)
+		{
+			Tile * tile (_save->getTile(Position(unit->getPosition().x + x, unit->getPosition().y + y, unit->getPosition().z) + p));
+			if (tile->getUnit() && tile->getUnit() == target)
+				return true;
+		}
+	}
+	return false;
+}
 }
