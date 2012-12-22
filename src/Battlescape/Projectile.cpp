@@ -176,11 +176,11 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 10);
+			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 		{
