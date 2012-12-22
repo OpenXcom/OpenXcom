@@ -444,20 +444,6 @@ void DebriefingState::prepareDebriefing()
 		{
 			(*j)->setTile(battle->getTile((*j)->getPosition()));
 		}
-		if (faction == FACTION_NEUTRAL)
-		{
-			// civilians are all dead if mission fails
-			if (aborted || playersSurvived == 0 || status == STATUS_DEAD)
-			{
-				addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);
-			}
-			// otherwise save the live ones
-			else
-			{
-				addStat("STR_CIVILIANS_SAVED", 1, value);
-			}
-		}
-
 
 		if (status == STATUS_DEAD)
 		{
@@ -495,6 +481,13 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
+			else if (faction == FACTION_NEUTRAL)
+			{
+				if ((*j)->killedBy() == FACTION_PLAYER)
+					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -50);
+				else // if civilians happen to kill themselves XCOM shouldn't get penalty for it
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
+			}
 		}
 		else if (status == STATUS_UNCONSCIOUS)
 		{
@@ -511,6 +504,10 @@ void DebriefingState::prepareDebriefing()
 				{
 					_noContainment = true;
 				}
+			}
+			else if (faction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			{
+				addStat("STR_CIVILIANS_SAVED", 1, 30);
 			}
 		}
 		else
@@ -553,6 +550,10 @@ void DebriefingState::prepareDebriefing()
 						}
 					}
 				}
+			}
+			else if (faction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			{
+				addStat("STR_CIVILIANS_SAVED", 1, 30);
 			}
 		}
 	}

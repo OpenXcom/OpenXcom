@@ -501,10 +501,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		Node* node = _save->getSpawnNode(NR_XCOM, unit);
 		if (node)
 		{
-			if (unit->getArmor()->getSize() > 1 &&  _save->getMissionType() == "STR_BASE_DEFENSE")
-				_save->setUnitPosition(unit, Position(node->getPosition().x, node->getPosition().y - 1, node->getPosition().z));
-			else
-				_save->setUnitPosition(unit, node->getPosition());
+			_save->setUnitPosition(unit, node->getPosition());
 		}
 		_craftInventoryTile = _save->getTile(node->getPosition());
 		unit->setDirection(RNG::generate(0,7));
@@ -624,10 +621,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node)
 	{
-		if (unit->getArmor()->getSize() > 1)
-			_save->setUnitPosition(unit, Position(node->getPosition().x, node->getPosition().y-1, node->getPosition().z));
-		else
-			_save->setUnitPosition(unit, node->getPosition());
+		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 

@@ -58,6 +58,7 @@ class BattleUnit
 {
 private:
 	UnitFaction _faction, _originalFaction;
+	UnitFaction _killedBy;
 	int _id;
 	Position _pos;
 	Tile *_tile;
@@ -341,6 +342,10 @@ public:
 	/// Sets the unit's energy level.
 	void setEnergy(int energy);
 	void halveArmor();
+	/// Gets the unit's faction.
+	UnitFaction killedBy() const;
+	void killedBy(UnitFaction f);
+
 };
 
 }
