@@ -222,7 +222,7 @@ void TransferItemsState::btnOkClick(Action *)
 
 void TransferItemsState::completeTransfer()
 {
-	int time = (int)floor(6 + _distance / 200.0);
+	int time = (int)floor(6 + _distance / 10.0);
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
@@ -477,7 +477,7 @@ int TransferItemsState::getCost()
 	{
 		cost = 1;
 	}
-	return (int)floor(_distance / 20.0 * cost);
+	return (int)floor(_distance * cost);
 }
 
 /**
@@ -624,12 +624,12 @@ int TransferItemsState::getTotal() const
  */
 double TransferItemsState::getDistance()
 {
-	double x[3], y[3], z[3], r = 128.0;
+	double x[3], y[3], z[3], r = 51.2;
 	Base *base = _baseFrom;
 	for (int i = 0; i < 2; ++i) {
-		x[i] = - r * sin(base->getLatitude()) * cos(base->getLongitude());
-		y[i] = - r * sin(base->getLatitude()) * sin(base->getLongitude());
-		z[i] = r * cos(base->getLatitude());
+		x[i] = r * cos(base->getLatitude()) * cos(base->getLongitude());
+		y[i] = r * cos(base->getLatitude()) * sin(base->getLongitude());
+		z[i] = r * -sin(base->getLatitude());
 		base = _baseTo;
 	}
 	x[2] = x[1] - x[0];
