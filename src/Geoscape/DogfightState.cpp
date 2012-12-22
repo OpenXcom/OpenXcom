@@ -1366,6 +1366,8 @@ void DogfightState::btnUfoClick(Action *)
 	_btnDisengage->setVisible(false);
 	_btnUfo->setVisible(false);
 	_btnMinimize->setVisible(false);
+	_weapon1->setVisible(false);
+	_weapon2->setVisible(false);
 }
 
 /**
@@ -1383,6 +1385,8 @@ void DogfightState::previewClick(Action *)
 	_btnDisengage->setVisible(true);
 	_btnUfo->setVisible(true);
 	_btnMinimize->setVisible(true);
+	_weapon1->setVisible(true);
+	_weapon2->setVisible(true);
 }
 
 /*
