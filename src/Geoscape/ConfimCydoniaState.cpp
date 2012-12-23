@@ -99,6 +99,7 @@ void ConfirmCydoniaState::btnConfirmClick(Action *)
 	bgen.setCraft(_craft);
 	bgen.setAlienRace("STR_SECTOID");
 	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+	bgen.setWorldShade(15);
 	bgen.run();
 
 	_game->pushState(new BriefingState(_game, _craft, 0));

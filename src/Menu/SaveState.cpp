@@ -126,7 +126,7 @@ void SaveState::lstSavesPress(Action *action)
 		_edtSave->focus();
 		_lstSaves->setScrolling(false);
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _selectedRow)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
 	{
 		if(_geo)
 			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(8)+10, "BACK01.SCR", 6, this));
