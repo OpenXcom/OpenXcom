@@ -36,6 +36,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -274,9 +275,22 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			BattleUnit *targetUnit = NULL;
 			Position p;
 			Pathfinding::directionToVector(_action->actor->getDirection(), &p);
-			Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
-			if (tile->getUnit())
-				targetUnit = tile->getUnit();
+			for (int x = 0; x != _action->actor->getArmor()->getSize(); ++x)
+			{
+				for (int y = 0; y != _action->actor->getArmor()->getSize(); ++y)
+				{
+					Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(Position(_action->actor->getPosition().x + x, _action->actor->getPosition().y + y, _action->actor->getPosition().z) + p));		
+					if (tile->getUnit() && tile->getUnit() != _action->actor)
+					{
+						targetUnit = tile->getUnit();
+						break;
+					}
+				}
+				if (targetUnit)
+					break;
+			}
+
+
 			if (targetUnit)
 			{
 				_game->popState();

@@ -528,9 +528,22 @@ void BattlescapeGame::handleNonTargetAction()
 					Position p;
 					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &p);
 					Tile * tile (_save->getTile(_currentAction.actor->getPosition() + p));
-					Position voxel = Position(tile->getPosition().x*16,tile->getPosition().y*16,tile->getPosition().z*24);
-					voxel.x += 8;voxel.y += 8;voxel.z += 8;
-					statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+					for (int x = 0; x != _currentAction.actor->getArmor()->getSize(); ++x)
+					{
+						for (int y = 0; y != _currentAction.actor->getArmor()->getSize(); ++y)
+						{
+							tile = _save->getTile(Position(_currentAction.actor->getPosition().x + x, _currentAction.actor->getPosition().y + y, _currentAction.actor->getPosition().z) + p);
+							if (tile->getUnit() && tile->getUnit() != _currentAction.actor)
+							{
+								Position voxel = Position(tile->getPosition().x*16,tile->getPosition().y*16,tile->getPosition().z*24);
+								voxel.x += 8;voxel.y += 8;voxel.z += 8;
+								statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+								break;
+							}
+						}
+						if (tile->getUnit() && tile->getUnit() != _currentAction.actor)
+							break;
+					}
 				}
 				else
 				{
