@@ -1123,8 +1123,12 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			int result = voxelCheck(Position(cx, cy, cz), excludeUnit);
 			if (LOSCalc)
 			{
-				int result2 = voxelCheck(Position(cx, cy, cz-1), excludeUnit);
-				int result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
+				int result2 = -1;
+				int result3 = -1;
+				if (cz % 23)
+					result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
+				if (cz > 0)
+					voxelCheck(Position(cx, cy, cz-1), excludeUnit);
 				if (result2 != -1)
 					result = result2;
 				if (result3 != -1)
