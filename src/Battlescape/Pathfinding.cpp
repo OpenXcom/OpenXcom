@@ -213,7 +213,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (_save->getTile(*endPosition + Position(x,y,-1))
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
-				&& _movementType != MT_FLY)
+				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
+				&& _movementType != MT_FLY && _save->getTile(*endPosition)->hasNoFloor())
 				return 255;
 
 
@@ -486,9 +487,13 @@ bool Pathfinding::canFallDown(Tile *here)
 	if (here->getPosition().z == 0)
 		return false;
 
-	if (_save->selectUnit(here->getPosition() + Position(0, 0, -1)) &&
-		_save->selectUnit(here->getPosition() + Position(0, 0, -1)) != _unit)
-		return false;
+	for (int z = 1; z <= here->getPosition().z; ++z)
+	{
+		if (_save->selectUnit(here->getPosition() - Position(0, 0, z)) &&
+			_save->selectUnit(here->getPosition() - Position(0, 0, z)) != _unit &&
+			!_save->selectUnit(here->getPosition() - Position(0, 0, z))->isOut())
+			return false;
+	}
 
 	if (!here || here->hasNoFloor())
 		return true;
