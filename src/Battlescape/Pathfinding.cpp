@@ -263,12 +263,15 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
 			// check if we have floor, else fall down
-			while (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs) && x==0 && y==0)
+			if (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs))
 			{
-				endPosition->z--;
-				destinationTile = _save->getTile(*endPosition);
-				fellDown = true;
 				numberOfPartsChangingLevel++;
+				if (x ==0 && y== 0)
+				{
+					endPosition->z--;
+					destinationTile = _save->getTile(*endPosition);
+					fellDown = true;
+				}
 			}
 
 			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
@@ -321,10 +324,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// also check if we change level, that there are two parts changing level,
 			// so a big sized unit can not go up a small sized stairs
-			if (numberOfPartsChangingLevel == 1)
+			if (numberOfPartsChangingLevel == 1 || numberOfPartsChangingLevel == 3)
 				return 255;
 	}
-
 	return cost;
 }
 
