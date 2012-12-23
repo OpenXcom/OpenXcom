@@ -487,7 +487,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 	if (action->actor && highestReactionScore > unit->getReactionScore() &&
 		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
 		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-		validMeleeRange(unit, action->actor))))
+		validMeleeRange(action->actor, unit))))
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
@@ -1419,9 +1419,16 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 	{
 		for (int y = 0; y != unit->getArmor()->getSize(); ++y)
 		{
-			Tile * tile (_save->getTile(Position(unit->getPosition().x + x, unit->getPosition().y + y, unit->getPosition().z) + p));
+			Tile * tile (_save->getTile(Position(unit->getPosition() + Position(x, y, 0) + p)));
 			if (tile->getUnit() && tile->getUnit() == target)
-				return true;
+			{
+				BattleUnit *target (tile->getUnit());
+				for (std::vector<BattleUnit*>::iterator b = unit->getVisibleUnits()->begin(); b != unit->getVisibleUnits()->end(); ++b)
+				{
+					if (*b == target && !_save->getPathfinding()->isBlocked(_save->getTile(unit->getPosition() + Position(x, y, 0)), tile, unit->getDirection()))
+						return true;
+				}
+			}
 		}
 	}
 	return false;

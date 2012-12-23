@@ -26,6 +26,7 @@
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -170,10 +171,21 @@ void AggroBAIState::think(BattleAction *action)
 		// we're using melee, so CHAAAAAAAARGE!!!!!
 		if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
 		{
-			if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 1)
-				takeCover = true;
-			else
-				takeCover = false;
+			takeCover = true;
+			for (int x = 0; x != _unit->getArmor()->getSize(); ++x)
+			{
+				for (int y = 0; y != _unit->getArmor()->getSize(); ++y)
+				{
+					Position p (x, y, 0);
+					if (_game->getTileEngine()->distance(_unit->getPosition() + p, _aggroTarget->getPosition()) == 1)
+					{
+						takeCover = false;
+						break;
+					}
+				}
+				if (!takeCover)
+					break;
+			}
 		}
 		//if distance ==1 attack instead
 		if (!takeCover)
@@ -227,7 +239,12 @@ void AggroBAIState::think(BattleAction *action)
 					if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
 					{
 						if (action->weapon->getRules()->getBattleType() == BT_MELEE)
+						{
+							action->actor->lookAt(_aggroTarget->getPosition());
+							while (action->actor->getStatus() == STATUS_TURNING)
+								action->actor->turn();
 							action->type = BA_HIT;
+						}
 						else if (RNG::generate(1,10) < 5)
 							action->type = BA_SNAPSHOT;
 						else
@@ -255,16 +272,31 @@ void AggroBAIState::think(BattleAction *action)
 			bool coverFound = false;
 			if(action->actor->getMainHandWeapon() && action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE )
 			{
-				for (int i = -1; i < 2; i++)
-					for (int j = -1; j < 2; j++)
+				int directions[9] = {3, 4, 5, 2, -1, 7, 1, 0, 6};
+				int entry = 0;
+				for (int x = -1; x < 2; ++x)
+				{
+					for (int y = -1; y < 2; ++y)
 					{
-						Position checkPath = Position (_aggroTarget->getPosition().x+i, _aggroTarget->getPosition().y+j, _aggroTarget->getPosition().z);
+						Position p(x, y, 0);
+						if (action->actor->getArmor()->getSize() > 1)
+						{
+							if (x == -1)
+								--p.x;
+							if (y == -1)
+								--p.y;
+						}
+						Position checkPath = _aggroTarget->getPosition() + p;
 						_game->getPathfinding()->calculate(_unit, checkPath);
-						if (_game->getPathfinding()->getStartDirection() != -1)
-							if (_game->getTileEngine()->distance(_unit->getPosition(), checkPath) < _game->getTileEngine()->distance(_unit->getPosition(), action->target))
+						if (_game->getPathfinding()->getStartDirection() != -1 &&
+							!_game->getPathfinding()->isBlocked(_game->getTile(checkPath), _game->getTile(_aggroTarget->getPosition()), directions[entry]) &&
+							_game->getTileEngine()->distance(_unit->getPosition(), checkPath) < _game->getTileEngine()->distance(_unit->getPosition(), action->target))
 								action->target = checkPath;
 						_game->getPathfinding()->abortPath();
+						++entry;
 					}
+					++entry;
+				}
 			}
 			else
 			while (tries < 30 && !coverFound)

@@ -47,7 +47,6 @@ private:
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
 	bool isBlocked(Tile *tile, const int part);
-	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
 	bool canFallDown(Tile *destinationTile);
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
@@ -57,6 +56,7 @@ private:
 	///Try to find a path between two positions.
 	bool aStarPath(const Position& origin, const Position& target);
 public:
+	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
 	static const int O_BIGWALL = -1;

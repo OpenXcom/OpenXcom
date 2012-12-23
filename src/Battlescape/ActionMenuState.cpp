@@ -282,9 +282,18 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 					Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(Position(_action->actor->getPosition().x + x, _action->actor->getPosition().y + y, _action->actor->getPosition().z) + p));		
 					if (tile->getUnit() && tile->getUnit() != _action->actor)
 					{
-						targetUnit = tile->getUnit();
-						break;
+						BattleUnit *target (tile->getUnit());
+						for (std::vector<BattleUnit*>::iterator b = _action->actor->getVisibleUnits()->begin(); b != _action->actor->getVisibleUnits()->end(); ++b)
+						{
+							if (*b == target && !_game->getSavedGame()->getBattleGame()->getPathfinding()->isBlocked(_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + Position(x, y, 0)), tile, _action->actor->getDirection()))
+							{
+								targetUnit = tile->getUnit();
+								break;
+							}
+						}
 					}
+					if (targetUnit)
+						break;
 				}
 				if (targetUnit)
 					break;

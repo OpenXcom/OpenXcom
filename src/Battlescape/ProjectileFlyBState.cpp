@@ -379,9 +379,16 @@ bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
 	{
 		for (int y = 0; y != action->actor->getArmor()->getSize(); ++y)
 		{
-			Tile * tile (_parent->getSave()->getTile(Position(action->actor->getPosition().x + x, action->actor->getPosition().y + y, action->actor->getPosition().z) + p));
+			Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0) + p));
 			if (tile->getUnit() && tile->getUnit() != action->actor)
-				return true;
+			{
+				BattleUnit *target (tile->getUnit());
+				for (std::vector<BattleUnit*>::iterator b = action->actor->getVisibleUnits()->begin(); b != action->actor->getVisibleUnits()->end(); ++b)
+				{
+					if (*b == target && !_parent->getPathfinding()->isBlocked(_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0)), tile, action->actor->getDirection()))
+						return true;
+				}
+			}
 		}
 	}
 	return false;
