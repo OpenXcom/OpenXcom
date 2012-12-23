@@ -55,6 +55,7 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
+	static bool _ctrlKeyDown; // Used so player can indicate strafing movement.
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -67,11 +68,11 @@ public:
 	/// Sets the game's audio volume.
 	void setVolume(int sound, int music);
 	/// Gets the game's display screen.
-	Screen *const getScreen() const;
+	Screen *getScreen() const;
 	/// Gets the game's cursor.
-	Cursor *const getCursor() const;
+	Cursor *getCursor() const;
 	/// Gets the FpsCounter.
-	FpsCounter *const getFpsCounter() const;
+	FpsCounter *getFpsCounter() const;
 	/// Sets the game's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.
@@ -81,23 +82,27 @@ public:
 	/// Pops the last state from the state stack.
 	void popState();
 	/// Gets the currently loaded language.
-	Language *const getLanguage() const;
+	Language *getLanguage() const;
 	/// Loads a new language for the game.
 	void loadLanguage(const std::string &filename);
 	/// Gets the currently loaded resource pack.
-	ResourcePack *const getResourcePack() const;
+	ResourcePack *getResourcePack() const;
 	/// Sets a new resource pack for the game.
 	void setResourcePack(ResourcePack *res);
 	/// Gets the currently loaded saved game.
-	SavedGame *const getSavedGame() const;
+	SavedGame *getSavedGame() const;
 	/// Sets a new saved game for the game.
 	void setSavedGame(SavedGame *save);
 	/// Gets the currently loaded ruleset.
-	Ruleset *const getRuleset() const;
+	Ruleset *getRuleset() const;
 	/// Loads a new ruleset for the game.
 	void loadRuleset();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
+	/// Sets whether the Ctrl Key is down
+	static void setCtrlKeyDown(bool ctrlKey);
+	/// Returns whether the control key is down
+	static bool getCtrlKeyDown();
 };
 
 }

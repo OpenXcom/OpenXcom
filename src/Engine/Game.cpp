@@ -209,6 +209,16 @@ void Game::run()
 							break;
 					}
 					break;
+				case SDL_KEYDOWN:
+				case SDL_KEYUP:
+					if (Options::getBool("strafe") && (_event.type == SDL_KEYDOWN) && (&_event)->key.keysym.sym == SDLK_LCTRL)
+					{
+						setCtrlKeyDown(true);
+					}
+					if ((_event.type == SDL_KEYUP) && (&_event)->key.keysym.sym == SDLK_LCTRL)
+					{
+						setCtrlKeyDown(false);
+					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
@@ -291,7 +301,7 @@ void Game::setVolume(int sound, int music)
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
  */
-Screen *const Game::getScreen() const
+Screen *Game::getScreen() const
 {
 	return _screen;
 }
@@ -300,7 +310,7 @@ Screen *const Game::getScreen() const
  * Returns the mouse cursor used by the game.
  * @return Pointer to the cursor.
  */
-Cursor *const Game::getCursor() const
+Cursor *Game::getCursor() const
 {
 	return _cursor;
 }
@@ -309,7 +319,7 @@ Cursor *const Game::getCursor() const
  * Returns the FpsCounter used by the game.
  * @return Pointer to the FpsCounter.
  */
-FpsCounter *const Game::getFpsCounter() const
+FpsCounter *Game::getFpsCounter() const
 {
 	return _fpsCounter;
 }
@@ -379,7 +389,7 @@ void Game::popState()
  * Returns the language currently in use by the game.
  * @return Pointer to the language.
  */
-Language *const Game::getLanguage() const
+Language *Game::getLanguage() const
 {
 	return _lang;
 }
@@ -395,7 +405,7 @@ void Game::loadLanguage(const std::string &filename)
 	ss2 << "Language/" << filename << ".geo";
 	_lang->loadLng(CrossPlatform::getDataFile(ss.str()));
 
-	Surface *sidebar = new Surface(64, 154);
+	std::auto_ptr<Surface> sidebar(new Surface(64, 154));
 	if (CrossPlatform::getDataFile(ss2.str()) != "")
 	{
 		sidebar->setPalette(_res->getSurface("GEOBORD.SCR")->getPalette());
@@ -412,7 +422,7 @@ void Game::loadLanguage(const std::string &filename)
  * Returns the resource pack currently in use by the game.
  * @return Pointer to the resource pack.
  */
-ResourcePack *const Game::getResourcePack() const
+ResourcePack *Game::getResourcePack() const
 {
 	return _res;
 }
@@ -430,7 +440,7 @@ void Game::setResourcePack(ResourcePack *res)
  * Returns the saved game currently in use by the game.
  * @return Pointer to the saved game.
  */
-SavedGame *const Game::getSavedGame() const
+SavedGame *Game::getSavedGame() const
 {
 	return _save;
 }
@@ -449,7 +459,7 @@ void Game::setSavedGame(SavedGame *save)
  * Returns the ruleset currently in use by the game.
  * @return Pointer to the ruleset.
  */
-Ruleset *const Game::getRuleset() const
+Ruleset *Game::getRuleset() const
 {
 	return _rules;
 }
@@ -478,6 +488,23 @@ void Game::setMouseActive(bool active)
 {
 	_mouseActive = active;
 	_cursor->setVisible(active);
+}
+
+bool Game::_ctrlKeyDown;
+/**
+ * Sets whether the control key is down
+ */
+void Game::setCtrlKeyDown(bool ctrlKey)
+{
+	_ctrlKeyDown =  ctrlKey;
+}
+
+/**
+ * Returns whether the control key is down
+ */
+bool Game::getCtrlKeyDown()
+{
+	return _ctrlKeyDown;
 }
 
 }
