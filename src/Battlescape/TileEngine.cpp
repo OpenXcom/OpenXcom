@@ -270,16 +270,25 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
-							if (calculateLine(pos, test, false, 0, unit, false) <= 0)
+							// large units have "4 pair of eyes"
+							int size = unit->getArmor()->getSize();
+							for (int xo = 0; xo < size; xo++)
 							{
-								unit->addToVisibleTiles(_save->getTile(test));
-								_save->getTile(test)->setDiscovered(true, 2);
-								_save->getTile(test)->setVisible(+1);
-								// walls to the east or south of a visible tile, we see that too
-								Tile* t = _save->getTile(Position(test.x + 1, test.y, test.z));
-								if (t) t->setDiscovered(true, 0);
-								t = _save->getTile(Position(test.x, test.y + 1, test.z));
-								if (t) t->setDiscovered(true, 1);
+								for (int yo = 0; yo < size; yo++)
+								{
+									Position poso = pos + Position(xo,yo,0);
+									if (calculateLine(poso, test, false, 0, unit, false) <= 0)
+									{
+										unit->addToVisibleTiles(_save->getTile(test));
+										_save->getTile(test)->setDiscovered(true, 2);
+										_save->getTile(test)->setVisible(+1);
+										// walls to the east or south of a visible tile, we see that too
+										Tile* t = _save->getTile(Position(test.x + 1, test.y, test.z));
+										if (t) t->setDiscovered(true, 0);
+										t = _save->getTile(Position(test.x, test.y + 1, test.z));
+										if (t) t->setDiscovered(true, 1);
+									}
+								}
 							}
 						}
 					}
@@ -338,6 +347,12 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
 	originVoxel.z += currentUnit->getHeight();
 	bool unitSeen = false;
+	// for large units origin voxel is in the middle
+	if (currentUnit->getArmor()->getSize() > 1)
+	{
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+	}
 
 	targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
