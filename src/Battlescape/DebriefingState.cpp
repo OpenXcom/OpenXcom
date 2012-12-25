@@ -49,6 +49,7 @@
 #include "../Savegame/Vehicle.h"
 #include <sstream>
 #include <map>
+#include "../Menu/MainMenuState.h"
 
 namespace OpenXcom
 {
@@ -223,7 +224,12 @@ void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
-	if (!_destroyBase)
+	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	{
+		//_game->popState();
+		_game->setState(new MainMenuState(_game));
+	}
+	else if (!_destroyBase)
 	{
 		if (_game->getSavedGame()->handlePromotions())
 		{
