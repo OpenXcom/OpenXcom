@@ -374,7 +374,8 @@ void NewBattleState::btnOkClick(Action *)
 		// either ground assault or ufo crash
 		bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 	}
-
+	if (_craft)
+		_craft->setSpeed(0);
 	GameDifficulty diffs[] = {DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN};
 	_game->getSavedGame()->setDifficulty(diffs[_selDifficulty]);
 

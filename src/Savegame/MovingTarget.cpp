@@ -132,7 +132,7 @@ void MovingTarget::setSpeed(int speed)
  */
 void MovingTarget::calculateSpeed()
 {
-	if (_dest != 0)
+	if (_dest != 0 && _speed != 0)
 	{
 		double dLon, dLat, length;
 		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
