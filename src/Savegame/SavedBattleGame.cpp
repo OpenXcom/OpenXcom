@@ -192,6 +192,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	{
 		std::string type;
 		(*i)["type"] >> type;
+		(*i)["id"] >> _itemId;
 		if (type != "0")
 		{
 			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);

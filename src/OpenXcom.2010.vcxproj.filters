@@ -705,10 +705,10 @@
     <ClCompile Include="Menu\DeleteGameState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\ConfimCydoniaState.cpp">
+    <ClCompile Include="Geoscape\BaseDestroyedState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\BaseDestroyedState.cpp">
+    <ClCompile Include="Geoscape\ConfirmCydoniaState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
