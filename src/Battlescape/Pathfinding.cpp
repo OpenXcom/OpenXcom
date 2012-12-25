@@ -306,7 +306,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			cost += wallcost;
 
-			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel() && destinationTile->getTerrainLevel() >= 16)
+			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel() && destinationTile->getTerrainLevel() <= -16)
 			{
 				numberOfPartsChangingHeight++;
 			}
