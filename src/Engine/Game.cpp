@@ -209,6 +209,16 @@ void Game::run()
 							break;
 					}
 					break;
+				case SDL_KEYDOWN:
+				case SDL_KEYUP:
+					if (Options::getBool("strafe") && (_event.type == SDL_KEYDOWN) && (&_event)->key.keysym.sym == SDLK_LCTRL)
+					{
+						setCtrlKeyDown(true);
+					}
+					if ((_event.type == SDL_KEYUP) && (&_event)->key.keysym.sym == SDLK_LCTRL)
+					{
+						setCtrlKeyDown(false);
+					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
@@ -478,6 +488,23 @@ void Game::setMouseActive(bool active)
 {
 	_mouseActive = active;
 	_cursor->setVisible(active);
+}
+
+bool Game::_ctrlKeyDown;
+/**
+ * Sets whether the control key is down
+ */
+void Game::setCtrlKeyDown(bool ctrlKey)
+{
+	_ctrlKeyDown =  ctrlKey;
+}
+
+/**
+ * Returns whether the control key is down
+ */
+bool Game::getCtrlKeyDown()
+{
+	return _ctrlKeyDown;
 }
 
 }
