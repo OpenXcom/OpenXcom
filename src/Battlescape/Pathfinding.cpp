@@ -190,7 +190,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
 	int numberOfPartsChangingLevel = 0;
-
+	int numberOfPartsChangingHeight = 0;
 
 	for (int x = size; x >= 0; x--)
 	{
@@ -267,7 +267,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs))
 			{
 				numberOfPartsChangingLevel++;
-				if (x ==0 && y== 0)
+				if ((numberOfPartsChangingLevel == 4 && size == 1)||(numberOfPartsChangingLevel == 1 && size == 0) )
 				{
 					endPosition->z--;
 					destinationTile = _save->getTile(*endPosition);
@@ -306,9 +306,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			cost += wallcost;
 
-			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel())
+			if (startTile->getTerrainLevel() != destinationTile->getTerrainLevel() && destinationTile->getTerrainLevel() >= 16)
 			{
-				numberOfPartsChangingLevel++;
+				numberOfPartsChangingHeight++;
 			}
 
 		}
@@ -325,7 +325,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// also check if we change level, that there are two parts changing level,
 			// so a big sized unit can not go up a small sized stairs
-			if (numberOfPartsChangingLevel == 1 || numberOfPartsChangingLevel == 3)
+			if (numberOfPartsChangingHeight == 1)
 				return 255;
 	}
 	return cost;
