@@ -60,6 +60,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_specab = SPECAB_NONE;
 	_armor = soldier->getArmor();
 	_gender = soldier->getGender();
+	_faceDirection = -1;
 
 	int rankbonus = 0;
 
@@ -116,6 +117,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
+	_faceDirection = -1;
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -297,12 +299,30 @@ void BattleUnit::setDirection(int direction)
 }
 
 /**
+ * Changes the facedirection. Only used for strafing moves.
+ * @param direction
+ */
+void BattleUnit::setFaceDirection(int direction)
+{
+	_faceDirection = direction;
+}
+
+/**
  * Gets the BattleUnit's (horizontal) direction.
  * @return direction
  */
 int BattleUnit::getDirection() const
 {
 	return _direction;
+}
+
+/**
+ * Gets the BattleUnit's (horizontal) face direction. Used only during strafing moves
+ * @return direction
+ */
+int BattleUnit::getFaceDirection() const
+{
+	return _faceDirection;
 }
 
 /**
@@ -407,6 +427,11 @@ void BattleUnit::keepWalking()
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
+		if (_faceDirection >= 0) {
+			// Finish strafing move facing the correct way.
+			_direction = _faceDirection;
+			_faceDirection = -1;
+		} 
 
 		// motion points calculation for the motion scanner blips
 		if (_armor->getSize() > 1)
