@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -53,6 +53,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_loftemps = soldier->getRules()->getLoftemps();
 	_deathSound = 0; // this one is hardcoded
+	_aggroSound = 0;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
 	_aggression = 1;
@@ -96,7 +97,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -106,6 +107,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_kneelHeight = unit->getKneelHeight();
 	_loftemps = unit->getLoftemps();
 	_deathSound = unit->getDeathSound();
+	_aggroSound = unit->getAggroSound();
 	_moveSound = unit->getMoveSound();
 	_intelligence = unit->getIntelligence();
 	_aggression = unit->getAggression();
@@ -177,6 +179,9 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expMelee"] >> _expMelee;
 	node["turretType"] >> _turretType;
 	node["visible"] >> _visible;
+	node["killedBy"] >> a;
+	_killedBy = (UnitFaction)a;
+
 
 
 }
@@ -229,6 +234,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 		out << YAML::Key << "AI" << YAML::Value;
 		getCurrentAIState()->save(out);
 	}
+	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
 
 	out << YAML::EndMap;
 }
@@ -1042,7 +1048,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit*> *const BattleUnit::getVisibleUnits()
+std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }
@@ -1070,7 +1076,7 @@ bool BattleUnit::addToVisibleTiles(Tile *tile)
  * Get the pointer to the vector of visible tiles.
  * @return pointer to vector.
  */
-std::vector<Tile*> *const BattleUnit::getVisibleTiles()
+std::vector<Tile*> *BattleUnit::getVisibleTiles()
 {
 	return &_visibleTiles;
 }
@@ -1326,7 +1332,7 @@ int BattleUnit::getFire() const
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem*> *const BattleUnit::getInventory()
+std::vector<BattleItem*> *BattleUnit::getInventory()
 {
 	return &_inventory;
 }
@@ -1539,9 +1545,9 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 * Check if this unit is in the exit area.
 * @return Is in the exit area?
 */
-bool BattleUnit::isInExitArea() const
+bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
-	return _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT);
+	return _tile && _tile->getMapData(MapData::O_FLOOR) && (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt);
 }
 
 /**
@@ -2008,6 +2014,50 @@ void BattleUnit::instaKill()
 	_health = 0;
 	_status = STATUS_DEAD;
 }
+
+/**
+ * Set health to 0 and set status dead - used when getting zombified.
+ */
+int BattleUnit::getAggroSound() const
+{
+	return _aggroSound;
+}
+/**
+ * Set a specific number of timeunits.
+ * @param tu
+ */
+void BattleUnit::setEnergy(int energy)
+{
+	_energy = energy;
+}
+
+void BattleUnit::halveArmor()
+{
+	_currentArmor[0] /= 2;
+	_currentArmor[1] /= 2;
+	_currentArmor[2] /= 2;
+	_currentArmor[3] /= 2;
+	_currentArmor[4] /= 2;
+}
+
+/**
+ * Get the faction the unit was killed by.
+ * @return faction
+ */
+UnitFaction BattleUnit::killedBy() const
+{
+	return _killedBy;
+}
+
+/**
+ * Set the faction the unit was killed by.
+ * @param f faction
+ */
+void BattleUnit::killedBy(UnitFaction f)
+{
+	_killedBy = f;
+}
+
 
 }
 

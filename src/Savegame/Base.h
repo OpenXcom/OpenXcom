@@ -38,6 +38,7 @@ class Ruleset;
 class SavedGame;
 class ResearchProject;
 class Production;
+class Vehicle;
 
 /**
  * Represents a player base on the globe.
@@ -57,6 +58,8 @@ private:
 	std::vector<ResearchProject *> _research;
 	std::vector<Production *> _productions;
 	bool _inBattlescape;
+	bool _retaliationTarget;
+	std::vector<Vehicle*> _vehicles;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -73,15 +76,15 @@ public:
 	/// Sets the base's name.
 	void setName(const std::wstring &name);
 	/// Gets the base's facilities.
-	std::vector<BaseFacility*> *const getFacilities();
+	std::vector<BaseFacility*> *getFacilities();
 	/// Gets the base's soldiers.
-	std::vector<Soldier*> *const getSoldiers();
+	std::vector<Soldier*> *getSoldiers();
 	/// Gets the base's crafts.
-	std::vector<Craft*> *const getCrafts();
+	std::vector<Craft*> *getCrafts();
 	/// Gets the base's transfers.
-	std::vector<Transfer*> *const getTransfers();
+	std::vector<Transfer*> *getTransfers();
 	/// Gets the base's items.
-	ItemContainer *const getItems();
+	ItemContainer *getItems();
 	/// Gets the base's scientists.
 	int getScientists() const;
 	/// Sets the base's scientists.
@@ -176,6 +179,18 @@ public:
 	void setInBattlescape(bool inbattle);
 	/// Gets if the craft is in battlescape.
 	bool isInBattlescape() const;
+	/// Mark this base for alien retaliation.
+	void setRetaliationTarget(bool mark = true);
+	/// Gets the retaliation status of this base.
+	bool getRetaliationTarget() const;
+	/// Get the detection chance for this base.
+	unsigned getDetectionChance() const;
+	/// Gets how many Grav Shields the base has
+	int getGravShields() const;
+	/// Get a list of Defensive Facilities
+	std::vector<BaseFacility*> *getDefenses();
+	/// Gets the base's vehicles.
+	std::vector<Vehicle*> *getVehicles();
 };
 
 }

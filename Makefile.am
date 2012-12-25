@@ -14,6 +14,7 @@ ruleset_DATA = \
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
+	bin/data/Language/Bulgarian.lng \
 	bin/data/Language/Czech.geo \
 	bin/data/Language/Czech.lng \
 	bin/data/Language/English.geo \
@@ -38,8 +39,8 @@ language_DATA = \
 	bin/data/Language/Small.fnt \
 	bin/data/Language/Spanish.geo \
 	bin/data/Language/Spanish.lng \
-	bin/data/Language/Ukranian.geo \
-	bin/data/Language/Ukranian.lng
+	bin/data/Language/Ukrainian.geo \
+	bin/data/Language/Ukrainian.lng
 
 namedir = $(pkgdatadir)/SoldierName
 name_DATA = \
@@ -281,12 +282,18 @@ openxcom_SOURCES = \
 	src/Geoscape/AlienTerrorState.h \
 	src/Geoscape/AllocatePsiTrainingState.cpp \
 	src/Geoscape/AllocatePsiTrainingState.h \
+	src/Geoscape/BaseDestroyedState.cpp \
+	src/Geoscape/BaseDestroyedState.h \
+	src/Geoscape/BaseDefenseState.cpp \
+	src/Geoscape/BaseDefenseState.h \
 	src/Geoscape/BaseNameState.cpp \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
 	src/Geoscape/BuildNewBaseState.h \
 	src/Geoscape/CraftErrorState.cpp \
 	src/Geoscape/CraftErrorState.h \
+	src/Geoscape/ConfirmCydoniaState.cpp \
+	src/Geoscape/ConfirmCydoniaState.h \
 	src/Geoscape/ConfirmDestinationState.cpp \
 	src/Geoscape/ConfirmDestinationState.h \
 	src/Geoscape/ConfirmLandingState.cpp \
@@ -295,6 +302,8 @@ openxcom_SOURCES = \
 	src/Geoscape/ConfirmNewBaseState.h \
 	src/Geoscape/CraftPatrolState.cpp \
 	src/Geoscape/CraftPatrolState.h \
+	src/Geoscape/DefeatState.cpp \
+	src/Geoscape/DefeatState.h \
 	src/Geoscape/DogfightState.cpp \
 	src/Geoscape/DogfightState.h \
 	src/Geoscape/FundingState.cpp \
@@ -343,6 +352,8 @@ openxcom_SOURCES = \
 	src/Geoscape/UfoHyperDetectedState.h \
 	src/Geoscape/UfoLostState.cpp \
 	src/Geoscape/UfoLostState.h \
+	src/Geoscape/VictoryState.cpp \
+	src/Geoscape/VictoryState.h \
 	src/Interface/ArrowButton.cpp \
 	src/Interface/ArrowButton.h \
 	src/Interface/Bar.cpp \
@@ -368,6 +379,8 @@ openxcom_SOURCES = \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
+	src/Menu/DeleteGameState.cpp \
+	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
 	src/Menu/LanguageState.cpp \
@@ -414,6 +427,8 @@ openxcom_SOURCES = \
 	src/Ruleset/Armor.h \
 	src/Ruleset/Unit.cpp \
 	src/Ruleset/Unit.h \
+	src/Ruleset/RuleAlienMission.cpp \
+	src/Ruleset/RuleAlienMission.h \
 	src/Ruleset/RuleBaseFacility.cpp \
 	src/Ruleset/RuleBaseFacility.h \
 	src/Ruleset/RuleCountry.cpp \
@@ -442,8 +457,14 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleUfo.h \
 	src/Ruleset/SoldierNamePool.cpp \
 	src/Ruleset/SoldierNamePool.h \
+	src/Ruleset/UfoTrajectory.cpp \
+	src/Ruleset/UfoTrajectory.h \
+	src/Savegame/AlienMission.cpp \
+	src/Savegame/AlienMission.h \
 	src/Savegame/AlienBase.cpp \
 	src/Savegame/AlienBase.h \
+	src/Savegame/AlienStrategy.cpp \
+	src/Savegame/AlienStrategy.h \
 	src/Savegame/Base.cpp \
 	src/Savegame/BaseFacility.cpp \
 	src/Savegame/BaseFacility.h \
@@ -498,6 +519,8 @@ openxcom_SOURCES = \
 	src/Savegame/Vehicle.h \
 	src/Savegame/Waypoint.cpp \
 	src/Savegame/Waypoint.h \
+	src/Savegame/WeightedOptions.cpp \
+	src/Savegame/WeightedOptions.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \
 	src/Ufopaedia/ArticleStateBaseFacility.h \
 	src/Ufopaedia/ArticleState.cpp \

@@ -18,16 +18,72 @@
  */
 #include "RuleRegion.h"
 #include "City.h"
+#include "../Engine/Exception.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of region.
+ * Defines a rectangle in polar coordinates.
+ * It is used to define areas for a mission zone.
+ */
+struct MissionArea
+{
+	double lonMin, lonMax, latMin, latMax;
+};
+
+/// Write a MissionArea to YAML.
+YAML::Emitter &operator<<(YAML::Emitter &out, const MissionArea &ma)
+{
+	out << YAML::Flow << YAML::BeginSeq;
+	out << ma.lonMin << ma.lonMax << ma.latMin << ma.latMax;
+	out << YAML::EndSeq;
+	return out;
+}
+
+/// Read a MissionArea from YAML.
+const YAML::Node &operator>>(const YAML::Node &nd, MissionArea &ma)
+{
+	nd[0] >> ma.lonMin;
+	nd[1] >> ma.lonMax;
+	nd[2] >> ma.latMin;
+	nd[3] >> ma.latMax;
+	return nd;
+}
+
+/**
+ * A zone (set of areas) on the globe.
+ */
+struct MissionZone
+{
+	std::vector<MissionArea> areas;
+
+	void swap(MissionZone &other)
+	{
+		areas.swap(other.areas);
+	}
+};
+
+/// Write a MissionZone to YAML.
+YAML::Emitter &operator<<(YAML::Emitter &out, const MissionZone &mz)
+{
+	out << mz.areas;
+	return out;
+}
+
+/// Read a MissionZone from YAML.
+const YAML::Node &operator>>(const YAML::Node &nd, MissionZone &mz)
+{
+	nd >> mz.areas;
+	return nd;
+}
+
+/**
+ * Creates a blank ruleset for a certain type of region.
  * @param type String defining the type.
  */
-RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities()
+RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0)
 {
 }
 
@@ -85,6 +141,18 @@ void RuleRegion::load(const YAML::Node &node)
 				_cities.push_back(rule);
 			}
 		}
+		else if (key == "regionWeight")
+		{
+			i.second() >> _regionWeight;
+		}
+		else if (key == "missionWeights")
+		{
+			_missionWeights.load(i.second());
+		}
+		else if (key == "missionZones")
+		{
+			i.second() >> _missionZones;
+		}
 	}
 }
 
@@ -108,7 +176,11 @@ void RuleRegion::save(YAML::Emitter &out) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "regionWeight" << YAML::Value << _regionWeight;
+	out << YAML::Key << "missionWeights" << YAML::Value;
+	_missionWeights.save(out);
 	out << YAML::EndMap;
+	out << YAML::Key << "missionZones" << YAML::Value << _missionZones;
 }
 
 /**
@@ -160,9 +232,60 @@ bool RuleRegion::insideRegion(double lon, double lat) const
  * Returns the list of cities contained.
  * @return Pointer to list.
  */
-std::vector<City*> *const RuleRegion::getCities()
+std::vector<City*> *RuleRegion::getCities()
 {
 	return &_cities;
+}
+
+/**
+ * Returns the weight of this region for mission selection.
+ * This is only used when creating a new game, since these weights change in the cource of the game.
+ * @return The initial weight of this region.
+ */
+unsigned RuleRegion::getWeight() const
+{
+	return _regionWeight;
+}
+
+/**
+ * Returns a random point that is guaranteed to be inside the give zone.
+ * If the region contains cities, they are the sites of zone 0 and the rest of the zones get one index higher.
+ * @return A pair of longtitude and latitude.
+ */
+std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
+{
+	if (zone == 0 && _cities.size() > 0)
+	{
+		unsigned p = RNG::generate(0, _cities.size() - 1);
+		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());
+	}
+	if (zone != 0)
+	{
+		--zone;
+	}
+	if (zone < _missionZones.size())
+	{
+		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
+		double lonMin = _missionZones[zone].areas[a].lonMin;
+		double lonMax = _missionZones[zone].areas[a].lonMax;
+		double latMin = _missionZones[zone].areas[a].latMin;
+		double latMax = _missionZones[zone].areas[a].latMax; 
+		if (lonMin > lonMax)
+		{
+			lonMin = _missionZones[zone].areas[a].lonMax;
+			lonMax = _missionZones[zone].areas[a].lonMin;
+		}
+		if (latMin > latMax)
+		{
+			latMin = _missionZones[zone].areas[a].latMax;
+			latMax = _missionZones[zone].areas[a].latMin;
+		}
+		double lon = RNG::generate(lonMin, lonMax);
+		double lat = RNG::generate(latMin, latMax);
+		return std::make_pair(lon, lat);
+	}
+	assert(0 && "Invalid zone number");
+	return std::make_pair(0.0, 0.0);
 }
 
 }

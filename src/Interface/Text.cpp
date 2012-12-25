@@ -51,6 +51,12 @@ Text::~Text()
  */
 std::wstring Text::formatFunding(int funds)
 {
+	bool negative = false;
+	if (funds < 0)
+	{
+		negative = true;
+		funds = -funds;
+	}
 	std::wstringstream ss;
 	ss << funds;
 	std::wstring s = ss.str();
@@ -61,6 +67,8 @@ std::wstring Text::formatFunding(int funds)
 		spacer -= 3;
 	}
 	s.insert(0, L"$");
+	if (negative)
+		s.insert(0, L"-");
 	return s;
 }
 
@@ -100,7 +108,7 @@ void Text::setSmall()
  * Returns the font currently used by the text.
  * @return Pointer to font.
  */
-Font *const Text::getFont() const
+Font *Text::getFont() const
 {
 	return _font;
 }
@@ -424,7 +432,7 @@ void Text::draw()
 		x = (getWidth() - _lineWidth[line]) / 2;
 		break;
 	case ALIGN_RIGHT:
-		x = getWidth() - _lineWidth[line];
+		x = (getWidth() - _lineWidth[line]) - 1;
 		break;
 	}
 

@@ -22,11 +22,13 @@
 #include <string>
 #include <vector>
 #include <yaml-cpp/yaml.h>
+#include "../Savegame/WeightedOptions.h"
 
 namespace OpenXcom
 {
 
 class City;
+struct MissionZone;
 
 /**
  * Represents a specific region of the world.
@@ -40,6 +42,10 @@ private:
 	int _cost;
 	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
 	std::vector<City*> _cities;
+	/// Weighted list of the different mission types for this region.
+	WeightedOptions _missionWeights;
+	unsigned _regionWeight; ///< Weight of this region when selecting regions for alien missions.
+	std::vector<MissionZone> _missionZones; ///< All the mission zones in this region.
 public:
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
@@ -56,7 +62,17 @@ public:
 	/// Checks if a point is inside the region.
 	bool insideRegion(double lon, double lat) const;
 	/// Gets the cities in this region.
-	std::vector<City*> *const getCities();
+	std::vector<City*> *getCities();
+	/// Gets the weight of this region for mission selection.
+	unsigned getWeight() const;
+	/// Gets the weighted list of missions for this region.
+	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
+	/// Gets a random point inside a mission site.
+	std::pair<double, double> getRandomPoint(unsigned site) const;
+	const std::vector<double> &getLonMax() const { return _lonMax; }
+	const std::vector<double> &getLonMin() const { return _lonMin; }
+	const std::vector<double> &getLatMax() const { return _latMax; }
+	const std::vector<double> &getLatMin() const { return _latMin; }
 };
 
 }

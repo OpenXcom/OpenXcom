@@ -128,7 +128,7 @@ CraftSoldiersState::~CraftSoldiersState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftSoldiersState::btnOkClick(Action *action)
+void CraftSoldiersState::btnOkClick(Action *)
 {
 	_game->popState();
 }

@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -145,7 +145,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cppd.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -303,7 +303,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -1279,6 +1279,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDefenseState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDefenseState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Geoscape\BaseNameState.cpp"
 				>
 			</File>
@@ -1292,6 +1308,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\BuildNewBaseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmCydoniaState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\ConfirmCydoniaState.h"
 				>
 			</File>
 			<File
@@ -1332,6 +1356,14 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\CraftPatrolState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\DefeatState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\DefeatState.h"
 				>
 			</File>
 			<File
@@ -1526,6 +1558,14 @@
 				RelativePath=".\Geoscape\UfoLostState.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Geoscape\VictoryState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\VictoryState.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Ufopaedia"
@@ -1630,6 +1670,14 @@
 		<Filter
 			Name="Menu"
 			>
+			<File
+				RelativePath=".\Menu\DeleteGameState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\DeleteGameState.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Menu\ErrorMessageState.cpp"
 				>
@@ -1736,6 +1784,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\AlienBase.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienMission.h"
 				>
 			</File>
 			<File
@@ -1946,6 +2002,22 @@
 				RelativePath=".\Savegame\Waypoint.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Savegame\WeightedOptions.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\WeightedOptions.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource"
@@ -2147,11 +2219,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\UfoTrajectory.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\UfoTrajectory.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\Unit.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Ruleset\Unit.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.h"
 				>
 			</File>
 		</Filter>

@@ -264,7 +264,7 @@ void BasescapeState::setBase(Base *base)
  * Goes to the Build New Base screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnNewBaseClick(Action *action)
+void BasescapeState::btnNewBaseClick(Action *)
 {
 	Base *base = new Base(_game->getRuleset());
 	_game->popState();
@@ -275,7 +275,7 @@ void BasescapeState::btnNewBaseClick(Action *action)
  * Goes to the Base Info screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnBaseInfoClick(Action *action)
+void BasescapeState::btnBaseInfoClick(Action *)
 {
 	_game->pushState(new BaseInfoState(_game, _base, this));
 }
@@ -284,7 +284,7 @@ void BasescapeState::btnBaseInfoClick(Action *action)
  * Goes to the Soldiers screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnSoldiersClick(Action *action)
+void BasescapeState::btnSoldiersClick(Action *)
 {
 	_game->pushState(new SoldiersState(_game, _base));
 }
@@ -293,7 +293,7 @@ void BasescapeState::btnSoldiersClick(Action *action)
  * Goes to the Crafts screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnCraftsClick(Action *action)
+void BasescapeState::btnCraftsClick(Action *)
 {
 	_game->pushState(new CraftsState(_game, _base));
 }
@@ -302,16 +302,16 @@ void BasescapeState::btnCraftsClick(Action *action)
  * Opens the Build Facilities window.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnFacilitiesClick(Action *action)
+void BasescapeState::btnFacilitiesClick(Action *)
 {
-	_game->pushState(new BuildFacilitiesState(_game, _base, this));
+	_game->pushState(new BuildFacilitiesState(_game, _base, this, true));
 }
 
 /**
  * Goes to the Research screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnResearchClick(Action *action)
+void BasescapeState::btnResearchClick(Action *)
 {
 	_game->pushState(new ResearchState(_game, _base));
 }
@@ -320,7 +320,7 @@ void BasescapeState::btnResearchClick(Action *action)
  * Goes to the Manufacture screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnManufactureClick(Action *action)
+void BasescapeState::btnManufactureClick(Action *)
 {
 	_game->pushState(new ManufactureState(_game, _base));
 }
@@ -329,7 +329,7 @@ void BasescapeState::btnManufactureClick(Action *action)
  * Goes to the Purchase screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnPurchaseClick(Action *action)
+void BasescapeState::btnPurchaseClick(Action *)
 {
 	_game->pushState(new PurchaseState(_game, _base));
 }
@@ -338,7 +338,7 @@ void BasescapeState::btnPurchaseClick(Action *action)
  * Goes to the Sell screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnSellClick(Action *action)
+void BasescapeState::btnSellClick(Action *)
 {
 	_game->pushState(new SellState(_game, _base));
 }
@@ -347,7 +347,7 @@ void BasescapeState::btnSellClick(Action *action)
  * Goes to the Select Destination Base window.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnTransferClick(Action *action)
+void BasescapeState::btnTransferClick(Action *)
 {
 	_game->pushState(new TransferBaseState(_game, _base));
 }
@@ -356,7 +356,7 @@ void BasescapeState::btnTransferClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnGeoscapeClick(Action *action)
+void BasescapeState::btnGeoscapeClick(Action *)
 {
 	_game->popState();
 }
@@ -365,7 +365,7 @@ void BasescapeState::btnGeoscapeClick(Action *action)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewClick(Action *action)
+void BasescapeState::viewClick(Action *)
 {
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
@@ -404,7 +404,7 @@ void BasescapeState::viewClick(Action *action)
  * Displays the name of the facility the mouse is over.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewMouseOver(Action *action)
+void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
@@ -417,7 +417,7 @@ void BasescapeState::viewMouseOver(Action *action)
  * Clears the facility name.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewMouseOut(Action *action)
+void BasescapeState::viewMouseOut(Action *)
 {
 	_txtFacility->setText(L"");
 }
@@ -426,7 +426,7 @@ void BasescapeState::viewMouseOut(Action *action)
  * Selects a new base to display.
  * @param action Pointer to an action.
  */
-void BasescapeState::miniClick(Action *action)
+void BasescapeState::miniClick(Action *)
 {
 	unsigned int base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())

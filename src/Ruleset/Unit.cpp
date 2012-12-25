@@ -60,7 +60,7 @@ YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
+Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _aggroSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
 {
 }
 
@@ -124,6 +124,10 @@ void Unit::load(const YAML::Node &node)
 		{
 			i.second() >> _deathSound;
 		}
+		else if (key == "aggroSound")
+		{
+			i.second() >> _aggroSound;
+		}
 		else if (key == "moveSound")
 		{
 			i.second() >> _moveSound;
@@ -169,6 +173,7 @@ void Unit::save(YAML::Emitter &out) const
 	out << YAML::Key << "loftemps" << YAML::Value << _loftemps;
 	out << YAML::Key << "value" << YAML::Value << _value;
 	out << YAML::Key << "deathSound" << YAML::Value << _deathSound;
+	out << YAML::Key << "aggroSound" << YAML::Value << _aggroSound;
 	out << YAML::Key << "moveSound" << YAML::Value << _moveSound;
 	out << YAML::Key << "intelligence" << YAML::Value << _intelligence;
 	out << YAML::Key << "aggression" << YAML::Value << _aggression;
@@ -322,6 +327,15 @@ std::string Unit::getZombieUnit() const
 std::string Unit::getSpawnUnit() const
 {
 	return _spawnUnit;
+}
+
+/**
+ * Get the unit's war cry.
+ * @return sound number.
+ */
+int Unit::getAggroSound() const
+{
+	return _aggroSound;
 }
 
 }

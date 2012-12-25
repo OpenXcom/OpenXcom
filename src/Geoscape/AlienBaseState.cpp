@@ -94,7 +94,7 @@ AlienBaseState::~AlienBaseState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AlienBaseState::btnOkClick(Action *action)
+void AlienBaseState::btnOkClick(Action *)
 {
 	_game->popState();
 }

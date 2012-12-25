@@ -109,7 +109,7 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
  * Go to the Place Access Lift screen.
  * @param action Pointer to an action.
  */
-void ConfirmNewBaseState::btnOkClick(Action *action)
+void ConfirmNewBaseState::btnOkClick(Action *)
 {
 	if (_game->getSavedGame()->getFunds() >= _cost)
 	{
@@ -127,7 +127,7 @@ void ConfirmNewBaseState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmNewBaseState::btnCancelClick(Action *action)
+void ConfirmNewBaseState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

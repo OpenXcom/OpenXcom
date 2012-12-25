@@ -58,6 +58,10 @@ public:
 	double getLabelLatitude() const;
 	/// Checks if a point is inside the country.
 	bool insideCountry(double lon, double lat) const;
+	const std::vector<double> &getLonMax() const { return _lonMax; }
+	const std::vector<double> &getLonMin() const { return _lonMin; }
+	const std::vector<double> &getLatMax() const { return _latMax; }
+	const std::vector<double> &getLatMin() const { return _latMin; }
 };
 
 }

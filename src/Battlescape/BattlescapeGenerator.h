@@ -112,6 +112,7 @@ public:
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
+	void nextStage();
 
 };
 

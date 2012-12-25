@@ -46,7 +46,7 @@ class Craft : public MovingTarget
 private:
 	RuleCraft *_rules;
 	Base *_base;
-	int _id, _fuel, _damage, _patrolTime, _interceptionOrder;
+	int _id, _fuel, _damage, _interceptionOrder;
 	std::vector<CraftWeapon*> _weapons;
 	ItemContainer *_items;
 	std::vector<Vehicle*> _vehicles;
@@ -66,7 +66,7 @@ public:
 	/// Saves the craft's ID to YAML.
 	void saveId(YAML::Emitter& out) const;
 	/// Gets the craft's ruleset.
-	RuleCraft *const getRules() const;
+	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.
 	void setRules(RuleCraft *rules);
 	/// Gets the craft's ID.
@@ -74,7 +74,7 @@ public:
 	/// Gets the craft's name.
 	std::wstring getName(Language *lang) const;
 	/// Gets the craft's base.
-	Base *const getBase() const;
+	Base *getBase() const;
 	/// Sets the craft's base.
 	void setBase(Base *base);
 	/// Gets the craft's status.
@@ -94,11 +94,11 @@ public:
 	/// Gets the craft's amount of vehicles.
 	int getNumVehicles() const;
 	/// Gets the craft's weapons.
-	std::vector<CraftWeapon*> *const getWeapons();
+	std::vector<CraftWeapon*> *getWeapons();
 	/// Gets the craft's items.
-	ItemContainer *const getItems();
+	ItemContainer *getItems();
 	/// Gets the craft's vehicles.
-	std::vector<Vehicle*> *const getVehicles();
+	std::vector<Vehicle*> *getVehicles();
 	/// Gets the craft's amount of fuel.
 	int getFuel() const;
 	/// Sets the craft's amount of fuel.
@@ -149,10 +149,6 @@ public:
 	int getSpaceUsed() const;
 	/// Gets the craft's vehicles of a certain type.
 	int getVehicleCount(const std::string &vehicle) const;
-	/// Gets how long this craft has been patrolling
-	int getPatrolTime() const;
-	/// Sets how long this craft has been patrolling
-	void setPatrolTime(int time);
 	/// Sets the craft's dogfight status.
 	void setInDogfight(const bool inDogfight);
 	/// Gets if the craft is in dogfight.

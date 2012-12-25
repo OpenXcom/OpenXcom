@@ -44,7 +44,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0)
+SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false)
 {
 	std::string temp;
 	temp = Options::getString("battleScrollButton");
@@ -363,6 +363,22 @@ Tile **SavedBattleGame::getTiles() const
  */
 void SavedBattleGame::initMap(int width, int length, int height)
 {
+	if (!_nodes.empty())
+	{
+		for (int i = 0; i < _height * _length * _width; ++i)
+		{
+			delete _tiles[i];
+		}
+		delete[] _tiles;
+
+		for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		{
+			delete *i;
+		}
+
+		_nodes.clear();
+		_mapDataSets.clear();
+	}
 	_width = width;
 	_length = length;
 	_height = height;
@@ -404,6 +420,21 @@ std::string SavedBattleGame::getMissionType() const
 {
 	return _missionType;
 }
+
+/**
+ * Gets the next mission type.
+ * @return missionType
+ */
+std::string SavedBattleGame::getNextStage() const
+{
+	if (_missionType == "STR_MARS_CYDONIA_LANDING")
+	{
+		return "STR_MARS_THE_FINAL_ASSAULT";
+	}
+	else
+		return "";
+}
+
 
 /**
  * Sets the global shade.
@@ -628,7 +659,7 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
  * Gets the list of nodes.
  * @return pointer to the list of nodes
  */
-std::vector<Node*> *const SavedBattleGame::getNodes()
+std::vector<Node*> *SavedBattleGame::getNodes()
 {
 	return &_nodes;
 }
@@ -637,7 +668,7 @@ std::vector<Node*> *const SavedBattleGame::getNodes()
  * Gets the list of units.
  * @return pointer to the list of units
  */
-std::vector<BattleUnit*> *const SavedBattleGame::getUnits()
+std::vector<BattleUnit*> *SavedBattleGame::getUnits()
 {
 	return &_units;
 }
@@ -646,7 +677,7 @@ std::vector<BattleUnit*> *const SavedBattleGame::getUnits()
  * Gets the list of items.
  * @return pointer to the list of items
  */
-std::vector<BattleItem*> *const SavedBattleGame::getItems()
+std::vector<BattleItem*> *SavedBattleGame::getItems()
 {
 	return &_items;
 }
@@ -655,7 +686,7 @@ std::vector<BattleItem*> *const SavedBattleGame::getItems()
  * Get the pathfinding object.
  * @return pointer to the pathfinding object
  */
-Pathfinding *const SavedBattleGame::getPathfinding() const
+Pathfinding *SavedBattleGame::getPathfinding() const
 {
 	return _pathfinding;
 }
@@ -664,7 +695,7 @@ Pathfinding *const SavedBattleGame::getPathfinding() const
  * Get the terrain modifier object.
  * @return pointer to the terrain modifier object
  */
-TileEngine *const SavedBattleGame::getTileEngine() const
+TileEngine *SavedBattleGame::getTileEngine() const
 {
 	return _tileEngine;
 }
@@ -673,7 +704,7 @@ TileEngine *const SavedBattleGame::getTileEngine() const
 * gets a pointer to the array of mapblock
 * @return pointer to the array of mapblocks
 */
-std::vector<MapDataSet*> *const SavedBattleGame::getMapDataSets()
+std::vector<MapDataSet*> *SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataSets;
 }
@@ -857,6 +888,24 @@ bool SavedBattleGame::isAborted()
 }
 
 /**
+ * Is the mission aborted or successful.
+ * @param bool.
+ */
+void SavedBattleGame::setObjectiveDestroyed(bool flag)
+{
+	_objectiveDestroyed = flag;
+}
+
+/**
+ * Is the mission aborted or successful.
+ * @return bool.
+ */
+bool SavedBattleGame::isObjectiveDestroyed()
+{
+	return _objectiveDestroyed;
+}
+
+/**
  * Gets the current item ID.
  * @return Current item ID pointer.
  */
@@ -884,7 +933,8 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
 				|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
+			&& setUnitPosition(unit, (*i)->getPosition(), true)		// check if not already occupied
+			&& (*i)->getPosition().x > 0 && (*i)->getPosition().y > 0 )
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{
@@ -926,7 +976,8 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!(n->getType() & Node::TYPE_FLYING) 
 					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 				&& !n->isAllocated() // check if not allocated
-				&& setUnitPosition(unit, n->getPosition(), true))	// check if not already occupied
+				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
+				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
 				compliantNodes.push_back(n);
 			}
@@ -940,10 +991,10 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 
 /**
  * New turn preparations. Like fire and smoke spreading.
+ * @return True when objective destroyed by fire
  */
 void SavedBattleGame::prepareNewTurn()
 {
-
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
@@ -1038,7 +1089,8 @@ void SavedBattleGame::prepareNewTurn()
 				}
 			}
 		}
-		(*i)->prepareNewTurn();
+		if (!_objectiveDestroyed)
+			_objectiveDestroyed = (*i)->prepareNewTurn();
 	}
 
 	if (!tilesOnFire.empty())
@@ -1061,20 +1113,23 @@ void SavedBattleGame::reviveUnconsciousUnits()
 
 	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
-		Position originalPosition = (*i)->getPosition();
-		for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+		if ((*i)->getArmor()->getSize() == 1)
 		{
-			Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
-			if (t && t->getUnit() == 0 && !t->hasNoFloor())
+			Position originalPosition = (*i)->getPosition();
+			for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
 			{
-				// recover from unconscious
-				(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
-				getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
-				(*i)->turn(false); // makes the unit stand up again
-				(*i)->setCache(0);
-				getTileEngine()->calculateFOV((*i));
-				getTileEngine()->calculateUnitLighting();
-				removeUnconsciousBodyItem((*i));
+				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
+				if (t && t->getUnit() == 0 && !t->hasNoFloor())
+				{
+					// recover from unconscious
+					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
+					getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
+					(*i)->turn(false); // makes the unit stand up again
+					(*i)->setCache(0);
+					getTileEngine()->calculateFOV((*i));
+					getTileEngine()->calculateUnitLighting();
+					removeUnconsciousBodyItem((*i));
+				}
 			}
 		}
 	}

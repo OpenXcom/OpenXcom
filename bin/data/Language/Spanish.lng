@@ -2083,3 +2083,9 @@ STR_DESERT
 Desierto
 STR_POLAR
 Polar
+STR_RANDOM_BATTLE
+batalla aleatorio
+STR_MIXED
+Mixto
+STR_RIGHT_CLICK_TO_DELETE
+Derecha clic para borrar.

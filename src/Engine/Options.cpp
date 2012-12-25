@@ -35,7 +35,7 @@ namespace OpenXcom
 namespace Options
 {
 
-std::string _version = "0.4.5";
+std::string _version = "0.5.0";
 std::string _dataFolder = "";
 std::vector<std::string> _dataList;
 std::string _userFolder = "";
@@ -85,6 +85,7 @@ void createDefault()
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("customInitialBase", false);
+	setBool("aggressiveRetaliation", false);
 
 	_rulesets.push_back("Xcom1Ruleset");
 }

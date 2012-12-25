@@ -366,7 +366,7 @@ BattlescapeOptionsState::~BattlescapeOptionsState()
  * Saves options and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BattlescapeOptionsState::btnOkClick(Action *action)
+void BattlescapeOptionsState::btnOkClick(Action *)
 {
 	if (_scrollSpeed == _btnScrollSpeed1)
 		Options::setInt("battleScrollSpeed", 8);
@@ -431,7 +431,7 @@ void BattlescapeOptionsState::btnOkClick(Action *action)
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
-void BattlescapeOptionsState::btnLoadClick(Action *action)
+void BattlescapeOptionsState::btnLoadClick(Action *)
 {
 	_game->pushState(new LoadState(_game, false));
 }
@@ -440,7 +440,7 @@ void BattlescapeOptionsState::btnLoadClick(Action *action)
  * Opens the Save Game screen.
  * @param action Pointer to an action.
  */
-void BattlescapeOptionsState::btnSaveClick(Action *action)
+void BattlescapeOptionsState::btnSaveClick(Action *)
 {
 	_game->pushState(new SaveState(_game, false));
 }

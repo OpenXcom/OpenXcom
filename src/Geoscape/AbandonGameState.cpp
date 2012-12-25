@@ -85,7 +85,7 @@ AbandonGameState::~AbandonGameState()
  * Goes back to the Main Menu.
  * @param action Pointer to an action.
  */
-void AbandonGameState::btnYesClick(Action *action)
+void AbandonGameState::btnYesClick(Action *)
 {
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
@@ -95,7 +95,7 @@ void AbandonGameState::btnYesClick(Action *action)
  * Closes the window.
  * @param action Pointer to an action.
  */
-void AbandonGameState::btnNoClick(Action *action)
+void AbandonGameState::btnNoClick(Action *)
 {
 	_game->popState();
 }

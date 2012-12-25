@@ -20,6 +20,7 @@
 #define OPENXCOM_SURFACE_H
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include <string>
 
 namespace OpenXcom
@@ -51,6 +52,7 @@ public:
 	void loadScr(const std::string &filename);
 	/// Loads an X-Com SPK graphic.
 	void loadSpk(const std::string &filename);
+	void loadLbm(const std::string &filename);
 	/// Clears the surface's contents.
 	void clear();
 	/// Offsets the surface's colors by a set amount.
@@ -80,7 +82,7 @@ public:
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Gets the surface's palette.
-	SDL_Color *const getPalette() const;
+	SDL_Color *getPalette() const;
 	/// Sets the X position of the surface.
 	void setX(int x);
 	/// Gets the X position of the surface.
@@ -104,7 +106,7 @@ public:
 	/// Gets a pixel of the surface.
 	Uint8 getPixel(int x, int y) const;
 	/// Gets the internal SDL surface.
-	SDL_Surface *const getSurface() const;
+	SDL_Surface *getSurface() const;
 	/// Gets the surface's width.
 	int getWidth() const;
 	/// Gets the surface's height.

@@ -28,6 +28,7 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class Globe;
 
 /**
  * Report screen shown monthly to display
@@ -38,13 +39,14 @@ class MonthlyReportState : public State
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtRatingTxt;
-	bool _psi;
-	int _ratingTotal, _fundingDiff, _generalSatisfaction;
+	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtRatingTxt, *_txtFailure;
+	bool _psi, _gameOver;
+	int _ratingTotal, _fundingDiff, _lastMonthsRating;
 	std::vector<std::string> _happyList, _sadList, _pactList;
+	Globe *_globe;
 public:
 	/// Creates the Monthly Report state.
-	MonthlyReportState(Game *game, bool psi);
+	MonthlyReportState(Game *game, bool psi, Globe *globe);
 	/// Cleans up the Monthly Report state.
 	~MonthlyReportState();
 	/// Updates the palette.

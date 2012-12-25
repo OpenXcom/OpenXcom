@@ -40,11 +40,11 @@ class NewBattleState : public State
 {
 private:
 	Window *_window;
-	Text *_txtTitle, *_txtMissionType, *_txtTerrainType, *_txtAlienRace, *_txtDifficulty, *_txtDarkness, *_txtCraft;
+	Text *_txtTitle, *_txtMissionType, *_txtTerrainType, *_txtAlienRace, *_txtDifficulty, *_txtDarkness, *_txtCraft, *_txtItemLevel;
 	TextButton *_btnMissionType, *_btnTerrainType, *_btnAlienRace, *_btnDifficulty, *_btnDarkness, *_btnCraft;
-	TextButton *_btnOk, *_btnCancel, *_btnEquip, *_btnRandom;
-	std::vector<std::string> _missionTypes, _terrainTypes, _alienRaces, _difficulty, _darkness, _crafts;
-	size_t _selMission, _selTerrain, _selAlien, _selDifficulty, _selDarkness, _selCraft;
+	TextButton *_btnOk, *_btnCancel, *_btnEquip, *_btnRandom, *_btnItemLevel;
+	std::vector<std::string> _missionTypes, _terrainTypes, _alienRaces, _difficulty, _darkness, _crafts, _itemLevels;
+	size_t _selMission, _selTerrain, _selAlien, _selDifficulty, _selDarkness, _selCraft, _selItemLevel;
 	bool _music;
 	size_t _alienEquipLevel;
 	Craft *_craft;
@@ -79,6 +79,7 @@ public:
 	void btnDarknessClick(Action *action);
 	/// Handler for clicking the Craft button.
 	void btnCraftClick(Action *action);
+	void btnItemLevelClick(Action *action);
 };
 
 }

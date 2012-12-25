@@ -90,8 +90,8 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0)
@@ -117,7 +117,7 @@ StoresState::~StoresState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void StoresState::btnOkClick(Action *action)
+void StoresState::btnOkClick(Action *)
 {
 	_game->popState();
 }

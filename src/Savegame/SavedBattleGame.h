@@ -75,6 +75,7 @@ private:
 	bool _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
 	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
 	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
+	bool _objectiveDestroyed;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -89,11 +90,13 @@ public:
 	/// initialises pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
-	std::vector<MapDataSet*> *const getMapDataSets();
+	std::vector<MapDataSet*> *getMapDataSets();
 	/// Set the mission type.
 	void setMissionType(const std::string &missionType);
 	/// Get the mission type.
 	std::string getMissionType() const;
+	/// Get the next mission type.
+	std::string getNextStage() const;
 	/// Set the global shade.
 	void setGlobalShade(int shade);
 	/// Get the global shade.
@@ -101,11 +104,11 @@ public:
 	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile **getTiles() const;
 	/// Get pointer to the list of nodes.
-	std::vector<Node*> *const getNodes();
+	std::vector<Node*> *getNodes();
 	/// Get pointer to the list of items.
-	std::vector<BattleItem*> *const getItems();
+	std::vector<BattleItem*> *getItems();
 	/// Get pointer to the list of units.
-	std::vector<BattleUnit*> *const getUnits();
+	std::vector<BattleUnit*> *getUnits();
 	/// Gets terrain width.
 	int getWidth() const;
 	/// Gets terrain length.
@@ -131,9 +134,9 @@ public:
 	/// select unit with position on map
 	BattleUnit *selectUnit(Tile *tile);
 	/// get the pathfinding object
-	Pathfinding *const getPathfinding() const;
+	Pathfinding *getPathfinding() const;
 	/// get a pointer to the tileengine
-	TileEngine *const getTileEngine() const;
+	TileEngine *getTileEngine() const;
 	/// get the playing side
 	UnitFaction getSide() const;
 	/// get the turn number
@@ -154,6 +157,10 @@ public:
 	void setAborted(bool flag);
 	/// Whether the mission was aborted.
 	bool isAborted();
+	/// Whether the objective is destroyed.
+	void setObjectiveDestroyed(bool flag);
+	/// Whether the objective is detroyed.
+	bool isObjectiveDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
 	/// Gets a spawn node.

@@ -84,7 +84,19 @@
 #include "../Savegame/Region.h"
 #include "../Savegame/Country.h"
 #include "../Ruleset/RuleCountry.h"
+#include "../Ruleset/RuleAlienMission.h"
+#include "../Savegame/AlienStrategy.h"
+#include "../Savegame/AlienMission.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/BriefingState.h"
+#include "../Ruleset/UfoTrajectory.h"
+#include "BaseDefenseState.h"
+#include "BaseDestroyedState.h"
+#include "DefeatState.h"
 #include <ctime>
+#include <algorithm>
+#include <functional>
 
 namespace OpenXcom
 {
@@ -93,7 +105,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _battleMusic(false),  _popups(), _dogfights(), _dogfightsToBeStarted(), _zoomInEffectDone(false), _zoomOutEffectDone(false), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -133,8 +145,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
 
-	_zoomInEffectTimer = new Timer(250);
-	_zoomOutEffectTimer = new Timer(250);
+	_zoomInEffectTimer = new Timer(50);
+	_zoomOutEffectTimer = new Timer(50);
 	_dogfightStartTimer = new Timer(250);
 
 	_txtDebug = new Text(100, 8, 0, 0);
@@ -394,6 +406,11 @@ void GeoscapeState::think()
 	_zoomOutEffectTimer->think(this, 0);
 	_dogfightStartTimer->think(this, 0);
 
+	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	{
+		_game->getSavedGame()->addMonth();
+		determineAlienMissions(true);
+	}
 	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
@@ -520,46 +537,93 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
+	// Game over if there are no more bases.
+	if (_game->getSavedGame()->getBases()->size() == 0)
+	{
+		_game->pushState (new DefeatState(_game));
+		return;
+	}
+
 	// Handle UFO logic
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
 		switch ((*i)->getStatus())
 		{
 		case Ufo::FLYING:
-			(*i)->think();
-			if ((*i)->reachedDestination())
+			if (!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
 			{
-				if (_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()))
+				(*i)->think();
+				if ((*i)->reachedDestination())
 				{
-					(*i)->setAltitude("STR_GROUND");
-					(*i)->setTimeOnGround(16 + RNG::generate(0, 24));
-				}
-				else
-				{
-					(*i)->setDetected(false);
-					if (!(*i)->getFollowers()->empty())
+					unsigned terrorSiteCount = _game->getSavedGame()->getTerrorSites()->size();
+					AlienMission *mission = (*i)->getMission();
+					bool detected = (*i)->getDetected();
+					mission->ufoReachedWaypoint(**i, *_game, *_globe);
+					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
-					// This is only required because we are
-					// faking the UFO flight patterns.
-					(*i)->setStatus(Ufo::DESTROYED);
+					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
+					{
+						const TerrorSite &ts = *_game->getSavedGame()->getTerrorSites()->back();
+						const City *city = _game->getRuleset()->locateCity(ts.getLongitude(), ts.getLatitude());
+						assert(city);
+						popup(new AlienTerrorState(_game, city, this));
+					}
+					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
+					{
+						base->setInBattlescape(true);
+						if (base->getDefenses())
+						{
+							popup(new BaseDefenseState(_game, base, *i));
+						}
+						else if (base->getSoldiers())
+						{
+							size_t month = _game->getSavedGame()->getMonthsPassed();
+							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+								month = _game->getRuleset()->getAlienItemLevels().size()-1;
+							SavedBattleGame *bgame = new SavedBattleGame();
+							_game->getSavedGame()->setBattleGame(bgame);
+							bgame->setMissionType("STR_BASE_DEFENSE");
+							BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+							bgen.setBase(base);
+							bgen.setAlienRace((*i)->getAlienRace());
+							bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+							bgen.run();
+
+							popup(new BriefingState(_game, 0, base, *i));
+						}
+						else
+						{
+							popup(new BaseDestroyedState(_game, base));
+						}
+					}
 				}
 			}
 			break;
 		case Ufo::LANDED:
-		case Ufo::CRASHED:
-			if ((*i)->getTimeOnGround() <= 0)
+			(*i)->think();
+			if ((*i)->getSecondsRemaining() == 0)
 			{
-				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty() && (*i)->getTimeOnGround() == 0)
+				AlienMission *mission = (*i)->getMission();
+				bool detected = (*i)->getDetected();
+				mission->ufoLifting(**i, *_game, *_globe);
+				if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 				{
 					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 				}
+			}
+			break;
+		case Ufo::CRASHED:
+			(*i)->think();
+			if ((*i)->getSecondsRemaining() == 0)
+			{
+				(*i)->setDetected(false);
 				(*i)->setStatus(Ufo::DESTROYED);
 			}
 			break;
 		case Ufo::DESTROYED:
+			// Nothing to do
 			break;
 		}
 	}
@@ -581,10 +645,6 @@ void GeoscapeState::time5Seconds()
 					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
-				if((*j)->getPatrolTime() != 0)
-				{
-					(*j)->setPatrolTime(0);
-				}
 			}
 			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
 			{
@@ -602,21 +662,17 @@ void GeoscapeState::time5Seconds()
 					{
 					case Ufo::FLYING:
 						// Not more than 4 interceptions at a time.
-						if(_dogfights.size() >= 4 || _dogfightsToBeStarted.size() >=4 || _dogfights.size() + _dogfightsToBeStarted.size() >= 4)
+						if(_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
 							continue;
 						}
 						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
 						{
-							std::cout << "Starting dogfight...\n";
-							clock_t startClock = clock();
-							std::auto_ptr<DogfightState> d(new DogfightState(_game, _globe, (*j), u));
-							_dogfightsToBeStarted.push_back(d.release());
-							double diff = clock() - startClock;
-							std::cout << "Took: " << diff / (double)CLOCKS_PER_SEC << "s. Why sooooooooo long?\n";
+							_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 
 							if(!_dogfightStartTimer->isRunning())
 							{
+								_pause = true;
 								timerReset();
 								_globe->center((*j)->getLongitude(), (*j)->getLatitude());
 								startDogfight();
@@ -645,7 +701,7 @@ void GeoscapeState::time5Seconds()
 								popup(new ConfirmLandingState(_game, *j, texture, shade));
 							}
 						}
-						else
+						else if (u->getStatus() != Ufo::LANDED)
 						{
 							(*j)->returnToBase();
 						}
@@ -694,52 +750,6 @@ void GeoscapeState::time5Seconds()
 			}
 		}
 	}
-	// Handle UFO logic
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
-	{
-		switch ((*i)->getStatus())
-		{
-		case Ufo::FLYING:
-			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
-			{
-				(*i)->think();
-				if ((*i)->reachedDestination())
-				{
-					if (_globe->insideLand((*i)->getLongitude(), (*i)->getLatitude()))
-					{
-						(*i)->setAltitude("STR_GROUND");
-						(*i)->setTimeOnGround(16 + RNG::generate(0, 24));
-					}
-					else
-					{
-						if (!(*i)->getFollowers()->empty())
-						{
-							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
-						}						
-						// This is only required because we are
-						// faking the UFO flight patterns.
-						(*i)->setStatus(Ufo::DESTROYED);
-						(*i)->setDetected(false);
-					}
-				}
-			}
-			break;
-		case Ufo::LANDED:
-		case Ufo::CRASHED:
-			if ((*i)->getTimeOnGround() <= 0)
-			{
-				(*i)->setDetected(false);
-				if (!(*i)->getFollowers()->empty() && (*i)->getTimeOnGround() == 0)
-				{
-					popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
-				}
-				(*i)->setStatus(Ufo::DESTROYED);
-			}
-			break;
-		case Ufo::DESTROYED:
-			break;
-		}
-	}
 
 	// Clean up dead UFOs and end dogfights which were minimized.
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
@@ -782,36 +792,6 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
-	// Clean up terror sites
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end();)
-	{
-		if ((*i)->getHoursActive() == 0 && (*i)->getFollowers()->empty()) // CHEEKY EXPLOIT
-		{
-			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityAlien(1000);
-					//kids, tell your folks... don't ignore terror sites.
-				}
-			}
-		
-			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityAlien(1000);
-				}
-			}
-			delete *i;
-			i = _game->getSavedGame()->getTerrorSites()->erase(i);
-		}
-		else
-		{
-			++i;
-		}
-	}
-
 	// Clean up unused waypoints
 	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
 	{
@@ -828,6 +808,51 @@ void GeoscapeState::time5Seconds()
 }
 
 /**
+ * Functor that attempt to detect an XCOM base.
+ */
+class DetectXCOMBase: public std::unary_function<Ufo *, bool>
+{
+public:
+	/// Create a detector for the given base.
+	DetectXCOMBase(const Base &base) : _base(base) { /* Empty by design.  */ }
+	/// Attempt detection
+	bool operator()(const Ufo *ufo) const;
+private:
+	const Base &_base;	//!< The target base.
+};
+
+/**
+ * Only UFOs within detection range of the base have a chance to detect it.
+ * @param ufo Pointer to the UFO attempting detection.
+ * @return If the base is detected by @a ufo.
+ */
+bool DetectXCOMBase::operator()(const Ufo *ufo) const
+{
+	// UFOs building a base don't detect!
+	if (ufo->getTrajectory().getID() == "P5")
+	{
+		return false;
+	}
+
+	// UFOs have a detection range of 80 XCOM units.
+	if (_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))
+	{
+		return false;
+	}
+	return ((int)_base.getDetectionChance() < RNG::generate(0, 100));
+}
+
+/**
+ * Functor that marks an XCOM base for retaliation.
+ * This is required because of the iterator type.
+ */
+struct SetRetaliationTarget: public std::unary_function<std::map<const Region *, Base *>::value_type, void>
+{
+	/// Mark as a valid retaliation target.
+	void operator()(const argument_type &iter) const { iter.second->setRetaliationTarget(true); }
+};
+
+/**
  * Takes care of any game logic that has to
  * run every game ten minutes, like fuel consumption.
  */
@@ -835,6 +860,7 @@ void GeoscapeState::time10Minutes()
 {
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
+		// Fuel consumption for XCOM craft.
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->getStatus() == "STR_OUT")
@@ -846,10 +872,162 @@ void GeoscapeState::time10Minutes()
 					(*j)->returnToBase();
 					popup(new LowFuelState(_game, (*j), this));
 				}
+
+				if ((*j)->getDestination() == 0)
+				{
+					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					{
+						if ((*j)->getDistance(*b) <= (1696 * (1 / 60.0) * (M_PI / 180) ))
+						{
+							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
+							if ((50-((*j)->getDistance(*b) / (1696 * (1 / 60.0) * (M_PI / 180) )) * 50 >= RNG::generate(0, 100)) && !(*b)->isDiscovered())
+							{
+								(*b)->setDiscovered(true);
+							}
+						}
+					}
+				}
 			}
 		}
 	}
+	if (Options::getBool("aggressiveRetaliation"))
+	{
+		// Detect as many bases as possible.
+		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
+		{
+			// Find a UFO that detected this base, if any.
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			if (uu != _game->getSavedGame()->getUfos()->end())
+			{
+				// Base found
+				(*iBase)->setRetaliationTarget(true);
+			}
+		}
+	}
+	else
+	{
+		// Only remember last base in each region.
+		std::map<const Region *, Base *> discovered;
+		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
+		{
+			// Find a UFO that detected this base, if any.
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			if (uu != _game->getSavedGame()->getUfos()->end())
+			{
+				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
+			}
+		}
+		// Now mark the bases as discovered.
+		std::for_each(discovered.begin(), discovered.end(), SetRetaliationTarget());
+	}
 }
+
+/** @brief Delete a finished mission.
+ * This function object will delete an alien mission if it is over.
+ */
+struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, bool>
+{
+	/// Delete a mission if it's finished.
+	/**
+	 * Delete a mission if it has no UFOs and is not going to create any more.
+	 * @param am A pointer to the mission to check.
+	 * @return true if @a am was deleted.
+	 */
+	bool operator()(AlienMission *am) const
+	{
+		if (am->isOver())
+		{
+			delete am;
+			return true;
+		}
+		return false;
+	}
+};
+
+/** @brief Call AlienMission::think() with proper parameters.
+ * This function object calls AlienMission::think() with the proper parameters.
+ */
+class callThink: public std::unary_function<AlienMission*, void>
+{
+public:
+	/// Store the parameters.
+	/**
+	 * @param game The game engine.
+	 * @param game The globe object.
+	 */
+	callThink(Game &game, const Globe &globe) : _game(game), _globe(globe) { /* Empty by design. */ }
+	/// Call AlienMission::think() with stored parameters.
+	void operator()(AlienMission *am) const { am->think(_game, _globe); }
+private:
+	Game &_game;
+	const Globe &_globe;
+};
+
+/** @brief Process a TerrorSite.
+ * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
+ */
+class ProcessTerrorSite: public std::unary_function<TerrorSite*, bool>
+{
+public:
+	/// Remember data for invocations.
+	ProcessTerrorSite(SavedGame &game) : _game(game) { /* Empty by design. */ }
+	/// Count down for expiration and handle it.
+	bool operator()(TerrorSite *ts) const;
+private:
+	SavedGame &_game;
+};
+
+bool ProcessTerrorSite::operator()(TerrorSite *ts) const
+{
+	if (ts->getSecondsRemaining() >= 30 * 60)
+	{
+		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
+		return false;
+	}
+	if (!ts->getFollowers()->empty()) // CHEEKY EXPLOIT
+	{
+		return false;
+	}
+	// Score and delete it.
+	Region *region = _game.locateRegion(*ts);
+	if (region)
+	{
+		//TODO: This should come from mission rules!
+		region->addActivityAlien(1000);
+		//kids, tell your folks... don't ignore terror sites.
+	}
+	for (std::vector<Country*>::iterator k = _game.getCountries()->begin(); k != _game.getCountries()->end(); ++k)
+	{
+		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
+		{
+			(*k)->addActivityAlien(1000);
+			break;
+		}
+	}
+	delete ts;
+	return true;
+}
+
+/** @brief Advance time for crashed UFOs.
+ * This function object will decrease the expiration timer for crashed UFOs.
+ */
+struct expireCrashedUfo: public std::unary_function<Ufo*, void>
+{
+	/// Decrease UFO expiration timer.
+	void operator()(Ufo *ufo) const
+	{
+		if (ufo->getStatus() == Ufo::CRASHED)
+		{
+			if (ufo->getSecondsRemaining() >= 30 * 60)
+			{
+				ufo->setSecondsRemaining(ufo->getSecondsRemaining() - 30 * 60);
+				return;
+			}
+			// Marked expired UFOs for removal.
+			ufo->setStatus(Ufo::DESTROYED);
+		}
+	}
+};
 
 /**
  * Takes care of any game logic that has to
@@ -857,70 +1035,28 @@ void GeoscapeState::time10Minutes()
  */
 void GeoscapeState::time30Minutes()
 {
-	// Spawn UFOs
-	std::vector<std::string> ufos = _game->getRuleset()->getUfosList();
-	int chance = RNG::generate(1, 100);
-	if (chance <= 40)
-	{
-		// Makes smallest UFO the more likely, biggest UFO the least likely
-		// eg. 0 - 0..6, 1 - 6..10, etc.
-		unsigned int range = RNG::generate(1, (ufos.size()*(ufos.size()+1))/2);
-		unsigned int type = 0;
-		for (unsigned int i = 0, j = 1; i < ufos.size(); ++i, j += ufos.size()-i)
-		{
-			if (j <= range && range < j + ufos.size()-i)
-			{
-				type = i;
-				break;
-			}
-		}
-		Ufo *u = new Ufo(_game->getRuleset()->getUfo(ufos[type]));
-		u->setLongitude(RNG::generate(0.0, 2*M_PI));
-		u->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
-		Waypoint *w = new Waypoint();
-		w->setLongitude(RNG::generate(0.0, 2*M_PI));
-		w->setLatitude(RNG::generate(-M_PI_2, M_PI_2));
-		u->setDestination(w);
-		u->setSpeed(RNG::generate(u->getRules()->getMaxSpeed() / 4, u->getRules()->getMaxSpeed() / 2));
-		int race = RNG::generate(1, 2);
-		if (race == 1)
-			u->setAlienRace("STR_SECTOID");
-		else
-			u->setAlienRace("STR_FLOATER");
-		_game->getSavedGame()->getUfos()->push_back(u);
-	}
+	// Decrease mission countdowns
+	std::for_each(_game->getSavedGame()->getAlienMissions().begin(),
+		      _game->getSavedGame()->getAlienMissions().end(),
+		      callThink(*_game, *_globe));
+	// Remove finished missions
+	std::vector<AlienMission*>::iterator last =
+	    std::remove_if(_game->getSavedGame()->getAlienMissions().begin(),
+			   _game->getSavedGame()->getAlienMissions().end(),
+			   deleteFinishedAlienMission());
+	_game->getSavedGame()->getAlienMissions().erase(last, _game->getSavedGame()->getAlienMissions().end());
+
+	// Handle crashed UFOs expiration
+	std::for_each(_game->getSavedGame()->getUfos()->begin(),
+		      _game->getSavedGame()->getUfos()->end(),
+		      expireCrashedUfo());
+
 
 	// Handle craft maintenance and alien base detection
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			if ((*j)->getStatus() == "STR_OUT")
-			{
-				if ((*j)->getDestination() == 0)
-				{
-					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
-					{
-						if ((*j)->getDistance(*b) < 1500 * (1 / 60.0) * (M_PI / 180))
-						{
-							chance = 5;
-							for (int it = 1500; it != 0; it -= 100)
-							{
-								if ((*j)->getDistance(*b) < it * (1 / 60.0) * (M_PI / 180))
-								{
-									chance += 5;
-								}
-							}
-							chance += (*j)->getPatrolTime()*5;
-							if(RNG::generate(1,100) <= chance)
-							{
-							(*b)->setDiscovered(true);
-							}
-						}
-					}
-					(*j)->setPatrolTime((*j)->getPatrolTime() + 1);
-				}
-			}
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
@@ -969,6 +1105,7 @@ void GeoscapeState::time30Minutes()
 				{
 					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
+					break;
 				}
 			}
 			// Get country
@@ -978,6 +1115,7 @@ void GeoscapeState::time30Minutes()
 				{
 					//one point per UFO in-flight per half hour
 					(*k)->addActivityAlien(points);
+					break;
 				}
 			}
 			if (!(*u)->getDetected())
@@ -1040,7 +1178,6 @@ void GeoscapeState::time30Minutes()
 					}
 					if (!(*u)->getFollowers()->empty())
 					{
-
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 					}
 				}
@@ -1051,6 +1188,13 @@ void GeoscapeState::time30Minutes()
 			break;
 		}
 	}
+
+	// Processes TerrorSites
+	std::vector<TerrorSite*>::iterator lastTerrorSite =
+	    std::remove_if( _game->getSavedGame()->getTerrorSites()->begin(),
+			    _game->getSavedGame()->getTerrorSites()->end(),
+			    ProcessTerrorSite(*_game->getSavedGame()));
+	_game->getSavedGame()->getTerrorSites()->erase(lastTerrorSite, _game->getSavedGame()->getTerrorSites()->end());
 }
 
 /**
@@ -1083,35 +1227,6 @@ void GeoscapeState::time1Hour()
 					popup(new CraftErrorState(_game, this, ss.str()));
 				}
 			}
-		}
-	}
-
-	// Handle crashed UFOs expiring
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
-	{
-		switch ((*i)->getStatus())
-		{
-		case Ufo::FLYING:
-			break;
-		case Ufo::LANDED:
-		case Ufo::CRASHED:
-			if ((*i)->getTimeOnGround() > 0)
-			{
-				(*i)->setTimeOnGround((*i)->getTimeOnGround() - 1);
-			}
-			break;
-		case Ufo::DESTROYED:
-			assert(0 && "Timing destroyed UFO.");
-			break;
-		}
-	}
-
-	// Handle terror sites expiring
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
-	{
-		if ((*i)->getHoursActive() > 0)
-		{
-			(*i)->setHoursActive((*i)->getHoursActive() - 1);
 		}
 	}
 
@@ -1153,105 +1268,48 @@ void GeoscapeState::time1Hour()
 }
 
 /**
+ * This class will attempt to generate a supply mission for a base.
+ * Each alien base has a 6/101 chance to generate a supply mission.
+ */
+class GenerateSupplyMission: public std::unary_function<const AlienBase *, void>
+{
+public:
+	/// Store rules and game data references for later use.
+	GenerateSupplyMission(const Ruleset &ruleset, SavedGame &save) : _ruleset(ruleset), _save(save) { /* Empty by design */ }
+	/// Check and spawn mission.
+	void operator()(const AlienBase *base) const;
+private:
+	const Ruleset &_ruleset;
+	SavedGame &_save;
+};
+
+/**
+ * Check and create supply mission for the given base.
+ * There is a 6/101 chance of the mission spawning.
+ * @param base A pointer to the alien base.
+ */
+void GenerateSupplyMission::operator()(const AlienBase *base) const
+{
+	if (RNG::generate(0, 100) < 6)
+	{
+		//Spawn supply mission for this base.
+		const RuleAlienMission &rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
+		AlienMission *mission = new AlienMission(rule);
+		mission->setRegion(_save.locateRegion(*base)->getRules()->getType());
+		mission->setId(_save.getId("ALIEN_MISSIONS"));
+		mission->setRace(base->getAlienRace());
+		mission->setAlienBase(base);
+		mission->start();
+		_save.getAlienMissions().push_back(mission);
+	}
+}
+
+/**
  * Takes care of any game logic that has to
  * run every game day, like constructions.
  */
 void GeoscapeState::time1Day()
 {
-	// Spawn terror sites
-	int chance = RNG::generate(1, 20);
-	if (chance <= 2)
-	{
-		// Pick a city
-		RuleRegion* region = 0;
-		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
-		do
-		{
-			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		}
-		while (region->getCities()->empty());
-		City *city = (*region->getCities())[RNG::generate(0, region->getCities()->size()-1)];
-
-		TerrorSite *t = new TerrorSite();
-		t->setLongitude(city->getLongitude());
-		t->setLatitude(city->getLatitude());
-		t->setId(_game->getSavedGame()->getId("STR_TERROR_SITE"));
-		t->setHoursActive(24 + RNG::generate(0, 24));
-		int race = RNG::generate(1, 2);
-		if (race == 1)
-			t->setAlienRace("STR_SECTOID");
-		else
-			t->setAlienRace("STR_FLOATER");
-		_game->getSavedGame()->getTerrorSites()->push_back(t);
-		popup(new AlienTerrorState(_game, city, this));
-		
-		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
-		{
-			if ((*k)->getRules()->insideRegion((t)->getLongitude(), (t)->getLatitude()))
-			{
-				(*k)->addActivityAlien(10);
-			}
-		}
-		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-		{
-			if ((*k)->getRules()->insideCountry((t)->getLongitude(), (t)->getLatitude()))
-			{
-				(*k)->addActivityAlien(10);
-			}
-		}
-	}
-	else if (chance == 20 && _game->getSavedGame()->getAlienBases()->size() < 9)
-	{
-		// Pick a city
-		RuleRegion* region = 0;
-		std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
-		do
-		{
-			region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
-		}
-		while (region->getCities()->empty());
-		City *city = (*region->getCities())[RNG::generate(0, region->getCities()->size()-1)];
-		double lon;
-		double lat;
-		int tries = 0;
-		do
-		{
-			double ran = RNG::generate(-100, 100) * 0.125 * M_PI / 180;
-			double ran2 = RNG::generate(-100, 100) * 0.125 * M_PI / 180;
-			lon = city->getLongitude() + ran;
-			lat = city->getLatitude() + ran2;
-			tries++;
-		}
-		while(!_globe->insideLand(lon, lat) && tries < 100);
-		AlienBase *b = new AlienBase();
-		b->setLongitude(lon);
-		b->setLatitude(lat);
-		b->setSupplyTime(0);
-		b->setDiscovered(false);
-		b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
-		int race = RNG::generate(1, 2);
-		if (race == 1)
-			b->setAlienRace("STR_SECTOID");
-		else if (race == 2)
-			b->setAlienRace("STR_FLOATER");
-		_game->getSavedGame()->getAlienBases()->push_back(b);
-		
-		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
-		{
-			if ((*k)->getRules()->insideRegion((b)->getLongitude(), (b)->getLatitude()))
-			{
-				(*k)->addActivityAlien(50);
-			}
-		}
-		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-		{
-			if ((*k)->getRules()->insideCountry((b)->getLongitude(), (b)->getLatitude()))
-			{
-				(*k)->addActivityAlien(50);
-			}
-		}
-	}
-
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		// Handle facility construction
@@ -1311,24 +1369,6 @@ void GeoscapeState::time1Day()
 					}
 				}
 			}
-			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
-					if(bonus)
-						(*k)->addActivityXcom(bonus->getPoints());
-				}
-			}
-			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-			{
-				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
-				{
-					(*k)->addActivityXcom((*iter)->getRules()->getPoints());
-					if(bonus)
-						(*k)->addActivityXcom(bonus->getPoints());
-				}
-			}
 			const RuleResearch * newResearch = research;
 			if(_game->getSavedGame()->isResearched(research->getName()))
 			{
@@ -1361,28 +1401,30 @@ void GeoscapeState::time1Day()
 			}
 		}
 	}
-	// handle regional points for alien bases
-	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	// handle regional and country points for alien bases
+	for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 	{
-		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+				break;
 			}
 		}
-	}
-	// handle country points for alien bases
-	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-	{
-		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+				break;
 			}
 		}
 	}
+
+	// Handle resupply of alien bases.
+	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
+		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 }
 
 /**
@@ -1391,18 +1433,54 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
+	_game->getSavedGame()->addMonth();
 
-	// Handle Psi-Training, if applicable
+	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
+	bool newRetaliation = false;
+
+	// Determine alien mission for this month.
+	determineAlienMissions();
+	if (monthsPassed > 5)
+		determineAlienMissions();
+	if (monthsPassed >= 14 - _game->getSavedGame()->getDifficulty()
+		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
+	{
+		newRetaliation = true;
+	}
+
+	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
 	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
-		if((*b)->getAvailablePsiLabs() > 0)
+		if (newRetaliation)
+		{
+			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+			{
+				if ((*i)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
+				{
+					if (!_game->getSavedGame()->getAlienMission((*i)->getRules()->getType(), "STR_ALIEN_RETALIATION"))
+					{
+						const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
+						AlienMission *mission = new AlienMission(rule);
+						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+						mission->setRegion((*i)->getRules()->getType());
+						int race = RNG::generate(0, _game->getRuleset()->getAlienRacesList().size()-2); // -2 to avoid "MIXED" race
+						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
+						mission->start();
+						_game->getSavedGame()->getAlienMissions().push_back(mission);
+						newRetaliation = false;
+					}
+					break;
+				}
+			}
+		}
+		if (!psi && (*b)->getAvailablePsiLabs() > 0)
 		{
 			psi = true;
 		}
 		for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
 		{
-			if((*s)->isInPsiTraining())
+			if ((*s)->isInPsiTraining())
 			{
 				(*s)->trainPsi();
 			}
@@ -1412,37 +1490,8 @@ void GeoscapeState::time1Month()
 	// Handle funding
 	timerReset();
 	_game->getSavedGame()->monthlyFunding();
-	popup(new MonthlyReportState(_game, psi));
-	for(std::vector<Country*>::iterator c = _game->getSavedGame()->getCountries()->begin(); c !=  _game->getSavedGame()->getCountries()->end(); ++c)
-	{
-		if((*c)->isNewPact() && _game->getSavedGame()->getAlienBases()->size() < 9)
-		{
-			double lon;
-			double lat;
-			int tries = 0;
-			do
-			{
-				double ran = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-				double ran2 = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-				lon = (*c)->getRules()->getLabelLongitude() + ran;
-				lat = (*c)->getRules()->getLabelLatitude()  + ran2;
-				tries++;
-			}
-			while(!_globe->insideLand(lon, lat) && !(*c)->getRules()->insideCountry(lon, lat) && tries < 100);
-			AlienBase *b = new AlienBase();
-			b->setLongitude(lon);
-			b->setLatitude(lat);
-			b->setSupplyTime(0);
-			b->setDiscovered(false);
-			b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
-			int race = RNG::generate(1, 2);
-			if (race == 1)
-				b->setAlienRace("STR_SECTOID");
-			else if (race == 2)
-				b->setAlienRace("STR_FLOATER");
-			_game->getSavedGame()->getAlienBases()->push_back(b);
-		}
-	}
+	popup(new MonthlyReportState(_game, psi, _globe));
+
 	// Handle Xcom Operatives discovering bases
 	if(_game->getSavedGame()->getAlienBases()->size())
 	{
@@ -1489,7 +1538,7 @@ void GeoscapeState::popup(State *state)
  * access by other substates.
  * @return Pointer to globe.
  */
-Globe *const GeoscapeState::getGlobe() const
+Globe *GeoscapeState::getGlobe() const
 {
 	return _globe;
 }
@@ -1519,7 +1568,7 @@ void GeoscapeState::globeClick(Action *action)
  * Opens the Intercept window.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnInterceptClick(Action *action)
+void GeoscapeState::btnInterceptClick(Action *)
 {
 	_game->pushState(new InterceptState(_game, _globe));
 }
@@ -1528,7 +1577,7 @@ void GeoscapeState::btnInterceptClick(Action *action)
  * Goes to the Basescape screen.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnBasesClick(Action *action)
+void GeoscapeState::btnBasesClick(Action *)
 {
 	timerReset();
 	if (_game->getSavedGame()->getBases()->size() > 0)
@@ -1545,7 +1594,7 @@ void GeoscapeState::btnBasesClick(Action *action)
  * Goes to the Graphs screen.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnGraphsClick(Action *action)
+void GeoscapeState::btnGraphsClick(Action *)
 {
 	_game->pushState(new GraphsState(_game));
 }
@@ -1554,7 +1603,7 @@ void GeoscapeState::btnGraphsClick(Action *action)
  * Goes to the Ufopaedia window.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnUfopaediaClick(Action *action)
+void GeoscapeState::btnUfopaediaClick(Action *)
 {
 	Ufopaedia::open(_game);
 }
@@ -1563,7 +1612,7 @@ void GeoscapeState::btnUfopaediaClick(Action *action)
  * Opens the Options window.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnOptionsClick(Action *action)
+void GeoscapeState::btnOptionsClick(Action *)
 {
 	_game->pushState(new GeoscapeOptionsState(_game));
 }
@@ -1572,7 +1621,7 @@ void GeoscapeState::btnOptionsClick(Action *action)
  * Goes to the Funding screen.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnFundingClick(Action *action)
+void GeoscapeState::btnFundingClick(Action *)
 {
 	_game->pushState(new FundingState(_game));
 }
@@ -1581,7 +1630,7 @@ void GeoscapeState::btnFundingClick(Action *action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateLeftPress(Action *action)
+void GeoscapeState::btnRotateLeftPress(Action *)
 {
 	_globe->rotateLeft();
 }
@@ -1590,7 +1639,7 @@ void GeoscapeState::btnRotateLeftPress(Action *action)
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateLeftRelease(Action *action)
+void GeoscapeState::btnRotateLeftRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1599,7 +1648,7 @@ void GeoscapeState::btnRotateLeftRelease(Action *action)
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateRightPress(Action *action)
+void GeoscapeState::btnRotateRightPress(Action *)
 {
 	_globe->rotateRight();
 }
@@ -1608,7 +1657,7 @@ void GeoscapeState::btnRotateRightPress(Action *action)
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateRightRelease(Action *action)
+void GeoscapeState::btnRotateRightRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1617,7 +1666,7 @@ void GeoscapeState::btnRotateRightRelease(Action *action)
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateUpPress(Action *action)
+void GeoscapeState::btnRotateUpPress(Action *)
 {
 	_globe->rotateUp();
 }
@@ -1626,7 +1675,7 @@ void GeoscapeState::btnRotateUpPress(Action *action)
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateUpRelease(Action *action)
+void GeoscapeState::btnRotateUpRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1635,7 +1684,7 @@ void GeoscapeState::btnRotateUpRelease(Action *action)
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateDownPress(Action *action)
+void GeoscapeState::btnRotateDownPress(Action *)
 {
 	_globe->rotateDown();
 }
@@ -1644,7 +1693,7 @@ void GeoscapeState::btnRotateDownPress(Action *action)
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateDownRelease(Action *action)
+void GeoscapeState::btnRotateDownRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -1653,7 +1702,7 @@ void GeoscapeState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInLeftClick(Action *action)
+void GeoscapeState::btnZoomInLeftClick(Action *)
 {
 	_globe->zoomIn();
 }
@@ -1662,7 +1711,7 @@ void GeoscapeState::btnZoomInLeftClick(Action *action)
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInRightClick(Action *action)
+void GeoscapeState::btnZoomInRightClick(Action *)
 {
 	_globe->zoomMax();
 }
@@ -1671,7 +1720,7 @@ void GeoscapeState::btnZoomInRightClick(Action *action)
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutLeftClick(Action *action)
+void GeoscapeState::btnZoomOutLeftClick(Action *)
 {
 	_globe->zoomOut();
 }
@@ -1680,7 +1729,7 @@ void GeoscapeState::btnZoomOutLeftClick(Action *action)
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutRightClick(Action *action)
+void GeoscapeState::btnZoomOutRightClick(Action *)
 {
 	_globe->zoomMin();
 }
@@ -1817,6 +1866,77 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 		}
 	}
 	return slotNo;
+}
+
+/**
+ * Determine the alien missions to start this month.
+ * In the vanilla game each month a terror mission and one other are started in
+ * random regions.
+ */
+void GeoscapeState::determineAlienMissions(bool atGameStart)
+{
+	//
+	// One terror mission per month
+	//
+
+	//Determine a random region with at least one city.
+	RuleRegion* region = 0;
+	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+	do
+	{
+		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
+	}
+	while (region->getCities()->empty());
+	// Choose race for terror mission.
+	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
+	const std::string &terrorRace = terrorRules.generateRace(*_game->getSavedGame()->getTime());
+	AlienMission *terrorMission = new AlienMission(terrorRules);
+	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+	terrorMission->setRegion(region->getType());
+	terrorMission->setRace(terrorRace);
+	terrorMission->start();
+	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
+
+	if (!atGameStart)
+	{
+		//
+		// One randomly selected mission.
+		//
+		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
+		const std::string &targetRegion = strategy.chooseRandomRegion();
+		const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
+		// Choose race for this mission.
+		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
+		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());
+		AlienMission *otherMission = new AlienMission(missionRules);
+		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+		otherMission->setRegion(targetRegion);
+		otherMission->setRace(missionRace);
+		otherMission->start();
+		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
+		// Make sure this combination never comes up again.
+		strategy.removeMission(targetRegion, targetMission);
+	}
+	else
+	{
+		//
+		// Alien Research at base's region.
+		//
+		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
+		std::string targetRegion =
+		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
+		// Choose race for this mission.
+		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
+		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());
+		AlienMission *otherMission = new AlienMission(missionRules);
+		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+		otherMission->setRegion(targetRegion);
+		otherMission->setRace(missionRace);
+		otherMission->start(150);
+		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
+		// Make sure this combination never comes up again.
+		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
+	}
 }
 
 }

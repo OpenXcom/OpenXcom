@@ -109,7 +109,7 @@ struct controler<ShaderRepeat<Pixel> >
 	//not used
 	//inline const GraphSubset& get_range()
 	
-	inline void mod_range(GraphSubset& r)
+	inline void mod_range(GraphSubset&)
 	{
 		//nothing
 	}
@@ -118,14 +118,14 @@ struct controler<ShaderRepeat<Pixel> >
 		_range_image = g;
 	}
 	
-	inline void mod_y(int& begin, int& end)
+	inline void mod_y(int&, int&)
 	{
 		_curr_y = ( _range_image.beg_y - _off_y)%_size_y; 
 		if(_curr_y <0)
 			_curr_y += _size_y;
 		_ptr_curr_y = _base;
 	}
-	inline void set_y(const int& begin, const int& end)
+	inline void set_y(const int& begin, const int&)
 	{
 		_curr_y = (_curr_y + begin)%_size_y;
 		_ptr_curr_y += (_range_domain.beg_y+_curr_y)*_pitch;
@@ -142,14 +142,14 @@ struct controler<ShaderRepeat<Pixel> >
 	}
 	
 	
-	inline void mod_x(int& begin, int& end)
+	inline void mod_x(int&, int&)
 	{
 		_curr_x = ( _range_image.beg_x - _off_x)%_size_x; 
 		if(_curr_x <0)
 			_curr_x += _size_x;
 		_ptr_curr_x = _ptr_curr_y;
 	}
-	inline void set_x(const int& begin, const int& end)
+	inline void set_x(const int& begin, const int&)
 	{
 		_curr_x = (_curr_x + begin)%_size_x;
 		_ptr_curr_x += _range_domain.beg_x +_curr_x;

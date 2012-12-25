@@ -474,11 +474,11 @@ struct controler<Scalar<T> >
 		//nothing
 	}
 	
-	inline void mod_y(int& begin, int& end)
+	inline void mod_y(int&, int&)
 	{
 		//nothing
 	}
-	inline void set_y(const int& begin, const int& end)
+	inline void set_y(const int&, const int&)
 	{
 		//nothing
 	}
@@ -488,11 +488,11 @@ struct controler<Scalar<T> >
 	}
 	
 	
-	inline void mod_x(int& begin, int& end)
+	inline void mod_x(int&, int&)
 	{
 		//nothing
 	}
-	inline void set_x(const int& begin, const int& end)
+	inline void set_x(const int&, const int&)
 	{
 		//nothing
 	}
@@ -512,7 +512,7 @@ template<>
 struct controler<Nothing>
 {
 	const int i;
-	inline controler(const Nothing& s) : i(0)
+	inline controler(const Nothing&) : i(0)
 	{
 		
 	}
@@ -529,11 +529,11 @@ struct controler<Nothing>
 		//nothing
 	}
 	
-	inline void mod_y(int& begin, int& end)
+	inline void mod_y(int&, int&)
 	{
 		//nothing
 	}
-	inline void set_y(const int& begin, const int& end)
+	inline void set_y(const int&, const int&)
 	{
 		//nothing
 	}
@@ -542,12 +542,11 @@ struct controler<Nothing>
 		//nothing
 	}
 	
-	
-	inline void mod_x(int& begin, int& end)
+	inline void mod_x(int&, int&)
 	{
 		//nothing
 	}
-	inline void set_x(const int& begin, const int& end)
+	inline void set_x(const int&, const int&)
 	{
 		//nothing
 	}
@@ -604,11 +603,11 @@ struct controler_base
 		range = r;
 	}
 	
-	inline void mod_y(int& begin, int& end)
+	inline void mod_y(int&, int&)
 	{
 		ptr_pos_y = data + step.first * start_x + step.second * start_y;
 	}
-	inline void set_y(const int& begin, const int& end)
+	inline void set_y(const int& begin, const int&)
 	{
 		ptr_pos_y += step.second*begin;		
 	}
@@ -618,11 +617,11 @@ struct controler_base
 	}
 	
 	
-	inline void mod_x(int& begin, int& end)
+	inline void mod_x(int&, int&)
 	{
 		ptr_pos_x = ptr_pos_y;
 	}
-	inline void set_x(const int& begin, const int& end)
+	inline void set_x(const int& begin, const int&)
 	{
 		ptr_pos_x += step.first*begin;
 	}

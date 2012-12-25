@@ -40,10 +40,9 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-	SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities) : BuildFacilitiesState(game, base, state), _globe(globe)
+	SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities) : BuildFacilitiesState(game, base, state, false), _globe(globe)
 {
 	_facilities = Facilities;
-	_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
 	PopulateBuildList();
 }
@@ -72,7 +71,7 @@ void SelectStartFacilityState::PopulateBuildList()
  * Places the selected facility.
  * @param action Pointer to an action.
  */
-void SelectStartFacilityState::lstFacilitiesClick(Action *action)
+void SelectStartFacilityState::lstFacilitiesClick(Action *)
 {
 	_game->pushState(new PlaceStartFacilityState(_game, _base, this, _facilities[_lstFacilities->getSelectedRow()]));
 }

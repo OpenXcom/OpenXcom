@@ -66,7 +66,7 @@ void Region::save(YAML::Emitter &out) const
  * Returns the ruleset for the region's type.
  * @return Pointer to ruleset.
  */
-RuleRegion *const Region::getRules() const
+RuleRegion *Region::getRules() const
 {
 	return _rules;
 }
@@ -76,7 +76,7 @@ RuleRegion *const Region::getRules() const
  */
 void Region::addActivityXcom(int activity)
 {
-	_activityXcom[_activityXcom.size()-1] += activity;
+	_activityXcom.back() += activity;
 }
 
 /**
@@ -84,14 +84,14 @@ void Region::addActivityXcom(int activity)
  */
 void Region::addActivityAlien(int activity)
 {
-	_activityAlien[_activityAlien.size()-1] += activity;
+	_activityAlien.back() += activity;
 }
 
 /**
  * Gets the region's xcom activity level.
  * @return activity level.
  */
-std::vector<int> Region::getActivityXcom() const
+const std::vector<int> &Region::getActivityXcom() const
 {
 	return _activityXcom;
 }
@@ -100,7 +100,7 @@ std::vector<int> Region::getActivityXcom() const
  * Gets the region's alien activity level.
  * @return activity level.
  */
-std::vector<int> Region::getActivityAlien() const
+const std::vector<int> &Region::getActivityAlien() const
 {
 	return _activityAlien;
 }

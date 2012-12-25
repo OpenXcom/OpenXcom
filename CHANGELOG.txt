@@ -1,3 +1,59 @@
+Version 0.5.0 Pre-Release
+---------------------------
+New features:
+- Live alien capture and interrogation.
+- Psionic training.
+- Hyper-wave decoding.
+- Geoscape alien base handling.
+- Battlescape melee unit AI.
+- Unit conversion (ie: chryssalids)
+- All missing units implemented, both alien units and xcom tanks.
+- Units dual wielding single handed weapons is now represented on the battlescape.
+- Scoring for both aliens and Xcom.
+- Funding nation decision making.
+- Multiple dogfight handling.
+- Graphs screen.
+- Equipment loadout saving.
+- "Random Battle" mode.
+- Proper A* pathfinding.
+- Battlescape RMB scrolling improved.
+- Custom Initial Base Building Option.
+- Landing Ufos/Ground Assault missions.
+- Alien Mission Generation.
+- Base Defense Screens.
+- Multi-Part Ruleset support.
+- Pause Game on Loss of Focus.
+- Ukranian translation.
+- Italian Soldier Names.
+- Hungarian Soldier Names.
+- Bulgarian translation.
+- Game over Screens (win and lose).
+- Alien retaliatory attacks on Xcom bases.
+- Certain units now "Yell" when engaging another unit.
+- Enemy unit stats and armour are now affected by difficulty.
+- Aliens progress their equipment levels, races and aggression over time.
+- Added "Alien Research" button in New Battle menu to set alien item level.
+- Added "Right Click to Delete" function in save/load menus.
+- Game is now finishable.
+
+Bugfixes:
+- Updated translations.
+- Updated soldier names.
+- Added support for native cyrillic letters.
+- Fixed bug in map generator regarding nodes outside the map.
+- Fix for horizontal scroll-wheels.
+- Research consumes items properly.
+- Reaper Corpse tiles now arranged correctly.
+- Support for Haiku folder paths.
+- Battlescape buttons now unavailable during alien turn.
+- Fixed Craft not rearming after refuelling.
+- Fixed strange spawn behaviour.
+- Camera now correctly centers on explosions, and properly detects explosion visibility.
+- UFO walls can no longer be seen through from certain angles.
+- Units on stairs will now correctly reveal tiles on the level above.
+- Opening doors now uses time units correctly.
+- Fixed error in great circle calculation.
+
 Version 0.4.5 (04-11-2012)
 ---------------------------
 New features:

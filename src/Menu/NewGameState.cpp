@@ -112,7 +112,7 @@ void NewGameState::newGame(GameDifficulty diff)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnBeginnerClick(Action *action)
+void NewGameState::btnBeginnerClick(Action *)
 {
 	newGame(DIFF_BEGINNER);
 }
@@ -122,7 +122,7 @@ void NewGameState::btnBeginnerClick(Action *action)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnExperiencedClick(Action *action)
+void NewGameState::btnExperiencedClick(Action *)
 {
 	newGame(DIFF_EXPERIENCED);
 }
@@ -132,7 +132,7 @@ void NewGameState::btnExperiencedClick(Action *action)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnVeteranClick(Action *action)
+void NewGameState::btnVeteranClick(Action *)
 {
 	newGame(DIFF_VETERAN);
 }
@@ -142,7 +142,7 @@ void NewGameState::btnVeteranClick(Action *action)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnGeniusClick(Action *action)
+void NewGameState::btnGeniusClick(Action *)
 {
 	newGame(DIFF_GENIUS);
 }
@@ -152,7 +152,7 @@ void NewGameState::btnGeniusClick(Action *action)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnSuperhumanClick(Action *action)
+void NewGameState::btnSuperhumanClick(Action *)
 {
 	newGame(DIFF_SUPERHUMAN);
 }

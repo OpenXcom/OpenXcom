@@ -39,7 +39,7 @@ class SavedGameState : public State
 protected:
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus;
+	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
 	TextList *_lstSaves;
 	bool _geo;
 public:

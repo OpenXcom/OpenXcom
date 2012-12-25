@@ -95,8 +95,8 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_lstArmor->setBackground(_window);
 	_lstArmor->setMargin(8);
 
-	std::vector<std::string> armors = _game->getRuleset()->getArmorsList();
-	for (std::vector<std::string>::iterator i = armors.begin(); i != armors.end(); ++i)
+	const std::vector<std::string> &armors = _game->getRuleset()->getArmorsList();
+	for (std::vector<std::string>::const_iterator i = armors.begin(); i != armors.end(); ++i)
 	{
 		Armor *a = _game->getRuleset()->getArmor(*i);
 		if (_base->getItems()->getItem(a->getStoreItem()) > 0)
@@ -127,7 +127,7 @@ SoldierArmorState::~SoldierArmorState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierArmorState::btnCancelClick(Action *action)
+void SoldierArmorState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -136,7 +136,7 @@ void SoldierArmorState::btnCancelClick(Action *action)
  * Equips the armor on the soldier and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierArmorState::lstArmorClick(Action *action)
+void SoldierArmorState::lstArmorClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
 	if (soldier->getArmor()->getStoreItem() != "STR_NONE")

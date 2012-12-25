@@ -162,7 +162,7 @@ void ItemsArrivingState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ItemsArrivingState::btnOkClick(Action *action)
+void ItemsArrivingState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -171,7 +171,7 @@ void ItemsArrivingState::btnOkClick(Action *action)
  * Reduces the speed to 5 Secs and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ItemsArrivingState::btnOk5SecsClick(Action *action)
+void ItemsArrivingState::btnOk5SecsClick(Action *)
 {
 	_state->timerReset();
 	_game->popState();

@@ -23,6 +23,7 @@
 #include "TileEngine.h"
 #include "UnitDieBState.h"
 #include "Map.h"
+#include "Camera.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
@@ -33,6 +34,7 @@
 #include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 #include "../Engine/RNG.h"
 
 namespace OpenXcom
@@ -117,7 +119,9 @@ void ExplosionBState::init()
 		// bullet hit sound
 		_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
 	}
-
+	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
+	if (t->isDiscovered(0))
+		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 }
 
 /*
@@ -163,7 +167,7 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty() && victim)
+			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1)
 			{
 				// converts the victim to a zombie
 				_parent->convertUnit(victim, _unit->getZombieUnit());

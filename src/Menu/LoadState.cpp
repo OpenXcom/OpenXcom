@@ -26,11 +26,13 @@
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Action.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"
 #include "../Battlescape/BattlescapeState.h"
+#include "DeleteGameState.h"
 
 namespace OpenXcom
 {
@@ -42,10 +44,11 @@ namespace OpenXcom
  */
 LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
 {
+	_geo = geo;
 	// Set up objects
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
-
-	_lstSaves->onMouseClick((ActionHandler)&LoadState::lstSavesClick);
+	
+	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);
 }
 
 /**
@@ -60,42 +63,52 @@ LoadState::~LoadState()
  * Loads the selected save.
  * @param action Pointer to an action.
  */
-void LoadState::lstSavesClick(Action *action)
+void LoadState::lstSavesPress(Action *action)
 {
-	updateStatus("STR_LOADING_GAME");
-	SavedGame *s = new SavedGame();
-	try
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), _game->getRuleset());
-		_game->setSavedGame(s);
-		_game->setState(new GeoscapeState(_game));
-		if (_game->getSavedGame()->getBattleGame() != 0)
+		updateStatus("STR_LOADING_GAME");
+		SavedGame *s = new SavedGame();
+		try
 		{
-			_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
-			_game->pushState(new BattlescapeState(_game));
+			s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), _game->getRuleset());
+			_game->setSavedGame(s);
+			_game->setState(new GeoscapeState(_game));
+			if (_game->getSavedGame()->getBattleGame() != 0)
+			{
+				_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
+				_game->pushState(new BattlescapeState(_game));
+			}
+		}
+		catch (Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+			std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+			if (_geo)
+					_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+				else
+					_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			delete s;
+			_game->setSavedGame(0);
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+			std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
+			if (_geo)
+					_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+				else
+					_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			delete s;
+			_game->setSavedGame(0);
 		}
 	}
-	catch (Exception &e)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		Log(LOG_ERROR) << e.what();
-		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-		if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
-		delete s;
-		_game->setSavedGame(0);
-	}
-	catch (YAML::Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wstring error = _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") + L'\x02' + Language::utf8ToWstr(e.what());
-		if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
-		delete s;
-		_game->setSavedGame(0);
+		if(_geo)
+			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(8)+10, "BACK01.SCR", 6, this));
+		else
+			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(0), "TAC00.SCR", -1, this));
 	}
 }
 

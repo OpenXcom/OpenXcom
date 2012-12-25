@@ -112,7 +112,7 @@ TransfersState::~TransfersState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransfersState::btnOkClick(Action *action)
+void TransfersState::btnOkClick(Action *)
 {
 	_game->popState();
 }

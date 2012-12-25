@@ -35,6 +35,7 @@
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -374,11 +375,16 @@ bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
 {
 	Position p;
 	Pathfinding::directionToVector(action->actor->getDirection(), &p);
-	Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + p));
-	if (tile->getUnit())
-		return true;
-	else
-		return false;
+	for (int x = 0; x != action->actor->getArmor()->getSize(); ++x)
+	{
+		for (int y = 0; y != action->actor->getArmor()->getSize(); ++y)
+		{
+			Tile * tile (_parent->getSave()->getTile(Position(action->actor->getPosition().x + x, action->actor->getPosition().y + y, action->actor->getPosition().z) + p));
+			if (tile->getUnit() && tile->getUnit() != action->actor)
+				return true;
+		}
+	}
+	return false;
 }
 
 }

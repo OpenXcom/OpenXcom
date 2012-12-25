@@ -101,7 +101,7 @@ void LowFuelState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void LowFuelState::btnOkClick(Action *action)
+void LowFuelState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -110,7 +110,7 @@ void LowFuelState::btnOkClick(Action *action)
  * Closes the window and sets the timer to 5 Secs.
  * @param action Pointer to an action.
  */
-void LowFuelState::btnOk5SecsClick(Action *action)
+void LowFuelState::btnOk5SecsClick(Action *)
 {
 	_state->timerReset();
 	_game->popState();

@@ -121,8 +121,8 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment->onRightArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowClick);
 
 	int row = 0;
-	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		// CHEAP HACK TO HIDE HWP AMMO
 		if ((*i).substr(0, 8) == "STR_HWP_")
@@ -207,7 +207,7 @@ void CraftEquipmentState::think()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftEquipmentState::btnOkClick(Action *action)
+void CraftEquipmentState::btnOkClick(Action *)
 {
 	_game->popState();
 }

@@ -49,7 +49,7 @@ protected:
 	TextList *_lstFacilities;
 public:
 	/// Creates the Build Facilities state.
-	BuildFacilitiesState(Game *game, Base *base, State *state);
+	BuildFacilitiesState(Game *game, Base *base, State *state, bool cancellable);
 	/// Cleans up the Build Facilities state.
 	~BuildFacilitiesState();
 	/// Populate the build option list

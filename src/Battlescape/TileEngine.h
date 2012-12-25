@@ -75,11 +75,11 @@ public:
 	/// Check if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
-	int unitOpensDoor(BattleUnit *unit);
+	int unitOpensDoor(BattleUnit *unit, bool rClick = false);
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool LOSCalc = false);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
 	bool visible(BattleUnit *currentUnit, Tile *tile);
@@ -90,6 +90,7 @@ public:
 	bool inTeamFOV(const Position &pos, UnitFaction team);
 	bool psiAttack(BattleAction *action);
 	Tile *applyItemGravity(Tile *t);
+	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
 };
 
 }

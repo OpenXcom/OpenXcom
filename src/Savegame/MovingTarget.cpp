@@ -69,7 +69,7 @@ void MovingTarget::save(YAML::Emitter &out) const
  * Returns the destination the moving target is heading to.
  * @return Pointer to destination.
  */
-Target *const MovingTarget::getDestination() const
+Target *MovingTarget::getDestination() const
 {
 	return _dest;
 }
@@ -140,12 +140,6 @@ void MovingTarget::calculateSpeed()
 		length = sqrt(dLon * dLon + dLat * dLat);
 		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
 		_speedLat = dLat / length * _speedRadian;
-		// Check for invalid speeds
-		if (!(_speedLon == _speedLon) || !(_speedLat == _speedLat))
-		{
-			_speedLon = 0;
-			_speedLat = 0;
-		}
 	}
 	else
 	{

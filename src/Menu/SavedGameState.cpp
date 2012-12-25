@@ -53,11 +53,12 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 	_window = new Window(this, 320, 200, 0, 0, p);
 	_btnCancel = new TextButton(80, 16, 120, 172);
 	_txtTitle = new Text(310, 16, 5, 8);
-	_txtName = new Text(150, 9, 16, 24);
-	_txtTime = new Text(30, 9, 184, 24);
-	_txtDate = new Text(30, 9, 214, 24);
+	_txtDelete = new Text(310, 8, 5, 24);
+	_txtName = new Text(150, 9, 16, 32);
+	_txtTime = new Text(30, 9, 184, 32);
+	_txtDate = new Text(30, 9, 214, 32);
 	_txtStatus = new Text(320, 16, 0, 92);
-	_lstSaves = new TextList(288, 128, 8, 32);
+	_lstSaves = new TextList(288, 120, 8, 40);
 
 	// Set palette
 	if (_geo)
@@ -68,6 +69,7 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
+	add(_txtDelete);
 	add(_txtName);
 	add(_txtTime);
 	add(_txtDate);
@@ -83,6 +85,8 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
 
 		_txtTitle->setColor(Palette::blockOffset(15)-1);
+
+		_txtDelete->setColor(Palette::blockOffset(15)-1);
 
 		_txtName->setColor(Palette::blockOffset(15)-1);
 
@@ -106,6 +110,9 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_txtTitle->setColor(Palette::blockOffset(0));
 		_txtTitle->setHighContrast(true);
 
+		_txtDelete->setColor(Palette::blockOffset(0));
+		_txtDelete->setHighContrast(true);
+
 		_txtName->setColor(Palette::blockOffset(0));
 		_txtName->setHighContrast(true);
 
@@ -127,6 +134,9 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	
+	_txtDelete->setAlign(ALIGN_CENTER);
+	_txtDelete->setText(_game->getLanguage()->getString("STR_RIGHT_CLICK_TO_DELETE"));
 
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
 
@@ -198,7 +208,7 @@ void SavedGameState::updateStatus(const std::string &msg)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SavedGameState::btnCancelClick(Action *action)
+void SavedGameState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

@@ -54,7 +54,8 @@ private:
 	Text *_txtDebug;
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
-	int _minimizedDogfights;
+	size_t _minimizedDogfights;
+	bool _gameStarted;
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
@@ -87,7 +88,7 @@ public:
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Gets the Geoscape globe.
-	Globe *const getGlobe() const;
+	Globe *getGlobe() const;
 	/// Handler for clicking the globe.
 	void globeClick(Action *action);
 	/// Handler for clicking the Intercept button.
@@ -140,6 +141,12 @@ public:
 	void startDogfight();
 	/// Get first free dogfight slot.
 	int getFirstFreeDogfightSlot();
+	/// Create the starting missions.
+	void createStartingMissions() { determineAlienMissions(true); }
+
+private:
+	/// Handle alien mission generation.
+	void determineAlienMissions(bool atGameStart = false);
 };
 
 }

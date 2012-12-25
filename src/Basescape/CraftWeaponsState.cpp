@@ -105,8 +105,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_lstWeapons->addRow(1, _game->getLanguage()->getString("STR_NONE_UC").c_str());
 	_weapons.push_back(0);
 
-	std::vector<std::string> weapons = _game->getRuleset()->getCraftWeaponsList();
-	for (std::vector<std::string>::iterator i = weapons.begin(); i != weapons.end(); ++i)
+	const std::vector<std::string> &weapons = _game->getRuleset()->getCraftWeaponsList();
+	for (std::vector<std::string>::const_iterator i = weapons.begin(); i != weapons.end(); ++i)
 	{
 		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(*i);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
@@ -133,7 +133,7 @@ CraftWeaponsState::~CraftWeaponsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftWeaponsState::btnCancelClick(Action *action)
+void CraftWeaponsState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -142,7 +142,7 @@ void CraftWeaponsState::btnCancelClick(Action *action)
  * Equips the weapon on the craft and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftWeaponsState::lstWeaponsClick(Action *action)
+void CraftWeaponsState::lstWeaponsClick(Action *)
 {
 	CraftWeapon *current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
 	// Remove current weapon

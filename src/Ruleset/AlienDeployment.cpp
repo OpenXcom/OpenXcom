@@ -83,7 +83,7 @@ YAML::Emitter& operator << (YAML::Emitter& out, const DeploymentData& s)
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0)
 {
 }
 
@@ -124,6 +124,10 @@ void AlienDeployment::load(const YAML::Node &node)
 		{
 			i.second() >> _height;
 		}
+		else if (key == "civilians")
+		{
+			i.second() >> _civilians;
+		}
 	}
 }
 
@@ -139,6 +143,7 @@ void AlienDeployment::save(YAML::Emitter &out) const
 	out << YAML::Key << "width" << YAML::Value << _width;
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
+	out << YAML::Key << "civilians" << YAML::Value << _civilians;
 	out << YAML::EndMap;
 }
 
@@ -167,5 +172,8 @@ void AlienDeployment::getDimensions(int *width, int *length, int *height)
 	*height = _height;
 }
 
-
+int AlienDeployment::getCivilians() const
+{
+	return _civilians;
+}
 }

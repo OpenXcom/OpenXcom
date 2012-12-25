@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _patrolTime(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false), _interceptionOrder(0)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false)
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -221,7 +221,7 @@ void Craft::saveId(YAML::Emitter &out) const
  * Returns the ruleset for the craft's type.
  * @return Pointer to ruleset.
  */
-RuleCraft *const Craft::getRules() const
+RuleCraft *Craft::getRules() const
 {
 	return _rules;
 }
@@ -267,7 +267,7 @@ std::wstring Craft::getName(Language *lang) const
  * Returns the base the craft belongs to.
  * @return Pointer to base.
  */
-Base *const Craft::getBase() const
+Base *Craft::getBase() const
 {
 	return _base;
 }
@@ -402,7 +402,7 @@ int Craft::getNumVehicles() const
  * in the craft.
  * @return Pointer to weapon list.
  */
-std::vector<CraftWeapon*> *const Craft::getWeapons()
+std::vector<CraftWeapon*> *Craft::getWeapons()
 {
 	return &_weapons;
 }
@@ -411,7 +411,7 @@ std::vector<CraftWeapon*> *const Craft::getWeapons()
  * Returns the list of items in the craft.
  * @return Pointer to the item list.
  */
-ItemContainer *const Craft::getItems()
+ItemContainer *Craft::getItems()
 {
 	return _items;
 }
@@ -421,7 +421,7 @@ ItemContainer *const Craft::getItems()
  * in the craft.
  * @return Pointer to vehicle list.
  */
-std::vector<Vehicle*> *const Craft::getVehicles()
+std::vector<Vehicle*> *Craft::getVehicles()
 {
 	return &_vehicles;
 }
@@ -655,6 +655,14 @@ void Craft::refuel()
 	if (_fuel >= _rules->getMaxFuel())
 	{
 		_status = "STR_READY";
+		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+		{
+			if (*i && (*i)->isRearming())
+			{
+				_status = "STR_REARMING";
+				break;
+			}
+		}
 	}
 }
 
@@ -758,27 +766,6 @@ int Craft::getVehicleCount(const std::string &vehicle) const
 		}
 	}
 	return total;
-}
-
-
-/**
- * Returns the total amount of 
- * time spent patrolling by the craft.
- * @return Time spent patrolling in half hour increments.
- */
-int Craft::getPatrolTime() const
-{
-	return _patrolTime;
-}
-
-
-/**
- * Changes the craft's Patrol timer.
- * @param time number of half hour blocks to increment this timer by.
- */
-void Craft::setPatrolTime(int time)
-{
-	_patrolTime = time;
 }
 
 /**

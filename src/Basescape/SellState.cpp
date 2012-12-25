@@ -163,8 +163,8 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		ss << _base->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
 	}
-	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0 && !_game->getRuleset()->getItem(*i)->getAlien())
@@ -208,7 +208,7 @@ void SellState::think()
  * Sells the selected items.
  * @param action Pointer to an action.
  */
-void SellState::btnOkClick(Action *action)
+void SellState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
@@ -293,7 +293,7 @@ void SellState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SellState::btnCancelClick(Action *action)
+void SellState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

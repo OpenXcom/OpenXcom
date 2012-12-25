@@ -92,7 +92,7 @@ void ScannerView::draw()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void ScannerView::mouseClick (Action *action, State *state)
+void ScannerView::mouseClick (Action *, State *)
 {
 }
 

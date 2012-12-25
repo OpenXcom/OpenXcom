@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), _battlescapeTerrainData(0)
+RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), _battlescapeTerrainData(0), _spacecraft(false)
 {
 
 }
@@ -123,6 +123,10 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 			rule->load(i.second(), ruleset);
 			_battlescapeTerrainData = rule;
 		}
+		else if (key == "spacecraft")
+		{
+			i.second() >> _spacecraft;
+		}
 	}
 }
 
@@ -149,6 +153,7 @@ void RuleCraft::save(YAML::Emitter &out) const
 	out << YAML::Key << "radarRange" << YAML::Value << _radarRange;
 	out << YAML::Key << "transferTime" << YAML::Value << _transferTime;
 	out << YAML::Key << "score" << YAML::Value << _score;
+	out << YAML::Key << "spacecraft" << YAML::Value << _spacecraft;
 	if (_battlescapeTerrainData != 0)
 	{
 		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;

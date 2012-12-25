@@ -147,7 +147,7 @@ InventoryType RuleInventory::getType() const
  * Gets all the slots in the inventory section.
  * @return List of slots.
  */
-std::vector<struct RuleSlot> *const RuleInventory::getSlots()
+std::vector<struct RuleSlot> *RuleInventory::getSlots()
 {
 	return &_slots;
 }

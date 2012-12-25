@@ -26,6 +26,7 @@
 #include "BattleUnit.h"
 #include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
@@ -220,7 +221,11 @@ bool Tile::isVoid() const
 int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
+	{
+		if (_objects[part]->isUFODoor() && _currentFrame[part] != 1)
+			return 0;
 		return _objects[part]->getTUCost(movementType);
+	}
 	else
 		return 0;
 }
@@ -295,14 +300,16 @@ int Tile::getFootstepSound() const
 /**
  * Open a door on this tile.
  * @param part
- * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening
+ * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
  */
-int Tile::openDoor(int part)
+int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 {
 	if (!_objects[part]) return -1;
 
 	if (_objects[part]->isDoor())
 	{
+		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) && !debug)
+			return 4;
 		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()), _objects[part]->getAltMCD(), _mapDataSetID[part],
 				   _objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
 		setMapData(0, -1, -1, part);
@@ -310,6 +317,8 @@ int Tile::openDoor(int part)
 	}
 	if (_objects[part]->isUFODoor() && _currentFrame[part] == 0) // ufo door part 0 - door is closed
 	{
+		if (unit && unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()) && !debug)
+			return 4;
 		_currentFrame[part] = 1; // start opening door
 		return 1;
 	}
@@ -429,11 +438,14 @@ int Tile::getShade() const
  * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
  * @param part
+ * @return bool Return true objective was destroyed
  */
-void Tile::destroy(int part)
+bool Tile::destroy(int part)
 {
+	bool _objective = false;
 	if (_objects[part])
 	{
+		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
 		MapData *originalPart = _objects[part];
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(0, -1, -1, part);
@@ -453,13 +465,18 @@ void Tile::destroy(int part)
 		/* replace with scorched earth */
 		setMapData(MapDataSet::getScourgedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
+	return _objective;
 }
 
-/* damage terrain  - check against armor*/
-void Tile::damage(int part, int power)
+/* damage terrain  - check against armor
+ * @return bool Return true objective was destroyed
+ */
+bool Tile::damage(int part, int power)
 {
+	bool objective = false;
 	if (power >= _objects[part]->getArmor())
-		destroy(part);
+		objective = destroy(part);
+	return objective;
 }
 
 
@@ -488,11 +505,13 @@ int Tile::getExplosive() const
 
 /**
  * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
+ * @return bool Return true objective was destroyed
  */
-void Tile::detonate()
+bool Tile::detonate()
 {
 	int explosive = _explosive;
 	_explosive = 0;
+	bool objective = false;
 
 	if (explosive)
 	{
@@ -505,11 +524,11 @@ void Tile::detonate()
 				if ((explosive) >= _objects[i]->getArmor())
 				{
 					int decrease = _objects[i]->getArmor();
-					destroy(i);
+					objective = destroy(i);
 					addSmoke(2);
 					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
 					{
-						destroy(i);
+						objective = destroy(i);
 					}
 				}
 			}
@@ -525,6 +544,8 @@ void Tile::detonate()
 			}
 		}
 	}
+
+	return objective;
 }
 
 /*
@@ -733,9 +754,12 @@ int Tile::getTopItemSprite()
 
 /**
  * New turn preparations. Decrease smoke and fire timers.
+ * @return bool Return true objective was destroyed
  */
-void Tile::prepareNewTurn()
+bool Tile::prepareNewTurn()
 {
+	bool objective = false;
+
 	_smoke--;
 	if (_smoke < 0) _smoke = 0;
 
@@ -749,7 +773,7 @@ void Tile::prepareNewTurn()
 			{
 				if (_objects[i]->getFlammable() < 255)
 				{
-					destroy(i);
+					objective = destroy(i);
 				}
 			}
 		}
@@ -767,6 +791,8 @@ void Tile::prepareNewTurn()
 		_fire--;
 		if (_fire < 0) _fire = 0;
 	}
+
+	return objective;
 }
 
 /**

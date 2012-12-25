@@ -63,7 +63,7 @@ void Vehicle::save(YAML::Emitter &out) const
  * Returns the ruleset for the vehicle's type.
  * @return Pointer to ruleset.
  */
-RuleItem *const Vehicle::getRules() const
+RuleItem *Vehicle::getRules() const
 {
 	return _rules;
 }

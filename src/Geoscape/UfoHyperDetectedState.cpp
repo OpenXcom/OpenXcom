@@ -125,7 +125,7 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
 	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_RACE").c_str(), _game->getLanguage()->getString(_ufo->getAlienRace()).c_str());
 	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_MISSION").c_str(), _game->getLanguage()->getString(_ufo->getMission()).c_str());
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_MISSION").c_str(), _game->getLanguage()->getString(_ufo->getMissionType()).c_str());
 	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
 	bool set = false;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
@@ -163,7 +163,7 @@ void UfoHyperDetectedState::init()
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoHyperDetectedState::btnCentreClick(Action *action)
+void UfoHyperDetectedState::btnCentreClick(Action *)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
@@ -174,7 +174,7 @@ void UfoHyperDetectedState::btnCentreClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoHyperDetectedState::btnCancelClick(Action *action)
+void UfoHyperDetectedState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

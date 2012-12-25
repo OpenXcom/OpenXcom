@@ -97,7 +97,7 @@ void NewResearchListState::init()
  * Select the RuleResearch to work on.
  * @param action Pointer to an action.
  */
-void NewResearchListState::onSelectProject(Action *action)
+void NewResearchListState::onSelectProject(Action *)
 {
 	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 	RuleResearch *_proj = _projects[_lstResearch->getSelectedRow()];
@@ -111,7 +111,7 @@ void NewResearchListState::onSelectProject(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewResearchListState::btnOKClick(Action *action)
+void NewResearchListState::btnOKClick(Action *)
 {
 	_game->popState();
 }

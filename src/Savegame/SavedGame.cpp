@@ -46,6 +46,12 @@
 #include "Production.h"
 #include "TerrorSite.h"
 #include "AlienBase.h"
+#include "AlienStrategy.h"
+#include "AlienMission.h"
+#include "../Ruleset/RuleRegion.h"
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
 
 namespace OpenXcom
 {
@@ -86,10 +92,14 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _funds(0), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+	_alienStrategy = new AlienStrategy();
+	_funds.push_back(0);
+	_maintenance.push_back(0);
+	_researchScores.push_back(0);
 }
 
 /**
@@ -126,6 +136,7 @@ SavedGame::~SavedGame()
  	{
 		delete *i;
 	}
+	delete _alienStrategy;
 	delete _battleGame;
 }
 
@@ -223,7 +234,11 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	doc["difficulty"] >> a;
 	_difficulty = (GameDifficulty)a;
 	RNG::load(doc);
+	doc["monthsPassed"] >> _monthsPassed;
 	doc["funds"] >> _funds;
+	doc["maintenance"] >> _maintenance;
+	doc["researchScores"] >> _researchScores;
+	doc["warned"] >> _warned;
 	doc["globeLon"] >> _globeLon;
 	doc["globeLat"] >> _globeLat;
 	doc["globeZoom"] >> _globeZoom;
@@ -247,12 +262,32 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_regions.push_back(r);
 	}
 
+	// Alien bases must be loaded before alien missions
+	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	{
+		AlienBase *b = new AlienBase();
+		b->load(*i);
+		_alienBases.push_back(b);
+	}
+
+	// Missions must be loaded before UFOs.
+	const YAML::Node &missions = *doc.FindValue("alienMissions");
+	for (YAML::Iterator it = missions.begin(); it != missions.end(); ++it)
+	{
+		std::string missionType;
+		(*it)["type"] >> missionType;
+		const RuleAlienMission &mRule = *rule->getAlienMission(missionType);
+		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
+		mission->load(*it, *this);
+		_activeMissions.push_back(mission.release());
+	}
+
 	for (YAML::Iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
 		std::string type;
 		(*i)["type"] >> type;
 		Ufo *u = new Ufo(rule->getUfo(type));
-		u->load(*i);
+		u->load(*i, *rule, *this);
 		_ufos.push_back(u);
 	}
 
@@ -270,12 +305,6 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
-	{
-		AlienBase *b = new AlienBase();
-		b->load(*i);
-		_alienBases.push_back(b);
-	}
 	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
@@ -289,6 +318,8 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		*it >> research;
 		_discovered.push_back(rule->getResearch(research));
 	}
+
+	_alienStrategy->load(rule, doc["alienStrategy"]);
 
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
 	{
@@ -330,8 +361,12 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginDoc;
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
+	out << YAML::Key << "monthsPassed" << YAML::Value << _monthsPassed;
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
+	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
+	out << YAML::Key << "researchScores" << YAML::Value << _researchScores;
+	out << YAML::Key << "warned" << YAML::Value << _warned;
 	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
 	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
 	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
@@ -357,13 +392,6 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
-	out << YAML::Key << "ufos" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
 	out << YAML::Key << "waypoints" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
@@ -378,9 +406,26 @@ void SavedGame::save(const std::string &filename) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	// Alien bases must be saved before alien missions.
 	out << YAML::Key << "alienBases" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// Missions must be saved before UFOs, but after alien bases.
+	out << YAML::Key << "alienMissions" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		(*i)->save(out);
+	}
+	out << YAML::EndSeq;
+	// UFOs must be after missions
+	out << YAML::Key << "ufos" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		(*i)->save(out);
 	}
@@ -392,6 +437,8 @@ void SavedGame::save(const std::string &filename) const
 		out << (*i)->getName ();
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "alienStrategy" << YAML::Value;
+	_alienStrategy->save(out);
 	if (_battleGame != 0)
 	{
 		out << YAML::Key << "battleGame" << YAML::Value;
@@ -426,6 +473,15 @@ void SavedGame::setDifficulty(GameDifficulty difficulty)
  */
 int SavedGame::getFunds() const
 {
+	return _funds.back();
+}
+
+/**
+ * Returns the player's funds for the last 12 months.
+ * @return funds.
+ */
+const std::vector<int> &SavedGame::getFundsList() const
+{
 	return _funds;
 }
 
@@ -435,7 +491,7 @@ int SavedGame::getFunds() const
  */
 void SavedGame::setFunds(int funds)
 {
-	_funds = funds;
+	_funds.back() = funds;
 }
 
 /**
@@ -498,14 +554,26 @@ void SavedGame::setGlobeZoom(int zoom)
  */
 void SavedGame::monthlyFunding()
 {
-	_funds += getCountryFunding() - getBaseMaintenance();
+	_funds.back() += getCountryFunding() - getBaseMaintenance();
+	_funds.push_back(_funds.back());
+	_maintenance.back() = getBaseMaintenance();
+	_maintenance.push_back(0);
+
+	_researchScores.push_back(0);
+	if (_researchScores.size() > 12)
+		_researchScores.erase(_researchScores.begin());
+
+	if(_funds.size() > 12)
+		_funds.erase(_funds.begin());
+	if(_maintenance.size() > 12)
+		_maintenance.erase(_maintenance.begin());
 }
 
 /**
  * Returns the current time of the game.
  * @return Pointer to the game time.
  */
-GameTime *const SavedGame::getTime() const
+GameTime *SavedGame::getTime() const
 {
 	return _time;
 }
@@ -536,7 +604,7 @@ void SavedGame::initIds(const std::map<std::string, int> &ids)
  * Returns the list of countries in the game world.
  * @return Pointer to country list.
  */
-std::vector<Country*> *const SavedGame::getCountries()
+std::vector<Country*> *SavedGame::getCountries()
 {
 	return &_countries;
 }
@@ -550,7 +618,7 @@ int SavedGame::getCountryFunding() const
 	int total = 0;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
-		total += (*i)->getFunding().at((*i)->getFunding().size()-1);
+		total += (*i)->getFunding().back();
 	}
 	return total;
 }
@@ -559,7 +627,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::vector<Region*> *const SavedGame::getRegions()
+std::vector<Region*> *SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -568,7 +636,16 @@ std::vector<Region*> *const SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-std::vector<Base*> *const SavedGame::getBases()
+std::vector<Base*> *SavedGame::getBases()
+{
+	return &_bases;
+}
+
+/**
+ * Returns an immutable list of player bases.
+ * @return Pointer to base list.
+ */
+const std::vector<Base*> *SavedGame::getBases() const
 {
 	return &_bases;
 }
@@ -591,7 +668,7 @@ int SavedGame::getBaseMaintenance() const
  * Returns the list of alien UFOs.
  * @return Pointer to UFO list.
  */
-std::vector<Ufo*> *const SavedGame::getUfos()
+std::vector<Ufo*> *SavedGame::getUfos()
 {
 	return &_ufos;
 }
@@ -600,7 +677,7 @@ std::vector<Ufo*> *const SavedGame::getUfos()
  * Returns the list of craft waypoints.
  * @return Pointer to waypoint list.
  */
-std::vector<Waypoint*> *const SavedGame::getWaypoints()
+std::vector<Waypoint*> *SavedGame::getWaypoints()
 {
 	return &_waypoints;
 }
@@ -609,7 +686,7 @@ std::vector<Waypoint*> *const SavedGame::getWaypoints()
  * Returns the list of terror sites.
  * @return Pointer to terror site list.
  */
-std::vector<TerrorSite*> *const SavedGame::getTerrorSites()
+std::vector<TerrorSite*> *SavedGame::getTerrorSites()
 {
 	return &_terrorSites;
 }
@@ -618,7 +695,7 @@ std::vector<TerrorSite*> *const SavedGame::getTerrorSites()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *const SavedGame::getBattleGame()
+SavedBattleGame *SavedGame::getBattleGame()
 {
 	return _battleGame;
 }
@@ -637,12 +714,13 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
  * Add a ResearchProject to the list of already discovered ResearchProject
  * @param r The newly found ResearchProject
 */
-void SavedGame::addFinishedResearch (const RuleResearch * r, Ruleset * ruleset)
+void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
 	if(itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
+		addResearchScore(r->getPoints());
 	}
 	if(ruleset)
 	{
@@ -688,7 +766,7 @@ const std::vector<const RuleResearch *> & SavedGame::getDiscoveredResearch() con
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, Ruleset * ruleset, Base * base) const
+void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const
 {
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	std::vector<std::string> researchProjects = ruleset->getResearchList();
@@ -745,9 +823,9 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, Ruleset * ruleset, Base * base) const
+void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const
 {
-	const std::vector<std::string> items (ruleset->getManufactureList ());
+	const std::vector<std::string> &items = ruleset->getManufactureList ();
 	const std::vector<Production *> baseProductions (base->getProductions ());
 
 	for(std::vector<std::string>::const_iterator iter = items.begin ();
@@ -773,7 +851,7 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
    * @param unlocked the list of currently unlocked RuleResearch
    * @return true if the RuleResearch can be researched
 */
-bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, Ruleset * ruleset) const
+bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
@@ -802,7 +880,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
 	for(std::vector<const RuleResearch *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
@@ -824,7 +902,7 @@ void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	std::vector<RuleResearch *> possibleProjects;
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
@@ -854,13 +932,13 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
    * @param ruleset the Game Ruleset
    * @param base a pointer to a Base
 */
-void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, Ruleset * ruleset, Base * base) const
+void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base *) const
 {
-	std::vector<std::string> mans = ruleset->getManufactureList();
+	const std::vector<std::string> &mans = ruleset->getManufactureList();
 	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
-		std::vector<std::string> reqs = m->getRequirements();
+		const std::vector<std::string> &reqs = m->getRequirements();
 		if(isResearched(m->getRequirements()) && std::find(reqs.begin(), reqs.end(), research->getName()) != reqs.end())
 		{
 			dependables.push_back(m);
@@ -918,7 +996,7 @@ bool SavedGame::isResearched(const std::vector<std::string> &research) const
  * @param id A soldier's unique id.
  * @return Pointer to Soldier.
  */
-Soldier *const SavedGame::getSoldier(int id) const
+Soldier *SavedGame::getSoldier(int id) const
 {
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
@@ -1022,7 +1100,7 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
   * Returns the list of alien bases.
   * @return Pointer to alien base list.
   */
-std::vector<AlienBase*> *const SavedGame::getAlienBases()
+std::vector<AlienBase*> *SavedGame::getAlienBases()
 {
 	return &_alienBases;
 }
@@ -1044,4 +1122,138 @@ bool SavedGame::getDebugMode() const
 	return _debug;
 }
 
+/** @brief Match a mission based on region and type.
+ * This function object will match alien missions based on region and type.
+ */
+class matchRegionAndType: public std::unary_function<AlienMission *, bool>
+{
+public:
+	/// Store the region and type.
+	matchRegionAndType(const std::string &region, const std::string &type) : _region(region), _type(type) { }
+	/// Match against stored values.
+	bool operator()(const AlienMission *mis) const
+	{
+		return mis->getRegion() == _region && mis->getType() == _type;
+	}
+private:
+
+	const std::string &_region;
+	const std::string &_type;
+};
+
+/**
+ * Find a mission from the active alien missions.
+ * @param region The region ID.
+ * @param type The mission type ID.
+ * @return A pointer to the mission, or 0 if no mission matched.
+ */
+AlienMission *SavedGame::getAlienMission(const std::string &region, const std::string &type) const
+{
+	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
+	if (ii == _activeMissions.end())
+		return 0;
+	return *ii;
+}
+
+/**
+ * return the list of monthly maintenance costs
+ * @return list of maintenances.
+ */
+std::vector<int> SavedGame::getMaintenances()
+{
+	return _maintenance;
+}
+
+/**
+ * adds to this month's research score
+ * @param score the amount to add.
+ */
+void SavedGame::addResearchScore(int score)
+{
+	_researchScores.back() += score;
+}
+
+/**
+ * return the list of research scores
+ * @return list of research scores.
+ */
+std::vector<int> SavedGame::getResearchScores()
+{
+	return _researchScores;
+}
+
+/**
+ * return if the player has been 
+ * warned about poor performance.
+ * @return true or false.
+ */
+bool SavedGame::getWarned() const
+{
+	return _warned;
+}
+
+/**
+ * sets the player's "warned" status.
+ * @param warned set "warned" to this.
+ */
+void SavedGame::setWarned(bool warned)
+{
+	_warned = warned;
+}
+
+/** @brief Check if a point is contained in a region.
+ * This function object checks if a point is contained inside a region.
+ */
+class ContainsPoint: public std::unary_function<const Region *, bool>
+{
+public:
+	/// Remember the coordinates.
+	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
+	/// Check is the region contains the stored point.
+	bool operator()(const Region *region) const { return region->getRules()->insideRegion(_lon, _lat); }
+private:
+	double _lon, _lat;
+};
+
+/**
+ * Find the region containing this location.
+ * @param lon The longtitude.
+ * @param lat The latitude.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(double lon, double lat) const
+{
+	std::vector<Region *>::const_iterator found = std::find_if(_regions.begin(), _regions.end(), ContainsPoint(lon, lat));
+	if (found != _regions.end())
+	{
+		return *found;
+	}
+	return 0;
+}
+
+/**
+ * Find the region containing this target.
+ * @param target The target to locate.
+ * @return Pointer to the region, or 0.
+ */
+Region *SavedGame::locateRegion(const Target &target) const
+{
+	return locateRegion(target.getLongitude(), target.getLatitude());
+}
+
+/*
+ * @return the month counter.
+ */
+int SavedGame::getMonthsPassed() const
+{
+	return _monthsPassed;
+}
+
+/*
+ * Increment the month counter.
+ */
+void SavedGame::addMonth()
+{
+	++_monthsPassed;
+}
 }

@@ -97,7 +97,7 @@ TransferConfirmState::~TransferConfirmState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferConfirmState::btnCancelClick(Action *action)
+void TransferConfirmState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
@@ -106,7 +106,7 @@ void TransferConfirmState::btnCancelClick(Action *action)
  * Completes the transfer.
  * @param action Pointer to an action.
  */
-void TransferConfirmState::btnOkClick(Action *action)
+void TransferConfirmState::btnOkClick(Action *)
 {
 	_state->completeTransfer();
 	_game->popState();

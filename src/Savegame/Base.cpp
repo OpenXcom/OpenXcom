@@ -46,7 +46,7 @@ namespace OpenXcom
  * Initializes an empty base.
  * @param rule Pointer to ruleset.
  */
-Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _facilities(), _soldiers(), _crafts(), _scientists(0), _engineers(0), _inBattlescape(false)
+Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _scientists(0), _engineers(0), _inBattlescape(false), _retaliationTarget(false)
 {
 	_items = new ItemContainer();
 }
@@ -169,6 +169,11 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 		p->load(*i);
 		_productions.push_back(p);
 	}
+
+	if (const YAML::Node *pNode = node.FindValue("retaliationTarget"))
+	{
+		*pNode >> _retaliationTarget;
+	}
 }
 
 /**
@@ -228,6 +233,7 @@ void Base::save(YAML::Emitter &out) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "retaliationTarget" << YAML::Value << _retaliationTarget;
 	out << YAML::EndMap;
 }
 
@@ -248,7 +254,7 @@ void Base::saveId(YAML::Emitter &out) const
  * @param lang Language to get strings from.
  * @return Name.
  */
-std::wstring Base::getName(Language *lang) const
+std::wstring Base::getName(Language *) const
 {
 	return _name;
 }
@@ -266,7 +272,7 @@ void Base::setName(const std::wstring &name)
  * Returns the list of facilities in the base.
  * @return Pointer to the facility list.
  */
-std::vector<BaseFacility*> *const Base::getFacilities()
+std::vector<BaseFacility*> *Base::getFacilities()
 {
 	return &_facilities;
 }
@@ -275,7 +281,7 @@ std::vector<BaseFacility*> *const Base::getFacilities()
  * Returns the list of soldiers in the base.
  * @return Pointer to the soldier list.
  */
-std::vector<Soldier*> *const Base::getSoldiers()
+std::vector<Soldier*> *Base::getSoldiers()
 {
 	return &_soldiers;
 }
@@ -284,7 +290,7 @@ std::vector<Soldier*> *const Base::getSoldiers()
  * Returns the list of crafts in the base.
  * @return Pointer to the craft list.
  */
-std::vector<Craft*> *const Base::getCrafts()
+std::vector<Craft*> *Base::getCrafts()
 {
 	return &_crafts;
 }
@@ -294,7 +300,7 @@ std::vector<Craft*> *const Base::getCrafts()
  * to this base.
  * @return Pointer to the transfer list.
  */
-std::vector<Transfer*> *const Base::getTransfers()
+std::vector<Transfer*> *Base::getTransfers()
 {
 	return &_transfers;
 }
@@ -303,7 +309,7 @@ std::vector<Transfer*> *const Base::getTransfers()
  * Returns the list of items in the base.
  * @return Pointer to the item list.
  */
-ItemContainer *const Base::getItems()
+ItemContainer *Base::getItems()
 {
 	return _items;
 }
@@ -1044,5 +1050,108 @@ bool Base::isInBattlescape() const
 void Base::setInBattlescape(bool inbattle)
 {
 	_inBattlescape = inbattle;
+}
+
+/**
+ * Mark the base as a valid alien retaliation target.
+ * @param mark Mark (if @c true) or unmark (if @c false) the base.
+ */
+void Base::setRetaliationTarget(bool mark)
+{
+	_retaliationTarget = mark;
+}
+
+/**
+ * Get the base's retaliation status.
+ * @return If the base is a valid target for alien retaliation.
+ */
+bool Base::getRetaliationTarget() const
+{
+	return _retaliationTarget;
+}
+
+/**
+ * Functor to check for mind shield capability.
+ */
+struct isMindShield: public std::unary_function<BaseFacility*, bool>
+{
+	/// Check isMindShield() for @a facility.
+	bool operator()(const BaseFacility *facility) const;
+};
+
+/**
+ * Only fully operational facilities are checked.
+ * @param facility Pointer to the facility to check.
+ * @return If @a facility can act as a mind shield.
+ */
+bool isMindShield::operator()(const BaseFacility *facility) const
+{
+	if (facility->getBuildTime() != 0)
+	{
+		// Still building this
+		return false;
+	}
+	return (facility->getRules()->isMindShield());
+}
+
+/**
+ * Calculate the detection chance of this base.
+ * Big bases without mindshields are easier to detect.
+ * @return The detection chance.
+ */
+unsigned Base::getDetectionChance() const
+{
+	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
+	return (_facilities.size()/6 + 16) / (mindShields + 1);
+}
+
+int Base::getGravShields() const
+{
+	int total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isGravShield())
+		{
+			++total;
+		}
+	}
+	return total;
+}
+
+
+std::vector<BaseFacility*> *Base::getDefenses()
+{
+	std::vector<BaseFacility*> *total = 0;
+	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	{
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getDefenseValue())
+		{
+			total->push_back(*i);
+		}
+	}
+	return total;
+}
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the base.
+ * @return Pointer to vehicle list.
+ */
+std::vector<Vehicle*> *Base::getVehicles()
+{
+	for (std::vector<Vehicle*>::iterator v = _vehicles.begin(); v < _vehicles.end(); ++v)
+	{
+		delete (*v);
+	}
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
+	{
+		if (_rule->getItem((i)->first)->isFixed())
+		{
+			std::string type = _rule->getItem((i)->first)->getType();
+			Vehicle *v = new Vehicle(_rule->getItem((i)->first), 0);
+			_vehicles.push_back(v);
+		}
+	}
+	return &_vehicles;
 }
 }

@@ -44,7 +44,7 @@ public:
          * @param b Pointer to second entry.
 	 * @return true If entry @a *b must come before @a *a.
 	 */
-	bool operator()(OpenSetEntry *a, OpenSetEntry *b)
+	bool operator()(OpenSetEntry *a, OpenSetEntry *b) const
 	{
 		return b->_cost < a->_cost;
 	}

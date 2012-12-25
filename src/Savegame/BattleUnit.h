@@ -25,6 +25,7 @@
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Unit.h"
+#include "../Ruleset/MapData.h"
 #include "Soldier.h"
 
 namespace OpenXcom
@@ -57,6 +58,7 @@ class BattleUnit
 {
 private:
 	UnitFaction _faction, _originalFaction;
+	UnitFaction _killedBy;
 	int _id;
 	Position _pos;
 	Tile *_tile;
@@ -94,7 +96,7 @@ private:
 	std::wstring _name;
 	UnitStats _stats;
 	int _standHeight, _kneelHeight, _loftemps;
-	int _value, _deathSound, _moveSound;
+	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 	std::string _zombieUnit, _spawnUnit;
@@ -202,13 +204,13 @@ public:
 	/// Add unit to visible units.
 	bool addToVisibleUnits(BattleUnit *unit);
 	/// Get the list of visible units.
-	std::vector<BattleUnit*> *const getVisibleUnits();
+	std::vector<BattleUnit*> *getVisibleUnits();
 	/// Clear visible units.
 	void clearVisibleUnits();
 	/// Add unit to visible tiles.
 	bool addToVisibleTiles(Tile *tile);
 	/// Get the list of visible tiles.
-	std::vector<Tile*> *const getVisibleTiles();
+	std::vector<Tile*> *getVisibleTiles();
 	/// Clear visible tiles.
 	void clearVisibleTiles();
 	/// Calculate firing accuracy.
@@ -238,7 +240,7 @@ public:
 	/// Get fire.
 	int getFire() const;
 	/// Get the list of items in the inventory.
-	std::vector<BattleItem*> *const getInventory();
+	std::vector<BattleItem*> *getInventory();
 	/// Let AI do their thing.
 	void think(BattleAction *action);
 	/// Get current AI state.
@@ -262,7 +264,7 @@ public:
 	/// Gets a grenade from the belt, if any.
 	BattleItem *getGrenadeFromBelt() const;
 	/// Check if this unit is in the exit area
-	bool isInExitArea() const;
+	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
 	/// Adds one to the reaction exp counter.
@@ -340,6 +342,15 @@ public:
 	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
+	/// Gets the unit's aggro sound.
+	int getAggroSound() const;
+	/// Sets the unit's energy level.
+	void setEnergy(int energy);
+	void halveArmor();
+	/// Gets the unit's faction.
+	UnitFaction killedBy() const;
+	void killedBy(UnitFaction f);
+
 };
 
 }

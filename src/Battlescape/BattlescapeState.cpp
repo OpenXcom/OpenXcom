@@ -72,6 +72,10 @@
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
 #include "MiniMapState.h"
+#include "BattlescapeGenerator.h"
+#include "BriefingState.h"
+#include "../Geoscape/DefeatState.h"
+#include "../Geoscape/VictoryState.h"
 
 namespace OpenXcom
 {
@@ -536,7 +540,7 @@ void BattlescapeState::mapClick(Action *action)
  * Processes when mouse enters to the map surface
  * @param action Pointer to an action.
  */
-void BattlescapeState::mapIn(Action *action)
+void BattlescapeState::mapIn(Action *)
 {
 	isMouseScrolling = false;
 	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
@@ -546,7 +550,7 @@ void BattlescapeState::mapIn(Action *action)
  * Move unit up.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnUnitUpClick(Action *action)
+void BattlescapeState::btnUnitUpClick(Action *)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
 	{
@@ -559,7 +563,7 @@ void BattlescapeState::btnUnitUpClick(Action *action)
  * Move unit down.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnUnitDownClick(Action *action)
+void BattlescapeState::btnUnitDownClick(Action *)
 {
 	if (playableUnitSelected() && _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
 	{
@@ -572,40 +576,46 @@ void BattlescapeState::btnUnitDownClick(Action *action)
  * Show next map layer.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnMapUpClick(Action *action)
+void BattlescapeState::btnMapUpClick(Action *)
 {
-	_map->getCamera()->up();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_map->getCamera()->up();
 }
 
 /**
  * Show previous map layer.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnMapDownClick(Action *action)
+void BattlescapeState::btnMapDownClick(Action *)
 {
-	_map->getCamera()->down();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_map->getCamera()->down();
 }
 
 /**
  * Show minimap.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnShowMapClick(Action *action)
+void BattlescapeState::btnShowMapClick(Action *)
 {
 	//MiniMapState
-	_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
 }
 
 /**
  * Kneel/Standup.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnKneelClick(Action *action)
+void BattlescapeState::btnKneelClick(Action *)
 {
-	BattleUnit *bu = _save->getSelectedUnit();
-	if (bu)
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 	{
-		_battleGame->kneel(bu);
+		BattleUnit *bu = _save->getSelectedUnit();
+		if (bu)
+		{
+			_battleGame->kneel(bu);
+		}
 	}
 }
 
@@ -613,7 +623,7 @@ void BattlescapeState::btnKneelClick(Action *action)
  * Go to soldier info screen.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnInventoryClick(Action *action)
+void BattlescapeState::btnInventoryClick(Action *)
 {
 	if (playableUnitSelected() && _save->getSelectedUnit()->getArmor()->getSize() == 1)
 	{
@@ -625,7 +635,7 @@ void BattlescapeState::btnInventoryClick(Action *action)
  * Center on currently selected soldier.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnCenterClick(Action *action)
+void BattlescapeState::btnCenterClick(Action *)
 {
 	if (playableUnitSelected())
 	{
@@ -637,18 +647,20 @@ void BattlescapeState::btnCenterClick(Action *action)
  * Select next soldier.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnNextSoldierClick(Action *action)
+void BattlescapeState::btnNextSoldierClick(Action *)
 {
-	selectNextPlayerUnit(false);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		selectNextPlayerUnit(false);
 }
 
 /**
  * Don't reselect current soldier and select next soldier.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnNextStopClick(Action *action)
+void BattlescapeState::btnNextStopClick(Action *)
 {
-	selectNextPlayerUnit(true);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		selectNextPlayerUnit(true);
 }
 
 /**
@@ -657,31 +669,35 @@ void BattlescapeState::btnNextStopClick(Action *action)
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
 {
-	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-	BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
-	updateSoldierInfo();
-	if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
-	_battleGame->cancelCurrentAction();
-	_battleGame->getCurrentAction()->actor = unit;
-	_battleGame->setupCursor();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	{
+		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
+		updateSoldierInfo();
+		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		_battleGame->cancelCurrentAction();
+		_battleGame->getCurrentAction()->actor = unit;
+		_battleGame->setupCursor();
+	}
 }
 
 /**
  * Show/hide all map layers.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnShowLayersClick(Action *action)
-{
-	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
+void BattlescapeState::btnShowLayersClick(Action *)
+{	
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
 
 /**
  * Show options.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnHelpClick(Action *action)
+void BattlescapeState::btnHelpClick(Action *)
 {
-	_game->pushState(new BattlescapeOptionsState(_game));
+		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
 /**
@@ -689,24 +705,26 @@ void BattlescapeState::btnHelpClick(Action *action)
  * so all ongoing actions, like explosions are finished first before really switching turn.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnEndTurnClick(Action *action)
+void BattlescapeState::btnEndTurnClick(Action *)
 {
-	_battleGame->requestEndTurn();
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->requestEndTurn();
 }
 /**
  * Abort game.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnAbortClick(Action *action)
+void BattlescapeState::btnAbortClick(Action *)
 {
-	_game->pushState(new AbortMissionState(_game, _save, this));
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_game->pushState(new AbortMissionState(_game, _save, this));
 }
 
 /**
  * Show selected soldier info.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnStatsClick(Action *action)
+void BattlescapeState::btnStatsClick(Action *)
 {
 	if (playableUnitSelected())
 	{
@@ -718,7 +736,7 @@ void BattlescapeState::btnStatsClick(Action *action)
  * Shows action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnLeftHandItemClick(Action *action)
+void BattlescapeState::btnLeftHandItemClick(Action *)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
@@ -735,7 +753,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *action)
  * Shows action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnRightHandItemClick(Action *action)
+void BattlescapeState::btnRightHandItemClick(Action *)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
@@ -787,36 +805,40 @@ void BattlescapeState::btnLaunchClick(Action *action)
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveNoneClick(Action *action)
+void BattlescapeState::btnReserveNoneClick(Action *)
 {
-	_battleGame->setTUReserved(BA_NONE);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_NONE);
 }
 
 /**
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveSnapClick(Action *action)
+void BattlescapeState::btnReserveSnapClick(Action *)
 {
-	_battleGame->setTUReserved(BA_SNAPSHOT);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_SNAPSHOT);
 }
 
 /**
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveAimedClick(Action *action)
+void BattlescapeState::btnReserveAimedClick(Action *)
 {
-	_battleGame->setTUReserved(BA_AIMEDSHOT);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_AIMEDSHOT);
 }
 
 /**
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveAutoClick(Action *action)
+void BattlescapeState::btnReserveAutoClick(Action *)
 {
-	_battleGame->setTUReserved(BA_AUTOSHOT);
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		_battleGame->setTUReserved(BA_AUTOSHOT);
 }
 
 /**
@@ -1093,17 +1115,57 @@ void BattlescapeState::popup(State *state)
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing the screen for the mission.
  * @param abort Was the mission aborted?
+ * @param number of soldiers in exit area OR number of survivors when battle finished due to either all aliens or objective was destroyed
  */
-void BattlescapeState::finishBattle(bool abort)
+void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	_popups.clear();
-	_animTimer->stop();
-	_gameTimer->stop();
-	_save->setAborted(abort);
-	_game->popState();
-	_game->pushState(new DebriefingState(_game));
-	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	if (_save->getNextStage() != "" && inExitArea)
+	{
+		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
+		_popups.clear();
+		_save->setMissionType(_save->getNextStage());
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.setAlienRace("STR_MIXED");
+		bgen.nextStage();
+		_game->popState();
+		_game->pushState(new BriefingState(_game, 0, 0));
+	}
+	else
+	{
+		_popups.clear();
+		_animTimer->stop();
+		_gameTimer->stop();
+		_save->setAborted(abort);
+		_game->popState();
+		if (abort || (!abort  && inExitArea == 0))
+		{
+			// abort was done or no player is still alive
+			// this concludes to defeat when in mars or mars landing mission
+			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
+			{
+				_game->pushState (new DefeatState(_game));
+			}
+			else
+			{
+				_game->pushState(new DebriefingState(_game));
+			}
+		}
+		else
+		{
+			// no abort was done and at least a player is still alive
+			// this concludes to victory when in mars mission
+			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
+			{
+				_game->pushState (new VictoryState(_game));
+			}
+			else
+			{
+				_game->pushState(new DebriefingState(_game));
+			}
+		}
+		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	}
 }
 
 /**

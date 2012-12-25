@@ -17,37 +17,38 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "DebriefingState.h"
-#include <sstream>
-#include <map>
+#include "CannotReequipState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Engine/Music.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Ufo.h"
-#include "../Savegame/Tile.h"
-#include "../Savegame/ItemContainer.h"
+#include "../Interface/Window.h"
+#include "NoContainmentState.h"
+#include "PromotionsState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Savegame/Vehicle.h"
-#include "../Savegame/TerrorSite.h"
-#include "../Savegame/AlienBase.h"
-#include "PromotionsState.h"
-#include "CannotReequipState.h"
-#include "NoContainmentState.h"
-#include "../Savegame/Region.h"
-#include "../Savegame/Country.h"
 #include "../Ruleset/RuleRegion.h"
-#include "../Ruleset/RuleCountry.h"
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/AlienMission.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Savegame/Tile.h"
+#include "../Savegame/Ufo.h"
+#include "../Savegame/Vehicle.h"
+#include <sstream>
+#include <map>
 
 namespace OpenXcom
 {
@@ -56,7 +57,7 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game), _noContainment(false), _regionPoints(false), _countryPoints(false)
+DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _destroyBase(false)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -154,10 +155,14 @@ DebriefingState::DebriefingState(Game *game) : State(game), _noContainment(false
 	_lstTotal->addRow(2, _game->getLanguage()->getString("STR_TOTAL_UC").c_str(), ss3.str().c_str());
 
 	// add the points to our activity score
-	if(_regionPoints)
+	if (_region)
+	{
 		_region->addActivityXcom(total);
-	if(_countryPoints)
+	}
+	if (_country)
+	{
 		_country->addActivityXcom(total);
+	}
 
 	if (recoveryY > 0)
 	{
@@ -214,21 +219,24 @@ DebriefingState::~DebriefingState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DebriefingState::btnOkClick(Action *action)
+void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
-	if (_game->getSavedGame()->handlePromotions())
+	if (!_destroyBase)
 	{
-		_game->pushState(new PromotionsState(_game));
-	}
-	if (!_missingItems.empty())
-	{
-		_game->pushState(new CannotReequipState(_game, _missingItems));
-	}
-	if (_noContainment)
-	{
-		_game->pushState (new NoContainmentState(_game));
+		if (_game->getSavedGame()->handlePromotions())
+		{
+			_game->pushState(new PromotionsState(_game));
+		}
+		if (!_missingItems.empty())
+		{
+			_game->pushState(new CannotReequipState(_game, _missingItems));
+		}
+		if (_noContainment)
+		{
+			_game->pushState (new NoContainmentState(_game));
+		}
 	}
 }
 
@@ -250,6 +258,33 @@ void DebriefingState::addStat(const std::string &name, int quantity, int score)
 			(*i)->score = (*i)->score + score;
 			break;
 		}
+	}
+}
+
+/**
+ * Clear the alien base from supply missions that use it.
+ */
+class ClearAlienBase: public std::unary_function<AlienMission *, void>
+{
+public:
+	/// Remember the base.
+	ClearAlienBase(const AlienBase *base) : _base(base) { /* Empty by design. */ }
+	/// Clear the base if required.
+	void operator()(AlienMission *am) const;
+private:
+	const AlienBase *_base;
+};
+
+/**
+ * This function will remove the association between the alien mission and the alien base,
+ * if one existed.
+ * @param am Pointer to the alien mission.
+ */
+void ClearAlienBase::operator()(AlienMission *am) const
+{
+	if (am->getAlienBase() == _base)
+	{
+		am->setAlienBase(0);
 	}
 }
 
@@ -304,18 +339,18 @@ void DebriefingState::prepareDebriefing()
 			{
 				for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 				{
-					if((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+					if ((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_region = (*k);
-						_regionPoints = true;
+						break;
 					}
 				}
 				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 				{
-					if((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+					if ((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						_country = (*k);
-						_countryPoints = true;
+						break;
 					}
 				}
 				craft = (*j);
@@ -327,23 +362,35 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 		// in case we DON'T have a craft (base defense)
-		if((*i)->isInBattlescape())
+		if ((*i)->isInBattlescape())
 		{
-				for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			base = (*i);
+			base->setInBattlescape(false);
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
-					if((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
-						_region = (*k);
+					_region = (*k);
+					break;
 				}
-				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			}
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			{
+				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
 				{
-					if((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
-						_country = (*k);
+					_country = (*k);
+					break;
 				}
+			}
+			if (aborted)
+			{
+				_destroyBase = true;
+			}
 		}
 	}
 
 	// UFO crash/landing site disappears
-	if(!aborted)
+	if (!aborted)
 	{
 		for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 		{
@@ -357,7 +404,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// terror site disappears
-	if(!aborted)
+	if (!aborted)
 	{
 		for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
 		{
@@ -370,12 +417,15 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	// alien base disappears (if you didn't abort)
-	if(!aborted)
+	if (!aborted)
 	{
 		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 		{
 			if ((*i)->isInBattlescape())
 			{
+				// Take care to remove supply missions for this base.
+				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
+					      ClearAlienBase(*i));
 				delete *i;
 				save->getAlienBases()->erase(i);
 				break;
@@ -390,21 +440,10 @@ void DebriefingState::prepareDebriefing()
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
-
-		if (faction == FACTION_NEUTRAL)
+		if (!(*j)->getTile())
 		{
-			// civilians are all dead if mission fails
-			if (aborted || playersSurvived == 0 || status == STATUS_DEAD)
-			{
-				addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);
-			}
-			// otherwise save the live ones
-			else
-			{
-				addStat("STR_CIVILIANS_SAVED", 1, value);
-			}
+			(*j)->setTile(battle->getTile((*j)->getPosition()));
 		}
-
 
 		if (status == STATUS_DEAD)
 		{
@@ -442,13 +481,20 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
+			else if (faction == FACTION_NEUTRAL)
+			{
+				if ((*j)->killedBy() == FACTION_PLAYER)
+					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -50);
+				else // if civilians happen to kill themselves XCOM shouldn't get penalty for it
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
+			}
 		}
 		else if (status == STATUS_UNCONSCIOUS)
 		{
 			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value*2);
-				if(base->getAvailableContainment())
+				if (base->getAvailableContainment())
 				{
 					std::stringstream ss;
 					ss << "STR_" << (*j)->getType();
@@ -459,13 +505,17 @@ void DebriefingState::prepareDebriefing()
 					_noContainment = true;
 				}
 			}
+			else if (faction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			{
+				addStat("STR_CIVILIANS_SAVED", 1, 30);
+			}
 		}
 		else
 		{
 			if (faction == FACTION_PLAYER)
 			{
 				playersSurvived++;
-				if ((*j)->isInExitArea() || !aborted)
+				if (((*j)->isInExitArea() && battle->getMissionType() != "STR_BASE_DEFENSE") || !aborted)
 				{
 					playerInExitArea++;
 					(*j)->postMissionProcedures(save);
@@ -501,6 +551,10 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
+			else if (faction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			{
+				addStat("STR_CIVILIANS_SAVED", 1, 30);
+			}
 		}
 	}
 	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0)) && craft != 0)
@@ -523,7 +577,13 @@ void DebriefingState::prepareDebriefing()
 		_txtTitle->setText(_game->getLanguage()->getString("STR_CRAFT_IS_LOST"));
 		return;
 	}
-
+	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && base->getCrafts()->size() > 0)
+	{
+		for(std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
+		{
+			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
+		}
+	}
 	if (!aborted && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
 		if (battle->getMissionType() == "STR_BASE_DEFENSE")
@@ -604,6 +664,7 @@ void DebriefingState::prepareDebriefing()
 		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
 			_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_IS_LOST"));
+			_destroyBase = true;
 		}
 		else if (battle->getMissionType() == "STR_TERROR_MISSION")
 		{
@@ -618,7 +679,7 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_NOT_RECOVERED"));
 		}
 
-		if (playersSurvived > 0)
+		if (playersSurvived > 0 && !_destroyBase)
 		{
 			// recover items from the craft floor
 			for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
@@ -626,7 +687,6 @@ void DebriefingState::prepareDebriefing()
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);		
 			}
-
 		}
 	}
 
@@ -635,12 +695,24 @@ void DebriefingState::prepareDebriefing()
 	{
 		reequipCraft(base, craft);
 	}
-	else
+	else if (!_destroyBase)
 	{
 		for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
 		{
 			if ((*c)->getStatus() != "STR_OUT")
 				reequipCraft(base, *c);
+		}
+	}
+	if (_destroyBase)
+	{
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+		{
+			if ((*i) == base)
+			{
+				(*i)->~Base();
+				_game->getSavedGame()->getBases()->erase(i);
+				break;
+			}
 		}
 	}
 }

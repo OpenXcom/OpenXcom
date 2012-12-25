@@ -106,7 +106,7 @@ void CraftPatrolState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void CraftPatrolState::btnOkClick(Action *action)
+void CraftPatrolState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -115,7 +115,7 @@ void CraftPatrolState::btnOkClick(Action *action)
  * Opens up the Craft window.
  * @param action Pointer to an action.
  */
-void CraftPatrolState::btnRedirectClick(Action *action)
+void CraftPatrolState::btnRedirectClick(Action *)
 {
 	_game->popState();
 	_game->pushState(new GeoscapeCraftState(_game, _craft, _globe, 0));

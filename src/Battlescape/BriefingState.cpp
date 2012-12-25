@@ -17,22 +17,23 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "BriefingState.h"
-#include <sstream>
+#include "BattlescapeState.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Savegame/Craft.h"
-#include "../Engine/Music.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Ufo.h"
-#include "BattlescapeState.h"
-#include "NextTurnState.h"
+#include "../Interface/Window.h"
 #include "InventoryState.h"
+#include "NextTurnState.h"
+#include "../Resource/ResourcePack.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
+#include <sstream>
 
 namespace OpenXcom
 {
@@ -41,7 +42,7 @@ namespace OpenXcom
  * Initializes all the elements in the Briefing screen.
  * @param game Pointer to the core game.
  */
-BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
+BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -59,6 +60,16 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
+	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+	}
+	else if (mission == "STR_MARS_CYDONIA_LANDING")
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
+	}
 	else
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -68,7 +79,7 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	if (mission == "STR_ALIEN_BASE_ASSAULT")
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
 	{
 		_txtCraft->setY(40);
 		_txtBriefing->setY(56);
@@ -77,7 +88,10 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 	{
 		add(_txtTarget);
 	}
-	add(_txtCraft);
+	if (mission != "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		add(_txtCraft);
+	}
 	add(_txtBriefing);
 
 	// Set up objects
@@ -92,19 +106,30 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 
 	_txtTarget->setColor(Palette::blockOffset(8)+5);
 	_txtTarget->setBig();
-	_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
-
+	
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
+	if (craft)
+	{
+		if (craft->getDestination())
+		{
+			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+		}
+
+		ss << _game->getLanguage()->getString("STR_CRAFT_") << craft->getName(_game->getLanguage());
+	}
+	else if(base)
+	{
+		ss << _game->getLanguage()->getString("STR_BASE_UC_") << base->getName();
+	}
 	_txtCraft->setText(ss.str());
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
 
 	// Show respective mission briefing
-	if (mission == "STR_ALIEN_BASE_ASSAULT")
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	}
@@ -113,34 +138,17 @@ BriefingState::BriefingState(Game *game, Craft *craft) : State(game)
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 	}
 
+	_txtTitle->setText(_game->getLanguage()->getString(mission));
+	std::stringstream briefingtext;
+	briefingtext << mission.c_str() << "_BRIEFING";
+	_txtBriefing->setText(_game->getLanguage()->getString(briefingtext.str()));
+
 	if (mission == "STR_BASE_DEFENSE")
 	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_BASE_DEFENSE_BRIEFING"));
-	}
-	else if (mission == "STR_TERROR_MISSION")
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_TERROR_MISSION"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_TERROR_MISSION_BRIEFING"));
-	}
-	else if (mission == "STR_ALIEN_BASE_ASSAULT")
-	{
-		_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_ASSAULT"));
-		_txtBriefing->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_ASSAULT_BRIEFING"));
-	}
-	else
-	{
-		Ufo* u = dynamic_cast<Ufo*>(craft->getDestination());
-		if (u->getStatus() == Ufo::CRASHED)
-		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY"));
-			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_CRASH_RECOVERY_BRIEFING"));
-		}
-		else
-		{
-			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT"));
-			_txtBriefing->setText(_game->getLanguage()->getString("STR_UFO_GROUND_ASSAULT_BRIEFING"));
-		}
+		// Mark as destroyed any way, to remove it from Geoscape.
+		ufo->setStatus(Ufo::DESTROYED);
+		// And make sure the base is unmarked.
+		base->setRetaliationTarget(false);
 	}
 }
 
@@ -156,7 +164,7 @@ BriefingState::~BriefingState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void BriefingState::btnOkClick(Action *action)
+void BriefingState::btnOkClick(Action *)
 {
 	_game->popState();
 	BattlescapeState *bs = new BattlescapeState(_game);

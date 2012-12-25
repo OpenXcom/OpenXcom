@@ -253,12 +253,18 @@ set ( geoscape_src
   Geoscape/AbandonGameState.h
   Geoscape/GraphsState.cpp
   Geoscape/GraphsState.h
+  Geoscape/ConfirmCydoniaState.cpp
+  Geoscape/ConfirmCydoniaState.h
   Geoscape/ConfirmLandingState.cpp
   Geoscape/ConfirmLandingState.h
   Geoscape/GeoscapeOptionsState.h
   Geoscape/GeoscapeOptionsState.cpp
   Geoscape/BaseNameState.cpp
   Geoscape/BaseNameState.h
+  Geoscape/BaseDestroyedState.cpp
+  Geoscape/BaseDestroyedState.h
+  Geoscape/BaseDefenseState.cpp
+  Geoscape/BaseDefenseState.h
   Geoscape/MultipleTargetsState.cpp
   Geoscape/MultipleTargetsState.h
   Geoscape/ItemsArrivingState.cpp
@@ -281,6 +287,10 @@ set ( geoscape_src
   Geoscape/AlienTerrorState.cpp
   Geoscape/NewPossibleManufactureState.h
   Geoscape/NewPossibleManufactureState.cpp
+  Geoscape/VictoryState.h
+  Geoscape/VictoryState.cpp
+  Geoscape/DefeatState.h
+  Geoscape/DefeatState.cpp
 )
 
 set ( interface_src
@@ -331,6 +341,8 @@ set ( menu_src
   Menu/OptionsState.h
   Menu/ErrorMessageState.cpp
   Menu/ErrorMessageState.h
+  Menu/DeleteGameState.cpp
+  Menu/DeleteGameState.h
   Menu/SavedGameState.cpp
   Menu/SavedGameState.h
 )
@@ -389,11 +401,17 @@ set ( ruleset_src
   Ruleset/AlienRace.cpp
   Ruleset/Unit.h
   Ruleset/Unit.cpp
+  Ruleset/UfoTrajectory.cpp
+  Ruleset/UfoTrajectory.h
+  Ruleset/RuleAlienMission.cpp
+  Ruleset/RuleAlienMission.h
 )
 
 set ( savegame_src
   Savegame/AlienBase.h
   Savegame/AlienBase.cpp
+  Savegame/AlienMission.cpp
+  Savegame/AlienMission.h
   Savegame/BattleItem.h
   Savegame/BattleItem.cpp
   Savegame/Ufo.cpp
@@ -448,6 +466,10 @@ set ( savegame_src
   Savegame/Vehicle.cpp
   Savegame/EquipmentLayoutItem.h
   Savegame/EquipmentLayoutItem.cpp
+  Savegame/WeightedOptions.cpp
+  Savegame/WeightedOptions.h
+  Savegame/AlienStrategy.cpp
+  Savegame/AlienStrategy.h
 )
 
 set ( ufopedia_src
@@ -571,7 +593,7 @@ if ( WIN32 )
   endif ()
   set ( system_libs ${basic_windows_libs} SDLmain ${static_flags} )
 endif ()
-target_link_libraries ( openxcom ${system_libs} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
+target_link_libraries ( openxcom ${system_libs} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDLGFX_LIBRARY} ${SDL_LIBRARY} ${YAMLCPP_LIBRARY} )
 
 add_custom_command ( TARGET openxcom
   POST_BUILD
@@ -596,6 +618,7 @@ endif ()
 if ( APPLE AND CREATE_BUNDLE )
   list ( APPEND frameworks "${SDLGFX_LIBRARY}" )
   list ( APPEND frameworks "${SDLMIXER_LIBRARY}" )
+  list ( APPEND frameworks "${SDLIMAGE_LIBRARY}" )
   list ( APPEND frameworks "${SDL_LIBRARY}" )
   list ( APPEND frameworks "${YAMLCPP_LIBRARY}" )
 

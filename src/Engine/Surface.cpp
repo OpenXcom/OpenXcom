@@ -20,6 +20,7 @@
 #include "ShaderDraw.h"
 #include <fstream>
 #include <SDL_gfxPrimitives.h>
+#include <SDL_image.h>
 #include "Palette.h"
 #include "Exception.h"
 #include "ShaderMove.h"
@@ -114,6 +115,32 @@ void Surface::loadScr(const std::string &filename)
 		throw Exception("Invalid data from file");
 	}
 
+	// Unlock the surface
+	unlock();
+
+	imgFile.close();
+}
+
+void Surface::loadLbm(const std::string &filename)
+{
+	// Load file and put pixels in surface
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	if (!imgFile)
+	{
+		throw Exception("Failed to load LBM");
+	}
+
+	// Lock the surface
+	lock();
+	
+	// load sample.lbm into image
+	SDL_Surface *image;
+	SDL_RWops *rwop;
+	rwop=SDL_RWFromFile(filename.c_str(), "rb");
+	image=IMG_LoadLBM_RW(rwop);
+	SDL_FreeSurface(_surface);
+	_surface = image;
+	image = 0;
 	// Unlock the surface
 	unlock();
 
@@ -495,7 +522,7 @@ void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Returns the surface's 8bpp palette.
  * @return Pointer to the palette's colors.
  */
-SDL_Color *const Surface::getPalette() const
+SDL_Color *Surface::getPalette() const
 {
 	return _surface->format->palette->colors;
 }
@@ -554,7 +581,7 @@ Uint8 Surface::getPixel(int x, int y) const
  * Returns the internal SDL_Surface for SDL calls.
  * @return Pointer to the surface.
  */
-SDL_Surface *const Surface::getSurface() const
+SDL_Surface *Surface::getSurface() const
 {
 	return _surface;
 }

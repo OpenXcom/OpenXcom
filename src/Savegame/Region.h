@@ -47,15 +47,15 @@ public:
 	/// Saves the region to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the region's ruleset.
-	RuleRegion *const getRules() const;
+	RuleRegion *getRules() const;
 	/// add xcom activity in this region
 	void addActivityXcom(int activity);
 	/// add alien activity in this region
 	void addActivityAlien(int activity);
 	/// get xcom activity to this region
-	std::vector<int> getActivityXcom() const;
+	const std::vector<int> &getActivityXcom() const;
 	/// get xcom activity to this region
-	std::vector<int> getActivityAlien() const;
+	const std::vector<int> &getActivityAlien() const;
 	/// store last month's counters, start new counters.
 	void newMonth();
 };

@@ -34,6 +34,7 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -227,7 +228,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	if (unit->isOut())
 		return false;
-
+	Position pos = unit->getPosition();
+	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) > 24)
+		++pos.z;
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
 		if (unit->getDirection()%2)
@@ -267,7 +270,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
-							if (calculateLine(unit->getPosition(), test, false, 0, unit, false) <= 0)
+							if (calculateLine(pos, test, false, 0, unit, false) <= 0)
 							{
 								unit->addToVisibleTiles(_save->getTile(test));
 								_save->getTile(test)->setDiscovered(true, 2);
@@ -355,7 +358,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	{
 		targetVoxel.z = i;
 		_trajectory.clear();
-		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit);
+		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit, true, true);
 		if (test == 4)
 		{
 			Position hitPosition = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
@@ -471,7 +474,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			}
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
-				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore)
+				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore && (*i)->getMainHandWeapon())
 				{
 					// I see you!
 					highestReactionScore = (*i)->getReactionScore();
@@ -481,7 +484,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		}
 	}
 
-	if (action->actor && highestReactionScore > unit->getReactionScore())
+	if (action->actor && highestReactionScore > unit->getReactionScore() &&
+		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
+		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+		validMeleeRange(unit, action->actor))))
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;
@@ -528,7 +534,8 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 25% to 75%
 		int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
-		tile->damage(part, rndPower);
+		if (tile->damage(part, rndPower))
+			_save->setObjectiveDestroyed(true);
 	}
 	else if (part == 4)
 	{
@@ -702,7 +709,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	{
 		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
-			(*i)->detonate();
+			if ((*i)->detonate())
+				_save->setObjectiveDestroyed(true);
 			applyItemGravity((*i));
 		}
 	}
@@ -911,11 +919,14 @@ int TileEngine::vectorToDirection(const Position &vector)
  *		  1 ufo door is starting to open, make a whoosh sound, don't walk through.
  *		  3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
  */
-int TileEngine::unitOpensDoor(BattleUnit *unit)
+int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 {
 	int door = -1;
-
+	int TUCost = 0;
 	int size = unit->getArmor()->getSize();
+
+	if (size > 1 && rClick)
+		return door;
 
 	for (int x = 0; x < size; x++)
 	{
@@ -926,9 +937,12 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 
 			if (unit->getDirection() == 0 || unit->getDirection() == 1 || unit->getDirection() == 7) // north, northeast or northwest
 			{
-				door = tile->openDoor(MapData::O_NORTHWALL);
+				door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
+				if (door == 0 && rClick)
+					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
 				if (door == 1)
 				{
+					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
 					// check for adjacent door(s)
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
@@ -943,9 +957,12 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 			if ((unit->getDirection() == 2 || unit->getDirection() == 1 || unit->getDirection() == 3) && door == -1) // east, northeast or southeast
 			{
 				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
-				if (tile) door = tile->openDoor(MapData::O_WESTWALL);
+				if (tile) door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
+				if (door == 0 && rClick)
+					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
 				if (door == 1)
 				{
+					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
 					// check for adjacent door(s)
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 1, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
@@ -960,9 +977,12 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 			if ((unit->getDirection() == 4 || unit->getDirection() == 5 || unit->getDirection() == 3) && door == -1) // south, southwest or southeast
 			{
 				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
-				if (tile) door = tile->openDoor(MapData::O_NORTHWALL);
+				if (tile) door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
+				if (door == 0 && rClick)
+					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
 				if (door == 1)
 				{
+					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
 					// check for adjacent door(s)
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 1, 0));
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
@@ -976,9 +996,12 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 			}
 			if ((unit->getDirection() == 6 || unit->getDirection() == 5 || unit->getDirection() == 7) && door == -1) // west, southwest or northwest
 			{
-				door = tile->openDoor(MapData::O_WESTWALL);
+				door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
+				if (door == 0 && rClick)
+					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
 				if (door == 1)
 				{
+					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
 					// check for adjacent door(s)
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
@@ -996,6 +1019,8 @@ int TileEngine::unitOpensDoor(BattleUnit *unit)
 
 	if (door == 0 || door == 1)
 	{
+
+		unit->spendTimeUnits(TUCost, _save->getDebugMode());
 		calculateFOV(unit->getPosition());
 	}
 
@@ -1028,7 +1053,7 @@ int TileEngine::closeUfoDoors()
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool LOSCalc)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -1096,6 +1121,15 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		if (doVoxelCheck)
 		{
 			int result = voxelCheck(Position(cx, cy, cz), excludeUnit);
+			if (LOSCalc)
+			{
+				int result2 = voxelCheck(Position(cx, cy, cz-1), excludeUnit);
+				int result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
+				if (result2 != -1)
+					result = result2;
+				if (result3 != -1)
+					result = result3;
+			}
 			if (result != -1)
 			{
 				if (!storeTrajectory && trajectory != 0)
@@ -1373,5 +1407,23 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 
 	return rt;
 }
-
+/*
+ * Validate the melee range.
+ * @return true when range is valid.
+ */
+bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
+{
+	Position p;
+	Pathfinding::directionToVector(unit->getDirection(), &p);
+	for (int x = 0; x != unit->getArmor()->getSize(); ++x)
+	{
+		for (int y = 0; y != unit->getArmor()->getSize(); ++y)
+		{
+			Tile * tile (_save->getTile(Position(unit->getPosition().x + x, unit->getPosition().y + y, unit->getPosition().z) + p));
+			if (tile->getUnit() && tile->getUnit() == target)
+				return true;
+		}
+	}
+	return false;
+}
 }

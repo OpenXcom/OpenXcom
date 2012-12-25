@@ -129,7 +129,7 @@ ResearchState::~ResearchState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnOkClick(Action *action)
+void ResearchState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -138,7 +138,7 @@ void ResearchState::btnOkClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnNewClick(Action *action)
+void ResearchState::btnNewClick(Action *)
 {
 	_game->pushState(new NewResearchListState(_game, _base));
 }
@@ -147,7 +147,7 @@ void ResearchState::btnNewClick(Action *action)
  * Display list of possible ResearchProject
  * @param action Pointer to an action.
 */
-void ResearchState::onSelectProject(Action *action)
+void ResearchState::onSelectProject(Action *)
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
 	_game->pushState(new ResearchInfoState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));

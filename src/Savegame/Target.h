@@ -61,7 +61,7 @@ public:
 	/// Gets the target's followers.
 	std::vector<Target*> *getFollowers();
 	/// Gets the distance to another target.
-	double getDistance(Target *target) const;
+	double getDistance(const Target *target) const;
 };
 
 }

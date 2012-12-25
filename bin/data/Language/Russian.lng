@@ -2083,3 +2083,9 @@ STR_DESERT
 Пустыня
 STR_POLAR
 Заполярье
+STR_RANDOM_BATTLE
+случайная битва
+STR_MIXED
+смешанные
+STR_RIGHT_CLICK_TO_DELETE
+Щелкните правой кнопкой мыши чтобы удалить.

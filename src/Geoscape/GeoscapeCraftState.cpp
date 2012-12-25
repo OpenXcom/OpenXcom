@@ -289,7 +289,7 @@ void GeoscapeCraftState::init()
  * Returns the craft back to its base.
  * @param action Pointer to an action.
  */
-void GeoscapeCraftState::btnBaseClick(Action *action)
+void GeoscapeCraftState::btnBaseClick(Action *)
 {
 	_game->popState();
 	_craft->returnToBase();
@@ -300,7 +300,7 @@ void GeoscapeCraftState::btnBaseClick(Action *action)
  * Changes the craft's target.
  * @param action Pointer to an action.
  */
-void GeoscapeCraftState::btnTargetClick(Action *action)
+void GeoscapeCraftState::btnTargetClick(Action *)
 {
 	_game->popState();
 	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
@@ -311,7 +311,7 @@ void GeoscapeCraftState::btnTargetClick(Action *action)
  * Sets the craft to patrol the current location.
  * @param action Pointer to an action.
  */
-void GeoscapeCraftState::btnPatrolClick(Action *action)
+void GeoscapeCraftState::btnPatrolClick(Action *)
 {
 	_game->popState();
 	_craft->setDestination(0);
@@ -322,7 +322,7 @@ void GeoscapeCraftState::btnPatrolClick(Action *action)
  * Closes the window.
  * @param action Pointer to an action.
  */
-void GeoscapeCraftState::btnCancelClick(Action *action)
+void GeoscapeCraftState::btnCancelClick(Action *)
 {
 	// Go to the last known UFO position
 	if (_waypoint != 0)

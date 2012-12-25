@@ -196,7 +196,7 @@ void ManufactureInfoState::buildUi()
  * Stop this Production. Return to previous screen
  * @param action a pointer to an Action
 */
-void ManufactureInfoState::btnStopClick (Action * action)
+void ManufactureInfoState::btnStopClick (Action *)
 {
 	_base->removeProduction(_production);
 	exitState();
@@ -206,7 +206,7 @@ void ManufactureInfoState::btnStopClick (Action * action)
  * Start this Production(if new). Return to previous screen
  * @param action a pointer to an Action
 */
-void ManufactureInfoState::btnOkClick (Action * action)
+void ManufactureInfoState::btnOkClick (Action *)
 {
 	if(_item)
 	{

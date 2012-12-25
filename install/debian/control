@@ -1,0 +1,27 @@
+Source: openxcom
+Section: games
+Priority: optional
+Maintainer: Krzysztof Knapik <knapsu@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), cmake,
+	libsdl1.2-dev,
+	libsdl-mixer1.2-dev,
+	libsdl-gfx1.2-dev,
+	libyaml-cpp-dev
+Standards-Version: 3.9.3
+Homepage: http://openxcom.org/
+Vcs-Git: git://github.com/SupSuper/OpenXcom.git
+Vcs-Browser: https://github.com/SupSuper/OpenXcom
+
+Package: openxcom
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: openxcom-data
+Description: Classic turn-based strategy game
+ UFO: Enemy Unknown (X-COM: UFO Defense in USA) is a popular
+ strategy video game made by Mythos / Microprose, where you
+ take control of the X-COM organization to fight off the alien
+ menace invading Earth.
+ OpenXcom is an open-source reimplementation of that game,
+ licensed under the GPL and written in C++ / SDL.
+ IMPORTANT: OpenXcom requires game resources from original
+ game (DOS or Steam version).

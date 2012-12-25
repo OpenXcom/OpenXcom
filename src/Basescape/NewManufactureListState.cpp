@@ -107,7 +107,7 @@ void NewManufactureListState::init ()
  * Return to previous screen
  * @param action a pointer to an Action
 */
-void NewManufactureListState::btnOkClick(Action * action)
+void NewManufactureListState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -116,7 +116,7 @@ void NewManufactureListState::btnOkClick(Action * action)
  * Open the Production settings screen
  * @param action a pointer to an Action
 */
-void NewManufactureListState::lstProdClick (Action * action)
+void NewManufactureListState::lstProdClick (Action *)
 {
 	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)

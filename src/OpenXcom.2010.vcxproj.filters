@@ -663,6 +663,9 @@
     <ClCompile Include="Savegame\AlienBase.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\AlienMission.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
     <ClCompile Include="Geoscape\AlienBaseState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -677,6 +680,36 @@
     </ClCompile>
     <ClCompile Include="Battlescape\NoContainmentState.cpp">
       <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\WeightedOptions.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\AlienStrategy.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\UfoTrajectory.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleAlienMission.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\BaseDefenseState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\VictoryState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\DefeatState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\DeleteGameState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\ConfimCydoniaState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\BaseDestroyedState.cpp">
+      <Filter>Geoscape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1343,6 +1376,9 @@
     <ClInclude Include="Savegame\AlienBase.h">
       <Filter>Savegame</Filter>
     </ClInclude>
+    <ClInclude Include="Savegame\AlienMission.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
     <ClInclude Include="Geoscape\AlienBaseState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
@@ -1360,6 +1396,36 @@
     </ClInclude>
     <ClInclude Include="Battlescape\NoContainmentState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\WeightedOptions.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\AlienStrategy.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\UfoTrajectory.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\RuleAlienMission.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\BaseDefenseState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\VictoryState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\DefeatState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\DeleteGameState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\ConfirmCydoniaState.h">
+      <Filter>Geoscape</Filter>
+    </ClInclude>
+    <ClInclude Include="Geoscape\BaseDestroyedState.h">
+      <Filter>Geoscape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

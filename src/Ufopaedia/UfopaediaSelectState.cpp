@@ -87,7 +87,7 @@ namespace OpenXcom
 	 * Returns to the previous screen.
 	 * @param action Pointer to an action.
 	 */
-	void UfopaediaSelectState::btnOkClick(Action *action)
+	void UfopaediaSelectState::btnOkClick(Action *)
 	{
 		_game->popState();
 	}
@@ -96,7 +96,7 @@ namespace OpenXcom
 	 *
 	 * @param action Pointer to an action.
 	 */
-	void UfopaediaSelectState::lstSelectionClick(Action *action)
+	void UfopaediaSelectState::lstSelectionClick(Action *)
 	{
 		Ufopaedia::openArticle(_game, _article_list[_lstSelection->getSelectedRow()]);
 	}

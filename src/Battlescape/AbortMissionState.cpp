@@ -65,7 +65,7 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
-			if ((*i)->isInExitArea())
+			if ((_battleGame->getNextStage() != "" && (*i)->isInExitArea(END_POINT)) || ((*i)->isInExitArea() && _battleGame->getNextStage() == ""))
 			{
 				_inExitArea++;
 			}
@@ -94,7 +94,11 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	ss.str(L"");
 	ss << _outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
 	_txtOutsideExit->setText(ss.str());
-
+	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
+	{
+		_txtInExit->setVisible(false);
+		_txtOutsideExit->setVisible(false);
+	}
 	_txtAbort->setColor(Palette::blockOffset(0));
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
@@ -125,17 +129,17 @@ AbortMissionState::~AbortMissionState()
  * Confirms to abort the mission.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnOkClick(Action *action)
+void AbortMissionState::btnOkClick(Action *)
 {
 	_game->popState();
-	_state->finishBattle(true);
+	_state->finishBattle(true, _inExitArea);
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnCancelClick(Action *action)
+void AbortMissionState::btnCancelClick(Action *)
 {
 	_game->popState();
 }

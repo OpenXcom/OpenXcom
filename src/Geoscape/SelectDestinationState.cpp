@@ -30,6 +30,10 @@
 #include "../Interface/TextButton.h"
 #include "../Savegame/Waypoint.h"
 #include "MultipleTargetsState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Craft.h"
+#include "../Ruleset/RuleCraft.h"
+#include "ConfirmCydoniaState.h"
 
 namespace OpenXcom
 {
@@ -54,6 +58,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(60, 12, 110, 8);
+	_btnCydonia = new TextButton(60, 12, 180, 8);
 	_txtTitle = new Text(100, 9, 10, 10);
 
 	// Set palette
@@ -68,7 +73,9 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	add(_window);
 	add(_btnCancel);
+	add(_btnCydonia);
 	add(_txtTitle);
+
 
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&SelectDestinationState::globeClick);
@@ -100,6 +107,17 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION"));
+
+	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
+	{
+		_btnCydonia->setVisible(false);
+	}
+	else
+	{
+		_btnCydonia->setColor(Palette::blockOffset(8)+5);
+		_btnCydonia->setText(_game->getLanguage()->getString("STR_CYDONIA"));
+		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
+	}
 }
 
 /**
@@ -173,7 +191,7 @@ void SelectDestinationState::globeClick(Action *action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateLeftPress(Action *action)
+void SelectDestinationState::btnRotateLeftPress(Action *)
 {
 	_globe->rotateLeft();
 }
@@ -182,7 +200,7 @@ void SelectDestinationState::btnRotateLeftPress(Action *action)
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateLeftRelease(Action *action)
+void SelectDestinationState::btnRotateLeftRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -191,7 +209,7 @@ void SelectDestinationState::btnRotateLeftRelease(Action *action)
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateRightPress(Action *action)
+void SelectDestinationState::btnRotateRightPress(Action *)
 {
 	_globe->rotateRight();
 }
@@ -200,7 +218,7 @@ void SelectDestinationState::btnRotateRightPress(Action *action)
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateRightRelease(Action *action)
+void SelectDestinationState::btnRotateRightRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -209,7 +227,7 @@ void SelectDestinationState::btnRotateRightRelease(Action *action)
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateUpPress(Action *action)
+void SelectDestinationState::btnRotateUpPress(Action *)
 {
 	_globe->rotateUp();
 }
@@ -218,7 +236,7 @@ void SelectDestinationState::btnRotateUpPress(Action *action)
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateUpRelease(Action *action)
+void SelectDestinationState::btnRotateUpRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -227,7 +245,7 @@ void SelectDestinationState::btnRotateUpRelease(Action *action)
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateDownPress(Action *action)
+void SelectDestinationState::btnRotateDownPress(Action *)
 {
 	_globe->rotateDown();
 }
@@ -236,7 +254,7 @@ void SelectDestinationState::btnRotateDownPress(Action *action)
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateDownRelease(Action *action)
+void SelectDestinationState::btnRotateDownRelease(Action *)
 {
 	_globe->rotateStop();
 }
@@ -245,7 +263,7 @@ void SelectDestinationState::btnRotateDownRelease(Action *action)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomInLeftClick(Action *action)
+void SelectDestinationState::btnZoomInLeftClick(Action *)
 {
 	_globe->zoomIn();
 }
@@ -254,7 +272,7 @@ void SelectDestinationState::btnZoomInLeftClick(Action *action)
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomInRightClick(Action *action)
+void SelectDestinationState::btnZoomInRightClick(Action *)
 {
 	_globe->zoomMax();
 }
@@ -263,7 +281,7 @@ void SelectDestinationState::btnZoomInRightClick(Action *action)
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomOutLeftClick(Action *action)
+void SelectDestinationState::btnZoomOutLeftClick(Action *)
 {
 	_globe->zoomOut();
 }
@@ -272,7 +290,7 @@ void SelectDestinationState::btnZoomOutLeftClick(Action *action)
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomOutRightClick(Action *action)
+void SelectDestinationState::btnZoomOutRightClick(Action *)
 {
 	_globe->zoomMin();
 }
@@ -281,9 +299,14 @@ void SelectDestinationState::btnZoomOutRightClick(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnCancelClick(Action *action)
+void SelectDestinationState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
 
+void SelectDestinationState::btnCydoniaClick(Action *)
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(5)), Palette::backPos, 16);
+	_game->pushState(new ConfirmCydoniaState(_game, _craft));
+}
 }

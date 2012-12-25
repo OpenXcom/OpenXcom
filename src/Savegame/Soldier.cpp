@@ -174,7 +174,7 @@ void Soldier::setName(const std::wstring &name)
  * Returns the craft the soldier is assigned to.
  * @return Pointer to craft.
  */
-Craft *const Soldier::getCraft() const
+Craft *Soldier::getCraft() const
 {
 	return _craft;
 }
@@ -380,7 +380,7 @@ bool Soldier::isPromoted()
  * Returns the unit's current armor.
  * @return Pointer to armor data.
  */
-Armor *const Soldier::getArmor() const
+Armor *Soldier::getArmor() const
 {
 	return _armor;
 }
@@ -430,7 +430,7 @@ void Soldier::heal()
  * Returns the list of EquipmentLayoutItems of a soldier.
  * @return Pointer to the EquipmentLayoutItem list.
  */
-std::vector<EquipmentLayoutItem*> *const Soldier::getEquipmentLayout()
+std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 {
 	return &_equipmentLayout;
 }

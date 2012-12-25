@@ -93,7 +93,7 @@ void CraftErrorState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void CraftErrorState::btnOkClick(Action *action)
+void CraftErrorState::btnOkClick(Action *)
 {
 	_game->popState();
 }
@@ -102,7 +102,7 @@ void CraftErrorState::btnOkClick(Action *action)
  * Closes the window.
  * @param action Pointer to an action.
  */
-void CraftErrorState::btnOk5SecsClick(Action *action)
+void CraftErrorState::btnOk5SecsClick(Action *)
 {
 	_state->timerReset();
 	_game->popState();
