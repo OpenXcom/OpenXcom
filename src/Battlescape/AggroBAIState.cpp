@@ -152,6 +152,7 @@ void AggroBAIState::think(BattleAction *action)
 	{
 		// if we see the target, we either can shoot him, or take cover.
 		bool takeCover = true;
+		bool charge = false;
 		int number = RNG::generate(0,100);
 
 		// lost health, chances to take cover get bigger
@@ -172,22 +173,60 @@ void AggroBAIState::think(BattleAction *action)
 		if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
 		{
 			takeCover = true;
-			for (int x = 0; x != _unit->getArmor()->getSize(); ++x)
+			if (!_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
 			{
-				for (int y = 0; y != _unit->getArmor()->getSize(); ++y)
-				{
-					Position p (x, y, 0);
-					if (_game->getTileEngine()->distance(_unit->getPosition() + p, _aggroTarget->getPosition()) == 1)
-					{
-						takeCover = false;
-						break;
-					}
-				}
-				if (!takeCover)
-					break;
+				charge = true;
 			}
 		}
-		//if distance ==1 attack instead
+
+		if (charge)
+		{
+			int directions[9] = {3, 4, 5, 2, -1, 7, 1, 0, 6};
+			int entry = 0;
+			for (int x = -1; x < 2; ++x)
+			{
+				for (int y = -1; y < 2; ++y)
+				{
+					if (x != 0 && y != 0) // skip the tile the target is standing on.
+					{
+						Position p(x, y, 0);
+						// offset the target tile to the north and west for large units.
+						if (action->actor->getArmor()->getSize() > 1)
+						{
+							if (x == -1)
+								--p.x;
+							if (y == -1)
+								--p.y;
+						}
+						// offset the target tile to the south and east for large targets.
+						if (_aggroTarget->getArmor()->getSize() > 1)
+						{
+							if (x == 1)
+								++p.x;
+							if (y == 1)
+								++p.y;
+						}
+
+						Position checkPath = _aggroTarget->getPosition() + p;
+						_game->getPathfinding()->calculate(_unit, checkPath);
+						if (_game->getPathfinding()->getStartDirection() != -1 &&  // if this is a valid path
+							!_game->getPathfinding()->isBlocked(_game->getTile(checkPath), _game->getTile(_aggroTarget->getPosition()), directions[entry]) && // make sure there's no walls between us and our target when we get there.
+							_game->getTileEngine()->distance(_unit->getPosition(), checkPath) < _game->getTileEngine()->distance(_unit->getPosition(), action->target) // is this closer?
+							&& (_game->getPathfinding()->getTUCost(_unit->getPosition(), _unit->getDirection(), &checkPath, _unit) // got enough TUs to get there?
+								+ _unit->getActionTUs(BA_HIT, _unit->getMainHandWeapon())) // got enough TUs to move to attack as well?
+								<= _unit->getTimeUnits() - 4) // reserve 4 TUs for turning towards the target
+						{
+							action->target = checkPath;
+							takeCover = false;
+						}
+						_game->getPathfinding()->abortPath();
+					}
+					++entry;
+				}
+				++entry;
+			}
+		}
+
 		if (!takeCover)
 		{
 			_timesNotSeen = 0;
@@ -229,7 +268,6 @@ void AggroBAIState::think(BattleAction *action)
 			{
 				action->weapon = action->actor->getMainHandWeapon();
 				// out of ammo or no weapon or ammo at all, we have to take cover
-				// no need for an ammo check here, getmainweapon does that already
 				if (!action->weapon)
 				{
 					takeCover = true;
@@ -238,11 +276,11 @@ void AggroBAIState::think(BattleAction *action)
 				{
 					if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
 					{
-						if (action->weapon->getRules()->getBattleType() == BT_MELEE)
+						if ( _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
 						{
-							action->actor->lookAt(_aggroTarget->getPosition());
-							while (action->actor->getStatus() == STATUS_TURNING)
-								action->actor->turn();
+							_unit->lookAt(_aggroTarget->getPosition(), false);
+							while (_unit->getStatus() == STATUS_TURNING)
+								_unit->turn();
 							action->type = BA_HIT;
 						}
 						else if (RNG::generate(1,10) < 5)
@@ -262,43 +300,14 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 
+
 		if (takeCover)
 		{
 			// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
 			// if there is no such tile, we run away from the target.
-			// unless we use melee, in which case, try to get within one tile of our target asap.
 			action->type = BA_WALK;
 			int tries = 0;
 			bool coverFound = false;
-			if(action->actor->getMainHandWeapon() && action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE )
-			{
-				int directions[9] = {3, 4, 5, 2, -1, 7, 1, 0, 6};
-				int entry = 0;
-				for (int x = -1; x < 2; ++x)
-				{
-					for (int y = -1; y < 2; ++y)
-					{
-						Position p(x, y, 0);
-						if (action->actor->getArmor()->getSize() > 1)
-						{
-							if (x == -1)
-								--p.x;
-							if (y == -1)
-								--p.y;
-						}
-						Position checkPath = _aggroTarget->getPosition() + p;
-						_game->getPathfinding()->calculate(_unit, checkPath);
-						if (_game->getPathfinding()->getStartDirection() != -1 &&
-							!_game->getPathfinding()->isBlocked(_game->getTile(checkPath), _game->getTile(_aggroTarget->getPosition()), directions[entry]) &&
-							_game->getTileEngine()->distance(_unit->getPosition(), checkPath) < _game->getTileEngine()->distance(_unit->getPosition(), action->target))
-								action->target = checkPath;
-						_game->getPathfinding()->abortPath();
-						++entry;
-					}
-					++entry;
-				}
-			}
-			else
 			while (tries < 30 && !coverFound)
 			{
 				tries++;
