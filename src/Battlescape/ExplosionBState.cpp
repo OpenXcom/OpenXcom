@@ -80,7 +80,7 @@ void ExplosionBState::init()
 						|| _item->getRules()->getDamageType() == DT_SMOKE
 						|| _item->getRules()->getDamageType() == DT_STUN);
 	}
-	else if (_tile)
+	else if (_tile && _tile->getExplosive())
 	{
 		_power = _tile->getExplosive();
 		_areaOfEffect = true;
