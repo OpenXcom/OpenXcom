@@ -100,86 +100,6 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug|x64"
-			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
-			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
-			ConfigurationType="1"
-			CharacterSet="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="true"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
-				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
-				GenerateManifest="true"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-				EmbedManifest="true"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
 			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
@@ -257,6 +177,86 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(TargetDir)&quot;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(ProjectDir)..\bin\$(ConfigurationName)\$(PlatformName)"
+			IntermediateDirectory="$(ProjectDir)..\obj\$(ConfigurationName)\$(PlatformName)"
+			ConfigurationType="1"
+			CharacterSet="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
+				GenerateManifest="true"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				EmbedManifest="true"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="copy /y &quot;$(ProjectDir)..\deps\lib\$(PlatformName)\*.dll&quot; &quot;$(ProjectDir)..\bin\$(PlatformName)\&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -1279,19 +1279,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\BaseDestroyedState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\BaseDefenseState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Geoscape\BaseDefenseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.h"
 				>
 			</File>
 			<File
@@ -1311,7 +1311,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\ConfirmCydoniaState.cpp"
+				RelativePath=".\Geoscape\ConfimCydoniaState.cpp"
 				>
 			</File>
 			<File
@@ -1795,6 +1795,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\AlienStrategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Base.cpp"
 				>
 			</File>
@@ -2010,14 +2018,6 @@
 				RelativePath=".\Savegame\WeightedOptions.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Savegame\AlienStrategy.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\AlienStrategy.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource"
@@ -2104,6 +2104,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\MapDataSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.h"
 				>
 			</File>
 			<File
@@ -2232,14 +2240,6 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\Unit.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleAlienMission.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleAlienMission.h"
 				>
 			</File>
 		</Filter>
