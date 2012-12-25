@@ -163,7 +163,15 @@ void UnitWalkBState::think()
 		else
 		{
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnit(_unit);
+			if (_pf->getStrafeMove()) {
+				// This is where we fake out the strafe movement direction so the unit "moonwalks"
+				int dirTemp = _unit->getDirection();
+				_unit->setDirection(_unit->getFaceDirection());
+				_parent->getMap()->cacheUnit(_unit);
+				_unit->setDirection(dirTemp);
+			} else {
+				_parent->getMap()->cacheUnit(_unit);
+			}
 		}
 	}
 
@@ -188,6 +196,10 @@ void UnitWalkBState::think()
 		int dir = _pf->getStartDirection();
 		if (dir != -1)
 		{
+			if (_pf->getStrafeMove()) {
+				_unit->setFaceDirection(_unit->getDirection());
+			}
+
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
@@ -204,9 +216,9 @@ void UnitWalkBState::think()
 				return;
 			}
 
-			// we are looking in the wrong way, turn first
+			// we are looking in the wrong way, turn first (unless strafing)
 			// we are not using the turn state, because turning during walking costs no tu
-			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP)
+			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
 				_unit->lookAt(dir);
 				return;
@@ -248,7 +260,15 @@ void UnitWalkBState::think()
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnit(_unit);
+			if (_pf->getStrafeMove()) {
+				// This is where we fake out the strafe movement direction so the unit "moonwalks"
+				int dirTemp = _unit->getDirection();
+				_unit->setDirection(_unit->getFaceDirection());
+				_parent->getMap()->cacheUnit(_unit);
+				_unit->setDirection(dirTemp);
+			} else {
+				_parent->getMap()->cacheUnit(_unit);
+			}
 		}
 		else
 		{
