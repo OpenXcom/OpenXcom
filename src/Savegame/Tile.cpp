@@ -70,10 +70,33 @@ Tile::~Tile()
 void Tile::load(const YAML::Node &node)
 {
 	//node["position"] >> _pos;
-	for (int i =0; i < 4; i++)
+	if(const YAML::Node *pName = node.FindValue("mapDataID0"))
 	{
-		node["mapDataID"][i] >> _mapDataID[i];
-		node["mapDataSetID"][i] >> _mapDataSetID[i];
+		*pName >> _mapDataID[0];
+		_mapDataID[1] = -1;
+		_mapDataID[2] = -1;
+		_mapDataID[3] = -1;
+	}
+	else
+	{
+		for (int i =0; i < 4; i++)
+		{
+			node["mapDataID"][i] >> _mapDataID[i];
+		}
+	}
+	if(const YAML::Node *pName = node.FindValue("mapDataSetID0"))
+	{
+		*pName >> _mapDataSetID[0];
+		_mapDataSetID[1] = -1;
+		_mapDataSetID[2] = -1;
+		_mapDataSetID[3] = -1;
+	}
+	else
+	{
+		for (int i =0; i < 4; i++)
+		{
+			node["mapDataSetID"][i] >> _mapDataSetID[i];
+		}
 	}
 	if(const YAML::Node *pName = node.FindValue("fire"))
 	{
@@ -85,7 +108,7 @@ void Tile::load(const YAML::Node &node)
 	}
 	if(const YAML::Node *pName = node.FindValue("smoke"))
 	{
-		*pName >> _smoke;
+		node["smoke"] >> _smoke;
 	}
 	else
 	{
@@ -97,6 +120,12 @@ void Tile::load(const YAML::Node &node)
 		node["discovered"][1] >> _discovered[1];
 		node["discovered"][2] >> _discovered[2];
 	}
+	else
+	{
+		_discovered[0] = false;
+		_discovered[1] = false;
+		_discovered[2] = false;
+	}
 }
 
 /**
@@ -107,15 +136,28 @@ void Tile::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "position" << YAML::Value << _pos;
-	out << YAML::Key << "mapDataID" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
-	out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _mapDataSetID[0] << _mapDataSetID[1] << _mapDataSetID[2] << _mapDataSetID[3] << YAML::EndSeq;
-	if (_smoke)
-		out << YAML::Key << "smoke" << YAML::Value << _smoke;
-	if (_fire)
-		out << YAML::Key << "fire" << YAML::Value << _fire;
-	if (_discovered[0] || _discovered[0] || _discovered[0])
+	if ((_mapDataID[1] != -1) || (_mapDataID[2] != -1) || (_mapDataID[3] != -1))
+	{
+		out << YAML::Key << "mapDataID" << YAML::Value << YAML::Flow;
+		out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
+	}
+	else
+	{
+		out << YAML::Key << "mapDataID0" << YAML::Value << _mapDataID[0];
+	}
+	if ((_mapDataSetID[1] != -1) || (_mapDataSetID[2] != -1) || (_mapDataSetID[3] != -1))
+	{
+		out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;
+		out << YAML::BeginSeq << _mapDataSetID[0] << _mapDataSetID[1] << _mapDataSetID[2] << _mapDataSetID[3] << YAML::EndSeq;
+	}
+	else
+	{
+		//out << YAML::BeginSeq << _mapDataSetID[0] << YAML::EndSeq;
+		out << YAML::Key << "mapDataSetID0" << YAML::Value << _mapDataSetID[0];
+	}
+	if (_smoke != 0) out << YAML::Key << "smoke" << YAML::Value << _smoke;
+	if (_fire  != 0) out << YAML::Key << "fire" << YAML::Value << _fire;
+	if ((_discovered[0] == true) || (_discovered[1] == true) || (_discovered[1] == true))
 	{
 		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;

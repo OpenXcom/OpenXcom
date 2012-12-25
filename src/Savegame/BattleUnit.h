@@ -87,6 +87,7 @@ private:
 	bool _needPainKiller;
 	int _motionPoints;
 	int _kills;
+	int _faceDirection; // used only during strafeing moves
 	
 	// static data
 	std::string _type;
@@ -124,8 +125,12 @@ public:
 	const Position& getLastPosition() const;
 	/// Sets the unit's direction 0-7.
 	void setDirection(int direction);
+	/// Sets the unit's face direction (only used by strafing moves)
+	void setFaceDirection(int direction);
 	/// Gets the unit's direction.
 	int getDirection() const;
+	/// Gets the unit's face direction (only used by strafing moves)
+	int getFaceDirection() const;
 	/// Gets the unit's turret direction.
 	int getTurretDirection() const;
 	/// Gets the unit's vertical direction.
