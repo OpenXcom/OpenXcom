@@ -1143,7 +1143,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			{
 				int result2 = -1;
 				int result3 = -1;
-				if (cz % 23)
+				if ((cz + 1) % 24)
 					result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
 				if (cz > 0)
 					voxelCheck(Position(cx, cy, cz-1), excludeUnit);
