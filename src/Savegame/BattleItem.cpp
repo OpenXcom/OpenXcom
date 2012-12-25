@@ -81,6 +81,7 @@ void BattleItem::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 
+	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	if (_owner)
 	{

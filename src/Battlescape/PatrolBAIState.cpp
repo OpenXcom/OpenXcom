@@ -138,12 +138,15 @@ void PatrolBAIState::think(BattleAction *action)
 	if (_fromNode == 0)
 	{
 		// assume closest node as "from node"
+		// on same level to avoid strange things, and the node has to match unit size or it will freeze
 		int closest = 1000000;
 		for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 		{
 			node = *i;
 			int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
-			if (d < closest)
+			if (_unit->getPosition().z == node->getPosition().z 
+				&& d < closest 
+				&& (!(node->getType() & Node::TYPE_SMALL) || _unit->getArmor()->getSize() == 1))
 			{
 				_fromNode = node;
 				closest = d;
