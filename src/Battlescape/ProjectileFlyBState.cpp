@@ -380,15 +380,18 @@ bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
 		for (int y = 0; y != action->actor->getArmor()->getSize(); ++y)
 		{
 			Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0) + p));
-			BattleUnit *target (tile->getUnit());
-			if (!target && (action->actor->getHeight() + _parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0))->getTerrainLevel() > 24))
-				target = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
-			if (target && target != action->actor)
+			if (tile)
 			{
-				for (std::vector<BattleUnit*>::iterator b = action->actor->getVisibleUnits()->begin(); b != action->actor->getVisibleUnits()->end(); ++b)
+				BattleUnit *target (tile->getUnit());
+				if (!target && (action->actor->getHeight() + _parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0))->getTerrainLevel() > 24))
+					target = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
+				if (target && target != action->actor)
 				{
-					if (*b == target && !_parent->getPathfinding()->isBlocked(_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0)), tile, action->actor->getDirection()))
-						return true;
+					for (std::vector<BattleUnit*>::iterator b = action->actor->getVisibleUnits()->begin(); b != action->actor->getVisibleUnits()->end(); ++b)
+					{
+						if (*b == target && !_parent->getPathfinding()->isBlocked(_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0)), tile, action->actor->getDirection()))
+							return true;
+					}
 				}
 			}
 		}

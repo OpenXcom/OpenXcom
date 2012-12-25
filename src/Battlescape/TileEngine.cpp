@@ -1442,14 +1442,17 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 		for (int y = 0; y != unit->getArmor()->getSize(); ++y)
 		{
 			Tile * tile (_save->getTile(Position(unit->getPosition() + Position(x, y, 0) + p)));
-			if (unit->getHeight() + _save->getTile(unit->getPosition() + Position(x, y, 0))->getTerrainLevel() > 24 && tile->getUnit() && tile->getUnit() != target)
-				tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
-			if (tile->getUnit() && tile->getUnit() == target)
+			if (tile)
 			{
-				for (std::vector<BattleUnit*>::iterator b = unit->getVisibleUnits()->begin(); b != unit->getVisibleUnits()->end(); ++b)
+				if (unit->getHeight() + _save->getTile(unit->getPosition() + Position(x, y, 0))->getTerrainLevel() > 24 && tile->getUnit() && tile->getUnit() != target)
+					tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
+				if (tile->getUnit() && tile->getUnit() == target)
 				{
-					if (*b == target && !_save->getPathfinding()->isBlocked(_save->getTile(unit->getPosition() + Position(x, y, 0)), tile, unit->getDirection()))
-						return true;
+					for (std::vector<BattleUnit*>::iterator b = unit->getVisibleUnits()->begin(); b != unit->getVisibleUnits()->end(); ++b)
+					{
+						if (*b == target && !_save->getPathfinding()->isBlocked(_save->getTile(unit->getPosition() + Position(x, y, 0)), tile, unit->getDirection()))
+							return true;
+					}
 				}
 			}
 		}
