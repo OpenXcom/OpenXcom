@@ -171,7 +171,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
 		// check if we did spot new units
-		if (unitspotted)
+		if (unitspotted && !_unit->getCharging() != 0)
 		{
 			_pf->abortPath();
 			return;
@@ -248,7 +248,8 @@ void UnitWalkBState::think()
 				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnit(_unit);
+			if (!(_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())))
+				_parent->getMap()->cacheUnit(_unit);
 		}
 		else
 		{
@@ -264,7 +265,7 @@ void UnitWalkBState::think()
 		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnit(_unit);
-		if (unitspotted)
+		if (unitspotted && !_unit->getCharging() != 0)
 		{
 			_pf->abortPath();
 			return;
@@ -285,6 +286,20 @@ void UnitWalkBState::cancel()
  */
 void UnitWalkBState::postPathProcedures()
 {
+	if (_action.actor->getCharging() != 0)
+	{
+		_unit->lookAt(_action.actor->getCharging()->getPosition(), false);
+		while (_action.actor->getStatus() == STATUS_TURNING)
+			_action.actor->turn();
+		if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging()))
+		{
+			_action.target = _action.actor->getCharging()->getPosition();
+			_action.weapon = _action.actor->getMainHandWeapon();
+			_action.type = BA_HIT;
+			_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
+			_action.actor->setCharging(0);
+		}
+	}
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
 	_parent->getMap()->cacheUnit(_unit);

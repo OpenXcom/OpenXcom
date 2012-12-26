@@ -375,9 +375,9 @@ bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
 {
 	Position p;
 	Pathfinding::directionToVector(action->actor->getDirection(), &p);
-	for (int x = 0; x != action->actor->getArmor()->getSize(); ++x)
+	for (int x = 0; x <= action->actor->getArmor()->getSize(); ++x)
 	{
-		for (int y = 0; y != action->actor->getArmor()->getSize(); ++y)
+		for (int y = 0; y <= action->actor->getArmor()->getSize(); ++y)
 		{
 			Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0) + p));
 			if (tile)

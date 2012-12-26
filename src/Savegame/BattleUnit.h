@@ -103,6 +103,7 @@ private:
 	SoldierGender _gender;
 	std::string _activeHand;
 	Soldier *_geoscapeSoldier;
+	BattleUnit *_charging;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -345,7 +346,8 @@ public:
 	/// Gets the unit's faction.
 	UnitFaction killedBy() const;
 	void killedBy(UnitFaction f);
-
+	void setCharging(BattleUnit *chargeTarget);
+	BattleUnit *getCharging();
 };
 
 }

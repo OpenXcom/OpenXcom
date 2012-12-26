@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -181,7 +181,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["visible"] >> _visible;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
-
+	_charging = 0;
 
 
 }
@@ -2035,6 +2035,14 @@ void BattleUnit::killedBy(UnitFaction f)
 	_killedBy = f;
 }
 
+void BattleUnit::setCharging(BattleUnit *chargeTarget)
+{
+	_charging = chargeTarget;
+}
 
+BattleUnit *BattleUnit::getCharging()
+{
+	return _charging;
+}
 }
 

@@ -764,7 +764,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
-			if (tuCost > tuMax) // Run out of TUs
+			if (currentNode->getTUCost() + tuCost > tuMax) // Run out of TUs
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.

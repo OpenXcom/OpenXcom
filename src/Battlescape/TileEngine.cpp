@@ -1437,9 +1437,9 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 {
 	Position p;
 	Pathfinding::directionToVector(unit->getDirection(), &p);
-	for (int x = 0; x != unit->getArmor()->getSize(); ++x)
+	for (int x = 0; x <= unit->getArmor()->getSize(); ++x)
 	{
-		for (int y = 0; y != unit->getArmor()->getSize(); ++y)
+		for (int y = 0; y <= unit->getArmor()->getSize(); ++y)
 		{
 			Tile * tile (_save->getTile(Position(unit->getPosition() + Position(x, y, 0) + p)));
 			if (tile)
