@@ -188,32 +188,28 @@ void AggroBAIState::think(BattleAction *action)
 				// get a list of the tiles we can reach and still get an attack in
 				std::vector<int> reachable = _game->getPathfinding()->findReachable(action->actor, (action->actor->getTimeUnits() - action->actor->getActionTUs(BA_HIT, action->actor->getMainHandWeapon())));
 				takeCover = true;
-				for (std::vector<int>::iterator reach = reachable.begin(); reach != reachable.end() ; ++reach)
+				bool targetFound = false;
+				for (std::vector<int>::iterator reach = reachable.begin(); reach != reachable.end() && !targetFound; ++reach)
 				{
-					for (int x = 0 - action->actor->getArmor()->getSize(); x <= _aggroTarget->getArmor()->getSize(); ++x)
+					for (int x = 0 - action->actor->getArmor()->getSize(); x <= _aggroTarget->getArmor()->getSize() && !targetFound; ++x)
 					{
-						for (int y = 0 - action->actor->getArmor()->getSize(); y <= _aggroTarget->getArmor()->getSize(); ++y)
+						for (int y = 0 - action->actor->getArmor()->getSize(); y <= _aggroTarget->getArmor()->getSize() && !targetFound; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
 								Position p (x, y, 0);
 								Position checkPath = _aggroTarget->getPosition() + p;
-								_game->getPathfinding()->calculate(action->actor, checkPath);
-								if (_game->getPathfinding()->getStartDirection() != -1 &&  // if this is a valid path
-									_game->getTileEngine()->distance(_unit->getPosition(), checkPath) < _game->getTileEngine()->distance(_unit->getPosition(), action->target)) // is this closer?
+								// if the tile we are checking is on the reachable list
+								if (*reach == _game->getTileIndex(checkPath))
 								{
-									// if the tile we are checking is on the reachable list
-									if (*reach == _game->getTileIndex(checkPath))
-									{
-										// CHAAAAAAARGE!
-										action->target = checkPath;
-										action->type = BA_WALK;
-										charge = true;
-										_unit->setCharging(_aggroTarget);
-									}
+									// CHAAAAAAARGE!
+									action->target = checkPath;
+									action->type = BA_WALK;
+									charge = true;
+									_unit->setCharging(_aggroTarget);
+									targetFound = true;
 								}
 							}
-							_game->getPathfinding()->abortPath();							
 						}
 					}
 				}
