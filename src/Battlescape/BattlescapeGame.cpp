@@ -730,7 +730,7 @@ void BattlescapeGame::popState()
 		else
 		{
 			// spend TUs
-			action.actor->spendTimeUnits(action.TU, false);
+			action.actor->spendTimeUnits(action.TU, _debugPlay);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
 				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
