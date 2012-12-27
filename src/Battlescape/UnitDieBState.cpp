@@ -115,14 +115,7 @@ void UnitDieBState::think()
 	{
 		if (!_unit->getVisibleUnits()->empty())
 		{
-			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
-			{
-				(*i)->setVisible(false);
-			}
-			for (std::vector<BattleUnit*>::iterator i = _parent->getSave()->getUnits()->begin(); i != _parent->getSave()->getUnits()->end(); ++i)
-			{
-				_parent->getTileEngine()->calculateFOV(*i);
-			}
+			_unit->clearVisibleUnits();
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{
