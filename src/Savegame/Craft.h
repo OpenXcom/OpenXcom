@@ -54,6 +54,7 @@ private:
 	bool _lowFuel;
 	bool _inBattlescape;
 	bool _inDogfight;
+	std::wstring _name;
 public:
 	/// Creates a craft of the specified type.
 	Craft(RuleCraft *rules, Base *base, int id = 0);
@@ -73,6 +74,8 @@ public:
 	int getId() const;
 	/// Gets the craft's name.
 	std::wstring getName(Language *lang) const;
+	/// Sets the craft's name.
+	void setName(const std::wstring &newName, Language *lang);
 	/// Gets the craft's base.
 	Base *getBase() const;
 	/// Sets the craft's base.

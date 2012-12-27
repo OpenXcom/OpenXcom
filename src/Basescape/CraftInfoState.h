@@ -28,6 +28,7 @@ class Base;
 class TextButton;
 class Window;
 class Text;
+class TextEdit;
 class Surface;
 
 /**
@@ -42,7 +43,8 @@ private:
 
 	TextButton *_btnOk, *_btnW1, *_btnW2, *_btnCrew, *_btnEquip, *_btnArmor;
 	Window *_window;
-	Text *_txtCraft, *_txtDamage, *_txtFuel;
+	TextEdit *_edtCraft;
+	Text *_txtDamage, *_txtFuel;
 	Text *_txtW1Name, *_txtW1Ammo, *_txtW1Max, *_txtW2Name, *_txtW2Ammo, *_txtW2Max;
 	Surface *_sprite, *_weapon1, *_weapon2, *_crew, *_equip;
 public:
@@ -64,6 +66,8 @@ public:
 	void btnEquipClick(Action *action);
 	/// Handler for clicking the Armor button.
 	void btnArmorClick(Action *action);
+	/// Handler for pressing a key on the Name edit.
+	void edtCraftKeyPress(Action *action);
 };
 
 }
