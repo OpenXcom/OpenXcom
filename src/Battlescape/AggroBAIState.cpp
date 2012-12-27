@@ -173,7 +173,7 @@ void AggroBAIState::think(BattleAction *action)
 		// we're using melee, so CHAAAAAAAARGE!!!!!
 		if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
 		{
-			_unit->lookAt(_aggroTarget->getPosition(), false);
+			_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
 			while (_unit->getStatus() == STATUS_TURNING)
 				_unit->turn();
 			if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
@@ -183,7 +183,7 @@ void AggroBAIState::think(BattleAction *action)
 				action->type = BA_HIT;
 				charge = true;
 			}
-			if (!_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
+			else
 			{
 				// get a list of the tiles we can reach and still get an attack in
 				std::vector<int> reachable = _game->getPathfinding()->findReachable(action->actor, (action->actor->getTimeUnits() - action->actor->getActionTUs(BA_HIT, action->actor->getMainHandWeapon())));

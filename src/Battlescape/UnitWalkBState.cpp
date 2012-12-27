@@ -288,7 +288,7 @@ void UnitWalkBState::postPathProcedures()
 {
 	if (_action.actor->getCharging() != 0)
 	{
-		_unit->lookAt(_action.actor->getCharging()->getPosition(), false);
+		_unit->lookAt(_action.actor->getCharging()->getPosition() + Position(_action.actor->getArmor()->getSize()-1, _action.actor->getArmor()->getSize()-1, 0), false);
 		while (_action.actor->getStatus() == STATUS_TURNING)
 			_action.actor->turn();
 		if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging()))
