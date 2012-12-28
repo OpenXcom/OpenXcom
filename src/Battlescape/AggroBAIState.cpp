@@ -124,7 +124,7 @@ void AggroBAIState::think(BattleAction *action)
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-	int psiAttackStrength (_unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50);
+	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 	_aggroTarget = 0;
 
 	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))

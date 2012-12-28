@@ -114,7 +114,7 @@ void ExplosionBState::init()
 	// create a bullet hit
 	{
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
-		bool hit (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
+		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
