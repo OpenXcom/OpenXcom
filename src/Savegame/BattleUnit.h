@@ -104,6 +104,7 @@ private:
 	std::string _activeHand;
 	Soldier *_geoscapeSoldier;
 	BattleUnit *_charging;
+	int _turnsExposedFor;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -327,6 +328,7 @@ public:
 	void addKillCount();
 	/// Get unit type.
 	std::string getType() const;
+	/// Set the hand this unit is using;
 	void setActiveHand(const std::string &slot);
 	/// Get unit's active hand.
 	std::string getActiveHand() const;
@@ -342,14 +344,23 @@ public:
 	int getAggroSound() const;
 	/// Sets the unit's energy level.
 	void setEnergy(int energy);
+	/// Halve the unit's armor values.
 	void halveArmor();
 	/// Gets the unit's faction.
 	UnitFaction killedBy() const;
+	/// Set the faction that killed this unit.
 	void killedBy(UnitFaction f);
+	/// Set the units we are charging towards.
 	void setCharging(BattleUnit *chargeTarget);
+	/// Get the units we are charging towards.
 	BattleUnit *getCharging();
 	/// Get the carried weight in strength units.
 	int getCarriedWeight() const;
+	/// Set how many turns this unit will be exposed for.
+	void setTurnsExposedFor (int turns);
+	/// Set how many turns this unit will be exposed for.
+	int getTurnsExposedFor () const;
+
 };
 
 }
