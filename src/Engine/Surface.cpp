@@ -127,7 +127,8 @@ void Surface::loadLbm(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw Exception("Failed to load LBM");
+		imgFile.close();
+		return;
 	}
 
 	// Lock the surface
