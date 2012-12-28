@@ -770,6 +770,8 @@ void SavedBattleGame::endTurn()
 	{
 		if ((*i)->getTurnsExposed() && _side == FACTION_PLAYER)
 			(*i)->setTurnsExposed((*i)->getTurnsExposed() - 1);
+		if (_side == FACTION_PLAYER && _turn == 20 && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
+			(*i)->setTurnsExposed(-1);
 		if ((*i)->getFaction() != FACTION_PLAYER)
 		{
 			(*i)->setVisible(false);
