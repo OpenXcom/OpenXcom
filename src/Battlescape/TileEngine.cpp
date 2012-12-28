@@ -584,7 +584,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN, true);
 		}
 
-		if (bu && bu->getFaction() != unit->getFaction())
+		if (bu && bu->getFaction() != unit->getFaction() && type != DT_NONE)
 		{
 			unit->addFiringExp();
 		}
