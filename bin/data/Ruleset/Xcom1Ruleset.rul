@@ -2173,7 +2173,6 @@ items:
     floorSprite: 32
     handSprite: 88
     hitSound: 36
-    hitAnimation: 36
     battleType: 9
     twoHanded: true
     invWidth: 1
@@ -2189,7 +2188,6 @@ items:
     floorSprite: 26
     handSprite: 80
     hitSound: 54
-    hitAnimation: 36
     power: 65
     damageType: 6
     accuracyMelee: 100
@@ -2466,8 +2464,7 @@ items:
     weight: 5
     bigSprite: 29
     floorSprite: 28
-    hitSound: 37
-    hitAnimation: 0		
+    hitSound: 37	
     battleType: 8
     invWidth: 2
     invHeight: 2
@@ -2764,7 +2761,6 @@ items:
     floorSprite: 31
     handSprite: 104
     hitSound: 48
-    hitAnimation: 36
     clipSize: -1
     power: 90
     damageType: 7
@@ -2781,7 +2777,6 @@ items:
     floorSprite: 31
     handSprite: 104
     hitSound: 48
-    hitAnimation: 36
     clipSize: -1
     power: 114
     damageType: 7
@@ -2819,7 +2814,6 @@ items:
     floorSprite: 31
     handSprite: 104
     hitSound: 48
-    hitAnimation: 36
     power: 70
     damageType: 2
     accuracyMelee: 92
@@ -2857,7 +2851,6 @@ items:
     floorSprite: 31
     handSprite: 104
     hitSound: 48
-    hitAnimation: 36
     power: 84
     damageType: 7
     accuracyMelee: 80

@@ -25,7 +25,9 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextEdit.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Action.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/CraftWeapon.h"
@@ -55,7 +57,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnCrew = new TextButton(64, 16, 24, 96);
 	_btnEquip = new TextButton(64, 16, 24, 120);
 	_btnArmor = new TextButton(64, 16, 24, 144);
-	_txtCraft = new Text(310, 16, 5, 8);
+	_edtCraft = new TextEdit(310, 16, 5, 8);
 	_txtDamage = new Text(82, 9, 24, 24);
 	_txtFuel = new Text(82, 9, 232, 24);
 	_txtW1Name = new Text(90, 9, 56, 48);
@@ -81,7 +83,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	add(_btnCrew);
 	add(_btnEquip);
 	add(_btnArmor);
-	add(_txtCraft);
+	add(_edtCraft);
 	add(_txtDamage);
 	add(_txtFuel);
 	add(_txtW1Name);
@@ -124,9 +126,10 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&CraftInfoState::btnArmorClick);
 
-	_txtCraft->setColor(Palette::blockOffset(13)+10);
-	_txtCraft->setBig();
-	_txtCraft->setAlign(ALIGN_CENTER);
+	_edtCraft->setColor(Palette::blockOffset(13)+10);
+	_edtCraft->setBig();
+	_edtCraft->setAlign(ALIGN_CENTER);
+	_edtCraft->onKeyboardPress((ActionHandler)&CraftInfoState::edtCraftKeyPress);
 
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
@@ -170,7 +173,7 @@ void CraftInfoState::init()
 
 	Craft *c = _base->getCrafts()->at(_craft);
 
-	_txtCraft->setText(c->getName(_game->getLanguage()));
+	_edtCraft->setText(c->getName(_game->getLanguage()));
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(c->getRules()->getSprite() + 33)->setX(0);
@@ -355,4 +358,17 @@ void CraftInfoState::btnArmorClick(Action *)
 	_game->pushState(new CraftArmorState(_game, _base, _craft));
 }
 
+/**
+ * Changes the soldier name.
+ * @param action Pointer to an action.
+ */
+void CraftInfoState::edtCraftKeyPress(Action *action)
+{
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	{
+		_base->getCrafts()->at(_craft)->setName(_edtCraft->getText(), _game->getLanguage());		
+		_edtCraft->setText(_base->getCrafts()->at(_craft)->getName(_game->getLanguage()));
+	}
+}
 }

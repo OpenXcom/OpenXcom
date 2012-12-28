@@ -32,6 +32,7 @@
 #include "Ufo.h"
 #include "Waypoint.h"
 #include "TerrorSite.h"
+#include "AlienBase.h"
 #include "Vehicle.h"
 #include "../Ruleset/RuleItem.h"
 
@@ -45,7 +46,7 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false)
+Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false), _name(L"")
 {
 	_items = new ItemContainer();
 	if (id != 0)
@@ -130,6 +131,17 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 				}
 			}
 		}
+		else if (type == "STR_ALIEN_BASE")
+		{
+			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+			{
+				if ((*i)->getId() == id)
+				{
+					setDestination(*i);
+					break;
+				}
+			}
+		}
 	}
 
 	unsigned int j = 0;
@@ -159,6 +171,14 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	node["inBattlescape"] >> _inBattlescape;
 	node["inDogfight"] >> _inDogfight;
 	node["interceptionOrder"] >> _interceptionOrder;
+	if (const YAML::Node *pName = node.FindValue("name"))
+	{
+		std::string name;
+		node["name"] >> name;
+		_name = Language::utf8ToWstr(name);
+	}
+	if (_inBattlescape)
+		setSpeed(0);
 }
 
 /**
@@ -202,6 +222,7 @@ void Craft::save(YAML::Emitter &out) const
 	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
 	out << YAML::Key << "inDogfight" << YAML::Value << false;
 	out << YAML::Key << "interceptionOrder" << YAML::Value << _interceptionOrder;
+	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
 	out << YAML::EndMap;
 }
 
@@ -258,9 +279,27 @@ int Craft::getId() const
  */
 std::wstring Craft::getName(Language *lang) const
 {
-	std::wstringstream name;
-	name << lang->getString(_rules->getType()) << "-" << _id;
-	return name.str();
+	if (_name == L"")
+	{
+		std::wstringstream name;
+		name << lang->getString(_rules->getType()) << "-" << _id;
+		return name.str();
+	}
+	return _name;
+}
+
+void Craft::setName(const std::wstring &newName, Language *lang)
+{
+	if (newName == L"")
+	{
+		std::wstringstream name;
+		name << lang->getString(_rules->getType()) << "-" << _id;
+		_name = name.str();
+	}
+	else
+	{
+		_name = newName;
+	}
 }
 
 /**
@@ -714,6 +753,8 @@ bool Craft::isInBattlescape() const
  */
 void Craft::setInBattlescape(bool inbattle)
 {
+	if (inbattle)
+		setSpeed(0);
 	_inBattlescape = inbattle;
 }
 

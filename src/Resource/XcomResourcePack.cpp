@@ -426,6 +426,13 @@ void XcomResourcePack::loadBattlescapeResources()
 	s2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
 	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+	
+	s.str("");
+	s2.str("");
+	s << "UFOGRAPH/" << "HIT.PCK";
+	s2 << "UFOGRAPH/" << "HIT.TAB";
+	_sets["HIT.PCK"] = new SurfaceSet(32, 40);
+	_sets["HIT.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s2.str("");

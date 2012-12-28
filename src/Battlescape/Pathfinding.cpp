@@ -71,10 +71,12 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
  * @param endPosition
  */
 
-void Pathfinding::calculate(BattleUnit *unit, Position endPosition)
+void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile)
 {
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
+	if (missile)
+		_movementType = MT_FLY;
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);

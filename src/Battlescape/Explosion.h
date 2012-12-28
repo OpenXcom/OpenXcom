@@ -41,10 +41,10 @@ private:
 	BattleItem *_item;
 	Position _position;
 	int _currentFrame, _startFrame;
-	bool _big;
+	bool _big, _hit;
 public:
 	/// Creates a new Explosion.
-	Explosion(Position _position, int startFrame, bool big);
+	Explosion(Position _position, int startFrame, bool big, bool hit = false);
 	/// Cleans up the Explosion.
 	~Explosion();
 	/// Move the Explosion one frame.
@@ -55,6 +55,7 @@ public:
 	int getCurrentFrame() const;
 	/// Is big?
 	bool isBig() const;
+	bool isHit() const;
 };
 
 }

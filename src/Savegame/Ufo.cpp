@@ -124,6 +124,8 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	node["trajectory"] >> tid;
 	_trajectory = ruleset.getUfoTrajectory(tid);
 	node["trajectoryPoint"] >> _trajectoryPoint;
+	if (_inBattlescape)
+		setSpeed(0);
 }
 
 /**
@@ -431,6 +433,8 @@ bool Ufo::isInBattlescape() const
  */
 void Ufo::setInBattlescape(bool inbattle)
 {
+	if (inbattle)
+		setSpeed(0);
 	_inBattlescape = inbattle;
 }
 
