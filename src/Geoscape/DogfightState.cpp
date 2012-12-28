@@ -951,7 +951,6 @@ void DogfightState::move()
 						}
 						(*c)->~Craft();
 						(*b)->getCrafts()->erase(c);
-						delete *c;
 						_craft = 0;
 						break;
 					}
