@@ -177,6 +177,8 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		node["name"] >> name;
 		_name = Language::utf8ToWstr(name);
 	}
+	if (_inBattlescape)
+		setSpeed(0);
 }
 
 /**
@@ -751,6 +753,8 @@ bool Craft::isInBattlescape() const
  */
 void Craft::setInBattlescape(bool inbattle)
 {
+	if (inbattle)
+		setSpeed(0);
 	_inBattlescape = inbattle;
 }
 
