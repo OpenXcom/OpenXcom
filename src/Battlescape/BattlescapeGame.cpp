@@ -195,10 +195,26 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		statePushBack(new UnitWalkBState(this, action));
 	}
 
-	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW || action.type == BA_HIT)
+	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 	{
+		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
+		{
+			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("STR_PSI_AMP"), _save->getCurrentItemId());
+		}
 		action.actor->lookAt(action.target);
 		statePushBack(new ProjectileFlyBState(this, action));
+		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
+		{
+			bool success (_save->getTileEngine()->psiAttack(&action));
+			if (success && action.type == BA_MINDCONTROL)
+			{
+				// show a little infobox with the name of the unit and "... is under alien control"
+				std::wstringstream ss;
+				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL");
+				_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+			}
+			_save->removeItem(action.weapon);
+		}
 	}
 
 	if (action.type == BA_NONE)

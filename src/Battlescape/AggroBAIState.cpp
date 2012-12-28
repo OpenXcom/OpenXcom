@@ -124,199 +124,303 @@ void AggroBAIState::think(BattleAction *action)
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-
+	int psiAttackStrength (_unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50);
 	_aggroTarget = 0;
-	for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
-	{
-		//pick closest living unit
-		if (!_aggroTarget || _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition()) < _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()))
-		{
-			if(!(*j)->isOut())
-			_aggroTarget = (*j);
-		}
-	}
-	// if we currently see no target, we either can move to it's last seen position or lose aggro
-	if (_aggroTarget == 0)
-	{
-		_timesNotSeen++;
-		if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
-		{
-			// we lost aggro - going back to patrol state
-			return;
-		}
-		// lets go looking where we've last seen him
-		action->type = BA_WALK;
-		action->target = _lastKnownPosition;
-	}
-	else
-	{
-		// if we see the target, we either can shoot him, or take cover.
-		bool takeCover = true;
-		bool charge = false;
-		_unit->setCharging(0);
-		int number = RNG::generate(0,100);
 
-		// lost health, chances to take cover get bigger
-		if (_unit->getHealth() < _unit->getStats()->health)
-			number += 10;
-
-		// aggrotarget has no weapon - chances of take cover get smaller
-		if (!_aggroTarget->getMainHandWeapon())
-			number -= 50;
-		if (aggression == 0 && number < 10)
-			takeCover = false;
-		if (aggression == 1 && number < 50)
-			takeCover = false;
-		if (aggression == 2 && number < 90)
-			takeCover = false;
-		
-		// we're using melee, so CHAAAAAAAARGE!!!!!
-		if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
+	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))
+	{
+		int chances = 0;
+		int odds = 0;
+		int tries = 0;
+		for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && tries < 80; ++i)
 		{
-			_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
-			while (_unit->getStatus() == STATUS_TURNING)
-				_unit->turn();
-			if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
+			// if it's a friendly unit, and he can see some other unit
+			if((*i)->getFaction() == _unit->getFaction() && (*i)->getVisibleUnits())
 			{
-				action->target = _aggroTarget->getPosition();
-				action->weapon = action->actor->getMainHandWeapon();
-				action->type = BA_HIT;
-				charge = true;
+				for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end() &&  tries < 80; ++j)
+				{
+					// make sure we're targetting an ENEMY
+					if ((*j)->getFaction() != _unit->getFaction())
+					{
+						// try to pathfind for a blaster launcher if we're using one
+						if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint())
+						{
+							_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), true);
+							if (_game->getPathfinding()->getStartDirection() != -1)
+							{
+								_aggroTarget = *j;
+								action->weapon = _unit->getMainHandWeapon();
+								action->target = (*j)->getPosition();
+								action->type = BA_LAUNCH;
+								action->TU = action->actor->getActionTUs(action->type, action->weapon);
+							}
+							_game->getPathfinding()->abortPath();
+						}
+
+						// select a target for mind control, and don't target tanks
+						if (_unit->getStats()->psiSkill && (*j)->getArmor()->getSize() != 2)
+						{
+							// good god. 
+							chances = psiAttackStrength 
+								+ ((*j)->getStats()->psiSkill * -0.4) 
+								- (_game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition()) / 2) 
+								- ((*j)->getStats()->psiStrength) 
+								+ (RNG::generate(0, 50))
+								+ 55;
+					
+							if (chances > odds)
+							{
+								odds = chances;
+								_aggroTarget = *j;
+								action->target = (*j)->getPosition();
+							}
+						}
+						++tries;
+					}
+				}
+			}
+		}
+		
+		if (odds)
+		{
+			if (_unit->getMainHandWeapon())
+			{
+				if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= odds)
+					odds = 0;
 			}
 			else
 			{
-				// get a list of the tiles we can reach and still get an attack in
-				std::vector<int> reachable = _game->getPathfinding()->findReachable(action->actor, (action->actor->getTimeUnits() - action->actor->getActionTUs(BA_HIT, action->actor->getMainHandWeapon())));
-				takeCover = true;
-				bool targetFound = false;
-				for (std::vector<int>::iterator reach = reachable.begin(); reach != reachable.end() && !targetFound; ++reach)
+				if (RNG::generate(35, 155) >= odds)
+					odds = 0;
+			}
+			if (odds >= 30)
+			{
+				int controlOrPanic = 60;
+				int morale = _aggroTarget->getMorale();
+				int bravery = _aggroTarget->getStats()->bravery;
+				if (bravery > 60)
+					controlOrPanic += 15;
+				if ( bravery < 40)
+					controlOrPanic -= 15;
+				if (morale >= 40)
 				{
-					for (int x = 0 - action->actor->getArmor()->getSize(); x <= _aggroTarget->getArmor()->getSize() && !targetFound; ++x)
+					if (morale - 10 * bravery < 50)
+						controlOrPanic += 15;
+				}
+				else
+				{
+					controlOrPanic -= 15;
+				}
+				if (!morale)
+				{
+					controlOrPanic = 0;
+				}
+				if (RNG::generate(0, 100) >= controlOrPanic)
+					action->type = BA_MINDCONTROL;
+				else
+					action->type = BA_PANIC;
+			}
+			else if (odds)
+			{
+					action->type = BA_PANIC;
+			}
+		}
+	}
+
+	if (!_aggroTarget)
+	{
+		for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
+		{
+			//pick closest living unit
+			if (!_aggroTarget || _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition()) < _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()))
+			{
+				if(!(*j)->isOut())
+				_aggroTarget = (*j);
+			}
+		}
+	
+		// if we currently see no target, we either can move to it's last seen position or lose aggro
+		if (_aggroTarget == 0)
+		{
+			_timesNotSeen++;
+			if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
+			{
+				// we lost aggro - going back to patrol state
+				return;
+			}
+			// lets go looking where we've last seen him
+			action->type = BA_WALK;
+			action->target = _lastKnownPosition;
+		}
+		else
+		{
+			// if we see the target, we either can shoot him, or take cover.
+			bool takeCover = true;
+			bool charge = false;
+			_unit->setCharging(0);
+			int number = RNG::generate(0,100);
+
+			// lost health, chances to take cover get bigger
+			if (_unit->getHealth() < _unit->getStats()->health)
+				number += 10;
+
+			// aggrotarget has no weapon - chances of take cover get smaller
+			if (!_aggroTarget->getMainHandWeapon())
+				number -= 50;
+			if (aggression == 0 && number < 10)
+				takeCover = false;
+			if (aggression == 1 && number < 50)
+				takeCover = false;
+			if (aggression == 2 && number < 90)
+				takeCover = false;
+		
+			// we're using melee, so CHAAAAAAAARGE!!!!!
+			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
+			{
+				_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
+				while (_unit->getStatus() == STATUS_TURNING)
+					_unit->turn();
+				if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
+				{
+					action->target = _aggroTarget->getPosition();
+					action->weapon = action->actor->getMainHandWeapon();
+					action->type = BA_HIT;
+					charge = true;
+				}
+				else
+				{
+					// get a list of the tiles we can reach and still get an attack in
+					std::vector<int> reachable = _game->getPathfinding()->findReachable(action->actor, (action->actor->getTimeUnits() - action->actor->getActionTUs(BA_HIT, action->actor->getMainHandWeapon())));
+					takeCover = true;
+					bool targetFound = false;
+					for (std::vector<int>::iterator reach = reachable.begin(); reach != reachable.end() && !targetFound; ++reach)
 					{
-						for (int y = 0 - action->actor->getArmor()->getSize(); y <= _aggroTarget->getArmor()->getSize() && !targetFound; ++y)
+						for (int x = 0 - action->actor->getArmor()->getSize(); x <= _aggroTarget->getArmor()->getSize() && !targetFound; ++x)
 						{
-							if (!(x == 0 && y == 0))
+							for (int y = 0 - action->actor->getArmor()->getSize(); y <= _aggroTarget->getArmor()->getSize() && !targetFound; ++y)
 							{
-								Position p (x, y, 0);
-								Position checkPath = _aggroTarget->getPosition() + p;
-								// if the tile we are checking is on the reachable list
-								if (*reach == _game->getTileIndex(checkPath))
+								if (!(x == 0 && y == 0))
 								{
-									// CHAAAAAAARGE!
-									action->target = checkPath;
-									action->type = BA_WALK;
-									charge = true;
-									_unit->setCharging(_aggroTarget);
-									targetFound = true;
+									Position p (x, y, 0);
+									Position checkPath = _aggroTarget->getPosition() + p;
+									// if the tile we are checking is on the reachable list
+									if (*reach == _game->getTileIndex(checkPath))
+									{
+										// CHAAAAAAARGE!
+										action->target = checkPath;
+										action->type = BA_WALK;
+										charge = true;
+										_unit->setCharging(_aggroTarget);
+										targetFound = true;
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}
 
-		if (!takeCover && !charge)
-		{
-			_timesNotSeen = 0;
-			_lastKnownPosition = _aggroTarget->getPosition();
-			action->target = _aggroTarget->getPosition();
-			action->type = BA_NONE;
-
-			// lets' evaluate if we could throw a grenade
-			int tu = 4; // 4TUs for picking up the grenade
-
-			// distance must be more than 6 tiles, otherwise it's too dangerous to play with explosives
-			if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 6)
+			if (!takeCover && !charge)
 			{
-				if((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE)
+				_timesNotSeen = 0;
+				_lastKnownPosition = _aggroTarget->getPosition();
+				action->target = _aggroTarget->getPosition();
+				action->type = BA_NONE;
+
+				// lets' evaluate if we could throw a grenade
+				int tu = 4; // 4TUs for picking up the grenade
+
+				// distance must be more than 6 tiles, otherwise it's too dangerous to play with explosives
+				if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 6)
 				{
-				// do we have a grenade on our belt?
-				BattleItem *grenade = _unit->getGrenadeFromBelt();
-				// do we have enough TUs to prime and throw the grenade?
-				if (grenade && RNG::generate(0,2) == 0)
-				{
-					action->weapon = grenade;
-					tu += _unit->getActionTUs(BA_PRIME, grenade);
-					tu += _unit->getActionTUs(BA_THROW, grenade);
-					if (tu <= _unit->getStats()->tu)
+					if((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE)
 					{
-						// are we within range?
-						if (ProjectileFlyBState::validThrowRange(action))
+					// do we have a grenade on our belt?
+					BattleItem *grenade = _unit->getGrenadeFromBelt();
+					// do we have enough TUs to prime and throw the grenade?
+					if (grenade && RNG::generate(0,2) == 0)
+					{
+						action->weapon = grenade;
+						tu += _unit->getActionTUs(BA_PRIME, grenade);
+						tu += _unit->getActionTUs(BA_THROW, grenade);
+						if (tu <= _unit->getStats()->tu)
 						{
-							grenade->setExplodeTurn(_game->getTurn());
-							_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade), false);
-							action->type = BA_THROW;
+							// are we within range?
+							if (ProjectileFlyBState::validThrowRange(action))
+							{
+								grenade->setExplodeTurn(_game->getTurn());
+								_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade), false);
+								action->type = BA_THROW;
+							}
 						}
 					}
+					}
 				}
-				}
-			}
 
-			if (action->type == BA_NONE)
-			{
-				action->weapon = action->actor->getMainHandWeapon();
-				// out of ammo or no weapon or ammo at all, we have to take cover
-				if (!action->weapon)
+				if (action->type == BA_NONE)
 				{
-					takeCover = true;
-				}
-				else
-				{
-					if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
+					action->weapon = action->actor->getMainHandWeapon();
+					// out of ammo or no weapon or ammo at all, we have to take cover
+					if (!action->weapon)
 					{
-						if (RNG::generate(1,10) < 5)
-							action->type = BA_SNAPSHOT;
-						else
-							action->type = BA_AUTOSHOT;
-						tu = action->actor->getActionTUs(action->type, action->weapon);
-						// enough time units to shoot?
-						if (tu > _unit->getTimeUnits())
-						{
-							takeCover = true;
-						}
+						takeCover = true;
 					}
 					else
-						takeCover = true;
-				}
-			}
-		}
-
-
-		if (takeCover && !charge)
-		{
-			// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
-			// if there is no such tile, we run away from the target.
-			action->type = BA_WALK;
-			int tries = 0;
-			bool coverFound = false;
-			while (tries < 30 && !coverFound)
-			{
-				tries++;
-				action->target = _unit->getPosition();
-				action->target.x += RNG::generate(-5,5);
-				action->target.y += RNG::generate(-5,5);
-				if (tries < 20)
-
-					coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
-				else
-					coverFound = true;
-
-				if (coverFound)
-				{
-					// check if we can reach this tile
-					_game->getPathfinding()->calculate(_unit, action->target);
-					if (_game->getPathfinding()->getStartDirection() == -1)
 					{
-						coverFound = false;
+						if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
+						{
+							if (RNG::generate(1,10) < 5)
+								action->type = BA_SNAPSHOT;
+							else
+								action->type = BA_AUTOSHOT;
+							tu = action->actor->getActionTUs(action->type, action->weapon);
+							// enough time units to shoot?
+							if (tu > _unit->getTimeUnits())
+							{
+								takeCover = true;
+							}
+						}
+						else
+							takeCover = true;
 					}
-					_game->getPathfinding()->abortPath();
+				}
+			}
+
+
+			if (takeCover && !charge)
+			{
+				// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
+				// if there is no such tile, we run away from the target.
+				action->type = BA_WALK;
+				int tries = 0;
+				bool coverFound = false;
+				while (tries < 30 && !coverFound)
+				{
+					tries++;
+					action->target = _unit->getPosition();
+					action->target.x += RNG::generate(-5,5);
+					action->target.y += RNG::generate(-5,5);
+					if (tries < 20)
+
+						coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
+					else
+						coverFound = true;
+
+					if (coverFound)
+					{
+						// check if we can reach this tile
+						_game->getPathfinding()->calculate(_unit, action->target);
+						if (_game->getPathfinding()->getStartDirection() == -1)
+						{
+							coverFound = false;
+						}
+						_game->getPathfinding()->abortPath();
+					}
 				}
 			}
 		}
+		action->TU = action->actor->getActionTUs(action->type, action->weapon);
 	}
-
-	action->TU = action->actor->getActionTUs(action->type, action->weapon);
 }
 
 /**

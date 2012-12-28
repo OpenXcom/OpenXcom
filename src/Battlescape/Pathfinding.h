@@ -65,7 +65,7 @@ public:
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculate the shortest path.
-	void calculate(BattleUnit *unit, Position endPosition);
+	void calculate(BattleUnit *unit, Position endPosition, bool missile = false);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready gives the first direction.
