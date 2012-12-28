@@ -404,11 +404,7 @@ void SoldierInfoState::init()
 	if (s->getWoundRecovery() > 0)
 	{
 		std::wstringstream ss13;
-		ss13 << _game->getLanguage()->getString("STR_WOUND_RECOVERY") << L'\x01' << s->getWoundRecovery();
-		if (s->getWoundRecovery() > 1)
-			ss13 << _game->getLanguage()->getString("STR_DAYS");
-		else
-			ss13 << _game->getLanguage()->getString("STR_DAY");
+		ss13 << tr("STR_WOUND_RECOVERY") << L'\x01' << tr("STR_DAY", s->getWoundRecovery());
 		_txtRecovery->setText(ss13.str());
 	}
 	else

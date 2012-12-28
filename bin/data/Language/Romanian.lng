@@ -1713,8 +1713,6 @@ STR_SECTOPOD_CORPSE
 Cadavru Sectopod
 STR_CYBERDISC_CORPSE
 Cadavru Cyberdisc
-STR_TO_ARM_HWP
- pentru înarmare Tanc
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Echipamente insuficiente pentru utilarea trupelor
 STR_MARS_CYDONIA_LANDING
@@ -1813,10 +1811,6 @@ STR_QUANTITY
 Cantitate
 STR_TOTAL
 Total
-STR_DAY
- zi
-STR_DAYS
- zile
 STR_IN_PSIONIC_TRAINING
 Sub Antrenament Psionic
 STR_BLASTER_BOMB_UFOPEDIA
@@ -2089,3 +2083,11 @@ STR_MIXED
 Mixt
 STR_RIGHT_CLICK_TO_DELETE
 Click dreapta pentru a șterge.
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Nu avem {1} pentru înarmare Tanc
+STR_DAY_1
+{N} zi
+STR_DAY_2
+{N} zile
+STR_DAY_3
+{N} zile
