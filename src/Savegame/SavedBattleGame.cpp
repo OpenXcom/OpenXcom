@@ -768,6 +768,8 @@ void SavedBattleGame::endTurn()
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
+		if ((*i)->getTurnsExposed() && _side == FACTION_PLAYER)
+			(*i)->setTurnsExposed((*i)->getTurnsExposed() - 1);
 		if ((*i)->getFaction() != FACTION_PLAYER)
 		{
 			(*i)->setVisible(false);

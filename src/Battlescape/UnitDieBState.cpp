@@ -76,6 +76,8 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getDeathSound())->play();
 		}
 	}
+	if (_unit->getTurnsExposed())
+		_unit->setTurnsExposed(0);
 }
 
 /**

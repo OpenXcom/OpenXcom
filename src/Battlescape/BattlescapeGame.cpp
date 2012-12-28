@@ -895,6 +895,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
+	if (unit->getFaction() == FACTION_PLAYER)
+		unit->setTurnsExposed(1);
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
