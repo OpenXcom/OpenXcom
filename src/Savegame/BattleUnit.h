@@ -104,7 +104,7 @@ private:
 	std::string _activeHand;
 	Soldier *_geoscapeSoldier;
 	BattleUnit *_charging;
-	int _turnsExposedFor;
+	int _turnsExposed;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -357,9 +357,9 @@ public:
 	/// Get the carried weight in strength units.
 	int getCarriedWeight() const;
 	/// Set how many turns this unit will be exposed for.
-	void setTurnsExposedFor (int turns);
+	void setTurnsExposed (int turns);
 	/// Set how many turns this unit will be exposed for.
-	int getTurnsExposedFor () const;
+	int getTurnsExposed () const;
 
 };
 

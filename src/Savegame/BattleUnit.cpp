@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposedFor(0)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -97,7 +97,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposedFor(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -179,7 +179,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expMelee"] >> _expMelee;
 	node["turretType"] >> _turretType;
 	node["visible"] >> _visible;
-	node["turnsExposedFor"] >> _turnsExposedFor;
+	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
 	_charging = 0;
@@ -229,7 +229,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
 	out << YAML::Key << "turretType" << YAML::Value << _turretType;
 	out << YAML::Key << "visible" << YAML::Value << _visible;
-	out << YAML::Key << "turnsExposedFor" << YAML::Value << _turnsExposedFor;
+	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
 
 	if (getCurrentAIState())
 	{
@@ -2085,18 +2085,18 @@ int BattleUnit::getCarriedWeight() const
  * Set how long this unit will be exposed for.
  * @param turns
  */
-void BattleUnit::setTurnsExposedFor (int turns)
+void BattleUnit::setTurnsExposed (int turns)
 {
-	_turnsExposedFor = turns;
+	_turnsExposed = turns;
 }
 
 /**
  * Get how long this unit will be exposed for.
  * @return turns
  */
-int BattleUnit::getTurnsExposedFor () const
+int BattleUnit::getTurnsExposed () const
 {
-	return _turnsExposedFor;
+	return _turnsExposed;
 }
 
 }
