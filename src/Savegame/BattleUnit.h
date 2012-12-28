@@ -348,6 +348,8 @@ public:
 	void killedBy(UnitFaction f);
 	void setCharging(BattleUnit *chargeTarget);
 	BattleUnit *getCharging();
+	/// Get the carried weight in strength units.
+	int getCarriedWeight() const;
 };
 
 }
