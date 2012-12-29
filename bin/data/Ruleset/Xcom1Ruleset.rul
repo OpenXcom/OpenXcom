@@ -5896,6 +5896,10 @@ alienDeployments:
         percentageOutsideUfo: 50
         itemSets:
           -
+            []
+          -
+            []
+          -
             []			
       - alienRank: 7
         lowQty: 0
@@ -5903,6 +5907,10 @@ alienDeployments:
         dQty: 1
         percentageOutsideUfo: 50
         itemSets:
+          -
+            []
+          -
+            []
           -
             []
     width: 50
