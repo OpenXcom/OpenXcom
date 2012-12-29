@@ -171,7 +171,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_STANDING)
 	{
 		// check if we did spot new units
-		if (unitspotted && !_unit->getCharging() != 0)
+		if (unitspotted && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0)
 		{
 			_pf->abortPath();
 			return;
@@ -265,7 +265,7 @@ void UnitWalkBState::think()
 		unitspotted = _terrain->calculateFOV(_unit);
 		// make sure the unit sprites are up to date
 		_parent->getMap()->cacheUnit(_unit);
-		if (unitspotted && !_unit->getCharging() != 0)
+		if (unitspotted && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0)
 		{
 			_pf->abortPath();
 			return;

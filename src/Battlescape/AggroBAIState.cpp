@@ -175,14 +175,18 @@ void AggroBAIState::think(BattleAction *action)
 			if (_unit->getMainHandWeapon())
 			{
 				if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= odds)
+				{
 					odds = 0;
 					_aggroTarget = 0;
+				}
 			}
 			else
 			{
 				if (RNG::generate(35, 155) >= odds)
+				{
 					odds = 0;
 					_aggroTarget = 0;
+				}
 			}
 			if (odds >= 30)
 			{
