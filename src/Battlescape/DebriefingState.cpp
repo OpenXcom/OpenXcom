@@ -443,6 +443,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		UnitStatus status = (*j)->getStatus();
 		UnitFaction faction = (*j)->getFaction();
+		UnitFaction oldFaction = (*j)->getOriginalFaction();
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
@@ -495,9 +496,9 @@ void DebriefingState::prepareDebriefing()
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
 			}
 		}
-		else if (status == STATUS_UNCONSCIOUS)
+		else if (status == STATUS_UNCONSCIOUS || (oldFaction == FACTION_HOSTILE && faction == FACTION_PLAYER))
 		{
-			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
+			if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value*2);
 				if (base->getAvailableContainment())

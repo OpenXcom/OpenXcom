@@ -350,6 +350,7 @@ public:
 	BattleUnit *getCharging();
 	/// Get the carried weight in strength units.
 	int getCarriedWeight() const;
+	UnitFaction getOriginalFaction() const;
 };
 
 }
