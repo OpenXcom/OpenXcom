@@ -182,6 +182,15 @@ void BattleUnit::load(const YAML::Node &node)
 	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
+	if (const YAML::Node *pName = node.FindValue("originalFaction"))
+	{
+		node["originalFaction"] >> a;
+		_originalFaction = (UnitFaction)a;
+	}
+	else
+	{
+		_originalFaction = _faction;
+	}
 	_charging = 0;
 
 
@@ -237,6 +246,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 		getCurrentAIState()->save(out);
 	}
 	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
+	if (_originalFaction != _faction)
+		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
 
 	out << YAML::EndMap;
 }
@@ -2097,6 +2108,15 @@ void BattleUnit::setTurnsExposed (int turns)
 int BattleUnit::getTurnsExposed () const
 {
 	return _turnsExposed;
+}
+
+/**
+ * Get This unit's original Faction.
+ * @return original faction
+ */
+UnitFaction BattleUnit::getOriginalFaction() const
+{
+	return _originalFaction;
 }
 
 }

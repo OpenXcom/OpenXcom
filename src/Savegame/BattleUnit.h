@@ -360,6 +360,8 @@ public:
 	void setTurnsExposed (int turns);
 	/// Set how many turns this unit will be exposed for.
 	int getTurnsExposed () const;
+	/// Get this unit's original faction
+	UnitFaction getOriginalFaction() const;
 
 };
 

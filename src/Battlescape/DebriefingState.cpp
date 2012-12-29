@@ -443,6 +443,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		UnitStatus status = (*j)->getStatus();
 		UnitFaction faction = (*j)->getFaction();
+		UnitFaction oldFaction = (*j)->getOriginalFaction();
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
@@ -453,11 +454,11 @@ void DebriefingState::prepareDebriefing()
 
 		if (status == STATUS_DEAD)
 		{
-			if (faction == FACTION_HOSTILE)
+			if (oldFaction == FACTION_HOSTILE)
 			{
 				addStat("STR_ALIENS_KILLED", 1, value);
 			}
-			else if (faction == FACTION_PLAYER)
+			else if (oldFaction == FACTION_PLAYER)
 			{
 				if (soldier != 0)
 				{
@@ -487,7 +488,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (faction == FACTION_NEUTRAL)
+			else if (oldFaction == FACTION_NEUTRAL)
 			{
 				if ((*j)->killedBy() == FACTION_PLAYER)
 					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -50);
@@ -495,9 +496,9 @@ void DebriefingState::prepareDebriefing()
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
 			}
 		}
-		else if (status == STATUS_UNCONSCIOUS)
+		else if (status == STATUS_UNCONSCIOUS || (oldFaction == FACTION_HOSTILE && faction == FACTION_PLAYER))
 		{
-			if (faction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
+			if (oldFaction == FACTION_HOSTILE && (!aborted || (*j)->isInExitArea()))
 			{
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value*2);
 				if (base->getAvailableContainment())
@@ -511,14 +512,14 @@ void DebriefingState::prepareDebriefing()
 					_noContainment = true;
 				}
 			}
-			else if (faction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			else if (oldFaction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
 			{
 				addStat("STR_CIVILIANS_SAVED", 1, 30);
 			}
 		}
 		else
 		{
-			if (faction == FACTION_PLAYER)
+			if (oldFaction == FACTION_PLAYER)
 			{
 				playersSurvived++;
 				if (((*j)->isInExitArea() && battle->getMissionType() != "STR_BASE_DEFENSE") || !aborted)
@@ -557,7 +558,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (faction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			else if (oldFaction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
 			{
 				addStat("STR_CIVILIANS_SAVED", 1, 30);
 			}

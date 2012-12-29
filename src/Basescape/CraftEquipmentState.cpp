@@ -84,9 +84,9 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
-	std::wstring s;
-	s = _game->getLanguage()->getString("STR_EQUIPMENT_FOR") + c->getName(_game->getLanguage());
-	_txtTitle->setText(s);
+	std::wstringstream s;
+	s << _game->getLanguage()->getString("STR_EQUIPMENT_FOR") << c->getName(_game->getLanguage());
+	_txtTitle->setText(s.str());
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
@@ -505,11 +505,8 @@ void CraftEquipmentState::moveRight()
 					int qty = _base->getItems()->getItem(ammo->getType());
 					if (qty == 0)
 					{
-						std::wstringstream ss;
-						ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
-						ss << _game->getLanguage()->getString(ammo->getType());
-						ss << _game->getLanguage()->getString("STR_TO_ARM_HWP");
-						_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+						LocalizedText msg(tr("STR_NOT_ENOUGH_ammotype_TO_ARM_HWP").arg(tr(ammo->getType())));
+						_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 						_timerRight->stop();
 					}
 					else

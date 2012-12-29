@@ -1713,8 +1713,6 @@ STR_SECTOPOD_CORPSE
 Труп Сектопода
 STR_CYBERDISC_CORPSE
 Труп Кібердиска
-STR_TO_ARM_HWP
- для озброєння ВБП
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Недостатньо спорядження для екіпірування загону
 STR_MARS_CYDONIA_LANDING
@@ -1813,10 +1811,6 @@ STR_QUANTITY
 Кільк.
 STR_TOTAL
 Всього
-STR_DAY
- день
-STR_DAYS
- дні(в)
 STR_IN_PSIONIC_TRAINING
 Тренуються в Псі-Лабораторії
 STR_BLASTER_BOMB_UFOPEDIA
@@ -2089,3 +2083,9 @@ STR_MIXED
 змішаний
 STR_RIGHT_CLICK_TO_DELETE
 Клацніть правою кнопкою миші видалити.
+STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
+Немає {1} для озброєння ВБП
+STR_DAY_1
+{N} день
+STR_DAY_2
+{N} дні(в)

@@ -32,6 +32,7 @@ class Polygon;
 class SurfaceSet;
 class Timer;
 class Target;
+class LocalizedText;
 
 /**
  * Interactive globe view of the world.
@@ -152,7 +153,10 @@ public:
 	bool isZoomedInToMax() const;
 	/// Checks if current globe zoom level is at minimum.
 	bool isZoomedOutToMax() const;
-
+	/// Get the localized text.
+	const LocalizedText &tr(const std::string &id) const;
+	/// Get the localized text.
+	LocalizedText tr(const std::string &id, unsigned n) const;
 };
 
 }

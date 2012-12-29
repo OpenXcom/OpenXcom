@@ -22,6 +22,8 @@
 #include "Screen.h"
 #include "Surface.h"
 #include "Font.h"
+#include "Language.h"
+#include "LocalizedText.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -207,6 +209,29 @@ void State::resetAll()
 			s->unpress(this);
 		}
 	}
+}
+
+/**
+ * Get the localized text for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string &).
+ * @param id The dictionary key to search for.
+ * @return A reference to the localized text.
+ */
+const LocalizedText &State::tr(const std::string &id) const
+{
+	return _game->getLanguage()->getString(id);
+}
+
+/**
+ * Get a modifiable copy of the localized text for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string &, unsigned).
+ * @param id The dictionary key to search for.
+ * @param n The number to use for the proper version.
+ * @return A copy of the localized text.
+ */
+LocalizedText State::tr(const std::string &id, unsigned n) const
+{
+	return _game->getLanguage()->getString(id, n);
 }
 
 }
