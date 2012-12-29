@@ -133,6 +133,8 @@ public:
 	int getFaceDirection() const;
 	/// Gets the unit's turret direction.
 	int getTurretDirection() const;
+	/// Gets the unit's turret To direction.
+	int getTurretToDirection() const;
 	/// Gets the unit's vertical direction.
 	int getVerticalDirection() const;
 	/// Gets the unit's status.
@@ -171,6 +173,8 @@ public:
 	bool isFloating() const;
 	/// Aim.
 	void aim(bool aiming);
+	/// Get direction to a certain point
+	int getDirectionTo(const Position &point) const;
 	/// Gets the unit's time units.
 	int getTimeUnits() const;
 	/// Gets the unit's stamina.

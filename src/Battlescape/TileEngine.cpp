@@ -35,6 +35,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -211,7 +212,16 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	size_t visibleUnitsChecksum = 0, oldNumVisibleUnits = 0;
 	Position center = unit->getPosition();
 	Position test;
-	bool swap = (unit->getDirection()==0 || unit->getDirection()==4);
+	int direction;
+	bool swap;
+	if (Options::getBool("strafe") && (unit->getTurretType() > -1)) {
+		direction = unit->getTurretDirection();
+	}
+	else
+	{
+		direction = unit->getDirection();
+	}
+	swap = (direction==0 || direction==4);
 	int signX[8] = { +1, +1, +1, +1, -1, -1, -1, -1 };
 	int signY[8] = { -1, -1, -1, +1, +1, +1, -1, -1 };
 	int y1, y2;
@@ -233,7 +243,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		++pos.z;
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
-		if (unit->getDirection()%2)
+		if (direction%2)
 		{
 			y1 = 0;
 			y2 = MAX_VIEW_DISTANCE - x;
@@ -251,8 +261,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 				test.z = z;
 				if (distance <= MAX_VIEW_DISTANCE)
 				{
-					test.x = center.x + signX[unit->getDirection()]*(swap?y:x);
-					test.y = center.y + signY[unit->getDirection()]*(swap?x:y);
+					test.x = center.x + signX[direction]*(swap?y:x);
+					test.y = center.y + signY[direction]*(swap?x:y);
 					if (_save->getTile(test))
 					{
 						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();

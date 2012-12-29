@@ -335,6 +335,15 @@ int BattleUnit::getTurretDirection() const
 }
 
 /**
+ * Gets the BattleUnit's turret To direction.
+ * @return toDirectionTurret
+ */
+int BattleUnit::getTurretToDirection() const
+{
+	return _toDirectionTurret;
+}
+
+/**
  * Gets the BattleUnit's vertical direction. This is when going up or down.
  * @return direction
  */
@@ -477,45 +486,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
-	double ox = point.x - _pos.x;
-	double oy = point.y - _pos.y;
-	double angle = atan2(ox, -oy);
-	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
-	int dir = 0;
-
-	if (angle > pie[0] || angle < -pie[0])
-	{
-		dir = 4;
-	}
-	else if (angle > pie[1])
-	{
-		dir = 3;
-	}
-	else if (angle > pie[2])
-	{
-		dir = 2;
-	}
-	else if (angle > pie[3])
-	{
-		dir = 1;
-	}
-	else if (angle < -pie[1])
-	{
-		dir = 5;
-	}
-	else if (angle < -pie[2])
-	{
-		dir = 6;
-	}
-	else if (angle < -pie[3])
-	{
-		dir = 7;
-	}
-	else if (angle < pie[0])
-	{
-		dir = 0;
-	}
+	int dir = getDirectionTo (point);
 
 	if (turret)
 	{
@@ -697,6 +668,54 @@ void BattleUnit::aim(bool aiming)
 		_status = STATUS_STANDING;
 
 	_cacheInvalid = true;
+}
+
+/**
+ * Returns the soldier's amount of time units.
+ * @return Time units.
+ */
+int BattleUnit::getDirectionTo(const Position &point) const
+{
+	double ox = point.x - _pos.x;
+	double oy = point.y - _pos.y;
+	double angle = atan2(ox, -oy);
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	int dir = 0;
+
+	if (angle > pie[0] || angle < -pie[0])
+	{
+		dir = 4;
+	}
+	else if (angle > pie[1])
+	{
+		dir = 3;
+	}
+	else if (angle > pie[2])
+	{
+		dir = 2;
+	}
+	else if (angle > pie[3])
+	{
+		dir = 1;
+	}
+	else if (angle < -pie[1])
+	{
+		dir = 5;
+	}
+	else if (angle < -pie[2])
+	{
+		dir = 6;
+	}
+	else if (angle < -pie[3])
+	{
+		dir = 7;
+	}
+	else if (angle < pie[0])
+	{
+		dir = 0;
+	}
+	return dir;
 }
 
 /**
