@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Base.h"
 #include "../Engine/Action.h"
+#include "../Engine/Options.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Soldier.h"
@@ -160,9 +161,21 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		}
 	}
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		if (_game->getRuleset()->getItem(*i)->getBuyCost() > 0)
+		// Is it suppressed in the options file?
+		std::vector<std::string> excludes = Options::getPurchaseExclusions();
+		bool exclude = false;
+		for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); s++ )
+		{
+			if ( _game->getLanguage()->cpToWstr(*s) == _game->getLanguage()->getString(*i) ) {
+				exclude = true;
+				break;
+			}
+		}
+
+		if ((_game->getRuleset()->getItem(*i)->getBuyCost() > 0) && !exclude)
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
