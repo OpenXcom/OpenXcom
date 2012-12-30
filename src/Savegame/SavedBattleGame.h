@@ -76,6 +76,7 @@ private:
 	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
 	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
 	bool _objectiveDestroyed;
+	std::vector<BattleUnit*> _exposedUnits;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -183,6 +184,10 @@ public:
 	int getScrollButtonTimeTolerancy() const;
 	/// get ScrollButtonPixelTolerancy
 	int getScrollButtonPixelTolerancy() const;
+	void updateExposedUnits();
+	std::vector<BattleUnit*> *getExposedUnits();
+	int getSpottingUnits(BattleUnit* unit) const;
+
 };
 
 }

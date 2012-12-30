@@ -126,6 +126,9 @@ void AggroBAIState::think(BattleAction *action)
 	int aggression = _unit->getAggression();
 	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 	_aggroTarget = 0;
+	int unitsSpottingMe = _game->getSpottingUnits(_unit);
+	int potentialTargets = _unit->getVisibleUnits()->size();
+	int exposedUnits = _game->getExposedUnits()->size();
 
 	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))
 	{
@@ -133,41 +136,37 @@ void AggroBAIState::think(BattleAction *action)
 		int chances = 0;
 		int odds = 0;
 		int tries = 0;
-		for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && tries < 80; ++i)
+		for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end() && tries < 80; ++i)
 		{
-			// if this unit has been exposed (excludes dead units), and is an Xcom unit
-			if((*i)->getTurnsExposed() && (*i)->getFaction() == FACTION_PLAYER)
+			// try to pathfind for a blaster launcher if we're using one
+			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint())
 			{
-				// try to pathfind for a blaster launcher if we're using one
-				if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint())
+				_game->getPathfinding()->calculate(_unit, (*i)->getPosition(), true);
+				if (_game->getPathfinding()->getStartDirection() != -1)
 				{
-					_game->getPathfinding()->calculate(_unit, (*i)->getPosition(), true);
-					if (_game->getPathfinding()->getStartDirection() != -1)
-					{
-						backupTarget = *i;
-					}
-					_game->getPathfinding()->abortPath();
+					backupTarget = *i;
 				}
-
-				// select a target for mind control, and don't target tanks
-				if (_unit->getStats()->psiSkill && (*i)->getArmor()->getSize() != 2)
-				{
-					// good god. 
-					chances = psiAttackStrength 
-						+ ((*i)->getStats()->psiSkill * -0.4) 
-						- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2) 
-						- ((*i)->getStats()->psiStrength) 
-						+ (RNG::generate(0, 50))
-						+ 55;
-			
-					if (chances > odds)
-					{
-						odds = chances;
-						_aggroTarget = *i;
-					}
-				}
-				++tries;
+				_game->getPathfinding()->abortPath();
 			}
+
+			// select a target for mind control, and don't target tanks
+			if (_unit->getStats()->psiSkill && (*i)->getArmor()->getSize() != 2)
+			{
+				// good god.
+				chances = psiAttackStrength
+					+ ((*i)->getStats()->psiSkill * -0.4)
+					- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
+					- ((*i)->getStats()->psiStrength)
+					+ (RNG::generate(0, 50))
+					+ 55;
+
+				if (chances > odds)
+				{
+					odds = chances;
+					_aggroTarget = *i;
+				}
+			}
+			++tries;
 		}
 
 		if (odds)

@@ -273,6 +273,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 							else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
 							{
 								visibleUnit->setTurnsExposed(unit->getIntelligence());
+								_save->updateExposedUnits();
 							}
 						}
 
@@ -1391,7 +1392,8 @@ bool TileEngine::psiAttack(BattleAction *action)
 			action->actor->addPsiExp();
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim);
-			_save->setSelectedUnit(victim);
+			if (action->actor->getFaction() == FACTION_PLAYER)
+				_save->setSelectedUnit(victim);
 			return true;
 		}
 		else

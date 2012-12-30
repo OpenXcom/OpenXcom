@@ -174,13 +174,21 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 	}
-
 	_AIActionCounter++;
 	if (_AIActionCounter == 1 && _playedAggroSound)
 	{
 		_playedAggroSound = false;
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
+	
+	if (((unit->getStats()->psiSkill && unit->getType() != "SOLDIER")
+		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint()))
+		&& _save->getExposedUnits()->size() > 0)
+	{
+		aggro = new AggroBAIState(_save, unit);
+		unit->setAIState(aggro);
+		ai = unit->getCurrentAIState();
+	}
 
 	BattleAction action;
 	unit->think(&action);
@@ -208,6 +216,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			bool success = _save->getTileEngine()->psiAttack(&action);
 			if (success && action.type == BA_MINDCONTROL)
 			{
+				_save->updateExposedUnits();
 				// show a little infobox with the name of the unit and "... is under alien control"
 				std::wstringstream ss;
 				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL");
@@ -391,13 +400,13 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
 				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
-				if ((victim->getFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE) ||
-					(victim->getFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
+				if ((victim->getOriginalFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE) ||
+					(victim->getOriginalFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
 				{
 					murderer->moraleChange(+20);
 				}
 				// murderer will get a penalty with friendly fire
-				if (victim->getFaction() == murderer->getFaction())
+				if (victim->getOriginalFaction() == murderer->getFaction())
 				{
 					murderer->moraleChange(-20);
 				}
@@ -406,7 +415,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 			{
 				// the losing squad all get a morale loss
-				if ((*i)->getFaction() == victim->getFaction())
+				if ((*i)->getFaction() == victim->getOriginalFaction())
 				{
 					(*i)->moraleChange(-(22 - ((*i)->getStats()->bravery / 10)*2));
 
@@ -445,7 +454,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					}
 				}
 				// the winning squad all get a morale increase
-				if ((*i)->getFaction() != victim->getFaction())
+				if ((*i)->getFaction() != victim->getOriginalFaction())
 				{
 					(*i)->moraleChange(+10);
 				}
@@ -896,7 +905,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
 	if (unit->getFaction() == FACTION_PLAYER)
+	{
 		unit->setTurnsExposed(1);
+		_save->updateExposedUnits();
+	}
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 

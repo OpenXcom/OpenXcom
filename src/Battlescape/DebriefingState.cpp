@@ -454,7 +454,7 @@ void DebriefingState::prepareDebriefing()
 
 		if (status == STATUS_DEAD)
 		{
-			if (oldFaction == FACTION_HOSTILE)
+			if (oldFaction == FACTION_HOSTILE && (*j)->killedBy() == FACTION_PLAYER)
 			{
 				addStat("STR_ALIENS_KILLED", 1, value);
 			}

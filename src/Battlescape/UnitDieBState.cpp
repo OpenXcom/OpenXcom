@@ -77,7 +77,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		}
 	}
 	if (_unit->getTurnsExposed())
+	{
 		_unit->setTurnsExposed(0);
+		_parent->getSave()->updateExposedUnits();
+	}
 }
 
 /**
