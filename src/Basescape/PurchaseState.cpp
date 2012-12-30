@@ -169,7 +169,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 		bool exclude = false;
 		for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); s++ )
 		{
-			if ( _game->getLanguage()->cpToWstr(*s) == _game->getLanguage()->getString(*i) ) {
+			if ( _game->getLanguage()->cpToWstr(*s) == _game->getLanguage()->getString(*i).c_str() ) {
 				exclude = true;
 				break;
 			}
