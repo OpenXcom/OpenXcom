@@ -181,7 +181,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 	
-	if (((unit->getStats()->psiSkill && unit->getType() != "SOLDIER")
+	if ((unit->getStats()->psiSkill
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint()))
 		&& _save->getExposedUnits()->size() > 0)
 	{
@@ -192,6 +192,14 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	BattleAction action;
 	unit->think(&action);
+	
+	if (action.type == BA_RETHINK)
+	{
+		unit->setAIState(new PatrolBAIState(_save, unit, 0));
+		ai = unit->getCurrentAIState();
+		unit->think(&action);
+	}
+
 	if (action.type == BA_WALK)
 	{
 		if (unit->getAggroSound() && aggro && !_playedAggroSound)
@@ -210,6 +218,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("STR_PSI_AMP"), _save->getCurrentItemId());
 		}
 		action.actor->lookAt(action.target);
+		while (action.actor->getStatus() == STATUS_TURNING)
+			action.actor->turn();
 		statePushBack(new ProjectileFlyBState(this, action));
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{

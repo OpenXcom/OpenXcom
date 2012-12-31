@@ -118,7 +118,7 @@ void AggroBAIState::exit()
  */
 void AggroBAIState::think(BattleAction *action)
 {
-	action->type = BA_NONE;
+	action->type = BA_RETHINK;
 	action->actor = _unit;
 	/* Aggro is mainly either shooting a target or running towards it (melee).
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
@@ -127,14 +127,11 @@ void AggroBAIState::think(BattleAction *action)
 	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 	_aggroTarget = 0;
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
-	int potentialTargets = _unit->getVisibleUnits()->size();
-	int exposedUnits = _game->getExposedUnits()->size();
 
 	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))
 	{
 		BattleUnit *backupTarget = 0;
-		int chances = 0;
-		int odds = 0;
+		int chanceToAttack = 87;
 		int tries = 0;
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end() && tries < 80; ++i)
 		{
@@ -150,44 +147,47 @@ void AggroBAIState::think(BattleAction *action)
 			}
 
 			// select a target for mind control, and don't target tanks
-			if (_unit->getStats()->psiSkill && (*i)->getArmor()->getSize() != 2)
+			if (_unit->getStats()->psiSkill && (*i)->getArmor()->getSize() != 2 && _unit->getType() != "SOLDIER")
 			{
 				// good god.
-				chances = psiAttackStrength
+				int chanceToAttackMe = psiAttackStrength
 					+ ((*i)->getStats()->psiSkill * -0.4)
 					- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
 					- ((*i)->getStats()->psiStrength)
 					+ (RNG::generate(0, 50))
 					+ 55;
 
-				if (chances > odds)
+				if (chanceToAttackMe > chanceToAttack)
 				{
-					odds = chances;
+					chanceToAttack = chanceToAttackMe;
 					_aggroTarget = *i;
 				}
 			}
 			++tries;
 		}
 
-		if (odds)
+		if (!_aggroTarget)
+			chanceToAttack = 0;
+
+		if (chanceToAttack)
 		{
-			if (_unit->getMainHandWeapon())
+			if (_unit->getMainHandWeapon()->getAmmoItem())
 			{
-				if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= odds)
+				if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
 				{
-					odds = 0;
+					chanceToAttack = 0;
 					_aggroTarget = 0;
 				}
 			}
 			else
 			{
-				if (RNG::generate(35, 155) >= odds)
+				if (RNG::generate(35, 155) >= chanceToAttack)
 				{
-					odds = 0;
+					chanceToAttack = 0;
 					_aggroTarget = 0;
 				}
 			}
-			if (odds >= 30)
+			if (chanceToAttack >= 30)
 			{
 				int controlOrPanic = 60;
 				int morale = _aggroTarget->getMorale();
@@ -222,7 +222,7 @@ void AggroBAIState::think(BattleAction *action)
 					action->TU = 25; // TODO: make this a ruleset thing
 				}
 			}
-			else if (odds)
+			else if (chanceToAttack)
 			{
 					action->type = BA_PANIC;
 					action->target = _aggroTarget->getPosition();
@@ -242,6 +242,8 @@ void AggroBAIState::think(BattleAction *action)
 
 	if (!_aggroTarget)
 	{
+		if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe)
+		{
 		for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 		{
 			//pick closest living unit
@@ -272,6 +274,9 @@ void AggroBAIState::think(BattleAction *action)
 			bool charge = false;
 			_unit->setCharging(0);
 			int number = RNG::generate(0,100);
+
+			// extra 5% chance per unit that sees us
+			number += unitsSpottingMe * 5;
 
 			// lost health, chances to take cover get bigger
 			if (_unit->getHealth() < _unit->getStats()->health)
@@ -432,8 +437,12 @@ void AggroBAIState::think(BattleAction *action)
 				}
 			}
 		}
-		action->TU = action->actor->getActionTUs(action->type, action->weapon);
+		if (action->type != BA_RETHINK)
+			action->TU = action->actor->getActionTUs(action->type, action->weapon);
+		}
 	}
+	else
+		setAggroTarget(_aggroTarget);
 }
 
 /**
