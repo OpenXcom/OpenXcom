@@ -1102,7 +1102,7 @@ void BattlescapeGenerator::generateMap()
 		int randX = RNG::generate(0, (_length/10)- 2);
 		int randY = RNG::generate(0, (_width/10)- 2);
 		// add one lift
-		while (blocks[randX][randY] != NULL)
+		while (blocks[randX][randY] != NULL || landingzone[randX][randY])
 		{
 			randX = RNG::generate(0, (_length/10)- 1);
 			randY = RNG::generate(0, (_width/10)- 1);
