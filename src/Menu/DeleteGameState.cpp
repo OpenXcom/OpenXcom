@@ -67,19 +67,27 @@ DeleteGameState::DeleteGameState(Game *game, const std::wstring &save, Uint8 col
 	// Set up objects
 	_window->setColor(color);
 	_window->setBackground(game->getResourcePack()->getSurface(bg));
+	if (color == 0)
+		_window->setHighContrast(true);
 
 	_btnConfirm->setColor(color);
 	_btnConfirm->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnConfirm->onMouseClick((ActionHandler)&DeleteGameState::btnConfirmClick);
+	if (color == 0)
+		_btnConfirm->setHighContrast(true);
 
 	_btnCancel->setColor(color);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&DeleteGameState::btnCancelClick);
+	if (color == 0)
+		_btnCancel->setHighContrast(true);
 	
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(color);
+	if (color == 0)
+		_txtMessage->setHighContrast(true);
 	_txtMessage->setText(_game->getLanguage()->getString("STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME"));
 }
 

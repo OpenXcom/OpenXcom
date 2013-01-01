@@ -409,6 +409,7 @@ void BattleUnit::keepWalking(bool cache)
 	
 	if (!cache)
 	{
+		_walkPhase = 1;
 		middle = 1;
 		end = 1;
 	}
