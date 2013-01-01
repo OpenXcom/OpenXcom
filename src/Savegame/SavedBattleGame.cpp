@@ -751,7 +751,7 @@ void SavedBattleGame::endTurn()
 				_selectedUnit = _lastSelectedUnit;
 			else
 				selectNextPlayerUnit();
-			while (_selectedUnit->getFaction() != FACTION_PLAYER)
+			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 				selectNextPlayerUnit();
 		}
 
@@ -765,7 +765,7 @@ void SavedBattleGame::endTurn()
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
-		while (_selectedUnit->getFaction() != FACTION_PLAYER)
+		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
 	
