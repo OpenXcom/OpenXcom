@@ -359,7 +359,7 @@ void CraftInfoState::btnArmorClick(Action *)
 }
 
 /**
- * Changes the soldier name.
+ * Changes the Craft name.
  * @param action Pointer to an action.
  */
 void CraftInfoState::edtCraftKeyPress(Action *action)

@@ -23,6 +23,7 @@
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextEdit.h"
 #include "BaseView.h"
 #include "MiniBaseView.h"
 #include "../Savegame/SavedGame.h"
@@ -35,6 +36,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "DismantleFacilityState.h"
 #include "../Geoscape/BuildNewBaseState.h"
+#include "../Engine/Action.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
@@ -60,7 +62,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_view = new BaseView(192, 192, 0, 8);
 	_mini = new MiniBaseView(128, 16, 192, 41);
 	_txtFacility = new Text(192, 9, 0, 0);
-	_txtBase = new Text(127, 17, 193, 0);
+	_edtBase = new TextEdit(127, 17, 193, 0);
 	_txtLocation = new Text(126, 9, 194, 16);
 	_txtFunds = new Text(126, 9, 194, 24);
 	_btnNewBase = new TextButton(128, 12, 192, 58);
@@ -81,7 +83,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	add(_view);
 	add(_mini);
 	add(_txtFacility);
-	add(_txtBase);
+	add(_edtBase);
 	add(_txtLocation);
 	add(_txtFunds);
 	add(_btnNewBase);
@@ -117,8 +119,9 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 
-	_txtBase->setColor(Palette::blockOffset(15)+1);
-	_txtBase->setBig();
+	_edtBase->setColor(Palette::blockOffset(15)+1);
+	_edtBase->setBig();
+	_edtBase->onKeyboardPress((ActionHandler)&BasescapeState::edtBaseKeyPress);
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 
@@ -220,7 +223,7 @@ void BasescapeState::init()
 
 	_view->setBase(_base);
 	_mini->draw();
-	_txtBase->setText(_base->getName());
+	_edtBase->setText(_base->getName());
 
 	// Get area
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
@@ -437,4 +440,16 @@ void BasescapeState::miniClick(Action *)
 	}
 }
 
+/**
+ * Changes the Base name.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::edtBaseKeyPress(Action *action)
+{
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
+		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	{
+		_base->setName(_edtBase->getText());
+	}
+}
 }
