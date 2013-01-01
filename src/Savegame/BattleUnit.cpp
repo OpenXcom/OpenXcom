@@ -350,7 +350,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param direction Which way to walk.
  * @param destination The position we should end up on.
  */
-void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile)
+void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache)
 {
 	if (direction < Pathfinding::DIR_UP)
 	{
@@ -376,14 +376,14 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-	_cacheInvalid = true;
+	_cacheInvalid = cache;
 	_kneeled = false;
 }
 
 /**
  * This will increment the walking phase.
  */
-void BattleUnit::keepWalking()
+void BattleUnit::keepWalking(bool cache)
 {
 	int middle, end;
 	if (_verticalDirection)
@@ -406,6 +406,12 @@ void BattleUnit::keepWalking()
 	}
 
 	_walkPhase++;
+	
+	if (!cache)
+	{
+		middle = 1;
+		end = 1;
+	}
 
 	if (_walkPhase == middle)
 	{
@@ -438,7 +444,7 @@ void BattleUnit::keepWalking()
 		}
 	}
 
-	_cacheInvalid = true;
+	_cacheInvalid = cache;
 }
 
 /*
@@ -527,10 +533,18 @@ void BattleUnit::lookAt(const Position &point, bool turret)
  * Look at a direction.
  * @param direction
  */
-void BattleUnit::lookAt(int direction)
+void BattleUnit::lookAt(int direction, bool force)
 {
-	_toDirection = direction;
-	_status = STATUS_TURNING;
+	if (!force)
+	{
+		_toDirection = direction;
+		_status = STATUS_TURNING;
+	}
+	else
+	{
+		_toDirection = direction;
+		_direction = direction;
+	}
 }
 
 /**

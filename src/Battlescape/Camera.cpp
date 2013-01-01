@@ -390,8 +390,10 @@ bool Camera::isOnScreen(const Position &mapPos) const
 	convertMapToScreen(mapPos, &screenPos);
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
-	// only check for the top 3/4 of the screen, because the buttons take up 56 pixels (56/200 = roughly one quarter)
-	return screenPos.x > 0 && screenPos.x < _screenWidth && screenPos.y > 0 && screenPos.y < (_screenHeight / 4) * 3;
+	return screenPos.x >= -24
+		&& screenPos.x <= _screenWidth + 24
+		&& screenPos.y >= -32
+		&& screenPos.y <= _screenHeight - 48;
 }
 
 }

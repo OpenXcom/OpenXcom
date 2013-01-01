@@ -135,9 +135,9 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase
-	void startWalking(int direction, const Position &destination, Tile *destinationTile);
+	void startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache);
 	/// Increase the walkingPhase
-	void keepWalking();
+	void keepWalking(bool cache);
 	/// Gets the walking phase for animation and sound
 	int getWalkingPhase() const;
 	/// Gets the walking phase for diagonal walking
@@ -147,7 +147,7 @@ public:
 	/// Look at a certain point.
 	void lookAt(const Position &point, bool turret = false);
 	/// Look at a certain direction.
-	void lookAt(int direction);
+	void lookAt(int direction, bool force = false);
 	/// Turn to the destination direction.
 	void turn(bool turret = false);
 	/// Abort turning.
