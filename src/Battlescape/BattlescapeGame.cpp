@@ -215,7 +215,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{
-			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("STR_PSI_AMP"), _save->getCurrentItemId());
+			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 		}
 		action.actor->lookAt(action.target);
 		while (action.actor->getStatus() == STATUS_TURNING)
