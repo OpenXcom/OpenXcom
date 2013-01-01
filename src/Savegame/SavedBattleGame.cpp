@@ -608,7 +608,7 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
 
 	do
 	{
-		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut() && ((checkReselect && (*i)->reselectAllowed())||!checkReselect))
+		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut() && (*i)->reselectAllowed())
 		{
 			break;
 		}
