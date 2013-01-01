@@ -608,7 +608,7 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
 
 	do
 	{
-		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut() && ((checkReselect && (*i)->reselectAllowed())||!checkReselect))
+		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut() && (*i)->reselectAllowed())
 		{
 			break;
 		}
@@ -751,7 +751,7 @@ void SavedBattleGame::endTurn()
 				_selectedUnit = _lastSelectedUnit;
 			else
 				selectNextPlayerUnit();
-			while (_selectedUnit->getOriginalFaction() != FACTION_PLAYER)
+			while (_selectedUnit->getFaction() != FACTION_PLAYER)
 				selectNextPlayerUnit();
 		}
 
@@ -765,13 +765,23 @@ void SavedBattleGame::endTurn()
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
-		while (_selectedUnit->getOriginalFaction() != FACTION_PLAYER)
+		while (_selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
 	
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
+		if ((*i)->getTurnsExposed() && _side == FACTION_PLAYER)
+		{
+			(*i)->setTurnsExposed((*i)->getTurnsExposed() - 1);
+			updateExposedUnits();
+		}
+		if (_side == FACTION_PLAYER && _turn == 20 && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
+		{
+			(*i)->setTurnsExposed(-1);
+			updateExposedUnits();
+		}
 		if ((*i)->getFaction() != FACTION_PLAYER)
 		{
 			(*i)->setVisible(false);
@@ -1228,6 +1238,38 @@ int SavedBattleGame::getScrollButtonTimeTolerancy() const
 int SavedBattleGame::getScrollButtonPixelTolerancy() const
 {
 	return _scrollButtonPixelTolerancy;
+}
+
+void SavedBattleGame::updateExposedUnits()
+{
+	_exposedUnits.clear();
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		if ((*i)->getTurnsExposed() && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
+			_exposedUnits.push_back(*i);
+	}
+}
+
+std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
+{
+	return &_exposedUnits;
+}
+
+/**
+ * Gets the Number of units that can see this a given unit.
+ * @param unit The unit to check for visibility.
+ * @return number of spotting units.
+ */
+int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
+{
+	int spotting = 0;
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	{
+		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
+		if (find != (*i)->getVisibleUnits()->end())
+			++spotting;
+	}
+	return spotting;
 }
 
 }

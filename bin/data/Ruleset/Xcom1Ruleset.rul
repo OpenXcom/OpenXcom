@@ -1517,6 +1517,58 @@ craftWeapons:
     ammoMax: 2
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
+# Item Definitions:
+#  - type: Item name, reference to string defined in .lng, must be unique. (string)
+#    size: How much space this item takes up in storage. (float) (default 0.0)
+#    costBuy: Cost in purchase menu. undefined/0 = cannot buy. (int) (default 0)
+#    costSell: Value in sell menu. undefined/0 = cannot sell. (int) (default 0)
+#    transferTime: time (in hours) to transfer this item (int) (default factor of distance vs weight)
+#    weight: Weight penalty to soldiers carrying this item. (int) (default 0)
+#    bigSprite: Sprite reference in BigObs.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=BIGOBS.PCK)
+#    floorSprite: Sprite reference in FloorOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
+#    handSprite: Sprite reference in HandOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
+#    bulletSprite: Projectile sprite. (int) 0 = rocket, 1 = pistol bullet, 2 = rifle bullet, 3 = auto cannon bullet, 
+#    4 = heavy cannon bullet, 5 = small laser, 6 = large laser, 7 = nothing?, 8 = plasma, 9 = small launcher, 10 = blaster launcher
+#    fireSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    compatibleAmmo:
+#      - Name of ammo item 1
+#      - Name of ammo item 2
+#      - etc.
+#    accuracyAuto: Auto-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
+#    accuracySnap: Snap-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
+#    accuracyAimed: Aimed-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
+#    accuracyMelee: Melee accuracy, as a percentage, affected by the unit's melee skill. (int)
+#    tuAuto: Auto-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    tuSnap: Snap-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    tuAimed: Aimed-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    tuMelee: Melee time unit usage, as a percentage of the attacking unit's TU. (int)
+#    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int)
+#    battleType: What kind of item is this? (int) (default 0)
+#        0 = NONE, 1 = FIREARM, 2 = AMMO, 3 = MELEE, 4 = GRENADE, 5 = PROXIMITYGRENADE, 6 = MEDIKIT,
+#        6 = MEDIKIT, 7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE 
+#    twoHanded: Is this a two-handed weapon. (boolean) (default false)
+#    invWidth: Width of this item in the inventory screen. (int) (default 1)
+#    invHeight: Height of this item in the inventory screen. (int) (default 1)
+#    armor: How much damage is needed to destoy this item on the ground. (int)
+#    fixedWeapon: can this item be dropped? (boolean) (default true)
+#    turretType: which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
+#    hitAnimation: reference in smoke.pck for "hit" explosion. (0-2) (int) (http://www.ufopaedia.org/index.php?title=SMOKE.PCK)
+#    NOTE - melee and psi-amp weapons use HIT.PCK instead, DO NOT define a hitAnimation for these types.
+#    power: average damage of the weapon, in most cases, the damage will be +- 50% (int)
+#    damageType: What kind of damage does this do? (int)
+#        0 = NONE, 1 = ARMOR PIERCING, 2 = INCENDIARY, 3 = HIGH EXPLOSIVE, 4 = LASER, 5 = PLASMA,
+#        6 = STUN, 7 = MELEE, 8 = ACID, 9 = SMOKE
+#    clipSize: How many bullets in this clip? -1 for infinite. (int) (default 0)
+#    painKiller: 10
+#    heal: 10
+#    stimulant: 10
+#    healAmount: 1
+#    healthAmount: 3
+#    stun: 4
+#    energy: 10
+#    recover: tally this item for end of mission results? (boolean) (default false)
+#    liveAlien: does this require containment? (boolean) (default false)
 items:
   - type: STR_STINGRAY_LAUNCHER
     size: 0.8
@@ -2977,6 +3029,14 @@ items:
     size: 0.0
     recover: true
     liveAlien: true
+# Special Psi Weapon for Aliens.
+# Usage of this is hard-coded.
+# DO NOT DELETE!
+  - type: ALIEN_PSI_WEAPON
+    hitSound: 36
+    battleType: 9
+    tuUse: 25
+    recover: false
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL

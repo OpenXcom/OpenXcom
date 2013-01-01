@@ -267,7 +267,14 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								visibleUnit->getTile()->setVisible(+1);
 							}
 							if (unit->getFaction() == FACTION_PLAYER)
+							{
 								visibleUnit->setVisible(true);
+							}
+							else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
+							{
+								visibleUnit->setTurnsExposed(unit->getIntelligence());
+								_save->updateExposedUnits();
+							}
 						}
 
 						if (unit->getFaction() == FACTION_PLAYER)
@@ -1146,7 +1153,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 				if ((cz + 1) % 24)
 					result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
 				if (cz > 0)
-					voxelCheck(Position(cx, cy, cz-1), excludeUnit);
+					result2 = voxelCheck(Position(cx, cy, cz-1), excludeUnit);
 				if (result2 != -1)
 					result = result2;
 				if (result3 != -1)
@@ -1385,7 +1392,10 @@ bool TileEngine::psiAttack(BattleAction *action)
 			action->actor->addPsiExp();
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim);
-			_save->setSelectedUnit(victim);
+			if (action->actor->getFaction() == FACTION_PLAYER)
+				_save->setSelectedUnit(victim);
+			else
+				victim->setTimeUnits(victim->getStats()->tu);
 			return true;
 		}
 		else

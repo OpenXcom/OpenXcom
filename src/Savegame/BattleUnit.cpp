@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -97,7 +97,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -179,6 +179,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["expMelee"] >> _expMelee;
 	node["turretType"] >> _turretType;
 	node["visible"] >> _visible;
+	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
 	if (const YAML::Node *pName = node.FindValue("originalFaction"))
@@ -237,6 +238,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
 	out << YAML::Key << "turretType" << YAML::Value << _turretType;
 	out << YAML::Key << "visible" << YAML::Value << _visible;
+	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
 
 	if (getCurrentAIState())
 	{
@@ -348,7 +350,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param direction Which way to walk.
  * @param destination The position we should end up on.
  */
-void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile)
+void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache)
 {
 	if (direction < Pathfinding::DIR_UP)
 	{
@@ -374,14 +376,14 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-	_cacheInvalid = true;
+	_cacheInvalid = cache;
 	_kneeled = false;
 }
 
 /**
  * This will increment the walking phase.
  */
-void BattleUnit::keepWalking()
+void BattleUnit::keepWalking(bool cache)
 {
 	int middle, end;
 	if (_verticalDirection)
@@ -404,6 +406,13 @@ void BattleUnit::keepWalking()
 	}
 
 	_walkPhase++;
+	
+	if (!cache)
+	{
+		_walkPhase = 1;
+		middle = 1;
+		end = 1;
+	}
 
 	if (_walkPhase == middle)
 	{
@@ -436,7 +445,7 @@ void BattleUnit::keepWalking()
 		}
 	}
 
-	_cacheInvalid = true;
+	_cacheInvalid = cache;
 }
 
 /*
@@ -525,10 +534,18 @@ void BattleUnit::lookAt(const Position &point, bool turret)
  * Look at a direction.
  * @param direction
  */
-void BattleUnit::lookAt(int direction)
+void BattleUnit::lookAt(int direction, bool force)
 {
-	_toDirection = direction;
-	_status = STATUS_TURNING;
+	if (!force)
+	{
+		_toDirection = direction;
+		_status = STATUS_TURNING;
+	}
+	else
+	{
+		_toDirection = direction;
+		_direction = direction;
+	}
 }
 
 /**
@@ -2024,6 +2041,9 @@ void BattleUnit::setEnergy(int energy)
 	_energy = energy;
 }
 
+/**
+ * Halve this unit's armor values (for beginner mode)
+ */
 void BattleUnit::halveArmor()
 {
 	_currentArmor[0] /= 2;
@@ -2051,11 +2071,19 @@ void BattleUnit::killedBy(UnitFaction f)
 	_killedBy = f;
 }
 
+/**
+ * Set the units we are charging towards.
+ * @param chargeTarget Charge Target
+ */
 void BattleUnit::setCharging(BattleUnit *chargeTarget)
 {
 	_charging = chargeTarget;
 }
 
+/**
+ * Get the units we are charging towards.
+ * @return Charge Target
+ */
 BattleUnit *BattleUnit::getCharging()
 {
 	return _charging;
@@ -2079,8 +2107,31 @@ int BattleUnit::getCarriedWeight() const
 	return weight;
 }
 
+/**
+ * Set how long this unit will be exposed for.
+ * @param turns
+ */
+void BattleUnit::setTurnsExposed (int turns)
+{
+	_turnsExposed = turns;
+}
+
+/**
+ * Get how long this unit will be exposed for.
+ * @return turns
+ */
+int BattleUnit::getTurnsExposed () const
+{
+	return _turnsExposed;
+}
+
+/**
+ * Get This unit's original Faction.
+ * @return original faction
+ */
 UnitFaction BattleUnit::getOriginalFaction() const
 {
 	return _originalFaction;
 }
+
 }
