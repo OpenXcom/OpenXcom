@@ -131,7 +131,7 @@ void AggroBAIState::think(BattleAction *action)
 	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))
 	{
 		BattleUnit *backupTarget = 0;
-		int chanceToAttack = 87;
+		int chanceToAttack = 0;
 		int tries = 0;
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end() && tries < 80; ++i)
 		{

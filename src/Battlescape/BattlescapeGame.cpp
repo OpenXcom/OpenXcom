@@ -183,7 +183,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	
 	if ((unit->getStats()->psiSkill
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint()))
-		&& _save->getExposedUnits()->size() > 0)
+		&& _save->getExposedUnits()->size() > 0 && RNG::generate(0,100) > 66)
 	{
 		aggro = new AggroBAIState(_save, unit);
 		unit->setAIState(aggro);
