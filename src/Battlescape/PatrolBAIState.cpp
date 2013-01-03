@@ -130,9 +130,25 @@ void PatrolBAIState::think(BattleAction *action)
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
 		// destination reached
-		_fromNode = _toNode;
-		_toNode->free();
-		_toNode = 0;
+		// take a peek through window before walking to the next node
+		int dir = _game->getTileEngine()->faceWindow(_unit->getPosition());
+		if (dir != -1 && dir != _unit->getDirection())
+		{
+			_unit->lookAt(dir);
+			while (_unit->getStatus() == STATUS_TURNING)
+			{
+				_unit->turn();
+			}
+			action->TU = 0; // tus are already decreased while walking
+			return;
+		}
+		else
+		{
+			// head off to next patrol node
+			_fromNode = _toNode;
+			_toNode->free();
+			_toNode = 0;
+		}
 	}
 
 	if (_fromNode == 0)

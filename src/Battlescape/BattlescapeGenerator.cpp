@@ -640,7 +640,11 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	{
 		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
-		unit->setDirection(RNG::generate(0,7));
+		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
+		if (dir != -1)
+			unit->setDirection(dir);
+		else
+			unit->setDirection(RNG::generate(0,7));
 
 		UnitStats *stats = unit->getStats();
 

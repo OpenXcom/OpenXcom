@@ -91,6 +91,8 @@ public:
 	bool psiAttack(BattleAction *action);
 	Tile *applyItemGravity(Tile *t);
 	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
+	int faceWindow(const Position &position);
+
 };
 
 }

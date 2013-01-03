@@ -1469,4 +1469,27 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 	}
 	return false;
 }
+
+/*
+ * AI: Check for windows.
+ * @return direction or -1 when no window found
+ */
+int TileEngine::faceWindow(const Position &position)
+{
+	static const Position oneTileEast = Position(1, 0, 0);
+	static const Position oneTileSouth = Position(0, 1, 0);
+
+	Tile *tile = _save->getTile(position);
+	if (tile && tile->getMapData(MapData::O_NORTHWALL) && tile->getMapData(MapData::O_NORTHWALL)->getBlock(DT_NONE)==0) return 0;
+	tile = _save->getTile(position + oneTileEast);
+	if (tile && tile->getMapData(MapData::O_WESTWALL) && tile->getMapData(MapData::O_WESTWALL)->getBlock(DT_NONE)==0) return 2;
+	tile = _save->getTile(position + oneTileSouth);
+	if (tile && tile->getMapData(MapData::O_NORTHWALL) && tile->getMapData(MapData::O_NORTHWALL)->getBlock(DT_NONE)==0) return 4;
+	tile = _save->getTile(position);
+	if (tile && tile->getMapData(MapData::O_WESTWALL) && tile->getMapData(MapData::O_WESTWALL)->getBlock(DT_NONE)==0) return 6;
+
+	return -1;
+}
+
+
 }
