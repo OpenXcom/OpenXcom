@@ -1038,7 +1038,7 @@ void SavedBattleGame::prepareNewTurn()
 		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
 		{
 			// units in smoke suffer stun
-			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_STUN, true);
+			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_SMOKE, true);
 		}
 
 		Tile *t = getTile(Position(x+spreadX, y+spreadY, z));
