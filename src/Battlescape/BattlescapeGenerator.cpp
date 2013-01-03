@@ -328,32 +328,27 @@ void BattlescapeGenerator::run()
 		{
 			for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
 			{
-				std::string vehicle = (*i)->getRules()->getType();
-				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
-				unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
-				addItem(_game->getRuleset()->getItem(vehicle), unit);
-				if((*i)->getRules()->getClipSize() != -1)
-				{
-					std::string ammo = (*i)->getRules()->getCompatibleAmmo()->front();
-					addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity((*i)->getAmmo());
-				}
-				unit->setTurretType((*i)->getRules()->getTurretType());
+				addXCOMVehicle(*i);
+
 			}
 		}
 		else if (_base != 0)
 		{
+			// add vehicles that are in the crafts of the base, if it's not out
+			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			{
+				if ((*c)->getStatus() != "STR_OUT")
+				{
+					for (std::vector<Vehicle*>::iterator i = (*c)->getVehicles()->begin(); i != (*c)->getVehicles()->end(); ++i)
+					{
+						addXCOMVehicle(*i);
+					}
+				}
+			}
+			// add vehicles that are in the base inventory
 			for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 			{
-				std::string vehicle = (*i)->getRules()->getType();
-				Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
-				unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
-				addItem(_game->getRuleset()->getItem(vehicle), unit);
-				if((*i)->getRules()->getClipSize() != -1)
-				{
-					std::string ammo = (*i)->getRules()->getCompatibleAmmo()->front();
-					addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity((*i)->getAmmo());
-				}
-				unit->setTurretType((*i)->getRules()->getTurretType());
+				addXCOMVehicle(*i);
 			}
 		}
 
@@ -485,6 +480,28 @@ void BattlescapeGenerator::run()
 	_save->getTileEngine()->calculateTerrainLighting();
 	_save->getTileEngine()->calculateUnitLighting();
 }
+
+/**
+ * Adds a xcom vehicle to the game.
+ * Set the correct turret depending on the ammo type
+ * @param v pointer to the Vehicle
+ */
+void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
+{
+	std::string vehicle = v->getRules()->getType();
+	Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
+	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
+	addItem(_game->getRuleset()->getItem(vehicle), unit);
+	if(v->getRules()->getClipSize() != -1)
+	{
+		std::string ammo = v->getRules()->getCompatibleAmmo()->front();
+		addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity(v->getAmmo());
+	}
+	unit->setTurretType(v->getRules()->getTurretType());
+}
+
+
+
 
 /**
  * Adds a soldier to the game and place him on a free spawnpoint.

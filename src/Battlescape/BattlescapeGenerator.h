@@ -32,6 +32,7 @@ class RuleTerrain;
 class ResourcePack;
 class RuleSet;
 class Soldier;
+class Vehicle;
 class Armor;
 class RuleItem;
 class Unit;
@@ -68,6 +69,8 @@ private:
 	void generateMap();
 	/// links tiles with terrainobjects, for easier/faster lookup
 	void linkTilesWithMapDatas();
+	/// Add a vehicle to the game
+	void addXCOMVehicle(Vehicle *v);
 	/// Add a soldier to the game
 	BattleUnit *addXCOMUnit(BattleUnit *unit);
 	/// Add an alien to the game
