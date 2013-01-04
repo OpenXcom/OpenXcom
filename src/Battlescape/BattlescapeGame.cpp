@@ -1093,10 +1093,15 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				cancelCurrentAction();
 			}
 		}
-		else if (_currentAction.weapon->getRules()->getBattleType() == BT_PSIAMP && _currentAction.type != BA_THROW)
+		else if (_currentAction.type == BA_PANIC || _currentAction.type == BA_MINDCONTROL)
 		{
 			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
+				bool builtinpsi = !_currentAction.weapon;
+				if (builtinpsi)
+				{
+					_currentAction.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
+				}
 				_currentAction.target = pos;
 				// get the sound/animation started
 				getMap()->setCursorType(CT_NONE);
@@ -1108,6 +1113,11 @@ void BattlescapeGame::primaryAction(const Position &pos)
 					_currentAction.targeting = false;
 					_currentAction.type = BA_NONE;
 					setupCursor();
+				}
+				if (builtinpsi)
+				{
+					_save->removeItem(_currentAction.weapon);
+					_currentAction.weapon = 0;
 				}
 			}
 		}
@@ -1188,6 +1198,19 @@ void BattlescapeGame::launchAction()
 	_states.push_back(new ProjectileFlyBState(this, _currentAction));
 	statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 }
+
+/**
+ * Pressed the psi button.
+ */
+void BattlescapeGame::psiAction()
+{
+	_currentAction.weapon = 0;
+	_currentAction.targeting = true;
+	_currentAction.type = BA_PANIC;
+	_currentAction.TU = 25;
+	setupCursor();
+}
+
 
 /**
  * Move a unit up or down.

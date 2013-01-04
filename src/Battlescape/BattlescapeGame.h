@@ -130,6 +130,8 @@ public:
 	void secondaryAction(const Position &pos);
 	/// Pressed the launch action.
 	void launchAction();
+	/// Pressed the psi action.
+	void psiAction();
 	/// Move a unit up or down.
 	void moveUpDown(BattleUnit *unit, int dir);
 	/// Request of the end of the turn (wait for explosions etc to really end the turn)

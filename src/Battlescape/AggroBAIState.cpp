@@ -27,6 +27,7 @@
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Armor.h"
+#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -456,5 +457,6 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 	_timesNotSeen = 0;
 	_lastKnownPosition = unit->getPosition();
 }
+
 
 }

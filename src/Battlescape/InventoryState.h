@@ -66,6 +66,8 @@ public:
 	void btnRankClick(Action *action);
 	/// Handler for clicking the Unload button.
 	void invClick(Action *action);
+	/// Handle keypresses.
+	void handle(Action *action);
 };
 
 }

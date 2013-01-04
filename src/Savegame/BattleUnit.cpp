@@ -1353,6 +1353,7 @@ std::vector<BattleItem*> *BattleUnit::getInventory()
  */
 void BattleUnit::think(BattleAction *action)
 {
+	checkAmmo();
 	_currentAIState->think(action);
 }
 
@@ -1549,6 +1550,46 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
 		}
 	}
 	return 0;
+}
+
+/**
+ * Check if we have ammo and reload if needed (used for AI)
+ */
+bool BattleUnit::checkAmmo()
+{
+	BattleItem *weapon = getItem("STR_RIGHT_HAND");
+	if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
+	{
+		weapon = getItem("STR_LEFT_HAND");
+		if (!weapon || weapon->getAmmoItem() != 0 || weapon->getRules()->getBattleType() == BT_MELEE || getTimeUnits() < 15)
+		{
+			return false;
+		}
+	}
+	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
+	BattleItem *ammo = 0;
+	bool wrong = true;
+	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	{
+		ammo = (*i);
+		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
+		{
+			if ((*c) == ammo->getRules()->getType())
+			{
+				wrong = false;
+				break;
+			}
+		}
+		if (!wrong) break;
+	}
+
+	if (wrong) return false; // didn't find any compatible ammo in inventory
+
+	spendTimeUnits(15,false);
+	weapon->setAmmoItem(ammo);
+	ammo->moveToOwner(0);
+
+	return true;
 }
 
 /**

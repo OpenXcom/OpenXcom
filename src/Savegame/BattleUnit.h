@@ -260,6 +260,8 @@ public:
 	BattleItem *getMainHandWeapon(bool quickest = true) const;
 	/// Gets a grenade from the belt, if any.
 	BattleItem *getGrenadeFromBelt() const;
+	/// Reloads righthand weapon if needed.
+	bool checkAmmo();
 	/// Check if this unit is in the exit area
 	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.

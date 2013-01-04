@@ -362,4 +362,21 @@ void InventoryState::invClick(Action *)
 	}
 }
 
+/**
+ * Takes care of any events from the core game engine.
+ * @param action Pointer to an action.
+ */
+void InventoryState::handle(Action *action)
+{
+	State::handle(action);
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		// "tab" - next solider
+		if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+		{
+			btnNextClick(action);
+		}
+	}
+}
+
 }

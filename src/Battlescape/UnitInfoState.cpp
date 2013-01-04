@@ -19,6 +19,8 @@
 #include "UnitInfoState.h"
 #include <sstream>
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -512,6 +514,15 @@ void UnitInfoState::handle(Action *action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
+	}
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		// "tab" - next solider
+		if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+		{
+			_unit = _game->getSavedGame()->getBattleGame()->selectNextPlayerUnit();
+			init();
+		}
 	}
 }
 

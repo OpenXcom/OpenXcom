@@ -136,6 +136,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
 	_btnLaunch = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 0);
 	_btnLaunch->setVisible(false);
+	_btnPsi = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 25);
+	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
 	_txtName = new Text(120, 10, _icons->getX() + 135, _icons->getY() + 32);
@@ -227,6 +229,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_txtDebug);
 	add(_btnLaunch);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
+	add(_btnPsi);
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
 	// Set up objects
 
@@ -286,6 +290,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1));
 	_btnLaunch->onMouseClick((ActionHandler)&BattlescapeState::btnLaunchClick);
+	_btnPsi->onMouseClick((ActionHandler)&BattlescapeState::btnPsiClick);
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
@@ -802,6 +807,16 @@ void BattlescapeState::btnLaunchClick(Action *action)
 }
 
 /**
+ * Use psionics.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnPsiClick(Action *action)
+{
+	_battleGame->psiAction();
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
+}
+
+/**
  * Reserve time units.
  * @param action Pointer to an action.
  */
@@ -954,6 +969,8 @@ void BattlescapeState::updateSoldierInfo()
 		_visibleUnit[j] = (*i);
 		++j;
 	}
+
+	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getStats()->psiSkill > 0);
 }
 
 /**
@@ -1096,6 +1113,26 @@ void BattlescapeState::handle(Action *action)
 			{
 				_save->getTileEngine()->togglePersonalLighting();
 			}
+			// "tab" - next solider
+			if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+			{
+				if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+					selectNextPlayerUnit(false);
+			}
+			// "esc" - options menu
+			if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)
+			{
+				_game->pushState(new BattlescapeOptionsState(_game));
+			}
+			// "r" - reload
+			if (action->getDetails()->key.keysym.sym == SDLK_r && playableUnitSelected())
+			{
+				if (_save->getSelectedUnit()->checkAmmo())
+				{
+					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(17)->play();
+					updateSoldierInfo();
+				}
+			}
 		}
 	}
 
@@ -1175,6 +1212,15 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 void BattlescapeState::showLaunchButton(bool show)
 {
 	_btnLaunch->setVisible(show);
+}
+
+/**
+ * Show PSI button.
+ * @param show Show PSI button?
+ */
+void BattlescapeState::showPsiButton(bool show)
+{
+	_btnPsi->setVisible(show);
 }
 
 /**

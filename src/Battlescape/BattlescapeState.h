@@ -55,7 +55,7 @@ private:
 	Map *_map;
 	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
 	InteractiveSurface *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
-	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats, *_btnLaunch;
+	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats, *_btnLaunch, *_btnPsi;
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
 	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
@@ -138,8 +138,10 @@ public:
 	void btnRightHandItemClick(Action *action);
 	/// Handler for clicking a visible unit button.
 	void btnVisibleUnitClick(Action *action);
-	/// Handler for clicking a reserved button.
+	/// Handler for clicking the launch rocket button.
 	void btnLaunchClick(Action *action);
+	/// Handler for clicking the use psi button.
+	void btnPsiClick(Action *action);
 	/// Handler for clicking a reserved button.
 	void btnReserveNoneClick(Action *action);
 	/// Handler for clicking a reserved button.
@@ -174,6 +176,8 @@ public:
 	void finishBattle(bool abort, int inExitArea);
 	/// show launch button
 	void showLaunchButton(bool show);
+	/// show PSI button
+	void showPsiButton(bool show);
 	/// Clears mouse-scrolling state
 	void clearMouseScrollingState();
 
