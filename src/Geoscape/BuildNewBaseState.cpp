@@ -174,6 +174,7 @@ void BuildNewBaseState::globeClick(Action *action)
 			{
 				(*i)->setLongitude(lon);
 				(*i)->setLatitude(lat);
+				(*i)->setName(L"", _game->getLanguage());
 			}
 			if (_first)
 			{
