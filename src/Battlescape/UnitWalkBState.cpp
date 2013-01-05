@@ -71,6 +71,7 @@ void UnitWalkBState::think()
 	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 	if (_unit->isOut())
 	{
+		_action.strafe = false;
 		_pf->abortPath();
 		_parent->popState();
 		return;
@@ -143,6 +144,7 @@ void UnitWalkBState::think()
 									p.z = t->getPosition().z*24 + t->getTerrainLevel();
 									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
 									t->getInventory()->erase(i);
+									_action.strafe = false;
 									return;
 								}
 							}
@@ -156,6 +158,7 @@ void UnitWalkBState::think()
 			{
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 				// unit got fired upon - stop walking
+				_action.strafe = false;
 				_pf->abortPath();
 				return;
 			}
@@ -163,7 +166,18 @@ void UnitWalkBState::think()
 		else if (onScreen)
 		{
 			// make sure the unit sprites are up to date
-			_parent->getMap()->cacheUnit(_unit);
+			if (_pf->getStrafeMove())
+			{
+				// This is where we fake out the strafe movement direction so the unit "moonwalks"
+				int dirTemp = _unit->getDirection();
+				_unit->setDirection(_unit->getFaceDirection());
+				_parent->getMap()->cacheUnit(_unit);
+				_unit->setDirection(dirTemp);
+			}
+			else
+			{
+				_parent->getMap()->cacheUnit(_unit);
+			}
 		}
 	}
 
@@ -174,6 +188,7 @@ void UnitWalkBState::think()
 		if (unitspotted && _unit->getCharging() == 0)
 		{
 			_parent->getMap()->cacheUnit(_unit);
+			_action.strafe = false;
 			_pf->abortPath();
 			return;
 		}
@@ -187,14 +202,60 @@ void UnitWalkBState::think()
 			_parent->setStateInterval(0);
 		}
 		int dir = _pf->getStartDirection();
-		if (dir != -1)
+		if ( (dir < 0) || (dir > 7) )
 		{
+			_action.strafe = false;
+		}
+		if ((_unit->getTurretType() > -1) && _action.strafe)
+		{
+			// Turret-and-Ctrl-down, turn the turret instead of moving.
+			// TU cost: (in 1/8ths turn) 1 = 1, 2 = 1, 3 = 2, 4 = 2
+			// Basically half the cost of actually turning.
+			int dirTurr  = _unit->getTurretDirection();
+			int dirTurrTo =_unit->getDirectionTo(_action.target);
+			// 
+			int turnSides = std::min(abs(8 + dirTurr - dirTurrTo), std::min( abs(dirTurrTo - dirTurr), abs(8 +dirTurrTo - dirTurr)));
+			int tu = 0;
+			if (turnSides == 0)
+			{
+				_action.strafe = false;
+				_unit->abortTurn();
+			}
+			else
+			{
+				tu = (turnSides + 1) / 2;
+			}
+			if (tu > _unit->getTimeUnits() && !_parent->getSave()->getDebugMode())
+			{
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_action.strafe = false;
+				_pf->abortPath();
+				return;
+			}
+			// Set up the look, and spend the tu's. This also sets STATUS_TURNING and _toDirectionTurret.
+			_unit->lookAt((_action.target), true);
+			_unit->spendTimeUnits(tu, _parent->getSave()->getDebugMode());
+			// Dequeue everything, because we don't want to walk to the click.
+			while (_pf->getStartDirection() > -1)
+			{
+				dir = _pf->dequeuePath();
+			}
+			return;
+		}
+		else if (dir != -1)
+		{
+			if (_pf->getStrafeMove())
+			{
+				_unit->setFaceDirection(_unit->getDirection());
+			}
+
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
 			if (tu > _unit->getTimeUnits())
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_action.strafe = false;
 				_pf->abortPath();
 				_parent->getMap()->cacheUnit(_unit);
 				return;
@@ -202,14 +263,15 @@ void UnitWalkBState::think()
 
 			if (_parent->checkReservedTU(_unit, tu) == false)
 			{
+				_action.strafe = false;
 				_pf->abortPath();
 				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
 
-			// we are looking in the wrong way, turn first
+			// we are looking in the wrong way, turn first (unless strafing)
 			// we are not using the turn state, because turning during walking costs no tu
-			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP)
+			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
 				_unit->lookAt(dir, true);
 				return;
@@ -254,7 +316,20 @@ void UnitWalkBState::think()
 			}
 			// make sure the unit sprites are up to date
 			if (onScreen)
-				_parent->getMap()->cacheUnit(_unit);
+			{
+				if (_pf->getStrafeMove())
+				{
+					// This is where we fake out the strafe movement direction so the unit "moonwalks"
+					int dirTemp = _unit->getDirection();
+					_unit->setDirection(_unit->getFaceDirection());
+					_parent->getMap()->cacheUnit(_unit);
+					_unit->setDirection(dirTemp);
+				}
+				else
+				{
+					_parent->getMap()->cacheUnit(_unit);
+				}
+			}
 		}
 		else
 		{
@@ -266,15 +341,34 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		_unit->turn();
-		unitspotted = _terrain->calculateFOV(_unit);
+		if (_action.strafe && (_unit->getTurretType() > -1))
+		{
+			_unit->turn(true);
+			if (_unit->getStatus() == STATUS_STANDING)
+			{
+				_action.strafe = false;
+			}
+		}
+		else
+		{
+			_unit->turn();
+		}
+		if (_unit->getTurretType() > -1)
+		{
+			unitspotted = _terrain->calculateFOV(_unit);
+		}
+		else
+		{
+			unitspotted = _terrain->calculateFOV(_unit);
+		}
 		// make sure the unit sprites are up to date
 		if (onScreen)
 			_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0)
 		{
 			_pf->abortPath();
-				_parent->getMap()->cacheUnit(_unit);
+			_parent->getMap()->cacheUnit(_unit);
+			_action.strafe = false;
 			return;
 		}
 	}
@@ -312,6 +406,7 @@ void UnitWalkBState::postPathProcedures()
 	_terrain->calculateFOV(_unit);
 	_parent->getMap()->cacheUnit(_unit);
 	_parent->popState();
+	this->_action.strafe = false;
 }
 
 /*

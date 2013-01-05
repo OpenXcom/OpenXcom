@@ -60,6 +60,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_specab = SPECAB_NONE;
 	_armor = soldier->getArmor();
 	_gender = soldier->getGender();
+	_faceDirection = -1;
 
 	int rankbonus = 0;
 
@@ -116,6 +117,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
 	_gender = GENDER_MALE;
+	_faceDirection = -1;
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -310,6 +312,15 @@ void BattleUnit::setDirection(int direction)
 }
 
 /**
+ * Changes the facedirection. Only used for strafing moves.
+ * @param direction
+ */
+void BattleUnit::setFaceDirection(int direction)
+{
+	_faceDirection = direction;
+}
+
+/**
  * Gets the BattleUnit's (horizontal) direction.
  * @return direction
  */
@@ -319,12 +330,30 @@ int BattleUnit::getDirection() const
 }
 
 /**
+ * Gets the BattleUnit's (horizontal) face direction. Used only during strafing moves
+ * @return direction
+ */
+int BattleUnit::getFaceDirection() const
+{
+	return _faceDirection;
+}
+
+/**
  * Gets the BattleUnit's turret direction.
  * @return direction
  */
 int BattleUnit::getTurretDirection() const
 {
 	return _directionTurret;
+}
+
+/**
+ * Gets the BattleUnit's turret To direction.
+ * @return toDirectionTurret
+ */
+int BattleUnit::getTurretToDirection() const
+{
+	return _toDirectionTurret;
 }
 
 /**
@@ -427,6 +456,11 @@ void BattleUnit::keepWalking(bool cache)
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
+		if (_faceDirection >= 0) {
+			// Finish strafing move facing the correct way.
+			_direction = _faceDirection;
+			_faceDirection = -1;
+		} 
 
 		// motion points calculation for the motion scanner blips
 		if (_armor->getSize() > 1)
@@ -472,45 +506,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
-	double ox = point.x - _pos.x;
-	double oy = point.y - _pos.y;
-	double angle = atan2(ox, -oy);
-	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
-	int dir = 0;
-
-	if (angle > pie[0] || angle < -pie[0])
-	{
-		dir = 4;
-	}
-	else if (angle > pie[1])
-	{
-		dir = 3;
-	}
-	else if (angle > pie[2])
-	{
-		dir = 2;
-	}
-	else if (angle > pie[3])
-	{
-		dir = 1;
-	}
-	else if (angle < -pie[1])
-	{
-		dir = 5;
-	}
-	else if (angle < -pie[2])
-	{
-		dir = 6;
-	}
-	else if (angle < -pie[3])
-	{
-		dir = 7;
-	}
-	else if (angle < pie[0])
-	{
-		dir = 0;
-	}
+	int dir = getDirectionTo (point);
 
 	if (turret)
 	{
@@ -700,6 +696,54 @@ void BattleUnit::aim(bool aiming)
 		_status = STATUS_STANDING;
 
 	_cacheInvalid = true;
+}
+
+/**
+ * Returns the soldier's amount of time units.
+ * @return Time units.
+ */
+int BattleUnit::getDirectionTo(const Position &point) const
+{
+	double ox = point.x - _pos.x;
+	double oy = point.y - _pos.y;
+	double angle = atan2(ox, -oy);
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	int dir = 0;
+
+	if (angle > pie[0] || angle < -pie[0])
+	{
+		dir = 4;
+	}
+	else if (angle > pie[1])
+	{
+		dir = 3;
+	}
+	else if (angle > pie[2])
+	{
+		dir = 2;
+	}
+	else if (angle > pie[3])
+	{
+		dir = 1;
+	}
+	else if (angle < -pie[1])
+	{
+		dir = 5;
+	}
+	else if (angle < -pie[2])
+	{
+		dir = 6;
+	}
+	else if (angle < -pie[3])
+	{
+		dir = 7;
+	}
+	else if (angle < pie[0])
+	{
+		dir = 0;
+	}
+	return dir;
 }
 
 /**

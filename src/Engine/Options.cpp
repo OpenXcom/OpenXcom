@@ -86,6 +86,7 @@ void createDefault()
 	setInt("pauseMode", 0);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
+	setBool("strafe", false);
 
 	_rulesets.push_back("Xcom1Ruleset");
 }

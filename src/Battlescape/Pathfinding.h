@@ -51,6 +51,7 @@ private:
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
 	bool _pathPreviewed;
+	bool _strafeMove;
 	///Try to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target);
 	///Try to find a path between two positions.
@@ -76,6 +77,7 @@ public:
 	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
 	/// Abort the current path.
 	void abortPath();
+	bool getStrafeMove() const;
 	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
 	bool previewPath(bool bRemove = false);
 	bool removePreview();
