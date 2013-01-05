@@ -1045,7 +1045,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 	if (door == 0 || door == 1)
 	{
 
-		unit->spendTimeUnits(TUCost, _save->getDebugMode());
+		unit->spendTimeUnits(TUCost);
 		calculateFOV(unit->getPosition());
 	}
 

@@ -95,7 +95,7 @@ void UnitTurnBState::think()
 		return;
 	}
 
-	if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
+	if (_unit->spendTimeUnits(tu))
 	{
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);

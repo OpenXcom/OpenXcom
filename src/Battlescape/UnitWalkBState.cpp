@@ -178,7 +178,7 @@ void UnitWalkBState::think()
 			return;
 		}
 
-		if (onScreen)
+		if (onScreen || _parent->getSave()->getDebugMode())
 		{
 			setNormalWalkSpeed();
 		}
@@ -192,7 +192,7 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
 
-			if (tu > _unit->getTimeUnits() && !_parent->dontSpendTUs())
+			if (tu > _unit->getTimeUnits())
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				_pf->abortPath();
@@ -233,9 +233,9 @@ void UnitWalkBState::think()
 
 			// now start moving
 			dir = _pf->dequeuePath();
-			if (_unit->spendTimeUnits(tu, _parent->dontSpendTUs()))
+			if (_unit->spendTimeUnits(tu))
 			{
-				if (_unit->spendEnergy(tu, _parent->dontSpendTUs()))
+				if (_unit->spendEnergy(tu))
 				{
 					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), onScreen);
 				}

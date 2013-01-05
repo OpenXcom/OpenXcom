@@ -528,6 +528,13 @@ void BattlescapeState::mapClick(Action *action)
 	Position pos;
 	_map->getSelectorPosition(&pos);
 
+	if (_save->getDebugMode())
+	{
+		std::wstringstream ss;
+		ss << L"Clicked " << pos.x << " "<< pos.y << " "<< pos.z;
+		debug(ss.str());
+	}
+
 	if (_save->getTile(pos) != 0) // don't allow to click into void
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)

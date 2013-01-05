@@ -243,7 +243,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if (_action->type == BA_USE && weapon->getBattleType() == BT_SCANNER)
 		{
 			// spend TUs first, then show the scanner
-			if (_action->actor->spendTimeUnits (_action->TU, false))
+			if (_action->actor->spendTimeUnits (_action->TU))
 			{
 				_game->pushState (new ScannerState (_game, _action));
 			}

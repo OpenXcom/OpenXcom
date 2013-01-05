@@ -167,6 +167,7 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
+	std::wstringstream ss;
 	BattleAIState *ai = unit->getCurrentAIState();
 	if (!ai)
 	{
@@ -188,6 +189,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		aggro = new AggroBAIState(_save, unit);
 		unit->setAIState(aggro);
 		ai = unit->getCurrentAIState();
+		_parentState->debug(L"Aggro");
 	}
 
 	BattleAction action;
@@ -195,13 +197,16 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	
 	if (action.type == BA_RETHINK)
 	{
+		_parentState->debug(L"Rethink");
 		unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
-		unit->think(&action);
+		unit->think(&action);	
 	}
 
 	if (action.type == BA_WALK)
 	{
+		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;
+		_parentState->debug(ss.str());
 		if (unit->getAggroSound() && aggro && !_playedAggroSound)
 		{
 			getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(unit->getAggroSound())->play();
@@ -217,6 +222,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		{
 			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 		}
+
+		ss.clear();
+		ss << L"Attack type=" << action.type << " target="<< action.target.x << " "<< action.target.y << " "<< action.target.z << " weapon=" << action.weapon->getRules()->getName().c_str();
+		_parentState->debug(ss.str());
+
 		action.actor->lookAt(action.target);
 		while (action.actor->getStatus() == STATUS_TURNING)
 			action.actor->turn();
@@ -238,11 +248,13 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (action.type == BA_NONE)
 	{
+		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 		if (aggro != 0)
 		{
 			// we lost aggro
 			unit->setAIState(new PatrolBAIState(_save, unit, 0));
+			_parentState->debug(L"Lost aggro");
 		}
 		if (_save->selectNextPlayerUnit(true) == 0)
 		{
@@ -272,7 +284,7 @@ void BattlescapeGame::kneel(BattleUnit *bu)
 	int tu = bu->isKneeled()?8:4;
 	if (checkReservedTU(bu, tu))
 	{
-		if (bu->spendTimeUnits(tu, _save->getDebugMode()))
+		if (bu->spendTimeUnits(tu))
 		{
 			bu->kneel(!bu->isKneeled());
 			// kneeling or standing up can reveal new terrain or units. I guess.
@@ -531,7 +543,7 @@ void BattlescapeGame::handleNonTargetAction()
 	{
 		if (_currentAction.type == BA_PRIME && _currentAction.value > -1)
 		{
-			if (_currentAction.actor->spendTimeUnits(_currentAction.TU, dontSpendTUs()))
+			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
 			}
@@ -558,7 +570,7 @@ void BattlescapeGame::handleNonTargetAction()
 			}
 			else
 			{
-				if (_currentAction.actor->spendTimeUnits(_currentAction.TU, dontSpendTUs()))
+				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					Position p;
 					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &p);
@@ -743,7 +755,7 @@ void BattlescapeGame::popState()
 			// the other actions' TUs (healing,scanning,..) are already take care of
 			if (action.targeting && _save->getSelectedUnit() && !actionFailed)
 			{
-				action.actor->spendTimeUnits(action.TU, dontSpendTUs());
+				action.actor->spendTimeUnits(action.TU);
 			}
 			if (_save->getSide() == FACTION_PLAYER)
 			{
@@ -765,7 +777,7 @@ void BattlescapeGame::popState()
 		else
 		{
 			// spend TUs
-			action.actor->spendTimeUnits(action.TU, _debugPlay);
+			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
 				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
@@ -862,7 +874,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  */
 bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 {
-	if (dontSpendTUs() || _save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
+	if (_save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
 
 	// check TUs against slowest weapon if we have two weapons
 	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
@@ -989,20 +1001,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	unit->moraleChange(+15);
 
 	return true;
-}
-
-/**
- * TUs are not spent when handling panicking mode or in debug mode.
- * @return Whether TUs are spent or not.
- */
-bool BattlescapeGame::dontSpendTUs()
-{
-	if (_save->getDebugMode())
-		return true;
-	if (!_playerPanicHandled)
-		return true;
-
-	return false;
 }
 
 /**

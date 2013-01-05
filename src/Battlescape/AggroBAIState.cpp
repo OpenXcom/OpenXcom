@@ -368,7 +368,7 @@ void AggroBAIState::think(BattleAction *action)
 							if (ProjectileFlyBState::validThrowRange(action))
 							{
 								grenade->setExplodeTurn(_game->getTurn());
-								_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade), false);
+								_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade));
 								action->type = BA_THROW;
 							}
 						}
