@@ -1003,12 +1003,10 @@ bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
 /**
  * Spend energy  if it can. Return false if it can't.
  * @param tu
- * @param debugmode If this is true, the function actually does noting.
  * @return flag if it could spend the time units or not.
  */
-bool BattleUnit::spendEnergy(int tu, bool debugmode)
+bool BattleUnit::spendEnergy(int tu)
 {
-	if (debugmode) return true;
 	int eu = tu / 2;
 
 	if (eu <= _energy)

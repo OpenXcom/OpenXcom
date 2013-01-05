@@ -193,9 +193,9 @@ public:
 	/// Get the number of time units a certain action takes.
 	int getActionTUs(BattleActionType actionType, BattleItem *item);
 	/// Spend time units if it can.
-	bool spendTimeUnits(int tu, bool debugmode);
+	bool spendTimeUnits(int tu, bool debugmode = false);
 	/// Spend energy if it can.
-	bool spendEnergy(int tu, bool debugmode);
+	bool spendEnergy(int tu);
 	/// Set time units.
 	void setTimeUnits(int tu);
 	/// Add unit to visible units.
