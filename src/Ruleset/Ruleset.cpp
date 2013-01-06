@@ -469,6 +469,7 @@ void Ruleset::loadFile(const std::string &filename)
 				{
 					rule = new AlienDeployment(type);
 					_alienDeployments[type] = rule;
+					if (type != "STR_BASE_DEFENSE")
 					_deploymentsIndex.push_back(type);
 				}
 				rule->load(*j);
