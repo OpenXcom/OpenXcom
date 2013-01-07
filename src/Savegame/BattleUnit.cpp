@@ -757,6 +757,8 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type, bool 
 
 	power = (int)floor(power * _armor->getDamageModifier(type));
 
+	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
+
 	if (!ignoreArmor)
 	{
 		if (position == Position(0, 0, 0))
