@@ -77,9 +77,9 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 							 0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00,
 							 'd', 'a', 't', 'a', 0x00, 0x00, 0x00, 0x00};
 
-            for (unsigned int n = 0; n < size; ++n) sound[n] *= 4; // scale to 8 bits
-            if (size > 5) size -= 5; // skip 5 garbage name bytes at beginning
-            if (size) size--; // omit trailing null byte
+			for (unsigned int n = 0; n < size; ++n) sound[n] *= 4; // scale to 8 bits
+			if (size > 5) size -= 5; // skip 5 garbage name bytes at beginning
+			if (size) size--; // omit trailing null byte
 
 			int headersize = size + 36;
 			int soundsize = size;
