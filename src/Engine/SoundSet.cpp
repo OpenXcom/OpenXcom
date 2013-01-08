@@ -65,7 +65,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 	for (int i = 0; i < sndFile.getAmount(); ++i)
 	{
 		// Read WAV chunk
-		char *sound = sndFile.load(i);
+		unsigned char *sound = (unsigned char*) sndFile.load(i);
 		unsigned int size = sndFile.getObjectSize(i);
 
 		// If there's no WAV header (44 bytes), add it
@@ -76,6 +76,11 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			char header[] = {'R', 'I', 'F', 'F', 0x00, 0x00, 0x00, 0x00, 'W', 'A', 'V', 'E', 'f', 'm', 't', ' ',
 							 0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x40, 0x1f, 0x00, 0x00, 0x01, 0x00, 0x08, 0x00,
 							 'd', 'a', 't', 'a', 0x00, 0x00, 0x00, 0x00};
+
+            for (int n = 0; n < size; ++n) sound[n] *= 4; // scale to 8 bits
+            if (size > 5) size -= 5; // skip 5 garbage name bytes at beginning
+            if (size) size--; // omit trailing null byte
+
 			int headersize = size + 36;
 			int soundsize = size;
 			memcpy(header + 4, &headersize, sizeof(headersize));
@@ -83,7 +88,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 
 			newsound = new char[44 + size];
 			memcpy(newsound, header, 44);
-			memcpy(newsound + 44, sound, size);
+			if (size) memcpy(newsound + 44, sound+5, size);
 		}
 
 		Sound *s = new Sound();
