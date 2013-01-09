@@ -874,6 +874,8 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  */
 bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 {
+    BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
+
 	if (_save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
 
 	// check TUs against slowest weapon if we have two weapons
@@ -881,14 +883,14 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0 && _tuReserved == BA_AUTOSHOT)
 	{
-		_tuReserved = BA_SNAPSHOT;
+		effectiveTuReserved = BA_SNAPSHOT;
 	}
 
-	if (_tuReserved != BA_NONE &&
-		tu + bu->getActionTUs(_tuReserved, slowestWeapon) > bu->getTimeUnits() &&
-		bu->getActionTUs(_tuReserved, slowestWeapon) <= bu->getTimeUnits())
+	if (effectiveTuReserved != BA_NONE &&
+		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
+		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
-		switch (_tuReserved)
+		switch (effectiveTuReserved)
 		{
 		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
 		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
