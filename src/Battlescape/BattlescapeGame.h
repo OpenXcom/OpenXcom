@@ -53,7 +53,8 @@ struct BattleAction
 	bool targeting;
 	int value;
 	std::string result;
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result("") { }
+	bool strafe, run;
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false) { }
 };
 
 /**

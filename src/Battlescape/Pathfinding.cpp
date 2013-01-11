@@ -25,6 +25,8 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Engine/Options.h"
+#include "../Engine/Game.h"
 
 namespace OpenXcom
 {
@@ -44,6 +46,7 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0
 		_save->getTileCoords(i, &p.x, &p.y, &p.z);
 		_nodes.push_back(PathfindingNode(p));
 	}
+	_strafeMove = false;
 }
 
 /**
@@ -98,6 +101,10 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
 	}
+
+	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
+	_strafeMove = Options::getBool("strafe") && Game::getCtrlKeyDown() && !Game::getShiftKeyDown() && (startPosition.z == endPosition.z) && 
+							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	_path.clear();
 
@@ -304,6 +311,29 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			{
 				wallcost /= 2;
 				cost = (int)((double)cost * 1.5);
+			}
+
+			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
+			// Maybe if flying then it makes no difference?
+			if (Options::getBool("strafe") && _strafeMove) {
+				if (size) {
+					// 4-tile units not supported.
+					// Turn off strafe move and continue
+					_strafeMove = false;
+				}
+				else
+				{
+					if (std::min(abs(8 + direction - _unit->getDirection()), std::min( abs(_unit->getDirection() - direction), abs(8 + _unit->getDirection() - direction))) > 2) {
+						// Strafing backwards-ish currently unsupported, turn it off and continue.
+						_strafeMove = false;
+					}
+					else
+					{
+						if (_unit->getDirection() != direction) {
+							cost += 1;
+						}
+					}
+				}
 			}
 
 			cost += wallcost;
@@ -790,6 +820,10 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		tiles.push_back(_save->getTileIndex((*it)->getPosition()));
 	}
 	return tiles;
+}
+
+bool Pathfinding::getStrafeMove() const {
+	return _strafeMove;
 }
 
 }
