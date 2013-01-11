@@ -55,6 +55,8 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
+	static bool _ctrlKeyDown; // Used so player can indicate strafing movement.
+	static bool _shiftKeyDown; // Used so player can indicate strafing movement.
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -98,6 +100,14 @@ public:
 	void loadRuleset();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
+	/// Sets whether the Ctrl Key is down
+	static void setCtrlKeyDown(bool ctrlKey);
+	/// Returns whether the control key is down
+	static bool getCtrlKeyDown();
+	/// Sets whether the Shift Key is down
+	static void setShiftKeyDown(bool shiftKey);
+	/// Returns whether the Shift key is down
+	static bool getShiftKeyDown();
 };
 
 }
