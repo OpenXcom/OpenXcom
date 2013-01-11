@@ -251,6 +251,13 @@ void UnitWalkBState::think()
 
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit); // gets tu cost, but also gets the destination position.
+			int energy = tu;
+
+			if (_action.run)
+			{
+				tu *= 0.75;
+				energy *= 1.5;
+			}
 
 			if (tu > _unit->getTimeUnits())
 			{
@@ -297,7 +304,7 @@ void UnitWalkBState::think()
 			dir = _pf->dequeuePath();
 			if (_unit->spendTimeUnits(tu))
 			{
-				if (_unit->spendEnergy(tu))
+				if (_unit->spendEnergy(energy))
 				{
 					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), onScreen);
 				}

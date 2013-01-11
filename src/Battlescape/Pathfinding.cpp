@@ -103,7 +103,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile
 	}
 
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = Options::getBool("strafe") && Game::getCtrlKeyDown() && (startPosition.z == endPosition.z) && 
+	_strafeMove = Options::getBool("strafe") && Game::getCtrlKeyDown() && !Game::getShiftKeyDown() && (startPosition.z == endPosition.z) && 
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	_path.clear();

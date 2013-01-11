@@ -211,13 +211,22 @@ void Game::run()
 					break;
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
-					if (Options::getBool("strafe") && (_event.type == SDL_KEYDOWN) && (&_event)->key.keysym.sym == SDLK_LCTRL)
+					if (Options::getBool("strafe"))
 					{
-						setCtrlKeyDown(true);
-					}
-					if ((_event.type == SDL_KEYUP) && (&_event)->key.keysym.sym == SDLK_LCTRL)
-					{
-						setCtrlKeyDown(false);
+						if (_event.type == SDL_KEYDOWN)
+						{ 
+							if ((&_event)->key.keysym.sym == SDLK_LCTRL)
+								setCtrlKeyDown(true);
+							else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
+								setShiftKeyDown(true);
+						}
+						else if (_event.type == SDL_KEYUP)
+						{
+							if ((&_event)->key.keysym.sym == SDLK_LCTRL)
+								setCtrlKeyDown(false);
+							else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
+								setShiftKeyDown(false);
+						}
 					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
@@ -507,4 +516,20 @@ bool Game::getCtrlKeyDown()
 	return _ctrlKeyDown;
 }
 
+bool Game::_shiftKeyDown;
+/**
+ * Sets whether the Shift key is down
+ */
+void Game::setShiftKeyDown(bool shiftKey)
+{
+	_shiftKeyDown =  shiftKey;
+}
+
+/**
+ * Returns whether the Shift key is down
+ */
+bool Game::getShiftKeyDown()
+{
+	return _shiftKeyDown;
+}
 }
