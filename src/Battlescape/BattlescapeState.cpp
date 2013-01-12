@@ -245,7 +245,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
 	SDL_Rect *r = s->getCrop();
 	r->x = 0;
-	r->y = mapHeight - iconsHeight;
+	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
 	s->blit(_icons);
