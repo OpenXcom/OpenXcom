@@ -238,6 +238,39 @@ void AggroBAIState::think(BattleAction *action)
 				action->target = backupTarget->getPosition();
 				action->type = BA_LAUNCH;
 				action->TU = action->actor->getActionTUs(action->type, action->weapon);
+				action->waypoints.clear();
+
+				int PathDirection;
+				int CollidesWith;
+				Position LastWayPoint = _unit->getPosition();
+				Position LastPosition = _unit->getPosition();
+				Position CurrentPosition = _unit->getPosition();
+				Position DirectionVector;
+
+				_game->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), true);
+				PathDirection = _game->getPathfinding()->dequeuePath();
+				while (PathDirection != -1)
+				{
+					LastPosition = CurrentPosition;
+					_game->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
+					CurrentPosition = CurrentPosition + DirectionVector;
+
+					CollidesWith = _game->getTileEngine()->calculateLine(CurrentPosition, LastWayPoint, false, 0, _unit, true, false );
+					if (CollidesWith > 0 && CollidesWith < 4)
+					{
+						action->waypoints.push_back(LastPosition);
+						LastWayPoint = LastPosition;
+					}
+
+					PathDirection = _game->getPathfinding()->dequeuePath();
+				}
+				action->waypoints.push_back(_aggroTarget->getPosition());
+
+				if( action->waypoints.size() > 10 )
+				{
+					action->type = BA_RETHINK;
+				}
+
 		}
 	}
 
