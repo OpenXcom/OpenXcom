@@ -40,12 +40,13 @@ NewGameState::NewGameState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
-	_btnBeginner = new TextButton(160, 18, 80, 55);
-	_btnExperienced = new TextButton(160, 18, 80, 80);
-	_btnVeteran = new TextButton(160, 18, 80, 105);
-	_btnGenius = new TextButton(160, 18, 80, 130);
-	_btnSuperhuman = new TextButton(160, 18, 80, 155);
-	_txtTitle = new Text(192, 10, 64, 30);
+	_btnBeginner = new TextButton(160, 18, 80, 30);
+	_btnExperienced = new TextButton(160, 18, 80, 55);
+	_btnVeteran = new TextButton(160, 18, 80, 80);
+	_btnGenius = new TextButton(160, 18, 80, 105);
+	_btnSuperhuman = new TextButton(160, 18, 80, 130);
+	_btnCancel = new TextButton(160, 18, 80, 155);
+	_txtTitle = new Text(192, 10, 64, 17);
 
 	add(_window);
 	add(_btnBeginner);
@@ -53,6 +54,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 	add(_btnVeteran);
 	add(_btnGenius);
 	add(_btnSuperhuman);
+	add(_btnCancel);
 	add(_txtTitle);
 
 	// Set up objects
@@ -78,6 +80,10 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_btnSuperhuman->setColor(Palette::blockOffset(8)+5);
 	_btnSuperhuman->setText(_game->getLanguage()->getString("STR_5_SUPERHUMAN"));
 	_btnSuperhuman->onMouseClick((ActionHandler)&NewGameState::btnSuperhumanClick);
+
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->onMouseClick((ActionHandler)&NewGameState::btnCancelClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -155,6 +161,16 @@ void NewGameState::btnGeniusClick(Action *)
 void NewGameState::btnSuperhumanClick(Action *)
 {
 	newGame(DIFF_SUPERHUMAN);
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void NewGameState::btnCancelClick(Action *)
+{
+	_game->setSavedGame(0);
+	_game->popState();
 }
 
 }

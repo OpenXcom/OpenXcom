@@ -37,7 +37,8 @@ class Text;
 class NewGameState : public State
 {
 private:
-	TextButton *_btnBeginner, *_btnExperienced, *_btnVeteran, *_btnGenius, *_btnSuperhuman;
+	TextButton *_btnBeginner, *_btnExperienced, *_btnVeteran;
+	TextButton *_btnGenius, *_btnSuperhuman, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle;
 public:
@@ -57,6 +58,8 @@ public:
 	void btnGeniusClick(Action *action);
 	/// Handler for clicking the Superhuman button.
 	void btnSuperhumanClick(Action *action);
+	/// Handler for clicking the cancel button.
+	void btnCancelClick(Action *);
 };
 
 }
