@@ -299,9 +299,6 @@
     <ClCompile Include="Savegame\Node.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\NodeLink.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\RuleTerrain.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -1015,9 +1012,6 @@
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\Node.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\NodeLink.h">
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleTerrain.h">

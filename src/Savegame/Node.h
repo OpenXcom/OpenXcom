@@ -25,8 +25,6 @@
 namespace OpenXcom
 {
 
-class NodeLink;
-
 enum NodeRank{NR_SCOUT=0, NR_XCOM, NR_SOLDIER, NR_NAVIGATOR, NR_LEADER, NR_ENGINEER, NR_MISC1, NR_MEDIC, NR_MISC2};
 
 /**
@@ -39,7 +37,7 @@ private:
 	int _id;
 	Position _pos;
 	int _segment;
-	NodeLink *_nodeLinks[5];
+	std::vector<int> _nodeLinks;
 	int _type;
 	int _rank;
 	int _flags;
@@ -63,9 +61,7 @@ public:
 	/// get the node's id
 	int getID() const;
 	/// get the node's paths
-	NodeLink *getNodeLink(int index);
-	/// Assigns a link to this node
-	void assignNodeLink(NodeLink *link, int index);
+	std::vector<int> *getNodeLinks();
 	/// Gets node's rank.
 	NodeRank getRank() const;
 	/// Gets node's priority.
