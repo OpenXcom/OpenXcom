@@ -183,7 +183,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		std::stringstream s;
 		s << "UFOINTRO/" << lbms[i];
 		_surfaces[lbms[i]] = new Surface(320, 200);
-		_surfaces[lbms[i]]->loadLbm(CrossPlatform::getDataFile(s.str()));
+		_surfaces[lbms[i]]->loadImage(CrossPlatform::getDataFile(s.str()));
 	}
 	// Load surface sets
 	std::string sets[] = {"BASEBITS.PCK",

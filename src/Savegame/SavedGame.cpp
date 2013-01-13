@@ -49,9 +49,6 @@
 #include "AlienStrategy.h"
 #include "AlienMission.h"
 #include "../Ruleset/RuleRegion.h"
-#ifdef _MSC_VER
-#include <windows.h>
-#endif
 
 namespace OpenXcom
 {
@@ -205,12 +202,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
-#ifdef _MSC_VER
-	std::wstring wstr = Language::utf8ToWstr(s);
-	std::ifstream fin(wstr.c_str());
-#else
 	std::ifstream fin(s.c_str());
-#endif
 	if (!fin)
 	{
 		throw Exception("Failed to load savegame");
@@ -337,12 +329,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 void SavedGame::save(const std::string &filename) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
-#ifdef _MSC_VER
-	std::wstring wstr = Language::utf8ToWstr(s);
-	std::ofstream sav(wstr.c_str());
-#else
 	std::ofstream sav(s.c_str());
-#endif
 	if (!sav)
 	{
 		throw Exception("Failed to save savegame");
