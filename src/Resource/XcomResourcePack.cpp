@@ -36,7 +36,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/Node.h"
-#include "../Savegame/NodeLink.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
 

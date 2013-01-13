@@ -35,7 +35,6 @@
 #include "../Battlescape/AggroBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-#include "../Savegame/NodeLink.h"
 
 
 namespace OpenXcom
@@ -122,6 +121,17 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		(*i)["position"][2] >> pos.z;
 		getTile(pos)->load((*i));
 	}
+/*	const int recordSize = 19;
+	std::string s;
+	node["tiles"] >> s;
+	std::vector<unsigned char> tileData( s.begin(), s.end() );
+	int records = tileData.size() / recordSize;
+	for (int i = 0; i < records; ++i)
+	{
+		int index = tileData.data()[(i * recordSize)] + tileData.data()[(i * recordSize)+1] << 8 + tileData.data()[(i * recordSize)+2] << 16 + tileData.data()[(i * recordSize)+3] << 24;
+		_tiles[index]->loadBinary(&tileData.data()[(i * recordSize)]);
+	}
+*/
 
 	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
 	{
@@ -308,7 +318,6 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		out << (*i)->getName();
 	}
 	out << YAML::EndSeq;
-
 	out << YAML::Key << "tiles" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (int i = 0; i < _height * _length * _width; ++i)
@@ -319,7 +328,27 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		}
 	}
 	out << YAML::EndSeq;
-
+	/*const int recordSize = 19;
+	size_t tileDataSize = recordSize * _height * _length * _width;
+	unsigned char* tileData = (unsigned char*) malloc(tileDataSize);
+	int ptr = 0;
+	for (int i = 0; i < _height * _length * _width; ++i)
+	{
+		if (!_tiles[i]->isVoid())
+		{
+			tileData[ptr] = (unsigned int)i;
+			_tiles[i]->saveBinary(&tileData[ptr]);
+			ptr += recordSize;
+		}
+		else
+		{
+			tileDataSize -= recordSize;
+		}
+	}
+	out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
+    free(tileData);
+    ptr = NULL;
+	*/
 	out << YAML::Key << "nodes" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
@@ -980,11 +1009,11 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 {
 	std::vector<Node*> compliantNodes;	
 
-	for (int i = 0; i < 4; i ++)
+	for (std::vector<int>::iterator i = fromNode->getNodeLinks()->begin(); i != fromNode->getNodeLinks()->end(); ++i )
 	{
-		if (fromNode->getNodeLink(i)->getConnectedNodeID() > -1)
+		if (*i > 0)
 		{
-			Node *n = getNodes()->at(fromNode->getNodeLink(i)->getConnectedNodeID());
+			Node *n = getNodes()->at(*i);
 			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
 				&& (!(n->getType() & Node::TYPE_SMALL) 
 					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small

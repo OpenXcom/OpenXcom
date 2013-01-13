@@ -493,8 +493,6 @@ openxcom_SOURCES = \
 	src/Savegame/MovingTarget.h \
 	src/Savegame/Node.cpp \
 	src/Savegame/Node.h \
-	src/Savegame/NodeLink.cpp \
-	src/Savegame/NodeLink.h \
 	src/Savegame/Production.cpp \
 	src/Savegame/Production.h \
 	src/Savegame/Region.cpp \

@@ -32,7 +32,6 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Node.h"
-#include "../Savegame/NodeLink.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Exception.h"
 #include "../Ruleset/MapBlock.h"
@@ -1365,22 +1364,22 @@ void BattlescapeGenerator::generateMap()
 		else
 			neighbourSegments[3] = segments[segmentX][segmentY-1];
 			
-		for (int j = 0; j < 5; j++)
+		for (std::vector<int>::iterator j = node->getNodeLinks()->begin(); j != node->getNodeLinks()->end(); ++j )
 		{
 			for (int n = 0; n < 4; n++)
 			{
-				if (node->getNodeLink(j)->getConnectedNodeID() == neighbourDirections[n])
+				if (*j == neighbourDirections[n])
 				{
 					for (std::vector<Node*>::iterator k = _save->getNodes()->begin(); k != _save->getNodes()->end(); ++k)
 					{
 						if ((*k)->getSegment() == neighbourSegments[n])
 						{
-							for (int l = 0; l < 5; l++)
+							for (std::vector<int>::iterator l = (*k)->getNodeLinks()->begin(); l != (*k)->getNodeLinks()->end(); ++l )
 							{
-								if ((*k)->getNodeLink(l)->getConnectedNodeID() == neighbourDirectionsInverted[n])
+								if (*l == neighbourDirectionsInverted[n])
 								{
-									(*k)->getNodeLink(l)->setConnectedNodeID(node->getID());
-									node->getNodeLink(j)->setConnectedNodeID((*k)->getID());
+									*l = node->getID();
+									*j = (*k)->getID();
 								}
 							}
 						}
@@ -1533,7 +1532,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 				{
 					connectID += nodeOffset;
 				}
-				node->assignNodeLink(new NodeLink(connectID, (int)value[5 + j*3], (int)value[6 + j*3]), j);
+				node->getNodeLinks()->push_back(connectID);
 			}
 			_save->getNodes()->push_back(node);
 		}

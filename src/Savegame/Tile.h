@@ -65,8 +65,11 @@ public:
 	~Tile();
 	/// Load the tile to yaml
 	void load(const YAML::Node &node);
+	void loadBinary(const unsigned char* buffer);
 	/// Saves the tile to yaml
 	void save(YAML::Emitter &out) const;
+	/// Saves the tile to binary
+	void saveBinary(unsigned char* buffer) const;
 	/// Gets a pointer to the mapdata for a specific part of the tile.
 	MapData *getMapData(int part) const;
 	/// Sets the pointer to the mapdata for a specific part of the tile

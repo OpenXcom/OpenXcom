@@ -432,8 +432,6 @@ set ( savegame_src
   Savegame/Craft.h
   Savegame/Country.cpp
   Savegame/Country.h
-  Savegame/NodeLink.cpp
-  Savegame/NodeLink.h
   Savegame/Transfer.cpp
   Savegame/Transfer.h
   Savegame/Region.h

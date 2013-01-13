@@ -100,6 +100,29 @@ void Tile::load(const YAML::Node &node)
 }
 
 /**
+ * Load the tile from binary.
+ * @param buffer pointer to buffer.
+ */
+void Tile::loadBinary(const unsigned char* buffer)
+{
+	_mapDataSetID[0] = buffer[4];
+	_mapDataID[0] = buffer[5] + (buffer[6] << 8);
+	_mapDataSetID[1] = buffer[7];
+	_mapDataID[1] = buffer[8] + (buffer[9] << 8);
+	_mapDataSetID[2] = buffer[10];
+	_mapDataID[2] = buffer[11] + (buffer[10] << 8);
+	_mapDataSetID[3] = buffer[13];
+	_mapDataID[3] = buffer[14] + (buffer[15] << 8);
+
+	_smoke = buffer[16];
+	_fire = buffer[17];
+	_discovered[0] = buffer[18] & 1;
+	_discovered[1] = buffer[18] & 2;
+	_discovered[2] = buffer[18] & 4;
+}
+
+
+/**
  * Saves the tile to a YAML node.
  * @param out YAML emitter.
  */
@@ -121,6 +144,25 @@ void Tile::save(YAML::Emitter &out) const
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
 	}
 	out << YAML::EndMap;
+}
+/**
+ * Saves the tile to binary.
+ * @param buffer pointer to buffer.
+ */
+void Tile::saveBinary(unsigned char* buffer) const
+{
+	buffer[4] = (unsigned char)_mapDataSetID[0];
+	buffer[5] = (unsigned short)_mapDataID[0];
+	buffer[7] = (unsigned char)_mapDataSetID[1];
+	buffer[8] = (unsigned short)_mapDataID[1];
+	buffer[10] = (unsigned char)_mapDataSetID[2];
+	buffer[11] = (unsigned short)_mapDataID[2];
+	buffer[13] = (unsigned char)_mapDataSetID[3];
+	buffer[14] = (unsigned short)_mapDataID[3];
+
+	buffer[16] = (unsigned short)_smoke;
+	buffer[17] = (unsigned short)_fire;
+	buffer[18] = _discovered[0]?1:0 + _discovered[1]?1:0 << 1 + _discovered[2]?1:0 << 2;
 }
 
 /**

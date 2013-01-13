@@ -402,7 +402,6 @@
     <ClCompile Include="Savegame\GameTime.cpp" />
     <ClCompile Include="Savegame\ItemContainer.cpp" />
     <ClCompile Include="Savegame\MovingTarget.cpp" />
-    <ClCompile Include="Savegame\NodeLink.cpp" />
     <ClCompile Include="Savegame\Production.cpp" />
     <ClCompile Include="Savegame\Region.cpp" />
     <ClCompile Include="Savegame\ResearchProject.cpp" />
@@ -645,7 +644,6 @@
     <ClInclude Include="Savegame\GameTime.h" />
     <ClInclude Include="Savegame\ItemContainer.h" />
     <ClInclude Include="Savegame\MovingTarget.h" />
-    <ClInclude Include="Savegame\NodeLink.h" />
     <ClInclude Include="Savegame\Production.h" />
     <ClInclude Include="Savegame\Region.h" />
     <ClInclude Include="Savegame\ResearchProject.h" />
