@@ -355,9 +355,10 @@ void BattlescapeGame::endTurn()
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
+		checkForCasualties(0, 0, false, true);
 	}
 
-	checkForCasualties(0, 0, false, true);
+	checkForCasualties(0, 0, false, false);
 
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
