@@ -111,23 +111,23 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			_lstDefenses->addRow(3, _game->getLanguage()->getString((*def)->getRules()->getType()).c_str(),"","");
 			++row;
 			delay();
-			_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_FIRING"));
-			_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getFireSound())->play(); // XXX XXX XXX this line crashes, not sure why
+			_lstDefenses->setCellText(row, 1, _game->getLanguage()->getString("STR_FIRING").c_str());
+			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((*def)->getRules()->getFireSound())->play(); // XXX XXX XXX this line crashes, not sure why
 			delay();
 			if(RNG::generate(1, 100) > (*def)->getRules()->getHitRatio())
 			{
-				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_MISSED"));
+				_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_MISSED").c_str());
 			}
 			else
 			{
-				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_HIT"));
-				_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
+				_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_HIT").c_str());
+				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((*def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (*def)->getRules()->getDefenseValue());
 				if(_ufo->getStatus() == 3)
 				{
 					delay();
-					_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),"","");
-					_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound(11)->play();
+					_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),"","");
+					_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
 					continue;
 				}
 			}
