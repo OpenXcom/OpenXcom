@@ -1121,7 +1121,7 @@ int Base::getGravShields() const
 
 std::vector<BaseFacility*> *Base::getDefenses()
 {
-	std::vector<BaseFacility*> *total = 0;
+	std::vector<BaseFacility*> *total = new std::vector<BaseFacility*>;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getDefenseValue())
