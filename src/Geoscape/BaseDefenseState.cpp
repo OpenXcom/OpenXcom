@@ -53,8 +53,6 @@ namespace OpenXcom
  */
 BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(game)
 {
-	std::vector<BaseFacility*>* defenses = _base->getDefenses(); // getDefenses() returns a new object every time; we must hold on to a single instance for iterators to work
-
 	_base = base;
 	_ufo = ufo;
 	// Create objects
@@ -94,6 +92,9 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 
 	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
+
+	std::vector<BaseFacility*>* defenses = _base->getDefenses(); 
+	// getDefenses() returns a new object every time; we must hold on to a single instance for iterators to work
 
 	int row = -1;
 	for(int pass = 0; pass != _base->getGravShields()+1; ++pass)
