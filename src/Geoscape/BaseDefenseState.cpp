@@ -54,6 +54,11 @@ namespace OpenXcom
 BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(game)
 {
 	_base = base;
+	_action = BDA_NONE;
+	_row = -1;
+	_passes = 0;
+	_attacks = 0;
+	_thinkcycles = 0;
 	_ufo = ufo;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -86,54 +91,16 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 	std::wstringstream ss;
 	ss << _base->getName() << _game->getLanguage()->getString("STR_UNDER_ATTACK");
 	_txtTitle->setText(ss.str());
+	_txtInit->setVisible(false);
 
 	_txtInit->setColor(Palette::blockOffset(13)+10);
 	_txtInit->setText(_game->getLanguage()->getString("STR_BASE_DEFENSES_INITIATED"));
 
 	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
-
-	int row = -1;
-	for(int pass = 0; pass != _base->getGravShields()+1; ++pass)
-	{
-		if(pass)
-		{
-			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str(),"","");
-			++row;
-		}
-		for(std::vector<BaseFacility*>::iterator def = _base->getDefenses()->begin(); def != _base->getDefenses()->end(); ++def)
-		{
-			delay();
-			_lstDefenses->addRow(3, _game->getLanguage()->getString((*def)->getRules()->getType()).c_str(),"","");
-			++row;
-			delay();
-			_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_FIRING"));
-			_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
-			delay();
-			if(RNG::generate(1, 100) > (*def)->getRules()->getHitRatio())
-			{
-				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_MISSED"));
-			}
-			else
-			{
-				_lstDefenses->setCellText(row, 3, _game->getLanguage()->getString("STR_HIT"));
-				_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getHitSound())->play();
-				_ufo->setDamage(_ufo->getDamage() + (*def)->getRules()->getDefenseValue());
-				if(_ufo->getStatus() == 3)
-				{
-					delay();
-					_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),"","");
-					_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound(11)->play();
-					continue;
-				}
-			}
-		}
-		if(_ufo->getStatus() == 3)
-		{
-			continue;
-		}
-	}
-	_btnOk->setVisible(true);
+	_gravShields = _base->getGravShields();
+	_defenses = _base->getDefenses()->size();
+	_nextEventTime = clock();
 }
 /**
  *
@@ -142,13 +109,97 @@ BaseDefenseState::~BaseDefenseState()
 {
 }
 
-/**
- * Resets the palette.
- */
-void BaseDefenseState::init()
+void BaseDefenseState::think()
 {
-}
+	if (_thinkcycles == -1 || clock() < _nextEventTime)
+		return;
+	
+	_nextEventTime = clock() + 750;
 
+	if (_thinkcycles == 1)
+	{
+		_txtInit->setVisible(true);
+		++_thinkcycles;
+		return;
+	}
+
+	if (_thinkcycles != -1)
+	{
+		++_thinkcycles;
+	}
+
+	if (_thinkcycles > 1)
+	{
+		if (_action == BDA_DESTROY)
+		{
+			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str()," "," ");
+			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
+			_action = BDA_END;
+			return;
+		}
+
+		if (_action == BDA_END)
+		{
+			_btnOk->setVisible(true);
+			_thinkcycles = -1;
+			return;
+		}
+
+		if (_attacks == _defenses && _passes == _gravShields)
+		{
+			_action = BDA_END;
+			return;
+		}
+		else if (_attacks == _defenses && _passes < _gravShields)
+		{
+			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str()," "," ");
+			++_row;
+			++_passes;
+			_attacks = 0;
+			return;
+		}
+		
+	
+
+		BaseFacility* def = _base->getDefenses()->at(_attacks);
+
+		if (_action == BDA_NONE)
+		{
+			_lstDefenses->addRow(3, _game->getLanguage()->getString((def)->getRules()->getType()).c_str()," "," ");
+			++_row;
+			_action = BDA_FIRE;
+			return;
+		}
+
+		if (_action == BDA_FIRE)
+		{
+			_lstDefenses->setCellText(_row, 1, _game->getLanguage()->getString("STR_FIRING").c_str());
+			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((def)->getRules()->getFireSound())->play();
+			_action = BDA_RESOLVE;
+			return;
+		}
+
+		if (_action == BDA_RESOLVE)
+		{
+			if (RNG::generate(0, 100) > (def)->getRules()->getHitRatio())
+			{
+				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_MISSED").c_str());
+			}
+			else
+			{
+				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_HIT").c_str());
+				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((def)->getRules()->getHitSound())->play();
+				_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
+			}
+			if (_ufo->getStatus() == Ufo::DESTROYED)
+				_action = BDA_DESTROY;
+			else
+				_action = BDA_NONE;
+			++_attacks;
+			return;
+		}
+	}
+}
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
@@ -159,7 +210,6 @@ void BaseDefenseState::btnOkClick(Action *)
 	_game->popState();
 	if(_ufo->getStatus() != 3 && _base->getSoldiers())
 	{
-		_game->popState();
 		if (_base->getSoldiers())
 		{
 			size_t month = _game->getSavedGame()->getMonthsPassed();
@@ -170,7 +220,6 @@ void BaseDefenseState::btnOkClick(Action *)
 			bgame->setMissionType("STR_BASE_DEFENSE");
 			BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 			bgen.setBase(_base);
-			bgen.setUfo(_ufo);
 			bgen.setAlienRace(_ufo->getAlienRace());
 			bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 			bgen.run();
@@ -182,12 +231,15 @@ void BaseDefenseState::btnOkClick(Action *)
 			_game->pushState(new BaseDestroyedState(_game, _base));
 		}
 	}
-}
-
-void BaseDefenseState::delay()
-{
-clock_t start_time = clock();
-clock_t end_time = 500 + start_time;
-while(clock() != end_time);
+	// destroy any way, to remove it from Geoscape.
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	{
+		if ((*i) == _ufo)
+		{
+			delete *i;
+			_game->getSavedGame()->getUfos()->erase(i);
+			break;
+		}
+	}
 }
 }

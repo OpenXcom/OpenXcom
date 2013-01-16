@@ -333,17 +333,6 @@ void BattlescapeGenerator::run()
 		}
 		else if (_base != 0)
 		{
-			// add vehicles that are in the crafts of the base, if it's not out
-			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
-			{
-				if ((*c)->getStatus() != "STR_OUT")
-				{
-					for (std::vector<Vehicle*>::iterator i = (*c)->getVehicles()->begin(); i != (*c)->getVehicles()->end(); ++i)
-					{
-						addXCOMVehicle(*i);
-					}
-				}
-			}
 			// add vehicles that are in the base inventory
 			for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 			{

@@ -50,6 +50,7 @@
 #include <sstream>
 #include <map>
 #include "../Menu/MainMenuState.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -224,9 +225,11 @@ void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
+	std::stringstream ss;
+	ss << "GMGEO" << RNG::generate(1, 2);
+	_game->getResourcePack()->getMusic(ss.str())->play();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
-		//_game->popState();
 		_game->setState(new MainMenuState(_game));
 	}
 	else if (!_destroyBase)
@@ -545,14 +548,30 @@ void DebriefingState::prepareDebriefing()
 					}
 					else
 					{
-						// non soldier player = tank
-						for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+						if (craft)
 						{
-							if ((*i)->getRules()->getType() == "STR_" + type)
+							// non soldier player = tank
+							for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 							{
-								delete (*i);
-								craft->getVehicles()->erase(i);
-								break;
+								if ((*i)->getRules()->getType() == "STR_" + type)
+								{
+									delete (*i);
+									craft->getVehicles()->erase(i);
+									break;
+								}
+							}
+						}
+						else
+						{
+							// non soldier player = tank
+							for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
+							{
+								if ((*i)->getRules()->getType() == "STR_" + type)
+								{
+									delete (*i);
+									base->getVehicles()->erase(i);
+									break;
+								}
 							}
 						}
 					}

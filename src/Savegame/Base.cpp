@@ -77,6 +77,10 @@ Base::~Base()
 	{
 		delete *i;
 	}
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -1118,31 +1122,30 @@ int Base::getGravShields() const
 	return total;
 }
 
-
-std::vector<BaseFacility*> *Base::getDefenses()
+void Base::setupDefenses()
 {
-	std::vector<BaseFacility*> *total = 0;
+	_defenses.clear();
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getDefenseValue())
 		{
-			total->push_back(*i);
+			_defenses.push_back(*i);
 		}
 	}
-	return total;
-}
 
-/**
- * Returns the list of vehicles currently equipped
- * in the base.
- * @return Pointer to vehicle list.
- */
-std::vector<Vehicle*> *Base::getVehicles()
-{
-	for (std::vector<Vehicle*>::iterator v = _vehicles.begin(); v < _vehicles.end(); ++v)
+	_vehicles.clear();
+	// add vehicles that are in the crafts of the base, if it's not out
+	for (std::vector<Craft*>::iterator c = getCrafts()->begin(); c != getCrafts()->end(); ++c)
 	{
-		delete (*v);
+		if ((*c)->getStatus() != "STR_OUT")
+		{
+			for (std::vector<Vehicle*>::iterator i = (*c)->getVehicles()->begin(); i != (*c)->getVehicles()->end(); ++i)
+			{
+				_vehicles.push_back(*i);
+			}
+		}
 	}
+
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
 		if (_rule->getItem((i)->first)->isFixed())
@@ -1152,6 +1155,20 @@ std::vector<Vehicle*> *Base::getVehicles()
 			_vehicles.push_back(v);
 		}
 	}
+}
+
+std::vector<BaseFacility*> *Base::getDefenses()
+{
+	return &_defenses;
+}
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the base.
+ * @return Pointer to vehicle list.
+ */
+std::vector<Vehicle*> *Base::getVehicles()
+{
 	return &_vehicles;
 }
 }

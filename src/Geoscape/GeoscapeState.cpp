@@ -540,7 +540,7 @@ void GeoscapeState::time5Seconds()
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->size() == 0)
 	{
-		_game->pushState (new DefeatState(_game));
+		popup(new DefeatState(_game));
 		return;
 	}
 
@@ -573,11 +573,12 @@ void GeoscapeState::time5Seconds()
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
 						base->setInBattlescape(true);
-						if (base->getDefenses())
+						base->setupDefenses();
+						if (base->getDefenses()->size() > 0)
 						{
 							popup(new BaseDefenseState(_game, base, *i));
 						}
-						else if (base->getSoldiers())
+						else if (base->getSoldiers()->size() > 0)
 						{
 							size_t month = _game->getSavedGame()->getMonthsPassed();
 							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
