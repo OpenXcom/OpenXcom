@@ -147,9 +147,14 @@ void SaveState::edtSaveKeyPress(Action *action)
 		updateStatus("STR_SAVING_GAME");
 		try
 		{
-			_game->getSavedGame()->save(Language::wstrToUtf8(_edtSave->getText()));
+#ifdef _MSC_VER
+			std::string filename = Language::wstrToCp(_edtSave->getText());
+#else
+			std::string filename = Language::wstrToUtf8(_edtSave->getText());
+#endif
+			_game->getSavedGame()->save(filename);
 			std::string oldName = Options::getUserFolder() + _selected + ".sav";
-			std::string newName = Options::getUserFolder() + Language::wstrToUtf8(_edtSave->getText()) + ".sav";
+			std::string newName = Options::getUserFolder() + filename + ".sav";
 			if (_selectedRow > 0 && oldName != newName)
 			{
 				if (!CrossPlatform::deleteFile(oldName))

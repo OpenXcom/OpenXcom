@@ -311,6 +311,30 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 }
 
 /**
+ * Takes a wide-character string and converts it to an
+ * 8-bit string encoded in the current system codepage.
+ * @param src Wide-character string.
+ * @return Codepage string.
+ */
+std::string Language::wstrToCp(const std::wstring& src)
+{
+	if (src.empty())
+		return "";
+#ifdef _WIN32
+	int size = WideCharToMultiByte(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
+	std::string str(size, 0);
+	WideCharToMultiByte(CP_ACP, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
+	return str;
+#else
+	const int MAX = 500;
+	char buffer[MAX];
+	wcstombs(buffer, src.c_str(), MAX);
+	std::string str(buffer);
+	return str;
+#endif
+}
+
+/**
  * Takes an 8-bit string encoded in UTF-8 and converts it
  * to a wide-character string.
  * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
