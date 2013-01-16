@@ -129,28 +129,20 @@ void AggroBAIState::think(BattleAction *action)
 	_aggroTarget = 0;
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 
-	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))
+
+	/*	psionic targetting: pick from any of the "exposed" units.
+		exposed means they have been previously spotted, and are therefore "known" to the AI,
+		regardless of whether we can see them or not, because we're psychic.
+	*/
+	if (_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER" && _game->getExposedUnits()->size() > 0 && RNG::generate(0, 100) > 66)
 	{
-		BattleUnit *backupTarget = 0;
 		int chanceToAttack = 0;
 		int tries = 0;
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end() && tries < 80; ++i)
 		{
-			// try to pathfind for a blaster launcher if we're using one
-			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint())
+			// don't target tanks
+			if ((*i)->getArmor()->getSize() != 2)
 			{
-				_game->getPathfinding()->calculate(_unit, (*i)->getPosition(), true);
-				if (_game->getPathfinding()->getStartDirection() != -1)
-				{
-					backupTarget = *i;
-				}
-				_game->getPathfinding()->abortPath();
-			}
-
-			// select a target for mind control, and don't target tanks
-			if (_unit->getStats()->psiSkill && (*i)->getArmor()->getSize() != 2 && _unit->getType() != "SOLDIER")
-			{
-				// good god.
 				int chanceToAttackMe = psiAttackStrength
 					+ ((*i)->getStats()->psiSkill * -0.4)
 					- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
@@ -230,47 +222,68 @@ void AggroBAIState::think(BattleAction *action)
 					action->TU = 25; // TODO: make this a ruleset thing
 			}
 		}
+	}
 
-		if (backupTarget != 0 && _aggroTarget == 0)
+	
+	/*	
+	*	waypoint targetting: pick from any units currently spotted by our allies.
+	*/
+	if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint() && _unit->getType() != "SOLDIER");
+	{
+		for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && _aggroTarget == 0; ++i)
 		{
-				_aggroTarget = backupTarget;
-				action->weapon = _unit->getMainHandWeapon();
-				action->target = backupTarget->getPosition();
-				action->type = BA_LAUNCH;
-				action->TU = action->actor->getActionTUs(action->type, action->weapon);
-				action->waypoints.clear();
-
-				int PathDirection;
-				int CollidesWith;
-				Position LastWayPoint = _unit->getPosition();
-				Position LastPosition = _unit->getPosition();
-				Position CurrentPosition = _unit->getPosition();
-				Position DirectionVector;
-
-				_game->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), true);
-				PathDirection = _game->getPathfinding()->dequeuePath();
-				while (PathDirection != -1)
+			if ((*i)->getFaction() == _unit->getFaction())
+			{
+				for (std::vector<BattleUnit*>::const_iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end() && _aggroTarget == 0; ++j)
 				{
-					LastPosition = CurrentPosition;
-					_game->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
-					CurrentPosition = CurrentPosition + DirectionVector;
-
-					CollidesWith = _game->getTileEngine()->calculateLine(CurrentPosition, LastWayPoint, false, 0, _unit, true, false );
-					if (CollidesWith > 0 && CollidesWith < 4)
+					_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), true);
+					if (_game->getPathfinding()->getStartDirection() != -1)
 					{
-						action->waypoints.push_back(LastPosition);
-						LastWayPoint = LastPosition;
+						_aggroTarget = *j;
 					}
-
-					PathDirection = _game->getPathfinding()->dequeuePath();
+					_game->getPathfinding()->abortPath();
 				}
-				action->waypoints.push_back(_aggroTarget->getPosition());
+			}
+		}
 
-				if( action->waypoints.size() > 10 )
+		if (_aggroTarget != 0)
+		{
+			action->weapon = _unit->getMainHandWeapon();
+			action->target = _aggroTarget->getPosition();
+			action->type = BA_LAUNCH;
+			action->TU = action->actor->getActionTUs(action->type, action->weapon);
+			action->waypoints.clear();
+
+			int PathDirection;
+			int CollidesWith;
+			Position LastWayPoint = _unit->getPosition();
+			Position LastPosition = _unit->getPosition();
+			Position CurrentPosition = _unit->getPosition();
+			Position DirectionVector;
+
+			_game->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), true);
+			PathDirection = _game->getPathfinding()->dequeuePath();
+			while (PathDirection != -1)
+			{
+				LastPosition = CurrentPosition;
+				_game->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
+				CurrentPosition = CurrentPosition + DirectionVector;
+
+				CollidesWith = _game->getTileEngine()->calculateLine(CurrentPosition, LastWayPoint, false, 0, _unit, true, false );
+				if (CollidesWith > 0 && CollidesWith < 4)
 				{
-					action->type = BA_RETHINK;
+					action->waypoints.push_back(LastPosition);
+					LastWayPoint = LastPosition;
 				}
 
+				PathDirection = _game->getPathfinding()->dequeuePath();
+			}
+			action->waypoints.push_back(_aggroTarget->getPosition());
+
+			if( action->waypoints.size() > 10 )
+			{
+				action->type = BA_RETHINK;
+			}
 		}
 	}
 
@@ -490,6 +503,4 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 	_timesNotSeen = 0;
 	_lastKnownPosition = unit->getPosition();
 }
-
-
 }
