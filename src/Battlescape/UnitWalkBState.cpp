@@ -348,7 +348,7 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		if (_action.strafe && (_unit->getTurretType() > -1))
+		if (_action.strafe && _unit->getTurretType() > -1)
 		{
 			_unit->turn(true);
 			if (_unit->getStatus() == STATUS_STANDING)
@@ -360,14 +360,9 @@ void UnitWalkBState::think()
 		{
 			_unit->turn();
 		}
-		if (_unit->getTurretType() > -1)
-		{
-			unitspotted = _terrain->calculateFOV(_unit);
-		}
-		else
-		{
-			unitspotted = _terrain->calculateFOV(_unit);
-		}
+
+		unitspotted = _terrain->calculateFOV(_unit);
+
 		// make sure the unit sprites are up to date
 		if (onScreen)
 			_parent->getMap()->cacheUnit(_unit);
