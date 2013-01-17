@@ -108,7 +108,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			++row;
 			delay();
 			_lstDefenses->setCellText(row, 2, _game->getLanguage()->getString("STR_FIRING"));
-			_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getFireSound())->play(); // XXX XXX XXX this line crashes, not sure why
+			_game->getResourcePack()->getSoundSet("SAMPLE.CAT")->getSound((*def)->getRules()->getFireSound())->play();
 			delay();
 			if(RNG::generate(1, 100) > (*def)->getRules()->getHitRatio())
 			{
@@ -188,6 +188,6 @@ void BaseDefenseState::delay()
 {
 clock_t start_time = clock();
 clock_t end_time = 500 + start_time;
-while(clock() <= end_time);
+while(clock() != end_time);
 }
 }
