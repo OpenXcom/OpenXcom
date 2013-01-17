@@ -145,8 +145,6 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : S
 
 	if (mission == "STR_BASE_DEFENSE")
 	{
-		// Mark as destroyed any way, to remove it from Geoscape.
-		ufo->setStatus(Ufo::DESTROYED);
 		// And make sure the base is unmarked.
 		base->setRetaliationTarget(false);
 	}
