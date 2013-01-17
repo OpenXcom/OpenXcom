@@ -228,7 +228,7 @@ void AggroBAIState::think(BattleAction *action)
 	/*	
 	*	waypoint targetting: pick from any units currently spotted by our allies.
 	*/
-	if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint() && _unit->getType() != "SOLDIER");
+	if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint() && _unit->getType() != "SOLDIER")
 	{
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && _aggroTarget == 0; ++i)
 		{
