@@ -251,11 +251,6 @@ void Screen::flip()
 		SDL_BlitSurface(_surface->getSurface(), 0, _screen, 0);
 	}
 
-	if (SDL_Flip(_screen) == -1)
-	{
-		throw Exception(SDL_GetError());
-	}
-	
 	// perform any requested palette update
 	if (_numColors)
 	{
@@ -264,6 +259,11 @@ void Screen::flip()
 			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 		}
 		_numColors = 0;
+	}
+
+	if (SDL_Flip(_screen) == -1)
+	{
+		throw Exception(SDL_GetError());
 	}
 }
 
