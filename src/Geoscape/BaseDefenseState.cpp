@@ -53,8 +53,6 @@ namespace OpenXcom
  */
 BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(game)
 {
-	std::vector<BaseFacility*>* defenses = _base->getDefenses(); // getDefenses() returns a new object every time; we must hold on to a single instance for iterators to work
-
 	_base = base;
 	_ufo = ufo;
 	// Create objects
@@ -103,8 +101,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str(),"","");
 			++row;
 		}
-
-		for(std::vector<BaseFacility*>::iterator def = defenses->begin(); def != defenses->end(); ++def)
+		for(std::vector<BaseFacility*>::iterator def = _base->getDefenses()->begin(); def != _base->getDefenses()->end(); ++def)
 		{
 			delay();
 			_lstDefenses->addRow(3, _game->getLanguage()->getString((*def)->getRules()->getType()).c_str(),"","");
@@ -137,8 +134,6 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(gam
 		}
 	}
 	_btnOk->setVisible(true);
-
-	delete defenses;
 }
 /**
  *
