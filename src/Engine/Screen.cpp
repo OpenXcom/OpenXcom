@@ -52,6 +52,8 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _sc
 		_flags |= SDL_FULLSCREEN;
 	}
 	setResolution(width, height);
+	memset(deferredPalette, 256, sizeof(SDL_Color));
+	_numColors = _firstColor = 0;
 }
 
 /**
@@ -249,6 +251,16 @@ void Screen::flip()
 		SDL_BlitSurface(_surface->getSurface(), 0, _screen, 0);
 	}
 
+	// perform any requested palette update
+	if (_numColors)
+	{
+		if (SDL_SetColors(_screen, deferredPalette, _firstColor, _numColors) == 0)
+		{
+			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
+		}
+		_numColors = 0;
+	}
+
 	if (SDL_Flip(_screen) == -1)
 	{
 		throw Exception(SDL_GetError());
@@ -277,11 +289,26 @@ void Screen::clear()
  */
 void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
-	_surface->setPalette(colors, firstcolor, ncolors);
-	if (SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+	if (_numColors == 256 && ncolors < 256)
 	{
-		Log(LOG_ERROR) << "Display palette doesn't match requested palette";
+		// an initial palette setup has not been comitted to the screen yet
+		// just update it with whatever colors are being sent now
+		memcpy(deferredPalette+firstcolor, colors, ncolors);
+	} else
+	{
+		memcpy(deferredPalette, colors, sizeof(SDL_Color) * ncolors);
+		_numColors = ncolors;
+		_firstColor = firstcolor;
 	}
+
+	_surface->setPalette(colors, firstcolor, ncolors);
+
+	// defer actual update of screen until SDL_Flip()
+	//if (SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+	//{
+	//	Log(LOG_ERROR) << "Display palette doesn't match requested palette";
+	//}
+
 	// Sanity check
 	/*
 	SDL_Color *newcolors = _screen->format->palette->colors;
