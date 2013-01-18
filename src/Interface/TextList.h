@@ -74,6 +74,8 @@ public:
 	std::wstring getCellText(int row, int column) const;
 	/// Sets the text of a certain cell.
 	void setCellText(int row, int column, const std::wstring &text);
+	/// Sorts the text list based on a specified column
+	void sortList(int startRow, int endRow, int sortCol);
 	/// Gets the X position of a certain column.
 	int getColumnX(int column) const;
 	/// Gets the Y position of a certain row.
@@ -160,6 +162,33 @@ public:
 	void mouseOut(Action *action, State *state);
 
 };
+
+
+/**
+ * @class TextRowCompare
+ * @author hmaon
+ * @date 01/17/2013
+ * @file TextList.h
+ * @brief Comparator for sorting rows of text within TextList.
+ */
+class TextRowCompare
+{
+// this comparator would be better implemented with a C++11 lambda imho btw fyi
+// http://en.cppreference.com/w/cpp/language/lambda
+private:
+	int _sortCol;
+
+public:
+	TextRowCompare(int sortCol) : _sortCol(sortCol)
+	{
+	}
+
+	bool operator()(const std::vector<Text*> &a, const std::vector<Text*> &b)
+	{
+		return a[_sortCol]->getText() < b[_sortCol]->getText();
+	}
+};
+
 
 }
 
