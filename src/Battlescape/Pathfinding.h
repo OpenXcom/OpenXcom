@@ -46,18 +46,18 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
-	bool isBlocked(Tile *tile, const int part);
+	bool isBlocked(Tile *tile, const int part, bool missile);
 	bool canFallDown(Tile *destinationTile);
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
 	bool _pathPreviewed;
 	bool _strafeMove;
 	///Try to find a straight line path between two positions.
-	bool bresenhamPath(const Position& origin, const Position& target);
+	bool bresenhamPath(const Position& origin, const Position& target, bool missile);
 	///Try to find a path between two positions.
-	bool aStarPath(const Position& origin, const Position& target);
+	bool aStarPath(const Position& origin, const Position& target, bool missile);
 public:
-	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
+	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, bool missile);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
 	static const int O_BIGWALL = -1;
@@ -74,7 +74,7 @@ public:
 	/// Dequeue a direction.
 	int dequeuePath();
 	/// Get's the TU cost to move from 1 tile to the other.
-	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
+	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit, bool missile);
 	/// Abort the current path.
 	void abortPath();
 	bool getStrafeMove() const;

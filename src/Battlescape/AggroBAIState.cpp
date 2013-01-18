@@ -249,7 +249,6 @@ void AggroBAIState::think(BattleAction *action)
 		if (_aggroTarget != 0)
 		{
 			action->weapon = _unit->getMainHandWeapon();
-			action->target = _aggroTarget->getPosition();
 			action->type = BA_LAUNCH;
 			action->TU = action->actor->getActionTUs(action->type, action->weapon);
 			action->waypoints.clear();
@@ -268,9 +267,10 @@ void AggroBAIState::think(BattleAction *action)
 				LastPosition = CurrentPosition;
 				_game->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
 				CurrentPosition = CurrentPosition + DirectionVector;
-
-				CollidesWith = _game->getTileEngine()->calculateLine(CurrentPosition, LastWayPoint, false, 0, _unit, true, false );
-				if (CollidesWith > 0 && CollidesWith < 4)
+				Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
+				Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
+				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true, false );
+				if (CollidesWith > -1 && CollidesWith < 4)
 				{
 					action->waypoints.push_back(LastPosition);
 					LastWayPoint = LastPosition;
@@ -278,7 +278,9 @@ void AggroBAIState::think(BattleAction *action)
 
 				PathDirection = _game->getPathfinding()->dequeuePath();
 			}
+			action->waypoints.push_back(LastPosition);
 			action->waypoints.push_back(_aggroTarget->getPosition());
+			action->target = action->waypoints.front();
 
 			if( action->waypoints.size() > 10 )
 			{
