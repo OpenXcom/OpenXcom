@@ -19,6 +19,7 @@
 #include "TextList.h"
 #include <cstdarg>
 #include <cmath>
+#include <algorithm>
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
@@ -132,6 +133,20 @@ std::wstring TextList::getCellText(int row, int column) const
 void TextList::setCellText(int row, int column, const std::wstring &text)
 {
 	_texts[row][column]->setText(text);
+	_redraw = true;
+}
+
+/**
+ * Sorts the text list based on a specified column
+ * @param startRow First line to sort (e.g., past the header line)
+ * @param endRow Last line to sort or -1 for last line.
+ * @param sortCol Column to use as sort key.
+ */
+void TextList::sortList(int startRow, int endRow, int sortCol)
+{
+	std::sort(_texts.begin() + startRow, 
+		(endRow==-1)?_texts.end() : (_texts.begin() + endRow),
+		TextRowCompare(sortCol));
 	_redraw = true;
 }
 
