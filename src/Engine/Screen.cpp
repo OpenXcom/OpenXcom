@@ -254,7 +254,7 @@ void Screen::flip()
 	// perform any requested palette update
 	if (_numColors)
 	{
-		if (SDL_SetColors(_screen, deferredPalette, _firstColor, _numColors) == 0)
+		if (SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
 			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 		}
@@ -289,16 +289,16 @@ void Screen::clear()
  */
 void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
-	if (_numColors && ncolors < 256)
+	if (_numColors && (_numColors != ncolors) && (_firstColor != firstcolor))
 	{
 		// an initial palette setup has not been comitted to the screen yet
 		// just update it with whatever colors are being sent now
 		memcpy(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color)*ncolors);
-		_numColors = 256; // all the use cases are just a full palette with a single 16-color follow-up
+		_numColors = 256; // all the use cases are just a full palette with 16-color follow-ups
 		_firstColor = 0;
 	} else
 	{
-		memcpy(deferredPalette, colors, sizeof(SDL_Color) * ncolors);
+		memcpy(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color) * ncolors);
 		_numColors = ncolors;
 		_firstColor = firstcolor;
 	}
