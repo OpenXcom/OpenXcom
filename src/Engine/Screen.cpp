@@ -52,7 +52,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _sc
 		_flags |= SDL_FULLSCREEN;
 	}
 	setResolution(width, height);
-	memset(deferredPalette, 256, sizeof(SDL_Color));
+	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
 	_numColors = _firstColor = 0;
 }
 
