@@ -24,6 +24,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Armor.h"
@@ -236,7 +237,7 @@ void AggroBAIState::think(BattleAction *action)
 			{
 				for (std::vector<BattleUnit*>::const_iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end() && _aggroTarget == 0; ++j)
 				{
-					_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), true);
+					_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), *j);
 					if (_game->getPathfinding()->getStartDirection() != -1)
 					{
 						_aggroTarget = *j;
@@ -260,7 +261,7 @@ void AggroBAIState::think(BattleAction *action)
 			Position CurrentPosition = _unit->getPosition();
 			Position DirectionVector;
 
-			_game->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), true);
+			_game->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget);
 			PathDirection = _game->getPathfinding()->dequeuePath();
 			while (PathDirection != -1)
 			{
@@ -269,20 +270,27 @@ void AggroBAIState::think(BattleAction *action)
 				CurrentPosition = CurrentPosition + DirectionVector;
 				Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
 				Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
-				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true, false );
+				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true, false);
 				if (CollidesWith > -1 && CollidesWith < 4)
 				{
 					action->waypoints.push_back(LastPosition);
 					LastWayPoint = LastPosition;
 				}
+				else if (CollidesWith == 4)
+				{
+					BattleUnit* target = _game->getTile(CurrentPosition)->getUnit();
+					if (target = _aggroTarget)
+					{
+						action->waypoints.push_back(CurrentPosition);
+						LastWayPoint = CurrentPosition;
+					}
+				}
 
 				PathDirection = _game->getPathfinding()->dequeuePath();
 			}
-			action->waypoints.push_back(LastPosition);
-			action->waypoints.push_back(_aggroTarget->getPosition());
 			action->target = action->waypoints.front();
 
-			if( action->waypoints.size() > 10 )
+			if( action->waypoints.size() > 10 || LastWayPoint != _aggroTarget->getPosition())
 			{
 				action->type = BA_RETHINK;
 			}
