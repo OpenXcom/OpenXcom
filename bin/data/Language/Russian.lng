@@ -2101,3 +2101,5 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} - ВНЕ ЗОНЫ ВЫХОДА
 STR_n_UNITS_OUTSIDE_EXIT_AREA_3
 {N} - ВНЕ ЗОНЫ ВЫХОДА
+STR_ABANDON_GAME_QUESTION
+ОТКАЗАТЬСЯ ОТ ИГРЫ?

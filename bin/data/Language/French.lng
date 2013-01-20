@@ -2093,3 +2093,5 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} Unité hors de la zone de sortie
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Unités hors de la zone de sortie
+STR_ABANDON_GAME_QUESTION
+ABANDONNER JEU?
