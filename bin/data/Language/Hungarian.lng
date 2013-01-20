@@ -2031,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Az időegységek Automata Lövésre fenntartva
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Az időegységek Célzott Lövésre fenntartva
-STR_UNITS_IN_EXIT_AREA
- egység elhagyásra kész
-STR_UNITS_OUTSIDE_EXIT_AREA
- egység elhagyásra nem kész
 STR_ABORT_MISSION
 Abbahagyod a küldetést?
 STR_CORPSE
@@ -2087,3 +2083,7 @@ STR_EQUIPMENT_FOR_craftname
 Felszerelések: {1}
 STR_SELECT_SQUAD_FOR_craftname
 Válassz osztagot: {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} egység elhagyásra kész
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} egység elhagyásra nem kész

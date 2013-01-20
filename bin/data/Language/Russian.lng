@@ -2033,10 +2033,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Время сохранено для стрельбы очередью
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Время сохранено для прицельного выстрела
-STR_UNITS_IN_EXIT_AREA
- - В ЗОНЕ ВЫХОДА
-STR_UNITS_OUTSIDE_EXIT_AREA
- - ВНЕ ЗОНЫ ВЫХОДА
 STR_ABORT_MISSION
 Прервать миссию?
 STR_CORPSE
@@ -2093,3 +2089,15 @@ STR_EQUIPMENT_FOR_craftname
 Снаряжение для {1}
 STR_SELECT_SQUAD_FOR_craftname
 Команда для {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} - В ЗОНЕ ВЫХОДА
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} - В ЗОНЕ ВЫХОДА
+STR_n_UNITS_IN_EXIT_AREA_3
+{N} - В ЗОНЕ ВЫХОДА
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} - ВНЕ ЗОНЫ ВЫХОДА
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} - ВНЕ ЗОНЫ ВЫХОДА
+STR_n_UNITS_OUTSIDE_EXIT_AREA_3
+{N} - ВНЕ ЗОНЫ ВЫХОДА

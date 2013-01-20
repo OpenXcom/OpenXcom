@@ -2033,10 +2033,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Time Units reserved for Auto Shot
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Time Units reserved for Aimed Shot
-STR_UNITS_IN_EXIT_AREA
- Units in Exit Area
-STR_UNITS_OUTSIDE_EXIT_AREA
- Units outside Exit Area
 STR_ABORT_MISSION
 Abort Mission ?
 STR_CORPSE
@@ -2091,3 +2087,15 @@ STR_EQUIPMENT_FOR_craftname
 Equipment for {1}
 STR_SELECT_SQUAD_FOR_craftname
 Select Squad for {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+No Units in Exit Area
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Unit in Exit Area
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} Units in Exit Area
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+No Units outside Exit Area
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} Unit outside Exit Area
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Units outside Exit Area

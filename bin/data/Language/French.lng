@@ -2031,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unités de temps réservées au tir automatique
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unités de temps réservées au tir précis
-STR_UNITS_IN_EXIT_AREA
- Unités dans la zone de sortie
-STR_UNITS_OUTSIDE_EXIT_AREA
- Unités hors de la zone de sortie
 STR_ABORT_MISSION
 Abandonner mission?
 STR_CORPSE
@@ -2089,3 +2085,11 @@ STR_EQUIPMENT_FOR_craftname
 Équipement pour {1}
 STR_SELECT_SQUAD_FOR_craftname
 Sélectionner Escouade pour {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Unité dans la zone de sortie
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} Unités dans la zone de sortie
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} Unité hors de la zone de sortie
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Unités hors de la zone de sortie

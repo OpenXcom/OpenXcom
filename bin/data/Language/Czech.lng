@@ -2031,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Čas vyhrazen pro automatickou střelbu
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Čas vyhrazen pro zacílený výstřel
-STR_UNITS_IN_EXIT_AREA
- jednotek v únikové oblasti
-STR_UNITS_OUTSIDE_EXIT_AREA
- mimo únikovou oblast
 STR_ABORT_MISSION
 Přerušit misi?
 STR_CORPSE
@@ -2091,3 +2087,15 @@ STR_EQUIPMENT_FOR_craftname
 Vybavení pro: {1}
 STR_SELECT_SQUAD_FOR_craftname
 Vyber jednotku pro: {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} jednotek v únikové oblasti
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} jednotek v únikové oblasti
+STR_n_UNITS_IN_EXIT_AREA_3
+{N} jednotek v únikové oblasti
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} mimo únikovou oblast
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} mimo únikovou oblast
+STR_n_UNITS_OUTSIDE_EXIT_AREA_3
+{N} mimo únikovou oblast

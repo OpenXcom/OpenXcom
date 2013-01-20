@@ -2031,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unità di tempo tiro automatico
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unità di tempo tiro con mira
-STR_UNITS_IN_EXIT_AREA
- Unità nell'area di uscita
-STR_UNITS_OUTSIDE_EXIT_AREA
- Unità fuori dall'area di uscita
 STR_ABORT_MISSION
 Interrompi la missione ?
 STR_CORPSE
@@ -2089,3 +2085,11 @@ STR_EQUIPMENT_FOR_craftname
 Equipaggiamento per {1}
 STR_SELECT_SQUAD_FOR_craftname
 Scegli la squadra per {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Unità nell'area di uscita
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} Unità nell'area di uscita
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} Unità fuori dall'area di uscita
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Unità fuori dall'area di uscita

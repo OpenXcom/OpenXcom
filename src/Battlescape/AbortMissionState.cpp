@@ -84,16 +84,12 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_txtInExit->setColor(Palette::blockOffset(0));
 	_txtInExit->setBig();
 	_txtInExit->setHighContrast(true);
-	std::wstringstream ss;
-	ss << _inExitArea << _game->getLanguage()->getString("STR_UNITS_IN_EXIT_AREA");
-	_txtInExit->setText(ss.str());
+	_txtInExit->setText(tr("STR_n_UNITS_IN_EXIT_AREA", _inExitArea));
 
 	_txtOutsideExit->setColor(Palette::blockOffset(0));
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setHighContrast(true);
-	ss.str(L"");
-	ss << _outExitArea << _game->getLanguage()->getString("STR_UNITS_OUTSIDE_EXIT_AREA");
-	_txtOutsideExit->setText(ss.str());
+	_txtOutsideExit->setText(tr("STR_n_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
 	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		_txtInExit->setVisible(false);
