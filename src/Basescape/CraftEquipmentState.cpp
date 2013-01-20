@@ -84,9 +84,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
-	std::wstringstream s;
-	s << _game->getLanguage()->getString("STR_EQUIPMENT_FOR") << c->getName(_game->getLanguage());
-	_txtTitle->setText(s.str());
+	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_craftname").arg(c->getName(_game->getLanguage())));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));

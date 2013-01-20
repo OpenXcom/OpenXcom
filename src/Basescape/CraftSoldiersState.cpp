@@ -80,9 +80,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	Craft *c = _base->getCrafts()->at(_craft);
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SELECT_SQUAD_FOR") << c->getName(_game->getLanguage());
-	_txtTitle->setText(ss.str());
+	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_craftname").arg(c->getName(_game->getLanguage())));
 
 	_txtName->setColor(Palette::blockOffset(15)+6);
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
