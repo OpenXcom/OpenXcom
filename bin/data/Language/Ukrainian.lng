@@ -597,13 +597,13 @@ STR_VERY_HIGH
 ДУЖЕ ВЕЛИКА
 STR_FUEL
 ПАЛЬНЕ>
-STR_WEAPON_1
+STR_WEAPON_ONE
 ЗБРОЯ-1>
 STR_NONE_UC
 НЕМАЄ
 STR_ROUNDS_
 БОЄЗАПАС>
-STR_WEAPON_2
+STR_WEAPON_TWO
 ЗБРОЯ-2>
 STR_HOSTILE
 ВОРОЖИЙ

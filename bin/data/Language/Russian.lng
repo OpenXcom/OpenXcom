@@ -597,13 +597,13 @@ STR_VERY_HIGH
 ОЧЕНЬ БОЛЬШАЯ
 STR_FUEL
 ТОПЛИВО>
-STR_WEAPON_1
+STR_WEAPON_ONE
 ОРУЖИЕ-1>
 STR_NONE_UC
 НЕТ
 STR_ROUNDS_
 БОЕЗАПАС>
-STR_WEAPON_2
+STR_WEAPON_TWO
 ОРУЖИЕ-2>
 STR_HOSTILE
 ВРАЖДЕБНЫЙ
