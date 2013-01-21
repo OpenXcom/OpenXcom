@@ -635,7 +635,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
-		int tu = getTUCost(pos, dir, &destination, _unit, false); // gets tu cost, but also gets the destination position.
+		int tu = getTUCost(pos, dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
 		tus -= tu;
 		pos = destination;
 		for (int x = size; x >= 0; x--)
@@ -802,7 +802,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		for (int direction = 0; direction < 10; direction++)
 		{
 			Position nextPos;
-			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, false);
+			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
 			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs

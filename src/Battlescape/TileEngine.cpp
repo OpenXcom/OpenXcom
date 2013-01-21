@@ -1470,7 +1470,7 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 				{
 					for (std::vector<BattleUnit*>::iterator b = unit->getVisibleUnits()->begin(); b != unit->getVisibleUnits()->end(); ++b)
 					{
-						if (*b == target && !_save->getPathfinding()->isBlocked(_save->getTile(unit->getPosition() + Position(x, y, 0)), tile, unit->getDirection(), false))
+						if (*b == target && !_save->getPathfinding()->isBlocked(_save->getTile(unit->getPosition() + Position(x, y, 0)), tile, unit->getDirection(), 0))
 							return true;
 					}
 				}

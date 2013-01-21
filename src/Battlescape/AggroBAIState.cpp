@@ -279,7 +279,7 @@ void AggroBAIState::think(BattleAction *action)
 				else if (CollidesWith == 4)
 				{
 					BattleUnit* target = _game->getTile(CurrentPosition)->getUnit();
-					if (target = _aggroTarget)
+					if (target == _aggroTarget)
 					{
 						action->waypoints.push_back(CurrentPosition);
 						LastWayPoint = CurrentPosition;

@@ -287,7 +287,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 							BattleUnit *target (tile->getUnit());
 							for (std::vector<BattleUnit*>::iterator b = _action->actor->getVisibleUnits()->begin(); b != _action->actor->getVisibleUnits()->end(); ++b)
 							{
-								if (*b == target && !_game->getSavedGame()->getBattleGame()->getPathfinding()->isBlocked(_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + Position(x, y, 0)), tile, _action->actor->getDirection(), false))
+								if (*b == target && !_game->getSavedGame()->getBattleGame()->getPathfinding()->isBlocked(_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + Position(x, y, 0)), tile, _action->actor->getDirection(), 0))
 								{
 									targetUnit = tile->getUnit();
 									break;

@@ -250,7 +250,7 @@ void UnitWalkBState::think()
 			}
 
 			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, false); // gets tu cost, but also gets the destination position.
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
 			int energy = tu;
 
 			if (_action.run)
