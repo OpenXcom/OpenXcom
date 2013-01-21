@@ -229,7 +229,7 @@ void AggroBAIState::think(BattleAction *action)
 	/*	
 	*	waypoint targetting: pick from any units currently spotted by our allies.
 	*/
-	if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint() && _unit->getType() != "SOLDIER")
+	if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem() && _unit->getMainHandWeapon()->getRules()->isWaypoint() && _unit->getType() != "SOLDIER")
 	{
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && _aggroTarget == 0; ++i)
 		{
@@ -238,7 +238,7 @@ void AggroBAIState::think(BattleAction *action)
 				for (std::vector<BattleUnit*>::const_iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end() && _aggroTarget == 0; ++j)
 				{
 					_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), *j);
-					if (_game->getPathfinding()->getStartDirection() != -1)
+					if (_game->getPathfinding()->getStartDirection() != -1 && explosiveEfficacy((*j)->getPosition(), _unit, (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower()/20)+1))
 					{
 						_aggroTarget = *j;
 					}
@@ -297,10 +297,12 @@ void AggroBAIState::think(BattleAction *action)
 		}
 	}
 
-	if (!_aggroTarget)
+
+	/*
+	 *	Regular targetting: we can see an enemy, or an enemy can see us (in case we need to take cover)
+	 */
+	if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe)
 	{
-		if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe)
-		{
 		for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 		{
 			//pick closest living unit
@@ -406,7 +408,7 @@ void AggroBAIState::think(BattleAction *action)
 				int tu = 4; // 4TUs for picking up the grenade
 
 				// distance must be more than 6 tiles, otherwise it's too dangerous to play with explosives
-				if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 6)
+				if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, 6))
 				{
 					if((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE)
 					{
@@ -496,7 +498,6 @@ void AggroBAIState::think(BattleAction *action)
 		}
 		if (action->type != BA_RETHINK)
 			action->TU = action->actor->getActionTUs(action->type, action->weapon);
-		}
 	}
 	else
 		setAggroTarget(_aggroTarget);
@@ -512,5 +513,53 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 {
 	_timesNotSeen = 0;
 	_lastKnownPosition = unit->getPosition();
+}
+
+bool AggroBAIState::explosiveEfficacy(Position pos, BattleUnit *unit, int radius)
+{
+	int distance = _game->getTileEngine()->distance(unit->getPosition(), pos);
+	int injurylevel = unit->getStats()->health - unit->getHealth();
+	int desperation = (100 - unit->getMorale()) / 10;
+	// assume there's one viable target, the one at ground zero.
+	int enemiesAffected = 1;
+	// if we're below 1/3 health, let's assume things are dire, and increase desperation.
+	if (injurylevel > (unit->getStats()->health / 3) * 2)
+		desperation += 3;
+
+	int efficacy = desperation + enemiesAffected;
+	// if we're within blast range, deduct 1 here, a further 2 will be deducted below
+	if (distance <= radius)
+		efficacy -= 1;
+
+	// we don't want to ruin our own base, but we do want to ruin XCom's day.
+	if (_game->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
+	else if (_game->getMissionType() == "STR_BASE_DEFENSE" || _game->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
+
+
+	BattleUnit *target = _game->getTile(pos)->getUnit();
+	for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
+	{
+		if (!(*i)->isOut() && (*i) != unit && (*i)->getPosition().z == pos.z && _game->getTileEngine()->distance((*i)->getPosition(), pos) <= radius)
+		{
+			Position voxelPosA = Position ((pos.x * 16)+8, (pos.y * 16)+8, (pos.z * 24)+12);
+			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
+			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false);
+			if (collidesWith == 4)
+			{
+				if ((*i)->getFaction() != unit->getFaction())
+				{
+					++enemiesAffected;
+					++efficacy;
+				}
+				else
+					efficacy -= 2; // friendlies count double
+			}
+		}
+	}
+	// spice things up a bit by adding a number between -2 and 2
+	efficacy += RNG::generate(0,2) - RNG::generate(0,2);
+	if (efficacy > 0 || enemiesAffected >= 10)
+		return true;
+	return false;
 }
 }

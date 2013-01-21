@@ -57,7 +57,8 @@ public:
 	void setAggroTarget(BattleUnit *unit);
 	/// Get the aggro target, for savegame
 	BattleUnit *getAggroTarget();
-
+	/// decide if we should throw a grenade/launch a missile to this position
+	bool explosiveEfficacy(Position pos, BattleUnit *unit, int radius);
 };
 
 }
