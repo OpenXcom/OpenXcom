@@ -114,7 +114,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
 		return;
 	}
-
+	_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
+	
 	// Now try through A*.
 	aStarPath(startPosition, endPosition, missileTarget);
 }
