@@ -36,6 +36,7 @@ class AggroBAIState : public BattleAIState
 {
 protected:
 	BattleUnit *_aggroTarget;
+	BattleUnit *_lastKnownTarget;
 	Position _lastKnownPosition;
 	int _timesNotSeen;
 public:
@@ -58,7 +59,7 @@ public:
 	/// Get the aggro target, for savegame
 	BattleUnit *getAggroTarget();
 	/// decide if we should throw a grenade/launch a missile to this position
-	bool explosiveEfficacy(Position pos, BattleUnit *unit, int radius);
+	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius);
 };
 
 }
