@@ -143,7 +143,6 @@ void AggroBAIState::think(BattleAction *action)
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 	_aggroTarget = 0;
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 
@@ -154,6 +153,7 @@ void AggroBAIState::think(BattleAction *action)
 	*/
 	if (_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER" && _game->getExposedUnits()->size() > 0 && RNG::generate(0, 100) > 66)
 	{
+		int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 		int chanceToAttack = 0;
 		int tries = 0;
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end() && tries < 80; ++i)
@@ -224,20 +224,17 @@ void AggroBAIState::think(BattleAction *action)
 				{
 					action->type = BA_MINDCONTROL;
 					action->target = _aggroTarget->getPosition();
-					action->TU = 25; // TODO: make this a ruleset thing
 				}
 				else
 				{
 					action->type = BA_PANIC;
 					action->target = _aggroTarget->getPosition();
-					action->TU = 25; // TODO: make this a ruleset thing
 				}
 			}
 			else if (chanceToAttack)
 			{
 					action->type = BA_PANIC;
 					action->target = _aggroTarget->getPosition();
-					action->TU = 25; // TODO: make this a ruleset thing
 			}
 		}
 	}
@@ -255,7 +252,7 @@ void AggroBAIState::think(BattleAction *action)
 				for (std::vector<BattleUnit*>::const_iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end() && _aggroTarget == 0; ++j)
 				{
 					_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), *j);
-					if (_game->getPathfinding()->getStartDirection() != -1 && explosiveEfficacy((*j)->getPosition(), _unit, (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower()/20)+1))
+					if (_game->getPathfinding()->getStartDirection() != -1 && explosiveEfficacy((*j)->getPosition(), _unit, (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower()/20)+1, action->diff))
 					{
 						_aggroTarget = *j;
 					}
@@ -306,7 +303,7 @@ void AggroBAIState::think(BattleAction *action)
 				PathDirection = _game->getPathfinding()->dequeuePath();
 			}
 			action->target = action->waypoints.front();
-			if( action->waypoints.size() > 10 || LastWayPoint != _aggroTarget->getPosition())
+			if( action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
 			{
 				action->type = BA_RETHINK;
 			}
@@ -342,7 +339,7 @@ void AggroBAIState::think(BattleAction *action)
 			action->type = BA_WALK;
 			action->target = _lastKnownPosition;
 		}
-		else
+		else if (_aggroTarget != 0)
 		{
 			// if we see the target, we either can shoot him, or take cover.
 			bool takeCover = true;
@@ -426,7 +423,7 @@ void AggroBAIState::think(BattleAction *action)
 				// do we have a grenade on our belt?
 				BattleItem *grenade = _unit->getGrenadeFromBelt();
 				// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
-				if (grenade && explosiveEfficacy(_aggroTarget->getPosition(), _unit, (grenade->getRules()->getPower()/10)+1))
+				if (grenade && explosiveEfficacy(_aggroTarget->getPosition(), _unit, (grenade->getRules()->getPower()/10)+1, action->diff))
 				{
 					if((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE)
 					{
@@ -459,7 +456,7 @@ void AggroBAIState::think(BattleAction *action)
 					{
 						if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
 						{
-							if (action->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE || explosiveEfficacy(_aggroTarget->getPosition(), _unit, (action->weapon->getAmmoItem()->getRules()->getPower() / 10) +1))
+							if (action->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE || explosiveEfficacy(_aggroTarget->getPosition(), _unit, (action->weapon->getAmmoItem()->getRules()->getPower() / 10) +1, action->diff))
 							if (RNG::generate(1,10) < 5 && action->weapon->getAmmoQuantity() > 2)
 								action->type = BA_AUTOSHOT;
 							else
@@ -530,7 +527,7 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 	_lastKnownPosition = unit->getPosition();
 }
 
-bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius)
+bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	if (_game->getTurn() < 3)
@@ -573,8 +570,8 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 			}
 		}
 	}
-	// spice things up a bit by adding a number between -2 and 2
-	efficacy += RNG::generate(0,2) - RNG::generate(0,2);
+	// spice things up a bit by adding a random number based on difficulty level
+	efficacy += RNG::generate(0, diff+1) - RNG::generate(0,2);
 	if (efficacy > 0 || enemiesAffected >= 10)
 		return true;
 	return false;

@@ -182,9 +182,9 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 	
-	if ((unit->getStats()->psiSkill
+	// psionic or blaster launcher units may attack remotely
+	if (unit->getStats()->psiSkill
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint()))
-		&& _save->getExposedUnits()->size() > 0 && RNG::generate(0,100) > 66)
 	{
 		aggro = new AggroBAIState(_save, unit);
 		unit->setAIState(aggro);
@@ -193,6 +193,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	BattleAction action;
+	action.diff = _parentState->getGame()->getSavedGame()->getDifficulty();
 	unit->think(&action);
 	
 	if (action.type == BA_RETHINK)
@@ -221,6 +222,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{
 			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
+			action.TU = action.weapon->getRules()->getTUUse();
 		}
 
 		ss.clear();

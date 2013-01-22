@@ -59,7 +59,7 @@ public:
 	/// Get the aggro target, for savegame
 	BattleUnit *getAggroTarget();
 	/// decide if we should throw a grenade/launch a missile to this position
-	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius);
+	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
 };
 
 }
