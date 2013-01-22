@@ -21,6 +21,7 @@
 
 #include "../Engine/State.h"
 #include <string>
+#include <SDL.h>
 
 namespace OpenXcom
 {
@@ -43,6 +44,7 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtProject, *_txtScientists, *_txtProgress;
 	TextList *_lstResearch;
+	SDL_Color _oldPalette[256];
 public:
 	/// Creates the Research state.
 	ResearchState(Game *game, Base *base);
