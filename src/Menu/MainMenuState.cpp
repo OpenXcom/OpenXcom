@@ -122,7 +122,7 @@ void MainMenuState::init()
  */
 void MainMenuState::btnNewGameClick(Action *)
 {
-	_game->setState(new NewGameState(_game));
+	_game->pushState(new NewGameState(_game));
 }
 
 /**
