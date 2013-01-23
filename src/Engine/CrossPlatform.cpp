@@ -387,7 +387,8 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
 	{
-		throw Exception("Failed to open saves directory");
+		std::string errorMessage("Failed to open directory: " + path);
+		throw Exception(errorMessage);
 	}
 
 	struct dirent *dirp;
