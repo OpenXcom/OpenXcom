@@ -2880,7 +2880,8 @@ items:
     bigSprite: 32
     floorSprite: 31
     handSprite: 104
-    hitSound: 48
+    fireSound: 11
+    hitSound: 19
     hitAnimation: 36
     power: 100
     damageType: 4
