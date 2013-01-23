@@ -129,8 +129,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 5);
 	for (int i = 0; i < 10; ++i)
 	{
-		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, 300, 128 - (i * 13));
-		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
+		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
+		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
@@ -245,7 +245,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
 	SDL_Rect *r = s->getCrop();
 	r->x = 0;
-	r->y = mapHeight - iconsHeight;
+	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
 	s->blit(_icons);
