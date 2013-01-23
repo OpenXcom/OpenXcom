@@ -72,9 +72,9 @@ void createDefault()
 	setString("battleScrollButtonInvertMode", "Normal"); // Normal, Inverted
 	setInt("battleScrollButtonTimeTolerancy", 300); // miliSecond
 	setInt("battleScrollButtonPixelTolerancy", 10); // count of pixels
-	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5
-	setInt("battleXcomSpeed", 40); // 60, 50, 40, 30, 20, 10
-	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10
+	setInt("battleFireSpeed", 15); // 25, 20, 15, 10, 5, 1
+	setInt("battleXcomSpeed", 15); // 25, 20, 15, 10, 5, 1
+	setInt("battleAlienSpeed", 15); // 25, 20, 15, 10, 5, 1
 	setBool("battleAltGrenade", false); // set to true if you want to play with the alternative grenade handling
 	setBool("battlePreviewPath", false);
 	setBool("battleRangeBasedAccuracy", false);
@@ -270,7 +270,7 @@ void load(const std::string &filename)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		//throw Exception("Failed to load options");
+		//throw Exception(filename + ".cfg" + "not found");
 		return;
 	}
 	YAML::Parser parser(fin);
@@ -309,7 +309,7 @@ void save(const std::string &filename)
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		//throw Exception("Failed to save options");
+		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
 		return;
 	}
 	YAML::Emitter out;

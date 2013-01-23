@@ -1419,7 +1419,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load MAP");
+		throw Exception(filename.str() + " not found");
 	}
 
 	mapFile.read((char*)&size, sizeof(size));
@@ -1488,7 +1488,7 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid MAP file");
 	}
 
 	mapFile.close();
@@ -1515,7 +1515,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 	std::ifstream mapFile (CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in| std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load RMP");
+		throw Exception(filename.str() + " not found");
 	}
 
 	size_t nodeOffset = _save->getNodes()->size();
@@ -1541,7 +1541,7 @@ void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int s
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid RMP file");
 	}
 
 	mapFile.close();

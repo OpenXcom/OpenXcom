@@ -58,7 +58,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 	CatFile sndFile (filename.c_str());
 	if (!sndFile)
 	{
-		throw Exception("Failed to load CAT");
+		throw Exception(filename + " not found");
 	}
 
 	// Load each sound file

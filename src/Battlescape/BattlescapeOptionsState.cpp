@@ -101,32 +101,32 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	}
 	switch (Options::getInt("battleFireSpeed"))
 	{
-	case 30: _fireSpeed = _btnFireSpeed1; break;
-	case 25: _fireSpeed = _btnFireSpeed2; break;
-	case 20: _fireSpeed = _btnFireSpeed3; break;
-	case 15: _fireSpeed = _btnFireSpeed4; break;
-	case 10: _fireSpeed = _btnFireSpeed5; break;
-	case 5: _fireSpeed = _btnFireSpeed6; break;
+	case 25: _fireSpeed = _btnFireSpeed1; break;
+	case 20: _fireSpeed = _btnFireSpeed2; break;
+	case 15: _fireSpeed = _btnFireSpeed3; break;
+	case 10: _fireSpeed = _btnFireSpeed4; break;
+	case 5: _fireSpeed = _btnFireSpeed5; break;
+	case 1: _fireSpeed = _btnFireSpeed6; break;
 	default: _fireSpeed = 0; break;
 	}
 	switch (Options::getInt("battleXcomSpeed"))
 	{
-	case 60: _xcomSpeed = _btnXcomSpeed1; break;
-	case 50: _xcomSpeed = _btnXcomSpeed2; break;
-	case 40: _xcomSpeed = _btnXcomSpeed3; break;
-	case 30: _xcomSpeed = _btnXcomSpeed4; break;
-	case 20: _xcomSpeed = _btnXcomSpeed5; break;
-	case 10: _xcomSpeed = _btnXcomSpeed6; break;
+	case 25: _xcomSpeed = _btnXcomSpeed1; break;
+	case 20: _xcomSpeed = _btnXcomSpeed2; break;
+	case 15: _xcomSpeed = _btnXcomSpeed3; break;
+	case 10: _xcomSpeed = _btnXcomSpeed4; break;
+	case 5: _xcomSpeed = _btnXcomSpeed5; break;
+	case 1: _xcomSpeed = _btnXcomSpeed6; break;
 	default: _xcomSpeed = 0; break;
 	}
 	switch (Options::getInt("battleAlienSpeed"))
 	{
-	case 60: _alienSpeed = _btnAlienSpeed1; break;
-	case 50: _alienSpeed = _btnAlienSpeed2; break;
-	case 40: _alienSpeed = _btnAlienSpeed3; break;
-	case 30: _alienSpeed = _btnAlienSpeed4; break;
-	case 20: _alienSpeed = _btnAlienSpeed5; break;
-	case 10: _alienSpeed = _btnAlienSpeed6; break;
+	case 25: _alienSpeed = _btnAlienSpeed1; break;
+	case 20: _alienSpeed = _btnAlienSpeed2; break;
+	case 15: _alienSpeed = _btnAlienSpeed3; break;
+	case 10: _alienSpeed = _btnAlienSpeed4; break;
+	case 5: _alienSpeed = _btnAlienSpeed5; break;
+	case 1: _alienSpeed = _btnAlienSpeed6; break;
 	default: _alienSpeed = 0; break;
 	}
 
@@ -385,43 +385,43 @@ void BattlescapeOptionsState::btnOkClick(Action *)
 		Options::setInt("battleScrollType", SCROLL_AUTO);
 
 	if (_fireSpeed == _btnFireSpeed1)
-		Options::setInt("battleFireSpeed", 30);
-	else if (_fireSpeed == _btnFireSpeed2)
 		Options::setInt("battleFireSpeed", 25);
-	else if (_fireSpeed == _btnFireSpeed3)
+	else if (_fireSpeed == _btnFireSpeed2)
 		Options::setInt("battleFireSpeed", 20);
-	else if (_fireSpeed == _btnFireSpeed4)
+	else if (_fireSpeed == _btnFireSpeed3)
 		Options::setInt("battleFireSpeed", 15);
-	else if (_fireSpeed == _btnFireSpeed5)
+	else if (_fireSpeed == _btnFireSpeed4)
 		Options::setInt("battleFireSpeed", 10);
-	else if (_fireSpeed == _btnFireSpeed6)
+	else if (_fireSpeed == _btnFireSpeed5)
 		Options::setInt("battleFireSpeed", 5);
+	else if (_fireSpeed == _btnFireSpeed6)
+		Options::setInt("battleFireSpeed", 1);
 
 	if (_xcomSpeed == _btnXcomSpeed1)
-		Options::setInt("battleXcomSpeed", 60);
+		Options::setInt("battleXcomSpeed", 25);
 	else if (_xcomSpeed == _btnXcomSpeed2)
-		Options::setInt("battleXcomSpeed", 50);
-	else if (_xcomSpeed == _btnXcomSpeed3)
-		Options::setInt("battleXcomSpeed", 40);
-	else if (_xcomSpeed == _btnXcomSpeed4)
-		Options::setInt("battleXcomSpeed", 30);
-	else if (_xcomSpeed == _btnXcomSpeed5)
 		Options::setInt("battleXcomSpeed", 20);
-	else if (_xcomSpeed == _btnXcomSpeed6)
+	else if (_xcomSpeed == _btnXcomSpeed3)
+		Options::setInt("battleXcomSpeed", 15);
+	else if (_xcomSpeed == _btnXcomSpeed4)
 		Options::setInt("battleXcomSpeed", 10);
+	else if (_xcomSpeed == _btnXcomSpeed5)
+		Options::setInt("battleXcomSpeed", 5);
+	else if (_xcomSpeed == _btnXcomSpeed6)
+		Options::setInt("battleXcomSpeed", 1);
 
 	if (_alienSpeed == _btnAlienSpeed1)
-		Options::setInt("battleAlienSpeed", 60);
+		Options::setInt("battleAlienSpeed", 25);
 	else if (_alienSpeed == _btnAlienSpeed2)
-		Options::setInt("battleAlienSpeed", 50);
-	else if (_alienSpeed == _btnAlienSpeed3)
-		Options::setInt("battleAlienSpeed", 40);
-	else if (_alienSpeed == _btnAlienSpeed4)
-		Options::setInt("battleAlienSpeed", 30);
-	else if (_alienSpeed == _btnAlienSpeed5)
 		Options::setInt("battleAlienSpeed", 20);
-	else if (_alienSpeed == _btnAlienSpeed6)
+	else if (_alienSpeed == _btnAlienSpeed3)
+		Options::setInt("battleAlienSpeed", 15);
+	else if (_alienSpeed == _btnAlienSpeed4)
 		Options::setInt("battleAlienSpeed", 10);
+	else if (_alienSpeed == _btnAlienSpeed5)
+		Options::setInt("battleAlienSpeed", 5);
+	else if (_alienSpeed == _btnAlienSpeed6)
+		Options::setInt("battleAlienSpeed", 1);
 
 	Options::save();
 	_game->popState();

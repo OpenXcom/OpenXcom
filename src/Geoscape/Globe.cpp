@@ -576,7 +576,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load DAT");
+		throw Exception(filename + " not found");
 	}
 
 	short value[10];
@@ -612,7 +612,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid globe map");
 	}
 
 	mapFile.close();

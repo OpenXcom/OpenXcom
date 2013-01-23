@@ -172,7 +172,7 @@ void MapDataSet::loadData()
 	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load MCD");
+		throw Exception(s.str() + " not found");
 	}
 
 	while (mapFile.read((char*)&mcd, sizeof(MCD)))
@@ -221,7 +221,7 @@ void MapDataSet::loadData()
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid MCD file");
 	}
 
 	mapFile.close();
@@ -271,7 +271,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load DAT");
+		throw Exception(filename + " not found");
 	}
 
 	Uint16 value;
@@ -283,7 +283,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid LOFTEMPS");
 	}
 
 	mapFile.close();

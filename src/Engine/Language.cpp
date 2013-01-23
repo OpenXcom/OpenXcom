@@ -474,7 +474,7 @@ std::vector<std::string> Language::getList(TextList *list)
 		{
 			if (!fin)
 			{
-				throw Exception("Failed to load language");
+				throw Exception(file + " not found");
 			}
 			char value;
 			std::string langname;
@@ -521,7 +521,7 @@ void Language::loadLng(const std::string &filename)
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
-		throw Exception("Failed to load LNG");
+		throw Exception(filename + " not found");
 	}
 	txtFile.exceptions(std::ios::badbit);
 
@@ -537,7 +537,7 @@ void Language::loadLng(const std::string &filename)
 		{
 			if (std::getline(txtFile, u8msg).fail())
 			{
-				throw Exception("Invalid data from file");
+				throw Exception("Invalid language file");
 			}
 			replace(u8msg, "{NEWLINE}", "\n");
 			replace(u8msg, "{SMALLLINE}", "\x02");
@@ -549,7 +549,7 @@ void Language::loadLng(const std::string &filename)
 	}
 	catch (std::ifstream::failure e)
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid language file");
 	}
 
 	txtFile.close();

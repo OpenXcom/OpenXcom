@@ -333,7 +333,7 @@ std::string getDataFile(const std::string &filename)
 	}
 
 	// Give up
-	return "";
+	return filename;
 }
 
 /**

@@ -96,7 +96,7 @@ void Surface::loadScr(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw Exception("Failed to load SCR");
+		throw Exception(filename + " not found");
 	}
 
 	// Lock the surface
@@ -112,7 +112,7 @@ void Surface::loadScr(const std::string &filename)
 
 	if (!imgFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid SCR file");
 	}
 
 	// Unlock the surface
@@ -153,7 +153,7 @@ void Surface::loadSpk(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw Exception("Failed to load SPK");
+		throw Exception(filename + " not found");
 	}
 
 	// Lock the surface

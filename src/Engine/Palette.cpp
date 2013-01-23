@@ -57,7 +57,7 @@ void Palette::loadDat(const std::string &filename, int ncolors, int offset)
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!palFile)
 	{
-		throw Exception("Failed to load palette");
+		throw Exception(filename + " not found");
 	}
 
 	// Move pointer to proper pallete

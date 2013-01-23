@@ -188,7 +188,7 @@ void Ruleset::loadFile(const std::string &filename)
 	std::ifstream fin(filename.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load ruleset");
+		throw Exception(filename + " not found");
 	}
 	YAML::Parser parser(fin);
 	YAML::Node doc;

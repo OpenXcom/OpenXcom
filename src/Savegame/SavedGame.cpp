@@ -156,7 +156,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 		{
 			if (!fin)
 			{
-				throw Exception("Failed to load savegame");
+				throw Exception("Failed to load " + file);
 			}
 			YAML::Parser parser(fin);
 			YAML::Node doc;
@@ -205,7 +205,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load savegame");
+		throw Exception("Failed to load " + filename + ".sav");
 	}
 	YAML::Parser parser(fin);
 	YAML::Node doc;
@@ -332,7 +332,7 @@ void SavedGame::save(const std::string &filename) const
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		throw Exception("Failed to save savegame");
+		throw Exception("Failed to save " + filename + ".sav");
 	}
 
 	YAML::Emitter out;
