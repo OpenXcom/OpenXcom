@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -60,6 +61,9 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtCost = new Text(40, 27, 227, 44);
 	_txtTimeLeft = new Text(55, 18, 265, 44);
 	_lstManufacture = new TextList(300, 90, 8, 80);
+
+	// back up palette in case we're being called from Geoscape!
+	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256*sizeof(SDL_Color));
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -160,6 +164,9 @@ void ManufactureState::init ()
  */
 void ManufactureState::btnOkClick(Action *)
 {
+	// restore palette
+	_game->setPalette(_oldPalette);
+	
 	_game->popState();
 }
 
