@@ -597,13 +597,13 @@ STR_VERY_HIGH
 ОЧЕНЬ БОЛЬШАЯ
 STR_FUEL
 ТОПЛИВО>
-STR_WEAPON_1
+STR_WEAPON_ONE
 ОРУЖИЕ-1>
 STR_NONE_UC
 НЕТ
 STR_ROUNDS_
 БОЕЗАПАС>
-STR_WEAPON_2
+STR_WEAPON_TWO
 ОРУЖИЕ-2>
 STR_HOSTILE
 ВРАЖДЕБНЫЙ
@@ -647,8 +647,6 @@ STR_COLONEL
 Полковник
 STR_COMMANDER
 Командующий
-STR_SELECT_SQUAD_FOR
-Команда для 
 STR_SPACE_AVAILABLE
 МЕСТА ДОСТУПНО>
 STR_SPACE_USED
@@ -657,8 +655,6 @@ STR_RANK
 ЗВАНИЕ
 STR_WOUNDED
 РАНЕНИЕ
-STR_EQUIPMENT_FOR
-Снаряжение для 
 STR_ARM
 Оружие
 STR_DEFENSE_VALUE
@@ -2037,10 +2033,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Время сохранено для стрельбы очередью
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Время сохранено для прицельного выстрела
-STR_UNITS_IN_EXIT_AREA
- - В ЗОНЕ ВЫХОДА
-STR_UNITS_OUTSIDE_EXIT_AREA
- - ВНЕ ЗОНЫ ВЫХОДА
 STR_ABORT_MISSION
 Прервать миссию?
 STR_CORPSE
@@ -2093,3 +2085,21 @@ STR_DAY_2
 {N} Дни
 STR_DAY_3
 {N} Дни
+STR_EQUIPMENT_FOR_craftname
+Снаряжение для {1}
+STR_SELECT_SQUAD_FOR_craftname
+Команда для {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} - В ЗОНЕ ВЫХОДА
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} - В ЗОНЕ ВЫХОДА
+STR_n_UNITS_IN_EXIT_AREA_3
+{N} - В ЗОНЕ ВЫХОДА
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} - ВНЕ ЗОНЫ ВЫХОДА
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} - ВНЕ ЗОНЫ ВЫХОДА
+STR_n_UNITS_OUTSIDE_EXIT_AREA_3
+{N} - ВНЕ ЗОНЫ ВЫХОДА
+STR_ABANDON_GAME_QUESTION
+ОТКАЗАТЬСЯ ОТ ИГРЫ?

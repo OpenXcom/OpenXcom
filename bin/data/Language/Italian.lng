@@ -597,13 +597,13 @@ STR_VERY_HIGH
 MOLTO ALTA
 STR_FUEL
 CARBURANTE>
-STR_WEAPON_1
+STR_WEAPON_ONE
 ARMA-1>
 STR_NONE_UC
 NIENTE
 STR_ROUNDS_
 MUNIZ.>
-STR_WEAPON_2
+STR_WEAPON_TWO
 ARMA-2>
 STR_HOSTILE
 OSTILE
@@ -647,8 +647,6 @@ STR_COLONEL
 Colonnello
 STR_COMMANDER
 Comandante
-STR_SELECT_SQUAD_FOR
-Scegli la squadra per 
 STR_SPACE_AVAILABLE
 SPAZIO DISPONIBILE>
 STR_SPACE_USED
@@ -657,8 +655,6 @@ STR_RANK
 GRADO
 STR_WOUNDED
 FERITO
-STR_EQUIPMENT_FOR
-Equipaggiamento per 
 STR_ARM
 Arma
 STR_DEFENSE_VALUE
@@ -2035,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unità di tempo tiro automatico
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unità di tempo tiro con mira
-STR_UNITS_IN_EXIT_AREA
- Unità nell'area di uscita
-STR_UNITS_OUTSIDE_EXIT_AREA
- Unità fuori dall'area di uscita
 STR_ABORT_MISSION
 Interrompi la missione ?
 STR_CORPSE
@@ -2089,3 +2081,17 @@ STR_DAY_1
 {N} giorno
 STR_DAY_2
 {N} giorni
+STR_EQUIPMENT_FOR_craftname
+Equipaggiamento per {1}
+STR_SELECT_SQUAD_FOR_craftname
+Scegli la squadra per {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Unità nell'area di uscita
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} Unità nell'area di uscita
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} Unità fuori dall'area di uscita
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Unità fuori dall'area di uscita
+STR_ABANDON_GAME_QUESTION
+ABBANDONA IL GIOCO?

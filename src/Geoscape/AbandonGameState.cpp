@@ -69,7 +69,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_ABANDON_GAME") << "?";
+	ss << _game->getLanguage()->getString("STR_ABANDON_GAME_QUESTION");
 	_txtTitle->setText(ss.str());
 }
 

@@ -597,13 +597,13 @@ STR_VERY_HIGH
 SEHR HOCH
 STR_FUEL
 TREIBSTOFF>
-STR_WEAPON_1
+STR_WEAPON_ONE
 WAFFE-1>
 STR_NONE_UC
 OHNE
 STR_ROUNDS_
 SCHUSS>
-STR_WEAPON_2
+STR_WEAPON_TWO
 WAFFE-2>
 STR_HOSTILE
 FEINDLICH
@@ -647,8 +647,6 @@ STR_COLONEL
 Oberst
 STR_COMMANDER
 Kommandant
-STR_SELECT_SQUAD_FOR
-Einsatztruppe wählen für 
 STR_SPACE_AVAILABLE
 PLATZ VERFÜGBAR>
 STR_SPACE_USED
@@ -657,8 +655,6 @@ STR_RANK
 RANG
 STR_WOUNDED
 VERWUNDET
-STR_EQUIPMENT_FOR
-Ausrüstung für 
 STR_ARM
 Bewaffnen 
 STR_DEFENSE_VALUE
@@ -2037,10 +2033,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Zeiteinheiten für Auto-Schuß
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Zeiteinheiten für Zielschuß
-STR_UNITS_IN_EXIT_AREA
-Einheiten im Ausgangsbereich
-STR_UNITS_OUTSIDE_EXIT_AREA
-Einheiten außerhalb des Ausgangsbereichs
 STR_ABORT_MISSION
 Mission abbrechen?
 STR_CORPSE
@@ -2091,3 +2083,17 @@ STR_DAY_1
 {N} Tag
 STR_DAY_2
 {N} Tage
+STR_EQUIPMENT_FOR_craftname
+Ausrüstung für {1}
+STR_SELECT_SQUAD_FOR_craftname
+Einsatztruppe wählen für {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Einheit im Ausgangsbereich
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} Einheiten im Ausgangsbereich
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} Einheit außerhalb des Ausgangsbereichs
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Einheiten außerhalb des Ausgangsbereichs
+STR_ABANDON_GAME_QUESTION
+SPIEL AUFGEBEN?

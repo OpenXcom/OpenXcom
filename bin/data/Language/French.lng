@@ -597,13 +597,13 @@ STR_VERY_HIGH
 TRÈS HAUTE
 STR_FUEL
 CARBURANT>
-STR_WEAPON_1
+STR_WEAPON_ONE
 ARME-1>
 STR_NONE_UC
 RIEN
 STR_ROUNDS_
 MUNITIONS>
-STR_WEAPON_2
+STR_WEAPON_TWO
 ARME-2>
 STR_HOSTILE
 HOSTILE
@@ -647,8 +647,6 @@ STR_COLONEL
 Colonel
 STR_COMMANDER
 Commandant
-STR_SELECT_SQUAD_FOR
-Sélectionner Escouade pour 
 STR_SPACE_AVAILABLE
 ESPACE DISPONIBLE>
 STR_SPACE_USED
@@ -657,8 +655,6 @@ STR_RANK
 GRADE
 STR_WOUNDED
 BLÉSSÉ
-STR_EQUIPMENT_FOR
-Équipement pour 
 STR_ARM
 Armer 
 STR_DEFENSE_VALUE
@@ -2035,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unités de temps réservées au tir automatique
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unités de temps réservées au tir précis
-STR_UNITS_IN_EXIT_AREA
- Unités dans la zone de sortie
-STR_UNITS_OUTSIDE_EXIT_AREA
- Unités hors de la zone de sortie
 STR_ABORT_MISSION
 Abandonner mission?
 STR_CORPSE
@@ -2089,3 +2081,17 @@ STR_DAY_1
 {N} jour
 STR_DAY_2
 {N} jours
+STR_EQUIPMENT_FOR_craftname
+Équipement pour {1}
+STR_SELECT_SQUAD_FOR_craftname
+Sélectionner Escouade pour {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Unité dans la zone de sortie
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} Unités dans la zone de sortie
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} Unité hors de la zone de sortie
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Unités hors de la zone de sortie
+STR_ABANDON_GAME_QUESTION
+ABANDONNER JEU?

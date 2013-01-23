@@ -597,13 +597,13 @@ STR_VERY_HIGH
 BARDZO WYSOKO
 STR_FUEL
 PALIWO>
-STR_WEAPON_1
+STR_WEAPON_ONE
 BROŃ-L>
 STR_NONE_UC
 BRAK
 STR_ROUNDS_
 NABOI>
-STR_WEAPON_2
+STR_WEAPON_TWO
 BROŃ-P>
 STR_HOSTILE
 WROGI
@@ -647,8 +647,6 @@ STR_COLONEL
 Pułkownik
 STR_COMMANDER
 Generał
-STR_SELECT_SQUAD_FOR
-Wybierz żołnierzy>
 STR_SPACE_AVAILABLE
 WOLNE MIEJSCE>
 STR_SPACE_USED
@@ -657,8 +655,6 @@ STR_RANK
 RANGA
 STR_WOUNDED
 RANNY
-STR_EQUIPMENT_FOR
-Wybierz sprzęt>
 STR_ARM
 Broń 
 STR_DEFENSE_VALUE
@@ -2035,10 +2031,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Zarezerwowano PR dla strzału seryjnego.
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Zarezerwowano PR dla strzału wycelowanego.
-STR_UNITS_IN_EXIT_AREA
- na terenie ewakuacji
-STR_UNITS_OUTSIDE_EXIT_AREA
- poza terenem ewakuacji
 STR_ABORT_MISSION
 Przerwać misję?
 STR_CORPSE
@@ -2091,3 +2083,21 @@ STR_DAY_2
 {N} dni
 STR_DAY_3
 {N} dni
+STR_EQUIPMENT_FOR_craftname
+Wybierz sprzęt> {1}
+STR_SELECT_SQUAD_FOR_craftname
+Wybierz żołnierzy> {1}
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} na terenie ewakuacji
+STR_n_UNITS_IN_EXIT_AREA_2
+{N} na terenie ewakuacji
+STR_n_UNITS_IN_EXIT_AREA_3
+{N} na terenie ewakuacji
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} poza terenem ewakuacji
+STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} poza terenem ewakuacji
+STR_n_UNITS_OUTSIDE_EXIT_AREA_3
+{N} poza terenem ewakuacji
+STR_ABANDON_GAME_QUESTION
+KONIEC GRY?
