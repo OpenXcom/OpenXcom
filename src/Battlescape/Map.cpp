@@ -236,7 +236,10 @@ void Map::drawTerrain(Surface *surface)
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && !_projectile->getItem())
 	{
-		for (int i = 1; i <= _projectile->getParticle(0); ++i)
+		int part = _projectile->getParticle(0);
+		if (part == 0)
+			part = 1;
+		for (int i = 1; i <= part; ++i)
 		{
 			if (_projectile->getPosition(1-i).x < bulletLowX)
 				bulletLowX = _projectile->getPosition(1-i).x;
