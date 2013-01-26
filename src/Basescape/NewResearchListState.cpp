@@ -82,6 +82,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(2);
 	_lstResearch->setAlign(ALIGN_CENTER);
+	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->onMouseClick((ActionHandler)&NewResearchListState::onSelectProject);
 }
 

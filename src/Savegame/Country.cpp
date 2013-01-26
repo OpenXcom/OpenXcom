@@ -159,6 +159,7 @@ const std::vector<int> &Country::getActivityAlien() const
 
 void Country::newMonth(int xcomTotal, int alienTotal)
 {
+	_satisfaction = 2;
 	int funding = getFunding().back();
 	int good = (xcomTotal / 10) + _activityXcom.back();
 	int bad = (alienTotal / 20) + _activityAlien.back();
@@ -204,8 +205,10 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	// set the new funding and reset the activity meters
 	if(_pact)
 		_funding.push_back(0);
-	else
+	else if (_satisfaction != 2)
 		_funding.push_back(funding + newFunding);
+	else
+		_funding.push_back(funding);
 	
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);

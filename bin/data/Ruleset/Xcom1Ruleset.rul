@@ -7861,7 +7861,7 @@ manufacture:
     time: 800
     cost: 22000
     requiredItems:
-      STR_ALIEN_ALLOYS: 1
+      STR_ALIEN_ALLOYS: 4
   - name: STR_POWER_SUIT
     category: STR_PERSONAL_ARMOR
     requires:
@@ -7870,7 +7870,8 @@ manufacture:
     time: 1000
     cost: 42000
     requiredItems:
-      STR_ALIEN_ALLOYS: 4
+      STR_ALIEN_ALLOYS: 5
+      STR_ELERIUM_115: 5
   - name: STR_FLYING_SUIT
     category: STR_PERSONAL_ARMOR
     requires:
@@ -7880,7 +7881,7 @@ manufacture:
     cost: 58000
     requiredItems:
       STR_ALIEN_ALLOYS: 5
-      STR_ELERIUM_115: 5
+      STR_ELERIUM_115: 16
   - name: STR_ALIEN_ALLOYS
     category: STR_UFO_COMPONENT
     requires:

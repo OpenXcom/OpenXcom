@@ -409,17 +409,14 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// terror site disappears
-	if (!aborted)
+	// terror site disappears (even when you abort)
+	for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
 	{
-		for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+		if ((*i)->isInBattlescape())
 		{
-			if ((*i)->isInBattlescape())
-			{
-				delete *i;
-				save->getTerrorSites()->erase(i);
-				break;
-			}
+			delete *i;
+			save->getTerrorSites()->erase(i);
+			break;
 		}
 	}
 	// alien base disappears (if you didn't abort)
@@ -493,7 +490,7 @@ void DebriefingState::prepareDebriefing()
 				if ((*j)->killedBy() == FACTION_PLAYER)
 					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -50);
 				else // if civilians happen to kill themselves XCOM shouldn't get penalty for it
-					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30);
 			}
 		}
 		else if (status == STATUS_UNCONSCIOUS || (oldFaction == FACTION_HOSTILE && faction == FACTION_PLAYER))
@@ -558,9 +555,17 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (oldFaction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			else if (oldFaction == FACTION_NEUTRAL)
 			{
-				addStat("STR_CIVILIANS_SAVED", 1, 30);
+				if (!aborted || playersSurvived == 0)
+				{
+					addStat("STR_CIVILIANS_SAVED", 1, 30);
+				}
+				// if mission fails, all civilians die
+				else
+				{
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
+				}
 			}
 		}
 	}

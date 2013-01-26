@@ -1301,18 +1301,47 @@ void Globe::drawMarkers()
 			_mkXcomBase->setY(y - 1);
 			_mkXcomBase->blit(_markers);
 		}
-		// Draw the craft markers
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+	}
+
+	// Draw the waypoint markers
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		_mkWaypoint->setX(x - 1);
+		_mkWaypoint->setY(y - 1);
+		_mkWaypoint->blit(_markers);
+	}
+
+	// Draw the terror site markers
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		_mkAlienSite->setX(x - 1);
+		_mkAlienSite->setY(y - 1);
+		_mkAlienSite->blit(_markers);
+	}
+
+	// Draw the Alien Base markers
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	{
+		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
+			continue;
+
+		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
+
+		if ((*i)->isDiscovered())
 		{
-			// Hide crafts docked at base
-			if ((*j)->getStatus() != "STR_OUT" || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
-				continue;
-
-			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
-
-			_mkCraft->setX(x - 1);
-			_mkCraft->setY(y - 1);
-			_mkCraft->blit(_markers);
+			_mkAlienBase->setX(x - 1);
+			_mkAlienBase->setY(y - 1);
+			_mkAlienBase->blit(_markers);
 		}
 	}
 
@@ -1344,44 +1373,20 @@ void Globe::drawMarkers()
 		marker->blit(_markers);
 	}
 
-	// Draw the waypoint markers
-	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
+	// Draw the craft markers
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
-			continue;
-
-		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-		_mkWaypoint->setX(x - 1);
-		_mkWaypoint->setY(y - 1);
-		_mkWaypoint->blit(_markers);
-	}
-
-	// Draw the terror site markers
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
-	{
-		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
-			continue;
-
-		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-		_mkAlienSite->setX(x - 1);
-		_mkAlienSite->setY(y - 1);
-		_mkAlienSite->blit(_markers);
-	}
-	// Draw the Alien Base markers
-	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
-	{
-		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
-			continue;
-
-		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
-
-		if ((*i)->isDiscovered())
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			_mkAlienBase->setX(x - 1);
-			_mkAlienBase->setY(y - 1);
-			_mkAlienBase->blit(_markers);
+			// Hide crafts docked at base
+			if ((*j)->getStatus() != "STR_OUT" || pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+				continue;
+
+			polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
+
+			_mkCraft->setX(x - 1);
+			_mkCraft->setY(y - 1);
+			_mkCraft->blit(_markers);
 		}
 	}
 }
