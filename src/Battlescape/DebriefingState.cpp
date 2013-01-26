@@ -512,7 +512,7 @@ void DebriefingState::prepareDebriefing()
 					_noContainment = true;
 				}
 			}
-			else if (oldFaction == FACTION_NEUTRAL && (!aborted || playersSurvived == 0))
+			else if (oldFaction == FACTION_NEUTRAL && !(aborted || playersSurvived == 0))
 			{
 				addStat("STR_CIVILIANS_SAVED", 1, 30);
 			}
@@ -576,14 +576,14 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (oldFaction == FACTION_NEUTRAL)
 			{
-				if (!aborted || playersSurvived == 0)
-				{
-					addStat("STR_CIVILIANS_SAVED", 1, 30);
-				}
 				// if mission fails, all civilians die
+				if (aborted || playersSurvived == 0)
+				{
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30);
+				}				
 				else
 				{
-					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -30); 
+					addStat("STR_CIVILIANS_SAVED", 1, 30);
 				}
 			}
 		}
