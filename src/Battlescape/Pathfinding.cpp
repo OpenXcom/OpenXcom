@@ -96,7 +96,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	}
 
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
-	while (canFallDown(destinationTile) && 	_movementType != MT_FLY)
+	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
@@ -253,7 +253,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() < -12 && x==0 && y==0)
+			if (direction < DIR_UP && startTile->getTerrainLevel() < -12 && !triedStairs)
 			{
 				endPosition->z++;
 				destinationTile = _save->getTile(*endPosition);
@@ -539,6 +539,20 @@ bool Pathfinding::canFallDown(Tile *here)
 		return false;
 }
 
+bool Pathfinding::canFallDown(Tile *here, int size)
+{
+	for (int x = 0; x != size; ++x)
+	{
+		for (int y = 0; y != size; ++y)
+		{
+			Position checkPos = here->getPosition() + Position(x,y,0);
+			Tile *checkTile = _save->getTile(checkPos);
+			if (!canFallDown(checkTile))
+				return false;
+		}
+	}
+	return true;
+}
 /**
  * We are going upstairs here?
  * @param startPosition

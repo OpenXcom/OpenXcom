@@ -48,6 +48,7 @@ private:
 	/// whether a tile blocks a certain movementType
 	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget);
 	bool canFallDown(Tile *destinationTile);
+	bool canFallDown(Tile *destinationTile, int size);
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
 	bool _pathPreviewed;
