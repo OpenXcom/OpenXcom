@@ -172,7 +172,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 			saveYear << time.getYear();
 
 			std::string s = file.substr(0, file.length()-4);
-#ifdef _MSC_VER
+#ifdef _WIN32
 			std::wstring wstr = Language::cpToWstr(s);
 #else
 			std::wstring wstr = Language::utf8ToWstr(s);

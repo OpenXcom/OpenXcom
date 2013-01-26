@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
 	
@@ -106,19 +106,19 @@ void SaveState::lstSavesPress(Action *action)
 				_lstSaves->setCellText(_previousSelectedRow	, 0, _game->getLanguage()->getString("STR_NEW_SAVED_GAME"));
 				break;
 			default:
-				_lstSaves->setCellText(_previousSelectedRow	, 0, Language::utf8ToWstr(_selected));
+				_lstSaves->setCellText(_previousSelectedRow	, 0, _selected);
 		}
 
-		_selected = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+		_selected = _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0);
 		_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
 		if (_lstSaves->getSelectedRow() == 0)
 		{
 			_edtSave->setText(L"");
-			_selected = "";
+			_selected = L"";
 		}
 		else
 		{
-			_edtSave->setText(Language::utf8ToWstr(_selected));
+			_edtSave->setText(_selected);
 		}
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
@@ -147,13 +147,15 @@ void SaveState::edtSaveKeyPress(Action *action)
 		updateStatus("STR_SAVING_GAME");
 		try
 		{
-#ifdef _MSC_VER
+#ifdef _WIN32
+			std::string selected = Language::wstrToCp(_selected);
 			std::string filename = Language::wstrToCp(_edtSave->getText());
 #else
+			std::string selected = Language::wstrToUtf8(_selected);
 			std::string filename = Language::wstrToUtf8(_edtSave->getText());
 #endif
 			_game->getSavedGame()->save(filename);
-			std::string oldName = Options::getUserFolder() + _selected + ".sav";
+			std::string oldName = Options::getUserFolder() + selected + ".sav";
 			std::string newName = Options::getUserFolder() + filename + ".sav";
 			if (_selectedRow > 0 && oldName != newName)
 			{

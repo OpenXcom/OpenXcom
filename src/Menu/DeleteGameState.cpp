@@ -44,7 +44,7 @@ namespace OpenXcom
  */
 DeleteGameState::DeleteGameState(Game *game, const std::wstring &save, Uint8 color, std::string bg, Uint8 bgColor, SavedGameState *parent): State(game)
 {
-#ifdef _MSC_VER
+#ifdef _WIN32
 	std::string file = Language::wstrToCp(save);
 #else
 	std::string file = Language::wstrToUtf8(save);

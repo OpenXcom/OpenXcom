@@ -71,7 +71,7 @@ void LoadState::lstSavesPress(Action *action)
 		SavedGame *s = new SavedGame();
 		try
 		{
-#ifdef _MSC_VER
+#ifdef _WIN32
 			std::string filename = Language::wstrToCp(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
 #else
 			std::string filename = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));

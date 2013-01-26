@@ -35,7 +35,7 @@ class SaveState : public SavedGameState
 {
 private:
 	TextEdit *_edtSave;
-	std::string _selected;
+	std::wstring _selected;
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
