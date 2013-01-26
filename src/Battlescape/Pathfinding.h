@@ -46,18 +46,19 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
-	bool isBlocked(Tile *tile, const int part);
+	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget);
 	bool canFallDown(Tile *destinationTile);
+	bool canFallDown(Tile *destinationTile, int size);
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	BattleUnit *_unit;
 	bool _pathPreviewed;
 	bool _strafeMove;
 	///Try to find a straight line path between two positions.
-	bool bresenhamPath(const Position& origin, const Position& target);
+	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget);
 	///Try to find a path between two positions.
-	bool aStarPath(const Position& origin, const Position& target);
+	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget);
 public:
-	bool isBlocked(Tile *startTile, Tile *endTile, const int direction);
+	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
 	static const int O_BIGWALL = -1;
@@ -66,7 +67,7 @@ public:
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculate the shortest path.
-	void calculate(BattleUnit *unit, Position endPosition, bool missile = false);
+	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready gives the first direction.
@@ -74,7 +75,7 @@ public:
 	/// Dequeue a direction.
 	int dequeuePath();
 	/// Get's the TU cost to move from 1 tile to the other.
-	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit);
+	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit, BattleUnit *missileTarget);
 	/// Abort the current path.
 	void abortPath();
 	bool getStrafeMove() const;

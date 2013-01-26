@@ -131,6 +131,8 @@ int Projectile::calculateTrajectory(double accuracy)
 	else
 	{
 		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
+		originVoxel.x += 8;
+		originVoxel.y += 8;
 		originVoxel.z += 12;
 	}
 
@@ -206,7 +208,8 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
+	if (_action.type != BA_LAUNCH)
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);

@@ -560,25 +560,26 @@ void BattleUnit::turn(bool turret)
 		if (a > 0) {
 			if (a <= 4) {
 				if (!turret) _direction++;
-				_directionTurret++;
+				else _directionTurret++;
 			} else {
 				if (!turret) _direction--;
-				_directionTurret--;
+				else _directionTurret--;
 			}
 		} else {
 			if (a > -4) {
 				if (!turret) _direction--;
-				_directionTurret--;
+				else _directionTurret--;
 			} else {
 				if (!turret) _direction++;
-				_directionTurret++;
+				else _directionTurret++;
 			}
 		}
 		if (_direction < 0) _direction = 7;
 		if (_direction > 7) _direction = 0;
 		if (_directionTurret < 0) _directionTurret = 7;
 		if (_directionTurret > 7) _directionTurret = 0;
-		_cacheInvalid = true;
+		if (_visible || _faction == FACTION_PLAYER)
+			_cacheInvalid = true;
 	}
 
 	if (turret)
@@ -651,7 +652,7 @@ void BattleUnit::setCache(Surface *cache, int part)
  */
 Surface *BattleUnit::getCache(bool *invalid, int part) const
 {
-        if (part < 0) part = 0;
+	if (part < 0) part = 0;
 	*invalid = _cacheInvalid;
 	return _cache[part];
 }
@@ -695,7 +696,8 @@ void BattleUnit::aim(bool aiming)
 	else
 		_status = STATUS_STANDING;
 
-	_cacheInvalid = true;
+	if (_visible || _faction == FACTION_PLAYER)
+		_cacheInvalid = true;
 }
 
 /**

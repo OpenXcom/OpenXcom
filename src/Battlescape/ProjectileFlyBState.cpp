@@ -136,7 +136,7 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!validMeleeRange(&_action))
+		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), _action.actor->getHeight(), 0))
 		{
 			_action.result = "STR_THERE_IS_NO_ONE_THERE";
 			_parent->popState();
@@ -365,38 +365,6 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 	realDistance += zdiff*2;
 
 	return realDistance < maxDistance;
-}
-
-/*
- * Validate the melee range.
- * @return true when range is valid.
- */
-bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
-{
-	Position p;
-	Pathfinding::directionToVector(action->actor->getDirection(), &p);
-	for (int x = 0; x <= action->actor->getArmor()->getSize(); ++x)
-	{
-		for (int y = 0; y <= action->actor->getArmor()->getSize(); ++y)
-		{
-			Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0) + p));
-			if (tile)
-			{
-				BattleUnit *target (tile->getUnit());
-				if (!target && (action->actor->getHeight() + _parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0))->getTerrainLevel() > 24))
-					target = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
-				if (target && target != action->actor)
-				{
-					for (std::vector<BattleUnit*>::iterator b = action->actor->getVisibleUnits()->begin(); b != action->actor->getVisibleUnits()->end(); ++b)
-					{
-						if (*b == target && !_parent->getPathfinding()->isBlocked(_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0)), tile, action->actor->getDirection()))
-							return true;
-					}
-				}
-			}
-		}
-	}
-	return false;
 }
 
 }

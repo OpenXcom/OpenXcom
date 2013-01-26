@@ -24,6 +24,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Armor.h"
@@ -37,7 +38,7 @@ namespace OpenXcom
  * @param game pointer to the game.
  * @param unit pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _timesNotSeen(0)
+AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0)
 {
 
 }
@@ -66,6 +67,15 @@ void AggroBAIState::load(const YAML::Node &node)
 				_aggroTarget = (*j);
 		}
 	}
+	node["lastKnownTarget"] >> targetID;
+	if (targetID != -1)
+	{
+		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
+		{
+			if ((*j)->getId() == targetID)
+				_lastKnownTarget = (*j);
+		}
+	}
 	node["lastKnownPosition"][0] >> _lastKnownPosition.x;
 	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
 	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
@@ -87,6 +97,14 @@ void AggroBAIState::save(YAML::Emitter &out) const
 	else
 	{
 		out << YAML::Key << "aggrotarget" << YAML::Value << -1;
+	}
+	if (_lastKnownTarget)
+	{
+		out << YAML::Key << "lastKnownTarget" << YAML::Value << _lastKnownTarget->getId();
+	}
+	else
+	{
+		out << YAML::Key << "lastKnownTarget" << YAML::Value << -1;
 	}
 	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
@@ -125,32 +143,24 @@ void AggroBAIState::think(BattleAction *action)
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 	_aggroTarget = 0;
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 
-	if ((_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER")|| (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint()))
+
+	/*	psionic targetting: pick from any of the "exposed" units.
+		exposed means they have been previously spotted, and are therefore "known" to the AI,
+		regardless of whether we can see them or not, because we're psychic.
+	*/
+	if (_unit->getStats()->psiSkill && _unit->getType() != "SOLDIER" && _game->getExposedUnits()->size() > 0 && RNG::generate(0, 100) > 66)
 	{
-		BattleUnit *backupTarget = 0;
+		int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 		int chanceToAttack = 0;
 		int tries = 0;
 		for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end() && tries < 80; ++i)
 		{
-			// try to pathfind for a blaster launcher if we're using one
-			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->isWaypoint())
+			// don't target tanks
+			if ((*i)->getArmor()->getSize() != 2)
 			{
-				_game->getPathfinding()->calculate(_unit, (*i)->getPosition(), true);
-				if (_game->getPathfinding()->getStartDirection() != -1)
-				{
-					backupTarget = *i;
-				}
-				_game->getPathfinding()->abortPath();
-			}
-
-			// select a target for mind control, and don't target tanks
-			if (_unit->getStats()->psiSkill && (*i)->getArmor()->getSize() != 2 && _unit->getType() != "SOLDIER")
-			{
-				// good god.
 				int chanceToAttackMe = psiAttackStrength
 					+ ((*i)->getStats()->psiSkill * -0.4)
 					- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
@@ -214,49 +224,110 @@ void AggroBAIState::think(BattleAction *action)
 				{
 					action->type = BA_MINDCONTROL;
 					action->target = _aggroTarget->getPosition();
-					action->TU = 25; // TODO: make this a ruleset thing
 				}
 				else
 				{
 					action->type = BA_PANIC;
 					action->target = _aggroTarget->getPosition();
-					action->TU = 25; // TODO: make this a ruleset thing
 				}
 			}
 			else if (chanceToAttack)
 			{
 					action->type = BA_PANIC;
 					action->target = _aggroTarget->getPosition();
-					action->TU = 25; // TODO: make this a ruleset thing
 			}
-		}
-
-		if (backupTarget != 0 && _aggroTarget == 0)
-		{
-				_aggroTarget = backupTarget;
-				action->weapon = _unit->getMainHandWeapon();
-				action->target = backupTarget->getPosition();
-				action->type = BA_LAUNCH;
-				action->TU = action->actor->getActionTUs(action->type, action->weapon);
 		}
 	}
 
-	if (!_aggroTarget)
+	
+	/*	
+	*	waypoint targetting: pick from any units currently spotted by our allies.
+	*/
+	if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem() && _unit->getMainHandWeapon()->getRules()->isWaypoint() && _unit->getType() != "SOLDIER")
 	{
-		if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe)
+		for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && _aggroTarget == 0; ++i)
 		{
+			if ((*i)->getFaction() == _unit->getFaction())
+			{
+				for (std::vector<BattleUnit*>::const_iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end() && _aggroTarget == 0; ++j)
+				{
+					_game->getPathfinding()->calculate(_unit, (*j)->getPosition(), *j);
+					if (_game->getPathfinding()->getStartDirection() != -1 && explosiveEfficacy((*j)->getPosition(), _unit, (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower()/20)+1, action->diff))
+					{
+						_aggroTarget = *j;
+					}
+					_game->getPathfinding()->abortPath();
+				}
+			}
+		}
+
+		if (_aggroTarget != 0)
+		{
+			action->weapon = _unit->getMainHandWeapon();
+			action->type = BA_LAUNCH;
+			action->TU = action->actor->getActionTUs(action->type, action->weapon);
+			action->waypoints.clear();
+
+			int PathDirection;
+			int CollidesWith;
+			Position LastWayPoint = _unit->getPosition();
+			Position LastPosition = _unit->getPosition();
+			Position CurrentPosition = _unit->getPosition();
+			Position DirectionVector;
+
+			_game->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget);
+			PathDirection = _game->getPathfinding()->dequeuePath();
+			while (PathDirection != -1)
+			{
+				LastPosition = CurrentPosition;
+				_game->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
+				CurrentPosition = CurrentPosition + DirectionVector;
+				Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
+				Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
+				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true, false);
+				if (CollidesWith > -1 && CollidesWith < 4)
+				{
+					action->waypoints.push_back(LastPosition);
+					LastWayPoint = LastPosition;
+				}
+				else if (CollidesWith == 4)
+				{
+					BattleUnit* target = _game->getTile(CurrentPosition)->getUnit();
+					if (target == _aggroTarget)
+					{
+						action->waypoints.push_back(CurrentPosition);
+						LastWayPoint = CurrentPosition;
+					}
+				}
+
+				PathDirection = _game->getPathfinding()->dequeuePath();
+			}
+			action->target = action->waypoints.front();
+			if( action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
+			{
+				action->type = BA_RETHINK;
+			}
+		}
+	}
+
+
+	/*
+	 *	Regular targetting: we can see an enemy, or an enemy can see us (in case we need to take cover)
+	 */
+	if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe)
+	{
 		for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 		{
 			//pick closest living unit
 			if (!_aggroTarget || _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition()) < _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()))
 			{
 				if(!(*j)->isOut())
-				_aggroTarget = (*j);
+					_aggroTarget = (*j);
 			}
 		}
 	
 		// if we currently see no target, we either can move to it's last seen position or lose aggro
-		if (_aggroTarget == 0)
+		if (_aggroTarget == 0 && _lastKnownTarget != 0)
 		{
 			_timesNotSeen++;
 			if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
@@ -268,7 +339,7 @@ void AggroBAIState::think(BattleAction *action)
 			action->type = BA_WALK;
 			action->target = _lastKnownPosition;
 		}
-		else
+		else if (_aggroTarget != 0)
 		{
 			// if we see the target, we either can shoot him, or take cover.
 			bool takeCover = true;
@@ -308,31 +379,31 @@ void AggroBAIState::think(BattleAction *action)
 				}
 				else
 				{
-					// get a list of the tiles we can reach and still get an attack in
-					std::vector<int> reachable = _game->getPathfinding()->findReachable(action->actor, (action->actor->getTimeUnits() - action->actor->getActionTUs(BA_HIT, action->actor->getMainHandWeapon())));
 					takeCover = true;
 					bool targetFound = false;
-					for (std::vector<int>::iterator reach = reachable.begin(); reach != reachable.end() && !targetFound; ++reach)
+					int distance = 200;
+					for (int x = 0 - action->actor->getArmor()->getSize()-1; x <= _aggroTarget->getArmor()->getSize()-1; ++x)
 					{
-						for (int x = 0 - action->actor->getArmor()->getSize(); x <= _aggroTarget->getArmor()->getSize() && !targetFound; ++x)
+						for (int y = 0 - action->actor->getArmor()->getSize()-1; y <= _aggroTarget->getArmor()->getSize()-1; ++y)
 						{
-							for (int y = 0 - action->actor->getArmor()->getSize(); y <= _aggroTarget->getArmor()->getSize() && !targetFound; ++y)
+							if (!(x == 0 && y == 0))
 							{
-								if (!(x == 0 && y == 0))
+								Position p (x, y, 0);
+								Position checkPath = _aggroTarget->getPosition() + p;
+								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
+								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
+								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
+								if (_game->getPathfinding()->getStartDirection() != -1 && valid &&
+									newDistance < distance)
 								{
-									Position p (x, y, 0);
-									Position checkPath = _aggroTarget->getPosition() + p;
-									// if the tile we are checking is on the reachable list
-									if (*reach == _game->getTileIndex(checkPath))
-									{
-										// CHAAAAAAARGE!
-										action->target = checkPath;
-										action->type = BA_WALK;
-										charge = true;
-										_unit->setCharging(_aggroTarget);
-										targetFound = true;
-									}
+									// CHAAAAAAARGE!
+									action->target = checkPath;
+									action->type = BA_WALK;
+									charge = true;
+									_unit->setCharging(_aggroTarget);
+									distance = newDistance;
 								}
+								_game->getPathfinding()->abortPath();
 							}
 						}
 					}
@@ -349,19 +420,17 @@ void AggroBAIState::think(BattleAction *action)
 				// lets' evaluate if we could throw a grenade
 				int tu = 4; // 4TUs for picking up the grenade
 
-				// distance must be more than 6 tiles, otherwise it's too dangerous to play with explosives
-				if (_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()) > 6)
+				// do we have a grenade on our belt?
+				BattleItem *grenade = _unit->getGrenadeFromBelt();
+				// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
+				if (grenade && explosiveEfficacy(_aggroTarget->getPosition(), _unit, (grenade->getRules()->getPower()/10)+1, action->diff))
 				{
 					if((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE)
-					{
-					// do we have a grenade on our belt?
-					BattleItem *grenade = _unit->getGrenadeFromBelt();
-					// do we have enough TUs to prime and throw the grenade?
-					if (grenade && RNG::generate(0,2) == 0)
 					{
 						action->weapon = grenade;
 						tu += _unit->getActionTUs(BA_PRIME, grenade);
 						tu += _unit->getActionTUs(BA_THROW, grenade);
+						// do we have enough TUs to prime and throw the grenade?
 						if (tu <= _unit->getStats()->tu)
 						{
 							// are we within range?
@@ -372,7 +441,6 @@ void AggroBAIState::think(BattleAction *action)
 								action->type = BA_THROW;
 							}
 						}
-					}
 					}
 				}
 
@@ -388,10 +456,11 @@ void AggroBAIState::think(BattleAction *action)
 					{
 						if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
 						{
-							if (RNG::generate(1,10) < 5)
-								action->type = BA_SNAPSHOT;
-							else
+							if (action->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE || explosiveEfficacy(_aggroTarget->getPosition(), _unit, (action->weapon->getAmmoItem()->getRules()->getPower() / 10) +1, action->diff))
+							if (RNG::generate(1,10) < 5 && action->weapon->getAmmoQuantity() > 2)
 								action->type = BA_AUTOSHOT;
+							else
+								action->type = BA_SNAPSHOT;
 							tu = action->actor->getActionTUs(action->type, action->weapon);
 							// enough time units to shoot?
 							if (tu > _unit->getTimeUnits())
@@ -440,9 +509,8 @@ void AggroBAIState::think(BattleAction *action)
 		}
 		if (action->type != BA_RETHINK)
 			action->TU = action->actor->getActionTUs(action->type, action->weapon);
-		}
 	}
-	else
+	if (_aggroTarget != 0)
 		setAggroTarget(_aggroTarget);
 }
 
@@ -455,8 +523,57 @@ void AggroBAIState::think(BattleAction *action)
 void AggroBAIState::setAggroTarget(BattleUnit *unit)
 {
 	_timesNotSeen = 0;
+	_lastKnownTarget = unit;
 	_lastKnownPosition = unit->getPosition();
 }
 
+bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
+{
+	// i hate the player and i want him dead, but i don't want to piss him off.
+	if (_game->getTurn() < 3)
+		return false;
+	int distance = _game->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
+	int injurylevel = attackingUnit->getStats()->health - attackingUnit->getHealth();
+	int desperation = (100 - attackingUnit->getMorale()) / 10;
+	// assume there's one viable target, the one at ground zero.
+	int enemiesAffected = 1;
+	// if we're below 1/3 health, let's assume things are dire, and increase desperation.
+	if (injurylevel > (attackingUnit->getStats()->health / 3) * 2)
+		desperation += 3;
 
+	int efficacy = desperation + enemiesAffected;
+	if (distance <= radius)
+		efficacy -= 3;
+
+	// we don't want to ruin our own base, but we do want to ruin XCom's day.
+	if (_game->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
+	else if (_game->getMissionType() == "STR_BASE_DEFENSE" || _game->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
+
+
+	BattleUnit *target = _game->getTile(targetPos)->getUnit();
+	for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
+	{
+		if (!(*i)->isOut() && (*i) != attackingUnit && (*i)->getPosition().z == targetPos.z && _game->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
+		{
+			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
+			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
+			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false);
+			if (collidesWith == 4)
+			{
+				if ((*i)->getFaction() != attackingUnit->getFaction())
+				{
+					++enemiesAffected;
+					++efficacy;
+				}
+				else
+					efficacy -= 2; // friendlies count double
+			}
+		}
+	}
+	// spice things up a bit by adding a random number based on difficulty level
+	efficacy += RNG::generate(0, diff+1) - RNG::generate(0,2);
+	if (efficacy > 0 || enemiesAffected >= 10)
+		return true;
+	return false;
+}
 }

@@ -73,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -171,7 +171,7 @@ void Map::draw()
 		}
 	}
 
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _save->getSelectedUnit() == 0 || _save->getDebugMode() || projectileInFOV || explosionInFOV)
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible()) || _unitDying || _save->getSelectedUnit() == 0 || _save->getDebugMode() || projectileInFOV || explosionInFOV)
 	{
 		drawTerrain(this);
 	}
@@ -236,7 +236,10 @@ void Map::drawTerrain(Surface *surface)
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile && !_projectile->getItem())
 	{
-		for (int i = 1; i <= _projectile->getParticle(0); ++i)
+		int part = _projectile->getParticle(0);
+		if (part == 0)
+			part = 1;
+		for (int i = 1; i <= part; ++i)
 		{
 			if (_projectile->getPosition(1-i).x < bulletLowX)
 				bulletLowX = _projectile->getPosition(1-i).x;
@@ -999,6 +1002,11 @@ std::vector<Position> *Map::getWaypoints()
 void Map::setButtonsPressed(Uint8 button, bool pressed)
 {
 	_buttonsPressed[button] = pressed;
+}
+
+void Map::setUnitDying(bool flag)
+{
+	_unitDying = flag;
 }
 
 }

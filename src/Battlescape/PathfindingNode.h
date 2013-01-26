@@ -57,7 +57,7 @@ public:
 	/// Mark as checked
 	void setChecked() { _checked = true; }
 	/// get TU cost
-	int getTUCost() const;
+	int getTUCost(bool missile) const;
 	/// get steps num
 	int getStepsNum() const;
 	/// get previous node
@@ -80,7 +80,7 @@ class MinNodeCosts
 public:
 	bool operator()(const PathfindingNode *a, const PathfindingNode *b) const
 	{
-		return a->getTUCost() < b->getTUCost();
+		return a->getTUCost(false) < b->getTUCost(false);
 	}
 };
 

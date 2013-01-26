@@ -60,6 +60,7 @@ private:
 	bool _inBattlescape;
 	bool _retaliationTarget;
 	std::vector<Vehicle*> _vehicles;
+	std::vector<BaseFacility*> _defenses;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -187,6 +188,7 @@ public:
 	unsigned getDetectionChance() const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
+	void setupDefenses();
 	/// Get a list of Defensive Facilities
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.

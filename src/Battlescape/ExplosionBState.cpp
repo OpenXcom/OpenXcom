@@ -90,7 +90,8 @@ void ExplosionBState::init()
 		_power = 120;
 		_areaOfEffect = true;
 	}
-
+	
+	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
 	if (_areaOfEffect)
 	{
 		for (int i = 0; i < _power/5; i++)
@@ -109,6 +110,8 @@ void ExplosionBState::init()
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(12)->play();
 		else
 			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(5)->play();
+		if (t->isDiscovered(0))
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 	}
 	else
 	// create a bullet hit
@@ -119,12 +122,9 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
-		if (_parent->getSave()->getSide() == FACTION_PLAYER)
+		if (t->getVisible() || (t->getUnit() && t->getUnit()->getFaction() == FACTION_PLAYER) || _parent->getSave()->getSide() == FACTION_PLAYER)
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
 	}
-	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
-	if (t->isDiscovered(0))
-		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 }
 
 /*

@@ -74,18 +74,18 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
  * @param endPosition
  */
 
-void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile)
+void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget)
 {
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
-	if (missile)
+	if (missileTarget != 0)
 		_movementType = MT_FLY;
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);
 
 	// check if destination is not blocked
-	if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT)) return;
+	if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget)) return;
 
 	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
 	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
@@ -96,7 +96,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile
 	}
 
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
-	while (canFallDown(destinationTile) && 	_movementType != MT_FLY)
+	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
@@ -109,14 +109,15 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile
 	_path.clear();
 
 	// look for a possible fast and accurate bresenham path and skip A*
-	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition))
+	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, missileTarget))
 	{
 		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
 		return;
 	}
-
+	_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
+	
 	// Now try through A*.
-	aStarPath(startPosition, endPosition);
+	aStarPath(startPosition, endPosition, missileTarget);
 }
 
 /**
@@ -127,7 +128,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, bool missile
  * @param endPosition The position we want to reach.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition)
+bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget)
 {
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -161,15 +162,15 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 		for (int direction = 0; direction < 10; direction++)
 		{
 			Position nextPos;
-			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit);
+			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, missileTarget);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
-			int totalTuCost = currentNode->getTUCost() + tuCost;
+			int totalTuCost = currentNode->getTUCost(missileTarget) + tuCost;
 			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost() > totalTuCost)
+			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget) > totalTuCost)
 			{
 				nextNode->connect(totalTuCost, currentNode, direction, endPosition);
 				openList.push(nextNode);
@@ -189,7 +190,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
  * @param unit
  * @return TU cost - 255 if movement impossible
  */
-int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit)
+int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *missileTarget)
 {
 	_unit = unit;
 	directionToVector(direction, endPosition);
@@ -200,6 +201,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	int cost = 0;
 	int numberOfPartsChangingLevel = 0;
 	int numberOfPartsChangingHeight = 0;
+
 
 	for (int x = size; x >= 0; x--)
 	{
@@ -215,7 +217,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 
 			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT))
+			if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
 				return 255;
 
 			// can't walk on top of other units
@@ -230,7 +232,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (direction < DIR_UP)
 			{
 				// check if we can go this way
-				if (isBlocked(startTile, destinationTile, direction))
+				if (isBlocked(startTile, destinationTile, direction, missileTarget))
 					return 255;
 				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8 && x==0 && y==0)
 					return 255;
@@ -251,7 +253,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() < -12 && x==0 && y==0)
+			if (direction < DIR_UP && startTile->getTerrainLevel() < -12 && !triedStairs)
 			{
 				endPosition->z++;
 				destinationTile = _save->getTile(*endPosition);
@@ -291,7 +293,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 
 			// check if the destination tile can be walked over
-			if ((isBlocked(destinationTile, MapData::O_FLOOR) || isBlocked(destinationTile, MapData::O_OBJECT)) && !fellDown)
+			if ((isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget)) && !fellDown)
 			{
 				return 255;
 			}
@@ -352,7 +354,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Tile *startTile = _save->getTile(*endPosition + Position(1,1,0));
 			Tile *destinationTile = _save->getTile(*endPosition);
 			int tmpDirection = 7;
-			if (isBlocked(startTile, destinationTile, tmpDirection))
+			if (isBlocked(startTile, destinationTile, tmpDirection, missileTarget))
 				return 255;
 
 			// also check if we change level, that there are two parts changing level,
@@ -360,7 +362,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (numberOfPartsChangingHeight == 1)
 				return 255;
 	}
-	return cost;
+	
+	if (missileTarget)
+		return 0;
+	else
+		return cost;
 }
 
 /*
@@ -415,7 +421,7 @@ void Pathfinding::abortPath()
  * @param movementType
  * @return true/false
  */
-bool Pathfinding::isBlocked(Tile *tile, const int part)
+bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarget)
 {
 	if (tile == 0) return true; // probably outside the map here
 
@@ -432,7 +438,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part)
 	if (part == MapData::O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit != 0 && unit != _unit) return true;
+		if (unit != 0 && unit != _unit && unit != missileTarget) return true;
 	}
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
@@ -447,7 +453,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part)
  * @param direction
  * @return true/false
  */
-bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
+bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget)
 {
 
 	// check if the difference in height between start and destination is not too high
@@ -464,44 +470,44 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction)
 	switch(direction)
 	{
 	case 0:	// north
-		if (isBlocked(startTile, MapData::O_NORTHWALL)) return true;
+		if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget)) return true;
 		break;
 	case 1: // north east
-		if (isBlocked(startTile,MapData::O_NORTHWALL)) return true;
-		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL)) return true;
+		if (isBlocked(startTile,MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(endTile,MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL, missileTarget) && isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL, missileTarget)) return true;
 		break;
 	case 2: // east
-		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
+		if (isBlocked(endTile,MapData::O_WESTWALL, missileTarget)) return true;
 		break;
 	case 3: // south east
-		if (isBlocked(endTile,MapData::O_WESTWALL)) return true;
-		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileEast),O_BIGWALL)) return true;
+		if (isBlocked(endTile,MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(endTile,MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileEast),MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL, missileTarget) && isBlocked(_save->getTile(pos1 + oneTileEast),O_BIGWALL, missileTarget)) return true;
 		break;
 	case 4: // south
-		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
+		if (isBlocked(endTile,MapData::O_NORTHWALL, missileTarget)) return true;
 		break;
 	case 5: // south west
-		if (isBlocked(endTile,MapData::O_NORTHWALL)) return true;
-		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL)) return true;
+		if (isBlocked(endTile,MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(startTile,MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL, missileTarget) && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL, missileTarget)) return true;
 		break;
 	case 6: // west
-		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
+		if (isBlocked(startTile,MapData::O_WESTWALL, missileTarget)) return true;
 		break;
 	case 7: // north west
-		if (isBlocked(startTile,MapData::O_WESTWALL)) return true;
-		if (isBlocked(startTile,MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileNorth),MapData::O_WESTWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_NORTHWALL)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL) && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL)) return true;
+		if (isBlocked(startTile,MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(startTile,MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileNorth),MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_NORTHWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileNorth),O_BIGWALL, missileTarget) && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL, missileTarget)) return true;
 		break;
 	}
 
@@ -533,6 +539,20 @@ bool Pathfinding::canFallDown(Tile *here)
 		return false;
 }
 
+bool Pathfinding::canFallDown(Tile *here, int size)
+{
+	for (int x = 0; x != size; ++x)
+	{
+		for (int y = 0; y != size; ++y)
+		{
+			Position checkPos = here->getPosition() + Position(x,y,0);
+			Tile *checkTile = _save->getTile(checkPos);
+			if (!canFallDown(checkTile))
+				return false;
+		}
+	}
+	return true;
+}
 /**
  * We are going upstairs here?
  * @param startPosition
@@ -629,7 +649,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
-		int tu = getTUCost(pos, dir, &destination, _unit); // gets tu cost, but also gets the destination position.
+		int tu = getTUCost(pos, dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
 		tus -= tu;
 		pos = destination;
 		for (int x = size; x >= 0; x--)
@@ -655,7 +675,7 @@ bool Pathfinding::removePreview()
 }
 
 // this works in only x/y plane
-bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
+bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget)
 {
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
@@ -730,9 +750,11 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 			{
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
-			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit);
+			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, missileTarget);
+			
+			// delete the following
 			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
-				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir))
+				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, missileTarget))
 			{
 				_path.push_back(dir);
 			}
@@ -740,7 +762,8 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target)
 			{
 				return false;
 			}
-			lastTUCost = tuCost;
+			if (missileTarget == 0 && tuCost != 255)
+				lastTUCost = tuCost;
 			lastPoint = Position(cx, cy, cz);
 		}
 		//update progress in other planes
@@ -793,17 +816,17 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 		for (int direction = 0; direction < 10; direction++)
 		{
 			Position nextPos;
-			int tuCost = getTUCost(currentPos, direction, &nextPos, unit);
+			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0);
 			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
-			if (currentNode->getTUCost() + tuCost > tuMax) // Run out of TUs
+			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs
 				continue;
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
-			int totalTuCost = currentNode->getTUCost() + tuCost;
+			int totalTuCost = currentNode->getTUCost(false) + tuCost;
 			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost() > totalTuCost)
+			if (!nextNode->inOpenSet() || nextNode->getTUCost(false) > totalTuCost)
 			{
 				nextNode->connect(totalTuCost, currentNode, direction);
 				unvisited.push(nextNode);

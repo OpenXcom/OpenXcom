@@ -194,7 +194,8 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
-
+	// it does what it says it does.
+	updateExposedUnits();
 	// matches up tiles and units
 	resetUnitTiles();
 

@@ -162,7 +162,7 @@ void Tile::saveBinary(unsigned char* buffer) const
 
 	buffer[16] = (unsigned short)_smoke;
 	buffer[17] = (unsigned short)_fire;
-	buffer[18] = _discovered[0]?1:0 + _discovered[1]?1:0 << 1 + _discovered[2]?1:0 << 2;
+	buffer[18] = (_discovered[0]?1:0) + (_discovered[1]?1:0) << 1 + (_discovered[2]?1:0) << 2;
 }
 
 /**

@@ -54,7 +54,8 @@ struct BattleAction
 	int value;
 	std::string result;
 	bool strafe, run;
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false) { }
+	int diff;
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0) { }
 };
 
 /**

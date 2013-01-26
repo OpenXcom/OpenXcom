@@ -275,6 +275,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			BattleUnit *targetUnit = NULL;
 			Position p;
 			Pathfinding::directionToVector(_action->actor->getDirection(), &p);
+
 			for (int x = 0; x != _action->actor->getArmor()->getSize(); ++x)
 			{
 				for (int y = 0; y != _action->actor->getArmor()->getSize(); ++y)
@@ -285,9 +286,11 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 							if (tile->getUnit() && tile->getUnit() != _action->actor)
 						{
 							BattleUnit *target (tile->getUnit());
+							if (!target && (_action->actor->getHeight() - _game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition())->getTerrainLevel() > 24))
+								target = _game->getSavedGame()->getBattleGame()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
 							for (std::vector<BattleUnit*>::iterator b = _action->actor->getVisibleUnits()->begin(); b != _action->actor->getVisibleUnits()->end(); ++b)
 							{
-								if (*b == target && !_game->getSavedGame()->getBattleGame()->getPathfinding()->isBlocked(_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + Position(x, y, 0)), tile, _action->actor->getDirection()))
+								if (*b == target && !_game->getSavedGame()->getBattleGame()->getPathfinding()->isBlocked(_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + Position(x, y, 0)), tile, _action->actor->getDirection(), 0))
 								{
 									targetUnit = tile->getUnit();
 									break;
