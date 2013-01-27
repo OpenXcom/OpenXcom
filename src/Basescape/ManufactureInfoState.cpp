@@ -86,10 +86,10 @@ void ManufactureInfoState::buildUi()
 	_txtEngineerDown = new Text(button_width, 2*button_height, start_x + 3*button_x_border, start_y + 7.5f * button_height);
 	_txtUnitUp = new Text(button_width, 2*button_height, width - button_width - button_x_border + 3*button_x_border, start_y + 6 * button_height);
 	_txtUnitDown = new Text(button_width, 2*button_height, width - button_width - button_x_border + 3*button_x_border, start_y + 7.5f * button_height);
-	_btnEngineerUp = new ArrowButton (ARROW_BIG_UP, 1.4f*button_x_border, button_height, button_height, start_y + 6 * button_height);
-	_btnEngineerDown = new ArrowButton (ARROW_BIG_DOWN, 1.4f*button_x_border, button_height, button_height, start_y + 7.5f * button_height);
-	_btnUnitUp = new ArrowButton (ARROW_BIG_UP, 1.4f*button_x_border, button_height, button_height, start_y + 6 * button_height);
-	_btnUnitDown = new ArrowButton (ARROW_BIG_DOWN, 1.4f*button_x_border, button_height, button_height, start_y + 7.5f * button_height);
+	_btnEngineerUp = new ArrowButton (ARROW_BIG_UP, 1.4f*button_x_border, button_height-2, width - button_width - 4*button_x_border, start_y + 6 * button_height);
+	_btnEngineerDown = new ArrowButton (ARROW_BIG_DOWN, 1.4f*button_x_border, button_height-2, width - button_width - 4*button_x_border, start_y + 7.5f * button_height);
+	_btnUnitUp = new ArrowButton (ARROW_BIG_UP, 1.4f*button_x_border, button_height-2, width - 4*button_x_border, start_y + 6 * button_height);
+	_btnUnitDown = new ArrowButton (ARROW_BIG_DOWN, 1.4f*button_x_border, button_height-2, width - 4*button_x_border, start_y + 7.5f * button_height);
 	_txtAllocated = new Text(button_width, 2*button_height, width - button_width - 5*button_x_border, start_y + 4 * button_height);
 	_txtTodo = new Text(button_width, 2*button_height, width - 5*button_x_border, start_y + 4 * button_height);
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
