@@ -34,7 +34,7 @@ class RuleCountry
 {
 private:
 	std::string _type;
-	int _fundingMin, _fundingMax;
+	int _fundingBase, _fundingCap;
 	double _labelLon, _labelLat;
 	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
 public:
@@ -48,10 +48,10 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the country's type.
 	std::string getType() const;
-	/// Gets the country's minimum funding.
-	int getMinFunding() const;
-	/// Gets the country's maximum funding.
-	int getMaxFunding() const;
+	/// Generates the country's starting funding.
+	int generateFunding() const;
+	/// Gets the country's funding cap.
+	int getFundingCap() const;
 	/// Gets the country's label X position.
 	double getLabelLongitude() const;
 	/// Gets the country's label Y position.

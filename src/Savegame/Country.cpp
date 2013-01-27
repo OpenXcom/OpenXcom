@@ -32,7 +32,7 @@ Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _pact(false), _n
 {
 	if (gen)
 	{
-		_funding.push_back(RNG::generate(rules->getMinFunding(), rules->getMaxFunding()) * 1000);
+		_funding.push_back(_rules->generateFunding());
 	}
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
@@ -172,7 +172,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 			if (RNG::generate(0, good) > bad)
 			{
 				// don't go over the cap
-				int cap = getRules()->getMaxFunding()*1000;
+				int cap = getRules()->getFundingCap()*1000;
 				if (funding + newFunding > cap)
 					newFunding = cap - funding;
 				if (newFunding)
@@ -186,7 +186,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 		{
 			if (newFunding)
 			{
-				newFunding = 0 - newFunding;
+				newFunding = -newFunding;
 				_satisfaction = 1;
 			}
 		}

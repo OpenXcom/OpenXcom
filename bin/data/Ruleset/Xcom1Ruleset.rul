@@ -1,7 +1,7 @@
 countries:
   - type: STR_USA
-    fundingMin: 600
-    fundingMax: 1200
+    fundingBase: 600
+    fundingCap: 10000
     labelLon: 4.53786
     labelLat: -0.698132
     lonMin:
@@ -33,8 +33,8 @@ countries:
       - -0.55850536
       - -0.69813170
   - type: STR_RUSSIA
-    fundingMin: 230
-    fundingMax: 460
+    fundingBase: 230
+    fundingCap: 8000
     labelLon: 1.0472
     labelLat: -1.0472
     lonMin:
@@ -62,8 +62,8 @@ countries:
       - -0.87266462
       - -1.02974425
   - type: STR_UK
-    fundingMin: 240
-    fundingMax: 480
+    fundingBase: 240
+    fundingCap: 7000
     labelLon: 6.24828
     labelLat: -0.935933
     lonMin:
@@ -75,8 +75,8 @@ countries:
     latMax:
       - -0.87266462
   - type: STR_FRANCE
-    fundingMin: 320
-    fundingMax: 640
+    fundingBase: 320
+    fundingCap: 8000
     labelLon: 0.0436332
     labelLat: -0.811578
     lonMin:
@@ -88,8 +88,8 @@ countries:
     latMax:
       - -0.75049157
   - type: STR_GERMANY
-    fundingMin: 250
-    fundingMax: 500
+    fundingBase: 250
+    fundingCap: 9000
     labelLon: 0.200713
     labelLat: -0.872665
     lonMin:
@@ -101,8 +101,8 @@ countries:
     latMax:
       - -0.82903139
   - type: STR_ITALY
-    fundingMin: 160
-    fundingMax: 320
+    fundingBase: 160
+    fundingCap: 6000
     labelLon: 0.218166
     labelLat: -0.765763
     lonMin:
@@ -118,8 +118,8 @@ countries:
       - -0.75049157
       - -0.64577182
   - type: STR_SPAIN
-    fundingMin: 140
-    fundingMax: 280
+    fundingBase: 140
+    fundingCap: 5000
     labelLon: 6.23955
     labelLat: -0.743947
     lonMin:
@@ -135,8 +135,8 @@ countries:
       - -0.63704517
       - -0.73740160
   - type: STR_CHINA
-    fundingMin: 245
-    fundingMax: 490
+    fundingBase: 245
+    fundingCap: 7000
     labelLon: 1.74533
     labelLat: -0.610865
     lonMin:
@@ -156,8 +156,8 @@ countries:
       - -0.38397243
       - -0.69813170
   - type: STR_JAPAN
-    fundingMin: 400
-    fundingMax: 800
+    fundingBase: 400
+    fundingCap: 10000
     labelLon: 2.40855
     labelLat: -0.667588
     lonMin:
@@ -173,8 +173,8 @@ countries:
       - -0.52359877
       - -0.69813170
   - type: STR_INDIA
-    fundingMin: 150
-    fundingMax: 300
+    fundingBase: 150
+    fundingCap: 5000
     labelLon: 1.39626
     labelLat: -0.418879
     lonMin:
@@ -194,8 +194,8 @@ countries:
       - -0.52359877
       - -0.34906585
   - type: STR_BRAZIL
-    fundingMin: 300
-    fundingMax: 600
+    fundingBase: 300
+    fundingCap: 4000
     labelLon: 5.32325
     labelLat: 0.0872665
     lonMin:
@@ -219,8 +219,8 @@ countries:
       - 0.41887902
       - 0.55850536
   - type: STR_AUSTRALIA
-    fundingMin: 280
-    fundingMax: 560
+    fundingBase: 280
+    fundingCap: 5000
     labelLon: 2.35619
     labelLat: 0.436332
     lonMin:
@@ -232,8 +232,8 @@ countries:
     latMax:
       - 0.69813170
   - type: STR_NIGERIA
-    fundingMin: 180
-    fundingMax: 360
+    fundingBase: 180
+    fundingCap: 2000
     labelLon: 0.1309
     labelLat: -0.174533
     lonMin:
@@ -245,8 +245,8 @@ countries:
     latMax:
       - -0.06981317
   - type: STR_SOUTH_AFRICA
-    fundingMin: 230
-    fundingMax: 460
+    fundingBase: 230
+    fundingCap: 3000
     labelLon: 0.436332
     labelLat: 0.523599
     lonMin:
@@ -262,8 +262,8 @@ countries:
       - 0.61086523
       - 0.61086523
   - type: STR_EGYPT
-    fundingMin: 230
-    fundingMax: 460
+    fundingBase: 230
+    fundingCap: 2000
     labelLon: 0.506145
     labelLat: -0.453786
     lonMin:
@@ -275,8 +275,8 @@ countries:
     latMax:
       - -0.38397243
   - type: STR_CANADA
-    fundingMin: 230
-    fundingMax: 460
+    fundingBase: 230
+    fundingCap: 4000
     labelLon: 4.53786
     labelLat: -0.959931
     lonMin:
