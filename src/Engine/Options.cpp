@@ -87,6 +87,7 @@ void createDefault()
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
+	setBool("battleNotifyDeath", false);
 
 	_rulesets.push_back("Xcom1Ruleset");
 }
