@@ -992,7 +992,14 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 			if ((unit->getDirection() == 2 || unit->getDirection() == 1 || unit->getDirection() == 3) && door == -1) // east, northeast or southeast
 			{
 				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
-				if (tile) door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
+				if (tile)
+				{
+					door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
+				}
+				else
+				{
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
+				}
 				if (door == 0 && rClick)
 					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
 				if (door == 1)
@@ -1012,7 +1019,14 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 			if ((unit->getDirection() == 4 || unit->getDirection() == 5 || unit->getDirection() == 3) && door == -1) // south, southwest or southeast
 			{
 				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
-				if (tile) door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
+				if (tile)
+				{
+					door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
+				}
+				else
+				{
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
+				}
 				if (door == 0 && rClick)
 					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
 				if (door == 1)
