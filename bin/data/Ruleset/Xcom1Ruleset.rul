@@ -1394,7 +1394,7 @@ crafts:
   - type: STR_FIRESTORM
     sprite: 4
     fuelMax: 20
-    damageMax: 50
+    damageMax: 500
     speedMax: 4200
     accel: 9
     weapons: 2
