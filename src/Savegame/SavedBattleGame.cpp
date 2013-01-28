@@ -765,7 +765,8 @@ void SavedBattleGame::endTurn()
 {
 	if (_side == FACTION_PLAYER)
 	{
-		_lastSelectedUnit = _selectedUnit;
+		if (_selectedUnit->getOriginalFaction() == FACTION_PLAYER)
+			_lastSelectedUnit = _selectedUnit;
 		_side = FACTION_HOSTILE;
 	}
 	else if (_side == FACTION_HOSTILE)
@@ -780,9 +781,9 @@ void SavedBattleGame::endTurn()
 			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 				_selectedUnit = _lastSelectedUnit;
 			else
-				selectNextPlayerUnit();
+				selectPreviousPlayerUnit();
 			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
-				selectNextPlayerUnit();
+				selectPreviousPlayerUnit();
 		}
 
 	}
@@ -794,9 +795,9 @@ void SavedBattleGame::endTurn()
 		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 			_selectedUnit = _lastSelectedUnit;
 		else
-			selectNextPlayerUnit();
+			selectPreviousPlayerUnit();
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
-			selectNextPlayerUnit();
+			selectPreviousPlayerUnit();
 	}
 	
 	// hide all aliens (VOF calculations below will turn them visible again)
