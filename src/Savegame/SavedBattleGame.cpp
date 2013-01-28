@@ -765,7 +765,7 @@ void SavedBattleGame::endTurn()
 {
 	if (_side == FACTION_PLAYER)
 	{
-		if (_selectedUnit->getOriginalFaction() == FACTION_PLAYER)
+		if (_selectedUnit && _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
 			_lastSelectedUnit = _selectedUnit;
 		_side = FACTION_HOSTILE;
 	}
