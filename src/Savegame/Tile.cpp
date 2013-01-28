@@ -463,7 +463,7 @@ bool Tile::destroy(int part)
 	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
 	{
 		/* replace with scorched earth */
-		setMapData(MapDataSet::getScourgedEarthTile(), 1, 0, MapData::O_FLOOR);
+		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
 	return _objective;
 }

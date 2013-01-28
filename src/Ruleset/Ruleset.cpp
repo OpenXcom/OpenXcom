@@ -815,6 +815,12 @@ SavedGame *Ruleset::newSave() const
 	{
 		save->getCountries()->push_back(new Country(getCountry(*i)));
 	}
+	// Adjust funding to total $6M
+	int missing = ((6000 - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
+	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
+	{
+		(*i)->setFunding((*i)->getFunding().back() + missing);
+	}
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions

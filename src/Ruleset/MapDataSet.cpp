@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 MapData *MapDataSet::_blankTile = 0;
-MapData *MapDataSet::_scourgedTile = 0;
+MapData *MapDataSet::_scorchedTile = 0;
 
 /**
 * MapDataSet construction.
@@ -213,7 +213,7 @@ void MapDataSet::loadData()
 			if (objNumber == 0)
 				MapDataSet::_blankTile = to;
 			else if (objNumber == 1)
-				MapDataSet::_scourgedTile = to;
+				MapDataSet::_scorchedTile = to;
 		}
 		objNumber++;
 	}
@@ -294,9 +294,9 @@ MapData *MapDataSet::getBlankFloorTile()
 	return MapDataSet::_blankTile;
 }
 
-MapData *MapDataSet::getScourgedEarthTile()
+MapData *MapDataSet::getScorchedEarthTile()
 {
-	return MapDataSet::_scourgedTile;
+	return MapDataSet::_scorchedTile;
 }
 
 }

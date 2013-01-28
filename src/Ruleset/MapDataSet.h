@@ -45,7 +45,7 @@ private:
 	SurfaceSet *_surfaceSet;
 	bool _loaded;
 	static MapData *_blankTile;
-	static MapData *_scourgedTile;
+	static MapData *_scorchedTile;
 public:
 	MapDataSet(const std::string &name);
 	~MapDataSet();
@@ -69,7 +69,7 @@ public:
 	void unloadData();
 	///
 	static MapData *getBlankFloorTile();
-	static MapData *getScourgedEarthTile();
+	static MapData *getScorchedEarthTile();
 };
 
 }
