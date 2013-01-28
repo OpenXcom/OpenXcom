@@ -1404,8 +1404,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			calculateFOV(victim);
 			if (action->actor->getFaction() == FACTION_PLAYER)
 				_save->setSelectedUnit(victim);
-			else
-				victim->setTimeUnits(victim->getStats()->tu);
+			victim->setTimeUnits(victim->getStats()->tu);
 			return true;
 		}
 		else
