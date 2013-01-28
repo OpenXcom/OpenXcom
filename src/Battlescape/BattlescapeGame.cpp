@@ -1124,6 +1124,17 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
 				if (getTileEngine()->psiAttack(&_currentAction))
 				{
+					// show a little infobox if it's successful
+					std::wstringstream ss;
+					if (_currentAction.type == BA_PANIC)
+					{
+						ss << _save->getTile(_currentAction.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED");
+					}
+					else if (_currentAction.type == BA_MINDCONTROL)
+					{
+						ss << _parentState->getGame()->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL");
+					}
+					_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 					_parentState->updateSoldierInfo();
 					_currentAction.targeting = false;
 					_currentAction.type = BA_NONE;
