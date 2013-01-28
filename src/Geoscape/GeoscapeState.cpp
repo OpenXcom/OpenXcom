@@ -1890,7 +1890,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	while (region->getCities()->empty());
 	// Choose race for terror mission.
 	const RuleAlienMission &terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
-	const std::string &terrorRace = terrorRules.generateRace(*_game->getSavedGame()->getTime());
+	const std::string &terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 	AlienMission *terrorMission = new AlienMission(terrorRules);
 	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 	terrorMission->setRegion(region->getType());
@@ -1908,7 +1908,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const std::string &targetMission = strategy.chooseRandomMission(targetRegion);
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission(targetMission);
-		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());
+		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion);
@@ -1928,7 +1928,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
-		const std::string &missionRace = missionRules.generateRace(*_game->getSavedGame()->getTime());
+		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion);
