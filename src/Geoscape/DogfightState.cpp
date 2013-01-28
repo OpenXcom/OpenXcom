@@ -926,6 +926,23 @@ void DogfightState::move()
 		}
 		if(_destroyCraft)
 		{
+			for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+			{
+				if((*country)->getRules()->insideCountry(_craft->getLongitude(), _craft->getLatitude()))
+				{
+					(*country)->addActivityXcom(-_craft->getRules()->getScore());
+					break;
+				}
+			}
+			for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+			{
+				if((*region)->getRules()->insideRegion(_craft->getLongitude(), _craft->getLatitude()))
+				{
+					(*region)->addActivityXcom(-_craft->getRules()->getScore());
+					break;
+				}
+			}
+
 			// Remove the craft.
 			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 			{
@@ -933,23 +950,7 @@ void DogfightState::move()
 				{
 					if(*c == _craft)
 					{
-						for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
-						{
-							if((*country)->getRules()->insideCountry((*c)->getLongitude(), (*c)->getLatitude()))
-							{
-								(*country)->addActivityXcom(0-(*c)->getRules()->getScore());
-								break;
-							}
-						}
-						for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
-						{
-							if((*region)->getRules()->insideRegion((*c)->getLongitude(), (*c)->getLatitude()))
-							{
-								(*region)->addActivityXcom(0-(*c)->getRules()->getScore());
-								break;
-							}
-						}
-						(*c)->~Craft();
+						delete *c;
 						(*b)->getCrafts()->erase(c);
 						_craft = 0;
 						break;
@@ -960,7 +961,7 @@ void DogfightState::move()
 			}
 		}
 		
-		if (_destroyUfo || _mode == _btnDisengage)
+		if (_craft && (_destroyUfo || _mode == _btnDisengage))
 		{
 			_craft->returnToBase();
 		}

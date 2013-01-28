@@ -740,7 +740,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i) == base)
 			{
-				(*i)->~Base();
+				delete (*i);
 				_game->getSavedGame()->getBases()->erase(i);
 				break;
 			}
