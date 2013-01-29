@@ -208,7 +208,7 @@ void BaseDefenseState::btnOkClick(Action *)
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
-	if(_ufo->getStatus() != 3 && _base->getSoldiers())
+	if(_ufo->getStatus() != Ufo::DESTROYED && _base->getSoldiers())
 	{
 		if (_base->getSoldiers())
 		{
@@ -231,15 +231,7 @@ void BaseDefenseState::btnOkClick(Action *)
 			_game->pushState(new BaseDestroyedState(_game, _base));
 		}
 	}
-	// destroy any way, to remove it from Geoscape.
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
-	{
-		if ((*i) == _ufo)
-		{
-			delete *i;
-			_game->getSavedGame()->getUfos()->erase(i);
-			break;
-		}
-	}
+	// Whatever happens in the base defense, the UFO has finished its duty
+	_ufo->setStatus(Ufo::DESTROYED);
 }
 }

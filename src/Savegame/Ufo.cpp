@@ -94,21 +94,30 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);
 	_dest->setLatitude(lat);
-	if (_altitude == "STR_GROUND")
+	if (const YAML::Node *status = node.FindValue("status"))
 	{
-		_status = LANDED;
+		int a;
+		(*status) >> a;
+		_status = (UfoStatus)a;
 	}
 	else
 	{
-		_status = FLYING;
-	}
-	if (_damage >= _rules->getMaxDamage())
-	{
-		_status = DESTROYED;
-	}
-	else if (_damage >= _rules->getMaxDamage() / 2)
-	{
-		_status = CRASHED;
+		if (_damage >= _rules->getMaxDamage())
+		{
+			_status = DESTROYED;
+		}
+		else if (_damage >= _rules->getMaxDamage() / 2)
+		{
+			_status = CRASHED;
+		}
+		else if (_altitude == "STR_GROUND")
+		{
+			_status = LANDED;
+		}
+		else
+		{
+			_status = FLYING;
+		}
 	}
 	int missionID;
 	node["mission"] >> missionID;
@@ -140,6 +149,7 @@ void Ufo::save(YAML::Emitter &out) const
 	out << YAML::Key << "damage" << YAML::Value << _damage;
 	out << YAML::Key << "altitude" << YAML::Value << _altitude;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
+	out << YAML::Key << "status" << YAML::Value << _status;
 	out << YAML::Key << "detected" << YAML::Value << _detected;
 	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
 	out << YAML::Key << "secondsRemaining" << YAML::Value << _secondsRemaining;

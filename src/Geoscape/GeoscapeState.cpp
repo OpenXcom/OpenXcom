@@ -563,6 +563,9 @@ void GeoscapeState::time5Seconds()
 					{
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
+					// If UFO was destroyed, don't spawn missions
+					if ((*i)->getStatus() == Ufo::DESTROYED)
+						return;
 					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 					{
 						const TerrorSite &ts = *_game->getSavedGame()->getTerrorSites()->back();
@@ -572,7 +575,8 @@ void GeoscapeState::time5Seconds()
 					}
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
-						base->setInBattlescape(true);
+						// Whatever happens in the base defense, the UFO has finished its duty
+						(*i)->setStatus(Ufo::DESTROYED);
 						base->setupDefenses();
 						if (base->getDefenses()->size() > 0)
 						{

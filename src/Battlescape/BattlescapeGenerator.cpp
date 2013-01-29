@@ -147,6 +147,7 @@ void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
 void BattlescapeGenerator::setBase(Base *base)
 {
 	_base = base;
+	_base->setInBattlescape(true);
 }
 
 /**
