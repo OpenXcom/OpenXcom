@@ -81,7 +81,7 @@ private:
 	int lastSucTotalMouseMoveX, lastSucTotalMouseMoveY;
 	bool mouseMovedOverThreshold;
 
-	void selectNextPlayerUnit(bool checkReselect);
+	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
 public:

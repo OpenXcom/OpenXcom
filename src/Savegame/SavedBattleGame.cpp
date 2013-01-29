@@ -617,10 +617,11 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
 /**
  * Select the next player unit.
  * TODO move this to BattlescapeState ?
- * @param checkReselect Don't reselect unit.
+ * @param checkReselect should we check if we should reselect unit?
+ * @param setReselect Don't reselect unit.
  * @return pointer to BattleUnit.
  */
-BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
+BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
 	std::vector<BattleUnit*>::iterator i = _units.begin();
 	bool bNext = false;
@@ -631,16 +632,17 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect)
 		bNext = true;
 	}
 	else
-	if (checkReselect)
+	if (setReselect)
 	{
 		_selectedUnit->dontReselect();
 	}
 
 	do
 	{
-		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut() && (*i)->reselectAllowed())
+		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut())
 		{
-			break;
+			if ( !checkReselect || ((*i)->reselectAllowed()))
+				break;
 		}
 		if ((*i) == _selectedUnit)
 		{
@@ -781,9 +783,9 @@ void SavedBattleGame::endTurn()
 			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 				_selectedUnit = _lastSelectedUnit;
 			else
-				selectPreviousPlayerUnit();
+				selectNextPlayerUnit();
 			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
-				selectPreviousPlayerUnit();
+				selectNextPlayerUnit();
 		}
 
 	}

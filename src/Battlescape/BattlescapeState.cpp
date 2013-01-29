@@ -662,7 +662,7 @@ void BattlescapeState::btnCenterClick(Action *)
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		selectNextPlayerUnit(false);
+		selectNextPlayerUnit(true, false);
 }
 
 /**
@@ -672,19 +672,19 @@ void BattlescapeState::btnNextSoldierClick(Action *)
 void BattlescapeState::btnNextStopClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		selectNextPlayerUnit(true);
+		selectNextPlayerUnit(true, true);
 }
 
 /**
  * Select next soldier.
  * @param checkReselect When true, don't reselect current unit.
  */
-void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
+void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -1124,7 +1124,7 @@ void BattlescapeState::handle(Action *action)
 			if (action->getDetails()->key.keysym.sym == SDLK_TAB)
 			{
 				if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-					selectNextPlayerUnit(false);
+					selectNextPlayerUnit();
 			}
 			// "esc" - options menu
 			if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)

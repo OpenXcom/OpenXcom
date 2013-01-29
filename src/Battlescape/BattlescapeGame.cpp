@@ -125,7 +125,7 @@ void BattlescapeGame::think()
 				}
 				else
 				{
-					if (_save->selectNextPlayerUnit(true) == 0)
+					if (_save->selectNextPlayerUnit(true, true) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -133,7 +133,7 @@ void BattlescapeGame::think()
 						}
 						else
 						{
-							_save->selectNextPlayerUnit(false);
+							_save->selectNextPlayerUnit();
 							_debugPlay = true;
 						}
 					}
@@ -258,7 +258,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			unit->setAIState(new PatrolBAIState(_save, unit, 0));
 			_parentState->debug(L"Lost aggro");
 		}
-		if (_save->selectNextPlayerUnit(true) == 0)
+		if (_save->selectNextPlayerUnit(true, true) == 0)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -266,7 +266,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			}
 			else
 			{
-				_save->selectNextPlayerUnit(false);
+				_save->selectNextPlayerUnit();
 				_debugPlay = true;
 			}
 		}
@@ -799,7 +799,7 @@ void BattlescapeGame::popState()
 				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					_AIActionCounter = 0;
-					if (_save->selectNextPlayerUnit(true) == 0)
+					if (_save->selectNextPlayerUnit(true, true) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -807,7 +807,7 @@ void BattlescapeGame::popState()
 						}
 						else
 						{
-							_save->selectNextPlayerUnit(false);
+							_save->selectNextPlayerUnit();
 							_debugPlay = true;
 						}
 					}
