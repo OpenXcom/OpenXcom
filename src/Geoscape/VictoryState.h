@@ -43,6 +43,7 @@ public:
 	VictoryState(Game *game);
 	/// Cleans up the Victory state.
 	~VictoryState();
+	void init();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
 	void nextScreen();

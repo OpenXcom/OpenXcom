@@ -43,6 +43,7 @@ public:
 	DefeatState(Game *game);
 	/// Cleans up the Defeat state.
 	~DefeatState();
+	void init();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
 	void nextScreen();

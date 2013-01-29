@@ -61,8 +61,6 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 		add(_txtText[text]);
 		_txtText[text]->setVisible(false);
 	}
-
-	nextScreen();
 }
 
 /**
@@ -73,6 +71,10 @@ DefeatState::~DefeatState()
 
 }
 
+void DefeatState::init()
+{
+	nextScreen();
+}
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
