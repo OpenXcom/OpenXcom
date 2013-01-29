@@ -1124,7 +1124,7 @@ void BattlescapeState::handle(Action *action)
 			if (action->getDetails()->key.keysym.sym == SDLK_TAB)
 			{
 				if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-					selectNextPlayerUnit();
+					selectNextPlayerUnit(true, false);
 			}
 			// "esc" - options menu
 			if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)
