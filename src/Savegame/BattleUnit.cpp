@@ -381,7 +381,7 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache)
 {
-	if (direction >= Pathfinding::DIR_UP && _armor->getMovementType() == MT_FLY)
+	if (direction >= Pathfinding::DIR_UP)
 	{
 		_verticalDirection = direction;
 		_status = STATUS_FLYING;
@@ -392,7 +392,7 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 		_status = STATUS_WALKING;
 	}
 
-	if ((!_tile->getMapData(MapData::O_FLOOR) || (direction >= Pathfinding::DIR_UP && !destinationTile->getMapData(MapData::O_FLOOR))) && _armor->getMovementType() == MT_FLY)
+	if ((!_tile->getMapData(MapData::O_FLOOR) || (direction >= Pathfinding::DIR_UP && !destinationTile->getMapData(MapData::O_FLOOR))))
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
