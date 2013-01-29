@@ -74,6 +74,7 @@
 #include "InfoboxState.h"
 #include "InfoboxOKState.h"
 #include "MiniMapState.h"
+#include "UnitFallBState.h"
 
 namespace OpenXcom
 {
@@ -147,9 +148,15 @@ void BattlescapeGame::think()
 			{
 				_playerPanicHandled = handlePanickingPlayer();
 			}
-
+		}
+		if (_save->getUnitsFalling())
+		{
+			BattleAction _action;
+			statePushFront(new UnitFallBState(this, _action));
+			_save->setUnitsFalling(false);
 		}
 	}
+
 }
 
 void BattlescapeGame::init()

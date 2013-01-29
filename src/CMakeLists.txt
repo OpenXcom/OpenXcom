@@ -114,6 +114,8 @@ set ( battlescape_src
   Battlescape/UnitSprite.cpp
   Battlescape/BattleState.h
   Battlescape/BattleState.cpp
+  Battlescape/UnitFallBState.h
+  Battlescape/UnitFallBState.cpp
   Battlescape/UnitWalkBState.h
   Battlescape/UnitWalkBState.cpp
   Battlescape/NextTurnState.cpp

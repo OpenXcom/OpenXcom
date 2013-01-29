@@ -1431,16 +1431,17 @@ bool TileEngine::psiAttack(BattleAction *action)
 }
 
 /**
- * Apply gravity to a tile. Causes items to drop. (not units)
+ * Apply gravity to a tile. Causes items to drop.
  * @param t Tile
  * @return Tile where the items end up in eventually.
  */
 Tile *TileEngine::applyItemGravity(Tile *t)
 {
-	if (t->getInventory()->size() == 0) return t; // skip this if there are no items
+	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
 
 	Position p = t->getPosition();
 	Tile *rt = t;
+	BattleUnit *occupant = t->getUnit();
 
 	while (rt->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
 	{
@@ -1458,6 +1459,12 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 
 		// clear tile
 		t->getInventory()->clear();
+		if (occupant && occupant->getArmor()->getMovementType() != MT_FLY)
+		{
+			occupant->startWalking(Pathfinding::DIR_DOWN, rt->getPosition(), rt, occupant->getVisible());
+			_save->addFallingUnit(occupant);
+			_save->setUnitsFalling(true);
+		}
 	}
 
 	return rt;

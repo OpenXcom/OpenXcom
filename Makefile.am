@@ -206,6 +206,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Projectile.h \
 	src/Battlescape/PromotionsState.cpp \
 	src/Battlescape/PromotionsState.h \
+	src/Battlescape/UnitFallBState.cpp \
+	src/Battlescape/UnitFallBState.h \
 	src/Battlescape/UnitInfoState.cpp \
 	src/Battlescape/UnitInfoState.h \
 	src/Battlescape/UnitSprite.cpp \

@@ -266,6 +266,7 @@
     <ClCompile Include="Battlescape\PromotionsState.cpp" />
     <ClCompile Include="Battlescape\ScannerState.cpp" />
     <ClCompile Include="Battlescape\ScannerView.cpp" />
+    <ClCompile Include="Battlescape\UnitFallBState.cpp" />
     <ClCompile Include="Battlescape\UnitInfoState.cpp" />
     <ClCompile Include="Battlescape\TileEngine.cpp" />
     <ClCompile Include="Battlescape\UnitDieBState.cpp" />
@@ -506,6 +507,7 @@
     <ClInclude Include="Battlescape\PromotionsState.h" />
     <ClInclude Include="Battlescape\ScannerState.h" />
     <ClInclude Include="Battlescape\ScannerView.h" />
+    <ClInclude Include="Battlescape\UnitFallBState.h" />
     <ClInclude Include="Battlescape\UnitInfoState.h" />
     <ClInclude Include="Battlescape\TileEngine.h" />
     <ClInclude Include="Battlescape\UnitDieBState.h" />
