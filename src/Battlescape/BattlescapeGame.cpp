@@ -369,9 +369,9 @@ void BattlescapeGame::endTurn()
 	{
 		if ((*j)->getHealth() > 0 && (*j)->getHealth() > (*j)->getStunlevel())
 		{
-			if ((*j)->getFaction() == FACTION_HOSTILE)
+			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 				liveAliens++;
-			if ((*j)->getFaction() == FACTION_PLAYER)
+			if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 				liveSoldiers++;
 		}
 	}

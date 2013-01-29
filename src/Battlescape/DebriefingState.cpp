@@ -783,13 +783,13 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 		else
 		{
 			// only "recover" unresearched items
-			if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty() && _game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
+			if ((*it)->getRules()->getRecoveryPoints() && !(*it)->getXCOMProperty())
 			{
 				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 				{
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
 				}
-				else
+				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getRequirements()))
 				{
 					addStat("STR_ALIEN_ARTIFACTS_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
 				}
