@@ -179,12 +179,12 @@ void ExplosionBState::explode()
 	}
 	if (_tile)
 	{
-		save->getTileEngine()->explode(_center, _power, DT_HE, 100);
+		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
 	}
 	if (!_tile && !_item)
 	{
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-		save->getTileEngine()->explode(_center, _power, DT_HE, 8);
+		save->getTileEngine()->explode(_center, _power, DT_HE, 6);
 		terrainExplosion = true;
 	}
 
