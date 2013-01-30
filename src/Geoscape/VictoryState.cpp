@@ -22,7 +22,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/SavedGame.h"
@@ -39,15 +38,13 @@ namespace OpenXcom
 VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 {
 	// Create objects
-	_window = new Window(this, 330, 210, -5, -5);
+	_screen = new InteractiveSurface(320, 200, 0, 0);
 	_txtText.push_back(new Text(195, 56, 5, 0));
 	_txtText.push_back(new Text(232, 56, 88, 144));
 	_txtText.push_back(new Text(254, 48, 66, 152));
 	_txtText.push_back(new Text(300, 200, 5, 0));
 	_txtText.push_back(new Text(310, 42, 5, 158));
-	_screen = new InteractiveSurface(320, 200, 0, 0);
 
-	add(_window);
 	add(_screen);
 	// Set up objects
 	_screen->onMouseClick((ActionHandler)&VictoryState::windowClick);
@@ -102,8 +99,8 @@ void VictoryState::nextScreen()
 	std::stringstream ss;
 	ss << "PICT" << _screenNumber+offset << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
-	_window->setBackground(_game->getResourcePack()->getSurface(ss.str()));
-	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_screen->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	_game->getResourcePack()->getSurface(ss.str())->blit(_screen);
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
 	_txtText[_screenNumber-1]->setVisible(true);

@@ -54,7 +54,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_btnTransfers = new TextButton(80, 14, 46, 180);
 	_btnStores = new TextButton(80, 14, 132, 180);
 	_btnMonthlyCosts = new TextButton(92, 14, 218, 180);
-	_edtBase = new TextEdit(136, 16, 8, 8);
+	_edtBase = new TextEdit(127, 16, 8, 8);
 
 	_txtPersonnel = new Text(300, 9, 8, 30);
 	_txtSoldiers = new Text(114, 9, 8, 41);

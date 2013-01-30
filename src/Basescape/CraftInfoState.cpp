@@ -57,7 +57,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnCrew = new TextButton(64, 16, 24, 96);
 	_btnEquip = new TextButton(64, 16, 24, 120);
 	_btnArmor = new TextButton(64, 16, 24, 144);
-	_edtCraft = new TextEdit(310, 16, 5, 8);
+	_edtCraft = new TextEdit(160, 16, 80, 8);
 	_txtDamage = new Text(82, 9, 24, 24);
 	_txtFuel = new Text(82, 9, 232, 24);
 	_txtW1Name = new Text(90, 9, 56, 48);
@@ -308,6 +308,7 @@ void CraftInfoState::init()
  */
 void CraftInfoState::btnOkClick(Action *)
 {
+	_base->getCrafts()->at(_craft)->setName(_edtCraft->getText(), _game->getLanguage());
 	_game->popState();
 }
 
@@ -367,7 +368,7 @@ void CraftInfoState::edtCraftKeyPress(Action *action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		_base->getCrafts()->at(_craft)->setName(_edtCraft->getText(), _game->getLanguage());		
+		_base->getCrafts()->at(_craft)->setName(_edtCraft->getText(), _game->getLanguage());
 		_edtCraft->setText(_base->getCrafts()->at(_craft)->getName(_game->getLanguage()));
 	}
 }

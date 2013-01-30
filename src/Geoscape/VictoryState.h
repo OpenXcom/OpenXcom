@@ -24,7 +24,6 @@
 namespace OpenXcom
 {
 
-class Window;
 class InteractiveSurface;
 class Text;
 
@@ -34,7 +33,6 @@ class Text;
 class VictoryState : public State
 {
 private:
-	Window *_window;
 	InteractiveSurface *_screen;
 	std::vector<Text*> _txtText;
 	int _screenNumber;
