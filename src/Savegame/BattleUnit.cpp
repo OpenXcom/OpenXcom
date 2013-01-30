@@ -1459,7 +1459,8 @@ bool BattleUnit::getVisible() const
 void BattleUnit::setTile(Tile *tile)
 {
 	_tile = tile;
-
+	if (!_tile)
+		return;
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING && !_tile->getMapData(MapData::O_FLOOR) && _armor->getMovementType() == MT_FLY)
 	{

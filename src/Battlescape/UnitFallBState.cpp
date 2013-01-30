@@ -63,13 +63,18 @@ void UnitFallBState::init()
 
 void UnitFallBState::think()
 {
-	for (std::vector<BattleUnit*>::iterator _unit = _parent->getSave()->getFallingUnits()->begin(); _unit != _parent->getSave()->getFallingUnits()->end();)
+	for (std::vector<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
-		bool onScreen = ((*_unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*_unit)->getPosition()));
+		if ((*unit)->getHealth() == 0 || (*unit)->getStunlevel() > (*unit)->getHealth())
+		{
+			unit = _parent->getSave()->getFallingUnits()->erase(unit);
+			continue;
+		}
+		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition()));
 	
 		if (onScreen)
 		{
-			if ((*_unit)->getFaction() == FACTION_PLAYER)
+			if ((*unit)->getFaction() == FACTION_PLAYER)
 				_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 			else
 				_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
@@ -79,44 +84,44 @@ void UnitFallBState::think()
 			_parent->setStateInterval(0);
 		}
 		
-		if ((*_unit)->getStatus() != STATUS_STANDING)
+		if ((*unit)->getStatus() != STATUS_STANDING)
 		{
-			(*_unit)->keepWalking(onScreen); // advances the phase
+			(*unit)->keepWalking(onScreen); // advances the phase
 
 			if (onScreen)
 			{
 				// make sure the unit sprites are up to date
-				_parent->getMap()->cacheUnit(*_unit);
+				_parent->getMap()->cacheUnit(*unit);
 			}
 		}
 
 		// unit moved from one tile to the other, update the tiles
-		if ((*_unit)->getPosition() != (*_unit)->getLastPosition())
+		if ((*unit)->getPosition() != (*unit)->getLastPosition())
 		{
-			int size = (*_unit)->getArmor()->getSize() - 1;
+			int size = (*unit)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					_parent->getSave()->getTile((*_unit)->getLastPosition() + Position(x,y,0))->setUnit(0);
+					_parent->getSave()->getTile((*unit)->getLastPosition() + Position(x,y,0))->setUnit(0);
 				}
 			}
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					_parent->getSave()->getTile((*_unit)->getPosition() + Position(x,y,0))->setUnit((*_unit));
+					_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->setUnit((*unit));
 				}
 			}
 		}
 
 		// we are just standing around, we are done falling.
-		if ((*_unit)->getStatus() == STATUS_STANDING)
+		if ((*unit)->getStatus() == STATUS_STANDING)
 		{
 			// if the unit burns floortiles, burn floortiles
-			if ((*_unit)->getSpecialAbility() == SPECAB_BURNFLOOR)
+			if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR)
 			{
-				(*_unit)->getTile()->destroy(MapData::O_FLOOR);
+				(*unit)->getTile()->destroy(MapData::O_FLOOR);
 			}
 
 			// move our personal lighting with us
@@ -124,7 +129,7 @@ void UnitFallBState::think()
 			BattleAction action;
 			
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
-			int size = (*_unit)->getArmor()->getSize() - 1;
+			int size = (*unit)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -133,7 +138,7 @@ void UnitFallBState::think()
 					{
 						for (int ty = -1; ty < 2; ty++)
 						{
-							Tile *t = _parent->getSave()->getTile((*_unit)->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+							Tile *t = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0) + Position(tx,ty,0));
 							if (t)
 							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 							{
@@ -154,15 +159,15 @@ void UnitFallBState::think()
 			}
 			if (onScreen || _parent->getSave()->getDebugMode())
 			{
-				_parent->getMap()->cacheUnit(*_unit);
+				_parent->getMap()->cacheUnit(*unit);
 			}
-			(*_unit)->setCache(0);
-			_terrain->calculateFOV(*_unit);
-			_unit = _parent->getSave()->getFallingUnits()->erase(_unit);
+			(*unit)->setCache(0);
+			_terrain->calculateFOV(*unit);
+			unit = _parent->getSave()->getFallingUnits()->erase(unit);
 		}
 		else
 		{
-			++_unit;
+			++unit;
 		}
 	}
 

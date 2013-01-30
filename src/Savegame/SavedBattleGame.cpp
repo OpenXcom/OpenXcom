@@ -1307,7 +1307,18 @@ int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 
 void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
-	_fallingUnits.push_back(unit);
+	bool add = true;
+	for (std::vector<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
+	{
+		if (unit == *i)
+		{
+			add = false;
+		}
+	}
+	if (add)
+	{
+		_fallingUnits.push_back(unit);
+	}
 }
 
 std::vector<BattleUnit*> *SavedBattleGame::getFallingUnits()
