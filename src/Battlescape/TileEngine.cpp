@@ -273,8 +273,11 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 							{
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
-								visibleUnit->getTile()->setDiscovered(true, 2);
-								visibleUnit->getTile()->setVisible(+1);
+								if (unit->getFaction() == FACTION_PLAYER)
+								{
+									visibleUnit->getTile()->setDiscovered(true, 2);
+									visibleUnit->getTile()->setVisible(+1);
+								}
 							}
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
@@ -1174,6 +1177,8 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			{
 				int result2 = -1;
 				int result3 = -1;
+				int result4 = voxelCheck(Position(cx+1, cy, cz), excludeUnit);
+				int result5 = voxelCheck(Position(cx, cy+1, cz), excludeUnit);
 				if ((cz + 1) % 24)
 					result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
 				if (cz > 0)
@@ -1182,6 +1187,10 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 					result = result2;
 				if (result3 != -1)
 					result = result3;
+				if (result4 != -1)
+					result = result4;
+				if (result5 != -1)
+					result = result5;
 			}
 			if (result != -1)
 			{
