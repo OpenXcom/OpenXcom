@@ -36,6 +36,7 @@
 #include "ActionMenuState.h"
 #include "UnitInfoState.h"
 #include "UnitDieBState.h"
+#include "UnitPanicBState.h"
 #include "InventoryState.h"
 #include "AggroBAIState.h"
 #include "PatrolBAIState.h"
@@ -1010,18 +1011,37 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			ba.weapon = unit->getMainHandWeapon();
 			if(ba.weapon)
 			{
-				ba.type = BA_SNAPSHOT;
-				for (int i= 0; i < 10; i++)
+				if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 				{
+					ba.type = BA_SNAPSHOT;
+					int tu = ba.actor->getActionTUs(ba.type, ba.weapon);
+					for (int i= 0; i < 10; i++)
+					{
+						// fire shots until unit runs out of TUs
+						if (!ba.actor->spendTimeUnits(tu))
+							break;
+						statePushBack(new ProjectileFlyBState(this, ba));
+					}
+				}
+				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
+				{
+					if (ba.weapon->getExplodeTurn() == 0)
+					{
+						ba.weapon->setExplodeTurn(_save->getTurn());
+					}
+					ba.type = BA_THROW;
 					statePushBack(new ProjectileFlyBState(this, ba));
 				}
 			}
 		}
+		// Add some time units for the turning
+		unit->setTimeUnits(15);
 		ba.type = BA_NONE;
 		break;
 	default: break;
 	}
-	unit->setTimeUnits(0);
+	// Time units can only be reset after everything else occurs
+	statePushBack(new UnitPanicBState(this, ba.actor));
 	unit->moraleChange(+15);
 
 	return true;

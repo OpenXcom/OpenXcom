@@ -118,6 +118,8 @@ set ( battlescape_src
   Battlescape/UnitFallBState.cpp
   Battlescape/UnitWalkBState.h
   Battlescape/UnitWalkBState.cpp
+  Battlescape/UnitPanicBState.h
+  Battlescape/UnitPanicBState.cpp
   Battlescape/NextTurnState.cpp
   Battlescape/NextTurnState.h
   Battlescape/NoContainmentState.cpp

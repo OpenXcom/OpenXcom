@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 8.0.0), cmake,
 	libsdl1.2-dev,
 	libsdl-mixer1.2-dev,
 	libsdl-gfx1.2-dev,
-	libyaml-cpp-dev
+	libyaml-cpp-dev (<= 0.3.0)
 Standards-Version: 3.9.3
 Homepage: http://openxcom.org/
 Vcs-Git: git://github.com/SupSuper/OpenXcom.git

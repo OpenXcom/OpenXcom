@@ -97,6 +97,7 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_txtStatus->setColor(Palette::blockOffset(8)+5);
 
 		_lstSaves->setColor(Palette::blockOffset(8)+10);
+		_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
 	}
 	else
 	{

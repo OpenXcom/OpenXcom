@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="_SCL_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -125,7 +125,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -205,7 +205,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="_SCL_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -285,7 +285,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -1224,6 +1224,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\UnitSprite.h"
+				>
+			</File>			
+			<File
+				RelativePath=".\Battlescape\UnitPanicBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitPanicBState.h"
 				>
 			</File>
 			<File

@@ -216,6 +216,8 @@ openxcom_SOURCES = \
 	src/Battlescape/UnitTurnBState.h \
 	src/Battlescape/UnitWalkBState.cpp \
 	src/Battlescape/UnitWalkBState.h \
+	src/Battlescape/UnitPanicBState.cpp \
+	src/Battlescape/UnitPanicBState.h \
 	src/Battlescape/WarningMessage.cpp \
 	src/Battlescape/WarningMessage.h \
 	src/Battlescape/TileEngine.cpp \

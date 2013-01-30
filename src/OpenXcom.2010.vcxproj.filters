@@ -714,6 +714,9 @@
     <ClCompile Include="Battlescape\UnitFallBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\UnitPanicBState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1431,6 +1434,9 @@
       <Filter>Geoscape</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\UnitFallBState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\UnitPanicBState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>

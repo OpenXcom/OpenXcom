@@ -51,6 +51,7 @@ LanguageState::LanguageState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_lstLanguages->setColor(Palette::blockOffset(8)+10);
+	_lstLanguages->setArrowColor(Palette::blockOffset(8)+5);
 	_lstLanguages->setColumns(1, 224);
 	_lstLanguages->setSelectable(true);
 	_lstLanguages->setBackground(_window);
