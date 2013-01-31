@@ -48,7 +48,10 @@ void UnitPanicBState::init()
 void UnitPanicBState::think()
 {
 	// reset the unit's time units when all panicking is done
-	_unit->setTimeUnits(0);
+	if (_unit)
+	{
+		_unit->setTimeUnits(0);
+	}
 	_parent->popState();
 }
 
