@@ -122,6 +122,7 @@ struct ColorFace
 	}
 };
 
+
 }
 
 /**
@@ -216,6 +217,35 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
+		if(_unit->getGeoscapeSoldier())
+		{
+			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
+
+			if(look)
+			{
+				Uint8 face_color = ColorFace::Face;
+				Uint8 hair_color = ColorFace::Hair;
+				switch(look)
+				{
+					case LOOK_BLONDE:
+						break;
+					case LOOK_BROWNHAIR:
+						hair_color = (10<<4) + 4;
+						break;
+					case LOOK_ORIENTAL:
+						face_color = 10<<4;
+						hair_color = (15<<4) + 5;
+						break;
+					case LOOK_AFRICAN:
+						face_color = (10<<4) + 3;
+						hair_color = (10<<4) + 6;
+						break;
+				}
+				lock();
+				ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
+				unlock();
+			}
+		}
 		return;
 	}
 
@@ -425,15 +455,15 @@ void UnitSprite::drawRoutine0()
 				case LOOK_BLONDE:
 					break;
 				case LOOK_BROWNHAIR:
-					hair_color = 10<<4;
+					hair_color = (10<<4) + 4;
 					break;
 				case LOOK_ORIENTAL:
 					face_color = 10<<4;
-					hair_color = 15<<4;
+					hair_color = (15<<4) + 5;
 					break;
 				case LOOK_AFRICAN:
-					face_color = (10<<4) + 8;
-					hair_color = 10<<4;
+					face_color = (10<<4) + 3;
+					hair_color = (10<<4) + 6;
 					break;
 			}
 			lock();

@@ -38,10 +38,33 @@
 #include "../Savegame/Node.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
 
 namespace OpenXcom
 {
 
+namespace
+{
+	
+struct HairBleach
+{
+	static const Uint8 ColorGroup = 15<<4;
+	static const Uint8 ColorShade = 15;
+
+	static const Uint8 Hair = 9 << 4;
+	static const Uint8 Face = 6 << 4;
+	static inline void func(Uint8& src, int, int, int, int)
+	{
+		if(src > Face + 6 && src <= Face + 15)
+		{
+			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
+		}
+	}
+};
+
+}
+	
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
@@ -394,6 +417,37 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	}
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
+	
+	//"fix" of hair color of male personal armor
+	SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
+	
+	for(int i=0; i< 16; ++i )
+	{
+		//cheast frame
+		Surface *s = xcom_1->getFrame(4*8 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(s);
+		GraphSubset dim = head.getBaseDomain();
+		dim.beg_y = 6;
+		dim.end_y = 10;
+		head.setDomain(dim);
+		s->lock();
+		ShaderDraw<HairBleach>(head);
+		s->unlock();
+	}
+	
+	for(int i=0; i< 3; ++i )
+	{
+		//fall frame
+		Surface *s = xcom_1->getFrame(264 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(s);
+		GraphSubset dim = head.getBaseDomain();
+		dim.beg_y = 0;
+		dim.end_y = 10 + 13 * i;
+		head.setDomain(dim);
+		s->lock();
+		ShaderDraw<HairBleach>(head);
+		s->unlock();
+	}
 }
 
 /**
