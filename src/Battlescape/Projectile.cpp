@@ -184,35 +184,39 @@ int Projectile::calculateTrajectory(double accuracy)
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 		}
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 		if (test == 4 && !_trajectory.empty())
 		{
+			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 			if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
 			{
 				_trajectory.clear();
 				return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
 			}
 		}
-		if (test != -1 && !_trajectory.empty() && hitPos != _action.target)
+		if (test != -1 && !_trajectory.empty())
 		{
-			if (test == 2)
+			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			if (hitPos != _action.target)
 			{
-				if (hitPos.y - 1 == _action.target.y)
+				if (test == 2)
 				{
-					_trajectory.clear();
-					return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+					if (hitPos.y - 1 == _action.target.y)
+					{
+						_trajectory.clear();
+						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+					}
 				}
-			}
-			if (test == 1)
-			{
-				if (hitPos.x - 1 == _action.target.x)
+				if (test == 1)
 				{
-					_trajectory.clear();
-					return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+					if (hitPos.x - 1 == _action.target.x)
+					{
+						_trajectory.clear();
+						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+					}
 				}
+				_trajectory.clear();
+				return -1;
 			}
-			_trajectory.clear();
-			return -1;
 		}
 		_trajectory.clear();
 	}
