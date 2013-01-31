@@ -1381,7 +1381,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	newWeapon << newType;
 	newWeapon << "_WEAPON";
 	
-	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, getSave()->getUnits()->size(), getRuleset()->getArmor(newArmor.str()));
+	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
 	RuleItem *newItem = getRuleset()->getItem(newWeapon.str());
 
 	getSave()->getTile(unit->getPosition())->setUnit(_newUnit);
@@ -1390,7 +1390,6 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	getSave()->getUnits()->push_back(_newUnit);
 	getMap()->cacheUnit(_newUnit);
 	_newUnit->setAIState(new PatrolBAIState(getSave(), _newUnit, 0));
-	
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(_newUnit);
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
