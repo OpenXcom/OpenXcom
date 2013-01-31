@@ -83,38 +83,28 @@ Projectile::~Projectile()
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
-	int direction;
-	int dirYshift[8] = {1, 4, 12, 15, 15, 15, 8, 1 };
-	int dirXshift[8] = {12, 14, 15, 15, 8, 1, 1, 1 };
-	
-	if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !_action.weapon->getRules()->isTwoHanded())
-	{
-	dirYshift[0] = 2;
-	dirYshift[1] = 0;
-	dirYshift[4] = 22;
-	dirYshift[5] = 20;
-	dirYshift[6] = 20;
-	dirXshift[0] = 6;
-	dirXshift[2] = 18;
-	dirXshift[3] = 19;
-	dirXshift[5] = -1;
-	dirXshift[6] = -1;
-	dirXshift[7] = -5;
-	}
+	int direction;		
+	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
+	int dirXshift[24] = {9, 15, 15, 13, 7, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+	int offset = 0;
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
+	
+	if (bu->getArmor()->getSize() > 1)
+	{
+		offset = 16;
+	}
+	else if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !_action.weapon->getRules()->isTwoHanded())
+	{
+		offset = 8;
+	}
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (_action.actor->getPosition() == _origin)
 	{
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-		if (bu->getArmor()->getSize() > 1)
-		{
-			originVoxel.x += 8;
-			originVoxel.y += 8;
-		}
 
 		originVoxel.z += bu->getHeight();
 		originVoxel.z -= 4;
@@ -125,8 +115,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		direction = bu->getDirection();
 		if (bu->getTurretType() != -1)
 			direction = bu->getTurretDirection();
-		originVoxel.x += dirXshift[direction];
-		originVoxel.y += dirYshift[direction];
+		originVoxel.x += dirXshift[direction+offset]*bu->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction+offset]*bu->getArmor()->getSize();
 	}
 	else
 	{
@@ -194,14 +184,35 @@ int Projectile::calculateTrajectory(double accuracy)
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 		}
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
+		Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 		if (test == 4 && !_trajectory.empty())
 		{
-			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
 			if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
 			{
 				_trajectory.clear();
 				return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
 			}
+		}
+		if (test != -1 && !_trajectory.empty() && hitPos != _action.target)
+		{
+			if (test == 2)
+			{
+				if (hitPos.y - 1 == _action.target.y)
+				{
+					_trajectory.clear();
+					return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+				}
+			}
+			if (test == 1)
+			{
+				if (hitPos.x - 1 == _action.target.x)
+				{
+					_trajectory.clear();
+					return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+				}
+			}
+			_trajectory.clear();
+			return -1;
 		}
 		_trajectory.clear();
 	}
