@@ -1572,7 +1572,7 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.x = _save->getTiles()[i]->getPosition().x*16;
 			pos.y = _save->getTiles()[i]->getPosition().y*16;
 			pos.z = (_save->getTiles()[i]->getPosition().z*24) +12;
-			_save->getTileEngine()->explode(pos, 240 /*240+RNG::generate(0,70)*/, DT_HE, 11);
+			_save->getTileEngine()->explode(pos, 240+RNG::generate(0,70), DT_HE, 11);
 		}
 	}
 }
