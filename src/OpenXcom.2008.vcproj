@@ -379,6 +379,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\FastLineClip.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\FastLineClip.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Font.cpp"
 				>
 			</File>

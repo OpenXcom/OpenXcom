@@ -279,6 +279,7 @@
     <ClCompile Include="Engine\CatFile.cpp" />
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
+    <ClCompile Include="Engine\FastLineClip.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GMCat.cpp" />
@@ -522,6 +523,7 @@
     <ClInclude Include="Engine\CatFile.h" />
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
+    <ClInclude Include="Engine\FastLineClip.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GMCat.h" />

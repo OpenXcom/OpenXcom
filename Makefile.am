@@ -245,6 +245,8 @@ openxcom_SOURCES = \
 	src/Engine/CrossPlatform.h \
 	src/Engine/Exception.cpp \
 	src/Engine/Exception.h \
+	src/Engine/FastLineClip.cpp \
+	src/Engine/FastLineClip.h \
 	src/Engine/Font.cpp \
 	src/Engine/Font.h \
 	src/Engine/Game.cpp \

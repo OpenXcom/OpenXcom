@@ -22,6 +22,7 @@
 #include <vector>
 #include <list>
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/FastLineClip.h"
 #include "Cord.h"
 
 namespace OpenXcom
@@ -52,17 +53,18 @@ private:
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
-	double _cenLon, _cenLat, _rotLon, _rotLat;
+	double _cenLon, _cenLat, _rotLon, _rotLat, _hoverLon, _hoverLat;
 	Sint16 _cenX, _cenY;
 	size_t _zoom;
 	SurfaceSet *_texture;
 	Game *_game;
-	Surface *_markers, *_countries;
-	bool _blink, _detail;
+	Surface *_markers, *_countries, *_radars;
+	bool _blink, _detail, _hover;
 	Timer *_blinkTimer, *_rotTimer;
 	std::list<Polygon*> _cacheLand;
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
+	FastLineClip *_clipper;
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
@@ -85,6 +87,7 @@ public:
 	static void loadDat(const std::string &filename, std::list<Polygon*> *polygons);
 	/// Converts polar coordinates to cartesian coordinates.
 	void polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const;
+	void polarToCart(double lon, double lat, double *x, double *y) const;
 	/// Converts cartesian coordinates to polar coordinates.
 	void cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const;
 	/// Sets the texture set for the globe's polygons.
@@ -134,6 +137,8 @@ public:
 	/// Draws the shadow.
 	void drawShadow();
 	/// Draws the country details of the globe.
+	void drawRadars();
+	/// Draws the country details of the globe.
 	void drawDetail();
 	/// Draws all the markers over the globe.
 	void drawMarkers();
@@ -157,6 +162,17 @@ public:
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
+	/// Draw globe range circle.
+	void drawGlobeCircle(double lat, double lon, double radius, int segments);
+	/// Special "transparent" line.
+	void XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 Color);
+	/// Sets hover base position.
+	void setNewBaseHoverPos(double lon, double lat);
+	/// Turns on new base hover mode.
+	void setNewBaseHover(void);
+	/// Turns off new base hover mode.
+	void unsetNewBaseHover(void);
+
 };
 
 }

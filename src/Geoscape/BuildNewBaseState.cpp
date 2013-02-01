@@ -24,6 +24,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Timer.h"
 #include "../Interface/Window.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
@@ -59,6 +60,9 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnCancel = new TextButton(54, 12, 186, 8);
 	_txtTitle = new Text(180, 16, 8, 6);
 
+	_hoverTimer = new Timer(100);
+	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -75,6 +79,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
+	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
 
 	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
@@ -116,7 +121,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-
+	delete _hoverTimer;
 }
 
 /**
@@ -125,6 +130,7 @@ BuildNewBaseState::~BuildNewBaseState()
 void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_globe->setNewBaseHover();
 }
 
 /**
@@ -134,6 +140,7 @@ void BuildNewBaseState::think()
 {
 	State::think();
 	_globe->think();
+	_hoverTimer->think(this, 0);
 }
 
 /**
@@ -144,6 +151,25 @@ void BuildNewBaseState::handle(Action *action)
 {
 	State::handle(action);
 	_globe->handle(action, this);
+}
+
+/**
+ * Processes mouse-hover event for base placement,
+ * @param action Pointer to an action.
+ */
+void BuildNewBaseState::globeHover(Action *action)
+{
+	double lon, lat;
+	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
+	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
+	_globe->setNewBaseHoverPos(lon,lat);
+	_hoverTimer->start();
+}
+
+void BuildNewBaseState::hoverRedraw(void)
+{
+	_globe->draw();
+	_hoverTimer->stop();
 }
 
 /**

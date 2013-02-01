@@ -717,6 +717,9 @@
     <ClCompile Include="Battlescape\UnitPanicBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\FastLineClip.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1438,6 +1441,9 @@
     </ClInclude>
     <ClInclude Include="Battlescape\UnitPanicBState.h">
       <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FastLineClip.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

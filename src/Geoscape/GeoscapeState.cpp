@@ -382,6 +382,7 @@ void GeoscapeState::init()
 	timeDisplay();
 
 	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
+	_globe->onMouseOver(0);
 	_globe->focus();
 	_globe->draw();
 
@@ -393,6 +394,7 @@ void GeoscapeState::init()
 		_game->getResourcePack()->getMusic(ss.str())->play();
 		_music = true;
 	}
+	_globe->unsetNewBaseHover();
 }
 
 /**

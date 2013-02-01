@@ -26,6 +26,7 @@
 #include "../Resource/ResourcePack.h"
 #include "Polygon.h"
 #include "Polyline.h"
+#include "../Engine/FastLineClip.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Savegame/SavedGame.h"
@@ -50,6 +51,10 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Engine/LocalizedText.h"
+#include "../Savegame/BaseFacility.h"
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -318,12 +323,14 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _cacheLand(),_hover(false)
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
 	_countries = new Surface(width, height, x, y);
 	_markers = new Surface(width, height, x, y);
+	_radars = new Surface(width, height, x, y);
+	_clipper = new FastLineClip(x, x+width, y, y+height);
 
 	// Animation timers
 	_blinkTimer = new Timer(100);
@@ -452,6 +459,8 @@ Globe::~Globe()
 	delete _mkLandedUfo;
 	delete _mkCrashedUfo;
 	delete _mkAlienSite;
+	delete _radars;
+	delete _clipper;
 
 	for (std::list<Polygon*>::iterator i = _cacheLand.begin(); i != _cacheLand.end(); ++i)
 	{
@@ -473,6 +482,14 @@ void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
 	*x = _cenX + (Sint16)floor(static_data.getRadius(_zoom) * cos(lat) * sin(lon - _cenLon));
 	*y = _cenY + (Sint16)floor(static_data.getRadius(_zoom) * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
+
+void Globe::polarToCart(double lon, double lat, double *x, double *y) const
+{
+	// Orthographic projection
+	*x = _cenX + static_data.getRadius(_zoom) * cos(lat) * sin(lon - _cenLon);
+	*y = _cenY + static_data.getRadius(_zoom) * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon));
+}
+
 
 /**
  * Converts a cartesian point into a polar point for
@@ -919,6 +936,7 @@ void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_mkLandedUfo->setPalette(colors, firstcolor, ncolors);
 	_mkCrashedUfo->setPalette(colors, firstcolor, ncolors);
 	_mkAlienSite->setPalette(colors, firstcolor, ncolors);
+	_radars->setPalette(colors, firstcolor, ncolors);
 }
 
 /**
@@ -977,6 +995,7 @@ void Globe::draw()
 	Surface::draw();
 	drawOcean();
 	drawLand();
+	drawRadars();
 	drawShadow();
 	drawMarkers();
 	drawDetail();
@@ -1088,6 +1107,192 @@ void Globe::drawShadow()
 		
 }
 
+
+void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 Color)
+{
+	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
+	x1+=0.5;
+	y1+=0.5;
+	x2+=0.5;
+	y2+=0.5;
+	double deltax = x2-x1, deltay = y2-y1;
+	bool inv;
+	Sint16 tcol;
+	double len,x0,y0,SX,SY;
+	if (abs((int)y2-(int)y1) > abs((int)x2-(int)x1)) 
+	{
+		len=abs((int)y2-(int)y1);
+		inv=false;
+	}
+	else
+	{
+		len=abs((int)x2-(int)x1);
+		inv=true;
+	}
+
+	if (y2<y1) SY=-1; else if (deltay==0) SY=0; else SY=1;
+	if (x2<x1) SX=-1; else if (deltax==0) SX=0; else SX=1;
+
+	x0=x1;  y0=y1;
+	if (inv)
+		SY=(deltay/len);
+	else
+		SX=(deltax/len);
+
+	while(len>0)
+	{
+		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
+		{
+			tcol=src->getPixel((int)x0,(int)y0);
+			const int d = tcol & helper::ColorGroup;
+			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			{
+				//this pixel is ocean
+				tcol = Palette::blockOffset(12) + 12;
+			}
+			else
+			{
+				const int e = tcol+4;
+				if(e > d + helper::ColorShade)
+					tcol = d + helper::ColorShade;
+				else tcol = e;
+			}
+			surface->setPixel((int)x0,(int)y0,tcol);
+		}
+		x0+=SX;
+		y0+=SY;
+		len-=1.0;
+	}
+}
+
+
+void Globe::drawRadars()
+{
+	_radars->clear();
+	if (!_detail)
+		return;
+/*	Text *label = new Text(80, 9, 0, 0);
+	label->setPalette(getPalette());
+	label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+	label->setAlign(ALIGN_LEFT);
+	label->setColor(Palette::blockOffset(15)-1);
+*/
+	double x, y, x2, y2;
+	double tr, range;
+	double lat, lon;
+
+//	lock();
+	_radars->lock();
+
+
+	// Draw radars around bases
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		lat = (*i)->getLatitude();
+		lon = (*i)->getLongitude();
+		// Cheap hack to hide bases when they haven't been placed yet
+		if ((lon != 0.0 || lat != 0.0)/* &&
+			!pointBack((*i)->getLongitude(), (*i)->getLatitude())*/)
+		{
+			polarToCart(lon, lat, &x, &y);
+
+			range = 0;
+			for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
+			{
+				if ((*j)->getBuildTime() == 0)
+				{
+					tr = (*j)->getRules()->getRadarRange();
+					if (tr > range) range = tr;
+				}
+			}
+			range = range * (1 / 60.0) * (M_PI / 180);
+
+			if (range>0) drawGlobeCircle(lat,lon,range,48);
+	
+		}
+
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		{
+			lat=(*j)->getLatitude();
+			lon=(*j)->getLongitude();
+			if ((*j)->getStatus()!= "STR_OUT")
+				continue;
+			polarToCart(lon, lat, &x, &y);
+			range = (*j)->getRules()->getRadarRange();
+			range = range * (1 / 60.0) * (M_PI / 180);
+
+			if (range>0) drawGlobeCircle(lat,lon,range,24);
+		}
+	}
+
+	if (_hover)
+	{
+		const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+		for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
+		{
+			range=_game->getRuleset()->getBaseFacility(*i)->getRadarRange();
+			range = range * (1 / 60.0) * (M_PI / 180);
+			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
+		}
+	}
+
+	_radars->unlock();
+//	unlock();
+//	delete label;
+}
+
+/**
+ *	Draw globe range circle
+ */
+void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
+{
+	double x, y, x2, y2;
+	double lat1, lon1;
+	double seg = M_PI / (segments / 2);
+	for (double az = 0; az <= M_PI*2+0.01; az+=seg) //48 circle segments
+	{
+		//calculating sphere-projected circle
+		lat1 = asin(sin(lat) * cos(radius) + cos(lat) * sin(radius) * cos(az));
+		lon1 = lon + atan2(sin(az) * sin(radius) * cos(lat), cos(radius) - sin(lat) * sin(lat1));
+		polarToCart(lon1, lat1, &x, &y);
+		if (az == 0) //first vertex is for initialization only
+		{
+			x2=x;
+			y2=y;
+			continue;
+		}
+		if (!pointBack(lon1,lat1))
+			XuLine(_radars, this, x, y, x2, y2, 249);
+//			_radars->drawLine(x,y,x2,y2,4);
+		x2=x; y2=y;
+	}
+/*
+	std::wstringstream ss6;
+	ss6 << range;
+	label->setX(x);
+	label->setY(y);
+	label->setText(ss6.str());
+	label->blit(_radars);
+*/
+}
+
+
+void Globe::setNewBaseHover(void)
+{
+	_hover=true;
+}
+void Globe::unsetNewBaseHover(void)
+{
+	_hover=false;
+}
+void Globe::setNewBaseHoverPos(double lon, double lat)
+{
+	_hoverLon=lon;
+	_hoverLat=lat;
+}
+
+
+
 /**
  * Draws the details of the countries on the globe,
  * based on the current zoom level.
@@ -1189,94 +1394,6 @@ void Globe::drawDetail()
 
 		delete label;
 	}
-
-	// Draw the radar ranges
-	/*
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
-	{
-		// Cheap hack to hide bases when they haven't been placed yet
-		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0) &&
-			!pointBack((*i)->getLongitude(), (*i)->getLatitude()))
-		{
-			int n = 16;
-			for (int j = 1; j <= n; ++j)
-			{
-				double r = 0.25;
-				double lon1 = (*i)->getLongitude() + r*cos(2*M_PI*j/n);
-				double lat1 = (*i)->getLatitude() + r*sin(2*M_PI*j/n);
-				double lon2 = (*i)->getLongitude() + r*cos(2*M_PI*(j+1)/n);
-				double lat2 = (*i)->getLatitude() + r*sin(2*M_PI*(j+1)/n);
-				if (!pointBack(lon2, lat2))
-				{
-					Sint16 x1, x2, y1, y2;
-					polarToCart(lon1, lat1, &x1, &y1);
-					polarToCart(lon2, lat2, &x2, &y2);
-					_countries->drawLine(x1, y1, x2, y2, 10);
-				}
-			}
-		}
-	}
-	
-	int color = 0;
-	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
-	{
-		color += 10;
-		for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
-		{
-			double lon1 = (*i)->getRules()->getLonMax().at(k);
-			double lon2 = (*i)->getRules()->getLonMin().at(k);
-			double lat1 = (*i)->getRules()->getLatMax().at(k);
-			double lat2 = (*i)->getRules()->getLatMin().at(k);
-			double diff = 0;
-			if ((*i)->getRules()->getType() == "STR_RUSSIA" || (*i)->getRules()->getType() == "STR_CHINA" || (*i)->getRules()->getType() == "STR_CANADA")
-				diff = (lon1-lon2)/2;
-			if (!pointBack(lon2, lat2)&&!pointBack(lon1, lat1))
-			{
-				Sint16 x1, x2, x3, x4, x5, x6, y1, y2, y3, y4, y5, y6;
-				polarToCart(lon1, lat1, &x1, &y1);
-				polarToCart(lon1-diff, lat1, &x2, &y2);
-				polarToCart(lon2, lat1, &x3, &y3);
-
-				polarToCart(lon2, lat2, &x4, &y4);
-				polarToCart(lon1-diff, lat2, &x5, &y5);
-				polarToCart(lon1, lat2, &x6, &y6);
-
-				_countries->drawLine(x1, y1, x2, y2, color);
-				_countries->drawLine(x2, y2, x3, y3, color);
-				_countries->drawLine(x3, y3, x4, y4, color);
-				_countries->drawLine(x4, y4, x5, y5, color);
-				_countries->drawLine(x5, y5, x6, y6, color);
-				_countries->drawLine(x6, y6, x1, y1, color);
-			}
-		}
-	}
-
-	int color = 0;
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
-	{
-		color += 10;
-		for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
-		{
-			double lon1 = (*i)->getRules()->getLonMax().at(k);
-			double lon2 = (*i)->getRules()->getLonMin().at(k);
-			double lat1 = (*i)->getRules()->getLatMax().at(k);
-			double lat2 = (*i)->getRules()->getLatMin().at(k);
-	
-			if (!pointBack(lon2, lat2)&&!pointBack(lon1, lat1))
-			{
-				Sint16 x1, x2, x3, x4, y1, y2, y3, y4;
-				polarToCart(lon1, lat1, &x1, &y1);
-				polarToCart(lon1, lat2, &x2, &y2);
-				polarToCart(lon2, lat2, &x3, &y3);
-				polarToCart(lon2, lat1, &x4, &y4);
-				_countries->drawLine(x1, y1, x2, y2, color);
-				_countries->drawLine(x2, y2, x3, y3, color);
-				_countries->drawLine(x3, y3, x4, y4, color);
-				_countries->drawLine(x4, y4, x1, y1, color);
-			}
-		}
-	}
-	*/
 }
 
 /**
@@ -1398,6 +1515,7 @@ void Globe::drawMarkers()
 void Globe::blit(Surface *surface)
 {
 	Surface::blit(surface);
+	_radars->blit(surface);
 	_countries->blit(surface);
 	_markers->blit(surface);
 }

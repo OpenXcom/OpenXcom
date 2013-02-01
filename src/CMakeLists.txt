@@ -214,6 +214,8 @@ set ( engine_src
   Engine/Logger.h
   Engine/LocalizedText.cpp
   Engine/LocalizedText.h
+  Engine/FastLineClip.cpp
+  Engine/FastLineClip.h
 )
 
 set ( geoscape_src
