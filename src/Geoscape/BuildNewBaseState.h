@@ -47,6 +47,9 @@ private:
 	TextButton *_btnCancel;
 	Timer *_hoverTimer;
 	bool _first;
+	bool _olddetail;
+	double _oldlat,_oldlon;
+	int _mousex, _mousey;
 public:
 	/// Creates the Build New Base state.
 	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);

@@ -59,7 +59,7 @@ private:
 	SurfaceSet *_texture;
 	Game *_game;
 	Surface *_markers, *_countries, *_radars;
-	bool _blink, _detail, _hover;
+	bool _blink, _detail, _hover, _showRadarLines;
 	Timer *_blinkTimer, *_rotTimer;
 	std::list<Polygon*> _cacheLand;
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
@@ -172,6 +172,12 @@ public:
 	void setNewBaseHover(void);
 	/// Turns off new base hover mode.
 	void unsetNewBaseHover(void);
+	/// Gets state of base hover mode
+	bool getNewBaseHover(void);
+	/// Gets _detail variable
+	bool getDetail(void);
+	/// set the _radarLines variable
+	void toggleRadarLines();
 
 };
 

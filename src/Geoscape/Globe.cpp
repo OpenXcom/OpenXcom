@@ -323,7 +323,7 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _cacheLand(),_hover(false)
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _hover(false), _showRadarLines(false), _cacheLand()
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -507,9 +507,17 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 
 	double rho = sqrt((double)(x*x + y*y));
 	double c = asin(rho / (static_data.getRadius(_zoom)));
+	if (rho==0)
+	{
+		*lat = _cenLat;
+		*lon = _cenLon;
 
-	*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
-	*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
+	}
+	else
+	{
+		*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
+		*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
+	}
 
 	// Keep between 0 and 2xPI
 	while (*lon < 0)
@@ -1169,7 +1177,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 void Globe::drawRadars()
 {
 	_radars->clear();
-	if (!_detail)
+	if (!_showRadarLines)
 		return;
 /*	Text *label = new Text(80, 9, 0, 0);
 	label->setPalette(getPalette());
@@ -1285,10 +1293,18 @@ void Globe::unsetNewBaseHover(void)
 {
 	_hover=false;
 }
+bool Globe::getNewBaseHover(void)
+{
+	return _hover;
+}
 void Globe::setNewBaseHoverPos(double lon, double lat)
 {
 	_hoverLon=lon;
 	_hoverLat=lat;
+}
+bool Globe::getDetail(void)
+{
+	return _detail;
 }
 
 
@@ -1594,6 +1610,10 @@ void Globe::keyboardPress(Action *action, State *state)
 	{
 		toggleDetail();
 	}
+	if (action->getDetails()->key.keysym.sym == SDLK_r)
+	{
+		toggleRadarLines();
+	}
 }
 
 /**
@@ -1676,6 +1696,12 @@ const LocalizedText &Globe::tr(const std::string &id) const
 LocalizedText Globe::tr(const std::string &id, unsigned n) const
 {
 	return _game->getLanguage()->getString(id, n);
+}
+
+void Globe::toggleRadarLines()
+{
+	_showRadarLines = !_showRadarLines;
+	drawRadars();
 }
 
 }
