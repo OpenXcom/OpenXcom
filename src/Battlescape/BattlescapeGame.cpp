@@ -1137,40 +1137,44 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else if (_currentAction.type == BA_PANIC || _currentAction.type == BA_MINDCONTROL)
 		{
-			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
+			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction() && _save->selectUnit(pos)->getVisible())
 			{
 				bool builtinpsi = !_currentAction.weapon;
 				if (builtinpsi)
 				{
 					_currentAction.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 				}
+				_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
 				_currentAction.target = pos;
 				// get the sound/animation started
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
-				if (getTileEngine()->psiAttack(&_currentAction))
+				if (_currentAction.result != "STR_NOT_ENOUGH_TIME_UNITS")
 				{
-					// show a little infobox if it's successful
-					std::wstringstream ss;
-					if (_currentAction.type == BA_PANIC)
+					if (getTileEngine()->psiAttack(&_currentAction))
 					{
-						ss << _save->getTile(_currentAction.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED");
+						// show a little infobox if it's successful
+						std::wstringstream ss;
+						if (_currentAction.type == BA_PANIC)
+						{
+							ss << _save->getTile(_currentAction.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED");
+						}
+						else if (_currentAction.type == BA_MINDCONTROL)
+						{
+							ss << _parentState->getGame()->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL");
+						}
+						_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+						_parentState->updateSoldierInfo();
+						_currentAction.targeting = false;
+						_currentAction.type = BA_NONE;
+						setupCursor();
 					}
-					else if (_currentAction.type == BA_MINDCONTROL)
+					if (builtinpsi)
 					{
-						ss << _parentState->getGame()->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL");
+						_save->removeItem(_currentAction.weapon);
+						_currentAction.weapon = 0;
 					}
-					_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-					_parentState->updateSoldierInfo();
-					_currentAction.targeting = false;
-					_currentAction.type = BA_NONE;
-					setupCursor();
-				}
-				if (builtinpsi)
-				{
-					_save->removeItem(_currentAction.weapon);
-					_currentAction.weapon = 0;
 				}
 			}
 		}
