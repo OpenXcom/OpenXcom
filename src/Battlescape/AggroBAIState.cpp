@@ -182,7 +182,7 @@ void AggroBAIState::think(BattleAction *action)
 
 		if (chanceToAttack)
 		{
-			if (_unit->getMainHandWeapon()->getAmmoItem())
+			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem())
 			{
 				if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
 				{
