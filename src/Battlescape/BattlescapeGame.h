@@ -55,7 +55,8 @@ struct BattleAction
 	std::string result;
 	bool strafe, run;
 	int diff;
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0) { }
+	int autoShotCounter;
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0) { }
 };
 
 /**

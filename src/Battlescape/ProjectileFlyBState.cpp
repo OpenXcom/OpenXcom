@@ -174,6 +174,7 @@ void ProjectileFlyBState::init()
 bool ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
+	++_action.autoShotCounter;
 	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
 
 	_autoshotCounter++;
