@@ -577,6 +577,7 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
+						(*i)->setDestination(0);
 						base->setupDefenses();
 						if (base->getDefenses()->size() > 0)
 						{
