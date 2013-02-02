@@ -1446,7 +1446,7 @@ crafts:
 craftWeapons:
   - type: STR_STINGRAY
     sprite: 0
-    sound: 8
+    sound: 5
     damage: 70
     range: 30
     accuracy: 70
@@ -1458,7 +1458,7 @@ craftWeapons:
     clip: STR_STINGRAY_MISSILES
   - type: STR_AVALANCHE
     sprite: 1
-    sound: 8
+    sound: 5
     damage: 100
     range: 60
     accuracy: 80
@@ -1483,7 +1483,7 @@ craftWeapons:
     clip: STR_CANNON_ROUNDS_X50
   - type: STR_LASER_CANNON_UC
     sprite: 4
-    sound: 5
+    sound: 8
     damage: 70
     range: 21
     accuracy: 35
