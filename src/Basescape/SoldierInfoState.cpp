@@ -147,8 +147,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtStrength);
 	add(_numStrength);
 	add(_barStrength);
-	if(_base->getSoldiers()->at(_soldier)->getCurrentStats()->psiSkill > 0)
-	{
+
 	add(_txtPsiStrength);
 	add(_numPsiStrength);
 	add(_barPsiStrength);
@@ -156,7 +155,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtPsiSkill);
 	add(_numPsiSkill);
 	add(_barPsiSkill);
-	}
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
@@ -317,7 +316,27 @@ void SoldierInfoState::init()
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
+	
+	if(s->getCurrentStats()->psiSkill == 0)
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
 
+		_txtPsiSkill->setVisible(false);
+		_numPsiSkill->setVisible(false);
+		_barPsiSkill->setVisible(false);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
+
+		_txtPsiSkill->setVisible(true);
+		_numPsiSkill->setVisible(true);
+		_barPsiSkill->setVisible(true);
+	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
 	texture->getFrame(s->getRankSprite())->setY(0);
