@@ -85,7 +85,7 @@ void Screen::handle(Action *action)
 	{
 		setFullscreen(!_fullscreen);
 	}
-	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F12)
+	else if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::getInt("keyScreenshot"))
 	{
 		std::stringstream ss;
 		int i = 0;

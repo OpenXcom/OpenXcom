@@ -51,34 +51,36 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnScrollSpeed5 = new TextButton(22, 30, 112, 42);
 
 	_txtScrollType = new Text(160, 9, 150, 32);
-	_txtTriggerScroll = new Text(130, 9, 182, 45);
-	_txtAutoScroll = new Text(130, 9, 182, 61);
-	_btnScrollType1 = new TextButton(30, 14, 150, 42);
-	_btnScrollType2 = new TextButton(30, 14, 150, 58);
+	_txtTriggerScroll = new Text(130, 9, 182, 44);
+	_txtAutoScroll = new Text(130, 9, 182, 58);
+	_txtDragScroll = new Text(130, 9, 182, 72);
+	_btnScrollType1 = new TextButton(30, 12, 150, 42);
+	_btnScrollType2 = new TextButton(30, 12, 150, 56);
+	_btnScrollType3 = new TextButton(30, 12, 150, 70);
 
-	_txtFireSpeed = new Text(200, 9, 16, 74);
-	_btnFireSpeed1 = new TextButton(22, 12, 16, 84);
-	_btnFireSpeed2 = new TextButton(28, 12, 40, 84);
-	_btnFireSpeed3 = new TextButton(36, 12, 70, 84);
-	_btnFireSpeed4 = new TextButton(45, 12, 108, 84);
-	_btnFireSpeed5 = new TextButton(56, 12, 155, 84);
-	_btnFireSpeed6 = new TextButton(69, 12, 213, 84);
+	_txtFireSpeed = new Text(200, 9, 16, 84);
+	_btnFireSpeed1 = new TextButton(22, 12, 16, 94);
+	_btnFireSpeed2 = new TextButton(28, 12, 40, 94);
+	_btnFireSpeed3 = new TextButton(36, 12, 70, 94);
+	_btnFireSpeed4 = new TextButton(45, 12, 108, 94);
+	_btnFireSpeed5 = new TextButton(56, 12, 155, 94);
+	_btnFireSpeed6 = new TextButton(69, 12, 213, 94);
 
-	_txtXcomSpeed = new Text(200, 9, 16, 106);
-	_btnXcomSpeed1 = new TextButton(22, 12, 16, 116);
-	_btnXcomSpeed2 = new TextButton(28, 12, 40, 116);
-	_btnXcomSpeed3 = new TextButton(36, 12, 70, 116);
-	_btnXcomSpeed4 = new TextButton(45, 12, 108, 116);
-	_btnXcomSpeed5 = new TextButton(56, 12, 155, 116);
-	_btnXcomSpeed6 = new TextButton(69, 12, 213, 116);
+	_txtXcomSpeed = new Text(200, 9, 16, 114);
+	_btnXcomSpeed1 = new TextButton(22, 12, 16, 124);
+	_btnXcomSpeed2 = new TextButton(28, 12, 40, 124);
+	_btnXcomSpeed3 = new TextButton(36, 12, 70, 124);
+	_btnXcomSpeed4 = new TextButton(45, 12, 108, 124);
+	_btnXcomSpeed5 = new TextButton(56, 12, 155, 124);
+	_btnXcomSpeed6 = new TextButton(69, 12, 213, 124);
 
-	_txtAlienSpeed = new Text(200, 9, 16, 138);
-	_btnAlienSpeed1 = new TextButton(22, 12, 16, 148);
-	_btnAlienSpeed2 = new TextButton(28, 12, 40, 148);
-	_btnAlienSpeed3 = new TextButton(36, 12, 70, 148);
-	_btnAlienSpeed4 = new TextButton(45, 12, 108, 148);
-	_btnAlienSpeed5 = new TextButton(56, 12, 155, 148);
-	_btnAlienSpeed6 = new TextButton(69, 12, 213, 148);
+	_txtAlienSpeed = new Text(200, 9, 16, 144);
+	_btnAlienSpeed1 = new TextButton(22, 12, 16, 154);
+	_btnAlienSpeed2 = new TextButton(28, 12, 40, 154);
+	_btnAlienSpeed3 = new TextButton(36, 12, 70, 154);
+	_btnAlienSpeed4 = new TextButton(45, 12, 108, 154);
+	_btnAlienSpeed5 = new TextButton(56, 12, 155, 154);
+	_btnAlienSpeed6 = new TextButton(69, 12, 213, 154);
 
 	_btnOk = new TextButton(90, 16, 16, 174);
 	_btnLoad = new TextButton(90, 16, 117, 174);
@@ -97,13 +99,14 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	{
 	case SCROLL_TRIGGER: _scrollType = _btnScrollType1; break;
 	case SCROLL_AUTO: _scrollType = _btnScrollType2; break;
+	case SCROLL_DRAG: _scrollType = _btnScrollType3; break;
 	default: _scrollSpeed = 0; break;
 	}
 	switch (Options::getInt("battleFireSpeed"))
 	{
-	case 25: _fireSpeed = _btnFireSpeed1; break;
-	case 20: _fireSpeed = _btnFireSpeed2; break;
-	case 15: _fireSpeed = _btnFireSpeed3; break;
+	case 40: _fireSpeed = _btnFireSpeed1; break;
+	case 30: _fireSpeed = _btnFireSpeed2; break;
+	case 20: _fireSpeed = _btnFireSpeed3; break;
 	case 10: _fireSpeed = _btnFireSpeed4; break;
 	case 5: _fireSpeed = _btnFireSpeed5; break;
 	case 1: _fireSpeed = _btnFireSpeed6; break;
@@ -111,9 +114,9 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	}
 	switch (Options::getInt("battleXcomSpeed"))
 	{
-	case 25: _xcomSpeed = _btnXcomSpeed1; break;
-	case 20: _xcomSpeed = _btnXcomSpeed2; break;
-	case 15: _xcomSpeed = _btnXcomSpeed3; break;
+	case 40: _xcomSpeed = _btnXcomSpeed1; break;
+	case 30: _xcomSpeed = _btnXcomSpeed2; break;
+	case 20: _xcomSpeed = _btnXcomSpeed3; break;
 	case 10: _xcomSpeed = _btnXcomSpeed4; break;
 	case 5: _xcomSpeed = _btnXcomSpeed5; break;
 	case 1: _xcomSpeed = _btnXcomSpeed6; break;
@@ -121,9 +124,9 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	}
 	switch (Options::getInt("battleAlienSpeed"))
 	{
-	case 25: _alienSpeed = _btnAlienSpeed1; break;
-	case 20: _alienSpeed = _btnAlienSpeed2; break;
-	case 15: _alienSpeed = _btnAlienSpeed3; break;
+	case 40: _alienSpeed = _btnAlienSpeed1; break;
+	case 30: _alienSpeed = _btnAlienSpeed2; break;
+	case 20: _alienSpeed = _btnAlienSpeed3; break;
 	case 10: _alienSpeed = _btnAlienSpeed4; break;
 	case 5: _alienSpeed = _btnAlienSpeed5; break;
 	case 1: _alienSpeed = _btnAlienSpeed6; break;
@@ -143,8 +146,10 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	add(_txtScrollType);
 	add(_txtTriggerScroll);
 	add(_txtAutoScroll);
+	add(_txtDragScroll);
 	add(_btnScrollType1);
 	add(_btnScrollType2);
+	add(_btnScrollType3);
 
 	add(_txtFireSpeed);
 	add(_btnFireSpeed1);
@@ -226,6 +231,10 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_txtAutoScroll->setHighContrast(true);
 	_txtAutoScroll->setText(_game->getLanguage()->getString("STR_AUTO_SCROLL"));
 
+	_txtDragScroll->setColor(Palette::blockOffset(0));
+	_txtDragScroll->setHighContrast(true);
+	_txtDragScroll->setText(_game->getLanguage()->getString("STR_DRAG_SCROLL"));
+
 	_btnScrollType1->setColor(Palette::blockOffset(0));
 	_btnScrollType1->setHighContrast(true);
 	_btnScrollType1->setText(L"1");
@@ -235,6 +244,11 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnScrollType2->setHighContrast(true);
 	_btnScrollType2->setText(L"2");
 	_btnScrollType2->setGroup(&_scrollType);
+
+	_btnScrollType3->setColor(Palette::blockOffset(0));
+	_btnScrollType3->setHighContrast(true);
+	_btnScrollType3->setText(L"3");
+	_btnScrollType3->setGroup(&_scrollType);
 
 	_txtFireSpeed->setColor(Palette::blockOffset(0));
 	_txtFireSpeed->setHighContrast(true);
@@ -383,13 +397,15 @@ void BattlescapeOptionsState::btnOkClick(Action *)
 		Options::setInt("battleScrollType", SCROLL_TRIGGER);
 	else if (_scrollType == _btnScrollType2)
 		Options::setInt("battleScrollType", SCROLL_AUTO);
+	else if (_scrollType == _btnScrollType3)
+		Options::setInt("battleScrollType", SCROLL_DRAG);
 
 	if (_fireSpeed == _btnFireSpeed1)
-		Options::setInt("battleFireSpeed", 25);
+		Options::setInt("battleFireSpeed", 40);
 	else if (_fireSpeed == _btnFireSpeed2)
-		Options::setInt("battleFireSpeed", 20);
+		Options::setInt("battleFireSpeed", 30);
 	else if (_fireSpeed == _btnFireSpeed3)
-		Options::setInt("battleFireSpeed", 15);
+		Options::setInt("battleFireSpeed", 20);
 	else if (_fireSpeed == _btnFireSpeed4)
 		Options::setInt("battleFireSpeed", 10);
 	else if (_fireSpeed == _btnFireSpeed5)
@@ -398,11 +414,11 @@ void BattlescapeOptionsState::btnOkClick(Action *)
 		Options::setInt("battleFireSpeed", 1);
 
 	if (_xcomSpeed == _btnXcomSpeed1)
-		Options::setInt("battleXcomSpeed", 25);
+		Options::setInt("battleXcomSpeed", 40);
 	else if (_xcomSpeed == _btnXcomSpeed2)
-		Options::setInt("battleXcomSpeed", 20);
+		Options::setInt("battleXcomSpeed", 30);
 	else if (_xcomSpeed == _btnXcomSpeed3)
-		Options::setInt("battleXcomSpeed", 15);
+		Options::setInt("battleXcomSpeed", 20);
 	else if (_xcomSpeed == _btnXcomSpeed4)
 		Options::setInt("battleXcomSpeed", 10);
 	else if (_xcomSpeed == _btnXcomSpeed5)
@@ -411,11 +427,11 @@ void BattlescapeOptionsState::btnOkClick(Action *)
 		Options::setInt("battleXcomSpeed", 1);
 
 	if (_alienSpeed == _btnAlienSpeed1)
-		Options::setInt("battleAlienSpeed", 25);
+		Options::setInt("battleAlienSpeed", 40);
 	else if (_alienSpeed == _btnAlienSpeed2)
-		Options::setInt("battleAlienSpeed", 20);
+		Options::setInt("battleAlienSpeed", 30);
 	else if (_alienSpeed == _btnAlienSpeed3)
-		Options::setInt("battleAlienSpeed", 15);
+		Options::setInt("battleAlienSpeed", 20);
 	else if (_alienSpeed == _btnAlienSpeed4)
 		Options::setInt("battleAlienSpeed", 10);
 	else if (_alienSpeed == _btnAlienSpeed5)

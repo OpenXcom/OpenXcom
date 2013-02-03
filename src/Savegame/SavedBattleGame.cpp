@@ -45,15 +45,10 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false)
 {
-	std::string temp;
-	temp = Options::getString("battleScrollButton");
-	if ("RMB" == temp) _scrollButton = SDL_BUTTON_RIGHT;
-	else if ("MMB" == temp) _scrollButton = SDL_BUTTON_MIDDLE;
-	else _scrollButton = -1;
-	temp = Options::getString("battleScrollButtonInvertMode");
-	_scrollButtonInvertMode = ("Normal" != temp);
-	_scrollButtonTimeTolerancy = Options::getInt("battleScrollButtonTimeTolerancy");
-	_scrollButtonPixelTolerancy = Options::getInt("battleScrollButtonPixelTolerancy");
+	_dragButton = Options::getInt("battleScrollDragButton");
+	_dragInvert = Options::getBool("battleScrollDragInvert");
+	_dragTimeTolerance = Options::getInt("battleScrollDragTimeTolerance");
+	_dragPixelTolerance = Options::getInt("battleScrollDragPixelTolerance");
 }
 
 /**
@@ -1238,39 +1233,41 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 }
 
 /**
- * Gets the ScrollButton type. (which mouse button is the scroll-button)
- * @return ScrollButton type.
+ * Gets the scroll drag button. (which mouse button is the scroll-button)
+ * @return ScrollButton.
  */
-Uint8 SavedBattleGame::getScrollButton() const
+Uint8 SavedBattleGame::getDragButton() const
 {
-	return _scrollButton;
+	return _dragButton;
 }
 
 /**
- * Gets the ScrollButton InvertMode.
- * @return ScrollButton InvertMode.
+ * Gets if the scroll drag is inverted.
+ * @return true drags away from the cursor, false drags towards (like a grab).
  */
-bool SavedBattleGame::getScrollButtonInvertMode() const
+bool SavedBattleGame::isDragInverted() const
 {
-	return _scrollButtonInvertMode;
+	return _dragInvert;
 }
 
 /**
- * Gets the ScrollButton TimeTolerancy.
- * @return ScrollButton TimeTolerancy.
+ * Gets the amount of time the button must be pushed
+ * to start a drag scroll.
+ * @return Time in miliseconds.
  */
-int SavedBattleGame::getScrollButtonTimeTolerancy() const
+int SavedBattleGame::getDragTimeTolerance() const
 {
-	return _scrollButtonTimeTolerancy;
+	return _dragTimeTolerance;
 }
 
 /**
- * Gets the ScrollButton PixelTolerancy.
- * @return ScrollButton PixelTolerancy.
+ * Gets the amount of pixels the mouse must move
+ * to start a drag scroll.
+ * @return Number of pixels.
  */
-int SavedBattleGame::getScrollButtonPixelTolerancy() const
+int SavedBattleGame::getDragPixelTolerance() const
 {
-	return _scrollButtonPixelTolerancy;
+	return _dragPixelTolerance;
 }
 
 void SavedBattleGame::updateExposedUnits()

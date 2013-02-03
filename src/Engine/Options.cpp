@@ -18,6 +18,8 @@
  */
 
 #include "Options.h"
+#include <SDL.h>
+#include <SDL_keysym.h>
 #include <SDL_mixer.h>
 #include <stdio.h>
 #include <iostream>
@@ -49,6 +51,7 @@ std::vector<std::string> _rulesets;
  */
 void createDefault()
 {
+	_options.clear();
 #ifdef DINGOO
 	setInt("displayWidth", 320);
 	setInt("displayHeight", 200);
@@ -68,15 +71,15 @@ void createDefault()
 	setString("language", "");
 	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
 	setInt("battleScrollType", SCROLL_AUTO);
-	setString("battleScrollButton", "RMB"); // RMB, MMB, None  (Right-Mouse-Button, Middle-Mouse-Button, None)
-	setString("battleScrollButtonInvertMode", "Normal"); // Normal, Inverted
-	setInt("battleScrollButtonTimeTolerancy", 300); // miliSecond
-	setInt("battleScrollButtonPixelTolerancy", 10); // count of pixels
-	setInt("battleFireSpeed", 15); // 25, 20, 15, 10, 5, 1
-	setInt("battleXcomSpeed", 15); // 25, 20, 15, 10, 5, 1
-	setInt("battleAlienSpeed", 15); // 25, 20, 15, 10, 5, 1
-	setBool("battleAltGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setBool("battlePreviewPath", false);
+	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
+	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
+	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
+	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
+	setInt("battleFireSpeed", 20); // 40, 30, 20, 10, 5, 1
+	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
+	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
@@ -88,7 +91,63 @@ void createDefault()
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
 	setBool("battleNotifyDeath", false);
+	// controls
+	setInt("keyAcceptWindow", SDLK_RETURN);
+	setInt("keyIgnoreWindow", SDLK_ESCAPE);
+	setInt("keyScreenshot", SDLK_F12);
+	setInt("keyGeoLeft", SDLK_LEFT);
+	setInt("keyGeoRight", SDLK_RIGHT);
+	setInt("keyGeoUp", SDLK_UP);
+	setInt("keyGeoDown", SDLK_DOWN);
+	setInt("keyGeoZoomIn", SDLK_PLUS);
+	setInt("keyGeoZoomOut", SDLK_MINUS);
+	setInt("keyGeoSpeed1", SDLK_1);
+	setInt("keyGeoSpeed2", SDLK_2);
+	setInt("keyGeoSpeed3", SDLK_3);
+	setInt("keyGeoSpeed4", SDLK_4);
+	setInt("keyGeoSpeed5", SDLK_5);
+	setInt("keyGeoSpeed6", SDLK_6);
+	setInt("keyGeoIntercept", SDLK_i);
+	setInt("keyGeoBases", SDLK_b);
+	setInt("keyGeoGraphs", SDLK_g);
+	setInt("keyGeoUfopaedia", SDLK_u);
+	setInt("keyGeoOptions", SDLK_ESCAPE);
+	setInt("keyGeoFunding", SDLK_f);
+	setInt("keyGeoToggleDetail", SDLK_TAB);
+	setInt("keyGeoToggleRadar", SDLK_r);
+	setInt("keyBattleLeft", SDLK_LEFT);
+	setInt("keyBattleRight", SDLK_RIGHT);
+	setInt("keyBattleUp", SDLK_UP);
+	setInt("keyBattleDown", SDLK_DOWN);
+	setInt("keyBattleLevelUp", SDLK_PAGEUP);
+	setInt("keyBattleLevelDown", SDLK_PAGEDOWN);
+	setInt("keyBattleCenterUnit", SDLK_HOME);
+	setInt("keyBattleNextUnit", SDLK_TAB);
+	setInt("keyBattlePrevUnit", SDLK_CAPSLOCK);
+	setInt("keyBattleOptions", SDLK_ESCAPE);
+	setInt("keyBattleEndTurn", SDLK_BACKSPACE);
+	setInt("keyBattleInventory", SDLK_i);
+	setInt("keyBattleMap", SDLK_m);
+	setInt("keyBattleCrouch", SDLK_c);
+	setInt("keyBattleReload", SDLK_r);
+	setInt("keyBattlePersonalLighting", SDLK_l);
+	setInt("keyBattleAbort", SDLK_a);
+	setInt("keyBattleStats", SDLK_F1);
+	setInt("keyBattleCenterEnemy1", SDLK_1);
+	setInt("keyBattleCenterEnemy2", SDLK_2);
+	setInt("keyBattleCenterEnemy3", SDLK_3);
+	setInt("keyBattleCenterEnemy4", SDLK_4);
+	setInt("keyBattleCenterEnemy5", SDLK_5);
+	setInt("keyBattleCenterEnemy6", SDLK_6);
+	setInt("keyBattleCenterEnemy7", SDLK_7);
+	setInt("keyBattleCenterEnemy8", SDLK_8);
+	setInt("keyBattleCenterEnemy9", SDLK_9);
+	setInt("keyBattleReserveNone", SDLK_F2);
+	setInt("keyBattleReserveSnap", SDLK_F3);
+	setInt("keyBattleReserveAimed", SDLK_F4);
+	setInt("keyBattleReserveAuto", SDLK_F5);
 
+	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
 }
 

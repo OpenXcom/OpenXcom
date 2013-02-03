@@ -1606,11 +1606,11 @@ void Globe::mouseClick(Action *action, State *state)
 void Globe::keyboardPress(Action *action, State *state)
 {
 	InteractiveSurface::keyboardPress(action, state);
-	if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleDetail"))
 	{
 		toggleDetail();
 	}
-	if (action->getDetails()->key.keysym.sym == SDLK_r)
+	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleRadar"))
 	{
 		toggleRadarLines();
 	}

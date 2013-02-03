@@ -499,7 +499,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
 				{
 					std::wstringstream ss;
-					ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << "has been killed";
+					ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
 					_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 				}
 			}
@@ -519,7 +519,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
 						{
 							std::wstringstream ss;
-							ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << "has been killed";
+							ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
 							_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 						}
 					}

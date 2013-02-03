@@ -38,6 +38,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Armor.h"
+#include "../Engine/Options.h"
 #include "UnitInfoState.h"
 #include "TileEngine.h"
 
@@ -372,9 +373,14 @@ void InventoryState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		// "tab" - next solider
-		if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
 			btnNextClick(action);
+		}
+		// prev soldier
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
+		{
+			btnPrevClick(action);
 		}
 	}
 }

@@ -49,7 +49,7 @@ private:
 	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
 	Text *_txtSoundVolume;
 	TextButton *_soundVolume, *_btnSoundVolume1, *_btnSoundVolume2, *_btnSoundVolume3, *_btnSoundVolume4, *_btnSoundVolume5;
-	TextButton *_btnOk, *_btnCancel, *_btnLanguage;
+	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls;
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
 public:
@@ -61,6 +61,8 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Restore Defaults button.
+	void btnDefaultClick(Action *action);
 	/// Handler for clicking the Language button.
 	void btnLanguageClick(Action *action);
 	/// Handler for clicking the Next Resolution button.

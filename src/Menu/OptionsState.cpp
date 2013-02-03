@@ -45,9 +45,11 @@ OptionsState::OptionsState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 8);
-	_btnLanguage = new TextButton(148, 16, 86, 154);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
+	_btnLanguage = new TextButton(148, 16, 8, 154);
+	_btnControls = new TextButton(148, 16, 164, 154);
+	_btnOk = new TextButton(100, 16, 8, 176);
+	_btnCancel = new TextButton(100, 16, 110, 176);
+	_btnDefault = new TextButton(100, 16, 212, 176);
 
 	_txtDisplayResolution = new Text(120, 9, 8, 32);
 	_txtDisplayWidth = new TextEdit(48, 16, 16, 42);
@@ -121,7 +123,9 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_txtTitle);
 	add(_btnOk);
 	add(_btnCancel);
+	add(_btnDefault);
 	add(_btnLanguage);
+	add(_btnControls);
 
 	add(_txtDisplayResolution);
 	add(_txtDisplayWidth);
@@ -162,12 +166,19 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnOk->onMouseClick((ActionHandler)&OptionsState::btnOkClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
+
+	_btnDefault->setColor(Palette::blockOffset(8)+5);
+	_btnDefault->setText(_game->getLanguage()->getString("STR_RESTORE_DEFAULTS"));
+	_btnDefault->onMouseClick((ActionHandler)&OptionsState::btnDefaultClick);
 
 	_btnLanguage->setColor(Palette::blockOffset(8)+5);
 	_btnLanguage->setText(_game->getLanguage()->getString("STR_LANGUAGE"));
 	_btnLanguage->onMouseClick((ActionHandler)&OptionsState::btnLanguageClick);
+
+	_btnControls->setColor(Palette::blockOffset(8)+5);
+	_btnControls->setText(_game->getLanguage()->getString("STR_CONTROLS"));
 
 
 	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
@@ -315,6 +326,18 @@ void OptionsState::btnOkClick(Action *)
 void OptionsState::btnCancelClick(Action *)
 {
 	_game->popState();
+}
+
+/**
+ * Restores the Options to default settings.
+ * @param action Pointer to an action.
+ */
+void OptionsState::btnDefaultClick(Action *)
+{
+	Options::createDefault();
+	Options::setString("language", "English");
+	_game->popState();
+	_game->pushState(new OptionsState(_game));
 }
 
 /**

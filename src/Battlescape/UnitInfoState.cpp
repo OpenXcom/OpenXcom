@@ -37,6 +37,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -163,16 +164,13 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	add(_numStrength);
 	add(_barStrength);
 
-	if (unit->getStats()->psiSkill > 0)
-	{
-		add(_txtPsiStrength);
-		add(_numPsiStrength);
-		add(_barPsiStrength);
+	add(_txtPsiStrength);
+	add(_numPsiStrength);
+	add(_barPsiStrength);
 
-		add(_txtPsiSkill);
-		add(_numPsiSkill);
-		add(_barPsiSkill);
-	}
+	add(_txtPsiSkill);
+	add(_numPsiSkill);
+	add(_barPsiSkill);
 
 	add(_txtFrontArmor);
 	add(_numFrontArmor);
@@ -460,17 +458,38 @@ void UnitInfoState::init()
 	_barStrength->setMax(_unit->getStats()->strength);
 	_barStrength->setValue(_unit->getStats()->strength);
 
-	ss.str(L"");
-	ss << _unit->getStats()->psiStrength;
-	_numPsiStrength->setText(ss.str());
-	_barPsiStrength->setMax(_unit->getStats()->psiStrength);
-	_barPsiStrength->setValue(_unit->getStats()->psiStrength);
+	if (_unit->getStats()->psiSkill > 0)
+	{
+		ss.str(L"");
+		ss << _unit->getStats()->psiStrength;
+		_numPsiStrength->setText(ss.str());
+		_barPsiStrength->setMax(_unit->getStats()->psiStrength);
+		_barPsiStrength->setValue(_unit->getStats()->psiStrength);
 
-	ss.str(L"");
-	ss << _unit->getStats()->psiSkill;
-	_numPsiSkill->setText(ss.str());
-	_barPsiSkill->setMax(_unit->getStats()->psiSkill);
-	_barPsiSkill->setValue(_unit->getStats()->psiSkill);
+		ss.str(L"");
+		ss << _unit->getStats()->psiSkill;
+		_numPsiSkill->setText(ss.str());
+		_barPsiSkill->setMax(_unit->getStats()->psiSkill);
+		_barPsiSkill->setValue(_unit->getStats()->psiSkill);
+
+		_txtPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
+
+		_txtPsiSkill->setVisible(true);
+		_numPsiSkill->setVisible(true);
+		_barPsiSkill->setVisible(true);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+
+		_txtPsiSkill->setVisible(false);
+		_numPsiSkill->setVisible(false);
+		_barPsiSkill->setVisible(false);
+	}
 
 	ss.str(L"");
 	ss << _unit->getArmor(SIDE_FRONT);
@@ -518,9 +537,15 @@ void UnitInfoState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		// "tab" - next solider
-		if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
 			_unit = _game->getSavedGame()->getBattleGame()->selectNextPlayerUnit();
+			init();
+		}
+		// prev soldier
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
+		{
+			_unit = _game->getSavedGame()->getBattleGame()->selectPreviousPlayerUnit();
 			init();
 		}
 	}

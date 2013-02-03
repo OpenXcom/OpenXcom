@@ -28,7 +28,7 @@ namespace OpenXcom
 /**
  * Enumeration for the battlescape scrolling types.
  */
-enum ScrollType { SCROLL_TRIGGER, SCROLL_AUTO };
+enum ScrollType { SCROLL_TRIGGER, SCROLL_AUTO, SCROLL_DRAG };
 
 /**
  * Enumeration for the keyboard modes.
@@ -41,6 +41,8 @@ enum KeyboardType { KEYBOARD_ON, KEYBOARD_VIRTUAL, KEYBOARD_OFF };
  */
 namespace Options
 {
+	/// Restores default options.
+	void createDefault();
 	/// Initializes the options settings.
 	bool init(int argc, char** args);
 	/// Loads options from YAML.
