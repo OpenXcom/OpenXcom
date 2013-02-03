@@ -227,8 +227,22 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_difficulty = (GameDifficulty)a;
 	RNG::load(doc);
 	doc["monthsPassed"] >> _monthsPassed;
-	doc["radarLines"] >> _radarLines;
-	doc["detail"] >> _detail;
+	if(const YAML::Node *pName = doc.FindValue("radarLines"))
+	{
+		*pName >> _radarLines;
+	}
+	else
+	{
+		_radarLines = false;
+	}
+	if(const YAML::Node *pName = doc.FindValue("detail"))
+	{
+		*pName >> _detail;
+	}
+	else
+	{
+		_detail = true;
+	}
 	doc["funds"] >> _funds;
 	doc["maintenance"] >> _maintenance;
 	doc["researchScores"] >> _researchScores;
