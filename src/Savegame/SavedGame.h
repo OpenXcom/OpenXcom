@@ -76,7 +76,7 @@ private:
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	std::vector<AlienMission*> _activeMissions;
-	bool _debug, _warned;
+	bool _debug, _warned, _detail, _radarLines;
 	int _monthsPassed;
 
 	/// Check whether a ResearchProject can be researched
@@ -201,6 +201,10 @@ public:
 	int getMonthsPassed() const;
 	/// Increment the month counter.
 	void addMonth();
+	void toggleRadarLines();
+	bool getRadarLines();
+	void toggleDetail();
+	bool getDetail();
 
 };
 

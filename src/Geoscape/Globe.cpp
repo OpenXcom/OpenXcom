@@ -323,7 +323,7 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _detail(true), _hover(false), _showRadarLines(false), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _hover(false), _cacheLand()
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -772,7 +772,7 @@ bool Globe::insideLand(double lon, double lat) const
  */
 void Globe::toggleDetail()
 {
-	_detail = !_detail;
+	_game->getSavedGame()->toggleDetail();
 	drawDetail();
 }
 
@@ -1177,7 +1177,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 void Globe::drawRadars()
 {
 	_radars->clear();
-	if (!_showRadarLines)
+	if (!_game->getSavedGame()->getRadarLines())
 		return;
 /*	Text *label = new Text(80, 9, 0, 0);
 	label->setPalette(getPalette());
@@ -1302,9 +1302,9 @@ void Globe::setNewBaseHoverPos(double lon, double lat)
 	_hoverLon=lon;
 	_hoverLat=lat;
 }
-bool Globe::getDetail(void)
+bool Globe::getShowRadar(void)
 {
-	return _detail;
+	return _game->getSavedGame()->getRadarLines();
 }
 
 
@@ -1317,7 +1317,7 @@ void Globe::drawDetail()
 {
 	_countries->clear();
 
-	if (!_detail)
+	if (!_game->getSavedGame()->getDetail())
 		return;
 
 	// Draw the country borders
@@ -1700,7 +1700,7 @@ LocalizedText Globe::tr(const std::string &id, unsigned n) const
 
 void Globe::toggleRadarLines()
 {
-	_showRadarLines = !_showRadarLines;
+	_game->getSavedGame()->toggleRadarLines();
 	drawRadars();
 }
 
