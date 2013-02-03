@@ -530,9 +530,22 @@ void UnitInfoState::init()
 void UnitInfoState::handle(Action *action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		_game->popState();
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			_game->popState();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
+		{
+			_unit = _game->getSavedGame()->getBattleGame()->selectNextPlayerUnit();
+			init();
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
+		{
+			_unit = _game->getSavedGame()->getBattleGame()->selectPreviousPlayerUnit();
+			init();
+		}
 	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{

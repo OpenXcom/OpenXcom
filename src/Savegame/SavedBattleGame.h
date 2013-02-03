@@ -129,7 +129,7 @@ public:
 	/// set the currently selected unit
 	void setSelectedUnit(BattleUnit *unit);
 	/// select previous soldier
-	BattleUnit *selectPreviousPlayerUnit();
+	BattleUnit *selectPreviousPlayerUnit(bool checkReselect = false);
 	/// select next soldier
 	BattleUnit *selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
 	/// select unit with position on map

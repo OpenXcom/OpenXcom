@@ -568,7 +568,7 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
  * Select the previous player unit TODO move this to BattlescapeState ?
  * @return pointer to BattleUnit.
  */
-BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
+BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect)
 {
 	std::vector<BattleUnit*>::iterator i = _units.begin();
 	bool bPrev = false;
@@ -583,7 +583,8 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
 	{
 		if (bPrev && (*i)->getFaction() == _side && !(*i)->isOut())
 		{
-			break;
+			if ( !checkReselect || ((*i)->reselectAllowed()))
+				break;
 		}
 		if ((*i) == _selectedUnit)
 		{
@@ -792,9 +793,9 @@ void SavedBattleGame::endTurn()
 		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 			_selectedUnit = _lastSelectedUnit;
 		else
-			selectPreviousPlayerUnit();
+			selectNextPlayerUnit();
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
-			selectPreviousPlayerUnit();
+			selectNextPlayerUnit();
 	}
 	
 	// hide all aliens (VOF calculations below will turn them visible again)

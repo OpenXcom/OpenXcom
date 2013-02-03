@@ -370,6 +370,18 @@ void InventoryState::invClick(Action *)
 void InventoryState::handle(Action *action)
 {
 	State::handle(action);
+	
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+	{
+		if (action->getDetails()->button.button == SDL_BUTTON_X1)
+		{
+			btnNextClick(action);
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
+		{
+			btnPrevClick(action);
+		}
+	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		// "tab" - next solider

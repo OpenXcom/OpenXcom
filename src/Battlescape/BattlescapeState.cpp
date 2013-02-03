@@ -678,7 +678,8 @@ void BattlescapeState::btnNextStopClick(Action *)
 
 /**
  * Select next soldier.
- * @param checkReselect When true, don't reselect current unit.
+ * @param checkReselect When true, don't select a unit that has been previously flagged.
+ * @param setReselect When true, flag the current unit first.
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
@@ -694,6 +695,23 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 	}
 }
 
+/**
+ * Select previous soldier.
+ * @param checkReselect When true, don't select a unit that has been previously flagged.
+ */
+void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
+{
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	{
+		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
+		updateSoldierInfo();
+		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		_battleGame->cancelCurrentAction();
+		_battleGame->getCurrentAction()->actor = unit;
+		_battleGame->setupCursor();
+	}
+}
 /**
  * Show/hide all map layers.
  * @param action Pointer to an action.
@@ -1116,7 +1134,7 @@ void BattlescapeState::handle(Action *action)
 			}
 			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 			{
-				//selectPreviousPlayerUnit(true, false);
+				selectPreviousPlayerUnit(true);
 			}
 		}
 
@@ -1141,7 +1159,7 @@ void BattlescapeState::handle(Action *action)
 			// previous solider
 			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 			{
-				//selectPreviousPlayerUnit(true, false);
+				selectPreviousPlayerUnit(true);
 			}
 			// options menu
 			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleOptions"))
