@@ -1150,7 +1150,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
-				if (_currentAction.result != "STR_NOT_ENOUGH_TIME_UNITS")
+				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
 				{
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{
