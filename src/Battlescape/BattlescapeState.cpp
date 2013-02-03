@@ -329,7 +329,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMTACTIC")->play();
+	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);

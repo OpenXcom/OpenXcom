@@ -26,6 +26,7 @@
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -132,6 +133,25 @@ std::list<Polyline*> *ResourcePack::getPolylines()
 Music *ResourcePack::getMusic(const std::string &name) const
 {
 	return _musics.find(name)->second;
+}
+
+/**
+ * Returns a random music from the resource set.
+ * @param name Name of the music to pick from.
+ * @return Pointer to the music.
+ */
+Music *ResourcePack::getRandomMusic(const std::string &name) const
+{
+	std::vector<Music*> music;
+	for (std::map<std::string, Music*>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+	{
+		if (i->first.find(name) != std::string::npos)
+		{
+			music.push_back(i->second);
+		}
+	}
+
+	return music[RNG::generate(0, music.size()-1)];
 }
 
 /**

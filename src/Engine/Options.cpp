@@ -123,7 +123,7 @@ void createDefault()
 	setInt("keyBattleLevelDown", SDLK_PAGEDOWN);
 	setInt("keyBattleCenterUnit", SDLK_HOME);
 	setInt("keyBattleNextUnit", SDLK_TAB);
-	setInt("keyBattlePrevUnit", SDLK_CAPSLOCK);
+	setInt("keyBattlePrevUnit", SDLK_LSHIFT);
 	setInt("keyBattleOptions", SDLK_ESCAPE);
 	setInt("keyBattleEndTurn", SDLK_BACKSPACE);
 	setInt("keyBattleInventory", SDLK_i);

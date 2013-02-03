@@ -32,6 +32,7 @@
 #include "../Engine/Screen.h"
 #include "../Interface/ArrowButton.h"
 #include "LanguageState.h"
+#include "MainMenuState.h"
 
 namespace OpenXcom
 {
@@ -336,8 +337,12 @@ void OptionsState::btnDefaultClick(Action *)
 {
 	Options::createDefault();
 	Options::setString("language", "English");
-	_game->popState();
-	_game->pushState(new OptionsState(_game));
+	Options::save();
+	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
+	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
+	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
+
+	_game->setState(new MainMenuState(_game));
 }
 
 /**

@@ -78,6 +78,8 @@ public:
 	std::list<Polyline*> *getPolylines();
 	/// Gets a particular music.
 	Music *getMusic(const std::string &name) const;
+	/// Gets a random music.
+	Music *getRandomMusic(const std::string &name) const;
 	/// Gets a particular sound set.
 	SoundSet *getSoundSet(const std::string &name) const;
 	/// Gets a particular palette.

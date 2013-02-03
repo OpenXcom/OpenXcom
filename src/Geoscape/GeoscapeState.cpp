@@ -389,9 +389,7 @@ void GeoscapeState::init()
 	// Set music if it's not already playing
 	if (!_music && !_battleMusic)
 	{
-		std::stringstream ss;
-		ss << "GMGEO" << RNG::generate(1, 2);
-		_game->getResourcePack()->getMusic(ss.str())->play();
+		_game->getResourcePack()->getRandomMusic("GMGEO")->play();
 		_music = true;
 	}
 	_globe->unsetNewBaseHover();

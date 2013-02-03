@@ -225,9 +225,6 @@ void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
-	std::stringstream ss;
-	ss << "GMGEO" << RNG::generate(1, 2);
-	_game->getResourcePack()->getMusic(ss.str())->play();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
 		_game->setState(new MainMenuState(_game));

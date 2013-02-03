@@ -38,6 +38,7 @@
 #include "../Savegame/Node.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -292,6 +293,8 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMENBASE",
 							 "GMGEO1",
 							 "GMGEO2",
+							 "GMGEO3",
+							 "GMGEO4",
 							 "GMINTER",
 							 "GMINTRO1",
 							 "GMINTRO2",
@@ -301,9 +304,10 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMNEWMAR",
 							 "GMSTORY",
 							 "GMTACTIC",
+							 "GMTACTIC2",
 							 "GMWIN"};
-		std::string exts[] = {"ogg", "mp3", "mod", "mid"};
-		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
+		std::string exts[] = {"ogg", "mp3", "mod"};
+		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
 
 		// Check which music version is available
 		bool cat = true;
@@ -320,25 +324,45 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			cat = false;
 		}
 
-		for (int i = 0; i < 14; ++i)
+		for (int i = 0; i < 17; ++i)
 		{
-			if (cat)
+			bool loaded = false;
+			for (int j = 0; j < 3; ++j)
 			{
-				_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+				std::stringstream s;
+				s << "SOUND/" << mus[i] << "." << exts[j];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
+				{
+					_musics[mus[i]] = new Music();
+					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+					break;
+				}
 			}
-			else
+			if (!loaded)
 			{
-				_musics[mus[i]] = new Music();
-				for (int j = 0; j < 4; ++j)
+				if (cat && tracks[i] != -1)
+				{
+					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+					loaded = true;
+				}
+				else
 				{
 					std::stringstream s;
-					s << "SOUND/" << mus[i] << "." << exts[j];
+					s << "SOUND/" << mus[i] << ".mid";
 					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
 					{
+						_musics[mus[i]] = new Music();
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
+						loaded = true;
 						break;
 					}
 				}
+			}
+			if (!loaded)
+			{
+				_musics[mus[i]] = new Music();
+				Log(LOG_WARNING) << "Missing music: " << mus[i];
 			}
 		}
 		delete gmcat;
@@ -377,6 +401,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			if (cats == 0)
 			{
 				_sounds[catsId[i]] = new SoundSet();
+				Log(LOG_WARNING) << "Missing soundset: " << catsId[i];
 			}
 			else
 			{
