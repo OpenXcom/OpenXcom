@@ -361,7 +361,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			}
 			if (!loaded)
 			{
-				_musics[mus[i]] = new Music();
+				//_musics[mus[i]] = new Music();
 				Log(LOG_WARNING) << "Missing music: " << mus[i];
 			}
 		}
