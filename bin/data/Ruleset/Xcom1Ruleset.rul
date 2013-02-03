@@ -1270,7 +1270,7 @@ facilities:
     mapName: XBASE_08
   - type: STR_LASER_DEFENSES
     requires:
-      - STR_LASER_DEFENSES
+      - STR_LASER_DEFENSE
     spriteShape: 3
     spriteFacility: 26
     buildCost: 400000
@@ -1283,7 +1283,7 @@ facilities:
     mapName: XBASE_09
   - type: STR_PLASMA_DEFENSES
     requires:
-      - STR_PLASMA_DEFENSES
+      - STR_PLASMA_DEFENSE
     spriteShape: 3
     spriteFacility: 27
     buildCost: 600000
@@ -1296,7 +1296,7 @@ facilities:
     mapName: XBASE_10
   - type: STR_FUSION_BALL_DEFENSES
     requires:
-      - STR_FUSION_BALL_DEFENSES
+      - STR_FUSION_DEFENSE
     spriteShape: 3
     spriteFacility: 28
     buildCost: 800000
@@ -6709,11 +6709,21 @@ research:
     points: 10
     dependencies:
       - STR_LASER_PISTOL
-  - name: STR_LASER_CANNON
-    cost: 420
+  - name: STR_HEAVY_LASER
+    cost: 460
     points: 10
     dependencies:
       - STR_LASER_RIFLE
+  - name: STR_LASER_CANNON
+    cost: 420
+    points: 15
+    dependencies:
+      - STR_HEAVY_LASER
+  - name: STR_LASER_DEFENSE
+    cost: 510
+    points: 15
+    dependencies:
+      - STR_LASER_CANNON
   - name: STR_MOTION_SCANNER
     cost: 180
     points: 20
@@ -8349,18 +8359,20 @@ ufopaedia:
     type_id: 6
     section: STR_BASE_FACILITIES
     requires:
-      - STR_LASER_DEFENSES
+      - STR_LASER_DEFENSE
     text: STR_LASER_DEFENSES_UFOPEDIA
   - id: STR_PLASMA_DEFENSES
     type_id: 6
     section: STR_BASE_FACILITIES
     requires:
-      - STR_PLASMA_DEFENSES
+      - STR_PLASMA_DEFENSE
     text: STR_PLASMA_DEFENSES_UFOPEDIA
   - id: STR_FUSION_BALL_DEFENSES
     type_id: 6
     section: STR_BASE_FACILITIES
     text: STR_FUSION_BALL_DEFENSES_UFOPEDIA
+    requires:
+      - STR_FUSION_DEFENSE
   - id: STR_GRAV_SHIELD
     type_id: 6
     section: STR_BASE_FACILITIES
