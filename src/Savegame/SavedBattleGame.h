@@ -123,7 +123,22 @@ public:
 	/// Conversion between tile index and coordinates.
 	void getTileCoords(int index, int *x, int *y, int *z) const;
 	/// Gets the tile at certain position.
-	Tile *getTile(const Position& pos) const;
+	//  Tile *getTile(const Position& pos) const;
+	/**
+	 * Gets the Tile on a given position on the map.
+	 * This method is called over 50mil+ times per turn so it seems useful
+	 * to inline it.
+	 * @param pos position
+	 * @return Pointer to tile.
+	 */
+	inline Tile *getTile(const Position& pos) const
+	{
+		if (pos.x < 0 || pos.y < 0 || pos.z < 0
+			|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
+			return 0;
+
+		return _tiles[getTileIndex(pos)];
+	}
 	/// get the currently selected unit
 	BattleUnit *getSelectedUnit() const;
 	/// set the currently selected unit
