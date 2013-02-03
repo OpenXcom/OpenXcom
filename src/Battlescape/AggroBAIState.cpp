@@ -490,18 +490,27 @@ void AggroBAIState::think(BattleAction *action)
 				bool coverFound = false;
 				int x_search_sign = RNG::generate(0, 1) ? 1 : -1; // randomize the direction of the search for lack of a better heuristic
 				int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
-				while (tries < 121 && !coverFound)
+				int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
+				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
+				int dsqr = dx*dx + dy*dy;
+				int runx = _unit->getPosition().x + (dx * 7 * 7) / dsqr;
+				int runy = _unit->getPosition().y + (dy * 7 * 7) / dsqr;
+				while (tries < 150 && !coverFound)
 				{
 					tries++;
 					action->target = _unit->getPosition();
-					action->target.x += x_search_sign * ((tries%11) - 5);
-					action->target.y += y_search_sign * ((tries/11) - 5); 
-					if (tries < 9999) // why the hell does this if statement exist? (was "if (tries < 20)" while the check in the while loop was "tries < 30", what kind of sense does that make?)
+					if (tries < 121) 
 					{
+						// looking for cover
+						action->target.x += x_search_sign * ((tries%11) - 5);
+						action->target.y += y_search_sign * ((tries/11) - 5); 
 						coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
 					}
 					else
 					{
+						// trying to run the hell away
+						action->target.x = runx + RNG::generate(-5,5);
+						action->target.y = runy + RNG::generate(-5,5);
 						coverFound = true;
 					}
 
