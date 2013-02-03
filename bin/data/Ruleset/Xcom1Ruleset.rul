@@ -6830,26 +6830,25 @@ research:
     cost: 800
     points: 25
     dependencies:
-      - STR_BLASTER_LAUNCHER
-      - STR_BLASTER_BOMB
+      - STR_FUSION_MISSILE
   - name: STR_FUSION_MISSILE
     cost: 880
+    points: 25
     dependencies:
-      - STR_FUSION_DEFENSE
+      - STR_BLASTER_LAUNCHER
+      - STR_BLASTER_BOMB
   - name: STR_GRAV_SHIELD
     cost: 930
     points: 25
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
-  - name: STR_HEAVY_LASER
-    cost: 460
-    dependencies:
-      - STR_LASER_RIFLE
   - name: STR_HEAVY_PLASMA
     cost: 800
+    points: 30
     needItem: true
   - name: STR_HEAVY_PLASMA_CLIP
     cost: 400
+    points: 7
     needItem: true
   - name: STR_HYPER_WAVE_DECODER
     cost: 670
@@ -7591,36 +7590,47 @@ research:
     needItem: true
   - name: STR_SECTOID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_SNAKEMAN_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_FLOATER_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_MUTON_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_ETHEREAL_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_CYBERDISC_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_REAPER_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_CELATID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_SILACOID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_SECTOPOD_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: REAPER_WEAPON
     cost: 0
