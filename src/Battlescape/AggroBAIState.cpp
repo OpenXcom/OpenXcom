@@ -483,22 +483,27 @@ void AggroBAIState::think(BattleAction *action)
 
 			if (takeCover && !charge)
 			{
-				// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
+				// the idea is to check within a 11x11 tile squarefor a tile which is not seen by our aggroTarget
 				// if there is no such tile, we run away from the target.
 				action->type = BA_WALK;
 				int tries = 0;
 				bool coverFound = false;
-				while (tries < 30 && !coverFound)
+				int x_search_sign = RNG::generate(0, 1) ? 1 : -1; // randomize the direction of the search for lack of a better heuristic
+				int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
+				while (tries < 121 && !coverFound)
 				{
 					tries++;
 					action->target = _unit->getPosition();
-					action->target.x += RNG::generate(-5,5);
-					action->target.y += RNG::generate(-5,5);
-					if (tries < 20)
-
+					action->target.x += x_search_sign * ((tries%11) - 5);
+					action->target.y += y_search_sign * ((tries/11) - 5); 
+					if (tries < 9999) // why the hell does this if statement exist? (was "if (tries < 20)" while the check in the while loop was "tries < 30", what kind of sense does that make?)
+					{
 						coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
+					}
 					else
+					{
 						coverFound = true;
+					}
 
 					if (coverFound)
 					{
