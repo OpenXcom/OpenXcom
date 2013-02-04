@@ -136,7 +136,8 @@ void Screen::handle(Action *action)
 int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy)
 {
 	int x, y;
-	Uint32 *sax, *say, *csax, *csay;
+	static Uint32 *sax, *say;
+	Uint32 *csax, *csay;
 	int csx, csy;
 	Uint8 *sp, *dp, *csp;
 	int dgap;
@@ -144,11 +145,13 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	/*
 	* Allocate memory for row increments
 	*/
-	if ((sax = (Uint32 *) malloc((dst->w + 1) * sizeof(Uint32))) == NULL) {
+	if ((sax = (Uint32 *) realloc(sax, (dst->w + 1) * sizeof(Uint32))) == NULL) {
+		sax = 0;
 		return (-1);
 	}
-	if ((say = (Uint32 *) malloc((dst->h + 1) * sizeof(Uint32))) == NULL) {
-		free(sax);
+	if ((say = (Uint32 *) realloc(say, (dst->h + 1) * sizeof(Uint32))) == NULL) {
+		say = 0;
+		//free(sax);
 		return (-1);
 	}
 
@@ -189,7 +192,6 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 		(*csay) *= src->pitch * (flipy ? -1 : 1);
 		csay++;
 	}
-
 	/*
 	* Draw
 	*/
@@ -225,10 +227,10 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	}
 
 	/*
-	* Remove temp arrays
+	* Never remove temp arrays
 	*/
-	free(sax);
-	free(say);
+	//free(sax);
+	//free(say);
 
 	return (0);
 }
