@@ -901,6 +901,14 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 			placed = true;
 		}
 		break;
+	case BT_MINDPROBE:
+		if (!unit->getItem("STR_LEFT_HAND"))
+		{
+			bi->moveToOwner(unit);
+			bi->setSlot(_game->getRuleset()->getInventory("STR_LEFT_HAND"));
+			placed = true;
+		}
+		break;
 	default: break;
 	}
 
