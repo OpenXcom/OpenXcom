@@ -508,16 +508,6 @@ int SavedBattleGame::getHeight() const
 }
 
 /**
- * This method converts coordinates into a unique index.
- * @param pos position
- * @return Unique index.
- */
-int SavedBattleGame::getTileIndex(const Position& pos) const
-{
-	return pos.z * _length * _width + pos.y * _width + pos.x;
-}
-
-/**
  * This method converts an index to coords.
  * @param index tileindex
  * @param x pointer to X coordinate.

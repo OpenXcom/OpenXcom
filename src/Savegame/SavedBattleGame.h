@@ -119,7 +119,18 @@ public:
 	/// Gets terrain height.
 	int getHeight() const;
 	/// Conversion between coordinates and the tile index.
-	int getTileIndex(const Position& pos) const;
+	//  int getTileIndex(const Position& pos) const;
+	/**
+	 * This method converts coordinates into a unique index.
+	 * getTile() calls this every time, so should be inlined along with it.
+	 * @param pos position
+	 * @return Unique index.
+	 */
+	inline int getTileIndex(const Position& pos) const
+	{
+		return pos.z * _length * _width + pos.y * _width + pos.x;
+	}
+
 	/// Conversion between tile index and coordinates.
 	void getTileCoords(int index, int *x, int *y, int *z) const;
 	/// Gets the tile at certain position.
