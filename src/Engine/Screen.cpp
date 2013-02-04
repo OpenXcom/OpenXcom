@@ -21,6 +21,7 @@
 #include <iomanip>
 #include <SDL_rotozoom.h>
 #include <SDL_endian.h>
+#include <limits.h>
 #include "../lodepng.h"
 #include "Exception.h"
 #include "Surface.h"
@@ -187,6 +188,63 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 
 /**
  *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
+ *  32-bit version for sad old x86 chips which run out of registers 
+ *  with the 64-bit version.
+ *  Used internally by _zoomSurfaceY() below.
+ *  source and dest. widths must be multiples of 4 bytes for 32-bit access
+ */
+static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
+{
+	Uint32 dataSrc;
+	Uint32 dataDst;
+	Uint8 *pixelSrc = (Uint8*)src->pixels;
+	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
+	int sx, sy;
+	static bool proclaimed = false;
+	
+	if (!proclaimed)
+	{
+		proclaimed = true;
+		Log(LOG_INFO) << "Using 32-bit 2X zoom routine.";
+	}
+
+	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDstRow += dst->pitch*2)
+	{
+		Uint32 *pixelDst = (Uint32*)pixelDstRow;
+		Uint32 *pixelDst2 = (Uint32*)(pixelDstRow + dst->pitch);	
+		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
+		{
+			dataSrc = *((Uint32*) pixelSrc);
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			// boo
+			SDL_Swap32(dataSrc);
+#endif
+
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+				((dataSrc & 0xFF00) << 16);
+
+			*pixelDst = dataDst;
+			*pixelDst2 = dataDst;
+			pixelDst++; // forward 4 bytes!
+			pixelDst2++;
+
+			dataSrc >>= 16; 
+
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+				((dataSrc & 0xFF00) << 16);
+
+			*pixelDst = dataDst;
+			*pixelDst2 = dataDst;
+			pixelDst++; // forward 4 bytes!
+			pixelDst2++;
+		}
+	}
+	
+	return 0;
+}
+
+/**
+ *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
  *  Used internally by _zoomSurfaceY() below.
  *  source and dest. widths must be multiples of 8 bytes for 64-bit access
  */
@@ -195,7 +253,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 	Uint64 dataSrc;
 	Uint64 dataDst;
 	Uint8 *pixelSrc = (Uint8*)src->pixels;
-	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
+	Uint8 *pixelDst = (Uint8*)dst->pixels;
 	int sx, sy;
 	static bool proclaimed = false;
 	
@@ -205,12 +263,9 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using modestly fast 4X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDstRow += dst->pitch*4)
+	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDst += dst->pitch*3)
 	{
-		Uint64 *pixelDst = (Uint64*)pixelDstRow;
-		Uint64 *pixelDst2 = (Uint64*)(pixelDstRow + dst->pitch);
-		Uint64 *pixelDst3 = (Uint64*)(pixelDstRow + 2*dst->pitch);
-		Uint64 *pixelDst4 = (Uint64*)(pixelDstRow + 3*dst->pitch);
+		/* Uint8 *pixelDst = pixelDstRow;*/
 		for (sx = 0; sx < src->w; sx += 8, pixelSrc += 8)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
@@ -218,29 +273,25 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 			// boo
 			SDL_Swap64(dataSrc);
 #endif
+			/* expanded form of of data shift:
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+				((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
+				((dataSrc & 0xFF00 ) << 24) | ((dataSrc & 0xFF00) << 32)  | 
+				((dataSrc & 0xFF00 ) << 40) | ((dataSrc & 0xFF00) << 48) ;
+				 */
 			for (int i = 0; i < 4; ++i)
 			{
-				/* expanded form of of data shift:
-				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-					((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
-					((dataSrc & 0xFF00 ) << 24) | ((dataSrc & 0xFF00) << 32)  | 
-					((dataSrc & 0xFF00 ) << 40) | ((dataSrc & 0xFF00) << 48) ;
-					 */
-
 				// compact form, combining terms with equal multipliers (shifts)
 				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 					((dataSrc & 0xFF) << 16) | 
 					((dataSrc & 0xFFFF ) << 24) | ((dataSrc & 0xFF00) << 32)  | 
 					((dataSrc & 0xFF00 ) << 40) | ((dataSrc & 0xFF00) << 48) ;
 
-				*pixelDst = dataDst;
-				*pixelDst2 = dataDst;
-				*pixelDst3 = dataDst;
-				*pixelDst4 = dataDst;
-				pixelDst++; // forward 8 bytes!
-				pixelDst2++;
-				pixelDst3++;
-				pixelDst4++;
+				*((Uint64*)pixelDst) = dataDst;
+				*((Uint64*)(pixelDst + dst->pitch)) = dataDst;
+				*((Uint64*)(pixelDst + dst->pitch*2)) = dataDst;
+				*((Uint64*)(pixelDst + dst->pitch*3)) = dataDst;
+				pixelDst+=8; // forward 8 bytes!
 				dataSrc >>= 16;
 			}
 		}
@@ -250,6 +301,60 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 }
 
 
+/**
+ *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
+ *  32-bit version.
+ *  Used internally by _zoomSurfaceY() below.
+ *  source and dest. widths must be multiples of 4 bytes for 32-bit access
+ */
+static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
+{
+	Uint32 dataSrc;
+	Uint32 dataDst;
+	Uint8 *pixelSrc = (Uint8*)src->pixels;
+	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
+	int sx, sy;
+	static bool proclaimed = false;
+	
+	if (!proclaimed)
+	{
+		proclaimed = true;
+		Log(LOG_INFO) << "Using 32-bit 4X zoom routine.";
+	}
+
+	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDstRow += dst->pitch*4)
+	{
+		Uint32 *pixelDst = (Uint32*)pixelDstRow;
+		Uint32 *pixelDst2 = (Uint32*)(pixelDstRow + dst->pitch);
+		Uint32 *pixelDst3 = (Uint32*)(pixelDstRow + 2*dst->pitch);
+		Uint32 *pixelDst4 = (Uint32*)(pixelDstRow + 3*dst->pitch);
+		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
+		{
+			dataSrc = *((Uint32*) pixelSrc);
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			// boo
+			SDL_Swap32(dataSrc);
+#endif
+			for (int i = 0; i < 4; ++i)
+			{
+				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24); 
+
+				*pixelDst = dataDst;
+				*pixelDst2 = dataDst;
+				*pixelDst3 = dataDst;
+				*pixelDst4 = dataDst;
+				pixelDst++; // forward 4 bytes!
+				pixelDst2++;
+				pixelDst3++;
+				pixelDst4++;
+				dataSrc >>= 8;
+			}
+		}
+	}
+	
+	return 0;
+}
 
 /**
  * Internal 8 bit Zoomer without smoothing.
@@ -273,10 +378,35 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 	int csx, csy;
 	Uint8 *sp, *dp, *csp;
 	int dgap;
+	static bool proclaimed = false;
+	
+// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
 
-	if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_64bit(src, dst);
-	else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_64bit(src, dst);
-
+	if (src->format->BytesPerPixel == 1 && dst->format->BytesPerPixel == 1)
+	{
+// __WORDSIZE is defined on Linux, SIZE_MAX on Windows
+#if defined(__WORDSIZE) && (__WORDSIZE == 64) || defined(SIZE_MAX) && (SIZE_MAX > 0xFFFFFFFF)
+		if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_64bit(src, dst);
+		else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_64bit(src, dst);
+#else
+		if (sizeof(void *) == 8)
+		{
+			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_64bit(src, dst);
+			else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_64bit(src, dst);
+		}
+		else
+		{
+			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_32bit(src, dst);
+			else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_32bit(src, dst);
+		}
+#endif
+	}
+	
+	if (!proclaimed)
+	{
+		Log(LOG_INFO) << "Using slower scaling routine. For best results, try a resolution of 640x400 or 1280x800.";
+	}
+	
 	/*
 	* Allocate memory for row increments
 	*/
