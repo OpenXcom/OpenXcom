@@ -32,9 +32,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"
-#include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
 {

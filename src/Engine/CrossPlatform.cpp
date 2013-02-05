@@ -64,6 +64,8 @@ void showError(const std::string &error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
+#else
+	std::cerr << error << std::endl;
 #endif
 	Log(LOG_FATAL) << error;
 }
