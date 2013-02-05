@@ -212,7 +212,8 @@ void Map::drawTerrain(Surface *surface)
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
-	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight();
+	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight()+1;
+	bool singleLevel = !_camera->getShowAllLayers();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
@@ -290,6 +291,12 @@ void Map::drawTerrain(Surface *surface)
 				mapPosition = Position(itX, itY, itZ);
 				_camera->convertMapToScreen(mapPosition, &screenPosition);
 				screenPosition += _camera->getMapOffset();
+				if (singleLevel && itZ == endZ) //fake second level of single layered view
+				{
+					Position mapPosition2 = Position(itX, itY, itZ-1);
+					if (_save->getTile(mapPosition2) && _save->getTile(mapPosition2)->getTerrainLevel() != -24)
+						continue;
+				}
 
 				// only render cells that are inside the surface
 				if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
@@ -513,7 +520,7 @@ void Map::drawTerrain(Surface *surface)
 								Position offset;
 								calculateWalkingOffset(tunit, &offset);
 								offset.y += 24;
-								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
+								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, ttile->getShade());
 								if (tunit->getArmor()->getSize() > 1)
 								{
 									offset.y += 4;

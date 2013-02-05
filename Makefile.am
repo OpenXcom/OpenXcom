@@ -405,6 +405,8 @@ openxcom_SOURCES = \
 	src/Menu/NoteState.h \
 	src/Menu/OptionsState.cpp \
 	src/Menu/OptionsState.h \
+	src/Menu/OptionsControlsState.cpp \
+	src/Menu/OptionsControlsState.h \
 	src/Menu/SaveState.cpp \
 	src/Menu/SaveState.h \
 	src/Menu/SavedGameState.cpp \

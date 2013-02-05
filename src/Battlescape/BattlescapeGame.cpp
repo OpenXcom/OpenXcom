@@ -48,7 +48,6 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -218,7 +217,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		_parentState->debug(ss.str());
 		if (unit->getAggroSound() && aggro && !_playedAggroSound)
 		{
-			getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(unit->getAggroSound())->play();
+			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
@@ -345,7 +344,7 @@ void BattlescapeGame::endTurn()
 
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
-		getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
+		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 	}
 
 	_save->endTurn();
@@ -1130,7 +1129,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
-				_parentState->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_currentAction.weapon->getRules()->getHitSound())->play();
+				_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
 				_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
 				cancelCurrentAction();
 			}

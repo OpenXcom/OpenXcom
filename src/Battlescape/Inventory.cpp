@@ -34,7 +34,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Action.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "WarningMessage.h"
 #include "../Savegame/Tile.h"
@@ -450,7 +449,7 @@ void Inventory::mouseClick(Action *action, State *state)
 						{
 							moveItem(_selItem, slot, x, y);
 							setSelectedItem(0);
-							_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
 						{
@@ -486,7 +485,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
-							_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(17)->play();
+							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
 						}
 						else
 						{

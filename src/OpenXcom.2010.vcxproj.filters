@@ -720,6 +720,9 @@
     <ClCompile Include="Engine\FastLineClip.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\OptionsControlsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1444,6 +1447,9 @@
     </ClInclude>
     <ClInclude Include="Engine\FastLineClip.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsControlsState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

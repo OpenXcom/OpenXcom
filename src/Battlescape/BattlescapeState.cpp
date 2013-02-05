@@ -46,7 +46,6 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -1171,7 +1170,7 @@ void BattlescapeState::handle(Action *action)
 			{
 				if (_save->getSelectedUnit()->checkAmmo())
 				{
-					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(17)->play();
+					_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
 					updateSoldierInfo();
 				}
 			}

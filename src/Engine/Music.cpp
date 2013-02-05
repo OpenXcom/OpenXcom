@@ -76,6 +76,7 @@ void Music::play() const
 	if (!Options::getBool("mute") && _music != 0 && Mix_PlayMusic(_music, -1) == -1)
 	{
 		Log(LOG_WARNING) << Mix_GetError();
+		Mix_HaltMusic();
 	}
 }
 

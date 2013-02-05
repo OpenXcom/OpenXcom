@@ -65,6 +65,8 @@ public:
 	void btnDefaultClick(Action *action);
 	/// Handler for clicking the Language button.
 	void btnLanguageClick(Action *action);
+	/// Handler for clicking the Language button.
+	void btnControlsClick(Action *action);
 	/// Handler for clicking the Next Resolution button.
 	void btnDisplayUpClick(Action *action);
 	/// Handler for clicking the Previous Resolution button.

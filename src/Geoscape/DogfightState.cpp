@@ -38,7 +38,6 @@
 #include "../Ruleset/RuleUfo.h"
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/CraftWeaponProjectile.h"
@@ -793,7 +792,7 @@ void DogfightState::move()
 						}
 						setStatus("STR_UFO_HIT");
 						_currentRadius += 4;
-						_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play(); //12
+						_game->getResourcePack()->getSound("GEO.CAT", 12)->play(); //12
 						p->remove();
 					}
 					// Missed.
@@ -832,7 +831,7 @@ void DogfightState::move()
 						_craft->setDamage(_craft->getDamage() + damage);
 						drawCraftDamage();
 						setStatus("STR_INTERCEPTOR_DAMAGED");
-						_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
+						_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
 					}
 					p->remove();
 				}
@@ -973,7 +972,7 @@ void DogfightState::move()
 	{
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 		_timeout += 30;
-		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(13)->play();
+		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
 		_end = true;
 		_destroyCraft = true;
 		_ufoWtimer->stop();
@@ -1034,7 +1033,7 @@ void DogfightState::move()
 					}
 				}
 				setStatus("STR_UFO_DESTROYED");
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //11
+				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //11
 			}
 			_destroyUfo = true;
 		}
@@ -1043,7 +1042,7 @@ void DogfightState::move()
 			if(_ufo->getShotDownByCraftId() == _craft->getId())
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
+				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
 				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
@@ -1105,7 +1104,7 @@ void DogfightState::fireWeapon1()
 		p->setHorizontalPosition(HP_LEFT);
 		_projectiles.push_back(p);
 
-		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w1->getRules()->getSound())->play();
+		_game->getResourcePack()->getSound("GEO.CAT", w1->getRules()->getSound())->play();
 	}
 }
 
@@ -1129,7 +1128,7 @@ void DogfightState::fireWeapon2()
 		p->setHorizontalPosition(HP_RIGHT);
 		_projectiles.push_back(p);
 
-		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w2->getRules()->getSound())->play();
+		_game->getResourcePack()->getSound("GEO.CAT", w2->getRules()->getSound())->play();
 	}
 }
 
@@ -1153,7 +1152,7 @@ void DogfightState::ufoFireWeapon()
 	p->setHorizontalPosition(HP_CENTER);
 	p->setPosition(_currentDist - (_currentRadius / 2));
 	_projectiles.push_back(p);
-	_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(8)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", 8)->play();
 }
 
 /**

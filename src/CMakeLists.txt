@@ -353,6 +353,8 @@ set ( menu_src
   Menu/DeleteGameState.h
   Menu/SavedGameState.cpp
   Menu/SavedGameState.h
+  Menu/OptionsControlsState.cpp
+  Menu/OptionsControlsState.h
 )
 
 set ( resource_src
