@@ -332,7 +332,7 @@ void BattlescapeGame::endTurn()
 			{
 				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
-				p.z = _save->getTiles()[i]->getPosition().z*24 + _save->getTiles()[i]->getTerrainLevel();
+				p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
 				statePushBack(0);
