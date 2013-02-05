@@ -26,7 +26,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
 #include "../Engine/GMCat.h"
-#include "../Engine/SoundSet.h"
+#include "../engine/SoundSet.h"
 #include "../Engine/Options.h"
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"
@@ -38,7 +38,7 @@
 #include "../Savegame/Node.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
-#include "../Engine/Logger.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -327,6 +327,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		for (int i = 0; i < 17; ++i)
 		{
 			bool loaded = false;
+			// Try digital tracks
 			for (int j = 0; j < 3; ++j)
 			{
 				std::stringstream s;
@@ -341,11 +342,13 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			}
 			if (!loaded)
 			{
+				// Try Adlib music
 				if (cat && tracks[i] != -1)
 				{
 					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
 					loaded = true;
 				}
+				// Try MIDI music
 				else
 				{
 					std::stringstream s;
@@ -355,14 +358,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 						_musics[mus[i]] = new Music();
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
 						loaded = true;
-						break;
 					}
 				}
 			}
-			if (!loaded)
+			if (!loaded && tracks[i] != -1)
 			{
-				//_musics[mus[i]] = new Music();
-				Log(LOG_WARNING) << "Missing music: " << mus[i];
+				throw Exception(mus[i] + " not found");
 			}
 		}
 		delete gmcat;
@@ -400,8 +401,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		{
 			if (cats == 0)
 			{
-				_sounds[catsId[i]] = new SoundSet();
-				Log(LOG_WARNING) << "Missing soundset: " << catsId[i];
+				throw Exception(cats[i] + " not found");
 			}
 			else
 			{
@@ -411,12 +411,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
 			}
 		}
-
-		TextButton::soundPress = _sounds["GEO.CAT"]->getSound(0);
-		Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
-		Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
-		Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
 	}
+
+	TextButton::soundPress = getSound("GEO.CAT", 0);
+	Window::soundPopup[0] = getSound("GEO.CAT", 1);
+	Window::soundPopup[1] = getSound("GEO.CAT", 2);
+	Window::soundPopup[2] = getSound("GEO.CAT", 3);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 }

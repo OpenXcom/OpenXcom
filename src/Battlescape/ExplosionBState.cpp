@@ -31,7 +31,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
@@ -107,9 +106,9 @@ void ExplosionBState::init()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		// explosion sound
 		if (_power <= 80)
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(12)->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 		else
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(5)->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 		if (t->isDiscovered(0))
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 	}
@@ -121,7 +120,7 @@ void ExplosionBState::init()
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
-		_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_item->getRules()->getHitSound())->play();
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
 		if (t->getVisible() || (t->getUnit() && t->getUnit()->getFaction() == FACTION_PLAYER) || _parent->getSave()->getSide() == FACTION_PLAYER)
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
 	}

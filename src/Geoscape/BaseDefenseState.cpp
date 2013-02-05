@@ -37,7 +37,6 @@
 #include "../Engine/RNG.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "BaseDestroyedState.h"
 #include <ctime>
@@ -133,7 +132,7 @@ void BaseDefenseState::think()
 		if (_action == BDA_DESTROY)
 		{
 			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str()," "," ");
-			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
+			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
 			_action = BDA_END;
 			return;
 		}
@@ -174,7 +173,7 @@ void BaseDefenseState::think()
 		if (_action == BDA_FIRE)
 		{
 			_lstDefenses->setCellText(_row, 1, _game->getLanguage()->getString("STR_FIRING").c_str());
-			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((def)->getRules()->getFireSound())->play();
+			_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
 			_action = BDA_RESOLVE;
 			return;
 		}
@@ -188,7 +187,7 @@ void BaseDefenseState::think()
 			else
 			{
 				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_HIT").c_str());
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((def)->getRules()->getHitSound())->play();
+				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
 			}
 			if (_ufo->getStatus() == Ufo::DESTROYED)

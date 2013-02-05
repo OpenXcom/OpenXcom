@@ -29,7 +29,6 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Armor.h"
@@ -67,15 +66,15 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	{
 		if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
 		}
 		else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
 		}
 		else
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getDeathSound())->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
 		}
 	}
 	if (_unit->getTurnsExposed())

@@ -36,6 +36,7 @@ class Polygon;
 class Polyline;
 class Music;
 class SoundSet;
+class Sound;
 class SavedBattleGame;
 class RuleTerrain;
 class MapBlock;
@@ -51,6 +52,9 @@ class MapBlock;
  */
 class ResourcePack
 {
+private:
+	Music *_muteMusic;
+	Sound *_muteSound;
 protected:
 	std::map<std::string, Palette*> _palettes;
 	std::map<std::string, Font*> _fonts;
@@ -80,8 +84,8 @@ public:
 	Music *getMusic(const std::string &name) const;
 	/// Gets a random music.
 	Music *getRandomMusic(const std::string &name) const;
-	/// Gets a particular sound set.
-	SoundSet *getSoundSet(const std::string &name) const;
+	/// Gets a particular sound.
+	Sound *getSound(const std::string &set, unsigned int sound) const;
 	/// Gets a particular palette.
 	Palette *getPalette(const std::string &name) const;
 	/// Sets a new palette.
