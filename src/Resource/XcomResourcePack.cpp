@@ -26,7 +26,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
 #include "../Engine/GMCat.h"
-#include "../engine/SoundSet.h"
+#include "../Engine/SoundSet.h"
 #include "../Engine/Options.h"
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"

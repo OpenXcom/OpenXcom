@@ -18,6 +18,7 @@
  */
 #include "CrossPlatform.h"
 #include <algorithm>
+#include <iostream>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
