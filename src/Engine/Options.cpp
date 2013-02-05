@@ -92,9 +92,10 @@ void createDefault()
 	setBool("strafe", false);
 	setBool("battleNotifyDeath", false);
 	// controls
-	setInt("keyAcceptWindow", SDLK_RETURN);
-	setInt("keyIgnoreWindow", SDLK_ESCAPE);
+	setInt("keyOk", SDLK_RETURN);
+	setInt("keyCancel", SDLK_ESCAPE);
 	setInt("keyScreenshot", SDLK_F12);
+	setInt("keyFps", SDLK_F5);
 	setInt("keyGeoLeft", SDLK_LEFT);
 	setInt("keyGeoRight", SDLK_RIGHT);
 	setInt("keyGeoUp", SDLK_UP);
