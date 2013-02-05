@@ -93,7 +93,7 @@ public:
 	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
 	bool validMeleeRange(Position pos, int direction, int size, int height, BattleUnit *target);
 	int faceWindow(const Position &position);
-
+	bool canTargetVoxel(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit* excludeUnit);
 };
 
 }

@@ -239,8 +239,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	if (unit->isOut())
 		return false;
 	Position pos = unit->getPosition();
-	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) > 24)
-		++pos.z;
+//	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) > 24)
+//		++pos.z;
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
 		if (direction%2)
@@ -364,54 +364,24 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	}
 
 	// determine the origin and target voxels for the raytrace
-	Position originVoxel, targetVoxel;
-	std::vector<Position> _trajectory;
+	Position originVoxel;
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-	originVoxel.z += currentUnit->getHeight();
+	originVoxel.z += currentUnit->getHeight()-1; //one voxel lower (eye level)
+
+	// fix!!! need to add flying elevation
 	bool unitSeen = false;
 	// for large units origin voxel is in the middle
 	if (currentUnit->getArmor()->getSize() > 1)
 	{
 		originVoxel.x += 8;
 		originVoxel.y += 8;
+		originVoxel.z += 1; //topmost voxel
 	}
 
-	targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
-	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
-	int targetMaxHeight = targetMinHeight;
-	// if there is an other unit on target tile, we assume we want to check against this unit's height
-	BattleUnit *otherUnit = tile->getUnit();
-	if (otherUnit && !otherUnit->isOut())
-	{
-		targetMaxHeight += otherUnit->getHeight();
-	}
-	else
-	{
-		targetMaxHeight += 12;
-	}
-
-	// scan ray from top to bottom
-	for (int i = targetMaxHeight; i > targetMinHeight; i-=2)
-	{
-		targetVoxel.z = i;
-		_trajectory.clear();
-		int test = calculateLine(originVoxel, targetVoxel, false, &_trajectory, currentUnit, true, true);
-		if (test == 4)
-		{
-			Position hitPosition = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (tile->getPosition() == hitPosition)
-			{
-				unitSeen = true;
-				break;
-			}
-		}
-		if (test == -1)
-		{
-			unitSeen = true;
-			break;
-		}
-	}
+	Position scanVoxel;
+	std::vector<Position> _trajectory;
+	unitSeen = canTargetVoxel(&originVoxel, tile, &scanVoxel, currentUnit);
 
 	if (unitSeen)
 	{
@@ -419,7 +389,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		// initial smoke "density" of a smoke grenade is around 10 per tile
 		// we do density/2 to get the decay of visibility, so in fresh smoke we only have 4 tiles of visibility
 		_trajectory.clear();
-		calculateLine(originVoxel, targetVoxel, true, &_trajectory, currentUnit);
+		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		Tile *t = _save->getTile(currentUnit->getPosition());
 		int maxViewDistance = MAX_VIEW_DISTANCE - (t->getSmoke()/2);
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
@@ -439,9 +409,76 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 			unitSeen = false;
 		}
 	}
-
 	return unitSeen;
 }
+
+/**
+ * Check for an another unit is available for targeting and what particular voxel
+ * @param originVoxel voxel of trace origin (eye or gun's barrel)
+ * @param tile the tile to check for
+ * @param scanVoxel is returned coordinate of hit
+ * @param excludeUnit is self (not to hit self)
+ * @return true/false
+ */
+bool TileEngine::canTargetVoxel(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit* excludeUnit)
+{
+	bool unitSeen = false;
+	Position targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
+	std::vector<Position> _trajectory;
+	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
+	int targetMaxHeight = targetMinHeight;
+	int targetCenterHeight;
+	// if there is an other unit on target tile, we assume we want to check against this unit's height
+	int unitRadius = 4; //fix!!! must be taken from unit width value of race data
+	int sliceTargets[10]={0,0,0,unitRadius,0,-unitRadius,unitRadius,0,-unitRadius,0};
+	static int heightOrder[11]={0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
+	int heightRange;
+	BattleUnit *otherUnit = tile->getUnit();
+
+	if (otherUnit && !otherUnit->isOut())
+	{
+		heightRange = otherUnit->getHeight();
+	}
+	else
+	{
+		heightRange = 12;
+	}
+
+	targetMaxHeight += heightRange;
+	targetCenterHeight=(targetMaxHeight+targetMinHeight)/2;
+	heightRange/=2;
+	if (heightRange>10) heightRange=10;
+	if (heightRange<=0) heightRange=0;
+
+	// scan ray from top to bottom  plus different parts of target cylinder
+	for (int i = 0; i <= heightRange; ++i)
+	{
+		scanVoxel->z=targetCenterHeight+heightOrder[i];
+		for (int j = 0; j < 5; ++j)
+		{
+			scanVoxel->x=targetVoxel.x+sliceTargets[j*2];
+			scanVoxel->y=targetVoxel.y+sliceTargets[j*2+1];
+			_trajectory.clear();
+			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, true);
+			if (test == 4)
+			{
+				//voxel of hit must be inside of scanned box
+				if (_trajectory.at(0).x/16==scanVoxel->x/16 &&
+					_trajectory.at(0).y/16==scanVoxel->y/16 &&
+					_trajectory.at(0).z>=targetMinHeight &&
+					_trajectory.at(0).z<=targetMaxHeight)
+				{
+					unitSeen = true;
+					return unitSeen;
+				}
+			}
+		}
+	}
+	return unitSeen;
+}
+
+
+
 /**
  * Calculates line of sight of a soldiers within range of the Position
  * (used when terrain has changed, which can reveal new parts of terrain or units)
