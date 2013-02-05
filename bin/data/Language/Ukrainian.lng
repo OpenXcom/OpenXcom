@@ -889,6 +889,8 @@ STR_SILACOID
 Силакоїд
 STR_CHRYSSALID
 Крисалід
+STR_ZOMBIE
+Зомбі
 STR_REAPER
 Рипер
 STR_SECTOPOD
@@ -2072,9 +2074,9 @@ STR_POLAR
 STR_RANDOM_BATTLE
 Випадкова Битва
 STR_MIXED
-змішаний
+Змішаний
 STR_RIGHT_CLICK_TO_DELETE
-Клацніть правою кнопкою миші видалити.
+Клацніть правою кнопкою миші щоб видалити.
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
 Немає {1} для озброєння ВБП
 STR_DAY_1
@@ -2095,3 +2097,11 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} поза Зоною Виходу
 STR_ABANDON_GAME_QUESTION
 ВІДМОВИТИСЬ ВІД ГРИ?
+STR_HAS_BEEN_KILLED
+був вбитий
+STR_DRAG_SCROLL
+DRAG SCROLL
+STR_CONTROLS
+УПРАВЛІННЯ
+STR_RESTORE_DEFAULTS
+За Замовчуванням
