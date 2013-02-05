@@ -82,8 +82,8 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
-	/// Unloads the selected weapon.
-	void unload();
+	/// Unloads the selected weapon
+	bool unload();
 	/// Arranges items on the ground.
 	void arrangeGround();
 };
