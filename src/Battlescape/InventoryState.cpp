@@ -274,15 +274,17 @@ void InventoryState::btnUnloadClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
-		_inv->unload();
-		_txtItem->setText(L"");
-		_txtAmmo->setText(L"");
-		_selAmmo->clear();
-		if (_tu)
+		if (_inv->unload() == true)
 		{
-			std::wstringstream ss;
-			ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
-			_txtTus->setText(ss.str());
+			_txtItem->setText(L"");
+			_txtAmmo->setText(L"");
+			_selAmmo->clear();
+			if (_tu)
+			{
+				std::wstringstream ss;
+				ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
+				_txtTus->setText(ss.str());
+			}
 		}
 	}
 }
