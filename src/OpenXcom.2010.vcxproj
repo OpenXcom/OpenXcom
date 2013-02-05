@@ -358,6 +358,7 @@
     <ClCompile Include="Menu\NewBattleState.cpp" />
     <ClCompile Include="Menu\NewGameState.cpp" />
     <ClCompile Include="Menu\NoteState.cpp" />
+    <ClCompile Include="Menu\OptionsControlsState.cpp" />
     <ClCompile Include="Menu\OptionsState.cpp" />
     <ClCompile Include="Menu\SavedGameState.cpp" />
     <ClCompile Include="Menu\SaveState.cpp" />
@@ -602,6 +603,7 @@
     <ClInclude Include="Menu\NewBattleState.h" />
     <ClInclude Include="Menu\NewGameState.h" />
     <ClInclude Include="Menu\NoteState.h" />
+    <ClInclude Include="Menu\OptionsControlsState.h" />
     <ClInclude Include="Menu\OptionsState.h" />
     <ClInclude Include="Menu\SavedGameState.h" />
     <ClInclude Include="Menu\SaveState.h" />

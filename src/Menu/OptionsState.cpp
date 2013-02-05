@@ -33,6 +33,7 @@
 #include "../Interface/ArrowButton.h"
 #include "LanguageState.h"
 #include "MainMenuState.h"
+#include "OptionsControlsState.h"
 
 namespace OpenXcom
 {
@@ -53,29 +54,29 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnDefault = new TextButton(100, 16, 212, 176);
 
 	_txtDisplayResolution = new Text(120, 9, 8, 32);
-	_txtDisplayWidth = new TextEdit(48, 16, 16, 42);
-	_txtDisplayX = new Text(16, 16, 60, 42);
-	_txtDisplayHeight = new TextEdit(48, 16, 72, 42);
-	_btnDisplayUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 120, 32);
-	_btnDisplayDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 120, 50);
+	_txtDisplayWidth = new TextEdit(48, 16, 10, 47);
+	_txtDisplayX = new Text(16, 16, 56, 47);
+	_txtDisplayHeight = new TextEdit(48, 16, 68, 47);
+	_btnDisplayUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 120, 36);
+	_btnDisplayDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 120, 58);
 
-	_txtDisplayMode = new Text(120, 9, 150, 32);
-	_btnDisplayWindowed = new TextButton(78, 16, 150, 42);
-	_btnDisplayFullscreen = new TextButton(78, 16, 232, 42);
+	_txtDisplayMode = new Text(120, 9, 164, 32);
+	_btnDisplayWindowed = new TextButton(120, 16, 164, 42);
+	_btnDisplayFullscreen = new TextButton(120, 16, 164, 60);
 
-	_txtMusicVolume = new Text(120, 9, 8, 62);
-	_btnMusicVolume1 = new TextButton(22, 14, 8, 72);
-	_btnMusicVolume2 = new TextButton(22, 18, 32, 72);
-	_btnMusicVolume3 = new TextButton(22, 22, 56, 72);
-	_btnMusicVolume4 = new TextButton(22, 26, 80, 72);
-	_btnMusicVolume5 = new TextButton(22, 30, 104, 72);
+	_txtMusicVolume = new Text(120, 9, 8, 82);
+	_btnMusicVolume1 = new TextButton(22, 14, 8, 92);
+	_btnMusicVolume2 = new TextButton(22, 18, 32, 92);
+	_btnMusicVolume3 = new TextButton(22, 22, 56, 92);
+	_btnMusicVolume4 = new TextButton(22, 26, 80, 92);
+	_btnMusicVolume5 = new TextButton(22, 30, 104, 92);
 
-	_txtSoundVolume = new Text(120, 9, 150, 62);
-	_btnSoundVolume1 = new TextButton(22, 14, 150, 72);
-	_btnSoundVolume2 = new TextButton(22, 18, 174, 72);
-	_btnSoundVolume3 = new TextButton(22, 22, 198, 72);
-	_btnSoundVolume4 = new TextButton(22, 26, 222, 72);
-	_btnSoundVolume5 = new TextButton(22, 30, 246, 72);
+	_txtSoundVolume = new Text(120, 9, 164, 82);
+	_btnSoundVolume1 = new TextButton(22, 14, 164, 92);
+	_btnSoundVolume2 = new TextButton(22, 18, 188, 92);
+	_btnSoundVolume3 = new TextButton(22, 22, 212, 92);
+	_btnSoundVolume4 = new TextButton(22, 26, 236, 92);
+	_btnSoundVolume5 = new TextButton(22, 30, 260, 92);
 
 	/* Get available fullscreen/hardware modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWPALETTE);
@@ -180,6 +181,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(_game->getLanguage()->getString("STR_CONTROLS"));
+	_btnControls->onMouseClick((ActionHandler)&OptionsState::btnControlsClick);
 
 
 	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
@@ -352,6 +354,15 @@ void OptionsState::btnDefaultClick(Action *)
 void OptionsState::btnLanguageClick(Action *)
 {
 	_game->setState(new LanguageState(_game));
+}
+
+/**
+ * Shows the Controls screen.
+ * @param action Pointer to an action.
+ */
+void OptionsState::btnControlsClick(Action *)
+{
+	_game->pushState(new OptionsControlsState(_game));
 }
 
 /**
