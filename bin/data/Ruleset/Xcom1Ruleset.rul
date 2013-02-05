@@ -8389,7 +8389,7 @@ ufopaedia:
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     requires:
-      - STR_ETHEREAL_
+      - STR_ETHEREAL
     image_id: UP016.SPK
     text: STR_ETHEREAL_UFOPEDIA
     text_width: 158

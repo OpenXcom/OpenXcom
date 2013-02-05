@@ -59,13 +59,19 @@ namespace OpenXcom
 	 * @param article_id Article id to find.
 	 * @returns Index of the given article id in the internal list, -1 if not found.
 	 */
-	size_t Ufopaedia::getArticleIndex(Game *game, const std::string &article_id)
+	size_t Ufopaedia::getArticleIndex(Game *game, std::string &article_id)
 	{
+		std::string UC_ID = article_id + "_UC";
 		ArticleDefinitionList articles = getAvailableArticles(game);
 		for (size_t it=0; it<articles.size(); ++it)
 		{
 			if (articles[it]->id == article_id)
 			{
+				return it;
+			}
+			if (articles[it]->id == UC_ID)
+			{
+				article_id = UC_ID;
 				return it;
 			}
 		}

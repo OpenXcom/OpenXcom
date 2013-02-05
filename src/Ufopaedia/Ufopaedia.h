@@ -90,7 +90,7 @@ namespace OpenXcom
 		static size_t _current_index;
 
 		/// get index of the given article id in the visible list.
-		static size_t getArticleIndex(Game *game, const std::string &article_id);
+		static size_t getArticleIndex(Game *game, std::string &article_id);
 
 		/// get list of researched articles
 		static ArticleDefinitionList getAvailableArticles(Game *game);
