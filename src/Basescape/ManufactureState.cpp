@@ -193,13 +193,13 @@ void ManufactureState::fillProductionList()
 		std::wstringstream s2;
 		s2 << (*iter)->getAmountProduced();
 		std::wstringstream s3;
-		s3 << (*iter)->getAmountRemaining();
+		s3 << (*iter)->getAmountTotal();
 		std::wstringstream s4;
 		s4 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wstringstream s5;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
-			int timeLeft = (*iter)->getAmountRemaining () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
+			int timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
