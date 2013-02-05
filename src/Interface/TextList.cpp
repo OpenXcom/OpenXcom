@@ -603,30 +603,32 @@ void TextList::clearList()
 }
 
 /**
- * Scrolls the text in the list up by one row.
+ * Scrolls the text in the list up by one row or to the top.
+ * @param toMax If true then scrolls to the top of the list. false => one row up
  */
-void TextList::scrollUp()
+void TextList::scrollUp(bool toMax)
 {
 	if (!_scrolling)
 		return;
 	if (_texts.size() > _visibleRows && _scroll > 0)
 	{
-		_scroll--;
+		if (toMax) _scroll=0; else _scroll--;
 		_redraw = true;
 	}
 	updateArrows();
 }
 
 /**
- * Scrolls the text in the list down by one row.
+ * Scrolls the text in the list down by one row or to the bottom.
+ * @param toMax If true then scrolls to the bottom of the list. false => one row down
  */
-void TextList::scrollDown()
+void TextList::scrollDown(bool toMax)
 {
 	if (!_scrolling)
 		return;
 	if (_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows)
 	{
-		_scroll++;
+		if (toMax) _scroll=_texts.size()-_visibleRows; else _scroll++;
 		_redraw = true;
 	}
 	updateArrows();
@@ -749,11 +751,11 @@ void TextList::mousePress(Action *action, State *state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-		scrollUp();
+		scrollUp(false);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
-		scrollDown();
+		scrollDown(false);
 	}
 }
 
