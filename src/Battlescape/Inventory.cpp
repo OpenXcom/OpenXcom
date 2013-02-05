@@ -541,14 +541,15 @@ void Inventory::mouseClick(Action *action, State *state)
 /**
  * Unloads the selected weapon, placing the gun
  * on the right hand and the ammo on the left hand.
+ * @return The success of the weapon being unlaoded
  */
-void Inventory::unload()
+bool Inventory::unload()
 {
 	// Hands must be free
 	for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
 	{
 		if ((*i)->getSlot()->getType() == INV_HAND && (*i) != _selItem)
-			return;
+			return false;
 	}
 
 	if (_selUnit->spendTimeUnits(8, !_tu))
@@ -563,7 +564,10 @@ void Inventory::unload()
 	else
 	{
 		_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+		return false;
 	}
+
+	return true;
 }
 
 /**
