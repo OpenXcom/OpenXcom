@@ -889,6 +889,8 @@ STR_SILACOID
 Szilakoid
 STR_CHRYSSALID
 Krisszalid
+STR_ZOMBIE
+Zombi
 STR_REAPER
 Arató
 STR_SECTOPOD
@@ -2054,7 +2056,7 @@ Kijelző Mód
 STR_WINDOWED
 Ablakos
 STR_FULLSCREEN
-Teljesképernyő
+Teljesképernyős
 STR_LANGUAGE
 NYELV
 STR_FARM
@@ -2083,9 +2085,21 @@ STR_EQUIPMENT_FOR_craftname
 Felszerelések: {1}
 STR_SELECT_SQUAD_FOR_craftname
 Válassz osztagot: {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+{N} egység elhagyásra kész
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} egység elhagyásra kész
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+{N} egység elhagyásra nem kész
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} egység elhagyásra nem kész
 STR_ABANDON_GAME_QUESTION
 ABBAHAGYOD A JÁTÉKOT?
+STR_HAS_BEEN_KILLED
+-t megölték
+STR_DRAG_SCROLL
+VONSZOLÁS
+STR_CONTROLS
+VEZÉRLÉS
+STR_RESTORE_DEFAULTS
+Alapértékek
