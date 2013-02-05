@@ -30,12 +30,12 @@ Production::Production (const RuleManufacture * rules, int amount) : _rules(rule
 {
 }
 
-int Production::getAmountRemaining () const
+int Production::getAmountTotal () const
 {
 	return _amount;
 }
 
-void Production::setAmountRemaining (int amount)
+void Production::setAmountTotal (int amount)
 {
 	_amount = amount;
 }
@@ -128,7 +128,7 @@ void Production::save(YAML::Emitter &out)
 	out << YAML::Key << "item" << YAML::Value << getRules ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
 	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
-	out << YAML::Key << "amount" << YAML::Value << getAmountRemaining ();
+	out << YAML::Key << "amount" << YAML::Value << getAmountTotal ();
 	out << YAML::EndMap;
 }
 
@@ -142,6 +142,6 @@ void Production::load(const YAML::Node &node)
 	node["amount"] >> amount;
 	setAssignedEngineers(assigned);
 	setTimeSpent(spent);
-	setAmountRemaining(amount);
+	setAmountTotal(amount);
 }
 };
