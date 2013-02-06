@@ -6803,7 +6803,6 @@ research:
   - name: STR_CYDONIA_DEP
     cost: 0
     points: 0
-    dependencies:
     unlocks:
       - STR_CYDONIA_OR_BUST
     requires:
