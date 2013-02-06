@@ -340,7 +340,7 @@ void ArrowButton::mouseRelease(Action *action, State *state)
 void ArrowButton::mouseClick(Action *action, State *state)
 {
 	ImageButton::mouseClick(action, state);
-	if (SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
+	if (0 != _list && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
 		if (_shape == ARROW_BIG_UP) _list->scrollUp(true);
 		else if (_shape == ARROW_BIG_DOWN) _list->scrollDown(true);
 	}
