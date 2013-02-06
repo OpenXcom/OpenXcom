@@ -191,7 +191,8 @@ void PatrolBAIState::think(BattleAction *action)
 		// in base defense missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
 		if (_game->getMissionType() == "STR_BASE_DEFENSE" && _unit->getArmor()->getSize() == 1)
 		{
-			if (_fromNode->isTarget())
+			// can i shoot an object?
+			if (_fromNode->isTarget() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
 			{
 				// scan this room for objects to destroy
 				int x = (_unit->getPosition().x/10)*10;
