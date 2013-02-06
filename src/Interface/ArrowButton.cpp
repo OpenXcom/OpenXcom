@@ -296,11 +296,11 @@ void ArrowButton::scroll()
 {
 	if (_shape == ARROW_BIG_UP)
 	{
-		_list->scrollUp();
+		_list->scrollUp(false);
 	}
 	else if (_shape == ARROW_BIG_DOWN)
 	{
-		_list->scrollDown();
+		_list->scrollDown(false);
 	}
 }
 
@@ -329,6 +329,20 @@ void ArrowButton::mouseRelease(Action *action, State *state)
 	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->stop();
+	}
+}
+
+/*
+ * Scrolls the associated list to top or bottom.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void ArrowButton::mouseClick(Action *action, State *state)
+{
+	ImageButton::mouseClick(action, state);
+	if (0 != _list && SDL_BUTTON_RIGHT == action->getDetails()->button.button) {
+		if (_shape == ARROW_BIG_UP) _list->scrollUp(true);
+		else if (_shape == ARROW_BIG_DOWN) _list->scrollDown(true);
 	}
 }
 
