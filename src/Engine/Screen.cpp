@@ -30,6 +30,17 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 
+#ifdef __GNUC__
+#define GCC_SSE2
+// TODO gcc intrinsics
+#else
+#	ifdef _WIN32
+#define VS_SSE2 true
+// probably Visual Studio (or Intel C++ which should also work)
+#include <emmintrin.h> // for SSE2 intrinsics; see http://msdn.microsoft.com/en-us/library/has3d153%28v=vs.71%29.aspx
+#	endif
+#endif
+
 namespace OpenXcom
 {
 
@@ -141,7 +152,7 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using somewhat fast 2X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDstRow += dst->pitch*2)
+	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*2)
 	{
 		Uint64 *pixelDst = (Uint64*)pixelDstRow;
 		Uint64 *pixelDst2 = (Uint64*)(pixelDstRow + dst->pitch);	
@@ -208,7 +219,7 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using 32-bit 2X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDstRow += dst->pitch*2)
+	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*2)
 	{
 		Uint32 *pixelDst = (Uint32*)pixelDstRow;
 		Uint32 *pixelDst2 = (Uint32*)(pixelDstRow + dst->pitch);	
@@ -263,7 +274,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using modestly fast 4X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDst += dst->pitch*3)
+	for (sy = 0; sy < src->h; ++sy, pixelDst += dst->pitch*3)
 	{
 		/* Uint8 *pixelDst = pixelDstRow;*/
 		for (sx = 0; sx < src->w; sx += 8, pixelSrc += 8)
@@ -322,7 +333,7 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using 32-bit 4X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy, dataSrc += src->pitch, pixelDstRow += dst->pitch*4)
+	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*4)
 	{
 		Uint32 *pixelDst = (Uint32*)pixelDstRow;
 		Uint32 *pixelDst2 = (Uint32*)(pixelDstRow + dst->pitch);
@@ -356,6 +367,56 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 	return 0;
 }
 
+#ifdef VS_SSE2
+/**
+ *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
+ *  Used internally by _zoomSurfaceY() below.
+ *	This is an SSE2 version written with Visual Studio intrinsics.
+ *  source and dest. widths must be multiples of 16 bytes for 128-bit access
+ *  and it would help if they were aligned properly... :(
+ */
+static int zoomSurface4X_VStudio_SSE2(SDL_Surface *src, SDL_Surface *dst)
+{
+	__m128i dataSrc;
+	__m128i dataDst;
+	Uint8 *pixelSrc = (Uint8*)src->pixels;
+	Uint8 *pixelDst = (Uint8*)dst->pixels;
+	int sx, sy;
+	static bool proclaimed = false;
+	
+	if (!proclaimed)
+	{
+		proclaimed = true;
+		Log(LOG_INFO) << "Using SSE2 4X zoom routine.";
+	}
+
+	for (sy = 0; sy < src->h; ++sy, pixelDst += dst->pitch*3)
+	{
+		for (sx = 0; sx < src->w; sx += 16, pixelSrc += 16)
+		{
+			dataSrc = *((__m128i*) pixelSrc);
+
+			for (int i = 0; i < 4; ++i)
+			{
+				dataDst = _mm_unpacklo_epi8(dataSrc, dataSrc); // http://msdn.microsoft.com/en-us/library/has3d153%28v=vs.71%29.aspx#vcref_mm_unpackhi_epi8
+				dataDst = _mm_unpacklo_epi8(dataDst, dataDst);
+
+				*((__m128i*)pixelDst) = dataDst;
+				*((__m128i*)(pixelDst + dst->pitch)) = dataDst;
+				*((__m128i*)(pixelDst + dst->pitch*2)) = dataDst;
+				*((__m128i*)(pixelDst + dst->pitch*3)) = dataDst;
+				pixelDst += 16; // forward 16 bytes!
+				dataSrc = _mm_srli_si128(dataSrc, 4); // shift right by four bytes
+			}
+		}
+	}
+	
+	return 0;
+}
+
+#endif
+
+
 /**
  * Internal 8 bit Zoomer without smoothing.
  * Source code originally from SDL_gfx (LGPL) with permission by author.
@@ -384,6 +445,9 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 
 	if (src->format->BytesPerPixel == 1 && dst->format->BytesPerPixel == 1)
 	{
+#ifdef VS_SSE2
+		if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_VStudio_SSE2(src, dst);
+#endif
 // __WORDSIZE is defined on Linux, SIZE_MAX on Windows
 #if defined(__WORDSIZE) && (__WORDSIZE == 64) || defined(SIZE_MAX) && (SIZE_MAX > 0xFFFFFFFF)
 		if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_64bit(src, dst);
