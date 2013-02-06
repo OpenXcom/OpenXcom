@@ -130,19 +130,7 @@ void NewResearchListState::fillProjectList ()
 	{
 		if((*it)->getRequirements().size() == 0)
 		{
-			if((*it)->getStringTemplate().size() == 0)
-			{
-				_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
-			}
-			else
-			{
-				std::wstring ss;
-				for(size_t st = 0; st != (*it)->getStringTemplate().size(); ++st)
-				{
-					ss += _game->getLanguage()->getString((*it)->getStringTemplate().at(st));
-				}
-				_lstResearch->addRow(1, ss.c_str());
-			}
+			_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
 			++it;
 		}
 		else
