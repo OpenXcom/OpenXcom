@@ -1166,6 +1166,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 	int drift_xy, drift_xz;
 	int cx, cy, cz;
 	Position lastPoint(origin);
+	int result;
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -1224,26 +1225,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		//passes through this point?
 		if (doVoxelCheck)
 		{
-			int result = voxelCheck(Position(cx, cy, cz), excludeUnit);
-			if (LOSCalc)
-			{
-				int result2 = -1;
-				int result3 = -1;
-				int result4 = voxelCheck(Position(cx+1, cy, cz), excludeUnit);
-				int result5 = voxelCheck(Position(cx, cy+1, cz), excludeUnit);
-				if ((cz + 1) % 24)
-					result3 = voxelCheck(Position(cx, cy, cz+1), excludeUnit);
-				if (cz > 0)
-					result2 = voxelCheck(Position(cx, cy, cz-1), excludeUnit);
-				if (result2 != -1)
-					result = result2;
-				if (result3 != -1)
-					result = result3;
-				if (result4 != -1)
-					result = result4;
-				if (result5 != -1)
-					result = result5;
-			}
+			result = voxelCheck(Position(cx, cy, cz), excludeUnit);
 			if (result != -1)
 			{
 				if (!storeTrajectory && trajectory != 0)
@@ -1255,7 +1237,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		}
 		else
 		{
-			int result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE)
+			result = horizontalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE)
 					   + verticalBlockage(_save->getTile(lastPoint), _save->getTile(Position(cx, cy, cz)), DT_NONE);
 			if (result > 127)
 			{
@@ -1273,6 +1255,22 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		{
 			y = y + step_y;
 			drift_xy = drift_xy + delta_x;
+
+			//check for xy diagonal intermediate voxel step
+			if (doVoxelCheck)
+			{
+				cx = x;	cy = y;
+				if (swap_xy) std::swap(cx, cy);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit);
+				if (result != -1)
+				{
+					if (!storeTrajectory && trajectory != 0)
+					{ // store the position of impact
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+					return result;
+				}
+			}
 		}
 
 		//same in z
@@ -1280,6 +1278,22 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		{
 			z = z + step_z;
 			drift_xz = drift_xz + delta_x;
+
+			//check for xz diagonal intermediate voxel step
+			if (doVoxelCheck)
+			{
+				cx = x;	cz = z;
+				if (swap_xz) std::swap(cx, cz);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit);
+				if (result != -1)
+				{
+					if (!storeTrajectory && trajectory != 0)
+					{ // store the position of impact
+						trajectory->push_back(Position(cx, cy, cz));
+					}
+					return result;
+				}
+			}
 		}
 	}
 
