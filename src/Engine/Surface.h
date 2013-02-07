@@ -37,7 +37,7 @@ class Surface
 {
 protected:
 	SDL_Surface *_surface;
-	void *_misalignedPixelBuffer; // put this back in _surface->pixels to free()
+	void *_misalignedPixelBuffer, *_alignedBuffer;
 	int _x, _y;
 	SDL_Rect _crop;
 	bool _visible, _hidden, _redraw;

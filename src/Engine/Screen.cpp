@@ -76,7 +76,6 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _sc
  */
 Screen::~Screen()
 {
-	if (_misalignedPixelBuffer) _screen->pixels = _misalignedPixelBuffer;
 	delete _surface;
 }
 
@@ -701,8 +700,8 @@ int Screen::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int f
 		static bool _haveSSE2 = haveSSE2();
 
 		if (_haveSSE2 &&
-			!((long)src->pixels % 128) && 
-			!((long)dst->pixels % 128)) // alignment check
+			!((long)src->pixels % 16) && 
+			!((long)dst->pixels % 16)) // alignment check
 		{
 			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_SSE2(src, dst);
 			else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_SSE2(src, dst);
@@ -968,15 +967,6 @@ void Screen::setResolution(int width, int height)
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
-	}
-
-	// fix pixel buffer alignment
-	int offBy = (long)_screen->pixels % 128;
-	if (offBy)
-	{
-		_misalignedPixelBuffer = realloc(_screen->pixels, _screen->h*_screen->pitch + 128); 
-		offBy = (long)_misalignedPixelBuffer % 128;
-		_screen->pixels = (Uint8*)_misalignedPixelBuffer + 128 - offBy;
 	}
 
 	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";

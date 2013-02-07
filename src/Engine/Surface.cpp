@@ -39,25 +39,23 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0)
+Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
-	_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
+	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
+	int rc;
+	int pitch = ((width+15)& ~0xF);
+	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height)))
+	{
+		throw Exception(strerror(rc));
+	}
+	
+	memset(_alignedBuffer, 0, pitch * height);
+	
+	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer,width, height, 8, pitch, 0, 0, 0, 0);
 
 	if (_surface == 0)
 	{
 		throw Exception(SDL_GetError());
-	}
-
-	// fix pixel buffer alignment
-	int offBy = (long)_surface->pixels % 128;
-	if (offBy)
-	{
-		int size = _surface->h * _surface->pitch;
-		_misalignedPixelBuffer = realloc(_surface->pixels, size + 128);
-		offBy = (long)_misalignedPixelBuffer % 128;
-		_surface->pixels = (Uint8*)_misalignedPixelBuffer + 128 - offBy;
-		int toClear = size > 128 ? 128 : size;
-		memset((Uint8*)_surface->pixels + _surface->h*_surface->pitch - toClear, 0, toClear);
 	}
 
 	SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
@@ -86,6 +84,7 @@ Surface::Surface(const Surface& other)
 	_redraw = other._redraw;
 	_originalColors = other._originalColors;
 	_misalignedPixelBuffer = 0;
+	_alignedBuffer = 0;
 }
 
 /**
@@ -93,7 +92,8 @@ Surface::Surface(const Surface& other)
  */
 Surface::~Surface()
 {
-	if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
+	//if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
+	if (_alignedBuffer) free(_alignedBuffer);
 	SDL_FreeSurface(_surface);
 }
 
@@ -143,7 +143,8 @@ void Surface::loadScr(const std::string &filename)
 void Surface::loadImage(const std::string &filename)
 {
 	// Destroy current surface (will be replaced)
-	if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
+	if (_alignedBuffer) free(_alignedBuffer); 
+	_alignedBuffer = 0;
 	SDL_FreeSurface(_surface);
 	_surface = 0;
 	_misalignedPixelBuffer = 0;
