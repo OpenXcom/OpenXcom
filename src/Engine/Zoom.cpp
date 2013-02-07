@@ -30,9 +30,12 @@
 #include <intrin.h>
 #endif
 
+#ifdef __GNUC__
+#include <cpuid.h>
+#endif
+
 #ifdef __SSE2__
 #include <emmintrin.h> // for SSE2 intrinsics; see http://msdn.microsoft.com/en-us/library/has3d153%28v=vs.71%29.aspx
-#include <cpuid.h>
 #endif
 
 
@@ -567,7 +570,7 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 
 static bool haveSSE2()
 {
-	unsigned int CPUInfo[4];
+	int CPUInfo[4];
 
 #ifdef __GNUC__
 	__get_cpuid(1, CPUInfo, CPUInfo+1, CPUInfo+2, CPUInfo+3);
