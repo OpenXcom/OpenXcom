@@ -398,7 +398,7 @@ void BasescapeState::viewClick(Action *)
 		}
 		else
 		{
-			_game->pushState(new DismantleFacilityState(_game, _base, fac));
+			_game->pushState(new DismantleFacilityState(_game, _base, _view, fac));
 		}
 	}
 }
