@@ -109,7 +109,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		else
 		// melee weapon
 		{
-			addItem(BA_HIT, "STR_HIT", &id);
+			addItem(BA_HIT, "STR_HIT_MELEE", &id);
 		}
 	}
 	// special items

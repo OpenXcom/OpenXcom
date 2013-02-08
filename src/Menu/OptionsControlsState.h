@@ -20,6 +20,7 @@
 #define OPENXCOM__OPTIONSCONTROLSSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -29,17 +30,30 @@ class Window;
 class Text;
 class TextList;
 
+struct KeyOption {
+	std::string option;
+	std::string name;
+	SDLKey key;
+};
+
 /**
- * Base class for saved game screens which
- * provides the common layout and listing.
+ * Controls screen which allows the user to
+ * customize the various key shortcuts in the game.
  */
 class OptionsControlsState : public State
 {
-protected:
+private:
 	TextButton *_btnOk, *_btnCancel;
 	Window *_window;
 	Text *_txtTitle;
 	TextList *_lstControls;
+	static KeyOption _controlsGeneral[], _controlsGeo[], _controlsBattle[];
+	int _countGeneral, _countGeo, _countBattle;
+	int _selected;
+	KeyOption *_selKey;
+
+	void addControls(KeyOption keys[], int count);
+	std::string ucWords(std::string str);
 public:
 	/// Creates the Saved Game state.
 	OptionsControlsState(Game *game);
@@ -49,6 +63,10 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
+	/// Handler for clicking the Controls list.
+	void lstControlsClick(Action *action);
+	/// Handler for pressing a key in the Controls list.
+	void lstControlsKeyPress(Action *action);
 };
 
 }
