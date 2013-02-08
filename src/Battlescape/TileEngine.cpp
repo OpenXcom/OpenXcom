@@ -214,6 +214,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	Position test;
 	int direction;
 	bool swap;
+	std::vector<Position> _trajectory;
 	if (Options::getBool("strafe") && (unit->getTurretType() > -1)) {
 		direction = unit->getTurretDirection();
 	}
@@ -239,8 +240,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	if (unit->isOut())
 		return false;
 	Position pos = unit->getPosition();
-//	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) > 24)
-//		++pos.z;
+
+	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24)
+		++pos.z;
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
 		if (direction%2)
@@ -300,17 +302,28 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								for (int yo = 0; yo < size; yo++)
 								{
 									Position poso = pos + Position(xo,yo,0);
-									if (calculateLine(poso, test, false, 0, unit, false) <= 0)
+									_trajectory.clear();
+									int tst = calculateLine(poso, test, true, &_trajectory, unit, false);
+									int tsize = _trajectory.size();
+									if (tst>127) --tsize; //last tile is blocked thus must be cropped
+									for (unsigned int i = 0; i < tsize; i++)
 									{
-										unit->addToVisibleTiles(_save->getTile(test));
-										_save->getTile(test)->setDiscovered(true, 2);
-										_save->getTile(test)->setVisible(+1);
-										// walls to the east or south of a visible tile, we see that too
-										Tile* t = _save->getTile(Position(test.x + 1, test.y, test.z));
-										if (t) t->setDiscovered(true, 0);
-										t = _save->getTile(Position(test.x, test.y + 1, test.z));
-										if (t) t->setDiscovered(true, 1);
+										Position posi = _trajectory.at(i); 
+										//mark every tile of line as visible (as in original)
+										//this is needed because of bresenham narrow stroke. 
+										_save->getTile(posi)->setVisible(+1);
+										if (!_save->getTile(posi)->isDiscovered(2)) //skip already discovered
+										{
+//											unit->addToVisibleTiles(_save->getTile(posi)); //per-unit visiblity? not used.
+											_save->getTile(posi)->setDiscovered(true, 2);
+											// walls to the east or south of a visible tile, we see that too
+											Tile* t = _save->getTile(Position(posi.x + 1, posi.y, posi.z));
+											if (t) t->setDiscovered(true, 0);
+											t = _save->getTile(Position(posi.x, posi.y + 1, posi.z));
+											if (t) t->setDiscovered(true, 1);
+										}
 									}
+
 								}
 							}
 						}
@@ -429,7 +442,7 @@ bool TileEngine::canTargetVoxel(Position *originVoxel, Tile *tile, Position *sca
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
-	int unitRadius = 4; //fix!!! must be taken from unit width value of race data
+	int unitRadius = 3; //fix!!! must be taken from unit width value of race data
 	int sliceTargets[10]={0,0,0,unitRadius,0,-unitRadius,unitRadius,0,-unitRadius,0};
 	static int heightOrder[11]={0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
 	int heightRange;
@@ -836,6 +849,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
 		{
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
 		}
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
@@ -844,6 +858,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 			for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
 			{
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
 			}
 		}
 	}
@@ -852,6 +867,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 		{
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
 		}
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
@@ -860,6 +876,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 			for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 			{
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
 			}
 		}
 	}
@@ -883,10 +900,10 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 
 	// safety check
 	if (startTile == 0 || endTile == 0) return 0;
+	if (startTile->getPosition().z != endTile->getPosition().z) return 0;
 
 	int direction = vectorToDirection(endTile->getPosition() - startTile->getPosition());
 	if (direction == -1) return 0;
-
 	int block = 0;
 
 	switch(direction)
@@ -895,57 +912,107 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		block = blockage(startTile, MapData::O_NORTHWALL, type);
 		break;
 	case 1: // north east
-		block = (blockage(startTile,MapData::O_NORTHWALL, type) + blockage(endTile,MapData::O_WESTWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
-		if (type == DT_HE)
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
+		if (type == DT_NONE) //this is two-way diagonal visiblity check, used in original game
+		{
+			block = blockage(startTile, MapData::O_NORTHWALL, type) + blockage(endTile, MapData::O_WESTWALL, type); //up+right
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type);
+			if (block == 0) break; //this way is opened
+			block = blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_NORTHWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_WESTWALL, type); //right+up
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type);
+}
 		else
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+		{
+			block = (blockage(startTile,MapData::O_NORTHWALL, type) + blockage(endTile,MapData::O_WESTWALL, type))/2
+				+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_NORTHWALL, type))/2;
+			if (type == DT_HE)
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+				blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
+			else
+			block = (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
 				  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
+		}
 		break;
 	case 2: // east
 		block = blockage(endTile,MapData::O_WESTWALL, type);
 		break;
 	case 3: // south east
-		block = (blockage(endTile,MapData::O_WESTWALL, type) + blockage(endTile,MapData::O_NORTHWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
-		if (type == DT_HE)
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
+		if (type == DT_NONE)
+		{
+			block = blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_NORTHWALL, type)
+				+ blockage(endTile, MapData::O_WESTWALL, type); //down+right
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type);
+			if (block == 0) break; //this way is opened
+			block = blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_WESTWALL, type)
+				+ blockage(endTile, MapData::O_NORTHWALL, type); //right+down
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type);
+		}
 		else
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
+		{
+			block = (blockage(endTile,MapData::O_WESTWALL, type) + blockage(endTile,MapData::O_NORTHWALL, type))/2
+				+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_WESTWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+			if (type == DT_HE)
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+					  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type))/2;
+			else
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+					  blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type)) < 510?0:255;
+		}
 		break;
 	case 4: // south
 		block = blockage(endTile,MapData::O_NORTHWALL, type);
 		break;
 	case 5: // south west
-		block = (blockage(endTile,MapData::O_NORTHWALL, type) + blockage(startTile,MapData::O_WESTWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
-		if (type == DT_HE)
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
+		if (type == DT_NONE)
+		{
+			block = blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_NORTHWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_WESTWALL, type); //down+left
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type);
+			if (block == 0) break; //this way is opened
+			block = blockage(startTile, MapData::O_WESTWALL, type) + blockage(endTile, MapData::O_NORTHWALL, type); //left+down
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type);
+		}
 		else
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
+		{
+			block = (blockage(endTile,MapData::O_NORTHWALL, type) + blockage(startTile,MapData::O_WESTWALL, type))/2
+				+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_WESTWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_NORTHWALL, type))/2;
+			if (type == DT_HE)
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+					  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
+			else
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type) +
+					  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
+		}
 		break;
 	case 6: // west
 		block = blockage(startTile,MapData::O_WESTWALL, type);
 		break;
 	case 7: // north west
-		block = (blockage(startTile,MapData::O_WESTWALL, type) + blockage(startTile,MapData::O_NORTHWALL, type))/2
-			+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
-			+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
-		if (type == DT_HE)
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
+		if (type == DT_NONE)
+		{
+			block = blockage(startTile, MapData::O_NORTHWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_WESTWALL, type); //up+left
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type);
+			if (block == 0) break; //this way is opened
+			block = blockage(startTile, MapData::O_WESTWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_NORTHWALL, type); //left+up
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type);
+		}
 		else
-		block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
-				  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
+		{
+			block = (blockage(startTile,MapData::O_WESTWALL, type) + blockage(startTile,MapData::O_NORTHWALL, type))/2
+				+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_WESTWALL, type)
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_NORTHWALL, type))/2;
+			if (type == DT_HE)
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+					  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type))/2;
+			else
+			block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth),MapData::O_OBJECT, type) +
+					  blockage(_save->getTile(startTile->getPosition() + oneTileWest),MapData::O_OBJECT, type)) < 510?0:255;
+		}
 		break;
 	}
 
