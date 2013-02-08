@@ -48,7 +48,7 @@ private:
 	ImageButton *_timeSpeed;
 	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
 	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
-	Text *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
+	Text *_txtFunds, *_txtHour, *_txtHourSep, *_txtMin, *_txtMinSep, *_txtSec, *_txtWeekday, *_txtDay, *_txtMonth, *_txtYear;
 	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
 	Text *_txtDebug;
@@ -56,6 +56,7 @@ private:
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _gameStarted;
+	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
@@ -67,7 +68,9 @@ public:
 	void init();
 	/// Runs the timer.
 	void think();
-	/// Displays the game time/date.
+	/// Converts an int into the given stringstream, grouped by thousands.
+	void static intToStringStreamGrouped(std::stringstream &out, int n);
+	/// Displays the game time/date. (+Funds)
 	void timeDisplay();
 	/// Advances the game timer.
 	void timeAdvance();

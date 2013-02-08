@@ -107,6 +107,8 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
+	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
+
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_globe = new Globe(_game, 130, 100, 256, 200, 0, 0);
@@ -132,11 +134,12 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
 	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
 
-	_txtHour = new Text(20, 16, 259, 74);
-	_txtHourSep = new Text(4, 16, 279, 74);
-	_txtMin = new Text(20, 16, 283, 74);
-	_txtMinSep = new Text(4, 16, 303, 74);
-	_txtSec = new Text(11, 8, 307, 80);
+	if (_showFundsOnGeoscape) _txtFunds = new Text(59, 8, 259, 73);
+	_txtHour = new Text(20, 16, 259, _showFundsOnGeoscape ? 80 : 74);
+	_txtHourSep = new Text(4, 16, 279, _showFundsOnGeoscape ? 80 : 74);
+	_txtMin = new Text(20, 16, 283, _showFundsOnGeoscape ? 80 : 74);
+	_txtMinSep = new Text(4, 16, _showFundsOnGeoscape ? 293 : 303, _showFundsOnGeoscape ? 80 : 74);
+	_txtSec = new Text(11, 8, _showFundsOnGeoscape ? 297 : 307, 80);
 	_txtWeekday = new Text(59, 8, 259, 87);
 	_txtDay = new Text(29, 8, 259, 94);
 	_txtMonth = new Text(29, 8, 288, 94);
@@ -178,6 +181,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
+	if (_showFundsOnGeoscape) add(_txtFunds);
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
@@ -259,20 +263,28 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 
-	_txtHour->setBig();
+	if (_showFundsOnGeoscape)
+	{
+		_txtFunds->setSmall();
+		_txtFunds->setColor(Palette::blockOffset(15)+4);
+		_txtFunds->setText(L"");
+		_txtFunds->setAlign(ALIGN_CENTER);
+	}
+
+	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 
-	_txtHourSep->setBig();
+	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+4);
 	_txtHourSep->setText(L":");
 
-	_txtMin->setBig();
+	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+4);
 	_txtMin->setText(L"");
 
-	_txtMinSep->setBig();
+	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+4);
 	_txtMinSep->setText(L":");
 
@@ -438,13 +450,40 @@ void GeoscapeState::think()
 }
 
 /**
+ * Converts an int into the given stringstream, grouped by thousands.
+ * @param out The stringstream which takes the converted value.
+ * @param n The int to be converted.
+ */
+void GeoscapeState::intToStringStreamGrouped(std::stringstream &out, int n)
+{
+  if (n < 0)
+	{
+    out << "-";
+    intToStringStreamGrouped(out, -n);
+  }
+	else if (n < 1000) out << n;
+  else
+	{
+    intToStringStreamGrouped(out, n / 1000);
+    out << "." << std::setw(3) << std::setfill('0') << (n % 1000);
+  }
+}
+
+/**
  * Updates the Geoscape clock with the latest
- * game time and date in human-readable format.
+ * game time and date in human-readable format. (+Funds)
  */
 void GeoscapeState::timeDisplay()
 {
 	std::stringstream ss, ss2;
 	std::wstringstream ss3, ss4, ss5;
+
+	if (_showFundsOnGeoscape)
+	{
+		std::stringstream ss6;
+		intToStringStreamGrouped(ss6,_game->getSavedGame()->getFunds());
+		_txtFunds->setText(Language::utf8ToWstr("$"+ss6.str()));
+	}
 
 	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 	_txtSec->setText(Language::utf8ToWstr(ss.str()));

@@ -91,6 +91,7 @@ void createDefault()
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
 	setBool("battleNotifyDeath", false);
+	setBool("showFundsOnGeoscape", false);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);
