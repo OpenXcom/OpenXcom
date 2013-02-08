@@ -571,11 +571,11 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
  */
 bool Zoom::haveSSE2()
 {
-	int CPUInfo[4];
-
 #ifdef __GNUC__
+	unsigned int CPUInfo[4];
 	__get_cpuid(1, CPUInfo, CPUInfo+1, CPUInfo+2, CPUInfo+3);
 #elif _WIN32
+	int CPUInfo[4];
 	__cpuid(CPUInfo, 1);
 #else
 	return false;
