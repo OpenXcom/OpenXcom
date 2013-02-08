@@ -19,6 +19,8 @@
 
 #include "Zoom.h"
 
+//#include "Scalers/hq2x.hpp"
+
 #include "Exception.h"
 #include "Surface.h"
 #include "Logger.h"
@@ -184,7 +186,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 	Uint64 dataSrc;
 	Uint64 dataDst;
 	Uint8 *pixelSrc = (Uint8*)src->pixels;
-	Uint8 *pixelDst = (Uint8*)dst->pixels;
+	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
 	int sx, sy;
 	static bool proclaimed = false;
 	
@@ -194,9 +196,10 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using modestly fast 4X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy, pixelDst += dst->pitch*3)
+	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*4)
 	{
-		/* Uint8 *pixelDst = pixelDstRow;*/
+		Uint8 *pixelDst = pixelDstRow;
+	
 		for (sx = 0; sx < src->w; sx += 8, pixelSrc += 8)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
@@ -463,12 +466,8 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 	__m128i dataSrc;
 	__m128i dataDst;
 	Uint8 *pixelSrc = (Uint8*)src->pixels;
-	__m128i *pixelDst =  (__m128i*)dst->pixels;
-	__m128i *pixelDst2 = (__m128i*)((Uint8*)dst->pixels + dst->pitch);
-	__m128i *pixelDst3 = (__m128i*)((Uint8*)dst->pixels + dst->pitch*2);
-	__m128i *pixelDst4 = (__m128i*)((Uint8*)dst->pixels + dst->pitch*3);
+	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
 	int sx, sy;
-	int inc = (dst->pitch * 3) / sizeof(__m128i);
 	static bool proclaimed = false;
 
 	if (!proclaimed)
@@ -477,8 +476,12 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using SSE2 4X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy)
+	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*4)
 	{
+		__m128i *pixelDst =  (__m128i*)pixelDstRow;
+		__m128i *pixelDst2 = (__m128i*)((Uint8*)pixelDstRow + dst->pitch);
+		__m128i *pixelDst3 = (__m128i*)((Uint8*)pixelDstRow + dst->pitch*2);
+		__m128i *pixelDst4 = (__m128i*)((Uint8*)pixelDstRow + dst->pitch*3);
 		for (sx = 0; sx < src->w; sx += 16, pixelSrc += 16)
 		{
 			dataSrc = *((__m128i*) pixelSrc);
@@ -506,13 +509,7 @@ static int zoomSurface4X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 			dataDst = _mm_unpackhi_epi8(halfDone, halfDone);
 			
 			WRITE_DST;
-		}
-	
-		if (sy == src->h) break;
-		pixelDst += inc;
-		pixelDst2 += inc;
-		pixelDst3 += inc;
-		pixelDst4 += inc;
+		}	
 	}
 
 	return 0;
@@ -530,10 +527,8 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 	__m128i dataSrc;
 	__m128i dataDst;
 	Uint8 *pixelSrc = (Uint8*)src->pixels;
-	__m128i *pixelDst =  (__m128i*)dst->pixels;
-	__m128i *pixelDst2 = (__m128i*)((Uint8*)dst->pixels + dst->pitch);
+	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
 	int sx, sy;
-	int inc = (dst->pitch) / sizeof(__m128i);
 	static bool proclaimed = false;
 	
 	if (!proclaimed)
@@ -542,8 +537,11 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using SSE2 2X zoom routine.";
 	}
 
-	for (sy = 0; sy < src->h; ++sy)
+	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*2)
 	{
+		__m128i *pixelDst =  (__m128i*)pixelDstRow;
+		__m128i *pixelDst2 = (__m128i*)((Uint8*)pixelDstRow + dst->pitch);
+
 		for (sx = 0; sx < src->w; sx += 16, pixelSrc += 16)
 		{
 			dataSrc = *((__m128i*) pixelSrc);
@@ -560,8 +558,6 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 			
 			WRITE_DST;
 		}
-		pixelDst += inc;
-		pixelDst2 += inc;
 	}
 	
 	return 0;
