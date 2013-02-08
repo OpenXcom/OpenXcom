@@ -291,6 +291,12 @@ openxcom_SOURCES = \
 	src/Engine/Scalers/scale3x.h \
 	src/Engine/Scalers/scalebit.c \
 	src/Engine/Scalers/scalebit.h \
+	src/Engine/Scalers/common.h \
+	src/Engine/Scalers/hqx.h \
+	src/Engine/Scalers/hq2x.cpp \
+	src/Engine/Scalers/hq3x.cpp \
+	src/Engine/Scalers/hq4x.cpp \
+	src/Engine/Scalers/init.cpp \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
 	src/Geoscape/AlienBaseState.cpp \

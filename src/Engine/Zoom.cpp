@@ -27,8 +27,14 @@
 #include "Options.h"
 
 extern "C" {
+// Scale2X
 #include "Scalers/scalebit.h"
 }
+// HQX
+
+#include "Scalers/common.h"
+#include "Scalers/hqx.h"
+
 
 #ifdef _WIN32
 #define __SSE2__ true
@@ -611,6 +617,37 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	int dgap;
 	static bool proclaimed = false;
 
+	if (Options::getBool("useHQXFilter"))
+	{
+		static bool initDone = false;
+
+		if (!initDone)
+		{
+			hqxInit();
+			initDone = true;
+		}
+
+		// HQX_API void HQX_CALLCONV hq2x_32_rb( uint32_t * src, uint32_t src_rowBytes, uint32_t * dest, uint32_t dest_rowBytes, int width, int height );
+
+		if (dst->w == src->w * 2 && dst->h == src->h * 2)
+		{
+			hq2x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
+			return 0;
+		}
+
+		if (dst->w == src->w * 3 && dst->h == src->h * 3)
+		{
+			hq3x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
+			return 0;
+		}
+
+		if (dst->w == src->w * 4 && dst->h == src->h * 4)
+		{
+			hq4x_32_rb((uint32_t*) src->pixels, src->pitch, (uint32_t*) dst->pixels, dst->pitch, src->w, src->h);
+			return 0;
+		}
+
+	}
 
 	if (Options::getBool("useScaleFilter"))
 	{

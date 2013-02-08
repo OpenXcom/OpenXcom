@@ -44,7 +44,7 @@ protected:
 	SDL_Color *_originalColors;
 public:
 	/// Creates a new surface with the specified size and position.
-	Surface(int width, int height, int x = 0, int y = 0);
+	Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
 	/// Creates a new surface from an existing one.
 	Surface(const Surface& other);
 	/// Cleans up the surface.

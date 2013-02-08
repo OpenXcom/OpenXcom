@@ -66,6 +66,7 @@ void createDefault()
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
 	setBool("useScaleFilter", false);
+	setBool("useHQXFilter", false);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);

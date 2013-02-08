@@ -732,6 +732,18 @@
     <ClCompile Include="Engine\Scalers\scale3x.c">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Scalers\hq2x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\hq3x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\hq4x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\init.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1467,6 +1479,12 @@
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scalers\scale3x.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\common.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\hqx.h">
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
   </ItemGroup>

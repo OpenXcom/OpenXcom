@@ -40,10 +40,10 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-	int pitch = ((width+15)& ~0xF);
+	int pitch = (bpp/8) * ((width+15)& ~0xF);
 
 #ifndef _WIN32
 	int rc;
@@ -53,16 +53,16 @@ Surface::Surface(int width, int height, int x, int y) : _x(x), _y(y), _visible(t
 	}
 #else
 	// of course Windows has to be difficult about this!
-	_alignedBuffer = _aligned_malloc(pitch*height, 16);
+	_alignedBuffer = _aligned_malloc(pitch*height*(bpp/8), 16);
 	if (!_alignedBuffer)
 	{
 		throw Exception("Where's the memory, Lebowski?");
 	}
 #endif
 	
-	memset(_alignedBuffer, 0, pitch * height);
+	memset(_alignedBuffer, 0, pitch * height * (bpp/8));
 	
-	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer,width, height, 8, pitch, 0, 0, 0, 0);
+	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer,width, height, bpp, pitch, 0, 0, 0, 0);
 
 	if (_surface == 0)
 	{
