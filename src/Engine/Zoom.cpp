@@ -24,7 +24,11 @@
 #include "Exception.h"
 #include "Surface.h"
 #include "Logger.h"
+#include "Options.h"
 
+extern "C" {
+#include "Scalers/scalebit.h"
+}
 
 #ifdef _WIN32
 #define __SSE2__ true
@@ -563,8 +567,9 @@ static int zoomSurface2X_SSE2(SDL_Surface *src, SDL_Surface *dst)
 	return 0;
 }
 
-
-static bool haveSSE2()
+/** Checks the SSE2 feature bit returned by the CPUID instruction
+ */
+bool Zoom::haveSSE2()
 {
 	int CPUInfo[4];
 
@@ -605,6 +610,31 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	Uint8 *sp, *dp, *csp;
 	int dgap;
 	static bool proclaimed = false;
+
+
+	if (Options::getBool("useScaleFilter"))
+	{
+		// check the resolution to see which of scale2x, scale3x, etc. we need
+
+		if (dst->w == src->w * 2 && dst->h == src->h *2 && !scale_precondition(2, src->format->BytesPerPixel, src->w, src->h))
+		{
+			scale(2, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
+			return 0;
+		}
+
+		if (dst->w == src->w * 3 && dst->h == src->h *3 && !scale_precondition(3, src->format->BytesPerPixel, src->w, src->h))
+		{
+			scale(3, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
+			return 0;
+		}
+
+		if (dst->w == src->w * 4 && dst->h == src->h *4 && !scale_precondition(4, src->format->BytesPerPixel, src->w, src->h))
+		{
+			scale(4, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
+			return 0;
+		}
+
+	}
 
 	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
 

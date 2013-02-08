@@ -93,7 +93,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -294,6 +295,9 @@
     <ClCompile Include="Engine\Options.cpp" />
     <ClCompile Include="Engine\Palette.cpp" />
     <ClCompile Include="Engine\RNG.cpp" />
+    <ClCompile Include="Engine\Scalers\scale2x.c" />
+    <ClCompile Include="Engine\Scalers\scale3x.c" />
+    <ClCompile Include="Engine\Scalers\scalebit.c" />
     <ClCompile Include="Engine\Screen.cpp" />
     <ClCompile Include="Engine\Sound.cpp" />
     <ClCompile Include="Engine\SoundSet.cpp" />
@@ -540,6 +544,9 @@
     <ClInclude Include="Engine\Options.h" />
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
+    <ClInclude Include="Engine\Scalers\scale2x.h" />
+    <ClInclude Include="Engine\Scalers\scale3x.h" />
+    <ClInclude Include="Engine\Scalers\scalebit.h" />
     <ClInclude Include="Engine\Screen.h" />
     <ClInclude Include="Engine\Sound.h" />
     <ClInclude Include="Engine\SoundSet.h" />
