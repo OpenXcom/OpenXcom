@@ -47,7 +47,7 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 
 #ifndef _WIN32
 	int rc;
-	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height)))
+	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height * (bpp/8))))
 	{
 		throw Exception(strerror(rc));
 	}
