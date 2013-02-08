@@ -65,6 +65,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("useScaleFilter", false);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);
