@@ -889,6 +889,8 @@ STR_SILACOID
 Silacoide
 STR_CHRYSSALID
 Crisálida
+STR_ZOMBIE
+Zombi
 STR_REAPER
 Segador
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Soldado
 STR_LIVE_TERRORIST
  Terrorista
+STR_FLOATER_SOLDIER
+Soldado flotador
+STR_FLOATER_NAVIGATOR
+Navegante flotador
+STR_FLOATER_MEDIC
+Médico flotador
+STR_FLOATER_ENGINEER
+Técnico flotador
+STR_FLOATER_LEADER
+Lider flotador
+STR_FLOATER_COMMANDER
+Comandante flotador
+STR_SECTOID_SOLDIER
+Sectoid Soldier
+STR_SECTOID_NAVIGATOR
+Sectoid Navigator
+STR_SECTOID_MEDIC
+Sectoid Medic
+STR_SECTOID_ENGINEER
+Sectoid Engineer
+STR_SECTOID_LEADER
+Sectoid Leader
+STR_SECTOID_COMMANDER
+Sectoid Commander
+STR_SNAKEMAN_SOLDIER
+Snakeman Soldier
+STR_SNAKEMAN_NAVIGATOR
+Snakeman Navigator
+STR_SNAKEMAN_ENGINEER
+Snakeman Engineer
+STR_SNAKEMAN_LEADER
+Snakeman Leader
+STR_SNAKEMAN_COMMANDER
+Snakeman Commander
+STR_MUTON_SOLDIER
+Muton Soldier
+STR_MUTON_NAVIGATOR
+Muton Navigator
+STR_MUTON_ENGINEER
+Muton Engineer
+STR_ETHEREAL_SOLDIER
+Ethereal Soldier
+STR_ETHEREAL_LEADER
+Ethereal Leader
+STR_ETHEREAL_COMMANDER
+Ethereal Commander
+STR_CYBERDISC_TERRORIST
+Cyberdisc Terrorist
+STR_REAPER_TERRORIST
+Reaper Terrorist
+STR_CHRYSSALID_TERRORIST
+Chryssalid Terrorist
+STR_CELATID_TERRORIST
+Celatid Terrorist
+STR_SILACOID_TERRORIST
+Silacoid Terrorist
+STR_SECTOPOD_TERRORIST
+Sectopod Terrorist
 STR_UFO_POWER_SOURCE
 Fuente de energía de OVNI
 STR_UFO_NAVIGATION
@@ -1147,18 +1207,6 @@ STR_EGYPT
 EGIPTO
 STR_CANADA
 CANADÁ
-STR_FLOATER_SOLDIER
-Soldado flotador
-STR_FLOATER_NAVIGATOR
-Navegante flotador
-STR_FLOATER_MEDIC
-Médico flotador
-STR_FLOATER_ENGINEER
-Técnico flotador
-STR_FLOATER_LEADER
-Lider flotador
-STR_FLOATER_COMMANDER
-Comandante flotador
 STR_TANK
 Tanque
 STR_CIVILIAN

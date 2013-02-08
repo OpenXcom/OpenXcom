@@ -889,6 +889,8 @@ STR_SILACOID
 Силакоїд
 STR_CHRYSSALID
 Крисалід
+STR_ZOMBIE
+Зомбі
 STR_REAPER
 Рипер
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Соладт
 STR_LIVE_TERRORIST
  Терорист
+STR_FLOATER_SOLDIER
+Летун Солдат
+STR_FLOATER_NAVIGATOR
+Летун Навігатор
+STR_FLOATER_MEDIC
+Летун Медик
+STR_FLOATER_ENGINEER
+Летун Інженер
+STR_FLOATER_LEADER
+Летун Лідер
+STR_FLOATER_COMMANDER
+Летун Командуючий
+STR_SECTOID_SOLDIER
+Сектоїд Соладт
+STR_SECTOID_NAVIGATOR
+Сектоїд Навігатор
+STR_SECTOID_MEDIC
+Сектоїд Медик
+STR_SECTOID_ENGINEER
+Сектоїд Інженер
+STR_SECTOID_LEADER
+Сектоїд Лідер
+STR_SECTOID_COMMANDER
+Сектоїд Командуючий
+STR_SNAKEMAN_SOLDIER
+Людинозмія Соладт
+STR_SNAKEMAN_NAVIGATOR
+Людинозмія Навігатор
+STR_SNAKEMAN_ENGINEER
+Людинозмія Інженер
+STR_SNAKEMAN_LEADER
+Людинозмія Лідер
+STR_SNAKEMAN_COMMANDER
+Людинозмія Командуючий
+STR_MUTON_SOLDIER
+Мутон Соладт
+STR_MUTON_NAVIGATOR
+Мутон Навігатор
+STR_MUTON_ENGINEER
+Мутон Інженер
+STR_ETHEREAL_SOLDIER
+Небесний Соладт
+STR_ETHEREAL_LEADER
+Небесний Лідер
+STR_ETHEREAL_COMMANDER
+Небесний Командуючий
+STR_CYBERDISC_TERRORIST
+Кібердиск Терорист
+STR_REAPER_TERRORIST
+Рипер Терорист
+STR_CHRYSSALID_TERRORIST
+Крисалід Терорист
+STR_CELATID_TERRORIST
+Селатид Терорист
+STR_SILACOID_TERRORIST
+Силакоїд Терорист
+STR_SECTOPOD_TERRORIST
+Сектопод Терорист
 STR_UFO_POWER_SOURCE
 Джерело Енергії НЛО
 STR_UFO_NAVIGATION
@@ -1147,18 +1207,6 @@ STR_EGYPT
 ЄГИПЕТ
 STR_CANADA
 КАНАДА
-STR_FLOATER_SOLDIER
-Летун Солдат
-STR_FLOATER_NAVIGATOR
-Летун Навігатор
-STR_FLOATER_MEDIC
-Летун Медик
-STR_FLOATER_ENGINEER
-Летун Інженер
-STR_FLOATER_LEADER
-Летун Лідер
-STR_FLOATER_COMMANDER
-Летун Командуючий
 STR_TANK
 Танк
 STR_CIVILIAN
