@@ -91,6 +91,7 @@ void createDefault()
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
 	setBool("battleNotifyDeath", false);
+	setBool("allowAutoSellProduction", false);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);
