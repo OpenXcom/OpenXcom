@@ -610,7 +610,7 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 	int dgap;
 	static bool proclaimed = false;
 
-// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
+	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
 
 	if (src->format->BytesPerPixel == 1 && dst->format->BytesPerPixel == 1)
 	{
