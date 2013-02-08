@@ -102,7 +102,7 @@ void ConfirmCydoniaState::btnConfirmClick(Action *)
 	bgen.setWorldShade(15);
 	bgen.run();
 
-	_game->pushState(new BriefingState(_game, _craft, 0));
+	_game->pushState(new BriefingState(_game, _craft));
 	
 }
 

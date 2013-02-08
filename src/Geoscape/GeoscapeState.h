@@ -85,6 +85,8 @@ public:
 	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
+	/// Stop the music!
+	void musicStop(bool pause = false);
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Gets the Geoscape globe.

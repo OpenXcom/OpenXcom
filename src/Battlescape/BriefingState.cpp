@@ -42,7 +42,7 @@ namespace OpenXcom
  * Initializes all the elements in the Briefing screen.
  * @param game Pointer to the core game.
  */
-BriefingState::BriefingState(Game *game, Craft *craft, Base *base, Ufo *ufo) : State(game)
+BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
