@@ -671,7 +671,7 @@ int Base::getUsedHangars() const
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
 		{
-			total += (*i)->getAmountRemaining();
+			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
 		}
 	}
 	return total;

@@ -31,7 +31,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
@@ -191,7 +190,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", 39)->play();
 			_unit->addThrowingExp();
 		}
 		else
@@ -213,7 +212,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 		}
 		else
 		{
@@ -235,7 +234,7 @@ bool ProjectileFlyBState::createNewProjectile()
 				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
 				if (_action.weapon->getRules()->getFireSound() != -1)
-					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -287,7 +286,7 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
 				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0)
 				{

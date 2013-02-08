@@ -26,7 +26,9 @@
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
 #include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -34,8 +36,10 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _polygons(), _musics()
+ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
 {
+	_muteMusic = new Music();
+	_muteSound = new Sound();
 }
 
 /**
@@ -43,6 +47,8 @@ ResourcePack::ResourcePack() : _palettes(), _fonts(), _surfaces(), _sets(), _pol
  */
 ResourcePack::~ResourcePack()
 {
+	delete _muteMusic;
+	delete _muteSound;
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
 		delete i->second;
@@ -132,7 +138,14 @@ std::list<Polyline*> *ResourcePack::getPolylines()
  */
 Music *ResourcePack::getMusic(const std::string &name) const
 {
-	return _musics.find(name)->second;
+	if (Options::getBool("mute"))
+	{
+		return _muteMusic;
+	}
+	else
+	{
+		return _musics.find(name)->second;
+	}
 }
 
 /**
@@ -142,26 +155,43 @@ Music *ResourcePack::getMusic(const std::string &name) const
  */
 Music *ResourcePack::getRandomMusic(const std::string &name) const
 {
-	std::vector<Music*> music;
-	for (std::map<std::string, Music*>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+	if (Options::getBool("mute"))
 	{
-		if (i->first.find(name) != std::string::npos)
-		{
-			music.push_back(i->second);
-		}
+		return _muteMusic;
 	}
-
-	return music[RNG::generate(0, music.size()-1)];
+	else
+	{
+		std::vector<Music*> music;
+		for (std::map<std::string, Music*>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+		{
+			if (i->first.find(name) != std::string::npos)
+			{
+				music.push_back(i->second);
+			}
+		}
+		if (_musics.empty())
+			return _muteMusic;
+		else
+			return music[RNG::generate(0, music.size()-1)];
+	}
 }
 
 /**
- * Returns a specific sound set from the resource set.
- * @param name Name of the sound set.
- * @return Pointer to the sound set.
+ * Returns a specific sound from the resource set.
+ * @param set Name of the sound set.
+ * @param sound ID of the sound.
+ * @return Pointer to the sound.
  */
-SoundSet *ResourcePack::getSoundSet(const std::string &name) const
+Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
 {
-	return _sounds.find(name)->second;
+	if (Options::getBool("mute"))
+	{
+		return _muteSound;
+	}
+	else
+	{
+		return _sounds.find(set)->second->getSound(sound);
+	}
 }
 
 /**

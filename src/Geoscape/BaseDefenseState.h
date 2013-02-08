@@ -31,6 +31,7 @@ class Text;
 class Base;
 class Ufo;
 class TextList;
+class GeoscapeState;
 
 enum BaseDefenseActionType { BDA_NONE, BDA_FIRE, BDA_RESOLVE, BDA_DESTROY, BDA_END };
 
@@ -49,9 +50,10 @@ private:
 	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks;
 	BaseDefenseActionType _action;
 	clock_t _nextEventTime;
+	GeoscapeState *_state;
 public:
 	/// Creates the Base Defense state.
-	BaseDefenseState(Game *game, Base *base, Ufo *ufo);
+	BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state);
 	/// Cleans up the Base Defense state.
 	~BaseDefenseState();
 	/// Updates the palette.

@@ -37,7 +37,6 @@
 #include "../Engine/RNG.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "BaseDestroyedState.h"
 #include <ctime>
@@ -51,7 +50,7 @@ namespace OpenXcom
  * @param base Pointer to the base being attacked.
  * @param ufo Pointer to the attacking ufo.
  */
-BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(game)
+BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state) : State(game), _state(state)
 {
 	_base = base;
 	_action = BDA_NONE;
@@ -133,7 +132,7 @@ void BaseDefenseState::think()
 		if (_action == BDA_DESTROY)
 		{
 			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str()," "," ");
-			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(11)->play();
+			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
 			_action = BDA_END;
 			return;
 		}
@@ -174,7 +173,7 @@ void BaseDefenseState::think()
 		if (_action == BDA_FIRE)
 		{
 			_lstDefenses->setCellText(_row, 1, _game->getLanguage()->getString("STR_FIRING").c_str());
-			_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((def)->getRules()->getFireSound())->play();
+			_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
 			_action = BDA_RESOLVE;
 			return;
 		}
@@ -188,7 +187,7 @@ void BaseDefenseState::think()
 			else
 			{
 				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_HIT").c_str());
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound((def)->getRules()->getHitSound())->play();
+				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
 			}
 			if (_ufo->getStatus() == Ufo::DESTROYED)
@@ -208,9 +207,9 @@ void BaseDefenseState::btnOkClick(Action *)
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
-	if(_ufo->getStatus() != Ufo::DESTROYED && _base->getSoldiers())
+	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		if (_base->getSoldiers())
+		if (_base->getSoldiers()->size() > 0)
 		{
 			size_t month = _game->getSavedGame()->getMonthsPassed();
 			if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
@@ -223,7 +222,7 @@ void BaseDefenseState::btnOkClick(Action *)
 			bgen.setAlienRace(_ufo->getAlienRace());
 			bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 			bgen.run();
-
+			_state->musicStop();
 			_game->pushState(new BriefingState(_game, 0, _base));
 		}
 		else

@@ -792,10 +792,58 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
-		if (itDiscovered != discovered.end () && research->getStringTemplate().size() == 0)
+		
+		// i hate to do this, but it just looks so much cleaner.
+		std::vector<std::string>::const_iterator alien = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_ALIEN_ORIGINS");
+		bool liveAlien ( alien != research->getUnlocked().end());
+
+		if (itDiscovered != discovered.end ())
 		{
-			continue;
+			// see?
+			if (!liveAlien)
+			{
+				continue;
+			}
+			else
+			{
+				bool cull = true;
+				if (research->getGetOneFree().size() != 0)
+				{
+					for (std::vector<std::string>::const_iterator ohBoy = research->getGetOneFree().begin(); ohBoy != research->getGetOneFree().end(); ++ohBoy)
+					{
+						std::vector<const RuleResearch *>::const_iterator more_iteration = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(*ohBoy));
+						if (more_iteration == discovered.end ())
+						{
+							cull = false;
+							break;
+						}
+					}
+				}
+				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
+				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_CYDONIA_DEP");
+				
+				bool leader ( leaderCheck != research->getUnlocked().end());
+				bool cmnder ( cmnderCheck != research->getUnlocked().end());
+
+				if (leader)
+				{
+					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_LEADER_PLUS"));
+					if (found == discovered.end())
+						cull = false;
+				}
+
+				if (cmnder)
+				{
+					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_CYDONIA_DEP"));
+					if (found == discovered.end())
+						cull = false;
+				}
+
+				if (cull)
+					continue;
+			}
 		}
+
 		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearch(research)) != baseResearchProjects.end ())
 		{
 			continue;
@@ -860,11 +908,45 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	if(std::find(unlocked.begin (), unlocked.end (),
-			 r) != unlocked.end ())
+	std::vector<std::string>::const_iterator alien = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_ALIEN_ORIGINS");
+	bool liveAlien ( alien != r->getUnlocked().end());
+	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
 	}
+	else if (liveAlien)
+	{		
+		if (r->getGetOneFree().size() > 0)
+		{
+			for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
+			{
+				if(std::find(unlocked.begin (), unlocked.end (), ruleset->getResearch(*itFree)) == unlocked.end ())
+				{
+					return true;
+				}
+			}
+			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
+			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_CYDONIA_DEP");
+				
+			bool leader ( leaderCheck != r->getUnlocked().end());
+			bool cmnder ( cmnderCheck != r->getUnlocked().end());
+
+			if (leader)
+			{
+				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_LEADER_PLUS"));
+				if (found == discovered.end())
+					return true;
+			}
+
+			if (cmnder)
+			{
+				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_CYDONIA_DEP"));
+				if (found == discovered.end())
+					return true;
+			}
+		}
+	}
+
 	for(std::vector<std::string>::const_iterator iter = deps.begin (); iter != deps.end (); ++ iter)
 	{
 		RuleResearch *research = ruleset->getResearch(*iter);
@@ -922,9 +1004,6 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 			if ((*iter)->getCost() == 0)
 			{
 				getDependableResearchBasic(dependables, *iter, ruleset, base);
-			}
-			else
-			{
 			}
 		}
 	}
