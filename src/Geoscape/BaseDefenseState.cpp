@@ -50,7 +50,7 @@ namespace OpenXcom
  * @param base Pointer to the base being attacked.
  * @param ufo Pointer to the attacking ufo.
  */
-BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo) : State(game)
+BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state) : State(game), _state(state)
 {
 	_base = base;
 	_action = BDA_NONE;
@@ -207,9 +207,9 @@ void BaseDefenseState::btnOkClick(Action *)
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
-	if(_ufo->getStatus() != Ufo::DESTROYED && _base->getSoldiers())
+	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		if (_base->getSoldiers())
+		if (_base->getSoldiers()->size() > 0)
 		{
 			size_t month = _game->getSavedGame()->getMonthsPassed();
 			if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
@@ -222,7 +222,7 @@ void BaseDefenseState::btnOkClick(Action *)
 			bgen.setAlienRace(_ufo->getAlienRace());
 			bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 			bgen.run();
-
+			_state->musicStop();
 			_game->pushState(new BriefingState(_game, 0, _base));
 		}
 		else

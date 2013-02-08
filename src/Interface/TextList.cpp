@@ -96,6 +96,7 @@ void TextList::unpress(State *state)
 void TextList::setCellColor(int row, int column, Uint8 color)
 {
 	_texts[row][column]->setColor(color);
+	_redraw = true;
 }
 
 /**
@@ -734,20 +735,13 @@ void TextList::think()
 }
 
 /**
- * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
 void TextList::mousePress(Action *action, State *state)
 {
-	if (_selectable && (action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT))
-	{
-		if (_selRow < _texts.size())
-		{
-			InteractiveSurface::mousePress(action, state);
-		}
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		scrollUp();
 	}
@@ -755,37 +749,56 @@ void TextList::mousePress(Action *action, State *state)
 	{
 		scrollDown();
 	}
+	if (_selectable)
+	{
+		if (_selRow < _texts.size())
+		{
+			InteractiveSurface::mousePress(action, state);
+		}
+	}
+	else
+	{
+		InteractiveSurface::mousePress(action, state);
+	}
 }
 
 /*
- * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
 void TextList::mouseRelease(Action *action, State *state)
 {
-	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_selectable)
 	{
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseRelease(action, state);
 		}
 	}
+	else
+	{
+		InteractiveSurface::mouseRelease(action, state);
+	}
 }
 
 /**
- * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
 void TextList::mouseClick(Action *action, State *state)
 {
-	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_selectable)
 	{
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
 		}
+	}
+	else
+	{
+		InteractiveSurface::mouseClick(action, state);
 	}
 }
 

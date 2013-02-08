@@ -36,6 +36,8 @@
 #include "../Savegame/AlienBase.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
+#include "../Geoscape/GeoscapeState.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -47,7 +49,7 @@ namespace OpenXcom
  * @param texture Texture of the landing site.
  * @param shade Shade of the landing site.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade) : State(game), _craft(craft), _texture(texture), _shade(shade)
+ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state)
 {
 	_screen = false;
 
@@ -119,63 +121,50 @@ ConfirmLandingState::~ConfirmLandingState()
 void ConfirmLandingState::btnYesClick(Action *)
 {
 	_game->popState();
+	_state->musicStop();
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
 	size_t month = _game->getSavedGame()->getMonthsPassed();
 	if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
 		month = _game->getRuleset()->getAlienItemLevels().size()-1;
+
+	SavedBattleGame *bgame = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(bgame);
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	bgen.setWorldTexture(_texture);
+	bgen.setWorldShade(_shade);
+	bgen.setCraft(_craft);
 	if (u != 0)
 	{
-		SavedBattleGame *bgame = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(bgame);
 		if(u->getStatus() == Ufo::CRASHED)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setWorldTexture(_texture);
-		bgen.setWorldShade(_shade);
-		bgen.setCraft(_craft);
 		bgen.setUfo(u);
 		bgen.setAlienRace(u->getAlienRace());
-		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-		bgen.run();
-
-		_game->pushState(new BriefingState(_game, _craft, 0));
 	}
 	else if (t != 0)
 	{
-		SavedBattleGame *bgame = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_TERROR_MISSION");
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setWorldTexture(_texture);
-		bgen.setWorldShade(_shade);
-		bgen.setCraft(_craft);
 		bgen.setTerrorSite(t);
 		bgen.setAlienRace(t->getAlienRace());
-		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-		bgen.run();
 
-		_game->pushState(new BriefingState(_game, _craft, 0));
+		_game->pushState(new BriefingState(_game, _craft));
 	}
 	else if (b != 0)
 	{
-		SavedBattleGame *bgame = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_ALIEN_BASE_ASSAULT");
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.setWorldTexture(_texture);
-		bgen.setWorldShade(_shade);
-		bgen.setCraft(_craft);
 		bgen.setAlienBase(b);
 		bgen.setAlienRace(b->getAlienRace());
-		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-		bgen.run();
-
-		_game->pushState(new BriefingState(_game, _craft, 0));
 	}
+	else
+	{
+		throw Exception("No mission available!");
+	}
+	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+	bgen.run();
+	_game->pushState(new BriefingState(_game, _craft));
 }
 
 /**
