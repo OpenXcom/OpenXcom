@@ -282,20 +282,24 @@ void Map::drawTerrain(Surface *surface)
 
 	surface->lock();
 
-    for (int itZ = beginZ; itZ <= endZ; itZ++)
+	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
-        for (int itX = beginX; itX <= endX; itX++)
+		for (int itX = beginX; itX <= endX; itX++)
 		{
-            for (int itY = beginY; itY <= endY; itY++)
+			for (int itY = beginY; itY <= endY; itY++)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				_camera->convertMapToScreen(mapPosition, &screenPosition);
 				screenPosition += _camera->getMapOffset();
 				if (singleLevel && itZ == endZ) //fake second level of single layered view
 				{
-					Position mapPosition2 = Position(itX, itY, itZ-1);
-					if (_save->getTile(mapPosition2) && _save->getTile(mapPosition2)->getTerrainLevel() != -24)
-						continue;
+					Tile *tile2 = _save->getTile(Position(itX, itY, itZ-1));
+					if (tile2 != 0)
+					{
+						MapData *md2 = tile2->getMapData(MapData::O_OBJECT);
+						if (md2 == 0 || md2->getTerrainLevel() != -24 || md2->getLoftID(11) != 6)
+							continue;
+					}
 				}
 
 				// only render cells that are inside the surface
