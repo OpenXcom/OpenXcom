@@ -135,7 +135,6 @@ void Screen::handle(Action *action)
 		unsigned error = lodepng::encode(ss.str(), image, getWidth(), getHeight(), LCT_RGB);
 		if (error)
 		{
-			puts(lodepng_error_text(error));
 			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
 		} 
 	}
