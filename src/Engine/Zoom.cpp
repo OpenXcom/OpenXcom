@@ -56,14 +56,6 @@ namespace OpenXcom
 {
 
 
-Zoom::Zoom()
-{
-}
-
-Zoom::~Zoom()
-{
-}
-
 /**
  *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
  *  Used internally by _zoomSurfaceY() below.
