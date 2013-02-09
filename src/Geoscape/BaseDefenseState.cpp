@@ -131,7 +131,7 @@ void BaseDefenseState::think()
 	{
 		if (_action == BDA_DESTROY)
 		{
-			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str()," "," ");
+			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),L" ",L" ");
 			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
 			_action = BDA_END;
 			return;
@@ -151,7 +151,7 @@ void BaseDefenseState::think()
 		}
 		else if (_attacks == _defenses && _passes < _gravShields)
 		{
-			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str()," "," ");
+			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str(),L" ",L" ");
 			++_row;
 			++_passes;
 			_attacks = 0;
@@ -164,7 +164,7 @@ void BaseDefenseState::think()
 
 		if (_action == BDA_NONE)
 		{
-			_lstDefenses->addRow(3, _game->getLanguage()->getString((def)->getRules()->getType()).c_str()," "," ");
+			_lstDefenses->addRow(3, _game->getLanguage()->getString((def)->getRules()->getType()).c_str(),L" ",L" ");
 			++_row;
 			_action = BDA_FIRE;
 			return;
