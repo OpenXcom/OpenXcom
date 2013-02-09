@@ -478,7 +478,7 @@ void BattlescapeGenerator::run()
 void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 {
 	std::string vehicle = v->getRules()->getType();
-	Unit *rule = _game->getRuleset()->getUnit(vehicle.substr(4));
+	Unit *rule = _game->getRuleset()->getUnit(vehicle);
 	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
 	addItem(_game->getRuleset()->getItem(vehicle), unit);
 	if(v->getRules()->getClipSize() != -1)
@@ -564,7 +564,8 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUfo;
 			if (_ufo == 0)
 				outside = false;
-			BattleUnit *unit = addAlien(_game->getRuleset()->getUnit(alienName), (*d).alienRank, outside);
+			Unit *rule = _game->getRuleset()->getUnit(alienName);
+			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
 			for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
 			{
 				RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
@@ -576,10 +577,9 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 			// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
 			if ((*d).alienRank == AR_TERRORIST || (*d).alienRank == AR_TERRORIST2)
 			{
-				std::stringstream terroristWeapon;
-				terroristWeapon << alienName;
-				terroristWeapon << "_WEAPON";
-				RuleItem *ruleItem = _game->getRuleset()->getItem(terroristWeapon.str());
+				std::string terroristWeapon = rule->getRace().substr(4);
+				terroristWeapon += "_WEAPON";
+				RuleItem *ruleItem = _game->getRuleset()->getItem(terroristWeapon);
 				if (ruleItem)
 				{
 					addItem(ruleItem, unit);
