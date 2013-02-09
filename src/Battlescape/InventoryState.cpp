@@ -131,6 +131,12 @@ InventoryState::~InventoryState()
 void InventoryState::init()
 {
 	BattleUnit *unit = _battleGame->getSelectedUnit();
+	
+	if (!unit) 
+	{
+		_game->popState();
+		return; // probably an empty base getting attacked
+	}
 
 	unit->setCache(0);
 	_soldier->clear();
@@ -228,7 +234,7 @@ void InventoryState::btnOkClick(Action *)
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
 	}
-	_battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());
+	if (_battleGame->getSelectedUnit()) _battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 }
 
@@ -259,6 +265,11 @@ void InventoryState::btnNextClick(Action *)
 		return;
 	_battleGame->selectNextPlayerUnit();
 	// skip large units
+	if (!_battleGame->getSelectedUnit()) 
+	{
+		_game->popState();
+		return; // losing a base
+	}
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
 	{
 		_battleGame->selectNextPlayerUnit();
