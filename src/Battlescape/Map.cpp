@@ -212,7 +212,7 @@ void Map::drawTerrain(Surface *surface)
 	Tile *tile;
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
-	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight()+1;
+	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight();
 	bool singleLevel = !_camera->getShowAllLayers();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
@@ -291,16 +291,6 @@ void Map::drawTerrain(Surface *surface)
 				mapPosition = Position(itX, itY, itZ);
 				_camera->convertMapToScreen(mapPosition, &screenPosition);
 				screenPosition += _camera->getMapOffset();
-				if (singleLevel && itZ == endZ) //fake second level of single layered view
-				{
-					Tile *tile2 = _save->getTile(Position(itX, itY, itZ-1));
-					if (tile2 != 0)
-					{
-						MapData *md2 = tile2->getMapData(MapData::O_OBJECT);
-						if (md2 == 0 || md2->getTerrainLevel() != -24 || md2->getLoftID(11) != 6)
-							continue;
-					}
-				}
 
 				// only render cells that are inside the surface
 				if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&

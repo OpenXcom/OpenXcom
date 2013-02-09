@@ -442,19 +442,21 @@ bool TileEngine::canTargetVoxel(Position *originVoxel, Tile *tile, Position *sca
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
-	int unitRadius = 3; //fix!!! must be taken from unit width value of race data
-	int sliceTargets[10]={0,0,0,unitRadius,0,-unitRadius,unitRadius,0,-unitRadius,0};
 	static int heightOrder[11]={0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
 	int heightRange;
 	BattleUnit *otherUnit = tile->getUnit();
-
-	if (otherUnit && !otherUnit->isOut())
+ 
+	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
+	int sliceTargets[10]={0,0,0,unitRadius,0,-unitRadius,unitRadius,0,-unitRadius,0};
+ 
+	if (!otherUnit->isOut())
 	{
-		heightRange = otherUnit->getHeight();
+			heightRange = otherUnit->getHeight();
 	}
 	else
 	{
-		heightRange = 12;
+			heightRange = 12;
 	}
 
 	targetMaxHeight += heightRange;
