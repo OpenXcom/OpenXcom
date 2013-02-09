@@ -168,7 +168,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnSell->onMouseClick((ActionHandler)&BasescapeState::btnSellClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
-	_btnGeoscape->setText(_game->getLanguage()->getString("STR_GEOSCAPE"));
+	_btnGeoscape->setText(_game->getLanguage()->getString("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
 }
 

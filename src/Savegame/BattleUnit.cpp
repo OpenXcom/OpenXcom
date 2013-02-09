@@ -1913,9 +1913,10 @@ std::wstring BattleUnit::getName(Language *lang) const
 {
 	if (_type != "SOLDIER" && lang != 0)
 	{
-		std::wstringstream wss;
-		wss << lang->getString(_race.c_str()) << lang->getString(_rank.c_str());
-		return wss.str();
+		if (_type.find("STR_") != std::string::npos)
+			return lang->getString(_type);
+		else
+			return lang->getString(_race);
 	}
 	return _name;
 }

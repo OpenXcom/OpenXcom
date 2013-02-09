@@ -193,10 +193,10 @@ GraphsState::GraphsState(Game *game) : State(game)
 	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance.
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
-	_txtMonths->addRow(12, "", "", "", "", "", "", "", "", "", "", "", "");
+	_txtMonths->addRow(12, L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ");
 	_txtMonths->setRowColor(0, Palette::blockOffset(6)+8);
 	_txtYears->setColumns(6, 34, 34, 34, 34, 34, 34);
-	_txtYears->addRow(6, " ", " ", " ", " ", " ", " ");
+	_txtYears->addRow(6, L" ", L" ", L" ", L" ", L" ", L" ");
 	_txtYears->setRowColor(0, Palette::blockOffset(6)+8);
 
 	for(int iter = 0; iter != 12; ++iter)

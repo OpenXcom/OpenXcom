@@ -478,7 +478,7 @@ void DebriefingState::prepareDebriefing()
 					addStat("STR_TANKS_DESTROYED", 1, -value);
 					for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 					{
-						if ((*i)->getRules()->getType() == "STR_" + type)
+						if ((*i)->getRules()->getType() == type)
 						{
 							delete (*i);
 							craft->getVehicles()->erase(i);
@@ -528,7 +528,7 @@ void DebriefingState::prepareDebriefing()
 							// non soldier player = tank
 							for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 							{
-								if ((*i)->getRules()->getType() == "STR_" + type)
+								if ((*i)->getRules()->getType() == type)
 								{
 									delete (*i);
 									craft->getVehicles()->erase(i);
@@ -541,7 +541,7 @@ void DebriefingState::prepareDebriefing()
 							// non soldier player = tank
 							for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
 							{
-								if ((*i)->getRules()->getType() == "STR_" + type)
+								if ((*i)->getRules()->getType() == type)
 								{
 									delete (*i);
 									base->getVehicles()->erase(i);
@@ -558,24 +558,24 @@ void DebriefingState::prepareDebriefing()
 				// large units can't be recovered as items, so we have to have an extra special case JUST for reapers
 				|| (*j)->getStatus() == STATUS_UNCONSCIOUS && (*j)->getArmor()->getSize() > 1))
 			{
-				std::string researchName = "STR_" + (*j)->getType();
-				std::string corpseName = researchName + "_CORPSE";
-				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(researchName), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
-					addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*j)->getValue()*2);
-					if (base->getAvailableContainment())
+					if (base->getAvailableContainment() > 0)
 					{
-						base->getItems()->addItem(researchName, 1);
+						addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*j)->getValue()*2);
+						base->getItems()->addItem(type, 1);
 					}
 					else
 					{
 						_noContainment = true;
+						addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*j)->getValue());
+						base->getItems()->addItem((*j)->getArmor()->getCorpseItem(), 1);
 					}
 				}
 				else
 				{
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*j)->getValue());
-					base->getItems()->addItem(corpseName, 1);
+					base->getItems()->addItem((*j)->getArmor()->getCorpseItem(), 1);
 				}
 			}
 			else if (oldFaction == FACTION_NEUTRAL)
@@ -791,30 +791,32 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_DEAD)
 				{
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+					base->getItems()->addItem((*it)->getRules()->getType(), 1);
 				}
 				else if ((*it)->getRules()->getBattleType() == BT_CORPSE && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						std::string researchName = "STR_" + (*it)->getUnit()->getType();
-						if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(researchName), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+						if (base->getAvailableContainment() > 0)
 						{
 							addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*it)->getUnit()->getValue()*2);
-							if (base->getAvailableContainment())
+							if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch((*it)->getUnit()->getType()), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 							{
-								base->getItems()->addItem(researchName, 1);
+								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
 							}
 							else
 							{
-								_noContainment = true;
 								base->getItems()->addItem((*it)->getRules()->getType(), 1);
 							}
 						}
 						else
 						{
 							addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getRules()->getRecoveryPoints());
+							_noContainment = true;
 							base->getItems()->addItem((*it)->getRules()->getType(), 1);
 						}
+
+						
 					}
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
 					{
