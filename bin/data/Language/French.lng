@@ -900,7 +900,7 @@ Cyberdisque
 STR_LIVE_COMMANDER
  Commandant
 STR_LIVE_LEADER
- Leader
+ Chef
 STR_LIVE_ENGINEER
  Ingénieur
 STR_LIVE_MEDIC
@@ -920,55 +920,55 @@ Docteur Flottant
 STR_FLOATER_ENGINEER
 Ingénieur Flottant
 STR_FLOATER_LEADER
-Leader Flottant
+Chef Flottant
 STR_FLOATER_COMMANDER
 Commandant Flottant
 STR_SECTOID_SOLDIER
-Sectoïde Soldat
+Soldat Sectoïde
 STR_SECTOID_NAVIGATOR
-Sectoïde Navigateur
+Navigateur Sectoïde
 STR_SECTOID_MEDIC
-Sectoïde Docteur
+Docteur Sectoïde
 STR_SECTOID_ENGINEER
-Sectoïde Ingénieur
+Ingénieur Sectoïde
 STR_SECTOID_LEADER
-Sectoïde Leader
+Chef Sectoïde
 STR_SECTOID_COMMANDER
-Sectoïde Commandant
+Commandant Sectoïde
 STR_SNAKEMAN_SOLDIER
-Homme-Serpent Soldat
+Soldat Homme-Serpent
 STR_SNAKEMAN_NAVIGATOR
-Homme-Serpent Navigateur
+Navigateur Homme-Serpent
 STR_SNAKEMAN_ENGINEER
-Homme-Serpent Ingénieur
+Ingénieur Homme-Serpent
 STR_SNAKEMAN_LEADER
-Homme-Serpent Leader
+Chef Homme-Serpent
 STR_SNAKEMAN_COMMANDER
-Homme-Serpent Commandant
+Commandant Homme-Serpent
 STR_MUTON_SOLDIER
-Muton Soldat
+Soldat Muton
 STR_MUTON_NAVIGATOR
-Muton Navigateur
+Navigateur Muton
 STR_MUTON_ENGINEER
-Muton Ingénieur
+Ingénieur Muton
 STR_ETHEREAL_SOLDIER
-Ethereal Soldat
+Soldat Ethereal
 STR_ETHEREAL_LEADER
-Ethereal Leader
+Chef Ethereal
 STR_ETHEREAL_COMMANDER
-Ethereal Commandant
+Commandant Ethereal
 STR_CYBERDISC_TERRORIST
-Cyberdisque Terroriste
+Terroriste Cyberdisque
 STR_REAPER_TERRORIST
-Reaper Terroriste
+Terroriste Reaper
 STR_CHRYSSALID_TERRORIST
-Chryssalid Terroriste
+Terroriste Chryssalid
 STR_CELATID_TERRORIST
-Celatid Terroriste
+Terroriste Celatid
 STR_SILACOID_TERRORIST
-Silacoïde Terroriste
+Terroriste Silacoïde 
 STR_SECTOPOD_TERRORIST
-Sectopode Terroriste
+Terroriste Sectopode
 STR_UFO_POWER_SOURCE
 Source d'énergie OVNI
 STR_UFO_NAVIGATION
@@ -2134,12 +2134,110 @@ STR_EQUIPMENT_FOR_craftname
 STR_SELECT_SQUAD_FOR_craftname
 Sélectionner Escouade pour {1}
 STR_n_UNITS_IN_EXIT_AREA_1
-{N} Unité dans la zone de sortie
+{N} unité dans la zone de sortie
 STR_n_UNITS_IN_EXIT_AREA_2
-{N} Unités dans la zone de sortie
+{N} unités dans la zone de sortie
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} Unité hors de la zone de sortie
+{N} unité hors de la zone de sortie
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} Unités hors de la zone de sortie
+{N} unités hors de la zone de sortie
 STR_ABANDON_GAME_QUESTION
 ABANDONNER JEU?
+STR_HAS_BEEN_KILLED
+a été tué.
+STR_DRAG_SCROLL
+TRAÎNER BARRE DE DÉFILEMENT
+STR_HIT_MELEE
+Mêlée
+STR_CONTROLS
+COMMANDES
+STR_RESTORE_DEFAULTS
+Restaure Défauts
+STR_GENERAL
+Général
+STR_GEOSCAPE
+Geoscape
+STR_BATTLESCAPE
+Bataillescape
+STR_SCREENSHOT
+Capture d'Écran
+STR_FPS_COUNTER
+Compteur à FPS
+STR_ROTATE_LEFT
+Tourner Gauche
+STR_ROTATE_RIGHT
+Tourner Droit
+STR_ROTATE_UP
+Tourner en Haut
+STR_ROTATE_DOWN
+Tourner en Bas
+STR_ZOOM_IN
+Zoomer
+STR_ZOOM_OUT
+Dézoomer
+STR_TOGGLE_COUNTRY_DETAIL
+Commuter Détail de Pays
+STR_TOGGLE_RADAR_RANGES
+Commuter Champs de Radar
+STR_SCROLL_LEFT
+Traîner Gauche
+STR_SCROLL_RIGHT
+Traîner Droit
+STR_SCROLL_UP
+Traîner en Haut
+STR_SCROLL_DOWN
+Traîner en Bas
+STR_VIEW_LEVEL_ABOVE
+Voir sur Niveau
+STR_VIEW_LEVEL_BELOW
+Voir sous Niveau
+STR_CENTER_SELECTED_UNIT
+Centrer l'unité sélectionné
+STR_PREVIOUS_UNIT
+Unité préalable
+STR_NEXT_UNIT
+Unité suivante
+STR_DESELECT_UNIT
+Desélectionner
+STR_INVENTORY
+Inventaire
+STR_MINIMAP
+Minicarte
+STR_END_TURN
+Tour Complet
+STR_ABORT_MISSION
+Abandonner la Mission
+STR_UNIT_STATS
+Stats des Unités
+STR_KNEEL
+Agenouiller
+STR_RELOAD
+Recharger
+STR_TOGGLE_PERSONAL_LIGHTING
+Commuter Éclairage Personnel
+STR_DONT_RESERVE_TUS
+Ne pas réserver les UTs
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+UTs réservées au tir rapide
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+UTs réservées au tir précis
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+UTs réservées au tir automatique
+STR_CENTER_ON_ENEMY_1
+Centrer sur l'ennemi #1
+STR_CENTER_ON_ENEMY_2
+Centrer sur l'ennemi #2
+STR_CENTER_ON_ENEMY_3
+Centrer sur l'ennemi #3
+STR_CENTER_ON_ENEMY_4
+Centrer sur l'ennemi #4
+STR_CENTER_ON_ENEMY_5
+Centrer sur l'ennemi #5
+STR_CENTER_ON_ENEMY_6
+Centrer sur l'ennemi #6
+STR_CENTER_ON_ENEMY_7
+Centrer sur l'ennemi #7
+STR_CENTER_ON_ENEMY_8
+Centrer sur l'ennemi #8
+STR_CENTER_ON_ENEMY_9
+Centrer sur l'ennemi #9
