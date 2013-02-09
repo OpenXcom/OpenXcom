@@ -41,7 +41,7 @@ namespace OpenXcom
 	{
 		Unit *unit = _game->getRuleset()->getUnit(defs->id);
 		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
-		RuleItem *item = _game->getRuleset()->getItem(defs->title);
+		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
 		// add screen elements
 		_txtTitle = new Text(310, 16, 5, 23);
