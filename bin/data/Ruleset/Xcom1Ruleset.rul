@@ -3228,7 +3228,7 @@ ufos:
 invs:
   - id: STR_BACK_PACK
     x: 192
-    y: 40
+    y: 39
     slots:
       - [0, 0]
       - [1, 0]
@@ -3310,7 +3310,7 @@ invs:
       STR_RIGHT_SHOULDER: 10
   - id: STR_LEFT_SHOULDER
     x: 112
-    y: 40
+    y: 39
     slots:
       - [0, 0]
       - [1, 0]
@@ -3353,7 +3353,7 @@ invs:
       STR_RIGHT_SHOULDER: 10
   - id: STR_RIGHT_SHOULDER
     x: 16
-    y: 40
+    y: 39
     slots:
       - [0, 0]
       - [1, 0]
