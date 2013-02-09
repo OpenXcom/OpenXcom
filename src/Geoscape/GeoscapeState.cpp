@@ -587,7 +587,7 @@ void GeoscapeState::time5Seconds()
 							int soldiersOnBase = 0;
 							for (std::vector<Soldier*>::iterator j = base->getSoldiers()->begin(); j != base->getSoldiers()->end() ; ++j)
 							{
-								if ((*j)->getCraft()->getStatus() != "STR_OUT") soldiersOnBase++;
+								if ((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") soldiersOnBase++;
 							}
 							if (soldiersOnBase > 0)
 							{
