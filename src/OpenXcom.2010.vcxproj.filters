@@ -722,6 +722,7 @@
     </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
       <Filter>Menu</Filter>
+	</ClCompile>
     <ClCompile Include="Engine\Zoom.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
@@ -1473,6 +1474,7 @@
     </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
       <Filter>Menu</Filter>
+	</ClInclude>
     <ClInclude Include="Engine\Zoom.h">
       <Filter>Engine</Filter>
     </ClInclude>
