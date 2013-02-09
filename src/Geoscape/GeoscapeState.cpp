@@ -582,27 +582,35 @@ void GeoscapeState::time5Seconds()
 						{
 							popup(new BaseDefenseState(_game, base, *i, this));
 						}
-						else if (base->getSoldiers()->size() > 0)
-						{
-							(*i)->setStatus(Ufo::DESTROYED);
-							size_t month = _game->getSavedGame()->getMonthsPassed();
-							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-								month = _game->getRuleset()->getAlienItemLevels().size()-1;
-							SavedBattleGame *bgame = new SavedBattleGame();
-							_game->getSavedGame()->setBattleGame(bgame);
-							bgame->setMissionType("STR_BASE_DEFENSE");
-							BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-							bgen.setBase(base);
-							bgen.setAlienRace((*i)->getAlienRace());
-							bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-							bgen.run();
-							musicStop();
-							popup(new BriefingState(_game, 0, base));
-						}
 						else
 						{
-							(*i)->setStatus(Ufo::DESTROYED);
-							popup(new BaseDestroyedState(_game, base));
+							int soldiersOnBase = 0;
+							for (std::vector<Soldier*>::iterator j = base->getSoldiers()->begin(); j != base->getSoldiers()->end() ; ++j)
+							{
+								if ((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") soldiersOnBase++;
+							}
+							if (soldiersOnBase > 0)
+							{
+								(*i)->setStatus(Ufo::DESTROYED);
+								size_t month = _game->getSavedGame()->getMonthsPassed();
+								if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+									month = _game->getRuleset()->getAlienItemLevels().size()-1;
+								SavedBattleGame *bgame = new SavedBattleGame();
+								_game->getSavedGame()->setBattleGame(bgame);
+								bgame->setMissionType("STR_BASE_DEFENSE");
+								BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+								bgen.setBase(base);
+								bgen.setAlienRace((*i)->getAlienRace());
+								bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+								bgen.run();
+								musicStop();
+								popup(new BriefingState(_game, 0, base));
+							}
+							else
+							{
+								(*i)->setStatus(Ufo::DESTROYED);
+								popup(new BaseDestroyedState(_game, base));
+							}
 						}
 					}
 				}

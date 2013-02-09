@@ -512,7 +512,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
 						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));
-						if (tunit && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
+						if (tunit && tunit->getVisible() && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
 						{
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;

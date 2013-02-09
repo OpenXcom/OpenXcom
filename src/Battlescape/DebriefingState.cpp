@@ -476,12 +476,12 @@ void DebriefingState::prepareDebriefing()
 				{
 					// non soldier player = tank
 					addStat("STR_TANKS_DESTROYED", 1, -value);
-					for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+					for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
 					{
 						if ((*i)->getRules()->getType() == type)
 						{
 							delete (*i);
-							craft->getVehicles()->erase(i);
+							base->getVehicles()->erase(i);
 							break;
 						}
 					}

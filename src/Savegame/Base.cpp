@@ -1148,11 +1148,11 @@ void Base::setupDefenses()
 
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
-		if (_rule->getItem((i)->first)->isFixed())
+		RuleItem *rule = _rule->getItem((i)->first);
+
+		if (rule != 0 && rule->isFixed())
 		{
-			std::string type = _rule->getItem((i)->first)->getType();
-			Vehicle *v = new Vehicle(_rule->getItem((i)->first), 0);
-			_vehicles.push_back(v);
+			_vehicles.push_back(new Vehicle(rule, 0));
 		}
 	}
 }
