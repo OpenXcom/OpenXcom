@@ -584,7 +584,6 @@ void GeoscapeState::time5Seconds()
 						}
 						else if (base->getSoldiers()->size() > 0)
 						{
-							// Whatever happens in the base defense, the UFO has finished its duty
 							(*i)->setStatus(Ufo::DESTROYED);
 							size_t month = _game->getSavedGame()->getMonthsPassed();
 							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
@@ -602,6 +601,7 @@ void GeoscapeState::time5Seconds()
 						}
 						else
 						{
+							(*i)->setStatus(Ufo::DESTROYED);
 							popup(new BaseDestroyedState(_game, base));
 						}
 					}
