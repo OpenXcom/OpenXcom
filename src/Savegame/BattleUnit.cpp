@@ -2187,6 +2187,7 @@ int BattleUnit::getCarriedWeight() const
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
 		weight += (*i)->getRules()->getWeight();
+		if (0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}
 	if (weight == 0)
 		weight = 1;
