@@ -1909,6 +1909,16 @@ STR_HEAL
 обработка ран
 STR_TUS
 Вр>
+STR_WEIGHT
+Вес>
+STR_FACCURACY
+Точ.В.>
+STR_REACT
+Реакц>
+STR_PSKILL
+П.Нав>
+STR_PSTRENGTH
+П.Сил>
 STR_ALIEN_ARTIFACT
 Экипировка пришельцев
 STR_AMMO_ROUNDS_LEFT
