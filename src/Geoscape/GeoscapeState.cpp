@@ -107,40 +107,43 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
+	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
+	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
+
 	// Create objects
-	_bg = new Surface(320, 200, 0, 0);
-	_globe = new Globe(_game, 130, 100, 256, 200, 0, 0);
+	_bg = new Surface(320, 200, mapWidth-320, mapHeight/2-100);
+	_globe = new Globe(_game, (mapWidth-64)/2, mapHeight/2, mapWidth-64, mapHeight, 0, 0);
 
-	_btnIntercept = new ImageButton(63, 11, 257, 0);
-	_btnBases = new ImageButton(63, 11, 257, 12);
-	_btnGraphs = new ImageButton(63, 11, 257, 24);
-	_btnUfopaedia = new ImageButton(63, 11, 257, 36);
-	_btnOptions = new ImageButton(63, 11, 257, 48);
-	_btnFunding = new ImageButton(63, 11, 257, 60);
+	_btnIntercept = new ImageButton(63, 11, mapWidth-63, mapHeight/2-100);
+	_btnBases = new ImageButton(63, 11, mapWidth-63, mapHeight/2-88);
+	_btnGraphs = new ImageButton(63, 11, mapWidth-63, mapHeight/2-76);
+	_btnUfopaedia = new ImageButton(63, 11, mapWidth-63, mapHeight/2-64);
+	_btnOptions = new ImageButton(63, 11, mapWidth-63, mapHeight/2-52);
+	_btnFunding = new ImageButton(63, 11, mapWidth-63, mapHeight/2-40);
 
-	_btn5Secs = new ImageButton(31, 13, 257, 112);
-	_btn1Min = new ImageButton(31, 13, 289, 112);
-	_btn5Mins = new ImageButton(31, 13, 257, 126);
-	_btn30Mins = new ImageButton(31, 13, 289, 126);
-	_btn1Hour = new ImageButton(31, 13, 257, 140);
-	_btn1Day = new ImageButton(31, 13, 289, 140);
+	_btn5Secs = new ImageButton(31, 13, mapWidth-63, mapHeight/2+12);
+	_btn1Min = new ImageButton(31, 13, mapWidth-31, mapHeight/2+12);
+	_btn5Mins = new ImageButton(31, 13, mapWidth-63, mapHeight/2+26);
+	_btn30Mins = new ImageButton(31, 13, mapWidth-31, mapHeight/2+26);
+	_btn1Hour = new ImageButton(31, 13, mapWidth-63, mapHeight/2+40);
+	_btn1Day = new ImageButton(31, 13, mapWidth-31, mapHeight/2+40);
 
-	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
-	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
-	_btnRotateUp = new InteractiveSurface(13, 12, 271, 162);
-	_btnRotateDown = new InteractiveSurface(13, 12, 271, 187);
-	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
-	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
+	_btnRotateLeft = new InteractiveSurface(12, 10, mapWidth-61, mapHeight/2+76);
+	_btnRotateRight = new InteractiveSurface(12, 10, mapWidth-37, mapHeight/2+76);
+	_btnRotateUp = new InteractiveSurface(13, 12, mapWidth-49, mapHeight/2+62);
+	_btnRotateDown = new InteractiveSurface(13, 12, mapWidth-49, mapHeight/2+87);
+	_btnZoomIn = new InteractiveSurface(23, 23, mapWidth-25, mapHeight/2+56);
+	_btnZoomOut = new InteractiveSurface(13, 17, mapWidth-20, mapHeight/2+82);
 
-	_txtHour = new Text(20, 16, 259, 74);
-	_txtHourSep = new Text(4, 16, 279, 74);
-	_txtMin = new Text(20, 16, 283, 74);
-	_txtMinSep = new Text(4, 16, 303, 74);
-	_txtSec = new Text(11, 8, 307, 80);
-	_txtWeekday = new Text(59, 8, 259, 87);
-	_txtDay = new Text(29, 8, 259, 94);
-	_txtMonth = new Text(29, 8, 288, 94);
-	_txtYear = new Text(59, 8, 259, 101);
+	_txtHour = new Text(20, 16, mapWidth-61, mapHeight/2-26);
+	_txtHourSep = new Text(4, 16, mapWidth-41, mapHeight/2-26);
+	_txtMin = new Text(20, 16, mapWidth-37, mapHeight/2-26);
+	_txtMinSep = new Text(4, 16, mapWidth-17, mapHeight/2-26);
+	_txtSec = new Text(11, 8, mapWidth-13, mapHeight/2-20);
+	_txtWeekday = new Text(59, 8, mapWidth-61, mapHeight/2-13);
+	_txtDay = new Text(29, 8, mapWidth-61, mapHeight/2-6);
+	_txtMonth = new Text(29, 8, mapWidth-32, mapHeight/2-6);
+	_txtYear = new Text(59, 8, mapWidth-61, mapHeight/2+1);
 
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
