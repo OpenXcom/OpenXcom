@@ -100,7 +100,7 @@ void Screen::handle(Action *action)
 			i++;
 		}
 		while (CrossPlatform::fileExists(ss.str()));
-
+		
 		std::vector<unsigned char> image;
 		SDL_Color *palette = getPalette();
 
@@ -108,18 +108,36 @@ void Screen::handle(Action *action)
 		{
 			for (int x = 0; x < getWidth(); ++x)
 			{
-				Uint8 color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
-				image.push_back(palette[color].r);
-				image.push_back(palette[color].g);
-				image.push_back(palette[color].b);
+				switch(_screen->format->BytesPerPixel)
+				{
+					Uint8 color;
+					Uint32 colors;
+				case 1:
+					color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
+					image.push_back(palette[color].r);
+					image.push_back(palette[color].g);
+					image.push_back(palette[color].b);
+					break;
+				case 2:
+				case 3:
+				case 4:
+					colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
+					image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
+					image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
+					image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
+					break;
+				default:
+					return; // not likely
+				}
 			}
 		}
 
 		unsigned error = lodepng::encode(ss.str(), image, getWidth(), getHeight(), LCT_RGB);
 		if (error)
 		{
+			puts(lodepng_error_text(error));
 			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
-		}
+		} 
 	}
 }
 
@@ -184,12 +202,12 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 	{
 		// an initial palette setup has not been comitted to the screen yet
 		// just update it with whatever colors are being sent now
-		memcpy(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color)*ncolors);
+		memmove(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color)*ncolors);
 		_numColors = 256; // all the use cases are just a full palette with 16-color follow-ups
 		_firstColor = 0;
 	} else
 	{
-		memcpy(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color) * ncolors);
+		memmove(&(deferredPalette[firstcolor]), colors, sizeof(SDL_Color) * ncolors);
 		_numColors = ncolors;
 		_firstColor = firstcolor;
 	}
@@ -265,7 +283,7 @@ void Screen::setResolution(int width, int height)
 	}
 
 	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
-	setPalette(getPalette());
+	if (_surface->getSurface()->format->BitsPerPixel == 8) _surface->setPalette(getPalette());
 }
 
 /**
