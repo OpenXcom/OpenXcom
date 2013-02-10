@@ -140,8 +140,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		std::string binTiles;
 		node["binTiles"] >> binTiles;
 
-		Log(LOG_WARNING) << binTiles;
-
 		Uint8 *tileData = (Uint8*)malloc(binTiles.length());
 
 		base64::decoder D;
