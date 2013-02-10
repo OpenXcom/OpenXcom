@@ -227,6 +227,9 @@ void InventoryState::btnOkClick(Action *)
 	{
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
+		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+			if ((*i)->getFaction() == _battleGame->getSide())
+				(*i)->prepareNewTurn();
 	}
 	_battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
