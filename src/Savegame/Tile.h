@@ -24,7 +24,9 @@
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapData.h"
 #include "BattleUnit.h"
+#include "SerializationHelper.h"
 
+#include <SDL_types.h> // for Uint8
 
 namespace OpenXcom
 {
@@ -41,6 +43,17 @@ class RuleInventory;
  */
 class Tile
 {
+public:
+	static struct SerializationKey 
+	{
+		// how many bytes to store each variable or each member of array of the same name
+		Uint8 index; // for indexing the actual tile array
+		Uint8 _mapDataSetID;
+		Uint8 _mapDataID;
+		Uint8 _smoke;
+		Uint8 _fire;
+		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
+	} serializationKey;
 protected:
 	static const int LIGHTLAYERS = 3;
 	MapData *_objects[4];
@@ -63,13 +76,14 @@ public:
 	Tile(const Position& pos);
 	/// Cleans up a tile.
 	~Tile();
-	/// Load the tile to yaml
+	/// Load the tile from yaml
 	void load(const YAML::Node &node);
-	void loadBinary(const unsigned char* buffer);
+	/// Load the tile from binary buffer in memory
+	void loadBinary(Uint8 **buffer);
 	/// Saves the tile to yaml
 	void save(YAML::Emitter &out) const;
 	/// Saves the tile to binary
-	void saveBinary(unsigned char* buffer) const;
+	void saveBinary(Uint8** buffer) const;
 	/// Gets a pointer to the mapdata for a specific part of the tile.
 	MapData *getMapData(int part) const;
 	/// Sets the pointer to the mapdata for a specific part of the tile

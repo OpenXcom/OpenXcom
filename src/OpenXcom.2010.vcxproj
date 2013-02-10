@@ -394,6 +394,7 @@
     <ClCompile Include="Savegame\AlienBase.cpp" />
     <ClCompile Include="Savegame\AlienStrategy.cpp" />
     <ClCompile Include="Savegame\AlienMission.cpp" />
+    <ClCompile Include="Savegame\b64\cdecode.c" />
     <ClCompile Include="Savegame\Base.cpp" />
     <ClCompile Include="Savegame\BaseFacility.cpp" />
     <ClCompile Include="Savegame\BattleItem.cpp" />
@@ -640,6 +641,8 @@
     <ClInclude Include="Savegame\AlienBase.h" />
     <ClInclude Include="Savegame\AlienStrategy.h" />
     <ClInclude Include="Savegame\AlienMission.h" />
+    <ClInclude Include="Savegame\b64\cdecode.h" />
+    <ClInclude Include="Savegame\b64\decode.h" />
     <ClInclude Include="Savegame\Base.h" />
     <ClInclude Include="Savegame\BaseFacility.h" />
     <ClInclude Include="Savegame\BattleItem.h" />
@@ -657,6 +660,7 @@
     <ClInclude Include="Savegame\ResearchProject.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
+    <ClInclude Include="Savegame\SerializationHelper.h" />
     <ClInclude Include="Savegame\Soldier.h" />
     <ClInclude Include="Savegame\Node.h" />
     <ClInclude Include="Savegame\Target.h" />
