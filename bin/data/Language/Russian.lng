@@ -2149,3 +2149,101 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_3
 {N} - ВНЕ ЗОНЫ ВЫХОДА
 STR_ABANDON_GAME_QUESTION
 ОТКАЗАТЬСЯ ОТ ИГРЫ?
+STR_HAS_BEEN_KILLED
+убит
+STR_DRAG_SCROLL
+ПРОЛИСТЫВАНИЕ
+STR_HIT_MELEE
+Поражен
+STR_CONTROLS
+УПРАВЛЕНИЕ
+STR_RESTORE_DEFAULTS
+Восстановить умолчания
+STR_GENERAL
+Общие
+STR_GEOSCAPE
+Глобальный вид
+STR_BATTLESCAPE
+Боевой вид
+STR_SCREENSHOT
+Снимок экрана
+STR_FPS_COUNTER
+Счетчик FPS
+STR_ROTATE_LEFT
+Повернуть налево
+STR_ROTATE_RIGHT
+Повернуть направо
+STR_ROTATE_UP
+Повернуть вверх
+STR_ROTATE_DOWN
+Повернуть вниз
+STR_ZOOM_IN
+Приблизить
+STR_ZOOM_OUT
+Отдалить
+STR_TOGGLE_COUNTRY_DETAIL
+Вкл/выкл контуры стран
+STR_TOGGLE_RADAR_RANGES
+Вкл/выкл зоны радаров
+STR_SCROLL_LEFT
+Пролистать влево
+STR_SCROLL_RIGHT
+Пролистать вправо
+STR_SCROLL_UP
+Пролистать вверх
+STR_SCROLL_DOWN
+Пролистать вниз
+STR_VIEW_LEVEL_ABOVE
+Смотреть уровень выше
+STR_VIEW_LEVEL_BELOW
+Смотреть уровень ниже
+STR_CENTER_SELECTED_UNIT
+Центр на выбранном солдате
+STR_PREVIOUS_UNIT
+Предыдущий солдат
+STR_NEXT_UNIT
+Следующий солдат
+STR_DESELECT_UNIT
+Снять выделение
+STR_INVENTORY
+Инвентарь
+STR_MINIMAP
+Миникарта
+STR_END_TURN
+Конец хода
+STR_ABORT_MISSION
+Отмена миссии
+STR_UNIT_STATS
+Статус солдата
+STR_KNEEL
+Присесть
+STR_RELOAD
+Перезарядка
+STR_TOGGLE_PERSONAL_LIGHTING
+Вкл/выкл персональное освещение
+STR_DONT_RESERVE_TUS
+Не оставлять TU
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Оставить TU для выстрела наспех
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Оставить TU для точного выстрела
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Оставить TU для выстрела очередью
+STR_CENTER_ON_ENEMY_1
+Центр на противнике 1
+STR_CENTER_ON_ENEMY_2
+Центр на противнике 2
+STR_CENTER_ON_ENEMY_3
+Центр на противнике 3
+STR_CENTER_ON_ENEMY_4
+Центр на противнике 4
+STR_CENTER_ON_ENEMY_5
+Центр на противнике 5
+STR_CENTER_ON_ENEMY_6
+Центр на противнике 6
+STR_CENTER_ON_ENEMY_7
+Центр на противнике 7
+STR_CENTER_ON_ENEMY_8
+Центр на противнике 8
+STR_CENTER_ON_ENEMY_9
+Центр на противнике 9
