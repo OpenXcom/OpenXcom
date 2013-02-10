@@ -529,6 +529,9 @@ openxcom_SOURCES = \
 	src/Savegame/Waypoint.h \
 	src/Savegame/WeightedOptions.cpp \
 	src/Savegame/WeightedOptions.h \
+	src/Savegame/b64/cdecode.c \
+	src/Savegame/b64/cdecode.h \
+	src/Savegame/b64/decode.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \
 	src/Ufopaedia/ArticleStateBaseFacility.h \
 	src/Ufopaedia/ArticleState.cpp \

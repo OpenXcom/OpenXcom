@@ -35,6 +35,7 @@
 #include "../Battlescape/AggroBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
+#include "../Engine/Logger.h"
 
 #include "b64/decode.h"
 #include <sstream>
@@ -139,17 +140,20 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		std::string binTiles;
 		node["binTiles"] >> binTiles;
 
-		Uint8 *tileData = (Uint8*)malloc(totalTiles * serKey.totalBytes);
+		Log(LOG_WARNING) << binTiles;
+
+		Uint8 *tileData = (Uint8*)malloc(binTiles.length());
 
 		base64::decoder D;
-		D.decode(binTiles.c_str(), binTiles.length(), (char*)tileData);
+		int len = D.decode(binTiles.c_str(), binTiles.length(), (char*)tileData);
 
 		Uint8 *r = (Uint8*)tileData; 
 
-		while (r < ((&tileData[0]) + totalTiles * serKey.totalBytes))
+		while (r < ((&tileData[0]) + len))
 		{
 			int index = unserializeInt(&r, serKey.index);
-			_tiles[index]->loadBinary(&r);
+			assert (index < _width * _height * _length);
+			_tiles[index]->loadBinary(&r, serKey);
 		}
 	}
 
@@ -360,7 +364,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _height * _length * _width;
-	Uint8* tileData = (Uint8*) malloc(tileDataSize);
+	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
 	Uint8* w = tileData;
 
 	for (int i = 0; i < _height * _length * _width; ++i)

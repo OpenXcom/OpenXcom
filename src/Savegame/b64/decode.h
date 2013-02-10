@@ -26,7 +26,9 @@ namespace base64
 
 		decoder(int buffersize_in = BUFFERSIZE)
 		: _buffersize(buffersize_in)
-		{}
+		{
+			base64_init_decodestate(&_state);
+		}
 
 		int decode(char value_in)
 		{

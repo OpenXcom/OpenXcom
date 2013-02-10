@@ -34,12 +34,12 @@ namespace OpenXcom
 /// How many bytes various fields use in a serialized tile. See header.
 Tile::SerializationKey Tile::serializationKey = 
 {4, // index
- 1, // _mapDataSetID, four of these
+ 2, // _mapDataSetID, four of these
  2, // _mapDataID, four of these
  1, // _fire
  1, // _smoke
 	// one 8-bit bool field goes unmentioned
- 19 // total bytes to save one tile
+ 4 + 2*4 + 2*4 +1 +1 +1 // total bytes to save one tile
 };
 
 /**
@@ -114,23 +114,23 @@ void Tile::load(const YAML::Node &node)
  * Load the tile from binary.
  * @param buffer pointer to buffer.
  */
-void Tile::loadBinary(Uint8 **buffer)
+void Tile::loadBinary(Uint8 **buffer, Tile::SerializationKey& serKey)
 {
-	_mapDataSetID[0] = unserializeInt(buffer, serializationKey._mapDataSetID);
-	_mapDataSetID[1] = unserializeInt(buffer, serializationKey._mapDataSetID);
-	_mapDataSetID[2] = unserializeInt(buffer, serializationKey._mapDataSetID);
-	_mapDataSetID[3] = unserializeInt(buffer, serializationKey._mapDataSetID);
-	_mapDataID[0] = unserializeInt(buffer, serializationKey._mapDataID);
-	_mapDataID[1] = unserializeInt(buffer, serializationKey._mapDataID);
-	_mapDataID[2] = unserializeInt(buffer, serializationKey._mapDataID);
-	_mapDataID[3] = unserializeInt(buffer, serializationKey._mapDataID);
+	_mapDataID[0] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataID[1] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataID[2] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataID[3] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataSetID[0] = unserializeInt(buffer, serKey._mapDataSetID);
+	_mapDataSetID[1] = unserializeInt(buffer, serKey._mapDataSetID);
+	_mapDataSetID[2] = unserializeInt(buffer, serKey._mapDataSetID);
+	_mapDataSetID[3] = unserializeInt(buffer, serKey._mapDataSetID);
 
-	_smoke = unserializeInt(buffer, serializationKey._smoke);
-	_fire = unserializeInt(buffer, serializationKey._fire);
+	_smoke = unserializeInt(buffer, serKey._smoke);
+	_fire = unserializeInt(buffer, serKey._fire);
 
-	_discovered[0] = **buffer & 1;
-	_discovered[1] = **buffer & 2;
-	_discovered[2] = **buffer & 4;
+	_discovered[0] = (**buffer & 1) ? true : false;
+	_discovered[1] = (**buffer & 2) ? true : false;
+	_discovered[2] = (**buffer & 4) ? true : false;
 	++(*buffer);
 }
 
@@ -151,7 +151,7 @@ void Tile::save(YAML::Emitter &out) const
 		out << YAML::Key << "smoke" << YAML::Value << _smoke;
 	if (_fire)
 		out << YAML::Key << "fire" << YAML::Value << _fire;
-	if (_discovered[0] || _discovered[0] || _discovered[0])
+	if (_discovered[0] || _discovered[1] || _discovered[2])
 	{
 		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
@@ -176,7 +176,7 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._smoke, _smoke);
 	serializeInt(buffer, serializationKey._fire, _fire);
 
-	**buffer = (_discovered[0]?1:0) + (_discovered[1]?1:0) << 1 + (_discovered[2]?1:0) << 2;
+	**buffer = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
 	++(*buffer);
 }
 

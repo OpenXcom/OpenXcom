@@ -26,16 +26,16 @@
 namespace OpenXcom
 {
 
-static Uint32 unserializeInt(Uint8 **buffer, Uint8 sizeKey)
+static int unserializeInt(Uint8 **buffer, Uint8 sizeKey)
 {
-	Uint32 ret = 0;
+	int ret = 0;
 	switch(sizeKey)
 	{
 	case 1:
 		ret = **buffer;
 		break;
 	case 2:
-		ret = *(Uint16*)*buffer;
+		ret = *(Sint16*)*buffer;
 		break;
 	case 3:
 		assert(false); // no.
@@ -52,15 +52,17 @@ static Uint32 unserializeInt(Uint8 **buffer, Uint8 sizeKey)
 	return ret;
 }
 
-static void serializeInt(Uint8 **buffer, Uint8 sizeKey, Uint32 value)
+static void serializeInt(Uint8 **buffer, Uint8 sizeKey, int value)
 {
 	switch(sizeKey)
 	{
 	case 1:
+		assert(value < 256);
 		**buffer = value;
 		break;
 	case 2:
-		*(Uint16*)*buffer = value;
+		assert(value < 65536);
+		*(Sint16*)*buffer = value;
 		break;
 	case 3:
 		assert(false); // no.
