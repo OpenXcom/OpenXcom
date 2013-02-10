@@ -556,7 +556,7 @@ void DebriefingState::prepareDebriefing()
 				// mind controlled units may as well count as unconscious
 				&& ((faction == FACTION_PLAYER)
 				// large units can't be recovered as items, so we have to have an extra special case JUST for reapers
-				|| (*j)->getStatus() == STATUS_UNCONSCIOUS && (*j)->getArmor()->getSize() > 1))
+				|| ((*j)->getStatus() == STATUS_UNCONSCIOUS && (*j)->getArmor()->getSize() > 1)))
 			{
 				std::string researchName = "STR_" + (*j)->getType();
 				std::string corpseName = researchName + "_CORPSE";

@@ -153,6 +153,8 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			assert (index < _width * _height * _length);
 			_tiles[index]->loadBinary(&r, serKey);
 		}
+		
+		free(tileData);
 	}
 
 	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
