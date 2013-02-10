@@ -37,9 +37,6 @@
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 
-#include "b64/decode.h"
-#include <sstream>
-
 namespace OpenXcom
 {
 
@@ -137,24 +134,18 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		node["totalTiles"] >> totalTiles;
 
 		// load binary tile data! 
-		std::string binTiles;
+		YAML::Binary binTiles;
 		node["binTiles"] >> binTiles;
 
-		Uint8 *tileData = (Uint8*)malloc(binTiles.length());
+		Uint8 *r = (Uint8*)binTiles.data();
+		Uint8 *dataEnd = r + totalTiles * serKey.totalBytes;
 
-		base64::decoder D;
-		int len = D.decode(binTiles.c_str(), binTiles.length(), (char*)tileData);
-
-		Uint8 *r = (Uint8*)tileData; 
-
-		while (r < ((&tileData[0]) + len))
+		while (r < dataEnd)
 		{
 			int index = unserializeInt(&r, serKey.index);
 			assert (index < _width * _height * _length);
 			_tiles[index]->loadBinary(&r, serKey);
-		}
-		
-		free(tileData);
+		}		
 	}
 
 	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
