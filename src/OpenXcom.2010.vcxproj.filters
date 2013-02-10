@@ -750,9 +750,6 @@
     <ClCompile Include="Engine\Zoom.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\b64\cdecode.c">
-      <Filter>Savegame\b64</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1505,12 +1502,6 @@
     <ClInclude Include="Savegame\SerializationHelper.h">
       <Filter>Savegame</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\b64\cdecode.h">
-      <Filter>Savegame\b64</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\b64\decode.h">
-      <Filter>Savegame\b64</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
@@ -1548,9 +1539,6 @@
     </Filter>
     <Filter Include="Engine\Scalers">
       <UniqueIdentifier>{fef61e76-5d44-4389-a40c-12da6e590e2c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Savegame\b64">
-      <UniqueIdentifier>{4ec40277-77e1-4265-b1db-951f46ade648}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
