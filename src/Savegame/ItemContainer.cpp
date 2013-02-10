@@ -141,8 +141,7 @@ double ItemContainer::getTotalSize(const Ruleset *rule) const
 	double total = 0;
 	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
 	{
-		RuleItem *ri = rule->getItem(i->first);
-		if (ri != 0) total += ri->getSize() * i->second;
+		total += rule->getItem(i->first)->getSize() * i->second;
 	}
 	return total;
 }

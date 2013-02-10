@@ -73,10 +73,13 @@ void Music::load(const void *data, size_t size)
  */
 void Music::play() const
 {
-	if (!Options::getBool("mute") && _music != 0 && Mix_PlayMusic(_music, -1) == -1)
+	if (!Options::getBool("mute"))
 	{
-		Log(LOG_WARNING) << Mix_GetError();
 		Mix_HaltMusic();
+		if (_music != 0 && Mix_PlayMusic(_music, -1) == -1)
+		{
+			Log(LOG_WARNING) << Mix_GetError();
+		}
 	}
 }
 

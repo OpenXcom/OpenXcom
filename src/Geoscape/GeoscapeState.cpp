@@ -783,17 +783,6 @@ void GeoscapeState::time5Seconds()
 						++d;
 					}
 				}
-				// Send all crafts engaging this UFO back to base.
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
-				{
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
-					{
-						if((*c)->getDestination() == (*i))
-						{
-							(*c)->returnToBase();
-						}
-					}
-				}
 			}
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
