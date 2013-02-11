@@ -2184,12 +2184,13 @@ BattleUnit *BattleUnit::getCharging()
  * Get the units carried weight in strength units.
  * @return weight
  */
-int BattleUnit::getCarriedWeight() const
+int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 {
 	int weight = 0;
 
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
+		if ((*i) == draggingItem) continue;
 		weight += (*i)->getRules()->getWeight();
 		if (0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}

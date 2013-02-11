@@ -236,12 +236,10 @@ void InventoryState::init()
  */
 void InventoryState::updateStats()
 {
-	BattleItem *item = _inv->getSelectedItem();
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 	if (_showMoreStatsInInventoryView)
 	{
-		int Weight = unit->getCarriedWeight();
-		if (item != 0 && item->getSlot()->getType() != INV_GROUND) Weight -= item->getRules()->getWeight();
+		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		std::wstringstream ss;
 		ss << _game->getLanguage()->getString("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
 		_txtWeight->setText(ss.str());
