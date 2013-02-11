@@ -59,6 +59,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_txtStores = new Text(150, 9, 160, 32);
 	_txtAvailable = new Text(110, 9, 16, 24);
 	_txtUsed = new Text(110, 9, 130, 24);
+	_txtCrew = new Text(71, 9, 244, 24);
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
@@ -71,6 +72,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	add(_txtStores);
 	add(_txtAvailable);
 	add(_txtUsed);
+	add(_txtCrew);
 	add(_lstEquipment);
 
 	// Set up objects
@@ -103,6 +105,12 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	std::wstringstream ss2;
 	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
+
+	_txtCrew->setColor(Palette::blockOffset(15)+1);
+	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
+	std::wstringstream ss3;
+	ss3 << _game->getLanguage()->getString("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
+	_txtCrew->setText(ss3.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
