@@ -24,7 +24,13 @@
 #include "Palette.h"
 #include "Exception.h"
 #include "ShaderMove.h"
+#include <stdlib.h>
+#include <malloc.h>
 
+#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
+#define _aligned_malloc __mingw_aligned_malloc
+#define _aligned_free   __mingw_aligned_free
+#endif //MINGW
 
 namespace OpenXcom
 {
@@ -45,7 +51,7 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 	int pitch = (bpp/8) * ((width+15)& ~0xF);
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 	int rc;
 	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height * (bpp/8))))
 	{
@@ -104,7 +110,7 @@ Surface::Surface(const Surface& other)
 Surface::~Surface()
 {
 	//if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
-#ifdef _MSC_VER
+#ifdef _WIN32
 	if (_alignedBuffer) _aligned_free(_alignedBuffer);
 #else
 	if (_alignedBuffer) free(_alignedBuffer);
