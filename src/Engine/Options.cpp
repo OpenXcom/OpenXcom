@@ -93,6 +93,7 @@ void createDefault()
 	setBool("strafe", false);
 	setBool("battleNotifyDeath", false);
 	setBool("allowBuildingQueue", false);
+	setBool("allowAutoSellProduction", false);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);

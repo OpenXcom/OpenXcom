@@ -34,6 +34,8 @@
 #include "../Savegame/Production.h"
 #include "NewManufactureListState.h"
 #include "ManufactureInfoState.h"
+#include "../Engine/Options.h"
+#include <limits>
 
 namespace OpenXcom
 {
@@ -193,13 +195,18 @@ void ManufactureState::fillProductionList()
 		std::wstringstream s2;
 		s2 << (*iter)->getAmountProduced();
 		std::wstringstream s3;
-		s3 << (*iter)->getAmountTotal();
+		if (Options::getBool("allowAutoSellProduction") && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+			s3 << "$$$";
+		else s3 << (*iter)->getAmountTotal();
 		std::wstringstream s4;
 		s4 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wstringstream s5;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
-			int timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
+			int timeLeft;
+			if (Options::getBool("allowAutoSellProduction") && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
+			else timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
