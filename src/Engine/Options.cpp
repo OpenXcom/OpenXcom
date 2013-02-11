@@ -56,13 +56,17 @@ void createDefault()
 	setInt("displayWidth", 320);
 	setInt("displayHeight", 200);
 	setBool("fullscreen", true);
+	setBool("asyncBlit", false);
 	setInt("keyboardMode", KEYBOARD_OFF);
 #else
 	setInt("displayWidth", 640);
 	setInt("displayHeight", 400);
 	setBool("fullscreen", false);
+	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("useScaleFilter", false);
+	setBool("useHQXFilter", false);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);
