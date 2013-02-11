@@ -50,6 +50,8 @@ private:
 	Surface *_selector;
 	bool _blink;
 	Timer *_timer;
+	/// Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
+	void updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor);
 public:
 	/// Creates a new base view at the specified position and size.
 	BaseView(int width, int height, int x = 0, int y = 0);
@@ -71,6 +73,10 @@ public:
 	void setSelectable(int size);
 	/// Checks if a facility can be placed.
 	bool isPlaceable(RuleBaseFacility *rule) const;
+	/// Checks if the placed facility is placed in queue or not.
+	bool isQueuedBuilding(RuleBaseFacility *rule) const;
+	/// ReCalculates the remaining build-time of all queued buildings.
+	void reCalcQueuedBuildings();
 	/// Counts the squares connected to a grid position.
 	int countConnected(int x, int y, int **grid, BaseFacility *remove = 0) const;
 	/// Handles the timers.

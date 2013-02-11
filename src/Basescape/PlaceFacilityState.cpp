@@ -31,6 +31,8 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Engine/Options.h"
+#include <limits>
 
 namespace OpenXcom
 {
@@ -149,6 +151,11 @@ void PlaceFacilityState::viewClick(Action *)
 		fac->setY(_view->getGridY());
 		fac->setBuildTime(_rule->getBuildTime());
 		_base->getFacilities()->push_back(fac);
+		if (Options::getBool("allowBuildingQueue"))
+		{
+			if (_view->isQueuedBuilding(_rule)) fac->setBuildTime(std::numeric_limits<int>::max());
+			_view->reCalcQueuedBuildings();
+		}
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _rule->getBuildCost());
 		_game->popState();
 	}
