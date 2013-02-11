@@ -35,7 +35,7 @@
 #include "../Battlescape/AggroBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -107,26 +107,46 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	}
 
 	initMap(_width, _length, _height);
+	
+	if (!node.FindValue("tileTotalBytesPer"))
+	{
+		// binary tile data not found, load old-style text tiles :(
+		for (YAML::Iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
+		{
+			Position pos;
+			(*i)["position"][0] >> pos.x;
+			(*i)["position"][1] >> pos.y;
+			(*i)["position"][2] >> pos.z;
+			getTile(pos)->load((*i));
+		}
+	} else 
+	{
+		// load key to how the tile data was saved
+		Tile::SerializationKey serKey;
+		size_t totalTiles;
 
-	for (YAML::Iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
-	{
-		Position pos;
-		(*i)["position"][0] >> pos.x;
-		(*i)["position"][1] >> pos.y;
-		(*i)["position"][2] >> pos.z;
-		getTile(pos)->load((*i));
+		node["tileIndexSize"] >> serKey.index;
+		node["tileTotalBytesPer"] >> serKey.totalBytes;
+		node["tileFireSize"] >> serKey._fire;
+		node["tileSmokeSize"] >> serKey._smoke;
+		node["tileIDSize"] >> serKey._mapDataID;
+		node["tileSetIDSize"] >> serKey._mapDataSetID;
+		node["totalTiles"] >> totalTiles;
+
+		// load binary tile data! 
+		YAML::Binary binTiles;
+		node["binTiles"] >> binTiles;
+
+		Uint8 *r = (Uint8*)binTiles.data();
+		Uint8 *dataEnd = r + totalTiles * serKey.totalBytes;
+
+		while (r < dataEnd)
+		{
+			int index = unserializeInt(&r, serKey.index);
+			assert (index < _width * _height * _length);
+			_tiles[index]->loadBinary(&r, serKey);
+		}		
 	}
-/*	const int recordSize = 19;
-	std::string s;
-	node["tiles"] >> s;
-	std::vector<unsigned char> tileData( s.begin(), s.end() );
-	int records = tileData.size() / recordSize;
-	for (int i = 0; i < records; ++i)
-	{
-		int index = tileData.data()[(i * recordSize)] + tileData.data()[(i * recordSize)+1] << 8 + tileData.data()[(i * recordSize)+2] << 16 + tileData.data()[(i * recordSize)+3] << 24;
-		_tiles[index]->loadBinary(&tileData.data()[(i * recordSize)]);
-	}
-*/
 
 	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
 	{
@@ -314,6 +334,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		out << (*i)->getName();
 	}
 	out << YAML::EndSeq;
+#if 0
 	out << YAML::Key << "tiles" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (int i = 0; i < _height * _length * _width; ++i)
@@ -324,27 +345,38 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		}
 	}
 	out << YAML::EndSeq;
-	/*const int recordSize = 19;
-	size_t tileDataSize = recordSize * _height * _length * _width;
-	unsigned char* tileData = (unsigned char*) malloc(tileDataSize);
-	int ptr = 0;
+#else
+	// first, write out the field sizes we're going to use to write the tile data
+	out << YAML::Key << "tileIndexSize" << YAML::Value << Tile::serializationKey.index;
+	out << YAML::Key << "tileTotalBytesPer" << YAML::Value << Tile::serializationKey.totalBytes;
+	out << YAML::Key << "tileFireSize" << YAML::Value << Tile::serializationKey._fire;
+	out << YAML::Key << "tileSmokeSize" << YAML::Value << Tile::serializationKey._smoke;
+	out << YAML::Key << "tileIDSize" << YAML::Value << Tile::serializationKey._mapDataID;
+	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
+
+	size_t tileDataSize = Tile::serializationKey.totalBytes * _height * _length * _width;
+	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
+	Uint8* w = tileData;
+
 	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
-			tileData[ptr] = (unsigned int)i;
-			_tiles[i]->saveBinary(&tileData[ptr]);
-			ptr += recordSize;
+			serializeInt(&w, Tile::serializationKey.index, i);
+			_tiles[i]->saveBinary(&w);
 		}
 		else
 		{
-			tileDataSize -= recordSize;
+			tileDataSize -= Tile::serializationKey.totalBytes;
 		}
 	}
-	out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
+	out << YAML::Key << "totalTiles" << YAML::Value << tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
+	out << YAML::Key << "binTiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
     free(tileData);
-    ptr = NULL;
-	*/
+
+
+#endif
+
 	out << YAML::Key << "nodes" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)

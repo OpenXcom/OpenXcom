@@ -64,8 +64,8 @@ name_DATA = \
 bin_PROGRAMS = openxcom
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
 openxcom_CXXFLAGS = \
-	$(CFLAGS) \
-	$(DEBUG_CFLAGS) \
+	$(CXXFLAGS) \
+	$(DEBUG_CXXFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
