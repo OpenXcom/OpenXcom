@@ -84,6 +84,7 @@ void createDefault()
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
+	setBool("globeAllRadarsOnBaseBuild", true);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);

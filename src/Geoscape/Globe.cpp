@@ -1188,10 +1188,23 @@ void Globe::drawRadars()
 	double x, y, x2, y2;
 	double tr, range;
 	double lat, lon;
+	std::vector<double> ranges;
 
 //	lock();
 	_radars->lock();
 
+
+	if (_hover)
+	{
+		const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+		for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
+		{
+			range=_game->getRuleset()->getBaseFacility(*i)->getRadarRange();
+			range = range * (1 / 60.0) * (M_PI / 180);
+			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
+			if (Options::getBool("globeAllRadarsOnBaseBuild")) ranges.push_back(range);
+		}
+	}
 
 	// Draw radars around bases
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1204,18 +1217,25 @@ void Globe::drawRadars()
 		{
 			polarToCart(lon, lat, &x, &y);
 
-			range = 0;
-			for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
+			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
 			{
-				if ((*j)->getBuildTime() == 0)
-				{
-					tr = (*j)->getRules()->getRadarRange();
-					if (tr > range) range = tr;
-				}
+				for (int j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
 			}
-			range = range * (1 / 60.0) * (M_PI / 180);
+			else
+			{
+				range = 0;
+				for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
+				{
+					if ((*j)->getBuildTime() == 0)
+					{
+						tr = (*j)->getRules()->getRadarRange();
+						if (tr > range) range = tr;
+					}
+				}
+				range = range * (1 / 60.0) * (M_PI / 180);
 
-			if (range>0) drawGlobeCircle(lat,lon,range,48);
+				if (range>0) drawGlobeCircle(lat,lon,range,48);
+			}
 	
 		}
 
@@ -1230,17 +1250,6 @@ void Globe::drawRadars()
 			range = range * (1 / 60.0) * (M_PI / 180);
 
 			if (range>0) drawGlobeCircle(lat,lon,range,24);
-		}
-	}
-
-	if (_hover)
-	{
-		const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
-		for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
-		{
-			range=_game->getRuleset()->getBaseFacility(*i)->getRadarRange();
-			range = range * (1 / 60.0) * (M_PI / 180);
-			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
 		}
 	}
 
