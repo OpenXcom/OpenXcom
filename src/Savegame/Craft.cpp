@@ -174,7 +174,7 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	if (const YAML::Node *pName = node.FindValue("name"))
 	{
 		std::string name;
-		(*pName)["name"] >> name;
+		(*pName) >> name;
 		_name = Language::utf8ToWstr(name);
 	}
 	if (_inBattlescape)
