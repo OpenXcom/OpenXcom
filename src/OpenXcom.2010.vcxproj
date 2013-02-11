@@ -299,9 +299,9 @@
     <ClCompile Include="Engine\Scalers\hq3x.cpp" />
     <ClCompile Include="Engine\Scalers\hq4x.cpp" />
     <ClCompile Include="Engine\Scalers\init.cpp" />
-    <ClCompile Include="Engine\Scalers\scale2x.c" />
-    <ClCompile Include="Engine\Scalers\scale3x.c" />
-    <ClCompile Include="Engine\Scalers\scalebit.c" />
+    <ClCompile Include="Engine\Scalers\scale2x.cpp" />
+    <ClCompile Include="Engine\Scalers\scale3x.cpp" />
+    <ClCompile Include="Engine\Scalers\scalebit.cpp" />
     <ClCompile Include="Engine\Screen.cpp" />
     <ClCompile Include="Engine\Sound.cpp" />
     <ClCompile Include="Engine\SoundSet.cpp" />

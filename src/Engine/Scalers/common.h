@@ -25,11 +25,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#ifdef _WIN32
-#define inline _inline
-#endif
-
-
 #define MASK_2     0x0000FF00
 #define MASK_13    0x00FF00FF
 #define MASK_RGB   0x00FFFFFF

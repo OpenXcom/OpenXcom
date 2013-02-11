@@ -722,21 +722,12 @@
     </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
       <Filter>Menu</Filter>
-	</ClCompile>
-    <ClCompile Include="Engine\Zoom.cpp">
-      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Zoom.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Scalers\scalebit.c">
-      <Filter>Engine\Scalers</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Scalers\scale2x.c">
-      <Filter>Engine\Scalers</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Scalers\scale3x.c">
-      <Filter>Engine\Scalers</Filter>
+    <ClCompile Include="Engine\Zoom.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Scalers\hq2x.cpp">
       <Filter>Engine\Scalers</Filter>
@@ -752,6 +743,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Zoom.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\scale2x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\scale3x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\scalebit.cpp">
+      <Filter>Engine\Scalers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1480,7 +1480,7 @@
     </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
       <Filter>Menu</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="Engine\Zoom.h">
       <Filter>Engine</Filter>
     </ClInclude>

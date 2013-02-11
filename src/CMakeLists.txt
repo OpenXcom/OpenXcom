@@ -216,6 +216,20 @@ set ( engine_src
   Engine/LocalizedText.h
   Engine/FastLineClip.cpp
   Engine/FastLineClip.h
+  Engine/Zoom.cpp
+  Engine/Zoom.h
+  Engine/Scalers/scale2x.cpp
+  Engine/Scalers/scale2x.h
+  Engine/Scalers/scale3x.cpp
+  Engine/Scalers/scale3x.h
+  Engine/Scalers/scalebit.cpp
+  Engine/Scalers/scalebit.h
+  Engine/Scalers/common.h
+  Engine/Scalers/hqx.h
+  Engine/Scalers/hq2x.cpp
+  Engine/Scalers/hq3x.cpp
+  Engine/Scalers/hq4x.cpp
+  Engine/Scalers/init.cpp
 )
 
 set ( geoscape_src

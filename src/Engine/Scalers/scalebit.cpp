@@ -40,11 +40,6 @@
 #include "scale2x.h"
 #include "scale3x.h"
 
-#ifdef _WIN32
-#define inline _inline
-#endif
-
-
 #if HAVE_ALLOCA_H
 #include <alloca.h>
 #endif

@@ -285,11 +285,11 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Engine/Zoom.cpp \
 	src/Engine/Zoom.h \
-	src/Engine/Scalers/scale2x.c \
+	src/Engine/Scalers/scale2x.cpp \
 	src/Engine/Scalers/scale2x.h \
-	src/Engine/Scalers/scale3x.c \
+	src/Engine/Scalers/scale3x.cpp \
 	src/Engine/Scalers/scale3x.h \
-	src/Engine/Scalers/scalebit.c \
+	src/Engine/Scalers/scalebit.cpp \
 	src/Engine/Scalers/scalebit.h \
 	src/Engine/Scalers/common.h \
 	src/Engine/Scalers/hqx.h \

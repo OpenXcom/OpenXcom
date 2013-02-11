@@ -346,6 +346,62 @@
 		<Filter
 			Name="Engine"
 			>
+			<Filter
+			Name="Interface"
+			>
+				<File
+					RelativePath=".\Engine\Scalers\common.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq2x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq3x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq4x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hqx.c"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hqx.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\init.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale2x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale2x.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale3x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale3x.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scalebit.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scalebit.h"
+					>
+				</File>
+			</Filter>
 			<File
 				RelativePath=".\Engine\Action.cpp"
 				>
@@ -524,6 +580,14 @@
 			</File>
 			<File
 				RelativePath=".\Engine\Timer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Zoom.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Zoom.h"
 				>
 			</File>
 		</Filter>

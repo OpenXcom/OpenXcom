@@ -26,17 +26,16 @@
 #include "Logger.h"
 #include "Options.h"
 
-extern "C" {
 // Scale2X
 #include "Scalers/scalebit.h"
-}
+
 // HQX
 
 #include "Scalers/common.h"
 #include "Scalers/hqx.h"
 
 
-#ifdef _MSC_VER
+#if (_MSC_VER >= 1400)
 #define __SSE2__ true
 // probably Visual Studio (or Intel C++ which should also work)
 #include <intrin.h>
