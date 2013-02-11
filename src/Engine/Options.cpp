@@ -94,6 +94,7 @@ void createDefault()
 	setBool("battleNotifyDeath", false);
 	setBool("allowBuildingQueue", false);
 	setBool("allowAutoSellProduction", false);
+	setBool("showFundsOnGeoscape", false);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);

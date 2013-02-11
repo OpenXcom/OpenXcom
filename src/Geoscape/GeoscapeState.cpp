@@ -110,6 +110,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
 	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
 
+	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
+
 	// Create objects
 	_bg = new Surface(320, 200, mapWidth-320, mapHeight/2-100);
 	_globe = new Globe(_game, (mapWidth-64)/2, mapHeight/2, mapWidth-64, mapHeight, 0, 0);
@@ -144,6 +146,16 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtDay = new Text(29, 8, mapWidth-61, mapHeight/2-6);
 	_txtMonth = new Text(29, 8, mapWidth-32, mapHeight/2-6);
 	_txtYear = new Text(59, 8, mapWidth-61, mapHeight/2+1);
+	if (_showFundsOnGeoscape)
+	{
+		_txtFunds = new Text(59, 8, 259, 73);
+		_txtHour->setY(_txtHour->getY()+6);
+		_txtHourSep->setY(_txtHourSep->getY()+6);
+		_txtMin->setY(_txtMin->getY()+6);
+		_txtMinSep->setY(_txtMinSep->getY()+6);
+		_txtMinSep->setX(_txtMinSep->getX()-10);
+		_txtSec->setX(_txtSec->getX()-10);
+	}
 
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
@@ -181,6 +193,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
+	if (_showFundsOnGeoscape) add(_txtFunds);
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
@@ -262,20 +275,28 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 
-	_txtHour->setBig();
+	if (_showFundsOnGeoscape)
+	{
+		_txtFunds->setSmall();
+		_txtFunds->setColor(Palette::blockOffset(15)+4);
+		_txtFunds->setText(L"");
+		_txtFunds->setAlign(ALIGN_CENTER);
+	}
+
+	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 
-	_txtHourSep->setBig();
+	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+4);
 	_txtHourSep->setText(L":");
 
-	_txtMin->setBig();
+	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+4);
 	_txtMin->setText(L"");
 
-	_txtMinSep->setBig();
+	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+4);
 	_txtMinSep->setText(L":");
 
@@ -441,13 +462,40 @@ void GeoscapeState::think()
 }
 
 /**
+ * Converts an int into the given stringstream, grouped by thousands.
+ * @param out The stringstream which takes the converted value.
+ * @param n The int to be converted.
+ */
+void GeoscapeState::intToStringStreamGrouped(std::stringstream &out, int n)
+{
+  if (n < 0)
+	{
+    out << "-";
+    intToStringStreamGrouped(out, -n);
+  }
+	else if (n < 1000) out << n;
+  else
+	{
+    intToStringStreamGrouped(out, n / 1000);
+    out << "." << std::setw(3) << std::setfill('0') << (n % 1000);
+  }
+}
+
+/**
  * Updates the Geoscape clock with the latest
- * game time and date in human-readable format.
+ * game time and date in human-readable format. (+Funds)
  */
 void GeoscapeState::timeDisplay()
 {
 	std::stringstream ss, ss2;
 	std::wstringstream ss3, ss4, ss5;
+
+	if (_showFundsOnGeoscape)
+	{
+		std::stringstream ss6;
+		intToStringStreamGrouped(ss6,_game->getSavedGame()->getFunds());
+		_txtFunds->setText(Language::utf8ToWstr("$"+ss6.str()));
+	}
 
 	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 	_txtSec->setText(Language::utf8ToWstr(ss.str()));
