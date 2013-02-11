@@ -55,7 +55,6 @@ Node::~Node()
  */
 void Node::load(const YAML::Node &node)
 {
-	int a = 0;
 	node["id"] >> _id;
 	node["position"] >> _pos;
 	//node["segment"] >> _segment;

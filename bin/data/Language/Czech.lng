@@ -151,8 +151,8 @@ STR_PURCHASE_RECRUIT
 NÁKUP/NÁBOR
 STR_SELL_SACK_UC
 PRODEJ/PROPOUŠTĚNÍ
-STR_GEOSCAPE
-GLOBUS
+STR_GEOSCAPE_UC
+GLÓBUS
 STR_XCOM_BASES
 Báze Xcom
 STR_NAME
@@ -889,6 +889,8 @@ STR_SILACOID
 Silacoid
 STR_CHRYSSALID
 Krysklad
+STR_ZOMBIE
+Zombie
 STR_REAPER
 Parak
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Voják
 STR_LIVE_TERRORIST
  Terorista
+STR_FLOATER_SOLDIER
+Levit Voják
+STR_FLOATER_NAVIGATOR
+Levit Navigátor
+STR_FLOATER_MEDIC
+Levit Medik
+STR_FLOATER_ENGINEER
+Levit Inženýr
+STR_FLOATER_LEADER
+Levit Vůdce
+STR_FLOATER_COMMANDER
+Levit Velitel
+STR_SECTOID_SOLDIER
+Sektan Voják
+STR_SECTOID_NAVIGATOR
+Sektan Navigátor
+STR_SECTOID_MEDIC
+Sektan Medik
+STR_SECTOID_ENGINEER
+Sektan Inženýr
+STR_SECTOID_LEADER
+Sektan Vůdce
+STR_SECTOID_COMMANDER
+Sektan Velitel
+STR_SNAKEMAN_SOLDIER
+Hadom Voják
+STR_SNAKEMAN_NAVIGATOR
+Hadom Navigátor
+STR_SNAKEMAN_ENGINEER
+Hadom Inženýr
+STR_SNAKEMAN_LEADER
+Hadom Vůdce
+STR_SNAKEMAN_COMMANDER
+Hadom Velitel
+STR_MUTON_SOLDIER
+Muton Voják
+STR_MUTON_NAVIGATOR
+Muton Navigátor
+STR_MUTON_ENGINEER
+Muton Inženýr
+STR_ETHEREAL_SOLDIER
+Etheral Voják
+STR_ETHEREAL_LEADER
+Etheral Vůdce
+STR_ETHEREAL_COMMANDER
+Etheral Velitel
+STR_CYBERDISC_TERRORIST
+Kyberdisk Terorista
+STR_REAPER_TERRORIST
+Parak Terorista
+STR_CHRYSSALID_TERRORIST
+Krysklad Terorista
+STR_CELATID_TERRORIST
+Celatid Terorista
+STR_SILACOID_TERRORIST
+Silacoid Terorista
+STR_SECTOPOD_TERRORIST
+Sektonoh Terorista
 STR_UFO_POWER_SOURCE
 Zdroj enrgie UFO
 STR_UFO_NAVIGATION
@@ -1100,7 +1160,7 @@ Velký radarový systém
 STR_MISSILE_DEFENSES
 Raketová obrana
 STR_GENERAL_STORES
-Sklady
+Hlavní Sklady
 STR_ALIEN_CONTAINMENT
 Cizacká cela
 STR_LASER_DEFENSES
@@ -1147,18 +1207,6 @@ STR_EGYPT
 EGYPT
 STR_CANADA
 KANADA
-STR_FLOATER_SOLDIER
-Levit voják
-STR_FLOATER_NAVIGATOR
-Levit navigátor
-STR_FLOATER_MEDIC
-Levit medik
-STR_FLOATER_ENGINEER
-Levit inženýr
-STR_FLOATER_LEADER
-Levit vůdce
-STR_FLOATER_COMMANDER
-Levit velitel
 STR_TANK
 Tank
 STR_CIVILIAN
@@ -1216,7 +1264,7 @@ Velký detekční systém disponuje radarem o efektivním dosahu 450 namořních
 STR_MISSILE_DEFENSES_UFOPEDIA
 Raketová obrana poskytuje určitou ochranu před napadnutím nepřátelským strojem, který by se pokusil přistát v blízkosti báze.
 STR_GENERAL_STORES_UFOPEDIA
-veškeré vybavení, zbraňové systémy, munice, získáný materiál a těžké zbraně jsou umístěny ve skladech, s výjimkou vybavení strojů ustajených v hangárech.
+veškeré vybavení, zbraňové systémy, munice, získaný materiál a těžké zbraně jsou umístěny ve skladech, s výjimkou vybavení strojů ustajených v hangárech.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Živí cizáci většinou potřebují zvláštní životní prostředi pro udržení jejich života. V této cele je možné v oddělených kójích vydržovat až 10 cizáckých forem života.
 STR_LASER_DEFENSES_UFOPEDIA
@@ -1907,6 +1955,16 @@ STR_HEAL
 UZDRAVOVAČ
 STR_TUS
 Čas>
+STR_WEIGHT
+Hmotnost>
+STR_FACCURACY
+Pře.S.>
+STR_REACT
+Reakc>
+STR_PSKILL
+P.Dov.>
+STR_PSTRENGTH
+P.Síl.>
 STR_ALIEN_ARTIFACT
 Cizácký artefakt
 STR_AMMO_ROUNDS_LEFT
@@ -2038,43 +2096,43 @@ Mrtvola
 STR_UNLOAD
 Vyndat náboje
 STR_NEW_SAVED_GAME
-<NEW SAVED GAME>
+<Poslední uložená hra>
 STR_NEW_BATTLE
-New Battle
+Nová bitva
 STR_OPTIONS
 Volby
 STR_TERRAIN
-TERRAIN
+KRAJINA
 STR_DARKNESS
-DARKNESS
+TEMNOTA
 STR_DISPLAY_RESOLUTION
-Display Resolution
+Rozlišení monitoru
 STR_DISPLAY_MODE
-Display Mode
+Režim monitoru
 STR_WINDOWED
-Windowed
+Okno
 STR_FULLSCREEN
-Fullscreen
+Celá obrazovka
 STR_LANGUAGE
-LANGUAGE
+JAZYK
 STR_FARM
-Farm
+Farma
 STR_FOREST
-Forest
+Les
 STR_JUNGLE
-Jungle
+Džungle
 STR_MOUNTAIN
-Mountain
+Hory
 STR_DESERT
-Desert
+Poušť
 STR_POLAR
-Polar
+Arktida
 STR_RANDOM_BATTLE
-Náhodné Bitvy
+Náhodná Bitva
 STR_MIXED
 Smíšený
 STR_RIGHT_CLICK_TO_DELETE
-Klikněte pravým tlačítkem myši odstranit.
+Klikněte pravým tlačítkem myši pro odstranit.
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
 Nedostatek {1} pro vyzbrojení tanku
 STR_DAY_1
@@ -2088,16 +2146,114 @@ Vybavení pro: {1}
 STR_SELECT_SQUAD_FOR_craftname
 Vyber jednotku pro: {1}
 STR_n_UNITS_IN_EXIT_AREA_1
-{N} jednotek v únikové oblasti
+{N} jednotka v únikové oblasti
 STR_n_UNITS_IN_EXIT_AREA_2
-{N} jednotek v únikové oblasti
+{N} jednotky v únikové oblasti
 STR_n_UNITS_IN_EXIT_AREA_3
-{N} jednotek v únikové oblasti
+{N} jednotky v únikové oblasti
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} mimo únikovou oblast
+{N} jednotka mimo únikovou oblast
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} mimo únikovou oblast
+{N} jednotky mimo únikovou oblast
 STR_n_UNITS_OUTSIDE_EXIT_AREA_3
-{N} mimo únikovou oblast
+{N} jednotky mimo únikovou oblast
 STR_ABANDON_GAME_QUESTION
 OPUSTIT HRU?
+STR_HAS_BEEN_KILLED
+zabito
+STR_DRAG_SCROLL
+DRAG SCROLL
+STR_HIT_MELEE
+Zásah
+STR_CONTROLS
+Ovládání
+STR_RESTORE_DEFAULTS
+Obnovit výchozí
+STR_GENERAL
+Hlavní
+STR_GEOSCAPE
+Geoscape
+STR_BATTLESCAPE
+Battlescape
+STR_SCREENSHOT
+Screenshot
+STR_FPS_COUNTER
+FPS Counter
+STR_ROTATE_LEFT
+Otočit vlevo
+STR_ROTATE_RIGHT
+Otočit vpravo
+STR_ROTATE_UP
+Otočit nahoru
+STR_ROTATE_DOWN
+Otočit dolu
+STR_ZOOM_IN
+Přiblížit
+STR_ZOOM_OUT
+Oddálit
+STR_TOGGLE_COUNTRY_DETAIL
+Přepínač detailů země
+STR_TOGGLE_RADAR_RANGES
+Přepínač dosahů radaru
+STR_SCROLL_LEFT
+Posunout vlevo
+STR_SCROLL_RIGHT
+Posunout vpravo
+STR_SCROLL_UP
+Posunout nahoru
+STR_SCROLL_DOWN
+Posunout dolu
+STR_VIEW_LEVEL_ABOVE
+Zvýšit pohled
+STR_VIEW_LEVEL_BELOW
+Snížit pohled
+STR_CENTER_SELECTED_UNIT
+Vycentrovat na vybranou jednotku
+STR_PREVIOUS_UNIT
+Předchozí jednotka
+STR_NEXT_UNIT
+Další jednotka
+STR_DESELECT_UNIT
+Zrušit výběr jednotky
+STR_INVENTORY
+Inventář
+STR_MINIMAP
+Minimapa
+STR_END_TURN
+Konec kola
+STR_ABORT_MISSION
+Zrušit misi
+STR_UNIT_STATS
+Statistika jednotky
+STR_KNEEL
+Kleknout
+STR_RELOAD
+Nabít
+STR_TOGGLE_PERSONAL_LIGHTING
+Spínač osobního světlometu
+STR_DONT_RESERVE_TUS
+Zrušit vyhrazený čas
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Vyhradit čas pro výstřel od boku
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Vyhradit čas pro zamířený výstřel
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Vyhradit čas pro výstřel automatem
+STR_CENTER_ON_ENEMY_1
+Vycentrovat na nepřítele 1
+STR_CENTER_ON_ENEMY_2
+Vycentrovat na nepřítele 2
+STR_CENTER_ON_ENEMY_3
+Vycentrovat na nepřítele 3
+STR_CENTER_ON_ENEMY_4
+Vycentrovat na nepřítele 4
+STR_CENTER_ON_ENEMY_5
+Vycentrovat na nepřítele 5
+STR_CENTER_ON_ENEMY_6
+Vycentrovat na nepřítele 6
+STR_CENTER_ON_ENEMY_7
+Vycentrovat na nepřítele 7
+STR_CENTER_ON_ENEMY_8
+Vycentrovat na nepřítele 8
+STR_CENTER_ON_ENEMY_9
+Vycentrovat na nepřítele 9

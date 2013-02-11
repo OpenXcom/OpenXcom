@@ -71,10 +71,10 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	Uint8 _scrollButton;  // this is a cache for Options::getString("battleScrollButton")
-	bool _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
-	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
-	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
+	Uint8 _dragButton;  // this is a cache for Options::getString("battleScrollDragButton")
+	bool _dragInvert;  // this is a cache for Options::getString("battleScrollDragInvert")
+	int _dragTimeTolerance;  // this is a cache for Options::getInt("battleScrollDragTimeTolerance")
+	int _dragPixelTolerance;  // this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::vector<BattleUnit*> _fallingUnits;
@@ -119,17 +119,43 @@ public:
 	/// Gets terrain height.
 	int getHeight() const;
 	/// Conversion between coordinates and the tile index.
-	int getTileIndex(const Position& pos) const;
+	//  int getTileIndex(const Position& pos) const;
+	/**
+	 * This method converts coordinates into a unique index.
+	 * getTile() calls this every time, so should be inlined along with it.
+	 * @param pos position
+	 * @return Unique index.
+	 */
+	inline int getTileIndex(const Position& pos) const
+	{
+		return pos.z * _length * _width + pos.y * _width + pos.x;
+	}
+
 	/// Conversion between tile index and coordinates.
 	void getTileCoords(int index, int *x, int *y, int *z) const;
 	/// Gets the tile at certain position.
-	Tile *getTile(const Position& pos) const;
+	//  Tile *getTile(const Position& pos) const;
+	/**
+	 * Gets the Tile on a given position on the map.
+	 * This method is called over 50mil+ times per turn so it seems useful
+	 * to inline it.
+	 * @param pos position
+	 * @return Pointer to tile.
+	 */
+	inline Tile *getTile(const Position& pos) const
+	{
+		if (pos.x < 0 || pos.y < 0 || pos.z < 0
+			|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
+			return 0;
+
+		return _tiles[getTileIndex(pos)];
+	}
 	/// get the currently selected unit
 	BattleUnit *getSelectedUnit() const;
 	/// set the currently selected unit
 	void setSelectedUnit(BattleUnit *unit);
 	/// select previous soldier
-	BattleUnit *selectPreviousPlayerUnit();
+	BattleUnit *selectPreviousPlayerUnit(bool checkReselect = false);
 	/// select next soldier
 	BattleUnit *selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
 	/// select unit with position on map
@@ -178,14 +204,14 @@ public:
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Set or try to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-	/// get ScrollButton
-	Uint8 getScrollButton() const;
-	/// get ScrollButtonInvertMode
-	bool getScrollButtonInvertMode() const;
-	/// get ScrollButtonTimeTolerancy
-	int getScrollButtonTimeTolerancy() const;
-	/// get ScrollButtonPixelTolerancy
-	int getScrollButtonPixelTolerancy() const;
+	/// get DragButton
+	Uint8 getDragButton() const;
+	/// get DragInverted
+	bool isDragInverted() const;
+	/// get DragTimeTolerance
+	int getDragTimeTolerance() const;
+	/// get DragPixelTolerance
+	int getDragPixelTolerance() const;
 	void updateExposedUnits();
 	std::vector<BattleUnit*> *getExposedUnits();
 	int getSpottingUnits(BattleUnit* unit) const;

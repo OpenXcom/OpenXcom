@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 КУПУВАНЕ/НАЕМАНЕ
 STR_SELL_SACK_UC
 ПРОДАВАНЕ/УВОЛНЯВАНЕ
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 ГЛОБУС
 STR_XCOM_BASES
 Бази на XCom
@@ -889,6 +889,8 @@ STR_SILACOID
 Силакоид
 STR_CHRYSSALID
 Хрисалид
+STR_ZOMBIE
+Zombie
 STR_REAPER
 Разкъсвач
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Soldier
 STR_LIVE_TERRORIST
  Terrorist
+STR_FLOATER_SOLDIER
+Левитатор Soldier
+STR_FLOATER_NAVIGATOR
+Левитатор Navigator
+STR_FLOATER_MEDIC
+Левитатор Medic
+STR_FLOATER_ENGINEER
+Левитатор Engineer
+STR_FLOATER_LEADER
+Левитатор Leader
+STR_FLOATER_COMMANDER
+Левитатор Commander
+STR_SECTOID_SOLDIER
+Сектоид Soldier
+STR_SECTOID_NAVIGATOR
+Сектоид Navigator
+STR_SECTOID_MEDIC
+Сектоид Medic
+STR_SECTOID_ENGINEER
+Сектоид Engineer
+STR_SECTOID_LEADER
+Сектоид Leader
+STR_SECTOID_COMMANDER
+Сектоид Commander
+STR_SNAKEMAN_SOLDIER
+Змиетел Soldier
+STR_SNAKEMAN_NAVIGATOR
+Змиетел Navigator
+STR_SNAKEMAN_ENGINEER
+Змиетел Engineer
+STR_SNAKEMAN_LEADER
+Змиетел Leader
+STR_SNAKEMAN_COMMANDER
+Змиетел Commander
+STR_MUTON_SOLDIER
+Мълчак Soldier
+STR_MUTON_NAVIGATOR
+Мълчак Navigator
+STR_MUTON_ENGINEER
+Мълчак Engineer
+STR_ETHEREAL_SOLDIER
+Ефирник Soldier
+STR_ETHEREAL_LEADER
+Ефирник Leader
+STR_ETHEREAL_COMMANDER
+Ефирник Commander
+STR_CYBERDISC_TERRORIST
+Кибердиск Terrorist
+STR_REAPER_TERRORIST
+Разкъсвач Terrorist
+STR_CHRYSSALID_TERRORIST
+Хрисалид Terrorist
+STR_CELATID_TERRORIST
+Целатид Terrorist
+STR_SILACOID_TERRORIST
+Силакоид Terrorist
+STR_SECTOPOD_TERRORIST
+Сектопод Terrorist
 STR_UFO_POWER_SOURCE
 Енергиен източник
 STR_UFO_NAVIGATION
@@ -1147,18 +1207,6 @@ STR_EGYPT
 ЕГИПЕТ
 STR_CANADA
 КАНАДА
-STR_FLOATER_SOLDIER
-Floater Soldier
-STR_FLOATER_NAVIGATOR
-Floater Navigator
-STR_FLOATER_MEDIC
-Floater Medic
-STR_FLOATER_ENGINEER
-Floater Engineer
-STR_FLOATER_LEADER
-Floater Leader
-STR_FLOATER_COMMANDER
-Floater Commander
 STR_TANK
 Tank
 STR_CIVILIAN
@@ -1913,6 +1961,16 @@ STR_HEAL
 ПРЕВРЪЗКА
 STR_TUS
 ТД>
+STR_WEIGHT
+Тегло>
+STR_FACCURACY
+Точ.С.>
+STR_REACT
+Реак.>
+STR_PSKILL
+П.Уме>
+STR_PSTRENGTH
+П.Сил>
 STR_ALIEN_ARTIFACT
 Извънземен артефакт
 STR_AMMO_ROUNDS_LEFT

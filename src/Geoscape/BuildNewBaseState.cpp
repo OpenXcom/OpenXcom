@@ -44,11 +44,13 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _mousex(0), _mousey(0), _oldlat(0), _oldlon(0)
+BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
 {
 	_screen = false;
 
-	_olddetail = !_globe->getDetail();
+	_oldshowradar = _globe->getShowRadar();
+	if (!_oldshowradar)
+		_globe->toggleRadarLines();
 	// Create objects
 	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
 	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
@@ -173,12 +175,8 @@ void BuildNewBaseState::hoverRedraw(void)
 	_globe->setNewBaseHoverPos(lon,lat);
 
 	_globe->setNewBaseHover();
-	if 	(_globe->getDetail()!=_olddetail)
-	{
-		_olddetail = _globe->getDetail();
-		_globe->draw();
-	}
-	else if (_globe->getDetail()&& (_oldlat!=lat||_oldlon!=lon) )
+	
+	if (_globe->getShowRadar() && (_oldlat!=lat||_oldlon!=lon) )
 	{
 		_oldlat=lat;
 		_oldlon=lon;
@@ -223,6 +221,10 @@ void BuildNewBaseState::globeClick(Action *action)
 			else
 			{
 				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
+			}
+			if (_globe->getShowRadar() != _oldshowradar)
+			{
+				_globe->toggleRadarLines();
 			}
 		}
 	}
@@ -343,6 +345,10 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *)
 void BuildNewBaseState::btnCancelClick(Action *)
 {
 	delete _base;
+	if (_globe->getShowRadar() != _oldshowradar)
+	{
+		_globe->toggleRadarLines();
+	}
 	_game->popState();
 }
 

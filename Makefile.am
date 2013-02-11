@@ -62,10 +62,11 @@ name_DATA = \
 	bin/data/SoldierName/Swedish.nam
 
 bin_PROGRAMS = openxcom
+AM_CFLAGS=-std=c99
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
 openxcom_CXXFLAGS = \
-	$(CFLAGS) \
-	$(DEBUG_CFLAGS) \
+	$(CXXFLAGS) \
+	$(DEBUG_CXXFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
@@ -282,6 +283,20 @@ openxcom_SOURCES = \
 	src/Engine/SurfaceSet.h \
 	src/Engine/Timer.cpp \
 	src/Engine/Timer.h \
+	src/Engine/Zoom.cpp \
+	src/Engine/Zoom.h \
+	src/Engine/Scalers/scale2x.cpp \
+	src/Engine/Scalers/scale2x.h \
+	src/Engine/Scalers/scale3x.cpp \
+	src/Engine/Scalers/scale3x.h \
+	src/Engine/Scalers/scalebit.cpp \
+	src/Engine/Scalers/scalebit.h \
+	src/Engine/Scalers/common.h \
+	src/Engine/Scalers/hqx.h \
+	src/Engine/Scalers/hq2x.cpp \
+	src/Engine/Scalers/hq3x.cpp \
+	src/Engine/Scalers/hq4x.cpp \
+	src/Engine/Scalers/init.cpp \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
 	src/Geoscape/AlienBaseState.cpp \
@@ -405,6 +420,8 @@ openxcom_SOURCES = \
 	src/Menu/NoteState.h \
 	src/Menu/OptionsState.cpp \
 	src/Menu/OptionsState.h \
+	src/Menu/OptionsControlsState.cpp \
+	src/Menu/OptionsControlsState.h \
 	src/Menu/SaveState.cpp \
 	src/Menu/SaveState.h \
 	src/Menu/SavedGameState.cpp \

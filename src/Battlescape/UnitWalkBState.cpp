@@ -31,7 +31,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
@@ -277,11 +276,11 @@ void UnitWalkBState::think()
 			}
 			if (door == 0)
 			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 			}
 			if (door == 1)
 			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(20)->play(); // ufo door
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
 				return; // don't start walking yet, wait for the ufo door to open
 			}
 
@@ -414,7 +413,7 @@ void UnitWalkBState::playMovementSound()
 		// if a sound is configured in the ruleset, play that one
 		if (_unit->getWalkingPhase() == 0)
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getMoveSound())->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getMoveSound())->play();
 		}
 	}
 	else
@@ -427,7 +426,7 @@ void UnitWalkBState::playMovementSound()
 				Tile *tile = _unit->getTile();
 				if (tile->getFootstepSound())
 				{
-					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(22 + (tile->getFootstepSound()*2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound()*2))->play();
 				}
 			}
 			// play footstep sound 2
@@ -436,7 +435,7 @@ void UnitWalkBState::playMovementSound()
 				Tile *tile = _unit->getTile();
 				if (tile->getFootstepSound())
 				{
-					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(23 + (tile->getFootstepSound()*2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound()*2))->play();
 				}
 			}
 		}
@@ -445,7 +444,7 @@ void UnitWalkBState::playMovementSound()
 			// play default flying sound
 			if (_unit->getWalkingPhase() == 0)
 			{
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(15)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
 			}
 		}
 	}

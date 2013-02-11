@@ -99,84 +99,86 @@ void Camera::mouseOver(Action *action, State *)
 		return;
 	}
 
-	int posX = action->getXMouse();
-	int posY = action->getYMouse();
+	if (Options::getInt("battleScrollType") == SCROLL_AUTO)
+	{
+		int posX = action->getXMouse();
+		int posY = action->getYMouse();
 
-	if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
-	{
-		_scrollX = Options::getInt("battleScrollSpeed");
-		// if close to top or bottom, also scroll diagonally
-		if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
-		{
-			_scrollY = Options::getInt("battleScrollSpeed")/2;
-		}
-		else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
-		{
-			_scrollY = -Options::getInt("battleScrollSpeed")/2;
-		}
-	}
-	else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
-	{
-		_scrollX = -Options::getInt("battleScrollSpeed");
-		// if close to top or bottom, also scroll diagonally
-		if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
-		{
-			_scrollY = Options::getInt("battleScrollSpeed")/2;
-		}
-		else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
-		{
-			_scrollY = -Options::getInt("battleScrollSpeed")/2;
-		}
-	}
-	else if (posX)
-	{
-		_scrollX = 0;
-	}
-
-	if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
-	{
-		_scrollY = Options::getInt("battleScrollSpeed");
-		// if close to left or right edge, also scroll diagonally
-		if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
 		{
 			_scrollX = Options::getInt("battleScrollSpeed");
-			_scrollY /=2;
+			// if close to top or bottom, also scroll diagonally
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			{
+				_scrollY = Options::getInt("battleScrollSpeed")/2;
+			}
+			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+			{
+				_scrollY = -Options::getInt("battleScrollSpeed")/2;
+			}
 		}
-		else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
 		{
 			_scrollX = -Options::getInt("battleScrollSpeed");
-			_scrollY /=2;
+			// if close to top or bottom, also scroll diagonally
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			{
+				_scrollY = Options::getInt("battleScrollSpeed")/2;
+			}
+			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+			{
+				_scrollY = -Options::getInt("battleScrollSpeed")/2;
+			}
 		}
-	}
-	else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
-	{
-		_scrollY = -Options::getInt("battleScrollSpeed");
-		// if close to left or right edge, also scroll diagonally
-		if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+		else if (posX)
 		{
-			_scrollX = Options::getInt("battleScrollSpeed");
-			_scrollY /=2;
+			_scrollX = 0;
 		}
-		else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+
+		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
 		{
-			_scrollX = -Options::getInt("battleScrollSpeed");
-			_scrollY /=2;
+			_scrollY = Options::getInt("battleScrollSpeed");
+			// if close to left or right edge, also scroll diagonally
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			{
+				_scrollX = Options::getInt("battleScrollSpeed");
+				_scrollY /=2;
+			}
+			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+			{
+				_scrollX = -Options::getInt("battleScrollSpeed");
+				_scrollY /=2;
+			}
+		}
+		else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
+		{
+			_scrollY = -Options::getInt("battleScrollSpeed");
+			// if close to left or right edge, also scroll diagonally
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			{
+				_scrollX = Options::getInt("battleScrollSpeed");
+				_scrollY /=2;
+			}
+			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+			{
+				_scrollX = -Options::getInt("battleScrollSpeed");
+				_scrollY /=2;
+			}
+		}
+		else if (posY && _scrollX == 0)
+		{
+			_scrollY = 0;
+		}
+
+		if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
+		{
+			_scrollTimer->start();
+		}
+		else if ((!_scrollX && !_scrollY) && _scrollTimer->isRunning())
+		{
+			_scrollTimer->stop();
 		}
 	}
-	else if (posY && _scrollX == 0)
-	{
-		_scrollY = 0;
-	}
-
-	if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
-	{
-		_scrollTimer->start();
-	}
-	else if ((!_scrollX && !_scrollY) && _scrollTimer->isRunning())
-	{
-		_scrollTimer->stop();
-	}
-
 }
 
 

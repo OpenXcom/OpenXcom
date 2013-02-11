@@ -61,6 +61,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_txtKills = new Text(100, 9, 230, 48);
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
+	_txtPsionic = new Text(140, 9, 0, 66);
 
 	_txtTimeUnits = new Text(120, 9, 6, 82);
 	_numTimeUnits = new Text(18, 9, 131, 82);
@@ -115,6 +116,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtKills);
 	add(_txtCraft);
 	add(_txtRecovery);
+	add(_txtPsionic);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -147,8 +149,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtStrength);
 	add(_numStrength);
 	add(_barStrength);
-	if(_base->getSoldiers()->at(_soldier)->getCurrentStats()->psiSkill > 0)
-	{
+
 	add(_txtPsiStrength);
 	add(_numPsiStrength);
 	add(_barPsiStrength);
@@ -156,7 +157,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtPsiSkill);
 	add(_numPsiSkill);
 	add(_barPsiSkill);
-	}
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
@@ -196,6 +197,9 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_txtRecovery->setColor(Palette::blockOffset(13)+10);
 	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
+
+	_txtPsionic->setColor(Palette::blockOffset(15)+1);
+	_txtPsionic->setText(_game->getLanguage()->getString("STR_IN_PSIONIC_TRAINING"));
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -317,7 +321,27 @@ void SoldierInfoState::init()
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
+	
+	if(s->getCurrentStats()->psiSkill == 0)
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
 
+		_txtPsiSkill->setVisible(false);
+		_numPsiSkill->setVisible(false);
+		_barPsiSkill->setVisible(false);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
+
+		_txtPsiSkill->setVisible(true);
+		_numPsiSkill->setVisible(true);
+		_barPsiSkill->setVisible(true);
+	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
 	texture->getFrame(s->getRankSprite())->setY(0);
@@ -411,20 +435,43 @@ void SoldierInfoState::init()
 	{
 		_txtRecovery->setText(L"");
 	}
-	
-	std::wstringstream ss14;
-	ss14 << current->psiStrength;
-	_numPsiStrength->setText(ss14.str());
-	_barPsiStrength->setMax(current->psiStrength);
-	_barPsiStrength->setValue(current->psiStrength);
-	_barPsiStrength->setValue2(initial->psiStrength);
 
-	std::wstringstream ss15;
-	ss15 << current->psiSkill;
-	_numPsiSkill->setText(ss15.str());
-	_barPsiSkill->setMax(current->psiSkill);
-	_barPsiSkill->setValue(current->psiSkill);
-	_barPsiSkill->setValue2(initial->psiSkill);
+	_txtPsionic->setVisible(s->isInPsiTraining());
+	
+	if(current->psiSkill > 0)
+	{
+		std::wstringstream ss14;
+		ss14 << current->psiStrength;
+		_numPsiStrength->setText(ss14.str());
+		_barPsiStrength->setMax(current->psiStrength);
+		_barPsiStrength->setValue(current->psiStrength);
+		_barPsiStrength->setValue2(initial->psiStrength);
+
+		std::wstringstream ss15;
+		ss15 << current->psiSkill;
+		_numPsiSkill->setText(ss15.str());
+		_barPsiSkill->setMax(current->psiSkill);
+		_barPsiSkill->setValue(current->psiSkill);
+		_barPsiSkill->setValue2(initial->psiSkill);
+
+		_txtPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
+
+		_txtPsiSkill->setVisible(true);
+		_numPsiSkill->setVisible(true);
+		_barPsiSkill->setVisible(true);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+
+		_txtPsiSkill->setVisible(false);
+		_numPsiSkill->setVisible(false);
+		_barPsiSkill->setVisible(false);
+	}
 }
 
 /**

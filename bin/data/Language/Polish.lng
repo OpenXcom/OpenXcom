@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 KUPNO/ZATRUDNIANIE
 STR_SELL_SACK_UC
 SPRZEDAŻ/ZWALNIANIE
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 WIDOK GLOBU
 STR_XCOM_BASES
 Bazy XComu
@@ -890,7 +890,7 @@ Silakoid
 STR_CHRYSSALID
 Chrysalid
 STR_ZOMBIE
-Zombie
+Zombi
 STR_REAPER
 Kosiarz
 STR_SECTOPOD
@@ -911,6 +911,64 @@ STR_LIVE_SOLDIER
  Żołnierz
 STR_LIVE_TERRORIST
  Terrorysta
+STR_FLOATER_SOLDIER
+Lewiton Żołnierz
+STR_FLOATER_NAVIGATOR
+Lewiton Nawigator
+STR_FLOATER_MEDIC
+Lewiton Medyk
+STR_FLOATER_ENGINEER
+Lewiton Inżynier
+STR_FLOATER_LEADER
+Lewiton Lider
+STR_FLOATER_COMMANDER
+Lewiton Komandor
+STR_SECTOID_SOLDIER
+Sektoid Żołnierz
+STR_SECTOID_NAVIGATOR
+Sektoid Nawigator
+STR_SECTOID_MEDIC
+Sektoid Medyk
+STR_SECTOID_ENGINEER
+Sektoid Inżynier
+STR_SECTOID_LEADER
+Sektoid Lider
+STR_SECTOID_COMMANDER
+Sektoid Komandor
+STR_SNAKEMAN_SOLDIER
+Wężownik Żołnierz
+STR_SNAKEMAN_NAVIGATOR
+Wężownik Nawigator
+STR_SNAKEMAN_ENGINEER
+Wężownik Inżynier
+STR_SNAKEMAN_LEADER
+Wężownik Lider
+STR_SNAKEMAN_COMMANDER
+Wężownik Komandor
+STR_MUTON_SOLDIER
+Muton Żołnierz
+STR_MUTON_NAVIGATOR
+Muton Nawigator
+STR_MUTON_ENGINEER
+Muton Inżynier
+STR_ETHEREAL_SOLDIER
+Etereal Żołnierz
+STR_ETHEREAL_LEADER
+Etereal Lider
+STR_ETHEREAL_COMMANDER
+Etereal Komandor
+STR_CYBERDISC_TERRORIST
+Cyberdysk Terrorysta
+STR_REAPER_TERRORIST
+Kosiarz Terrorysta
+STR_CHRYSSALID_TERRORIST
+Chrysalid Terrorysta
+STR_CELATID_TERRORIST
+Celatyd Terrorysta
+STR_SILACOID_TERRORIST
+Silakoid Terrorysta
+STR_SECTOPOD_TERRORIST
+Sektopod Terrorysta
 STR_UFO_POWER_SOURCE
 Reaktor antymaterii
 STR_UFO_NAVIGATION
@@ -1149,18 +1207,6 @@ STR_EGYPT
 EGIPT
 STR_CANADA
 KANADA
-STR_FLOATER_SOLDIER
-Lewiton Żołnierz
-STR_FLOATER_NAVIGATOR
-Lewiton Nawigator
-STR_FLOATER_MEDIC
-Lewiton Medyk
-STR_FLOATER_ENGINEER
-Lewiton Inżynier
-STR_FLOATER_LEADER
-Lewiton Lider
-STR_FLOATER_COMMANDER
-Lewiton Komandor
 STR_TANK
 CDS
 STR_CIVILIAN
@@ -1909,6 +1955,16 @@ STR_HEAL
 LECZENIE
 STR_TUS
 PR>
+STR_WEIGHT
+Waga>
+STR_FACCURACY
+Celn.S.>
+STR_REACT
+Refle>
+STR_PSKILL
+Zdo.P.>
+STR_PSTRENGTH
+Moc.P.>
 STR_ALIEN_ARTIFACT
 Artefakt obcych
 STR_AMMO_ROUNDS_LEFT
@@ -2089,17 +2145,119 @@ STR_EQUIPMENT_FOR_craftname
 Wybierz sprzęt> {1}
 STR_SELECT_SQUAD_FOR_craftname
 Wybierz żołnierzy> {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+Brak jednostek na terenie ewakuacji
 STR_n_UNITS_IN_EXIT_AREA_1
-{N} na terenie ewakuacji
+{N} jednostka na terenie ewakuacji
 STR_n_UNITS_IN_EXIT_AREA_2
-{N} na terenie ewakuacji
+{N} jednostki na terenie ewakuacji
 STR_n_UNITS_IN_EXIT_AREA_3
-{N} na terenie ewakuacji
+{N} jednostek na terenie ewakuacji
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+Brak jednostek poza terenem ewakuacji
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} poza terenem ewakuacji
+{N} jednostka poza terenem ewakuacji
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} poza terenem ewakuacji
+{N} jednostki poza terenem ewakuacji
 STR_n_UNITS_OUTSIDE_EXIT_AREA_3
-{N} poza terenem ewakuacji
+{N} jednostek poza terenem ewakuacji
 STR_ABANDON_GAME_QUESTION
 KONIEC GRY?
+STR_HAS_BEEN_KILLED
+nie żyje
+STR_DRAG_SCROLL
+PRZYTRZYMAJ I PRZESUŃ
+STR_HIT_MELEE
+Cios
+STR_CONTROLS
+Sterowanie
+STR_RESTORE_DEFAULTS
+Przywróć domyślne
+STR_GENERAL
+OGÓLNE
+STR_GEOSCAPE
+WIDOK GLOBU
+STR_BATTLESCAPE
+POTYCZKA TAKTYCZNA
+STR_SCREENSHOT
+Zrzut ekranu [screenshot]
+STR_FPS_COUNTER
+Licznik FPS
+STR_ROTATE_LEFT
+Rotacja w lewo
+STR_ROTATE_RIGHT
+Rotacja w prawo
+STR_ROTATE_UP
+Rotacja w górę
+STR_ROTATE_DOWN
+Rotacja w dół
+STR_ZOOM_IN
+Zbliżenie widoku
+STR_ZOOM_OUT
+Oddalenie widoku
+STR_TOGGLE_COUNTRY_DETAIL
+Pokaż detale geopolityczne
+STR_TOGGLE_RADAR_RANGES
+Pokaż zasiąg radaru
+STR_SCROLL_LEFT
+Przesunięcie w lewo
+STR_SCROLL_RIGHT
+Przesunięcie w prawo
+STR_SCROLL_UP
+Przesunięcie w górę
+STR_SCROLL_DOWN
+Przesunięcie w dół
+STR_VIEW_LEVEL_ABOVE
+Widok poziom wyżej
+STR_VIEW_LEVEL_BELOW
+Widok poziom niżej
+STR_CENTER_SELECTED_UNIT
+Centruj na zaznaczonej jednostce
+STR_PREVIOUS_UNIT
+Zaznacz poprzednią jednostkę
+STR_NEXT_UNIT
+Zaznacz następną jednostkę
+STR_DESELECT_UNIT
+Odznacz jednostkę
+STR_INVENTORY
+Ekwipunek
+STR_MINIMAP
+Minimapa
+STR_END_TURN
+Zakończ turę
+STR_ABORT_MISSION
+Przerwij misję
+STR_UNIT_STATS
+Statystyki jednostki
+STR_KNEEL
+Przyklęknij
+STR_RELOAD
+Przeładuj
+STR_TOGGLE_PERSONAL_LIGHTING
+Załącz latarkę osobistą
+STR_DONT_RESERVE_TUS
+Nie rezerwuj PR
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Rezerwuj PR dla strzału szybkiego
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Rezerwuj PR dla krótkiej serii
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Rezerwuj PR dla strzału celowanego
+STR_CENTER_ON_ENEMY_1
+Centruj na przeciwniku nr 1
+STR_CENTER_ON_ENEMY_2
+Centruj na przeciwniku nr 2
+STR_CENTER_ON_ENEMY_3
+Centruj na przeciwniku nr 3
+STR_CENTER_ON_ENEMY_4
+Centruj na przeciwniku nr 4
+STR_CENTER_ON_ENEMY_5
+Centruj na przeciwniku nr 5
+STR_CENTER_ON_ENEMY_6
+Centruj na przeciwniku nr 6
+STR_CENTER_ON_ENEMY_7
+Centruj na przeciwniku nr 7
+STR_CENTER_ON_ENEMY_8
+Centruj na przeciwniku nr 8
+STR_CENTER_ON_ENEMY_9
+Centruj na przeciwniku nr 9

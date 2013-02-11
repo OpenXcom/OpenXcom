@@ -48,7 +48,6 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -218,7 +217,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		_parentState->debug(ss.str());
 		if (unit->getAggroSound() && aggro && !_playedAggroSound)
 		{
-			getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(unit->getAggroSound())->play();
+			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
@@ -333,7 +332,7 @@ void BattlescapeGame::endTurn()
 			{
 				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
-				p.z = _save->getTiles()[i]->getPosition().z*24 + _save->getTiles()[i]->getTerrainLevel();
+				p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
 				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
 				statePushBack(0);
@@ -345,7 +344,7 @@ void BattlescapeGame::endTurn()
 
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
-		getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(21)->play(); // ufo door closed
+		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 	}
 
 	_save->endTurn();
@@ -499,7 +498,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
 				{
 					std::wstringstream ss;
-					ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << "has been killed";
+					ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
 					_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 				}
 			}
@@ -519,7 +518,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
 						{
 							std::wstringstream ss;
-							ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << "has been killed";
+							ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
 							_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 						}
 					}
@@ -1130,9 +1129,16 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
-				_parentState->getGame()->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_currentAction.weapon->getRules()->getHitSound())->play();
-				_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
-				cancelCurrentAction();
+				if (_currentAction.actor->spendTimeUnits(_currentAction.TU, false))
+				{
+					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
+					_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
+					cancelCurrentAction();
+				}
+				else
+				{
+					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+				}
 			}
 		}
 		else if (_currentAction.type == BA_PANIC || _currentAction.type == BA_MINDCONTROL)
@@ -1150,7 +1156,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
-				if (_currentAction.result != "STR_NOT_ENOUGH_TIME_UNITS")
+				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
 				{
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{

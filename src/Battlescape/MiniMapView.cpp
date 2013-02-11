@@ -180,9 +180,9 @@ void MiniMapView::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-	if (-1 != _battleGame->getScrollButton())
+	if (-1 != _battleGame->getDragButton())
 	{
-		if (action->getDetails()->button.button == _battleGame->getScrollButton())
+		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{
 			isMouseScrolling = true;
 			isMouseScrolled = false;
@@ -209,9 +209,9 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _battleGame->getScrollButton()) isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == _battleGame->getDragButton()) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_battleGame->getScrollButtonTimeTolerancy())))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_battleGame->getDragTimeTolerance())))
 		{
 			isMouseScrolled = false;
 			_camera->centerOnPosition(posBeforeMouseScrolling);
@@ -254,7 +254,7 @@ void MiniMapView::mouseOver(Action *action, State *state)
 	{
 		isMouseScrolled = true;
 
-		if (!_battleGame->getScrollButtonInvertMode())
+		if (_battleGame->isDragInverted())
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -266,12 +266,12 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		totalMouseMoveX += action->getDetails()->motion.xrel;
 		totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _battleGame->getScrollButtonPixelTolerancy()) || (std::abs(totalMouseMoveY) > _battleGame->getScrollButtonPixelTolerancy()));
+			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _battleGame->getDragPixelTolerance()) || (std::abs(totalMouseMoveY) > _battleGame->getDragPixelTolerance()));
 
 		// Calculate the move
 		int newX;
 		int newY;
-		if (!_battleGame->getScrollButtonInvertMode())
+		if (_battleGame->isDragInverted())
 		{
 			mouseScrollX += action->getDetails()->motion.xrel;
 			mouseScrollY += action->getDetails()->motion.yrel;
@@ -306,7 +306,7 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
 		_redraw = true;
 
-		if (!_battleGame->getScrollButtonInvertMode())
+		if (_battleGame->isDragInverted())
 		{
 			// We don't want to look the mouse-cursor jumping :)
 			action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;

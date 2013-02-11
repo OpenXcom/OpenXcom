@@ -29,6 +29,8 @@
 #include "../Interface/Text.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Options.h"
+#include <limits>
 
 namespace OpenXcom
 {
@@ -197,13 +199,15 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 		}
 	}
 
+	bool bq=Options::getBool("allowBuildingQueue");
+
 	// Check for another facility to connect to
 	for (int i = 0; i < rule->getSize(); ++i)
 	{
-		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0) ||
-			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
-			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0) ||
-			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0))
+		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && (bq || _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0)) ||
+			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && (bq || _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0)) ||
+			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && (bq || _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0)) ||
+			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && (bq || _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0)))
 		{
 			return true;
 		}
@@ -213,8 +217,74 @@ bool BaseView::isPlaceable(RuleBaseFacility *rule) const
 }
 
 /**
+ * Returns if the placed facility is placed in queue or not.
+ * @param rule Facility type.
+ * @return True if queued, False otherwise.
+ */
+bool BaseView::isQueuedBuilding(RuleBaseFacility *rule) const
+{
+	for (int i = 0; i < rule->getSize(); ++i)
+	{
+		if ((_gridX > 0 && _facilities[_gridX - 1][_gridY + i] != 0 && _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0) ||
+			(_gridY > 0 && _facilities[_gridX + i][_gridY - 1] != 0 && _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0) ||
+			(_gridX + rule->getSize() < BASE_SIZE && _facilities[_gridX + rule->getSize()][_gridY + i] != 0 && _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0) ||
+			(_gridY + rule->getSize() < BASE_SIZE && _facilities[_gridX + i][_gridY + rule->getSize()] != 0 && _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * ReCalculates the remaining build-time of all queued buildings.
+ */
+void BaseView::reCalcQueuedBuildings()
+{
+	setBase(_base);
+	std::vector<BaseFacility*> facilities;
+	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+		if ((*i)->getBuildTime() > 0)
+		{
+			// Set all queued buildings to infinite.
+			if ((*i)->getBuildTime() > (*i)->getRules()->getBuildTime()) (*i)->setBuildTime(std::numeric_limits<int>::max());
+			facilities.push_back(*i);
+		}
+
+	// Applying a simple Dijkstra Algorithm
+	while (!facilities.empty())
+	{
+		std::vector<BaseFacility*>::iterator min = facilities.begin();
+		for (std::vector<BaseFacility*>::iterator i = facilities.begin(); i != facilities.end(); ++i)
+			if ((*i)->getBuildTime() < (*min)->getBuildTime()) min=i;
+		BaseFacility* facility=(*min);
+		facilities.erase(min);
+		RuleBaseFacility *rule=facility->getRules();
+		int x=facility->getX(), y=facility->getY();
+		for (int i = 0; i < rule->getSize(); ++i)
+		{
+			if (x > 0) updateNeighborFacilityBuildTime(facility,_facilities[x - 1][y + i]);
+			if (y > 0) updateNeighborFacilityBuildTime(facility,_facilities[x + i][y - 1]);
+			if (x + rule->getSize() < BASE_SIZE) updateNeighborFacilityBuildTime(facility,_facilities[x + rule->getSize()][y + i]);
+			if (y + rule->getSize() < BASE_SIZE) updateNeighborFacilityBuildTime(facility,_facilities[x + i][y + rule->getSize()]);
+		}
+	}
+}
+
+/**
+ * Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
+ */
+void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor)
+{
+	if (0 != facility && 0 != neighbor
+	&& neighbor->getBuildTime() > neighbor->getRules()->getBuildTime()
+	&& facility->getBuildTime() + neighbor->getRules()->getBuildTime() < neighbor->getBuildTime())
+		neighbor->setBuildTime(facility->getBuildTime() + neighbor->getRules()->getBuildTime());
+}
+
+/**
  * Counts all the occupied squares connected to a certain position in the
- * grid inclusive, but ignoring facilities under construction.
+ * grid inclusive, INCLUDING facilities under construction.
  * Mostly used to ensure a base stays connected to the Access Lift.
  * -1 = Unoccupied, 0 = Occupied, 1 = Connected.
  * @param x X position in grid.
@@ -254,36 +324,22 @@ int BaseView::countConnected(int x, int y, int **grid, BaseFacility *remove) con
 		return 0;
 	}
 
-	// Add connected facilities to grid
+	// Add connected (neighbor) facilities to grid
 	int total = 1;
 	grid[x][y]++;
 
-	// Check for facilities under construction bigger than a square
-	if (_facilities[x][y]->getBuildTime() > 0)
-	{
-		if (x > 0 && _facilities[x - 1][y] == _facilities[x][y])
-		{
-			total += countConnected(x - 1, y, grid, remove);
-		}
-		if (y > 0 && _facilities[x][y - 1] == _facilities[x][y])
-		{
-			total += countConnected(x, y - 1, grid, remove);
-		}
-		if (x < BASE_SIZE - 1 && _facilities[x + 1][y] == _facilities[x][y])
-		{
-			total += countConnected(x + 1, y, grid, remove);
-		}
-		if (y < BASE_SIZE - 1 && _facilities[x][y + 1] == _facilities[x][y])
-		{
-			total += countConnected(x, y + 1, grid, remove);
-		}
-		return total;
-	}
-
-	total += countConnected(x - 1, y, grid, remove);
-	total += countConnected(x, y - 1, grid, remove);
-	total += countConnected(x + 1, y, grid, remove);
-	total += countConnected(x, y + 1, grid, remove);
+	if (0 == _facilities[x][y]->getBuildTime()
+	|| (x-1>=0 && 0!=_facilities[x-1][y] && (_facilities[x-1][y] == _facilities[x][y] || _facilities[x-1][y]->getBuildTime() > _facilities[x-1][y]->getRules()->getBuildTime())))
+		total += countConnected(x - 1, y, grid, remove);
+	if (0 == _facilities[x][y]->getBuildTime()
+	|| (y-1>=0 && 0!=_facilities[x][y-1] && (_facilities[x][y-1] == _facilities[x][y] || _facilities[x][y-1]->getBuildTime() > _facilities[x][y-1]->getRules()->getBuildTime())))
+		total += countConnected(x, y - 1, grid, remove);
+	if (0 == _facilities[x][y]->getBuildTime()
+	|| (x+1<BASE_SIZE && 0!=_facilities[x+1][y] && (_facilities[x+1][y] == _facilities[x][y] || _facilities[x+1][y]->getBuildTime() > _facilities[x+1][y]->getRules()->getBuildTime())))
+		total += countConnected(x + 1, y, grid, remove);
+	if (0 == _facilities[x][y]->getBuildTime()
+	|| (y+1<BASE_SIZE && 0!=_facilities[x][y+1] && (_facilities[x][y+1] == _facilities[x][y] || _facilities[x][y+1]->getBuildTime() > _facilities[x][y+1]->getRules()->getBuildTime())))
+		total += countConnected(x, y + 1, grid, remove);
 
 	// Delete connection grid
 	if (newgrid)

@@ -39,13 +39,13 @@
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -328,7 +328,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMTACTIC")->play();
+	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
@@ -417,7 +417,7 @@ void BattlescapeState::mapOver(Action *action)
 	{
 		isMouseScrolled = true;
 
-		if (!_save->getScrollButtonInvertMode())
+		if (_save->isDragInverted())
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -428,10 +428,10 @@ void BattlescapeState::mapOver(Action *action)
 		totalMouseMoveX += action->getDetails()->motion.xrel;
 		totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _save->getScrollButtonPixelTolerancy()) || (std::abs(totalMouseMoveY) > _save->getScrollButtonPixelTolerancy()));
+			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _save->getDragPixelTolerance()) || (std::abs(totalMouseMoveY) > _save->getDragPixelTolerance()));
 
 		// Scrolling
-		if (!_save->getScrollButtonInvertMode())
+		if (_save->isDragInverted())
 		{
 			_map->getCamera()->scrollXY(
 				-action->getDetails()->motion.xrel,
@@ -470,9 +470,9 @@ void BattlescapeState::mapPress(Action *action)
 	int mx = int(action->getAbsoluteXMouse());
 	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
 
-	if (-1 != _save->getScrollButton())
+	if (Options::getInt("battleScrollType") == SCROLL_DRAG)
 	{
-		if (action->getDetails()->button.button == _save->getScrollButton())
+		if (action->getDetails()->button.button == _save->getDragButton())
 		{
 			isMouseScrolling = true;
 			isMouseScrolled = false;
@@ -497,9 +497,9 @@ void BattlescapeState::mapClick(Action *action)
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _save->getScrollButton()) isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == _save->getDragButton()) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getScrollButtonTimeTolerancy())))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
 		{
 			isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
@@ -677,7 +677,8 @@ void BattlescapeState::btnNextStopClick(Action *)
 
 /**
  * Select next soldier.
- * @param checkReselect When true, don't reselect current unit.
+ * @param checkReselect When true, don't select a unit that has been previously flagged.
+ * @param setReselect When true, flag the current unit first.
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
@@ -693,6 +694,23 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 	}
 }
 
+/**
+ * Select previous soldier.
+ * @param checkReselect When true, don't select a unit that has been previously flagged.
+ */
+void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
+{
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	{
+		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
+		updateSoldierInfo();
+		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		_battleGame->cancelCurrentAction();
+		_battleGame->getCurrentAction()->actor = unit;
+		_battleGame->setupCursor();
+	}
+}
 /**
  * Show/hide all map layers.
  * @param action Pointer to an action.
@@ -1107,6 +1125,18 @@ void BattlescapeState::handle(Action *action)
 	{
 		State::handle(action);
 
+		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+		{
+			if (action->getDetails()->button.button == SDL_BUTTON_X1)
+			{
+				selectNextPlayerUnit(true, false);
+			}
+			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
+			{
+				selectPreviousPlayerUnit(true);
+			}
+		}
+
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
 			// "d" - enable debug mode
@@ -1115,28 +1145,32 @@ void BattlescapeState::handle(Action *action)
 				_save->setDebugMode();
 				debug(L"Debug Mode");
 			}
-			// "l" - toggle personal lighting
-			if (action->getDetails()->key.keysym.sym == SDLK_l)
+			// toggle personal lighting
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePersonalLighting"))
 			{
 				_save->getTileEngine()->togglePersonalLighting();
 			}
-			// "tab" - next solider
-			if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+			// next solider
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 			{
-				if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-					selectNextPlayerUnit(true, false);
+				selectNextPlayerUnit(true, false);
 			}
-			// "esc" - options menu
-			if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)
+			// previous solider
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
+			{
+				selectPreviousPlayerUnit(true);
+			}
+			// options menu
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleOptions"))
 			{
 				_game->pushState(new BattlescapeOptionsState(_game));
 			}
-			// "r" - reload
-			if (action->getDetails()->key.keysym.sym == SDLK_r && playableUnitSelected())
+			// reload
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleReload") && playableUnitSelected())
 			{
 				if (_save->getSelectedUnit()->checkAmmo())
 				{
-					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(17)->play();
+					_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
 					updateSoldierInfo();
 				}
 			}

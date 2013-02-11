@@ -35,7 +35,7 @@
 #include "../Battlescape/AggroBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
-
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -45,15 +45,10 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false)
 {
-	std::string temp;
-	temp = Options::getString("battleScrollButton");
-	if ("RMB" == temp) _scrollButton = SDL_BUTTON_RIGHT;
-	else if ("MMB" == temp) _scrollButton = SDL_BUTTON_MIDDLE;
-	else _scrollButton = -1;
-	temp = Options::getString("battleScrollButtonInvertMode");
-	_scrollButtonInvertMode = ("Normal" != temp);
-	_scrollButtonTimeTolerancy = Options::getInt("battleScrollButtonTimeTolerancy");
-	_scrollButtonPixelTolerancy = Options::getInt("battleScrollButtonPixelTolerancy");
+	_dragButton = Options::getInt("battleScrollDragButton");
+	_dragInvert = Options::getBool("battleScrollDragInvert");
+	_dragTimeTolerance = Options::getInt("battleScrollDragTimeTolerance");
+	_dragPixelTolerance = Options::getInt("battleScrollDragPixelTolerance");
 }
 
 /**
@@ -112,26 +107,46 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	}
 
 	initMap(_width, _length, _height);
+	
+	if (!node.FindValue("tileTotalBytesPer"))
+	{
+		// binary tile data not found, load old-style text tiles :(
+		for (YAML::Iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
+		{
+			Position pos;
+			(*i)["position"][0] >> pos.x;
+			(*i)["position"][1] >> pos.y;
+			(*i)["position"][2] >> pos.z;
+			getTile(pos)->load((*i));
+		}
+	} else 
+	{
+		// load key to how the tile data was saved
+		Tile::SerializationKey serKey;
+		size_t totalTiles;
 
-	for (YAML::Iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
-	{
-		Position pos;
-		(*i)["position"][0] >> pos.x;
-		(*i)["position"][1] >> pos.y;
-		(*i)["position"][2] >> pos.z;
-		getTile(pos)->load((*i));
+		node["tileIndexSize"] >> serKey.index;
+		node["tileTotalBytesPer"] >> serKey.totalBytes;
+		node["tileFireSize"] >> serKey._fire;
+		node["tileSmokeSize"] >> serKey._smoke;
+		node["tileIDSize"] >> serKey._mapDataID;
+		node["tileSetIDSize"] >> serKey._mapDataSetID;
+		node["totalTiles"] >> totalTiles;
+
+		// load binary tile data! 
+		YAML::Binary binTiles;
+		node["binTiles"] >> binTiles;
+
+		Uint8 *r = (Uint8*)binTiles.data();
+		Uint8 *dataEnd = r + totalTiles * serKey.totalBytes;
+
+		while (r < dataEnd)
+		{
+			int index = unserializeInt(&r, serKey.index);
+			assert (index < _width * _height * _length);
+			_tiles[index]->loadBinary(&r, serKey);
+		}		
 	}
-/*	const int recordSize = 19;
-	std::string s;
-	node["tiles"] >> s;
-	std::vector<unsigned char> tileData( s.begin(), s.end() );
-	int records = tileData.size() / recordSize;
-	for (int i = 0; i < records; ++i)
-	{
-		int index = tileData.data()[(i * recordSize)] + tileData.data()[(i * recordSize)+1] << 8 + tileData.data()[(i * recordSize)+2] << 16 + tileData.data()[(i * recordSize)+3] << 24;
-		_tiles[index]->loadBinary(&tileData.data()[(i * recordSize)]);
-	}
-*/
 
 	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
 	{
@@ -319,6 +334,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		out << (*i)->getName();
 	}
 	out << YAML::EndSeq;
+#if 0
 	out << YAML::Key << "tiles" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (int i = 0; i < _height * _length * _width; ++i)
@@ -329,27 +345,38 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 		}
 	}
 	out << YAML::EndSeq;
-	/*const int recordSize = 19;
-	size_t tileDataSize = recordSize * _height * _length * _width;
-	unsigned char* tileData = (unsigned char*) malloc(tileDataSize);
-	int ptr = 0;
+#else
+	// first, write out the field sizes we're going to use to write the tile data
+	out << YAML::Key << "tileIndexSize" << YAML::Value << Tile::serializationKey.index;
+	out << YAML::Key << "tileTotalBytesPer" << YAML::Value << Tile::serializationKey.totalBytes;
+	out << YAML::Key << "tileFireSize" << YAML::Value << Tile::serializationKey._fire;
+	out << YAML::Key << "tileSmokeSize" << YAML::Value << Tile::serializationKey._smoke;
+	out << YAML::Key << "tileIDSize" << YAML::Value << Tile::serializationKey._mapDataID;
+	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
+
+	size_t tileDataSize = Tile::serializationKey.totalBytes * _height * _length * _width;
+	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
+	Uint8* w = tileData;
+
 	for (int i = 0; i < _height * _length * _width; ++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
-			tileData[ptr] = (unsigned int)i;
-			_tiles[i]->saveBinary(&tileData[ptr]);
-			ptr += recordSize;
+			serializeInt(&w, Tile::serializationKey.index, i);
+			_tiles[i]->saveBinary(&w);
 		}
 		else
 		{
-			tileDataSize -= recordSize;
+			tileDataSize -= Tile::serializationKey.totalBytes;
 		}
 	}
-	out << YAML::Key << "tiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
+	out << YAML::Key << "totalTiles" << YAML::Value << tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
+	out << YAML::Key << "binTiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
     free(tileData);
-    ptr = NULL;
-	*/
+
+
+#endif
+
 	out << YAML::Key << "nodes" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
@@ -513,16 +540,6 @@ int SavedBattleGame::getHeight() const
 }
 
 /**
- * This method converts coordinates into a unique index.
- * @param pos position
- * @return Unique index.
- */
-int SavedBattleGame::getTileIndex(const Position& pos) const
-{
-	return pos.z * _length * _width + pos.y * _width + pos.x;
-}
-
-/**
  * This method converts an index to coords.
  * @param index tileindex
  * @param x pointer to X coordinate.
@@ -537,19 +554,6 @@ void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z) const
 	*x = (index % (_length * _width)) % _width;
 }
 
-/**
- * Gets the Tile on a given position on the map.
- * @param pos position
- * @return Pointer to tile.
- */
-Tile *SavedBattleGame::getTile(const Position& pos) const
-{
-	if (pos.x < 0 || pos.y < 0 || pos.z < 0
-		|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
-		return 0;
-
-	return _tiles[getTileIndex(pos)];
-}
 
 /**
  * Gets the currently selected unit
@@ -573,7 +577,7 @@ void SavedBattleGame::setSelectedUnit(BattleUnit *unit)
  * Select the previous player unit TODO move this to BattlescapeState ?
  * @return pointer to BattleUnit.
  */
-BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
+BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect)
 {
 	std::vector<BattleUnit*>::iterator i = _units.begin();
 	bool bPrev = false;
@@ -588,7 +592,8 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit()
 	{
 		if (bPrev && (*i)->getFaction() == _side && !(*i)->isOut())
 		{
-			break;
+			if ( !checkReselect || ((*i)->reselectAllowed()))
+				break;
 		}
 		if ((*i) == _selectedUnit)
 		{
@@ -797,9 +802,9 @@ void SavedBattleGame::endTurn()
 		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 			_selectedUnit = _lastSelectedUnit;
 		else
-			selectPreviousPlayerUnit();
+			selectNextPlayerUnit();
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
-			selectPreviousPlayerUnit();
+			selectNextPlayerUnit();
 	}
 	
 	// hide all aliens (VOF calculations below will turn them visible again)
@@ -1238,39 +1243,41 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 }
 
 /**
- * Gets the ScrollButton type. (which mouse button is the scroll-button)
- * @return ScrollButton type.
+ * Gets the scroll drag button. (which mouse button is the scroll-button)
+ * @return ScrollButton.
  */
-Uint8 SavedBattleGame::getScrollButton() const
+Uint8 SavedBattleGame::getDragButton() const
 {
-	return _scrollButton;
+	return _dragButton;
 }
 
 /**
- * Gets the ScrollButton InvertMode.
- * @return ScrollButton InvertMode.
+ * Gets if the scroll drag is inverted.
+ * @return true drags away from the cursor, false drags towards (like a grab).
  */
-bool SavedBattleGame::getScrollButtonInvertMode() const
+bool SavedBattleGame::isDragInverted() const
 {
-	return _scrollButtonInvertMode;
+	return _dragInvert;
 }
 
 /**
- * Gets the ScrollButton TimeTolerancy.
- * @return ScrollButton TimeTolerancy.
+ * Gets the amount of time the button must be pushed
+ * to start a drag scroll.
+ * @return Time in miliseconds.
  */
-int SavedBattleGame::getScrollButtonTimeTolerancy() const
+int SavedBattleGame::getDragTimeTolerance() const
 {
-	return _scrollButtonTimeTolerancy;
+	return _dragTimeTolerance;
 }
 
 /**
- * Gets the ScrollButton PixelTolerancy.
- * @return ScrollButton PixelTolerancy.
+ * Gets the amount of pixels the mouse must move
+ * to start a drag scroll.
+ * @return Number of pixels.
  */
-int SavedBattleGame::getScrollButtonPixelTolerancy() const
+int SavedBattleGame::getDragPixelTolerance() const
 {
-	return _scrollButtonPixelTolerancy;
+	return _dragPixelTolerance;
 }
 
 void SavedBattleGame::updateExposedUnits()

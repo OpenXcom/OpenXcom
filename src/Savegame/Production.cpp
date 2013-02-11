@@ -23,6 +23,9 @@
 #include "ItemContainer.h"
 #include "Craft.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Engine/Options.h"
+#include <limits>
 
 namespace OpenXcom
 {
@@ -30,12 +33,12 @@ Production::Production (const RuleManufacture * rules, int amount) : _rules(rule
 {
 }
 
-int Production::getAmountRemaining () const
+int Production::getAmountTotal () const
 {
 	return _amount;
 }
 
-void Production::setAmountRemaining (int amount)
+void Production::setAmountTotal (int amount)
 {
 	_amount = amount;
 }
@@ -74,7 +77,10 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		}
 		else
 		{
-			b->getItems ()->addItem(_rules->getName (), 1);
+			if (Options::getBool("allowAutoSellProduction") && getAmountTotal() == std::numeric_limits<int>::max())
+				g->setFunds(g->getFunds() + r->getItem(_rules->getName())->getSellCost());
+			else
+				b->getItems()->addItem(_rules->getName(), 1);
 		}
 	}
 	if (getAmountProduced () >= _amount)
@@ -128,7 +134,7 @@ void Production::save(YAML::Emitter &out)
 	out << YAML::Key << "item" << YAML::Value << getRules ()->getName ();
 	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
 	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
-	out << YAML::Key << "amount" << YAML::Value << getAmountRemaining ();
+	out << YAML::Key << "amount" << YAML::Value << getAmountTotal ();
 	out << YAML::EndMap;
 }
 
@@ -142,6 +148,6 @@ void Production::load(const YAML::Node &node)
 	node["amount"] >> amount;
 	setAssignedEngineers(assigned);
 	setTimeSpent(spent);
-	setAmountRemaining(amount);
+	setAmountTotal(amount);
 }
 };

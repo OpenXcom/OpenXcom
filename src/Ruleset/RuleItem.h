@@ -65,6 +65,7 @@ private:
 	int _turretType;
 	bool _recover, _liveAlien;
 	int _blastRadius;
+	bool _flatRate;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -170,6 +171,8 @@ public:
 	int getTurretType() const;
 	/// is this a live alien?
 	bool getAlien() const;
+	/// should we charge a flat rate?
+	bool getFlatRate() const;
 };
 
 }

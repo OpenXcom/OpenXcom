@@ -107,40 +107,55 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
 {
+	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
+	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
+
+	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
+
 	// Create objects
-	_bg = new Surface(320, 200, 0, 0);
-	_globe = new Globe(_game, 130, 100, 256, 200, 0, 0);
+	_bg = new Surface(320, 200, mapWidth-320, mapHeight/2-100);
+	_globe = new Globe(_game, (mapWidth-64)/2, mapHeight/2, mapWidth-64, mapHeight, 0, 0);
 
-	_btnIntercept = new ImageButton(63, 11, 257, 0);
-	_btnBases = new ImageButton(63, 11, 257, 12);
-	_btnGraphs = new ImageButton(63, 11, 257, 24);
-	_btnUfopaedia = new ImageButton(63, 11, 257, 36);
-	_btnOptions = new ImageButton(63, 11, 257, 48);
-	_btnFunding = new ImageButton(63, 11, 257, 60);
+	_btnIntercept = new ImageButton(63, 11, mapWidth-63, mapHeight/2-100);
+	_btnBases = new ImageButton(63, 11, mapWidth-63, mapHeight/2-88);
+	_btnGraphs = new ImageButton(63, 11, mapWidth-63, mapHeight/2-76);
+	_btnUfopaedia = new ImageButton(63, 11, mapWidth-63, mapHeight/2-64);
+	_btnOptions = new ImageButton(63, 11, mapWidth-63, mapHeight/2-52);
+	_btnFunding = new ImageButton(63, 11, mapWidth-63, mapHeight/2-40);
 
-	_btn5Secs = new ImageButton(31, 13, 257, 112);
-	_btn1Min = new ImageButton(31, 13, 289, 112);
-	_btn5Mins = new ImageButton(31, 13, 257, 126);
-	_btn30Mins = new ImageButton(31, 13, 289, 126);
-	_btn1Hour = new ImageButton(31, 13, 257, 140);
-	_btn1Day = new ImageButton(31, 13, 289, 140);
+	_btn5Secs = new ImageButton(31, 13, mapWidth-63, mapHeight/2+12);
+	_btn1Min = new ImageButton(31, 13, mapWidth-31, mapHeight/2+12);
+	_btn5Mins = new ImageButton(31, 13, mapWidth-63, mapHeight/2+26);
+	_btn30Mins = new ImageButton(31, 13, mapWidth-31, mapHeight/2+26);
+	_btn1Hour = new ImageButton(31, 13, mapWidth-63, mapHeight/2+40);
+	_btn1Day = new ImageButton(31, 13, mapWidth-31, mapHeight/2+40);
 
-	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
-	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
-	_btnRotateUp = new InteractiveSurface(13, 12, 271, 162);
-	_btnRotateDown = new InteractiveSurface(13, 12, 271, 187);
-	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
-	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
+	_btnRotateLeft = new InteractiveSurface(12, 10, mapWidth-61, mapHeight/2+76);
+	_btnRotateRight = new InteractiveSurface(12, 10, mapWidth-37, mapHeight/2+76);
+	_btnRotateUp = new InteractiveSurface(13, 12, mapWidth-49, mapHeight/2+62);
+	_btnRotateDown = new InteractiveSurface(13, 12, mapWidth-49, mapHeight/2+87);
+	_btnZoomIn = new InteractiveSurface(23, 23, mapWidth-25, mapHeight/2+56);
+	_btnZoomOut = new InteractiveSurface(13, 17, mapWidth-20, mapHeight/2+82);
 
-	_txtHour = new Text(20, 16, 259, 74);
-	_txtHourSep = new Text(4, 16, 279, 74);
-	_txtMin = new Text(20, 16, 283, 74);
-	_txtMinSep = new Text(4, 16, 303, 74);
-	_txtSec = new Text(11, 8, 307, 80);
-	_txtWeekday = new Text(59, 8, 259, 87);
-	_txtDay = new Text(29, 8, 259, 94);
-	_txtMonth = new Text(29, 8, 288, 94);
-	_txtYear = new Text(59, 8, 259, 101);
+	_txtHour = new Text(20, 16, mapWidth-61, mapHeight/2-26);
+	_txtHourSep = new Text(4, 16, mapWidth-41, mapHeight/2-26);
+	_txtMin = new Text(20, 16, mapWidth-37, mapHeight/2-26);
+	_txtMinSep = new Text(4, 16, mapWidth-17, mapHeight/2-26);
+	_txtSec = new Text(11, 8, mapWidth-13, mapHeight/2-20);
+	_txtWeekday = new Text(59, 8, mapWidth-61, mapHeight/2-13);
+	_txtDay = new Text(29, 8, mapWidth-61, mapHeight/2-6);
+	_txtMonth = new Text(29, 8, mapWidth-32, mapHeight/2-6);
+	_txtYear = new Text(59, 8, mapWidth-61, mapHeight/2+1);
+	if (_showFundsOnGeoscape)
+	{
+		_txtFunds = new Text(59, 8, 259, 73);
+		_txtHour->setY(_txtHour->getY()+6);
+		_txtHourSep->setY(_txtHourSep->getY()+6);
+		_txtMin->setY(_txtMin->getY()+6);
+		_txtMinSep->setY(_txtMinSep->getY()+6);
+		_txtMinSep->setX(_txtMinSep->getX()-10);
+		_txtSec->setX(_txtSec->getX()-10);
+	}
 
 	_timeSpeed = _btn5Secs;
 	_timer = new Timer(100);
@@ -178,6 +193,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_btnZoomIn);
 	add(_btnZoomOut);
 
+	if (_showFundsOnGeoscape) add(_txtFunds);
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
@@ -259,20 +275,28 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 
-	_txtHour->setBig();
+	if (_showFundsOnGeoscape)
+	{
+		_txtFunds->setSmall();
+		_txtFunds->setColor(Palette::blockOffset(15)+4);
+		_txtFunds->setText(L"");
+		_txtFunds->setAlign(ALIGN_CENTER);
+	}
+
+	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
 	_txtHour->setColor(Palette::blockOffset(15)+4);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 
-	_txtHourSep->setBig();
+	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
 	_txtHourSep->setColor(Palette::blockOffset(15)+4);
 	_txtHourSep->setText(L":");
 
-	_txtMin->setBig();
+	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
 	_txtMin->setColor(Palette::blockOffset(15)+4);
 	_txtMin->setText(L"");
 
-	_txtMinSep->setBig();
+	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+4);
 	_txtMinSep->setText(L":");
 
@@ -389,9 +413,7 @@ void GeoscapeState::init()
 	// Set music if it's not already playing
 	if (!_music && !_battleMusic)
 	{
-		std::stringstream ss;
-		ss << "GMGEO" << RNG::generate(1, 2);
-		_game->getResourcePack()->getMusic(ss.str())->play();
+		_game->getResourcePack()->getRandomMusic("GMGEO")->play();
 		_music = true;
 	}
 	_globe->unsetNewBaseHover();
@@ -435,18 +457,45 @@ void GeoscapeState::think()
 	if (_minimizedDogfights == 0 && _dogfights.empty() &&_battleMusic)
 	{
 		_battleMusic = false;
-		_music = false;
+		musicStop();
 	}
 }
 
 /**
+ * Converts an int into the given stringstream, grouped by thousands.
+ * @param out The stringstream which takes the converted value.
+ * @param n The int to be converted.
+ */
+void GeoscapeState::intToStringStreamGrouped(std::stringstream &out, int n)
+{
+  if (n < 0)
+	{
+    out << "-";
+    intToStringStreamGrouped(out, -n);
+  }
+	else if (n < 1000) out << n;
+  else
+	{
+    intToStringStreamGrouped(out, n / 1000);
+    out << "." << std::setw(3) << std::setfill('0') << (n % 1000);
+  }
+}
+
+/**
  * Updates the Geoscape clock with the latest
- * game time and date in human-readable format.
+ * game time and date in human-readable format. (+Funds)
  */
 void GeoscapeState::timeDisplay()
 {
 	std::stringstream ss, ss2;
 	std::wstringstream ss3, ss4, ss5;
+
+	if (_showFundsOnGeoscape)
+	{
+		std::stringstream ss6;
+		intToStringStreamGrouped(ss6,_game->getSavedGame()->getFunds());
+		_txtFunds->setText(Language::utf8ToWstr("$"+ss6.str()));
+	}
 
 	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 	_txtSec->setText(Language::utf8ToWstr(ss.str()));
@@ -577,32 +626,42 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
+						(*i)->setDestination(0);
 						base->setupDefenses();
+						timerReset();
 						if (base->getDefenses()->size() > 0)
 						{
-							popup(new BaseDefenseState(_game, base, *i));
-						}
-						else if (base->getSoldiers()->size() > 0)
-						{
-							// Whatever happens in the base defense, the UFO has finished its duty
-							(*i)->setStatus(Ufo::DESTROYED);
-							size_t month = _game->getSavedGame()->getMonthsPassed();
-							if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-								month = _game->getRuleset()->getAlienItemLevels().size()-1;
-							SavedBattleGame *bgame = new SavedBattleGame();
-							_game->getSavedGame()->setBattleGame(bgame);
-							bgame->setMissionType("STR_BASE_DEFENSE");
-							BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-							bgen.setBase(base);
-							bgen.setAlienRace((*i)->getAlienRace());
-							bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-							bgen.run();
-
-							popup(new BriefingState(_game, 0, base, *i));
+							popup(new BaseDefenseState(_game, base, *i, this));
 						}
 						else
 						{
-							popup(new BaseDestroyedState(_game, base));
+							int soldiersOnBase = 0;
+							for (std::vector<Soldier*>::iterator j = base->getSoldiers()->begin(); j != base->getSoldiers()->end() ; ++j)
+							{
+								if ((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") soldiersOnBase++;
+							}
+							if (soldiersOnBase > 0)
+							{
+								(*i)->setStatus(Ufo::DESTROYED);
+								size_t month = _game->getSavedGame()->getMonthsPassed();
+								if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+									month = _game->getRuleset()->getAlienItemLevels().size()-1;
+								SavedBattleGame *bgame = new SavedBattleGame();
+								_game->getSavedGame()->setBattleGame(bgame);
+								bgame->setMissionType("STR_BASE_DEFENSE");
+								BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+								bgen.setBase(base);
+								bgen.setAlienRace((*i)->getAlienRace());
+								bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+								bgen.run();
+								musicStop();
+								popup(new BriefingState(_game, 0, base));
+							}
+							else
+							{
+								(*i)->setStatus(Ufo::DESTROYED);
+								popup(new BaseDestroyedState(_game, base));
+							}
 						}
 					}
 				}
@@ -703,9 +762,8 @@ void GeoscapeState::time5Seconds()
 								// look up polygons texture
 								int texture, shade;
 								_globe->getPolygonTextureAndShade(u->getLongitude(), u->getLatitude(), &texture, &shade);
-								_music = false;
 								timerReset();
-								popup(new ConfirmLandingState(_game, *j, texture, shade));
+								popup(new ConfirmLandingState(_game, *j, texture, shade, this));
 							}
 						}
 						else if (u->getStatus() != Ufo::LANDED)
@@ -727,9 +785,8 @@ void GeoscapeState::time5Seconds()
 						// look up polygons texture
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
-						_music = false;
 						timerReset();
-						popup(new ConfirmLandingState(_game, *j, texture, shade));
+						popup(new ConfirmLandingState(_game, *j, texture, shade, this));
 					}
 					else
 					{
@@ -744,9 +801,8 @@ void GeoscapeState::time5Seconds()
 						{
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
-							_music = false;
 							timerReset();
-							popup(new ConfirmLandingState(_game, *j, texture, shade));
+							popup(new ConfirmLandingState(_game, *j, texture, shade, this));
 						}
 						else
 						{
@@ -776,17 +832,6 @@ void GeoscapeState::time5Seconds()
 					else
 					{
 						++d;
-					}
-				}
-				// Send all crafts engaging this UFO back to base.
-				for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
-				{
-					for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
-					{
-						if((*c)->getDestination() == (*i))
-						{
-							(*c)->returnToBase();
-						}
 					}
 				}
 			}
@@ -1529,6 +1574,18 @@ void GeoscapeState::timerReset()
 }
 
 /**
+ * Stops the Geoscape music for when another
+ * music is gonna take place, so it resumes
+ * when we go back to the Geoscape.
+ * @param pause True if we want to resume
+ * from the same spot we left off.
+ */
+void GeoscapeState::musicStop(bool pause)
+{
+	_music = false;
+}
+
+/**
  * Adds a new popup window to the queue
  * (this prevents popups from overlapping)
  * and pauses the game timer respectively.
@@ -1843,7 +1900,7 @@ void GeoscapeState::startDogfight()
 		_dogfightStartTimer->stop();
 		_zoomInEffectTimer->stop();
 		timerReset();
-		_music = false;
+		musicStop();
 		while(!_dogfightsToBeStarted.empty())
 		{
 			_dogfights.push_back(_dogfightsToBeStarted.back());

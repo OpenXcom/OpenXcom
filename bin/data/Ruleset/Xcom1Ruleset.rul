@@ -1270,7 +1270,7 @@ facilities:
     mapName: XBASE_08
   - type: STR_LASER_DEFENSES
     requires:
-      - STR_LASER_DEFENSES
+      - STR_LASER_DEFENSE
     spriteShape: 3
     spriteFacility: 26
     buildCost: 400000
@@ -1283,7 +1283,7 @@ facilities:
     mapName: XBASE_09
   - type: STR_PLASMA_DEFENSES
     requires:
-      - STR_PLASMA_DEFENSES
+      - STR_PLASMA_DEFENSE
     spriteShape: 3
     spriteFacility: 27
     buildCost: 600000
@@ -1296,7 +1296,7 @@ facilities:
     mapName: XBASE_10
   - type: STR_FUSION_BALL_DEFENSES
     requires:
-      - STR_FUSION_BALL_DEFENSES
+      - STR_FUSION_DEFENSE
     spriteShape: 3
     spriteFacility: 28
     buildCost: 800000
@@ -1726,7 +1726,7 @@ items:
     costSell: 980000
     transferTime: 96
     weight: 1
-    bigSprite: 43
+    bigSprite: 40
     floorSprite: 0
     handSprite: 0
     bulletSprite: 8
@@ -2219,6 +2219,7 @@ items:
     stun: 4
     energy: 10
     tuUse: 10
+    flatRate: true
     armor: 20
   - type: STR_PSI_AMP
     requires:
@@ -2235,6 +2236,7 @@ items:
     invWidth: 1
     invHeight: 3
     tuUse: 25
+    flatRate: true
     armor: 20
   - type: STR_STUN_ROD
     size: 0.1
@@ -2795,7 +2797,7 @@ items:
     costSell: 115000
   - type: CYBERDISC_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 40
     floorSprite: 31
     handSprite: 104
     bulletSprite: 8
@@ -2811,12 +2813,12 @@ items:
     clipSize: -1
     battleType: 1
     fixedWeapon: true
-    invWidth: 1
-    invHeight: 2
+    invWidth: 2
+    invHeight: 3
     recover: false
   - type: REAPER_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 26
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2828,11 +2830,11 @@ items:
     battleType: 3
     fixedWeapon: true
     invWidth: 1
-    invHeight: 2
+    invHeight: 3
     recover: false
   - type: CHRYSSALID_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 26
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2844,11 +2846,11 @@ items:
     battleType: 3
     fixedWeapon: true
     invWidth: 1
-    invHeight: 2
+    invHeight: 3
     recover: false
   - type: CELATID_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 40
     floorSprite: 31
     handSprite: 104
     bulletSprite: 8
@@ -2863,13 +2865,13 @@ items:
     tuAimed: 60
     battleType: 1
     fixedWeapon: true
-    invWidth: 1
-    invHeight: 2
+    invWidth: 2
+    invHeight: 3
     clipSize: -1
     recover: false
   - type: SILACOID_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 40
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2879,12 +2881,12 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 1
-    invHeight: 2
+    invWidth: 2
+    invHeight: 3
     recover: false
   - type: SECTOPOD_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 40
     floorSprite: 31
     handSprite: 104
     fireSound: 11
@@ -2900,14 +2902,14 @@ items:
     tuAimed: 60
     battleType: 1
     fixedWeapon: true
-    invWidth: 1
-    invHeight: 2
+    invWidth: 2
+    invHeight: 3
     clipSize: -1
     bulletSprite: 9
     recover: false
   - type: ZOMBIE_WEAPON
     weight: 3
-    bigSprite: 32
+    bigSprite: 26
     floorSprite: 31
     handSprite: 104
     hitSound: 48
@@ -2918,7 +2920,7 @@ items:
     battleType: 3
     fixedWeapon: true
     invWidth: 1
-    invHeight: 2
+    invHeight: 3
     clipSize: -1
     recover: false
   - type: STR_SECTOID_SOLDIER
@@ -2945,7 +2947,7 @@ items:
     size: 0.0
     recover: true
     liveAlien: true
-  - type: STR_CYBERDISC
+  - type: STR_CYBERDISC_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
@@ -2973,7 +2975,7 @@ items:
     size: 0.0
     recover: true
     liveAlien: true
-  - type: STR_REAPER
+  - type: STR_REAPER_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
@@ -2997,7 +2999,7 @@ items:
     size: 0.0
     recover: true
     liveAlien: true
-  - type: STR_CHRYSSALID
+  - type: STR_CHRYSSALID_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
@@ -3025,15 +3027,15 @@ items:
     size: 0.0
     recover: true
     liveAlien: true
-  - type: STR_SILACOID
+  - type: STR_SILACOID_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
-  - type: STR_CELATID
+  - type: STR_CELATID_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
-  - type: STR_SECTOPOD
+  - type: STR_SECTOPOD_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
@@ -3044,6 +3046,7 @@ items:
     hitSound: 36
     battleType: 9
     tuUse: 25
+    flatRate: true
     recover: false
 ufos:
   - type: STR_SMALL_SCOUT
@@ -3228,7 +3231,7 @@ ufos:
 invs:
   - id: STR_BACK_PACK
     x: 192
-    y: 40
+    y: 39
     slots:
       - [0, 0]
       - [1, 0]
@@ -3310,7 +3313,7 @@ invs:
       STR_RIGHT_SHOULDER: 10
   - id: STR_LEFT_SHOULDER
     x: 112
-    y: 40
+    y: 39
     slots:
       - [0, 0]
       - [1, 0]
@@ -3353,7 +3356,7 @@ invs:
       STR_RIGHT_SHOULDER: 10
   - id: STR_RIGHT_SHOULDER
     x: 16
-    y: 40
+    y: 39
     slots:
       - [0, 0]
       - [1, 0]
@@ -4466,7 +4469,7 @@ soldiers:
     kneelHeight: 14
     loftemps: 3
 units:
-  - type: SECTOID_SOLDIER
+  - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
     stats:
@@ -4489,7 +4492,7 @@ units:
     deathSound: 10
     intelligence: 3
     aggression: 2
-  - type: SECTOID_ENGINEER
+  - type: STR_SECTOID_ENGINEER
     race: STR_SECTOID
     rank: STR_LIVE_ENGINEER
     stats:
@@ -4512,7 +4515,7 @@ units:
     deathSound: 10
     intelligence: 6
     aggression: 2
-  - type: SECTOID_MEDIC
+  - type: STR_SECTOID_MEDIC
     race: STR_SECTOID
     rank: STR_LIVE_MEDIC
     stats:
@@ -4535,7 +4538,7 @@ units:
     deathSound: 10
     intelligence: 5
     aggression: 1
-  - type: SECTOID_NAVIGATOR
+  - type: STR_SECTOID_NAVIGATOR
     race: STR_SECTOID
     rank: STR_LIVE_NAVIGATOR
     stats:
@@ -4558,7 +4561,7 @@ units:
     deathSound: 10
     intelligence: 4
     aggression: 2
-  - type: SECTOID_LEADER
+  - type: STR_SECTOID_LEADER
     race: STR_SECTOID
     rank: STR_LIVE_LEADER
     stats:
@@ -4581,7 +4584,7 @@ units:
     deathSound: 10
     intelligence: 7
     aggression: 1
-  - type: SECTOID_COMMANDER
+  - type: STR_SECTOID_COMMANDER
     race: STR_SECTOID
     rank: STR_LIVE_COMMANDER
     stats:
@@ -4604,7 +4607,7 @@ units:
     deathSound: 10
     intelligence: 8
     aggression: 0
-  - type: CYBERDISC
+  - type: STR_CYBERDISC_TERRORIST
     race: STR_CYBERDISC
     stats:
       tu: 62
@@ -4628,7 +4631,7 @@ units:
     intelligence: 5
     aggression: 1
     specab: 1
-  - type: FLOATER_SOLDIER
+  - type: STR_FLOATER_SOLDIER
     race: STR_FLOATER
     rank: STR_LIVE_SOLDIER
     stats:
@@ -4652,7 +4655,7 @@ units:
     moveSound: 15
     intelligence: 4
     aggression: 2
-  - type: FLOATER_ENGINEER
+  - type: STR_FLOATER_ENGINEER
     race: STR_FLOATER
     rank: STR_LIVE_ENGINEER
     stats:
@@ -4676,7 +4679,7 @@ units:
     moveSound: 15
     intelligence: 7
     aggression: 2
-  - type: FLOATER_NAVIGATOR
+  - type: STR_FLOATER_NAVIGATOR
     race: STR_FLOATER
     rank: STR_LIVE_NAVIGATOR
     stats:
@@ -4700,7 +4703,7 @@ units:
     moveSound: 15
     intelligence: 5
     aggression: 2
-  - type: FLOATER_MEDIC
+  - type: STR_FLOATER_MEDIC
     race: STR_FLOATER
     rank: STR_LIVE_MEDIC
     stats:
@@ -4724,7 +4727,7 @@ units:
     moveSound: 15
     intelligence: 6
     aggression: 1
-  - type: FLOATER_LEADER
+  - type: STR_FLOATER_LEADER
     race: STR_FLOATER
     rank: STR_LIVE_LEADER
     stats:
@@ -4748,7 +4751,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
-  - type: FLOATER_COMMANDER
+  - type: STR_FLOATER_COMMANDER
     race: STR_FLOATER
     rank: STR_LIVE_COMMANDER
     stats:
@@ -4772,7 +4775,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
-  - type: REAPER
+  - type: STR_REAPER_TERRORIST
     race: STR_REAPER
     stats:
       tu: 62
@@ -4794,7 +4797,7 @@ units:
     deathSound: 48
     intelligence: 2
     aggression: 2
-  - type: TANK_CANNON
+  - type: STR_TANK_CANNON
     race: STR_TANK_CANNON
     stats:
       tu: 70
@@ -4815,7 +4818,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 14	
-  - type: TANK_ROCKET_LAUNCHER
+  - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
       tu: 70
@@ -4836,7 +4839,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 14
-  - type: TANK_LASER_CANNON
+  - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
       tu: 70
@@ -4857,7 +4860,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 14
-  - type: HOVERTANK_PLASMA
+  - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
       tu: 100
@@ -4878,7 +4881,7 @@ units:
     value: 20
     deathSound: 23
     moveSound: 15
-  - type: HOVERTANK_LAUNCHER
+  - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
       tu: 100
@@ -4939,7 +4942,7 @@ units:
     loftemps: 3
     value: 30
     intelligence: 4
-  - type: SNAKEMAN_SOLDIER
+  - type: STR_SNAKEMAN_SOLDIER
     race: STR_SNAKEMAN
     rank: STR_LIVE_SOLDIER
     stats:
@@ -4963,7 +4966,7 @@ units:
     moveSound: 0
     intelligence: 2
     aggression: 2
-  - type: SNAKEMAN_NAVIGATOR
+  - type: STR_SNAKEMAN_NAVIGATOR
     race: STR_SNAKEMAN
     rank: STR_LIVE_NAVIGATOR
     stats:
@@ -4987,7 +4990,7 @@ units:
     moveSound: 0
     intelligence: 3
     aggression: 2
-  - type: SNAKEMAN_ENGINEER
+  - type: STR_SNAKEMAN_ENGINEER
     race: STR_SNAKEMAN
     rank: STR_LIVE_ENGINEER
     stats:
@@ -5011,7 +5014,7 @@ units:
     moveSound: 0
     intelligence: 4
     aggression: 2
-  - type: SNAKEMAN_LEADER
+  - type: STR_SNAKEMAN_LEADER
     race: STR_SNAKEMAN
     rank: STR_LIVE_LEADER
     stats:
@@ -5035,7 +5038,7 @@ units:
     moveSound: 0
     intelligence: 5
     aggression: 2  
-  - type: SNAKEMAN_COMMANDER
+  - type: STR_SNAKEMAN_COMMANDER
     race: STR_SNAKEMAN
     rank: STR_LIVE_COMMANDER
     stats:
@@ -5059,7 +5062,7 @@ units:
     moveSound: 0
     intelligence: 6
     aggression: 2 
-  - type: MUTON_SOLDIER
+  - type: STR_MUTON_SOLDIER
     race: STR_MUTON
     rank: STR_LIVE_SOLDIER
     stats:
@@ -5082,7 +5085,7 @@ units:
     deathSound: 6
     intelligence: 2
     aggression: 2
-  - type: MUTON_NAVIGATOR
+  - type: STR_MUTON_NAVIGATOR
     race: STR_MUTON
     rank: STR_LIVE_NAVIGATOR
     stats:
@@ -5105,7 +5108,7 @@ units:
     deathSound: 6
     intelligence: 3
     aggression: 2 
-  - type: MUTON_ENGINEER
+  - type: STR_MUTON_ENGINEER
     race: STR_MUTON
     rank: STR_LIVE_ENGINEER
     stats:
@@ -5128,7 +5131,7 @@ units:
     deathSound: 6
     intelligence: 4
     aggression: 2 
-  - type: ETHEREAL_SOLDIER
+  - type: STR_ETHEREAL_SOLDIER
     race: STR_ETHEREAL
     rank: STR_LIVE_SOLDIER
     stats:
@@ -5151,7 +5154,7 @@ units:
     deathSound: 9
     intelligence: 6
     aggression: 1     
-  - type: ETHEREAL_LEADER
+  - type: STR_ETHEREAL_LEADER
     race: STR_ETHEREAL
     rank: STR_LIVE_LEADER
     stats:
@@ -5174,7 +5177,7 @@ units:
     deathSound: 9
     intelligence: 7
     aggression: 1    
-  - type: ETHEREAL_COMMANDER
+  - type: STR_ETHEREAL_COMMANDER
     race: STR_ETHEREAL
     rank: STR_LIVE_COMMANDER
     stats:
@@ -5197,7 +5200,7 @@ units:
     deathSound: 9
     intelligence: 8
     aggression: 1 
-  - type: CHRYSSALID
+  - type: STR_CHRYSSALID_TERRORIST
     race: STR_CHRYSSALID
     rank: STR_LIVE_TERRORIST
     stats:
@@ -5221,8 +5224,8 @@ units:
     aggroSound: 49
     intelligence: 4
     aggression: 1
-    zombieUnit: ZOMBIE
-  - type: SILACOID
+    zombieUnit: STR_ZOMBIE
+  - type: STR_SILACOID_TERRORIST
     race: STR_SILACOID
     rank: STR_LIVE_TERRORIST
     stats:
@@ -5247,7 +5250,7 @@ units:
     intelligence: 3
     aggression: 2
     specab: 2
-  - type: CELATID
+  - type: STR_CELATID_TERRORIST
     race: STR_CELATID
     rank: STR_LIVE_TERRORIST
     stats:
@@ -5271,7 +5274,7 @@ units:
     moveSound: 16
     intelligence: 3
     aggression: 2
-  - type: SECTOPOD
+  - type: STR_SECTOPOD_TERRORIST
     race: STR_SECTOPOD
     rank: STR_LIVE_TERRORIST
     stats:
@@ -5294,7 +5297,7 @@ units:
     deathSound: 23
     intelligence: 4
     aggression: 1
-  - type: ZOMBIE
+  - type: STR_ZOMBIE
     race: STR_ZOMBIE
     rank: STR_LIVE_TERRORIST
     stats:
@@ -5317,68 +5320,68 @@ units:
     deathSound: 48
     intelligence: 3
     aggression: 2
-    spawnUnit: CHRYSSALID
+    spawnUnit: STR_CHRYSSALID_TERRORIST
 alienRaces:
   - id: STR_SECTOID
     members:
-      - SECTOID_COMMANDER
-      - SECTOID_LEADER
-      - SECTOID_ENGINEER
-      - SECTOID_MEDIC
-      - SECTOID_NAVIGATOR
-      - SECTOID_SOLDIER
-      - CYBERDISC
-      - CYBERDISC
+      - STR_SECTOID_COMMANDER
+      - STR_SECTOID_LEADER
+      - STR_SECTOID_ENGINEER
+      - STR_SECTOID_MEDIC
+      - STR_SECTOID_NAVIGATOR
+      - STR_SECTOID_SOLDIER
+      - STR_CYBERDISC_TERRORIST
+      - STR_CYBERDISC_TERRORIST
   - id: STR_SNAKEMAN
     members:
-      - SNAKEMAN_COMMANDER
-      - SNAKEMAN_LEADER
-      - SNAKEMAN_ENGINEER
-      - SNAKEMAN_SOLDIER
-      - SNAKEMAN_NAVIGATOR
-      - SNAKEMAN_SOLDIER
-      - CHRYSSALID
-      - CHRYSSALID
+      - STR_SNAKEMAN_COMMANDER
+      - STR_SNAKEMAN_LEADER
+      - STR_SNAKEMAN_ENGINEER
+      - STR_SNAKEMAN_SOLDIER
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_SNAKEMAN_SOLDIER
+      - STR_CHRYSSALID_TERRORIST
+      - STR_CHRYSSALID_TERRORIST
   - id: STR_ETHEREAL
     members:
-      - ETHEREAL_COMMANDER
-      - ETHEREAL_LEADER
-      - ETHEREAL_LEADER
-      - ETHEREAL_LEADER
-      - ETHEREAL_LEADER
-      - ETHEREAL_SOLDIER
-      - SECTOPOD
-      - SECTOPOD
+      - STR_ETHEREAL_COMMANDER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_SOLDIER
+      - STR_SECTOPOD_TERRORIST
+      - STR_SECTOPOD_TERRORIST
   - id: STR_MUTON
     members:
-      - MUTON_SOLDIER
-      - MUTON_SOLDIER
-      - MUTON_ENGINEER
-      - MUTON_SOLDIER
-      - MUTON_NAVIGATOR
-      - MUTON_SOLDIER
-      - SILACOID
-      - CELATID
+      - STR_MUTON_SOLDIER
+      - STR_MUTON_SOLDIER
+      - STR_MUTON_ENGINEER
+      - STR_MUTON_SOLDIER
+      - STR_MUTON_NAVIGATOR
+      - STR_MUTON_SOLDIER
+      - STR_SILACOID_TERRORIST
+      - STR_CELATID_TERRORIST
   - id: STR_FLOATER
     members:
-      - FLOATER_COMMANDER
-      - FLOATER_LEADER
-      - FLOATER_ENGINEER
-      - FLOATER_MEDIC
-      - FLOATER_NAVIGATOR
-      - FLOATER_SOLDIER
-      - REAPER
-      - REAPER
+      - STR_FLOATER_COMMANDER
+      - STR_FLOATER_LEADER
+      - STR_FLOATER_ENGINEER
+      - STR_FLOATER_MEDIC
+      - STR_FLOATER_NAVIGATOR
+      - STR_FLOATER_SOLDIER
+      - STR_REAPER_TERRORIST
+      - STR_REAPER_TERRORIST
   - id: STR_MIXED
     members:
-      - ETHEREAL_SOLDIER
-      - ETHEREAL_LEADER
-      - ETHEREAL_COMMANDER
-      - CHRYSSALID
-      - SILACOID
-      - CELATID
-      - SECTOPOD
-      - SECTOPOD
+      - STR_ETHEREAL_SOLDIER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_COMMANDER
+      - STR_CHRYSSALID_TERRORIST
+      - STR_SILACOID_TERRORIST
+      - STR_CELATID_TERRORIST
+      - STR_SECTOPOD_TERRORIST
+      - STR_SECTOPOD_TERRORIST
 alienDeployments:
   - type: STR_SMALL_SCOUT
     data:
@@ -6709,11 +6712,21 @@ research:
     points: 10
     dependencies:
       - STR_LASER_PISTOL
-  - name: STR_LASER_CANNON
-    cost: 420
+  - name: STR_HEAVY_LASER
+    cost: 460
     points: 10
     dependencies:
       - STR_LASER_RIFLE
+  - name: STR_LASER_CANNON
+    cost: 420
+    points: 15
+    dependencies:
+      - STR_HEAVY_LASER
+  - name: STR_LASER_DEFENSE
+    cost: 510
+    points: 15
+    dependencies:
+      - STR_LASER_CANNON
   - name: STR_MOTION_SCANNER
     cost: 180
     points: 20
@@ -6746,29 +6759,29 @@ research:
       - STR_SECTOID_MEDIC
       - STR_SECTOID_NAVIGATOR
       - STR_SECTOID_SOLDIER
-      - STR_CYBERDISC
+      - STR_CYBERDISC_TERRORIST
       - STR_SNAKEMAN_COMMANDER
       - STR_SNAKEMAN_LEADER
       - STR_SNAKEMAN_ENGINEER
       - STR_SNAKEMAN_NAVIGATOR
       - STR_SNAKEMAN_SOLDIER
-      - STR_CHRYSSALID
+      - STR_CHRYSSALID_TERRORIST
       - STR_ETHEREAL_COMMANDER
       - STR_ETHEREAL_LEADER
       - STR_ETHEREAL_SOLDIER
-      - STR_SECTOPOD
+      - STR_SECTOPOD_TERRORIST
       - STR_MUTON_ENGINEER
       - STR_MUTON_NAVIGATOR
       - STR_MUTON_SOLDIER
-      - STR_SILACOID
-      - STR_CELATID
+      - STR_SILACOID_TERRORIST
+      - STR_CELATID_TERRORIST
       - STR_FLOATER_COMMANDER
       - STR_FLOATER_LEADER
       - STR_FLOATER_ENGINEER
       - STR_FLOATER_MEDIC
       - STR_FLOATER_NAVIGATOR
       - STR_FLOATER_SOLDIER
-      - STR_REAPER
+      - STR_REAPER_TERRORIST
   - name: STR_ALIEN_REPRODUCTION
     cost: 150
     points: 30
@@ -6793,7 +6806,6 @@ research:
   - name: STR_CYDONIA_DEP
     cost: 0
     points: 0
-    dependencies:
     unlocks:
       - STR_CYDONIA_OR_BUST
     requires:
@@ -6820,26 +6832,25 @@ research:
     cost: 800
     points: 25
     dependencies:
-      - STR_BLASTER_LAUNCHER
-      - STR_BLASTER_BOMB
+      - STR_FUSION_MISSILE
   - name: STR_FUSION_MISSILE
     cost: 880
+    points: 25
     dependencies:
-      - STR_FUSION_DEFENSE
+      - STR_BLASTER_LAUNCHER
+      - STR_BLASTER_BOMB
   - name: STR_GRAV_SHIELD
     cost: 930
     points: 25
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
-  - name: STR_HEAVY_LASER
-    cost: 460
-    dependencies:
-      - STR_LASER_RIFLE
   - name: STR_HEAVY_PLASMA
     cost: 800
+    points: 30
     needItem: true
   - name: STR_HEAVY_PLASMA_CLIP
     cost: 400
+    points: 7
     needItem: true
   - name: STR_HYPER_WAVE_DECODER
     cost: 670
@@ -7035,9 +7046,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
-    stringTemplate:
-      - STR_FLOATER
-      - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7045,9 +7053,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
-    stringTemplate:
-      - STR_FLOATER
-      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7065,9 +7070,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
-    stringTemplate:
-      - STR_FLOATER
-      - STR_LIVE_MEDIC
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7100,17 +7102,11 @@ research:
     unlocks:
       - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
-    stringTemplate:
-      - STR_FLOATER
-      - STR_LIVE_LEADER
     needItem: true
   - name: STR_FLOATER_ENGINEER
     cost: 192
     points: 50
     lookup: STR_FLOATER
-    stringTemplate:
-      - STR_FLOATER
-      - STR_LIVE_ENGINEER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7127,9 +7123,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_FLOATER
-    stringTemplate:
-      - STR_FLOATER
-      - STR_LIVE_COMMANDER
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
@@ -7139,9 +7132,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
-    stringTemplate:
-      - STR_SNAKEMAN
-      - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7149,9 +7139,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
-    stringTemplate:
-      - STR_SNAKEMAN
-      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7169,9 +7156,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
-    stringTemplate:
-      - STR_SNAKEMAN
-      - STR_LIVE_MEDIC
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7201,9 +7185,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
-    stringTemplate:
-      - STR_SNAKEMAN
-      - STR_LIVE_LEADER
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
@@ -7212,9 +7193,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
-    stringTemplate:
-      - STR_SNAKEMAN
-      - STR_LIVE_ENGINEER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7231,9 +7209,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
-    stringTemplate:
-      - STR_SNAKEMAN
-      - STR_LIVE_COMMANDER
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
@@ -7243,9 +7218,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_MUTON
-    stringTemplate:
-      - STR_MUTON
-      - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7253,9 +7225,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_MUTON
-    stringTemplate:
-      - STR_MUTON
-      - STR_LIVE_NAVIGATOR
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7273,9 +7242,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_MUTON
-    stringTemplate:
-      - STR_MUTON
-      - STR_LIVE_ENGINEER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7294,9 +7260,6 @@ research:
     lookup: STR_SECTOID
     unlocks:
       - STR_ALIEN_ORIGINS
-    stringTemplate:
-      - STR_SECTOID
-      - STR_LIVE_SOLDIER
     needItem: true
   - name: STR_SECTOID_NAVIGATOR
     cost: 192
@@ -7306,9 +7269,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
-    stringTemplate:
-      - STR_SECTOID
-      - STR_LIVE_NAVIGATOR
     getOneFree:
       - STR_ALIEN_RESEARCH
       - STR_ALIEN_HARVEST
@@ -7325,9 +7285,6 @@ research:
     unlocks:
       - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
-    stringTemplate:
-      - STR_SECTOID
-      - STR_LIVE_MEDIC
     getOneFree:
       - STR_SNAKEMAN
       - STR_MUTON
@@ -7359,18 +7316,12 @@ research:
       - STR_PSI_LAB
       - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
-    stringTemplate:
-      - STR_SECTOID
-      - STR_LIVE_LEADER
   - name: STR_SECTOID_ENGINEER
     cost: 192
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
     lookup: STR_SECTOID
-    stringTemplate:
-      - STR_SECTOID
-      - STR_LIVE_ENGINEER
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -7390,16 +7341,10 @@ research:
       - STR_CYDONIA_DEP
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
-    stringTemplate:
-      - STR_SECTOID
-      - STR_LIVE_COMMANDER
   - name: STR_ETHEREAL_SOLDIER
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
-    stringTemplate:
-      - STR_ETHEREAL
-      - STR_LIVE_SOLDIER
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7408,9 +7353,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
-    stringTemplate:
-      - STR_ETHEREAL
-      - STR_LIVE_LEADER
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
@@ -7420,9 +7362,6 @@ research:
     cost: 192
     points: 50
     lookup: STR_ETHEREAL
-    stringTemplate:
-      - STR_ETHEREAL
-      - STR_LIVE_COMMANDER
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
@@ -7463,28 +7402,43 @@ research:
     cost: 0
     points: 50
     needItem: true
+  - name: STR_CYBERDISC_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_CYBERDISC
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
   - name: STR_CYBERDISC
     cost: 0
     points: 50
     needItem: true
-    stringTemplate:
-      - STR_CYBERDISC
-      - STR_LIVE_TERRORIST
-  - name: STR_REAPER
+  - name: STR_REAPER_TERRORIST
     cost: 170
     points: 50
+    lookup: STR_REAPER
     needItem: true
-    stringTemplate:
-      - STR_REAPER
-      - STR_LIVE_TERRORIST
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_REAPER
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_CHRYSSALID_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_CHRYSSALID
+    needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID
     cost: 170
     points: 50
-    stringTemplate:
-      - STR_CHRYSSALID
-      - STR_LIVE_TERRORIST
+    needItem: true
+  - name: STR_SILACOID_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_SILACOID
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
@@ -7492,29 +7446,28 @@ research:
     cost: 170
     points: 50
     needItem: true
-    stringTemplate:
-      - STR_SILACOID
-      - STR_LIVE_TERRORIST
+  - name: STR_CELATID_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_CELATID
+    needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_CELATID
     cost: 170
     points: 50
-    stringTemplate:
-      - STR_CELATID
-      - STR_LIVE_TERRORIST
+    needItem: true
+  - name: STR_SECTOPOD_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_SECTOPOD
     needItem: true
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD
     cost: 0
     points: 50
-    stringTemplate:
-      - STR_SECTOPOD
-      - STR_LIVE_TERRORIST
     needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_ALIEN_RESEARCH
     cost: 0
     points: 50
@@ -7581,57 +7534,47 @@ research:
     needItem: true
   - name: STR_SECTOID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_SNAKEMAN_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_FLOATER_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_MUTON_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_ETHEREAL_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_CYBERDISC_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_REAPER_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_CELATID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_SILACOID_AUTOPSY
     cost: 0
+    points: 50
     needItem: true
   - name: STR_SECTOPOD_AUTOPSY
     cost: 0
-    needItem: true
-  - name: REAPER_WEAPON
-    cost: 0
-    needItem: true
-  - name: CHRYSSALID_WEAPON
-    cost: 0
-    needItem: true
-  - name: SILACOID_WEAPON
-    cost: 0
-    needItem: true
-  - name: CELATID_WEAPON
-    cost: 0
-    needItem: true
-  - name: CYBERDISC_WEAPON
-    cost: 0
-    needItem: true
-  - name: SECTOPOD_WEAPON
-    cost: 0
-    needItem: true
-  - name: ZOMBIE_WEAPON
-    cost: 0
+    points: 50
     needItem: true
 manufacture:
   - name: STR_FUSION_BALL_LAUNCHER
@@ -8066,33 +8009,28 @@ ufopaedia:
       - STR_PLASMA_CANNON
     image_id: UP011.SPK
     text: STR_PLASMA_BEAM_UFOPEDIA
-  - id: TANK_CANNON
-    title: STR_TANK_CANNON
+  - id: STR_TANK_CANNON
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_CANNON_UFOPEDIA
-  - id: TANK_ROCKET_LAUNCHER
-    title: STR_TANK_ROCKET_LAUNCHER
+  - id: STR_TANK_ROCKET_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
-  - id: TANK_LASER_CANNON
-    title: STR_TANK_LASER_CANNON
+  - id: STR_TANK_LASER_CANNON
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     requires:
       - STR_LASER_CANNON
     text: STR_TANK_LASER_CANNON_UFOPEDIA
-  - id: HOVERTANK_PLASMA
-    title: STR_HOVERTANK_PLASMA
+  - id: STR_HOVERTANK_PLASMA
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     requires:
       - STR_PLASMA_CANNON
       - STR_NEW_FIGHTER_CRAFT
     text: STR_HOVERTANK_PLASMA_UFOPEDIA
-  - id: HOVERTANK_LAUNCHER
-    title: STR_HOVERTANK_LAUNCHER
+  - id: STR_HOVERTANK_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     requires:
@@ -8349,18 +8287,20 @@ ufopaedia:
     type_id: 6
     section: STR_BASE_FACILITIES
     requires:
-      - STR_LASER_DEFENSES
+      - STR_LASER_DEFENSE
     text: STR_LASER_DEFENSES_UFOPEDIA
   - id: STR_PLASMA_DEFENSES
     type_id: 6
     section: STR_BASE_FACILITIES
     requires:
-      - STR_PLASMA_DEFENSES
+      - STR_PLASMA_DEFENSE
     text: STR_PLASMA_DEFENSES_UFOPEDIA
   - id: STR_FUSION_BALL_DEFENSES
     type_id: 6
     section: STR_BASE_FACILITIES
     text: STR_FUSION_BALL_DEFENSES_UFOPEDIA
+    requires:
+      - STR_FUSION_DEFENSE
   - id: STR_GRAV_SHIELD
     type_id: 6
     section: STR_BASE_FACILITIES
@@ -8425,7 +8365,7 @@ ufopaedia:
     type_id: 7
     section: STR_ALIEN_LIFE_FORMS
     requires:
-      - STR_ETHEREAL_
+      - STR_ETHEREAL
     image_id: UP016.SPK
     text: STR_ETHEREAL_UFOPEDIA
     text_width: 158

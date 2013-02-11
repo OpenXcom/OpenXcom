@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 CUMPĂRĂ/RECRUTEAZĂ
 STR_SELL_SACK_UC
 VINDE/CONCEDIAZĂ
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 GEOSFERĂ
 STR_XCOM_BASES
 Baze XCom
@@ -889,6 +889,8 @@ STR_SILACOID
 Silacoid
 STR_CHRYSSALID
 Chryssalid
+STR_ZOMBIE
+Zombie
 STR_REAPER
 Reaper
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Soldat
 STR_LIVE_TERRORIST
  Terorist
+STR_FLOATER_SOLDIER
+Floater Soldat
+STR_FLOATER_NAVIGATOR
+Floater Pilot
+STR_FLOATER_MEDIC
+Floater Medic
+STR_FLOATER_ENGINEER
+Floater Inginer
+STR_FLOATER_LEADER
+Floater Lider
+STR_FLOATER_COMMANDER
+Floater Comandant
+STR_SECTOID_SOLDIER
+Sectoid Soldat
+STR_SECTOID_NAVIGATOR
+Sectoid Pilot
+STR_SECTOID_MEDIC
+Sectoid Medic
+STR_SECTOID_ENGINEER
+Sectoid Inginer
+STR_SECTOID_LEADER
+Sectoid Lider
+STR_SECTOID_COMMANDER
+Sectoid Comandant
+STR_SNAKEMAN_SOLDIER
+Snakeman Soldat
+STR_SNAKEMAN_NAVIGATOR
+Snakeman Pilot
+STR_SNAKEMAN_ENGINEER
+Snakeman Inginer
+STR_SNAKEMAN_LEADER
+Snakeman Lider
+STR_SNAKEMAN_COMMANDER
+Snakeman Comandant
+STR_MUTON_SOLDIER
+Muton Soldat
+STR_MUTON_NAVIGATOR
+Muton Pilot
+STR_MUTON_ENGINEER
+Muton Inginer
+STR_ETHEREAL_SOLDIER
+Ethereal Soldat
+STR_ETHEREAL_LEADER
+Ethereal Lider
+STR_ETHEREAL_COMMANDER
+Ethereal Comandant
+STR_CYBERDISC_TERRORIST
+Cyberdisc Terorist
+STR_REAPER_TERRORIST
+Reaper Terorist
+STR_CHRYSSALID_TERRORIST
+Chryssalid Terorist
+STR_CELATID_TERRORIST
+Celatid Terorist
+STR_SILACOID_TERRORIST
+Silacoid Terorist
+STR_SECTOPOD_TERRORIST
+Sectopod Terorist
 STR_UFO_POWER_SOURCE
 Sursa de Energie OZN
 STR_UFO_NAVIGATION
@@ -1147,18 +1207,6 @@ STR_EGYPT
 EGIPT
 STR_CANADA
 CANADA
-STR_FLOATER_SOLDIER
-Soldat Floater
-STR_FLOATER_NAVIGATOR
-Pilot Floater
-STR_FLOATER_MEDIC
-Medic Floater
-STR_FLOATER_ENGINEER
-Inginer Floater
-STR_FLOATER_LEADER
-Lider Floater
-STR_FLOATER_COMMANDER
-Comandant Floater
 STR_TANK
 Tanc
 STR_CIVILIAN
@@ -1907,6 +1955,16 @@ STR_HEAL
 VINDECĂ
 STR_TUS
 UT>
+STR_WEIGHT
+Greutate>
+STR_FACCURACY
+Pre.F.>
+STR_REACT
+Reac.>
+STR_PSKILL
+Abil.P.>
+STR_PSTRENGTH
+Rez.P.>
 STR_ALIEN_ARTIFACT
 Artefact Extraterestru
 STR_AMMO_ROUNDS_LEFT
@@ -2002,13 +2060,13 @@ CENTURĂ
 STR_IS_UNDER_ALIEN_CONTROL
 se află sub control străin
 STR_SCROLL_SPEED
-VITEZĂ DERULARE
+VITEZĂ GLISARE
 STR_SCROLL_TYPE
-TIP DERULARE
+TIP GLISARE
 STR_TRIGGER_SCROLL
-DERULARE DECLANȘATĂ
+GLISARE DECLANȘATĂ
 STR_AUTO_SCROLL
-DERULARE AUTOMATĂ
+GLISARE AUTOMATĂ
 STR_FIRE_SPEED
 VITEZĂ DE FOC
 STR_XCOM_MOVEMENT_SPEED
@@ -2070,34 +2128,130 @@ Deșert
 STR_POLAR
 Polar
 STR_RANDOM_BATTLE
-Aleatoare Luptă
+Luptă Aleatoare
 STR_MIXED
-Mixt
+Amestecate
 STR_RIGHT_CLICK_TO_DELETE
 Click dreapta pentru a șterge.
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Nu avem {1} pentru înarmare Tanc
+Lipsă {1} pentru înarmare Tanc
 STR_DAY_1
 {N} zi
 STR_DAY_2
-{N} zile
-STR_DAY_3
 {N} zile
 STR_EQUIPMENT_FOR_craftname
 Echipament pentru {1}
 STR_SELECT_SQUAD_FOR_craftname
 Alege Echipa din {1}
-STR_n_UNITS_IN_EXIT_AREA_1
+STR_n_UNITS_IN_EXIT_AREA_0
 {N} Soldați În Zona De Evacuare
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} Soldat În Zona De Evacuare
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} Soldați În Zona De Evacuare
-STR_n_UNITS_IN_EXIT_AREA_3
-{N} Soldați În Zona De Evacuare
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+{N} Soldați În Afara Zonei De Evacuare
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} Soldați În Afara Zonei De Evacuare
+{N} Soldat În Afara Zonei De Evacuare
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} Soldați În Afara Zonei De Evacuare
-STR_n_UNITS_OUTSIDE_EXIT_AREA_3
 {N} Soldați În Afara Zonei De Evacuare
 STR_ABANDON_GAME_QUESTION
 PĂRĂSIȚI JOCUL?
+STR_HAS_BEEN_KILLED
+a fost Omorât
+STR_DRAG_SCROLL
+GLISARE MANUALĂ
+STR_HIT_MELEE
+Lovire
+STR_CONTROLS
+COMENZI
+STR_RESTORE_DEFAULTS
+Valori Inițiale
+STR_GENERAL
+General
+STR_GEOSCAPE
+Geoscape
+STR_BATTLESCAPE
+Battlescape
+STR_SCREENSHOT
+Captură Ecran
+STR_FPS_COUNTER
+Contor FPS
+STR_ROTATE_LEFT
+Rotire Stânga
+STR_ROTATE_RIGHT
+Rotire Dreapta
+STR_ROTATE_UP
+Rotire Sus
+STR_ROTATE_DOWN
+Rotire Jos
+STR_ZOOM_IN
+Apropiere
+STR_ZOOM_OUT
+Depărtare
+STR_TOGGLE_COUNTRY_DETAIL
+Comutare Detalii Țări
+STR_TOGGLE_RADAR_RANGES
+Comutare Zone Radar
+STR_SCROLL_LEFT
+Glisare Stânga
+STR_SCROLL_RIGHT
+Glisare Dreapta
+STR_SCROLL_UP
+Glisare Sus
+STR_SCROLL_DOWN
+Glisare Jos
+STR_VIEW_LEVEL_ABOVE
+Afișare Nivel Superior
+STR_VIEW_LEVEL_BELOW
+Afișare Nivel Inferior
+STR_CENTER_SELECTED_UNIT
+Centrează Unitatea Selectată
+STR_PREVIOUS_UNIT
+Unitatea Anterioară
+STR_NEXT_UNIT
+Unitatea Următoare
+STR_DESELECT_UNIT
+Deselectează Unitatea
+STR_INVENTORY
+Inventar
+STR_MINIMAP
+Mini-Hartă
+STR_END_TURN
+Finalizează Runda
+STR_ABORT_MISSION
+Anulează Misiunea
+STR_UNIT_STATS
+Abilități Unitate
+STR_KNEEL
+Îngenunchere
+STR_RELOAD
+Reîncărcare
+STR_TOGGLE_PERSONAL_LIGHTING
+Comutare Iluminare Personală
+STR_DONT_RESERVE_TUS
+Fără rezervare UT
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Rezervare UT pentru Foc Rapid
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Rezervare UT pentru Foc Ochit
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Rezervare UT pentru Foc Automat
+STR_CENTER_ON_ENEMY_1
+Centrare pe Inamicul 1
+STR_CENTER_ON_ENEMY_2
+Centrare pe Inamicul 2
+STR_CENTER_ON_ENEMY_3
+Centrare pe Inamicul 3
+STR_CENTER_ON_ENEMY_4
+Centrare pe Inamicul 4
+STR_CENTER_ON_ENEMY_5
+Centrare pe Inamicul 5
+STR_CENTER_ON_ENEMY_6
+Centrare pe Inamicul 6
+STR_CENTER_ON_ENEMY_7
+Centrare pe Inamicul 7
+STR_CENTER_ON_ENEMY_8
+Centrare pe Inamicul 8
+STR_CENTER_ON_ENEMY_9
+Centrare pe Inamicul 9

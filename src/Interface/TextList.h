@@ -135,9 +135,9 @@ public:
 	/// Clears the list.
 	void clearList();
 	/// Scrolls the list up.
-	void scrollUp();
+	void scrollUp(bool toMax);
 	/// Scrolls the list down.
-	void scrollDown();
+	void scrollDown(bool toMax);
 	/// Sets the list scrolling.
 	void setScrolling(bool scrolling);
 	/// Draws the text onto the text list.

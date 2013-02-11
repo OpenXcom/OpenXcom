@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 ЗАКУПІВЛЯ/НАЙМ
 STR_SELL_SACK_UC
 ПРОДАЖ/ЗВІЛЬНЕННЯ
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 ГЛОБУС
 STR_XCOM_BASES
 Бази X-COM
@@ -889,6 +889,8 @@ STR_SILACOID
 Силакоїд
 STR_CHRYSSALID
 Крисалід
+STR_ZOMBIE
+Зомбі
 STR_REAPER
 Рипер
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Соладт
 STR_LIVE_TERRORIST
  Терорист
+STR_FLOATER_SOLDIER
+Летун Солдат
+STR_FLOATER_NAVIGATOR
+Летун Навігатор
+STR_FLOATER_MEDIC
+Летун Медик
+STR_FLOATER_ENGINEER
+Летун Інженер
+STR_FLOATER_LEADER
+Летун Лідер
+STR_FLOATER_COMMANDER
+Летун Командуючий
+STR_SECTOID_SOLDIER
+Сектоїд Соладт
+STR_SECTOID_NAVIGATOR
+Сектоїд Навігатор
+STR_SECTOID_MEDIC
+Сектоїд Медик
+STR_SECTOID_ENGINEER
+Сектоїд Інженер
+STR_SECTOID_LEADER
+Сектоїд Лідер
+STR_SECTOID_COMMANDER
+Сектоїд Командуючий
+STR_SNAKEMAN_SOLDIER
+Людинозмія Соладт
+STR_SNAKEMAN_NAVIGATOR
+Людинозмія Навігатор
+STR_SNAKEMAN_ENGINEER
+Людинозмія Інженер
+STR_SNAKEMAN_LEADER
+Людинозмія Лідер
+STR_SNAKEMAN_COMMANDER
+Людинозмія Командуючий
+STR_MUTON_SOLDIER
+Мутон Соладт
+STR_MUTON_NAVIGATOR
+Мутон Навігатор
+STR_MUTON_ENGINEER
+Мутон Інженер
+STR_ETHEREAL_SOLDIER
+Небесний Соладт
+STR_ETHEREAL_LEADER
+Небесний Лідер
+STR_ETHEREAL_COMMANDER
+Небесний Командуючий
+STR_CYBERDISC_TERRORIST
+Кібердиск Терорист
+STR_REAPER_TERRORIST
+Рипер Терорист
+STR_CHRYSSALID_TERRORIST
+Крисалід Терорист
+STR_CELATID_TERRORIST
+Селатид Терорист
+STR_SILACOID_TERRORIST
+Силакоїд Терорист
+STR_SECTOPOD_TERRORIST
+Сектопод Терорист
 STR_UFO_POWER_SOURCE
 Джерело Енергії НЛО
 STR_UFO_NAVIGATION
@@ -1147,18 +1207,6 @@ STR_EGYPT
 ЄГИПЕТ
 STR_CANADA
 КАНАДА
-STR_FLOATER_SOLDIER
-Летун Солдат
-STR_FLOATER_NAVIGATOR
-Летун Навігатор
-STR_FLOATER_MEDIC
-Летун Медик
-STR_FLOATER_ENGINEER
-Летун Інженер
-STR_FLOATER_LEADER
-Летун Лідер
-STR_FLOATER_COMMANDER
-Летун Командуючий
 STR_TANK
 Танк
 STR_CIVILIAN
@@ -1907,6 +1955,16 @@ STR_HEAL
 ЛІКУВАННЯ
 STR_TUS
 ОЧ>
+STR_WEIGHT
+Вага>
+STR_FACCURACY
+Точ.С.>
+STR_REACT
+Реакц>
+STR_PSKILL
+П.Нав>
+STR_PSTRENGTH
+П.Сил>
 STR_ALIEN_ARTIFACT
 Артефакт прибульців
 STR_AMMO_ROUNDS_LEFT
@@ -2071,27 +2129,129 @@ STR_POLAR
 Заполяр'я
 STR_RANDOM_BATTLE
 Випадкова Битва
-STR_MIXED
-змішаний
-STR_RIGHT_CLICK_TO_DELETE
-Клацніть правою кнопкою миші видалити.
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
 Немає {1} для озброєння ВБП
 STR_DAY_1
 {N} день
 STR_DAY_2
 {N} дні(в)
+STR_MIXED
+Змішаний
+STR_RIGHT_CLICK_TO_DELETE
+Клацніть правою кнопкою миші щоб видалити.
 STR_EQUIPMENT_FOR_craftname
 Спорядження для {1}
 STR_SELECT_SQUAD_FOR_craftname
 Команда для {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+Немає жодного в Зоні Виходу
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} в Зоні Виходу
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} в Зоні Виходу
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+Немає жодного поза Зоною Виходу
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} поза Зоною Виходу
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} поза Зоною Виходу
 STR_ABANDON_GAME_QUESTION
 ВІДМОВИТИСЬ ВІД ГРИ?
+STR_HAS_BEEN_KILLED
+був вбитий
+STR_DRAG_SCROLL
+СЕРЕДНЬОЮ КН. МИШІ
+STR_HIT_MELEE
+Hit
+STR_CONTROLS
+УПРАВЛІННЯ
+STR_RESTORE_DEFAULTS
+За Замовчуванням
+STR_GENERAL
+Загальні
+STR_GEOSCAPE
+Глобус
+STR_BATTLESCAPE
+Тактичниій бій
+STR_SCREENSHOT
+Знімок екрана
+STR_FPS_COUNTER
+Лічильник FPS
+STR_ROTATE_LEFT
+Обертати вліво
+STR_ROTATE_RIGHT
+Обертати вправо
+STR_ROTATE_UP
+Обертати вгору
+STR_ROTATE_DOWN
+Обертати вниз
+STR_ZOOM_IN
+Зблизити
+STR_ZOOM_OUT
+Віддалити
+STR_TOGGLE_COUNTRY_DETAIL
+Деталі країн Вкл./Викл.
+STR_TOGGLE_RADAR_RANGES
+Радіус радарів Вкл./Викл.
+STR_SCROLL_LEFT
+Камера вліво
+STR_SCROLL_RIGHT
+Камера вправо
+STR_SCROLL_UP
+Камера вгору
+STR_SCROLL_DOWN
+Камера вниз
+STR_VIEW_LEVEL_ABOVE
+Камера на 1 рівень вище
+STR_VIEW_LEVEL_BELOW
+Камера на 1 рівень нижче
+STR_CENTER_SELECTED_UNIT
+Центувати на вибраного бійця
+STR_PREVIOUS_UNIT
+Попередній боєць
+STR_NEXT_UNIT
+Наступний боєць
+STR_DESELECT_UNIT
+Скасувати вибір бійця
+STR_INVENTORY
+Інвентар
+STR_MINIMAP
+Міні-карта
+STR_END_TURN
+Завершити хід
+STR_ABORT_MISSION
+Перервати завдання
+STR_UNIT_STATS
+Характеристики бійця
+STR_KNEEL
+Встати на коліна
+STR_RELOAD
+Перезарядка
+STR_TOGGLE_PERSONAL_LIGHTING
+Особистий ліхтар Вкл./Викл.
+STR_DONT_RESERVE_TUS
+Не залишати ОЧ (Одиниці Часу)
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Залишити ОЧ для пострілу Поспіхом
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Залишити ОЧ для Прицільного пострілу
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Залишити ОЧ для пострілу Чергою
+STR_CENTER_ON_ENEMY_1
+Центрувати на ворога 1
+STR_CENTER_ON_ENEMY_2
+Центрувати на ворога 2
+STR_CENTER_ON_ENEMY_3
+Центрувати на ворога 3
+STR_CENTER_ON_ENEMY_4
+Центрувати на ворога 4
+STR_CENTER_ON_ENEMY_5
+Центрувати на ворога 5
+STR_CENTER_ON_ENEMY_6
+Центрувати на ворога 6
+STR_CENTER_ON_ENEMY_7
+Центрувати на ворога 7
+STR_CENTER_ON_ENEMY_8
+Центрувати на ворога 8
+STR_CENTER_ON_ENEMY_9
+Центрувати на ворога 9

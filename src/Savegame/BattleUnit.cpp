@@ -186,7 +186,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_killedBy = (UnitFaction)a;
 	if (const YAML::Node *pName = node.FindValue("originalFaction"))
 	{
-		node["originalFaction"] >> a;
+		(*pName) >> a;
 		_originalFaction = (UnitFaction)a;
 	}
 	else
@@ -1019,7 +1019,10 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			return item->getRules()->getTUUse();
+			if (item->getRules()->getFlatRate())
+				return item->getRules()->getTUUse();
+			else
+				return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
 		default:
 			return 0;
 	}
@@ -1913,9 +1916,10 @@ std::wstring BattleUnit::getName(Language *lang) const
 {
 	if (_type != "SOLDIER" && lang != 0)
 	{
-		std::wstringstream wss;
-		wss << lang->getString(_race.c_str()) << lang->getString(_rank.c_str());
-		return wss.str();
+		if (_type.find("STR_") != std::string::npos)
+			return lang->getString(_type);
+		else
+			return lang->getString(_race);
 	}
 	return _name;
 }
@@ -2187,6 +2191,7 @@ int BattleUnit::getCarriedWeight() const
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
 		weight += (*i)->getRules()->getWeight();
+		if (0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}
 	if (weight == 0)
 		weight = 1;

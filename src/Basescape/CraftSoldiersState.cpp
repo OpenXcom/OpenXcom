@@ -166,18 +166,26 @@ void CraftSoldiersState::populateList()
  */
 void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button != SDL_BUTTON_LEFT)
+	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
+	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		return;
+		int row = _lstSoldiers->getSelectedRow();
+		if (row > 0 )
+		{
+			Soldier *s = _base->getSoldiers()->at(row);
+			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			{
+				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row-1);
+				_base->getSoldiers()->at(row-1) = s;
+			}
+			else
+			{
+				_base->getSoldiers()->erase(_base->getSoldiers()->begin()+row);
+				_base->getSoldiers()->insert(_base->getSoldiers()->begin(),s);
+			}
+		}
+		populateList();
 	}
-	int row = _lstSoldiers->getSelectedRow();
-	if (row > 0 )
-	{
-		Soldier *s = _base->getSoldiers()->at(row);
-		_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row-1);
-		_base->getSoldiers()->at(row-1) = s;
-	}
-	populateList();
 }
 
 /**
@@ -186,18 +194,26 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
  */
 void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button != SDL_BUTTON_LEFT)
+	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
+	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		return;
+		unsigned int row = _lstSoldiers->getSelectedRow();
+		if (row < _base->getSoldiers()->size() - 1 )
+		{
+			Soldier *s = _base->getSoldiers()->at(row);
+			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			{
+				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row+1);
+				_base->getSoldiers()->at(row+1) = s;
+			}
+			else
+			{
+				_base->getSoldiers()->erase(_base->getSoldiers()->begin()+row);
+				_base->getSoldiers()->insert(_base->getSoldiers()->end(),s);
+			}
+		}
+		populateList();
 	}
-	unsigned int row = _lstSoldiers->getSelectedRow();
-	if (row < _base->getSoldiers()->size() - 1 )
-	{
-		Soldier *s = _base->getSoldiers()->at(row);
-		_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row+1);
-		_base->getSoldiers()->at(row+1) = s;
-	}
-	populateList();
 }
 
 /**

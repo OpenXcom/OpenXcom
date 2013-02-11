@@ -109,7 +109,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 		else
 		// melee weapon
 		{
-			addItem(BA_HIT, "STR_HIT", &id);
+			addItem(BA_HIT, "STR_HIT_MELEE", &id);
 		}
 	}
 	// special items
@@ -200,7 +200,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (Options::getBool("battleAltGrenade") || weapon->getBattleType() == BT_PROXIMITYGRENADE)
+			if (Options::getBool("battleInstantGrenade") || weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 1;
 				_game->popState();

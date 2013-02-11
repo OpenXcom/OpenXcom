@@ -78,13 +78,13 @@ El segador tiene dos cerebros y dos corazones, los cuales le permiten seguir mov
 STR_SECTOPOD_UFOPEDIA
 Los sectópodos son robots equipados con una potente arma de rayos de plasma. El control de estas bestias mecánicas se realiza gracias a un vinculo telepático con sus controladores, los Etereos. Los sectópodos constituyen el arma más potente y terrorífica a disposición de las fuerzas alienígenas.
 STR_SECTOPOD_AUTOPSY
-Autopsia de Sectópodo
+Examen de Sectópodo
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 El robot esta sólidamente construido con un blindaje reforzado capaz de resistir la mayoría de formas de ataque, sobretodo las armas de plasma. No obstante sus circuitos sensores parecen ser particularmente vulnerables a las armas láser.
 STR_CYBERDISC_UFOPEDIA
 Este platillo volante en miniatura está equipado con un potente rayo de plasma y se usa para aterrorizar a la población . Su propulsión antigravedad le da una gran ventaja en terrenos difíciles. Su principal función es sembrar la destrucción y el terror al servicio de los sectoides.
 STR_CYBERDISC_AUTOPSY
-Autopsia de Ciberdisco
+Examen de Ciberdisco
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
 Los ciberdiscos tienen un blindaje muy bueno, especialmente resistente a los ataques con munición explosiva. El sistema de antigravedad de este ejemplar está demasiado dañado como para averiguar su funcionamiento.
 STR_UFO_POWER_SOURCE_UFOPEDIA
@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 COMPRAR/RECLUTAR
 STR_SELL_SACK_UC
 VENDER/DESPEDIR
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 GEOESCAPE
 STR_XCOM_BASES
 Bases XCom 
@@ -832,11 +832,11 @@ DAÑO
 STR_AMMO
 MUNICIÓN
 STR_AUTO
-Auto
+Automático
 STR_SNAP
-Instantáneo
+Rápido
 STR_AIMED
-Dirigido
+Precisión
 STR_CONSTRUCTION_TIME
 Tiempo de construcción
 STR_CONSTRUCTION_COST
@@ -889,6 +889,8 @@ STR_SILACOID
 Silacoide
 STR_CHRYSSALID
 Crisálida
+STR_ZOMBIE
+Zombi
 STR_REAPER
 Segador
 STR_SECTOPOD
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Soldado
 STR_LIVE_TERRORIST
  Terrorista
+STR_FLOATER_SOLDIER
+Soldado flotador
+STR_FLOATER_NAVIGATOR
+Navegante flotador
+STR_FLOATER_MEDIC
+Médico flotador
+STR_FLOATER_ENGINEER
+Técnico flotador
+STR_FLOATER_LEADER
+Lider flotador
+STR_FLOATER_COMMANDER
+Comandante flotador
+STR_SECTOID_SOLDIER
+Sectoid Soldier
+STR_SECTOID_NAVIGATOR
+Sectoid Navigator
+STR_SECTOID_MEDIC
+Sectoid Medic
+STR_SECTOID_ENGINEER
+Sectoid Engineer
+STR_SECTOID_LEADER
+Sectoid Leader
+STR_SECTOID_COMMANDER
+Sectoid Commander
+STR_SNAKEMAN_SOLDIER
+Snakeman Soldier
+STR_SNAKEMAN_NAVIGATOR
+Snakeman Navigator
+STR_SNAKEMAN_ENGINEER
+Snakeman Engineer
+STR_SNAKEMAN_LEADER
+Snakeman Leader
+STR_SNAKEMAN_COMMANDER
+Snakeman Commander
+STR_MUTON_SOLDIER
+Muton Soldier
+STR_MUTON_NAVIGATOR
+Muton Navigator
+STR_MUTON_ENGINEER
+Muton Engineer
+STR_ETHEREAL_SOLDIER
+Ethereal Soldier
+STR_ETHEREAL_LEADER
+Ethereal Leader
+STR_ETHEREAL_COMMANDER
+Ethereal Commander
+STR_CYBERDISC_TERRORIST
+Cyberdisc Terrorist
+STR_REAPER_TERRORIST
+Reaper Terrorist
+STR_CHRYSSALID_TERRORIST
+Chryssalid Terrorist
+STR_CELATID_TERRORIST
+Celatid Terrorist
+STR_SILACOID_TERRORIST
+Silacoid Terrorist
+STR_SECTOPOD_TERRORIST
+Sectopod Terrorist
 STR_UFO_POWER_SOURCE
 Fuente de energía de OVNI
 STR_UFO_NAVIGATION
@@ -924,7 +984,7 @@ Diversión alienígena
 STR_ALIEN_SURGERY
 Cirugía alienígena
 STR_EXAMINATION_ROOM
-Sala de examenes
+Sala de exámenes
 STR_ALIEN_ALLOYS
 Aleaciones alienígenas
 STR_ALIEN_HABITAT
@@ -1094,9 +1154,9 @@ Laboratorio
 STR_WORKSHOP
 Taller
 STR_SMALL_RADAR_SYSTEM
-Sistema radar pequeño
+Radar de corto alcance
 STR_LARGE_RADAR_SYSTEM
-Sistema de radar grande
+Radar de largo alcance
 STR_MISSILE_DEFENSES
 Defensas de misiles
 STR_GENERAL_STORES
@@ -1147,18 +1207,6 @@ STR_EGYPT
 EGIPTO
 STR_CANADA
 CANADÁ
-STR_FLOATER_SOLDIER
-Soldado flotador
-STR_FLOATER_NAVIGATOR
-Navegante flotador
-STR_FLOATER_MEDIC
-Médico flotador
-STR_FLOATER_ENGINEER
-Técnico flotador
-STR_FLOATER_LEADER
-Lider flotador
-STR_FLOATER_COMMANDER
-Comandante flotador
 STR_TANK
 Tanque
 STR_CIVILIAN
@@ -1210,9 +1258,9 @@ En un laboratorio pueden trabajar 50 científicos. Los laboratorios están equip
 STR_WORKSHOP_UFOPEDIA
 En un taller se puede encontrar todo lo necesario para fabricar productos a partir de diseños realizados en los laboratorios científicos. En un taller caben 50 técnicos, los objetos que se están fabricando también ocupan sitio.
 STR_SMALL_RADAR_SYSTEM_UFOPEDIA
-Un sistema de detección pequeño tiene un alcance efectivo de 300 millas náuticas y está conectado a sistemas de satélites para el análisis de la superficie. Cada sistema tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
+Un sistema de radar pequeño tiene un alcance efectivo de 300 millas náuticas y está conectado a sistemas de satélites para el análisis de la superficie. Cada radar tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
-Un sistema de detección grande cubre una zona de más de 450 millas náuticas y está conectado a sistemas de satélites para el análisis de la superficie. Cada  sistema tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
+Un sistema de radar grande cubre una zona de más de 450 millas náuticas y está conectado a sistemas de satélites para el análisis de la superficie. Cada  radar tiene una probabilidad del 5% de detectar un objeto de tamaño medio cada 10 minutos.
 STR_MISSILE_DEFENSES_UFOPEDIA
 Los sistemas de defensa basados en misiles proporcionan protección contra las incursiones de naves hostiles que intenten aterrizar en la base.
 STR_GENERAL_STORES_UFOPEDIA
@@ -1592,7 +1640,7 @@ El ovni explorador más grande se usa en todo tipo de misiones alienígenas.
 STR_HARVESTER_UFOPEDIA
 El ovni cosechador tiene una escotilla en la parte de abajo y está equipado con aparatos para subir a bordo ganado u otras bestias. Extirpan el material deseado con láser y luego tiran el cadáver al suelo. También tienen contenedores para almacenar las partes del cuerpo extirpadas.
 STR_ABDUCTOR_UFOPEDIA
-Este ovni va equipado con una sala de examenes para realizar horribles experimentos con humanos. Normalmente las víctimas son paralizadas por medios telepáticos, pero permanecen conscientes mientras están en la mesa de operaciones.
+Este ovni va equipado con una sala de exámenes para realizar horribles experimentos con humanos. Normalmente las víctimas son paralizadas por medios telepáticos, pero permanecen conscientes mientras están en la mesa de operaciones.
 STR_TERROR_SHIP_UFOPEDIA
 La nave de incursión tiene una instalación de confinamiento para criaturas alienígenas de gran tamaño y/o armas, cuyo proposito es aterrorizar a la población. Sirven para transportar dichas criaturas/armas a zonas pobladas.
 STR_BATTLESHIP_UFOPEDIA
@@ -1706,9 +1754,9 @@ Cadáver de crisálida
 STR_REAPER_CORPSE
 Cadáver de segador
 STR_SECTOPOD_CORPSE
-Cadáver de sectópodo
+Restos de sectópodo
 STR_CYBERDISC_CORPSE
-Cadáver de ciberdisco
+Restos de ciberdisco
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
 Equipo insuficiente para reequipar el escuadrón
 STR_MARS_CYDONIA_LANDING
@@ -1907,6 +1955,16 @@ STR_HEAL
 CURAR
 STR_TUS
 UT>
+STR_WEIGHT
+Peso>
+STR_FACCURACY
+Punte>
+STR_REACT
+Refle>
+STR_PSKILL
+Habil.P.>
+STR_PSTRENGTH
+Fue.P.>
 STR_ALIEN_ARTIFACT
 Artefacto alienígena
 STR_AMMO_ROUNDS_LEFT
@@ -1916,7 +1974,7 @@ Lanzar
 STR_AUTO_SHOT
 Disparo automático
 STR_SNAP_SHOT
-Disparo instantáneo
+Disparo rápido
 STR_AIMED_SHOT
 Disparo de precisión
 STR_OPEN
@@ -2026,9 +2084,9 @@ HERIDAS MORTALES
 STR_UNDER_ARMOR_UC
 BAJO BLINDAJE
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
-Uni. de tiempo reservadas para tiro instantáneo
+Uni. de tiempo reservadas para disparo rápido
 STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
-Uni. de tiempo reservadas para tiro automático
+Uni. de tiempo reservadas para disparo automático
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Uni. de tiempo reservadas para disparo de precisión
 STR_ABORT_MISSION
@@ -2070,28 +2128,130 @@ Desierto
 STR_POLAR
 Polar
 STR_RANDOM_BATTLE
-batalla aleatorio
-STR_MIXED
-Mixto
-STR_RIGHT_CLICK_TO_DELETE
-Derecha clic para borrar.
+Batalla Aleatoria
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Insuficiente {1} para una PAP
+No hay suficiente {1} para armar PAP
 STR_DAY_1
-{N} día
+{N} dia
 STR_DAY_2
-{N} días
+{N} dias
+STR_MIXED
+Mezclado
+STR_RIGHT_CLICK_TO_DELETE
+Click derecho para borrar.
 STR_EQUIPMENT_FOR_craftname
 Equipo para {1}
 STR_SELECT_SQUAD_FOR_craftname
-Selecciona un grupo para {1}
+Elige Tripulacion para {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+No hay unidades en el area de salida
 STR_n_UNITS_IN_EXIT_AREA_1
-{N} Unidades en el área de salida
+{N} unidad en el area de salida
 STR_n_UNITS_IN_EXIT_AREA_2
-{N} Unidades en el área de salida
+{N} unidades en el area de salida
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+No hay unidades fuera del area de salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} Unidades que quedan en el exterior
+{N} unidad fuera del area de salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} Unidades que quedan en el exterior
+{N} unidades fuera del area de salida
 STR_ABANDON_GAME_QUESTION
-¿ABANDONAR PARTIDA?
+¿ABANDONAR EL JUEGO?
+STR_HAS_BEEN_KILLED
+ha muerto
+STR_DRAG_SCROLL
+DESPLAZAR ARRASTRANDO
+STR_HIT_MELEE
+Atacar
+STR_CONTROLS
+CONTROLES
+STR_RESTORE_DEFAULTS
+Restaurar Valores Iniciales
+STR_GENERAL
+General
+STR_GEOSCAPE
+GeoEscape
+STR_BATTLESCAPE
+BatallaEscape
+STR_SCREENSHOT
+Captura de Pantalla
+STR_FPS_COUNTER
+Contador FPS
+STR_ROTATE_LEFT
+Rotar Izquierda
+STR_ROTATE_RIGHT
+Rotar Derecha
+STR_ROTATE_UP
+Rotar Arriba
+STR_ROTATE_DOWN
+Rotar Abajo
+STR_ZOOM_IN
+Acercar
+STR_ZOOM_OUT
+Alejar
+STR_TOGGLE_COUNTRY_DETAIL
+Activar Detalle de Paises
+STR_TOGGLE_RADAR_RANGES
+Activar Rangos de Radar
+STR_SCROLL_LEFT
+Desplazar Izquierda
+STR_SCROLL_RIGHT
+Desplazar Derecha
+STR_SCROLL_UP
+Desplazar Arriba
+STR_SCROLL_DOWN
+Desplazar Abajo
+STR_VIEW_LEVEL_ABOVE
+Ver Nivel Arriba
+STR_VIEW_LEVEL_BELOW
+Ver Nivel Abajo
+STR_CENTER_SELECTED_UNIT
+Centrar en Unidad Seleccionada
+STR_PREVIOUS_UNIT
+Unidad Anterior
+STR_NEXT_UNIT
+Unidad Siguiente
+STR_DESELECT_UNIT
+Deseleccionar Unidad
+STR_INVENTORY
+Inventario
+STR_MINIMAP
+Minimapa
+STR_END_TURN
+Finalizar Turno
+STR_ABORT_MISSION
+Abortar Mision
+STR_UNIT_STATS
+Estadisticas de Unidad
+STR_KNEEL
+Arrodillarse
+STR_RELOAD
+Recargar
+STR_TOGGLE_PERSONAL_LIGHTING
+Activar Iluminacion Personal
+STR_DONT_RESERVE_TUS
+No Reservar UTs
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Reservar UTs para Disparo Rápido
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Reservar UTs para Disparo de Precisión
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Reservar UTs para Disparo Automático
+STR_CENTER_ON_ENEMY_1
+Centrar en Enemigo 1
+STR_CENTER_ON_ENEMY_2
+Centrar en Enemigo 2
+STR_CENTER_ON_ENEMY_3
+Centrar en Enemigo 3
+STR_CENTER_ON_ENEMY_4
+Centrar en Enemigo 4
+STR_CENTER_ON_ENEMY_5
+Centrar en Enemigo 5
+STR_CENTER_ON_ENEMY_6
+Centrar en Enemigo 6
+STR_CENTER_ON_ENEMY_7
+Centrar en Enemigo 7
+STR_CENTER_ON_ENEMY_8
+Centrar en Enemigo 8
+STR_CENTER_ON_ENEMY_9
+Centrar en Enemigo 9

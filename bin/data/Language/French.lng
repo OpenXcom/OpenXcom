@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 ACHAT/RECRUTEMENT
 STR_SELL_SACK_UC
 VENDRE/LICENCIER
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 GEOSCAPE
 STR_XCOM_BASES
 Bases XCom
@@ -889,6 +889,8 @@ STR_SILACOID
 Silacoïde
 STR_CHRYSSALID
 Chryssalid
+STR_ZOMBIE
+Zombi
 STR_REAPER
 Reaper
 STR_SECTOPOD
@@ -898,7 +900,7 @@ Cyberdisque
 STR_LIVE_COMMANDER
  Commandant
 STR_LIVE_LEADER
- Leader
+ Chef
 STR_LIVE_ENGINEER
  Ingénieur
 STR_LIVE_MEDIC
@@ -909,6 +911,64 @@ STR_LIVE_SOLDIER
  Soldat
 STR_LIVE_TERRORIST
  Terroriste
+STR_FLOATER_SOLDIER
+Soldat Flottant
+STR_FLOATER_NAVIGATOR
+Navigateur Flottant
+STR_FLOATER_MEDIC
+Docteur Flottant
+STR_FLOATER_ENGINEER
+Ingénieur Flottant
+STR_FLOATER_LEADER
+Chef Flottant
+STR_FLOATER_COMMANDER
+Commandant Flottant
+STR_SECTOID_SOLDIER
+Soldat Sectoïde
+STR_SECTOID_NAVIGATOR
+Navigateur Sectoïde
+STR_SECTOID_MEDIC
+Docteur Sectoïde
+STR_SECTOID_ENGINEER
+Ingénieur Sectoïde
+STR_SECTOID_LEADER
+Chef Sectoïde
+STR_SECTOID_COMMANDER
+Commandant Sectoïde
+STR_SNAKEMAN_SOLDIER
+Soldat Homme-Serpent
+STR_SNAKEMAN_NAVIGATOR
+Navigateur Homme-Serpent
+STR_SNAKEMAN_ENGINEER
+Ingénieur Homme-Serpent
+STR_SNAKEMAN_LEADER
+Chef Homme-Serpent
+STR_SNAKEMAN_COMMANDER
+Commandant Homme-Serpent
+STR_MUTON_SOLDIER
+Soldat Muton
+STR_MUTON_NAVIGATOR
+Navigateur Muton
+STR_MUTON_ENGINEER
+Ingénieur Muton
+STR_ETHEREAL_SOLDIER
+Soldat Ethereal
+STR_ETHEREAL_LEADER
+Chef Ethereal
+STR_ETHEREAL_COMMANDER
+Commandant Ethereal
+STR_CYBERDISC_TERRORIST
+Terroriste Cyberdisque
+STR_REAPER_TERRORIST
+Terroriste Reaper
+STR_CHRYSSALID_TERRORIST
+Terroriste Chryssalid
+STR_CELATID_TERRORIST
+Terroriste Celatid
+STR_SILACOID_TERRORIST
+Terroriste Silacoïde 
+STR_SECTOPOD_TERRORIST
+Terroriste Sectopode
 STR_UFO_POWER_SOURCE
 Source d'énergie OVNI
 STR_UFO_NAVIGATION
@@ -1147,18 +1207,6 @@ STR_EGYPT
 ÉGYPTE
 STR_CANADA
 CANADA
-STR_FLOATER_SOLDIER
-Soldat Flottant
-STR_FLOATER_NAVIGATOR
-Navigateur Flottant
-STR_FLOATER_MEDIC
-Docteur Flottant
-STR_FLOATER_ENGINEER
-Ingénieur Flottant
-STR_FLOATER_LEADER
-Leader Flottant
-STR_FLOATER_COMMANDER
-Commandant Flottant
 STR_TANK
 Char d'Assaut
 STR_CIVILIAN
@@ -1907,6 +1955,16 @@ STR_HEAL
 SOIGNER
 STR_TUS
 UT>
+STR_WEIGHT
+Poids>
+STR_FACCURACY
+Pré.T.>
+STR_REACT
+Réact>
+STR_PSKILL
+Com.P.>
+STR_PSTRENGTH
+For.P.>
 STR_ALIEN_ARTIFACT
 Objet extraterrestre
 STR_AMMO_ROUNDS_LEFT
@@ -2086,12 +2144,110 @@ STR_EQUIPMENT_FOR_craftname
 STR_SELECT_SQUAD_FOR_craftname
 Sélectionner Escouade pour {1}
 STR_n_UNITS_IN_EXIT_AREA_1
-{N} Unité dans la zone de sortie
+{N} unité dans la zone de sortie
 STR_n_UNITS_IN_EXIT_AREA_2
-{N} Unités dans la zone de sortie
+{N} unités dans la zone de sortie
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} Unité hors de la zone de sortie
+{N} unité hors de la zone de sortie
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} Unités hors de la zone de sortie
+{N} unités hors de la zone de sortie
 STR_ABANDON_GAME_QUESTION
 ABANDONNER JEU?
+STR_HAS_BEEN_KILLED
+a été tué.
+STR_DRAG_SCROLL
+TRAÎNER BARRE DE DÉFILEMENT
+STR_HIT_MELEE
+Mêlée
+STR_CONTROLS
+COMMANDES
+STR_RESTORE_DEFAULTS
+Restaure Défauts
+STR_GENERAL
+Général
+STR_GEOSCAPE
+Geoscape
+STR_BATTLESCAPE
+Bataillescape
+STR_SCREENSHOT
+Capture d'Écran
+STR_FPS_COUNTER
+Compteur à FPS
+STR_ROTATE_LEFT
+Tourner Gauche
+STR_ROTATE_RIGHT
+Tourner Droit
+STR_ROTATE_UP
+Tourner en Haut
+STR_ROTATE_DOWN
+Tourner en Bas
+STR_ZOOM_IN
+Zoomer
+STR_ZOOM_OUT
+Dézoomer
+STR_TOGGLE_COUNTRY_DETAIL
+Commuter Détail de Pays
+STR_TOGGLE_RADAR_RANGES
+Commuter Champs de Radar
+STR_SCROLL_LEFT
+Traîner Gauche
+STR_SCROLL_RIGHT
+Traîner Droit
+STR_SCROLL_UP
+Traîner en Haut
+STR_SCROLL_DOWN
+Traîner en Bas
+STR_VIEW_LEVEL_ABOVE
+Voir sur Niveau
+STR_VIEW_LEVEL_BELOW
+Voir sous Niveau
+STR_CENTER_SELECTED_UNIT
+Centrer l'unité sélectionné
+STR_PREVIOUS_UNIT
+Unité préalable
+STR_NEXT_UNIT
+Unité suivante
+STR_DESELECT_UNIT
+Desélectionner
+STR_INVENTORY
+Inventaire
+STR_MINIMAP
+Minicarte
+STR_END_TURN
+Tour Complet
+STR_ABORT_MISSION
+Abandonner la Mission
+STR_UNIT_STATS
+Stats des Unités
+STR_KNEEL
+Agenouiller
+STR_RELOAD
+Recharger
+STR_TOGGLE_PERSONAL_LIGHTING
+Commuter Éclairage Personnel
+STR_DONT_RESERVE_TUS
+Ne pas réserver les UTs
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+UTs réservées au tir rapide
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+UTs réservées au tir précis
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+UTs réservées au tir automatique
+STR_CENTER_ON_ENEMY_1
+Centrer sur l'ennemi #1
+STR_CENTER_ON_ENEMY_2
+Centrer sur l'ennemi #2
+STR_CENTER_ON_ENEMY_3
+Centrer sur l'ennemi #3
+STR_CENTER_ON_ENEMY_4
+Centrer sur l'ennemi #4
+STR_CENTER_ON_ENEMY_5
+Centrer sur l'ennemi #5
+STR_CENTER_ON_ENEMY_6
+Centrer sur l'ennemi #6
+STR_CENTER_ON_ENEMY_7
+Centrer sur l'ennemi #7
+STR_CENTER_ON_ENEMY_8
+Centrer sur l'ennemi #8
+STR_CENTER_ON_ENEMY_9
+Centrer sur l'ennemi #9

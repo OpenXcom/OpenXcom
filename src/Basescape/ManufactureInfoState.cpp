@@ -26,12 +26,14 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
 #include "../Engine/Timer.h"
 #include "../Menu/ErrorMessageState.h"
+#include <limits>
 
 namespace OpenXcom
 {
@@ -244,7 +246,10 @@ void ManufactureInfoState::setAssignedEngineer()
 	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 	std::wstringstream s4;
-	s4 << L">\x01" << _production->getAmountRemaining ();
+	s4 << L">\x01";
+	if (Options::getBool("allowAutoSellProduction") && _production->getAmountTotal() == std::numeric_limits<int>::max())
+		s4 << "$$$";
+	else s4 << _production->getAmountTotal();
 	_txtTodo->setText(s4.str());
 }
 
@@ -329,7 +334,8 @@ void ManufactureInfoState::lessEngineerClick(Action * action)
 */
 void ManufactureInfoState::moreUnitPress(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMoreUnit->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _production->getAmountTotal() < std::numeric_limits<int>::max())
+		_timerMoreUnit->start();
 }
 
 /**
@@ -351,20 +357,19 @@ void ManufactureInfoState::moreUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		// TODO: virtual infinite value for produce & sell automatically
-		// now it just raises the value to 999 or max-available-hangars on crafts
-		int more = _production->getAmountRemaining ();
+		int more = _production->getAmountTotal ();
 		if (_production->getRules()->getCategory() == "STR_CRAFT")
 		{
 			if (_base->getAvailableHangars() - _base->getUsedHangars() > 0)
 			{
-				_production->setAmountRemaining(std::max(more,_base->getAvailableHangars() - _base->getUsedHangars()));
+				_production->setAmountTotal(std::max(more,_base->getAvailableHangars() - _base->getUsedHangars()));
 				setAssignedEngineer();
 			}
 		}
 		else
 		{
-			_production->setAmountRemaining(std::max(more,999));
+			if (Options::getBool("allowAutoSellProduction")) _production->setAmountTotal(std::numeric_limits<int>::max());
+			else _production->setAmountTotal(std::max(more,999));
 			setAssignedEngineer();
 		}
 	}
@@ -376,7 +381,12 @@ void ManufactureInfoState::moreUnitClick(Action * action)
 */
 void ManufactureInfoState::lessUnitPress(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessUnit->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		if (Options::getBool("allowAutoSellProduction") && _production->getAmountTotal() == std::numeric_limits<int>::max())
+			_production->setAmountTotal(std::max(_production->getAmountProduced()+1,999));
+		_timerLessUnit->start();
+	}
 }
 
 /**
@@ -396,10 +406,10 @@ void ManufactureInfoState::lessUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		int less = _production->getAmountRemaining ();
+		int less = _production->getAmountTotal ();
 		if (less > (_production->getAmountProduced () + 1))
 		{
-			_production->setAmountRemaining(_production->getAmountProduced () + 1);
+			_production->setAmountTotal(_production->getAmountProduced () + 1);
 			setAssignedEngineer();
 		}
 	}
@@ -440,7 +450,7 @@ void ManufactureInfoState::onLessEngineer()
  */
 void ManufactureInfoState::onMoreUnit()
 {
-	int more = _production->getAmountRemaining ();
+	int more = _production->getAmountTotal ();
 	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_timerMoreUnit->stop();
@@ -448,7 +458,7 @@ void ManufactureInfoState::onMoreUnit()
 	}
 	else
 	{
-		_production->setAmountRemaining (++more);
+		_production->setAmountTotal (++more);
 		setAssignedEngineer();
 	}
 }
@@ -458,10 +468,10 @@ void ManufactureInfoState::onMoreUnit()
  */
 void ManufactureInfoState::onLessUnit()
 {
-	int less = _production->getAmountRemaining ();
+	int less = _production->getAmountTotal ();
 	if(less > (_production->getAmountProduced () + 1))
 	{
-		_production->setAmountRemaining (--less);
+		_production->setAmountTotal (--less);
 		setAssignedEngineer();
 	}
 }

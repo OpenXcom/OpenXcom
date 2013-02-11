@@ -89,7 +89,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _monthsPassed(-1)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1)
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -227,6 +227,22 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_difficulty = (GameDifficulty)a;
 	RNG::load(doc);
 	doc["monthsPassed"] >> _monthsPassed;
+	if(const YAML::Node *pName = doc.FindValue("radarLines"))
+	{
+		*pName >> _radarLines;
+	}
+	else
+	{
+		_radarLines = false;
+	}
+	if(const YAML::Node *pName = doc.FindValue("detail"))
+	{
+		*pName >> _detail;
+	}
+	else
+	{
+		_detail = true;
+	}
 	doc["funds"] >> _funds;
 	doc["maintenance"] >> _maintenance;
 	doc["researchScores"] >> _researchScores;
@@ -349,6 +365,8 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
 	out << YAML::Key << "monthsPassed" << YAML::Value << _monthsPassed;
+	out << YAML::Key << "radarLines" << YAML::Value << _radarLines;
+	out << YAML::Key << "detail" << YAML::Value << _detail;
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
@@ -774,10 +792,58 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
-		if (itDiscovered != discovered.end () && research->getStringTemplate().size() == 0)
+		
+		// i hate to do this, but it just looks so much cleaner.
+		std::vector<std::string>::const_iterator alien = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_ALIEN_ORIGINS");
+		bool liveAlien ( alien != research->getUnlocked().end());
+
+		if (itDiscovered != discovered.end ())
 		{
-			continue;
+			// see?
+			if (!liveAlien)
+			{
+				continue;
+			}
+			else
+			{
+				bool cull = true;
+				if (research->getGetOneFree().size() != 0)
+				{
+					for (std::vector<std::string>::const_iterator ohBoy = research->getGetOneFree().begin(); ohBoy != research->getGetOneFree().end(); ++ohBoy)
+					{
+						std::vector<const RuleResearch *>::const_iterator more_iteration = std::find(discovered.begin (), discovered.end (), ruleset->getResearch(*ohBoy));
+						if (more_iteration == discovered.end ())
+						{
+							cull = false;
+							break;
+						}
+					}
+				}
+				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
+				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_CYDONIA_DEP");
+				
+				bool leader ( leaderCheck != research->getUnlocked().end());
+				bool cmnder ( cmnderCheck != research->getUnlocked().end());
+
+				if (leader)
+				{
+					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_LEADER_PLUS"));
+					if (found == discovered.end())
+						cull = false;
+				}
+
+				if (cmnder)
+				{
+					std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_CYDONIA_DEP"));
+					if (found == discovered.end())
+						cull = false;
+				}
+
+				if (cull)
+					continue;
+			}
 		}
+
 		if (std::find_if (baseResearchProjects.begin(), baseResearchProjects.end (), findRuleResearch(research)) != baseResearchProjects.end ())
 		{
 			continue;
@@ -842,11 +908,45 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	if(std::find(unlocked.begin (), unlocked.end (),
-			 r) != unlocked.end ())
+	std::vector<std::string>::const_iterator alien = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_ALIEN_ORIGINS");
+	bool liveAlien ( alien != r->getUnlocked().end());
+	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
 	}
+	else if (liveAlien)
+	{		
+		if (r->getGetOneFree().size() > 0)
+		{
+			for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
+			{
+				if(std::find(unlocked.begin (), unlocked.end (), ruleset->getResearch(*itFree)) == unlocked.end ())
+				{
+					return true;
+				}
+			}
+			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
+			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_CYDONIA_DEP");
+				
+			bool leader ( leaderCheck != r->getUnlocked().end());
+			bool cmnder ( cmnderCheck != r->getUnlocked().end());
+
+			if (leader)
+			{
+				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_LEADER_PLUS"));
+				if (found == discovered.end())
+					return true;
+			}
+
+			if (cmnder)
+			{
+				std::vector<const RuleResearch*>::const_iterator found = std::find(discovered.begin(), discovered.end(), ruleset->getResearch("STR_CYDONIA_DEP"));
+				if (found == discovered.end())
+					return true;
+			}
+		}
+	}
+
 	for(std::vector<std::string>::const_iterator iter = deps.begin (); iter != deps.end (); ++ iter)
 	{
 		RuleResearch *research = ruleset->getResearch(*iter);
@@ -904,9 +1004,6 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 			if ((*iter)->getCost() == 0)
 			{
 				getDependableResearchBasic(dependables, *iter, ruleset, base);
-			}
-			else
-			{
 			}
 		}
 	}
@@ -1243,4 +1340,24 @@ void SavedGame::addMonth()
 {
 	++_monthsPassed;
 }
+
+void SavedGame::toggleRadarLines()
+{
+	_radarLines = !_radarLines;
+}
+
+bool SavedGame::getRadarLines()
+{
+	return _radarLines;
+}
+void SavedGame::toggleDetail()
+{
+	_detail = !_detail;
+}
+
+bool SavedGame::getDetail()
+{
+	return _detail;
+}
+
 }

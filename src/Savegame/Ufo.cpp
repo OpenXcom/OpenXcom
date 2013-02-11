@@ -53,8 +53,11 @@ Ufo::~Ufo()
 	{
 		_mission->decreaseLiveUfos();
 	}
-	Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
-	delete wp;
+	if (_dest)
+	{
+		Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
+		delete wp;
+	}
 }
 
 /**

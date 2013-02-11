@@ -213,6 +213,7 @@ void Map::drawTerrain(Surface *surface)
 	int beginX = 0, endX = _save->getWidth() - 1;
     int beginY = 0, endY = _save->getLength() - 1;
 	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight();
+	bool singleLevel = !_camera->getShowAllLayers();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
@@ -281,11 +282,11 @@ void Map::drawTerrain(Surface *surface)
 
 	surface->lock();
 
-    for (int itZ = beginZ; itZ <= endZ; itZ++)
+	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
-        for (int itX = beginX; itX <= endX; itX++)
+		for (int itX = beginX; itX <= endX; itX++)
 		{
-            for (int itY = beginY; itY <= endY; itY++)
+			for (int itY = beginY; itY <= endY; itY++)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				_camera->convertMapToScreen(mapPosition, &screenPosition);
@@ -501,7 +502,7 @@ void Map::drawTerrain(Surface *surface)
 					{
 						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
 						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));
-						if (tunit && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
+						if (tunit && tunit->getVisible() && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
 						{
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
@@ -513,7 +514,7 @@ void Map::drawTerrain(Surface *surface)
 								Position offset;
 								calculateWalkingOffset(tunit, &offset);
 								offset.y += 24;
-								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
+								tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, ttile->getShade());
 								if (tunit->getArmor()->getSize() > 1)
 								{
 									offset.y += 4;

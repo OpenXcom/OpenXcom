@@ -20,6 +20,7 @@
 #include "Target.h"
 #include <cmath>
 #include "../Engine/Language.h"
+#include "Craft.h"
 
 namespace OpenXcom
 {
@@ -31,8 +32,19 @@ Target::Target() : _lon(0.0), _lat(0.0), _followers()
 {
 }
 
+/**
+ * Make sure no crafts are chasing this target.
+ */
 Target::~Target()
 {
+	for (size_t i = 0; i < _followers.size(); ++i)
+	{
+		Craft *craft = dynamic_cast<Craft*>(_followers[i]);
+		if (craft)
+		{
+			craft->returnToBase();
+		}
+	}
 }
 
 /**

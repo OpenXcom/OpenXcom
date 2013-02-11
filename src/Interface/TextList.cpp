@@ -96,6 +96,7 @@ void TextList::unpress(State *state)
 void TextList::setCellColor(int row, int column, Uint8 color)
 {
 	_texts[row][column]->setColor(color);
+	_redraw = true;
 }
 
 /**
@@ -603,30 +604,32 @@ void TextList::clearList()
 }
 
 /**
- * Scrolls the text in the list up by one row.
+ * Scrolls the text in the list up by one row or to the top.
+ * @param toMax If true then scrolls to the top of the list. false => one row up
  */
-void TextList::scrollUp()
+void TextList::scrollUp(bool toMax)
 {
 	if (!_scrolling)
 		return;
 	if (_texts.size() > _visibleRows && _scroll > 0)
 	{
-		_scroll--;
+		if (toMax) _scroll=0; else _scroll--;
 		_redraw = true;
 	}
 	updateArrows();
 }
 
 /**
- * Scrolls the text in the list down by one row.
+ * Scrolls the text in the list down by one row or to the bottom.
+ * @param toMax If true then scrolls to the bottom of the list. false => one row down
  */
-void TextList::scrollDown()
+void TextList::scrollDown(bool toMax)
 {
 	if (!_scrolling)
 		return;
 	if (_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows)
 	{
-		_scroll++;
+		if (toMax) _scroll=_texts.size()-_visibleRows; else _scroll++;
 		_redraw = true;
 	}
 	updateArrows();
@@ -734,58 +737,70 @@ void TextList::think()
 }
 
 /**
- * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
 void TextList::mousePress(Action *action, State *state)
 {
-	if (_selectable && (action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT))
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	{
+		scrollUp(false);
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		scrollDown(false);
+	}
+	if (_selectable)
 	{
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mousePress(action, state);
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	else
 	{
-		scrollUp();
-	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
-		scrollDown();
+		InteractiveSurface::mousePress(action, state);
 	}
 }
 
 /*
- * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
 void TextList::mouseRelease(Action *action, State *state)
 {
-	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_selectable)
 	{
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseRelease(action, state);
 		}
 	}
+	else
+	{
+		InteractiveSurface::mouseRelease(action, state);
+	}
 }
 
 /**
- * Ignores any mouse clicks that aren't on a row with the left mouse button.
+ * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
 void TextList::mouseClick(Action *action, State *state)
 {
-	if (_selectable && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_selectable)
 	{
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
 		}
+	}
+	else
+	{
+		InteractiveSurface::mouseClick(action, state);
 	}
 }
 
