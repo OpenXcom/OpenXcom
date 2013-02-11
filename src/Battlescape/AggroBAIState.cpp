@@ -459,9 +459,13 @@ void AggroBAIState::think(BattleAction *action)
 							if (action->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE || explosiveEfficacy(_aggroTarget->getPosition(), _unit, (action->weapon->getAmmoItem()->getRules()->getPower() / 10) +1, action->diff))
 							{
 								if (RNG::generate(1,10) < 5 && action->weapon->getAmmoQuantity() > 2)
+								{
 									action->type = BA_AUTOSHOT;
+								}
 								else
+								{
 									action->type = BA_SNAPSHOT;
+								}
 							}
 							tu = action->actor->getActionTUs(action->type, action->weapon);
 							// enough time units to shoot?
