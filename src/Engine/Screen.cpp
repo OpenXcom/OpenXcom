@@ -100,43 +100,8 @@ void Screen::handle(Action *action)
 			i++;
 		}
 		while (CrossPlatform::fileExists(ss.str()));
-		
-		std::vector<unsigned char> image;
-		SDL_Color *palette = getPalette();
-
-		for (int y = 0; y < getHeight(); ++y)
-		{
-			for (int x = 0; x < getWidth(); ++x)
-			{
-				switch(_screen->format->BytesPerPixel)
-				{
-					Uint8 color;
-					Uint32 colors;
-				case 1:
-					color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
-					image.push_back(palette[color].r);
-					image.push_back(palette[color].g);
-					image.push_back(palette[color].b);
-					break;
-				case 2:
-				case 3:
-				case 4:
-					colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
-					image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
-					image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
-					image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
-					break;
-				default:
-					return; // not likely
-				}
-			}
-		}
-
-		unsigned error = lodepng::encode(ss.str(), image, getWidth(), getHeight(), LCT_RGB);
-		if (error)
-		{
-			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
-		} 
+		screenshot(ss.str());
+		return;
 	}
 }
 
@@ -323,6 +288,50 @@ double Screen::getXScale() const
 double Screen::getYScale() const
 {
 	return _scaleY;
+}
+
+/**
+ * Saves a screenshot of the screen's contents.
+ * @param filename Filename of the PNG file.
+ */
+void Screen::screenshot(const std::string &filename) const
+{
+	std::vector<unsigned char> image;
+	SDL_Color *palette = getPalette();
+
+	for (int y = 0; y < getHeight(); ++y)
+	{
+		for (int x = 0; x < getWidth(); ++x)
+		{
+			switch(_screen->format->BytesPerPixel)
+			{
+				Uint8 color;
+				Uint32 colors;
+			case 1:
+				color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
+				image.push_back(palette[color].r);
+				image.push_back(palette[color].g);
+				image.push_back(palette[color].b);
+				break;
+			case 2:
+			case 3:
+			case 4:
+				colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
+				image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
+				image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
+				image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
+				break;
+			default:
+				return; // not likely
+			}
+		}
+	}
+
+	unsigned error = lodepng::encode(filename, image, getWidth(), getHeight(), LCT_RGB);
+	if (error)
+	{
+		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+	}
 }
 
 }

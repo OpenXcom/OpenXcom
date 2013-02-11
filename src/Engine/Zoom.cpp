@@ -36,7 +36,7 @@ extern "C" {
 #include "Scalers/hqx.h"
 
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 #define __SSE2__ true
 // probably Visual Studio (or Intel C++ which should also work)
 #include <intrin.h>

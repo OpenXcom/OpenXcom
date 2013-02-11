@@ -20,6 +20,7 @@
 #define OPENXCOM_SCREEN_H
 
 #include <SDL.h>
+#include <string>
 
 namespace OpenXcom
 {
@@ -75,10 +76,12 @@ public:
 	void setResolution(int width, int height);
 	/// Sets whether the screen is full-screen or windowed.
 	void setFullscreen(bool full);
-	/// Gets the screen's X scale;
+	/// Gets the screen's X scale.
 	double getXScale() const;
-	/// Gets the screen's Y scale;
+	/// Gets the screen's Y scale.
 	double getYScale() const;
+	/// Takes a screenshot.
+	void screenshot(const std::string &filename) const;
 };
 
 }

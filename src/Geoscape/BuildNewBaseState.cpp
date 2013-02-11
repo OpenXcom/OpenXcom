@@ -44,7 +44,7 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _mousex(0), _mousey(0), _oldlat(0), _oldlon(0)
+BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
 {
 	_screen = false;
 

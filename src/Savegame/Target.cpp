@@ -37,7 +37,7 @@ Target::Target() : _lon(0.0), _lat(0.0), _followers()
  */
 Target::~Target()
 {
-	for (int i = 0; i < _followers.size(); ++i)
+	for (size_t i = 0; i < _followers.size(); ++i)
 	{
 		Craft *craft = dynamic_cast<Craft*>(_followers[i]);
 		if (craft)

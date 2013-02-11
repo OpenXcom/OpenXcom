@@ -186,7 +186,7 @@ void BattleUnit::load(const YAML::Node &node)
 	_killedBy = (UnitFaction)a;
 	if (const YAML::Node *pName = node.FindValue("originalFaction"))
 	{
-		node["originalFaction"] >> a;
+		*pName >> a;
 		_originalFaction = (UnitFaction)a;
 	}
 	else

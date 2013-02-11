@@ -104,9 +104,9 @@ void Tile::load(const YAML::Node &node)
 	}
 	if(const YAML::Node *pName = node.FindValue("discovered"))
 	{
-		node["discovered"][0] >> _discovered[0];
-		node["discovered"][1] >> _discovered[1];
-		node["discovered"][2] >> _discovered[2];
+		(*pName)[0] >> _discovered[0];
+		(*pName)[1] >> _discovered[1];
+		(*pName)[2] >> _discovered[2];
 	}
 }
 

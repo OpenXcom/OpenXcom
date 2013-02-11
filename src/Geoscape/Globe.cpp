@@ -1185,7 +1185,7 @@ void Globe::drawRadars()
 	label->setAlign(ALIGN_LEFT);
 	label->setColor(Palette::blockOffset(15)-1);
 */
-	double x, y, x2, y2;
+	double x, y;
 	double tr, range;
 	double lat, lon;
 	std::vector<double> ranges;
