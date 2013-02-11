@@ -6,7 +6,7 @@ TARGET =
 # Directories and files
 OBJDIR = ../obj/
 BINDIR = ../bin/
-SRCS = $(wildcard *.cpp */*.cpp)
+SRCS = $(wildcard *.cpp */*.cpp */*/*.cpp)
 OBJS = $(patsubst %.cpp, $(OBJDIR)%.o, $(notdir $(SRCS)))
 
 # Target-specific settings

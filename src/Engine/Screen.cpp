@@ -247,7 +247,10 @@ void Screen::setResolution(int width, int height)
 	}
 
 	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
-	if (_surface->getSurface()->format->BitsPerPixel == 8) _surface->setPalette(getPalette());
+	if (_screen->format->BitsPerPixel == 8)
+	{
+		setPalette(getPalette());
+	}
 }
 
 /**
