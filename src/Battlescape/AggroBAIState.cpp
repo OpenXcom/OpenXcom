@@ -483,22 +483,36 @@ void AggroBAIState::think(BattleAction *action)
 
 			if (takeCover && !charge)
 			{
-				// the idea is to check within a 5 tile radius for a tile which is not seen by our aggroTarget
+				// the idea is to check within a 11x11 tile squarefor a tile which is not seen by our aggroTarget
 				// if there is no such tile, we run away from the target.
 				action->type = BA_WALK;
 				int tries = 0;
 				bool coverFound = false;
-				while (tries < 30 && !coverFound)
+				int x_search_sign = RNG::generate(0, 1) ? 1 : -1; // randomize the direction of the search for lack of a better heuristic
+				int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
+				int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
+				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
+				int dsqr = dx*dx + dy*dy;
+				int runx = _unit->getPosition().x + (dx * 7 * 7) / dsqr;
+				int runy = _unit->getPosition().y + (dy * 7 * 7) / dsqr;
+				while (tries < 150 && !coverFound)
 				{
 					tries++;
 					action->target = _unit->getPosition();
-					action->target.x += RNG::generate(-5,5);
-					action->target.y += RNG::generate(-5,5);
-					if (tries < 20)
-
+					if (tries < 121) 
+					{
+						// looking for cover
+						action->target.x += x_search_sign * ((tries%11) - 5);
+						action->target.y += y_search_sign * ((tries/11) - 5); 
 						coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
+					}
 					else
+					{
+						// trying to run the hell away
+						action->target.x = runx + RNG::generate(-5,5);
+						action->target.y = runy + RNG::generate(-5,5);
 						coverFound = true;
+					}
 
 					if (coverFound)
 					{
