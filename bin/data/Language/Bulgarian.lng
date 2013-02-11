@@ -1961,6 +1961,16 @@ STR_HEAL
 ПРЕВРЪЗКА
 STR_TUS
 ТД>
+STR_WEIGHT
+Тегло>
+STR_FACCURACY
+Точ.С.>
+STR_REACT
+Реак.>
+STR_PSKILL
+П.Уме>
+STR_PSTRENGTH
+П.Сил>
 STR_ALIEN_ARTIFACT
 Извънземен артефакт
 STR_AMMO_ROUNDS_LEFT

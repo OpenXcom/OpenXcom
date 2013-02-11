@@ -54,11 +54,21 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 {
 	_battleGame = _game->getSavedGame()->getBattleGame();
 
+	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
+
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(200, 16, 36, 6);
-	_txtTus = new Text(40, 9, 250, 24);
+	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
+	if (_showMoreStatsInInventoryView)
+	{
+		_txtWeight = new Text(70, 9, 245, 24);
+		_txtFAcc = new Text(40, 9, 245, 32);
+		_txtReact = new Text(40, 9, 245, 40);
+		_txtPSkill = new Text(40, 9, 245, 48);
+		_txtPStr = new Text(40, 9, 245, 56);
+	}
 	_txtItem = new Text(200, 9, 0, 23);
 	_txtAmmo = new Text(64, 24, 256, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
@@ -74,6 +84,14 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	add(_soldier);
 	add(_txtName);
 	add(_txtTus);
+	if (_showMoreStatsInInventoryView)
+	{
+		add(_txtWeight);
+		add(_txtFAcc);
+		add(_txtReact);
+		add(_txtPSkill);
+		add(_txtPStr);
+	}
 	add(_txtItem);
 	add(_txtAmmo);
 	add(_btnOk);
@@ -95,6 +113,29 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	_txtTus->setColor(Palette::blockOffset(4));
 	_txtTus->setSecondaryColor(Palette::blockOffset(1));
 	_txtTus->setHighContrast(true);
+
+	if (_showMoreStatsInInventoryView)
+	{
+		_txtWeight->setColor(Palette::blockOffset(4));
+		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		_txtWeight->setHighContrast(true);
+
+		_txtFAcc->setColor(Palette::blockOffset(4));
+		_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
+		_txtFAcc->setHighContrast(true);
+
+		_txtReact->setColor(Palette::blockOffset(4));
+		_txtReact->setSecondaryColor(Palette::blockOffset(1));
+		_txtReact->setHighContrast(true);
+
+		_txtPSkill->setColor(Palette::blockOffset(4));
+		_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
+		_txtPSkill->setHighContrast(true);
+
+		_txtPStr->setColor(Palette::blockOffset(4));
+		_txtPStr->setSecondaryColor(Palette::blockOffset(1));
+		_txtPStr->setHighContrast(true);
+	}
 
 	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
@@ -126,7 +167,7 @@ InventoryState::~InventoryState()
 }
 
 /**
- * Update soldier stats when the soldier changes.
+ * Updates all soldier stats when the soldier changes.
  */
 void InventoryState::init()
 {
@@ -165,6 +206,48 @@ void InventoryState::init()
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
+	}
+	if (_showMoreStatsInInventoryView && !_tu)
+	{
+		std::wstringstream ss2;
+		ss2 << _game->getLanguage()->getString("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
+		_txtFAcc->setText(ss2.str());
+
+		std::wstringstream ss3;
+		ss3 << _game->getLanguage()->getString("STR_REACT") << L'\x01' << unit->getStats()->reactions;
+		_txtReact->setText(ss3.str());
+
+		if (unit->getStats()->psiSkill > 0)
+		{
+			std::wstringstream ss4;
+			ss4 << _game->getLanguage()->getString("STR_PSKILL") << L'\x01' << unit->getStats()->psiSkill;
+			_txtPSkill->setText(ss4.str());
+
+			std::wstringstream ss5;
+			ss5 << _game->getLanguage()->getString("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
+			_txtPStr->setText(ss5.str());
+		}
+	}
+	updateStats();
+}
+
+/**
+ * Updates the soldier stats (Weight, TU).
+ */
+void InventoryState::updateStats()
+{
+	BattleItem *item = _inv->getSelectedItem();
+	BattleUnit *unit = _battleGame->getSelectedUnit();
+	if (_showMoreStatsInInventoryView)
+	{
+		int Weight = unit->getCarriedWeight();
+		if (item != 0 && item->getSlot()->getType() != INV_GROUND) Weight -= item->getRules()->getWeight();
+		std::wstringstream ss;
+		ss << _game->getLanguage()->getString("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
+		_txtWeight->setText(ss.str());
+		if (Weight > unit->getStats()->strength)
+			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
+		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	}
 	if (_tu)
 	{
@@ -277,18 +360,12 @@ void InventoryState::btnUnloadClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
 	{
-		if (_inv->unload() == true)
-		{
-			_txtItem->setText(L"");
-			_txtAmmo->setText(L"");
-			_selAmmo->clear();
-			if (_tu)
-			{
-				std::wstringstream ss;
-				ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
-				_txtTus->setText(ss.str());
-			}
-		}
+		_inv->unload();
+		_txtItem->setText(L"");
+		_txtAmmo->setText(L"");
+		_selAmmo->clear();
+		updateStats();
+
 	}
 }
 
@@ -360,12 +437,7 @@ void InventoryState::invClick(Action *)
 		}
 		_txtAmmo->setText(ss.str());
 	}
-	if (_tu)
-	{
-		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << _battleGame->getSelectedUnit()->getTimeUnits();
-		_txtTus->setText(ss.str());
-	}
+	updateStats();
 }
 
 /**

@@ -95,6 +95,7 @@ void createDefault()
 	setBool("allowBuildingQueue", false);
 	setBool("allowAutoSellProduction", false);
 	setBool("showFundsOnGeoscape", false);
+	setBool("showMoreStatsInInventoryView", false);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);

@@ -37,19 +37,21 @@ class InventoryState : public State
 {
 private:
 	Surface *_bg, *_soldier;
-	Text *_txtName, *_txtTus, *_txtItem, *_txtAmmo;
+	Text *_txtName, *_txtItem, *_txtAmmo, *_txtWeight, *_txtTus, *_txtFAcc, *_txtReact, *_txtPSkill, *_txtPStr;
 	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
 	Surface *_selAmmo;
 	Inventory *_inv;
 	SavedBattleGame *_battleGame;
-	bool _tu;
+	bool _tu, _showMoreStatsInInventoryView;
 public:
 	/// Creates the Inventory state.
 	InventoryState(Game *game, bool tu);
 	/// Cleans up the Inventory state.
 	~InventoryState();
-	/// Updates the soldier info.
+	/// Updates all soldier info.
 	void init();
+	/// Updates the soldier info (Weight, TU).
+	void updateStats();
 	/// Saves the soldiers' equipment-layout.
 	void saveEquipmentLayout();
 	/// Handler for clicking the OK button.
