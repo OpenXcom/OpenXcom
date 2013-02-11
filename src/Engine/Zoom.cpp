@@ -35,8 +35,11 @@
 #include "Scalers/hqx.h"
 
 
-#if (_MSC_VER >= 1400)
+#if (_MSC_VER >= 1400) || (defined(__MINGW32__) && defined(__SSE2__))
+
+#ifndef __SSE2__
 #define __SSE2__ true
+#endif
 // probably Visual Studio (or Intel C++ which should also work)
 #include <intrin.h>
 #endif
@@ -328,7 +331,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 		say = 0;
 		return (-1);
 	}
-	
+
 	csy = 0;
 	csay = say;
 	for (int y = 0; y < dst->h; y++) {
@@ -341,7 +344,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 		(*csay) *= src->pitch;
 		csay++;
 	}
-
+	
 	for (dsty = 0; dsty < dst->h; ++dsty, pixelDstRow += dst->pitch)
 	{
 		if (!say[dsty]) continue;
@@ -365,6 +368,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 				int j = 0;
 				do
 				{
+					if (dsty + j >= dst->h) break;
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
 				} while(say[dsty + ++j] == 0); // fill in all relevant rows
@@ -447,6 +451,7 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 				int j = 0;
 				do
 				{
+					if (dsty + j >= dst->h) break;
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
 				} while(say[dsty + ++j] == 0); // fill in all relevant rows
@@ -684,7 +689,15 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		{
 			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_SSE2(src, dst);
 			else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_SSE2(src, dst);
-		} 
+		} else
+		{
+			static bool complained = false;
+
+			if (!complained)
+			{
+				Log(LOG_ERROR) << "Misaligned surface buffers.";
+			}
+		}
 #endif
 
 // __WORDSIZE is defined on Linux, SIZE_MAX on Windows
