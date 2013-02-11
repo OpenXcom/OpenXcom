@@ -25,6 +25,7 @@ namespace OpenXcom
 {
 
 class Base;
+class BaseView;
 class BaseFacility;
 class TextButton;
 class Window;
@@ -38,6 +39,7 @@ class DismantleFacilityState : public State
 {
 private:
 	Base *_base;
+	BaseView *_view;
 	BaseFacility *_fac;
 
 	TextButton *_btnOk, *_btnCancel;
@@ -45,7 +47,7 @@ private:
 	Text *_txtTitle, *_txtFacility;
 public:
 	/// Creates the Dismantle Facility state.
-	DismantleFacilityState(Game *game, Base *base, BaseFacility *fac);
+	DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac);
 	/// Cleans up the Dismantle Facility state.
 	~DismantleFacilityState();
 	/// Handler for clicking the OK button.

@@ -26,8 +26,10 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+#include "../Basescape/BaseView.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -38,7 +40,7 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param fac Pointer to the facility to dismantle.
  */
-DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseFacility *fac) : State(game), _base(base), _fac(fac)
+DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac) : State(game), _base(base), _view(view), _fac(fac)
 {
 	_screen = false;
 
@@ -102,6 +104,7 @@ void DismantleFacilityState::btnOkClick(Action *)
 			{
 				_base->getFacilities()->erase(i);
 				delete _fac;
+				if (Options::getBool("allowBuildingQueue")) _view->reCalcQueuedBuildings();
 				break;
 			}
 		}
