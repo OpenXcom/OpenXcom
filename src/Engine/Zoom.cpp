@@ -325,7 +325,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 		say = 0;
 		return (-1);
 	}
-	
+
 	csy = 0;
 	csay = say;
 	for (int y = 0; y < dst->h; y++) {
@@ -338,7 +338,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 		(*csay) *= src->pitch;
 		csay++;
 	}
-
+	
 	for (dsty = 0; dsty < dst->h; ++dsty, pixelDstRow += dst->pitch)
 	{
 		if (!say[dsty]) continue;
@@ -362,6 +362,7 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 				int j = 0;
 				do
 				{
+					if (dsty + j >= dst->h) break;
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
 				} while(say[dsty + ++j] == 0); // fill in all relevant rows
@@ -444,6 +445,7 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 				int j = 0;
 				do
 				{
+					if (dsty + j >= dst->h) break;
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
 				} while(say[dsty + ++j] == 0); // fill in all relevant rows
