@@ -1019,7 +1019,10 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			return item->getRules()->getTUUse();
+			if (item->getRules()->getFlatRate())
+				return item->getRules()->getTUUse();
+			else
+				return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
 		default:
 			return 0;
 	}

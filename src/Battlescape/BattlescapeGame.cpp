@@ -1129,9 +1129,16 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			if (_save->selectUnit(pos) && _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
-				_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-				_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
-				cancelCurrentAction();
+				if (_currentAction.actor->spendTimeUnits(_currentAction.TU, false))
+				{
+					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
+					_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
+					cancelCurrentAction();
+				}
+				else
+				{
+					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+				}
 			}
 		}
 		else if (_currentAction.type == BA_PANIC || _currentAction.type == BA_MINDCONTROL)
