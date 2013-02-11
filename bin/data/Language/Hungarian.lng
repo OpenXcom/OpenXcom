@@ -2155,7 +2155,97 @@ STR_HAS_BEEN_KILLED
 -t megölték
 STR_DRAG_SCROLL
 VONSZOLÁS
+STR_HIT_MELEE
+Megüt
 STR_CONTROLS
 VEZÉRLÉS
 STR_RESTORE_DEFAULTS
 Alapértékek
+STR_GENERAL
+Általános
+STR_GEOSCAPE
+Földgömb
+STR_BATTLESCAPE
+Csatamező
+STR_SCREENSHOT
+Képernyőkép Mentése
+STR_FPS_COUNTER
+FPS Számláló
+STR_ROTATE_LEFT
+Forgatás Balra
+STR_ROTATE_RIGHT
+Forgatás Jobbra
+STR_ROTATE_UP
+Forgatás Fel
+STR_ROTATE_DOWN
+Forgatás Le
+STR_ZOOM_IN
+Nagyítás
+STR_ZOOM_OUT
+Kicsinyítés
+STR_TOGGLE_COUNTRY_DETAIL
+Kapcsoló: Országok Részletesen
+STR_TOGGLE_RADAR_RANGES
+Kapcsoló: Radar Hatókörök
+STR_SCROLL_LEFT
+Görgetés Balra
+STR_SCROLL_RIGHT
+Görgetés Jobbra
+STR_SCROLL_UP
+Görgetés Fel
+STR_SCROLL_DOWN
+Görgetés Le
+STR_VIEW_LEVEL_ABOVE
+Nézetet Egy Szinttel Fel
+STR_VIEW_LEVEL_BELOW
+Nézetet Egy Szinttel Le
+STR_CENTER_SELECTED_UNIT
+Kiválasztott Egységet Középre
+STR_PREVIOUS_UNIT
+Előző Egység
+STR_NEXT_UNIT
+Következő Egység
+STR_DESELECT_UNIT
+Egység Kiválasztásának Törlése
+STR_INVENTORY
+Személy-Leltár
+STR_MINIMAP
+Mini-Térkép
+STR_END_TURN
+Kör Befejezése
+STR_ABORT_MISSION
+Küldetés megszakítása
+STR_UNIT_STATS
+Egység Tulajdonságai
+STR_KNEEL
+Térdelés
+STR_RELOAD
+Újratöltés
+STR_TOGGLE_PERSONAL_LIGHTING
+Kapcsoló: Személyi Világítás
+STR_DONT_RESERVE_TUS
+Ne Tartson Fenn IE-eket
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+IE-ek Fenntartása Kapáslövésre
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+IE-ek Fenntartása Célzott Lövésre
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+IE-ek Fenntartása Auto. Lövésre
+STR_CENTER_ON_ENEMY_1
+Ellenség-1-et Középre
+STR_CENTER_ON_ENEMY_2
+Ellenség-2-t Középre
+STR_CENTER_ON_ENEMY_3
+Ellenség-3-at Középre
+STR_CENTER_ON_ENEMY_4
+Ellenség-4-et Középre
+STR_CENTER_ON_ENEMY_5
+Ellenség-5-öt Középre
+STR_CENTER_ON_ENEMY_6
+Ellenség-6-ot Középre
+STR_CENTER_ON_ENEMY_7
+Ellenség-7-et Középre
+STR_CENTER_ON_ENEMY_8
+Ellenség-8-at Középre
+STR_CENTER_ON_ENEMY_9
+Ellenség-9-et Középre
