@@ -40,13 +40,14 @@
 namespace OpenXcom
 {
 
+const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
+
 /**
  * Sets up a TileEngine.
  * @param save pointer to SavedBattleGame object.
  */
 TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
 {
-
 }
 
 /**
@@ -312,16 +313,12 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 										//mark every tile of line as visible (as in original)
 										//this is needed because of bresenham narrow stroke. 
 										_save->getTile(posi)->setVisible(+1);
-										if (!_save->getTile(posi)->isDiscovered(2)) //skip already discovered
-										{
-//											unit->addToVisibleTiles(_save->getTile(posi)); //per-unit visiblity? not used.
-											_save->getTile(posi)->setDiscovered(true, 2);
-											// walls to the east or south of a visible tile, we see that too
-											Tile* t = _save->getTile(Position(posi.x + 1, posi.y, posi.z));
-											if (t) t->setDiscovered(true, 0);
-											t = _save->getTile(Position(posi.x, posi.y + 1, posi.z));
-											if (t) t->setDiscovered(true, 1);
-										}
+										_save->getTile(posi)->setDiscovered(true, 2);
+										// walls to the east or south of a visible tile, we see that too
+										Tile* t = _save->getTile(Position(posi.x + 1, posi.y, posi.z));
+										if (t) t->setDiscovered(true, 0);
+										t = _save->getTile(Position(posi.x, posi.y + 1, posi.z));
+										if (t) t->setDiscovered(true, 1);
 									}
 
 								}
@@ -394,7 +391,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 
 	Position scanVoxel;
 	std::vector<Position> _trajectory;
-	unitSeen = canTargetVoxel(&originVoxel, tile, &scanVoxel, currentUnit);
+	unitSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
 
 	if (unitSeen)
 	{
@@ -413,11 +410,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 				maxViewDistance -= t->getSmoke()/2;
 			}
 		}
-		if (distance(currentUnit->getPosition(), tile->getPosition()) <= maxViewDistance)
-		{
-			unitSeen = true;
-		}
-		else
+		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
 		{
 			unitSeen = false;
 		}
@@ -433,30 +426,28 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
  * @param excludeUnit is self (not to hit self)
  * @return true/false
  */
-bool TileEngine::canTargetVoxel(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit* excludeUnit)
+bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit* excludeUnit)
 {
-	bool unitSeen = false;
-	Position targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z*24);
+	Position targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
-	static int heightOrder[11]={0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
 	int heightRange;
 	BattleUnit *otherUnit = tile->getUnit();
  
 	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
-	int sliceTargets[10]={0,0,0,unitRadius,0,-unitRadius,unitRadius,0,-unitRadius,0};
+	int sliceTargets[10]={0,0, 0,unitRadius, 0,-unitRadius, unitRadius,0, -unitRadius,0};
  
 	if (!otherUnit->isOut())
 	{
-			heightRange = otherUnit->getHeight();
+		heightRange = otherUnit->getHeight();
 	}
 	else
 	{
-			heightRange = 12;
+		heightRange = 12;
 	}
 
 	targetMaxHeight += heightRange;
@@ -468,30 +459,156 @@ bool TileEngine::canTargetVoxel(Position *originVoxel, Tile *tile, Position *sca
 	// scan ray from top to bottom  plus different parts of target cylinder
 	for (int i = 0; i <= heightRange; ++i)
 	{
-		scanVoxel->z=targetCenterHeight+heightOrder[i];
+		scanVoxel->z=targetCenterHeight+heightFromCenter[i];
 		for (int j = 0; j < 5; ++j)
 		{
-			scanVoxel->x=targetVoxel.x+sliceTargets[j*2];
-			scanVoxel->y=targetVoxel.y+sliceTargets[j*2+1];
+			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
+			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, true);
 			if (test == 4)
 			{
 				//voxel of hit must be inside of scanned box
-				if (_trajectory.at(0).x/16==scanVoxel->x/16 &&
-					_trajectory.at(0).y/16==scanVoxel->y/16 &&
-					_trajectory.at(0).z>=targetMinHeight &&
-					_trajectory.at(0).z<=targetMaxHeight)
+				if (_trajectory.at(0).x/16 == scanVoxel->x/16 &&
+					_trajectory.at(0).y/16 == scanVoxel->y/16 &&
+					_trajectory.at(0).z >= targetMinHeight &&
+					_trajectory.at(0).z <= targetMaxHeight)
 				{
-					unitSeen = true;
-					return unitSeen;
+					return true;
 				}
 			}
 		}
 	}
-	return unitSeen;
+	return false;
 }
 
+/**
+ * Check for a tile part available for targeting and what particular voxel
+ * @param originVoxel voxel of trace origin (gun's barrel)
+ * @param tile the tile to check for
+ * @param part tile part to check for
+ * @param scanVoxel is returned coordinate of hit
+ * @param excludeUnit is self (not to hit self)
+ * @return true/false
+ */
+bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit)
+{
+	static int sliceObjectSpiral[82] = {8,8, 8,6, 10,6, 10,8, 10,10, 8,10, 6,10, 6,8, 6,6, //first circle
+		8,4, 10,4, 12,4, 12,6, 12,8, 12,10, 12,12, 10,12, 8,12, 6,12, 4,12, 4,10, 4,8, 4,6, 4,4, 6,4, //second circle
+		8,1, 12,1, 15,1, 15,4, 15,8, 15,12, 15,15, 12,15, 8,15, 4,15, 1,15, 1,12, 1,8, 1,4, 1,1, 4,1}; //third circle
+	static int westWallSpiral[14] = {0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2};
+	static int northWallSpiral[14] = {7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0};
+
+	Position targetVoxel = Position((tile->getPosition().x * 16), (tile->getPosition().y * 16), tile->getPosition().z * 24);
+	std::vector<Position> _trajectory;
+	
+	int *spiralArray;
+	int spiralCount;
+
+	int minZ, maxZ;
+	bool minZfound = false, maxZfound = false;
+
+	if (part == MapData::O_OBJECT)
+	{
+		spiralArray = sliceObjectSpiral;
+		spiralCount = 41;
+	}
+	else
+	if (part == MapData::O_NORTHWALL)
+	{
+		spiralArray = northWallSpiral;
+		spiralCount = 7;
+	}
+	else
+	if (part == MapData::O_WESTWALL)
+	{
+		spiralArray = westWallSpiral;
+		spiralCount = 7;
+	}
+	else if (part == MapData::O_FLOOR)
+	{
+		spiralArray = sliceObjectSpiral;
+		spiralCount = 41;
+		minZfound = true; minZ=0;
+		maxZfound = true; maxZ=0;
+	}
+
+// find out height range
+
+	if (!minZfound)
+	{
+		for (int j = 1; j < 12; ++j)
+		{
+			if (minZfound) break;
+			for (int i = 0; i < spiralCount; ++i)
+			{
+				int tX = spiralArray[i*2];
+				int tY = spiralArray[i*2+1];
+				if (voxelCheck(Position(targetVoxel.x + tX, targetVoxel.y + tY, targetVoxel.z + j*2),0,true) == part) //bingo
+				{
+					if (!minZfound)
+					{
+						minZ = j*2;
+						minZfound = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if (!minZfound) return false;//empty object!!!
+
+	if (!maxZfound)
+	{
+		for (int j = 10; j >= 0; --j)
+		{
+			if (maxZfound) break;
+			for (int i = 0; i < spiralCount; ++i)
+			{
+				int tX = spiralArray[i*2];
+				int tY = spiralArray[i*2+1];
+				if (voxelCheck(Position(targetVoxel.x + tX, targetVoxel.y + tY, targetVoxel.z + j*2),0,true) == part) //bingo
+				{
+					if (!maxZfound)
+					{
+						maxZ = j*2;
+						maxZfound = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	if (!maxZfound) return false;//it's impossible to get there
+
+	if (minZ > maxZ) minZ = maxZ;
+	int rangeZ = maxZ - minZ;
+	int centerZ = (maxZ + minZ)/2;
+
+	for (int j = 0; j <= rangeZ; ++j)
+	{
+		scanVoxel->z = targetVoxel.z + centerZ + heightFromCenter[j];
+		for (int i = 0; i < spiralCount; ++i)
+		{
+			scanVoxel->x = targetVoxel.x + spiralArray[i*2];
+			scanVoxel->y = targetVoxel.y + spiralArray[i*2+1];
+			_trajectory.clear();
+			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, true);
+			if (test == part) //bingo
+			{
+				if (_trajectory.at(0).x/16 == scanVoxel->x/16 &&
+					_trajectory.at(0).y/16 == scanVoxel->y/16 &&
+					_trajectory.at(0).z/24 == scanVoxel->z/24)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
 
 
 /**
@@ -1328,7 +1445,8 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			//check for xy diagonal intermediate voxel step
 			if (doVoxelCheck)
 			{
-				cx = x;	cy = y;
+				cx = x;	cz = z; cy = y;
+				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit);
 				if (result != -1)
@@ -1351,8 +1469,9 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			//check for xz diagonal intermediate voxel step
 			if (doVoxelCheck)
 			{
-				cx = x;	cz = z;
+				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
+				if (swap_xy) std::swap(cx, cy);
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit);
 				if (result != -1)
 				{
