@@ -42,6 +42,7 @@ private:
 	static const double BASE_HEIGHT;
 	Surface *_surface;
 	SDL_Surface *_screen;
+	void *_misalignedPixelBuffer;
 	int _bpp;
 	double _scaleX, _scaleY;
 	Uint32 _flags;
