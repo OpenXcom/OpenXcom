@@ -19,7 +19,6 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
-#include <SDL_rotozoom.h>
 #include <SDL_endian.h>
 #include <limits.h>
 #include "../lodepng.h"
