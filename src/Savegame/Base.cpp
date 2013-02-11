@@ -143,18 +143,19 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 	}
 
 	_items->load(node["items"]);
-	// Some old saves have bad items, better
-	// get rid of them to avoid further bugs
+	// Some old saves have bad items, better get rid of them to avoid further bugs
+	// using the ugliest code ever (STL algorithms don't work with maps)
+	std::vector<std::string> remove;
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
 	{
-		if (std::find(_rule->getItemsList().begin(), _rule->getItemsList().end(), i->first) != _rule->getItemsList().end())
+		if (std::find(_rule->getItemsList().begin(), _rule->getItemsList().end(), i->first) == _rule->getItemsList().end())
 		{
-			i = _items->getContents()->erase(i);
+			remove.push_back(i->first);
 		}
-		else
-		{
-			++i;
-		}
+	}
+	for (std::vector<std::string>::iterator i = remove.begin(); i != remove.end(); ++i)
+	{
+		_items->removeItem(*i, 999);
 	}
 
 	node["scientists"] >> _scientists;
