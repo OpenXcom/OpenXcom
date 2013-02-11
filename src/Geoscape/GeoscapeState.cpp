@@ -98,6 +98,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <assert.h>
+
 namespace OpenXcom
 {
 
