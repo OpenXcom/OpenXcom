@@ -35,8 +35,11 @@
 #include "Scalers/hqx.h"
 
 
-#if (_MSC_VER >= 1400)
+#if (_MSC_VER >= 1400) || (defined(__MINGW32__) && defined(__SSE2__))
+
+#ifndef __SSE2__
 #define __SSE2__ true
+#endif
 // probably Visual Studio (or Intel C++ which should also work)
 #include <intrin.h>
 #endif
@@ -684,7 +687,15 @@ int Zoom::_zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int fli
 		{
 			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_SSE2(src, dst);
 			else if (dst->w == src->w * 4 && dst->h == src->h * 4) return  zoomSurface4X_SSE2(src, dst);
-		} 
+		} else
+		{
+			static bool complained = false;
+
+			if (!complained)
+			{
+				Log(LOG_ERROR) << "Misaligned surface buffers.";
+			}
+		}
 #endif
 
 // __WORDSIZE is defined on Linux, SIZE_MAX on Windows
