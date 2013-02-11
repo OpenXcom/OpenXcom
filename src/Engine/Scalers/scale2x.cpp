@@ -49,7 +49,6 @@
 #pragma optimize("a", on)
 #endif
 
-#pragma warning (default : 4235)
 
 /***************************************************************************/
 /* Scale2x C implementation */
