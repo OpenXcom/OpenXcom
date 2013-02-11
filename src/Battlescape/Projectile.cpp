@@ -150,24 +150,36 @@ int Projectile::calculateTrajectory(double accuracy)
 			}
 			else
 			{
-				_save->getTileEngine()->canTargetVoxel(&originVoxel, targetTile, &targetVoxel, bu);
+				_save->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &targetVoxel, bu);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			}
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
+			}
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
+			}
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+			}
 		}
 		else
 		{

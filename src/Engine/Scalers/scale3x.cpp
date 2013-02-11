@@ -40,7 +40,11 @@
 
 #include <assert.h>
 
+#define restrict
+#if defined(_MSC_VER)  && (_MSC_VER >= 1400) 
 #define restrict __restrict
+#endif
+
 #ifdef _WIN32
 #pragma optimize("a", on)
 #endif
