@@ -177,13 +177,22 @@ int Projectile::calculateTrajectory(double accuracy)
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 		if (test == 4 && !_trajectory.empty())
 		{
-			if (targetTile->getUnit() != 0) hitPos = targetTile->getUnit()->getPosition();
-			else Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			if (targetTile->getUnit() != 0)
+			{
+				hitPos = targetTile->getUnit()->getPosition();
+			}
+			else
+			{
+				hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			}
 		}
 		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
 		{
 			//skip already estimated hitPos
-			if (test != 4) hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			if (test != 4)
+			{
+				hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			}
 			if (hitPos != _action.target && _action.result == "")
 			{
 				if (test == 2)
