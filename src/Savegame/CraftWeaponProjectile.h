@@ -49,6 +49,8 @@ private:
 	bool _toBeRemoved;
 	bool _missed;
 
+	int _distanceCovered;
+	
 public:
 	CraftWeaponProjectile();
 	~CraftWeaponProjectile(void);

@@ -750,11 +750,11 @@ void DogfightState::move()
 		{
 			if (_currentDist < _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				distanceChange += 4;
+				distanceChange = 4;
 			}
 			else if (_currentDist > _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				distanceChange = 2;
+				distanceChange = -2;
 			}
 
 			// don't let the interceptor mystically push or pull its fired projectiles
@@ -823,9 +823,6 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
-				if (p->getGlobalType() == CWPGT_MISSILE && (_currentDist / 8) >= p->getRange())
-					p->setMissed(true);
-
 				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
 				{
 					p->remove();
