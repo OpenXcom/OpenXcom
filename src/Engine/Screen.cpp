@@ -34,8 +34,8 @@
 namespace OpenXcom
 {
 
-const double Screen::BASE_WIDTH = 320.0;
-const double Screen::BASE_HEIGHT = 200.0;
+int Screen::BaseWidth = 320;
+int Screen::BaseHeight = 200;
 
 /**
  * Initializes a new display screen for the game to render contents to.
@@ -48,7 +48,9 @@ const double Screen::BASE_HEIGHT = 200.0;
  */
 Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0)
 {
-	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, bpp);
+	Screen::BaseWidth = Options::getInt("baseXResolution");
+	Screen::BaseHeight = Options::getInt("baseYResolution");
+	_surface = new Surface((int)BaseWidth, (int)BaseHeight, 0, 0, bpp);
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (_fullscreen)
@@ -114,7 +116,7 @@ void Screen::handle(Action *action)
  */
 void Screen::flip()
 {
-	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
+	if (getWidth() != BaseWidth || getHeight() != BaseHeight)
 	{
 		Zoom::_zoomSurfaceY(_surface->getSurface(), _screen, 0, 0);
 	}
@@ -124,7 +126,7 @@ void Screen::flip()
 	}
 
 	// perform any requested palette update
-	if (_numColors)
+	if (_numColors && _screen->format->BitsPerPixel == 8)
 	{
 		if (SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
@@ -236,8 +238,8 @@ int Screen::getHeight() const
  */
 void Screen::setResolution(int width, int height)
 {
-	_scaleX = width / BASE_WIDTH;
-	_scaleY = height / BASE_HEIGHT;
+	_scaleX = width / (double)BaseWidth;
+	_scaleY = height / (double)BaseHeight;
 	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)

@@ -39,8 +39,9 @@ class Action;
 class Screen
 {
 private:
-	static const double BASE_WIDTH;
-	static const double BASE_HEIGHT;
+	static int BaseWidth;
+	static int BaseHeight;
+
 	Surface *_surface;
 	SDL_Surface *_screen;
 	void *_misalignedPixelBuffer;
