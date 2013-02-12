@@ -336,4 +336,24 @@ void Screen::screenshot(const std::string &filename) const
 	}
 }
 
+
+/** Check whether useHQXFilter is set in Options and a compatible resolution
+ *  has been selected.
+ */
+bool Screen::isHQXEnabled()
+{
+	int w = Options::getInt("displayWidth");
+	int h = Options::getInt("displayHeight");
+
+	if (Options::getBool("useHQXFilter") && (
+		(w == Screen::BASE_WIDTH * 2 && h == Screen::BASE_HEIGHT * 2) || 
+		(w == Screen::BASE_WIDTH * 3 && h == Screen::BASE_HEIGHT * 3) || 
+		(w == Screen::BASE_WIDTH * 4 && h == Screen::BASE_HEIGHT * 4)))
+	{
+		return true;
+	}
+
+	return false;
+}
+
 }
