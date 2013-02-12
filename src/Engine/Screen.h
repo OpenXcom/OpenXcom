@@ -82,6 +82,8 @@ public:
 	double getYScale() const;
 	/// Takes a screenshot.
 	void screenshot(const std::string &filename) const;
+	/// Checks whether HQX is requested and works for the selected resolution
+	static bool isHQXEnabled();
 };
 
 }

@@ -743,22 +743,35 @@ void DogfightState::move()
 	}
 	if(!_minimized)
 	{
+		int distanceChange = 0;
+
 		// Update distance
 		if(!_ufoBreakingOff)
 		{
 			if (_currentDist < _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				_currentDist += 4;
+				distanceChange = 4;
 			}
 			else if (_currentDist > _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				_currentDist -= 2;
+				distanceChange = -2;
+			}
+
+			// don't let the interceptor mystically push or pull its fired projectiles
+			for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
+			{
+				if ((*it)->getGlobalType() != CWPGT_BEAM && (*it)->getDirection() == D_UP) (*it)->setPosition((*it)->getPosition() + distanceChange);
 			}
 		}
 		else
 		{
-			_currentDist += 4;
+			distanceChange = 4;
+
+			// UFOs can try to outrun our missiles, don't adjust projectile positions here
+			// If UFOs ever fire anything but beams, those positions need to be adjust here though.
 		}
+
+		_currentDist += distanceChange; 
 
 		std::wstringstream ss;
 		ss << _currentDist;
@@ -810,9 +823,6 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
-				if (p->getGlobalType() == CWPGT_MISSILE && (_currentDist / 8) >= p->getRange())
-					p->setMissed(true);
-
 				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
 				{
 					p->remove();

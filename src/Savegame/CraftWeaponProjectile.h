@@ -40,7 +40,7 @@ private:
 	int _globalType;
 	int _speed;
 	int _direction;
-	int _currentPosition;
+	int _currentPosition; // relative to interceptor, apparently, which is a problem when the interceptor disengages while projectile is in flight
 	int _horizontalPosition;
 	int _state;
 	int _accuracy;
@@ -49,6 +49,8 @@ private:
 	bool _toBeRemoved;
 	bool _missed;
 
+	int _distanceCovered;
+	
 public:
 	CraftWeaponProjectile();
 	~CraftWeaponProjectile(void);
@@ -95,7 +97,6 @@ public:
 	void setRange(const int &range);
 	/// Gets maximum range of projectile.
 	int getRange() const;
-	
 };
 
 }
