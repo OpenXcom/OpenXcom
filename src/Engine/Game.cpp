@@ -210,6 +210,11 @@ void Game::run()
 							break;
 					}
 					break;
+				case SDL_VIDEORESIZE:
+					Options::setInt("displayWidth", _event.resize.w);
+					Options::setInt("displayHeight", _event.resize.h);
+					_screen->setResolution(_event.resize.w, _event.resize.h);
+					break;
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
 					if (Options::getBool("strafe"))

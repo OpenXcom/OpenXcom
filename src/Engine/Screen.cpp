@@ -49,7 +49,7 @@ const double Screen::BASE_HEIGHT = 200.0;
 Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0)
 {
 	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, bpp);
-	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
+	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (_fullscreen)
 	{
