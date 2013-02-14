@@ -227,6 +227,11 @@ void InventoryState::init()
 			ss5 << _game->getLanguage()->getString("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
 			_txtPStr->setText(ss5.str());
 		}
+		else
+		{
+			_txtPSkill->setText(L"");
+			_txtPStr->setText(L"");
+		}
 	}
 	updateStats();
 }
