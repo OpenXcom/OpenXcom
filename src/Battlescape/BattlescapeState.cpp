@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -76,6 +77,9 @@
 #include "BriefingState.h"
 #include "../Geoscape/DefeatState.h"
 #include "../Geoscape/VictoryState.h"
+#include "../lodepng.h"
+#include "../Engine/Logger.h"
+#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -1174,10 +1178,138 @@ void BattlescapeState::handle(Action *action)
 					updateSoldierInfo();
 				}
 			}
+			// voxel map dump
+			else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+			{
+				if (_save->getDebugMode())
+				{
+					SaveVoxelMap();
+				}
+			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
+			{
+				if (_save->getDebugMode())
+				{
+					SaveVoxelView();
+				}
+			}
 		}
 	}
 
 }
+
+void BattlescapeState::SaveVoxelView()
+{
+	static const unsigned char pal[24]={0,0,0, 192,192,192,  160,160,255,  255,160,160, 160,255,160, 255,0,255,  0,0,0, 255,255,255 };
+
+	BattleUnit * bu = _save->getSelectedUnit();
+	if (bu==0) return; //no unit selected
+	Position viewPos = _save->getSelectedUnit()->getPosition();
+	std::vector<Position> _trajectory;
+
+	double ang_x,ang_y;
+	std::stringstream ss;
+	std::vector<unsigned char> image;
+	int test;
+	Position originVoxel = Position(viewPos.x*16+8,
+		viewPos.y*16+8,
+		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getHeight()-1) );
+	Position targetVoxel,hitPos;
+	double dist;
+
+	double dir = ((float)bu->getDirection()+4)/4*M_PI;
+
+	image.clear();
+
+	for (int y = -256-32; y < 256-32; ++y)
+	{
+		ang_y = (((double)y)/640*M_PI+M_PI/2);
+		for (int x = -256; x < 256; ++x)
+		{
+			ang_x = ((double)x/1024)*M_PI+dir;
+
+			targetVoxel.x=originVoxel.x + (int)(-sin(ang_x)*256*sin(ang_y));
+			targetVoxel.y=originVoxel.y + (int)(cos(ang_x)*256*sin(ang_y));
+			targetVoxel.z=originVoxel.z + (int)(cos(ang_y)*256);
+
+			_trajectory.clear();
+			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu) +1;
+			if (test==0 || test==6)
+			{
+				dist=10000;
+			}
+			else
+			{
+				hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
+				dist=sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
+					+(hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
+					+(hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
+			}
+
+			if (dist>1000) dist=1000;
+			if (dist<1) dist=1;
+			dist=(1000-(log(dist))*140)/800;//140
+
+			image.push_back((int)((float)(pal[test*3+0])*dist));
+			image.push_back((int)((float)(pal[test*3+1])*dist));
+			image.push_back((int)((float)(pal[test*3+2])*dist));
+		}
+	}
+
+	int i = 0;
+	do
+	{
+		ss.str("");
+		ss << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
+		i++;
+	}
+	while (CrossPlatform::fileExists(ss.str()));
+
+
+	unsigned error = lodepng::encode(ss.str(), image, 512, 512, LCT_RGB);
+	if (error)
+	{
+		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+	}
+
+	return;
+}
+
+
+void BattlescapeState::SaveVoxelMap()
+{
+	std::stringstream ss;
+	std::vector<unsigned char> image;
+	static const unsigned char pal[24]={255,255,255, 192,192,192,  160,160,255,  255,160,160, 160,255,160, 255,0,255,  255,255,255, 255,255,255 };
+
+	for (int z = 0; z < _save->getHeight()*12; ++z)
+	{
+		image.clear();
+
+		for (int y = 0; y < _save->getLength()*16; ++y)
+		{
+			for (int x = 0; x < _save->getWidth()*16; ++x)
+			{
+				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
+				image.push_back(pal[test*3+0]);
+				image.push_back(pal[test*3+1]);
+				image.push_back(pal[test*3+2]);
+			}
+		}
+
+		ss.str("");
+		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
+
+		unsigned error = lodepng::encode(ss.str(), image, _save->getWidth()*16, _save->getLength()*16, LCT_RGB);
+		if (error)
+		{
+			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+		}
+	}
+	return;
+}
+
+
 
 /**
  * Adds a new popup window to the queue
