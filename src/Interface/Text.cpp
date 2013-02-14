@@ -20,6 +20,7 @@
 #include <sstream>
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
+#include "../Engine/Language.h"
 
 namespace OpenXcom
 {
@@ -51,6 +52,11 @@ Text::~Text()
  */
 std::wstring Text::formatFunding(int funds)
 {
+	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	struct lconv * lc;
+	lc=localeconv();
+	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
+
 	bool negative = false;
 	if (funds < 0)
 	{
@@ -63,7 +69,7 @@ std::wstring Text::formatFunding(int funds)
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
-		s.insert(spacer, L" ");
+		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
 	s.insert(0, L"$");
