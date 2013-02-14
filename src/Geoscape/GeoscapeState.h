@@ -68,8 +68,6 @@ public:
 	void init();
 	/// Runs the timer.
 	void think();
-	/// Converts an int into the given stringstream, grouped by thousands.
-	void static intToStringStreamGrouped(std::stringstream &out, int n);
 	/// Displays the game time/date. (+Funds)
 	void timeDisplay();
 	/// Advances the game timer.
