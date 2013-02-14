@@ -182,6 +182,8 @@ public:
 	/// Clears mouse-scrolling state
 	void clearMouseScrollingState();
 
+	void SaveVoxelMap();
+
 };
 
 }

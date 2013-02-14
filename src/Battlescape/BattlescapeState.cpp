@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -76,6 +77,8 @@
 #include "BriefingState.h"
 #include "../Geoscape/DefeatState.h"
 #include "../Geoscape/VictoryState.h"
+#include "../lodepng.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -1174,10 +1177,57 @@ void BattlescapeState::handle(Action *action)
 					updateSoldierInfo();
 				}
 			}
+			// voxel map dump
+			else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+			{
+				if (_save->getDebugMode())
+				{
+					SaveVoxelMap();
+				}
+			}
 		}
 	}
 
 }
+
+void BattlescapeState::SaveVoxelMap()
+{
+	std::stringstream ss;
+	std::vector<unsigned char> image;
+	static const unsigned char pal[21]={255,255,255, 128,128,128,  96,96,224,  224,96,96, 96,224,96, 128,0,0,  255,255,255  };
+
+	for (int z = 0; z < _save->getHeight()*12; ++z)
+	{
+		image.clear();
+
+		for (int y = 0; y < _save->getLength()*16; ++y)
+		{
+			for (int x = 0; x < _save->getWidth()*16; ++x)
+			{
+				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
+				image.push_back(pal[test*3+0]);
+				image.push_back(pal[test*3+1]);
+				image.push_back(pal[test*3+2]);
+			}
+		}
+
+		ss.str("");
+		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
+
+
+		unsigned error = lodepng::encode(ss.str(), image, _save->getWidth()*16, _save->getLength()*16, LCT_RGB);
+		if (error)
+		{
+			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+		}
+
+	}
+
+	return;
+
+
+}
+
 
 /**
  * Adds a new popup window to the queue

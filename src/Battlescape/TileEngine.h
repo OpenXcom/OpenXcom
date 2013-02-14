@@ -49,7 +49,6 @@ private:
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
-	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
 	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.
@@ -96,6 +95,7 @@ public:
 	int faceWindow(const Position &position);
 	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
+	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
 };
 
 }
