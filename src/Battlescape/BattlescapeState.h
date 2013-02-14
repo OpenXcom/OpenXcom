@@ -183,6 +183,7 @@ public:
 	void clearMouseScrollingState();
 
 	void SaveVoxelMap();
+	void SaveVoxelView();
 
 };
 
