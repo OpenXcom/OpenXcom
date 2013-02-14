@@ -145,12 +145,6 @@ void Screen::flip()
 void Screen::clear()
 {
 	_surface->clear();
-	SDL_Rect square;
-	square.x = 0;
-	square.y = 0;
-	square.w = getWidth();
-	square.h = getHeight();
-	SDL_FillRect(_screen, &square, 0);
 }
 
 /**
