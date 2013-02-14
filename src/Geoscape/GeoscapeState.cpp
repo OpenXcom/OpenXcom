@@ -464,26 +464,6 @@ void GeoscapeState::think()
 }
 
 /**
- * Converts an int into the given stringstream, grouped by thousands.
- * @param out The stringstream which takes the converted value.
- * @param n The int to be converted.
- */
-void GeoscapeState::intToStringStreamGrouped(std::stringstream &out, int n)
-{
-  if (n < 0)
-	{
-    out << "-";
-    intToStringStreamGrouped(out, -n);
-  }
-	else if (n < 1000) out << n;
-  else
-	{
-    intToStringStreamGrouped(out, n / 1000);
-    out << "." << std::setw(3) << std::setfill('0') << (n % 1000);
-  }
-}
-
-/**
  * Updates the Geoscape clock with the latest
  * game time and date in human-readable format. (+Funds)
  */
@@ -494,9 +474,7 @@ void GeoscapeState::timeDisplay()
 
 	if (_showFundsOnGeoscape)
 	{
-		std::stringstream ss6;
-		intToStringStreamGrouped(ss6,_game->getSavedGame()->getFunds());
-		_txtFunds->setText(Language::utf8ToWstr("$"+ss6.str()));
+		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
 	ss << std::setfill('0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
