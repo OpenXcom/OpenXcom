@@ -4310,6 +4310,7 @@ armors:
     sideArmor: 35
     rearArmor: 35
     underArmor: 35
+    movementType: 1
     drawingRoutine: 4
     damageModifier:
       - 0.9
@@ -4329,6 +4330,7 @@ armors:
     sideArmor: 40
     rearArmor: 40
     underArmor: 40
+    movementType: 1
     drawingRoutine: 4
     damageModifier:
       - 0.8
@@ -4348,6 +4350,7 @@ armors:
     sideArmor: 40
     rearArmor: 40
     underArmor: 40
+    movementType: 1
     drawingRoutine: 4
     damageModifier:
       - 0.7
@@ -5152,6 +5155,7 @@ units:
     loftemps: 3
     value: 20
     deathSound: 9
+    moveSound: 15
     intelligence: 6
     aggression: 1     
   - type: STR_ETHEREAL_LEADER
@@ -5175,6 +5179,7 @@ units:
     loftemps: 3
     value: 30
     deathSound: 9
+    moveSound: 15
     intelligence: 7
     aggression: 1    
   - type: STR_ETHEREAL_COMMANDER
@@ -5198,6 +5203,7 @@ units:
     loftemps: 3
     value: 40
     deathSound: 9
+    moveSound: 15
     intelligence: 8
     aggression: 1 
   - type: STR_CHRYSSALID_TERRORIST

@@ -95,7 +95,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtPsiStrength = new Text(120, 9, 8, 131);
 	_numPsiStrength = new Text(18, 9, 150, 131);
-	_barPsiStrength = new Bar(170, 5, 170, 134);
+	_barPsiStrength = new Bar(170, 5, 170, 132);
 
 	_txtPsiSkill = new Text(120, 9, 8, 141);
 	_numPsiSkill = new Text(18, 9, 150, 141);
