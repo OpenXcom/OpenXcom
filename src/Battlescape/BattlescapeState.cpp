@@ -1221,7 +1221,7 @@ void BattlescapeState::SaveVoxelView()
 
 	image.clear();
 
-	for (int y = -256-32; y < 256-32; ++y)
+	for (int y = -256+32; y < 256+32; ++y)
 	{
 		ang_y = (((double)y)/640*M_PI+M_PI/2);
 		for (int x = -256; x < 256; ++x)
