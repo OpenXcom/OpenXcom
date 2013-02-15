@@ -332,7 +332,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			{
 				std::stringstream s;
 				s << "SOUND/" << mus[i] << "." << exts[j];
-				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 				{
 					_musics[mus[i]] = new Music();
 					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
@@ -353,7 +353,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 				{
 					std::stringstream s;
 					s << "SOUND/" << mus[i] << ".mid";
-					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
+					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 					{
 						_musics[mus[i]] = new Music();
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
