@@ -39,8 +39,8 @@ class Action;
 class Screen
 {
 private:
-	static int BaseWidth;
-	static int BaseHeight;
+	static int BASE_WIDTH;
+	static int BASE_HEIGHT;
 
 	Surface *_surface;
 	SDL_Surface *_screen;
