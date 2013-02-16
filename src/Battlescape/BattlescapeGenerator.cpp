@@ -379,7 +379,7 @@ void BattlescapeGenerator::run()
 		else
 		{
 			// add items that are in the base
-			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end(); ++i)
+			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end();)
 			{
 				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
 				RuleItem *rule = _game->getRuleset()->getItem(i->first);
@@ -390,6 +390,11 @@ void BattlescapeGenerator::run()
 						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
 							_game->getRuleset()->getInventory("STR_GROUND"));
 					}
+					i = _base->getItems()->getContents()->erase(i);
+				}
+				else
+				{
+					++i;
 				}
 			}
 			// add items from crafts in base
