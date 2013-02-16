@@ -91,9 +91,13 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	node["hyperDetected"] >> _hyperDetected;
 	node["secondsRemaining"] >> _secondsRemaining;
 	node["inBattlescape"] >> _inBattlescape;
-	double lon, lat;
-	node["dest"]["lon"] >> lon;
-	node["dest"]["lat"] >> lat;
+	double lon = _lon;
+	double lat = _lat;
+	if (const YAML::Node *dest = node.FindValue("dest"))
+	{
+		node["dest"]["lon"] >> lon;
+		node["dest"]["lat"] >> lat;
+	}
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);
 	_dest->setLatitude(lat);
