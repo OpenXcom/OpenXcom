@@ -344,7 +344,7 @@ void BattlescapeGenerator::run()
 		// add soldiers that are in the craft or base
 		for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 		{
-			if ((*i)->getCraft() == _craft ||
+			if ((_craft != 0 && (*i)->getCraft() == _craft) ||
 				(_craft == 0 && (*i)->getWoundRecovery() == 0 && ((*i)->getCraft() == 0 || (*i)->getCraft()->getStatus() != "STR_OUT")))
 			{
 				unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
