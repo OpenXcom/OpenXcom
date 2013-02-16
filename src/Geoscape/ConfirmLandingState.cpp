@@ -149,8 +149,6 @@ void ConfirmLandingState::btnYesClick(Action *)
 		bgame->setMissionType("STR_TERROR_MISSION");
 		bgen.setTerrorSite(t);
 		bgen.setAlienRace(t->getAlienRace());
-
-		_game->pushState(new BriefingState(_game, _craft));
 	}
 	else if (b != 0)
 	{
