@@ -38,6 +38,7 @@
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -49,6 +50,9 @@ namespace OpenXcom
  */
 SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0)
 {
+	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
+	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(148, 16, 8, 176);
@@ -122,12 +126,14 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
+	if (allowChangeListValuesByMouseWheel) _lstItems->setAllowScrollOnArrowButtons(false);
 	_lstItems->onLeftArrowPress((ActionHandler)&SellState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&SellState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&SellState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&SellState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&SellState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&SellState::lstItemsRightArrowClick);
+	if (allowChangeListValuesByMouseWheel) _lstItems->onMousePress((ActionHandler)&SellState::lstItemsMousePress);
 
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
@@ -323,23 +329,7 @@ void SellState::lstItemsLeftArrowRelease(Action *action)
  */
 void SellState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		if (_qtys[_sel] < getQuantity())
-		{
-			int change = getQuantity() - _qtys[_sel];
-			_qtys[_sel] = getQuantity();
-			std::wstringstream ss, ss2;
-			ss << _qtys[_sel];
-			_lstItems->setCellText(_sel, 2, ss.str());
-			ss2 << 0;
-			_lstItems->setCellText(_sel, 1, ss2.str());
-			_total += getPrice() * change;
-			std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
-			s += Text::formatFunding(_total);
-			_txtSales->setText(s);
-		}
-	}
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
 }
 
 /**
@@ -367,21 +357,20 @@ void SellState::lstItemsRightArrowRelease(Action *action)
  */
 void SellState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+}
+
+/**
+ * Handles the mouse-wheels on the arrow-buttons.
+ * @param action Pointer to an action.
+ */
+void SellState::lstItemsMousePress(Action *action)
+{
+	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 	{
-		if (_qtys[_sel] > 0)
-		{
-			_total -= getPrice() * _qtys[_sel];
-			_qtys[_sel] = 0;
-			std::wstringstream ss, ss2;
-			ss << 0;
-			_lstItems->setCellText(_sel, 2, ss.str());
-			ss2 << getQuantity();
-			_lstItems->setCellText(_sel, 1, ss2.str());
-			std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
-			s += Text::formatFunding(_total);
-			_txtSales->setText(s);
-		}
+		_sel = _lstItems->getSelectedRow();
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
 	}
 }
 
@@ -431,43 +420,59 @@ int SellState::getQuantity()
 }
 
 /**
- * Increases the quantity of the selected item to sell.
+ * Increases the quantity of the selected item to sell by one.
  */
 void SellState::increase()
 {
-	if (_qtys[_sel] < getQuantity())
-	{
-		_qtys[_sel]++;
-		std::wstringstream ss, ss2;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 2, ss.str());
-		ss2 << getQuantity() - _qtys[_sel];
-		_lstItems->setCellText(_sel, 1, ss2.str());
-		_total += getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
-		s += Text::formatFunding(_total);
-		_txtSales->setText(s);
-	}
+	increase(1);
 }
 
 /**
- * Decreases the quantity of the selected item to sell.
+ * Increases the quantity of the selected item to sell by "change".
+ * @param change how much we want to add
+ */
+void SellState::increase(int change)
+{
+	if (0 >= change || getQuantity() <=_qtys[_sel]) return;
+	change = std::min(getQuantity() - _qtys[_sel], change);
+	_qtys[_sel] += change;
+	_total += getPrice() * change;
+	updateItemStrings();
+}
+
+/**
+ * Decreases the quantity of the selected item to sell by one.
  */
 void SellState::decrease()
 {
-	if (_qtys[_sel] > 0)
-	{
-		_qtys[_sel]--;
-		std::wstringstream ss, ss2;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 2, ss.str());
-		ss2 << getQuantity() - _qtys[_sel];
-		_lstItems->setCellText(_sel, 1, ss2.str());
-		_total -= getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
-		s += Text::formatFunding(_total);
-		_txtSales->setText(s);
-	}
+	decrease(1);
+}
+
+/**
+ * Decreases the quantity of the selected item to sell by "change".
+ */
+void SellState::decrease(int change)
+{
+	if (0 >= change || 0 >= _qtys[_sel]) return;
+	change = std::min(_qtys[_sel], change);
+	_qtys[_sel] -= change;
+	_total -= getPrice() * change;
+	updateItemStrings();
+}
+
+/**
+ * Updates the quantity-strings of the selected item.
+ */
+void SellState::updateItemStrings()
+{
+	std::wstringstream ss, ss2;
+	ss << _qtys[_sel];
+	_lstItems->setCellText(_sel, 2, ss.str());
+	ss2 << getQuantity() - _qtys[_sel];
+	_lstItems->setCellText(_sel, 1, ss2.str());
+	std::wstring s = _game->getLanguage()->getString("STR_VALUE_OF_SALES");
+	s += Text::formatFunding(_total);
+	_txtSales->setText(s);
 }
 
 }
