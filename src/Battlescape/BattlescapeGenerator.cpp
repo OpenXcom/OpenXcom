@@ -390,7 +390,9 @@ void BattlescapeGenerator::run()
 						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
 							_game->getRuleset()->getInventory("STR_GROUND"));
 					}
-					i = _base->getItems()->getContents()->erase(i);
+					std::map<std::string, int>::iterator tmp = i;
+					++i;
+					_base->getItems()->removeItem(tmp->first, tmp->second);
 				}
 				else
 				{

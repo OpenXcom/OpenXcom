@@ -77,11 +77,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
 		}
 	}
-	if (_unit->getTurnsExposed())
-	{
-		_unit->setTurnsExposed(0);
-		_parent->getSave()->updateExposedUnits();
-	}
 }
 
 /**
@@ -123,6 +118,11 @@ void UnitDieBState::think()
 		if (!_unit->getVisibleUnits()->empty())
 		{
 			_unit->clearVisibleUnits();
+		}
+		if (_unit->getTurnsExposed())
+		{
+			_unit->setTurnsExposed(0);
+			_parent->getSave()->updateExposedUnits();
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{
