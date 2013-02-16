@@ -498,16 +498,12 @@ bool Tile::damage(int part, int power)
 /**
  * Set a "virtual" explosive on this tile. We mark a tile this way to detonate it later.
  * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
- * The explosive power on the tile is some kind of moving average of the explosive rays that passes it.
+ * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that passes it.
  * @param power
  */
-void Tile::setExplosive(int power)
+void Tile::setExplosive(int power, bool force)
 {
-	if (_explosive)
-	{
-		_explosive = (_explosive + power) / 2;
-	}
-	else
+	if (force || _explosive < power)
 	{
 		_explosive = power;
 	}
@@ -548,6 +544,7 @@ bool Tile::detonate()
 				}
 			}
 		}
+
 		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
 		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
 		int flam = getFlammability();
@@ -818,6 +815,7 @@ std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
+
 
 /**
  * Set the marker color on this tile.
