@@ -69,6 +69,9 @@ void createDefault()
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
+	setBool("useOpenGL", false);
+	setString("useOpenGLShader", "Shaders/Curvature.OpenGL.shader");
+	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);

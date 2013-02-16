@@ -21,6 +21,7 @@
 
 #include <SDL.h>
 #include <string>
+#include "OpenGL.h"
 
 namespace OpenXcom
 {
@@ -38,10 +39,11 @@ class Action;
  */
 class Screen
 {
-private:
+public:
 	static int BASE_WIDTH;
 	static int BASE_HEIGHT;
 
+private:
 	Surface *_surface;
 	SDL_Surface *_screen;
 	void *_misalignedPixelBuffer;
@@ -52,13 +54,15 @@ private:
 	int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
 	SDL_Color deferredPalette[256];
 	int _numColors, _firstColor;
+	bool _pushPalette;
+	OpenGL glOutput;
 public:
 	/// Creates a new display screen with the specified resolution.
 	Screen(int width, int height, int bpp, bool fullscreen);
 	/// Cleans up the display screen.
 	~Screen();
 	/// Gets the internal buffer.
-	Surface *getSurface() const;
+	Surface *getSurface();
 	/// Handles keyboard events.
 	void handle(Action *action);
 	/// Renders the screen onto the game window.
@@ -85,6 +89,8 @@ public:
 	void screenshot(const std::string &filename) const;
 	/// Checks whether HQX is requested and works for the selected resolution
 	static bool isHQXEnabled();
+	/// Checks whether OpenGL output is requested
+	static bool isOpenGLEnabled();
 };
 
 }

@@ -29,6 +29,8 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "Zoom.h"
+#include "OpenGL.h"
+
 
 
 namespace OpenXcom
@@ -48,11 +50,11 @@ int Screen::BASE_HEIGHT = 200;
  */
 Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0)
 {
-	Screen::BASE_WIDTH = Options::getInt("baseXResolution");
-	Screen::BASE_HEIGHT = Options::getInt("baseYResolution");
 	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, bpp);
+	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
+	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
 	if (_fullscreen)
 	{
 		_flags |= SDL_FULLSCREEN;
@@ -75,8 +77,9 @@ Screen::~Screen()
  * contents that need to be shown will be blitted to this.
  * @return Pointer to the buffer surface.
  */
-Surface *Screen::getSurface() const
+Surface *Screen::getSurface()
 {
+	_pushPalette = true;
 	return _surface;
 }
 
@@ -118,7 +121,7 @@ void Screen::flip()
 {
 	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
 	{
-		Zoom::_zoomSurfaceY(_surface->getSurface(), _screen, 0, 0);
+		Zoom::flipWithZoom(_surface->getSurface(), _screen, &glOutput);
 	}
 	else
 	{
@@ -126,14 +129,17 @@ void Screen::flip()
 	}
 
 	// perform any requested palette update
-	if (_numColors && _screen->format->BitsPerPixel == 8)
+	if (_pushPalette && _numColors && _screen->format->BitsPerPixel == 8)
 	{
 		if (SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
 			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 		}
 		_numColors = 0;
+		_pushPalette = false;
 	}
+
+
 	
 	if (SDL_Flip(_screen) == -1)
 	{
@@ -247,6 +253,13 @@ void Screen::setResolution(int width, int height)
 		throw Exception(SDL_GetError());
 	}
 
+	if (isOpenGLEnabled()) 
+	{
+		glOutput.init(BASE_WIDTH, BASE_HEIGHT);
+		glOutput.linear = Options::getBool("useOpenGLSmoothing"); // setting from shader file will override this, though
+		glOutput.set_shader(CrossPlatform::getDataFile(Options::getString("useOpenGLShader")).c_str());
+	}
+
 	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
 	if (_screen->format->BitsPerPixel == 8)
 	{
@@ -356,6 +369,12 @@ bool Screen::isHQXEnabled()
 	}
 
 	return false;
+}
+
+
+bool Screen::isOpenGLEnabled()
+{
+	return Options::getBool("useOpenGL");
 }
 
 }
