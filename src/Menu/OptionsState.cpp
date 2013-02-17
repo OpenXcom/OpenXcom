@@ -382,8 +382,10 @@ void OptionsState::btnDisplayUpClick(Action *)
 		_resCurrent--;
 	}
 	std::wstringstream ssW, ssH;
-	ssW << _res[_resCurrent]->w;
-	ssH << _res[_resCurrent]->h;
+	ssW.clear();
+	ssH.clear();
+	ssW << (int)_res[_resCurrent]->w;
+	ssH << (int)_res[_resCurrent]->h;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
 }
@@ -405,8 +407,8 @@ void OptionsState::btnDisplayDownClick(Action *)
 		_resCurrent++;
 	}
 	std::wstringstream ssW, ssH;
-	ssW << _res[_resCurrent]->w;
-	ssH << _res[_resCurrent]->h;
+	ssW << (int)_res[_resCurrent]->w;
+	ssH << (int)_res[_resCurrent]->h;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
 }
