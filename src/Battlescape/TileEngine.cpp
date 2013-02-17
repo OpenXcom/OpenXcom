@@ -251,7 +251,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		if (direction%2)
 		{
 			y1 = 0;
-			y2 = MAX_VIEW_DISTANCE - x;
+			y2 = MAX_VIEW_DISTANCE;
 		}
 		else
 		{
