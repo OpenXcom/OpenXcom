@@ -1250,6 +1250,19 @@ void BattlescapeState::SaveVoxelView()
 			if (dist<1) dist=1;
 			dist=(1000-(log(dist))*140)/800;//140
 
+			if (hitPos.x%16==15)
+			{
+				dist*=0.9;
+			}
+			if (hitPos.y%16==15)
+			{
+				dist*=0.9;
+			}
+			if (hitPos.z%24==23)
+			{
+				dist*=0.9;
+			}
+
 			image.push_back((int)((float)(pal[test*3+0])*dist));
 			image.push_back((int)((float)(pal[test*3+1])*dist));
 			image.push_back((int)((float)(pal[test*3+2])*dist));
@@ -1291,9 +1304,18 @@ void BattlescapeState::SaveVoxelMap()
 			for (int x = 0; x < _save->getWidth()*16; ++x)
 			{
 				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
-				image.push_back(pal[test*3+0]);
-				image.push_back(pal[test*3+1]);
-				image.push_back(pal[test*3+2]);
+				float dist=1;
+				if (x%16==15)
+				{
+					dist*=0.9;
+				}
+				if (y%16==15)
+				{
+					dist*=0.9;
+				}
+				image.push_back((int)((float)pal[test*3+0]*dist));
+				image.push_back((int)((float)pal[test*3+1]*dist));
+				image.push_back((int)((float)pal[test*3+2]*dist));
 			}
 		}
 
