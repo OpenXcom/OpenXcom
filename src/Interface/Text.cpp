@@ -56,7 +56,7 @@ std::wstring Text::formatFunding(int funds)
 	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	struct lconv * lc;
 	lc=localeconv();
-	std::wstring thousands_sep = Language::cpToWstr(ispunct((unsigned char)*(lc->mon_thousands_sep)) ? lc->mon_decimal_point : " ");
+	std::wstring thousands_sep = Language::cpToWstr(ispunct((unsigned char)*(lc->mon_thousands_sep)) ? lc->mon_thousands_sep : " ");
 
 	bool negative = false;
 	if (funds < 0)
