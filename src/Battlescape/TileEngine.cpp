@@ -442,6 +442,10 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
 	if (otherUnit == excludeUnit) return false; //skip self
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
+	if (otherUnit->getArmor()->getSize() > 1)
+	{
+		unitRadius = 16;
+	}
 	int sliceTargets[10]={0,0, 0,unitRadius, 0,-unitRadius, unitRadius,0, -unitRadius,0};
  
 	if (!otherUnit->isOut())
@@ -1637,7 +1641,23 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 			{
 				int x = voxel.x%16;
 				int y = voxel.y%16;
-				int idx = (unit->getLoftemps() * 16) + y;
+				int part = 0;
+				if (unit->getArmor()->getSize() > 1)
+				{
+					if (tile->getPosition().x - unit->getPosition().x == 1)
+					{
+						part = 1;
+					}
+					if (tile->getPosition().y - unit->getPosition().y == 1)
+					{
+						part = 2;
+					}
+					if (tile->getPosition().x - unit->getPosition().x == 1 && tile->getPosition().y - unit->getPosition().y == 1)
+					{
+						part = 3;
+					}
+				}
+				int idx = (unit->getLoftemps(part) * 16) + y;
 				if (_voxelData->at(idx) & (1 << x))
 				{
 					return 4;
@@ -1655,7 +1675,23 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 				{
 					int x = voxel.x%16;
 					int y = voxel.y%16;
-					int idx = (unit->getLoftemps() * 16) + y;
+					int part = 0;
+					if (unit->getArmor()->getSize() > 1)
+					{
+						if (below->getPosition().x - unit->getPosition().x == 1)
+						{
+							part = 1;
+						}
+						if (below->getPosition().y - unit->getPosition().y == 1)
+						{
+							part = 2;
+						}
+						if (below->getPosition().x - unit->getPosition().x == 1 && below->getPosition().y - unit->getPosition().y == 1)
+						{
+							part = 3;
+						}
+					}
+					int idx = (unit->getLoftemps(part) * 16) + y;
 					if (_voxelData->at(idx) & (1 << x))
 					{
 						return 4;

@@ -51,7 +51,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_stats = *soldier->getCurrentStats();
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
-	_loftemps = soldier->getRules()->getLoftemps();
+	_loftempsSet = soldier->getRules()->getLoftempsSet();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = 0;
 	_moveSound = -1;  // this one is hardcoded
@@ -106,7 +106,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_stats = *unit->getStats();
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
-	_loftemps = unit->getLoftemps();
+	_loftempsSet = unit->getLoftempsSet();
 	_deathSound = unit->getDeathSound();
 	_aggroSound = unit->getAggroSound();
 	_moveSound = unit->getMoveSound();
@@ -1960,9 +1960,9 @@ int BattleUnit::getKneelHeight() const
   * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
   * @return The unit's line of fire template ID.
   */
-int BattleUnit::getLoftemps() const
+int BattleUnit::getLoftemps(int entry) const
 {
-	return _loftemps;
+	return _loftempsSet.at(entry);
 }
 
 /**
