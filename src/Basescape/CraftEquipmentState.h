@@ -49,6 +49,7 @@ private:
 	Base *_base;
 	size_t _craft;
 	std::vector<std::string> _items;
+	int _changeValueByMouseWheel;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
@@ -72,10 +73,16 @@ public:
 	void lstEquipmentRightArrowRelease(Action *action);
 	/// Handler for clicking a Move Right arrow in the list.
 	void lstEquipmentRightArrowClick(Action *action);
+	/// Handler for pressing-down a mouse-button in the list.
+	void lstEquipmentMousePress(Action *action);
 	/// Moves an item to the base.
 	void moveLeft();
+	/// Moves the given number of items to the base.
+	void moveLeft(int change);
 	/// Moves an item to the craft.
 	void moveRight();
+	/// Moves the given number of items to the craft.
+	void moveRight(int change);
 };
 
 }

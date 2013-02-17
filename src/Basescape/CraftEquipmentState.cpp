@@ -39,6 +39,7 @@
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -51,6 +52,9 @@ namespace OpenXcom
  */
 CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _base(base), _craft(craft)
 {
+	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
+	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(288, 16, 16, 176);
@@ -119,12 +123,14 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
+	if (allowChangeListValuesByMouseWheel) _lstEquipment->setAllowScrollOnArrowButtons(false);
 	_lstEquipment->onLeftArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowPress);
 	_lstEquipment->onLeftArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowRelease);
 	_lstEquipment->onLeftArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowClick);
 	_lstEquipment->onRightArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowPress);
 	_lstEquipment->onRightArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowRelease);
 	_lstEquipment->onRightArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowClick);
+	if (allowChangeListValuesByMouseWheel) _lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
 
 	int row = 0;
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
@@ -243,58 +249,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
  */
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		Craft *c = _base->getCrafts()->at(_craft);
-		RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
-		int cQty = 0;
-		if (item->isFixed())
-		{
-			cQty = c->getVehicleCount(_items[_sel]);
-			if (cQty > 0)
-			{
-				while (cQty > 0)
-				{
-					if(item->getClipSize() != -1)
-					{
-						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-						for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
-						{
-							if ((*i)->getRules() == item)
-							{
-								_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
-								delete (*i);
-								c->getVehicles()->erase(i);
-								break;
-							}
-						}
-					}
-					else
-					{
-						for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
-						{
-							delete (*i);
-							c->getVehicles()->erase(i);
-							break;
-						}
-					}
-					_base->getItems()->addItem(_items[_sel]);
-					cQty = c->getVehicleCount(_items[_sel]);
-				}
-				updateQuantity();
-			}
-		}
-		else
-		{
-			cQty = c->getItems()->getItem(_items[_sel]);
-			if (cQty > 0)
-			{
-				_base->getItems()->addItem(_items[_sel], cQty);
-				c->getItems()->removeItem(_items[_sel], cQty);
-				updateQuantity();
-			}
-		}
-	}
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeft(INT_MAX);
 }
 
 /**
@@ -322,62 +277,20 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
  */
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRight(INT_MAX);
+}
+
+/**
+ * Handles the mouse-wheels on the arrow-buttons.
+ * @param action Pointer to an action.
+ */
+void CraftEquipmentState::lstEquipmentMousePress(Action *action)
+{
+	if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 	{
-		Craft *c = _base->getCrafts()->at(_craft);
-		RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
-		int bqty = _base->getItems()->getItem(_items[_sel]);
-		if (bqty > 0)
-		{
-			// Do we need to convert item to vehicle?
-			if (item->isFixed())
-			{
-				// Check if there's enough room
-				int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
-				if (room > 0)
-				{
-					if(item->getClipSize() != -1)
-					{
-						RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-						int baqty = _base->getItems()->getItem(ammo->getType());
-						int vehiclesCount = std::min(std::min(bqty, room), baqty);
-						if (vehiclesCount > 0)
-						{
-							int newAmmoPerVehicle = std::min(baqty / vehiclesCount, ammo->getClipSize());;
-							int remainder = baqty - (vehiclesCount * newAmmoPerVehicle);
-							if (ammo->getClipSize() == newAmmoPerVehicle) remainder = 0;
-							int newAmmo;
-							for (int i=0; i < vehiclesCount; ++i)
-							{
-								newAmmo = newAmmoPerVehicle;
-								if (i<remainder) ++newAmmo;
-								c->getVehicles()->push_back(new Vehicle(item, newAmmo));
-								_base->getItems()->removeItem(ammo->getType(), newAmmo);
-								_base->getItems()->removeItem(_items[_sel]);
-							}
-						}
-					}
-					else
-					{
-						int vehiclesCount = std::min(bqty, room);
-						if (vehiclesCount > 0)
-						{
-							for (int i=0; i < vehiclesCount; ++i)
-							{
-								c->getVehicles()->push_back(new Vehicle(item, 255));
-								_base->getItems()->removeItem(_items[_sel]);
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				_base->getItems()->removeItem(_items[_sel],bqty);
-				c->getItems()->addItem(_items[_sel],bqty);
-			}
-			updateQuantity();
-		}
+		_sel = _lstEquipment->getSelectedRow();
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moveRight(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) moveLeft(_changeValueByMouseWheel);
 	}
 }
 
@@ -436,58 +349,65 @@ void CraftEquipmentState::updateQuantity()
  */
 void CraftEquipmentState::moveLeft()
 {
+	moveLeft(1);
+}
+
+/**
+ * Moves the given number of items (selected) to the base.
+ */
+void CraftEquipmentState::moveLeft(int change)
+{
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
 	int cQty = 0;
+	if (item->isFixed()) cQty = c->getVehicleCount(_items[_sel]);
+	else cQty = c->getItems()->getItem(_items[_sel]);
+	if (0 >= change || 0 >= cQty) return;
+	change = std::min(cQty, change);
+	// Convert vehicle to item
 	if (item->isFixed())
 	{
-		cQty = c->getVehicleCount(_items[_sel]);
-	}
-	else
-	{
-		cQty = c->getItems()->getItem(_items[_sel]);
-	}
-	if (cQty > 0)
-	{
-		RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
-		// Convert vehicle to item
-		if (item->isFixed())
+		if(item->getClipSize() != -1)
 		{
-			if(item->getClipSize() != -1)
+			// First we remove all vehicles because we want to redistribute the ammo
+			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
 			{
-				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-				for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
+				if ((*i)->getRules() == item)
 				{
-					if ((*i)->getRules() == item)
-					{
-						_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
-						delete (*i);
-						c->getVehicles()->erase(i);
-						break;
-					}
+					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
+					delete (*i);
+					c->getVehicles()->erase(i);
+					i = c->getVehicles()->begin(); // Since we erased the current iterator, we have to start over (to avoid a crash)
 				}
+				else ++i;
 			}
-			else
-			{
-				for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); ++i)
-				{
-					if ((*i)->getRules() == item)
-					{
-						delete (*i);
-						c->getVehicles()->erase(i);
-						break;
-					}
-				}
-			}
-			_base->getItems()->addItem(_items[_sel]);
+			_base->getItems()->addItem(_items[_sel], cQty);
+			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
+			if (cQty > change) moveRight(cQty - change);
 		}
 		else
 		{
-			_base->getItems()->addItem(_items[_sel]);
-			c->getItems()->removeItem(_items[_sel]);
+			_base->getItems()->addItem(_items[_sel], change);
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			{
+				if ((*i)->getRules() == item)
+				{
+					delete (*i);
+					c->getVehicles()->erase(i);
+					if (0 >= --change) break;
+					i = c->getVehicles()->begin(); // Since we erased the current iterator, we have to start over (to avoid a crash)
+				}
+				else ++i;
+			}
 		}
-		updateQuantity();
 	}
+	else
+	{
+		c->getItems()->removeItem(_items[_sel], change);
+		_base->getItems()->addItem(_items[_sel], change);
+	}
+	updateQuantity();
 }
 
 /**
@@ -495,48 +415,76 @@ void CraftEquipmentState::moveLeft()
  */
 void CraftEquipmentState::moveRight()
 {
+	moveRight(1);
+}
+
+/**
+ * Moves the given number of items (selected) to the craft.
+ */
+void CraftEquipmentState::moveRight(int change)
+{
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
-	if (_base->getItems()->getItem(_items[_sel]) > 0)
+	int bqty = _base->getItems()->getItem(_items[_sel]);
+	if (0 >= change || 0 >= bqty) return;
+	change = std::min(bqty, change);
+	// Do we need to convert item to vehicle?
+	if (item->isFixed())
 	{
-		// Convert item to vehicle
-		if (item->isFixed())
+		// Check if there's enough room
+		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
+		if (room > 0)
 		{
-			// Check if there's enough room
-			if (c->getNumVehicles() < c->getRules()->getVehicles() && c->getSpaceAvailable() >= 4)
+			change = std::min(room, change);
+			if(item->getClipSize() != -1)
 			{
-				if(item->getClipSize() != -1)
+				// We want to redistribute all the available ammo among the vehicles,
+				// so first we note the total number of vehicles we want in the craft
+				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
+				int newVehiclesCount = oldVehiclesCount + change;
+				// ...and we move back all of this vehicle-type to the base.
+				if (0 < oldVehiclesCount) moveLeft(INT_MAX);
+				// And now let's see if we can add the total number of vehicles.
+				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
+				int canBeAdded = std::min(newVehiclesCount, baqty);
+				if (canBeAdded > 0)
 				{
-					RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-					int qty = _base->getItems()->getItem(ammo->getType());
-					if (qty == 0)
+					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+					int remainder = 0;
+					if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
+					int newAmmo;
+					for (int i=0; i < canBeAdded; ++i)
 					{
-						LocalizedText msg(tr("STR_NOT_ENOUGH_ammotype_TO_ARM_HWP").arg(tr(ammo->getType())));
-						_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
-						_timerRight->stop();
-					}
-					else
-					{
-						int newAmmo = std::min(qty, ammo->getClipSize());
+						newAmmo = newAmmoPerVehicle;
+						if (i<remainder) ++newAmmo;
 						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
 						_base->getItems()->removeItem(ammo->getType(), newAmmo);
 						_base->getItems()->removeItem(_items[_sel]);
 					}
 				}
-				else
+				if (oldVehiclesCount >= canBeAdded)
+				{
+					// So we haven't managed to increase the count of vehicles because of the ammo
+					_timerRight->stop();
+					LocalizedText msg(tr("STR_NOT_ENOUGH_ammotype_TO_ARM_HWP").arg(tr(ammo->getType())));
+					_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+				}
+			}
+			else
+				for (int i=0; i < change; ++i)
 				{
 					c->getVehicles()->push_back(new Vehicle(item, 255));
 					_base->getItems()->removeItem(_items[_sel]);
 				}
-			}
 		}
-		else
-		{
-			_base->getItems()->removeItem(_items[_sel]);
-			c->getItems()->addItem(_items[_sel]);
-		}
-		updateQuantity();
 	}
+	else
+	{
+		_base->getItems()->removeItem(_items[_sel],change);
+		c->getItems()->addItem(_items[_sel],change);
+	}
+	updateQuantity();
 }
 
 }

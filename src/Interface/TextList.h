@@ -56,6 +56,8 @@ private:
 	int _arrowPos;
 	ArrowOrientation _arrowType;
 	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
+	bool _allowScrollOnArrowButtons;
+	int _arrowsLeftEdge, _arrowsRightEdge;
 
 	/// Updates the arrow buttons.
 	void updateArrows();
@@ -64,6 +66,12 @@ public:
 	TextList(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text list.
 	~TextList();
+	/// Sets the allowScrollOnArrowButtons.
+	void setAllowScrollOnArrowButtons(bool value);
+	/// Gets the arrowsLeftEdge.
+	int getArrowsLeftEdge();
+	/// Gets the arrowsRightEdge.
+	int getArrowsRightEdge();
 	/// Unpresses the surface.
 	void unpress(State *state);
 	/// Sets the text color of a certain cell.
