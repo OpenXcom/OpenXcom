@@ -18,6 +18,7 @@
  */
 #include "CraftEquipmentState.h"
 #include <sstream>
+#include <climits>
 #include <algorithm>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
