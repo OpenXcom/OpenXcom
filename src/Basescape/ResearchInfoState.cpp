@@ -34,8 +34,10 @@
 #include "../Interface/ArrowButton.h"
 #include "../Engine/Timer.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
 
 #include <sstream>
+#include <limits>
 
 namespace OpenXcom
 {
@@ -67,12 +69,17 @@ ResearchInfoState::ResearchInfoState(Game *game, Base *base, ResearchProject * p
  */
 void ResearchInfoState::buildUi ()
 {
+	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+
 	int width = 230;
 	int height = 140;
 	int max_width = 320;
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
+
+	_surface = new InteractiveSurface(width, height, start_x, start_y);
+	_surface->onMouseClick((ActionHandler)&ResearchInfoState::handleWheel, 0);
 
 	int button_x_border = 16;
 	int button_y_border = 10;
@@ -93,6 +100,7 @@ void ResearchInfoState::buildUi ()
 	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
 
+	add(_surface);
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -181,6 +189,16 @@ void ResearchInfoState::SetAssignedScientist()
 }
 
 /**
+ * Increases or decreases the scientists according the mouse-wheel used.
+ * @param action a Pointer to an Action
+ */
+void ResearchInfoState::handleWheel(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) more(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) less(_changeValueByMouseWheel);
+}
+
+/**
  * Start the timeMore timer
  * @param action a Pointer to an Action
  */
@@ -205,18 +223,7 @@ void ResearchInfoState::moreRelease(Action *action)
 void ResearchInfoState::moreClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		int assigned = _project->getAssigned ();
-		int freeScientist = _base->getAvailableScientists();
-		int freeSpaceLab = _base->getFreeLaboratories();
-		if (freeScientist > 0 && freeSpaceLab > 0)
-		{
-			int change=std::min(freeScientist, freeSpaceLab);
-			_project->setAssigned(assigned+=change);
-			_base->setScientists(_base->getScientists()-change);
-			SetAssignedScientist();
-		}
-	}
+		more(std::numeric_limits<int>::max());
 }
 
 /**
@@ -244,15 +251,7 @@ void ResearchInfoState::lessRelease(Action *action)
 void ResearchInfoState::lessClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		int assigned = _project->getAssigned();
-		if (assigned > 0)
-		{
-			_project->setAssigned(0);
-			_base->setScientists(_base->getScientists()+assigned);
-			SetAssignedScientist();
-		}
-	}
+		less(std::numeric_limits<int>::max());
 }
 
 /**
@@ -260,27 +259,48 @@ void ResearchInfoState::lessClick(Action *action)
  */
 void ResearchInfoState::more()
 {
-	int assigned = _project->getAssigned ();
+	more(1);
+}
+
+/**
+ * Add given number of scientists to the project if possible
+ * @param change how much we want to add
+ */
+void ResearchInfoState::more(int change)
+{
+	if (0 >= change) return;
 	int freeScientist = _base->getAvailableScientists();
 	int freeSpaceLab = _base->getFreeLaboratories();
-	if(freeScientist > 0 && freeSpaceLab > 0)
+	if (freeScientist > 0 && freeSpaceLab > 0)
 	{
-		_project->setAssigned(++assigned);
-		_base->setScientists(_base->getScientists()-1);
+		change = std::min(std::min(freeScientist, freeSpaceLab), change);
+		_project->setAssigned(_project->getAssigned()+change);
+		_base->setScientists(_base->getScientists()-change);
 		SetAssignedScientist();
 	}
 }
 
 /**
- * Remove one scientist to the project if possible
+ * Remove one scientist from the project if possible
  */
 void ResearchInfoState::less()
 {
-	int assigned = _project->getAssigned ();
+	less(1);
+}
+
+/**
+ * Remove the given number of scientists from the project if possible
+ * @param change how much we want to subtract
+ */
+void ResearchInfoState::less(int change)
+{
+	if (0 >= change) return;
+	int assigned = _project->getAssigned();
 	if (assigned > 0)
 	{
-		_project->setAssigned(--assigned);
-		_base->setScientists(_base->getScientists()+1);
+		change = std::min(assigned, change);
+		_project->setAssigned(assigned-change);
+		_base->setScientists(_base->getScientists()+change);
 		SetAssignedScientist();
 	}
 }

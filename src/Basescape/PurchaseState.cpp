@@ -40,6 +40,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -51,6 +52,9 @@ namespace OpenXcom
  */
 PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
+	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
+	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(148, 16, 8, 176);
@@ -121,12 +125,14 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
+	if (allowChangeListValuesByMouseWheel) _lstItems->setAllowScrollOnArrowButtons(false);
 	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
+	if (allowChangeListValuesByMouseWheel) _lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
 	_qtys.push_back(0);
 	std::wstringstream ss;
@@ -294,50 +300,7 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
-		int canBeBought = 0;
-		if (_sel <= 2)
-		{
-			// Personnel count
-			int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
-			canBeBought = std::min(maxByMoney, maxByQuarters);
-			if (0 < canBeBought) _pQty += canBeBought;
-		}
-		else if (_sel >= 3 && _sel < 3 + _crafts.size())
-		{
-			// Craft count
-			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
-			canBeBought = std::min(maxByMoney, maxByHangars);
-			if (0 < canBeBought) _cQty += canBeBought;
-		}
-		else if (_sel >= 3 + _crafts.size())
-		{
-			// Item count
-			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
-			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
-			if (0 < freeStores)
-			{
-				int maxByStores;
-				if (0 == storesNeededPerItem) maxByStores = INT_MAX;
-				else maxByStores = floor(freeStores / storesNeededPerItem);
-				canBeBought = std::min(maxByMoney, maxByStores);
-				if (0 < canBeBought) _iQty += ((float)(canBeBought)) * storesNeededPerItem;
-			}
-		}
-		if (0 < canBeBought)
-		{
-			_qtys[_sel] += canBeBought;
-			std::wstringstream ss;
-			ss << _qtys[_sel];
-			_lstItems->setCellText(_sel, 3, ss.str());
-			_total += getPrice() * canBeBought;
-			std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-			s += L'\x01' + Text::formatFunding(_total);
-			_txtPurchases->setText(s);
-		}
-	}
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
 }
 
 /**
@@ -365,34 +328,20 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+}
+
+/**
+ * Handles the mouse-wheels on the arrow-buttons.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsMousePress(Action *action)
+{
+	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 	{
-		if (_qtys[_sel] > 0)
-		{
-			// Personnel count
-			if (_sel <= 2)
-			{
-				_pQty -= _qtys[_sel];
-			}
-			// Craft count
-			else if (_sel >= 3 && _sel < 3 + _crafts.size())
-			{
-				_cQty -= _qtys[_sel];
-			}
-			// Item count
-			else
-			{
-				_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(_qtys[_sel]));
-			}
-			_total -= getPrice() * _qtys[_sel];
-			std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-			s += L'\x01' + Text::formatFunding(_total);
-			_txtPurchases->setText(s);
-			_qtys[_sel] = 0;
-			std::wstringstream ss;
-			ss << _qtys[_sel];
-			_lstItems->setCellText(_sel, 3, ss.str());
-		}
+		_sel = _lstItems->getSelectedRow();
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
 	}
 }
 
@@ -429,10 +378,20 @@ int PurchaseState::getPrice()
 }
 
 /**
- * Increases the quantity of the selected item to buy.
+ * Increases the quantity of the selected item to buy by one.
  */
 void PurchaseState::increase()
 {
+	increase(1);
+}
+
+/**
+ * Increases the quantity of the selected item to buy by "change".
+ * @param change how much we want to add
+ */
+void PurchaseState::increase(int change)
+{
+	if (0 >= change) return;
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
 		_timerInc->stop();
@@ -455,63 +414,77 @@ void PurchaseState::increase()
 	}
 	else
 	{
-		// Personnel count
+		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
+		change = std::min(maxByMoney, change);
 		if (_sel <= 2)
 		{
-			_pQty++;
+			// Personnel count
+			int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
+			change = std::min(maxByQuarters, change);
+			_pQty += change;
 		}
-		// Craft count
 		else if (_sel >= 3 && _sel < 3 + _crafts.size())
 		{
-			_cQty++;
+			// Craft count
+			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
+			change = std::min(maxByHangars, change);
+			_cQty += change;
 		}
-		// Item count
-		else
+		else if (_sel >= 3 + _crafts.size())
 		{
-			_iQty += _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
+			// Item count
+			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
+			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
+			int maxByStores;
+			if (0 == storesNeededPerItem) maxByStores = INT_MAX;
+			else maxByStores = floor(freeStores / storesNeededPerItem);
+			change = std::min(maxByStores, change);
+			_iQty += ((float)(change)) * storesNeededPerItem;
 		}
-		_qtys[_sel]++;
-		std::wstringstream ss;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 3, ss.str());
-		_total += getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-		s += L'\x01' + Text::formatFunding(_total);
-		_txtPurchases->setText(s);
+		_qtys[_sel] += change;
+		_total += getPrice() * change;
+		updateItemStrings();
 	}
 }
 
 /**
- * Decreases the quantity of the selected item to buy.
+ * Decreases the quantity of the selected item to buy by one.
  */
 void PurchaseState::decrease()
 {
-	if (_qtys[_sel] > 0)
-	{
-		// Personnel count
-		if (_sel <= 2)
-		{
-			_pQty--;
-		}
-		// Craft count
-		else if (_sel >= 3 && _sel < 3 + _crafts.size())
-		{
-			_cQty--;
-		}
-		// Item count
-		else
-		{
-			_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
-		}
-		_qtys[_sel]--;
-		std::wstringstream ss;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 3, ss.str());
-		_total -= getPrice();
-		std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
-		s += L'\x01' + Text::formatFunding(_total);
-		_txtPurchases->setText(s);
-	}
+	decrease(1);
+}
+
+/**
+ * Decreases the quantity of the selected item to buy by "change".
+ * @param change how much we want to add
+ */
+void PurchaseState::decrease(int change)
+{
+	if (0 >= change || 0 >= _qtys[_sel]) return;
+	change = std::min(_qtys[_sel], change);
+	// Personnel count
+	if (_sel <= 2) _pQty -= change;
+	// Craft count
+	else if (_sel >= 3 && _sel < 3 + _crafts.size()) _cQty -= change;
+	// Item count
+	else _iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(change));
+	_qtys[_sel] -= change;
+	_total -= getPrice() * change;
+	updateItemStrings();
+}
+
+/**
+ * Updates the quantity-strings of the selected item.
+ */
+void PurchaseState::updateItemStrings()
+{
+	std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
+	s += L'\x01' + Text::formatFunding(_total);
+	_txtPurchases->setText(s);
+	std::wstringstream ss;
+	ss << _qtys[_sel];
+	_lstItems->setCellText(_sel, 3, ss.str());
 }
 
 }

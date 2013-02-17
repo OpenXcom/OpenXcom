@@ -54,6 +54,7 @@ private:
 	unsigned int _sel;
 	int _total, _sOffset, _eOffset;
 	Timer *_timerInc, *_timerDec;
+	int _changeValueByMouseWheel;
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
@@ -81,10 +82,18 @@ public:
 	void lstItemsRightArrowRelease(Action *action);
 	/// Handler for clicking a Decrease arrow in the list.
 	void lstItemsRightArrowClick(Action *action);
-	/// Increases the quantity of an item.
+	/// Handler for pressing-down a mouse-button in the list.
+	void lstItemsMousePress(Action *action);
+	/// Increases the quantity of an item by one.
 	void increase();
-	/// Decreases the quantity of an item.
+	/// Increases the quantity of an item by the given value.
+	void increase(int change);
+	/// Decreases the quantity of an item by one.
 	void decrease();
+	/// Decreases the quantity of an item by the given value.
+	void decrease(int change);
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 };
 
 }

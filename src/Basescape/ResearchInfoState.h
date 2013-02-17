@@ -35,6 +35,7 @@ class ResearchState;
 class NewResearchListState;
 class ArrowButton;
 class Timer;
+class InteractiveSurface;
 
 /**
    Window which allow to change number of assigned scientist to a project.
@@ -54,6 +55,8 @@ private:
 	RuleResearch * _rule;
 	void buildUi ();
 	Timer *_timerMore, *_timerLess;
+	InteractiveSurface *_surface;
+	int _changeValueByMouseWheel;
 public:
 	/// Creates the ResearchProject state.
 	ResearchInfoState(Game *game, Base *base, RuleResearch * rule);
@@ -62,8 +65,14 @@ public:
 	void btnOkClick(Action *action);
 	/// Function called every time the _timerMore timer is triggered.
 	void more();
+	/// Add given number of scientists to the project if possible
+	void more(int change);
 	/// Function called every time the _timerLess timer is triggered.
 	void less();
+	/// Remove the given number of scientists from the project if possible
+	void less(int change);
+	/// Handler for using the mouse wheel.
+	void handleWheel(Action *action);
 	/// Handler for pressing the More button.
 	void morePress(Action *action);
 	/// Handler for releasing the More button.
