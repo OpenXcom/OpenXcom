@@ -153,6 +153,7 @@ void UnitWalkBState::think()
 			// check for reaction fire
 			if (_terrain->checkReactionFire(_unit, &action))
 			{
+				_parent->popState();
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 				// unit got fired upon - stop walking
 				_pf->abortPath();
