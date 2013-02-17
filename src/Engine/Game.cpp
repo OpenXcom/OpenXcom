@@ -109,7 +109,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	SDL_EnableUNICODE(1);
 
 	// Create display
-	int bpp = Screen::isHQXEnabled() ? 32 : 8;
+	Screen::BASE_WIDTH = Options::getInt("baseXResolution");
+	Screen::BASE_HEIGHT = Options::getInt("baseYResolution");
+	int bpp = (Screen::isHQXEnabled() || Screen::isOpenGLEnabled()) ? 32 : 8;
 	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), bpp, Options::getBool("fullscreen"));
 
 	// Create cursor
