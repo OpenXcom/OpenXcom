@@ -64,6 +64,8 @@ ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, Production
 */
 void ManufactureInfoState::buildUi()
 {
+	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+
 	_screen = false;
 	int width = 320;
 	int height = 170;
@@ -96,6 +98,14 @@ void ManufactureInfoState::buildUi()
 	_txtTodo = new Text(button_width, 2*button_height, width - 5*button_x_border, start_y + 4 * button_height);
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
+	_surface1 = new InteractiveSurface((_btnEngineerUp->getX()+_btnEngineerUp->getWidth()+_txtUnitToProduce->getX()) / 2, height, start_x, start_y);
+	_surface1->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelEngineer, 0);
+
+	_surface2 = new InteractiveSurface(_surface1->getWidth(), height, start_x + _surface1->getWidth(), start_y);
+	_surface2->onMouseClick((ActionHandler)&ManufactureInfoState::handleWheelUnit, 0);
+
+	add(_surface1);
+	add(_surface2);
 	add(_window);
 	add(_txtTitle);
 	add(_txtAvailableEngineer);
@@ -254,6 +264,24 @@ void ManufactureInfoState::setAssignedEngineer()
 }
 
 /**
+ * Add given number of engineers to the project if possible
+ * @param change how much we want to add
+*/
+void ManufactureInfoState::moreEngineer(int change)
+{
+	if (0 >= change) return;
+	int availableEngineer = _base->getAvailableEngineers();
+	int availableWorkSpace = _base->getFreeWorkshops();
+	if (availableEngineer > 0 && availableWorkSpace > 0)
+	{
+		change = std::min(std::min(availableEngineer, availableWorkSpace), change);
+		_production->setAssignedEngineers(_production->getAssignedEngineers()+change);
+		_base->setEngineers(_base->getEngineers()-change);
+		setAssignedEngineer();
+	}
+}
+
+/**
  * Start the timerMoreEngineer
  * @param action a pointer to an Action
 */
@@ -277,18 +305,23 @@ void ManufactureInfoState::moreEngineerRelease(Action * action)
 */
 void ManufactureInfoState::moreEngineerClick(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moreEngineer(std::numeric_limits<int>::max());
+}
+
+/**
+ * Remove the given number of engineers from the project if possible
+ * @param change how much we want to subtract
+*/
+void ManufactureInfoState::lessEngineer(int change)
+{
+	if (0 >= change) return;
+	int assigned = _production->getAssignedEngineers();
+	if(assigned > 0)
 	{
-		int assigned = _production->getAssignedEngineers();
-		int availableEngineer = _base->getAvailableEngineers();
-		int availableWorkSpace = _base->getFreeWorkshops();
-		if (availableEngineer > 0 && availableWorkSpace > 0)
-		{
-			int change=std::min(availableEngineer, availableWorkSpace);
-			_production->setAssignedEngineers(assigned+=change);
-			_base->setEngineers(_base->getEngineers()-change);
-			setAssignedEngineer();
-		}
+		change = std::min(assigned, change);
+		_production->setAssignedEngineers(assigned-change);
+		_base->setEngineers(_base->getEngineers()+change);
+		setAssignedEngineer();
 	}
 }
 
@@ -316,15 +349,29 @@ void ManufactureInfoState::lessEngineerRelease(Action * action)
 */
 void ManufactureInfoState::lessEngineerClick(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessEngineer(std::numeric_limits<int>::max());
+}
+
+/**
+ * Add given number of units to produce to the project if possible
+ * @param change how much we want to add
+*/
+void ManufactureInfoState::moreUnit(int change)
+{
+	if (0 >= change) return;
+	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
-		int assigned = _production->getAssignedEngineers();
-		if (assigned > 0)
-		{
-			_production->setAssignedEngineers(0);
-			_base->setEngineers(_base->getEngineers()+assigned);
-			setAssignedEngineer();
-		}
+		_timerMoreUnit->stop();
+		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+	}
+	else
+	{
+		int units = _production->getAmountTotal();
+		change = std::min(std::numeric_limits<int>::max()-units, change);
+		if (_production->getRules()->getCategory() == "STR_CRAFT")
+			change = std::min(_base->getAvailableHangars() - _base->getUsedHangars(), change);
+		_production->setAmountTotal(units+change);
+		setAssignedEngineer();
 	}
 }
 
@@ -348,31 +395,28 @@ void ManufactureInfoState::moreUnitRelease(Action * action)
 }
 
 /**
- * This could set a virtual infinite value for units
- * which could mean produce & sell automatically just like in UFOextender. :)
- * Perhaps someone will implement that feature later.
+ * Increases the units-to-produce to 999 or to $$$ when allowAutoSellProduction is true.
  * @param action a pointer to an Action
 */
 void ManufactureInfoState::moreUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		int more = _production->getAmountTotal ();
-		if (_production->getRules()->getCategory() == "STR_CRAFT")
-		{
-			if (_base->getAvailableHangars() - _base->getUsedHangars() > 0)
-			{
-				_production->setAmountTotal(std::max(more,_base->getAvailableHangars() - _base->getUsedHangars()));
-				setAssignedEngineer();
-			}
-		}
-		else
-		{
-			if (Options::getBool("allowAutoSellProduction")) _production->setAmountTotal(std::numeric_limits<int>::max());
-			else _production->setAmountTotal(std::max(more,999));
-			setAssignedEngineer();
-		}
-	}
+		moreUnit(Options::getBool("allowAutoSellProduction") ? std::numeric_limits<int>::max() : (999 - _production->getAmountTotal()));
+}
+
+/**
+ * Remove the given number of units to produce from the project if possible
+ * @param change how much we want to subtract
+*/
+void ManufactureInfoState::lessUnit(int change)
+{
+	if (0 >= change) return;
+	if (Options::getBool("allowAutoSellProduction") && _production->getAmountTotal() == std::numeric_limits<int>::max())
+		_production->setAmountTotal(std::max(_production->getAmountProduced()+1,999));
+	int units = _production->getAmountTotal();
+	change = std::min(units-(_production->getAmountProduced()+1), change);
+	_production->setAmountTotal(units-change);
+	setAssignedEngineer();
 }
 
 /**
@@ -381,12 +425,7 @@ void ManufactureInfoState::moreUnitClick(Action * action)
 */
 void ManufactureInfoState::lessUnitPress(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
-		if (Options::getBool("allowAutoSellProduction") && _production->getAmountTotal() == std::numeric_limits<int>::max())
-			_production->setAmountTotal(std::max(_production->getAmountProduced()+1,999));
-		_timerLessUnit->start();
-	}
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessUnit->start();
 }
 
 /**
@@ -404,15 +443,7 @@ void ManufactureInfoState::lessUnitRelease(Action * action)
 */
 void ManufactureInfoState::lessUnitClick(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		int less = _production->getAmountTotal ();
-		if (less > (_production->getAmountProduced () + 1))
-		{
-			_production->setAmountTotal(_production->getAmountProduced () + 1);
-			setAssignedEngineer();
-		}
-	}
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessUnit(std::numeric_limits<int>::max());
 }
 
 /**
@@ -420,15 +451,7 @@ void ManufactureInfoState::lessUnitClick(Action * action)
  */
 void ManufactureInfoState::onMoreEngineer()
 {
-	int assigned = _production->getAssignedEngineers();
-	int availableEngineer = _base->getAvailableEngineers();
-	int availableWorkSpace = _base->getFreeWorkshops();
-	if (availableEngineer > 0 && availableWorkSpace > 0)
-	{
-		_production->setAssignedEngineers(++assigned);
-		_base->setEngineers(_base->getEngineers()-1);
-		setAssignedEngineer();
-	}
+	moreEngineer(1);
 }
 
 /**
@@ -436,13 +459,17 @@ void ManufactureInfoState::onMoreEngineer()
  */
 void ManufactureInfoState::onLessEngineer()
 {
-	int assigned = _production->getAssignedEngineers();
-	if(assigned > 0)
-	{
-		_production->setAssignedEngineers(--assigned);
-		_base->setEngineers(_base->getEngineers()+1);
-		setAssignedEngineer();
-	}
+	lessEngineer(1);
+}
+
+/**
+ * Increases or decreases the Engineers according the mouse-wheel used.
+ * @param action a pointer to an Action
+*/
+void ManufactureInfoState::handleWheelEngineer(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreEngineer(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessEngineer(_changeValueByMouseWheel);
 }
 
 /**
@@ -450,17 +477,7 @@ void ManufactureInfoState::onLessEngineer()
  */
 void ManufactureInfoState::onMoreUnit()
 {
-	int more = _production->getAmountTotal ();
-	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
-	{
-		_timerMoreUnit->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
-	}
-	else
-	{
-		_production->setAmountTotal (++more);
-		setAssignedEngineer();
-	}
+	moreUnit(1);
 }
 
 /**
@@ -468,12 +485,17 @@ void ManufactureInfoState::onMoreUnit()
  */
 void ManufactureInfoState::onLessUnit()
 {
-	int less = _production->getAmountTotal ();
-	if(less > (_production->getAmountProduced () + 1))
-	{
-		_production->setAmountTotal (--less);
-		setAssignedEngineer();
-	}
+	lessUnit(1);
+}
+
+/**
+ * Increases or decreases the Units to produce according the mouse-wheel used.
+ * @param action a pointer to an Action
+*/
+void ManufactureInfoState::handleWheelUnit(Action *action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreUnit(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessUnit(_changeValueByMouseWheel);
 }
 
 /**

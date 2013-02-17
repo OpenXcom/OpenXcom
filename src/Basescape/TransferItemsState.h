@@ -52,10 +52,11 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	unsigned int _sel;
-	int _total, _sOffset, _eOffset, _pQty, _cQty, _aOffset;
+	int _total, _sOffset, _eOffset, _aOffset, _pQty, _cQty, _aQty;
 	float _iQty;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
+	int _changeValueByMouseWheel;
 	/// Gets selected cost.
 	int getCost();
 	/// Gets selected quantity.
@@ -89,10 +90,18 @@ public:
 	void lstItemsRightArrowRelease(Action *action);
 	/// Handler for clicking a Decrease arrow in the list.
 	void lstItemsRightArrowClick(Action *action);
-	/// Increases the quantity of an item.
+	/// Handler for pressing-down a mouse-button in the list.
+	void lstItemsMousePress(Action *action);
+	/// Increases the quantity of an item by one.
 	void increase();
-	/// Decreases the quantity of an item.
+	/// Increases the quantity of an item by the given value.
+	void increase(int change);
+	/// Decreases the quantity of an item by one.
 	void decrease();
+	/// Decreases the quantity of an item by the given value.
+	void decrease(int change);
+	/// Updates the quantity-strings of the selected item.
+	void updateItemStrings();
 	/// Gets the total of the transfer.
 	int getTotal() const;
 };

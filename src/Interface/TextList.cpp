@@ -37,6 +37,7 @@ namespace OpenXcom
 TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _contrast(false),
 																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
+	_allowScrollOnArrowButtons = true;
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
 	_up->setVisible(false);
 	_up->setTextList(this);
@@ -68,6 +69,33 @@ TextList::~TextList()
 	delete _selector;
 	delete _up;
 	delete _down;
+}
+
+/**
+ * Sets the allowScrollOnArrowButtons.
+ * @param value new value.
+ */
+void TextList::setAllowScrollOnArrowButtons(bool value)
+{
+	_allowScrollOnArrowButtons = value;
+}
+
+/**
+ * Gets the arrowsLeftEdge.
+ * @return arrowsLeftEdge.
+ */
+int TextList::getArrowsLeftEdge()
+{
+	return _arrowsLeftEdge;
+}
+
+/**
+ * Gets the arrowsRightEdge.
+ * @return arrowsRightEdge.
+ */
+int TextList::getArrowsRightEdge()
+{
+	return _arrowsRightEdge;
 }
 
 /**
@@ -507,6 +535,8 @@ void TextList::setArrowColumn(int pos, ArrowOrientation type)
 {
 	_arrowPos = pos;
 	_arrowType = type;
+	_arrowsLeftEdge = getX() + _arrowPos;
+	_arrowsRightEdge = _arrowsLeftEdge + 12 + 11;
 }
 
 /**
@@ -743,13 +773,15 @@ void TextList::think()
  */
 void TextList::mousePress(Action *action, State *state)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+	bool allowScroll = _allowScrollOnArrowButtons;
+	if (!allowScroll)
 	{
-		scrollUp(false);
+		allowScroll = (action->getAbsoluteXMouse() < _arrowsLeftEdge || action->getAbsoluteXMouse() > _arrowsRightEdge);
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	if (allowScroll)
 	{
-		scrollDown(false);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) scrollUp(false);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) scrollDown(false);
 	}
 	if (_selectable)
 	{
