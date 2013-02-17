@@ -39,6 +39,21 @@ namespace OpenXcom
 int Screen::BASE_WIDTH = 320;
 int Screen::BASE_HEIGHT = 200;
 
+/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
+void Screen::makeVideoFlags()
+{
+	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
+	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
+	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
+	if (_fullscreen)
+	{
+		_flags |= SDL_FULLSCREEN;
+	}
+
+	_bpp = (Screen::isHQXEnabled() || Screen::isOpenGLEnabled()) ? 32 : 8;
+}
+
+
 /**
  * Initializes a new display screen for the game to render contents to.
  * @param width Width in pixels.
@@ -48,17 +63,8 @@ int Screen::BASE_HEIGHT = 200;
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0)
+Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0), _surface(0)
 {
-	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, bpp);
-	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
-	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
-	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
-	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
-	if (_fullscreen)
-	{
-		_flags |= SDL_FULLSCREEN;
-	}
 	setResolution(width, height);
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
 }
@@ -244,6 +250,18 @@ int Screen::getHeight() const
  */
 void Screen::setResolution(int width, int height)
 {
+	makeVideoFlags();
+
+	if (!_surface || (_surface && 
+		(_surface->getSurface()->format->BitsPerPixel != _bpp || 
+		_surface->getSurface()->w != BASE_WIDTH ||
+		_surface->getSurface()->h != BASE_HEIGHT))) // don't reallocate _surface if not necessary, it's a waste of CPU cycles
+	{
+		if (_surface) delete _surface;
+		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, _bpp);
+	}
+	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
+
 	_scaleX = width / (double)BASE_WIDTH;
 	_scaleY = height / (double)BASE_HEIGHT;
 	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
