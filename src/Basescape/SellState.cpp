@@ -18,6 +18,7 @@
  */
 #include "SellState.h"
 #include <sstream>
+#include <climits>
 #include <cmath>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
