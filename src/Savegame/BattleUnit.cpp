@@ -957,14 +957,20 @@ void BattleUnit::startFalling()
 void BattleUnit::keepFalling()
 {
 	_fallPhase++;
-	if (_fallPhase == 3)
+	int endFrame = 3;
+	if (_spawnUnit != "")
 	{
-		_fallPhase = 2;
+		endFrame = 9;
+	}
+	if (_fallPhase == endFrame)
+	{
+		_fallPhase--;
 		if (_health == 0)
 			_status = STATUS_DEAD;
 		else
 			_status = STATUS_UNCONSCIOUS;
 	}
+
 	_cacheInvalid = true;
 }
 
