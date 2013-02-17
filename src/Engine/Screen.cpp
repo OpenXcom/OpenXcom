@@ -334,30 +334,43 @@ void Screen::screenshot(const std::string &filename) const
 	std::vector<unsigned char> image;
 	SDL_Color *palette = getPalette();
 
-	for (int y = 0; y < getHeight(); ++y)
+	if (isOpenGLEnabled())
 	{
-		for (int x = 0; x < getWidth(); ++x)
+		GLenum format = GL_RGB;
+
+		image.resize(getWidth() * getHeight() * 3, 0);
+		for (int y = 0; y < getHeight(); ++y)
 		{
-			switch(_screen->format->BytesPerPixel)
+			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, &(image[y*getWidth()*3]));
+		}
+		glErrorCheck();
+	} else
+	{
+		for (int y = 0; y < getHeight(); ++y)
+		{
+			for (int x = 0; x < getWidth(); ++x)
 			{
-				Uint8 color;
-				Uint32 colors;
-			case 1:
-				color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
-				image.push_back(palette[color].r);
-				image.push_back(palette[color].g);
-				image.push_back(palette[color].b);
-				break;
-			case 2:
-			case 3:
-			case 4:
-				colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
-				image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
-				image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
-				image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
-				break;
-			default:
-				return; // not likely
+				switch(_screen->format->BytesPerPixel)
+				{
+					Uint8 color;
+					Uint32 colors;
+				case 1:
+					color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
+					image.push_back(palette[color].r);
+					image.push_back(palette[color].g);
+					image.push_back(palette[color].b);
+					break;
+				case 2:
+				case 3:
+				case 4:
+					colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
+					image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
+					image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
+					image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
+					break;
+				default:
+					return; // not likely
+				}
 			}
 		}
 	}

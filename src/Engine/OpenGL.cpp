@@ -56,19 +56,6 @@ std::string strGLError(GLenum glErr)
 }
 
 
-#define glErrorCheck() {\
-	static bool reported##__LINE__ = false;\
-	GLenum glErr##__LINE__;\
-	if ((glErr##__LINE__ = glGetError()) != GL_NO_ERROR && !reported##__LINE__)\
-	{\
-		reported##__LINE__ = true;\
-		\
-		do \
-		{ \
-			Log(LOG_WARNING) << __FILE__ << ":" << __LINE__ << ": glGetError() complaint: " << strGLError(glErr##__LINE__);\
-		} while (((glErr##__LINE__ = glGetError()) != GL_NO_ERROR));\
-	}\
-}
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 
