@@ -125,7 +125,7 @@ public:
 	/// Damage a tile part.
 	bool damage(int part, int power);
 	/// Set a "virtual" explosive on this tile, to detonate later.
-	void setExplosive(int power);
+	void setExplosive(int power, bool force = false);
 	/// Get explosive power of this tile.
 	int getExplosive() const;
 	/// Apply the explosive power to the tile parts.

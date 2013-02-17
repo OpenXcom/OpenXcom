@@ -500,10 +500,10 @@ void DebriefingState::prepareDebriefing()
 			if (oldFaction == FACTION_PLAYER)
 			{
 				playersSurvived++;
+				(*j)->postMissionProcedures(save);
 				if (((*j)->isInExitArea() && battle->getMissionType() != "STR_BASE_DEFENSE") || !aborted)
 				{
 					playerInExitArea++;
-					(*j)->postMissionProcedures(save);
 					recoverItems((*j)->getInventory(), base);		
 				}
 				else
