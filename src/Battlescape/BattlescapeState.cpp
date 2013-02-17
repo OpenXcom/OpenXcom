@@ -1188,10 +1188,10 @@ void BattlescapeState::handle(Action *action)
 			}
 			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
 			{
-				if (_save->getDebugMode())
-				{
+//				if (_save->getDebugMode())
+//				{
 					SaveVoxelView();
-				}
+//				}
 			}
 		}
 	}
@@ -1208,6 +1208,8 @@ void BattlescapeState::SaveVoxelView()
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
+	bool black;
+	Tile *tile,*tile2;
 	std::stringstream ss;
 	std::vector<unsigned char> image;
 	int test;
@@ -1234,35 +1236,53 @@ void BattlescapeState::SaveVoxelView()
 
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu) +1;
-			if (test==0 || test==6)
+			black = true;
+			if (test!=0 && test!=6)
 			{
-				dist=10000;
+				tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24));
+				tile2 = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24-1));
+				if (_save->getDebugMode()
+					|| tile->isDiscovered(0) && test == 2
+					|| tile->isDiscovered(1) && test == 3
+					|| tile->isDiscovered(2) && (test == 1 || test == 4)
+					|| (tile->getUnit() && tile->getUnit()->getVisible() )
+					|| (tile2 && tile2->getUnit() && tile2->getUnit()->getVisible() )
+					)
+				{
+					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
+					dist = sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
+						+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
+						+ (hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
+					black = false;
+				}
+			}
+
+			if (black)
+			{
+				dist = 0;
 			}
 			else
 			{
-				hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
-				dist=sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
-					+(hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
-					+(hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
-			}
+				if (dist>1000) dist=1000;
+				if (dist<1) dist=1;
+				dist=(1000-(log(dist))*140)/800;//140
 
-			if (dist>1000) dist=1000;
-			if (dist<1) dist=1;
-			dist=(1000-(log(dist))*140)/800;//140
-
-			if (hitPos.x%16==15)
-			{
-				dist*=0.9;
+				if (hitPos.x%16==15)
+				{
+					dist*=0.9;
+				}
+				if (hitPos.y%16==15)
+				{
+					dist*=0.9;
+				}
+				if (hitPos.z%24==23)
+				{
+					dist*=0.9;
+				}
+				if (dist > 1) dist = 1;
+				if (tile) dist *= (16 - (float)tile->getShade())/16; 
 			}
-			if (hitPos.y%16==15)
-			{
-				dist*=0.9;
-			}
-			if (hitPos.z%24==23)
-			{
-				dist*=0.9;
-			}
-
+			
 			image.push_back((int)((float)(pal[test*3+0])*dist));
 			image.push_back((int)((float)(pal[test*3+1])*dist));
 			image.push_back((int)((float)(pal[test*3+2])*dist));
