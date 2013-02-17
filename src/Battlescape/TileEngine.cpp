@@ -444,7 +444,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
 	if (otherUnit->getArmor()->getSize() > 1)
 	{
-		unitRadius = 16;
+		unitRadius = 6;
 	}
 	int sliceTargets[10]={0,0, 0,unitRadius, 0,-unitRadius, unitRadius,0, -unitRadius,0};
  
