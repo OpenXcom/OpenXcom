@@ -251,7 +251,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		if (direction%2)
 		{
 			y1 = 0;
-			y2 = MAX_VIEW_DISTANCE - x;
+			y2 = MAX_VIEW_DISTANCE;
 		}
 		else
 		{
@@ -441,7 +441,12 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
  
 	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
 	if (otherUnit == excludeUnit) return false; //skip self
-	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
+	int unitRadius = 6; //default radius (for 2x2)
+	if (otherUnit->getArmor()->getSize() == 1) 
+	{
+		unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set for 1x1 unit
+	}
+
 	int sliceTargets[10]={0,0, 0,unitRadius, 0,-unitRadius, unitRadius,0, -unitRadius,0};
  
 	if (!otherUnit->isOut())
