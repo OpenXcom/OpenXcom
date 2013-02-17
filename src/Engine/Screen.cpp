@@ -126,7 +126,7 @@ void Screen::flip()
 	// perform any requested palette update
 	if (_numColors)
 	{
-		if (SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
+		if (_screen->format->BitsPerPixel == 8 && SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
 			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 		}
@@ -145,12 +145,6 @@ void Screen::flip()
 void Screen::clear()
 {
 	_surface->clear();
-	SDL_Rect square;
-	square.x = 0;
-	square.y = 0;
-	square.w = getWidth();
-	square.h = getHeight();
-	SDL_FillRect(_screen, &square, 0);
 }
 
 /**
