@@ -70,7 +70,7 @@ void createDefault()
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
 	setBool("useOpenGL", false);
-	setString("useOpenGLShader", "Shaders/Curvature.OpenGL.shader");
+	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
 	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
