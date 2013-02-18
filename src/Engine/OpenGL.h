@@ -35,6 +35,23 @@ extern PFNGLUNIFORM1IPROC glUniform1i;
 extern PFNGLUNIFORM2FVPROC glUniform2fv;
 extern PFNGLUNIFORM4FVPROC glUniform4fv;
 
+std::string strGLError(GLenum glErr);
+
+#define glErrorCheck() {\
+	static bool reported##__LINE__ = false;\
+	GLenum glErr##__LINE__;\
+	if ((glErr##__LINE__ = glGetError()) != GL_NO_ERROR && !reported##__LINE__)\
+	{\
+		reported##__LINE__ = true;\
+		\
+		do \
+		{ \
+			Log(LOG_WARNING) << __FILE__ << ":" << __LINE__ << ": glGetError() complaint: " << strGLError(glErr##__LINE__);\
+		} while (((glErr##__LINE__ = glGetError()) != GL_NO_ERROR));\
+	}\
+}
+
+
 class OpenGL {
 public:
   GLuint gltexture;

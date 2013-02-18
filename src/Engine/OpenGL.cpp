@@ -15,9 +15,46 @@
 #include <fstream>
 
 #include "OpenGL.h"
+#include "Logger.h"
 
 namespace OpenXcom 
 {
+
+std::string strGLError(GLenum glErr)
+{
+	std::string err;
+
+	switch(glErr)
+	{
+	case GL_INVALID_ENUM:
+		err = "GL_INVALID_ENUM";
+		break;
+	case GL_INVALID_VALUE:
+		err = "GL_INVALID_VALUE";
+		break;
+	case GL_INVALID_OPERATION:
+		err = "GL_INVALID_OPERATION";
+		break;
+	case GL_STACK_OVERFLOW:
+		err = "GL_STACK_OVERFLOW";
+		break;
+	case GL_STACK_UNDERFLOW:
+		err = "GL_STACK_UNDERFLOW";
+		break;
+	case GL_OUT_OF_MEMORY:
+		err = "GL_OUT_OF_MEMORY";
+		break;
+	case GL_NO_ERROR:
+		err = "No error! How did you even reach this code?";
+		break;
+	default:
+		err = "Unknown error code!";
+		break;
+	}
+
+	return err;
+}
+
 
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
@@ -46,7 +83,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
   void OpenGL::resize(unsigned width, unsigned height) {
     if(gltexture == 0) glGenTextures(1, &gltexture);
-	assert(glGetError() == GL_NO_ERROR);
+	glErrorCheck();
 	
     iwidth  = SDL_max(width,  iwidth );
     iheight = SDL_max(height, iheight);
@@ -55,14 +92,14 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 	buffer = (uint32_t*) buffer_surface->getSurface()->pixels;
 
     glBindTexture(GL_TEXTURE_2D, gltexture);
-	assert(glGetError() == GL_NO_ERROR);
+	glErrorCheck();
     glPixelStorei(GL_UNPACK_ROW_LENGTH, iwidth);
-	assert(glGetError() == GL_NO_ERROR);
+	glErrorCheck();
     glTexImage2D(GL_TEXTURE_2D,
       /* mip-map level = */ 0, /* internal format = */ GL_RGB16_EXT,
       width, height, /* border = */ 0, /* format = */ GL_BGRA,
       iformat, buffer);
-	assert(glGetError() == GL_NO_ERROR);
+	glErrorCheck();
 
   }
 
@@ -79,7 +116,8 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   }
 
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight) {
-    if(shader_support) {
+	while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
+    if(shader_support && (fragmentshader || vertexshader)) {
       glUseProgram(glprogram);
       GLint location;
 
@@ -96,10 +134,14 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
       glUniform2fv(location, 1, textureSize);
     }
 
+	glErrorCheck();
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, smooth ? GL_LINEAR : GL_NEAREST);
+
+	glErrorCheck();
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -108,13 +150,17 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+
+	glErrorCheck();
+
     glPixelStorei(GL_UNPACK_ROW_LENGTH, buffer_surface->getSurface()->pitch / buffer_surface->getSurface()->format->BytesPerPixel);
+
+	glErrorCheck();
+
     glTexSubImage2D(GL_TEXTURE_2D,
       /* mip-map level = */ 0, /* x = */ 0, /* y = */ 0,
       iwidth, iheight, GL_BGRA, iformat, buffer);
 
-	assert(glGetError() == GL_NO_ERROR);
-	  
 
     //OpenGL projection sets 0,0 as *bottom-left* of screen.
     //therefore, below vertices flip image to support top-left source.
@@ -131,10 +177,10 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glTexCoord2f(0, h); glVertex3i(0, 0, 0);
     glTexCoord2f(w, h); glVertex3i(u, 0, 0);
     glEnd();
-	assert(glGetError() == GL_NO_ERROR);
+	glErrorCheck();
 
     glFlush();
-	assert(glGetError() == GL_NO_ERROR);
+	glErrorCheck();
 
     if(shader_support) {
       glUseProgram(0);
