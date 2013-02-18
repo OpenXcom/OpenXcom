@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "Camera.h"
 
 namespace OpenXcom
 {
@@ -271,6 +272,10 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
+			if (_action.cameraPosition.z != -1)
+			{
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+			}
 			_parent->popState();
 		}
 	}
