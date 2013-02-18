@@ -66,6 +66,8 @@ public:
   void init(int width, int height); 
   /// more like exit, because destructors are for uncool people
   void term(); 
+  /// Try to set VSync!
+  void setVSync(bool sync);
   /// constructor -- like we said, we're too cool to actually construct things
   OpenGL();
 };
