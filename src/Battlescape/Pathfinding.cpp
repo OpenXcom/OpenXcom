@@ -75,6 +75,8 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 
 void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget)
 {
+	bool sneak = Options::getBool("sneakyAI") && unit->getFaction() == FACTION_HOSTILE;
+	
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
 	if (missileTarget != 0)
@@ -132,7 +134,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	_path.clear();
 
 	// look for a possible fast and accurate bresenham path and skip A*
-	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, missileTarget))
+	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, missileTarget, sneak))
 	{
 		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
 		return;
@@ -142,7 +144,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
 	}
 	// Now try through A*.
-	if (!aStarPath(startPosition, endPosition, missileTarget))
+	if (!aStarPath(startPosition, endPosition, missileTarget, sneak))
 	{
 		_path.clear();
 	}
@@ -156,7 +158,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
  * @param endPosition The position we want to reach.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget)
+bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget, bool sneak)
 {
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -193,6 +195,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, missileTarget);
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
+			if (sneak && _save->getTile(nextPos)->getVisible()) tuCost *= 5; // avoid being seen
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
@@ -742,7 +745,7 @@ bool Pathfinding::removePreview()
 }
 
 // this works in only x/y plane
-bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget)
+bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak)
 {
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
@@ -818,6 +821,8 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
 			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, missileTarget);
+			
+			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
 			
 			// delete the following
 			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
