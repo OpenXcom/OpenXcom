@@ -160,6 +160,7 @@ void ProjectileFlyBState::init()
 		{
 			if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 			{
+				action.cameraPosition = _action.cameraPosition;
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		}
