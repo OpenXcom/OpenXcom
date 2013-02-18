@@ -358,8 +358,16 @@ void Text::processText()
 		// Keep track of the width of the last line and word
 		else if (*c != 1)
 		{
-			width += font->getChar(*c)->getCrop()->w + font->getSpacing();
-			word += font->getChar(*c)->getCrop()->w + font->getSpacing();
+			int charWidth;
+
+			// Consider non-breakable space as a non-space character
+			if (*c == L'\xa0')
+				charWidth = font->getWidth() / 2;
+			else
+				charWidth = font->getChar(*c)->getCrop()->w + font->getSpacing();
+
+			width += charWidth;
+			word += charWidth;
 
 			// Wordwrap if the last word doesn't fit the line
 			if (_wrap && width > getWidth() && !start)
@@ -462,7 +470,7 @@ void Text::draw()
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
 	{
-		if (*c == ' ')
+		if (*c == ' ' || *c == L'\xa0')
 		{
 			x += font->getWidth() / 2;
 		}
