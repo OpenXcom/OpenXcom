@@ -95,7 +95,7 @@ private:
 	std::string _race;
 	std::wstring _name;
 	UnitStats _stats;
-	int _standHeight, _kneelHeight;
+	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
@@ -276,6 +276,8 @@ public:
 	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
+	/// Gets the unit floating elevation.
+	int getFloatHeight() const;
 	/// Adds one to the reaction exp counter.
 	void addReactionExp();
 	/// Adds one to the firing exp counter.

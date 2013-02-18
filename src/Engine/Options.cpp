@@ -65,8 +65,13 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setInt("baseXResolution", 320);
+	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
+	setBool("useOpenGL", false);
+	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
+	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);
@@ -83,6 +88,7 @@ void createDefault()
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
+	setInt("battleExplosionHeight", 3); //0, 1, 2, 3
 	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);

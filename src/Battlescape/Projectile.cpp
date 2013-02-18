@@ -107,7 +107,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 
-		originVoxel.z += bu->getHeight();
+		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 		originVoxel.z -= 4;
 		if (originVoxel.z >= (_origin.z + 1)*24)
 		{
@@ -256,7 +256,7 @@ bool Projectile::calculateThrow(double accuracy)
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
 	if(!bu)
 		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
-	originVoxel.z += bu->getHeight();
+	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{

@@ -25,6 +25,9 @@
 #include "Surface.h"
 #include "Logger.h"
 #include "Options.h"
+#include "Screen.h"
+
+#include "OpenGL.h"
 
 // Scale2X
 #include "Scalers/scalebit.h"
@@ -593,6 +596,24 @@ bool Zoom::haveSSE2()
 }
 
 #endif
+
+/**
+ * Wrapper around various software and OpenGL screen buffer pushing functions which zoom.
+ * Basically called just from Screen::flip()
+ */
+void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, OpenGL *glOut)
+{
+	if (Screen::isOpenGLEnabled() && glOut->buffer_surface)
+	{
+		SDL_BlitSurface(src, 0, glOut->buffer_surface->getSurface(), 0); // TODO; this is less than ideal...
+
+		glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h);
+		SDL_GL_SwapBuffers();
+	} else
+	{
+		_zoomSurfaceY(src, dst, 0, 0);
+	}
+}
 
 
 /**

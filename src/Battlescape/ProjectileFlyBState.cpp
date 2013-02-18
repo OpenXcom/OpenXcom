@@ -35,7 +35,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
-#include "Camera.h"
 
 namespace OpenXcom
 {
@@ -160,7 +159,6 @@ void ProjectileFlyBState::init()
 		{
 			if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 			{
-				action.cameraPosition = _action.cameraPosition;
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		}
@@ -273,10 +271,6 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
-			if (_action.cameraPosition.z != -1)
-			{
-				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-			}
 			_parent->popState();
 		}
 	}
