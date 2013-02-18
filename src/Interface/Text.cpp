@@ -52,7 +52,12 @@ Text::~Text()
  */
 std::wstring Text::formatFunding(int funds)
 {
+	// In the future, the whole setlocale thing should be removed from here.
+	// It is inconsistent with the in-game language selection: locale-specific
+	// symbols, such as thousands separators, should be determined by the game
+	// language, not by system locale.
 	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc;
 	lc=localeconv();
 	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
