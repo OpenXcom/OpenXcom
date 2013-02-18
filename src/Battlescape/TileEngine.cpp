@@ -816,6 +816,23 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		power /= 2;
 	}
 
+	int exHeight = Options::getInt("battleExplosionHeight");
+	int vertdec = 1000; //default flat explosion
+	if (exHeight<0) exHeight = 0;
+	if (exHeight>3) exHeight = 3;
+	switch (exHeight)
+	{
+	case 1:
+		vertdec = 30;
+		break;
+	case 2:
+		vertdec = 10;
+		break;
+	case 3:
+		vertdec = 5;
+	}
+
+
 	for (int fi = -90; fi <= 90; fi += 10)
 //	for (int fi = 0; fi <= 0; fi += 10)
 	{
@@ -851,6 +868,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				{
 					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
+					if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
 				}
 
 				if (power_ > 0)
