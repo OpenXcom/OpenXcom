@@ -242,7 +242,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		return false;
 	Position pos = unit->getPosition();
 
-	if ((unit->getHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24 + 4)
+	if ((unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24 + 4)
 	{
 		++pos.z;
 	}
@@ -379,7 +379,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	Position originVoxel;
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-	originVoxel.z += currentUnit->getHeight()-1; //one voxel lower (eye level)
+	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
 
 	// fix!!! need to add flying elevation
 	bool unitSeen = false;
@@ -462,7 +462,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	}
 
 	targetMaxHeight += heightRange;
-	targetCenterHeight=(targetMaxHeight+targetMinHeight)/2;
+	targetCenterHeight=(targetMaxHeight+targetMinHeight)/2 + otherUnit->getFloatHeight();
 	heightRange/=2;
 	if (heightRange>10) heightRange=10;
 	if (heightRange<=0) heightRange=0;
@@ -1641,7 +1641,8 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		BattleUnit *unit = tile->getUnit();
 		if (unit != 0 && unit != excludeUnit)
 		{
-			if ((voxel.z%24) < (unit->getHeight()+(-tile->getTerrainLevel())) && (voxel.z%24) > (1+(-tile->getTerrainLevel())))
+			if ((voxel.z%24) < (unit->getHeight()+unit->getFloatHeight()+(-tile->getTerrainLevel()))
+							&& (voxel.z%24) > (1+unit->getFloatHeight()+(-tile->getTerrainLevel())))
 			{
 				int x = voxel.x%16;
 				int y = voxel.y%16;
@@ -1675,7 +1676,8 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 			BattleUnit *unit = below->getUnit();
 			if (unit != 0 && unit != excludeUnit)
 			{
-				if ((voxel.z%24) < ((unit->getHeight()+(-below->getTerrainLevel()))-24))
+				if ((voxel.z%24) < (unit->getHeight()+unit->getFloatHeight()+(-tile->getTerrainLevel()))-24
+								&& (voxel.z%24) > (unit->getFloatHeight()+(-tile->getTerrainLevel())-24))
 				{
 					int x = voxel.x%16;
 					int y = voxel.y%16;

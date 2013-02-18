@@ -4627,6 +4627,7 @@ units:
     armor: CYBERDISC_ARMOR
     standHeight: 15
     kneelHeight: 15
+    floatHeight: 2
     loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
@@ -4652,6 +4653,7 @@ units:
     armor: FLOATER_ARMOR0
     standHeight: 21
     kneelHeight: 16
+    floatHeight: 2
     loftemps: 3
     value: 12
     deathSound: 10
@@ -4676,6 +4678,7 @@ units:
     armor: FLOATER_ARMOR0
     standHeight: 21
     kneelHeight: 16
+    floatHeight: 2
     loftemps: 3
     value: 12
     deathSound: 10
@@ -4700,6 +4703,7 @@ units:
     armor: FLOATER_ARMOR0
     standHeight: 21
     kneelHeight: 16
+    floatHeight: 2
     loftemps: 3
     value: 12
     deathSound: 10
@@ -4724,6 +4728,7 @@ units:
     armor: FLOATER_ARMOR0
     standHeight: 21
     kneelHeight: 16
+    floatHeight: 2
     loftemps: 3
     value: 16
     deathSound: 10
@@ -4748,6 +4753,7 @@ units:
     armor: FLOATER_ARMOR1
     standHeight: 21
     kneelHeight: 16
+    floatHeight: 2
     loftemps: 3
     value: 25
     deathSound: 10
@@ -4772,6 +4778,7 @@ units:
     armor: FLOATER_ARMOR2
     standHeight: 21
     kneelHeight: 16
+    floatHeight: 2
     loftemps: 3
     value: 35
     deathSound: 10
@@ -4795,7 +4802,7 @@ units:
     armor: REAPER_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 25
     deathSound: 48
     intelligence: 2
@@ -4813,11 +4820,11 @@ units:
       strength: 60
       psiStrength: 100
       psiSkill: 0
-      melee: 0
+      melee: 70
     armor: TANK_ARMOR
-    standHeight: 15
-    kneelHeight: 15
-    loftempsSet: [ 92, 89, 90, 91 ]
+    standHeight: 16
+    kneelHeight: 16
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 20
     deathSound: 23
     moveSound: 14	
@@ -4834,11 +4841,11 @@ units:
       strength: 60
       psiStrength: 100
       psiSkill: 0
-      melee: 0
+      melee: 70
     armor: TANK_ARMOR
-    standHeight: 15
-    kneelHeight: 15
-    loftempsSet: [ 92, 89, 90, 91 ]
+    standHeight: 16
+    kneelHeight: 16
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4855,11 +4862,11 @@ units:
       strength: 60
       psiStrength: 100
       psiSkill: 0
-      melee: 0
+      melee: 7
     armor: TANK_ARMOR
-    standHeight: 15
-    kneelHeight: 15
-    loftempsSet: [ 92, 89, 90, 91 ]
+    standHeight: 16
+    kneelHeight: 16
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4876,11 +4883,12 @@ units:
       strength: 60
       psiStrength: 100
       psiSkill: 0
-      melee: 0
+      melee: 70
     armor: HOVERTANK_ARMOR
-    standHeight: 15
-    kneelHeight: 15
-    loftempsSet: [ 92, 89, 90, 91 ]
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 20
     deathSound: 23
     moveSound: 15
@@ -4897,11 +4905,12 @@ units:
       strength: 60
       psiStrength: 100
       psiSkill: 0
-      melee: 0
+      melee: 60
     armor: HOVERTANK_ARMOR
-    standHeight: 15
-    kneelHeight: 15
-    loftempsSet: [ 92, 89, 90, 91 ]
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 20
     deathSound: 23
     moveSound: 15
@@ -5224,7 +5233,7 @@ units:
     armor: CHRYSSALID_ARMOR
     standHeight: 21
     kneelHeight: 16
-    loftemps: 4
+    loftemps: 3
     value: 25
     deathSound: 49
     aggroSound: 49
@@ -5249,7 +5258,7 @@ units:
     armor: SILACOID_ARMOR
     standHeight: 10
     kneelHeight: 10
-    loftemps: 2
+    loftemps: 5
     value: 20
     deathSound: 51
     moveSound: 47
@@ -5272,8 +5281,9 @@ units:
       psiSkill: 0
       melee: 80
     armor: CELATID_ARMOR
-    standHeight: 10
-    kneelHeight: 10
+    standHeight: 12
+    kneelHeight: 12
+    floatHeight: 6
     loftemps: 2
     value: 20
     deathSound: 51
@@ -5298,7 +5308,7 @@ units:
     armor: SECTOPOD_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 30
     deathSound: 23
     intelligence: 4
