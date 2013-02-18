@@ -833,7 +833,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	}
 
 
-	for (int fi = -90; fi <= 90; fi += 10)
+	for (int fi = -90; fi <= 90; fi += 5)
 //	for (int fi = 0; fi <= 0; fi += 10)
 	{
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
