@@ -42,7 +42,8 @@ int Screen::BASE_HEIGHT = 200;
 /// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 void Screen::makeVideoFlags()
 {
-	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
+	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
+	if (Options::getBool("allowResize")) _flags |= SDL_RESIZABLE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
 	if (_fullscreen)
