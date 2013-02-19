@@ -776,7 +776,7 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 		}
 		if (tankRule->getClipSize() == -1)
 		{ // so this tank does NOT require ammo
-			for (int i=0; i<canBeAdded; ++i)
+			for (int j = 0; j < canBeAdded; ++j)
 				craft->getVehicles()->push_back(new Vehicle(tankRule, 255));
 			base->getItems()->removeItem(i->first, canBeAdded);
 		}
@@ -797,10 +797,10 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 				int remainder = 0;
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 				int newAmmo;
-				for (int i=0; i < canBeAdded; ++i)
+				for (int j = 0; j < canBeAdded; ++j)
 				{
 					newAmmo = newAmmoPerVehicle;
-					if (i<remainder) ++newAmmo;
+					if (j < remainder) ++newAmmo;
 					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo));
 					base->getItems()->removeItem(ammo->getType(), newAmmo);
 				}
