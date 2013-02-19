@@ -60,7 +60,7 @@ YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftempsSet(0), _value(0), _deathSound(0), _aggroSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
+Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0), _loftempsSet(0), _value(0), _deathSound(0), _aggroSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
 {
 }
 

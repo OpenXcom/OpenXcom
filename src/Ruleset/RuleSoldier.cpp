@@ -104,7 +104,7 @@ void RuleSoldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "armor" << YAML::Value << _armor;
 	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
 	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
-	out << YAML::Key << "floatHeight" << YAML::Value << _kneelHeight;
+	out << YAML::Key << "floatHeight" << YAML::Value << _floatHeight;
 	if (_loftempsSet.size() == 1)
 	{
 		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
