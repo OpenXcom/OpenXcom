@@ -418,10 +418,11 @@ std::wstring Language::cpToWstr(const std::string& src)
 	return wstr;
 #else
 	const int MAX = 500;
-	wchar_t buffer[MAX];
-	mbstowcs(buffer, src.c_str(), MAX);
-	std::wstring wstr(buffer);
-	return wstr;
+	wchar_t buffer[MAX + 1];
+	size_t len = mbstowcs(buffer, src.c_str(), MAX);
+	if (len == (size_t)-1)
+		return L"?";
+	return std::wstring(buffer, len);
 #endif
 }
 
