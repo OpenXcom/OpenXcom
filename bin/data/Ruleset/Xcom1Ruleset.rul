@@ -4628,7 +4628,7 @@ units:
     standHeight: 15
     kneelHeight: 15
     floatHeight: 2
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4802,7 +4802,7 @@ units:
     armor: REAPER_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 25
     deathSound: 48
     intelligence: 2
@@ -4824,7 +4824,7 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14	
@@ -4845,7 +4845,7 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4866,7 +4866,7 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4888,7 +4888,7 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 15
@@ -4910,7 +4910,7 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 15
@@ -5308,7 +5308,7 @@ units:
     armor: SECTOPOD_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 104, 107, 101, 98 ]
+    loftempsSet: [ 92, 89, 90, 91 ]
     value: 30
     deathSound: 23
     intelligence: 4
