@@ -753,6 +753,9 @@
     <ClCompile Include="Engine\Scalers\scalebit.cpp">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\OpenGL.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1507,6 +1510,9 @@
     </ClInclude>
     <ClInclude Include="Savegame\SerializationHelper.h">
       <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OpenGL.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

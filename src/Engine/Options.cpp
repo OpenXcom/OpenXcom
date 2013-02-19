@@ -65,8 +65,14 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setInt("baseXResolution", 320);
+	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
+	setBool("useOpenGL", false);
+	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
+	setBool("vSyncForOpenGL", false);
+	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);
