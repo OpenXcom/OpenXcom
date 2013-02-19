@@ -1199,7 +1199,7 @@ void BattlescapeState::SaveVoxelView()
 {
 	static const unsigned char pal[30]=
 	//			ground		west wall	north wall		object		enem unit						xcom unit	neutr unit
-	{0,0,0, 192,192,192,  192,192,255,  255,192,192, 128,255,128, 128,0,255,  0,0,0, 255,255,255,  224,192,0,  255,128,0 };
+	{0,0,0, 224,224,224,  192,224,255,  255,224,192, 128,255,128, 192,0,255,  0,0,0, 255,255,255,  224,192,0,  255,64,128 };
 
 	BattleUnit * bu = _save->getSelectedUnit();
 	if (bu==0) return; //no unit selected
@@ -1335,7 +1335,7 @@ void BattlescapeState::SaveVoxelMap()
 	std::stringstream ss;
 	std::vector<unsigned char> image;
 	static const unsigned char pal[30]=
-	{255,255,255, 192,192,192,  192,192,255,  255,192,192, 128,255,128, 128,0,255,  255,255,255, 255,255,255,  224,192,0,  255,128,0 };
+	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
 
 	Tile *tile;
 
