@@ -284,7 +284,7 @@ void AggroBAIState::think(BattleAction *action)
 				CurrentPosition = CurrentPosition + DirectionVector;
 				Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
 				Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
-				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true, false);
+				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
 				if (CollidesWith > -1 && CollidesWith < 4)
 				{
 					action->waypoints.push_back(LastPosition);
@@ -578,7 +578,7 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 		{
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
-			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false);
+			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true);
 			if (collidesWith == 4)
 			{
 				if ((*i)->getFaction() != attackingUnit->getFaction())
