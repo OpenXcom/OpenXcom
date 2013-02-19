@@ -201,6 +201,8 @@ set ( engine_src
   Engine/Surface.h
   Engine/Font.cpp
   Engine/Font.h
+  Engine/OpenGL.cpp
+  Engine/OpenGL.h
   Engine/Options.cpp
   Engine/Options.h
   Engine/CrossPlatform.cpp
