@@ -40,6 +40,13 @@ if ( IS_DIRECTORY ${DEPS_DIR} )
 else ( )
   find_package ( SDL2 COMPONENTS mixer gfx image)
   find_package ( Yaml_cpp )
+  find_package ( OpenGL )
+
+  if ( NOT OPENGL_FOUND )
+	  message ( FATAL_ERROR "Can't find OpenGL; how does that even happen?" )
+  else ()
+	  include_directories ( ${OPENGL_INCLUDE_DIR} )
+  endif ()
 
   if ( NOT SDL_FOUND )
     message ( FATAL_ERROR "Can't find SDL which is required" )
