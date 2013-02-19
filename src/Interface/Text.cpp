@@ -53,10 +53,15 @@ Text::~Text()
  */
 std::wstring Text::formatFunding(int funds)
 {
+	// In the future, the whole setlocale thing should be removed from here.
+	// It is inconsistent with the in-game language selection: locale-specific
+	// symbols, such as thousands separators, should be determined by the game
+	// language, not by system locale.
 	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc;
 	lc=localeconv();
-	std::wstring thousands_sep = Language::cpToWstr(ispunct((unsigned char)*(lc->mon_thousands_sep)) ? lc->mon_thousands_sep : " ");
+	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = false;
 	if (funds < 0)
@@ -359,8 +364,16 @@ void Text::processText()
 		// Keep track of the width of the last line and word
 		else if (*c != 1)
 		{
-			width += font->getChar(*c)->getCrop()->w + font->getSpacing();
-			word += font->getChar(*c)->getCrop()->w + font->getSpacing();
+			int charWidth;
+
+			// Consider non-breakable space as a non-space character
+			if (*c == L'\xa0')
+				charWidth = font->getWidth() / 2;
+			else
+				charWidth = font->getChar(*c)->getCrop()->w + font->getSpacing();
+
+			width += charWidth;
+			word += charWidth;
 
 			// Wordwrap if the last word doesn't fit the line
 			if (_wrap && width > getWidth() && !start)
@@ -463,7 +476,7 @@ void Text::draw()
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
 	{
-		if (*c == ' ')
+		if (*c == ' ' || *c == L'\xa0')
 		{
 			x += font->getWidth() / 2;
 		}
