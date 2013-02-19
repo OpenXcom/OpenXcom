@@ -63,8 +63,7 @@ name_DATA = \
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
-AM_LDFLAGS=-lGL
-openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
+openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) -lGL
 openxcom_CXXFLAGS = \
 	$(CXXFLAGS) \
 	$(DEBUG_CXXFLAGS) \
