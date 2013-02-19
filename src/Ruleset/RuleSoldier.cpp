@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftempsSet(0)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0), _loftempsSet(0)
 {
 
 }
@@ -73,6 +73,10 @@ void RuleSoldier::load(const YAML::Node &node)
 		{
 			i.second() >> _kneelHeight;
 		}
+		else if (key == "floatHeight")
+		{
+			i.second() >> _floatHeight;
+		}
 		else if (key == "loftemps")
 		{
 			int a;
@@ -100,6 +104,7 @@ void RuleSoldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "armor" << YAML::Value << _armor;
 	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
 	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
+	out << YAML::Key << "floatHeight" << YAML::Value << _kneelHeight;
 	if (_loftempsSet.size() == 1)
 	{
 		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
@@ -139,6 +144,11 @@ int RuleSoldier::getStandHeight() const
 int RuleSoldier::getKneelHeight() const
 {
 	return _kneelHeight;
+}
+///
+int RuleSoldier::getFloatHeight() const
+{
+	return _floatHeight;
 }
 ///
 int RuleSoldier::getLoftemps(int entry) const

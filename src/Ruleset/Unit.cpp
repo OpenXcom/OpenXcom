@@ -112,6 +112,10 @@ void Unit::load(const YAML::Node &node)
 		{
 			i.second() >> _kneelHeight;
 		}
+		else if (key == "floatHeight")
+		{
+			i.second() >> _floatHeight;
+		}
 		else if (key == "loftemps")
 		{
 			int a;
@@ -176,6 +180,7 @@ void Unit::save(YAML::Emitter &out) const
 	out << YAML::Key << "armor" << YAML::Value << _armor;
 	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
 	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
+	out << YAML::Key << "floatHeight" << YAML::Value << _floatHeight;
 	if (_loftempsSet.size() == 1)
 	{
 		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
@@ -231,6 +236,15 @@ int Unit::getStandHeight() const
 int Unit::getKneelHeight() const
 {
 	return _kneelHeight;
+}
+
+/**
+ * Returns the unit's floating eleavtion.
+ * @return height.
+ */
+int Unit::getFloatHeight() const
+{
+	return _floatHeight;
 }
 
 /**
