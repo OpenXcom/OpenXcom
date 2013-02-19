@@ -4628,7 +4628,7 @@ units:
     standHeight: 15
     kneelHeight: 15
     floatHeight: 2
-    loftempsSet: [ 92, 89, 90, 91 ]
+    loftempsSet: [ 104, 107, 101, 98 ]
     value: 20
     deathSound: 23
     moveSound: 40
