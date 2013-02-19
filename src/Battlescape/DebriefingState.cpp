@@ -530,7 +530,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
-					if (base->getAvailableContainment() > 0)
+					if (base->getAvailableContainment() - base->getUsedContainment() > 0)
 					{
 						addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*j)->getValue()*2);
 						base->getItems()->addItem(type, 1);
@@ -834,7 +834,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				{
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						if (base->getAvailableContainment() > 0)
+						if (base->getAvailableContainment() - base->getUsedContainment() > 0)
 						{
 							addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*it)->getUnit()->getValue()*2);
 							if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch((*it)->getUnit()->getType()), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
