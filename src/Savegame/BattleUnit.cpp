@@ -51,6 +51,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_stats = *soldier->getCurrentStats();
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
+	_floatHeight = soldier->getRules()->getFloatHeight();
 	_loftempsSet = soldier->getRules()->getLoftempsSet();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = 0;
@@ -106,6 +107,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_stats = *unit->getStats();
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
+	_floatHeight = unit->getFloatHeight();
 	_loftempsSet = unit->getLoftempsSet();
 	_deathSound = unit->getDeathSound();
 	_aggroSound = unit->getAggroSound();
@@ -1954,6 +1956,15 @@ int BattleUnit::getStandHeight() const
 int BattleUnit::getKneelHeight() const
 {
 	return _kneelHeight;
+}
+
+/**
+  * Get the unit's floating elevation.
+  * @return The unit's elevation over the ground in voxels, when flying.
+  */
+int BattleUnit::getFloatHeight() const
+{
+	return _floatHeight;
 }
 
 /**

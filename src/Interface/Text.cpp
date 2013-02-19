@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cctype>
 #include "Text.h"
 #include <sstream>
 #include "../Engine/Font.h"
@@ -60,7 +61,7 @@ std::wstring Text::formatFunding(int funds)
 	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc;
 	lc=localeconv();
-	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
+	std::wstring thousands_sep = Language::cpToWstr(ispunct((unsigned char)*(lc->mon_thousands_sep)) ? lc->mon_thousands_sep : " ");
 
 	bool negative = false;
 	if (funds < 0)

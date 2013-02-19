@@ -29,13 +29,30 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "Zoom.h"
+#include "OpenGL.h"
+
 
 
 namespace OpenXcom
 {
 
-const double Screen::BASE_WIDTH = 320.0;
-const double Screen::BASE_HEIGHT = 200.0;
+int Screen::BASE_WIDTH = 320;
+int Screen::BASE_HEIGHT = 200;
+
+/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
+void Screen::makeVideoFlags()
+{
+	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
+	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
+	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
+	if (_fullscreen)
+	{
+		_flags |= SDL_FULLSCREEN;
+	}
+
+	_bpp = (Screen::isHQXEnabled() || Screen::isOpenGLEnabled()) ? 32 : 8;
+}
+
 
 /**
  * Initializes a new display screen for the game to render contents to.
@@ -46,15 +63,8 @@ const double Screen::BASE_HEIGHT = 200.0;
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0)
+Screen::Screen(int width, int height, int bpp, bool fullscreen) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0), _surface(0)
 {
-	_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, bpp);
-	_flags = SDL_SWSURFACE|SDL_HWPALETTE|SDL_RESIZABLE;
-	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
-	if (_fullscreen)
-	{
-		_flags |= SDL_FULLSCREEN;
-	}
 	setResolution(width, height);
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
 }
@@ -73,8 +83,9 @@ Screen::~Screen()
  * contents that need to be shown will be blitted to this.
  * @return Pointer to the buffer surface.
  */
-Surface *Screen::getSurface() const
+Surface *Screen::getSurface()
 {
+	_pushPalette = true;
 	return _surface;
 }
 
@@ -116,7 +127,7 @@ void Screen::flip()
 {
 	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
 	{
-		Zoom::_zoomSurfaceY(_surface->getSurface(), _screen, 0, 0);
+		Zoom::flipWithZoom(_surface->getSurface(), _screen, &glOutput);
 	}
 	else
 	{
@@ -124,14 +135,17 @@ void Screen::flip()
 	}
 
 	// perform any requested palette update
-	if (_numColors)
+	if (_pushPalette && _numColors && _screen->format->BitsPerPixel == 8)
 	{
 		if (_screen->format->BitsPerPixel == 8 && SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
 			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
 		}
 		_numColors = 0;
+		_pushPalette = false;
 	}
+
+
 	
 	if (SDL_Flip(_screen) == -1)
 	{
@@ -230,13 +244,33 @@ int Screen::getHeight() const
  */
 void Screen::setResolution(int width, int height)
 {
-	_scaleX = width / BASE_WIDTH;
-	_scaleY = height / BASE_HEIGHT;
+	makeVideoFlags();
+
+	if (!_surface || (_surface && 
+		(_surface->getSurface()->format->BitsPerPixel != _bpp || 
+		_surface->getSurface()->w != BASE_WIDTH ||
+		_surface->getSurface()->h != BASE_HEIGHT))) // don't reallocate _surface if not necessary, it's a waste of CPU cycles
+	{
+		if (_surface) delete _surface;
+		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, _bpp);
+	}
+	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
+
+	_scaleX = width / (double)BASE_WIDTH;
+	_scaleY = height / (double)BASE_HEIGHT;
 	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
+	}
+
+	if (isOpenGLEnabled()) 
+	{
+		glOutput.init(BASE_WIDTH, BASE_HEIGHT);
+		glOutput.linear = Options::getBool("useOpenGLSmoothing"); // setting from shader file will override this, though
+		glOutput.set_shader(CrossPlatform::getDataFile(Options::getString("useOpenGLShader")).c_str());
+		glOutput.setVSync(Options::getBool("vSyncForOpenGL"));
 	}
 
 	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
@@ -295,30 +329,43 @@ void Screen::screenshot(const std::string &filename) const
 	std::vector<unsigned char> image;
 	SDL_Color *palette = getPalette();
 
-	for (int y = 0; y < getHeight(); ++y)
+	if (isOpenGLEnabled())
 	{
-		for (int x = 0; x < getWidth(); ++x)
+		GLenum format = GL_RGB;
+
+		image.resize(getWidth() * getHeight() * 3, 0);
+		for (int y = 0; y < getHeight(); ++y)
 		{
-			switch(_screen->format->BytesPerPixel)
+			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, &(image[y*getWidth()*3]));
+		}
+		glErrorCheck();
+	} else
+	{
+		for (int y = 0; y < getHeight(); ++y)
+		{
+			for (int x = 0; x < getWidth(); ++x)
 			{
-				Uint8 color;
-				Uint32 colors;
-			case 1:
-				color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
-				image.push_back(palette[color].r);
-				image.push_back(palette[color].g);
-				image.push_back(palette[color].b);
-				break;
-			case 2:
-			case 3:
-			case 4:
-				colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
-				image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
-				image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
-				image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
-				break;
-			default:
-				return; // not likely
+				switch(_screen->format->BytesPerPixel)
+				{
+					Uint8 color;
+					Uint32 colors;
+				case 1:
+					color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
+					image.push_back(palette[color].r);
+					image.push_back(palette[color].g);
+					image.push_back(palette[color].b);
+					break;
+				case 2:
+				case 3:
+				case 4:
+					colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
+					image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
+					image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
+					image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
+					break;
+				default:
+					return; // not likely
+				}
 			}
 		}
 	}
@@ -348,6 +395,12 @@ bool Screen::isHQXEnabled()
 	}
 
 	return false;
+}
+
+
+bool Screen::isOpenGLEnabled()
+{
+	return Options::getBool("useOpenGL");
 }
 
 }
