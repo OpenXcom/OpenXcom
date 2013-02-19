@@ -152,13 +152,13 @@ bool BaseFacility::inUse() const
 	{
 		return false;
 	}
-	return (_base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters() ||
-			_base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores() ||
-			_base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories() ||
-			_base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops() ||
-			_base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars() ||
-			_base->getAvailablePsiLabs() - _rules->getPsiLaboratories() < _base->getUsedPsiLabs() ||
-			_base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment());
+	return (_rules->getPersonnel() > 0 && _base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters() ||
+			_rules->getStorage() > 0 && _base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores() ||
+			_rules->getLaboratories() > 0 && _base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories() ||
+			_rules->getWorkshops() > 0 && _base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops() ||
+			_rules->getCrafts() > 0 && _base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars() ||
+			_rules->getPsiLaboratories() > 0 && _base->getAvailablePsiLabs() - _rules->getPsiLaboratories() < _base->getUsedPsiLabs() ||
+			_rules->getAliens() > 0 && _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment());
 }
 
 }
