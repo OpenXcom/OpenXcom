@@ -1189,6 +1189,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			_currentAction.target = pos;
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setVisible(false);
+			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 			_states.push_back(new ProjectileFlyBState(this, _currentAction));
 			statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 		}
@@ -1385,17 +1386,16 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	getSave()->getTile(unit->getPosition())->setUnit(0);
 	std::stringstream newArmor;
-	newArmor << newType;
-	newArmor << "_ARMOR";
-	std::stringstream newWeapon;
-	newWeapon << newType;
-	newWeapon << "_WEAPON";
-	
+	newArmor << getRuleset()->getUnit(newType)->getArmor();
+	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
+	terroristWeapon += "_WEAPON";
+	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
+
 	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
-	RuleItem *newItem = getRuleset()->getItem(newWeapon.str());
 
 	getSave()->getTile(unit->getPosition())->setUnit(_newUnit);
 	_newUnit->setPosition(unit->getPosition());
+	_newUnit->setDirection(3);
 	_newUnit->setCache(0);
 	getSave()->getUnits()->push_back(_newUnit);
 	getMap()->cacheUnit(_newUnit);

@@ -107,7 +107,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 
-		originVoxel.z += bu->getHeight();
+		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 		originVoxel.z -= 4;
 		if (originVoxel.z >= (_origin.z + 1)*24)
 		{
@@ -189,13 +189,10 @@ int Projectile::calculateTrajectory(double accuracy)
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 		if (test == 4 && !_trajectory.empty())
 		{
-			if (targetTile->getUnit() != 0)
+			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			if (_save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
 			{
-				hitPos = targetTile->getUnit()->getPosition();
-			}
-			else
-			{
-				hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+				hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
 			}
 		}
 		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
@@ -259,7 +256,7 @@ bool Projectile::calculateThrow(double accuracy)
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
 	if(!bu)
 		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
-	originVoxel.z += bu->getHeight();
+	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{

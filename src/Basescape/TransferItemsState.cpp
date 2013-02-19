@@ -42,6 +42,7 @@
 #include "../Savegame/Transfer.h"
 #include "../Menu/ErrorMessageState.h"
 #include "TransferConfirmState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -52,8 +53,11 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _pQty(0), _cQty(0), _aOffset(0), _iQty(0.0f), _distance(0.0)
+TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _aOffset(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _distance(0.0)
 {
+	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
+	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(148, 16, 8, 176);
@@ -114,12 +118,14 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
+	if (allowChangeListValuesByMouseWheel) _lstItems->setAllowScrollOnArrowButtons(false);
 	_lstItems->onLeftArrowPress((ActionHandler)&TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&TransferItemsState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&TransferItemsState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&TransferItemsState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&TransferItemsState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&TransferItemsState::lstItemsRightArrowClick);
+	if (allowChangeListValuesByMouseWheel) _lstItems->onMousePress((ActionHandler)&TransferItemsState::lstItemsMousePress);
 
 	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
@@ -348,56 +354,7 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
  */
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		if ((_sel < _soldiers.size()) || (_sel >= _soldiers.size() + _crafts.size() && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
-		{
-			int freeQuarters = _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters() - _pQty;
-			int toBeAdded = getQuantity() - _qtys[_sel];
-			int canBeAdded = std::min(freeQuarters, toBeAdded);
-			if (0 < canBeAdded)
-			{
-				_pQty += canBeAdded;
-				_qtys[_sel] += canBeAdded;
-				_total += getCost() * canBeAdded;
-			}
-		}
-		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
-		{
-			Craft *craft = _crafts[_sel - _soldiers.size()];
-			if ((_cQty + 1 <= _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
-			&&  (_pQty + craft->getNumSoldiers() <= _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
-			&&  (_qtys[_sel] < getQuantity()))
-			{
-				_cQty++;
-				_pQty += craft->getNumSoldiers();
-				_qtys[_sel]++;
-				_total += getCost();
-			}
-		}
-		else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset)
-		{
-			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
-			float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
-			if (0 < freeStores)
-			{
-				int freeStoresForItem;
-				if (0 == storesNeededPerItem) freeStoresForItem = INT_MAX;
-				else freeStoresForItem = floor(freeStores / storesNeededPerItem);
-				int toBeAdded = getQuantity() - _qtys[_sel];
-				int canBeAdded = std::min(freeStoresForItem, toBeAdded);
-				if (0 < canBeAdded)
-				{
-					_iQty += ((float)(canBeAdded)) * storesNeededPerItem;
-					_qtys[_sel] += canBeAdded;
-					_total += getCost() * canBeAdded;
-				}
-			}
-		}
-		std::wstringstream ss;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 2, ss.str());
-	}
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
 }
 
 /**
@@ -425,33 +382,20 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+}
+
+/**
+ * Handles the mouse-wheels on the arrow-buttons.
+ * @param action Pointer to an action.
+ */
+void TransferItemsState::lstItemsMousePress(Action *action)
+{
+	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 	{
-		if (_qtys[_sel] > 0)
-		{
-			// Personnel count
-			if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
-			{
-				_pQty -= _qtys[_sel];
-			}
-			// Craft count
-			else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
-			{
-				Craft *craft = _crafts[_sel - _soldiers.size()];
-				_cQty--;
-				_pQty -= craft->getNumSoldiers();
-			}
-			// Item count
-			else
-			{
-				_iQty -= _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() * ((float)(_qtys[_sel]));
-			}
-			_total -= getCost() * _qtys[_sel];
-			_qtys[_sel] = 0;
-			std::wstringstream ss;
-			ss << _qtys[_sel];
-			_lstItems->setCellText(_sel, 2, ss.str());
-		}
+		_sel = _lstItems->getSelectedRow();
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
 	}
 }
 
@@ -510,10 +454,20 @@ int TransferItemsState::getQuantity()
 }
 
 /**
- * Increases the quantity of the selected item to transfer.
+ * Increases the quantity of the selected item to transfer by one.
  */
 void TransferItemsState::increase()
 {
+	increase(1);
+}
+
+/**
+ * Increases the quantity of the selected item to transfer by "change".
+ * @param change how much we want to add
+ */
+void TransferItemsState::increase(int change)
+{
+	if (0 >= change || getQuantity() <= _qtys[_sel]) return;
 	if ((_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset)) && _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
 		_timerInc->stop();
@@ -535,13 +489,6 @@ void TransferItemsState::increase()
 			_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_ACCOMODATION_CREW", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 			return;
 		}
-		if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset &&
-			_iQty + _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset - _aOffset])->getSize() > _baseTo->getAvailableContainment())
-		{
-			_timerInc->stop();
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-			return;
-		}
 	}
 	if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset &&
 		_iQty + _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() > _baseTo->getAvailableStores() - _baseTo->getUsedStores())
@@ -550,63 +497,100 @@ void TransferItemsState::increase()
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
-	if (_qtys[_sel] < getQuantity())
+	if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset &&
+		_aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment())
 	{
-		// Personnel count
-		if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
-		{
-			_pQty++;
-		}
-		// Craft count
-		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
-		{
-			Craft *craft =  _crafts[_sel - _soldiers.size()];
-			_cQty++;
-			_pQty += craft->getNumSoldiers();
-		}
-		// Item count
-		else
-		{
-			_iQty += _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
-		}
+		_timerInc->stop();
+		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		return;
+	}
+
+	// Personnel count
+	if ((_sel < _soldiers.size()) || (_sel >= _soldiers.size() + _crafts.size() && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+	{
+		int freeQuarters = _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters() - _pQty;
+		change = std::min(std::min(freeQuarters, getQuantity() - _qtys[_sel]), change);
+		_pQty += change;
+		_qtys[_sel] += change;
+		_total += getCost() * change;
+	}
+	// Craft count
+	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
+	{
+		Craft *craft = _crafts[_sel - _soldiers.size()];
+		_cQty++;
+		_pQty += craft->getNumSoldiers();
 		_qtys[_sel]++;
-		std::wstringstream ss;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 2, ss.str());
 		_total += getCost();
 	}
+	// Item count
+	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
+	{
+		float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
+		float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
+		int freeStoresForItem;
+		if (0 == storesNeededPerItem) freeStoresForItem = INT_MAX;
+		else freeStoresForItem = floor(freeStores / storesNeededPerItem);
+		change = std::min(std::min(freeStoresForItem, getQuantity() - _qtys[_sel]), change);
+		_iQty += ((float)(change)) * storesNeededPerItem;
+		_qtys[_sel] += change;
+		_total += getCost() * change;
+	}
+	// Live Aliens count
+	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
+	{
+		int freeContainment = _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty;
+		change = std::min(std::min(freeContainment, getQuantity() - _qtys[_sel]), change);
+		_aQty += change;
+		_qtys[_sel] += change;
+		_total += getCost() * change;
+	}
+	updateItemStrings();
 }
 
 /**
- * Decreases the quantity of the selected item to transfer.
+ * Decreases the quantity of the selected item to transfer by one.
  */
 void TransferItemsState::decrease()
 {
-	if (_qtys[_sel] > 0)
+	decrease(1);
+}
+
+/**
+ * Decreases the quantity of the selected item to transfer by "change".
+ */
+void TransferItemsState::decrease(int change)
+{
+	if (0 >= change || 0 >= _qtys[_sel]) return;
+	change = std::min(_qtys[_sel], change);
+	// Personnel count
+	if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
+		_pQty -= change;
+	// Craft count
+	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
 	{
-		// Personnel count
-		if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
-		{
-			_pQty--;
-		}
-		// Craft count
-		else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
-		{
-			Craft *craft =  _crafts[_sel - _soldiers.size()];
-			_cQty--;
-			_pQty -= craft->getNumSoldiers();
-		}
-		// Item count
-		else
-		{
-			_iQty -= _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
-		}
-		_qtys[_sel]--;
-		std::wstringstream ss;
-		ss << _qtys[_sel];
-		_lstItems->setCellText(_sel, 2, ss.str());
-		_total -= getCost();
+		Craft *craft = _crafts[_sel - _soldiers.size()];
+		_cQty--;
+		_pQty -= craft->getNumSoldiers();
 	}
+	// Item count
+	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
+		_iQty -= _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize() * ((float)(change));
+	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
+		_aQty -= change;
+	_qtys[_sel] -= change;
+	_total -= getCost() * change;
+	updateItemStrings();
+}
+
+/**
+ * Updates the quantity-strings of the selected item.
+ */
+void TransferItemsState::updateItemStrings()
+{
+	std::wstringstream ss;
+	ss << _qtys[_sel];
+	_lstItems->setCellText(_sel, 2, ss.str());
 }
 
 /**

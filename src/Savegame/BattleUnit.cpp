@@ -51,7 +51,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_stats = *soldier->getCurrentStats();
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
-	_loftemps = soldier->getRules()->getLoftemps();
+	_floatHeight = soldier->getRules()->getFloatHeight();
+	_loftempsSet = soldier->getRules()->getLoftempsSet();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = 0;
 	_moveSound = -1;  // this one is hardcoded
@@ -106,7 +107,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_stats = *unit->getStats();
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
-	_loftemps = unit->getLoftemps();
+	_floatHeight = unit->getFloatHeight();
+	_loftempsSet = unit->getLoftempsSet();
 	_deathSound = unit->getDeathSound();
 	_aggroSound = unit->getAggroSound();
 	_moveSound = unit->getMoveSound();
@@ -957,14 +959,20 @@ void BattleUnit::startFalling()
 void BattleUnit::keepFalling()
 {
 	_fallPhase++;
-	if (_fallPhase == 3)
+	int endFrame = 3;
+	if (_spawnUnit != "")
 	{
-		_fallPhase = 2;
+		endFrame = 9;
+	}
+	if (_fallPhase == endFrame)
+	{
+		_fallPhase--;
 		if (_health == 0)
 			_status = STATUS_DEAD;
 		else
 			_status = STATUS_UNCONSCIOUS;
 	}
+
 	_cacheInvalid = true;
 }
 
@@ -1951,12 +1959,21 @@ int BattleUnit::getKneelHeight() const
 }
 
 /**
+  * Get the unit's floating elevation.
+  * @return The unit's elevation over the ground in voxels, when flying.
+  */
+int BattleUnit::getFloatHeight() const
+{
+	return _floatHeight;
+}
+
+/**
   * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
   * @return The unit's line of fire template ID.
   */
-int BattleUnit::getLoftemps() const
+int BattleUnit::getLoftemps(int entry) const
 {
-	return _loftemps;
+	return _loftempsSet.at(entry);
 }
 
 /**
@@ -2184,18 +2201,15 @@ BattleUnit *BattleUnit::getCharging()
  * Get the units carried weight in strength units.
  * @return weight
  */
-int BattleUnit::getCarriedWeight() const
+int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 {
-	int weight = 0;
-
+	int weight = 6;
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
+		if ((*i) == draggingItem) continue;
 		weight += (*i)->getRules()->getWeight();
 		if (0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}
-	if (weight == 0)
-		weight = 1;
-
 	return weight;
 }
 

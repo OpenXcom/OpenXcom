@@ -306,7 +306,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMTACTIC",
 							 "GMTACTIC2",
 							 "GMWIN"};
-		std::string exts[] = {"ogg", "mp3", "mod"};
+		std::string exts[] = {"flac", "ogg", "mp3", "mod"};
 		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
 
 		// Check which music version is available

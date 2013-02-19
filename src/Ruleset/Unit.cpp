@@ -60,7 +60,7 @@ YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _loftemps(0), _value(0), _deathSound(0), _aggroSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
+Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0), _loftempsSet(0), _value(0), _deathSound(0), _aggroSound(0), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE), _zombieUnit(""), _spawnUnit("")
 {
 }
 
@@ -112,9 +112,19 @@ void Unit::load(const YAML::Node &node)
 		{
 			i.second() >> _kneelHeight;
 		}
+		else if (key == "floatHeight")
+		{
+			i.second() >> _floatHeight;
+		}
 		else if (key == "loftemps")
 		{
-			i.second() >> _loftemps;
+			int a;
+			i.second() >> a;
+			_loftempsSet.push_back(a);
+		}
+		else if (key == "loftempsSet")
+		{
+			i.second() >> _loftempsSet;
 		}
 		else if (key == "value")
 		{
@@ -170,7 +180,15 @@ void Unit::save(YAML::Emitter &out) const
 	out << YAML::Key << "armor" << YAML::Value << _armor;
 	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
 	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
-	out << YAML::Key << "loftemps" << YAML::Value << _loftemps;
+	out << YAML::Key << "floatHeight" << YAML::Value << _floatHeight;
+	if (_loftempsSet.size() == 1)
+	{
+		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
+	}
+	else
+	{
+		out << YAML::Key << "loftempsSet" << YAML::Value << _loftempsSet;
+	}
 	out << YAML::Key << "value" << YAML::Value << _value;
 	out << YAML::Key << "deathSound" << YAML::Value << _deathSound;
 	out << YAML::Key << "aggroSound" << YAML::Value << _aggroSound;
@@ -221,14 +239,27 @@ int Unit::getKneelHeight() const
 }
 
 /**
+ * Returns the unit's floating eleavtion.
+ * @return height.
+ */
+int Unit::getFloatHeight() const
+{
+	return _floatHeight;
+}
+
+/**
  * Returns the unit's 3D template ID.
  * @return template ID.
  */
-int Unit::getLoftemps() const
+int Unit::getLoftemps(int entry) const
 {
-	return _loftemps;
+	return _loftempsSet.at(entry);
 }
 
+std::vector<int> Unit::getLoftempsSet() const
+{
+	return _loftempsSet;
+}
 /**
  * Gets the unit's armor type.
  * @return string.

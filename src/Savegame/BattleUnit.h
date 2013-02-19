@@ -95,7 +95,7 @@ private:
 	std::string _race;
 	std::wstring _name;
 	UnitStats _stats;
-	int _standHeight, _kneelHeight, _loftemps;
+	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
@@ -106,6 +106,7 @@ private:
 	Soldier *_geoscapeSoldier;
 	BattleUnit *_charging;
 	int _turnsExposed;
+	std::vector<int> _loftempsSet;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -275,6 +276,8 @@ public:
 	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
+	/// Gets the unit floating elevation.
+	int getFloatHeight() const;
 	/// Adds one to the reaction exp counter.
 	void addReactionExp();
 	/// Adds one to the firing exp counter.
@@ -314,7 +317,7 @@ public:
 	/// Get the unit's kneel height.
 	int getKneelHeight() const;
 	/// Get the unit's loft ID.
-	int getLoftemps() const;
+	int getLoftemps(int entry = 0) const;
 	/// Get the unit's value.
 	int getValue() const;
 	/// Get the unit's death sound.
@@ -366,7 +369,7 @@ public:
 	/// Get the units we are charging towards.
 	BattleUnit *getCharging();
 	/// Get the carried weight in strength units.
-	int getCarriedWeight() const;
+	int getCarriedWeight(BattleItem *draggingItem = 0) const;
 	/// Set how many turns this unit will be exposed for.
 	void setTurnsExposed (int turns);
 	/// Set how many turns this unit will be exposed for.
