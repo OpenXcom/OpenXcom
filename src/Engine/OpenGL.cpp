@@ -105,7 +105,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
   bool OpenGL::lock(uint32_t *&data, unsigned &pitch) {
     pitch = iwidth * ibpp;
-    return data = buffer;
+    return (data = buffer);
   }
 
   void OpenGL::clear() {
@@ -271,9 +271,9 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glUniform2fv = (PFNGLUNIFORM2FVPROC)glGetProcAddress("glUniform2fv");
     glUniform4fv = (PFNGLUNIFORM4FVPROC)glGetProcAddress("glUniform4fv");
 
-	glXGetCurrentDisplay = (void* (*)())glGetProcAddress("glXGetCurrentDisplay");
-	glXGetCurrentDrawable = (Uint32 (*)())glGetProcAddress("glXGetCurrentDrawable");
-	glXSwapIntervalEXT = (void (*)(void*, Uint32, int))glGetProcAddress("glXSwapIntervalEXT");
+	glXGetCurrentDisplay = (void* (APIENTRYP)())glGetProcAddress("glXGetCurrentDisplay");
+	glXGetCurrentDrawable = (Uint32 (APIENTRYP)())glGetProcAddress("glXGetCurrentDrawable");
+	glXSwapIntervalEXT = (void (APIENTRYP)(void*, Uint32, int))glGetProcAddress("glXSwapIntervalEXT");
 
 	wglSwapIntervalEXT = (Uint32 (APIENTRYP)(int))glGetProcAddress("wglSwapIntervalEXT");
 
