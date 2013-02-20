@@ -1740,47 +1740,36 @@ bool TileEngine::psiAttack(BattleAction *action)
 {
 	BattleUnit *victim = _save->getTile(action->target)->getUnit();
 	double attackStrength = action->actor->getStats()->psiStrength * action->actor->getStats()->psiSkill / 50;
-	double defenseStrength = victim->getStats()->psiStrength + 30 + (victim->getStats()->psiSkill / 5);
+	double defenseStrength = victim->getStats()->psiStrength + 10 + (victim->getStats()->psiSkill / 5);
 	int d = distance(action->actor->getPosition(), action->target);
 	attackStrength -= d/2;
 	attackStrength += RNG::generate(0,55);
-	if (action->type == BA_PANIC)
+
+	if (action->type == BA_MINDCONTROL)
 	{
-		if (attackStrength > defenseStrength)
+		defenceStrength += 20;
+	}
+
+	action->actor->addPsiExp();
+	if (attackStrength > defenseStrength)
+	{
+		action->actor->addPsiExp();
+		action->actor->addPsiExp();
+		if (action->type == BA_PANIC)
 		{
-			action->actor->addPsiExp();
-			action->actor->addPsiExp();
-			action->actor->addPsiExp();
 			int moraleLoss = (110-_save->getTile(action->target)->getUnit()->getStats()->bravery);
 			if (moraleLoss > 0)
 			_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
-			return true;
 		}
-		else
+		else// if (action->type == BA_MINDCONTROL)
 		{
-			action->actor->addPsiExp();
-			return false;
-		}
-	}
-	else if (action->type == BA_MINDCONTROL)
-	{
-		if (attackStrength > defenseStrength)
-		{
-			action->actor->addPsiExp();
-			action->actor->addPsiExp();
-			action->actor->addPsiExp();
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim);
 			if (action->actor->getFaction() == FACTION_PLAYER)
 				_save->setSelectedUnit(victim);
 			victim->setTimeUnits(victim->getStats()->tu);
-			return true;
 		}
-		else
-		{
-			action->actor->addPsiExp();
-			return false;
-		}
+		return true;
 	}
 	return false;
 }
