@@ -935,7 +935,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if (handlePanickingUnit(*j))
+		if ((*j)->getFaction() == FACTION_PLAYER && handlePanickingUnit(*j))
 			return false;
 	}
 	return true;
@@ -950,11 +950,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
-	if (unit->getFaction() == FACTION_PLAYER)
-	{
-		unit->setTurnsExposed(1);
-		_save->updateExposedUnits();
-	}
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
