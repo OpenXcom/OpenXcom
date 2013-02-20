@@ -24,7 +24,6 @@
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapData.h"
 #include "BattleUnit.h"
-#include "SerializationHelper.h"
 
 #include <SDL_types.h> // for Uint8
 

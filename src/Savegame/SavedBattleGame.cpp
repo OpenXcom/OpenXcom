@@ -36,6 +36,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {

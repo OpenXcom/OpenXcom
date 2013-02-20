@@ -498,7 +498,7 @@ void TransferItemsState::increase(int change)
 		return;
 	}
 	if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset &&
-		(_game->getAlienContainmentHasUpperLimit() && _aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() || 0 == _baseTo->getAvailableContainment()))
+		((_game->getAlienContainmentHasUpperLimit() && _aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment()) || 0 == _baseTo->getAvailableContainment()))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));

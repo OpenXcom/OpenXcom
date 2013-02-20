@@ -44,7 +44,6 @@ public:
 	static int BASE_HEIGHT;
 
 private:
-	Surface *_surface;
 	SDL_Surface *_screen;
 	void *_misalignedPixelBuffer;
 	int _bpp;
@@ -56,6 +55,7 @@ private:
 	int _numColors, _firstColor;
 	bool _pushPalette;
 	OpenGL glOutput;
+	Surface *_surface;
 public:
 	/// Creates a new display screen with the specified resolution.
 	Screen(int width, int height, int bpp, bool fullscreen);
