@@ -33,7 +33,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _stun(0), _energy(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _flatRate(false)
+											_recover(true), _liveAlien(false), _blastRadius(-1), _flatRate(false), _arcingShot(false)
 {
 }
 
@@ -253,6 +253,10 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _flatRate;
 		}
+		else if (key == "arcingShot")
+		{
+			i.second() >> _arcingShot;
+		}
 	}
 }
 
@@ -312,6 +316,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "liveAlien" << YAML::Value << _liveAlien;
 	out << YAML::Key << "blastRadius" << YAML::Value << _blastRadius;
 	out << YAML::Key << "flatRate" << YAML::Value << _flatRate;
+	out << YAML::Key << "arcingShot" << YAML::Value << _arcingShot;
 	out << YAML::EndMap;
 }
 
@@ -789,5 +794,10 @@ bool RuleItem::getAlien() const
 bool RuleItem::getFlatRate() const
 {
 	return _flatRate;
+}
+
+bool RuleItem::getArcingShot() const
+{
+	return _arcingShot;
 }
 }
