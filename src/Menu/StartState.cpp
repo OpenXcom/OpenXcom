@@ -21,7 +21,6 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Resource/XcomResourcePack.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
@@ -86,7 +85,7 @@ void StartState::think()
 		try
 		{
 			Log(LOG_INFO) << "Loading resources...";
-			_game->setResourcePack(new XcomResourcePack());
+			_game->setResourcePack(makeModifications(new XcomResourcePack()));
 			Log(LOG_INFO) << "Resources loaded successfully.";
 			Log(LOG_INFO) << "Loading ruleset...";
 			_game->loadRuleset();
@@ -151,6 +150,29 @@ void StartState::handle(Action *action)
 		if (action->getDetails()->type == SDL_KEYDOWN)
 			_game->quit();
 	}
+}
+
+/**
+ * This method makes our modifications to the XcomResourcePack.
+ * @param pack XcomResourcePack which is already read in from files.
+ * @return The modified XcomResourcePack.
+ */
+XcomResourcePack *StartState::makeModifications(XcomResourcePack *pack)
+{
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		Surface *surface = pack->getSurface("BACK07.SCR");
+		for (int y = 172; y >= 152; --y)
+			for (int x = 5; x <= 314; ++x)
+				surface->setPixel(x, y+4, surface->getPixel(x,y));
+		for (int y = 147; y >= 134; --y)
+			for (int x = 5; x <= 314; ++x)
+				surface->setPixel(x, y+9, surface->getPixel(x,y));
+		for (int y = 132; y >= 109; --y)
+			for (int x = 5; x <= 314; ++x)
+				surface->setPixel(x, y+10, surface->getPixel(x,y));
+	}
+	return pack;
 }
 
 }
