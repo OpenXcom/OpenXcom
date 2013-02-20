@@ -962,6 +962,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	int flee = RNG::generate(0,100);
 	BattleAction ba;
+	ba.actor = unit;
 	switch (status)
 	{
 	case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
@@ -978,8 +979,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				dropItem(unit->getPosition(), item, false, true);
 			}
 			unit->setCache(0);
-			BattleAction ba;
-			ba.actor = unit;
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			if (_save->getTile(ba.target)) // only walk towards it when the place exists
 			{
@@ -991,7 +990,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
 		for (int i= 0; i < 4; i++)
 		{
-			ba.actor = unit;
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			statePushBack(new UnitTurnBState(this, ba));
 		}
