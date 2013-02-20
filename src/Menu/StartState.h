@@ -20,6 +20,7 @@
 #define OPENXCOM_STARTSTATE_H
 
 #include "../Engine/State.h"
+#include "../Resource/XcomResourcePack.h"
 
 namespace OpenXcom
 {
@@ -45,6 +46,8 @@ public:
 	void think();
 	/// Handles key clicks.
 	void handle(Action *action);
+	/// This method makes our modifications to the XcomResourcePack.
+	XcomResourcePack *makeModifications(XcomResourcePack *pack);
 };
 
 }
