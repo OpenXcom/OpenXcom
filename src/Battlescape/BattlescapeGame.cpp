@@ -805,6 +805,11 @@ void BattlescapeGame::popState()
 				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
+					if (_save->getSelectedUnit())
+					{
+						_save->getSelectedUnit()->setCache(0);
+						getMap()->cacheUnit(_save->getSelectedUnit());
+					}
 					_AIActionCounter = 0;
 					if (_save->selectNextPlayerUnit(true, true) == 0)
 					{
