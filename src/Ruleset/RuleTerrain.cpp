@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
 * RuleTerrain construction
 */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(-1)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0)
 {
 }
 

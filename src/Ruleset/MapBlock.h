@@ -41,7 +41,7 @@ private:
 	std::string _name;
 	int _width, _length, _height;
 	MapBlockType _type, _subType;
-	int _frequency, _timesUsed;
+	int _frequency, _timesUsed, _maxCount;
 public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type);
 	~MapBlock();
