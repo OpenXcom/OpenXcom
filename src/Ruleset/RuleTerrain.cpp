@@ -153,7 +153,8 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type)
 
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if ((*i)->getWidth() <= maxsize && (*i)->getType() == type)
+		if ((*i)->getWidth() <= maxsize || 
+			((*i)->getType() == type || (*i)->getSubType() == type))
 		{
 			compliantMapBlocks.push_back((*i));
 		}

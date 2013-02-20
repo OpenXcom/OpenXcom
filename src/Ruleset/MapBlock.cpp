@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
 * MapBlock construction
 */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _type(type)
+MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _type(type), _subType(type)
 {
 }
 
@@ -67,6 +67,12 @@ void MapBlock::load(const YAML::Node &node)
 			i.second() >> a;
 			_type = (MapBlockType)a;
 		}
+		else if (key == "subType")
+		{
+			int a;
+			i.second() >> a;
+			_subType = (MapBlockType)a;
+		}
 	}
 }
 
@@ -82,6 +88,7 @@ void MapBlock::save(YAML::Emitter &out) const
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
 	out << YAML::Key << "type" << YAML::Value << (int)_type;
+	out << YAML::Key << "subType" << YAML::Value << (int)_subType;
 	out << YAML::EndMap;
 }
 
@@ -139,5 +146,9 @@ MapBlockType MapBlock::getType() const
 	return _type;
 }
 
+MapBlockType MapBlock::getSubType() const
+{
+	return _subType;
+}
 
 }

@@ -40,7 +40,7 @@ private:
 	RuleTerrain *_terrain;
 	std::string _name;
 	int _width, _length, _height;
-	MapBlockType _type;
+	MapBlockType _type, _subType;
 public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type);
 	~MapBlock();
@@ -60,6 +60,8 @@ public:
 	void setHeight(int height);
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getType() const;
+	/// Returns whether this mapblock is a landingzone.
+	MapBlockType getSubType() const;
 };
 
 }

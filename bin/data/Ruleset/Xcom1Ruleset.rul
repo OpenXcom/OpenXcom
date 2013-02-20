@@ -3381,6 +3381,7 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: CULTA01
         width: 10
         length: 10
@@ -3403,6 +3404,7 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: CULTA08
         width: 10
         length: 10
@@ -3416,6 +3418,7 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: CULTA12
         width: 10
         length: 10
@@ -3447,14 +3450,17 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: DESERT01
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: DESERT02
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: DESERT03
         width: 10
         length: 10
@@ -3580,6 +3586,7 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: MARS01
         width: 10
         length: 10
@@ -3669,14 +3676,17 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: POLAR01
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: POLAR02
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: POLAR03
         width: 10
         length: 10
@@ -3745,6 +3755,7 @@ terrains:
       - name: UBASE_07
         width: 10
         length: 10
+        type: 4
       - name: UBASE_08
         width: 10
         length: 10
@@ -3795,10 +3806,12 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: URBAN04
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: URBAN05
         width: 20
         length: 20
