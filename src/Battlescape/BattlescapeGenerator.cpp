@@ -1143,6 +1143,8 @@ void BattlescapeGenerator::generateMap()
 
 	x = 0;
 	y = 0;
+	int maxLarge = _terrain->getLargeBlockLimit();
+	int curLarge = 0;
 
 	/* Random map generation for crash/landing sites */
 	while (blocksToDo)
@@ -1153,7 +1155,7 @@ void BattlescapeGenerator::generateMap()
 			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1)
 				|| landingzone[x + 1][y] || landingzone[x + 1][y + 1] || landingzone[x][y + 1]
 				|| blocks[x + 1][y] || blocks[x + 1][y + 1] || blocks[x][y + 1] 
-				|| blocksToDo == 1)
+				|| blocksToDo == 1 || curLarge == maxLarge)
 			{
 				// only small block will fit
 				blocks[x][y] = _terrain->getRandomMapBlock(10, landingzone[x][y]?MT_LANDINGZONE:MT_DEFAULT);
@@ -1173,6 +1175,7 @@ void BattlescapeGenerator::generateMap()
 					blocksToDo--;
 					blocks[x][y + 1] = dummy;
 					blocksToDo--;
+					curLarge++;
 					x++;
 				}
 				x++;

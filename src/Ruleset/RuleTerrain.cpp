@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
 * RuleTerrain construction
 */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(-1)
 {
 }
 
@@ -81,6 +81,10 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 				_mapBlocks.push_back(map);
 			}
 		}
+		else if (key == "largeBlockLimit")
+		{
+			i.second() >> _largeBlockLimit;
+		}
 	}
 }
 
@@ -106,6 +110,7 @@ void RuleTerrain::save(YAML::Emitter &out) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "largeBlockLimit" << YAML::Value << _largeBlockLimit;
 	out << YAML::EndMap;
 }
 
@@ -198,6 +203,10 @@ MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
 	}
 
 	return mdf->getObjects()->at(*id);
+}
+int RuleTerrain::getLargeBlockLimit() const
+{
+	return _largeBlockLimit;
 }
 
 }

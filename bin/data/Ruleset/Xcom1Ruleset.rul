@@ -3441,6 +3441,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - DESERT
+    largeBlockLimit: 3
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -3485,6 +3486,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - FOREST
+    largeBlockLimit: 2
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -3613,6 +3615,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - MOUNT
+    largeBlockLimit: 2
     mapBlocks:
       - name: MOUNT00
         width: 10
@@ -3660,6 +3663,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLAR
+    largeBlockLimit: 1
     mapBlocks:
       - name: POLAR00
         width: 10
@@ -3713,6 +3717,7 @@ terrains:
       - U_WALL02
       - U_PODS
       - BRAIN
+    largeBlockLimit: 3
     mapBlocks:
       - name: UBASE_00
         width: 20
@@ -3772,6 +3777,7 @@ terrains:
       - URBITS
       - URBAN
       - FRNITURE
+    largeBlockLimit: 5
     mapBlocks:
       - name: URBAN00
         width: 10
