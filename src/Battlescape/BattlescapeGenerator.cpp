@@ -1148,46 +1148,45 @@ void BattlescapeGenerator::generateMap()
 		blocksToDo--;
 	}
 
-
 	x = 0;
 	y = 0;
 	int maxLarge = _terrain->getLargeBlockLimit();
 	int curLarge = 0;
-
+	int tries = 0;
+	while (curLarge != maxLarge && tries <= 50)
+	{
+		int randX = RNG::generate(0, (_length/10)- 2);
+		int randY = RNG::generate(0, (_width/10)- 2);
+		if (!blocks[randX][randY] && !blocks[randX + 1][randY] && !blocks[randX + 1][randY + 1] && !blocks[randX][randY + 1])
+		{
+			blocks[randX][randY] = _terrain->getRandomMapBlock(20, MT_DEFAULT, true);
+			blocksToDo--;
+			// mark mapblocks as used
+			blocks[randX + 1][randY] = dummy;
+			blocksToDo--;
+			blocks[randX + 1][randY + 1] = dummy;
+			blocksToDo--;
+			blocks[randX][y + randY] = dummy;
+			blocksToDo--;
+			curLarge++;
+		}
+		tries++;
+	}
 	/* Random map generation for crash/landing sites */
 	while (blocksToDo)
 	{
 		if (blocks[x][y] == 0)
 		{
-			// last block of this row or column or next block is not free or big block would block landingzone
-			if (x == ((_width / 10) - 1) || y == ((_length / 10) - 1)
-				|| landingzone[x + 1][y] || landingzone[x + 1][y + 1] || landingzone[x][y + 1]
-				|| blocks[x + 1][y] || blocks[x + 1][y + 1] || blocks[x][y + 1] 
-				|| blocksToDo == 1 || curLarge == maxLarge)
+			if ((_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT") && RNG::generate(0,100) > 60)
 			{
-				// only small block will fit
-				blocks[x][y] = _terrain->getRandomMapBlock(10, landingzone[x][y]?MT_LANDINGZONE:MT_DEFAULT);
-				blocksToDo--;
-				x++;
+				blocks[x][y] = _terrain->getRandomMapBlock(10, MT_CROSSING);
 			}
 			else
 			{
-				blocks[x][y] = _terrain->getRandomMapBlock(20, landingzone[x][y]?MT_LANDINGZONE:MT_DEFAULT);
-				blocksToDo--;
-				if (blocks[x][y]->getWidth() == 20) // big block
-				{
-					// mark mapblocks as used
-					blocks[x + 1][y] = dummy;
-					blocksToDo--;
-					blocks[x + 1][y + 1] = dummy;
-					blocksToDo--;
-					blocks[x][y + 1] = dummy;
-					blocksToDo--;
-					curLarge++;
-					x++;
-				}
-				x++;
+				blocks[x][y] = _terrain->getRandomMapBlock(10, MT_DEFAULT);
 			}
+			blocksToDo--;
+			x++;
 		}
 		else
 		{

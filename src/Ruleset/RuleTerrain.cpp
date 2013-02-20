@@ -145,15 +145,17 @@ std::string RuleTerrain::getName() const
 * gets a random mapblock within the given constraints
 * @param maxsize maximum size of the mapblock (10 or 20 or 999-don't care)
 * @param type whether this must be a block of a certain type
+* @param force whether to enforce the max size.
 * @return pointer to mapblock
 */
-MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type)
+MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool force)
 {
 	std::vector<MapBlock*> compliantMapBlocks;
 
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if ((*i)->getWidth() <= maxsize || 
+		if (((force && (*i)->getWidth() == maxsize) || 
+			(!force && (*i)->getWidth() <= maxsize)) && 
 			((*i)->getType() == type || (*i)->getSubType() == type))
 		{
 			for (int j = 0; j != (*i)->getRemainingUses(); ++j)

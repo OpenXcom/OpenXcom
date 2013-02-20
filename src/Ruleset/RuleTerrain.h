@@ -59,7 +59,7 @@ public:
 	/// Gets the terrain's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
-	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type);
+	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type, bool force = false);
 	/// Get a mapblock given it's name.
 	MapBlock* getMapBlock(const std::string &name);
 	/// Get the mapdata object.
