@@ -216,7 +216,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	int direction;
 	bool swap;
 	std::vector<Position> _trajectory;
-	if (Options::getBool("strafe") && (unit->getTurretType() > -1)) {
+	if (_save->getStrafeSetting() && (unit->getTurretType() > -1)) {
 		direction = unit->getTurretDirection();
 	}
 	else

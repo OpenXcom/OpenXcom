@@ -179,7 +179,7 @@ void UnitWalkBState::think()
 	}
 
 	// we are just standing around, shouldn't we be walking?
-	if (_unit->getStatus() == STATUS_STANDING)
+	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_PANICKING)
 	{
 		// check if we did spot new units
 		if (unitspotted && _unit->getCharging() == 0)

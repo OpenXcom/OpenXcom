@@ -2869,6 +2869,7 @@ items:
     invHeight: 3
     clipSize: -1
     recover: false
+    arcingShot: true
   - type: SILACOID_WEAPON
     weight: 3
     bigSprite: 40

@@ -218,22 +218,19 @@ void Game::run()
 					break;
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
-					if (Options::getBool("strafe"))
+					if (_event.type == SDL_KEYDOWN)
+					{ 
+						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
+							setCtrlKeyDown(true);
+						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
+							setShiftKeyDown(true);
+					}
+					else if (_event.type == SDL_KEYUP)
 					{
-						if (_event.type == SDL_KEYDOWN)
-						{ 
-							if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-								setCtrlKeyDown(true);
-							else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-								setShiftKeyDown(true);
-						}
-						else if (_event.type == SDL_KEYUP)
-						{
-							if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-								setCtrlKeyDown(false);
-							else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-								setShiftKeyDown(false);
-						}
+						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
+							setCtrlKeyDown(false);
+						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
+							setShiftKeyDown(false);
 					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:

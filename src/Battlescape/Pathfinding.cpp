@@ -103,7 +103,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	}
 
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = Options::getBool("strafe") && Game::getCtrlKeyDown() && !Game::getShiftKeyDown() && (startPosition.z == endPosition.z) && 
+	_strafeMove = _save->getStrafeSetting() && Game::getCtrlKeyDown() && !Game::getShiftKeyDown() && (startPosition.z == endPosition.z) && 
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	_path.clear();
@@ -317,7 +317,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
-			if (Options::getBool("strafe") && _strafeMove) {
+			if (_save->getStrafeSetting() && _strafeMove) {
 				if (size) {
 					// 4-tile units not supported.
 					// Turn off strafe move and continue

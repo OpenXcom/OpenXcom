@@ -43,9 +43,9 @@ int Screen::BASE_HEIGHT = 200;
 void Screen::makeVideoFlags()
 {
 	_flags = SDL_SWSURFACE|SDL_HWPALETTE;
-	if (Options::getBool("allowResize")) _flags |= SDL_RESIZABLE;
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
+	if (Options::getBool("allowResize")) _flags |= SDL_RESIZABLE;
 	if (_fullscreen)
 	{
 		_flags |= SDL_FULLSCREEN;

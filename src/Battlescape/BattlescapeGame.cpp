@@ -935,7 +935,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if (handlePanickingUnit(*j))
+		if ((*j)->getFaction() == FACTION_PLAYER && handlePanickingUnit(*j))
 			return false;
 	}
 	return true;
@@ -950,11 +950,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
 	unit->setVisible(true);
-	if (unit->getFaction() == FACTION_PLAYER)
-	{
-		unit->setTurnsExposed(1);
-		_save->updateExposedUnits();
-	}
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
@@ -967,6 +962,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	int flee = RNG::generate(0,100);
 	BattleAction ba;
+	ba.actor = unit;
 	switch (status)
 	{
 	case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
@@ -983,8 +979,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				dropItem(unit->getPosition(), item, false, true);
 			}
 			unit->setCache(0);
-			BattleAction ba;
-			ba.actor = unit;
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			if (_save->getTile(ba.target)) // only walk towards it when the place exists
 			{
@@ -996,7 +990,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	case STATUS_BERSERK: // berserk - do some weird turning around and then aggro towards an enemy unit or shoot towards random place
 		for (int i= 0; i < 4; i++)
 		{
-			ba.actor = unit;
 			ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
 			statePushBack(new UnitTurnBState(this, ba));
 		}
@@ -1214,8 +1207,8 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			if (_currentAction.target != pos && bPreviewed)
 				_save->getPathfinding()->removePreview();
-			_currentAction.run = Options::getBool("strafe") && Game::getShiftKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
-			_currentAction.strafe = !_currentAction.run && Options::getBool("strafe") && Game::getCtrlKeyDown() && (_save->getSelectedUnit()->getTurretType() > -1);
+			_currentAction.run = _save->getStrafeSetting() && Game::getShiftKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && Game::getCtrlKeyDown() && (_save->getSelectedUnit()->getTurretType() > -1);
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
 			if (bPreviewed && !_save->getPathfinding()->previewPath())

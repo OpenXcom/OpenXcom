@@ -205,7 +205,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	else if (_unit->getType() == "CELATID") // special code for the "spit" trajectory
+	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
 		{
