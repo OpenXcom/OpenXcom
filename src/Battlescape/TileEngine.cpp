@@ -691,9 +691,13 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			{
 				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore && (*i)->getMainHandWeapon())
 				{
-					// I see you!
-					highestReactionScore = (*i)->getReactionScore();
-					action->actor = (*i);
+					if (((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE && validMeleeRange((*i), unit)) ||
+						(*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE)
+					{
+						// I see you!
+						highestReactionScore = (*i)->getReactionScore();
+						action->actor = (*i);
+					}
 				}
 			}
 		}
@@ -701,8 +705,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	if (action->actor && highestReactionScore > unit->getReactionScore() &&
 		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
-		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-		validMeleeRange(action->actor, unit))))
+		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)))
 	{
 		action->actor->addReactionExp();
 		action->type = BA_SNAPSHOT;

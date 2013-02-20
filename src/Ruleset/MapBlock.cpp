@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
 * MapBlock construction
 */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _type(type)
+MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _type(type), _subType(type), _frequency(1), _timesUsed(0), _maxCount(-1)
 {
 }
 
@@ -67,6 +67,20 @@ void MapBlock::load(const YAML::Node &node)
 			i.second() >> a;
 			_type = (MapBlockType)a;
 		}
+		else if (key == "subType")
+		{
+			int a;
+			i.second() >> a;
+			_subType = (MapBlockType)a;
+		}
+		else if (key == "frequency")
+		{
+			i.second() >> _frequency;
+		}
+		else if (key == "maxCount")
+		{
+			i.second() >> _maxCount;
+		}
 	}
 }
 
@@ -82,6 +96,9 @@ void MapBlock::save(YAML::Emitter &out) const
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
 	out << YAML::Key << "type" << YAML::Value << (int)_type;
+	out << YAML::Key << "subType" << YAML::Value << (int)_subType;
+	out << YAML::Key << "frequency" << YAML::Value << _frequency;
+	out << YAML::Key << "maxCount" << YAML::Value << _maxCount;
 	out << YAML::EndMap;
 }
 
@@ -139,5 +156,31 @@ MapBlockType MapBlock::getType() const
 	return _type;
 }
 
+MapBlockType MapBlock::getSubType() const
+{
+	return _subType;
+}
+
+int MapBlock::getRemainingUses()
+{
+	if (_maxCount == -1)
+	{
+		return _frequency;
+	}
+	return _maxCount - _timesUsed;
+}
+
+void MapBlock::markUsed()
+{
+	if (_maxCount == -1)
+	{
+		return;
+	}
+	_timesUsed++;
+	if (_timesUsed >= _maxCount)
+	{
+		_timesUsed = _maxCount;
+	}
+}
 
 }

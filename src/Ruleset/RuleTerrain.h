@@ -44,6 +44,7 @@ private:
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name;
+	int _largeBlockLimit;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -58,11 +59,12 @@ public:
 	/// Gets the terrain's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
-	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type);
+	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type, bool force = false);
 	/// Get a mapblock given it's name.
 	MapBlock* getMapBlock(const std::string &name);
 	/// Get the mapdata object.
 	MapData *getMapData(int *id, int *mapDataSetID) const;
+	int getLargeBlockLimit() const;
 };
 
 }

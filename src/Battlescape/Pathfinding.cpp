@@ -46,7 +46,6 @@ Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0
 		_save->getTileCoords(i, &p.x, &p.y, &p.z);
 		_nodes.push_back(PathfindingNode(p));
 	}
-	_strafeMove = false;
 }
 
 /**
@@ -117,7 +116,10 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
 	
 	// Now try through A*.
-	aStarPath(startPosition, endPosition, missileTarget);
+	if (!aStarPath(startPosition, endPosition, missileTarget))
+	{
+		_path.clear();
+	}
 }
 
 /**

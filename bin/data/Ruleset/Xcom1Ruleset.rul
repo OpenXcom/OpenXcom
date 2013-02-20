@@ -3381,79 +3381,105 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
+        maxCount: 3
       - name: CULTA01
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA02
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA03
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA04
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA05
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA06
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA07
         width: 10
         length: 10
         type: 1
+        subtype: 0
+        maxCount: 3
       - name: CULTA08
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA09
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA10
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA11
         width: 10
         length: 10
         type: 1
+        subtype: 0
+        maxCount: 3
       - name: CULTA12
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA13
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA14
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA15
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA16
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA17
         width: 10
         length: 10
+        maxCount: 3
       - name: CULTA18
         width: 10
         length: 10
+        maxCount: 3
   - name: DESERT
     mapDataSets:
       - BLANKS
       - DESERT
+    largeBlockLimit: 3
     mapBlocks:
       - name: DESERT00
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: DESERT01
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: DESERT02
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: DESERT03
         width: 10
         length: 10
@@ -3485,6 +3511,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - FOREST
+    largeBlockLimit: 2
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -3544,30 +3571,39 @@ terrains:
       - name: JUNGLE03
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE04
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE05
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE06
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE07
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE08
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE09
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE10
         width: 10
         length: 10
+        frequency: 1
       - name: JUNGLE11
         width: 10
         length: 10
+        frequency: 1
   - name: MARS
     mapDataSets:
       - BLANKS
@@ -3578,6 +3614,7 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: MARS01
         width: 10
         length: 10
@@ -3613,6 +3650,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - MOUNT
+    largeBlockLimit: 2
     mapBlocks:
       - name: MOUNT00
         width: 10
@@ -3660,19 +3698,23 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLAR
+    largeBlockLimit: 1
     mapBlocks:
       - name: POLAR00
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: POLAR01
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: POLAR02
         width: 10
         length: 10
         type: 1
+        subtype: 0
       - name: POLAR03
         width: 10
         length: 10
@@ -3713,6 +3755,7 @@ terrains:
       - U_WALL02
       - U_PODS
       - BRAIN
+    largeBlockLimit: 3
     mapBlocks:
       - name: UBASE_00
         width: 20
@@ -3740,6 +3783,7 @@ terrains:
       - name: UBASE_07
         width: 10
         length: 10
+        type: 4
       - name: UBASE_08
         width: 10
         length: 10
@@ -3772,6 +3816,7 @@ terrains:
       - URBITS
       - URBAN
       - FRNITURE
+    largeBlockLimit: 5
     mapBlocks:
       - name: URBAN00
         width: 10
@@ -3789,10 +3834,14 @@ terrains:
         width: 10
         length: 10
         type: 1
+        subtype: 0
+        frequency: 3
       - name: URBAN04
         width: 10
         length: 10
         type: 1
+        subtype: 0
+        frequency: 3
       - name: URBAN05
         width: 20
         length: 20
@@ -3811,18 +3860,23 @@ terrains:
       - name: URBAN14
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN15
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN16
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN17
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN18
         width: 10
         length: 10
+        frequency: 2
   - name: XBASE
     mapDataSets:
       - BLANKS

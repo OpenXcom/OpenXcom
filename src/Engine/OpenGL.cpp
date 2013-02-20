@@ -293,7 +293,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 	void OpenGL::setVSync(bool sync)
 	{
 		const int interval = sync ? 1 : 0;
-		if (glXGetCurrentDisplay)
+		if (glXGetCurrentDisplay && glXGetCurrentDrawable && glXSwapIntervalEXT)
 		{
 			void *dpy = glXGetCurrentDisplay();
 			Uint32 drawable = glXGetCurrentDrawable();
