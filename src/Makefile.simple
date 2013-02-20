@@ -24,7 +24,7 @@ CXXFLAGS ?= -Wall -Wextra -O2 -rdynamic
 CXXFLAGS += $(addprefix -D,$(TARGET))
 CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 
-LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image
+LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL
 
 # Rules
 all: $(BINDIR)$(BIN)
