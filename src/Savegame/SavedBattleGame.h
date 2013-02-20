@@ -78,7 +78,7 @@ private:
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::vector<BattleUnit*> _fallingUnits;
-	bool _unitsFalling;
+	bool _unitsFalling, _strafeEnabled;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -219,6 +219,7 @@ public:
 	std::vector<BattleUnit*> *getFallingUnits();
 	void setUnitsFalling(bool fall);
 	bool getUnitsFalling();
+	const bool getStrafeSetting();
 
 };
 

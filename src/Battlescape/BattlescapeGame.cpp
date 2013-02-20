@@ -1207,8 +1207,8 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		{
 			if (_currentAction.target != pos && bPreviewed)
 				_save->getPathfinding()->removePreview();
-			_currentAction.run = Options::getBool("strafe") && Game::getShiftKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
-			_currentAction.strafe = !_currentAction.run && Options::getBool("strafe") && Game::getCtrlKeyDown() && (_save->getSelectedUnit()->getTurretType() > -1);
+			_currentAction.run = _save->getStrafeSetting() && Game::getShiftKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && Game::getCtrlKeyDown() && (_save->getSelectedUnit()->getTurretType() > -1);
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
 			if (bPreviewed && !_save->getPathfinding()->previewPath())

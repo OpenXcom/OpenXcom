@@ -382,14 +382,15 @@ void AggroBAIState::think(BattleAction *action)
 					takeCover = true;
 					bool targetFound = false;
 					int distance = 200;
-					for (int x = 0 - action->actor->getArmor()->getSize()-1; x <= _aggroTarget->getArmor()->getSize()-1; ++x)
+					int size = action->actor->getArmor()->getSize()-1;
+					int targetsize = _aggroTarget->getArmor()->getSize()-1;
+					for (int x = 0 - size; x <= targetsize; ++x)
 					{
-						for (int y = 0 - action->actor->getArmor()->getSize()-1; y <= _aggroTarget->getArmor()->getSize()-1; ++y)
+						for (int y = 0 - size; y <= targetsize; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
-								Position p (x, y, 0);
-								Position checkPath = _aggroTarget->getPosition() + p;
+								Position checkPath = _aggroTarget->getPosition() + Position (x, y, 0);
 								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
@@ -527,7 +528,7 @@ void AggroBAIState::think(BattleAction *action)
 				}
 			}
 		}
-		if (action->type != BA_RETHINK)
+		if (action->type != BA_RETHINK && action->type != BA_WALK)
 			action->TU = action->actor->getActionTUs(action->type, action->weapon);
 	}
 	if (_aggroTarget != 0)
