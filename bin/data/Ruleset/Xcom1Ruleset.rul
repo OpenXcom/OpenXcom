@@ -3382,64 +3382,83 @@ terrains:
         length: 10
         type: 1
         subtype: 0
+        frequency: 3
       - name: CULTA01
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA02
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA03
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA04
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA05
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA06
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA07
         width: 10
         length: 10
         type: 1
         subtype: 0
+        frequency: 3
       - name: CULTA08
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA09
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA10
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA11
         width: 10
         length: 10
         type: 1
         subtype: 0
+        frequency: 3
       - name: CULTA12
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA13
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA14
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA15
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA16
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA17
         width: 10
         length: 10
+        frequency: 3
       - name: CULTA18
         width: 10
         length: 10
+        frequency: 3
   - name: DESERT
     mapDataSets:
       - BLANKS
@@ -3552,30 +3571,39 @@ terrains:
       - name: JUNGLE03
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE04
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE05
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE06
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE07
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE08
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE09
         width: 10
         length: 10
+        frequency: 2
       - name: JUNGLE10
         width: 10
         length: 10
+        frequency: 1
       - name: JUNGLE11
         width: 10
         length: 10
+        frequency: 1
   - name: MARS
     mapDataSets:
       - BLANKS
@@ -3807,11 +3835,13 @@ terrains:
         length: 10
         type: 1
         subtype: 0
+        frequency: 3
       - name: URBAN04
         width: 10
         length: 10
         type: 1
         subtype: 0
+        frequency: 3
       - name: URBAN05
         width: 20
         length: 20
@@ -3830,18 +3860,23 @@ terrains:
       - name: URBAN14
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN15
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN16
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN17
         width: 10
         length: 10
+        frequency: 2
       - name: URBAN18
         width: 10
         length: 10
+        frequency: 2
   - name: XBASE
     mapDataSets:
       - BLANKS

@@ -973,6 +973,8 @@ void BattlescapeGenerator::generateMap()
 			for (int j = 0; j < ufoMap->getLength() / 10; ++j)
 			{
 				landingzone[ufoX + i][ufoY + j] = true;
+				blocks[ufoX + i][ufoY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
+				blocksToDo--;
 			}
 		}
 	}
@@ -1003,8 +1005,14 @@ void BattlescapeGenerator::generateMap()
 			if (placed)
 			{
 				for (int i = 0; i < craftMap->getWidth() / 10; ++i)
+				{
 					for (int j = 0; j < craftMap->getLength() / 10; ++j)
+					{
 						landingzone[craftX + i][craftY + j] = true;
+						blocks[craftX + i][craftY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
+						blocksToDo--;
+					}
+				}
 			}
 		}
 	}
