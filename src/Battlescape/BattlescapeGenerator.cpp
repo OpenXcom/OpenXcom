@@ -1166,7 +1166,7 @@ void BattlescapeGenerator::generateMap()
 			blocksToDo--;
 			blocks[randX + 1][randY + 1] = dummy;
 			blocksToDo--;
-			blocks[randX][y + randY] = dummy;
+			blocks[randX][randY + 1] = dummy;
 			blocksToDo--;
 			curLarge++;
 		}
