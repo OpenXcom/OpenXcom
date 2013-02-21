@@ -66,8 +66,11 @@ void Screen::makeVideoFlags()
  */
 Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0), _surface(0)
 {
+	char *prev;
 	if (!_fullscreen)
 	{
+		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
+		if (0 == prev) prev="";
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
@@ -76,7 +79,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	if (!_fullscreen)
 	{ // We don't want to put the window back to the starting position later when the window is resized.
 		std::stringstream ss;
-		ss << "SDL_VIDEO_WINDOW_POS=";
+		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 	}
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
