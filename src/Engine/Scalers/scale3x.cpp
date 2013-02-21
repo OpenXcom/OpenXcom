@@ -32,10 +32,6 @@
  * - derivative works of the program are allowed.
  */
 
-#if HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "scale3x.h"
 
 #include <assert.h>

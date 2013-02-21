@@ -27,6 +27,7 @@
 #include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {

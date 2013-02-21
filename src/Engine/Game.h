@@ -55,6 +55,7 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
+	int _alienContainmentHasUpperLimit; // It's an int-type cache for Options::getBool("alienContainmentHasUpperLimit").
 	static bool _ctrlKeyDown; // Used so player can indicate strafing movement.
 	static bool _shiftKeyDown; // Used so player can indicate strafing movement.
 public:
@@ -100,6 +101,8 @@ public:
 	void loadRuleset();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
+	/// Gets the value of alienContainmentHasUpperLimit.
+	int getAlienContainmentHasUpperLimit() const;
 	/// Sets whether the Ctrl Key is down
 	static void setCtrlKeyDown(bool ctrlKey);
 	/// Returns whether the control key is down

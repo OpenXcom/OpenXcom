@@ -95,8 +95,8 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	double lat = _lat;
 	if (const YAML::Node *dest = node.FindValue("dest"))
 	{
-		node["dest"]["lon"] >> lon;
-		node["dest"]["lat"] >> lat;
+		(*dest)["lon"] >> lon;
+		(*dest)["lat"] >> lat;
 	}
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);

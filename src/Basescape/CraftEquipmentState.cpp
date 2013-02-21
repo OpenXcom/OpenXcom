@@ -378,8 +378,7 @@ void CraftEquipmentState::moveLeft(int change)
 				{
 					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
 					delete (*i);
-					c->getVehicles()->erase(i);
-					i = c->getVehicles()->begin(); // Since we erased the current iterator, we have to start over (to avoid a crash)
+					i = c->getVehicles()->erase(i);
 				}
 				else ++i;
 			}
@@ -395,9 +394,8 @@ void CraftEquipmentState::moveLeft(int change)
 				if ((*i)->getRules() == item)
 				{
 					delete (*i);
-					c->getVehicles()->erase(i);
+					i = c->getVehicles()->erase(i);
 					if (0 >= --change) break;
-					i = c->getVehicles()->begin(); // Since we erased the current iterator, we have to start over (to avoid a crash)
 				}
 				else ++i;
 			}

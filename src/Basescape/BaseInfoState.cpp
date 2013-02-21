@@ -80,19 +80,25 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtWorkshops = new Text(114, 9, 8, 113);
 	_numWorkshops = new Text(40, 9, 126, 113);
 	_barWorkshops = new Bar(150, 5, 166, 115);
-	_txtHangars = new Text(114, 9, 8, 123);
-	_numHangars = new Text(40, 9, 126, 123);
-	_barHangars = new Bar(150, 5, 166, 125);
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		_txtContainment = new Text(114, 9, 8, 123);
+		_numContainment = new Text(40, 9, 126, 123);
+		_barContainment = new Bar(150, 5, 166, 125);
+	}
+	_txtHangars = new Text(114, 9, 8, _game->getAlienContainmentHasUpperLimit() ? 133 : 123);
+	_numHangars = new Text(40, 9, 126, _game->getAlienContainmentHasUpperLimit() ? 133 : 123);
+	_barHangars = new Bar(150, 5, 166, _game->getAlienContainmentHasUpperLimit() ? 135 : 125);
 
-	_txtDefense = new Text(114, 9, 8, 138);
-	_numDefense = new Text(40, 9, 126, 138);
-	_barDefense = new Bar(150, 5, 166, 140);
-	_txtShortRange = new Text(114, 9, 8, 153);
-	_numShortRange = new Text(40, 9, 126, 153);
-	_barShortRange = new Bar(150, 5, 166, 155);
-	_txtLongRange = new Text(114, 9, 8, 163);
-	_numLongRange = new Text(40, 9, 126, 163);
-	_barLongRange = new Bar(150, 5, 166, 165);
+	_txtDefense = new Text(114, 9, 8, _game->getAlienContainmentHasUpperLimit() ? 147 : 138);
+	_numDefense = new Text(40, 9, 126, _game->getAlienContainmentHasUpperLimit() ? 147 : 138);
+	_barDefense = new Bar(150, 5, 166, _game->getAlienContainmentHasUpperLimit() ? 149 : 140);
+	_txtShortRange = new Text(114, 9, 8, _game->getAlienContainmentHasUpperLimit() ? 157 : 153);
+	_numShortRange = new Text(40, 9, 126, _game->getAlienContainmentHasUpperLimit() ? 157 : 153);
+	_barShortRange = new Bar(150, 5, 166, _game->getAlienContainmentHasUpperLimit() ? 159 : 155);
+	_txtLongRange = new Text(114, 9, 8, _game->getAlienContainmentHasUpperLimit() ? 167 : 163);
+	_numLongRange = new Text(40, 9, 126, _game->getAlienContainmentHasUpperLimit() ? 167 : 163);
+	_barLongRange = new Bar(150, 5, 166, _game->getAlienContainmentHasUpperLimit() ? 169 : 165);
 
 	add(_bg);
 	add(_mini);
@@ -126,6 +132,12 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_txtWorkshops);
 	add(_numWorkshops);
 	add(_barWorkshops);
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		add(_txtContainment);
+		add(_numContainment);
+		add(_barContainment);
+	}
 	add(_txtHangars);
 	add(_numHangars);
 	add(_barHangars);
@@ -239,6 +251,17 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		_txtContainment->setColor(Palette::blockOffset(13)+5);
+		_txtContainment->setText(_game->getLanguage()->getString("STR_ALIEN_CONTAINMENT"));
+
+		_numContainment->setColor(Palette::blockOffset(13));
+
+		_barContainment->setColor(Palette::blockOffset(3));
+		_barContainment->setScale(0.5);
+	}
+
 	_txtHangars->setColor(Palette::blockOffset(13)+5);
 	_txtHangars->setText(_game->getLanguage()->getString("STR_HANGARS"));
 
@@ -337,6 +360,16 @@ void BaseInfoState::init()
 
 	_barWorkshops->setMax(_base->getAvailableWorkshops());
 	_barWorkshops->setValue(_base->getUsedWorkshops());
+
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		std::wstringstream ss72;
+		ss72 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
+		_numContainment->setText(ss72.str());
+
+		_barContainment->setMax(_base->getAvailableContainment());
+		_barContainment->setValue(_base->getUsedContainment());
+	}
 
 	std::wstringstream ss8;
 	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
