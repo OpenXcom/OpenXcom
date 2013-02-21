@@ -1747,7 +1747,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 
 	if (action->type == BA_MINDCONTROL)
 	{
-		defenceStrength += 20;
+		defenseStrength += 20;
 	}
 
 	action->actor->addPsiExp();
