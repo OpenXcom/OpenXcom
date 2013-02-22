@@ -73,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight), _unitDying(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight), _unitDying(false), _launch(false)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -220,22 +220,11 @@ void Map::drawTerrain(Surface *surface)
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
+
 	NumberText *_numWaypid = 0;
 	
-	// get corner map coordinates to give rough boundaries in which tiles to redraw are
-	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
-	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
-	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
-	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
-	beginY -= (_camera->getViewHeight() * 2);
-	beginX -= (_camera->getViewHeight() * 2);
-	if (beginX < 0)
-		beginX = 0;
-	if (beginY < 0)
-		beginY = 0;
-
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile && !_projectile->getItem())
+	if (_projectile /* && !_projectile->getItem()*/) //thrown items also need to be sen by level
 	{
 		int part = _projectile->getParticle(0);
 		if (part == 0)
@@ -265,13 +254,54 @@ void Map::drawTerrain(Surface *surface)
 
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
-		if ((bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
-			bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
-			&& projectileInFOV)
+
+		if (projectileInFOV)
 		{
-			_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletLowZ), false);
-		}
+			if (_launch)
+			{
+				_launch = false;
+				if ((bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
+					bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight  )
+					&& projectileInFOV)
+				{
+					_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
+				}
+			}
+			else
+			{
+				Position newCam = _camera->getMapOffset();
+				if (newCam.z != bulletHighZ) //switch level
+				{
+					newCam.z = bulletHighZ;
+					if (projectileInFOV)
+					{
+						_camera->setMapOffset(newCam);
+						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+					}
+				}
+				if (bulletPositionScreen.x < 8)
+					_camera->scrollXY(+surface->getWidth()-16, _visibleMapHeight/2 - bulletPositionScreen.y, false);
+				if (bulletPositionScreen.x > surface->getWidth()-8)
+					_camera->scrollXY(-surface->getWidth()+16, _visibleMapHeight/2 - bulletPositionScreen.y, false);
+				if (bulletPositionScreen.y < 8)
+					_camera->scrollXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16, false);
+				if (bulletPositionScreen.y > _visibleMapHeight-8)
+					_camera->scrollXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16, false);
+			}
+		}	
 	}
+
+	// get corner map coordinates to give rough boundaries in which tiles to redraw are
+	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
+	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
+	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
+	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
+	beginY -= (_camera->getViewHeight() * 2);
+	beginX -= (_camera->getViewHeight() * 2);
+	if (beginX < 0)
+		beginX = 0;
+	if (beginY < 0)
+		beginY = 0;
 
 	if (!_waypoints.empty())
 	{
@@ -404,64 +434,61 @@ void Map::drawTerrain(Surface *surface)
 						{
 							tmpSurface = _projectile->getSprite();
 
-							if (itZ == 0)
+							Position voxelPos = _projectile->getPosition();
+							// draw shadow on the floor
+							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
+							if (voxelPos.x / 16 == itX &&
+								voxelPos.y / 16 == itY &&
+								voxelPos.z / 24 == itZ &&
+								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
-								// draw shadow on the floor
-								Position voxelPos = _projectile->getPosition();
-								voxelPos.z = 0;
-								if (voxelPos.x / 16 >= mapPosition.x-1 &&
-									voxelPos.y / 16 >= mapPosition.y-1 &&
-									voxelPos.x / 16 <= mapPosition.x+1 &&
-									voxelPos.y / 16 <= mapPosition.y+1 )
-								{
-									_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-									tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 15);
-								}
+								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 15);
 							}
 
-							Position voxelPos = _projectile->getPosition();
-							if (voxelPos.x / 16 == mapPosition.x &&
-								voxelPos.y / 16 == mapPosition.y )
+							voxelPos = _projectile->getPosition();
+							// draw thrown object
+							if (voxelPos.x / 16 == itX &&
+								voxelPos.y / 16 == itY &&
+								voxelPos.z / 24 == itZ &&
+								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 0);
 							}
+
 						}
 						else
 						{
 							// draw bullet on the correct tile
 							if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
 							{
-								if (itZ == 0)
-								{
-									// draw shadow on the floor
-									for (int i = 1; i <= _projectile->getParticle(0); ++i)
-									{
-										if (_projectile->getParticle(i) != 0xFF)
-										{
-											Position voxelPos = _projectile->getPosition(1-i);
-											Tile *floorTile = _save->getTileEngine()->applyItemGravity(tile);
-											voxelPos.z = (floorTile->getPosition().z * 24) - floorTile->getTerrainLevel();
-											if (voxelPos.x / 16 == mapPosition.x &&
-												voxelPos.y / 16 == mapPosition.y)
-											{
-												_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-												_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 15);
-											}
-										}
-									}
-								}
 								for (int i = 1; i <= _projectile->getParticle(0); ++i)
 								{
 									if (_projectile->getParticle(i) != 0xFF)
 									{
 										Position voxelPos = _projectile->getPosition(1-i);
-										if (voxelPos.x / 16 == mapPosition.x &&
-											voxelPos.y / 16 == mapPosition.y)
+										// draw shadow on the floor
+										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
+										if (voxelPos.x / 16 == itX &&
+											voxelPos.y / 16 == itY &&
+											voxelPos.z / 24 == itZ &&
+											_save->getTileEngine()->isVoxelVisible(voxelPos))
+										{
+											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 15);
+										}
+										// draw bullet itself
+										voxelPos = _projectile->getPosition(1-i);
+										if (voxelPos.x / 16 == itX &&
+											voxelPos.y / 16 == itY &&
+											voxelPos.z / 24 == itZ &&
+											_save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
 										}
+
 									}
 								}
 							}
@@ -951,6 +978,7 @@ void Map::cacheUnit(BattleUnit *unit)
 void Map::setProjectile(Projectile *projectile)
 {
 	_projectile = projectile;
+	_launch = true;
 }
 
 /**
@@ -1011,5 +1039,6 @@ void Map::setUnitDying(bool flag)
 {
 	_unitDying = flag;
 }
+
 
 }
