@@ -498,7 +498,8 @@ void Map::drawTerrain(Surface *surface)
 						}
 					}
 					// if we can see through the floor, draw the soldier below it if it is on stairs
-					if (itZ > 0 && tile->hasNoFloor())
+					Tile *tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
+					if (itZ > 0 && tile->hasNoFloor(tileBelow))
 					{
 						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
 						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));

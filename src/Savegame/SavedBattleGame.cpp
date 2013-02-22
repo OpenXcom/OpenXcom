@@ -1174,7 +1174,8 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
 			{
 				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
-				if (t && t->getUnit() == 0 && !t->hasNoFloor())
+				Tile *bt = getTile(originalPosition + Position(xd[dir],yd[dir],-1));
+				if (t && t->getUnit() == 0 && !t->hasNoFloor(bt))
 				{
 					// recover from unconscious
 					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));

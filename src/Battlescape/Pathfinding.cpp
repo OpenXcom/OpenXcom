@@ -170,9 +170,9 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
-			int totalTuCost = currentNode->getTUCost(missileTarget) + tuCost;
+			int totalTuCost = currentNode->getTUCost(missileTarget != 0) + tuCost;
 			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget) > totalTuCost)
+			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > totalTuCost)
 			{
 				nextNode->connect(totalTuCost, currentNode, direction, endPosition);
 				openList.push(nextNode);
@@ -212,6 +212,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			Tile *startTile = _save->getTile(startPosition + Position(x,y,0));
 			Tile *destinationTile = _save->getTile(*endPosition + Position(x,y,0));
+			Tile *belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
 
 			cost = 0;
 			// this means the destination is probably outside the map
@@ -227,7 +228,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
 				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
-				&& _movementType != MT_FLY && _save->getTile(*endPosition)->hasNoFloor())
+				&& _movementType != MT_FLY && _save->getTile(*endPosition)->hasNoFloor(belowDestination))
 				return 255;
 
 
@@ -289,7 +290,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 
 			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
-			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor() && x==0 && y==0)
+			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(belowDestination) && x==0 && y==0)
 			{
 				cost = 4;
 			}
@@ -528,7 +529,7 @@ bool Pathfinding::canFallDown(Tile *here)
 {
 	if (here->getPosition().z == 0)
 		return false;
-
+	Tile* tileBelow = _save->getTile(here->getPosition() - Position (0,0,1));
 	for (int z = 1; z <= here->getPosition().z; ++z)
 	{
 		if (_save->selectUnit(here->getPosition() - Position(0, 0, z)) &&
@@ -537,7 +538,7 @@ bool Pathfinding::canFallDown(Tile *here)
 			return false;
 	}
 
-	if (!here || here->hasNoFloor())
+	if (here->hasNoFloor(tileBelow))
 		return true;
 	else
 		return false;
