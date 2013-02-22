@@ -440,7 +440,8 @@ void Map::drawTerrain(Surface *surface)
 										if (_projectile->getParticle(i) != 0xFF)
 										{
 											Position voxelPos = _projectile->getPosition(1-i);
-											voxelPos.z = 0;
+											Tile *floorTile = _save->getTileEngine()->applyItemGravity(tile);
+											voxelPos.z = (floorTile->getPosition().z * 24) - floorTile->getTerrainLevel();
 											if (voxelPos.x / 16 == mapPosition.x &&
 												voxelPos.y / 16 == mapPosition.y)
 											{
