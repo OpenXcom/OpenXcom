@@ -515,9 +515,10 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		if (node)
 		{
 			_save->setUnitPosition(unit, node->getPosition());
+			_craftInventoryTile = _save->getTile(node->getPosition());
+			unit->setDirection(RNG::generate(0,7));
+			_save->getUnits()->push_back(unit);
 		}
-		_craftInventoryTile = _save->getTile(node->getPosition());
-		unit->setDirection(RNG::generate(0,7));
 	}
 	else
 	{
@@ -538,6 +539,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				{
 					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 					{
+						_save->getUnits()->push_back(unit);
 						_save->getTileEngine()->calculateFOV(unit);
 						break;
 					}
@@ -545,7 +547,6 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			}
 		}
 	}
-	_save->getUnits()->push_back(unit);
 	return unit;
 }
 
@@ -684,9 +685,11 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
+		
+		// we only add a unit if it has a node to spawn on.
+		// (stops them spawning at 0,0,0)
+		_save->getUnits()->push_back(unit);
 	}
-
-	_save->getUnits()->push_back(unit);
 
 	return unit;
 }
@@ -1020,13 +1023,15 @@ void BattlescapeGenerator::generateMap()
 	/* determine positioning of the urban terrain roads */
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
-		bool EWRoad = RNG::generate(0,99) < 33;
-		bool NSRoad = !EWRoad;
-		bool TwoRoads = RNG::generate(0,99) < 25;
+		int roadStyle = RNG::generate(0,99);
+		std::vector<int> roadChances = _game->getRuleset()->getDeployment(_save->getMissionType())->getRoadTypeOdds();
+		bool EWRoad = roadStyle < roadChances.at(0);
+		bool NSRoad = !EWRoad && roadStyle < roadChances.at(0) + roadChances.at(1);
+		bool TwoRoads = !EWRoad && !NSRoad;
 		int roadX = craftX;
 		int roadY = craftY;
-		// make sure the road(s) are not crossing the craftin landing site
-		while (roadX == craftX || roadY == craftY)
+		// make sure the road(s) are not crossing the craft landing site
+		while (roadX == craftX || roadX == craftX + (craftMap->getWidth() / 10) || roadY == craftY || roadY == craftY + (craftMap->getLength() / 10))
 		{
 			roadX = RNG::generate(0, (_length/10)- 1);
 			roadY = RNG::generate(0, (_width/10)- 1);
@@ -1157,7 +1162,8 @@ void BattlescapeGenerator::generateMap()
 	{
 		int randX = RNG::generate(0, (_length/10)- 2);
 		int randY = RNG::generate(0, (_width/10)- 2);
-		if (!blocks[randX][randY] && !blocks[randX + 1][randY] && !blocks[randX + 1][randY + 1] && !blocks[randX][randY + 1])
+		if (!blocks[randX][randY] && !blocks[randX + 1][randY] && !blocks[randX + 1][randY + 1] && !blocks[randX][randY + 1]
+		&& !landingzone[randX][randY] && !landingzone[randX + 1][randY] && !landingzone[randX][randY + 1] && !landingzone[randX + 1][randY + 1])
 		{
 			blocks[randX][randY] = _terrain->getRandomMapBlock(20, MT_DEFAULT, true);
 			blocksToDo--;
@@ -1183,7 +1189,7 @@ void BattlescapeGenerator::generateMap()
 			}
 			else
 			{
-				blocks[x][y] = _terrain->getRandomMapBlock(10, MT_DEFAULT);
+				blocks[x][y] = _terrain->getRandomMapBlock(10, landingzone[x][y]?MT_LANDINGZONE:MT_DEFAULT);
 			}
 			blocksToDo--;
 			x++;

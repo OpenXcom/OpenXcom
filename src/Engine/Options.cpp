@@ -102,6 +102,7 @@ void createDefault()
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("alienContainmentHasUpperLimit", false);
+	setBool("canSellLiveAliens", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
@@ -111,6 +112,8 @@ void createDefault()
 	setBool("showFundsOnGeoscape", false);
 	setBool("showMoreStatsInInventoryView", false);
 	setBool("allowResize", false);
+	setInt("windowedModePositionX", 3);
+	setInt("windowedModePositionY", 22);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);

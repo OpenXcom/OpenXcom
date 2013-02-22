@@ -58,6 +58,7 @@ private:
 	std::string _type;
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
+	std::vector<int> _roadTypeOdds;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -74,6 +75,7 @@ public:
 	/// Get dimensions.
 	void getDimensions(int *width, int *length, int *height);
 	int getCivilians() const;
+	std::vector<int> getRoadTypeOdds() const;
 };
 
 }

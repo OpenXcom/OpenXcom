@@ -2928,118 +2928,147 @@ items:
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_SECTOID_ENGINEER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SECTOID_MEDIC
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SECTOID_NAVIGATOR
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SECTOID_LEADER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SECTOID_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_CYBERDISC_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 80000
   - type: STR_FLOATER_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_FLOATER_ENGINEER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_FLOATER_MEDIC
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_FLOATER_NAVIGATOR
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_FLOATER_LEADER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_FLOATER_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_REAPER_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_SNAKEMAN_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_SNAKEMAN_ENGINEER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SNAKEMAN_NAVIGATOR
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SNAKEMAN_LEADER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_SNAKEMAN_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_CHRYSSALID_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_MUTON_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_MUTON_NAVIGATOR
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_MUTON_ENGINEER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_ETHEREAL_SOLDIER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_ETHEREAL_LEADER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 60000
   - type: STR_ETHEREAL_COMMANDER
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 80000
   - type: STR_SILACOID_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_CELATID_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 40000
   - type: STR_SECTOPOD_TERRORIST
     size: 0.0
     recover: true
     liveAlien: true
+    costSell: 80000
 # Special Psi Weapon for Aliens.
 # Usage of this is hard-coded.
 # DO NOT DELETE!
@@ -3381,7 +3410,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         maxCount: 3
       - name: CULTA01
         width: 10
@@ -3411,7 +3440,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         maxCount: 3
       - name: CULTA08
         width: 10
@@ -3429,7 +3458,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         maxCount: 3
       - name: CULTA12
         width: 10
@@ -3469,17 +3498,17 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: DESERT01
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: DESERT02
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: DESERT03
         width: 10
         length: 10
@@ -3614,7 +3643,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: MARS01
         width: 10
         length: 10
@@ -3704,17 +3733,17 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: POLAR01
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: POLAR02
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: POLAR03
         width: 10
         length: 10
@@ -3834,13 +3863,13 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         frequency: 3
       - name: URBAN04
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         frequency: 3
       - name: URBAN05
         width: 20
@@ -6285,6 +6314,8 @@ alienDeployments:
     length: 50
     height: 4
     civilians: 16
+    # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
+    roadTypeOdds: [50, 25]
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 5

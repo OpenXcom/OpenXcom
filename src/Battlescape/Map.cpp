@@ -463,6 +463,7 @@ void Map::drawTerrain(Surface *surface)
 							// draw bullet on the correct tile
 							if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
 							{
+
 								for (int i = 1; i <= _projectile->getParticle(0); ++i)
 								{
 									if (_projectile->getParticle(i) != 0xFF)

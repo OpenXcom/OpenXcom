@@ -1245,9 +1245,9 @@ void BattlescapeState::SaveVoxelView()
 			{
 				tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24));
 				if (_debug
-					|| tile->isDiscovered(0) && test == 2
-					|| tile->isDiscovered(1) && test == 3
-					|| tile->isDiscovered(2) && (test == 1 || test == 4)
+					|| (tile->isDiscovered(0) && test == 2)
+					|| (tile->isDiscovered(1) && test == 3)
+					|| (tile->isDiscovered(2) && (test == 1 || test == 4))
 					|| test==5
 					)
 				{
