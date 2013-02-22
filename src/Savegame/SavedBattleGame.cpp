@@ -988,8 +988,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
 				|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true)		// check if not already occupied
-			&& (*i)->getPosition().x > 0 && (*i)->getPosition().y > 0 )
+			&& setUnitPosition(unit, (*i)->getPosition(), true))		// check if not already occupied
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{

@@ -3410,7 +3410,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         maxCount: 3
       - name: CULTA01
         width: 10
@@ -3440,7 +3440,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         maxCount: 3
       - name: CULTA08
         width: 10
@@ -3458,7 +3458,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         maxCount: 3
       - name: CULTA12
         width: 10
@@ -3498,17 +3498,17 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: DESERT01
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: DESERT02
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: DESERT03
         width: 10
         length: 10
@@ -3643,7 +3643,7 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: MARS01
         width: 10
         length: 10
@@ -3733,17 +3733,17 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: POLAR01
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: POLAR02
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
       - name: POLAR03
         width: 10
         length: 10
@@ -3863,13 +3863,13 @@ terrains:
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         frequency: 3
       - name: URBAN04
         width: 10
         length: 10
         type: 1
-        subtype: 0
+        subType: 0
         frequency: 3
       - name: URBAN05
         width: 20
@@ -6314,6 +6314,8 @@ alienDeployments:
     length: 50
     height: 4
     civilians: 16
+    # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
+    roadTypeOdds: [50, 25]
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 5
