@@ -126,7 +126,7 @@ void Screen::handle(Action *action)
  */
 void Screen::flip()
 {
-	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT)
+	if (getWidth() != BASE_WIDTH || getHeight() != BASE_HEIGHT || isOpenGLEnabled())
 	{
 		Zoom::flipWithZoom(_surface->getSurface(), _screen, &glOutput);
 	}
