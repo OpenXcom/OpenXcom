@@ -27,6 +27,8 @@
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
+#include "../Engine/Logger.h"
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
 
@@ -484,8 +486,9 @@ void AggroBAIState::think(BattleAction *action)
 
 			if (takeCover && !charge)
 			{
-				// the idea is to check within a 11x11 tile squarefor a tile which is not seen by our aggroTarget
+				// the idea is to check within a 11x11 tile square for a tile which is not seen by our aggroTarget
 				// if there is no such tile, we run away from the target.
+				bool sneak = Options::getBool("sneakyAI");
 				action->type = BA_WALK;
 				int tries = 0;
 				bool coverFound = false;
@@ -496,6 +499,12 @@ void AggroBAIState::think(BattleAction *action)
 				int dsqr = dx*dx + dy*dy;
 				int runx = _unit->getPosition().x + (dx * 7 * 7) / dsqr;
 				int runy = _unit->getPosition().y + (dy * 7 * 7) / dsqr;
+				
+				int bestTileScore = -1;
+				int score = -1;
+				Position bestTile(-1, -1, 0xDEADBEEF);
+				
+				
 				while (tries < 150 && !coverFound)
 				{
 					tries++;
@@ -505,27 +514,48 @@ void AggroBAIState::think(BattleAction *action)
 						// looking for cover
 						action->target.x += x_search_sign * ((tries%11) - 5);
 						action->target.y += y_search_sign * ((tries/11) - 5); 
-						coverFound = !_game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target));
+						score = _game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target)) ? 0 : 100;
 					}
 					else
 					{
-						// trying to run the hell away
+						//if (tries == 121) bestTileScore = -1; // try to make the best of a bad situation
+						
+						score = 99;
 						action->target.x = runx + RNG::generate(-5,5);
 						action->target.y = runy + RNG::generate(-5,5);
-						coverFound = true;
+						action->target.z = _unit->getPosition().z + RNG::generate(-1,1);
+						if (action->target.z < 0) action->target.z = 0;
 					}
 
-					if (coverFound)
+					// THINK, DAMN YOU
+					if (score && _game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score >>= 2; 
+					if (sneak && score)
+					{
+						Tile *tile = _game->getTile(action->target);
+						if (!tile) score = -1000;
+						else if (tile->getVisible()) score >>= 2; 
+						// XXX perhaps only psi-skilled aliens should cheat-sneak?						
+					}
+					score += abs(action->target.x - _aggroTarget->getPosition().x);
+					score += abs(action->target.y - _aggroTarget->getPosition().y);
+					score += abs(action->target.z - _aggroTarget->getPosition().z)*2;
+
+					if (score > bestTileScore)
 					{
 						// check if we can reach this tile
 						_game->getPathfinding()->calculate(_unit, action->target);
-						if (_game->getPathfinding()->getStartDirection() == -1)
+						if (_game->getPathfinding()->getStartDirection() != -1)
 						{
-							coverFound = false;
+							// yay, we can get there
+							bestTileScore = score;
+							bestTile = action->target;
 						}
 						_game->getPathfinding()->abortPath();
+						if (bestTileScore > 100) coverFound = true;
 					}
 				}
+				Log(LOG_INFO) << "Taking cover with score " << bestTileScore << " after " << tries << " tries.";
+				action->target = bestTile;
 			}
 		}
 		if (action->type != BA_RETHINK && action->type != BA_WALK)
