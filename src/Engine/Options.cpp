@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <map>
+#include <set>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
@@ -538,9 +539,14 @@ void save(const std::string &filename)
 	out << YAML::BeginMap;
 	out << YAML::Key << "options" << YAML::Value; // << _options;
 	out << YAML::BeginMap;
+	std::set<std::string> sortedOptions;
 	for (OPTIONS_MAP_TYPE<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
 	{
-		out << YAML::Key << it->first << YAML::Value << it->second;
+		sortedOptions.insert(it->first);
+	}
+	for (std::set<std::string>::iterator it = sortedOptions.begin(); it != sortedOptions.end(); ++it)
+	{
+		out << YAML::Key << *it << YAML::Value << _options[*it];
 	}
 	out << YAML::EndMap;
 	out << YAML::Key << "rulesets" << YAML::Value << _rulesets;
