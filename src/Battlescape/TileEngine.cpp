@@ -1639,6 +1639,49 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 }
 
 /**
+ * Calculate z "grounded" value for particular voxel (used for projectile shadow).
+ * @param voxel The voxel to trace down.
+ * @return z coord of "ground"
+ */
+int TileEngine::castedShade(const Position& voxel)
+{
+	int zstart = voxel.z;
+	Position tmpVoxel = voxel;
+	for (int z = zstart; z>0; z--)
+	{
+		tmpVoxel.z = z;
+		if (voxelCheck(tmpVoxel, 0) != -1) break;
+			
+	}
+    return z;
+}
+
+/**
+ * Trace voxel visibility.
+ * @param voxel coordinate.
+ * @return visible or not
+ */
+
+bool TileEngine::isVoxelVisible(const Position& voxel)
+{
+	int zstart = voxel.z+1;
+	Position tmpVoxel = voxel;
+	int zend = (zstart/24)*24 +24;
+	for (int z = zstart; z<zend; z++)
+	{
+		tmpVoxel.z=z;
+		if (voxelCheck(tmpVoxel, 0) != -1) return false;
+		++tmpVoxel.x;
+		if (voxelCheck(tmpVoxel, 0) != -1) return false;
+		++tmpVoxel.y;
+		if (voxelCheck(tmpVoxel, 0) != -1) return false;
+	}
+    return true;
+}
+
+
+
+/**
  * Check if we hit a voxel.
  * @param voxel The voxel to check.
  * @param excludeUnit Don't do checks on this unit.

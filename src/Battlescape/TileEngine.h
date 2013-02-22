@@ -95,6 +95,8 @@ public:
 	int faceWindow(const Position &position);
 	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
+	int castedShade(const Position& voxel);
+	bool isVoxelVisible(const Position& voxel);
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false);
 	bool detonate(Tile* tile);
 };
