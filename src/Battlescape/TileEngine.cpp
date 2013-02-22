@@ -1791,7 +1791,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	if (occupant && occupant->getArmor()->getMovementType() != MT_FLY)
 	{
 		Position unitpos = occupant->getPosition();
-		while (unitpos.z > 0)
+		while (unitpos.z >= 0)
 		{
 			bool canFall = true;
 			for (int y = 0; y < occupant->getArmor()->getSize() && canFall; ++y)
@@ -1825,7 +1825,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	
 	rt = t;
 	bool canFall = true;
-	while (p.z > 0 && canFall)
+	while (p.z >= 0 && canFall)
 	{
 		rt = _save->getTile(p);
 		rtb = _save->getTile(Position(p.x, p.y, p.z-1)); //below
