@@ -225,7 +225,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0;
+	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0 && _inventory.size() == 0;
 }
 
 /**
@@ -250,8 +250,10 @@ int Tile::getTUCost(int part, MovementType movementType) const
  * Whether this tile has a floor or not. If no object defined as floor, it has no floor.
  * @return bool
  */
-bool Tile::hasNoFloor() const
+bool Tile::hasNoFloor(Tile *tileBelow) const
 {
+	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+		return false;
 	if (_objects[MapData::O_FLOOR])
 		return _objects[MapData::O_FLOOR]->isNoFloor();
 	else
@@ -300,7 +302,7 @@ const Position& Tile::getPosition() const
  * Gets the tile's footstep sound.
  * @return sound ID
  */
-int Tile::getFootstepSound() const
+int Tile::getFootstepSound(Tile *tileBelow) const
 {
 	int sound = 0;
 
@@ -308,6 +310,8 @@ int Tile::getFootstepSound() const
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
 	if (_objects[MapData::O_OBJECT])
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
+	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
 
 	return sound;
 }

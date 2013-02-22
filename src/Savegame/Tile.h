@@ -94,7 +94,7 @@ public:
 	/// Get the TU cost to walk over a certain part of the tile.
 	int getTUCost(int part, MovementType movementType) const;
 	/// Checks if this tile has a floor.
-	bool hasNoFloor() const;
+	bool hasNoFloor(Tile *tileBelow) const;
 	/// Checks if this tile is a big wall.
 	bool isBigWall() const;
 	/// Get terrain level.
@@ -102,7 +102,7 @@ public:
 	/// Gets the tile's position.
 	const Position& getPosition() const;
 	/// Gets the floor object footstep sound.
-	int getFootstepSound() const;
+	int getFootstepSound(Tile *tileBelow) const;
 	/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 	int openDoor(int part, BattleUnit *Unit = 0, bool debug = false);
 	/// Check if ufo door is open.

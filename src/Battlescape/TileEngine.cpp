@@ -307,7 +307,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 									Position poso = pos + Position(xo,yo,0);
 									_trajectory.clear();
 									int tst = calculateLine(poso, test, true, &_trajectory, unit, false);
-									int tsize = _trajectory.size();
+									unsigned int tsize = _trajectory.size();
 									if (tst>127) --tsize; //last tile is blocked thus must be cropped
 									for (unsigned int i = 0; i < tsize; i++)
 									{
@@ -1747,7 +1747,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 
 	if (action->type == BA_MINDCONTROL)
 	{
-		defenceStrength += 20;
+		defenseStrength += 20;
 	}
 
 	action->actor->addPsiExp();
@@ -1781,52 +1781,58 @@ bool TileEngine::psiAttack(BattleAction *action)
  */
 Tile *TileEngine::applyItemGravity(Tile *t)
 {
-	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
-
+	if (t->getPosition().z == 0 || (t->getInventory()->size() == 0 && !t->getUnit())) return t; // skip this if there are no items
+ 
 	Position p = t->getPosition();
 	Tile *rt = t;
+	Tile *rtb;
 	BattleUnit *occupant = t->getUnit();
-
+ 
 	if (occupant && occupant->getArmor()->getMovementType() != MT_FLY)
 	{
-		Tile *rt1 = _save->getTile(p);
-		if (occupant->getArmor()->getSize() >= 2)
+		Position unitpos = occupant->getPosition();
+		while (unitpos.z > 0)
 		{
-			Position xOffset (1,0,0);
-			Position yOffset (0,1,0);
-			Tile *rt2 = _save->getTile(p + xOffset);
-			Tile *rt3 = _save->getTile(p + yOffset);
-			Tile *rt4 = _save->getTile(p + xOffset + yOffset);
-		
-			while (rt1->getMapData(MapData::O_FLOOR) == 0 && rt2->getMapData(MapData::O_FLOOR) == 0 && rt3->getMapData(MapData::O_FLOOR) == 0 && rt4->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
+			bool canFall = true;
+			for (int y = 0; y < occupant->getArmor()->getSize() && canFall; ++y)
 			{
-				p.z--;
-				rt1 = _save->getTile(p);
-				rt2 = _save->getTile(p + xOffset);
-				rt3 = _save->getTile(p + yOffset);
-				rt4 = _save->getTile(p + xOffset + yOffset);
+				for (int x = 0; x < occupant->getArmor()->getSize() && canFall; ++x)
+				{
+					rt = _save->getTile(Position(unitpos.x+x, unitpos.y+y, unitpos.z));
+					rtb = _save->getTile(Position(unitpos.x+x, unitpos.y+y, unitpos.z-1)); //below
+					if (rt->getMapData(MapData::O_FLOOR)
+						|| (rtb && rtb->getTerrainLevel() == -24) )
+					{
+						canFall = false;
+					}
+				}
 			}
+			if (!canFall)
+				break;
+			unitpos.z--;
 		}
-		else
+		rt = _save->getTile(unitpos); //destination tile
+ 
+		if (t != rt)
 		{
-			while (rt1->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
-			{
-				p.z--;
-				rt1 = _save->getTile(p);
-			}
-		}
-		if (t != rt1)
-		{
-			occupant->startWalking(Pathfinding::DIR_DOWN, rt1->getPosition(), rt1, occupant->getVisible());
+			Tile *tileBelowrt = _save->getTile(rt->getPosition() - Position(0,0,1));
+			Tile *tileBelowt = _save->getTile(t->getPosition() - Position(0,0,1));
+			occupant->startWalking(Pathfinding::DIR_DOWN, rt->getPosition(), rt, tileBelowt, tileBelowrt, occupant->getVisible());
 			_save->addFallingUnit(occupant);
 			_save->setUnitsFalling(true);
 		}
 	}
-
-	while (rt->getMapData(MapData::O_FLOOR) == 0 && p.z > 0)
+	
+	rt = t;
+	bool canFall = true;
+	while (p.z > 0 && canFall)
 	{
-		p.z--;
 		rt = _save->getTile(p);
+		rtb = _save->getTile(Position(p.x, p.y, p.z-1)); //below
+		if (rt->getMapData(MapData::O_FLOOR)
+			|| (rtb && rtb->getTerrainLevel() == -24))
+			canFall = false;
+		p.z--;
 	}
 
 	if (t != rt)

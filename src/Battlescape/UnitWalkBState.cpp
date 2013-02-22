@@ -42,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false)
 {
 
 }
@@ -84,6 +84,15 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{
+			if (_unit->getPosition().z < _unit->getLastPosition().z && _unit->getArmor()->getMovementType() != MT_FLY)
+			{
+				_falling = true;
+			}
+			else if (_falling)
+			{
+				_falling = false;
+			}
+
 			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
@@ -151,7 +160,7 @@ void UnitWalkBState::think()
 			}
 
 			// check for reaction fire
-			if (_terrain->checkReactionFire(_unit, &action))
+			if (!_falling && _terrain->checkReactionFire(_unit, &action))
 			{
 				_parent->popState();
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
@@ -238,8 +247,11 @@ void UnitWalkBState::think()
 
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
+			if (_falling)
+			{
+				tu = 0;
+			}
 			int energy = tu;
-
 			if (_action.run)
 			{
 				tu *= 0.75;
@@ -291,7 +303,9 @@ void UnitWalkBState::think()
 			{
 				if (_unit->spendEnergy(energy))
 				{
-					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), onScreen);
+					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+					Tile *tileBelowDestination = _parent->getSave()->getTile(destination + Position(0,0,-1));
+					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), tileBelow, tileBelowDestination, onScreen);
 				}
 				else
 				{
@@ -421,22 +435,22 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
+			Tile *tile = _unit->getTile();
+			Tile *tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
 			{
-				Tile *tile = _unit->getTile();
-				if (tile->getFootstepSound())
+				if (tile->getFootstepSound(tileBelow))
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound()*2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow)*2))->play();
 				}
 			}
 			// play footstep sound 2
 			if (_unit->getWalkingPhase() == 7)
 			{
-				Tile *tile = _unit->getTile();
-				if (tile->getFootstepSound())
+				if (tile->getFootstepSound(tileBelow))
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound()*2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow)*2))->play();
 				}
 			}
 		}
