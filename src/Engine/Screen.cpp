@@ -70,7 +70,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	if (!_fullscreen)
 	{
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
-		if (0 == prev) prev="";
+		if (0 == prev) prev = (char*)"";
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
