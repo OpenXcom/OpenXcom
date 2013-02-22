@@ -53,6 +53,7 @@
 #include "City.h"
 #include "../Engine/Logger.h"
 #include <algorithm>
+#include <SDL.h>
 
 namespace OpenXcom
 {
@@ -171,11 +172,15 @@ Ruleset::~Ruleset()
  */
 void Ruleset::load(const std::string &source)
 {
+	Uint32 startTime = SDL_GetTicks();
+
 	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
 	if (!CrossPlatform::folderExists(dirname))
 		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
 	else
 		loadFiles(dirname);
+	
+	Log(LOG_INFO) << "Ruleset loaded in " << (SDL_GetTicks() - startTime) << "ms";
 }
 
 /**
