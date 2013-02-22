@@ -188,7 +188,7 @@ class HungarianRules: public Language::PluralityRules
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static PluralityRules *create() { return new RusianRules; }
+	static PluralityRules *create() { return new HungarianRules; }
 };
 
 const char *HungarianRules::getSuffix(unsigned n) const
