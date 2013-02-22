@@ -58,7 +58,7 @@ private:
 	Surface *_surface;
 public:
 	/// Creates a new display screen with the specified resolution.
-	Screen(int width, int height, int bpp, bool fullscreen);
+	Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY);
 	/// Cleans up the display screen.
 	~Screen();
 	/// Gets the internal buffer.

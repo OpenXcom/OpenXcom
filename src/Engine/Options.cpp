@@ -111,6 +111,8 @@ void createDefault()
 	setBool("showFundsOnGeoscape", false);
 	setBool("showMoreStatsInInventoryView", false);
 	setBool("allowResize", false);
+	setInt("windowedModePositionX", 3);
+	setInt("windowedModePositionY", 22);
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);
