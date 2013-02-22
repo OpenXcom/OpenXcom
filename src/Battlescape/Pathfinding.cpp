@@ -440,7 +440,8 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit != 0 && unit != _unit && unit != missileTarget) return true;
+		if (unit == 0 || unit == _unit || unit == missileTarget) return false;
+		if (unit->getVisible() || unit->getFaction() == _unit->getFaction()) return true;
 	}
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
