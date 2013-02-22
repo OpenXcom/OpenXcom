@@ -69,7 +69,10 @@ openxcom_CXXFLAGS = \
 	$(DEBUG_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
-	-DDATADIR=\"$(pkgdatadir)/\" -Wno-deprecated
+	-DDATADIR=\"$(pkgdatadir)/\" \
+	-Wno-deprecated
+#-D_OPTIONS_boost_unordered_map
+#-D_OPTIONS_google_sparsehash
 openxcom_SOURCES = \
 	src/Basescape/BaseInfoState.cpp \
 	src/Basescape/BaseInfoState.h \

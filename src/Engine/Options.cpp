@@ -66,14 +66,15 @@ struct hash<std::string> {
 };
 }
 
-#elif defined(_OPTIONS_google_sparasehash)
+#elif defined(_OPTIONS_google_sparsehash)
 
 #include <google/dense_hash_map> // once we have something like libboost, we can replace this with unordered_map
 #define OPTIONS_MAP_TYPE google::dense_hash_map
 
 #elif defined (_OPTIONS_boost_unordered_map)
 
-// TODO whatever this is
+#include <boost/unordered_map.hpp>
+#define OPTIONS_MAP_TYPE boost::unordered::unordered_map
 
 #endif
 
@@ -400,7 +401,7 @@ bool showHelp(int argc, char** args)
  */
 bool init(int argc, char** args)
 {
-#ifdef _OPTIONS_google_sparasehash
+#ifdef _OPTIONS_google_sparsehash
 	_options.set_empty_key("\n\t: ```this is not a valid option, clearly```");
 	_optionsCache.set_empty_key("\n\t: ```this is not a valid option, clearly```");
 #endif
