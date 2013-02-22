@@ -102,6 +102,7 @@ void createDefault()
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("alienContainmentHasUpperLimit", false);
+	setBool("canSellLiveAliens", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
