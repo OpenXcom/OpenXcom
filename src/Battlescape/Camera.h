@@ -64,6 +64,8 @@ public:
 	void scroll();
 	/// Scrolls the view (when mouse-scrolling)
 	bool scrollXY(int x, int y, bool redraw);
+	/// Jump the view (when projectile in motion)
+	void jumpXY(int x, int y);
 	/// move map layer up
 	void up();
 	/// move map layer down
