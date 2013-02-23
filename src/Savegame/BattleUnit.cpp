@@ -1190,7 +1190,7 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
  */
 double BattleUnit::getAccuracyModifier()
 {
-	double result = ((double)_health/(double)getStats()->health);
+	double result = 0.75 + 0.25*((double)_health/(double)getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
