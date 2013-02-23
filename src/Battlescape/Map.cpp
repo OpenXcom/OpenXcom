@@ -280,13 +280,13 @@ void Map::drawTerrain(Surface *surface)
 					}
 				}
 				if (bulletPositionScreen.x < 8)
-					_camera->scrollXY(+surface->getWidth()-16, _visibleMapHeight/2 - bulletPositionScreen.y, false);
+					_camera->jumpXY(+surface->getWidth()-16, _visibleMapHeight/2 - bulletPositionScreen.y);
 				if (bulletPositionScreen.x > surface->getWidth()-8)
-					_camera->scrollXY(-surface->getWidth()+16, _visibleMapHeight/2 - bulletPositionScreen.y, false);
+					_camera->jumpXY(-surface->getWidth()+16, _visibleMapHeight/2 - bulletPositionScreen.y);
 				if (bulletPositionScreen.y < 8)
-					_camera->scrollXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16, false);
+					_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16);
 				if (bulletPositionScreen.y > _visibleMapHeight-8)
-					_camera->scrollXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16, false);
+					_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16);
 			}
 		}	
 	}
