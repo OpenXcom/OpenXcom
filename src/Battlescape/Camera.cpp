@@ -225,7 +225,6 @@ void Camera::jumpXY(int x, int y)
 	_mapOffset.y += y;
 
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-//	convertScreenToMap((_screenWidth / 2), (_screenHeight / 2), &_center.x, &_center.y);
 // if center goes out of map bounds, hold the scrolling
 	if (_center.x > _mapWidth -1 || _center.x < 0 || 
 		_center.y > _mapLength -1  || _center.y < 0 )
@@ -235,7 +234,6 @@ void Camera::jumpXY(int x, int y)
 			_mapOffset.x = oldX + x*k/128;
 			_mapOffset.y = oldY + y*k/128;
 			convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-//			convertScreenToMap((_screenWidth / 2), (_screenHeight / 2), &_center.x, &_center.y);
 			if (_center.x > _mapWidth -1 || _center.x < 0 || 
 				_center.y > _mapLength -1  || _center.y < 0 )
 			{
