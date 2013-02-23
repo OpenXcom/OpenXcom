@@ -87,6 +87,10 @@ void UnitWalkBState::think()
 		{
 			_pf->abortPath();
 			_parent->popState();
+			if (_parent->getSave()->getTile(_unit->getDestination())->getUnit()->getFaction() == FACTION_PLAYER)
+			{
+				unitspotted = _terrain->calculateFOV(_parent->getSave()->getTile(_unit->getDestination())->getUnit());
+			}
 		}
 
 		// unit moved from one tile to the other, update the tiles
