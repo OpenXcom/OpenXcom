@@ -1471,18 +1471,18 @@ bool BattleUnit::getVisible() const
  * Sets the unit's tile it's standing on
  * @param tile
  */
-void BattleUnit::setTile(Tile *tile)
+void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 {
 	_tile = tile;
 	if (!_tile)
 		return;
 	// unit could have changed from flying to walking or vice versa
-	if (_status == STATUS_WALKING && !_tile->getMapData(MapData::O_FLOOR) && _armor->getMovementType() == MT_FLY)
+	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _armor->getMovementType() == MT_FLY)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
 	}
-	else if (_status == STATUS_FLYING && _tile->getMapData(MapData::O_FLOOR))
+	else if (_status == STATUS_FLYING && !_tile->hasNoFloor(tileBelow))
 	{
 		_status = STATUS_WALKING;
 		_floating = false;

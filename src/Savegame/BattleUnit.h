@@ -259,7 +259,7 @@ public:
 	/// Get whether this unit is visible
 	bool getVisible() const;
 	/// Sets the unit's tile it's standing on
-	void setTile(Tile *tile);
+	void setTile(Tile *tile, Tile *tileBelow = 0);
 	/// Gets the unit's tile.
 	Tile *getTile() const;
 	/// Gets the item in the specified slot.
