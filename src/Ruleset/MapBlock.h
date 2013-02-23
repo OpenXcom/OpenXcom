@@ -65,6 +65,7 @@ public:
 	MapBlockType getSubType() const;
 	int getRemainingUses();
 	void markUsed();
+	void reset();
 
 };
 

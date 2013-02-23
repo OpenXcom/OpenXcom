@@ -1206,6 +1206,9 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
+	//reset the "times used" fields.
+	_terrain->resetMapBlocks();
+
 	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); ++i)
 	{
 		(*i)->loadData();

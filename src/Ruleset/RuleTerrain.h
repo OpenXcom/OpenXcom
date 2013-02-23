@@ -65,6 +65,7 @@ public:
 	/// Get the mapdata object.
 	MapData *getMapData(int *id, int *mapDataSetID) const;
 	int getLargeBlockLimit() const;
+	void resetMapBlocks();
 };
 
 }

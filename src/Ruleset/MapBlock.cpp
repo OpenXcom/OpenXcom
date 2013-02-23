@@ -185,4 +185,9 @@ void MapBlock::markUsed()
 	}
 }
 
+void MapBlock::reset()
+{
+	_timesUsed = 0;
+}
+
 }
