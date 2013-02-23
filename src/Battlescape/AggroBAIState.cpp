@@ -500,8 +500,8 @@ void AggroBAIState::think(BattleAction *action)
 				int runx = _unit->getPosition().x + (dx * 7 * 7) / dsqr;
 				int runy = _unit->getPosition().y + (dy * 7 * 7) / dsqr;
 				
-				int bestTileScore = -1;
-				int score = -1;
+				int bestTileScore = -1000;
+				int score = -1000;
 				Position bestTile(-1, -1, 0xDEADBEEF);
 				
 				
@@ -518,9 +518,7 @@ void AggroBAIState::think(BattleAction *action)
 					}
 					else
 					{
-						//if (tries == 121) bestTileScore = -1; // try to make the best of a bad situation
-						
-						score = 99;
+						score = 100; // ruuuuuuun
 						action->target.x = runx + RNG::generate(-5,5);
 						action->target.y = runy + RNG::generate(-5,5);
 						action->target.z = _unit->getPosition().z + RNG::generate(-1,1);
@@ -528,17 +526,40 @@ void AggroBAIState::think(BattleAction *action)
 					}
 
 					// THINK, DAMN YOU
-					if (score && _game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score >>= 2; 
-					if (sneak && score)
+					if (!_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score += 25; // partial cover?
+					if (sneak)
 					{
 						Tile *tile = _game->getTile(action->target);
-						if (!tile) score = -1000;
-						else if (tile->getVisible()) score >>= 2; 
-						// XXX perhaps only psi-skilled aliens should cheat-sneak?						
+						if (!tile) score = -10000;
+						else if (!tile->getVisible()) score += 50; 
+						// XXX perhaps only psi-skilled aliens should cheat-sneak?
 					}
 					score += abs(action->target.x - _aggroTarget->getPosition().x);
 					score += abs(action->target.y - _aggroTarget->getPosition().y);
 					score += abs(action->target.z - _aggroTarget->getPosition().z)*2;
+
+					for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
+					{
+						if ((*i)->getId() == _unit->getId()) continue; // woo, it's us
+						int distSq = _game->getTileEngine()->distanceSq(action->target, (*i)->getPosition());
+						if (distSq == 0) 
+						{
+							score = -1000; // we can't stand inside another unit, duh. Even sectoids know that.
+							break;
+						}
+						if (distSq <= 100)
+						{
+							if ((*i)->getFaction() == FACTION_PLAYER)
+							{
+								score -= 200/distSq; // stop standing next to soldiers ffs
+							} else
+							{
+								if (distSq <= 5) score += 5; // quick, hide behind the nearest civilian?
+								if ((*i)->getFaction() == FACTION_HOSTILE) score += 5; // strength in numbers?
+							}
+						}
+					}
+
 
 					if (score > bestTileScore)
 					{

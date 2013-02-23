@@ -1807,6 +1807,20 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 
 
 /**
+ * Distance squared between 2 points. No sqrt() and sometimes it's all you need.
+ * @return distance
+ */
+int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const
+{
+	int x = abs(pos1.x - pos2.x);
+	int y = abs(pos1.y - pos2.y);
+	int z = considerZ ? abs(pos1.z - pos2.z) : 0;
+	return x + y + z;
+}
+
+
+
+/**
  * Psionic attack mechanism.
  * @param action
  * @return whether it failed or succeeded

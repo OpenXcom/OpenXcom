@@ -1305,7 +1305,7 @@ std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
 int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 {
 	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i) // cheating! perhaps only consider visible units here
 	{
 		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
 		if (find != (*i)->getVisibleUnits()->end())
