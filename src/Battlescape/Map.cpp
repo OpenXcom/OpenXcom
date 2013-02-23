@@ -319,7 +319,7 @@ void Map::drawTerrain(Surface *surface)
 					unit = tile->getUnit();
 
 					// Draw cursor back
-					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1)
+					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
 					{
 						if (_camera->getViewHeight() == itZ)
 						{
@@ -481,15 +481,11 @@ void Map::drawTerrain(Surface *surface)
 						{
 							Position offset;
 							calculateWalkingOffset(unit, &offset);
-							tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
 							if (unit->getArmor()->getSize() > 1)
 							{
 								offset.y += 4;
 							}
-							if (unit == (BattleUnit*)_save->getSelectedUnit() && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && part == 0)
-							{
-								_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
-							}
+							tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
 							if (unit->getFire() > 0)
 							{
 								frameNumber = 4 + (_animFrame / 2);
@@ -536,7 +532,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// Draw cursor front
-					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1)
+					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
 					{
 						if (_camera->getViewHeight() == itZ)
 						{
@@ -619,7 +615,19 @@ void Map::drawTerrain(Surface *surface)
 			}
 		}
 	}
-
+	unit = (BattleUnit*)_save->getSelectedUnit();
+	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewHeight())
+	{
+		_camera->convertMapToScreen(unit->getPosition(), &screenPosition);
+		screenPosition += _camera->getMapOffset();
+		Position offset;
+		calculateWalkingOffset(unit, &offset);
+		if (unit->getArmor()->getSize() > 1)
+		{
+			offset.y += 4;
+		}
+		_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
+	}
 	delete _numWaypid;
 
 	// check if we got big explosions
