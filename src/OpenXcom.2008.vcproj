@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib opengl32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib opengl32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -346,62 +346,6 @@
 		<Filter
 			Name="Engine"
 			>
-			<Filter
-			Name="Interface"
-			>
-				<File
-					RelativePath=".\Engine\Scalers\common.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\hq2x.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\hq3x.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\hq4x.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\hqx.c"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\hqx.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\init.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\scale2x.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\scale2x.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\scale3x.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\scale3x.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\scalebit.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Engine\Scalers\scalebit.h"
-					>
-				</File>
-			</Filter>
 			<File
 				RelativePath=".\Engine\Action.cpp"
 				>
@@ -590,6 +534,58 @@
 				RelativePath=".\Engine\Zoom.h"
 				>
 			</File>
+			<Filter
+				Name="Interface"
+				>
+				<File
+					RelativePath=".\Engine\Scalers\common.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq2x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq3x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq4x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hqx.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\init.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale2x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale2x.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale3x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale3x.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scalebit.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scalebit.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Interface"
@@ -1283,6 +1279,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\UnitFallBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitFallBState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\UnitInfoState.cpp"
 				>
 			</File>
@@ -1290,14 +1294,6 @@
 				RelativePath=".\Battlescape\UnitInfoState.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Battlescape\UnitSprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitSprite.h"
-				>
-			</File>			
 			<File
 				RelativePath=".\Battlescape\UnitPanicBState.cpp"
 				>
@@ -1307,19 +1303,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\UnitSprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitSprite.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\UnitTurnBState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Battlescape\UnitTurnBState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitFallBState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\UnitFallBState.h"
 				>
 			</File>
 			<File
@@ -1375,19 +1371,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\BaseDestroyedState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\BaseDefenseState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Geoscape\BaseDefenseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.h"
 				>
 			</File>
 			<File
@@ -1831,19 +1827,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Menu\OptionsState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Menu\OptionsState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Menu\OptionsControlsState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Menu\OptionsControlsState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\OptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\OptionsState.h"
 				>
 			</File>
 			<File
@@ -1896,6 +1892,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\AlienMission.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.h"
 				>
 			</File>
 			<File
@@ -1992,10 +1996,6 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\NodeLink.cpp"
 				>
 			</File>
 			<File
@@ -2114,14 +2114,6 @@
 				RelativePath=".\Savegame\WeightedOptions.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Savegame\AlienStrategy.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\AlienStrategy.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource"
@@ -2208,6 +2200,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\MapDataSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.h"
 				>
 			</File>
 			<File
@@ -2338,14 +2338,6 @@
 				RelativePath=".\Ruleset\Unit.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Ruleset\RuleAlienMission.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleAlienMission.h"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath=".\Ufopaedia\ArticleStateVehicle.cpp"
@@ -2389,6 +2381,14 @@
 		</File>
 		<File
 			RelativePath=".\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\OpenGL.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\OpenGL.h"
 			>
 		</File>
 		<File
