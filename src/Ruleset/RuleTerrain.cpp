@@ -216,5 +216,12 @@ int RuleTerrain::getLargeBlockLimit() const
 {
 	return _largeBlockLimit;
 }
+void RuleTerrain::resetMapBlocks()
+{
+	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	{
+		(*i)->reset();
+	}
+}
 
 }

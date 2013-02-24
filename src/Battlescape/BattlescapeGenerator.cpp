@@ -1031,7 +1031,7 @@ void BattlescapeGenerator::generateMap()
 		int roadX = craftX;
 		int roadY = craftY;
 		// make sure the road(s) are not crossing the craft landing site
-		while (roadX == craftX || roadX == craftX + (craftMap->getWidth() / 10) || roadY == craftY || roadY == craftY + (craftMap->getLength() / 10))
+		while ((roadX >= craftX && roadX < craftX + (craftMap->getWidth() / 10)) || (roadY >= craftY && roadY < craftY + (craftMap->getLength() / 10)))
 		{
 			roadX = RNG::generate(0, (_length/10)- 1);
 			roadY = RNG::generate(0, (_width/10)- 1);
@@ -1205,6 +1205,9 @@ void BattlescapeGenerator::generateMap()
 			y++;
 		}
 	}
+
+	//reset the "times used" fields.
+	_terrain->resetMapBlocks();
 
 	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); ++i)
 	{

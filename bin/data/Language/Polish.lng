@@ -456,7 +456,7 @@ STR_UNDER_ATTACK
 STR_BASE_DEFENSES_INITIATED
 ZAINICJOWANO SYSTEMY OBRONNE BAZY
 STR_GRAV_SHIELD_REPELS_UFO
-ODPYCHACZ GRAWITACYJNY ODPYCHA UFO!
+TARCZA GRAWITACYJNA ODPYCHA UFO!
 STR_FIRING
 STRZELA
 STR_HIT
@@ -1024,7 +1024,7 @@ Obrona plazmowa
 STR_FUSION_DEFENSE
 Obrona fuzyjna
 STR_GRAV_SHIELD
-Odpychacz grawitacyjny
+Tarcza grawitacyjna
 STR_MIND_SHIELD
 Osłona fal mózgowych
 STR_PSI_LAB
@@ -1274,7 +1274,7 @@ Obrona plazmowa, dzięki rozpędzonym cząstkom, zapewnia mocną i skuteczną oc
 STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Obrona fuzyjna zapewnia najskuteczniejszą ochronę przed atakiem obcych. Dzięki antymaterii pociski wytwarzają implozję, która niszczy wszystko w obrębie określonego promienia.
 STR_GRAV_SHIELD_UFOPEDIA
-Odpychacz grawitacyjny odpycha statek obcych próbujący lądować w pobliżu bazy wystarczająco długo, by wszystkie systemy obronne bazy wystrzeliły ponownie. W praktyce podwaja to skuteczność każdego systemu obronnego bazy.
+Tarcza grawitacyjna odpycha statek obcych próbujący lądować w pobliżu bazy. Wystarczająco długo, by wszystkie systemy obronne mogły wystrzelić ponownie. W praktyce podwaja to skuteczność każdego systemu obronnego bazy.
 STR_MIND_SHIELD_UFOPEDIA
 Dopóki statki obcych polegają na odbiorze fal mózgowych do wykrywania obecności ludzi (a więc i baz), najefektywniejszym środkiem zaradczym przeciw wykryciu bazy jest tłumienie fal mózgowych emitowanych przez jej personel. Ta instalacja drastycznie redukuje szansę wykrycia bazy przez statek obcych.
 STR_PSIONIC_LABORATORY_UFOPEDIA
