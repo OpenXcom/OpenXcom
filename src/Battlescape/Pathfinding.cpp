@@ -442,8 +442,15 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		BattleUnit *unit = tile->getUnit();
 		if (unit == 0 || unit == _unit || unit == missileTarget) return false;
-		if (unit->getFaction() == _unit->getFaction() ||
-			(_unit->getFaction() == FACTION_PLAYER && unit->getVisible())) return true;
+		if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
+			(_unit->getFaction() == FACTION_PLAYER && unit->getVisible())) return true;		// player know all visible units
+		if (_unit->getFaction() != FACTION_PLAYER)
+		{
+			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
+			{
+				if ((*i)->getTile() == tile) return true;	// unit know, were all visible for him units
+			}
+		}
 	}
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
