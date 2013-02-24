@@ -728,7 +728,7 @@ void Map::setSelectorPosition(int mx, int my)
 	int oldX = _selectorX, oldY = _selectorY;
 
 	if (!mx && !my) return; // cursor is offscreen
-	_camera->convertScreenToMap(mx, my, &_selectorX, &_selectorY);
+	_camera->convertScreenToMap(mx, my + _spriteHeight/4, &_selectorX, &_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
