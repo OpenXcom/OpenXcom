@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <algorithm>
 #include "AggroBAIState.h"
 #include "ProjectileFlyBState.h"
 #include "../Savegame/BattleUnit.h"
@@ -35,6 +36,10 @@
 namespace OpenXcom
 {
 
+
+std::vector<Position> AggroBAIState::_randomTileSearch;
+int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
+
 /**
  * Sets up a BattleAIState.
  * @param game pointer to the game.
@@ -42,7 +47,23 @@ namespace OpenXcom
  */
 AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0)
 {
+    if (_randomTileSearch.size() == 0)
+    {
+        _randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
 
+        for (int i = 0; i < 121; ++i)
+        {
+            _randomTileSearch[i].x = ((i%11) - 5);
+	        _randomTileSearch[i].y = ((i/11) - 5); 
+        }
+    }
+
+    if (_randomTileSearchAge > 42) // shuffle the search pattern after an arbitrary number of uses
+    {
+
+        std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
+        _randomTileSearchAge = 0;
+    }
 }
 
 /**
@@ -365,6 +386,12 @@ void AggroBAIState::think(BattleAction *action)
 				takeCover = false;
 			if (aggression == 2 && number < 90)
 				takeCover = false;
+
+            if (action->number == 2)
+            {
+                takeCover = true; // always seek cover as last action
+                action->reckless = true;
+            }
 		
 			// we're using melee, so CHAAAAAAAARGE!!!!!
 			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
@@ -396,8 +423,8 @@ void AggroBAIState::think(BattleAction *action)
 								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
-								if (_game->getPathfinding()->getStartDirection() != -1 && valid &&
-									newDistance < distance)
+								if (_game->getPathfinding()->getStartDirection() != -1 /* && valid  &&
+									newDistance < distance*/)
 								{
 									// CHAAAAAAARGE!
 									action->target = checkPath;
@@ -496,69 +523,87 @@ void AggroBAIState::think(BattleAction *action)
 				int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
 				int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
 				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
-				int dsqr = dx*dx + dy*dy;
-				int runx = _unit->getPosition().x + (dx * 7 * 7) / dsqr;
-				int runy = _unit->getPosition().y + (dy * 7 * 7) / dsqr;
+				int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
+                Vector3i run;
+				run.x = (dx * 5) / dist;
+				run.y = (dy * 5) / dist;
+                run.z = 0;
 				
 				int bestTileScore = -1000;
 				int score = -1000;
-				Position bestTile(-1, -1, 0xDEADBEEF);
-				
+				Position bestTile(0, 0, 0);
+                ++_randomTileSearchAge;
 				
 				while (tries < 150 && !coverFound)
 				{
 					tries++;
-					action->target = _unit->getPosition();
+					action->target = _unit->getPosition() + run; // start looking in a direction away from the enemy
 					if (tries < 121) 
 					{
 						// looking for cover
-						action->target.x += x_search_sign * ((tries%11) - 5);
-						action->target.y += y_search_sign * ((tries/11) - 5); 
+						action->target.x += _randomTileSearch[tries].x;
+						action->target.y += _randomTileSearch[tries].y;
+						if (action->target == _unit->getPosition() && unitsSpottingMe > 0)
+						{
+							// don't even think about staying in the same spot. Move!
+							action->target.x += RNG::generate(-20,20);
+							action->target.y += RNG::generate(-20,20);
+						}
 						score = _game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target)) ? 0 : 100;
 					}
 					else
 					{
-						score = 100; // ruuuuuuun
-						action->target.x = runx + RNG::generate(-5,5);
-						action->target.y = runy + RNG::generate(-5,5);
+                        if (tries == 121) Log(LOG_INFO) << _unit->getId() << " best score after systematic search was: " << bestTileScore;
+                        action->desperate = true;
+						score = 130; // ruuuuuuun
+                        action->target = _unit->getPosition() + run*2;
+						action->target.x += RNG::generate(-5,5);
+						action->target.y += RNG::generate(-5,5);
 						action->target.z = _unit->getPosition().z + RNG::generate(-1,1);
-						if (action->target.z < 0) action->target.z = 0;
+						if (action->target.z < 0)
+                        {
+                            action->target.z = 0;
+                        }
+                        else if (action->target.z >= _game->getHeight()) 
+                        {
+                            action->target.z = _unit->getPosition().z;
+                        }
 					}
 
 					// THINK, DAMN YOU
 					if (!_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score += 25; // partial cover?
+                    _game->getPathfinding()->abortPath(); // clean up hypothetical path data
 					if (sneak)
 					{
 						Tile *tile = _game->getTile(action->target);
 						if (!tile) score = -10000;
-						else if (!tile->getVisible()) score += 50; 
+						else if (tile->getVisible()) score -= 50; 
 						// XXX perhaps only psi-skilled aliens should cheat-sneak?
 					}
 					score += abs(action->target.x - _aggroTarget->getPosition().x);
 					score += abs(action->target.y - _aggroTarget->getPosition().y);
 					score += abs(action->target.z - _aggroTarget->getPosition().z)*2;
 
+                    int nearestEnemy = 1000; // too far away to matter
 					for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
 					{
 						if ((*i)->getId() == _unit->getId()) continue; // woo, it's us
+                        if ((*i)->isOut()) continue; // derp
 						int distSq = _game->getTileEngine()->distanceSq(action->target, (*i)->getPosition());
-						if (distSq == 0) 
-						{
-							score = -1000; // we can't stand inside another unit, duh. Even sectoids know that.
-							break;
-						}
+						if (distSq == 0) distSq = 1; // dont divide by 0
 						if (distSq <= 100)
 						{
 							if ((*i)->getFaction() == FACTION_PLAYER)
 							{
-								score -= 200/distSq; // stop standing next to soldiers ffs
+								if (distSq < nearestEnemy) nearestEnemy = distSq;
 							} else
 							{
-								if (distSq <= 5) score += 5; // quick, hide behind the nearest civilian?
-								if ((*i)->getFaction() == FACTION_HOSTILE) score += 5; // strength in numbers?
+								if (distSq <= 2) score += 5; // quick, hide behind the nearest civilian?
+								if (distSq <= 9 && (*i)->getFaction() == FACTION_HOSTILE) score += 5; // strength in numbers?
 							}
 						}
 					}
+                    if (nearestEnemy < 100) score -= (100-nearestEnemy);
 
 
 					if (score > bestTileScore)
@@ -572,10 +617,11 @@ void AggroBAIState::think(BattleAction *action)
 							bestTile = action->target;
 						}
 						_game->getPathfinding()->abortPath();
-						if (bestTileScore > 100) coverFound = true;
+						if (bestTileScore > 130) coverFound = true; // good enough, gogogo; this value is hand-tuned and subjective :(
 					}
 				}
-				Log(LOG_INFO) << "Taking cover with score " << bestTileScore << " after " << tries << " tries.";
+				Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries.";
+                Log(LOG_INFO) << "Walking " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so.";
 				action->target = bestTile;
 			}
 		}

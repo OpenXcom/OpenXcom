@@ -20,6 +20,7 @@
 #include "BattleUnit.h"
 #include "BattleItem.h"
 #include <cmath>
+#include <sstream>
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -1933,15 +1934,26 @@ Armor *BattleUnit::getArmor() const
  * @param lang Pointer to language.
  * @return name Widecharstring of the unit's name.
  */
-std::wstring BattleUnit::getName(Language *lang) const
+std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 {
 	if (_type != "SOLDIER" && lang != 0)
 	{
+		std::wstring ret;
+
 		if (_type.find("STR_") != std::string::npos)
-			return lang->getString(_type);
+			ret = lang->getString(_type);
 		else
-			return lang->getString(_race);
+			ret = lang->getString(_race);
+
+		if (debugAppendId)
+		{
+			std::wstringstream ss;
+			ss << ret << L" #" << _id;
+			ret = ss.str();
+		}
+		return ret;
 	}
+
 	return _name;
 }
 /**

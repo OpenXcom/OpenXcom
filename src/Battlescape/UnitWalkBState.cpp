@@ -35,6 +35,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -166,7 +167,7 @@ void UnitWalkBState::think()
 			}
 
 			// check for reaction fire
-			if (!_falling && _terrain->checkReactionFire(_unit, &action))
+			if (!_falling && !_action.reckless && _terrain->checkReactionFire(_unit, &action))
 			{
 				postPathProcedures();
 				action.cameraPosition = _parent->getMap()->getCamera()->getMapOffset();
@@ -197,9 +198,9 @@ void UnitWalkBState::think()
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_PANICKING)
 	{
-		
+        if (unitspotted && _action.desperate) Log(LOG_INFO) << "desperate action!";
 		// check if we did spot new units
-		if (unitspotted && _unit->getCharging() == 0 && !_falling)
+		if (unitspotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
 		{
 			_parent->getMap()->cacheUnit(_unit);
 			_pf->abortPath();

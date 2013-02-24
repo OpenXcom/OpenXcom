@@ -75,9 +75,12 @@
 #include "InfoboxOKState.h"
 #include "MiniMapState.h"
 #include "UnitFallBState.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
+
+bool BattlescapeGame::_debugPlay = false;
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -200,6 +203,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	BattleAction action;
 	action.diff = _parentState->getGame()->getSavedGame()->getDifficulty();
+    action.number = _AIActionCounter;
 	unit->think(&action);
 	
 	if (action.type == BA_RETHINK)
@@ -402,6 +406,11 @@ void BattlescapeGame::endTurn()
 			setupCursor();
 		}
 	}
+
+    if (_save->getSide() == FACTION_HOSTILE)
+    {
+        resetSituationForAI();
+    }
 
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
@@ -802,8 +811,8 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
-				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				 // AI does two things per unit + hides?, before switching to the next, or it got killed before doing the second thing
+				if (_AIActionCounter > 3 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -1454,5 +1463,27 @@ const Ruleset *BattlescapeGame::getRuleset() const
 {
 	return _parentState->getGame()->getRuleset();
 }
+
+
+/** 
+ * Evaluate the situation for ease of AI decisions in the following turn.
+ */
+void BattlescapeGame::resetSituationForAI()
+{
+    int w = _save->getWidth();
+    int h = _save->getHeight();
+    int l = _save->getLength();
+
+    Tile **tiles = _save->getTiles();
+
+    // Log(LOG_INFO) << w*h*l << " tiles!";
+
+    for (int i = 0; i < w * l * h; ++i)
+    {
+       tiles[i]->_soldiersVisible = -1;    // -1 for "not calculated"; actual calculations will take place as needed
+       tiles[i]->_closestSoldierDSqr = -1; // for most of the tiles most of the time, this data is not needed
+    }
+}
+
 
 }

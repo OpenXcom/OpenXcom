@@ -45,7 +45,7 @@ class Tile
 public:
 	static struct SerializationKey 
 	{
-		// how many bytes to store each variable or each member of array of the same name
+		// how many bytes to store for each variable or each member of array of the same name
 		Uint8 index; // for indexing the actual tile array
 		Uint8 _mapDataSetID;
 		Uint8 _mapDataID;
@@ -53,6 +53,11 @@ public:
 		Uint8 _fire;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
+
+    // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
+    int _closestSoldierDSqr;
+    int _soldiersVisible;
+
 protected:
 	static const int LIGHTLAYERS = 3;
 	MapData *_objects[4];

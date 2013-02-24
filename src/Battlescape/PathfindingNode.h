@@ -25,7 +25,7 @@ namespace OpenXcom
 {
 
 class PathfindingOpenSet;
-class OpenSetEntry;
+struct OpenSetEntry;
 
 /**
  * A class that holds pathfinding info for a certain node on the map.

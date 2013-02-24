@@ -20,6 +20,7 @@
 #define OPENXCOM_AGGROBAISTATE_H
 
 #include "BattleAIState.h"
+#include <vector>
 
 
 namespace OpenXcom
@@ -39,6 +40,8 @@ protected:
 	BattleUnit *_lastKnownTarget;
 	Position _lastKnownPosition;
 	int _timesNotSeen;
+    static std::vector<Position> _randomTileSearch;
+    static int _randomTileSearchAge;
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);

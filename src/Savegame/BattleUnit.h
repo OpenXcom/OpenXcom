@@ -309,7 +309,7 @@ public:
 	/// Gets the unit's armor.
 	Armor *getArmor() const;
 	/// Gets the unit's name.
-	std::wstring getName(Language *lang) const;
+	std::wstring getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
 	UnitStats *getStats();
 	/// Get the unit's stand height.
