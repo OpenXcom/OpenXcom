@@ -526,8 +526,15 @@ void DebriefingState::prepareDebriefing()
 				// mind controlled units may as well count as unconscious
 				&& ((faction == FACTION_PLAYER)
 				// large units can't be recovered as items, so we have to have an extra special case JUST for reapers
-				|| ((*j)->getStatus() == STATUS_UNCONSCIOUS && (*j)->getArmor()->getSize() > 1)))
+				|| (status == STATUS_UNCONSCIOUS && (*j)->getArmor()->getSize() > 1)))
 			{
+				std::string corpseItem = (*j)->getArmor()->getCorpseItem();
+
+				// we need to remove that pesky underscore and add an STR_ for large unit corpses.
+				if ((*j)->getArmor()->getSize() > 1)
+				{
+					corpseItem = "STR_" + corpseItem.substr(0, corpseItem.size()-1);
+				}
 				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
 					if (base->getAvailableContainment() - (base->getUsedContainment() * _game->getAlienContainmentHasUpperLimit()) > 0)
@@ -539,13 +546,13 @@ void DebriefingState::prepareDebriefing()
 					{
 						_noContainment = true;
 						addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*j)->getValue());
-						base->getItems()->addItem((*j)->getArmor()->getCorpseItem(), 1);
+						base->getItems()->addItem(corpseItem, 1);
 					}
 				}
 				else
 				{
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*j)->getValue());
-					base->getItems()->addItem((*j)->getArmor()->getCorpseItem(), 1);
+					base->getItems()->addItem(corpseItem, 1);
 				}
 			}
 			else if (oldFaction == FACTION_NEUTRAL)
