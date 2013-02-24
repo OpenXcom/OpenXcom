@@ -1229,7 +1229,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		break;
 	}
 
-	block += blockage(startTile,MapData::O_OBJECT, type);
+	block += blockage(endTile,MapData::O_OBJECT, type);
 
 	return block;
 }
