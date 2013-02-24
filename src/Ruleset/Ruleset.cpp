@@ -176,6 +176,23 @@ void Ruleset::load(const std::string &source)
 		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
 	else
 		loadFiles(dirname);
+	// This is needed for canConvertAmmoToElerium:
+	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	{
+		if ("STR_AMMUNITION" != i->second->getCategory() && "STR_WEAPON" != i->second->getCategory()
+		|| 0 >= i->second->getRequiredItems().size())
+			continue;
+		std::map<std::string, int>::const_iterator requiredItem = i->second->getRequiredItems().begin();
+		if ("STR_WEAPON" == i->second->getCategory() && _manufacture.find(requiredItem->first) != _manufacture.end()) continue; // We want the Alien Grenade only :)
+		std::string type = requiredItem->first + "_" + i->first;
+		std::map<std::string, int> requiredItems;
+		requiredItems[i->first] = 1;
+		RuleManufacture *rule = new RuleManufacture(type, requiredItem->first, "STR_UFO_COMPONENT",
+			i->second->getRequirements(), i->second->getRequiredSpace(), i->second->getManufactureTime()/2, 0,
+			requiredItem->second, requiredItems);
+		_manufacture[type] = rule;
+		_manufactureIndex.push_back(type);
+	}
 }
 
 /**

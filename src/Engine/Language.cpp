@@ -26,6 +26,8 @@
 #include "Options.h"
 #include "LocalizedText.h"
 #include "../Interface/TextList.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleManufacture.h"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -515,7 +517,7 @@ std::vector<std::string> Language::getList(TextList *list)
  * @param filename Filename of the LNG file.
  * @sa @ref LanguageFiles
  */
-void Language::loadLng(const std::string &filename)
+void Language::loadLng(const std::string &filename, const Ruleset * ruleset)
 {
 	_strings.clear();
 
@@ -554,6 +556,19 @@ void Language::loadLng(const std::string &filename)
 	}
 
 	txtFile.close();
+
+	// This is needed for canConvertAmmoToElerium:
+	const std::vector<std::string> &items = ruleset->getManufactureList();
+	for (std::vector<std::string>::const_iterator i = items.begin (); i != items.end (); ++i)
+	{
+		RuleManufacture *m = ruleset->getManufacture(*i);
+		if (m->getName() != m->getProducedItem())
+		{
+			std::map<std::string, int>::const_iterator requiredItem = m->getRequiredItems().begin();
+			if (_strings.find(m->getProducedItem()) != _strings.end() && _strings.find(requiredItem->first) != _strings.end())
+				_strings[m->getName()] = utf8ToWstr(_strings[m->getProducedItem()].asUTF8() + " <- " + _strings[requiredItem->first].asUTF8());
+		}
+	}
 }
 
 /**

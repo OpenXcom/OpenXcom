@@ -28,6 +28,7 @@ namespace OpenXcom
 {
 
 class TextList;
+class Ruleset;
 
 /**
  * Contains strings used throughout the game for localization.
@@ -56,7 +57,7 @@ public:
 	/// Gets list of languages in the data directory.
 	static std::vector<std::string> getList(TextList *list);
 	/// Loads an OpenXcom language file.
-	void loadLng(const std::string &filename);
+	void loadLng(const std::string &filename, const Ruleset * ruleset);
 	/// Gets the language's name.
 	std::wstring getName() const;
 	/// Outputs the language to a HTML file.

@@ -78,9 +78,9 @@ productionProgress_e Production::step(Base * b, SavedGame * g, const Ruleset *r)
 		else
 		{
 			if (Options::getBool("allowAutoSellProduction") && getAmountTotal() == std::numeric_limits<int>::max())
-				g->setFunds(g->getFunds() + r->getItem(_rules->getName())->getSellCost());
+				g->setFunds(g->getFunds() + (r->getItem(_rules->getProducedItem())->getSellCost() * _rules->getProduceQty()));
 			else
-				b->getItems()->addItem(_rules->getName(), 1);
+				b->getItems()->addItem(_rules->getProducedItem(), _rules->getProduceQty());
 		}
 	}
 	if (getAmountProduced () >= _amount)

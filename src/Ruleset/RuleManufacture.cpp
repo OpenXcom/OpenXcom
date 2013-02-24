@@ -24,7 +24,22 @@ namespace OpenXcom
  * Create a new Manufacture
  * @param name The unique manufacture name
 */
-RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(0), _time(0), _cost(0)
+RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _producedItem(name), _space(0), _time(0), _cost(0), _produceQty(1)
+{
+}
+
+/**
+ * Create a new Manufacture
+ * @param name The unique manufacture name
+ * @param category The category type
+ * @param requires The required research
+ * @param space The required workshop space
+ * @param time The required time to produce one unit
+ * @param cost The required money
+ * @param requiredItems The required materials
+*/
+RuleManufacture::RuleManufacture(const std::string &name, const std::string &producedItem, const std::string &category, const std::vector<std::string> &requires, int space, int time, int cost, int produceQty, const std::map<std::string, int> &requiredItems) :
+	_name(name), _producedItem(producedItem), _category(category), _requires(requires), _space(space), _time(time), _cost(cost), _produceQty(produceQty), _requiredItems(requiredItems)
 {
 }
 
@@ -96,6 +111,15 @@ std::string RuleManufacture::getName () const
 }
 
 /**
+ * Get the name of the produced item (it is the same as getName in most cases)
+ * @return the name
+*/
+std::string RuleManufacture::getProducedItem() const
+{
+	return _producedItem;
+}
+
+/**
  * Get the category shown in the manufacture list
  * @return the category
 */
@@ -140,6 +164,15 @@ int RuleManufacture::getManufactureTime () const
 int RuleManufacture::getManufactureCost () const
 {
 	return _cost;
+}
+
+/**
+ * Get the number of objects to manufacture instead of one (it is 1 in most cases)
+ * @return the number
+*/
+int RuleManufacture::getProduceQty() const
+{
+	return _produceQty;
 }
 
 /**
