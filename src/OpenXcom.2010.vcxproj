@@ -125,7 +125,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cppd.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -181,7 +181,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cpp.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
