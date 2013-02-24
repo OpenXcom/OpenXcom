@@ -1671,17 +1671,18 @@ int TileEngine::castedShade(const Position& voxel)
 
 bool TileEngine::isVoxelVisible(const Position& voxel)
 {
-	int zstart = voxel.z+1;
+	int zstart = voxel.z+3; //slight Z adjust
 	Position tmpVoxel = voxel;
 	int zend = (zstart/24)*24 +24;
 	for (int z = zstart; z<zend; z++)
 	{
 		tmpVoxel.z=z;
-		if (voxelCheck(tmpVoxel, 0) != -1) return false;
+		// only OBJECT can cause additional occlusion (because of any shape)
+		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
 		++tmpVoxel.x;
-		if (voxelCheck(tmpVoxel, 0) != -1) return false;
+		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
 		++tmpVoxel.y;
-		if (voxelCheck(tmpVoxel, 0) != -1) return false;
+		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
 	}
     return true;
 }
