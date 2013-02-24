@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-enum MapBlockType { MT_DEFAULT, MT_LANDINGZONE, MT_EWROAD, MT_NSROAD, MT_CROSSING, MT_DIRT, MT_XCOMSPAWN, MT_UBASECOMM, MT_FINALCOMM };
+enum MapBlockType {MT_UNDEFINED = -1, MT_DEFAULT, MT_LANDINGZONE, MT_EWROAD, MT_NSROAD, MT_CROSSING, MT_DIRT, MT_XCOMSPAWN, MT_UBASECOMM, MT_FINALCOMM };
 class RuleTerrain;
 
 /**
@@ -40,7 +40,8 @@ private:
 	RuleTerrain *_terrain;
 	std::string _name;
 	int _width, _length, _height;
-	MapBlockType _type;
+	MapBlockType _type, _subType;
+	int _frequency, _timesUsed, _maxCount;
 public:
 	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type);
 	~MapBlock();
@@ -60,6 +61,12 @@ public:
 	void setHeight(int height);
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getType() const;
+	/// Returns whether this mapblock is a landingzone.
+	MapBlockType getSubType() const;
+	int getRemainingUses();
+	void markUsed();
+	void reset();
+
 };
 
 }

@@ -284,7 +284,7 @@ void AggroBAIState::think(BattleAction *action)
 				CurrentPosition = CurrentPosition + DirectionVector;
 				Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
 				Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
-				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true, false);
+				CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
 				if (CollidesWith > -1 && CollidesWith < 4)
 				{
 					action->waypoints.push_back(LastPosition);
@@ -382,14 +382,15 @@ void AggroBAIState::think(BattleAction *action)
 					takeCover = true;
 					bool targetFound = false;
 					int distance = 200;
-					for (int x = 0 - action->actor->getArmor()->getSize()-1; x <= _aggroTarget->getArmor()->getSize()-1; ++x)
+					int size = action->actor->getArmor()->getSize()-1;
+					int targetsize = _aggroTarget->getArmor()->getSize()-1;
+					for (int x = 0 - size; x <= targetsize; ++x)
 					{
-						for (int y = 0 - action->actor->getArmor()->getSize()-1; y <= _aggroTarget->getArmor()->getSize()-1; ++y)
+						for (int y = 0 - size; y <= targetsize; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
-								Position p (x, y, 0);
-								Position checkPath = _aggroTarget->getPosition() + p;
+								Position checkPath = _aggroTarget->getPosition() + Position (x, y, 0);
 								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
@@ -454,7 +455,7 @@ void AggroBAIState::think(BattleAction *action)
 					}
 					else
 					{
-						if(((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
+						if(action->weapon->getAmmoItem() && ((_unit->getFaction() == FACTION_NEUTRAL && _aggroTarget->getFaction() == FACTION_HOSTILE) || _unit->getFaction() == FACTION_HOSTILE))
 						{
 							if (action->weapon->getAmmoItem()->getRules()->getDamageType() != DT_HE || explosiveEfficacy(_aggroTarget->getPosition(), _unit, (action->weapon->getAmmoItem()->getRules()->getPower() / 10) +1, action->diff))
 							{
@@ -527,7 +528,7 @@ void AggroBAIState::think(BattleAction *action)
 				}
 			}
 		}
-		if (action->type != BA_RETHINK)
+		if (action->type != BA_RETHINK && action->type != BA_WALK)
 			action->TU = action->actor->getActionTUs(action->type, action->weapon);
 	}
 	if (_aggroTarget != 0)
@@ -577,7 +578,7 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 		{
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
-			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false);
+			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true);
 			if (collidesWith == 4)
 			{
 				if ((*i)->getFaction() != attackingUnit->getFaction())

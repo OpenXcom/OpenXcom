@@ -128,6 +128,10 @@ void AlienDeployment::load(const YAML::Node &node)
 		{
 			i.second() >> _civilians;
 		}
+		else if (key == "roadTypeOdds")
+		{
+			i.second() >> _roadTypeOdds;
+		}
 	}
 }
 
@@ -143,7 +147,8 @@ void AlienDeployment::save(YAML::Emitter &out) const
 	out << YAML::Key << "width" << YAML::Value << _width;
 	out << YAML::Key << "length" << YAML::Value << _length;
 	out << YAML::Key << "height" << YAML::Value << _height;
-	out << YAML::Key << "civilians" << YAML::Value << _civilians;
+	out << YAML::Key << "civilians" << YAML::Value << _civilians;	
+	out << YAML::Key << "roadTypeOdds" << YAML::Value << _roadTypeOdds;
 	out << YAML::EndMap;
 }
 
@@ -176,4 +181,10 @@ int AlienDeployment::getCivilians() const
 {
 	return _civilians;
 }
+
+std::vector<int> AlienDeployment::getRoadTypeOdds() const
+{
+	return _roadTypeOdds;
+}
+
 }

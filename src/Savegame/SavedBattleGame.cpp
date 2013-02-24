@@ -36,6 +36,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {
@@ -43,12 +44,13 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false)
+SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
 	_dragTimeTolerance = Options::getInt("battleScrollDragTimeTolerance");
 	_dragPixelTolerance = Options::getInt("battleScrollDragPixelTolerance");
+	_strafeEnabled = Options::getBool("strafe");
 }
 
 /**
@@ -986,8 +988,7 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 			&& (!((*i)->getType() & Node::TYPE_FLYING) 
 				|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true)		// check if not already occupied
-			&& (*i)->getPosition().x > 0 && (*i)->getPosition().y > 0 )
+			&& setUnitPosition(unit, (*i)->getPosition(), true))		// check if not already occupied
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{
@@ -1172,7 +1173,8 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
 			{
 				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
-				if (t && t->getUnit() == 0 && !t->hasNoFloor())
+				Tile *bt = getTile(originalPosition + Position(xd[dir],yd[dir],-1));
+				if (t && t->getUnit() == 0 && !t->hasNoFloor(bt))
 				{
 					// recover from unconscious
 					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
@@ -1342,4 +1344,9 @@ bool SavedBattleGame::getUnitsFalling()
 {
 	return _unitsFalling;
 }
+const bool SavedBattleGame::getStrafeSetting()
+{
+	return _strafeEnabled;
+}
+
 }

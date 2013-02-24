@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "Camera.h"
 
 namespace OpenXcom
 {
@@ -159,6 +160,7 @@ void ProjectileFlyBState::init()
 		{
 			if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 			{
+				action.cameraPosition = _action.cameraPosition;
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		}
@@ -203,7 +205,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	else if (_unit->getType() == "CELATID") // special code for the "spit" trajectory
+	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
 		{
@@ -271,6 +273,10 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
+			if (_action.cameraPosition.z != -1)
+			{
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+			}
 			_parent->popState();
 		}
 	}

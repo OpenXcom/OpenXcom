@@ -95,7 +95,7 @@ private:
 	std::string _race;
 	std::wstring _name;
 	UnitStats _stats;
-	int _standHeight, _kneelHeight;
+	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
@@ -143,7 +143,7 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase
-	void startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache);
+	void startWalking(int direction, const Position &destination, Tile *destinationTile, Tile *tileBelowMe, Tile *TileBelowDestination, bool cache);
 	/// Increase the walkingPhase
 	void keepWalking(bool cache);
 	/// Gets the walking phase for animation and sound
@@ -259,7 +259,7 @@ public:
 	/// Get whether this unit is visible
 	bool getVisible() const;
 	/// Sets the unit's tile it's standing on
-	void setTile(Tile *tile);
+	void setTile(Tile *tile, Tile *tileBelow = 0);
 	/// Gets the unit's tile.
 	Tile *getTile() const;
 	/// Gets the item in the specified slot.
@@ -276,6 +276,8 @@ public:
 	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
+	/// Gets the unit floating elevation.
+	int getFloatHeight() const;
 	/// Adds one to the reaction exp counter.
 	void addReactionExp();
 	/// Adds one to the firing exp counter.

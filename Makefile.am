@@ -63,7 +63,7 @@ name_DATA = \
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
-openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
+openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) -lGL
 openxcom_CXXFLAGS = \
 	$(CXXFLAGS) \
 	$(DEBUG_CXXFLAGS) \
@@ -263,6 +263,8 @@ openxcom_SOURCES = \
 	src/Engine/Logger.h \
 	src/Engine/Music.cpp \
 	src/Engine/Music.h \
+	src/Engine/OpenGL.cpp \
+	src/Engine/OpenGL.h \
 	src/Engine/Options.cpp \
 	src/Engine/Options.h \
 	src/Engine/Palette.cpp \

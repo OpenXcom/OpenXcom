@@ -51,6 +51,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_stats = *soldier->getCurrentStats();
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
+	_floatHeight = soldier->getRules()->getFloatHeight();
 	_loftempsSet = soldier->getRules()->getLoftempsSet();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = 0;
@@ -106,6 +107,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_stats = *unit->getStats();
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
+	_floatHeight = unit->getFloatHeight();
 	_loftempsSet = unit->getLoftempsSet();
 	_deathSound = unit->getDeathSound();
 	_aggroSound = unit->getAggroSound();
@@ -379,7 +381,7 @@ UnitStatus BattleUnit::getStatus() const
  * @param direction Which way to walk.
  * @param destination The position we should end up on.
  */
-void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache)
+void BattleUnit::startWalking(int direction, const Position &destination, Tile *destinationTile, Tile *tileBelowMe, Tile *TileBelowDestination, bool cache)
 {
 	if (direction >= Pathfinding::DIR_UP)
 	{
@@ -391,8 +393,12 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 		_direction = direction;
 		_status = STATUS_WALKING;
 	}
-
-	if ((!_tile->getMapData(MapData::O_FLOOR) || (direction >= Pathfinding::DIR_UP && !destinationTile->getMapData(MapData::O_FLOOR))))
+	bool floorFound = false;
+	if ((tileBelowMe && tileBelowMe->getTerrainLevel() == -24) || (TileBelowDestination && TileBelowDestination->getTerrainLevel() == -24))
+	{
+		floorFound = true;
+	}
+	if (!floorFound && (!_tile->getMapData(MapData::O_FLOOR) || (direction >= Pathfinding::DIR_UP && !destinationTile->getMapData(MapData::O_FLOOR))))
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -1465,18 +1471,18 @@ bool BattleUnit::getVisible() const
  * Sets the unit's tile it's standing on
  * @param tile
  */
-void BattleUnit::setTile(Tile *tile)
+void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 {
 	_tile = tile;
 	if (!_tile)
 		return;
 	// unit could have changed from flying to walking or vice versa
-	if (_status == STATUS_WALKING && !_tile->getMapData(MapData::O_FLOOR) && _armor->getMovementType() == MT_FLY)
+	if (_status == STATUS_WALKING && _tile->hasNoFloor(tileBelow) && _armor->getMovementType() == MT_FLY)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
 	}
-	else if (_status == STATUS_FLYING && _tile->getMapData(MapData::O_FLOOR))
+	else if (_status == STATUS_FLYING && !_tile->hasNoFloor(tileBelow))
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
@@ -1954,6 +1960,15 @@ int BattleUnit::getStandHeight() const
 int BattleUnit::getKneelHeight() const
 {
 	return _kneelHeight;
+}
+
+/**
+  * Get the unit's floating elevation.
+  * @return The unit's elevation over the ground in voxels, when flying.
+  */
+int BattleUnit::getFloatHeight() const
+{
+	return _floatHeight;
 }
 
 /**

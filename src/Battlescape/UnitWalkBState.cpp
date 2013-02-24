@@ -42,7 +42,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false)
 {
 
 }
@@ -68,6 +68,15 @@ void UnitWalkBState::think()
 {
 	bool unitspotted = false;
 	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
+	Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+	bool wasFalling = _falling;
+	_falling = _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY;
+	if (wasFalling && !_falling)
+	{
+		_action.target.z = _unit->getPosition().z;
+		_pf->abortPath();
+		_pf->calculate(_action.actor, _action.target);
+	}
 	if (_unit->isOut())
 	{
 		_pf->abortPath();
@@ -83,7 +92,8 @@ void UnitWalkBState::think()
 
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
-		{
+		{	
+
 			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
@@ -151,9 +161,9 @@ void UnitWalkBState::think()
 			}
 
 			// check for reaction fire
-			if (_terrain->checkReactionFire(_unit, &action))
+			if (!_falling && _terrain->checkReactionFire(_unit, &action))
 			{
-				_parent->popState();
+				postPathProcedures();
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 				// unit got fired upon - stop walking
 				_pf->abortPath();
@@ -179,10 +189,10 @@ void UnitWalkBState::think()
 	}
 
 	// we are just standing around, shouldn't we be walking?
-	if (_unit->getStatus() == STATUS_STANDING)
+	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_PANICKING)
 	{
 		// check if we did spot new units
-		if (unitspotted && _unit->getCharging() == 0)
+		if (unitspotted && _unit->getCharging() == 0 && !_falling)
 		{
 			_parent->getMap()->cacheUnit(_unit);
 			_pf->abortPath();
@@ -198,6 +208,10 @@ void UnitWalkBState::think()
 			_parent->setStateInterval(0);
 		}
 		int dir = _pf->getStartDirection();
+		if (_falling)
+		{
+			dir = Pathfinding::DIR_DOWN;
+		}
 		if (_unit->getTurretType() > -1 && _action.strafe)
 		{
 			// Turret-and-Ctrl-down, turn the turret instead of moving.
@@ -238,8 +252,11 @@ void UnitWalkBState::think()
 
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
+			if (_falling)
+			{
+				tu = 0;
+			}
 			int energy = tu;
-
 			if (_action.run)
 			{
 				tu *= 0.75;
@@ -286,17 +303,23 @@ void UnitWalkBState::think()
 			}
 
 			// now start moving
-			dir = _pf->dequeuePath();
+			if (!_falling)
+			{
+				dir = _pf->dequeuePath();
+			}
+
 			if (_unit->spendTimeUnits(tu))
 			{
 				if (_unit->spendEnergy(energy))
 				{
-					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), onScreen);
+					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+					Tile *tileBelowDestination = _parent->getSave()->getTile(destination + Position(0,0,-1));
+					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), tileBelow, tileBelowDestination, onScreen);
 				}
 				else
 				{
 					_action.result = "STR_NOT_ENOUGH_ENERGY";
-				_parent->getMap()->cacheUnit(_unit);
+					_parent->getMap()->cacheUnit(_unit);
 					_parent->popState();
 				}
 			}
@@ -314,13 +337,9 @@ void UnitWalkBState::think()
 					// This is where we fake out the strafe movement direction so the unit "moonwalks"
 					int dirTemp = _unit->getDirection();
 					_unit->setDirection(_unit->getFaceDirection());
-					_parent->getMap()->cacheUnit(_unit);
 					_unit->setDirection(dirTemp);
 				}
-				else
-				{
-					_parent->getMap()->cacheUnit(_unit);
-				}
+				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
 		else
@@ -347,7 +366,7 @@ void UnitWalkBState::think()
 		// make sure the unit sprites are up to date
 		if (onScreen)
 			_parent->getMap()->cacheUnit(_unit);
-		if (unitspotted && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0)
+		if (unitspotted && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0 && !_falling)
 		{
 			_pf->abortPath();
 			_parent->getMap()->cacheUnit(_unit);
@@ -387,7 +406,8 @@ void UnitWalkBState::postPathProcedures()
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);
 	_parent->getMap()->cacheUnit(_unit);
-	_parent->popState();
+	if (!_falling)
+		_parent->popState();
 }
 
 /*
@@ -421,29 +441,29 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
+			Tile *tile = _unit->getTile();
+			Tile *tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
 			{
-				Tile *tile = _unit->getTile();
-				if (tile->getFootstepSound())
+				if (tile->getFootstepSound(tileBelow))
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound()*2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow)*2))->play();
 				}
 			}
 			// play footstep sound 2
 			if (_unit->getWalkingPhase() == 7)
 			{
-				Tile *tile = _unit->getTile();
-				if (tile->getFootstepSound())
+				if (tile->getFootstepSound(tileBelow))
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound()*2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow)*2))->play();
 				}
 			}
 		}
 		else
 		{
 			// play default flying sound
-			if (_unit->getWalkingPhase() == 0)
+			if (_unit->getWalkingPhase() == 0 && !_falling)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
 			}

@@ -36,6 +36,7 @@ private:
 	BattleUnit *_unit;
 	Pathfinding *_pf;
 	TileEngine *_terrain;
+	bool _falling;
 	void postPathProcedures();
 	void setNormalWalkSpeed();
 	void playMovementSound();

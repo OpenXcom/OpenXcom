@@ -1188,10 +1188,7 @@ void BattlescapeState::handle(Action *action)
 			}
 			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
 			{
-				if (_save->getDebugMode())
-				{
-					SaveVoxelView();
-				}
+				SaveVoxelView();
 			}
 		}
 	}
@@ -1200,7 +1197,9 @@ void BattlescapeState::handle(Action *action)
 
 void BattlescapeState::SaveVoxelView()
 {
-	static const unsigned char pal[24]={0,0,0, 192,192,192,  160,160,255,  255,160,160, 160,255,160, 255,0,255,  0,0,0, 255,255,255 };
+	static const unsigned char pal[30]=
+	//			ground		west wall	north wall		object		enem unit						xcom unit	neutr unit
+	{0,0,0, 224,224,224,  192,224,255,  255,224,192, 128,255,128, 192,0,255,  0,0,0, 255,255,255,  224,192,0,  255,64,128 };
 
 	BattleUnit * bu = _save->getSelectedUnit();
 	if (bu==0) return; //no unit selected
@@ -1208,19 +1207,26 @@ void BattlescapeState::SaveVoxelView()
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
+	bool black;
+	Tile *tile;
 	std::stringstream ss;
 	std::vector<unsigned char> image;
 	int test;
 	Position originVoxel = Position(viewPos.x*16+8,
 		viewPos.y*16+8,
-		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getHeight()-1) );
+		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getFloatHeight() + bu->getHeight()-1) );
+	if (bu->getArmor()->getSize() > 1)
+	{
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 1; //topmost voxel
+	}
+
 	Position targetVoxel,hitPos;
 	double dist;
-
+	bool _debug = _save->getDebugMode();
 	double dir = ((float)bu->getDirection()+4)/4*M_PI;
-
 	image.clear();
-
 	for (int y = -256+32; y < 256+32; ++y)
 	{
 		ang_y = (((double)y)/640*M_PI+M_PI/2);
@@ -1233,36 +1239,71 @@ void BattlescapeState::SaveVoxelView()
 			targetVoxel.z=originVoxel.z + (int)(cos(ang_y)*1024);
 
 			_trajectory.clear();
-			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu) +1;
-			if (test==0 || test==6)
+			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, !_debug) +1;
+			black = true;
+			if (test!=0 && test!=6)
 			{
-				dist=10000;
+				tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24));
+				if (_debug
+					|| (tile->isDiscovered(0) && test == 2)
+					|| (tile->isDiscovered(1) && test == 3)
+					|| (tile->isDiscovered(2) && (test == 1 || test == 4))
+					|| test==5
+					)
+				{
+					if (test==5)
+					{
+						if (tile->getUnit())
+						{
+							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+							else
+							if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+						}
+						else
+						{
+							tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24-1));
+							if (tile && tile->getUnit())
+							{
+								if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+								else
+								if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+							}
+						}
+					}
+					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
+					dist = sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
+						+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
+						+ (hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
+					black = false;
+				}
+			}
+
+			if (black)
+			{
+				dist = 0;
 			}
 			else
 			{
-				hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
-				dist=sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
-					+(hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
-					+(hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
-			}
+				if (dist>1000) dist=1000;
+				if (dist<1) dist=1;
+				dist=(1000-(log(dist))*140)/700;//140
 
-			if (dist>1000) dist=1000;
-			if (dist<1) dist=1;
-			dist=(1000-(log(dist))*140)/800;//140
-
-			if (hitPos.x%16==15)
-			{
-				dist*=0.9;
+				if (hitPos.x%16==15)
+				{
+					dist*=0.9;
+				}
+				if (hitPos.y%16==15)
+				{
+					dist*=0.9;
+				}
+				if (hitPos.z%24==23)
+				{
+					dist*=0.9;
+				}
+				if (dist > 1) dist = 1;
+				if (tile) dist *= (16 - (float)tile->getShade())/16; 
 			}
-			if (hitPos.y%16==15)
-			{
-				dist*=0.9;
-			}
-			if (hitPos.z%24==23)
-			{
-				dist*=0.9;
-			}
-
+			
 			image.push_back((int)((float)(pal[test*3+0])*dist));
 			image.push_back((int)((float)(pal[test*3+1])*dist));
 			image.push_back((int)((float)(pal[test*3+2])*dist));
@@ -1293,7 +1334,10 @@ void BattlescapeState::SaveVoxelMap()
 {
 	std::stringstream ss;
 	std::vector<unsigned char> image;
-	static const unsigned char pal[24]={255,255,255, 192,192,192,  160,160,255,  255,160,160, 160,255,160, 255,0,255,  255,255,255, 255,255,255 };
+	static const unsigned char pal[30]=
+	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
+
+	Tile *tile;
 
 	for (int z = 0; z < _save->getHeight()*12; ++z)
 	{
@@ -1313,6 +1357,28 @@ void BattlescapeState::SaveVoxelMap()
 				{
 					dist*=0.9;
 				}
+
+				if (test==5)
+				{
+					tile = _save->getTile(Position(x/16, y/16, z/12));
+					if (tile->getUnit())
+					{
+						if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+						else
+						if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+					}
+					else
+					{
+						tile = _save->getTile(Position(x/16, y/16, z/12-1));
+						if (tile && tile->getUnit())
+						{
+							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+							else
+							if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+						}
+					}
+				}
+
 				image.push_back((int)((float)pal[test*3+0]*dist));
 				image.push_back((int)((float)pal[test*3+1]*dist));
 				image.push_back((int)((float)pal[test*3+2]*dist));
@@ -1330,7 +1396,6 @@ void BattlescapeState::SaveVoxelMap()
 	}
 	return;
 }
-
 
 
 /**

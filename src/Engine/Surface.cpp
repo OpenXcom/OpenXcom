@@ -25,8 +25,9 @@
 #include "Exception.h"
 #include "ShaderMove.h"
 #include <stdlib.h>
+#ifdef _WIN32
 #include <malloc.h>
-
+#endif
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 #define _aligned_malloc __mingw_aligned_malloc
 #define _aligned_free   __mingw_aligned_free
