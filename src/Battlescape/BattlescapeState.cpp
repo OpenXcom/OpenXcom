@@ -641,7 +641,7 @@ void BattlescapeState::btnKneelClick(Action *)
  */
 void BattlescapeState::btnInventoryClick(Action *)
 {
-	if (playableUnitSelected() && _save->getSelectedUnit()->getArmor()->getSize() == 1)
+	if (playableUnitSelected() && (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode()))
 	{
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode()));
 	}
