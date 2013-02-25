@@ -880,12 +880,17 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 {
 	const std::vector<std::string> &items = ruleset->getManufactureList ();
 	const std::vector<Production *> baseProductions (base->getProductions ());
+	bool canConvertAmmoToElerium = Options::getBool("canConvertAmmoToElerium");
 
 	for(std::vector<std::string>::const_iterator iter = items.begin ();
 		iter != items.end ();
 		++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
+		if (!canConvertAmmoToElerium && m->getName() != m->getProducedItem())
+		{
+		 	continue;
+		}
 		if(!isResearched(m->getRequirements()))
 		{
 		 	continue;

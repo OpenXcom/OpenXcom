@@ -255,12 +255,12 @@ namespace OpenXcom
 	 */
 	void Ufopaedia::runStandalone(Game *game)
 	{
-		// set game language
-		game->loadLanguage("English");
-
 		// init game
 		game->loadRuleset();
 		game->setSavedGame(game->getRuleset()->newSave());
+
+		// set game language
+		game->loadLanguage("English");
 
 		// open Ufopaedia
 		open(game);

@@ -20,6 +20,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -75,9 +76,11 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
+	bool canConvertAmmoToElerium = Options::getBool("canConvertAmmoToElerium");
 	for(std::vector<RuleManufacture *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
-		_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
+		if (canConvertAmmoToElerium || (*iter)->getName() == (*iter)->getProducedItem())
+			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName()).c_str());
 	}
 }
 
