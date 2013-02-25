@@ -150,10 +150,15 @@ void Map::draw()
 {
 	Surface::draw();
 	Tile *t;
-
+	
+	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
-		projectileInFOV = true;
+		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
+		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
+		{
+			projectileInFOV = true;
+		}
 	}
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
