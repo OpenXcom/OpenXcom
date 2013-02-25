@@ -69,14 +69,18 @@ void UnitWalkBState::think()
 	bool unitspotted = false;
 	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 	Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
-	bool wasFalling = _falling;
-	_falling = _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY;
-	if (wasFalling && !_falling)
+	bool largeCheck = true;
+	for (int x = _unit->getArmor()->getSize() - 1; x != 0 && largeCheck; --x)
 	{
-		_action.target.z = _unit->getPosition().z;
-		_pf->abortPath();
-		_pf->calculate(_action.actor, _action.target);
+		for (int y = _unit->getArmor()->getSize() - 1; y != 0 && largeCheck; --y)
+		{
+			Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
+			if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || _unit->getArmor()->getMovementType() == MT_FLY)
+				largeCheck = false;
+		}
 	}
+	_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY;
+
 	if (_unit->isOut())
 	{
 		_pf->abortPath();
@@ -93,6 +97,7 @@ void UnitWalkBState::think()
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
 		{	
+			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY;
 
 			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
@@ -191,6 +196,7 @@ void UnitWalkBState::think()
 	// we are just standing around, shouldn't we be walking?
 	if (_unit->getStatus() == STATUS_STANDING || _unit->getStatus() == STATUS_PANICKING)
 	{
+		
 		// check if we did spot new units
 		if (unitspotted && _unit->getCharging() == 0 && !_falling)
 		{
@@ -303,9 +309,10 @@ void UnitWalkBState::think()
 			}
 
 			// now start moving
-			if (!_falling)
+			dir = _pf->dequeuePath();
+			if (_falling)
 			{
-				dir = _pf->dequeuePath();
+				dir = Pathfinding::DIR_DOWN;
 			}
 
 			if (_unit->spendTimeUnits(tu))
@@ -380,6 +387,7 @@ void UnitWalkBState::think()
  */
 void UnitWalkBState::cancel()
 {
+	if (_parent->getSave()->getSide() == FACTION_PLAYER)
 	_pf->abortPath();
 }
 

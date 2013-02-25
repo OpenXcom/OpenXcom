@@ -95,12 +95,31 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	}	
 	Tile *tileBelow = _save->getTile(endPosition + Position(0,0,-1));
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
-	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && tileBelow->getTerrainLevel() < -10 && _movementType != MT_FLY)
+	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
 	}
-
+	
+	int size = unit->getArmor()->getSize()-1;
+	if (size >= 1)
+	{
+		int its = 0;
+		for (int x = 0; x <= size; x += size)
+		{
+			for (int y = 0; y <= size; y += size)
+			{
+				if (x || y)
+				{
+					int dir[3] = {4,2,3};
+					Tile *checkTile = _save->getTile(endPosition + Position(x, y, 0));
+					if (isBlocked(unit->getTile(), checkTile, dir[its], missileTarget))
+						return;
+					++its;
+				}
+			}
+		}
+	}
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
 	_strafeMove = _save->getStrafeSetting() && Game::getCtrlKeyDown() && !Game::getShiftKeyDown() && (startPosition.z == endPosition.z) && 
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
@@ -203,187 +222,184 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	bool triedStairs = false;
 	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
-	int numberOfPartsChangingLevel = 0;
+	int numberOfPartsGoingUp = 0;
+	int numberOfPartsGoingDown = 0;
+	int numberOfPartsFalling = 0;
 	int numberOfPartsChangingHeight = 0;
 
-	Tile *startTile = _save->getTile(startPosition);
-	Tile *destinationTile = _save->getTile(*endPosition);
-	Tile *belowDestination = _save->getTile(*endPosition + Position(0,0,-1));
-
-	cost = 0;
-	// this means the destination is probably outside the map
-	if (!destinationTile)
-		return 255;
-
-	// check if the destination tile can be walked over
-	if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
-		return 255;
-
-	// can't walk on top of other units
-	if (_save->getTile(*endPosition + Position(0,0,-1))
-		&& _save->getTile(*endPosition + Position(0,0,-1))->getUnit()
-		&& _save->getTile(*endPosition + Position(0,0,-1))->getUnit() != _unit
-		&& !_save->getTile(*endPosition + Position(0,0,-1))->getUnit()->isOut()
-		&& _movementType != MT_FLY && _save->getTile(*endPosition)->hasNoFloor(belowDestination))
-		return 255;
-
-	// if we are on a stairs try to go up a level
-	if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !triedStairs)
-	{
-		endPosition->z++;
-		destinationTile = _save->getTile(*endPosition);
-		belowDestination = _save->getTile(*endPosition + Position(0,0,-1));
-		triedStairs = true;
-	}
-
-	// this means the destination is probably outside the map
-	if (!destinationTile)
-		return 255;
-
-	if (direction < DIR_UP && endPosition->z == startTile->getPosition().z)
-	{
-		// check if we can go this way
-		if (isBlocked(startTile, destinationTile, direction, missileTarget))
-			return 255;
-		if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
-			return 255;
-
-	}
-	else if (direction >= DIR_UP)
-	{
-		// check if we can go up or down through gravlift or fly
-		if (validateUpDown(unit, startPosition, direction))
+	for (int x = 0; x <= size; ++x)
+		for (int y = 0; y <= size; ++y)
 		{
-			cost = 8; // vertical movement by flying suit or grav lift
-		}
-		else
-		{
-			return 255;
-		}
-	}
+			Position offset = Position (x, y, 0);
+			Tile *startTile = _save->getTile(startPosition + offset);
+			Tile *destinationTile = _save->getTile(*endPosition + offset);
+			Tile *belowDestination = _save->getTile(*endPosition + offset + Position(0,0,-1));
 
-	int wallcost = 0; // walking through rubble walls
-	if (!triedStairs && (direction == 7 || direction == 0 || direction == 1))
-		wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-	if (direction == 1 || direction == 2 || direction == 3)
-		wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-	if (direction == 3 || direction == 4 || direction == 5)
-		wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-	if (!triedStairs && (direction == 5 || direction == 6 || direction == 7))
-		wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-	// check if we have floor, else fall down
-	bool doneFalling = false;
-	while (canFallDown(destinationTile) && (_movementType != MT_FLY || triedStairs) && !doneFalling && belowDestination->getTerrainLevel() < -10)
-	{
-		if (size == 0)
-		{
-			endPosition->z--;
-			destinationTile = _save->getTile(*endPosition);
-			belowDestination = _save->getTile(*endPosition + Position(0,0,-1));
-			fellDown = true;
-		}
-		else
-		{
-			numberOfPartsChangingLevel = 0;
-			for (int x = 0; x <= size; ++x)
+
+			// this means the destination is probably outside the map
+			if (startTile == 0 || destinationTile == 0)
+				return 255;
+
+			// check if the destination tile can be walked over
+			//if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
+				//return 255;
+
+			// can't walk on top of other units
+			if (_save->getTile(*endPosition + Position(x,y,-1))
+				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
+				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
+				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
+				&& _movementType != MT_FLY && _save->getTile(*endPosition + offset)->hasNoFloor(belowDestination))
+				return 255;
+
+			// if we are on a stairs try to go up a level
+			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && destinationTile->getTerrainLevel() == 0 && !triedStairs)
 			{
-				for (int y = 0; y <= size; ++y)
-				{
-					Tile *test = _save->getTile(destinationTile->getPosition() + Position (x,y,0));
-					if (test && canFallDown(test))
+					numberOfPartsGoingUp++;
+
+					if (numberOfPartsGoingUp > size)
 					{
-						numberOfPartsChangingLevel++;
+						endPosition->z++;
+						destinationTile = _save->getTile(*endPosition + offset);
+						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+						triedStairs = true;
+					}
+			}
+			else if (!fellDown && _movementType != MT_FLY && belowDestination && canFallDown(destinationTile) && belowDestination->getTerrainLevel() <= -12)
+			{
+					numberOfPartsGoingDown++;
+
+					if (numberOfPartsGoingDown == (size + 1)*(size + 1))
+					{
+						endPosition->z--;
+						destinationTile = _save->getTile(*endPosition + offset);
+						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+						fellDown = true;
+					}
+			}
+
+			// this means the destination is probably outside the map
+			if (!destinationTile)
+				return 255;
+
+			if (direction < DIR_UP && endPosition->z == startTile->getPosition().z)
+			{
+				// check if we can go this way
+				if (isBlocked(startTile, destinationTile, direction, missileTarget))
+					return 255;
+				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+					return 255;
+
+			}
+			else if (direction >= DIR_UP)
+			{
+				// check if we can go up or down through gravlift or fly
+				if (validateUpDown(unit, startPosition + offset, direction))
+				{
+					cost = 8; // vertical movement by flying suit or grav lift
+				}
+				else
+				{
+					return 255;
+				}
+			}
+
+			int wallcost = 0; // walking through rubble walls
+			if (!triedStairs && !fellDown)
+			{
+				if (direction == 7 || direction == 0 || direction == 1)
+					wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+				if (direction == 1 || direction == 2 || direction == 3)
+					wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+				if (direction == 3 || direction == 4 || direction == 5)
+					wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+				if (direction == 5 || direction == 6 || direction == 7)
+					wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
+			}
+			// check if we have floor, else fall down
+			if (_movementType != MT_FLY && !fellDown && canFallDown(startTile))
+			{
+				numberOfPartsFalling++;
+
+				if (numberOfPartsFalling == (size+1)*(size+1))
+				{
+					*endPosition = startPosition + Position(0,0,-1);
+					destinationTile = _save->getTile(*endPosition + offset);
+					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+					fellDown = true;
+				}
+			}
+			/*
+			if (abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) < 10)
+				numberOfPartsChangingHeight++;
+			*/
+			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
+			if (cost == 0 && direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(belowDestination))
+			{
+				cost = 4;
+			}
+
+			// check if the destination tile can be walked over
+			if ((isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget)) && !fellDown)
+			{
+				return 255;
+			}
+
+			// calculate the cost by adding floor walk cost and object walk cost
+			if (direction < DIR_UP && x == 0 && y == 0)
+			{
+				cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
+				if (!fellDown && !triedStairs && destinationTile->getMapData(MapData::O_OBJECT))
+				{
+					cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+				}
+			}
+
+			// diagonal walking (uneven directions) costs 50% more tu's
+			if (direction < DIR_UP && direction & 1)
+			{
+				wallcost /= 2;
+				cost = (int)((double)cost * 1.5);
+			}
+
+			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
+			// Maybe if flying then it makes no difference?
+			if (_save->getStrafeSetting() && _strafeMove) {
+				if (size) {
+					// 4-tile units not supported.
+					// Turn off strafe move and continue
+					_strafeMove = false;
+				}
+				else
+				{
+					if (std::min(abs(8 + direction - _unit->getDirection()), std::min( abs(_unit->getDirection() - direction), abs(8 + _unit->getDirection() - direction))) > 2) {
+						// Strafing backwards-ish currently unsupported, turn it off and continue.
+						_strafeMove = false;
+					}
+					else
+					{
+						if (_unit->getDirection() != direction && x == 0 && y == 0) {
+							cost += 1;
+						}
 					}
 				}
 			}
-			if (numberOfPartsChangingLevel == (size+1)*(size+1))
+			if (x == size && y == size)
 			{
-				endPosition->z--;
-				destinationTile = _save->getTile(*endPosition);
-				belowDestination = _save->getTile(*endPosition + Position(0,0,-1));
-				fellDown = true;
-			}
-			else
-			{
-				doneFalling = true;
+				cost += wallcost;
 			}
 		}
-	}
-	// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
-	if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(belowDestination))
-	{
-		cost = 4;
-	}
-
-	// check if the destination tile can be walked over
-	if ((isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget)) && !fellDown)
-	{
-		return 255;
-	}
-
-	// calculate the cost by adding floor walk cost and object walk cost
-	if (direction < DIR_UP)
-	{
-		cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
-		if (!fellDown)
-		{
-			cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
-		}
-	}
-
-	// diagonal walking (uneven directions) costs 50% more tu's
-	if (direction < DIR_UP && direction & 1)
-	{
-		wallcost /= 2;
-		cost = (int)((double)cost * 1.5);
-	}
-
-	// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
-	// Maybe if flying then it makes no difference?
-	if (_save->getStrafeSetting() && _strafeMove) {
-		if (size) {
-			// 4-tile units not supported.
-			// Turn off strafe move and continue
-			_strafeMove = false;
-		}
-		else
-		{
-			if (std::min(abs(8 + direction - _unit->getDirection()), std::min( abs(_unit->getDirection() - direction), abs(8 + _unit->getDirection() - direction))) > 2) {
-				// Strafing backwards-ish currently unsupported, turn it off and continue.
-				_strafeMove = false;
-			}
-			else
-			{
-				if (_unit->getDirection() != direction) {
-					cost += 1;
-				}
-			}
-		}
-	}
-
-	cost += wallcost;
 
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
 	if (size)
-	{		
-		startTile = _save->getTile(*endPosition + Position(1,1,0));
-		destinationTile = _save->getTile(*endPosition);
-		if (startTile == 0 || destinationTile == 0)
-			return 255;
-		for (int x = 0; x <= size; ++x)
-		{
-			for (int y = 0; y <= size; ++y)
-			{
-				Tile *checkTileA = _save->getTile(startPosition + Position(x,y,0));
-				Tile *checkTileB = _save->getTile(*endPosition + Position(x,y,0));
-				if (checkTileA && checkTileB && checkTileA->getTerrainLevel() != checkTileB->getTerrainLevel() && checkTileB->getTerrainLevel() <= -16)
-					numberOfPartsChangingHeight++;
-			}
-		}
+	{
+		Tile *startTile = _save->getTile(*endPosition + Position(1,1,0));
+		Tile *destinationTile = _save->getTile(*endPosition);
 		int tmpDirection = 7;
 		if (isBlocked(startTile, destinationTile, tmpDirection, missileTarget))
 			return 255;
-
+		if (!fellDown && abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
+			return 255;
 		// also check if we change level, that there are two parts changing level,
 		// so a big sized unit can not go up a small sized stairs
 		if (numberOfPartsChangingHeight == 1)
@@ -551,7 +567,6 @@ bool Pathfinding::canFallDown(Tile *here)
 {
 	if (here->getPosition().z == 0)
 		return false;
-	Tile* tileBelow = _save->getTile(here->getPosition() - Position (0,0,1));
 	for (int z = 1; z <= here->getPosition().z; ++z)
 	{
 		if (_save->selectUnit(here->getPosition() - Position(0, 0, z)) &&
@@ -560,10 +575,9 @@ bool Pathfinding::canFallDown(Tile *here)
 			return false;
 	}
 
-	if (here->hasNoFloor(tileBelow))
-		return true;
-	else
-		return false;
+	Tile* tileBelow = _save->getTile(here->getPosition() - Position (0,0,1));
+
+	return here->hasNoFloor(tileBelow);
 }
 
 bool Pathfinding::canFallDown(Tile *here, int size)
