@@ -1229,7 +1229,14 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		break;
 	}
 
-	block += blockage(startTile,MapData::O_OBJECT, type);
+	if (type != DT_NONE)
+	{
+		block += blockage(endTile,MapData::O_OBJECT, type);
+	}
+	else
+	{
+		block += blockage(startTile,MapData::O_OBJECT, type);
+	}
 
 	return block;
 }
@@ -1643,6 +1650,53 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	}
 	return -1;
 }
+
+/**
+ * Calculate z "grounded" value for particular voxel (used for projectile shadow).
+ * @param voxel The voxel to trace down.
+ * @return z coord of "ground"
+ */
+int TileEngine::castedShade(const Position& voxel)
+{
+	int zstart = voxel.z;
+	Position tmpVoxel = voxel;
+	int z;
+	for (z = zstart; z>0; z--)
+	{
+		tmpVoxel.z = z;
+		if (voxelCheck(tmpVoxel, 0) != -1) break;
+			
+	}
+    return z;
+}
+
+/**
+ * Trace voxel visibility.
+ * @param voxel coordinate.
+ * @return visible or not
+ */
+
+bool TileEngine::isVoxelVisible(const Position& voxel)
+{
+	int zstart = voxel.z+3; // slight Z adjust
+	if ((zstart/24)!=(voxel.z/24))
+		return true; // visble!
+	Position tmpVoxel = voxel;
+	int zend = (zstart/24)*24 +24;
+	for (int z = zstart; z<zend; z++)
+	{
+		tmpVoxel.z=z;
+		// only OBJECT can cause additional occlusion (because of any shape)
+		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
+		++tmpVoxel.x;
+		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
+		++tmpVoxel.y;
+		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
+	}
+    return true;
+}
+
+
 
 /**
  * Check if we hit a voxel.
