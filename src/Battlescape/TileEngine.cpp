@@ -1665,7 +1665,9 @@ int TileEngine::castedShade(const Position& voxel)
 
 bool TileEngine::isVoxelVisible(const Position& voxel)
 {
-	int zstart = voxel.z+3; //slight Z adjust
+	int zstart = voxel.z+3; // slight Z adjust
+	if ((zstart/24)!=(voxel.z/24))
+		return false; // visble!
 	Position tmpVoxel = voxel;
 	int zend = (zstart/24)*24 +24;
 	for (int z = zstart; z<zend; z++)
