@@ -2632,7 +2632,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: REAPER_CORPSE_2
     name: STR_REAPER_CORPSE
@@ -2640,7 +2639,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: REAPER_CORPSE_3
     name: STR_REAPER_CORPSE
@@ -2648,7 +2646,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: REAPER_CORPSE_4
     name: STR_REAPER_CORPSE
@@ -2656,7 +2653,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: STR_SECTOPOD_CORPSE
     size: 1
@@ -2670,7 +2666,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: SECTOPOD_CORPSE_2
     name: STR_SECTOPOD_CORPSE
@@ -2678,7 +2673,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: SECTOPOD_CORPSE_3
     name: STR_SECTOPOD_CORPSE
@@ -2686,7 +2680,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: SECTOPOD_CORPSE_4
     name: STR_SECTOPOD_CORPSE
@@ -2694,7 +2687,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: STR_CYBERDISC_CORPSE
     size: 1
@@ -2708,7 +2700,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: CYBERDISC_CORPSE_2
     name: STR_CYBERDISC_CORPSE
@@ -2716,7 +2707,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: CYBERDISC_CORPSE_3
     name: STR_CYBERDISC_CORPSE
@@ -2724,7 +2714,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: CYBERDISC_CORPSE_4
     name: STR_CYBERDISC_CORPSE
@@ -2732,7 +2721,6 @@ items:
     invWidth: 0
     invHeight: 0
     battleType: 12
-    recover: true
     armor: 20
   - type: HOVERTANK_CORPSE_1
     floorSprite: 64
