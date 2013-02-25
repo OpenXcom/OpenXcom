@@ -1196,7 +1196,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 	{
 		_currentAction.actor = _save->getSelectedUnit();
 		BattleUnit *unit = _save->selectUnit(pos);
-		if (unit && unit != _save->getSelectedUnit() && unit->getVisible())
+		if (unit && unit != _save->getSelectedUnit() && (unit->getVisible() || _debugPlay))
 		{
 		//  -= select unit =-
 			if (unit->getFaction() == _save->getSide())
