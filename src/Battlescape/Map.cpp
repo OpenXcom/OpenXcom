@@ -155,8 +155,6 @@ void Map::draw()
 	{
 		projectileInFOV = true;
 	}
-
-	projectileInFOV = true;
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
