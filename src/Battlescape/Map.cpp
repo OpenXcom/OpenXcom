@@ -481,10 +481,6 @@ void Map::drawTerrain(Surface *surface)
 						{
 							Position offset;
 							calculateWalkingOffset(unit, &offset);
-							if (unit->getArmor()->getSize() > 1)
-							{
-								offset.y += 4;
-							}
 							tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, tileShade);
 							if (unit->getFire() > 0)
 							{
@@ -516,10 +512,6 @@ void Map::drawTerrain(Surface *surface)
 								if (tunit->getArmor()->getSize() > 1)
 								{
 									offset.y += 4;
-								}
-								if (tunit == (BattleUnit*)_save->getSelectedUnit() && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && part == 0)
-								{
-									_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
 								}
 								if (tunit->getFire() > 0)
 								{
