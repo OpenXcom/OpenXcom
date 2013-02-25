@@ -151,15 +151,12 @@ void Map::draw()
 	Surface::draw();
 	Tile *t;
 
-	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
-		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
-		if (t && ((_save->getSide() == FACTION_PLAYER && t->isDiscovered(0)) || t->getVisible()))
-		{
-			projectileInFOV = true;
-		}
+		projectileInFOV = true;
 	}
+
+	projectileInFOV = true;
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
@@ -443,7 +440,7 @@ void Map::drawTerrain(Surface *surface)
 								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 15);
+								tmpSurface->blitNShade(surface, bulletPositionScreen.x - 16, bulletPositionScreen.y - 26, 16);
 							}
 
 							voxelPos = _projectile->getPosition();
@@ -476,7 +473,7 @@ void Map::drawTerrain(Surface *surface)
 											_save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 15);
+											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
 										}
 										// draw bullet itself
 										voxelPos = _projectile->getPosition(1-i);
