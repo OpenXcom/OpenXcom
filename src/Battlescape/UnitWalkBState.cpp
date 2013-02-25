@@ -90,9 +90,17 @@ void UnitWalkBState::think()
 
 	if (_unit->getStatus() == STATUS_WALKING || _unit->getStatus() == STATUS_FLYING)
 	{
-		playMovementSound();
-
-		_unit->keepWalking(onScreen); // advances the phase
+		if ((_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0) || // next tile must be not occupied
+			(_parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit))
+		{
+			playMovementSound();
+			_unit->keepWalking(onScreen); // advances the phase
+		}
+		else
+		{
+			_unit->turn();	// turn to undiscovered unit
+			_pf->abortPath();
+		}
 
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
