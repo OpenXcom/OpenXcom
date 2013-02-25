@@ -463,7 +463,11 @@ void BattlescapeGenerator::run()
 	{
 		for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
 		{
-			if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
+			if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+				(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
+				(_save->getTiles()[i]->getPosition().z == 1 &&
+				_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
+				_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
 				_save->getTiles()[i]->setDiscovered(true, 2);
 		}
 	}
