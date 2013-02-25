@@ -434,8 +434,10 @@ void Map::drawTerrain(Surface *surface)
 							Position voxelPos = _projectile->getPosition();
 							// draw shadow on the floor
 							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-							if (voxelPos.x / 16 == itX &&
-								voxelPos.y / 16 == itY &&
+							if (voxelPos.x / 16 >= itX &&
+								voxelPos.y / 16 >= itY &&
+								voxelPos.x / 16 <= itX+1 &&
+								voxelPos.y / 16 <= itY+1 &&
 								voxelPos.z / 24 == itZ &&
 								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
@@ -445,8 +447,10 @@ void Map::drawTerrain(Surface *surface)
 
 							voxelPos = _projectile->getPosition();
 							// draw thrown object
-							if (voxelPos.x / 16 == itX &&
-								voxelPos.y / 16 == itY &&
+							if (voxelPos.x / 16 >= itX &&
+								voxelPos.y / 16 >= itY &&
+								voxelPos.x / 16 <= itX+1 &&
+								voxelPos.y / 16 <= itY+1 &&
 								voxelPos.z / 24 == itZ &&
 								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
