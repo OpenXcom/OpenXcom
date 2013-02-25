@@ -857,8 +857,8 @@ int Base::getPersonnelMaintenance() const
 {
 	size_t total = 0;
 	total += _soldiers.size() * _rule->getSoldierCost();
-	total += _engineers * _rule->getEngineerCost();
-	total += _scientists * _rule->getScientistCost();
+	total += getTotalEngineers() * _rule->getEngineerCost();
+	total += getTotalScientists() * _rule->getScientistCost();
 	return total;
 }
 
