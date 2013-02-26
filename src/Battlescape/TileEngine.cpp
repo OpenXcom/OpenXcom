@@ -1229,7 +1229,14 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		break;
 	}
 
-	block += blockage(endTile,MapData::O_OBJECT, type);
+	if (type != DT_NONE)
+	{
+		block += blockage(endTile,MapData::O_OBJECT, type);
+	}
+	else
+	{
+		block += blockage(startTile,MapData::O_OBJECT, type);
+	}
 
 	return block;
 }
@@ -1673,7 +1680,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 {
 	int zstart = voxel.z+3; // slight Z adjust
 	if ((zstart/24)!=(voxel.z/24))
-		return false; // visble!
+		return true; // visble!
 	Position tmpVoxel = voxel;
 	int zend = (zstart/24)*24 +24;
 	for (int z = zstart; z<zend; z++)

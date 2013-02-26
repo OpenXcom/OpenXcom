@@ -150,13 +150,16 @@ void Map::draw()
 {
 	Surface::draw();
 	Tile *t;
-
+	
+	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
-		projectileInFOV = true;
+		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
+		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
+		{
+			projectileInFOV = true;
+		}
 	}
-
-	projectileInFOV = true;
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
@@ -434,8 +437,10 @@ void Map::drawTerrain(Surface *surface)
 							Position voxelPos = _projectile->getPosition();
 							// draw shadow on the floor
 							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-							if (voxelPos.x / 16 == itX &&
-								voxelPos.y / 16 == itY &&
+							if (voxelPos.x / 16 >= itX &&
+								voxelPos.y / 16 >= itY &&
+								voxelPos.x / 16 <= itX+1 &&
+								voxelPos.y / 16 <= itY+1 &&
 								voxelPos.z / 24 == itZ &&
 								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
@@ -445,8 +450,10 @@ void Map::drawTerrain(Surface *surface)
 
 							voxelPos = _projectile->getPosition();
 							// draw thrown object
-							if (voxelPos.x / 16 == itX &&
-								voxelPos.y / 16 == itY &&
+							if (voxelPos.x / 16 >= itX &&
+								voxelPos.y / 16 >= itY &&
+								voxelPos.x / 16 <= itX+1 &&
+								voxelPos.y / 16 <= itY+1 &&
 								voxelPos.z / 24 == itZ &&
 								_save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
