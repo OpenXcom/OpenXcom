@@ -153,7 +153,7 @@ public:
 	ResourcePack *getResourcePack();
 	const Ruleset *getRuleset() const;
     /// this method evaluates the threats from XCom soldiers to tiles, for later use by AI
-    void BattlescapeGame::resetSituationForAI();
+    void resetSituationForAI();
     static bool _debugPlay; // nobody needs a getter for this. It should really be global. 
 };
 

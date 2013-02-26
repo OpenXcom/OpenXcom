@@ -83,6 +83,8 @@ public:
 	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
 	bool previewPath(bool bRemove = false);
 	bool removePreview();
+	/// Set _unit in order to abuse low-level pathfinding functions from outside the class
+	void setUnit(BattleUnit *unit) { _unit = unit; };
 	/// Get all reachable tiles, based on cost.
 	std::vector<int> findReachable(BattleUnit *unit, int tuMax);
 };

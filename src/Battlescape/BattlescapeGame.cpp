@@ -189,6 +189,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		_playedAggroSound = false;
 	}
+	if(_AIActionCounter == 1)
+	{
+		unit->_hidingForTurn = 0;
+	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 	
 	// psionic or blaster launcher units may attack remotely
@@ -471,7 +475,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						{
 							if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
 							{
-								int d = _save->getTileEngine()->distance(victim->getPosition(), (*h)->getPosition());
+								int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
 								if (d < closest)
 								{
 									revenger = (*h);

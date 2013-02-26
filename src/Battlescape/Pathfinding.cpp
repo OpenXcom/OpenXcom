@@ -228,7 +228,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	*endPosition += startPosition;
 	bool fellDown = false;
 	bool triedStairs = false;
-	int size = _unit->getArmor()->getSize() - 1;
+	int size = _unit ? (_unit->getArmor()->getSize() - 1) : 1;
 	int cost = 0;
 	int numberOfPartsGoingUp = 0;
 	int numberOfPartsGoingDown = 0;

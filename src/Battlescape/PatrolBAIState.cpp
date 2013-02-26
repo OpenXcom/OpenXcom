@@ -25,6 +25,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/Tile.h"
 
@@ -127,6 +129,19 @@ void PatrolBAIState::think(BattleAction *action)
 
 	Node *node;
 
+
+	if (Options::getBool("traceAI")) 
+	{
+		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
+	}
+	
+	if (_unit->_hidingForTurn) 
+	{
+		action->type = BA_NONE;
+		action->TU = 0;
+		return;
+	}
+	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
 		// destination reached

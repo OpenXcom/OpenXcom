@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <climits>
 #include <set>
 #include "TileEngine.h"
 #include <SDL.h>
@@ -36,6 +37,7 @@
 #include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -334,7 +336,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	size_t newChecksum = 0;
 	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		newChecksum += (*i)->getPosition().x*100 + (*i)->getPosition().y;
+		newChecksum += ((*i)->getPosition().x*100 + (*i)->getPosition().y) ^ (*i)->getId();
 
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
@@ -361,6 +363,76 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 }
 
 
+
+void TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit)
+{
+	if (tile->_soldiersVisible != -1) return; // already calculated this turn
+	
+	BattleUnit *realUnit = tile->getUnit();
+	tile->setUnit(hypotheticalUnit);
+	
+	Position realUnitPosition = hypotheticalUnit->getPosition();
+	hypotheticalUnit->setPosition(tilePos);
+	
+	tile->_soldiersVisible = 0;
+	tile->_closestSoldierDSqr = INT_MAX;
+	tile->_closestAlienDSqr = INT_MAX;
+	
+	Position targetVoxel = getSightOriginVoxel(hypotheticalUnit);
+	//(tilePos.x*16+8, tilePos.x*16+8, tilePos.z*24+hypotheticalUnit->getHeight()/2); // middle of tile, high up?
+
+	//tile->setDiscovered(false, 2);
+	
+	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if ((*i)->isOut()) continue;
+		
+		int dsqr = distanceSq(tilePos, (*i)->getPosition());
+		if (dsqr < 1) dsqr = 1; // sanity buffer
+		
+		Position originVoxel = getSightOriginVoxel(*i);
+
+		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
+		//if ((*i)->getFaction() == FACTION_PLAYER && visible(*i, tile))
+		if ((*i)->getFaction() == FACTION_PLAYER && canTargetTile(&originVoxel, tile, MapData::O_FLOOR, &targetVoxel, *i)) 
+		//if ((*i)->getFaction() == FACTION_PLAYER && calculateLine(originVoxel, targetVoxel, false, 0, *i, false) == 4)
+		{
+			++tile->_soldiersVisible;
+
+			if (dsqr < tile->_closestSoldierDSqr)
+			{
+				tile->_closestSoldierDSqr = dsqr;
+				tile->_closestSoldierPos = (*i)->getPosition();
+			}
+		}
+
+		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->_closestAlienDSqr) tile->_closestAlienDSqr = dsqr;
+	}
+	
+	//if (tile->_soldiersVisible == 0 && tile->getVisible()) { Log(LOG_WARNING) << "Visible tile returned !canTargetTile() for all soldiers."; }
+	
+	hypotheticalUnit->setPosition(realUnitPosition);
+	tile->setUnit(realUnit);
+}
+
+/**
+ * Get the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7??
+ * @param currentUnit the watcher
+ * @return approximately an eyeball voxel
+ */
+Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
+{
+	// determine the origin and target voxels for the raytrace
+	Position originVoxel;
+	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
+	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
+	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
+
+	return originVoxel;
+}
+
+
+
 /**
  * Check for an opposing unit on this tile
  * @param currentUnit the watcher
@@ -375,11 +447,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	// determine the origin and target voxels for the raytrace
-	Position originVoxel;
-	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
-	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
+	Position originVoxel = getSightOriginVoxel(currentUnit);
 
 	bool unitSeen = false;
 	// for large units origin voxel is in the middle
@@ -427,7 +495,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
  * @param excludeUnit is self (not to hit self)
  * @return true/false
  */
-bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit* excludeUnit)
+bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
@@ -1457,8 +1525,8 @@ int TileEngine::closeUfoDoors()
 }
 /**
  * calculateLine. Using bresenham algorithm in 3D.
- * @param origin
- * @param target
+ * @param origin (voxel??)
+ * @param target (also voxel??)
  * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
  * @param trajectory A vector of positions in which the trajectory is stored.
  * @param excludeUnit Excludes this unit in the collision detection.
@@ -1807,7 +1875,7 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 
 
 /**
- * Distance squared between 2 points. No sqrt() and sometimes it's all you need.
+ * Distance squared between 2 points. No sqrt(), not floating point math, and sometimes it's all you need.
  * @return distance
  */
 int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const

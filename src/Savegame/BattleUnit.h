@@ -377,6 +377,8 @@ public:
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
 
+	/// scratch value for AI's left hand to tell its right hand what's up...
+	bool _hidingForTurn;
 };
 
 }
