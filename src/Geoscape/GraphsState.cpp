@@ -228,9 +228,9 @@ GraphsState::GraphsState(Game *game) : State(game)
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
-	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setColor(Palette::blockOffset(8)+8);
+	_txtTitle->setBig();
 	
 	_txtFactor->setText(L"$1000's");
 	_txtFactor->setColor(Palette::blockOffset(8)+8);
@@ -281,6 +281,7 @@ void GraphsState::btnUfoRegionClick(Action *)
 	}
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -301,6 +302,7 @@ void GraphsState::btnUfoCountryClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -321,6 +323,7 @@ void GraphsState::btnXcomRegionClick(Action *)
 	}
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_AREAS"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -341,6 +344,7 @@ void GraphsState::btnXcomCountryClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -362,6 +366,7 @@ void GraphsState::btnIncomeClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_INCOME"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -383,6 +388,7 @@ void GraphsState::btnFinanceClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_txtTitle->setText(_game->getLanguage()->getString("STR_FINANCE"));
+	_txtTitle->setBig();
 
 }
 
