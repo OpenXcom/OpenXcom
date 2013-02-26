@@ -226,38 +226,8 @@ void UnitWalkBState::think()
 		{
 			dir = Pathfinding::DIR_DOWN;
 		}
-		if (_unit->getTurretType() > -1 && _action.strafe)
-		{
-			// Turret-and-Ctrl-down, turn the turret instead of moving.
-			// TU cost: (in 1/8ths turn) 1 = 1, 2 = 1, 3 = 2, 4 = 2
-			// Basically half the cost of actually turning.
-			int dirTurr  = _unit->getTurretDirection();
-			int dirTurrTo =_unit->getDirectionTo(_action.target);
-			// 
-			int turnSides = std::min(abs(8 + dirTurr - dirTurrTo), std::min( abs(dirTurrTo - dirTurr), abs(8 +dirTurrTo - dirTurr)));
-			int tu = 0;
-			if (turnSides == 0)
-			{
-				_unit->abortTurn();
-			}
-			else
-			{
-				tu = (turnSides + 1) / 2;
-			}
-			if (tu > _unit->getTimeUnits() && !_parent->getSave()->getDebugMode())
-			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-				_pf->abortPath();
-				return;
-			}
-			// Set up the look, and spend the tu's. This also sets STATUS_TURNING and _toDirectionTurret.
-			_unit->lookAt((_action.target), true);
-			_unit->spendTimeUnits(tu, _parent->getSave()->getDebugMode());
-			// Dequeue everything, because we don't want to walk to the click.
-			_pf->abortPath();
-			return;
-		}
-		else if (dir != -1)
+
+		if (dir != -1)
 		{
 			if (_pf->getStrafeMove())
 			{
