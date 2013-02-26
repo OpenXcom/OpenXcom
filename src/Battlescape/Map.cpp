@@ -279,16 +279,36 @@ void Map::drawTerrain(Surface *surface)
 						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
 					}
 				}
-				if (bulletPositionScreen.x < 8)
-					_camera->jumpXY(+surface->getWidth()-16, _visibleMapHeight/2 - bulletPositionScreen.y);
-				if (bulletPositionScreen.x > surface->getWidth()-8)
-					_camera->jumpXY(-surface->getWidth()+16, _visibleMapHeight/2 - bulletPositionScreen.y);
-				if (bulletPositionScreen.y < 8)
-					_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16);
-				if (bulletPositionScreen.y > _visibleMapHeight-8)
-					_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16);
+
+				bool enough;
+				do
+				{
+					enough = true;
+					if (bulletPositionScreen.x < 8)
+					{
+						_camera->jumpXY(+surface->getWidth()-16, _visibleMapHeight/2 - bulletPositionScreen.y);
+						enough = false;
+					}
+					else if (bulletPositionScreen.x > surface->getWidth()-8)
+					{
+						_camera->jumpXY(-surface->getWidth()+16, _visibleMapHeight/2 - bulletPositionScreen.y);
+						enough = false;
+					}
+					else if (bulletPositionScreen.y < 8)
+					{
+						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16);
+						enough = false;
+					}
+					else if (bulletPositionScreen.y > _visibleMapHeight-8)
+					{
+						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16);
+						enough = false;
+					}
+					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+				} while (!enough);
+
 			}
-		}	
+		}
 	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
