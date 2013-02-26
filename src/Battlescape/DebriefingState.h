@@ -35,6 +35,7 @@ class Craft;
 class Base;
 class Region;
 class Country;
+class ItemContainer;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -55,9 +56,11 @@ private:
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
 	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
+	ItemContainer *_cc; // Corpses Collection)
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
+	void assemblePartsOfCorpses(Base *base);
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _destroyBase;
 public:
