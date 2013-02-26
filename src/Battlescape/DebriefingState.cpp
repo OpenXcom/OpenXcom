@@ -75,6 +75,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_lstStats = new TextList(280, 80, 16, 32);
 	_lstUfoRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);
+	_bullets = new ItemContainer;
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -705,6 +706,8 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+	// Now calculate the clips for each type based on the recovered rounds.
+	assembleClips(base);
 
 	// reequip craft after a non-base-defense mission (of course only if it's not lost already (that case craft=0))
 	if (craft)
@@ -820,7 +823,6 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 /* converts battlescape inventory into geoscape itemcontainer */
 void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
-	std::map<RuleItem*, int> rounds;
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
 		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
@@ -882,7 +884,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						break;
 					case BT_AMMO:
 						// It's a clip, count any rounds left.
-						rounds[(*it)->getRules()] += (*it)->getAmmoQuantity();
+						_bullets->addItem((*it)->getRules()->getType(), (*it)->getAmmoQuantity());
 						break;
 					case BT_FIREARM:
 					case BT_MELEE:
@@ -891,7 +893,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 							BattleItem *clip = (*it)->getAmmoItem();
 							if (clip && (*it)->getRules()->getClipSize() != -1)
 							{
-								rounds[clip->getRules()] += clip->getAmmoQuantity();
+								_bullets->addItem(clip->getRules()->getType(), clip->getAmmoQuantity());
 							}
 						}
 						// Fall-through, to recover the weapon itself.
@@ -901,15 +903,19 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 			}
 		}
 	}
-
-	// Now calculate the clips for each type based on the recovered rounds.
-	for (std::map<RuleItem*, int>::const_iterator rl = rounds.begin(); rl != rounds.end(); ++rl)
-	{
-		//Count half-full clips as full.
-		int total_clips = (rl->second + rl->first->getClipSize()/2) / rl->first->getClipSize();
-		base->getItems()->addItem(rl->first->getType(), total_clips);
-	}
 }
 
+/* Calculate the clips for each type based on the recovered rounds. */
+void DebriefingState::assembleClips(Base *base)
+{
+	int n;
+
+	for (std::map<std::string, int>::const_iterator i = _bullets->getContents()->begin(); i != _bullets->getContents()->end(); ++i)
+	{
+		n = i->second / _game->getRuleset()->getItem(i->first)->getClipSize();
+		if (n > 0)
+			base->getItems()->addItem(i->first, n);
+	}
+}
 
 }
