@@ -1546,7 +1546,7 @@ craftWeapons:
 #    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int)
 #    battleType: What kind of item is this? (int) (default 0)
 #        0 = NONE, 1 = FIREARM, 2 = AMMO, 3 = MELEE, 4 = GRENADE, 5 = PROXIMITYGRENADE, 6 = MEDIKIT,
-#        6 = MEDIKIT, 7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE 
+#        7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE, 12 = PART OF CORPSE
 #    twoHanded: Is this a two-handed weapon. (boolean) (default false)
 #    invWidth: Width of this item in the inventory screen. (int) (default 1)
 #    invHeight: Height of this item in the inventory screen. (int) (default 1)
@@ -2627,25 +2627,33 @@ items:
     battleType: 11
     armor: 20
   - type: REAPER_CORPSE_1
+    name: STR_REAPER_CORPSE
     floorSprite: 52
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: REAPER_CORPSE_2
+    name: STR_REAPER_CORPSE
     floorSprite: 55
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: REAPER_CORPSE_3
+    name: STR_REAPER_CORPSE
     floorSprite: 54
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: REAPER_CORPSE_4
+    name: STR_REAPER_CORPSE
     floorSprite: 53
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: STR_SECTOPOD_CORPSE
     size: 1
     costSell: 20000
@@ -2653,25 +2661,33 @@ items:
     battleType: 11
     armor: 20
   - type: SECTOPOD_CORPSE_1
+    name: STR_SECTOPOD_CORPSE
     floorSprite: 60
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: SECTOPOD_CORPSE_2
+    name: STR_SECTOPOD_CORPSE
     floorSprite: 61
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: SECTOPOD_CORPSE_3
+    name: STR_SECTOPOD_CORPSE
     floorSprite: 62
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: SECTOPOD_CORPSE_4
+    name: STR_SECTOPOD_CORPSE
     floorSprite: 63
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
@@ -2679,25 +2695,33 @@ items:
     battleType: 11
     armor: 20
   - type: CYBERDISC_CORPSE_1
+    name: STR_CYBERDISC_CORPSE
     floorSprite: 56
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: CYBERDISC_CORPSE_2
+    name: STR_CYBERDISC_CORPSE
     floorSprite: 57
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: CYBERDISC_CORPSE_3
+    name: STR_CYBERDISC_CORPSE
     floorSprite: 58
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: CYBERDISC_CORPSE_4
+    name: STR_CYBERDISC_CORPSE
     floorSprite: 59
     invWidth: 0
     invHeight: 0
-    recover: false
+    battleType: 12
+    armor: 20
   - type: HOVERTANK_CORPSE_1
     floorSprite: 64
     invWidth: 0
