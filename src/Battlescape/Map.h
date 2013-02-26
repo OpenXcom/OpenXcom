@@ -64,6 +64,7 @@ private:
 	bool projectileInFOV;
 	std::set<Explosion *> _explosions;
 	bool explosionInFOV;
+	bool _launch;
 	BattlescapeMessage *_message;
 	Camera *_camera;
 	int _visibleMapHeight;

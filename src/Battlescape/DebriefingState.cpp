@@ -75,6 +75,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_lstStats = new TextList(280, 80, 16, 32);
 	_lstUfoRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);
+	_cc = new ItemContainer();
 
 	//
 	_bullets = new ItemContainer();
@@ -660,6 +661,7 @@ void DebriefingState::prepareDebriefing()
 			// recover items from the floor
 			recoverItems(battle->getTiles()[i]->getInventory(), base);		
 		}
+		assemblePartsOfCorpses(base);
 
 		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
@@ -897,6 +899,9 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				{
 					case BT_CORPSE:
 						break;
+					case BT_PARTOFCORPSE:
+						_cc->addItem((*it)->getRules()->getName(), 1);
+						break;
 					case BT_AMMO:
 						// It's a clip, count any rounds left.
 						_bullets->addItem((*it)->getRules()->getType(), (*it)->getAmmoQuantity());
@@ -920,6 +925,20 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 	}
 }
 
+/* assemble found heads, hands, legs to one corpse) */
+void DebriefingState::assemblePartsOfCorpses(Base *base)
+{
+	int n;
+
+	for (std::map<std::string, int>::const_iterator i = _cc->getContents()->begin(); i != _cc->getContents()->end(); ++i)
+	{
+		n = i->second / 4;
+		if (n > 0) {
+			addStat("STR_ALIEN_CORPSES_RECOVERED", n, n * _game->getRuleset()->getItem(i->first)->getRecoveryPoints());
+			base->getItems()->addItem(i->first, n);
+		}
+	}
+}
 
 
 }

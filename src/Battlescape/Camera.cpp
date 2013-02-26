@@ -200,10 +200,10 @@ bool Camera::scrollXY(int x, int y, bool redraw)
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
-	convertScreenToMap((_screenWidth / 2), (_screenHeight / 2), &_center.x, &_center.y);
-
-	// if center goes out of map bounds, hold the scrolling (may need further tweaking)
-	if (_center.x > _mapWidth - 1 || _center.y > _mapLength - 1 || _center.x < 0 || _center.y < 0)
+	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
+// if center goes out of map bounds, hold the scrolling
+	if (_center.x > _mapWidth -1 || _center.x < 0 || 
+		_center.y > _mapLength -1  || _center.y < 0 )
 	{
 		_mapOffset.x -= x;
 		_mapOffset.y -= y;
@@ -212,6 +212,40 @@ bool Camera::scrollXY(int x, int y, bool redraw)
 	if (redraw) _map->draw();
 	return result;
 }
+
+
+/**
+ * Handle jumping with given deviation.
+ */
+void Camera::jumpXY(int x, int y)
+{
+	int oldX = _mapOffset.x, oldY= _mapOffset.y;
+
+	_mapOffset.x += x;
+	_mapOffset.y += y;
+
+	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
+// if center goes out of map bounds, hold the scrolling
+	if (_center.x > _mapWidth -1 || _center.x < 0 || 
+		_center.y > _mapLength -1  || _center.y < 0 )
+	{
+		for (int k=1; k<128; ++k) //try intermediate values
+		{
+			_mapOffset.x = oldX + x*k/128;
+			_mapOffset.y = oldY + y*k/128;
+			convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
+			if (_center.x > _mapWidth -1 || _center.x < 0 || 
+				_center.y > _mapLength -1  || _center.y < 0 )
+			{
+				//step back
+				_mapOffset.x = oldX + x*(k-1)/128;
+				_mapOffset.y = oldY + y*(k-1)/128;
+				break;
+			}
+		}
+	}
+}
+
 
 /**
  * Go one level up.

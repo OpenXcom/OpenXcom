@@ -121,8 +121,9 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-		if (t->getVisible() || (t->getUnit() && t->getUnit()->getFaction() == FACTION_PLAYER) || _parent->getSave()->getSide() == FACTION_PLAYER)
-			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
+// is it really necessary to center bullet hit? this already happen on screen, though not on center.
+//		if (t->getVisible() || (t->getUnit() && t->getUnit()->getFaction() == FACTION_PLAYER) || _parent->getSave()->getSide() == FACTION_PLAYER)
+//			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
 	}
 }
 

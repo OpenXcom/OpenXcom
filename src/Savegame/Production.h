@@ -49,6 +49,8 @@ private:
 	int _amount;
 	int _timeSpent;
 	int _engineers;
+	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g);
+	bool haveEnoughMaterialsForOneMoreUnit(Base * b);
 };
 }
 #endif
