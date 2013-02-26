@@ -329,15 +329,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					fellDown = true;
 				}
 			}
-			/*
-			if (abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) < 10)
-				numberOfPartsChangingHeight++;
-			*/
-			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
-			if (cost == 0 && direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(belowDestination))
-			{
-				cost = 4;
-			}
 
 			// check if the destination tile can be walked over
 			if ((isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget)) && !fellDown)
@@ -345,23 +336,31 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 			}
 
-			// calculate the cost by adding floor walk cost and object walk cost
-			if (direction < DIR_UP && x == 0 && y == 0)
+			if (x == 0 && y == 0)
 			{
-				cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
-				if (!fellDown && !triedStairs && destinationTile->getMapData(MapData::O_OBJECT))
+				// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
+				if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(belowDestination))
 				{
-					cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+					cost = 4;
 				}
-			}
+				// calculate the cost by adding floor walk cost and object walk cost
+				if (direction < DIR_UP)
+				{
+					cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
+					if (!fellDown && !triedStairs && destinationTile->getMapData(MapData::O_OBJECT))
+					{
+						cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+					}
+				}
 
-			// diagonal walking (uneven directions) costs 50% more tu's
-			if (direction < DIR_UP && direction & 1)
-			{
-				wallcost /= 2;
-				cost = (int)((double)cost * 1.5);
+				// diagonal walking (uneven directions) costs 50% more tu's
+				if (direction < DIR_UP && direction & 1)
+				{
+					wallcost /= 2;
+					cost = (int)((double)cost * 1.5);
+				}
+				cost += wallcost;
 			}
-
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
 			if (_save->getStrafeSetting() && _strafeMove) {
@@ -383,10 +382,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						}
 					}
 				}
-			}
-			if (x == size && y == size)
-			{
-				cost += wallcost;
 			}
 		}
 
