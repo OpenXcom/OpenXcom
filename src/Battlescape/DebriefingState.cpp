@@ -76,8 +76,6 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_lstUfoRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);
 	_cc = new ItemContainer();
-
-	//
 	_bullets = new ItemContainer();
 
 	// Set palette
@@ -824,19 +822,6 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	}
 }
 
-/* Calculate the clips for each type based on the recovered rounds. */
-void DebriefingState::assembleClips(Base *base)
-{
-	int n;
-
-	for (std::map<std::string, int>::const_iterator i = _bullets->getContents()->begin(); i != _bullets->getContents()->end(); ++i)
-	{
-		n = i->second / _game->getRuleset()->getItem(i->first)->getClipSize();
-		if (n > 0)
-			base->getItems()->addItem(i->first, n);
-	}
-}
-
 /* converts battlescape inventory into geoscape itemcontainer */
 void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
@@ -940,5 +925,17 @@ void DebriefingState::assemblePartsOfCorpses(Base *base)
 	}
 }
 
+/* Calculate the clips for each type based on the recovered rounds. */
+void DebriefingState::assembleClips(Base *base)
+{
+	int n;
+
+	for (std::map<std::string, int>::const_iterator i = _bullets->getContents()->begin(); i != _bullets->getContents()->end(); ++i)
+	{
+		n = i->second / _game->getRuleset()->getItem(i->first)->getClipSize();
+		if (n > 0)
+			base->getItems()->addItem(i->first, n);
+	}
+}
 
 }

@@ -55,14 +55,14 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
 	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
-	ItemContainer *_bullets;
 	std::vector<ReequipStat> _missingItems;
 	ItemContainer *_cc; // Corpses Collection)
+	ItemContainer *_bullets;
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
-	void assembleClips(Base *base);
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
 	void assemblePartsOfCorpses(Base *base);
+	void assembleClips(Base *base);
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _destroyBase;
 public:
