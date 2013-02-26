@@ -303,6 +303,7 @@ void BattlescapeGame::kneel(BattleUnit *bu)
 			BattleAction action;
 			if (getTileEngine()->checkReactionFire(bu, &action, 0, false))
 			{
+				action.cameraPosition = getMap()->getCamera()->getMapOffset();
 				statePushBack(new ProjectileFlyBState(this, action));
 			}
 		}
@@ -1153,6 +1154,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				// get the sound/animation started
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
+				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
 				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
 				{
@@ -1210,6 +1212,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else if (playableUnitSelected())
 		{
+
 			if (_currentAction.target != pos && bPreviewed)
 				_save->getPathfinding()->removePreview();
 			_currentAction.run = _save->getStrafeSetting() && Game::getShiftKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
@@ -1260,6 +1263,7 @@ void BattlescapeGame::launchAction()
 	_currentAction.target = _currentAction.waypoints.front();
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
+	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 	_states.push_back(new ProjectileFlyBState(this, _currentAction));
 	statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 }
