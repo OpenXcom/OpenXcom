@@ -376,7 +376,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					}
 					else
 					{
-						if (_unit->getDirection() != direction && x == 0 && y == 0) {
+						if (_unit->getDirection() != direction) {
 							cost += 1;
 						}
 					}
@@ -389,7 +389,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
 	if (size)
 	{
-		totalCost /= (size+1)*(size*1);
+		totalCost /= (size+1)*(size+1);
 		Tile *startTile = _save->getTile(*endPosition + Position(1,1,0));
 		Tile *destinationTile = _save->getTile(*endPosition);
 		int tmpDirection = 7;
