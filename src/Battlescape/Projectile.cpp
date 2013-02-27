@@ -359,11 +359,11 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	{
 		baseDeviation = 0.03;
 	}
-	// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,9%)
+	// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 	double dMis = RNG::boxMuller(0.0, baseDeviation/6.0);  // miss in radian
 	double dRot = RNG::generate(0.0, 2*M_PI);  // vector of miss (in radian)
 	double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dMis * cos(dRot);
-	double fi = atan2(double(target->z - origin.z), realDistance) + dMis * sin(dRot);
+	double fi = atan2(double(target->z - origin.z), realDistance) + dMis * sin(dRot) * 16/24; // 16/24 - tiles does not square
 	double cos_fi = cos(fi);
 
 	target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
