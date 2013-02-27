@@ -348,41 +348,24 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 			accuracy -= 0.00125 * (realDistance - 240);
 		}
 	}
-	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	double maxDeviation = 2.5;
-	// minDeviation is the min angle deviation for accuracy 100% in degrees
-	double minDeviation = 0.4;
-	double dRot, dTilt;
-	double rotation, tilt;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	// check if we hit
-	if (RNG::generate(0.0, 1.0) < accuracy)
+	// 0.5  is the max angle deviation for accuracy 0% (+-3s = 0,5 radian)
+	// 0.03 is the min angle deviation for accuracy (+-3s = 0,03 radian)
+	// 3.0  is the coefficient obtained in the analysis data http://ufopaedia.org/index.php?title=Accuracy_formula
+	double baseDeviation = 0.5 - accuracy / 3.0;
+	if (baseDeviation < 0.03)
 	{
-		// we hit, so no deviation
-		dRot = 0;
-		dTilt = 0;
+		baseDeviation = 0.03;
 	}
-	else
-	{
-		dRot = RNG::boxMuller(0, baseDeviation);
-		dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
-	}
-	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-	tilt = atan2(double(target->z - origin.z),
-		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
-	// add deviations
-	rotation += dRot;
-	tilt += dTilt;
-	// calculate new target
-	// this new target can be very far out of the map, but we don't care about that right now
-	double cos_fi = cos(tilt * M_PI / 180.0);
-	double sin_fi = sin(tilt * M_PI / 180.0);
-	double cos_te = cos(rotation * M_PI / 180.0);
-	double sin_te = sin(rotation * M_PI / 180.0);
-	target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
-	target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
-	target->z = (int)(origin.z + maxRange * sin_fi);
+	// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,9%)
+	double dMis = RNG::boxMuller(0.0, baseDeviation/6.0);  // miss in radian
+	double dRot = RNG::generate(0.0, 2*M_PI);  // vector of miss (in radian)
+	double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dMis * cos(dRot);
+	double fi = atan2(double(target->z - origin.z), realDistance) + dMis * sin(dRot);
+	double cos_fi = cos(fi);
+
+	target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
+	target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
+	target->z = (int)(origin.z + maxRange * sin(fi));
 }
 
 /**
