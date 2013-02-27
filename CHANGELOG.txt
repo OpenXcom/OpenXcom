@@ -1,45 +1,61 @@
 Version 0.5.0 Pre-Release
 ---------------------------
 New features:
+  General:
+- Game can now be completed, game over screens for winning and losing.
+- "Random Battle" mode.
+- Ukranian translation implemented.
+- Bulgarian translation implemented.
+- Italian Soldier Names added.
+- Hungarian Soldier Names added.
+- Aliens progress their equipment levels, races and aggression over time.
+- Added "Alien Research" button in New Battle menu to set alien item level.
+- Added "Right Click to Delete" function in save/load menus.
+- Added various display filters to the game.*
+- The default windowed mode position can now be edited in the configuration file.
+- Increase/decrease buttons now respond mouse wheel scrolling when the cursor is above them.+
+- The game can no longer be dynamically resized to a new display resolution when in windowed mode.+
+
+  Geoscape:
 - Live alien capture and interrogation.
 - Psionic training.
 - Hyper-wave decoding.
-- Geoscape alien base handling.
-- Battlescape melee unit AI.
-- Unit conversion (ie: chryssalids)
-- All missing units implemented, both alien units and xcom tanks.
-- Units dual wielding single handed weapons is now represented on the battlescape.
+- Alien base handling.
 - Scoring for both aliens and Xcom.
 - Funding nation decision making.
 - Multiple dogfight handling.
 - Graphs screen.
+- Base Defense Screens.
+- Alien UFO Mission Generation.
+- Alien retaliatory attacks on Xcom bases.
+- Custom Initial Base Building.* (requires a new game to take effect)
+- Allowed multiple items to be produced per hour when very large numbers of engineers are assigned to a project.*
+- Upper limit for alien captures per containment facility.* (visible on Base Info screen)
+- Captive aliens can now be sold in the same manner as dead aliens.*
+
+  Battlescape:
+- Battlescape melee unit AI.
+- Unit conversion (ie: chryssalids)
+- All missing units implemented, both alien units and xcom tanks.
+- Units dual wielding single handed weapons is now represented on the battlescape.
 - Equipment loadout saving.
-- "Random Battle" mode.
 - Proper A* pathfinding.
 - Battlescape RMB scrolling improved.
-- Custom Initial Base Building Option.
 - Landing Ufos/Ground Assault missions.
-- Alien Mission Generation.
-- Base Defense Screens.
 - Multi-Part Ruleset support.
 - Pause Game on Loss of Focus.
-- Ukranian translation.
-- Italian Soldier Names.
-- Hungarian Soldier Names.
-- Bulgarian translation.
-- Game over Screens (win and lose).
-- Alien retaliatory attacks on Xcom bases.
 - Certain units now "Yell" when engaging another unit.
 - Enemy unit stats and armour are now affected by difficulty.
-- Aliens progress their equipment levels, races and aggression over time.
-- Added "Alien Research" button in New Battle menu to set alien item level.
-- Added "Right Click to Delete" function in save/load menus.
-- Game is now finishable.
+- Units can now "fall" off edges by walking off the side of a roof or platform.\
+
+* These features are disabled by default but can be enabled as advanced options by editing your configuration file.
++ These features are enabled by default but can be disabled as advanced options by editing your configuration file.
 
 Bugfixes:
 - Updated translations.
 - Updated soldier names.
 - Added support for native cyrillic letters.
+- Adjusted the length of the Date column on the saved game screen to allow room for translated text.
 - Fixed bug in map generator regarding nodes outside the map.
 - Fix for horizontal scroll-wheels.
 - Research consumes items properly.
@@ -53,6 +69,16 @@ Bugfixes:
 - Units on stairs will now correctly reveal tiles on the level above.
 - Opening doors now uses time units correctly.
 - Fixed error in great circle calculation.
+- The player no longer reveals the tile an alien is standing on when they detect an alien on an unrevealed tile.
+- The camera resets after non-reaction shots.
+- Projectiles are now visible when they fly above an unrevealed tile.
+- Undiscovered aliens are no longer factored into pathfinding.
+- Players can now recover large unit corpses.
+- Various bugfixes for large units.
+- Various psi-related bugfixes.
+- Various pathfinding bugfixes/improvements.
+- Various cursor-related bugfixes/improvements.
+- Ethereals can now fly as intended. You have been warned.
 
 Version 0.4.5 (04-11-2012)
 ---------------------------
