@@ -134,7 +134,7 @@ public:
 	/// Get object sprites.
 	Surface *getSprite(int part) const;
 	/// Set a unit on this tile.
-	void setUnit(BattleUnit *unit);
+	void setUnit(BattleUnit *unit, Tile *tileBelow = 0);
 	/// Get the (alive) unit on this tile.
 	BattleUnit *getUnit() const;
 	/// Set fire.

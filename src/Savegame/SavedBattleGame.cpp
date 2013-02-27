@@ -882,7 +882,7 @@ void SavedBattleGame::resetUnitTiles()
 				for (int y = size; y >= 0; y--)
 				{
 					Tile *t = getTile((*i)->getPosition() + Position(x,y,0));
-					t->setUnit((*i));
+					t->setUnit((*i), getTile(t->getPosition() + Position(0,0,-1)));
 				}
 			}
 
@@ -1178,7 +1178,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				{
 					// recover from unconscious
 					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
-					getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i);
+					getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i, getTile(originalPosition + Position(xd[dir],yd[dir],-1)));
 					(*i)->turn(false); // makes the unit stand up again
 					(*i)->setCache(0);
 					getTileEngine()->calculateFOV((*i));
@@ -1237,7 +1237,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 			{
 				bu->setPosition(position + Position(x,y,0));
 			}
-			getTile(position + Position(x,y,0))->setUnit(bu);
+			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
 		}
 	}
 

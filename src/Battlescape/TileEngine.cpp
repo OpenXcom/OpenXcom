@@ -1860,8 +1860,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 				{
 					rt = _save->getTile(Position(unitpos.x+x, unitpos.y+y, unitpos.z));
 					rtb = _save->getTile(Position(unitpos.x+x, unitpos.y+y, unitpos.z-1)); //below
-					if (rt->getMapData(MapData::O_FLOOR)
-						|| (rtb && rtb->getTerrainLevel() == -24) )
+					if (!rt->hasNoFloor(rtb))
 					{
 						canFall = false;
 					}
@@ -1871,15 +1870,17 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 				break;
 			unitpos.z--;
 		}
-		rt = _save->getTile(unitpos); //destination tile
- 
-		if (t != rt)
+		if (unitpos != occupant->getPosition() && !occupant->isOut())
 		{
-			Tile *tileBelowrt = _save->getTile(rt->getPosition() - Position(0,0,1));
-			Tile *tileBelowt = _save->getTile(t->getPosition() - Position(0,0,1));
-			occupant->startWalking(Pathfinding::DIR_DOWN, rt->getPosition(), rt, tileBelowt, tileBelowrt, occupant->getVisible());
+			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
+				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
+				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
+				_save->getTile(occupant->getPosition() + Position(0,0,-2)), true);
 			_save->addFallingUnit(occupant);
-			_save->setUnitsFalling(true);
+		}
+		else if (unitpos != occupant->getPosition())
+		{
+			_save->setUnitPosition(occupant, unitpos);
 		}
 	}
 	

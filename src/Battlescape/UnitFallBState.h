@@ -33,7 +33,7 @@ private:
 	TileEngine *_terrain;
 public:
 	/// Creates a new UnitWalkBState class
-	UnitFallBState(BattlescapeGame *parent, BattleAction _action);
+	UnitFallBState(BattlescapeGame *parent);
 	/// Cleans up the UnitWalkBState.
 	~UnitFallBState();
 	/// Initializes the state.

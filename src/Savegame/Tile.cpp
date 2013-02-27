@@ -654,11 +654,11 @@ Surface *Tile::getSprite(int part) const
  * Set a unit on this tile.
  * @param unit
  */
-void Tile::setUnit(BattleUnit *unit)
+void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 {
 	if (unit != 0)
 	{
-		unit->setTile(this);
+		unit->setTile(this, tileBelow);
 	}
 	_unit = unit;
 }

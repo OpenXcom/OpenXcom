@@ -93,6 +93,11 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);
 	}	
+	while (endPosition.z != _save->getHeight() && destinationTile->getTerrainLevel() == -24)
+	{
+		endPosition.z++;
+		destinationTile = _save->getTile(endPosition);
+	}
 	Tile *tileBelow = _save->getTile(endPosition + Position(0,0,-1));
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
 	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
@@ -242,8 +247,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 
 			// check if the destination tile can be walked over
-			//if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
-				//return 255;
+			if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
+				return 255;
 
 			// can't walk on top of other units
 			if (_save->getTile(*endPosition + Position(x,y,-1))
@@ -254,7 +259,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && destinationTile->getTerrainLevel() == 0 && !triedStairs)
+			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && (destinationTile->getTerrainLevel() == 0 || destinationTile->getTerrainLevel() == -24) && !triedStairs)
 			{
 					numberOfPartsGoingUp++;
 
@@ -337,8 +342,16 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 			}
 
+			// can't walk on top of other units
+			if (_save->getTile(*endPosition + Position(x,y,-1))
+				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
+				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
+				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
+				&& _movementType != MT_FLY && _save->getTile(*endPosition + offset)->hasNoFloor(belowDestination))
+				return 255;
+
 			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
-			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(belowDestination))
+			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(0))
 			{
 				cost = 4;
 			}
@@ -704,7 +717,13 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			for (int y = size; y >= 0; y--)
 			{
-				_save->getTile(pos + Position(x,y,0))->setMarkerColor(bRemove?0:(tus>0?4:3));           
+				Tile *tile = _save->getTile(pos + Position(x,y,0));
+				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
+				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
+				{
+					tileBelow->setMarkerColor(bRemove?0:(tus>0?4:3));
+				}
+				tile->setMarkerColor(bRemove?0:(tus>0?4:3));
 			}
 		}
 	}

@@ -394,11 +394,11 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 		_status = STATUS_WALKING;
 	}
 	bool floorFound = false;
-	if ((tileBelowMe && tileBelowMe->getTerrainLevel() == -24) || (TileBelowDestination && TileBelowDestination->getTerrainLevel() == -24))
+	if (!_tile->hasNoFloor(tileBelowMe))
 	{
 		floorFound = true;
 	}
-	if (!floorFound && (!_tile->getMapData(MapData::O_FLOOR) || (direction >= Pathfinding::DIR_UP && !destinationTile->getMapData(MapData::O_FLOOR))))
+	if (!floorFound || direction >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -418,7 +418,7 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 /**
  * This will increment the walking phase.
  */
-void BattleUnit::keepWalking(bool cache)
+void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
 	int middle, end;
 	if (_verticalDirection)
@@ -458,6 +458,10 @@ void BattleUnit::keepWalking(bool cache)
 
 	if (_walkPhase == end)
 	{
+		if (_floating && !_tile->hasNoFloor(tileBelowMe))
+		{
+			_floating = false;
+		}
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
@@ -1482,7 +1486,7 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
 		_status = STATUS_FLYING;
 		_floating = true;
 	}
-	else if (_status == STATUS_FLYING && !_tile->hasNoFloor(tileBelow))
+	else if (_status == STATUS_FLYING && !_tile->hasNoFloor(tileBelow) && _verticalDirection == 0)
 	{
 		_status = STATUS_WALKING;
 		_floating = false;

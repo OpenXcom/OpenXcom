@@ -145,7 +145,7 @@ public:
 	/// Start the walkingPhase
 	void startWalking(int direction, const Position &destination, Tile *destinationTile, Tile *tileBelowMe, Tile *TileBelowDestination, bool cache);
 	/// Increase the walkingPhase
-	void keepWalking(bool cache);
+	void keepWalking(Tile *tileBelowMe, bool cache);
 	/// Gets the walking phase for animation and sound
 	int getWalkingPhase() const;
 	/// Gets the walking phase for diagonal walking
