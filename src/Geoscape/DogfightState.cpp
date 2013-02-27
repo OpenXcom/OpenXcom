@@ -567,7 +567,7 @@ void DogfightState::think()
 			_ufoEscapeTimer->think(this, 0);
 			_craftDamageAnimTimer->think(this, 0);
 		}
-		else if(!_endDogfight && _craft->getDestination() != _ufo)
+		else if(!_endDogfight && (_craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED))
 		{
 			endDogfight();
 		}
@@ -928,12 +928,12 @@ void DogfightState::move()
 	// Check when battle is over.
 	if (_end == true && ((_currentDist > 640 && (_mode == _btnDisengage || _ufoBreakingOff == true)) || (_timeout == 0 && (_ufo->isCrashed() || _craft->isDestroyed()))))
 	{
-		if(_ufoBreakingOff)
+		if (_ufoBreakingOff)
 		{
 			_ufo->move();
 			_craft->setDestination(_ufo);
 		}
-		if(_destroyCraft)
+		if (_destroyCraft)
 		{
 			for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 			{
@@ -1091,6 +1091,15 @@ void DogfightState::move()
 		}
 		_end = true;
 		_ufo->setSpeed(0);
+	}
+
+	if (!_end && _ufo->getStatus() == Ufo::LANDED)
+	{
+		_timeout += 30;
+		_end = true;
+		_ufoWtimer->stop();
+		_w1Timer->stop();
+		_w2Timer->stop();
 	}
 }
 

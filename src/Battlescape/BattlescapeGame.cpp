@@ -151,8 +151,7 @@ void BattlescapeGame::think()
 		}
 		if (_save->getUnitsFalling())
 		{
-			BattleAction _action;
-			statePushFront(new UnitFallBState(this, _action));
+			statePushFront(new UnitFallBState(this));
 			_save->setUnitsFalling(false);
 		}
 	}
@@ -1396,7 +1395,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
 
-	getSave()->getTile(unit->getPosition())->setUnit(_newUnit);
+	getSave()->getTile(unit->getPosition())->setUnit(_newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	_newUnit->setPosition(unit->getPosition());
 	_newUnit->setDirection(3);
 	_newUnit->setCache(0);
