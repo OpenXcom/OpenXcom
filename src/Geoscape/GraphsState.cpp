@@ -33,6 +33,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
+#include "../Engine/Options.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -159,6 +160,59 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnFinances.at(3)->setText(_game->getLanguage()->getString("STR_BALANCE"));
 	_btnFinances.at(4)->setText(_game->getLanguage()->getString("STR_SCORE"));
 
+	// load back the button states
+	std::string graphRegionToggles = Options::getString("graphRegionToggles");
+	std::string graphCountryToggles = Options::getString("graphCountryToggles");
+	std::string graphFinanceToggles = Options::getString("graphFinanceToggles");
+	while (graphRegionToggles.size() < _regionToggles.size()) graphRegionToggles.push_back('0');
+	while (graphCountryToggles.size() < _countryToggles.size()) graphCountryToggles.push_back('0');
+	while (graphFinanceToggles.size() < _financeToggles.size()) graphFinanceToggles.push_back('0');
+	for (int i = 0; i < _regionToggles.size(); ++i)
+	{
+		_regionToggles[i] = ('0'==graphRegionToggles[i]) ? false : true;
+		if (_regionToggles[i])
+		{
+			TextButton *button;
+			int adjustment = -42 + (4*i);
+			if (_btnRegions.size() == i)
+			{
+				button = _btnRegionTotal;
+				adjustment = 22;
+			}
+			else button = _btnRegions.at(i);
+			button->draw();
+			button->invert(adjustment);
+		}
+	}
+	for (int i = 0; i < _countryToggles.size(); ++i)
+	{
+		_countryToggles[i] = ('0'==graphCountryToggles[i]) ? false : true;
+		if (_countryToggles[i])
+		{
+			TextButton *button;
+			int adjustment = -42 + (4*i);
+			if (_btnCountries.size() == i)
+			{
+				button = _btnCountryTotal;
+				adjustment = 22;
+			}
+			else button = _btnCountries.at(i);
+			button->draw();
+			button->invert(adjustment);
+		}
+	}
+	for (int i = 0; i < _financeToggles.size(); ++i)
+	{
+		_financeToggles[i] = ('0'==graphFinanceToggles[i]) ? false : true;
+		if (_financeToggles[i])
+		{
+			TextButton *button = _btnFinances.at(i);
+			int adjustment = -42 + (4*i);
+			button->draw();
+			button->invert(adjustment);
+		}
+	}
+
 	// set up the grid
 	SDL_Rect current;
 	current.w = 188;
@@ -251,7 +305,15 @@ GraphsState::GraphsState(Game *game) : State(game)
  */
 GraphsState::~GraphsState()
 {
-
+	std::string graphRegionToggles = "";
+	std::string graphCountryToggles = "";
+	std::string graphFinanceToggles = "";
+	for (int i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i] ? '1' : '0');
+	for (int i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i] ? '1' : '0');
+	for (int i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
+	Options::setString("graphRegionToggles", graphRegionToggles);
+	Options::setString("graphCountryToggles", graphCountryToggles);
+	Options::setString("graphFinanceToggles", graphFinanceToggles);
 }
 
 /**
