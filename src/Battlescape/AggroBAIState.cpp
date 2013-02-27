@@ -615,6 +615,8 @@ void AggroBAIState::think(BattleAction *action)
 
 						_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
+						if (tile->_soldiersVisible == -1) continue; // you can't go there.
+						
 						if (tile->_soldiersVisible && tile->_closestSoldierDSqr <= 100 && tile->_closestSoldierDSqr > 0) score -= (200/tile->_closestSoldierDSqr);
 						//if (!tile->_soldiersVisible) { Log(LOG_WARNING) << "No soldiers visible? Really?"; }
 						
@@ -668,6 +670,11 @@ void AggroBAIState::think(BattleAction *action)
 
 				}
 				action->target = bestTile;
+				if (score <= -1000) 
+				{
+					coverFound = false;
+					action->type = BA_RETHINK;
+				}
 			}
 		}
 		if (action->type != BA_RETHINK && action->type != BA_WALK)

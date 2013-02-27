@@ -121,7 +121,7 @@ public:
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the unit's position
-	void setPosition(const Position& pos);
+	void setPosition(const Position& pos, bool updateLastPos = true);
 	/// Gets the unit's position.
 	const Position& getPosition() const;
 	/// Gets the unit's position.
@@ -376,9 +376,12 @@ public:
 	int getTurnsExposed () const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
+	/// call this after the default copy constructor deletes the cache?
+	void invalidateCache();
 
 	/// scratch value for AI's left hand to tell its right hand what's up...
-	bool _hidingForTurn;
+	bool _hidingForTurn; // don't zone out and start patrolling again
+	bool _desperatelySeekingCover; // the AI may have picked a decent spot to hide in so don't stop just because you see a new soldier on the way
 };
 
 }

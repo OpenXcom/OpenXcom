@@ -192,12 +192,15 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if(_AIActionCounter == 1)
 	{
 		unit->_hidingForTurn = 0;
+		unit->_desperatelySeekingCover = 0;
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
 	
 	// psionic or blaster launcher units may attack remotely
+	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
 	if (unit->getStats()->psiSkill
-		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint()))
+		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
+		|| (_AIActionCounter > 2))
 	{
 		aggro = new AggroBAIState(_save, unit);
 		unit->setAIState(aggro);
