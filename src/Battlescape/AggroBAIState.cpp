@@ -400,6 +400,7 @@ void AggroBAIState::think(BattleAction *action)
 					_unit->turn();
 				if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
 				{
+					if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Rawr!"; }
 					action->target = _aggroTarget->getPosition();
 					action->weapon = action->actor->getMainHandWeapon();
 					action->type = BA_HIT;
@@ -410,11 +411,11 @@ void AggroBAIState::think(BattleAction *action)
 					takeCover = true;
 					bool targetFound = false;
 					int distance = 200;
-					int size = action->actor->getArmor()->getSize()-1;
-					int targetsize = _aggroTarget->getArmor()->getSize()-1;
-					for (int x = 0 - size; x <= targetsize; ++x)
+					int size = action->actor->getArmor()->getSize(); //-1;
+					int targetsize = _aggroTarget->getArmor()->getSize(); //-1;
+					for (int x = 0 - size; !charge && x <= targetsize; ++x)
 					{
-						for (int y = 0 - size; y <= targetsize; ++y)
+						for (int y = 0 - size; !charge && y <= targetsize; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
@@ -422,10 +423,11 @@ void AggroBAIState::think(BattleAction *action)
 								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
-								if (_game->getPathfinding()->getStartDirection() != -1 && valid  &&
+								if (_game->getPathfinding()->getStartDirection() != -1  &&  valid  &&
 									newDistance < distance)
 								{
 									// CHAAAAAAARGE!
+									if (Options::getBool("traceAI")) { Log(LOG_INFO) << "CHAAAAAAARGE!"; }
 									action->target = checkPath;
 									action->type = BA_WALK;
 									charge = true;
@@ -542,8 +544,8 @@ void AggroBAIState::think(BattleAction *action)
 				run.y = (dy * 5) / dist;
                 run.z = 0;
 				
-				int bestTileScore = -1000;
-				int score = -1000;
+				int bestTileScore = -100000;
+				int score = -100000;
 				Position bestTile(0, 0, 0);
                 ++_randomTileSearchAge;
 				if (action->number > 1) action->desperate = true;
@@ -612,7 +614,7 @@ void AggroBAIState::think(BattleAction *action)
 					tile = _game->getTile(action->target);
 					if (!tile) 
 					{
-						score = -10000; // no you can't quit the battlefield by running off the map. 
+						score = -100000; // no you can't quit the battlefield by running off the map. 
 					}
 					else
 					{
@@ -631,6 +633,16 @@ void AggroBAIState::think(BattleAction *action)
 						{						
 							score -= tile->_soldiersVisible * EXPOSURE_PENALTY;
 							score += (dist > 9) ? 4 : dist; 
+						}
+						
+						if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE
+							/* && _unit->getArmor()->getSize() > 1 */ && _unit->getUnitRules() && _unit->getHealth() > _unit->getStats()->health/2)
+						{
+							// did you say "not charge?" KOMPRESSOR BREAK YOUR GLOWSTICK AND KOMPRESSOR EAT YOUR CANDY
+							score -= (dist-1) * 256;
+							if (score < -90000) score = -90000;
+							charge = true;
+							if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Trying to get melee unit to do something."; }
 						}
 						
 						if (tile->_closestAlienDSqr < 25 && tile->_closestAlienDSqr > 4) score += 4; // strength in numbers but not in "grenade us!" huddles 
@@ -686,7 +698,7 @@ void AggroBAIState::think(BattleAction *action)
 					setAggroTarget(_aggroTarget);
 
 				
-				if (score <= -1000) 
+				if (score <= -100000) 
 				{
 					coverFound = false;
 					action->type = BA_NONE;
