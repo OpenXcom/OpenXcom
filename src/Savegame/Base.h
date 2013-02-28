@@ -67,7 +67,7 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.
-	void load(const YAML::Node& node, SavedGame *save, bool newGame);
+	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
 	/// Saves the base to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the base's ID to YAML.
@@ -99,7 +99,7 @@ public:
 	/// Checks if a target is inside the base's radar range.
 	bool insideRadarRange(Target *target) const;
 	/// Gets the base's available soldiers.
-	int getAvailableSoldiers() const;
+	int getAvailableSoldiers(bool checkCombatReadiness = false) const;
 	/// Gets the base's total soldiers.
 	int getTotalSoldiers() const;
 	/// Gets the base's available scientists.

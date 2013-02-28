@@ -129,21 +129,18 @@ void BaseDefenseState::think()
 
 	if (_thinkcycles > 1)
 	{
-		if (_action == BDA_DESTROY)
+		switch (_action)
 		{
+		case BDA_DESTROY:
 			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),L" ",L" ");
 			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
 			_action = BDA_END;
 			return;
-		}
-
-		if (_action == BDA_END)
-		{
+		case BDA_END:
 			_btnOk->setVisible(true);
 			_thinkcycles = -1;
 			return;
 		}
-
 		if (_attacks == _defenses && _passes == _gravShields)
 		{
 			_action = BDA_END;
@@ -161,25 +158,20 @@ void BaseDefenseState::think()
 	
 
 		BaseFacility* def = _base->getDefenses()->at(_attacks);
-
-		if (_action == BDA_NONE)
+		
+		switch (_action)
 		{
+		case  BDA_NONE:
 			_lstDefenses->addRow(3, _game->getLanguage()->getString((def)->getRules()->getType()).c_str(),L" ",L" ");
 			++_row;
 			_action = BDA_FIRE;
 			return;
-		}
-
-		if (_action == BDA_FIRE)
-		{
+		case BDA_FIRE:
 			_lstDefenses->setCellText(_row, 1, _game->getLanguage()->getString("STR_FIRING").c_str());
 			_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
 			_action = BDA_RESOLVE;
 			return;
-		}
-
-		if (_action == BDA_RESOLVE)
-		{
+		case BDA_RESOLVE:
 			if (RNG::generate(0, 100) > (def)->getRules()->getHitRatio())
 			{
 				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_MISSED").c_str());
@@ -209,7 +201,7 @@ void BaseDefenseState::btnOkClick(Action *)
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		if (_base->getSoldiers()->size() > 0)
+		if (_base->getAvailableSoldiers(true) > 0)
 		{
 			size_t month = _game->getSavedGame()->getMonthsPassed();
 			if (month > _game->getRuleset()->getAlienItemLevels().size()-1)

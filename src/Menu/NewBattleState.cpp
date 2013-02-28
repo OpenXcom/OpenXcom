@@ -282,12 +282,24 @@ void NewBattleState::initSave()
 	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
+	const YAML::Node &starter = _game->getRuleset()->getStartingBase();
+	base->load(starter, save, true, true);
 	save->getBases()->push_back(base);
+	// kill everything we don't want in this base
+	for (std::vector<Soldier*>::iterator d = base->getSoldiers()->begin(); d != base->getSoldiers()->end(); d = base->getSoldiers()->erase(d))
+	for (std::vector<Craft*>::iterator e = base->getCrafts()->begin(); e != base->getCrafts()->end();)
+	{
+			e = base->getCrafts()->erase(e);
+	}
+	for (std::map<std::string, int>::iterator l = base->getItems()->getContents()->begin(); l != base->getItems()->getContents()->end();)
+	{
+		base->getItems()->removeItem(l->first, l->second);
+		l = base->getItems()->getContents()->begin();
+	}
 	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
 	base->getCrafts()->push_back(_craft);
-
 	// Generate soldiers
-	for (int i = 0; i < 30; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
@@ -302,7 +314,7 @@ void NewBattleState::initSave()
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
 		{
-			base->getItems()->addItem(*i, 99);
+			base->getItems()->addItem(*i, 10);
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
 				_craft->getItems()->addItem(*i);

@@ -1528,7 +1528,7 @@ craftWeapons:
 #    floorSprite: Sprite reference in FloorOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
 #    handSprite: Sprite reference in HandOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
 #    bulletSprite: Projectile sprite. (int) 0 = rocket, 1 = pistol bullet, 2 = rifle bullet, 3 = auto cannon bullet, 
-#    4 = heavy cannon bullet, 5 = small laser, 6 = large laser, 7 = nothing?, 8 = plasma, 9 = small launcher, 10 = blaster launcher
+#    4 = heavy cannon bullet, 5 = small laser, 6 = laser rifle, 7 = heavy laser, 8 = plasma, 9 = small launcher, 10 = blaster launcher
 #    fireSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
 #    hitSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
 #    compatibleAmmo:
@@ -1546,7 +1546,7 @@ craftWeapons:
 #    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int)
 #    battleType: What kind of item is this? (int) (default 0)
 #        0 = NONE, 1 = FIREARM, 2 = AMMO, 3 = MELEE, 4 = GRENADE, 5 = PROXIMITYGRENADE, 6 = MEDIKIT,
-#        7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE, 12 = PART OF CORPSE
+#        7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE
 #    twoHanded: Is this a two-handed weapon. (boolean) (default false)
 #    invWidth: Width of this item in the inventory screen. (int) (default 1)
 #    invHeight: Height of this item in the inventory screen. (int) (default 1)
@@ -2127,7 +2127,7 @@ items:
     bigSprite: 6
     floorSprite: 6
     handSprite: 16
-    bulletSprite: 6
+    bulletSprite: 7
     fireSound: 11
     hitSound: 19
     hitAnimation: 36
@@ -2623,105 +2623,104 @@ items:
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
-    recoveryPoints: 3
     battleType: 11
-    armor: 20
   - type: REAPER_CORPSE_1
     name: STR_REAPER_CORPSE
     floorSprite: 52
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
+    recoveryPoints: 3
     armor: 20
   - type: REAPER_CORPSE_2
-    name: STR_REAPER_CORPSE
     floorSprite: 55
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: REAPER_CORPSE_3
-    name: STR_REAPER_CORPSE
     floorSprite: 54
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: REAPER_CORPSE_4
-    name: STR_REAPER_CORPSE
     floorSprite: 53
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: STR_SECTOPOD_CORPSE
     size: 1
     costSell: 20000
-    recoveryPoints: 3
     battleType: 11
-    armor: 20
   - type: SECTOPOD_CORPSE_1
     name: STR_SECTOPOD_CORPSE
     floorSprite: 60
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
+    recoveryPoints: 3
     armor: 20
   - type: SECTOPOD_CORPSE_2
-    name: STR_SECTOPOD_CORPSE
     floorSprite: 61
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: SECTOPOD_CORPSE_3
-    name: STR_SECTOPOD_CORPSE
     floorSprite: 62
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: SECTOPOD_CORPSE_4
-    name: STR_SECTOPOD_CORPSE
     floorSprite: 63
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: STR_CYBERDISC_CORPSE
     size: 1
     costSell: 20000
-    recoveryPoints: 3
     battleType: 11
-    armor: 20
   - type: CYBERDISC_CORPSE_1
     name: STR_CYBERDISC_CORPSE
     floorSprite: 56
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
+    recoveryPoints: 3
     armor: 20
   - type: CYBERDISC_CORPSE_2
-    name: STR_CYBERDISC_CORPSE
     floorSprite: 57
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: CYBERDISC_CORPSE_3
     name: STR_CYBERDISC_CORPSE
     floorSprite: 58
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: CYBERDISC_CORPSE_4
     name: STR_CYBERDISC_CORPSE
     floorSprite: 59
     invWidth: 0
     invHeight: 0
-    battleType: 12
+    battleType: 11
     armor: 20
+    recover: false
   - type: HOVERTANK_CORPSE_1
     floorSprite: 64
     invWidth: 0
@@ -2904,6 +2903,7 @@ items:
     damageType: 2
     accuracyMelee: 92
     tuMelee: 15
+    clipSize: -1
     battleType: 3
     fixedWeapon: true
     invWidth: 2
