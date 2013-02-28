@@ -339,15 +339,35 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	*/
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		if (_action.type == BA_AUTOSHOT && realDistance > 112)
+		// 0.5   is the max angle deviation for accuracy 0% (+-3s = 0,5 radian)
+		// 0.03 is the min angle deviation for best accuracy (+-3s = 0,03 radian)
+		// 3.0   is the coefficient obtained in the analysis data http://ufopaedia.org/index.php?title=Accuracy_formula
+		double baseDeviation = 0.8 - accuracy / 1.7;
+		if (baseDeviation < 0.03)
 		{
-			accuracy -= 0.00125 * (realDistance - 112);
+			baseDeviation = 0.03;
 		}
-		if (_action.type == BA_SNAPSHOT && realDistance > 240)
-		{
-			accuracy -= 0.00125 * (realDistance - 240);
-		}
+		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
+		double dH = RNG::boxMuller(0.0, baseDeviation/6.0);  // miss in radian
+		double dV = RNG::boxMuller(0.0, baseDeviation/(6.0 * 2));
+		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
+		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
+		double cos_fi = cos(fi);
+
+		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
+		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
+		target->z = (int)(origin.z + maxRange * sin(fi));
+//		if (_action.type == BA_AUTOSHOT && realDistance > 112)
+//		{
+//			accuracy -= 0.00125 * (realDistance - 112);
+//		}
+//		if (_action.type == BA_SNAPSHOT && realDistance > 240)
+//		{
+//			accuracy -= 0.00125 * (realDistance - 240);
+//		}
 	}
+	else
+	{
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
 	double maxDeviation = 2.5;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
@@ -383,6 +403,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
 	target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
 	target->z = (int)(origin.z + maxRange * sin_fi);
+	}
 }
 
 /**
