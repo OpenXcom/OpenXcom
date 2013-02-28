@@ -893,6 +893,13 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							{
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							}
+							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
+							{
+								if ((*it)->getUnit())
+								{
+									(*it)->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+								}
+							}
 						}
 						if (type == DT_HE)
 						{
