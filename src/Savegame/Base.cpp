@@ -429,12 +429,17 @@ bool Base::insideRadarRange(Target *target) const
  * in the base without any assignments.
  * @return Number of soldiers.
  */
-int Base::getAvailableSoldiers() const
+int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 {
 	int total = 0;
 	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
-		if ((*i)->getCraft() == 0)
+		if (!checkCombatReadiness && (*i)->getCraft() == 0)
+		{
+			total++;
+		}
+		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
+			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
 		}

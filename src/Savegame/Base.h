@@ -99,7 +99,7 @@ public:
 	/// Checks if a target is inside the base's radar range.
 	bool insideRadarRange(Target *target) const;
 	/// Gets the base's available soldiers.
-	int getAvailableSoldiers() const;
+	int getAvailableSoldiers(bool checkCombatReadiness = false) const;
 	/// Gets the base's total soldiers.
 	int getTotalSoldiers() const;
 	/// Gets the base's available scientists.
