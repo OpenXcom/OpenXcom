@@ -53,6 +53,7 @@ private:
 	BattleUnit *_unit;
 	bool _pathPreviewed;
 	bool _strafeMove;
+	int _totalTUCost;
 public:
 	///Try to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false);
@@ -87,6 +88,8 @@ public:
 	void setUnit(BattleUnit *unit) { _unit = unit; };
 	/// Get all reachable tiles, based on cost.
 	std::vector<int> findReachable(BattleUnit *unit, int tuMax);
+	/// get _totalTUCost; find out whether we can hike somewhere in this turn or not
+	int getTotalTUCost() const { return _totalTUCost; }
 };
 
 }

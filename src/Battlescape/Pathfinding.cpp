@@ -199,11 +199,11 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
-			int totalTuCost = currentNode->getTUCost(missileTarget != 0) + tuCost;
+			_totalTUCost = currentNode->getTUCost(missileTarget != 0) + tuCost;
 			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > totalTuCost)
+			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > _totalTUCost)
 			{
-				nextNode->connect(totalTuCost, currentNode, direction, endPosition);
+				nextNode->connect(_totalTUCost, currentNode, direction, endPosition);
 				openList.push(nextNode);
 			}
 		}
@@ -760,6 +760,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 	int dir;
 	int lastTUCost = -1;
 	Position nextPoint;
+	_totalTUCost = 0;
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -835,7 +836,10 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 				return false;
 			}
 			if (missileTarget == 0 && tuCost != 255)
+			{
 				lastTUCost = tuCost;
+				_totalTUCost += tuCost;
+			}
 			lastPoint = Position(cx, cy, cz);
 		}
 		//update progress in other planes

@@ -389,20 +389,6 @@ void AggroBAIState::think(BattleAction *action)
 			if (aggression == 2 && number < 90)
 				takeCover = false;
 
-			if (action->number >= 3)
-			{
-				if (_unit->_hidingForTurn)
-				{
-					// already tried to get to cover; stay still
-					action->type = BA_NONE;
-					action->TU = 0;
-					return;
-				}
-				
-                takeCover = true; // always seek cover as last action
-                action->reckless = true;
-			}
-		
 			// we're using melee, so CHAAAAAAAARGE!!!!!
 			if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)
 			{
@@ -448,6 +434,20 @@ void AggroBAIState::think(BattleAction *action)
 						}
 					}
 				}
+			}
+
+			if (action->number >= 3 && !charge)
+			{
+				if (_unit->_hidingForTurn)
+				{
+					// already tried to get to cover; stay still
+					action->target = _unit->getPosition();
+					action->TU = 0;
+					return;
+				}
+				
+                takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
+                action->reckless = true;
 			}
 
 			if (!takeCover && !charge)
@@ -525,7 +525,6 @@ void AggroBAIState::think(BattleAction *action)
 			{
 				// the idea is to check within a 11x11 tile square for a tile which is not seen by our aggroTarget
 				// if there is no such tile, we run away from the target.
-				bool sneak = Options::getBool("sneakyAI");
 				action->type = BA_WALK;
 				_unit->_hidingForTurn = true;
 				int tries = 0;
@@ -548,6 +547,13 @@ void AggroBAIState::think(BattleAction *action)
 				
 				Tile *tile = 0;
 				
+				const int EXPOSURE_PENALTY = 20;
+				const int WINDOW_PENALTY = 30;
+				const int WALL_BONUS = 1;
+				const int FIRE_PENALTY = 40;
+				const int FRIEND_BONUS = 10;
+				const int SMOKE_PENALTY = 5;
+				const int OVERREACH_PENALTY = EXPOSURE_PENALTY*3;
 				
 				while (tries < 150 && !coverFound)
 				{
@@ -607,45 +613,40 @@ void AggroBAIState::think(BattleAction *action)
 					}
 					else
 					{
-						if (sneak)
-						{
-							if (tile->getVisible()) score -= 50; 
-							// XXX perhaps only psi-skilled aliens should cheat-sneak?
-						}
-
 						_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
 						if (tile->_soldiersVisible == -1) continue; // you can't go there.
 						
-						if (tile->_soldiersVisible && tile->_closestSoldierDSqr <= 100 && tile->_closestSoldierDSqr > 0) score -= (200/tile->_closestSoldierDSqr);
+						if (tile->_soldiersVisible && tile->_closestSoldierDSqr <= 100 && tile->_closestSoldierDSqr > 0) score -= (100/tile->_closestSoldierDSqr);
+						if (tile->_soldiersVisible && tile->_meanSoldierDSqr <= 200 && tile->_meanSoldierDSqr > 0) score -= (50/tile->_meanSoldierDSqr); // less important than above
 						//if (!tile->_soldiersVisible) { Log(LOG_WARNING) << "No soldiers visible? Really?"; }
 						
 						if (!tile->_soldiersVisible)
 						{
-							score += dist*5; // hooray!
+							score += dist*4; // hooray!
 						} else
 						{						
-							score -= tile->_soldiersVisible * 10;
-							score += (dist > 9) ? 9 : dist;
+							score -= tile->_soldiersVisible * EXPOSURE_PENALTY;
+							score += (dist > 9) ? 4 : dist; 
 						}
 						
 						if (tile->_closestAlienDSqr < 25 && tile->_closestAlienDSqr > 4) score += 4; // strength in numbers but not in "grenade us!" huddles 
 						
 						_game->getPathfinding()->setUnit(_unit); // because we can't just pass this around as a paramater, can we... no, that would be too simple
 						
-						if (tile->_soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->_closestSoldierPos, action->target, 0, false)) score -= 50; // not even partial cover?
+						if (tile->_soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->_closestSoldierPos, action->target, 0, false)) score -= 30; // not even partial cover?
 						_game->getPathfinding()->abortPath(); // clean up hypothetical path data
 						
-						if (!_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score += 4; // partial cover?
+						if (_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score -= 10; // come on partial cover?
 						_game->getPathfinding()->abortPath(); // clean up hypothetical path data						
 						
-						if (tile->getFire()) score -= 20;
+						if (tile->getFire()) score -= FIRE_PENALTY; // maybe stop, drop, and roll?
 						
-						if (tile->getSmoke()) score -= 2;
+						if (tile->getSmoke()) score -= SMOKE_PENALTY; // *cough* *cough*
 						
-						if (tile->getMapData(MapData::O_NORTHWALL) || tile->getMapData(MapData::O_WESTWALL)) score += 1; // hug the walls
+						if (tile->getMapData(MapData::O_NORTHWALL) || tile->getMapData(MapData::O_WESTWALL)) score += WALL_BONUS; // hug the walls
 						
-						if (_game->getTileEngine()->faceWindow(action->target) != -1) score -= 50; // a window is not cover.
+						if (_game->getTileEngine()->faceWindow(action->target) != -1) score -= WINDOW_PENALTY; // a window is not cover.
 					}
 
 
@@ -653,6 +654,13 @@ void AggroBAIState::think(BattleAction *action)
 					{
 						// check if we can reach this tile
 						_game->getPathfinding()->calculate(_unit, action->target);
+						if (_game->getPathfinding()->getTotalTUCost() > _unit->getTimeUnits())
+						{
+							score -= OVERREACH_PENALTY; // not gonna make it
+						} else
+						{
+							if (tile->_soldiersVisible == 0) score += _unit->getTimeUnits() - _game->getPathfinding()->getTotalTUCost(); // conserve TU if possible
+						}
 						if (_game->getPathfinding()->getStartDirection() != -1)
 						{
 							// yay, we can get there
@@ -670,10 +678,17 @@ void AggroBAIState::think(BattleAction *action)
 
 				}
 				action->target = bestTile;
+				
+				if (_aggroTarget != 0)
+					setAggroTarget(_aggroTarget);
+
+				
 				if (score <= -1000) 
 				{
 					coverFound = false;
-					action->type = BA_RETHINK;
+					action->type = BA_NONE;
+					action->TU = 0;
+					return;
 				}
 			}
 		}

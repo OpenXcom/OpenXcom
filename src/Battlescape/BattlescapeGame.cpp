@@ -193,8 +193,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		unit->_hidingForTurn = 0;
 		unit->_desperatelySeekingCover = 0;
+		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
-	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
+	//AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast does not work XXX XXX XXX
+	//assert(!ai || aggro);
+	
+	AggroBAIState *aggro = 0;
 	
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?

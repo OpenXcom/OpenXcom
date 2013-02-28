@@ -57,6 +57,7 @@ public:
     // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
     int _closestSoldierDSqr;
 	Position _closestSoldierPos;
+	int _meanSoldierDSqr;
     int _soldiersVisible;
 	int _closestAlienDSqr;
 

@@ -34,6 +34,7 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
@@ -374,13 +375,20 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 {
 	if (tile->_soldiersVisible != -1) return true; // already calculated this turn
 
-	BattleUnit *hypotheticalUnit = new BattleUnit(*queryingUnit);
+	//BattleUnit *hypotheticalUnit = new BattleUnit(*queryingUnit); // dangerous :/
+	
+	//BattleUnit dummyUnit(queryingUnit->getUnitRules(), FACTION_HOSTILE, queryingUnit->getId()*2, queryingUnit->getArmor());
+	//dummyUnit.setTile(queryingUnit->getTile());
+	//dummyUnit.setPosition(queryingUnit->getPosition());
+	BattleUnit dummyUnit(*queryingUnit);
+	BattleUnit *hypotheticalUnit = &dummyUnit;
+	
 	//BattleUnit unitBackup = *hypotheticalUnit;
 		
 	if (!_save->setUnitPosition(hypotheticalUnit, tilePos, true)) 
 	{
-		hypotheticalUnit->invalidateCache();
-		delete hypotheticalUnit;
+		//hypotheticalUnit->invalidateCache();
+		//delete hypotheticalUnit;
 		return false;
 	}
 	
@@ -436,6 +444,9 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	tile->_soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
 	tile->_closestSoldierDSqr = INT_MAX;
 	tile->_closestAlienDSqr = INT_MAX;
+	tile->_meanSoldierDSqr = INT_MAX;
+	
+	int dsqrTotal = 0;
 	
 	//Position targetVoxel = getSightOriginVoxel(hypotheticalUnit); // relevant if trying to use calculateLine() which doesn't seem to cooperate anyway!
 	Position targetVoxel(0,0,0);
@@ -461,10 +472,14 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 				tile->_closestSoldierDSqr = dsqr;
 				tile->_closestSoldierPos = (*i)->getPosition();
 			}
+			
+			dsqrTotal += dsqr;
 		}
 
 		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->_closestAlienDSqr) tile->_closestAlienDSqr = dsqr;
 	}
+	
+	tile->_meanSoldierDSqr = tile->_soldiersVisible ? (dsqrTotal / tile->_soldiersVisible) : 0;
 	
 	//if (tile->_soldiersVisible == 0 && tile->getVisible()) { Log(LOG_WARNING) << "Visible tile returned !canTargetTile() for all soldiers."; }
 
@@ -477,8 +492,8 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		_save->getTiles()[i->first]->setUnit(i->second);
 	}
 	
-	hypotheticalUnit->invalidateCache();
-	delete hypotheticalUnit;
+	//hypotheticalUnit->invalidateCache();
+	//delete hypotheticalUnit;
 	
 	return true;
 }
