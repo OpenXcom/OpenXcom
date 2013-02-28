@@ -142,6 +142,8 @@ void BaseDefenseState::think()
 			_btnOk->setVisible(true);
 			_thinkcycles = -1;
 			return;
+		default:
+			break;
 		}
 
 		if (_attacks == _defenses && _passes == _gravShields)
@@ -196,6 +198,8 @@ void BaseDefenseState::think()
 				_action = BDA_NONE;
 			++_attacks;
 			return;
+		default:
+			break;
 		}
 	}
 }
