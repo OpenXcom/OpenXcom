@@ -339,10 +339,10 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	*/
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		// 0.5   is the max angle deviation for accuracy 0% (+-3s = 0,5 radian)
+		// 0.5  is the max angle deviation for accuracy 0% (+-3s = 0,5 radian)
 		// 0.03 is the min angle deviation for best accuracy (+-3s = 0,03 radian)
-		// 3.0   is the coefficient obtained in the analysis data http://ufopaedia.org/index.php?title=Accuracy_formula
-		double baseDeviation = 0.7 - accuracy / 2.0;
+		// 3.0  is the coefficient obtained in the analysis data http://ufopaedia.org/index.php?title=Accuracy_formula
+		double baseDeviation = 0.5 - accuracy / 3.0;
 		if (baseDeviation < 0.03)
 		{
 			baseDeviation = 0.03;
