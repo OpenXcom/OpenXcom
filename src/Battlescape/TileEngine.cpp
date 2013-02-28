@@ -908,23 +908,31 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							{
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							}
-							bool done = false;
-							while (!done)
+							if (DT_HE == type)
 							{
-								done = dest->getInventory()->size() == 0;
-								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
+								bool done = false;
+								while (!done)
 								{
-									if (power_ > (*it)->getRules()->getArmor())
+									done = dest->getInventory()->size() == 0;
+									for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
 									{
-										_save->removeItem((*it));
-										break;
-									}
-									else
-									{
-										++it;
-										done = it == dest->getInventory()->end();
+										if (power_ > (*it)->getRules()->getArmor())
+										{
+											_save->removeItem((*it));
+											break;
+										}
+										else
+										{
+											++it;
+											done = it == dest->getInventory()->end();
+										}
 									}
 								}
+							}
+							else
+							{ // so DT_STUN == type
+								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
+									if ((*it)->getUnit()) (*it)->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							}
 						}
 
