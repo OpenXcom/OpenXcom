@@ -38,16 +38,16 @@ extern PFNGLUNIFORM4FVPROC glUniform4fv;
 std::string strGLError(GLenum glErr);
 
 #define glErrorCheck() {\
-	static bool reported##__LINE__ = false;\
-	GLenum glErr##__LINE__;\
-	if ((glErr##__LINE__ = glGetError()) != GL_NO_ERROR && !reported##__LINE__)\
+	static bool reported = false;\
+	GLenum glErr;\
+	if ((glErr = glGetError()) != GL_NO_ERROR && !reported)\
 	{\
-		reported##__LINE__ = true;\
+		reported = true;\
 		\
 		do \
 		{ \
-			Log(LOG_WARNING) << __FILE__ << ":" << __LINE__ << ": glGetError() complaint: " << strGLError(glErr##__LINE__);\
-		} while (((glErr##__LINE__ = glGetError()) != GL_NO_ERROR));\
+			Log(LOG_WARNING) << __FILE__ << ":" << __LINE__ << ": glGetError() complaint: " << strGLError(glErr);\
+		} while (((glErr = glGetError()) != GL_NO_ERROR));\
 	}\
 }
 

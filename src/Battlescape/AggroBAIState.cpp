@@ -106,7 +106,8 @@ void AggroBAIState::load(const YAML::Node &node)
 	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
 	node["timesNotSeen"] >> _timesNotSeen;
 	
-	charge = false; // this ought to really be saved
+	charge = false;
+	if (const YAML::Node *chargeNode = node.FindValue("charge")) *chargeNode >> charge;
 }
 
 /**
@@ -136,6 +137,7 @@ void AggroBAIState::save(YAML::Emitter &out) const
 	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
 	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
+	out << YAML::Key << "charge" << YAML::Value << charge;
 	out << YAML::EndMap;
 }
 
@@ -164,15 +166,22 @@ void AggroBAIState::exit()
  */
 void AggroBAIState::think(BattleAction *action)
 {
-	if (Options::getBool("traceAI")) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number; }
+	if (Options::getBool("traceAI")) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (charge ? " [charging]": " "); }
 	
-	action->type = BA_RETHINK;
+ 	action->type = BA_RETHINK;
 	action->actor = _unit;
 	/* Aggro is mainly either shooting a target or running towards it (melee).
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-	_aggroTarget = 0;
+	if (!charge || (_aggroTarget && (_aggroTarget->isOut() || _aggroTarget->getFaction() == _unit->getFaction()))) 
+	{
+		_aggroTarget = 0;
+	} else
+	{
+		action->type = BA_WALK; // just in case
+		action->target = _lastKnownPosition;
+	}
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 
 
@@ -341,9 +350,9 @@ void AggroBAIState::think(BattleAction *action)
 
 
 	/*
-	 *	Regular targetting: we can see an enemy, or an enemy can see us (in case we need to take cover)
+	 *	Regular targetting: we can see an enemy, or an enemy can see us (in case we need to take cover), or we're charging blindly toward an enemy we're pretty sure is there
 	 */
-	if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe)
+	if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe || charge)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 		{
@@ -362,6 +371,8 @@ void AggroBAIState::think(BattleAction *action)
 			if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
 			{
 				// we lost aggro - going back to patrol state
+				charge = 0;
+				_unit->setCharging(0);
 				return;
 			}
 			// lets go looking where we've last seen him
@@ -372,7 +383,13 @@ void AggroBAIState::think(BattleAction *action)
 		{
 			// if we see the target, we either can shoot him, or take cover.
 			bool takeCover = true;
-			_unit->setCharging(0);
+			if (!charge)
+			{
+				_unit->setCharging(0);
+			} else
+			{
+				_unit->setCharging(_aggroTarget);
+			}
 			int number = RNG::generate(0,100);
 
 			// extra 5% chance per unit that sees us
@@ -413,9 +430,9 @@ void AggroBAIState::think(BattleAction *action)
 					int distance = 200;
 					int size = action->actor->getArmor()->getSize(); //-1;
 					int targetsize = _aggroTarget->getArmor()->getSize(); //-1;
-					for (int x = 0 - size; !charge && x <= targetsize; ++x)
+					for (int x = 0 - size; x <= targetsize; ++x)
 					{
-						for (int y = 0 - size; !charge && y <= targetsize; ++y)
+						for (int y = 0 - size; y <= targetsize; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
@@ -552,6 +569,9 @@ void AggroBAIState::think(BattleAction *action)
 				
 				Tile *tile = 0;
 				
+				bool traceSpammed = false;
+				
+				// weights of various factors in choosing a tile to which to withdraw
 				const int EXPOSURE_PENALTY = 20;
 				const int WINDOW_PENALTY = 30;
 				const int WALL_BONUS = 1;
@@ -559,6 +579,15 @@ void AggroBAIState::think(BattleAction *action)
 				const int FRIEND_BONUS = 10;
 				const int SMOKE_PENALTY = 5;
 				const int OVERREACH_PENALTY = EXPOSURE_PENALTY*3;
+				const int MELEE_TUNNELVISION_BONUS = 1000;
+				const int DIRECT_PATH_PENALTY = 10;
+				const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
+				const int BASE_SYSTEMATIC_SUCCESS = 100;
+				const int BASE_DESPERATE_SUCCESS = 110;
+				const int FAST_PASS_THRESHOLD = 120; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
+				const int MAX_ALLY_DISTANCE = 25; // distance^2 actually
+				const int MIN_ALLY_DISTANCE = 4; // don't clump up too much and get grenaded, OK?
+				const int ALLY_BONUS = 4;
 				
 				while (tries < 150 && !coverFound)
 				{
@@ -582,7 +611,7 @@ void AggroBAIState::think(BattleAction *action)
 							action->target.y += RNG::generate(-20,20);
 						}
 						//score = _game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target)) ? 0 : 100;
-						score = 100; // no need for visible here, the TileEngine code will take care of it
+						score = BASE_SYSTEMATIC_SUCCESS; // no need for visible here, the TileEngine code will take care of it
 					}
 					else
 					{
@@ -595,7 +624,7 @@ void AggroBAIState::think(BattleAction *action)
 							}
 						}
 						
-						score = 110; // ruuuuuuun
+						score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
                         action->target = _unit->getPosition() + run*3;
 						action->target.x += RNG::generate(-10,10);
 						action->target.y += RNG::generate(-10,10);
@@ -620,40 +649,53 @@ void AggroBAIState::think(BattleAction *action)
 					{
 						_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
-						if (tile->_soldiersVisible == -1) continue; // you can't go there.
+						if (tile->soldiersVisible == -1) continue; // you can't go there.
 						
-						if (tile->_soldiersVisible && tile->_closestSoldierDSqr <= 100 && tile->_closestSoldierDSqr > 0) score -= (100/tile->_closestSoldierDSqr);
-						if (tile->_soldiersVisible && tile->_meanSoldierDSqr <= 200 && tile->_meanSoldierDSqr > 0) score -= (50/tile->_meanSoldierDSqr); // less important than above
+						if (tile->soldiersVisible && tile->closestSoldierDSqr <= 100 && tile->closestSoldierDSqr > 0) 
+						{
+							score -= (100/tile->closestSoldierDSqr);
+						}
+						
+						if (tile->soldiersVisible && tile->meanSoldierDSqr <= 200 && tile->meanSoldierDSqr > 0) 
+						{
+							score -= (50/tile->meanSoldierDSqr); // less important than above
+						}
+						
 						//if (!tile->_soldiersVisible) { Log(LOG_WARNING) << "No soldiers visible? Really?"; }
 						
-						if (!tile->_soldiersVisible)
+						if (!tile->soldiersVisible)
 						{
-							score += dist*4; // hooray!
+							score += dist*4; // hooray! (4 because it's about 4 TUs to walk a tile?)
 						} else
 						{						
-							score -= tile->_soldiersVisible * EXPOSURE_PENALTY;
+							score -= tile->soldiersVisible * EXPOSURE_PENALTY;
 							score += (dist > 9) ? 4 : dist; 
 						}
 						
 						if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE
-							/* && _unit->getArmor()->getSize() > 1 */ && _unit->getUnitRules() && _unit->getHealth() > _unit->getStats()->health/2)
+							 && _unit->getUnitRules() && _unit->getHealth() > _unit->getStats()->health/2)
 						{
 							// did you say "not charge?" KOMPRESSOR BREAK YOUR GLOWSTICK AND KOMPRESSOR EAT YOUR CANDY
-							score -= (dist-1) * 256;
+							score -= (dist-1) * MELEE_TUNNELVISION_BONUS;
 							if (score < -90000) score = -90000;
 							charge = true;
-							if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Trying to get melee unit to do something."; }
+							if (Options::getBool("traceAI") && !traceSpammed) { Log(LOG_INFO) << "Trying to get melee unit to do something."; traceSpammed = true; }
 						}
 						
-						if (tile->_closestAlienDSqr < 25 && tile->_closestAlienDSqr > 4) score += 4; // strength in numbers but not in "grenade us!" huddles 
+						// strength in numbers but not in "grenade us!" huddles:
+						if (tile->closestAlienDSqr < MAX_ALLY_DISTANCE && tile->closestAlienDSqr > MIN_ALLY_DISTANCE) score += ALLY_BONUS;
+						if (tile->closestAlienDSqr <= MIN_ALLY_DISTANCE) score -= ALLY_BONUS;
 						
 						_game->getPathfinding()->setUnit(_unit); // because we can't just pass this around as a paramater, can we... no, that would be too simple
 						
-						if (tile->_soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->_closestSoldierPos, action->target, 0, false)) score -= 30; // not even partial cover?
+						if (tile->soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->_closestSoldierPos, action->target, 0, false))
+						{
+							score -= DIRECT_PATH_TO_TARGET_PENALTY; // not even partial cover?
+						}
 						_game->getPathfinding()->abortPath(); // clean up hypothetical path data
 						
-						if (_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score -= 10; // come on partial cover?
-						_game->getPathfinding()->abortPath(); // clean up hypothetical path data						
+						if (_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score -= DIRECT_PATH_PENALTY; // come on partial cover?
+						_game->getPathfinding()->abortPath();						
 						
 						if (tile->getFire()) score -= FIRE_PENALTY; // maybe stop, drop, and roll?
 						
@@ -674,21 +716,21 @@ void AggroBAIState::think(BattleAction *action)
 							score -= OVERREACH_PENALTY; // not gonna make it
 						} else
 						{
-							if (tile->_soldiersVisible == 0) score += _unit->getTimeUnits() - _game->getPathfinding()->getTotalTUCost(); // conserve TU if possible
+							if (tile->soldiersVisible == 0) score += _unit->getTimeUnits() - _game->getPathfinding()->getTotalTUCost(); // conserve TU if possible
 						}
-						if (_game->getPathfinding()->getStartDirection() != -1)
+						if (score > bestTileScore && _game->getPathfinding()->getStartDirection() != -1)
 						{
-							// yay, we can get there
+							// yay, we can get there and the overreach penalty didn't kill the score
 							bestTileScore = score;
 							bestTile = action->target;
 						}
 						_game->getPathfinding()->abortPath();
-						if (bestTileScore > 120) coverFound = true; // good enough, gogogo; this value is hand-tuned and subjective :(
+						if (bestTileScore > FAST_PASS_THRESHOLD) coverFound = true; // good enough, gogogo
 					}
 				}
 				if (Options::getBool("traceAI"))
 				{
-					Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, at a tile spotted by " << ((tile=_game->getTile(bestTile)) ? tile->_soldiersVisible : -666) << ". Action #" << action->number;
+					Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, at a tile spotted by " << ((tile=_game->getTile(bestTile)) ? tile->soldiersVisible : -666) << ". Action #" << action->number;
 					//Log(LOG_INFO) << "Walking " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so.";
 
 				}
@@ -712,6 +754,8 @@ void AggroBAIState::think(BattleAction *action)
 	}
 	if (_aggroTarget != 0)
 		setAggroTarget(_aggroTarget);
+	if (charge)
+		action->desperate = true;
 }
 
 /**

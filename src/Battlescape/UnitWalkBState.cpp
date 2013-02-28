@@ -344,7 +344,7 @@ void UnitWalkBState::think()
 		// make sure the unit sprites are up to date
 		if (onScreen)
 			_parent->getMap()->cacheUnit(_unit);
-		if (unitspotted && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0 && !_falling)
+		if (unitspotted && !_action.desperate && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0 && !_falling)
 		{
 			_pf->abortPath();
 			_parent->getMap()->cacheUnit(_unit);

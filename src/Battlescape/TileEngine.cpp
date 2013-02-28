@@ -373,7 +373,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
 {
-	if (tile->_soldiersVisible != -1) return true; // already calculated this turn
+	if (tile->soldiersVisible != -1) return true; // already calculated this turn
 
 	//BattleUnit *hypotheticalUnit = new BattleUnit(*queryingUnit); // dangerous :/
 	
@@ -441,10 +441,10 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	//_save->setUnitPosition(hypotheticalUnit, tilePos); // reset its lastPosition too
 
 		
-	tile->_soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
-	tile->_closestSoldierDSqr = INT_MAX;
-	tile->_closestAlienDSqr = INT_MAX;
-	tile->_meanSoldierDSqr = INT_MAX;
+	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
+	tile->closestSoldierDSqr = INT_MAX;
+	tile->closestAlienDSqr = INT_MAX;
+	tile->meanSoldierDSqr = INT_MAX;
 	
 	int dsqrTotal = 0;
 	
@@ -465,21 +465,21 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetTile(&originVoxel, tile, MapData::O_FLOOR, &targetVoxel, *i)) 
 		//if ((*i)->getFaction() == FACTION_PLAYER && calculateLine(originVoxel, targetVoxel, false, 0, *i, false) == 4)
 		{
-			++tile->_soldiersVisible;
+			++tile->soldiersVisible;
 
-			if (dsqr < tile->_closestSoldierDSqr)
+			if (dsqr < tile->closestSoldierDSqr)
 			{
-				tile->_closestSoldierDSqr = dsqr;
+				tile->closestSoldierDSqr = dsqr;
 				tile->_closestSoldierPos = (*i)->getPosition();
 			}
 			
 			dsqrTotal += dsqr;
 		}
 
-		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->_closestAlienDSqr) tile->_closestAlienDSqr = dsqr;
+		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->closestAlienDSqr) tile->closestAlienDSqr = dsqr;
 	}
 	
-	tile->_meanSoldierDSqr = tile->_soldiersVisible ? (dsqrTotal / tile->_soldiersVisible) : 0;
+	tile->meanSoldierDSqr = tile->soldiersVisible ? (dsqrTotal / tile->soldiersVisible) : 0;
 	
 	//if (tile->_soldiersVisible == 0 && tile->getVisible()) { Log(LOG_WARNING) << "Visible tile returned !canTargetTile() for all soldiers."; }
 

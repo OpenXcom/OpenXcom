@@ -55,11 +55,11 @@ public:
 	} serializationKey;
 
     // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
-    int _closestSoldierDSqr;
+    int closestSoldierDSqr;
 	Position _closestSoldierPos;
-	int _meanSoldierDSqr;
-    int _soldiersVisible;
-	int _closestAlienDSqr;
+	int meanSoldierDSqr;
+    int soldiersVisible;
+	int closestAlienDSqr;
 
 protected:
 	static const int LIGHTLAYERS = 3;
