@@ -627,6 +627,7 @@ void BattlescapeGame::handleNonTargetAction()
 								Position voxel = Position(tile->getPosition().x*16,tile->getPosition().y*16,tile->getPosition().z*24);
 								voxel.x += 8;voxel.y += 8;voxel.z += 8;
 								statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+								--_AIActionCounter; // KEEP CHOMPING!
 								break;
 							}
 						}

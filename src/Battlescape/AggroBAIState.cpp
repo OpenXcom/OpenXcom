@@ -18,6 +18,7 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <climits>
 #include <algorithm>
 #include "AggroBAIState.h"
 #include "ProjectileFlyBState.h"
@@ -66,6 +67,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
     }
 	
 	charge = false;
+	_chosenMeleeAttackSpot = Position(INT_MAX,0,0);
 }
 
 /**
@@ -428,11 +430,14 @@ void AggroBAIState::think(BattleAction *action)
 					takeCover = true;
 					bool targetFound = false;
 					int distance = 200;
-					int size = action->actor->getArmor()->getSize(); //-1;
-					int targetsize = _aggroTarget->getArmor()->getSize(); //-1;
-					for (int x = 0 - size; x <= targetsize; ++x)
+					int size = action->actor->getArmor()->getSize(); // -1;
+					int targetsize = _aggroTarget->getArmor()->getSize(); // -1;
+					
+					bool alreadyChosen = false;
+					
+					for (int x = 0 - size; !alreadyChosen && x <= targetsize; ++x)
 					{
-						for (int y = 0 - size; y <= targetsize; ++y)
+						for (int y = 0 - size; !alreadyChosen && y <= targetsize; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
@@ -440,12 +445,19 @@ void AggroBAIState::think(BattleAction *action)
 								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
-								if (_game->getPathfinding()->getStartDirection() != -1  &&  valid  &&
-									newDistance < distance)
+								bool fitHere = _game->setUnitPosition(_unit, checkPath, true);
+								alreadyChosen = (checkPath == _chosenMeleeAttackSpot);
+								
+								if (alreadyChosen)
+								{
+									checkPath = _chosenMeleeAttackSpot;
+								}
+								if (alreadyChosen || (_game->getPathfinding()->getStartDirection() != -1  &&  valid && fitHere &&
+									newDistance < distance))
 								{
 									// CHAAAAAAARGE!
-									if (Options::getBool("traceAI")) { Log(LOG_INFO) << "CHAAAAAAARGE!"; }
-									action->target = checkPath;
+									if (Options::getBool("traceAI")) { Log(LOG_INFO) << (alreadyChosen ? "Continuing to planned spot..." : "CHAAAAAAARGE!") << " -> " << checkPath.x << "," << checkPath.y; }
+									action->target = _chosenMeleeAttackSpot = checkPath;
 									action->type = BA_WALK;
 									charge = true;
 									_unit->setCharging(_aggroTarget);
@@ -665,11 +677,10 @@ void AggroBAIState::think(BattleAction *action)
 						
 						if (!tile->soldiersVisible)
 						{
-							score += dist*4; // hooray! (4 because it's about 4 TUs to walk a tile?)
+							score += (dist-_game->getTileEngine()->distance(_aggroTarget->getPosition(), action->target))*4; // get away from aggrotarget, modest priority
 						} else
 						{						
 							score -= tile->soldiersVisible * EXPOSURE_PENALTY;
-							score += (dist > 9) ? 4 : dist; 
 						}
 						
 						if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE

@@ -43,6 +43,9 @@ protected:
     static std::vector<Position> _randomTileSearch;
     static int _randomTileSearchAge;
 	bool charge;
+	
+	Position _chosenMeleeAttackSpot; // these values keep coming out different every time the unit moves, resulting in a weird back-and-forth dance...
+	
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
