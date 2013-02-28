@@ -137,12 +137,9 @@ void BaseDefenseState::think()
 			_action = BDA_END;
 			return;
 		case BDA_END:
-			{
-				_btnOk->setVisible(true);
-				_thinkcycles = -1;
-				return;
-			}
-
+			_btnOk->setVisible(true);
+			_thinkcycles = -1;
+			return;
 		}
 		if (_attacks == _defenses && _passes == _gravShields)
 		{
