@@ -58,7 +58,7 @@ private:
 	TerrorSite *_terror;
 	AlienBase *_alienBase;
 	RuleTerrain *_terrain;
-	int _width, _length, _height;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
 	int _worldTexture, _worldShade;
 	int _unitSequence;
 	Tile *_craftInventoryTile;

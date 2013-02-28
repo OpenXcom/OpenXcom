@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Sets up a camera.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapWidth(mapWidth), _mapLength(mapLength), _mapHeight(mapHeight), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()),
+Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()),
 																																_mapOffset(-250,250,0), _center(), _scrollX(0), _scrollY(0), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
 {
 }
@@ -202,8 +202,8 @@ bool Camera::scrollXY(int x, int y, bool redraw)
 
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
 // if center goes out of map bounds, hold the scrolling
-	if (_center.x > _mapWidth -1 || _center.x < 0 || 
-		_center.y > _mapLength -1  || _center.y < 0 )
+	if (_center.x > _mapsize_x -1 || _center.x < 0 || 
+		_center.y > _mapsize_y -1  || _center.y < 0 )
 	{
 		_mapOffset.x -= x;
 		_mapOffset.y -= y;
@@ -226,16 +226,16 @@ void Camera::jumpXY(int x, int y)
 
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
 // if center goes out of map bounds, hold the scrolling
-	if (_center.x > _mapWidth -1 || _center.x < 0 || 
-		_center.y > _mapLength -1  || _center.y < 0 )
+	if (_center.x > _mapsize_x -1 || _center.x < 0 || 
+		_center.y > _mapsize_y -1  || _center.y < 0 )
 	{
 		for (int k=1; k<128; ++k) //try intermediate values
 		{
 			_mapOffset.x = oldX + x*k/128;
 			_mapOffset.y = oldY + y*k/128;
 			convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-			if (_center.x > _mapWidth -1 || _center.x < 0 || 
-				_center.y > _mapLength -1  || _center.y < 0 )
+			if (_center.x > _mapsize_x -1 || _center.x < 0 || 
+				_center.y > _mapsize_y -1  || _center.y < 0 )
 			{
 				//step back
 				_mapOffset.x = oldX + x*(k-1)/128;
@@ -252,7 +252,7 @@ void Camera::jumpXY(int x, int y)
  */
 void Camera::up()
 {
-	if (_mapOffset.z < _mapHeight - 1)
+	if (_mapOffset.z < _mapsize_z - 1)
 	{
 		_mapOffset.z++;
 		_mapOffset.y += _spriteHeight / 2;
@@ -274,13 +274,13 @@ void Camera::down()
 }
 
 /**
- * Set viewheight.
- * @param viewheight
+ * Set view level.
+ * @param view level
  */
-void Camera::setViewHeight(int viewheight)
+void Camera::setViewLevel(int viewlevel)
 {
-	_mapOffset.z = viewheight;
-	minMaxInt(&_mapOffset.z, 0, _mapHeight-1);
+	_mapOffset.z = viewlevel;
+	minMaxInt(&_mapOffset.z, 0, _mapsize_z-1);
 	_map->draw();
 }
 
@@ -294,8 +294,8 @@ void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
 	_center = mapPos;
-	minMaxInt(&_center.x, -1, _mapLength);
-	minMaxInt(&_center.y, -1, _mapWidth);
+	minMaxInt(&_center.x, -1, _mapsize_y);
+	minMaxInt(&_center.y, -1, _mapsize_x);
 	convertMapToScreen(_center, &screenPos);
 
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2));
@@ -335,8 +335,8 @@ void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) 
 	*mapX /= (_spriteWidth / 4);
 	*mapY /= _spriteWidth;
 
-	minMaxInt(mapX, -1, _mapLength);
-	minMaxInt(mapY, -1, _mapWidth);
+	minMaxInt(mapX, -1, _mapsize_y);
+	minMaxInt(mapY, -1, _mapsize_x);
 }
 
 /**
@@ -373,27 +373,27 @@ void Camera::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
  * Get the displayed level
  * @return the displayed layer
 */
-int Camera::getViewHeight() const
+int Camera::getViewLevel() const
 {
 	return _mapOffset.z;
 }
 
 /**
- * Get the map width
- * @return the map width
+ * Get the map size x
+ * @return the map size x
 */
-int Camera::getMapWidth() const
+int Camera::getMapSizeX() const
 {
-	return _mapWidth;
+	return _mapsize_x;
 }
 
 /**
- * Get the map length
- * @return the map length
+ * Get the map size y
+ * @return the map size y
 */
-int Camera::getMapLength() const
+int Camera::getMapSizeY() const
 {
-	return _mapLength;
+	return _mapsize_y;
 }
 
 Position Camera::getMapOffset()

@@ -40,7 +40,7 @@ private:
 	static const int SCROLL_DIAGONAL_EDGE = 60;
 	Timer *_scrollTimer;
 	int _spriteWidth, _spriteHeight;
-	int _mapWidth, _mapLength, _mapHeight;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
 	int _screenWidth, _screenHeight;
 	Position _mapOffset, _center;
 	int _scrollX, _scrollY;
@@ -50,7 +50,7 @@ private:
 	Map *_map;
 public:
 	/// Creates a new camera.
-	Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight);
+	Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight);
 	/// Cleans up the camera.
 	~Camera();
 	void setScrollTimer(Timer *timer);
@@ -70,8 +70,8 @@ public:
 	void up();
 	/// move map layer down
 	void down();
-	/// set view height
-	void setViewHeight(int viewheight);
+	/// set view level
+	void setViewLevel(int viewlevel);
 	/// Converts map coordinates to screen coordinates.
 	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
 	/// Converts voxel coordinates to screen coordinates.
@@ -85,9 +85,9 @@ public:
 	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 	/// Get the map displayed level
-	int getViewHeight() const;
-	int getMapWidth() const;
-	int getMapLength() const;
+	int getViewLevel() const;
+	int getMapSizeX() const;
+	int getMapSizeY() const;
 	/// Get the map x/y screen offset
 	Position getMapOffset();
 	/// Set the map x/y screen offset

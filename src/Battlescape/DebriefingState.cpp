@@ -620,7 +620,7 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
 		}
 
-		for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
+		for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 		{
 			// get recoverable map data objects from the battlescape map
 			for (int part = 0; part < 4; part++)
@@ -700,7 +700,7 @@ void DebriefingState::prepareDebriefing()
 		if (playersSurvived > 0 && !_destroyBase)
 		{
 			// recover items from the craft floor
-			for (int i = 0; i < battle->getHeight() * battle->getLength() * battle->getWidth(); ++i)
+			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);		
