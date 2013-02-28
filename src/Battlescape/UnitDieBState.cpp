@@ -197,7 +197,9 @@ void UnitDieBState::convertUnitToCorpse()
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
-				//corpse->setUnit(unit); // no need for this, because large units never can be revived as they don't go unconscious
+				corpse->setUnit(_unit); // no need for this, because large units never can be revived as they don't go unconscious
+										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
+										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
 				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
 				i++;
 			}

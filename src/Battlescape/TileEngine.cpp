@@ -886,7 +886,15 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (type == DT_HE || type == DT_STUN)
+						if (type == DT_STUN)
+						{
+							// power 50 - 150%
+							if (dest->getUnit())
+							{
+								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+							}
+						}
+						if (type == DT_HE)
 						{
 							// power 50 - 150%
 							if (dest->getUnit())
