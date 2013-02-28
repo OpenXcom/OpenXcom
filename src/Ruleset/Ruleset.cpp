@@ -180,7 +180,7 @@ void Ruleset::load(const std::string &source)
 	else
 		loadFiles(dirname);
 	
-	Log(LOG_INFO) << "Ruleset loaded in " << (SDL_GetTicks() - startTime) << "ms";
+	Log(LOG_DEBUG) << "Ruleset loaded in " << (SDL_GetTicks() - startTime) << "ms";
 }
 
 /**

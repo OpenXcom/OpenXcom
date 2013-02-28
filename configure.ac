@@ -22,7 +22,6 @@ AC_LANG([C++])
 # Find required base packages
 # ===========================
 AC_PROG_CXX
-AC_PROG_CC
 PKG_PROG_PKG_CONFIG([0.24])
 
 # ================
@@ -42,6 +41,8 @@ AS_IF([test x"$GCC" = xyes], [
 	CFLAGS="$CFLAGS -Wall -pedantic"
 	LDFLAGS="$LDFLAGS -Wl,--as-needed"
 ])
+AC_CHECK_HEADER(tr1/unordered_map,[AC_DEFINE([_USE_TR1],[1],["Have tr1/unordered_map"])],[])
+
 
 # ============
 # Debug switch

@@ -290,7 +290,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		}
 	}
 
-	Log(LOG_INFO) << "Battlescape data loaded in " << (SDL_GetTicks() - startTime) << "ms";
+	Log(LOG_DEBUG) << "Battlescape data loaded in " << (SDL_GetTicks() - startTime) << "ms";
 }
 
 /**
