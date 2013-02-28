@@ -2099,7 +2099,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 {
-	return validMeleeRange(unit->getPosition(), unit->getDirection(), unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), unit->getArmor()->getSize() > 1 ?  -1 : unit->getDirection(), unit->getArmor()->getSize(), unit->getHeight(), target);
 }
 
 /*
