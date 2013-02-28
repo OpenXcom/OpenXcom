@@ -6487,7 +6487,7 @@ alienDeployments:
             []
     width: 50
     length: 50
-    height: 4
+    height: 2
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
