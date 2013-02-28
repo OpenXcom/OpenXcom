@@ -89,7 +89,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles("")
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -243,6 +243,9 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		_detail = true;
 	}
+	if (const YAML::Node *pName = doc.FindValue("GraphRegionToggles")) *pName >> _graphRegionToggles; else _graphRegionToggles="";
+	if (const YAML::Node *pName = doc.FindValue("GraphCountryToggles")) *pName >> _graphCountryToggles; else _graphCountryToggles="";
+	if (const YAML::Node *pName = doc.FindValue("GraphFinanceToggles")) *pName >> _graphFinanceToggles; else _graphFinanceToggles="";
 	doc["funds"] >> _funds;
 	doc["maintenance"] >> _maintenance;
 	doc["researchScores"] >> _researchScores;
@@ -367,6 +370,9 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "monthsPassed" << YAML::Value << _monthsPassed;
 	out << YAML::Key << "radarLines" << YAML::Value << _radarLines;
 	out << YAML::Key << "detail" << YAML::Value << _detail;
+	out << YAML::Key << "GraphRegionToggles" << YAML::Value << _graphRegionToggles;
+	out << YAML::Key << "GraphCountryToggles" << YAML::Value << _graphCountryToggles;
+	out << YAML::Key << "GraphFinanceToggles" << YAML::Value << _graphFinanceToggles;
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
@@ -1331,6 +1337,57 @@ Region *SavedGame::locateRegion(const Target &target) const
 int SavedGame::getMonthsPassed() const
 {
 	return _monthsPassed;
+}
+
+/*
+ * @return the GraphRegionToggles.
+ */
+const std::string &SavedGame::getGraphRegionToggles() const
+{
+	return _graphRegionToggles;
+}
+
+/*
+ * @return the GraphCountryToggles.
+ */
+const std::string &SavedGame::getGraphCountryToggles() const
+{
+	return _graphCountryToggles;
+}
+
+/*
+ * @return the GraphFinanceToggles.
+ */
+const std::string &SavedGame::getGraphFinanceToggles() const
+{
+	return _graphFinanceToggles;
+}
+
+/**
+ * Sets the GraphRegionToggles.
+ * @param value The new value for GraphRegionToggles.
+ */
+void SavedGame::setGraphRegionToggles(const std::string &value)
+{
+	_graphRegionToggles = value;
+}
+
+/**
+ * Sets the GraphCountryToggles.
+ * @param value The new value for GraphCountryToggles.
+ */
+void SavedGame::setGraphCountryToggles(const std::string &value)
+{
+	_graphCountryToggles = value;
+}
+
+/**
+ * Sets the GraphFinanceToggles.
+ * @param value The new value for GraphFinanceToggles.
+ */
+void SavedGame::setGraphFinanceToggles(const std::string &value)
+{
+	_graphFinanceToggles = value;
 }
 
 /*

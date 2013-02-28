@@ -79,9 +79,6 @@ void createDefault()
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
 	setString("language", "");
-	setString("graphRegionToggles", "");
-	setString("graphCountryToggles", "");
-	setString("graphFinanceToggles", "");
 	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
 	setInt("battleScrollType", SCROLL_AUTO);
 	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 

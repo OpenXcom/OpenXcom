@@ -33,7 +33,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
-#include "../Engine/Options.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -161,9 +160,9 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnFinances.at(4)->setText(_game->getLanguage()->getString("STR_SCORE"));
 
 	// load back the button states
-	std::string graphRegionToggles = Options::getString("graphRegionToggles");
-	std::string graphCountryToggles = Options::getString("graphCountryToggles");
-	std::string graphFinanceToggles = Options::getString("graphFinanceToggles");
+	std::string graphRegionToggles = _game->getSavedGame()->getGraphRegionToggles();
+	std::string graphCountryToggles = _game->getSavedGame()->getGraphCountryToggles();
+	std::string graphFinanceToggles = _game->getSavedGame()->getGraphFinanceToggles();
 	while (graphRegionToggles.size() < _regionToggles.size()) graphRegionToggles.push_back('0');
 	while (graphCountryToggles.size() < _countryToggles.size()) graphCountryToggles.push_back('0');
 	while (graphFinanceToggles.size() < _financeToggles.size()) graphFinanceToggles.push_back('0');
@@ -311,9 +310,9 @@ GraphsState::~GraphsState()
 	for (int i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i] ? '1' : '0');
 	for (int i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i] ? '1' : '0');
 	for (int i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
-	Options::setString("graphRegionToggles", graphRegionToggles);
-	Options::setString("graphCountryToggles", graphCountryToggles);
-	Options::setString("graphFinanceToggles", graphFinanceToggles);
+	_game->getSavedGame()->setGraphRegionToggles(graphRegionToggles);
+	_game->getSavedGame()->setGraphCountryToggles(graphCountryToggles);
+	_game->getSavedGame()->setGraphFinanceToggles(graphFinanceToggles);
 }
 
 /**
