@@ -195,10 +195,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->_desperatelySeekingCover = 0;
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
-	//AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast does not work XXX XXX XXX
-	//assert(!ai || aggro);
-	
-	AggroBAIState *aggro = 0;
+	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast only works when ai was already AggroBAIState at heart
 	
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
@@ -206,8 +203,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
 		|| (_AIActionCounter > 2))
 	{
-		aggro = new AggroBAIState(_save, unit);
-		unit->setAIState(aggro);
+		if (aggro == 0)
+		{
+			aggro = new AggroBAIState(_save, unit);
+			unit->setAIState(aggro);
+		}
 		ai = unit->getCurrentAIState();
 		_parentState->debug(L"Aggro");
 	}

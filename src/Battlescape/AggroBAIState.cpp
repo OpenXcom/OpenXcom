@@ -64,6 +64,8 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
         std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
         _randomTileSearchAge = 0;
     }
+	
+	charge = false;
 }
 
 /**
@@ -103,6 +105,8 @@ void AggroBAIState::load(const YAML::Node &node)
 	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
 	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
 	node["timesNotSeen"] >> _timesNotSeen;
+	
+	charge = false; // this ought to really be saved
 }
 
 /**
@@ -368,7 +372,6 @@ void AggroBAIState::think(BattleAction *action)
 		{
 			// if we see the target, we either can shoot him, or take cover.
 			bool takeCover = true;
-			bool charge = false;
 			_unit->setCharging(0);
 			int number = RNG::generate(0,100);
 
