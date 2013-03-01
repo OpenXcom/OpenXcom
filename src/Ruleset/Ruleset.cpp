@@ -1071,7 +1071,8 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
  */
 Unit *Ruleset::getUnit(const std::string &name) const
 {
-	return _units.find(name)->second;
+	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
+	if (_units.end() != i) return i->second; else return 0;
 }
 
 /**
