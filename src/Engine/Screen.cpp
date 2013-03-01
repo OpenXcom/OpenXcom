@@ -287,6 +287,7 @@ void Screen::setResolution(int width, int height)
 		glOutput.linear = Options::getBool("useOpenGLSmoothing"); // setting from shader file will override this, though
 		glOutput.set_shader(CrossPlatform::getDataFile(Options::getString("useOpenGLShader")).c_str());
 		glOutput.setVSync(Options::getBool("vSyncForOpenGL"));
+		OpenGL::checkErrors = Options::getBool("checkOpenGLErrors");
 	}
 
 	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
