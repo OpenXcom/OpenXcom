@@ -62,7 +62,9 @@ public:
 	/// Sets aggro target, triggered by reaction fire.
 	void setAggroTarget(BattleUnit *unit);
 	/// Get the aggro target, for savegame
-	BattleUnit *getAggroTarget();
+	BattleUnit *getAggroTarget() const { return _aggroTarget; }
+	/// Get the last known location of target, for turning
+	Position getLastKnownPosition() const { return _lastKnownPosition; }
 	/// decide if we should throw a grenade/launch a missile to this position
 	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
 };

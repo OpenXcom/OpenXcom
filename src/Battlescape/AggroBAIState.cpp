@@ -587,7 +587,7 @@ void AggroBAIState::think(BattleAction *action)
 				const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
 				const int BASE_SYSTEMATIC_SUCCESS = 100;
 				const int BASE_DESPERATE_SUCCESS = 110;
-				const int FAST_PASS_THRESHOLD = 120; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
+				const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
 				const int MAX_ALLY_DISTANCE = 25; // distance^2 actually
 				const int MIN_ALLY_DISTANCE = 4; // don't clump up too much and get grenaded, OK?
 				const int ALLY_BONUS = 4;
@@ -722,7 +722,7 @@ void AggroBAIState::think(BattleAction *action)
 					{
 						// check if we can reach this tile
 						_game->getPathfinding()->calculate(_unit, action->target);
-						if (_game->getPathfinding()->getTotalTUCost() > _unit->getTimeUnits())
+						if (_game->getPathfinding()->getTotalTUCost()+4 > _unit->getTimeUnits()) // save 4 to turn around?
 						{
 							score -= OVERREACH_PENALTY; // not gonna make it
 						} else

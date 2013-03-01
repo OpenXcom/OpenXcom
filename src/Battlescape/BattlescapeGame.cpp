@@ -236,6 +236,15 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
 		statePushBack(new UnitWalkBState(this, action));
+		
+		if (unit->_hidingForTurn && _AIActionCounter > 2) // it seems like this should be in an AIBstate somewhere... but where?
+		{
+			BattleAction turnAction;
+			turnAction.type = BA_TURN; 
+			turnAction.actor = unit; 
+			turnAction.target = aggro->getLastKnownPosition();
+			statePushBack(new UnitTurnBState(this, action));  // face your foe or no reaction shots for you, you tactical genius... 
+		}
 	}
 
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
@@ -822,7 +831,7 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 3;
+				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
 				 // AI does two (or three?) things per unit + hides?, before switching to the next, or it got killed before doing the second thing
 				 // melee get more because chryssalids and reapers need to attack many times to be scary
 				if (_AIActionCounter > AIActionLimit || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
