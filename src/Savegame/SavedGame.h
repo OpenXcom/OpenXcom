@@ -78,6 +78,9 @@ private:
 	std::vector<AlienMission*> _activeMissions;
 	bool _debug, _warned, _detail, _radarLines;
 	int _monthsPassed;
+	std::string _graphRegionToggles;
+	std::string _graphCountryToggles;
+	std::string _graphFinanceToggles;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
@@ -199,6 +202,18 @@ public:
 	Region *locateRegion(const Target &target) const;
 	/// Return the month counter.
 	int getMonthsPassed() const;
+	/// Return the GraphRegionToggles.
+	const std::string &getGraphRegionToggles() const;
+	/// Return the GraphCountryToggles.
+	const std::string &getGraphCountryToggles() const;
+	/// Return the GraphFinanceToggles.
+	const std::string &getGraphFinanceToggles() const;
+	/// Sets the GraphRegionToggles.
+	void setGraphRegionToggles(const std::string &value);
+	/// Sets the GraphCountryToggles.
+	void setGraphCountryToggles(const std::string &value);
+	/// Sets the GraphFinanceToggles.
+	void setGraphFinanceToggles(const std::string &value);
 	/// Increment the month counter.
 	void addMonth();
 	void toggleRadarLines();
