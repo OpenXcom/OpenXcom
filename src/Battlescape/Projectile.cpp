@@ -331,25 +331,20 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
 
-	/*
-	This modifies the accuracy based on the distance from the target. The accuracy decreases linearly (2% per tile or 0.125% per voxel) when shooting beyond the limit of the firing mode:
-	auto shot: 7 tiles or 112 voxels
-	snap shot: 15 tiles or 240 voxels
-	aimed shot: no penalty
-	*/
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		// 0.5  is the max angle deviation for accuracy 0% (+-3s = 0,5 radian)
+		// It is a simple task - to hit in target width of 4-6 voxels. Good luck!
+		// 0.4  is the max angle deviation for accuracy 0% (+-3s = 0,4 radian)
 		// 0.03 is the min angle deviation for best accuracy (+-3s = 0,03 radian)
-		// 3.0  is the coefficient obtained in the analysis data http://ufopaedia.org/index.php?title=Accuracy_formula
-		double baseDeviation = 0.5 - accuracy / 3.0;
+		// 3.5  is the coefficient
+		double baseDeviation = 0.4 - accuracy / 3.5;
 		if (baseDeviation < 0.03)
 		{
 			baseDeviation = 0.03;
 		}
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation/6.0);  // miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation/(6.0 * 2));
+		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // miss in radian
+		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
@@ -357,14 +352,6 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
 		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
 		target->z = (int)(origin.z + maxRange * sin(fi));
-//		if (_action.type == BA_AUTOSHOT && realDistance > 112)
-//		{
-//			accuracy -= 0.00125 * (realDistance - 112);
-//		}
-//		if (_action.type == BA_SNAPSHOT && realDistance > 240)
-//		{
-//			accuracy -= 0.00125 * (realDistance - 240);
-//		}
 	}
 	else
 	{
