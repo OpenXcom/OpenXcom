@@ -582,7 +582,7 @@ void AggroBAIState::think(BattleAction *action)
 				const int FRIEND_BONUS = 6;
 				const int SMOKE_PENALTY = 5;
 				const int OVERREACH_PENALTY = EXPOSURE_PENALTY*3;
-				const int MELEE_TUNNELVISION_BONUS = 1000;
+				const int MELEE_TUNNELVISION_BONUS = 20;
 				const int DIRECT_PATH_PENALTY = 10;
 				const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
 				const int BASE_SYSTEMATIC_SUCCESS = 100;
@@ -687,7 +687,7 @@ void AggroBAIState::think(BattleAction *action)
 							 && _unit->getUnitRules() && _unit->getHealth() > _unit->getStats()->health/2)
 						{
 							// did you say "not charge?" KOMPRESSOR BREAK YOUR GLOWSTICK AND KOMPRESSOR EAT YOUR CANDY
-							score -= (dist-1) * MELEE_TUNNELVISION_BONUS;
+							score -= (tile->closestSoldierDSqr-1) * MELEE_TUNNELVISION_BONUS;
 							if (score < -90000) score = -90000;
 							charge = true;
 							if (Options::getBool("traceAI") && !traceSpammed) { Log(LOG_INFO) << "Trying to get melee unit to do something."; traceSpammed = true; }
