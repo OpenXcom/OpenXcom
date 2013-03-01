@@ -175,11 +175,12 @@ void AggroBAIState::think(BattleAction *action)
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-	if (!charge || 
-		(_aggroTarget && 
+	if (_aggroTarget && 
 			(_aggroTarget->isOut() || 
 			 _aggroTarget->getFaction() == _unit->getFaction() || 
-			 (!_unit->_hidingForTurn && !_game->getTileEngine()->visible(_unit, _aggroTarget->getTile()))))) 
+			 (!_unit->_hidingForTurn && !_game->eyesOnTarget(_unit->getFaction(), _aggroTarget))
+			)
+		)
 	{
 		_aggroTarget = 0;
 	} else
@@ -467,15 +468,7 @@ void AggroBAIState::think(BattleAction *action)
 			}
 
 			if (action->number >= 3 && !charge)
-			{
-				if (_unit->_hidingForTurn)
-				{
-					// already tried to get to cover; stay still
-					action->target = _unit->getPosition();
-					action->TU = 0;
-					return;
-				}
-				
+			{				
                 takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
                 action->reckless = true;
 			}
@@ -556,6 +549,7 @@ void AggroBAIState::think(BattleAction *action)
 				// the idea is to check within a 11x11 tile square for a tile which is not seen by our aggroTarget
 				// if there is no such tile, we run away from the target.
 				action->type = BA_WALK;
+				int currentTilePreference = _unit->_hidingForTurn ? action->number * 5 : 0;
 				_unit->_hidingForTurn = true;
 				int tries = 0;
 				bool coverFound = false;
@@ -613,11 +607,17 @@ void AggroBAIState::think(BattleAction *action)
 						// looking for cover
 						action->target.x += _randomTileSearch[tries].x;
 						action->target.y += _randomTileSearch[tries].y;
-						if (action->target == _unit->getPosition() && unitsSpottingMe > 0)
+						if (action->target == _unit->getPosition()) 
 						{
-							// don't even think about staying in the same spot. Move!
-							action->target.x += RNG::generate(-20,20);
-							action->target.y += RNG::generate(-20,20);
+							if (unitsSpottingMe > 0)
+							{
+								// don't even think about staying in the same spot. Move!
+								action->target.x += RNG::generate(-20,20);
+								action->target.y += RNG::generate(-20,20);
+							} else
+							{
+								score += currentTilePreference;
+							}
 						}
 						//score = _game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target)) ? 0 : 100;
 						score = BASE_SYSTEMATIC_SUCCESS; // no need for visible here, the TileEngine code will take care of it

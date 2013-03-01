@@ -2027,7 +2027,7 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 		if (debugAppendId)
 		{
 			std::wstringstream ss;
-			ss << ret << L" #" << _id;
+			ss << ret << L" " << _id;
 			ret = ss.str();
 		}
 		return ret;
