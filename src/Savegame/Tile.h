@@ -55,10 +55,10 @@ public:
 	} serializationKey;
 
     // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
-    int closestSoldierDSqr;
+	int closestSoldierDSqr;
 	Position closestSoldierPos;
 	int meanSoldierDSqr;
-    int soldiersVisible;
+	int soldiersVisible;
 	int closestAlienDSqr;
 
 protected:

@@ -560,15 +560,15 @@ void AggroBAIState::think(BattleAction *action)
 				int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
 				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
 				int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
-                Vector3i run;
+				Vector3i run;
 				run.x = (dx * 5) / dist;
 				run.y = (dy * 5) / dist;
-                run.z = 0;
+				run.z = 0;
 				
 				int bestTileScore = -100000;
 				int score = -100000;
 				Position bestTile(0, 0, 0);
-                ++_randomTileSearchAge;
+				++_randomTileSearchAge;
 				if (action->number > 1) action->desperate = true;
 				
 				Tile *tile = 0;

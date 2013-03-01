@@ -40,8 +40,8 @@ protected:
 	BattleUnit *_lastKnownTarget;
 	Position _lastKnownPosition;
 	int _timesNotSeen;
-    static std::vector<Position> _randomTileSearch;
-    static int _randomTileSearchAge;
+	static std::vector<Position> _randomTileSearch;
+	static int _randomTileSearchAge;
 	bool charge;
 	
 public:
