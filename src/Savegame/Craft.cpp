@@ -323,6 +323,15 @@ void Craft::setBase(Base *base)
 }
 
 /**
+ * Changes the base the craft belongs to. (without setting the craft's coordinates)
+ * @param base Pointer to base.
+ */
+void Craft::setBaseOnly(Base *base)
+{
+	_base = base;
+}
+
+/**
  * Returns the current status of the craft.
  * @return Status string.
  */
@@ -585,7 +594,17 @@ int Craft::getFuelConsumption() const
  */
 int Craft::getFuelLimit() const
 {
-	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (_speedRadian * 120));
+	return getFuelLimit(_base);
+}
+
+/**
+ * Returns the minimum required fuel for the
+ * craft to go to a base.
+ * @return Fuel amount.
+ */
+int Craft::getFuelLimit(Base *base) const
+{
+	return (int)floor(getFuelConsumption() * getDistance(base) / (_speedRadian * 120));
 }
 
 /**
