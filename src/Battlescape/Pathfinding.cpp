@@ -27,6 +27,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Options.h"
 #include "../Engine/Game.h"
+#include "../Battlescape/TileEngine.h"
 
 namespace OpenXcom
 {
@@ -467,6 +468,7 @@ int Pathfinding::dequeuePath()
  */
 void Pathfinding::abortPath()
 {
+	_totalTUCost = 0;
 	_path.clear();
 }
 
@@ -494,15 +496,23 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit == 0 || unit == _unit || unit == missileTarget) return false;
+		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
 		if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
 			(_unit->getFaction() == FACTION_PLAYER && unit->getVisible())) return true;		// player know all visible units
 		if (_unit->getFaction() != FACTION_PLAYER)
 		{
+			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			{
+				std::vector<BattleUnit*> *vis = (*i)->getVisibleUnits();
+				if ((*i)->getFaction() == _unit->getFaction() && std::find(vis->begin(), vis->end(), unit) != vis->end()) return true;
+				// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies				
+			}
+#if 0
 			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
 			{
 				if ((*i)->getTile() == tile) return true;	// unit know, were all visible for him units
 			}
+#endif
 		}
 	}
 

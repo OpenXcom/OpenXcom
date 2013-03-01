@@ -130,17 +130,22 @@ void PatrolBAIState::think(BattleAction *action)
 	Node *node;
 
 
+	if (_unit->_hidingForTurn) 
+	{
+		action->type = BA_NONE;
+		action->TU = 0;
+		if (Options::getBool("traceAI")) 
+		{
+			Log(LOG_INFO) << "PatrolBAIState::think()? Better not... #" << action->number;
+		}
+		return;
+	}
+
 	if (Options::getBool("traceAI")) 
 	{
 		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
 	}
 	
-	if (_unit->_hidingForTurn) 
-	{
-		action->type = BA_NONE;
-		action->TU = 0;
-		return;
-	}
 	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
