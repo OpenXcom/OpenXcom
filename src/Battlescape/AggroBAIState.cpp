@@ -67,7 +67,6 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
     }
 	
 	charge = false;
-	_chosenMeleeAttackSpot = Position(INT_MAX,0,0);
 }
 
 /**
@@ -433,11 +432,9 @@ void AggroBAIState::think(BattleAction *action)
 					int size = action->actor->getArmor()->getSize(); // -1;
 					int targetsize = _aggroTarget->getArmor()->getSize(); // -1;
 					
-					bool alreadyChosen = false;
-					
-					for (int x = 0 - size; !alreadyChosen && x <= targetsize; ++x)
+					for (int x = 0 - size; x <= targetsize; ++x)
 					{
-						for (int y = 0 - size; !alreadyChosen && y <= targetsize; ++y)
+						for (int y = 0 - size; y <= targetsize; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
@@ -446,18 +443,13 @@ void AggroBAIState::think(BattleAction *action)
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
 								bool fitHere = _game->setUnitPosition(_unit, checkPath, true);
-								alreadyChosen = (checkPath == _chosenMeleeAttackSpot);
 								
-								if (alreadyChosen)
-								{
-									checkPath = _chosenMeleeAttackSpot;
-								}
-								if (alreadyChosen || (_game->getPathfinding()->getStartDirection() != -1  &&  valid && fitHere &&
-									newDistance < distance))
+								if (_game->getPathfinding()->getStartDirection() != -1  &&  valid && fitHere &&
+									newDistance < distance)
 								{
 									// CHAAAAAAARGE!
-									if (Options::getBool("traceAI")) { Log(LOG_INFO) << (alreadyChosen ? "Continuing to planned spot..." : "CHAAAAAAARGE!") << " -> " << checkPath.x << "," << checkPath.y; }
-									action->target = _chosenMeleeAttackSpot = checkPath;
+									if (Options::getBool("traceAI")) { Log(LOG_INFO) << "CHAAAAAAARGE!" << " -> " << checkPath.x << "," << checkPath.y; }
+									action->target = checkPath;
 									action->type = BA_WALK;
 									charge = true;
 									_unit->setCharging(_aggroTarget);
@@ -677,7 +669,7 @@ void AggroBAIState::think(BattleAction *action)
 						
 						if (!tile->soldiersVisible)
 						{
-							score += (dist-_game->getTileEngine()->distance(_aggroTarget->getPosition(), action->target))*4; // get away from aggrotarget, modest priority
+							score += (dist-_game->getTileEngine()->distance(_aggroTarget->getPosition(), action->target)); // get away from aggrotarget, modest priority
 						} else
 						{						
 							score -= tile->soldiersVisible * EXPOSURE_PENALTY;
@@ -699,7 +691,7 @@ void AggroBAIState::think(BattleAction *action)
 						
 						_game->getPathfinding()->setUnit(_unit); // because we can't just pass this around as a paramater, can we... no, that would be too simple
 						
-						if (tile->soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->_closestSoldierPos, action->target, 0, false))
+						if (tile->soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->closestSoldierPos, action->target, 0, false))
 						{
 							score -= DIRECT_PATH_TO_TARGET_PENALTY; // not even partial cover?
 						}

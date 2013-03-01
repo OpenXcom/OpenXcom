@@ -20,6 +20,7 @@
 #include <cmath>
 #include <climits>
 #include <set>
+#include <functional>
 #include "TileEngine.h"
 #include <SDL.h>
 #include "BattleAIState.h"
@@ -209,8 +210,10 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 static size_t BattleUnitsChecksum(std::vector<BattleUnit*>& units)
 {
 	size_t newChecksum = 0;
+	
 	for (std::vector<BattleUnit*>::iterator i = units.begin(); i != units.end(); ++i)
-		newChecksum += ((*i)->getPosition().x*100 + (*i)->getPosition().y) ^ (*i)->getId();
+		newChecksum += ((*i)->getPosition().x*100 + (*i)->getPosition().y);
+
 	return newChecksum;
 }
 
@@ -371,41 +374,39 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 
 
+/**
+ * @brief Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.
+ * @param tile the tile to check
+ * @param tilePos the position of the tile to check, redundantly
+ * @param queryingUnit the unit to temporarily place at tilePos for calculations
+ * @return false if the unit couldn't possibly be placed at tile (i.e., something's blocking it), true otherwise
+ */
 bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
 {
 	if (tile->soldiersVisible != -1) return true; // already calculated this turn
 
-	//BattleUnit *hypotheticalUnit = new BattleUnit(*queryingUnit); // dangerous :/
+	BattleUnit hypotheticalUnit(*queryingUnit); // this is why I needed a copy constructor for BattleUnit
+	// I tried repeatedly to just move queryingUnit without making a copy of it but that caused mysterious crashes in loftemps calculations for 2x2 units. :<
 	
-	//BattleUnit dummyUnit(queryingUnit->getUnitRules(), FACTION_HOSTILE, queryingUnit->getId()*2, queryingUnit->getArmor());
-	//dummyUnit.setTile(queryingUnit->getTile());
-	//dummyUnit.setPosition(queryingUnit->getPosition());
-	BattleUnit dummyUnit(*queryingUnit);
-	BattleUnit *hypotheticalUnit = &dummyUnit;
-	
-	//BattleUnit unitBackup = *hypotheticalUnit;
-		
-	if (!_save->setUnitPosition(hypotheticalUnit, tilePos, true)) 
+	if (!_save->setUnitPosition(&hypotheticalUnit, tilePos, true)) 
 	{
-		//hypotheticalUnit->invalidateCache();
-		//delete hypotheticalUnit;
 		return false;
 	}
 	
 	std::map<int, BattleUnit*> originalTileUnits;
 	std::vector<Position> toBackUp;
 	
-	toBackUp.push_back(hypotheticalUnit->getPosition());
-	toBackUp.push_back(hypotheticalUnit->getTile()->getPosition()); // no such thing as too many backups??? .__.
-	toBackUp.push_back(hypotheticalUnit->getLastPosition());
+	toBackUp.push_back(hypotheticalUnit.getPosition());
+	toBackUp.push_back(hypotheticalUnit.getTile()->getPosition()); // no such thing as too many backups??? .__.
+	toBackUp.push_back(hypotheticalUnit.getLastPosition());
 	toBackUp.push_back(tilePos);
 	
-	// back up BattleUnit pointers in tile data
+	// back up the BattleUnit pointers from the live tile data
 	for (std::vector<Position>::iterator which = toBackUp.begin(); which != toBackUp.end(); ++which)
 	{
-		for (int x = hypotheticalUnit->getArmor()->getSize()-1; x >= 0; x--)
+		for (int x = hypotheticalUnit.getArmor()->getSize()-1; x >= 0; x--)
 		{
-			for (int y = hypotheticalUnit->getArmor()->getSize()-1; y >= 0; y--)
+			for (int y = hypotheticalUnit.getArmor()->getSize()-1; y >= 0; y--)
 			{
 				Position pos = *which;
 				pos.x += x;
@@ -422,11 +423,14 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 
 
 #if 0
-	for (int x = hypotheticalUnit->getArmor()->getSize()-1; x >= 0; x--)
+	// this block of code would make sure that the unit in question wouldn't occlude its own LOS checks
+	// since the LOS checks happen from soldiers to the hypothetical unit, this is possible, I think
+	// however, this code also causes the game to crash in other parts of the code for mysterious reasons
+	for (int x = hypotheticalUnit.getArmor()->getSize()-1; x >= 0; x--)
 	{
-		for (int y = hypotheticalUnit->getArmor()->getSize()-1; y >= 0; y--)
+		for (int y = hypotheticalUnit.getArmor()->getSize()-1; y >= 0; y--)
 		{
-			Position pos = hypotheticalUnit->getPosition();
+			Position pos = hypotheticalUnit.getPosition();
 			pos.x += x;
 			pos.y += y;
 
@@ -436,9 +440,25 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		}
 	}
 #endif
+
+#ifdef _DEBUG
+	// sanity-check the tile data...
+	int count = 0;
+	for (int i = 0; i < _save->getWidth() * _save->getHeight() * _save->getLength(); ++i)
+	{
+		if (_save->getTiles()[i]->getUnit() == queryingUnit)
+		{
+			++count;
+		}
+	}
+	if (count > queryingUnit->getArmor()->getSize()*queryingUnit->getArmor()->getSize())
+	{
+		Log(LOG_ERROR) << count << " tiles are occupied by " << queryingUnit->getType() << " #" << queryingUnit->getId() << " and that is messed up.";
+	}
+#endif
 	
-	_save->setUnitPosition(hypotheticalUnit, tilePos); // updates the unit and the tiles
-	//_save->setUnitPosition(hypotheticalUnit, tilePos); // reset its lastPosition too
+	_save->setUnitPosition(&hypotheticalUnit, tilePos); // updates the unit and the tiles
+	//_save->setUnitPosition(&hypotheticalUnit, tilePos); // reset its lastPosition too
 
 		
 	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
@@ -448,7 +468,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	
 	int dsqrTotal = 0;
 	
-	//Position targetVoxel = getSightOriginVoxel(hypotheticalUnit); // relevant if trying to use calculateLine() which doesn't seem to cooperate anyway!
+	//Position targetVoxel = getSightOriginVoxel(&hypotheticalUnit); // relevant if trying to use calculateLine() which doesn't seem to cooperate anyway!
 	Position targetVoxel(0,0,0);
 	
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -456,21 +476,24 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		if ((*i)->isOut()) continue;
 		
 		int dsqr = distanceSq(tilePos, (*i)->getPosition());
-		if (dsqr < 1) dsqr = 1; // sanity buffer
+		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
 		
 		Position originVoxel = getSightOriginVoxel(*i);
 
-		if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
+		// these three things don't seem to work, probably because I don't know how to call them properly:
 		//if ((*i)->getFaction() == FACTION_PLAYER && visible(*i, tile))
 		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetTile(&originVoxel, tile, MapData::O_FLOOR, &targetVoxel, *i)) 
 		//if ((*i)->getFaction() == FACTION_PLAYER && calculateLine(originVoxel, targetVoxel, false, 0, *i, false) == 4)
+
+		// this works OK but we don't need to try all those rays for this tactical assessment; Volutar might be working on a superior routine, though
+		if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
 		{
 			++tile->soldiersVisible;
 
 			if (dsqr < tile->closestSoldierDSqr)
 			{
 				tile->closestSoldierDSqr = dsqr;
-				tile->_closestSoldierPos = (*i)->getPosition();
+				tile->closestSoldierPos = (*i)->getPosition();
 			}
 			
 			dsqrTotal += dsqr;
@@ -483,17 +506,11 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	
 	//if (tile->_soldiersVisible == 0 && tile->getVisible()) { Log(LOG_WARNING) << "Visible tile returned !canTargetTile() for all soldiers."; }
 
-	//*hypotheticalUnit = unitBackup;
-	//hypotheticalUnit->invalidateCache();
-	
 	// restore tile data
 	for (std::map<int,BattleUnit*>::iterator i = originalTileUnits.begin(); i != originalTileUnits.end(); ++i)
 	{
 		_save->getTiles()[i->first]->setUnit(i->second);
 	}
-	
-	//hypotheticalUnit->invalidateCache();
-	//delete hypotheticalUnit;
 	
 	return true;
 }
