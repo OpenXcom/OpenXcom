@@ -37,7 +37,7 @@ namespace OpenXcom
  */
 Pathfinding::Pathfinding(SavedBattleGame *save) : _save(save), _nodes(), _unit(0), _pathPreviewed(false)
 {
-	_size = _save->getHeight() * _save->getLength() * _save->getWidth();
+	_size = _save->getMapSizeXYZ();
 	// Initialize one node per tile
 	_nodes.reserve(_size);
 	Position p;
@@ -93,7 +93,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);
 	}	
-	while (endPosition.z != _save->getHeight() && destinationTile->getTerrainLevel() == -24)
+	while (endPosition.z != _save->getMapSizeZ() && destinationTile->getTerrainLevel() == -24)
 	{
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);

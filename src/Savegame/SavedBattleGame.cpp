@@ -44,7 +44,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false)
+SavedBattleGame::SavedBattleGame() : _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
@@ -58,7 +58,7 @@ SavedBattleGame::SavedBattleGame() : _width(0), _length(0), _height(0), _tiles()
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		delete _tiles[i];
 	}
@@ -92,9 +92,9 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	int a,b;
 	int selectedUnit = 0;
 
-	node["width"] >> _width;
-	node["length"] >> _length;
-	node["height"] >> _height;
+	node["width"] >> _mapsize_x;
+	node["length"] >> _mapsize_y;
+	node["height"] >> _mapsize_z;
 	node["missionType"] >> _missionType;
 	node["globalshade"] >> _globalShade;
 	node["turn"] >> _turn;
@@ -108,7 +108,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		_mapDataSets.push_back(mds);
 	}
 
-	initMap(_width, _length, _height);
+	initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	
 	if (!node.FindValue("tileTotalBytesPer"))
 	{
@@ -145,7 +145,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		while (r < dataEnd)
 		{
 			int index = unserializeInt(&r, serKey.index);
-			assert (index < _width * _height * _length);
+			assert (index < _mapsize_x * _mapsize_z * _mapsize_y);
 			_tiles[index]->loadBinary(&r, serKey);
 		}		
 	}
@@ -291,7 +291,7 @@ void SavedBattleGame::loadMapResources(ResourcePack *res)
 
 	int mdsID, mdID;
 
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		for (int part = 0; part < 4; part++)
 		{
@@ -321,9 +321,9 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 
-	out << YAML::Key << "width" << YAML::Value << _width;
-	out << YAML::Key << "length" << YAML::Value << _length;
-	out << YAML::Key << "height" << YAML::Value << _height;
+	out << YAML::Key << "width" << YAML::Value << _mapsize_x;
+	out << YAML::Key << "length" << YAML::Value << _mapsize_y;
+	out << YAML::Key << "height" << YAML::Value << _mapsize_z;
 	out << YAML::Key << "missionType" << YAML::Value << _missionType;
 	out << YAML::Key << "globalshade" << YAML::Value << _globalShade;
 	out << YAML::Key << "turn" << YAML::Value << _turn;
@@ -356,11 +356,11 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "tileIDSize" << YAML::Value << Tile::serializationKey._mapDataID;
 	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
 
-	size_t tileDataSize = Tile::serializationKey.totalBytes * _height * _length * _width;
+	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
 	Uint8* w = tileData;
 
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
@@ -417,15 +417,15 @@ Tile **SavedBattleGame::getTiles() const
 
 /**
  * Initializes the array of tiles + creates a pathfinding object.
- * @param width
- * @param length
- * @param height
+ * @param mapsize_x
+ * @param mapsize_y
+ * @param mapsize_z
  */
-void SavedBattleGame::initMap(int width, int length, int height)
+void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 {
 	if (!_nodes.empty())
 	{
-		for (int i = 0; i < _height * _length * _width; ++i)
+		for (int i = 0; i < _mapsize_y * _mapsize_y * _mapsize_x; ++i)
 		{
 			delete _tiles[i];
 		}
@@ -439,12 +439,12 @@ void SavedBattleGame::initMap(int width, int length, int height)
 		_nodes.clear();
 		_mapDataSets.clear();
 	}
-	_width = width;
-	_length = length;
-	_height = height;
-	_tiles = new Tile*[_height * _length * _width];
+	_mapsize_x = mapsize_x;
+	_mapsize_y = mapsize_y;
+	_mapsize_z = mapsize_z;
+	_tiles = new Tile*[_mapsize_z * _mapsize_y * _mapsize_x];
 	/* create tile objects */
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		Position pos;
 		getTileCoords(i, &pos.x, &pos.y, &pos.z);
@@ -516,29 +516,38 @@ int SavedBattleGame::getGlobalShade() const
 
 /**
  * Gets the map width.
- * @return Width in tiles.
+ * @return Size X in tiles.
  */
-int SavedBattleGame::getWidth() const
+int SavedBattleGame::getMapSizeX() const
 {
-	return _width;
+	return _mapsize_x;
 }
 
 /**
  * Gets the map length.
- * @return Length in tiles.
+ * @return Size Y in tiles.
  */
-int SavedBattleGame::getLength() const
+int SavedBattleGame::getMapSizeY() const
 {
-	return _length;
+	return _mapsize_y;
 }
 
 /**
  * Gets the map height.
- * @return Height in layers.
+ * @return Size Z in layers.
  */
-int SavedBattleGame::getHeight() const
+int SavedBattleGame::getMapSizeZ() const
 {
-	return _height;
+	return _mapsize_z;
+}
+
+/**
+ * Gets the map size in tiles.
+ * @return map size.
+ */
+int SavedBattleGame::getMapSizeXYZ() const
+{
+	return _mapsize_x * _mapsize_y * _mapsize_z;
 }
 
 /**
@@ -551,9 +560,9 @@ int SavedBattleGame::getHeight() const
  */
 void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z) const
 {
-	*z = index / (_length * _width);
-	*y = (index % (_length * _width)) / _width;
-	*x = (index % (_length * _width)) % _width;
+	*z = index / (_mapsize_y * _mapsize_x);
+	*y = (index % (_mapsize_y * _mapsize_x)) / _mapsize_x;
+	*x = (index % (_mapsize_y * _mapsize_x)) % _mapsize_x;
 }
 
 
@@ -846,7 +855,7 @@ void SavedBattleGame::endTurn()
  */
 void SavedBattleGame::setDebugMode()
 {
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		_tiles[i]->setDiscovered(true, 2);
 	}
@@ -909,7 +918,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 		}
 	}
 	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
-	for (int i = 0; i < getWidth() * getLength() * getHeight(); ++i)
+	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
 		{
@@ -1053,7 +1062,7 @@ void SavedBattleGame::prepareNewTurn()
 	std::vector<Tile*> tilesOnSmoke;
 
 	// prepare a list of tiles on fire/smoke
-	for (int i = 0; i < getWidth() * getLength() * getHeight(); ++i)
+	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
 		if (getTiles()[i]->getFire() > 0)
 		{

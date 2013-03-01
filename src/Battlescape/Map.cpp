@@ -80,7 +80,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 	_save = _game->getSavedGame()->getBattleGame();
 	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
-	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getWidth(), _save->getLength(), _save->getHeight(), this, visibleMapHeight);
+	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollTimer = new Timer(SCROLL_INTERVAL);
 	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
 	_camera->setScrollTimer(_scrollTimer);
@@ -210,9 +210,9 @@ void Map::drawTerrain(Surface *surface)
 	int frameNumber = 0;
 	Surface *tmpSurface;
 	Tile *tile;
-	int beginX = 0, endX = _save->getWidth() - 1;
-    int beginY = 0, endY = _save->getLength() - 1;
-	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getHeight() - 1:_camera->getViewHeight();
+	int beginX = 0, endX = _save->getMapSizeX() - 1;
+    int beginY = 0, endY = _save->getMapSizeY() - 1;
+	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getMapSizeZ() - 1:_camera->getViewLevel();
 	bool singleLevel = !_camera->getShowAllLayers();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
@@ -316,8 +316,8 @@ void Map::drawTerrain(Surface *surface)
 	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
 	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
 	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
-	beginY -= (_camera->getViewHeight() * 2);
-	beginX -= (_camera->getViewHeight() * 2);
+	beginY -= (_camera->getViewLevel() * 2);
+	beginX -= (_camera->getViewLevel() * 2);
 	if (beginX < 0)
 		beginX = 0;
 	if (beginY < 0)
@@ -371,7 +371,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw cursor back
 					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
 					{
-						if (_camera->getViewHeight() == itZ)
+						if (_camera->getViewLevel() == itZ)
 						{
 							if (_cursorType != CT_AIM)
 							{
@@ -389,7 +389,7 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
-						else if (_camera->getViewHeight() > itZ)
+						else if (_camera->getViewLevel() > itZ)
 						{
 							frameNumber = 2; // blue box
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
@@ -577,7 +577,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw cursor front
 					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
 					{
-						if (_camera->getViewHeight() == itZ)
+						if (_camera->getViewLevel() == itZ)
 						{
 							if (_cursorType != CT_AIM)
 							{
@@ -595,13 +595,13 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
-						else if (_camera->getViewHeight() > itZ)
+						else if (_camera->getViewLevel() > itZ)
 						{
 							frameNumber = 5; // blue box
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 						}
-						if (_cursorType > 2 && _camera->getViewHeight() == itZ)
+						if (_cursorType > 2 && _camera->getViewLevel() == itZ)
 						{
 							int frame[6] = {0, 0, 0, 11, 13, 15};
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame[_cursorType] + (_animFrame / 4));
@@ -659,7 +659,7 @@ void Map::drawTerrain(Surface *surface)
 		}
 	}
 	unit = (BattleUnit*)_save->getSelectedUnit();
-	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewHeight())
+	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewLevel())
 	{
 		_camera->convertMapToScreen(unit->getPosition(), &screenPosition);
 		screenPosition += _camera->getMapOffset();
@@ -770,7 +770,7 @@ void Map::animate(bool redraw)
 	if (_animFrame == 8) _animFrame = 0;
 
 	// animate tiles
-	for (int i = 0; i < _save->getWidth()*_save->getHeight()*_save->getLength(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		_save->getTiles()[i]->animate();
 	}
@@ -798,7 +798,7 @@ void Map::getSelectorPosition(Position *pos) const
 {
 	pos->x = _selectorX;
 	pos->y = _selectorY;
-	pos->z = _camera->getViewHeight();
+	pos->z = _camera->getViewLevel();
 }
 
 /**

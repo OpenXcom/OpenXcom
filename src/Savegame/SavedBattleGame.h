@@ -55,7 +55,7 @@ class Ruleset;
 class SavedBattleGame
 {
 private:
-	int _width, _length, _height;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
 	BattleUnit *_selectedUnit, *_lastSelectedUnit;
@@ -89,7 +89,7 @@ public:
 	/// Saves a saved battle game to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
-	void initMap(int width, int length, int height);
+	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 	/// initialises pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
@@ -112,12 +112,16 @@ public:
 	std::vector<BattleItem*> *getItems();
 	/// Get pointer to the list of units.
 	std::vector<BattleUnit*> *getUnits();
-	/// Gets terrain width.
-	int getWidth() const;
-	/// Gets terrain length.
-	int getLength() const;
-	/// Gets terrain height.
-	int getHeight() const;
+	/// Gets terrain size x.
+	int getMapSizeX() const;
+	/// Gets terrain size y.
+	int getMapSizeY() const;
+	/// Gets terrain size z.
+	int getMapSizeZ() const;
+	/// Gets terrain x*y*z
+	int getMapSizeXYZ() const;
+
+
 	/// Conversion between coordinates and the tile index.
 	//  int getTileIndex(const Position& pos) const;
 	/**
@@ -128,7 +132,7 @@ public:
 	 */
 	inline int getTileIndex(const Position& pos) const
 	{
-		return pos.z * _length * _width + pos.y * _width + pos.x;
+		return pos.z * _mapsize_y * _mapsize_x + pos.y * _mapsize_x + pos.x;
 	}
 
 	/// Conversion between tile index and coordinates.
@@ -145,7 +149,7 @@ public:
 	inline Tile *getTile(const Position& pos) const
 	{
 		if (pos.x < 0 || pos.y < 0 || pos.z < 0
-			|| pos.x >= _width || pos.y >= _length || pos.z >= _height)
+			|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
 			return 0;
 
 		return _tiles[getTileIndex(pos)];
