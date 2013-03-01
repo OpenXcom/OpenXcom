@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
+#include <typeinfo>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "../Engine/Timer.h"
@@ -192,7 +193,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if(_AIActionCounter == 1)
 	{
 		unit->_hidingForTurn = 0;
-		unit->_desperatelySeekingCover = 0;
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast only works when ai was already AggroBAIState at heart
@@ -822,8 +822,10 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
+				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 3;
 				 // AI does two (or three?) things per unit + hides?, before switching to the next, or it got killed before doing the second thing
-				if (_AIActionCounter > 3 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				 // melee get more because chryssalids and reapers need to attack many times to be scary
+				if (_AIActionCounter > AIActionLimit || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{

@@ -175,19 +175,15 @@ void AggroBAIState::think(BattleAction *action)
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
 	int aggression = _unit->getAggression();
-	if (_aggroTarget && 
-			(_aggroTarget->isOut() || 
-			 _aggroTarget->getFaction() == _unit->getFaction() || 
-			 (!_unit->_hidingForTurn && !_game->eyesOnTarget(_unit->getFaction(), _aggroTarget))
-			)
-		)
-	{
-		_aggroTarget = 0;
-	} else
+	
+	_aggroTarget = 0;
+	
+	if (charge)
 	{
 		action->type = BA_WALK; // just in case
 		action->target = _lastKnownPosition;
 	}
+	
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 
 
@@ -373,7 +369,11 @@ void AggroBAIState::think(BattleAction *action)
 		// if we currently see no target, we either can move to it's last seen position or lose aggro
 		if (_aggroTarget == 0 && _lastKnownTarget != 0)
 		{
-			_timesNotSeen++;
+			if (!_game->eyesOnTarget(_unit->getFaction(), _lastKnownTarget))
+			{
+				_timesNotSeen++; // come on, guys! teamwork!
+			}
+			
 			if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
 			{
 				// we lost aggro - going back to patrol state
@@ -467,12 +467,13 @@ void AggroBAIState::think(BattleAction *action)
 				}
 			}
 
+
 			if (action->number >= 3 && !charge)
-			{				
+			{
                 takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
                 action->reckless = true;
 			}
-
+			
 			if (!takeCover && !charge)
 			{
 				_timesNotSeen = 0;
@@ -480,7 +481,7 @@ void AggroBAIState::think(BattleAction *action)
 				action->target = _aggroTarget->getPosition();
 				action->type = BA_NONE;
 
-				// lets' evaluate if we could throw a grenade
+				// let's evaluate if we could throw a grenade
 				int tu = 4; // 4TUs for picking up the grenade
 
 				// do we have a grenade on our belt?
@@ -580,7 +581,7 @@ void AggroBAIState::think(BattleAction *action)
 				const int FIRE_PENALTY = 40;
 				const int FRIEND_BONUS = 6;
 				const int SMOKE_PENALTY = 5;
-				const int OVERREACH_PENALTY = EXPOSURE_PENALTY*2;
+				const int OVERREACH_PENALTY = EXPOSURE_PENALTY*3;
 				const int MELEE_TUNNELVISION_BONUS = 1000;
 				const int DIRECT_PATH_PENALTY = 10;
 				const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
@@ -748,12 +749,12 @@ void AggroBAIState::think(BattleAction *action)
 				
 				if (_aggroTarget != 0)
 					setAggroTarget(_aggroTarget);
-
 				
 				if (bestTileScore <= -100000) 
 				{
 					coverFound = false;
-					action->type = BA_NONE;
+					_unit->_hidingForTurn = false; 
+					action->type = BA_RETHINK; // do something, just don't look dumbstruck :P
 					action->TU = 0;
 					return;
 				}

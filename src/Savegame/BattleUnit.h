@@ -43,6 +43,8 @@ class Soldier;
 class Armor;
 class SavedGame;
 class Language;
+class AggroBAIState;
+class PatrolBAIState;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -385,7 +387,6 @@ public:
 
 	/// scratch value for AI's left hand to tell its right hand what's up...
 	bool _hidingForTurn; // don't zone out and start patrolling again
-	bool _desperatelySeekingCover; // the AI may have picked a decent spot to hide in so don't stop just because you see a new soldier on the way
 };
 
 }
