@@ -286,11 +286,8 @@ void NewBattleState::initSave()
 	base->load(starter, save, true, true);
 	save->getBases()->push_back(base);
 	// kill everything we don't want in this base
-	for (std::vector<Soldier*>::iterator d = base->getSoldiers()->begin(); d != base->getSoldiers()->end(); d = base->getSoldiers()->erase(d))
-	for (std::vector<Craft*>::iterator e = base->getCrafts()->begin(); e != base->getCrafts()->end();)
-	{
-			e = base->getCrafts()->erase(e);
-	}
+	for (std::vector<Soldier*>::iterator d = base->getSoldiers()->begin(); d != base->getSoldiers()->end(); d = base->getSoldiers()->erase(d));
+	for (std::vector<Craft*>::iterator e = base->getCrafts()->begin(); e != base->getCrafts()->end(); e = base->getCrafts()->erase(e));
 	for (std::map<std::string, int>::iterator l = base->getItems()->getContents()->begin(); l != base->getItems()->getContents()->end();)
 	{
 		base->getItems()->removeItem(l->first, l->second);
