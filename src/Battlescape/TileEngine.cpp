@@ -1914,7 +1914,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	
 	for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 	{
-		if ((*it)->getUnit())
+		if ((*it)->getUnit() && t->getPosition() == (*it)->getUnit()->getPosition())
 		{
 			(*it)->getUnit()->setPosition(rt->getPosition());
 		}
