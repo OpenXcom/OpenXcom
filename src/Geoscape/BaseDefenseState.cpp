@@ -39,7 +39,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Engine/Sound.h"
 #include "BaseDestroyedState.h"
-#include <ctime>
+#include "../Engine/Timer.h"
 
 namespace OpenXcom
 {
@@ -99,7 +99,9 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_lstDefenses->setColumns(3, 134, 70, 50);
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
-	_nextEventTime = clock();
+	_timer = new Timer(750);
+	_timer->onTimer((StateHandler)&BaseDefenseState::nextStep);
+	_timer->start();
 }
 /**
  *
@@ -110,21 +112,20 @@ BaseDefenseState::~BaseDefenseState()
 
 void BaseDefenseState::think()
 {
-	if (_thinkcycles == -1 || clock() < _nextEventTime)
+	_timer->think(this, 0);
+}
+
+void BaseDefenseState::nextStep()
+{
+	if (_thinkcycles == -1)
 		return;
 	
-	_nextEventTime = clock() + 750;
+	++_thinkcycles;
 
 	if (_thinkcycles == 1)
 	{
 		_txtInit->setVisible(true);
-		++_thinkcycles;
 		return;
-	}
-
-	if (_thinkcycles != -1)
-	{
-		++_thinkcycles;
 	}
 
 	if (_thinkcycles > 1)
@@ -201,6 +202,7 @@ void BaseDefenseState::think()
  */
 void BaseDefenseState::btnOkClick(Action *)
 {
+	_timer->stop();
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
