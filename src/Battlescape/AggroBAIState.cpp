@@ -685,7 +685,7 @@ void AggroBAIState::think(BattleAction *action)
 						}
 						
 						if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE
-							 && _unit->getUnitRules() && _unit->getHealth() > _unit->getStats()->health/2)
+							 && _unit->getHealth() > _unit->getStats()->health/2)
 						{
 							// did you say "not charge?" KOMPRESSOR BREAK YOUR GLOWSTICK AND KOMPRESSOR EAT YOUR CANDY
 							score -= (tile->closestSoldierDSqr-1) * MELEE_TUNNELVISION_BONUS;
