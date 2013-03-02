@@ -1492,9 +1492,9 @@ const Ruleset *BattlescapeGame::getRuleset() const
  */
 void BattlescapeGame::resetSituationForAI()
 {
-    int w = _save->getWidth();
-    int h = _save->getHeight();
-    int l = _save->getLength();
+    int w = _save->getMapSizeX();
+    int h = _save->getMapSizeZ();
+    int l = _save->getMapSizeY();
 
     Tile **tiles = _save->getTiles();
 
