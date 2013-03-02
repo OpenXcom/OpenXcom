@@ -338,7 +338,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		// 0.40  is the max angle deviation for accuracy 0% (+-3s = 0,4 radian)
 		// 0.03 is the min angle deviation for best accuracy (+-3s = 0,03 radian)
 		// 3.5  is the coefficient
-		if (_save->getGlobalShade() < 4)
+		if (_save->getGlobalShade() < 7)
 			baseDeviation = 0.40 - accuracy / 3.5;	// day
 		else
 			baseDeviation = 0.45 - accuracy / 3.2;	// night
