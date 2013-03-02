@@ -70,6 +70,7 @@ void createDefault()
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
 	setBool("useOpenGL", false);
+	setBool("checkOpenGLErrors", false);
 	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
 	setBool("vSyncForOpenGL", false);
 	setBool("useOpenGLSmoothing", true);
@@ -103,6 +104,7 @@ void createDefault()
 	setInt("pauseMode", 0);
 	setBool("alienContainmentHasUpperLimit", false);
 	setBool("canSellLiveAliens", false);
+	setBool("canTransferCraftsInAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);

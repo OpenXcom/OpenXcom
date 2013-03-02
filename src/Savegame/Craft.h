@@ -80,6 +80,8 @@ public:
 	Base *getBase() const;
 	/// Sets the craft's base.
 	void setBase(Base *base);
+	/// Sets the craft's base. (without setting the craft's coordinates)
+	void setBaseOnly(Base *base);
 	/// Gets the craft's status.
 	std::string getStatus() const;
 	/// Sets the craft's status.
@@ -124,6 +126,8 @@ public:
 	int getFuelConsumption() const;
 	/// Gets the craft's minimum fuel limit.
 	int getFuelLimit() const;
+	/// Gets the craft's minimum fuel limit to go to a base.
+	int getFuelLimit(Base *base) const;
 	/// Returns the craft to its base.
 	void returnToBase();
 	/// Checks if a target is detected by the craft's radar.

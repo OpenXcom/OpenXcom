@@ -1885,7 +1885,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 				break;
 			unitpos.z--;
 		}
-		if (unitpos != occupant->getPosition() && !occupant->isOut())
+		if (unitpos != occupant->getPosition() && !occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 		{
 			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
 				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
@@ -1895,7 +1895,8 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		}
 		else if (unitpos != occupant->getPosition())
 		{
-			_save->setUnitPosition(occupant, unitpos);
+			occupant->getTile()->setUnit(0);
+			occupant->setPosition(unitpos);
 		}
 	}
 	
