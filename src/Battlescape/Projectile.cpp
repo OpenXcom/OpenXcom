@@ -334,14 +334,11 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
 		double baseDeviation;
-		// It is a simple task - to hit in target width of 4-6 voxels. Good luck!
-		// 0.40  is the max angle deviation for accuracy 0% (+-3s = 0,4 radian)
-		// 0.03 is the min angle deviation for best accuracy (+-3s = 0,03 radian)
-		// 3.5  is the coefficient
-		if (_save->getGlobalShade() < 7)
-			baseDeviation = 0.40 - accuracy / 3.5;	// day
-		else
-			baseDeviation = 0.45 - accuracy / 3.2;	// night
+		double shade = 0.1 * _save->getGlobalShade();	// Can be from 0 (at day) till 1.5 (at night).
+		// 0.40 is the max angle deviation for accuracy 0% (+-3s = 0.4 radian). Can be from 0.4 till 0.5 (at night).
+		// 0.03 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
+		// 3.5  is the coefficient. Can be from 3.5 (at day) till 2.9 (at night).
+		baseDeviation = (0.4 + shade/1.5) - accuracy / (3.5 - shade/2.5);
 
 		if (baseDeviation < 0.03)
 			baseDeviation = 0.03;
@@ -352,6 +349,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
 
+		// It is a simple task - to hit in target width of 4-6 voxels. Good luck!
 		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
 		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
 		target->z = (int)(origin.z + maxRange * sin(fi));
