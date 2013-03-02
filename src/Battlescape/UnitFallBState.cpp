@@ -67,9 +67,12 @@ void UnitFallBState::init()
 
 void UnitFallBState::think()
 {
-
+	
 	for (std::vector<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
+		bool largeCheck = true;
+		bool falling = true;
+		int size = (*unit)->getArmor()->getSize() - 1;
 		if ((*unit)->getHealth() == 0 || (*unit)->getStunlevel() > (*unit)->getHealth())
 		{
 			unit = _parent->getSave()->getFallingUnits()->erase(unit);
@@ -77,19 +80,16 @@ void UnitFallBState::think()
 		}
 		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition()));
 		Tile *tileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(0,0,-1));
-	
-
-		bool largeCheck = true;
-		for (int x = (*unit)->getArmor()->getSize() - 1; x != 0 && largeCheck; --x)
+		for (int x = size; x >= 0; x--)
 		{
-			for (int y = (*unit)->getArmor()->getSize() - 1; y != 0 && largeCheck; --y)
+			for (int y = size; y >= 0; y--)
 			{
 				Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
 				if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getArmor()->getMovementType() == MT_FLY)
 					largeCheck = false;
 			}
 		}
-		bool _falling = largeCheck && (*unit)->getPosition().z != 0 && (*unit)->getTile()->hasNoFloor(tileBelow) && (*unit)->getArmor()->getMovementType() != MT_FLY;
+		falling = largeCheck && (*unit)->getPosition().z != 0 && (*unit)->getTile()->hasNoFloor(tileBelow) && (*unit)->getArmor()->getMovementType() != MT_FLY && (*unit)->getWalkingPhase() == 0;
 		if ((*unit)->getStatus() == STATUS_WALKING || (*unit)->getStatus() == STATUS_FLYING)
 		{
 			(*unit)->keepWalking(tileBelow, true); // advances the phase
@@ -97,13 +97,10 @@ void UnitFallBState::think()
 			// make sure the unit sprites are up to date
 			_parent->getMap()->cacheUnit(*unit);
 		}
-
+		
 		// unit moved from one tile to the other, update the tiles
 		if ((*unit)->getPosition() != (*unit)->getLastPosition())
 		{
-			_falling = largeCheck && (*unit)->getPosition().z != 0 && (*unit)->getTile()->hasNoFloor(tileBelow) && (*unit)->getArmor()->getMovementType() != MT_FLY;
-
-			int size = (*unit)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -118,17 +115,47 @@ void UnitFallBState::think()
 					_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->setUnit((*unit), _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1)));
 				}
 			}
+			
+			if (falling)
+			{
+				for (int x = (*unit)->getArmor()->getSize() - 1; x >= 0; --x)
+				{
+					for (int y = (*unit)->getArmor()->getSize() - 1; y >= 0; --y)
+					{
+						Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
+						if (otherTileBelow && otherTileBelow->getUnit())
+						{
+							Position originalPosition(otherTileBelow->getUnit()->getPosition());
+							for (int dir = 0; dir < Pathfinding::DIR_UP; dir++)
+							{
+								Position offset;
+								Pathfinding::directionToVector(dir, &offset);
+								Tile *t = _parent->getSave()->getTile(originalPosition + offset);
+								Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+								Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
+								if (t && !_parent->getSave()->getPathfinding()->isBlocked(otherTileBelow, t, dir, 0) && t->getUnit() == 0 && (!t->hasNoFloor(bt) || otherTileBelow->getUnit()->getArmor()->getMovementType() == MT_FLY))
+								{
+									otherTileBelow->getUnit()->startWalking(dir, t->getPosition(), t, bu, bt, onScreen);
+									_parent->getSave()->addFallingUnit(otherTileBelow->getUnit());
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
 		}
-
 		// we are just standing around, we are done falling.
 		if ((*unit)->getStatus() == STATUS_STANDING)
 		{
-			if (_falling)
+			if (falling)
 			{
 				Position destination = (*unit)->getPosition() + Position(0,0,-1);
 				Tile *tileBelow = _parent->getSave()->getTile(destination);
 				Tile *tileBelowDestination = _parent->getSave()->getTile(destination + Position(0,0,-1));
 				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, tileBelow, tileBelowDestination, onScreen);
+				(*unit)->setCache(0);
+				_parent->getMap()->cacheUnit(*unit);
 				++unit;
 			}
 			else
