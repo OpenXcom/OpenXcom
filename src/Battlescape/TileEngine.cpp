@@ -916,6 +916,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								{
 									if (power_ > (*it)->getRules()->getArmor())
 									{
+										if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+											(*it)->getUnit()->instaKill();
 										_save->removeItem((*it));
 										break;
 									}
