@@ -560,10 +560,10 @@ void AggroBAIState::think(BattleAction *action)
 				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
 				int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
                 dist = dist ? dist : 1; // division by zero paranoia
-				Vector3i run;
-				run.x = (dx * 5) / dist;
-				run.y = (dy * 5) / dist;
-				run.z = 0;
+				Position runOffset;
+				runOffset.x = (dx * 5) / dist;
+				runOffset.y = (dy * 5) / dist;
+				runOffset.z = 0;
 				
 				int bestTileScore = -100000;
 				int score = -100000;
@@ -597,7 +597,7 @@ void AggroBAIState::think(BattleAction *action)
 				while (tries < 150 && !coverFound)
 				{
 					tries++;
-					action->target = _unit->getPosition() + run; // start looking in a direction away from the enemy
+					action->target = _unit->getPosition() + runOffset; // start looking in a direction away from the enemy
 					
 					if (!_game->getTile(action->target))
 					{
@@ -636,7 +636,7 @@ void AggroBAIState::think(BattleAction *action)
 						}
 						
 						score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
-                        action->target = _unit->getPosition() + run*3;
+                        action->target = _unit->getPosition() + runOffset*3;
 						action->target.x += RNG::generate(-10,10);
 						action->target.y += RNG::generate(-10,10);
 						action->target.z = _unit->getPosition().z + RNG::generate(-1,1);
