@@ -727,7 +727,9 @@ void AggroBAIState::think(BattleAction *action)
 							score -= OVERREACH_PENALTY; // not gonna make it
 						} else
 						{
-							if (tile->soldiersVisible == 0 && action->number > 2) score += (_unit->getTimeUnits() - _game->getPathfinding()->getTotalTUCost()) / 4; // conserve TU a little in later actions
+                            int TUBonus = (_unit->getTimeUnits() - (_game->getPathfinding()->getTotalTUCost()+4));
+                            TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
+							if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
 						}
 						if (score > bestTileScore && _game->getPathfinding()->getStartDirection() != -1)
 						{

@@ -170,7 +170,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		if (a < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
 			// look up the matching soldier
-			b = new BattleUnit(savedGame->getSoldier(a), faction, rule);
+			b = new BattleUnit(savedGame->getSoldier(a), faction);
 		}
 		else
 		{

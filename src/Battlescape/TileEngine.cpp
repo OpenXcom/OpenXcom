@@ -444,7 +444,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 #ifdef _DEBUG
 	// sanity-check the tile data...
 	int count = 0;
-	for (int i = 0; i < _save->getWidth() * _save->getHeight() * _save->getLength(); ++i)
+	for (int i = 0; i < _save->getMapSizeX() * _save->getMapSizeY() * _save->getMapSizeZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getUnit() == queryingUnit)
 		{

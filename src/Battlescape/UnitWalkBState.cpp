@@ -43,7 +43,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action, const Position finalFacing, const bool pathfindForFinalTurn) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false), _finalFacing(finalFacing), _pathfindForFinalTurn(pathfindForFinalTurn)
 {
 
 }
@@ -384,7 +384,33 @@ void UnitWalkBState::postPathProcedures()
 			_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
 			_unit->setCharging(0);
 		}
-	}
+	} else if (_parent->getSave()->getTile(_finalFacing) != 0) // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
+    {
+        if (_pathfindForFinalTurn)
+        {        
+            // if we can't see the target, try to face where they might come from        
+            _pf->abortPath();
+            _pf->calculate(_unit, _finalFacing);
+
+            if (_pf->getStartDirection() != -1)
+            {
+                _unit->lookAt(_pf->getStartDirection(), false);
+            } else
+            {
+                _unit->lookAt(_finalFacing);
+            }
+            _pf->abortPath();
+        } else
+        {
+            _unit->lookAt(_finalFacing); // this duplicated call looks weird but let's not run the pathfinding code if we don't have to; lookAt(), otoh, is very cheap
+        }
+
+        while (_unit->getStatus() == STATUS_TURNING) // cheat-turn by recommendation of warboy; use no time-units to face our foes in battle and such
+            _unit->turn();
+
+
+    }
+
 	_unit->setCache(0);
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);

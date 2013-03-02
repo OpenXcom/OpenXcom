@@ -182,7 +182,16 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
-		unit->setAIState(new PatrolBAIState(_save, unit, 0));
+        _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
+
+        if (unit->getVisibleUnits()->size() == 0)
+        {
+		    unit->setAIState(new PatrolBAIState(_save, unit, 0));
+        } else
+        {
+            unit->setAIState(new AggroBAIState(_save, unit));
+        }
+
 		ai = unit->getCurrentAIState();
 	}
 	_AIActionCounter++;
@@ -235,16 +244,24 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			_playedAggroSound = true;
 		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
-		statePushBack(new UnitWalkBState(this, action));
-		
-		if (unit->_hidingForTurn && _AIActionCounter > 2) // it seems like this should be in an AIBstate somewhere... but where?
-		{
-			BattleAction turnAction;
-			turnAction.type = BA_TURN; 
-			turnAction.actor = unit; 
-			turnAction.target = aggro->getLastKnownPosition();
-			statePushBack(new UnitTurnBState(this, action));  // face your foe or no reaction shots for you, you tactical genius... 
-		}
+
+        Position finalFacing(0, 0, INT_MAX);
+        bool usePathfinding = false;
+
+        if (unit->_hidingForTurn && _AIActionCounter > 2)
+        {
+            if (_save->getTile(action.target) && _save->getTile(action.target)->closestSoldierDSqr != -1)
+            {
+                finalFacing = _save->getTile(action.target)->closestSoldierPos; // be ready for the nearest spotting unit for our destination
+                usePathfinding = false;
+            } else if (aggro != 0)
+            {
+                finalFacing = aggro->getLastKnownPosition(); // or else be ready for our aggro target
+                usePathfinding = true;
+            }
+        }
+
+		statePushBack(new UnitWalkBState(this, action, finalFacing, usePathfinding));
 	}
 
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
