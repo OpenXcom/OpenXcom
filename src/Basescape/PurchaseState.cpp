@@ -250,7 +250,6 @@ void PurchaseState::btnOkClick(Action *)
 					craft->setStatus("STR_REFUELLING");
 					t->setCraft(craft);
 					_base->getTransfers()->push_back(t);
-					craft->setName(L"", _game->getLanguage());
 				}
 			}
 			// Buy items
