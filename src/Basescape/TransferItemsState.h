@@ -57,6 +57,7 @@ private:
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
+	bool _canTransferCraftsInAirborne; // this is a cache for Options::getBool("canTransferCraftsInAirborne")
 	/// Gets selected cost.
 	int getCost();
 	/// Gets selected quantity.

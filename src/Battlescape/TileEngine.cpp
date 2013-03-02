@@ -70,7 +70,7 @@ void TileEngine::calculateSunShading()
 {
 	const int layer = 0; // Ambient lighting layer.
 
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 		calculateSunShading(_save->getTiles()[i]);
@@ -90,7 +90,7 @@ void TileEngine::calculateSunShading(Tile *tile)
 	// At night/dusk sun isn't dropping shades blocked by roofs
 	if (_save->getGlobalShade() <= 4)
 	{
-		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getHeight() - 1)), tile, DT_NONE))
+		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getMapSizeZ() - 1)), tile, DT_NONE))
 		{
 			power -= 2;
 		}
@@ -108,13 +108,13 @@ void TileEngine::calculateTerrainLighting()
 	const int fireLightPower = 15; // amount of light a fire generates
 
 	// reset all light to 0 first
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
 	// add lighting of terrain
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		// only floors and objects can light up
 		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR)
@@ -155,7 +155,7 @@ void TileEngine::calculateUnitLighting()
 	const int personalLightPower = 15; // amount of light a unit generates
 
 	// reset all light to 0 first
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 	}
@@ -186,7 +186,7 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 	{
 		for (int y = 0; y <= power; ++y)
 		{
-			for (int z = 0; z < _save->getHeight(); z++)
+			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
 				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
 
@@ -273,7 +273,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		}
 		for (int y = y1; y <= y2; ++y)
 		{
-			for (int z = 0; z < _save->getHeight(); z++)
+			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
 				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
 				test.z = z;
@@ -1209,7 +1209,7 @@ bool TileEngine::detonate(Tile* tile)
 Tile *TileEngine::checkForTerrainExplosions()
 {
 
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getExplosive())
 		{
@@ -1616,7 +1616,7 @@ int TileEngine::closeUfoDoors()
 	int doorsclosed = 0;
 
 	// prepare a list of tiles on fire/smoke & close any ufo doors
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		doorsclosed += _save->getTiles()[i]->closeUfoDoor();
 	}
@@ -2068,7 +2068,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 				break;
 			unitpos.z--;
 		}
-		if (unitpos != occupant->getPosition() && !occupant->isOut())
+		if (unitpos != occupant->getPosition() && !occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 		{
 			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
 				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
@@ -2078,7 +2078,8 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		}
 		else if (unitpos != occupant->getPosition())
 		{
-			_save->setUnitPosition(occupant, unitpos);
+			occupant->getTile()->setUnit(0);
+			occupant->setPosition(unitpos);
 		}
 	}
 	

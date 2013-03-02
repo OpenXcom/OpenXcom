@@ -40,7 +40,7 @@ std::string strGLError(GLenum glErr);
 #define glErrorCheck() {\
 	static bool reported = false;\
 	GLenum glErr;\
-	if ((glErr = glGetError()) != GL_NO_ERROR && !reported)\
+	if (OpenGL::checkErrors && !reported && (glErr = glGetError()) != GL_NO_ERROR)\
 	{\
 		reported = true;\
 		\
@@ -64,6 +64,8 @@ public:
   uint32_t *buffer;
   Surface *buffer_surface;
   unsigned iwidth, iheight, iformat, ibpp;
+
+  static bool checkErrors;
 
   /// call to resize internal buffer; internal use
   void resize(unsigned width, unsigned height);

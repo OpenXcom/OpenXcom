@@ -348,7 +348,7 @@ void BattlescapeGame::endTurn()
 	_currentAction.type = BA_NONE;
 
 	// check for hot grenades on the ground
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{

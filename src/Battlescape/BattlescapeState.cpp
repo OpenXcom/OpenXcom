@@ -1339,13 +1339,13 @@ void BattlescapeState::SaveVoxelMap()
 
 	Tile *tile;
 
-	for (int z = 0; z < _save->getHeight()*12; ++z)
+	for (int z = 0; z < _save->getMapSizeZ()*12; ++z)
 	{
 		image.clear();
 
-		for (int y = 0; y < _save->getLength()*16; ++y)
+		for (int y = 0; y < _save->getMapSizeY()*16; ++y)
 		{
-			for (int x = 0; x < _save->getWidth()*16; ++x)
+			for (int x = 0; x < _save->getMapSizeX()*16; ++x)
 			{
 				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
 				float dist=1;
@@ -1388,7 +1388,7 @@ void BattlescapeState::SaveVoxelMap()
 		ss.str("");
 		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
 
-		unsigned error = lodepng::encode(ss.str(), image, _save->getWidth()*16, _save->getLength()*16, LCT_RGB);
+		unsigned error = lodepng::encode(ss.str(), image, _save->getMapSizeX()*16, _save->getMapSizeY()*16, LCT_RGB);
 		if (error)
 		{
 			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
