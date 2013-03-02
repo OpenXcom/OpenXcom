@@ -169,7 +169,8 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
 
 	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
 
-	compliantMapBlocks[n]->markUsed();
+	if (type == MT_DEFAULT)
+		compliantMapBlocks[n]->markUsed();
 
 	return compliantMapBlocks[n];
 }
