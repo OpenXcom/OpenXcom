@@ -167,7 +167,8 @@ void AggroBAIState::exit()
  */
 void AggroBAIState::think(BattleAction *action)
 {
-	if (Options::getBool("traceAI")) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (charge ? " [charging]": " "); }
+    const bool traceAI = Options::getBool("traceAI");
+    if (traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (charge ? " [charging]": " "); }
 	
  	action->type = BA_RETHINK;
 	action->actor = _unit;
@@ -423,7 +424,7 @@ void AggroBAIState::think(BattleAction *action)
 					_unit->turn();
 				if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
 				{
-					if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Rawr!"; }
+					if (traceAI) { Log(LOG_INFO) << "Rawr!"; }
 					action->target = _aggroTarget->getPosition();
 					action->weapon = action->actor->getMainHandWeapon();
 					action->type = BA_HIT;
@@ -453,7 +454,7 @@ void AggroBAIState::think(BattleAction *action)
 									newDistance < distance)
 								{
 									// CHAAAAAAARGE!
-									if (Options::getBool("traceAI")) { Log(LOG_INFO) << "CHAAAAAAARGE!" << " -> " << checkPath.x << "," << checkPath.y; }
+									if (traceAI) { Log(LOG_INFO) << "CHAAAAAAARGE!" << " -> " << checkPath.x << "," << checkPath.y; }
 									action->target = checkPath;
 									action->type = BA_WALK;
 									charge = true;
@@ -593,7 +594,7 @@ void AggroBAIState::think(BattleAction *action)
 				const int MIN_ALLY_DISTANCE = 4; // don't clump up too much and get grenaded, OK?
 				const int ALLY_BONUS = 4;
 				const int SOLDIER_PROXIMITY_BASE_PENALTY = 100; // this is divided by distance^2 to nearest soldier
-				
+
 				while (tries < 150 && !coverFound)
 				{
 					tries++;
@@ -629,7 +630,7 @@ void AggroBAIState::think(BattleAction *action)
                         if (tries == 121) 
 						{ 
 							action->reckless = true; 
-							if (Options::getBool("traceAI")) 
+							if (traceAI) 
 							{
 								Log(LOG_INFO) << _unit->getId() << " best score after systematic search was: " << bestTileScore; 
 							}
@@ -691,7 +692,7 @@ void AggroBAIState::think(BattleAction *action)
 							score -= (tile->closestSoldierDSqr-1) * MELEE_TUNNELVISION_BONUS;
 							if (score < -90000) score = -90000;
 							charge = true;
-							if (Options::getBool("traceAI") && !traceSpammed) { Log(LOG_INFO) << "Trying to get melee unit to do something."; traceSpammed = true; }
+							if (traceAI && !traceSpammed) { Log(LOG_INFO) << "Trying to get melee unit to do something."; traceSpammed = true; }
 						}
 						
 						// strength in numbers but not in "grenade us!" huddles:
@@ -742,7 +743,7 @@ void AggroBAIState::think(BattleAction *action)
 						if (bestTileScore > FAST_PASS_THRESHOLD) coverFound = true; // good enough, gogogo
 					}
 				}
-				if (Options::getBool("traceAI"))
+				if (traceAI)
 				{
 					Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, at a tile spotted by " << ((tile=_game->getTile(bestTile)) ? tile->soldiersVisible : -666) << ", " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Action #" << action->number;
 					// Log(LOG_INFO) << "Walking " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so.";
