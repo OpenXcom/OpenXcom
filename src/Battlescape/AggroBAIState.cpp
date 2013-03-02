@@ -559,6 +559,7 @@ void AggroBAIState::think(BattleAction *action)
 				int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
 				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
 				int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
+                dist = dist ? dist : 1; // division by zero paranoia
 				Vector3i run;
 				run.x = (dx * 5) / dist;
 				run.y = (dy * 5) / dist;
