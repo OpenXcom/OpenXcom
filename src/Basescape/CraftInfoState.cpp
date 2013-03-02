@@ -308,7 +308,11 @@ void CraftInfoState::init()
  */
 void CraftInfoState::btnOkClick(Action *)
 {
-	_base->getCrafts()->at(_craft)->setName(_edtCraft->getText(), _game->getLanguage());
+	Craft *c = _base->getCrafts()->at(_craft);
+	if (c->getName(_game->getLanguage()) != _edtCraft->getText())
+	{
+		c->setName(_edtCraft->getText());
+	}
 	_game->popState();
 }
 
@@ -368,8 +372,12 @@ void CraftInfoState::edtCraftKeyPress(Action *action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		_base->getCrafts()->at(_craft)->setName(_edtCraft->getText(), _game->getLanguage());
-		_edtCraft->setText(_base->getCrafts()->at(_craft)->getName(_game->getLanguage()));
+		Craft *c = _base->getCrafts()->at(_craft);
+		if (c->getName(_game->getLanguage()) != _edtCraft->getText())
+		{
+			c->setName(_edtCraft->getText());
+			_edtCraft->setText(c->getName(_game->getLanguage()));
+		}
 	}
 }
 }

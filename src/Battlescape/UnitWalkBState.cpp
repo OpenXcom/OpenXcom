@@ -36,6 +36,7 @@
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Logger.h"
+#include "UnitFallBState.h"
 
 namespace OpenXcom
 {
@@ -86,9 +87,9 @@ void UnitWalkBState::think()
 			playMovementSound();
 			_unit->keepWalking(tileBelow, onScreen); // advances the phase
 		}
-		else
+		else if (!_falling)
 		{
-			_unit->turn();	// turn to undiscovered unit
+			_unit->lookAt(_unit->getDestination(), true);	// turn to undiscovered unit
 			_pf->abortPath();
 		}
 
@@ -115,6 +116,40 @@ void UnitWalkBState::think()
 				}
 			}
 			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY && _unit->getWalkingPhase() == 0;
+			
+			if (_falling)
+			{
+				for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
+				{
+					for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
+					{
+						Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
+						if (otherTileBelow && otherTileBelow->getUnit())
+						{
+							Position originalPosition(otherTileBelow->getUnit()->getPosition());
+							for (int dir = 0; dir < Pathfinding::DIR_UP; dir++)
+							{
+								Position offset;
+								Pathfinding::directionToVector(dir, &offset);
+								Tile *t = _parent->getSave()->getTile(originalPosition + offset);
+								Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+								Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
+								if (t && !_parent->getPathfinding()->isBlocked(otherTileBelow, t, dir, 0) && t->getUnit() == 0 && (!t->hasNoFloor(bt) || otherTileBelow->getUnit()->getArmor()->getMovementType() == MT_FLY))
+								{
+									_falling = false;
+									_pf->dequeuePath();
+									otherTileBelow->getUnit()->startWalking(dir, t->getPosition(), t, bu, bt, onScreen);
+									_parent->getSave()->addFallingUnit(otherTileBelow->getUnit());
+									_parent->getSave()->addFallingUnit(_unit);
+									_parent->statePushFront(new UnitFallBState(_parent));
+									return;
+								}
+							}
+						}
+					}
+				}
+			}
+
 			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			// if the unit changed level, camera changes level with

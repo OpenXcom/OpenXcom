@@ -661,21 +661,15 @@ void BattleUnit::turn(bool turret)
 			_cacheInvalid = true;
 	}
 
-	if (turret)
+	if (turret && _toDirectionTurret == _directionTurret)
 	{
-		if (_toDirectionTurret == _directionTurret)
-		{
-			// we officially reached our destination
-			_status = STATUS_STANDING;
-		}
+		// we officially reached our destination
+		_status = STATUS_STANDING;
 	}
-	else
+	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)
 	{
-		if (_toDirection == _direction)
-		{
-			// we officially reached our destination
-			_status = STATUS_STANDING;
-		}
+		// we officially reached our destination
+		_status = STATUS_STANDING;
 	}
 }
 
