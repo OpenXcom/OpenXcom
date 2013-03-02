@@ -42,7 +42,7 @@ protected:
 	int _timesNotSeen;
 	static std::vector<Position> _randomTileSearch;
 	static int _randomTileSearchAge;
-	bool charge;
+	bool _charge;
 	
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.

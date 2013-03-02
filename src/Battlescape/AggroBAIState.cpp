@@ -66,7 +66,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
         _randomTileSearchAge = 0;
     }
 	
-	charge = false;
+	_charge = false;
 }
 
 /**
@@ -107,8 +107,8 @@ void AggroBAIState::load(const YAML::Node &node)
 	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
 	node["timesNotSeen"] >> _timesNotSeen;
 	
-	charge = false;
-	if (const YAML::Node *chargeNode = node.FindValue("charge")) *chargeNode >> charge;
+	_charge = false;
+	if (const YAML::Node *chargeNode = node.FindValue("charge")) *chargeNode >> _charge;
 }
 
 /**
@@ -138,7 +138,7 @@ void AggroBAIState::save(YAML::Emitter &out) const
 	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
 	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
-	out << YAML::Key << "charge" << YAML::Value << charge;
+	out << YAML::Key << "charge" << YAML::Value << _charge;
 	out << YAML::EndMap;
 }
 
@@ -168,7 +168,7 @@ void AggroBAIState::exit()
 void AggroBAIState::think(BattleAction *action)
 {
     const bool traceAI = Options::getBool("traceAI");
-    if (traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (charge ? " [charging]": " "); }
+    if (traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (_charge ? " [charging]": " "); }
 	
  	action->type = BA_RETHINK;
 	action->actor = _unit;
@@ -179,7 +179,7 @@ void AggroBAIState::think(BattleAction *action)
 	
 	_aggroTarget = 0;
 	
-	if (charge)
+	if (_charge)
 	{
 		action->type = BA_WALK; // just in case
 		action->target = _lastKnownPosition;
@@ -355,7 +355,7 @@ void AggroBAIState::think(BattleAction *action)
 	/*
 	 *	Regular targetting: we can see an enemy, or an enemy can see us (in case we need to take cover), or we're charging blindly toward an enemy we're pretty sure is there
 	 */
-	if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe || charge)
+	if (_unit->getVisibleUnits()->size() > 0 || unitsSpottingMe || _charge)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 		{
@@ -378,7 +378,7 @@ void AggroBAIState::think(BattleAction *action)
 			if (_timesNotSeen > _unit->getIntelligence() || aggression == 0)
 			{
 				// we lost aggro - going back to patrol state
-				charge = 0;
+				_charge = 0;
 				_unit->setCharging(0);
 				return;
 			}
@@ -390,7 +390,7 @@ void AggroBAIState::think(BattleAction *action)
 		{
 			// if we see the target, we either can shoot him, or take cover.
 			bool takeCover = true;
-			if (!charge)
+			if (!_charge)
 			{
 				_unit->setCharging(0);
 			} else
@@ -428,7 +428,7 @@ void AggroBAIState::think(BattleAction *action)
 					action->target = _aggroTarget->getPosition();
 					action->weapon = action->actor->getMainHandWeapon();
 					action->type = BA_HIT;
-					charge = true;
+					_charge = true;
 				}
 				else
 				{
@@ -457,7 +457,7 @@ void AggroBAIState::think(BattleAction *action)
 									if (traceAI) { Log(LOG_INFO) << "CHAAAAAAARGE!" << " -> " << checkPath.x << "," << checkPath.y; }
 									action->target = checkPath;
 									action->type = BA_WALK;
-									charge = true;
+									_charge = true;
 									_unit->setCharging(_aggroTarget);
 									distance = newDistance;
 								}
@@ -469,13 +469,13 @@ void AggroBAIState::think(BattleAction *action)
 			}
 
 
-			if (action->number >= 3 && !charge)
+			if (action->number >= 3 && !_charge)
 			{
                 takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
                 action->reckless = true;
 			}
 			
-			if (!takeCover && !charge)
+			if (!takeCover && !_charge)
 			{
 				_timesNotSeen = 0;
 				_lastKnownPosition = _aggroTarget->getPosition();
@@ -546,7 +546,7 @@ void AggroBAIState::think(BattleAction *action)
 			}
 
 
-			if (takeCover && !charge)
+			if (takeCover && !_charge)
 			{
 				// the idea is to check within a 11x11 tile square for a tile which is not seen by our aggroTarget
 				// if there is no such tile, we run away from the target.
@@ -691,7 +691,7 @@ void AggroBAIState::think(BattleAction *action)
 							// did you say "not charge?" KOMPRESSOR BREAK YOUR GLOWSTICK AND KOMPRESSOR EAT YOUR CANDY
 							score -= (tile->closestSoldierDSqr-1) * MELEE_TUNNELVISION_BONUS;
 							if (score < -90000) score = -90000;
-							charge = true;
+							_charge = true;
 							if (traceAI && !traceSpammed) { Log(LOG_INFO) << "Trying to get melee unit to do something."; traceSpammed = true; }
 						}
 						
@@ -769,7 +769,7 @@ void AggroBAIState::think(BattleAction *action)
 	}
 	if (_aggroTarget != 0)
 		setAggroTarget(_aggroTarget);
-	if (charge)
+	if (_charge)
 		action->desperate = true;
 }
 
