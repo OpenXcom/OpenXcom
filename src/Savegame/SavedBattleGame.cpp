@@ -1336,6 +1336,7 @@ void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 	if (add)
 	{
 		_fallingUnits.push_back(unit);
+		_unitsFalling = true;
 	}
 }
 
