@@ -434,8 +434,8 @@ void AggroBAIState::think(BattleAction *action)
 					takeCover = true;
 					bool targetFound = false;
 					int distance = 200;
-					int size = action->actor->getArmor()->getSize(); // -1;
-					int targetsize = _aggroTarget->getArmor()->getSize(); // -1;
+					int size = action->actor->getArmor()->getSize() -1;
+					int targetsize = _aggroTarget->getArmor()->getSize() -1;
 					
 					for (int x = 0 - size; x <= targetsize; ++x)
 					{

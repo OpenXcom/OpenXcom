@@ -2143,10 +2143,12 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 				for (int y = 0; y <= size-1; ++y)
 				{
 					Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-					if (tile)
+					if (tile && _save->getTile(pos))
 					{
 						if (height - _save->getTile(pos)->getTerrainLevel() > 24 && ((tile->getUnit() && tile->getUnit() != target) || !tile->getUnit()))
 							tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
+                        if (!tile) continue; // I blame Reapers.
+
 						if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 						{
 							if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, dir, 0))
@@ -2165,10 +2167,12 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 			for (int y = 0; y <= size-1; ++y)
 			{
 				Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-				if (tile)
+				if (tile && _save->getTile(pos))
 				{
 					if (height - _save->getTile(pos)->getTerrainLevel() > 24 && ((tile->getUnit() && tile->getUnit() != target) || !tile->getUnit()))
 						tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
+                    if (!tile) continue; 
+
 					if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 					{
 						if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, direction, 0))
