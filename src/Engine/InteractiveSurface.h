@@ -37,13 +37,17 @@ typedef void (State::* ActionHandler)(Action*);
  */
 class InteractiveSurface : public Surface
 {
-protected:
+private:
 	static const int NUM_BUTTONS = 7;
+	Uint8 _buttonsPressed;
+protected:
 	ActionHandler *_clicks, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
-	bool *_buttonsPressed, _isHovered, _isFocused;
+	bool _isHovered, _isFocused;
 
 	/// Is any mouse button pressed?
-	bool isButtonPressed();
+	bool isButtonPressed(Uint8 button = 0);
+	/// Set a mouse button's internal state.
+	void setButtonPressed(Uint8 button, bool pressed);
 public:
 	/// Creates a new interactive surface with the specified size and position.
 	InteractiveSurface(int width, int height, int x = 0, int y = 0);

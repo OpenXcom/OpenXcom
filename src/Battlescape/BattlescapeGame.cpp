@@ -1292,8 +1292,8 @@ void BattlescapeGame::primaryAction(const Position &pos)
 
 			if (_currentAction.target != pos && bPreviewed)
 				_save->getPathfinding()->removePreview();
-			_currentAction.run = _save->getStrafeSetting() && Game::getShiftKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
-			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && Game::getCtrlKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.run = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_SHIFT) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
 			if (bPreviewed && !_save->getPathfinding()->previewPath() && _save->getPathfinding()->getStartDirection() != -1)
@@ -1322,7 +1322,7 @@ void BattlescapeGame::secondaryAction(const Position &pos)
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
 	_currentAction.actor = _save->getSelectedUnit();
-	_currentAction.strafe = _save->getStrafeSetting() && Game::getCtrlKeyDown() && _save->getSelectedUnit()->getTurretType() > -1;
+	_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() > -1;
 	statePushBack(new UnitTurnBState(this, _currentAction));
 }
 

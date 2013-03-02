@@ -18,6 +18,7 @@
  */
 #include "InteractiveSurface.h"
 #include "Action.h"
+#include "Options.h"
 
 namespace OpenXcom
 {
@@ -29,14 +30,12 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _press(0), _release(0), _in(0), _over(0), _out(0), _keyPress(0), _keyRelease(0), _isHovered(false), _isFocused(false)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _press(0), _release(0), _in(0), _over(0), _out(0), _keyPress(0), _keyRelease(0), _isHovered(false), _isFocused(false)
 {
 	_clicks = new ActionHandler[NUM_BUTTONS+1];
-	_buttonsPressed = new bool[NUM_BUTTONS+1];
 	for (int i = 0; i <= NUM_BUTTONS; ++i)
 	{
 		_clicks[i] = 0;
-		_buttonsPressed[i] = false;
 	}
 }
 
@@ -46,17 +45,30 @@ InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Su
 InteractiveSurface::~InteractiveSurface()
 {
 	delete[] _clicks;
-	delete[] _buttonsPressed;
 }
 
-bool InteractiveSurface::isButtonPressed()
+bool InteractiveSurface::isButtonPressed(Uint8 button)
 {
-	for (int i = 0; i <= NUM_BUTTONS; ++i)
+	if (button == 0)
 	{
-		if (_buttonsPressed[i])
-			return true;
+		return (_buttonsPressed != 0);
 	}
-	return false;
+	else
+	{
+		return (_buttonsPressed & SDL_BUTTON(button)) != 0;
+	}
+}
+
+void InteractiveSurface::setButtonPressed(Uint8 button, bool pressed)
+{
+	if (pressed)
+	{
+		_buttonsPressed = _buttonsPressed | SDL_BUTTON(button);
+	}
+	else
+	{
+		_buttonsPressed = _buttonsPressed & (!SDL_BUTTON(button));
+	}
 }
 
 /**
@@ -98,6 +110,10 @@ void InteractiveSurface::handle(Action *action, State *state)
 		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
 	}
 
+	// Modern system mouse handling: Press/releases are only triggered by button up/down events
+	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
+	bool classic = Options::getBool("classicMouseHandling");
+
 	if (action->isMouseAction())
 	{
 		if ((action->getAbsoluteXMouse() >= getX() && action->getAbsoluteXMouse() < getX() + getWidth()) &&
@@ -107,6 +123,18 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = true;
 				mouseIn(action, state);
+				if (classic)
+				{
+					_buttonsPressed = SDL_GetMouseState(0, 0);
+					for (Uint8 i = 0; i <= NUM_BUTTONS; ++i)
+					{
+						if (isButtonPressed(i))
+						{
+							action->getDetails()->button.button = i;
+							mousePress(action, state);
+						}
+					}
+				}
 			}
 			mouseOver(action, state);
 		}
@@ -116,23 +144,35 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
+				if (classic)
+				{
+					for (Uint8 i = 0; i <= NUM_BUTTONS; ++i)
+					{
+						if (isButtonPressed(i))
+						{
+							setButtonPressed(i, false);
+							action->getDetails()->button.button = i;
+							mouseRelease(action, state);
+						}
+					}
+				}
 			}
 		}
 	}
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (_isHovered && !_buttonsPressed[action->getDetails()->button.button])
+		if (_isHovered && !isButtonPressed(action->getDetails()->button.button))
 		{
-			_buttonsPressed[action->getDetails()->button.button] = true;
+			setButtonPressed(action->getDetails()->button.button, true);
 			mousePress(action, state);
 		}
 	}
 	else if (action->getDetails()->type == SDL_MOUSEBUTTONUP)
 	{
-		if (_buttonsPressed[action->getDetails()->button.button])
+		if (isButtonPressed(action->getDetails()->button.button))
 		{
-			_buttonsPressed[action->getDetails()->button.button] = false;
+			setButtonPressed(action->getDetails()->button.button, false);
 			mouseRelease(action, state);
 			if (_isHovered)
 			{
@@ -172,10 +212,7 @@ void InteractiveSurface::unpress(State *state)
 {
 	if (isButtonPressed())
 	{
-		for (int i = 0; i <= NUM_BUTTONS; ++i)
-		{
-			_buttonsPressed[i] = false;
-		}
+		_buttonsPressed = 0;
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONUP;
 		ev.button.button = SDL_BUTTON_LEFT;
