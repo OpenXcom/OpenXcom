@@ -916,6 +916,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								{
 									if (power_ > (*it)->getRules()->getArmor())
 									{
+										if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+											(*it)->getUnit()->instaKill();
 										_save->removeItem((*it));
 										break;
 									}
@@ -1856,7 +1858,7 @@ bool TileEngine::psiAttack(BattleAction *action)
  */
 Tile *TileEngine::applyItemGravity(Tile *t)
 {
-	if (t->getPosition().z == 0 || (t->getInventory()->size() == 0 && !t->getUnit())) return t; // skip this if there are no items
+	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
  
 	Position p = t->getPosition();
 	Tile *rt = t;
@@ -1899,27 +1901,31 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 			occupant->setPosition(unitpos);
 		}
 	}
-	
 	rt = t;
 	bool canFall = true;
 	while (p.z >= 0 && canFall)
 	{
 		rt = _save->getTile(p);
 		rtb = _save->getTile(Position(p.x, p.y, p.z-1)); //below
-		if (rt->getMapData(MapData::O_FLOOR)
-			|| (rtb && rtb->getTerrainLevel() == -24))
+		if (!rt->hasNoFloor(rtb))
 			canFall = false;
 		p.z--;
 	}
-
-	if (t != rt)
+	
+	for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 	{
-		// copy items
-		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+		if ((*it)->getUnit())
+		{
+			(*it)->getUnit()->setPosition(rt->getPosition());
+		}
+		if (t != rt)
 		{
 			rt->addItem(*it, (*it)->getSlot());
 		}
-
+	}
+	
+	if (t != rt)
+	{
 		// clear tile
 		t->getInventory()->clear();
 	}

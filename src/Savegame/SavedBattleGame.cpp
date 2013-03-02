@@ -1193,6 +1193,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
 					removeUnconsciousBodyItem((*i));
+					break;
 				}
 			}
 		}
