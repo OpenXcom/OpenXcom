@@ -335,8 +335,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		double baseDeviation;
-		int shade;
+		double baseDeviation, shade;
 
 		if (!targetTile)
 			shade = _save->getGlobalShade();	// Can be from 0 (at day) to 15 (at night).
@@ -347,7 +346,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		// 0.40 is the max angle deviation for accuracy 0% (+-3s = 0.4 radian). Can be from 0.4 to 0.5 (at night).
 		// 0.03 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
 		// 3.5  is the coefficient. Can be from 3.5 (at day) to 2.9 (at night).
-		baseDeviation = (0.4 + shade/150.0) - accuracy / (3.5 - shade/25.0);
+		baseDeviation = (0.4 + shade/150) - accuracy / (3.5 - shade/25);
 
 		if (baseDeviation < 0.03)
 			baseDeviation = 0.03;
