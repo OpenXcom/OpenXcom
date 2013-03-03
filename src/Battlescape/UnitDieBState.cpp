@@ -34,6 +34,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "PatrolBAIState.h"
+#include "../Savegame/Node.h"
 
 namespace OpenXcom
 {
@@ -78,7 +79,21 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		}
 	}
 	
-	parent->resetSituationForAI();
+    parent->resetSituationForAI();
+
+    if (_unit->getFaction() == FACTION_HOSTILE)
+    {
+        std::vector<Node *> *nodes = parent->getSave()->getNodes();
+        if (!nodes) return; // this better not happen.
+
+        for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
+        {
+            if ((*n)->getPosition() == unit->getPosition())
+            {
+                (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
+            }
+        }
+    }
 }
 
 /**
