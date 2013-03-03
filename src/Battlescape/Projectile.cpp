@@ -339,7 +339,8 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 		if (!targetTile)
 			shade = _save->getGlobalShade();	// Can be from 0 (at day) to 15 (at night).
-		else if (targetTile->getUnit()->getFaction() == FACTION_PLAYER || targetTile->getUnit()->getFaction() == FACTION_NEUTRAL)
+		else if (targetTile->getUnit() &&
+			(targetTile->getUnit()->getFaction() == FACTION_PLAYER || targetTile->getUnit()->getFaction() == FACTION_NEUTRAL))
 			shade = 0;	// Enemy units can see in the dark.
 		else
 			shade = targetTile->getShade();	// Can be from 0 to 15
