@@ -20,7 +20,19 @@
 
 namespace OpenXcom
 {
-
+	
+const Uint32 accurate = 4;
+Uint32 slownes = 1;
+Uint32 slowTick()
+{
+	static Uint32 old_time = SDL_GetTicks();
+	static Uint64 false_time = old_time << accurate;
+	Uint32 new_time = SDL_GetTicks() << accurate;
+	false_time += (new_time - old_time) / slownes;
+	old_time = new_time;
+	return false_time >> accurate;
+}
+	
 /**
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.
@@ -41,7 +53,7 @@ Timer::~Timer()
  */
 void Timer::start()
 {
-	_start = SDL_GetTicks();
+	_start = slowTick();
 	_running = true;
 }
 
@@ -62,7 +74,7 @@ Uint32 Timer::getTime() const
 {
 	if (_running)
 	{
-		return SDL_GetTicks() - _start;
+		return slowTick() - _start;
 	}
 	return 0;
 }
@@ -96,7 +108,7 @@ void Timer::think(State* state, Surface* surface)
 			{
 				(surface->*_surface)();
 			}
-			_start = SDL_GetTicks();
+			_start = slowTick();
 		}
 	}
 }

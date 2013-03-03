@@ -24,7 +24,7 @@
 	
 namespace OpenXcom
 {
-	
+
 /**
  * Universal blit function
  * @tparam ColorFunc class that contains static function `func` that get 5 arguments
@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param src3_frame surface or scalar
  */
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type, typename Src3Type>
-inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame, const Src3Type& src3_frame)
+static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame, const Src3Type& src3_frame)
 {
 	//creating helper objects
 	helper::controler<DestType> dest(dest_frame);
@@ -110,33 +110,33 @@ inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, c
 };
 	
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type>
-inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame)
+static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame)
 {
 	ShaderDraw<ColorFunc>(dest_frame, src0_frame, src1_frame, src2_frame, helper::Nothing());
 }
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type>
-inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame)
+static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame)
 {
 	ShaderDraw<ColorFunc>(dest_frame, src0_frame, src1_frame, helper::Nothing(), helper::Nothing());
 }
 template<typename ColorFunc, typename DestType, typename Src0Type>
-inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame)
+static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame)
 {
 	ShaderDraw<ColorFunc>(dest_frame, src0_frame, helper::Nothing(), helper::Nothing(), helper::Nothing());
 }
 template<typename ColorFunc, typename DestType>
-inline void ShaderDraw(const DestType& dest_frame)
+static inline void ShaderDraw(const DestType& dest_frame)
 {
 	ShaderDraw<ColorFunc>(dest_frame, helper::Nothing(), helper::Nothing(), helper::Nothing(), helper::Nothing());
 }
 
 template<typename T>
-helper::Scalar<T> ShaderScalar(T& t)
+static inline helper::Scalar<T> ShaderScalar(T& t)
 {
 	return helper::Scalar<T>(t);
 }
 template<typename T>
-helper::Scalar<const T> ShaderScalar(const T& t)
+static inline helper::Scalar<const T> ShaderScalar(const T& t)
 {
 	return helper::Scalar<const T>(t);
 }
