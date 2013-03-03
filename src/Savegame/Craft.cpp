@@ -274,12 +274,13 @@ int Craft::getId() const
 
 /**
  * Returns the craft's unique identifying name.
+ * If there's no custom name, the language default is used.
  * @param lang Language to get strings from.
  * @return Full name.
  */
 std::wstring Craft::getName(Language *lang) const
 {
-	if (_name == L"")
+	if (_name.empty())
 	{
 		std::wstringstream name;
 		name << lang->getString(_rules->getType()) << "-" << _id;
@@ -288,18 +289,13 @@ std::wstring Craft::getName(Language *lang) const
 	return _name;
 }
 
-void Craft::setName(const std::wstring &newName, Language *lang)
+/**
+ * Changes the craft's custom name.
+ * @param newName New custom name. If set to blank, the language default is used.
+ */
+void Craft::setName(const std::wstring &newName)
 {
-	if (newName == L"")
-	{
-		std::wstringstream name;
-		name << lang->getString(_rules->getType()) << "-" << _id;
-		_name = name.str();
-	}
-	else
-	{
-		_name = newName;
-	}
+	_name = newName;
 }
 
 /**
@@ -320,6 +316,15 @@ void Craft::setBase(Base *base)
 	_base = base;
 	_lon = base->getLongitude();
 	_lat = base->getLatitude();
+}
+
+/**
+ * Changes the base the craft belongs to. (without setting the craft's coordinates)
+ * @param base Pointer to base.
+ */
+void Craft::setBaseOnly(Base *base)
+{
+	_base = base;
 }
 
 /**
@@ -585,7 +590,17 @@ int Craft::getFuelConsumption() const
  */
 int Craft::getFuelLimit() const
 {
-	return (int)floor(getFuelConsumption() * getDistanceFromBase() / (_speedRadian * 120));
+	return getFuelLimit(_base);
+}
+
+/**
+ * Returns the minimum required fuel for the
+ * craft to go to a base.
+ * @return Fuel amount.
+ */
+int Craft::getFuelLimit(Base *base) const
+{
+	return (int)floor(getFuelConsumption() * getDistance(base) / (_speedRadian * 120));
 }
 
 /**

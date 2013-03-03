@@ -189,7 +189,7 @@ public:
 	/// Whether the mission was aborted.
 	void setAborted(bool flag);
 	/// Whether the mission was aborted.
-	bool isAborted();
+	bool isAborted() const;
 	/// Whether the objective is destroyed.
 	void setObjectiveDestroyed(bool flag);
 	/// Whether the objective is detroyed.
@@ -222,9 +222,11 @@ public:
 	void addFallingUnit(BattleUnit* unit);
 	std::vector<BattleUnit*> *getFallingUnits();
 	void setUnitsFalling(bool fall);
-	bool getUnitsFalling();
-	const bool getStrafeSetting();
+	bool getUnitsFalling() const;
+	const bool getStrafeSetting() const;
 
+	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
+	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 };
 
 }

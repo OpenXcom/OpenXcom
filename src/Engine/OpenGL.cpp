@@ -19,6 +19,8 @@
 
 namespace OpenXcom 
 {
+	
+bool OpenGL::checkErrors = true;
 
 std::string strGLError(GLenum glErr)
 {
@@ -202,7 +204,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
       vertexshader = 0;
     }
 
-    if(source_yaml_filename) {
+    if(source_yaml_filename && strlen(source_yaml_filename)) {
       std::ifstream fin(source_yaml_filename);
       YAML::Parser parser(fin);
       YAML::Node document;
@@ -215,7 +217,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 	  is_glsl = (s == "GLSL");
 
 
-      document["linear"] >> linear; // seemingly pointless!
+      document["linear"] >> linear; // some shaders want texture linear interpolation and some don't
       std::string fragment_source;
       std::string vertex_source;
 	  if (const YAML::Node *pFrag = document.FindValue("fragment")) *pFrag >> fragment_source;
@@ -300,12 +302,12 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
 			if (drawable) {
 				glXSwapIntervalEXT(dpy, drawable, interval);
-				Log(LOG_INFO) << "Made an attempt to set vsync via GLX.";
+				// Log(LOG_INFO) << "Made an attempt to set vsync via GLX.";
 			}
 		} else if (wglSwapIntervalEXT)
 		{
 			wglSwapIntervalEXT(interval);
-			Log(LOG_INFO) << "Made an attempt to set vsync via WGL.";
+			// Log(LOG_INFO) << "Made an attempt to set vsync via WGL.";
 		}
 	}
 

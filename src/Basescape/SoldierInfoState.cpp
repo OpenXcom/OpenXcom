@@ -527,8 +527,11 @@ void SoldierInfoState::btnNextClick(Action *)
  * @param action Pointer to an action.
  */
 void SoldierInfoState::btnArmorClick(Action *)
-{
-	_game->pushState(new SoldierArmorState(_game, _base, _soldier));
+{	
+	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
+	{
+		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
+	}
 }
 
 }

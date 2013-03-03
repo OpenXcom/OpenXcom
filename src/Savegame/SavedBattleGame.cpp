@@ -909,6 +909,32 @@ void SavedBattleGame::resetUnitTiles()
  */
 void SavedBattleGame::removeItem(BattleItem *item)
 {
+	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
+	Tile *t = item->getTile();
+	BattleUnit *b = item->getOwner();
+	if (t)
+	{
+		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+		{
+			if ((*it) == item)
+			{
+				t->getInventory()->erase(it);
+				break;
+			}
+		}
+	}
+	else if (b)
+	{
+		for (std::vector<BattleItem*>::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
+		{
+			if ((*it) == item)
+			{
+				b->getInventory()->erase(it);
+				break;
+			}
+		}
+	}
+
 	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		if (*i == item)
@@ -917,7 +943,8 @@ void SavedBattleGame::removeItem(BattleItem *item)
 			break;
 		}
 	}
-	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
+
+	/*
 	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
@@ -930,6 +957,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 			++it;
 		}
 	}
+	*/
 
 }
 
@@ -946,7 +974,7 @@ void SavedBattleGame::setAborted(bool flag)
  * Is the mission aborted or successful.
  * @return bool.
  */
-bool SavedBattleGame::isAborted()
+bool SavedBattleGame::isAborted() const
 {
 	return _aborted;
 }
@@ -1171,28 +1199,51 @@ void SavedBattleGame::prepareNewTurn()
  */
 void SavedBattleGame::reviveUnconsciousUnits()
 {
-	int xd[9] = {0, 0, 1, 1, 1, 0, -1, -1, -1};
-	int yd[9] = {0, -1, -1, 0, 1, 1, 1, 0, -1};
-
+	int xd[11] = {0, 0, 1, 1, 1, 0, -1, -1, -1, 0, 0};
+	int yd[11] = {0, -1, -1, 0, 1, 1, 1, 0, -1, 0, 0};
+	int zd = 0;
 	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
 		if ((*i)->getArmor()->getSize() == 1)
 		{
 			Position originalPosition = (*i)->getPosition();
-			for (int dir = 0; dir < 9 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+			if (originalPosition == Position(-1, -1, -1))
 			{
-				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],0));
-				Tile *bt = getTile(originalPosition + Position(xd[dir],yd[dir],-1));
+				for (std::vector<BattleItem*>::iterator j = _items.begin(); j != _items.end(); ++j)
+				{
+					if ((*j)->getUnit() && (*j)->getUnit() == *i && (*j)->getOwner())
+					{
+						originalPosition = (*j)->getOwner()->getPosition();
+					}
+				}
+			}
+			for (int dir = 0; dir < 12 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+			{
+				if (dir == 10)
+				{
+					if ((*i)->getArmor()->getMovementType() != MT_FLY)
+					{
+						continue;
+					}
+					zd = 1;
+				}
+				if (dir == 11)
+				{
+					zd = -1;
+				}
+				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],zd));
+				Tile *bt = getTile(originalPosition + Position(xd[dir],yd[dir],zd - 1));
 				if (t && t->getUnit() == 0 && !t->hasNoFloor(bt))
 				{
 					// recover from unconscious
-					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],0));
-					getTile(originalPosition + Position(xd[dir],yd[dir],0))->setUnit(*i, getTile(originalPosition + Position(xd[dir],yd[dir],-1)));
+					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],zd));
+					getTile(originalPosition + Position(xd[dir],yd[dir],zd))->setUnit(*i, getTile(originalPosition + Position(xd[dir],yd[dir],zd-1)));
 					(*i)->turn(false); // makes the unit stand up again
 					(*i)->setCache(0);
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
 					removeUnconsciousBodyItem((*i));
+					break;
 				}
 			}
 		}
@@ -1314,7 +1365,7 @@ std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
 int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 {
 	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i) // cheating! perhaps only consider visible units here
 	{
 		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
 		if (find != (*i)->getVisibleUnits()->end())
@@ -1322,6 +1373,31 @@ int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 	}
 	return spotting;
 }
+
+
+/**
+ * @brief Check whether anyone on a particular faction is looking at *unit
+ * 
+ * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.
+ * 
+ * @param faction A faction, of course
+ * @param unit Whom to spot
+ * @return true when the unit can be seen
+ */
+bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
+{
+	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
+	{
+		if ((*i)->getFaction() != faction) continue;
+		
+		std::vector<BattleUnit*> *vis = (*i)->getVisibleUnits();
+		if (std::find(vis->begin(), vis->end(), unit) != vis->end()) return true;
+		// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies				
+	}
+
+	return false;
+}
+
 
 void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
@@ -1336,6 +1412,7 @@ void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 	if (add)
 	{
 		_fallingUnits.push_back(unit);
+		_unitsFalling = true;
 	}
 }
 
@@ -1349,11 +1426,11 @@ void SavedBattleGame::setUnitsFalling(bool fall)
 	_unitsFalling = fall;
 }
 
-bool SavedBattleGame::getUnitsFalling()
+bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
 }
-const bool SavedBattleGame::getStrafeSetting()
+const bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
 }

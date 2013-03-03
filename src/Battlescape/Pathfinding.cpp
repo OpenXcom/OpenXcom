@@ -27,6 +27,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Options.h"
 #include "../Engine/Game.h"
+#include "../Battlescape/TileEngine.h"
 
 namespace OpenXcom
 {
@@ -75,6 +76,11 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 
 void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget)
 {
+	// i'm DONE with these out of bounds errors.
+	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize() || endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize() || endPosition.x < 0 || endPosition.y < 0) return;
+
+	bool sneak = Options::getBool("sneakyAI") && unit->getFaction() == FACTION_HOSTILE;
+	
 	Position startPosition = unit->getPosition();
 	_movementType = unit->getArmor()->getMovementType();
 	if (missileTarget != 0)
@@ -132,7 +138,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	_path.clear();
 
 	// look for a possible fast and accurate bresenham path and skip A*
-	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, missileTarget))
+	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, missileTarget, sneak))
 	{
 		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
 		return;
@@ -142,7 +148,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
 	}
 	// Now try through A*.
-	if (!aStarPath(startPosition, endPosition, missileTarget))
+	if (!aStarPath(startPosition, endPosition, missileTarget, sneak))
 	{
 		_path.clear();
 	}
@@ -156,7 +162,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
  * @param endPosition The position we want to reach.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget)
+bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget, bool sneak)
 {
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -193,14 +199,15 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, missileTarget);
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
+			if (sneak && _save->getTile(nextPos)->getVisible()) tuCost *= 5; // avoid being seen
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
-			int totalTuCost = currentNode->getTUCost(missileTarget != 0) + tuCost;
+			_totalTUCost = currentNode->getTUCost(missileTarget != 0) + tuCost;
 			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > totalTuCost)
+			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > _totalTUCost)
 			{
-				nextNode->connect(totalTuCost, currentNode, direction, endPosition);
+				nextNode->connect(_totalTUCost, currentNode, direction, endPosition);
 				openList.push(nextNode);
 			}
 		}
@@ -240,16 +247,16 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Tile *startTile = _save->getTile(startPosition + offset);
 			Tile *destinationTile = _save->getTile(*endPosition + offset);
 			Tile *belowDestination = _save->getTile(*endPosition + offset + Position(0,0,-1));
-
+			Tile *aboveDestination = _save->getTile(*endPosition + offset + Position(0,0,1));
 
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
-
+			/*
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
 				return 255;
-
+			*/
 			// can't walk on top of other units
 			if (_save->getTile(*endPosition + Position(x,y,-1))
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
@@ -259,7 +266,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && (destinationTile->getTerrainLevel() == 0 || destinationTile->getTerrainLevel() == -24) && !triedStairs)
+			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
 			{
 					numberOfPartsGoingUp++;
 
@@ -464,6 +471,7 @@ int Pathfinding::dequeuePath()
  */
 void Pathfinding::abortPath()
 {
+	_totalTUCost = 0;
 	_path.clear();
 }
 
@@ -491,15 +499,20 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit == 0 || unit == _unit || unit == missileTarget) return false;
+		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
 		if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
 			(_unit->getFaction() == FACTION_PLAYER && unit->getVisible())) return true;		// player know all visible units
 		if (_unit->getFaction() != FACTION_PLAYER)
 		{
+			if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
+			// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies		
+		
+#if 0
 			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
 			{
 				if ((*i)->getTile() == tile) return true;	// unit know, were all visible for him units
 			}
+#endif
 		}
 	}
 
@@ -742,7 +755,7 @@ bool Pathfinding::removePreview()
 }
 
 // this works in only x/y plane
-bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget)
+bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak)
 {
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
@@ -757,6 +770,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 	int dir;
 	int lastTUCost = -1;
 	Position nextPoint;
+	_totalTUCost = 0;
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -819,6 +833,8 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			}
 			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, missileTarget);
 			
+			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
+			
 			// delete the following
 			if (nextPoint == realNextPoint && tuCost < 255 && (tuCost == lastTUCost || (dir&1 && tuCost == lastTUCost*1.5) || (!(dir&1) && tuCost*1.5 == lastTUCost) || lastTUCost == -1)
 				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, missileTarget))
@@ -830,7 +846,10 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 				return false;
 			}
 			if (missileTarget == 0 && tuCost != 255)
+			{
 				lastTUCost = tuCost;
+				_totalTUCost += tuCost;
+			}
 			lastPoint = Position(cx, cy, cz);
 		}
 		//update progress in other planes

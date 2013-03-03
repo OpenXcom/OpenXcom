@@ -38,6 +38,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Options.h"
+#include "BattlescapeGame.h"
 
 namespace OpenXcom
 {
@@ -400,7 +401,7 @@ void UnitInfoState::init()
 		ss << _game->getLanguage()->getString(_unit->getRankString());
 		ss << " ";
 	}
-	ss << _unit->getName(_game->getLanguage());
+	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
 	_txtName->setText(ss.str());
 
 	ss.str(L"");

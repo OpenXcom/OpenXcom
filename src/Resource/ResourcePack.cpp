@@ -90,7 +90,8 @@ ResourcePack::~ResourcePack()
  */
 Font *ResourcePack::getFont(const std::string &name) const
 {
-	return _fonts.find(name)->second;
+	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
+	if (_fonts.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -100,7 +101,8 @@ Font *ResourcePack::getFont(const std::string &name) const
  */
 Surface *ResourcePack::getSurface(const std::string &name) const
 {
-	return _surfaces.find(name)->second;
+	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
+	if (_surfaces.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -110,7 +112,8 @@ Surface *ResourcePack::getSurface(const std::string &name) const
  */
 SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
 {
-	return _sets.find(name)->second;
+	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
+	if (_sets.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -144,7 +147,8 @@ Music *ResourcePack::getMusic(const std::string &name) const
 	}
 	else
 	{
-		return _musics.find(name)->second;
+		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
+		if (_musics.end() != i) return i->second; else return 0;
 	}
 }
 
@@ -190,7 +194,8 @@ Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
 	}
 	else
 	{
-		return _sounds.find(set)->second->getSound(sound);
+		std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
+		if (_sounds.end() != i) return i->second->getSound(sound); else return 0;
 	}
 }
 
@@ -201,7 +206,8 @@ Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
  */
 Palette *ResourcePack::getPalette(const std::string &name) const
 {
-	return _palettes.find(name)->second;
+	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
+	if (_palettes.end() != i) return i->second; else return 0;
 }
 
 /**

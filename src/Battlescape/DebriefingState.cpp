@@ -368,6 +368,14 @@ void DebriefingState::prepareDebriefing()
 				craft->setLowFuel(true);
 				craft->setInBattlescape(false);
 			}
+			else if ((*j)->getDestination() != 0)
+			{
+				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
+				if (u != 0 && u->isInBattlescape())
+				{
+					(*j)->returnToBase();
+				}
+			}
 		}
 		// in case we DON'T have a craft (base defense)
 		if ((*i)->isInBattlescape())

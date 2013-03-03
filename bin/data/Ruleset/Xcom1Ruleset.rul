@@ -5444,6 +5444,7 @@ units:
     deathSound: 48
     intelligence: 3
     aggression: 2
+    zombieUnit: STR_ZOMBIE
     spawnUnit: STR_CHRYSSALID_TERRORIST
 alienRaces:
   - id: STR_SECTOID
