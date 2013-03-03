@@ -348,7 +348,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		// 0.33 - max angle deviation for Autoshot.
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		// 5.0  is the coefficient. Can be from 5.0 (at day) to 4.0 (at night).
-		baseDeviation = (_action.type == BA_AUTOSHOT?0.33:0.25 + shade/150) - accuracy / (5.0 - shade/15);
+		baseDeviation = ((_action.type == BA_AUTOSHOT?0.33:0.25) + shade/150) - accuracy / (5.0 - shade/15);
 
 		if (baseDeviation < 0.02)
 			baseDeviation = 0.02;
