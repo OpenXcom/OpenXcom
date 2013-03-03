@@ -52,6 +52,8 @@ public:
 	Position operator*(const int v) const { return Position(x * v, y * v, z * v); }
 	Position& operator*=(const int v) { x*=v; y*=v; z*=v; return *this; }
 
+    Position operator/(const int v) const { return Position(x / v, y / v, z / v); }
+
 	/// == operator
     bool operator== (const Position& pos) const
 	{
@@ -65,9 +67,22 @@ public:
 
 };
 
-void operator>> (const YAML::Node& node, Position& pos);
-YAML::Emitter& operator<< (YAML::Emitter& out, const Position& pos);
+typedef Position Vector3i; 
+
+inline void operator>> (const YAML::Node& node, Position& pos)
+{
+	node[0] >> pos.x;
+	node[1] >> pos.y;
+	node[2] >> pos.z;
+}
+
+inline YAML::Emitter& operator<< (YAML::Emitter& out, const Position& pos)
+{
+	out << YAML::Flow << YAML::BeginSeq << pos.x << pos.y << pos.z << YAML::EndSeq;
+    return out;
+}
 
 }
+
 
 #endif

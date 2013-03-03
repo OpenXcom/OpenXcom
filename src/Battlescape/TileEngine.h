@@ -82,9 +82,12 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
+	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);	
+	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	bool visible(BattleUnit *currentUnit, Tile *tile);
 	void togglePersonalLighting();
 	int distance(const Position &pos1, const Position &pos2) const;
+	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;	
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	bool inTeamFOV(const Position &pos, UnitFaction team);

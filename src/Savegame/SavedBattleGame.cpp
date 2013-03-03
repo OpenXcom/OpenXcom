@@ -974,7 +974,7 @@ void SavedBattleGame::setAborted(bool flag)
  * Is the mission aborted or successful.
  * @return bool.
  */
-bool SavedBattleGame::isAborted()
+bool SavedBattleGame::isAborted() const
 {
 	return _aborted;
 }
@@ -1365,7 +1365,7 @@ std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
 int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 {
 	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i) // cheating! perhaps only consider visible units here
 	{
 		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
 		if (find != (*i)->getVisibleUnits()->end())
@@ -1373,6 +1373,31 @@ int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 	}
 	return spotting;
 }
+
+
+/**
+ * @brief Check whether anyone on a particular faction is looking at *unit
+ * 
+ * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.
+ * 
+ * @param faction A faction, of course
+ * @param unit Whom to spot
+ * @return true when the unit can be seen
+ */
+bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
+{
+	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
+	{
+		if ((*i)->getFaction() != faction) continue;
+		
+		std::vector<BattleUnit*> *vis = (*i)->getVisibleUnits();
+		if (std::find(vis->begin(), vis->end(), unit) != vis->end()) return true;
+		// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies				
+	}
+
+	return false;
+}
+
 
 void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
@@ -1401,11 +1426,11 @@ void SavedBattleGame::setUnitsFalling(bool fall)
 	_unitsFalling = fall;
 }
 
-bool SavedBattleGame::getUnitsFalling()
+bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
 }
-const bool SavedBattleGame::getStrafeSetting()
+const bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
 }

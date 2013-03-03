@@ -18,7 +18,9 @@
  */
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <climits>
 #include <set>
+#include <functional>
 #include "TileEngine.h"
 #include <SDL.h>
 #include "BattleAIState.h"
@@ -33,9 +35,11 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -203,6 +207,17 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 }
 
 
+static size_t BattleUnitsChecksum(std::vector<BattleUnit*>& units)
+{
+	size_t newChecksum = 0;
+	
+	for (std::vector<BattleUnit*>::iterator i = units.begin(); i != units.end(); ++i)
+		newChecksum += ((*i)->getPosition().x*100 + (*i)->getPosition().y);
+
+	return newChecksum;
+}
+
+
 /**
  * Calculates line of sight of a soldier.
  * @param unit
@@ -229,9 +244,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	int y1, y2;
 
 	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
-	// the unit's Xposition * 100 + y seems a simple but unique ID for each unit
-	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		visibleUnitsChecksum += (*i)->getPosition().x*100 + (*i)->getPosition().y;
+	visibleUnitsChecksum = BattleUnitsChecksum(*(unit->getVisibleUnits()));	
 
 	oldNumVisibleUnits = unit->getVisibleUnits()->size();
 
@@ -332,9 +345,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		}
 	}
 
-	size_t newChecksum = 0;
-	for (std::vector<BattleUnit*>::iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-		newChecksum += (*i)->getPosition().x*100 + (*i)->getPosition().y;
+	size_t newChecksum = BattleUnitsChecksum(*(unit->getVisibleUnits()));
 
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
@@ -349,6 +360,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 			{
 				aggro = new AggroBAIState(_save, unit);
 				unit->setAIState(aggro);
+				unit->_hidingForTurn = false; // something new happened, react at will...
 			}
 			aggro->setAggroTarget(unit->getVisibleUnits()->at(0)); // just pick the first one - maybe we need to prioritize on distance to unit or other parameters?
 		}
@@ -359,6 +371,166 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	return false;
 
 }
+
+
+
+/**
+ * @brief Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.
+ * @param tile the tile to check
+ * @param tilePos the position of the tile to check, redundantly
+ * @param queryingUnit the unit to temporarily place at tilePos for calculations
+ * @return false if the unit couldn't possibly be placed at tile (i.e., something's blocking it), true otherwise
+ */
+bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
+{
+	if (tile->soldiersVisible != -1) return true; // already calculated this turn
+
+	BattleUnit hypotheticalUnit(*queryingUnit); // this is why I needed a copy constructor for BattleUnit
+	// I tried repeatedly to just move queryingUnit without making a copy of it but that caused mysterious crashes in loftemps calculations for 2x2 units. :<
+	
+	if (!_save->setUnitPosition(&hypotheticalUnit, tilePos, true)) 
+	{
+		return false;
+	}
+	
+	std::map<int, BattleUnit*> originalTileUnits;
+	std::vector<Position> toBackUp;
+	
+	toBackUp.push_back(hypotheticalUnit.getPosition());
+	toBackUp.push_back(hypotheticalUnit.getTile()->getPosition()); // no such thing as too many backups??? .__.
+	toBackUp.push_back(hypotheticalUnit.getLastPosition());
+	toBackUp.push_back(tilePos);
+	
+	// back up the BattleUnit pointers from the live tile data
+	for (std::vector<Position>::iterator which = toBackUp.begin(); which != toBackUp.end(); ++which)
+	{
+		for (int x = hypotheticalUnit.getArmor()->getSize()-1; x >= 0; x--)
+		{
+			for (int y = hypotheticalUnit.getArmor()->getSize()-1; y >= 0; y--)
+			{
+				Position pos = *which;
+				pos.x += x;
+				pos.y += y;
+				
+				Tile *tileToSave = _save->getTile(pos);
+				if (!tileToSave) continue; // out of map bounds?
+				
+				int index = _save->getTileIndex(pos);				
+				originalTileUnits[index] = tileToSave->getUnit();
+			}
+		}
+	}
+
+
+#if 0
+	// this block of code would make sure that the unit in question wouldn't occlude its own LOS checks
+	// since the LOS checks happen from soldiers to the hypothetical unit, this is possible, I think
+	// however, this code also causes the game to crash in other parts of the code for mysterious reasons
+	for (int x = hypotheticalUnit.getArmor()->getSize()-1; x >= 0; x--)
+	{
+		for (int y = hypotheticalUnit.getArmor()->getSize()-1; y >= 0; y--)
+		{
+			Position pos = hypotheticalUnit.getPosition();
+			pos.x += x;
+			pos.y += y;
+
+			Tile *zeroMe = _save->getTile(pos);
+			assert (!zeroMe || zeroMe->getUnit() == queryingUnit);
+			if (zeroMe) zeroMe->setUnit(0);
+		}
+	}
+#endif
+
+#ifdef _DEBUG
+	// sanity-check the tile data...
+	int count = 0;
+	for (int i = 0; i < _save->getMapSizeX() * _save->getMapSizeY() * _save->getMapSizeZ(); ++i)
+	{
+		if (_save->getTiles()[i]->getUnit() == queryingUnit)
+		{
+			++count;
+		}
+	}
+	if (count > queryingUnit->getArmor()->getSize()*queryingUnit->getArmor()->getSize())
+	{
+		Log(LOG_ERROR) << count << " tiles are occupied by " << queryingUnit->getType() << " #" << queryingUnit->getId() << " and that is messed up.";
+	}
+#endif
+	
+	_save->setUnitPosition(&hypotheticalUnit, tilePos); // updates the unit and the tiles
+	//_save->setUnitPosition(&hypotheticalUnit, tilePos); // reset its lastPosition too
+
+		
+	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
+	tile->closestSoldierDSqr = INT_MAX;
+	tile->closestAlienDSqr = INT_MAX;
+	tile->meanSoldierDSqr = INT_MAX;
+	
+	int dsqrTotal = 0;
+	
+	//Position targetVoxel = getSightOriginVoxel(&hypotheticalUnit); // relevant if trying to use calculateLine() which doesn't seem to cooperate anyway!
+	Position targetVoxel(0,0,0);
+	
+	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if ((*i)->isOut()) continue;
+		
+		int dsqr = distanceSq(tilePos, (*i)->getPosition());
+		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
+		
+		Position originVoxel = getSightOriginVoxel(*i);
+
+		// these three things don't seem to work, probably because I don't know how to call them properly:
+		//if ((*i)->getFaction() == FACTION_PLAYER && visible(*i, tile))
+		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetTile(&originVoxel, tile, MapData::O_FLOOR, &targetVoxel, *i)) 
+		//if ((*i)->getFaction() == FACTION_PLAYER && calculateLine(originVoxel, targetVoxel, false, 0, *i, false) == 4)
+
+		// this works OK but we don't need to try all those rays for this tactical assessment; Volutar might be working on a superior routine, though
+		if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
+		{
+			++tile->soldiersVisible;
+
+			if (dsqr < tile->closestSoldierDSqr)
+			{
+				tile->closestSoldierDSqr = dsqr;
+				tile->closestSoldierPos = (*i)->getPosition();
+			}
+			
+			dsqrTotal += dsqr;
+		}
+
+		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->closestAlienDSqr) tile->closestAlienDSqr = dsqr;
+	}
+	
+	tile->meanSoldierDSqr = tile->soldiersVisible ? (dsqrTotal / tile->soldiersVisible) : 0;
+	
+	//if (tile->_soldiersVisible == 0 && tile->getVisible()) { Log(LOG_WARNING) << "Visible tile returned !canTargetTile() for all soldiers."; }
+
+	// restore tile data
+	for (std::map<int,BattleUnit*>::iterator i = originalTileUnits.begin(); i != originalTileUnits.end(); ++i)
+	{
+		_save->getTiles()[i->first]->setUnit(i->second);
+	}
+	
+	return true;
+}
+
+/**
+ * Get the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7??
+ * @param currentUnit the watcher
+ * @return approximately an eyeball voxel
+ */
+Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
+{
+	// determine the origin and target voxels for the raytrace
+	Position originVoxel;
+	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
+	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
+	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
+
+	return originVoxel;
+}
+
 
 
 /**
@@ -375,11 +547,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	// determine the origin and target voxels for the raytrace
-	Position originVoxel;
-	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
-	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
+	Position originVoxel = getSightOriginVoxel(currentUnit);
 
 	bool unitSeen = false;
 	// for large units origin voxel is in the middle
@@ -427,7 +595,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
  * @param excludeUnit is self (not to hit self)
  * @return true/false
  */
-bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit* excludeUnit)
+bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
@@ -1459,8 +1627,8 @@ int TileEngine::closeUfoDoors()
 }
 /**
  * calculateLine. Using bresenham algorithm in 3D.
- * @param origin
- * @param target
+ * @param origin (voxel??)
+ * @param target (also voxel??)
  * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
  * @param trajectory A vector of positions in which the trajectory is stored.
  * @param excludeUnit Excludes this unit in the collision detection.
@@ -1763,6 +1931,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 
 		if (unit != 0 && unit != excludeUnit && (!onlyVisible || unit->getVisible() ) )
 		{
+			Position tilepos;
 			Position unitpos = unit->getPosition();
 			int tz = unitpos.z*24 + unit->getFloatHeight()+(-tile->getTerrainLevel());//bottom
 			if ((voxel.z > tz) && (voxel.z <= tz + unit->getHeight()) )
@@ -1772,7 +1941,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 				int part = 0;
 				if (unit->getArmor()->getSize() > 1)
 				{
-					Position tilepos = tile->getPosition();
+					tilepos = tile->getPosition();
 					part = tilepos.x - unitpos.x + (tilepos.y - unitpos.y)*2;
 				}
 				int idx = (unit->getLoftemps(part) * 16) + y;
@@ -1806,6 +1975,20 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 	int y = abs(pos1.y - pos2.y);
 	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
 }
+
+
+/**
+ * Distance squared between 2 points. No sqrt(), not floating point math, and sometimes it's all you need.
+ * @return distance
+ */
+int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const
+{
+	int x = abs(pos1.x - pos2.x);
+	int y = abs(pos1.y - pos2.y);
+	int z = considerZ ? abs(pos1.z - pos2.z) : 0;
+	return x + y + z;
+}
+
 
 
 /**
@@ -1940,7 +2123,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 {
-	return validMeleeRange(unit->getPosition(), unit->getDirection(), unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), unit->getArmor()->getSize() > 1 ?  -1 : unit->getDirection(), unit->getArmor()->getSize(), unit->getHeight(), target);
 }
 
 /*
@@ -1966,10 +2149,12 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 				for (int y = 0; y <= size-1; ++y)
 				{
 					Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-					if (tile)
+					if (tile && _save->getTile(pos))
 					{
 						if (height - _save->getTile(pos)->getTerrainLevel() > 24 && ((tile->getUnit() && tile->getUnit() != target) || !tile->getUnit()))
 							tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
+                        if (!tile) continue; // I blame Reapers.
+
 						if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 						{
 							if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, dir, 0))
@@ -1988,10 +2173,12 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 			for (int y = 0; y <= size-1; ++y)
 			{
 				Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-				if (tile)
+				if (tile && _save->getTile(pos))
 				{
 					if (height - _save->getTile(pos)->getTerrainLevel() > 24 && ((tile->getUnit() && tile->getUnit() != target) || !tile->getUnit()))
 						tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
+                    if (!tile) continue; 
+
 					if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 					{
 						if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, direction, 0))
