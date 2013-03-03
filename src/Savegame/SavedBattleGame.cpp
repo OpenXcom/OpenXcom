@@ -127,6 +127,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		Tile::SerializationKey serKey;
 		size_t totalTiles;
 
+        memset(&serKey, 0, sizeof(Tile::SerializationKey));
 		node["tileIndexSize"] >> serKey.index;
 		node["tileTotalBytesPer"] >> serKey.totalBytes;
 		node["tileFireSize"] >> serKey._fire;
@@ -134,6 +135,17 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		node["tileIDSize"] >> serKey._mapDataID;
 		node["tileSetIDSize"] >> serKey._mapDataSetID;
 		node["totalTiles"] >> totalTiles;
+        if (const YAML::Node *boolFieldsNode = node.FindValue("tileBoolFieldsSize")) 
+        {
+            *boolFieldsNode >> serKey.boolFields;
+        } else
+        {
+            serKey.boolFields = 1; // boolean flags used to be stored in an unmentioned byte (Uint8) :|
+        }
+        if (const YAML::Node *_currentFrameNode = node.FindValue("tileCurrentFrameSize"))
+        {
+            *_currentFrameNode >> serKey._currentFrame;
+        }
 
 		// load binary tile data! 
 		YAML::Binary binTiles;
@@ -355,6 +367,8 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "tileSmokeSize" << YAML::Value << Tile::serializationKey._smoke;
 	out << YAML::Key << "tileIDSize" << YAML::Value << Tile::serializationKey._mapDataID;
 	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
+    out << YAML::Key << "tileBoolFieldsSize" << YAML::Value << Tile::serializationKey.boolFields;
+    out << YAML::Key << "tileCurrentFrameSize" << YAML::Value << Tile::serializationKey._currentFrame;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
