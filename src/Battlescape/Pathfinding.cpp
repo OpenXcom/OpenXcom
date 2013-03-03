@@ -76,6 +76,9 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 
 void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget)
 {
+	// i'm DONE with these out of bounds errors.
+	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize() || endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize() || endPosition.x < 0 || endPosition < 0) return;
+
 	bool sneak = Options::getBool("sneakyAI") && unit->getFaction() == FACTION_HOSTILE;
 	
 	Position startPosition = unit->getPosition();
