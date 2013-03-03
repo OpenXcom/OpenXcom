@@ -528,7 +528,7 @@ void SoldierInfoState::btnNextClick(Action *)
  */
 void SoldierInfoState::btnArmorClick(Action *)
 {	
-	if (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT")
+	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 	}
