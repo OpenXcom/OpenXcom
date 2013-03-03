@@ -691,6 +691,10 @@ void GeoscapeState::time5Seconds()
 					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
 				}
+				if (u != 0 && u->getStatus() == Ufo::DESTROYED)
+				{
+					(*j)->returnToBase();
+				}
 			}
 			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())
 			{
