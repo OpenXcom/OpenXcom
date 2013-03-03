@@ -247,7 +247,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			Tile *startTile = _save->getTile(startPosition + offset);
 			Tile *destinationTile = _save->getTile(*endPosition + offset);
 			Tile *belowDestination = _save->getTile(*endPosition + offset + Position(0,0,-1));
-
+			Tile *aboveDestination = _save->getTile(*endPosition + offset + Position(0,0,1));
 
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
@@ -266,7 +266,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 
 			// if we are on a stairs try to go up a level
-			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && (destinationTile->getTerrainLevel() == 0 || destinationTile->getTerrainLevel() == -24) && !triedStairs)
+			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
 			{
 					numberOfPartsGoingUp++;
 
