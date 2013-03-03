@@ -27,9 +27,21 @@
 #include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
+#include "SerializationHelper.h"
 
 namespace OpenXcom
 {
+
+/// How many bytes various fields use in a serialized tile. See header.
+Tile::SerializationKey Tile::serializationKey = 
+{4, // index
+ 2, // _mapDataSetID, four of these
+ 2, // _mapDataID, four of these
+ 1, // _fire
+ 1, // _smoke
+	// one 8-bit bool field goes unmentioned
+ 4 + 2*4 + 2*4 +1 +1 +1 // total bytes to save one tile
+};
 
 /**
 * constructor
@@ -93,9 +105,9 @@ void Tile::load(const YAML::Node &node)
 	}
 	if(const YAML::Node *pName = node.FindValue("discovered"))
 	{
-		node["discovered"][0] >> _discovered[0];
-		node["discovered"][1] >> _discovered[1];
-		node["discovered"][2] >> _discovered[2];
+		(*pName)[0] >> _discovered[0];
+		(*pName)[1] >> _discovered[1];
+		(*pName)[2] >> _discovered[2];
 	}
 }
 
@@ -103,22 +115,24 @@ void Tile::load(const YAML::Node &node)
  * Load the tile from binary.
  * @param buffer pointer to buffer.
  */
-void Tile::loadBinary(const unsigned char* buffer)
+void Tile::loadBinary(Uint8 **buffer, Tile::SerializationKey& serKey)
 {
-	_mapDataSetID[0] = buffer[4];
-	_mapDataID[0] = buffer[5] + (buffer[6] << 8);
-	_mapDataSetID[1] = buffer[7];
-	_mapDataID[1] = buffer[8] + (buffer[9] << 8);
-	_mapDataSetID[2] = buffer[10];
-	_mapDataID[2] = buffer[11] + (buffer[10] << 8);
-	_mapDataSetID[3] = buffer[13];
-	_mapDataID[3] = buffer[14] + (buffer[15] << 8);
+	_mapDataID[0] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataID[1] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataID[2] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataID[3] = unserializeInt(buffer, serKey._mapDataID);
+	_mapDataSetID[0] = unserializeInt(buffer, serKey._mapDataSetID);
+	_mapDataSetID[1] = unserializeInt(buffer, serKey._mapDataSetID);
+	_mapDataSetID[2] = unserializeInt(buffer, serKey._mapDataSetID);
+	_mapDataSetID[3] = unserializeInt(buffer, serKey._mapDataSetID);
 
-	_smoke = buffer[16];
-	_fire = buffer[17];
-	_discovered[0] = buffer[18] & 1;
-	_discovered[1] = buffer[18] & 2;
-	_discovered[2] = buffer[18] & 4;
+	_smoke = unserializeInt(buffer, serKey._smoke);
+	_fire = unserializeInt(buffer, serKey._fire);
+
+	_discovered[0] = (**buffer & 1) ? true : false;
+	_discovered[1] = (**buffer & 2) ? true : false;
+	_discovered[2] = (**buffer & 4) ? true : false;
+	++(*buffer);
 }
 
 
@@ -138,7 +152,7 @@ void Tile::save(YAML::Emitter &out) const
 		out << YAML::Key << "smoke" << YAML::Value << _smoke;
 	if (_fire)
 		out << YAML::Key << "fire" << YAML::Value << _fire;
-	if (_discovered[0] || _discovered[0] || _discovered[0])
+	if (_discovered[0] || _discovered[1] || _discovered[2])
 	{
 		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
@@ -149,20 +163,22 @@ void Tile::save(YAML::Emitter &out) const
  * Saves the tile to binary.
  * @param buffer pointer to buffer.
  */
-void Tile::saveBinary(unsigned char* buffer) const
+void Tile::saveBinary(Uint8** buffer) const
 {
-	buffer[4] = (unsigned char)_mapDataSetID[0];
-	buffer[5] = (unsigned short)_mapDataID[0];
-	buffer[7] = (unsigned char)_mapDataSetID[1];
-	buffer[8] = (unsigned short)_mapDataID[1];
-	buffer[10] = (unsigned char)_mapDataSetID[2];
-	buffer[11] = (unsigned short)_mapDataID[2];
-	buffer[13] = (unsigned char)_mapDataSetID[3];
-	buffer[14] = (unsigned short)_mapDataID[3];
+	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[0]);
+	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[1]);
+	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[2]);
+	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[3]);
+	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[0]);
+	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[1]);
+	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[2]);
+	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[3]);
 
-	buffer[16] = (unsigned short)_smoke;
-	buffer[17] = (unsigned short)_fire;
-	buffer[18] = _discovered[0]?1:0 + _discovered[1]?1:0 << 1 + _discovered[2]?1:0 << 2;
+	serializeInt(buffer, serializationKey._smoke, _smoke);
+	serializeInt(buffer, serializationKey._fire, _fire);
+
+	**buffer = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
+	++(*buffer);
 }
 
 /**
@@ -209,7 +225,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0;
+	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0 && _inventory.size() == 0;
 }
 
 /**
@@ -234,8 +250,10 @@ int Tile::getTUCost(int part, MovementType movementType) const
  * Whether this tile has a floor or not. If no object defined as floor, it has no floor.
  * @return bool
  */
-bool Tile::hasNoFloor() const
+bool Tile::hasNoFloor(Tile *tileBelow) const
 {
+	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+		return false;
 	if (_objects[MapData::O_FLOOR])
 		return _objects[MapData::O_FLOOR]->isNoFloor();
 	else
@@ -284,7 +302,7 @@ const Position& Tile::getPosition() const
  * Gets the tile's footstep sound.
  * @return sound ID
  */
-int Tile::getFootstepSound() const
+int Tile::getFootstepSound(Tile *tileBelow) const
 {
 	int sound = 0;
 
@@ -292,6 +310,8 @@ int Tile::getFootstepSound() const
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
 	if (_objects[MapData::O_OBJECT])
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
+	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
 
 	return sound;
 }
@@ -463,7 +483,7 @@ bool Tile::destroy(int part)
 	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
 	{
 		/* replace with scorched earth */
-		setMapData(MapDataSet::getScourgedEarthTile(), 1, 0, MapData::O_FLOOR);
+		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
 	return _objective;
 }
@@ -483,16 +503,12 @@ bool Tile::damage(int part, int power)
 /**
  * Set a "virtual" explosive on this tile. We mark a tile this way to detonate it later.
  * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
- * The explosive power on the tile is some kind of moving average of the explosive rays that passes it.
+ * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that passes it.
  * @param power
  */
-void Tile::setExplosive(int power)
+void Tile::setExplosive(int power, bool force)
 {
-	if (_explosive)
-	{
-		_explosive = (_explosive + power) / 2;
-	}
-	else
+	if (force || _explosive < power)
 	{
 		_explosive = power;
 	}
@@ -533,6 +549,7 @@ bool Tile::detonate()
 				}
 			}
 		}
+
 		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
 		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
 		int flam = getFlammability();
@@ -637,11 +654,11 @@ Surface *Tile::getSprite(int part) const
  * Set a unit on this tile.
  * @param unit
  */
-void Tile::setUnit(BattleUnit *unit)
+void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 {
 	if (unit != 0)
 	{
-		unit->setTile(this);
+		unit->setTile(this, tileBelow);
 	}
 	_unit = unit;
 }
@@ -803,6 +820,7 @@ std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
+
 
 /**
  * Set the marker color on this tile.

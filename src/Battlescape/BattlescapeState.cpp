@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -39,13 +40,13 @@
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Engine/Music.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Screen.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -76,6 +77,9 @@
 #include "BriefingState.h"
 #include "../Geoscape/DefeatState.h"
 #include "../Geoscape/VictoryState.h"
+#include "../lodepng.h"
+#include "../Engine/Logger.h"
+#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
@@ -129,8 +133,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 5);
 	for (int i = 0; i < 10; ++i)
 	{
-		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, 300, 128 - (i * 13));
-		_numVisibleUnit[i] = new NumberText(15, 12, 306, 132 - (i * 13));
+		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
+		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
 	}
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
@@ -245,7 +249,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
 	SDL_Rect *r = s->getCrop();
 	r->x = 0;
-	r->y = mapHeight - iconsHeight;
+	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
 	r->h = iconsHeight;
 	s->blit(_icons);
@@ -328,7 +332,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto->setGroup(&_reserve);
 
 	// Set music
-	_game->getResourcePack()->getMusic("GMTACTIC")->play();
+	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
@@ -417,7 +421,7 @@ void BattlescapeState::mapOver(Action *action)
 	{
 		isMouseScrolled = true;
 
-		if (!_save->getScrollButtonInvertMode())
+		if (_save->isDragInverted())
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -428,10 +432,10 @@ void BattlescapeState::mapOver(Action *action)
 		totalMouseMoveX += action->getDetails()->motion.xrel;
 		totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _save->getScrollButtonPixelTolerancy()) || (std::abs(totalMouseMoveY) > _save->getScrollButtonPixelTolerancy()));
+			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _save->getDragPixelTolerance()) || (std::abs(totalMouseMoveY) > _save->getDragPixelTolerance()));
 
 		// Scrolling
-		if (!_save->getScrollButtonInvertMode())
+		if (_save->isDragInverted())
 		{
 			_map->getCamera()->scrollXY(
 				-action->getDetails()->motion.xrel,
@@ -470,9 +474,9 @@ void BattlescapeState::mapPress(Action *action)
 	int mx = int(action->getAbsoluteXMouse());
 	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
 
-	if (-1 != _save->getScrollButton())
+	if (Options::getInt("battleScrollType") == SCROLL_DRAG)
 	{
-		if (action->getDetails()->button.button == _save->getScrollButton())
+		if (action->getDetails()->button.button == _save->getDragButton())
 		{
 			isMouseScrolling = true;
 			isMouseScrolled = false;
@@ -497,9 +501,9 @@ void BattlescapeState::mapClick(Action *action)
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _save->getScrollButton()) isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == _save->getDragButton()) isMouseScrolling = false; else return;
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getScrollButtonTimeTolerancy())))
+		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
 		{
 			isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
@@ -637,7 +641,7 @@ void BattlescapeState::btnKneelClick(Action *)
  */
 void BattlescapeState::btnInventoryClick(Action *)
 {
-	if (playableUnitSelected() && _save->getSelectedUnit()->getArmor()->getSize() == 1)
+	if (playableUnitSelected() && (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode()))
 	{
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode()));
 	}
@@ -662,7 +666,7 @@ void BattlescapeState::btnCenterClick(Action *)
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		selectNextPlayerUnit(false);
+		selectNextPlayerUnit(true, false);
 }
 
 /**
@@ -672,19 +676,20 @@ void BattlescapeState::btnNextSoldierClick(Action *)
 void BattlescapeState::btnNextStopClick(Action *)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		selectNextPlayerUnit(true);
+		selectNextPlayerUnit(true, true);
 }
 
 /**
  * Select next soldier.
- * @param checkReselect When true, don't reselect current unit.
+ * @param checkReselect When true, don't select a unit that has been previously flagged.
+ * @param setReselect When true, flag the current unit first.
  */
-void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
+void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
 	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect);
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -693,6 +698,23 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect)
 	}
 }
 
+/**
+ * Select previous soldier.
+ * @param checkReselect When true, don't select a unit that has been previously flagged.
+ */
+void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
+{
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	{
+		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
+		updateSoldierInfo();
+		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		_battleGame->cancelCurrentAction();
+		_battleGame->getCurrentAction()->actor = unit;
+		_battleGame->setupCursor();
+	}
+}
 /**
  * Show/hide all map layers.
  * @param action Pointer to an action.
@@ -911,7 +933,7 @@ void BattlescapeState::updateSoldierInfo()
 		return;
 	}
 
-	_txtName->setText(battleUnit->getName(_game->getLanguage()));
+	_txtName->setText(battleUnit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay));
 	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{
@@ -1023,7 +1045,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 	// make sure there is an item, and the battlescape is in an idle state
 	if (item && !_battleGame->isBusy())
 	{
-		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
+		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()) || _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			_battleGame->getCurrentAction()->weapon = item;
 			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
@@ -1107,6 +1129,18 @@ void BattlescapeState::handle(Action *action)
 	{
 		State::handle(action);
 
+		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+		{
+			if (action->getDetails()->button.button == SDL_BUTTON_X1)
+			{
+				selectNextPlayerUnit(true, false);
+			}
+			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
+			{
+				selectPreviousPlayerUnit(true);
+			}
+		}
+
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
 			// "d" - enable debug mode
@@ -1115,35 +1149,254 @@ void BattlescapeState::handle(Action *action)
 				_save->setDebugMode();
 				debug(L"Debug Mode");
 			}
-			// "l" - toggle personal lighting
-			if (action->getDetails()->key.keysym.sym == SDLK_l)
+			// toggle personal lighting
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePersonalLighting"))
 			{
 				_save->getTileEngine()->togglePersonalLighting();
 			}
-			// "tab" - next solider
-			if (action->getDetails()->key.keysym.sym == SDLK_TAB)
+			// next solider
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 			{
-				if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-					selectNextPlayerUnit(false);
+				selectNextPlayerUnit(true, false);
 			}
-			// "esc" - options menu
-			if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)
+			// previous solider
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
+			{
+				selectPreviousPlayerUnit(true);
+			}
+			// options menu
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleOptions"))
 			{
 				_game->pushState(new BattlescapeOptionsState(_game));
 			}
-			// "r" - reload
-			if (action->getDetails()->key.keysym.sym == SDLK_r && playableUnitSelected())
+			// reload
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleReload") && playableUnitSelected())
 			{
 				if (_save->getSelectedUnit()->checkAmmo())
 				{
-					_game->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(17)->play();
+					_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
 					updateSoldierInfo();
 				}
+			}
+			// voxel map dump
+			else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+			{
+				if (_save->getDebugMode())
+				{
+					SaveVoxelMap();
+				}
+			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
+			{
+				SaveVoxelView();
 			}
 		}
 	}
 
 }
+
+void BattlescapeState::SaveVoxelView()
+{
+	static const unsigned char pal[30]=
+	//			ground		west wall	north wall		object		enem unit						xcom unit	neutr unit
+	{0,0,0, 224,224,224,  192,224,255,  255,224,192, 128,255,128, 192,0,255,  0,0,0, 255,255,255,  224,192,0,  255,64,128 };
+
+	BattleUnit * bu = _save->getSelectedUnit();
+	if (bu==0) return; //no unit selected
+	Position viewPos = _save->getSelectedUnit()->getPosition();
+	std::vector<Position> _trajectory;
+
+	double ang_x,ang_y;
+	bool black;
+	Tile *tile;
+	std::stringstream ss;
+	std::vector<unsigned char> image;
+	int test;
+	Position originVoxel = Position(viewPos.x*16+8,
+		viewPos.y*16+8,
+		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getFloatHeight() + bu->getHeight()-1) );
+	if (bu->getArmor()->getSize() > 1)
+	{
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 1; //topmost voxel
+	}
+
+	Position targetVoxel,hitPos;
+	double dist;
+	bool _debug = _save->getDebugMode();
+	double dir = ((float)bu->getDirection()+4)/4*M_PI;
+	image.clear();
+	for (int y = -256+32; y < 256+32; ++y)
+	{
+		ang_y = (((double)y)/640*M_PI+M_PI/2);
+		for (int x = -256; x < 256; ++x)
+		{
+			ang_x = ((double)x/1024)*M_PI+dir;
+
+			targetVoxel.x=originVoxel.x + (int)(-sin(ang_x)*1024*sin(ang_y));
+			targetVoxel.y=originVoxel.y + (int)(cos(ang_x)*1024*sin(ang_y));
+			targetVoxel.z=originVoxel.z + (int)(cos(ang_y)*1024);
+
+			_trajectory.clear();
+			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, !_debug) +1;
+			black = true;
+			if (test!=0 && test!=6)
+			{
+				tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24));
+				if (_debug
+					|| (tile->isDiscovered(0) && test == 2)
+					|| (tile->isDiscovered(1) && test == 3)
+					|| (tile->isDiscovered(2) && (test == 1 || test == 4))
+					|| test==5
+					)
+				{
+					if (test==5)
+					{
+						if (tile->getUnit())
+						{
+							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+							else
+							if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+						}
+						else
+						{
+							tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24-1));
+							if (tile && tile->getUnit())
+							{
+								if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+								else
+								if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+							}
+						}
+					}
+					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
+					dist = sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
+						+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
+						+ (hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
+					black = false;
+				}
+			}
+
+			if (black)
+			{
+				dist = 0;
+			}
+			else
+			{
+				if (dist>1000) dist=1000;
+				if (dist<1) dist=1;
+				dist=(1000-(log(dist))*140)/700;//140
+
+				if (hitPos.x%16==15)
+				{
+					dist*=0.9;
+				}
+				if (hitPos.y%16==15)
+				{
+					dist*=0.9;
+				}
+				if (hitPos.z%24==23)
+				{
+					dist*=0.9;
+				}
+				if (dist > 1) dist = 1;
+				if (tile) dist *= (16 - (float)tile->getShade())/16; 
+			}
+			
+			image.push_back((int)((float)(pal[test*3+0])*dist));
+			image.push_back((int)((float)(pal[test*3+1])*dist));
+			image.push_back((int)((float)(pal[test*3+2])*dist));
+		}
+	}
+
+	int i = 0;
+	do
+	{
+		ss.str("");
+		ss << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
+		i++;
+	}
+	while (CrossPlatform::fileExists(ss.str()));
+
+
+	unsigned error = lodepng::encode(ss.str(), image, 512, 512, LCT_RGB);
+	if (error)
+	{
+		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+	}
+
+	return;
+}
+
+
+void BattlescapeState::SaveVoxelMap()
+{
+	std::stringstream ss;
+	std::vector<unsigned char> image;
+	static const unsigned char pal[30]=
+	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
+
+	Tile *tile;
+
+	for (int z = 0; z < _save->getMapSizeZ()*12; ++z)
+	{
+		image.clear();
+
+		for (int y = 0; y < _save->getMapSizeY()*16; ++y)
+		{
+			for (int x = 0; x < _save->getMapSizeX()*16; ++x)
+			{
+				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
+				float dist=1;
+				if (x%16==15)
+				{
+					dist*=0.9;
+				}
+				if (y%16==15)
+				{
+					dist*=0.9;
+				}
+
+				if (test==5)
+				{
+					tile = _save->getTile(Position(x/16, y/16, z/12));
+					if (tile->getUnit())
+					{
+						if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+						else
+						if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+					}
+					else
+					{
+						tile = _save->getTile(Position(x/16, y/16, z/12-1));
+						if (tile && tile->getUnit())
+						{
+							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
+							else
+							if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+						}
+					}
+				}
+
+				image.push_back((int)((float)pal[test*3+0]*dist));
+				image.push_back((int)((float)pal[test*3+1]*dist));
+				image.push_back((int)((float)pal[test*3+2]*dist));
+			}
+		}
+
+		ss.str("");
+		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
+
+		unsigned error = lodepng::encode(ss.str(), image, _save->getMapSizeX()*16, _save->getMapSizeY()*16, LCT_RGB);
+		if (error)
+		{
+			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+		}
+	}
+	return;
+}
+
 
 /**
  * Adds a new popup window to the queue

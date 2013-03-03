@@ -188,7 +188,7 @@ class HungarianRules: public Language::PluralityRules
 {
 public:
 	virtual const char *getSuffix(unsigned n) const;
-	static PluralityRules *create() { return new RusianRules; }
+	static PluralityRules *create() { return new HungarianRules; }
 };
 
 const char *HungarianRules::getSuffix(unsigned n) const
@@ -311,6 +311,30 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 }
 
 /**
+ * Takes a wide-character string and converts it to an
+ * 8-bit string encoded in the current system codepage.
+ * @param src Wide-character string.
+ * @return Codepage string.
+ */
+std::string Language::wstrToCp(const std::wstring& src)
+{
+	if (src.empty())
+		return "";
+#ifdef _WIN32
+	int size = WideCharToMultiByte(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
+	std::string str(size, 0);
+	WideCharToMultiByte(CP_ACP, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
+	return str;
+#else
+	const int MAX = 500;
+	char buffer[MAX];
+	wcstombs(buffer, src.c_str(), MAX);
+	std::string str(buffer);
+	return str;
+#endif
+}
+
+/**
  * Takes an 8-bit string encoded in UTF-8 and converts it
  * to a wide-character string.
  * @note Adapted from http://stackoverflow.com/questions/148403/utf8-to-from-wide-char-conversion-in-stl
@@ -394,10 +418,11 @@ std::wstring Language::cpToWstr(const std::string& src)
 	return wstr;
 #else
 	const int MAX = 500;
-	wchar_t buffer[MAX];
-	mbstowcs(buffer, src.c_str(), MAX);
-	std::wstring wstr(buffer);
-	return wstr;
+	wchar_t buffer[MAX + 1];
+	size_t len = mbstowcs(buffer, src.c_str(), MAX);
+	if (len == (size_t)-1)
+		return L"?";
+	return std::wstring(buffer, len);
 #endif
 }
 
@@ -450,7 +475,7 @@ std::vector<std::string> Language::getList(TextList *list)
 		{
 			if (!fin)
 			{
-				throw Exception("Failed to load language");
+				throw Exception(file + " not found");
 			}
 			char value;
 			std::string langname;
@@ -497,7 +522,7 @@ void Language::loadLng(const std::string &filename)
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
-		throw Exception("Failed to load LNG");
+		throw Exception(filename + " not found");
 	}
 	txtFile.exceptions(std::ios::badbit);
 
@@ -513,7 +538,7 @@ void Language::loadLng(const std::string &filename)
 		{
 			if (std::getline(txtFile, u8msg).fail())
 			{
-				throw Exception("Invalid data from file");
+				throw Exception("Invalid language file");
 			}
 			replace(u8msg, "{NEWLINE}", "\n");
 			replace(u8msg, "{SMALLLINE}", "\x02");
@@ -525,7 +550,7 @@ void Language::loadLng(const std::string &filename)
 	}
 	catch (std::ifstream::failure e)
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid language file");
 	}
 
 	txtFile.close();

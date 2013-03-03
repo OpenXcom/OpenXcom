@@ -40,6 +40,7 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
+#include "../Engine/Exception.h"
 
 namespace OpenXcom
 {
@@ -206,7 +207,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		std::stringstream s;
 		s << "UFOINTRO/" << lbms[i];
 		_surfaces[lbms[i]] = new Surface(320, 200);
-		_surfaces[lbms[i]]->loadLbm(CrossPlatform::getDataFile(s.str()));
+		_surfaces[lbms[i]]->loadImage(CrossPlatform::getDataFile(s.str()));
 	}
 	// Load surface sets
 	std::string sets[] = {"BASEBITS.PCK",
@@ -315,6 +316,8 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMENBASE",
 							 "GMGEO1",
 							 "GMGEO2",
+							 "GMGEO3",
+							 "GMGEO4",
 							 "GMINTER",
 							 "GMINTRO1",
 							 "GMINTRO2",
@@ -324,9 +327,10 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 							 "GMNEWMAR",
 							 "GMSTORY",
 							 "GMTACTIC",
+							 "GMTACTIC2",
 							 "GMWIN"};
-		std::string exts[] = {"ogg", "mp3", "mod", "mid"};
-		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
+		std::string exts[] = {"flac", "ogg", "mp3", "mod"};
+		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
 
 		// Check which music version is available
 		bool cat = true;
@@ -343,25 +347,46 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			cat = false;
 		}
 
-		for (int i = 0; i < 14; ++i)
+		for (int i = 0; i < 17; ++i)
 		{
-			if (cat)
+			bool loaded = false;
+			// Try digital tracks
+			for (int j = 0; j < 3; ++j)
 			{
-				_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+				std::stringstream s;
+				s << "SOUND/" << mus[i] << "." << exts[j];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[mus[i]] = new Music();
+					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+					break;
+				}
 			}
-			else
+			if (!loaded)
 			{
-				_musics[mus[i]] = new Music();
-				for (int j = 0; j < 4; ++j)
+				// Try Adlib music
+				if (cat && tracks[i] != -1)
+				{
+					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+					loaded = true;
+				}
+				// Try MIDI music
+				else
 				{
 					std::stringstream s;
-					s << "SOUND/" << mus[i] << "." << exts[j];
-					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str()).c_str()))
+					s << "SOUND/" << mus[i] << ".mid";
+					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 					{
+						_musics[mus[i]] = new Music();
 						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
-						break;
+						loaded = true;
 					}
 				}
+			}
+			if (!loaded && tracks[i] != -1)
+			{
+				throw Exception(mus[i] + " not found");
 			}
 		}
 		delete gmcat;
@@ -399,7 +424,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		{
 			if (cats == 0)
 			{
-				_sounds[catsId[i]] = new SoundSet();
+				throw Exception(cats[i] + " not found");
 			}
 			else
 			{
@@ -409,12 +434,12 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
 			}
 		}
-
-		TextButton::soundPress = _sounds["GEO.CAT"]->getSound(0);
-		Window::soundPopup[0] = _sounds["GEO.CAT"]->getSound(1);
-		Window::soundPopup[1] = _sounds["GEO.CAT"]->getSound(2);
-		Window::soundPopup[2] = _sounds["GEO.CAT"]->getSound(3);
 	}
+
+	TextButton::soundPress = getSound("GEO.CAT", 0);
+	Window::soundPopup[0] = getSound("GEO.CAT", 1);
+	Window::soundPopup[1] = getSound("GEO.CAT", 2);
+	Window::soundPopup[2] = getSound("GEO.CAT", 3);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 	

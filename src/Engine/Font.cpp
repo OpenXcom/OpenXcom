@@ -104,7 +104,7 @@ void Font::loadIndex(const std::string &filename)
 	std::ifstream txtFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!txtFile)
 	{
-		throw Exception("Failed to load index");
+		throw Exception(filename + " not found");
 	}
 
 	char value;
@@ -116,7 +116,7 @@ void Font::loadIndex(const std::string &filename)
 
 	if (!txtFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid font index");
 	}
 
 	_index = Language::utf8ToWstr(buffer);

@@ -55,7 +55,7 @@ class Ruleset;
 class SavedBattleGame
 {
 private:
-	int _width, _length, _height;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
 	BattleUnit *_selectedUnit, *_lastSelectedUnit;
@@ -71,12 +71,14 @@ private:
 	bool _debugMode;
 	bool _aborted;
 	int _itemId;
-	Uint8 _scrollButton;  // this is a cache for Options::getString("battleScrollButton")
-	bool _scrollButtonInvertMode;  // this is a cache for Options::getString("battleScrollButtonInvertMode")
-	int _scrollButtonTimeTolerancy;  // this is a cache for Options::getInt("battleScrollButtonTimeTolerancy")
-	int _scrollButtonPixelTolerancy;  // this is a cache for Options::getInt("battleScrollButtonPixelTolerancy")
+	Uint8 _dragButton;  // this is a cache for Options::getString("battleScrollDragButton")
+	bool _dragInvert;  // this is a cache for Options::getString("battleScrollDragInvert")
+	int _dragTimeTolerance;  // this is a cache for Options::getInt("battleScrollDragTimeTolerance")
+	int _dragPixelTolerance;  // this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
+	std::vector<BattleUnit*> _fallingUnits;
+	bool _unitsFalling, _strafeEnabled;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -87,7 +89,7 @@ public:
 	/// Saves a saved battle game to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Set the dimensions of the map and initializes it.
-	void initMap(int width, int length, int height);
+	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 	/// initialises pathfinding and tileengine
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
@@ -110,26 +112,56 @@ public:
 	std::vector<BattleItem*> *getItems();
 	/// Get pointer to the list of units.
 	std::vector<BattleUnit*> *getUnits();
-	/// Gets terrain width.
-	int getWidth() const;
-	/// Gets terrain length.
-	int getLength() const;
-	/// Gets terrain height.
-	int getHeight() const;
+	/// Gets terrain size x.
+	int getMapSizeX() const;
+	/// Gets terrain size y.
+	int getMapSizeY() const;
+	/// Gets terrain size z.
+	int getMapSizeZ() const;
+	/// Gets terrain x*y*z
+	int getMapSizeXYZ() const;
+
+
 	/// Conversion between coordinates and the tile index.
-	int getTileIndex(const Position& pos) const;
+	//  int getTileIndex(const Position& pos) const;
+	/**
+	 * This method converts coordinates into a unique index.
+	 * getTile() calls this every time, so should be inlined along with it.
+	 * @param pos position
+	 * @return Unique index.
+	 */
+	inline int getTileIndex(const Position& pos) const
+	{
+		return pos.z * _mapsize_y * _mapsize_x + pos.y * _mapsize_x + pos.x;
+	}
+
 	/// Conversion between tile index and coordinates.
 	void getTileCoords(int index, int *x, int *y, int *z) const;
 	/// Gets the tile at certain position.
-	Tile *getTile(const Position& pos) const;
+	//  Tile *getTile(const Position& pos) const;
+	/**
+	 * Gets the Tile on a given position on the map.
+	 * This method is called over 50mil+ times per turn so it seems useful
+	 * to inline it.
+	 * @param pos position
+	 * @return Pointer to tile.
+	 */
+	inline Tile *getTile(const Position& pos) const
+	{
+		if (pos.x < 0 || pos.y < 0 || pos.z < 0
+			|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
+			return 0;
+
+		return _tiles[getTileIndex(pos)];
+	}
 	/// get the currently selected unit
 	BattleUnit *getSelectedUnit() const;
 	/// set the currently selected unit
 	void setSelectedUnit(BattleUnit *unit);
 	/// select previous soldier
-	BattleUnit *selectPreviousPlayerUnit();
+	BattleUnit *selectPreviousPlayerUnit(bool checkReselect = false);
 	/// select next soldier
-	BattleUnit *selectNextPlayerUnit(bool checkReselect = false);
+	BattleUnit *selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
 	/// select unit with position on map
 	BattleUnit *selectUnit(const Position& pos);
 	/// select unit with position on map
@@ -157,7 +189,7 @@ public:
 	/// Whether the mission was aborted.
 	void setAborted(bool flag);
 	/// Whether the mission was aborted.
-	bool isAborted();
+	bool isAborted() const;
 	/// Whether the objective is destroyed.
 	void setObjectiveDestroyed(bool flag);
 	/// Whether the objective is detroyed.
@@ -176,18 +208,25 @@ public:
 	void removeUnconsciousBodyItem(BattleUnit *bu);
 	/// Set or try to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-	/// get ScrollButton
-	Uint8 getScrollButton() const;
-	/// get ScrollButtonInvertMode
-	bool getScrollButtonInvertMode() const;
-	/// get ScrollButtonTimeTolerancy
-	int getScrollButtonTimeTolerancy() const;
-	/// get ScrollButtonPixelTolerancy
-	int getScrollButtonPixelTolerancy() const;
+	/// get DragButton
+	Uint8 getDragButton() const;
+	/// get DragInverted
+	bool isDragInverted() const;
+	/// get DragTimeTolerance
+	int getDragTimeTolerance() const;
+	/// get DragPixelTolerance
+	int getDragPixelTolerance() const;
 	void updateExposedUnits();
 	std::vector<BattleUnit*> *getExposedUnits();
 	int getSpottingUnits(BattleUnit* unit) const;
+	void addFallingUnit(BattleUnit* unit);
+	std::vector<BattleUnit*> *getFallingUnits();
+	void setUnitsFalling(bool fall);
+	bool getUnitsFalling() const;
+	const bool getStrafeSetting() const;
 
+	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
+	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 };
 
 }

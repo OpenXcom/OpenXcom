@@ -23,6 +23,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
+#include "../Battlescape/TileEngine.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -83,40 +84,30 @@ Projectile::~Projectile()
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
-	int direction;
-	int dirYshift[8] = {1, 4, 12, 15, 15, 15, 8, 1 };
-	int dirXshift[8] = {12, 14, 15, 15, 8, 1, 1, 1 };
-	
-	if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !_action.weapon->getRules()->isTwoHanded())
-	{
-	dirYshift[0] = 2;
-	dirYshift[1] = 0;
-	dirYshift[4] = 22;
-	dirYshift[5] = 20;
-	dirYshift[6] = 20;
-	dirXshift[0] = 6;
-	dirXshift[2] = 18;
-	dirXshift[3] = 19;
-	dirXshift[5] = -1;
-	dirXshift[6] = -1;
-	dirXshift[7] = -5;
-	}
+	int direction;		
+	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
+	int dirXshift[24] = {9, 15, 15, 13, 7, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+	int offset = 0;
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
+	
+	if (bu->getArmor()->getSize() > 1)
+	{
+		offset = 16;
+	}
+	else if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !_action.weapon->getRules()->isTwoHanded())
+	{
+		offset = 8;
+	}
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (_action.actor->getPosition() == _origin)
 	{
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-		if (bu->getArmor()->getSize() > 1)
-		{
-			originVoxel.x += 8;
-			originVoxel.y += 8;
-		}
 
-		originVoxel.z += bu->getHeight();
+		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 		originVoxel.z -= 4;
 		if (originVoxel.z >= (_origin.z + 1)*24)
 		{
@@ -125,12 +116,14 @@ int Projectile::calculateTrajectory(double accuracy)
 		direction = bu->getDirection();
 		if (bu->getTurretType() != -1)
 			direction = bu->getTurretDirection();
-		originVoxel.x += dirXshift[direction];
-		originVoxel.y += dirYshift[direction];
+		originVoxel.x += dirXshift[direction+offset]*bu->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction+offset]*bu->getArmor()->getSize();
 	}
 	else
 	{
 		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
+		originVoxel.x += 8;
+		originVoxel.y += 8;
 		originVoxel.z += 12;
 	}
 
@@ -146,6 +139,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store this target voxel.
 		Tile *targetTile = _save->getTile(_action.target);
+		Position hitPos;
 		int test = -1;
 		if (targetTile->getUnit() != 0)
 		{
@@ -156,35 +150,36 @@ int Projectile::calculateTrajectory(double accuracy)
 			}
 			else
 			{
-				// first try is at half the unit height
-				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + targetTile->getUnit()->getStandHeight()/2);
-				targetVoxel.z += -targetTile->getTerrainLevel();
-				test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
-				Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-				_trajectory.clear();
-				if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
-				{
-					// did not hit a unit, try at different heights (for ex: unit behind a window can only be hit in the head)
-					targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + (targetTile->getUnit()->getStandHeight()*3)/4);
-					targetVoxel.z += -targetTile->getTerrainLevel();
-				}
+				_save->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &targetVoxel, bu);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+			}
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
+			}
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
+			}
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 		{
-			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+			if (!_save->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &targetVoxel, bu))
+			{
+				targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+			}
 		}
 		else
 		{
@@ -194,11 +189,39 @@ int Projectile::calculateTrajectory(double accuracy)
 		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu);
 		if (test == 4 && !_trajectory.empty())
 		{
-			Position hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
-			if (hitPos.x != targetTile->getPosition().x || hitPos.y != targetTile->getPosition().y)
+			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			if (_save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
 			{
+				hitPos = Position(hitPos.x, hitPos.y, hitPos.z-1);
+			}
+		}
+		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
+		{
+			//skip already estimated hitPos
+			if (test != 4)
+			{
+				hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
+			}
+			if (hitPos != _action.target && _action.result == "")
+			{
+				if (test == 2)
+				{
+					if (hitPos.y - 1 == _action.target.y)
+					{
+						_trajectory.clear();
+						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+					}
+				}
+				if (test == 1)
+				{
+					if (hitPos.x - 1 == _action.target.x)
+					{
+						_trajectory.clear();
+						return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
+					}
+				}
 				_trajectory.clear();
-				return -1; // still no line of fire as we can't reach the target tile due to a unit blocking
+				return -1;
 			}
 		}
 		_trajectory.clear();
@@ -206,7 +229,8 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
-	applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
+	if (_action.type != BA_LAUNCH)
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -232,7 +256,7 @@ bool Projectile::calculateThrow(double accuracy)
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
 	if(!bu)
 		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
-	originVoxel.z += bu->getHeight();
+	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{

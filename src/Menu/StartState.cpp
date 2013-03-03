@@ -21,7 +21,6 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Resource/XcomResourcePack.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
@@ -44,7 +43,7 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	_surface = new Surface(320, 200, 0, 0);
 
 	// Set palette
-	SDL_Color bnw[2];
+	SDL_Color bnw[3];
 
 	bnw[0].r = 0;
 	bnw[0].g = 0;
@@ -52,8 +51,11 @@ StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 	bnw[1].r = 255;
 	bnw[1].g = 255;
 	bnw[1].b = 255;
+	bnw[2].r = 255;
+	bnw[2].g = 255;
+	bnw[2].b = 0;
 
-	_game->setPalette(bnw, 0, 2);
+	_game->setPalette(bnw, 0, 3);
 
 	add(_surface);
 
@@ -83,7 +85,7 @@ void StartState::think()
 		try
 		{
 			Log(LOG_INFO) << "Loading resources...";
-			_game->setResourcePack(new XcomResourcePack());
+			_game->setResourcePack(makeModifications(new XcomResourcePack()));
 			Log(LOG_INFO) << "Resources loaded successfully.";
 			Log(LOG_INFO) << "Loading ruleset...";
 			_game->loadRuleset();
@@ -99,13 +101,13 @@ void StartState::think()
 		{
 			_load = LOADING_FAILED;
 			_surface->clear();
-			_surface->drawString(0, 0, "ERROR:", 1);
-			_surface->drawString(0, 8, e.what(), 1);
-			_surface->drawString(0, 32, "Can't find a required X-Com data file.", 1);
-			_surface->drawString(0, 40, "Make sure you installed OpenXcom", 1);
-			_surface->drawString(0, 48, "correctly.", 1);
-			_surface->drawString(0, 72, "Check the README for more details.", 1);
-			_surface->drawString(76, 192, "Press any key to quit", 1);
+			_surface->drawString(1, 9, "ERROR:", 2);
+			_surface->drawString(1, 17, e.what(), 2);
+			_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
+			_surface->drawString(1, 57, "correctly.", 1);
+			_surface->drawString(1, 73, "Check the requirements and", 1);
+			_surface->drawString(1, 81, "documentation for more details.", 1);
+			_surface->drawString(75, 183, "Press any key to quit", 1);
 			Log(LOG_ERROR) << e.what();
 		}
 		break;
@@ -148,6 +150,29 @@ void StartState::handle(Action *action)
 		if (action->getDetails()->type == SDL_KEYDOWN)
 			_game->quit();
 	}
+}
+
+/**
+ * This method makes our modifications to the XcomResourcePack.
+ * @param pack XcomResourcePack which is already read in from files.
+ * @return The modified XcomResourcePack.
+ */
+XcomResourcePack *StartState::makeModifications(XcomResourcePack *pack)
+{
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		Surface *surface = pack->getSurface("BACK07.SCR");
+		for (int y = 172; y >= 152; --y)
+			for (int x = 5; x <= 314; ++x)
+				surface->setPixel(x, y+4, surface->getPixel(x,y));
+		for (int y = 147; y >= 134; --y)
+			for (int x = 5; x <= 314; ++x)
+				surface->setPixel(x, y+9, surface->getPixel(x,y));
+		for (int y = 132; y >= 109; --y)
+			for (int x = 5; x <= 314; ++x)
+				surface->setPixel(x, y+10, surface->getPixel(x,y));
+	}
+	return pack;
 }
 
 }

@@ -24,7 +24,7 @@
 
 namespace OpenXcom {
 
-CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _range(0), _toBeRemoved(false), _missed(false)
+CraftWeaponProjectile::CraftWeaponProjectile() : _type(CWPT_CANNON_ROUND), _globalType(CWPGT_MISSILE), _speed(0), _direction(D_NONE), _currentPosition(0), _horizontalPosition(0), _state(0), _accuracy(0), _damage(0), _range(0), _toBeRemoved(false), _missed(false), _distanceCovered(0)
 {
 }
 
@@ -136,6 +136,13 @@ void CraftWeaponProjectile::move()
 		{
 			_currentPosition -= _speed;
 		}
+		
+		_distanceCovered += _speed;
+		
+		// Check if projectile passed it's maximum range.
+		if (getGlobalType() == CWPGT_MISSILE && (_distanceCovered / 8) >= getRange())
+			setMissed(true);
+
 	}
 	else if(_globalType == CWPGT_BEAM)
 	{

@@ -60,13 +60,14 @@ private:
 	bool _inBattlescape;
 	bool _retaliationTarget;
 	std::vector<Vehicle*> _vehicles;
+	std::vector<BaseFacility*> _defenses;
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.
-	void load(const YAML::Node& node, SavedGame *save, bool newGame);
+	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
 	/// Saves the base to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the base's ID to YAML.
@@ -98,7 +99,7 @@ public:
 	/// Checks if a target is inside the base's radar range.
 	bool insideRadarRange(Target *target) const;
 	/// Gets the base's available soldiers.
-	int getAvailableSoldiers() const;
+	int getAvailableSoldiers(bool checkCombatReadiness = false) const;
 	/// Gets the base's total soldiers.
 	int getTotalSoldiers() const;
 	/// Gets the base's available scientists.
@@ -187,6 +188,7 @@ public:
 	unsigned getDetectionChance() const;
 	/// Gets how many Grav Shields the base has
 	int getGravShields() const;
+	void setupDefenses();
 	/// Get a list of Defensive Facilities
 	std::vector<BaseFacility*> *getDefenses();
 	/// Gets the base's vehicles.

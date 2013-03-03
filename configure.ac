@@ -22,6 +22,7 @@ AC_LANG([C++])
 # Find required base packages
 # ===========================
 AC_PROG_CXX
+AC_PROG_CC
 PKG_PROG_PKG_CONFIG([0.24])
 
 # ================
@@ -38,7 +39,7 @@ AS_IF([test x"$enable_werror" != "xno"], [
 ])
 AS_IF([test x"$GCC" = xyes], [
 	# Be tough with warnings and produce less careless code
-	CFLAGS="$CFLAGS -Wall -pedantic -Weffc++"
+	CFLAGS="$CFLAGS -Wall -pedantic"
 	LDFLAGS="$LDFLAGS -Wl,--as-needed"
 ])
 
@@ -77,7 +78,7 @@ AM_CONDITIONAL([WITH_OPENXCOM_DOCS], [test "x$build_docs" != "xno"])
 # Check dependencies
 # ==================
 PKG_CHECK_MODULES([SDL],[sdl >= 1.2.13 SDL_mixer >= 1.2.11 SDL_gfx >= 2.0.22 SDL_image >= 1.2])
-PKG_CHECK_MODULES([YAML],[yaml-cpp])
+PKG_CHECK_MODULES([YAML],[yaml-cpp <= 0.3.0])
 
 AC_CONFIG_FILES([
 	Makefile

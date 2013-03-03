@@ -32,8 +32,8 @@ class Production
 {
 public:
 	Production (const RuleManufacture * rules, int amount);
-	int getAmountRemaining () const;
-	void setAmountRemaining (int);
+	int getAmountTotal () const;
+	void setAmountTotal (int);
 	int getTimeSpent () const;
 	void setTimeSpent (int);
 	int getAmountProduced () const;
@@ -49,6 +49,8 @@ private:
 	int _amount;
 	int _timeSpent;
 	int _engineers;
+	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g);
+	bool haveEnoughMaterialsForOneMoreUnit(Base * b);
 };
 }
 #endif

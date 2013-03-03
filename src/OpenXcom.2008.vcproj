@@ -45,7 +45,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="_SCL_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -65,7 +65,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cppd.lib opengl32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -125,7 +125,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -205,7 +205,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="_SCL_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib"
+				AdditionalDependencies="SDLmain.lib SDL.lib SDL_gfx.lib SDL_image.lib SDL_mixer.lib yaml-cpp.lib opengl32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\deps\lib\$(PlatformName)&quot;"
 				GenerateManifest="true"
@@ -285,7 +285,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -376,6 +376,14 @@
 			</File>
 			<File
 				RelativePath=".\Engine\Exception.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\FastLineClip.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\FastLineClip.h"
 				>
 			</File>
 			<File
@@ -518,6 +526,66 @@
 				RelativePath=".\Engine\Timer.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Engine\Zoom.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Zoom.h"
+				>
+			</File>
+			<Filter
+				Name="Interface"
+				>
+				<File
+					RelativePath=".\Engine\Scalers\common.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq2x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq3x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hq4x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\hqx.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\init.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale2x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale2x.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale3x.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scale3x.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scalebit.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Engine\Scalers\scalebit.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Interface"
@@ -1211,11 +1279,27 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\UnitFallBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitFallBState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\UnitInfoState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Battlescape\UnitInfoState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitPanicBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\UnitPanicBState.h"
 				>
 			</File>
 			<File
@@ -1287,19 +1371,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\BaseDestroyedState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\BaseDefenseState.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Geoscape\BaseDefenseState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\BaseDestroyedState.h"
 				>
 			</File>
 			<File
@@ -1743,6 +1827,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Menu\OptionsControlsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\OptionsControlsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\OptionsState.cpp"
 				>
 			</File>
@@ -1800,6 +1892,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\AlienMission.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\AlienStrategy.h"
 				>
 			</File>
 			<File
@@ -1896,10 +1996,6 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\Node.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\NodeLink.cpp"
 				>
 			</File>
 			<File
@@ -2018,14 +2114,6 @@
 				RelativePath=".\Savegame\WeightedOptions.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Savegame\AlienStrategy.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Savegame\AlienStrategy.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Resource"
@@ -2112,6 +2200,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\MapDataSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\RuleAlienMission.h"
 				>
 			</File>
 			<File
@@ -2242,14 +2338,6 @@
 				RelativePath=".\Ruleset\Unit.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Ruleset\RuleAlienMission.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Ruleset\RuleAlienMission.h"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath=".\Ufopaedia\ArticleStateVehicle.cpp"
@@ -2293,6 +2381,14 @@
 		</File>
 		<File
 			RelativePath=".\main.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\OpenGL.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Engine\OpenGL.h"
 			>
 		</File>
 		<File

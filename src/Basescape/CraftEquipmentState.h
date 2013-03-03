@@ -42,13 +42,14 @@ class CraftEquipmentState : public State
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtStores, *_txtAvailable, *_txtUsed;
+	Text *_txtTitle, *_txtItem, *_txtStores, *_txtAvailable, *_txtUsed, *_txtCrew;
 	TextList *_lstEquipment;
 	Timer *_timerLeft, *_timerRight;
 	unsigned int _sel;
 	Base *_base;
 	size_t _craft;
 	std::vector<std::string> _items;
+	int _changeValueByMouseWheel;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
@@ -72,10 +73,16 @@ public:
 	void lstEquipmentRightArrowRelease(Action *action);
 	/// Handler for clicking a Move Right arrow in the list.
 	void lstEquipmentRightArrowClick(Action *action);
+	/// Handler for pressing-down a mouse-button in the list.
+	void lstEquipmentMousePress(Action *action);
 	/// Moves an item to the base.
 	void moveLeft();
+	/// Moves the given number of items to the base.
+	void moveLeft(int change);
 	/// Moves an item to the craft.
 	void moveRight();
+	/// Moves the given number of items to the craft.
+	void moveRight(int change);
 };
 
 }

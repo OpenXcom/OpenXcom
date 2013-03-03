@@ -44,7 +44,12 @@ namespace OpenXcom
  */
 DeleteGameState::DeleteGameState(Game *game, const std::wstring &save, Uint8 color, std::string bg, Uint8 bgColor, SavedGameState *parent): State(game)
 {
-	_filename = Options::getUserFolder() +  Language::wstrToUtf8(save) + ".sav";
+#ifdef _WIN32
+	std::string file = Language::wstrToCp(save);
+#else
+	std::string file = Language::wstrToUtf8(save);
+#endif
+	_filename = Options::getUserFolder() + file + ".sav";
 	_parent = parent;
 	_screen = false;
 

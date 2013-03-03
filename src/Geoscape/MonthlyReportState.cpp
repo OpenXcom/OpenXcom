@@ -153,7 +153,10 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtRatingTxt->setText(rating);
 
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01' <<  Text::formatFunding(_fundingDiff);
+	ss3 << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01';
+	if (_fundingDiff > 0)
+		ss3 << '+';
+	ss3 << Text::formatFunding(_fundingDiff);
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);

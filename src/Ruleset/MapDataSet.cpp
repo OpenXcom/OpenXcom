@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 MapData *MapDataSet::_blankTile = 0;
-MapData *MapDataSet::_scourgedTile = 0;
+MapData *MapDataSet::_scorchedTile = 0;
 
 /**
 * MapDataSet construction.
@@ -172,7 +172,7 @@ void MapDataSet::loadData()
 	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load MCD");
+		throw Exception(s.str() + " not found");
 	}
 
 	while (mapFile.read((char*)&mcd, sizeof(MCD)))
@@ -213,7 +213,7 @@ void MapDataSet::loadData()
 			if (objNumber == 0)
 				MapDataSet::_blankTile = to;
 			else if (objNumber == 1)
-				MapDataSet::_scourgedTile = to;
+				MapDataSet::_scorchedTile = to;
 		}
 		objNumber++;
 	}
@@ -221,7 +221,7 @@ void MapDataSet::loadData()
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid MCD file");
 	}
 
 	mapFile.close();
@@ -271,7 +271,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
-		throw Exception("Failed to load DAT");
+		throw Exception(filename + " not found");
 	}
 
 	Uint16 value;
@@ -283,7 +283,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	if (!mapFile.eof())
 	{
-		throw Exception("Invalid data from file");
+		throw Exception("Invalid LOFTEMPS");
 	}
 
 	mapFile.close();
@@ -294,9 +294,9 @@ MapData *MapDataSet::getBlankFloorTile()
 	return MapDataSet::_blankTile;
 }
 
-MapData *MapDataSet::getScourgedEarthTile()
+MapData *MapDataSet::getScorchedEarthTile()
 {
-	return MapDataSet::_scourgedTile;
+	return MapDataSet::_scorchedTile;
 }
 
 }

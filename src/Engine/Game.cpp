@@ -109,7 +109,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	SDL_EnableUNICODE(1);
 
 	// Create display
-	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 8, Options::getBool("fullscreen"));
+	Screen::BASE_WIDTH = Options::getInt("baseXResolution");
+	Screen::BASE_HEIGHT = Options::getInt("baseYResolution");
+	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 0, Options::getBool("fullscreen"), Options::getInt("windowedModePositionX"), Options::getInt("windowedModePositionY"));
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
@@ -120,6 +122,8 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// Create blank language
 	_lang = new Language();
+
+	_alienContainmentHasUpperLimit = Options::getBool("alienContainmentHasUpperLimit") ? 1 : 0;
 }
 
 /**
@@ -209,24 +213,26 @@ void Game::run()
 							break;
 					}
 					break;
+				case SDL_VIDEORESIZE:
+					Options::setInt("displayWidth", _event.resize.w);
+					Options::setInt("displayHeight", _event.resize.h);
+					_screen->setResolution(_event.resize.w, _event.resize.h);
+					break;
 				case SDL_KEYDOWN:
 				case SDL_KEYUP:
-					if (Options::getBool("strafe"))
+					if (_event.type == SDL_KEYDOWN)
+					{ 
+						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
+							setCtrlKeyDown(true);
+						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
+							setShiftKeyDown(true);
+					}
+					else if (_event.type == SDL_KEYUP)
 					{
-						if (_event.type == SDL_KEYDOWN)
-						{ 
-							if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-								setCtrlKeyDown(true);
-							else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-								setShiftKeyDown(true);
-						}
-						else if (_event.type == SDL_KEYUP)
-						{
-							if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-								setCtrlKeyDown(false);
-							else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-								setShiftKeyDown(false);
-						}
+						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
+							setCtrlKeyDown(false);
+						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
+							setShiftKeyDown(false);
 					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
@@ -497,6 +503,15 @@ void Game::setMouseActive(bool active)
 {
 	_mouseActive = active;
 	_cursor->setVisible(active);
+}
+
+/**
+ * Gets the value of alienContainmentHasUpperLimit.
+ * @return An int, if alienContainmentHasUpperLimit is true, then 1, and it's 0 else.
+ */
+int Game::getAlienContainmentHasUpperLimit() const
+{
+	return _alienContainmentHasUpperLimit;
 }
 
 bool Game::_ctrlKeyDown;

@@ -39,8 +39,8 @@ private:
 	Text *_txtTitle;
 	Text *_txtScrollSpeed;
 	TextButton *_scrollSpeed, *_btnScrollSpeed1, *_btnScrollSpeed2, *_btnScrollSpeed3, *_btnScrollSpeed4, *_btnScrollSpeed5;
-	Text *_txtScrollType, *_txtTriggerScroll, *_txtAutoScroll;
-	TextButton *_scrollType, *_btnScrollType1, *_btnScrollType2;
+	Text *_txtScrollType, *_txtTriggerScroll, *_txtAutoScroll, *_txtDragScroll;
+	TextButton *_scrollType, *_btnScrollType1, *_btnScrollType2, *_btnScrollType3;
 	Text *_txtFireSpeed;
 	TextButton *_fireSpeed, *_btnFireSpeed1, *_btnFireSpeed2, *_btnFireSpeed3, *_btnFireSpeed4, *_btnFireSpeed5, *_btnFireSpeed6;
 	Text *_txtXcomSpeed;

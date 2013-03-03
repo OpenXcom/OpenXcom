@@ -45,10 +45,10 @@ private:
 	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
 	SavedBattleGame *_save;
 	std::vector<Uint16> *_voxelData;
+	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type);
 	int vectorToDirection(const Position &vector);
-	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false);
 	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.
@@ -79,20 +79,29 @@ public:
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool LOSCalc = false);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
+	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);	
+	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	bool visible(BattleUnit *currentUnit, Tile *tile);
 	void togglePersonalLighting();
 	int distance(const Position &pos1, const Position &pos2) const;
+	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;	
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
 	bool inTeamFOV(const Position &pos, UnitFaction team);
 	bool psiAttack(BattleAction *action);
 	Tile *applyItemGravity(Tile *t);
 	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
+	bool validMeleeRange(Position pos, int direction, int size, int height, BattleUnit *target);
 	int faceWindow(const Position &position);
-
+	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
+	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
+	int castedShade(const Position& voxel);
+	bool isVoxelVisible(const Position& voxel);
+	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false);
+	bool detonate(Tile* tile);
 };
 
 }

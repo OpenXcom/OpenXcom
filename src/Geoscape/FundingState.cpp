@@ -91,7 +91,12 @@ FundingState::FundingState(Game *game) : State(game)
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
 		if((*i)->getFunding().size() > 1)
 		{
-			ss2 << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)- (*i)->getFunding().at((*i)->getFunding().size()-2));
+			ss2 << L'\x01';
+			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
+			if (change > 0)
+				ss2 << L'+';
+			ss2 << Text::formatFunding(change);
+			ss2 << L'\x01';
 		}
 		else
 		{

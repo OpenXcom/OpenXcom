@@ -30,8 +30,22 @@ MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0
 {
 }
 
+/**
+ * Make sure to cleanup the target's destination followers.
+ */
 MovingTarget::~MovingTarget()
 {
+	if (_dest != 0 && _dest->getFollowers()->size() > 0)
+	{
+		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		{
+			if ((*i) == this)
+			{
+				_dest->getFollowers()->erase(i);
+				break;
+			}
+		}
+	}
 }
 
 /**
@@ -132,7 +146,7 @@ void MovingTarget::setSpeed(int speed)
  */
 void MovingTarget::calculateSpeed()
 {
-	if (_dest != 0 && _speed != 0)
+	if (_dest != 0)
 	{
 		double dLon, dLat, length;
 		dLon = sin(_dest->getLongitude() - _lon) * cos(_dest->getLatitude());
@@ -140,6 +154,12 @@ void MovingTarget::calculateSpeed()
 		length = sqrt(dLon * dLon + dLat * dLat);
 		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
 		_speedLat = dLat / length * _speedRadian;
+		// Check for invalid speeds when a division by zero occurs due to near-zero values
+		if (!(_speedLon == _speedLon) || !(_speedLat == _speedLat))
+		{
+			_speedLon = 0;
+			_speedLat = 0;
+		}
 	}
 	else
 	{

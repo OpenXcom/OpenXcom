@@ -25,6 +25,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/Tile.h"
 
@@ -127,6 +129,24 @@ void PatrolBAIState::think(BattleAction *action)
 
 	Node *node;
 
+
+	if (_unit->_hidingForTurn) 
+	{
+		action->type = BA_NONE;
+		action->TU = 0;
+		if (Options::getBool("traceAI")) 
+		{
+			Log(LOG_INFO) << "PatrolBAIState::think()? Better not... #" << action->number;
+		}
+		return;
+	}
+
+	if (Options::getBool("traceAI")) 
+	{
+		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
+	}
+	
+	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
 		// destination reached
@@ -191,7 +211,8 @@ void PatrolBAIState::think(BattleAction *action)
 		// in base defense missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
 		if (_game->getMissionType() == "STR_BASE_DEFENSE" && _unit->getArmor()->getSize() == 1)
 		{
-			if (_fromNode->isTarget())
+			// can i shoot an object?
+			if (_fromNode->isTarget() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
 			{
 				// scan this room for objects to destroy
 				int x = (_unit->getPosition().x/10)*10;

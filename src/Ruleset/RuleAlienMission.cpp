@@ -116,12 +116,10 @@ void RuleAlienMission::save(YAML::Emitter &out) const
  * @param gameTime The current date and time of the game world.
  * @return The string id of the race.
  */
-const std::string &RuleAlienMission::generateRace(const GameTime &gameTime) const
+const std::string &RuleAlienMission::generateRace(const int monthsPassed) const
 {
-	unsigned months = (gameTime.getYear() - 1999) * 12 + gameTime.getMonth() - 1;
-	assert(months >= _raceDistribution.front().first);
 	std::vector<std::pair<unsigned, WeightedOptions*> >::const_reverse_iterator rc = _raceDistribution.rbegin();
-	while (months < rc->first)
+	while (monthsPassed < rc->first)
 		++rc;
 	return rc->second->choose();
 }

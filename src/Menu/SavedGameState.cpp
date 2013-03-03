@@ -32,9 +32,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-#include "../Geoscape/GeoscapeState.h"
 #include "ErrorMessageState.h"
-#include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -56,7 +54,7 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 	_txtDelete = new Text(310, 8, 5, 24);
 	_txtName = new Text(150, 9, 16, 32);
 	_txtTime = new Text(30, 9, 184, 32);
-	_txtDate = new Text(30, 9, 214, 32);
+	_txtDate = new Text(38, 9, 214, 32);
 	_txtStatus = new Text(320, 16, 0, 92);
 	_lstSaves = new TextList(288, 120, 8, 40);
 
@@ -97,6 +95,7 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 		_txtStatus->setColor(Palette::blockOffset(8)+5);
 
 		_lstSaves->setColor(Palette::blockOffset(8)+10);
+		_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
 	}
 	else
 	{

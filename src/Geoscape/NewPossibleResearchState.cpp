@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <algorithm>
 #include "NewPossibleResearchState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -78,8 +79,8 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	size_t tally(0);
 	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
-		
-		if((*iter)->getRequirements().size() == 0 && (*iter)->getStringTemplate().size() == 0 )
+		std::vector<std::string>::const_iterator unlocked = std::find((*iter)->getUnlocked().begin(), (*iter)->getUnlocked().end(), "STR_ALIEN_ORIGINS");
+		if((*iter)->getRequirements().size() == 0 && unlocked == (*iter)->getUnlocked().end())
 		{
 			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
 		}

@@ -711,6 +711,51 @@
     <ClCompile Include="Geoscape\ConfirmCydoniaState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\UnitFallBState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\UnitPanicBState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FastLineClip.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\OptionsControlsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Zoom.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Zoom.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\hq2x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\hq3x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\hq4x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\init.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Zoom.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\scale2x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\scale3x.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Scalers\scalebit.cpp">
+      <Filter>Engine\Scalers</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\OpenGL.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1427,6 +1472,48 @@
     <ClInclude Include="Geoscape\BaseDestroyedState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
+    <ClInclude Include="Battlescape\UnitFallBState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\UnitPanicBState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FastLineClip.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\OptionsControlsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Zoom.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Zoom.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\scalebit.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\scale2x.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\scale3x.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\common.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Scalers\hqx.h">
+      <Filter>Engine\Scalers</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Zoom.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Savegame\SerializationHelper.h">
+      <Filter>Savegame</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\OpenGL.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
@@ -1461,6 +1548,9 @@
     </Filter>
     <Filter Include="Ufopaedia">
       <UniqueIdentifier>{41135935-090f-4179-a64d-0efbd66b5f5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Scalers">
+      <UniqueIdentifier>{fef61e76-5d44-4389-a40c-12da6e590e2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

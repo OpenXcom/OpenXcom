@@ -43,6 +43,8 @@ class Soldier;
 class Armor;
 class SavedGame;
 class Language;
+class AggroBAIState;
+class PatrolBAIState;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -95,7 +97,7 @@ private:
 	std::string _race;
 	std::wstring _name;
 	UnitStats _stats;
-	int _standHeight, _kneelHeight, _loftemps;
+	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
@@ -106,13 +108,16 @@ private:
 	Soldier *_geoscapeSoldier;
 	BattleUnit *_charging;
 	int _turnsExposed;
+	std::vector<int> _loftempsSet;
+	Unit *_unitRules;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor);
+	BattleUnit(BattleUnit&);
 	/// Cleans up the BattleUnit.
-	virtual ~BattleUnit();
+	~BattleUnit();
 	/// Loads the unit from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the unit to YAML.
@@ -120,7 +125,7 @@ public:
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the unit's position
-	void setPosition(const Position& pos);
+	void setPosition(const Position& pos, bool updateLastPos = true);
 	/// Gets the unit's position.
 	const Position& getPosition() const;
 	/// Gets the unit's position.
@@ -142,9 +147,9 @@ public:
 	/// Gets the unit's status.
 	UnitStatus getStatus() const;
 	/// Start the walkingPhase
-	void startWalking(int direction, const Position &destination, Tile *destinationTile, bool cache);
+	void startWalking(int direction, const Position &destination, Tile *destinationTile, Tile *tileBelowMe, Tile *TileBelowDestination, bool cache);
 	/// Increase the walkingPhase
-	void keepWalking(bool cache);
+	void keepWalking(Tile *tileBelowMe, bool cache);
 	/// Gets the walking phase for animation and sound
 	int getWalkingPhase() const;
 	/// Gets the walking phase for diagonal walking
@@ -258,7 +263,7 @@ public:
 	/// Get whether this unit is visible
 	bool getVisible() const;
 	/// Sets the unit's tile it's standing on
-	void setTile(Tile *tile);
+	void setTile(Tile *tile, Tile *tileBelow = 0);
 	/// Gets the unit's tile.
 	Tile *getTile() const;
 	/// Gets the item in the specified slot.
@@ -275,6 +280,8 @@ public:
 	bool isInExitArea(SpecialTileType stt = START_POINT) const;
 	/// Gets the unit height taking into account kneeling/standing.
 	int getHeight() const;
+	/// Gets the unit floating elevation.
+	int getFloatHeight() const;
 	/// Adds one to the reaction exp counter.
 	void addReactionExp();
 	/// Adds one to the firing exp counter.
@@ -306,7 +313,7 @@ public:
 	/// Gets the unit's armor.
 	Armor *getArmor() const;
 	/// Gets the unit's name.
-	std::wstring getName(Language *lang) const;
+	std::wstring getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
 	UnitStats *getStats();
 	/// Get the unit's stand height.
@@ -314,7 +321,7 @@ public:
 	/// Get the unit's kneel height.
 	int getKneelHeight() const;
 	/// Get the unit's loft ID.
-	int getLoftemps() const;
+	int getLoftemps(int entry = 0) const;
 	/// Get the unit's value.
 	int getValue() const;
 	/// Get the unit's death sound.
@@ -366,14 +373,20 @@ public:
 	/// Get the units we are charging towards.
 	BattleUnit *getCharging();
 	/// Get the carried weight in strength units.
-	int getCarriedWeight() const;
+	int getCarriedWeight(BattleItem *draggingItem = 0) const;
 	/// Set how many turns this unit will be exposed for.
 	void setTurnsExposed (int turns);
 	/// Set how many turns this unit will be exposed for.
 	int getTurnsExposed () const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
+	/// call this after the default copy constructor deletes the cache?
+	void invalidateCache();
+	
+	Unit *getUnitRules() const { return _unitRules; }
 
+	/// scratch value for AI's left hand to tell its right hand what's up...
+	bool _hidingForTurn; // don't zone out and start patrolling again
 };
 
 }

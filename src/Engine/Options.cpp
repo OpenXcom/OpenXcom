@@ -18,6 +18,8 @@
  */
 
 #include "Options.h"
+#include <SDL.h>
+#include <SDL_keysym.h>
 #include <SDL_mixer.h>
 #include <stdio.h>
 #include <iostream>
@@ -49,17 +51,31 @@ std::vector<std::string> _rulesets;
  */
 void createDefault()
 {
+	_options.clear();
 #ifdef DINGOO
 	setInt("displayWidth", 320);
 	setInt("displayHeight", 200);
 	setBool("fullscreen", true);
+	setBool("asyncBlit", false);
 	setInt("keyboardMode", KEYBOARD_OFF);
 #else
 	setInt("displayWidth", 640);
 	setInt("displayHeight", 400);
 	setBool("fullscreen", false);
+	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("traceAI", false);
+	setBool("sneakyAI", false);
+	setInt("baseXResolution", 320);
+	setInt("baseYResolution", 200);
+	setBool("useScaleFilter", false);
+	setBool("useHQXFilter", false);
+	setBool("useOpenGL", false);
+	setBool("checkOpenGLErrors", false);
+	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
+	setBool("vSyncForOpenGL", false);
+	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);
@@ -68,26 +84,100 @@ void createDefault()
 	setString("language", "");
 	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
 	setInt("battleScrollType", SCROLL_AUTO);
-	setString("battleScrollButton", "RMB"); // RMB, MMB, None  (Right-Mouse-Button, Middle-Mouse-Button, None)
-	setString("battleScrollButtonInvertMode", "Normal"); // Normal, Inverted
-	setInt("battleScrollButtonTimeTolerancy", 300); // miliSecond
-	setInt("battleScrollButtonPixelTolerancy", 10); // count of pixels
-	setInt("battleFireSpeed", 20); // 30, 25, 20, 15, 10, 5
-	setInt("battleXcomSpeed", 40); // 60, 50, 40, 30, 20, 10
-	setInt("battleAlienSpeed", 40); // 60, 50, 40, 30, 20, 10
-	setBool("battleAltGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setBool("battlePreviewPath", false);
+	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
+	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
+	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
+	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
+	setInt("battleFireSpeed", 20); // 40, 30, 20, 10, 5, 1
+	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
+	setInt("battleExplosionHeight", 3); //0, 1, 2, 3
+	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
+	setBool("globeAllRadarsOnBaseBuild", true);
+	setBool("allowChangeListValuesByMouseWheel", true); // It applies only for lists, not for scientists/engineers screen
+	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
+	setBool("alienContainmentHasUpperLimit", false);
+	setBool("canSellLiveAliens", false);
+	setBool("canTransferCraftsInAirborne", false); // When the craft can reach the destination base with its fuel
+	setBool("canManufactureMoreItemsPerHour", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
 	setBool("strafe", false);
+	setBool("battleNotifyDeath", false);
+	setBool("allowBuildingQueue", false);
+	setBool("allowAutoSellProduction", false);
+	setBool("showFundsOnGeoscape", false);
+	setBool("showMoreStatsInInventoryView", false);
+	setBool("allowResize", false);
+	setInt("windowedModePositionX", 3);
+	setInt("windowedModePositionY", 22);
+	// controls
+	setInt("keyOk", SDLK_RETURN);
+	setInt("keyCancel", SDLK_ESCAPE);
+	setInt("keyScreenshot", SDLK_F12);
+	setInt("keyFps", SDLK_F5);
+	setInt("keyGeoLeft", SDLK_LEFT);
+	setInt("keyGeoRight", SDLK_RIGHT);
+	setInt("keyGeoUp", SDLK_UP);
+	setInt("keyGeoDown", SDLK_DOWN);
+	setInt("keyGeoZoomIn", SDLK_PLUS);
+	setInt("keyGeoZoomOut", SDLK_MINUS);
+	setInt("keyGeoSpeed1", SDLK_1);
+	setInt("keyGeoSpeed2", SDLK_2);
+	setInt("keyGeoSpeed3", SDLK_3);
+	setInt("keyGeoSpeed4", SDLK_4);
+	setInt("keyGeoSpeed5", SDLK_5);
+	setInt("keyGeoSpeed6", SDLK_6);
+	setInt("keyGeoIntercept", SDLK_i);
+	setInt("keyGeoBases", SDLK_b);
+	setInt("keyGeoGraphs", SDLK_g);
+	setInt("keyGeoUfopedia", SDLK_u);
+	setInt("keyGeoOptions", SDLK_ESCAPE);
+	setInt("keyGeoFunding", SDLK_f);
+	setInt("keyGeoToggleDetail", SDLK_TAB);
+	setInt("keyGeoToggleRadar", SDLK_r);
+	setInt("keyBattleLeft", SDLK_LEFT);
+	setInt("keyBattleRight", SDLK_RIGHT);
+	setInt("keyBattleUp", SDLK_UP);
+	setInt("keyBattleDown", SDLK_DOWN);
+	setInt("keyBattleLevelUp", SDLK_PAGEUP);
+	setInt("keyBattleLevelDown", SDLK_PAGEDOWN);
+	setInt("keyBattleCenterUnit", SDLK_HOME);
+	setInt("keyBattlePrevUnit", SDLK_LSHIFT);
+	setInt("keyBattleNextUnit", SDLK_TAB);
+	setInt("keyBattleDeselectUnit", SDLK_BACKSLASH);
+	setInt("keyBattleInventory", SDLK_i);
+	setInt("keyBattleMap", SDLK_m);
+	setInt("keyBattleOptions", SDLK_ESCAPE);
+	setInt("keyBattleEndTurn", SDLK_BACKSPACE);
+	setInt("keyBattleAbort", SDLK_a);
+	setInt("keyBattleStats", SDLK_F1);
+	setInt("keyBattleKneel", SDLK_k);
+	setInt("keyBattleReload", SDLK_r);
+	setInt("keyBattlePersonalLighting", SDLK_l);
+	setInt("keyBattleReserveNone", SDLK_F2);
+	setInt("keyBattleReserveSnap", SDLK_F3);
+	setInt("keyBattleReserveAimed", SDLK_F4);
+	setInt("keyBattleReserveAuto", SDLK_F5);
+	setInt("keyBattleCenterEnemy1", SDLK_1);
+	setInt("keyBattleCenterEnemy2", SDLK_2);
+	setInt("keyBattleCenterEnemy3", SDLK_3);
+	setInt("keyBattleCenterEnemy4", SDLK_4);
+	setInt("keyBattleCenterEnemy5", SDLK_5);
+	setInt("keyBattleCenterEnemy6", SDLK_6);
+	setInt("keyBattleCenterEnemy7", SDLK_7);
+	setInt("keyBattleCenterEnemy8", SDLK_8);
+	setInt("keyBattleCenterEnemy9", SDLK_9);
 
+	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
 }
 
@@ -270,7 +360,7 @@ void load(const std::string &filename)
 	std::ifstream fin(s.c_str());
 	if (!fin)
 	{
-		//throw Exception("Failed to load options");
+		//throw Exception(filename + ".cfg" + "not found");
 		return;
 	}
 	YAML::Parser parser(fin);
@@ -309,7 +399,7 @@ void save(const std::string &filename)
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		//throw Exception("Failed to save options");
+		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
 		return;
 	}
 	YAML::Emitter out;

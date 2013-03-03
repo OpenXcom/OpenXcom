@@ -70,9 +70,12 @@ bool PathfindingNode::isChecked() const
  * Get TU cost.
  * @return cost
  */
-int PathfindingNode::getTUCost() const
+int PathfindingNode::getTUCost(bool missile) const
 {
-	return _tuCost;
+	if (missile)
+		return 0;
+	else
+		return _tuCost;
 }
 
 /**

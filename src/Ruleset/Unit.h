@@ -48,11 +48,12 @@ private:
 	std::string _rank;
 	UnitStats _stats;
 	std::string _armor;
-	int _standHeight, _kneelHeight, _loftemps;
+	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 	std::string _zombieUnit, _spawnUnit;
+	std::vector<int> _loftempsSet;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type, std::string race, std::string rank);
@@ -70,8 +71,11 @@ public:
 	int getStandHeight() const;
 	/// Get the unit's height when kneeling.
 	int getKneelHeight() const;
+	/// Get the unit's float elevation.
+	int getFloatHeight() const;
 	/// Get the 3D templates
-	int getLoftemps() const;
+	int getLoftemps(int entry = 0) const;
+	std::vector<int> getLoftempsSet() const;
 	/// Get the armor type.
 	std::string getArmor() const;
 	/// Get the alien race type.

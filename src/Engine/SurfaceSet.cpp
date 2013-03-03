@@ -97,7 +97,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	std::ifstream imgFile (pck.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw Exception("Failed to load PCK");
+		throw Exception(pck + " not found");
 	}
 
 	Uint8 value;
@@ -158,7 +158,7 @@ void SurfaceSet::loadDat(const std::string &filename)
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
-		throw Exception("Failed to load DAT");
+		throw Exception(filename + " not found");
 	}
 
 	imgFile.seekg(0, std::ios::end);

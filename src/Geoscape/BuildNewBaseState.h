@@ -45,7 +45,11 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 	TextButton *_btnCancel;
+	Timer *_hoverTimer;
 	bool _first;
+	bool _oldshowradar;
+	double _oldlat,_oldlon;
+	int _mousex, _mousey;
 public:
 	/// Creates the Build New Base state.
 	BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first);
@@ -59,6 +63,10 @@ public:
 	void handle(Action *action);
 	/// Handler for clicking the globe.
 	void globeClick(Action *action);
+	/// Handler for mouse hovering the globe.
+	void globeHover(Action *action);
+	/// Handler for redrawing hover (delayed)
+	void hoverRedraw(void);
 	/// Handler for pressing the Rotate Left arrow.
 	void btnRotateLeftPress(Action *action);
 	/// Handler for releasing the Rotate Left arrow.

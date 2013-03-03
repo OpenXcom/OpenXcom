@@ -19,6 +19,7 @@
 #ifndef OPENXCOM_UNITWALKBSTATE_H
 #define OPENXCOM_UNITWALKBSTATE_H
 
+#include <climits>
 #include "BattleState.h"
 #include "Position.h"
 
@@ -36,12 +37,16 @@ private:
 	BattleUnit *_unit;
 	Pathfinding *_pf;
 	TileEngine *_terrain;
+	bool _falling;
+    bool _beforeFirstStep;
 	void postPathProcedures();
 	void setNormalWalkSpeed();
 	void playMovementSound();
+    const Position _finalFacing;
+    const bool _pathfindForFinalTurn;
 public:
 	/// Creates a new UnitWalkBState class
-	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
+	UnitWalkBState(BattlescapeGame *parent, BattleAction _action, const Position finalFacing = Position(0,0,INT_MAX), const bool pathfindForFinalTurn = true);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
 	/// Set the target to walk to.

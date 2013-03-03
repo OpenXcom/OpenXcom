@@ -66,6 +66,9 @@ Base::~Base()
 	}
 	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
+		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
+				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's desctructor twice
 		delete *i;
 	}
 	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)
@@ -77,6 +80,10 @@ Base::~Base()
 	{
 		delete *i;
 	}
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -84,14 +91,14 @@ Base::~Base()
  * @param node YAML node.
  * @param save Pointer to saved game.
  */
-void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
+void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newBattleGame)
 {
 	Target::load(node);
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
 
-	if (!newGame || !Options::getBool("customInitialBase") )
+	if (!newGame || !Options::getBool("customInitialBase") || newBattleGame)
 	{
 		for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 		{
@@ -139,6 +146,19 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
 	}
 
 	_items->load(node["items"]);
+	// Some old saves have bad items, better get rid of them to avoid further bugs
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
+	{
+		if (std::find(_rule->getItemsList().begin(), _rule->getItemsList().end(), i->first) == _rule->getItemsList().end())
+		{
+			_items->getContents()->erase(i++);
+		}
+		else
+		{
+			++i;
+		}
+	}
+
 	node["scientists"] >> _scientists;
 	node["engineers"] >> _engineers;
 	node["inBattlescape"] >> _inBattlescape;
@@ -407,14 +427,20 @@ bool Base::insideRadarRange(Target *target) const
 /**
  * Returns the amount of soldiers contained
  * in the base without any assignments.
+ * @param checkCombatReadiness does what it says on the tin.
  * @return Number of soldiers.
  */
-int Base::getAvailableSoldiers() const
+int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 {
 	int total = 0;
 	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
-		if ((*i)->getCraft() == 0)
+		if (!checkCombatReadiness && (*i)->getCraft() == 0)
+		{
+			total++;
+		}
+		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
+			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
 		}
@@ -667,7 +693,7 @@ int Base::getUsedHangars() const
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
 		{
-			total += (*i)->getAmountRemaining();
+			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
 		}
 	}
 	return total;
@@ -837,8 +863,8 @@ int Base::getPersonnelMaintenance() const
 {
 	size_t total = 0;
 	total += _soldiers.size() * _rule->getSoldierCost();
-	total += _engineers * _rule->getEngineerCost();
-	total += _scientists * _rule->getScientistCost();
+	total += getTotalEngineers() * _rule->getEngineerCost();
+	total += getTotalScientists() * _rule->getScientistCost();
 	return total;
 }
 
@@ -1118,18 +1144,72 @@ int Base::getGravShields() const
 	return total;
 }
 
-
-std::vector<BaseFacility*> *Base::getDefenses()
+void Base::setupDefenses()
 {
-	std::vector<BaseFacility*> *total = 0;
+	_defenses.clear();
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getDefenseValue())
 		{
-			total->push_back(*i);
+			_defenses.push_back(*i);
 		}
 	}
-	return total;
+
+	_vehicles.clear();
+	// add vehicles that are in the crafts of the base, if it's not out
+	for (std::vector<Craft*>::iterator c = getCrafts()->begin(); c != getCrafts()->end(); ++c)
+	{
+		if ((*c)->getStatus() != "STR_OUT")
+		{
+			for (std::vector<Vehicle*>::iterator i = (*c)->getVehicles()->begin(); i != (*c)->getVehicles()->end(); ++i)
+			{
+				_vehicles.push_back(*i);
+			}
+		}
+	}
+
+	// add vehicles left on the base
+	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); )
+	{
+		std::string itemId=(i)->first;
+		int iqty=(i)->second;
+		RuleItem *rule = _rule->getItem(itemId);
+		if (rule->isFixed())
+		{
+			if (rule->getClipSize() == -1) // so this vehicle does not need ammo
+			{
+				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, 255));
+				_items->removeItem(itemId, iqty);
+			}
+			else // so this vehicle needs ammo
+			{
+				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
+				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
+				if (0 >= baqty || 0 >= iqty) { ++i; continue; }
+				int canBeAdded = std::min(iqty, baqty);
+				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+				int remainder = 0;
+				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
+				int newAmmo;
+				for (int j=0; j<canBeAdded; ++j)
+				{
+					newAmmo = newAmmoPerVehicle;
+					if (j<remainder) ++newAmmo;
+					_vehicles.push_back(new Vehicle(rule, newAmmo));
+					_items->removeItem(ammo->getType(), newAmmo);
+				}
+				_items->removeItem(itemId, canBeAdded);
+			}
+
+			i = _items->getContents()->begin(); // we have to start over because iterator is broken because of the removeItem
+		}
+		else ++i;
+	}
+}
+
+std::vector<BaseFacility*> *Base::getDefenses()
+{
+	return &_defenses;
 }
 
 /**
@@ -1139,19 +1219,6 @@ std::vector<BaseFacility*> *Base::getDefenses()
  */
 std::vector<Vehicle*> *Base::getVehicles()
 {
-	for (std::vector<Vehicle*>::iterator v = _vehicles.begin(); v < _vehicles.end(); ++v)
-	{
-		delete (*v);
-	}
-	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); ++i)
-	{
-		if (_rule->getItem((i)->first)->isFixed())
-		{
-			std::string type = _rule->getItem((i)->first)->getType();
-			Vehicle *v = new Vehicle(_rule->getItem((i)->first), 0);
-			_vehicles.push_back(v);
-		}
-	}
 	return &_vehicles;
 }
 }

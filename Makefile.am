@@ -62,9 +62,10 @@ name_DATA = \
 	bin/data/SoldierName/Swedish.nam
 
 bin_PROGRAMS = openxcom
-openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS)
+AM_CFLAGS=-std=c99
+openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) -lGL
 openxcom_CXXFLAGS = \
-	$(CFLAGS) \
+	$(CXXFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
@@ -206,6 +207,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Projectile.h \
 	src/Battlescape/PromotionsState.cpp \
 	src/Battlescape/PromotionsState.h \
+	src/Battlescape/UnitFallBState.cpp \
+	src/Battlescape/UnitFallBState.h \
 	src/Battlescape/UnitInfoState.cpp \
 	src/Battlescape/UnitInfoState.h \
 	src/Battlescape/UnitSprite.cpp \
@@ -214,6 +217,8 @@ openxcom_SOURCES = \
 	src/Battlescape/UnitTurnBState.h \
 	src/Battlescape/UnitWalkBState.cpp \
 	src/Battlescape/UnitWalkBState.h \
+	src/Battlescape/UnitPanicBState.cpp \
+	src/Battlescape/UnitPanicBState.h \
 	src/Battlescape/WarningMessage.cpp \
 	src/Battlescape/WarningMessage.h \
 	src/Battlescape/TileEngine.cpp \
@@ -241,6 +246,8 @@ openxcom_SOURCES = \
 	src/Engine/CrossPlatform.h \
 	src/Engine/Exception.cpp \
 	src/Engine/Exception.h \
+	src/Engine/FastLineClip.cpp \
+	src/Engine/FastLineClip.h \
 	src/Engine/Font.cpp \
 	src/Engine/Font.h \
 	src/Engine/Game.cpp \
@@ -256,6 +263,8 @@ openxcom_SOURCES = \
 	src/Engine/Logger.h \
 	src/Engine/Music.cpp \
 	src/Engine/Music.h \
+	src/Engine/OpenGL.cpp \
+	src/Engine/OpenGL.h \
 	src/Engine/Options.cpp \
 	src/Engine/Options.h \
 	src/Engine/Palette.cpp \
@@ -276,6 +285,20 @@ openxcom_SOURCES = \
 	src/Engine/SurfaceSet.h \
 	src/Engine/Timer.cpp \
 	src/Engine/Timer.h \
+	src/Engine/Zoom.cpp \
+	src/Engine/Zoom.h \
+	src/Engine/Scalers/scale2x.cpp \
+	src/Engine/Scalers/scale2x.h \
+	src/Engine/Scalers/scale3x.cpp \
+	src/Engine/Scalers/scale3x.h \
+	src/Engine/Scalers/scalebit.cpp \
+	src/Engine/Scalers/scalebit.h \
+	src/Engine/Scalers/common.h \
+	src/Engine/Scalers/hqx.h \
+	src/Engine/Scalers/hq2x.cpp \
+	src/Engine/Scalers/hq3x.cpp \
+	src/Engine/Scalers/hq4x.cpp \
+	src/Engine/Scalers/init.cpp \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
 	src/Geoscape/AlienBaseState.cpp \
@@ -399,6 +422,8 @@ openxcom_SOURCES = \
 	src/Menu/NoteState.h \
 	src/Menu/OptionsState.cpp \
 	src/Menu/OptionsState.h \
+	src/Menu/OptionsControlsState.cpp \
+	src/Menu/OptionsControlsState.h \
 	src/Menu/SaveState.cpp \
 	src/Menu/SaveState.h \
 	src/Menu/SavedGameState.cpp \

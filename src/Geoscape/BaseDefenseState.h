@@ -30,6 +30,10 @@ class Text;
 class Base;
 class Ufo;
 class TextList;
+class GeoscapeState;
+class Timer;
+
+enum BaseDefenseActionType { BDA_NONE, BDA_FIRE, BDA_RESOLVE, BDA_DESTROY, BDA_END };
 
 /**
  * Base Defense Screen for when ufos try to attack.
@@ -43,17 +47,21 @@ private:
 	TextList *_lstDefenses;
 	Base *_base;
 	Ufo *_ufo;
+	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks;
+	BaseDefenseActionType _action;
+	Timer *_timer;
+	GeoscapeState *_state;
 public:
 	/// Creates the Base Defense state.
-	BaseDefenseState(Game *game, Base *base, Ufo *ufo);
+	BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state);
 	/// Cleans up the Base Defense state.
 	~BaseDefenseState();
-	/// Updates the palette.
-	void init();
+	/// Handle the Timer.
+	void think();
+	/// do the next step.
+	void nextStep();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
-	/// wait half a second before next action
-	void delay();
 };
 
 }

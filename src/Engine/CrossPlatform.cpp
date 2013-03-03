@@ -18,6 +18,7 @@
  */
 #include "CrossPlatform.h"
 #include <algorithm>
+#include <iostream>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -64,6 +65,8 @@ void showError(const std::string &error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
+#else
+	std::cerr << error << std::endl;
 #endif
 	Log(LOG_FATAL) << error;
 }
@@ -333,7 +336,7 @@ std::string getDataFile(const std::string &filename)
 	}
 
 	// Give up
-	return "";
+	return filename;
 }
 
 /**
@@ -387,7 +390,8 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
 	{
-		throw Exception("Failed to open saves directory");
+		std::string errorMessage("Failed to open directory: " + path);
+		throw Exception(errorMessage);
 	}
 
 	struct dirent *dirp;

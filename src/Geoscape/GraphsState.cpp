@@ -159,6 +159,59 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnFinances.at(3)->setText(_game->getLanguage()->getString("STR_BALANCE"));
 	_btnFinances.at(4)->setText(_game->getLanguage()->getString("STR_SCORE"));
 
+	// load back the button states
+	std::string graphRegionToggles = _game->getSavedGame()->getGraphRegionToggles();
+	std::string graphCountryToggles = _game->getSavedGame()->getGraphCountryToggles();
+	std::string graphFinanceToggles = _game->getSavedGame()->getGraphFinanceToggles();
+	while (graphRegionToggles.size() < _regionToggles.size()) graphRegionToggles.push_back('0');
+	while (graphCountryToggles.size() < _countryToggles.size()) graphCountryToggles.push_back('0');
+	while (graphFinanceToggles.size() < _financeToggles.size()) graphFinanceToggles.push_back('0');
+	for (int i = 0; i < _regionToggles.size(); ++i)
+	{
+		_regionToggles[i] = ('0'==graphRegionToggles[i]) ? false : true;
+		if (_regionToggles[i])
+		{
+			TextButton *button;
+			int adjustment = -42 + (4*i);
+			if (_btnRegions.size() == i)
+			{
+				button = _btnRegionTotal;
+				adjustment = 22;
+			}
+			else button = _btnRegions.at(i);
+			button->draw();
+			button->invert(adjustment);
+		}
+	}
+	for (int i = 0; i < _countryToggles.size(); ++i)
+	{
+		_countryToggles[i] = ('0'==graphCountryToggles[i]) ? false : true;
+		if (_countryToggles[i])
+		{
+			TextButton *button;
+			int adjustment = -42 + (4*i);
+			if (_btnCountries.size() == i)
+			{
+				button = _btnCountryTotal;
+				adjustment = 22;
+			}
+			else button = _btnCountries.at(i);
+			button->draw();
+			button->invert(adjustment);
+		}
+	}
+	for (int i = 0; i < _financeToggles.size(); ++i)
+	{
+		_financeToggles[i] = ('0'==graphFinanceToggles[i]) ? false : true;
+		if (_financeToggles[i])
+		{
+			TextButton *button = _btnFinances.at(i);
+			int adjustment = -42 + (4*i);
+			button->draw();
+			button->invert(adjustment);
+		}
+	}
+
 	// set up the grid
 	SDL_Rect current;
 	current.w = 188;
@@ -193,10 +246,10 @@ GraphsState::GraphsState(Game *game) : State(game)
 	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance.
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
-	_txtMonths->addRow(12, "", "", "", "", "", "", "", "", "", "", "", "");
+	_txtMonths->addRow(12, L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ", L" ");
 	_txtMonths->setRowColor(0, Palette::blockOffset(6)+8);
 	_txtYears->setColumns(6, 34, 34, 34, 34, 34, 34);
-	_txtYears->addRow(6, " ", " ", " ", " ", " ", " ");
+	_txtYears->addRow(6, L" ", L" ", L" ", L" ", L" ", L" ");
 	_txtYears->setRowColor(0, Palette::blockOffset(6)+8);
 
 	for(int iter = 0; iter != 12; ++iter)
@@ -228,9 +281,9 @@ GraphsState::GraphsState(Game *game) : State(game)
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
-	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setColor(Palette::blockOffset(8)+8);
+	_txtTitle->setBig();
 	
 	_txtFactor->setText(L"$1000's");
 	_txtFactor->setColor(Palette::blockOffset(8)+8);
@@ -251,7 +304,15 @@ GraphsState::GraphsState(Game *game) : State(game)
  */
 GraphsState::~GraphsState()
 {
-
+	std::string graphRegionToggles = "";
+	std::string graphCountryToggles = "";
+	std::string graphFinanceToggles = "";
+	for (int i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i] ? '1' : '0');
+	for (int i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i] ? '1' : '0');
+	for (int i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
+	_game->getSavedGame()->setGraphRegionToggles(graphRegionToggles);
+	_game->getSavedGame()->setGraphCountryToggles(graphCountryToggles);
+	_game->getSavedGame()->setGraphFinanceToggles(graphFinanceToggles);
 }
 
 /**
@@ -281,6 +342,7 @@ void GraphsState::btnUfoRegionClick(Action *)
 	}
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -301,6 +363,7 @@ void GraphsState::btnUfoCountryClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -321,6 +384,7 @@ void GraphsState::btnXcomRegionClick(Action *)
 	}
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_AREAS"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -341,6 +405,7 @@ void GraphsState::btnXcomCountryClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -362,6 +427,7 @@ void GraphsState::btnIncomeClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_INCOME"));
+	_txtTitle->setBig();
 }
 
 /**
@@ -383,6 +449,7 @@ void GraphsState::btnFinanceClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_txtTitle->setText(_game->getLanguage()->getString("STR_FINANCE"));
+	_txtTitle->setBig();
 
 }
 

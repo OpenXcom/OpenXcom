@@ -38,7 +38,6 @@
 #include "../Ruleset/RuleUfo.h"
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/CraftWeaponProjectile.h"
@@ -568,7 +567,7 @@ void DogfightState::think()
 			_ufoEscapeTimer->think(this, 0);
 			_craftDamageAnimTimer->think(this, 0);
 		}
-		else if(!_endDogfight && _craft->getDestination() != _ufo)
+		else if(!_endDogfight && (_craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED))
 		{
 			endDogfight();
 		}
@@ -744,22 +743,35 @@ void DogfightState::move()
 	}
 	if(!_minimized)
 	{
+		int distanceChange = 0;
+
 		// Update distance
 		if(!_ufoBreakingOff)
 		{
 			if (_currentDist < _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				_currentDist += 4;
+				distanceChange = 4;
 			}
 			else if (_currentDist > _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
-				_currentDist -= 2;
+				distanceChange = -2;
+			}
+
+			// don't let the interceptor mystically push or pull its fired projectiles
+			for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
+			{
+				if ((*it)->getGlobalType() != CWPGT_BEAM && (*it)->getDirection() == D_UP) (*it)->setPosition((*it)->getPosition() + distanceChange);
 			}
 		}
 		else
 		{
-			_currentDist += 4;
+			distanceChange = 4;
+
+			// UFOs can try to outrun our missiles, don't adjust projectile positions here
+			// If UFOs ever fire anything but beams, those positions need to be adjust here though.
 		}
+
+		_currentDist += distanceChange; 
 
 		std::wstringstream ss;
 		ss << _currentDist;
@@ -793,7 +805,7 @@ void DogfightState::move()
 						}
 						setStatus("STR_UFO_HIT");
 						_currentRadius += 4;
-						_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(12)->play(); //12
+						_game->getResourcePack()->getSound("GEO.CAT", 12)->play(); //12
 						p->remove();
 					}
 					// Missed.
@@ -811,9 +823,6 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
-				if (p->getGlobalType() == CWPGT_MISSILE && (_currentDist / 8) >= p->getRange())
-					p->setMissed(true);
-
 				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
 				{
 					p->remove();
@@ -832,7 +841,7 @@ void DogfightState::move()
 						_craft->setDamage(_craft->getDamage() + damage);
 						drawCraftDamage();
 						setStatus("STR_INTERCEPTOR_DAMAGED");
-						_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
+						_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
 					}
 					p->remove();
 				}
@@ -919,13 +928,30 @@ void DogfightState::move()
 	// Check when battle is over.
 	if (_end == true && ((_currentDist > 640 && (_mode == _btnDisengage || _ufoBreakingOff == true)) || (_timeout == 0 && (_ufo->isCrashed() || _craft->isDestroyed()))))
 	{
-		if(_ufoBreakingOff)
+		if (_ufoBreakingOff)
 		{
 			_ufo->move();
 			_craft->setDestination(_ufo);
 		}
-		if(_destroyCraft)
+		if (_destroyCraft)
 		{
+			for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+			{
+				if((*country)->getRules()->insideCountry(_craft->getLongitude(), _craft->getLatitude()))
+				{
+					(*country)->addActivityXcom(-_craft->getRules()->getScore());
+					break;
+				}
+			}
+			for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+			{
+				if((*region)->getRules()->insideRegion(_craft->getLongitude(), _craft->getLatitude()))
+				{
+					(*region)->addActivityXcom(-_craft->getRules()->getScore());
+					break;
+				}
+			}
+
 			// Remove the craft.
 			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 			{
@@ -933,23 +959,7 @@ void DogfightState::move()
 				{
 					if(*c == _craft)
 					{
-						for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
-						{
-							if((*country)->getRules()->insideCountry((*c)->getLongitude(), (*c)->getLatitude()))
-							{
-								(*country)->addActivityXcom(0-(*c)->getRules()->getScore());
-								break;
-							}
-						}
-						for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
-						{
-							if((*region)->getRules()->insideRegion((*c)->getLongitude(), (*c)->getLatitude()))
-							{
-								(*region)->addActivityXcom(0-(*c)->getRules()->getScore());
-								break;
-							}
-						}
-						(*c)->~Craft();
+						delete *c;
 						(*b)->getCrafts()->erase(c);
 						_craft = 0;
 						break;
@@ -960,7 +970,7 @@ void DogfightState::move()
 			}
 		}
 		
-		if (_destroyUfo || _mode == _btnDisengage)
+		if (_craft && (_destroyUfo || _mode == _btnDisengage))
 		{
 			_craft->returnToBase();
 		}
@@ -972,7 +982,7 @@ void DogfightState::move()
 	{
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 		_timeout += 30;
-		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(13)->play();
+		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
 		_end = true;
 		_destroyCraft = true;
 		_ufoWtimer->stop();
@@ -1033,7 +1043,7 @@ void DogfightState::move()
 					}
 				}
 				setStatus("STR_UFO_DESTROYED");
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //11
+				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //11
 			}
 			_destroyUfo = true;
 		}
@@ -1042,7 +1052,7 @@ void DogfightState::move()
 			if(_ufo->getShotDownByCraftId() == _craft->getId())
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
-				_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(10)->play(); //10
+				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
 				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
@@ -1082,6 +1092,15 @@ void DogfightState::move()
 		_end = true;
 		_ufo->setSpeed(0);
 	}
+
+	if (!_end && _ufo->getStatus() == Ufo::LANDED)
+	{
+		_timeout += 30;
+		_end = true;
+		_ufoWtimer->stop();
+		_w1Timer->stop();
+		_w2Timer->stop();
+	}
 }
 
 /**
@@ -1104,7 +1123,7 @@ void DogfightState::fireWeapon1()
 		p->setHorizontalPosition(HP_LEFT);
 		_projectiles.push_back(p);
 
-		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w1->getRules()->getSound())->play();
+		_game->getResourcePack()->getSound("GEO.CAT", w1->getRules()->getSound())->play();
 	}
 }
 
@@ -1128,7 +1147,7 @@ void DogfightState::fireWeapon2()
 		p->setHorizontalPosition(HP_RIGHT);
 		_projectiles.push_back(p);
 
-		_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(w2->getRules()->getSound())->play();
+		_game->getResourcePack()->getSound("GEO.CAT", w2->getRules()->getSound())->play();
 	}
 }
 
@@ -1152,7 +1171,7 @@ void DogfightState::ufoFireWeapon()
 	p->setHorizontalPosition(HP_CENTER);
 	p->setPosition(_currentDist - (_currentRadius / 2));
 	_projectiles.push_back(p);
-	_game->getResourcePack()->getSoundSet("GEO.CAT")->getSound(8)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", 8)->play();
 }
 
 /**

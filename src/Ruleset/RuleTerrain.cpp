@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
 * RuleTerrain construction
 */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0)
 {
 }
 
@@ -81,6 +81,10 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 				_mapBlocks.push_back(map);
 			}
 		}
+		else if (key == "largeBlockLimit")
+		{
+			i.second() >> _largeBlockLimit;
+		}
 	}
 }
 
@@ -106,6 +110,7 @@ void RuleTerrain::save(YAML::Emitter &out) const
 		(*i)->save(out);
 	}
 	out << YAML::EndSeq;
+	out << YAML::Key << "largeBlockLimit" << YAML::Value << _largeBlockLimit;
 	out << YAML::EndMap;
 }
 
@@ -140,23 +145,32 @@ std::string RuleTerrain::getName() const
 * gets a random mapblock within the given constraints
 * @param maxsize maximum size of the mapblock (10 or 20 or 999-don't care)
 * @param type whether this must be a block of a certain type
+* @param force whether to enforce the max size.
 * @return pointer to mapblock
 */
-MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type)
+MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool force)
 {
 	std::vector<MapBlock*> compliantMapBlocks;
 
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if ((*i)->getWidth() <= maxsize && (*i)->getType() == type)
+		if (((force && (*i)->getSizeX() == maxsize) || 
+			(!force && (*i)->getSizeX() <= maxsize)) && 
+			((*i)->getType() == type || (*i)->getSubType() == type))
 		{
-			compliantMapBlocks.push_back((*i));
+			for (int j = 0; j != (*i)->getRemainingUses(); ++j)
+			{
+				compliantMapBlocks.push_back((*i));
+			}
 		}
 	}
 
 	if (compliantMapBlocks.empty()) return 0;
 
 	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
+
+	if (type == MT_DEFAULT)
+		compliantMapBlocks[n]->markUsed();
 
 	return compliantMapBlocks[n];
 }
@@ -198,6 +212,17 @@ MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
 	}
 
 	return mdf->getObjects()->at(*id);
+}
+int RuleTerrain::getLargeBlockLimit() const
+{
+	return _largeBlockLimit;
+}
+void RuleTerrain::resetMapBlocks()
+{
+	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	{
+		(*i)->reset();
+	}
 }
 
 }

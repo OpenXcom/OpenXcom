@@ -64,12 +64,14 @@ private:
 	bool projectileInFOV;
 	std::set<Explosion *> _explosions;
 	bool explosionInFOV;
+	bool _launch;
 	BattlescapeMessage *_message;
 	Camera *_camera;
 	int _visibleMapHeight;
 	void drawTerrain(Surface *surface);
 	int getTerrainLevel(Position pos, int size);
 	std::vector<Position> _waypoints;
+	bool _unitDying;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
@@ -118,7 +120,7 @@ public:
 	std::vector<Position> *getWaypoints();
 	/// Set mouse-buttons' pressed state
 	void setButtonsPressed(Uint8 button, bool pressed);
-
+	void setUnitDying(bool flag);
 };
 
 }

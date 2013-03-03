@@ -188,7 +188,7 @@ void Ruleset::loadFile(const std::string &filename)
 	std::ifstream fin(filename.c_str());
 	if (!fin)
 	{
-		throw Exception("Failed to load ruleset");
+		throw Exception(filename + " not found");
 	}
 	YAML::Parser parser(fin);
 	YAML::Node doc;
@@ -469,7 +469,6 @@ void Ruleset::loadFile(const std::string &filename)
 				{
 					rule = new AlienDeployment(type);
 					_alienDeployments[type] = rule;
-					if (type != "STR_BASE_DEFENSE")
 					_deploymentsIndex.push_back(type);
 				}
 				rule->load(*j);
@@ -815,6 +814,12 @@ SavedGame *Ruleset::newSave() const
 	{
 		save->getCountries()->push_back(new Country(getCountry(*i)));
 	}
+	// Adjust funding to total $6M
+	int missing = ((6000 - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
+	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
+	{
+		(*i)->setFunding((*i)->getFunding().back() + missing);
+	}
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions
@@ -832,6 +837,7 @@ SavedGame *Ruleset::newSave() const
 	ids["STR_UFO"] = 1;
 	ids["STR_WAYPOINT"] = 1;
 	ids["STR_TERROR_SITE"] = 1;
+	ids["STR_ALIEN_BASE"] = 1;
 	ids["STR_SOLDIER"] = 1;
 	ids["ALIEN_MISSIONS"] = 1;
 	save->initIds(ids);
@@ -1335,5 +1341,10 @@ const City *Ruleset::locateCity(double lon, double lat) const
 const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
+}
+
+const YAML::Node &Ruleset::getStartingBase()
+{
+	return *_startingBase->begin();
 }
 }

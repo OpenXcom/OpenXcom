@@ -29,7 +29,6 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Armor.h"
@@ -55,6 +54,8 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	}
 	else
 	{
+		if (_unit->getFaction() == FACTION_PLAYER)
+			_parent->getMap()->setUnitDying(true);
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
@@ -65,22 +66,19 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	{
 		if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(41,43))->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
 		}
 		else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(44,46))->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
 		}
 		else
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_unit->getDeathSound())->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
 		}
 	}
-	if (_unit->getTurnsExposed())
-	{
-		_unit->setTurnsExposed(0);
-		_parent->getSave()->updateExposedUnits();
-	}
+	
+	parent->resetSituationForAI();
 }
 
 /**
@@ -118,9 +116,15 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
+		_parent->getMap()->setUnitDying(false);
 		if (!_unit->getVisibleUnits()->empty())
 		{
 			_unit->clearVisibleUnits();
+		}
+		if (_unit->getTurnsExposed())
+		{
+			_unit->setTurnsExposed(0);
+			_parent->getSave()->updateExposedUnits();
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{
@@ -137,8 +141,11 @@ void UnitDieBState::think()
 		if (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			_unit->instaKill();
-			Position p = Position(_unit->getPosition().x * 16, _unit->getPosition().y * 16, _unit->getPosition().z * 24);
-			_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, 0));
+			if (_damageType != DT_STUN && _damageType != DT_HE)
+			{
+				Position p = Position(_unit->getPosition().x * 16, _unit->getPosition().y * 16, _unit->getPosition().z * 24);
+				_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, 0));
+			}
 		}
 	}
 
@@ -192,7 +199,9 @@ void UnitDieBState::convertUnitToCorpse()
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
-				//corpse->setUnit(unit); // no need for this, because large units never can be revived as they don't go unconscious
+				corpse->setUnit(_unit); // no need for this, because large units never can be revived as they don't go unconscious
+										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
+										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
 				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
 				i++;
 			}

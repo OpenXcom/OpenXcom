@@ -24,6 +24,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Timer.h"
 #include "../Interface/Window.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
@@ -43,10 +44,13 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
 {
 	_screen = false;
 
+	_oldshowradar = _globe->getShowRadar();
+	if (!_oldshowradar)
+		_globe->toggleRadarLines();
 	// Create objects
 	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
 	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
@@ -58,6 +62,10 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(54, 12, 186, 8);
 	_txtTitle = new Text(180, 16, 8, 6);
+
+	_hoverTimer = new Timer(50);
+	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
+	_hoverTimer->start();
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -75,6 +83,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
+	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
 
 	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
@@ -116,7 +125,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-
+	delete _hoverTimer;
 }
 
 /**
@@ -125,6 +134,7 @@ BuildNewBaseState::~BuildNewBaseState()
 void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_globe->setNewBaseHover();
 }
 
 /**
@@ -134,6 +144,7 @@ void BuildNewBaseState::think()
 {
 	State::think();
 	_globe->think();
+	_hoverTimer->think(this, 0);
 }
 
 /**
@@ -144,6 +155,33 @@ void BuildNewBaseState::handle(Action *action)
 {
 	State::handle(action);
 	_globe->handle(action, this);
+}
+
+/**
+ * Processes mouse-hover event for base placement,
+ * @param action Pointer to an action.
+ */
+void BuildNewBaseState::globeHover(Action *action)
+{
+	_mousex = (int)floor(action->getAbsoluteXMouse());
+	_mousey = (int)floor(action->getAbsoluteYMouse());
+	if (!_hoverTimer->isRunning()) _hoverTimer->start();
+}
+
+void BuildNewBaseState::hoverRedraw(void)
+{
+	double lon, lat;
+	_globe->cartToPolar(_mousex, _mousey, &lon, &lat);
+	_globe->setNewBaseHoverPos(lon,lat);
+
+	_globe->setNewBaseHover();
+	
+	if (_globe->getShowRadar() && (_oldlat!=lat||_oldlon!=lon) )
+	{
+		_oldlat=lat;
+		_oldlon=lon;
+		_globe->draw();
+	}
 }
 
 /**
@@ -174,7 +212,6 @@ void BuildNewBaseState::globeClick(Action *action)
 			{
 				(*i)->setLongitude(lon);
 				(*i)->setLatitude(lat);
-				(*i)->setName(L"", _game->getLanguage());
 			}
 			if (_first)
 			{
@@ -183,6 +220,10 @@ void BuildNewBaseState::globeClick(Action *action)
 			else
 			{
 				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
+			}
+			if (_globe->getShowRadar() != _oldshowradar)
+			{
+				_globe->toggleRadarLines();
 			}
 		}
 	}
@@ -303,6 +344,10 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *)
 void BuildNewBaseState::btnCancelClick(Action *)
 {
 	delete _base;
+	if (_globe->getShowRadar() != _oldshowradar)
+	{
+		_globe->toggleRadarLines();
+	}
 	_game->popState();
 }
 

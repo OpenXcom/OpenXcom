@@ -76,11 +76,12 @@ private:
 	SavedBattleGame *_battleGame;
 	std::vector<const RuleResearch *> _discovered;
 	std::vector<AlienMission*> _activeMissions;
-	bool _debug, _warned;
+	bool _debug, _warned, _detail, _radarLines;
 	int _monthsPassed;
+	std::string _graphRegionToggles;
+	std::string _graphCountryToggles;
+	std::string _graphFinanceToggles;
 
-	/// Check whether a ResearchProject can be researched
-	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const;
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
 	/// Creates a new saved game.
@@ -157,6 +158,8 @@ public:
 	void getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	/// Get the list of newly available manufacture projects once a research has been completed.
 	void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
+	/// Check whether a ResearchProject can be researched
+	bool isResearchAvailable (RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const;
 	/// Gets if a research has been unlocked.
 	bool isResearched(const std::string &research) const;
 	/// Gets if a list of research has been unlocked.
@@ -199,8 +202,24 @@ public:
 	Region *locateRegion(const Target &target) const;
 	/// Return the month counter.
 	int getMonthsPassed() const;
+	/// Return the GraphRegionToggles.
+	const std::string &getGraphRegionToggles() const;
+	/// Return the GraphCountryToggles.
+	const std::string &getGraphCountryToggles() const;
+	/// Return the GraphFinanceToggles.
+	const std::string &getGraphFinanceToggles() const;
+	/// Sets the GraphRegionToggles.
+	void setGraphRegionToggles(const std::string &value);
+	/// Sets the GraphCountryToggles.
+	void setGraphCountryToggles(const std::string &value);
+	/// Sets the GraphFinanceToggles.
+	void setGraphFinanceToggles(const std::string &value);
 	/// Increment the month counter.
 	void addMonth();
+	void toggleRadarLines();
+	bool getRadarLines();
+	void toggleDetail();
+	bool getDetail();
 
 };
 

@@ -25,7 +25,6 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
@@ -60,7 +59,7 @@ void UnitTurnBState::init()
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
-	_turret = (_unit->getTurretType() != -1) && _action.targeting;
+	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
 
 	_unit->lookAt(_action.target, _turret);
 
@@ -70,11 +69,11 @@ void UnitTurnBState::init()
 		int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 		if (door == 0)
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(3)->play(); // normal door
+			_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 		}
 		if (door == 1)
 		{
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(RNG::generate(20,21))->play(); // ufo door
+			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20,21))->play(); // ufo door
 		}
 		if (door == 4)
 		{

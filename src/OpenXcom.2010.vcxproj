@@ -33,7 +33,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -86,17 +85,18 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -115,16 +115,17 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cppd.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -141,15 +142,19 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -168,15 +173,18 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\deps\include;..\deps\include\SDL;..\deps\include\yaml-cpp%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cpp.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -266,9 +274,11 @@
     <ClCompile Include="Battlescape\PromotionsState.cpp" />
     <ClCompile Include="Battlescape\ScannerState.cpp" />
     <ClCompile Include="Battlescape\ScannerView.cpp" />
+    <ClCompile Include="Battlescape\UnitFallBState.cpp" />
     <ClCompile Include="Battlescape\UnitInfoState.cpp" />
     <ClCompile Include="Battlescape\TileEngine.cpp" />
     <ClCompile Include="Battlescape\UnitDieBState.cpp" />
+    <ClCompile Include="Battlescape\UnitPanicBState.cpp" />
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Battlescape\UnitTurnBState.cpp" />
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
@@ -277,6 +287,7 @@
     <ClCompile Include="Engine\CatFile.cpp" />
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
+    <ClCompile Include="Engine\FastLineClip.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GMCat.cpp" />
@@ -284,9 +295,17 @@
     <ClCompile Include="Engine\Language.cpp" />
     <ClCompile Include="Engine\LocalizedText.cpp" />
     <ClCompile Include="Engine\Music.cpp" />
+    <ClCompile Include="Engine\OpenGL.cpp" />
     <ClCompile Include="Engine\Options.cpp" />
     <ClCompile Include="Engine\Palette.cpp" />
     <ClCompile Include="Engine\RNG.cpp" />
+    <ClCompile Include="Engine\Scalers\hq2x.cpp" />
+    <ClCompile Include="Engine\Scalers\hq3x.cpp" />
+    <ClCompile Include="Engine\Scalers\hq4x.cpp" />
+    <ClCompile Include="Engine\Scalers\init.cpp" />
+    <ClCompile Include="Engine\Scalers\scale2x.cpp" />
+    <ClCompile Include="Engine\Scalers\scale3x.cpp" />
+    <ClCompile Include="Engine\Scalers\scalebit.cpp" />
     <ClCompile Include="Engine\Screen.cpp" />
     <ClCompile Include="Engine\Sound.cpp" />
     <ClCompile Include="Engine\SoundSet.cpp" />
@@ -294,6 +313,7 @@
     <ClCompile Include="Engine\Surface.cpp" />
     <ClCompile Include="Engine\SurfaceSet.cpp" />
     <ClCompile Include="Engine\Timer.cpp" />
+    <ClCompile Include="Engine\Zoom.cpp" />
     <ClCompile Include="Geoscape\AbandonGameState.cpp" />
     <ClCompile Include="Geoscape\AlienBaseState.cpp" />
     <ClCompile Include="Geoscape\AlienTerrorState.cpp" />
@@ -355,6 +375,7 @@
     <ClCompile Include="Menu\NewBattleState.cpp" />
     <ClCompile Include="Menu\NewGameState.cpp" />
     <ClCompile Include="Menu\NoteState.cpp" />
+    <ClCompile Include="Menu\OptionsControlsState.cpp" />
     <ClCompile Include="Menu\OptionsState.cpp" />
     <ClCompile Include="Menu\SavedGameState.cpp" />
     <ClCompile Include="Menu\SaveState.cpp" />
@@ -506,9 +527,11 @@
     <ClInclude Include="Battlescape\PromotionsState.h" />
     <ClInclude Include="Battlescape\ScannerState.h" />
     <ClInclude Include="Battlescape\ScannerView.h" />
+    <ClInclude Include="Battlescape\UnitFallBState.h" />
     <ClInclude Include="Battlescape\UnitInfoState.h" />
     <ClInclude Include="Battlescape\TileEngine.h" />
     <ClInclude Include="Battlescape\UnitDieBState.h" />
+    <ClInclude Include="Battlescape\UnitPanicBState.h" />
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Battlescape\UnitTurnBState.h" />
     <ClInclude Include="Battlescape\UnitWalkBState.h" />
@@ -518,6 +541,7 @@
     <ClInclude Include="Engine\CatFile.h" />
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
+    <ClInclude Include="Engine\FastLineClip.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GMCat.h" />
@@ -526,9 +550,15 @@
     <ClInclude Include="Engine\LocalizedText.h" />
     <ClInclude Include="Engine\Logger.h" />
     <ClInclude Include="Engine\Music.h" />
+    <ClInclude Include="Engine\OpenGL.h" />
     <ClInclude Include="Engine\Options.h" />
     <ClInclude Include="Engine\Palette.h" />
     <ClInclude Include="Engine\RNG.h" />
+    <ClInclude Include="Engine\Scalers\common.h" />
+    <ClInclude Include="Engine\Scalers\hqx.h" />
+    <ClInclude Include="Engine\Scalers\scale2x.h" />
+    <ClInclude Include="Engine\Scalers\scale3x.h" />
+    <ClInclude Include="Engine\Scalers\scalebit.h" />
     <ClInclude Include="Engine\Screen.h" />
     <ClInclude Include="Engine\Sound.h" />
     <ClInclude Include="Engine\SoundSet.h" />
@@ -536,6 +566,7 @@
     <ClInclude Include="Engine\Surface.h" />
     <ClInclude Include="Engine\SurfaceSet.h" />
     <ClInclude Include="Engine\Timer.h" />
+    <ClInclude Include="Engine\Zoom.h" />
     <ClInclude Include="Geoscape\AbandonGameState.h" />
     <ClInclude Include="Geoscape\AlienBaseState.h" />
     <ClInclude Include="Geoscape\AlienTerrorState.h" />
@@ -596,6 +627,7 @@
     <ClInclude Include="Menu\NewBattleState.h" />
     <ClInclude Include="Menu\NewGameState.h" />
     <ClInclude Include="Menu\NoteState.h" />
+    <ClInclude Include="Menu\OptionsControlsState.h" />
     <ClInclude Include="Menu\OptionsState.h" />
     <ClInclude Include="Menu\SavedGameState.h" />
     <ClInclude Include="Menu\SaveState.h" />
@@ -649,6 +681,7 @@
     <ClInclude Include="Savegame\ResearchProject.h" />
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
+    <ClInclude Include="Savegame\SerializationHelper.h" />
     <ClInclude Include="Savegame\Soldier.h" />
     <ClInclude Include="Savegame\Node.h" />
     <ClInclude Include="Savegame\Target.h" />

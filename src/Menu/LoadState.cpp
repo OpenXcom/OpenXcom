@@ -71,7 +71,12 @@ void LoadState::lstSavesPress(Action *action)
 		SavedGame *s = new SavedGame();
 		try
 		{
-			s->load(Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0)), _game->getRuleset());
+#ifdef _WIN32
+			std::string filename = Language::wstrToCp(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+#else
+			std::string filename = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
+#endif
+			s->load(filename, _game->getRuleset());
 			_game->setSavedGame(s);
 			_game->setState(new GeoscapeState(_game));
 			if (_game->getSavedGame()->getBattleGame() != 0)

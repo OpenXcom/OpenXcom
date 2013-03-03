@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleCountry.h"
+#include "../Engine/RNG.h"
 
 namespace OpenXcom
 {
@@ -26,7 +27,7 @@ namespace OpenXcom
  * type of country.
  * @param type String defining the type.
  */
-RuleCountry::RuleCountry(const std::string &type) : _type(type), _fundingMin(0), _fundingMax(0), _labelLon(0.0), _labelLat(0.0)
+RuleCountry::RuleCountry(const std::string &type) : _type(type), _fundingBase(0), _fundingCap(0), _labelLon(0.0), _labelLat(0.0)
 {
 }
 
@@ -51,13 +52,13 @@ void RuleCountry::load(const YAML::Node &node)
 		{
 			i.second() >> _type;
 		}
-		else if (key == "fundingMin")
+		else if (key == "fundingBase")
 		{
-			i.second() >> _fundingMin;
+			i.second() >> _fundingBase;
 		}
-		else if (key == "fundingMax")
+		else if (key == "fundingCap")
 		{
-			i.second() >> _fundingMax;
+			i.second() >> _fundingCap;
 		}
 		else if (key == "labelLon")
 		{
@@ -94,8 +95,8 @@ void RuleCountry::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "fundingMin" << YAML::Value << _fundingMin;
-	out << YAML::Key << "fundingMax" << YAML::Value << _fundingMax;
+	out << YAML::Key << "fundingBase" << YAML::Value << _fundingBase;
+	out << YAML::Key << "fundingCap" << YAML::Value << _fundingCap;
 	out << YAML::Key << "labelLon" << YAML::Value << _labelLon;
 	out << YAML::Key << "labelLat" << YAML::Value << _labelLat;
 	out << YAML::Key << "lonMin" << YAML::Value << _lonMin;
@@ -117,22 +118,22 @@ std::string RuleCountry::getType() const
 }
 
 /**
- * Returns the country's minimum starting funding,
- * in thousands.
+ * Generates the random starting funding for the country.
  * @return Monthly funding.
  */
-int RuleCountry::getMinFunding() const
+int RuleCountry::generateFunding() const
 {
-	return _fundingMin;
+	return RNG::generate(_fundingBase, _fundingBase*2) * 1000;
 }
 
 /**
- * Returns the country's maximum starting funding.
- * @return Monthly funding.
+ * Returns the country's funding cap.
+ * Country funding can never exceed this.
+ * @return Funding cap, in thousands.
  */
-int RuleCountry::getMaxFunding() const
+int RuleCountry::getFundingCap() const
 {
-	return _fundingMax;
+	return _fundingCap;
 }
 
 /**

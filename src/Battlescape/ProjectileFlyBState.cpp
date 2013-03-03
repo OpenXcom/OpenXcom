@@ -31,11 +31,11 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/SoundSet.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "Camera.h"
 
 namespace OpenXcom
 {
@@ -136,7 +136,7 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!validMeleeRange(&_action))
+		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), _action.actor->getHeight(), 0))
 		{
 			_action.result = "STR_THERE_IS_NO_ONE_THERE";
 			_parent->popState();
@@ -160,6 +160,7 @@ void ProjectileFlyBState::init()
 		{
 			if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
 			{
+				action.cameraPosition = _action.cameraPosition;
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		}
@@ -174,6 +175,7 @@ void ProjectileFlyBState::init()
 bool ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
+	++_action.autoShotCounter;
 	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
 
 	_autoshotCounter++;
@@ -190,7 +192,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-			_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(39)->play();
+			_parent->getResourcePack()->getSound("BATTLE.CAT", 39)->play();
 			_unit->addThrowingExp();
 		}
 		else
@@ -203,7 +205,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	else if (_unit->getType() == "CELATID") // special code for the "spit" trajectory
+	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
 		{
@@ -212,7 +214,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->cacheUnit(_unit);
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 		}
 		else
 		{
@@ -234,7 +236,7 @@ bool ProjectileFlyBState::createNewProjectile()
 				_parent->getMap()->cacheUnit(_unit);
 				// and we have a lift-off
 				if (_action.weapon->getRules()->getFireSound() != -1)
-					_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(_action.weapon->getRules()->getFireSound())->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -271,6 +273,10 @@ void ProjectileFlyBState::think()
 		}
 		else
 		{
+			if (_action.cameraPosition.z != -1)
+			{
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+			}
 			_parent->popState();
 		}
 	}
@@ -286,9 +292,9 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getResourcePack()->getSoundSet("BATTLE.CAT")->getSound(38)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
-				if (Options::getBool("battleAltGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0)
+				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() > 0)
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
@@ -365,38 +371,6 @@ bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 	realDistance += zdiff*2;
 
 	return realDistance < maxDistance;
-}
-
-/*
- * Validate the melee range.
- * @return true when range is valid.
- */
-bool ProjectileFlyBState::validMeleeRange(BattleAction *action)
-{
-	Position p;
-	Pathfinding::directionToVector(action->actor->getDirection(), &p);
-	for (int x = 0; x <= action->actor->getArmor()->getSize(); ++x)
-	{
-		for (int y = 0; y <= action->actor->getArmor()->getSize(); ++y)
-		{
-			Tile * tile (_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0) + p));
-			if (tile)
-			{
-				BattleUnit *target (tile->getUnit());
-				if (!target && (action->actor->getHeight() + _parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0))->getTerrainLevel() > 24))
-					target = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
-				if (target && target != action->actor)
-				{
-					for (std::vector<BattleUnit*>::iterator b = action->actor->getVisibleUnits()->begin(); b != action->actor->getVisibleUnits()->end(); ++b)
-					{
-						if (*b == target && !_parent->getPathfinding()->isBlocked(_parent->getSave()->getTile(action->actor->getPosition() + Position(x, y, 0)), tile, action->actor->getDirection()))
-							return true;
-					}
-				}
-			}
-		}
-	}
-	return false;
 }
 
 }

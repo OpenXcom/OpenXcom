@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+# Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenXcom", "OpenXcom.2010.vcxproj", "{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}"
 EndProject
 Global
@@ -13,10 +13,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Debug|Win32.Build.0 = Debug|Win32
-		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Debug|x64.ActiveCfg = Debug|Win32
+		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Debug|x64.ActiveCfg = Debug|x64
+		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Debug|x64.Build.0 = Debug|x64
 		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Release|Win32.ActiveCfg = Release|Win32
 		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Release|Win32.Build.0 = Release|Win32
-		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Release|x64.ActiveCfg = Release|Win32
+		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Release|x64.ActiveCfg = Release|x64
+		{D8F55ED4-1A4E-4111-8E83-153CF91FE25A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

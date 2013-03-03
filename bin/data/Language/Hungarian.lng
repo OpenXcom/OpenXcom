@@ -151,7 +151,7 @@ STR_PURCHASE_RECRUIT
 VÁSÁRLÁS/SOROZÁS
 STR_SELL_SACK_UC
 ELADÁS/KIRÚGÁS
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 FÖLDGÖMB
 STR_XCOM_BASES
 XCom Bázisok
@@ -597,13 +597,13 @@ STR_VERY_HIGH
 NAGYON MAGAS
 STR_FUEL
 ÜZEMANYAG>
-STR_WEAPON_1
+STR_WEAPON_ONE
 FEGYVER-1>
 STR_NONE_UC
 SEMMI
 STR_ROUNDS_
 LŐSZER>
-STR_WEAPON_2
+STR_WEAPON_TWO
 FEGYVER-2>
 STR_HOSTILE
 ELLENSÉGES
@@ -647,8 +647,6 @@ STR_COLONEL
 Ezredes
 STR_COMMANDER
 Parancsnok
-STR_SELECT_SQUAD_FOR
-Válassz osztagot: 
 STR_SPACE_AVAILABLE
 FELHASZNÁLHATÓ HELY>
 STR_SPACE_USED
@@ -657,8 +655,6 @@ STR_RANK
 RENDFOKOZAT
 STR_WOUNDED
 SEBESÜLT
-STR_EQUIPMENT_FOR
-Felszerelések: 
 STR_ARM
 Fegyverzet 
 STR_DEFENSE_VALUE
@@ -893,6 +889,8 @@ STR_SILACOID
 Szilakoid
 STR_CHRYSSALID
 Krisszalid
+STR_ZOMBIE
+Zombi
 STR_REAPER
 Arató
 STR_SECTOPOD
@@ -913,6 +911,64 @@ STR_LIVE_SOLDIER
  Katona
 STR_LIVE_TERRORIST
  Terrorista
+STR_FLOATER_SOLDIER
+Lebegő Katona
+STR_FLOATER_NAVIGATOR
+Lebegő Navigátor
+STR_FLOATER_MEDIC
+Lebegő Orvos
+STR_FLOATER_ENGINEER
+Lebegő Mérnök
+STR_FLOATER_LEADER
+Lebegő Vezető
+STR_FLOATER_COMMANDER
+Lebegő Parancsnok
+STR_SECTOID_SOLDIER
+Szektoid Katona
+STR_SECTOID_NAVIGATOR
+Szektoid Navigátor
+STR_SECTOID_MEDIC
+Szektoid Orvos
+STR_SECTOID_ENGINEER
+Szektoid Mérnök
+STR_SECTOID_LEADER
+Szektoid Vezető
+STR_SECTOID_COMMANDER
+Szektoid Parancsnok
+STR_SNAKEMAN_SOLDIER
+Kígyóember Katona
+STR_SNAKEMAN_NAVIGATOR
+Kígyóember Navigátor
+STR_SNAKEMAN_ENGINEER
+Kígyóember Mérnök
+STR_SNAKEMAN_LEADER
+Kígyóember Vezető
+STR_SNAKEMAN_COMMANDER
+Kígyóember Parancsnok
+STR_MUTON_SOLDIER
+Muton Katona
+STR_MUTON_NAVIGATOR
+Muton Navigátor
+STR_MUTON_ENGINEER
+Muton Mérnök
+STR_ETHEREAL_SOLDIER
+Éteri Katona
+STR_ETHEREAL_LEADER
+Éteri Vezető
+STR_ETHEREAL_COMMANDER
+Éteri Parancsnok
+STR_CYBERDISC_TERRORIST
+Kiberkorong Terrorista
+STR_REAPER_TERRORIST
+Arató Terrorista
+STR_CHRYSSALID_TERRORIST
+Krisszalid Terrorista
+STR_CELATID_TERRORIST
+Kelatid Terrorista
+STR_SILACOID_TERRORIST
+Szilakoid Terrorista
+STR_SECTOPOD_TERRORIST
+Szektopod Terrorista
 STR_UFO_POWER_SOURCE
 UFO Erőforrás
 STR_UFO_NAVIGATION
@@ -1151,18 +1207,6 @@ STR_EGYPT
 EGYIPTOM
 STR_CANADA
 KANADA
-STR_FLOATER_SOLDIER
-Lebegő Katona
-STR_FLOATER_NAVIGATOR
-Lebegő Navigátor
-STR_FLOATER_MEDIC
-Lebegő Orvos
-STR_FLOATER_ENGINEER
-Lebegő Mérnök
-STR_FLOATER_LEADER
-Lebegő Vezető
-STR_FLOATER_COMMANDER
-Lebegő Parancsnok
 STR_TANK
 Tank
 STR_CIVILIAN
@@ -1911,6 +1955,16 @@ STR_HEAL
 GYÓGYÍTÁS
 STR_TUS
 IE>
+STR_WEIGHT
+Súly>
+STR_FACCURACY
+T.Ptg>
+STR_REACT
+Reakc>
+STR_PSKILL
+P.Ügy>
+STR_PSTRENGTH
+P.Erő>
 STR_ALIEN_ARTIFACT
 Idegen Szerkezet
 STR_AMMO_ROUNDS_LEFT
@@ -2035,10 +2089,6 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Az időegységek Automata Lövésre fenntartva
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Az időegységek Célzott Lövésre fenntartva
-STR_UNITS_IN_EXIT_AREA
- egység elhagyásra kész
-STR_UNITS_OUTSIDE_EXIT_AREA
- egység elhagyásra nem kész
 STR_ABORT_MISSION
 Abbahagyod a küldetést?
 STR_CORPSE
@@ -2062,7 +2112,7 @@ Kijelző Mód
 STR_WINDOWED
 Ablakos
 STR_FULLSCREEN
-Teljesképernyő
+Teljesképernyős
 STR_LANGUAGE
 NYELV
 STR_FARM
@@ -2087,3 +2137,115 @@ STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
 Nincs elég {1} az NFP fegyverzéséhez
 STR_DAY_1
 {N} nap
+STR_EQUIPMENT_FOR_craftname
+Felszerelések: {1}
+STR_SELECT_SQUAD_FOR_craftname
+Válassz osztagot: {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+{N} egység elhagyásra kész
+STR_n_UNITS_IN_EXIT_AREA_1
+{N} egység elhagyásra kész
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+{N} egység elhagyásra nem kész
+STR_n_UNITS_OUTSIDE_EXIT_AREA_1
+{N} egység elhagyásra nem kész
+STR_ABANDON_GAME_QUESTION
+ABBAHAGYOD A JÁTÉKOT?
+STR_HAS_BEEN_KILLED
+-t megölték
+STR_DRAG_SCROLL
+VONSZOLÁS
+STR_HIT_MELEE
+Megüt
+STR_CONTROLS
+VEZÉRLÉS
+STR_RESTORE_DEFAULTS
+Alapértékek
+STR_GENERAL
+Általános
+STR_GEOSCAPE
+Földgömb
+STR_BATTLESCAPE
+Csatamező
+STR_SCREENSHOT
+Képernyőkép Mentése
+STR_FPS_COUNTER
+FPS Számláló
+STR_ROTATE_LEFT
+Forgatás Balra
+STR_ROTATE_RIGHT
+Forgatás Jobbra
+STR_ROTATE_UP
+Forgatás Fel
+STR_ROTATE_DOWN
+Forgatás Le
+STR_ZOOM_IN
+Nagyítás
+STR_ZOOM_OUT
+Kicsinyítés
+STR_TOGGLE_COUNTRY_DETAIL
+Kapcsoló: Országok Részletesen
+STR_TOGGLE_RADAR_RANGES
+Kapcsoló: Radar Hatókörök
+STR_SCROLL_LEFT
+Görgetés Balra
+STR_SCROLL_RIGHT
+Görgetés Jobbra
+STR_SCROLL_UP
+Görgetés Fel
+STR_SCROLL_DOWN
+Görgetés Le
+STR_VIEW_LEVEL_ABOVE
+Nézetet Egy Szinttel Fel
+STR_VIEW_LEVEL_BELOW
+Nézetet Egy Szinttel Le
+STR_CENTER_SELECTED_UNIT
+Kiválasztott Egységet Középre
+STR_PREVIOUS_UNIT
+Előző Egység
+STR_NEXT_UNIT
+Következő Egység
+STR_DESELECT_UNIT
+Egység Kiválasztásának Törlése
+STR_INVENTORY
+Személy-Leltár
+STR_MINIMAP
+Mini-Térkép
+STR_END_TURN
+Kör Befejezése
+STR_ABORT_MISSION
+Küldetés megszakítása
+STR_UNIT_STATS
+Egység Tulajdonságai
+STR_KNEEL
+Térdelés
+STR_RELOAD
+Újratöltés
+STR_TOGGLE_PERSONAL_LIGHTING
+Kapcsoló: Személyi Világítás
+STR_DONT_RESERVE_TUS
+Ne Tartson Fenn IE-eket
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+IE-ek Fenntartása Kapáslövésre
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+IE-ek Fenntartása Célzott Lövésre
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+IE-ek Fenntartása Auto. Lövésre
+STR_CENTER_ON_ENEMY_1
+Ellenség-1-et Középre
+STR_CENTER_ON_ENEMY_2
+Ellenség-2-t Középre
+STR_CENTER_ON_ENEMY_3
+Ellenség-3-at Középre
+STR_CENTER_ON_ENEMY_4
+Ellenség-4-et Középre
+STR_CENTER_ON_ENEMY_5
+Ellenség-5-öt Középre
+STR_CENTER_ON_ENEMY_6
+Ellenség-6-ot Középre
+STR_CENTER_ON_ENEMY_7
+Ellenség-7-et Középre
+STR_CENTER_ON_ENEMY_8
+Ellenség-8-at Középre
+STR_CENTER_ON_ENEMY_9
+Ellenség-9-et Középre

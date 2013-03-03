@@ -24,7 +24,6 @@
 namespace OpenXcom
 {
 
-class Window;
 class InteractiveSurface;
 class Text;
 
@@ -34,7 +33,6 @@ class Text;
 class DefeatState : public State
 {
 private:
-	Window *_window;
 	InteractiveSurface *_screen;
 	std::vector<Text*> _txtText;
 	int _screenNumber;
@@ -43,6 +41,7 @@ public:
 	DefeatState(Game *game);
 	/// Cleans up the Defeat state.
 	~DefeatState();
+	void init();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
 	void nextScreen();
