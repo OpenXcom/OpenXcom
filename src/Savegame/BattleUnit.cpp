@@ -1033,7 +1033,7 @@ void BattleUnit::keepFalling()
 	int endFrame = 3;
 	if (_spawnUnit != "")
 	{
-		endFrame = 9;
+		endFrame = 18;
 	}
 	if (_fallPhase == endFrame)
 	{
