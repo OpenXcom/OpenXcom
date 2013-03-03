@@ -321,7 +321,7 @@ void OptionsState::btnOkClick(Action *)
 	else if (_soundVolume == _btnSoundVolume5)
 		Options::setInt("soundVolume", 128);
 
-    Options::setBool("useOpenGL", _btnDisplayOpenGL->isPressed);
+    Options::setBool("useOpenGL", _btnDisplayOpenGL->getPressed());
 	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));

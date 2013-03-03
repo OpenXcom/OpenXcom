@@ -25,9 +25,9 @@
 namespace OpenXcom
 {
 
-ToggleTextButton::ToggleTextButton(int width, int height, int x, int y) : TextButton(width, height, x, y), _fakeGroup(0)
+ToggleTextButton::ToggleTextButton(int width, int height, int x, int y) : TextButton(width, height, x, y), _fakeGroup(0), _invertMid(-1)
 {
-    isPressed = false;
+    _isPressed = false;
     TextButton::setGroup(&_fakeGroup);
 }
 
@@ -44,20 +44,44 @@ void ToggleTextButton::mousePress(Action *action, State *state)
 
     if (action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
     {
-        isPressed = !isPressed;
-        _fakeGroup = isPressed ? this : 0;
+        _isPressed = !_isPressed;
+        _fakeGroup = _isPressed ? this : 0; // this is the trick that makes TextButton stick
     }
 
-    InteractiveSurface::unpress(state);
+	InteractiveSurface::mousePress(action, state); // skip TextButton's code as it will try to set *_group
     draw();
 }
 
-/// set the isPressed state of the button and force it to redraw
+/// set the _isPressed state of the button and force it to redraw
 void ToggleTextButton::setPressed(bool pressed)
 {
-    isPressed = pressed;
-    _fakeGroup = isPressed ? this : 0;
+    if (_isPressed == pressed) return;
+    _isPressed = pressed;
+    _fakeGroup = _isPressed ? this : 0;
     _redraw = true;
 }
+
+/// When this is set, Surface::invert() is called with the value from mid when it's time to invert the button
+void ToggleTextButton::setInvertColor(Uint8 mid)
+{
+    _invertMid = mid;
+    _fakeGroup = 0;
+    _redraw = true;
+}
+
+/// handle draw() in case we need to paint the button a garish color
+void ToggleTextButton::draw()
+{
+    if (_invertMid > -1) _fakeGroup = 0; // nevermind, TextButton. We'll invert the surface ourselves.
+    TextButton::draw();
+
+    if (_invertMid > -1 && _isPressed)
+    {
+        this->invert(_invertMid);
+    }
+}
+
+
+
 
 }
