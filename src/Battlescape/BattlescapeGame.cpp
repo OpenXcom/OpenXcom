@@ -1440,6 +1440,28 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
 
 	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
+	
+	int difficulty = _parentState->getGame()->getSavedGame()->getDifficulty();
+	int divider = 1;
+	if (!difficulty)
+		divider = 2;
+	
+	UnitStats *stats = _newUnit->getStats();
+
+	// adjust the unit's stats according to the difficulty level.
+	stats->tu += 4 * difficulty * stats->tu / 100;
+	_newUnit->setTimeUnits(stats->tu);
+	stats->stamina += 4 * difficulty * stats->stamina / 100;
+	_newUnit->setEnergy(stats->stamina);
+	stats->reactions += 6 * difficulty * stats->reactions / 100;
+	stats->strength += 2 * difficulty * stats->strength / 100;
+	stats->firing = (stats->firing + 6 * difficulty * stats->firing / 100) / divider;
+	stats->strength += 2 * difficulty * stats->strength / 100;
+	stats->melee += 4 * difficulty * stats->melee / 100;
+	stats->psiSkill += 4 * difficulty * stats->psiSkill / 100;
+	stats->psiStrength += 4 * difficulty * stats->psiStrength / 100;
+	if (divider > 1)
+		unit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(_newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	_newUnit->setPosition(unit->getPosition());
