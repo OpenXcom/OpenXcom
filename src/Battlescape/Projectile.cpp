@@ -344,14 +344,14 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 			shade = 0;	// Enemy units can see in the dark.
 		else
 			shade = targetTile->getShade();		// Can be from 0 to 15
-		// 0.25 is the max angle deviation for accuracy 0% (+-3s = 0.25 radian). Can be from 0.25 to 0.35 (at night).
-		// 0.33 - max angle deviation for Autoshot.
-		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
-		// 5.0  is the coefficient. Can be from 5.0 (at day) to 4.0 (at night).
-		baseDeviation = ((_action.type == BA_AUTOSHOT?0.33:0.25) + shade/150) - accuracy / (5.0 - shade/15);
+		// 0.32 is the max angle deviation for accuracy 0% (+-3s = 0.32 radian). Can be from 0.32 to 0.42 (at night).
+		// 0.40 - max angle deviation for Autoshot.
+		// 0.03 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
+		// 4.2  is the coefficient. Can be from 4.2 (at day) to 3.2 (at night).
+		baseDeviation = ((_action.type == BA_AUTOSHOT?0.40:0.32) + shade/150) - accuracy / (4.2 - shade/15);
 
-		if (baseDeviation < 0.02)
-			baseDeviation = 0.02;
+		if (baseDeviation < 0.03)
+			baseDeviation = 0.03;
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // miss in radian
 		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
