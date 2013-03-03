@@ -717,10 +717,11 @@ void AggroBAIState::think(BattleAction *action)
 						if (tile->getMapData(MapData::O_NORTHWALL) || tile->getMapData(MapData::O_WESTWALL)) score += WALL_BONUS; // hug the walls
 						
 						if (_game->getTileEngine()->faceWindow(action->target) != -1) score -= WINDOW_PENALTY; // a window is not cover.
+                        
+                        if (traceAI) { tile->setMarkerColor(score < 0 ? 3 : 9); }
 					}
 
-
-					if (score > bestTileScore)
+					if (tile && score > bestTileScore)
 					{
 						// check if we can reach this tile
 						_game->getPathfinding()->calculate(_unit, action->target);
@@ -733,6 +734,7 @@ void AggroBAIState::think(BattleAction *action)
                             TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
 							if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
 						}
+                        if (traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); tile->addLight(4, action->target.z); }
 						if (score > bestTileScore && _game->getPathfinding()->getStartDirection() != -1)
 						{
 							// yay, we can get there and the overreach penalty didn't kill the score
@@ -750,6 +752,7 @@ void AggroBAIState::think(BattleAction *action)
 
 				}
 				action->target = bestTile;
+                if (traceAI) { _game->getTile(action->target)->setMarkerColor(13); tile->addLight(10, action->target.z); }
 				
 				if (_aggroTarget != 0)
 					setAggroTarget(_aggroTarget);

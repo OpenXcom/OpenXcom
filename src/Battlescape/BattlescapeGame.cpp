@@ -178,20 +178,16 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
 	std::wstringstream ss;
-	BattleAIState *ai = unit->getCurrentAIState();
+    
+    _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
+        // it might also help chryssalids realize they've zombified someone and need to move on
+        // it's also for good luck
+
+    BattleAIState *ai = unit->getCurrentAIState();
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
-        _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
-
-        if (unit->getVisibleUnits()->size() == 0)
-        {
-		    unit->setAIState(new PatrolBAIState(_save, unit, 0));
-        } else
-        {
-            unit->setAIState(new AggroBAIState(_save, unit));
-        }
-
+        unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 	}
 	_AIActionCounter++;
@@ -208,9 +204,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
-	if (unit->getStats()->psiSkill
+	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
+	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
-		|| (_AIActionCounter > 2))
+		|| (_AIActionCounter > 2)
+        || (unit->getVisibleUnits()->size() != 0))
 	{
 		if (aggro == 0)
 		{
