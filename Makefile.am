@@ -66,7 +66,7 @@ AM_CFLAGS=-std=c99
 openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) -lGL
 openxcom_CXXFLAGS = \
 	$(CXXFLAGS) \
-	$(DEBUG_CXXFLAGS) \
+	$(DEBUG_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"

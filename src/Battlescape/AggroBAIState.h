@@ -20,6 +20,7 @@
 #define OPENXCOM_AGGROBAISTATE_H
 
 #include "BattleAIState.h"
+#include <vector>
 
 
 namespace OpenXcom
@@ -39,6 +40,10 @@ protected:
 	BattleUnit *_lastKnownTarget;
 	Position _lastKnownPosition;
 	int _timesNotSeen;
+	static std::vector<Position> _randomTileSearch;
+	static int _randomTileSearchAge;
+	bool _charge;
+	
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
@@ -57,7 +62,9 @@ public:
 	/// Sets aggro target, triggered by reaction fire.
 	void setAggroTarget(BattleUnit *unit);
 	/// Get the aggro target, for savegame
-	BattleUnit *getAggroTarget();
+	BattleUnit *getAggroTarget() const { return _aggroTarget; }
+	/// Get the last known location of target, for turning
+	Position getLastKnownPosition() const { return _lastKnownPosition; }
 	/// decide if we should throw a grenade/launch a missile to this position
 	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
 };
