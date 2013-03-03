@@ -109,6 +109,14 @@ void Tile::load(const YAML::Node &node)
 		(*pName)[1] >> _discovered[1];
 		(*pName)[2] >> _discovered[2];
 	}
+	if (const YAML::Node *pName = node.FindValue("openDoorWest"))
+	{
+		_currentFrame[1] = 7;
+	}
+	if (const YAML::Node *pName = node.FindValue("openDoorNorth"))
+	{
+		_currentFrame[2] = 7;
+	}
 }
 
 /**
@@ -156,6 +164,14 @@ void Tile::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+	}
+	if (_objects[1] && _objects[1]->isUFODoor() && _currentFrame[1] != 0)
+	{
+		out << YAML::Key << "openDoorWest" <<  YAML::Value << true;
+	}
+	if (_objects[2] && _objects[2]->isUFODoor() && _currentFrame[2] != 0)
+	{
+		out << YAML::Key << "openDoorNorth" <<  YAML::Value << true;
 	}
 	out << YAML::EndMap;
 }

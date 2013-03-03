@@ -339,7 +339,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 #if 0
 	out << YAML::Key << "tiles" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
