@@ -1620,6 +1620,18 @@ int TileEngine::closeUfoDoors()
 	// prepare a list of tiles on fire/smoke & close any ufo doors
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
+		if (_save->getTiles()[i]->getUnit() && _save->getTiles()[i]->getUnit()->getArmor()->getSize() > 1)
+		{
+			BattleUnit *bu = _save->getTiles()[i]->getUnit();
+			Tile *tile = _save->getTiles()[i];
+			Tile *oneTileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+			Tile *oneTileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL) && oneTileNorth && oneTileNorth->getUnit() && oneTileNorth->getUnit() == bu) ||
+				(tile->isUfoDoorOpen(MapData::O_WESTWALL) && oneTileWest && oneTileWest->getUnit() && oneTileWest->getUnit() == bu))
+			{
+				continue;
+			}
+		}
 		doorsclosed += _save->getTiles()[i]->closeUfoDoor();
 	}
 
