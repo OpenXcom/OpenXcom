@@ -84,6 +84,7 @@ Projectile::~Projectile()
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
+	Tile *targetTile = 0;
 	int direction;		
 	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	int dirXshift[24] = {9, 15, 15, 13, 7, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
@@ -138,7 +139,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store this target voxel.
-		Tile *targetTile = _save->getTile(_action.target);
+		targetTile = _save->getTile(_action.target);
 		Position hitPos;
 		int test = -1;
 		if (targetTile->getUnit() != 0)
@@ -230,7 +231,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH, targetTile);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -322,8 +323,9 @@ bool Projectile::calculateThrow(double accuracy)
  * @param origin Startposition of the trajectory.
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
+ * @param targetTile Tile of target. Default = 0.
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -334,11 +336,18 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
 		double baseDeviation;
-		double shade = 0.1 * _save->getGlobalShade();	// Can be from 0 (at day) till 1.5 (at night).
-		// 0.40 is the max angle deviation for accuracy 0% (+-3s = 0.4 radian). Can be from 0.4 till 0.5 (at night).
+		int shade;
+
+		if (!targetTile)
+			shade = _save->getGlobalShade();	// Can be from 0 (at day) to 15 (at night).
+		else if (targetTile->getUnit()->getFaction() == FACTION_PLAYER || targetTile->getUnit()->getFaction() == FACTION_NEUTRAL)
+			shade = 0;	// Enemy units can see in the dark.
+		else
+			shade = targetTile->getShade();	// Can be from 0 to 15
+		// 0.40 is the max angle deviation for accuracy 0% (+-3s = 0.4 radian). Can be from 0.4 to 0.5 (at night).
 		// 0.03 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
-		// 3.5  is the coefficient. Can be from 3.5 (at day) till 2.9 (at night).
-		baseDeviation = (0.4 + shade/1.5) - accuracy / (3.5 - shade/2.5);
+		// 3.5  is the coefficient. Can be from 3.5 (at day) to 2.9 (at night).
+		baseDeviation = (0.4 + shade/150.0) - accuracy / (3.5 - shade/25.0);
 
 		if (baseDeviation < 0.03)
 			baseDeviation = 0.03;
