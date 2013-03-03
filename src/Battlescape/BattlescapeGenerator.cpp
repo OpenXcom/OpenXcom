@@ -640,7 +640,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(0); // it is wiser to enter the world with no preconceived ideas of what actions one will take
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node)); // no it isn't.
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getBattleGame()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20)
