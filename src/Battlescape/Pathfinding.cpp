@@ -252,11 +252,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
-
+			/*
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
 				return 255;
-
+			*/
 			// can't walk on top of other units
 			if (_save->getTile(*endPosition + Position(x,y,-1))
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
