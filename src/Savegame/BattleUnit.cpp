@@ -1650,26 +1650,12 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 {
 	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
 	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
-	bool leftMelee  = (weaponLeftHand  && weaponLeftHand->getRules()->getBattleType() == BT_MELEE);
-	bool rightMelee = (weaponRightHand && weaponRightHand->getRules()->getBattleType() == BT_MELEE);
 
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
-	if (!rightMelee && (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity()))
+	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
 		return weaponLeftHand;
-	if (!leftMelee && (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity()))
+	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
 		return weaponRightHand;
-
-	// try to find a melee weapon
-	if (leftMelee) 
-	{
-		return weaponLeftHand;
-	}
-
-	if (rightMelee) 
-	{
-		return weaponRightHand;
-	}
-
 
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();

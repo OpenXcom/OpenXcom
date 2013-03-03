@@ -734,12 +734,12 @@ void AggroBAIState::think(BattleAction *action)
                             TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
 							if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
 						}
-                        if (traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); tile->addLight(4, action->target.z); }
 						if (score > bestTileScore && _game->getPathfinding()->getStartDirection() != -1)
 						{
 							// yay, we can get there and the overreach penalty didn't kill the score
 							bestTileScore = score;
 							bestTile = action->target;
+                            if (traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); tile->addLight(4, action->target.z); }
 						}
 						_game->getPathfinding()->abortPath();
 						if (bestTileScore > FAST_PASS_THRESHOLD) coverFound = true; // good enough, gogogo
