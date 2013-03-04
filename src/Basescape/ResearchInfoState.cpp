@@ -271,7 +271,7 @@ void ResearchInfoState::lessClick(Action *action)
  */
 void ResearchInfoState::more()
 {	
-	_timerLess->setInterval(50);
+	_timerMore->setInterval(50);
 	more(1);
 }
 
@@ -298,7 +298,7 @@ void ResearchInfoState::more(int change)
  */
 void ResearchInfoState::less()
 {
-	_timerMore->setInterval(50);
+	_timerLess->setInterval(50);
 	less(1);
 }
 

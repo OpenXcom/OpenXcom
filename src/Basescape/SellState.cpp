@@ -458,7 +458,7 @@ void SellState::increase(int change)
  */
 void SellState::decrease()
 {
-	_timerInc->setInterval(50);
+	_timerDec->setInterval(50);
 	decrease(1);
 }
 
