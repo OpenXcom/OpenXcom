@@ -155,6 +155,8 @@ public:
 	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI
 	void resetSituationForAI();
 	static bool _debugPlay;
+	/// is panic done with yet?
+	bool getPanicHandled() { return _playerPanicHandled; }
 };
 
 }
