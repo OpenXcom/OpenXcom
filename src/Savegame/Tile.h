@@ -49,7 +49,6 @@ public:
 		Uint8 index; // for indexing the actual tile array
 		Uint8 _mapDataSetID;
 		Uint8 _mapDataID;
-        Uint8 _currentFrame;
 		Uint8 _smoke;
 		Uint8 _fire;
         Uint8 boolFields;
@@ -88,7 +87,7 @@ public:
 	/// Load the tile from yaml
 	void load(const YAML::Node &node);
 	/// Load the tile from binary buffer in memory
-	void loadBinary(Uint8 **buffer, Tile::SerializationKey& serializationKey);
+	void loadBinary(Uint8 *buffer, Tile::SerializationKey& serializationKey);
 	/// Saves the tile to yaml
 	void save(YAML::Emitter &out) const;
 	/// Saves the tile to binary

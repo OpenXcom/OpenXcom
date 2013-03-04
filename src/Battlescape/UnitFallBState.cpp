@@ -115,6 +115,16 @@ void UnitFallBState::think()
 					_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->setUnit((*unit), _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1)));
 				}
 			}
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
+					if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getArmor()->getMovementType() == MT_FLY)
+						largeCheck = false;
+				}
+			}
+			falling = largeCheck && (*unit)->getPosition().z != 0 && (*unit)->getTile()->hasNoFloor(tileBelow) && (*unit)->getArmor()->getMovementType() != MT_FLY && (*unit)->getWalkingPhase() == 0;
 			
 			if (falling)
 			{
