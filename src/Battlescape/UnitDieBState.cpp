@@ -88,7 +88,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 
         for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
         {
-            if ((*n)->getPosition() == unit->getPosition())
+            if (parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), unit->getPosition()) < 4)
             {
                 (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
             }
