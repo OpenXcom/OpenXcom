@@ -66,6 +66,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setInt("baseXResolution", 320);
