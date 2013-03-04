@@ -167,4 +167,10 @@ bool Node::isTarget() const
 	return _reserved == 5;
 }
 
+void Node::setType(int type)
+{
+    _flags = type;
+}
+
+
 }

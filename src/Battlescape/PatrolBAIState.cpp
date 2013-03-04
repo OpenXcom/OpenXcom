@@ -179,7 +179,7 @@ void PatrolBAIState::think(BattleAction *action)
 		for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 		{
 			node = *i;
-			int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
+			int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z 
 				&& d < closest 
 				&& (!(node->getType() & Node::TYPE_SMALL) || _unit->getArmor()->getSize() == 1))
@@ -246,7 +246,7 @@ void PatrolBAIState::think(BattleAction *action)
 					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
 						node = *i;
-						int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
+						int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
 						if (d < closest)
 						{
 							_toNode = node;
