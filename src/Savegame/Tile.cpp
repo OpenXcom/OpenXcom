@@ -37,11 +37,10 @@ Tile::SerializationKey Tile::serializationKey =
 {4, // index
  2, // _mapDataSetID, four of these
  2, // _mapDataID, four of these
- 2, // _currentFrame, 4 of these as well
  1, // _fire
  1, // _smoke
  1,	// one 8-bit bool field
- 4 + 2*4 + 2*4 + 2*4 + 1 + 1 + 1 // total bytes to save one tile
+ 4 + 2*4 + 2*4 + 1 + 1 + 1 // total bytes to save one tile
 };
 
 /**
@@ -124,25 +123,26 @@ void Tile::load(const YAML::Node &node)
  * Load the tile from binary.
  * @param buffer pointer to buffer.
  */
-void Tile::loadBinary(Uint8 **buffer, Tile::SerializationKey& serKey)
+void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 {
-	_mapDataID[0] = unserializeInt(buffer, serKey._mapDataID);
-	_mapDataID[1] = unserializeInt(buffer, serKey._mapDataID);
-	_mapDataID[2] = unserializeInt(buffer, serKey._mapDataID);
-	_mapDataID[3] = unserializeInt(buffer, serKey._mapDataID);
-	_mapDataSetID[0] = unserializeInt(buffer, serKey._mapDataSetID);
-	_mapDataSetID[1] = unserializeInt(buffer, serKey._mapDataSetID);
-	_mapDataSetID[2] = unserializeInt(buffer, serKey._mapDataSetID);
-	_mapDataSetID[3] = unserializeInt(buffer, serKey._mapDataSetID);
-    for (int i = 0; i < 4; ++i) _currentFrame[i] = unserializeInt(buffer, serKey._currentFrame);
+	_mapDataID[0] = unserializeInt(&buffer, serKey._mapDataID);
+	_mapDataID[1] = unserializeInt(&buffer, serKey._mapDataID);
+	_mapDataID[2] = unserializeInt(&buffer, serKey._mapDataID);
+	_mapDataID[3] = unserializeInt(&buffer, serKey._mapDataID);
+	_mapDataSetID[0] = unserializeInt(&buffer, serKey._mapDataSetID);
+	_mapDataSetID[1] = unserializeInt(&buffer, serKey._mapDataSetID);
+	_mapDataSetID[2] = unserializeInt(&buffer, serKey._mapDataSetID);
+	_mapDataSetID[3] = unserializeInt(&buffer, serKey._mapDataSetID);
 
-	_smoke = unserializeInt(buffer, serKey._smoke);
-	_fire = unserializeInt(buffer, serKey._fire);
+	_smoke = unserializeInt(&buffer, serKey._smoke);
+	_fire = unserializeInt(&buffer, serKey._fire);
 
-    Uint8 boolFields = unserializeInt(buffer, serKey.boolFields);
+    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
 	_discovered[0] = (boolFields & 1) ? true : false;
 	_discovered[1] = (boolFields & 2) ? true : false;
 	_discovered[2] = (boolFields & 4) ? true : false;
+	_currentFrame[1] = (boolFields & 8) ? 7 : 0;
+	_currentFrame[2] = (boolFields & 0x10) ? 7 : 0;
 }
 
 
@@ -191,12 +191,13 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[1]);
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[2]);
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[3]);
-    for (int i = 0; i < 4; ++i) serializeInt(buffer, serializationKey._currentFrame, _currentFrame[i]);
 
 	serializeInt(buffer, serializationKey._smoke, _smoke);
 	serializeInt(buffer, serializationKey._fire, _fire);
 
 	Uint8 boolFields = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
+	boolFields |= isUfoDoorOpen(1) ? 8 : 0; // west
+	boolFields |= isUfoDoorOpen(2) ? 0x10 : 0; // north?
 	serializeInt(buffer, serializationKey.boolFields, boolFields);
 }
 
