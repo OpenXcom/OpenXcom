@@ -45,6 +45,7 @@ std::string _configFolder = "";
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _options;
 std::vector<std::string> _rulesets;
+std::vector<std::string> _purchaseexclusions;
 
 /**
  * Creates a default set of options based on the system.
@@ -433,6 +434,11 @@ void load(const std::string &filename)
 		_options[key] = value;
 	}
 
+	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
+	{
+		(*pName) >> _purchaseexclusions;
+	}
+
 	if (const YAML::Node *pName = doc.FindValue("rulesets"))
 	{
 		(*pName) >> _rulesets;
@@ -592,6 +598,11 @@ void setBool(const std::string& id, bool value)
 std::vector<std::string> getRulesets()
 {
 	return _rulesets;
+}
+
+std::vector<std::string> getPurchaseExclusions()
+{
+	return _purchaseexclusions;
 }
 
 }
