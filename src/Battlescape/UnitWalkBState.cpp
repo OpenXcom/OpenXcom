@@ -397,7 +397,7 @@ void UnitWalkBState::think()
  */
 void UnitWalkBState::cancel()
 {
-	if (_parent->getSave()->getSide() == FACTION_PLAYER)
+	if (_parent->getSave()->getSide() == FACTION_PLAYER && _parent->getPanicHandled())
 	_pf->abortPath();
 }
 
