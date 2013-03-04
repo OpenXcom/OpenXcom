@@ -167,11 +167,11 @@ void Tile::save(YAML::Emitter &out) const
 		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
 	}
-	if (_objects[1] && _objects[1]->isUFODoor() && _currentFrame[1] != 0)
+	if (isUfoDoorOpen(1))
 	{
 		out << YAML::Key << "openDoorWest" <<  YAML::Value << true;
 	}
-	if (_objects[2] && _objects[2]->isUFODoor() && _currentFrame[2] != 0)
+	if (isUfoDoorOpen(2))
 	{
 		out << YAML::Key << "openDoorNorth" <<  YAML::Value << true;
 	}
