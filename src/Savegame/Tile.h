@@ -51,6 +51,7 @@ public:
 		Uint8 _mapDataID;
 		Uint8 _smoke;
 		Uint8 _fire;
+        Uint8 boolFields;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
 
@@ -86,7 +87,7 @@ public:
 	/// Load the tile from yaml
 	void load(const YAML::Node &node);
 	/// Load the tile from binary buffer in memory
-	void loadBinary(Uint8 **buffer, Tile::SerializationKey& serializationKey);
+	void loadBinary(Uint8 *buffer, Tile::SerializationKey& serializationKey);
 	/// Saves the tile to yaml
 	void save(YAML::Emitter &out) const;
 	/// Saves the tile to binary
