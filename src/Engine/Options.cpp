@@ -119,6 +119,58 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", 3);
 	setInt("windowedModePositionY", 22);
+
+	// new battle mode data
+	setInt("NewBattleMission", 0);
+	setInt("NewBattleTerrain", 0);
+	setInt("NewBattleItemLevel", 0);
+	setInt("NewBattleAlienRace", 0);
+	setInt("NewBattleDifficulty", 0);
+	setInt("NewBattleDarkness", 0);
+	setInt("NewBattleCraft", 0);
+	
+	// new battle loadout data
+	setInt("NewBattle_STR_AC_AP_AMMO", 1);
+	setInt("NewBattle_STR_AC_HE_AMMO", 1);
+	setInt("NewBattle_STR_AC_I_AMMO", 1);
+	setInt("NewBattle_STR_ALIEN_GRENADE", 1);
+	setInt("NewBattle_STR_AUTO_CANNON", 1);
+	setInt("NewBattle_STR_BLASTER_BOMB", 1);
+	setInt("NewBattle_STR_BLASTER_LAUNCHER", 1);
+	setInt("NewBattle_STR_ELECTRO_FLARE", 1);
+	setInt("NewBattle_STR_GRENADE", 1);
+	setInt("NewBattle_STR_HC_AP_AMMO", 1);
+	setInt("NewBattle_STR_HC_HE_AMMO", 1);
+	setInt("NewBattle_STR_HC_I_AMMO", 1);
+	setInt("NewBattle_STR_HEAVY_CANNON", 1);
+	setInt("NewBattle_STR_HEAVY_LASER", 1);
+	setInt("NewBattle_STR_HEAVY_PLASMA", 1);
+	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 1);
+	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 1);
+	setInt("NewBattle_STR_INCENDIARY_ROCKET", 1);
+	setInt("NewBattle_STR_LARGE_ROCKET", 1);
+	setInt("NewBattle_STR_LASER_PISTOL", 1);
+	setInt("NewBattle_STR_LASER_RIFLE", 1);
+	setInt("NewBattle_STR_MEDI_KIT", 1);
+	setInt("NewBattle_STR_MIND_PROBE", 1);
+	setInt("NewBattle_STR_MOTION_SCANNER", 1);
+	setInt("NewBattle_STR_PISTOL", 1);
+	setInt("NewBattle_STR_PISTOL_CLIP", 1);
+	setInt("NewBattle_STR_PLASMA_PISTOL", 1);
+	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 1);
+	setInt("NewBattle_STR_PLASMA_RIFLE", 1);
+	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 1);
+	setInt("NewBattle_STR_PROXIMITY_GRENADE", 1);
+	setInt("NewBattle_STR_PSI_AMP", 1);
+	setInt("NewBattle_STR_RIFLE", 1);
+	setInt("NewBattle_STR_RIFLE_CLIP", 1);
+	setInt("NewBattle_STR_ROCKET_LAUNCHER", 1);
+	setInt("NewBattle_STR_SMALL_LAUNCHER", 1);
+	setInt("NewBattle_STR_SMALL_ROCKET", 1);
+	setInt("NewBattle_STR_SMOKE_GRENADE", 1);
+	setInt("NewBattle_STR_STUN_BOMB", 1);
+	setInt("NewBattle_STR_STUN_ROD", 1);
+
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);
