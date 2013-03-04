@@ -542,10 +542,11 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 {
 	// if the tile is too dark, we can't see it
-	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS || !tile->getUnit())
 	{
 		return false;
 	}
+	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) return true; //friendlies are always seen
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 
@@ -587,6 +588,85 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	return unitSeen;
 }
 
+
+/**
+ * Check for how exposed unit for another unit
+ * @param originVoxel voxel of trace origin (eye or gun's barrel)
+ * @param tile the tile to check for
+ * @param excludeUnit is self (not to hit self)
+ * @return degree of exposure
+ */
+int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit)
+{
+	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
+	Position scanVoxel;
+	std::vector<Position> _trajectory;
+	BattleUnit *otherUnit = tile->getUnit();
+	if (otherUnit == 0) return 0; //no unit in this tile, even if it elevated and appearing in it.
+	if (otherUnit == excludeUnit) return 0; //skip self
+
+	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
+	if (otherUnit)
+		 targetMinHeight += otherUnit->getFloatHeight();
+
+	// if there is an other unit on target tile, we assume we want to check against this unit's height
+	int heightRange;
+ 
+	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
+	if (otherUnit->getArmor()->getSize() > 1)
+	{
+		unitRadius = 3;
+	}
+
+	// vector manipulation to make scan work in view-space
+	Position relPos = targetVoxel - *originVoxel;
+	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
+	int relX = floor(((float)relPos.y)*normal+0.5);
+	int relY = floor(((float)-relPos.x)*normal+0.5);
+
+	int sliceTargets[10]={0,0, relX,relY, -relX,-relY};
+ 
+	if (!otherUnit->isOut())
+	{
+		heightRange = otherUnit->getHeight();
+	}
+	else
+	{
+		heightRange = 12;
+	}
+
+
+	int targetMaxHeight=targetMinHeight+heightRange;
+	// scan ray from top to bottom  plus different parts of target cylinder
+	int total=0;
+	int visible=0;
+	for (int i = heightRange; i >=0; i-=2)
+	{
+		++total;
+		scanVoxel.z=targetMinHeight+i;
+		for (int j = 0; j < 2; ++j)
+		{
+			scanVoxel.x=targetVoxel.x + sliceTargets[j*2];
+			scanVoxel.y=targetVoxel.y + sliceTargets[j*2+1];
+			_trajectory.clear();
+			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true);
+			if (test == 4)
+			{
+				//voxel of hit must be inside of scanned box
+				if (_trajectory.at(0).x/16 == scanVoxel.x/16 &&
+					_trajectory.at(0).y/16 == scanVoxel.y/16 &&
+					_trajectory.at(0).z >= targetMinHeight &&
+					_trajectory.at(0).z <= targetMaxHeight)
+				{
+					++visible;
+				}
+			}
+		}
+	}
+	return (visible*100)/total;
+}
+
+
 /**
  * Check for an another unit is available for targeting and what particular voxel
  * @param originVoxel voxel of trace origin (eye or gun's barrel)
@@ -600,22 +680,31 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
 	BattleUnit *otherUnit = tile->getUnit();
+	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+	if (otherUnit == excludeUnit) return false; //skip self
+
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
 	if (otherUnit)
 		 targetMinHeight += otherUnit->getFloatHeight();
+
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
  
-	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
-	if (otherUnit == excludeUnit) return false; //skip self
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
 	if (otherUnit->getArmor()->getSize() > 1)
 	{
 		unitRadius = 3;
 	}
-	int sliceTargets[10]={0,0, 0,unitRadius, 0,-unitRadius, unitRadius,0, -unitRadius,0};
+
+	// vector manipulation to make scan work in view-space
+	Position relPos = targetVoxel - *originVoxel;
+	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
+	int relX = floor(((float)relPos.y)*normal+0.5);
+	int relY = floor(((float)-relPos.x)*normal+0.5);
+
+	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relX,-relY, -relX,relY};
  
 	if (!otherUnit->isOut())
 	{
@@ -638,6 +727,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 		scanVoxel->z=targetCenterHeight+heightFromCenter[i];
 		for (int j = 0; j < 5; ++j)
 		{
+			if (i < (heightRange-1) && j>2) break; //skip unnecessary checks
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
