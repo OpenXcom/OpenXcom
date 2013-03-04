@@ -25,6 +25,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/ToggleTextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
@@ -65,6 +66,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayMode = new Text(120, 9, 164, 32);
 	_btnDisplayWindowed = new TextButton(120, 16, 164, 42);
 	_btnDisplayFullscreen = new TextButton(120, 16, 164, 60);
+	_btnDisplayOpenGL = new ToggleTextButton(56, 16, 164, 78);
 
 	_txtMusicVolume = new Text(120, 9, 8, 82);
 	_btnMusicVolume1 = new TextButton(22, 14, 8, 92);
@@ -73,12 +75,12 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnMusicVolume4 = new TextButton(22, 26, 80, 92);
 	_btnMusicVolume5 = new TextButton(22, 30, 104, 92);
 
-	_txtSoundVolume = new Text(120, 9, 164, 82);
-	_btnSoundVolume1 = new TextButton(22, 14, 164, 92);
-	_btnSoundVolume2 = new TextButton(22, 18, 188, 92);
-	_btnSoundVolume3 = new TextButton(22, 22, 212, 92);
-	_btnSoundVolume4 = new TextButton(22, 26, 236, 92);
-	_btnSoundVolume5 = new TextButton(22, 30, 260, 92);
+	_txtSoundVolume = new Text(120, 9, 164, 82+18);
+	_btnSoundVolume1 = new TextButton(22, 14, 164, 92+18);
+	_btnSoundVolume2 = new TextButton(22, 18, 188, 92+18);
+	_btnSoundVolume3 = new TextButton(22, 22, 212, 92+18);
+	_btnSoundVolume4 = new TextButton(22, 26, 236, 92+18);
+	_btnSoundVolume5 = new TextButton(22, 30, 260, 92+18);
 
 	/* Get available fullscreen/hardware modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWPALETTE);
@@ -141,6 +143,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_txtDisplayMode);
 	add(_btnDisplayWindowed);
 	add(_btnDisplayFullscreen);
+    add(_btnDisplayOpenGL);
 
 	add(_txtMusicVolume);
 	add(_btnMusicVolume1);
@@ -225,6 +228,9 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnDisplayFullscreen->setText(_game->getLanguage()->getString("STR_FULLSCREEN"));
 	_btnDisplayFullscreen->setGroup(&_displayMode);
 
+    _btnDisplayOpenGL->setColor(Palette::blockOffset(15)-1);
+    _btnDisplayOpenGL->setText(_game->getLanguage()->getString("STR_OPENGL")); // there's not really a translation for "OpenGL" afaik
+    _btnDisplayOpenGL->setPressed(Options::getBool("useOpenGL"));
 
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
 	_txtMusicVolume->setText(_game->getLanguage()->getString("STR_MUSIC_VOLUME"));
@@ -318,6 +324,7 @@ void OptionsState::btnOkClick(Action *)
 	else if (_soundVolume == _btnSoundVolume5)
 		Options::setInt("soundVolume", 128);
 
+    Options::setBool("useOpenGL", _btnDisplayOpenGL->getPressed());
 	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
