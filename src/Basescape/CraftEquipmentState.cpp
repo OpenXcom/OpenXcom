@@ -189,9 +189,9 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 		}
 	}
 
-	_timerLeft = new Timer(50);
+	_timerLeft = new Timer(250);
 	_timerLeft->onTimer((StateHandler)&CraftEquipmentState::moveLeft);
-	_timerRight = new Timer(50);
+	_timerRight = new Timer(250);
 	_timerRight->onTimer((StateHandler)&CraftEquipmentState::moveRight);
 }
 
@@ -241,7 +241,11 @@ void CraftEquipmentState::lstEquipmentLeftArrowPress(Action *action)
  */
 void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLeft->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerLeft->setInterval(250);
+		_timerLeft->stop();
+	}
 }
 
 /**
@@ -251,6 +255,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeft(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveLeft(1);
 }
 
 /**
@@ -269,7 +274,11 @@ void CraftEquipmentState::lstEquipmentRightArrowPress(Action *action)
  */
 void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerRight->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerRight->setInterval(250);
+		_timerRight->stop();
+	}
 }
 
 /**
@@ -279,6 +288,7 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRight(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveRight(1);
 }
 
 /**
@@ -350,6 +360,7 @@ void CraftEquipmentState::updateQuantity()
  */
 void CraftEquipmentState::moveLeft()
 {
+	_timerLeft->setInterval(50);
 	moveLeft(1);
 }
 
@@ -418,6 +429,7 @@ void CraftEquipmentState::moveLeft(int change)
  */
 void CraftEquipmentState::moveRight()
 {
+	_timerRight->setInterval(50);
 	moveRight(1);
 }
 
