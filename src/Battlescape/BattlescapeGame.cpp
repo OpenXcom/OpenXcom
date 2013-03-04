@@ -585,6 +585,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 		}
 	}
+	BattleUnit *bu = _save->getSelectedUnit();
+	if (_save->getSide() == FACTION_PLAYER)
+	{
+		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
+	}
 }
 
 /**
@@ -1264,13 +1269,13 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && Game::getCtrlKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
-			if (bPreviewed && !_save->getPathfinding()->previewPath())
+			if (bPreviewed && !_save->getPathfinding()->previewPath() && _save->getPathfinding()->getStartDirection() != -1)
 			{
 				_save->getPathfinding()->removePreview();
 				bPreviewed = false;
 			}
 
-			if (!bPreviewed)
+			if (!bPreviewed && _save->getPathfinding()->getStartDirection() != -1)
 			{
 				//  -= start walking =-
 				getMap()->setCursorType(CT_NONE);

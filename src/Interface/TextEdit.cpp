@@ -446,4 +446,12 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	InteractiveSurface::keyboardPress(action, state);
 }
 
+void TextEdit::deFocus()
+{
+	_isFocused = false;
+	_blink = false;
+	_redraw = true;
+	_timer->stop();
+}
+
 }

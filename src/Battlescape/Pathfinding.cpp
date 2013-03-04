@@ -124,7 +124,10 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 				{
 					int dir[3] = {4,2,3};
 					Tile *checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if (isBlocked(unit->getTile(), checkTile, dir[its], missileTarget))
+					if (isBlocked(unit->getTile(), checkTile, dir[its], missileTarget) || 
+						(checkTile->getUnit() &&
+						checkTile->getUnit() != unit &&
+						checkTile->getUnit()->getVisible()))
 						return;
 					++its;
 				}
@@ -349,12 +352,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				return 255;
 			}
 
-			// can't walk on top of other units
-			if (_save->getTile(*endPosition + Position(x,y,-1))
-				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
-				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
-				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
-				&& _movementType != MT_FLY && _save->getTile(*endPosition + offset)->hasNoFloor(belowDestination))
+			// can't walk through other units
+			if (_save->getTile(*endPosition + Position(x,y,0))
+				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit()
+				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit() != _unit
+				&& !_save->getTile(*endPosition + Position(x,y,0))->getUnit()->isOut())
 				return 255;
 
 			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4

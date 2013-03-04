@@ -393,6 +393,8 @@ openxcom_SOURCES = \
 	src/Interface/NumberText.h \
 	src/Interface/TextButton.cpp \
 	src/Interface/TextButton.h \
+	src/Interface/ToggleTextButton.cpp \
+	src/Interface/ToggleTextButton.h \
 	src/Interface/Text.cpp \
 	src/Interface/TextEdit.cpp \
 	src/Interface/TextEdit.h \

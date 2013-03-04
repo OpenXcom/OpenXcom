@@ -37,9 +37,8 @@ typedef void (State::* ActionHandler)(Action*);
  */
 class InteractiveSurface : public Surface
 {
-private:
-	static const int NUM_BUTTONS = 7;
 protected:
+	static const int NUM_BUTTONS = 7;
 	ActionHandler *_clicks, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
 	bool *_buttonsPressed, _isHovered, _isFocused;
 

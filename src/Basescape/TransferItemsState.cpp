@@ -366,7 +366,11 @@ void TransferItemsState::lstItemsLeftArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerInc->setInterval(250);
+		_timerInc->stop();
+	}
 }
 
 /**
@@ -376,6 +380,7 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
 }
 
 /**
@@ -394,7 +399,11 @@ void TransferItemsState::lstItemsRightArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerDec->setInterval(250);
+		_timerDec->stop();
+	}
 }
 
 /**
@@ -404,6 +413,7 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
 }
 
 /**
@@ -479,6 +489,7 @@ int TransferItemsState::getQuantity()
  */
 void TransferItemsState::increase()
 {
+	_timerInc->setInterval(50);
 	increase(1);
 }
 
@@ -574,6 +585,7 @@ void TransferItemsState::increase(int change)
  */
 void TransferItemsState::decrease()
 {
+	_timerDec->setInterval(50);
 	decrease(1);
 }
 
