@@ -2136,7 +2136,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
 {
-	return validMeleeRange(unit->getPosition(), unit->getArmor()->getSize() > 1 ?  -1 : unit->getDirection(), unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), -1, unit->getArmor()->getSize(), unit->getHeight(), target);
 }
 
 /*
@@ -2164,13 +2164,13 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 					Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
 					if (tile && _save->getTile(pos))
 					{
-						if (height - _save->getTile(pos)->getTerrainLevel() > 24 && ((tile->getUnit() && tile->getUnit() != target) || !tile->getUnit()))
+						if (height - _save->getTile(pos)->getTerrainLevel() > 24)
 							tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
                         if (!tile) continue; // I blame Reapers.
 
 						if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 						{
-							if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, dir, 0))
+							if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, dir, target))
 								return true;
 						}
 					}
@@ -2188,13 +2188,13 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 				Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
 				if (tile && _save->getTile(pos))
 				{
-					if (height - _save->getTile(pos)->getTerrainLevel() > 24 && ((tile->getUnit() && tile->getUnit() != target) || !tile->getUnit()))
+					if (height - _save->getTile(pos)->getTerrainLevel() > 24)
 						tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
                     if (!tile) continue; 
 
 					if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 					{
-						if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, direction, 0))
+						if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, direction, target))
 							return true;
 					}
 				}
