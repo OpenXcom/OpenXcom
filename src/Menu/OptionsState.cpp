@@ -44,6 +44,8 @@ namespace OpenXcom
  */
 OptionsState::OptionsState(Game *game) : State(game)
 {
+	_wClicked = false;
+	_hClicked = false;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 8);
@@ -192,6 +194,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayWidth->setBig();
 	_txtDisplayWidth->setText(Language::utf8ToWstr(Options::getString("displayWidth")));
 	_txtDisplayWidth->setNumerical(true);
+	_txtDisplayWidth->onMouseClick((ActionHandler)&OptionsState::DisplayWidthClick);
 
 	_txtDisplayX->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayX->setAlign(ALIGN_CENTER);
@@ -203,6 +206,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setText(Language::utf8ToWstr(Options::getString("displayHeight")));
 	_txtDisplayHeight->setNumerical(true);
+	_txtDisplayHeight->onMouseClick((ActionHandler)&OptionsState::DisplayHeightClick);
 
 	_btnDisplayUp->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayUp->onMouseClick((ActionHandler)&OptionsState::btnDisplayUpClick);
@@ -411,4 +415,22 @@ void OptionsState::btnDisplayDownClick(Action *)
 	_txtDisplayHeight->setText(ssH.str());
 }
 
+void OptionsState::DisplayWidthClick(Action *action)
+{
+	_wClicked = true;
+	if (_hClicked)
+	{
+		_txtDisplayHeight->deFocus();
+		_hClicked = false;
+	}
+}
+void OptionsState::DisplayHeightClick(Action *action)
+{
+	_hClicked = true;
+	if (_wClicked)
+	{
+		_txtDisplayWidth->deFocus();
+		_wClicked = false;
+	}
+}
 }

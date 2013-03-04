@@ -52,6 +52,7 @@ private:
 	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls;
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
+	bool _wClicked, _hClicked;
 public:
 	/// Creates the Options state.
 	OptionsState(Game *game);
@@ -71,6 +72,10 @@ public:
 	void btnDisplayUpClick(Action *action);
 	/// Handler for clicking the Previous Resolution button.
 	void btnDisplayDownClick(Action *action);
+	/// unclick height if necessary.
+	void DisplayWidthClick(Action *action);
+	/// unclick width if necessary.
+	void DisplayHeightClick(Action *action);
 };
 
 }
