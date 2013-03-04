@@ -1537,11 +1537,17 @@ void BattlescapeGame::resetSituationForAI()
 
     // Log(LOG_INFO) << w*h*l << " tiles!";
 
+	if (Options::getBool("traceAI"))
+	{
+		for (int i = 0; i < w * l * h; ++i) if (tiles[i]->closestSoldierDSqr == -1) { tiles[i]->setMarkerColor(0); } // clear old tile markers
+	}
+
     for (int i = 0; i < w * l * h; ++i)
     {
        tiles[i]->soldiersVisible = -1;    // -1 for "not calculated"; actual calculations will take place as needed
        tiles[i]->closestSoldierDSqr = -1; // for most of the tiles most of the time, this data is not needed
     }
+
 }
 
 
