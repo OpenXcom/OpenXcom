@@ -37,10 +37,11 @@ Tile::SerializationKey Tile::serializationKey =
 {4, // index
  2, // _mapDataSetID, four of these
  2, // _mapDataID, four of these
+ 2, // _currentFrame, 4 of these as well
  1, // _fire
  1, // _smoke
-	// one 8-bit bool field goes unmentioned
- 4 + 2*4 + 2*4 +1 +1 +1 // total bytes to save one tile
+ 1,	// one 8-bit bool field
+ 4 + 2*4 + 2*4 + 2*4 + 1 + 1 + 1 // total bytes to save one tile
 };
 
 /**
@@ -109,6 +110,14 @@ void Tile::load(const YAML::Node &node)
 		(*pName)[1] >> _discovered[1];
 		(*pName)[2] >> _discovered[2];
 	}
+	if (const YAML::Node *pName = node.FindValue("openDoorWest"))
+	{
+		_currentFrame[1] = 7;
+	}
+	if (const YAML::Node *pName = node.FindValue("openDoorNorth"))
+	{
+		_currentFrame[2] = 7;
+	}
 }
 
 /**
@@ -125,14 +134,15 @@ void Tile::loadBinary(Uint8 **buffer, Tile::SerializationKey& serKey)
 	_mapDataSetID[1] = unserializeInt(buffer, serKey._mapDataSetID);
 	_mapDataSetID[2] = unserializeInt(buffer, serKey._mapDataSetID);
 	_mapDataSetID[3] = unserializeInt(buffer, serKey._mapDataSetID);
+    for (int i = 0; i < 4; ++i) _currentFrame[i] = unserializeInt(buffer, serKey._currentFrame);
 
 	_smoke = unserializeInt(buffer, serKey._smoke);
 	_fire = unserializeInt(buffer, serKey._fire);
 
-	_discovered[0] = (**buffer & 1) ? true : false;
-	_discovered[1] = (**buffer & 2) ? true : false;
-	_discovered[2] = (**buffer & 4) ? true : false;
-	++(*buffer);
+    Uint8 boolFields = unserializeInt(buffer, serKey.boolFields);
+	_discovered[0] = (boolFields & 1) ? true : false;
+	_discovered[1] = (boolFields & 2) ? true : false;
+	_discovered[2] = (boolFields & 4) ? true : false;
 }
 
 
@@ -157,6 +167,14 @@ void Tile::save(YAML::Emitter &out) const
 		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
 		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
 	}
+	if (_objects[1] && _objects[1]->isUFODoor() && _currentFrame[1] != 0)
+	{
+		out << YAML::Key << "openDoorWest" <<  YAML::Value << true;
+	}
+	if (_objects[2] && _objects[2]->isUFODoor() && _currentFrame[2] != 0)
+	{
+		out << YAML::Key << "openDoorNorth" <<  YAML::Value << true;
+	}
 	out << YAML::EndMap;
 }
 /**
@@ -173,12 +191,13 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[1]);
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[2]);
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[3]);
+    for (int i = 0; i < 4; ++i) serializeInt(buffer, serializationKey._currentFrame, _currentFrame[i]);
 
 	serializeInt(buffer, serializationKey._smoke, _smoke);
 	serializeInt(buffer, serializationKey._fire, _fire);
 
-	**buffer = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
-	++(*buffer);
+	Uint8 boolFields = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
+	serializeInt(buffer, serializationKey.boolFields, boolFields);
 }
 
 /**

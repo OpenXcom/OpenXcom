@@ -127,6 +127,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		Tile::SerializationKey serKey;
 		size_t totalTiles;
 
+        memset(&serKey, 0, sizeof(Tile::SerializationKey));
 		node["tileIndexSize"] >> serKey.index;
 		node["tileTotalBytesPer"] >> serKey.totalBytes;
 		node["tileFireSize"] >> serKey._fire;
@@ -134,6 +135,17 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		node["tileIDSize"] >> serKey._mapDataID;
 		node["tileSetIDSize"] >> serKey._mapDataSetID;
 		node["totalTiles"] >> totalTiles;
+        if (const YAML::Node *boolFieldsNode = node.FindValue("tileBoolFieldsSize")) 
+        {
+            *boolFieldsNode >> serKey.boolFields;
+        } else
+        {
+            serKey.boolFields = 1; // boolean flags used to be stored in an unmentioned byte (Uint8) :|
+        }
+        if (const YAML::Node *_currentFrameNode = node.FindValue("tileCurrentFrameSize"))
+        {
+            *_currentFrameNode >> serKey._currentFrame;
+        }
 
 		// load binary tile data! 
 		YAML::Binary binTiles;
@@ -339,7 +351,7 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 #if 0
 	out << YAML::Key << "tiles" << YAML::Value;
 	out << YAML::BeginSeq;
-	for (int i = 0; i < _height * _length * _width; ++i)
+	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
@@ -355,6 +367,8 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	out << YAML::Key << "tileSmokeSize" << YAML::Value << Tile::serializationKey._smoke;
 	out << YAML::Key << "tileIDSize" << YAML::Value << Tile::serializationKey._mapDataID;
 	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
+    out << YAML::Key << "tileBoolFieldsSize" << YAML::Value << Tile::serializationKey.boolFields;
+    out << YAML::Key << "tileCurrentFrameSize" << YAML::Value << Tile::serializationKey._currentFrame;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
@@ -883,7 +897,7 @@ void SavedBattleGame::resetUnitTiles()
 		{
 			if ((*i)->getTile() && (*i)->getTile()->getUnit() == (*i))
 			{
-				(*i)->getTile()->setUnit(0);
+				(*i)->getTile()->setUnit(0); // XXX XXX XXX doesn't this fail to clear 3 out of 4 tiles for 2x2 units?
 			}
 			int size = (*i)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
@@ -1067,6 +1081,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!(n->getType() & Node::TYPE_FLYING) 
 					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
 				&& !n->isAllocated() // check if not allocated
+				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
 				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{

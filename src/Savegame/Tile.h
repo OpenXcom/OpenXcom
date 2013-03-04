@@ -49,8 +49,10 @@ public:
 		Uint8 index; // for indexing the actual tile array
 		Uint8 _mapDataSetID;
 		Uint8 _mapDataID;
+        Uint8 _currentFrame;
 		Uint8 _smoke;
 		Uint8 _fire;
+        Uint8 boolFields;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
 
