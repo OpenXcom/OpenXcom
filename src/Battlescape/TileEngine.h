@@ -96,6 +96,7 @@ public:
 	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
 	bool validMeleeRange(Position pos, int direction, int size, int height, BattleUnit *target);
 	int faceWindow(const Position &position);
+	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit);
 	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
 	int castedShade(const Position& voxel);
