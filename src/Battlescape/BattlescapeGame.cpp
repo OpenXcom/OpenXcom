@@ -585,6 +585,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			}
 		}
 	}
+	BattleUnit *bu = _save->getSelectedUnit();
+	if (_save->getSide() == FACTION_PLAYER)
+	{
+		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
+	}
 }
 
 /**
