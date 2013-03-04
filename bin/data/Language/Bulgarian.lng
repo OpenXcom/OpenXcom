@@ -2153,3 +2153,5 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Units outside Exit Area
 STR_ABANDON_GAME_QUESTION
 НАПУСКАНЕ НА ИГРАТА?
+STR_OPENGL
+OpenGL
