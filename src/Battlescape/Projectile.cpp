@@ -346,12 +346,12 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 			shade = targetTile->getShade();		// Can be from 0 to 15
 		// 0.32 is the max angle deviation for accuracy 0% (+-3s = 0.32 radian). Can be from 0.32 to 0.42 (at night).
 		// 0.40 - max angle deviation for Autoshot.
-		// 0.03 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
-		// 4.2  is the coefficient. Can be from 4.2 (at day) to 3.2 (at night).
-		baseDeviation = ((_action.type == BA_AUTOSHOT?0.40:0.32) + shade/150) - accuracy / (4.2 - shade/15);
+		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
+		// 4.1  is the coefficient. Can be from 4.1 (at day) to 3.1 (at night).
+		baseDeviation = ((_action.type == BA_AUTOSHOT?0.40:0.32) + shade/150) - accuracy / (4.1 - shade/15);
 
-		if (baseDeviation < 0.03)
-			baseDeviation = 0.03;
+		if (baseDeviation < 0.02)
+			baseDeviation = 0.02;
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // miss in radian
 		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
@@ -359,7 +359,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
 
-		// It is a simple task - to hit in target width of 4-6 voxels. Good luck!
+		// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
 		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
 		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
 		target->z = (int)(origin.z + maxRange * sin(fi));
