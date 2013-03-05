@@ -34,6 +34,7 @@ grt,
 #include "Flc.h"
 #include "Logger.h"
 #include "Exception.h"
+#include "Zoom.h"
 
 namespace OpenXcom
 {
@@ -118,6 +119,7 @@ int FlcCheckHeader(const char *filename)
   if((flc.HeaderCheck==0x0AF12) || (flc.HeaderCheck==0x0AF11)) { 
     flc.screen_w=flc.HeaderWidth;
     flc.screen_h=flc.HeaderHeight;
+	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h;
     flc.screen_depth=8;
     if(flc.HeaderCheck==0x0AF11) {
       flc.HeaderSpeed*=1000/70;
@@ -176,8 +178,9 @@ void COLORS256()
       flc.colors[i].b=*(pSrc++);
       i++;
     }
-    //SDL_SetColors(flc.mainscreen, flc.colors, NumColorsSkip, i);
-		flc.mainscreen->setPalette(flc.colors, NumColorsSkip, i);
+	flc.realscreen->setPalette(flc.colors, NumColorsSkip, i);
+	SDL_SetColors(flc.mainscreen, flc.colors, NumColorsSkip, i);
+	flc.realscreen->getSurface(); // force palette update to really happen
   }
 } /* COLORS256 */
 
@@ -188,7 +191,7 @@ void SS2()
   Uint16 Lines, Count;
 
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->getSurface()->getSurface()->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels;
   ReadU16(&Lines, pSrc);
   pSrc+=2;
   while(Lines--) {
@@ -199,7 +202,7 @@ void SS2()
 /* Upper bits 11 - Lines skip 
 */
       if((Count & 0xc000)==0xc000) {  // 0xc000h = 1100000000000000
-        pDst+=(0x10000-Count)*flc.mainscreen->getSurface()->getSurface()->pitch;
+        pDst+=(0x10000-Count)*flc.mainscreen->pitch;
       }
 
       if((Count & 0xc000)==0x4000) {  // 0x4000h = 0100000000000000
@@ -236,7 +239,7 @@ void SS2()
           }
         }
       }
-      pDst+=flc.mainscreen->getSurface()->getSurface()->pitch;
+      pDst+=flc.mainscreen->pitch;
     } 
   }
 } /* SS2 */
@@ -248,7 +251,7 @@ void DECODE_BRUN()
 
   HeightCount=flc.HeaderHeight;
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->getSurface()->getSurface()->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels;
   while(HeightCount--) {
     pTmpDst=pDst;
     PacketsCount=*(pSrc++);
@@ -268,7 +271,7 @@ void DECODE_BRUN()
         }
       }
     }
-    pDst+=flc.mainscreen->getSurface()->getSurface()->pitch;
+    pDst+=flc.mainscreen->pitch;
   }
 } /* DECODE_BRUN */
 
@@ -282,11 +285,11 @@ void DECODE_LC()
   int PacketsCount;
 
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->getSurface()->getSurface()->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels;
 
   ReadU16(&tmp, pSrc);
   pSrc+=2;
-  pDst+=tmp*flc.mainscreen->getSurface()->getSurface()->pitch;
+  pDst+=tmp*flc.mainscreen->pitch;
   ReadU16(&Lines, pSrc);
   pSrc+=2;
   while(Lines--) {
@@ -310,7 +313,7 @@ void DECODE_LC()
         }
       }
     }
-    pDst+=flc.mainscreen->getSurface()->getSurface()->pitch;
+    pDst+=flc.mainscreen->pitch;
   }
 } /* DECODE_LC */
 
@@ -335,7 +338,7 @@ void DECODE_COLOR()
       flc.colors[i].b=*(pSrc++)<<2;
       i++;
     }
-    SDL_SetColors(flc.mainscreen->getSurface()->getSurface(), flc.colors, NumColorsSkip, i);
+    SDL_SetColors(flc.mainscreen, flc.colors, NumColorsSkip, i);
   }
 } /* DECODE_COLOR  */
 
@@ -344,21 +347,21 @@ void DECODE_COPY()
 { Uint8 *pSrc, *pDst;
   int Lines = flc.screen_h;
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->getSurface()->getSurface()->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels;
   while(Lines-- > 0) {
     memcpy(pDst, pSrc, flc.screen_w);
     pSrc+=flc.screen_w;
-    pDst+=flc.mainscreen->getSurface()->getSurface()->pitch;
+    pDst+=flc.mainscreen->pitch;
   }
 } /* DECODE_COPY */
 
 void BLACK()
 { Uint8 *pDst;
   int Lines = flc.screen_h;
-  pDst=(Uint8*)flc.mainscreen->getSurface()->getSurface()->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels;
   while(Lines-- > 0) {
     memset(pDst, 0, flc.screen_w);
-    pDst+=flc.mainscreen->getSurface()->getSurface()->pitch;
+    pDst+=flc.mainscreen->pitch;
   }
 } /* BLACK */
 
@@ -367,7 +370,7 @@ void FlcDoOneFrame()
 { int ChunkCount; 
   ChunkCount=flc.FrameChunks;
   flc.pChunk=flc.pMembuf;
-  if ( SDL_LockSurface(flc.mainscreen->getSurface()->getSurface()) < 0 )
+  if ( SDL_LockSurface(flc.mainscreen) < 0 )
     return;
   while(ChunkCount--) {
     ReadU32(&flc.ChunkSize, flc.pChunk+0);
@@ -410,7 +413,7 @@ void FlcDoOneFrame()
     }
     flc.pChunk+=flc.ChunkSize;
   }
-  SDL_UnlockSurface(flc.mainscreen->getSurface()->getSurface());
+  SDL_UnlockSurface(flc.mainscreen);
 } /* FlcDoOneFrame */
 
 void SDLWaitFrame(void)
@@ -443,15 +446,26 @@ int FlcInit(const char *filename)
   if(FlcCheckHeader(filename)) {
     Log(LOG_ERROR) << "Flx file failed header check.";
     //exit(1);
-		return -1;
+	return -1;
   }
-	return 0;
+#if 0
+  if (flc.realscreen->getSurface()->getSurface()->format->BitsPerPixel == 8)
+  {
+	  flc.mainscreen = flc.realscreen->getSurface()->getSurface();
+  } else
+  {
+#endif
+	  flc.mainscreen = SDL_AllocSurface(SDL_SWSURFACE, flc.screen_w, flc.screen_h, 8, 0, 0, 0, 0);
+  //}
+  return 0;
   //SDLInit(filename);
 } /* FlcInit */
 
 void FlcDeInit()
-{ fclose(flc.file);
-  free(flc.pMembuf);
+{ 
+	if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_FreeSurface(flc.mainscreen);
+	fclose(flc.file);
+	free(flc.pMembuf);
 } /* FlcDeInit */
 
 void FlcMain()
@@ -482,17 +496,19 @@ void FlcMain()
       FlcDoOneFrame();
       SDLWaitFrame();
       /* TODO: Track which rectangles have really changed */
-      //SDL_UpdateRect(flc.mainscreen->getSurface()->getSurface(), 0, 0, 0, 0);
-			flc.mainscreen->flip();
+      //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
+      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
+      flc.realscreen->flip();
     }
 
     while(SDL_PollEvent(&event)) {
       switch(event.type) {
+		case SDL_MOUSEBUTTONDOWN:
         case SDL_KEYDOWN:
           quit=1;
         break;
         case SDL_QUIT:
-          quit=1;
+          exit(0);
         default:
         break;
       }

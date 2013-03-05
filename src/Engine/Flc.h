@@ -53,7 +53,8 @@ struct Flc_t {
   Uint16 ChunkType;     /* Type of chunk */
   /*
   */
-  Screen *mainscreen;
+  SDL_Surface *mainscreen;
+  Screen *realscreen;
   SDL_Color colors[256];
   int screen_w;
   int screen_h;

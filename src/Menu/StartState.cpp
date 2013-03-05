@@ -105,7 +105,7 @@ void StartState::think()
 			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
 			{
 				Flc::flc.loop = 0; // just the one time, please
-				Flc::flc.mainscreen = _game->getScreen();
+				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
 				Flc::FlcMain();
 				Flc::FlcDeInit();
