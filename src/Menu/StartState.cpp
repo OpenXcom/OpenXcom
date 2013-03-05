@@ -18,6 +18,7 @@
  */
 #include "StartState.h"
 #include <SDL.h>
+#include <assert.h>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -76,6 +77,79 @@ StartState::~StartState()
 
 }
 
+
+typedef struct
+{
+	std::string catFile;
+	int sound;
+} soundInFile;
+
+#if 0
+// the pure MS-DOS experience
+static soundInFile introSounds[]=
+{
+{"INTRO.CAT", 0x0},
+{"INTRO.CAT", 0x1},
+{"INTRO.CAT", 0x2},
+{"INTRO.CAT", 0x3},
+{"INTRO.CAT", 0x4},
+{"INTRO.CAT", 0x5},
+{"INTRO.CAT", 0x6},
+{"INTRO.CAT", 0x7},
+{"INTRO.CAT", 0x8},
+{"INTRO.CAT", 0x9},
+{"INTRO.CAT", 0xa},
+{"INTRO.CAT", 0xb},
+{"INTRO.CAT", 0xc},
+{"INTRO.CAT", 0xd},
+{"INTRO.CAT", 0xe},
+{"INTRO.CAT", 0xf},
+{"INTRO.CAT", 0x10},
+{"INTRO.CAT", 0x11},
+{"INTRO.CAT", 0x12},
+{"INTRO.CAT", 0x13},
+{"INTRO.CAT", 0x14},
+{"INTRO.CAT", 0x15},
+{"INTRO.CAT", 0x16},
+{"INTRO.CAT", 0x17},
+{"INTRO.CAT", 0x18},
+{"INTRO.CAT", 0x18}
+};
+#else
+// a mix of (subjectively) the best sounds from the two versions
+static soundInFile introSounds[]=
+{
+{"SAMPLE3.CAT", 24}, // machine gun
+{"SAMPLE3.CAT", 5},   // plasma rifle
+{"SAMPLE3.CAT", 0x5}, // rifle
+{"INTRO.CAT", 0x3}, // some kind of death noise, urgh?
+{"INTRO.CAT", 0x4}, // mutdie
+{"INTRO.CAT", 0x5}, // dying alien
+{"INTRO.CAT", 0x6}, // another dying alien
+{"INTRO.CAT", 0x7}, // ??? ship flying? alien screech?
+{"INTRO.CAT", 0x8}, // fscream
+{"SAMPLE3.CAT", 11}, // alarm
+{"INTRO.CAT", 0xa}, // gun spinning up?
+{"INTRO.CAT", 0xb},  // reload; this one's not even in sample3
+{"SAMPLE3.CAT",19},  // whoosh
+{"INTRO.CAT", 0xd},  // feet, also not in sample3
+{"INTRO.CAT", 0xe},  // low pulsating hum
+{"INTRO.CAT", 30}, // energise
+{"SAMPLE3.CAT", 21}, // hatch
+{"SAMPLE3.CAT", 19}, // phizz
+{"SAMPLE3.CAT", 13}, // warning 
+{"SAMPLE3.CAT", 14}, // detected
+{"INTRO.CAT", 0x14}, // a different whoosh?? or the same one? what? first sound you hear when the UFO light first appears?
+{"INTRO.CAT", 0x15}, // growl
+{"SAMPLE3.CAT", 15}, // voice
+{"SAMPLE3.CAT", 12}, // beep 1
+{"SAMPLE3.CAT", 18}, // takeoff
+{"SAMPLE3.CAT", 20}  // another takeoff/landing sound?? if it exists?
+};
+#endif
+
+// sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound
+
 typedef struct 
 {
 	int frameNumber;
@@ -84,7 +158,6 @@ typedef struct
 
 static introSoundEffect introSoundTrack[] = 
 {
-//{1, 0x4},
 {149, 0x11},
 {173, 0x0C},
 {183, 0x0E},
@@ -141,7 +214,8 @@ static introSoundEffect introSoundTrack[] =
 {560, 0x407},
 {577, 0x14},
 {582, 0x405},
-{582, 0x18},
+// {582, 0x18}, // landing! correcting to landing sound!
+{582, 0x19},
 {613, 0x407},
 {615, 0x10},
 {635, 0x14},
@@ -245,10 +319,15 @@ static struct AudioSequence
 
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
-			Log(LOG_WARNING) << trackPosition << " " << introSoundTrack[trackPosition].frameNumber << " " <<  introSoundTrack[trackPosition].sound;
-			s = rp->getSound("INTRO.CAT", (introSoundTrack[trackPosition].sound));
-			if (s) s->play();
-			else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
+			int sound = introSoundTrack[trackPosition].sound /* & 0xff */;
+			if (sound <= 0x18)
+			{
+				soundInFile *sf = introSounds + sound;
+				//Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound; 
+				s = rp->getSound(sf->catFile, sf->sound);
+				if (s) s->play();
+				else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
+			}
 			++trackPosition;
 		}
 	}
