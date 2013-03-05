@@ -101,7 +101,7 @@ static struct AudioSequence
 			m = rp->getMusic("GMINTRO3");
 			m->play();
 			break;
-		}
+		}		
 	}
 } *audioSequence;
 
