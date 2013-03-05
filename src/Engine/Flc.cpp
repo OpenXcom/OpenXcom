@@ -469,7 +469,7 @@ void FlcDeInit()
 } /* FlcDeInit */
 
 void FlcMain(void (*frameCallBack)())
-{ int quit=0;
+{ bool quit=false;
   SDL_Event event;
   FlcInitFirstFrame();
   while(!quit) {
@@ -485,7 +485,7 @@ void FlcMain(void (*frameCallBack)())
           FlcInitFirstFrame();
         else {
           SDL_Delay(1000);
-          quit=1;
+          quit=true;
         }
         continue;
       }
@@ -502,18 +502,27 @@ void FlcMain(void (*frameCallBack)())
       flc.realscreen->flip();
     }
 
-    while(SDL_PollEvent(&event)) {
-      switch(event.type) {
-		case SDL_MOUSEBUTTONDOWN:
-        case SDL_KEYDOWN:
-          quit=1;
-        break;
-        case SDL_QUIT:
-          exit(0);
-        default:
-        break;
-      }
-    }
+	bool finalFrame = !flc.loop && (flc.FrameCount == flc.HeaderFrames);
+	Uint32 pauseStart;
+	if (finalFrame) pauseStart = SDL_GetTicks();
+
+	do 
+	{
+		while(SDL_PollEvent(&event)) {
+		  switch(event.type) {
+			case SDL_MOUSEBUTTONDOWN:
+			case SDL_KEYDOWN:
+			  return;
+			break;
+			case SDL_QUIT:
+			  exit(0);
+			default:
+			break;
+		  }
+		}
+		if (finalFrame) SDL_Delay(50);
+	} while (finalFrame && SDL_GetTicks() - pauseStart < 14000);
+	if (finalFrame) quit = true;;
   }
 } /* FlcMain */
 
