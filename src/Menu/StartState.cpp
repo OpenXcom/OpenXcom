@@ -87,7 +87,7 @@ static struct AudioSequence
 
 	void operator ()()
 	{
-		switch(Flc::flc.FrameCount-1)
+		switch(Flc::flc.FrameCount)
 		{
 		case 0:
 			m = rp->getMusic("GMINTRO1");
