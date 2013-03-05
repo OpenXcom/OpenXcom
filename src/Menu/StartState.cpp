@@ -18,6 +18,7 @@
  */
 #include "StartState.h"
 #include <SDL.h>
+#include <assert.h>
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -25,6 +26,11 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
+#include "../Engine/Flc.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Music.h"
+#include "../Engine/Sound.h"
 #include "TestState.h"
 #include "NoteState.h"
 #include "LanguageState.h"
@@ -71,6 +77,268 @@ StartState::~StartState()
 
 }
 
+
+typedef struct
+{
+	std::string catFile;
+	int sound;
+} soundInFile;
+
+#if 0
+// the pure MS-DOS experience
+static soundInFile introSounds[]=
+{
+{"INTRO.CAT", 0x0},
+{"INTRO.CAT", 0x1},
+{"INTRO.CAT", 0x2},
+{"INTRO.CAT", 0x3},
+{"INTRO.CAT", 0x4},
+{"INTRO.CAT", 0x5},
+{"INTRO.CAT", 0x6},
+{"INTRO.CAT", 0x7},
+{"INTRO.CAT", 0x8},
+{"INTRO.CAT", 0x9},
+{"INTRO.CAT", 0xa},
+{"INTRO.CAT", 0xb},
+{"INTRO.CAT", 0xc},
+{"INTRO.CAT", 0xd},
+{"INTRO.CAT", 0xe},
+{"INTRO.CAT", 0xf},
+{"INTRO.CAT", 0x10},
+{"INTRO.CAT", 0x11},
+{"INTRO.CAT", 0x12},
+{"INTRO.CAT", 0x13},
+{"INTRO.CAT", 0x14},
+{"INTRO.CAT", 0x15},
+{"INTRO.CAT", 0x16},
+{"INTRO.CAT", 0x17},
+{"INTRO.CAT", 0x18},
+{"INTRO.CAT", 0x18}
+};
+#else
+// a mix of (subjectively) the best sounds from the two versions
+static soundInFile introSounds[]=
+{
+{"SAMPLE3.CAT", 24}, // machine gun
+{"SAMPLE3.CAT", 5},   // plasma rifle
+{"SAMPLE3.CAT", 0x5}, // rifle
+{"INTRO.CAT", 0x3}, // some kind of death noise, urgh?
+{"INTRO.CAT", 0x4}, // mutdie
+{"INTRO.CAT", 0x5}, // dying alien
+{"INTRO.CAT", 0x6}, // another dying alien
+{"INTRO.CAT", 0x7}, // ??? ship flying? alien screech?
+{"INTRO.CAT", 0x8}, // fscream
+{"SAMPLE3.CAT", 11}, // alarm
+{"INTRO.CAT", 0xa}, // gun spinning up?
+{"INTRO.CAT", 0xb},  // reload; this one's not even in sample3
+{"SAMPLE3.CAT",19},  // whoosh
+{"INTRO.CAT", 0xd},  // feet, also not in sample3
+{"INTRO.CAT", 0xe},  // low pulsating hum
+{"INTRO.CAT", 30}, // energise
+{"SAMPLE3.CAT", 21}, // hatch
+{"SAMPLE3.CAT", 19}, // phizz
+{"SAMPLE3.CAT", 13}, // warning 
+{"SAMPLE3.CAT", 14}, // detected
+{"INTRO.CAT", 0x14}, // a different whoosh?? or the same one? what? first sound you hear when the UFO light first appears?
+{"INTRO.CAT", 0x15}, // growl
+{"SAMPLE3.CAT", 15}, // voice
+{"SAMPLE3.CAT", 12}, // beep 1
+{"SAMPLE3.CAT", 18}, // takeoff
+{"SAMPLE3.CAT", 20}  // another takeoff/landing sound?? if it exists?
+};
+#endif
+
+// sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound
+
+typedef struct 
+{
+	int frameNumber;
+	int sound;
+} introSoundEffect;
+
+static introSoundEffect introSoundTrack[] = 
+{
+{149, 0x11},
+{173, 0x0C},
+{183, 0x0E},
+{205, 0x15},
+{211, 0x201},
+{211, 0x407},
+{223, 0x7},
+{250, 0x1},
+{253, 0x1},
+{255, 0x1},
+{257, 0x1},
+{260, 0x1},
+{261, 0x3},
+{262, 0x1},
+{264, 0x1},
+{268, 0x1},
+{270, 0x1},
+{272, 0x5},
+{272, 0x1},
+{274, 0x1},
+{278, 0x1},
+{280, 0x1},
+{282, 0x8},
+{282, 0x1},
+{284, 0x1},
+{286, 0x1},
+{288, 0x1},
+{290, 0x1},
+{292, 0x6},
+{292, 0x1},
+{296, 0x1},
+{298, 0x1},
+{300, 0x1},
+{302, 0x1},
+{304, 0x1},
+{306, 0x1},
+{308, 0x1},
+{310, 0x1},
+{312, 0x1},
+{378, 0x202},
+{378, 0x9},
+{386, 0x9},
+{393, 0x9},
+{399, 0x17},
+{433, 0x17},
+{463, 0x12},
+{477, 0x12},
+{487, 0x13},
+{495, 0x16},
+{501, 0x16},
+{522, 0x0B},
+{534, 0x18},
+{535, 0x405},
+{560, 0x407},
+{577, 0x14},
+{582, 0x405},
+// {582, 0x18}, // landing! correcting to landing sound!
+{582, 0x19},
+{613, 0x407},
+{615, 0x10},
+{635, 0x14},
+{638, 0x14},
+{639, 0x14},
+{644, 0x2},
+{646, 0x2},
+{648, 0x2},
+{650, 0x2},
+{652, 0x2},
+{654, 0x2},
+{656, 0x2},
+{658, 0x2},
+{660, 0x2},
+{662, 0x2},
+{664, 0x2},
+{666, 0x2},
+{668, 0x401},
+{681, 0x406},
+{687, 0x402},
+{689, 0x407},
+{694, 0x0A},
+{711, 0x407},
+{711, 0x0},
+{714, 0x0},
+{716, 0x4},
+{717, 0x0},
+{720, 0x0},
+{723, 0x0},
+{726, 0x5},
+{726, 0x0},
+{729, 0x0},
+{732, 0x0},
+{735, 0x0},
+{738, 0x0},
+{741, 0x0},
+{742, 0x6},
+{744, 0x0},
+{747, 0x0},
+{750, 0x0},
+{753, 0x0},
+{756, 0x0},
+{759, 0x0},
+{762, 0x0},
+{765, 0x0},
+{768, 0x0},
+{771, 0x0},
+{774, 0x0},
+{777, 0x0},
+{780, 0x0},
+{783, 0x0},
+{786, 0x0},
+{790, 0x15},
+{790, 0x15},
+{807, 0x2},
+{810, 0x2},
+{812, 0x2},
+{814, 0x2},
+{816, 0x0},
+{819, 0x0},
+{822, 0x0},
+{824, 0x40A},
+{824, 0x5},
+{827, 0x6},
+{835, 0x0F},
+{841, 0x0F},
+{845, 0x0F},
+{855, 0x407},
+{879, 0x0C},
+{65535, 0x0FFFF}
+};
+
+static struct AudioSequence
+{
+	ResourcePack *rp;
+	Music *m;
+	Sound *s;
+	int trackPosition;
+
+	AudioSequence(ResourcePack *resources) : rp(resources), trackPosition(0)
+	{
+	}
+
+	void operator ()()
+	{
+		switch(Flc::flc.FrameCount)
+		{
+		case 0:
+			m = rp->getMusic("GMINTRO1");
+			m->play();
+			break;
+		case 180:
+			m = rp->getMusic("GMINTRO2");
+			m->play();
+			break;
+		case 382:
+			m = rp->getMusic("GMINTRO3");
+			m->play();
+			break;
+		}		
+
+		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
+		{
+			int sound = introSoundTrack[trackPosition].sound /* & 0xff */;
+			if (sound <= 0x18)
+			{
+				soundInFile *sf = introSounds + sound;
+				//Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound; 
+				s = rp->getSound(sf->catFile, sf->sound);
+				if (s) s->play();
+				else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
+			}
+			++trackPosition;
+		}
+	}
+} *audioSequence;
+
+
+static void audioHandler()
+{
+	(*audioSequence)();
+}
+
 /**
  * Waits a cycle to load the resources so the screen is blitted first.
  * If the loading fails, it shows an error, otherwise moves on to the game.
@@ -96,6 +364,19 @@ void StartState::think()
 				throw Exception("No languages available");
 			}
 			_load = LOADING_SUCCESSFUL;
+
+			// loading done? let's play intro!
+			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
+			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
+			{
+				audioSequence = new AudioSequence(_game->getResourcePack());
+				Flc::flc.realscreen = _game->getScreen();
+				Flc::FlcInit(introFile.c_str());
+				Flc::flc.loop = 0; // just the one time, please
+				Flc::FlcMain(&audioHandler);
+				Flc::FlcDeInit();
+				delete audioSequence;
+			}
 		}
 		catch (Exception &e)
 		{

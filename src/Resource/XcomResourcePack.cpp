@@ -41,6 +41,7 @@
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -393,14 +394,11 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 
 		// Load sounds
 		std::string catsId[] = {"GEO.CAT",
-								"BATTLE.CAT",
-								"INTRO.CAT"};
+								"BATTLE.CAT"};
 		std::string catsDos[] = {"SOUND2.CAT",
-								 "SOUND1.CAT",
-								 "INTRO.CAT"};
+								"SOUND1.CAT"};
 		std::string catsWin[] = {"SAMPLE.CAT",
-								 "SAMPLE2.CAT",
-								 "SAMPLE3.CAT"};
+								"SAMPLE2.CAT"};
 
 		// Check which sound version is available
 		std::string *cats = 0;
@@ -420,11 +418,11 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			wav = false;
 		}
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < 2; ++i)
 		{
 			if (cats == 0)
 			{
-				throw Exception(cats[i] + " not found");
+				throw Exception(cats[i] + " not found"); // meow?
 			}
 			else
 			{
@@ -434,6 +432,26 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
 			}
 		}
+		
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")))
+		{
+			SoundSet *s = _sounds["INTRO.CAT"] = new SoundSet();
+			s->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
+		} else
+		{
+			Log(LOG_WARNING) << "INTRO.CAT is missing! :(";
+		}
+
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
+		{
+			SoundSet *s = _sounds["SAMPLE3.CAT"] = new SoundSet();
+			wav = true;
+			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
+		} else
+		{
+			Log(LOG_WARNING) << "SAMPLE3.CAT is missing! :(";
+		}
+		
 	}
 
 	TextButton::soundPress = getSound("GEO.CAT", 0);

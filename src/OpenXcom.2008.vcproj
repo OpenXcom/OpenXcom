@@ -387,6 +387,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\Flc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Flc.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Font.cpp"
 				>
 			</File>
@@ -652,6 +660,14 @@
 			</File>
 			<File
 				RelativePath=".\Interface\TextButton.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\ToggleTextButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\ToggleTextButton.h"
 				>
 			</File>
 			<File
