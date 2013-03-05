@@ -88,7 +88,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 
 			newsound = new unsigned char[44 + size*2];
 			memcpy(newsound, header, 44);
-			//if (size) memcpy(newsound + 44, sound+5, size);
+			if (size) memcpy(newsound + 44, sound+5, size);
 			Uint32 step16 = (8000<<16)/11025;
 			Uint8 *w = newsound+44;
 			int newsize = 0;
