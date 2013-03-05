@@ -663,6 +663,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Interface\ToggleTextButton.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\ToggleTextButton.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Interface\TextEdit.cpp"
 				>
 			</File>
