@@ -468,7 +468,7 @@ void FlcDeInit()
 	free(flc.pMembuf);
 } /* FlcDeInit */
 
-void FlcMain()
+void FlcMain(void (*frameCallBack)())
 { int quit=0;
   SDL_Event event;
   FlcInitFirstFrame();
@@ -499,6 +499,7 @@ void FlcMain()
       //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
       if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
       flc.realscreen->flip();
+	  if (frameCallBack) (*frameCallBack)();
     }
 
     while(SDL_PollEvent(&event)) {
