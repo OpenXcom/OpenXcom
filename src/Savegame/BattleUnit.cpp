@@ -20,6 +20,7 @@
 #include "BattleUnit.h"
 #include "BattleItem.h"
 #include <cmath>
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -52,7 +53,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
-	_loftempsSet = soldier->getRules()->getLoftempsSet();
+//	_loftempsSet = soldier->getRules()->getLoftempsSet();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = 0;
 	_moveSound = -1;  // this one is hardcoded
@@ -62,6 +63,18 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_armor = soldier->getArmor();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
+
+	if (Options::getBool("battleRangeBasedAccuracy") &&
+		(_armor->getType() == "STR_POWER_SUIT_UC" || _armor->getType() == "STR_FLYING_SUIT_UC"))
+	{
+		int i = soldier->getRules()->getLoftempsSet().front() + 1;
+		if (i > 5) i = 5;	// max loft item for single unit (1-5);
+		_loftempsSet.push_back(i);
+	}
+	else
+	{
+		_loftempsSet = soldier->getRules()->getLoftempsSet();
+	}
 
 	int rankbonus = 0;
 
