@@ -41,6 +41,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Action.h"
+#include "../Engine/Options.h"
 #include "../Basescape/CraftInfoState.h"
 
 namespace OpenXcom
@@ -127,15 +128,12 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
 	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACTS"));
 	
-	_selItemLevel = 0;
 	_itemLevels.push_back("STR_LOW");
 	_itemLevels.push_back("STR_MEDIUM");
 	_itemLevels.push_back("STR_HIGH");
 
-	_selMission = 0;
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
-	_selTerrain = 0;
 	_terrainTypes.push_back("STR_FARM");
 	_terrainTypes.push_back("STR_FOREST");
 	_terrainTypes.push_back("STR_JUNGLE");
@@ -143,17 +141,14 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_terrainTypes.push_back("STR_DESERT");
 	_terrainTypes.push_back("STR_POLAR");
 
-	_selAlien = 0;
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
 
-	_selDifficulty = 0;
 	_difficulty.push_back("STR_1_BEGINNER");
 	_difficulty.push_back("STR_2_EXPERIENCED");
 	_difficulty.push_back("STR_3_VETERAN");
 	_difficulty.push_back("STR_4_GENIUS");
 	_difficulty.push_back("STR_5_SUPERHUMAN");
 
-	_selDarkness = 0;
 	_darkness.push_back("0");
 	_darkness.push_back("3");
 	_darkness.push_back("6");
@@ -161,7 +156,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_darkness.push_back("12");
 	_darkness.push_back("15");
 
-	_selCraft = 0;
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
@@ -171,6 +165,14 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 			_crafts.push_back(*i);
 		}
 	}
+	
+	_selMission = Options::getInt("NewBattleMission");
+	_selTerrain = Options::getInt("NewBattleTerrain");
+	_selItemLevel = Options::getInt("NewBattleItemLevel");
+	_selAlien = Options::getInt("NewBattleAlienRace");
+	_selDifficulty = Options::getInt("NewBattleDifficulty");
+	_selDarkness = Options::getInt("NewBattleDarkness");
+	_selCraft = Options::getInt("NewBattleCraft");
 
 	_btnMissionType->setColor(Palette::blockOffset(15)-1);
 	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
@@ -282,12 +284,21 @@ void NewBattleState::initSave()
 	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
 	Base *base = new Base(rule);
+	const YAML::Node &starter = _game->getRuleset()->getStartingBase();
+	base->load(starter, save, true, true);
 	save->getBases()->push_back(base);
-	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
+	// kill everything we don't want in this base
+	for (std::vector<Soldier*>::iterator d = base->getSoldiers()->begin(); d != base->getSoldiers()->end(); d = base->getSoldiers()->erase(d));
+	for (std::vector<Craft*>::iterator e = base->getCrafts()->begin(); e != base->getCrafts()->end(); e = base->getCrafts()->erase(e));
+	for (std::map<std::string, int>::iterator l = base->getItems()->getContents()->begin(); l != base->getItems()->getContents()->end();)
+	{
+		base->getItems()->removeItem(l->first, l->second);
+		l = base->getItems()->getContents()->begin();
+	}
+	_craft = new Craft(rule->getCraft(_crafts[_selCraft]), base, 1);
 	base->getCrafts()->push_back(_craft);
-
 	// Generate soldiers
-	for (int i = 0; i < 30; ++i)
+	for (int i = 0; i < 20; ++i)
 	{
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
@@ -302,10 +313,11 @@ void NewBattleState::initSave()
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
 		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
 		{
-			base->getItems()->addItem(*i, 99);
+			base->getItems()->addItem(*i, 10);
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
-				_craft->getItems()->addItem(*i);
+				int amount = Options::getInt("NewBattle_" + rule->getName());
+				_craft->getItems()->addItem(*i, amount);
 			}
 		}
 	}
@@ -536,6 +548,7 @@ void NewBattleState::btnMissionTypeClick(Action *action)
 		updateIndex(_selMission, _missionTypes, -1);
 	}
 	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+	Options::setInt("NewBattleMission", _selMission);
 }
 
 /**
@@ -553,6 +566,7 @@ void NewBattleState::btnTerrainTypeClick(Action *action)
 		updateIndex(_selTerrain, _terrainTypes, -1);
 	}
 	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
+	Options::setInt("NewBattleTerrain", _selTerrain);
 }
 
 /**
@@ -570,6 +584,7 @@ void NewBattleState::btnItemLevelClick(Action *action)
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
 	_btnItemLevel->setText(_game->getLanguage()->getString(_itemLevels[_selItemLevel]));
+	Options::setInt("NewBattleItemLevel", _selItemLevel);
 }
 
 /**
@@ -587,6 +602,7 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 		updateIndex(_selAlien, _alienRaces, -1);
 	}
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+	Options::setInt("NewBattleAlienRace", _selAlien);
 }
 
 /**
@@ -604,6 +620,7 @@ void NewBattleState::btnDifficultyClick(Action *action)
 		updateIndex(_selDifficulty, _difficulty, -1);
 	}
 	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	Options::setInt("NewBattleDifficulty", _selDifficulty);
 }
 
 /**
@@ -621,6 +638,7 @@ void NewBattleState::btnDarknessClick(Action *action)
 		updateIndex(_selDarkness, _darkness, -1);
 	}
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+	Options::setInt("NewBattleDarkness", _selDarkness);
 }
 
 /**
@@ -639,6 +657,7 @@ void NewBattleState::btnCraftClick(Action *action)
 	}
 	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
+	Options::setInt("NewBattleCraft", _selCraft);
 }
 
 }

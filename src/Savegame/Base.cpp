@@ -91,14 +91,14 @@ Base::~Base()
  * @param node YAML node.
  * @param save Pointer to saved game.
  */
-void Base::load(const YAML::Node &node, SavedGame *save, bool newGame)
+void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newBattleGame)
 {
 	Target::load(node);
 	std::string name;
 	node["name"] >> name;
 	_name = Language::utf8ToWstr(name);
 
-	if (!newGame || !Options::getBool("customInitialBase") )
+	if (!newGame || !Options::getBool("customInitialBase") || newBattleGame)
 	{
 		for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 		{
@@ -427,6 +427,7 @@ bool Base::insideRadarRange(Target *target) const
 /**
  * Returns the amount of soldiers contained
  * in the base without any assignments.
+ * @param checkCombatReadiness does what it says on the tin.
  * @return Number of soldiers.
  */
 int Base::getAvailableSoldiers(bool checkCombatReadiness) const
@@ -1199,6 +1200,7 @@ void Base::setupDefenses()
 				}
 				_items->removeItem(itemId, canBeAdded);
 			}
+
 			i = _items->getContents()->begin(); // we have to start over because iterator is broken because of the removeItem
 		}
 		else ++i;

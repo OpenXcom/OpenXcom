@@ -194,10 +194,10 @@ void ManufactureInfoState::buildUi()
 	}
 	setAssignedEngineer();
 
-	_timerMoreEngineer = new Timer(30);
-	_timerLessEngineer = new Timer(30);
-	_timerMoreUnit = new Timer(30);
-	_timerLessUnit = new Timer(30);
+	_timerMoreEngineer = new Timer(250);
+	_timerLessEngineer = new Timer(250);
+	_timerMoreUnit = new Timer(250);
+	_timerLessUnit = new Timer(250);
 	_timerMoreEngineer->onTimer((StateHandler)&ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)&ManufactureInfoState::onLessEngineer);
 	_timerMoreUnit->onTimer((StateHandler)&ManufactureInfoState::onMoreUnit);
@@ -296,7 +296,11 @@ void ManufactureInfoState::moreEngineerPress(Action * action)
 */
 void ManufactureInfoState::moreEngineerRelease(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMoreEngineer->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerMoreEngineer->setInterval(250);
+		_timerMoreEngineer->stop();
+	}
 }
 
 /**
@@ -306,6 +310,7 @@ void ManufactureInfoState::moreEngineerRelease(Action * action)
 void ManufactureInfoState::moreEngineerClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moreEngineer(std::numeric_limits<int>::max());
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moreEngineer(1);
 }
 
 /**
@@ -340,7 +345,11 @@ void ManufactureInfoState::lessEngineerPress(Action * action)
 */
 void ManufactureInfoState::lessEngineerRelease(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessEngineer->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerLessEngineer->setInterval(250);
+		_timerLessEngineer->stop();
+	}
 }
 
 /**
@@ -350,6 +359,7 @@ void ManufactureInfoState::lessEngineerRelease(Action * action)
 void ManufactureInfoState::lessEngineerClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessEngineer(std::numeric_limits<int>::max());
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) lessEngineer(1);
 }
 
 /**
@@ -391,7 +401,11 @@ void ManufactureInfoState::moreUnitPress(Action * action)
 */
 void ManufactureInfoState::moreUnitRelease(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMoreUnit->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerMoreUnit->setInterval(250);
+		_timerMoreUnit->stop();
+	}
 }
 
 /**
@@ -402,6 +416,7 @@ void ManufactureInfoState::moreUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		moreUnit(Options::getBool("allowAutoSellProduction") ? std::numeric_limits<int>::max() : (999 - _production->getAmountTotal()));
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moreUnit(1);
 }
 
 /**
@@ -434,7 +449,11 @@ void ManufactureInfoState::lessUnitPress(Action * action)
 */
 void ManufactureInfoState::lessUnitRelease(Action * action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessUnit->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerLessUnit->setInterval(250);
+		_timerLessUnit->stop();
+	}
 }
 
 /**
@@ -444,6 +463,7 @@ void ManufactureInfoState::lessUnitRelease(Action * action)
 void ManufactureInfoState::lessUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessUnit(std::numeric_limits<int>::max());
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) lessUnit(1);
 }
 
 /**
@@ -451,6 +471,7 @@ void ManufactureInfoState::lessUnitClick(Action * action)
  */
 void ManufactureInfoState::onMoreEngineer()
 {
+	_timerMoreEngineer->setInterval(50);
 	moreEngineer(1);
 }
 
@@ -459,6 +480,7 @@ void ManufactureInfoState::onMoreEngineer()
  */
 void ManufactureInfoState::onLessEngineer()
 {
+	_timerLessEngineer->setInterval(50);
 	lessEngineer(1);
 }
 
@@ -477,6 +499,7 @@ void ManufactureInfoState::handleWheelEngineer(Action *action)
  */
 void ManufactureInfoState::onMoreUnit()
 {
+	_timerMoreUnit->setInterval(50);
 	moreUnit(1);
 }
 
@@ -485,6 +508,7 @@ void ManufactureInfoState::onMoreUnit()
  */
 void ManufactureInfoState::onLessUnit()
 {
+	_timerLessUnit->setInterval(50);
 	lessUnit(1);
 }
 

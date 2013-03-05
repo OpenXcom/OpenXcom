@@ -56,7 +56,11 @@ Ufo::~Ufo()
 	if (_dest)
 	{
 		Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
-		delete wp;
+		if (wp != 0)
+		{
+			delete _dest;
+			_dest = 0;
+		}
 	}
 }
 

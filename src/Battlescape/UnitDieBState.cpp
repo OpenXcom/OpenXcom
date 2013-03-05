@@ -34,6 +34,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "PatrolBAIState.h"
+#include "../Savegame/Node.h"
 
 namespace OpenXcom
 {
@@ -77,6 +78,22 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
 		}
 	}
+	
+    parent->resetSituationForAI();
+
+    if (_unit->getFaction() == FACTION_HOSTILE)
+    {
+        std::vector<Node *> *nodes = parent->getSave()->getNodes();
+        if (!nodes) return; // this better not happen.
+
+        for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
+        {
+            if (parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), unit->getPosition()) < 4)
+            {
+                (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
+            }
+        }
+    }
 }
 
 /**
@@ -197,7 +214,9 @@ void UnitDieBState::convertUnitToCorpse()
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
-				//corpse->setUnit(unit); // no need for this, because large units never can be revived as they don't go unconscious
+				corpse->setUnit(_unit); // no need for this, because large units never can be revived as they don't go unconscious
+										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
+										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
 				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
 				i++;
 			}

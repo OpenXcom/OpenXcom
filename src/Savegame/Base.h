@@ -67,7 +67,7 @@ public:
 	/// Cleans up the base.
 	~Base();
 	/// Loads the base from YAML.
-	void load(const YAML::Node& node, SavedGame *save, bool newGame);
+	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
 	/// Saves the base to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Saves the base's ID to YAML.

@@ -20,7 +20,6 @@
 #define OPENXCOM_BASEDEFENSESTATE_H
 
 #include "../Engine/State.h"
-#include <ctime>
 
 namespace OpenXcom
 {
@@ -32,6 +31,7 @@ class Base;
 class Ufo;
 class TextList;
 class GeoscapeState;
+class Timer;
 
 enum BaseDefenseActionType { BDA_NONE, BDA_FIRE, BDA_RESOLVE, BDA_DESTROY, BDA_END };
 
@@ -49,15 +49,17 @@ private:
 	Ufo *_ufo;
 	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks;
 	BaseDefenseActionType _action;
-	clock_t _nextEventTime;
+	Timer *_timer;
 	GeoscapeState *_state;
 public:
 	/// Creates the Base Defense state.
 	BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state);
 	/// Cleans up the Base Defense state.
 	~BaseDefenseState();
-	/// Updates the palette.
+	/// Handle the Timer.
 	void think();
+	/// do the next step.
+	void nextStep();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };

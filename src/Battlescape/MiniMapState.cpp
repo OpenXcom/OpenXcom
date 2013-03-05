@@ -64,7 +64,7 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
 	std::wstringstream s;
-	s << camera->getViewHeight();
+	s << camera->getViewLevel();
 	_txtLevel->setText(s.str());
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);

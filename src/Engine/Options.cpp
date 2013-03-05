@@ -45,6 +45,7 @@ std::string _configFolder = "";
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _options;
 std::vector<std::string> _rulesets;
+std::vector<std::string> _purchaseexclusions;
 
 /**
  * Creates a default set of options based on the system.
@@ -65,11 +66,14 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("traceAI", false);
+	setBool("sneakyAI", false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
 	setBool("useOpenGL", false);
+	setBool("checkOpenGLErrors", false);
 	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
 	setBool("vSyncForOpenGL", false);
 	setBool("useOpenGLSmoothing", true);
@@ -103,6 +107,7 @@ void createDefault()
 	setInt("pauseMode", 0);
 	setBool("alienContainmentHasUpperLimit", false);
 	setBool("canSellLiveAliens", false);
+	setBool("canTransferCraftsInAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
@@ -115,6 +120,58 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", 3);
 	setInt("windowedModePositionY", 22);
+
+	// new battle mode data
+	setInt("NewBattleMission", 0);
+	setInt("NewBattleTerrain", 0);
+	setInt("NewBattleItemLevel", 0);
+	setInt("NewBattleAlienRace", 0);
+	setInt("NewBattleDifficulty", 0);
+	setInt("NewBattleDarkness", 0);
+	setInt("NewBattleCraft", 0);
+	
+	// new battle loadout data
+	setInt("NewBattle_STR_AC_AP_AMMO", 1);
+	setInt("NewBattle_STR_AC_HE_AMMO", 1);
+	setInt("NewBattle_STR_AC_I_AMMO", 1);
+	setInt("NewBattle_STR_ALIEN_GRENADE", 1);
+	setInt("NewBattle_STR_AUTO_CANNON", 1);
+	setInt("NewBattle_STR_BLASTER_BOMB", 1);
+	setInt("NewBattle_STR_BLASTER_LAUNCHER", 1);
+	setInt("NewBattle_STR_ELECTRO_FLARE", 1);
+	setInt("NewBattle_STR_GRENADE", 1);
+	setInt("NewBattle_STR_HC_AP_AMMO", 1);
+	setInt("NewBattle_STR_HC_HE_AMMO", 1);
+	setInt("NewBattle_STR_HC_I_AMMO", 1);
+	setInt("NewBattle_STR_HEAVY_CANNON", 1);
+	setInt("NewBattle_STR_HEAVY_LASER", 1);
+	setInt("NewBattle_STR_HEAVY_PLASMA", 1);
+	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 1);
+	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 1);
+	setInt("NewBattle_STR_INCENDIARY_ROCKET", 1);
+	setInt("NewBattle_STR_LARGE_ROCKET", 1);
+	setInt("NewBattle_STR_LASER_PISTOL", 1);
+	setInt("NewBattle_STR_LASER_RIFLE", 1);
+	setInt("NewBattle_STR_MEDI_KIT", 1);
+	setInt("NewBattle_STR_MIND_PROBE", 1);
+	setInt("NewBattle_STR_MOTION_SCANNER", 1);
+	setInt("NewBattle_STR_PISTOL", 1);
+	setInt("NewBattle_STR_PISTOL_CLIP", 1);
+	setInt("NewBattle_STR_PLASMA_PISTOL", 1);
+	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 1);
+	setInt("NewBattle_STR_PLASMA_RIFLE", 1);
+	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 1);
+	setInt("NewBattle_STR_PROXIMITY_GRENADE", 1);
+	setInt("NewBattle_STR_PSI_AMP", 1);
+	setInt("NewBattle_STR_RIFLE", 1);
+	setInt("NewBattle_STR_RIFLE_CLIP", 1);
+	setInt("NewBattle_STR_ROCKET_LAUNCHER", 1);
+	setInt("NewBattle_STR_SMALL_LAUNCHER", 1);
+	setInt("NewBattle_STR_SMALL_ROCKET", 1);
+	setInt("NewBattle_STR_SMOKE_GRENADE", 1);
+	setInt("NewBattle_STR_STUN_BOMB", 1);
+	setInt("NewBattle_STR_STUN_ROD", 1);
+
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);
@@ -377,6 +434,11 @@ void load(const std::string &filename)
 		_options[key] = value;
 	}
 
+	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
+	{
+		(*pName) >> _purchaseexclusions;
+	}
+
 	if (const YAML::Node *pName = doc.FindValue("rulesets"))
 	{
 		(*pName) >> _rulesets;
@@ -536,6 +598,11 @@ void setBool(const std::string& id, bool value)
 std::vector<std::string> getRulesets()
 {
 	return _rulesets;
+}
+
+std::vector<std::string> getPurchaseExclusions()
+{
+	return _purchaseexclusions;
 }
 
 }

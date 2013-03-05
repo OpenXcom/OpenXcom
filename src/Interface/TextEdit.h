@@ -95,6 +95,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state);
+	/// de-focus this text box.
+	void deFocus();
 };
 
 }

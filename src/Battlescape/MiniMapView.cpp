@@ -156,9 +156,9 @@ void MiniMapView::draw()
  */
 int MiniMapView::up ()
 {
-	_camera->setViewHeight(_camera->getViewHeight()+1);
+	_camera->setViewLevel(_camera->getViewLevel()+1);
 	_redraw = true;
-	return _camera->getViewHeight();
+	return _camera->getViewLevel();
 }
 
 /**
@@ -166,9 +166,9 @@ int MiniMapView::up ()
  */
 int MiniMapView::down ()
 {
-	_camera->setViewHeight(_camera->getViewHeight()-1);
+	_camera->setViewLevel(_camera->getViewLevel()-1);
 	_redraw = true;
-	return _camera->getViewHeight();
+	return _camera->getViewLevel();
 }
 
 /**
@@ -230,7 +230,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		// center the camera on this new position
 		int newX = _camera->getCenterPosition().x + xOff;
 		int newY = _camera->getCenterPosition().y + yOff;
-		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
+		_camera->centerOnPosition(Position(newX,newY,_camera->getViewLevel()));
 		_redraw = true;
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -279,12 +279,12 @@ void MiniMapView::mouseOver(Action *action, State *state)
 			newY = posBeforeMouseScrolling.y + mouseScrollY / 4;
 
 			// Keep the limits...
-			if (newX < -1 || _camera->getMapLength() < newX)
+			if (newX < -1 || _camera->getMapSizeY() < newX)
 			{
 				mouseScrollX -= action->getDetails()->motion.xrel;
 				newX = posBeforeMouseScrolling.x + mouseScrollX / 4;
 			}
-			if (newY < -1 || _camera->getMapWidth() < newY)
+			if (newY < -1 || _camera->getMapSizeX() < newY)
 			{
 				mouseScrollY -= action->getDetails()->motion.yrel;
 				newY = posBeforeMouseScrolling.y + mouseScrollY / 4;
@@ -297,13 +297,13 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 			// Keep the limits...
 			if (newX < -1) newX = -1;
-			else if (_camera->getMapLength() < newX) newX = _camera->getMapLength();
+			else if (_camera->getMapSizeY() < newX) newX = _camera->getMapSizeY();
 			if (newY < -1) newY = -1;
-			else if (_camera->getMapWidth() < newY) newY = _camera->getMapWidth();
+			else if (_camera->getMapSizeX() < newY) newY = _camera->getMapSizeX();
 		}
 
 		// Scrolling
-		_camera->centerOnPosition(Position(newX,newY,_camera->getViewHeight()));
+		_camera->centerOnPosition(Position(newX,newY,_camera->getViewLevel()));
 		_redraw = true;
 
 		if (_battleGame->isDragInverted())

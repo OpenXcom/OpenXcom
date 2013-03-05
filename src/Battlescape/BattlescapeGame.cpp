@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
+#include <typeinfo>
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 #include "../Engine/Timer.h"
@@ -75,9 +76,12 @@
 #include "InfoboxOKState.h"
 #include "MiniMapState.h"
 #include "UnitFallBState.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
+
+bool BattlescapeGame::_debugPlay = false;
 
 /**
  * Initializes all the elements in the Battlescape screen.
@@ -174,11 +178,16 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
 	std::wstringstream ss;
-	BattleAIState *ai = unit->getCurrentAIState();
+    
+    _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
+        // it might also help chryssalids realize they've zombified someone and need to move on
+        // it's also for good luck
+
+    BattleAIState *ai = unit->getCurrentAIState();
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
-		unit->setAIState(new PatrolBAIState(_save, unit, 0));
+        unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 	}
 	_AIActionCounter++;
@@ -186,20 +195,33 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		_playedAggroSound = false;
 	}
-	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
+	if(_AIActionCounter == 1)
+	{
+		unit->_hidingForTurn = 0;
+		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
+	}
+	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast only works when ai was already AggroBAIState at heart
 	
 	// psionic or blaster launcher units may attack remotely
-	if (unit->getStats()->psiSkill
-		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint()))
+	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
+	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
+	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
+		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
+		|| (_AIActionCounter > 2)
+        || (unit->getVisibleUnits()->size() != 0))
 	{
-		aggro = new AggroBAIState(_save, unit);
-		unit->setAIState(aggro);
+		if (aggro == 0)
+		{
+			aggro = new AggroBAIState(_save, unit);
+			unit->setAIState(aggro);
+		}
 		ai = unit->getCurrentAIState();
 		_parentState->debug(L"Aggro");
 	}
 
 	BattleAction action;
 	action.diff = _parentState->getGame()->getSavedGame()->getDifficulty();
+    action.number = _AIActionCounter;
 	unit->think(&action);
 	
 	if (action.type == BA_RETHINK)
@@ -220,7 +242,24 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			_playedAggroSound = true;
 		}
  		_save->getPathfinding()->calculate(action.actor, action.target);
-		statePushBack(new UnitWalkBState(this, action));
+
+        Position finalFacing(0, 0, INT_MAX);
+        bool usePathfinding = false;
+
+        if (unit->_hidingForTurn && _AIActionCounter > 2)
+        {
+            if (_save->getTile(action.target) && _save->getTile(action.target)->closestSoldierDSqr != -1)
+            {
+                finalFacing = _save->getTile(action.target)->closestSoldierPos; // be ready for the nearest spotting unit for our destination
+                usePathfinding = false;
+            } else if (aggro != 0)
+            {
+                finalFacing = aggro->getLastKnownPosition(); // or else be ready for our aggro target
+                usePathfinding = true;
+            }
+        }
+
+		statePushBack(new UnitWalkBState(this, action, finalFacing, usePathfinding));
 	}
 
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
@@ -324,7 +363,7 @@ void BattlescapeGame::endTurn()
 	_currentAction.type = BA_NONE;
 
 	// check for hot grenades on the ground
-	for (int i = 0; i < _save->getWidth() * _save->getLength() * _save->getHeight(); ++i)
+	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
@@ -403,6 +442,11 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
+    if (_save->getSide() == FACTION_HOSTILE)
+    {
+        resetSituationForAI();
+    }
+
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
@@ -462,7 +506,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						{
 							if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
 							{
-								int d = _save->getTileEngine()->distance(victim->getPosition(), (*h)->getPosition());
+								int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
 								if (d < closest)
 								{
 									revenger = (*h);
@@ -540,6 +584,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
 			}
 		}
+	}
+	BattleUnit *bu = _save->getSelectedUnit();
+	if (_save->getSide() == FACTION_PLAYER)
+	{
+		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
 	}
 }
 
@@ -802,8 +851,10 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				 // AI does two things per unit, before switching to the next, or it got killed before doing the second thing
-				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
+				 // AI does two (or three?) things per unit + hides?, before switching to the next, or it got killed before doing the second thing
+				 // melee get more because chryssalids and reapers need to attack many times to be scary
+				if (_AIActionCounter > AIActionLimit || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -1218,13 +1269,13 @@ void BattlescapeGame::primaryAction(const Position &pos)
 			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && Game::getCtrlKeyDown() && _save->getSelectedUnit()->getTurretType() == -1;
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
-			if (bPreviewed && !_save->getPathfinding()->previewPath())
+			if (bPreviewed && !_save->getPathfinding()->previewPath() && _save->getPathfinding()->getStartDirection() != -1)
 			{
 				_save->getPathfinding()->removePreview();
 				bPreviewed = false;
 			}
 
-			if (!bPreviewed)
+			if (!bPreviewed && _save->getPathfinding()->getStartDirection() != -1)
 			{
 				//  -= start walking =-
 				getMap()->setCursorType(CT_NONE);
@@ -1394,6 +1445,28 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
 
 	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
+	
+	int difficulty = _parentState->getGame()->getSavedGame()->getDifficulty();
+	int divider = 1;
+	if (!difficulty)
+		divider = 2;
+	
+	UnitStats *stats = _newUnit->getStats();
+
+	// adjust the unit's stats according to the difficulty level.
+	stats->tu += 4 * difficulty * stats->tu / 100;
+	_newUnit->setTimeUnits(stats->tu);
+	stats->stamina += 4 * difficulty * stats->stamina / 100;
+	_newUnit->setEnergy(stats->stamina);
+	stats->reactions += 6 * difficulty * stats->reactions / 100;
+	stats->strength += 2 * difficulty * stats->strength / 100;
+	stats->firing = (stats->firing + 6 * difficulty * stats->firing / 100) / divider;
+	stats->strength += 2 * difficulty * stats->strength / 100;
+	stats->melee += 4 * difficulty * stats->melee / 100;
+	stats->psiSkill += 4 * difficulty * stats->psiSkill / 100;
+	stats->psiStrength += 4 * difficulty * stats->psiStrength / 100;
+	if (divider > 1)
+		unit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(_newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	_newUnit->setPosition(unit->getPosition());
@@ -1454,5 +1527,33 @@ const Ruleset *BattlescapeGame::getRuleset() const
 {
 	return _parentState->getGame()->getRuleset();
 }
+
+
+/** 
+ * Evaluate the situation for ease of AI decisions in the following turn.
+ */
+void BattlescapeGame::resetSituationForAI()
+{
+    int w = _save->getMapSizeX();
+    int h = _save->getMapSizeZ();
+    int l = _save->getMapSizeY();
+
+    Tile **tiles = _save->getTiles();
+
+    // Log(LOG_INFO) << w*h*l << " tiles!";
+
+	if (Options::getBool("traceAI"))
+	{
+		for (int i = 0; i < w * l * h; ++i) if (tiles[i]->closestSoldierDSqr == -1) { tiles[i]->setMarkerColor(0); } // clear old tile markers
+	}
+
+    for (int i = 0; i < w * l * h; ++i)
+    {
+       tiles[i]->soldiersVisible = -1;    // -1 for "not calculated"; actual calculations will take place as needed
+       tiles[i]->closestSoldierDSqr = -1; // for most of the tiles most of the time, this data is not needed
+    }
+
+}
+
 
 }

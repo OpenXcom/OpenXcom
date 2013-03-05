@@ -25,7 +25,7 @@ namespace OpenXcom
 {
 
 class PathfindingOpenSet;
-class OpenSetEntry;
+struct OpenSetEntry;
 
 /**
  * A class that holds pathfinding info for a certain node on the map.
@@ -65,7 +65,7 @@ public:
 	/// get previous walking direction
 	int getPrevDir() const;
 	/// Is this node already in a PathfindingOpenSet?
-	bool inOpenSet() const { return _openentry; }
+	bool inOpenSet() const { return (_openentry != 0); }
 	/// Get approximate cost to reach target position.
 	int getTUGuess() const { return _tuGuess; }
 	/// Connect to previous node along the path.
