@@ -162,6 +162,11 @@ void ExplosionBState::explode()
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
+		if (!_unit && _item->getPreviousOwner())
+		{
+			_unit = _item->getPreviousOwner();
+		}
+
 		if (_areaOfEffect)
 		{
 			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
