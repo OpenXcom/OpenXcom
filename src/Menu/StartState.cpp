@@ -25,6 +25,9 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
+#include "../Engine/Flc.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Screen.h"
 #include "TestState.h"
 #include "NoteState.h"
 #include "LanguageState.h"
@@ -96,6 +99,17 @@ void StartState::think()
 				throw Exception("No languages available");
 			}
 			_load = LOADING_SUCCESSFUL;
+
+			// loading done? let's play intro!
+			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
+			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
+			{
+				Flc::flc.loop = 0; // just the one time, please
+				Flc::flc.mainscreen = _game->getScreen();
+				Flc::FlcInit(introFile.c_str());
+				Flc::FlcMain();
+				Flc::FlcDeInit();
+			}
 		}
 		catch (Exception &e)
 		{
