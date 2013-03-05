@@ -338,7 +338,9 @@ void DECODE_COLOR()
       flc.colors[i].b=*(pSrc++)<<2;
       i++;
     }
+	flc.realscreen->setPalette(flc.colors, NumColorsSkip, i);
     SDL_SetColors(flc.mainscreen, flc.colors, NumColorsSkip, i);
+	flc.realscreen->getSurface(); // force palette update to really happen
   }
 } /* DECODE_COLOR  */
 
@@ -448,15 +450,13 @@ int FlcInit(const char *filename)
     //exit(1);
 	return -1;
   }
-#if 0
   if (flc.realscreen->getSurface()->getSurface()->format->BitsPerPixel == 8)
   {
 	  flc.mainscreen = flc.realscreen->getSurface()->getSurface();
   } else
   {
-#endif
 	  flc.mainscreen = SDL_AllocSurface(SDL_SWSURFACE, flc.screen_w, flc.screen_h, 8, 0, 0, 0, 0);
-  //}
+  }
   return 0;
   //SDLInit(filename);
 } /* FlcInit */
