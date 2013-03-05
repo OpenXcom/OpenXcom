@@ -65,6 +65,14 @@ namespace OpenXcom
 		ArticleDefinitionList articles = getAvailableArticles(game);
 		for (size_t it=0; it<articles.size(); ++it)
 		{
+			for (std::vector<std::string>::iterator j = articles[it]->requires.begin(); j != articles[it]->requires.end(); ++j)
+			{
+				if (article_id == *j)
+				{
+					article_id = articles[it]->id;
+					return it;
+				}
+			}
 			if (articles[it]->id == article_id)
 			{
 				return it;

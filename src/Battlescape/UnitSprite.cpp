@@ -31,6 +31,8 @@
 #include "../Savegame/Soldier.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
 
 namespace OpenXcom
 {
@@ -94,6 +96,33 @@ void UnitSprite::setBattleItem(BattleItem *item)
 			_itema = item;
 	}
 	_redraw = true;
+}
+
+
+namespace
+{
+
+struct ColorFace
+{
+	static const Uint8 ColorGroup = 15<<4;
+	static const Uint8 ColorShade = 15;
+
+	static const Uint8 Hair = 9 << 4;
+	static const Uint8 Face = 6 << 4;
+	static inline void func(Uint8& src, const Uint8& hair_color, const Uint8& face_color, int, int)
+	{
+		if((src & ColorGroup) == Hair)
+		{
+			src = hair_color + (src & ColorShade);
+		}
+		else if((src & ColorGroup) == Face)
+		{
+			src = face_color + (src & ColorShade);
+		}
+	}
+};
+
+
 }
 
 /**
@@ -188,6 +217,35 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
+		if(_unit->getGeoscapeSoldier())
+		{
+			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
+
+			if(look)
+			{
+				Uint8 face_color = ColorFace::Face;
+				Uint8 hair_color = ColorFace::Hair;
+				switch(look)
+				{
+					case LOOK_BLONDE:
+						break;
+					case LOOK_BROWNHAIR:
+						hair_color = (10<<4) + 4;
+						break;
+					case LOOK_ORIENTAL:
+						face_color = 10<<4;
+						hair_color = (15<<4) + 5;
+						break;
+					case LOOK_AFRICAN:
+						face_color = (10<<4) + 3;
+						hair_color = (10<<4) + 6;
+						break;
+				}
+				lock();
+				ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
+				unlock();
+			}
+		}
 		return;
 	}
 
@@ -382,6 +440,36 @@ void UnitSprite::drawRoutine0()
 	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+	}
+	
+	if(_unit->getGeoscapeSoldier())
+	{
+		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
+		
+		if(look)
+		{
+			Uint8 face_color = ColorFace::Face;
+			Uint8 hair_color = ColorFace::Hair;
+			switch(look)
+			{
+				case LOOK_BLONDE:
+					break;
+				case LOOK_BROWNHAIR:
+					hair_color = (10<<4) + 4;
+					break;
+				case LOOK_ORIENTAL:
+					face_color = 10<<4;
+					hair_color = (15<<4) + 5;
+					break;
+				case LOOK_AFRICAN:
+					face_color = (10<<4) + 3;
+					hair_color = (10<<4) + 6;
+					break;
+			}
+			lock();
+			ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
+			unlock();
+		}
 	}
 }
 
@@ -852,7 +940,6 @@ void UnitSprite::drawRoutine6()
 	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
 	}
-
 }
 
 /**
