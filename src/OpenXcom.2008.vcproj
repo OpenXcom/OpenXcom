@@ -387,6 +387,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Engine\Flc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\Flc.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Engine\Font.cpp"
 				>
 			</File>
