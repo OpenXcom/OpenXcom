@@ -66,7 +66,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
-	setBool("playIntro", false); // intro is not ready yet; only the .FLI plays
+	setBool("playIntro", true); // FLI and music both play! almost there
 	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);

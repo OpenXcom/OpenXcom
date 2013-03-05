@@ -28,6 +28,7 @@
 #include "../Engine/Flc.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Music.h"
 #include "TestState.h"
 #include "NoteState.h"
 #include "LanguageState.h"
@@ -74,6 +75,42 @@ StartState::~StartState()
 
 }
 
+
+static struct AudioSequence
+{
+	ResourcePack *rp;
+	Music *m;
+
+	AudioSequence(ResourcePack *resources) : rp(resources)
+	{
+	}
+
+	void operator ()()
+	{
+		switch(Flc::flc.FrameCount-1)
+		{
+		case 0:
+			m = rp->getMusic("GMINTRO1");
+			m->play();
+			break;
+		case 180:
+			m = rp->getMusic("GMINTRO2");
+			m->play();
+			break;
+		case 382:
+			m = rp->getMusic("GMINTRO3");
+			m->play();
+			break;
+		}
+	}
+} *audioSequence;
+
+
+static void audioHandler()
+{
+	(*audioSequence)();
+}
+
 /**
  * Waits a cycle to load the resources so the screen is blitted first.
  * If the loading fails, it shows an error, otherwise moves on to the game.
@@ -104,11 +141,13 @@ void StartState::think()
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
 			{
+				audioSequence = new AudioSequence(_game->getResourcePack());
 				Flc::flc.loop = 0; // just the one time, please
 				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
-				Flc::FlcMain();
+				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
+				delete audioSequence;
 			}
 		}
 		catch (Exception &e)
