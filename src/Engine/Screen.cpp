@@ -268,7 +268,7 @@ void Screen::setResolution(int width, int height)
 		_surface->getSurface()->h != BASE_HEIGHT))) // don't reallocate _surface if not necessary, it's a waste of CPU cycles
 	{
 		if (_surface) delete _surface;
-		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, _bpp);
+		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, 8);
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
