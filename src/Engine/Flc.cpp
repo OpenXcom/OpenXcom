@@ -473,6 +473,7 @@ void FlcMain(void (*frameCallBack)())
   SDL_Event event;
   FlcInitFirstFrame();
   while(!quit) {
+	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
     if(FlcCheckFrame()) {
       if (flc.FrameCount<=flc.HeaderFrames) {
@@ -499,7 +500,6 @@ void FlcMain(void (*frameCallBack)())
       //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
       if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
       flc.realscreen->flip();
-	  if (frameCallBack) (*frameCallBack)();
     }
 
     while(SDL_PollEvent(&event)) {
