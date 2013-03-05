@@ -119,7 +119,7 @@ int FlcCheckHeader(const char *filename)
   if((flc.HeaderCheck==0x0AF12) || (flc.HeaderCheck==0x0AF11)) { 
     flc.screen_w=flc.HeaderWidth;
     flc.screen_h=flc.HeaderHeight;
-	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h;
+	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
     flc.screen_depth=8;
     if(flc.HeaderCheck==0x0AF11) {
       flc.HeaderSpeed*=1000/70;

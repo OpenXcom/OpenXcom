@@ -29,6 +29,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
+#include "../Engine/Sound.h"
 #include "TestState.h"
 #include "NoteState.h"
 #include "LanguageState.h"
@@ -75,13 +76,152 @@ StartState::~StartState()
 
 }
 
+typedef struct 
+{
+	int frameNumber;
+	int sound;
+} introSoundEffect;
+
+static introSoundEffect introSoundTrack[] = 
+{
+//{1, 0x4},
+{149, 0x11},
+{173, 0x0C},
+{183, 0x0E},
+{205, 0x15},
+{211, 0x201},
+{211, 0x407},
+{223, 0x7},
+{250, 0x1},
+{253, 0x1},
+{255, 0x1},
+{257, 0x1},
+{260, 0x1},
+{261, 0x3},
+{262, 0x1},
+{264, 0x1},
+{268, 0x1},
+{270, 0x1},
+{272, 0x5},
+{272, 0x1},
+{274, 0x1},
+{278, 0x1},
+{280, 0x1},
+{282, 0x8},
+{282, 0x1},
+{284, 0x1},
+{286, 0x1},
+{288, 0x1},
+{290, 0x1},
+{292, 0x6},
+{292, 0x1},
+{296, 0x1},
+{298, 0x1},
+{300, 0x1},
+{302, 0x1},
+{304, 0x1},
+{306, 0x1},
+{308, 0x1},
+{310, 0x1},
+{312, 0x1},
+{378, 0x202},
+{378, 0x9},
+{386, 0x9},
+{393, 0x9},
+{399, 0x17},
+{433, 0x17},
+{463, 0x12},
+{477, 0x12},
+{487, 0x13},
+{495, 0x16},
+{501, 0x16},
+{522, 0x0B},
+{534, 0x18},
+{535, 0x405},
+{560, 0x407},
+{577, 0x14},
+{582, 0x405},
+{582, 0x18},
+{613, 0x407},
+{615, 0x10},
+{635, 0x14},
+{638, 0x14},
+{639, 0x14},
+{644, 0x2},
+{646, 0x2},
+{648, 0x2},
+{650, 0x2},
+{652, 0x2},
+{654, 0x2},
+{656, 0x2},
+{658, 0x2},
+{660, 0x2},
+{662, 0x2},
+{664, 0x2},
+{666, 0x2},
+{668, 0x401},
+{681, 0x406},
+{687, 0x402},
+{689, 0x407},
+{694, 0x0A},
+{711, 0x407},
+{711, 0x0},
+{714, 0x0},
+{716, 0x4},
+{717, 0x0},
+{720, 0x0},
+{723, 0x0},
+{726, 0x5},
+{726, 0x0},
+{729, 0x0},
+{732, 0x0},
+{735, 0x0},
+{738, 0x0},
+{741, 0x0},
+{742, 0x6},
+{744, 0x0},
+{747, 0x0},
+{750, 0x0},
+{753, 0x0},
+{756, 0x0},
+{759, 0x0},
+{762, 0x0},
+{765, 0x0},
+{768, 0x0},
+{771, 0x0},
+{774, 0x0},
+{777, 0x0},
+{780, 0x0},
+{783, 0x0},
+{786, 0x0},
+{790, 0x15},
+{790, 0x15},
+{807, 0x2},
+{810, 0x2},
+{812, 0x2},
+{814, 0x2},
+{816, 0x0},
+{819, 0x0},
+{822, 0x0},
+{824, 0x40A},
+{824, 0x5},
+{827, 0x6},
+{835, 0x0F},
+{841, 0x0F},
+{845, 0x0F},
+{855, 0x407},
+{879, 0x0C},
+{65535, 0x0FFFF}
+};
 
 static struct AudioSequence
 {
 	ResourcePack *rp;
 	Music *m;
+	Sound *s;
+	int trackPosition;
 
-	AudioSequence(ResourcePack *resources) : rp(resources)
+	AudioSequence(ResourcePack *resources) : rp(resources), trackPosition(0)
 	{
 	}
 
@@ -102,6 +242,15 @@ static struct AudioSequence
 			m->play();
 			break;
 		}		
+
+		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
+		{
+			Log(LOG_WARNING) << trackPosition << " " << introSoundTrack[trackPosition].frameNumber << " " <<  introSoundTrack[trackPosition].sound;
+			s = rp->getSound("INTRO.CAT", (introSoundTrack[trackPosition].sound));
+			if (s) s->play();
+			else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
+			++trackPosition;
+		}
 	}
 } *audioSequence;
 
