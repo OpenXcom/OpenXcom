@@ -116,30 +116,31 @@ static soundInFile introSounds[]=
 {"INTRO.CAT", 0x18}
 };
 #else
-// a mix of (subjectively) the best sounds from the two versions
+// an attempt at a mix of (subjectively) the best sounds from the two versions
+// difficult because we can't find a definitive map from old sequence numbers to SAMPLE3.CAT indexes
 static soundInFile introSounds[]=
 {
 {"SAMPLE3.CAT", 24}, // machine gun
 {"SAMPLE3.CAT", 5},   // plasma rifle
-{"SAMPLE3.CAT", 0x5}, // rifle
-{"INTRO.CAT", 0x3}, // some kind of death noise, urgh?
+{"SAMPLE3.CAT", 23}, // rifle
+{"INTRO.CAT",  3}, // some kind of death noise, urgh?
 {"INTRO.CAT", 0x4}, // mutdie
 {"INTRO.CAT", 0x5}, // dying alien
 {"INTRO.CAT", 0x6}, // another dying alien
 {"INTRO.CAT", 0x7}, // ??? ship flying? alien screech?
-{"INTRO.CAT", 0x8}, // fscream
+{"SAMPLE3.CAT", 0x8}, // fscream
 {"SAMPLE3.CAT", 11}, // alarm
-{"INTRO.CAT", 0xa}, // gun spinning up?
+{"SAMPLE3.CAT", 4}, // gun spinning up?
 {"INTRO.CAT", 0xb},  // reload; this one's not even in sample3
 {"SAMPLE3.CAT",19},  // whoosh
 {"INTRO.CAT", 0xd},  // feet, also not in sample3
 {"INTRO.CAT", 0xe},  // low pulsating hum
 {"INTRO.CAT", 30}, // energise
 {"SAMPLE3.CAT", 21}, // hatch
-{"SAMPLE3.CAT", 19}, // phizz
+{"INTRO.CAT", 0x11}, // phizz
 {"SAMPLE3.CAT", 13}, // warning 
 {"SAMPLE3.CAT", 14}, // detected
-{"INTRO.CAT", 0x14}, // a different whoosh?? or the same one? what? first sound you hear when the UFO light first appears?
+{"SAMPLE3.CAT", 19}, // skyranger flyby whoosh
 {"INTRO.CAT", 0x15}, // growl
 {"SAMPLE3.CAT", 15}, // voice
 {"SAMPLE3.CAT", 12}, // beep 1
@@ -320,10 +321,10 @@ static struct AudioSequence
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
 			int sound = introSoundTrack[trackPosition].sound /* & 0xff */;
-			if (sound <= 0x18)
+			if (sound <= 0x19)
 			{
 				soundInFile *sf = introSounds + sound;
-				//Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound; 
+				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << sound; 
 				s = rp->getSound(sf->catFile, sf->sound);
 				if (s) s->play();
 				else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
