@@ -155,7 +155,7 @@ void Screen::flip()
 	{
 		if (_screen->format->BitsPerPixel == 8 && SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
-			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
+			Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 		}
 		_numColors = 0;
 		_pushPalette = false;

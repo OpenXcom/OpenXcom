@@ -312,17 +312,21 @@ static struct AudioSequence
 		switch(Flc::flc.FrameCount)
 		{
 		case 0:
+			Log(LOG_DEBUG) << "Playing gmintro1";
 			m = rp->getMusic("GMINTRO1");
 			m->play();
 			break;
 		case 180:
+			Log(LOG_DEBUG) << "Playing gmintro2";
 			m = rp->getMusic("GMINTRO2");
 			m->play();
 			break;
 		case 382:
+			Log(LOG_DEBUG) << "Playing gmintro3";
 			m = rp->getMusic("GMINTRO3");
 			m->play();
 			Mix_HookMusicFinished(musicDone);
+			Flc::flc.HeaderSpeed = 1000/10; // last part only syncs well at this fps or something; it is a mystery so far
 			break;
 		}		
 

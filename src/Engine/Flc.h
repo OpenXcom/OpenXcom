@@ -45,7 +45,7 @@ struct Flc_t {
   Uint16 HeaderWidth;   /* Fli width */
   Uint16 HeaderHeight;  /* Fli heigth */
   Uint16 HeaderDepth;   /* Color depth */
-  Uint32 HeaderSpeed;   /* Number of video ticks between frame */
+  double HeaderSpeed;   /* Number of video ticks between frame */
   Uint32 FrameSize;     /* Frame size in bytes */
   Uint16 FrameCheck;    /* Frame check */
   Uint16 FrameChunks;   /* Number of chunks in frame */
@@ -53,6 +53,10 @@ struct Flc_t {
   Uint16 ChunkType;     /* Type of chunk */
   /*
   */
+  // FRAME_TYPE extension, see http://www.compuphase.com/flic.htm
+  Uint16 DelayOverride;
+  //
+
   SDL_Surface *mainscreen;
   Screen *realscreen;
   SDL_Color colors[256];
