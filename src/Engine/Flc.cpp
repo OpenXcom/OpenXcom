@@ -26,6 +26,7 @@ grt,
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 /*
 */
 #include "SDL.h"
@@ -122,7 +123,7 @@ int FlcCheckHeader(const char *filename)
 	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
     flc.screen_depth=8;
     if(flc.HeaderCheck==0x0AF11) {
-      flc.HeaderSpeed*=1000/70;
+      flc.HeaderSpeed*=1000.0/70;
     }
     return(0);
   }
@@ -419,17 +420,24 @@ void FlcDoOneFrame()
 } /* FlcDoOneFrame */
 
 void SDLWaitFrame(void)
-{ static Uint32 oldTick=0;
+{ static double oldTick=0.0;
   Uint32 currentTick;
-  Sint32 waitTicks;
+  double waitTicks;
 
-  currentTick=SDL_GetTicks(); 
-	if (oldTick == 0) oldTick = currentTick;
-  waitTicks=(oldTick+=(flc.HeaderSpeed))-currentTick;
+	if (oldTick == 0.0) oldTick = SDL_GetTicks();
 
-  if(waitTicks>0) {
-    SDL_Delay(waitTicks);
-  }
+	currentTick=SDL_GetTicks(); 
+	waitTicks=(oldTick+=(flc.HeaderSpeed))-currentTick;
+
+
+	do {
+		waitTicks = (oldTick + flc.HeaderSpeed - SDL_GetTicks());
+
+		if(waitTicks > 0.0) {
+			//SDL_Delay(floor(waitTicks + 0.5)); // biased rounding? mehhh?
+			SDL_Delay(1);
+		}
+	} while (waitTicks > 0.0); 
 } /* SDLWaitFrame */
 
 void FlcInitFirstFrame()
