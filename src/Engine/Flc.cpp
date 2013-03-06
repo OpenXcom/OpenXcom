@@ -123,7 +123,9 @@ int FlcCheckHeader(const char *filename)
 	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
     flc.screen_depth=8;
     if(flc.HeaderCheck==0x0AF11) {
-      flc.HeaderSpeed*=1000.0/70;
+      flc.HeaderSpeed*=1000/70;
+	  // gross hack, let's set the framespeed to something not expressed in 1s/70 "jiffies"
+	  flc.HeaderSpeed = 1000/10; // 10FPS makes the end of the intro sync up perfectly! shame about the middle though?
     }
     return(0);
   }
@@ -420,9 +422,9 @@ void FlcDoOneFrame()
 } /* FlcDoOneFrame */
 
 void SDLWaitFrame(void)
-{ static double oldTick=0.0;
+{ static Uint32 oldTick=0.0;
   Uint32 currentTick;
-  double waitTicks;
+  int waitTicks;
 
 	if (oldTick == 0.0) oldTick = SDL_GetTicks();
 
@@ -434,7 +436,6 @@ void SDLWaitFrame(void)
 		waitTicks = (oldTick + flc.HeaderSpeed - SDL_GetTicks());
 
 		if(waitTicks > 0.0) {
-			//SDL_Delay(floor(waitTicks + 0.5)); // biased rounding? mehhh?
 			SDL_Delay(1);
 		}
 	} while (waitTicks > 0.0); 
@@ -478,10 +479,10 @@ void FlcDeInit()
 } /* FlcDeInit */
 
 void FlcMain(void (*frameCallBack)())
-{ bool quit=false;
+{ flc.quit=false;
   SDL_Event event;
   FlcInitFirstFrame();
-  while(!quit) {
+  while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
     if(FlcCheckFrame()) {
@@ -494,7 +495,7 @@ void FlcMain(void (*frameCallBack)())
           FlcInitFirstFrame();
         else {
           SDL_Delay(1000);
-          quit=true;
+          flc.quit=true;
         }
         continue;
       }
@@ -530,8 +531,8 @@ void FlcMain(void (*frameCallBack)())
 		  }
 		}
 		if (finalFrame) SDL_Delay(50);
-	} while (finalFrame && SDL_GetTicks() - pauseStart < 14000);
-	if (finalFrame) quit = true;;
+	} while (!flc.quit && finalFrame && SDL_GetTicks() - pauseStart < 5000);
+	if (finalFrame) flc.quit = true;;
   }
 } /* FlcMain */
 

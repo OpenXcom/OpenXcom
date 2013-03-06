@@ -45,7 +45,7 @@ struct Flc_t {
   Uint16 HeaderWidth;   /* Fli width */
   Uint16 HeaderHeight;  /* Fli heigth */
   Uint16 HeaderDepth;   /* Color depth */
-  double HeaderSpeed;   /* Number of video ticks between frame */
+  Uint32 HeaderSpeed;   /* Number of video ticks between frame */
   Uint32 FrameSize;     /* Frame size in bytes */
   Uint16 FrameCheck;    /* Frame check */
   Uint16 FrameChunks;   /* Number of chunks in frame */
@@ -60,6 +60,7 @@ struct Flc_t {
   int screen_h;
   int screen_depth;
   int loop;
+  bool quit;
 };
 
 extern struct Flc_t flc;

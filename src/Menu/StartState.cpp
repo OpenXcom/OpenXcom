@@ -290,6 +290,12 @@ static introSoundEffect introSoundTrack[] =
 {65535, 0x0FFFF}
 };
 
+
+static void musicDone()
+{
+	Flc::flc.quit = true;
+}
+
 static struct AudioSequence
 {
 	ResourcePack *rp;
@@ -316,6 +322,7 @@ static struct AudioSequence
 		case 382:
 			m = rp->getMusic("GMINTRO3");
 			m->play();
+			Mix_HookMusicFinished(musicDone);
 			break;
 		}		
 
@@ -382,6 +389,27 @@ void StartState::think()
 				delete audioSequence;
 				Mix_Volume(-1, Options::getInt("soundVolume"));
 				Mix_VolumeMusic(Options::getInt("musicVolume"));
+
+				// fade out!
+				SDL_Color pal[256];
+				SDL_Color pal2[256];
+				memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
+				for (int i = 20; i > 0; --i)
+				{
+					SDL_Event event;
+					if (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN) break;
+					for (int color = 0; color < 256; ++color)
+					{
+						pal2[color].r = (((int)pal[color].r) * i) / 20;
+						pal2[color].g = (((int)pal[color].g) * i) / 20;
+						pal2[color].b = (((int)pal[color].b) * i) / 20;
+					}
+					_game->getScreen()->setPalette(pal2, 0, 256, true);
+					_game->getScreen()->flip();
+					SDL_Delay(45);
+				}
+				_game->getScreen()->clear();
+				_game->getScreen()->flip();
 			}
 		}
 		catch (Exception &e)
