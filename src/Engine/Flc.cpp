@@ -424,6 +424,7 @@ void SDLWaitFrame(void)
   Sint32 waitTicks;
 
   currentTick=SDL_GetTicks(); 
+	if (oldTick == 0) oldTick = currentTick;
   waitTicks=(oldTick+=(flc.HeaderSpeed))-currentTick;
 
   if(waitTicks>0) {
