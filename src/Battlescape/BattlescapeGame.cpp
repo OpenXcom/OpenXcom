@@ -413,6 +413,11 @@ void BattlescapeGame::endTurn()
 	int liveSoldiers = 0;
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
+		if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+		{
+			(*j)->setSpecialAbility(SPECAB_NONE);
+			convertUnit((*j), (*j)->getSpawnUnit());
+		}
 		if ((*j)->getHealth() > 0 && (*j)->getHealth() > (*j)->getStunlevel())
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
@@ -574,6 +579,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
 					}
 				}
+			}
+			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			{
+				(*j)->setSpecialAbility(SPECAB_NONE);
+				convertUnit((*j), (*j)->getSpawnUnit());
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
@@ -1480,7 +1490,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
-
+	getTileEngine()->applyItemGravity(newUnit->getTile());
 	return newUnit;
 
 }

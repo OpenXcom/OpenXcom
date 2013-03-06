@@ -1031,7 +1031,7 @@ void BattleUnit::keepFalling()
 {
 	_fallPhase++;
 	int endFrame = 3;
-	if (_spawnUnit != "")
+	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
 	{
 		endFrame = 18;
 	}
@@ -2142,6 +2142,14 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
+/// Get the units's special ability.
+ */
+void BattleUnit::setSpecialAbility(SpecialAbility specab)
+{
+	_specab = specab;
+}
+
+/**
  * Get the unit that the victim is morphed into when attacked.
  * @return unit.
  */
@@ -2157,6 +2165,15 @@ std::string BattleUnit::getZombieUnit() const
 std::string BattleUnit::getSpawnUnit() const
 {
 	return _spawnUnit;
+}
+
+/**
+ * Set the unit that is spawned when this one dies.
+ * @return unit.
+ */
+void BattleUnit::setSpawnUnit(std::string spawnUnit)
+{
+	_spawnUnit = spawnUnit;
 }
 
 /**
