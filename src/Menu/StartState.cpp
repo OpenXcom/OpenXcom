@@ -327,6 +327,7 @@ static struct AudioSequence
 				soundInFile *sf = introSounds + sound;
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << sound; 
 				s = rp->getSound(sf->catFile, sf->sound);
+				Mix_Volume(-1, 32);
 				if (s) s->play(trackPosition % 4); // use at most four channels to play sound effects
 				else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
 			}
@@ -375,9 +376,12 @@ void StartState::think()
 				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
 				Flc::flc.loop = 0; // just the one time, please
+				Mix_VolumeMusic(128);
 				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
 				delete audioSequence;
+				Mix_Volume(-1, Options::getInt("soundVolume"));
+				Mix_VolumeMusic(Options::getInt("musicVolume"));
 			}
 		}
 		catch (Exception &e)
