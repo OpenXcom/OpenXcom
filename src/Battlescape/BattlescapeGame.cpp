@@ -1444,20 +1444,20 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	terroristWeapon += "_WEAPON";
 	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
 
-	BattleUnit *_newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
+	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
 	
 	int difficulty = _parentState->getGame()->getSavedGame()->getDifficulty();
 	int divider = 1;
 	if (!difficulty)
 		divider = 2;
 	
-	UnitStats *stats = _newUnit->getStats();
+	UnitStats *stats = newUnit->getStats();
 
 	// adjust the unit's stats according to the difficulty level.
 	stats->tu += 4 * difficulty * stats->tu / 100;
-	_newUnit->setTimeUnits(stats->tu);
+	newUnit->setTimeUnits(0);
 	stats->stamina += 4 * difficulty * stats->stamina / 100;
-	_newUnit->setEnergy(stats->stamina);
+	newUnit->setEnergy(stats->stamina);
 	stats->reactions += 6 * difficulty * stats->reactions / 100;
 	stats->strength += 2 * difficulty * stats->strength / 100;
 	stats->firing = (stats->firing + 6 * difficulty * stats->firing / 100) / divider;
@@ -1468,19 +1468,20 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	if (divider > 1)
 		unit->halveArmor();
 
-	getSave()->getTile(unit->getPosition())->setUnit(_newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
-	_newUnit->setPosition(unit->getPosition());
-	_newUnit->setDirection(3);
-	_newUnit->setCache(0);
-	getSave()->getUnits()->push_back(_newUnit);
-	getMap()->cacheUnit(_newUnit);
-	_newUnit->setAIState(new PatrolBAIState(getSave(), _newUnit, 0));
+	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
+	newUnit->setPosition(unit->getPosition());
+	newUnit->setDirection(3);
+	newUnit->setCache(0);
+	getSave()->getUnits()->push_back(newUnit);
+	getMap()->cacheUnit(newUnit);
+	newUnit->setAIState(new PatrolBAIState(getSave(), newUnit, 0));
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
-	bi->moveToOwner(_newUnit);
+	bi->moveToOwner(newUnit);
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
+	getTileEngine()->calculateFOV(newUnit->getPosition());
 
-	return _newUnit;
+	return newUnit;
 
 }
 
