@@ -347,9 +347,15 @@ void ProjectileFlyBState::think()
 
 /*
  * Flying projectiles cannot be cancelled.
+ * but they can be "skipped"
  */
 void ProjectileFlyBState::cancel()
 {
+	if (_parent->getMap()->getProjectile())
+	{
+		_parent->getMap()->getProjectile()->skipTrajectory();
+		_parent->getMap()->getCamera()->centerOnPosition(_parent->getMap()->getProjectile()->getPosition());
+	}
 }
 
 /*
