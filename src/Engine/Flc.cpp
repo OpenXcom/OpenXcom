@@ -114,7 +114,7 @@ int FlcCheckHeader(const char *filename)
   printf("flc.HeaderWidth: %d\n", flc.HeaderWidth);
   printf("flc.HeaderHeight: %d\n", flc.HeaderHeight);
   printf("flc.HeaderDepth: %d\n", flc.HeaderDepth);
-  printf("flc.HeaderSpeed: %d\n", flc.HeaderSpeed);
+  printf("flc.HeaderSpeed: %lf\n", flc.HeaderSpeed);
 #endif
 
   if((flc.HeaderCheck==0x0AF12) || (flc.HeaderCheck==0x0AF11)) { 
@@ -123,9 +123,7 @@ int FlcCheckHeader(const char *filename)
 	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
     flc.screen_depth=8;
     if(flc.HeaderCheck==0x0AF11) {
-      flc.HeaderSpeed*=1000/70;
-	  // gross hack, let's set the framespeed to something not expressed in 1s/70 "jiffies"
-	  flc.HeaderSpeed = 1000/10; // 10FPS makes the end of the intro sync up perfectly! shame about the middle though?
+      flc.HeaderSpeed*=1000.0/70.0;
     }
     return(0);
   }
@@ -137,17 +135,21 @@ int FlcCheckFrame()
   ReadU32(&flc.FrameSize, flc.pFrame+0);
   ReadU16(&flc.FrameCheck, flc.pFrame+4);
   ReadU16(&flc.FrameChunks, flc.pFrame+6);
+  ReadU16(&flc.DelayOverride, flc.pFrame+8); // not actually used in UFOINT.FLI, it turns out
 
 #ifdef DEBUG
   printf("flc.FrameSize: %d\n", flc.FrameSize);
   printf("flc.FrameCheck: %d\n", flc.FrameCheck);
   printf("flc.FrameChunks: %d\n", flc.FrameChunks);
+  printf("flc.DelayOverride: %d\n", flc.DelayOverride);
 #endif
 
   flc.pFrame+=16;
   if(flc.FrameCheck==0x0f1fa) { 
     return(0);
   }
+
+  flc.DelayOverride = 0; // not FRAME_TYPE means the value we read wasn't a delay at all
 
   if(flc.FrameCheck==0x0f100) { 
 #ifdef DEBUG
@@ -377,13 +379,15 @@ void FlcDoOneFrame()
   flc.pChunk=flc.pMembuf;
   if ( SDL_LockSurface(flc.mainscreen) < 0 )
     return;
+  // if (!ChunkCount) printf("Empty frame! %d\n", flc.FrameCount); // this is normal and used for delays
   while(ChunkCount--) {
     ReadU32(&flc.ChunkSize, flc.pChunk+0);
     ReadU16(&flc.ChunkType, flc.pChunk+4);
 
 #ifdef DEBUG
     printf("flc.ChunkSize: %d\n", flc.ChunkSize);
-    printf("flc.ChunkType: %d\n", flc.ChunkType);
+    printf("flc.ChunkType: %d aka %x\n", flc.ChunkType, flc.ChunkType);
+	if (flc.DelayOverride) printf("DelayOverride: %d\n", flc.DelayOverride);
 #endif
 
     switch(flc.ChunkType) {
@@ -422,20 +426,22 @@ void FlcDoOneFrame()
 } /* FlcDoOneFrame */
 
 void SDLWaitFrame(void)
-{ static Uint32 oldTick=0.0;
+{ static double oldTick=0.0;
   Uint32 currentTick;
-  int waitTicks;
+  double waitTicks;
+  double delay = flc.DelayOverride ? flc.DelayOverride : flc.HeaderSpeed;
 
 	if (oldTick == 0.0) oldTick = SDL_GetTicks();
 
 	currentTick=SDL_GetTicks(); 
-	waitTicks=(oldTick+=(flc.HeaderSpeed))-currentTick;
+	waitTicks=(oldTick+=(delay))-currentTick;
 
 
 	do {
-		waitTicks = (oldTick + flc.HeaderSpeed - SDL_GetTicks());
+		waitTicks = (oldTick + delay - SDL_GetTicks());
 
 		if(waitTicks > 0.0) {
+			//SDL_Delay(floor(waitTicks + 0.5)); // biased rounding? mehhh?
 			SDL_Delay(1);
 		}
 	} while (waitTicks > 0.0); 
@@ -536,6 +542,8 @@ void FlcMain(void (*frameCallBack)())
   }
 } /* FlcMain */
 
+
+#if 0
 void FlxplayHelp()
 { printf("FLX player (%s) with SDL output (jasper@il.fontys.nl)\n", version);
   printf("View readme file for more information\n\n");
@@ -543,7 +551,7 @@ void FlxplayHelp()
   exit(1);
 } /* FlxplayHelp */
 
-#if 0
+
 main(int argc, char **argv)
 { int c;
 
