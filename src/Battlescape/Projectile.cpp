@@ -459,4 +459,12 @@ Surface *Projectile::getSprite() const
 	return _sprite;
 }
 
+/** 
+ * skip to the end of the trajectory
+ */
+void Projectile::skipTrajectory()
+{
+	_position = _trajectory.size() - 2;
+}
+
 }

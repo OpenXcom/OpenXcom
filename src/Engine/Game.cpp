@@ -239,6 +239,8 @@ void Game::run()
 				case SDL_MOUSEBUTTONUP:
 					// Skip mouse events if they're disabled
 					if (!_mouseActive) continue;
+					// re-gain focus on mouse-over or keypress.
+					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
 					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
