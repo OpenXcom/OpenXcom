@@ -120,7 +120,8 @@ static soundInFile introSounds[]=
 // difficult because we can't find a definitive map from old sequence numbers to SAMPLE3.CAT indexes
 static soundInFile introSounds[]=
 {
-{"SAMPLE3.CAT", 24}, // machine gun
+{"SAMPLE3.CAT", 24}, // machine gun // seems like too much imho, drowns out the alien death cries
+//{"INTRO.CAT", 0}, // original machine gun
 {"SAMPLE3.CAT", 5},   // plasma rifle
 {"SAMPLE3.CAT", 23}, // rifle
 {"INTRO.CAT",  3}, // some kind of death noise, urgh?
@@ -135,12 +136,12 @@ static soundInFile introSounds[]=
 {"SAMPLE3.CAT",19},  // whoosh
 {"INTRO.CAT", 0xd},  // feet, also not in sample3
 {"INTRO.CAT", 0xe},  // low pulsating hum
-{"INTRO.CAT", 30}, // energise
+{"SAMPLE3.CAT", 30}, // energise
 {"SAMPLE3.CAT", 21}, // hatch
 {"INTRO.CAT", 0x11}, // phizz
 {"SAMPLE3.CAT", 13}, // warning 
 {"SAMPLE3.CAT", 14}, // detected
-{"SAMPLE3.CAT", 19}, // skyranger flyby whoosh
+{"SAMPLE3.CAT", 19}, // UFO flyby whoosh?
 {"INTRO.CAT", 0x15}, // growl
 {"SAMPLE3.CAT", 15}, // voice
 {"SAMPLE3.CAT", 12}, // beep 1
@@ -149,7 +150,7 @@ static soundInFile introSounds[]=
 };
 #endif
 
-// sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound
+// sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound, not sure for which craft
 
 typedef struct 
 {
@@ -326,7 +327,7 @@ static struct AudioSequence
 				soundInFile *sf = introSounds + sound;
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << sound; 
 				s = rp->getSound(sf->catFile, sf->sound);
-				if (s) s->play();
+				if (s) s->play(trackPosition % 4); // use at most four channels to play sound effects
 				else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
 			}
 			++trackPosition;
