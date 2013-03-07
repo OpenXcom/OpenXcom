@@ -1065,6 +1065,8 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
 	std::vector<Node*> compliantNodes;	
+	
+	if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 
 	for (std::vector<int>::iterator i = fromNode->getNodeLinks()->begin(); i != fromNode->getNodeLinks()->end(); ++i )
 	{
