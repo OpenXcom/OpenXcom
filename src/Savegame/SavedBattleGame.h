@@ -78,7 +78,7 @@ private:
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::vector<BattleUnit*> _fallingUnits;
-	bool _unitsFalling, _strafeEnabled;
+	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -224,6 +224,8 @@ public:
 	void setUnitsFalling(bool fall);
 	bool getUnitsFalling() const;
 	const bool getStrafeSetting() const;
+	const bool getSneakySetting() const;
+	const bool getTraceSetting() const;
 
 	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);

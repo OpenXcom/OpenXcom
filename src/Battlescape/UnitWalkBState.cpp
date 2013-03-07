@@ -236,7 +236,7 @@ void UnitWalkBState::think()
 		// check if we did spot new units
 		if (unitspotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
 		{
-			if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Uh-oh! Company!"; }			
+			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }			
 			_unit->_hidingForTurn = false; // clearly we're not hidden now
 			_parent->getMap()->cacheUnit(_unit);
 			_pf->abortPath();
@@ -383,7 +383,7 @@ void UnitWalkBState::think()
 			_parent->getMap()->cacheUnit(_unit);
 		if (unitspotted && !_action.desperate && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0 && !_falling)
 		{
-			if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
+			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
 			_parent->getMap()->cacheUnit(_unit);

@@ -167,8 +167,8 @@ void AggroBAIState::exit()
  */
 void AggroBAIState::think(BattleAction *action)
 {
-    const bool traceAI = Options::getBool("traceAI");
-    if (traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (_charge ? " [charging]": " "); }
+	const bool traceAI = _game->getTraceSetting();
+	if (traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (_charge ? " [charging]": " ") << (_aggroTarget ? " [aggroTarget]:": " ") << (_aggroTarget ? _aggroTarget->getId() : 0); }
 	
  	action->type = BA_RETHINK;
 	action->actor = _unit;
