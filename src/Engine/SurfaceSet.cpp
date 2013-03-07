@@ -77,9 +77,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	std::ifstream offsetFile (tab.c_str(), std::ios::in | std::ios::binary);
 	if (!offsetFile)
 	{
-		nframes = 1;
-		Surface *surface = new Surface(_width, _height);
-		_frames.push_back(surface);
+		throw Exception(tab + " not found");
 	}
 	else
 	{
