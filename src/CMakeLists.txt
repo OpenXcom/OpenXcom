@@ -326,6 +326,8 @@ set ( interface_src
   Interface/ArrowButton.h
   Interface/TextButton.cpp
   Interface/TextButton.h
+  Interface/ToggleTextButton.cpp
+  Interface/ToggleTextButton.h
   Interface/Text.h
   Interface/Text.cpp
   Interface/Bar.h
