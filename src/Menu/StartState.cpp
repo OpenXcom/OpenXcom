@@ -160,6 +160,7 @@ typedef struct
 
 static introSoundEffect introSoundTrack[] = 
 {
+{0, 0x200}, // inserting this to keep the code simple
 {149, 0x11},
 {173, 0x0C},
 {183, 0x0E},
@@ -309,34 +310,41 @@ static struct AudioSequence
 
 	void operator ()()
 	{
-		switch(Flc::flc.FrameCount)
-		{
-		case 0:
-			Log(LOG_DEBUG) << "Playing gmintro1";
-			m = rp->getMusic("GMINTRO1");
-			m->play();
-			break;
-		case 180:
-			Log(LOG_DEBUG) << "Playing gmintro2";
-			m = rp->getMusic("GMINTRO2");
-			m->play();
-			break;
-		case 382:
-			Log(LOG_DEBUG) << "Playing gmintro3";
-			m = rp->getMusic("GMINTRO3");
-			m->play();
-			Mix_HookMusicFinished(musicDone);
-			Flc::flc.HeaderSpeed = 1000/10; // last part only syncs well at this fps or something; it is a mystery so far
-			break;
-		}		
-
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
-			int sound = introSoundTrack[trackPosition].sound /* & 0xff */;
-			if (sound <= 0x19)
+			int command = introSoundTrack[trackPosition].sound;
+
+			if (command & 0x200)
 			{
-				soundInFile *sf = introSounds + sound;
-				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << sound; 
+				switch(command)
+				{
+				case 0x200:
+					Log(LOG_DEBUG) << "Playing gmintro1";
+					m = rp->getMusic("GMINTRO1");
+					m->play(1);
+					break;
+				case 0x201:
+					Log(LOG_DEBUG) << "Playing gmintro2";
+					m = rp->getMusic("GMINTRO2");
+					m->play(1);
+					break;
+				case 0x202:
+					Log(LOG_DEBUG) << "Playing gmintro3";
+					m = rp->getMusic("GMINTRO3");
+					m->play(1);
+					Mix_HookMusicFinished(musicDone);
+					break;
+				}		
+			}
+			else if (command & 0x400)
+			{
+				Flc::flc.HeaderSpeed = (1000.0/70.0) * (command & 0xff);
+				Log(LOG_DEBUG) << "Frame delay now: " << Flc::flc.HeaderSpeed;
+			}
+			else if (command <= 0x19)
+			{
+				soundInFile *sf = introSounds + command;
+				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 				s = rp->getSound(sf->catFile, sf->sound);
 				Mix_Volume(-1, 32);
 				if (s) s->play(trackPosition % 4); // use at most four channels to play sound effects
