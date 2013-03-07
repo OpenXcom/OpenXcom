@@ -1922,6 +1922,13 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 	{
 		return 5;
 	}
+	
+	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
+	{		
+		Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
+		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
+			return 0;
+	}
 
 	// first we check terrain voxel data, not to allow 2x2 units stick through walls
 	for (int i=0; i< 4; ++i)
