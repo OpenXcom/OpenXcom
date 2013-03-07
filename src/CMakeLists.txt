@@ -218,6 +218,8 @@ set ( engine_src
   Engine/LocalizedText.h
   Engine/FastLineClip.cpp
   Engine/FastLineClip.h
+  Engine/Flc.cpp
+  Engine/Flc.h
   Engine/Zoom.cpp
   Engine/Zoom.h
   Engine/Scalers/scale2x.cpp
@@ -326,6 +328,8 @@ set ( interface_src
   Interface/ArrowButton.h
   Interface/TextButton.cpp
   Interface/TextButton.h
+  Interface/ToggleTextButton.cpp
+  Interface/ToggleTextButton.h
   Interface/Text.h
   Interface/Text.cpp
   Interface/Bar.h
