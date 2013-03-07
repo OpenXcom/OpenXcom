@@ -204,7 +204,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
 	// defer actual update of screen until SDL_Flip()
 	if (immediately && SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
 	{
-		Log(LOG_ERROR) << "Display palette doesn't match requested palette";
+		Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 	}
 
 	// Sanity check
