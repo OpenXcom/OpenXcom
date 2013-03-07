@@ -82,71 +82,71 @@ typedef struct
 {
 	std::string catFile;
 	int sound;
+	int volume;
 } soundInFile;
 
 #if 0
 // the pure MS-DOS experience
 static soundInFile introSounds[]=
 {
-{"INTRO.CAT", 0x0},
-{"INTRO.CAT", 0x1},
-{"INTRO.CAT", 0x2},
-{"INTRO.CAT", 0x3},
-{"INTRO.CAT", 0x4},
-{"INTRO.CAT", 0x5},
-{"INTRO.CAT", 0x6},
-{"INTRO.CAT", 0x7},
-{"INTRO.CAT", 0x8},
-{"INTRO.CAT", 0x9},
-{"INTRO.CAT", 0xa},
-{"INTRO.CAT", 0xb},
-{"INTRO.CAT", 0xc},
-{"INTRO.CAT", 0xd},
-{"INTRO.CAT", 0xe},
-{"INTRO.CAT", 0xf},
-{"INTRO.CAT", 0x10},
-{"INTRO.CAT", 0x11},
-{"INTRO.CAT", 0x12},
-{"INTRO.CAT", 0x13},
-{"INTRO.CAT", 0x14},
-{"INTRO.CAT", 0x15},
-{"INTRO.CAT", 0x16},
-{"INTRO.CAT", 0x17},
-{"INTRO.CAT", 0x18},
-{"INTRO.CAT", 0x18}
+{"INTRO.CAT", 0x0, 32},
+{"INTRO.CAT", 0x1, 32},
+{"INTRO.CAT", 0x2, 32},
+{"INTRO.CAT", 0x3, 32},
+{"INTRO.CAT", 0x4, 32},
+{"INTRO.CAT", 0x5, 32},
+{"INTRO.CAT", 0x6, 32},
+{"INTRO.CAT", 0x7, 32},
+{"INTRO.CAT", 0x8, 32},
+{"INTRO.CAT", 0x9, 32},
+{"INTRO.CAT", 0xa, 32},
+{"INTRO.CAT", 0xb, 32},
+{"INTRO.CAT", 0xc, 32},
+{"INTRO.CAT", 0xd, 32},
+{"INTRO.CAT", 0xe, 32},
+{"INTRO.CAT", 0xf, 32},
+{"INTRO.CAT", 0x10, 32},
+{"INTRO.CAT", 0x11, 32},
+{"INTRO.CAT", 0x12, 32},
+{"INTRO.CAT", 0x13, 32},
+{"INTRO.CAT", 0x14, 32},
+{"INTRO.CAT", 0x15, 32},
+{"INTRO.CAT", 0x16, 32},
+{"INTRO.CAT", 0x17, 32},
+{"INTRO.CAT", 0x18, 32},
+{"INTRO.CAT", 0x18, 32}
 };
 #else
 // an attempt at a mix of (subjectively) the best sounds from the two versions
 // difficult because we can't find a definitive map from old sequence numbers to SAMPLE3.CAT indexes
 static soundInFile introSounds[]=
 {
-{"SAMPLE3.CAT", 24}, // machine gun // seems like too much imho, drowns out the alien death cries
-//{"INTRO.CAT", 0}, // original machine gun
-{"SAMPLE3.CAT", 5},   // plasma rifle
-{"SAMPLE3.CAT", 23}, // rifle
-{"INTRO.CAT",  3}, // some kind of death noise, urgh?
-{"INTRO.CAT", 0x4}, // mutdie
-{"INTRO.CAT", 0x5}, // dying alien
-{"INTRO.CAT", 0x6}, // another dying alien
-{"INTRO.CAT", 0x7}, // ??? ship flying? alien screech?
-{"SAMPLE3.CAT", 0x8}, // fscream
-{"SAMPLE3.CAT", 11}, // alarm
-{"SAMPLE3.CAT", 4}, // gun spinning up?
-{"INTRO.CAT", 0xb},  // reload; this one's not even in sample3
-{"SAMPLE3.CAT",19},  // whoosh
-{"INTRO.CAT", 0xd},  // feet, also not in sample3
-{"INTRO.CAT", 0xe},  // low pulsating hum
-{"SAMPLE3.CAT", 30}, // energise
-{"SAMPLE3.CAT", 21}, // hatch
-{"INTRO.CAT", 0x11}, // phizz
-{"SAMPLE3.CAT", 13}, // warning 
-{"SAMPLE3.CAT", 14}, // detected
-{"SAMPLE3.CAT", 19}, // UFO flyby whoosh?
-{"INTRO.CAT", 0x15}, // growl
-{"SAMPLE3.CAT", 15}, // voice
-{"SAMPLE3.CAT", 12}, // beep 1
-{"SAMPLE3.CAT", 18}, // takeoff
-{"SAMPLE3.CAT", 20}  // another takeoff/landing sound?? if it exists?
+{"SAMPLE3.CAT", 24, 32}, // machine gun
+{"SAMPLE3.CAT", 5, 32},   // plasma rifle
+{"SAMPLE3.CAT", 23, 32}, // rifle
+{"INTRO.CAT",  3, 32}, // some kind of death noise, urgh?
+{"INTRO.CAT", 0x4, 64}, // mutdie
+{"INTRO.CAT", 0x5, 64}, // dying alien
+{"INTRO.CAT", 0x6, 64}, // another dying alien
+{"INTRO.CAT", 0x7, 32}, // ??? ship flying? alien screech?
+{"SAMPLE3.CAT", 0x8, 32}, // fscream
+{"SAMPLE3.CAT", 11, 32}, // alarm
+{"SAMPLE3.CAT", 4, 32}, // gun spinning up?
+{"INTRO.CAT", 0xb, 32},  // reload; this one's not even in sample3
+{"SAMPLE3.CAT",19, 48},  // whoosh
+{"INTRO.CAT", 0xd, 32},  // feet, also not in sample3
+{"INTRO.CAT", 0xe, 32},  // low pulsating hum
+{"SAMPLE3.CAT", 30, 32}, // energise
+{"SAMPLE3.CAT", 21, 32}, // hatch
+{"INTRO.CAT", 0x11, 64}, // phizz
+{"SAMPLE3.CAT", 13, 32}, // warning 
+{"SAMPLE3.CAT", 14, 32}, // detected
+{"SAMPLE3.CAT", 19, 64}, // UFO flyby whoosh?
+{"INTRO.CAT", 0x15, 32}, // growl
+{"SAMPLE3.CAT", 15, 128}, // voice
+{"SAMPLE3.CAT", 12, 32}, // beep 1
+{"SAMPLE3.CAT", 18, 32}, // takeoff
+{"SAMPLE3.CAT", 20, 32}  // another takeoff/landing sound?? if it exists?
 };
 #endif
 
@@ -201,17 +201,21 @@ static introSoundEffect introSoundTrack[] =
 {310, 0x1},
 {312, 0x1},
 {378, 0x202},
-{378, 0x9},
+{378, 0x9}, // alarm
 {386, 0x9},
 {393, 0x9},
-{399, 0x17},
+{399, 0x17}, // bleeps
 {433, 0x17},
-{463, 0x12},
+{463, 0x12}, // warning
 {477, 0x12},
-{487, 0x13},
-{495, 0x16},
+{487, 0x13}, // ufo detected
+{495, 0x16}, // voice
 {501, 0x16},
-{522, 0x0B},
+{512, 0xd},  // feet -- not in original
+{514, 0xd},  // feet -- not in original
+{522, 0x0B}, // rifle grab
+{523, 0xd},  // feet -- not in original
+{525, 0xd},  // feet -- not in original
 {534, 0x18},
 {535, 0x405},
 {560, 0x407},
@@ -344,11 +348,12 @@ static struct AudioSequence
 			else if (command <= 0x19)
 			{
 				soundInFile *sf = introSounds + command;
+				int channel = trackPosition % 4; // use at most four channels to play sound effects
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 				s = rp->getSound(sf->catFile, sf->sound);
-				Mix_Volume(-1, 32);
-				if (s) s->play(trackPosition % 4); // use at most four channels to play sound effects
-				else Log(LOG_WARNING) << "Couldn't play INTRO.CAT:" << introSoundTrack[trackPosition].sound;
+				Mix_Volume(channel, sf->volume);
+				if (s) s->play(channel);
+				else Log(LOG_WARNING) << "Couldn't play" << sf->catFile << " :" << introSoundTrack[trackPosition].sound;
 			}
 			++trackPosition;
 		}
