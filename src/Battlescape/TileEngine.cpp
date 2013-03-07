@@ -850,37 +850,47 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 && (*i)->getFaction() != _save->getSide() && !(*i)->isOut())
+		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 &&
+			(*i)->getFaction() != _save->getSide() &&
+			!(*i)->isOut() &&
+			(*i)->getReactionScore() > highestReactionScore &&
+			(*i)->getMainHandWeapon() &&
+			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+			validMeleeRange((*i), unit)) ||
+			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
+			(*i)->getMainHandWeapon()->getRules()->getTUSnap())))
 		{
 			if (recalculateFOV)
 			{
 				calculateFOV(*i);
 			}
+			Position originVoxel = getSightOriginVoxel(*i);
+			Position scanVoxel;
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
-				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore && (*i)->getMainHandWeapon())
+				if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
 				{
-					if (((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE && validMeleeRange((*i), unit)) ||
-						(*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE)
-					{
-						// I see you!
-						highestReactionScore = (*i)->getReactionScore();
-						action->actor = (*i);
-					}
+					// I see you!
+					highestReactionScore = (*i)->getReactionScore();
+					action->actor = (*i);
 				}
 			}
 		}
 	}
 
-	if (action->actor && highestReactionScore > unit->getReactionScore() &&
-		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
-		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)))
+	if (action->actor)
 	{
 		action->actor->addReactionExp();
-		action->type = BA_SNAPSHOT;
-		action->target = unit->getPosition();
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
+
+		if (!action->weapon->getRules()->getTUAuto() || RNG::generate(0,3) < 3)
+			action->type = BA_SNAPSHOT;
+		else
+			action->type = BA_AUTOSHOT;
+
+		action->target = unit->getPosition();
+
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
 		action->TU = tu;
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && action->actor->getTimeUnits() >= tu)
