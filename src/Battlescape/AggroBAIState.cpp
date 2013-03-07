@@ -434,34 +434,54 @@ void AggroBAIState::think(BattleAction *action)
 				{
 					takeCover = true;
 					bool targetFound = false;
-					int distance = 200;
-					int size = action->actor->getArmor()->getSize();
-					int targetsize = _aggroTarget->getArmor()->getSize();
+					int attackCost = (action->actor->getMainHandWeapon()->getRules()->getTUMelee() * 100) / action->actor->getStats()->tu;
+					int chargeReserve = action->actor->getTimeUnits() - attackCost;
+					int distance = chargeReserve / 4;
+					int size = action->actor->getArmor()->getSize() -1;
+					int targetsize = _aggroTarget->getArmor()->getSize() -1;
 					
-					for (int x = 0 - size; x <= targetsize; ++x)
+					for (int x =-1; x <= 1; ++x)
 					{
-						for (int y = 0 - size; y <= targetsize; ++y)
+						for (int y = -1; y <= 1; ++y)
 						{
 							if (!(x == 0 && y == 0))
 							{
-								Position checkPath = _aggroTarget->getPosition() + Position (x, y, 0);
-								_game->getPathfinding()->calculate(action->actor, checkPath, 0);
+								int ox = x;
+								int oy = y;
+								if (size)
+								{
+									if (x == -1)
+										ox -= size;
+									if (y == -1)
+										oy -= size;
+								}
+								if (targetsize)
+								{
+									if (x == 1)
+										ox += targetsize;
+									if (y == 1)
+										oy += targetsize;
+								}
+								Position checkPath = _aggroTarget->getPosition() + Position (ox, oy, 0);
 								int newDistance = _game->getTileEngine()->distance(action->actor->getPosition(), checkPath);
 								bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), _aggroTarget);
 								bool fitHere = _game->setUnitPosition(_unit, checkPath, true);
 								
-								if (_game->getPathfinding()->getStartDirection() != -1  &&  valid && fitHere &&
-									newDistance < distance)
+								if (valid && fitHere && newDistance < distance)
 								{
-									// CHAAAAAAARGE!
-									if (traceAI) { Log(LOG_INFO) << "CHAAAAAAARGE!" << " -> " << checkPath.x << "," << checkPath.y; }
-									action->target = checkPath;
-									action->type = BA_WALK;
-									_charge = true;
-									_unit->setCharging(_aggroTarget);
-									distance = newDistance;
+									_game->getPathfinding()->calculate(action->actor, checkPath, 0, chargeReserve);
+									if (_game->getPathfinding()->getStartDirection() != -1)
+									{
+										// CHAAAAAAARGE!
+										if (traceAI) { Log(LOG_INFO) << "CHAAAAAAARGE!" << " -> " << checkPath.x << "," << checkPath.y; }
+										action->target = checkPath;
+										action->type = BA_WALK;
+										_charge = true;
+										_unit->setCharging(_aggroTarget);
+										distance = newDistance;
+									}
+									_game->getPathfinding()->abortPath();
 								}
-								_game->getPathfinding()->abortPath();
 							}
 						}
 					}

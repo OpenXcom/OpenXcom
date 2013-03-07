@@ -283,59 +283,60 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 					test.y = center.y + signY[direction]*(swap?x:y);
 					if (_save->getTile(test))
 					{
-						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
-						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
+						// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
+						// large units have "4 pair of eyes"
+						int size = unit->getArmor()->getSize();
+						for (int xo = 0; xo < size; xo++)
 						{
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
-								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+							for (int yo = 0; yo < size; yo++)
 							{
-								unit->addToVisibleUnits(visibleUnit);
-								unit->addToVisibleTiles(visibleUnit->getTile());
-								if (unit->getFaction() == FACTION_PLAYER)
+								Position poso = pos + Position(xo,yo,0);
+								_trajectory.clear();
+								int tst = calculateLine(poso, test, true, &_trajectory, unit, false);
+								unsigned int tsize = _trajectory.size();
+								if (tst>127) --tsize; //last tile is blocked thus must be cropped
+								for (unsigned int i = 0; i < tsize; i++)
 								{
-								//	visibleUnit->getTile()->setDiscovered(true, 2);
-									visibleUnit->getTile()->setVisible(+1);
-								}
-							}
-							if (unit->getFaction() == FACTION_PLAYER)
-							{
-								visibleUnit->setVisible(true);
-							}
-							else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
-							{
-								visibleUnit->setTurnsExposed(unit->getIntelligence());
-								_save->updateExposedUnits();
-							}
-						}
-
-						if (unit->getFaction() == FACTION_PLAYER)
-						{
-							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
-							// large units have "4 pair of eyes"
-							int size = unit->getArmor()->getSize();
-							for (int xo = 0; xo < size; xo++)
-							{
-								for (int yo = 0; yo < size; yo++)
-								{
-									Position poso = pos + Position(xo,yo,0);
-									_trajectory.clear();
-									int tst = calculateLine(poso, test, true, &_trajectory, unit, false);
-									unsigned int tsize = _trajectory.size();
-									if (tst>127) --tsize; //last tile is blocked thus must be cropped
-									for (unsigned int i = 0; i < tsize; i++)
+									Position posi = _trajectory.at(i); 
+									BattleUnit *visibleUnit = _save->getTile(posi)->getUnit();
+									if (visibleUnit && !visibleUnit->isOut())
 									{
-										Position posi = _trajectory.at(i); 
+										if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+											|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+										{
+											unit->addToVisibleUnits(visibleUnit);
+											// unit->addToVisibleTiles(visibleUnit->getTile());
+											//	if (unit->getFaction() == FACTION_PLAYER)
+											//	{
+											//	visibleUnit->getTile()->setDiscovered(true, 2);
+											//	visibleUnit->getTile()->setVisible(+1);
+											//	}
+										}
+										if (unit->getFaction() == FACTION_PLAYER)
+										{
+											visibleUnit->setVisible(true);
+										}
+										else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
+										{
+											visibleUnit->setTurnsExposed(unit->getIntelligence());
+											_save->updateExposedUnits();
+										}
+									}
+									if (unit->getFaction() == FACTION_PLAYER)
+									{
 										//mark every tile of line as visible (as in original)
 										//this is needed because of bresenham narrow stroke. 
 										_save->getTile(posi)->setVisible(+1);
 										_save->getTile(posi)->setDiscovered(true, 2);
 										// walls to the east or south of a visible tile, we see that too
 										Tile* t = _save->getTile(Position(posi.x + 1, posi.y, posi.z));
-										if (t) t->setDiscovered(true, 0);
+										if (t)
+										{
+											t->setDiscovered(true, 0);
+										}
 										t = _save->getTile(Position(posi.x, posi.y + 1, posi.z));
 										if (t) t->setDiscovered(true, 1);
 									}
-
 								}
 							}
 						}
@@ -813,7 +814,7 @@ void TileEngine::calculateFOV(const Position &position)
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
 {
-	double highestReactionScore = 0;
+	double highestReactionScore = unit->getReactionScore();
 	action->actor = 0;
 
 	// reaction fire only triggered when the actioning unit is of the currently playing side
