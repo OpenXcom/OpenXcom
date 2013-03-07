@@ -17,10 +17,36 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Position.h"
+#ifndef __OXC_TOGGLETEXTBUTTON_H
+#define __OXC_TOGGLETEXTBUTTON_H
+
+
+#include "TextButton.h"
+#include "../Engine/Action.h"
+#include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
+class ToggleTextButton :
+    public TextButton
+{
+private:
+    bool _isPressed;
+    int _invertMid;
+    TextButton *_fakeGroup;
+
+public:
+
+    void draw();
+    void mousePress(Action *action, State *state);
+    void setPressed(bool pressed);
+    bool getPressed() const { return _isPressed; }
+    void setInvertColor(Uint8 mid);
+    ToggleTextButton(int width, int height, int x, int y);
+    ~ToggleTextButton(void);
+};
 
 }
+
+#endif

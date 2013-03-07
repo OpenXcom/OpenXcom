@@ -75,7 +75,7 @@ public:
 	/// Gets the craft's name.
 	std::wstring getName(Language *lang) const;
 	/// Sets the craft's name.
-	void setName(const std::wstring &newName, Language *lang);
+	void setName(const std::wstring &newName);
 	/// Gets the craft's base.
 	Base *getBase() const;
 	/// Sets the craft's base.

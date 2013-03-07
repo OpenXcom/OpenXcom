@@ -66,6 +66,8 @@ public:
 	BattleItem *getItem() const;
 	/// Get the sprite
 	Surface *getSprite() const;
+	/// skip the bullet flight
+	void skipTrajectory();
 };
 
 }

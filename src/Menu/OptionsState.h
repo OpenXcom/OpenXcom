@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 class TextButton;
+class ToggleTextButton;
 class Window;
 class Text;
 class TextEdit;
@@ -45,6 +46,7 @@ private:
 	ArrowButton *_btnDisplayUp, *_btnDisplayDown;
 	Text *_txtDisplayMode;
 	TextButton *_displayMode, *_btnDisplayWindowed, *_btnDisplayFullscreen;
+    ToggleTextButton *_btnDisplayOpenGL;
 	Text *_txtMusicVolume;
 	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
 	Text *_txtSoundVolume;
@@ -52,6 +54,7 @@ private:
 	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls;
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
+	bool _wClicked, _hClicked, _OpenGL;
 public:
 	/// Creates the Options state.
 	OptionsState(Game *game);
@@ -71,6 +74,12 @@ public:
 	void btnDisplayUpClick(Action *action);
 	/// Handler for clicking the Previous Resolution button.
 	void btnDisplayDownClick(Action *action);
+	/// unclick height if necessary.
+	void DisplayWidthClick(Action *action);
+	/// unclick width if necessary.
+	void DisplayHeightClick(Action *action);
+    /// Handler for clicking the OpenGL button
+    void btnOpenGLClick(Action *action);
 };
 
 }

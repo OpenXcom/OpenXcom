@@ -162,6 +162,11 @@ void ExplosionBState::explode()
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
+		if (!_unit && _item->getPreviousOwner())
+		{
+			_unit = _item->getPreviousOwner();
+		}
+
 		if (_areaOfEffect)
 		{
 			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
@@ -170,10 +175,11 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1)
+			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1 && victim->getSpawnUnit().empty())
 			{
-				// converts the victim to a zombie
-				_parent->convertUnit(victim, _unit->getZombieUnit());
+				// converts the victim to a zombie on death
+				victim->setSpecialAbility(SPECAB_RESPAWN);
+				victim->setSpawnUnit(_unit->getZombieUnit());
 			}
 		}
 	}

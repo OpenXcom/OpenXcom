@@ -73,6 +73,8 @@ namespace Options
 	void setBool(const std::string& id, bool value);
 	/// Gets the list of rulesets to use.
 	std::vector<std::string> getRulesets();
+	/// Gets the list of rulesets to use.
+	std::vector<std::string> getPurchaseExclusions();
 }
 
 }

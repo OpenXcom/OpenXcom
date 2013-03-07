@@ -43,6 +43,8 @@ class Soldier;
 class Armor;
 class SavedGame;
 class Language;
+class AggroBAIState;
+class PatrolBAIState;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -107,13 +109,15 @@ private:
 	BattleUnit *_charging;
 	int _turnsExposed;
 	std::vector<int> _loftempsSet;
+	Unit *_unitRules;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor);
+	BattleUnit(BattleUnit&);
 	/// Cleans up the BattleUnit.
-	virtual ~BattleUnit();
+	~BattleUnit();
 	/// Loads the unit from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the unit to YAML.
@@ -121,7 +125,7 @@ public:
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the unit's position
-	void setPosition(const Position& pos);
+	void setPosition(const Position& pos, bool updateLastPos = true);
 	/// Gets the unit's position.
 	const Position& getPosition() const;
 	/// Gets the unit's position.
@@ -309,7 +313,7 @@ public:
 	/// Gets the unit's armor.
 	Armor *getArmor() const;
 	/// Gets the unit's name.
-	std::wstring getName(Language *lang) const;
+	std::wstring getName(Language *lang, bool debugAppendId = false) const;
 	/// Gets the unit's stats.
 	UnitStats *getStats();
 	/// Get the unit's stand height.
@@ -334,6 +338,8 @@ public:
 	int getAggression() const;
 	/// Get the units's special ability.
 	int getSpecialAbility() const;
+	/// Set the units's special ability.
+	void setSpecialAbility(SpecialAbility specab);
 	/// Get the units's rank string.
 	std::string getRankString() const;
 	/// Get the geoscape-soldier object.
@@ -354,6 +360,8 @@ public:
 	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
+	/// Sets the unit's spawn unit.
+	void setSpawnUnit(std::string spawnUnit);
 	/// Gets the unit's aggro sound.
 	int getAggroSound() const;
 	/// Sets the unit's energy level.
@@ -376,7 +384,13 @@ public:
 	int getTurnsExposed () const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
+	/// call this after the default copy constructor deletes the cache?
+	void invalidateCache();
+	
+	Unit *getUnitRules() const { return _unitRules; }
 
+	/// scratch value for AI's left hand to tell its right hand what's up...
+	bool _hidingForTurn; // don't zone out and start patrolling again
 };
 
 }

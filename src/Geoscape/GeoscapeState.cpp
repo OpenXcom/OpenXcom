@@ -618,7 +618,7 @@ void GeoscapeState::time5Seconds()
 							int soldiersOnBase = 0;
 							for (std::vector<Soldier*>::iterator j = base->getSoldiers()->begin(); j != base->getSoldiers()->end() ; ++j)
 							{
-								if ((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") soldiersOnBase++;
+								if (((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") && (*j)->getWoundRecovery() == 0) soldiersOnBase++;
 							}
 							if (soldiersOnBase > 0)
 							{
@@ -690,6 +690,10 @@ void GeoscapeState::time5Seconds()
 					w->setLatitude(u->getLatitude());
 					w->setId(u->getId());
 					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+				}
+				if (u != 0 && u->getStatus() == Ufo::DESTROYED)
+				{
+					(*j)->returnToBase();
 				}
 			}
 			if(!_zoomInEffectTimer->isRunning() && !_zoomOutEffectTimer->isRunning())

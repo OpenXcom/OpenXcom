@@ -53,11 +53,13 @@ private:
 	BattleUnit *_unit;
 	bool _pathPreviewed;
 	bool _strafeMove;
-	///Try to find a straight line path between two positions.
-	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget);
-	///Try to find a path between two positions.
-	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget);
+	int _totalTUCost;
 public:
+	///Try to find a straight line path between two positions.
+	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false);
+	///Try to find a path between two positions.
+	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false);
+	///XXX please document
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
@@ -82,8 +84,12 @@ public:
 	bool validateUpDown(BattleUnit *bu, Position startPosition, const int direction);
 	bool previewPath(bool bRemove = false);
 	bool removePreview();
+	/// Set _unit in order to abuse low-level pathfinding functions from outside the class
+	void setUnit(BattleUnit *unit) { _unit = unit; };
 	/// Get all reachable tiles, based on cost.
 	std::vector<int> findReachable(BattleUnit *unit, int tuMax);
+	/// get _totalTUCost; find out whether we can hike somewhere in this turn or not
+	int getTotalTUCost() const { return _totalTUCost; }
 };
 
 }

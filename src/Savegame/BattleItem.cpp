@@ -227,7 +227,8 @@ void BattleItem::setOwner(BattleUnit *owner)
  */
 void BattleItem::moveToOwner(BattleUnit *owner)
 {
-	_previousOwner = _owner;
+	
+	_previousOwner = _owner ? _owner:owner;
 	_owner = owner;
 	if (_previousOwner != 0)
 	{

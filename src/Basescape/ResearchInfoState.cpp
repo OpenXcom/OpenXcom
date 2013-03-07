@@ -153,9 +153,9 @@ void ResearchInfoState::buildUi ()
 	_btnLess->onMouseRelease((ActionHandler)&ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)&ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(50);
+	_timerMore = new Timer(250);
 	_timerMore->onTimer((StateHandler)&ResearchInfoState::more);
-	_timerLess = new Timer(50);
+	_timerLess = new Timer(250);
 	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
@@ -213,7 +213,11 @@ void ResearchInfoState::morePress(Action *action)
  */
 void ResearchInfoState::moreRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMore->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerMore->setInterval(250);
+		_timerMore->stop();
+	}
 }
 
 /**
@@ -224,6 +228,8 @@ void ResearchInfoState::moreClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		more(std::numeric_limits<int>::max());
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		more(1);
 }
 
 /**
@@ -241,7 +247,11 @@ void ResearchInfoState::lessPress(Action *action)
  */
 void ResearchInfoState::lessRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLess->stop ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerLess->setInterval(250);
+		_timerLess->stop ();
+	}
 }
 
 /**
@@ -251,14 +261,17 @@ void ResearchInfoState::lessRelease(Action *action)
 void ResearchInfoState::lessClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		less(std::numeric_limits<int>::max());
+		less(std::numeric_limits<int>::max());	
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		less(1);
 }
 
 /**
  * Add one scientist to the project if possible
  */
 void ResearchInfoState::more()
-{
+{	
+	_timerMore->setInterval(50);
 	more(1);
 }
 
@@ -285,6 +298,7 @@ void ResearchInfoState::more(int change)
  */
 void ResearchInfoState::less()
 {
+	_timerLess->setInterval(50);
 	less(1);
 }
 
