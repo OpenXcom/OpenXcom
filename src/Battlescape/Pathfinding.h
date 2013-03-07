@@ -58,7 +58,7 @@ public:
 	///Try to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false);
 	///Try to find a path between two positions.
-	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false);
+	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	///XXX please document
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
@@ -69,7 +69,7 @@ public:
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculate the shortest path.
-	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0);
+	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int TUMax = 1000);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready gives the first direction.

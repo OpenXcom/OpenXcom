@@ -25,7 +25,6 @@
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Engine/Options.h"
 #include "../Engine/Game.h"
 #include "../Battlescape/TileEngine.h"
 
@@ -74,8 +73,9 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
  * @param endPosition
  */
 
-void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget)
+void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget, int maxTUCost)
 {
+	_totalTUCost = 0;
 	// i'm DONE with these out of bounds errors.
 	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize() || endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize() || endPosition.x < 0 || endPosition.y < 0) return;
 
@@ -127,7 +127,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 					if (isBlocked(unit->getTile(), checkTile, dir[its], missileTarget) || 
 						(checkTile->getUnit() &&
 						checkTile->getUnit() != unit &&
-						checkTile->getUnit()->getVisible()))
+						checkTile->getUnit()->getVisible() &&
+						checkTile->getUnit() != missileTarget))
 						return;
 					++its;
 				}
@@ -149,9 +150,10 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	else
 	{
 		_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
+		_totalTUCost = 0;
 	}
 	// Now try through A*.
-	if (!aStarPath(startPosition, endPosition, missileTarget, sneak))
+	if (!aStarPath(startPosition, endPosition, missileTarget, sneak, maxTUCost))
 	{
 		_path.clear();
 	}
@@ -165,7 +167,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
  * @param endPosition The position we want to reach.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget, bool sneak)
+bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *missileTarget, bool sneak, int maxTUCost)
 {
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -208,7 +210,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 				continue;
 			_totalTUCost = currentNode->getTUCost(missileTarget != 0) + tuCost;
 			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > _totalTUCost)
+			if ((!nextNode->inOpenSet() || nextNode->getTUCost(missileTarget != 0) > _totalTUCost) && nextNode->getTUCost(missileTarget != 0) < maxTUCost)
 			{
 				nextNode->connect(_totalTUCost, currentNode, direction, endPosition);
 				openList.push(nextNode);
@@ -264,6 +266,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (_save->getTile(*endPosition + Position(x,y,-1))
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
 				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
+				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != missileTarget
 				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
 				&& _movementType != MT_FLY && _save->getTile(*endPosition + offset)->hasNoFloor(belowDestination))
 				return 255;
@@ -356,6 +359,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (_save->getTile(*endPosition + Position(x,y,0))
 				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit()
 				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit() != _unit
+				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit() != missileTarget
 				&& !_save->getTile(*endPosition + Position(x,y,0))->getUnit()->isOut())
 				return 255;
 
