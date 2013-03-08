@@ -71,7 +71,7 @@ public:
 	/// Get the mission's type.
         const std::string &getType() const { return _type; }
 	/// Get a race based on the game time and the racial distribution.
-        const std::string &generateRace(const int monthsPassed) const;
+        const std::string &generateRace(const unsigned monthsPassed) const;
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
 	/// Saves the alien mission data to YAML.

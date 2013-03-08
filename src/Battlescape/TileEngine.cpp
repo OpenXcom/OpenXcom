@@ -1600,7 +1600,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 		calculateFOV(unit->getPosition());
 		// look from the other side (may be need check reaction fire?)
 		std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
-		for (int i = 0; i < vunits->size(); ++i)
+		for (size_t i = 0; i < vunits->size(); ++i)
 		{
 			calculateFOV(vunits->at(i));
 		}
