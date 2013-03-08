@@ -344,7 +344,7 @@ void AggroBAIState::think(BattleAction *action)
 				PathDirection = _game->getPathfinding()->dequeuePath();
 			}
 			action->target = action->waypoints.front();
-			if( action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
+			if((int) action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
 			{
 				action->type = BA_RETHINK;
 			}
@@ -433,7 +433,6 @@ void AggroBAIState::think(BattleAction *action)
 				else
 				{
 					takeCover = true;
-					bool targetFound = false;
 					int distance = 200;
 					int size = action->actor->getArmor()->getSize();
 					int targetsize = _aggroTarget->getArmor()->getSize();
@@ -555,8 +554,6 @@ void AggroBAIState::think(BattleAction *action)
 				_unit->_hidingForTurn = true;
 				int tries = 0;
 				bool coverFound = false;
-				int x_search_sign = RNG::generate(0, 1) ? 1 : -1; // randomize the direction of the search for lack of a better heuristic
-				int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
 				int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
 				int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
 				int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
@@ -581,7 +578,6 @@ void AggroBAIState::think(BattleAction *action)
 				const int WINDOW_PENALTY = 30;
 				const int WALL_BONUS = 1;
 				const int FIRE_PENALTY = 40;
-				const int FRIEND_BONUS = 6;
 				const int SMOKE_PENALTY = 5;
 				const int OVERREACH_PENALTY = EXPOSURE_PENALTY*3;
 				const int MELEE_TUNNELVISION_BONUS = 20;

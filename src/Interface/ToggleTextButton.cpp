@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-ToggleTextButton::ToggleTextButton(int width, int height, int x, int y) : TextButton(width, height, x, y), _fakeGroup(0), _invertMid(-1)
+ToggleTextButton::ToggleTextButton(int width, int height, int x, int y) : TextButton(width, height, x, y), _invertMid(-1), _fakeGroup(0)
 {
     _isPressed = false;
     TextButton::setGroup(&_fakeGroup);

@@ -1441,7 +1441,7 @@ bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
 }
-const bool SavedBattleGame::getStrafeSetting() const
+bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
 }

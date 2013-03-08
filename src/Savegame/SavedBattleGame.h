@@ -223,7 +223,7 @@ public:
 	std::vector<BattleUnit*> *getFallingUnits();
 	void setUnitsFalling(bool fall);
 	bool getUnitsFalling() const;
-	const bool getStrafeSetting() const;
+	bool getStrafeSetting() const;
 
 	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);

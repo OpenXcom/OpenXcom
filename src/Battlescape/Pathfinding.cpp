@@ -104,7 +104,6 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);
 	}
-	Tile *tileBelow = _save->getTile(endPosition + Position(0,0,-1));
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
 	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
 	{
