@@ -2318,7 +2318,7 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 	{
 		if ((*i) == draggingItem) continue;
 		weight += (*i)->getRules()->getWeight();
-		if (0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
+		if ((*i)->getAmmoItem()->getRules()->getClipSize() != -1 && 0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight(); // Hopefully this vaguely resembles checking for if an item uses itself as ammo.
 	}
 	return weight;
 }
