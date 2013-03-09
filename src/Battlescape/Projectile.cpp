@@ -37,6 +37,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "../Engine/Game.h"
 
 namespace OpenXcom
 {
@@ -127,7 +128,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		originVoxel.z += 12;
 	}
 
-	if (_action.type == BA_LAUNCH)
+	if (_action.type == BA_LAUNCH || Game::getCtrlKeyDown())
 	{
 		// target nothing, targets the middle of the tile
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
@@ -330,6 +331,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
+	maxRange = _action.type == BA_HIT?32:maxRange; // 2 tiles (allow for large units)
 
 	/*
 	This modifies the accuracy based on the distance from the target. The accuracy decreases linearly (2% per tile or 0.125% per voxel) when shooting beyond the limit of the firing mode:
@@ -466,4 +468,8 @@ void Projectile::skipTrajectory()
 	_position = _trajectory.size() - 2;
 }
 
+BattleActionType Projectile::getType() const
+{
+	return _action.type;
+}
 }

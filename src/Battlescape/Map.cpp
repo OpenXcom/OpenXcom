@@ -155,7 +155,7 @@ void Map::draw()
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
-		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
+		if ((_save->getSide() == FACTION_PLAYER || (t && t->getVisible())) && _projectile->getType() != BA_HIT)
 		{
 			projectileInFOV = true;
 		}
@@ -405,8 +405,8 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							if ((tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
-								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-								wallShade = 0;
+								 && tile->isDiscovered(0))
+								wallShade = tile->getShade();
 							else
 								wallShade = tileShade;
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(), wallShade, false);
@@ -416,8 +416,8 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							if ((tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-								wallShade = 0;
+								 && tile->isDiscovered(1))
+								wallShade = tile->getShade();
 							else
 								wallShade = tileShade;
 							if (tile->getMapData(MapData::O_WESTWALL))

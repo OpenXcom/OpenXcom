@@ -44,13 +44,15 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false)
+SavedBattleGame::SavedBattleGame() : _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false), _sneaky(false), _traceAI(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
 	_dragTimeTolerance = Options::getInt("battleScrollDragTimeTolerance");
 	_dragPixelTolerance = Options::getInt("battleScrollDragPixelTolerance");
 	_strafeEnabled = Options::getBool("strafe");
+	_sneaky = Options::getBool("sneakyAI");
+	_traceAI = Options::getBool("traceAI");
 }
 
 /**
@@ -1376,8 +1378,8 @@ std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
 int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 {
 	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i) // cheating! perhaps only consider visible units here
-	{
+	for (std::vector<BattleUnit*>::const_iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i) // cheating! perhaps only consider visible units here
+	{																															// k
 		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
 		if (find != (*i)->getVisibleUnits()->end())
 			++spotting;
@@ -1444,6 +1446,14 @@ bool SavedBattleGame::getUnitsFalling() const
 const bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
+}
+const bool SavedBattleGame::getSneakySetting() const
+{
+	return _sneaky;
+}
+const bool SavedBattleGame::getTraceSetting() const
+{
+	return _traceAI;
 }
 
 }

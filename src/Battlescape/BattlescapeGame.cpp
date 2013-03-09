@@ -177,6 +177,9 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
+	_AIActionCounter++;
+	if (unit->isOut())
+		return;
 	std::wstringstream ss;
     
     _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
@@ -190,7 +193,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
         unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 	}
-	_AIActionCounter++;
 	if (_AIActionCounter == 1 && _playedAggroSound)
 	{
 		_playedAggroSound = false;
@@ -241,11 +243,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
- 		_save->getPathfinding()->calculate(action.actor, action.target);
+		_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
 
         Position finalFacing(0, 0, INT_MAX);
         bool usePathfinding = false;
 
+		/*
         if (unit->_hidingForTurn && _AIActionCounter > 2)
         {
             if (_save->getTile(action.target) && _save->getTile(action.target)->closestSoldierDSqr != -1)
@@ -258,6 +261,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
                 usePathfinding = true;
             }
         }
+		*/
 
 		statePushBack(new UnitWalkBState(this, action, finalFacing, usePathfinding));
 	}
