@@ -70,7 +70,7 @@ public:
 	/// Clears the screen.
 	void clear();
 	/// Sets the screen's 8bpp palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256, bool immediately = false);
 	/// Gets the screen's 8bpp palette.
 	SDL_Color *getPalette() const;
 	/// Gets the screen's width.
