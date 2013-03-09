@@ -43,7 +43,7 @@ public:
 	/// Loads music from a chunk of memory.
 	void load(const void *data, size_t size);
 	/// Plays the music.
-	void play() const;
+	void play(int loop = -1) const;
 };
 
 }

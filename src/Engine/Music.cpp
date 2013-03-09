@@ -71,12 +71,12 @@ void Music::load(const void *data, size_t size)
 /**
  * Plays the contained music track.
  */
-void Music::play() const
+void Music::play(int loop) const
 {
 	if (!Options::getBool("mute"))
 	{
 		Mix_HaltMusic();
-		if (_music != 0 && Mix_PlayMusic(_music, -1) == -1)
+		if (_music != 0 && Mix_PlayMusic(_music, loop) == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
 		}

@@ -549,4 +549,17 @@ bool Game::getShiftKeyDown()
 {
 	return _shiftKeyDown;
 }
+
+
+/**
+ * @brief Returns whether current state is *state
+ * @param state The state to test against the stack state
+ */
+ const bool Game::isState(State *state) const
+{
+	return _states.size() > 0 && _states.back() == state;
+}
+
+
+
 }
