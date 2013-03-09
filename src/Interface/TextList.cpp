@@ -489,52 +489,6 @@ int TextList::getSelectedRow() const
 }
 
 /**
- * Sets the currently selected row if the text
- * list is selectable.
- * @param The new row to be selected.
- */
-void TextList::setSelectedRow(int value)
-{
-	if (value >= 0 && value < _texts.size())
-	{
-		_selRow = value;
-
-		if (_selRow >= _visibleRows + _scroll)
-		{
-			scrollDown(false);
-		}
-		if (_selRow < _scroll)
-		{
-			scrollUp(false);
-		}
-
-		updateSelector();
-	}
-}
-
-/**
- * Update the highlighted row of the text list.
- */
-void TextList::updateSelector()
-{
-	int h = _font->getHeight() + _font->getSpacing();
-	if (_selRow < _texts.size())
-	{
-		_selector->setY(getY() + (_selRow - _scroll) * h);
-		_selector->copy(_bg);
-		if (_contrast)
-			_selector->offset(-10, 1);
-		else
-			_selector->offset(-10, Palette::backPos);
-		_selector->setVisible(true);
-	}
-	else
-	{
-		_selector->setVisible(false);
-	}
-}
-
-/**
  * Changes the surface used to draw the background of the selector.
  * @param bg New background.
  */
@@ -894,7 +848,20 @@ void TextList::mouseOver(Action *action, State *state)
 		int h = _font->getHeight() + _font->getSpacing();
 		_selRow = _scroll + (int)floor(action->getRelativeYMouse() / (h * action->getYScale()));
 
-		updateSelector();
+		if (_selRow < _texts.size())
+		{
+			_selector->setY(getY() + (_selRow - _scroll) * h);
+			_selector->copy(_bg);
+			if (_contrast)
+				_selector->offset(-10, 1);
+			else
+				_selector->offset(-10, Palette::backPos);
+			_selector->setVisible(true);
+		}
+		else
+		{
+			_selector->setVisible(false);
+		}
 	}
 
 	InteractiveSurface::mouseOver(action, state);

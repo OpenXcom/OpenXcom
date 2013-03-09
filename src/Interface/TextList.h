@@ -120,10 +120,6 @@ public:
 	void setBackground(Surface *bg);
 	/// Gets the selected row in the list.
 	int getSelectedRow() const;
-	/// Sets the selected row in the list to a new one.
-	void setSelectedRow(int value);
-	/// Updates the selected row of the text list. Called by setSelectedRow() and mouseOver().
-	void updateSelector();
 	/// Sets the margin of the text list.
 	void setMargin(int margin);
 	/// Gets the margin of the text list.
