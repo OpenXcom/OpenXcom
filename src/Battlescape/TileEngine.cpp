@@ -946,7 +946,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			(*i)->getReactionScore() > highestReactionScore &&
 			(*i)->getMainHandWeapon() &&
 			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-			validMeleeRange((*i), unit)) ||
+			validMeleeRange((*i), unit, (*i)->getDirection())) ||
 			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
 			(*i)->getMainHandWeapon()->getRules()->getTUSnap())))
 		{
@@ -2240,11 +2240,12 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  * Validate the melee range between two units.
  * @param *unit the attacking unit.
  * @param *target the unit we want to attack.
+ * @param dir direction to check, -1 for all.
  * @return true when range is valid.
  */
-bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
+bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir)
 {
-	return validMeleeRange(unit->getPosition(), -1, unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), dir, unit->getArmor()->getSize(), unit->getHeight(), target);
 }
 
 /*
@@ -2269,16 +2270,24 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 			{
 				for (int y = 0; y <= size-1; ++y)
 				{
-					Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-					if (tile && _save->getTile(pos))
-					{
-						if (height - _save->getTile(pos)->getTerrainLevel() > 24)
-							tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
-                        if (!tile) continue; // I blame Reapers.
+					Tile *origin (_save->getTile(Position(pos + Position(x, y, 0))));
+					Tile *belowOrigin (_save->getTile(Position(pos + Position(x, y, -1))));
 
-						if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
+					if (origin->hasNoFloor(belowOrigin))
+						origin = _save->getTile(Position(pos + Position(x, y, -1)));
+
+					Tile *targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
+					if (targetTile && origin)
+					{
+						if (height - origin->getTerrainLevel() > 24)
 						{
-							if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, dir, target))
+							targetTile = _save->getTile(targetTile->getPosition() + Position(0, 0, 1));
+						}
+                        if (!targetTile) continue; // I blame Reapers.
+
+						if (targetTile->getUnit() && ((target != 0 && targetTile->getUnit() == target ) || (target == 0)))
+						{
+							if (!_save->getPathfinding()->isBlocked(origin, targetTile, dir, target))
 								return true;
 						}
 					}
@@ -2293,16 +2302,20 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 		{
 			for (int y = 0; y <= size-1; ++y)
 			{
-				Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-				if (tile && _save->getTile(pos))
+				Tile *origin (_save->getTile(Position(pos + Position(x, y, 0))));
+				Tile *targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
+				if (targetTile && _save->getTile(pos))
 				{
 					if (height - _save->getTile(pos)->getTerrainLevel() > 24)
-						tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
-                    if (!tile) continue; 
-
-					if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
 					{
-						if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, direction, target))
+						origin = _save->getTile(origin->getPosition() + Position(0, 0, 1));
+						targetTile = _save->getTile(targetTile->getPosition() + Position(0, 0, 1));
+					}
+                   if (!targetTile || !origin) continue;
+
+					if (targetTile->getUnit() && ((target != 0 && targetTile->getUnit() == target ) || (target == 0)))
+					{
+						if (!_save->getPathfinding()->isBlocked(origin, targetTile, direction, target))
 							return true;
 					}
 				}

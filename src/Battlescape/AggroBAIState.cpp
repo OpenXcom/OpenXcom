@@ -295,10 +295,17 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 void AggroBAIState::meleeAction(BattleAction *action)
 {
 	_charge = false;
-	_aggroTarget = 0;
+	if (_aggroTarget != 0)
+	{
+		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirection()))
+		{
+			meleeAttack(action);
+			return;
+		}
+	}
 	int attackCost = action->actor->getActionTUs(BA_HIT, _unit->getMainHandWeapon());
 	int chargeReserve = _unit->getTimeUnits() - attackCost;
-	int distance = chargeReserve / 4;
+	int distance = (chargeReserve / 4) + 1;
 	for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 	{
 		int newDistance = _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition());
@@ -318,17 +325,9 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	}
 	if (_aggroTarget != 0)
 	{
-		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget))
+		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, -1))
 		{
-			// we're using melee, so CHAAAAAAAARGE!!!!!
-			_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
-			while (_unit->getStatus() == STATUS_TURNING)
-				_unit->turn();
-			if (_traceAI) { Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId(); }
-			action->target = _aggroTarget->getPosition();
-			action->type = BA_HIT;
-			_charge = true;
-			return;
+			meleeAttack(action);
 		}
 	}
 	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "AggroBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << "at: "  << action->target.x << "," << action->target.y << "," << _aggroTarget->getId(); }
@@ -834,11 +833,6 @@ void AggroBAIState::stalkingAction(BattleAction *action)
 */
 bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 {
-	if (_charge)
-	{
-		return false;
-	}
-
 	if (!_aggroTarget)
 	{
 		selectNearestTarget();
@@ -952,5 +946,14 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 	}
 	return returnValue;
 }
-
+void AggroBAIState::meleeAttack(BattleAction *action)
+{
+	_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
+	while (_unit->getStatus() == STATUS_TURNING)
+		_unit->turn();
+	if (_traceAI) { Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId(); }
+	action->target = _aggroTarget->getPosition();
+	action->type = BA_HIT;
+	_charge = true;
+}
 }

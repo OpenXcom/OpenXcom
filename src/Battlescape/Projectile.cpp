@@ -331,6 +331,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
+	maxRange = _action.type == BA_HIT?32:maxRange; // 2 tiles (allow for large units)
 
 	/*
 	This modifies the accuracy based on the distance from the target. The accuracy decreases linearly (2% per tile or 0.125% per voxel) when shooting beyond the limit of the firing mode:

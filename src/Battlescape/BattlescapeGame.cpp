@@ -248,6 +248,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
         Position finalFacing(0, 0, INT_MAX);
         bool usePathfinding = false;
 
+		/*
         if (unit->_hidingForTurn && _AIActionCounter > 2)
         {
             if (_save->getTile(action.target) && _save->getTile(action.target)->closestSoldierDSqr != -1)
@@ -260,6 +261,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
                 usePathfinding = true;
             }
         }
+		*/
 
 		statePushBack(new UnitWalkBState(this, action, finalFacing, usePathfinding));
 	}

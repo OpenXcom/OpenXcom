@@ -87,6 +87,7 @@ public:
 	void selectNearestTarget();
 	/// select the nearest moveable relative to a target
 	bool selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs);
+	void meleeAttack(BattleAction *action);
 };
 
 }
