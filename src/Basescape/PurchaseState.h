@@ -80,6 +80,8 @@ public:
 	void lstItemsRightArrowClick(Action *action);
 	/// Handler for pressing-down a mouse-button in the list.
 	void lstItemsMousePress(Action *action);
+	/// Handler for pressing a key down.
+	void lstItemsKeyPress(Action *action);
 	/// Increases the quantity of an item by one.
 	void increase();
 	/// Increases the quantity of an item by the given value.

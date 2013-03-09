@@ -133,6 +133,8 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
+	_lstItems->onKeyboardPress((ActionHandler)&PurchaseState::lstItemsKeyPress);
+	_lstItems->focus();
 	if (allowChangeListValuesByMouseWheel) _lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
 	_qtys.push_back(0);
@@ -364,6 +366,32 @@ void PurchaseState::lstItemsMousePress(Action *action)
 		_sel = _lstItems->getSelectedRow();
 		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
+	}
+}
+
+/**
+ * Handles the keyboard.
+ * @param action Pointer to an action.
+ */
+void PurchaseState::lstItemsKeyPress(Action *action)
+{
+	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoUp"))
+	{
+		_lstItems->setSelectedRow(_lstItems->getSelectedRow() - 1);
+	}
+	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoDown"))
+	{
+		_lstItems->setSelectedRow(_lstItems->getSelectedRow() + 1);
+	}
+	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoLeft"))
+	{
+		_sel = _lstItems->getSelectedRow();
+		decrease();
+	}
+	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoRight"))
+	{
+		_sel = _lstItems->getSelectedRow();
+		increase();
 	}
 }
 
