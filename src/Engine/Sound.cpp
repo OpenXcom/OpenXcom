@@ -71,9 +71,9 @@ void Sound::load(const void *data, unsigned int size)
 /**
  * Plays the contained sound effect.
  */
-void Sound::play() const
+void Sound::play(int channel) const
 {
-	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(-1, _sound, 0) == -1)
+	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
 	{
 		Log(LOG_WARNING) << Mix_GetError();
 	}

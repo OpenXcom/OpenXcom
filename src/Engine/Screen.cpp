@@ -155,7 +155,7 @@ void Screen::flip()
 	{
 		if (_screen->format->BitsPerPixel == 8 && SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
-			Log(LOG_ERROR) << "Display palette doesn't match requested palette";
+			Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 		}
 		_numColors = 0;
 		_pushPalette = false;
@@ -183,7 +183,7 @@ void Screen::clear()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool immediately)
 {
 	if (_numColors && (_numColors != ncolors) && (_firstColor != firstcolor))
 	{
@@ -202,10 +202,10 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 	_surface->setPalette(colors, firstcolor, ncolors);
 
 	// defer actual update of screen until SDL_Flip()
-	//if (SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
-	//{
-	//	Log(LOG_ERROR) << "Display palette doesn't match requested palette";
-	//}
+	if (immediately && SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+	{
+		Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
+	}
 
 	// Sanity check
 	/*
@@ -268,7 +268,8 @@ void Screen::setResolution(int width, int height)
 		_surface->getSurface()->h != BASE_HEIGHT))) // don't reallocate _surface if not necessary, it's a waste of CPU cycles
 	{
 		if (_surface) delete _surface;
-		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, _bpp);
+		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, Screen::isHQXEnabled() ? 32 : 8); // only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
+		if (_surface->getSurface()->format->BitsPerPixel == 8) _surface->setPalette(deferredPalette);
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
