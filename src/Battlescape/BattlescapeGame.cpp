@@ -177,6 +177,9 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
+	_AIActionCounter++;
+	if (unit->isOut())
+		return;
 	std::wstringstream ss;
     
     _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
@@ -190,7 +193,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
         unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 	}
-	_AIActionCounter++;
 	if (_AIActionCounter == 1 && _playedAggroSound)
 	{
 		_playedAggroSound = false;
