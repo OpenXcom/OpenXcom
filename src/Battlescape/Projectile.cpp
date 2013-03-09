@@ -467,4 +467,8 @@ void Projectile::skipTrajectory()
 	_position = _trajectory.size() - 2;
 }
 
+BattleActionType Projectile::getType() const
+{
+	return _action.type;
+}
 }

@@ -155,7 +155,7 @@ void Map::draw()
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
-		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
+		if ((_save->getSide() == FACTION_PLAYER || (t && t->getVisible())) && _projectile->getType() != BA_HIT)
 		{
 			projectileInFOV = true;
 		}
