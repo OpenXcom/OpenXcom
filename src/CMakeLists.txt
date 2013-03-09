@@ -344,6 +344,8 @@ set ( interface_src
   Interface/TextList.cpp
   Interface/Cursor.h
   Interface/Cursor.cpp
+  Interface/ToggleTextButton.h
+  Interface/ToggleTextButton.cpp
 )
 
 set ( menu_src
