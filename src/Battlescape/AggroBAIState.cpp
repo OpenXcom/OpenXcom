@@ -529,7 +529,7 @@ void AggroBAIState::projectileAction(BattleAction *action)
 				{
 					action->type = BA_SNAPSHOT;
 				}
-				if (action->actor->getActionTUs(action->type, action->weapon) > action->actor->getTimeUnits());
+				if (action->actor->getActionTUs(action->type, action->weapon) > action->actor->getTimeUnits())
 					action->type = BA_RETHINK;
 			}
 		}
