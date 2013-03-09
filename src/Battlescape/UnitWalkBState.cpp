@@ -64,6 +64,7 @@ void UnitWalkBState::init()
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
+	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z << "," << " to " << _target.x << "," << _target.y << "," << _target.z;}
 }
 
 void UnitWalkBState::think()
@@ -271,7 +272,7 @@ void UnitWalkBState::think()
 			}
 
 			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 			if (_falling)
 			{
 				tu = 0;
@@ -387,7 +388,7 @@ void UnitWalkBState::think()
 		// make sure the unit sprites are up to date
 		if (onScreen)
 			_parent->getMap()->cacheUnit(_unit);
-		if (unitspotted && !_action.desperate && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0 && !_falling)
+		if (unitspotted && !(_action.desperate || _unit->getCharging()) && !_falling)
 		{
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...

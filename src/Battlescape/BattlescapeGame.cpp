@@ -243,7 +243,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
- 		_save->getPathfinding()->calculate(action.actor, action.target);
+		_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
 
         Position finalFacing(0, 0, INT_MAX);
         bool usePathfinding = false;

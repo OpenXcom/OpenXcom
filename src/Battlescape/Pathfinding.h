@@ -56,7 +56,7 @@ private:
 	int _totalTUCost;
 public:
 	///Try to find a straight line path between two positions.
-	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false);
+	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	///Try to find a path between two positions.
 	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	///XXX please document
@@ -69,7 +69,7 @@ public:
 	/// Cleans up the Pathfinding.
 	~Pathfinding();
 	/// Calculate the shortest path.
-	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int TUMax = 1000);
+	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
 	/// Check whether a path is ready gives the first direction.
@@ -77,7 +77,7 @@ public:
 	/// Dequeue a direction.
 	int dequeuePath();
 	/// Get's the TU cost to move from 1 tile to the other.
-	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit, BattleUnit *missileTarget);
+	int getTUCost(const Position &startPosition, const int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile);
 	/// Abort the current path.
 	void abortPath();
 	bool getStrafeMove() const;
