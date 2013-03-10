@@ -605,29 +605,30 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	Tile *tile = 0;
 				
 	bool traceSpammed = false;
+	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
 				
 	// weights of various factors in choosing a tile to which to withdraw
-	const int EXPOSURE_PENALTY = 20;
+	const int EXPOSURE_PENALTY = civ ? 20 : -20;
 	const int WINDOW_PENALTY = 30;
 	const int WALL_BONUS = 1;
 	const int FIRE_PENALTY = 40;
-	const int FRIEND_BONUS = 6;
 	const int SMOKE_PENALTY = 5;
-	const int OVERREACH_PENALTY = EXPOSURE_PENALTY*3;
+	const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*3;
 	const int MELEE_TUNNELVISION_BONUS = 200;
 	const int DIRECT_PATH_PENALTY = 10;
 	const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
 	const int BASE_DESPERATE_SUCCESS = 110;
 	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
-	const int MAX_ALLY_DISTANCE = 25; // distance^2 actually
-	const int MIN_ALLY_DISTANCE = 4; // don't clump up too much and get grenaded, OK?
-	const int ALLY_BONUS = 4;
-	const int SOLDIER_PROXIMITY_BASE_PENALTY = 100; // this is divided by distance^2 to nearest soldier
+	const int MAX_ALLY_DISTANCE = civ ? 1000 : 25; // distance^2 actually
+	const int MIN_ALLY_DISTANCE = civ ? 0 : 4; // don't clump up too much and get grenaded, OK?
+	const int ALLY_BONUS = civ ? -50 : 4;
+	const int SOLDIER_PROXIMITY_BASE_PENALTY = civ ? 0 : 100; // this is divided by distance^2 to nearest soldier
 
 	while (tries < 150 && !coverFound)
 	{
 		tries++;
+		if (civ) tries += 9; // civilians shouldn't have any tactical sense anyway so save some CPU cycles here
 		action->target = _unit->getPosition() + runOffset; // start looking in a direction away from the enemy
 					
 		if (!_game->getTile(action->target))

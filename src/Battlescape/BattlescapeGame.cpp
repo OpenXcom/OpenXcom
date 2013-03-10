@@ -208,7 +208,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
 		|| (_AIActionCounter > 2)
-        || (unit->getVisibleUnits()->size() != 0))
+        || (unit->getVisibleUnits()->size() != 0)
+		|| (unit->_hidingForTurn))
 	{
 		if (aggro == 0)
 		{
