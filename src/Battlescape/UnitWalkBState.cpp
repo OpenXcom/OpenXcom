@@ -64,6 +64,7 @@ void UnitWalkBState::init()
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
+	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z << "," << " to " << _target.x << "," << _target.y << "," << _target.z;}
 }
 
 void UnitWalkBState::think()
@@ -95,9 +96,10 @@ void UnitWalkBState::think()
 
 		// unit moved from one tile to the other, update the tiles
 		if (_unit->getPosition() != _unit->getLastPosition())
-		{	
+		{
 			int size = _unit->getArmor()->getSize() - 1;
 			bool largeCheck = true;
+			bool visibilityFlag = false;
 			for (int x = size; x >= 0; x--)
 			{
 				for (int y = size; y >= 0; y--)
@@ -113,8 +115,13 @@ void UnitWalkBState::think()
 				for (int y = size; y >= 0; y--)
 				{
 					_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(_unit, _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
+					if (_parent->getSave()->getTile(_unit->getPosition())->getVisible())
+						visibilityFlag = true;
 				}
 			}
+
+			_unit->setVisible(visibilityFlag);
+
 			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY && _unit->getWalkingPhase() == 0;
 			
 			if (_falling)
@@ -236,7 +243,7 @@ void UnitWalkBState::think()
 		// check if we did spot new units
 		if (unitspotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
 		{
-			if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Uh-oh! Company!"; }			
+			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }			
 			_unit->_hidingForTurn = false; // clearly we're not hidden now
 			_parent->getMap()->cacheUnit(_unit);
 			_pf->abortPath();
@@ -265,7 +272,7 @@ void UnitWalkBState::think()
 			}
 
 			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0); // gets tu cost, but also gets the destination position.
+			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 			if (_falling)
 			{
 				tu = 0;
@@ -381,9 +388,9 @@ void UnitWalkBState::think()
 		// make sure the unit sprites are up to date
 		if (onScreen)
 			_parent->getMap()->cacheUnit(_unit);
-		if (unitspotted && !_action.desperate && _unit->getStatus() != STATUS_PANICKING && _unit->getCharging() == 0 && !_falling)
+		if (unitspotted && !(_action.desperate || _unit->getCharging()) && !_falling)
 		{
-			if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
+			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
 			_parent->getMap()->cacheUnit(_unit);
@@ -411,7 +418,7 @@ void UnitWalkBState::postPathProcedures()
 		_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
 		while (_unit->getStatus() == STATUS_TURNING)
 			_unit->turn();
-		if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging()))
+		if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
 		{
 			_action.target = _action.actor->getCharging()->getPosition();
 			_action.weapon = _action.actor->getMainHandWeapon();
@@ -425,7 +432,7 @@ void UnitWalkBState::postPathProcedures()
         {        
             // if we can't see the target, try to face where they might come from        
             _pf->abortPath();
-            _pf->calculate(_unit, _finalFacing);
+            _pf->calculate(_unit, _finalFacing, _parent->getSave()->getTile(_finalFacing)->getUnit());
 
             if (_pf->getStartDirection() != -1)
             {

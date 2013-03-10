@@ -287,7 +287,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
 						{
 							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
-								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE)
+								|| unit->getFaction() == FACTION_NEUTRAL)
 							{
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
@@ -512,6 +513,12 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		_save->getTiles()[i->first]->setUnit(i->second);
 	}
 	
+	if (tile->soldiersVisible == 0)
+	{
+		tile->closestSoldierDSqr = -1; 
+		tile->closestSoldierPos = Position(INT_MAX, INT_MAX, INT_MAX);
+	}
+	
 	return true;
 }
 
@@ -542,10 +549,11 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 {
 	// if the tile is too dark, we can't see it
-	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS || !tile->getUnit())
 	{
 		return false;
 	}
+	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) return true; //friendlies are always seen
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 
@@ -587,6 +595,85 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	return unitSeen;
 }
 
+
+/**
+ * Check for how exposed unit for another unit
+ * @param originVoxel voxel of trace origin (eye or gun's barrel)
+ * @param tile the tile to check for
+ * @param excludeUnit is self (not to hit self)
+ * @return degree of exposure
+ */
+int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit)
+{
+	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
+	Position scanVoxel;
+	std::vector<Position> _trajectory;
+	BattleUnit *otherUnit = tile->getUnit();
+	if (otherUnit == 0) return 0; //no unit in this tile, even if it elevated and appearing in it.
+	if (otherUnit == excludeUnit) return 0; //skip self
+
+	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
+	if (otherUnit)
+		 targetMinHeight += otherUnit->getFloatHeight();
+
+	// if there is an other unit on target tile, we assume we want to check against this unit's height
+	int heightRange;
+ 
+	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
+	if (otherUnit->getArmor()->getSize() > 1)
+	{
+		unitRadius = 3;
+	}
+
+	// vector manipulation to make scan work in view-space
+	Position relPos = targetVoxel - *originVoxel;
+	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
+	int relX = floor(((float)relPos.y)*normal+0.5);
+	int relY = floor(((float)-relPos.x)*normal+0.5);
+
+	int sliceTargets[10]={0,0, relX,relY, -relX,-relY};
+ 
+	if (!otherUnit->isOut())
+	{
+		heightRange = otherUnit->getHeight();
+	}
+	else
+	{
+		heightRange = 12;
+	}
+
+
+	int targetMaxHeight=targetMinHeight+heightRange;
+	// scan ray from top to bottom  plus different parts of target cylinder
+	int total=0;
+	int visible=0;
+	for (int i = heightRange; i >=0; i-=2)
+	{
+		++total;
+		scanVoxel.z=targetMinHeight+i;
+		for (int j = 0; j < 2; ++j)
+		{
+			scanVoxel.x=targetVoxel.x + sliceTargets[j*2];
+			scanVoxel.y=targetVoxel.y + sliceTargets[j*2+1];
+			_trajectory.clear();
+			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true);
+			if (test == 4)
+			{
+				//voxel of hit must be inside of scanned box
+				if (_trajectory.at(0).x/16 == scanVoxel.x/16 &&
+					_trajectory.at(0).y/16 == scanVoxel.y/16 &&
+					_trajectory.at(0).z >= targetMinHeight &&
+					_trajectory.at(0).z <= targetMaxHeight)
+				{
+					++visible;
+				}
+			}
+		}
+	}
+	return (visible*100)/total;
+}
+
+
 /**
  * Check for an another unit is available for targeting and what particular voxel
  * @param originVoxel voxel of trace origin (eye or gun's barrel)
@@ -600,22 +687,31 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
 	BattleUnit *otherUnit = tile->getUnit();
+	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+	if (otherUnit == excludeUnit) return false; //skip self
+
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
 	if (otherUnit)
 		 targetMinHeight += otherUnit->getFloatHeight();
+
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
  
-	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
-	if (otherUnit == excludeUnit) return false; //skip self
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
 	if (otherUnit->getArmor()->getSize() > 1)
 	{
 		unitRadius = 3;
 	}
-	int sliceTargets[10]={0,0, 0,unitRadius, 0,-unitRadius, unitRadius,0, -unitRadius,0};
+
+	// vector manipulation to make scan work in view-space
+	Position relPos = targetVoxel - *originVoxel;
+	float normal = unitRadius/sqrt((float)(relPos.x*relPos.x + relPos.y*relPos.y));
+	int relX = floor(((float)relPos.y)*normal+0.5);
+	int relY = floor(((float)-relPos.x)*normal+0.5);
+
+	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relX,-relY, -relX,relY};
  
 	if (!otherUnit->isOut())
 	{
@@ -638,6 +734,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 		scanVoxel->z=targetCenterHeight+heightFromCenter[i];
 		for (int j = 0; j < 5; ++j)
 		{
+			if (i < (heightRange-1) && j>2) break; //skip unnecessary checks
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
@@ -813,7 +910,7 @@ void TileEngine::calculateFOV(const Position &position)
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
 {
-	double highestReactionScore = 0;
+	double highestReactionScore = unit->getReactionScore();
 	action->actor = 0;
 
 	// reaction fire only triggered when the actioning unit is of the currently playing side
@@ -849,37 +946,47 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 && (*i)->getFaction() != _save->getSide() && !(*i)->isOut())
+		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 &&
+			(*i)->getFaction() != _save->getSide() &&
+			!(*i)->isOut() &&
+			(*i)->getReactionScore() > highestReactionScore &&
+			(*i)->getMainHandWeapon() &&
+			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+			validMeleeRange((*i), unit, (*i)->getDirection())) ||
+			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
+			(*i)->getMainHandWeapon()->getRules()->getTUSnap())))
 		{
 			if (recalculateFOV)
 			{
 				calculateFOV(*i);
 			}
+			Position originVoxel = getSightOriginVoxel(*i);
+			Position scanVoxel;
 			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 			{
-				if ((*j) == unit && (*i)->getReactionScore() > highestReactionScore && (*i)->getMainHandWeapon())
+				if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
 				{
-					if (((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE && validMeleeRange((*i), unit)) ||
-						(*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE)
-					{
-						// I see you!
-						highestReactionScore = (*i)->getReactionScore();
-						action->actor = (*i);
-					}
+					// I see you!
+					highestReactionScore = (*i)->getReactionScore();
+					action->actor = (*i);
 				}
 			}
 		}
 	}
 
-	if (action->actor && highestReactionScore > unit->getReactionScore() &&
-		(action->actor->getMainHandWeapon()->getRules()->getTUSnap() ||
-		(action->actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE)))
+	if (action->actor)
 	{
 		action->actor->addReactionExp();
-		action->type = BA_SNAPSHOT;
-		action->target = unit->getPosition();
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
+
+		if (!action->weapon->getRules()->getTUAuto() || RNG::generate(0,3) < 3)
+			action->type = BA_SNAPSHOT;
+		else
+			action->type = BA_AUTOSHOT;
+
+		action->target = unit->getPosition();
+
 		int tu = action->actor->getActionTUs(action->type, action->weapon);
 		action->TU = tu;
 		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && action->actor->getTimeUnits() >= tu)
@@ -1911,6 +2018,13 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 	{
 		return 5;
 	}
+	
+	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
+	{		
+		Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
+		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
+			return 0;
+	}
 
 	// first we check terrain voxel data, not to allow 2x2 units stick through walls
 	for (int i=0; i< 4; ++i)
@@ -2132,11 +2246,12 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  * Validate the melee range between two units.
  * @param *unit the attacking unit.
  * @param *target the unit we want to attack.
+ * @param dir direction to check, -1 for all.
  * @return true when range is valid.
  */
-bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target)
+bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir)
 {
-	return validMeleeRange(unit->getPosition(), -1, unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), dir, unit->getArmor()->getSize(), unit->getHeight(), target);
 }
 
 /*
@@ -2161,17 +2276,23 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 			{
 				for (int y = 0; y <= size-1; ++y)
 				{
-					Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-					if (tile && _save->getTile(pos))
+					Tile *origin (_save->getTile(Position(pos + Position(x, y, 0))));
+					Tile *targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
+					if (targetTile && origin)
 					{
-						if (height - _save->getTile(pos)->getTerrainLevel() > 24)
-							tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
-                        if (!tile) continue; // I blame Reapers.
-
-						if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
+						if (_save->getPathfinding()->isOnStairs(origin->getPosition(), targetTile->getPosition()))
 						{
-							if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, dir, target))
+							targetTile = _save->getTile(targetTile->getPosition() + Position(0,0,1));
+						}
+						if (!targetTile)
+							continue;
+						if (targetTile->getUnit())
+						{
+							if (!_save->getPathfinding()->isBlocked(origin, targetTile, dir, targetTile->getUnit())
+								&& (target == 0 || targetTile->getUnit() == target))
+							{
 								return true;
+							}
 						}
 					}
 				}
@@ -2185,17 +2306,24 @@ bool TileEngine::validMeleeRange(Position pos, int direction, int size, int heig
 		{
 			for (int y = 0; y <= size-1; ++y)
 			{
-				Tile * tile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-				if (tile && _save->getTile(pos))
+				Tile *origin (_save->getTile(Position(pos + Position(x, y, 0))));
+				Tile *targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
+				
+				if (targetTile && origin)
 				{
-					if (height - _save->getTile(pos)->getTerrainLevel() > 24)
-						tile = _save->getTile(tile->getPosition() + Position(0, 0, 1));
-                    if (!tile) continue; 
-
-					if (tile->getUnit() && ((target != 0 && tile->getUnit() == target ) || (target == 0)))
+					if (_save->getPathfinding()->isOnStairs(origin->getPosition(), targetTile->getPosition()))
 					{
-						if (!_save->getPathfinding()->isBlocked(_save->getTile(pos + Position(x, y, 0)), tile, direction, target))
+						targetTile = _save->getTile(targetTile->getPosition() + Position(0,0,1));
+					}
+					if (!targetTile)
+						continue;
+					if (targetTile->getUnit())
+					{
+						if (!_save->getPathfinding()->isBlocked(origin, targetTile, direction, targetTile->getUnit())
+							&& (target == 0 || targetTile->getUnit() == target))
+						{
 							return true;
+						}
 					}
 				}
 			}

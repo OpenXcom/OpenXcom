@@ -717,7 +717,7 @@ int RuleItem::getTUUse() const
  */
 int RuleItem::getExplosionRadius() const
 {
-	int radius = 5;
+	int radius = 0;
 	if (_blastRadius == -1)
 	{
 		if (_damageType == DT_IN)
