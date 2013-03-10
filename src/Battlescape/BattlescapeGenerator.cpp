@@ -881,20 +881,33 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 				placed = true;
 			}
 		}
-		else if (!unit->getItem("STR_BELT"))
-		{
-			bi->moveToOwner(unit);
-			bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-			placed = true;
+		else 
+		{	
+			for (int i = 0; i != 4; ++i)
+			{
+				if (!unit->getItem("STR_BELT"), i)
+				{
+					bi->moveToOwner(unit);
+					bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+					bi->setSlotX(i);
+					placed = true;
+					break;
+				}
+			}
 		}
 		break;
 	case BT_GRENADE:
 	case BT_PROXIMITYGRENADE:
-		if (!unit->getItem("STR_BELT"))
+		for (int i = 0; i != 4; ++i)
 		{
-			bi->moveToOwner(unit);
-			bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-			placed = true;
+			if (!unit->getItem("STR_BELT", i))
+			{
+				bi->moveToOwner(unit);
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				bi->setSlotX(i);
+				placed = true;
+				break;
+			}
 		}
 		break;
 	case BT_FIREARM:
