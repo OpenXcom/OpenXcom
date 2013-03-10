@@ -337,6 +337,7 @@ void DebriefingState::prepareDebriefing()
 
 	int playerInExitArea = 0; // if this stays 0 the craft is lost...
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
+	int playersUnconscious = 0;
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -497,6 +498,8 @@ void DebriefingState::prepareDebriefing()
 		{ // so this unit is not dead...
 			if (oldFaction == FACTION_PLAYER)
 			{
+				if ((status == STATUS_UNCONSCIOUS || faction == FACTION_HOSTILE) && battle->getMissionType() == "STR_BASE_DEFENSE")
+					playersUnconscious++;
 				playersSurvived++;
 				(*j)->postMissionProcedures(save);
 				if (((*j)->isInExitArea() && battle->getMissionType() != "STR_BASE_DEFENSE") || !aborted)
@@ -572,6 +575,10 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 		}
+	}
+	if (playersUnconscious == playersSurvived)
+	{
+		playersSurvived = 0;
 	}
 	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0)) && craft != 0)
 	{

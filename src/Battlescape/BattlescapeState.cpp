@@ -334,11 +334,11 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	// Set music
 	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
 
-	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
+	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler)&BattlescapeState::animate);
 	_animTimer->start();
 
-	_gameTimer = new Timer(DEFAULT_ANIM_SPEED);
+	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_gameTimer->onTimer((StateHandler)&BattlescapeState::handleState);
 	_gameTimer->start();
 
@@ -933,7 +933,7 @@ void BattlescapeState::updateSoldierInfo()
 		return;
 	}
 
-	_txtName->setText(battleUnit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay));
+	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
 	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{

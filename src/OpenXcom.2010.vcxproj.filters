@@ -720,6 +720,9 @@
     <ClCompile Include="Engine\FastLineClip.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Flc.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -1482,6 +1485,9 @@
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Engine\FastLineClip.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Flc.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
