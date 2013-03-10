@@ -1010,7 +1010,7 @@ void DogfightState::move()
 				// TODO: If the base is removed, the mission is canceled.
 			}
 			// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
-			if (!_game->getSavedGame()->getAlienMission("STR_ALIEN_RETALIATION", targetRegion))
+			if (!_game->getSavedGame()->getAlienMission(targetRegion, "STR_ALIEN_RETALIATION"))
 			{
 				const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 				AlienMission *mission = new AlienMission(rule);
