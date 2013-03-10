@@ -142,6 +142,12 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	std::stringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(_game->getLanguage()->getString(briefingtext.str()));
+
+	if (mission == "STR_BASE_DEFENSE")
+	{
+		// And make sure the base is unmarked.
+		base->setRetaliationTarget(false);
+	}
 }
 
 /**
