@@ -583,7 +583,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	action->type = BA_WALK;
 	int currentTilePreference = _unit->_hidingForTurn ? action->number * 5 : 0;
 	_unit->_hidingForTurn = true;
-	int tries = 0;
+	int tries = -1;
 	bool coverFound = false;
 	int x_search_sign = RNG::generate(0, 1) ? 1 : -1; // randomize the direction of the search for lack of a better heuristic
 	int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
@@ -634,8 +634,16 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		{
 			action->target = _unit->getPosition(); // cornered at the edge of the map perhaps? 
 		}
-					
-		if (tries < 121) 
+		
+		if (tries == -1)
+		{
+			// you know, maybe we should just stay where we are and not risk reaction fire... 
+			// or maybe continue to wherever we were running to and not risk looking stupid
+			if (_game->getTile(_unit->lastCover) != 0)
+			{
+				action->target = _unit->lastCover;
+			} 
+		} else if (tries < 121) 
 		{
 			// looking for cover
 			action->target.x += _randomTileSearch[tries].x;
@@ -644,7 +652,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			{
 				if (unitsSpottingMe > 0)
 				{
-					// don't even think about staying in the same spot. Move!
+					// maybe don't stay in the same spot? move or something if there's any point to it?
 					action->target.x += RNG::generate(-20,20);
 					action->target.y += RNG::generate(-20,20);
 				} else
@@ -766,6 +774,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		}
 	}
 	action->target = bestTile;
+	_unit->lastCover = bestTile;
 	if (_traceAI)
 	{
 		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, at a tile spotted by " << ((tile=_game->getTile(bestTile)) ? tile->soldiersVisible : -666) << ", " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Action #" << action->number;
