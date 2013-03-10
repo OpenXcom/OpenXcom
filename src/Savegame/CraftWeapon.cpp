@@ -84,13 +84,19 @@ int CraftWeapon::getAmmo() const
  * Changes the ammo contained in this craft weapon.
  * @param ammo Weapon ammo.
  */
-void CraftWeapon::setAmmo(int ammo)
+bool CraftWeapon::setAmmo(int ammo)
 {
 	_ammo = ammo;
+	if (_ammo < 0)
+	{
+		_ammo = 0;
+		return false;
+	}
 	if (_ammo > _rules->getAmmoMax())
 	{
 		_ammo = _rules->getAmmoMax();
 	}
+	return true;
 }
 
 /**

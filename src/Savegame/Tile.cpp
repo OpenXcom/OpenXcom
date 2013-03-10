@@ -485,6 +485,8 @@ bool Tile::destroy(int part)
 	bool _objective = false;
 	if (_objects[part])
 	{
+		if (_objects[part]->isGravLift())
+			return false;
 		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
 		MapData *originalPart = _objects[part];
 		int originalMapDataSetID = _mapDataSetID[part];

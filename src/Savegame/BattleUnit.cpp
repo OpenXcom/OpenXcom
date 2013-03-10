@@ -96,6 +96,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
+
+	lastCover = Position(-1, -1, -1);
 }
 
 /**
@@ -141,6 +143,9 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
+	
+	lastCover = Position(-1, -1, -1);
+	
 }
 
 /// tedious copy constructor because we can't copy _cache by the default method
@@ -192,7 +197,9 @@ BattleUnit::BattleUnit(BattleUnit &b) :
 	_charging(b._charging),
 	_turnsExposed(b._turnsExposed),
 	_loftempsSet(b._loftempsSet),
-	_unitRules(b._unitRules)
+	_unitRules(b._unitRules),
+	_hidingForTurn(b._hidingForTurn),
+	lastCover(b.lastCover)
 {
 	invalidateCache();
 	for (int i = 0; i < 5; ++i)
@@ -2318,7 +2325,7 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 	{
 		if ((*i) == draggingItem) continue;
 		weight += (*i)->getRules()->getWeight();
-		if (0 != (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
+		if ((*i)->getAmmoItem() != (*i) && (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
 	}
 	return weight;
 }
