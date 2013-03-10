@@ -1247,7 +1247,7 @@ void DogfightState::setStatus(const std::string &status)
  */
 void DogfightState::btnMinimizeClick(Action *)
 {
-	if(_currentDist == STANDOFF_DIST)
+	if(_currentDist == STANDOFF_DIST && !_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		setMinimized(true);
 		_window->setVisible(false);
@@ -1281,7 +1281,7 @@ void DogfightState::btnMinimizeClick(Action *)
  */
 void DogfightState::btnStandoffClick(Action *)
 {
-	if (!_ufo->isCrashed())
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		_end = false;
 		setStatus("STR_STANDOFF");
@@ -1295,7 +1295,7 @@ void DogfightState::btnStandoffClick(Action *)
  */
 void DogfightState::btnCautiousClick(Action *)
 {
-	if (!_ufo->isCrashed())
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		_end = false;
 		setStatus("STR_CAUTIOUS_ATTACK");
@@ -1318,7 +1318,7 @@ void DogfightState::btnCautiousClick(Action *)
  */
 void DogfightState::btnStandardClick(Action *)
 {
-	if (!_ufo->isCrashed())
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		_end = false;
 		setStatus("STR_STANDARD_ATTACK");
@@ -1341,7 +1341,7 @@ void DogfightState::btnStandardClick(Action *)
  */
 void DogfightState::btnAggressiveClick(Action *)
 {
-	if (!_ufo->isCrashed())
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		_end = false;
 		setStatus("STR_AGGRESSIVE_ATTACK");
@@ -1364,7 +1364,7 @@ void DogfightState::btnAggressiveClick(Action *)
  */
 void DogfightState::btnDisengageClick(Action *)
 {
-	if (!_ufo->isCrashed())
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
 		_end = true;
 		setStatus("STR_DISENGAGING");
@@ -1416,9 +1416,10 @@ void DogfightState::previewClick(Action *)
  */
 void DogfightState::ufoBreakOff()
 {
-	if(!_ufo->isCrashed() && !_ufo->isDestroyed())
+	if(!_ufo->isCrashed() && !_ufo->isDestroyed() && !_craft->isDestroyed())
 	{
 		_ufo->setSpeed(_ufo->getRules()->getMaxSpeed());
+		_ufoBreakingOff = true;
 	}
 }
 
