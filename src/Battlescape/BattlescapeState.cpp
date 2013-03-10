@@ -933,7 +933,7 @@ void BattlescapeState::updateSoldierInfo()
 		return;
 	}
 
-	_txtName->setText(battleUnit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay));
+	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
 	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{
