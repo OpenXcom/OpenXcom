@@ -160,6 +160,10 @@ void PatrolBAIState::think(BattleAction *action)
 				_unit->turn();
 			}
 			action->TU = 0; // tus are already decreased while walking
+			if (_unit->getFaction() == FACTION_NEUTRAL) 
+			{
+				_unit->_hidingForTurn = true; // pretend to be terrified by all the soldiers and tanks rolling down your street or through your yard
+			}
 			return;
 		}
 		else
