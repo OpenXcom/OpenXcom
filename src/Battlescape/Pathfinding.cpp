@@ -206,7 +206,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, target, missile);
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
-			if (sneak && _save->getTile(nextPos)->getVisible()) tuCost *= 5; // avoid being seen
+			if (sneak && _save->getTile(nextPos)->getVisible()) tuCost *= 2; // avoid being seen
 			PathfindingNode *nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;

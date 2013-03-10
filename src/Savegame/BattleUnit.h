@@ -391,6 +391,7 @@ public:
 
 	/// scratch value for AI's left hand to tell its right hand what's up...
 	bool _hidingForTurn; // don't zone out and start patrolling again
+	Position lastCover;
 };
 
 }

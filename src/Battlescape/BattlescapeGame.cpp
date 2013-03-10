@@ -208,7 +208,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
 		|| (_AIActionCounter > 2)
-        || (unit->getVisibleUnits()->size() != 0))
+        || (unit->getVisibleUnits()->size() != 0)
+		|| (unit->_hidingForTurn))
 	{
 		if (aggro == 0)
 		{
@@ -252,12 +253,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
             {
                 finalFacing = _save->getTile(action.target)->closestSoldierPos; // be ready for the nearest spotting unit for our destination
                 usePathfinding = false;
-				if (Options::getBool("traceAI")) { Log(LOG_INFO) << "setting final facing directino for closest soldier, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
+				if (Options::getBool("traceAI")) { Log(LOG_INFO) << "setting final facing direction for closest soldier, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
             } else if (aggro != 0)
             {
                 finalFacing = aggro->getLastKnownPosition(); // or else be ready for our aggro target
                 usePathfinding = true;
-				if (Options::getBool("traceAI")) { Log(LOG_INFO) << "setting final facing directino for aggro target via pathfinding, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
+				if (Options::getBool("traceAI")) { Log(LOG_INFO) << "setting final facing direction for aggro target via pathfinding, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
             }
         }
 
