@@ -1432,7 +1432,6 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_popups.clear();
 		_animTimer->stop();
 		_gameTimer->stop();
-		_save->setAborted(abort);
 		_game->popState();
 		if (abort || (!abort  && inExitArea == 0))
 		{

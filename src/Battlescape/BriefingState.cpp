@@ -53,6 +53,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getBattleGame()->getMissionType();
+	
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	// Set palette
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
