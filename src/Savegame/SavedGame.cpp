@@ -1002,14 +1002,26 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 	for(std::vector<RuleResearch *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
 	{
 		if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ()
-			||
-			std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research->getName()) != (*iter)->getUnlocked().end ()
-			)
+			|| std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research->getName()) != (*iter)->getUnlocked().end ())
 		{
-				dependables.push_back(*iter);
-			if ((*iter)->getCost() == 0)
+			bool add = true;
+			for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
 			{
-				getDependableResearchBasic(dependables, *iter, ruleset, base);
+				if (*i != research &&
+					std::find((*iter)->getDependencies().begin(), (*iter)->getDependencies().end(), (*i)->getName()) != (*iter)->getDependencies().end())
+				{
+					add = false;
+					break;
+				}
+			}
+			if (add)
+			{
+				dependables.push_back(*iter);
+			
+				if ((*iter)->getCost() == 0)
+				{
+					getDependableResearchBasic(dependables, *iter, ruleset, base);
+				}
 			}
 		}
 	}
