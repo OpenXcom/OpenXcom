@@ -437,7 +437,7 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 {
 	if (!_nodes.empty())
 	{
-		for (int i = 0; i < _mapsize_y * _mapsize_y * _mapsize_x; ++i)
+		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 		{
 			delete _tiles[i];
 		}

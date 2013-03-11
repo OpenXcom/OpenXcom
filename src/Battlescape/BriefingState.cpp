@@ -60,12 +60,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
-	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
-	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING")
+	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMNEWMAR")->play();

@@ -213,8 +213,12 @@ void BattlescapeGenerator::nextStage()
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
-			_save->getTiles()[i]->setDiscovered(true, 2);
+		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+			(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
+			(_save->getTiles()[i]->getPosition().z == 1 &&
+			_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
+			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
+				_save->getTiles()[i]->setDiscovered(true, 2);
 	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
