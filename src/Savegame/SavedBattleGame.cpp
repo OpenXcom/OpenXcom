@@ -1068,13 +1068,12 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 {
 	std::vector<Node*> compliantNodes;	
 	
-	if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
+	//if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 
-	for (std::vector<int>::iterator i = fromNode->getNodeLinks()->begin(); i != fromNode->getNodeLinks()->end(); ++i )
+	const std::vector<Node *>::iterator end = getNodes()->end();
+	for (std::vector<Node *>::iterator i = getNodes()->begin(); i != end; ++i )
 	{
-		if (*i > 0)
-		{
-			Node *n = getNodes()->at(*i);
+			Node *n = *i;
 			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
 				&& (!(n->getType() & Node::TYPE_SMALL) 
 					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
@@ -1084,11 +1083,12 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
 				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
 				&& n->getPosition().x > 0 && n->getPosition().y > 0
-				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire()) // you are not a firefighter; do not patrol into fire
+				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
+				&& n != fromNode	// don't go back to Rockville
+				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
 				compliantNodes.push_back(n);
 			}
-		}
 	}
 
 	if (compliantNodes.empty()) return 0;

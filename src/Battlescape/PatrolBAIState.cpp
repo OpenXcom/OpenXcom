@@ -149,6 +149,10 @@ void PatrolBAIState::think(BattleAction *action)
 	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
+		if (Options::getBool("traceAI"))
+		{
+			Log(LOG_INFO) << "Patrol destination reached!";
+		}
 		// destination reached
 		// take a peek through window before walking to the next node
 		int dir = _game->getTileEngine()->faceWindow(_unit->getPosition());
@@ -202,7 +206,7 @@ void PatrolBAIState::think(BattleAction *action)
 			|| _game->getMissionType() == "STR_UFO_GROUND_ASSAULT")
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
-			if (_game->getTurn() > 20 || _fromNode->getRank() == 0)
+			if (_game->getTurn() > 20 || !_fromNode || _fromNode->getRank() == 0)
 			{
 				scout = true;
 			}
