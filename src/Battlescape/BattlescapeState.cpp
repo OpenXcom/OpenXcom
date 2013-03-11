@@ -643,7 +643,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 {
 	if (playableUnitSelected() && (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode()))
 	{
-		_game->pushState(new InventoryState(_game, !_save->getDebugMode()));
+		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
 

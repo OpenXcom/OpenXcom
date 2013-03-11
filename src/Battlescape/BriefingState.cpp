@@ -168,7 +168,7 @@ void BriefingState::btnOkClick(Action *)
 	BattlescapeState *bs = new BattlescapeState(_game);
 	_game->pushState(bs);
 	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame(), bs));
-	_game->pushState(new InventoryState(_game, false));
+	_game->pushState(new InventoryState(_game, false, bs));
 }
 
 }
