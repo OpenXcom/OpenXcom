@@ -1219,7 +1219,7 @@ void Globe::drawRadars()
 
 			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
 			{
-				for (int j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
+				for (size_t j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
 			}
 			else
 			{

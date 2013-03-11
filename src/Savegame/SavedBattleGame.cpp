@@ -1443,15 +1443,15 @@ bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
 }
-const bool SavedBattleGame::getStrafeSetting() const
+bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
 }
-const bool SavedBattleGame::getSneakySetting() const
+bool SavedBattleGame::getSneakySetting() const
 {
 	return _sneaky;
 }
-const bool SavedBattleGame::getTraceSetting() const
+bool SavedBattleGame::getTraceSetting() const
 {
 	return _traceAI;
 }
