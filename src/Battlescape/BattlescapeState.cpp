@@ -643,7 +643,7 @@ void BattlescapeState::btnInventoryClick(Action *)
 {
 	if (playableUnitSelected() && (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode()))
 	{
-		_game->pushState(new InventoryState(_game, !_save->getDebugMode()));
+		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
 
@@ -1432,7 +1432,6 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_popups.clear();
 		_animTimer->stop();
 		_gameTimer->stop();
-		_save->setAborted(abort);
 		_game->popState();
 		if (abort || (!abort  && inExitArea == 0))
 		{

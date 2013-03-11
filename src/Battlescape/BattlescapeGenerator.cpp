@@ -174,13 +174,13 @@ void BattlescapeGenerator::nextStage()
 		{
 			if (!(*j)->isInExitArea(END_POINT))
 			{
-				(*j)->instaKill();
 				(*j)->setTile(0);
+				(*j)->instaKill();
 			}
 		}
 	}
-
-	if (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
+	
+	while (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
 		_game->getSavedGame()->getBattleGame()->endTurn();
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
@@ -193,28 +193,54 @@ void BattlescapeGenerator::nextStage()
 
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	generateMap();
-
+	int highestSoldierID = 0;
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if (!(*j)->isOut())
+		if ((*j)->getFaction() == FACTION_PLAYER)
 		{
-			Node* node = _save->getSpawnNode(NR_XCOM, (*j));
-			if (node)
+			if (!(*j)->isOut())
 			{
-				_save->setUnitPosition((*j), node->getPosition());
-				(*j)->getVisibleTiles()->clear();
+				Node* node = _save->getSpawnNode(NR_XCOM, (*j));
+				if (node)
+				{
+					highestSoldierID = (*j)->getId();
+					_save->setUnitPosition((*j), node->getPosition());
+					(*j)->getVisibleTiles()->clear();
+				}
+			}
+			else
+			{
+				(*j)->setTile(0);
 			}
 		}
+		else
+		{
+			(*j)->setTile(0);
+			(*j)->instaKill(); // we don't want them waking up.
+		}
 	}
-
+	
+	// remove all items not belonging to our soldiers from the map.
+	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
+	{
+		if (!(*j)->getOwner() || (*j)->getOwner()->getId() > highestSoldierID)
+		{
+			(*j)->setTile(0);
+		}
+	}
+	_unitSequence = _save->getUnits()->back()->getId() + 1;
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
 	deployCivilians(ruleDeploy->getCivilians());
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
-			_save->getTiles()[i]->setDiscovered(true, 2);
+		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+			(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
+			(_save->getTiles()[i]->getPosition().z == 1 &&
+			_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
+			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
+				_save->getTiles()[i]->setDiscovered(true, 2);
 	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
@@ -885,7 +911,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 		{	
 			for (int i = 0; i != 4; ++i)
 			{
-				if (!unit->getItem("STR_BELT"), i)
+				if (!unit->getItem("STR_BELT", i))
 				{
 					bi->moveToOwner(unit);
 					bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
@@ -1287,7 +1313,7 @@ void BattlescapeGenerator::generateMap()
 					&& _save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 					|| (_save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
-					&& _save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)->getTerrainLevel()!=-24)))
+					&& _save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)->getTerrainLevel()==-24)))
 				{
 					// remove stuff
 					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0, -1, -1, MapData::O_WESTWALL);
@@ -1325,7 +1351,7 @@ void BattlescapeGenerator::generateMap()
 					&& _save->getTile(Position((i*10)+4,(j*10)+9,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)
 					|| (_save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)
-					&& _save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)->getTerrainLevel()!=-24)))
+					&& _save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)->getTerrainLevel()==-24)))
 				{
 					// remove stuff
 					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0, -1, -1, MapData::O_NORTHWALL);

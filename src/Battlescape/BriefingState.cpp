@@ -53,6 +53,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getBattleGame()->getMissionType();
+	
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	// Set palette
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
@@ -60,12 +62,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
-	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
-	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING")
+	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
@@ -168,7 +165,7 @@ void BriefingState::btnOkClick(Action *)
 	BattlescapeState *bs = new BattlescapeState(_game);
 	_game->pushState(bs);
 	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame(), bs));
-	_game->pushState(new InventoryState(_game, false));
+	_game->pushState(new InventoryState(_game, false, bs));
 }
 
 }

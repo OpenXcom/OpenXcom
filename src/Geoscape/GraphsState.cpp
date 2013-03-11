@@ -172,7 +172,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	while (graphRegionToggles.size() < _regionToggles.size()) graphRegionToggles.push_back('0');
 	while (graphCountryToggles.size() < _countryToggles.size()) graphCountryToggles.push_back('0');
 	while (graphFinanceToggles.size() < _financeToggles.size()) graphFinanceToggles.push_back('0');
-	for (int i = 0; i < _regionToggles.size(); ++i)
+	for (size_t i = 0; i < _regionToggles.size(); ++i)
 	{
 		_regionToggles[i] = ('0'==graphRegionToggles[i]) ? false : true;
 		if (_btnRegions.size() == i)
@@ -181,7 +181,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		}
 		else _btnRegions.at(i)->setPressed(_regionToggles[i]);
 	}
-	for (int i = 0; i < _countryToggles.size(); ++i)
+	for (size_t i = 0; i < _countryToggles.size(); ++i)
 	{
 		_countryToggles[i] = ('0'==graphCountryToggles[i]) ? false : true;
 		if (_btnCountries.size() == i)
@@ -190,7 +190,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		}
 		else _btnCountries.at(i)->setPressed(_countryToggles[i]);
 	}
-	for (int i = 0; i < _financeToggles.size(); ++i)
+	for (size_t i = 0; i < _financeToggles.size(); ++i)
 	{
 		_financeToggles[i] = ('0'==graphFinanceToggles[i]) ? false : true;
 		_btnFinances.at(i)->setPressed(_financeToggles[i]);
@@ -291,9 +291,9 @@ GraphsState::~GraphsState()
 	std::string graphRegionToggles = "";
 	std::string graphCountryToggles = "";
 	std::string graphFinanceToggles = "";
-	for (int i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i] ? '1' : '0');
-	for (int i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i] ? '1' : '0');
-	for (int i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
+	for (size_t i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i] ? '1' : '0');
+	for (size_t i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i] ? '1' : '0');
+	for (size_t i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
 	_game->getSavedGame()->setGraphRegionToggles(graphRegionToggles);
 	_game->getSavedGame()->setGraphCountryToggles(graphCountryToggles);
 	_game->getSavedGame()->setGraphFinanceToggles(graphFinanceToggles);
@@ -444,12 +444,10 @@ void GraphsState::btnRegionListClick(Action * action)
 {
 	size_t number = action->getSender()->getY()/11;
 	ToggleTextButton *button = 0;
-	int adjustment = -42 + (4*number);
 
 	if(number == _btnRegions.size())
 	{
 		button = _btnRegionTotal;
-		adjustment = 22;
 	}
 	else
 	{
@@ -469,12 +467,10 @@ void GraphsState::btnCountryListClick(Action * action)
 {
 	size_t number = action->getSender()->getY()/11;
 	ToggleTextButton *button = 0;
-	int adjustment = -42 + (4*number);
 
 	if(number == _btnCountries.size())
 	{
 		button = _btnCountryTotal;
-		adjustment = 22;
 	}
 	else
 	{

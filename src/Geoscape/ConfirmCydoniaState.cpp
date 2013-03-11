@@ -91,7 +91,11 @@ void ConfirmCydoniaState::btnConfirmClick(Action *)
 	_game->popState();
 	_game->popState();
 	
-	int month = _game->getSavedGame()->getMonthsPassed();
+	int month = 
+		_game->getSavedGame()->getMonthsPassed() > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
+		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
+		_game->getSavedGame()->getMonthsPassed() ;  // else
+
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType("STR_MARS_CYDONIA_LANDING");

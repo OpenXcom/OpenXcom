@@ -40,7 +40,10 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
 #include "UnitInfoState.h"
+#include "BattlescapeState.h"
 #include "TileEngine.h"
+#include "Map.h"
+#include "Camera.h"
 
 namespace OpenXcom
 {
@@ -50,10 +53,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param tu Inventory Time Unit mode.
  */
-InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
+InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getBattleGame();
-
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// Create objects
@@ -171,6 +173,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	unit->setCache(0);

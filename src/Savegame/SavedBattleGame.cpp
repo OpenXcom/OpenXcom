@@ -437,7 +437,7 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 {
 	if (!_nodes.empty())
 	{
-		for (int i = 0; i < _mapsize_y * _mapsize_y * _mapsize_x; ++i)
+		for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 		{
 			delete _tiles[i];
 		}
@@ -1067,6 +1067,8 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
 	std::vector<Node*> compliantNodes;	
+	
+	if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 
 	for (std::vector<int>::iterator i = fromNode->getNodeLinks()->begin(); i != fromNode->getNodeLinks()->end(); ++i )
 	{
@@ -1443,15 +1445,15 @@ bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
 }
-const bool SavedBattleGame::getStrafeSetting() const
+bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
 }
-const bool SavedBattleGame::getSneakySetting() const
+bool SavedBattleGame::getSneakySetting() const
 {
 	return _sneaky;
 }
-const bool SavedBattleGame::getTraceSetting() const
+bool SavedBattleGame::getTraceSetting() const
 {
 	return _traceAI;
 }

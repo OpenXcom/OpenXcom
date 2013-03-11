@@ -864,8 +864,12 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	// UFOs building a base don't detect!
-	if (ufo->getTrajectory().getID() == "P5")
+	// only UFOs on retaliation missions actively scan for bases
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION")
+		return false;
+
+	// UFOs attacking a base don't detect!
+	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		return false;
 	}
@@ -1406,7 +1410,8 @@ void GeoscapeState::time1Day()
 				}
 			}
 			const RuleResearch * newResearch = research;
-			if(_game->getSavedGame()->isResearched(research->getName()))
+			std::string name = research->getLookup() == "" ? research->getName() : research->getLookup();
+			if(_game->getSavedGame()->isResearched(name))
 			{
 				newResearch = 0;
 			}
@@ -1980,18 +1985,17 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	else
 	{
 		//
-		// Alien Research at base's region.
+		// Sectoid Research at base's region.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
 		std::string targetRegion =
 		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
-		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion);
-		otherMission->setRace(missionRace);
+		otherMission->setRace("STR_SECTOID");
 		otherMission->start(150);
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
 		// Make sure this combination never comes up again.
