@@ -190,6 +190,7 @@ void SavedGameState::updateList()
 {
 	_lstSaves->clearList();
 	SavedGame::getList(_lstSaves, _game->getLanguage());
+	_lstSaves->draw();
 }
 
 /**
