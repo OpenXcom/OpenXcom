@@ -1178,6 +1178,23 @@ void BattlescapeState::handle(Action *action)
 					updateSoldierInfo();
 				}
 			}
+			// map scrolling
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleUp"))
+			{
+				_map->getCamera()->scrollXY(0, Options::getInt("battleScrollSpeed")/2, true);
+			}
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleDown"))
+			{
+				_map->getCamera()->scrollXY(0, -Options::getInt("battleScrollSpeed")/2, true);
+			}
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleLeft"))
+			{
+				_map->getCamera()->scrollXY(Options::getInt("battleScrollSpeed")/2, 0, true);
+			}
+			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleRight"))
+			{
+				_map->getCamera()->scrollXY(-Options::getInt("battleScrollSpeed")/2, 0, true);
+			}
 			// voxel map dump
 			else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 			{
