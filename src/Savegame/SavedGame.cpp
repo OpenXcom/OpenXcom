@@ -1008,6 +1008,7 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 			for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
 			{
 				if (*i != research &&
+					std::find((*i)->getUnlocked().begin(), (*i)->getUnlocked().end(), (*iter)->getName()) != (*i)->getUnlocked().end() &&
 					std::find((*iter)->getDependencies().begin(), (*iter)->getDependencies().end(), (*i)->getName()) != (*iter)->getDependencies().end())
 				{
 					add = false;
