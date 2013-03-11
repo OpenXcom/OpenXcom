@@ -243,6 +243,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			_playedAggroSound = true;
 		}
 		_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
+		if (_save->getPathfinding()->getStartDirection() == -1)
+		{
+			PatrolBAIState *pbai = dynamic_cast<PatrolBAIState*>(unit->getCurrentAIState());
+			if (pbai) unit->setAIState(new PatrolBAIState(_save, unit, 0)); // can't reach destination, pick someplace else to walk toward
+		}
+
 
         Position finalFacing(0, 0, INT_MAX);
         bool usePathfinding = false;
