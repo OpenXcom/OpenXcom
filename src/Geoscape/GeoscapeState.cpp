@@ -1406,7 +1406,8 @@ void GeoscapeState::time1Day()
 				}
 			}
 			const RuleResearch * newResearch = research;
-			if(_game->getSavedGame()->isResearched(research->getName()) || _game->getSavedGame()->isResearched(research->getLookup()))
+			std::string name = research->getLookup() == "" ? research->getName() : research->getLookup();
+			if(_game->getSavedGame()->isResearched(name))
 			{
 				newResearch = 0;
 			}
