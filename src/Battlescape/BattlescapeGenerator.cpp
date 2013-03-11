@@ -911,7 +911,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 		{	
 			for (int i = 0; i != 4; ++i)
 			{
-				if (!unit->getItem("STR_BELT"), i)
+				if (!unit->getItem("STR_BELT", i))
 				{
 					bi->moveToOwner(unit);
 					bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));

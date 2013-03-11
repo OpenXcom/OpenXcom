@@ -864,8 +864,12 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	// UFOs building a base don't detect!
-	if (ufo->getTrajectory().getID() == "P5")
+	// only UFOs on retaliation missions actively scan for bases
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION")
+		return false;
+
+	// UFOs attacking a base don't detect!
+	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		return false;
 	}
