@@ -605,7 +605,9 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 	else
 	{
 		_toDirection = dir;
-		if (_toDirection != _direction)
+		if (_toDirection != _direction
+			&& _toDirection < 8
+			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
 		}
@@ -620,6 +622,7 @@ void BattleUnit::lookAt(int direction, bool force)
 {
 	if (!force)
 	{
+		if (direction < 0 || direction >= 8) return;
 		_toDirection = direction;
 		_status = STATUS_TURNING;
 	}
