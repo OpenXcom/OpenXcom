@@ -102,7 +102,7 @@ void createDefault()
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
-	setBool("allowChangeListValuesByMouseWheel", true); // It applies only for lists, not for scientists/engineers screen
+	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
