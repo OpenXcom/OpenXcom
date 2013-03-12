@@ -404,10 +404,11 @@ void StartState::think()
 				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
 				delete audioSequence;
-				Mix_Volume(-1, Options::getInt("soundVolume"));
-				Mix_VolumeMusic(Options::getInt("musicVolume"));
+
 
 				// fade out!
+				Mix_FadeOutChannel(-1, 45*20);
+				Mix_FadeOutMusic(45*20);				
 				SDL_Color pal[256];
 				SDL_Color pal2[256];
 				memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
@@ -427,6 +428,12 @@ void StartState::think()
 				}
 				_game->getScreen()->clear();
 				_game->getScreen()->flip();
+				
+				Mix_HaltChannel(-1);
+				Mix_HaltMusic();
+				
+				Mix_Volume(-1, Options::getInt("soundVolume"));
+				Mix_VolumeMusic(Options::getInt("musicVolume"));				
 			}
 		}
 		catch (Exception &e)
