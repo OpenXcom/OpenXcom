@@ -186,6 +186,7 @@ void ExplosionBState::explode()
 	if (_tile)
 	{
 		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
+		terrainExplosion = true;
 	}
 	if (!_tile && !_item)
 	{
