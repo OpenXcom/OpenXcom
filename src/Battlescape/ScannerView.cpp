@@ -64,15 +64,18 @@ void ScannerView::draw()
 	{
 		for (int y = -9; y < 10; y++)
 		{
-			Tile *t = _game->getSavedGame()->getBattleGame()->getTile(Position(x,y,0) + _unit->getPosition());
-			if (t && t->getUnit() && t->getUnit()->getMotionPoints())
+			for (int z = 0; z < _game->getSavedGame()->getBattleGame()->getMapSizeZ(); z++)
 			{
-				int frame = (t->getUnit()->getMotionPoints() / 5);
-				if (frame >= 0)
+				Tile *t = _game->getSavedGame()->getBattleGame()->getTile(Position(x,y,z) + Position(_unit->getPosition().x, _unit->getPosition().y, 0));
+				if (t && t->getUnit() && t->getUnit()->getMotionPoints())
 				{
-					if (frame > 5) frame = 5;
-					surface = set->getFrame(frame + _frame);
-					surface->blitNShade(this, Surface::getX()+((9+x)*8)-4, Surface::getY()+((9+y)*8)-4, 0);
+					int frame = (t->getUnit()->getMotionPoints() / 5);
+					if (frame >= 0)
+					{
+						if (frame > 5) frame = 5;
+						surface = set->getFrame(frame + _frame);
+						surface->blitNShade(this, Surface::getX()+((9+x)*8)-4, Surface::getY()+((9+y)*8)-4, 0);
+					}
 				}
 			}
 		}
