@@ -1123,7 +1123,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			double sin_fi = sin(fi * M_PI / 180.0);
 			double cos_fi = cos(fi * M_PI / 180.0);
 
-			Tile *origin = _save->getTile(center);
+			Tile *origin = _save->getTile(Position(centerX, centerY, centerZ));
 			double l = 0;
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
@@ -1142,12 +1142,20 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
 				if (!dest) break; // out of map!
 
+
 				// blockage by terrain is deducted from the explosion power
 				if (l != 0) // no need to block epicentrum
 				{
 					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
 					if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
+				}
+				else if (dest->getExplosive())
+				{
+					dest->setExplosive(0, true);
+					origin = dest;
+					l++;
+					continue;
 				}
 
 				if (power_ > 0)

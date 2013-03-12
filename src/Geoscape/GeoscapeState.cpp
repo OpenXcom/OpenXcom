@@ -865,7 +865,7 @@ private:
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
 	// only UFOs on retaliation missions actively scan for bases
-	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION")
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation"))
 		return false;
 
 	// UFOs attacking a base don't detect!
