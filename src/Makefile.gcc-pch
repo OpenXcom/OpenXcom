@@ -22,7 +22,7 @@ BIN = openxcom
 endif
 
 # Compiler settings
-CXXFLAGS ?= -Wall -Wextra -Wno-unused-function -O2 -rdynamic
+CXXFLAGS ?= -Wall -Wextra -Wno-unused-function -O2 -rdynamic -g -D_DEBUG
 CXXFLAGS += $(addprefix -D,$(TARGET))
 CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
 CXXFLAGS += -include pch.h
@@ -78,6 +78,6 @@ $(OBJDIR)%.o:: Ufopaedia/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
-	rm -f $(BINDIR)$(BIN) $(OBJDIR)*.o
+	rm -f $(BINDIR)$(BIN) $(OBJDIR)*.o pch.h.gch
 
 .PHONY: all clean
