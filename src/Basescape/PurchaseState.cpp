@@ -53,8 +53,8 @@ namespace OpenXcom
  */
 PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);

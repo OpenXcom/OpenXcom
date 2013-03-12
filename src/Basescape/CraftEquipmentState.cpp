@@ -53,8 +53,8 @@ namespace OpenXcom
  */
 CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _base(base), _craft(craft)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
