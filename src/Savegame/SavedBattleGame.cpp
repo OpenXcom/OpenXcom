@@ -94,9 +94,12 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 	int a,b;
 	int selectedUnit = 0;
 
+	Uint32 startTime = SDL_GetTicks();
+
 	node["width"] >> _mapsize_x;
 	node["length"] >> _mapsize_y;
 	node["height"] >> _mapsize_z;
+
 	node["missionType"] >> _missionType;
 	node["globalshade"] >> _globalShade;
 	node["turn"] >> _turn;
@@ -287,6 +290,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		}
 	}
 
+	Log(LOG_DEBUG) << "Battlescape data loaded in " << (SDL_GetTicks() - startTime) << "ms";
 }
 
 /**

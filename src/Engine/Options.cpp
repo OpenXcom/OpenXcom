@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <map>
+#include <set>
 #include <sstream>
 #include <fstream>
 #include <algorithm>
@@ -31,6 +32,9 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "CrossPlatform.h"
+#include "unordered_map.h"
+
+
 
 namespace OpenXcom
 {
@@ -43,7 +47,18 @@ std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-std::map<std::string, std::string> _options;
+unordered_map<std::string, std::string> _options;
+
+typedef union 
+{
+	int i;
+	bool b;
+} u_option;
+
+unordered_map<std::string, u_option> _optionsCache; // don't parse ints and bools every time we need to access them
+// this optimization may seem like too much but Options::getX() calls end up in AI loops and suddenly performance matters, go figure
+
+
 std::vector<std::string> _rulesets;
 std::vector<std::string> _purchaseexclusions;
 
@@ -234,6 +249,8 @@ void createDefault()
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
+
+	_optionsCache.clear(); // don't cache default values; let them be overwritten by loaded values
 }
 
 /**
@@ -257,7 +274,7 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
-				std::map<std::string, std::string>::iterator it = _options.find(argname);
+				unordered_map<std::string, std::string>::iterator it = _options.find(argname);
 				if (it != _options.end())
 				{
 					it->second = args[i+1];
@@ -335,6 +352,15 @@ bool showHelp(int argc, char** args)
  */
 bool init(int argc, char** args)
 {
+#ifdef _USE_google_sparsehash
+	// google's sparsehash requires these strange calls for any new hashtable
+	// you must give it a key that will never appear as an actual key
+	// sparsehash then presumably uses it to mark empty entries
+	// why is there no default? it is a mystery.
+	_options.set_empty_key("\n\t: ```this is not a valid option, clearly```");
+	_optionsCache.set_empty_key("\n\t: ```this is not a valid option, clearly```");
+#endif
+
 	if (showHelp(argc, args))
 		return false;
 	createDefault();
@@ -428,13 +454,7 @@ void load(const std::string &filename)
 		options = &doc;
 	}
 
-	for (YAML::Iterator i = options->begin(); i != options->end(); ++i)
-	{
-		std::string key, value;
-		i.first() >> key;
-		i.second() >> value;
-		_options[key] = value;
-	}
+	options >> _options;
 
 	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
 	{
@@ -538,10 +558,14 @@ std::string getString(const std::string& id)
  */
 int getInt(const std::string& id)
 {
+	unordered_map<std::string, u_option>::iterator it = _optionsCache.find(id);
+	if (it != _optionsCache.end()) return it->second.i;
+
 	std::stringstream ss;
 	int value;
 	ss << std::dec << _options[id];
 	ss >> std::dec >> value;
+	_optionsCache[id].i = value;
 	return value;
 }
 
@@ -552,10 +576,14 @@ int getInt(const std::string& id)
  */
 bool getBool(const std::string& id)
 {
+	unordered_map<std::string, u_option>::iterator it = _optionsCache.find(id);
+	if (it != _optionsCache.end()) return it->second.b;
+
 	std::stringstream ss;
 	bool value;
 	ss << std::boolalpha << _options[id];
 	ss >> std::boolalpha >> value;
+	_optionsCache[id].b = value;
 	return value;
 }
 
@@ -576,6 +604,7 @@ void setString(const std::string& id, const std::string& value)
  */
 void setInt(const std::string& id, int value)
 {
+	_optionsCache[id].i = value;
 	std::stringstream ss;
 	ss << std::dec << value;
 	_options[id] = ss.str();
@@ -588,6 +617,7 @@ void setInt(const std::string& id, int value)
  */
 void setBool(const std::string& id, bool value)
 {
+	_optionsCache[id].b = value;
 	std::stringstream ss;
 	ss << std::boolalpha << value;
 	_options[id] = ss.str();
@@ -608,4 +638,35 @@ std::vector<std::string> getPurchaseExclusions()
 }
 
 }
+
+
+YAML::Emitter &operator <<(YAML::Emitter &out, unordered_map<std::string, std::string> &map)
+{
+	out << YAML::BeginMap;
+	std::set<std::string> sortedOptions;
+	for (unordered_map<std::string, std::string>::iterator it = map.begin(), end = map.end(); it != end; ++it)
+	{
+		sortedOptions.insert(it->first);
+	}
+	for (std::set<std::string>::iterator it = sortedOptions.begin(), end = sortedOptions.end(); it != sortedOptions.end(); ++it)
+	{
+		out << YAML::Key << *it << YAML::Value << map[*it];
+	}
+	out << YAML::EndMap;
+	
+	return out;
+}
+
+void operator >>(const YAML::Node *node, unordered_map<std::string, std::string> &map)
+{
+	for (YAML::Iterator i = node->begin(), end = node->end(); i != end; ++i)
+	{
+		std::string key, value;
+		i.first() >> key;
+		i.second() >> value;
+		map[key] = value;
+	}
+}
+
+
 }

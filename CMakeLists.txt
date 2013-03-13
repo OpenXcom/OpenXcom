@@ -84,6 +84,12 @@ else ( )
   endif ( NOT YAMLCPP_FOUND )
 endif()
 
+include ( CheckIncludeFileCXX )
+CHECK_INCLUDE_FILE_CXX (tr1/unordered_map HAVE_TR1)
+if (HAVE_TR1)
+	add_definitions ( -D_USE_TR1=1 )
+endif()
+
 # Read version number
 set ( file "${CMAKE_SOURCE_DIR}/src/Engine/Options.cpp" )
 file ( READ ${file} lines )
