@@ -1504,8 +1504,7 @@ void GeoscapeState::time1Day()
 		{
 			Log(LOG_ERROR) << e.what();
 			std::wstringstream error;
-			error <<
-			_game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+			error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		}
 	}
