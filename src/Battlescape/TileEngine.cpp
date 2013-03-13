@@ -1150,13 +1150,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					power_ -= 10; // explosive damage decreases by 10 per tile
 					if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
 				}
-				else if (dest->getExplosive())
-				{
-					dest->setExplosive(0, true);
-					origin = dest;
-					l++;
-					continue;
-				}
 
 				if (power_ > 0)
 				{
