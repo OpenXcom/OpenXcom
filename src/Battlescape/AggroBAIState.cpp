@@ -604,6 +604,12 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				
 	bool traceSpammed = false;
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
+
+	if (_unit->getTimeUnits() <= 5)
+	{
+		action->target = _unit->getPosition(); // stop wasting our time with calculations when you can't walk anywhere, reapers
+		return;
+	}
 				
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = civ ? -20 : 20;
@@ -611,7 +617,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int WALL_BONUS = 1;
 	const int FIRE_PENALTY = 40;
 	const int SMOKE_PENALTY = 5;
-	const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*3;
+	const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*20;
 	const int MELEE_TUNNELVISION_BONUS = 200;
 	const int DIRECT_PATH_PENALTY = 10;
 	const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
@@ -698,7 +704,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		{
 			_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
-			if (tile->soldiersVisible == -1) continue; // you can't go there.
+			if (tile->soldiersVisible == Tile::NOT_CALCULATED) continue; // you can't go there.
 						
 			if (tile->soldiersVisible && tile->closestSoldierDSqr <= SOLDIER_PROXIMITY_BASE_PENALTY && tile->closestSoldierDSqr > 0) 
 			{
@@ -719,7 +725,9 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				// yay.
 			} else
 			{						
-				score -= tile->soldiersVisible * EXPOSURE_PENALTY;
+				// score -= tile->soldiersVisible * EXPOSURE_PENALTY;
+				score -= EXPOSURE_PENALTY; // that's for giving away our position
+				score -= tile->totalExposure / (100 / EXPOSURE_PENALTY); // this is for how easy it'd be to shoot at us
 			}
 						
 			// strength in numbers but not in "grenade us!" huddles:
@@ -752,7 +760,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		{
 			// check if we can reach this tile
 			_game->getPathfinding()->calculate(_unit, action->target);
-			if (_game->getPathfinding()->getTotalTUCost()+4 > _unit->getTimeUnits()) // save 4 to turn around?
+			if (_game->getPathfinding()->getTotalTUCost() > _unit->getTimeUnits())
 			{
 				score -= OVERREACH_PENALTY; // not gonna make it
 			} else

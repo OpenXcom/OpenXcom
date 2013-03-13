@@ -826,6 +826,7 @@ void BattlescapeGame::statePushBack(BattleState *bs)
  */
 void BattlescapeGame::popState()
 {
+	if (Options::getBool("traceAI")) Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with " << (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
 	bool actionFailed = false;
 
 	if (_states.empty()) return;
@@ -1577,8 +1578,8 @@ void BattlescapeGame::resetSituationForAI()
 
     for (int i = 0; i < w * l * h; ++i)
     {
-       tiles[i]->soldiersVisible = -1;    // -1 for "not calculated"; actual calculations will take place as needed
-       tiles[i]->closestSoldierDSqr = -1; // for most of the tiles most of the time, this data is not needed
+		tiles[i]->soldiersVisible = Tile::NOT_CALCULATED;    // -1 for "not calculated"; actual calculations will take place as needed
+		tiles[i]->closestSoldierDSqr = Tile::NOT_CALCULATED; // for most of the tiles most of the time, this data is not needed
     }
 
 }
