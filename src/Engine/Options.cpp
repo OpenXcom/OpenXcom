@@ -32,7 +32,7 @@
 #include "Exception.h"
 #include "Logger.h"
 #include "CrossPlatform.h"
-#include "HashMap.h"
+#include "unordered_map.h"
 
 
 
@@ -47,7 +47,7 @@ std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-HashMap<std::string, std::string> _options;
+unordered_map<std::string, std::string> _options;
 
 typedef union 
 {
@@ -55,7 +55,7 @@ typedef union
 	bool b;
 } u_option;
 
-HashMap<std::string, u_option> _optionsCache; // don't parse ints and bools every time we need to access them
+unordered_map<std::string, u_option> _optionsCache; // don't parse ints and bools every time we need to access them
 // this optimization may seem like too much but Options::getX() calls end up in AI loops and suddenly performance matters, go figure
 
 
@@ -274,7 +274,7 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
-				HashMap<std::string, std::string>::iterator it = _options.find(argname);
+				unordered_map<std::string, std::string>::iterator it = _options.find(argname);
 				if (it != _options.end())
 				{
 					it->second = args[i+1];
@@ -454,13 +454,7 @@ void load(const std::string &filename)
 		options = &doc;
 	}
 
-	for (YAML::Iterator i = options->begin(); i != options->end(); ++i)
-	{
-		std::string key, value;
-		i.first() >> key;
-		i.second() >> value;
-		_options[key] = value;
-	}
+	options >> _options;
 
 	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
 	{
@@ -491,18 +485,7 @@ void save(const std::string &filename)
 	YAML::Emitter out;
 
 	out << YAML::BeginMap;
-	out << YAML::Key << "options" << YAML::Value; // << _options;
-	out << YAML::BeginMap;
-	std::set<std::string> sortedOptions;
-	for (HashMap<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
-	{
-		sortedOptions.insert(it->first);
-	}
-	for (std::set<std::string>::iterator it = sortedOptions.begin(); it != sortedOptions.end(); ++it)
-	{
-		out << YAML::Key << *it << YAML::Value << _options[*it];
-	}
-	out << YAML::EndMap;
+	out << YAML::Key << "options" << YAML::Value << _options;
 	out << YAML::Key << "rulesets" << YAML::Value << _rulesets;
 	out << YAML::EndMap;
 
@@ -575,7 +558,7 @@ std::string getString(const std::string& id)
  */
 int getInt(const std::string& id)
 {
-	HashMap<std::string, u_option>::iterator it = _optionsCache.find(id);
+	unordered_map<std::string, u_option>::iterator it = _optionsCache.find(id);
 	if (it != _optionsCache.end()) return it->second.i;
 
 	std::stringstream ss;
@@ -593,7 +576,7 @@ int getInt(const std::string& id)
  */
 bool getBool(const std::string& id)
 {
-	HashMap<std::string, u_option>::iterator it = _optionsCache.find(id);
+	unordered_map<std::string, u_option>::iterator it = _optionsCache.find(id);
 	if (it != _optionsCache.end()) return it->second.b;
 
 	std::stringstream ss;
@@ -655,4 +638,35 @@ std::vector<std::string> getPurchaseExclusions()
 }
 
 }
+
+
+YAML::Emitter &operator <<(YAML::Emitter &out, unordered_map<std::string, std::string> &map)
+{
+	out << YAML::BeginMap;
+	std::set<std::string> sortedOptions;
+	for (unordered_map<std::string, std::string>::iterator it = map.begin(), end = map.end(); it != end; ++it)
+	{
+		sortedOptions.insert(it->first);
+	}
+	for (std::set<std::string>::iterator it = sortedOptions.begin(), end = sortedOptions.end(); it != sortedOptions.end(); ++it)
+	{
+		out << YAML::Key << *it << YAML::Value << map[*it];
+	}
+	out << YAML::EndMap;
+	
+	return out;
+}
+
+void operator >>(const YAML::Node *node, unordered_map<std::string, std::string> &map)
+{
+	for (YAML::Iterator i = node->begin(), end = node->end(); i != end; ++i)
+	{
+		std::string key, value;
+		i.first() >> key;
+		i.second() >> value;
+		map[key] = value;
+	}
+}
+
+
 }
