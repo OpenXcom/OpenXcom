@@ -25,6 +25,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
+#include "../Engine/Options.h"
 #include "../Menu/LoadState.h"
 #include "../Menu/SaveState.h"
 
@@ -42,7 +43,7 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnLoad = new TextButton(180, 20, 38, 60);
-	_btnSave = new TextButton(180, 20, 38, 85);
+	if(!Options::getBool("autosaveOnly")) _btnSave = new TextButton(180, 20, 38, 85);
 	_btnAbandon = new TextButton(180, 20, 38, 110);
 	_btnCancel = new TextButton(180, 20, 38, 140);
 	_txtTitle = new Text(206, 15, 25, 32);
@@ -52,7 +53,7 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 
 	add(_window);
 	add(_btnLoad);
-	add(_btnSave);
+	if(!Options::getBool("autosaveOnly")) add(_btnSave);
 	add(_btnAbandon);
 	add(_btnCancel);
 	add(_txtTitle);
@@ -65,9 +66,12 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
 
-	_btnSave->setColor(Palette::blockOffset(15)-1);
-	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
-	_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
+	if(!Options::getBool("autosaveOnly"))
+	{
+		_btnSave->setColor(Palette::blockOffset(15)-1);
+		_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
+		_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
+	}
 
 	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(_game->getLanguage()->getString("STR_ABANDON_GAME"));

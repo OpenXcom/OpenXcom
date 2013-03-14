@@ -122,6 +122,7 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", 3);
 	setInt("windowedModePositionY", 22);
+	setBool("autosaveOnly", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

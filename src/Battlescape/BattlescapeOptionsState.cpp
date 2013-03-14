@@ -84,7 +84,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	_btnOk = new TextButton(90, 16, 16, 174);
 	_btnLoad = new TextButton(90, 16, 117, 174);
-	_btnSave = new TextButton(90, 16, 214, 174);
+	if(!Options::getBool("autosaveOnly")) _btnSave = new TextButton(90, 16, 214, 174);
 
 	switch (Options::getInt("battleScrollSpeed"))
 	{
@@ -177,7 +177,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	add(_btnOk);
 	add(_btnLoad);
-	add(_btnSave);
+	if(!Options::getBool("autosaveOnly")) add(_btnSave);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0));
@@ -362,10 +362,13 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnLoadClick);
 
-	_btnSave->setColor(Palette::blockOffset(0));
-	_btnSave->setHighContrast(true);
-	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
-	_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
+	if(!Options::getBool("autosaveOnly"))
+	{
+		_btnSave->setColor(Palette::blockOffset(0));
+		_btnSave->setHighContrast(true);
+		_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
+		_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
+	}
 }
 
 /**
