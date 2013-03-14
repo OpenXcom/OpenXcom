@@ -332,11 +332,11 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	_battleGame->selectPreviousPlayerUnit();
+	_parent->selectPreviousPlayerUnit(false);
 	// skip large units
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
 	{
-		_battleGame->selectPreviousPlayerUnit();
+		_parent->selectPreviousPlayerUnit(false);
 	}
 	init();
 }
@@ -349,11 +349,11 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	_battleGame->selectNextPlayerUnit();
+	_parent->selectNextPlayerUnit(false, false);
 	// skip large units
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
 	{
-		_battleGame->selectNextPlayerUnit();
+		_parent->selectNextPlayerUnit(false, false);
 	}
 	init();
 }
