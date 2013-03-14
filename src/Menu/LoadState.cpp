@@ -82,7 +82,9 @@ void LoadState::lstSavesPress(Action *action)
 			if (_game->getSavedGame()->getBattleGame() != 0)
 			{
 				_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
-				_game->pushState(new BattlescapeState(_game));
+				BattlescapeState *bs = new BattlescapeState(_game);
+				_game->pushState(bs);
+				_game->getSavedGame()->getBattleGame()->setBattleState(bs);
 			}
 		}
 		catch (Exception &e)

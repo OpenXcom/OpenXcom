@@ -55,6 +55,7 @@ class Ruleset;
 class SavedBattleGame
 {
 private:
+	BattlescapeState *_battleState;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
@@ -226,6 +227,9 @@ public:
 	bool getStrafeSetting() const;
 	bool getSneakySetting() const;
 	bool getTraceSetting() const;
+	BattlescapeState *getBattleState();
+	void setBattleState(BattlescapeState *bs);
+
 
 	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
