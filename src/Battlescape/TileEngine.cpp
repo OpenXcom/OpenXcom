@@ -483,8 +483,8 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		// this works OK but we don't need to try all those rays for this tactical assessment
 		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
 		// this should be the best, a routine that gives us the degree of exposure while economizing raytraces:
-		int exposure = checkVoxelExposure(&originVoxel, tile, *i, queryingUnit);
-		if (exposure)
+		int exposure;
+		if ((*i)->getFaction() == FACTION_PLAYER && (exposure = checkVoxelExposure(&originVoxel, tile, *i, queryingUnit)))
 		{
 			++tile->soldiersVisible;
 			tile->totalExposure += exposure;

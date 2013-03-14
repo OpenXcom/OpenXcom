@@ -20,6 +20,7 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <SDL_gfxPrimitives.h>
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -1188,12 +1189,114 @@ void BattlescapeState::handle(Action *action)
 			}
 			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
 			{
-				SaveVoxelView();
+				if (_game->getCtrlKeyDown())
+				{
+					SaveAIMap();
+				} else
+				{
+					SaveVoxelView();
+				}
 			}
 		}
 	}
 
 }
+
+
+void BattlescapeState::SaveAIMap()
+{
+	BattleUnit *unit = _save->getSelectedUnit();
+	if (!unit) return;
+
+	int w = _save->getMapSizeX();
+	int h = _save->getMapSizeY();
+	Position pos(unit->getPosition());
+
+	int expMax = 0;
+
+	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
+	Log(LOG_INFO) << "pitch = " << img->pitch;
+	memset(img->pixels, 0, img->pitch * img->h);
+	
+	Position tilePos(pos);
+	SDL_Rect r;
+	r.h = 8;
+	r.w = 8;
+
+	for (int y = 0; y < h; ++y)
+	{
+		tilePos.y = y;
+		for (int x = 0; x < w; ++x)
+		{
+			tilePos.x = x;
+			Tile *t = _save->getTile(tilePos);
+
+			if (!t) continue;
+			if (!t->isDiscovered(2)) continue;
+			
+			if (_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->totalExposure > expMax) expMax = t->totalExposure;
+		}
+	}
+	
+	if (expMax < 100) expMax = 100;
+
+	for (int y = 0; y < h; ++y)
+	{
+		tilePos.y = y;
+		for (int x = 0; x < w; ++x)
+		{
+			tilePos.x = x;
+			Tile *t = _save->getTile(tilePos);
+
+			if (!t) continue;
+			if (!t->isDiscovered(2)) continue;
+			
+			r.x = x * r.w;
+			r.y = y * r.h;
+
+			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255 && _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->soldiersVisible != Tile::NOT_CALCULATED)
+			{
+				int e = (t->totalExposure * 255) / expMax;
+				SDL_FillRect(img, &r, (e << img->format->Rshift) + ((255-e) << img->format->Gshift));
+			} else
+			{
+				BattleUnit *wat = t->getUnit();
+				if (wat) switch(wat->getFaction())
+				{
+				case FACTION_HOSTILE:
+					characterRGBA(img, r.x, r.y, 'A', 31, 31, 255, 255);
+					break;
+				case FACTION_PLAYER:
+					characterRGBA(img, r.x, r.y, 'X', 255, 255, 31, 255);
+					break;
+				case FACTION_NEUTRAL:
+					characterRGBA(img, r.x, r.y, 'C', 255, 31, 31, 255);
+					break;
+				}
+				else SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x20, 0x20, 0x20)); // gray for blocked tile
+
+			}			
+		}
+	}
+
+	std::stringstream ss;
+	int i = 0;
+	do
+	{
+		ss.str("");
+		ss << Options::getUserFolder() << "AIExposure" << std::setfill('0') << std::setw(3) << i << ".png";
+		i++;
+	}
+	while (CrossPlatform::fileExists(ss.str()));
+
+
+	unsigned error = lodepng::encode(ss.str(), (const unsigned char*)img->pixels, img->w, img->h, LCT_RGB);
+	if (error)
+	{
+		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+	}
+}
+
 
 void BattlescapeState::SaveVoxelView()
 {
