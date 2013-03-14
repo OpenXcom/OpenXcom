@@ -202,7 +202,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
 	_surface->setPalette(colors, firstcolor, ncolors);
 
 	// defer actual update of screen until SDL_Flip()
-	if (immediately && SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+	if (immediately && _screen->format->BitsPerPixel == 8 && SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
 	{
 		Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 	}
