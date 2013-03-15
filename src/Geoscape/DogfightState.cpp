@@ -718,6 +718,7 @@ void DogfightState::animate()
  */
 void DogfightState::move()
 {
+	bool finalRun = false;
 	// Check if craft is not low on fuel when window minimized.
 	if(_craft->getLowFuel())
 	{
@@ -737,7 +738,7 @@ void DogfightState::move()
 		if(_ufo->getSpeed() > _craft->getSpeed())
 		{
 			_ufoBreakingOff = true;
-			_end = true;
+			finalRun = true;
 			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 		}
 	}
@@ -983,7 +984,7 @@ void DogfightState::move()
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 		_timeout += 30;
 		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
-		_end = true;
+		finalRun = true;
 		_destroyCraft = true;
 		_ufoWtimer->stop();
 		_w1Timer->stop();
@@ -1089,17 +1090,22 @@ void DogfightState::move()
 			_timeout += 50;
 			_ufoHitFrame = 3;
 		}
-		_end = true;
+		finalRun = true;
 		_ufo->setSpeed(0);
 	}
 
 	if (!_end && _ufo->getStatus() == Ufo::LANDED)
 	{
 		_timeout += 30;
-		_end = true;
+		finalRun = true;
 		_ufoWtimer->stop();
 		_w1Timer->stop();
 		_w2Timer->stop();
+	}
+
+	if (finalRun)
+	{
+		_end = true;
 	}
 }
 

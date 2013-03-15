@@ -948,13 +948,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 	{
 		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 &&
 			(*i)->getFaction() != _save->getSide() &&
-			!(*i)->isOut() &&
-			(*i)->getReactionScore() > highestReactionScore &&
-			(*i)->getMainHandWeapon() &&
-			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-			validMeleeRange((*i), unit, (*i)->getDirection())) ||
-			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
-			(*i)->getMainHandWeapon()->getRules()->getTUSnap())))
+			!(*i)->isOut())
 		{
 			if (recalculateFOV)
 			{
@@ -962,13 +956,21 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			}
 			Position originVoxel = getSightOriginVoxel(*i);
 			Position scanVoxel;
-			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
+			if ((*i)->getMainHandWeapon() &&
+			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+			validMeleeRange((*i), unit, (*i)->getDirection())) ||
+			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
+			(*i)->getMainHandWeapon()->getRules()->getTUSnap())) &&
+			(*i)->getReactionScore() > highestReactionScore)
 			{
-				if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
+				for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 				{
-					// I see you!
-					highestReactionScore = (*i)->getReactionScore();
-					action->actor = (*i);
+					if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
+					{
+						// I see you!
+						highestReactionScore = (*i)->getReactionScore();
+						action->actor = (*i);
+					}
 				}
 			}
 		}
