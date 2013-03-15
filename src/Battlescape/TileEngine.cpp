@@ -270,9 +270,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+				int distanceSqr = x*x + y*y;
 				test.z = z;
-				if (distance <= MAX_VIEW_DISTANCE)
+				if (distanceSqr <= MAX_VIEW_DISTANCE*MAX_VIEW_DISTANCE)
 				{
 					test.x = center.x + signX[direction]*(swap?y:x);
 					test.y = center.y + signY[direction]*(swap?x:y);
@@ -472,6 +472,8 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		
 		int dsqr = distanceSq(tilePos, (*i)->getPosition());
 		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
+
+		if (dsqr > (MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)) continue; // can't even see that far, yo
 		
 		Position originVoxel = getSightOriginVoxel(*i);
 
@@ -586,7 +588,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 				maxViewDistance -= t->getSmoke()/2;
 			}
 		}
-		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
+		if (distanceSq(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance*maxViewDistance)
 		{
 			unitSeen = false;
 		}
@@ -2117,7 +2119,7 @@ int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool cons
 	int x = abs(pos1.x - pos2.x);
 	int y = abs(pos1.y - pos2.y);
 	int z = considerZ ? abs(pos1.z - pos2.z) : 0;
-	return x + y + z;
+	return x*x + y*y + z*z;
 }
 
 
