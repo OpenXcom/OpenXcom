@@ -338,6 +338,7 @@ static struct AudioSequence
 					Log(LOG_DEBUG) << "Playing gmintro3";
 					m = rp->getMusic("GMINTRO3");
 					m->play(1);
+					Mix_HookMusicFinished(musicDone);
 					Mix_VolumeMusic(Options::getInt("soundVolume"));
 					break;
 				}		
