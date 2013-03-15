@@ -1266,6 +1266,8 @@ void BattlescapeState::SaveAIMap()
 
 			for (int z = tilePos.z; z >= 0; --z)
 			{
+				Position pos(tilePos.x, tilePos.y, z);
+				t = _save->getTile(pos);
 				BattleUnit *wat = t->getUnit();
 				if (wat) 
 				{
@@ -1283,6 +1285,8 @@ void BattlescapeState::SaveAIMap()
 					}
 					break;
 				}
+				pos.z--;
+				if (z > 0 && !t->hasNoFloor(_save->getTile(pos))) break; // no seeing through floors
 			}
 
 			if (t->getMapData(MapData::O_NORTHWALL) && t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
