@@ -41,8 +41,10 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, bool geo, bool autosave) : SavedGameState(game, geo, autosave), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
+	if (autosave) return;	// Don't need UI objects
+
 	// Create objects
 	
 	_edtSave = new TextEdit(168, 9, 0, 0);
@@ -145,8 +147,6 @@ void SaveState::edtSaveKeyPress(Action *action)
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		updateStatus("STR_SAVING_GAME");
-		try
-		{
 #ifdef _WIN32
 			std::string selected = Language::wstrToCp(_selected);
 			std::string filename = Language::wstrToCp(_edtSave->getText());
@@ -154,7 +154,49 @@ void SaveState::edtSaveKeyPress(Action *action)
 			std::string selected = Language::wstrToUtf8(_selected);
 			std::string filename = Language::wstrToUtf8(_edtSave->getText());
 #endif
-			_game->getSavedGame()->save(filename);
+		saveGame(filename, selected);
+	}
+}
+
+/**
+ * init SaveState.
+ */
+void SaveState::init()
+{
+	if (_autoSaveLoad)
+	{
+#ifdef _WIN32
+		std::string filename = Language::wstrToCp(L"autosave");
+#else
+		std::string filename = Language::wstrToUtf8(L"autosave");
+#endif
+		saveGame(filename, filename);
+	}
+	else
+	{
+		try
+		{
+			updateList();
+		}
+		catch (Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+		}
+	}
+}
+
+/**
+ * Save game.
+ * @param filename New filename.
+ * @param selected Old (selected) filename.
+ */
+void SaveState::saveGame(std::string filename, std::string selected)
+{
+	try
+	{
+		_game->getSavedGame()->save(filename);
+		if (!_autoSaveLoad)
+		{
 			std::string oldName = Options::getUserFolder() + selected + ".sav";
 			std::string newName = Options::getUserFolder() + filename + ".sav";
 			if (_selectedRow > 0 && oldName != newName)
@@ -165,31 +207,36 @@ void SaveState::edtSaveKeyPress(Action *action)
 				}
 			}
 			_game->popState();
+		}
+		_game->popState();
+	}
+	catch (Exception &e)
+	{
+		if (_autoSaveLoad)
 			_game->popState();
-		}
-		catch (Exception &e)
-		{
+		else
 			_edtSave->setVisible(false);
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-		}
-		catch (YAML::Exception &e)
-		{
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+	}
+	catch (YAML::Exception &e)
+	{
+		if (_autoSaveLoad)
+			_game->popState();
+		else
 			_edtSave->setVisible(false);
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error <<
-			_game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-			else
-				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-		}
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

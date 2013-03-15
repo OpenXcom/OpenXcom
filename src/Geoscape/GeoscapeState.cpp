@@ -24,14 +24,13 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
-#include "../Engine/Exception.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Options.h"
+#include "../Menu/SaveState.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
@@ -50,7 +49,6 @@
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
-#include "../Menu/ErrorMessageState.h"
 #include "GeoscapeOptionsState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
@@ -1484,30 +1482,7 @@ void GeoscapeState::time1Day()
 
 	if(Options::getBool("autosaveOnly"))
 	{
-		try
-		{
-#ifdef _WIN32
-			std::string filename = Language::wstrToCp(L"autosave");
-#else
-			std::string filename = Language::wstrToUtf8(L"autosave");
-#endif
-			_game->getSavedGame()->save(filename);
-		}
-		catch (Exception &e)
-		{
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-		}
-		catch (YAML::Exception &e)
-		{
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error <<
-			_game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-		}
+		popup(new SaveState(_game, true, true));
 	}
 }
 

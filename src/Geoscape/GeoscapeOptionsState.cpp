@@ -66,7 +66,8 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
 
-	if(!Options::getBool("autosaveOnly")) {
+	if(!Options::getBool("autosaveOnly"))
+	{
 		_btnSave->setColor(Palette::blockOffset(15)-1);
 		_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
 		_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);

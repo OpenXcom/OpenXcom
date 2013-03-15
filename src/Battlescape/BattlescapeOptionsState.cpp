@@ -362,7 +362,8 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnLoadClick);
 
-	if(!Options::getBool("autosaveOnly")) {
+	if(!Options::getBool("autosaveOnly"))
+	{
 		_btnSave->setColor(Palette::blockOffset(0));
 		_btnSave->setHighContrast(true);
 		_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
