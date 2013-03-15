@@ -1274,13 +1274,14 @@ void BattlescapeState::SaveAIMap()
 					switch(wat->getFaction())
 					{
 					case FACTION_HOSTILE:
-						characterRGBA(img, r.x, r.y, 'A', 31, 31, 255, 255);
+						// #4080C0 is Volutar Blue
+						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'a' : 'A', 0x40, 0x80, 0xC0, 0xff);
 						break;
 					case FACTION_PLAYER:
-						characterRGBA(img, r.x, r.y, 'X', 255, 255, 31, 255);
+						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'x' : 'X', 255, 255, 127, 0xff);
 						break;
 					case FACTION_NEUTRAL:
-						characterRGBA(img, r.x, r.y, 'C', 255, 31, 31, 255);
+						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'c' : 'C', 255, 127, 127, 0xff);
 						break;
 					}
 					break;
@@ -1302,6 +1303,11 @@ void BattlescapeState::SaveAIMap()
 	}
 
 	std::stringstream ss;
+
+	ss.str("");
+	ss << "z = " << tilePos.z;
+	stringRGBA(img, 12, 12, ss.str().c_str(), 0, 0, 0, 0x7f);
+
 	int i = 0;
 	do
 	{
