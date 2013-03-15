@@ -1191,7 +1191,7 @@ void BattlescapeState::handle(Action *action)
 			{
 				if (_game->getCtrlKeyDown())
 				{
-					SaveAIMap();
+					if (Options::getBool("traceAI")) SaveAIMap();
 				} else
 				{
 					SaveVoxelView();
@@ -1205,6 +1205,7 @@ void BattlescapeState::handle(Action *action)
 
 void BattlescapeState::SaveAIMap()
 {
+	Uint32 start = SDL_GetTicks();
 	BattleUnit *unit = _save->getSelectedUnit();
 	if (!unit) return;
 
@@ -1257,25 +1258,42 @@ void BattlescapeState::SaveAIMap()
 			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255 && _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->soldiersVisible != Tile::NOT_CALCULATED)
 			{
 				int e = (t->totalExposure * 255) / expMax;
-				SDL_FillRect(img, &r, (e << img->format->Rshift) + ((255-e) << img->format->Gshift));
+				SDL_FillRect(img, &r, SDL_MapRGB(img->format, e, 255-e, 0x20));
 			} else
 			{
+				if (!t->getUnit()) SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
+			}
+
+			for (int z = tilePos.z; z >= 0; --z)
+			{
 				BattleUnit *wat = t->getUnit();
-				if (wat) switch(wat->getFaction())
+				if (wat) 
 				{
-				case FACTION_HOSTILE:
-					characterRGBA(img, r.x, r.y, 'A', 31, 31, 255, 255);
-					break;
-				case FACTION_PLAYER:
-					characterRGBA(img, r.x, r.y, 'X', 255, 255, 31, 255);
-					break;
-				case FACTION_NEUTRAL:
-					characterRGBA(img, r.x, r.y, 'C', 255, 31, 31, 255);
+					switch(wat->getFaction())
+					{
+					case FACTION_HOSTILE:
+						characterRGBA(img, r.x, r.y, 'A', 31, 31, 255, 255);
+						break;
+					case FACTION_PLAYER:
+						characterRGBA(img, r.x, r.y, 'X', 255, 255, 31, 255);
+						break;
+					case FACTION_NEUTRAL:
+						characterRGBA(img, r.x, r.y, 'C', 255, 31, 31, 255);
+						break;
+					}
 					break;
 				}
-				else SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x20, 0x20, 0x20)); // gray for blocked tile
+			}
 
-			}			
+			if (t->getMapData(MapData::O_NORTHWALL) && t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
+			{
+				lineRGBA(img, r.x, r.y, r.x+r.w, r.y, 0x50, 0x50, 0x50, 255);
+			}
+			
+			if (t->getMapData(MapData::O_WESTWALL) && t->getMapData(MapData::O_WESTWALL)->getTUCost(MT_FLY) == 255)
+			{
+				lineRGBA(img, r.x, r.y, r.x, r.y+r.h, 0x50, 0x50, 0x50, 255);
+			}
 		}
 	}
 
@@ -1295,6 +1313,8 @@ void BattlescapeState::SaveAIMap()
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
 	}
+
+	Log(LOG_INFO) << "SaveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
 }
 
 
