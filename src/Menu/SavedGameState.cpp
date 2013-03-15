@@ -41,7 +41,7 @@ namespace OpenXcom
  * Initializes all the elements in the Saved Game screen.
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
- * @param autoSaveLoad false by default
+ * @param autoSaveLoad True for autosave or autoload without UI, false (default) to use UI.
  */
 SavedGameState::SavedGameState(Game *game, bool geo, bool autoSaveLoad) : State(game), _geo(geo), _autoSaveLoad(autoSaveLoad)
 {
