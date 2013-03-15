@@ -1324,6 +1324,8 @@ void BattlescapeState::SaveAIMap()
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
 	}
 
+	SDL_FreeSurface(img);
+
 	Log(LOG_INFO) << "SaveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
 }
 
