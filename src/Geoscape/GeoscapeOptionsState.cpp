@@ -43,7 +43,7 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnLoad = new TextButton(180, 20, 38, 60);
-	if(!Options::getBool("autosaveOnly")) _btnSave = new TextButton(180, 20, 38, 85);
+	_btnSave = new TextButton(180, 20, 38, 85);
 	_btnAbandon = new TextButton(180, 20, 38, 110);
 	_btnCancel = new TextButton(180, 20, 38, 140);
 	_txtTitle = new Text(206, 15, 25, 32);
@@ -53,7 +53,7 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 
 	add(_window);
 	add(_btnLoad);
-	if(!Options::getBool("autosaveOnly")) add(_btnSave);
+	add(_btnSave);
 	add(_btnAbandon);
 	add(_btnCancel);
 	add(_txtTitle);
@@ -66,12 +66,9 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
 
-	if(!Options::getBool("autosaveOnly"))
-	{
-		_btnSave->setColor(Palette::blockOffset(15)-1);
-		_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
-		_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
-	}
+	_btnSave->setColor(Palette::blockOffset(15)-1);
+	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
+	_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(_game->getLanguage()->getString("STR_ABANDON_GAME"));
@@ -85,6 +82,12 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+
+	if(Options::getBool("autosaveOnly"))
+	{
+		_btnSave->setVisible(false);
+		_btnLoad->setVisible(false);
+	}
 }
 
 /**
@@ -103,6 +106,7 @@ void GeoscapeOptionsState::init()
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+
 }
 
 /**
