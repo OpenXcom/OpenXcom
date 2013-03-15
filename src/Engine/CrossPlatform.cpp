@@ -471,7 +471,7 @@ bool deleteFile(const std::string &path)
     MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), &wstr[0], size);
 	return (DeleteFileW(wstr.c_str()) != 0);
 #else
-	return (remove(path.c_str()) != 0);
+	return (remove(path.c_str()) == 0);
 #endif
 }
 

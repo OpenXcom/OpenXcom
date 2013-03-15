@@ -326,17 +326,20 @@ static struct AudioSequence
 					Log(LOG_DEBUG) << "Playing gmintro1";
 					m = rp->getMusic("GMINTRO1");
 					m->play(1);
+					Mix_VolumeMusic((Options::getInt("soundVolume")*2)/3); // not musicVolume because we want music and sound volumes at a set ratio, unlike during gameplay
 					break;
 				case 0x201:
 					Log(LOG_DEBUG) << "Playing gmintro2";
 					m = rp->getMusic("GMINTRO2");
 					m->play(1);
+					Mix_VolumeMusic((Options::getInt("soundVolume")*2)/3);
 					break;
 				case 0x202:
 					Log(LOG_DEBUG) << "Playing gmintro3";
 					m = rp->getMusic("GMINTRO3");
 					m->play(1);
 					Mix_HookMusicFinished(musicDone);
+					Mix_VolumeMusic(Options::getInt("soundVolume"));
 					break;
 				}		
 			}
@@ -351,8 +354,11 @@ static struct AudioSequence
 				int channel = trackPosition % 4; // use at most four channels to play sound effects
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 				s = rp->getSound(sf->catFile, sf->sound);
-				Mix_Volume(channel, sf->volume);
-				if (s) s->play(channel);
+				if (s)
+				{
+					s->play(channel);
+					Mix_Volume(channel, (Options::getInt("soundVolume") * sf->volume) / 256);
+				}
 				else Log(LOG_WARNING) << "Couldn't play" << sf->catFile << " :" << introSoundTrack[trackPosition].sound;
 			}
 			++trackPosition;
@@ -400,14 +406,14 @@ void StartState::think()
 				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
 				Flc::flc.loop = 0; // just the one time, please
-				Mix_VolumeMusic(128);
 				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
 				delete audioSequence;
-				Mix_Volume(-1, Options::getInt("soundVolume"));
-				Mix_VolumeMusic(Options::getInt("musicVolume"));
+
 
 				// fade out!
+				Mix_FadeOutChannel(-1, 45*20);
+				Mix_FadeOutMusic(45*20);				
 				SDL_Color pal[256];
 				SDL_Color pal2[256];
 				memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
@@ -427,6 +433,13 @@ void StartState::think()
 				}
 				_game->getScreen()->clear();
 				_game->getScreen()->flip();
+
+				Mix_Volume(-1, Options::getInt("soundVolume"));
+				Mix_VolumeMusic(Options::getInt("musicVolume"));				
+				
+				Mix_HaltChannel(-1);
+				Mix_HaltMusic();
+				
 			}
 		}
 		catch (Exception &e)

@@ -243,6 +243,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			_playedAggroSound = true;
 		}
 		_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
+		if (_save->getPathfinding()->getStartDirection() == -1)
+		{
+			PatrolBAIState *pbai = dynamic_cast<PatrolBAIState*>(unit->getCurrentAIState());
+			if (pbai) unit->setAIState(new PatrolBAIState(_save, unit, 0)); // can't reach destination, pick someplace else to walk toward
+		}
+
 
         Position finalFacing(0, 0, INT_MAX);
         bool usePathfinding = false;
@@ -384,6 +390,17 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
+	// check for terrain explosions
+	Tile *t = _save->getTileEngine()->checkForTerrainExplosions();
+	if (t)
+	{
+		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
+		statePushNext(new ExplosionBState(this, p, 0, 0, t));
+		t = _save->getTileEngine()->checkForTerrainExplosions();
+		statePushBack(0);
+		return;
+	}
+
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
 		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
@@ -398,15 +415,6 @@ void BattlescapeGame::endTurn()
 	else
 	{
 		getMap()->setCursorType(CT_NONE);
-	}
-
-	// check for terrain explosions
-	Tile *t = _save->getTileEngine()->checkForTerrainExplosions();
-	if (t)
-	{
-		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
-		statePushNext(new ExplosionBState(this, p, 0, 0, t));
-		checkForCasualties(0, 0, false, true);
 	}
 
 	checkForCasualties(0, 0, false, false);
@@ -579,6 +587,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 						// no murderer, and no terrain explosion, must be fatal wounds
 						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
 						// show a little infobox with the name of the unit and "... is panicking"
+						if ((*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
 						_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
 					}
 				}

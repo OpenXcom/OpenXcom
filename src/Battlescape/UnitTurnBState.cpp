@@ -63,7 +63,7 @@ void UnitTurnBState::init()
 
 	_unit->lookAt(_action.target, _turret);
 
-	if (_unit->getStatus() != STATUS_TURNING)
+	if (_unit->getStatus() != STATUS_TURNING && _action.type == BA_NONE)
 	{
 		// try to open a door
 		int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);

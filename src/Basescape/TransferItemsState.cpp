@@ -55,8 +55,8 @@ namespace OpenXcom
  */
 TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _aOffset(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _distance(0.0)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	_canTransferCraftsInAirborne = Options::getBool("canTransferCraftsInAirborne");
 
 	// Create objects

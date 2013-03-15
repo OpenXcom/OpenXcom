@@ -128,6 +128,7 @@ AbortMissionState::~AbortMissionState()
 void AbortMissionState::btnOkClick(Action *)
 {
 	_game->popState();
+	_battleGame->setAborted(true);
 	_state->finishBattle(true, _inExitArea);
 }
 

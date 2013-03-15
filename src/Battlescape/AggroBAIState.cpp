@@ -494,7 +494,7 @@ void AggroBAIState::wayPointAction(BattleAction *action)
 			PathDirection = _game->getPathfinding()->dequeuePath();
 		}
 		action->target = action->waypoints.front();
-		if( action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
+		if ((int) action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
 		{
 			action->type = BA_RETHINK;
 		}
@@ -585,8 +585,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	_unit->_hidingForTurn = true;
 	int tries = -1;
 	bool coverFound = false;
-	int x_search_sign = RNG::generate(0, 1) ? 1 : -1; // randomize the direction of the search for lack of a better heuristic
-	int y_search_sign = RNG::generate(0, 1) ? 1 : -1;
 	int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
 	int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
 	int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());

@@ -711,7 +711,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	int relX = floor(((float)relPos.y)*normal+0.5);
 	int relY = floor(((float)-relPos.x)*normal+0.5);
 
-	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relX,-relY, -relX,relY};
+	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
  
 	if (!otherUnit->isOut())
 	{
@@ -948,13 +948,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 	{
 		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 &&
 			(*i)->getFaction() != _save->getSide() &&
-			!(*i)->isOut() &&
-			(*i)->getReactionScore() > highestReactionScore &&
-			(*i)->getMainHandWeapon() &&
-			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-			validMeleeRange((*i), unit, (*i)->getDirection())) ||
-			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
-			(*i)->getMainHandWeapon()->getRules()->getTUSnap())))
+			!(*i)->isOut())
 		{
 			if (recalculateFOV)
 			{
@@ -962,13 +956,21 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			}
 			Position originVoxel = getSightOriginVoxel(*i);
 			Position scanVoxel;
-			for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
+			if ((*i)->getMainHandWeapon() &&
+			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+			validMeleeRange((*i), unit, (*i)->getDirection())) ||
+			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
+			(*i)->getMainHandWeapon()->getRules()->getTUSnap())) &&
+			(*i)->getReactionScore() > highestReactionScore)
 			{
-				if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
+				for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 				{
-					// I see you!
-					highestReactionScore = (*i)->getReactionScore();
-					action->actor = (*i);
+					if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
+					{
+						// I see you!
+						highestReactionScore = (*i)->getReactionScore();
+						action->actor = (*i);
+					}
 				}
 			}
 		}
@@ -1123,7 +1125,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 			double sin_fi = sin(fi * M_PI / 180.0);
 			double cos_fi = cos(fi * M_PI / 180.0);
 
-			Tile *origin = _save->getTile(center);
+			Tile *origin = _save->getTile(Position(centerX, centerY, centerZ));
 			double l = 0;
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
@@ -1141,6 +1143,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 				Tile *dest = _save->getTile(Position(tileX, tileY, tileZ));
 				if (!dest) break; // out of map!
+
 
 				// blockage by terrain is deducted from the explosion power
 				if (l != 0) // no need to block epicentrum
@@ -1707,7 +1710,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 		calculateFOV(unit->getPosition());
 		// look from the other side (may be need check reaction fire?)
 		std::vector<BattleUnit*> *vunits = unit->getVisibleUnits();
-		for (int i = 0; i < vunits->size(); ++i)
+		for (size_t i = 0; i < vunits->size(); ++i)
 		{
 			calculateFOV(vunits->at(i));
 		}
