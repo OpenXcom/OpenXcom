@@ -1481,9 +1481,7 @@ void GeoscapeState::time1Day()
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
 	if(Options::getBool("autosaveOnly"))
-	{
 		popup(new SaveState(_game, true, true));
-	}
 }
 
 /**
