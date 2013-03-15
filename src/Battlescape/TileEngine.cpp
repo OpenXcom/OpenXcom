@@ -2104,8 +2104,8 @@ void TileEngine::togglePersonalLighting()
  */
 int TileEngine::distance(const Position &pos1, const Position &pos2) const
 {
-	int x = abs(pos1.x - pos2.x);
-	int y = abs(pos1.y - pos2.y);
+	int x = pos1.x - pos2.x;
+	int y = pos1.y - pos2.y;
 	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
 }
 
@@ -2116,9 +2116,9 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
  */
 int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const
 {
-	int x = abs(pos1.x - pos2.x);
-	int y = abs(pos1.y - pos2.y);
-	int z = considerZ ? abs(pos1.z - pos2.z) : 0;
+	int x = pos1.x - pos2.x;
+	int y = pos1.y - pos2.y;
+	int z = considerZ ? (pos1.z - pos2.z) : 0;
 	return x*x + y*y + z*z;
 }
 
