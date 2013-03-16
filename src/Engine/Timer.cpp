@@ -43,7 +43,7 @@ int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.
  */
-Timer::Timer(Uint32 interval, bool frameSkipping) : _start(0), _interval(interval), _running(false), _state(0), _surface(0), _frameSkipping(frameSkipping)
+Timer::Timer(Uint32 interval, bool frameSkipping) : _start(0), _interval(interval), _running(false), _frameSkipping(frameSkipping), _state(0), _surface(0)
 {
 	Timer::maxFrameSkip = Options::getInt("maxFrameSkip");
 }

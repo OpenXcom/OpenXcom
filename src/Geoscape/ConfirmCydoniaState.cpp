@@ -92,7 +92,7 @@ void ConfirmCydoniaState::btnConfirmClick(Action *)
 	_game->popState();
 	
 	int month = 
-		_game->getSavedGame()->getMonthsPassed() > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
+		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
 		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
 		_game->getSavedGame()->getMonthsPassed() ;  // else
 

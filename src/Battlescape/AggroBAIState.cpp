@@ -602,7 +602,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				
 	Tile *tile = 0;
 				
-	bool traceSpammed = false;
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
 				
 	// weights of various factors in choosing a tile to which to withdraw
@@ -612,7 +611,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int FIRE_PENALTY = 40;
 	const int SMOKE_PENALTY = 5;
 	const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*3;
-	const int MELEE_TUNNELVISION_BONUS = 200;
 	const int DIRECT_PATH_PENALTY = 10;
 	const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
