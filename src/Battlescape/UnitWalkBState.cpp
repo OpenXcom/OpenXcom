@@ -325,7 +325,20 @@ void UnitWalkBState::think()
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
 				return; // don't start walking yet, wait for the ufo door to open
 			}
-
+			for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
+			{
+				for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
+				{
+					if (_parent->getSave()->getTile(destination + Position(x,y,0))->getUnit() &&
+						_parent->getSave()->getTile(destination + Position(x,y,0))->getUnit() != _unit &&
+						!_falling)
+					{
+						_action.TU = 0;
+						postPathProcedures();
+						return;
+					}
+				}
+			}
 			// now start moving
 			dir = _pf->dequeuePath();
 			if (_falling)
