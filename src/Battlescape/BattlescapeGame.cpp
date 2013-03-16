@@ -1013,7 +1013,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if ((*j)->getFaction() == FACTION_PLAYER && handlePanickingUnit(*j))
+		if ((*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER && handlePanickingUnit(*j))
 			return false;
 	}
 	return true;
