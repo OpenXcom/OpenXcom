@@ -907,9 +907,11 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 		}
 	}
 
-	_save->getItems()->push_back(item);
-	item->setXCOMProperty(true);
-
+	if (!secondPass)
+	{
+		_save->getItems()->push_back(item);
+		item->setXCOMProperty(true);
+	}
 	return item;
 }
 
