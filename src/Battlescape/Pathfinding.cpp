@@ -371,6 +371,10 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 			cost += wallcost;
+			if (_unit->getFaction() == FACTION_HOSTILE && 
+				destinationTile->getUnit() &&
+				destinationTile->getUnit() != _unit)
+				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
@@ -492,11 +496,11 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		BattleUnit *unit = tile->getUnit();
 		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
-		if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
-			(_unit->getFaction() == FACTION_PLAYER && unit->getVisible())) return true;		// player know all visible units
-		if (_unit->getFaction() != FACTION_PLAYER)
+		//if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
+		if (_unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+		//if (_unit->getFaction() != FACTION_PLAYER)
 		{
-			if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
+			//if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
 			// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies		
 		
 #if 0
