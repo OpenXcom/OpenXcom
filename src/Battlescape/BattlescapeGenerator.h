@@ -79,7 +79,7 @@ private:
 	/// Place an item to a soldier based on equipment layout
 	BattleItem* placeItemByLayout(BattleItem *item);
 	/// Add an item to the game
-	BattleItem* addItem(BattleItem *item);
+	BattleItem* addItem(BattleItem *item, bool secondPass);
 	// Add an item to a unit
 	BattleItem* addItem(RuleItem *item, BattleUnit *unit);
 	/// loads an XCOM MAP file
