@@ -606,7 +606,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
 				
 	// weights of various factors in choosing a tile to which to withdraw
-	const int EXPOSURE_PENALTY = civ ? 20 : -20;
+	const int EXPOSURE_PENALTY = civ ? -20 : 20;
 	const int WINDOW_PENALTY = 30;
 	const int WALL_BONUS = 1;
 	const int FIRE_PENALTY = 40;
