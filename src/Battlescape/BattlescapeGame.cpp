@@ -1444,7 +1444,16 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 {
 	// in case the unit was unconscious
 	getSave()->removeUnconsciousBodyItem(unit);
+
 	unit->instaKill();
+
+	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
+	{
+		std::wstringstream ss;
+		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
+		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+	}
+
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		dropItem(unit->getPosition(), (*i));
