@@ -1302,10 +1302,6 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				//  -= start walking =-
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
-				if (_save->getSelectedUnit()->isKneeled())
-				{
-					kneel(_save->getSelectedUnit());
-				}
 				statePushBack(new UnitWalkBState(this, _currentAction));
 			}
 		}

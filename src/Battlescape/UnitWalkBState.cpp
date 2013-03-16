@@ -72,6 +72,14 @@ void UnitWalkBState::think()
 {
 	bool unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
+	if (_unit->isKneeled())
+	{
+		_parent->kneel(_unit);
+		_unit->setCache(0);
+		_terrain->calculateFOV(_unit);
+		_parent->getMap()->cacheUnit(_unit);
+		return;
+	}
 	Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 
 	if (_unit->isOut())
