@@ -1013,7 +1013,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if ((*j)->getFaction() == FACTION_PLAYER && handlePanickingUnit(*j))
+		if ((*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER && handlePanickingUnit(*j))
 			return false;
 	}
 	return true;
@@ -1302,10 +1302,6 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				//  -= start walking =-
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
-				if (_save->getSelectedUnit()->isKneeled())
-				{
-					kneel(_save->getSelectedUnit());
-				}
 				statePushBack(new UnitWalkBState(this, _currentAction));
 			}
 		}
@@ -1448,7 +1444,16 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 {
 	// in case the unit was unconscious
 	getSave()->removeUnconsciousBodyItem(unit);
+
 	unit->instaKill();
+
+	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
+	{
+		std::wstringstream ss;
+		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
+		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+	}
+
 	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		dropItem(unit->getPosition(), (*i));

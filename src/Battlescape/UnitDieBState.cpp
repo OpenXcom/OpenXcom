@@ -79,6 +79,9 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		}
 	}
 	
+	_unit->clearVisibleTiles();
+	_unit->clearVisibleUnits();
+
     parent->resetSituationForAI();
 
     if (_unit->getFaction() == FACTION_HOSTILE)
@@ -132,10 +135,6 @@ void UnitDieBState::think()
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_parent->getMap()->setUnitDying(false);
-		if (!_unit->getVisibleUnits()->empty())
-		{
-			_unit->clearVisibleUnits();
-		}
 		if (_unit->getTurnsExposed())
 		{
 			_unit->setTurnsExposed(0);

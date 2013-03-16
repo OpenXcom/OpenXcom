@@ -843,10 +843,6 @@ void SavedBattleGame::endTurn()
 			(*i)->setTurnsExposed(-1);
 			updateExposedUnits();
 		}
-		if ((*i)->getFaction() != FACTION_PLAYER)
-		{
-			(*i)->setVisible(false);
-		}
 	}
 
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
@@ -854,6 +850,10 @@ void SavedBattleGame::endTurn()
 		if ((*i)->getFaction() == _side)
 		{
 			(*i)->prepareNewTurn();
+		}
+		if ((*i)->getFaction() != FACTION_PLAYER)
+		{
+			(*i)->setVisible(false);
 		}
 		_tileEngine->calculateFOV(*i);
 	}

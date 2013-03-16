@@ -259,19 +259,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
-			/*
+			
 			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, missileTarget) || isBlocked(destinationTile, MapData::O_OBJECT, missileTarget))
+			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 				return 255;
-			*/
-			// can't walk on top of other units
-			if (_save->getTile(*endPosition + Position(x,y,-1))
-				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit()
-				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != _unit
-				&& _save->getTile(*endPosition + Position(x,y,-1))->getUnit() != target
-				&& !_save->getTile(*endPosition + Position(x,y,-1))->getUnit()->isOut()
-				&& _movementType != MT_FLY && _save->getTile(*endPosition + offset)->hasNoFloor(belowDestination))
-				return 255;
+			
 
 			// if we are on a stairs try to go up a level
 			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
@@ -352,18 +344,10 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 
 			// check if the destination tile can be walked over
-			if ((isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target)) && !fellDown)
+			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 			{
 				return 255;
 			}
-
-			// can't walk through other units
-			if (_save->getTile(*endPosition + Position(x,y,0))
-				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit()
-				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit() != _unit
-				&& _save->getTile(*endPosition + Position(x,y,0))->getUnit() != target
-				&& !_save->getTile(*endPosition + Position(x,y,0))->getUnit()->isOut())
-				return 255;
 
 			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
 			if (direction < DIR_UP && !fellDown && destinationTile->hasNoFloor(0))
@@ -387,6 +371,10 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 			cost += wallcost;
+			if (_unit->getFaction() == FACTION_HOSTILE && 
+				destinationTile->getUnit() &&
+				destinationTile->getUnit() != _unit)
+				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
@@ -508,11 +496,11 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		BattleUnit *unit = tile->getUnit();
 		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
-		if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
-			(_unit->getFaction() == FACTION_PLAYER && unit->getVisible())) return true;		// player know all visible units
-		if (_unit->getFaction() != FACTION_PLAYER)
+		//if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
+		if (_unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+		//if (_unit->getFaction() != FACTION_PLAYER)
 		{
-			if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
+			//if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
 			// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies		
 		
 #if 0
@@ -607,14 +595,6 @@ bool Pathfinding::canFallDown(Tile *here)
 {
 	if (here->getPosition().z == 0)
 		return false;
-	for (int z = 1; z <= here->getPosition().z; ++z)
-	{
-		if (_save->selectUnit(here->getPosition() - Position(0, 0, z)) &&
-			_save->selectUnit(here->getPosition() - Position(0, 0, z)) != _unit &&
-			!_save->selectUnit(here->getPosition() - Position(0, 0, z))->isOut())
-			return false;
-	}
-
 	Tile* tileBelow = _save->getTile(here->getPosition() - Position (0,0,1));
 
 	return here->hasNoFloor(tileBelow);
