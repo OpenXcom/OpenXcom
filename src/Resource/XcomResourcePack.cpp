@@ -422,7 +422,9 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		{
 			if (cats == 0)
 			{
-				throw Exception(cats[i] + " not found"); // meow?
+        std::stringstream ss;
+        ss << "Cats[" << i << "] not found";
+				throw Exception(ss.str());
 			}
 			else
 			{
@@ -487,7 +489,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		dim.beg_y = 0;
 		dim.end_y = 24;
 		dim.beg_x = 11;
-		dim.beg_x = 20;
+		dim.end_x = 20;
 		head.setDomain(dim);
 		s->lock();
 		ShaderDraw<HairBleach>(head);

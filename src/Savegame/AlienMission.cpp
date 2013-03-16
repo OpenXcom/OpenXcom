@@ -19,6 +19,7 @@
 #include "AlienMission.h"
 #include "AlienBase.h"
 #include "Base.h"
+#include "../aresame.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
@@ -362,7 +363,7 @@ public:
 	/// Remember the query coordinates.
 	MatchBaseCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
 	/// Match with base's coordinates.
-	bool operator()(const Base *base) const { return _lon == base->getLongitude() && _lat == base->getLatitude(); }
+	bool operator()(const Base *base) const { return AreSame(base->getLongitude(), _lon) && AreSame(base->getLatitude(), _lat); }
 private:
 	double _lon, _lat;
 };

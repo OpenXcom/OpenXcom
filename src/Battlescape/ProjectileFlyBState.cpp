@@ -314,7 +314,7 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				if (_action.type == BA_LAUNCH && _ammo->spendBullet() == false)
+				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);

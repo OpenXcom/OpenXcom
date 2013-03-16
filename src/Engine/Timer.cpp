@@ -29,7 +29,7 @@ Uint32 slowness = 1;
 Uint32 slowTick()
 {
 	static Uint32 old_time = SDL_GetTicks();
-	static Uint64 false_time = old_time << accurate;
+	static Uint64 false_time = static_cast<Uint64>(old_time) << accurate;
 	Uint64 new_time = ((Uint64)SDL_GetTicks()) << accurate;
 	false_time += (new_time - old_time) / slowness;
 	old_time = new_time;

@@ -18,6 +18,7 @@
  */
 #include "Window.h"
 #include <SDL.h>
+#include "../aresame.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
@@ -132,7 +133,7 @@ void Window::think()
  */
 void Window::popup()
 {
-	if (_popupStep == 0.0)
+	if ( AreSame(_popupStep, 0.0) )
 	{
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)

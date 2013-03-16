@@ -242,8 +242,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
-		_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
-		if (_save->getPathfinding()->getStartDirection() == -1)
+    if (_save->getTile(action.target)) {
+      _save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
+		}
+    if (_save->getPathfinding()->getStartDirection() == -1)
 		{
 			PatrolBAIState *pbai = dynamic_cast<PatrolBAIState*>(unit->getCurrentAIState());
 			if (pbai) unit->setAIState(new PatrolBAIState(_save, unit, 0)); // can't reach destination, pick someplace else to walk toward
@@ -832,7 +834,8 @@ void BattlescapeGame::popState()
 
 	BattleAction action = _states.front()->getAction();
 
-	if (action.result.length() > 0 && action.actor->getFaction() == FACTION_PLAYER && _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
+	if (action.actor && action.result.length() > 0 && action.actor->getFaction() == FACTION_PLAYER 
+    && _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
 	{
 		_parentState->warning(action.result);
 		actionFailed = true;

@@ -1139,7 +1139,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 
 				// blockage by terrain is deducted from the explosion power
-				if (l != 0) // no need to block epicentrum
+				if (std::abs(l) > 0) // no need to block epicentrum
 				{
 					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
@@ -1812,7 +1812,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		if (swap_xz) std::swap(cx, cz);
 		if (swap_xy) std::swap(cx, cy);
 
-		if (storeTrajectory)
+		if (storeTrajectory && trajectory)
 		{
 			trajectory->push_back(Position(cx, cy, cz));
 		}
@@ -1822,7 +1822,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible);
 			if (result != -1)
 			{
-				if (trajectory != 0)
+				if (trajectory)
 				{ // store the position of impact
 					trajectory->push_back(Position(cx, cy, cz));
 				}
@@ -1928,7 +1928,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
 		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
 		z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
-		if (storeTrajectory)
+		if (storeTrajectory && trajectory)
 		{
 			trajectory->push_back(Position(x, y, z));
 		}
@@ -2121,10 +2121,10 @@ int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool cons
 bool TileEngine::psiAttack(BattleAction *action)
 {
 	BattleUnit *victim = _save->getTile(action->target)->getUnit();
-	double attackStrength = action->actor->getStats()->psiStrength * action->actor->getStats()->psiSkill / 50;
-	double defenseStrength = victim->getStats()->psiStrength + 10 + (victim->getStats()->psiSkill / 5);
+	double attackStrength = static_cast<double>(action->actor->getStats()->psiStrength) * action->actor->getStats()->psiSkill / 50;
+	double defenseStrength = static_cast<double>(victim->getStats()->psiStrength) + 10.0 + (static_cast<double>(victim->getStats()->psiSkill) / 5);
 	int d = distance(action->actor->getPosition(), action->target);
-	attackStrength -= d/2;
+	attackStrength -= static_cast<double>(d)/2;
 	attackStrength += RNG::generate(0,55);
 
 	if (action->type == BA_MINDCONTROL)
