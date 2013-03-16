@@ -225,7 +225,7 @@ static size_t BattleUnitsChecksum(std::vector<BattleUnit*>& units)
  */
 bool TileEngine::calculateFOV(BattleUnit *unit)
 {
-	size_t visibleUnitsChecksum = 0, oldNumVisibleUnits = 0;
+	size_t oldNumVisibleUnits = unit->getUnitsSpottedThisTurn().size();
 	Position center = unit->getPosition();
 	Position test;
 	int direction;
@@ -242,11 +242,6 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	int signX[8] = { +1, +1, +1, +1, -1, -1, -1, -1 };
 	int signY[8] = { -1, -1, -1, +1, +1, +1, -1, -1 };
 	int y1, y2;
-
-	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
-	visibleUnitsChecksum = BattleUnitsChecksum(*(unit->getVisibleUnits()));	
-
-	oldNumVisibleUnits = unit->getVisibleUnits()->size();
 
 	unit->clearVisibleUnits();
 	unit->clearVisibleTiles();
@@ -346,12 +341,10 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		}
 	}
 
-	size_t newChecksum = BattleUnitsChecksum(*(unit->getVisibleUnits()));
-
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
 	// or we stop if there are more visible units seen
-	if (visibleUnitsChecksum != newChecksum && unit->getVisibleUnits()->size() >= oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
+	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
 	{
 		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
 		if (unit->getFaction() == FACTION_HOSTILE)

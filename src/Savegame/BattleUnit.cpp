@@ -1175,6 +1175,19 @@ void BattleUnit::setTimeUnits(int tu)
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 {
+	bool add = true;
+	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end();++i)
+	{
+		if ((BattleUnit*)(*i) == unit)
+		{
+			add = false;
+			break;
+		}
+	}
+	if (add)
+	{
+		_unitsSpottedThisTurn.push_back(unit);
+	}
 	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
@@ -1355,6 +1368,11 @@ void BattleUnit::prepareNewTurn()
 {
 	// revert to original faction
 	_faction = _originalFaction;
+
+	if (!_unitsSpottedThisTurn.empty())
+	{
+		for (std::vector<BattleUnit *>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); i = _unitsSpottedThisTurn.erase(i));
+	}
 
 	// recover TUs
 	int TURecovery = getStats()->tu;
@@ -2365,6 +2383,11 @@ void BattleUnit::invalidateCache()
 {
 	for (int i = 0; i < 5; ++i) { _cache[i] = 0; }
 	_cacheInvalid = true;
+}
+
+std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
+{
+	return _unitsSpottedThisTurn;
 }
 
 }
