@@ -271,6 +271,10 @@ void BattleUnit::load(const YAML::Node &node)
 	{
 		_originalFaction = _faction;
 	}
+	if (const YAML::Node *pName = node.FindValue("kills"))
+	{
+		(*pName) >> _kills;
+	}
 	_charging = 0;
 
 
@@ -328,6 +332,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
 	if (_originalFaction != _faction)
 		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
+	if (_kills)
+		out << YAML::Key << "kills" << YAML::Value << _kills;
 
 	out << YAML::EndMap;
 }
