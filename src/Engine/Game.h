@@ -112,7 +112,7 @@ public:
 	/// Returns whether the Shift key is down
 	static bool getShiftKeyDown();
 	/// Returns whether current state is the param state
-	const bool isState(State *state) const;
+	bool isState(State *state) const;
 };
 
 }

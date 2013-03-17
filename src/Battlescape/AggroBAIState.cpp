@@ -607,7 +607,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				
 	Tile *tile = 0;
 				
-	bool traceSpammed = false;
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
 
 	if (_unit->getTimeUnits() <= 5)
