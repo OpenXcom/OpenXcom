@@ -209,11 +209,6 @@ void AggroBAIState::think(BattleAction *action)
 		}
 	}
 	
-	if (_unit->getGrenadeFromBelt() && action->type != BA_RETHINK && RNG::generate(0, 9 - action->diff) == 0)
-	{
-		grenadeAction(action);
-	}
-
 	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,9 - action->diff) == 0)
 	{
 		psiAction(action);
@@ -224,6 +219,10 @@ void AggroBAIState::think(BattleAction *action)
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		takeCoverAction(action);
 		action->reckless = true;
+	}
+	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0, 9 - action->diff) == 0)
+	{
+		grenadeAction(action);
 	}
 
 	if (_aggroTarget != 0) { setAggroTarget(_aggroTarget); }
@@ -566,7 +565,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 			if (tu <= _unit->getStats()->tu)
 			{
 				// are we within range?
-				if (ProjectileFlyBState::validThrowRange(action))
+				if (_game->getTileEngine()->validateThrow(action))
 				{
 					grenade->setExplodeTurn(_game->getTurn());
 					_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade));

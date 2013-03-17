@@ -39,6 +39,7 @@
 #include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
+#include "ProjectileFlyBState.h"
 #include "../Engine/Logger.h"
 
 namespace OpenXcom
@@ -2359,5 +2360,53 @@ int TileEngine::faceWindow(const Position &position)
 	return -1;
 }
 
+
+bool TileEngine::validateThrow(BattleAction *action)
+{
+	Position originVoxel, targetVoxel;
+	bool foundCurve = false;
+	Position origin = action->actor->getPosition();
+	std::vector<Position> _trajectory;
+	// object blocking - can't throw here
+	if (action->type == BA_THROW && _save->getTile(action->target) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	{
+		return false;
+	}
+
+	originVoxel = Position(origin.x*16 + 8, origin.y*16 + 8, origin.z*24);
+	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
+	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
+	originVoxel.z -= 3;
+	if (originVoxel.z >= (origin.z + 1)*24)
+	{
+		origin.z++;
+	}
+
+
+	// determine the target voxel.
+	// aim at the center of the floor
+	targetVoxel = Position(action->target.x*16 + 8, action->target.y*16 + 8, action->target.z*24 + 2);
+
+	// we try 4 different curvatures to try and reach our goal.
+	double curvature = 1.0;
+	while (!foundCurve && curvature < 5.0)
+	{
+		calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
+		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
+		{
+			foundCurve = true;
+		}
+		else
+		{
+			curvature += 1.0;
+		}
+		_trajectory.clear();
+	}
+	if (curvature == 5.0)
+	{
+		return false;
+	}
+	return ProjectileFlyBState::validThrowRange(action);
+}
 
 }

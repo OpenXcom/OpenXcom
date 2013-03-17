@@ -103,6 +103,8 @@ public:
 	bool isVoxelVisible(const Position& voxel);
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *alsoExclude = 0);
 	bool detonate(Tile* tile);
+	bool validateThrow(BattleAction *action);
+
 };
 
 }
