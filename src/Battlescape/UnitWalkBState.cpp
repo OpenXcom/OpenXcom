@@ -70,7 +70,7 @@ void UnitWalkBState::init()
 
 void UnitWalkBState::think()
 {
-	bool unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+	bool unitSpotted = false;
 	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 	if (_unit->isKneeled())
 	{
@@ -184,7 +184,7 @@ void UnitWalkBState::think()
 
 			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
-			unitSpotted = _terrain->calculateFOV(_unit);
+			unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			BattleAction action;
 			
@@ -415,8 +415,8 @@ void UnitWalkBState::think()
 		{
 			_unit->turn();
 		}
-
-		unitSpotted = _terrain->calculateFOV(_unit);
+		
+		unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
