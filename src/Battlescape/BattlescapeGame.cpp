@@ -221,7 +221,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	BattleAction action;
-	action.diff = _parentState->getGame()->getSavedGame()->getDifficulty();
     action.number = _AIActionCounter;
 	unit->think(&action);
 	

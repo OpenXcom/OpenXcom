@@ -25,12 +25,15 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/BattleScapeState.h"
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
 
@@ -167,7 +170,8 @@ void AggroBAIState::exit()
  */
 void AggroBAIState::think(BattleAction *action)
 {
-	
+	// design choices thus far force me to derive the difficulty this way.
+	action->diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
  	action->type = BA_RETHINK;
 	action->actor = _unit;
 	
@@ -204,15 +208,15 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 	}
-
-	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,3) == 0)
-	{
-		psiAction(action);
-	}
-	// TODO: make this dependant on difficulty level
-	if (_unit->getGrenadeFromBelt() && _aggroTarget && RNG::generate(0,3) == 0)
+	
+	if (_unit->getGrenadeFromBelt() && action->type != BA_RETHINK && RNG::generate(0, 9 - action->diff) == 0)
 	{
 		grenadeAction(action);
+	}
+
+	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,9 - action->diff) == 0)
+	{
+		psiAction(action);
 	}
 
 	if (takeCoverAssessment(action))
