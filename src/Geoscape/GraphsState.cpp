@@ -425,8 +425,6 @@ void GraphsState::btnFinanceClick(Action *)
 	_finance = true;
 	resetScreen();
 	drawLines();
-	updateScale(1000);
-	_txtFactor->setVisible(true);
 
 	for(std::vector<ToggleTextButton *>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
 	{
@@ -498,7 +496,6 @@ void GraphsState::btnFinanceListClick(Action *action)
 	_financeToggles.at(number) = button->getPressed();
 
 	drawLines();
-	updateScale(1000);
 }
 
 /**
@@ -948,7 +945,7 @@ void GraphsState::drawFinanceLines()
 	}
 
 	//adjust the scale to fit the upward maximum
-	for(int check = 100000; check <= 1000000000; check *= 10)
+	for(int check = 1000; check <= 1000000000; check *= 10)
 	{
 		if(roof < check - (check/10))
 		{
@@ -1000,6 +997,16 @@ void GraphsState::drawFinanceLines()
 				offset = 8;
 			if(newLineVector.size() > 1)
 				_financeLines.at(button)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset((button/2)+1)+offset);
+		}
+	}
+	updateScale(1);
+	_txtFactor->setVisible(false);
+	for (std::size_t i = 0; i != 4; ++i)
+	{
+		if (_financeToggles.at(i))
+		{
+			_txtFactor->setVisible(true);
+			updateScale(1000);
 		}
 	}
 }
