@@ -329,9 +329,19 @@ void UnitWalkBState::think()
 			{
 				for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
 				{
-					if (_parent->getSave()->getTile(destination + Position(x,y,0))->getUnit() &&
-						_parent->getSave()->getTile(destination + Position(x,y,0))->getUnit() != _unit &&
-						!_falling)
+					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit();
+					BattleUnit* unitBelowMyWay;
+					Tile* belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
+					if (belowDest)
+					{
+						unitBelowMyWay = belowDest->getUnit();
+					}
+					// can't walk into units in this tile, or on top of other units sticking their head into this tile
+					if (!_falling &&
+						((unitInMyWay && unitInMyWay != _unit)
+						|| (belowDest && unitBelowMyWay && unitBelowMyWay != _unit &&
+						(-belowDest->getTerrainLevel() + unitBelowMyWay->getFloatHeight() + unitBelowMyWay->getHeight())
+						>= 28)))  // 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						_action.TU = 0;
 						postPathProcedures();
