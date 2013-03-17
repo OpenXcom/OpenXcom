@@ -27,7 +27,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Battlescape/TileEngine.h"
-#include "../Battlescape/BattleScapeState.h"
+#include "../Battlescape/BattlescapeState.h"
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
