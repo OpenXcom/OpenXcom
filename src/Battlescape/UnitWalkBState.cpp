@@ -305,7 +305,10 @@ void UnitWalkBState::think()
 
 			if (tu > _unit->getTimeUnits())
 			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				if (tu < 255)
+				{
+					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				}
 				_pf->abortPath();
 				_parent->getMap()->cacheUnit(_unit);
 				return;
@@ -416,7 +419,7 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		_unit->turn(_unit->getTurretType() > -1);
+		_unit->turn();
 
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
