@@ -39,6 +39,7 @@
 #include "../Resource/ResourcePack.h"
 #include "Pathfinding.h"
 #include "../Engine/Options.h"
+#include "ProjectileFlyBState.h"
 #include "../Engine/Logger.h"
 
 namespace OpenXcom
@@ -225,7 +226,7 @@ static size_t BattleUnitsChecksum(std::vector<BattleUnit*>& units)
  */
 bool TileEngine::calculateFOV(BattleUnit *unit)
 {
-	size_t visibleUnitsChecksum = 0, oldNumVisibleUnits = 0;
+	size_t oldNumVisibleUnits = unit->getUnitsSpottedThisTurn().size();
 	Position center = unit->getPosition();
 	Position test;
 	int direction;
@@ -242,11 +243,6 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	int signX[8] = { +1, +1, +1, +1, -1, -1, -1, -1 };
 	int signY[8] = { -1, -1, -1, +1, +1, +1, -1, -1 };
 	int y1, y2;
-
-	// calculate a visible units checksum - if it changed during this step, the soldier stops walking
-	visibleUnitsChecksum = BattleUnitsChecksum(*(unit->getVisibleUnits()));	
-
-	oldNumVisibleUnits = unit->getVisibleUnits()->size();
 
 	unit->clearVisibleUnits();
 	unit->clearVisibleTiles();
@@ -275,9 +271,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distance = int(floor(sqrt(float(x*x + y*y)) + 0.5));
+				int distanceSqr = x*x + y*y;
 				test.z = z;
-				if (distance <= MAX_VIEW_DISTANCE)
+				if (distanceSqr <= MAX_VIEW_DISTANCE*MAX_VIEW_DISTANCE)
 				{
 					test.x = center.x + signX[direction]*(swap?y:x);
 					test.y = center.y + signY[direction]*(swap?x:y);
@@ -346,12 +342,10 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		}
 	}
 
-	size_t newChecksum = BattleUnitsChecksum(*(unit->getVisibleUnits()));
-
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
 	// or we stop if there are more visible units seen
-	if (visibleUnitsChecksum != newChecksum && unit->getVisibleUnits()->size() >= oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
+	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
 	{
 		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
 		if (unit->getFaction() == FACTION_HOSTILE)
@@ -466,6 +460,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	tile->closestSoldierDSqr = INT_MAX;
 	tile->closestAlienDSqr = INT_MAX;
 	tile->meanSoldierDSqr = INT_MAX;
+	tile->totalExposure = 0;
 	
 	int dsqrTotal = 0;
 	
@@ -478,6 +473,8 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		
 		int dsqr = distanceSq(tilePos, (*i)->getPosition());
 		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
+
+		if (dsqr > (MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)) continue; // can't even see that far, yo
 		
 		Position originVoxel = getSightOriginVoxel(*i);
 
@@ -486,10 +483,14 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetTile(&originVoxel, tile, MapData::O_FLOOR, &targetVoxel, *i)) 
 		//if ((*i)->getFaction() == FACTION_PLAYER && calculateLine(originVoxel, targetVoxel, false, 0, *i, false) == 4)
 
-		// this works OK but we don't need to try all those rays for this tactical assessment; Volutar might be working on a superior routine, though
-		if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
+		// this works OK but we don't need to try all those rays for this tactical assessment
+		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
+		// this should be the best, a routine that gives us the degree of exposure while economizing raytraces:
+		int exposure;
+		if ((*i)->getFaction() == FACTION_PLAYER && (exposure = checkVoxelExposure(&originVoxel, tile, *i, queryingUnit)))
 		{
 			++tile->soldiersVisible;
+			tile->totalExposure += exposure;
 
 			if (dsqr < tile->closestSoldierDSqr)
 			{
@@ -534,6 +535,13 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
 	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
+	
+	if (currentUnit->getArmor()->getSize() > 1)
+	{
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 1; //topmost voxel
+	}
 
 	return originVoxel;
 }
@@ -559,12 +567,6 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 
 	bool unitSeen = false;
 	// for large units origin voxel is in the middle
-	if (currentUnit->getArmor()->getSize() > 1)
-	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 1; //topmost voxel
-	}
 
 	Position scanVoxel;
 	std::vector<Position> _trajectory;
@@ -587,7 +589,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 				maxViewDistance -= t->getSmoke()/2;
 			}
 		}
-		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
+		if (distanceSq(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance*maxViewDistance)
 		{
 			unitSeen = false;
 		}
@@ -601,9 +603,10 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
  * @param originVoxel voxel of trace origin (eye or gun's barrel)
  * @param tile the tile to check for
  * @param excludeUnit is self (not to hit self)
- * @return degree of exposure
+ * @param alsoExclude is origin copy of hypothetically-placed unit; efforts to actually erase it from the battlescape temporarily have only led to crashes.
+ * @return degree of exposure (as percent)
  */
-int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit)
+int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *alsoExclude)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position scanVoxel;
@@ -656,7 +659,7 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 			scanVoxel.x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel.y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
-			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true);
+			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, alsoExclude);
 			if (test == 4)
 			{
 				//voxel of hit must be inside of scanned box
@@ -1146,7 +1149,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 
 				// blockage by terrain is deducted from the explosion power
-				if (l != 0) // no need to block epicentrum
+				if (std::abs(l) > 0) // no need to block epicentrum
 				{
 					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
@@ -1756,9 +1759,10 @@ int TileEngine::closeUfoDoors()
  * @param excludeUnit Excludes this unit in the collision detection.
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
  * @param onlyVisible skip invisible units? used in FPS view
+ * @param alsoExclude another unit to exclude, for hypothetical calculations
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *alsoExclude)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -1819,17 +1823,17 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		if (swap_xz) std::swap(cx, cz);
 		if (swap_xy) std::swap(cx, cy);
 
-		if (storeTrajectory)
+		if (storeTrajectory && trajectory)
 		{
 			trajectory->push_back(Position(cx, cy, cz));
 		}
 		//passes through this point?
 		if (doVoxelCheck)
 		{
-			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible);
+			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, alsoExclude);
 			if (result != -1)
 			{
-				if (trajectory != 0)
+				if (trajectory)
 				{ // store the position of impact
 					trajectory->push_back(Position(cx, cy, cz));
 				}
@@ -1863,7 +1867,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, alsoExclude);
 				if (result != -1)
 				{
 					if (trajectory != 0)
@@ -1887,7 +1891,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible,  alsoExclude);
 				if (result != -1)
 				{
 					if (trajectory != 0)
@@ -1935,7 +1939,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 		x = (int)((double)origin.x + (double)i * cos(te) * sin(fi));
 		y = (int)((double)origin.y + (double)i * sin(te) * sin(fi));
 		z = (int)((double)origin.z + (double)i * cos(fi) - zK * ((double)i - ro / 2.0) * ((double)i - ro / 2.0) + zA);
-		if (storeTrajectory)
+		if (storeTrajectory && trajectory)
 		{
 			trajectory->push_back(Position(x, y, z));
 		}
@@ -2010,9 +2014,10 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @param voxel The voxel to check.
  * @param excludeUnit Don't do checks on this unit.
  * @param excludeAllUnits Don't do checks on any unit.
+ * @param alsoExclude Don' tdo checks on this unit either.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible)
+int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *alsoExclude)
 {
 
 	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
@@ -2058,7 +2063,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 			if (tile) unit = tile->getUnit();
 		}
 
-		if (unit != 0 && unit != excludeUnit && (!onlyVisible || unit->getVisible() ) )
+		if (unit != 0 && unit != excludeUnit && unit != alsoExclude && (!onlyVisible || unit->getVisible() ) )
 		{
 			Position tilepos;
 			Position unitpos = unit->getPosition();
@@ -2100,8 +2105,8 @@ void TileEngine::togglePersonalLighting()
  */
 int TileEngine::distance(const Position &pos1, const Position &pos2) const
 {
-	int x = abs(pos1.x - pos2.x);
-	int y = abs(pos1.y - pos2.y);
+	int x = pos1.x - pos2.x;
+	int y = pos1.y - pos2.y;
 	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
 }
 
@@ -2112,10 +2117,10 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
  */
 int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const
 {
-	int x = abs(pos1.x - pos2.x);
-	int y = abs(pos1.y - pos2.y);
-	int z = considerZ ? abs(pos1.z - pos2.z) : 0;
-	return x + y + z;
+	int x = pos1.x - pos2.x;
+	int y = pos1.y - pos2.y;
+	int z = considerZ ? (pos1.z - pos2.z) : 0;
+	return x*x + y*y + z*z;
 }
 
 
@@ -2128,10 +2133,10 @@ int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool cons
 bool TileEngine::psiAttack(BattleAction *action)
 {
 	BattleUnit *victim = _save->getTile(action->target)->getUnit();
-	double attackStrength = action->actor->getStats()->psiStrength * action->actor->getStats()->psiSkill / 50;
-	double defenseStrength = victim->getStats()->psiStrength + 10 + (victim->getStats()->psiSkill / 5);
+	double attackStrength = static_cast<double>(action->actor->getStats()->psiStrength) * action->actor->getStats()->psiSkill / 50;
+	double defenseStrength = static_cast<double>(victim->getStats()->psiStrength) + 10.0 + (static_cast<double>(victim->getStats()->psiSkill) / 5);
 	int d = distance(action->actor->getPosition(), action->target);
-	attackStrength -= d/2;
+	attackStrength -= static_cast<double>(d)/2;
 	attackStrength += RNG::generate(0,55);
 
 	if (action->type == BA_MINDCONTROL)
@@ -2355,5 +2360,53 @@ int TileEngine::faceWindow(const Position &position)
 	return -1;
 }
 
+
+bool TileEngine::validateThrow(BattleAction *action)
+{
+	Position originVoxel, targetVoxel;
+	bool foundCurve = false;
+	Position origin = action->actor->getPosition();
+	std::vector<Position> _trajectory;
+	// object blocking - can't throw here
+	if (action->type == BA_THROW && _save->getTile(action->target) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT) && _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	{
+		return false;
+	}
+
+	originVoxel = Position(origin.x*16 + 8, origin.y*16 + 8, origin.z*24);
+	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
+	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
+	originVoxel.z -= 3;
+	if (originVoxel.z >= (origin.z + 1)*24)
+	{
+		origin.z++;
+	}
+
+
+	// determine the target voxel.
+	// aim at the center of the floor
+	targetVoxel = Position(action->target.x*16 + 8, action->target.y*16 + 8, action->target.z*24 + 2);
+
+	// we try 4 different curvatures to try and reach our goal.
+	double curvature = 1.0;
+	while (!foundCurve && curvature < 5.0)
+	{
+		calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
+		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
+		{
+			foundCurve = true;
+		}
+		else
+		{
+			curvature += 1.0;
+		}
+		_trajectory.clear();
+	}
+	if (curvature == 5.0)
+	{
+		return false;
+	}
+	return ProjectileFlyBState::validThrowRange(action);
+}
 
 }

@@ -27,6 +27,10 @@
 #include "../Interface/TextButton.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/AlienMission.h"
+#include "../Savegame/Ufo.h"
+#include "../Ruleset/RuleRegion.h"
 
 namespace OpenXcom
 {
@@ -59,6 +63,37 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE") << _base->getName();
 	_txtMessage->setText(ss.str());
+	std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin();
+	for (; k != _game->getSavedGame()->getRegions()->end(); ++k)
+	{
+		if ((*k)->getRules()->insideRegion((base)->getLongitude(), (base)->getLatitude()))
+		{
+			break;
+		}
+	}
+	AlienMission* am = _game->getSavedGame()->getAlienMission((*k)->getRules()->getType(), "STR_ALIEN_RETALIATION");
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+	{
+		if ((*i)->getMission() == am)
+		{
+			delete *i;
+			i = _game->getSavedGame()->getUfos()->erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+	for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
+		i != _game->getSavedGame()->getAlienMissions().end(); ++i)
+	{
+		if ((AlienMission*)(*i) == am)
+		{
+			delete (*i);
+			_game->getSavedGame()->getAlienMissions().erase(i);
+			break;
+		}
+	}
 }
 
 /**

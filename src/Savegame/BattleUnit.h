@@ -71,7 +71,7 @@ private:
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase, _fallPhase;
-	std::vector<BattleUnit *> _visibleUnits;
+	std::vector<BattleUnit *> _visibleUnits, _unitsSpottedThisTurn;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
 	bool _kneeled, _floating, _dontReselect;
@@ -392,6 +392,9 @@ public:
 	/// scratch value for AI's left hand to tell its right hand what's up...
 	bool _hidingForTurn; // don't zone out and start patrolling again
 	Position lastCover;
+	/// get the vector of units we've seen this turn.
+	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+
 };
 
 }

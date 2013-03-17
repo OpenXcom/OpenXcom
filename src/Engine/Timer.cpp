@@ -29,7 +29,7 @@ Uint32 slowness = 1;
 Uint32 slowTick()
 {
 	static Uint32 old_time = SDL_GetTicks();
-	static Uint64 false_time = old_time << accurate;
+	static Uint64 false_time = static_cast<Uint64>(old_time) << accurate;
 	Uint64 new_time = ((Uint64)SDL_GetTicks()) << accurate;
 	false_time += (new_time - old_time) / slowness;
 	old_time = new_time;
@@ -43,7 +43,7 @@ int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.
  */
-Timer::Timer(Uint32 interval, bool frameSkipping) : _start(0), _interval(interval), _running(false), _state(0), _surface(0), _frameSkipping(frameSkipping)
+Timer::Timer(Uint32 interval, bool frameSkipping) : _start(0), _interval(interval), _running(false), _frameSkipping(frameSkipping), _state(0), _surface(0)
 {
 	Timer::maxFrameSkip = Options::getInt("maxFrameSkip");
 }

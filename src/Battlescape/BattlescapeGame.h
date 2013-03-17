@@ -122,7 +122,7 @@ public:
 	/// Convert a unit into a unit of another type.
 	BattleUnit *convertUnit(BattleUnit *unit, std::string newType);
 	/// Handle kneeling action.
-	void kneel(BattleUnit *bu);
+	bool kneel(BattleUnit *bu);
 	/// Cancel whatever action we were going at.
 	bool cancelCurrentAction(bool bForce = false);
 	/// Get pointer to access action members directly.

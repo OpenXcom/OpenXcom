@@ -4999,7 +4999,7 @@ units:
     loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
-    moveSound: 15
+    moveSound: 40
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -5021,7 +5021,7 @@ units:
     loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
-    moveSound: 15
+    moveSound: 40
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:

@@ -182,6 +182,7 @@ public:
 	/// Clears mouse-scrolling state
 	void clearMouseScrollingState();
 
+	void SaveAIMap();
 	void SaveVoxelMap();
 	void SaveVoxelView();
 

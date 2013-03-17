@@ -36,6 +36,7 @@ grt,
 #include "Logger.h"
 #include "Exception.h"
 #include "Zoom.h"
+#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -431,7 +432,7 @@ void SDLWaitFrame(void)
   double waitTicks;
   double delay = flc.DelayOverride ? flc.DelayOverride : flc.HeaderSpeed;
 
-	if (oldTick == 0.0) oldTick = SDL_GetTicks();
+	if ( AreSame(oldTick, 0.0) ) oldTick = SDL_GetTicks();
 
 	currentTick=SDL_GetTicks(); 
 	waitTicks=(oldTick+=(delay))-currentTick;
@@ -519,7 +520,7 @@ void FlcMain(void (*frameCallBack)())
     }
 
 	bool finalFrame = !flc.loop && (flc.FrameCount == flc.HeaderFrames);
-	Uint32 pauseStart;
+	Uint32 pauseStart = 0;
 	if (finalFrame) pauseStart = SDL_GetTicks();
 
 	do 
