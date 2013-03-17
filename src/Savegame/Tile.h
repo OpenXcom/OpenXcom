@@ -61,6 +61,9 @@ public:
 	int meanSoldierDSqr;
 	int soldiersVisible;
 	int closestAlienDSqr;
+	int totalExposure;
+
+	static const int NOT_CALCULATED = -1;
 
 protected:
 	static const int LIGHTLAYERS = 3;
