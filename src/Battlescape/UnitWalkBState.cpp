@@ -408,10 +408,8 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		if (!_action.strafe)
-		{
-			_unit->turn((_unit->getTurretType() != -1));
-		}
+		_unit->turn(_unit->getTurretType() > -1);
+
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
