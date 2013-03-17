@@ -1093,7 +1093,6 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& !n->isAllocated() // check if not allocated
 				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
 				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
-				&& n->getPosition().x > 0 && n->getPosition().y > 0
 				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
 				&& n != fromNode	// don't go back to Rockville
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)

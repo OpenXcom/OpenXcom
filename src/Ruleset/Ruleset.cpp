@@ -18,6 +18,7 @@
  */
 #include "Ruleset.h"
 #include <fstream>
+#include "../aresame.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"
@@ -1330,7 +1331,7 @@ public:
 	/// Remember the coordinates.
 	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
 	/// Compare with stored coordinates.
-	bool operator()(const City *city) const { return city->getLongitude() == _lon && city->getLatitude() == _lat; }
+	bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
 private:
 	double _lon, _lat;
 };

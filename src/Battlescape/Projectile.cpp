@@ -20,6 +20,7 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
+#include "../aresame.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
@@ -231,7 +232,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH);
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, false);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -284,7 +285,7 @@ bool Projectile::calculateThrow(double accuracy)
 		}
 		_trajectory.clear();
 	}
-	if (curvature == 5.0)
+	if ( AreSame(curvature, 5.0) )
 	{
 		return false;
 	}

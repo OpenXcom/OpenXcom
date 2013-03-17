@@ -18,6 +18,7 @@
  */
 #include "BuildNewBaseState.h"
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -176,7 +177,7 @@ void BuildNewBaseState::hoverRedraw(void)
 
 	_globe->setNewBaseHover();
 	
-	if (_globe->getShowRadar() && (_oldlat!=lat||_oldlon!=lon) )
+	if (_globe->getShowRadar() && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
 	{
 		_oldlat=lat;
 		_oldlon=lon;
