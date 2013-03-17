@@ -335,7 +335,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
  * Kneel/Standup.
  * @param bu Pointer to a unit.
  */
-void BattlescapeGame::kneel(BattleUnit *bu)
+bool BattlescapeGame::kneel(BattleUnit *bu)
 {
 	int tu = bu->isKneeled()?8:4;
 	if (checkReservedTU(bu, tu))
@@ -353,12 +353,14 @@ void BattlescapeGame::kneel(BattleUnit *bu)
 				action.cameraPosition = getMap()->getCamera()->getMapOffset();
 				statePushBack(new ProjectileFlyBState(this, action));
 			}
+			return true;
 		}
 		else
 		{
 			_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 		}
 	}
+	return false;
 }
 
 /**
