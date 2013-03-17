@@ -47,6 +47,10 @@ private:
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
 	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget);
+	///Try to find a straight line path between two positions.
+	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
+	///Try to find a path between two positions.
+	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	bool canFallDown(Tile *destinationTile);
 	bool canFallDown(Tile *destinationTile, int size);
 	BattleUnit *_unit;
@@ -55,10 +59,6 @@ private:
 	int _totalTUCost;
 public:
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
-	///Try to find a straight line path between two positions.
-	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
-	///Try to find a path between two positions.
-	bool aStarPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	///XXX please document
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
