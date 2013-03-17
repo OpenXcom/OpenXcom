@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+#export DH_VERBOSE=1
+
 %:
 	dh $@ --sourcedirectory=src
 
@@ -15,4 +17,3 @@ override_dh_install:
 	mkdir -p debian/openxcom/usr/share/icons/hicolor/128x128/apps
 	cp res/linux/icons/openxcom_128x128.png debian/openxcom/usr/share/icons/hicolor/128x128/apps/openxcom.png
 	dh_install
-
