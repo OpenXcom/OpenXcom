@@ -106,7 +106,7 @@ void UnitWalkBState::think()
 		}
 		else if (!_falling)
 		{
-			_unit->lookAt(_unit->getDestination(), true);	// turn to undiscovered unit
+			_unit->lookAt(_unit->getDestination(), (_unit->getTurretType() != -1));	// turn to undiscovered unit
 			_pf->abortPath();
 		}
 
@@ -314,7 +314,7 @@ void UnitWalkBState::think()
 			// we are not using the turn state, because turning during walking costs no tu
 			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
-				_unit->lookAt(dir, true);
+				_unit->lookAt(dir);
 				return;
 			}
 
@@ -408,20 +408,21 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		if (_action.strafe && _unit->getTurretType() > -1)
+		if (!_action.strafe)
 		{
-			_unit->turn(true);
+			_unit->turn((_unit->getTurretType() != -1));
 		}
-		else
-		{
-			_unit->turn();
-		}
-		
+		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
+		// in the code, ie: doors opening, and this messes up the result.
+		_terrain->calculateFOV(_unit);
 		unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
+		{
+			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+		}
 		if (unitSpotted && !(_action.desperate || _unit->getCharging()) && !_falling)
 		{
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
