@@ -855,6 +855,11 @@ void SavedBattleGame::endTurn()
 		{
 			(*i)->setVisible(false);
 		}
+	}
+	
+	// re-run calculateFOV() *after* all aliens have been set not-visible
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(), end = _units.end(); i != end; ++i)
+	{
 		_tileEngine->calculateFOV(*i);
 	}
 

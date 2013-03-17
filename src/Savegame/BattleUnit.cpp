@@ -1375,10 +1375,7 @@ void BattleUnit::prepareNewTurn()
 	// revert to original faction
 	_faction = _originalFaction;
 
-	if (!_unitsSpottedThisTurn.empty())
-	{
-		for (std::vector<BattleUnit *>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); i = _unitsSpottedThisTurn.erase(i));
-	}
+	_unitsSpottedThisTurn.clear();
 
 	// recover TUs
 	int TURecovery = getStats()->tu;
