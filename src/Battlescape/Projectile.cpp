@@ -335,8 +335,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		double baseDeviation, shade;
-		double accPenalty = 0;
+		double baseDeviation, accPenalty, shade;
 
 		if (!targetTile)
 			shade = _save->getGlobalShade();	// Can be from 0 (at day) to 15 (at night).
@@ -346,8 +345,8 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		else
 			shade = targetTile->getShade();		// Can be from 0 to 15
 		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-		if (targetTile->getUnit() && targetTile->getUnit()->isKneeled())
-			accPenalty = 0.05;
+		accPenalty = (targetTile->getUnit() && targetTile->getUnit()->isKneeled()) ? 0.05 : 0;
+
 		// 0.32 is the max angle deviation for accuracy 0% (+-3s = 0.32 radian). Can be from 0.32 to 0.42 (at night).
 		// 0.40 - max angle deviation for Autoshot.
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
