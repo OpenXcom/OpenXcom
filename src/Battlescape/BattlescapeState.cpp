@@ -1189,14 +1189,13 @@ void BattlescapeState::handle(Action *action)
 			}
 			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
 			{
-				if (_game->getCtrlKeyDown())
-				{
-					if (Options::getBool("traceAI")) SaveAIMap();
-				} else
-				{
-					SaveVoxelView();
-				}
+				SaveVoxelView();
 			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
+			{
+				SaveAIMap();
+			}
+			//else Log(LOG_DEBUG) << "Unused key: " << action->getDetails()->key.keysym.sym;
 		}
 	}
 
