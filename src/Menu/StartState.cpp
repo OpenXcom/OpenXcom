@@ -517,3 +517,4 @@ XcomResourcePack *StartState::makeModifications(XcomResourcePack *pack)
 }
 
 }
+
