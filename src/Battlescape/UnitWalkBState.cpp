@@ -184,7 +184,15 @@ void UnitWalkBState::think()
 
 			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
-			_terrain->calculateFOV(_unit);
+			if (_unit->getFaction() != FACTION_PLAYER)
+			{
+				_unit->setVisible(false);
+				_terrain->calculateFOV(_unit->getPosition());
+			}
+			else
+			{
+				_terrain->calculateFOV(_unit);
+			}
 			unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			BattleAction action;
