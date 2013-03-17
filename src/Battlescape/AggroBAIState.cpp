@@ -618,10 +618,10 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int WALL_BONUS = 1;
 	const int FIRE_PENALTY = 40;
 	const int SMOKE_PENALTY = 5;
-	const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*20;
+	//const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*20;
 	const int MELEE_TUNNELVISION_BONUS = 200;
-	const int DIRECT_PATH_PENALTY = 10;
-	const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
+	//const int DIRECT_PATH_PENALTY = 10;
+	//const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
 	const int BASE_DESPERATE_SUCCESS = 110;
 	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
@@ -741,14 +741,14 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 						
 			_game->getPathfinding()->setUnit(_unit); // because we can't just pass this around as a paramater, can we... no, that would be too simple
 						
-			if (tile->soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->closestSoldierPos, action->target, 0, false))
-			{
-				score -= DIRECT_PATH_TO_TARGET_PENALTY; // not even partial cover?
-			}
-			_game->getPathfinding()->abortPath(); // clean up hypothetical path data
+			//if (tile->soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->closestSoldierPos, action->target, 0, false))
+			//{
+			//	score -= DIRECT_PATH_TO_TARGET_PENALTY; // not even partial cover?
+			//}
+			//_game->getPathfinding()->abortPath(); // clean up hypothetical path data
 						
-			if (_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score -= DIRECT_PATH_PENALTY; // come on partial cover?
-			_game->getPathfinding()->abortPath();						
+			//if (_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score -= DIRECT_PATH_PENALTY; // come on partial cover?
+			//_game->getPathfinding()->abortPath();						
 						
 			if (tile->getFire()) score -= FIRE_PENALTY; // maybe stop, drop, and roll?
 						
