@@ -81,11 +81,11 @@ private:
 	int lastSucTotalMouseMoveX, lastSucTotalMouseMoveY;
 	bool mouseMovedOverThreshold;
 
-	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
-	void selectPreviousPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
 public:
+	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
+	void selectPreviousPlayerUnit(bool checkReselect);
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -182,6 +182,7 @@ public:
 	/// Clears mouse-scrolling state
 	void clearMouseScrollingState();
 
+	void SaveAIMap();
 	void SaveVoxelMap();
 	void SaveVoxelView();
 

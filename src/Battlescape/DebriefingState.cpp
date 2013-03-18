@@ -337,6 +337,7 @@ void DebriefingState::prepareDebriefing()
 
 	int playerInExitArea = 0; // if this stays 0 the craft is lost...
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
+	int playersUnconscious = 0;
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
@@ -497,6 +498,8 @@ void DebriefingState::prepareDebriefing()
 		{ // so this unit is not dead...
 			if (oldFaction == FACTION_PLAYER)
 			{
+				if ((status == STATUS_UNCONSCIOUS || faction == FACTION_HOSTILE) && battle->getMissionType() == "STR_BASE_DEFENSE")
+					playersUnconscious++;
 				playersSurvived++;
 				(*j)->postMissionProcedures(save);
 				if (((*j)->isInExitArea() && battle->getMissionType() != "STR_BASE_DEFENSE") || !aborted)
@@ -572,6 +575,10 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 		}
+	}
+	if (playersUnconscious == playersSurvived)
+	{
+		playersSurvived = 0;
 	}
 	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0)) && craft != 0)
 	{
@@ -735,8 +742,33 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i) == base)
 			{
+
 				delete (*i);
 				_game->getSavedGame()->getBases()->erase(i);
+				break;
+			}
+		}
+
+		AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
+		for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+		{
+			if ((*i)->getMission() == am)
+			{
+				delete *i;
+				i = _game->getSavedGame()->getUfos()->erase(i);
+			}
+			else
+			{
+				++i;
+			}
+		}
+		for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
+			i != _game->getSavedGame()->getAlienMissions().end(); ++i)
+		{
+			if ((AlienMission*)(*i) == am)
+			{
+				delete (*i);
+				_game->getSavedGame()->getAlienMissions().erase(i);
 				break;
 			}
 		}

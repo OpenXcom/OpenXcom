@@ -73,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight), _unitDying(false), _launch(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -211,9 +211,8 @@ void Map::drawTerrain(Surface *surface)
 	Surface *tmpSurface;
 	Tile *tile;
 	int beginX = 0, endX = _save->getMapSizeX() - 1;
-    int beginY = 0, endY = _save->getMapSizeY() - 1;
+	int beginY = 0, endY = _save->getMapSizeY() - 1;
 	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getMapSizeZ() - 1:_camera->getViewLevel();
-	bool singleLevel = !_camera->getShowAllLayers();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
@@ -405,8 +404,8 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							if ((tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
-								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-								wallShade = 0;
+								 && tile->isDiscovered(0))
+								wallShade = tile->getShade();
 							else
 								wallShade = tileShade;
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(), wallShade, false);
@@ -416,8 +415,8 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							if ((tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-								wallShade = 0;
+								 && tile->isDiscovered(1))
+								wallShade = tile->getShade();
 							else
 								wallShade = tileShade;
 							if (tile->getMapData(MapData::O_WESTWALL))
@@ -1056,7 +1055,7 @@ std::vector<Position> *Map::getWaypoints()
  */
 void Map::setButtonsPressed(Uint8 button, bool pressed)
 {
-	_buttonsPressed[button] = pressed;
+	setButtonPressed(button, pressed);
 }
 
 void Map::setUnitDying(bool flag)

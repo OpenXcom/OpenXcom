@@ -20,6 +20,7 @@
 #include "Globe.h"
 #include <cmath>
 #include <fstream>
+#include "../aresame.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
@@ -507,7 +508,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 
 	double rho = sqrt((double)(x*x + y*y));
 	double c = asin(rho / (static_data.getRadius(_zoom)));
-	if (rho==0)
+	if ( AreSame(rho, 0.0) )
 	{
 		*lat = _cenLat;
 		*lon = _cenLon;
@@ -1138,8 +1139,21 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		inv=true;
 	}
 
-	if (y2<y1) SY=-1; else if (deltay==0) SY=0; else SY=1;
-	if (x2<x1) SX=-1; else if (deltax==0) SX=0; else SX=1;
+	if (y2<y1) { 
+    SY=-1;
+  } else if ( AreSame(deltay, 0.0) ) {
+    SY=0;
+  } else {
+    SY=1;
+  }
+
+	if (x2<x1) {
+    SX=-1;
+  } else if ( AreSame(deltax, 0.0) ) {
+    SX=0;
+  } else {
+    SX=1;
+  }
 
 	x0=x1;  y0=y1;
 	if (inv)
@@ -1212,14 +1226,14 @@ void Globe::drawRadars()
 		lat = (*i)->getLatitude();
 		lon = (*i)->getLongitude();
 		// Cheap hack to hide bases when they haven't been placed yet
-		if ((lon != 0.0 || lat != 0.0)/* &&
+		if (( !(AreSame(lon, 0.0) && AreSame(lat, 0.0)) )/* &&
 			!pointBack((*i)->getLongitude(), (*i)->getLatitude())*/)
 		{
 			polarToCart(lon, lat, &x, &y);
 
 			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
 			{
-				for (int j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
+				for (size_t j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
 			}
 			else
 			{
@@ -1265,14 +1279,14 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 {
 	double x, y, x2, y2;
 	double lat1, lon1;
-	double seg = M_PI / (segments / 2);
+	double seg = M_PI / (static_cast<double>(segments) / 2);
 	for (double az = 0; az <= M_PI*2+0.01; az+=seg) //48 circle segments
 	{
 		//calculating sphere-projected circle
 		lat1 = asin(sin(lat) * cos(radius) + cos(lat) * sin(radius) * cos(az));
 		lon1 = lon + atan2(sin(az) * sin(radius) * cos(lat), cos(radius) - sin(lat) * sin(lat1));
 		polarToCart(lon1, lat1, &x, &y);
-		if (az == 0) //first vertex is for initialization only
+		if ( AreSame(az, 0.0) ) //first vertex is for initialization only
 		{
 			x2=x;
 			y2=y;

@@ -71,7 +71,7 @@ private:
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase, _fallPhase;
-	std::vector<BattleUnit *> _visibleUnits;
+	std::vector<BattleUnit *> _visibleUnits, _unitsSpottedThisTurn;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
 	bool _kneeled, _floating, _dontReselect;
@@ -338,6 +338,8 @@ public:
 	int getAggression() const;
 	/// Get the units's special ability.
 	int getSpecialAbility() const;
+	/// Set the units's special ability.
+	void setSpecialAbility(SpecialAbility specab);
 	/// Get the units's rank string.
 	std::string getRankString() const;
 	/// Get the geoscape-soldier object.
@@ -358,6 +360,8 @@ public:
 	std::string getZombieUnit() const;
 	/// Gets the unit's spawn unit.
 	std::string getSpawnUnit() const;
+	/// Sets the unit's spawn unit.
+	void setSpawnUnit(std::string spawnUnit);
 	/// Gets the unit's aggro sound.
 	int getAggroSound() const;
 	/// Sets the unit's energy level.
@@ -387,6 +391,10 @@ public:
 
 	/// scratch value for AI's left hand to tell its right hand what's up...
 	bool _hidingForTurn; // don't zone out and start patrolling again
+	Position lastCover;
+	/// get the vector of units we've seen this turn.
+	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+
 };
 
 }

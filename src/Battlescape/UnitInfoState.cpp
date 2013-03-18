@@ -39,6 +39,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Options.h"
 #include "BattlescapeGame.h"
+#include "BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -539,12 +540,24 @@ void UnitInfoState::handle(Action *action)
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			_unit = _game->getSavedGame()->getBattleGame()->selectNextPlayerUnit();
+			_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
+			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			while (_unit->getArmor()->getSize() >1)
+			{
+				_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
+				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			}
 			init();
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			_unit = _game->getSavedGame()->getBattleGame()->selectPreviousPlayerUnit();
+			_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
+			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			while (_unit->getArmor()->getSize() >1)
+			{
+				_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
+				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			}
 			init();
 		}
 	}
@@ -553,13 +566,25 @@ void UnitInfoState::handle(Action *action)
 		// "tab" - next solider
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			_unit = _game->getSavedGame()->getBattleGame()->selectNextPlayerUnit();
+			_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
+			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			while (_unit->getArmor()->getSize() >1)
+			{
+				_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
+				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			}
 			init();
 		}
 		// prev soldier
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			_unit = _game->getSavedGame()->getBattleGame()->selectPreviousPlayerUnit();
+			_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
+			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			while (_unit->getArmor()->getSize() >1)
+			{
+				_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
+				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			}
 			init();
 		}
 	}

@@ -29,6 +29,7 @@ class Text;
 class InteractiveSurface;
 class Inventory;
 class SavedBattleGame;
+class BattlescapeState;
 
 /**
  * Screen which displays soldier's inventory.
@@ -43,9 +44,10 @@ private:
 	Inventory *_inv;
 	SavedBattleGame *_battleGame;
 	bool _tu, _showMoreStatsInInventoryView;
+	BattlescapeState *_parent;
 public:
 	/// Creates the Inventory state.
-	InventoryState(Game *game, bool tu);
+	InventoryState(Game *game, bool tu, BattlescapeState *parent);
 	/// Cleans up the Inventory state.
 	~InventoryState();
 	/// Updates all soldier info.

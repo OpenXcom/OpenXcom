@@ -66,6 +66,8 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("playIntro", true);
+	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setInt("baseXResolution", 320);
@@ -100,7 +102,7 @@ void createDefault()
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
-	setBool("allowChangeListValuesByMouseWheel", true); // It applies only for lists, not for scientists/engineers screen
+	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
@@ -120,7 +122,7 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", 3);
 	setInt("windowedModePositionY", 22);
-
+	setBool("classicMouseHandling", false);
 	// new battle mode data
 	setInt("NewBattleMission", 0);
 	setInt("NewBattleTerrain", 0);

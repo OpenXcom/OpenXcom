@@ -55,6 +55,7 @@ class Ruleset;
 class SavedBattleGame
 {
 private:
+	BattlescapeState *_battleState;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
@@ -78,7 +79,7 @@ private:
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::vector<BattleUnit*> _fallingUnits;
-	bool _unitsFalling, _strafeEnabled;
+	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -223,7 +224,12 @@ public:
 	std::vector<BattleUnit*> *getFallingUnits();
 	void setUnitsFalling(bool fall);
 	bool getUnitsFalling() const;
-	const bool getStrafeSetting() const;
+	bool getStrafeSetting() const;
+	bool getSneakySetting() const;
+	bool getTraceSetting() const;
+	BattlescapeState *getBattleState();
+	void setBattleState(BattlescapeState *bs);
+
 
 	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);

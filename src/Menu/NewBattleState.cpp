@@ -372,7 +372,7 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		bgen.setCraft(_craft);
 	}
-	else
+	else if (_craft)
 	{
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
 		u->setId(1);

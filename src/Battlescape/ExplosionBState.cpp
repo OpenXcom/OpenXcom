@@ -79,7 +79,7 @@ void ExplosionBState::init()
 						|| _item->getRules()->getDamageType() == DT_SMOKE
 						|| _item->getRules()->getDamageType() == DT_STUN);
 	}
-	else if (_tile && _tile->getExplosive())
+	else if (_tile)
 	{
 		_power = _tile->getExplosive();
 		_areaOfEffect = true;
@@ -93,24 +93,31 @@ void ExplosionBState::init()
 	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
 	if (_areaOfEffect)
 	{
-		for (int i = 0; i < _power/5; i++)
+		if (_power)
 		{
-			int X = RNG::generate(-_power/2,_power/2);
-			int Y = RNG::generate(-_power/2,_power/2);
-			Position p = _center;
-			p.x += X; p.y += Y;
-			Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
-			// add the explosion on the map
-			_parent->getMap()->getExplosions()->insert(explosion);
+			for (int i = 0; i < _power/5; i++)
+			{
+				int X = RNG::generate(-_power/2,_power/2);
+				int Y = RNG::generate(-_power/2,_power/2);
+				Position p = _center;
+				p.x += X; p.y += Y;
+				Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
+				// add the explosion on the map
+				_parent->getMap()->getExplosions()->insert(explosion);
+			}
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+			// explosion sound
+			if (_power <= 80)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
+			else
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
+			if (t->isDiscovered(0))
+				_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 		}
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		// explosion sound
-		if (_power <= 80)
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 		else
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
-		if (t->isDiscovered(0))
-			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
+		{
+			_parent->popState();
+		}
 	}
 	else
 	// create a bullet hit
@@ -175,16 +182,18 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1)
+			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1 && victim->getSpawnUnit().empty())
 			{
-				// converts the victim to a zombie
-				_parent->convertUnit(victim, _unit->getZombieUnit());
+				// converts the victim to a zombie on death
+				victim->setSpecialAbility(SPECAB_RESPAWN);
+				victim->setSpawnUnit(_unit->getZombieUnit());
 			}
 		}
 	}
 	if (_tile)
 	{
 		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
+		terrainExplosion = true;
 	}
 	if (!_tile && !_item)
 	{

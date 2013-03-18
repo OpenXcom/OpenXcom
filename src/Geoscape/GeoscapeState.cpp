@@ -592,7 +592,8 @@ void GeoscapeState::time5Seconds()
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
-						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
 					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 					{
@@ -606,6 +607,7 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
+						mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
 						(*i)->setDestination(0);
 						base->setupDefenses();
 						timerReset();
@@ -677,19 +679,49 @@ void GeoscapeState::time5Seconds()
 	// Handle craft logic
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end();)
 		{
+			if ((*j)->isDestroyed())
+			{
+				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				{
+					if((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+					{
+						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
+						break;
+					}
+				}
+				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				{
+					if((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+					{
+						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
+						break;
+					}
+				}
+
+				delete *j;
+				j = (*i)->getCrafts()->erase(j);
+				continue;
+			}
 			if ((*j)->getDestination() != 0)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0 && !u->getDetected())
 				{
-					(*j)->setDestination(0);
-					Waypoint *w = new Waypoint();
-					w->setLongitude(u->getLongitude());
-					w->setLatitude(u->getLatitude());
-					w->setId(u->getId());
-					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && u->getStatus() == Ufo::LANDED)
+					{
+						(*j)->returnToBase();
+					}
+					else
+					{
+						(*j)->setDestination(0);
+						Waypoint *w = new Waypoint();
+						w->setLongitude(u->getLongitude());
+						w->setLatitude(u->getLatitude());
+						w->setId(u->getId());
+						popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					}
 				}
 				if (u != 0 && u->getStatus() == Ufo::DESTROYED)
 				{
@@ -795,6 +827,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			}
+			 ++j;
 		}
 	}
 
@@ -864,8 +897,12 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	// UFOs building a base don't detect!
-	if (ufo->getTrajectory().getID() == "P5")
+	// only UFOs on retaliation missions actively scan for bases
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation"))
+		return false;
+
+	// UFOs attacking a base don't detect!
+	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		return false;
 	}
@@ -1208,10 +1245,6 @@ void GeoscapeState::time30Minutes()
 				if (!detected)
 				{
 					(*u)->setDetected(false);
-					if ((*u)->getHyperDetected())
-					{
-						(*u)->setHyperDetected(false);
-					}
 					if (!(*u)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
@@ -1406,7 +1439,8 @@ void GeoscapeState::time1Day()
 				}
 			}
 			const RuleResearch * newResearch = research;
-			if(_game->getSavedGame()->isResearched(research->getName()))
+			std::string name = research->getLookup() == "" ? research->getName() : research->getLookup();
+			if(_game->getSavedGame()->isResearched(name))
 			{
 				newResearch = 0;
 			}
@@ -1980,18 +2014,17 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	else
 	{
 		//
-		// Alien Research at base's region.
+		// Sectoid Research at base's region.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
 		std::string targetRegion =
 		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
-		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion);
-		otherMission->setRace(missionRace);
+		otherMission->setRace("STR_SECTOID");
 		otherMission->start(150);
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
 		// Make sure this combination never comes up again.

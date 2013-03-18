@@ -422,7 +422,7 @@ void OptionsState::btnDisplayDownClick(Action *)
 	_txtDisplayHeight->setText(ssH.str());
 }
 
-void OptionsState::DisplayWidthClick(Action *action)
+void OptionsState::DisplayWidthClick(Action *)
 {
 	_wClicked = true;
 	if (_hClicked)
@@ -431,7 +431,7 @@ void OptionsState::DisplayWidthClick(Action *action)
 		_hClicked = false;
 	}
 }
-void OptionsState::DisplayHeightClick(Action *action)
+void OptionsState::DisplayHeightClick(Action *)
 {
 	_hClicked = true;
 	if (_wClicked)

@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -53,8 +54,8 @@ namespace OpenXcom
  */
 PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -459,8 +460,11 @@ void PurchaseState::increase(int change)
 			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
 			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
 			int maxByStores;
-			if (0 == storesNeededPerItem) maxByStores = INT_MAX;
-			else maxByStores = floor(freeStores / storesNeededPerItem);
+			if ( AreSame(storesNeededPerItem, 0.f) ) {
+        maxByStores = INT_MAX;
+      } else {
+        maxByStores = floor(freeStores / storesNeededPerItem);
+      }
 			change = std::min(maxByStores, change);
 			_iQty += ((float)(change)) * storesNeededPerItem;
 		}

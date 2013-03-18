@@ -31,8 +31,7 @@
 #include "GeoscapeState.h"
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Region.h"
-#include "../Ruleset/RuleRegion.h"
+#include "../Savegame/AlienMission.h"
 
 namespace OpenXcom
 {
@@ -127,19 +126,7 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_MISSION").c_str(), _game->getLanguage()->getString(_ufo->getMissionType()).c_str());
 	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	bool set = false;
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
-	{
-		if((*i)->getRules()->insideRegion(_ufo->getDestination()->getLongitude(), _ufo->getDestination()->getLatitude()) && !set)
-		{
-			_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString((*i)->getRules()->getType()).c_str());
-			set = true;
-		}
-	}
-	if(!set)
-	{
-		_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString("STR_UNKNOWN").c_str());
-	}
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString(_ufo->getMission()->getRegion()).c_str());
 	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 }
 

@@ -314,7 +314,7 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				if (_action.type == BA_LAUNCH && _ammo->spendBullet() == false)
+				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
@@ -347,9 +347,17 @@ void ProjectileFlyBState::think()
 
 /*
  * Flying projectiles cannot be cancelled.
+ * but they can be "skipped"
  */
 void ProjectileFlyBState::cancel()
 {
+	if (_parent->getMap()->getProjectile())
+	{
+		_parent->getMap()->getProjectile()->skipTrajectory();
+		Position p = _parent->getMap()->getProjectile()->getPosition();
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24)))
+			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x/16, p.y/16, p.z/24));
+	}
 }
 
 /*

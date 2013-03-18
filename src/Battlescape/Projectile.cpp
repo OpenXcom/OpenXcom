@@ -20,6 +20,7 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
+#include "../aresame.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Battlescape/Position.h"
@@ -37,6 +38,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "../Engine/Game.h"
 
 namespace OpenXcom
 {
@@ -128,7 +130,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		originVoxel.z += 12;
 	}
 
-	if (_action.type == BA_LAUNCH)
+	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0)
 	{
 		// target nothing, targets the middle of the tile
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
@@ -231,7 +233,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, _action.type == BA_LAUNCH, targetTile);
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -284,7 +286,7 @@ bool Projectile::calculateThrow(double accuracy)
 		}
 		_trajectory.clear();
 	}
-	if (curvature == 5.0)
+	if ( AreSame(curvature, 5.0) )
 	{
 		return false;
 	}
@@ -332,6 +334,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
+	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
@@ -349,7 +352,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 		// 0.32 is the max angle deviation for accuracy 0% (+-3s = 0.32 radian). Can be from 0.32 to 0.42 (at night).
 		// 0.40 - max angle deviation for Autoshot.
-		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.03 radian).
+		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		// 4.1  is the coefficient. Can be from 4.1 (at day) to 3.1 (at night).
 		baseDeviation = ((_action.type == BA_AUTOSHOT? 0.40 : 0.32) + shade/150) - (accuracy - accPenalty) / (4.1 - shade/15);
 
@@ -478,6 +481,14 @@ BattleItem *Projectile::getItem() const
 Surface *Projectile::getSprite() const
 {
 	return _sprite;
+}
+
+/** 
+ * skip to the end of the trajectory
+ */
+void Projectile::skipTrajectory()
+{
+	_position = _trajectory.size() - 2;
 }
 
 }

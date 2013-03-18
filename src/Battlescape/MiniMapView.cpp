@@ -326,7 +326,7 @@ void MiniMapView::mouseIn(Action *action, State *state)
 	InteractiveSurface::mouseIn(action, state);
 
 	isMouseScrolling = false;
-	_buttonsPressed[SDL_BUTTON_RIGHT] = false;
+	setButtonPressed(SDL_BUTTON_RIGHT, false);
 }
 
 /**
