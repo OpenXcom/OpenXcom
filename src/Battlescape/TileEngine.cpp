@@ -923,26 +923,16 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		return false;
 	}
 
-	if (potentialVictim && RNG::generate(0, 4) == 1 && potentialVictim->getFaction() == FACTION_HOSTILE)
+	if (potentialVictim && potentialVictim->getFaction() == FACTION_HOSTILE)
 	{
-		potentialVictim->lookAt(unit->getPosition());
-		while (potentialVictim->getStatus() == STATUS_TURNING)
-		{
-			recalculateFOV = true;
-			potentialVictim->turn();
-		}
 		// if the potentialVictim is hostile, he will aggro if he wasn't already or at least change aggro target
-		if (potentialVictim->getFaction() == FACTION_HOSTILE)
+		AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(potentialVictim->getCurrentAIState());
+		if (aggro == 0)
 		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(potentialVictim->getCurrentAIState());
-			if (aggro == 0)
-			{
-				aggro = new AggroBAIState(_save, potentialVictim);
-				potentialVictim->setAIState(aggro);
-			}
-			aggro->setAggroTarget(unit);
+			aggro = new AggroBAIState(_save, potentialVictim);
+			potentialVictim->setAIState(aggro);
 		}
-
+		aggro->setAggroTarget(unit);
 	}
 
 	// we reset the unit to false here - if it is seen by any unit in range below the unit becomes visible again
