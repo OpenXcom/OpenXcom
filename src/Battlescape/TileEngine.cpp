@@ -447,7 +447,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 			++count;
 		}
 	}
-	if (count > queryingUnit->getArmor()->getSize()*queryingUnit->getArmor()->getSize())
+	if (count != queryingUnit->getArmor()->getSize()*queryingUnit->getArmor()->getSize())
 	{
 		Log(LOG_ERROR) << count << " tiles are occupied by " << queryingUnit->getType() << " #" << queryingUnit->getId() << " and that is messed up.";
 	}
