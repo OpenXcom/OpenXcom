@@ -69,9 +69,9 @@ public:
 	/// Hooks an action handler to a mouse click on the surface.
 	void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
 	/// Hooks an action handler to a mouse press over the surface.
-	void onMousePress(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
+	void onMousePress(ActionHandler handler, Uint8 button = 0);
 	/// Hooks an action handler to a mouse release over the surface.
-	void onMouseRelease(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
+	void onMouseRelease(ActionHandler handler, Uint8 button = 0);
 	/// Hooks an action handler to moving the mouse into the surface.
 	void onMouseIn(ActionHandler handler);
 	/// Hooks an action handler to moving the mouse over the surface.
