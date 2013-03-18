@@ -232,7 +232,7 @@ void InteractiveSurface::unpress(State *state)
  */
 void InteractiveSurface::mousePress(Action *action, State *state)
 {
-	std::map<Uint8, ActionHandler>::iterator allHandler = _press.find(0);
+	std::map<Uint8, ActionHandler>::iterator allHandler = _press.begin();
 	std::map<Uint8, ActionHandler>::iterator oneHandler = _press.find(action->getDetails()->button.button);
 	if (allHandler != _press.end())
 	{
