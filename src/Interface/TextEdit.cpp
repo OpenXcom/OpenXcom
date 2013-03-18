@@ -35,6 +35,7 @@ namespace OpenXcom
  */
 TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0), _numerical(false)
 {
+	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
@@ -66,6 +67,18 @@ void TextEdit::focus()
 		_redraw = true;
 	}
 	InteractiveSurface::focus();
+}
+
+/**
+* Stops the blinking animation when
+* the text edit is defocused.
+ */
+void TextEdit::deFocus()
+{
+	InteractiveSurface::deFocus();
+	_blink = false;
+	_redraw = true;
+	_timer->stop();
 }
 
 /**
@@ -426,9 +439,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			break;
 		case SDLK_RETURN:
 		case SDLK_KP_ENTER:
-			_isFocused = false;
-			_blink = false;
-			_timer->stop();
+			deFocus();
 			break;
 		default:
 			Uint16 key = action->getDetails()->key.keysym.unicode;
@@ -444,14 +455,6 @@ void TextEdit::keyboardPress(Action *action, State *state)
 	_redraw = true;
 
 	InteractiveSurface::keyboardPress(action, state);
-}
-
-void TextEdit::deFocus()
-{
-	_isFocused = false;
-	_blink = false;
-	_redraw = true;
-	_timer->stop();
 }
 
 }

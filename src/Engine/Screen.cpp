@@ -31,7 +31,6 @@
 #include "OpenGL.h"
 #include <SDL.h>
 
-
 namespace OpenXcom
 {
 

@@ -1055,7 +1055,7 @@ std::vector<Position> *Map::getWaypoints()
  */
 void Map::setButtonsPressed(Uint8 button, bool pressed)
 {
-	_buttonsPressed[button] = pressed;
+	setButtonPressed(button, pressed);
 }
 
 void Map::setUnitDying(bool flag)

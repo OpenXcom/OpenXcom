@@ -654,19 +654,31 @@ void BattleUnit::turn(bool turret)
 	if (a != 0) {
 		if (a > 0) {
 			if (a <= 4) {
-				if (!turret) _direction++;
-				else _directionTurret++;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret++;
+					_direction++;
+				} else _directionTurret++;
 			} else {
-				if (!turret) _direction--;
-				else _directionTurret--;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret--;
+					_direction--;
+				} else _directionTurret--;
 			}
 		} else {
 			if (a > -4) {
-				if (!turret) _direction--;
-				else _directionTurret--;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret--;
+					_direction--;
+				} else _directionTurret--;
 			} else {
-				if (!turret) _direction++;
-				else _directionTurret++;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret++;
+					_direction++;
+				} else _directionTurret++;
 			}
 		}
 		if (_direction < 0) _direction = 7;

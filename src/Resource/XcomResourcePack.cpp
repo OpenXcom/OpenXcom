@@ -422,8 +422,8 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		{
 			if (cats == 0)
 			{
-        std::stringstream ss;
-        ss << "Cats[" << i << "] not found";
+				std::stringstream ss;
+				ss << catsDos[i] << " not found";
 				throw Exception(ss.str());
 			}
 			else

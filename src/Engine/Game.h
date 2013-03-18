@@ -56,8 +56,6 @@ private:
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
 	int _alienContainmentHasUpperLimit; // It's an int-type cache for Options::getBool("alienContainmentHasUpperLimit").
-	static bool _ctrlKeyDown; // Used so player can indicate strafing movement.
-	static bool _shiftKeyDown; // Used so player can indicate strafing movement.
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -103,14 +101,6 @@ public:
 	void setMouseActive(bool active);
 	/// Gets the value of alienContainmentHasUpperLimit.
 	int getAlienContainmentHasUpperLimit() const;
-	/// Sets whether the Ctrl Key is down
-	static void setCtrlKeyDown(bool ctrlKey);
-	/// Returns whether the control key is down
-	static bool getCtrlKeyDown();
-	/// Sets whether the Shift Key is down
-	static void setShiftKeyDown(bool shiftKey);
-	/// Returns whether the Shift key is down
-	static bool getShiftKeyDown();
 	/// Returns whether current state is the param state
 	bool isState(State *state) const;
 };

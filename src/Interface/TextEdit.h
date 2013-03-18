@@ -52,7 +52,9 @@ public:
 	/// Cleans up the text edit.
 	~TextEdit();
 	/// Sets focus on this text edit.
-	virtual void focus();
+	void focus();
+	/// Removes focus from this text box.
+	void deFocus();
 	/// Sets the text size to big.
 	void setBig();
 	/// Sets the text size to small.
@@ -95,8 +97,6 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for keyboard presses.
 	void keyboardPress(Action *action, State *state);
-	/// de-focus this text box.
-	void deFocus();
 };
 
 }
