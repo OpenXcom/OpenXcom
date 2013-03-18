@@ -1427,6 +1427,10 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	if (removeItem)
 	{
 		item->moveToOwner(0);
+		if (_save->getSide() != FACTION_PLAYER)
+		{
+			item->setTurnFlag(true);
+		}
 	}
 	else
 	{
