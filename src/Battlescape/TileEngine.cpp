@@ -41,6 +41,7 @@
 #include "../Engine/Options.h"
 #include "ProjectileFlyBState.h"
 #include "../Engine/Logger.h"
+#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -2402,7 +2403,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 		}
 		_trajectory.clear();
 	}
-	if (curvature == 5.0)
+	if (AreSame(curvature, 5.0))
 	{
 		return false;
 	}
