@@ -718,6 +718,7 @@ void DogfightState::animate()
  */
 void DogfightState::move()
 {
+	bool finalRun = false;
 	// Check if craft is not low on fuel when window minimized.
 	if(_craft->getLowFuel())
 	{
@@ -737,7 +738,7 @@ void DogfightState::move()
 		if(_ufo->getSpeed() > _craft->getSpeed())
 		{
 			_ufoBreakingOff = true;
-			_end = true;
+			finalRun = true;
 			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 		}
 	}
@@ -933,44 +934,7 @@ void DogfightState::move()
 			_ufo->move();
 			_craft->setDestination(_ufo);
 		}
-		if (_destroyCraft)
-		{
-			for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
-			{
-				if((*country)->getRules()->insideCountry(_craft->getLongitude(), _craft->getLatitude()))
-				{
-					(*country)->addActivityXcom(-_craft->getRules()->getScore());
-					break;
-				}
-			}
-			for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
-			{
-				if((*region)->getRules()->insideRegion(_craft->getLongitude(), _craft->getLatitude()))
-				{
-					(*region)->addActivityXcom(-_craft->getRules()->getScore());
-					break;
-				}
-			}
-
-			// Remove the craft.
-			for(std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
-			{
-				for(std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
-				{
-					if(*c == _craft)
-					{
-						delete *c;
-						(*b)->getCrafts()->erase(c);
-						_craft = 0;
-						break;
-					}
-				}
-				if (!_craft)
-					break;
-			}
-		}
-		
-		if (_craft && (_destroyUfo || _mode == _btnDisengage))
+		if (!_destroyCraft && (_destroyUfo || _mode == _btnDisengage))
 		{
 			_craft->returnToBase();
 		}
@@ -983,7 +947,7 @@ void DogfightState::move()
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 		_timeout += 30;
 		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
-		_end = true;
+		finalRun = true;
 		_destroyCraft = true;
 		_ufoWtimer->stop();
 		_w1Timer->stop();
@@ -993,6 +957,8 @@ void DogfightState::move()
 	// End dogfight if UFO is crashed or destroyed.
 	if (!_end && _ufo->isCrashed())
 	{
+		AlienMission *mission = _ufo->getMission();
+		mission->ufoShotDown(*_ufo, *_game, *_globe);
 		// Check for retaliation trigger.
 		if (RNG::generate(0, 100) > 4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))
 		{
@@ -1080,8 +1046,6 @@ void DogfightState::move()
 				_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
 				_ufo->setAltitude("STR_GROUND");
 			}
-			AlienMission *mission = _ufo->getMission();
-			mission->ufoShotDown(*_ufo, *_game, *_globe);
 		}
 		_timeout += 30;
 		if(_ufo->getShotDownByCraftId() != _craft->getId())
@@ -1089,17 +1053,23 @@ void DogfightState::move()
 			_timeout += 50;
 			_ufoHitFrame = 3;
 		}
-		_end = true;
+		_ufoBreakingOff = false;
+		finalRun = true;
 		_ufo->setSpeed(0);
 	}
 
 	if (!_end && _ufo->getStatus() == Ufo::LANDED)
 	{
 		_timeout += 30;
-		_end = true;
+		finalRun = true;
 		_ufoWtimer->stop();
 		_w1Timer->stop();
 		_w2Timer->stop();
+	}
+
+	if (finalRun)
+	{
+		_end = true;
 	}
 }
 

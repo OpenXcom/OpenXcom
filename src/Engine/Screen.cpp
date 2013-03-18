@@ -19,7 +19,6 @@
 #include "Screen.h"
 #include <sstream>
 #include <iomanip>
-#include <SDL_endian.h>
 #include <limits.h>
 #include "../lodepng.h"
 #include "Exception.h"
@@ -30,8 +29,7 @@
 #include "CrossPlatform.h"
 #include "Zoom.h"
 #include "OpenGL.h"
-
-
+#include <SDL.h>
 
 namespace OpenXcom
 {
@@ -202,7 +200,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
 	_surface->setPalette(colors, firstcolor, ncolors);
 
 	// defer actual update of screen until SDL_Flip()
-	if (immediately && SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+	if (immediately && _screen->format->BitsPerPixel == 8 && SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
 	{
 		Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 	}
@@ -344,55 +342,32 @@ double Screen::getYScale() const
  */
 void Screen::screenshot(const std::string &filename) const
 {
-	std::vector<unsigned char> image;
 	SDL_Color *palette = getPalette();
+	
+	SDL_Surface *screenshot = SDL_AllocSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
+
 
 	if (isOpenGLEnabled())
 	{
 		GLenum format = GL_RGB;
 
-		image.resize(getWidth() * getHeight() * 3, 0);
 		for (int y = 0; y < getHeight(); ++y)
 		{
-			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, &(image[y*getWidth()*3]));
+			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
 		}
 		glErrorCheck();
 	} else
 	{
-		for (int y = 0; y < getHeight(); ++y)
-		{
-			for (int x = 0; x < getWidth(); ++x)
-			{
-				switch(_screen->format->BytesPerPixel)
-				{
-					Uint8 color;
-					Uint32 colors;
-				case 1:
-					color = ((Uint8 *)_screen->pixels)[y * _screen->pitch + x * _screen->format->BytesPerPixel];
-					image.push_back(palette[color].r);
-					image.push_back(palette[color].g);
-					image.push_back(palette[color].b);
-					break;
-				case 2:
-				case 3:
-				case 4:
-					colors = *(Uint32*)(((Uint8 *)_screen->pixels) + y * _screen->pitch + x * _screen->format->BytesPerPixel);
-					image.push_back((colors & _screen->format->Rmask) >> _screen->format->Rshift);
-					image.push_back((colors & _screen->format->Gmask) >> _screen->format->Gshift);
-					image.push_back((colors & _screen->format->Bmask) >> _screen->format->Bshift);
-					break;
-				default:
-					return; // not likely
-				}
-			}
-		}
+		SDL_BlitSurface(_screen, 0, screenshot, 0);
 	}
 
-	unsigned error = lodepng::encode(filename, image, getWidth(), getHeight(), LCT_RGB);
+	unsigned error = lodepng::encode(filename, (const unsigned char *)(screenshot->pixels), getWidth(), getHeight(), LCT_RGB);
 	if (error)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
 	}
+
+	SDL_FreeSurface(screenshot);
 }
 
 

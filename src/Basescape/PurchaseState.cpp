@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -459,8 +460,11 @@ void PurchaseState::increase(int change)
 			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
 			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
 			int maxByStores;
-			if (0 == storesNeededPerItem) maxByStores = INT_MAX;
-			else maxByStores = floor(freeStores / storesNeededPerItem);
+			if ( AreSame(storesNeededPerItem, 0.f) ) {
+        maxByStores = INT_MAX;
+      } else {
+        maxByStores = floor(freeStores / storesNeededPerItem);
+      }
 			change = std::min(maxByStores, change);
 			_iQty += ((float)(change)) * storesNeededPerItem;
 		}

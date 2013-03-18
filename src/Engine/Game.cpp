@@ -218,22 +218,6 @@ void Game::run()
 					Options::setInt("displayHeight", _event.resize.h);
 					_screen->setResolution(_event.resize.w, _event.resize.h);
 					break;
-				case SDL_KEYDOWN:
-				case SDL_KEYUP:
-					if (_event.type == SDL_KEYDOWN)
-					{ 
-						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-							setCtrlKeyDown(true);
-						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-							setShiftKeyDown(true);
-					}
-					else if (_event.type == SDL_KEYUP)
-					{
-						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-							setCtrlKeyDown(false);
-						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-							setShiftKeyDown(false);
-					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
@@ -516,46 +500,11 @@ int Game::getAlienContainmentHasUpperLimit() const
 	return _alienContainmentHasUpperLimit;
 }
 
-bool Game::_ctrlKeyDown;
-/**
- * Sets whether the control key is down
- */
-void Game::setCtrlKeyDown(bool ctrlKey)
-{
-	_ctrlKeyDown =  ctrlKey;
-}
-
-/**
- * Returns whether the control key is down
- */
-bool Game::getCtrlKeyDown()
-{
-	return _ctrlKeyDown;
-}
-
-bool Game::_shiftKeyDown;
-/**
- * Sets whether the Shift key is down
- */
-void Game::setShiftKeyDown(bool shiftKey)
-{
-	_shiftKeyDown =  shiftKey;
-}
-
-/**
- * Returns whether the Shift key is down
- */
-bool Game::getShiftKeyDown()
-{
-	return _shiftKeyDown;
-}
-
-
 /**
  * @brief Returns whether current state is *state
  * @param state The state to test against the stack state
  */
- const bool Game::isState(State *state) const
+bool Game::isState(State *state) const
 {
 	return _states.size() > 0 && _states.back() == state;
 }

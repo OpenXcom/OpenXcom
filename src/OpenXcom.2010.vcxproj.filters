@@ -1526,6 +1526,7 @@
     <ClInclude Include="Interface\ToggleTextButton.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="aresame.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

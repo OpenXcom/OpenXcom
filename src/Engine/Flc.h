@@ -20,6 +20,9 @@ grt,
                                                                   ----+
 */
 
+#ifndef __OXC_FLC_H
+#define __OXC_FLC_H
+
 #include "SDL.h"
 #include "Screen.h"
 
@@ -86,3 +89,5 @@ void FlcDoOneFrame();
 }
 
 }
+
+#endif

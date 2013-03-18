@@ -123,6 +123,7 @@ void createDefault()
 	setInt("windowedModePositionX", 3);
 	setInt("windowedModePositionY", 22);
 	setBool("autosaveOnly", false);
+	setBool("classicMouseHandling", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

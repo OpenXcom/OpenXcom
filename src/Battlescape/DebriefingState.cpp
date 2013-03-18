@@ -742,8 +742,33 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i) == base)
 			{
+
 				delete (*i);
 				_game->getSavedGame()->getBases()->erase(i);
+				break;
+			}
+		}
+
+		AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
+		for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+		{
+			if ((*i)->getMission() == am)
+			{
+				delete *i;
+				i = _game->getSavedGame()->getUfos()->erase(i);
+			}
+			else
+			{
+				++i;
+			}
+		}
+		for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
+			i != _game->getSavedGame()->getAlienMissions().end(); ++i)
+		{
+			if ((AlienMission*)(*i) == am)
+			{
+				delete (*i);
+				_game->getSavedGame()->getAlienMissions().erase(i);
 				break;
 			}
 		}

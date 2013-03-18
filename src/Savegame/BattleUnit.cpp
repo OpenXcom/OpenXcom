@@ -271,6 +271,10 @@ void BattleUnit::load(const YAML::Node &node)
 	{
 		_originalFaction = _faction;
 	}
+	if (const YAML::Node *pName = node.FindValue("kills"))
+	{
+		(*pName) >> _kills;
+	}
 	_charging = 0;
 
 
@@ -328,6 +332,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
 	if (_originalFaction != _faction)
 		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
+	if (_kills)
+		out << YAML::Key << "kills" << YAML::Value << _kills;
 
 	out << YAML::EndMap;
 }
@@ -605,7 +611,9 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 	else
 	{
 		_toDirection = dir;
-		if (_toDirection != _direction)
+		if (_toDirection != _direction
+			&& _toDirection < 8
+			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
 		}
@@ -620,6 +628,7 @@ void BattleUnit::lookAt(int direction, bool force)
 {
 	if (!force)
 	{
+		if (direction < 0 || direction >= 8) return;
 		_toDirection = direction;
 		_status = STATUS_TURNING;
 	}
@@ -645,19 +654,31 @@ void BattleUnit::turn(bool turret)
 	if (a != 0) {
 		if (a > 0) {
 			if (a <= 4) {
-				if (!turret) _direction++;
-				else _directionTurret++;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret++;
+					_direction++;
+				} else _directionTurret++;
 			} else {
-				if (!turret) _direction--;
-				else _directionTurret--;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret--;
+					_direction--;
+				} else _directionTurret--;
 			}
 		} else {
 			if (a > -4) {
-				if (!turret) _direction--;
-				else _directionTurret--;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret--;
+					_direction--;
+				} else _directionTurret--;
 			} else {
-				if (!turret) _direction++;
-				else _directionTurret++;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret++;
+					_direction++;
+				} else _directionTurret++;
 			}
 		}
 		if (_direction < 0) _direction = 7;
@@ -668,10 +689,13 @@ void BattleUnit::turn(bool turret)
 			_cacheInvalid = true;
 	}
 
-	if (turret && _toDirectionTurret == _directionTurret)
+	if (turret)
 	{
-		// we officially reached our destination
-		_status = STATUS_STANDING;
+		 if (_toDirectionTurret == _directionTurret)
+		 {
+			// we officially reached our destination
+			_status = STATUS_STANDING;
+		 }
 	}
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)
 	{
@@ -1172,6 +1196,19 @@ void BattleUnit::setTimeUnits(int tu)
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 {
+	bool add = true;
+	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end();++i)
+	{
+		if ((BattleUnit*)(*i) == unit)
+		{
+			add = false;
+			break;
+		}
+	}
+	if (add)
+	{
+		_unitsSpottedThisTurn.push_back(unit);
+	}
 	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
@@ -1352,6 +1389,8 @@ void BattleUnit::prepareNewTurn()
 {
 	// revert to original faction
 	_faction = _originalFaction;
+
+	_unitsSpottedThisTurn.clear();
 
 	// recover TUs
 	int TURecovery = getStats()->tu;
@@ -2362,6 +2401,11 @@ void BattleUnit::invalidateCache()
 {
 	for (int i = 0; i < 5; ++i) { _cache[i] = 0; }
 	_cacheInvalid = true;
+}
+
+std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
+{
+	return _unitsSpottedThisTurn;
 }
 
 }

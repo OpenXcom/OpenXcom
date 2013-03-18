@@ -449,7 +449,11 @@ void BattlescapeGenerator::run()
 		// auto-equip soldiers (only soldiers without layout)
 		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 		{
-			addItem(*i);
+			addItem(*i, false);
+		}
+		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+		{
+			addItem(*i, true);
 		}
 		// clean up moved items
 		RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
@@ -789,7 +793,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  * Adds an item to an X-Com soldier. (auto-equip)
  * @param item pointer to the Item
  */
-BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
+BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
@@ -800,6 +804,30 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 		switch (item->getRules()->getBattleType())
 		{
 		case BT_AMMO:
+			if (secondPass)
+			{
+				bool placed = false;
+				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
+				{
+					if ((*bu)->getMainHandWeapon() && (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo())
+					{
+						for (std::vector<std::string>::iterator it = (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->begin(); it != (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
+						{
+							if (*it == item->getRules()->getType())
+							{
+								if (!(*bu)->getItem("STR_BELT", 1) && item->getRules()->getInventoryHeight() == 1)
+								{
+									item->moveToOwner((*bu));
+									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+									item->setSlotX(1);
+									placed = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
 			break;
 		case BT_GRENADE:
 		case BT_PROXIMITYGRENADE:
@@ -879,9 +907,11 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 		}
 	}
 
-	_save->getItems()->push_back(item);
-	item->setXCOMProperty(true);
-
+	if (!secondPass)
+	{
+		_save->getItems()->push_back(item);
+		item->setXCOMProperty(true);
+	}
 	return item;
 }
 

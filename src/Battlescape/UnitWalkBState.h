@@ -44,6 +44,7 @@ private:
 	void playMovementSound();
     const Position _finalFacing;
     const bool _pathfindForFinalTurn;
+	std::size_t _numUnitsSpotted;
 public:
 	/// Creates a new UnitWalkBState class
 	UnitWalkBState(BattlescapeGame *parent, BattleAction _action, const Position finalFacing = Position(0,0,INT_MAX), const bool pathfindForFinalTurn = true);

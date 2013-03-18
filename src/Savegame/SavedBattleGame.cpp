@@ -44,7 +44,7 @@ namespace OpenXcom
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false), _sneaky(false), _traceAI(false)
+SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _tiles(), _selectedUnit(0), _lastSelectedUnit(0), _nodes(), _units(), _items(), _pathfinding(0), _tileEngine(0), _missionType(""), _globalShade(0), _side(FACTION_PLAYER), _turn(1), _debugMode(false), _aborted(false), _itemId(0), _objectiveDestroyed(false), _fallingUnits(), _unitsFalling(false), _strafeEnabled(false), _sneaky(false), _traceAI(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
@@ -843,10 +843,6 @@ void SavedBattleGame::endTurn()
 			(*i)->setTurnsExposed(-1);
 			updateExposedUnits();
 		}
-		if ((*i)->getFaction() != FACTION_PLAYER)
-		{
-			(*i)->setVisible(false);
-		}
 	}
 
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
@@ -855,6 +851,15 @@ void SavedBattleGame::endTurn()
 		{
 			(*i)->prepareNewTurn();
 		}
+		if ((*i)->getFaction() != FACTION_PLAYER)
+		{
+			(*i)->setVisible(false);
+		}
+	}
+	
+	// re-run calculateFOV() *after* all aliens have been set not-visible
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(), end = _units.end(); i != end; ++i)
+	{
 		_tileEngine->calculateFOV(*i);
 	}
 
@@ -883,6 +888,17 @@ bool SavedBattleGame::getDebugMode() const
 {
 	return _debugMode;
 }
+
+BattlescapeState *SavedBattleGame::getBattleState()
+{
+	return _battleState;
+}
+
+void SavedBattleGame::setBattleState(BattlescapeState *bs)
+{
+	_battleState = bs;
+}
+
 
 /**
  * Resets all the units to their current standing tile(s).
@@ -1068,13 +1084,12 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 {
 	std::vector<Node*> compliantNodes;	
 	
-	if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
+	//if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 
-	for (std::vector<int>::iterator i = fromNode->getNodeLinks()->begin(); i != fromNode->getNodeLinks()->end(); ++i )
+	const std::vector<Node *>::iterator end = getNodes()->end();
+	for (std::vector<Node *>::iterator i = getNodes()->begin(); i != end; ++i )
 	{
-		if (*i > 0)
-		{
-			Node *n = getNodes()->at(*i);
+			Node *n = *i;
 			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
 				&& (!(n->getType() & Node::TYPE_SMALL) 
 					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
@@ -1083,11 +1098,12 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& !n->isAllocated() // check if not allocated
 				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
 				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
+				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
+				&& n != fromNode	// don't go back to Rockville
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
 				compliantNodes.push_back(n);
 			}
-		}
 	}
 
 	if (compliantNodes.empty()) return 0;

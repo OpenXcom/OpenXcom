@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_TRANSFERBASESTATE_H
-#define OPENXCOM_TRANSFERBASESTATE_H
+#ifndef OPENXCOM_TRANSFERCONFIRMSTATE_H
+#define OPENXCOM_TRANSFERCONFIRMSTATE_H
 
 #include "../Engine/State.h"
 

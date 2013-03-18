@@ -351,8 +351,11 @@ static struct AudioSequence
 				int channel = trackPosition % 4; // use at most four channels to play sound effects
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
 				s = rp->getSound(sf->catFile, sf->sound);
-				Mix_Volume(channel, sf->volume);
-				if (s) s->play(channel);
+				if (s)
+				{
+					s->play(channel);
+					Mix_Volume(channel, sf->volume);
+				}
 				else Log(LOG_WARNING) << "Couldn't play" << sf->catFile << " :" << introSoundTrack[trackPosition].sound;
 			}
 			++trackPosition;
@@ -400,14 +403,16 @@ void StartState::think()
 				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
 				Flc::flc.loop = 0; // just the one time, please
-				Mix_VolumeMusic(128);
 				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
 				delete audioSequence;
-				Mix_Volume(-1, Options::getInt("soundVolume"));
-				Mix_VolumeMusic(Options::getInt("musicVolume"));
+
 
 				// fade out!
+				Mix_FadeOutChannel(-1, 45*20);
+				if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45*20); } // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
+				else { Mix_HaltMusic(); }
+
 				SDL_Color pal[256];
 				SDL_Color pal2[256];
 				memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
@@ -427,6 +432,10 @@ void StartState::think()
 				}
 				_game->getScreen()->clear();
 				_game->getScreen()->flip();
+
+				_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
+
+				Mix_HaltChannel(-1);
 			}
 		}
 		catch (Exception &e)
@@ -508,3 +517,4 @@ XcomResourcePack *StartState::makeModifications(XcomResourcePack *pack)
 }
 
 }
+
