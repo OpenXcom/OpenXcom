@@ -66,6 +66,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
 #include "WarningMessage.h"
@@ -230,6 +231,14 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 		unit->think(&action);	
+	}
+
+	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
+	{
+		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->size() == 0)
+		{
+			findItem(&action);
+		}
 	}
 
 	if (action.type == BA_WALK)
@@ -1592,5 +1601,309 @@ void BattlescapeGame::resetSituationForAI()
 
 }
 
+
+/**
+ * Try and find an item and pick it up if possible
+ */
+void BattlescapeGame::findItem(BattleAction *action)
+{
+	// terrorists don't have hands.
+	if (action->actor->getRankString() != "STR_TERRORIST")
+	{
+		// pick the best available item
+		BattleItem *targetItem = surveyItems(action);
+		// make sure it's worth taking
+		if (targetItem && worthTaking(targetItem, action))
+		{
+			// if we're already standing on it...
+			if (targetItem->getTile()->getPosition() == action->actor->getPosition())
+			{
+				// try to pick it up
+				if (takeItemFromGround(targetItem, action) == 0)
+				{
+					// if it isn't loaded or it is ammo
+					if (!targetItem->getAmmoItem())
+					{
+						// try to load our weapon
+						action->actor->checkAmmo();
+					}
+				}
+			}
+			else if (!targetItem->getTile()->getUnit() || targetItem->getTile()->getUnit()->isOut())
+			{
+				// if we're not standing on it, we should try to get to it.
+				action->target = targetItem->getTile()->getPosition();
+				action->type = BA_WALK;
+			}
+		}
+	}
+}
+
+
+/**
+ * Search through items on the map that were dropped on an alien turn, then pick the most "attractive" one
+ * @param action a pointer to the action being performed.
+ * @return the item to attempt to take.
+ */
+BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
+{
+	std::vector<BattleItem*> droppedItems;
+
+	// first fill a vector with items on the ground that were dropped on the alien turn, and have an attraction value.
+	for (std::vector<BattleItem*>::iterator i = _save->getItems()->begin(); i != _save->getItems()->end(); ++i)
+	{
+		if ((*i)->getSlot() && (*i)->getSlot()->getId() == "STR_GROUND" && (*i)->getTile() && (*i)->getTurnFlag() && (*i)->getRules()->getAttraction())
+		{
+			droppedItems.push_back(*i);
+		}
+	}
+
+	BattleItem *targetItem;
+	int maxWorth = 0;
+
+	// now select the most suitable candidate depending on attractiveness and distance
+	// (are we still talking about items?)
+	for (std::vector<BattleItem*>::iterator i = droppedItems.begin(); i != droppedItems.end(); ++i)
+	{
+		int currentWorth = (*i)->getRules()->getAttraction() / (_save->getTileEngine()->distance(action->actor->getPosition(), (*i)->getTile()->getPosition()) + 1);
+		if (currentWorth > maxWorth)
+		{
+			maxWorth = currentWorth;
+			targetItem = *i;
+		}
+	}
+
+	return targetItem;
+}
+
+
+/**
+ * Assess whether this item is worth trying to pick up, taking into account how many units we see,
+ * whether or not the Weapon has ammo, and if we have ammo FOR it,
+ * or if it's ammo, check if we have the weapon to go with it,
+ * assess the attraction value of the item and compare it with the distance to the object,
+ * then return false anyway.
+ * @param item the item to attempt to take.
+ * @param action a pointer to the action being performed.
+ * @return false.
+ */
+bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
+{
+	int worthToTake = 0;
+
+	// don't even think about making a move for that gun if you can see a target, for some reason 
+	// (maybe this should check for enemies spotting the tile the item is on?)
+	if (action->actor->getVisibleUnits()->size() == 0)
+	{
+		// retrieve an insignificantly low value from the ruleset.
+		worthToTake = item->getRules()->getAttraction();
+
+		// it's always going to be worth while to try and take a blaster launcher, apparently
+		if (!item->getRules()->isWaypoint() && item->getRules()->getBattleType() != BT_AMMO)
+		{
+			// we only want weapons that HAVE ammo, or weapons that we have ammo FOR
+			bool ammoFound = true;
+			if (!item->getAmmoItem())
+			{
+				ammoFound = false;
+				for (std::vector<BattleItem*>::iterator i = action->actor->getInventory()->begin(); i != action->actor->getInventory()->end() && !ammoFound; ++i)
+				{
+					if ((*i)->getRules()->getBattleType() == BT_AMMO)
+					{
+						for (std::vector<std::string>::iterator j = item->getRules()->getCompatibleAmmo()->begin(); j != item->getRules()->getCompatibleAmmo()->end() && !ammoFound; ++j)
+						{
+							if ((*i)->getRules()->getName() == *j)
+							{
+								ammoFound = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (!ammoFound)
+			{
+				return false;
+			}
+		}
+
+		if ( item->getRules()->getBattleType() == BT_AMMO)
+		{
+			// similar to the above, but this time we're checking if the ammo is suitable for a weapon we have.
+			bool weaponFound = false;
+			for (std::vector<BattleItem*>::iterator i = action->actor->getInventory()->begin(); i != action->actor->getInventory()->end() && !weaponFound; ++i)
+			{
+				if ((*i)->getRules()->getBattleType() == BT_FIREARM)
+				{
+					for (std::vector<std::string>::iterator j = (*i)->getRules()->getCompatibleAmmo()->begin(); j != (*i)->getRules()->getCompatibleAmmo()->end() && !weaponFound; ++j)
+					{
+						if ((*i)->getRules()->getName() == *j)
+						{
+							weaponFound = true;
+							break;
+						}
+					}
+				}
+			}
+			if (!weaponFound)
+			{
+				return false;
+			}
+		}
+	}
+
+    if (worthToTake)
+    {
+		// use bad logic to determine if we'll have room for the item
+		int freeSlots = 25;
+		for (std::vector<BattleItem*>::iterator i = action->actor->getInventory()->begin(); i != action->actor->getInventory()->end(); ++i)
+		{
+			freeSlots -= (*i)->getRules()->getInventoryHeight() * (*i)->getRules()->getInventoryWidth();
+		}
+		int size = item->getRules()->getInventoryHeight() * item->getRules()->getInventoryWidth();
+		if (freeSlots < size)
+		{
+			return false;
+		}
+	}
+
+	// return false for any item that we aren't standing directly on top of with an attraction value less than 6 (aka always)
+	return (worthToTake - _save->getTileEngine()->distance(action->actor->getPosition(), item->getTile()->getPosition())) > 5;
+}
+
+
+/**
+ * at this point we've decided it's worth our while to grab this item, so we try to do just that.
+ * first we check to make sure we have time units, then that we have space (using horrifying logic)
+ * then we attempt to actually recover the item.
+ * @param item the item to attempt to take.
+ * @param action a pointer to the action being performed.
+ * @return 0 if successful, 1 for no TUs, 2 for not enough room, 3 for "won't fit" and -1 for "something went horribly wrong"
+ */
+int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
+{
+	const int unhandledError = -1;
+	const int success = 0;
+	const int notEnoughTimeUnits = 1;
+	const int notEnoughSpace = 2;
+	const int couldNotFit = 3;
+	int freeSlots = 25;
+
+	// make sure we have time units
+	if (action->actor->getTimeUnits() < 6)
+	{
+		return notEnoughTimeUnits;
+	}
+	else
+	{
+		// check to make sure we have enough space by checking all the sizes of items in our inventory 
+		for (std::vector<BattleItem*>::iterator i = action->actor->getInventory()->begin(); i != action->actor->getInventory()->end(); ++i)
+		{
+			freeSlots -= (*i)->getRules()->getInventoryHeight() * (*i)->getRules()->getInventoryWidth();
+		}
+		if (freeSlots < item->getRules()->getInventoryHeight() * item->getRules()->getInventoryWidth())
+		{
+			return notEnoughSpace;
+		}
+		else
+		{
+			// check that the item will fit in our inventory, and if so, take it
+			if (takeItem(item, action))
+			{
+				action->actor->spendTimeUnits(6);
+				item->getTile()->removeItem(item);
+				return success;
+			}
+			else
+			{
+				return couldNotFit;
+			}
+		}
+	}
+	// shouldn't ever end up here
+	return unhandledError;
+}
+
+
+/**
+ * try to fit an item into the unit's inventory, return false if you can't.
+ * @param item the item to attempt to take.
+ * @param action a pointer to the action being performed.
+ * @return whether or not the item was successfully retrieved.
+ */
+bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
+{
+	bool placed = false;
+	Ruleset* rules = _parentState->getGame()->getRuleset();
+	switch (item->getRules()->getBattleType())
+	{
+	case BT_AMMO:
+		// find equipped weapons that can be loaded with this ammo
+		if (action->actor->getItem("STR_RIGHT_HAND") && action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
+		{
+			if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
+			{
+				placed = true;
+			}
+		}
+		else
+		{
+			for (int i = 0; i != 4; ++i)
+			{
+				if (!action->actor->getItem("STR_BELT", i))
+				{
+					item->moveToOwner(action->actor);
+					item->setSlot(rules->getInventory("STR_BELT"));
+					item->setSlotX(i);
+					placed = true;
+					break;
+				}
+			}
+		}
+		break;
+	case BT_GRENADE:
+	case BT_PROXIMITYGRENADE:
+		for (int i = 0; i != 4; ++i)
+		{
+			if (!action->actor->getItem("STR_BELT", i))
+			{
+				item->moveToOwner(action->actor);
+				item->setSlot(rules->getInventory("STR_BELT"));
+				item->setSlotX(i);
+				placed = true;
+				break;
+			}
+		}
+		break;
+	case BT_FIREARM:
+	case BT_MELEE:
+		if (!action->actor->getItem("STR_RIGHT_HAND"))
+		{
+			item->moveToOwner(action->actor);
+			item->setSlot(rules->getInventory("STR_RIGHT_HAND"));
+			placed = true;
+		}
+		break;
+	case BT_MEDIKIT:
+	case BT_SCANNER:
+		if (!action->actor->getItem("STR_BACK_PACK"))
+		{
+			item->moveToOwner(action->actor);
+			item->setSlot(rules->getInventory("STR_BACK_PACK"));
+			placed = true;
+		}
+		break;
+	case BT_MINDPROBE:
+		if (!action->actor->getItem("STR_LEFT_HAND"))
+		{
+			item->moveToOwner(action->actor);
+			item->setSlot(rules->getInventory("STR_LEFT_HAND"));
+			placed = true;
+		}
+		break;
+	default: break;
+	}
+	return placed;
+}
 
 }
