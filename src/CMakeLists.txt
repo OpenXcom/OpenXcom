@@ -160,8 +160,6 @@ set ( battlescape_src
   Battlescape/ScannerState.h
   Battlescape/ScannerView.cpp
   Battlescape/ScannerView.h
-  Battlescape/SearchForWeaponBAIState.cpp
-  Battlescape/SearchForWeaponBAIState.h
   Battlescape/PromotionsState.cpp
   Battlescape/PromotionsState.h
   Battlescape/BattlescapeGame.cpp
