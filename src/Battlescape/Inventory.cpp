@@ -272,6 +272,7 @@ void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 			{
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);
+				item->setTurnFlag(false);
 			}
 		}
 		item->setSlot(slot);

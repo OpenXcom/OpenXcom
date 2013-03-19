@@ -85,9 +85,9 @@ typedef struct
 	int volume;
 } soundInFile;
 
-#if 0
+
 // the pure MS-DOS experience
-static soundInFile introSounds[]=
+static soundInFile introCatOnlySounds[]=
 {
 {"INTRO.CAT", 0x0, 32},
 {"INTRO.CAT", 0x1, 32},
@@ -116,10 +116,44 @@ static soundInFile introSounds[]=
 {"INTRO.CAT", 0x18, 32},
 {"INTRO.CAT", 0x18, 32}
 };
-#else
+
+
+static soundInFile sample3CatOnlySounds[]=
+{
+{"SAMPLE3.CAT", 24, 32}, // machine gun
+{"SAMPLE3.CAT", 5, 32},   // plasma rifle
+{"SAMPLE3.CAT", 23, 32}, // rifle
+{"SAMPLE3.CAT",  6, 32}, // some kind of death noise, urgh?
+{"SAMPLE3.CAT", 9, 64}, // mutdie
+{"SAMPLE3.CAT", 7, 64}, // dying alien
+{"SAMPLE3.CAT", 27, 64}, // another dying alien
+{"SAMPLE3.CAT", 4, 32}, // ??? ship flying? alien screech?
+{"SAMPLE3.CAT", 0x8, 32}, // fscream
+{"SAMPLE3.CAT", 11, 32}, // alarm
+{"SAMPLE3.CAT", 4, 32}, // gun spinning up?
+{"INTRO.CAT", 0xb, 32},  // reload; this one's not even in sample3
+{"SAMPLE3.CAT",19, 48},  // whoosh
+{"INTRO.CAT", 0xd, 32},  // feet, also not in sample3
+{"SAMPLE3.CAT", 2, 32},  // low pulsating hum
+{"SAMPLE3.CAT", 30, 32}, // energise
+{"SAMPLE3.CAT", 21, 32}, // hatch
+{"SAMPLE3.CAT", 0, 64}, // phizz -- no equivalent in sample3.cat?
+{"SAMPLE3.CAT", 13, 32}, // warning 
+{"SAMPLE3.CAT", 14, 32}, // detected
+{"SAMPLE3.CAT", 19, 64}, // UFO flyby whoosh?
+{"SAMPLE3.CAT", 3, 32}, // growl
+{"SAMPLE3.CAT", 15, 128}, // voice
+{"SAMPLE3.CAT", 12, 32}, // beep 1
+{"SAMPLE3.CAT", 18, 32}, // takeoff
+{"SAMPLE3.CAT", 20, 32}  // another takeoff/landing sound?? if it exists?
+};
+
+
+
 // an attempt at a mix of (subjectively) the best sounds from the two versions
 // difficult because we can't find a definitive map from old sequence numbers to SAMPLE3.CAT indexes
-static soundInFile introSounds[]=
+// probably only the Steam version of the game comes with both INTRO.CAT and SAMPLE3.CAT
+static soundInFile hybridIntroSounds[]=
 {
 {"SAMPLE3.CAT", 24, 32}, // machine gun
 {"SAMPLE3.CAT", 5, 32},   // plasma rifle
@@ -148,9 +182,17 @@ static soundInFile introSounds[]=
 {"SAMPLE3.CAT", 18, 32}, // takeoff
 {"SAMPLE3.CAT", 20, 32}  // another takeoff/landing sound?? if it exists?
 };
-#endif
 
 // sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound, not sure for which craft
+
+static soundInFile *introSounds[] =
+{
+	hybridIntroSounds,
+	introCatOnlySounds,
+	sample3CatOnlySounds,
+	0
+};
+
 
 typedef struct 
 {
@@ -347,16 +389,20 @@ static struct AudioSequence
 			}
 			else if (command <= 0x19)
 			{
-				soundInFile *sf = introSounds + command;
-				int channel = trackPosition % 4; // use at most four channels to play sound effects
-				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
-				s = rp->getSound(sf->catFile, sf->sound);
-				if (s)
+				for (soundInFile **sounds = introSounds; *sounds; ++sounds) // try hybrid sound set, then intro.cat or sample3.cat alone
 				{
-					s->play(channel);
-					Mix_Volume(channel, sf->volume);
+					soundInFile *sf = (*sounds) + command;
+					int channel = trackPosition % 4; // use at most four channels to play sound effects
+					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
+					s = rp->getSound(sf->catFile, sf->sound);
+					if (s)
+					{
+						s->play(channel);
+						Mix_Volume(channel, sf->volume);
+						break;
+					}
+					else Log(LOG_DEBUG) << "Couldn't play " << sf->catFile << ":" << sf->sound;
 				}
-				else Log(LOG_WARNING) << "Couldn't play" << sf->catFile << " :" << introSoundTrack[trackPosition].sound;
 			}
 			++trackPosition;
 		}
