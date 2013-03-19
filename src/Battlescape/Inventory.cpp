@@ -348,7 +348,7 @@ BattleItem *Inventory::getSelectedItem() const
  */
 void Inventory::setSelectedItem(BattleItem *item)
 {
-	_selItem = item;
+	_selItem = (item && !item->getRules()->isFixed()) ? item : 0;
 	if (_selItem == 0)
 	{
 		_selection->clear();
