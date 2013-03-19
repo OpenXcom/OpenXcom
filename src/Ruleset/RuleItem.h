@@ -64,7 +64,7 @@ private:
 	int _armor;
 	int _turretType;
 	bool _recover, _liveAlien;
-	int _blastRadius;
+	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
 public:
 	/// Creates a blank item ruleset.
@@ -175,6 +175,9 @@ public:
 	bool getFlatRate() const;
 	/// should this weapon arc?
 	bool getArcingShot() const;
+	/// how much do aliens want this thing?
+	int getAttraction() const;
+
 };
 
 }
