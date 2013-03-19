@@ -762,6 +762,9 @@
     <ClCompile Include="Interface\ToggleTextButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\SearchForWeaponBAIState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1527,6 +1530,9 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="aresame.h" />
+    <ClInclude Include="Battlescape\SearchForWeaponBAIState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

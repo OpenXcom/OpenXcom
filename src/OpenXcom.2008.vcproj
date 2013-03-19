@@ -1279,6 +1279,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Battlescape\SearchForWeaponBAIState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\SearchForWeaponBAIState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Battlescape\TileEngine.cpp"
 				>
 			</File>

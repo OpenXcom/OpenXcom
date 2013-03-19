@@ -33,6 +33,7 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/PatrolBAIState.h"
 #include "../Battlescape/AggroBAIState.h"
+#include "../Battlescape/SearchForWeaponBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
@@ -212,6 +213,10 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				else if (state == "AGGRO")
 				{
 					aiState = new AggroBAIState(this, b);
+				}
+				else if (state == "SEARCH")
+				{
+					aiState = new SearchForWeaponBAIState(this, b);
 				}
 				else
 				{
