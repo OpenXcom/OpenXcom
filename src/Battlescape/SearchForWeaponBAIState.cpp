@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SearchForWeaponBAIState.h"
-#include "BattleScapeState.h"
+#include "BattlescapeState.h"
 #include "TileEngine.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
