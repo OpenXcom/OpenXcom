@@ -23,7 +23,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
-#include "../Ruleset/RuleSet.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Tile.h"
