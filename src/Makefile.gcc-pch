@@ -36,7 +36,7 @@ $(OBJDIR):
 	mkdir $(OBJDIR)
 
 pch.h.gch: $(HDRS)
-	$(CXX) -x c++-header $(CXXFLAGS) pch.h 
+	$(CXX) -x c++-header $(patsubst -include pch.h,,$(CXXFLAGS)) pch.h 
 
 $(BINDIR)$(BIN): $(OBJS)
 	$(CXX) $(OBJS) $(LDFLAGS) $(LIBS) -o $(BINDIR)$(BIN)
