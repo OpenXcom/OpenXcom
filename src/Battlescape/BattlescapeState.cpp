@@ -1215,7 +1215,7 @@ void BattlescapeState::SaveAIMap()
 	int expMax = 0;
 
 	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
-	Log(LOG_INFO) << "pitch = " << img->pitch;
+	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(img->pixels, 0, img->pitch * img->h);
 	
 	Position tilePos(pos);
@@ -1258,6 +1258,7 @@ void BattlescapeState::SaveAIMap()
 			{
 				int e = (t->totalExposure * 255) / expMax;
 				SDL_FillRect(img, &r, SDL_MapRGB(img->format, e, 255-e, 0x20));
+				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
 			} else
 			{
 				if (!t->getUnit()) SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
