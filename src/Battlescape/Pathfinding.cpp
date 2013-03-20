@@ -238,6 +238,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
 	bool fellDown = false;
+	bool walkedDown = false;
 	bool triedStairs = false;
 	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
@@ -264,6 +265,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 				return 255;
 			
+			// this will later be used to re-cast the start tile again.
+			Position verticalOffset (0, 0, 0);
 
 			// if we are on a stairs try to go up a level
 			if (direction < DIR_UP && startTile->getTerrainLevel() <= -16 && !aboveDestination->hasNoFloor(destinationTile) && !triedStairs)
@@ -272,6 +275,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 					if (numberOfPartsGoingUp > size)
 					{
+						verticalOffset.z++;
 						endPosition->z++;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
@@ -287,7 +291,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						endPosition->z--;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
-						fellDown = true;
+						walkedDown = true;
 					}
 			}
 
@@ -317,18 +321,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				}
 			}
 
-			int wallcost = 0; // walking through rubble walls
-			if (!triedStairs && !fellDown)
-			{
-				if (direction == 7 || direction == 0 || direction == 1)
-					wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-				if (direction == 1 || direction == 2 || direction == 3)
-					wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-				if (direction == 3 || direction == 4 || direction == 5)
-					wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-				if (direction == 5 || direction == 6 || direction == 7)
-					wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-			}
 			// check if we have floor, else fall down
 			if (_movementType != MT_FLY && !fellDown && canFallDown(startTile))
 			{
@@ -340,8 +332,20 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					destinationTile = _save->getTile(*endPosition + offset);
 					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
 					fellDown = true;
+					direction = DIR_DOWN;
 				}
 			}
+			startTile = _save->getTile(startTile->getPosition() + verticalOffset);
+
+			int wallcost = 0; // walking through rubble walls
+			if (direction == 7 || direction == 0 || direction == 1)
+				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+			if (direction == 1 || direction == 2 || direction == 3)
+				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+			if (direction == 3 || direction == 4 || direction == 5)
+				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+			if (direction == 5 || direction == 6 || direction == 7)
+				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
