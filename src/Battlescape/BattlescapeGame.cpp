@@ -1432,14 +1432,14 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	{
 		_save->getItems()->push_back(item);
 	}
+	else if (_save->getSide() != FACTION_PLAYER)
+	{
+		item->setTurnFlag(true);
+	}
 
 	if (removeItem)
 	{
 		item->moveToOwner(0);
-		if (_save->getSide() != FACTION_PLAYER)
-		{
-			item->setTurnFlag(true);
-		}
 	}
 	else
 	{
@@ -1658,7 +1658,7 @@ BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
 		}
 	}
 
-	BattleItem *targetItem;
+	BattleItem *targetItem = 0;
 	int maxWorth = 0;
 
 	// now select the most suitable candidate depending on attractiveness and distance
