@@ -447,7 +447,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 			++count;
 		}
 	}
-	if (count > queryingUnit->getArmor()->getSize()*queryingUnit->getArmor()->getSize())
+	if (count != queryingUnit->getArmor()->getSize()*queryingUnit->getArmor()->getSize())
 	{
 		Log(LOG_ERROR) << count << " tiles are occupied by " << queryingUnit->getType() << " #" << queryingUnit->getId() << " and that is messed up.";
 	}
@@ -488,7 +488,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
 		// this should be the best, a routine that gives us the degree of exposure while economizing raytraces:
 		int exposure;
-		if ((*i)->getFaction() == FACTION_PLAYER && (exposure = checkVoxelExposure(&originVoxel, tile, *i, queryingUnit)))
+		if ((*i)->getFaction() == FACTION_PLAYER && (exposure = checkVoxelExposure(&originVoxel, tile, *i, &hypotheticalUnit)))
 		{
 			++tile->soldiersVisible;
 			tile->totalExposure += exposure;
@@ -604,10 +604,10 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
  * @param originVoxel voxel of trace origin (eye or gun's barrel)
  * @param tile the tile to check for
  * @param excludeUnit is self (not to hit self)
- * @param alsoExclude is origin copy of hypothetically-placed unit; efforts to actually erase it from the battlescape temporarily have only led to crashes.
+ * @param excludeAllBut [optional] is unit which is the only one to be considered for ray hits
  * @return degree of exposure (as percent)
  */
-int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *alsoExclude)
+int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position scanVoxel;
@@ -660,7 +660,7 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 			scanVoxel.x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel.y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
-			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, alsoExclude);
+			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, excludeAllBut);
 			if (test == 4)
 			{
 				//voxel of hit must be inside of scanned box
@@ -1750,10 +1750,10 @@ int TileEngine::closeUfoDoors()
  * @param excludeUnit Excludes this unit in the collision detection.
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
  * @param onlyVisible skip invisible units? used in FPS view
- * @param alsoExclude another unit to exclude, for hypothetical calculations
+ * @param excludeAllBut [optional] the only unit to be considered for ray hits
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *alsoExclude)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -1821,7 +1821,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 		//passes through this point?
 		if (doVoxelCheck)
 		{
-			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, alsoExclude);
+			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
 			if (result != -1)
 			{
 				if (trajectory)
@@ -1858,7 +1858,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, alsoExclude);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
 				if (result != -1)
 				{
 					if (trajectory != 0)
@@ -1882,7 +1882,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 				cx = x;	cz = z; cy = y;
 				if (swap_xz) std::swap(cx, cz);
 				if (swap_xy) std::swap(cx, cy);
-				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible,  alsoExclude);
+				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible,  excludeAllBut);
 				if (result != -1)
 				{
 					if (trajectory != 0)
@@ -2005,10 +2005,10 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @param voxel The voxel to check.
  * @param excludeUnit Don't do checks on this unit.
  * @param excludeAllUnits Don't do checks on any unit.
- * @param alsoExclude Don' tdo checks on this unit either.
+ * @param excludeAllBut if set, the only unit to be considered for ray hits
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *alsoExclude)
+int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
 
 	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
@@ -2054,7 +2054,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 			if (tile) unit = tile->getUnit();
 		}
 
-		if (unit != 0 && unit != excludeUnit && unit != alsoExclude && (!onlyVisible || unit->getVisible() ) )
+		if (unit != 0 && unit != excludeUnit && (!excludeAllBut || unit == excludeAllBut) && (!onlyVisible || unit->getVisible() ) )
 		{
 			Position tilepos;
 			Position unitpos = unit->getPosition();
