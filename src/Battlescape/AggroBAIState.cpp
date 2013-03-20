@@ -393,7 +393,7 @@ void AggroBAIState::psiAction(BattleAction *action)
 		{
 			int controlOrPanic = 60;
 			int morale = _aggroTarget->getMorale();
-			int bravery = (100 - _aggroTarget->getStats()->bravery) / 10;
+			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
 			if (bravery > 6)
 				controlOrPanic += 15;
 			if ( bravery < 4)
