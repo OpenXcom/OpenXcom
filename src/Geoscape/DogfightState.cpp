@@ -741,6 +741,11 @@ void DogfightState::move()
 			finalRun = true;
 			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 		}
+		else //ufo cannot break off, because it's too slow
+		{
+			_ufoBreakingOff = false;
+		}
+
 	}
 	if(!_minimized)
 	{
