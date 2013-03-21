@@ -126,6 +126,10 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
+	if (_globe->getShowRadar() != _oldshowradar)
+	{
+		_globe->toggleRadarLines();
+	}
 	delete _hoverTimer;
 }
 
@@ -221,10 +225,6 @@ void BuildNewBaseState::globeClick(Action *action)
 			else
 			{
 				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
-			}
-			if (_globe->getShowRadar() != _oldshowradar)
-			{
-				_globe->toggleRadarLines();
 			}
 		}
 	}
@@ -345,10 +345,6 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *)
 void BuildNewBaseState::btnCancelClick(Action *)
 {
 	delete _base;
-	if (_globe->getShowRadar() != _oldshowradar)
-	{
-		_globe->toggleRadarLines();
-	}
 	_game->popState();
 }
 
