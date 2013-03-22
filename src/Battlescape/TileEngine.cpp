@@ -208,18 +208,6 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 	}
 }
 
-
-static size_t BattleUnitsChecksum(std::vector<BattleUnit*>& units)
-{
-	size_t newChecksum = 0;
-	
-	for (std::vector<BattleUnit*>::iterator i = units.begin(); i != units.end(); ++i)
-		newChecksum += ((*i)->getPosition().x*100 + (*i)->getPosition().y);
-
-	return newChecksum;
-}
-
-
 /**
  * Calculates line of sight of a soldier.
  * @param unit

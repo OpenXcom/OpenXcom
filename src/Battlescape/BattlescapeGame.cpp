@@ -838,7 +838,10 @@ void BattlescapeGame::statePushBack(BattleState *bs)
  */
 void BattlescapeGame::popState()
 {
-	if (Options::getBool("traceAI")) Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with " << (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
+	if (Options::getBool("traceAI"))
+	{
+		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with " << (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
+	}
 	bool actionFailed = false;
 
 	if (_states.empty()) return;

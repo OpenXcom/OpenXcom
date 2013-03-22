@@ -186,7 +186,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	RuleItem *weapon = _action->weapon->getRules();
 
 	// got to find out which button was pressed
-	for (int i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
+	for (size_t i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
 	{
 		if (action->getSender() == _actionMenu[i])
 		{
