@@ -1190,7 +1190,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 									{
 										if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 											(*it)->getUnit()->instaKill();
-										_save->removeItem((*it));
+										if (fi == 0) //no 3d explosion effect on items
+											_save->removeItem((*it));
 										break;
 									}
 									else
