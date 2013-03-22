@@ -186,7 +186,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	RuleItem *weapon = _action->weapon->getRules();
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; ++i)
+	for (int i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
 	{
 		if (action->getSender() == _actionMenu[i])
 		{
@@ -280,17 +280,20 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				for (int y = 0; y != _action->actor->getArmor()->getSize(); ++y)
 				{
-					Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(Position(_action->actor->getPosition().x + x, _action->actor->getPosition().y + y, _action->actor->getPosition().z) + p));		
+          SavedGame* savedGame = _game->getSavedGame();
+          Position actorPosition = _action->actor->getPosition();
+					Tile * tile (savedGame->getBattleGame()->getTile(Position(actorPosition.x + x, actorPosition.y + y, actorPosition.z) + p));		
 					if (tile)
 					{
 							if (tile->getUnit() && tile->getUnit() != _action->actor)
 						{
 							BattleUnit *target (tile->getUnit());
-							if (!target && (_action->actor->getHeight() - _game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition())->getTerrainLevel() > 24))
-								target = _game->getSavedGame()->getBattleGame()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
+							if (!target && (_action->actor->getHeight() - savedGame->getBattleGame()->getTile(actorPosition)->getTerrainLevel() > 24))
+								target = savedGame->getBattleGame()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
 							for (std::vector<BattleUnit*>::iterator b = _action->actor->getVisibleUnits()->begin(); b != _action->actor->getVisibleUnits()->end(); ++b)
 							{
-								if (*b == target && !_game->getSavedGame()->getBattleGame()->getPathfinding()->isBlocked(_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + Position(x, y, 0)), tile, _action->actor->getDirection(), 0))
+								if (*b == target && !savedGame->getBattleGame()->getPathfinding()->isBlocked(
+                  savedGame->getBattleGame()->getTile(actorPosition + Position(x, y, 0)), tile, _action->actor->getDirection(), 0))
 								{
 									targetUnit = tile->getUnit();
 									break;

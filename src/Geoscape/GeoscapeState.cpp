@@ -592,7 +592,8 @@ void GeoscapeState::time5Seconds()
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
-						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
 					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 					{
@@ -606,6 +607,7 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
+						mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
 						(*i)->setDestination(0);
 						base->setupDefenses();
 						timerReset();
@@ -677,19 +679,49 @@ void GeoscapeState::time5Seconds()
 	// Handle craft logic
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end();)
 		{
+			if ((*j)->isDestroyed())
+			{
+				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				{
+					if((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+					{
+						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
+						break;
+					}
+				}
+				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				{
+					if((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+					{
+						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
+						break;
+					}
+				}
+
+				delete *j;
+				j = (*i)->getCrafts()->erase(j);
+				continue;
+			}
 			if ((*j)->getDestination() != 0)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0 && !u->getDetected())
 				{
-					(*j)->setDestination(0);
-					Waypoint *w = new Waypoint();
-					w->setLongitude(u->getLongitude());
-					w->setLatitude(u->getLatitude());
-					w->setId(u->getId());
-					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && u->getStatus() == Ufo::LANDED)
+					{
+						(*j)->returnToBase();
+					}
+					else
+					{
+						(*j)->setDestination(0);
+						Waypoint *w = new Waypoint();
+						w->setLongitude(u->getLongitude());
+						w->setLatitude(u->getLatitude());
+						w->setId(u->getId());
+						popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					}
 				}
 				if (u != 0 && u->getStatus() == Ufo::DESTROYED)
 				{
@@ -795,6 +827,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			}
+			 ++j;
 		}
 	}
 
@@ -1212,10 +1245,6 @@ void GeoscapeState::time30Minutes()
 				if (!detected)
 				{
 					(*u)->setDetected(false);
-					if ((*u)->getHyperDetected())
-					{
-						(*u)->setHyperDetected(false);
-					}
 					if (!(*u)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));

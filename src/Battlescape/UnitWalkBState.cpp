@@ -70,15 +70,22 @@ void UnitWalkBState::init()
 
 void UnitWalkBState::think()
 {
-	bool unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+	bool unitSpotted = false;
 	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 	if (_unit->isKneeled())
 	{
-		_parent->kneel(_unit);
-		_unit->setCache(0);
-		_terrain->calculateFOV(_unit);
-		_parent->getMap()->cacheUnit(_unit);
-		return;
+		if (_parent->kneel(_unit))
+		{
+			_unit->setCache(0);
+			_terrain->calculateFOV(_unit);
+			_parent->getMap()->cacheUnit(_unit);
+			return;
+		}
+		else
+		{
+			_parent->popState();
+			return;
+		}
 	}
 	Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 
@@ -99,7 +106,7 @@ void UnitWalkBState::think()
 		}
 		else if (!_falling)
 		{
-			_unit->lookAt(_unit->getDestination(), true);	// turn to undiscovered unit
+			_unit->lookAt(_unit->getDestination(), (_unit->getTurretType() != -1));	// turn to undiscovered unit
 			_pf->abortPath();
 		}
 
@@ -177,7 +184,16 @@ void UnitWalkBState::think()
 
 			// move our personal lighting with us
 			_terrain->calculateUnitLighting();
-			unitSpotted = _terrain->calculateFOV(_unit);
+			if (_unit->getFaction() != FACTION_PLAYER)
+			{
+				_unit->setVisible(false);
+				_terrain->calculateFOV(_unit->getPosition());
+			}
+			else
+			{
+				_terrain->calculateFOV(_unit);
+			}
+			unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			BattleAction action;
 			
@@ -289,7 +305,10 @@ void UnitWalkBState::think()
 
 			if (tu > _unit->getTimeUnits())
 			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				if (tu < 255)
+				{
+					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				}
 				_pf->abortPath();
 				_parent->getMap()->cacheUnit(_unit);
 				return;
@@ -306,7 +325,7 @@ void UnitWalkBState::think()
 			// we are not using the turn state, because turning during walking costs no tu
 			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
-				_unit->lookAt(dir, true);
+				_unit->lookAt(dir);
 				return;
 			}
 
@@ -329,9 +348,19 @@ void UnitWalkBState::think()
 			{
 				for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
 				{
-					if (_parent->getSave()->getTile(destination + Position(x,y,0))->getUnit() &&
-						_parent->getSave()->getTile(destination + Position(x,y,0))->getUnit() != _unit &&
-						!_falling)
+					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit();
+					BattleUnit* unitBelowMyWay;
+					Tile* belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
+					if (belowDest)
+					{
+						unitBelowMyWay = belowDest->getUnit();
+					}
+					// can't walk into units in this tile, or on top of other units sticking their head into this tile
+					if (!_falling &&
+						((unitInMyWay && unitInMyWay != _unit)
+						|| (belowDest && unitBelowMyWay && unitBelowMyWay != _unit &&
+						(-belowDest->getTerrainLevel() + unitBelowMyWay->getFloatHeight() + unitBelowMyWay->getHeight())
+						>= 28)))  // 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						_action.TU = 0;
 						postPathProcedures();
@@ -390,20 +419,19 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		if (_action.strafe && _unit->getTurretType() > -1)
-		{
-			_unit->turn(true);
-		}
-		else
-		{
-			_unit->turn();
-		}
+		_unit->turn();
 
-		unitSpotted = _terrain->calculateFOV(_unit);
+		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
+		// in the code, ie: doors opening, and this messes up the result.
+		_terrain->calculateFOV(_unit);
+		unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
+		{
+			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+		}
 		if (unitSpotted && !(_action.desperate || _unit->getCharging()) && !_falling)
 		{
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }

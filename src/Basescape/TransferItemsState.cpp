@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -561,8 +562,11 @@ void TransferItemsState::increase(int change)
 		float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
 		float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
 		int freeStoresForItem;
-		if (0 == storesNeededPerItem) freeStoresForItem = INT_MAX;
-		else freeStoresForItem = floor(freeStores / storesNeededPerItem);
+		if ( AreSame(storesNeededPerItem, 0.f) ) { 
+      freeStoresForItem = INT_MAX;
+    } else {
+      freeStoresForItem = floor(freeStores / storesNeededPerItem);
+    }
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _qtys[_sel]), change);
 		_iQty += ((float)(change)) * storesNeededPerItem;
 		_qtys[_sel] += change;

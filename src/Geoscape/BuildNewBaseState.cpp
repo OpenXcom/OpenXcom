@@ -18,6 +18,7 @@
  */
 #include "BuildNewBaseState.h"
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -125,6 +126,10 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
+	if (_globe->getShowRadar() != _oldshowradar)
+	{
+		_globe->toggleRadarLines();
+	}
 	delete _hoverTimer;
 }
 
@@ -176,7 +181,7 @@ void BuildNewBaseState::hoverRedraw(void)
 
 	_globe->setNewBaseHover();
 	
-	if (_globe->getShowRadar() && (_oldlat!=lat||_oldlon!=lon) )
+	if (_globe->getShowRadar() && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
 	{
 		_oldlat=lat;
 		_oldlon=lon;
@@ -220,10 +225,6 @@ void BuildNewBaseState::globeClick(Action *action)
 			else
 			{
 				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
-			}
-			if (_globe->getShowRadar() != _oldshowradar)
-			{
-				_globe->toggleRadarLines();
 			}
 		}
 	}
@@ -344,10 +345,6 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *)
 void BuildNewBaseState::btnCancelClick(Action *)
 {
 	delete _base;
-	if (_globe->getShowRadar() != _oldshowradar)
-	{
-		_globe->toggleRadarLines();
-	}
 	_game->popState();
 }
 

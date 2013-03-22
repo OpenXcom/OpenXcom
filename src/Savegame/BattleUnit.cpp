@@ -654,19 +654,31 @@ void BattleUnit::turn(bool turret)
 	if (a != 0) {
 		if (a > 0) {
 			if (a <= 4) {
-				if (!turret) _direction++;
-				else _directionTurret++;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret++;
+					_direction++;
+				} else _directionTurret++;
 			} else {
-				if (!turret) _direction--;
-				else _directionTurret--;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret--;
+					_direction--;
+				} else _directionTurret--;
 			}
 		} else {
 			if (a > -4) {
-				if (!turret) _direction--;
-				else _directionTurret--;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret--;
+					_direction--;
+				} else _directionTurret--;
 			} else {
-				if (!turret) _direction++;
-				else _directionTurret++;
+				if (!turret) {
+					if (_turretType > -1)
+						_directionTurret++;
+					_direction++;
+				} else _directionTurret++;
 			}
 		}
 		if (_direction < 0) _direction = 7;
@@ -677,10 +689,13 @@ void BattleUnit::turn(bool turret)
 			_cacheInvalid = true;
 	}
 
-	if (turret && _toDirectionTurret == _directionTurret)
+	if (turret)
 	{
-		// we officially reached our destination
-		_status = STATUS_STANDING;
+		 if (_toDirectionTurret == _directionTurret)
+		 {
+			// we officially reached our destination
+			_status = STATUS_STANDING;
+		 }
 	}
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)
 	{
@@ -1375,10 +1390,7 @@ void BattleUnit::prepareNewTurn()
 	// revert to original faction
 	_faction = _originalFaction;
 
-	if (!_unitsSpottedThisTurn.empty())
-	{
-		for (std::vector<BattleUnit *>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); i = _unitsSpottedThisTurn.erase(i));
-	}
+	_unitsSpottedThisTurn.clear();
 
 	// recover TUs
 	int TURecovery = getStats()->tu;

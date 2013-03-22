@@ -25,12 +25,15 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/BattlescapeState.h"
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
 
@@ -167,17 +170,18 @@ void AggroBAIState::exit()
  */
 void AggroBAIState::think(BattleAction *action)
 {
-	
+	// design choices thus far force me to derive the difficulty this way.
+	action->diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
  	action->type = BA_RETHINK;
 	action->actor = _unit;
+	_aggroTarget = 0;
 	
 	if (_lastKnownTarget && _lastKnownTarget->isOut())
 	{
 		_lastKnownTarget = 0;
 		_lastKnownPosition = Position(0,0,-1);
 	}
-	if (_aggroTarget && _aggroTarget->isOut())
-		_aggroTarget = 0;
+
 	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
 		_unit->setCharging(0);
@@ -204,15 +208,10 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 	}
-
-	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,3) == 0)
+	
+	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,9 - action->diff) == 0)
 	{
 		psiAction(action);
-	}
-	// TODO: make this dependant on difficulty level
-	if (_unit->getGrenadeFromBelt() && _aggroTarget && RNG::generate(0,3) == 0)
-	{
-		grenadeAction(action);
 	}
 
 	if (takeCoverAssessment(action))
@@ -220,6 +219,10 @@ void AggroBAIState::think(BattleAction *action)
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		takeCoverAction(action);
 		action->reckless = true;
+	}
+	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0, 9 - action->diff) == 0)
+	{
+		grenadeAction(action);
 	}
 
 	if (_aggroTarget != 0) { setAggroTarget(_aggroTarget); }
@@ -390,10 +393,10 @@ void AggroBAIState::psiAction(BattleAction *action)
 		{
 			int controlOrPanic = 60;
 			int morale = _aggroTarget->getMorale();
-			int bravery = _aggroTarget->getStats()->bravery;
-			if (bravery > 60)
+			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
+			if (bravery > 6)
 				controlOrPanic += 15;
-			if ( bravery < 40)
+			if ( bravery < 4)
 				controlOrPanic -= 15;
 			if (morale >= 40)
 			{
@@ -562,7 +565,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 			if (tu <= _unit->getStats()->tu)
 			{
 				// are we within range?
-				if (ProjectileFlyBState::validThrowRange(action))
+				if (_game->getTileEngine()->validateThrow(action))
 				{
 					grenade->setExplodeTurn(_game->getTurn());
 					_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade));
@@ -579,6 +582,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 */
 void AggroBAIState::takeCoverAction(BattleAction *action)
 {
+	Uint32 start = SDL_GetTicks();
 	int unitsSpottingMe =_game->getSpottingUnits(action->actor);
 	action->type = BA_WALK;
 	int currentTilePreference = _unit->_hidingForTurn ? action->number * 5 : 0;
@@ -602,8 +606,13 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				
 	Tile *tile = 0;
 				
-	bool traceSpammed = false;
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
+
+	if (_unit->getTimeUnits() <= 5)
+	{
+		action->target = _unit->getPosition(); // stop wasting our time with calculations when you can't walk anywhere, reapers
+		return;
+	}
 				
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = civ ? -20 : 20;
@@ -611,10 +620,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int WALL_BONUS = 1;
 	const int FIRE_PENALTY = 40;
 	const int SMOKE_PENALTY = 5;
-	const int OVERREACH_PENALTY = civ ? 60 : EXPOSURE_PENALTY*3;
-	const int MELEE_TUNNELVISION_BONUS = 200;
-	const int DIRECT_PATH_PENALTY = 10;
-	const int DIRECT_PATH_TO_TARGET_PENALTY = 30;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
 	const int BASE_DESPERATE_SUCCESS = 110;
 	const int FAST_PASS_THRESHOLD = 100; // a score that's good engouh to quit the while loop early; it's subjective, hand-tuned and may need tweaking
@@ -622,6 +627,8 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int MIN_ALLY_DISTANCE = civ ? 0 : 4; // don't clump up too much and get grenaded, OK?
 	const int ALLY_BONUS = civ ? -50 : 4;
 	const int SOLDIER_PROXIMITY_BASE_PENALTY = civ ? 0 : 100; // this is divided by distance^2 to nearest soldier
+
+	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
 
 	while (tries < 150 && !coverFound)
 	{
@@ -696,9 +703,11 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		}
 		else
 		{
+			if (std::find(reachable.begin(), reachable.end(), _game->getTileIndex(tile->getPosition()))  == reachable.end()) continue; // just ignore unreachable tiles
+
 			_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
-			if (tile->soldiersVisible == -1) continue; // you can't go there.
+			if (tile->soldiersVisible == Tile::NOT_CALCULATED) continue; // you can't go there.
 						
 			if (tile->soldiersVisible && tile->closestSoldierDSqr <= SOLDIER_PROXIMITY_BASE_PENALTY && tile->closestSoldierDSqr > 0) 
 			{
@@ -709,8 +718,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			{
 				score -= ((SOLDIER_PROXIMITY_BASE_PENALTY/2)/tile->meanSoldierDSqr); // less important than above
 			}
-						
-			//if (!tile->_soldiersVisible) { Log(LOG_WARNING) << "No soldiers visible? Really?"; }
 
 			//score += (dist-_game->getTileEngine()->distance(_aggroTarget->getPosition(), action->target)); // get away from aggrotarget, modest priority
 						
@@ -719,24 +726,15 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				// yay.
 			} else
 			{						
-				score -= tile->soldiersVisible * EXPOSURE_PENALTY;
+				// score -= tile->soldiersVisible * EXPOSURE_PENALTY;
+				score -= EXPOSURE_PENALTY; // that's for giving away our position
+				score -= tile->totalExposure / (100 / EXPOSURE_PENALTY); // this is for how easy it'd be to shoot at us
 			}
 						
 			// strength in numbers but not in "grenade us!" huddles:
 			if (tile->closestAlienDSqr < MAX_ALLY_DISTANCE && tile->closestAlienDSqr > MIN_ALLY_DISTANCE) score += ALLY_BONUS;
 			if (tile->closestAlienDSqr <= MIN_ALLY_DISTANCE) score -= ALLY_BONUS;
-						
-			_game->getPathfinding()->setUnit(_unit); // because we can't just pass this around as a paramater, can we... no, that would be too simple
-						
-			if (tile->soldiersVisible && _game->getPathfinding()->bresenhamPath(tile->closestSoldierPos, action->target, 0, false))
-			{
-				score -= DIRECT_PATH_TO_TARGET_PENALTY; // not even partial cover?
-			}
-			_game->getPathfinding()->abortPath(); // clean up hypothetical path data
-						
-			if (_game->getPathfinding()->bresenhamPath(_aggroTarget->getPosition(), action->target, 0, false)) score -= DIRECT_PATH_PENALTY; // come on partial cover?
-			_game->getPathfinding()->abortPath();						
-						
+										
 			if (tile->getFire()) score -= FIRE_PENALTY; // maybe stop, drop, and roll?
 						
 			if (tile->getSmoke()) score -= SMOKE_PENALTY; // *cough* *cough*
@@ -750,23 +748,16 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 
 		if (tile && score > bestTileScore)
 		{
-			// check if we can reach this tile
+			// calculate TUs to tile; we could be getting this from findReachable() somehow but that would break something for sure...
 			_game->getPathfinding()->calculate(_unit, action->target);
-			if (_game->getPathfinding()->getTotalTUCost()+4 > _unit->getTimeUnits()) // save 4 to turn around?
-			{
-				score -= OVERREACH_PENALTY; // not gonna make it
-			} else
-			{
-				int TUBonus = (_unit->getTimeUnits() - (_game->getPathfinding()->getTotalTUCost()+4));
-				TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
-				if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
-			}
+			int TUBonus = (_unit->getTimeUnits() - (_game->getPathfinding()->getTotalTUCost()+4));
+			TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
+			if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
 			if (score > bestTileScore && _game->getPathfinding()->getStartDirection() != -1)
 			{
-				// yay, we can get there and the overreach penalty didn't kill the score
 				bestTileScore = score;
 				bestTile = action->target;
-				if (_traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); tile->addLight(4, action->target.z); }
+				if (_traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); }
 			}
 			_game->getPathfinding()->abortPath();
 			if (bestTileScore > FAST_PASS_THRESHOLD) coverFound = true; // good enough, gogogo
@@ -776,9 +767,9 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	_unit->lastCover = bestTile;
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, at a tile spotted by " << ((tile=_game->getTile(bestTile)) ? tile->soldiersVisible : -666) << ", " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Action #" << action->number;
+		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, with total exposure " << ((tile=_game->getTile(bestTile)) ? tile->totalExposure : -9999) << ", " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Time: " << (SDL_GetTicks() - start) << " Action #" << action->number;
 		// Log(LOG_INFO) << "Walking " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so.";
-		_game->getTile(action->target)->setMarkerColor(13); tile->addLight(10, action->target.z);
+		_game->getTile(action->target)->setMarkerColor(13);
 	}
 				
 	if (bestTileScore <= -100000) 

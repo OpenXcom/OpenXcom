@@ -122,7 +122,7 @@ public:
 	/// Convert a unit into a unit of another type.
 	BattleUnit *convertUnit(BattleUnit *unit, std::string newType);
 	/// Handle kneeling action.
-	void kneel(BattleUnit *bu);
+	bool kneel(BattleUnit *bu);
 	/// Cancel whatever action we were going at.
 	bool cancelCurrentAction(bool bForce = false);
 	/// Get pointer to access action members directly.
@@ -157,6 +157,16 @@ public:
 	static bool _debugPlay;
 	/// is panic done with yet?
 	bool getPanicHandled() { return _playerPanicHandled; }
+	/// try to find and pick up an item.
+	void findItem(BattleAction *action);
+	/// check through all the items on the ground and pick one
+	BattleItem *surveyItems(BattleAction *action);
+	/// evaluate if it's worth while to take this item
+	bool worthTaking(BattleItem* item, BattleAction *action);
+	/// pick the item up from the ground
+	int takeItemFromGround(BattleItem* item, BattleAction *action);
+	/// assign the item to a slot (stolen from battlescapeGenerator::addItem())
+	bool takeItem(BattleItem* item, BattleAction *action);
 };
 
 }

@@ -20,6 +20,7 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <SDL_gfxPrimitives.h>
 #include "Map.h"
 #include "Camera.h"
 #include "BattlescapeState.h"
@@ -1190,10 +1191,144 @@ void BattlescapeState::handle(Action *action)
 			{
 				SaveVoxelView();
 			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
+			{
+				SaveAIMap();
+			}
+			//else Log(LOG_DEBUG) << "Unused key: " << action->getDetails()->key.keysym.sym;
 		}
 	}
 
 }
+
+
+void BattlescapeState::SaveAIMap()
+{
+	Uint32 start = SDL_GetTicks();
+	BattleUnit *unit = _save->getSelectedUnit();
+	if (!unit) return;
+
+	int w = _save->getMapSizeX();
+	int h = _save->getMapSizeY();
+	Position pos(unit->getPosition());
+
+	int expMax = 0;
+
+	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
+	Log(LOG_INFO) << "unit = " << unit->getId();
+	memset(img->pixels, 0, img->pitch * img->h);
+	
+	Position tilePos(pos);
+	SDL_Rect r;
+	r.h = 8;
+	r.w = 8;
+
+	for (int y = 0; y < h; ++y)
+	{
+		tilePos.y = y;
+		for (int x = 0; x < w; ++x)
+		{
+			tilePos.x = x;
+			Tile *t = _save->getTile(tilePos);
+
+			if (!t) continue;
+			if (!t->isDiscovered(2)) continue;
+			
+			if (_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->totalExposure > expMax) expMax = t->totalExposure;
+		}
+	}
+	
+	if (expMax < 100) expMax = 100;
+
+	for (int y = 0; y < h; ++y)
+	{
+		tilePos.y = y;
+		for (int x = 0; x < w; ++x)
+		{
+			tilePos.x = x;
+			Tile *t = _save->getTile(tilePos);
+
+			if (!t) continue;
+			if (!t->isDiscovered(2)) continue;
+			
+			r.x = x * r.w;
+			r.y = y * r.h;
+
+			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255 && _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->soldiersVisible != Tile::NOT_CALCULATED)
+			{
+				int e = (t->totalExposure * 255) / expMax;
+				SDL_FillRect(img, &r, SDL_MapRGB(img->format, e, 255-e, 0x20));
+				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
+			} else
+			{
+				if (!t->getUnit()) SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
+			}
+
+			for (int z = tilePos.z; z >= 0; --z)
+			{
+				Position pos(tilePos.x, tilePos.y, z);
+				t = _save->getTile(pos);
+				BattleUnit *wat = t->getUnit();
+				if (wat) 
+				{
+					switch(wat->getFaction())
+					{
+					case FACTION_HOSTILE:
+						// #4080C0 is Volutar Blue
+						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'a' : 'A', 0x40, 0x80, 0xC0, 0xff);
+						break;
+					case FACTION_PLAYER:
+						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'x' : 'X', 255, 255, 127, 0xff);
+						break;
+					case FACTION_NEUTRAL:
+						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'c' : 'C', 255, 127, 127, 0xff);
+						break;
+					}
+					break;
+				}
+				pos.z--;
+				if (z > 0 && !t->hasNoFloor(_save->getTile(pos))) break; // no seeing through floors
+			}
+
+			if (t->getMapData(MapData::O_NORTHWALL) && t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
+			{
+				lineRGBA(img, r.x, r.y, r.x+r.w, r.y, 0x50, 0x50, 0x50, 255);
+			}
+			
+			if (t->getMapData(MapData::O_WESTWALL) && t->getMapData(MapData::O_WESTWALL)->getTUCost(MT_FLY) == 255)
+			{
+				lineRGBA(img, r.x, r.y, r.x, r.y+r.h, 0x50, 0x50, 0x50, 255);
+			}
+		}
+	}
+
+	std::stringstream ss;
+
+	ss.str("");
+	ss << "z = " << tilePos.z;
+	stringRGBA(img, 12, 12, ss.str().c_str(), 0, 0, 0, 0x7f);
+
+	int i = 0;
+	do
+	{
+		ss.str("");
+		ss << Options::getUserFolder() << "AIExposure" << std::setfill('0') << std::setw(3) << i << ".png";
+		i++;
+	}
+	while (CrossPlatform::fileExists(ss.str()));
+
+
+	unsigned error = lodepng::encode(ss.str(), (const unsigned char*)img->pixels, img->w, img->h, LCT_RGB);
+	if (error)
+	{
+		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
+	}
+
+	SDL_FreeSurface(img);
+
+	Log(LOG_INFO) << "SaveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
+}
+
 
 void BattlescapeState::SaveVoxelView()
 {
