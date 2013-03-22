@@ -235,10 +235,6 @@ void BattleItem::moveToOwner(BattleUnit *owner)
 {
 	
 	_previousOwner = _owner ? _owner:owner;
-	if (_unit && _unit->getStatus() == STATUS_UNCONSCIOUS)
-	{
-		_unit->setPosition(owner ? owner->getPosition() : Position(-1,-1,-1));
-	}
 	_owner = owner;
 	if (_previousOwner != 0)
 	{

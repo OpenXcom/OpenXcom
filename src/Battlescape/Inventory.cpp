@@ -267,12 +267,20 @@ void Inventory::moveItem(BattleItem *item, RuleInventory *slot, int x, int y)
 			{
 				item->moveToOwner(0);
 				_selUnit->getTile()->addItem(item, item->getSlot());
+				if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					item->getUnit()->setPosition(_selUnit->getPosition());
+				}
 			}
 			else if (item->getSlot() == 0 || item->getSlot()->getType() == INV_GROUND)
 			{
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);
 				item->setTurnFlag(false);
+				if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					item->getUnit()->setPosition(Position(-1,-1,-1));
+				}
 			}
 		}
 		item->setSlot(slot);
