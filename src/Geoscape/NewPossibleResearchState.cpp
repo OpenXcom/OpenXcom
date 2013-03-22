@@ -28,6 +28,7 @@
 #include "../Interface/TextList.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -80,8 +81,9 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
 		std::vector<std::string>::const_iterator unlocked = std::find((*iter)->getUnlocked().begin(), (*iter)->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-		if((*iter)->getRequirements().size() == 0 && unlocked == (*iter)->getUnlocked().end())
+		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().size() == 0 && unlocked == (*iter)->getUnlocked().end())
 		{
+			_game->getSavedGame()->addPoppedResearch((*iter));
 			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
 		}
 		else

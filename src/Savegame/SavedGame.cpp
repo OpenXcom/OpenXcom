@@ -329,7 +329,16 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		*it >> research;
 		_discovered.push_back(rule->getResearch(research));
 	}
-
+	
+	if (const YAML::Node *pName = doc.FindValue("poppedResearch"))
+	{
+		for(YAML::Iterator it= pName->begin();it!=pName->end();++it)
+		{
+			std::string research;
+			*it >> research;
+			_poppedResearch.push_back(rule->getResearch(research));
+		}
+	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
@@ -444,6 +453,13 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "discovered" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		out << (*i)->getName ();
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "poppedResearch" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<const RuleResearch *>::const_iterator i = _poppedResearch.begin(); i != _poppedResearch.end(); ++i)
 	{
 		out << (*i)->getName ();
 	}
@@ -731,6 +747,7 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 	if(itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
+		removePoppedResearch(r);
 		addResearchScore(r->getPoints());
 	}
 	if(ruleset)
@@ -1004,25 +1021,10 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 		if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ()
 			|| std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research->getName()) != (*iter)->getUnlocked().end ())
 		{
-			bool add = true;
-			for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+			dependables.push_back(*iter);
+			if ((*iter)->getCost() == 0)
 			{
-				if (*i != research &&
-					std::find((*i)->getUnlocked().begin(), (*i)->getUnlocked().end(), (*iter)->getName()) != (*i)->getUnlocked().end() &&
-					std::find((*iter)->getDependencies().begin(), (*iter)->getDependencies().end(), (*i)->getName()) != (*iter)->getDependencies().end())
-				{
-					add = false;
-					break;
-				}
-			}
-			if (add)
-			{
-				dependables.push_back(*iter);
-			
-				if ((*iter)->getCost() == 0)
-				{
-					getDependableResearchBasic(dependables, *iter, ruleset, base);
-				}
+				getDependableResearchBasic(dependables, *iter, ruleset, base);
 			}
 		}
 	}
@@ -1411,23 +1413,69 @@ void SavedGame::addMonth()
 	++_monthsPassed;
 }
 
+/*
+ * Toggles the state of the radar line drawing.
+ */
 void SavedGame::toggleRadarLines()
 {
 	_radarLines = !_radarLines;
 }
 
+/*
+ * @return the state of the radar line drawing.
+ */
 bool SavedGame::getRadarLines()
 {
 	return _radarLines;
 }
+
+/*
+ * Toggles the state of the detail drawing.
+ */
 void SavedGame::toggleDetail()
 {
 	_detail = !_detail;
 }
 
+/*
+ * @return the state of the detail drawing.
+ */
 bool SavedGame::getDetail()
 {
 	return _detail;
+}
+
+/*
+ * marks a research topic as having already come up as "we can now research"
+ * @param research is the project we want to add to the vector
+ */
+void SavedGame::addPoppedResearch(const RuleResearch* research)
+{
+	if (!wasResearchPopped(research))
+		_poppedResearch.push_back(research);
+}
+
+/*
+ * checks if an unresearched topic has previously been popped up.
+ * @param research is the project we are checking for
+ * @return whether or not it has been popped up.
+ */
+bool SavedGame::wasResearchPopped(const RuleResearch* research)
+{
+	return (std::find(_poppedResearch.begin(), _poppedResearch.end(), research) != _poppedResearch.end());
+}
+
+/*
+ * checks for and removes a research project from the "has been popped up" array
+ * @param research is the project we are checking for and removing, if necessary.
+ */
+void SavedGame::removePoppedResearch(const RuleResearch* research)
+{
+	std::vector<const RuleResearch*>::iterator r = std::find(_poppedResearch.begin(), _poppedResearch.end(), research);
+	if (r != _poppedResearch.end())
+	{
+		_poppedResearch.erase(r);
+	}
 }
 
 }
