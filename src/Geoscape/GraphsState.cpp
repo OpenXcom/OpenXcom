@@ -35,6 +35,7 @@
 #include "../Interface/TextList.h"
 #include "../Engine/Action.h"
 #include <sstream>
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -280,7 +281,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnIncome->onMouseClick((ActionHandler)&GraphsState::btnIncomeClick);
 	_btnFinance->onMouseClick((ActionHandler)&GraphsState::btnFinanceClick);
 	_btnGeoscape->onMouseClick((ActionHandler)&GraphsState::btnGeoscapeClick);
-
+	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**

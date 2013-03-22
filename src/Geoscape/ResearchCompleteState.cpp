@@ -29,6 +29,7 @@
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include <algorithm>
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -62,9 +63,11 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(_game->getLanguage()->getString("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
+	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();

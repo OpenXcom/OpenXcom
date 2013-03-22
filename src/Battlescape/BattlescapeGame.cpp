@@ -489,7 +489,6 @@ void BattlescapeGame::endTurn()
  * @param murderer This is needed for credits for the kill.
  * @param hiddenExplosion Set to true for the explosions of UFO Power sources at start of battlescape.
  * @param terrainExplosion Set to true for the explosions of terrain.
- * @return Whether the battle is finished.
  */
 void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
 {
@@ -623,6 +622,28 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	if (_save->getSide() == FACTION_PLAYER)
 	{
 		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
+	}
+
+	// if all units from either faction are killed - the mission is over.
+	if (Options::getBool("battleAutoEnd"))
+	{
+		int liveAliens = 0;
+		int liveSoldiers = 0;
+		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+		{
+			if (!(*j)->isOut())
+			{
+				if ((*j)->getFaction() == FACTION_HOSTILE)
+					liveAliens++;
+				if ((*j)->getFaction() == FACTION_PLAYER)
+					liveSoldiers++;
+			}
+		}
+
+		if (liveAliens == 0 || liveSoldiers == 0)
+		{
+			_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
+		}
 	}
 }
 

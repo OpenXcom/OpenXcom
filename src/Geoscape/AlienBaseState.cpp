@@ -31,6 +31,7 @@
 #include "../Savegame/Region.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Savegame/AlienBase.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -62,6 +63,8 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AlienBaseState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&AlienBaseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);

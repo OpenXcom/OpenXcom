@@ -213,10 +213,12 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewBattleState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NewBattleState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_music = true;
 }

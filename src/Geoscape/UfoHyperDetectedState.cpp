@@ -32,6 +32,7 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/AlienMission.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -82,10 +83,12 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_UFO_TIME_5_SECS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoHyperDetectedState::btnCentreClick);
+	_btnCentre->onKeyboardPress((ActionHandler)&UfoHyperDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoHyperDetectedState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&UfoHyperDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	_txtDetected2->setColor(Palette::blockOffset(8)+5);

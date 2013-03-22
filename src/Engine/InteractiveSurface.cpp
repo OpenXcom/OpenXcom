@@ -353,7 +353,9 @@ void InteractiveSurface::keyboardPress(Action *action, State *state)
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
-	if (oneHandler != _keyPress.end())
+	// Check if Ctrl, Alt and Shift aren't pressed
+	bool mod = ((action->getDetails()->key.keysym.mod & (KMOD_CTRL|KMOD_ALT|KMOD_SHIFT)) != 0);
+	if (oneHandler != _keyPress.end() && !mod)
 	{
 		ActionHandler handler = oneHandler->second;
 		(state->*handler)(action);
@@ -376,7 +378,9 @@ void InteractiveSurface::keyboardRelease(Action *action, State *state)
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
-	if (oneHandler != _keyRelease.end())
+	// Check if Ctrl, Alt and Shift aren't pressed
+	bool mod = ((action->getDetails()->key.keysym.mod & (KMOD_CTRL|KMOD_ALT|KMOD_SHIFT)) != 0);
+	if (oneHandler != _keyRelease.end() && !mod)
 	{
 		ActionHandler handler = oneHandler->second;
 		(state->*handler)(action);
@@ -464,7 +468,7 @@ void InteractiveSurface::onMouseOut(ActionHandler handler)
 /**
  * Sets a function to be called every time a key is pressed when the surface is focused.
  * @param handler Action handler.
- * @param key Keyboard button to check for. Set to 0 for any key.
+ * @param key Keyboard button to check for (note: ignores key modifiers). Set to 0 for any key.
  */
 void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
 {
@@ -481,7 +485,7 @@ void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
 /**
  * Sets a function to be called every time a key is released when the surface is focused.
  * @param handler Action handler.
- * @param key Keyboard button to check for. Set to 0 for any key.
+ * @param key Keyboard button to check for (note: ignores key modifiers). Set to 0 for any key.
  */
 void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
 {

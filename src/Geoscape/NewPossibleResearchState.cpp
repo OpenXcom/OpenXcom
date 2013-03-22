@@ -29,6 +29,7 @@
 #include "../Ruleset/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -65,9 +66,11 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleResearchState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(_game->getLanguage()->getString("STR_ALLOCATE_RESEARCH"));
 	_btnResearch->onMouseClick((ActionHandler)&NewPossibleResearchState::btnResearchClick);
+	_btnResearch->onKeyboardPress((ActionHandler)&NewPossibleResearchState::btnResearchClick, (SDLKey)Options::getInt("keyOk"));
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

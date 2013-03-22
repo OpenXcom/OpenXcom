@@ -27,6 +27,7 @@
 #include "../Interface/TextList.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Basescape/ManufactureState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -63,9 +64,11 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(_game->getLanguage()->getString("STR_ALLOCATE_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnManufactureClick);
+	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, (SDLKey)Options::getInt("keyOk"));
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

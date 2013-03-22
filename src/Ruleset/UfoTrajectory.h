@@ -62,7 +62,7 @@ public:
 	/// Gets the altitude at a waypoint.
 	std::string getAltitude(unsigned wp) const;
 	/// Gets the speed percentage at a waypoint.
-	float getSpeedPercentage(unsigned wp) const { return _waypoints[wp].speed / 100.0; }
+	float getSpeedPercentage(unsigned wp) const { return _waypoints[wp].speed / 100.0f; }
 	/// Gets the number of seconds UFOs should spend on the ground.
 	unsigned groundTimer() const { return _groundTimer; }
 private:

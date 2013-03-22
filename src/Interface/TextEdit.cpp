@@ -51,6 +51,8 @@ TextEdit::~TextEdit()
 	delete _text;
 	delete _caret;
 	delete _timer;
+	// In case it was left focused
+	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /**
@@ -61,6 +63,7 @@ void TextEdit::focus()
 {
 	if (!_isFocused)
 	{
+		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 		_caretPos = _value.length();
 		_blink = true;
 		_timer->start();
@@ -79,6 +82,7 @@ void TextEdit::deFocus()
 	_blink = false;
 	_redraw = true;
 	_timer->stop();
+	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /**

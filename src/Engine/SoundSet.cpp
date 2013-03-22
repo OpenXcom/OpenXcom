@@ -111,10 +111,9 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			else
 				s->load(newsound, size);
 		}
-		catch (Exception &e)
+		catch (Exception)
 		{
 			// Ignore junk in the file
-			e = e;
 		}
 		_sounds.push_back(s);
 

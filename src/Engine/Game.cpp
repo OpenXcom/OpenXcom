@@ -104,8 +104,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 #endif
 
-	// Set up keyboard events
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
 
 	// Create display
@@ -206,7 +204,7 @@ void Game::run()
 							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[pauseMode];
 							break;
 						case SDL_APPMOUSEFOCUS:
-							// We consiously ignore it.
+							// We consciously ignore it.
 							break;
 						case SDL_APPINPUTFOCUS:
 							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[pauseMode];

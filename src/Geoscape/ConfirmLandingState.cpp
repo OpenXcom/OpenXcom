@@ -38,6 +38,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -80,10 +81,12 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+10);
 	_txtCraft->setBig();
