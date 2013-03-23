@@ -330,19 +330,22 @@ void UnitWalkBState::think()
 			}
 
 			// now open doors (if any)
-			int door = _terrain->unitOpensDoor(_unit);
-			if (door == 3)
+			if (dir < Pathfinding::DIR_UP)
 			{
-				return; // don't start walking yet, wait for the ufo door to open
-			}
-			if (door == 0)
-			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
-			}
-			if (door == 1)
-			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
-				return; // don't start walking yet, wait for the ufo door to open
+				int door = _terrain->unitOpensDoor(_unit);
+				if (door == 3)
+				{
+					return; // don't start walking yet, wait for the ufo door to open
+				}
+				if (door == 0)
+				{
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
+				}
+				if (door == 1)
+				{
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
+					return; // don't start walking yet, wait for the ufo door to open
+				}
 			}
 			for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
 			{
