@@ -6800,11 +6800,11 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            []
+            - CHRYSSALID_WEAPON
           -
-            []
+            - CHRYSSALID_WEAPON
           -
-            []
+            - CHRYSSALID_WEAPON
       - alienRank: 4
         lowQty: 3
         highQty: 5
@@ -6812,11 +6812,11 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            []
+            - SILACOID_WEAPON
           -
-            []
+            - SILACOID_WEAPON
           -
-            []
+            - SILACOID_WEAPON
       - alienRank: 5
         lowQty: 3
         highQty: 5
@@ -6824,11 +6824,11 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            []
+            - CELATID_WEAPON
           -
-            []
+            - CELATID_WEAPON
           -
-            []
+            - CELATID_WEAPON
       - alienRank: 6
         lowQty: 1
         highQty: 4
