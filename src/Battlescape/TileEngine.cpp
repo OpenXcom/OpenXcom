@@ -2184,7 +2184,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	Tile *rtb;
 	BattleUnit *occupant = t->getUnit();
  
-	if (occupant && occupant->getArmor()->getMovementType() != MT_FLY)
+	if (occupant && (occupant->getArmor()->getMovementType() != MT_FLY || occupant->isOut()))
 	{
 		Position unitpos = occupant->getPosition();
 		while (unitpos.z >= 0)
@@ -2243,18 +2243,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	{
 		if ((*it)->getUnit() && t->getPosition() == (*it)->getUnit()->getPosition())
 		{
-			Position origin = t->getPosition();
-			Position destination = rt->getPosition();
-			occupant = (*it)->getUnit();
-			for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
-			{
-				for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
-				{
-					_save->getTile(origin + Position(x, y, 0))->setUnit(0);
-					_save->getTile(destination + Position(x, y, 0))->setUnit(occupant);
-				}
-			}
-			occupant->setPosition(destination);
+			(*it)->getUnit()->setPosition(rt->getPosition());
 		}
 		if (t != rt)
 		{

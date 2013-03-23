@@ -192,30 +192,32 @@ void UnitDieBState::convertUnitToCorpse()
 
 	if (size == 0)
 	{
-		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
 		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
+		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
 	}
 	else
 	{
+		Position p = _unit->getPosition();
 		int i = 1;
 		for (int y = 0; y <= size; y++)
 		{
 			for (int x = 0; x <= size; x++)
 			{
-				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit); // no need for this, because large units never can be revived as they don't go unconscious
 										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
 										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
-				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
+				_parent->dropItem(p + Position(x,y,0), corpse, true);
+				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
 				i++;
 			}
 		}
 	}
+
 }
 
 }
