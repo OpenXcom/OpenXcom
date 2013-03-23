@@ -28,6 +28,7 @@
 #include "../Interface/Text.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "../Geoscape/BuildNewBaseState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -84,6 +85,7 @@ NewGameState::NewGameState(Game *game) : State(game)
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&NewGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&NewGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

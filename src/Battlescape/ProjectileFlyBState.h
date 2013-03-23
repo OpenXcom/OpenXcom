@@ -36,7 +36,6 @@ private:
 	BattleItem *_ammo;
 	BattleItem *_projectileItem;
 	Position _origin;
-	int _autoshotCounter;
 	int _projectileImpact;
 	bool createNewProjectile();
 	bool _initialized;

@@ -146,6 +146,8 @@ public:
 	int getFirstFreeDogfightSlot();
 	/// Create the starting missions.
 	void createStartingMissions() { determineAlienMissions(true); }
+	/// Handler for clicking the timer button.
+	void btnTimerClick(Action *action);
 
 private:
 	/// Handle alien mission generation.

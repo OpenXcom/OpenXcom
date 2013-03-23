@@ -37,7 +37,7 @@ class BaseDestroyedState : public State
 private:
 	Window *_window;
 	Text *_txtMessage;
-	TextButton *_btnConfirm;
+	TextButton *_btnOk;
 	Base *_base;
 public:
 	/// Creates the Select Destination state.
@@ -46,10 +46,8 @@ public:
 	~BaseDestroyedState();
 	/// Updates the palette.
 	void init();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
 	/// Handler for clicking the Cydonia mission button.
-	void btnConfirmClick(Action *action);
+	void btnOkClick(Action *action);
 
 };
 

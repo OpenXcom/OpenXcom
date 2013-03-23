@@ -50,7 +50,7 @@ private:
 	BattleItem *_ammoItem;
 	int _explodeTurn, _ammoQuantity;
 	int _painKiller, _heal, _stimulant;
-	bool _XCOMProperty;
+	bool _XCOMProperty, _droppedOnAlienTurn;
 public:
 	/// Creates a item of the specified type.
 	BattleItem(RuleItem *rules, int *id);
@@ -125,6 +125,11 @@ public:
 	void setXCOMProperty (bool flag);
 	/// Get xcom property flag
 	bool getXCOMProperty () const;
+	/// get the flag representing "not dropped on player turn"
+	bool getTurnFlag() const;
+	/// set the flag representing "not dropped on player turn"
+	void setTurnFlag(bool flag);
+
 };
 
 }

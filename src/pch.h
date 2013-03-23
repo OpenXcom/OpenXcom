@@ -63,6 +63,8 @@
 #endif
 #include <yaml-cpp/yaml.h>
 
+#include "./aresame.h"
+
 #include "./Engine/State.h"
 #include "./Basescape/TransferConfirmState.h"
 

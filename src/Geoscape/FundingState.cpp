@@ -29,6 +29,7 @@
 #include "../Savegame/Country.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Savegame/SavedGame.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -66,6 +67,8 @@ FundingState::FundingState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);

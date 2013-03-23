@@ -120,10 +120,11 @@ void createDefault()
 	setBool("showFundsOnGeoscape", false);
 	setBool("showMoreStatsInInventoryView", false);
 	setBool("allowResize", false);
-	setInt("windowedModePositionX", 3);
-	setInt("windowedModePositionY", 22);
+	setInt("windowedModePositionX", -1);
+	setInt("windowedModePositionY", -1);
 	setBool("autosaveOnly", false);
 	setBool("classicMouseHandling", false);
+	setBool("battleAutoEnd", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

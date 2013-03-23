@@ -29,6 +29,7 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/City.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -66,10 +67,12 @@ AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_SITE_TIME_5_SECS"));
 	_btnCentre->onMouseClick((ActionHandler)&AlienTerrorState::btnCentreClick);
+	_btnCentre->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&AlienTerrorState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

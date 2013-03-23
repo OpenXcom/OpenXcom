@@ -29,6 +29,7 @@
 #include "../Savegame/Base.h"
 #include "GeoscapeState.h"
 #include "AllocatePsiTrainingState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -59,6 +60,7 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PsiTrainingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&PsiTrainingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

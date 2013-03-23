@@ -37,7 +37,7 @@ class ConfirmCydoniaState : public State
 private:
 	Window *_window;
 	Text *_txtMessage;
-	TextButton *_btnCancel, *_btnConfirm;
+	TextButton *_btnNo, *_btnYes;
 	Craft *_craft;
 public:
 	/// Creates the Select Destination state.
@@ -47,9 +47,9 @@ public:
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	void btnNoClick(Action *action);
 	/// Handler for clicking the Cydonia mission button.
-	void btnConfirmClick(Action *action);
+	void btnYesClick(Action *action);
 
 };
 

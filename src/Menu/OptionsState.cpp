@@ -171,10 +171,12 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&OptionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&OptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
 	_btnDefault->setText(_game->getLanguage()->getString("STR_RESTORE_DEFAULTS"));

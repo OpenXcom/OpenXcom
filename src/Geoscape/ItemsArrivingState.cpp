@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "GeoscapeState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -77,10 +78,12 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&ItemsArrivingState::btnOk5SecsClick);
+	_btnOk5Secs->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOk5SecsClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

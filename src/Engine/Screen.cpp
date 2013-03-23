@@ -65,7 +65,7 @@ void Screen::makeVideoFlags()
 Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0), _surface(0)
 {
 	char *prev;
-	if (!_fullscreen)
+	if (!_fullscreen && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
 		if (0 == prev) prev = (char*)"";
@@ -74,7 +74,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 	}
 	setResolution(width, height);
-	if (!_fullscreen)
+	if (!_fullscreen  && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{ // We don't want to put the window back to the starting position later when the window is resized.
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
@@ -271,14 +271,14 @@ void Screen::setResolution(int width, int height)
 	}
 	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
 
-	_scaleX = width / (double)BASE_WIDTH;
-	_scaleY = height / (double)BASE_HEIGHT;
 	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
+	_scaleX = getWidth() / (double)BASE_WIDTH;
+	_scaleY = getHeight() / (double)BASE_HEIGHT;
 
 	if (isOpenGLEnabled()) 
 	{
@@ -289,7 +289,7 @@ void Screen::setResolution(int width, int height)
 		OpenGL::checkErrors = Options::getBool("checkOpenGLErrors");
 	}
 
-	Log(LOG_INFO) << "Display set to " << _screen->w << "x" << _screen->h << "x" << (int)_screen->format->BitsPerPixel << ".";
+	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 	if (_screen->format->BitsPerPixel == 8)
 	{
 		setPalette(getPalette());

@@ -133,6 +133,7 @@ SavedGameState::SavedGameState(Game *game, bool geo, bool quickSaveLoad) : State
 
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&SavedGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

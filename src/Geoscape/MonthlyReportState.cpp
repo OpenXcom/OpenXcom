@@ -37,6 +37,7 @@
 #include "DefeatState.h"
 #include "Globe.h"
 #include "../Savegame/AlienBase.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -79,6 +80,8 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();

@@ -407,7 +407,6 @@ void InventoryState::invClick(Action *)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
-			item->getUnit()->setPosition(Position(-1,-1,-1));
 			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
 		}
 		else

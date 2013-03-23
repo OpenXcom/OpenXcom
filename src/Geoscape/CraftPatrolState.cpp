@@ -28,6 +28,7 @@
 #include "../Savegame/Craft.h"
 #include "../Savegame/Target.h"
 #include "GeoscapeCraftState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -65,10 +66,12 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftPatrolState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&CraftPatrolState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(_game->getLanguage()->getString("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)&CraftPatrolState::btnRedirectClick);
+	_btnRedirect->onKeyboardPress((ActionHandler)&CraftPatrolState::btnRedirectClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
