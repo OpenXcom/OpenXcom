@@ -169,7 +169,7 @@ bool Node::isTarget() const
 
 void Node::setType(int type)
 {
-    _flags = type;
+    _type = type;
 }
 
 
