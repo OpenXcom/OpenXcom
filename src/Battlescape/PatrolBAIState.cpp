@@ -202,8 +202,7 @@ void PatrolBAIState::think(BattleAction *action)
 	{
 		// look for a new node to walk towards
 		bool scout = true;
-		if (_game->getMissionType() == "STR_UFO_CRASH_RECOVERY"
-			|| _game->getMissionType() == "STR_UFO_GROUND_ASSAULT")
+		if (_game->getMissionType() != "STR_BASE_DEFENSE")
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
 			if (_game->getTurn() > 20 || !_fromNode || _fromNode->getRank() == 0)
