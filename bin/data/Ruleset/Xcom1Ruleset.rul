@@ -2936,7 +2936,7 @@ items:
     handSprite: 104
     fireSound: 11
     hitSound: 19
-    hitAnimation: 36
+    hitAnimation: 46
     power: 100
     damageType: 4
     accuracyAuto: 50
@@ -2950,7 +2950,7 @@ items:
     invWidth: 2
     invHeight: 3
     clipSize: -1
-    bulletSprite: 9
+    bulletSprite: 8
     recover: false
   - type: ZOMBIE_WEAPON
     weight: 3
