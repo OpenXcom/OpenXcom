@@ -26,10 +26,12 @@
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "ExplosionBState.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Engine/RNG.h"
+#include "BattlescapeState.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Unit.h"
@@ -1058,6 +1060,15 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 		if (bu && bu->getFaction() != unit->getFaction() && type != DT_NONE)
 		{
 			unit->addFiringExp();
+		}
+	}
+	if (bu && bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
+	{
+		if (type != DT_STUN && type != DT_HE)
+		{
+			Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
+			BattlescapeGame;
+			_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
 		}
 	}
 	applyItemGravity(tile);
@@ -2174,7 +2185,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	Tile *rtb;
 	BattleUnit *occupant = t->getUnit();
  
-	if (occupant && occupant->getArmor()->getMovementType() != MT_FLY)
+	if (occupant && (occupant->getArmor()->getMovementType() != MT_FLY || occupant->getHealth() == 0 || occupant->getStunlevel() >= occupant->getHealth()))
 	{
 		Position unitpos = occupant->getPosition();
 		while (unitpos.z >= 0)
@@ -2206,7 +2217,14 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		}
 		else if (unitpos != occupant->getPosition())
 		{
-			occupant->getTile()->setUnit(0);
+			Position origin = occupant->getPosition();
+			for (int y = 0; y < occupant->getArmor()->getSize(); ++y)
+			{
+				for (int x = 0; x < occupant->getArmor()->getSize(); ++x)
+				{
+					_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+				}
+			}
 			occupant->setPosition(unitpos);
 		}
 	}

@@ -181,7 +181,8 @@ public:
 	void showPsiButton(bool show);
 	/// Clears mouse-scrolling state
 	void clearMouseScrollingState();
-
+	/// returns a pointer to the battlegame, in case we need it's functions.
+	BattlescapeGame *getBattleGame();
 	void SaveAIMap();
 	void SaveVoxelMap();
 	void SaveVoxelView();

@@ -134,6 +134,10 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		{
+			_unit->instaKill();
+		}
 		_parent->getMap()->setUnitDying(false);
 		if (_unit->getTurnsExposed())
 		{
@@ -152,15 +156,6 @@ void UnitDieBState::think()
 		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
-		if (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
-		{
-			_unit->instaKill();
-			if (_damageType != DT_STUN && _damageType != DT_HE)
-			{
-				Position p = Position(_unit->getPosition().x * 16, _unit->getPosition().y * 16, _unit->getPosition().z * 24);
-				_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, 0));
-			}
-		}
 	}
 
 	_parent->getMap()->cacheUnit(_unit);

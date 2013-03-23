@@ -1625,5 +1625,12 @@ void BattlescapeState::clearMouseScrollingState()
 	isMouseScrolling = false;
 }
 
+/**
+ * returns a pointer to the battlegame, in case we need it's functions.
+ */
+BattlescapeGame *BattlescapeState::getBattleGame()
+{
+	return _battleGame;
+}
 
 }
