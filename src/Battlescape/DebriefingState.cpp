@@ -53,6 +53,7 @@
 #include <map>
 #include "../Menu/MainMenuState.h"
 #include "../Engine/RNG.h"
+#include "../Interface/Cursor.h"
 
 namespace OpenXcom
 {
@@ -63,6 +64,9 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _destroyBase(false)
 {
+	// Restore the cursor in case something weird happened
+	_game->getCursor()->setVisible(true);
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
