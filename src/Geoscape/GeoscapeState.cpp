@@ -30,6 +30,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Options.h"
+#include "../Menu/SaveState.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
@@ -1529,6 +1530,9 @@ void GeoscapeState::time1Day()
 	// Handle resupply of alien bases.
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
+
+	if(Options::getBool("autosaveOnly"))
+		popup(new SaveState(_game, true, true));
 }
 
 /**

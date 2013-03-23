@@ -122,6 +122,7 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
 	setInt("windowedModePositionY", -1);
+	setBool("autosaveOnly", false);
 	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
 

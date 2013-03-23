@@ -25,6 +25,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "AbandonGameState.h"
+#include "../Engine/Options.h"
 #include "../Menu/LoadState.h"
 #include "../Menu/SaveState.h"
 #include "../Engine/Options.h"
@@ -83,6 +84,12 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+
+	if(Options::getBool("autosaveOnly"))
+	{
+		_btnSave->setVisible(false);
+		_btnLoad->setVisible(false);
+	}
 }
 
 /**

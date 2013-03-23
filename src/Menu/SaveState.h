@@ -39,7 +39,7 @@ private:
 	int _previousSelectedRow, _selectedRow;
 public:
 	/// Creates the Save Game state.
-	SaveState(Game *game, bool geo);
+	SaveState(Game *game, bool geo, bool quicksave = false);
 	/// Cleans up the Save Game state.
 	~SaveState();
 	/// Updates the savegame list.
@@ -48,6 +48,9 @@ public:
 	void edtSaveKeyPress(Action *action);
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
+	/// Quick save game.
+	void quickSave();
+	void init();
 };
 
 }

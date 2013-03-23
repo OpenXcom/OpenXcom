@@ -40,9 +40,12 @@ namespace OpenXcom
  * Initializes all the elements in the Save Game screen.
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param quicksave True for save without UI, false (default) to use UI.
  */
-SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, bool geo, bool quicksave) : SavedGameState(game, geo, quicksave), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
+	if (quicksave) return;	// Don't need UI objects
+
 	// Create objects
 	
 	_edtSave = new TextEdit(168, 9, 0, 0);
@@ -190,6 +193,67 @@ void SaveState::edtSaveKeyPress(Action *action)
 			else
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
+	}
+}
+
+/**
+ * init SaveState.
+ */
+void SaveState::init()
+{
+	if (_quickSaveLoad)
+	{
+		quickSave();
+	}
+	else
+	{
+		try
+		{
+			updateList();
+		}
+		catch (Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+		}
+	}
+}
+
+/**
+ * Quick save game.
+ */
+void SaveState::quickSave()
+{
+#ifdef _WIN32
+		std::string filename = Language::wstrToCp(L"autosave");
+#else
+		std::string filename = Language::wstrToUtf8(L"autosave");
+#endif
+	try
+	{
+		_game->getSavedGame()->save(filename);
+		_game->popState();
+	}
+	catch (Exception &e)
+	{
+		_game->popState();
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+	}
+	catch (YAML::Exception &e)
+	{
+		_game->popState();
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

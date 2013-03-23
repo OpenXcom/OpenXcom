@@ -42,9 +42,11 @@ protected:
 	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
 	TextList *_lstSaves;
 	bool _geo;
+	/// Flag for QuickSave or QuickLoad.
+	bool _quickSaveLoad;
 public:
 	/// Creates the Saved Game state.
-	SavedGameState(Game *game, bool geo);
+	SavedGameState(Game *game, bool geo, bool quickSaveLoad = false);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();
 	/// Updates the palette.
