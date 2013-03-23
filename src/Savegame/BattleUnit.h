@@ -110,6 +110,7 @@ private:
 	int _turnsExposed;
 	std::vector<int> _loftempsSet;
 	Unit *_unitRules;
+	int _alienRank;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -394,6 +395,9 @@ public:
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
 	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+	///
+	void setAlienRank(int rank);
+	int getAlienRank() const;
 
 };
 
