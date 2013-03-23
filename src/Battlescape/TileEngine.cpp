@@ -2184,7 +2184,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	Tile *rtb;
 	BattleUnit *occupant = t->getUnit();
  
-	if (occupant && (occupant->getArmor()->getMovementType() != MT_FLY || occupant->getHealth() == 0 || occupant->getStunlevel() >= occupant->getHealth()))
+	if (occupant && occupant->getArmor()->getMovementType() != MT_FLY)
 	{
 		Position unitpos = occupant->getPosition();
 		while (unitpos.z >= 0)
@@ -2217,11 +2217,12 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		else if (unitpos != occupant->getPosition())
 		{
 			Position origin = occupant->getPosition();
-			for (int y = 0; y < occupant->getArmor()->getSize(); ++y)
+			for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
 			{
-				for (int x = 0; x < occupant->getArmor()->getSize(); ++x)
+				for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
 				{
 					_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+					_save->getTile(unitpos + Position(x, y, 0))->setUnit(occupant);
 				}
 			}
 			occupant->setPosition(unitpos);
@@ -2242,7 +2243,18 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 	{
 		if ((*it)->getUnit() && t->getPosition() == (*it)->getUnit()->getPosition())
 		{
-			(*it)->getUnit()->setPosition(rt->getPosition());
+			Position origin = t->getPosition();
+			Position destination = rt->getPosition();
+			occupant = (*it)->getUnit();
+			for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
+			{
+				for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
+				{
+					_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+					_save->getTile(destination + Position(x, y, 0))->setUnit(occupant);
+				}
+			}
+			occupant->setPosition(destination);
 		}
 		if (t != rt)
 		{
