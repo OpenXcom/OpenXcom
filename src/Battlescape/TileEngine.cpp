@@ -1067,7 +1067,6 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 		if (type != DT_STUN && type != DT_HE)
 		{
 			Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
-			BattlescapeGame;
 			_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
 		}
 	}
