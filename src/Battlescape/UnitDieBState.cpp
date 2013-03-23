@@ -48,6 +48,12 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
+
+		if (!_noSound)
+		{
+			playDeathSound();
+		}
+
 		while (_unit->getStatus() == STATUS_COLLAPSING)
 		{
 			_unit->keepFalling();
@@ -61,22 +67,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_originalDir = _unit->getDirection();
 		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
-	}
-
-	if (!_noSound)
-	{
-		if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
-		}
-		else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
-		}
-		else
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
-		}
 	}
 	
 	_unit->clearVisibleTiles();
@@ -126,6 +116,11 @@ void UnitDieBState::think()
 	else if (_unit->getStatus() == STATUS_STANDING)
 	{
 		_unit->startFalling();
+
+		if (!_noSound)
+		{
+			playDeathSound();
+		}
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -218,6 +213,22 @@ void UnitDieBState::convertUnitToCorpse()
 		}
 	}
 
+}
+
+void UnitDieBState::playDeathSound()
+{
+	if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
+	}
+	else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
+	}
+	else
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
+	}
 }
 
 }
