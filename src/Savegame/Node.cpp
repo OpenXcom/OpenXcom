@@ -49,6 +49,20 @@ Node::~Node()
 {
 }
 
+
+
+
+const int Node::nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
+	{ 4, 3, 5, 8, 7, 2, 0 }, // leader
+	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
+	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
+	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
+	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
+	{ 2, 5, 3, 4, 6, 8, 0 }, //terrorist
+	{ 2, 5, 3, 4, 6, 8, 0 }  }; //also terrorist
+
+
+
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.

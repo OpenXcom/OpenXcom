@@ -1097,7 +1097,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 	}
 
-	// scouts roam all over while all others shuffle around to adjacent nodes:
+	// scouts roam all over while all others shuffle around to adjacent nodes at most:
 	const int end = scout ? getNodes()->size() : fromNode->getNodeLinks()->size();
 	
 	for (int i = 0; i < end; ++i)
@@ -1116,7 +1116,9 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!scout || n != fromNode)	// scouts push forward
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
-				if (!preferred || (preferred->getFlags() < n->getFlags())) preferred = n;
+				if (!preferred 
+					|| (preferred->getRank() == Node::nodeRank[unit->getAlienRank()][0] && preferred->getFlags() < n->getFlags())
+					|| preferred->getFlags() < n->getFlags()) preferred = n;
 				compliantNodes.push_back(n);
 			}
 	}

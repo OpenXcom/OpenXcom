@@ -204,8 +204,16 @@ void PatrolBAIState::think(BattleAction *action)
 		bool scout = true;
 		if (_game->getMissionType() != "STR_BASE_DEFENSE")
 		{
+			int aliensAlive = 0;
+			for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(), end = _game->getUnits()->end(); i != end; ++i)
+			{
+				if (!(*i)->isOut() && (*i)->getFaction() == FACTION_HOSTILE) ++aliensAlive;
+				if (aliensAlive > 1) break; // all the info we need
+			}
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
-			if (_game->getTurn() > 20 || !_fromNode || _fromNode->getRank() == 0)
+			// also anyone standing in fire should also probably move
+			if (_game->getTurn() > 20 || (aliensAlive < 2 && _game->getTurn() > 10) || !_fromNode || _fromNode->getRank() == 0 || 
+				(_game->getTile(_unit->getPosition()) && _game->getTile(_unit->getPosition())->getFire()))
 			{
 				scout = true;
 			}
@@ -246,15 +254,15 @@ void PatrolBAIState::think(BattleAction *action)
 			}
 			else
 			{
-				// find closest target which is not already allocated
+				// find closest high value target which is not already allocated
 				int closest = 1000000;
 				for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 				{
-					if ((*i)->isTarget() && !(*i)->isAllocated())
+					if (/* (*i)->isTarget() && */ node->getFlags() && !(*i)->isAllocated())
 					{
 						node = *i;
 						int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-						if (d < closest)
+						if (!_toNode || node->getFlags() > _toNode->getFlags() ||  d < closest)
 						{
 							_toNode = node;
 							closest = d;
