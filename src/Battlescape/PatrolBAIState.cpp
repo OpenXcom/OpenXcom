@@ -258,11 +258,11 @@ void PatrolBAIState::think(BattleAction *action)
 				int closest = 1000000;
 				for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 				{
-					if (/* (*i)->isTarget() && */ node->getFlags() && !(*i)->isAllocated())
+					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
 						node = *i;
 						int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-						if (!_toNode || node->getFlags() > _toNode->getFlags() ||  d < closest)
+						if (!_toNode ||  d < closest)
 						{
 							_toNode = node;
 							closest = d;
