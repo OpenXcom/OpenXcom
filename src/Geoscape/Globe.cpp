@@ -1331,6 +1331,46 @@ bool Globe::getShowRadar(void)
 }
 
 
+void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour)
+{
+	double sx = lon2 - lon1;
+	double sy = lat2 - lat1;
+	double ln1, lt1, ln2, lt2;
+	int seg;
+	Sint16 x1, y1, x2, y2;
+
+	if (sx<0) sx += 2*M_PI;
+
+	if (fabs(sx)<0.01)
+	{
+		seg = abs( sy/(2*M_PI)*48 );
+		if (seg == 0) ++seg;
+	}
+	else
+	{
+		seg = abs( sx/(2*M_PI)*96 );
+		if (seg == 0) ++seg;
+	}
+
+	sx /= seg;
+	sy /= seg;
+
+	for (int i = 0; i < seg; ++i)
+	{
+		ln1 = lon1 + sx*i;
+		lt1 = lat1 + sy*i;
+		ln2 = lon1 + sx*(i+1);
+		lt2 = lat1 + sy*(i+1);
+
+		if (!pointBack(ln2, lt2)&&!pointBack(ln1, lt1))
+		{
+			polarToCart(ln1,lt1,&x1,&y1);
+			polarToCart(ln2,lt2,&x2,&y2);
+			_countries->drawLine(x1, y1, x2, y2, colour);
+		}
+	}
+}
+
 
 /**
  * Draws the details of the countries on the globe,
@@ -1434,65 +1474,60 @@ void Globe::drawDetail()
 		delete label;
 	}
 	
+	static int debugType = 0;
+	static bool canSwitchDebugType = false;
 	if (_game->getSavedGame()->getDebugMode())
 	{
-		int color = 0;
-		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+		int color;
+		canSwitchDebugType = true;
+		if (debugType == 0)
 		{
-			color += 10;
-			for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+			color = 0;
+			for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 			{
-				double lon1 = (*i)->getRules()->getLonMax().at(k);
-				double lon2 = (*i)->getRules()->getLonMin().at(k);
-				double lat1 = (*i)->getRules()->getLatMax().at(k);
-				double lat2 = (*i)->getRules()->getLatMin().at(k);
-				double diff = 0;
-				if ((*i)->getRules()->getType() == "STR_RUSSIA" || (*i)->getRules()->getType() == "STR_CHINA" || (*i)->getRules()->getType() == "STR_CANADA")
-					diff = (lon1-lon2)/2;
-				if (!pointBack(lon2, lat2)&&!pointBack(lon1, lat1))
+				color += 10;
+				for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
 				{
-					Sint16 x1, x2, x3, x4, x5, x6, y1, y2, y3, y4, y5, y6;
-					polarToCart(lon1, lat1, &x1, &y1);
-					polarToCart(lon1-diff, lat1, &x2, &y2);
-					polarToCart(lon2, lat1, &x3, &y3);
+					double lon2 = (*i)->getRules()->getLonMax().at(k);
+					double lon1 = (*i)->getRules()->getLonMin().at(k);
+					double lat2 = (*i)->getRules()->getLatMax().at(k);
+					double lat1 = (*i)->getRules()->getLatMin().at(k);
 
-					polarToCart(lon2, lat2, &x4, &y4);
-					polarToCart(lon1-diff, lat2, &x5, &y5);
-					polarToCart(lon1, lat2, &x6, &y6);
-
-					_countries->drawLine(x1, y1, x2, y2, color);
-					_countries->drawLine(x2, y2, x3, y3, color);
-					_countries->drawLine(x3, y3, x4, y4, color);
-					_countries->drawLine(x4, y4, x5, y5, color);
-					_countries->drawLine(x5, y5, x6, y6, color);
-					_countries->drawLine(x6, y6, x1, y1, color);
+					drawVHLine(lon1, lat1, lon2, lat1, color);
+					drawVHLine(lon1, lat2, lon2, lat2, color);
+					drawVHLine(lon1, lat1, lon1, lat2, color);
+					drawVHLine(lon2, lat1, lon2, lat2, color);
 				}
 			}
 		}
-		color = 0;
-		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+		else if (debugType == 1)
 		{
-			color += 10;
-			for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+			color = 0;
+			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 			{
-				double lon1 = (*i)->getRules()->getLonMax().at(k);
-				double lon2 = (*i)->getRules()->getLonMin().at(k);
-				double lat1 = (*i)->getRules()->getLatMax().at(k);
-				double lat2 = (*i)->getRules()->getLatMin().at(k);
-	
-				if (!pointBack(lon2, lat2)&&!pointBack(lon1, lat1))
+				color += 10;
+				for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
 				{
-					Sint16 x1, x2, x3, x4, y1, y2, y3, y4;
-					polarToCart(lon1, lat1, &x1, &y1);
-					polarToCart(lon1, lat2, &x2, &y2);
-					polarToCart(lon2, lat2, &x3, &y3);
-					polarToCart(lon2, lat1, &x4, &y4);
-					_countries->drawLine(x1, y1, x2, y2, color);
-					_countries->drawLine(x2, y2, x3, y3, color);
-					_countries->drawLine(x3, y3, x4, y4, color);
-					_countries->drawLine(x4, y4, x1, y1, color);
+					double lon2 = (*i)->getRules()->getLonMax().at(k);
+					double lon1 = (*i)->getRules()->getLonMin().at(k);
+					double lat2 = (*i)->getRules()->getLatMax().at(k);
+					double lat1 = (*i)->getRules()->getLatMin().at(k);
+
+					drawVHLine(lon1, lat1, lon2, lat1, color);
+					drawVHLine(lon1, lat2, lon2, lat2, color);
+					drawVHLine(lon1, lat1, lon1, lat2, color);
+					drawVHLine(lon2, lat1, lon2, lat2, color);
 				}
 			}
+		}
+	}
+	else
+	{
+		if (canSwitchDebugType)
+		{
+			++debugType;
+			if (debugType > 1) debugType = 0;
+			canSwitchDebugType = false;
 		}
 	}
 }

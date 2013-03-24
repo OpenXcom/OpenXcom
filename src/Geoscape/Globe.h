@@ -179,6 +179,8 @@ public:
 	/// set the _radarLines variable
 	void toggleRadarLines();
 
+	void drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour);
+
 };
 
 }
