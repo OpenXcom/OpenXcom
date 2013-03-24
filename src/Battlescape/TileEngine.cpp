@@ -1019,6 +1019,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 	BattleUnit *bu = tile->getUnit();
+	int adjustedDamage = 0;
 	int part = voxelCheck(center, unit);
 	if (part >= 0 && part <= 3)
 	{
@@ -1033,7 +1034,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 		int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
 		if (bu)
 		{
-			bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
+			adjustedDamage = bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
 		}
 		else
 		{
@@ -1044,8 +1045,8 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				BattleUnit *buBelow = below->getUnit();
 				if (buBelow)
 				{
-					buBelow->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
 					bu = buBelow;
+					adjustedDamage = bu->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
 				}
 			}
 		}
@@ -1056,17 +1057,26 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN, true);
 		}
 
-		if (bu && bu->getFaction() != unit->getFaction() && type != DT_NONE)
+		if (bu && bu->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER && type != DT_NONE)
 		{
 			unit->addFiringExp();
 		}
 	}
-	if (bu && bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
+	if (bu)
 	{
-		if (type != DT_STUN && type != DT_HE)
+
+		int bravery = (110 - bu->getStats()->bravery) / 10;
+		int modifier = bu->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
+		int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
+		bu->moraleChange(-morale_loss);
+
+		if (bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
 		{
-			Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
-			_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
+			if (type != DT_STUN && type != DT_HE)
+			{
+				Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
+				_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
+			}
 		}
 	}
 	applyItemGravity(tile);

@@ -502,67 +502,89 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			{
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
+				int modifier = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
+
 				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
 				if ((victim->getOriginalFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE) ||
 					(victim->getOriginalFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
 				{
-					murderer->moraleChange(+20);
+					murderer->moraleChange(20 * modifier / 100);
 				}
 				// murderer will get a penalty with friendly fire
 				if (victim->getOriginalFaction() == murderer->getFaction())
 				{
-					murderer->moraleChange(-20);
+					murderer->moraleChange(-(2000 / modifier));
+				}
+				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
+				{
+					if (murderer->getOriginalFaction() == FACTION_PLAYER)
+					{
+						murderer->moraleChange(-(1000 / modifier));
+					}
+					else
+					{
+						murderer->moraleChange(10);
+					}
 				}
 			}
 
-			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
-				// the losing squad all get a morale loss
-				if ((*i)->getFaction() == victim->getOriginalFaction())
+				int modifier = _save->getMoraleModifier(true);
+				int loserMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
+				int winnerMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
-					(*i)->moraleChange(-(22 - ((*i)->getStats()->bravery / 10)*2));
-
-					// revenge procedure:
-					// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
-					if (victim->getFaction() == FACTION_HOSTILE && murderer)
+					if (!(*i)->isOut() && (*i)->getArmor()->getSize() == 1)
 					{
-						int closest = 1000000;
-						BattleUnit *revenger = 0;
-						bool revenge = RNG::generate(0,100) < 50;
-						for (std::vector<BattleUnit*>::iterator h = _save->getUnits()->begin(); h != _save->getUnits()->end(); ++h)
+						// the losing squad all get a morale loss
+						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())
 						{
-							if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
+							int bravery = (110 - (*i)->getStats()->bravery) / 10;
+							(*i)->moraleChange(-(modifier * 200 * bravery / loserMod / 100));
+
+							// revenge procedure:
+							// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
+							if (victim->getFaction() == FACTION_HOSTILE && murderer)
 							{
-								int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
-								if (d < closest)
+								int closest = 1000000;
+								BattleUnit *revenger = 0;
+								bool revenge = RNG::generate(0,100) < 50;
+								for (std::vector<BattleUnit*>::iterator h = _save->getUnits()->begin(); h != _save->getUnits()->end(); ++h)
 								{
-									revenger = (*h);
-									closest = d;
+									if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
+									{
+										int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
+										if (d < closest)
+										{
+											revenger = (*h);
+											closest = d;
+										}
+									}
+								}
+								// aliens with aggression level 2 always revenge
+								// aliens with aggression level 1 have 50% chance to revenge
+								// aliens with aggression level 0 never revenge
+								if (revenger && (revenger->getAggression() == 2 || (revenger->getAggression() == 1 && revenge)))
+								{
+									AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
+									if (aggro == 0)
+									{
+										aggro = new AggroBAIState(_save, revenger);
+										revenger->setAIState(aggro);
+									}
+									aggro->setAggroTarget(murderer);
 								}
 							}
 						}
-						// aliens with aggression level 2 always revenge
-						// aliens with aggression level 1 have 50% chance to revenge
-						// aliens with aggression level 0 never revenge
-						if (revenger && (revenger->getAggression() == 2 || (revenger->getAggression() == 1 && revenge)))
+						// the winning squad all get a morale increase
+						else
 						{
-							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
-							if (aggro == 0)
-							{
-								aggro = new AggroBAIState(_save, revenger);
-								revenger->setAIState(aggro);
-							}
-							aggro->setAggroTarget(murderer);
+							(*i)->moraleChange(10 * winnerMod / 100);
 						}
 					}
 				}
-				// the winning squad all get a morale increase
-				if ((*i)->getFaction() != victim->getOriginalFaction())
-				{
-					(*i)->moraleChange(+10);
-				}
 			}
-
 			if (murderweapon)
 			{
 				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
