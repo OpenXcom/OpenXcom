@@ -637,6 +637,8 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 	}
 }
 
+
+
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
  * @param rules pointer to the Unit which holds info about alien .
@@ -656,21 +658,12 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
-	int nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
-	{ 4, 3, 5, 8, 7, 2, 0 }, // leader
-	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
-	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
-	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
-	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
-	{ 2, 5, 3, 4, 6, 8, 0 }, //terrorist
-	{ 2, 5, 3, 4, 6, 8, 0 }  }; //also terrorist
-
 	for (int i = 0; i < 7 && node == 0; i++)
 	{
 		if (outside)
 			node = _save->getSpawnNode(0, unit); // when alien is instructed to spawn outside, we only look for node 0 spawnpoints
 		else
-			node = _save->getSpawnNode(nodeRank[alienRank][i], unit);
+			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
 	}
 
 	if (node)

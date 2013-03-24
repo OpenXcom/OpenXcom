@@ -116,7 +116,6 @@ public:
 	/// Runs the generator.
 	void run();
 	void nextStage();
-
 };
 
 }
