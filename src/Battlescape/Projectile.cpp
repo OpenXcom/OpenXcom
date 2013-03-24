@@ -351,7 +351,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		if (targetTile->getUnit() && targetTile->getUnit()->isKneeled())
 			accPenalty += 0.05;
 
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accPenalty + 0.26);
+		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accPenalty + 0.25);
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
