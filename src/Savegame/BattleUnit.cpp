@@ -898,8 +898,9 @@ int BattleUnit::getMorale() const
  * @param position The position defines which part of armor and/or bodypart is hit.
  * @param power
  * @param type
+ * @return damage done after adjustment
  */
-void BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	int impactheight;
@@ -907,7 +908,7 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type, bool 
 
 	if (power <= 0)
 	{
-		return;
+		return 0;
 	}
 
 	power = (int)floor(power * _armor->getDamageModifier(type));
@@ -1033,6 +1034,8 @@ void BattleUnit::damage(Position position, int power, ItemDamageType type, bool 
 			_needPainKiller = true;
 		}
 	}
+
+	return power < 0 ? 0:power;
 }
 
 /**
