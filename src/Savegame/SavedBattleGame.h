@@ -243,8 +243,8 @@ public:
 	void setBattleState(BattlescapeState *bs);
 	/// return a pointer to the highest ranked, living XCOM unit
 	BattleUnit* getHighestRankedXCom();
-	/// get the morale modifier for XCOM based on the highest ranked, living XCOM unit.
-	int getMoraleModifier(bool alternate = false);
+	/// get the morale modifier for XCOM based on the highest ranked, living XCOM unit, or the modifier for the unit passed to this function.
+	int getMoraleModifier(BattleUnit* unit = 0);
 	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 };

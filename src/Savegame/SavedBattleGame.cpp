@@ -1524,28 +1524,46 @@ BattleUnit* SavedBattleGame::getHighestRankedXCom()
 	return highest;
 }
 
-int SavedBattleGame::getMoraleModifier(bool alternate)
+int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 {
 	int result = 100;
 
-	BattleUnit *leader = getHighestRankedXCom();
-	if (leader)
+	if (unit == 0)
 	{
-		switch (leader->getRankInt())
+		BattleUnit *leader = getHighestRankedXCom();
+		if (leader)
+		{
+			switch (leader->getRankInt())
+			{
+			case 5:
+				result += 25;
+			case 4:
+				result += 10;
+			case 3:
+				result += 5;
+			case 2:
+				result += 10;
+			default:
+				break;
+			}
+		}
+	}
+	else if (unit->getFaction() == FACTION_PLAYER)
+	{
+		switch (unit->getRankInt())
 		{
 		case 5:
 			result += 25;
 		case 4:
-			result += alternate? 20:10;
+			result += 20;
 		case 3:
-			result += alternate? 10:5;
+			result += 10;
 		case 2:
-			result += alternate? 20:10;
+			result += 20;
 		default:
 			break;
 		}
 	}
-
 	return result;
 }
 

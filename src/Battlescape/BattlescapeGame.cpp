@@ -530,7 +530,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
-				int modifier = _save->getMoraleModifier(true);
+				int modifier = _save->getMoraleModifier(victim);
 				int loserMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
 				int winnerMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
 				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
