@@ -75,8 +75,7 @@ void Node::load(const YAML::Node &node)
 	node["type"] >> _type;
 	node["rank"] >> _rank;
 	node["flags"] >> _flags;
-	//const YAML::Node * res = node.FindValue("reserved");
-	//if (res) *res >> _reserved; // this value is not used (see http://www.ufopaedia.org/index.php?title=ROUTES.DAT )
+	node["reserved"] >> _reserved;
 	node["priority"] >> _priority;
 	node["allocated"] >> _allocated;
 	node["links"] >> _nodeLinks;
@@ -95,7 +94,7 @@ void Node::save(YAML::Emitter &out) const
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "rank" << YAML::Value << _rank;
 	out << YAML::Key << "flags" << YAML::Value << _flags;
-	//out << YAML::Key << "reserved" << YAML::Value << _reserved;
+	out << YAML::Key << "reserved" << YAML::Value << _reserved;
 	out << YAML::Key << "priority" << YAML::Value << _priority;
 	out << YAML::Key << "allocated" << YAML::Value << _allocated;
 	out << YAML::Key << "links" << YAML::Value << YAML::Flow << _nodeLinks;
@@ -179,7 +178,7 @@ void Node::free()
 
 bool Node::isTarget() const
 {
-	return _flags == 5;
+	return _reserved == 5;
 }
 
 void Node::setType(int type)

@@ -19,6 +19,8 @@
  
  
 #include <vector>
+#include <deque>
+#include <queue>
 
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
