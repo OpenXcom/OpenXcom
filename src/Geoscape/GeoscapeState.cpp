@@ -665,6 +665,7 @@ void GeoscapeState::time5Seconds()
 							{
 								(*i)->setStatus(Ufo::DESTROYED);
 								popup(new BaseDestroyedState(_game, base));
+								return;
 							}
 						}
 					}
