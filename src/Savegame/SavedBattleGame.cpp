@@ -16,6 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+ 
+#include <vector>
+#include <deque>
+#include <queue>
 
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
@@ -37,6 +42,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "SerializationHelper.h"
+
 
 namespace OpenXcom
 {
@@ -1082,16 +1088,24 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
  */
 Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
 {
-	std::vector<Node*> compliantNodes;	
+	std::vector<Node *> compliantNodes;	
+	Node *preferred = 0;
 	
-	//if (fromNode == 0) fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
-
-	const std::vector<Node *>::iterator end = getNodes()->end();
-	for (std::vector<Node *>::iterator i = getNodes()->begin(); i != end; ++i )
+	if (fromNode == 0)
 	{
-			Node *n = *i;
-			if ((n->getRank() > 0 || scout)										// for no scouts we find a node with a rank above 0
-				&& (!(n->getType() & Node::TYPE_SMALL) 
+		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "This alien got lost. :("; }
+		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
+	}
+
+	// scouts roam all over while all others shuffle around to adjacent nodes at most:
+	const int end = scout ? getNodes()->size() : fromNode->getNodeLinks()->size();
+	
+	for (int i = 0; i < end; ++i)
+	{
+			if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
+			Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+			if ((n->getFlags() > 0 || n->getRank() > 0 || scout)										// for non-scouts we find a node with a desirability above 0
+			    && (!(n->getType() & Node::TYPE_SMALL) 
 					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
 				&& (!(n->getType() & Node::TYPE_FLYING) 
 					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
@@ -1099,16 +1113,36 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
 				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
 				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
-				&& n != fromNode	// don't go back to Rockville
+				&& (!scout || n != fromNode)	// scouts push forward
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
+				if (!preferred 
+					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+					|| preferred->getFlags() < n->getFlags()) preferred = n;
 				compliantNodes.push_back(n);
 			}
 	}
 
-	if (compliantNodes.empty()) return 0;
-
-	return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
+	if (compliantNodes.empty())
+	{ 
+		if (Options::getBool("traceAI")) { Log(LOG_INFO) << (scout ? "Scout " : "Guard ") << "found no patrol node! XXX XXX XXX"; }
+		if (unit->getArmor()->getSize() > 1 && !scout) 
+		{
+			return getPatrolNode(true, unit, fromNode); // move dammit
+		} else return 0; 
+	}
+	
+	if (scout)
+	{
+		// scout picks a random destination:
+		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
+	} else
+	{
+		if (!preferred) return 0;
+		// non-scout patrols to highest value unoccupied node that's not fromNode
+		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags(); }
+		return preferred;
+	}
 }
 
 /**
