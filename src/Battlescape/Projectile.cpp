@@ -342,14 +342,17 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 		if (!targetTile)
 			accPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (at day) to 15 (at night).
-		else if (targetTile->getUnit() &&
-			(targetTile->getUnit()->getFaction() == FACTION_PLAYER || targetTile->getUnit()->getFaction() == FACTION_NEUTRAL))
-			accPenalty = 0;		// Enemy units can see in the dark.
 		else
-			accPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
-		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-		if (targetTile->getUnit() && targetTile->getUnit()->isKneeled())
-			accPenalty += 0.05;
+		{
+			if (targetTile->getUnit() &&
+				(targetTile->getUnit()->getFaction() == FACTION_PLAYER || targetTile->getUnit()->getFaction() == FACTION_NEUTRAL))
+				accPenalty = 0;		// Enemy units can see in the dark.
+			else
+				accPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+			// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
+			if (targetTile->getUnit() && targetTile->getUnit()->isKneeled())
+				accPenalty += 0.05;
+		}
 
 		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accPenalty + 0.25);
 
