@@ -110,7 +110,7 @@ private:
 	int _turnsExposed;
 	std::vector<int> _loftempsSet;
 	Unit *_unitRules;
-	int _alienRank;
+	int _rankInt;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -395,9 +395,12 @@ public:
 	Position lastCover;
 	/// get the vector of units we've seen this turn.
 	std::vector<BattleUnit *> getUnitsSpottedThisTurn();
-	///
-	void setAlienRank(int rank);
-	int getAlienRank() const;
+	/// set the rank integer
+	void setRankInt(int rank);
+	/// get the rank integer
+	int getRankInt() const;
+	/// derive a rank integer based on rank string (for xcom soldiers ONLY)
+	void deriveRank();
 
 };
 

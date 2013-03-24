@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0), _unitRules(0), _hidingForTurn(false), _alienRank(-1)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0), _unitRules(0), _hidingForTurn(false), _rankInt(-1)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -105,7 +105,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit),_hidingForTurn(false), _alienRank(-1)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit),_hidingForTurn(false), _rankInt(-1)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -262,9 +262,9 @@ void BattleUnit::load(const YAML::Node &node)
 	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
-	if (const YAML::Node *pName = node.FindValue("alienRank"))
+	if (const YAML::Node *pName = node.FindValue("rankInt"))
 	{
-		(*pName) >> _alienRank;
+		(*pName) >> _rankInt;
 	}
 	if (const YAML::Node *pName = node.FindValue("originalFaction"))
 	{
@@ -327,7 +327,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "turretType" << YAML::Value << _turretType;
 	out << YAML::Key << "visible" << YAML::Value << _visible;
 	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
-	out << YAML::Key << "alienRank" << YAML::Value << _alienRank;
+	out << YAML::Key << "rankInt" << YAML::Value << _rankInt;
 
 	if (getCurrentAIState())
 	{
@@ -2413,14 +2413,33 @@ std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
 	return _unitsSpottedThisTurn;
 }
 
-void BattleUnit::setAlienRank(int rank)
+void BattleUnit::setRankInt(int rank)
 {
-	_alienRank = rank;
+	_rankInt = rank;
 }
 
-int BattleUnit::getAlienRank() const
+int BattleUnit::getRankInt() const
 {
-	return _alienRank;
+	return _rankInt;
+}
+
+void BattleUnit::deriveRank()
+{
+	if (_faction == FACTION_PLAYER)
+	{
+		if (_rank == "STR_COMMANDER")
+			_rankInt = 5;
+		else if (_rank == "STR_COLONEL")
+			_rankInt = 4;
+		else if (_rank == "STR_CAPTAIN")
+			_rankInt = 3;
+		else if (_rank == "STR_SERGEANT")
+			_rankInt = 2;
+		else if (_rank == "STR_SQUADDIE")
+			_rankInt = 1;
+		else if (_rank == "STR_ROOKIE")
+			_rankInt = 0;
+	}
 }
 
 }
