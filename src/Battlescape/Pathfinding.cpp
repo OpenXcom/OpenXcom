@@ -578,7 +578,7 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction,
 		if (isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_WESTWALL, missileTarget)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL, missileTarget) 
       && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL, missileTarget)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL, missileTarget)
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_WESTWALL, missileTarget)
       && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL, missileTarget)) return true;
 		break;
 	case 6: // west
