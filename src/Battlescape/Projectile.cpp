@@ -338,29 +338,29 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		double baseDeviation, accPenalty;
+		double baseDeviation, accuracyPenalty;
 
-		if (!targetTile)
-			accPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (at day) to 15 (at night).
-		else
+		if (targetTile)
 		{
-			if (targetTile->getUnit() &&
-				(targetTile->getUnit()->getFaction() == FACTION_PLAYER || targetTile->getUnit()->getFaction() == FACTION_NEUTRAL))
-				accPenalty = 0;		// Enemy units can see in the dark.
+			BattleUnit* targetUnit = targetTile->getUnit();
+			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
+				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
 			else
-				accPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
 			// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-			if (targetTile->getUnit() && targetTile->getUnit()->isKneeled())
-				accPenalty += 0.05;
+			if (targetUnit && targetUnit->isKneeled())
+				accuracyPenalty += 0.05;
 		}
+		else
+			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accPenalty + 0.25);
+		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
 			baseDeviation = 0.02;
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // miss in radian
+		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
 		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
