@@ -1474,4 +1474,45 @@ bool SavedBattleGame::getTraceSetting() const
 	return _traceAI;
 }
 
+BattleUnit* SavedBattleGame::getHighestRankedXCom()
+{
+	BattleUnit* highest = 0;
+	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
+	{
+		if ((*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->isOut())
+		{
+			if (highest == 0 || (*j)->getRankInt() > highest->getRankInt())
+			{
+				highest = *j;
+			}
+		}
+	}
+	return highest;
+}
+
+int SavedBattleGame::getMoraleModifier(bool alternate)
+{
+	int result = 100;
+
+	BattleUnit *leader = getHighestRankedXCom();
+	if (leader)
+	{
+		switch (leader->getRankInt())
+		{
+		case 5:
+			result += 25;
+		case 4:
+			result += alternate? 20:10;
+		case 3:
+			result += alternate? 10:5;
+		case 2:
+			result += alternate? 20:10;
+		default:
+			break;
+		}
+	}
+
+	return result;
+}
+
 }
