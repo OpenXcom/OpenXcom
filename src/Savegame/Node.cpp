@@ -75,7 +75,8 @@ void Node::load(const YAML::Node &node)
 	node["type"] >> _type;
 	node["rank"] >> _rank;
 	node["flags"] >> _flags;
-	node["reserved"] >> _reserved;
+	const YAML::Node *res = node.FindValue("reserved");
+	if (res) *res >> _reserved;
 	node["priority"] >> _priority;
 	node["allocated"] >> _allocated;
 	node["links"] >> _nodeLinks;
