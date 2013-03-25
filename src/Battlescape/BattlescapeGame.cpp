@@ -245,7 +245,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;
 		_parentState->debug(ss.str());
-		if (unit->getAggroSound() && aggro && !_playedAggroSound)
+		if (unit->getAggroSound() && unit->getCharging() && !_playedAggroSound)
 		{
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
