@@ -89,7 +89,7 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false)
 {
 	_tuReserved = BA_NONE;
 	_debugPlay = false;
@@ -378,6 +378,7 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
  */
 void BattlescapeGame::endTurn()
 {
+	_endTurnRequested = false;
 	Position p;
 
 	_debugPlay = false;
@@ -1438,7 +1439,11 @@ void BattlescapeGame::moveUpDown(BattleUnit *unit, int dir)
 void BattlescapeGame::requestEndTurn()
 {
 	cancelCurrentAction();
-	statePushBack(0);
+	if (!_endTurnRequested)
+	{
+		_endTurnRequested = true;
+		statePushBack(0);
+	}
 }
 
 /**
