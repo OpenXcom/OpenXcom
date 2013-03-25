@@ -364,7 +364,7 @@ Insuffisant matériaux spéciaux pour produire{NEWLINE}
 STR_NOT_ENOUGH_MONEY_TO_PRODUCE
 Insuffisant argent pour produire{NEWLINE}
 STR_PRODUCTION_COMPLETE
-Production Terminée:{NEWLINE}
+Production finit:{NEWLINE}
 STR_PRODUCTION_OF
 Production de{NEWLINE}
 STR__AT__
@@ -374,7 +374,7 @@ STR_IS_COMPLETE
 STR_OK_5_SECS
 OK - 5 sec
 STR_RESEARCH_COMPLETED
-Recherche Terminée
+Recherche finit
 STR_VIEW_REPORTS
 VOIR RAPPORTS
 STR_WE_CAN_NOW_RESEARCH
@@ -460,7 +460,7 @@ LE BOUCLIER DE GRAVITE REPOUSSE L'OVNI!
 STR_FIRING
 TIR
 STR_HIT
-TOUCHÉ!
+FRAPPÉ!
 STR_UFO_DESTROYED
 OVNI DÉTRUIT!
 STR_MISSED
@@ -636,7 +636,7 @@ ARMURE
 STR_MAX
 MAXI>
 STR_ROOKIE
-Nouvelle Recrue
+Recrue
 STR_SQUADDIE
 Deuxième Classe
 STR_SERGEANT
@@ -1258,9 +1258,9 @@ Un maximum de 50 savants peut travailler dans un laboratoire.  Les laboratoires 
 STR_WORKSHOP_UFOPEDIA
 Un atelier contenant tout l'équipement nécessaire à la fabrication de produits basés sur les conceptions des labos scientifiques.  Un atelier peut contenir jusqu'à 50 ingénieurs, mais les objets en construction prennent également de la place.
 STR_SMALL_RADAR_SYSTEM_UFOPEDIA
-Un petit système de détection ayant une portée radar de 300 miles nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
+Un petit système de détection ayant une portée radar de 300 nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
-Un grand système de détection ayant une portée de 450 miles nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
+Un grand système de détection ayant une portée de 450 nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
 STR_MISSILE_DEFENSES_UFOPEDIA
 Les défenses missiles protègent des incursions des vaisseaux ennemis qui essaient d'atterrir près de la base.
 STR_GENERAL_STORES_UFOPEDIA
@@ -1774,7 +1774,7 @@ Les extraterrestres ont détruit la base non défendue
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
 Les agents Xcom ont localisé une base extraterrestre sur 
 STR_STANDOFF
-ATTENTE
+IMPASSE
 STR_CAUTIOUS_ATTACK
 ATTAQUE PRUDENTE
 STR_STANDARD_ATTACK
@@ -1784,19 +1784,19 @@ ATTAQUE AGRESSIVE
 STR_DISENGAGING
 DÉSENGAGEMENT
 STR_UFO_HIT
-OVNI TOUCHE!
+L'OVNI EST FRAPPÉ!
 STR_UFO_CRASH_LANDS
-CRASH DE L'OVNI!
+L'OVNI S'ÉCRASE!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Réduction en mode attente seulement
+Réduction en mode impasse seulement
 STR_UFO_RETURN_FIRE
-L'OVNI RÉPLIQUE!
+L'OVNI TIRANT!
 STR_INTERCEPTOR_DAMAGED
 >>>INTERCEPTEUR ENDOMMAGÉ<<<
 STR_INTERCEPTOR_DESTROYED
 >>>INTERCEPTEUR DÉTRUIT<<<
 STR_UFO_OUTRUNNING_INTERCEPTOR
-L'OVNI SÈME L'INTERCEPTEUR!
+L'OVNI DÈPASSER L'INTERCEPTEUR!
 STR_ALIENS_TERRORISE
 TERREUR EXTRATERRESTRE
 STR_LONG_RANGE_DETECTION
@@ -2084,11 +2084,11 @@ BLESSURES GRAVES
 STR_UNDER_ARMOR_UC
 ARMURE DE DESSOUS
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
-Unités de temps réservées au tir rapide
+Unités de temps réservées pour le tir rapide
 STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
-Unités de temps réservées au tir automatique
+Unités de temps réservées pour le tir automatique
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
-Unités de temps réservées au tir précis
+Unités de temps réservées pour le tir précis
 STR_ABORT_MISSION
 Abandonner mission?
 STR_CORPSE
