@@ -386,7 +386,10 @@ void NewBattleState::btnOkClick(Action *)
 			u->setLatitude(-0.5);
 		}
 		// either ground assault or ufo crash
-		bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+		if (RNG::generate(0,1) == 1)
+			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+		else
+			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 	}
 	if (_craft)
 		_craft->setSpeed(0);
