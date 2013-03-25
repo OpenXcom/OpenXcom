@@ -295,12 +295,12 @@ void Map::drawTerrain(Surface *surface)
 					}
 					else if (bulletPositionScreen.y < 8)
 					{
-						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16);
+						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-20);
 						enough = false;
 					}
 					else if (bulletPositionScreen.y > _visibleMapHeight-8)
 					{
-						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16);
+						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+20);
 						enough = false;
 					}
 					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
