@@ -206,25 +206,15 @@ void AlienMission::think(Game &engine, const Globe &globe)
 				break;
 			}
 		}
+
+		spawnAlienBase(ufo, globe, engine);
+
 		// Infiltrations loop for ever.
 		_nextWave = 0;
 	}
 	if (_rule.getType() == "STR_ALIEN_BASE" && _nextWave == _rule.getWaveCount())
 	{
-		// Once the last UFO is spawned, the aliens build their base.
-		// TODO: Find out what should actually be the location.
-		// For now we use the last non-exit zone of the last UFO for the location.
-		assert(ufo);
-		const RuleRegion &regionRules = *ruleset.getRegion(_region);
-		unsigned zone = ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2);
-		std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
-		AlienBase *ab = new AlienBase();
-		ab->setAlienRace(_race);
-		ab->setId(game.getId("STR_ALIEN_BASE"));
-		ab->setLongitude(pos.first);
-		ab->setLatitude(pos.second);
-		game.getAlienBases()->push_back(ab);
-		addScore(pos.first, pos.second, engine);
+		spawnAlienBase(ufo, globe, engine);
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
@@ -611,4 +601,24 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 		}
 	}
 }
+
+void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
+{
+	SavedGame &game = *engine.getSavedGame();
+	const Ruleset &ruleset = *engine.getRuleset();
+	// Once the last UFO is spawned, the aliens build their base.
+	// TODO: Find out what should actually be the location.
+	// For now we use the last non-exit zone of the last UFO for the location.
+	const RuleRegion &regionRules = *ruleset.getRegion(_region);
+	unsigned zone = ufo ? ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2) : 0;
+	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
+	AlienBase *ab = new AlienBase();
+	ab->setAlienRace(_race);
+	ab->setId(game.getId("STR_ALIEN_BASE"));
+	ab->setLongitude(pos.first);
+	ab->setLatitude(pos.second);
+	game.getAlienBases()->push_back(ab);
+	addScore(pos.first, pos.second, engine);
+}
+
 }

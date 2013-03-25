@@ -414,29 +414,7 @@ void MonthlyReportState::CalculateChanges()
 		// process
 		if ((*k)->getNewPact())
 		{
-			_pactList.push_back((*k)->getRules()->getType());		
-			if (_game->getSavedGame()->getAlienBases()->size() < 9)
-			{
-				double lon;
-				double lat;
-				int tries = 0;
-				do
-				{
-					double ran = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-					double ran2 = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-					lon = (*k)->getRules()->getLabelLongitude() + ran;
-					lat = (*k)->getRules()->getLabelLatitude()  + ran2;
-					tries++;
-				}
-				while(!_globe->insideLand(lon, lat) && !(*k)->getRules()->insideCountry(lon, lat) && tries < 100);
-				AlienBase *b = new AlienBase();
-				b->setLongitude(lon);
-				b->setLatitude(lat);
-				b->setDiscovered(false);
-				b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
-				b->setAlienRace("STR_SECTOID");
-				_game->getSavedGame()->getAlienBases()->push_back(b);
-			}
+			_pactList.push_back((*k)->getRules()->getType());
 		}
 
 		// determine satisfaction level, sign pacts, adjust funding
