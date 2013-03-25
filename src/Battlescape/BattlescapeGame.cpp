@@ -92,6 +92,7 @@ bool BattlescapeGame::_debugPlay = false;
 BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false)
 {
 	_tuReserved = BA_NONE;
+	_playerTUReserved = BA_NONE;
 	_debugPlay = false;
 	_playerPanicHandled = true;
 	_AIActionCounter = 0;
@@ -133,6 +134,7 @@ void BattlescapeGame::think()
 				{
 					if (_save->selectNextPlayerUnit(true, true) == 0)
 					{
+						_tuReserved = _playerTUReserved;
 						if (!_save->getDebugMode())
 						{
 							statePushBack(0); // end AI turn
@@ -179,7 +181,23 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
 	std::wstringstream ss;
-    
+	
+	_tuReserved = BA_NONE;
+
+	if (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_FIREARM)
+	{
+		switch (unit->getAggression())
+		{
+		case 1:
+			_tuReserved = BA_SNAPSHOT;
+			break;
+		case 2:
+			_tuReserved = BA_AUTOSHOT;
+		default:
+			break;
+		}
+	}
+
     _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
         // it might also help chryssalids realize they've zombified someone and need to move on
         // it's also for good luck
@@ -1034,7 +1052,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
-	if (_save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
+	// if (_save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
 
 	// check TUs against slowest weapon if we have two weapons
 	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
@@ -1048,12 +1066,15 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
-		switch (effectiveTuReserved)
+		if (_save->getSide() == FACTION_PLAYER)
 		{
-		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-		case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-		default: ;
+			switch (effectiveTuReserved)
+			{
+			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+			default: ;
+			}
 		}
 		return false;
 	}
@@ -1453,6 +1474,7 @@ void BattlescapeGame::requestEndTurn()
 void BattlescapeGame::setTUReserved(BattleActionType tur)
 {
 	_tuReserved = tur;
+	_playerTUReserved = tur;
 }
 
 /**
@@ -1952,6 +1974,11 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 	default: break;
 	}
 	return placed;
+}
+
+BattleActionType BattlescapeGame::getReservedAction()
+{
+	return _tuReserved;
 }
 
 }

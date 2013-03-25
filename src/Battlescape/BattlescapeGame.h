@@ -72,7 +72,7 @@ private:
 	SavedBattleGame *_save;
 	BattlescapeState *_parentState;
 	std::list<BattleState*> _states;
-	BattleActionType _tuReserved;
+	BattleActionType _tuReserved, _playerTUReserved;
 	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
@@ -151,6 +151,7 @@ public:
 	TileEngine *getTileEngine();
 	Pathfinding *getPathfinding();
 	ResourcePack *getResourcePack();
+	BattleActionType getReservedAction();
 	const Ruleset *getRuleset() const;
 	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI
 	void resetSituationForAI();
@@ -167,6 +168,7 @@ public:
 	int takeItemFromGround(BattleItem* item, BattleAction *action);
 	/// assign the item to a slot (stolen from battlescapeGenerator::addItem())
 	bool takeItem(BattleItem* item, BattleAction *action);
+
 };
 
 }

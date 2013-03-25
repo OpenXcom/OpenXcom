@@ -627,8 +627,15 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int MIN_ALLY_DISTANCE = civ ? 0 : 4; // don't clump up too much and get grenaded, OK?
 	const int ALLY_BONUS = civ ? -50 : 4;
 	const int SOLDIER_PROXIMITY_BASE_PENALTY = civ ? 0 : 100; // this is divided by distance^2 to nearest soldier
+	
+	int tu = _unit->getTimeUnits();
 
-	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, _unit->getTimeUnits());
+	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
+	{
+		tu -= _unit->getActionTUs(_game->getBattleState()->getBattleGame()->getReservedAction(), action->weapon);
+	}
+
+	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, tu);
 
 	while (tries < 150 && !coverFound)
 	{
