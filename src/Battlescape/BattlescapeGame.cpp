@@ -134,7 +134,6 @@ void BattlescapeGame::think()
 				{
 					if (_save->selectNextPlayerUnit(true, true) == 0)
 					{
-						_tuReserved = _playerTUReserved;
 						if (!_save->getDebugMode())
 						{
 							statePushBack(0); // end AI turn
@@ -399,6 +398,7 @@ void BattlescapeGame::endTurn()
 	_endTurnRequested = false;
 	Position p;
 
+	_tuReserved = _playerTUReserved;
 	_debugPlay = false;
 	_currentAction.type = BA_NONE;
 
