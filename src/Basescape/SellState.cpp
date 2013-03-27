@@ -187,9 +187,9 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	}
 
 	_timerInc = new Timer(250);
-	_timerInc->onTimer((StateHandler)&SellState::increase);
+	_timerInc->onTimer((StateHandler) (void (SellState::*)()) &SellState::increase);
 	_timerDec = new Timer(250);
-	_timerDec->onTimer((StateHandler)&SellState::decrease);
+	_timerDec->onTimer((StateHandler) (void (SellState::*)()) &SellState::decrease);
 }
 
 /**

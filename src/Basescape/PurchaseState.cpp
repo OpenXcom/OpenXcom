@@ -193,9 +193,9 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	}
 
 	_timerInc = new Timer(250);
-	_timerInc->onTimer((StateHandler)&PurchaseState::increase);
+	_timerInc->onTimer((StateHandler) (void (PurchaseState::*)()) &PurchaseState::increase);
 	_timerDec = new Timer(250);
-	_timerDec->onTimer((StateHandler)&PurchaseState::decrease);
+	_timerDec->onTimer((StateHandler) (void (PurchaseState::*)()) &PurchaseState::decrease);
 }
 
 /**

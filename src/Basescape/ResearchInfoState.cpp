@@ -154,9 +154,9 @@ void ResearchInfoState::buildUi ()
 	_btnLess->onMouseClick((ActionHandler)&ResearchInfoState::lessClick, 0);
 
 	_timerMore = new Timer(250);
-	_timerMore->onTimer((StateHandler)&ResearchInfoState::more);
+	_timerMore->onTimer((StateHandler) (void (ResearchInfoState::*)()) &ResearchInfoState::more);
 	_timerLess = new Timer(250);
-	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
+	_timerLess->onTimer((StateHandler) (void (ResearchInfoState::*)()) &ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));

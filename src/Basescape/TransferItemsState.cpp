@@ -186,9 +186,9 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_distance = getDistance();
 
 	_timerInc = new Timer(50);
-	_timerInc->onTimer((StateHandler)&TransferItemsState::increase);
+	_timerInc->onTimer((StateHandler) (void (TransferItemsState::*)()) &TransferItemsState::increase);
 	_timerDec = new Timer(50);
-	_timerDec->onTimer((StateHandler)&TransferItemsState::decrease);
+	_timerDec->onTimer((StateHandler) (void (TransferItemsState::*)()) &TransferItemsState::decrease);
 }
 
 /**

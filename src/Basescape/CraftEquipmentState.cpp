@@ -190,9 +190,9 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	}
 
 	_timerLeft = new Timer(250);
-	_timerLeft->onTimer((StateHandler)&CraftEquipmentState::moveLeft);
+	_timerLeft->onTimer((StateHandler) (void (CraftEquipmentState::*)()) &CraftEquipmentState::moveLeft);
 	_timerRight = new Timer(250);
-	_timerRight->onTimer((StateHandler)&CraftEquipmentState::moveRight);
+	_timerRight->onTimer((StateHandler) (void (CraftEquipmentState::*)()) &CraftEquipmentState::moveRight);
 }
 
 /**
