@@ -125,8 +125,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 				{
 					int dir[3] = {4,2,3};
 					Tile *checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if ((isBlocked(unit->getTile(), checkTile, dir[its], unit) &&
-						isBlocked(unit->getTile(), checkTile, dir[its], target))||
+					if ((isBlocked(destinationTile, checkTile, dir[its], unit) &&
+						isBlocked(destinationTile, checkTile, dir[its], target))||
 						(checkTile->getUnit() &&
 						checkTile->getUnit() != unit &&
 						checkTile->getUnit()->getVisible() &&
