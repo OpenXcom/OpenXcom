@@ -209,7 +209,7 @@ void AggroBAIState::think(BattleAction *action)
 		}
 	}
 	
-	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,9 - action->diff) == 0)
+	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
 	{
 		psiAction(action);
 	}
