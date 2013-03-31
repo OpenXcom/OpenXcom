@@ -43,7 +43,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(320, 16, 0, 16);
 
-	_txtScrollSpeed = new Text(120, 9, 16, 32);
+	_txtScrollSpeed = new Text(130, 9, 16, 32);
 	_btnScrollSpeed1 = new TextButton(22, 14, 16, 42);
 	_btnScrollSpeed2 = new TextButton(22, 18, 40, 42);
 	_btnScrollSpeed3 = new TextButton(22, 22, 64, 42);
@@ -356,6 +356,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnOk->setHighContrast(true);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BattlescapeOptionsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnLoad->setColor(Palette::blockOffset(0));
 	_btnLoad->setHighContrast(true);

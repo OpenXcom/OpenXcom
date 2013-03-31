@@ -222,7 +222,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
  */
 void CraftSoldiersState::lstSoldiersClick(Action *action)
 {
-	int mx = (action->getXMouse() / action->getXScale());
+	int mx = action->getAbsoluteXMouse();
 	if ( mx >= 186 && mx < 220 )
 	{
 		return;

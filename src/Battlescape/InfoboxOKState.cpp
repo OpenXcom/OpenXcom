@@ -25,6 +25,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/Cursor.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -53,6 +54,8 @@ InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string messag
 	_btnOk->setColor(Palette::blockOffset(1)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&InfoboxOKState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnOk->setHighContrast(true);
 
 	_txtTitle->setColor(Palette::blockOffset(1)-1);

@@ -56,6 +56,7 @@ private:
 	Surface *_arrow;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
+	int _mouseX, _mouseY;
 	CursorType _cursorType;
 	int _cursorSize;
 	int _animFrame;
@@ -85,12 +86,16 @@ public:
 	void draw();
 	/// Sets the palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Special handling for mouse clicks.
-	void mouseClick(Action *action, State *state);
+	/// Special handling for mouse press.
+	void mousePress(Action *action, State *state);
+	/// Special handling for mouse release.
+	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
+	/// Special handling for key releases.
+	void keyboardRelease(Action *action, State *state);
 	/// rotate the tileframes 0-7
 	void animate(bool redraw);
 	/// Sets the battlescape selector position relative to mouseposition.
@@ -121,6 +126,8 @@ public:
 	/// Set mouse-buttons' pressed state
 	void setButtonsPressed(Uint8 button, bool pressed);
 	void setUnitDying(bool flag);
+	/// Refreshes the battlescape selector after scrolling.
+	void refreshSelectorPosition();
 };
 
 }

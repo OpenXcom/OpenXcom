@@ -267,28 +267,51 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
+	_btnMapUp->onKeyboardPress((ActionHandler)&BattlescapeState::btnMapUpClick, (SDLKey)Options::getInt("keyBattleLevelUp"));
 	_btnMapDown->onMouseClick((ActionHandler)&BattlescapeState::btnMapDownClick);
+	_btnMapDown->onKeyboardPress((ActionHandler)&BattlescapeState::btnMapDownClick, (SDLKey)Options::getInt("keyBattleLevelDown"));
 	_btnShowMap->onMouseClick((ActionHandler)&BattlescapeState::btnShowMapClick);
+	_btnShowMap->onKeyboardPress((ActionHandler)&BattlescapeState::btnShowMapClick, (SDLKey)Options::getInt("keyBattleMap"));
 	_btnKneel->onMouseClick((ActionHandler)&BattlescapeState::btnKneelClick);
+	_btnKneel->onKeyboardPress((ActionHandler)&BattlescapeState::btnKneelClick, (SDLKey)Options::getInt("keyBattleKneel"));
 	_btnInventory->onMouseClick((ActionHandler)&BattlescapeState::btnInventoryClick);
+	_btnInventory->onKeyboardPress((ActionHandler)&BattlescapeState::btnInventoryClick, (SDLKey)Options::getInt("keyBattleInventory"));
 	_btnCenter->onMouseClick((ActionHandler)&BattlescapeState::btnCenterClick);
+	_btnCenter->onKeyboardPress((ActionHandler)&BattlescapeState::btnCenterClick, (SDLKey)Options::getInt("keyBattleCenterUnit"));
 	_btnNextSoldier->onMouseClick((ActionHandler)&BattlescapeState::btnNextSoldierClick);
+	_btnNextSoldier->onKeyboardPress((ActionHandler)&BattlescapeState::btnNextSoldierClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+	_btnNextSoldier->onKeyboardPress((ActionHandler)&BattlescapeState::btnPrevSoldierClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNextStop->onMouseClick((ActionHandler)&BattlescapeState::btnNextStopClick);
+	_btnNextStop->onKeyboardPress((ActionHandler)&BattlescapeState::btnNextStopClick, (SDLKey)Options::getInt("keyBattleDeselectUnit"));
 	_btnShowLayers->onMouseClick((ActionHandler)&BattlescapeState::btnShowLayersClick);
 	_btnHelp->onMouseClick((ActionHandler)&BattlescapeState::btnHelpClick);
+	_btnHelp->onKeyboardPress((ActionHandler)&BattlescapeState::btnHelpClick, (SDLKey)Options::getInt("keyBattleOptions"));
 	_btnEndTurn->onMouseClick((ActionHandler)&BattlescapeState::btnEndTurnClick);
+	_btnEndTurn->onKeyboardPress((ActionHandler)&BattlescapeState::btnEndTurnClick, (SDLKey)Options::getInt("keyBattleEndTurn"));
 	_btnAbort->onMouseClick((ActionHandler)&BattlescapeState::btnAbortClick);
+	_btnAbort->onKeyboardPress((ActionHandler)&BattlescapeState::btnAbortClick, (SDLKey)Options::getInt("keyBattleAbort"));
 	_btnStats->onMouseClick((ActionHandler)&BattlescapeState::btnStatsClick);
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnStatsClick, (SDLKey)Options::getInt("keyBattleStats"));
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
-	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveNoneClick);
-	_btnReserveSnap->onMouseClick((ActionHandler)&BattlescapeState::btnReserveSnapClick);
-	_btnReserveAimed->onMouseClick((ActionHandler)&BattlescapeState::btnReserveAimedClick);
-	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveAutoClick);
+	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
+	_btnReserveNone->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveNone"));
+	_btnReserveSnap->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
+	_btnReserveSnap->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveSnap"));
+	_btnReserveAimed->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
+	_btnReserveAimed->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAimed"));
+	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
+	_btnReserveAuto->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAuto"));
+	// shortcuts without a specific button
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
 
 	for (int i = 0; i < 10; ++i)
 	{
+		std::stringstream key;
+		key << "keyBattleCenterEnemy" << (i+1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
+		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)&BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
 		_numVisibleUnit[i]->setColor(16);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
@@ -682,6 +705,16 @@ void BattlescapeState::btnNextStopClick(Action *)
 
 /**
  * Select next soldier.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnPrevSoldierClick(Action *)
+{
+	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		selectPreviousPlayerUnit(true);
+}
+
+/**
+ * Select next soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
  * @param setReselect When true, flag the current unit first.
  */
@@ -850,40 +883,47 @@ void BattlescapeState::btnPsiClick(Action *action)
  * Reserve time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveNoneClick(Action *)
+void BattlescapeState::btnReserveClick(Action *action)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		_battleGame->setTUReserved(BA_NONE);
+	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+
+		if (_reserve == _btnReserveNone)
+			_battleGame->setTUReserved(BA_NONE);
+		else if (_reserve == _btnReserveSnap)
+			_battleGame->setTUReserved(BA_SNAPSHOT);
+		else if (_reserve == _btnReserveAimed)
+			_battleGame->setTUReserved(BA_AIMEDSHOT);
+		else if (_reserve == _btnReserveAuto)
+			_battleGame->setTUReserved(BA_AUTOSHOT);
+	}
 }
 
 /**
- * Reserve time units.
+ * Reload weapon in hand.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveSnapClick(Action *)
+void BattlescapeState::btnReloadClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		_battleGame->setTUReserved(BA_SNAPSHOT);
+	if (playableUnitSelected() && _save->getSelectedUnit()->checkAmmo())
+	{
+		_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+		updateSoldierInfo();
+	}
 }
 
 /**
- * Reserve time units.
+ * Toggle soldier's personal lighting (purely cosmetic).
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveAimedClick(Action *)
+void BattlescapeState::btnPersonalLightingClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		_battleGame->setTUReserved(BA_AIMEDSHOT);
-}
-
-/**
- * Reserve time units.
- * @param action Pointer to an action.
- */
-void BattlescapeState::btnReserveAutoClick(Action *)
-{
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		_battleGame->setTUReserved(BA_AUTOSHOT);
+	_save->getTileEngine()->togglePersonalLighting();
 }
 
 /**
@@ -1124,7 +1164,7 @@ void BattlescapeState::warning(const std::string &message)
  * Takes care of any events from the core game engine.
  * @param action Pointer to an action.
  */
-void BattlescapeState::handle(Action *action)
+inline void BattlescapeState::handle(Action *action)
 {
 	if (_game->getCursor()->getVisible() || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -1134,71 +1174,45 @@ void BattlescapeState::handle(Action *action)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
 			{
-				selectNextPlayerUnit(true, false);
+				btnNextSoldierClick(action);
 			}
 			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 			{
-				selectPreviousPlayerUnit(true);
+				btnPrevSoldierClick(action);
 			}
 		}
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-			// "d" - enable debug mode
-			if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d)
+			if (Options::getBool("debug"))
 			{
-				_save->setDebugMode();
-				debug(L"Debug Mode");
-			}
-			// toggle personal lighting
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePersonalLighting"))
-			{
-				_save->getTileEngine()->togglePersonalLighting();
-			}
-			// next solider
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
-			{
-				selectNextPlayerUnit(true, false);
-			}
-			// previous solider
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
-			{
-				selectPreviousPlayerUnit(true);
-			}
-			// options menu
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleOptions"))
-			{
-				_game->pushState(new BattlescapeOptionsState(_game));
-			}
-			// reload
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleReload") && playableUnitSelected())
-			{
-				if (_save->getSelectedUnit()->checkAmmo())
+				// "ctrl-d" - enable debug mode
+				if (action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
-					_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
-					updateSoldierInfo();
+					_save->setDebugMode();
+					debug(L"Debug Mode");
+				}
+				// f11 - voxel map dump
+				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+				{
+					if (_save->getDebugMode())
+					{
+						SaveVoxelMap();
+					}
+				}
+				// f10 - voxel view dump
+				else if (action->getDetails()->key.keysym.sym == SDLK_F10)
+				{
+					SaveVoxelView();
+				}
+				// f9 - ai 
+				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
+				{
+					SaveAIMap();
 				}
 			}
-			// voxel map dump
-			else if (action->getDetails()->key.keysym.sym == SDLK_F11)
-			{
-				if (_save->getDebugMode())
-				{
-					SaveVoxelMap();
-				}
-			}
-			else if (action->getDetails()->key.keysym.sym == SDLK_F10)
-			{
-				SaveVoxelView();
-			}
-			else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
-			{
-				SaveAIMap();
-			}
-			//else Log(LOG_DEBUG) << "Unused key: " << action->getDetails()->key.keysym.sym;
 		}
 	}
-
 }
 
 
@@ -1486,11 +1500,11 @@ void BattlescapeState::SaveVoxelMap()
 				float dist=1;
 				if (x%16==15)
 				{
-					dist*=0.9;
+					dist*=0.9f;
 				}
 				if (y%16==15)
 				{
-					dist*=0.9;
+					dist*=0.9f;
 				}
 
 				if (test==5)

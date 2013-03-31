@@ -54,6 +54,7 @@
 #include "../Menu/MainMenuState.h"
 #include "../Engine/RNG.h"
 #include "../Interface/Cursor.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -73,7 +74,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtTitle = new Text(280, 16, 16, 8);
 	_txtItem = new Text(180, 9, 16, 24);
 	_txtQuantity = new Text(60, 9, 200, 24);
-	_txtScore = new Text(50, 9, 260, 24);
+	_txtScore = new Text(55, 9, 260, 24);
 	_txtUfoRecovery = new Text(180, 9, 16, 60);
 	_txtRating = new Text(120, 9, 64, 180);
 	_lstStats = new TextList(280, 80, 16, 32);
@@ -103,6 +104,8 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DebriefingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

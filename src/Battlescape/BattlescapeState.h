@@ -123,6 +123,8 @@ public:
 	void btnNextSoldierClick(Action *action);
 	/// Handler for clicking the Next Stop button.
 	void btnNextStopClick(Action *action);
+	/// Handler for clicking the Previous Soldier button.
+	void btnPrevSoldierClick(Action *action);
 	/// Handler for clicking the Show Layers button.
 	void btnShowLayersClick(Action *action);
 	/// Handler for clicking the Help button.
@@ -144,13 +146,11 @@ public:
 	/// Handler for clicking the use psi button.
 	void btnPsiClick(Action *action);
 	/// Handler for clicking a reserved button.
-	void btnReserveNoneClick(Action *action);
-	/// Handler for clicking a reserved button.
-	void btnReserveSnapClick(Action *action);
-	/// Handler for clicking a reserved button.
-	void btnReserveAimedClick(Action *action);
-	/// Handler for clicking a reserved button.
-	void btnReserveAutoClick(Action *action);
+	void btnReserveClick(Action *action);
+	/// Handler for clicking the reload button.
+	void btnReloadClick(Action *action);
+	/// Handler for clicking the lighting button.
+	void btnPersonalLightingClick(Action *action);
 	// playable unit selected?
 	bool playableUnitSelected();
 	/// updates soldier name/rank/tu/energy/health/morale

@@ -44,6 +44,7 @@ private:
 	int _screenWidth, _screenHeight;
 	Position _mapOffset, _center;
 	int _scrollX, _scrollY;
+	bool _scrollTrigger;
 	int _visibleMapHeight;
 	bool _showAllLayers;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
@@ -54,12 +55,16 @@ public:
 	/// Cleans up the camera.
 	~Camera();
 	void setScrollTimer(Timer *timer);
-	/// Special handling for mouse clicks.
-	void mouseClick(Action *action, State *state);
+	/// Special handling for mouse press.
+	void mousePress(Action *action, State *state);
+	/// Special handling for mouse release.
+	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
+	/// Special handling for key releases.
+	void keyboardRelease(Action *action, State *state);
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// Scrolls the view (when mouse-scrolling)

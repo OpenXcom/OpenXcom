@@ -394,8 +394,8 @@ void GeoscapeState::handle(Action *action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		// "d" - enable debug mode
-		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d)
+		// "ctrl-d" - enable debug mode
+		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
