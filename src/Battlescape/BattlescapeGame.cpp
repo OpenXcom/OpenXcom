@@ -254,6 +254,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->size() == 0)
 		{
+			action.actor = unit;
 			findItem(&action);
 		}
 	}
