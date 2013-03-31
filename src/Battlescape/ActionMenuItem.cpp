@@ -32,7 +32,7 @@ namespace OpenXcom
  */
 ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false), _action(BA_NONE), _tu(0)
 {
-	_txtDescription = new Text(150, 20, 10, 13);
+	_txtDescription = new Text(200, 20, 10, 13);
 	_txtDescription->setFonts(big, small);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
@@ -45,7 +45,7 @@ ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : I
 	_txtAcc->setHighContrast(true);
 	_txtAcc->setColor(Palette::blockOffset(0));
 
-	_txtTU = new Text(100, 20, 210, 13);
+	_txtTU = new Text(80, 20, 210, 13);
 	_txtTU->setFonts(big, small);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
