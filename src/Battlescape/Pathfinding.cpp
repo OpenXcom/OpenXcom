@@ -238,7 +238,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
 	bool fellDown = false;
-	bool walkedDown = false;
 	bool triedStairs = false;
 	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
@@ -291,7 +290,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						endPosition->z--;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
-						walkedDown = true;
 					}
 			}
 
