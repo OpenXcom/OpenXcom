@@ -2108,11 +2108,11 @@ OSCURITÀ
 STR_DISPLAY_RESOLUTION
 Risoluzione Display
 STR_DISPLAY_MODE
-Display Mode
+Modalita Schermo
 STR_WINDOWED
-A finestra
+In Finestra
 STR_FULLSCREEN
-A pieno schermo
+In Fullscreen
 STR_LANGUAGE
 LINGUA
 STR_FARM
@@ -2129,29 +2129,131 @@ STR_POLAR
 Polare
 STR_RANDOM_BATTLE
 Battaglia Random
-STR_MIXED
-Misto
-STR_RIGHT_CLICK_TO_DELETE
-Tasto destro del mouse per cancellare.
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Insufficiente {1} Proiettili Tank insufficienti
+Proiettili {1} insufficienti per armare il Tank
 STR_DAY_1
 {N} giorno
 STR_DAY_2
 {N} giorni
+STR_MIXED
+Misto
+STR_RIGHT_CLICK_TO_DELETE
+Tasto destro del mouse per cancellare.
 STR_EQUIPMENT_FOR_craftname
 Equipaggiamento per {1}
 STR_SELECT_SQUAD_FOR_craftname
 Scegli la squadra per {1}
+STR_n_UNITS_IN_EXIT_AREA_0
+Nessuna Unità nell'area di uscita
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} Unità nell'area di uscita
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} Unità nell'area di uscita
+STR_n_UNITS_OUTSIDE_EXIT_AREA_0
+Nessuna Unità fuori dall'area di uscita
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} Unità fuori dall'area di uscita
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Unità fuori dall'area di uscita
 STR_ABANDON_GAME_QUESTION
 ABBANDONA IL GIOCO?
+STR_HAS_BEEN_KILLED
+è stato ucciso
+STR_DRAG_SCROLL
+DRAG SCROLL
+STR_HIT_MELEE
+Colpito
+STR_CONTROLS
+CONTROLLI
+STR_RESTORE_DEFAULTS
+Impostaz. Predefinite
+STR_GENERAL
+Generale
+STR_GEOSCAPE
+Geoscape
+STR_BATTLESCAPE
+Battlescape
+STR_SCREENSHOT
+Screenshot
+STR_FPS_COUNTER
+Contatore FPS
+STR_ROTATE_LEFT
+Ruota a Sinistra
+STR_ROTATE_RIGHT
+Ruota a Destra
+STR_ROTATE_UP
+Ruota in Alto
+STR_ROTATE_DOWN
+Ruota in Basso
+STR_ZOOM_IN
+Aumenta Zoom
+STR_ZOOM_OUT
+Diminuisci Zoom
+STR_TOGGLE_COUNTRY_DETAIL
+Alterna Dettaglio Nazioni
+STR_TOGGLE_RADAR_RANGES
+Alterna Raggio Radar
+STR_SCROLL_LEFT
+Scroll a Sinistra
+STR_SCROLL_RIGHT
+Scroll a Destra
+STR_SCROLL_UP
+Scroll in Alto
+STR_SCROLL_DOWN
+Scroll in Basso
+STR_VIEW_LEVEL_ABOVE
+Mostra livello superiore
+STR_VIEW_LEVEL_BELOW
+Mostra livello inferiore
+STR_CENTER_SELECTED_UNIT
+Centra Unità Selezionata
+STR_PREVIOUS_UNIT
+Unità Precedente
+STR_NEXT_UNIT
+Unità Successiva
+STR_DESELECT_UNIT
+Deseleziona Unità
+STR_INVENTORY
+Inventario
+STR_MINIMAP
+Minimappa
+STR_END_TURN
+Termina Turno
+STR_ABORT_MISSION
+Abbandona Missione
+STR_UNIT_STATS
+Statistiche Unità
+STR_KNEEL
+Inginocchiati
+STR_RELOAD
+Ricarica
+STR_TOGGLE_PERSONAL_LIGHTING
+Alterna Illuminazione Personale
+STR_DONT_RESERVE_TUS
+Non Riservare TU
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Riserva TU per tiro senza mira
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Riserva TU per tiro con mira
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Riserva TU per tiro automatico
+STR_CENTER_ON_ENEMY_1
+Centra su Nemico 1
+STR_CENTER_ON_ENEMY_2
+Centra su Nemico 2
+STR_CENTER_ON_ENEMY_3
+Centra su Nemico 3
+STR_CENTER_ON_ENEMY_4
+Centra su Nemico 4
+STR_CENTER_ON_ENEMY_5
+Centra su Nemico 5
+STR_CENTER_ON_ENEMY_6
+Centra su Nemico 6
+STR_CENTER_ON_ENEMY_7
+Centra su Nemico 7
+STR_CENTER_ON_ENEMY_8
+Centra su Nemico 8
+STR_CENTER_ON_ENEMY_9
+Centra su Nemico 9
 STR_OPENGL
 OpenGL
