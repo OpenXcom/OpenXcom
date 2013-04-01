@@ -8159,19 +8159,23 @@ ufopaedia:
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_CANNON_UFOPEDIA
+    weapon: STR_ARMOR_PIERCING
   - id: STR_TANK_ROCKET_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
+    weapon: STR_ROCKET_LAUNCHER
   - id: STR_TANK_LASER_CANNON
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_LASER_CANNON
     requires:
       - STR_LASER_CANNON
     text: STR_TANK_LASER_CANNON_UFOPEDIA
   - id: STR_HOVERTANK_PLASMA
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_PLASMA_CANNON
     requires:
       - STR_PLASMA_CANNON
       - STR_NEW_FIGHTER_CRAFT
@@ -8179,6 +8183,7 @@ ufopaedia:
   - id: STR_HOVERTANK_LAUNCHER
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
+    weapon: STR_FUSION_BALL_LAUNCHER
     requires:
       - STR_FUSION_MISSILE
       - STR_NEW_FIGHTER_CRAFT

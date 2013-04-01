@@ -248,6 +248,7 @@ namespace OpenXcom
 		/// Saves the article to YAML.
 		void save(YAML::Emitter& out) const;
 		std::string text;
+		std::string weapon;
 	};
 
 

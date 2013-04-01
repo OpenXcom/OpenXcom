@@ -450,6 +450,10 @@ namespace OpenXcom
 			{
 				i.second() >> text;
 			}
+			else if (key == "weapon")
+			{
+				i.second() >> weapon;
+			}
 		}
 	}
 
@@ -461,6 +465,7 @@ namespace OpenXcom
 	{
 		ArticleDefinition::save(out);
 		out << YAML::Key << "text" << YAML::Value << text;
+		out << YAML::Key << "weapon" << YAML::Value << weapon;
 		out << YAML::EndMap;
 	}
 
