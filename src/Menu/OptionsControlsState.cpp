@@ -223,7 +223,7 @@ void OptionsControlsState::btnOkClick(Action *)
 	{
 		Options::setInt(_controlsGeo[i].option, _controlsGeo[i].key);
 	}
-	for (int i = 0; i < _countGeneral; ++i)
+	for (int i = 0; i < _countBattle; ++i)
 	{
 		Options::setInt(_controlsBattle[i].option, _controlsBattle[i].key);
 	}
