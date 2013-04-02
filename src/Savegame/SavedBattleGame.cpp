@@ -1352,6 +1352,11 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		}
 	}
 
+	if (size > 0 && getPathfinding()->isBlocked(getTile(position), getTile(position + Position(1, 1, 0)), 3, 0))
+	{
+		return false;
+	}
+
 	if (testOnly) return true;
 
 	for (int x = size; x >= 0; x--)

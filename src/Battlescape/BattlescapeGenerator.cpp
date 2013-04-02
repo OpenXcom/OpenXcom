@@ -648,10 +648,8 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
  */
 BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
-	int difficulty = _game->getSavedGame()->getDifficulty();
-	int divider = 1;
-	if (!difficulty)
-		divider = 2;
+	int difficulty = (int)(_game->getSavedGame()->getDifficulty());
+	int divider = difficulty > 0 ? 1 : 2;
 	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
 	Node *node = 0;
 
