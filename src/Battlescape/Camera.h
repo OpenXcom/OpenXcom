@@ -68,7 +68,7 @@ public:
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// Scrolls the view (when mouse-scrolling)
-	bool scrollXY(int x, int y, bool redraw);
+	void scrollXY(int x, int y, bool redraw);
 	/// Jump the view (when projectile in motion)
 	void jumpXY(int x, int y);
 	/// move map layer up

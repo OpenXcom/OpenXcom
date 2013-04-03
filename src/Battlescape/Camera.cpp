@@ -283,25 +283,28 @@ void Camera::scroll()
 /**
  * Handle scrolling with given deviation.
  */
-bool Camera::scrollXY(int x, int y, bool redraw)
+void Camera::scrollXY(int x, int y, bool redraw)
 {
-	bool result = true;
-
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
-	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-// if center goes out of map bounds, hold the scrolling
-	if (_center.x > _mapsize_x -1 || _center.x < 0 || 
-		_center.y > _mapsize_y -1  || _center.y < 0 )
+	do
 	{
-		_mapOffset.x -= x;
-		_mapOffset.y -= y;
-		result = false;
+		convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
+
+		// Handling map bounds...
+		// Ok, this is a prototype, it should be optimized.
+		// Actually this should be calculated instead of slow-approximation.
+		if (_center.x < 0)             { _mapOffset.x -= 2; _mapOffset.y -= 1; continue; }
+		if (_center.x > _mapsize_x -1) { _mapOffset.x += 2; _mapOffset.y += 1; continue; }
+		if (_center.y < 0)             { _mapOffset.x += 2; _mapOffset.y -= 1; continue; }
+		if (_center.y > _mapsize_y -1) { _mapOffset.x -= 2; _mapOffset.y += 1; continue; }
+		break;
 	}
+	while (true);
+
 	_map->refreshSelectorPosition();
 	if (redraw) _map->draw();
-	return result;
 }
 
 

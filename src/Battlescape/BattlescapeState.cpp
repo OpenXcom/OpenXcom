@@ -484,17 +484,9 @@ void BattlescapeState::mapOver(Action *action)
 		else
 		{
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
-			if (_map->getCamera()->scrollXY(
+			_map->getCamera()->scrollXY(
 				(int)((double)totalMouseMoveX / action->getXScale()),
-				(int)((double)totalMouseMoveY / action->getYScale()), false))
-			{
-				lastSucTotalMouseMoveX = totalMouseMoveX;
-				lastSucTotalMouseMoveY = totalMouseMoveY;
-			}
-			else
-				_map->getCamera()->scrollXY(
-					(int)((double)lastSucTotalMouseMoveX / action->getXScale()),
-					(int)((double)lastSucTotalMouseMoveY / action->getYScale()), false);
+				(int)((double)totalMouseMoveY / action->getYScale()), false);
 		}
 	}
 }
@@ -519,7 +511,6 @@ void BattlescapeState::mapPress(Action *action)
 			SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
 			mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
 			totalMouseMoveX = 0; totalMouseMoveY = 0;
-			lastSucTotalMouseMoveX = 0; lastSucTotalMouseMoveY = 0;
 			mouseMovedOverThreshold = false;
 			mouseScrollingStartTime = SDL_GetTicks();
 		}
