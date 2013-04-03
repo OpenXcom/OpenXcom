@@ -86,6 +86,7 @@ void Camera::mousePress(Action *action, State *)
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::getInt("battleScrollType") == SCROLL_TRIGGER)
 	{
 		_scrollTrigger = true;
+		mouseOver(action, 0);
 	}
 }
 
