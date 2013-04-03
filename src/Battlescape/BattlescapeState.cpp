@@ -809,11 +809,25 @@ void BattlescapeState::btnAbortClick(Action *)
  * Show selected soldier info.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnStatsClick(Action *)
+void BattlescapeState::btnStatsClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		popup(new UnitInfoState(_game, _save->getSelectedUnit()));
+		bool b = true;
+		if (SCROLL_TRIGGER == Options::getInt("battleScrollType") &&
+			SDL_MOUSEBUTTONUP == action->getDetails()->type && SDL_BUTTON_LEFT == action->getDetails()->button.button)
+		{
+			int posX = action->getXMouse();
+			int posY = action->getYMouse();
+			if ((posX < (Camera::SCROLL_BORDER * action->getXScale()) && posX > 0)
+				|| (posX > (_map->getWidth() - Camera::SCROLL_BORDER) * action->getXScale())
+				|| (posY < (Camera::SCROLL_BORDER * action->getYScale()) && posY > 0)
+				|| (posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale()))
+				// To avoid handling this event as a click
+				// on the stats button when the mouse is on the scroll-border
+				b = false;
+		}
+		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit()));
 	}
 }
 

@@ -102,6 +102,15 @@ void Camera::mouseRelease(Action *action, State *)
 		_scrollY = 0;
 		_scrollTimer->stop();
 		_scrollTrigger = false;
+		int posX = action->getXMouse();
+		int posY = action->getYMouse();
+		if ((posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
+			|| (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
+			|| (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+			|| (posY > (_screenHeight - SCROLL_BORDER) * action->getYScale()))
+			// A cheap hack to avoid handling this event as a click
+			// on the map when the mouse is on the scroll-border
+			action->getDetails()->button.button = 0;
 	}
 }
 
