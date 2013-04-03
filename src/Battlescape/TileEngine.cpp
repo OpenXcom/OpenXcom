@@ -2292,7 +2292,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir)
 {
-	return validMeleeRange(unit->getPosition(), dir, unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), dir, unit->getArmor()->getSize(), target);
 }
 
 /*
@@ -2300,11 +2300,10 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir)
  * @param pos Position to check from.
  * @param direction direction to check, -1 for all.
  * @param size for large units, we have to do extra checks.
- * @param height units on stairs might protrude into the tile above.
  * @param *target the unit we want to attack, 0 for any unit.
  * @return true when range is valid.
  */
-bool TileEngine::validMeleeRange(Position pos, int direction, int size, int height, BattleUnit *target)
+bool TileEngine::validMeleeRange(Position pos, int direction, int size, BattleUnit *target)
 {
 	Position p;
 	

@@ -135,7 +135,7 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), _action.actor->getHeight(), 0))
+		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), 0))
 		{
 			_action.result = "STR_THERE_IS_NO_ONE_THERE";
 			_parent->popState();

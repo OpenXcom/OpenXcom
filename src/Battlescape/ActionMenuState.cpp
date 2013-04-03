@@ -37,6 +37,7 @@
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
 #include "../Ruleset/Armor.h"
+#include "TileEngine.h"
 
 namespace OpenXcom
 {
@@ -272,51 +273,16 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
-			BattleUnit *targetUnit = NULL;
-			Position p;
-			Pathfinding::directionToVector(_action->actor->getDirection(), &p);
-
-			for (int x = 0; x != _action->actor->getArmor()->getSize(); ++x)
-			{
-				for (int y = 0; y != _action->actor->getArmor()->getSize(); ++y)
-				{
-					SavedGame* savedGame = _game->getSavedGame();
-					Position actorPosition = _action->actor->getPosition();
-					Tile * tile (savedGame->getBattleGame()->getTile(Position(actorPosition.x + x, actorPosition.y + y, actorPosition.z) + p));		
-					if (tile)
-					{
-						if (tile->getUnit() && tile->getUnit() != _action->actor)
-						{
-							BattleUnit *target (tile->getUnit());
-							if (!target && (_action->actor->getHeight() - savedGame->getBattleGame()->getTile(actorPosition)->getTerrainLevel() > 24))
-								target = savedGame->getBattleGame()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
-							if (!savedGame->getBattleGame()->getPathfinding()->isBlocked(
-								savedGame->getBattleGame()->getTile(
-								actorPosition + Position(x, y, 0)), tile, _action->actor->getDirection(), 0))
-							{
-								targetUnit = tile->getUnit();
-								break;
-							}
-						}
-					}
-					if (targetUnit)
-						break;
-				}
-				if (targetUnit)
-					break;
-			}
-
-
-			if (targetUnit)
-			{
-				_game->popState();
-			}
-			else
+			
+			if (!_game->getSavedGame()->getBattleGame()->getTileEngine()->validMeleeRange(
+				_action->actor->getPosition(),
+				_action->actor->getDirection(),
+				_action->actor->getArmor()->getSize(),
+				0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
-				_game->popState();
 			}
-
+			_game->popState();
 		}
 		else
 		{
