@@ -292,6 +292,14 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
 					}
 			}
+			else if (_movementType == MT_FLY && belowDestination && belowDestination->getUnit() && belowDestination->getUnit() != unit)
+			{
+				// 2 or more voxels poking into this tile = no go
+				if (belowDestination->getUnit()->getHeight() + belowDestination->getUnit()->getFloatHeight() - belowDestination->getTerrainLevel() > 26)
+				{
+					return 255;
+				}
+			}
 
 			// this means the destination is probably outside the map
 			if (!destinationTile)
