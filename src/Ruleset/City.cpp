@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "City.h"
 
 namespace OpenXcom
@@ -55,10 +56,12 @@ void City::load(const YAML::Node &node)
 		else if (key == "lon")
 		{
 			i.second() >> _lon;
+			_lon *= M_PI / 180;
 		}
 		else if (key == "lat")
 		{
 			i.second() >> _lat;
+			_lat *= M_PI / 180;
 		}
 	}
 }
