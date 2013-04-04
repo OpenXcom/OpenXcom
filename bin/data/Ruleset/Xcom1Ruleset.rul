@@ -647,7 +647,7 @@ regions:
         - [115, 132.5, 21, 25.5]
   - type: STR_SOUTH_EAST_ASIA
     cost: 750000
-    lonMin:
+    areas:
       - [90, 105, -50, 10]
       - [105, 150, -50, -5]
     cities:
