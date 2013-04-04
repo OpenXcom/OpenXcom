@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include "RuleCountry.h"
 #include "../Engine/RNG.h"
+#include <math.h>
 
 namespace OpenXcom
 {

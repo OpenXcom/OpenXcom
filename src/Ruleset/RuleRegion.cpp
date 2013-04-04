@@ -21,6 +21,7 @@
 #include "City.h"
 #include "../Engine/Exception.h"
 #include "../Engine/RNG.h"
+#include <math.h>
 
 namespace OpenXcom
 {
