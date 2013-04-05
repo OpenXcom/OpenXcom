@@ -145,7 +145,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
-	_txtName = new Text(120, 10, _icons->getX() + 135, _icons->getY() + 32);
+	_txtName = new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
 
 	_numTimeUnits = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
 	_barTimeUnits = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
