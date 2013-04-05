@@ -1683,6 +1683,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 			}
 			if ((unit->getDirection() == 6 || unit->getDirection() == 5 || unit->getDirection() == 7) && door == -1) // west, southwest or northwest
 			{
+				tile = _save->getTile(unit->getPosition() + Position(x,y,0));
 				door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
 				if (door == 0 && rClick)
 					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
