@@ -31,9 +31,13 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
+#include "../Engine/Language.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "PatrolBAIState.h"
+#include "InfoboxOKState.h"
+#include "InfoboxState.h"
 #include "../Savegame/Node.h"
 
 namespace OpenXcom
@@ -151,6 +155,27 @@ void UnitDieBState::think()
 		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
+		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
+		{
+			Game *game = _parent->getSave()->getBattleState()->getGame();
+			if (_unit->getStatus() == STATUS_DEAD)
+			{
+				if (_damageType == DT_NONE)
+				{
+					game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+				}
+				else if (Options::getBool("battleNotifyDeath"))
+				{
+					std::wstringstream ss;
+					ss << _unit->getName(game->getLanguage()) << L'\n' << game->getLanguage()->getString("STR_HAS_BEEN_KILLED");
+					game->pushState(new InfoboxState(game, ss.str()));
+				}
+			}
+			else
+			{
+				game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
+			}
+		}
 	}
 
 	_parent->getMap()->cacheUnit(_unit);

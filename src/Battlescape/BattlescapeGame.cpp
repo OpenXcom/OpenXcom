@@ -608,12 +608,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			if (murderweapon)
 			{
 				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
-				if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
-				{
-					std::wstringstream ss;
-					ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
-					_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-				}
 			}
 			else
 			{
@@ -628,20 +622,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					{
 						// terrain explosion
 						statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
-						if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
-						{
-							std::wstringstream ss;
-							ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
-							_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-						}
 					}
 					else
 					{
 						// no murderer, and no terrain explosion, must be fatal wounds
-						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
-						// show a little infobox with the name of the unit and "... is panicking"
-						if ((*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
-						_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+						statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 					}
 				}
 			}
@@ -654,10 +639,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
-			if ((*j)->getFaction() == FACTION_PLAYER)
-			{
-				_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
-			}
 		}
 	}
 	BattleUnit *bu = _save->getSelectedUnit();
@@ -1012,16 +993,6 @@ void BattlescapeGame::popState()
 		_save->setSelectedUnit(0);
 	}
 	_parentState->updateSoldierInfo();
-
-	// the unit became unconscious - show popup
-	if (action.actor && action.actor->getStatus() == STATUS_UNCONSCIOUS)
-	{
-		std::wstringstream ss;
-		ss << action.actor->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-	}
-	
-
 }
 
 bool BattlescapeGame::noActionsPending(BattleUnit *bu)
