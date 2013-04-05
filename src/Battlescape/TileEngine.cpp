@@ -965,10 +965,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
 
-		if (!action->weapon->getRules()->getTUAuto() || RNG::generate(0,3) < 3)
-			action->type = BA_SNAPSHOT;
-		else
+		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) < 3)
 			action->type = BA_AUTOSHOT;
+		else
+			action->type = BA_SNAPSHOT;
 
 		action->target = unit->getPosition();
 
