@@ -1027,7 +1027,15 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
-	// if (_save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
+	if (_save->getSide() != FACTION_PLAYER) // aliens reserve TUs as a percentage rather than just enough for a single action.
+	{
+		switch (effectiveTuReserved)
+		{
+		case BA_SNAPSHOT: return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits(); break;
+		case BA_AUTOSHOT: return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits(); break;
+		default: return tu > bu->getTimeUnits(); break;
+		}
+	}
 
 	// check TUs against slowest weapon if we have two weapons
 	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
@@ -1041,15 +1049,12 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
-		if (_save->getSide() == FACTION_PLAYER)
+		switch (effectiveTuReserved)
 		{
-			switch (effectiveTuReserved)
-			{
-			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-			default: ;
-			}
+		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+		case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+		default: ;
 		}
 		return false;
 	}

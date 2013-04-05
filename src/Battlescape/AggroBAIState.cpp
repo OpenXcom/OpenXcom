@@ -632,7 +632,13 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 
 	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
 	{
-		tu -= _unit->getActionTUs(_game->getBattleState()->getBattleGame()->getReservedAction(), action->weapon);
+		switch (_game->getBattleState()->getBattleGame()->getReservedAction())
+		{
+		case BA_SNAPSHOT: tu -= action->actor->getStats()->tu / 3; break;
+		case BA_AUTOSHOT: tu -= action->actor->getStats()->tu / 2; break;
+		default: break;
+		}
+		if (tu < 0) tu = 0;
 	}
 
 	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, tu);
