@@ -2251,5 +2251,9 @@ STR_CENTER_ON_ENEMY_9
 Ellenség-9-et Középre
 STR_OPENGL
 OpenGL
-STR_ENEMY_THREAT_LEVEL
-szinten az ellenséges fenyegetés
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+TALAJ
+STR_LIVING_QUARTERS_PLURAL
+Lakónegyed

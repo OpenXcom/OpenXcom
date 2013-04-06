@@ -2259,5 +2259,9 @@ STR_CENTER_ON_ENEMY_9
 Vycentrovat na nepřítele 9
 STR_OPENGL
 OpenGL
-STR_ENEMY_THREAT_LEVEL
-úroveň nepřátelského ohrožení
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+ZEMĚ
+STR_LIVING_QUARTERS_PLURAL
+Obytné buňky

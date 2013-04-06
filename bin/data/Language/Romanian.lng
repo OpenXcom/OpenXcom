@@ -2257,5 +2257,9 @@ STR_CENTER_ON_ENEMY_9
 Centrare pe Inamicul 9
 STR_OPENGL
 OpenGL
-STR_ENEMY_THREAT_LEVEL
-Nivelul de amenințare inamic
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+LA SOL
+STR_LIVING_QUARTERS_PLURAL
+Ansamblu Locuințe

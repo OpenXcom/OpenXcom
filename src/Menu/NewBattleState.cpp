@@ -126,7 +126,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 	
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
-	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ENEMY_THREAT_LEVEL"));
+	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ENEMY_WEAPON_LEVEL"));
 	
 	_itemLevels.push_back("STR_LOW");
 	_itemLevels.push_back("STR_MEDIUM");

@@ -2259,5 +2259,9 @@ STR_CENTER_ON_ENEMY_9
 Центр на противнике 9
 STR_OPENGL
 OpenGL
-STR_ENEMY_THREAT_LEVEL
-Уровень вражеской угрозы
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+НА ЗЕМЛЕ
+STR_LIVING_QUARTERS_PLURAL
+Жилые модули

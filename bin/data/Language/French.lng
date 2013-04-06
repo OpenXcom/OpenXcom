@@ -2253,5 +2253,9 @@ STR_CENTER_ON_ENEMY_9
 Centrer sur l'ennemi #9
 STR_OPENGL
 OpenGL
-STR_ENEMY_THREAT_LEVEL
-Niveau de menace de l'ennemi
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+SOL
+STR_LIVING_QUARTERS_PLURAL
+Baraquements
