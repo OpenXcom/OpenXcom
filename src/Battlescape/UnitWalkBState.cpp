@@ -155,7 +155,7 @@ void UnitWalkBState::think()
 								{
 									_falling = false;
 									_pf->dequeuePath();
-									otherTileBelow->getUnit()->startWalking(dir, t->getPosition(), t, bu, bt, onScreen);
+									otherTileBelow->getUnit()->startWalking(dir, t->getPosition(), bu, onScreen);
 									_parent->getSave()->addFallingUnit(otherTileBelow->getUnit());
 									_parent->getSave()->addFallingUnit(_unit);
 									_parent->statePushFront(new UnitFallBState(_parent));
@@ -383,8 +383,7 @@ void UnitWalkBState::think()
 				if (_unit->spendEnergy(energy))
 				{
 					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
-					Tile *tileBelowDestination = _parent->getSave()->getTile(destination + Position(0,0,-1));
-					_unit->startWalking(dir, destination, _parent->getSave()->getTile(destination), tileBelow, tileBelowDestination, onScreen);
+					_unit->startWalking(dir, destination, tileBelow, onScreen);
 				}
 				else
 				{

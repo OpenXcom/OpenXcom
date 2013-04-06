@@ -2234,9 +2234,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		if (unitpos != occupant->getPosition() && occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 		{
 			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
-				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
-				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
-				_save->getTile(occupant->getPosition() + Position(0,0,-2)), true);
+				_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
 			_save->addFallingUnit(occupant);
 		}
 		else if (unitpos != occupant->getPosition())
