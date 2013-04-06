@@ -579,7 +579,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 				maxViewDistance -= t->getSmoke()/2;
 			}
 		}
-		if (distanceSq(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance*maxViewDistance)
+		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
 		{
 			unitSeen = false;
 		}
