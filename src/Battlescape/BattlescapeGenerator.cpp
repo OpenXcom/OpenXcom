@@ -56,6 +56,7 @@
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "PatrolBAIState.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -172,11 +173,16 @@ void BattlescapeGenerator::nextStage()
 		// kill all units not in endpoint area
 		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if (!(*j)->isInExitArea(END_POINT))
+			if (!(*j)->isInExitArea(END_POINT) || (*j)->getFaction() == FACTION_HOSTILE)
 			{
-				(*j)->setTile(0);
 				(*j)->instaKill();
 			}
+			if ((*j)->getTile())
+			{
+				(*j)->getTile()->setUnit(0);
+			}
+			(*j)->setTile(0);
+			(*j)->setPosition(Position(-1,-1,-1), false);
 		}
 	}
 	
@@ -207,16 +213,37 @@ void BattlescapeGenerator::nextStage()
 					_save->setUnitPosition((*j), node->getPosition());
 					(*j)->getVisibleTiles()->clear();
 				}
+				else
+				{
+					Position entryPoint = Position(-1, -1, -1);
+					int tries = 100;
+					while (entryPoint == Position(-1, -1, -1) && tries)
+					{
+						BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
+						if (k->getPosition() != Position(-1,-1,-1) && k->getFaction() == FACTION_PLAYER && k->getArmor()->getSize() == 1)
+						{
+							entryPoint = k->getPosition();
+						}
+						--tries;
+					}
+					if (tries)
+					{
+						bool found = false;
+						for (int dir = 0; dir <= 7 && !found; ++dir)
+						{
+							Position offset;
+							_save->getPathfinding()->directionToVector(dir, &offset);
+							if (_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
+								&& _save->setUnitPosition((*j), entryPoint + offset))
+							{
+								(*j)->getVisibleTiles()->clear();
+								highestSoldierID = (*j)->getId();
+								found = true;
+							}
+						}
+					}
+				}
 			}
-			else
-			{
-				(*j)->setTile(0);
-			}
-		}
-		else
-		{
-			(*j)->setTile(0);
-			(*j)->instaKill(); // we don't want them waking up.
 		}
 	}
 	
