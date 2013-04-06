@@ -220,7 +220,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_txtSpace->setText(_game->getLanguage()->getString("STR_SPACE_USED_SPACE_AVAILABLE"));
 
 	_txtQuarters->setColor(Palette::blockOffset(13)+5);
-	_txtQuarters->setText(_game->getLanguage()->getString("STR_LIVING_QUARTERS"));
+	_txtQuarters->setText(_game->getLanguage()->getString("STR_LIVING_QUARTERS_PLURAL"));
 
 	_numQuarters->setColor(Palette::blockOffset(13));
 
