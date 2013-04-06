@@ -59,7 +59,7 @@ private:
 	int _totalTUCost;
 public:
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
-	///XXX please document
+	/// whether or not movement between starttile and endtile is possible in the direction.
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;

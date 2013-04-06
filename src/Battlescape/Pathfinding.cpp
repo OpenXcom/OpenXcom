@@ -506,20 +506,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		BattleUnit *unit = tile->getUnit();
 		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
-		//if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
 		if (_unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
-		//if (_unit->getFaction() != FACTION_PLAYER)
-		{
-			//if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
-			// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies		
-		
-#if 0
-			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
-			{
-				if ((*i)->getTile() == tile) return true;	// unit know, were all visible for him units
-			}
-#endif
-		}
 	}
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
