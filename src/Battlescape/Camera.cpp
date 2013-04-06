@@ -32,8 +32,7 @@ namespace OpenXcom
 /**
  * Sets up a camera.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()),
-																																_mapOffset(-250,250,0), _center(), _scrollTrigger(false), _scrollX(0), _scrollY(0), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
+Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()), _mapOffset(-250,250,0), _center(), _scrollX(0), _scrollY(0), _scrollTrigger(false), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
 {
 }
 
@@ -205,7 +204,7 @@ void Camera::mouseOver(Action *action, State *)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::keyboardPress(Action *action, State *state)
+void Camera::keyboardPress(Action *action, State *)
 {
 	int key = action->getDetails()->key.keysym.sym;
 	int scrollSpeed = Options::getInt("battleScrollSpeed");
@@ -241,7 +240,7 @@ void Camera::keyboardPress(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::keyboardRelease(Action *action, State *state)
+void Camera::keyboardRelease(Action *action, State *)
 {
 	int key = action->getDetails()->key.keysym.sym;
 	int scrollSpeed = Options::getInt("battleScrollSpeed");
