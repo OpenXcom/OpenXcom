@@ -1117,7 +1117,7 @@ void Globe::drawShadow()
 }
 
 
-void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 Color)
+void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16)
 {
 	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
 	x1+=0.5;
@@ -1486,7 +1486,7 @@ void Globe::drawDetail()
 			for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 			{
 				color += 10;
-				for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
 				{
 					double lon2 = (*i)->getRules()->getLonMax().at(k);
 					double lon1 = (*i)->getRules()->getLonMin().at(k);
@@ -1506,7 +1506,7 @@ void Globe::drawDetail()
 			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 			{
 				color += 10;
-				for(int k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
 				{
 					double lon2 = (*i)->getRules()->getLonMax().at(k);
 					double lon1 = (*i)->getRules()->getLonMin().at(k);
