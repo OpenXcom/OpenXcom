@@ -641,7 +641,8 @@ void Map::drawTerrain(Surface *surface)
 					}
 					if (tile->getSmoke() && tile->isDiscovered(2))
 					{
-						frameNumber = 8 + int(floor((tile->getSmoke() / 5.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
 						{
 							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);

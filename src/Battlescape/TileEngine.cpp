@@ -570,13 +570,13 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		Tile *t = _save->getTile(currentUnit->getPosition());
-		int maxViewDistance = MAX_VIEW_DISTANCE - (t->getSmoke()/2);
+		int maxViewDistance = MAX_VIEW_DISTANCE - (2 * t->getSmoke() / 3);
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
 		{
 			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
 			{
 				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
-				maxViewDistance -= t->getSmoke()/2;
+				maxViewDistance -= 2 * t->getSmoke() / 3;
 			}
 		}
 		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
