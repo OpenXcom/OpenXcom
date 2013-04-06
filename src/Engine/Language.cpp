@@ -191,7 +191,7 @@ public:
 	static PluralityRules *create() { return new HungarianRules; }
 };
 
-const char *HungarianRules::getSuffix(unsigned n) const
+const char *HungarianRules::getSuffix(unsigned) const
 {
 	return "_1";
 }

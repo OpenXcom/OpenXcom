@@ -1633,7 +1633,7 @@ void GeoscapeState::timerReset()
  * @param pause True if we want to resume
  * from the same spot we left off.
  */
-void GeoscapeState::musicStop(bool pause)
+void GeoscapeState::musicStop(bool)
 {
 	_music = false;
 }
