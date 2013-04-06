@@ -2155,3 +2155,5 @@ STR_ABANDON_GAME_QUESTION
 НАПУСКАНЕ НА ИГРАТА?
 STR_OPENGL
 OpenGL
+STR_ENEMY_THREAT_LEVEL
+Enemy Threat Level

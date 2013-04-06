@@ -2259,3 +2259,5 @@ STR_CENTER_ON_ENEMY_9
 Центр на противнике 9
 STR_OPENGL
 OpenGL
+STR_ENEMY_THREAT_LEVEL
+Уровень вражеской угрозы
