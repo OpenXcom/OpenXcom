@@ -1745,13 +1745,13 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 				{
 					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
 					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-1, 0, 0));
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -1, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(2, 0, 0));
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 2, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 0, 0));
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -2, 0));
 					if (tile) tile->openDoor(MapData::O_WESTWALL);
 				}
 			}
