@@ -48,6 +48,7 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_text->setBig();
+	_text->setWordWrap(true);
 	_text->setText(msg);
 	_text->setColor(Palette::blockOffset(0));
 	_text->setHighContrast(true);
