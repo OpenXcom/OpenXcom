@@ -233,7 +233,7 @@ void BattlescapeGenerator::nextStage()
 						{
 							Position offset;
 							_save->getPathfinding()->directionToVector(dir, &offset);
-							if (_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
+							if (!_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
 								&& _save->setUnitPosition((*j), entryPoint + offset))
 							{
 								(*j)->getVisibleTiles()->clear();
@@ -271,7 +271,8 @@ void BattlescapeGenerator::nextStage()
 	}
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		_save->getTileEngine()->calculateFOV((*j));
+		if (!(*j)->isOut())
+			_save->getTileEngine()->calculateFOV((*j));
 	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
