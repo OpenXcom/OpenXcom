@@ -22,6 +22,7 @@
 #include <vector>
 #include "Position.h"
 #include "BattlescapeGame.h"
+#include "../Savegame/Tile.h"
 
 namespace OpenXcom
 {
@@ -46,7 +47,7 @@ private:
 	unsigned int _position;
 	static const int _trail[11][36];
 	Surface *_sprite;
-	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false);
+	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
