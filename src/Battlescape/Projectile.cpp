@@ -86,6 +86,7 @@ Projectile::~Projectile()
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
+	Tile *targetTile = 0;
 	int direction;		
 	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	int dirXshift[24] = {9, 15, 15, 13, 7, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
@@ -140,7 +141,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store this target voxel.
-		Tile *targetTile = _save->getTile(_action.target);
+		targetTile = _save->getTile(_action.target);
 		Position hitPos;
 		int test = -1;
 		if (targetTile->getUnit() != 0)
@@ -232,7 +233,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, false);
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -324,8 +325,9 @@ bool Projectile::calculateThrow(double accuracy)
  * @param origin Startposition of the trajectory.
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
+ * @param targetTile Tile of target. Default = 0.
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -334,23 +336,44 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double maxRange = keepRange?realDistance:16*1000; // 1000 tiles
 	maxRange = _action.type == BA_HIT?46:maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
-	/*
-	This modifies the accuracy based on the distance from the target. The accuracy decreases linearly (2% per tile or 0.125% per voxel) when shooting beyond the limit of the firing mode:
-	auto shot: 7 tiles or 112 voxels
-	snap shot: 15 tiles or 240 voxels
-	aimed shot: no penalty
-	*/
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		if (_action.type == BA_AUTOSHOT && realDistance > 112)
+		double baseDeviation, accuracyPenalty;
+
+		if (targetTile)
 		{
-			accuracy -= 0.00125 * (realDistance - 112);
+			BattleUnit* targetUnit = targetTile->getUnit();
+			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
+				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+			else
+				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
+			// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
+			if (targetUnit && targetUnit->isKneeled())
+				accuracyPenalty += 0.05;
 		}
-		if (_action.type == BA_SNAPSHOT && realDistance > 240)
-		{
-			accuracy -= 0.00125 * (realDistance - 240);
-		}
+		else
+			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
+
+		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+
+		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
+		if (baseDeviation < 0.02)
+			baseDeviation = 0.02;
+		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
+		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
+		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
+		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
+		double cos_fi = cos(fi);
+
+		// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
+		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
+		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
+		target->z = (int)(origin.z + maxRange * sin(fi));
+
+		return;
 	}
+
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
 	double maxDeviation = 2.5;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
