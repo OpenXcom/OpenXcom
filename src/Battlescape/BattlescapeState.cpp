@@ -443,6 +443,18 @@ void BattlescapeState::mapOver(Action *action)
 {
 	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
 	{
+		// The following is the workaround for a rare problem where sometimes
+		// the mouse-release event is missed for any reason.
+		// (checking: is the dragScroll-mouse-button still pressed?)
+		// However if the SDL is also missed the release event, then it is to no avail :(
+		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) { // so we missed again the mouse-release :(
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
+				_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+			isMouseScrolled = isMouseScrolling = false;
+			return;
+		}
+
 		isMouseScrolled = true;
 
 		if (_save->isDragInverted())
@@ -472,17 +484,9 @@ void BattlescapeState::mapOver(Action *action)
 		else
 		{
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
-			if (_map->getCamera()->scrollXY(
+			_map->getCamera()->scrollXY(
 				(int)((double)totalMouseMoveX / action->getXScale()),
-				(int)((double)totalMouseMoveY / action->getYScale()), false))
-			{
-				lastSucTotalMouseMoveX = totalMouseMoveX;
-				lastSucTotalMouseMoveY = totalMouseMoveY;
-			}
-			else
-				_map->getCamera()->scrollXY(
-					(int)((double)lastSucTotalMouseMoveX / action->getXScale()),
-					(int)((double)lastSucTotalMouseMoveY / action->getYScale()), false);
+				(int)((double)totalMouseMoveY / action->getYScale()), false);
 		}
 	}
 }
@@ -507,7 +511,6 @@ void BattlescapeState::mapPress(Action *action)
 			SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
 			mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
 			totalMouseMoveX = 0; totalMouseMoveY = 0;
-			lastSucTotalMouseMoveX = 0; lastSucTotalMouseMoveY = 0;
 			mouseMovedOverThreshold = false;
 			mouseScrollingStartTime = SDL_GetTicks();
 		}
@@ -521,7 +524,21 @@ void BattlescapeState::mapPress(Action *action)
  */
 void BattlescapeState::mapClick(Action *action)
 {
-	// Right-button release: release mouse-scroll-mode
+	// The following is the workaround for a rare problem where sometimes
+	// the mouse-release event is missed for any reason.
+	// However if the SDL is also missed the release event, then it is to no avail :(
+	// (this part handles the release if it is missed and now an other button is used)
+	if (isMouseScrolling) {
+		if (action->getDetails()->button.button != _save->getDragButton()
+		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) { // so we missed again the mouse-release :(
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
+				_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+			isMouseScrolled = isMouseScrolling = false;
+		}
+	}
+
+	// DragScroll-Button release: release mouse-scroll-mode
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
@@ -792,11 +809,25 @@ void BattlescapeState::btnAbortClick(Action *)
  * Show selected soldier info.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnStatsClick(Action *)
+void BattlescapeState::btnStatsClick(Action *action)
 {
 	if (playableUnitSelected())
 	{
-		popup(new UnitInfoState(_game, _save->getSelectedUnit()));
+		bool b = true;
+		if (SCROLL_TRIGGER == Options::getInt("battleScrollType") &&
+			SDL_MOUSEBUTTONUP == action->getDetails()->type && SDL_BUTTON_LEFT == action->getDetails()->button.button)
+		{
+			int posX = action->getXMouse();
+			int posY = action->getYMouse();
+			if ((posX < (Camera::SCROLL_BORDER * action->getXScale()) && posX > 0)
+				|| (posX > (_map->getWidth() - Camera::SCROLL_BORDER) * action->getXScale())
+				|| (posY < (Camera::SCROLL_BORDER * action->getYScale()) && posY > 0)
+				|| (posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale()))
+				// To avoid handling this event as a click
+				// on the stats button when the mouse is on the scroll-border
+				b = false;
+		}
+		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit()));
 	}
 }
 

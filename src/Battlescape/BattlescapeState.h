@@ -78,7 +78,6 @@ private:
 	Position mapOffsetBeforeMouseScrolling;
 	Uint32 mouseScrollingStartTime;
 	int totalMouseMoveX, totalMouseMoveY;
-	int lastSucTotalMouseMoveX, lastSucTotalMouseMoveY;
 	bool mouseMovedOverThreshold;
 
 	void handleItemClick(BattleItem *item);
