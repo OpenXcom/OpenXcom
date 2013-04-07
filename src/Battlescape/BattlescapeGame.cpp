@@ -1033,7 +1033,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 		{
 		case BA_SNAPSHOT: return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits(); break;
 		case BA_AUTOSHOT: return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits(); break;
-		default: return tu > bu->getTimeUnits(); break;
+		default: return tu < bu->getTimeUnits(); break;
 		}
 	}
 
