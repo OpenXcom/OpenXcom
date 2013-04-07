@@ -219,6 +219,7 @@ void UnitWalkBState::think()
 									p.z = t->getPosition().z*24 + t->getTerrainLevel();
 									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
 									t->getInventory()->erase(i);
+									_parent->popState();
 									return;
 								}
 							}

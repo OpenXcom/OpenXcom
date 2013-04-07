@@ -220,6 +220,19 @@ void ExplosionBState::explode()
 		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
 	}
 
+	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+	{
+		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin(); j != _parent->getSave()->getItems()->end(); ++j)
+		{
+			if (_item->getId() == (*j)->getId())
+			{
+				delete *j;
+				_parent->getSave()->getItems()->erase(j);
+				break;
+			}
+		}
+	}
+
 }
 
 }
