@@ -88,7 +88,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/*2 STR_MEDIUM */
+		/*2 STR_MEDIUM_UC */
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -829,7 +829,7 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
-				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
+				if(p->getGlobalType() == CWPGT_MISSILE && p->getPosition() / 8 >= p->getRange())
 				{
 					p->remove();
 				}
