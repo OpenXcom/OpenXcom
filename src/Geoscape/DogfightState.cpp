@@ -478,12 +478,12 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_w2Timer->onTimer((StateHandler)&DogfightState::fireWeapon2);
 
 	_ufoWtimer->onTimer((StateHandler)&DogfightState::ufoFireWeapon);
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * _game->getSavedGame()->getDifficulty()) * 75;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * 75;
 	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)&DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime()) - 30 * _game->getSavedGame()->getDifficulty()) * 20;
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime()) - 30 * (int)(_game->getSavedGame()->getDifficulty())) * 20;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)&DogfightState::animateCraftDamage);
@@ -965,11 +965,11 @@ void DogfightState::move()
 		AlienMission *mission = _ufo->getMission();
 		mission->ufoShotDown(*_ufo, *_game, *_globe);
 		// Check for retaliation trigger.
-		if (RNG::generate(0, 100) > 4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))
+		if (RNG::generate(0, 100) > 4 * (24 - (int)(_game->getSavedGame()->getDifficulty())))
 		{
 			// Spawn retaliation mission.
 			std::string targetRegion;
-			if (RNG::generate(0, 100) <= 50 - 6 * static_cast<int>(_game->getSavedGame()->getDifficulty()))
+			if (RNG::generate(0, 100) <= 50 - 6 * (int)(_game->getSavedGame()->getDifficulty()))
 			{
 				// Attack on UFO's mission region
 				targetRegion = _ufo->getMission()->getRegion();
@@ -1137,7 +1137,7 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * _game->getSavedGame()->getDifficulty()) * 75;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * 75;
 	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 

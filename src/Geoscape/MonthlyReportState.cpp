@@ -118,7 +118,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	case 11: m = "STR_NOV"; break;
 	case 12: m = "STR_DEC"; break;
 	}
-	int difficulty_threshold = 100*(_game->getSavedGame()->getDifficulty()-9);
+	int difficulty_threshold = 100*((int)(_game->getSavedGame()->getDifficulty())-9);
 
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_MONTH") << L'\x01' << _game->getLanguage()->getString(m) << L" " << year;

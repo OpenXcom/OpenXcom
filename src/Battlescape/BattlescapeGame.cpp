@@ -1541,7 +1541,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
 	
-	int difficulty = _parentState->getGame()->getSavedGame()->getDifficulty();
+	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
 	int divider = 1;
 	if (!difficulty)
 		divider = 2;

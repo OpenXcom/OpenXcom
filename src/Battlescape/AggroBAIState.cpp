@@ -220,7 +220,7 @@ void AggroBAIState::think(BattleAction *action)
 		takeCoverAction(action);
 		action->reckless = true;
 	}
-	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0, 9 - action->diff) == 0)
+	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
 		grenadeAction(action);
 	}

@@ -1543,7 +1543,7 @@ void GeoscapeState::time1Month()
 	determineAlienMissions();
 	if (monthsPassed > 5)
 		determineAlienMissions();
-	if (monthsPassed >= 14 - _game->getSavedGame()->getDifficulty()
+	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
 	{
 		newRetaliation = true;
