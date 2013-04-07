@@ -438,21 +438,42 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	// alien base disappears (if you didn't abort)
-	if (!aborted)
+	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
+		bool destroyAlienBase = true;
+		if (aborted)
+		{
+			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
+			{
+				// get recoverable map data objects from the battlescape map
+				if (battle->getTiles()[i]->getMapData(4) && battle->getTiles()[i]->getMapData(4)->getSpecialType() == UFO_NAVIGATION)
+				{
+					destroyAlienBase = false;
+					break;
+				}
+			}
+		}
 		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 		{
 			if ((*i)->isInBattlescape())
 			{
-				// Take care to remove supply missions for this base.
-				std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
-					      ClearAlienBase(*i));
-				delete *i;
-				save->getAlienBases()->erase(i);
-				break;
+				if (destroyAlienBase)
+				{
+					// Take care to remove supply missions for this base.
+					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
+								ClearAlienBase(*i));
+					delete *i;
+					save->getAlienBases()->erase(i);
+					break;
+				}
+				else
+				{
+					(*i)->setInBattlescape(false);
+				}
 			}
 		}
 	}
+
 	// lets see what happens with units
 
 	// first, we evaluate how many surviving XCom units there are, and how many are conscious
