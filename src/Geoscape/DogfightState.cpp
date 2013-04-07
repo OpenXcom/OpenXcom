@@ -1222,31 +1222,38 @@ void DogfightState::setStatus(const std::string &status)
  */
 void DogfightState::btnMinimizeClick(Action *)
 {
-	if(_currentDist == STANDOFF_DIST && !_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
-		setMinimized(true);
-		_window->setVisible(false);
-		_preview->setVisible(false);
-		_btnStandoff->setVisible(false);
-		_btnCautious->setVisible(false);
-		_btnStandard->setVisible(false);
-		_btnAggressive->setVisible(false);
-		_btnDisengage->setVisible(false);
-		_btnUfo->setVisible(false);
-		_btnMinimize->setVisible(false);
-		_battle->setVisible(false);
-		_weapon1->setVisible(false);
-		_range1->setVisible(false);
-		_weapon2->setVisible(false);
-		_range2->setVisible(false);
-		_damage->setVisible(false);
-		_txtAmmo1->setVisible(false);
-		_txtAmmo2->setVisible(false);
-		_txtDistance->setVisible(false);
-		_preview->setVisible(false);
-		_txtStatus->setVisible(false);
-		_btnMinimizedIcon->setVisible(true);
-		_txtInterceptionNumber->setVisible(true);
+		if (_currentDist == STANDOFF_DIST)
+		{
+			setMinimized(true);
+			_window->setVisible(false);
+			_preview->setVisible(false);
+			_btnStandoff->setVisible(false);
+			_btnCautious->setVisible(false);
+			_btnStandard->setVisible(false);
+			_btnAggressive->setVisible(false);
+			_btnDisengage->setVisible(false);
+			_btnUfo->setVisible(false);
+			_btnMinimize->setVisible(false);
+			_battle->setVisible(false);
+			_weapon1->setVisible(false);
+			_range1->setVisible(false);
+			_weapon2->setVisible(false);
+			_range2->setVisible(false);
+			_damage->setVisible(false);
+			_txtAmmo1->setVisible(false);
+			_txtAmmo2->setVisible(false);
+			_txtDistance->setVisible(false);
+			_preview->setVisible(false);
+			_txtStatus->setVisible(false);
+			_btnMinimizedIcon->setVisible(true);
+			_txtInterceptionNumber->setVisible(true);
+		}
+		else
+		{
+			setStatus("STR_MINIMISE_AT_STANDOFF_RANGE_ONLY");
+		}
 	}
 }
 
