@@ -36,8 +36,6 @@ class Map;
 class Camera
 {
 private:
-	static const int SCROLL_BORDER = 5;
-	static const int SCROLL_DIAGONAL_EDGE = 60;
 	Timer *_scrollTimer;
 	int _spriteWidth, _spriteHeight;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
@@ -50,6 +48,8 @@ private:
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
 	Map *_map;
 public:
+	static const int SCROLL_BORDER = 5;
+	static const int SCROLL_DIAGONAL_EDGE = 60;
 	/// Creates a new camera.
 	Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight);
 	/// Cleans up the camera.
@@ -68,7 +68,7 @@ public:
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// Scrolls the view (when mouse-scrolling)
-	bool scrollXY(int x, int y, bool redraw);
+	void scrollXY(int x, int y, bool redraw);
 	/// Jump the view (when projectile in motion)
 	void jumpXY(int x, int y);
 	/// move map layer up
