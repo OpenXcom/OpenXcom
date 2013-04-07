@@ -300,7 +300,7 @@ void NewBattleState::initSave()
 	_craft = new Craft(rule->getCraft(_crafts[_selCraft]), base, 1);
 	base->getCrafts()->push_back(_craft);
 	// Generate soldiers
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 30; ++i)
 	{
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
