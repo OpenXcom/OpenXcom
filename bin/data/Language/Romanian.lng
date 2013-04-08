@@ -2143,17 +2143,17 @@ STR_EQUIPMENT_FOR_craftname
 Echipament pentru {1}
 STR_SELECT_SQUAD_FOR_craftname
 Alege Echipa din {1}
-STR_n_UNITS_IN_EXIT_AREA_0
-{N} Soldați În Zona De Evacuare
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} Soldat În Zona De Evacuare
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} Soldați În Zona De Evacuare
-STR_n_UNITS_OUTSIDE_EXIT_AREA_0
-{N} Soldați În Afara Zonei De Evacuare
+STR_n_UNITS_IN_EXIT_AREA_3
+{N} Soldați În Zona De Evacuare
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} Soldat În Afara Zonei De Evacuare
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
+{N} Soldați În Afara Zonei De Evacuare
+STR_n_UNITS_OUTSIDE_EXIT_AREA_3
 {N} Soldați În Afara Zonei De Evacuare
 STR_ABANDON_GAME_QUESTION
 PĂRĂSIȚI JOCUL?
