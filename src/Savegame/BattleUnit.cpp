@@ -56,7 +56,6 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
-//	_loftempsSet = soldier->getRules()->getLoftempsSet();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = 0;
 	_moveSound = -1;  // this one is hardcoded
@@ -115,7 +114,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : 
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
-//	_loftempsSet = unit->getLoftempsSet();
 	_loftempsSet = _armor->getLoftempsSet();
 	_deathSound = unit->getDeathSound();
 	_aggroSound = unit->getAggroSound();
