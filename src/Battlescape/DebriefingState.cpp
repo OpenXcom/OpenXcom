@@ -338,6 +338,7 @@ void DebriefingState::prepareDebriefing()
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getBattleGame();
 	bool aborted = battle->isAborted();
+	bool success = aborted;
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
@@ -459,6 +460,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (destroyAlienBase)
 				{
+					success = true;
 					// Take care to remove supply missions for this base.
 					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),
 								ClearAlienBase(*i));
@@ -554,7 +556,7 @@ void DebriefingState::prepareDebriefing()
 			if (oldFaction == FACTION_PLAYER)
 			{
 				(*j)->postMissionProcedures(save);
-				if (((*j)->isInExitArea() && battle->getMissionType() != "STR_BASE_DEFENSE") || !aborted)
+				if (((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success) || !aborted)
 				{ // so game is not aborted or aborted and unit is on exit area
 					playerInExitArea++;
 					if (soldier != 0)
@@ -660,7 +662,7 @@ void DebriefingState::prepareDebriefing()
 			addStat("STR_XCOM_CRAFT_LOST", 1, -(*i)->getRules()->getScore());
 		}
 	}
-	if (!aborted && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
+	if ((!aborted || success) && playersSurvived > 0) 	// RECOVER UFO : run through all tiles to recover UFO components and items
 	{
 		if (battle->getMissionType() == "STR_BASE_DEFENSE")
 		{
@@ -679,59 +681,62 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_IS_RECOVERED"));
 		}
 
-		for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
+		if (!aborted)
 		{
-			// get recoverable map data objects from the battlescape map
-			for (int part = 0; part < 4; part++)
+			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
-				if (battle->getTiles()[i]->getMapData(part))
+				// get recoverable map data objects from the battlescape map
+				for (int part = 0; part < 4; part++)
 				{
-					switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+					if (battle->getTiles()[i]->getMapData(part))
 					{
-					case UFO_POWER_SOURCE:
-						addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
-					case UFO_NAVIGATION:
-						addStat("STR_UFO_NAVIGATION", 1, 5); break;
-					case UFO_CONSTRUCTION:
-						addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
-					case ALIEN_FOOD:
-						addStat("STR_ALIEN_FOOD", 1, 2); break;
-					case ALIEN_REPRODUCTION:
-						addStat("STR_ALIEN_REPRODUCTION", 1, 2); break;
-					case ALIEN_ENTERTAINMENT:
-						addStat("STR_ALIEN_ENTERTAINMENT", 1, 2); break;
-					case ALIEN_SURGERY:
-						addStat("STR_ALIEN_SURGERY", 1, 2); break;
-					case EXAM_ROOM:
-						addStat("STR_EXAMINATION_ROOM", 1, 2); break;
-					case ALIEN_ALLOYS:
-						addStat("STR_ALIEN_ALLOYS", 1, 1); break;
-					case ALIEN_HABITAT:
-						addStat("STR_ALIEN_HABITAT", 1, 1); break;
-					case MUST_DESTROY: break; // this is the brain
-					default: break;
+						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+						{
+						case UFO_POWER_SOURCE:
+							addStat("STR_UFO_POWER_SOURCE", 1, 20); break;
+						case UFO_NAVIGATION:
+							addStat("STR_UFO_NAVIGATION", 1, 5); break;
+						case UFO_CONSTRUCTION:
+							addStat("STR_UFO_CONSTRUCTION", 1, 2); break;
+						case ALIEN_FOOD:
+							addStat("STR_ALIEN_FOOD", 1, 2); break;
+						case ALIEN_REPRODUCTION:
+							addStat("STR_ALIEN_REPRODUCTION", 1, 2); break;
+						case ALIEN_ENTERTAINMENT:
+							addStat("STR_ALIEN_ENTERTAINMENT", 1, 2); break;
+						case ALIEN_SURGERY:
+							addStat("STR_ALIEN_SURGERY", 1, 2); break;
+						case EXAM_ROOM:
+							addStat("STR_EXAMINATION_ROOM", 1, 2); break;
+						case ALIEN_ALLOYS:
+							addStat("STR_ALIEN_ALLOYS", 1, 1); break;
+						case ALIEN_HABITAT:
+							addStat("STR_ALIEN_HABITAT", 1, 1); break;
+						case MUST_DESTROY: break; // this is the brain
+						default: break;
+						}
+
 					}
-
 				}
-			}
-			// recover items from the floor
-			recoverItems(battle->getTiles()[i]->getInventory(), base);		
-		}
-
-		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
-		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
-		{
-			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			if ((*i)->item == "STR_ALIEN_ALLOYS")
-			{
-				(*i)->qty = (*i)->qty / aadivider;
-				(*i)->score = (*i)->score / aadivider;
+				// recover items from the floor
+				recoverItems(battle->getTiles()[i]->getInventory(), base);		
 			}
 
-			// recoverable battlescape tiles are now converted to items and put in base inventory
-			if ((*i)->recovery && (*i)->qty > 0)
+			int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
+			for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 			{
-				base->getItems()->addItem((*i)->item, (*i)->qty);
+				// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
+				if ((*i)->item == "STR_ALIEN_ALLOYS")
+				{
+					(*i)->qty = (*i)->qty / aadivider;
+					(*i)->score = (*i)->score / aadivider;
+				}
+
+				// recoverable battlescape tiles are now converted to items and put in base inventory
+				if ((*i)->recovery && (*i)->qty > 0)
+				{
+					base->getItems()->addItem((*i)->item, (*i)->qty);
+				}
 			}
 		}
 	}
