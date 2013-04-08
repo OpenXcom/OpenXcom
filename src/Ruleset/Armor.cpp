@@ -31,7 +31,6 @@ Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutin
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0;
-	_loftempsSet.push_back(3);
 }
 
 /**
