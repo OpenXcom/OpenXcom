@@ -446,7 +446,7 @@ void DebriefingState::prepareDebriefing()
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				// get recoverable map data objects from the battlescape map
-				if (battle->getTiles()[i]->getMapData(4) && battle->getTiles()[i]->getMapData(4)->getSpecialType() == UFO_NAVIGATION)
+				if (battle->getTiles()[i]->getMapData(3) && battle->getTiles()[i]->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
 				{
 					destroyAlienBase = false;
 					break;
@@ -785,7 +785,7 @@ void DebriefingState::prepareDebriefing()
 			delete (*i);
 		base->getVehicles()->clear();
 	}
-	if (_destroyBase)
+	if (_destroyBase && _game->getSavedGame()->getMonthsPassed() != -1)
 	{
 		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 		{
