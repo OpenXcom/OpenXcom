@@ -908,6 +908,7 @@ void GraphsState::drawFinanceLines()
 		size_t invertedEntry = _game->getSavedGame()->getFundsList().size() - (1 + entry);
 		maintTotals[entry] = _game->getSavedGame()->getMaintenances().at(invertedEntry);
 		balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(invertedEntry);
+		scoreTotals[entry] = _game->getSavedGame()->getResearchScores().at(invertedEntry);
 
 		for(std::vector<Country*>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 		{
