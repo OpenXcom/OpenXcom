@@ -556,7 +556,7 @@ void DebriefingState::prepareDebriefing()
 			if (oldFaction == FACTION_PLAYER)
 			{
 				(*j)->postMissionProcedures(save);
-				if (((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success) || !aborted))
+				if ((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success) || !aborted)
 				{ // so game is not aborted or aborted and unit is on exit area
 					playerInExitArea++;
 					if (soldier != 0)
