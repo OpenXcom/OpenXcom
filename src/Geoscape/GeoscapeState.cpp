@@ -1482,12 +1482,14 @@ void GeoscapeState::time1Day()
 			// now iterate through all the bases and remove this project from their labs
 			for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
 			{
-				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin (); iter2 != (*j)->getResearch().end (); ++iter2)
+				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
-						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") != (*iter2)->getRules()->getUnlocked().end())
+						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") == (*iter2)->getRules()->getUnlocked().end())
 					{
 						(*j)->removeResearch(*iter2);
+						// reset the iterator, the vector just got updated.
+						iter2 = (*j)->getResearch().begin();
 					}
 				}
 			}
