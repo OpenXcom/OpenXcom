@@ -905,19 +905,20 @@ void GraphsState::drawFinanceLines()
 	// determine which is the highest one being displayed, so we can adjust the scale
 	for(size_t entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
-		maintTotals[entry] = _game->getSavedGame()->getMaintenances().at(_game->getSavedGame()->getMaintenances().size() -(1+entry));
-		balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(_game->getSavedGame()->getFundsList().size()-(1+entry));
+		size_t invertedEntry = _game->getSavedGame()->getFundsList().size() - (1 + entry);
+		maintTotals[entry] = _game->getSavedGame()->getMaintenances().at(invertedEntry);
+		balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(invertedEntry);
 
 		for(std::vector<Country*>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 		{
-			scoreTotals[entry] += (*iter)->getActivityXcom().at(entry) - (*iter)->getActivityAlien().at(entry);
-			incomeTotals[entry] += (*iter)->getFunding().at((*iter)->getFunding().size()-(1+entry));
+			scoreTotals[entry] += (*iter)->getActivityXcom().at(invertedEntry) - (*iter)->getActivityAlien().at(invertedEntry);
+			incomeTotals[entry] += (*iter)->getFunding().at(invertedEntry);
 			if(_financeToggles.at(0) && incomeTotals[entry] > roof)
 				roof = incomeTotals[entry];
 		}
 		for(std::vector<Region*>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 		{
-			scoreTotals[entry] += (*iter)->getActivityXcom().at(entry) - (*iter)->getActivityAlien().at(entry);
+			scoreTotals[entry] += (*iter)->getActivityXcom().at(invertedEntry) - (*iter)->getActivityAlien().at(invertedEntry);
 		}
 		
 		if(_financeToggles.at(2) && maintTotals[entry] > roof)
