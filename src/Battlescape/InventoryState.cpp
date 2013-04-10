@@ -337,7 +337,8 @@ void InventoryState::btnPrevClick(Action *)
 		return;
 	_parent->selectPreviousPlayerUnit(false);
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
 		_parent->selectPreviousPlayerUnit(false);
 	}
@@ -354,7 +355,8 @@ void InventoryState::btnNextClick(Action *)
 		return;
 	_parent->selectNextPlayerUnit(false, false);
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
 		_parent->selectNextPlayerUnit(false, false);
 	}

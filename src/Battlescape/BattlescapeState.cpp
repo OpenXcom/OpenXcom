@@ -682,7 +682,10 @@ void BattlescapeState::btnKneelClick(Action *)
  */
 void BattlescapeState::btnInventoryClick(Action *)
 {
-	if (playableUnitSelected() && (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode()))
+	if (playableUnitSelected()
+		&& (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode())
+		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
+			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
