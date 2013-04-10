@@ -338,7 +338,7 @@ void DebriefingState::prepareDebriefing()
 	SavedGame *save = _game->getSavedGame();
 	SavedBattleGame *battle = save->getBattleGame();
 	bool aborted = battle->isAborted();
-	bool success = aborted;
+	bool success = !aborted;
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 	Base* base = 0;
@@ -471,6 +471,7 @@ void DebriefingState::prepareDebriefing()
 				else
 				{
 					(*i)->setInBattlescape(false);
+					break;
 				}
 			}
 		}
