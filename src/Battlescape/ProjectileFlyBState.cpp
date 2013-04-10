@@ -326,9 +326,9 @@ void ProjectileFlyBState::think()
 					{
 						offset = -1;
 					}
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3)));
 				}
-				else
+				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3)
 				{
 					_unit->aim(false);
 					_parent->getMap()->cacheUnits();
