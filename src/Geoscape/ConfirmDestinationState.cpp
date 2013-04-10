@@ -48,10 +48,10 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 224, 72, 16, 64);
+	_window = new Window(this, 256, 72, 0, 64);
 	_btnOk = new TextButton(50, 12, 68, 104);
 	_btnCancel = new TextButton(50, 12, 138, 104);
-	_txtTarget = new Text(214, 16, 21, 80);
+	_txtTarget = new Text(246, 32, 5, 72);
 
 	// Set palette
 	if (w != 0 && w->getId() == 0)
@@ -85,6 +85,8 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setColor(Palette::blockOffset(15)-1);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
+	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTarget->setWordWrap(true);
 	std::wstringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
