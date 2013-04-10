@@ -895,66 +895,111 @@ void GraphsState::drawFinanceLines()
 {
 	//set up arrays
 	int roof = 0;
+	int lowerLimit = 0;
 	int incomeTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int balanceTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int expendTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int maintTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int scoreTotals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	maintTotals[0] = _game->getSavedGame()->getBaseMaintenance();
 
 	// start filling those arrays with score values
 	// determine which is the highest one being displayed, so we can adjust the scale
 	for (size_t entry = 0; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
 		size_t invertedEntry = _game->getSavedGame()->getFundsList().size() - (1 + entry);
-		maintTotals[entry] = _game->getSavedGame()->getMaintenances().at(invertedEntry);
+		maintTotals[entry] += _game->getSavedGame()->getMaintenances().at(invertedEntry);
 		balanceTotals[entry] = _game->getSavedGame()->getFundsList().at(invertedEntry);
 		scoreTotals[entry] = _game->getSavedGame()->getResearchScores().at(invertedEntry);
 
 		for (std::vector<Country*>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
 		{
-			scoreTotals[entry] += (*iter)->getActivityXcom().at(invertedEntry) - (*iter)->getActivityAlien().at(invertedEntry);
 			incomeTotals[entry] += (*iter)->getFunding().at(invertedEntry);
-			if(_financeToggles.at(0) && incomeTotals[entry] > roof)
-				roof = incomeTotals[entry];
 		}
 		for (std::vector<Region*>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
 		{
 			scoreTotals[entry] += (*iter)->getActivityXcom().at(invertedEntry) - (*iter)->getActivityAlien().at(invertedEntry);
 		}
+
+		if (_financeToggles.at(0))
+		{
+			if (incomeTotals[entry] > roof)
+			{
+				roof = incomeTotals[entry];
+			}
+			if (incomeTotals[entry] < lowerLimit)
+			{
+				lowerLimit = incomeTotals[entry];
+			}
+		}
 		
-		if(_financeToggles.at(2) && maintTotals[entry] > roof)
-			roof = maintTotals[entry];
-		if(_financeToggles.at(3) && balanceTotals[entry] > roof)
-			roof = balanceTotals[entry];
-		if(_financeToggles.at(4) && scoreTotals[entry] > roof)
-			roof = scoreTotals[entry];
+		if (_financeToggles.at(2))
+		{
+			if (maintTotals[entry] > roof)
+			{
+				roof = maintTotals[entry];
+			}
+			if (maintTotals[entry] < lowerLimit)
+			{
+				lowerLimit = maintTotals[entry];
+			}
+		}
+		if (_financeToggles.at(3))
+		{
+			if (balanceTotals[entry] > roof)
+			{
+				roof = balanceTotals[entry];
+			}
+			if (balanceTotals[entry] < lowerLimit)
+			{
+				lowerLimit = balanceTotals[entry];
+			}
+		}
+		if (_financeToggles.at(4))
+		{
+			if (scoreTotals[entry] > roof)
+			{
+				roof = scoreTotals[entry];
+			}
+			if (scoreTotals[entry] < lowerLimit)
+			{
+				lowerLimit = scoreTotals[entry];
+			}
+		}
 	}
-	maintTotals[0] = _game->getSavedGame()->getBaseMaintenance();
-	if(_financeToggles.at(2) && maintTotals[0] > roof)
-		roof = maintTotals[0];
 	expendTotals[0] = balanceTotals[1] - balanceTotals[0];
 	if (expendTotals[0] < 0)
-		expendTotals[0] = 0;
-	if(_financeToggles.at(1) && expendTotals[0] > roof)
-		roof = expendTotals[0];
-
-	for(size_t entry = 1; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
-		expendTotals[entry] = ((balanceTotals[entry+1] + incomeTotals[entry]) - maintTotals[entry])-balanceTotals[entry];
-		if(expendTotals[entry] < 0)
-			expendTotals[entry] = 0;
-		if(_financeToggles.at(1) && expendTotals[entry] > roof)
-			roof = expendTotals[entry];
+		expendTotals[0] = 0;
+	}
+	if (_financeToggles.at(1) && expendTotals[0] > roof)
+	{
+		roof = expendTotals[0];
 	}
 
-	//adjust the scale to fit the upward maximum
-	for(int check = 1000; check <= 1000000000; check *= 10)
+	for (size_t entry = 1; entry != _game->getSavedGame()->getFundsList().size(); ++entry)
 	{
-		if(roof < check - (check/10))
+		expendTotals[entry] = ((balanceTotals[entry+1] + incomeTotals[entry]) - maintTotals[entry])-balanceTotals[entry];
+		if (expendTotals[entry] < 0)
 		{
-			_scale = check;
-			break;
+			expendTotals[entry] = 0;
 		}
+		if (_financeToggles.at(1) && expendTotals[entry] > roof)
+		{
+			roof = expendTotals[entry];
+		}
+	}
+	int range = roof - lowerLimit;
+	//adjust the scale to fit the upward maximum
+	int check = 250;
+	_scale = 100;
+	if (range > 9 * check)
+	{
+		while ( range > 9 * check)
+		{
+			check *= 2;
+		}
+		_scale = 10 * check;
 	}
 	
 	//toggle screens
