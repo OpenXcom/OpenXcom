@@ -592,6 +592,14 @@ void DebriefingState::prepareDebriefing()
 				// mind controlled units may as well count as unconscious
 				&& faction == FACTION_PLAYER)
 			{
+				for (std::vector<BattleItem*>::iterator k = (*j)->getInventory()->begin(); k != (*j)->getInventory()->end(); ++k)
+				{
+					if (!(*k)->getRules()->isFixed())
+					{
+						(*j)->getTile()->addItem(*k, _game->getRuleset()->getInventory("STR_GROUND"));
+					}
+				}
+
 				std::string corpseItem = (*j)->getArmor()->getCorpseItem();
 
 				// we need to remove that pesky underscore and add an STR_ for large unit corpses.
