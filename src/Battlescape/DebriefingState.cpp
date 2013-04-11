@@ -111,7 +111,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtTitle->setBig();
 
 	_txtItem->setColor(Palette::blockOffset(8)+5);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(_game->getLanguage()->getString("STR_LIST_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
