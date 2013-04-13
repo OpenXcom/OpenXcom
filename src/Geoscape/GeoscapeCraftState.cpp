@@ -58,7 +58,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnPatrol = new TextButton(192, 12, 32, 156);
 	_btnCancel = new TextButton(192, 12, 32, 172);
 	_txtTitle = new Text(200, 16, 32, 20);
-	_txtStatus = new Text(200, 9, 32, 36);
+	_txtStatus = new Text(200, 16, 32, 36);
 	_txtBase = new Text(200, 9, 32, 52);
 	_txtSpeed = new Text(200, 9, 32, 60);
 	_txtMaxSpeed = new Text(200, 9, 32, 68);
@@ -120,6 +120,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
+	_txtStatus->setWordWrap(true);
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_STATUS_") << L'\x01';
 	if (_waypoint != 0)

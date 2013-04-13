@@ -75,10 +75,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtItem = new Text(180, 9, 16, 24);
 	_txtQuantity = new Text(60, 9, 200, 24);
 	_txtScore = new Text(55, 9, 260, 24);
-	_txtUfoRecovery = new Text(180, 9, 16, 60);
+	_txtRecovery = new Text(180, 9, 16, 60);
 	_txtRating = new Text(120, 9, 64, 180);
 	_lstStats = new TextList(280, 80, 16, 32);
-	_lstUfoRecovery = new TextList(280, 80, 16, 32);
+	_lstRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);
 
 	// Set palette
@@ -91,10 +91,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtScore);
-	add(_txtUfoRecovery);
+	add(_txtRecovery);
 	add(_txtRating);
 	add(_lstStats);
-	add(_lstUfoRecovery);
+	add(_lstRecovery);
 	add(_lstTotal);
 
 	// Set up objects
@@ -119,8 +119,8 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(_game->getLanguage()->getString("STR_SCORE"));
 
-	_txtUfoRecovery->setColor(Palette::blockOffset(8)+5);
-	_txtUfoRecovery->setText(_game->getLanguage()->getString("STR_UFO_RECOVERY"));
+	_txtRecovery->setColor(Palette::blockOffset(8)+5);
+	_txtRecovery->setText(_game->getLanguage()->getString("STR_UFO_RECOVERY"));
 
 	_txtRating->setColor(Palette::blockOffset(8)+5);
 
@@ -129,10 +129,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_lstStats->setColumns(3, 184, 60, 64);
 	_lstStats->setDot(true);
 
-	_lstUfoRecovery->setColor(Palette::blockOffset(15)-1);
-	_lstUfoRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstUfoRecovery->setColumns(3, 184, 60, 64);
-	_lstUfoRecovery->setDot(true);
+	_lstRecovery->setColor(Palette::blockOffset(15)-1);
+	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
+	_lstRecovery->setColumns(3, 184, 60, 64);
+	_lstRecovery->setDot(true);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 244, 64);
@@ -152,7 +152,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 		total += (*i)->score;
 		if ((*i)->recovery)
 		{
-			_lstUfoRecovery->addRow(3, _game->getLanguage()->getString((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstRecovery->addRow(3, _game->getLanguage()->getString((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
 			recoveryY += 8;
 		}
 		else
@@ -177,13 +177,13 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 
 	if (recoveryY > 0)
 	{
-		_txtUfoRecovery->setY(_lstStats->getY() + statsY + 5);
-		_lstUfoRecovery->setY(_txtUfoRecovery->getY() + 8);
-		_lstTotal->setY(_lstUfoRecovery->getY() + recoveryY + 5);
+		_txtRecovery->setY(_lstStats->getY() + statsY + 5);
+		_lstRecovery->setY(_txtRecovery->getY() + 8);
+		_lstTotal->setY(_lstRecovery->getY() + recoveryY + 5);
 	}
 	else
 	{
-		_txtUfoRecovery->setText(L"");
+		_txtRecovery->setText(L"");
 		_lstTotal->setY(_lstStats->getY() + statsY + 5);
 	}
 
@@ -441,6 +441,7 @@ void DebriefingState::prepareDebriefing()
 	// alien base disappears (if you didn't abort)
 	if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
+		_txtRecovery->setText(_game->getLanguage()->getString("STR_ALIEN_BASE_RECOVERY"));
 		bool destroyAlienBase = true;
 		if (aborted)
 		{

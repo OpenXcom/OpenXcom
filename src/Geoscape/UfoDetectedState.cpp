@@ -57,9 +57,9 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_window = new Window(this, 208, 120, 24, 48, POPUP_BOTH);
 	_btnCentre = new TextButton(160, 12, 48, 128);
 	_btnCancel = new TextButton(160, 12, 48, 144);
-	_txtUfo = new Text(160, 16, 48, 56);
+	_txtUfo = new Text(190, 16, 48, 56);
 	_txtDetected = new Text(80, 8, 48, 72);
-	_lstInfo = new TextList(176, 32, 48, 82);
+	_lstInfo = new TextList(190, 32, 48, 82);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
@@ -100,7 +100,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
-	_lstInfo->setColumns(2, 82, 94);
+	_lstInfo->setColumns(2, 82, 108);
 	_lstInfo->setDot(true);
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SIZE_UC").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
