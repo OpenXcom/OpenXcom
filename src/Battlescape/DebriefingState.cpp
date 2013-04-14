@@ -514,6 +514,10 @@ void DebriefingState::prepareDebriefing()
 		int value = (*j)->getValue();
 		Soldier *soldier = save->getSoldier((*j)->getId());
 		std::string type = (*j)->getType();
+		if ((*j)->getSpawnUnit() != "")
+		{
+			type = (*j)->getSpawnUnit();
+		}
 		if (!(*j)->getTile())
 		{
 			(*j)->setTile(battle->getTile((*j)->getPosition()));
@@ -602,7 +606,10 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				std::string corpseItem = (*j)->getArmor()->getCorpseItem();
-
+				if ((*j)->getSpawnUnit() != "")
+				{
+					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseItem();
+				}
 				// we need to remove that pesky underscore and add an STR_ for large unit corpses.
 				if ((*j)->getArmor()->getSize() > 1)
 				{
