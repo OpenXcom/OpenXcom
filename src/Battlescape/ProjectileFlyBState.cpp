@@ -267,10 +267,13 @@ void ProjectileFlyBState::think()
 			BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
 			if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction() && !potentialVictim->isOut())
 			{
-				if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+				if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
 				{
-					action.cameraPosition = _action.cameraPosition;
-					_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+					if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+					{
+						action.cameraPosition = _action.cameraPosition;
+						_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+					}
 				}
 			}
 			_parent->popState();
