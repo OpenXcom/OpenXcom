@@ -2213,8 +2213,6 @@ bool TileEngine::psiAttack(BattleAction *action)
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim);
 			calculateUnitLighting();
-			if (action->actor->getFaction() == FACTION_PLAYER)
-				_save->setSelectedUnit(victim);
 			victim->setTimeUnits(victim->getStats()->tu);
 		}
 		return true;
