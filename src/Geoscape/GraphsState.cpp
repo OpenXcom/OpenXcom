@@ -269,7 +269,6 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setColor(Palette::blockOffset(8)+7);
-	_txtTitle->setBig();
 	
 	_txtFactor->setText(L"$1000's");
 	_txtFactor->setColor(Palette::blockOffset(8)+7);
@@ -326,8 +325,8 @@ void GraphsState::btnUfoRegionClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_btnRegionTotal->setVisible(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
 	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
 }
 
 /**
@@ -346,8 +345,8 @@ void GraphsState::btnUfoCountryClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_btnCountryTotal->setVisible(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
 	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
 }
 
 /**
@@ -366,8 +365,8 @@ void GraphsState::btnXcomRegionClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_btnRegionTotal->setVisible(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_AREAS"));
 	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_AREAS"));
 }
 
 /**
@@ -386,8 +385,8 @@ void GraphsState::btnXcomCountryClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_btnCountryTotal->setVisible(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
 	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
 }
 
 /**
@@ -407,8 +406,8 @@ void GraphsState::btnIncomeClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_btnCountryTotal->setVisible(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_INCOME"));
 	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_INCOME"));
 }
 
 /**
@@ -427,8 +426,8 @@ void GraphsState::btnFinanceClick(Action *)
 	{
 		(*iter)->setVisible(true);
 	}
-	_txtTitle->setText(_game->getLanguage()->getString("STR_FINANCE"));
 	_txtTitle->setBig();
+	_txtTitle->setText(_game->getLanguage()->getString("STR_FINANCE"));
 
 }
 
