@@ -85,6 +85,7 @@ public:
 	/// Reset all the elements on screen.
 	void resetScreen();
 	/// Update the scale 
+	void updateScale(double lowerLimit, double upperLimit);
 	/// Decide which lines to draw
 	void drawLines();
 	/// Draw Region Lines.
