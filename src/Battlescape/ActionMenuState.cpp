@@ -228,7 +228,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
 				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
-				if (tile->getUnit() && tile->getUnit()->isWoundable())
+				if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
 					targetUnit = tile->getUnit();
 			}
 			if (targetUnit)
