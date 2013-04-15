@@ -320,7 +320,6 @@ void GraphsState::btnUfoRegionClick(Action *)
 	_finance = false;
 	resetScreen();
 	drawLines();
-	updateScale(1);
 	for (std::vector<ToggleTextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
@@ -341,7 +340,6 @@ void GraphsState::btnUfoCountryClick(Action *)
 	_finance = false;
 	resetScreen();
 	drawLines();
-	updateScale(1);
 	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
@@ -362,7 +360,6 @@ void GraphsState::btnXcomRegionClick(Action *)
 	_finance = false;
 	resetScreen();
 	drawLines();
-	updateScale(1);
 	for (std::vector<ToggleTextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
@@ -383,7 +380,6 @@ void GraphsState::btnXcomCountryClick(Action *)
 	_finance = false;
 	resetScreen();
 	drawLines();
-	updateScale(1);
 	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
@@ -404,7 +400,6 @@ void GraphsState::btnIncomeClick(Action *)
 	_finance = false;
 	resetScreen();
 	drawLines();
-	updateScale(1000);
 	_txtFactor->setVisible(true);
 	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
@@ -456,7 +451,6 @@ void GraphsState::btnRegionListClick(Action * action)
 	_regionToggles.at(number) = button->getPressed();
 	
 	drawLines();
-	updateScale(1);
 }
 
 /**
@@ -479,10 +473,6 @@ void GraphsState::btnCountryListClick(Action * action)
 	_countryToggles.at(number) = button->getPressed();
 
 	drawLines();
-	if (!_income)
-		updateScale(1);
-	else
-		updateScale(1000);
 }
 
 /**
@@ -546,24 +536,11 @@ void GraphsState::resetScreen()
 	_btnRegionTotal->setVisible(false);
 	_btnCountryTotal->setVisible(false);
 	_txtFactor->setVisible(false);
-	_scale = 100;
-	updateScale(1);
 }
 
 /**
  * updates the text on the vertical scale
  */
-void GraphsState::updateScale(int factor)
-{
-	int offset = 0;
-	for (std::vector<Text *>::iterator iter = _txtScale.begin(); iter != _txtScale.end(); ++iter)
-	{
-		std::wstringstream ss;
-		ss << ((_scale/10)/factor)*offset << " ";
-		(*iter)->setText(ss.str());
-		offset ++;
-	}
-}
 
 /**
  * instead of having all our line drawing in one giant ridiculous routine, just use the one we need.
@@ -632,32 +609,14 @@ void GraphsState::drawCountryLines()
 		if (_countryToggles.back() && total > roof)
 			roof = total;
 	}
-
-	// set the scale to fit
-	if (!_income)
 	{
-		for (int check = 100; check <= 100000; check *= 2)
 		{
-			if (roof < check - (check/10))
-			{
-				_scale = check;
-				break;
-			}
 		}
 	}
-	else
 	{
-		for (int check = 100000; check <= 1000000000; check *= 10)
 		{
-			if (roof < check - (check/10))
-			{
-				_scale = check;
-				break;
-			}
 		}
 	}
-	double dscale = _scale;
-	double units = dscale / 140;
 
 	// draw country lines
 	for (size_t entry = 0; entry != _game->getSavedGame()->getCountries()->size(); ++entry)
@@ -734,8 +693,6 @@ void GraphsState::drawCountryLines()
 		int y = 175;
 		if (totals[iter] > 0)
 		{
-			double dscale = _scale;
-			double units = dscale / 140;
 			int reduction = totals[iter] / units;
 			y -= reduction;
 		}
@@ -796,17 +753,10 @@ void GraphsState::drawRegionLines()
 				roof = total;
 	}
 
-	// set the scale to fit
-	for (int check = 100; check <= 100000; check *= 2)
 	{
-		if (roof < check - (check/10))
 		{
-			_scale = check;
-			break;
 		}
 	}
-	double dscale = _scale;
-	double units = dscale / 140;
 
 	// draw region lines
 	for (size_t entry = 0; entry != _game->getSavedGame()->getRegions()->size(); ++entry)
@@ -989,17 +939,11 @@ void GraphsState::drawFinanceLines()
 			roof = expendTotals[entry];
 		}
 	}
-	int range = roof - lowerLimit;
 	//adjust the scale to fit the upward maximum
-	int check = 250;
-	_scale = 100;
-	if (range > 9 * check)
 	{
-		while ( range > 9 * check)
 		{
 			check *= 2;
 		}
-		_scale = 10 * check;
 	}
 	
 	//toggle screens
@@ -1010,15 +954,12 @@ void GraphsState::drawFinanceLines()
 	}
 
 	//figure out how many units to the pixel, then plot the points for the graph and connect the dots.
-	double dscale = _scale;
-	double units = dscale / 140;
 	for (int button = 0; button != 5; ++button)
 	{
 		std::vector<Sint16> newLineVector;
 		for (int iter = 0; iter != 12; ++iter)
 		{
 			int x = 312 - (iter*17);
-			int y = 175;
 			int reduction = 0;
 			switch(button)
 			{
@@ -1040,21 +981,17 @@ void GraphsState::drawFinanceLines()
 			}
 			y -= reduction;
 			newLineVector.push_back(y);
-			int offset = 0;
-			if (button % 2)
-				offset = 8;
+			int offset = button % 2 ? 8 : 0;
 			if (newLineVector.size() > 1)
 				_financeLines.at(button)->drawLine(x, y, x+17, newLineVector.at(newLineVector.size()-2), Palette::blockOffset((button/2)+1)+offset);
 		}
 	}
-	updateScale(1);
 	_txtFactor->setVisible(false);
 	for (std::size_t i = 0; i != 4; ++i)
 	{
 		if (_financeToggles.at(i))
 		{
 			_txtFactor->setVisible(true);
-			updateScale(1000);
 		}
 	}
 }
