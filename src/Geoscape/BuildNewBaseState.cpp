@@ -138,7 +138,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-	if (_globe->getShowRadar() != _oldshowradar)
+	if (!_game->isQuitting() && _globe->getShowRadar() != _oldshowradar)
 	{
 		_globe->toggleRadarLines();
 	}

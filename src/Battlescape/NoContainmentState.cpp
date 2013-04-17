@@ -29,6 +29,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -58,6 +59,8 @@ NoContainmentState::NoContainmentState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NoContainmentState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY"));

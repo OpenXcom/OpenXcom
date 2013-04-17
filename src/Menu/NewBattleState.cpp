@@ -73,7 +73,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	
-	_txtItemLevel = new Text(100, 9, 110, 110);
+	_txtItemLevel = new Text(136, 9, 110, 110);
 	_btnItemLevel = new TextButton(100, 20, 110, 120);
 
 	add(_window);
@@ -126,7 +126,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 	
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
-	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACTS"));
+	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ENEMY_WEAPON_LEVEL"));
 	
 	_itemLevels.push_back("STR_LOW");
 	_itemLevels.push_back("STR_MEDIUM");
@@ -300,7 +300,7 @@ void NewBattleState::initSave()
 	_craft = new Craft(rule->getCraft(_crafts[_selCraft]), base, 1);
 	base->getCrafts()->push_back(_craft);
 	// Generate soldiers
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 30; ++i)
 	{
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);

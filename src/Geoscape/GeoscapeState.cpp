@@ -394,8 +394,8 @@ void GeoscapeState::handle(Action *action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		// "d" - enable debug mode
-		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d)
+		// "ctrl-d" - enable debug mode
+		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
@@ -1062,18 +1062,7 @@ private:
 /** @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
  */
-class ProcessTerrorSite: public std::unary_function<TerrorSite*, bool>
-{
-public:
-	/// Remember data for invocations.
-	ProcessTerrorSite(SavedGame &game) : _game(game) { /* Empty by design. */ }
-	/// Count down for expiration and handle it.
-	bool operator()(TerrorSite *ts) const;
-private:
-	SavedGame &_game;
-};
-
-bool ProcessTerrorSite::operator()(TerrorSite *ts) const
+bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 {
 	if (ts->getSecondsRemaining() >= 30 * 60)
 	{
@@ -1085,14 +1074,14 @@ bool ProcessTerrorSite::operator()(TerrorSite *ts) const
 		return false;
 	}
 	// Score and delete it.
-	Region *region = _game.locateRegion(*ts);
+	Region *region = _game->getSavedGame()->locateRegion(*ts);
 	if (region)
 	{
 		//TODO: This should come from mission rules!
 		region->addActivityAlien(1000);
 		//kids, tell your folks... don't ignore terror sites.
 	}
-	for (std::vector<Country*>::iterator k = _game.getCountries()->begin(); k != _game.getCountries()->end(); ++k)
+	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
 		{
@@ -1282,11 +1271,18 @@ void GeoscapeState::time30Minutes()
 	}
 
 	// Processes TerrorSites
-	std::vector<TerrorSite*>::iterator lastTerrorSite =
-	    std::remove_if( _game->getSavedGame()->getTerrorSites()->begin(),
-			    _game->getSavedGame()->getTerrorSites()->end(),
-			    ProcessTerrorSite(*_game->getSavedGame()));
-	_game->getSavedGame()->getTerrorSites()->erase(lastTerrorSite, _game->getSavedGame()->getTerrorSites()->end());
+	for (std::vector<TerrorSite*>::iterator ts = _game->getSavedGame()->getTerrorSites()->begin();
+		ts != _game->getSavedGame()->getTerrorSites()->end();)
+	{
+		if (processTerrorSite(*ts))
+		{
+			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
+		}
+		else
+		{
+			++ts;
+		}
+	}
 }
 
 /**
@@ -1486,12 +1482,14 @@ void GeoscapeState::time1Day()
 			// now iterate through all the bases and remove this project from their labs
 			for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
 			{
-				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin (); iter2 != (*j)->getResearch().end (); ++iter2)
+				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
-						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") != (*iter2)->getRules()->getUnlocked().end())
+						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") == (*iter2)->getRules()->getUnlocked().end())
 					{
 						(*j)->removeResearch(*iter2);
+						// reset the iterator, the vector just got updated.
+						iter2 = (*j)->getResearch().begin();
 					}
 				}
 			}
@@ -1547,7 +1545,7 @@ void GeoscapeState::time1Month()
 	determineAlienMissions();
 	if (monthsPassed > 5)
 		determineAlienMissions();
-	if (monthsPassed >= 14 - _game->getSavedGame()->getDifficulty()
+	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
 	{
 		newRetaliation = true;
@@ -1633,7 +1631,7 @@ void GeoscapeState::timerReset()
  * @param pause True if we want to resume
  * from the same spot we left off.
  */
-void GeoscapeState::musicStop(bool pause)
+void GeoscapeState::musicStop(bool)
 {
 	_music = false;
 }

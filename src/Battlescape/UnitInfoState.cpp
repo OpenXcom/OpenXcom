@@ -542,7 +542,8 @@ void UnitInfoState::handle(Action *action)
 		{
 			_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
 			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1)
+			while (_unit->getArmor()->getSize() > 1
+					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
 				_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
 				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -553,7 +554,8 @@ void UnitInfoState::handle(Action *action)
 		{
 			_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
 			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1)
+			while (_unit->getArmor()->getSize() >1
+					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
 				_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
 				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -568,7 +570,8 @@ void UnitInfoState::handle(Action *action)
 		{
 			_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
 			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1)
+			while (_unit->getArmor()->getSize() >1
+					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
 				_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
 				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
@@ -580,7 +583,8 @@ void UnitInfoState::handle(Action *action)
 		{
 			_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
 			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1)
+			while (_unit->getArmor()->getSize() >1
+					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
 				_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
 				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();

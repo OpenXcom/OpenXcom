@@ -88,7 +88,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/*2 STR_MEDIUM */
+		/*2 STR_MEDIUM_UC */
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -478,12 +478,12 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	_w2Timer->onTimer((StateHandler)&DogfightState::fireWeapon2);
 
 	_ufoWtimer->onTimer((StateHandler)&DogfightState::ufoFireWeapon);
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * _game->getSavedGame()->getDifficulty()) * 75;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * 75;
 	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)&DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime()) - 30 * _game->getSavedGame()->getDifficulty()) * 20;
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime()) - 30 * (int)(_game->getSavedGame()->getDifficulty())) * 20;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)&DogfightState::animateCraftDamage);
@@ -498,7 +498,7 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	{
 		_ufoSize = 1;
 	}
-	else if(ufoSize.compare("STR_MEDIUM") == 0)
+	else if(ufoSize.compare("STR_MEDIUM_UC") == 0)
 	{
 		_ufoSize = 2;
 	}
@@ -829,7 +829,7 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
-				if(p->getMissed() && ((p->getPosition() / 8) >= p->getRange()))
+				if(p->getGlobalType() == CWPGT_MISSILE && p->getPosition() / 8 >= p->getRange())
 				{
 					p->remove();
 				}
@@ -965,11 +965,11 @@ void DogfightState::move()
 		AlienMission *mission = _ufo->getMission();
 		mission->ufoShotDown(*_ufo, *_game, *_globe);
 		// Check for retaliation trigger.
-		if (RNG::generate(0, 100) > 4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))
+		if (RNG::generate(0, 100) > 4 * (24 - (int)(_game->getSavedGame()->getDifficulty())))
 		{
 			// Spawn retaliation mission.
 			std::string targetRegion;
-			if (RNG::generate(0, 100) <= 50 - 6 * static_cast<int>(_game->getSavedGame()->getDifficulty()))
+			if (RNG::generate(0, 100) <= 50 - 6 * (int)(_game->getSavedGame()->getDifficulty()))
 			{
 				// Attack on UFO's mission region
 				targetRegion = _ufo->getMission()->getRegion();
@@ -1137,7 +1137,7 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * _game->getSavedGame()->getDifficulty()) * 75;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * 75;
 	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
@@ -1222,31 +1222,38 @@ void DogfightState::setStatus(const std::string &status)
  */
 void DogfightState::btnMinimizeClick(Action *)
 {
-	if(_currentDist == STANDOFF_DIST && !_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
+	if (!_ufo->isCrashed() && !_craft->isDestroyed() && !_ufoBreakingOff)
 	{
-		setMinimized(true);
-		_window->setVisible(false);
-		_preview->setVisible(false);
-		_btnStandoff->setVisible(false);
-		_btnCautious->setVisible(false);
-		_btnStandard->setVisible(false);
-		_btnAggressive->setVisible(false);
-		_btnDisengage->setVisible(false);
-		_btnUfo->setVisible(false);
-		_btnMinimize->setVisible(false);
-		_battle->setVisible(false);
-		_weapon1->setVisible(false);
-		_range1->setVisible(false);
-		_weapon2->setVisible(false);
-		_range2->setVisible(false);
-		_damage->setVisible(false);
-		_txtAmmo1->setVisible(false);
-		_txtAmmo2->setVisible(false);
-		_txtDistance->setVisible(false);
-		_preview->setVisible(false);
-		_txtStatus->setVisible(false);
-		_btnMinimizedIcon->setVisible(true);
-		_txtInterceptionNumber->setVisible(true);
+		if (_currentDist == STANDOFF_DIST)
+		{
+			setMinimized(true);
+			_window->setVisible(false);
+			_preview->setVisible(false);
+			_btnStandoff->setVisible(false);
+			_btnCautious->setVisible(false);
+			_btnStandard->setVisible(false);
+			_btnAggressive->setVisible(false);
+			_btnDisengage->setVisible(false);
+			_btnUfo->setVisible(false);
+			_btnMinimize->setVisible(false);
+			_battle->setVisible(false);
+			_weapon1->setVisible(false);
+			_range1->setVisible(false);
+			_weapon2->setVisible(false);
+			_range2->setVisible(false);
+			_damage->setVisible(false);
+			_txtAmmo1->setVisible(false);
+			_txtAmmo2->setVisible(false);
+			_txtDistance->setVisible(false);
+			_preview->setVisible(false);
+			_txtStatus->setVisible(false);
+			_btnMinimizedIcon->setVisible(true);
+			_txtInterceptionNumber->setVisible(true);
+		}
+		else
+		{
+			setStatus("STR_MINIMISE_AT_STANDOFF_RANGE_ONLY");
+		}
 	}
 }
 

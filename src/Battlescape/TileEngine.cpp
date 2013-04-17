@@ -210,18 +210,6 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 	}
 }
 
-
-static size_t BattleUnitsChecksum(std::vector<BattleUnit*>& units)
-{
-	size_t newChecksum = 0;
-	
-	for (std::vector<BattleUnit*>::iterator i = units.begin(); i != units.end(); ++i)
-		newChecksum += ((*i)->getPosition().x*100 + (*i)->getPosition().y);
-
-	return newChecksum;
-}
-
-
 /**
  * Calculates line of sight of a soldier.
  * @param unit
@@ -582,16 +570,16 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		Tile *t = _save->getTile(currentUnit->getPosition());
-		int maxViewDistance = MAX_VIEW_DISTANCE - (t->getSmoke()/2);
+		int maxViewDistance = MAX_VIEW_DISTANCE - (2 * t->getSmoke() / 3);
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
 		{
 			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
 			{
 				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
-				maxViewDistance -= t->getSmoke()/2;
+				maxViewDistance -= 2 * t->getSmoke() / 3;
 			}
 		}
-		if (distanceSq(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance*maxViewDistance)
+		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
 		{
 			unitSeen = false;
 		}
@@ -977,10 +965,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
 
-		if (!action->weapon->getRules()->getTUAuto() || RNG::generate(0,3) < 3)
-			action->type = BA_SNAPSHOT;
-		else
+		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) < 3)
 			action->type = BA_AUTOSHOT;
+		else
+			action->type = BA_SNAPSHOT;
 
 		action->target = unit->getPosition();
 
@@ -1695,6 +1683,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 			}
 			if ((unit->getDirection() == 6 || unit->getDirection() == 5 || unit->getDirection() == 7) && door == -1) // west, southwest or northwest
 			{
+				tile = _save->getTile(unit->getPosition() + Position(x,y,0));
 				door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
 				if (door == 0 && rClick)
 					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
@@ -1737,6 +1726,33 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
 					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 0, 0));
 					if (tile) tile->openDoor(MapData::O_NORTHWALL);
+				}
+			}
+			if (unit->getDirection() == 5 && door == -1)
+			{
+				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
+				if (tile)
+				{
+					door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
+				}
+				else
+				{
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
+				}
+				if (door == 0 && rClick)
+					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
+				if (door == 1)
+				{
+					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
+					// check for adjacent door(s)
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -1, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 2, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
+					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -2, 0));
+					if (tile) tile->openDoor(MapData::O_WESTWALL);
 				}
 			}
 		}
@@ -2197,8 +2213,6 @@ bool TileEngine::psiAttack(BattleAction *action)
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim);
 			calculateUnitLighting();
-			if (action->actor->getFaction() == FACTION_PLAYER)
-				_save->setSelectedUnit(victim);
 			victim->setTimeUnits(victim->getStats()->tu);
 		}
 		return true;
@@ -2245,9 +2259,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 		if (unitpos != occupant->getPosition() && occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 		{
 			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
-				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
-				_save->getTile(occupant->getPosition() + Position(0,0,-1)),
-				_save->getTile(occupant->getPosition() + Position(0,0,-2)), true);
+				_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
 			_save->addFallingUnit(occupant);
 		}
 		else if (unitpos != occupant->getPosition())
@@ -2304,7 +2316,7 @@ Tile *TileEngine::applyItemGravity(Tile *t)
  */
 bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir)
 {
-	return validMeleeRange(unit->getPosition(), dir, unit->getArmor()->getSize(), unit->getHeight(), target);
+	return validMeleeRange(unit->getPosition(), dir, unit->getArmor()->getSize(), target);
 }
 
 /*
@@ -2312,11 +2324,10 @@ bool TileEngine::validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir)
  * @param pos Position to check from.
  * @param direction direction to check, -1 for all.
  * @param size for large units, we have to do extra checks.
- * @param height units on stairs might protrude into the tile above.
  * @param *target the unit we want to attack, 0 for any unit.
  * @return true when range is valid.
  */
-bool TileEngine::validMeleeRange(Position pos, int direction, int size, int height, BattleUnit *target)
+bool TileEngine::validMeleeRange(Position pos, int direction, int size, BattleUnit *target)
 {
 	Position p;
 	

@@ -440,6 +440,10 @@ void Ufo::think()
 		_secondsRemaining -= 5;
 		break;
 	case CRASHED:
+		if (!_detected)
+		{
+			_detected = true;
+		}
 		// This gets handled in GeoscapeState::time30Minutes()
 		// Because the original game processes it every 30 minutes!
 	case DESTROYED:

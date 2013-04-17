@@ -103,7 +103,6 @@ void Country::setFunding(int funding)
 
 /*
  * Keith Richards would be so proud
- * @param diff the difficulty level.
  * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
  */
 int Country::getSatisfaction()

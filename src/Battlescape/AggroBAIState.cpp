@@ -194,8 +194,14 @@ void AggroBAIState::think(BattleAction *action)
 	
 	action->weapon = _unit->getMainHandWeapon();
 
-	if (action->weapon)
+	if (_unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
 	{
+		psiAction(action);
+	}
+
+	if (action->weapon && action->type == BA_RETHINK)
+	{
+		_aggroTarget = 0;
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 		{
 			meleeAction(action);
@@ -208,19 +214,15 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 	}
-	
-	if (action->type == BA_RETHINK && _unit->getStats()->psiSkill && RNG::generate(0,9 - action->diff) == 0)
-	{
-		psiAction(action);
-	}
 
 	if (takeCoverAssessment(action))
 	{
+		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		takeCoverAction(action);
 		action->reckless = true;
 	}
-	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0, 9 - action->diff) == 0)
+	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
 		grenadeAction(action);
 	}
@@ -350,8 +352,8 @@ void AggroBAIState::psiAction(BattleAction *action)
 	int chanceToAttack = 0;
 	for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end(); ++i)
 	{
-		// don't target tanks or other aliens
-		if ((*i)->getArmor()->getSize() == 1 && (*i)->getOriginalFaction() == FACTION_PLAYER)
+		// don't target tanks or other aliens or units under mind control
+		if ((*i)->getArmor()->getSize() == 1 && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
 		{
 			int chanceToAttackMe = psiAttackStrength
 				+ ((*i)->getStats()->psiSkill * -0.4)
@@ -373,7 +375,7 @@ void AggroBAIState::psiAction(BattleAction *action)
 
 	if (chanceToAttack)
 	{
-		if (_unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem())
+		if (!_unit->getVisibleUnits()->empty() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem())
 		{
 			if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
 			{
@@ -582,6 +584,12 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 */
 void AggroBAIState::takeCoverAction(BattleAction *action)
 {
+	selectNearestTarget();
+	if (!_aggroTarget)
+	{
+		action->type = BA_RETHINK;
+		return;
+	}
 	Uint32 start = SDL_GetTicks();
 	int unitsSpottingMe =_game->getSpottingUnits(action->actor);
 	action->type = BA_WALK;
@@ -632,15 +640,19 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 
 	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
 	{
-		tu -= _unit->getActionTUs(_game->getBattleState()->getBattleGame()->getReservedAction(), action->weapon);
+		switch (_game->getBattleState()->getBattleGame()->getReservedAction())
+		{
+		case BA_SNAPSHOT: tu -= action->actor->getStats()->tu / 3; break;
+		case BA_AUTOSHOT: tu -= action->actor->getStats()->tu / 2; break;
+		default: break;
+		}
+		if (tu < 0) tu = 0;
 	}
 
 	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, tu);
 
 	while (tries < 150 && !coverFound)
 	{
-		tries++;
-		if (civ) tries += 9; // civilians shouldn't have any tactical sense anyway so save some CPU cycles here
 		action->target = _unit->getPosition() + runOffset; // start looking in a direction away from the enemy
 					
 		if (!_game->getTile(action->target))
@@ -701,6 +713,9 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				action->target.z = _unit->getPosition().z;
 			}
 		}
+
+		tries++;
+		if (civ) tries += 9; // civilians shouldn't have any tactical sense anyway so save some CPU cycles here
 
 		// THINK, DAMN YOU
 		tile = _game->getTile(action->target);
@@ -836,13 +851,6 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 {
 	action->actor->_hidingForTurn = false;
 
-	if (!_aggroTarget)
-	{
-		selectNearestTarget();
-		if (!_aggroTarget)
-			return false;
-	}
-
 	bool takeCover = true;
 	int number = RNG::generate(0,100);
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
@@ -860,13 +868,15 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 
 
 	// aggrotarget has no weapon - chances of take cover get smaller
-	if (!_aggroTarget->getMainHandWeapon())
+	if (!_unit->getVisibleUnits()->empty() && _aggroTarget && !_aggroTarget->getMainHandWeapon())
 		number -= 50;
 	if (aggression == 0 && number < 10)
 		takeCover = false;
 	if (aggression == 1 && number < 50)
 		takeCover = false;
 	if (aggression == 2 && number < 90)
+		takeCover = false;
+	if (action->type == BA_MINDCONTROL || action->type == BA_PANIC)
 		takeCover = false;
 			
 
@@ -903,7 +913,9 @@ void AggroBAIState::selectNearestTarget()
 {
 	for (std::vector<BattleUnit*>::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 	{
-		if (!_aggroTarget || _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition()) < _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()))
+		if (!_aggroTarget ||
+			_game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition()) <
+			_game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition()))
 		{
 			if(!(*j)->isOut())
 				_aggroTarget = (*j);
@@ -923,7 +935,7 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 			if (x || y) // skip the unit itself
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
-				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), action->actor->getHeight(), target);
+				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), target);
 				bool fitHere = _game->setUnitPosition(action->actor, checkPath, true);
 								
 				if (valid && fitHere)

@@ -216,14 +216,14 @@ void createDefault()
 	setInt("keyBattleOptions", SDLK_ESCAPE);
 	setInt("keyBattleEndTurn", SDLK_BACKSPACE);
 	setInt("keyBattleAbort", SDLK_a);
-	setInt("keyBattleStats", SDLK_F1);
+	setInt("keyBattleStats", SDLK_s);
 	setInt("keyBattleKneel", SDLK_k);
 	setInt("keyBattleReload", SDLK_r);
 	setInt("keyBattlePersonalLighting", SDLK_l);
-	setInt("keyBattleReserveNone", SDLK_F2);
-	setInt("keyBattleReserveSnap", SDLK_F3);
-	setInt("keyBattleReserveAimed", SDLK_F4);
-	setInt("keyBattleReserveAuto", SDLK_F5);
+	setInt("keyBattleReserveNone", SDLK_F1);
+	setInt("keyBattleReserveSnap", SDLK_F2);
+	setInt("keyBattleReserveAimed", SDLK_F3);
+	setInt("keyBattleReserveAuto", SDLK_F4);
 	setInt("keyBattleCenterEnemy1", SDLK_1);
 	setInt("keyBattleCenterEnemy2", SDLK_2);
 	setInt("keyBattleCenterEnemy3", SDLK_3);
@@ -233,6 +233,7 @@ void createDefault()
 	setInt("keyBattleCenterEnemy7", SDLK_7);
 	setInt("keyBattleCenterEnemy8", SDLK_8);
 	setInt("keyBattleCenterEnemy9", SDLK_9);
+	setInt("keyBattleCenterEnemy10", SDLK_0);
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");

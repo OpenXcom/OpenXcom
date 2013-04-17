@@ -507,6 +507,13 @@ bool Game::isState(State *state) const
 	return _states.size() > 0 && _states.back() == state;
 }
 
+/**
+ * @return whether the game is shutting down or not.
+ */
+bool Game::isQuitting() const
+{
+	return _quit;
+}
 
 
 }

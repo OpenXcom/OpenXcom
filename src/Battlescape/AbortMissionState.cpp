@@ -32,6 +32,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "BattlescapeState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -105,11 +106,13 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&AbortMissionState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(0));
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 }
 

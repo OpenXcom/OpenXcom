@@ -135,7 +135,7 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), _action.actor->getHeight(), 0))
+		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), 0))
 		{
 			_action.result = "STR_THERE_IS_NO_ONE_THERE";
 			_parent->popState();
@@ -267,10 +267,13 @@ void ProjectileFlyBState::think()
 			BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
 			if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction() && !potentialVictim->isOut())
 			{
-				if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+				if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
 				{
-					action.cameraPosition = _action.cameraPosition;
-					_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+					if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+					{
+						action.cameraPosition = _action.cameraPosition;
+						_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+					}
 				}
 			}
 			_parent->popState();
@@ -326,9 +329,9 @@ void ProjectileFlyBState::think()
 					{
 						offset = -1;
 					}
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
 				}
-				else
+				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
 					_parent->getMap()->cacheUnits();

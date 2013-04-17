@@ -844,11 +844,11 @@ Koszt konstruowania
 STR_MAINTENANCE_COST
 Koszt utrzymania
 STR_LOW
-Nisko
+Słabe
 STR_MEDIUM
-Średnio
+Średnie
 STR_HIGH
-Wysoko
+Mocne
 STR_CRAFT_WEAPON
 Broń samolotów
 STR_CRAFT_AMMUNITION
@@ -2263,3 +2263,13 @@ STR_CENTER_ON_ENEMY_9
 Centruj na przeciwniku nr 9
 STR_OPENGL
 OpenGL
+STR_ENEMY_WEAPON_LEVEL
+Uzbrojenie Wroga
+STR_GROUNDED
+ZIEMIA
+STR_LIVING_QUARTERS_PLURAL
+Kwatery
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+PRZEDMIOT

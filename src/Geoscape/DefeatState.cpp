@@ -39,7 +39,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 {
 	// Create objects
 	_screen = new InteractiveSurface(320, 200, 0, 0);
-	_txtText.push_back(new Text(190, 82, 0, 0));
+	_txtText.push_back(new Text(190, 104, 0, 0));
 	_txtText.push_back(new Text(200, 34, 32, 0));
 
 	add(_screen);

@@ -125,8 +125,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 				{
 					int dir[3] = {4,2,3};
 					Tile *checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if ((isBlocked(unit->getTile(), checkTile, dir[its], unit) &&
-						isBlocked(unit->getTile(), checkTile, dir[its], target))||
+					if ((isBlocked(destinationTile, checkTile, dir[its], unit) &&
+						isBlocked(destinationTile, checkTile, dir[its], target))||
 						(checkTile->getUnit() &&
 						checkTile->getUnit() != unit &&
 						checkTile->getUnit()->getVisible() &&
@@ -238,7 +238,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
 	bool fellDown = false;
-	bool walkedDown = false;
 	bool triedStairs = false;
 	int size = _unit->getArmor()->getSize() - 1;
 	int cost = 0;
@@ -291,8 +290,15 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						endPosition->z--;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
-						walkedDown = true;
 					}
+			}
+			else if (_movementType == MT_FLY && belowDestination && belowDestination->getUnit() && belowDestination->getUnit() != unit)
+			{
+				// 2 or more voxels poking into this tile = no go
+				if (belowDestination->getUnit()->getHeight() + belowDestination->getUnit()->getFloatHeight() - belowDestination->getTerrainLevel() > 26)
+				{
+					return 255;
+				}
 			}
 
 			// this means the destination is probably outside the map
@@ -500,20 +506,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		BattleUnit *unit = tile->getUnit();
 		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
-		//if (unit->getFaction() == _unit->getFaction() ||		// unit know, where his faction members
 		if (_unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
-		//if (_unit->getFaction() != FACTION_PLAYER)
-		{
-			//if (_save->eyesOnTarget(_unit->getFaction(), unit)) return true;
-			// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies		
-		
-#if 0
-			for (std::vector<BattleUnit*>::iterator i = _unit->getVisibleUnits()->begin(); i != _unit->getVisibleUnits()->end(); ++i)
-			{
-				if ((*i)->getTile() == tile) return true;	// unit know, were all visible for him units
-			}
-#endif
-		}
 	}
 
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part

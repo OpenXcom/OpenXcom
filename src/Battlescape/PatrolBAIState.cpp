@@ -262,7 +262,7 @@ void PatrolBAIState::think(BattleAction *action)
 					{
 						node = *i;
 						int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-						if (!_toNode ||  d < closest)
+						if (!_toNode ||  (d < closest && node != _fromNode))
 						{
 							_toNode = node;
 							closest = d;

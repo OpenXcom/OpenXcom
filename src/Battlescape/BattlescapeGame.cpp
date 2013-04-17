@@ -254,6 +254,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->size() == 0)
 		{
+			action.actor = unit;
 			findItem(&action);
 		}
 	}
@@ -365,7 +366,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 bool BattlescapeGame::kneel(BattleUnit *bu)
 {
 	int tu = bu->isKneeled()?8:4;
-	if (checkReservedTU(bu, tu))
+	if (!bu->isFloating() && checkReservedTU(bu, tu))
 	{
 		if (bu->spendTimeUnits(tu))
 		{
@@ -607,12 +608,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			if (murderweapon)
 			{
 				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
-				if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
-				{
-					std::wstringstream ss;
-					ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
-					_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-				}
 			}
 			else
 			{
@@ -627,20 +622,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					{
 						// terrain explosion
 						statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
-						if (Options::getBool("battleNotifyDeath") && (*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
-						{
-							std::wstringstream ss;
-							ss << (*j)->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
-							_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-						}
 					}
 					else
 					{
 						// no murderer, and no terrain explosion, must be fatal wounds
-						statePushNext(new UnitDieBState(this, (*j), DT_AP, false));  // STR_HAS_DIED_FROM_A_FATAL_WOUND
-						// show a little infobox with the name of the unit and "... is panicking"
-						if ((*j)->getFaction() == FACTION_PLAYER && (*j)->getOriginalFaction() == FACTION_PLAYER)
-						_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+						statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 					}
 				}
 			}
@@ -653,10 +639,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 		else if ((*j)->getStunlevel() >= (*j)->getHealth() && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_UNCONSCIOUS && (*j)->getStatus() != STATUS_COLLAPSING && (*j)->getStatus() != STATUS_TURNING)
 		{
 			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
-			if ((*j)->getFaction() == FACTION_PLAYER)
-			{
-				_infoboxQueue.push_back(new InfoboxOKState(_parentState->getGame(), (*j)->getName(_parentState->getGame()->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
-			}
 		}
 	}
 	BattleUnit *bu = _save->getSelectedUnit();
@@ -900,7 +882,10 @@ void BattlescapeGame::statePushBack(BattleState *bs)
  */
 void BattlescapeGame::popState()
 {
-	if (Options::getBool("traceAI")) Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with " << (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
+	if (Options::getBool("traceAI"))
+	{
+		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with " << (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
+	}
 	bool actionFailed = false;
 
 	if (_states.empty()) return;
@@ -1008,16 +993,6 @@ void BattlescapeGame::popState()
 		_save->setSelectedUnit(0);
 	}
 	_parentState->updateSoldierInfo();
-
-	// the unit became unconscious - show popup
-	if (action.actor && action.actor->getStatus() == STATUS_UNCONSCIOUS)
-	{
-		std::wstringstream ss;
-		ss << action.actor->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS");
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-	}
-	
-
 }
 
 bool BattlescapeGame::noActionsPending(BattleUnit *bu)
@@ -1052,7 +1027,15 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
-	// if (_save->getSide() != FACTION_PLAYER) return true; // aliens don't reserve TUs
+	if (_save->getSide() != FACTION_PLAYER) // aliens reserve TUs as a percentage rather than just enough for a single action.
+	{
+		switch (effectiveTuReserved)
+		{
+		case BA_SNAPSHOT: return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits(); break;
+		case BA_AUTOSHOT: return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits(); break;
+		default: return tu < bu->getTimeUnits(); break;
+		}
+	}
 
 	// check TUs against slowest weapon if we have two weapons
 	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
@@ -1066,15 +1049,12 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
-		if (_save->getSide() == FACTION_PLAYER)
+		switch (effectiveTuReserved)
 		{
-			switch (effectiveTuReserved)
-			{
-			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-			default: ;
-			}
+		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+		case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+		default: ;
 		}
 		return false;
 	}
@@ -1561,7 +1541,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
 	
-	int difficulty = _parentState->getGame()->getSavedGame()->getDifficulty();
+	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
 	int divider = 1;
 	if (!difficulty)
 		divider = 2;

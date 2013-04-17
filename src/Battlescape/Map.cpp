@@ -73,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -641,7 +641,8 @@ void Map::drawTerrain(Surface *surface)
 					}
 					if (tile->getSmoke() && tile->isDiscovered(2))
 					{
-						frameNumber = 8 + int(floor((tile->getSmoke() / 5.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
 						{
 							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
@@ -708,10 +709,21 @@ void Map::drawTerrain(Surface *surface)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Map::mouseClick(Action *action, State *state)
+void Map::mousePress(Action *action, State *state)
 {
-	InteractiveSurface::mouseClick(action, state);
-	_camera->mouseClick(action, state);
+	InteractiveSurface::mousePress(action, state);
+	_camera->mousePress(action, state);
+}
+
+/**
+ * Handles map mouse shortcuts.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Map::mouseRelease(Action *action, State *state)
+{
+	InteractiveSurface::mouseRelease(action, state);
+	_camera->mouseRelease(action, state);
 }
 
 /**
@@ -722,6 +734,18 @@ void Map::mouseClick(Action *action, State *state)
 void Map::keyboardPress(Action *action, State *state)
 {
 	InteractiveSurface::keyboardPress(action, state);
+	_camera->keyboardPress(action, state);
+}
+
+/**
+ * Handles map keyboard shortcuts.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Map::keyboardRelease(Action *action, State *state)
+{
+	InteractiveSurface::keyboardRelease(action, state);
+	_camera->keyboardRelease(action, state);
 }
 
 /**
@@ -732,12 +756,10 @@ void Map::keyboardPress(Action *action, State *state)
 void Map::mouseOver(Action *action, State *state)
 {
 	InteractiveSurface::mouseOver(action, state);
-	int posX = action->getXMouse();
-	int posY = action->getYMouse();
-
 	_camera->mouseOver(action, state);
-
-	setSelectorPosition((int)((double)posX / action->getXScale()), (int)((double)posY / action->getYScale()));
+	_mouseX = (int)action->getAbsoluteXMouse();
+	_mouseY = (int)action->getAbsoluteYMouse();
+	setSelectorPosition(_mouseX, _mouseY);
 }
 
 
@@ -1061,6 +1083,14 @@ void Map::setButtonsPressed(Uint8 button, bool pressed)
 void Map::setUnitDying(bool flag)
 {
 	_unitDying = flag;
+}
+
+/**
+ * Updates the selector to the last-known mouse position.
+ */
+void Map::refreshSelectorPosition()
+{
+	setSelectorPosition(_mouseX, _mouseY);
 }
 
 

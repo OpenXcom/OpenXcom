@@ -37,6 +37,7 @@
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
 #include "../Ruleset/Armor.h"
+#include "TileEngine.h"
 
 namespace OpenXcom
 {
@@ -54,7 +55,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	for (int i = 0; i < 6; ++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(i, _game->getResourcePack()->getFont("Big.fnt"), x, y);
+		_actionMenu[i] = new ActionMenuItem(i, _game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"), x, y);
 		add(_actionMenu[i]);
 		_actionMenu[i]->setVisible(false);
 		_actionMenu[i]->onMouseClick((ActionHandler)&ActionMenuState::btnActionMenuItemClick);
@@ -155,7 +156,7 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
-	if (acc > 0)
+	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH)
 		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
 	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
 	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
@@ -186,7 +187,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	RuleItem *weapon = _action->weapon->getRules();
 
 	// got to find out which button was pressed
-	for (int i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
+	for (size_t i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
 	{
 		if (action->getSender() == _actionMenu[i])
 		{
@@ -227,7 +228,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
 				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
-				if (tile->getUnit() && tile->getUnit()->isWoundable())
+				if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
 					targetUnit = tile->getUnit();
 			}
 			if (targetUnit)
@@ -272,53 +273,16 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
-			BattleUnit *targetUnit = NULL;
-			Position p;
-			Pathfinding::directionToVector(_action->actor->getDirection(), &p);
-
-			for (int x = 0; x != _action->actor->getArmor()->getSize(); ++x)
-			{
-				for (int y = 0; y != _action->actor->getArmor()->getSize(); ++y)
-				{
-          SavedGame* savedGame = _game->getSavedGame();
-          Position actorPosition = _action->actor->getPosition();
-					Tile * tile (savedGame->getBattleGame()->getTile(Position(actorPosition.x + x, actorPosition.y + y, actorPosition.z) + p));		
-					if (tile)
-					{
-							if (tile->getUnit() && tile->getUnit() != _action->actor)
-						{
-							BattleUnit *target (tile->getUnit());
-							if (!target && (_action->actor->getHeight() - savedGame->getBattleGame()->getTile(actorPosition)->getTerrainLevel() > 24))
-								target = savedGame->getBattleGame()->getTile(tile->getPosition() + Position(0, 0, 1))->getUnit();
-							for (std::vector<BattleUnit*>::iterator b = _action->actor->getVisibleUnits()->begin(); b != _action->actor->getVisibleUnits()->end(); ++b)
-							{
-								if (*b == target && !savedGame->getBattleGame()->getPathfinding()->isBlocked(
-                  savedGame->getBattleGame()->getTile(actorPosition + Position(x, y, 0)), tile, _action->actor->getDirection(), 0))
-								{
-									targetUnit = tile->getUnit();
-									break;
-								}
-							}
-						}
-					}
-					if (targetUnit)
-						break;
-				}
-				if (targetUnit)
-					break;
-			}
-
-
-			if (targetUnit)
-			{
-				_game->popState();
-			}
-			else
+			
+			if (!_game->getSavedGame()->getBattleGame()->getTileEngine()->validMeleeRange(
+				_action->actor->getPosition(),
+				_action->actor->getDirection(),
+				_action->actor->getArmor()->getSize(),
+				0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
-				_game->popState();
 			}
-
+			_game->popState();
 		}
 		else
 		{

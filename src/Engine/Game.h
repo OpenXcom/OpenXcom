@@ -103,6 +103,8 @@ public:
 	int getAlienContainmentHasUpperLimit() const;
 	/// Returns whether current state is the param state
 	bool isState(State *state) const;
+	/// Returns whether the game is shutting down.
+	bool isQuitting() const;
 };
 
 }

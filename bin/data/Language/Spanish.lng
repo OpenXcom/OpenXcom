@@ -912,63 +912,63 @@ STR_LIVE_SOLDIER
 STR_LIVE_TERRORIST
  Terrorista
 STR_FLOATER_SOLDIER
-Soldado flotador
+Soldado Flotador
 STR_FLOATER_NAVIGATOR
-Navegante flotador
+Navegante Flotador
 STR_FLOATER_MEDIC
-Médico flotador
+Médico Flotador
 STR_FLOATER_ENGINEER
-Técnico flotador
+Técnico Flotador
 STR_FLOATER_LEADER
-Lider flotador
+Lider Flotador
 STR_FLOATER_COMMANDER
-Comandante flotador
+Comandante Flotador
 STR_SECTOID_SOLDIER
-Sectoid Soldier
+Soldado Sectoide
 STR_SECTOID_NAVIGATOR
-Sectoid Navigator
+Navegante Sectoide
 STR_SECTOID_MEDIC
-Sectoid Medic
+Médico Sectoide
 STR_SECTOID_ENGINEER
-Sectoid Engineer
+Técnico Sectoide
 STR_SECTOID_LEADER
-Sectoid Leader
+Lider Sectoide
 STR_SECTOID_COMMANDER
-Sectoid Commander
+Comandante Sectoide
 STR_SNAKEMAN_SOLDIER
-Snakeman Soldier
+Soldado Hombre-serpiente
 STR_SNAKEMAN_NAVIGATOR
-Snakeman Navigator
+Navegante Hombre-serpiente
 STR_SNAKEMAN_ENGINEER
-Snakeman Engineer
+Técnico Hombre-serpiente
 STR_SNAKEMAN_LEADER
-Snakeman Leader
+Lider Hombre-serpiente
 STR_SNAKEMAN_COMMANDER
-Snakeman Commander
+Comandante Hombre-serpiente
 STR_MUTON_SOLDIER
-Muton Soldier
+Soldado Mutante
 STR_MUTON_NAVIGATOR
-Muton Navigator
+Navegante Mutante
 STR_MUTON_ENGINEER
-Muton Engineer
+Técnico Mutante
 STR_ETHEREAL_SOLDIER
-Ethereal Soldier
+Soldado Etéreo
 STR_ETHEREAL_LEADER
-Ethereal Leader
+Lider Etéreo
 STR_ETHEREAL_COMMANDER
-Ethereal Commander
+Comandante Etéreo
 STR_CYBERDISC_TERRORIST
-Cyberdisc Terrorist
+Terrorista Ciberdisco
 STR_REAPER_TERRORIST
-Reaper Terrorist
+Terrorista Segador
 STR_CHRYSSALID_TERRORIST
-Chryssalid Terrorist
+Terrorista Crisálida
 STR_CELATID_TERRORIST
-Celatid Terrorist
+Terrorista Celátido
 STR_SILACOID_TERRORIST
-Silacoid Terrorist
+Terrorista Silacoide
 STR_SECTOPOD_TERRORIST
-Sectopod Terrorist
+Terrorista Sectópodo
 STR_UFO_POWER_SOURCE
 Fuente de energía de OVNI
 STR_UFO_NAVIGATION
@@ -1940,13 +1940,13 @@ CABEZA
 STR_TORSO
 TORSO
 STR_RIGHT_ARM
-BRAZO DERECHO
+Brazo Dcho.
 STR_LEFT_ARM
-BRAZO IZQUIERDO
+Brazo Izdo.
 STR_RIGHT_LEG
-PIERNA DERECHA
+Pierna Dcha.
 STR_LEFT_LEG
-PIERNA IZQUIERDA
+Pierna Izda.
 STR_PAIN_KILLER
 CALMANTE
 STR_STIMULANT
@@ -1972,11 +1972,11 @@ MUNICIóN:{NEWLINE}DISPAROS{NEWLINE}QUE QUEDAN=
 STR_THROW
 Lanzar
 STR_AUTO_SHOT
-Disparo automático
+Disparo auto.
 STR_SNAP_SHOT
 Disparo rápido
 STR_AIMED_SHOT
-Disparo de precisión
+Disparo preciso
 STR_OPEN
 Abrir
 STR_CLOSE
@@ -2048,11 +2048,11 @@ Alienígenas
 STR_RIGHT_HAND
 Mano Dcha.
 STR_LEFT_HAND
-Mano Izquierda
+Mano Izda.
 STR_RIGHT_SHOULDER
-Hombro Derecho
+Hombro Dcho.
 STR_LEFT_SHOULDER
-Hombro Izquierdo
+Hombro Izdo.
 STR_BACK_PACK
 Mochila
 STR_BELT
@@ -2144,17 +2144,17 @@ Equipo para {1}
 STR_SELECT_SQUAD_FOR_craftname
 Elige Tripulacion para {1}
 STR_n_UNITS_IN_EXIT_AREA_0
-No hay unidades en el area de salida
+Sin unidades en area de salida
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} unidad en el area de salida
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} unidades en el area de salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_0
-No hay unidades fuera del area de salida
+Sin unidades fuera de area salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} unidad fuera del area de salida
+{N} unidad fuera area de salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} unidades fuera del area de salida
+{N} unidades fuera area salida
 STR_ABANDON_GAME_QUESTION
 ¿ABANDONAR EL JUEGO?
 STR_HAS_BEEN_KILLED
@@ -2234,9 +2234,9 @@ No Reservar UTs
 STR_RESERVE_TUS_FOR_SNAP_SHOT
 Reservar UTs para Disparo Rápido
 STR_RESERVE_TUS_FOR_AIMED_SHOT
-Reservar UTs para Disparo de Precisión
+Reservar UTs para Disparo Preciso
 STR_RESERVE_TUS_FOR_AUTO_SHOT
-Reservar UTs para Disparo Automático
+Reservar UTs para Disparo Auto.
 STR_CENTER_ON_ENEMY_1
 Centrar en Enemigo 1
 STR_CENTER_ON_ENEMY_2
@@ -2257,3 +2257,13 @@ STR_CENTER_ON_ENEMY_9
 Centrar en Enemigo 9
 STR_OPENGL
 OpenGL
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+EN TIERRA
+STR_LIVING_QUARTERS_PLURAL
+Alojamiento
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+ARTÍCULO

@@ -3,7 +3,8 @@ Version 0.5.0 Pre-Release
 New features:
   General:
 - Game can now be completed, game over screens for winning and losing.
-- "Random Battle" mode.
+- Random "New Battle" mode.
+-- Your settings in this mode will be saved for next time you play.
 - Ukranian translation implemented.
 - Bulgarian translation implemented.
 - Italian Soldier Names added.
@@ -13,8 +14,9 @@ New features:
 - Added "Right Click to Delete" function in save/load menus.
 - Added various display filters to the game.*
 - The default windowed mode position can now be edited in the configuration file.
-- Increase/decrease buttons now respond mouse wheel scrolling when the cursor is above them.+
+- Increase/decrease buttons now respond to mouse wheel scrolling when the cursor is above them.*
 - The game can no longer be dynamically resized to a new display resolution when in windowed mode.+
+- Multi-Part Ruleset support.
 
   Geoscape:
 - Live alien capture and interrogation.
@@ -28,57 +30,91 @@ New features:
 - Base Defense Screens.
 - Alien UFO Mission Generation.
 - Alien retaliatory attacks on Xcom bases.
-- Custom Initial Base Building.* (requires a new game to take effect)
+- Custom initial base layout.* (requires a new game to take effect)
 - Allowed multiple items to be produced per hour when very large numbers of engineers are assigned to a project.*
 - Upper limit for alien captures per containment facility.* (visible on Base Info screen)
 - Captive aliens can now be sold in the same manner as dead aliens.*
 
   Battlescape:
 - Battlescape melee unit AI.
-- Unit conversion (ie: chryssalids)
+- Unit conversion for chryssalids and zombies.
 - All missing units implemented, both alien units and xcom tanks.
 - Units dual wielding single handed weapons is now represented on the battlescape.
+- The game now dynamically replaces sprite colours in order to represent soldier ethnicity and hair colour.
 - Equipment loadout saving.
 - Proper A* pathfinding.
 - Battlescape RMB scrolling improved.
 - Landing Ufos/Ground Assault missions.
-- Multi-Part Ruleset support.
-- Pause Game on Loss of Focus.
+- Ruleset support for multiple-stage missions.
+- Pause Game on Loss of Focus.**
 - Certain units now "Yell" when engaging another unit.
 - Enemy unit stats and armour are now affected by difficulty.
-- Units can now "fall" off edges by walking off the side of a roof or platform.\
+- Grenade explosions now properly credit the previous owner of the grenade with the kill when a unit dies.
+- Units can now "fall" off edges by walking off the side of a roof or platform, and other gravity-related features are implemented.
+- The game now centres on the active soldier when the player closes the inventory screen.
+- Reapers can now reaction-attack soldiers that move into a tile adjacent to them.
+- Aliens will attempt to avoid areas where other aliens have died, except in base defense missions.
+- Various AI improvements.
+- Debug mode now has tile colourisation to represent AI evaluations.
+- Debug mode now has a time-slowing feature, which can be used for graphical or voxel debugging.
 
 * These features are disabled by default but can be enabled as advanced options by editing your configuration file.
 + These features are enabled by default but can be disabled as advanced options by editing your configuration file.
+** These features can be altered by editing your configuration file.
 
 Bugfixes:
+  General:
 - Updated translations.
 - Updated soldier names.
 - Added support for native cyrillic letters.
-- Adjusted the length of the Date column on the saved game screen to allow room for translated text.
-- Fixed bug in map generator regarding nodes outside the map.
 - Fix for horizontal scroll-wheels.
-- Research consumes items properly.
-- Reaper Corpse tiles now arranged correctly.
+- Various cursor-related bugfixes/improvements.
 - Support for Haiku folder paths.
-- Battlescape buttons now unavailable during alien turn.
-- Fixed Craft not rearming after refuelling.
-- Fixed strange spawn behaviour.
-- Camera now correctly centers on explosions, and properly detects explosion visibility.
-- UFO walls can no longer be seen through from certain angles.
-- Units on stairs will now correctly reveal tiles on the level above.
-- Opening doors now uses time units correctly.
+
+  Geoscape:
+- Fix for a crash bug involving an edge case where several craft were sent to intercept a single UFO.
+- Adjusted the length of the date column on the saved game screen to allow room for translated text.
+- Research consumes items properly.
+- If necessary, craft will now always rearm after refuelling.
 - Fixed error in great circle calculation.
+- It is no longer possible to assign armour to a soldier while they're away from the base.
+- Up/down buttons now need to be held for a quarter-second before they increment by more than one.
+(This should fix single-clicks incrementing totals by more than one, making it hard to hit exact values)
+- Items are no longer removed from stores when they are researched.
+- Cut off input to dogfight screens when your craft is destroyed or the UFO decides to disengage.
+- "New research available" popups should now only display the first time you research a technology that will unlock a new branch of research.
+
+Battlescape:
+- Battlescape buttons are now unavailable during alien turn.
+- Fixed bug in map generator regarding nodes outside the map.
+- Improved map generation of alien base assualt missions.
 - The player no longer reveals the tile an alien is standing on when they detect an alien on an unrevealed tile.
 - The camera resets after non-reaction shots.
+- Camera now correctly centers on explosions, and properly detects explosion visibility.
 - Projectiles are now visible when they fly above an unrevealed tile.
+- Fixed various display bugs with projectiles.
+- UFO walls can no longer be seen through from certain angles.
+- Reaper Corpse tiles now arranged correctly.
+- Doors should no longer close on top of large units.
+- Players can now recover large unit corpses if the northwest piece is intact, as per the original game.
+- Units on stairs will now correctly reveal tiles on the level above.
+- Opening doors now uses time units correctly.
+- Fixed strange spawn behaviour.
 - Undiscovered aliens are no longer factored into pathfinding.
-- Players can now recover large unit corpses.
+- Applying stun damage to unconscious units increasing the time they will remain unconscious.
+- Stun damage should no longer damage items.
+- When units are auto-equipped for battle they will now assign as many items to their belt slots as will fit instead of stopping after 1.
+(This should fix alien grenades being recovered less often than in the original)
+- Motion scanners now detect motion on all different levels in addition to the level of the scanning soldier.
 - Various bugfixes for large units.
 - Various psi-related bugfixes.
+- Various clipping issues fixed.
 - Various pathfinding bugfixes/improvements.
-- Various cursor-related bugfixes/improvements.
 - Ethereals can now fly as intended. You have been warned.
+- Added some more robust behaviour around what happens when a unit is forced into an occupied tile.
+(ie. for the floor collapsing beneath a soldier standing above another soldier, and for when an unconscious soldier revives when another soldier is standing in their tile)
+- Fixed a bug where items with unlimited ammo would weigh twice as much as they should.
+(removed the step to add clip weight to a weapon if the weapon is its own ammunition)
 
 Version 0.4.5 (04-11-2012)
 ---------------------------

@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param unit Unit involved in the explosion (eg unit throwing the grenade)
  * @param tile Tile the explosion is on.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
 {
 
 }
@@ -128,9 +128,8 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-// is it really necessary to center bullet hit? this already happen on screen, though not on center.
-//		if (t->getVisible() || (t->getUnit() && t->getUnit()->getFaction() == FACTION_PLAYER) || _parent->getSave()->getSide() == FACTION_PLAYER)
-//			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
+		if (hit && t->getVisible())
+			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
 	}
 }
 
@@ -206,7 +205,7 @@ void ExplosionBState::explode()
 	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
-	if (_unit && !_unit->isOut())
+	if (_unit && !_unit->isOut() && _lowerWeapon)
 	{
 		_unit->aim(false);
 	}
@@ -219,6 +218,19 @@ void ExplosionBState::explode()
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
 		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
+	}
+
+	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+	{
+		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin(); j != _parent->getSave()->getItems()->end(); ++j)
+		{
+			if (_item->getId() == (*j)->getId())
+			{
+				delete *j;
+				_parent->getSave()->getItems()->erase(j);
+				break;
+			}
+		}
 	}
 
 }
