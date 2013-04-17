@@ -209,38 +209,19 @@ void BattlescapeGenerator::nextStage()
 				Node* node = _save->getSpawnNode(NR_XCOM, (*j));
 				if (node)
 				{
-					highestSoldierID = (*j)->getId();
 					_save->setUnitPosition((*j), node->getPosition());
 					(*j)->getVisibleTiles()->clear();
-				}
-				else
-				{
-					Position entryPoint = Position(-1, -1, -1);
-					int tries = 100;
-					while (entryPoint == Position(-1, -1, -1) && tries)
+					if ((*j)->getId() > highestSoldierID)
 					{
-						BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
-						if (k->getPosition() != Position(-1,-1,-1) && k->getFaction() == FACTION_PLAYER && k->getArmor()->getSize() == 1)
-						{
-							entryPoint = k->getPosition();
-						}
-						--tries;
+						highestSoldierID = (*j)->getId();
 					}
-					if (tries)
+				}
+				else if (placeUnitNearFriend(*j))
+				{
+					(*j)->getVisibleTiles()->clear();
+					if ((*j)->getId() > highestSoldierID)
 					{
-						bool found = false;
-						for (int dir = 0; dir <= 7 && !found; ++dir)
-						{
-							Position offset;
-							_save->getPathfinding()->directionToVector(dir, &offset);
-							if (!_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
-								&& _save->setUnitPosition((*j), entryPoint + offset))
-							{
-								(*j)->getVisibleTiles()->clear();
-								highestSoldierID = (*j)->getId();
-								found = true;
-							}
-						}
+						highestSoldierID = (*j)->getId();
 					}
 				}
 			}
@@ -584,7 +565,19 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			_craftInventoryTile = _save->getTile(node->getPosition());
 			unit->setDirection(RNG::generate(0,7));
 			_save->getUnits()->push_back(unit);
+			_save->getTileEngine()->calculateFOV(unit);
 			unit->deriveRank();
+		}
+		else if (_save->getMissionType() != "STR_BASE_DEFENSE")
+		{
+			if (placeUnitNearFriend(unit))
+			{
+				_craftInventoryTile = _save->getTile(unit->getPosition());
+				unit->setDirection(RNG::generate(0,7));
+				_save->getUnits()->push_back(unit);
+				_save->getTileEngine()->calculateFOV(unit);
+				unit->deriveRank();
+			}
 		}
 	}
 	else
@@ -748,6 +741,12 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 		
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)
+		_save->getUnits()->push_back(unit);
+	}
+	else if (placeUnitNearFriend(unit))
+	{
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}
 
@@ -1735,17 +1734,20 @@ void BattlescapeGenerator::deployCivilians(int max)
 {
 	if (max)
 	{
-		int number = RNG::generate(1, max);
+		int number = RNG::generate(0, max);
 
-		for (int i = 0; i < number; ++i)
+		if (number > 0)
 		{
-			if (RNG::generate(0,100) < 50)
+			for (int i = 0; i < number; ++i)
 			{
-				addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-			}
-			else
-			{
-				addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+				if (RNG::generate(0,100) < 50)
+				{
+					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
+				}
+				else
+				{
+					addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+				}
 			}
 		}
 	}
@@ -1760,6 +1762,39 @@ void BattlescapeGenerator::setAlienBase(AlienBase *base)
 	_alienBase = base;
 	_alienBase->setInBattlescape(true);
 }
-
+/**
+ * Place a unit near a friendly unit.
+ * @param unit Pointer to the unit in question.
+ * @return if we successfully placed the unit.
+ */
+bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
+{
+	Position entryPoint = Position(-1, -1, -1);
+	int tries = 100;
+	while (entryPoint == Position(-1, -1, -1) && tries)
+	{
+		BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
+		if (k->getFaction() == unit->getFaction() && k->getPosition() != Position(-1, -1, -1) && k->getArmor()->getSize() == 1)
+		{
+			entryPoint = k->getPosition();
+		}
+		--tries;
+	}
+	if (tries)
+	{
+		bool found = false;
+		for (int dir = 0; dir <= 7 && !found; ++dir)
+		{
+			Position offset;
+			_save->getPathfinding()->directionToVector(dir, &offset);
+			if (!_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
+				&& _save->setUnitPosition(unit, entryPoint + offset))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 }

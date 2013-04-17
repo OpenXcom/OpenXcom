@@ -115,7 +115,11 @@ public:
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
+	/// Set up the next stage (for cydonia/tftd terror missions)
 	void nextStage();
+	/// Find a spot near a friend to spawn at
+	bool placeUnitNearFriend(BattleUnit *unit);
+
 };
 
 }
