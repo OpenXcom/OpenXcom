@@ -154,9 +154,9 @@ void ResearchInfoState::buildUi ()
 	_btnLess->onMouseClick((ActionHandler)&ResearchInfoState::lessClick, 0);
 
 	_timerMore = new Timer(250);
-	_timerMore->onTimer((StateHandler) (void (ResearchInfoState::*)()) &ResearchInfoState::more);
+	_timerMore->onTimer((StateHandler)&ResearchInfoState::more);
 	_timerLess = new Timer(250);
-	_timerLess->onTimer((StateHandler) (void (ResearchInfoState::*)()) &ResearchInfoState::less);
+	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -194,8 +194,8 @@ void ResearchInfoState::SetAssignedScientist()
  */
 void ResearchInfoState::handleWheel(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) more(_changeValueByMouseWheel);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) less(_changeValueByMouseWheel);
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreByValue(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessByValue(_changeValueByMouseWheel);
 }
 
 /**
@@ -227,9 +227,9 @@ void ResearchInfoState::moreRelease(Action *action)
 void ResearchInfoState::moreClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		more(std::numeric_limits<int>::max());
+		moreByValue(std::numeric_limits<int>::max());
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		more(1);
+		moreByValue(1);
 }
 
 /**
@@ -261,9 +261,9 @@ void ResearchInfoState::lessRelease(Action *action)
 void ResearchInfoState::lessClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		less(std::numeric_limits<int>::max());	
+		lessByValue(std::numeric_limits<int>::max());	
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		less(1);
+		lessByValue(1);
 }
 
 /**
@@ -272,14 +272,14 @@ void ResearchInfoState::lessClick(Action *action)
 void ResearchInfoState::more()
 {	
 	_timerMore->setInterval(50);
-	more(1);
+	moreByValue(1);
 }
 
 /**
  * Add given number of scientists to the project if possible
  * @param change how much we want to add
  */
-void ResearchInfoState::more(int change)
+void ResearchInfoState::moreByValue(int change)
 {
 	if (0 >= change) return;
 	int freeScientist = _base->getAvailableScientists();
@@ -299,14 +299,14 @@ void ResearchInfoState::more(int change)
 void ResearchInfoState::less()
 {
 	_timerLess->setInterval(50);
-	less(1);
+	lessByValue(1);
 }
 
 /**
  * Remove the given number of scientists from the project if possible
  * @param change how much we want to subtract
  */
-void ResearchInfoState::less(int change)
+void ResearchInfoState::lessByValue(int change)
 {
 	if (0 >= change) return;
 	int assigned = _project->getAssigned();
