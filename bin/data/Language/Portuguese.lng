@@ -52,13 +52,13 @@ Autópsia - Celátido
 STR_CELATID_AUTOPSY_UFOPEDIA
 O seu núcleo contém um pequeno órgão biomecânico, que aparenta ser um sistema de propulsão anti-gravidade natural. A bolsa de veneno é o maior órgão do corpo e não parece haver nenhuma estrutura cerebral independente. Não há indícios de um sistema digestivo ou reprodutor. Um outro pequeno órgão contém vários embriões que podem rapidamente dar origem a uma nova criatura.
 STR_SILACOID_UFOPEDIA
-Esta forma de vida, à base de silício é capaz de gerar enormes quantidades de calor. A sua força permite-lhe esmagar rochas para digerir no seu núcleo escaldante. Possui uma inteligência primitiva e é facilmente controlável através de implantes ou por entidades telepáticas. Trabalha em conjunto com a raça Muton.
+Esta forma de vida à base de silício é capaz de gerar enormes quantidades de calor. A sua força permite-lhe esmagar rochas para digerir no seu núcleo escaldante. Possui uma inteligência primitiva e é facilmente controlável através de implantes ou por entidades telepáticas. Trabalha em conjunto com a raça Muton.
 STR_SILACOID_AUTOPSY
 Autópsia - Silacóide
 STR_SILACOID_AUTOPSY_UFOPEDIA
 O núcleo desta criatura é extremamente quente e parece ser a base do seu sistema digestivo. O seu sistema muscular possui uma força e rapidez tremendas. A sua pele rochosa é impregnável ao fogo ou a munições incendiárias.
 STR_CHRYSSALID_UFOPEDIA
-As suas pinças são uma arma terrível em combate corpo a corpo. O seu metabolismo elevado e força física concedem-lhe uma velocidade e destreza incríveis. Em vez de matar as suas vítimas, a Crisálida deposita um ovo dentro dos seus corpos, e injeta-as com um veneno que as transforma em mortos-vivos. Pouco tempo depois de a vítima ter sido injetada, uma nova Crisálida eclodirá do seu corpo. Estes seres estão associados à raça dos Homens-Cobra.
+As suas tenazes são uma arma terrível em combate corpo a corpo. O seu metabolismo elevado e força física concedem-lhe uma velocidade e destreza incríveis. Em vez de matar as suas vítimas, a Crisálida deposita um ovo dentro dos seus corpos, e injeta-as com um veneno que as transforma em mortos-vivos. Pouco tempo depois de a vítima ter sido injetada, uma nova Crisálida eclodirá do seu corpo. Estes seres estão associados à raça dos Homens-Cobra.
 STR_CHRYSSALID_AUTOPSY
 Autópsia - Crisálida
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
@@ -316,9 +316,9 @@ Selecionar Base de Destino
 STR_COST
 Valor
 STR_VICTORY_1
-Ao entrar na câmara, as nossas tropas avistam imediatamente o cérebro alienígena - o alvo da nossa missão. Antes de terem oportunidade para abrir fogo, o cérebro comunica através de um ecrã na sua base, implorando que escutemos os seus argumentos para que o deixemos vivo.
+Ao entrar na câmara, as nossas tropas avistam imediatamente o cérebro alienígena – o alvo da nossa missão. Antes de terem oportunidade para abrir fogo, o cérebro comunica através de um ecrã na sua base, implorando que escutemos os seus argumentos para que o deixemos vivo.
 STR_VICTORY_2
-Então o cérebro diz: "Há muitos milhões de anos, este planeta a que chamais de Marte foi outrora repleto de vida. Vida essa que foi trazida de outro planeta pela nossa civilização, e que foi postumamente levada para o vosso. Fomos nós que, ao longo de milhões de anos, visitámos a Terra e desenvolvemos geneticamente a vossa espécie. Não podeis matar-nos, porque sois parte de nós.
+Então o cérebro diz: "Há muitos milhões de anos, este planeta a que chamais de Marte foi outrora repleto de vida. Vida essa que foi trazida de outro planeta pela nossa civilização, e que foi postumamente levada para o vosso. Fomos nós que, ao longo de milhões de anos, visitámos o vosso planeta e desenvolvemos geneticamente a vossa espécie. Não podeis matar-nos, porque sois parte de nós.
 STR_VICTORY_3
 Estas pirâmides são o núcleo da civilização marciana, construídas milhões de anos antes das que tendes na Terra, por uma espécie nossa antepassada. Nenhum planeta está fora do nosso alcance. Este poder poderá vir a ser vosso. Em troca só pedimos a vossa cooperação...
 STR_GAME_OVER_1
@@ -328,7 +328,7 @@ O conhecimento adquirido pelo projeto XCom foi perdido para sempre. Não consegu
 STR_VICTORY_4
 O discurso do cérebro alienígena é subitamente interrompido por uma rajada de plasma. As forças alienígenas foram derrotadas.
 STR_VICTORY_5
-Após a queda de Marte, os alienígenas perderam a batalha pela Terra. Alguns anos mais tarde, a tecnologia capturada pelo projeto XCom, conduz a humanidade a uma nova idade de ouro e à colonização de Marte. A ameaça alienígena foi repelida, mas por quanto tempo, ninguém sabe. 
+Após a queda de Marte, os alienígenas perderam a batalha pela Terra. Alguns anos mais tarde, a tecnologia capturada pelo projeto XCom, conduz a humanidade a uma nova idade de ouro, levando à colonização de Marte. A ameaça alienígena foi repelida, mas por quanto tempo, ninguém sabe... 
 STR_YOU_HAVE_FAILED
 Não conseguiu travar a ameaça alienígena. Uma a uma, as nações financiadoras assinam pactos com os alienígenas em troca de tecnologia, paz e prosperidade. No entanto cedo se apercebem que os alienígenas têm outros planos... 
 STR_TOTAL_UC
@@ -376,7 +376,7 @@ OK - 5 segs
 STR_RESEARCH_COMPLETED
 Investigação Completa
 STR_VIEW_REPORTS
-LER RELATÓRIOS
+VER RELATÓRIOS
 STR_WE_CAN_NOW_RESEARCH
 Agora podemos investigar
 STR_WE_CAN_NOW_PRODUCE
@@ -544,7 +544,7 @@ A REABASTECER
 STR_REARMING
 A REARMAR
 STR_TARGET
-ALVO: 
+ALVO:
 STR_TARGET_WAY_POINT
 ALVO: PONTO DE REFERÊNCIA
 STR_ARE_YOU_SURE_CYDONIA
@@ -996,7 +996,7 @@ Armadura Voadora
 STR_HWP_ROCKETS
 Mísseis PAP
 STR_HWP_FUSION_BOMB
-Bomba de Fusão PAP
+Bombas de Fusão PAP
 STR_LASER_WEAPONS
 Armas Laser
 STR_NEW_FIGHTER_CRAFT
@@ -1028,7 +1028,7 @@ Escudo de Gravidade
 STR_MIND_SHIELD
 Escudo Mental
 STR_PSI_LAB
-Laboratório de Psíquica
+Laboratório Psíquico
 STR_MOTION_SCANNER
 Sensor de Movimento
 STR_MEDI_KIT
@@ -1366,7 +1366,7 @@ EXCELENTE!
 STR_SCORE
 PONTUAÇÃO
 STR_XCOM_PROJECT_MONTHLY_REPORT
-RELATÓRIO MENSAL DO PROJETO XCOM
+RELATÓRIO MENSAL XCOM
 STR_MONTH
 Mês> 
 STR_COUNCIL_IS_GENERALLY_SATISFIED
@@ -1570,7 +1570,7 @@ MISSÕES>
 STR_KILLS
 MORTOS> 
 STR_WOUND_RECOVERY
-RECUPERAÇÃO DE FERIMENTOS> 
+EM RECUPERAÇÃO> 
 STR_TIME_UNITS
 UNIDADES DE TEMPO
 STR_STAMINA
@@ -1614,7 +1614,7 @@ Este pequeno objeto é utilizado como fonte de energia para a espingarda de plas
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
 Fonte de energia para pistola de plasma alienígena. Contém Elério, a fonte de energia alienígena.
 STR_STUN_BOMB_UFOPEDIA
-A bomba atordoadora serve, originalmente, para a captura de humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um mini-lançador.
+A bomba atordoadora serve, originalmente, para capturar humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um mini-lançador.
 STR_ALIEN_RESEARCH_UFOPEDIA
 As missões alienígenas de investigação destinam-se a recolher informação básica sobre a Terra e os seus habitantes. Utilizam sobretudo veículos pequenos, aterrando ocasionalmente em áreas desertas. Este tipo de atividade alienígena é considerada a menos perigosa para o projeto XCom, devido a atrair pouca atenção dos governos e do público geral. 
 STR_ALIEN_HARVEST_UFOPEDIA
@@ -1788,7 +1788,7 @@ ALVO ATINGIDO!
 STR_UFO_CRASH_LANDS
 O OVNI DESPENHOU-SE!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Só pode minimizar em Perseguição
+Não pode minimizar em Modo de Ataque
 STR_UFO_RETURN_FIRE
 O OVNI ABRIU FOGO!
 STR_INTERCEPTOR_DAMAGED
@@ -1816,7 +1816,7 @@ OVNIPÉDIA
 STR_OPTIONS_UC
 OPÇÕES
 STR_FUNDING_UC
-ORÇAMENTO
+FUNDOS
 STR_5_SECS
 5 Segs
 STR_1_MIN
@@ -2142,7 +2142,7 @@ Clique no botão direito para apagar o ficheiro
 STR_EQUIPMENT_FOR_craftname
 Equipar {1}
 STR_SELECT_SQUAD_FOR_craftname
-Selecionar Esquadrão para {1}
+{1}: Selecionar Esquadrão
 STR_n_UNITS_IN_EXIT_AREA_0
 0 Unidades na Zona de Saída
 STR_n_UNITS_IN_EXIT_AREA_1
@@ -2260,10 +2260,10 @@ OpenGL
 STR_ENEMY_WEAPON_LEVEL
 Armamento Inimigo
 STR_GROUNDED
-Em Terra
+EM TERRA
 STR_LIVING_QUARTERS_PLURAL
 Habitações
 STR_OPENXCOM
 OpenXcom
 STR_LIST_ITEM
-ITEM
+Resultados
