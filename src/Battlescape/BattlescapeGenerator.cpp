@@ -173,7 +173,7 @@ void BattlescapeGenerator::nextStage()
 		// kill all units not in endpoint area
 		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if (!(*j)->isInExitArea(END_POINT) || (*j)->getFaction() == FACTION_HOSTILE)
+			if (!(*j)->isInExitArea(END_POINT) || (*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
 				(*j)->instaKill();
 			}
