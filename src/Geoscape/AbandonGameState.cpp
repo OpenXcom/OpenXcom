@@ -27,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -60,10 +61,12 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);

@@ -720,6 +720,9 @@
     <ClCompile Include="Engine\FastLineClip.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Flc.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -755,6 +758,9 @@
     </ClCompile>
     <ClCompile Include="Engine\OpenGL.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\ToggleTextButton.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1481,6 +1487,9 @@
     <ClInclude Include="Engine\FastLineClip.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Flc.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1514,6 +1523,10 @@
     <ClInclude Include="Engine\OpenGL.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\ToggleTextButton.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="aresame.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

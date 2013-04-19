@@ -179,9 +179,10 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <StringPooling>true</StringPooling>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -288,6 +289,7 @@
     <ClCompile Include="Engine\CrossPlatform.cpp" />
     <ClCompile Include="Engine\Exception.cpp" />
     <ClCompile Include="Engine\FastLineClip.cpp" />
+    <ClCompile Include="Engine\Flc.cpp" />
     <ClCompile Include="Engine\Font.cpp" />
     <ClCompile Include="Engine\Game.cpp" />
     <ClCompile Include="Engine\GMCat.cpp" />
@@ -364,6 +366,7 @@
     <ClCompile Include="Interface\TextButton.cpp" />
     <ClCompile Include="Interface\TextEdit.cpp" />
     <ClCompile Include="Interface\TextList.cpp" />
+    <ClCompile Include="Interface\ToggleTextButton.cpp" />
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
@@ -453,6 +456,7 @@
     <ClCompile Include="Ufopaedia\UfopaediaStartState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aresame.h" />
     <ClInclude Include="Basescape\BaseInfoState.h" />
     <ClInclude Include="Basescape\BasescapeState.h" />
     <ClInclude Include="Basescape\BaseView.h" />
@@ -542,6 +546,7 @@
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\FastLineClip.h" />
+    <ClInclude Include="Engine\Flc.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GMCat.h" />
@@ -617,6 +622,7 @@
     <ClInclude Include="Interface\TextButton.h" />
     <ClInclude Include="Interface\TextEdit.h" />
     <ClInclude Include="Interface\TextList.h" />
+    <ClInclude Include="Interface\ToggleTextButton.h" />
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />

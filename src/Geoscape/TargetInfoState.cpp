@@ -25,6 +25,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Savegame/Target.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -61,6 +62,8 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

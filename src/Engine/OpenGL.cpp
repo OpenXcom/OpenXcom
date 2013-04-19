@@ -118,7 +118,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   }
 
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight) {
-	while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
+    while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
     if(shader_support && (fragmentshader || vertexshader)) {
       glUseProgram(glprogram);
       GLint location;

@@ -36,14 +36,20 @@ typedef void (Surface::* SurfaceHandler)();
  */
 class Timer
 {
+public:
+	static int maxFrameSkip;
+	
 private:
-	Uint32 _start, _interval;
+	Uint32 _start;
+	Uint32 _frameSkipStart;
+	int _interval;
 	bool _running;
+	bool _frameSkipping;
 	StateHandler _state;
 	SurfaceHandler _surface;
 public:
 	/// Creates a stopped timer.
-	Timer(Uint32 interval);
+	Timer(Uint32 interval, bool frameSkipping = false);
 	/// Cleans up the timer.
 	~Timer();
 	/// Starts the timer.
@@ -62,6 +68,8 @@ public:
 	void onTimer(StateHandler handler);
 	/// Hooks a surface action handler to the timer interval.
 	void onTimer(SurfaceHandler handler);
+	/// Turns frame skipping on or off
+	void setFrameSkipping(bool skip);
 };
 
 }

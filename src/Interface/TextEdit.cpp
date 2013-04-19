@@ -35,6 +35,7 @@ namespace OpenXcom
  */
 TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0), _numerical(false)
 {
+	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
@@ -50,6 +51,8 @@ TextEdit::~TextEdit()
 	delete _text;
 	delete _caret;
 	delete _timer;
+	// In case it was left focused
+	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /**
@@ -60,12 +63,26 @@ void TextEdit::focus()
 {
 	if (!_isFocused)
 	{
+		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 		_caretPos = _value.length();
 		_blink = true;
 		_timer->start();
 		_redraw = true;
 	}
 	InteractiveSurface::focus();
+}
+
+/**
+* Stops the blinking animation when
+* the text edit is defocused.
+ */
+void TextEdit::deFocus()
+{
+	InteractiveSurface::deFocus();
+	_blink = false;
+	_redraw = true;
+	_timer->stop();
+	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /**
@@ -426,9 +443,7 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			break;
 		case SDLK_RETURN:
 		case SDLK_KP_ENTER:
-			_isFocused = false;
-			_blink = false;
-			_timer->stop();
+			deFocus();
 			break;
 		default:
 			Uint16 key = action->getDetails()->key.keysym.unicode;

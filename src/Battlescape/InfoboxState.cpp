@@ -40,13 +40,15 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 
 	// Create objects
 	_window = new Window(this, 261, 122, 34, 10);
-	_text = new Text(235, 40, 16, 40);
+	_text = new Text(241, 102, 10, 10);
 
 	add(_window);
 
 	_text->setAlign(ALIGN_CENTER);
-	_text->setFonts(_game->getResourcePack()->getFont("Big.fnt"), 0);
+	_text->setVerticalAlign(ALIGN_MIDDLE);
+	_text->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_text->setBig();
+	_text->setWordWrap(true);
 	_text->setText(msg);
 	_text->setColor(Palette::blockOffset(0));
 	_text->setHighContrast(true);

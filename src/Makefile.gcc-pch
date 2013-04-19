@@ -1,0 +1,83 @@
+# Target system.
+# Leave blank for standard Linux builds.
+# Put DINGOO for Dingoo A320 builds.
+TARGET = linux
+
+# Directories and files
+OBJDIR = ../obj/$(TARGET)/
+BINDIR = ../bin/
+SRCS = $(wildcard *.cpp */*.cpp */*/*.cpp)
+HDRS = $(wildcard *.h */*.h */*/*.h)
+OBJS = $(patsubst %.cpp, $(OBJDIR)%.o, $(notdir $(SRCS)))
+
+# Target-specific settings
+ifeq ($(TARGET),DINGOO)
+CXX = mipsel-linux-g++
+PKG-CONFIG = /opt/mipsel-linux-uclibc/usr/bin/pkg-config
+BIN = openxcom.dge
+else
+CXX = g++
+PKG-CONFIG = pkg-config
+BIN = openxcom
+endif
+
+# Compiler settings
+CXXFLAGS ?= -Wall -Wextra -Wno-unused-function -O2 -rdynamic -g -D_DEBUG
+CXXFLAGS += $(addprefix -D,$(TARGET))
+CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
+CXXFLAGS += -include pch.h
+
+LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL
+
+# Rules
+all: pch.h.gch $(OBJDIR) $(BINDIR)$(BIN)
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+pch.h.gch: $(HDRS)
+	$(CXX) -x c++-header $(patsubst -include pch.h,,$(CXXFLAGS)) pch.h 
+
+$(BINDIR)$(BIN): $(OBJS)
+	$(CXX) $(OBJS) $(LDFLAGS) $(LIBS) -o $(BINDIR)$(BIN)
+
+$(OBJDIR)%.o:: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Basescape/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Battlescape/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Engine/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Engine/Scalers/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Geoscape/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Interface/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Menu/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Resource/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Ruleset/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+	
+$(OBJDIR)%.o:: Savegame/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:: Ufopaedia/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+clean:
+	rm -f $(BINDIR)$(BIN) $(OBJDIR)*.o pch.h.gch
+
+.PHONY: all clean

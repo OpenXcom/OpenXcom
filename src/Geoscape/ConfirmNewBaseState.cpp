@@ -32,6 +32,7 @@
 #include "../Savegame/Base.h"
 #include "BaseNameState.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -69,10 +70,12 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	std::wstringstream ss;
 	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)

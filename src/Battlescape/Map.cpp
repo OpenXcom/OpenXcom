@@ -73,7 +73,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _visibleMapHeight(visibleMapHeight), _unitDying(false), _launch(false)
+Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -211,9 +211,8 @@ void Map::drawTerrain(Surface *surface)
 	Surface *tmpSurface;
 	Tile *tile;
 	int beginX = 0, endX = _save->getMapSizeX() - 1;
-    int beginY = 0, endY = _save->getMapSizeY() - 1;
+	int beginY = 0, endY = _save->getMapSizeY() - 1;
 	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getMapSizeZ() - 1:_camera->getViewLevel();
-	bool singleLevel = !_camera->getShowAllLayers();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
 	int dummy;
@@ -296,12 +295,12 @@ void Map::drawTerrain(Surface *surface)
 					}
 					else if (bulletPositionScreen.y < 8)
 					{
-						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-16);
+						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, +_visibleMapHeight-20);
 						enough = false;
 					}
 					else if (bulletPositionScreen.y > _visibleMapHeight-8)
 					{
-						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+16);
+						_camera->jumpXY(surface->getWidth()/2 - bulletPositionScreen.x, -_visibleMapHeight+20);
 						enough = false;
 					}
 					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
@@ -405,8 +404,8 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							if ((tile->getMapData(MapData::O_WESTWALL)->isDoor() || tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
-								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-								wallShade = 0;
+								 && tile->isDiscovered(0))
+								wallShade = tile->getShade();
 							else
 								wallShade = tileShade;
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(), wallShade, false);
@@ -416,8 +415,8 @@ void Map::drawTerrain(Surface *surface)
 						if (tmpSurface)
 						{
 							if ((tile->getMapData(MapData::O_NORTHWALL)->isDoor() || tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-								 && (tile->isDiscovered(0) || tile->isDiscovered(1)))
-								wallShade = 0;
+								 && tile->isDiscovered(1))
+								wallShade = tile->getShade();
 							else
 								wallShade = tileShade;
 							if (tile->getMapData(MapData::O_WESTWALL))
@@ -642,7 +641,8 @@ void Map::drawTerrain(Surface *surface)
 					}
 					if (tile->getSmoke() && tile->isDiscovered(2))
 					{
-						frameNumber = 8 + int(floor((tile->getSmoke() / 5.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
 						{
 							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
@@ -709,10 +709,21 @@ void Map::drawTerrain(Surface *surface)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Map::mouseClick(Action *action, State *state)
+void Map::mousePress(Action *action, State *state)
 {
-	InteractiveSurface::mouseClick(action, state);
-	_camera->mouseClick(action, state);
+	InteractiveSurface::mousePress(action, state);
+	_camera->mousePress(action, state);
+}
+
+/**
+ * Handles map mouse shortcuts.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Map::mouseRelease(Action *action, State *state)
+{
+	InteractiveSurface::mouseRelease(action, state);
+	_camera->mouseRelease(action, state);
 }
 
 /**
@@ -723,6 +734,18 @@ void Map::mouseClick(Action *action, State *state)
 void Map::keyboardPress(Action *action, State *state)
 {
 	InteractiveSurface::keyboardPress(action, state);
+	_camera->keyboardPress(action, state);
+}
+
+/**
+ * Handles map keyboard shortcuts.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Map::keyboardRelease(Action *action, State *state)
+{
+	InteractiveSurface::keyboardRelease(action, state);
+	_camera->keyboardRelease(action, state);
 }
 
 /**
@@ -733,12 +756,10 @@ void Map::keyboardPress(Action *action, State *state)
 void Map::mouseOver(Action *action, State *state)
 {
 	InteractiveSurface::mouseOver(action, state);
-	int posX = action->getXMouse();
-	int posY = action->getYMouse();
-
 	_camera->mouseOver(action, state);
-
-	setSelectorPosition((int)((double)posX / action->getXScale()), (int)((double)posY / action->getYScale()));
+	_mouseX = (int)action->getAbsoluteXMouse();
+	_mouseY = (int)action->getAbsoluteYMouse();
+	setSelectorPosition(_mouseX, _mouseY);
 }
 
 
@@ -1056,12 +1077,20 @@ std::vector<Position> *Map::getWaypoints()
  */
 void Map::setButtonsPressed(Uint8 button, bool pressed)
 {
-	_buttonsPressed[button] = pressed;
+	setButtonPressed(button, pressed);
 }
 
 void Map::setUnitDying(bool flag)
 {
 	_unitDying = flag;
+}
+
+/**
+ * Updates the selector to the last-known mouse position.
+ */
+void Map::refreshSelectorPosition()
+{
+	setSelectorPosition(_mouseX, _mouseY);
 }
 
 

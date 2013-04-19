@@ -64,7 +64,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO"));
+	_txtTitle->setText(_game->getLanguage()->getString("STR_OPENXCOM"));
 
 	_txtTurn->setColor(Palette::blockOffset(0));
 	_txtTurn->setBig();

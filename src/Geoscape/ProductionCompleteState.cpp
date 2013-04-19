@@ -24,6 +24,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -58,6 +59,8 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);

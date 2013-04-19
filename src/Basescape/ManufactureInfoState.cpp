@@ -471,7 +471,7 @@ void ManufactureInfoState::lessUnitClick(Action * action)
  */
 void ManufactureInfoState::onMoreEngineer()
 {
-	_timerMoreEngineer->setInterval(30);
+	_timerMoreEngineer->setInterval(50);
 	moreEngineer(1);
 }
 
@@ -480,7 +480,7 @@ void ManufactureInfoState::onMoreEngineer()
  */
 void ManufactureInfoState::onLessEngineer()
 {
-	_timerLessEngineer->setInterval(30);
+	_timerLessEngineer->setInterval(50);
 	lessEngineer(1);
 }
 
@@ -499,7 +499,7 @@ void ManufactureInfoState::handleWheelEngineer(Action *action)
  */
 void ManufactureInfoState::onMoreUnit()
 {
-	_timerMoreUnit->setInterval(30);
+	_timerMoreUnit->setInterval(50);
 	moreUnit(1);
 }
 
@@ -508,7 +508,7 @@ void ManufactureInfoState::onMoreUnit()
  */
 void ManufactureInfoState::onLessUnit()
 {
-	_timerLessUnit->setInterval(30);
+	_timerLessUnit->setInterval(50);
 	lessUnit(1);
 }
 

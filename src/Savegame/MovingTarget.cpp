@@ -19,6 +19,7 @@
 #define _USE_MATH_DEFINES
 #include "MovingTarget.h"
 #include <cmath>
+#include "../aresame.h"
 
 namespace OpenXcom
 {
@@ -178,7 +179,7 @@ bool MovingTarget::reachedDestination() const
 	{
 		return false;
 	}
-	return (_lon == _dest->getLongitude() && _lat == _dest->getLatitude());
+	return ( AreSame(_dest->getLongitude(), _lon) && AreSame(_dest->getLatitude(), _lat) );
 }
 
 /**

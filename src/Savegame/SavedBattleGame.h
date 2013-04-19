@@ -55,6 +55,7 @@ class Ruleset;
 class SavedBattleGame
 {
 private:
+	BattlescapeState *_battleState;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
 	std::vector<MapDataSet*> _mapDataSets;
 	Tile **_tiles;
@@ -78,7 +79,7 @@ private:
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::vector<BattleUnit*> _fallingUnits;
-	bool _unitsFalling, _strafeEnabled;
+	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
 public:
 	/// Creates a new battle save, based on current generic save.
 	SavedBattleGame();
@@ -216,15 +217,34 @@ public:
 	int getDragTimeTolerance() const;
 	/// get DragPixelTolerance
 	int getDragPixelTolerance() const;
+	/// update the psionic target array 
 	void updateExposedUnits();
+	/// get the vector of psionic targets
 	std::vector<BattleUnit*> *getExposedUnits();
+	/// get the number of units that can see this unit
 	int getSpottingUnits(BattleUnit* unit) const;
+	/// add this unit to the vector of falling units
 	void addFallingUnit(BattleUnit* unit);
+	/// get the vector of falling units
 	std::vector<BattleUnit*> *getFallingUnits();
+	/// toggle the switch that says "there are units falling, start the fall state"
 	void setUnitsFalling(bool fall);
+	/// check the status of the switch that says "there are units falling"
 	bool getUnitsFalling() const;
-	const bool getStrafeSetting() const;
-
+	/// check the strafe setting
+	bool getStrafeSetting() const;
+	/// check the sneaky ai setting
+	bool getSneakySetting() const;
+	/// get the traceAI setting
+	bool getTraceSetting() const;
+	/// get a pointer to the BattlescapeState
+	BattlescapeState *getBattleState();
+	/// set the pointer to the BattlescapeState
+	void setBattleState(BattlescapeState *bs);
+	/// return a pointer to the highest ranked, living XCOM unit
+	BattleUnit* getHighestRankedXCom();
+	/// get the morale modifier for XCOM based on the highest ranked, living XCOM unit, or the modifier for the unit passed to this function.
+	int getMoraleModifier(BattleUnit* unit = 0);
 	// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 };

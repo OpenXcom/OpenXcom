@@ -45,6 +45,7 @@ std::string _configFolder = "";
 std::vector<std::string> _userList;
 std::map<std::string, std::string> _options;
 std::vector<std::string> _rulesets;
+std::vector<std::string> _purchaseexclusions;
 
 /**
  * Creates a default set of options based on the system.
@@ -65,6 +66,8 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("playIntro", true);
+	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setInt("baseXResolution", 320);
@@ -73,7 +76,7 @@ void createDefault()
 	setBool("useHQXFilter", false);
 	setBool("useOpenGL", false);
 	setBool("checkOpenGLErrors", false);
-	setString("useOpenGLShader", "Shaders/CRT-interlaced.OpenGL.shader");
+	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
 	setBool("vSyncForOpenGL", false);
 	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
@@ -92,14 +95,14 @@ void createDefault()
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setInt("battleExplosionHeight", 3); //0, 1, 2, 3
+	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
 	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
-	setBool("allowChangeListValuesByMouseWheel", true); // It applies only for lists, not for scientists/engineers screen
+	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
@@ -117,8 +120,62 @@ void createDefault()
 	setBool("showFundsOnGeoscape", false);
 	setBool("showMoreStatsInInventoryView", false);
 	setBool("allowResize", false);
-	setInt("windowedModePositionX", 3);
-	setInt("windowedModePositionY", 22);
+	setInt("windowedModePositionX", -1);
+	setInt("windowedModePositionY", -1);
+	setBool("classicMouseHandling", false);
+	setBool("battleAutoEnd", false);
+
+	// new battle mode data
+	setInt("NewBattleMission", 0);
+	setInt("NewBattleTerrain", 0);
+	setInt("NewBattleItemLevel", 0);
+	setInt("NewBattleAlienRace", 0);
+	setInt("NewBattleDifficulty", 0);
+	setInt("NewBattleDarkness", 0);
+	setInt("NewBattleCraft", 0);
+	
+	// new battle loadout data
+	setInt("NewBattle_STR_AC_AP_AMMO", 1);
+	setInt("NewBattle_STR_AC_HE_AMMO", 1);
+	setInt("NewBattle_STR_AC_I_AMMO", 1);
+	setInt("NewBattle_STR_ALIEN_GRENADE", 1);
+	setInt("NewBattle_STR_AUTO_CANNON", 1);
+	setInt("NewBattle_STR_BLASTER_BOMB", 1);
+	setInt("NewBattle_STR_BLASTER_LAUNCHER", 1);
+	setInt("NewBattle_STR_ELECTRO_FLARE", 1);
+	setInt("NewBattle_STR_GRENADE", 1);
+	setInt("NewBattle_STR_HC_AP_AMMO", 1);
+	setInt("NewBattle_STR_HC_HE_AMMO", 1);
+	setInt("NewBattle_STR_HC_I_AMMO", 1);
+	setInt("NewBattle_STR_HEAVY_CANNON", 1);
+	setInt("NewBattle_STR_HEAVY_LASER", 1);
+	setInt("NewBattle_STR_HEAVY_PLASMA", 1);
+	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 1);
+	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 1);
+	setInt("NewBattle_STR_INCENDIARY_ROCKET", 1);
+	setInt("NewBattle_STR_LARGE_ROCKET", 1);
+	setInt("NewBattle_STR_LASER_PISTOL", 1);
+	setInt("NewBattle_STR_LASER_RIFLE", 1);
+	setInt("NewBattle_STR_MEDI_KIT", 1);
+	setInt("NewBattle_STR_MIND_PROBE", 1);
+	setInt("NewBattle_STR_MOTION_SCANNER", 1);
+	setInt("NewBattle_STR_PISTOL", 1);
+	setInt("NewBattle_STR_PISTOL_CLIP", 1);
+	setInt("NewBattle_STR_PLASMA_PISTOL", 1);
+	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 1);
+	setInt("NewBattle_STR_PLASMA_RIFLE", 1);
+	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 1);
+	setInt("NewBattle_STR_PROXIMITY_GRENADE", 1);
+	setInt("NewBattle_STR_PSI_AMP", 1);
+	setInt("NewBattle_STR_RIFLE", 1);
+	setInt("NewBattle_STR_RIFLE_CLIP", 1);
+	setInt("NewBattle_STR_ROCKET_LAUNCHER", 1);
+	setInt("NewBattle_STR_SMALL_LAUNCHER", 1);
+	setInt("NewBattle_STR_SMALL_ROCKET", 1);
+	setInt("NewBattle_STR_SMOKE_GRENADE", 1);
+	setInt("NewBattle_STR_STUN_BOMB", 1);
+	setInt("NewBattle_STR_STUN_ROD", 1);
+
 	// controls
 	setInt("keyOk", SDLK_RETURN);
 	setInt("keyCancel", SDLK_ESCAPE);
@@ -159,14 +216,14 @@ void createDefault()
 	setInt("keyBattleOptions", SDLK_ESCAPE);
 	setInt("keyBattleEndTurn", SDLK_BACKSPACE);
 	setInt("keyBattleAbort", SDLK_a);
-	setInt("keyBattleStats", SDLK_F1);
+	setInt("keyBattleStats", SDLK_s);
 	setInt("keyBattleKneel", SDLK_k);
 	setInt("keyBattleReload", SDLK_r);
 	setInt("keyBattlePersonalLighting", SDLK_l);
-	setInt("keyBattleReserveNone", SDLK_F2);
-	setInt("keyBattleReserveSnap", SDLK_F3);
-	setInt("keyBattleReserveAimed", SDLK_F4);
-	setInt("keyBattleReserveAuto", SDLK_F5);
+	setInt("keyBattleReserveNone", SDLK_F1);
+	setInt("keyBattleReserveSnap", SDLK_F2);
+	setInt("keyBattleReserveAimed", SDLK_F3);
+	setInt("keyBattleReserveAuto", SDLK_F4);
 	setInt("keyBattleCenterEnemy1", SDLK_1);
 	setInt("keyBattleCenterEnemy2", SDLK_2);
 	setInt("keyBattleCenterEnemy3", SDLK_3);
@@ -176,6 +233,7 @@ void createDefault()
 	setInt("keyBattleCenterEnemy7", SDLK_7);
 	setInt("keyBattleCenterEnemy8", SDLK_8);
 	setInt("keyBattleCenterEnemy9", SDLK_9);
+	setInt("keyBattleCenterEnemy10", SDLK_0);
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
@@ -381,6 +439,11 @@ void load(const std::string &filename)
 		_options[key] = value;
 	}
 
+	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
+	{
+		(*pName) >> _purchaseexclusions;
+	}
+
 	if (const YAML::Node *pName = doc.FindValue("rulesets"))
 	{
 		(*pName) >> _rulesets;
@@ -540,6 +603,11 @@ void setBool(const std::string& id, bool value)
 std::vector<std::string> getRulesets()
 {
 	return _rulesets;
+}
+
+std::vector<std::string> getPurchaseExclusions()
+{
+	return _purchaseexclusions;
 }
 
 }

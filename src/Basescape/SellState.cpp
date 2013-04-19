@@ -51,8 +51,8 @@ namespace OpenXcom
  */
 SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	bool canSellLiveAliens=Options::getBool("canSellLiveAliens");
 
 	// Create objects
@@ -63,7 +63,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtSales = new Text(190, 9, 10, 24);
 	_txtFunds = new Text(114, 9, 200, 24);
 	_txtItem = new Text(130, 9, 10, 32);
-	_txtQuantity = new Text(54, 9, 130, 32);
+	_txtQuantity = new Text(54, 9, 126, 32);
 	_txtSell = new Text(96, 9, 180, 32);
 	_txtValue = new Text(40, 9, 266, 32);
 	_lstItems = new TextList(287, 120, 8, 44);
@@ -186,9 +186,9 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		}
 	}
 
-	_timerInc = new Timer(50);
+	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)&SellState::increase);
-	_timerDec = new Timer(50);
+	_timerDec = new Timer(250);
 	_timerDec->onTimer((StateHandler)&SellState::decrease);
 }
 
@@ -322,7 +322,11 @@ void SellState::lstItemsLeftArrowPress(Action *action)
  */
 void SellState::lstItemsLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerInc->setInterval(250);
+		_timerInc->stop();
+	}
 }
 
 /**
@@ -332,6 +336,7 @@ void SellState::lstItemsLeftArrowRelease(Action *action)
 void SellState::lstItemsLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
 }
 
 /**
@@ -350,7 +355,11 @@ void SellState::lstItemsRightArrowPress(Action *action)
  */
 void SellState::lstItemsRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerDec->setInterval(250);
+		_timerDec->stop();
+	}
 }
 
 /**
@@ -360,6 +369,7 @@ void SellState::lstItemsRightArrowRelease(Action *action)
 void SellState::lstItemsRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
 }
 
 /**
@@ -426,6 +436,7 @@ int SellState::getQuantity()
  */
 void SellState::increase()
 {
+	_timerInc->setInterval(50);
 	increase(1);
 }
 
@@ -447,6 +458,7 @@ void SellState::increase(int change)
  */
 void SellState::decrease()
 {
+	_timerDec->setInterval(50);
 	decrease(1);
 }
 

@@ -166,7 +166,7 @@ int RuleUfo::getRadius() const
 	{
 		return 3;
 	}
-	else if (_size == "STR_MEDIUM")
+	else if (_size == "STR_MEDIUM_UC")
 	{
 		return 4;
 	}

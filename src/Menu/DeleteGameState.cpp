@@ -53,11 +53,10 @@ DeleteGameState::DeleteGameState(Game *game, const std::wstring &save, Uint8 col
 	_parent = parent;
 	_screen = false;
 
-
 	// Create objects
 	_window = new Window(this, 256, 120, 32, 40, POPUP_BOTH);
-	_btnConfirm = new TextButton(60, 18, 90, 112);
-	_btnCancel = new TextButton(60, 18, 170, 112);
+	_btnYes = new TextButton(60, 18, 90, 112);
+	_btnNo = new TextButton(60, 18, 170, 112);
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
@@ -65,35 +64,37 @@ DeleteGameState::DeleteGameState(Game *game, const std::wstring &save, Uint8 col
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnConfirm);
-	add(_btnCancel);
+	add(_btnYes);
+	add(_btnNo);
 	add(_txtMessage);
 
 	// Set up objects
 	_window->setColor(color);
 	_window->setBackground(game->getResourcePack()->getSurface(bg));
-	if (color == 0)
-		_window->setHighContrast(true);
 
-	_btnConfirm->setColor(color);
-	_btnConfirm->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnConfirm->onMouseClick((ActionHandler)&DeleteGameState::btnConfirmClick);
-	if (color == 0)
-		_btnConfirm->setHighContrast(true);
+	_btnYes->setColor(color);
+	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnCancel->setColor(color);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&DeleteGameState::btnCancelClick);
-	if (color == 0)
-		_btnCancel->setHighContrast(true);
+	_btnNo->setColor(color);
+	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 	
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(color);
-	if (color == 0)
-		_txtMessage->setHighContrast(true);
 	_txtMessage->setText(_game->getLanguage()->getString("STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME"));
+
+	if (color == 0)
+	{
+		_window->setHighContrast(true);
+		_btnYes->setHighContrast(true);
+		_btnNo->setHighContrast(true);
+		_txtMessage->setHighContrast(true);
+	}
 }
 
 /**
@@ -104,12 +105,12 @@ DeleteGameState::~DeleteGameState()
 
 }
 
-void DeleteGameState::btnCancelClick(Action *)
+void DeleteGameState::btnNoClick(Action *)
 {
 	_game->popState();
 }
 
-void DeleteGameState::btnConfirmClick(Action *)
+void DeleteGameState::btnYesClick(Action *)
 {
 	if (!CrossPlatform::deleteFile(_filename))
 	{

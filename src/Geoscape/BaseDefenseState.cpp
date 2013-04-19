@@ -40,6 +40,7 @@
 #include "../Engine/Sound.h"
 #include "BaseDestroyedState.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -83,6 +84,8 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
@@ -108,6 +111,15 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
  */
 BaseDefenseState::~BaseDefenseState()
 {
+}
+
+/**
+ * Resets the palette.
+ */
+void BaseDefenseState::init()
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
 }
 
 void BaseDefenseState::think()

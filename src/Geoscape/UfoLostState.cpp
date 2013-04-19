@@ -24,6 +24,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -56,6 +57,8 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&UfoLostState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

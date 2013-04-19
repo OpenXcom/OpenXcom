@@ -109,6 +109,8 @@ public:
 private:
 	/// Spawns a UFO, based on mission rules.
 	Ufo *spawnUfo(const SavedGame &game, const Ruleset &ruleset, const Globe &globe, const RuleUfo &ufoRule, const UfoTrajectory &trajectory);
+	/// Spawn an alien base
+	void spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine);
 };
 
 }

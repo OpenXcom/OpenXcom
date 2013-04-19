@@ -56,6 +56,7 @@
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "PatrolBAIState.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -172,15 +173,20 @@ void BattlescapeGenerator::nextStage()
 		// kill all units not in endpoint area
 		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if (!(*j)->isInExitArea(END_POINT))
+			if (!(*j)->isInExitArea(END_POINT) || (*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
 				(*j)->instaKill();
-				(*j)->setTile(0);
 			}
+			if ((*j)->getTile())
+			{
+				(*j)->getTile()->setUnit(0);
+			}
+			(*j)->setTile(0);
+			(*j)->setPosition(Position(-1,-1,-1), false);
 		}
 	}
-
-	if (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
+	
+	while (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
 		_game->getSavedGame()->getBattleGame()->endTurn();
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
@@ -193,28 +199,61 @@ void BattlescapeGenerator::nextStage()
 
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	generateMap();
-
+	int highestSoldierID = 0;
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if (!(*j)->isOut())
+		if ((*j)->getFaction() == FACTION_PLAYER)
 		{
-			Node* node = _save->getSpawnNode(NR_XCOM, (*j));
-			if (node)
+			if (!(*j)->isOut())
 			{
-				_save->setUnitPosition((*j), node->getPosition());
-				(*j)->getVisibleTiles()->clear();
+				Node* node = _save->getSpawnNode(NR_XCOM, (*j));
+				if (node)
+				{
+					_save->setUnitPosition((*j), node->getPosition());
+					(*j)->getVisibleTiles()->clear();
+					if ((*j)->getId() > highestSoldierID)
+					{
+						highestSoldierID = (*j)->getId();
+					}
+				}
+				else if (placeUnitNearFriend(*j))
+				{
+					(*j)->getVisibleTiles()->clear();
+					if ((*j)->getId() > highestSoldierID)
+					{
+						highestSoldierID = (*j)->getId();
+					}
+				}
 			}
 		}
 	}
-
+	
+	// remove all items not belonging to our soldiers from the map.
+	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
+	{
+		if (!(*j)->getOwner() || (*j)->getOwner()->getId() > highestSoldierID)
+		{
+			(*j)->setTile(0);
+		}
+	}
+	_unitSequence = _save->getUnits()->back()->getId() + 1;
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
 
 	deployCivilians(ruleDeploy->getCivilians());
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) && _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
-			_save->getTiles()[i]->setDiscovered(true, 2);
+		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR) &&
+			(_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT ||
+			(_save->getTiles()[i]->getPosition().z == 1 &&
+			_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift() &&
+			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
+				_save->getTiles()[i]->setDiscovered(true, 2);
+	}
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if (!(*j)->isOut())
+			_save->getTileEngine()->calculateFOV((*j));
 	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
@@ -423,7 +462,11 @@ void BattlescapeGenerator::run()
 		// auto-equip soldiers (only soldiers without layout)
 		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 		{
-			addItem(*i);
+			addItem(*i, false);
+		}
+		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+		{
+			addItem(*i, true);
 		}
 		// clean up moved items
 		RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
@@ -522,6 +565,19 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			_craftInventoryTile = _save->getTile(node->getPosition());
 			unit->setDirection(RNG::generate(0,7));
 			_save->getUnits()->push_back(unit);
+			_save->getTileEngine()->calculateFOV(unit);
+			unit->deriveRank();
+		}
+		else if (_save->getMissionType() != "STR_BASE_DEFENSE")
+		{
+			if (placeUnitNearFriend(unit))
+			{
+				_craftInventoryTile = _save->getTile(unit->getPosition());
+				unit->setDirection(RNG::generate(0,7));
+				_save->getUnits()->push_back(unit);
+				_save->getTileEngine()->calculateFOV(unit);
+				unit->deriveRank();
+			}
 		}
 	}
 	else
@@ -545,6 +601,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 					{
 						_save->getUnits()->push_back(unit);
 						_save->getTileEngine()->calculateFOV(unit);
+						unit->deriveRank();
 						break;
 					}
 				}
@@ -601,6 +658,8 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 	}
 }
 
+
+
 /**
  * Adds an alien to the game and place him on a free spawnpoint.
  * @param rules pointer to the Unit which holds info about alien .
@@ -610,37 +669,27 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
  */
 BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
-	int difficulty = _game->getSavedGame()->getDifficulty();
-	int divider = 1;
-	if (!difficulty)
-		divider = 2;
+	int difficulty = (int)(_game->getSavedGame()->getDifficulty());
+	int divider = difficulty > 0 ? 1 : 2;
 	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
 	Node *node = 0;
 
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
-	int nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
-	{ 4, 3, 5, 8, 7, 2, 0 }, // leader
-	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
-	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
-	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
-	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
-	{ 2, 5, 3, 4, 6, 8, 0 }, //terrorist
-	{ 2, 5, 3, 4, 6, 8, 0 }  }; //also terrorist
-
 	for (int i = 0; i < 7 && node == 0; i++)
 	{
 		if (outside)
 			node = _save->getSpawnNode(0, unit); // when alien is instructed to spawn outside, we only look for node 0 spawnpoints
 		else
-			node = _save->getSpawnNode(nodeRank[alienRank][i], unit);
+			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
 	}
 
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node)); // no it isn't.
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getBattleGame()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20)
@@ -692,6 +741,12 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 		
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)
+		_save->getUnits()->push_back(unit);
+	}
+	else if (placeUnitNearFriend(unit))
+	{
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}
 
@@ -763,7 +818,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  * Adds an item to an X-Com soldier. (auto-equip)
  * @param item pointer to the Item
  */
-BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
+BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
@@ -774,6 +829,30 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 		switch (item->getRules()->getBattleType())
 		{
 		case BT_AMMO:
+			if (secondPass)
+			{
+				bool placed = false;
+				for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end() && !placed; ++bu)
+				{
+					if ((*bu)->getMainHandWeapon() && (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo())
+					{
+						for (std::vector<std::string>::iterator it = (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->begin(); it != (*bu)->getMainHandWeapon()->getRules()->getCompatibleAmmo()->end() && !placed; ++it)
+						{
+							if (*it == item->getRules()->getType())
+							{
+								if (!(*bu)->getItem("STR_BELT", 1) && item->getRules()->getInventoryHeight() == 1)
+								{
+									item->moveToOwner((*bu));
+									item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+									item->setSlotX(1);
+									placed = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
 			break;
 		case BT_GRENADE:
 		case BT_PROXIMITYGRENADE:
@@ -853,9 +932,11 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item)
 		}
 	}
 
-	_save->getItems()->push_back(item);
-	item->setXCOMProperty(true);
-
+	if (!secondPass)
+	{
+		_save->getItems()->push_back(item);
+		item->setXCOMProperty(true);
+	}
 	return item;
 }
 
@@ -881,20 +962,33 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 				placed = true;
 			}
 		}
-		else if (!unit->getItem("STR_BELT"))
-		{
-			bi->moveToOwner(unit);
-			bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-			placed = true;
+		else 
+		{	
+			for (int i = 0; i != 4; ++i)
+			{
+				if (!unit->getItem("STR_BELT", i))
+				{
+					bi->moveToOwner(unit);
+					bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+					bi->setSlotX(i);
+					placed = true;
+					break;
+				}
+			}
 		}
 		break;
 	case BT_GRENADE:
 	case BT_PROXIMITYGRENADE:
-		if (!unit->getItem("STR_BELT"))
+		for (int i = 0; i != 4; ++i)
 		{
-			bi->moveToOwner(unit);
-			bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-			placed = true;
+			if (!unit->getItem("STR_BELT", i))
+			{
+				bi->moveToOwner(unit);
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+				bi->setSlotX(i);
+				placed = true;
+				break;
+			}
 		}
 		break;
 	case BT_FIREARM:
@@ -1273,8 +1367,8 @@ void BattlescapeGenerator::generateMap()
 					&& blocks[i+1][j] != dirt
 					&& _save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
-					|| (_save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
-					&& _save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)->getTerrainLevel()!=-24)))
+					|| (_save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
+					!= _save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT))))
 				{
 					// remove stuff
 					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0, -1, -1, MapData::O_WESTWALL);
@@ -1311,8 +1405,8 @@ void BattlescapeGenerator::generateMap()
 					&& blocks[i][j+1] != dirt
 					&& _save->getTile(Position((i*10)+4,(j*10)+9,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)
-					|| (_save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)
-					&& _save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)->getTerrainLevel()!=-24)))
+					|| (_save->getTile(Position((i*10)+4,(j*10)+9,0))->getMapData(MapData::O_OBJECT)
+					!= _save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT))))
 				{
 					// remove stuff
 					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0, -1, -1, MapData::O_NORTHWALL);
@@ -1640,17 +1734,20 @@ void BattlescapeGenerator::deployCivilians(int max)
 {
 	if (max)
 	{
-		int number = RNG::generate(1, max);
+		int number = RNG::generate(0, max);
 
-		for (int i = 0; i < number; ++i)
+		if (number > 0)
 		{
-			if (RNG::generate(0,100) < 50)
+			for (int i = 0; i < number; ++i)
 			{
-				addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-			}
-			else
-			{
-				addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+				if (RNG::generate(0,100) < 50)
+				{
+					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
+				}
+				else
+				{
+					addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+				}
 			}
 		}
 	}
@@ -1665,4 +1762,39 @@ void BattlescapeGenerator::setAlienBase(AlienBase *base)
 	_alienBase = base;
 	_alienBase->setInBattlescape(true);
 }
+/**
+ * Place a unit near a friendly unit.
+ * @param unit Pointer to the unit in question.
+ * @return if we successfully placed the unit.
+ */
+bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
+{
+	Position entryPoint = Position(-1, -1, -1);
+	int tries = 100;
+	while (entryPoint == Position(-1, -1, -1) && tries)
+	{
+		BattleUnit* k = _save->getUnits()->at(RNG::generate(0, _save->getUnits()->size()-1));
+		if (k->getFaction() == unit->getFaction() && k->getPosition() != Position(-1, -1, -1) && k->getArmor()->getSize() == 1)
+		{
+			entryPoint = k->getPosition();
+		}
+		--tries;
+	}
+	if (tries)
+	{
+		bool found = false;
+		for (int dir = 0; dir <= 7 && !found; ++dir)
+		{
+			Position offset;
+			_save->getPathfinding()->directionToVector(dir, &offset);
+			if (!_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
+				&& _save->setUnitPosition(unit, entryPoint + offset))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 }

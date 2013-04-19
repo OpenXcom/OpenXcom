@@ -115,6 +115,16 @@ void UnitFallBState::think()
 					_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->setUnit((*unit), _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1)));
 				}
 			}
+			for (int x = size; x >= 0; x--)
+			{
+				for (int y = size; y >= 0; y--)
+				{
+					Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
+					if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,0))->hasNoFloor(otherTileBelow) || (*unit)->getArmor()->getMovementType() == MT_FLY)
+						largeCheck = false;
+				}
+			}
+			falling = largeCheck && (*unit)->getPosition().z != 0 && (*unit)->getTile()->hasNoFloor(tileBelow) && (*unit)->getArmor()->getMovementType() != MT_FLY && (*unit)->getWalkingPhase() == 0;
 			
 			if (falling)
 			{
@@ -135,7 +145,7 @@ void UnitFallBState::think()
 								Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
 								if (t && !_parent->getSave()->getPathfinding()->isBlocked(otherTileBelow, t, dir, 0) && t->getUnit() == 0 && (!t->hasNoFloor(bt) || otherTileBelow->getUnit()->getArmor()->getMovementType() == MT_FLY))
 								{
-									otherTileBelow->getUnit()->startWalking(dir, t->getPosition(), t, bu, bt, onScreen);
+									otherTileBelow->getUnit()->startWalking(dir, originalPosition + offset, bu, onScreen);
 									_parent->getSave()->addFallingUnit(otherTileBelow->getUnit());
 									break;
 								}
@@ -153,7 +163,7 @@ void UnitFallBState::think()
 				Position destination = (*unit)->getPosition() + Position(0,0,-1);
 				Tile *tileBelow = _parent->getSave()->getTile(destination);
 				Tile *tileBelowDestination = _parent->getSave()->getTile(destination + Position(0,0,-1));
-				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, tileBelow, tileBelowDestination, onScreen);
+				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, onScreen);
 				(*unit)->setCache(0);
 				_parent->getMap()->cacheUnit(*unit);
 				++unit;

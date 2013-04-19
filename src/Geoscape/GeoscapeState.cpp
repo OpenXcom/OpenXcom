@@ -214,68 +214,90 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+5);
 	_btnIntercept->onMouseClick((ActionHandler)&GeoscapeState::btnInterceptClick);
+	_btnIntercept->onKeyboardPress((ActionHandler)&GeoscapeState::btnInterceptClick, (SDLKey)Options::getInt("keyGeoIntercept"));
 
 	_btnBases->copy(_bg);
 	_btnBases->setColor(Palette::blockOffset(15)+5);
 	_btnBases->onMouseClick((ActionHandler)&GeoscapeState::btnBasesClick);
+	_btnBases->onKeyboardPress((ActionHandler)&GeoscapeState::btnBasesClick, (SDLKey)Options::getInt("keyGeoBases"));
 
 	_btnGraphs->copy(_bg);
 	_btnGraphs->setColor(Palette::blockOffset(15)+5);
 	_btnGraphs->onMouseClick((ActionHandler)&GeoscapeState::btnGraphsClick);
+	_btnGraphs->onKeyboardPress((ActionHandler)&GeoscapeState::btnGraphsClick, (SDLKey)Options::getInt("keyGeoGraphs"));
 
 	_btnUfopaedia->copy(_bg);
 	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
 	_btnUfopaedia->onMouseClick((ActionHandler)&GeoscapeState::btnUfopaediaClick);
+	_btnUfopaedia->onKeyboardPress((ActionHandler)&GeoscapeState::btnUfopaediaClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
 
 	_btnOptions->copy(_bg);
 	_btnOptions->setColor(Palette::blockOffset(15)+5);
 	_btnOptions->onMouseClick((ActionHandler)&GeoscapeState::btnOptionsClick);
+	_btnOptions->onKeyboardPress((ActionHandler)&GeoscapeState::btnOptionsClick, (SDLKey)Options::getInt("keyGeoOptions"));
 
 	_btnFunding->copy(_bg);
 	_btnFunding->setColor(Palette::blockOffset(15)+5);
 	_btnFunding->onMouseClick((ActionHandler)&GeoscapeState::btnFundingClick);
+	_btnFunding->onKeyboardPress((ActionHandler)&GeoscapeState::btnFundingClick, (SDLKey)Options::getInt("keyGeoFunding"));
 
 	_btn5Secs->copy(_bg);
 	_btn5Secs->setColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setGroup(&_timeSpeed);
+	_btn5Secs->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
 
 	_btn1Min->copy(_bg);
 	_btn1Min->setColor(Palette::blockOffset(15)+5);
 	_btn1Min->setGroup(&_timeSpeed);
+	_btn1Min->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed2"));
 
 	_btn5Mins->copy(_bg);
 	_btn5Mins->setColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setGroup(&_timeSpeed);
+	_btn5Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed3"));
 
 	_btn30Mins->copy(_bg);
 	_btn30Mins->setColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setGroup(&_timeSpeed);
+	_btn30Mins->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed4"));
 
 	_btn1Hour->copy(_bg);
 	_btn1Hour->setColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setGroup(&_timeSpeed);
+	_btn1Hour->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed5"));
 
 	_btn1Day->copy(_bg);
 	_btn1Day->setColor(Palette::blockOffset(15)+5);
 	_btn1Day->setGroup(&_timeSpeed);
+	_btn1Day->onKeyboardPress((ActionHandler)&GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6"));
 
 	_btnRotateLeft->onMousePress((ActionHandler)&GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease);
+	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
+	_btnRotateLeft->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
 
 	_btnRotateRight->onMousePress((ActionHandler)&GeoscapeState::btnRotateRightPress);
 	_btnRotateRight->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateRightRelease);
+	_btnRotateRight->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateRightPress, (SDLKey)Options::getInt("keyGeoRight"));
+	_btnRotateRight->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateRightRelease, (SDLKey)Options::getInt("keyGeoRight"));
 
 	_btnRotateUp->onMousePress((ActionHandler)&GeoscapeState::btnRotateUpPress);
 	_btnRotateUp->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateUpRelease);
+	_btnRotateUp->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateUpPress, (SDLKey)Options::getInt("keyGeoUp"));
+	_btnRotateUp->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateUpRelease, (SDLKey)Options::getInt("keyGeoUp"));
 
 	_btnRotateDown->onMousePress((ActionHandler)&GeoscapeState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease);
+	_btnRotateDown->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateDownPress, (SDLKey)Options::getInt("keyGeoDown"));
+	_btnRotateDown->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateDownRelease, (SDLKey)Options::getInt("keyGeoDown"));
 
 	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomIn->onMouseClick((ActionHandler)&GeoscapeState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
+	_btnZoomIn->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomInLeftClick, (SDLKey)Options::getInt("keyGeoZoomIn"));
 
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
+	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
 
 	if (_showFundsOnGeoscape)
 	{
@@ -372,8 +394,8 @@ void GeoscapeState::handle(Action *action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		// "d" - enable debug mode
-		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d)
+		// "ctrl-d" - enable debug mode
+		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
@@ -592,7 +614,8 @@ void GeoscapeState::time5Seconds()
 					mission->ufoReachedWaypoint(**i, *_game, *_globe);
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
-						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
 					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 					{
@@ -606,6 +629,7 @@ void GeoscapeState::time5Seconds()
 						return;
 					if (Base *base = dynamic_cast<Base*>((*i)->getDestination()))
 					{
+						mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
 						(*i)->setDestination(0);
 						base->setupDefenses();
 						timerReset();
@@ -618,7 +642,7 @@ void GeoscapeState::time5Seconds()
 							int soldiersOnBase = 0;
 							for (std::vector<Soldier*>::iterator j = base->getSoldiers()->begin(); j != base->getSoldiers()->end() ; ++j)
 							{
-								if ((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") soldiersOnBase++;
+								if (((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") && (*j)->getWoundRecovery() == 0) soldiersOnBase++;
 							}
 							if (soldiersOnBase > 0)
 							{
@@ -641,6 +665,7 @@ void GeoscapeState::time5Seconds()
 							{
 								(*i)->setStatus(Ufo::DESTROYED);
 								popup(new BaseDestroyedState(_game, base));
+								return;
 							}
 						}
 					}
@@ -677,19 +702,49 @@ void GeoscapeState::time5Seconds()
 	// Handle craft logic
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end();)
 		{
+			if ((*j)->isDestroyed())
+			{
+				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				{
+					if((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+					{
+						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
+						break;
+					}
+				}
+				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				{
+					if((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+					{
+						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
+						break;
+					}
+				}
+
+				delete *j;
+				j = (*i)->getCrafts()->erase(j);
+				continue;
+			}
 			if ((*j)->getDestination() != 0)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0 && !u->getDetected())
 				{
-					(*j)->setDestination(0);
-					Waypoint *w = new Waypoint();
-					w->setLongitude(u->getLongitude());
-					w->setLatitude(u->getLatitude());
-					w->setId(u->getId());
-					popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && u->getStatus() == Ufo::LANDED)
+					{
+						(*j)->returnToBase();
+					}
+					else
+					{
+						(*j)->setDestination(0);
+						Waypoint *w = new Waypoint();
+						w->setLongitude(u->getLongitude());
+						w->setLatitude(u->getLatitude());
+						w->setId(u->getId());
+						popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+					}
 				}
 				if (u != 0 && u->getStatus() == Ufo::DESTROYED)
 				{
@@ -795,6 +850,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 			}
+			 ++j;
 		}
 	}
 
@@ -864,8 +920,12 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	// UFOs building a base don't detect!
-	if (ufo->getTrajectory().getID() == "P5")
+	// only UFOs on retaliation missions actively scan for bases
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation"))
+		return false;
+
+	// UFOs attacking a base don't detect!
+	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		return false;
 	}
@@ -1002,18 +1062,7 @@ private:
 /** @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
  */
-class ProcessTerrorSite: public std::unary_function<TerrorSite*, bool>
-{
-public:
-	/// Remember data for invocations.
-	ProcessTerrorSite(SavedGame &game) : _game(game) { /* Empty by design. */ }
-	/// Count down for expiration and handle it.
-	bool operator()(TerrorSite *ts) const;
-private:
-	SavedGame &_game;
-};
-
-bool ProcessTerrorSite::operator()(TerrorSite *ts) const
+bool GeoscapeState::processTerrorSite(TerrorSite *ts) const
 {
 	if (ts->getSecondsRemaining() >= 30 * 60)
 	{
@@ -1025,14 +1074,14 @@ bool ProcessTerrorSite::operator()(TerrorSite *ts) const
 		return false;
 	}
 	// Score and delete it.
-	Region *region = _game.locateRegion(*ts);
+	Region *region = _game->getSavedGame()->locateRegion(*ts);
 	if (region)
 	{
 		//TODO: This should come from mission rules!
 		region->addActivityAlien(1000);
 		//kids, tell your folks... don't ignore terror sites.
 	}
-	for (std::vector<Country*>::iterator k = _game.getCountries()->begin(); k != _game.getCountries()->end(); ++k)
+	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
 		{
@@ -1208,10 +1257,6 @@ void GeoscapeState::time30Minutes()
 				if (!detected)
 				{
 					(*u)->setDetected(false);
-					if ((*u)->getHyperDetected())
-					{
-						(*u)->setHyperDetected(false);
-					}
 					if (!(*u)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
@@ -1226,11 +1271,18 @@ void GeoscapeState::time30Minutes()
 	}
 
 	// Processes TerrorSites
-	std::vector<TerrorSite*>::iterator lastTerrorSite =
-	    std::remove_if( _game->getSavedGame()->getTerrorSites()->begin(),
-			    _game->getSavedGame()->getTerrorSites()->end(),
-			    ProcessTerrorSite(*_game->getSavedGame()));
-	_game->getSavedGame()->getTerrorSites()->erase(lastTerrorSite, _game->getSavedGame()->getTerrorSites()->end());
+	for (std::vector<TerrorSite*>::iterator ts = _game->getSavedGame()->getTerrorSites()->begin();
+		ts != _game->getSavedGame()->getTerrorSites()->end();)
+	{
+		if (processTerrorSite(*ts))
+		{
+			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
+		}
+		else
+		{
+			++ts;
+		}
+	}
 }
 
 /**
@@ -1406,7 +1458,8 @@ void GeoscapeState::time1Day()
 				}
 			}
 			const RuleResearch * newResearch = research;
-			if(_game->getSavedGame()->isResearched(research->getName()))
+			std::string name = research->getLookup() == "" ? research->getName() : research->getLookup();
+			if(_game->getSavedGame()->isResearched(name))
 			{
 				newResearch = 0;
 			}
@@ -1429,12 +1482,14 @@ void GeoscapeState::time1Day()
 			// now iterate through all the bases and remove this project from their labs
 			for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
 			{
-				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin (); iter2 != (*j)->getResearch().end (); ++iter2)
+				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
-						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") != (*iter2)->getRules()->getUnlocked().end())
+						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") == (*iter2)->getRules()->getUnlocked().end())
 					{
 						(*j)->removeResearch(*iter2);
+						// reset the iterator, the vector just got updated.
+						iter2 = (*j)->getResearch().begin();
 					}
 				}
 			}
@@ -1490,7 +1545,7 @@ void GeoscapeState::time1Month()
 	determineAlienMissions();
 	if (monthsPassed > 5)
 		determineAlienMissions();
-	if (monthsPassed >= 14 - _game->getSavedGame()->getDifficulty()
+	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
 	{
 		newRetaliation = true;
@@ -1576,7 +1631,7 @@ void GeoscapeState::timerReset()
  * @param pause True if we want to resume
  * from the same spot we left off.
  */
-void GeoscapeState::musicStop(bool pause)
+void GeoscapeState::musicStop(bool)
 {
 	_music = false;
 }
@@ -1980,23 +2035,31 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	else
 	{
 		//
-		// Alien Research at base's region.
+		// Sectoid Research at base's region.
 		//
 		AlienStrategy &strategy = _game->getSavedGame()->getAlienStrategy();
 		std::string targetRegion =
 		_game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();
 		// Choose race for this mission.
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
-		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 		otherMission->setRegion(targetRegion);
-		otherMission->setRace(missionRace);
+		otherMission->setRace("STR_SECTOID");
 		otherMission->start(150);
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
 		// Make sure this combination never comes up again.
 		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
 	}
+}
+
+void GeoscapeState::btnTimerClick(Action *action)
+{
+	SDL_Event ev;
+	ev.type = SDL_MOUSEBUTTONDOWN;
+	ev.button.button = SDL_BUTTON_LEFT;
+	Action a = Action(&ev, 0.0, 0.0);
+	action->getSender()->mousePress(&a, this);
 }
 
 }

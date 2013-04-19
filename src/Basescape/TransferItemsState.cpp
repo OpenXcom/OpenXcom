@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -55,8 +56,8 @@ namespace OpenXcom
  */
 TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _aOffset(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _distance(0.0)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	_canTransferCraftsInAirborne = Options::getBool("canTransferCraftsInAirborne");
 
 	// Create objects
@@ -366,7 +367,11 @@ void TransferItemsState::lstItemsLeftArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerInc->setInterval(250);
+		_timerInc->stop();
+	}
 }
 
 /**
@@ -376,6 +381,7 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
 }
 
 /**
@@ -394,7 +400,11 @@ void TransferItemsState::lstItemsRightArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerDec->setInterval(250);
+		_timerDec->stop();
+	}
 }
 
 /**
@@ -404,6 +414,7 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
 }
 
 /**
@@ -479,6 +490,7 @@ int TransferItemsState::getQuantity()
  */
 void TransferItemsState::increase()
 {
+	_timerInc->setInterval(50);
 	increase(1);
 }
 
@@ -550,8 +562,11 @@ void TransferItemsState::increase(int change)
 		float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
 		float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
 		int freeStoresForItem;
-		if (0 == storesNeededPerItem) freeStoresForItem = INT_MAX;
-		else freeStoresForItem = floor(freeStores / storesNeededPerItem);
+		if ( AreSame(storesNeededPerItem, 0.f) ) { 
+      freeStoresForItem = INT_MAX;
+    } else {
+      freeStoresForItem = floor(freeStores / storesNeededPerItem);
+    }
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _qtys[_sel]), change);
 		_iQty += ((float)(change)) * storesNeededPerItem;
 		_qtys[_sel] += change;
@@ -574,6 +589,7 @@ void TransferItemsState::increase(int change)
  */
 void TransferItemsState::decrease()
 {
+	_timerDec->setInterval(50);
 	decrease(1);
 }
 

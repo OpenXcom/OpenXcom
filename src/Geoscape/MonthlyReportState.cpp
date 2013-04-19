@@ -37,6 +37,7 @@
 #include "DefeatState.h"
 #include "Globe.h"
 #include "../Savegame/AlienBase.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -79,6 +80,8 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&MonthlyReportState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -115,7 +118,7 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	case 11: m = "STR_NOV"; break;
 	case 12: m = "STR_DEC"; break;
 	}
-	int difficulty_threshold = 100*(_game->getSavedGame()->getDifficulty()-9);
+	int difficulty_threshold = 100*((int)(_game->getSavedGame()->getDifficulty())-9);
 
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_MONTH") << L'\x01' << _game->getLanguage()->getString(m) << L" " << year;
@@ -411,29 +414,7 @@ void MonthlyReportState::CalculateChanges()
 		// process
 		if ((*k)->getNewPact())
 		{
-			_pactList.push_back((*k)->getRules()->getType());		
-			if (_game->getSavedGame()->getAlienBases()->size() < 9)
-			{
-				double lon;
-				double lat;
-				int tries = 0;
-				do
-				{
-					double ran = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-					double ran2 = RNG::generate(-300, 300) * 0.125 * M_PI / 180;
-					lon = (*k)->getRules()->getLabelLongitude() + ran;
-					lat = (*k)->getRules()->getLabelLatitude()  + ran2;
-					tries++;
-				}
-				while(!_globe->insideLand(lon, lat) && !(*k)->getRules()->insideCountry(lon, lat) && tries < 100);
-				AlienBase *b = new AlienBase();
-				b->setLongitude(lon);
-				b->setLatitude(lat);
-				b->setDiscovered(false);
-				b->setId(_game->getSavedGame()->getId("STR_ALIEN_BASE_"));
-				b->setAlienRace("STR_SECTOID");
-				_game->getSavedGame()->getAlienBases()->push_back(b);
-			}
+			_pactList.push_back((*k)->getRules()->getType());
 		}
 
 		// determine satisfaction level, sign pacts, adjust funding

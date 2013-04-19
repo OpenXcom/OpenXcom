@@ -104,8 +104,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	}
 #endif
 
-	// Set up keyboard events
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
 
 	// Create display
@@ -206,7 +204,7 @@ void Game::run()
 							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[pauseMode];
 							break;
 						case SDL_APPMOUSEFOCUS:
-							// We consiously ignore it.
+							// We consciously ignore it.
 							break;
 						case SDL_APPINPUTFOCUS:
 							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[pauseMode];
@@ -218,27 +216,13 @@ void Game::run()
 					Options::setInt("displayHeight", _event.resize.h);
 					_screen->setResolution(_event.resize.w, _event.resize.h);
 					break;
-				case SDL_KEYDOWN:
-				case SDL_KEYUP:
-					if (_event.type == SDL_KEYDOWN)
-					{ 
-						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-							setCtrlKeyDown(true);
-						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-							setShiftKeyDown(true);
-					}
-					else if (_event.type == SDL_KEYUP)
-					{
-						if ((&_event)->key.keysym.sym == SDLK_LCTRL)
-							setCtrlKeyDown(false);
-						else if ((&_event)->key.keysym.sym == SDLK_LSHIFT)
-							setShiftKeyDown(false);
-					}
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
 					// Skip mouse events if they're disabled
 					if (!_mouseActive) continue;
+					// re-gain focus on mouse-over or keypress.
+					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
 					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
@@ -514,37 +498,22 @@ int Game::getAlienContainmentHasUpperLimit() const
 	return _alienContainmentHasUpperLimit;
 }
 
-bool Game::_ctrlKeyDown;
 /**
- * Sets whether the control key is down
+ * @brief Returns whether current state is *state
+ * @param state The state to test against the stack state
  */
-void Game::setCtrlKeyDown(bool ctrlKey)
+bool Game::isState(State *state) const
 {
-	_ctrlKeyDown =  ctrlKey;
+	return _states.size() > 0 && _states.back() == state;
 }
 
 /**
- * Returns whether the control key is down
+ * @return whether the game is shutting down or not.
  */
-bool Game::getCtrlKeyDown()
+bool Game::isQuitting() const
 {
-	return _ctrlKeyDown;
+	return _quit;
 }
 
-bool Game::_shiftKeyDown;
-/**
- * Sets whether the Shift key is down
- */
-void Game::setShiftKeyDown(bool shiftKey)
-{
-	_shiftKeyDown =  shiftKey;
-}
 
-/**
- * Returns whether the Shift key is down
- */
-bool Game::getShiftKeyDown()
-{
-	return _shiftKeyDown;
-}
 }

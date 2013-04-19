@@ -43,11 +43,11 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _autoshotCounter(0), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(origin), _projectileImpact(0), _initialized(false)
 {
 }
 
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _autoshotCounter(0), _projectileImpact(0), _initialized(false)
+ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _projectileImpact(0), _initialized(false)
 {
 	;
 }
@@ -73,7 +73,6 @@ void ProjectileFlyBState::init()
 
 	BattleItem *weapon = _action.weapon;
 	_projectileItem = 0;
-	_autoshotCounter = 0;
 
 	if (!weapon) // can't shoot without weapon
 		return;
@@ -136,7 +135,7 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), _action.actor->getHeight(), 0))
+		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), 0))
 		{
 			_action.result = "STR_THERE_IS_NO_ONE_THERE";
 			_parent->popState();
@@ -152,19 +151,7 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
-	if (createNewProjectile() == true)
-	{
-		BattleAction action;
-		BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
-		if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction())
-		{
-			if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
-			{
-				action.cameraPosition = _action.cameraPosition;
-				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-			}
-		}
-	}
+	createNewProjectile();
 }
 
 /**
@@ -178,7 +165,6 @@ bool ProjectileFlyBState::createNewProjectile()
 	++_action.autoShotCounter;
 	Projectile *projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
 
-	_autoshotCounter++;
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
 	_parent->setStateInterval(Options::getInt("battleFireSpeed"));
@@ -267,7 +253,7 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _autoshotCounter < 3 && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
+		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter < 3 && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
 		{
 			createNewProjectile();
 		}
@@ -276,6 +262,19 @@ void ProjectileFlyBState::think()
 			if (_action.cameraPosition.z != -1)
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+			}
+			BattleAction action;
+			BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
+			if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction() && !potentialVictim->isOut())
+			{
+				if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
+				{
+					if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
+					{
+						action.cameraPosition = _action.cameraPosition;
+						_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+					}
+				}
 			}
 			_parent->popState();
 		}
@@ -314,7 +313,7 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				if (_action.type == BA_LAUNCH && _ammo->spendBullet() == false)
+				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
@@ -330,9 +329,9 @@ void ProjectileFlyBState::think()
 					{
 						offset = -1;
 					}
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
 				}
-				else
+				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
 					_parent->getMap()->cacheUnits();
@@ -347,9 +346,17 @@ void ProjectileFlyBState::think()
 
 /*
  * Flying projectiles cannot be cancelled.
+ * but they can be "skipped"
  */
 void ProjectileFlyBState::cancel()
 {
+	if (_parent->getMap()->getProjectile())
+	{
+		_parent->getMap()->getProjectile()->skipTrajectory();
+		Position p = _parent->getMap()->getProjectile()->getPosition();
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24)))
+			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x/16, p.y/16, p.z/24));
+	}
 }
 
 /*

@@ -130,6 +130,7 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SavedGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&SavedGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -190,6 +191,7 @@ void SavedGameState::updateList()
 {
 	_lstSaves->clearList();
 	SavedGame::getList(_lstSaves, _game->getLanguage());
+	_lstSaves->draw();
 }
 
 /**

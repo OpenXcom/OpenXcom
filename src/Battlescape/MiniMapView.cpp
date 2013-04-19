@@ -205,7 +205,21 @@ void MiniMapView::mouseClick (Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
 
-	// Right-button release: release mouse-scroll-mode
+	// The following is the workaround for a rare problem where sometimes
+	// the mouse-release event is missed for any reason.
+	// However if the SDL is also missed the release event, then it is to no avail :(
+	// (this part handles the release if it is missed and now an other button is used)
+	if (isMouseScrolling) {
+		if (action->getDetails()->button.button != _battleGame->getDragButton()
+		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_battleGame->getDragButton()))) { // so we missed again the mouse-release :(
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_battleGame->getDragTimeTolerance())))
+				{ _camera->centerOnPosition(posBeforeMouseScrolling); _redraw = true; }
+			isMouseScrolled = isMouseScrolling = false;
+		}
+	}
+
+	// Drag-Scroll release: release mouse-scroll-mode
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
@@ -252,6 +266,18 @@ void MiniMapView::mouseOver(Action *action, State *state)
 
 	if (isMouseScrolling && action->getDetails()->type == SDL_MOUSEMOTION)
 	{
+		// The following is the workaround for a rare problem where sometimes
+		// the mouse-release event is missed for any reason.
+		// However if the SDL is also missed the release event, then it is to no avail :(
+		// (checking: is the dragScroll-mouse-button still pressed?)
+		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_battleGame->getDragButton()))) { // so we missed again the mouse-release :(
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_battleGame->getDragTimeTolerance())))
+				{ _camera->centerOnPosition(posBeforeMouseScrolling); _redraw = true; }
+			isMouseScrolled = isMouseScrolling = false;
+			return;
+		}
+
 		isMouseScrolled = true;
 
 		if (_battleGame->isDragInverted())
@@ -326,7 +352,7 @@ void MiniMapView::mouseIn(Action *action, State *state)
 	InteractiveSurface::mouseIn(action, state);
 
 	isMouseScrolling = false;
-	_buttonsPressed[SDL_BUTTON_RIGHT] = false;
+	setButtonPressed(SDL_BUTTON_RIGHT, false);
 }
 
 /**

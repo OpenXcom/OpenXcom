@@ -31,8 +31,8 @@
 #include "GeoscapeState.h"
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Region.h"
-#include "../Ruleset/RuleRegion.h"
+#include "../Savegame/AlienMission.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -56,11 +56,11 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 
 	// Create objects
 	_window = new Window(this, 224, 180, 16, 10, POPUP_BOTH);
-	_txtUfo = new Text(160, 16, 28, 20);
+	_txtUfo = new Text(190, 16, 28, 20);
 	_txtDetected = new Text(80, 8, 28, 36);
-	_txtDetected2 = new Text(224, 8, 14, 44);
-	_lstInfo = new TextList(176, 32, 28, 60);
-	_lstInfo2 = new TextList(176, 32, 28, 96);
+	_txtDetected2 = new Text(224, 8, 16, 44);
+	_lstInfo = new TextList(190, 32, 28, 60);
+	_lstInfo2 = new TextList(190, 32, 28, 96);
 	_btnCentre = new TextButton(160, 12, 48, 144);
 	_btnCancel = new TextButton(160, 12, 48, 160);
 
@@ -83,10 +83,12 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_UFO_TIME_5_SECS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoHyperDetectedState::btnCentreClick);
+	_btnCentre->onKeyboardPress((ActionHandler)&UfoHyperDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoHyperDetectedState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&UfoHyperDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	_txtDetected2->setColor(Palette::blockOffset(8)+5);
@@ -106,14 +108,15 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
-	_lstInfo->setColumns(2, 82, 94);
+	_lstInfo->setColumns(2, 82, 108);
 	_lstInfo->setDot(true);
 	_lstInfo2->setColor(Palette::blockOffset(8)+5);
-	_lstInfo2->setColumns(2, 82, 94);
+	_lstInfo2->setColumns(2, 82, 108);
 	_lstInfo2->setDot(true);
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SIZE_UC").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ALTITUDE").c_str(), _game->getLanguage()->getString(_ufo->getAltitude()).c_str());
+	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
+	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ALTITUDE").c_str(), _game->getLanguage()->getString(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HEADING").c_str(), _game->getLanguage()->getString(_ufo->getDirection()).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
@@ -127,19 +130,7 @@ UfoHyperDetectedState::UfoHyperDetectedState(Game *game, Ufo *ufo, GeoscapeState
 	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_MISSION").c_str(), _game->getLanguage()->getString(_ufo->getMissionType()).c_str());
 	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	bool set = false;
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
-	{
-		if((*i)->getRules()->insideRegion(_ufo->getDestination()->getLongitude(), _ufo->getDestination()->getLatitude()) && !set)
-		{
-			_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString((*i)->getRules()->getType()).c_str());
-			set = true;
-		}
-	}
-	if(!set)
-	{
-		_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString("STR_UNKNOWN").c_str());
-	}
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString(_ufo->getMission()->getRegion()).c_str());
 	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 }
 

@@ -20,6 +20,7 @@
 #define OPENXCOM_INTERACTIVE_SURFACE_H
 
 #include <SDL.h>
+#include <map>
 #include "Surface.h"
 #include "State.h"
 
@@ -39,12 +40,17 @@ class InteractiveSurface : public Surface
 {
 private:
 	static const int NUM_BUTTONS = 7;
+	Uint8 _buttonsPressed;
 protected:
-	ActionHandler *_clicks, _press, _release, _in, _over, _out, _keyPress, _keyRelease;
-	bool *_buttonsPressed, _isHovered, _isFocused;
+	std::map<Uint8, ActionHandler> _click, _press, _release;
+	ActionHandler _in, _over, _out;
+	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
+	bool _isHovered, _isFocused;
 
 	/// Is any mouse button pressed?
-	bool isButtonPressed();
+	bool isButtonPressed(Uint8 button = 0);
+	/// Set a mouse button's internal state.
+	void setButtonPressed(Uint8 button, bool pressed);
 public:
 	/// Creates a new interactive surface with the specified size and position.
 	InteractiveSurface(int width, int height, int x = 0, int y = 0);
@@ -56,14 +62,16 @@ public:
 	virtual void handle(Action *action, State *state);
 	/// Sets focus on this surface.
 	virtual void focus();
+	/// Removes focus from this surface.
+	virtual void deFocus();
 	/// Unpresses the surface.
 	virtual void unpress(State *state);
 	/// Hooks an action handler to a mouse click on the surface.
 	void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
 	/// Hooks an action handler to a mouse press over the surface.
-	void onMousePress(ActionHandler handler);
+	void onMousePress(ActionHandler handler, Uint8 button = 0);
 	/// Hooks an action handler to a mouse release over the surface.
-	void onMouseRelease(ActionHandler handler);
+	void onMouseRelease(ActionHandler handler, Uint8 button = 0);
 	/// Hooks an action handler to moving the mouse into the surface.
 	void onMouseIn(ActionHandler handler);
 	/// Hooks an action handler to moving the mouse over the surface.
@@ -71,9 +79,9 @@ public:
 	/// Hooks an action handler to moving the mouse out of the surface.
 	void onMouseOut(ActionHandler handler);
 	/// Hooks an action handler to pressing a key when the surface is focused.
-	void onKeyboardPress(ActionHandler handler);
+	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
 	/// Hooks an action handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(ActionHandler handler);
+	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
 	/// Processes a mouse button press event.
 	virtual void mousePress(Action *action, State *state);
 	/// Processes a mouse button release event.

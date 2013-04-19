@@ -81,6 +81,7 @@ private:
 	std::string _graphRegionToggles;
 	std::string _graphCountryToggles;
 	std::string _graphFinanceToggles;
+	std::vector<const RuleResearch *> _poppedResearch;
 
 	void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 public:
@@ -216,10 +217,20 @@ public:
 	void setGraphFinanceToggles(const std::string &value);
 	/// Increment the month counter.
 	void addMonth();
+	/// toggle the current state of the radar line drawing
 	void toggleRadarLines();
+	/// check the current state of the radar line drawing
 	bool getRadarLines();
+	/// toggle the current state of the detail drawing
 	void toggleDetail();
+	/// check the current state of the detail drawing
 	bool getDetail();
+	/// add a research to the "popped up" array
+	void addPoppedResearch(const RuleResearch* research);
+	/// check if a research is on the "popped up" array
+	bool wasResearchPopped(const RuleResearch* research);
+	/// remove a research from the "popped up" array
+	void removePoppedResearch(const RuleResearch* research);
 
 };
 

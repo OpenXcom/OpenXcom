@@ -31,9 +31,14 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Options.h"
+#include "../Engine/Language.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "PatrolBAIState.h"
+#include "InfoboxOKState.h"
+#include "InfoboxState.h"
+#include "../Savegame/Node.h"
 
 namespace OpenXcom
 {
@@ -47,6 +52,12 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
+
+		if (!_noSound)
+		{
+			playDeathSound();
+		}
+
 		while (_unit->getStatus() == STATUS_COLLAPSING)
 		{
 			_unit->keepFalling();
@@ -61,24 +72,25 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		_originalDir = _unit->getDirection();
 		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 	}
-
-	if (!_noSound)
-	{
-		if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
-		}
-		else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
-		}
-		else
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
-		}
-	}
 	
-	parent->resetSituationForAI();
+	_unit->clearVisibleTiles();
+	_unit->clearVisibleUnits();
+
+    parent->resetSituationForAI();
+
+    if (_unit->getFaction() == FACTION_HOSTILE)
+    {
+        std::vector<Node *> *nodes = parent->getSave()->getNodes();
+        if (!nodes) return; // this better not happen.
+
+        for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
+        {
+            if (parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), unit->getPosition()) < 4)
+            {
+                (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
+            }
+        }
+    }
 }
 
 /**
@@ -108,6 +120,11 @@ void UnitDieBState::think()
 	else if (_unit->getStatus() == STATUS_STANDING)
 	{
 		_unit->startFalling();
+
+		if (!_noSound)
+		{
+			playDeathSound();
+		}
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -116,11 +133,11 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
-		_parent->getMap()->setUnitDying(false);
-		if (!_unit->getVisibleUnits()->empty())
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
-			_unit->clearVisibleUnits();
+			_unit->instaKill();
 		}
+		_parent->getMap()->setUnitDying(false);
 		if (_unit->getTurnsExposed())
 		{
 			_unit->setTurnsExposed(0);
@@ -138,13 +155,25 @@ void UnitDieBState::think()
 		}
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
-		if (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
 		{
-			_unit->instaKill();
-			if (_damageType != DT_STUN && _damageType != DT_HE)
+			Game *game = _parent->getSave()->getBattleState()->getGame();
+			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				Position p = Position(_unit->getPosition().x * 16, _unit->getPosition().y * 16, _unit->getPosition().z * 24);
-				_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, 0));
+				if (_damageType == DT_NONE)
+				{
+					game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+				}
+				else if (Options::getBool("battleNotifyDeath"))
+				{
+					std::wstringstream ss;
+					ss << _unit->getName(game->getLanguage()) << L'\n' << game->getLanguage()->getString("STR_HAS_BEEN_KILLED");
+					game->pushState(new InfoboxState(game, ss.str()));
+				}
+			}
+			else
+			{
+				game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
 			}
 		}
 	}
@@ -183,29 +212,47 @@ void UnitDieBState::convertUnitToCorpse()
 
 	if (size == 0)
 	{
-		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
 		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
+		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
 	}
 	else
 	{
+		Position p = _unit->getPosition();
 		int i = 1;
 		for (int y = 0; y <= size; y++)
 		{
 			for (int x = 0; x <= size; x++)
 			{
-				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit); // no need for this, because large units never can be revived as they don't go unconscious
 										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
 										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
-				_parent->dropItem(_unit->getPosition() + Position(x,y,0), corpse, true);
+				_parent->dropItem(p + Position(x,y,0), corpse, true);
+				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
 				i++;
 			}
 		}
+	}
+
+}
+
+void UnitDieBState::playDeathSound()
+{
+	if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
+	}
+	else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
+	}
+	else
+	{
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
 	}
 }
 

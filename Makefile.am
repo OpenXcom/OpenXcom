@@ -248,6 +248,8 @@ openxcom_SOURCES = \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \
+	src/Engine/Flc.cpp \
+	src/Engine/Flc.h \
 	src/Engine/Font.cpp \
 	src/Engine/Font.h \
 	src/Engine/Game.cpp \
@@ -393,6 +395,8 @@ openxcom_SOURCES = \
 	src/Interface/NumberText.h \
 	src/Interface/TextButton.cpp \
 	src/Interface/TextButton.h \
+	src/Interface/ToggleTextButton.cpp \
+	src/Interface/ToggleTextButton.h \
 	src/Interface/Text.cpp \
 	src/Interface/TextEdit.cpp \
 	src/Interface/TextEdit.h \

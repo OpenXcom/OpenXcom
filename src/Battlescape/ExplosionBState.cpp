@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param unit Unit involved in the explosion (eg unit throwing the grenade)
  * @param tile Tile the explosion is on.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
 {
 
 }
@@ -79,7 +79,7 @@ void ExplosionBState::init()
 						|| _item->getRules()->getDamageType() == DT_SMOKE
 						|| _item->getRules()->getDamageType() == DT_STUN);
 	}
-	else if (_tile && _tile->getExplosive())
+	else if (_tile)
 	{
 		_power = _tile->getExplosive();
 		_areaOfEffect = true;
@@ -93,24 +93,31 @@ void ExplosionBState::init()
 	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
 	if (_areaOfEffect)
 	{
-		for (int i = 0; i < _power/5; i++)
+		if (_power)
 		{
-			int X = RNG::generate(-_power/2,_power/2);
-			int Y = RNG::generate(-_power/2,_power/2);
-			Position p = _center;
-			p.x += X; p.y += Y;
-			Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
-			// add the explosion on the map
-			_parent->getMap()->getExplosions()->insert(explosion);
+			for (int i = 0; i < _power/5; i++)
+			{
+				int X = RNG::generate(-_power/2,_power/2);
+				int Y = RNG::generate(-_power/2,_power/2);
+				Position p = _center;
+				p.x += X; p.y += Y;
+				Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
+				// add the explosion on the map
+				_parent->getMap()->getExplosions()->insert(explosion);
+			}
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+			// explosion sound
+			if (_power <= 80)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
+			else
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
+			if (t->isDiscovered(0))
+				_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 		}
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		// explosion sound
-		if (_power <= 80)
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 		else
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
-		if (t->isDiscovered(0))
-			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
+		{
+			_parent->popState();
+		}
 	}
 	else
 	// create a bullet hit
@@ -121,9 +128,8 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 		// bullet hit sound
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
-// is it really necessary to center bullet hit? this already happen on screen, though not on center.
-//		if (t->getVisible() || (t->getUnit() && t->getUnit()->getFaction() == FACTION_PLAYER) || _parent->getSave()->getSide() == FACTION_PLAYER)
-//			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
+		if (hit && t->getVisible())
+			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
 	}
 }
 
@@ -162,6 +168,11 @@ void ExplosionBState::explode()
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
+		if (!_unit && _item->getPreviousOwner())
+		{
+			_unit = _item->getPreviousOwner();
+		}
+
 		if (_areaOfEffect)
 		{
 			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
@@ -170,16 +181,18 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1)
+			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1 && victim->getSpawnUnit().empty())
 			{
-				// converts the victim to a zombie
-				_parent->convertUnit(victim, _unit->getZombieUnit());
+				// converts the victim to a zombie on death
+				victim->setSpecialAbility(SPECAB_RESPAWN);
+				victim->setSpawnUnit(_unit->getZombieUnit());
 			}
 		}
 	}
 	if (_tile)
 	{
 		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
+		terrainExplosion = true;
 	}
 	if (!_tile && !_item)
 	{
@@ -192,7 +205,7 @@ void ExplosionBState::explode()
 	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
-	if (_unit && !_unit->isOut())
+	if (_unit && !_unit->isOut() && _lowerWeapon)
 	{
 		_unit->aim(false);
 	}
@@ -204,7 +217,20 @@ void ExplosionBState::explode()
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
-		_parent->statePushNext(new ExplosionBState(_parent, p, 0, _unit, t));
+		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
+	}
+
+	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+	{
+		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin(); j != _parent->getSave()->getItems()->end(); ++j)
+		{
+			if (_item->getId() == (*j)->getId())
+			{
+				delete *j;
+				_parent->getSave()->getItems()->erase(j);
+				break;
+			}
+		}
 	}
 
 }

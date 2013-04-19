@@ -35,6 +35,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Waypoint.h"
 #include "SelectDestinationState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -57,7 +58,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnPatrol = new TextButton(192, 12, 32, 156);
 	_btnCancel = new TextButton(192, 12, 32, 172);
 	_txtTitle = new Text(200, 16, 32, 20);
-	_txtStatus = new Text(200, 9, 32, 36);
+	_txtStatus = new Text(200, 16, 32, 36);
 	_txtBase = new Text(200, 9, 32, 52);
 	_txtSpeed = new Text(200, 9, 32, 60);
 	_txtMaxSpeed = new Text(200, 9, 32, 68);
@@ -111,6 +112,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeCraftState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeCraftState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -118,6 +120,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
+	_txtStatus->setWordWrap(true);
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_STATUS_") << L'\x01';
 	if (_waypoint != 0)
@@ -178,7 +181,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss5;
-	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(_craft->getAltitude());
+	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
+	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(altitude);
 	_txtAltitude->setText(ss5.str());
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);

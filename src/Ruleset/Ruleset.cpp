@@ -18,6 +18,7 @@
  */
 #include "Ruleset.h"
 #include <fstream>
+#include "../aresame.h"
 #include "../Engine/Options.h"
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"
@@ -888,7 +889,8 @@ const std::vector<SoldierNamePool*> &Ruleset::getPools() const
  */
 RuleCountry *Ruleset::getCountry(const std::string &id) const
 {
-	return _countries.find(id)->second;
+	std::map<std::string, RuleCountry*>::const_iterator i = _countries.find(id);
+	if (_countries.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -908,7 +910,8 @@ const std::vector<std::string> &Ruleset::getCountriesList() const
  */
 RuleRegion *Ruleset::getRegion(const std::string &id) const
 {
-	return _regions.find(id)->second;
+	std::map<std::string, RuleRegion*>::const_iterator i = _regions.find(id);
+	if (_regions.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -928,7 +931,8 @@ const std::vector<std::string> &Ruleset::getRegionsList() const
  */
 RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
 {
-	return _facilities.find(id)->second;
+	std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.find(id);
+	if (_facilities.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -948,7 +952,8 @@ const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
  */
 RuleCraft *Ruleset::getCraft(const std::string &id) const
 {
-	return _crafts.find(id)->second;
+	std::map<std::string, RuleCraft*>::const_iterator i = _crafts.find(id);
+	if (_crafts.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -968,7 +973,8 @@ const std::vector<std::string> &Ruleset::getCraftsList() const
  */
 RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
 {
-	return _craftWeapons.find(id)->second;
+	std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.find(id);
+	if (_craftWeapons.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1011,7 +1017,8 @@ const std::vector<std::string> &Ruleset::getItemsList() const
  */
 RuleUfo *Ruleset::getUfo(const std::string &id) const
 {
-	return _ufos.find(id)->second;
+	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
+	if (_ufos.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1031,7 +1038,8 @@ const std::vector<std::string> &Ruleset::getUfosList() const
  */
 RuleTerrain *Ruleset::getTerrain(const std::string &name) const
 {
-	return _terrains.find(name)->second;
+	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
+	if (_terrains.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1061,7 +1069,8 @@ MapDataSet *Ruleset::getMapDataSet(const std::string &name)
  */
 RuleSoldier *Ruleset::getSoldier(const std::string &name) const
 {
-	return _soldiers.find(name)->second;
+	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
+	if (_soldiers.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1071,7 +1080,8 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
  */
 Unit *Ruleset::getUnit(const std::string &name) const
 {
-	return _units.find(name)->second;
+	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
+	if (_units.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1081,7 +1091,8 @@ Unit *Ruleset::getUnit(const std::string &name) const
  */
 AlienRace *Ruleset::getAlienRace(const std::string &name) const
 {
-	return _alienRaces.find(name)->second;
+	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
+	if (_alienRaces.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1101,7 +1112,8 @@ const std::vector<std::string> &Ruleset::getAlienRacesList() const
  */
 AlienDeployment *Ruleset::getDeployment(const std::string &name) const
 {
-	return _alienDeployments.find(name)->second;
+	std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.find(name);
+	if (_alienDeployments.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1121,7 +1133,8 @@ const std::vector<std::string> &Ruleset::getDeploymentsList() const
  */
 Armor *Ruleset::getArmor(const std::string &name) const
 {
-	return _armors.find(name)->second;
+	std::map<std::string, Armor*>::const_iterator i = _armors.find(name);
+	if (_armors.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1181,7 +1194,8 @@ int Ruleset::getPersonnelTime() const
  */
 ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
 {
-	return _ufopaediaArticles.find(name)->second;
+	std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(name);
+	if (_ufopaediaArticles.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1210,7 +1224,8 @@ std::map<std::string, RuleInventory*> *Ruleset::getInventories()
  */
 RuleInventory *Ruleset::getInventory(const std::string &id) const
 {
-	return _invs.find(id)->second;
+	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
+	if (_invs.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1220,7 +1235,8 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
  */
 RuleResearch *Ruleset::getResearch (const std::string &id) const
 {
-	return _research.find(id)->second;
+	std::map<std::string, RuleResearch *>::const_iterator i = _research.find(id);
+	if (_research.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1239,7 +1255,8 @@ const std::vector<std::string> &Ruleset::getResearchList () const
  */
 RuleManufacture *Ruleset::getManufacture (const std::string &id) const
 {
-	return _manufacture.find(id)->second;
+	std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.find(id);
+	if (_manufacture.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1281,7 +1298,8 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
  */
 const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
 {
-	return _ufoTrajectories.find(id)->second;
+	std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.find(id);
+	if (_ufoTrajectories.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1291,7 +1309,8 @@ const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
  */
 const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
 {
-	return _alienMissions.find(id)->second;
+	std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.find(id);
+	if (_alienMissions.end() != i) return i->second; else return 0;
 }
 
 /**
@@ -1312,7 +1331,7 @@ public:
 	/// Remember the coordinates.
 	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
 	/// Compare with stored coordinates.
-	bool operator()(const City *city) const { return city->getLongitude() == _lon && city->getLatitude() == _lat; }
+	bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
 private:
 	double _lon, _lat;
 };

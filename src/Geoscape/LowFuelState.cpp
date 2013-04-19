@@ -27,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Savegame/Craft.h"
 #include "GeoscapeState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -64,10 +65,12 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&LowFuelState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&LowFuelState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&LowFuelState::btnOk5SecsClick);
+	_btnOk5Secs->onKeyboardPress((ActionHandler)&LowFuelState::btnOk5SecsClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

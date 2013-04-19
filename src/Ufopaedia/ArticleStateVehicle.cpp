@@ -105,7 +105,7 @@ namespace OpenXcom
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
-		_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON").c_str(), _game->getLanguage()->getString(item->getName()).c_str());
+		_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON").c_str(), _game->getLanguage()->getString(defs->weapon).c_str());
 		
 		std::wstringstream ss8;
 		ss8 << unit->getStats()->tu;

@@ -41,6 +41,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Action.h"
+#include "../Engine/Options.h"
 #include "../Basescape/CraftInfoState.h"
 
 namespace OpenXcom
@@ -72,7 +73,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnOk = new TextButton(148, 16, 8, 176);
 	_btnCancel = new TextButton(148, 16, 164, 176);
 	
-	_txtItemLevel = new Text(100, 9, 110, 110);
+	_txtItemLevel = new Text(136, 9, 110, 110);
 	_btnItemLevel = new TextButton(100, 20, 110, 120);
 
 	add(_window);
@@ -125,17 +126,14 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
 	
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
-	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACTS"));
+	_txtItemLevel->setText(_game->getLanguage()->getString("STR_ENEMY_WEAPON_LEVEL"));
 	
-	_selItemLevel = 0;
 	_itemLevels.push_back("STR_LOW");
 	_itemLevels.push_back("STR_MEDIUM");
 	_itemLevels.push_back("STR_HIGH");
 
-	_selMission = 0;
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
-	_selTerrain = 0;
 	_terrainTypes.push_back("STR_FARM");
 	_terrainTypes.push_back("STR_FOREST");
 	_terrainTypes.push_back("STR_JUNGLE");
@@ -143,17 +141,14 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_terrainTypes.push_back("STR_DESERT");
 	_terrainTypes.push_back("STR_POLAR");
 
-	_selAlien = 0;
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
 
-	_selDifficulty = 0;
 	_difficulty.push_back("STR_1_BEGINNER");
 	_difficulty.push_back("STR_2_EXPERIENCED");
 	_difficulty.push_back("STR_3_VETERAN");
 	_difficulty.push_back("STR_4_GENIUS");
 	_difficulty.push_back("STR_5_SUPERHUMAN");
 
-	_selDarkness = 0;
 	_darkness.push_back("0");
 	_darkness.push_back("3");
 	_darkness.push_back("6");
@@ -161,7 +156,6 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_darkness.push_back("12");
 	_darkness.push_back("15");
 
-	_selCraft = 0;
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
@@ -171,6 +165,14 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 			_crafts.push_back(*i);
 		}
 	}
+	
+	_selMission = Options::getInt("NewBattleMission");
+	_selTerrain = Options::getInt("NewBattleTerrain");
+	_selItemLevel = Options::getInt("NewBattleItemLevel");
+	_selAlien = Options::getInt("NewBattleAlienRace");
+	_selDifficulty = Options::getInt("NewBattleDifficulty");
+	_selDarkness = Options::getInt("NewBattleDarkness");
+	_selCraft = Options::getInt("NewBattleCraft");
 
 	_btnMissionType->setColor(Palette::blockOffset(15)-1);
 	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
@@ -211,10 +213,12 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewBattleState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NewBattleState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_music = true;
 }
@@ -293,10 +297,10 @@ void NewBattleState::initSave()
 		base->getItems()->removeItem(l->first, l->second);
 		l = base->getItems()->getContents()->begin();
 	}
-	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
+	_craft = new Craft(rule->getCraft(_crafts[_selCraft]), base, 1);
 	base->getCrafts()->push_back(_craft);
 	// Generate soldiers
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 30; ++i)
 	{
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 		base->getSoldiers()->push_back(soldier);
@@ -314,7 +318,8 @@ void NewBattleState::initSave()
 			base->getItems()->addItem(*i, 10);
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
-				_craft->getItems()->addItem(*i);
+				int amount = Options::getInt("NewBattle_" + rule->getName());
+				_craft->getItems()->addItem(*i, amount);
 			}
 		}
 	}
@@ -369,7 +374,7 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		bgen.setCraft(_craft);
 	}
-	else
+	else if (_craft)
 	{
 		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
 		u->setId(1);
@@ -381,7 +386,10 @@ void NewBattleState::btnOkClick(Action *)
 			u->setLatitude(-0.5);
 		}
 		// either ground assault or ufo crash
-		bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+		if (RNG::generate(0,1) == 1)
+			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+		else
+			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 	}
 	if (_craft)
 		_craft->setSpeed(0);
@@ -545,6 +553,7 @@ void NewBattleState::btnMissionTypeClick(Action *action)
 		updateIndex(_selMission, _missionTypes, -1);
 	}
 	_btnMissionType->setText(_game->getLanguage()->getString(_missionTypes[_selMission]));
+	Options::setInt("NewBattleMission", _selMission);
 }
 
 /**
@@ -562,6 +571,7 @@ void NewBattleState::btnTerrainTypeClick(Action *action)
 		updateIndex(_selTerrain, _terrainTypes, -1);
 	}
 	_btnTerrainType->setText(_game->getLanguage()->getString(_terrainTypes[_selTerrain]));
+	Options::setInt("NewBattleTerrain", _selTerrain);
 }
 
 /**
@@ -579,6 +589,7 @@ void NewBattleState::btnItemLevelClick(Action *action)
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
 	_btnItemLevel->setText(_game->getLanguage()->getString(_itemLevels[_selItemLevel]));
+	Options::setInt("NewBattleItemLevel", _selItemLevel);
 }
 
 /**
@@ -596,6 +607,7 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 		updateIndex(_selAlien, _alienRaces, -1);
 	}
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
+	Options::setInt("NewBattleAlienRace", _selAlien);
 }
 
 /**
@@ -613,6 +625,7 @@ void NewBattleState::btnDifficultyClick(Action *action)
 		updateIndex(_selDifficulty, _difficulty, -1);
 	}
 	_btnDifficulty->setText(_game->getLanguage()->getString(_difficulty[_selDifficulty]));
+	Options::setInt("NewBattleDifficulty", _selDifficulty);
 }
 
 /**
@@ -630,6 +643,7 @@ void NewBattleState::btnDarknessClick(Action *action)
 		updateIndex(_selDarkness, _darkness, -1);
 	}
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+	Options::setInt("NewBattleDarkness", _selDarkness);
 }
 
 /**
@@ -648,6 +662,7 @@ void NewBattleState::btnCraftClick(Action *action)
 	}
 	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
+	Options::setInt("NewBattleCraft", _selCraft);
 }
 
 }

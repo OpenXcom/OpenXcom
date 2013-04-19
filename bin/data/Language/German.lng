@@ -2153,3 +2153,113 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Einheiten außerhalb des Ausgangsbereichs
 STR_ABANDON_GAME_QUESTION
 SPIEL AUFGEBEN?
+STR_OPENGL
+OpenGL
+STR_HAS_BEEN_KILLED
+wurde getötet
+STR_DRAG_SCROLL
+Bildverlauf ziehen
+STR_HIT_MELEE
+Nahkampftreffer
+STR_CONTROLS
+Steuerung
+STR_RESTORE_DEFAULTS
+zurücksetzen
+STR_GENERAL
+allgemein
+STR_GEOSCAPE
+GEOSCAPE
+STR_BATTLESCAPE
+BATTLESCAPE
+STR_SCREENSHOT
+SCREENSHOT
+STR_FPS_COUNTER
+FPS zähler
+STR_ROTATE_LEFT
+links drehen
+STR_ROTATE_RIGHT
+rechts drehen
+STR_ROTATE_UP
+nach oben drehen
+STR_ROTATE_DOWN
+nach unten drehen
+STR_ZOOM_IN
+einzoomen
+STR_ZOOM_OUT
+auszoomen
+STR_TOGGLE_COUNTRY_DETAIL
+gebiets Information
+STR_TOGGLE_RADAR_RANGES
+Radar weite
+STR_SCROLL_LEFT
+links blättern
+STR_SCROLL_RIGHT
+rechts blättern
+STR_SCROLL_UP
+oben blättern
+STR_SCROLL_DOWN
+unten blättern
+STR_VIEW_LEVEL_ABOVE
+nach oben
+STR_VIEW_LEVEL_BELOW
+nach unten
+STR_CENTER_SELECTED_UNIT
+zentriere Einheit
+STR_PREVIOUS_UNIT
+voherige Einheit
+STR_NEXT_UNIT
+nächste Einheit
+STR_DESELECT_UNIT
+Einheit abwählen
+STR_INVENTORY
+Inventar
+STR_MINIMAP
+Minikarte
+STR_END_TURN
+Ende der Runde
+STR_ABORT_MISSION
+Mission abbrechen
+STR_UNIT_STATS
+statistik der Einheit
+STR_KNEEL
+hinknien
+STR_RELOAD
+nachladen
+STR_TOGGLE_PERSONAL_LIGHTING
+wechsel zwischen beleuchtung
+STR_DONT_RESERVE_TUS
+keine Zeiteinheiten reservieren
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Zeiteinheiten reservieren für schnellschuss
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Zeiteinheiten reservieren für gezieltenschuss
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Zeiteinheiten reservieren für automatikschuss
+STR_CENTER_ON_ENEMY_1
+zentriere Gegner 1
+STR_CENTER_ON_ENEMY_2
+zentriere Gegner 2
+STR_CENTER_ON_ENEMY_3
+zentriere Gegner 3
+STR_CENTER_ON_ENEMY_4
+zentriere Gegner 4
+STR_CENTER_ON_ENEMY_5
+zentriere Gegner 5
+STR_CENTER_ON_ENEMY_6
+zentriere Gegner 6
+STR_CENTER_ON_ENEMY_7
+zentriere Gegner 7
+STR_CENTER_ON_ENEMY_8
+zentriere Gegner 8
+STR_CENTER_ON_ENEMY_9
+zentriere Gegner 9
+STR_ENEMY_WEAPON_LEVEL
+Enemy Weapon Level
+STR_GROUNDED
+BODEN
+STR_LIVING_QUARTERS_PLURAL
+Quartiere
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+GEGENSTAND
