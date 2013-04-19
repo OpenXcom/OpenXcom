@@ -166,7 +166,6 @@ void AllocatePsiTrainingState::init()
 void AllocatePsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new PsiTrainingState(_game));
 }
 
 void AllocatePsiTrainingState::lstSoldiersPress(Action *)

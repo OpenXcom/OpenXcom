@@ -22,7 +22,9 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Geoscape/PsiTrainingState.h"
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -62,6 +64,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
 	_txtPsionic = new Text(140, 9, 0, 66);
+	_btnPsionic = new TextButton(46, 24, 274, 33);
 
 	_txtTimeUnits = new Text(120, 9, 6, 82);
 	_numTimeUnits = new Text(18, 9, 131, 82);
@@ -117,6 +120,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtCraft);
 	add(_txtRecovery);
 	add(_txtPsionic);
+	add(_btnPsionic);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -200,6 +204,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
 	_txtPsionic->setText(_game->getLanguage()->getString("STR_IN_PSIONIC_TRAINING"));
+
+	_btnPsionic->setColor(Palette::blockOffset(15)+6);
+	_btnPsionic->setText(_game->getLanguage()->getString("STR_IN_TRAINING"));
+	_btnPsionic->onMouseClick((ActionHandler)&SoldierInfoState::btnPsionicClick);
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -322,17 +330,7 @@ void SoldierInfoState::init()
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
 	
-	if(s->getCurrentStats()->psiSkill == 0)
-	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-
-		_txtPsiSkill->setVisible(false);
-		_numPsiSkill->setVisible(false);
-		_barPsiSkill->setVisible(false);
-	}
-	else
+	if(current->psiSkill > 0)
 	{
 		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
@@ -341,6 +339,16 @@ void SoldierInfoState::init()
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);
 		_barPsiSkill->setVisible(true);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+
+		_txtPsiSkill->setVisible(false);
+		_numPsiSkill->setVisible(false);
+		_barPsiSkill->setVisible(false);
 	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
@@ -437,7 +445,8 @@ void SoldierInfoState::init()
 	}
 
 	_txtPsionic->setVisible(s->isInPsiTraining());
-	
+	_btnPsionic->setVisible(Options::getBool("quickPsiTraining") && _base->getAvailablePsiLabs() > 0 && !(s->isInPsiTraining()));
+
 	if(current->psiSkill > 0)
 	{
 		std::wstringstream ss14;
@@ -532,6 +541,15 @@ void SoldierInfoState::btnArmorClick(Action *)
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 	}
+}
+
+/**
+ * Turn on/off psionic training.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::btnPsionicClick(Action *)
+{
+	_game->pushState(new PsiTrainingState(_game, "PALETTES.DAT_1"));
 }
 
 }

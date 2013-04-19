@@ -19,6 +19,7 @@
 #include "Soldier.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Ruleset/SoldierNamePool.h"
@@ -440,6 +441,30 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
+	if (Options::getBool("quickPsiTraining"))
+	{
+		if (_currentStats.psiSkill > 0)
+		{
+			if (100 * 10/_currentStats.psiSkill > RNG::generate(0, 100))
+				_currentStats.psiSkill++;
+			if(_currentStats.psiSkill > 100)
+				_currentStats.psiSkill = 100;
+		}
+		else if (_currentStats.psiSkill < 0)
+		{
+			_currentStats.psiSkill++;
+			if (_currentStats.psiSkill == 0)	// initial training is over
+			{
+				_currentStats.psiSkill = RNG::generate(16, 24);
+			}
+		}
+		else if (_currentStats.psiSkill == 0)
+		{
+			_currentStats.psiSkill = -RNG::generate(20, 40);	// initial training from 20 to 40 days
+		}
+		return;
+	}
+
 	_improvement = 0;
 	if(_currentStats.psiSkill <= 16)
 		_improvement = RNG::generate(16, 24);
