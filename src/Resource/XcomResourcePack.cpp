@@ -55,9 +55,9 @@ struct HairBleach
 
 	static const Uint8 Hair = 9 << 4;
 	static const Uint8 Face = 6 << 4;
-	static inline void func(Uint8& src, int, int, int, int)
+	static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
 	{
-		if(src > Face + 5 && src <= Face + 15)
+		if(src > cutoff && src <= Face + 15)
 		{
 			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
 		}
@@ -456,7 +456,7 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		dim.end_y = 10;
 		head.setDomain(dim);
 		s->lock();
-		ShaderDraw<HairBleach>(head);
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+5));
 		s->unlock();
 	}
 	
@@ -469,10 +469,10 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		dim.beg_y = 0;
 		dim.end_y = 24;
 		dim.beg_x = 11;
-		dim.beg_x = 20;
+		dim.end_x = 20;
 		head.setDomain(dim);
 		s->lock();
-		ShaderDraw<HairBleach>(head);
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
 		s->unlock();
 	}
 }
