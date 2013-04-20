@@ -58,7 +58,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_btnPatrol = new TextButton(192, 12, 32, 156);
 	_btnCancel = new TextButton(192, 12, 32, 172);
 	_txtTitle = new Text(200, 16, 32, 20);
-	_txtStatus = new Text(200, 16, 32, 36);
+	_txtStatus = new Text(210, 16, 32, 36);
 	_txtBase = new Text(200, 9, 32, 52);
 	_txtSpeed = new Text(200, 9, 32, 60);
 	_txtMaxSpeed = new Text(200, 9, 32, 68);

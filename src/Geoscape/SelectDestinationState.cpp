@@ -60,7 +60,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_window = new Window(this, 256, 28, 0, 0);
 	_btnCancel = new TextButton(60, 12, 110, 8);
 	_btnCydonia = new TextButton(60, 12, 180, 8);
-	_txtTitle = new Text(100, 9, 10, 10);
+	_txtTitle = new Text(100, 16, 10, 6);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -119,6 +119,8 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION"));
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTitle->setWordWrap(true);
 
 	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
 	{

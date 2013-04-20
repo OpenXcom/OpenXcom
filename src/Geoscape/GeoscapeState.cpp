@@ -56,7 +56,6 @@
 #include "MonthlyReportState.h"
 #include "ProductionCompleteState.h"
 #include "UfoDetectedState.h"
-#include "UfoHyperDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "DogfightState.h"
 #include "UfoLostState.h"
@@ -1229,14 +1228,7 @@ void GeoscapeState::time30Minutes()
 				if (detected)
 				{
 					(*u)->setDetected(true);
-					if(!(*u)->getHyperDetected())
-					{
-						popup(new UfoDetectedState(_game, (*u), this, true));
-					}
-					else
-					{
-						popup(new UfoHyperDetectedState(_game, (*u), this, true));
-					}
+					popup(new UfoDetectedState(_game, (*u), this, true, (*u)->getHyperDetected()));
 				}
 			}
 			else
