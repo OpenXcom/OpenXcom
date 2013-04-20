@@ -70,9 +70,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_ADVANCED") << " " << _game->getLanguage()->getString("STR_OPTIONS_UC");
-	_txtTitle->setText(ss.str());
+	_txtTitle->setText(_game->getLanguage()->getString("STR_ADVANCED_OPTIONS"));
 	
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -133,9 +131,9 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + s).c_str(), setting.c_str());
 	}
 
-	std::wstringstream ss2;
-	ss2 << Options::getInt("battleExplosionHeight");
-	_lstOptions->addRow(2, _game->getLanguage()->getString("STR_BATTLEEXPLOSIONHEIGHT").c_str(), ss2.str().c_str());
+	std::wstringstream ss;
+	ss << Options::getInt("battleExplosionHeight");
+	_lstOptions->addRow(2, _game->getLanguage()->getString("STR_BATTLEEXPLOSIONHEIGHT").c_str(), ss.str().c_str());
 
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
