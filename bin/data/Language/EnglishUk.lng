@@ -2278,9 +2278,13 @@ Aggressive Retaliation
 STR_AGGRESSIVERETALIATION_DESC
 UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Containment Limits
+Alien containment Limits
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Containment limits will be imposed and the sale of live aliens will be allowed.
+Live alien containment limits will be imposed.
+STR_CANSELLLIVEALIENS
+Live alien sale
+STR_CANSELLLIVEALIENS_DESC
+Allows the sale of live aliens, recommended when using containment limits.
 STR_ALLOWAUTOSELLPRODUCTION
 Allow auto-sale
 STR_ALLOWAUTOSELLPRODUCTION_DESC

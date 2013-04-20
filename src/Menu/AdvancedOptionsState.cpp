@@ -103,6 +103,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 
 	_settingSet.push_back("aggressiveRetaliation");
 	_settingSet.push_back("alienContainmentHasUpperLimit");
+	_settingSet.push_back("canSellLiveAliens");
 	_settingSet.push_back("allowAutoSellProduction");
 	_settingSet.push_back("allowBuildingQueue");
 	_settingSet.push_back("battleAutoEnd");
@@ -124,7 +125,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_settingSet.push_back("battleExplosionHeight");
 
 
-	for (size_t i = 0; i != 20; ++i)
+	for (size_t i = 0; i != 21; ++i)
 	{
 		std::wstring setting = Options::getBool(_settingSet[i]) ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
 		std::string s = _settingSet[i];
@@ -187,17 +188,13 @@ void AdvancedOptionsState::lstOptionsClick(Action *action)
 	_sel = _lstOptions->getSelectedRow();
 	bool newSetting = false;
 	std::wstring setting = L"";
-	if (_sel < 20)
+	if (_sel < 21)
 	{
 		newSetting = !Options::getBool(_settingSet[_sel]);
 		Options::setBool(_settingSet[_sel], newSetting);
-		if (_sel == 1)
-		{
-			Options::setBool("canSellLiveAliens", newSetting);
-		}
 		setting = newSetting ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
 	}
-	else if (_sel == 20)
+	else if (_sel == 21)
 	{
 		int radius = 1 + Options::getInt("battleExplosionHeight");
 		if (radius == 4)
