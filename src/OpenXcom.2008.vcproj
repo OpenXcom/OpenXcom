@@ -1779,6 +1779,14 @@
 			Name="Menu"
 			>
 			<File
+				RelativePath=".\Menu\AdvancedOptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\AdvancedOptionsState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Menu\DeleteGameState.cpp"
 				>
 			</File>

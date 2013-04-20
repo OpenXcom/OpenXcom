@@ -370,6 +370,7 @@
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\AdvancedOptionsState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
     <ClCompile Include="Menu\LanguageState.cpp" />
@@ -625,6 +626,7 @@
     <ClInclude Include="Interface\ToggleTextButton.h" />
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="Menu\AdvancedOptionsState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
     <ClInclude Include="Menu\LanguageState.h" />

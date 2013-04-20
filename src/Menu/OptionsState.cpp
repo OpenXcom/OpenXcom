@@ -35,6 +35,7 @@
 #include "LanguageState.h"
 #include "MainMenuState.h"
 #include "OptionsControlsState.h"
+#include "AdvancedOptionsState.h"
 
 namespace OpenXcom
 {
@@ -50,8 +51,9 @@ OptionsState::OptionsState(Game *game) : State(game)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 8);
-	_btnLanguage = new TextButton(148, 16, 8, 154);
-	_btnControls = new TextButton(148, 16, 164, 154);
+	_btnLanguage = new TextButton(100, 16, 8, 154);
+	_btnControls = new TextButton(100, 16, 110, 154);
+	_btnAdvanced = new TextButton(100, 16, 212, 154);
 	_btnOk = new TextButton(100, 16, 8, 176);
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
@@ -133,6 +135,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_btnDefault);
 	add(_btnLanguage);
 	add(_btnControls);
+	add(_btnAdvanced);
 
 	add(_txtDisplayResolution);
 	add(_txtDisplayWidth);
@@ -191,7 +194,10 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(_game->getLanguage()->getString("STR_CONTROLS"));
 	_btnControls->onMouseClick((ActionHandler)&OptionsState::btnControlsClick);
-
+	
+	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
+	_btnAdvanced->setText(_game->getLanguage()->getString("STR_ADVANCED"));
+	_btnAdvanced->onMouseClick((ActionHandler)&OptionsState::btnAdvancedClick);
 
 	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
 	_txtDisplayResolution->setText(_game->getLanguage()->getString("STR_DISPLAY_RESOLUTION"));
@@ -392,8 +398,8 @@ void OptionsState::btnDefaultClick(Action *)
 	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
-
-	_game->setState(new MainMenuState(_game));
+	
+	_game->popState();
 }
 
 /**
@@ -478,4 +484,10 @@ void OptionsState::DisplayHeightClick(Action *)
 		_wClicked = false;
 	}
 }
+
+void OptionsState::btnAdvancedClick(Action *action)
+{
+	_game->pushState(new AdvancedOptionsState(_game));
+}
+
 }

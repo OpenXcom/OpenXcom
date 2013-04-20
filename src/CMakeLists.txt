@@ -347,6 +347,8 @@ set ( interface_src
 )
 
 set ( menu_src
+  Menu/AdvancedOptionsState.cpp
+  Menu/AdvancedOptionsState.h
   Menu/StartState.cpp
   Menu/StartState.h
   Menu/NoteState.cpp
