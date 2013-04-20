@@ -2340,11 +2340,11 @@ Show the intro cinematic.
 STR_SHOWFUNDSONGEOSCAPE
 Show geoscape funds
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current finanical situation.
+Expand the geoscape info panel to include additional information on your current financial situation.
 STR_SHOWMORESTATSININVENTORYVIEW
 Inventory stats
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show relevent information on the selected soldier in the inventory screen.
+Show relevant information on the selected soldier in the inventory screen.
 STR_SNEAKYAI
 Sneaky AI
 STR_SNEAKYAI_DESC
@@ -2352,9 +2352,9 @@ AI avoids exposing themselves to the player whenever possible.
 STR_STRAFE
 Strafe setting
 STR_STRAFE_DESC
-enable strafing, running, and independant tank turrent movement. Use CTRL to enable alternate movement methods.
+Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
 STR_BATTLESCROLLDRAGINVERT
-Invert drag-scrolling
+Inverted drag-scrolling
 STR_BATTLESCROLLDRAGINVERT_DESC
 Inverts drag-scrolling on the battlescape.
 STR_BATTLEEXPLOSIONHEIGHT

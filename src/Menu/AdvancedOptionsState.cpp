@@ -50,8 +50,8 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_btnOk = new TextButton(100, 16, 8, 176);
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
-	_lstOptions = new TextList(180, 96, 75, 30);
-	_txtDescription = new Text(280, 40, 20, 134);
+	_lstOptions = new TextList(280, 104, 20, 30);
+	_txtDescription = new Text(280, 32, 20, 142);
 
 	add(_window);
 	add(_txtTitle);
@@ -85,11 +85,10 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_btnDefault->onMouseClick((ActionHandler)&AdvancedOptionsState::btnDefaultClick);
 	
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
-	_txtDescription->setAlign(ALIGN_CENTER);
 	_txtDescription->setWordWrap(true);
 
 
-	_lstOptions->setColumns(2, 145, 35);
+	_lstOptions->setColumns(2, 245, 35);
 	_lstOptions->setColor(Palette::blockOffset(8)+5);
 
 
