@@ -39,7 +39,7 @@ class AdvancedOptionsState : public State
 {
 private:
 	Window *_window;
-	Text *_txtTitle, *_txtSubTitle, *_txtDescription;
+	Text *_txtTitle, *_txtDescription;
 	TextList *_lstOptions;
 	unsigned int _sel;
 	TextButton *_btnOk, *_btnCancel, *_btnDefault;
@@ -58,6 +58,7 @@ public:
 	void lstOptionsClick(Action *action);
 	void lstOptionsMouseOver(Action *action);
 	void lstOptionsMouseOut(Action *action);
+
 };
 
 }

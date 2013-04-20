@@ -47,11 +47,10 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 8);
-	_txtSubTitle = new Text(320, 8, 0, 24);
 	_btnOk = new TextButton(100, 16, 8, 176);
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
-	_lstOptions = new TextList(180, 96, 75, 34);
+	_lstOptions = new TextList(180, 96, 75, 30);
 	_txtDescription = new Text(280, 40, 20, 134);
 
 	add(_window);
@@ -60,7 +59,6 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	add(_btnCancel);
 	add(_btnDefault);
 	add(_lstOptions);
-	add(_txtSubTitle);
 	add(_txtDescription);
 
 	// Set up objects
@@ -86,10 +84,6 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_btnDefault->setText(_game->getLanguage()->getString("STR_RESTORE_DEFAULTS"));
 	_btnDefault->onMouseClick((ActionHandler)&AdvancedOptionsState::btnDefaultClick);
 	
-	_txtSubTitle->setColor(Palette::blockOffset(8)+10);
-	_txtSubTitle->setAlign(ALIGN_CENTER);
-	_txtSubTitle->setText(_game->getLanguage()->getString("STR_DESC_TOGGLE"));
-
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
 	_txtDescription->setAlign(ALIGN_CENTER);
 	_txtDescription->setWordWrap(true);
