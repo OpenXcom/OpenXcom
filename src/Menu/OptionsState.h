@@ -46,7 +46,7 @@ private:
 	ArrowButton *_btnDisplayUp, *_btnDisplayDown;
 	Text *_txtDisplayMode;
 	TextButton *_displayMode, *_btnDisplayWindowed, *_btnDisplayFullscreen;
-    ToggleTextButton *_btnDisplayOpenGL;
+    ToggleTextButton *_btnDisplayOpenGL, *_btnDisplayFilter;
 	Text *_txtMusicVolume;
 	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
 	Text *_txtSoundVolume;

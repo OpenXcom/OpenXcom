@@ -66,7 +66,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayMode = new Text(120, 9, 164, 32);
 	_btnDisplayWindowed = new TextButton(120, 16, 164, 42);
 	_btnDisplayFullscreen = new TextButton(120, 16, 164, 60);
-	_btnDisplayOpenGL = new ToggleTextButton(56, 16, 164, 78);
+	_btnDisplayOpenGL = new ToggleTextButton(58, 16, 164, 78);
+	_btnDisplayFilter = new ToggleTextButton(58, 16, 226, 78);
 
 	_txtMusicVolume = new Text(120, 9, 8, 82);
 	_btnMusicVolume1 = new TextButton(22, 14, 8, 92);
@@ -144,6 +145,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_btnDisplayWindowed);
 	add(_btnDisplayFullscreen);
     add(_btnDisplayOpenGL);
+    add(_btnDisplayFilter);
 
 	add(_txtMusicVolume);
 	add(_btnMusicVolume1);
@@ -233,6 +235,11 @@ OptionsState::OptionsState(Game *game) : State(game)
     _btnDisplayOpenGL->setColor(Palette::blockOffset(15)-1);
     _btnDisplayOpenGL->setText(_game->getLanguage()->getString("STR_OPENGL")); // there's not really a translation for "OpenGL" afaik
     _btnDisplayOpenGL->setPressed(Options::getBool("useOpenGL"));
+	
+    _btnDisplayFilter->setColor(Palette::blockOffset(15)-1);
+    _btnDisplayFilter->setText(_game->getLanguage()->getString("STR_HQ_FILTER"));
+	bool filter = Options::getBool("useOpenGL") ? Options::getString("useOpenGLShader") == "Shaders/HQ2X.OpenGL.shader" : Options::getBool("useHQXFilter");
+    _btnDisplayFilter->setPressed(filter);
 
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
 	_txtMusicVolume->setText(_game->getLanguage()->getString("STR_MUSIC_VOLUME"));
@@ -327,6 +334,35 @@ void OptionsState::btnOkClick(Action *)
 		Options::setInt("soundVolume", 128);
 
     Options::setBool("useOpenGL", _btnDisplayOpenGL->getPressed());
+
+    if (_btnDisplayFilter->getPressed())
+	{
+		if (_btnDisplayOpenGL->getPressed())
+		{
+			if (Options::getString("useOpenGLShader") == "Shaders/Openxcom.OpenGL.shader")
+			{
+				Options::setString("useOpenGLShader", "Shaders/HQ2X.OpenGL.shader");
+			}
+		}
+		else
+		{
+			Options::setBool("useHQXFilter", true);
+		}
+	}
+	else
+	{
+		if (_btnDisplayOpenGL->getPressed())
+		{
+			if (Options::getString("useOpenGLShader") == "Shaders/HQ2X.OpenGL.shader")
+			{
+				Options::setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
+			}
+		}
+		else
+		{
+			Options::setBool("useHQXFilter", false);
+		}
+	}
 	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
