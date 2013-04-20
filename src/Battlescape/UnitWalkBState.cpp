@@ -312,6 +312,16 @@ void UnitWalkBState::think()
 				}
 				_pf->abortPath();
 				_parent->getMap()->cacheUnit(_unit);
+				_parent->popState();
+				return;
+			}
+
+			if (energy > _unit->getEnergy())
+			{
+				_action.result = "STR_NOT_ENOUGH_ENERGY";
+				_pf->abortPath();
+				_parent->getMap()->cacheUnit(_unit);
+				_parent->popState();
 				return;
 			}
 
@@ -386,18 +396,6 @@ void UnitWalkBState::think()
 					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 					_unit->startWalking(dir, destination, tileBelow, onScreen);
 				}
-				else
-				{
-					_action.result = "STR_NOT_ENOUGH_ENERGY";
-					_parent->getMap()->cacheUnit(_unit);
-					_parent->popState();
-				}
-			}
-			else
-			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-				_parent->getMap()->cacheUnit(_unit);
-				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
 			if (onScreen)
