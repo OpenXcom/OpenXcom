@@ -1282,27 +1282,31 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					}
 				}
 			}
-			for (int dir = 0; dir < 12 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+			for (int dir = 0; dir < 11 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
 			{
-				if (dir == 10)
+			    bool hasFlyingArmor = (*i)->getArmor()->getMovementType() == MT_FLY;
+
+				if (dir == 9)
 				{
-					if ((*i)->getArmor()->getMovementType() != MT_FLY)
+					if (!hasFlyingArmor)
 					{
 						continue;
 					}
 					zd = 1;
 				}
-				if (dir == 11)
+				if (dir == 10)
 				{
 					zd = -1;
 				}
+
 				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],zd));
 				Tile *bt = getTile(originalPosition + Position(xd[dir],yd[dir],zd - 1));
-				if (t && t->getUnit() == 0 && !t->hasNoFloor(bt))
+
+				if (t && t->getUnit() == 0 && (!t->hasNoFloor(bt) || (t->hasNoFloor(bt) && hasFlyingArmor)) )
 				{
 					// recover from unconscious
 					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],zd));
-					getTile(originalPosition + Position(xd[dir],yd[dir],zd))->setUnit(*i, getTile(originalPosition + Position(xd[dir],yd[dir],zd-1)));
+					t->setUnit(*i, bt);
 					(*i)->turn(false); // makes the unit stand up again
 					(*i)->setCache(0);
 					getTileEngine()->calculateFOV((*i));
