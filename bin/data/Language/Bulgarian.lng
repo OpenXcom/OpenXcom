@@ -2165,3 +2165,93 @@ STR_OPENXCOM
 OpenXcom
 STR_LIST_ITEM
 АРТИКУЛ
+STR_HQ_FILTER
+HQX
+STR_ADVANCED
+ADVANCED
+STR_DESC_TOGGLE
+Left-Click to toggle.
+STR_AGGRESSIVERETALIATION
+Aggressive Retaliation
+STR_AGGRESSIVERETALIATION_DESC
+UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+STR_ALIENCONTAINMENTHASUPPERLIMIT
+Containment Limits
+STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+Containment limits will be imposed and the sale of live aliens will be allowed.
+STR_ALLOWAUTOSELLPRODUCTION
+Allow auto-sale
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Enable auto-selling. To auto-sell: right-click the "Increase" button on a manufacturing project's "Total to Produce" ("$$$" indicates an item being auto-sold).
+STR_ALLOWBUILDINGQUEUE
+Use building queue
+STR_ALLOWBUILDINGQUEUE_DESC
+Unfinished facilities act as links to the access lift when new facilities are placed.
+STR_BATTLEAUTOEND
+Auto-end battle
+STR_BATTLEAUTOEND_DESC
+Battles automatically end when the last living enemy is neutralized.
+STR_BATTLEINSTANTGRENADE
+Instant grenades
+STR_BATTLEINSTANTGRENADE_DESC
+Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+STR_BATTLENOTIFYDEATH
+Show death notifications
+STR_BATTLENOTIFYDEATH_DESC
+Display notifications every time one of your soldiers die.
+STR_BATTLEPREVIEWPATH
+Pathfinding preview
+STR_BATTLEPREVIEWPATH_DESC
+Display highlighted path previews while choosing unit destinations.
+STR_BATTLERANGEBASEDACCURACY
+Range-based accuracy
+STR_BATTLERANGEBASEDACCURACY_DESC
+Accuracy of shots takes visibility, distance, and other factors into account.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+TFTD manufacture rules
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Allows manufacturing projects to produce more than one item per hour.
+STR_CANTRANSFERCRAFTSINAIRBORNE
+Airborne transfers
+STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+Aircraft currently in-flight can be transferred.
+STR_CRAFTLAUNCHALWAYS
+Force launch
+STR_CRAFTLAUNCHALWAYS_DESC
+You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+STR_CUSTOMINITIALBASE
+Custom initial base
+STR_CUSTOMINITIALBASE_DESC
+When starting a new game, you can manually place your starting facilities instead of using the default layout.
+STR_GLOBESEASONS
+Globe seasons
+STR_GLOBESEASONS_DESC
+Enable realistic projection of sunlight according to the time of year.
+STR_PLAYINTRO
+Play intro
+STR_PLAYINTRO_DESC
+Show the intro cinematic.
+STR_SHOWFUNDSONGEOSCAPE
+Show geoscape funds
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Expand the geoscape info panel to include additional information on your current finanical situation.
+STR_SHOWMORESTATSININVENTORYVIEW
+Inventory stats
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Show relevent information on the selected soldier in the inventory screen.
+STR_SNEAKYAI
+Sneaky AI
+STR_SNEAKYAI_DESC
+AI avoids exposing themselves to the player whenever possible.
+STR_STRAFE
+Strafe setting
+STR_STRAFE_DESC
+Add the following movement options: strafing (one square at a time), running (less TUs, more energy), and independant tank turrent movement. Use CTRL to enable alternate movement methods.
+STR_BATTLESCROLLDRAGINVERT
+Invert drag-scrolling
+STR_BATTLESCROLLDRAGINVERT_DESC
+Inverts drag-scrolling on the battlescape.
+STR_BATTLEEXPLOSIONHEIGHT
+Explosion height
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Change how far height-wise explosions may spread (Flat: 0, Round: 3).
