@@ -441,26 +441,21 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
-	if (Options::getBool("quickPsiTraining"))
+	if (Options::getBool("anytimePsiTraining"))
 	{
 		if (_currentStats.psiSkill > 0)
 		{
-			if (100 * 10/_currentStats.psiSkill > RNG::generate(0, 100))
-				_currentStats.psiSkill++;
-			if(_currentStats.psiSkill > 100)
-				_currentStats.psiSkill = 100;
+			if (_currentStats.psiSkill < 100 && 100 * 10/_currentStats.psiSkill >= RNG::generate(1, 100))
+				++_currentStats.psiSkill;
 		}
 		else if (_currentStats.psiSkill < 0)
 		{
-			_currentStats.psiSkill++;
-			if (_currentStats.psiSkill == 0)	// initial training is over
-			{
+			if (++_currentStats.psiSkill == 0)	// initial training is over
 				_currentStats.psiSkill = RNG::generate(16, 24);
-			}
 		}
 		else if (_currentStats.psiSkill == 0)
 		{
-			_currentStats.psiSkill = -RNG::generate(30, 50);	// initial training from 30 to 50 days
+			_currentStats.psiSkill = -RNG::generate(30, 50);	// set initial training from 30 to 50 days
 		}
 		return;
 	}

@@ -1504,7 +1504,7 @@ void GeoscapeState::time1Day()
 			}
 		}
 		// Handle psionic training
-		if ((*i)->getAvailablePsiLabs() > 0 && Options::getBool("quickPsiTraining"))
+		if ((*i)->getAvailablePsiLabs() > 0 && Options::getBool("anytimePsiTraining"))
 		{
 			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
 			{
@@ -1589,7 +1589,7 @@ void GeoscapeState::time1Month()
 				}
 			}
 		}
-		if (!psi && (*b)->getAvailablePsiLabs() > 0 && !Options::getBool("quickPsiTraining"))
+		if (!psi && (*b)->getAvailablePsiLabs() > 0 && !Options::getBool("anytimePsiTraining"))
 		{
 			psi = true;
 			for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)

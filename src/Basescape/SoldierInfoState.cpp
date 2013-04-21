@@ -445,8 +445,8 @@ void SoldierInfoState::init()
 		_txtRecovery->setText(L"");
 	}
 
-	_txtPsionic->setVisible(!Options::getBool("quickPsiTraining") && s->isInPsiTraining());
-	_btnPsionic->setVisible( Options::getBool("quickPsiTraining") && _base->getAvailablePsiLabs() > 0);
+	_txtPsionic->setVisible(!Options::getBool("anytimePsiTraining") && s->isInPsiTraining());
+	_btnPsionic->setVisible( Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0);
 	_btnPsionic->setPressed(s->isInPsiTraining());
 
 	if(current->psiSkill > 0)

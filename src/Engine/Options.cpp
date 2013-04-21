@@ -66,6 +66,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
 	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
@@ -98,7 +99,6 @@ void createDefault()
 	setInt("battleExplosionHeight", 3); //0, 1, 2, 3
 	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
-	setBool("quickPsiTraining", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
