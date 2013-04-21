@@ -1732,7 +1732,7 @@ Bomba ogłuszająca
 STR_ALIEN_GRENADE
 Granat obcych
 STR_ELERIUM_115
-Elerium
+Elerium-115
 STR_MIND_PROBE
 Próbnik myśli
 STR_SECTOID_CORPSE
@@ -2276,94 +2276,94 @@ PRZEDMIOT
 STR_HQ_FILTER
 HQX
 STR_ADVANCED
-ADVANCED
+Zaawansowane
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+OPCJE ZAAWANSOWANE
 STR_AGGRESSIVERETALIATION
 Aggressive Retaliation
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+UFO zawsze będzie próbowało wykryć Twoją bazę, bez względu na cel swojej misji.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
 Alien containment Limits
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Limit ilości miejsca w celach dla żywych obcych.
 STR_CANSELLLIVEALIENS
 Live alien sale
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Dozwolona będzie sprzedaż żywych obcych, zalecane gdy używasz limitu w celach.
 STR_ALLOWAUTOSELLPRODUCTION
 Allow auto-sale
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Automatyczna sprzedaż produkowanych przedmiotów:  kliknij prawym przyciskiem myszy na "Zwiększ"/"Zmniejsz" podczas planowania ilości w kolumnie "Ilość zlecona" ("$$$" oznacza że element będzie sprzedawany automatycznie).
 STR_ALLOWBUILDINGQUEUE
 Use building queue
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Podczas wyznaczania nowych instalacji pod budowę, niedokończone instalacje pozwalają na połączenie z windą.
 STR_BATTLEAUTOEND
 Auto-end battle
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Potyczka jest automatycznie zakańczana gdy ostatni żywy obcy będzie zneutralizowany.
 STR_BATTLEINSTANTGRENADE
 Instant grenades
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Granaty ustawione na 0 tur będą eksplodować od razu po rzucie a nie po zakończeniu tury.
 STR_BATTLENOTIFYDEATH
 Show death notifications
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Wyświetla powiadomienie za każdym razem gdy jeden z Twoich żołnierzy umiera.
 STR_BATTLEPREVIEWPATH
 Pathfinding preview
 STR_BATTLEPREVIEWPATH_DESC
-Display highlighted path previews while choosing unit destinations.
+Wyświetla podgląd ścieżki ruchu podczas wskazywaniu celu przemieszczenia się jednostki.
 STR_BATTLERANGEBASEDACCURACY
 Range-based accuracy
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Skuteczność strzałów wynika z widoczności, odległości oraz innych czynników.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
 TFTD manufacture rules
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Dozwolona produkcja więcej niż jedenego przedmiotu na godzinę w procesie produkcyjnym.
 STR_CANTRANSFERCRAFTSINAIRBORNE
 Airborne transfers
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Możliwość transferu samolotu będącego aktualnie w trakcie lotu.
 STR_CRAFTLAUNCHALWAYS
 Force launch
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Możliwość wymuszenia startu samolotu, bez konieczności całkowitego zatankowania i dozbrojenia.
 STR_CUSTOMINITIALBASE
 Custom initial base
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Po rozpoczęciu nowej gry można ręcznie rozmieścić swoje początkowe instalacje, zamiast standardowego ich układu{NEWLINE}w bazie.
 STR_GLOBESEASONS
 Globe seasons
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight according to the time of year.
+Realistyczne odwzorowanie oświetlenia słonecznego w zależności od pory roku.
 STR_PLAYINTRO
 Play intro
 STR_PLAYINTRO_DESC
-Show the intro cinematic.
+Pokazuj animowane intro.
 STR_SHOWFUNDSONGEOSCAPE
 Show geoscape funds
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current finanical situation.
+Rozszerzenie panelu informacyjnego w widoku globu{NEWLINE}o dodatkowe informacje na temat aktualnej sytuacji finansowej.
 STR_SHOWMORESTATSININVENTORYVIEW
 Inventory stats
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show relevent information on the selected soldier in the inventory screen.
+Pokazuj istotne informacje dotyczące wybranego żołnierza na ekranie ekwipunku.
 STR_SNEAKYAI
 Sneaky AI
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+AI w miarę możliwości stara się uniknąć narażania gracza.
 STR_STRAFE
 Strafe setting
 STR_STRAFE_DESC
-enable strafing, running, and independant tank turrent movement. Use CTRL to enable alternate movement methods.
+Włącz ostrzeliwanie, bieg i niezależny ruch wieżyczki czołgu. Przytrzymaj klawisz CTRL aby używać alternatywnych metod ruchu.
 STR_BATTLESCROLLDRAGINVERT
-Invert drag-scrolling
+Inverted drag-scrolling
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Odwrócenie kierunków w trybie 'przytrzymaj by przesunąć' widok pola walki w trybie taktycznym.
 STR_BATTLEEXPLOSIONHEIGHT
 Explosion height
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Zmień w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
