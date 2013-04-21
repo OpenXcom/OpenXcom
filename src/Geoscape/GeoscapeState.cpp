@@ -33,6 +33,8 @@
 #include "Globe.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Engine/Timer.h"
 #include "../Savegame/GameTime.h"
 #include "../Engine/Music.h"
@@ -169,6 +171,10 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
+	// Fix system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 	add(_bg);
 	add(_globe);

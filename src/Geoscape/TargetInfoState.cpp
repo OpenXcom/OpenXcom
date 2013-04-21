@@ -40,11 +40,11 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 224, 120, 16, 40, POPUP_BOTH);
+	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_btnOk = new TextButton(160, 16, 48, 135);
-	_txtTitle = new Text(214, 16, 21, 54);
-	_txtTargetted = new Text(182, 8, 37, 74);
-	_txtFollowers = new Text(182, 48, 37, 84);
+	_txtTitle = new Text(182, 32, 37, 46);
+	_txtTargetted = new Text(182, 8, 37, 78);
+	_txtFollowers = new Text(182, 40, 37, 88);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -66,8 +66,10 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
 
 	_txtTargetted->setColor(Palette::blockOffset(15)-1);

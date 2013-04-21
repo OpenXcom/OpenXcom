@@ -36,9 +36,14 @@
 #include "MainMenuState.h"
 #include "OptionsControlsState.h"
 #include "AdvancedOptionsState.h"
+#include "../Engine/CrossPlatform.h"
 
 namespace OpenXcom
 {
+
+const std::string OptionsState::GL_EXT = "OpenGL.shader";
+const std::string OptionsState::GL_FOLDER = "Shaders/";
+const std::string OptionsState::GL_STRING = " (OpenGL)";
 
 /**
  * Initializes all the elements in the Options window.
@@ -58,32 +63,33 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
 
-	_txtDisplayResolution = new Text(120, 9, 8, 32);
-	_txtDisplayWidth = new TextEdit(48, 16, 10, 47);
-	_txtDisplayX = new Text(16, 16, 56, 47);
-	_txtDisplayHeight = new TextEdit(48, 16, 68, 47);
-	_btnDisplayUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 120, 36);
-	_btnDisplayDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 120, 58);
+	_txtDisplayResolution = new Text(140, 9, 28, 32);
+	_txtDisplayWidth = new TextEdit(48, 16, 30, 47);
+	_txtDisplayX = new Text(16, 16, 76, 47);
+	_txtDisplayHeight = new TextEdit(48, 16, 88, 47);
+	_btnDisplayUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 140, 36);
+	_btnDisplayDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 140, 58);
 
-	_txtDisplayMode = new Text(120, 9, 164, 32);
-	_btnDisplayWindowed = new TextButton(120, 16, 164, 42);
-	_btnDisplayFullscreen = new TextButton(120, 16, 164, 60);
-	_btnDisplayOpenGL = new ToggleTextButton(58, 16, 164, 78);
-	_btnDisplayFilter = new ToggleTextButton(58, 16, 226, 78);
+	_txtDisplayMode = new Text(140, 9, 28, 72);
+	_btnDisplayWindowed = new TextButton(126, 16, 28, 82);
+	_btnDisplayFullscreen = new TextButton(126, 16, 28, 100);
 
-	_txtMusicVolume = new Text(120, 9, 8, 82);
-	_btnMusicVolume1 = new TextButton(22, 14, 8, 92);
-	_btnMusicVolume2 = new TextButton(22, 18, 32, 92);
-	_btnMusicVolume3 = new TextButton(22, 22, 56, 92);
-	_btnMusicVolume4 = new TextButton(22, 26, 80, 92);
-	_btnMusicVolume5 = new TextButton(22, 30, 104, 92);
+	_txtDisplayFilter = new Text(140, 9, 28, 122);
+	_btnDisplayFilter = new TextButton(126, 16, 28, 132);
 
-	_txtSoundVolume = new Text(120, 9, 164, 82+18);
-	_btnSoundVolume1 = new TextButton(22, 14, 164, 92+18);
-	_btnSoundVolume2 = new TextButton(22, 18, 188, 92+18);
-	_btnSoundVolume3 = new TextButton(22, 22, 212, 92+18);
-	_btnSoundVolume4 = new TextButton(22, 26, 236, 92+18);
-	_btnSoundVolume5 = new TextButton(22, 30, 260, 92+18);
+	_txtMusicVolume = new Text(140, 9, 174, 32);
+	_btnMusicVolume1 = new TextButton(22, 14, 174, 42);
+	_btnMusicVolume2 = new TextButton(22, 18, 198, 42);
+	_btnMusicVolume3 = new TextButton(22, 22, 222, 42);
+	_btnMusicVolume4 = new TextButton(22, 26, 246, 42);
+	_btnMusicVolume5 = new TextButton(22, 30, 270, 42);
+
+	_txtSoundVolume = new Text(140, 9, 174, 72);
+	_btnSoundVolume1 = new TextButton(22, 14, 174, 82);
+	_btnSoundVolume2 = new TextButton(22, 18, 198, 82);
+	_btnSoundVolume3 = new TextButton(22, 22, 222, 82);
+	_btnSoundVolume4 = new TextButton(22, 26, 246, 82);
+	_btnSoundVolume5 = new TextButton(22, 30, 270, 82);
 
 	/* Get available fullscreen/hardware modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWPALETTE);
@@ -147,7 +153,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_txtDisplayMode);
 	add(_btnDisplayWindowed);
 	add(_btnDisplayFullscreen);
-    add(_btnDisplayOpenGL);
+
+	add(_txtDisplayFilter);
     add(_btnDisplayFilter);
 
 	add(_txtMusicVolume);
@@ -207,7 +214,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayWidth->setBig();
 	_txtDisplayWidth->setText(Language::utf8ToWstr(Options::getString("displayWidth")));
 	_txtDisplayWidth->setNumerical(true);
-	_txtDisplayWidth->onMouseClick((ActionHandler)&OptionsState::DisplayWidthClick);
+	_txtDisplayWidth->onMouseClick((ActionHandler)&OptionsState::txtDisplayWidthClick);
 
 	_txtDisplayX->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayX->setAlign(ALIGN_CENTER);
@@ -219,7 +226,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setText(Language::utf8ToWstr(Options::getString("displayHeight")));
 	_txtDisplayHeight->setNumerical(true);
-	_txtDisplayHeight->onMouseClick((ActionHandler)&OptionsState::DisplayHeightClick);
+	_txtDisplayHeight->onMouseClick((ActionHandler)&OptionsState::txtDisplayHeightClick);
 
 	_btnDisplayUp->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayUp->onMouseClick((ActionHandler)&OptionsState::btnDisplayUpClick);
@@ -237,37 +244,73 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnDisplayFullscreen->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayFullscreen->setText(_game->getLanguage()->getString("STR_FULLSCREEN"));
 	_btnDisplayFullscreen->setGroup(&_displayMode);
-
-    _btnDisplayOpenGL->setColor(Palette::blockOffset(15)-1);
-    _btnDisplayOpenGL->setText(_game->getLanguage()->getString("STR_OPENGL")); // there's not really a translation for "OpenGL" afaik
-    _btnDisplayOpenGL->setPressed(Options::getBool("useOpenGL"));
 	
+	_filters.push_back("-");
+	_filters.push_back("Scale");
+	_filters.push_back("HQX");
+	_filterPaths.push_back("");
+	_filterPaths.push_back("");
+	_filterPaths.push_back("");
+
+	std::vector<std::string> filters = CrossPlatform::getFolderContents(Options::getDataFolder() + GL_FOLDER, GL_EXT);
+	for (std::vector<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
+	{
+		std::string file = (*i);
+		std::string path = GL_FOLDER + file;
+		std::string name = file.substr(0, file.length() - GL_EXT.length() - 1) + GL_STRING;
+		_filters.push_back(name);
+		_filterPaths.push_back(path);
+	}
+	
+	_selFilter = 0;
+	if (Options::getBool("useOpenGL"))
+	{
+		std::string path = Options::getString("useOpenGLShader");
+		for (size_t i = 0; i < _filterPaths.size(); ++i)
+		{
+			if (_filterPaths[i] == path)
+			{
+				_selFilter = i;
+			}
+		}
+	}
+	else if (Options::getBool("useScaleFilter"))
+	{
+		_selFilter = 1;
+	}
+	else if (Options::getBool("useHQXFilter"))
+	{
+		_selFilter = 2;
+	}
+
+	_txtDisplayFilter->setColor(Palette::blockOffset(8)+10);
+	_txtDisplayFilter->setText(_game->getLanguage()->getString("STR_DISPLAY_FILTER"));
+
     _btnDisplayFilter->setColor(Palette::blockOffset(15)-1);
-    _btnDisplayFilter->setText(_game->getLanguage()->getString("STR_HQ_FILTER"));
-	bool filter = Options::getBool("useOpenGL") ? Options::getString("useOpenGLShader") == "Shaders/HQ2X.OpenGL.shader" : Options::getBool("useHQXFilter");
-    _btnDisplayFilter->setPressed(filter);
+    _btnDisplayFilter->setText(Language::utf8ToWstr(_filters[_selFilter]));
+	_btnDisplayFilter->onMouseClick((ActionHandler)&OptionsState::btnDisplayFilterClick, 0);
 
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
 	_txtMusicVolume->setText(_game->getLanguage()->getString("STR_MUSIC_VOLUME"));
 
 	_btnMusicVolume1->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume1->setText(L"1");
+	_btnMusicVolume1->setText(L"0");
 	_btnMusicVolume1->setGroup(&_musicVolume);
 
 	_btnMusicVolume2->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume2->setText(L"2");
+	_btnMusicVolume2->setText(L"1");
 	_btnMusicVolume2->setGroup(&_musicVolume);
 
 	_btnMusicVolume3->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume3->setText(L"3");
+	_btnMusicVolume3->setText(L"2");
 	_btnMusicVolume3->setGroup(&_musicVolume);
 
 	_btnMusicVolume4->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume4->setText(L"4");
+	_btnMusicVolume4->setText(L"3");
 	_btnMusicVolume4->setGroup(&_musicVolume);
 
 	_btnMusicVolume5->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume5->setText(L"5");
+	_btnMusicVolume5->setText(L"4");
 	_btnMusicVolume5->setGroup(&_musicVolume);
 
 
@@ -275,23 +318,23 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtSoundVolume->setText(_game->getLanguage()->getString("STR_SFX_VOLUME"));
 
 	_btnSoundVolume1->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume1->setText(L"1");
+	_btnSoundVolume1->setText(L"0");
 	_btnSoundVolume1->setGroup(&_soundVolume);
 
 	_btnSoundVolume2->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume2->setText(L"2");
+	_btnSoundVolume2->setText(L"1");
 	_btnSoundVolume2->setGroup(&_soundVolume);
 
 	_btnSoundVolume3->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume3->setText(L"3");
+	_btnSoundVolume3->setText(L"2");
 	_btnSoundVolume3->setGroup(&_soundVolume);
 
 	_btnSoundVolume4->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume4->setText(L"4");
+	_btnSoundVolume4->setText(L"3");
 	_btnSoundVolume4->setGroup(&_soundVolume);
 
 	_btnSoundVolume5->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume5->setText(L"5");
+	_btnSoundVolume5->setText(L"4");
 	_btnSoundVolume5->setGroup(&_soundVolume);
 }
 
@@ -339,36 +382,31 @@ void OptionsState::btnOkClick(Action *)
 	else if (_soundVolume == _btnSoundVolume5)
 		Options::setInt("soundVolume", 128);
 
-    Options::setBool("useOpenGL", _btnDisplayOpenGL->getPressed());
+	switch (_selFilter)
+	{
+	case 0:
+		Options::setBool("useOpenGL", false);
+		Options::setBool("useScaleFilter", false);
+		Options::setBool("useHQXFilter", false);
+		break;
+	case 1:
+		Options::setBool("useOpenGL", false);
+		Options::setBool("useScaleFilter", true);
+		Options::setBool("useHQXFilter", false);
+		break;
+	case 2:
+		Options::setBool("useOpenGL", false);
+		Options::setBool("useScaleFilter", false);
+		Options::setBool("useHQXFilter", true);
+		break;
+	default:
+		Options::setBool("useOpenGL", true);
+		Options::setBool("useScaleFilter", false);
+		Options::setBool("useHQXFilter", false);
+		Options::setString("useOpenGLShader", _filterPaths[_selFilter]);
+		break;
+	}
 
-    if (_btnDisplayFilter->getPressed())
-	{
-		if (_btnDisplayOpenGL->getPressed())
-		{
-			if (Options::getString("useOpenGLShader") == "Shaders/Openxcom.OpenGL.shader")
-			{
-				Options::setString("useOpenGLShader", "Shaders/HQ2X.OpenGL.shader");
-			}
-		}
-		else
-		{
-			Options::setBool("useHQXFilter", true);
-		}
-	}
-	else
-	{
-		if (_btnDisplayOpenGL->getPressed())
-		{
-			if (Options::getString("useOpenGLShader") == "Shaders/HQ2X.OpenGL.shader")
-			{
-				Options::setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
-			}
-		}
-		else
-		{
-			Options::setBool("useHQXFilter", false);
-		}
-	}
 	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
@@ -466,7 +504,7 @@ void OptionsState::btnDisplayDownClick(Action *)
 	_txtDisplayHeight->setText(ssH.str());
 }
 
-void OptionsState::DisplayWidthClick(Action *)
+void OptionsState::txtDisplayWidthClick(Action *)
 {
 	_wClicked = true;
 	if (_hClicked)
@@ -475,7 +513,7 @@ void OptionsState::DisplayWidthClick(Action *)
 		_hClicked = false;
 	}
 }
-void OptionsState::DisplayHeightClick(Action *)
+void OptionsState::txtDisplayHeightClick(Action *)
 {
 	_hClicked = true;
 	if (_wClicked)
@@ -483,6 +521,33 @@ void OptionsState::DisplayHeightClick(Action *)
 		_txtDisplayWidth->deFocus();
 		_wClicked = false;
 	}
+}
+
+void OptionsState::btnDisplayFilterClick(Action *action)
+{
+	int change = 0;
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		change = 1;
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		change = -1;
+	}
+	int i = _selFilter;
+	if (i + change >= (int)_filters.size())
+	{
+		_selFilter = 0;
+	}
+	else if (i + change < 0)
+	{
+		_selFilter = _filters.size() - 1;
+	}
+	else
+	{
+		_selFilter += change;
+	}
+	_btnDisplayFilter->setText(Language::utf8ToWstr(_filters[_selFilter]));
 }
 
 void OptionsState::btnAdvancedClick(Action *action)

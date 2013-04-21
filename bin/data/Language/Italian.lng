@@ -2255,8 +2255,6 @@ STR_CENTER_ON_ENEMY_8
 Centra su Nemico 8
 STR_CENTER_ON_ENEMY_9
 Centra su Nemico 9
-STR_OPENGL
-OpenGL
 STR_ENEMY_WEAPON_LEVEL
 Livello dell'arma del nemico
 STR_GROUNDED
@@ -2267,18 +2265,18 @@ STR_OPENXCOM
 OpenXcom
 STR_LIST_ITEM
 OGGETTO
-STR_HQ_FILTER
-HQX
+STR_DISPLAY_FILTER
+Display Filter
 STR_ADVANCED
 ADVANCED
 STR_ADVANCED_OPTIONS
 ADVANCED OPTIONS
 STR_AGGRESSIVERETALIATION
-Aggressive Retaliation
+Aggressive retaliation
 STR_AGGRESSIVERETALIATION_DESC
 UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment Limits
+Alien containment limits
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
 Live alien containment limits will be imposed.
 STR_CANSELLLIVEALIENS
@@ -2286,11 +2284,11 @@ Live alien sale
 STR_CANSELLLIVEALIENS_DESC
 Allows the sale of live aliens, recommended when using containment limits.
 STR_ALLOWAUTOSELLPRODUCTION
-Allow auto-sale
+Manufacture auto-sale
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
 STR_ALLOWBUILDINGQUEUE
-Use building queue
+Allow building queue
 STR_ALLOWBUILDINGQUEUE_DESC
 Unfinished facilities act as links to the access lift when new facilities are placed.
 STR_BATTLEAUTOEND
@@ -2308,7 +2306,7 @@ Display notifications every time one of your soldiers die.
 STR_BATTLEPREVIEWPATH
 Pathfinding preview
 STR_BATTLEPREVIEWPATH_DESC
-Display highlighted path previews while choosing unit destinations.
+Left-click highlights the path your unit will take to the destination, double-click moves the unit.
 STR_BATTLERANGEBASEDACCURACY
 Range-based accuracy
 STR_BATTLERANGEBASEDACCURACY_DESC
@@ -2322,7 +2320,7 @@ Airborne transfers
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 Aircraft currently in-flight can be transferred.
 STR_CRAFTLAUNCHALWAYS
-Force launch
+Force aircraft launch
 STR_CRAFTLAUNCHALWAYS_DESC
 You may force your aircraft into flight, overriding the need to completely refuel and rearm.
 STR_CUSTOMINITIALBASE
@@ -2330,21 +2328,21 @@ Custom initial base
 STR_CUSTOMINITIALBASE_DESC
 When starting a new game, you can manually place your starting facilities instead of using the default layout.
 STR_GLOBESEASONS
-Globe seasons
+Globe tilted lighting
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight according to the time of year.
+Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
 STR_PLAYINTRO
 Play intro
 STR_PLAYINTRO_DESC
-Show the intro cinematic.
+Show the intro cinematic on startup.
 STR_SHOWFUNDSONGEOSCAPE
 Show geoscape funds
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current finanical situation.
+Expand the geoscape info panel to include additional information on your current financial situation.
 STR_SHOWMORESTATSININVENTORYVIEW
 Inventory stats
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show relevent information on the selected soldier in the inventory screen.
+Show extra information on the selected soldier in the inventory screen.
 STR_SNEAKYAI
 Sneaky AI
 STR_SNEAKYAI_DESC
@@ -2352,9 +2350,9 @@ AI avoids exposing themselves to the player whenever possible.
 STR_STRAFE
 Strafe setting
 STR_STRAFE_DESC
-enable strafing, running, and independant tank turrent movement. Use CTRL to enable alternate movement methods.
+Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
 STR_BATTLESCROLLDRAGINVERT
-Invert drag-scrolling
+Inverted drag-scrolling
 STR_BATTLESCROLLDRAGINVERT_DESC
 Inverts drag-scrolling on the battlescape.
 STR_BATTLEEXPLOSIONHEIGHT
