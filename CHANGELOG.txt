@@ -10,13 +10,15 @@ New features:
 - Italian Soldier Names added.
 - Hungarian Soldier Names added.
 - Aliens progress their equipment levels, races and aggression over time.
-- Added "Alien Research" button in New Battle menu to set alien item level.
+- Added "Alien Weapon Level" button in New Battle menu.
 - Added "Right Click to Delete" function in save/load menus.
 - Added various display filters to the game.*
 - The default windowed mode position can now be edited in the configuration file.
 - Increase/decrease buttons now respond to mouse wheel scrolling when the cursor is above them.*
 - The game can no longer be dynamically resized to a new display resolution when in windowed mode.+
 - Multi-Part Ruleset support.
+- Added OpenGL shaders and HQX filters.
+- Added "Advanced Options" menu.
 
   Geoscape:
 - Live alien capture and interrogation.
@@ -34,6 +36,7 @@ New features:
 - Allowed multiple items to be produced per hour when very large numbers of engineers are assigned to a project.*
 - Upper limit for alien captures per containment facility.* (visible on Base Info screen)
 - Captive aliens can now be sold in the same manner as dead aliens.*
+- Debug mode now enables drawing of country and region borders.
 
   Battlescape:
 - Battlescape melee unit AI.
@@ -57,6 +60,7 @@ New features:
 - Various AI improvements.
 - Debug mode now has tile colourisation to represent AI evaluations.
 - Debug mode now has a time-slowing feature, which can be used for graphical or voxel debugging.
+- Alien Bases can now be neutralized by destroying the control room.
 
 * These features are disabled by default but can be enabled as advanced options by editing your configuration file.
 + These features are enabled by default but can be disabled as advanced options by editing your configuration file.
