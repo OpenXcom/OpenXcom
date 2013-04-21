@@ -7,17 +7,17 @@ New features:
 -- Your settings in this mode will be saved for next time you play.
 - Ukranian translation implemented.
 - Bulgarian translation implemented.
+- Portuguese translation implemented.
 - Italian Soldier Names added.
 - Hungarian Soldier Names added.
 - Aliens progress their equipment levels, races and aggression over time.
 - Added "Alien Weapon Level" button in New Battle menu.
 - Added "Right Click to Delete" function in save/load menus.
-- Added various display filters to the game.*
+- Added various display filters to the game, including HQX and various OpenGL shaders.*
 - The default windowed mode position can now be edited in the configuration file.
 - Increase/decrease buttons now respond to mouse wheel scrolling when the cursor is above them.*
 - The game can no longer be dynamically resized to a new display resolution when in windowed mode.+
 - Multi-Part Ruleset support.
-- Added OpenGL shaders and HQX filters.
 - Added "Advanced Options" menu.
 
   Geoscape:

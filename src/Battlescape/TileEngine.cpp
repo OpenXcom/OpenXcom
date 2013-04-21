@@ -2416,7 +2416,11 @@ int TileEngine::faceWindow(const Position &position)
 	return -1;
 }
 
-
+/*
+ * Validate a throw action
+ * @param action the action to validate.
+ * @return validity of action.
+ */
 bool TileEngine::validateThrow(BattleAction *action)
 {
 	Position originVoxel, targetVoxel;
