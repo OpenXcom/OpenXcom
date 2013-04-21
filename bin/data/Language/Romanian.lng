@@ -2270,94 +2270,94 @@ ARTICOL
 STR_HQ_FILTER
 HQX
 STR_ADVANCED
-ADVANCED
+AVANSAT
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+OPȚIUNI AVANSATE
 STR_AGGRESSIVERETALIATION
-Aggressive Retaliation
+Represalii Agresive
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+OZNurile vor încerca să îți detecteze bazele întotdeauna, indiferent de parametrii misiunii lor.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment Limits
+Limite Carantină Extratereștrii
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Vor fi impuse limite pentru numărul de extratereștrii vii din carantină.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Vânzarea extratereștrilor vii
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Permite vânzarea extratereștrilor vii, recomandat a se folosi împreună cu Limite Carantină Extratereștrii.
 STR_ALLOWAUTOSELLPRODUCTION
-Allow auto-sale
+Permite vânzarea automată
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Click dreapta pe butonul de creștere de la "total de produs" din cadrul unui proiect pentru a vinde automat.
 STR_ALLOWBUILDINGQUEUE
-Use building queue
+Folosește ordine de construcție
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Construcțiile neterminate servesc drept legătură cu liftul de acces în momentul în care sunt plasate construcții noi.
 STR_BATTLEAUTOEND
-Auto-end battle
+Termină lupta automat
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Lupta se termină automat în momentul în care ultimul inamic este neutralizat.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Grenade instant
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Grenadele amorsate pentru explozie în 0 runde vor exploda imediat ce sunt aruncate și nu la finalul rundei.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Afișează notificări decese
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Afișează notificări de fiecare dată când un soldat propriu moare.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Previzualizarea rutelor
 STR_BATTLEPREVIEWPATH_DESC
-Display highlighted path previews while choosing unit destinations.
+Afișează previzualizarea rutei în timpul alegerii unei destinații pentru o unitate.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Precizie bazată pe distanță
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Precizia de foc ține cont de vizibilitate, distanță și alți factori.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Reguli de producție TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Permite proiectelor să producă mai mult de un articol pe oră.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Transferuri aeriene
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Aeronavele pot fi transferate între baze în timpul zborului.
 STR_CRAFTLAUNCHALWAYS
-Force launch
+Forțează lansarea
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Forțează lansarea aeronavei, fără a ține cont de nevoia de a o alimenta și arma complet.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Bază inițială particularizată
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+La începerea unui joc nou, construcțiile de start se vor plasa manual, fără a folosi așezarea implicită.
 STR_GLOBESEASONS
-Globe seasons
+Anotimpuri pe glob
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight according to the time of year.
+Activează proiecția realistică a luminii solare conform datei calendaristice.
 STR_PLAYINTRO
-Play intro
+Rulează introducerea
 STR_PLAYINTRO_DESC
-Show the intro cinematic.
+Rulează filmul de introducere la pornire.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Arată fondurile
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current finanical situation.
+Extinde panoul cu data pentru a include informații adiționale privind situația financiară curentă.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Abilități în inventar
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show relevent information on the selected soldier in the inventory screen.
+Afișează informații relevante în inventarul soldatului selectat.
 STR_SNEAKYAI
-Sneaky AI
+AI viclean
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+Unitățile AI evită pe cât posibil expunerea în fața jucătorului.
 STR_STRAFE
-Strafe setting
+Setare pas lateral
 STR_STRAFE_DESC
-enable strafing, running, and independant tank turrent movement. Use CTRL to enable alternate movement methods.
+Activează pasul lateral, fuga și rotirea independentă a turelei tancului. Mișcările alternative se activează cu tasta CTRL.
 STR_BATTLESCROLLDRAGINVERT
-Invert drag-scrolling
+Inversează glisarea manuală
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Inversează direcția glisării manuale pe câmpul de luptă.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Înălțimea exploziilor
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
