@@ -1562,14 +1562,12 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 
 bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint)
 {
-	bool found = false;
-
 	if (setUnitPosition(unit, entryPoint))
 	{
 		return true;
 	}
 
-	for (int dir = 0; dir <= 7 && !found; ++dir)
+	for (int dir = 0; dir <= 7; ++dir)
 	{
 		Position offset;
 		getPathfinding()->directionToVector(dir, &offset);
