@@ -2264,94 +2264,94 @@ TÉTEL
 STR_HQ_FILTER
 HQX
 STR_ADVANCED
-ADVANCED
+HALADÓ
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+HALADÓ BEÁLLÍTÁSOK
 STR_AGGRESSIVERETALIATION
-Aggressive Retaliation
+Aggresszív Megtorlás
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+Az UFO-k - küldetésüktől függetlenül - minden alkalommal kíserletet tesznek a bázisod helyének kiderítésére.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment Limits
+Idegen Tároló felső korlátossága
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Az Idegen Tároló csak meghatározott számú élő idegent képes tárolni. (alap: 10)
 STR_CANSELLLIVEALIENS
-Live alien sale
+Élő idegen eladhatósága
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Engedélyezi az élő idegenek eladását. Ez a funkció javasolt a felső korlát bekapcsolása esetén.
 STR_ALLOWAUTOSELLPRODUCTION
-Allow auto-sale
+Auto-eladás engedélyezése
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right click the increase button on a manufacturing project's "total to produce" to auto-sell.
+A gyártás képernyőn az "Összesen gyártandó" rész növelő gombjára való jobb kattintással az auto-eladás aktiválódik.
 STR_ALLOWBUILDINGQUEUE
-Use building queue
+Épület-emelés sorba állíthatósága
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+A még nem elkészült bázisépületek összekötőként szolgálnak a Központi Lifthez, amikor újabb épületeket építtetünk.
 STR_BATTLEAUTOEND
-Auto-end battle
+Csata automatikus befejezése
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+A csaták automatikusan befejeződnek, amint az utolsó élő ellenség is semlegesítve lesz.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Azonnali gránátok
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+A 0-ra időzített gránátok azonnal felrobbannak eldobást követően, ahelyett, hogy a kör végén robbannának.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Elhalálozások értesítéseinek mutatása
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Értesítő üzenet jelenik meg, valahányszor elhalálozik egy katonád.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Útvonal előnézete
 STR_BATTLEPREVIEWPATH_DESC
-Display highlighted path previews while choosing unit destinations.
+Kiemeléssel mutatja az utat amikor célt választasz egy egységednek.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Távolság-alapú pontosság
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+A lövések pontosságánál figyelembe veszi a láthatóságot, távolságot, és egyéb faktorokat.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+TFTD gyártási szabályok
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Engedélyezi, hogy óránként egynél több darabot lehessen gyártani egy projektben.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Repülő jármű átcsoportosíthatósága
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Jelenleg levegőben lévő járművet át lehet csoportosítani.
 STR_CRAFTLAUNCHALWAYS
-Force launch
+A gépek mindig indíthatók
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Mindig elindíthatod a repülőgépeidet, felülírva a teljes újratöltés és újrafegyverzés szükségét.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Egyéni kezdő-bázis
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Amikor új játékot indítasz, akkor egyesével helyezheted el a kezdő-épületeidet az alap elrendezés helyett.
 STR_GLOBESEASONS
-Globe seasons
+Bolygó évszakok
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight according to the time of year.
+Engedélyezi a napfény valósághű kivetítését az év szakának megfelelően.
 STR_PLAYINTRO
-Play intro
+Bevezető lejátszása
 STR_PLAYINTRO_DESC
-Show the intro cinematic.
+A bevezető képsorok mutatása indításkor.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Tőke mutatása a földgömb képernyőn
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current finanical situation.
+Kibővíti a földgömb információs paneljét egy további információval a jelenlegi pénzügyi helyzetedről.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Személy-Leltár adatok
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show relevent information on the selected soldier in the inventory screen.
+A kiválasztott katonáról lényeges információkat mutat a Személy-Leltár képernyőjén.
 STR_SNEAKYAI
-Sneaky AI
+Sunyi MI
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+A Mesterséges Intelligencia - amikor csak lehetséges - elkerüli, hogy felfedje az egységeit a játékos számára.
 STR_STRAFE
-Strafe setting
+Oldalazás
 STR_STRAFE_DESC
-enable strafing, running, and independant tank turrent movement. Use CTRL to enable alternate movement methods.
+Oldalazás, futás, és tank tornyának független mozgatási lehetőségének bekapcsolása. CTRL nyomvatartásával lehetséges használni.
 STR_BATTLESCROLLDRAGINVERT
-Invert drag-scrolling
+Fordított vonszoló-görgetés
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+A csatamezőn a vonszoló-görgetés fordított irányban működik.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Robbanások magassága
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Megváltoztatja a robbanások magassági terjedését.{NEWLINE}(Sima: 0, Kör: 3)
