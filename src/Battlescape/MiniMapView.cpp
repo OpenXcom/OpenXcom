@@ -180,7 +180,7 @@ void MiniMapView::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-	if (-1 != _battleGame->getDragButton())
+	if (((Uint8)-1) != _battleGame->getDragButton())
 	{
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{

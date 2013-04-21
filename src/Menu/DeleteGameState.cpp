@@ -60,7 +60,7 @@ DeleteGameState::DeleteGameState(Game *game, const std::wstring &save, Uint8 col
 	_txtMessage = new Text(246, 32, 37, 70);
 
 	// Set palette
-	if (bgColor != -1)
+	if (bgColor != ((Uint8)-1))
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
