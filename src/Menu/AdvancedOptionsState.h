@@ -41,9 +41,11 @@ private:
 	Window *_window;
 	Text *_txtTitle, *_txtDescription;
 	TextList *_lstOptions;
-	unsigned int _sel;
+	size_t _boolQuantity;
 	TextButton *_btnOk, *_btnCancel, *_btnDefault;
-	std::vector<std::string> _settingSet;
+	// intentionally avoiding using a map here, to avoid auto-sorting.
+	std::vector<std::pair<std::string, bool> > _settingBoolSet;
+	std::vector<std::pair<std::string, int> > _settingIntSet;
 public:
 	/// Creates the Options state.
 	AdvancedOptionsState(Game *game);
@@ -55,8 +57,11 @@ public:
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Restore Defaults button.
 	void btnDefaultClick(Action *action);
+	/// Handler for clicking an item on the menu.
 	void lstOptionsClick(Action *action);
+	/// Handler for moving the mouse over a menu item.
 	void lstOptionsMouseOver(Action *action);
+	/// Handler for moving the mouse outside the menu borders.
 	void lstOptionsMouseOut(Action *action);
 
 };

@@ -31,7 +31,6 @@
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
-#include "MainMenuState.h"
 #include "../Engine/Action.h"
 #include <algorithm>
 
@@ -42,7 +41,7 @@ namespace OpenXcom
  * Initializes all the elements in the Advanced Options window.
  * @param game Pointer to the core game.
  */
-AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
+AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -50,7 +49,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_btnOk = new TextButton(100, 16, 8, 176);
 	_btnCancel = new TextButton(100, 16, 110, 176);
 	_btnDefault = new TextButton(100, 16, 212, 176);
-	_lstOptions = new TextList(280, 104, 20, 30);
+	_lstOptions = new TextList(268, 104, 20, 30);
 	_txtDescription = new Text(280, 32, 20, 142);
 
 	add(_window);
@@ -88,45 +87,54 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game), _sel(0)
 	_txtDescription->setWordWrap(true);
 
 
-	_lstOptions->setColumns(2, 245, 35);
+	_lstOptions->setColumns(2, 245, 23);
 	_lstOptions->setColor(Palette::blockOffset(8)+5);
 
+	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentHasUpperLimit", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canSellLiveAliens", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("allowAutoSellProduction", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("allowBuildingQueue", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleAutoEnd", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleInstantGrenade", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleNotifyDeath", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battlePreviewPath", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleRangeBasedAccuracy", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsInAirborne", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("customInitialBase", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("showFundsOnGeoscape", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 
-	_settingSet.push_back("aggressiveRetaliation");
-	_settingSet.push_back("alienContainmentHasUpperLimit");
-	_settingSet.push_back("canSellLiveAliens");
-	_settingSet.push_back("allowAutoSellProduction");
-	_settingSet.push_back("allowBuildingQueue");
-	_settingSet.push_back("battleAutoEnd");
-	_settingSet.push_back("battleInstantGrenade");
-	_settingSet.push_back("battleNotifyDeath");
-	_settingSet.push_back("battlePreviewPath");
-	_settingSet.push_back("battleRangeBasedAccuracy");
-	_settingSet.push_back("canManufactureMoreItemsPerHour");
-	_settingSet.push_back("canTransferCraftsInAirborne");
-	_settingSet.push_back("craftLaunchAlways");
-	_settingSet.push_back("customInitialBase");
-	_settingSet.push_back("globeSeasons");
-	_settingSet.push_back("playIntro");
-	_settingSet.push_back("showFundsOnGeoscape");
-	_settingSet.push_back("showMoreStatsInInventoryView");
-	_settingSet.push_back("sneakyAI");
-	_settingSet.push_back("strafe");
-	_settingSet.push_back("battleScrollDragInvert");
-	_settingSet.push_back("battleExplosionHeight");
+	_boolQuantity = _settingBoolSet.size();
 
-
-	for (size_t i = 0; i != 21; ++i)
+	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
 	{
-		std::wstring setting = Options::getBool(_settingSet[i]) ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
-		std::string s = _settingSet[i];
-		transform(s.begin(), s.end(), s.begin(), toupper);
-		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + s).c_str(), setting.c_str());
+		std::string settingName = (*i).first;
+		(*i).second = Options::getBool(settingName);
+		std::wstring setting =  (*i).second ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
+		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
+		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), setting.c_str());
 	}
 
-	std::wstringstream ss;
-	ss << Options::getInt("battleExplosionHeight");
-	_lstOptions->addRow(2, _game->getLanguage()->getString("STR_BATTLEEXPLOSIONHEIGHT").c_str(), ss.str().c_str());
+	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
+
+
+	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	{
+		std::string settingName = (*i).first;
+		(*i).second = Options::getInt(settingName);
+		std::wstringstream ss;
+		ss << (*i).second;
+		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
+		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), ss.str().c_str());
+	}
 
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
@@ -149,6 +157,14 @@ AdvancedOptionsState::~AdvancedOptionsState()
  */
 void AdvancedOptionsState::btnOkClick(Action *)
 {
+	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
+	{
+		Options::setBool((*i).first, (*i).second);
+	}
+	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	{
+		Options::setInt((*i).first, (*i).second);
+	}
 	Options::save();
 	_game->popState();
 }
@@ -176,38 +192,53 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 
 void AdvancedOptionsState::lstOptionsClick(Action *action)
 {
-	_sel = _lstOptions->getSelectedRow();
-	bool newSetting = false;
-	std::wstring setting = L"";
-	if (_sel < 21)
+	size_t sel = _lstOptions->getSelectedRow();
+	std::wstring settingText = L"";
+	if (sel < _boolQuantity)
 	{
-		newSetting = !Options::getBool(_settingSet[_sel]);
-		Options::setBool(_settingSet[_sel], newSetting);
-		setting = newSetting ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
+		_settingBoolSet.at(sel).second = !_settingBoolSet.at(sel).second;
+		settingText = _settingBoolSet.at(sel).second ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
 	}
-	else if (_sel == 21)
+	else // integer variables will need special handling
 	{
-		int radius = 1 + Options::getInt("battleExplosionHeight");
-		if (radius == 4)
+		size_t intSel = sel - _boolQuantity;
+		int increment = 1;
+		// this is purely future-proofing.
+		switch (intSel)
 		{
-			radius = 0;
+		case 0:
+			if (_settingIntSet.at(intSel).second == 3)
+			{
+				increment = -3;
+			}
+			break;
+		default:
+			break;
 		}
-		Options::setInt("battleExplosionHeight", radius);
+		_settingIntSet.at(intSel).second += increment;
 		std::wstringstream ss;
-		ss << radius;
-		setting = ss.str();
+		ss << _settingIntSet.at(intSel).second;
+		settingText = ss.str();
 	}
-	_lstOptions->setCellText(_sel, 1, setting.c_str());
+	_lstOptions->setCellText(sel, 1, settingText.c_str());
 }
 
 void AdvancedOptionsState::lstOptionsMouseOver(Action *)
 {
-	_sel = _lstOptions->getSelectedRow();
+	size_t sel = _lstOptions->getSelectedRow();
 	std::stringstream ss;
-	std::string s = _settingSet[_sel];
-	transform(s.begin(), s.end(), s.begin(), toupper);
-	ss << "STR_" << s.c_str() << "_DESC";
+	std::string settingName;
+	if (sel < _boolQuantity)
+	{
+		settingName = _settingBoolSet.at(sel).first;
+	}
+	else
+	{
+		settingName = _settingIntSet.at(sel - _boolQuantity).first;
+	}
 
+	transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
+	ss << "STR_" << settingName.c_str() << "_DESC";
 	_txtDescription->setText(_game->getLanguage()->getString(ss.str()).c_str());
 }
 
