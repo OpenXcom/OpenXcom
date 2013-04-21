@@ -1780,19 +1780,9 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 		}
 		--tries;
 	}
-	if (tries)
+	if (tries && _save->placeUnitNearPosition(unit, entryPoint))
 	{
-		bool found = false;
-		for (int dir = 0; dir <= 7 && !found; ++dir)
-		{
-			Position offset;
-			_save->getPathfinding()->directionToVector(dir, &offset);
-			if (!_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
-				&& _save->setUnitPosition(unit, entryPoint + offset))
-			{
-				return true;
-			}
-		}
+		return true;
 	}
 	return false;
 }

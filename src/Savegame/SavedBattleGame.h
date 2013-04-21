@@ -247,6 +247,8 @@ public:
 	int getMoraleModifier(BattleUnit* unit = 0);
 	/// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
+	/// attempt to place unit on or near entryPoint
+	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
 };
 
 }
