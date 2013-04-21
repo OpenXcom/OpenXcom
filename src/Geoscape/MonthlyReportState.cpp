@@ -343,7 +343,7 @@ void MonthlyReportState::btnOkClick(Action *)
 	{
 		_game->popState();
 		if (_psi)
-			_game->pushState (new PsiTrainingState(_game, "PALETTES.DAT_0"));
+			_game->pushState (new PsiTrainingState(_game));
 	}
 	else
 	{

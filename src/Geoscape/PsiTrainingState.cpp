@@ -37,12 +37,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
- * @param paletteName - name of restoring palette
  */
-PsiTrainingState::PsiTrainingState(Game *game, const std::string & paletteName) : State(game), _base1(0), _base2(0), _base3(0), _base4(0), _base5(0), _base6(0), _base7(0), _base8(0)
+PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(0), _base3(0), _base4(0), _base5(0), _base6(0), _base7(0), _base8(0)
 {
-	_restoreColors = _game->getResourcePack()->getPalette(paletteName)->getColors();
-
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_txtTitle = new Text(300, 16, 10, 16);
@@ -169,7 +166,7 @@ void PsiTrainingState::init()
 void PsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->setPalette(_restoreColors);
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
 void PsiTrainingState::btnBase1Click(Action *)

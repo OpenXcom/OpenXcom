@@ -41,10 +41,9 @@ private:
 	Window *_window;
 	Text *_txtTitle;
 	Base *_base1, *_base2, *_base3, *_base4, *_base5, *_base6, *_base7, *_base8;
-	SDL_Color *_restoreColors;
 public:
 	/// Creates the Psi Training state.
-	PsiTrainingState(Game *game, const std::string & paletteName);
+	PsiTrainingState(Game *game);
 	/// Cleans up the Psi Training state.
 	~PsiTrainingState();
 	/// Updates the palette.
