@@ -460,7 +460,7 @@ void Soldier::trainPsi()
 		}
 		else if (_currentStats.psiSkill == 0)
 		{
-			_currentStats.psiSkill = -RNG::generate(20, 40);	// initial training from 20 to 40 days
+			_currentStats.psiSkill = -RNG::generate(30, 50);	// initial training from 30 to 50 days
 		}
 		return;
 	}
