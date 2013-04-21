@@ -316,7 +316,7 @@ void UnitWalkBState::think()
 				return;
 			}
 
-			if (energy > _unit->getEnergy())
+			if (energy / 2 > _unit->getEnergy())
 			{
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
 				_pf->abortPath();
