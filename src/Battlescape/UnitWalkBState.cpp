@@ -363,7 +363,7 @@ void UnitWalkBState::think()
 				for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
 				{
 					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit();
-					BattleUnit* unitBelowMyWay;
+					BattleUnit* unitBelowMyWay = 0;
 					Tile* belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
 					if (belowDest)
 					{
