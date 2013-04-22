@@ -83,6 +83,8 @@ void UnitWalkBState::think()
 		}
 		else
 		{
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			_pf->abortPath();
 			_parent->popState();
 			return;
 		}
@@ -219,6 +221,8 @@ void UnitWalkBState::think()
 									p.z = t->getPosition().z*24 + t->getTerrainLevel();
 									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
 									t->getInventory()->erase(i);
+									_unit->setCache(0);
+									_parent->getMap()->cacheUnit(_unit);
 									_parent->popState();
 									return;
 								}
@@ -311,6 +315,7 @@ void UnitWalkBState::think()
 					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 				_pf->abortPath();
+				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 				_parent->popState();
 				return;
@@ -320,6 +325,7 @@ void UnitWalkBState::think()
 			{
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
 				_pf->abortPath();
+				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 				_parent->popState();
 				return;
@@ -328,6 +334,7 @@ void UnitWalkBState::think()
 			if (_parent->checkReservedTU(_unit, tu) == false)
 			{
 				_pf->abortPath();
+				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
