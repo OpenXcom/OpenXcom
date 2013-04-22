@@ -2362,4 +2362,4 @@ Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
 STR_ALLOWPSIONICCAPTURE
 Allow psi-capture
 STR_ALLOWPSIONICCAPTURE_DESC
-Description goes here
+Mind-controlling all remaining aliens automatically ends the mission, and they count as live captures.
