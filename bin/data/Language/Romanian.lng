@@ -2360,6 +2360,6 @@ STR_BATTLEEXPLOSIONHEIGHT
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Permite captura psi
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens automatically ends the mission, and they count as live captures.
+Controlul mental al tuturor extratereștrilor rămași finalizează automat misiunea și capturarea acestora ca fiind vii.
