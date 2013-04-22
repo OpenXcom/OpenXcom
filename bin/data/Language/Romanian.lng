@@ -2266,17 +2266,17 @@ OpenXcom
 STR_LIST_ITEM
 ARTICOL
 STR_DISPLAY_FILTER
-Display Filter
+Filtru Afișaj
 STR_ADVANCED
 AVANSAT
 STR_ADVANCED_OPTIONS
 OPȚIUNI AVANSATE
 STR_AGGRESSIVERETALIATION
-Represalii Agresive
+Represalii agresive
 STR_AGGRESSIVERETALIATION_DESC
 OZNurile vor încerca să îți detecteze bazele întotdeauna, indiferent de parametrii misiunii lor.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Limite Carantină Extratereștrii
+Limite carantină extratereștrii
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
 Vor fi impuse limite pentru numărul de extratereștrii vii din carantină.
 STR_CANSELLLIVEALIENS
@@ -2284,11 +2284,11 @@ Vânzarea extratereștrilor vii
 STR_CANSELLLIVEALIENS_DESC
 Permite vânzarea extratereștrilor vii, recomandat a se folosi împreună cu Limite Carantină Extratereștrii.
 STR_ALLOWAUTOSELLPRODUCTION
-Permite vânzarea automată
+Producție cu vânzare automată
 STR_ALLOWAUTOSELLPRODUCTION_DESC
 Click dreapta pe butonul de creștere de la "total de produs" din cadrul unui proiect pentru a vinde automat.
 STR_ALLOWBUILDINGQUEUE
-Folosește ordine de construcție
+Permite ordine de construcție
 STR_ALLOWBUILDINGQUEUE_DESC
 Construcțiile neterminate servesc drept legătură cu liftul de acces în momentul în care sunt plasate construcții noi.
 STR_BATTLEAUTOEND
@@ -2306,7 +2306,7 @@ Afișează notificări de fiecare dată când un soldat propriu moare.
 STR_BATTLEPREVIEWPATH
 Previzualizarea rutelor
 STR_BATTLEPREVIEWPATH_DESC
-Afișează previzualizarea rutei în timpul alegerii unei destinații pentru o unitate.
+Click stânga previzualizează ruta urmată de unitate la alegerea unei destinații, dublu click mișcă unitatea.
 STR_BATTLERANGEBASEDACCURACY
 Precizie bazată pe distanță
 STR_BATTLERANGEBASEDACCURACY_DESC
@@ -2320,7 +2320,7 @@ Transferuri aeriene
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 Aeronavele pot fi transferate între baze în timpul zborului.
 STR_CRAFTLAUNCHALWAYS
-Forțează lansarea
+Forțează lansarea aeronavelor
 STR_CRAFTLAUNCHALWAYS_DESC
 Forțează lansarea aeronavei, fără a ține cont de nevoia de a o alimenta și arma complet.
 STR_CUSTOMINITIALBASE
@@ -2328,9 +2328,9 @@ Bază inițială particularizată
 STR_CUSTOMINITIALBASE_DESC
 La începerea unui joc nou, construcțiile de start se vor plasa manual, fără a folosi așezarea implicită.
 STR_GLOBESEASONS
-Anotimpuri pe glob
+Iluminare realistică pe glob
 STR_GLOBESEASONS_DESC
-Activează proiecția realistică a luminii solare conform datei calendaristice.
+Activează proiecția realistică a luminii solare pe glob conform axei de înclinare a Pământului.
 STR_PLAYINTRO
 Rulează introducerea
 STR_PLAYINTRO_DESC
@@ -2342,7 +2342,7 @@ Extinde panoul cu data pentru a include informații adiționale privind situați
 STR_SHOWMORESTATSININVENTORYVIEW
 Abilități în inventar
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Afișează informații relevante în inventarul soldatului selectat.
+Afișează informații suplimentare în inventarul soldatului selectat.
 STR_SNEAKYAI
 AI viclean
 STR_SNEAKYAI_DESC
@@ -2359,3 +2359,7 @@ STR_BATTLEEXPLOSIONHEIGHT
 Înălțimea exploziilor
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
+STR_ALLOWPSIONICCAPTURE
+Allow psi-capture
+STR_ALLOWPSIONICCAPTURE_DESC
+Mind-controlling all remaining aliens automatically ends the mission, and they count as live captures.
