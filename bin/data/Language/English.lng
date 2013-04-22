@@ -2359,3 +2359,7 @@ STR_BATTLEEXPLOSIONHEIGHT
 Explosion height
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+STR_ALLOWPSIONICCAPTURE
+Allow psi-capture
+STR_ALLOWPSIONICCAPTURE_DESC
+Description goes here
