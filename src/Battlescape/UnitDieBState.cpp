@@ -232,7 +232,7 @@ void UnitDieBState::convertUnitToCorpse()
 										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
 										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
 				_parent->dropItem(p + Position(x,y,0), corpse, true);
-				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(0);
+				_parent->getSave()->getTile(p + Position(x,y,0))->setUnit(0);
 				i++;
 			}
 		}

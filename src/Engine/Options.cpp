@@ -124,6 +124,7 @@ void createDefault()
 	setInt("windowedModePositionY", -1);
 	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
+	setBool("allowPsionicCapture", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

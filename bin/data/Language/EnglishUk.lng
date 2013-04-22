@@ -254,7 +254,7 @@ WORKSHOP SPACE AVAILABLE>
 STR_ENGINEERS
 Engineers
 STR_ALLOCATED
-Allocated 
+Allocated
 STR_INCREASE_UC
 INCREASE
 STR_DECREASE_UC
@@ -262,7 +262,7 @@ DECREASE
 STR_UNITS_TO
 Units to
 STR_PRODUCE
-Produce 
+Produce
 STR_PURCHASE_HIRE_PERSONNEL
 Purchase/Hire Personnel
 STR_COST_OF_PURCHASES
@@ -2298,7 +2298,7 @@ Battles automatically end when the last living enemy is neutralized.
 STR_BATTLEINSTANTGRENADE
 Instant grenades
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn.
 STR_BATTLENOTIFYDEATH
 Show death notifications
 STR_BATTLENOTIFYDEATH_DESC
@@ -2359,3 +2359,7 @@ STR_BATTLEEXPLOSIONHEIGHT
 Explosion height
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+STR_ALLOWPSIONICCAPTURE
+Allow psi-capture
+STR_ALLOWPSIONICCAPTURE_DESC
+Mind-controlling all remaining aliens results in victory, and they count as live captures.

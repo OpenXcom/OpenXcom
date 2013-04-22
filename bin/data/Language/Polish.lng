@@ -2272,96 +2272,100 @@ OpenXcom
 STR_LIST_ITEM
 PRZEDMIOT
 STR_DISPLAY_FILTER
-Display Filter
+Filtr wyświetlania
 STR_ADVANCED
 Zaawansowane
 STR_ADVANCED_OPTIONS
 OPCJE ZAAWANSOWANE
 STR_AGGRESSIVERETALIATION
-Aggressive Retaliation
+Agresywne akcje odwetowe
 STR_AGGRESSIVERETALIATION_DESC
-UFO zawsze będzie próbowało wykryć Twoją bazę, bez względu na cel swojej misji.
+UFO zawsze będzie próbowało wykryć Twoje bazy, bez względu na cel swojej misji.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment Limits
+Limity cel dla obcych
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
 Limit ilości miejsca w celach dla żywych obcych.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Sprzedaż żywych obcych
 STR_CANSELLLIVEALIENS_DESC
-Dozwolona będzie sprzedaż żywych obcych, zalecane gdy używasz limitu w celach.
+Dozwolona będzie sprzedaż żywych obcych, zalecane gdy używasz limitu cel dla obcych.
 STR_ALLOWAUTOSELLPRODUCTION
-Allow auto-sale
+Automatyczna sprzedaż
 STR_ALLOWAUTOSELLPRODUCTION_DESC
 Automatyczna sprzedaż produkowanych przedmiotów:  kliknij prawym przyciskiem myszy na "Zwiększ"/"Zmniejsz" podczas planowania ilości w kolumnie "Ilość zlecona" ("$$$" oznacza że element będzie sprzedawany automatycznie).
 STR_ALLOWBUILDINGQUEUE
-Use building queue
+Kolejkowanie rozbudowy bazy
 STR_ALLOWBUILDINGQUEUE_DESC
 Podczas wyznaczania nowych instalacji pod budowę, niedokończone instalacje pozwalają na połączenie z windą.
 STR_BATTLEAUTOEND
-Auto-end battle
+Automatyczne zakończenie potyczki
 STR_BATTLEAUTOEND_DESC
 Potyczka jest automatycznie zakańczana gdy ostatni żywy obcy będzie zneutralizowany.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Natychmiastowe granaty
 STR_BATTLEINSTANTGRENADE_DESC
 Granaty ustawione na 0 tur będą eksplodować od razu po rzucie a nie po zakończeniu tury.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Wyświetlaj powiadomienia o śmierci
 STR_BATTLENOTIFYDEATH_DESC
 Wyświetla powiadomienie za każdym razem gdy jeden z Twoich żołnierzy umiera.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Wyświetlaj ścieżkę ruchu
 STR_BATTLEPREVIEWPATH_DESC
 Wyświetla podgląd ścieżki ruchu podczas wskazywaniu celu przemieszczenia się jednostki.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Celność zależna od odległości
 STR_BATTLERANGEBASEDACCURACY_DESC
 Skuteczność strzałów wynika z widoczności, odległości oraz innych czynników.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Reguły produkcji z TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Dozwolona produkcja więcej niż jedenego przedmiotu na godzinę w procesie produkcyjnym.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Transfer w trakcie lotu
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 Możliwość transferu samolotu będącego aktualnie w trakcie lotu.
 STR_CRAFTLAUNCHALWAYS
-Force launch
+Wymuszanie startu
 STR_CRAFTLAUNCHALWAYS_DESC
 Możliwość wymuszenia startu samolotu, bez konieczności całkowitego zatankowania i dozbrojenia.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Reorganizacja początkowej bazy
 STR_CUSTOMINITIALBASE_DESC
 Po rozpoczęciu nowej gry można ręcznie rozmieścić swoje początkowe instalacje, zamiast standardowego ich układu{NEWLINE}w bazie.
 STR_GLOBESEASONS
-Globe seasons
+Pory roku
 STR_GLOBESEASONS_DESC
 Realistyczne odwzorowanie oświetlenia słonecznego w zależności od pory roku.
 STR_PLAYINTRO
-Play intro
+Odtwarzaj intro
 STR_PLAYINTRO_DESC
 Pokazuj animowane intro.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Wyświetlaj fundusze w widoku globu
 STR_SHOWFUNDSONGEOSCAPE_DESC
 Rozszerzenie panelu informacyjnego w widoku globu{NEWLINE}o dodatkowe informacje na temat aktualnej sytuacji finansowej.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Statystyki na ekranie ekwipunku
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
 Pokazuj istotne informacje dotyczące wybranego żołnierza na ekranie ekwipunku.
 STR_SNEAKYAI
-Sneaky AI
+Podstępna AI
 STR_SNEAKYAI_DESC
-AI w miarę możliwości stara się uniknąć narażania gracza.
+AI w miarę możliwości stara się uniknąć narażania jednostek na ostrzał ze strony gracza. Starając się pozostawać poza jego zasięgiem w trakcie ruchu.
 STR_STRAFE
-Strafe setting
+Przemieszczanie się bokiem
 STR_STRAFE_DESC
-Włącz ostrzeliwanie, bieg i niezależny ruch wieżyczki czołgu. Przytrzymaj klawisz CTRL aby używać alternatywnych metod ruchu.
+Włącz tryb chodzenia w bok, oraz jazdy z niezależnym ukierunkowaniem wieżyczki w czołgu. Przytrzymaj klawisz CTRL aby użyć alternatywnej metody ruchu.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Odwrócenie dla "Przytrzymaj i przesuń"
 STR_BATTLESCROLLDRAGINVERT_DESC
-Odwrócenie kierunków w trybie 'przytrzymaj by przesunąć' widok pola walki w trybie taktycznym.
+Odwrócenie kierunków w trybie "przytrzymaj by przesunąć" widok pola walki w trybie taktycznym.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Rozmiar eksplozji
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Zmień w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
+Ustal w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
+STR_ALLOWPSIONICCAPTURE
+Przechwycenie psioniczne
+STR_ALLOWPSIONICCAPTURE_DESC
+Kontrola jaźni nad wszystkimi pozostałymi przy życiu obcymi pozwala zakończyć misję. Są traktowani jako zneutralizowani{NEWLINE}i schwytani żywi.

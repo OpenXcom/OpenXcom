@@ -1,4 +1,4 @@
-PORTUGUÊS (PT) 
+PORTUGUÊS (PT)
 STR_AVENGER_UFOPEDIA
 NAVE DE COMBATE E TRANSPORTE.  A MELHOR REPRODUÇÃO DA TECNOLOGIA ALIENÍGENA.
 STR_INTERCEPTOR_UFOPEDIA
@@ -110,7 +110,7 @@ Precisa de investigar um{NEWLINE}
 STR_ELERIUM_115_UFOPEDIA
 Este elemento possuí a característica invulgar de produzir anti-matéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto,  não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
 STR_ALIEN_ORIGINS_UFOPEDIA
-Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o epicentro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena, de  maneira a obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
+Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o centro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena, de  maneira a obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
 As nossas investigações indicam que a base de operações alienígena está localizada em Marte. Esta base está muito bem escondida e contém todas as instalações de manufatura e clonagem, essenciais para a infiltração no nosso planeta. Todas estas operações são controladas por uma espécie de computador, que também se encontra nesta mesma base. Aparentemente, a sociedade alienígena é semelhante a uma colmeia, controlada por uma "abelha-rainha", o que nos leva a crer que este é o seu ponto fraco. Se eliminarmos o "cérebro", o corpo morrerá com ele. Logo, é essencial continuarmos as nossas pesquisas antes que seja demasiado tarde. Para tal, precisamos de capturar um alienígena da mais alta patente, os Comandantes, que residem exclusivamente em bases alienígenas.
 STR_CYDONIA_OR_BUST_UFOPEDIA
@@ -146,7 +146,7 @@ PESQUISAS
 STR_MANUFACTURE
 MANUFATURAS
 STR_TRANSFER_UC
-TRANSFERIR
+TRANSFERÊNCIAS
 STR_PURCHASE_RECRUIT
 COMPRAR/CONTRATAR
 STR_SELL_SACK_UC
@@ -316,9 +316,9 @@ Selecionar Base de Destino
 STR_COST
 Valor
 STR_VICTORY_1
-Ao entrar na câmara, as nossas tropas avistam imediatamente o cérebro alienígena – o alvo da nossa missão. Antes de terem oportunidade para abrir fogo, o cérebro comunica através de um ecrã na sua base, implorando que escutemos os seus argumentos para que o deixemos vivo.
+Ao entrar na câmara, as nossas tropas avistam imediatamente o cérebro alienígena - o alvo da nossa missão. Antes de terem oportunidade para abrir fogo, o cérebro comunica através de um ecrã na sua base, implorando que escutemos os seus argumentos para que o deixemos vivo.
 STR_VICTORY_2
-Então o cérebro diz: "Há muitos milhões de anos, este planeta a que chamais de Marte foi outrora repleto de vida. Vida essa que foi trazida de outro planeta pela nossa civilização, e que foi postumamente levada para o vosso. Fomos nós que, ao longo de milhões de anos, visitámos o vosso planeta e desenvolvemos geneticamente a vossa espécie. Não podeis matar-nos, porque sois parte de nós.
+Então o cérebro diz: "Há muitos milhões de anos, este planeta a que chamais de Marte foi outrora repleto de vida, que foi trazida de outro planeta pela nossa civilização, e que foi postumamente levada para o vosso. Fomos nós que, ao longo de milhões de anos, visitámos o vosso planeta e desenvolvemos geneticamente a vossa espécie. Não podeis matar-nos, porque sois parte de nós.
 STR_VICTORY_3
 Estas pirâmides são o núcleo da civilização marciana, construídas milhões de anos antes das que tendes na Terra, por uma espécie nossa antepassada. Nenhum planeta está fora do nosso alcance. Este poder poderá vir a ser vosso. Em troca só pedimos a vossa cooperação...
 STR_GAME_OVER_1
@@ -398,7 +398,7 @@ SÁBADO
 STR_NOT_ENOUGH
 Não há 
 STR_TO_REFUEL
-  suficiente para reabastecer
+ suficiente para reabastecer
 STR_TO_REARM
  para rearmar 
 STR_AT_
@@ -544,7 +544,7 @@ A REABASTECER
 STR_REARMING
 A REARMAR
 STR_TARGET
-ALVO:
+ALVO: 
 STR_TARGET_WAY_POINT
 ALVO: PONTO DE REFERÊNCIA
 STR_ARE_YOU_SURE_CYDONIA
@@ -1352,7 +1352,7 @@ Nave de Batalha
 STR_SUPPLY_SHIP
 Nave de Abastecimento
 STR_RATING
-AVALIAÇÃO>
+AVALIAÇÃO> 
 STR_RATING_TERRIBLE
 PÉSSIMO!
 STR_RATING_POOR
@@ -1394,7 +1394,7 @@ STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
  assinaram um pacto secreto com forças alienígenas desconhecidas e decidiram retirar-se do projeto
 STR_MONTHLY_RATING
-Avaliação Mensal>
+Avaliação Mensal> 
 STR_FUNDING_CHANGE
 Alteração de fundos> 
 STR_COUNCIL_REDUCE_DEBTS
@@ -1566,7 +1566,7 @@ Lista de Soldados
 STR_RANK_
 POSTO> 
 STR_MISSIONS
-MISSÕES>
+MISSÕES> 
 STR_KILLS
 MORTOS> 
 STR_WOUND_RECOVERY
@@ -1770,9 +1770,9 @@ O elevador da pirâmide transporta as nossas tropas até ao fundo da superfície
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
 {NEWLINE}para usar ou produzir o{NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
-Os alienígenas destruíram a base indefesa
+Os alienígenas destruíram a base indefesa 
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
-Detetámos uma base alienígena na seguinte localização:
+Detetámos uma base alienígena na seguinte localização: 
 STR_STANDOFF
 MODO DE PERSEGUIÇÃO
 STR_CAUTIOUS_ATTACK
@@ -1788,7 +1788,7 @@ ALVO ATINGIDO!
 STR_UFO_CRASH_LANDS
 O OVNI DESPENHOU-SE!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Não pode minimizar em Modo de Ataque
+Minimizar apenas em perseguição
 STR_UFO_RETURN_FIRE
 O OVNI ABRIU FOGO!
 STR_INTERCEPTOR_DAMAGED
@@ -2268,94 +2268,94 @@ RESULTADOS
 STR_DISPLAY_FILTER
 Display Filter
 STR_ADVANCED
-ADVANCED
+OPÇÕES AVANÇADAS
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+OPÇÕES AVANÇADAS
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Retaliação Agressiva
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+Todos os OVNIs tentarão detetar bases X-COM, independentemente das suas diretivas.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment limits
+Contenção Alienígena limitada
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Limita ao número de alienígenas em contenção. Recomenda-se o uso da opção "Vender alienígenas vivos".
 STR_CANSELLLIVEALIENS
-Live alien sale
+Vender alienígenas vivos
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Permite a venda de alienígenas vivos capturados.
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Venda automática de produtos
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Usar o botão direito do rato para vender automaticamente produtos fabricados no menu de manufaturas.
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Construções em espera
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Permite ao jogador colocar construções em lista de espera, usando uma construção em curso como elo de ligação.
 STR_BATTLEAUTOEND
-Auto-end battle
+Terminar combates automaticamente
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Os combates terminam automaticamente assim que último inimigo for neutralizado.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Detonação instantânea
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Explosivos programados para 0 turnos detonam imediatamente após serem lançados.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Confirmações de morte
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Exibir uma mensagem de cada vez que um soldado X-COM morre em combate.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Pré-visualizar percursos
 STR_BATTLEPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Pré-visualizar o percurso ao mover soldados em campo.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Precisão de fogo realista
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+A precisão de fogo é afetada por visibilidade, distância, e outros fatores similares.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Novas regras de manufatura (TFTD)
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Permite uma produção superior a uma unidade por hora em projetos de manufatura.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Transferência de aeronaves em voo
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Permite a transferência de aeronaves durante voo.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+Forçar descolagem
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Permite forçar a descolagem de aeronaves, independentemente de estarem reabastecidas e rearmadas a 100%.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Personalizar base inicial
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Permite ao jogador colocar manualmente as instalações da primeira base, em vez de forçar o modelo padrão.
 STR_GLOBESEASONS
-Globe tilted lighting
+Projeção solar realista
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Reproduz a projeção solar global ao longo do ano, de acordo com a inclinação axial da Terra.
 STR_PLAYINTRO
-Play intro
+Reproduzir introdução
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Reproduz o vídeo de introdução ao iniciar o jogo.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Indicador de fundos
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+Adiciona informação sobre a situação financeira atual ao menu de Controlo Global.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Informações no menu de equipamento
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+Adiciona informações sobre o soldado selecionado ao menu de equipamento.
 STR_SNEAKYAI
-Sneaky AI
+IA Defensiva
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+A IA tentará evitar expor-se ao inimigo tanto quanto possível.
 STR_STRAFE
-Strafe setting
+Modos de movimento alternativo
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Permite movimento lateral, passo de corrida e movimento giratório da torre de uma PAP. (CTRL + botões do rato)
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Inverter movimentação por arrasto
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Inverte a direção da movimentação de ecrã por arrasto, em situações de combate.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Alcance vertical de explosão
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Altera a altura e proporção das explosões.{NEWLINE}(Planas: 0, Esféricas: 3)
