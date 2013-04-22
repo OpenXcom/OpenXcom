@@ -16,6 +16,7 @@ New features:
 - Added various display filters to the game, including HQX and various OpenGL shaders.*
 - The default windowed mode position can now be edited in the configuration file.
 - Increase/decrease buttons now respond to mouse wheel scrolling when the cursor is above them.*
+- Allocate Scientists and Allocate Engineers screens now respond to mouse wheel scrolling.
 - The game can no longer be dynamically resized to a new display resolution when in windowed mode.+
 - Multi-Part Ruleset support.
 - Added "Advanced Options" menu.
@@ -28,14 +29,20 @@ New features:
 - Scoring for both aliens and Xcom.
 - Funding nation decision making.
 - Multiple dogfight handling.
-- Graphs screen.
+- Graphs screen. (+saving the buttons' state to the savegame)
 - Base Defense Screens.
 - Alien UFO Mission Generation.
 - Alien retaliatory attacks on Xcom bases.
+- Show radar-range lines on the globe after pressing R key.
+- Show funds above the time.*
+- Show Soldiers' number on Equipment-screen.
 - Custom initial base layout.* (requires a new game to take effect)
+- Building-Queue: Can place buildings next to uncompleted-buildings.*
+- AutoSell Production state for a manufacturing project by a right click on the increase button.*
 - Allowed multiple items to be produced per hour when very large numbers of engineers are assigned to a project.*
 - Upper limit for alien captures per containment facility.* (visible on Base Info screen)
 - Captive aliens can now be sold in the same manner as dead aliens.*
+- Can transfer crafts in airborne.*
 - Debug mode now enables drawing of country and region borders.
 
   Battlescape:
@@ -45,8 +52,9 @@ New features:
 - Units dual wielding single handed weapons is now represented on the battlescape.
 - The game now dynamically replaces sprite colours in order to represent soldier ethnicity and hair colour.
 - Equipment loadout saving.
+- Show more stats in inventory view.*
 - Proper A* pathfinding.
-- Battlescape RMB scrolling improved.
+- Battlescape RMB scrolling improved. (and it's renamed to Drag-Scroll, and new default button: middle)
 - Landing Ufos/Ground Assault missions.
 - Ruleset support for multiple-stage missions.
 - Pause Game on Loss of Focus.**
@@ -61,6 +69,11 @@ New features:
 - Debug mode now has tile colourisation to represent AI evaluations.
 - Debug mode now has a time-slowing feature, which can be used for graphical or voxel debugging.
 - Alien Bases can now be neutralized by destroying the control room.
+- Added: Distribute ammo equally among base owned tanks on Base-defense mission.
+- Tank (+ammo) handling/management implemented:
+-- Count and subtract the destroyed/missing tanks on Debriefing.
+-- Reequip tanks in craft(s) on Debriefing.
+
 
 * These features are disabled by default but can be enabled as advanced options by editing your configuration file.
 + These features are enabled by default but can be disabled as advanced options by editing your configuration file.
@@ -87,6 +100,8 @@ Bugfixes:
 - Items are no longer removed from stores when they are researched.
 - Cut off input to dogfight screens when your craft is destroyed or the UFO decides to disengage.
 - "New research available" popups should now only display the first time you research a technology that will unlock a new branch of research.
+- Fixed: Can't dismantle ANY facility if some of the attributes is overflowed!
+- Fixed: Busy people don't get paychecks
 
 Battlescape:
 - Battlescape buttons are now unavailable during alien turn.
@@ -119,6 +134,16 @@ Battlescape:
 (ie. for the floor collapsing beneath a soldier standing above another soldier, and for when an unconscious soldier revives when another soldier is standing in their tile)
 - Fixed a bug where items with unlimited ammo would weigh twice as much as they should.
 (removed the step to add clip weight to a weapon if the weapon is its own ammunition)
+- Minimum-Weight (of soldiers) is Fixed/Changed to work like in the original X-COM: Minimum is 6.
+- Fixed: Weight of ammos in weapons was not counted to total-weight.
+- Fixed: Soldiers' TU penalty is not applied to first turn.
+- Fixed: Inventory-view showed zero weight when the last item on the soldier is grabbed.
+- Fixed: HWP ammo was deployed to the ground on Base-defense mission.
+- Fixed: Deploy all base owned tanks on Base-defense mission. (exception: tanks with 0 ammo left)
+- Fixed: A crash when vehicles' desctructor called twice.
+- Fixed: Unable to scroll when out of map bounds.
+- Fixed: Scroll did not start when clicking on the scroll-border on Trigger (Manual) Scroll mode.
+- Fixed: Release of the Left mouse-button was handled as a click on the map when Scroll mode is Trigger (Manual) Scroll.
 
 Version 0.4.5 (04-11-2012)
 ---------------------------
@@ -127,6 +152,7 @@ New features:
 - Hungarian translation.
 - Rightclick mouse scrolling.
 - Rightclick arrow buttons to min/max values.
+- Can prime a grenade on mission pre-equip (Inventory view) with a right-click.
 - Weapons can be toggled on/off during dogfights.
 - Modular rulesets (specified in options.cfg).
 - Soldier reordering.
