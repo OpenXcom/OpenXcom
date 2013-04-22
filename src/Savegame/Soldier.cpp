@@ -446,7 +446,10 @@ void Soldier::trainPsi()
 		if (_currentStats.psiSkill > 0)
 		{
 			if (_currentStats.psiSkill < 100 && 100 * 10/_currentStats.psiSkill >= RNG::generate(1, 100))
+			{
 				++_currentStats.psiSkill;
+				++_improvement;
+			}
 		}
 		else if (_currentStats.psiSkill < 0)
 		{
