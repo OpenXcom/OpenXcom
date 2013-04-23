@@ -1978,7 +1978,7 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 					liveAliens++;
 				}
 			}
-			if ((*j)->getOriginalFaction() == FACTION_PLAYER)
+			else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getFaction() == FACTION_PLAYER)
 			{
 				liveSoldiers++;
 			}

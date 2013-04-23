@@ -1886,19 +1886,21 @@ PROCEED
 STR_NO_SAVED_GAME_PRESENT
 No saved game present
 STR_LOAD_UNSUCCESSFUL
-Load unsuccessful
+Load failed
 STR_SAVE_UNSUCCESSFUL
-Save unsuccessful
+Save failed
 STR_LOAD_SUCCESSFUL
 Load successful
 STR_SAVE_SUCCESSFUL
 Save successful
 STR_DELETE
 DELETE
+STR_DELETE_UNSUCCESSFUL
+Delete failed
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Previous X-COM saved game detected
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
-Is it OK to delete the saved game?
+Are you sure you want to delete the saved game?
 STR_SOUND_OPTIONS
 SOUND OPTIONS
 STR_MUSIC_VOLUME
