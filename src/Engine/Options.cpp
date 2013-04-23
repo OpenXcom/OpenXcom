@@ -77,7 +77,7 @@ void createDefault()
 	setBool("useOpenGL", false);
 	setBool("checkOpenGLErrors", false);
 	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
-	setBool("vSyncForOpenGL", false);
+	setBool("vSyncForOpenGL", true);
 	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
