@@ -48,9 +48,9 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 	if (cancellable)
 	{
 		_btnOk = new TextButton(112, 16, 200, 176);
-		_lstFacilities = new TextList(115, 96, 200, 64);
+		_lstFacilities = new TextList(112, 96, 200, 64);
 	} else {
-		_lstFacilities = new TextList(115, 128, 200, 64);
+		_lstFacilities = new TextList(112, 128, 200, 64);
 	}
 	_txtTitle = new Text(118, 16, 197, 48);
 
@@ -83,7 +83,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 115);
+	_lstFacilities->setColumns(1, 112);
 	_lstFacilities->setSelectable(true);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
