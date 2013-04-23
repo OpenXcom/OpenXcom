@@ -2336,7 +2336,7 @@ Po rozpoczęciu nowej gry można ręcznie rozmieścić swoje początkowe instala
 STR_GLOBESEASONS
 Pory roku
 STR_GLOBESEASONS_DESC
-Realistyczne odwzorowanie oświetlenia słonecznego w zależności od pory roku.
+Realistyczne odwzorowanie oświetlenia słonecznego{NEWLINE}w zależności od pory roku.
 STR_PLAYINTRO
 Odtwarzaj intro
 STR_PLAYINTRO_DESC
@@ -2356,7 +2356,7 @@ AI w miarę możliwości stara się uniknąć narażania jednostek na ostrzał z
 STR_STRAFE
 Przemieszczanie się bokiem
 STR_STRAFE_DESC
-Włącz tryb chodzenia w bok, oraz jazdy z niezależnym ukierunkowaniem wieżyczki w czołgu. Przytrzymaj klawisz CTRL aby użyć alternatywnej metody ruchu.
+Włącz tryb chodzenia w bok i biegania, oraz jazdy{NEWLINE}z niezależnym ukierunkowaniem wieżyczki w czołgu. Przytrzymaj klawisz CTRL aby użyć alternatywnej metody ruchu.
 STR_BATTLESCROLLDRAGINVERT
 Odwrócenie dla "Przytrzymaj i przesuń"
 STR_BATTLESCROLLDRAGINVERT_DESC
