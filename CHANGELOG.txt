@@ -9,6 +9,7 @@ New features:
 - Ukranian translation implemented.
 - Bulgarian translation implemented.
 - Portuguese translation implemented.
+- Spanish (Latin American) translation implemented.
 - Italian Soldier Names added.
 - Hungarian Soldier Names added.
 - Aliens progress their equipment levels, races and aggression over time.
