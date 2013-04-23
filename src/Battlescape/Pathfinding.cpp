@@ -717,7 +717,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
-		if ((SDL_GetModState() & KMOD_CTRL) != 0)
+		if ((SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1)
 		{
 			tu *= 0.75;
 		}
@@ -732,9 +732,9 @@ bool Pathfinding::previewPath(bool bRemove)
 				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
 				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
 				{
-					tileBelow->setMarkerColor(bRemove?0:(tus>0?4:3));
+					tileBelow->setMarkerColor(bRemove?0:(tus>=0?4:3));
 				}
-				tile->setMarkerColor(bRemove?0:(tus>0?4:3));
+				tile->setMarkerColor(bRemove?0:(tus>=0?4:3));
 			}
 		}
 	}
