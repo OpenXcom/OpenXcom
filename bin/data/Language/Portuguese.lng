@@ -2266,7 +2266,7 @@ OpenXcom
 STR_LIST_ITEM
 RESULTADOS
 STR_DISPLAY_FILTER
-Display Filter
+Filtro Gráfico
 STR_ADVANCED
 OPÇÕES AVANÇADAS
 STR_ADVANCED_OPTIONS
@@ -2278,7 +2278,7 @@ Todos os OVNIs tentarão detetar bases X-COM, independentemente das suas diretiv
 STR_ALIENCONTAINMENTHASUPPERLIMIT
 Contenção Alienígena limitada
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Limita ao número de alienígenas em contenção. Recomenda-se o uso da opção "Vender alienígenas vivos".
+Limita o número de alienígenas em contenção. Recomenda-se o uso da opção "Vender alienígenas vivos".
 STR_CANSELLLIVEALIENS
 Vender alienígenas vivos
 STR_CANSELLLIVEALIENS_DESC
@@ -2306,7 +2306,7 @@ Exibir uma mensagem de cada vez que um soldado X-COM morre em combate.
 STR_BATTLEPREVIEWPATH
 Pré-visualizar percursos
 STR_BATTLEPREVIEWPATH_DESC
-Pré-visualizar o percurso ao mover soldados em campo.
+A localização do cursor traça uma pré-visualização do percurso, ao mover soldados em campo.
 STR_BATTLERANGEBASEDACCURACY
 Precisão de fogo realista
 STR_BATTLERANGEBASEDACCURACY_DESC
@@ -2359,3 +2359,7 @@ STR_BATTLEEXPLOSIONHEIGHT
 Alcance vertical de explosão
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Altera a altura e proporção das explosões.{NEWLINE}(Planas: 0, Esféricas: 3)
+STR_ALLOWPSIONICCAPTURE
+Psi-captura
+STR_ALLOWPSIONICCAPTURE_DESC
+O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
