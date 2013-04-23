@@ -2038,9 +2038,13 @@ STR_PANIC_UNIT
 STR_MIND_CONTROL_SUCCESSFUL
 Контроль установлен
 STR_HAS_GONE_BERSERK
-теряет рассудок
+потерял рассудок
+STR_HAS_GONE_BERSERK_FEMALE
+потеряла рассудок
 STR_HAS_PANICKED
-паникует
+запаниковал
+STR_HAS_PANICKED_FEMALE
+запаниковала
 STR_XCOM
 X-COM
 STR_ALIENS
@@ -2075,8 +2079,12 @@ STR_ALIEN_MOVEMENT_SPEED
 СКОРОСТЬ ПЕРЕМЕЩЕНИЯ ПРОТИВНИКА
 STR_HAS_BECOME_UNCONSCIOUS
  потерял сознание
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ потеряла сознание
 STR_HAS_DIED_FROM_A_FATAL_WOUND
  умер от ран
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
+ умерла от ран
 STR_USE_MIND_PROBE
 Использовать
 STR_FATAL_WOUNDS
@@ -2161,6 +2169,8 @@ STR_ABANDON_GAME_QUESTION
 ОТКАЗАТЬСЯ ОТ ИГРЫ?
 STR_HAS_BEEN_KILLED
 убит
+STR_HAS_BEEN_KILLED_FEMALE
+убита
 STR_DRAG_SCROLL
 ПРОЛИСТЫВАНИЕ
 STR_HIT_MELEE
