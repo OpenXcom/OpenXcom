@@ -1896,7 +1896,7 @@ Zapis powiódł się
 STR_DELETE
 USUŃ
 STR_DELETE_UNSUCCESSFUL
-Usuń nie powiodło się
+Usuwanie nieudane.
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Wykryto poprzedni zapis gry XCom
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
