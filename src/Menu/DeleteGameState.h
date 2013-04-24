@@ -41,11 +41,10 @@ private:
 	Text *_txtMessage;
 	SavedGameState *_parent;
 	std::string _filename;
-
-	void create(Game *game, const std::wstring &save, Uint8 color, std::string bg, Uint8 bgColor, SavedGameState *parent);
+	bool _geo;
 public:
 	/// Creates the Confirm state.
-	DeleteGameState(Game *game, const std::wstring &save, Uint8 color, std::string bg, Uint8 bgColor, SavedGameState *parent);
+	DeleteGameState(Game *game, bool geo, const std::wstring &save, SavedGameState *parent);
 	/// Cleans up the Confirm state.
 	~DeleteGameState();
 	/// Handler for clicking the confirm button.

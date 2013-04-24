@@ -623,6 +623,26 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 }
 
 /**
+ * Returns the localized text with the specified ID, in the proper form for the gender.
+ * If it's not found, just returns the ID.
+ * @param id ID of the string.
+ * @return String with the requested ID.
+ */
+const LocalizedText &Language::getString(const std::string &id, SoldierGender gender) const
+{
+	std::string genderId;
+	if (gender == GENDER_MALE)
+	{
+		genderId = id + "_MALE";
+	}
+	else
+	{
+		genderId = id + "_FEMALE";
+	}
+	return getString(genderId);
+}
+
+/**
  * Outputs all the language IDs and strings
  * to an HTML table.
  * @param filename HTML file.

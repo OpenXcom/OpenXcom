@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 Збереження завершено
 STR_DELETE
 ВИДАЛИТИ
+STR_DELETE_UNSUCCESSFUL
+Видалити не вдалось
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Виявлено попереднє збереження X-COM
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,10 +2039,14 @@ STR_PANIC_UNIT
 Паніка
 STR_MIND_CONTROL_SUCCESSFUL
 Успішно взято під контроль
-STR_HAS_GONE_BERSERK
-втрачає глузд
-STR_HAS_PANICKED
-панікує
+STR_HAS_GONE_BERSERK_MALE
+втратив глузд
+STR_HAS_GONE_BERSERK_FEMALE
+втратила глузд
+STR_HAS_PANICKED_MALE
+запанікував
+STR_HAS_PANICKED_FEMALE
+запанікувала
 STR_XCOM
 X-COM
 STR_ALIENS
@@ -2073,10 +2079,14 @@ STR_XCOM_MOVEMENT_SPEED
 ШВИДКІСТЬ ПЕРЕМІЩЕННЯ X-COM
 STR_ALIEN_MOVEMENT_SPEED
 ШВИДКІСТЬ ПЕРЕМІЩЕННЯ ПРИБУЛЬЦІВ
-STR_HAS_BECOME_UNCONSCIOUS
- втрачає свідомість
-STR_HAS_DIED_FROM_A_FATAL_WOUND
- помирає від смертельних ран
+STR_HAS_BECOME_UNCONSCIOUS_MALE
+ втратив свідомість
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ втратила свідомість
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ помер від смертельних ран
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
+ померла від смертельних ран
 STR_USE_MIND_PROBE
 Використати
 STR_FATAL_WOUNDS
@@ -2157,8 +2167,10 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} поза Зоною Виходу
 STR_ABANDON_GAME_QUESTION
 ВІДМОВИТИСЬ ВІД ГРИ?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
 був вбитий
+STR_HAS_BEEN_KILLED_FEMALE
+була вбита
 STR_DRAG_SCROLL
 СЕРЕДНЬОЮ КНОПКОЮ МИШІ
 STR_HIT_MELEE
@@ -2326,7 +2338,7 @@ STR_CRAFTLAUNCHALWAYS_DESC
 STR_CUSTOMINITIALBASE
 Своя початкова база
 STR_CUSTOMINITIALBASE_DESC
-Коли починається нова гра, Ви самі виставлаєте розміщення початкових модулів, замість використання стандартної схеми.
+Коли починається нова гра, Ви самі розставляєте початкові модулі, замість використання стандартної схеми.
 STR_GLOBESEASONS
 Реалістичне освітлення Глобуса
 STR_GLOBESEASONS_DESC
@@ -2338,11 +2350,11 @@ STR_PLAYINTRO_DESC
 STR_SHOWFUNDSONGEOSCAPE
 Показувати фонди в режимі глобуса
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Розширити інформаційну панель в режимі глобуса, щоб відображати також і поточний фінансовий стан.
+Розширити інформаційну панель в режимі глобуса, щоб показувати також і поточний фінансовий стан.
 STR_SHOWMORESTATSININVENTORYVIEW
 Характеристики в інвентарі
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Показувати характеристики солдата на екрані інвентаря.
+Показувати характеристики солдата на екрані інвентарю.
 STR_SNEAKYAI
 Підлий ШІ
 STR_SNEAKYAI_DESC

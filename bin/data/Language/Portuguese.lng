@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 Jogo carregado com sucesso
 STR_DELETE
 ELIMINAR
+STR_DELETE_UNSUCCESSFUL
+Falha ao eliminar jogo
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Jogo X-COM anterior encontrado
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,9 +2039,13 @@ STR_PANIC_UNIT
 Pânico
 STR_MIND_CONTROL_SUCCESSFUL
 Controlo Mental Bem-Sucedido
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 Enlouqueceu
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+Enlouqueceu
+STR_HAS_PANICKED_MALE
+entrou em Pânico
+STR_HAS_PANICKED_FEMALE
 entrou em Pânico
 STR_XCOM
 XCom
@@ -2073,9 +2079,13 @@ STR_XCOM_MOVEMENT_SPEED
 VELOCIDADE DE MOVIMENTOS XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VELOCIDADE DE MOVIMENTOS ALIENÍGENAS
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  está inconsciente
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ está inconsciente
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ morreu vítima de ferimentos graves
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  morreu vítima de ferimentos graves
 STR_USE_MIND_PROBE
 Usar Sonda Mental
@@ -2157,8 +2167,10 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Unidades fora da Zona de Saída
 STR_ABANDON_GAME_QUESTION
 ABANDONAR JOGO?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
 foi morto.
+STR_HAS_BEEN_KILLED_FEMALE
+foi morta.
 STR_DRAG_SCROLL
 POR ARRASTO
 STR_HIT_MELEE
@@ -2266,7 +2278,7 @@ OpenXcom
 STR_LIST_ITEM
 RESULTADOS
 STR_DISPLAY_FILTER
-Display Filter
+Filtro Gráfico
 STR_ADVANCED
 OPÇÕES AVANÇADAS
 STR_ADVANCED_OPTIONS
@@ -2278,7 +2290,7 @@ Todos os OVNIs tentarão detetar bases X-COM, independentemente das suas diretiv
 STR_ALIENCONTAINMENTHASUPPERLIMIT
 Contenção Alienígena limitada
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Limita ao número de alienígenas em contenção. Recomenda-se o uso da opção "Vender alienígenas vivos".
+Limita o número de alienígenas em contenção. Recomenda-se o uso da opção "Vender alienígenas vivos".
 STR_CANSELLLIVEALIENS
 Vender alienígenas vivos
 STR_CANSELLLIVEALIENS_DESC
@@ -2306,7 +2318,7 @@ Exibir uma mensagem de cada vez que um soldado X-COM morre em combate.
 STR_BATTLEPREVIEWPATH
 Pré-visualizar percursos
 STR_BATTLEPREVIEWPATH_DESC
-Pré-visualizar o percurso ao mover soldados em campo.
+A localização do cursor traça uma pré-visualização do percurso, ao mover soldados em campo.
 STR_BATTLERANGEBASEDACCURACY
 Precisão de fogo realista
 STR_BATTLERANGEBASEDACCURACY_DESC
@@ -2359,3 +2371,7 @@ STR_BATTLEEXPLOSIONHEIGHT
 Alcance vertical de explosão
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Altera a altura e proporção das explosões.{NEWLINE}(Planas: 0, Esféricas: 3)
+STR_ALLOWPSIONICCAPTURE
+Psi-captura
+STR_ALLOWPSIONICCAPTURE_DESC
+O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.

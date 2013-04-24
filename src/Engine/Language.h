@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include "LocalizedText.h"
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
@@ -65,6 +66,8 @@ public:
 	const LocalizedText &getString(const std::string &id) const;
 	/// Get a quantity-depended localized text.
 	LocalizedText getString(const std::string &id, unsigned n) const;
+	/// Get a gender-depended localized text.
+	const LocalizedText &getString(const std::string &id, SoldierGender gender) const;
 private:
 	std::wstring _name;
 	std::map<std::string, LocalizedText> _strings;

@@ -74,7 +74,7 @@ STR_REAPER_UFOPEDIA
 STR_REAPER_AUTOPSY
 Вскрытие потрошителя
 STR_REAPER_AUTOPSY_UFOPEDIA
-Рипер имеет два "мозга" и два "сердца", что позволяет ему действовать даже когда он тяжело ранен. Однако, его покрытая шерстью кожа легко воспламеняется, что делает это существо уязвимым для зажигательного оружия.
+Потрошитель имеет два "мозга" и два "сердца", что позволяет ему действовать даже когда он тяжело ранен. Однако, его покрытая шерстью кожа легко воспламеняется, что делает это существо уязвимым для зажигательного оружия.
 STR_SECTOPOD_UFOPEDIA
 Сектоподы это роботы, оснащенные мощным плазменным оружием. Эти механические монстры управляются телепатически их контроллерами, небесными. Сектоподы являются самым мощным оружием террора, которое доступно вооруженным силам пришельцев.
 STR_SECTOPOD_AUTOPSY
@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 Сохранение удалось
 STR_DELETE
 УДАЛИТЬ
+STR_DELETE_UNSUCCESSFUL
+Удалить не удалось
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Обнаружено предыдущее сохранение X-COM
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,10 +2039,14 @@ STR_PANIC_UNIT
 Паника
 STR_MIND_CONTROL_SUCCESSFUL
 Контроль установлен
-STR_HAS_GONE_BERSERK
-теряет рассудок
-STR_HAS_PANICKED
-паникует
+STR_HAS_GONE_BERSERK_MALE
+потерял рассудок
+STR_HAS_GONE_BERSERK_FEMALE
+потеряла рассудок
+STR_HAS_PANICKED_MALE
+запаниковал
+STR_HAS_PANICKED_FEMALE
+запаниковала
 STR_XCOM
 X-COM
 STR_ALIENS
@@ -2073,10 +2079,14 @@ STR_XCOM_MOVEMENT_SPEED
 СКОРОСТЬ ПЕРЕМЕЩЕНИЯ X-COM
 STR_ALIEN_MOVEMENT_SPEED
 СКОРОСТЬ ПЕРЕМЕЩЕНИЯ ПРОТИВНИКА
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  потерял сознание
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ потеряла сознание
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
  умер от ран
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
+ умерла от ран
 STR_USE_MIND_PROBE
 Использовать
 STR_FATAL_WOUNDS
@@ -2159,8 +2169,10 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_3
 {N} - ВНЕ ЗОНЫ ВЫХОДА
 STR_ABANDON_GAME_QUESTION
 ОТКАЗАТЬСЯ ОТ ИГРЫ?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
 убит
+STR_HAS_BEEN_KILLED_FEMALE
+убита
 STR_DRAG_SCROLL
 ПРОЛИСТЫВАНИЕ
 STR_HIT_MELEE
@@ -2268,7 +2280,7 @@ OpenXcom
 STR_LIST_ITEM
 Наименование
 STR_DISPLAY_FILTER
-Display Filter
+Фильтр изображения
 STR_ADVANCED
 ДОПОЛНИТЕЛЬНО
 STR_ADVANCED_OPTIONS
@@ -2284,13 +2296,13 @@ STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
 STR_CANSELLLIVEALIENS
 Продажа живых пришельцев
 STR_CANSELLLIVEALIENS_DESC
-Позволяет продавать живых пришельцев, рекомендуется при использовании ограничений содержания.
+Позволяет продавать живых пришельцев, рекомендуется при использовании ограничения содержания.
 STR_ALLOWAUTOSELLPRODUCTION
-Разрешить автопродажу
+Автопродажа производства
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Нажмите правой кнопкой мыши на кнопке увеличения производства проекта для автоматической продажи.
 STR_ALLOWBUILDINGQUEUE
-Очередь строительства
+Включить очередь строительства
 STR_ALLOWBUILDINGQUEUE_DESC
 Незавершенные помещения выступают в качестве связи с лифтом при строительстве новых.
 STR_BATTLEAUTOEND
@@ -2300,7 +2312,7 @@ STR_BATTLEAUTOEND_DESC
 STR_BATTLEINSTANTGRENADE
 Мгновенные гранаты
 STR_BATTLEINSTANTGRENADE_DESC
-Гранаты, взведенные на 0 ходов, взорвутся сразу же после броска а не в конце хода. 
+Гранаты, взведенные на 0 ходов, взорвутся сразу же после броска, а не в конце хода. 
 STR_BATTLENOTIFYDEATH
 Показывать сообщения о смерти
 STR_BATTLENOTIFYDEATH_DESC
@@ -2308,13 +2320,13 @@ STR_BATTLENOTIFYDEATH_DESC
 STR_BATTLEPREVIEWPATH
 Предпросмотр пути
 STR_BATTLEPREVIEWPATH_DESC
-Подвечивать предполагаемый путь при выборе направления движения солдата.
+Подсвечивать предполагаемый путь при выборе направления движения солдата.
 STR_BATTLERANGEBASEDACCURACY
-Точность в зависимости от расстояния
+Точность зависит от расстояния
 STR_BATTLERANGEBASEDACCURACY_DESC
 На точность влияют видимость, дистанция и другие факторы.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-Правила производства TFTD
+Правила производства в стиле TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Позволяет производить более одного предмета в час.
 STR_CANTRANSFERCRAFTSINAIRBORNE
@@ -2324,27 +2336,27 @@ STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 STR_CRAFTLAUNCHALWAYS
 Принудительный запуск
 STR_CRAFTLAUNCHALWAYS_DESC
-Вы можете заставить запустить летательный аппарат, даже если он не полностью заправлен и вооружен.
+Вы можете заставить запустить летательный аппарат, даже если он не полностью заправлен и снаряжен.
 STR_CUSTOMINITIALBASE
 Другая первая база
 STR_CUSTOMINITIALBASE_DESC
 При старте новой игры вы можете вручную застроить первую базу вместо использования застройки по умолчанию.
 STR_GLOBESEASONS
-Времена года на планете
+Освещение планеты согласно наклону оси вращения
 STR_GLOBESEASONS_DESC
-Включить реалистичную проекцию солнечного света в зависимости от времени года.
+Включить реалистичную проекцию солнечного света в глобальном виде согласно оси вращения Земли.
 STR_PLAYINTRO
-Показать заставку
+Показывать заставку
 STR_PLAYINTRO_DESC
-Показать заставку в начале.
+Показывать заставку при старте.
 STR_SHOWFUNDSONGEOSCAPE
-Показывать финансы в глобальном экране
+Показывать финансы в глобальном виде
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Включить в панель глобального экрана сведения о вашем финансовом состоянии.
+Включить в панель глобального вида сведения о вашем финансовом состоянии.
 STR_SHOWMORESTATSININVENTORYVIEW
 Статистика в снаряжении
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Показывать соответствующую информацию по выбранному солдату в экране снаряжения.
+Показывать дополнительную информацию по выбранному солдату в экране снаряжения.
 STR_SNEAKYAI
 Скрытный ИИ
 STR_SNEAKYAI_DESC
@@ -2352,12 +2364,16 @@ STR_SNEAKYAI_DESC
 STR_STRAFE
 Стрейф
 STR_STRAFE_DESC
-Включить стрейф, бег и независимое движение турели танка. Используйте Ctrl для включения альтернативных движений.
+Включить стрейф, бег и независимое движение турели танка. Нажимайте Ctrl для использования альтернативных движений.
 STR_BATTLESCROLLDRAGINVERT
 Инвертировать прокрутку удержанием
 STR_BATTLESCROLLDRAGINVERT_DESC
-Инвертировать прокрутку удержанием в боевом экране.
+Инвертировать прокрутку удержанием в боевом виде.
 STR_BATTLEEXPLOSIONHEIGHT
 Высота взрыва
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Как высоко могут распространяться взрывы.{NEWLINE}(Плоский: 0, Объемный: 3)
+STR_ALLOWPSIONICCAPTURE
+Разрешить пси-захват
+STR_ALLOWPSIONICCAPTURE_DESC
+При победе все оставшиеся под контролем сознания пришельцы будут считаться захваченными в плен.

@@ -1886,7 +1886,7 @@ WEITER
 STR_NO_SAVED_GAME_PRESENT
 Keine gesicherten Spiele vorhanden.
 STR_LOAD_UNSUCCESSFUL
-Ladevorgang abgebrochen.
+Ladevorgang fehlgeschlagen.
 STR_SAVE_UNSUCCESSFUL
 Sicherungsvorgang fehlgeschlagen.
 STR_LOAD_SUCCESSFUL
@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 Sicherungsvorgang abgeschlossen.
 STR_DELETE
 LÖSCHEN
+STR_DELETE_UNSUCCESSFUL
+Löschen fehlgeschlagen.
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Früher gesichertes XCom-Spiel gefunden.
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,9 +2039,13 @@ STR_PANIC_UNIT
 Einheit in Panik stürzen
 STR_MIND_CONTROL_SUCCESSFUL
 Gedankenkontrolle erfolgreich
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 hat einen Tobsuchtsanfall
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+hat einen Tobsuchtsanfall
+STR_HAS_PANICKED_MALE
+ist in Panik ausgebrochen
+STR_HAS_PANICKED_FEMALE
 ist in Panik ausgebrochen
 STR_XCOM
 XCom
@@ -2073,9 +2079,13 @@ STR_XCOM_MOVEMENT_SPEED
 GESCHWINDIGKEIT DER XCOM
 STR_ALIEN_MOVEMENT_SPEED
 GESCHWINDIGKEIT DER AUSSERIRDISCHEN
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  ist bewußtlos
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ ist bewußtlos
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ ist an einer Verletzung gestorben
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  ist an einer Verletzung gestorben
 STR_USE_MIND_PROBE
 Gedankensonde einsetzen
@@ -2153,7 +2163,9 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Einheiten außerhalb des Ausgangsbereichs
 STR_ABANDON_GAME_QUESTION
 SPIEL AUFGEBEN?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
+wurde getötet
+STR_HAS_BEEN_KILLED_FEMALE
 wurde getötet
 STR_DRAG_SCROLL
 Bildverlauf ziehen
@@ -2355,3 +2367,7 @@ STR_BATTLEEXPLOSIONHEIGHT
 Explosion height
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+STR_ALLOWPSIONICCAPTURE
+Allow psi-capture
+STR_ALLOWPSIONICCAPTURE_DESC
+Mind-controlling all remaining aliens results in victory, and they count as live captures.
