@@ -2266,96 +2266,100 @@ OpenXcom
 STR_LIST_ITEM
 ОДИНИЦЯ
 STR_DISPLAY_FILTER
-Display Filter
+Екранний фільтр
 STR_ADVANCED
-ADVANCED
+ДОДАТКОВІ
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+ДОДАТКОВІ НАЛАШТУВАННЯ
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Агресивна відплата
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+НЛО завжди будуть намагатись знайти Вашу базу, незалежно від виконуваного завдання.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment limits
+Ліміт тюрми для прибульців
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Буде введено ліміт на кількість живих прибульців в тюрмах.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Продаж живих прибульців
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Дозволити продаж живих прибульців. Корисно при ввімкненому ліміті тюрем.
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Авто-продаж продукції цехів
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+На екрані проекту виробництва, клацніть правою кнопкою миші по кнопці "збільшити" в графі "Всього до Виготовл." для авто-продажу.
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Дозволити чергу будівництва
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Недобудовані модулі бази забезпечують зв'язок з ліфтом при закладанні нових модулів.
 STR_BATTLEAUTOEND
-Auto-end battle
+Авто-завершення бою
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Тактичний бій завершується автоматично, після смерті останнього ворога. 
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Миттєвий вибух гранат
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Гранати активовані з таймером на 0 ходів вибухають одразу після кидання, а не в кінці ходу.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Показувати сповіщення про смерть
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Показувати сповіщення про смерть кожного разу, коли помирає хтось із Ваших солдатів.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Попередній перегляд шляху
 STR_BATTLEPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Клік лівою кн. миші підсвічує шлях яким боєць піде до цілі, подвійний клік пересуває бійця.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Реалістична точність пострілу
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Точність пострілу буде залежати від видимості, відстані та інших факторів.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Правила виробництва як в TFTD 
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Дозволяє виробничим проектам виготовляти більше ніж одну одиницю за годину.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Передачі в польоті
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Дозволити передачу кораблів, що перебувають в польоті.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+Примусовий запуск кораблів
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Ви можете змусити корабель злетіти, якщо він не є повністю заправлений чи пере-озброєний.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Своя початкова база
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Коли починається нова гра, Ви самі виставлаєте розміщення початкових модулів, замість використання стандартної схеми.
 STR_GLOBESEASONS
-Globe tilted lighting
+Реалістичне освітлення Глобуса
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Включити реалістичну проекцію сонячного світла на Глобус, відповідно до нахилу Земної осі.
 STR_PLAYINTRO
-Play intro
+Показувати вступний ролик
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Показувати вступний ролик при кожному запуску гри.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Показувати фонди в режимі глобуса
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+Розширити інформаційну панель в режимі глобуса, щоб відображати також і поточний фінансовий стан.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Характеристики в інвентарі
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+Показувати характеристики солдата на екрані інвентаря.
 STR_SNEAKYAI
-Sneaky AI
+Підлий ШІ
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+ШІ (Штучний Інтелект) намагатиметься не показувати себе гравцю, наскільки це буде можливо.
 STR_STRAFE
-Strafe setting
+Розширене керування танками
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Дозволити незалежне керування корпусом танка та його гарматою. Затисніть CTRL для використання альтернативних способів руху.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Інвертована прокрутка середньою кн.
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Інвертувати напрям прокрутки середньою кнопкою миші на екрані тактичної битви.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Висота вибухів
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Змініть як далеко по вертикалі поширюватимуться вибухи.{NEWLINE}(Плоский: 0, Сферичний: 3)
+STR_ALLOWPSIONICCAPTURE
+Дозволити псі-захоплення
+STR_ALLOWPSIONICCAPTURE_DESC
+Псі-контроль над всіма прибульцями, що залишились, означає перемогу і вони рахуються як захоплені живими.
