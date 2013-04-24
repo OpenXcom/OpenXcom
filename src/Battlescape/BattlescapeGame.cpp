@@ -1070,13 +1070,13 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	// show a little infobox with the name of the unit and "... is panicking"
 	std::wstringstream ss;
 	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
-	if (unit->getGender() == GENDER_MALE)
+	if (status == STATUS_PANICKING)
 	{
-		ss << _parentState->getGame()->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
+		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
 	}
 	else
 	{
-		ss << _parentState->getGame()->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED_FEMALE":"STR_HAS_GONE_BERSERK_FEMALE");
+		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender());
 	}
 	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 

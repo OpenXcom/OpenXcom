@@ -162,44 +162,37 @@ void UnitDieBState::think()
 			{
 				if (_damageType == DT_NONE)
 				{
-					// Check gender for different messages (localization things)
+					std::string msg;
 					if (_unit->getGender() == GENDER_MALE)
 					{
-						game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND"));
+						msg = "STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE";
 					}
 					else
 					{
-						game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE"));
+						msg = "STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE";
 					}
-
+					game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), msg));
 				}
 				else if (Options::getBool("battleNotifyDeath"))
 				{
 					std::wstringstream ss;
 					ss << _unit->getName(game->getLanguage()) << L'\n';
-					// Check gender for different messages (localization things)
-					if (_unit->getGender() == GENDER_MALE)
-					{
-						ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED");
-					}
-					else
-					{
-						ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED_FEMALE");
-					}
+					ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender());
 					game->pushState(new InfoboxState(game, ss.str()));
 				}
 			}
 			else
 			{
-				// Check gender for different messages (localization things)
+				std::string msg;
 				if (_unit->getGender() == GENDER_MALE)
 				{
-					game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS"));
+					msg = "STR_HAS_BECOME_UNCONSCIOUS_MALE";
 				}
 				else
 				{
-					game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), "STR_HAS_BECOME_UNCONSCIOUS_FEMALE"));
+					msg = "STR_HAS_BECOME_UNCONSCIOUS_FEMALE";
 				}
+				game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), msg));
 			}
 		}
 	}
