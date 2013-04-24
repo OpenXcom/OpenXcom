@@ -1900,7 +1900,7 @@ Törlés sikertelen
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Előző X-COM mentett játék észlelve
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
-A mentett játék törölhető?
+Biztosan törölni akarod a mentett játékot?
 STR_SOUND_OPTIONS
 HANG OPCIÓK
 STR_MUSIC_VOLUME
@@ -2272,13 +2272,13 @@ OpenXcom
 STR_LIST_ITEM
 TÉTEL
 STR_DISPLAY_FILTER
-Display Filter
+Megjelenítő Szűrő (Filter)
 STR_ADVANCED
 HALADÓ
 STR_ADVANCED_OPTIONS
 HALADÓ BEÁLLÍTÁSOK
 STR_AGGRESSIVERETALIATION
-Aggresszív Megtorlás
+Aggresszív megtorlás
 STR_AGGRESSIVERETALIATION_DESC
 Az UFO-k - küldetésüktől függetlenül - minden alkalommal kíserletet tesznek a bázisod helyének kiderítésére.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
@@ -2290,9 +2290,9 @@ STR_CANSELLLIVEALIENS
 STR_CANSELLLIVEALIENS_DESC
 Engedélyezi az élő idegenek eladását. Ez a funkció javasolt a felső korlát bekapcsolása esetén.
 STR_ALLOWAUTOSELLPRODUCTION
-Auto-eladás engedélyezése
+Gyártás auto-eladása
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-A gyártás képernyőn az "Összesen gyártandó" rész növelő gombjára való jobb kattintással az auto-eladás aktiválódik.
+A gyártás képernyőn az "Összesen gyártandó" rész növelő gombjára való jobb-kattintással az auto-eladás aktiválódik.
 STR_ALLOWBUILDINGQUEUE
 Épület-emelés sorba állíthatósága
 STR_ALLOWBUILDINGQUEUE_DESC
@@ -2312,7 +2312,7 @@ STR_BATTLENOTIFYDEATH_DESC
 STR_BATTLEPREVIEWPATH
 Útvonal előnézete
 STR_BATTLEPREVIEWPATH_DESC
-Kiemeléssel mutatja az utat amikor célt választasz egy egységednek.
+Bal-kattintásra kiemeléssel mutatja az utat amikor célt választasz egy egységednek, dupla-kattintásra az egység megindul.
 STR_BATTLERANGEBASEDACCURACY
 Távolság-alapú pontosság
 STR_BATTLERANGEBASEDACCURACY_DESC
@@ -2326,7 +2326,7 @@ Repülő jármű átcsoportosíthatósága
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 Jelenleg levegőben lévő járművet át lehet csoportosítani.
 STR_CRAFTLAUNCHALWAYS
-A gépek mindig indíthatók
+Repülőgépek mindig elindíthatóak
 STR_CRAFTLAUNCHALWAYS_DESC
 Mindig elindíthatod a repülőgépeidet, felülírva a teljes újratöltés és újrafegyverzés szükségét.
 STR_CUSTOMINITIALBASE
@@ -2334,9 +2334,9 @@ Egyéni kezdő-bázis
 STR_CUSTOMINITIALBASE_DESC
 Amikor új játékot indítasz, akkor egyesével helyezheted el a kezdő-épületeidet az alap elrendezés helyett.
 STR_GLOBESEASONS
-Bolygó évszakok
+Bolygó évszak szerinti megvilágítása
 STR_GLOBESEASONS_DESC
-Engedélyezi a napfény valósághű kivetítését az év szakának megfelelően.
+Engedélyezi a napfény valósághű kivetítését a Földgömbön az év szakának megfelelően (a Föld tengelyferdesége).
 STR_PLAYINTRO
 Bevezető lejátszása
 STR_PLAYINTRO_DESC
@@ -2348,13 +2348,13 @@ Kibővíti a földgömb információs paneljét egy további információval a j
 STR_SHOWMORESTATSININVENTORYVIEW
 Személy-Leltár adatok
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-A kiválasztott katonáról lényeges információkat mutat a Személy-Leltár képernyőjén.
+A kiválasztott katonáról extra információkat mutat a Személy-Leltár képernyőjén.
 STR_SNEAKYAI
 Sunyi MI
 STR_SNEAKYAI_DESC
 A Mesterséges Intelligencia - amikor csak lehetséges - elkerüli, hogy felfedje az egységeit a játékos számára.
 STR_STRAFE
-Oldalazás
+Oldalazás, futás
 STR_STRAFE_DESC
 Oldalazás, futás, és tank tornyának független mozgatási lehetőségének bekapcsolása. CTRL nyomvatartásával lehetséges használni.
 STR_BATTLESCROLLDRAGINVERT
@@ -2366,6 +2366,6 @@ Robbanások magassága
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Megváltoztatja a robbanások magassági terjedését.{NEWLINE}(Sima: 0, Kör: 3)
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Psi-elfogás engedélyezése
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens results in victory, and they count as live captures.
+Az összes megmaradt élő idegen elmekontroll alá vonása a csata győzelmét eredményezi, és mindegyik élve elfogott idegennek számít.
