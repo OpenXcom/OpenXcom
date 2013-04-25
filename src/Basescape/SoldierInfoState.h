@@ -29,7 +29,6 @@ class Surface;
 class TextButton;
 class Text;
 class TextEdit;
-class ToggleTextButton;
 class Bar;
 
 /**
@@ -44,7 +43,6 @@ private:
 
 	Surface *_bg, *_rank;
 	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor;
-	ToggleTextButton *_btnPsionic;
 	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
 	TextEdit *_edtSoldier;
 
@@ -68,8 +66,6 @@ public:
 	void btnNextClick(Action *action);
 	/// Handler for clicking the Armor button.
 	void btnArmorClick(Action *action);
-	/// Handler for on/off psionic training.
-	void btnPsionicClick(Action *);
 };
 
 }

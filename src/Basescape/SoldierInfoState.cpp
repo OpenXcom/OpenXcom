@@ -22,14 +22,11 @@
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
-#include "../Interface/ToggleTextButton.h"
 #include "../Engine/Surface.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -65,7 +62,6 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
 	_txtPsionic = new Text(140, 9, 0, 66);
-	_btnPsionic = new ToggleTextButton(140, 14, 0, 65);
 
 	_txtTimeUnits = new Text(120, 9, 6, 82);
 	_numTimeUnits = new Text(18, 9, 131, 82);
@@ -121,7 +117,6 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_txtCraft);
 	add(_txtRecovery);
 	add(_txtPsionic);
-	add(_btnPsionic);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -205,10 +200,6 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
 	_txtPsionic->setText(_game->getLanguage()->getString("STR_IN_PSIONIC_TRAINING"));
-
-	_btnPsionic->setColor(Palette::blockOffset(15)+6);
-	_btnPsionic->setText(_game->getLanguage()->getString("STR_IN_PSIONIC_TRAINING"));
-	_btnPsionic->onMouseClick((ActionHandler)&SoldierInfoState::btnPsionicClick);
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -445,9 +436,7 @@ void SoldierInfoState::init()
 		_txtRecovery->setText(L"");
 	}
 
-	_txtPsionic->setVisible(!Options::getBool("anytimePsiTraining") && s->isInPsiTraining());
-	_btnPsionic->setVisible( Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0);
-	_btnPsionic->setPressed(s->isInPsiTraining());
+	_txtPsionic->setVisible(s->isInPsiTraining());
 
 	if(current->psiSkill > 0)
 	{
@@ -543,18 +532,6 @@ void SoldierInfoState::btnArmorClick(Action *)
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 	}
-}
-
-/**
- * Turn on/off psionic training.
- * @param action Pointer to an action.
- */
-void SoldierInfoState::btnPsionicClick(Action *)
-{
-	if (_btnPsionic->getPressed())
-		_game->pushState(new AllocatePsiTrainingState(_game, _base));
-	else
-		_base->getSoldiers()->at(_soldier)->setPsiTraining();
 }
 
 }
