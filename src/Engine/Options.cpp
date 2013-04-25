@@ -125,6 +125,7 @@ void createDefault()
 	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
+	setInt("FPSLimit", 60);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

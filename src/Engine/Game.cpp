@@ -162,6 +162,8 @@ void Game::run()
 	int pauseMode = Options::getInt("pauseMode");
 	if (pauseMode > 3)
 		pauseMode = 3;
+	Uint32 FPSLimiter = 0;
+	static const Uint32 FPSInterval = 1000 / (Options::getInt("FPSLimit") > 0 && Options::getInt("FPSLimit") < 1000 ? Options::getInt("FPSLimit") : 1000);
 	while (!_quit)
 	{
 		// Clean up states
@@ -235,8 +237,9 @@ void Game::run()
 		}
 
 		// Process rendering
-		if (runningState != PAUSED)
+		if (runningState != PAUSED && SDL_GetTicks() >= FPSLimiter)
 		{
+			FPSLimiter = SDL_GetTicks() + FPSInterval;
 			// Process logic
 			_fpsCounter->think();
 			_states.back()->think();
