@@ -1264,9 +1264,6 @@ void SavedBattleGame::prepareNewTurn()
  */
 void SavedBattleGame::reviveUnconsciousUnits()
 {
-	int xd[11] = {0, 0, 1, 1, 1, 0, -1, -1, -1, 0, 0};
-	int yd[11] = {0, -1, -1, 0, 1, 1, 1, 0, -1, 0, 0};
-	int zd = 0;
 	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
 		if ((*i)->getArmor()->getSize() == 1)
@@ -1282,27 +1279,11 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					}
 				}
 			}
-			for (int dir = 0; dir < 12 && (*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0; dir++)
+			if((*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0)
 			{
-				if (dir == 10)
-				{
-					if ((*i)->getArmor()->getMovementType() != MT_FLY)
-					{
-						continue;
-					}
-					zd = 1;
-				}
-				if (dir == 11)
-				{
-					zd = -1;
-				}
-				Tile *t = getTile(originalPosition + Position(xd[dir],yd[dir],zd));
-				Tile *bt = getTile(originalPosition + Position(xd[dir],yd[dir],zd - 1));
-				if (t && t->getUnit() == 0 && !t->hasNoFloor(bt))
+				if (placeUnitNearPosition((*i), originalPosition))
 				{
 					// recover from unconscious
-					(*i)->setPosition(originalPosition + Position(xd[dir],yd[dir],zd));
-					getTile(originalPosition + Position(xd[dir],yd[dir],zd))->setUnit(*i, getTile(originalPosition + Position(xd[dir],yd[dir],zd-1)));
 					(*i)->turn(false); // makes the unit stand up again
 					(*i)->setCache(0);
 					getTileEngine()->calculateFOV((*i));
@@ -1570,6 +1551,43 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 		}
 	}
 	return result;
+}
+
+/*
+ * place a unit on or near a position
+ * @param unit the unit to place
+ * @param entryPoint the position around which to attempt to place the unit
+ * @return if we were successful
+ */
+
+bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoint)
+{
+	if (setUnitPosition(unit, entryPoint))
+	{
+		return true;
+	}
+
+	for (int dir = 0; dir <= 7; ++dir)
+	{
+		Position offset;
+		getPathfinding()->directionToVector(dir, &offset);
+		Tile *t = getTile(entryPoint + offset);
+		if (t && !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+			&& setUnitPosition(unit, entryPoint + offset))
+		{
+			return true;
+		}
+	}
+	
+	if (unit->getArmor()->getMovementType() == MT_FLY)
+	{
+		Tile *t = getTile(entryPoint + Position(0, 0, 1));
+		if (t && t->hasNoFloor(getTile(entryPoint)) && setUnitPosition(unit, entryPoint + Position(0, 0, 1)))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 }

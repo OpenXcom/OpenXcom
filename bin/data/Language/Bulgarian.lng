@@ -1901,6 +1901,8 @@ STR_SAVE_SUCCESSFUL
 Save successful
 STR_DELETE
 DELETE
+STR_DELETE_UNSUCCESSFUL
+Delete failed
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Previous X-COM saved game detected
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2043,9 +2045,13 @@ STR_PANIC_UNIT
 Panic Unit
 STR_MIND_CONTROL_SUCCESSFUL
 Mind Control Successful
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 изпадна в бяс
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+изпадна в бяс
+STR_HAS_PANICKED_MALE
+изпадна в паника
+STR_HAS_PANICKED_FEMALE
 изпадна в паника
 STR_XCOM
 Xcom
@@ -2079,9 +2085,13 @@ STR_XCOM_MOVEMENT_SPEED
 СКОРОСТ НА ДВИЖЕНИЕ НА XCOM
 STR_ALIEN_MOVEMENT_SPEED
 СКОРОСТ НА ДВИЖЕНИЕ НА ИЗВЪНЗЕМНИТЕ
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  изпадна в безсъзнание
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ изпадна в безсъзнание
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ умря заради смъртоносна рана
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  умря заради смъртоносна рана
 STR_USE_MIND_PROBE
 Use Mind Probe
@@ -2153,8 +2163,106 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Units outside Exit Area
 STR_ABANDON_GAME_QUESTION
 НАПУСКАНЕ НА ИГРАТА?
-STR_OPENGL
-OpenGL
+STR_HAS_BEEN_KILLED_MALE
+has been Killed
+STR_HAS_BEEN_KILLED_FEMALE
+has been Killed
+STR_DRAG_SCROLL
+DRAG SCROLL
+STR_HIT_MELEE
+Hit
+STR_CONTROLS
+CONTROLS
+STR_RESTORE_DEFAULTS
+Restore Defaults
+STR_GENERAL
+General
+STR_GEOSCAPE
+Geoscape
+STR_BATTLESCAPE
+Battlescape
+STR_SCREENSHOT
+Screenshot
+STR_FPS_COUNTER
+FPS Counter
+STR_ROTATE_LEFT
+Rotate Left
+STR_ROTATE_RIGHT
+Rotate Right
+STR_ROTATE_UP
+Rotate Up
+STR_ROTATE_DOWN
+Rotate Down
+STR_ZOOM_IN
+Zoom In
+STR_ZOOM_OUT
+Zoom Out
+STR_TOGGLE_COUNTRY_DETAIL
+Toggle Country Detail
+STR_TOGGLE_RADAR_RANGES
+Toggle Radar Ranges
+STR_SCROLL_LEFT
+Scroll Left
+STR_SCROLL_RIGHT
+Scroll Right
+STR_SCROLL_UP
+Scroll Up
+STR_SCROLL_DOWN
+Scroll Down
+STR_VIEW_LEVEL_ABOVE
+View Level Above
+STR_VIEW_LEVEL_BELOW
+View Level Below
+STR_CENTER_SELECTED_UNIT
+Center Selected Unit
+STR_PREVIOUS_UNIT
+Previous Unit
+STR_NEXT_UNIT
+Next Unit
+STR_DESELECT_UNIT
+Deselect Unit
+STR_INVENTORY
+Inventory
+STR_MINIMAP
+Minimap
+STR_END_TURN
+End Turn
+STR_ABORT_MISSION
+Abort Mission
+STR_UNIT_STATS
+Unit Stats
+STR_KNEEL
+Kneel
+STR_RELOAD
+Reload
+STR_TOGGLE_PERSONAL_LIGHTING
+Toggle Personal Lighting
+STR_DONT_RESERVE_TUS
+Don't Reserve TUs
+STR_RESERVE_TUS_FOR_SNAP_SHOT
+Reserve TUs for Snap Shot
+STR_RESERVE_TUS_FOR_AIMED_SHOT
+Reserve TUs for Aimed Shot
+STR_RESERVE_TUS_FOR_AUTO_SHOT
+Reserve TUs for Auto Shot
+STR_CENTER_ON_ENEMY_1
+Center on Enemy 1
+STR_CENTER_ON_ENEMY_2
+Center on Enemy 2
+STR_CENTER_ON_ENEMY_3
+Center on Enemy 3
+STR_CENTER_ON_ENEMY_4
+Center on Enemy 4
+STR_CENTER_ON_ENEMY_5
+Center on Enemy 5
+STR_CENTER_ON_ENEMY_6
+Center on Enemy 6
+STR_CENTER_ON_ENEMY_7
+Center on Enemy 7
+STR_CENTER_ON_ENEMY_8
+Center on Enemy 8
+STR_CENTER_ON_ENEMY_9
+Center on Enemy 9
 STR_ENEMY_WEAPON_LEVEL
 Enemy Weapon Level
 STR_GROUNDED
@@ -2165,3 +2273,101 @@ STR_OPENXCOM
 OpenXcom
 STR_LIST_ITEM
 АРТИКУЛ
+STR_DISPLAY_FILTER
+Display Filter
+STR_ADVANCED
+ADVANCED
+STR_ADVANCED_OPTIONS
+ADVANCED OPTIONS
+STR_AGGRESSIVERETALIATION
+Aggressive retaliation
+STR_AGGRESSIVERETALIATION_DESC
+UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+STR_ALIENCONTAINMENTHASUPPERLIMIT
+Alien containment limits
+STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+Live alien containment limits will be imposed.
+STR_CANSELLLIVEALIENS
+Live alien sale
+STR_CANSELLLIVEALIENS_DESC
+Allows the sale of live aliens, recommended when using containment limits.
+STR_ALLOWAUTOSELLPRODUCTION
+Manufacture auto-sale
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+STR_ALLOWBUILDINGQUEUE
+Allow building queue
+STR_ALLOWBUILDINGQUEUE_DESC
+Unfinished facilities act as links to the access lift when new facilities are placed.
+STR_BATTLEAUTOEND
+Auto-end battle
+STR_BATTLEAUTOEND_DESC
+Battles automatically end when the last living enemy is neutralized.
+STR_BATTLEINSTANTGRENADE
+Instant grenades
+STR_BATTLEINSTANTGRENADE_DESC
+Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+STR_BATTLENOTIFYDEATH
+Show death notifications
+STR_BATTLENOTIFYDEATH_DESC
+Display notifications every time one of your soldiers die.
+STR_BATTLEPREVIEWPATH
+Pathfinding preview
+STR_BATTLEPREVIEWPATH_DESC
+Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+STR_BATTLERANGEBASEDACCURACY
+Range-based accuracy
+STR_BATTLERANGEBASEDACCURACY_DESC
+Accuracy of shots takes visibility, distance, and other factors into account.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+TFTD manufacture rules
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Allows manufacturing projects to produce more than one item per hour.
+STR_CANTRANSFERCRAFTSINAIRBORNE
+Airborne transfers
+STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+Aircraft currently in-flight can be transferred.
+STR_CRAFTLAUNCHALWAYS
+Force aircraft launch
+STR_CRAFTLAUNCHALWAYS_DESC
+You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+STR_CUSTOMINITIALBASE
+Custom initial base
+STR_CUSTOMINITIALBASE_DESC
+When starting a new game, you can manually place your starting facilities instead of using the default layout.
+STR_GLOBESEASONS
+Globe tilted lighting
+STR_GLOBESEASONS_DESC
+Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+STR_PLAYINTRO
+Play intro
+STR_PLAYINTRO_DESC
+Show the intro cinematic on startup.
+STR_SHOWFUNDSONGEOSCAPE
+Show geoscape funds
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Expand the geoscape info panel to include additional information on your current financial situation.
+STR_SHOWMORESTATSININVENTORYVIEW
+Inventory stats
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Show extra information on the selected soldier in the inventory screen.
+STR_SNEAKYAI
+Sneaky AI
+STR_SNEAKYAI_DESC
+AI avoids exposing themselves to the player whenever possible.
+STR_STRAFE
+Strafe setting
+STR_STRAFE_DESC
+Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+STR_BATTLESCROLLDRAGINVERT
+Inverted drag-scrolling
+STR_BATTLESCROLLDRAGINVERT_DESC
+Inverts drag-scrolling on the battlescape.
+STR_BATTLEEXPLOSIONHEIGHT
+Explosion height
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+STR_ALLOWPSIONICCAPTURE
+Allow psi-capture
+STR_ALLOWPSIONICCAPTURE_DESC
+Mind-controlling all remaining aliens results in victory, and they count as live captures.

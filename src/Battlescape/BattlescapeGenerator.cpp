@@ -173,7 +173,7 @@ void BattlescapeGenerator::nextStage()
 		// kill all units not in endpoint area
 		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if (!(*j)->isInExitArea(END_POINT) || (*j)->getFaction() == FACTION_HOSTILE)
+			if (!(*j)->isInExitArea(END_POINT) || (*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
 				(*j)->instaKill();
 			}
@@ -1780,19 +1780,9 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 		}
 		--tries;
 	}
-	if (tries)
+	if (tries && _save->placeUnitNearPosition(unit, entryPoint))
 	{
-		bool found = false;
-		for (int dir = 0; dir <= 7 && !found; ++dir)
-		{
-			Position offset;
-			_save->getPathfinding()->directionToVector(dir, &offset);
-			if (!_save->getPathfinding()->isBlocked(_save->getTile(entryPoint), _save->getTile(entryPoint + offset), dir, 0)
-				&& _save->setUnitPosition(unit, entryPoint + offset))
-			{
-				return true;
-			}
-		}
+		return true;
 	}
 	return false;
 }

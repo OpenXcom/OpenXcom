@@ -59,7 +59,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
 	_txtCraft = new Text(206, 16, 25, 40);
-	_txtTarget = new Text(206, 16, 25, 88);
+	_txtTarget = new Text(206, 32, 25, 88);
 	_txtReady = new Text(206, 32, 25, 56);
 	_txtBegin = new Text(206, 16, 25, 130);
 
@@ -96,6 +96,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_txtTarget->setColor(Palette::blockOffset(8)+10);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
+	_txtTarget->setWordWrap(true);
 	_txtTarget->setText(_craft->getDestination()->getName(_game->getLanguage()));
 
 	_txtReady->setColor(Palette::blockOffset(8)+5);

@@ -83,6 +83,8 @@ void UnitWalkBState::think()
 		}
 		else
 		{
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			_pf->abortPath();
 			_parent->popState();
 			return;
 		}
@@ -219,6 +221,8 @@ void UnitWalkBState::think()
 									p.z = t->getPosition().z*24 + t->getTerrainLevel();
 									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
 									t->getInventory()->erase(i);
+									_unit->setCache(0);
+									_parent->getMap()->cacheUnit(_unit);
 									_parent->popState();
 									return;
 								}
@@ -311,13 +315,26 @@ void UnitWalkBState::think()
 					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 				_pf->abortPath();
+				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
+				_parent->popState();
+				return;
+			}
+
+			if (energy / 2 > _unit->getEnergy())
+			{
+				_action.result = "STR_NOT_ENOUGH_ENERGY";
+				_pf->abortPath();
+				_unit->setCache(0);
+				_parent->getMap()->cacheUnit(_unit);
+				_parent->popState();
 				return;
 			}
 
 			if (_parent->checkReservedTU(_unit, tu) == false)
 			{
 				_pf->abortPath();
+				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
@@ -353,7 +370,7 @@ void UnitWalkBState::think()
 				for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
 				{
 					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x,y,0))->getUnit();
-					BattleUnit* unitBelowMyWay;
+					BattleUnit* unitBelowMyWay = 0;
 					Tile* belowDest = _parent->getSave()->getTile(destination + Position(x,y,-1));
 					if (belowDest)
 					{
@@ -386,18 +403,6 @@ void UnitWalkBState::think()
 					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
 					_unit->startWalking(dir, destination, tileBelow, onScreen);
 				}
-				else
-				{
-					_action.result = "STR_NOT_ENOUGH_ENERGY";
-					_parent->getMap()->cacheUnit(_unit);
-					_parent->popState();
-				}
-			}
-			else
-			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-				_parent->getMap()->cacheUnit(_unit);
-				_parent->popState();
 			}
 			// make sure the unit sprites are up to date
 			if (onScreen)

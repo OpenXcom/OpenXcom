@@ -32,6 +32,8 @@ language_DATA = \
 	bin/data/Language/Italian.lng \
 	bin/data/Language/Polish.geo \
 	bin/data/Language/Polish.lng \
+	bin/data/Language/Portuguese.geo \
+	bin/data/Language/Portuguese.lng \
 	bin/data/Language/Romanian.geo \
 	bin/data/Language/Romanian.lng \
 	bin/data/Language/Russian.geo \
@@ -60,6 +62,23 @@ name_DATA = \
 	bin/data/SoldierName/Russian.nam \
 	bin/data/SoldierName/Spanish.nam \
 	bin/data/SoldierName/Swedish.nam
+	
+shaderdir = $(pkgdatadir)/Shaders
+shader_DATA = \
+	bin/data/Shaders/CRT.OpenGL.shader \
+	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
+	bin/data/Shaders/CRT-simple.OpenGL.shader \
+	bin/data/Shaders/Curvature.OpenGL.shader \
+	bin/data/Shaders/dot_n_bloom.OpenGL.shader \
+	bin/data/Shaders/heavybloom.OpenGL.shader \
+	bin/data/Shaders/HQ2x.OpenGL.shader \
+	bin/data/Shaders/Openxcom.OpenGL.shader \
+	bin/data/Shaders/Phosphor-simple.OpenGL.shader \
+	bin/data/Shaders/Pixellate.OpenGL.shader \
+	bin/data/Shaders/Quilez.OpenGL.shader \
+	bin/data/Shaders/SABR.OpenGL.shader \
+	bin/data/Shaders/Scale4xHQ.OpenGL.shader \
+	bin/data/Shaders/simplebloom.OpenGL.shader
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
@@ -375,8 +394,6 @@ openxcom_SOURCES = \
 	src/Geoscape/TargetInfoState.h \
 	src/Geoscape/UfoDetectedState.cpp \
 	src/Geoscape/UfoDetectedState.h \
-	src/Geoscape/UfoHyperDetectedState.cpp \
-	src/Geoscape/UfoHyperDetectedState.h \
 	src/Geoscape/UfoLostState.cpp \
 	src/Geoscape/UfoLostState.h \
 	src/Geoscape/VictoryState.cpp \
@@ -408,6 +425,8 @@ openxcom_SOURCES = \
 	src/lodepng.cpp \
 	src/lodepng.h \
 	src/main.cpp \
+	src/Menu/AdvancedOptionsState.cpp \
+	src/Menu/AdvancedOptionsState.h \
 	src/Menu/DeleteGameState.cpp \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \

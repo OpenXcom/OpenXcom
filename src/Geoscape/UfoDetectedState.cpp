@@ -32,6 +32,7 @@
 #include "Globe.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "../Savegame/AlienMission.h"
 
 namespace OpenXcom
 {
@@ -42,8 +43,9 @@ namespace OpenXcom
  * @param ufo Pointer to the UFO to get info from.
  * @param state Pointer to the Geoscape.
  * @param detected Was the UFO detected?
+ * @param hyperwave Was it a hyperwave radar?
  */
-UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected) : State(game), _ufo(ufo), _state(state), _detected(detected)
+UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected, bool hyperwave) : State(game), _ufo(ufo), _state(state), _hyperwave(hyperwave)
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
@@ -54,22 +56,54 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 208, 120, 24, 48, POPUP_BOTH);
-	_btnCentre = new TextButton(160, 12, 48, 128);
-	_btnCancel = new TextButton(160, 12, 48, 144);
-	_txtUfo = new Text(190, 16, 48, 56);
-	_txtDetected = new Text(80, 8, 48, 72);
-	_lstInfo = new TextList(190, 32, 48, 82);
+	if (hyperwave)
+	{
+		_window = new Window(this, 224, 180, 16, 10, POPUP_BOTH);
+	}
+	else
+	{
+		_window = new Window(this, 224, 120, 16, 48, POPUP_BOTH);
+	}
+	_btnCentre = new TextButton(200, 12, 28, 128);
+	_btnCancel = new TextButton(200, 12, 28, 144);
+	_txtUfo = new Text(207, 16, 28, 56);
+	_txtDetected = new Text(100, 8, 28, 72);
+	_txtHyperwave = new Text(214, 16, 21, 44);
+	_lstInfo = new TextList(207, 32, 28, 82);
+	_lstInfo2 = new TextList(207, 32, 28, 96);
+
+	if (hyperwave)
+	{
+		_btnCentre->setY(144);
+		_btnCancel->setY(160);
+		_txtUfo->setY(20);
+		_txtDetected->setY(36);
+		_lstInfo->setY(60);
+	}
+	else
+	{
+		_txtHyperwave->setVisible(false);
+		_lstInfo2->setVisible(false);
+	}
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	if (hyperwave)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	}
+	else
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	}
 
 	add(_window);
 	add(_btnCentre);
 	add(_btnCancel);
 	add(_txtUfo);
 	add(_txtDetected);
+	add(_txtHyperwave);
 	add(_lstInfo);
+	add(_lstInfo2);
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
@@ -86,7 +120,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
-	if (_detected)
+	if (detected)
 	{
 		_txtDetected->setText(_game->getLanguage()->getString("STR_DETECTED"));
 	}
@@ -95,12 +129,17 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 		_txtDetected->setText(L"");
 	}
 
+	_txtHyperwave->setColor(Palette::blockOffset(8)+5);
+	_txtHyperwave->setAlign(ALIGN_CENTER);
+	_txtHyperwave->setWordWrap(true);
+	_txtHyperwave->setText(_game->getLanguage()->getString("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
+
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
-	_lstInfo->setColumns(2, 82, 108);
+	_lstInfo->setColumns(2, 87, 120);
 	_lstInfo->setDot(true);
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SIZE_UC").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
@@ -113,6 +152,18 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	ss << _ufo->getSpeed();
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SPEED").c_str(), ss.str().c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
+
+	_lstInfo2->setColor(Palette::blockOffset(8)+5);
+	_lstInfo2->setColumns(2, 87, 120);
+	_lstInfo2->setDot(true);
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_CRAFT_TYPE").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getType()).c_str());
+	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_RACE").c_str(), _game->getLanguage()->getString(_ufo->getAlienRace()).c_str());
+	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_MISSION").c_str(), _game->getLanguage()->getString(_ufo->getMissionType()).c_str());
+	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
+	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString(_ufo->getMission()->getRegion()).c_str());
+	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 }
 
 /**
@@ -128,7 +179,14 @@ UfoDetectedState::~UfoDetectedState()
  */
 void UfoDetectedState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	if (_hyperwave)
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	}
+	else
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	}
 }
 
 /**

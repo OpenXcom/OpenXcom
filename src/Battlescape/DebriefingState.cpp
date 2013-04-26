@@ -415,15 +415,19 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// UFO crash/landing site disappears
-	if (!aborted)
+	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 	{
-		for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+		if ((*i)->isInBattlescape())
 		{
-			if ((*i)->isInBattlescape())
+			if (!aborted)
 			{
 				delete *i;
 				save->getUfos()->erase(i);
 				break;
+			}
+			else
+			{
+				(*i)->setInBattlescape(false);
 			}
 		}
 	}

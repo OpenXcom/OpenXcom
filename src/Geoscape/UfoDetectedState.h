@@ -39,15 +39,15 @@ class UfoDetectedState : public State
 private:
 	Ufo *_ufo;
 	GeoscapeState *_state;
-	bool _detected;
+	bool _hyperwave;
 
 	TextButton *_btnCentre, *_btnCancel;
 	Window *_window;
-	Text *_txtUfo, *_txtDetected;
-	TextList *_lstInfo;
+	Text *_txtUfo, *_txtDetected, *_txtHyperwave;
+	TextList *_lstInfo, *_lstInfo2;
 public:
 	/// Creates the Ufo Detected state.
-	UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected);
+	UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected, bool hyper);
 	/// Cleans up the Ufo Detected state.
 	~UfoDetectedState();
 	/// Updates the palette.

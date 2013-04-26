@@ -962,6 +962,7 @@ void DogfightState::move()
 	// End dogfight if UFO is crashed or destroyed.
 	if (!_end && _ufo->isCrashed())
 	{
+		_ufoBreakingOff = false;
 		AlienMission *mission = _ufo->getMission();
 		mission->ufoShotDown(*_ufo, *_game, *_globe);
 		// Check for retaliation trigger.

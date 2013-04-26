@@ -78,7 +78,7 @@ void createDefault()
 	setBool("useOpenGL", false);
 	setBool("checkOpenGLErrors", false);
 	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
-	setBool("vSyncForOpenGL", false);
+	setBool("vSyncForOpenGL", true);
 	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
@@ -96,7 +96,7 @@ void createDefault()
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setInt("battleExplosionHeight", 3); //0, 1, 2, 3
+	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
 	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
@@ -125,6 +125,7 @@ void createDefault()
 	setInt("windowedModePositionY", -1);
 	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
+	setBool("allowPsionicCapture", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

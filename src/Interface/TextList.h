@@ -53,7 +53,7 @@ private:
 	int _margin;
 	bool _scrolling;
 	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
-	int _arrowPos;
+	int _arrowPos, _scrollPos;
 	ArrowOrientation _arrowType;
 	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
 	bool _allowScrollOnArrowButtons;
@@ -147,7 +147,7 @@ public:
 	/// Scrolls the list down.
 	void scrollDown(bool toMax);
 	/// Sets the list scrolling.
-	void setScrolling(bool scrolling);
+	void setScrolling(bool scrolling, int scrollPos = 4);
 	/// Draws the text onto the text list.
 	void draw();
 	/// Blits the text list onto another surface.

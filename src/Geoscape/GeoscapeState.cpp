@@ -33,6 +33,8 @@
 #include "Globe.h"
 #include "../Interface/Text.h"
 #include "../Interface/ImageButton.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Engine/Timer.h"
 #include "../Savegame/GameTime.h"
 #include "../Engine/Music.h"
@@ -56,7 +58,6 @@
 #include "MonthlyReportState.h"
 #include "ProductionCompleteState.h"
 #include "UfoDetectedState.h"
-#include "UfoHyperDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "DogfightState.h"
 #include "UfoLostState.h"
@@ -170,6 +171,10 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
+	// Fix system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 	add(_bg);
 	add(_globe);
@@ -1229,14 +1234,7 @@ void GeoscapeState::time30Minutes()
 				if (detected)
 				{
 					(*u)->setDetected(true);
-					if(!(*u)->getHyperDetected())
-					{
-						popup(new UfoDetectedState(_game, (*u), this, true));
-					}
-					else
-					{
-						popup(new UfoHyperDetectedState(_game, (*u), this, true));
-					}
+					popup(new UfoDetectedState(_game, (*u), this, true, (*u)->getHyperDetected()));
 				}
 			}
 			else

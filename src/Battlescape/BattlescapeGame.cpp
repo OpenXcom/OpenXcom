@@ -454,21 +454,7 @@ void BattlescapeGame::endTurn()
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
-	{
-		if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
-		{
-			(*j)->setSpecialAbility(SPECAB_NONE);
-			convertUnit((*j), (*j)->getSpawnUnit());
-		}
-		if ((*j)->getHealth() > 0 && (*j)->getHealth() > (*j)->getStunlevel())
-		{
-			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
-				liveAliens++;
-			if ((*j)->getOriginalFaction() == FACTION_PLAYER)
-				liveSoldiers++;
-		}
-	}
+	tallyUnits(liveAliens, liveSoldiers, true);
 
 	if (_save->isObjectiveDestroyed())
 	{
@@ -652,16 +638,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	{
 		int liveAliens = 0;
 		int liveSoldiers = 0;
-		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
-		{
-			if (!(*j)->isOut())
-			{
-				if ((*j)->getFaction() == FACTION_HOSTILE)
-					liveAliens++;
-				if ((*j)->getFaction() == FACTION_PLAYER)
-					liveSoldiers++;
-			}
-		}
+		tallyUnits(liveAliens, liveSoldiers, false);
 
 		if (liveAliens == 0 || liveSoldiers == 0)
 		{
@@ -1092,7 +1069,15 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	std::wstringstream ss;
-	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString(status==STATUS_PANICKING?"STR_HAS_PANICKED":"STR_HAS_GONE_BERSERK");
+	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
+	if (status == STATUS_PANICKING)
+	{
+		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
+	}
+	else
+	{
+		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender());
+	}
 	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
@@ -1346,8 +1331,12 @@ void BattlescapeGame::primaryAction(const Position &pos)
 
 			if (_currentAction.target != pos && bPreviewed)
 				_save->getPathfinding()->removePreview();
-			_currentAction.run = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_SHIFT) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
-			_currentAction.strafe = !_currentAction.run && _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
+			if (_currentAction.strafe && _save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)
+			{
+				_currentAction.run = true;
+				_currentAction.strafe = false;
+			}
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
 			if (bPreviewed && !_save->getPathfinding()->previewPath() && _save->getPathfinding()->getStartDirection() != -1)
@@ -1956,9 +1945,45 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 	return placed;
 }
 
+/*
+ * @return the type of action that is reserved.
+ */
 BattleActionType BattlescapeGame::getReservedAction()
 {
 	return _tuReserved;
+}
+
+/*
+ * tally the living units in the game, and if required, convert units into their spawn unit.
+ * @param &liveAliens the integer in which to store the live alien tally
+ * @param &liveSoldiers the integer in which to store the live XCom tally
+ * @param convert should we convert infected units?
+ */
+void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
+{
+	bool psiCapture = Options::getBool("allowPsionicCapture");
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	{
+		if (convert && (*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+		{
+			(*j)->setSpecialAbility(SPECAB_NONE);
+			convertUnit((*j), (*j)->getSpawnUnit());
+		}
+		if (!(*j)->isOut())
+		{
+			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
+			{
+				if (!psiCapture || (*j)->getFaction() != FACTION_PLAYER)
+				{
+					liveAliens++;
+				}
+			}
+			else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getFaction() == FACTION_PLAYER)
+			{
+				liveSoldiers++;
+			}
+		}
+	}
 }
 
 }

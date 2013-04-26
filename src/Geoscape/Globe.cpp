@@ -570,23 +570,28 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 	if (backFace != pointBack(lon, lat))
 		return false;
 
-	bool c = false;
+	bool odd = false;
 	for (int i = 0; i < poly->getPoints(); ++i)
 	{
 		int j = (i + 1) % poly->getPoints();
 
-		Sint16 x, y, x_i, x_j, y_i, y_j;
+		/*double x = lon, y = lat,
+			   x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
+			   x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);*/
+
+		double x, y, x_i, x_j, y_i, y_j;
 		polarToCart(poly->getLongitude(i), poly->getLatitude(i), &x_i, &y_i);
 		polarToCart(poly->getLongitude(j), poly->getLatitude(j), &x_j, &y_j);
 		polarToCart(lon, lat, &x, &y);
 
-		if ( ((y_i > y) != (y_j > y)) &&
-			 (x < (x_j - x_i) * (y - y_i) / (y_j - y_i) + x_i) )
+		if ((y_i < y && y_j >= y ||
+			 y_j < y && y_i >= y) &&
+			(x_i <= x || x_j <= x))
 		{
-			c = !c;
+			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
 		}
 	}
-	return c;
+	return odd;
 }
 
 /**
@@ -760,10 +765,17 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat) const
 {
 	bool inside = false;
+	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
+	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
+	double oldLon = _cenLon, oldLat = _cenLat;
+	globe->_cenLon = lon;
+	globe->_cenLat = lat;
 	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; ++i)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
+	globe->_cenLon = oldLon;
+	globe->_cenLat = oldLat;
 	return inside;
 }
 
@@ -1743,7 +1755,7 @@ void Globe::keyboardPress(Action *action, State *state)
  * @param texture pointer to texture ID returns -1 when polygon not found
  * @param shade pointer to shade
  */
-void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
+void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const
 {
 	///this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
 	int worldshades[32] = {  0, 0, 0, 0, 1, 1, 2, 2,
@@ -1753,14 +1765,22 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 
 	*texture = -1;
 	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
+
+	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
+	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
+	double oldLon = _cenLon, oldLat = _cenLat;
+	globe->_cenLon = lon;
+	globe->_cenLat = lat;
 	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
 	{
 		if (insidePolygon(lon, lat, *i))
 		{
 			*texture = (*i)->getTexture();
-			return;
+			break;
 		}
 	}
+	globe->_cenLon = oldLon;
+	globe->_cenLat = oldLat;
 }
 
 /**

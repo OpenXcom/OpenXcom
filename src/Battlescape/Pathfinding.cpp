@@ -138,7 +138,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		}
 	}
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (SDL_GetModState() & KMOD_SHIFT) == 0 && (startPosition.z == endPosition.z) && 
+	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) && 
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	_path.clear();
@@ -568,7 +568,7 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction,
 		if (isBlocked(endTile,MapData::O_NORTHWALL, missileTarget)) return true;
 		if (isBlocked(startTile,MapData::O_WESTWALL, missileTarget)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_NORTHWALL, missileTarget)) return true;
-		if (isBlocked(_save->getTile(pos1 + oneTileWest),MapData::O_WESTWALL, missileTarget)) return true;
+		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_WESTWALL, missileTarget)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),O_BIGWALL, missileTarget) 
       && isBlocked(_save->getTile(pos1 + oneTileWest),O_BIGWALL, missileTarget)) return true;
 		if (isBlocked(_save->getTile(pos1 + oneTileSouth),MapData::O_WESTWALL, missileTarget)
@@ -717,6 +717,11 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
+		if ((SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1)
+		{
+			tu *= 0.75;
+		}
+
 		tus -= tu;
 		pos = destination;
 		for (int x = size; x >= 0; x--)
@@ -727,9 +732,9 @@ bool Pathfinding::previewPath(bool bRemove)
 				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
 				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
 				{
-					tileBelow->setMarkerColor(bRemove?0:(tus>0?4:3));
+					tileBelow->setMarkerColor(bRemove?0:(tus>=0?4:3));
 				}
-				tile->setMarkerColor(bRemove?0:(tus>0?4:3));
+				tile->setMarkerColor(bRemove?0:(tus>=0?4:3));
 			}
 		}
 	}

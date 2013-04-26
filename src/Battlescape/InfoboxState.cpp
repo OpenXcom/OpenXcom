@@ -25,6 +25,7 @@
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -69,6 +70,19 @@ InfoboxState::~InfoboxState()
 
 }
 
+/**
+ * Closes the window.
+ * @param action Pointer to an action.
+ */
+void InfoboxState::handle(Action *action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+	{
+		close();
+	}
+}
 
 /**
  * Draws the bordered box.

@@ -151,7 +151,6 @@ public:
 	TileEngine *getTileEngine();
 	Pathfinding *getPathfinding();
 	ResourcePack *getResourcePack();
-	BattleActionType getReservedAction();
 	const Ruleset *getRuleset() const;
 	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI
 	void resetSituationForAI();
@@ -168,6 +167,10 @@ public:
 	int takeItemFromGround(BattleItem* item, BattleAction *action);
 	/// assign the item to a slot (stolen from battlescapeGenerator::addItem())
 	bool takeItem(BattleItem* item, BattleAction *action);
+	/// return the type of action that is reserved
+	BattleActionType getReservedAction();
+	/// tally the living units, convert them if necessary
+	void tallyUnits(int &liveAliens, int &liveSoldiers, bool convert);
 
 };
 

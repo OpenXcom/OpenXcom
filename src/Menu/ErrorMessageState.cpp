@@ -74,7 +74,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_txtMessage = new Text(246, 80, 37, 50);
 
 	// Set palette
-	if (bgColor != -1)
+	if (bgColor != ((Uint8)-1))
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);

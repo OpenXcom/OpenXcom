@@ -466,10 +466,7 @@ bool fileExists(const std::string &path)
 bool deleteFile(const std::string &path)
 {
 #ifdef _WIN32
-	int size = MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), &wstr[0], size);
-	return (DeleteFileW(wstr.c_str()) != 0);
+	return (DeleteFileA(path.c_str()) != 0);
 #else
 	return (remove(path.c_str()) == 0);
 #endif

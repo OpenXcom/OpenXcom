@@ -11,7 +11,7 @@
 ;General
 
 	!define GAME_NAME "OpenXcom"
-	!define GAME_VERSION "0.4.5"
+	!define GAME_VERSION "0.5"
 	!define GAME_AUTHOR "OpenXcom Developers"
 
 	;Name and file
@@ -172,6 +172,10 @@ ${EndIf}
 	SetOutPath "$INSTDIR\data\SoldierName"
 	
 	File "..\..\bin\data\SoldierName\*.*"
+	
+	SetOutPath "$INSTDIR\data\Shaders"
+	
+	File "..\..\bin\data\Shaders\*.*"
 
 	;Store installation folder
 	WriteRegStr HKLM "Software\${GAME_NAME}" "" $INSTDIR
@@ -253,6 +257,8 @@ Section "-un.Main"
 	RMDir "$INSTDIR\Ruleset"
 	Delete "$INSTDIR\data\SoldierName\*.*"
 	RMDir "$INSTDIR\data\SoldierName"
+	Delete "$INSTDIR\data\Shaders\*.*"
+	RMDir "$INSTDIR\data\Shaders"
 	RMDir "$INSTDIR\data"
 
 	Delete "$INSTDIR\Uninstall.exe"

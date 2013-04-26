@@ -354,7 +354,6 @@
     <ClCompile Include="Geoscape\SelectDestinationState.cpp" />
     <ClCompile Include="Geoscape\TargetInfoState.cpp" />
     <ClCompile Include="Geoscape\UfoDetectedState.cpp" />
-    <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp" />
     <ClCompile Include="Geoscape\UfoLostState.cpp" />
     <ClCompile Include="Interface\ArrowButton.cpp" />
     <ClCompile Include="Interface\Bar.cpp" />
@@ -370,6 +369,7 @@
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\AdvancedOptionsState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
     <ClCompile Include="Menu\LanguageState.cpp" />
@@ -610,7 +610,6 @@
     <ClInclude Include="Geoscape\SelectDestinationState.h" />
     <ClInclude Include="Geoscape\TargetInfoState.h" />
     <ClInclude Include="Geoscape\UfoDetectedState.h" />
-    <ClInclude Include="Geoscape\UfoHyperDetectedState.h" />
     <ClInclude Include="Geoscape\UfoLostState.h" />
     <ClInclude Include="Interface\ArrowButton.h" />
     <ClInclude Include="Interface\Bar.h" />
@@ -625,6 +624,7 @@
     <ClInclude Include="Interface\ToggleTextButton.h" />
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="Menu\AdvancedOptionsState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
     <ClInclude Include="Menu\LanguageState.h" />
