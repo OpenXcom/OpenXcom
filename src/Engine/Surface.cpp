@@ -32,6 +32,7 @@
 #define _aligned_malloc __mingw_aligned_malloc
 #define _aligned_free   __mingw_aligned_free
 #endif //MINGW
+#include "Language.h"
 
 namespace OpenXcom
 {
@@ -175,8 +176,13 @@ void Surface::loadImage(const std::string &filename)
 	_surface = 0;
 	_misalignedPixelBuffer = 0;
 	
+	// SDL only takes UTF-8 filenames
+	// so here's an ugly hack to match this ugly reasoning
+	std::wstring wstr = Language::cpToWstr(filename);
+	std::string utf8 = Language::wstrToUtf8(wstr);
+	
 	// Load file
-	_surface = IMG_Load(filename.c_str());
+	_surface = IMG_Load(utf8.c_str());
 	if (!_surface)
 	{
 		throw Exception(IMG_GetError());
