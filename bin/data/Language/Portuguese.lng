@@ -2375,3 +2375,7 @@ STR_ALLOWPSIONICCAPTURE
 Psi-captura
 STR_ALLOWPSIONICCAPTURE_DESC
 O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 50 days.
