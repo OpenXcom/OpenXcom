@@ -36,9 +36,10 @@
 
 #include <assert.h>
 
-#define restrict
-#if defined(_MSC_VER)  && (_MSC_VER >= 1400) 
+#if (_MSC_VER >= 1400) 
 #define restrict __restrict
+#else
+#define restrict
 #endif
 
 #ifdef _WIN32
