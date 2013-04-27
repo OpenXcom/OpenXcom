@@ -2318,7 +2318,7 @@ Exibir uma mensagem de cada vez que um soldado X-COM morre em combate.
 STR_BATTLEPREVIEWPATH
 Pré-visualizar percursos
 STR_BATTLEPREVIEWPATH_DESC
-A localização do cursor traça uma pré-visualização do percurso, ao mover soldados em campo.
+Ao mover soldados em campo, a localização do cursor traça uma pré-visualização do percurso.
 STR_BATTLERANGEBASEDACCURACY
 Precisão de fogo realista
 STR_BATTLERANGEBASEDACCURACY_DESC
