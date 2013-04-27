@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param save Name of the save file to delete.
  * @param parent Pointer to SavedGameState.
  */
-DeleteGameState::DeleteGameState(Game *game, bool geo, const std::wstring &save, SavedGameState *parent) : State(game), _geo(geo), _parent(parent)
+DeleteGameState::DeleteGameState(Game *game, bool geo, const std::wstring &save, SavedGameState *parent) : State(game), _parent(parent), _geo(geo)
 {
 #ifdef _WIN32
 	std::string file = Language::wstrToCp(save);

@@ -584,9 +584,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 		polarToCart(poly->getLongitude(j), poly->getLatitude(j), &x_j, &y_j);
 		polarToCart(lon, lat, &x, &y);
 
-		if ((y_i < y && y_j >= y ||
-			 y_j < y && y_i >= y) &&
-			(x_i <= x || x_j <= x))
+		if (((y_i < y && y_j >= y) || (y_j < y && y_i >= y)) && (x_i <= x || x_j <= x))
 		{
 			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
 		}
