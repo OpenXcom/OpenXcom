@@ -470,7 +470,9 @@ void Soldier::trainPsi()
 	}
 
 	_improvement = 0;
-	if(_currentStats.psiSkill <= 16)
+	if (_currentStats.psiSkill < 0)
+		_currentStats.psiSkill = 0;
+	else if(_currentStats.psiSkill <= 16)
 		_improvement = RNG::generate(16, 24);
 	else if(_currentStats.psiSkill <= 50)
 		_improvement = RNG::generate(5, 12);
