@@ -441,6 +441,12 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
+	if (!_psiTraining)
+	{
+		_improvement = 0;
+		return;
+	}
+
 	if (Options::getBool("anytimePsiTraining"))
 	{
 		if (_currentStats.psiSkill > 0)

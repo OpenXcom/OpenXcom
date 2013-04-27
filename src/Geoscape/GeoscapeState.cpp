@@ -1505,12 +1505,7 @@ void GeoscapeState::time1Day()
 		if ((*i)->getAvailablePsiLabs() > 0 && Options::getBool("anytimePsiTraining"))
 		{
 			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
-			{
-				if ((*s)->isInPsiTraining())
-				{
-					(*s)->trainPsi();
-				}
-			}
+				(*s)->trainPsi();
 		}
 
 	}
