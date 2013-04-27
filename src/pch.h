@@ -230,7 +230,6 @@
 #include "./Geoscape/ProductionCompleteState.h"
 #include "./Geoscape/AbandonGameState.h"
 #include "./Geoscape/SelectDestinationState.h"
-#include "./Geoscape/UfoHyperDetectedState.h"
 #include "./Geoscape/ConfirmNewBaseState.h"
 #include "./Geoscape/InterceptState.h"
 #include "./Geoscape/DefeatState.h"
@@ -327,5 +326,6 @@
 #include "./Savegame/Soldier.h"
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
+#include "Menu/AdvancedOptionsState.h"
 
 #endif
