@@ -191,7 +191,7 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 	_game->popState();
 }
 
-void AdvancedOptionsState::lstOptionsClick(Action *action)
+void AdvancedOptionsState::lstOptionsClick(Action *)
 {
 	size_t sel = _lstOptions->getSelectedRow();
 	std::wstring settingText = L"";
