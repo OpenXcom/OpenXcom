@@ -10,7 +10,6 @@
 #include <cmath>
 #include <cstdarg>
 #include <cstring>
-#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
