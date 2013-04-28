@@ -888,5 +888,13 @@ void TextList::mouseOut(Action *action, State *state)
 
 	InteractiveSurface::mouseOut(action, state);
 }
+/*
+ * get the scroll depth.
+ * @return scroll depth.
+ */
+int TextList::getScroll()
+{
+	return _scroll;
+}
 
 }
