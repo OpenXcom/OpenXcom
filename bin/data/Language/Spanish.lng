@@ -720,7 +720,7 @@ PEQUEÑO
 STR_VERY_SMALL
 MUY PEQUEÑO
 STR_GROUND
-EN TIERRA
+Suelo
 STR_DETECTED
 Detectado
 STR_SIZE_UC
@@ -2142,9 +2142,9 @@ Batalla Aleatoria
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
 No hay suficiente {1} para armar PAP
 STR_DAY_1
-{N} dia
+{N} día
 STR_DAY_2
-{N} dias
+{N} días
 STR_MIXED
 Mezclado
 STR_RIGHT_CLICK_TO_DELETE
@@ -2268,110 +2268,110 @@ Centrar en Enemigo 8
 STR_CENTER_ON_ENEMY_9
 Centrar en Enemigo 9
 STR_ENEMY_WEAPON_LEVEL
-Enemy Weapon Level
+Nivel de Armas del Enemigo
 STR_GROUNDED
 EN TIERRA
 STR_LIVING_QUARTERS_PLURAL
-Alojamiento
+Alojamientos
 STR_OPENXCOM
 OpenXcom
 STR_LIST_ITEM
-ARTÍCULO
+ELEMENTO
 STR_DISPLAY_FILTER
-Display Filter
+Mostrar Filtro
 STR_ADVANCED
-ADVANCED
+AVANZADO
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+OPCIONES AVANZADAS
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Represalia Agresiva
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+Los OVNIs intentarán detectar tus bases siempre, independientemente de sus parametros de misión.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment limits
+Límites de contención alienígena
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Se impondrán límites a la contención de alienígenas.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Venta de alienígenas vivos
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Permite la venta de alienígenas vivos, recomendado al usar limites de contención.
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Auto-venta de produción
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Click dcho. en el botón de aumentar el "total a producir" de un proyecto de manufactura para auto-vender.
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Permitir cola de construción
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Las instalaciones sin terminar actuan como enlace al ascensor de acceso cuando se ubican nuevas instalaciones.
 STR_BATTLEAUTOEND
-Auto-end battle
+Auto-finalizar batalla
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Las batallas finalizan automaticamente cuando el último enemigo vivo es neutralizado.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Granadas instantaneas
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Las granadas cuyo temporizador haya sido puesto a 0 turnos explotarán inmediatamente al arrojarlas, en lugar de al final del turno.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Mostrar notificación de bajas
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Muestra notificaciones cada vez que un soldado muere.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Mostrar ruta previa
 STR_BATTLEPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Click-izdo. ilumina la ruta que tu unidad seguirá para llegar al destino, doble-click mueve la unidad.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Precisión basada en distancia
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+La precisión de los disparos tiene en cuenta factores como visibilidad y distancia.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Reglas de manufacturación TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Permite a los proyectos de manufacturación producir mas de un artículo por hora.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Transferir aeronaves en vuelo
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Las aeronaves actualmente en vuelo pueden transferirse.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+Forzar despegue de aeronave
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Las aeronaves podran ser enviadas a una misión sin terminar de repostar o rearmar.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Base inicial personalizada
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Al empezar una partida nueva podras ubicar manualmente tus instalaciones en lugar de usar la distribución por defecto.
 STR_GLOBESEASONS
-Globe tilted lighting
+Iluminar globo según inclinación
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Activa proyección realista de luz solar en Geoescape de acuerdo a la inclinación del eje de la tierra.
 STR_PLAYINTRO
-Play intro
+Mostrar introducción
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Mostrar el video de introducción al empezar.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Mostrar fondos en Geoescape
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+Expande el panel de información en Geoescape para incluir información adicional de tu situación económica.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Estadisticas de inventario
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+Muestra información extra en la pantalla de inventario del soldado
 STR_SNEAKYAI
-Sneaky AI
+IA furtiva
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+La IA evita exponerse al jugador siempre que es posible.
 STR_STRAFE
-Strafe setting
+Ajuste de bombardeo
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Activa el bombardeo, movimiento y movimiento independiente de la torreta del tanque. Manten pulsado CTRL para usar metodos de movimiento.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Selección-desplazamiento invertido
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Invierte la selección-desplazamiento en el campo de batalla.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Altura de explosión
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Cambia el area de efecto de las explosiones hacia arriba.{NEWLINE}(Plana: 0, Redonda: 3)
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Permitir captura psiquica
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens results in victory, and they count as live captures.
+Al controlar mentalmente a todos los alienigenas restantes la mision finaliza, y cuentan como capturados vivos.
