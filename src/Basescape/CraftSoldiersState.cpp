@@ -223,7 +223,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 void CraftSoldiersState::lstSoldiersClick(Action *action)
 {
 	int mx = action->getAbsoluteXMouse();
-	if ( mx >= 186 && mx < 220 )
+	if ( mx >= _lstSoldiers->getArrowsLeftEdge() && mx < _lstSoldiers->getArrowsRightEdge() )
 	{
 		return;
 	}
