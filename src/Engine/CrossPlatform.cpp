@@ -37,10 +37,10 @@
 #pragma comment(lib, "shlwapi.lib")
 #else
 #include <sys/stat.h>
-#include <string.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>

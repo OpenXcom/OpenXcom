@@ -2,7 +2,6 @@
 #define __OXC_PCH_H
 
 #include <algorithm>
-#include <assert.h>
 #include <cassert>
 #include <cctype>
 #include <climits>
@@ -10,7 +9,6 @@
 #include <cmath>
 #include <cstdarg>
 #include <cstring>
-#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -38,6 +36,7 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <typeinfo>
