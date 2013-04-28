@@ -1550,7 +1550,7 @@ Progression{NEWLINE}/Compétence Psionique
 STR_PSI_AMP
 Psi-Amp
 STR_IN_TRAINING
-En{NEWLINE}Entraînement?
+En{NEWLINE}Entrainement?
 STR_TARGETTED_BY
 VISE PAR:
 STR_WEAPONS_CREW_HWPS
@@ -1838,7 +1838,7 @@ STR_PERFORMANCE_RATING
 STR_VICTORY_DATE
 Date de victoire
 STR_ELECTRO_FLARE
-Leurre électronique
+Électrolumière
 STR_ELECTRO_FLARE_UFOPEDIA
 Cette fusée éclairante produit une lumière vive lorsqu'elle est lancée.  Ceci éclaire les unités ennemies proches lors des missions de nuit.
 STR_MONTHLY_COSTS
@@ -1884,7 +1884,7 @@ Chargement en cours
 STR_PROCEED
 CONTINUER
 STR_NO_SAVED_GAME_PRESENT
-Pas de jeu sauvegardé.
+Pas de jeu sauvegarde.
 STR_LOAD_UNSUCCESSFUL
 Chargement a échoué.
 STR_SAVE_UNSUCCESSFUL
@@ -2166,7 +2166,7 @@ ABANDONNER JEU?
 STR_HAS_BEEN_KILLED_MALE
 a été tué.
 STR_HAS_BEEN_KILLED_FEMALE
-a été tué.
+a été tuée.
 STR_DRAG_SCROLL
 TRAÎNER BARRE DE DÉFILEMENT
 STR_HIT_MELEE
@@ -2264,7 +2264,7 @@ Centrer sur l'ennemi #8
 STR_CENTER_ON_ENEMY_9
 Centrer sur l'ennemi #9
 STR_ENEMY_WEAPON_LEVEL
-Enemy Weapon Level
+Niveau à l'arme ennemi
 STR_GROUNDED
 SOL
 STR_LIVING_QUARTERS_PLURAL
@@ -2274,100 +2274,100 @@ OpenXcom
 STR_LIST_ITEM
 OBJET
 STR_DISPLAY_FILTER
-Display Filter
+Filtre d'écran
 STR_ADVANCED
-ADVANCED
+AVANCÉE
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+OPTIONS AVANCÉES
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Représaille agressive
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+Tous classes des OVNIs être d'essayant à détecter ta base, en dépit de paramètres mission.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment limits
+Limites pour les détentions des E.T.
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Les limites sur les détentions des E.T. avoir imposé.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Vendre les E.T. vivants
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Accorder la vente des E.T. vivants, recommandé quand limites pour les détentions des E.T. est utilisé. 
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Auto-vente Fabrication
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Droit-clic la bouton augmentation sur "total à produire" avec un projet fabrication, pour auto-vente.
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Accorder queue de construisant
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Installations incomplètes sont relié à l'ascenseur d'accés, accordant la construction des installations additionnelles.
 STR_BATTLEAUTOEND
-Auto-end battle
+Bataille Auto-fin
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Automatiquement terminant la bataille quand l'ennemi final est tué.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Grenades Instantes
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Grenades armé pour 0 tours exploser immédiatement quand lancé, pas au fin du tour. 
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Montrer notifications de mort
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Recevoir une notification quand un soldat est tué.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Aperçu Mouvement
 STR_BATTLEPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Gauche-clic apercevoir le sentier à la destination choisi, puis un double-clic meut le soldat.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Précision via distance
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Tir précision être dépendant sur la visibilitie, distance, et facteurs additionnels.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Fabrication comme TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Accorder les projets fabrication à produire plus que une item par heure.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Transferts les vaisseaux en vol
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Vaisseaux en vol sont transférables.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+Forcer les vaisseaux à lance
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Accorder forçant les vaisseaux à lance, et ignore le ravitaillement / réarmement.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Personnalise la base initiale
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Quand commencement un jeu nouveau, tes installations initiales sont placé manuellement, et ne utiliser pas le schéma typique.
 STR_GLOBESEASONS
-Globe tilted lighting
+Éclairage realiste de la geospace
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Utiliser un angle realiste de la lumière du soleil sur le Geoscape, selon inclinaison de l'axe de la Terre.
 STR_PLAYINTRO
-Play intro
+Regarder intro
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Regarder la vidéo intro au commencement.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Montrer les fonds sur la geoscape
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+La geoscape inclura les informations additionnelles pour ta situation financière.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Statistiques inventaire
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+L'écran inventaire présenter les informations additionnelles pour la soldat choisi actuellement.
 STR_SNEAKYAI
-Sneaky AI
+IA Furtive
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+Quand possible, l'adversaire IA éviter exposant leur soldats.
 STR_STRAFE
-Strafe setting
+Actions additionnelles 
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Accorder strafing, courant, et mouvement indépendant pour l'arme du char d'assaut. Appuyez CTRL à utilise ceci méthode alternatif de mouvement.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Traîner-faire-défiler invertu
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Durant le combat, traîner-faire-défiler est invertu.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Hauteur des explosions
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Change la hauteur et l'aire des explosions.{NEWLINE}(Plate: 0, Ronde: 3)
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Accorder psi-capture
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens results in victory, and they count as live captures.
+Utilisant psi-capture sur les E.T. restant causer une victoire, et ils être considérant comme les captures vivants.
