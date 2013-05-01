@@ -167,7 +167,7 @@ public:
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
 	/// get the scroll depth
-	int TextList::getScroll();
+	int getScroll();
 };
 
 }
