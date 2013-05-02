@@ -169,7 +169,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		int row = _lstSoldiers->getSelectedRow();
+		size_t row = _lstSoldiers->getSelectedRow();
 		if (row > 0 )
 		{
 			Soldier *s = _base->getSoldiers()->at(row);
@@ -179,7 +179,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 				_base->getSoldiers()->at(row-1) = s;
 				if (row != _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - (8 * action->getYScale()));
+					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
 				}
 				else
 				{
@@ -205,7 +205,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		int row = _lstSoldiers->getSelectedRow();
+		size_t row = _lstSoldiers->getSelectedRow();
 		if (row < _base->getSoldiers()->size() - 1 )
 		{
 			Soldier *s = _base->getSoldiers()->at(row);
@@ -215,7 +215,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 				_base->getSoldiers()->at(row+1) = s;
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + (8 * action->getYScale()));
+					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
 				}
 				else
 				{
@@ -238,7 +238,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
  */
 void CraftSoldiersState::lstSoldiersClick(Action *action)
 {
-	int mx = action->getAbsoluteXMouse();
+	double mx = action->getAbsoluteXMouse();
 	if ( mx >= _lstSoldiers->getArrowsLeftEdge() && mx < _lstSoldiers->getArrowsRightEdge() )
 	{
 		return;
