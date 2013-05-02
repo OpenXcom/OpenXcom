@@ -2328,11 +2328,11 @@ Lufttransfer
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 Flugzeuge, die sich aktuell in der Luft befinden, können transferiert werden.
 STR_CRAFTLAUNCHALWAYS
-erzwungene Starts der Luftwaffe
+Erzwungene Starts der Luftwaffe
 STR_CRAFTLAUNCHALWAYS_DESC
 Flugzeuge können gestartet werden, obwohl sie noch nicht voll betankt und nachgeladen haben.
 STR_CUSTOMINITIALBASE
-benutzerdefinierte Anfangsbasis
+Benutzerdefinierte Anfangsbasis
 STR_CUSTOMINITIALBASE_DESC
 Erlaubt die manuelle Platzierung der Starteinrichtungen bei Neustart des Spiels anstatt den vorgefertigten Entwurf der Basis benutzen zu müssen.
 STR_GLOBESEASONS
@@ -2344,30 +2344,30 @@ Zeige Intro
 STR_PLAYINTRO_DESC
 Zeigt das Intro bei Spielstart.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Zeige Gelder auf Geoscape 
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+Zusätzliche Informationen über die aktuellen Geldmittel werden auf dem Geoscape Info Panel gezeigt.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Mehr Statistiken im Inventar
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+Zeige mehr Informationen (Gewicht, Belastung etc.) im Inventar-/Ausrüsten- Bildschirm.
 STR_SNEAKYAI
-Sneaky AI
+Hinterlistige KI
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+Die Künstliche Intelligenz versucht sich so oft wie möglich zu verstecken.
 STR_STRAFE
-Strafe setting
+Mehr Bewegungsmöglichkeiten
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Aktiviert Strafing, Rennen und unabhängiges Bewegen der Panzergeschütztürme. STRG gedrückt halten um zu benutzen.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Invertiertes Drag-Scrolling
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Vertauscht Y-Achse (invert) beim Scrollen mit gedrückter Maustaste auf dem Battlescape.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Explosionshöhe
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Wieviele Höhenebenen (hoch und runter) hat die Reichweite von Explosionen.{NEWLINE}(Normal: 0, Voluminös: 3)
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Aktiviere Gefangennahme durch PSI-Gedankenkontrolle
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens results in victory, and they count as live captures.
+Übernahme eines Aliens durch Gedankenkontrolle über das Missionsende hinaus zählt als Gefangennahme.{NEWLINE}Wenn nur noch durch den Spieler kontrollierte Aliens übrig sind gilt die Mission als gewonnen.
