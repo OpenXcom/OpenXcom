@@ -112,7 +112,6 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		_unit->turn();
@@ -194,6 +193,19 @@ void UnitDieBState::think()
 				}
 				game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), msg));
 			}
+		}
+	}
+
+	// if all units from either faction are killed - auto-end the mission.
+	if (Options::getBool("battleAutoEnd"))
+	{
+		int liveAliens = 0;
+		int liveSoldiers = 0;
+		_parent->tallyUnits(liveAliens, liveSoldiers, false);
+
+		if (liveAliens == 0 || liveSoldiers == 0)
+		{
+			_parent->getSave()->getBattleState()->getBattleGame()->requestEndTurn();
 		}
 	}
 

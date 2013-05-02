@@ -632,19 +632,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	{
 		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
 	}
-
-	// if all units from either faction are killed - the mission is over.
-	if (Options::getBool("battleAutoEnd"))
-	{
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		tallyUnits(liveAliens, liveSoldiers, false);
-
-		if (liveAliens == 0 || liveSoldiers == 0)
-		{
-			_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
-		}
-	}
 }
 
 /**
