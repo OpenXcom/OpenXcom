@@ -1022,7 +1022,7 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 				// fatal wounds
 				if (isWoundable())
 				{
-					if (RNG::generate(0,power) > 2)
+					if (RNG::generate(0, 10) < power)
 						_fatalWounds[bodypart] += RNG::generate(1,3);
 
 					if (_fatalWounds[bodypart])
