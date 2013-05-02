@@ -2274,75 +2274,75 @@ OpenXcom
 STR_LIST_ITEM
 GEGENSTAND
 STR_DISPLAY_FILTER
-Display Filter
+Filter anzeigen
 STR_ADVANCED
-ADVANCED
+ERWEITERT
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+ERWEITERT OPTIONEN
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Agressive Vergeltung
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+UFOs können jederzeit Ihre Basen aufspüren, unabhängig ihrer Missionsparameter.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment limits
+Limit lebendig gefangener Aliens
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Die Anzahl der Aliens, die in den Ausserirdischen-Klimazellen gefangen gehalten werden können, ist beschränkt.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Verkauf lebender Aliens
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Erlaubt das Verkaufen lebender gefangener Aliens. Wird empfohlen, wenn die Anzahl der Gefangenen beschränkt ist.
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Automatischer Verkauf der Einrichtungsproduktion
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Rechtsklick den "erhöhen" Button bei der "Gesamtproduktion" eures laufenden Einrichtungsprojekts, um den automatischen Verkauf zu aktivieren.
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Mehrere Bauaufträge erlauben
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Unfertige Einrichtungen agieren als Verbindungen zum Hauptaufzug, wenn neue Einrichtungen platziert werden.
 STR_BATTLEAUTOEND
-Auto-end battle
+Automatisches Beenden der Kämpfe
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Ein Kampf endet automatisch, sobald der letze Gegner betäubt oder getötet wurde.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Sofortige Explosion der Granaten
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Die Explosion der Granaten, die nach "0" Runden detonieren sollen, erfolgt unmittelbar nach dem Wurf anstatt zum Ende der Runde.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Zeige Todesbenachrichtigungen
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Eine kurze Mitteilung wird bei jedem Tod eines eurer Soldaten angezeigt.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Vorschau der Wegfindung
 STR_BATTLEPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Linksklick zeigt den Weg, den eure Einheit zu ihrem Zielort nehmen wird. Doppelklick, um die Einheit zu bewegen
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Fernkampf Zielgenauigkeit
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Die Genauigkeit der Schüsse berücksichtigt Sichtbarkeit, Distanz und ähnliche Faktoren.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+TFTD Pruduktionsregeln
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Erlaubt es Einrichtungen, mehr als ein Item pro Stunde zu produzieren.
 STR_CANTRANSFERCRAFTSINAIRBORNE
-Airborne transfers
+Lufttransfer
 STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Flugzeuge, die sich aktuell in der Luft befinden, können transferiert werden.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+erzwungene Starts der Luftwaffe
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Flugzeuge können gestartet werden, obwohl sie noch nicht voll betankt und nachgeladen haben.
 STR_CUSTOMINITIALBASE
-Custom initial base
+benutzerdefinierte Anfangsbasis
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Erlaubt die manuelle Platzierung der Starteinrichtungen bei Neustart des Spiels anstatt den vorgefertigten Entwurf der Basis benutzen zu müssen.
 STR_GLOBESEASONS
-Globe tilted lighting
+Sonnenlicht bei geneigntem Globus
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Aktiviert die realistische Projektion des Sonnenlichts auf die Erdoberfläche in Bezug auf die Neigung der Erdachse.
 STR_PLAYINTRO
-Play intro
+Zeige Intro
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Zeigt das Intro bei Spielstart.
 STR_SHOWFUNDSONGEOSCAPE
 Show geoscape funds
 STR_SHOWFUNDSONGEOSCAPE_DESC
