@@ -2314,7 +2314,7 @@ Grenades primed to go off in 0 turns will explode immediately when thrown, inste
 STR_BATTLENOTIFYDEATH
 Show death notifications
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Display notifications every time one of your soldiers dies.
 STR_BATTLEPREVIEWPATH
 Pathfinding preview
 STR_BATTLEPREVIEWPATH_DESC
