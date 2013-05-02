@@ -775,20 +775,24 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 	
-	int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
-	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
+	// recover all our goodies
+	if (playersSurvived > 0)
 	{
-		// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-		if ((*i)->item == "STR_ALIEN_ALLOYS")
+		int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
+		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
-			(*i)->qty = (*i)->qty / aadivider;
-			(*i)->score = (*i)->score / aadivider;
-		}
+			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
+			if ((*i)->item == "STR_ALIEN_ALLOYS")
+			{
+				(*i)->qty = (*i)->qty / aadivider;
+				(*i)->score = (*i)->score / aadivider;
+			}
 
-		// recoverable battlescape tiles are now converted to items and put in base inventory
-		if ((*i)->recovery && (*i)->qty > 0)
-		{
-			base->getItems()->addItem((*i)->item, (*i)->qty);
+			// recoverable battlescape tiles are now converted to items and put in base inventory
+			if ((*i)->recovery && (*i)->qty > 0)
+			{
+				base->getItems()->addItem((*i)->item, (*i)->qty);
+			}
 		}
 	}
 
