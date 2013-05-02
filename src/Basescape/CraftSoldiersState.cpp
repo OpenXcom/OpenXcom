@@ -205,7 +205,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		unsigned int row = _lstSoldiers->getSelectedRow();
+		int row = _lstSoldiers->getSelectedRow();
 		if (row < _base->getSoldiers()->size() - 1 )
 		{
 			Soldier *s = _base->getSoldiers()->at(row);
