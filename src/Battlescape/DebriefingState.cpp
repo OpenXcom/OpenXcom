@@ -742,23 +742,6 @@ void DebriefingState::prepareDebriefing()
 				// recover items from the floor
 				recoverItems(battle->getTiles()[i]->getInventory(), base);		
 			}
-
-			int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
-			for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
-			{
-				// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-				if ((*i)->item == "STR_ALIEN_ALLOYS")
-				{
-					(*i)->qty = (*i)->qty / aadivider;
-					(*i)->score = (*i)->score / aadivider;
-				}
-
-				// recoverable battlescape tiles are now converted to items and put in base inventory
-				if ((*i)->recovery && (*i)->qty > 0)
-				{
-					base->getItems()->addItem((*i)->item, (*i)->qty);
-				}
-			}
 		}
 	}
 	else
@@ -789,6 +772,23 @@ void DebriefingState::prepareDebriefing()
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
 					recoverItems(battle->getTiles()[i]->getInventory(), base);		
 			}
+		}
+	}
+	
+	int aadivider = battle->getMissionType()=="STR_ALIEN_BASE_ASSAULT"?150:10;
+	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
+	{
+		// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
+		if ((*i)->item == "STR_ALIEN_ALLOYS")
+		{
+			(*i)->qty = (*i)->qty / aadivider;
+			(*i)->score = (*i)->score / aadivider;
+		}
+
+		// recoverable battlescape tiles are now converted to items and put in base inventory
+		if ((*i)->recovery && (*i)->qty > 0)
+		{
+			base->getItems()->addItem((*i)->item, (*i)->qty);
 		}
 	}
 
