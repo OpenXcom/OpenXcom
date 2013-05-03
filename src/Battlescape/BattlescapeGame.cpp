@@ -1056,15 +1056,31 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	std::wstringstream ss;
+	std::string msg;
 	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
 	if (status == STATUS_PANICKING)
 	{
-		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
+		if (unit->getGender() == GENDER_MALE)
+		{
+			msg = "STR_HAS_PANICKED_MALE";
+		}
+		else
+		{
+			msg = "STR_HAS_PANICKED_FEMALE";
+		}
 	}
 	else
 	{
-		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender());
+		if (unit->getGender() == GENDER_MALE)
+		{
+			msg = "STR_HAS_GONE_BERSERK_MALE";
+		}
+		else
+		{
+			msg = "STR_HAS_GONE_BERSERK_FEMALE";
+		}
 	}
+	ss << _parentState->getGame()->getLanguage()->getString(msg);
 	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 
 	unit->abortTurn(); //makes the unit go to status STANDING :p
@@ -1494,7 +1510,17 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
 	{
 		std::wstringstream ss;
-		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
+		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
+		std::string msg;
+		if (unit->getGender() == GENDER_MALE)
+		{
+			msg = "STR_HAS_BEEN_KILLED_MALE";
+		}
+		else
+		{
+			msg = "STR_HAS_BEEN_KILLED_FEMALE";
+		}
+		ss << _parentState->getGame()->getLanguage()->getString(msg);
 		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 	}
 
