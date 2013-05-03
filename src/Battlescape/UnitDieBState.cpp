@@ -157,11 +157,11 @@ void UnitDieBState::think()
 		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
 		{
 			Game *game = _parent->getSave()->getBattleState()->getGame();
+			std::string msg;
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
 				if (_damageType == DT_NONE)
 				{
-					std::string msg;
 					if (_unit->getGender() == GENDER_MALE)
 					{
 						msg = "STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE";
@@ -176,13 +176,20 @@ void UnitDieBState::think()
 				{
 					std::wstringstream ss;
 					ss << _unit->getName(game->getLanguage()) << L'\n';
-					ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender());
+					if (_unit->getGender() == GENDER_MALE)
+					{
+						msg = "STR_HAS_BEEN_KILLED_MALE";
+					}
+					else
+					{
+						msg = "STR_HAS_BEEN_KILLED_FEMALE";
+					}
+					ss << game->getLanguage()->getString(msg);
 					game->pushState(new InfoboxState(game, ss.str()));
 				}
 			}
 			else
 			{
-				std::string msg;
 				if (_unit->getGender() == GENDER_MALE)
 				{
 					msg = "STR_HAS_BECOME_UNCONSCIOUS_MALE";
