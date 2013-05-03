@@ -161,16 +161,10 @@ void UnitDieBState::think()
 			{
 				if (_damageType == DT_NONE)
 				{
-					std::string msg;
-					if (_unit->getGender() == GENDER_MALE)
-					{
-						msg = "STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE";
-					}
-					else
-					{
-						msg = "STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE";
-					}
-					game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), msg));
+					std::wstringstream ss;
+					ss << _unit->getName(game->getLanguage()) << L'\n';
+					ss << game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender());
+					game->pushState(new InfoboxOKState(game, ss.str()));
 				}
 				else if (Options::getBool("battleNotifyDeath"))
 				{
@@ -182,16 +176,10 @@ void UnitDieBState::think()
 			}
 			else
 			{
-				std::string msg;
-				if (_unit->getGender() == GENDER_MALE)
-				{
-					msg = "STR_HAS_BECOME_UNCONSCIOUS_MALE";
-				}
-				else
-				{
-					msg = "STR_HAS_BECOME_UNCONSCIOUS_FEMALE";
-				}
-				game->pushState(new InfoboxOKState(game, _unit->getName(game->getLanguage()), msg));
+				std::wstringstream ss;
+				ss << _unit->getName(game->getLanguage()) << L'\n';
+				ss << game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender());
+				game->pushState(new InfoboxOKState(game, ss.str()));
 			}
 		}
 	}

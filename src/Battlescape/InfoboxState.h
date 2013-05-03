@@ -50,7 +50,6 @@ public:
 	void think();
 	/// Closes the window.
 	void close();
-	void draw();
 
 };
 
