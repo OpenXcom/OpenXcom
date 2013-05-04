@@ -2325,9 +2325,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Reglas de manufactura como TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Esta opción permite que proyectos de manufactura puedan producir más de un artículo por hora.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Transferencias cuando en vuelo
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Esta opción permite que aeronaves que se encuentran en vuelo pueden ser transferidas.
 STR_CRAFTLAUNCHALWAYS
 Forzar despegue de aeronaves

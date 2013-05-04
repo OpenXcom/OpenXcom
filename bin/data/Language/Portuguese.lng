@@ -2327,9 +2327,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Novas regras de manufatura (TFTD)
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Permite uma produção superior a uma unidade por hora em projetos de manufatura.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Transferência de aeronaves em voo
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Permite a transferência de aeronaves durante voo.
 STR_CRAFTLAUNCHALWAYS
 Forçar descolagem

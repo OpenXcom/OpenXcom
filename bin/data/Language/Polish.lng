@@ -2333,9 +2333,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Reguły produkcji z TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Dozwolona produkcja więcej niż jedenego przedmiotu na godzinę w procesie produkcyjnym.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Transfer w trakcie lotu
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Możliwość transferu samolotu będącego aktualnie w trakcie lotu.
 STR_CRAFTLAUNCHALWAYS
 Wymuszanie startu

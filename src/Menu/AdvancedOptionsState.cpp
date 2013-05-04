@@ -101,7 +101,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battlePreviewPath", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleRangeBasedAccuracy", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsInAirborne", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("customInitialBase", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
