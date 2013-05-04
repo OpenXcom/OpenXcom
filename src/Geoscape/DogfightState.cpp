@@ -729,6 +729,7 @@ void DogfightState::move()
 	if(u != _ufo)
 	{
 		endDogfight();
+		return;
 	}
 	// Check if UFO is not breaking off.
 	if(_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())

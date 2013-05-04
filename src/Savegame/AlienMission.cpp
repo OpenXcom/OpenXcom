@@ -407,7 +407,6 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			// Remove UFO, replace with TerrorSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			ufo.setStatus(Ufo::DESTROYED);
-			ufo.setDetected(false);
 			TerrorSite *terrorSite = new TerrorSite();
 			terrorSite->setLongitude(ufo.getLongitude());
 			terrorSite->setLatitude(ufo.getLatitude());
