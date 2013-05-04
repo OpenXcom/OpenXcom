@@ -34,6 +34,7 @@
 #include "SavedGame.h"
 #include "TerrorSite.h"
 #include "Ufo.h"
+#include "Craft.h"
 #include "Region.h"
 #include "Country.h"
 #include "Waypoint.h"
@@ -416,6 +417,19 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			const City *city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
 			assert(city);
 			game.getTerrorSites()->push_back(terrorSite);
+			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
+			{
+				Craft* c = dynamic_cast<Craft*>(*t);
+				if (c && c->getNumSoldiers() != 0)
+				{
+					c->setDestination(terrorSite);
+					t = ufo.getFollowers()->begin();
+				}
+				else
+				{
+					++t;
+				}
+			}
 		}
 		else if (_rule.getType() == "STR_ALIEN_RETALIATION" && ufo.getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 		{
