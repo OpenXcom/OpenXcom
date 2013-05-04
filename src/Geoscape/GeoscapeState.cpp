@@ -1486,8 +1486,7 @@ void GeoscapeState::time1Day()
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
-						// reset the iterator, the vector just got updated.
-						iter2 = (*j)->getResearch().begin();
+						break;
 					}
 				}
 			}
