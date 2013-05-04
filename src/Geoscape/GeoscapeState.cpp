@@ -36,6 +36,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Engine/Timer.h"
+#include "../Menu/AutoSaveState.h"
 #include "../Savegame/GameTime.h"
 #include "../Engine/Music.h"
 #include "../Savegame/SavedGame.h"
@@ -412,6 +413,11 @@ void GeoscapeState::handle(Action *action)
 				_txtDebug->setText(L"");
 			}
 		}
+		// quick save and quick load
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			_game->pushState(new AutoSaveState(_game, true));
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			_game->pushState(new AutoSaveState(_game, true, true));
 	}
 	if(!_dogfights.empty())
 	{
@@ -1526,6 +1532,9 @@ void GeoscapeState::time1Day()
 	// Handle resupply of alien bases.
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
+
+	if (Options::getInt("autosave") >= 2)
+		_game->pushState(new AutoSaveState(_game, true, true));
 }
 
 /**

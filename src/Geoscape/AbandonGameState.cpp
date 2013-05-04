@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Savegame/SavedGame.h"
+#include "../Menu/AutoSaveState.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Options.h"
 
@@ -90,6 +91,12 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action *)
 {
+	if (Options::getInt("autosave") == 3)
+	{
+		AutoSaveState *as = new AutoSaveState(_game, true);
+		as->quickSave();
+	}
+
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
 }

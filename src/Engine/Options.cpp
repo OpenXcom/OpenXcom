@@ -103,6 +103,7 @@ void createDefault()
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
+	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
@@ -202,6 +203,8 @@ void createDefault()
 	setInt("keyGeoFunding", SDLK_f);
 	setInt("keyGeoToggleDetail", SDLK_TAB);
 	setInt("keyGeoToggleRadar", SDLK_r);
+	setInt("keyQuickSave", SDLK_F6);
+	setInt("keyQuickLoad", SDLK_F10);
 	setInt("keyBattleLeft", SDLK_LEFT);
 	setInt("keyBattleRight", SDLK_RIGHT);
 	setInt("keyBattleUp", SDLK_UP);
