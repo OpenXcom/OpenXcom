@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
 #include "../Savegame/SavedGame.h"
@@ -83,8 +84,8 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	size_t tally(0);
 	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
-		std::vector<std::string>::const_iterator unlocked = std::find((*iter)->getUnlocked().begin(), (*iter)->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().size() == 0 && unlocked == (*iter)->getUnlocked().end())
+		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
+		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().size() == 0 && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));
 			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());

@@ -14,11 +14,11 @@ MISSIL AR-AR, COM SISTEMAS ELETRÓNICOS ESPECIALMENTE PROTEGIDOS.
 STR_AVALANCHE_UFOPEDIA
 MISSIL AR-AR PESADO, CARREGADO COM UMA OGIVA NUCLEAR.
 STR_CANNON_UFOPEDIA
-UM PODEROSO CANHÃO QUE DISPARA PROJÉTEIS ANTI-BLINDAGEM CAPAZES DE PENETRAR ATÉ 40CM DE AÇO.
+UM PODEROSO CANHÃO QUE DISPARA PROJÉTEIS ANTIBLINDAGEM CAPAZES DE PENETRAR ATÉ 40CM DE AÇO.
 STR_FUSION_BALL_UFOPEDIA
-ESTE LANÇADOR DISPARA UM PROJÉTIL ESFÉRICO ALIMENTADO POR UMA REACÇÃO DE ANTI-MATÉRIA. A BOLA DESTROI O ALVO ATRAVÉS DE UMA IMPLOSÃO GRAVITACIONAL.
+ESTE LANÇADOR DISPARA UM PROJÉTIL ESFÉRICO ALIMENTADO POR UMA REACÇÃO DE ANTIMATÉRIA. A BOLA DESTROI O ALVO ATRAVÉS DE UMA IMPLOSÃO GRAVITACIONAL.
 STR_LASER_CANNON_UFOPEDIA
-ESTE RAIO LASER CONVENCIONAL É ALIMENTADO POR UMA CÂMARA DE REAÇÃO ANTI-MATÉRIA.
+ESTE RAIO LASER CONVENCIONAL É ALIMENTADO POR UMA CÂMARA DE REAÇÃO ANTIMATÉRIA.
 STR_PLASMA_BEAM_UFOPEDIA
 UM RAIO DE GRAVIDADE QUE PROJETA UMA IMPLOSÃO GRAVITACIONAL ALTAMENTE CONCENTRADA. 
 STR_SECTOID_UFOPEDIA
@@ -38,19 +38,19 @@ Estes seres possuem poderes mentais extraordinários. Para além de faculdades t
 STR_ETHEREAL_AUTOPSY
 Autópsia - Etéreo
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
-Esta entidade possuí um físico débil que parece ser incapaz de manter quaisquer funções vitais. Os músculos estão muito atrofiados e os órgãos internos parecem sub-desenvolvidos. Os órgãos sensoriais, incluindo os olhos, parecem não funcionar de todo. No entanto, o cérebro é muito desenvolvido e utiliza grande parte do fluxo sanguíneo corporal. É um mistério como esta criatura é capaz de se manter viva sem suporte externo.
+Esta entidade possuí um físico débil que parece ser incapaz de manter quaisquer funções vitais. Os músculos estão muito atrofiados e os órgãos internos parecem subdesenvolvidos. Os órgãos sensoriais, incluindo os olhos, parecem não funcionar de todo. No entanto, o cérebro é muito desenvolvido e utiliza grande parte do fluxo sanguíneo corporal. É um mistério como esta criatura é capaz de se manter viva sem suporte externo.
 STR_MUTON_UFOPEDIA
 Estas criaturas humanóides são muito fortes e inteligentes. Têm um gosto especial por carne crua de qualquer espécie, da qual necessitam para sobreviver, tal como os carnívoros terrestres. Parecem depender das ordens telepáticas de uma outra raça chamada de "Etéreos". Uma vez cortada a ligação telepática, o seu sistema nervoso deixa de funcionar e morrem. Têm vários implantes cibernéticos espalhados por todo o corpo, que servem para melhorar o seu desempenho em situações de combate. Estes seres são obviamente meros peões ao serviço de uma inteligência superior.
 STR_MUTON_AUTOPSY
 Autópsia - Muton
 STR_MUTON_AUTOPSY_UFOPEDIA
-A "pele" desta criatura parece ser uma espécie de armadura orgânica, que foi postumamente enxertada sobre o seu corpo. Há vários implantes cibernéticos espalhados por todo o corpo que servem para melhorar o desempenho do sistema cardiovascular e das suas capacidades sensoriais. Os órgãos reprodutivos parecem ter sido removidos cirurgicamente. É evidente que estas pobres criaturas são forçadas a uma vida de guerra e de conquista. A pele reforçada é resistente a munições anti-blindagem.
+A "pele" desta criatura parece ser uma espécie de armadura orgânica, que foi postumamente enxertada sobre o seu corpo. Há vários implantes cibernéticos espalhados por todo o corpo que servem para melhorar o desempenho do sistema cardiovascular e das suas capacidades sensoriais. Os órgãos reprodutivos parecem ter sido removidos cirurgicamente. É evidente que estas pobres criaturas são forçadas a uma vida de guerra e de conquista. A pele reforçada é resistente a munições antiblindagem.
 STR_CELATID_UFOPEDIA
 Esta forma de vida possuí a capacidade misteriosa de flutuar naturalmente. É sensível a ondas cerebrais, sendo capaz de detetar um ser humano, mesmo que bem escondido. Uma vez detetada a sua vítima, o Celátido pousa no chão e cospe pequenos globos de um veneno extremamente corrosivo. Esta criatura tem a habilidade de se clonar a um ritmo alarmante. Acompanha frequentemente a raça Muton. 
 STR_CELATID_AUTOPSY
 Autópsia - Celátido
 STR_CELATID_AUTOPSY_UFOPEDIA
-O seu núcleo contém um pequeno órgão biomecânico, que aparenta ser um sistema de propulsão anti-gravidade natural. A bolsa de veneno é o maior órgão do corpo e não parece haver nenhuma estrutura cerebral independente. Não há indícios de um sistema digestivo ou reprodutor. Um outro pequeno órgão contém vários embriões que podem rapidamente dar origem a uma nova criatura.
+O seu núcleo contém um pequeno órgão biomecânico, que aparenta ser um sistema de propulsão antigravidade natural. A bolsa de veneno é o maior órgão do corpo e não parece haver nenhuma estrutura cerebral independente. Não há indícios de um sistema digestivo ou reprodutor. Um outro pequeno órgão contém vários embriões que podem rapidamente dar origem a uma nova criatura.
 STR_SILACOID_UFOPEDIA
 Esta forma de vida à base de silício é capaz de gerar enormes quantidades de calor. A sua força permite-lhe esmagar rochas para digerir no seu núcleo escaldante. Possui uma inteligência primitiva e é facilmente controlável através de implantes ou por entidades telepáticas. Trabalha em conjunto com a raça Muton.
 STR_SILACOID_AUTOPSY
@@ -64,7 +64,7 @@ Autópsia - Crisálida
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 O exoesqueleto desta criatura é muito resistente, mas, no entanto, é vulnerável a munição explosiva. O seu cérebro é muito desenvolvido, e o seu crescimento celular bastante rápido. Esta criatura transporta cerca de vinte ovos para serem depositados dentro de outros organismos vivos. É uma arma biológica de terror muito eficaz.
 STR_FLOATER_UFOPEDIA
-Os Flutuadores desempenham as funções de soldado e de agente terrorista. São predadores natos, desenvolvidos geneticamente e implantados com várias modificações cibernéticas para os tornar em guerreiros formidáveis. A parte inferior do seu corpo, tal como a maioria dos seus órgãos internos, foi removida cirurgicamente e substituída por um sistema de suporte de vida artificial. Este implante contém um sistema anti-gravidade que lhes permite flutuar de forma mais ou menos estável.
+Os Flutuadores desempenham as funções de soldado e de agente terrorista. São predadores natos, desenvolvidos geneticamente e implantados com várias modificações cibernéticas para os tornar em guerreiros formidáveis. A parte inferior do seu corpo, tal como a maioria dos seus órgãos internos, foi removida cirurgicamente e substituída por um sistema de suporte de vida artificial. Este implante contém um sistema antigravidade que lhes permite flutuar de forma mais ou menos estável.
 STR_FLOATER_AUTOPSY
 Autópsia - Flutuador
 STR_FLOATER_AUTOPSY_UFOPEDIA
@@ -82,13 +82,13 @@ Autópsia - Sectópode
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 Este robô está construído de forma robusta, com uma blindagem capaz de resistir à grande maioria das formas de ataque, especialmente a armas de plasma. No entanto, os seus sensores parecem ser particularmente vulneráveis a armas laser.
 STR_CYBERDISC_UFOPEDIA
-Este disco voador em miniatura é uma arma de terror automatizada, equipada com um raio de plasma. O seu sistema de propulsão anti-gravidade, proporciona-lhe uma grande vantagem no combate em terreno acidentado. As suas diretivas principais são provocar a destruição e o terror ao serviço da raça Sectóide.
+Este disco voador em miniatura é uma arma de terror automatizada, equipada com um raio de plasma. O seu sistema de propulsão antigravidade, proporciona-lhe uma grande vantagem no combate em terreno acidentado. As suas diretivas principais são provocar a destruição e o terror ao serviço da raça Sectóide.
 STR_CYBERDISC_AUTOPSY
 Autópsia - Ciberdisco
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
-O Ciberdisco possuí uma blindagem forte e é especialmente resistente a munição explosiva. Infelizmente o sistema anti-gravidade está demasiado danificado para compreendermos o seu funcionamento.
+O Ciberdisco possuí uma blindagem forte e é especialmente resistente a munição explosiva. Infelizmente o sistema antigravidade está demasiado danificado para compreendermos o seu funcionamento.
 STR_UFO_POWER_SOURCE_UFOPEDIA
-As naves alienígenas são alimentadas por um reator de anti-matéria que utiliza Elério (elemento 115), para gerar ondas de gravidade e outras formas de energia. A conversão de matéria para energia possui um nível de eficiência incrível (99%), de maneira a que mesmo fragmentos minúsculos de Elério são capazes de gerar enormes quantidades de energia. Este dispositivo de conversão é facilmente fabricável através de ligas alienígenas. 
+As naves alienígenas são alimentadas por um reator de antimatéria que utiliza Elério (elemento 115), para gerar ondas de gravidade e outras formas de energia. A conversão de matéria para energia possui um nível de eficiência incrível (99%), de maneira a que mesmo fragmentos minúsculos de Elério são capazes de gerar enormes quantidades de energia. Este dispositivo de conversão é facilmente fabricável através de ligas alienígenas. 
 STR_UFO_NAVIGATION_UFOPEDIA
 As naves alienígenas utilizam computadores sofisticados como sistemas de navegação, tanto em terra como no espaço. O seu sistema é baseado em processadores óticos ligados em rede. Os controles são relativamente simples: o navegador controla a direção das ondas de gravidade geradas pela fonte de energia para mover a nave na direção que desejar. Este sistema pode ser facilmente utilizado por humanos e é reproduzível através de ligas alienígenas e outros componentes.
 STR_UFO_CONSTRUCTION_UFOPEDIA
@@ -108,7 +108,7 @@ Os artefactos alienígenas são construídos a partir de ligas especiais com pro
 STR_YOU_WILL_NEED_TO_RESEARCH_A
 Precisa de investigar um{NEWLINE}
 STR_ELERIUM_115_UFOPEDIA
-Este elemento possuí a característica invulgar de produzir anti-matéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto,  não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
+Este elemento possuí a característica invulgar de produzir antimatéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto,  não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
 STR_ALIEN_ORIGINS_UFOPEDIA
 Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o centro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena, de  maneira a obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
@@ -810,7 +810,7 @@ Intervalo de fogo
 STR_S
 s
 STR_ARMOR_PIERCING
-ANTI-BLINDAGEM
+ANTIBLINDAGEM
 STR_INCENDIARY
 INCENDIÁRIO
 STR_HIGH_EXPLOSIVE_UC
@@ -1118,7 +1118,7 @@ Fontes de Energia
 STR_MAXIMUM_SPEED
 Velocidade Máxima
 STR_HYPER_WAVE_DECODER_UC
-RECETOR DE HIPER-ONDAS
+RECETOR DE HIPERONDAS
 STR_SKYRANGER
 SKYRANGER
 STR_LIGHTNING
@@ -1172,7 +1172,7 @@ Defesas de Fusão
 STR_PSIONIC_LABORATORY
 Laboratório Psíquico
 STR_HYPER_WAVE_DECODER
-Recetor Hiper-Onda
+Recetor Hiperonda
 STR_HANGAR
 Hangar
 STR_USA
@@ -1272,7 +1272,7 @@ Estes sistemas de defesa laser proporcionam proteção contra incursões de nave
 STR_PLASMA_DEFENSES_UFOPEDIA
 Estes sistemas de defesa de raios plasma proporcionam uma proteção poderosa e eficiente contra incursões de naves inimigas. 
 STR_FUSION_BALL_DEFENSES_UFOPEDIA
-Os mísseis de fusão proporcionam o sistema de defesa mais eficaz contra ataques alienígenas. Estes mísseis geram uma implosão de anti-matéria que aniquila tudo o que se encontra no seu raio de ação.
+Os mísseis de fusão proporcionam o sistema de defesa mais eficaz contra ataques alienígenas. Estes mísseis geram uma implosão de antimatéria que aniquila tudo o que se encontra no seu raio de ação.
 STR_GRAV_SHIELD_UFOPEDIA
 O escudo de gravidade repele naves alienígenas que tentem aterrar perto de uma base durante tempo suficiente para que quaisquer sistemas de defesa voltem a abrir fogo, duplicando a sua eficácia.
 STR_MIND_SHIELD_UFOPEDIA
@@ -1280,15 +1280,15 @@ Como as naves alienígenas detetam a presença de humanos através de ondas cere
 STR_PSIONIC_LABORATORY_UFOPEDIA
 Estas instalações avaliam o potencial psíquico de todos os soldados da base. Cada laboratório pode treinar até dez soldados de cada vez. Os programas de treino são atribuídos no fim de cada mês. Quando usadas em conjunto com um Amplificador Psíquico, as habilidades psíquicas podem ser utilizadas para realizar ataques mentais durante situações de combate.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
-Os sistemas de comunicação alienígenas usam ondas supra-dimensionais que viajam quase instantaneamente. Esta instalação interceta transmissões feitas por OVNIs e descodifica a informação, o que permite identificar o tipo de OVNI, a espécie da tripulação, e o tipo de missão a que se destina.
+Os sistemas de comunicação alienígenas usam ondas supradimensionais que viajam quase instantaneamente. Esta instalação interceta transmissões feitas por OVNIs e descodifica a informação, o que permite identificar o tipo de OVNI, a espécie da tripulação, e o tipo de missão a que se destina.
 STR_HANGAR_UFOPEDIA
 Cada hangar pode albergar uma aeronave XCom, dispondo de instalações próprias para manutenção, abastecimento, e reparação. Uma aeronave atribuída a uma base deve dispor de um hangar exclusivo que não pode ser usado por outras, mesmo que esta esteja fora em missão. 
 STR_PISTOL_UFOPEDIA
-A pistola padrão utilizada pelas forças XCom. Semi-automática de alto calibre, com doze tiros.
+A pistola padrão utilizada pelas forças XCom. Semiautomática de alto calibre, com doze tiros.
 STR_RIFLE_UFOPEDIA
 Esta espingarda altamente precisa, está equipada com mira laser e usa munição de 6.7mm, em carregadores de vinte balas.
 STR_HEAVY_CANNON_UFOPEDIA
-O canhão de combate é uma arma devastadora, mas de difícil uso. Funciona com três tipos de munição: anti-blindagem, incendiária ou explosiva.
+O canhão de combate é uma arma devastadora, mas de difícil uso. Funciona com três tipos de munição: antiblindagem, incendiária ou explosiva.
 STR_AUTO_CANNON_UFOPEDIA
 O canhão automático combina a versatilidade e poder do canhão de combate, com uma maior cadência de tiro.
 STR_ROCKET_LAUNCHER_UFOPEDIA
@@ -1320,9 +1320,9 @@ O alienígena morreu durante ao processo de interrogação.
 STR_MIND_PROBE_UFOPEDIA
 A sonda mental é um aparelho de comunicação alienígena, utilizado para extrair informação diretamente das ondas cerebrais. Os agentes XCom podem utilizar este dispositivo em combate, de maneira a saberem mais sobre as características de um determinado alienígena. Após equipar, clique no ícone da Sonda Mental e selecione a opção "usar". Em seguida, selecione o inimigo-alvo com o cursor.
 STR_PLASMA_PISTOL_UFOPEDIA
-As pistolas de plasma são armas mortíferas que funcionam com base na aceleração de partículas dentro de um campo de anti-gravidade instantâneo.
+As pistolas de plasma são armas mortíferas que funcionam com base na aceleração de partículas dentro de um campo de antigravidade instantâneo.
 STR_PLASMA_RIFLE_UFOPEDIA
-Esta arma devastadora funciona com base na aceleração de partículas dentro de um campo anti-gravidade instantâneo.
+Esta arma devastadora funciona com base na aceleração de partículas dentro de um campo antigravidade instantâneo.
 STR_SIZE
 Tamanho
 STR_THE_CORPSE_MAY_BE_RESEARCHED
@@ -1400,7 +1400,7 @@ Alteração de fundos>
 STR_COUNCIL_REDUCE_DEBTS
 O conselho de nações financiadoras não está satisfeito com a sua posição financeira.  Reduza a sua dívida abaixo de 2 milhões ou o seu projeto será cancelado.
 STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED
-DESCODIFICAÇÃO DE TRANSMISSÃO HIPER-ONDA
+DESCODIFICAÇÃO DE TRANSMISSÃO HIPERONDA
 STR_CRAFT_TYPE
 TIPO DE NAVE
 STR_RACE
@@ -1604,7 +1604,7 @@ Esta Plataforma de Armas Pesadas controlada à distância está armada com míss
 STR_TANK_LASER_CANNON_UFOPEDIA
 A tecnologia laser é uma adição excelente ao arsenal das  PAP, permitindo um poder de fogo superior sem quaisquer restrições de munição. 
 STR_HOVERTANK_PLASMA_UFOPEDIA
-A tecnologia alienígena deu origem a uma nova geração de PAPs. A propulsão anti-gravítica e o poder de fogo da tecnologia plasma são uma combinação mortífera.
+A tecnologia alienígena deu origem a uma nova geração de PAPs. A propulsão antigravítica e o poder de fogo da tecnologia plasma são uma combinação mortífera.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
 Este tanque voador está equipado com um lançador de bolas de fusão de enorme poder destrutivo. Usar com extrema cautela. Também terá de fabricar as bolas de fusão para armar esta PAP. A bola de fusão é um projétil inteligente. Para disparar esta arma pode colocar vários pontos de referência no terreno com o cursor. De seguida clique no ícone "lançar míssil".
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
@@ -1614,7 +1614,7 @@ Este pequeno objeto é utilizado como fonte de energia para a espingarda de plas
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
 Fonte de energia para pistola de plasma alienígena. Contém Elério, a fonte de energia alienígena.
 STR_STUN_BOMB_UFOPEDIA
-A bomba atordoadora serve, originalmente, para capturar humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um mini-lançador.
+A bomba atordoadora serve, originalmente, para capturar humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um minilançador.
 STR_ALIEN_RESEARCH_UFOPEDIA
 As missões alienígenas de investigação destinam-se a recolher informação básica sobre a Terra e os seus habitantes. Utilizam sobretudo veículos pequenos, aterrando ocasionalmente em áreas desertas. Este tipo de atividade alienígena é considerada a menos perigosa para o projeto XCom, devido a atrair pouca atenção dos governos e do público geral. 
 STR_ALIEN_HARVEST_UFOPEDIA
@@ -1636,7 +1636,7 @@ Esta nave minúscula é utilizada para fins de reconhecimento e pesquisa. Preced
 STR_MEDIUM_SCOUT_UFOPEDIA
 Uma nave de reconhecimento ligeira, que não é grande ameaça para as forças terrestres. Precede a vinda de naves maiores, no início de incursões alienígenas.
 STR_LARGE_SCOUT_UFOPEDIA
-A maior nave de reconhecimento alienígena. Um veículo multi-usos, que serve para todo o tipo de missões.
+A maior nave de reconhecimento alienígena. Um veículo multiusos, que serve para todo o tipo de missões.
 STR_HARVESTER_UFOPEDIA
 Os "Recoletores" estão equipados com um feixe de tração para recolher gado e outros animais. Bisturis laser extraem rapidamente o material orgânico desejado, que é guardado em contentores próprios. Após a extração, o cadáver é despejado para o solo.  
 STR_ABDUCTOR_UFOPEDIA
@@ -1726,7 +1726,7 @@ Desintegrador
 STR_BLASTER_BOMB
 Bomba Desintegradora
 STR_SMALL_LAUNCHER
-Mini-Lançador
+Minilançador
 STR_STUN_BOMB
 Bomba Atordoadora
 STR_ALIEN_GRENADE
@@ -2327,9 +2327,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Novas regras de manufatura (TFTD)
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Permite uma produção superior a uma unidade por hora em projetos de manufatura.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Transferência de aeronaves em voo
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Permite a transferência de aeronaves durante voo.
 STR_CRAFTLAUNCHALWAYS
 Forçar descolagem

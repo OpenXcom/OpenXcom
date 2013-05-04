@@ -38,15 +38,11 @@ private:
 	TextButton *_btnOk;
 	Window *_window;
 	Text *_txtTitle;
-	std::wstring _name;
-	std::string _message;
 public:
 	/// Creates the InfoboxOKState.
-	InfoboxOKState(Game *game, std::wstring name, std::string message);
+	InfoboxOKState(Game *game, const std::wstring &msg);
 	/// Cleans up the InfoboxOKState.
 	~InfoboxOKState();
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 };

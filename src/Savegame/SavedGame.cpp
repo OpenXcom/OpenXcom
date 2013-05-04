@@ -816,13 +816,10 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
 		
-		// i hate to do this, but it just looks so much cleaner.
-		std::vector<std::string>::const_iterator alien = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-		bool liveAlien ( alien != research->getUnlocked().end());
+		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end ())
 		{
-			// see?
 			if (!liveAlien)
 			{
 				continue;
@@ -931,8 +928,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	std::vector<std::string>::const_iterator alien = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-	bool liveAlien ( alien != r->getUnlocked().end());
+	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
 	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
