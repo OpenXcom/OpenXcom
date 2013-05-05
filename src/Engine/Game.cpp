@@ -121,7 +121,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create blank language
 	_lang = new Language();
 
-	_alienContainmentHasUpperLimit = Options::getBool("alienContainmentHasUpperLimit") ? 1 : 0;
+	_alienContainmentHasUpperLimit = Options::getBool("alienContainmentHasUpperLimit");
 }
 
 /**
@@ -490,10 +490,19 @@ void Game::setMouseActive(bool active)
 }
 
 /**
- * Gets the value of alienContainmentHasUpperLimit.
- * @return An int, if alienContainmentHasUpperLimit is true, then 1, and it's 0 else.
+ * Sets the value of alienContainmentHasUpperLimit.
  */
-int Game::getAlienContainmentHasUpperLimit() const
+void Game::setAlienContainmentHasUpperLimit(bool setting)
+{
+	_alienContainmentHasUpperLimit = setting;
+}
+
+
+/**
+ * Gets the value of alienContainmentHasUpperLimit.
+ * @return if alienContainmentHasUpperLimit is true.
+ */
+bool Game::getAlienContainmentHasUpperLimit() const
 {
 	return _alienContainmentHasUpperLimit;
 }

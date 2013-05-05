@@ -143,6 +143,20 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
+	// here we create an "alternate" background surface for the base info screen.
+	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
+	_surfaces["ALTBACK07.SCR"]->loadScr(CrossPlatform::getDataFile("GEOGRAPH/BACK07.SCR"));
+	for (int y = 172; y >= 152; --y)
+		for (int x = 5; x <= 314; ++x)
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+4, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
+	for (int y = 147; y >= 134; --y)
+		for (int x = 5; x <= 314; ++x)
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+9, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
+	for (int y = 132; y >= 109; --y)
+		for (int x = 5; x <= 314; ++x)
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+10, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
+
+
 	std::string spks[] = {"UP001.SPK",
 						  "UP002.SPK",
 						  "UP003.SPK",

@@ -153,7 +153,13 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_barLongRange);
 
 	// Set up objects
-	_game->getResourcePack()->getSurface("BACK07.SCR")->blit(_bg);
+	std::stringstream ss;
+	if (_game->getAlienContainmentHasUpperLimit())
+	{
+		ss << "ALT";
+	}
+	ss << "BACK07.SCR";
+	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());

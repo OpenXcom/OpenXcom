@@ -46,8 +46,6 @@ public:
 	void think();
 	/// Handles key clicks.
 	void handle(Action *action);
-	/// This method makes our modifications to the XcomResourcePack.
-	XcomResourcePack *makeModifications(XcomResourcePack *pack);
 };
 
 }
