@@ -84,6 +84,7 @@ Bugfixes:
 - Fix for horizontal scroll-wheels.
 - Various cursor-related bugfixes/improvements.
 - Support for Haiku folder paths.
+- Fix for 8 KHz WAV-file (in SAMPLEx.CAT) playing.
 
   Geoscape:
 - Fix for a crash bug involving an edge case where several craft were sent to intercept a single UFO.
