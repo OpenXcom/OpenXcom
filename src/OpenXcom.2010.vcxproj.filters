@@ -763,9 +763,6 @@
       <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Menu\AutoSaveState.cpp">
-      <Filter>Menu</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1552,9 +1549,6 @@
     </ClInclude>
     <ClInclude Include="Engine\GraphSubset.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\AutoSaveState.h">
-      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

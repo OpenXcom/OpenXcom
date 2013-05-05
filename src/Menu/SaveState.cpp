@@ -69,6 +69,17 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 }
 
 /**
+ * Initializes all the elements in the Save Game screen.
+ * @param game Pointer to the core game.
+ * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param showMsg True if need to show messages like "Loading game" or "Saving game".
+ */
+SaveState::SaveState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+{
+	quickSave();
+}
+
+/**
  *
  */
 SaveState::~SaveState()
@@ -187,6 +198,48 @@ void SaveState::edtSaveKeyPress(Action *action)
 			else
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
+	}
+}
+
+/**
+ * Quick save game.
+ */
+void SaveState::quickSave()
+{
+	if (_showMsg) updateStatus("STR_SAVING_GAME");
+
+#ifdef _WIN32
+		std::string filename = Language::wstrToCp(L"autosave");
+#else
+		std::string filename = Language::wstrToUtf8(L"autosave");
+#endif
+
+	try
+	{
+		_game->getSavedGame()->save(filename);
+//		_game->popState();
+	}
+	catch (Exception &e)
+	{
+//		_game->popState();
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+	}
+	catch (YAML::Exception &e)
+	{
+//		_game->popState();
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

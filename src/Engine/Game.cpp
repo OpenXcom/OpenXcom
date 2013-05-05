@@ -30,7 +30,6 @@
 #include "Logger.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
-#include "../Menu/AutoSaveState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
@@ -132,8 +131,7 @@ Game::~Game()
 {
 	if (_save != 0 && Options::getInt("autosave") == 3)
 	{
-		AutoSaveState *as = new AutoSaveState(this, true);
-		as->quickSave();
+		SaveState *ss = new SaveState(this, true, true);
 	}
 
 	Mix_HaltChannel(-1);
@@ -181,8 +179,8 @@ void Game::run()
 		// Initialize active state
 		if (!_init)
 		{
-			_states.back()->init();
 			_init = true;
+			_states.back()->init();
 
 			// Unpress buttons
 			_states.back()->resetAll();

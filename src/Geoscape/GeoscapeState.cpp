@@ -36,7 +36,6 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Engine/Timer.h"
-#include "../Menu/AutoSaveState.h"
 #include "../Savegame/GameTime.h"
 #include "../Engine/Music.h"
 #include "../Savegame/SavedGame.h"
@@ -415,9 +414,9 @@ void GeoscapeState::handle(Action *action)
 		}
 		// quick save and quick load
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
-			_game->pushState(new AutoSaveState(_game, true));
+			_game->pushState(new SaveState(_game, true, true));
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
-			_game->pushState(new AutoSaveState(_game, true, true));
+			_game->pushState(new LoadState(_game, true, true));
 	}
 	if(!_dogfights.empty())
 	{
@@ -1532,8 +1531,9 @@ void GeoscapeState::time1Day()
 	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(),
 		      GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
+	// Autosave
 	if (Options::getInt("autosave") >= 2)
-		_game->pushState(new AutoSaveState(_game, true, true));
+		_game->pushState(new SaveState(_game, true, false));
 }
 
 /**

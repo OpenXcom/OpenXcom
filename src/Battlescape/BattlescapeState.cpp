@@ -57,7 +57,6 @@
 #include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
-#include "../Menu/AutoSaveState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -1248,9 +1247,9 @@ inline void BattlescapeState::handle(Action *action)
 			}
 			// quick save and quick load
 			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
-				_game->pushState(new AutoSaveState(_game, true));
+				_game->pushState(new SaveState(_game, false, true));
 			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
-				_game->pushState(new AutoSaveState(_game, true, true));
+				_game->pushState(new LoadState(_game, false, true));
 		}
 	}
 }
