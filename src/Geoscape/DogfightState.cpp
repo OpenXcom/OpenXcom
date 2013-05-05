@@ -719,16 +719,13 @@ void DogfightState::animate()
 void DogfightState::move()
 {
 	bool finalRun = false;
-	// Check if craft is not low on fuel when window minimized.
-	if(_craft->getLowFuel())
-	{
-		endDogfight();
-	}
+	// Check if craft is not low on fuel when window minimized, and
 	// Check if crafts destination hasn't been changed when window minimized.
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	if(u != _ufo)
+	if(u != _ufo || _craft->getLowFuel())
 	{
 		endDogfight();
+		return;
 	}
 	// Check if UFO is not breaking off.
 	if(_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())

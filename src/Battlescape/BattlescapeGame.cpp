@@ -1267,7 +1267,8 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						std::wstringstream ss;
 						if (_currentAction.type == BA_PANIC)
 						{
-							ss << _save->getTile(_currentAction.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED");
+							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
+							ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
