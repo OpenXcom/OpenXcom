@@ -79,24 +79,54 @@ public:
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
+	/// Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.
+	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);	
+	/// Get the origin voxel of a unit's eyesight
+	Position getSightOriginVoxel(BattleUnit *currentUnit);
+	/// Check visibility of a unit on this tile
 	bool visible(BattleUnit *currentUnit, Tile *tile);
+	/// turn xcom soldier's personal lighting on or off
 	void togglePersonalLighting();
+	/// check the distance between two positions
 	int distance(const Position &pos1, const Position &pos2) const;
+	/// check the distance squared between two positions
+	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;	
+	/// check the horizontal blockage of a tile
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	/// check the vertical blockage of a tile
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
+	/// can someone on our team see this position?
 	bool inTeamFOV(const Position &pos, UnitFaction team);
+	/// attempt a panic or mind control action
 	bool psiAttack(BattleAction *action);
+	/// apply gravity to items (and units) that occupy this tile.
 	Tile *applyItemGravity(Tile *t);
-	bool validMeleeRange(BattleUnit *unit, BattleUnit *target);
-	bool validMeleeRange(Position pos, int direction, int size, int height, BattleUnit *target);
+	/// return melee validity between two units
+	bool validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir);
+	/// return validity of a melee attack from a given position
+	bool validMeleeRange(Position pos, int direction, int size, BattleUnit *target);
+	/// get the ai to look through a window
 	int faceWindow(const Position &position);
+	/// get the exposure % of a unit on a tile
+	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut);
+	/// check validity for targetting a unit
 	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
+	/// check validity for targetting a tile
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
-	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false);
+	/// calculate te z voxel for shadows
+	int castedShade(const Position& voxel);
+	/// check the visibility of a given voxel
+	bool isVoxelVisible(const Position& voxel);
+	/// check what type of voxel occupies this space
+	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	/// blow this tile up
 	bool detonate(Tile* tile);
+	/// validate a throwing action
+	bool validateThrow(BattleAction *action);
+
 };
 
 }

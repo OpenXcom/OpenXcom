@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Ufo.h"
+#include "Craft.h"
 #include "AlienMission.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
@@ -49,6 +50,14 @@ Ufo::Ufo(RuleUfo *rules)
  */
 Ufo::~Ufo()
 {
+	for (std::vector<Target*>::iterator i = _followers.begin(); i != _followers.end(); ++i)
+	{
+		Craft *c = dynamic_cast<Craft*>(*i);
+		if (c)
+		{
+			c->returnToBase();
+		}
+	}
 	if (_mission)
 	{
 		_mission->decreaseLiveUfos();
@@ -56,7 +65,11 @@ Ufo::~Ufo()
 	if (_dest)
 	{
 		Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
-		delete wp;
+		if (wp != 0)
+		{
+			delete _dest;
+			_dest = 0;
+		}
 	}
 }
 
@@ -427,6 +440,10 @@ void Ufo::think()
 		_secondsRemaining -= 5;
 		break;
 	case CRASHED:
+		if (!_detected)
+		{
+			_detected = true;
+		}
 		// This gets handled in GeoscapeState::time30Minutes()
 		// Because the original game processes it every 30 minutes!
 	case DESTROYED:

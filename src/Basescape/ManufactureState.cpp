@@ -57,7 +57,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtSpace = new Text(150, 9, 8, 34);
 	_txtFunds = new Text(150, 9, 160, 34);
 	_txtItem = new Text(80, 9, 10, 52);
-	_txtEngineers = new Text(50, 18, 70, 44);
+	_txtEngineers = new Text(56, 18, 64, 44);
 	_txtProduced = new Text(56, 18, 120, 44);
 	_txtTotal = new Text(50, 18, 176, 44);
 	_txtCost = new Text(40, 27, 227, 44);

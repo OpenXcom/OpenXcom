@@ -59,25 +59,28 @@ void UnitTurnBState::init()
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
-	_turret = (_unit->getTurretType() != -1) && _action.targeting;
+	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
 
 	_unit->lookAt(_action.target, _turret);
 
 	if (_unit->getStatus() != STATUS_TURNING)
 	{
-		// try to open a door
-		int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
-		if (door == 0)
+		if (_action.type == BA_NONE)
 		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
-		}
-		if (door == 1)
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20,21))->play(); // ufo door
-		}
-		if (door == 4)
-		{
-			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			// try to open a door
+			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
+			if (door == 0)
+			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
+			}
+			if (door == 1)
+			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20,21))->play(); // ufo door
+			}
+			if (door == 4)
+			{
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			}
 		}
 		_parent->popState();
 	}

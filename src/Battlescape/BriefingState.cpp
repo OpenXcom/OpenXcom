@@ -34,6 +34,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
 #include <sstream>
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -47,12 +48,14 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
-	_txtTitle = new Text(274, 16, 16, 24);
-	_txtTarget = new Text(274, 16, 16, 40);
-	_txtCraft = new Text(274, 16, 16, 56);
+	_txtTitle = new Text(300, 16, 16, 24);
+	_txtTarget = new Text(300, 16, 16, 40);
+	_txtCraft = new Text(300, 16, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getBattleGame()->getMissionType();
+	
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	// Set palette
 	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
@@ -60,12 +63,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
-	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
-	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING")
+	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
@@ -100,6 +98,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -167,8 +167,9 @@ void BriefingState::btnOkClick(Action *)
 	_game->popState();
 	BattlescapeState *bs = new BattlescapeState(_game);
 	_game->pushState(bs);
+	_game->getSavedGame()->getBattleGame()->setBattleState(bs);
 	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame(), bs));
-	_game->pushState(new InventoryState(_game, false));
+	_game->pushState(new InventoryState(_game, false, bs));
 }
 
 }

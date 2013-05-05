@@ -669,9 +669,6 @@
     <ClCompile Include="Geoscape\AlienBaseState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\AllocatePsiTrainingState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -720,6 +717,9 @@
     <ClCompile Include="Engine\FastLineClip.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Flc.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
     <ClCompile Include="Menu\OptionsControlsState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -756,6 +756,13 @@
     <ClCompile Include="Engine\OpenGL.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\ToggleTextButton.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\AdvancedOptionsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1427,9 +1434,6 @@
     <ClInclude Include="Geoscape\AlienBaseState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\UfoHyperDetectedState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\EquipmentLayoutItem.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1481,6 +1485,9 @@
     <ClInclude Include="Engine\FastLineClip.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Flc.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Menu\OptionsControlsState.h">
       <Filter>Menu</Filter>
     </ClInclude>
@@ -1512,6 +1519,35 @@
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Engine\OpenGL.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\ToggleTextButton.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="aresame.h" />
+    <ClInclude Include="Menu\AdvancedOptionsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Engine\ShaderDraw.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderDrawHelper.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderMove.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderRepeat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderRotate.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FixedFloat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphSubset.h">
       <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>

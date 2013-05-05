@@ -49,6 +49,20 @@ Node::~Node()
 {
 }
 
+
+
+
+const int Node::nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
+	{ 4, 3, 5, 8, 7, 2, 0 }, // leader
+	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
+	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
+	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
+	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
+	{ 2, 5, 3, 4, 6, 8, 0 }, //terrorist
+	{ 2, 5, 3, 4, 6, 8, 0 }  }; //also terrorist
+
+
+
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
@@ -61,7 +75,8 @@ void Node::load(const YAML::Node &node)
 	node["type"] >> _type;
 	node["rank"] >> _rank;
 	node["flags"] >> _flags;
-	//node["reserved"] >> _reserved;
+	const YAML::Node *res = node.FindValue("reserved");
+	if (res) *res >> _reserved;
 	node["priority"] >> _priority;
 	node["allocated"] >> _allocated;
 	node["links"] >> _nodeLinks;
@@ -80,7 +95,7 @@ void Node::save(YAML::Emitter &out) const
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "rank" << YAML::Value << _rank;
 	out << YAML::Key << "flags" << YAML::Value << _flags;
-	//out << YAML::Key << "reserved" << YAML::Value << _reserved;
+	out << YAML::Key << "reserved" << YAML::Value << _reserved;
 	out << YAML::Key << "priority" << YAML::Value << _priority;
 	out << YAML::Key << "allocated" << YAML::Value << _allocated;
 	out << YAML::Key << "links" << YAML::Value << YAML::Flow << _nodeLinks;
@@ -166,5 +181,11 @@ bool Node::isTarget() const
 {
 	return _reserved == 5;
 }
+
+void Node::setType(int type)
+{
+    _type = type;
+}
+
 
 }

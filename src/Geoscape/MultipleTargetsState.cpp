@@ -33,9 +33,9 @@
 #include "ConfirmDestinationState.h"
 #include "InterceptState.h"
 #include "UfoDetectedState.h"
-#include "UfoHyperDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "TargetInfoState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -78,6 +78,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
 		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 		_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
+		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 		_lstTargets->setColor(Palette::blockOffset(8)+5);
 		_lstTargets->setAlign(ALIGN_CENTER);
@@ -136,14 +137,7 @@ void MultipleTargetsState::popupTarget(Target *target)
 		}
 		else if (u != 0)
 		{
-			if(!(u->getHyperDetected()))
-			{
-				_game->pushState(new UfoDetectedState(_game, u, _state, false));
-			}
-			else
-			{
-				_game->pushState(new UfoHyperDetectedState(_game, u, _state, false));
-			}
+			_game->pushState(new UfoDetectedState(_game, u, _state, false, u->getHyperDetected()));
 		}
 		else
 		{

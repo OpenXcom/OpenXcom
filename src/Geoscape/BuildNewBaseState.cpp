@@ -18,6 +18,7 @@
  */
 #include "BuildNewBaseState.h"
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
@@ -33,6 +34,7 @@
 #include "../Savegame/Craft.h"
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -87,21 +89,31 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
+	_btnRotateLeft->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
+	_btnRotateLeft->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
 
 	_btnRotateRight->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateRightPress);
 	_btnRotateRight->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease);
+	_btnRotateRight->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateRightPress, (SDLKey)Options::getInt("keyGeoRight"));
+	_btnRotateRight->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease, (SDLKey)Options::getInt("keyGeoRight"));
 
 	_btnRotateUp->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateUpPress);
 	_btnRotateUp->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease);
+	_btnRotateUp->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateUpPress, (SDLKey)Options::getInt("keyGeoUp"));
+	_btnRotateUp->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease, (SDLKey)Options::getInt("keyGeoUp"));
 
 	_btnRotateDown->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease);
+	_btnRotateDown->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateDownPress, (SDLKey)Options::getInt("keyGeoDown"));
+	_btnRotateDown->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease, (SDLKey)Options::getInt("keyGeoDown"));
 
 	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
+	_btnZoomIn->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, (SDLKey)Options::getInt("keyGeoZoomIn"));
 
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
+	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -109,10 +121,12 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SITE_FOR_NEW_BASE"));
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTitle->setWordWrap(true);
 
 	if (_first)
 	{
@@ -125,6 +139,10 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
+	if (!_game->isQuitting() && _globe->getShowRadar() != _oldshowradar)
+	{
+		_globe->toggleRadarLines();
+	}
 	delete _hoverTimer;
 }
 
@@ -176,7 +194,7 @@ void BuildNewBaseState::hoverRedraw(void)
 
 	_globe->setNewBaseHover();
 	
-	if (_globe->getShowRadar() && (_oldlat!=lat||_oldlon!=lon) )
+	if (_globe->getShowRadar() && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
 	{
 		_oldlat=lat;
 		_oldlon=lon;
@@ -212,7 +230,6 @@ void BuildNewBaseState::globeClick(Action *action)
 			{
 				(*i)->setLongitude(lon);
 				(*i)->setLatitude(lat);
-				(*i)->setName(L"", _game->getLanguage());
 			}
 			if (_first)
 			{
@@ -221,10 +238,6 @@ void BuildNewBaseState::globeClick(Action *action)
 			else
 			{
 				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
-			}
-			if (_globe->getShowRadar() != _oldshowradar)
-			{
-				_globe->toggleRadarLines();
 			}
 		}
 	}
@@ -345,10 +358,6 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *)
 void BuildNewBaseState::btnCancelClick(Action *)
 {
 	delete _base;
-	if (_globe->getShowRadar() != _oldshowradar)
-	{
-		_globe->toggleRadarLines();
-	}
 	_game->popState();
 }
 

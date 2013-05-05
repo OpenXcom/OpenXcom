@@ -218,6 +218,8 @@ set ( engine_src
   Engine/LocalizedText.h
   Engine/FastLineClip.cpp
   Engine/FastLineClip.h
+  Engine/Flc.cpp
+  Engine/Flc.h
   Engine/Zoom.cpp
   Engine/Zoom.h
   Engine/Scalers/scale2x.cpp
@@ -239,8 +241,6 @@ set ( geoscape_src
   Geoscape/GeoscapeCraftState.h
   Geoscape/UfoDetectedState.h
   Geoscape/UfoDetectedState.cpp
-  Geoscape/UfoHyperDetectedState.h
-  Geoscape/UfoHyperDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
   Geoscape/Polyline.h
@@ -326,6 +326,8 @@ set ( interface_src
   Interface/ArrowButton.h
   Interface/TextButton.cpp
   Interface/TextButton.h
+  Interface/ToggleTextButton.cpp
+  Interface/ToggleTextButton.h
   Interface/Text.h
   Interface/Text.cpp
   Interface/Bar.h
@@ -343,6 +345,8 @@ set ( interface_src
 )
 
 set ( menu_src
+  Menu/AdvancedOptionsState.cpp
+  Menu/AdvancedOptionsState.h
   Menu/StartState.cpp
   Menu/StartState.h
   Menu/NoteState.cpp
@@ -572,7 +576,7 @@ if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
-set ( openxcom_src main.cpp lodepng.cpp lodepng.h dirent.h ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
+set ( openxcom_src main.cpp lodepng.cpp lodepng.h dirent.h aresame.h ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )

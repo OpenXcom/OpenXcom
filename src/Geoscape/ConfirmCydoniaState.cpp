@@ -31,6 +31,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -40,26 +41,28 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_screen = false;
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
-	_btnConfirm = new TextButton(80, 20, 70, 142);
-	_btnCancel = new TextButton(80, 20, 170, 142);
+	_btnYes = new TextButton(80, 20, 70, 142);
+	_btnNo = new TextButton(80, 20, 170, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
 	
 	add(_window);
-	add(_btnConfirm);
-	add(_btnCancel);
+	add(_btnYes);
+	add(_btnNo);
 	add(_txtMessage);
 	
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
-	_btnConfirm->setColor(Palette::blockOffset(8)+5);
-	_btnConfirm->setText(_game->getLanguage()->getString("STR_YES"));
-	_btnConfirm->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnConfirmClick);
+	_btnYes->setColor(Palette::blockOffset(8)+5);
+	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_NO"));
-	_btnCancel->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnCancelClick);
+	_btnNo->setColor(Palette::blockOffset(8)+5);
+	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 	
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
@@ -86,12 +89,16 @@ void ConfirmCydoniaState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmCydoniaState::btnConfirmClick(Action *)
+void ConfirmCydoniaState::btnYesClick(Action *)
 {
 	_game->popState();
 	_game->popState();
 	
-	int month = _game->getSavedGame()->getMonthsPassed();
+	int month = 
+		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
+		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
+		_game->getSavedGame()->getMonthsPassed() ;  // else
+
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType("STR_MARS_CYDONIA_LANDING");
@@ -110,7 +117,7 @@ void ConfirmCydoniaState::btnConfirmClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmCydoniaState::btnCancelClick(Action *)
+void ConfirmCydoniaState::btnNoClick(Action *)
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	_game->popState();

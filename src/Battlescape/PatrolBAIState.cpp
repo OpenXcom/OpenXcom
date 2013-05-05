@@ -25,6 +25,8 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/Tile.h"
 
@@ -127,8 +129,30 @@ void PatrolBAIState::think(BattleAction *action)
 
 	Node *node;
 
+
+	if (_unit->_hidingForTurn) 
+	{
+		action->type = BA_NONE;
+		action->TU = 0;
+		if (Options::getBool("traceAI")) 
+		{
+			Log(LOG_INFO) << "PatrolBAIState::think()? Better not... #" << action->number;
+		}
+		return;
+	}
+
+	if (Options::getBool("traceAI")) 
+	{
+		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
+	}
+	
+	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
+		if (Options::getBool("traceAI"))
+		{
+			Log(LOG_INFO) << "Patrol destination reached!";
+		}
 		// destination reached
 		// take a peek through window before walking to the next node
 		int dir = _game->getTileEngine()->faceWindow(_unit->getPosition());
@@ -140,6 +164,10 @@ void PatrolBAIState::think(BattleAction *action)
 				_unit->turn();
 			}
 			action->TU = 0; // tus are already decreased while walking
+			if (_unit->getFaction() == FACTION_NEUTRAL) 
+			{
+				_unit->_hidingForTurn = true; // pretend to be terrified by all the soldiers and tanks rolling down your street or through your yard
+			}
 			return;
 		}
 		else
@@ -159,7 +187,7 @@ void PatrolBAIState::think(BattleAction *action)
 		for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 		{
 			node = *i;
-			int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
+			int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z 
 				&& d < closest 
 				&& (!(node->getType() & Node::TYPE_SMALL) || _unit->getArmor()->getSize() == 1))
@@ -174,11 +202,18 @@ void PatrolBAIState::think(BattleAction *action)
 	{
 		// look for a new node to walk towards
 		bool scout = true;
-		if (_game->getMissionType() == "STR_UFO_CRASH_RECOVERY"
-			|| _game->getMissionType() == "STR_UFO_GROUND_ASSAULT")
+		if (_game->getMissionType() != "STR_BASE_DEFENSE")
 		{
+			int aliensAlive = 0;
+			for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(), end = _game->getUnits()->end(); i != end; ++i)
+			{
+				if (!(*i)->isOut() && (*i)->getFaction() == FACTION_HOSTILE) ++aliensAlive;
+				if (aliensAlive > 1) break; // all the info we need
+			}
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
-			if (_game->getTurn() > 20 || _fromNode->getRank() == 0)
+			// also anyone standing in fire should also probably move
+			if (_game->getTurn() > 20 || (aliensAlive < 2 && _game->getTurn() > 10) || !_fromNode || _fromNode->getRank() == 0 || 
+				(_game->getTile(_unit->getPosition()) && _game->getTile(_unit->getPosition())->getFire()))
 			{
 				scout = true;
 			}
@@ -219,15 +254,15 @@ void PatrolBAIState::think(BattleAction *action)
 			}
 			else
 			{
-				// find closest target which is not already allocated
+				// find closest high value target which is not already allocated
 				int closest = 1000000;
 				for (std::vector<Node*>::iterator i = _game->getNodes()->begin(); i != _game->getNodes()->end(); ++i)
 				{
 					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
 						node = *i;
-						int d = _game->getTileEngine()->distance(_unit->getPosition(), node->getPosition());
-						if (d < closest)
+						int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
+						if (!_toNode ||  (d < closest && node != _fromNode))
 						{
 							_toNode = node;
 							closest = d;

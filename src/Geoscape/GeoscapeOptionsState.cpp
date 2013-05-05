@@ -27,6 +27,7 @@
 #include "AbandonGameState.h"
 #include "../Menu/LoadState.h"
 #include "../Menu/SaveState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -76,6 +77,7 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeOptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);

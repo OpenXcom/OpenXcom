@@ -36,9 +36,10 @@
 
 #include <assert.h>
 
-#define restrict
-#if defined(_MSC_VER)  && (_MSC_VER >= 1400) 
+#if (_MSC_VER >= 1400) 
 #define restrict __restrict
+#else
+#define restrict
 #endif
 
 #ifdef _WIN32
@@ -67,6 +68,7 @@ static inline void scale3x_8_def_whole(scale3x_uint8* restrict dst0, scale3x_uin
 		dst0[0] = src1[0];
 		dst0[1] = (src1[0] == src0[0] && src1[0] != src0[1]) || (src1[1] == src0[0] && src1[0] != src0[0]) ? src0[0] : src1[0];
 		dst0[2] = src1[1] == src0[0] ? src1[1] : src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst1[0] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst1[1] = src1[0];
 		dst1[2] = (src1[1] == src0[0] && src1[0] != src2[1]) || (src1[1] == src2[0] && src1[0] != src0[1]) ? src1[1] : src1[0];
@@ -132,6 +134,7 @@ static inline void scale3x_8_def_whole(scale3x_uint8* restrict dst0, scale3x_uin
 		dst0[2] = src1[0];
 		dst1[0] = (src1[-1] == src0[0] && src1[0] != src2[-1]) || (src1[-1] == src2[0] && src1[0] != src0[-1]) ? src1[-1] : src1[0];
 		dst1[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst1[2] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst2[0] = src1[-1] == src2[0] ? src1[-1] : src1[0];
 		dst2[1] = (src1[-1] == src2[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src2[-1]) ? src2[0] : src1[0];
@@ -206,8 +209,10 @@ static inline void scale3x_8_def_center(scale3x_uint8* restrict dst, const scale
 
 	/* first pixel */
 	if (src0[0] != src2[0] && src1[0] != src1[1]) {
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[0] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[2] = (src1[1] == src0[0] && src1[0] != src2[1]) || (src1[1] == src2[0] && src1[0] != src0[1]) ? src1[1] : src1[0];
 	} else {
 		dst[0] = src1[0];
@@ -243,6 +248,7 @@ static inline void scale3x_8_def_center(scale3x_uint8* restrict dst, const scale
 	if (src0[0] != src2[0] && src1[-1] != src1[0]) {
 		dst[0] = (src1[-1] == src0[0] && src1[0] != src2[-1]) || (src1[-1] == src2[0] && src1[0] != src0[-1]) ? src1[-1] : src1[0];
 		dst[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[2] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 	} else {
 		dst[0] = src1[0];
@@ -260,6 +266,7 @@ static inline void scale3x_16_def_whole(scale3x_uint16* restrict dst0, scale3x_u
 		dst0[0] = src1[0];
 		dst0[1] = (src1[0] == src0[0] && src1[0] != src0[1]) || (src1[1] == src0[0] && src1[0] != src0[0]) ? src0[0] : src1[0];
 		dst0[2] = src1[1] == src0[0] ? src1[1] : src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst1[0] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst1[1] = src1[0];
 		dst1[2] = (src1[1] == src0[0] && src1[0] != src2[1]) || (src1[1] == src2[0] && src1[0] != src0[1]) ? src1[1] : src1[0];
@@ -325,6 +332,7 @@ static inline void scale3x_16_def_whole(scale3x_uint16* restrict dst0, scale3x_u
 		dst0[2] = src1[0];
 		dst1[0] = (src1[-1] == src0[0] && src1[0] != src2[-1]) || (src1[-1] == src2[0] && src1[0] != src0[-1]) ? src1[-1] : src1[0];
 		dst1[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst1[2] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst2[0] = src1[-1] == src2[0] ? src1[-1] : src1[0];
 		dst2[1] = (src1[-1] == src2[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src2[-1]) ? src2[0] : src1[0];
@@ -399,6 +407,7 @@ static inline void scale3x_16_def_center(scale3x_uint16* restrict dst, const sca
 
 	/* first pixel */
 	if (src0[0] != src2[0] && src1[0] != src1[1]) {
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[0] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst[1] = src1[0];
 		dst[2] = (src1[1] == src0[0] && src1[0] != src2[1]) || (src1[1] == src2[0] && src1[0] != src0[1]) ? src1[1] : src1[0];
@@ -436,6 +445,7 @@ static inline void scale3x_16_def_center(scale3x_uint16* restrict dst, const sca
 	if (src0[0] != src2[0] && src1[-1] != src1[0]) {
 		dst[0] = (src1[-1] == src0[0] && src1[0] != src2[-1]) || (src1[-1] == src2[0] && src1[0] != src0[-1]) ? src1[-1] : src1[0];
 		dst[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[2] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 	} else {
 		dst[0] = src1[0];
@@ -453,6 +463,7 @@ static inline void scale3x_32_def_whole(scale3x_uint32* restrict dst0, scale3x_u
 		dst0[0] = src1[0];
 		dst0[1] = (src1[0] == src0[0] && src1[0] != src0[1]) || (src1[1] == src0[0] && src1[0] != src0[0]) ? src0[0] : src1[0];
 		dst0[2] = src1[1] == src0[0] ? src1[1] : src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst1[0] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst1[1] = src1[0];
 		dst1[2] = (src1[1] == src0[0] && src1[0] != src2[1]) || (src1[1] == src2[0] && src1[0] != src0[1]) ? src1[1] : src1[0];
@@ -518,6 +529,7 @@ static inline void scale3x_32_def_whole(scale3x_uint32* restrict dst0, scale3x_u
 		dst0[2] = src1[0];
 		dst1[0] = (src1[-1] == src0[0] && src1[0] != src2[-1]) || (src1[-1] == src2[0] && src1[0] != src0[-1]) ? src1[-1] : src1[0];
 		dst1[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst1[2] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst2[0] = src1[-1] == src2[0] ? src1[-1] : src1[0];
 		dst2[1] = (src1[-1] == src2[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src2[-1]) ? src2[0] : src1[0];
@@ -592,6 +604,7 @@ static inline void scale3x_32_def_center(scale3x_uint32* restrict dst, const sca
 
 	/* first pixel */
 	if (src0[0] != src2[0] && src1[0] != src1[1]) {
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[0] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 		dst[1] = src1[0];
 		dst[2] = (src1[1] == src0[0] && src1[0] != src2[1]) || (src1[1] == src2[0] && src1[0] != src0[1]) ? src1[1] : src1[0];
@@ -629,6 +642,7 @@ static inline void scale3x_32_def_center(scale3x_uint32* restrict dst, const sca
 	if (src0[0] != src2[0] && src1[-1] != src1[0]) {
 		dst[0] = (src1[-1] == src0[0] && src1[0] != src2[-1]) || (src1[-1] == src2[0] && src1[0] != src0[-1]) ? src1[-1] : src1[0];
 		dst[1] = src1[0];
+    //TODO: One should check ?: operator carefully - both branches are equal to src1[0]
 		dst[2] = (src1[0] == src0[0] && src1[0] != src2[0]) || (src1[0] == src2[0] && src1[0] != src0[0]) ? src1[0] : src1[0];
 	} else {
 		dst[0] = src1[0];

@@ -27,6 +27,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Music.h"
+#include "../Engine/Timer.h"
 
 namespace OpenXcom
 {
@@ -40,10 +41,11 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 	// Create objects
 	_screen = new InteractiveSurface(320, 200, 0, 0);
 	_txtText.push_back(new Text(195, 56, 5, 0));
-	_txtText.push_back(new Text(232, 56, 88, 144));
+	_txtText.push_back(new Text(232, 64, 88, 136));
 	_txtText.push_back(new Text(254, 48, 66, 152));
 	_txtText.push_back(new Text(300, 200, 5, 0));
 	_txtText.push_back(new Text(310, 42, 5, 158));
+	_timer = new Timer(20000);
 
 	add(_screen);
 	// Set up objects
@@ -60,6 +62,9 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 		add(_txtText[text]);
 		_txtText[text]->setVisible(false);
 	}
+
+	_timer->onTimer((StateHandler)&VictoryState::windowClick);
+	_timer->start();
 }
 
 /**
@@ -74,6 +79,12 @@ void VictoryState::init()
 {
 	nextScreen();
 }
+
+void VictoryState::think()
+{
+	_timer->think(this, 0);
+}
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

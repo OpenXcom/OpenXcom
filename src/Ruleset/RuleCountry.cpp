@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#define _USE_MATH_DEFINES
 #include "RuleCountry.h"
 #include "../Engine/RNG.h"
+#include <math.h>
 
 namespace OpenXcom
 {
@@ -63,26 +65,24 @@ void RuleCountry::load(const YAML::Node &node)
 		else if (key == "labelLon")
 		{
 			i.second() >> _labelLon;
+			_labelLon *= M_PI / 180;
 		}
 		else if (key == "labelLat")
 		{
 			i.second() >> _labelLat;
+			_labelLat *= M_PI / 180;
 		}
-		else if (key == "lonMin")
+		else if (key == "areas")
 		{
-			i.second() >> _lonMin;
-		}
-		else if (key == "lonMax")
-		{
-			i.second() >> _lonMax;
-		}
-		else if (key == "latMin")
-		{
-			i.second() >> _latMin;
-		}
-		else if (key == "latMax")
-		{
-			i.second() >> _latMax;
+			for (size_t j = 0; j != i.second().size(); ++j)
+			{
+				std::vector<double> k;
+				i.second()[j] >> k;
+				_lonMin.push_back(k[0] * M_PI / 180);
+				_lonMax.push_back(k[1] * M_PI / 180);
+				_latMin.push_back(k[2] * M_PI / 180);
+				_latMax.push_back(k[3] * M_PI / 180);
+			}
 		}
 	}
 }

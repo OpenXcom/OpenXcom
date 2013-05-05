@@ -27,30 +27,38 @@
 #include "../Interface/TextButton.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/AlienMission.h"
+#include "../Savegame/Ufo.h"
+#include "../Ruleset/RuleRegion.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
 
 BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _base(base)
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 	_screen = false;
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20);
-	_btnConfirm = new TextButton(100, 20, 110, 142);
+	_btnOk = new TextButton(100, 20, 110, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
+
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 	
 	add(_window);
-	add(_btnConfirm);
+	add(_btnOk);
 	add(_txtMessage);
 	
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnConfirm->setColor(Palette::blockOffset(8)+5);
-	_btnConfirm->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnConfirm->onMouseClick((ActionHandler)&BaseDestroyedState::btnConfirmClick);
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 		
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
@@ -59,6 +67,37 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE") << _base->getName();
 	_txtMessage->setText(ss.str());
+	std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin();
+	for (; k != _game->getSavedGame()->getRegions()->end(); ++k)
+	{
+		if ((*k)->getRules()->insideRegion((base)->getLongitude(), (base)->getLatitude()))
+		{
+			break;
+		}
+	}
+	AlienMission* am = _game->getSavedGame()->getAlienMission((*k)->getRules()->getType(), "STR_ALIEN_RETALIATION");
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+	{
+		if ((*i)->getMission() == am)
+		{
+			delete *i;
+			i = _game->getSavedGame()->getUfos()->erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+	for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
+		i != _game->getSavedGame()->getAlienMissions().end(); ++i)
+	{
+		if ((AlienMission*)(*i) == am)
+		{
+			delete (*i);
+			_game->getSavedGame()->getAlienMissions().erase(i);
+			break;
+		}
+	}
 }
 
 /**
@@ -69,17 +108,18 @@ BaseDestroyedState::~BaseDestroyedState()
 }
 
 /**
- *
+ * Resets the palette.
  */
 void BaseDestroyedState::init()
 {
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BaseDestroyedState::btnConfirmClick(Action *)
+void BaseDestroyedState::btnOkClick(Action *)
 {
 	_game->popState();
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)

@@ -38,11 +38,35 @@
 #include "../Savegame/Node.h"
 #include "../Battlescape/Position.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
 
+namespace
+{
+	
+struct HairBleach
+{
+	static const Uint8 ColorGroup = 15<<4;
+	static const Uint8 ColorShade = 15;
+
+	static const Uint8 Hair = 9 << 4;
+	static const Uint8 Face = 6 << 4;
+	static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
+	{
+		if(src > cutoff && src <= Face + 15)
+		{
+			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
+		}
+	}
+};
+
+}
+	
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
@@ -370,14 +394,11 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 
 		// Load sounds
 		std::string catsId[] = {"GEO.CAT",
-								"BATTLE.CAT",
-								"INTRO.CAT"};
+								"BATTLE.CAT"};
 		std::string catsDos[] = {"SOUND2.CAT",
-								 "SOUND1.CAT",
-								 "INTRO.CAT"};
+								"SOUND1.CAT"};
 		std::string catsWin[] = {"SAMPLE.CAT",
-								 "SAMPLE2.CAT",
-								 "SAMPLE3.CAT"};
+								"SAMPLE2.CAT"};
 
 		// Check which sound version is available
 		std::string *cats = 0;
@@ -397,11 +418,13 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 			wav = false;
 		}
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < 2; ++i)
 		{
 			if (cats == 0)
 			{
-				throw Exception(cats[i] + " not found");
+				std::stringstream ss;
+				ss << catsDos[i] << " not found";
+				throw Exception(ss.str());
 			}
 			else
 			{
@@ -411,6 +434,26 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
 			}
 		}
+		
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")))
+		{
+			SoundSet *s = _sounds["INTRO.CAT"] = new SoundSet();
+			s->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
+		} else
+		{
+			Log(LOG_WARNING) << "INTRO.CAT is missing! :(";
+		}
+
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
+		{
+			SoundSet *s = _sounds["SAMPLE3.CAT"] = new SoundSet();
+			wav = true;
+			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
+		} else
+		{
+			Log(LOG_WARNING) << "SAMPLE3.CAT is missing! :(";
+		}
+		
 	}
 
 	TextButton::soundPress = getSound("GEO.CAT", 0);
@@ -419,6 +462,43 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	Window::soundPopup[2] = getSound("GEO.CAT", 3);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
+	
+	//"fix" of hair color of male personal armor
+	SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
+	
+	for(int i=0; i< 16; ++i )
+	{
+		//cheast frame
+		Surface *s = xcom_1->getFrame(4*8 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(s);
+		GraphSubset dim = head.getBaseDomain();
+		s->lock();
+		dim.beg_y = 6;
+		dim.end_y = 9;
+		head.setDomain(dim);
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+5));
+		dim.beg_y = 9;
+		dim.end_y = 10;
+		head.setDomain(dim);
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
+		s->unlock();
+	}
+	
+	for(int i=0; i< 3; ++i )
+	{
+		//fall frame
+		Surface *s = xcom_1->getFrame(264 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(s);
+		GraphSubset dim = head.getBaseDomain();
+		dim.beg_y = 0;
+		dim.end_y = 24;
+		dim.beg_x = 11;
+		dim.end_x = 20;
+		head.setDomain(dim);
+		s->lock();
+		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
+		s->unlock();
+	}
 }
 
 /**

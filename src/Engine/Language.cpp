@@ -191,7 +191,7 @@ public:
 	static PluralityRules *create() { return new HungarianRules; }
 };
 
-const char *HungarianRules::getSuffix(unsigned n) const
+const char *HungarianRules::getSuffix(unsigned) const
 {
 	return "_1";
 }
@@ -620,6 +620,26 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
 	replace(txt, marker, val);
 	return txt;
+}
+
+/**
+ * Returns the localized text with the specified ID, in the proper form for the gender.
+ * If it's not found, just returns the ID.
+ * @param id ID of the string.
+ * @return String with the requested ID.
+ */
+const LocalizedText &Language::getString(const std::string &id, SoldierGender gender) const
+{
+	std::string genderId;
+	if (gender == GENDER_MALE)
+	{
+		genderId = id + "_MALE";
+	}
+	else
+	{
+		genderId = id + "_FEMALE";
+	}
+	return getString(genderId);
 }
 
 /**

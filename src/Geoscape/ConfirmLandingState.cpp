@@ -38,6 +38,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Geoscape/GeoscapeState.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -58,7 +59,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
 	_txtCraft = new Text(206, 16, 25, 40);
-	_txtTarget = new Text(206, 16, 25, 88);
+	_txtTarget = new Text(206, 32, 25, 88);
 	_txtReady = new Text(206, 32, 25, 56);
 	_txtBegin = new Text(206, 16, 25, 130);
 
@@ -80,10 +81,12 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+10);
 	_txtCraft->setBig();
@@ -93,6 +96,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_txtTarget->setColor(Palette::blockOffset(8)+10);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
+	_txtTarget->setWordWrap(true);
 	_txtTarget->setText(_craft->getDestination()->getName(_game->getLanguage()));
 
 	_txtReady->setColor(Palette::blockOffset(8)+5);

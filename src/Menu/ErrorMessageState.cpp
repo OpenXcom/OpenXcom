@@ -25,6 +25,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -73,7 +74,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_txtMessage = new Text(246, 80, 37, 50);
 
 	// Set palette
-	if (bgColor != -1)
+	if (bgColor != ((Uint8)-1))
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
@@ -87,6 +88,8 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_btnOk->setColor(color);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ErrorMessageState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtMessage->setColor(color);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -98,7 +101,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	else
 		_txtMessage->setText(_game->getLanguage()->getString(str));
 
-	if (bgColor == -1)
+	if (bgColor == ((Uint8)-1))
 	{
 		_window->setHighContrast(true);
 		_btnOk->setHighContrast(true);

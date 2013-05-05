@@ -35,13 +35,13 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _contrast(false),
-																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_allowScrollOnArrowButtons = true;
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
 	_up->setVisible(false);
 	_up->setTextList(this);
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + 4, getY() + getHeight() - 12);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 12);
 	_down->setVisible(false);
 	_down->setTextList(this);
 }
@@ -678,10 +678,17 @@ void TextList::updateArrows()
 /**
  * Changes whether the list can be scrolled.
  * @param scrolling True to allow scrolling, false otherwise.
+ * @param scrollPos Custom X position for the scroll buttons.
  */
-void TextList::setScrolling(bool scrolling)
+void TextList::setScrolling(bool scrolling, int scrollPos)
 {
 	_scrolling = scrolling;
+	if (scrollPos != _scrollPos)
+	{
+		_scrollPos = scrollPos;
+		_up->setX(getX() + getWidth() + _scrollPos);
+		_down->setX(getX() + getWidth() + _scrollPos);
+	}
 }
 
 /**
@@ -880,6 +887,14 @@ void TextList::mouseOut(Action *action, State *state)
 	}
 
 	InteractiveSurface::mouseOut(action, state);
+}
+/*
+ * get the scroll depth.
+ * @return scroll depth.
+ */
+int TextList::getScroll()
+{
+	return _scroll;
 }
 
 }

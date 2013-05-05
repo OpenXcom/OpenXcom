@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 class TextButton;
+class ToggleTextButton;
 class Window;
 class Text;
 class TextEdit;
@@ -38,6 +39,8 @@ class ArrowButton;
 class OptionsState : public State
 {
 private:
+	static const std::string GL_EXT, GL_FOLDER, GL_STRING;
+
 	Window *_window;
 	Text *_txtTitle;
 	Text *_txtDisplayResolution, *_txtDisplayX;
@@ -45,13 +48,18 @@ private:
 	ArrowButton *_btnDisplayUp, *_btnDisplayDown;
 	Text *_txtDisplayMode;
 	TextButton *_displayMode, *_btnDisplayWindowed, *_btnDisplayFullscreen;
+	Text *_txtDisplayFilter;
+    TextButton *_btnDisplayFilter;
 	Text *_txtMusicVolume;
 	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
 	Text *_txtSoundVolume;
 	TextButton *_soundVolume, *_btnSoundVolume1, *_btnSoundVolume2, *_btnSoundVolume3, *_btnSoundVolume4, *_btnSoundVolume5;
-	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls;
+	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls, *_btnAdvanced;
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
+	bool _wClicked, _hClicked;
+	std::vector<std::string> _filters, _filterPaths;
+	size_t _selFilter;
 public:
 	/// Creates the Options state.
 	OptionsState(Game *game);
@@ -71,6 +79,14 @@ public:
 	void btnDisplayUpClick(Action *action);
 	/// Handler for clicking the Previous Resolution button.
 	void btnDisplayDownClick(Action *action);
+	/// unclick height if necessary.
+	void txtDisplayWidthClick(Action *action);
+	/// unclick width if necessary.
+	void txtDisplayHeightClick(Action *action);
+    /// Handler for clicking the Display Filter button
+    void btnDisplayFilterClick(Action *action);
+    /// Handler for clicking the advanced options button
+    void btnAdvancedClick(Action *action);
 };
 
 }

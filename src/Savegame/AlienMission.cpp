@@ -19,6 +19,7 @@
 #include "AlienMission.h"
 #include "AlienBase.h"
 #include "Base.h"
+#include "../aresame.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
@@ -33,6 +34,7 @@
 #include "SavedGame.h"
 #include "TerrorSite.h"
 #include "Ufo.h"
+#include "Craft.h"
 #include "Region.h"
 #include "Country.h"
 #include "Waypoint.h"
@@ -51,13 +53,12 @@ namespace {
 std::pair<double, double> getLandPoint(const OpenXcom::Globe &globe, const OpenXcom::RuleRegion &region, unsigned zone)
 {
 	std::pair<double, double> pos;
-	int tries = 0;
 	do
 	{
 		pos = region.getRandomPoint(zone);
-		++tries;
 	}
-	while (!globe.insideLand(pos.first, pos.second) && tries < 1000);
+	while (!globe.insideLand(pos.first, pos.second)
+		&& !region.insideRegion(pos.first, pos.second));
 	return pos;
 
 }
@@ -206,25 +207,15 @@ void AlienMission::think(Game &engine, const Globe &globe)
 				break;
 			}
 		}
+
+		spawnAlienBase(ufo, globe, engine);
+
 		// Infiltrations loop for ever.
 		_nextWave = 0;
 	}
 	if (_rule.getType() == "STR_ALIEN_BASE" && _nextWave == _rule.getWaveCount())
 	{
-		// Once the last UFO is spawned, the aliens build their base.
-		// TODO: Find out what should actually be the location.
-		// For now we use the last non-exit zone of the last UFO for the location.
-		assert(ufo);
-		const RuleRegion &regionRules = *ruleset.getRegion(_region);
-		unsigned zone = ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2);
-		std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
-		AlienBase *ab = new AlienBase();
-		ab->setAlienRace(_race);
-		ab->setId(game.getId("STR_ALIEN_BASE"));
-		ab->setLongitude(pos.first);
-		ab->setLatitude(pos.second);
-		game.getAlienBases()->push_back(ab);
-		addScore(pos.first, pos.second, engine);
+		spawnAlienBase(ufo, globe, engine);
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
@@ -362,7 +353,7 @@ public:
 	/// Remember the query coordinates.
 	MatchBaseCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
 	/// Match with base's coordinates.
-	bool operator()(const Base *base) const { return _lon == base->getLongitude() && _lat == base->getLatitude(); }
+	bool operator()(const Base *base) const { return AreSame(base->getLongitude(), _lon) && AreSame(base->getLatitude(), _lat); }
 private:
 	double _lon, _lat;
 };
@@ -417,7 +408,6 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			// Remove UFO, replace with TerrorSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			ufo.setStatus(Ufo::DESTROYED);
-			ufo.setDetected(false);
 			TerrorSite *terrorSite = new TerrorSite();
 			terrorSite->setLongitude(ufo.getLongitude());
 			terrorSite->setLatitude(ufo.getLatitude());
@@ -427,6 +417,19 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			const City *city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
 			assert(city);
 			game.getTerrorSites()->push_back(terrorSite);
+			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
+			{
+				Craft* c = dynamic_cast<Craft*>(*t);
+				if (c && c->getNumSoldiers() != 0)
+				{
+					c->setDestination(terrorSite);
+					t = ufo.getFollowers()->begin();
+				}
+				else
+				{
+					++t;
+				}
+			}
 		}
 		else if (_rule.getType() == "STR_ALIEN_RETALIATION" && ufo.getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 		{
@@ -611,4 +614,24 @@ void AlienMission::addScore(const double lon, const double lat, Game &engine)
 		}
 	}
 }
+
+void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
+{
+	SavedGame &game = *engine.getSavedGame();
+	const Ruleset &ruleset = *engine.getRuleset();
+	// Once the last UFO is spawned, the aliens build their base.
+	// TODO: Find out what should actually be the location.
+	// For now we use the last non-exit zone of the last UFO for the location.
+	const RuleRegion &regionRules = *ruleset.getRegion(_region);
+	unsigned zone = ufo ? ufo->getTrajectory().getZone(ufo->getTrajectory().getWaypointCount() - 2) : 0;
+	std::pair<double, double> pos = getLandPoint(globe, regionRules, zone);
+	AlienBase *ab = new AlienBase();
+	ab->setAlienRace(_race);
+	ab->setId(game.getId("STR_ALIEN_BASE"));
+	ab->setLongitude(pos.first);
+	ab->setLatitude(pos.second);
+	game.getAlienBases()->push_back(ab);
+	addScore(pos.first, pos.second, engine);
+}
+
 }

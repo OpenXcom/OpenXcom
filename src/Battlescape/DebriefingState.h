@@ -53,8 +53,8 @@ private:
 	std::vector<DebriefingStat*> _stats;
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtUfoRecovery, *_txtRating;
-	TextList *_lstStats, *_lstUfoRecovery, *_lstTotal;
+	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtRecovery, *_txtRating;
+	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	ItemContainer *_bullets;
 	void addStat(const std::string &name, int quantity, int score);

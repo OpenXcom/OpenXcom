@@ -53,6 +53,8 @@ public:
 	std::string getResult() const;
 	/// Convert a unit to a corpse.
 	void convertUnitToCorpse();
+	/// Play the death sound
+	void playDeathSound();
 };
 
 }

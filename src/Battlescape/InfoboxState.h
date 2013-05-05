@@ -44,11 +44,12 @@ public:
 	InfoboxState(Game *game, const std::wstring &msg);
 	/// Cleans up the Infobox state.
 	~InfoboxState();
+	/// Handler for clicking anything.
+	void handle(Action *action);
 	/// Handles the timers.
 	void think();
 	/// Closes the window.
 	void close();
-	void draw();
 
 };
 

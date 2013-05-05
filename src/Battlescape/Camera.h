@@ -36,40 +36,47 @@ class Map;
 class Camera
 {
 private:
-	static const int SCROLL_BORDER = 5;
-	static const int SCROLL_DIAGONAL_EDGE = 60;
 	Timer *_scrollTimer;
 	int _spriteWidth, _spriteHeight;
-	int _mapWidth, _mapLength, _mapHeight;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
 	int _screenWidth, _screenHeight;
 	Position _mapOffset, _center;
 	int _scrollX, _scrollY;
+	bool _scrollTrigger;
 	int _visibleMapHeight;
 	bool _showAllLayers;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
 	Map *_map;
 public:
+	static const int SCROLL_BORDER = 5;
+	static const int SCROLL_DIAGONAL_EDGE = 60;
 	/// Creates a new camera.
-	Camera(int spriteWidth, int spriteHeight, int mapWidth, int mapLength, int mapHeight, Map *map, int visibleMapHeight);
+	Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight);
 	/// Cleans up the camera.
 	~Camera();
 	void setScrollTimer(Timer *timer);
-	/// Special handling for mouse clicks.
-	void mouseClick(Action *action, State *state);
+	/// Special handling for mouse press.
+	void mousePress(Action *action, State *state);
+	/// Special handling for mouse release.
+	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse over
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
+	/// Special handling for key releases.
+	void keyboardRelease(Action *action, State *state);
 	/// Scrolls the view (eg when mouse is on the edge of the screen)
 	void scroll();
 	/// Scrolls the view (when mouse-scrolling)
-	bool scrollXY(int x, int y, bool redraw);
+	void scrollXY(int x, int y, bool redraw);
+	/// Jump the view (when projectile in motion)
+	void jumpXY(int x, int y);
 	/// move map layer up
 	void up();
 	/// move map layer down
 	void down();
-	/// set view height
-	void setViewHeight(int viewheight);
+	/// set view level
+	void setViewLevel(int viewlevel);
 	/// Converts map coordinates to screen coordinates.
 	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
 	/// Converts voxel coordinates to screen coordinates.
@@ -83,9 +90,9 @@ public:
 	/// Check if the camera was following a bullet.
 	bool didCameraFollow();
 	/// Get the map displayed level
-	int getViewHeight() const;
-	int getMapWidth() const;
-	int getMapLength() const;
+	int getViewLevel() const;
+	int getMapSizeX() const;
+	int getMapSizeY() const;
 	/// Get the map x/y screen offset
 	Position getMapOffset();
 	/// Set the map x/y screen offset

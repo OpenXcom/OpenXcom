@@ -28,6 +28,7 @@ namespace OpenXcom
 	class Game;
 	class Text;
 	class ArticleStateTextImage;
+	class ArticleDefinitionTextImage;
 
 	/**
 	 * ArticleStateTextImage has a title, text block and a background image.

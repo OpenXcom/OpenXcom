@@ -20,6 +20,7 @@
 #include <sstream>
 #include <climits>
 #include <cmath>
+#include "../aresame.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -55,8 +56,9 @@ namespace OpenXcom
  */
 TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _aOffset(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _distance(0.0)
 {
-	bool allowChangeListValuesByMouseWheel=Options::getBool("allowChangeListValuesByMouseWheel");
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
+	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -138,7 +140,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	}
 	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
 	{
-		if ((*i)->getStatus() != "STR_OUT")
+		if ((*i)->getStatus() != "STR_OUT" || (_canTransferCraftsWhileAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
@@ -263,13 +265,14 @@ void TransferItemsState::completeTransfer()
 				{
 					if ((*s)->getCraft() == craft)
 					{
-						 if((*s)->isInPsiTraining())
-						 {
-							 (*s)->setPsiTraining();
-						 }
-						Transfer *t = new Transfer(time);
-						t->setSoldier(*s);
-						_baseTo->getTransfers()->push_back(t);
+						if ((*s)->isInPsiTraining()) (*s)->setPsiTraining();
+						if (craft->getStatus() == "STR_OUT") _baseTo->getSoldiers()->push_back(*s);
+						else
+						{
+							Transfer *t = new Transfer(time);
+							t->setSoldier(*s);
+							_baseTo->getTransfers()->push_back(t);
+						}
 						s = _baseFrom->getSoldiers()->erase(s);
 					}
 					else
@@ -283,9 +286,28 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*c == craft)
 					{
-						Transfer *t = new Transfer(time);
-						t->setCraft(*c);
-						_baseTo->getTransfers()->push_back(t);
+						if (craft->getStatus() == "STR_OUT")
+						{
+							bool returning = (craft->getDestination() == (Target*)craft->getBase());
+							_baseTo->getCrafts()->push_back(craft);
+							craft->setBaseOnly(_baseTo);
+							if (craft->getFuel() <= craft->getFuelLimit(_baseTo))
+							{
+								craft->setLowFuel(true);
+								craft->returnToBase();
+							}
+							else if (returning)
+							{
+								craft->setLowFuel(false);
+								craft->returnToBase();
+							}
+						}
+						else
+						{
+							Transfer *t = new Transfer(time);
+							t->setCraft(*c);
+							_baseTo->getTransfers()->push_back(t);
+						}
 						_baseFrom->getCrafts()->erase(c);
 						break;
 					}
@@ -345,7 +367,11 @@ void TransferItemsState::lstItemsLeftArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerInc->setInterval(250);
+		_timerInc->stop();
+	}
 }
 
 /**
@@ -355,6 +381,7 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
 }
 
 /**
@@ -373,7 +400,11 @@ void TransferItemsState::lstItemsRightArrowPress(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->stop();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_timerDec->setInterval(250);
+		_timerDec->stop();
+	}
 }
 
 /**
@@ -383,6 +414,7 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
 }
 
 /**
@@ -458,6 +490,7 @@ int TransferItemsState::getQuantity()
  */
 void TransferItemsState::increase()
 {
+	_timerInc->setInterval(50);
 	increase(1);
 }
 
@@ -521,7 +554,7 @@ void TransferItemsState::increase(int change)
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
 		_qtys[_sel]++;
-		_total += getCost();
+		if (!_canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
 	}
 	// Item count
 	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
@@ -529,8 +562,11 @@ void TransferItemsState::increase(int change)
 		float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSize();
 		float freeStores = (float)(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
 		int freeStoresForItem;
-		if (0 == storesNeededPerItem) freeStoresForItem = INT_MAX;
-		else freeStoresForItem = floor(freeStores / storesNeededPerItem);
+		if ( AreSame(storesNeededPerItem, 0.f) ) { 
+      freeStoresForItem = INT_MAX;
+    } else {
+      freeStoresForItem = floor(freeStores / storesNeededPerItem);
+    }
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _qtys[_sel]), change);
 		_iQty += ((float)(change)) * storesNeededPerItem;
 		_qtys[_sel] += change;
@@ -553,6 +589,7 @@ void TransferItemsState::increase(int change)
  */
 void TransferItemsState::decrease()
 {
+	_timerDec->setInterval(50);
 	decrease(1);
 }
 
@@ -562,6 +599,7 @@ void TransferItemsState::decrease()
 void TransferItemsState::decrease(int change)
 {
 	if (0 >= change || 0 >= _qtys[_sel]) return;
+	Craft *craft = 0;
 	change = std::min(_qtys[_sel], change);
 	// Personnel count
 	if (_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset))
@@ -569,7 +607,7 @@ void TransferItemsState::decrease(int change)
 	// Craft count
 	else if (_sel >= _soldiers.size() && _sel < _soldiers.size() + _crafts.size())
 	{
-		Craft *craft = _crafts[_sel - _soldiers.size()];
+		craft = _crafts[_sel - _soldiers.size()];
 		_cQty--;
 		_pQty -= craft->getNumSoldiers();
 	}
@@ -579,7 +617,8 @@ void TransferItemsState::decrease(int change)
 	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
 		_aQty -= change;
 	_qtys[_sel] -= change;
-	_total -= getCost() * change;
+	if (!_canTransferCraftsWhileAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
+		_total -= getCost() * change;
 	updateItemStrings();
 }
 

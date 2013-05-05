@@ -720,7 +720,7 @@ PEQUEÑO
 STR_VERY_SMALL
 MUY PEQUEÑO
 STR_GROUND
-EN TIERRA
+Suelo
 STR_DETECTED
 Detectado
 STR_SIZE_UC
@@ -912,63 +912,63 @@ STR_LIVE_SOLDIER
 STR_LIVE_TERRORIST
  Terrorista
 STR_FLOATER_SOLDIER
-Soldado flotador
+Soldado Flotador
 STR_FLOATER_NAVIGATOR
-Navegante flotador
+Navegante Flotador
 STR_FLOATER_MEDIC
-Médico flotador
+Médico Flotador
 STR_FLOATER_ENGINEER
-Técnico flotador
+Técnico Flotador
 STR_FLOATER_LEADER
-Lider flotador
+Lider Flotador
 STR_FLOATER_COMMANDER
-Comandante flotador
+Comandante Flotador
 STR_SECTOID_SOLDIER
-Sectoid Soldier
+Soldado Sectoide
 STR_SECTOID_NAVIGATOR
-Sectoid Navigator
+Navegante Sectoide
 STR_SECTOID_MEDIC
-Sectoid Medic
+Médico Sectoide
 STR_SECTOID_ENGINEER
-Sectoid Engineer
+Técnico Sectoide
 STR_SECTOID_LEADER
-Sectoid Leader
+Lider Sectoide
 STR_SECTOID_COMMANDER
-Sectoid Commander
+Comandante Sectoide
 STR_SNAKEMAN_SOLDIER
-Snakeman Soldier
+Soldado Hombre-serpiente
 STR_SNAKEMAN_NAVIGATOR
-Snakeman Navigator
+Navegante Hombre-serpiente
 STR_SNAKEMAN_ENGINEER
-Snakeman Engineer
+Técnico Hombre-serpiente
 STR_SNAKEMAN_LEADER
-Snakeman Leader
+Lider Hombre-serpiente
 STR_SNAKEMAN_COMMANDER
-Snakeman Commander
+Comandante Hombre-serpiente
 STR_MUTON_SOLDIER
-Muton Soldier
+Soldado Mutante
 STR_MUTON_NAVIGATOR
-Muton Navigator
+Navegante Mutante
 STR_MUTON_ENGINEER
-Muton Engineer
+Técnico Mutante
 STR_ETHEREAL_SOLDIER
-Ethereal Soldier
+Soldado Etéreo
 STR_ETHEREAL_LEADER
-Ethereal Leader
+Lider Etéreo
 STR_ETHEREAL_COMMANDER
-Ethereal Commander
+Comandante Etéreo
 STR_CYBERDISC_TERRORIST
-Cyberdisc Terrorist
+Terrorista Ciberdisco
 STR_REAPER_TERRORIST
-Reaper Terrorist
+Terrorista Segador
 STR_CHRYSSALID_TERRORIST
-Chryssalid Terrorist
+Terrorista Crisálida
 STR_CELATID_TERRORIST
-Celatid Terrorist
+Terrorista Celátido
 STR_SILACOID_TERRORIST
-Silacoid Terrorist
+Terrorista Silacoide
 STR_SECTOPOD_TERRORIST
-Sectopod Terrorist
+Terrorista Sectópodo
 STR_UFO_POWER_SOURCE
 Fuente de energía de OVNI
 STR_UFO_NAVIGATION
@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 La partida está guardada.
 STR_DELETE
 BORRAR
+STR_DELETE_UNSUCCESSFUL
+No se ha podido borrar la partida.
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Anterior partida de X-Com detectada.
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -1940,13 +1942,13 @@ CABEZA
 STR_TORSO
 TORSO
 STR_RIGHT_ARM
-BRAZO DERECHO
+Brazo Dcho.
 STR_LEFT_ARM
-BRAZO IZQUIERDO
+Brazo Izdo.
 STR_RIGHT_LEG
-PIERNA DERECHA
+Pierna Dcha.
 STR_LEFT_LEG
-PIERNA IZQUIERDA
+Pierna Izda.
 STR_PAIN_KILLER
 CALMANTE
 STR_STIMULANT
@@ -1972,11 +1974,11 @@ MUNICIóN:{NEWLINE}DISPAROS{NEWLINE}QUE QUEDAN=
 STR_THROW
 Lanzar
 STR_AUTO_SHOT
-Disparo automático
+Disparo auto.
 STR_SNAP_SHOT
 Disparo rápido
 STR_AIMED_SHOT
-Disparo de precisión
+Disparo preciso
 STR_OPEN
 Abrir
 STR_CLOSE
@@ -2037,9 +2039,13 @@ STR_PANIC_UNIT
 Causar pánico
 STR_MIND_CONTROL_SUCCESSFUL
 Control mental satisfactorio
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 ha enloquecido
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+ha enloquecido
+STR_HAS_PANICKED_MALE
+es presa del pánico
+STR_HAS_PANICKED_FEMALE
 es presa del pánico
 STR_XCOM
 XCom
@@ -2048,11 +2054,11 @@ Alienígenas
 STR_RIGHT_HAND
 Mano Dcha.
 STR_LEFT_HAND
-Mano Izquierda
+Mano Izda.
 STR_RIGHT_SHOULDER
-Hombro Derecho
+Hombro Dcho.
 STR_LEFT_SHOULDER
-Hombro Izquierdo
+Hombro Izdo.
 STR_BACK_PACK
 Mochila
 STR_BELT
@@ -2073,9 +2079,13 @@ STR_XCOM_MOVEMENT_SPEED
 VELOCIDAD DE MOVIMIENTO XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VELOCIDAD DE MOVIMIENTO ALIENÍGENA
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  ha perdido el sentido
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ ha perdido el sentido
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ ha muerto a causa de una herida mortal
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  ha muerto a causa de una herida mortal
 STR_USE_MIND_PROBE
 Usar sonda mental
@@ -2132,9 +2142,9 @@ Batalla Aleatoria
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
 No hay suficiente {1} para armar PAP
 STR_DAY_1
-{N} dia
+{N} día
 STR_DAY_2
-{N} dias
+{N} días
 STR_MIXED
 Mezclado
 STR_RIGHT_CLICK_TO_DELETE
@@ -2144,20 +2154,22 @@ Equipo para {1}
 STR_SELECT_SQUAD_FOR_craftname
 Elige Tripulacion para {1}
 STR_n_UNITS_IN_EXIT_AREA_0
-No hay unidades en el area de salida
+Sin unidades en area de salida
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} unidad en el area de salida
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} unidades en el area de salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_0
-No hay unidades fuera del area de salida
+Sin unidades fuera de area salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} unidad fuera del area de salida
+{N} unidad fuera area de salida
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} unidades fuera del area de salida
+{N} unidades fuera area salida
 STR_ABANDON_GAME_QUESTION
 ¿ABANDONAR EL JUEGO?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
+ha muerto
+STR_HAS_BEEN_KILLED_FEMALE
 ha muerto
 STR_DRAG_SCROLL
 DESPLAZAR ARRASTRANDO
@@ -2234,9 +2246,9 @@ No Reservar UTs
 STR_RESERVE_TUS_FOR_SNAP_SHOT
 Reservar UTs para Disparo Rápido
 STR_RESERVE_TUS_FOR_AIMED_SHOT
-Reservar UTs para Disparo de Precisión
+Reservar UTs para Disparo Preciso
 STR_RESERVE_TUS_FOR_AUTO_SHOT
-Reservar UTs para Disparo Automático
+Reservar UTs para Disparo Auto.
 STR_CENTER_ON_ENEMY_1
 Centrar en Enemigo 1
 STR_CENTER_ON_ENEMY_2
@@ -2255,3 +2267,111 @@ STR_CENTER_ON_ENEMY_8
 Centrar en Enemigo 8
 STR_CENTER_ON_ENEMY_9
 Centrar en Enemigo 9
+STR_ENEMY_WEAPON_LEVEL
+Nivel de Armas del Enemigo
+STR_GROUNDED
+EN TIERRA
+STR_LIVING_QUARTERS_PLURAL
+Alojamientos
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+ELEMENTO
+STR_DISPLAY_FILTER
+Mostrar Filtro
+STR_ADVANCED
+AVANZADO
+STR_ADVANCED_OPTIONS
+OPCIONES AVANZADAS
+STR_AGGRESSIVERETALIATION
+Represalia Agresiva
+STR_AGGRESSIVERETALIATION_DESC
+Los OVNIs intentarán detectar tus bases siempre, independientemente de sus parametros de misión.
+STR_ALIENCONTAINMENTHASUPPERLIMIT
+Límites de contención alienígena
+STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+Se impondrán límites a la contención de alienígenas.
+STR_CANSELLLIVEALIENS
+Venta de alienígenas vivos
+STR_CANSELLLIVEALIENS_DESC
+Permite la venta de alienígenas vivos, recomendado al usar limites de contención.
+STR_ALLOWAUTOSELLPRODUCTION
+Auto-venta de produción
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Click dcho. en el botón de aumentar el "total a producir" de un proyecto de manufactura para auto-vender.
+STR_ALLOWBUILDINGQUEUE
+Permitir cola de construción
+STR_ALLOWBUILDINGQUEUE_DESC
+Las instalaciones sin terminar actuan como enlace al ascensor de acceso cuando se ubican nuevas instalaciones.
+STR_BATTLEAUTOEND
+Auto-finalizar batalla
+STR_BATTLEAUTOEND_DESC
+Las batallas finalizan automaticamente cuando el último enemigo vivo es neutralizado.
+STR_BATTLEINSTANTGRENADE
+Granadas instantaneas
+STR_BATTLEINSTANTGRENADE_DESC
+Las granadas cuyo temporizador haya sido puesto a 0 turnos explotarán inmediatamente al arrojarlas, en lugar de al final del turno.
+STR_BATTLENOTIFYDEATH
+Mostrar notificación de bajas
+STR_BATTLENOTIFYDEATH_DESC
+Muestra notificaciones cada vez que un soldado muere.
+STR_BATTLEPREVIEWPATH
+Mostrar ruta previa
+STR_BATTLEPREVIEWPATH_DESC
+Click-izdo. ilumina la ruta que tu unidad seguirá para llegar al destino, doble-click mueve la unidad.
+STR_BATTLERANGEBASEDACCURACY
+Precisión basada en distancia
+STR_BATTLERANGEBASEDACCURACY_DESC
+La precisión de los disparos tiene en cuenta factores como visibilidad y distancia.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+Reglas de manufacturación TFTD
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Permite a los proyectos de manufacturación producir mas de un artículo por hora.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Transferir aeronaves en vuelo
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Las aeronaves actualmente en vuelo pueden transferirse.
+STR_CRAFTLAUNCHALWAYS
+Forzar despegue de aeronave
+STR_CRAFTLAUNCHALWAYS_DESC
+Las aeronaves podran ser enviadas a una misión sin terminar de repostar o rearmar.
+STR_CUSTOMINITIALBASE
+Base inicial personalizada
+STR_CUSTOMINITIALBASE_DESC
+Al empezar una partida nueva podras ubicar manualmente tus instalaciones en lugar de usar la distribución por defecto.
+STR_GLOBESEASONS
+Iluminar globo según inclinación
+STR_GLOBESEASONS_DESC
+Activa proyección realista de luz solar en Geoescape de acuerdo a la inclinación del eje de la tierra.
+STR_PLAYINTRO
+Mostrar introducción
+STR_PLAYINTRO_DESC
+Mostrar el video de introducción al empezar.
+STR_SHOWFUNDSONGEOSCAPE
+Mostrar fondos en Geoescape
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Expande el panel de información en Geoescape para incluir información adicional de tu situación económica.
+STR_SHOWMORESTATSININVENTORYVIEW
+Estadisticas de inventario
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Muestra información extra en la pantalla de inventario del soldado
+STR_SNEAKYAI
+IA furtiva
+STR_SNEAKYAI_DESC
+La IA evita exponerse al jugador siempre que es posible.
+STR_STRAFE
+Ajuste de bombardeo
+STR_STRAFE_DESC
+Activa el bombardeo, movimiento y movimiento independiente de la torreta del tanque. Manten pulsado CTRL para usar metodos de movimiento.
+STR_BATTLESCROLLDRAGINVERT
+Selección-desplazamiento invertido
+STR_BATTLESCROLLDRAGINVERT_DESC
+Invierte la selección-desplazamiento en el campo de batalla.
+STR_BATTLEEXPLOSIONHEIGHT
+Altura de explosión
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Cambia el area de efecto de las explosiones hacia arriba.{NEWLINE}(Plana: 0, Redonda: 3)
+STR_ALLOWPSIONICCAPTURE
+Permitir captura psiquica
+STR_ALLOWPSIONICCAPTURE_DESC
+Al controlar mentalmente a todos los alienigenas restantes la mision finaliza, y cuentan como capturados vivos.

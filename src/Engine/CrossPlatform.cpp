@@ -37,10 +37,10 @@
 #pragma comment(lib, "shlwapi.lib")
 #else
 #include <sys/stat.h>
-#include <string.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <sys/param.h>
 #include <sys/types.h>
 #include <pwd.h>
@@ -466,12 +466,9 @@ bool fileExists(const std::string &path)
 bool deleteFile(const std::string &path)
 {
 #ifdef _WIN32
-	int size = MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), NULL, 0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &path[0], (int)path.size(), &wstr[0], size);
-	return (DeleteFileW(wstr.c_str()) != 0);
+	return (DeleteFileA(path.c_str()) != 0);
 #else
-	return (remove(path.c_str()) != 0);
+	return (remove(path.c_str()) == 0);
 #endif
 }
 

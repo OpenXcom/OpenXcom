@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsControlsState.h"
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
@@ -127,10 +127,12 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsControlsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&OptionsControlsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsControlsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&OptionsControlsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -221,7 +223,7 @@ void OptionsControlsState::btnOkClick(Action *)
 	{
 		Options::setInt(_controlsGeo[i].option, _controlsGeo[i].key);
 	}
-	for (int i = 0; i < _countGeneral; ++i)
+	for (int i = 0; i < _countBattle; ++i)
 	{
 		Options::setInt(_controlsBattle[i].option, _controlsBattle[i].key);
 	}

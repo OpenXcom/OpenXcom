@@ -89,7 +89,7 @@ bool equalProduction::operator()(const Production * p) const
 /**
  * Initializes a brand new saved game according to the specified difficulty.
  */
-SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1)
+SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles("")
 {
 	RNG::init();
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
@@ -243,6 +243,9 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	{
 		_detail = true;
 	}
+	if (const YAML::Node *pName = doc.FindValue("GraphRegionToggles")) *pName >> _graphRegionToggles; else _graphRegionToggles="";
+	if (const YAML::Node *pName = doc.FindValue("GraphCountryToggles")) *pName >> _graphCountryToggles; else _graphCountryToggles="";
+	if (const YAML::Node *pName = doc.FindValue("GraphFinanceToggles")) *pName >> _graphFinanceToggles; else _graphFinanceToggles="";
 	doc["funds"] >> _funds;
 	doc["maintenance"] >> _maintenance;
 	doc["researchScores"] >> _researchScores;
@@ -326,7 +329,16 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		*it >> research;
 		_discovered.push_back(rule->getResearch(research));
 	}
-
+	
+	if (const YAML::Node *pName = doc.FindValue("poppedResearch"))
+	{
+		for(YAML::Iterator it= pName->begin();it!=pName->end();++it)
+		{
+			std::string research;
+			*it >> research;
+			_poppedResearch.push_back(rule->getResearch(research));
+		}
+	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
 	if (const YAML::Node *pName = doc.FindValue("battleGame"))
@@ -367,6 +379,9 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "monthsPassed" << YAML::Value << _monthsPassed;
 	out << YAML::Key << "radarLines" << YAML::Value << _radarLines;
 	out << YAML::Key << "detail" << YAML::Value << _detail;
+	out << YAML::Key << "GraphRegionToggles" << YAML::Value << _graphRegionToggles;
+	out << YAML::Key << "GraphCountryToggles" << YAML::Value << _graphCountryToggles;
+	out << YAML::Key << "GraphFinanceToggles" << YAML::Value << _graphFinanceToggles;
 	RNG::save(out);
 	out << YAML::Key << "funds" << YAML::Value << _funds;
 	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
@@ -438,6 +453,13 @@ void SavedGame::save(const std::string &filename) const
 	out << YAML::Key << "discovered" << YAML::Value;
 	out << YAML::BeginSeq;
 	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	{
+		out << (*i)->getName ();
+	}
+	out << YAML::EndSeq;
+	out << YAML::Key << "poppedResearch" << YAML::Value;
+	out << YAML::BeginSeq;
+	for (std::vector<const RuleResearch *>::const_iterator i = _poppedResearch.begin(); i != _poppedResearch.end(); ++i)
 	{
 		out << (*i)->getName ();
 	}
@@ -725,6 +747,7 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 	if(itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
+		removePoppedResearch(r);
 		addResearchScore(r->getPoints());
 	}
 	if(ruleset)
@@ -793,13 +816,10 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
 		
-		// i hate to do this, but it just looks so much cleaner.
-		std::vector<std::string>::const_iterator alien = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-		bool liveAlien ( alien != research->getUnlocked().end());
+		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end ())
 		{
-			// see?
 			if (!liveAlien)
 			{
 				continue;
@@ -908,8 +928,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	std::vector<std::string>::const_iterator alien = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-	bool liveAlien ( alien != r->getUnlocked().end());
+	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
 	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
@@ -996,11 +1015,9 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 	for(std::vector<RuleResearch *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
 	{
 		if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ()
-			||
-			std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research->getName()) != (*iter)->getUnlocked().end ()
-			)
+			|| std::find((*iter)->getUnlocked().begin (), (*iter)->getUnlocked().end (), research->getName()) != (*iter)->getUnlocked().end ())
 		{
-				dependables.push_back(*iter);
+			dependables.push_back(*iter);
 			if ((*iter)->getCost() == 0)
 			{
 				getDependableResearchBasic(dependables, *iter, ruleset, base);
@@ -1168,7 +1185,7 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
 				int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
 				int v3 = v2 + s->melee + s->throwing + s->strength;
-				//if (PsiSkill>0) c3 += PsiStrength + 2* PsiSkill
+				if (s->psiSkill > 0) v3 += s->psiStrength + 2 * s->psiSkill;
 				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
 				if (score > highestScore)
 				{
@@ -1334,6 +1351,57 @@ int SavedGame::getMonthsPassed() const
 }
 
 /*
+ * @return the GraphRegionToggles.
+ */
+const std::string &SavedGame::getGraphRegionToggles() const
+{
+	return _graphRegionToggles;
+}
+
+/*
+ * @return the GraphCountryToggles.
+ */
+const std::string &SavedGame::getGraphCountryToggles() const
+{
+	return _graphCountryToggles;
+}
+
+/*
+ * @return the GraphFinanceToggles.
+ */
+const std::string &SavedGame::getGraphFinanceToggles() const
+{
+	return _graphFinanceToggles;
+}
+
+/**
+ * Sets the GraphRegionToggles.
+ * @param value The new value for GraphRegionToggles.
+ */
+void SavedGame::setGraphRegionToggles(const std::string &value)
+{
+	_graphRegionToggles = value;
+}
+
+/**
+ * Sets the GraphCountryToggles.
+ * @param value The new value for GraphCountryToggles.
+ */
+void SavedGame::setGraphCountryToggles(const std::string &value)
+{
+	_graphCountryToggles = value;
+}
+
+/**
+ * Sets the GraphFinanceToggles.
+ * @param value The new value for GraphFinanceToggles.
+ */
+void SavedGame::setGraphFinanceToggles(const std::string &value)
+{
+	_graphFinanceToggles = value;
+}
+
+/*
  * Increment the month counter.
  */
 void SavedGame::addMonth()
@@ -1341,23 +1409,69 @@ void SavedGame::addMonth()
 	++_monthsPassed;
 }
 
+/*
+ * Toggles the state of the radar line drawing.
+ */
 void SavedGame::toggleRadarLines()
 {
 	_radarLines = !_radarLines;
 }
 
+/*
+ * @return the state of the radar line drawing.
+ */
 bool SavedGame::getRadarLines()
 {
 	return _radarLines;
 }
+
+/*
+ * Toggles the state of the detail drawing.
+ */
 void SavedGame::toggleDetail()
 {
 	_detail = !_detail;
 }
 
+/*
+ * @return the state of the detail drawing.
+ */
 bool SavedGame::getDetail()
 {
 	return _detail;
+}
+
+/*
+ * marks a research topic as having already come up as "we can now research"
+ * @param research is the project we want to add to the vector
+ */
+void SavedGame::addPoppedResearch(const RuleResearch* research)
+{
+	if (!wasResearchPopped(research))
+		_poppedResearch.push_back(research);
+}
+
+/*
+ * checks if an unresearched topic has previously been popped up.
+ * @param research is the project we are checking for
+ * @return whether or not it has been popped up.
+ */
+bool SavedGame::wasResearchPopped(const RuleResearch* research)
+{
+	return (std::find(_poppedResearch.begin(), _poppedResearch.end(), research) != _poppedResearch.end());
+}
+
+/*
+ * checks for and removes a research project from the "has been popped up" array
+ * @param research is the project we are checking for and removing, if necessary.
+ */
+void SavedGame::removePoppedResearch(const RuleResearch* research)
+{
+	std::vector<const RuleResearch*>::iterator r = std::find(_poppedResearch.begin(), _poppedResearch.end(), research);
+	if (r != _poppedResearch.end())
+	{
+		_poppedResearch.erase(r);
+	}
 }
 
 }

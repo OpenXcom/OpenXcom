@@ -43,7 +43,7 @@ public:
 	/// Loads sound from a chunk of memory.
 	void load(const void *data, unsigned int size);
 	/// Plays the sound.
-	void play() const;
+	void play(int channel = -1) const;
 };
 
 }

@@ -40,7 +40,10 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
 #include "UnitInfoState.h"
+#include "BattlescapeState.h"
 #include "TileEngine.h"
+#include "Map.h"
+#include "Camera.h"
 
 namespace OpenXcom
 {
@@ -50,10 +53,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param tu Inventory Time Unit mode.
  */
-InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
+InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getBattleGame();
-
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// Create objects
@@ -70,7 +72,7 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 		_txtPStr = new Text(40, 9, 245, 56);
 	}
 	_txtItem = new Text(140, 9, 128, 140);
-	_txtAmmo = new Text(64, 24, 256, 64);
+	_txtAmmo = new Text(66, 24, 254, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
 	_btnNext = new InteractiveSurface(23, 22, 297, 1);
@@ -146,8 +148,11 @@ InventoryState::InventoryState(Game *game, bool tu) : State(game), _tu(tu)
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
+	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
+	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
 	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
 	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
@@ -171,6 +176,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	unit->setCache(0);
@@ -329,11 +335,12 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	_battleGame->selectPreviousPlayerUnit();
+	_parent->selectPreviousPlayerUnit(false);
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
-		_battleGame->selectPreviousPlayerUnit();
+		_parent->selectPreviousPlayerUnit(false);
 	}
 	init();
 }
@@ -346,11 +353,12 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	_battleGame->selectNextPlayerUnit();
+	_parent->selectNextPlayerUnit(false, false);
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
-		_battleGame->selectNextPlayerUnit();
+		_parent->selectNextPlayerUnit(false, false);
 	}
 	init();
 }
@@ -458,19 +466,6 @@ void InventoryState::handle(Action *action)
 			btnNextClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
-		{
-			btnPrevClick(action);
-		}
-	}
-	if (action->getDetails()->type == SDL_KEYDOWN)
-	{
-		// "tab" - next solider
-		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
-		{
-			btnNextClick(action);
-		}
-		// prev soldier
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
 			btnPrevClick(action);
 		}

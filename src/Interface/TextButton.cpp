@@ -214,8 +214,11 @@ void TextButton::draw()
  */
 void TextButton::mousePress(Action *action, State *state)
 {
-	if (soundPress != 0 && _group == 0)
+	if (soundPress != 0 && _group == 0 &&
+		action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
+	{
 		soundPress->play();
+	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _group != 0)
 	{

@@ -20,6 +20,7 @@
 #define OPENXCOM_AGGROBAISTATE_H
 
 #include "BattleAIState.h"
+#include <vector>
 
 
 namespace OpenXcom
@@ -39,6 +40,10 @@ protected:
 	BattleUnit *_lastKnownTarget;
 	Position _lastKnownPosition;
 	int _timesNotSeen;
+	static std::vector<Position> _randomTileSearch;
+	static int _randomTileSearchAge;
+	bool _charge, _traceAI;
+	
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
@@ -56,10 +61,33 @@ public:
 	void think(BattleAction *action);
 	/// Sets aggro target, triggered by reaction fire.
 	void setAggroTarget(BattleUnit *unit);
-	/// Get the aggro target, for savegame
-	BattleUnit *getAggroTarget();
-	/// decide if we should throw a grenade/launch a missile to this position
+	/// Get the aggro target, for savegame.
+	BattleUnit *getAggroTarget() const { return _aggroTarget; }
+	/// Get the last known location of target, for turning.
+	Position getLastKnownPosition() const { return _lastKnownPosition; }
+	/// decide if we should throw a grenade/launch a missile to this position.
 	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
+	/// attempt to take a melee attack/charge an enemy we can see.
+	void meleeAction(BattleAction *action);
+	/// attempt a psionic attack on an enemy we "know of".
+	void psiAction(BattleAction *action);
+	/// attempt to fire a waypoint projectile at an enemy we, or one of our teammates sees.
+	void wayPointAction(BattleAction *action);
+	/// attempt to fire at an enemy we can see.
+	void projectileAction(BattleAction *action);
+	/// attempt to throw a grenade at an enemy (or group of enemies) we can see.
+	void grenadeAction(BattleAction *action);
+	/// attempt to find cover, and move toward it.
+	void takeCoverAction(BattleAction *action);
+	/// attempt to track down an enemy we have lost sight of.
+	void stalkingAction(BattleAction *action);
+	/// should we take cover or not?
+	bool takeCoverAssessment(BattleAction *action);
+	/// select the nearest target we can see
+	void selectNearestTarget();
+	/// select the nearest moveable relative to a target
+	bool selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs);
+	void meleeAttack(BattleAction *action);
 };
 
 }

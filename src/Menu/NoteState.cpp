@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "LanguageState.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -56,6 +57,8 @@ NoteState::NoteState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(L"OK");
 	_btnOk->onMouseClick((ActionHandler)&NoteState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NoteState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&NoteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);

@@ -78,14 +78,13 @@ private:
 	Position mapOffsetBeforeMouseScrolling;
 	Uint32 mouseScrollingStartTime;
 	int totalMouseMoveX, totalMouseMoveY;
-	int lastSucTotalMouseMoveX, lastSucTotalMouseMoveY;
 	bool mouseMovedOverThreshold;
 
-	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
-	void selectPreviousPlayerUnit(bool checkReselect);
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
 public:
+	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
+	void selectPreviousPlayerUnit(bool checkReselect);
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -123,6 +122,8 @@ public:
 	void btnNextSoldierClick(Action *action);
 	/// Handler for clicking the Next Stop button.
 	void btnNextStopClick(Action *action);
+	/// Handler for clicking the Previous Soldier button.
+	void btnPrevSoldierClick(Action *action);
 	/// Handler for clicking the Show Layers button.
 	void btnShowLayersClick(Action *action);
 	/// Handler for clicking the Help button.
@@ -144,13 +145,11 @@ public:
 	/// Handler for clicking the use psi button.
 	void btnPsiClick(Action *action);
 	/// Handler for clicking a reserved button.
-	void btnReserveNoneClick(Action *action);
-	/// Handler for clicking a reserved button.
-	void btnReserveSnapClick(Action *action);
-	/// Handler for clicking a reserved button.
-	void btnReserveAimedClick(Action *action);
-	/// Handler for clicking a reserved button.
-	void btnReserveAutoClick(Action *action);
+	void btnReserveClick(Action *action);
+	/// Handler for clicking the reload button.
+	void btnReloadClick(Action *action);
+	/// Handler for clicking the lighting button.
+	void btnPersonalLightingClick(Action *action);
 	// playable unit selected?
 	bool playableUnitSelected();
 	/// updates soldier name/rank/tu/energy/health/morale
@@ -181,7 +180,9 @@ public:
 	void showPsiButton(bool show);
 	/// Clears mouse-scrolling state
 	void clearMouseScrollingState();
-
+	/// returns a pointer to the battlegame, in case we need it's functions.
+	BattlescapeGame *getBattleGame();
+	void SaveAIMap();
 	void SaveVoxelMap();
 	void SaveVoxelView();
 

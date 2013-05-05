@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 Salvare reușită
 STR_DELETE
 ȘTERGE
+STR_DELETE_UNSUCCESSFUL
+Ștergere eșuată
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Salvare anterioară detectată
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -1956,13 +1958,13 @@ VINDECĂ
 STR_TUS
 UT>
 STR_WEIGHT
-Greutate>
+Greut.>
 STR_FACCURACY
-Pre.F.>
+Prec.>
 STR_REACT
 Reac.>
 STR_PSKILL
-Abil.P.>
+Abi.P.>
 STR_PSTRENGTH
 Rez.P.>
 STR_ALIEN_ARTIFACT
@@ -2037,9 +2039,13 @@ STR_PANIC_UNIT
 Panicare Unitate
 STR_MIND_CONTROL_SUCCESSFUL
 Control Mental Reușit
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 a Înnebunit
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+a Înnebunit
+STR_HAS_PANICKED_MALE
+s-a Panicat
+STR_HAS_PANICKED_FEMALE
 s-a Panicat
 STR_XCOM
 XCom
@@ -2073,9 +2079,13 @@ STR_XCOM_MOVEMENT_SPEED
 VITEZĂ MIȘCARE XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VITEZĂ MIȘCARE EXTRATEREȘTRII
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  și-a pierdut cunoștința
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ și-a pierdut cunoștința
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ a murit din cauza rănilor grave
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  a murit din cauza rănilor grave
 STR_USE_MIND_PROBE
 Folosește Sonda Mentală
@@ -2143,22 +2153,24 @@ STR_EQUIPMENT_FOR_craftname
 Echipament pentru {1}
 STR_SELECT_SQUAD_FOR_craftname
 Alege Echipa din {1}
-STR_n_UNITS_IN_EXIT_AREA_0
-{N} Soldați În Zona De Evacuare
 STR_n_UNITS_IN_EXIT_AREA_1
 {N} Soldat În Zona De Evacuare
 STR_n_UNITS_IN_EXIT_AREA_2
 {N} Soldați În Zona De Evacuare
-STR_n_UNITS_OUTSIDE_EXIT_AREA_0
-{N} Soldați În Afara Zonei De Evacuare
+STR_n_UNITS_IN_EXIT_AREA_3
+{N} Soldați În Zona De Evacuare
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} Soldat În Afara Zonei De Evacuare
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Soldați În Afara Zonei De Evacuare
+STR_n_UNITS_OUTSIDE_EXIT_AREA_3
+{N} Soldați În Afara Zonei De Evacuare
 STR_ABANDON_GAME_QUESTION
 PĂRĂSIȚI JOCUL?
-STR_HAS_BEEN_KILLED
-a fost Omorât
+STR_HAS_BEEN_KILLED_MALE
+a fost Ucis
+STR_HAS_BEEN_KILLED_FEMALE
+a fost Ucisă
 STR_DRAG_SCROLL
 GLISARE MANUALĂ
 STR_HIT_MELEE
@@ -2255,3 +2267,111 @@ STR_CENTER_ON_ENEMY_8
 Centrare pe Inamicul 8
 STR_CENTER_ON_ENEMY_9
 Centrare pe Inamicul 9
+STR_ENEMY_WEAPON_LEVEL
+Nivel Armament Inamic
+STR_GROUNDED
+LA SOL
+STR_LIVING_QUARTERS_PLURAL
+Ansamblu Locuințe
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+ARTICOL
+STR_DISPLAY_FILTER
+Filtru Afișaj
+STR_ADVANCED
+AVANSAT
+STR_ADVANCED_OPTIONS
+OPȚIUNI AVANSATE
+STR_AGGRESSIVERETALIATION
+Represalii agresive
+STR_AGGRESSIVERETALIATION_DESC
+OZNurile vor încerca să îți detecteze bazele întotdeauna, indiferent de parametrii misiunii lor.
+STR_ALIENCONTAINMENTHASUPPERLIMIT
+Limite carantină extratereștrii
+STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+Vor fi impuse limite pentru numărul de extratereștrii vii din carantină.
+STR_CANSELLLIVEALIENS
+Vânzarea extratereștrilor vii
+STR_CANSELLLIVEALIENS_DESC
+Permite vânzarea extratereștrilor vii, recomandat a se folosi împreună cu Limite Carantină Extratereștrii.
+STR_ALLOWAUTOSELLPRODUCTION
+Producție cu vânzare automată
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Click dreapta pe butonul de creștere de la "total de produs" din cadrul unui proiect pentru a vinde automat.
+STR_ALLOWBUILDINGQUEUE
+Permite ordine de construcție
+STR_ALLOWBUILDINGQUEUE_DESC
+Construcțiile neterminate servesc drept legătură cu liftul de acces în momentul în care sunt plasate construcții noi.
+STR_BATTLEAUTOEND
+Termină lupta automat
+STR_BATTLEAUTOEND_DESC
+Lupta se termină automat în momentul în care ultimul inamic este neutralizat.
+STR_BATTLEINSTANTGRENADE
+Grenade instant
+STR_BATTLEINSTANTGRENADE_DESC
+Grenadele amorsate pentru explozie în 0 runde vor exploda imediat ce sunt aruncate și nu la finalul rundei.
+STR_BATTLENOTIFYDEATH
+Afișează notificări decese
+STR_BATTLENOTIFYDEATH_DESC
+Afișează notificări de fiecare dată când un soldat propriu moare.
+STR_BATTLEPREVIEWPATH
+Previzualizarea rutelor
+STR_BATTLEPREVIEWPATH_DESC
+Click stânga previzualizează ruta urmată de unitate la alegerea unei destinații, dublu click mișcă unitatea.
+STR_BATTLERANGEBASEDACCURACY
+Precizie bazată pe distanță
+STR_BATTLERANGEBASEDACCURACY_DESC
+Precizia de foc ține cont de vizibilitate, distanță și alți factori.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+Reguli de producție TFTD
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Permite proiectelor să producă mai mult de un articol pe oră.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Transferuri aeriene
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Aeronavele pot fi transferate între baze în timpul zborului.
+STR_CRAFTLAUNCHALWAYS
+Forțează lansarea aeronavelor
+STR_CRAFTLAUNCHALWAYS_DESC
+Forțează lansarea aeronavei, fără a ține cont de nevoia de a o alimenta și arma complet.
+STR_CUSTOMINITIALBASE
+Bază inițială particularizată
+STR_CUSTOMINITIALBASE_DESC
+La începerea unui joc nou, construcțiile de start se vor plasa manual, fără a folosi așezarea implicită.
+STR_GLOBESEASONS
+Iluminare realistică pe glob
+STR_GLOBESEASONS_DESC
+Activează proiecția realistică a luminii solare pe glob conform axei de înclinare a Pământului.
+STR_PLAYINTRO
+Rulează introducerea
+STR_PLAYINTRO_DESC
+Rulează filmul de introducere la pornire.
+STR_SHOWFUNDSONGEOSCAPE
+Arată fondurile
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Extinde panoul cu data pentru a include informații adiționale privind situația financiară curentă.
+STR_SHOWMORESTATSININVENTORYVIEW
+Abilități în inventar
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Afișează informații suplimentare în inventarul soldatului selectat.
+STR_SNEAKYAI
+AI viclean
+STR_SNEAKYAI_DESC
+Unitățile AI evită pe cât posibil expunerea în fața jucătorului.
+STR_STRAFE
+Setare pas lateral
+STR_STRAFE_DESC
+Activează pasul lateral, fuga și rotirea independentă a turelei tancului. Mișcările alternative se activează cu tasta CTRL.
+STR_BATTLESCROLLDRAGINVERT
+Inversează glisarea manuală
+STR_BATTLESCROLLDRAGINVERT_DESC
+Inversează direcția glisării manuale pe câmpul de luptă.
+STR_BATTLEEXPLOSIONHEIGHT
+Înălțimea exploziilor
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
+STR_ALLOWPSIONICCAPTURE
+Permite captura psi
+STR_ALLOWPSIONICCAPTURE_DESC
+Controlul mental al tuturor extratereștrilor rămași finalizează automat misiunea și capturarea acestora ca fiind vii.

@@ -57,7 +57,10 @@ struct BattleAction
 	int diff;
 	int autoShotCounter;
 	Position cameraPosition;
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1) { }
+    bool desperate; // ignoring newly-spotted units
+    bool reckless; // ignoring reaction fire!
+    int number; // first action of turn, second, etc.?
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), reckless(false) { }
 };
 
 /**
@@ -69,8 +72,8 @@ private:
 	SavedBattleGame *_save;
 	BattlescapeState *_parentState;
 	std::list<BattleState*> _states;
-	BattleActionType _tuReserved;
-	bool _debugPlay, _playerPanicHandled;
+	BattleActionType _tuReserved, _playerTUReserved;
+	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
 
@@ -81,7 +84,7 @@ private:
 	bool noActionsPending(BattleUnit *bu);
 	std::vector<InfoboxOKState*> _infoboxQueue;
 	void showInfoBoxQueue();
-	bool _playedAggroSound;
+	bool _playedAggroSound, _endTurnRequested;
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
@@ -119,7 +122,7 @@ public:
 	/// Convert a unit into a unit of another type.
 	BattleUnit *convertUnit(BattleUnit *unit, std::string newType);
 	/// Handle kneeling action.
-	void kneel(BattleUnit *bu);
+	bool kneel(BattleUnit *bu);
 	/// Cancel whatever action we were going at.
 	bool cancelCurrentAction(bool bForce = false);
 	/// Get pointer to access action members directly.
@@ -149,6 +152,26 @@ public:
 	Pathfinding *getPathfinding();
 	ResourcePack *getResourcePack();
 	const Ruleset *getRuleset() const;
+	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI
+	void resetSituationForAI();
+	static bool _debugPlay;
+	/// is panic done with yet?
+	bool getPanicHandled() { return _playerPanicHandled; }
+	/// try to find and pick up an item.
+	void findItem(BattleAction *action);
+	/// check through all the items on the ground and pick one
+	BattleItem *surveyItems(BattleAction *action);
+	/// evaluate if it's worth while to take this item
+	bool worthTaking(BattleItem* item, BattleAction *action);
+	/// pick the item up from the ground
+	int takeItemFromGround(BattleItem* item, BattleAction *action);
+	/// assign the item to a slot (stolen from battlescapeGenerator::addItem())
+	bool takeItem(BattleItem* item, BattleAction *action);
+	/// return the type of action that is reserved
+	BattleActionType getReservedAction();
+	/// tally the living units, convert them if necessary
+	void tallyUnits(int &liveAliens, int &liveSoldiers, bool convert);
+
 };
 
 }

@@ -20,6 +20,7 @@
 #include "Globe.h"
 #include <cmath>
 #include <fstream>
+#include "../aresame.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
@@ -507,7 +508,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 
 	double rho = sqrt((double)(x*x + y*y));
 	double c = asin(rho / (static_data.getRadius(_zoom)));
-	if (rho==0)
+	if ( AreSame(rho, 0.0) )
 	{
 		*lat = _cenLat;
 		*lon = _cenLon;
@@ -569,23 +570,26 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 	if (backFace != pointBack(lon, lat))
 		return false;
 
-	bool c = false;
+	bool odd = false;
 	for (int i = 0; i < poly->getPoints(); ++i)
 	{
 		int j = (i + 1) % poly->getPoints();
 
-		Sint16 x, y, x_i, x_j, y_i, y_j;
+		/*double x = lon, y = lat,
+			   x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
+			   x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);*/
+
+		double x, y, x_i, x_j, y_i, y_j;
 		polarToCart(poly->getLongitude(i), poly->getLatitude(i), &x_i, &y_i);
 		polarToCart(poly->getLongitude(j), poly->getLatitude(j), &x_j, &y_j);
 		polarToCart(lon, lat, &x, &y);
 
-		if ( ((y_i > y) != (y_j > y)) &&
-			 (x < (x_j - x_i) * (y - y_i) / (y_j - y_i) + x_i) )
+		if (((y_i < y && y_j >= y) || (y_j < y && y_i >= y)) && (x_i <= x || x_j <= x))
 		{
-			c = !c;
+			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
 		}
 	}
-	return c;
+	return odd;
 }
 
 /**
@@ -759,10 +763,17 @@ void Globe::center(double lon, double lat)
 bool Globe::insideLand(double lon, double lat) const
 {
 	bool inside = false;
+	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
+	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
+	double oldLon = _cenLon, oldLat = _cenLat;
+	globe->_cenLon = lon;
+	globe->_cenLat = lat;
 	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; ++i)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
+	globe->_cenLon = oldLon;
+	globe->_cenLat = oldLat;
 	return inside;
 }
 
@@ -1116,7 +1127,7 @@ void Globe::drawShadow()
 }
 
 
-void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 Color)
+void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16)
 {
 	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
 	x1+=0.5;
@@ -1138,8 +1149,21 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		inv=true;
 	}
 
-	if (y2<y1) SY=-1; else if (deltay==0) SY=0; else SY=1;
-	if (x2<x1) SX=-1; else if (deltax==0) SX=0; else SX=1;
+	if (y2<y1) { 
+    SY=-1;
+  } else if ( AreSame(deltay, 0.0) ) {
+    SY=0;
+  } else {
+    SY=1;
+  }
+
+	if (x2<x1) {
+    SX=-1;
+  } else if ( AreSame(deltax, 0.0) ) {
+    SX=0;
+  } else {
+    SX=1;
+  }
 
 	x0=x1;  y0=y1;
 	if (inv)
@@ -1212,14 +1236,14 @@ void Globe::drawRadars()
 		lat = (*i)->getLatitude();
 		lon = (*i)->getLongitude();
 		// Cheap hack to hide bases when they haven't been placed yet
-		if ((lon != 0.0 || lat != 0.0)/* &&
+		if (( !(AreSame(lon, 0.0) && AreSame(lat, 0.0)) )/* &&
 			!pointBack((*i)->getLongitude(), (*i)->getLatitude())*/)
 		{
 			polarToCart(lon, lat, &x, &y);
 
 			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
 			{
-				for (int j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
+				for (size_t j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
 			}
 			else
 			{
@@ -1263,16 +1287,16 @@ void Globe::drawRadars()
  */
 void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 {
-	double x, y, x2, y2;
+	double x, y, x2 = 0, y2 = 0;
 	double lat1, lon1;
-	double seg = M_PI / (segments / 2);
+	double seg = M_PI / (static_cast<double>(segments) / 2);
 	for (double az = 0; az <= M_PI*2+0.01; az+=seg) //48 circle segments
 	{
 		//calculating sphere-projected circle
 		lat1 = asin(sin(lat) * cos(radius) + cos(lat) * sin(radius) * cos(az));
 		lon1 = lon + atan2(sin(az) * sin(radius) * cos(lat), cos(radius) - sin(lat) * sin(lat1));
 		polarToCart(lon1, lat1, &x, &y);
-		if (az == 0) //first vertex is for initialization only
+		if ( AreSame(az, 0.0) ) //first vertex is for initialization only
 		{
 			x2=x;
 			y2=y;
@@ -1280,17 +1304,8 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 		}
 		if (!pointBack(lon1,lat1))
 			XuLine(_radars, this, x, y, x2, y2, 249);
-//			_radars->drawLine(x,y,x2,y2,4);
 		x2=x; y2=y;
 	}
-/*
-	std::wstringstream ss6;
-	ss6 << range;
-	label->setX(x);
-	label->setY(y);
-	label->setText(ss6.str());
-	label->blit(_radars);
-*/
 }
 
 
@@ -1316,6 +1331,46 @@ bool Globe::getShowRadar(void)
 	return _game->getSavedGame()->getRadarLines();
 }
 
+
+void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour)
+{
+	double sx = lon2 - lon1;
+	double sy = lat2 - lat1;
+	double ln1, lt1, ln2, lt2;
+	int seg;
+	Sint16 x1, y1, x2, y2;
+
+	if (sx<0) sx += 2*M_PI;
+
+	if (fabs(sx)<0.01)
+	{
+		seg = abs( sy/(2*M_PI)*48 );
+		if (seg == 0) ++seg;
+	}
+	else
+	{
+		seg = abs( sx/(2*M_PI)*96 );
+		if (seg == 0) ++seg;
+	}
+
+	sx /= seg;
+	sy /= seg;
+
+	for (int i = 0; i < seg; ++i)
+	{
+		ln1 = lon1 + sx*i;
+		lt1 = lat1 + sy*i;
+		ln2 = lon1 + sx*(i+1);
+		lt2 = lat1 + sy*(i+1);
+
+		if (!pointBack(ln2, lt2)&&!pointBack(ln1, lt1))
+		{
+			polarToCart(ln1,lt1,&x1,&y1);
+			polarToCart(ln2,lt2,&x2,&y2);
+			_countries->drawLine(x1, y1, x2, y2, colour);
+		}
+	}
+}
 
 
 /**
@@ -1418,6 +1473,63 @@ void Globe::drawDetail()
 		}
 
 		delete label;
+	}
+	
+	static int debugType = 0;
+	static bool canSwitchDebugType = false;
+	if (_game->getSavedGame()->getDebugMode())
+	{
+		int color;
+		canSwitchDebugType = true;
+		if (debugType == 0)
+		{
+			color = 0;
+			for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+			{
+				color += 10;
+				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+				{
+					double lon2 = (*i)->getRules()->getLonMax().at(k);
+					double lon1 = (*i)->getRules()->getLonMin().at(k);
+					double lat2 = (*i)->getRules()->getLatMax().at(k);
+					double lat1 = (*i)->getRules()->getLatMin().at(k);
+
+					drawVHLine(lon1, lat1, lon2, lat1, color);
+					drawVHLine(lon1, lat2, lon2, lat2, color);
+					drawVHLine(lon1, lat1, lon1, lat2, color);
+					drawVHLine(lon2, lat1, lon2, lat2, color);
+				}
+			}
+		}
+		else if (debugType == 1)
+		{
+			color = 0;
+			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+			{
+				color += 10;
+				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+				{
+					double lon2 = (*i)->getRules()->getLonMax().at(k);
+					double lon1 = (*i)->getRules()->getLonMin().at(k);
+					double lat2 = (*i)->getRules()->getLatMax().at(k);
+					double lat1 = (*i)->getRules()->getLatMin().at(k);
+
+					drawVHLine(lon1, lat1, lon2, lat1, color);
+					drawVHLine(lon1, lat2, lon2, lat2, color);
+					drawVHLine(lon1, lat1, lon1, lat2, color);
+					drawVHLine(lon2, lat1, lon2, lat2, color);
+				}
+			}
+		}
+	}
+	else
+	{
+		if (canSwitchDebugType)
+		{
+			++debugType;
+			if (debugType > 1) debugType = 0;
+			canSwitchDebugType = false;
+		}
 	}
 }
 
@@ -1632,7 +1744,7 @@ void Globe::keyboardPress(Action *action, State *state)
  * @param texture pointer to texture ID returns -1 when polygon not found
  * @param shade pointer to shade
  */
-void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade)
+void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const
 {
 	///this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
 	int worldshades[32] = {  0, 0, 0, 0, 1, 1, 2, 2,
@@ -1642,14 +1754,22 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 
 	*texture = -1;
 	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
+
+	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
+	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
+	double oldLon = _cenLon, oldLat = _cenLat;
+	globe->_cenLon = lon;
+	globe->_cenLat = lat;
 	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
 	{
 		if (insidePolygon(lon, lat, *i))
 		{
 			*texture = (*i)->getTexture();
-			return;
+			break;
 		}
 	}
+	globe->_cenLon = oldLon;
+	globe->_cenLat = oldLat;
 }
 
 /**

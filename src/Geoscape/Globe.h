@@ -153,7 +153,7 @@ public:
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.
-	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade);
+	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const;
 	/// Checks if current globe zoom level is at maximum.
 	bool isZoomedInToMax() const;
 	/// Checks if current globe zoom level is at minimum.
@@ -178,6 +178,8 @@ public:
 	bool getShowRadar(void);
 	/// set the _radarLines variable
 	void toggleRadarLines();
+
+	void drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour);
 
 };
 

@@ -45,14 +45,26 @@ class Tile
 public:
 	static struct SerializationKey 
 	{
-		// how many bytes to store each variable or each member of array of the same name
+		// how many bytes to store for each variable or each member of array of the same name
 		Uint8 index; // for indexing the actual tile array
 		Uint8 _mapDataSetID;
 		Uint8 _mapDataID;
 		Uint8 _smoke;
 		Uint8 _fire;
+        Uint8 boolFields;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
+
+    // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
+	int closestSoldierDSqr;
+	Position closestSoldierPos;
+	int meanSoldierDSqr;
+	int soldiersVisible;
+	int closestAlienDSqr;
+	int totalExposure;
+
+	static const int NOT_CALCULATED = -1;
+
 protected:
 	static const int LIGHTLAYERS = 3;
 	MapData *_objects[4];
@@ -78,7 +90,7 @@ public:
 	/// Load the tile from yaml
 	void load(const YAML::Node &node);
 	/// Load the tile from binary buffer in memory
-	void loadBinary(Uint8 **buffer, Tile::SerializationKey& serializationKey);
+	void loadBinary(Uint8 *buffer, Tile::SerializationKey& serializationKey);
 	/// Saves the tile to yaml
 	void save(YAML::Emitter &out) const;
 	/// Saves the tile to binary
@@ -134,7 +146,7 @@ public:
 	/// Get object sprites.
 	Surface *getSprite(int part) const;
 	/// Set a unit on this tile.
-	void setUnit(BattleUnit *unit);
+	void setUnit(BattleUnit *unit, Tile *tileBelow = 0);
 	/// Get the (alive) unit on this tile.
 	BattleUnit *getUnit() const;
 	/// Set fire.

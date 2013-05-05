@@ -25,6 +25,7 @@
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
+#include "../Engine/Action.h"
 
 namespace OpenXcom
 {
@@ -32,7 +33,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements.
  * @param game Pointer to the core game.
- * @param msg Pointer to  the message.
+ * @param msg Message string.
  */
 InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 {
@@ -40,13 +41,18 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 
 	// Create objects
 	_window = new Window(this, 261, 122, 34, 10);
-	_text = new Text(235, 40, 16, 40);
+	_text = new Text(251, 112, 39, 15);
 
 	add(_window);
+	add(_text);
+
+	_window->setColor(Palette::blockOffset(0));
+	_window->setHighContrast(true);
 
 	_text->setAlign(ALIGN_CENTER);
-	_text->setFonts(_game->getResourcePack()->getFont("Big.fnt"), 0);
+	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setBig();
+	_text->setWordWrap(true);
 	_text->setText(msg);
 	_text->setColor(Palette::blockOffset(0));
 	_text->setHighContrast(true);
@@ -55,8 +61,6 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_timer = new Timer(INFOBOX_DELAY);
 	_timer->onTimer((StateHandler)&InfoboxState::close);
 	_timer->start();
-
-	draw();
 }
 
 /**
@@ -67,47 +71,18 @@ InfoboxState::~InfoboxState()
 
 }
 
-
 /**
- * Draws the bordered box.
+ * Closes the window.
+ * @param action Pointer to an action.
  */
-void InfoboxState::draw()
+void InfoboxState::handle(Action *action)
 {
-	SDL_Rect square;
-	Uint8 color = 11;
+	State::handle(action);
 
-	_window->clear();
-
-	square.x = 0;
-	square.w = _window->getWidth();
-
-	square.y = 0;
-	square.h = _window->getHeight();
-
-	for (int i = 0; i < 9; ++i)
+	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (i == 8)
-			color -= 4;
-		_window->drawRect(&square, color);
-		if (i < 3)
-			color-=2;
-		else
-			color+=2;
-		square.x++;
-		square.y++;
-		if (square.w >= 2)
-			square.w -= 2;
-		else
-			square.w = 1;
-
-		if (square.h >= 2)
-			square.h -= 2;
-		else
-			square.h = 1;
+		close();
 	}
-
-	_text->draw();
-	_text->blit(_window);
 }
 
 

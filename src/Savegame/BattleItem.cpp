@@ -29,7 +29,7 @@ namespace OpenXcom
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false)
+BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
 {
 	if (_rules && _rules->getBattleType() == BT_AMMO)
 	{
@@ -71,6 +71,10 @@ void BattleItem::load(const YAML::Node &node)
 	node["heal"] >> _heal;
 	node["stimulant"] >> _stimulant;
 	node["explodeTurn"] >> _explodeTurn;
+	if(const YAML::Node *pName = node.FindValue("droppedOnAlienTurn"))
+	{
+		*pName >> _droppedOnAlienTurn;
+	}
 }
 
 /**
@@ -134,6 +138,8 @@ void BattleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "heal" << YAML::Value << _heal;
 	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
 	out << YAML::Key << "explodeTurn" << YAML::Value << _explodeTurn;
+	if (_droppedOnAlienTurn)
+		out << YAML::Key << "droppedOnAlienTurn" << YAML::Value << _droppedOnAlienTurn;
 
 	out << YAML::EndMap;
 }
@@ -227,7 +233,8 @@ void BattleItem::setOwner(BattleUnit *owner)
  */
 void BattleItem::moveToOwner(BattleUnit *owner)
 {
-	_previousOwner = _owner;
+	
+	_previousOwner = _owner ? _owner:owner;
 	_owner = owner;
 	if (_previousOwner != 0)
 	{
@@ -486,5 +493,25 @@ void BattleItem::setXCOMProperty (bool flag)
 bool BattleItem::getXCOMProperty () const
 {
 	return _XCOMProperty;
+}
+
+/**
+ * Get the "dropped on non-player turn" flag. This is to determine whether or not
+ * aliens should attempt to pick this item up, as items dropped by the player may be "honey traps"
+ * @return bool
+ */
+bool BattleItem::getTurnFlag() const
+{
+	return _droppedOnAlienTurn;
+}
+
+/**
+ * Set the "dropped on non-player turn" flag. This is set when the item is dropped in the battlescape
+ * or picked up in the inventory screen
+ * @param bool
+ */
+void BattleItem::setTurnFlag(bool flag)
+{
+	_droppedOnAlienTurn = flag;
 }
 }

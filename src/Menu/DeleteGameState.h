@@ -36,22 +36,21 @@ class SavedGameState;
 class DeleteGameState : public State
 {
 private:
-	TextButton *_btnCancel, *_btnConfirm;
+	TextButton *_btnNo, *_btnYes;
 	Window *_window;
 	Text *_txtMessage;
 	SavedGameState *_parent;
 	std::string _filename;
-
-	void create(Game *game, const std::wstring &save, Uint8 color, std::string bg, Uint8 bgColor, SavedGameState *parent);
+	bool _geo;
 public:
 	/// Creates the Confirm state.
-	DeleteGameState(Game *game, const std::wstring &save, Uint8 color, std::string bg, Uint8 bgColor, SavedGameState *parent);
+	DeleteGameState(Game *game, bool geo, const std::wstring &save, SavedGameState *parent);
 	/// Cleans up the Confirm state.
 	~DeleteGameState();
 	/// Handler for clicking the confirm button.
-	void btnConfirmClick(Action *action);
+	void btnYesClick(Action *action);
 	/// Handler for clicking the cancel button.
-	void btnCancelClick(Action *action);
+	void btnNoClick(Action *action);
 };
 
 }

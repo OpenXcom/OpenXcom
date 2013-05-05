@@ -29,6 +29,7 @@ class Surface;
 class InteractiveSurface;
 class Text;
 class TextButton;
+class ToggleTextButton;
 class TextList;
 class Region;
 
@@ -47,15 +48,14 @@ private:
 	Text *_txtTitle, *_txtFactor;
 	TextList *_txtMonths, *_txtYears;
 	std::vector<Text *> _txtScale;
-	std::vector<TextButton *> _btnRegions, _btnCountries;
-	std::vector<TextButton *> _btnFinances;
+	std::vector<ToggleTextButton *> _btnRegions, _btnCountries;
+	std::vector<ToggleTextButton *> _btnFinances;
 	std::vector<bool> _regionToggles, _countryToggles;
 	std::vector<bool> _financeToggles;
-	TextButton *_btnRegionTotal, *_btnCountryTotal;
+	ToggleTextButton *_btnRegionTotal, *_btnCountryTotal;
 	std::vector<Surface *> _alienRegionLines, _alienCountryLines;
 	std::vector<Surface *> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface *> _financeLines, _incomeLines;
-	int _scale;
 	bool _alien, _income, _country, _finance;
 public:
 	/// Creates the Graphs state.
@@ -85,7 +85,7 @@ public:
 	/// Reset all the elements on screen.
 	void resetScreen();
 	/// Update the scale 
-	void updateScale(int factor);
+	void updateScale(double lowerLimit, double upperLimit);
 	/// Decide which lines to draw
 	void drawLines();
 	/// Draw Region Lines.

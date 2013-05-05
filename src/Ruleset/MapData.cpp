@@ -92,6 +92,7 @@ bool MapData::isNoFloor() const
 bool MapData::isBigWall() const
 {
 	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
+	if (_specialType == START_POINT && _stopLOS && _TUWalk == 255) return true; // this is another hack for avenger and lightning walls
 	return _isBigWall;
 }
 

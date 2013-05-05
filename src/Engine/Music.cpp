@@ -20,6 +20,7 @@
 #include "Exception.h"
 #include "Options.h"
 #include "Logger.h"
+#include "Language.h"
 
 namespace OpenXcom
 {
@@ -45,7 +46,12 @@ Music::~Music()
  */
 void Music::load(const std::string &filename)
 {
-	_music = Mix_LoadMUS(filename.c_str());
+	// SDL only takes UTF-8 filenames
+	// so here's an ugly hack to match this ugly reasoning
+	std::wstring wstr = Language::cpToWstr(filename);
+	std::string utf8 = Language::wstrToUtf8(wstr);
+
+	_music = Mix_LoadMUS(utf8.c_str());
 	if (_music == 0)
 	{
 		throw Exception(Mix_GetError());
@@ -71,12 +77,12 @@ void Music::load(const void *data, size_t size)
 /**
  * Plays the contained music track.
  */
-void Music::play() const
+void Music::play(int loop) const
 {
 	if (!Options::getBool("mute"))
 	{
 		Mix_HaltMusic();
-		if (_music != 0 && Mix_PlayMusic(_music, -1) == -1)
+		if (_music != 0 && Mix_PlayMusic(_music, loop) == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
 		}

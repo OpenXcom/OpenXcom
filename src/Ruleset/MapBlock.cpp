@@ -24,7 +24,7 @@ namespace OpenXcom
 /**
 * MapBlock construction
 */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type):_terrain(terrain), _name(name), _width(width), _length(length), _height(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
+MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type):_terrain(terrain), _name(name), _size_x(size_x), _size_y(size_y), _size_z(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
 {
 }
 
@@ -51,15 +51,15 @@ void MapBlock::load(const YAML::Node &node)
 		}
 		else if (key == "width")
 		{
-			i.second() >> _width;
+			i.second() >> _size_x;
 		}
 		else if (key == "length")
 		{
-			i.second() >> _length;
+			i.second() >> _size_y;
 		}
 		else if (key == "height")
 		{
-			i.second() >> _height;
+			i.second() >> _size_z;
 		}
 		else if (key == "type")
 		{
@@ -94,9 +94,9 @@ void MapBlock::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "width" << YAML::Value << _width;
-	out << YAML::Key << "length" << YAML::Value << _length;
-	out << YAML::Key << "height" << YAML::Value << _height;
+	out << YAML::Key << "width" << YAML::Value << _size_x;
+	out << YAML::Key << "length" << YAML::Value << _size_y;
+	out << YAML::Key << "height" << YAML::Value << _size_z;
 	out << YAML::Key << "type" << YAML::Value << (int)_type;
 	out << YAML::Key << "subType" << YAML::Value << (int)_subType;
 	out << YAML::Key << "frequency" << YAML::Value << _frequency;
@@ -114,39 +114,39 @@ std::string MapBlock::getName() const
 }
 
 /**
-* Gets the MapBlock width.
-* @return width in tiles.
+* Gets the MapBlock size x.
+* @return size x in tiles.
 */
-int MapBlock::getWidth() const
+int MapBlock::getSizeX() const
 {
-	return _width;
+	return _size_x;
 }
 
 /**
-* Gets the MapBlock length.
-* @return length in tiles.
+* Gets the MapBlock size y.
+* @return size y in tiles.
 */
-int MapBlock::getLength() const
+int MapBlock::getSizeY() const
 {
-	return _length;
+	return _size_y;
 }
 
 /**
-* Sets the MapBlock height.
-* @param height
+* Sets the MapBlock size z.
+* @param size z
 */
-void MapBlock::setHeight(int height)
+void MapBlock::setSizeZ(int size_z)
 {
-	_height = height;
+	_size_z = size_z;
 }
 
 /**
-* Gets the MapBlock height.
-* @return height
+* Gets the MapBlock size z.
+* @return size z
 */
-int MapBlock::getHeight() const
+int MapBlock::getSizeZ() const
 {
-	return _height;
+	return _size_z;
 }
 
 /**

@@ -45,7 +45,7 @@ private:
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
 	/// Creates a new ActionMenuItem.
-	ActionMenuItem(int id, Font *bigFont, int x, int y);
+	ActionMenuItem(int id, Font *big, Font *small, int x, int y);
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
 	/// Assign an action to it.

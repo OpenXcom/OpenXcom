@@ -210,6 +210,7 @@ namespace OpenXcom
 				break;
 			case BT_AMMO:
 			case BT_GRENADE:
+			case BT_PROXIMITYGRENADE:
 				setDamageTypeText(_txtAmmoType[0], item);
 
 				ss.str(L"");ss.clear();

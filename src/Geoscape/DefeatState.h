@@ -26,6 +26,7 @@ namespace OpenXcom
 
 class InteractiveSurface;
 class Text;
+class Timer;
 
 /**
  * Game Over Screens.
@@ -36,12 +37,15 @@ private:
 	InteractiveSurface *_screen;
 	std::vector<Text*> _txtText;
 	int _screenNumber;
+	Timer *_timer;
 public:
 	/// Creates the Defeat state.
 	DefeatState(Game *game);
 	/// Cleans up the Defeat state.
 	~DefeatState();
 	void init();
+	/// Handle timers.
+	void think();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
 	void nextScreen();

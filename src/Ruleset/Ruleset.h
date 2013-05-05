@@ -51,6 +51,7 @@ class AlienDeployment;
 class UfoTrajectory;
 class RuleAlienMission;
 class City;
+class Base;
 
 /**
  * Set of rules and stats for a game.
@@ -190,6 +191,7 @@ public:
 	const City *locateCity(double lon, double lat) const;
 	/// Get the alien item level table
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
+	const YAML::Node &getStartingBase();
 };
 
 }

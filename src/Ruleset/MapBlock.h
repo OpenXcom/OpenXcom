@@ -39,11 +39,11 @@ class MapBlock
 private:
 	RuleTerrain *_terrain;
 	std::string _name;
-	int _width, _length, _height;
+	int _size_x, _size_y, _size_z;
 	MapBlockType _type, _subType;
 	int _frequency, _timesUsed, _maxCount;
 public:
-	MapBlock(RuleTerrain *terrain, std::string name, int width, int length, MapBlockType type);
+	MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type);
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);
@@ -51,14 +51,14 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the mapblock's name (used for MAP generation).
 	std::string getName() const;
-	/// Gets the mapblock's width.
-	int getWidth() const;
-	/// Get the mapblock's length.
-	int getLength() const;
-	/// Get the mapblock's height.
-	int getHeight() const;
-	/// Set the mapblock's height.
-	void setHeight(int height);
+	/// Gets the mapblock's x size.
+	int getSizeX() const;
+	/// Get the mapblock's y size.
+	int getSizeY() const;
+	/// Get the mapblock's z size.
+	int getSizeZ() const;
+	/// Set the mapblock's z size.
+	void setSizeZ(int size_z);
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getType() const;
 	/// Returns whether this mapblock is a landingzone.

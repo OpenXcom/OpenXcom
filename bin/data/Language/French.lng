@@ -364,7 +364,7 @@ Insuffisant matériaux spéciaux pour produire{NEWLINE}
 STR_NOT_ENOUGH_MONEY_TO_PRODUCE
 Insuffisant argent pour produire{NEWLINE}
 STR_PRODUCTION_COMPLETE
-Production Terminée:{NEWLINE}
+Production finit:{NEWLINE}
 STR_PRODUCTION_OF
 Production de{NEWLINE}
 STR__AT__
@@ -374,7 +374,7 @@ STR_IS_COMPLETE
 STR_OK_5_SECS
 OK - 5 sec
 STR_RESEARCH_COMPLETED
-Recherche Terminée
+Recherche finit
 STR_VIEW_REPORTS
 VOIR RAPPORTS
 STR_WE_CAN_NOW_RESEARCH
@@ -460,7 +460,7 @@ LE BOUCLIER DE GRAVITE REPOUSSE L'OVNI!
 STR_FIRING
 TIR
 STR_HIT
-TOUCHÉ!
+FRAPPÉ!
 STR_UFO_DESTROYED
 OVNI DÉTRUIT!
 STR_MISSED
@@ -636,7 +636,7 @@ ARMURE
 STR_MAX
 MAXI>
 STR_ROOKIE
-Nouvelle Recrue
+Recrue
 STR_SQUADDIE
 Deuxième Classe
 STR_SERGEANT
@@ -1258,9 +1258,9 @@ Un maximum de 50 savants peut travailler dans un laboratoire.  Les laboratoires 
 STR_WORKSHOP_UFOPEDIA
 Un atelier contenant tout l'équipement nécessaire à la fabrication de produits basés sur les conceptions des labos scientifiques.  Un atelier peut contenir jusqu'à 50 ingénieurs, mais les objets en construction prennent également de la place.
 STR_SMALL_RADAR_SYSTEM_UFOPEDIA
-Un petit système de détection ayant une portée radar de 300 miles nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
+Un petit système de détection ayant une portée radar de 300 nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
-Un grand système de détection ayant une portée de 450 miles nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
+Un grand système de détection ayant une portée de 450 nautiques et relié à des systèmes satellites pour les recherches au sol.  Chaque système a 5% de chances de détecter un objet de taille moyenne toutes les 10 minutes.
 STR_MISSILE_DEFENSES_UFOPEDIA
 Les défenses missiles protègent des incursions des vaisseaux ennemis qui essaient d'atterrir près de la base.
 STR_GENERAL_STORES_UFOPEDIA
@@ -1550,7 +1550,7 @@ Progression{NEWLINE}/Compétence Psionique
 STR_PSI_AMP
 Psi-Amp
 STR_IN_TRAINING
-En{NEWLINE}Entraînement?
+En{NEWLINE}Entrainement?
 STR_TARGETTED_BY
 VISE PAR:
 STR_WEAPONS_CREW_HWPS
@@ -1774,7 +1774,7 @@ Les extraterrestres ont détruit la base non défendue
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
 Les agents Xcom ont localisé une base extraterrestre sur 
 STR_STANDOFF
-ATTENTE
+IMPASSE
 STR_CAUTIOUS_ATTACK
 ATTAQUE PRUDENTE
 STR_STANDARD_ATTACK
@@ -1784,19 +1784,19 @@ ATTAQUE AGRESSIVE
 STR_DISENGAGING
 DÉSENGAGEMENT
 STR_UFO_HIT
-OVNI TOUCHE!
+L'OVNI EST FRAPPÉ!
 STR_UFO_CRASH_LANDS
-CRASH DE L'OVNI!
+L'OVNI S'ÉCRASE!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Réduction en mode attente seulement
+Réduction en mode impasse seulement
 STR_UFO_RETURN_FIRE
-L'OVNI RÉPLIQUE!
+L'OVNI TIRANT!
 STR_INTERCEPTOR_DAMAGED
 >>>INTERCEPTEUR ENDOMMAGÉ<<<
 STR_INTERCEPTOR_DESTROYED
 >>>INTERCEPTEUR DÉTRUIT<<<
 STR_UFO_OUTRUNNING_INTERCEPTOR
-L'OVNI SÈME L'INTERCEPTEUR!
+L'OVNI DÈPASSER L'INTERCEPTEUR!
 STR_ALIENS_TERRORISE
 TERREUR EXTRATERRESTRE
 STR_LONG_RANGE_DETECTION
@@ -1838,7 +1838,7 @@ STR_PERFORMANCE_RATING
 STR_VICTORY_DATE
 Date de victoire
 STR_ELECTRO_FLARE
-Leurre électronique
+Électrolumière
 STR_ELECTRO_FLARE_UFOPEDIA
 Cette fusée éclairante produit une lumière vive lorsqu'elle est lancée.  Ceci éclaire les unités ennemies proches lors des missions de nuit.
 STR_MONTHLY_COSTS
@@ -1884,7 +1884,7 @@ Chargement en cours
 STR_PROCEED
 CONTINUER
 STR_NO_SAVED_GAME_PRESENT
-Pas de jeu sauvegardé.
+Pas de jeu sauvegarde.
 STR_LOAD_UNSUCCESSFUL
 Chargement a échoué.
 STR_SAVE_UNSUCCESSFUL
@@ -1895,6 +1895,8 @@ STR_SAVE_SUCCESSFUL
 Sauvegarde réussie.
 STR_DELETE
 EFFACER
+STR_DELETE_UNSUCCESSFUL
+Effacer a échoué.
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Jeu X-Com sauvegardé détecté.
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,10 +2039,14 @@ STR_PANIC_UNIT
 Panique de l'Unité
 STR_MIND_CONTROL_SUCCESSFUL
 Contrôle de l'Esprit Réussi
-STR_HAS_GONE_BERSERK
-est délirant/e
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_MALE
+est délirant
+STR_HAS_GONE_BERSERK_FEMALE
+est délirante
+STR_HAS_PANICKED_MALE
 a paniqué
+STR_HAS_PANICKED_FEMALE
+a paniquée
 STR_XCOM
 Xcom
 STR_ALIENS
@@ -2073,9 +2079,13 @@ STR_XCOM_MOVEMENT_SPEED
 VITESSE DE MOUVEMENT XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VITESSE DE MOUVEMENT EXTRATERRESTRES
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  a perdu connaissance
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ a perdu connaissance
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ a succombé à une blessure grave
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  a succombé à une blessure grave
 STR_USE_MIND_PROBE
 Utiliser Sonde d'Esprit
@@ -2084,11 +2094,11 @@ BLESSURES GRAVES
 STR_UNDER_ARMOR_UC
 ARMURE DE DESSOUS
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
-Unités de temps réservées au tir rapide
+Unités de temps réservées pour le tir rapide
 STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
-Unités de temps réservées au tir automatique
+Unités de temps réservées pour le tir automatique
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
-Unités de temps réservées au tir précis
+Unités de temps réservées pour le tir précis
 STR_ABORT_MISSION
 Abandonner mission?
 STR_CORPSE
@@ -2153,8 +2163,10 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} unités hors de la zone de sortie
 STR_ABANDON_GAME_QUESTION
 ABANDONNER JEU?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
 a été tué.
+STR_HAS_BEEN_KILLED_FEMALE
+a été tuée.
 STR_DRAG_SCROLL
 TRAÎNER BARRE DE DÉFILEMENT
 STR_HIT_MELEE
@@ -2251,3 +2263,111 @@ STR_CENTER_ON_ENEMY_8
 Centrer sur l'ennemi #8
 STR_CENTER_ON_ENEMY_9
 Centrer sur l'ennemi #9
+STR_ENEMY_WEAPON_LEVEL
+Niveau à l'arme ennemi
+STR_GROUNDED
+SOL
+STR_LIVING_QUARTERS_PLURAL
+Baraquements
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+OBJET
+STR_DISPLAY_FILTER
+Filtre d'écran
+STR_ADVANCED
+AVANCÉE
+STR_ADVANCED_OPTIONS
+OPTIONS AVANCÉES
+STR_AGGRESSIVERETALIATION
+Représaille agressive
+STR_AGGRESSIVERETALIATION_DESC
+Tous classes des OVNIs être d'essayant à détecter ta base, en dépit de paramètres mission.
+STR_ALIENCONTAINMENTHASUPPERLIMIT
+Limites pour les détentions des E.T.
+STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+Les limites sur les détentions des E.T. avoir imposé.
+STR_CANSELLLIVEALIENS
+Vendre les E.T. vivants
+STR_CANSELLLIVEALIENS_DESC
+Accorder la vente des E.T. vivants, recommandé quand limites pour les détentions des E.T. est utilisé. 
+STR_ALLOWAUTOSELLPRODUCTION
+Auto-vente Fabrication
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Droit-clic la bouton augmentation sur "total à produire" avec un projet fabrication, pour auto-vente.
+STR_ALLOWBUILDINGQUEUE
+Accorder queue de construisant
+STR_ALLOWBUILDINGQUEUE_DESC
+Installations incomplètes sont relié à l'ascenseur d'accés, accordant la construction des installations additionnelles.
+STR_BATTLEAUTOEND
+Bataille Auto-fin
+STR_BATTLEAUTOEND_DESC
+Automatiquement terminant la bataille quand l'ennemi final est tué.
+STR_BATTLEINSTANTGRENADE
+Grenades Instantes
+STR_BATTLEINSTANTGRENADE_DESC
+Grenades armé pour 0 tours exploser immédiatement quand lancé, pas au fin du tour. 
+STR_BATTLENOTIFYDEATH
+Montrer notifications de mort
+STR_BATTLENOTIFYDEATH_DESC
+Recevoir une notification quand un soldat est tué.
+STR_BATTLEPREVIEWPATH
+Aperçu Mouvement
+STR_BATTLEPREVIEWPATH_DESC
+Gauche-clic apercevoir le sentier à la destination choisi, puis un double-clic meut le soldat.
+STR_BATTLERANGEBASEDACCURACY
+Précision via distance
+STR_BATTLERANGEBASEDACCURACY_DESC
+Tir précision être dépendant sur la visibilitie, distance, et facteurs additionnels.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+Fabrication comme TFTD
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Accorder les projets fabrication à produire plus que une item par heure.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Transferts les vaisseaux en vol
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Vaisseaux en vol sont transférables.
+STR_CRAFTLAUNCHALWAYS
+Forcer les vaisseaux à lance
+STR_CRAFTLAUNCHALWAYS_DESC
+Accorder forçant les vaisseaux à lance, et ignore le ravitaillement / réarmement.
+STR_CUSTOMINITIALBASE
+Personnalise la base initiale
+STR_CUSTOMINITIALBASE_DESC
+Quand commencement un jeu nouveau, tes installations initiales sont placé manuellement, et ne utiliser pas le schéma typique.
+STR_GLOBESEASONS
+Éclairage realiste de la geospace
+STR_GLOBESEASONS_DESC
+Utiliser un angle realiste de la lumière du soleil sur le Geoscape, selon inclinaison de l'axe de la Terre.
+STR_PLAYINTRO
+Regarder intro
+STR_PLAYINTRO_DESC
+Regarder la vidéo intro au commencement.
+STR_SHOWFUNDSONGEOSCAPE
+Montrer les fonds sur la geoscape
+STR_SHOWFUNDSONGEOSCAPE_DESC
+La geoscape inclura les informations additionnelles pour ta situation financière.
+STR_SHOWMORESTATSININVENTORYVIEW
+Statistiques inventaire
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+L'écran inventaire présenter les informations additionnelles pour la soldat choisi actuellement.
+STR_SNEAKYAI
+IA Furtive
+STR_SNEAKYAI_DESC
+Quand possible, l'adversaire IA éviter exposant leur soldats.
+STR_STRAFE
+Actions additionnelles 
+STR_STRAFE_DESC
+Accorder strafing, courant, et mouvement indépendant pour l'arme du char d'assaut. Appuyez CTRL à utilise ceci méthode alternatif de mouvement.
+STR_BATTLESCROLLDRAGINVERT
+Traîner-faire-défiler invertu
+STR_BATTLESCROLLDRAGINVERT_DESC
+Durant le combat, traîner-faire-défiler est invertu.
+STR_BATTLEEXPLOSIONHEIGHT
+Hauteur des explosions
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Change la hauteur et l'aire des explosions.{NEWLINE}(Plate: 0, Ronde: 3)
+STR_ALLOWPSIONICCAPTURE
+Accorder psi-capture
+STR_ALLOWPSIONICCAPTURE_DESC
+Utilisant psi-capture sur les E.T. restant causer une victoire, et ils être considérant comme les captures vivants.

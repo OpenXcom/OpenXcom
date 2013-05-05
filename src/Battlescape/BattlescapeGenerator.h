@@ -58,7 +58,7 @@ private:
 	TerrorSite *_terror;
 	AlienBase *_alienBase;
 	RuleTerrain *_terrain;
-	int _width, _length, _height;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
 	int _worldTexture, _worldShade;
 	int _unitSequence;
 	Tile *_craftInventoryTile;
@@ -79,7 +79,7 @@ private:
 	/// Place an item to a soldier based on equipment layout
 	BattleItem* placeItemByLayout(BattleItem *item);
 	/// Add an item to the game
-	BattleItem* addItem(BattleItem *item);
+	BattleItem* addItem(BattleItem *item, bool secondPass);
 	// Add an item to a unit
 	BattleItem* addItem(RuleItem *item, BattleUnit *unit);
 	/// loads an XCOM MAP file
@@ -115,7 +115,10 @@ public:
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
+	/// Set up the next stage (for cydonia/tftd terror missions)
 	void nextStage();
+	/// Find a spot near a friend to spawn at
+	bool placeUnitNearFriend(BattleUnit *unit);
 
 };
 

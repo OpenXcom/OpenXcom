@@ -82,7 +82,9 @@ void LoadState::lstSavesPress(Action *action)
 			if (_game->getSavedGame()->getBattleGame() != 0)
 			{
 				_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
-				_game->pushState(new BattlescapeState(_game));
+				BattlescapeState *bs = new BattlescapeState(_game);
+				_game->pushState(bs);
+				_game->getSavedGame()->getBattleGame()->setBattleState(bs);
 			}
 		}
 		catch (Exception &e)
@@ -112,10 +114,7 @@ void LoadState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if(_geo)
-			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(8)+10, "BACK01.SCR", 6, this));
-		else
-			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(0), "TAC00.SCR", -1, this));
+		_game->pushState(new DeleteGameState(_game, _geo, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
 	}
 }
 

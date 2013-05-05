@@ -154,8 +154,8 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
 
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if (((force && (*i)->getWidth() == maxsize) || 
-			(!force && (*i)->getWidth() <= maxsize)) && 
+		if (((force && (*i)->getSizeX() == maxsize) || 
+			(!force && (*i)->getSizeX() <= maxsize)) && 
 			((*i)->getType() == type || (*i)->getSubType() == type))
 		{
 			for (int j = 0; j != (*i)->getRemainingUses(); ++j)
@@ -169,7 +169,8 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
 
 	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
 
-	compliantMapBlocks[n]->markUsed();
+	if (type == MT_DEFAULT)
+		compliantMapBlocks[n]->markUsed();
 
 	return compliantMapBlocks[n];
 }

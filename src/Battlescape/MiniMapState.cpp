@@ -33,6 +33,7 @@
 #include "Camera.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Action.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -60,11 +61,12 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
 	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
 	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
+	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
 	std::wstringstream s;
-	s << camera->getViewHeight();
+	s << camera->getViewLevel();
 	_txtLevel->setText(s.str());
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
