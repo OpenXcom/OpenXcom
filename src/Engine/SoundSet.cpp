@@ -118,6 +118,9 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			}
 			size = newsize + 44;
 
+			// Rewrite the number of samples in the WAV file
+			memcpy(sound2 + 0x28, &newsize, sizeof(newsize));
+
 			// Ok, now replace the original with the converted:
 			delete[] sound;
 			sound = sound2;
