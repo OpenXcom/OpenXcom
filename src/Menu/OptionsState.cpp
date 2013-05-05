@@ -550,7 +550,7 @@ void OptionsState::btnDisplayFilterClick(Action *action)
 	_btnDisplayFilter->setText(Language::utf8ToWstr(_filters[_selFilter]));
 }
 
-void OptionsState::btnAdvancedClick(Action *action)
+void OptionsState::btnAdvancedClick(Action *)
 {
 	_game->pushState(new AdvancedOptionsState(_game));
 }

@@ -366,7 +366,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 bool BattlescapeGame::kneel(BattleUnit *bu)
 {
 	int tu = bu->isKneeled()?8:4;
-	if (!bu->isFloating() && checkReservedTU(bu, tu))
+	if (bu->getType() == "SOLDIER" && !bu->isFloating() && checkReservedTU(bu, tu))
 	{
 		if (bu->spendTimeUnits(tu))
 		{
@@ -631,19 +631,6 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 	if (_save->getSide() == FACTION_PLAYER)
 	{
 		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
-	}
-
-	// if all units from either faction are killed - the mission is over.
-	if (Options::getBool("battleAutoEnd"))
-	{
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		tallyUnits(liveAliens, liveSoldiers, false);
-
-		if (liveAliens == 0 || liveSoldiers == 0)
-		{
-			_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
-		}
 	}
 }
 
@@ -1280,7 +1267,8 @@ void BattlescapeGame::primaryAction(const Position &pos)
 						std::wstringstream ss;
 						if (_currentAction.type == BA_PANIC)
 						{
-							ss << _save->getTile(_currentAction.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED");
+							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
+							ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
@@ -1507,7 +1495,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
 	{
 		std::wstringstream ss;
-		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED");
+		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender());
 		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 	}
 

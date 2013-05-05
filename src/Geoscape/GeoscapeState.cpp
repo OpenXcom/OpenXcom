@@ -1483,11 +1483,10 @@ void GeoscapeState::time1Day()
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
-						std::find((*iter2)->getRules()->getUnlocked().begin(), (*iter2)->getRules()->getUnlocked().end(), "STR_ALIEN_ORIGINS") == (*iter2)->getRules()->getUnlocked().end())
+						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
-						// reset the iterator, the vector just got updated.
-						iter2 = (*j)->getResearch().begin();
+						break;
 					}
 				}
 			}

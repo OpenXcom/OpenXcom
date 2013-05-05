@@ -110,7 +110,7 @@ void createDefault()
 	setInt("pauseMode", 0);
 	setBool("alienContainmentHasUpperLimit", false);
 	setBool("canSellLiveAliens", false);
-	setBool("canTransferCraftsInAirborne", false); // When the craft can reach the destination base with its fuel
+	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);

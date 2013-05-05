@@ -116,11 +116,11 @@ Nuestra investigación se dirige ahora a Marte como base de operaciones alieníg
 STR_CYDONIA_OR_BUST_UFOPEDIA
 Ahora está claro que las hordas alienígenas son controladas desde una base subterránea en Cydonia - una zona curiosa de Marte en la que hay pirámides de cinco lados y una estructura enorme similar a una cara humana. La civilización de Cydonia floreció en Marte hace muchos millones de años, pero no sabemos por qué desapareció o qué conexión tiene con la reciente actividad alienígena. Cualquiera que sea la explicación, tenemos que mandar una expedición a Cydonia, esta es la única forma de derrotar a los alienígenas. Tenemos que destruir su 'cerebro' dirigente. Necesitaremos una nave Avenger equipada con las mejores armas destructivas de que dispongamos. No hay nada más que podamos averiguar, sólo queda esperar el resultado del asalto en Cydonia.
 STR_TERROR_SITE
-Lugar de terrorismo -
+Lugar aterrorizado -
 STR_CENTER_ON_SITE_TIME_5_SECS
 CENTRAR EN SITIO - TIEMPO=5 Seg
 STR_CANCEL_UC
-Cancelar
+CANCELAR
 STR_NONE
 Ninguno
 STR_UNKNOWN
@@ -138,7 +138,7 @@ NUEVA BASE
 STR_BASE_INFORMATION
 INFORMACIÓN DE BASES
 STR_EQUIP_CRAFT
-Abastecer nave
+ABASTECER NAVES
 STR_BUILD_FACILITIES
 CONSTRUIR INSTALACIONES
 STR_RESEARCH
@@ -204,9 +204,9 @@ INICIAR PROYECTO
 STR_CURRENT_PRODUCTION
 PRODUCCIÓN ACTUAL
 STR_ENGINEERS_AVAILABLE
-Técnicos disponibles >
+Ingenieros disponibles >
 STR_ENGINEERS_ALLOCATED
-Técnicos asignados>
+Ingenieros asignados>
 STR_WORKSHOP_SPACE_AVAILABLE
 Espacio disponible >
 STR_CURRENT_FUNDS
@@ -214,7 +214,7 @@ Fondos actuales >
 STR_ITEM
 Artículo
 STR_ENGINEERS__ALLOCATED
-Técnicos
+Ingenieros
 STR_UNITS_PRODUCED
 Fabricadas
 STR_TOTAL_TO_PRODUCE
@@ -232,7 +232,7 @@ Categoría
 STR_START_PRODUCTION
 INICIAR FABRICACIÓN
 STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT
- Horas para producir una unidad
+Horas para producir una unidad
 STR_COST_PER_UNIT_
 Costo p/u > $
 STR_WORK_SPACE_REQUIRED
@@ -268,7 +268,7 @@ Comprar/Contratar personal
 STR_COST_OF_PURCHASES
 Costo de compras >
 STR_COST_PER_UNIT_UC
-COSTO P/U
+Costo p/u
 STR_QUANTITY_UC
 Cantidad
 STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL
@@ -410,7 +410,7 @@ OVNI recuperado
 STR_CRAFT_IS_LOST
 Nave destruida
 STR_TERROR_CONTINUES
-El terrorismo alienígena continúa
+El aterrorizo continúa
 STR_ALIENS_DEFEATED
 Alienígenas derrotados
 STR_BASE_IS_LOST
@@ -448,9 +448,9 @@ Tanques destruidos
 STR_XCOM_CRAFT_LOST
 NAVE X-COM DESTRUIDA
 STR_UFO_RECOVERY
-Articulos recuperados
+Artículos recuperados
 STR_ALIEN_BASE_RECOVERY
-Recuperación de base alienígena
+Articulos adquiridos
 STR_UNDER_ATTACK
  está siendo atacada
 STR_BASE_DEFENSES_INITIATED
@@ -498,7 +498,7 @@ Los operativos X-COM han entrado en una base alienígena. Hay que destruir el ce
 STR_CYDONIA_BRIEFING
 Ha llegado a Cydonia. Entra en un gran complejo subterráneo cercano a la Esfinge Marciana. Tienes que destruir al cerebro alienígena que controla todas las actividades alienígenas. El destino de la humanidad está en sus manos.
 STR_TERROR_MISSION
-MISIÓN DE TERRORISMO
+MISIÓN DE ATERRO
 STR_TERROR_MISSION_BRIEFING
 El objetivo de la misión es eliminar o neutralizar todas las unidades enemigas. Debe intentar salvar a cualquier civil que haya en el área. Para cancelar la misión, lleve a los operativos X-COM al vehículo de transporte y presione el icono de 'Cancelar misión'.
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
@@ -528,11 +528,11 @@ STR_NO_MORE_EQUIPMENT_ALLOWED_ON_BOARD
 STR_LAUNCH_INTERCEPTION
 INICIAR INTERCEPCIÓN
 STR_CRAFT
-NAVE
+Nave
 STR_STATUS
-SITUACIÓN
+Situación
 STR_BASE
-BASE
+Base
 STR_READY
 LISTO
 STR_OUT
@@ -544,9 +544,9 @@ REPOSTANDO
 STR_REARMING
 REARMANDO
 STR_TARGET
-BLANCO: 
+DESTINO: 
 STR_TARGET_WAY_POINT
-BLANCO: PUNTO MARCADO**
+DESTINO: PUNTO DE REFERENCIA
 STR_ARE_YOU_SURE_CYDONIA
 ¿Estás seguro de que quieres mandar esta nave a Cydonia en una misión?
 STR_YES
@@ -620,11 +620,11 @@ CARGAR JEUGO
 STR_SAVE_GAME
 GUARDAR JEUGO
 STR_INTERCEPTION_CRAFT
-NAVE DE INTERCEPCIÓN
+NAVES DISPONIBLES
 STR_BASE_
 Base >
 STR_NAME_UC
-NOMBRE
+Nombre
 STR_AMMO_
 MUNICIÓN >
 STR_CREW
@@ -632,7 +632,7 @@ Tripulación
 STR_EQUIPMENT_UC
 Armamento
 STR_ARMOR
-Corazas
+Armadura
 STR_MAX
 MÁX >
 STR_ROOKIE
@@ -652,7 +652,7 @@ ESPACIO DISPONIBLE >
 STR_SPACE_USED
 EN USO >
 STR_RANK
-RANGO
+Rango
 STR_WOUNDED
 Herido
 STR_ARM
@@ -662,7 +662,7 @@ Valor defensivo
 STR_HIT_RATIO
 Proporción
 STR_READY_TO_LAND_NEAR
-listo para{NEWLINE} aterrizar cerca de
+esta listo para{NEWLINE}aterrizar cerca de
 STR_BEGIN_MISSION
 ¿Iniciar la misión?
 STR_SELECT_ARMAMENT
@@ -676,17 +676,17 @@ DISPONIBLE
 STR_NOT_AVAILABLE
 N.D.
 STR_SELECT_ARMOR_FOR
-Seleccione coraza para
+Seleccione armadura para
 STR_TYPE
 TIPO
 STR_PERSONAL_ARMOR_UC
-Coraza personal
+Armadura personal
 STR_POWER_SUIT_UC
-Coraza mecanica
+Armadura mecanica
 STR_FLYING_SUIT_UC
-Coraza voladora
+Armadura voladora
 STR_SELECT_ARMOR
-Seleccione coraza
+Seleccione Armadura
 STR_NORTH
 NORTE
 STR_NORTH_EAST
@@ -748,13 +748,13 @@ SITIO DE ACCIDENTE-
 STR_LANDING_SITE_
 SITIO DE ATERRIZAJE-
 STR_WAY_POINT_
-PUNTO DE DESTINO -
+PUNTO DE REFERENCIA -
 STR_TERROR_SITE_UC
-SITIO DE TERRORISMO ALIENÍGENA-
+LUGAR ATERRORIZADO -
 STR_HAS_REACHED
 ha llegado a
 STR_DESTINATION
-destino
+
 STR_NOW_PATROLLING
 Está patrullando
 STR_ALIEN_ORIGINS
@@ -866,7 +866,7 @@ Cadáver alienígena
 STR_UFO_COMPONENT
 Componente de OVNI
 STR_PERSONAL_ARMOR
-Coraza personal
+Armadura personal
 STR_RAW_MATERIALS
 Materias primas
 STR_HWP_CANNON_SHELLS
@@ -1062,11 +1062,11 @@ Balas del cañón(x50)
 STR_FUSION_BALL
 Bola de fusión
 STR_SOLDIER
-Soldado
+Soldados
 STR_SCIENTIST
-Científico
+Científicos
 STR_ENGINEER
-Técnico
+Ingenieros
 STR_NORTH_AMERICA
 Norteamérica
 STR_ARCTIC
@@ -1244,7 +1244,7 @@ Financiación
 STR_CHANGE
 Cambio
 STR_WEAPON_SYSTEMS
-SISTEMAS{NEWLINE}DE ARMAS
+Armas
 STR_HWPS
 PAPS
 STR_DAMAGE_UC_
@@ -1394,7 +1394,7 @@ STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
  han firmado un pacto secreto con fuerzas alienígenas y han abandonado el proyecto.
 STR_MONTHLY_RATING
-Evaluación mensual >  
+Evaluación >  
 STR_FUNDING_CHANGE
 Cambio en la financiación > 
 STR_COUNCIL_REDUCE_DEBTS
@@ -1592,7 +1592,7 @@ FUERZA PSÍQUICA
 STR_PSIONIC_SKILL
 HABILIDAD PSÍQUICA
 STR_NEW_RANK
-NUEVO RANGO
+Nuevo rango
 STR_PROMOTIONS
 Promociones
 STR_SOLDIERS_UC
@@ -1758,7 +1758,7 @@ Restos de Sectópodo
 STR_CYBERDISC_CORPSE
 Restos de ciberdisco
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
-Armamento insuficiente para reequipar el escuadra
+Insuficiente armamento para reequipar
 STR_MARS_CYDONIA_LANDING
 Marte: aterrizaje en Cydonia.
 STR_MARS_CYDONIA_LANDING_BRIEFING
@@ -1798,7 +1798,7 @@ STR_INTERCEPTOR_DESTROYED
 STR_UFO_OUTRUNNING_INTERCEPTOR
 ¡OVNI ESTA ESCAPANDO!
 STR_ALIENS_TERRORISE
-TERRORISMO ALIENíGENA
+ATERRO ALIENíGENA
 STR_LONG_RANGE_DETECTION
 Radar de largo alcanze
 STR_STORES_UC
@@ -1894,7 +1894,7 @@ Guardado exitoso
 STR_DELETE
 BORRAR
 STR_DELETE_UNSUCCESSFUL
-Borra de juego fracasó
+Borrado de juego fracasó
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Juego anterior de X-COM detectado
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2325,9 +2325,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Reglas de manufactura como TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Esta opción permite que proyectos de manufactura puedan producir más de un artículo por hora.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Transferencias cuando en vuelo
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Esta opción permite que aeronaves que se encuentran en vuelo pueden ser transferidas.
 STR_CRAFTLAUNCHALWAYS
 Forzar despegue de aeronaves
@@ -2336,7 +2336,7 @@ Esta opción permite que usted puede forzar a su nave que despege, lo cual anula
 STR_CUSTOMINITIALBASE
 Base inicial personalizada
 STR_CUSTOMINITIALBASE_DESC
-Esta opción permite al iniciar un nuevo juego, puede colocar manualmente sus instalaciones en lugar de utilizar el diseño predeterminado.
+Esta opción permite al iniciar un nuevo juego, poder colocar manualmente sus instalaciones en lugar de utilizar el diseño predeterminado.
 STR_GLOBESEASONS
 Iluminación inclinada del globo
 STR_GLOBESEASONS_DESC
@@ -2352,15 +2352,15 @@ Esta opción permite expandir el panel de información Geoscape para incluir inf
 STR_SHOWMORESTATSININVENTORYVIEW
 Estadísticas inventario
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Esta opción permite mostrar más información sobre el soldado seleccionado en la pantalla de inventario.
+Esta opción permite mostrar más información sobre el soldado en la pantalla de inventario.
 STR_SNEAKYAI
 IA sigilosa
 STR_SNEAKYAI_DESC
-Esta opción permite que la inteligencia artificial (IA) evite exponerse sus unidades al jugador siempre que sea posible.
+Esta opción permite que la inteligencia artificial (IA) evite exponer sus unidades al jugador siempre que sea posible.
 STR_STRAFE
-Maniobras de tanques
+Movimento alterno
 STR_STRAFE_DESC
-Esta opción permite la habilidad maniobrar, acelerar, y el movimiento independiente de la torre del tanque. Mantenga presionado CTRL para utilizar estos métodos de movimiento.
+Esta opción permite a los agentes la habilidad maniobrar y correr, tambien permite el movimiento independiente de la torre de los tanques. Mantenga presionado CTRL para utilizar estos métodos de movimiento.
 STR_BATTLESCROLLDRAGINVERT
 Desplazamiento invertido 
 STR_BATTLESCROLLDRAGINVERT_DESC

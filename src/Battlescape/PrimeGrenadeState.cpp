@@ -71,7 +71,6 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 
 	add(_title);
 	_title->setAlign(ALIGN_CENTER);
-	_title->setFonts(_game->getResourcePack()->getFont("Big.fnt"), 0);
 	_title->setBig();
 	_title->setText(_game->getLanguage()->getString("STR_SET_TIMER"));
 	_title->setColor(Palette::blockOffset(1)-1);

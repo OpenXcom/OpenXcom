@@ -33,23 +33,24 @@ namespace OpenXcom
 /**
  * Initializes all the elements.
  * @param game Pointer to the core game.
- * @param message Pointer to  the message.
+ * @param msg Message string.
  */
-InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string message) : State(game), _name(name), _message(message)
+InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 222, 92, 48, 48, POPUP_BOTH);
-	_btnOk = new TextButton(120, 18, 98, 112);
-	_txtTitle = new Text(210, 60, 60, 60);
+	_window = new Window(this, 261, 89, 30, 48);
+	_btnOk = new TextButton(120, 18, 100, 112);
+	_txtTitle = new Text(255, 61, 33, 51);
 	
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(6)+11);
+	_window->setColor(Palette::blockOffset(1)-1);
+	_window->setHighContrast(true);
 
 	_btnOk->setColor(Palette::blockOffset(1)-1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
@@ -61,12 +62,10 @@ InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string messag
 	_txtTitle->setColor(Palette::blockOffset(1)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setHighContrast(true);
 	_txtTitle->setWordWrap(true);
-	std::wstring s = _name;
-	s += L'\n';
-	s += _game->getLanguage()->getString(_message);
-	_txtTitle->setText(s);
+	_txtTitle->setText(msg);
 
 	_game->getCursor()->setVisible(true);
 }
@@ -77,13 +76,6 @@ InfoboxOKState::InfoboxOKState(Game *game, std::wstring name, std::string messag
 InfoboxOKState::~InfoboxOKState()
 {
 
-}
-
-/**
- * Resets the palette.
- */
-void InfoboxOKState::init()
-{
 }
 
 /**

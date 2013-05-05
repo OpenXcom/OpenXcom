@@ -20,6 +20,7 @@
 #ifndef OPENXCOM_SHADERROTATE_H
 #define	OPENXCOM_SHADERROTATE_H
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
 #include "ShaderDraw.h"

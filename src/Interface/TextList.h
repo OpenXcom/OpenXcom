@@ -166,7 +166,8 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
-
+	/// get the scroll depth
+	int getScroll();
 };
 
 }

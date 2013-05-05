@@ -2314,7 +2314,7 @@ Grenades primed to go off in 0 turns will explode immediately when thrown, inste
 STR_BATTLENOTIFYDEATH
 Show death notifications
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Display notifications every time one of your soldiers dies.
 STR_BATTLEPREVIEWPATH
 Pathfinding preview
 STR_BATTLEPREVIEWPATH_DESC
@@ -2327,9 +2327,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 TFTD manufacture rules
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Allows manufacturing projects to produce more than one item per hour.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Airborne transfers
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Aircraft currently in-flight can be transferred.
 STR_CRAFTLAUNCHALWAYS
 Force aircraft launch

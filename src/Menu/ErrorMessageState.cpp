@@ -101,7 +101,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	else
 		_txtMessage->setText(_game->getLanguage()->getString(str));
 
-	if (bgColor == -1)
+	if (bgColor == ((Uint8)-1))
 	{
 		_window->setHighContrast(true);
 		_btnOk->setHighContrast(true);

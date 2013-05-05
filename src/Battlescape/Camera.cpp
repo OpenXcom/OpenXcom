@@ -322,34 +322,9 @@ void Camera::scrollXY(int x, int y, bool redraw)
  */
 void Camera::jumpXY(int x, int y)
 {
-	int oldX = _mapOffset.x, oldY= _mapOffset.y;
-
 	_mapOffset.x += x;
 	_mapOffset.y += y;
-
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-	/*
-	// if center goes out of map bounds, let it,
-	// the next run of the loop this came from will move it back in before the frame renders.
-	if (_center.x > _mapsize_x -1 || _center.x < 0 || 
-		_center.y > _mapsize_y -1  || _center.y < 0 )
-	{
-		for (int k=1; k<128; ++k) //try intermediate values
-		{
-			_mapOffset.x = oldX + x*k/128;
-			_mapOffset.y = oldY + y*k/128;
-			convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-			if (_center.x > _mapsize_x -1 || _center.x < 0 || 
-				_center.y > _mapsize_y -1  || _center.y < 0 )
-			{
-				//step back
-				_mapOffset.x = oldX + x*(k-1)/128;
-				_mapOffset.y = oldY + y*(k-1)/128;
-				break;
-			}
-		}
-	}
-	*/
 }
 
 

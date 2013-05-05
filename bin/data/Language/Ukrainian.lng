@@ -2327,9 +2327,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Правила виробництва як в TFTD 
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Дозволяє виробничим проектам виготовляти більше ніж одну одиницю за годину.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Передачі в польоті
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Дозволити передачу кораблів, що перебувають в польоті.
 STR_CRAFTLAUNCHALWAYS
 Примусовий запуск кораблів

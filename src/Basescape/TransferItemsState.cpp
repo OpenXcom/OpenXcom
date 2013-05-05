@@ -58,7 +58,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
-	_canTransferCraftsInAirborne = Options::getBool("canTransferCraftsInAirborne");
+	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -140,7 +140,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	}
 	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
 	{
-		if ((*i)->getStatus() != "STR_OUT" || (_canTransferCraftsInAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
+		if ((*i)->getStatus() != "STR_OUT" || (_canTransferCraftsWhileAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
@@ -554,7 +554,7 @@ void TransferItemsState::increase(int change)
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
 		_qtys[_sel]++;
-		if (!_canTransferCraftsInAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
+		if (!_canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT") _total += getCost();
 	}
 	// Item count
 	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
@@ -617,7 +617,7 @@ void TransferItemsState::decrease(int change)
 	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
 		_aQty -= change;
 	_qtys[_sel] -= change;
-	if (!_canTransferCraftsInAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
+	if (!_canTransferCraftsWhileAirborne || 0 == craft || craft->getStatus() != "STR_OUT")
 		_total -= getCost() * change;
 	updateItemStrings();
 }

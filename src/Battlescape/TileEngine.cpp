@@ -2214,6 +2214,17 @@ bool TileEngine::psiAttack(BattleAction *action)
 			calculateFOV(victim);
 			calculateUnitLighting();
 			victim->setTimeUnits(victim->getStats()->tu);
+			// if all units from either faction are mind controlled - auto-end the mission.
+			if (Options::getBool("battleAutoEnd") && Options::getBool("allowPsionicCapture"))
+			{
+				int liveAliens = 0;
+				int liveSoldiers = 0;
+				_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+				if (liveAliens == 0 || liveSoldiers == 0)
+				{
+					_save->getBattleState()->getBattleGame()->requestEndTurn();
+				}
+			}
 		}
 		return true;
 	}

@@ -2321,9 +2321,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 TFTD gyártási szabályok
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Engedélyezi, hogy óránként egynél több darabot lehessen gyártani egy projektben.
-STR_CANTRANSFERCRAFTSINAIRBORNE
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Repülő jármű átcsoportosíthatósága
-STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
 Jelenleg levegőben lévő járművet át lehet csoportosítani.
 STR_CRAFTLAUNCHALWAYS
 Repülőgépek mindig elindíthatóak

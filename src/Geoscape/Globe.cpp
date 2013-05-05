@@ -584,9 +584,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 		polarToCart(poly->getLongitude(j), poly->getLatitude(j), &x_j, &y_j);
 		polarToCart(lon, lat, &x, &y);
 
-		if ((y_i < y && y_j >= y ||
-			 y_j < y && y_i >= y) &&
-			(x_i <= x || x_j <= x))
+		if (((y_i < y && y_j >= y) || (y_j < y && y_i >= y)) && (x_i <= x || x_j <= x))
 		{
 			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
 		}
@@ -1289,7 +1287,7 @@ void Globe::drawRadars()
  */
 void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 {
-	double x, y, x2, y2;
+	double x, y, x2 = 0, y2 = 0;
 	double lat1, lon1;
 	double seg = M_PI / (static_cast<double>(segments) / 2);
 	for (double az = 0; az <= M_PI*2+0.01; az+=seg) //48 circle segments
@@ -1306,17 +1304,8 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 		}
 		if (!pointBack(lon1,lat1))
 			XuLine(_radars, this, x, y, x2, y2, 249);
-//			_radars->drawLine(x,y,x2,y2,4);
 		x2=x; y2=y;
 	}
-/*
-	std::wstringstream ss6;
-	ss6 << range;
-	label->setX(x);
-	label->setY(y);
-	label->setText(ss6.str());
-	label->blit(_radars);
-*/
 }
 
 
