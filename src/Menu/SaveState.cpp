@@ -217,11 +217,9 @@ void SaveState::quickSave()
 	try
 	{
 		_game->getSavedGame()->save(filename);
-//		_game->popState();
 	}
 	catch (Exception &e)
 	{
-//		_game->popState();
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
 		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
@@ -232,7 +230,6 @@ void SaveState::quickSave()
 	}
 	catch (YAML::Exception &e)
 	{
-//		_game->popState();
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
 		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());

@@ -125,7 +125,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	}
 
 	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
-
+	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
 
 	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
@@ -208,6 +208,12 @@ void AdvancedOptionsState::lstOptionsClick(Action *)
 		switch (intSel)
 		{
 		case 0:
+			if (_settingIntSet.at(intSel).second == 3)
+			{
+				increment = -3;
+			}
+			break;
+		case 1:
 			if (_settingIntSet.at(intSel).second == 3)
 			{
 				increment = -3;
