@@ -98,6 +98,30 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			}
 			size = newsize + 44;
 		}
+		else if (0x40 == sound[0x18] && 0x1F == sound[0x19] && 0x00 == sound[0x1A] && 0x00 == sound[0x1B])
+		{
+			// so it's WAV, but in 8 khz, we have to convert it to 11 khz sound
+
+			unsigned char *sound2 = new unsigned char[size*2];
+
+			// rewrite the samplerate in the header to 11 khz
+			sound[0x18]=0x11; sound[0x19]=0x2B; sound[0x1C]=0x11; sound[0x1D]=0x2B;
+
+			// copy and do the conversion...
+			memcpy(sound2, sound, size);
+			Uint32 step16 = (8000<<16)/11025;
+			Uint8 *w = sound2+44;
+			int newsize = 0;
+			for (Uint32 offset16 = 0; (offset16>>16) < size-44; offset16 += step16, ++w, ++newsize)
+			{
+				*w = sound[44 + (offset16>>16)];
+			}
+			size = newsize + 44;
+
+			// Ok, now replace the original with the converted:
+			delete[] sound;
+			sound = sound2;
+		}
 
 		Sound *s = new Sound();
 		try
