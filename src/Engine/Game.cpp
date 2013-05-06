@@ -172,8 +172,8 @@ void Game::run()
 		// Initialize active state
 		if (!_init)
 		{
-			_states.back()->init();
 			_init = true;
+			_states.back()->init();
 
 			// Unpress buttons
 			_states.back()->resetAll();
