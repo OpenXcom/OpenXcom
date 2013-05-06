@@ -129,7 +129,7 @@ Game::~Game()
 {
 	if (_save != 0 && Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(this, true, true);
+		SaveState *ss = new SaveState(this, true, false);
 	}
 
 	Mix_HaltChannel(-1);
