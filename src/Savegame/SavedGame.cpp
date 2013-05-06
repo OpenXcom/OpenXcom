@@ -29,7 +29,7 @@
 #include "../Engine/Language.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Exception.h"
-//#include "../Engine/Options.h"
+#include "../Engine/Options.h"
 #include "../Engine/CrossPlatform.h"
 #include "SavedBattleGame.h"
 #include "GameTime.h"
