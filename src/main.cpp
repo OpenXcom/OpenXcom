@@ -73,6 +73,7 @@ int main(int argc, char** args)
 
 	// Comment this for faster exit.
 	delete game;
-	_CrtDumpMemoryLeaks();
+	// Uncomment to check memory leaks in VS
+	//_CrtDumpMemoryLeaks();
 	return EXIT_SUCCESS;
 }
