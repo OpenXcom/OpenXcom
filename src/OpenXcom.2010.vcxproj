@@ -729,6 +729,7 @@
     <ClInclude Include="Ufopaedia\Ufopaedia.h" />
     <ClInclude Include="Ufopaedia\UfopaediaSelectState.h" />
     <ClInclude Include="Ufopaedia\UfopaediaStartState.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

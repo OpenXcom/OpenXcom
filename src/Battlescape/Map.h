@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,6 +49,7 @@ class Map : public InteractiveSurface
 {
 private:
 	static const int SCROLL_INTERVAL = 50;
+	static const int BULLET_SPRITES = 37;
 	Timer *_scrollTimer;
 	Game *_game;
 	SavedBattleGame *_save;
@@ -60,7 +61,7 @@ private:
 	CursorType _cursorType;
 	int _cursorSize;
 	int _animFrame;
-	BulletSprite *_bullet[37];
+	BulletSprite *_bullet[BULLET_SPRITES];
 	Projectile *_projectile;
 	bool projectileInFOV;
 	std::set<Explosion *> _explosions;

@@ -14,9 +14,12 @@ ruleset_DATA = \
 languagedir = $(pkgdatadir)/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
+	bin/data/Language/Bulgarian.geo \
 	bin/data/Language/Bulgarian.lng \
 	bin/data/Language/Czech.geo \
 	bin/data/Language/Czech.lng \
+	bin/data/Language/Danish.geo \
+	bin/data/Language/Danish.lng \
 	bin/data/Language/English.geo \
 	bin/data/Language/English.lng \
 	bin/data/Language/EnglishUk.geo \
@@ -41,6 +44,8 @@ language_DATA = \
 	bin/data/Language/Small.fnt \
 	bin/data/Language/Spanish.geo \
 	bin/data/Language/Spanish.lng \
+	bin/data/Language/SpanishAL.geo \
+	bin/data/Language/SpanishAL.lng \
 	bin/data/Language/Ukrainian.geo \
 	bin/data/Language/Ukrainian.lng
 
@@ -90,6 +95,7 @@ openxcom_CXXFLAGS = \
 	$(YAML_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
 openxcom_SOURCES = \
+	src/aresame.h \
 	src/Basescape/BaseInfoState.cpp \
 	src/Basescape/BaseInfoState.h \
 	src/Basescape/BasescapeState.cpp \
@@ -594,7 +600,8 @@ openxcom_SOURCES = \
 	src/Ufopaedia/UfopaediaSelectState.cpp \
 	src/Ufopaedia/UfopaediaSelectState.h \
 	src/Ufopaedia/UfopaediaStartState.cpp \
-	src/Ufopaedia/UfopaediaStartState.h
+	src/Ufopaedia/UfopaediaStartState.h \
+	src/version.h
 
 EXTRA_DIST = autogen.sh src/OpenXcom.* \
 	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt cmake/* \

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,6 +59,7 @@ private:
 	Text *_txtDefense, *_txtShortRange, *_txtLongRange;
 	Text *_numDefense, *_numShortRange, *_numLongRange;
 	Bar *_barDefense, *_barShortRange, *_barLongRange;
+	bool _containmentLimit;
 public:
 	/// Creates the Base Info state.
 	BaseInfoState(Game *game, Base *base, BasescapeState *state);

@@ -2099,7 +2099,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unités de temps réservées pour le tir automatique
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unités de temps réservées pour le tir précis
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Abandonner mission?
 STR_CORPSE
 Corps

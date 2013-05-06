@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -106,7 +106,8 @@ void InteractiveSurface::handle(Action *action, State *state)
 
 	// Modern system mouse handling: Press/releases are only triggered by button up/down events
 	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
-	bool classic = Options::getBool("classicMouseHandling");
+	//bool classic = Options::getBool("classicMouseHandling");
+	bool classic = false;
 
 	if (action->isMouseAction())
 	{

@@ -1550,6 +1550,7 @@
     <ClInclude Include="Engine\GraphSubset.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

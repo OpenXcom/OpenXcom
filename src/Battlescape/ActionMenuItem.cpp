@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -57,7 +57,9 @@ ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : I
  */
 ActionMenuItem::~ActionMenuItem()
 {
-
+	delete _txtDescription;
+	delete _txtAcc;
+	delete _txtTU;
 }
 
 /**

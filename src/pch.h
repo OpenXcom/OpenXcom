@@ -1,6 +1,11 @@
 #ifndef __OXC_PCH_H
 #define __OXC_PCH_H
 
+// uncomment to check memory leaks in VS
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -56,6 +61,15 @@
 #include <yaml-cpp/yaml.h>
 
 #include "./aresame.h"
+#include "./version.h"
+
+// uncomment to check memory leaks in VS
+//#ifdef _DEBUG
+//#ifndef DBG_NEW
+//#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+//#define new DBG_NEW
+//#endif
+//#endif
 
 #include "./Engine/State.h"
 #include "./Basescape/TransferConfirmState.h"

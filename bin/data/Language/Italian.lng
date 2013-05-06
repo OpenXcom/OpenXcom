@@ -2099,7 +2099,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unità di tempo tiro automatico
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unità di tempo tiro con mira
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Interrompi la missione ?
 STR_CORPSE
 Cadavere
@@ -2278,108 +2278,108 @@ OpenXcom
 STR_LIST_ITEM
 OGGETTO
 STR_DISPLAY_FILTER
-Display Filter
+Filtro Grafico
 STR_QUICK_SAVE
 Quick Save
 STR_QUICK_LOAD
 Quick Load
 STR_ADVANCED
-ADVANCED
+AVANZATE
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+OPZIONI AVANZATE
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Rappresaglia aggressiva
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+Gli UFO cercheranno di individuare le tue basi in ogni momento, a prescindere dai loro parametri di missione.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Alien containment limits
+Limiti di contenimento alieni
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Live alien containment limits will be imposed.
+Saranno imposti limiti di contenimento alieni vivi.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Vendita alieni vivi
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Permette la vendita di alieni vivi, consigliato quando si utilizzano i limiti di contenimento.
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Vendita automatica produzioni
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Click-destro sul pulsante di aumento del "totale da produrre" del progetto di produzione per la vendita automatica
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Consenti coda di costruzione
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Strutture incompiute fungono da collegamenti all'ascensore quando nuovi impianti sono collocati.
 STR_BATTLEAUTOEND
-Auto-end battle
+Battaglia con fine automatica
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Battaglie finiscono automaticamente quando l'ultimo nemico vivente viene neutralizzato.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Granate Immediata
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn. 
+Granate innescate per esplodere in 0 turni esploderanno immediatamente quando gettate, invece che alla fine del turno.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Visualizzare le notifiche di morte
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers die.
+Visualizza notifiche ogni volta che uno dei tuoi soldati muore.
 STR_BATTLEPREVIEWPATH
-Pathfinding preview
+Anteprima percorso
 STR_BATTLEPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Click sinistro evidenzia il percorso che l'unità farà fino alla destinazione, doppio click sposta l'unità.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Precisione basata sul raggio
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+La precisione degli spari dipende da visibilità, distanza, ed altri fattori.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+Regole di produzione TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Permette ai progetti di produzione di produrre più di un oggetto per ora.
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE
-Airborne transfers
+Trasferimenti Aerei
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Gli aerei attualmente in volo possono essere trasferiti.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+Forza il lancio dell'aereo
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Puoi forzare il tuo aereo a volare, ignorando completamente la necessità di rifornirsi di carburante e riarmarsi.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Base iniziale personalizzata
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Quando si inizia una partita, è possibile posizionare manualmente le strutture iniziali invece di utilizzare il layout predefinito.
 STR_GLOBESEASONS
-Globe tilted lighting
+Illuminazione globo inclinata
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Abilita proiezione realistica della luce solare sulla Geoscape secondo l'inclinazione assiale della Terra.
 STR_PLAYINTRO
 Play intro
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Visualizza l'intro cinematografica all'avvio.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Mostra fondi Geoscape
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+Espandere il pannello Informazioni Geoscape per includere ulteriori informazioni sulla vostra situazione finanziaria attuale.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Statistiche inventario
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+Mostra altre informazioni sul soldato selezionato nella schermata dell'inventario.
 STR_SNEAKYAI
-Sneaky AI
+AI Sneaky
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+AI evita di esporsi al giocatore quando possibile.
 STR_STRAFE
-Strafe setting
+Impostazione strafe
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Abilita bombardamento, la corsa e il movimento del tank indipendente. Tenere premuto CTRL per usare metodi alternativi di movimento.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Inverti il drag-scrolling
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Inverti drag-scrolling sul Battlescape.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Altezza di esplosione
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Modifica quanto le esplosioni che prevedono l'altezza possono diffondersi.{NEWLINE}(Flat: 0, Round: 3)
 STR_AUTOSAVE
 Autosave mode
 STR_AUTOSAVE_DESC
 0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Abilita la cattura psi
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens results in victory, and they count as live captures.
+Controllare mentalmente tutti gli alieni rimanenti porta alla vittoria, e loro contano come alieni vivi.

@@ -1,3 +1,12 @@
+set ( root_src
+  main.cpp
+  lodepng.cpp
+  lodepng.h
+  dirent.h
+  aresame.h
+  version.h
+)
+
 set ( basescape_src
   Basescape/BaseView.cpp
   Basescape/BaseView.h
@@ -576,7 +585,7 @@ if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
-set ( openxcom_src main.cpp lodepng.cpp lodepng.h dirent.h aresame.h ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
+set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )

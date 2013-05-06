@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,10 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <exception>
+#include <sstream>
+#include "version.h"
 #include "Engine/Logger.h"
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
-#include "Engine/Screen.h"
 #include "Engine/Options.h"
 #include "Menu/StartState.h"
 
@@ -54,7 +55,9 @@ int main(int argc, char** args)
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;
-		game = new Game("OpenXcom " + Options::getVersion());
+		std::stringstream title;
+		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+		game = new Game(title.str());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 		game->setState(new StartState(game));
 		game->run();
@@ -70,5 +73,7 @@ int main(int argc, char** args)
 
 	// Comment this for faster exit.
 	delete game;
+	// Uncomment to check memory leaks in VS
+	//_CrtDumpMemoryLeaks();
 	return EXIT_SUCCESS;
 }

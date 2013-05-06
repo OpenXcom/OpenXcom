@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,8 +46,6 @@ public:
 	void think();
 	/// Handles key clicks.
 	void handle(Action *action);
-	/// This method makes our modifications to the XcomResourcePack.
-	XcomResourcePack *makeModifications(XcomResourcePack *pack);
 };
 
 }

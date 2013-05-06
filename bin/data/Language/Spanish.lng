@@ -2099,7 +2099,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Uni. de tiempo reservadas para disparo automático
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Uni. de tiempo reservadas para disparo de precisión
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 ¿Cancelar la misión?
 STR_CORPSE
 Cadáver
