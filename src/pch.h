@@ -56,6 +56,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include "./aresame.h"
+#include "./version.h"
 
 #include "./Engine/State.h"
 #include "./Basescape/TransferConfirmState.h"

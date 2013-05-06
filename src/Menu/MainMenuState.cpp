@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,6 +18,7 @@
  */
 #include "MainMenuState.h"
 #include <sstream>
+#include "../version.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -27,7 +28,6 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
 #include "NewGameState.h"
 #include "NewBattleState.h"
 #include "LoadState.h"
@@ -91,7 +91,7 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	std::wstring s = L"OpenXcom\x02";
-	s += Language::utf8ToWstr(Options::getVersion());
+	s += Language::utf8ToWstr(OPENXCOM_VERSION_SHORT);
 	_txtTitle->setText(s);
 
 	// Set music

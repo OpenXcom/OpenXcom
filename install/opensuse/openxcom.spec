@@ -29,7 +29,7 @@ BuildRequires:	timidity
 BuildRequires:	libSDL-devel
 BuildRequires:	libSDL_mixer-devel
 BuildRequires:	libSDL_gfx-devel >= 2.0.21
-BuildRequires:	yaml-cpp-devel
+BuildRequires:	yaml-cpp-devel <= 0.3.0
 
 %description
 Open source reimplementation of the original X-Com

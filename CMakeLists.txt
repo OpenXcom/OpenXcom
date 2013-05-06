@@ -85,9 +85,9 @@ else ( )
 endif()
 
 # Read version number
-set ( file "${CMAKE_SOURCE_DIR}/src/Engine/Options.cpp" )
+set ( file "${CMAKE_SOURCE_DIR}/src/version.h" )
 file ( READ ${file} lines )
-string ( REGEX MATCH "[.]*_version = \"([0-9]).([0-9])" version_line "${lines}" )
+string ( REGEX MATCH "[.]*OPENXCOM_VERSION_SHORT \"([0-9]).([0-9])" version_line "${lines}" )
 set ( CPACK_PACKAGE_VERSION_MAJOR ${CMAKE_MATCH_1} )
 set ( CPACK_PACKAGE_VERSION_MINOR ${CMAKE_MATCH_2} )
 set ( CPACK_PACKAGE_VERSION_PATCH "" )
