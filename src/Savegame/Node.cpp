@@ -167,12 +167,12 @@ bool Node::isAllocated() const
 	return _allocated;
 }
 
-void Node::allocate()
+void Node::allocateNode()
 {
 	_allocated = true;
 }
 
-void Node::free()
+void Node::freeNode()
 {
 	_allocated = false;
 }

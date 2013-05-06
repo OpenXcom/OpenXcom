@@ -57,7 +57,9 @@ ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : I
  */
 ActionMenuItem::~ActionMenuItem()
 {
-
+	delete _txtDescription;
+	delete _txtAcc;
+	delete _txtTU;
 }
 
 /**

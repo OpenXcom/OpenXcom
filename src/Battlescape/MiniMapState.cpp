@@ -75,6 +75,14 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 }
 
 /**
+ *
+ */
+MiniMapState::~MiniMapState()
+{
+	delete _timerAnimate;
+}
+
+/**
  * Handles mouse-wheeling.
  * @param action Pointer to an action.
  */

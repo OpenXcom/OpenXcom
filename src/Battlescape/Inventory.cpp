@@ -70,6 +70,7 @@ Inventory::~Inventory()
 	delete _grid;
 	delete _items;
 	delete _selection;
+	delete _warning;
 }
 
 /**

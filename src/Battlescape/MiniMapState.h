@@ -44,6 +44,8 @@ class MiniMapState : public State
 public:
 	/// Create the MiniMapState
 	MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame);
+	/// Clean up the MiniMapState.
+	~MiniMapState();
 	/// Handler for the OK button
 	void btnOkClick (Action * action);
 	/// Handler for the one level up button

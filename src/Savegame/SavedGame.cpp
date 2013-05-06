@@ -135,6 +135,10 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	delete _alienStrategy;
+	for (std::vector<AlienMission*>::iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 

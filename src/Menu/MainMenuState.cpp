@@ -90,9 +90,10 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wstring s = L"OpenXcom\x02";
-	s += Language::utf8ToWstr(OPENXCOM_VERSION_SHORT);
-	_txtTitle->setText(s);
+	std::wstringstream title;
+	title << _game->getLanguage()->getString("STR_OPENXCOM") << L"\x02";
+	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
+	_txtTitle->setText(title.str());
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();

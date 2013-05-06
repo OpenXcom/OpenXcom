@@ -93,8 +93,10 @@ Map::~Map()
 {
 	delete _scrollTimer;
 	delete _arrow;
+	delete _message;
+	delete _camera;
 
-	for (int i = 0; i < 36; ++i)
+	for (int i = 0; i < BULLET_SPRITES; ++i)
 	{
 		delete _bullet[i];
 	}
@@ -126,7 +128,7 @@ void Map::init()
 			_arrow->setPixel(x, y, pixels[x+(y*9)]);
 	_arrow->unlock();
 
-	for (int i = 0; i < 37; ++i)
+	for (int i = 0; i < BULLET_SPRITES; ++i)
 	{
 		_bullet[i] = new BulletSprite(i);
 		_bullet[i]->setPalette(this->getPalette());

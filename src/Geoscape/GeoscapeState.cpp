@@ -373,6 +373,7 @@ GeoscapeState::~GeoscapeState()
 	delete _timer;
 	delete _zoomInEffectTimer;
 	delete _zoomOutEffectTimer;
+	delete _dogfightStartTimer;
 }
 
 /**

@@ -204,7 +204,7 @@ public:
 	}
 	~GlobeStaticData()
 	{
-		for(unsigned int i=0; i< earth.size(); ++i)
+		for(size_t i=0; i< earth.size(); ++i)
 			delete earth[i];
 		delete random_noise;
 	}

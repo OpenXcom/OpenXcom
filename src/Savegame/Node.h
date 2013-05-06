@@ -81,8 +81,8 @@ public:
 	/// compares the _flags variables of the nodes (for the purpose of patrol decisions!)
 	bool operator<(Node &b) { return _flags < b.getFlags(); };
 	bool isAllocated() const;
-	void allocate();
-	void free();
+	void allocateNode();
+	void freeNode();
 	bool isTarget() const;
 	
 };

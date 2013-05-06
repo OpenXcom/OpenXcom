@@ -71,6 +71,10 @@ Base::~Base()
 				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's desctructor twice
 		delete *i;
 	}
+	for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
+		delete *i;
+	}
 	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)
 	{
 		delete *i;

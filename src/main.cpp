@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <exception>
-#include <string>
+#include <sstream>
 #include "version.h"
 #include "Engine/Logger.h"
 #include "Engine/CrossPlatform.h"
@@ -55,9 +55,9 @@ int main(int argc, char** args)
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;
-		std::string title = "OpenXcom ";
-		title += OPENXCOM_VERSION_SHORT;
-		game = new Game(title);
+		std::stringstream title;
+		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+		game = new Game(title.str());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 		game->setState(new StartState(game));
 		game->run();
@@ -73,5 +73,6 @@ int main(int argc, char** args)
 
 	// Comment this for faster exit.
 	delete game;
+	_CrtDumpMemoryLeaks();
 	return EXIT_SUCCESS;
 }
