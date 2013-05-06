@@ -2099,7 +2099,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Čas vyhrazen pro automatickou střelbu
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Čas vyhrazen pro zacílený výstřel
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Přerušit misi?
 STR_CORPSE
 Mrtvola
