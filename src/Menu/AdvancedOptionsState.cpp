@@ -166,7 +166,6 @@ void AdvancedOptionsState::btnOkClick(Action *)
 	{
 		Options::setInt((*i).first, (*i).second);
 	}
-	_game->setAlienContainmentHasUpperLimit(Options::getBool("alienContainmentHasUpperLimit"));
 	Options::save();
 	_game->popState();
 }

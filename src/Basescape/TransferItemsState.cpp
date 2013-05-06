@@ -58,6 +58,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_containmentLimit = Options::getBool("alienContainmentHasUpperLimit");
 	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
 
 	// Create objects
@@ -531,7 +532,7 @@ void TransferItemsState::increase(int change)
 		return;
 	}
 	if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset &&
-		((_game->getAlienContainmentHasUpperLimit() && _aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment()) || 0 == _baseTo->getAvailableContainment()))
+		((_containmentLimit && _aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment()) || 0 == _baseTo->getAvailableContainment()))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
@@ -575,7 +576,7 @@ void TransferItemsState::increase(int change)
 	// Live Aliens count
 	else if (_sel >= _soldiers.size() + _crafts.size() + _sOffset + _eOffset + _aOffset)
 	{
-		int freeContainment = _game->getAlienContainmentHasUpperLimit() ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
+		int freeContainment = _containmentLimit ? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty : INT_MAX;
 		change = std::min(std::min(freeContainment, getQuantity() - _qtys[_sel]), change);
 		_aQty += change;
 		_qtys[_sel] += change;
