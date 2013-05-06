@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,6 +18,7 @@
  */
 
 #include "Options.h"
+#include "../version.h"
 #include <SDL.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
@@ -37,7 +38,6 @@ namespace OpenXcom
 namespace Options
 {
 
-std::string _version = "0.5.0";
 std::string _dataFolder = "";
 std::vector<std::string> _dataList;
 std::string _userFolder = "";
@@ -300,7 +300,7 @@ void loadArgs(int argc, char** args)
 bool showHelp(int argc, char** args)
 {
 	std::stringstream help;
-	help << "OpenXcom v" << Options::getVersion() << std::endl;
+	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
 	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
@@ -476,15 +476,6 @@ void save(const std::string &filename)
 
 	sav << out.c_str();
 	sav.close();
-}
-
-/**
- * Returns the game's version in x.x format.
- * @return String with version number.
- */
-std::string getVersion()
-{
-	return _version;
 }
 
 /**

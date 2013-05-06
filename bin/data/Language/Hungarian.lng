@@ -2099,7 +2099,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Az időegységek Automata Lövésre fenntartva
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Az időegységek Célzott Lövésre fenntartva
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Abbahagyod a küldetést?
 STR_CORPSE
 Tetem

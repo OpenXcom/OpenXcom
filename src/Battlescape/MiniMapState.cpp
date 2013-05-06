@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -72,6 +72,14 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
 	_timerAnimate->start();
 	_miniMapView->draw();
+}
+
+/**
+ *
+ */
+MiniMapState::~MiniMapState()
+{
+	delete _timerAnimate;
 }
 
 /**

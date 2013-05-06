@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -100,7 +100,7 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
 	_txtAbort->setHighContrast(true);
-	_txtAbort->setText(_game->getLanguage()->getString("STR_ABORT_MISSION"));
+	_txtAbort->setText(_game->getLanguage()->getString("STR_ABORT_MISSION_QUESTION"));
 
 	_btnOk->setColor(Palette::blockOffset(0));
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));

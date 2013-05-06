@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -67,7 +67,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
-
+	_containmentLimit = Options::getBool("alienContainmentHasUpperLimit") ? 1 : 0;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
@@ -622,7 +622,7 @@ void DebriefingState::prepareDebriefing()
 				addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*j)->getValue()*2);
 				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 				{
-					if (base->getAvailableContainment() - (base->getUsedContainment() * _game->getAlienContainmentHasUpperLimit()) > 0)
+					if (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) > 0)
 					{
 						base->getItems()->addItem(type, 1);
 					}
@@ -957,7 +957,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
 						addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*it)->getUnit()->getValue()*2);
-						if (base->getAvailableContainment() - (base->getUsedContainment() * _game->getAlienContainmentHasUpperLimit()) > 0)
+						if (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) > 0)
 						{
 							if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch((*it)->getUnit()->getType()), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
 							{

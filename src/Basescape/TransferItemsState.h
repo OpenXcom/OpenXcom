@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -57,7 +57,7 @@ private:
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
-	bool _canTransferCraftsWhileAirborne; // this is a cache for Options::getBool("canTransferCraftsWhileAirborne")
+	bool _canTransferCraftsWhileAirborne, _containmentLimit;
 	/// Gets selected cost.
 	int getCost();
 	/// Gets selected quantity.

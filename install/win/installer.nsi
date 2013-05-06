@@ -4,6 +4,7 @@
 ;Includes
 
 	!include "MUI2.nsh"
+	!include "ZipDLL.nsh"
 	!include "FileFunc.nsh"
 	!include "x64.nsh"
 
@@ -11,7 +12,7 @@
 ;General
 
 	!define GAME_NAME "OpenXcom"
-	!define GAME_VERSION "0.5"
+	!define GAME_VERSION "0.9"
 	!define GAME_AUTHOR "OpenXcom Developers"
 
 	;Name and file
@@ -132,7 +133,7 @@ ${EndIf}
 	File "..\..\CHANGELOG.txt"
 	File "..\..\README.txt"
 	
-	SetOutPath "$INSTDIR\DATA"
+	SetOutPath "$INSTDIR\data"
 	
 	File "..\..\bin\data\README.txt"
 	
@@ -203,8 +204,33 @@ ${EndIf}
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk" "$INSTDIR\OpenXcom.exe"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Readme.lnk" "$INSTDIR\README.TXT"
 		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+		CreateShortCut "$SMPROGRAMS\$StartMenuFolder\User Folder.lnk" "$DOCUMENTS\OpenXcom"
   
 	!insertmacro MUI_STARTMENU_WRITE_END
+
+SectionEnd
+
+Section "Data Patch" SecPatch
+	
+	;(uses NSISdl.dll)
+	NSISdl::download "http://openxcom.org/download/extras/data-patch.zip" "$TEMP\data-patch.zip"
+	Pop $0
+	StrCmp $0 success success1
+		SetDetailsView show
+		DetailPrint "download failed: $0"
+		Abort
+	success1:
+
+	;(uses ZipDLL.dll)
+	!insertmacro ZIPDLL_EXTRACT "$TEMP\data-patch.zip" "$INSTDIR\data" "<ALL>"
+	Pop $0
+	StrCmp $0 success success2
+		SetDetailsView show
+		DetailPrint "unzipping failed: $0"
+		Abort
+	success2:
+
+	Delete "$TEMP\data-patch.zip"
 
 SectionEnd
 
@@ -221,11 +247,13 @@ SectionEnd
 
 	;Language strings
 	LangString DESC_SecMain ${LANG_ENGLISH} "Files required to run ${GAME_NAME}."
+	LangString DESC_SecPatch ${LANG_ENGLISH} "Fixes errors in the original X-Com maps (courtesy of Zombie)."
 	LangString DESC_SecDesktop ${LANG_ENGLISH} "Creates a shortcut in the desktop to play ${GAME_NAME}."
 
 	;Assign language strings to sections
 	!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
+		!insertmacro MUI_DESCRIPTION_TEXT ${SecPatch} $(DESC_SecPatch)
 		!insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} $(DESC_SecDesktop)
 	!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -269,6 +297,7 @@ Section "-un.Main"
 	Delete "$SMPROGRAMS\$StartMenuFolder\OpenXcom.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Readme.lnk"
 	Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
+	Delete "$SMPROGRAMS\$StartMenuFolder\User Folder.lnk"
 	RMDir "$SMPROGRAMS\$StartMenuFolder"
 	
 	Delete "$DESKTOP\OpenXcom.lnk"

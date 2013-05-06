@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -373,6 +373,7 @@ GeoscapeState::~GeoscapeState()
 	delete _timer;
 	delete _zoomInEffectTimer;
 	delete _zoomOutEffectTimer;
+	delete _dogfightStartTimer;
 }
 
 /**

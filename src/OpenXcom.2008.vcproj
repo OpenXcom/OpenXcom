@@ -2495,6 +2495,10 @@
 			RelativePath=".\resource.h"
 			>
 		</File>
+		<File
+			RelativePath=".\version.h"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

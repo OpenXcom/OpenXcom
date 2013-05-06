@@ -2095,7 +2095,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 UT reservadas para ráfagas
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 UT reservadas para disparo de precisión
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 ¿Cancelar la misión?
 STR_CORPSE
 Cadáver

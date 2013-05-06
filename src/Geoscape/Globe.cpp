@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -204,7 +204,7 @@ public:
 	}
 	~GlobeStaticData()
 	{
-		for(unsigned int i=0; i< earth.size(); ++i)
+		for(size_t i=0; i< earth.size(); ++i)
 			delete earth[i];
 		delete random_noise;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -109,7 +109,7 @@ void PatrolBAIState::enter()
  */
 void PatrolBAIState::exit()
 {
-	if (_toNode) _toNode->free();
+	if (_toNode) _toNode->freeNode();
 }
 
 /**
@@ -174,7 +174,7 @@ void PatrolBAIState::think(BattleAction *action)
 		{
 			// head off to next patrol node
 			_fromNode = _toNode;
-			_toNode->free();
+			_toNode->freeNode();
 			_toNode = 0;
 		}
 	}
@@ -280,7 +280,7 @@ void PatrolBAIState::think(BattleAction *action)
 
 	if (_toNode != 0)
 	{
-		_toNode->allocate();
+		_toNode->allocateNode();
 		action->actor = _unit;
 		action->type = BA_WALK;
 		action->target = _toNode->getPosition();

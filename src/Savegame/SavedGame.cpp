@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
+#include "../version.h"
 #include "../Engine/Logger.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
@@ -134,6 +135,10 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	delete _alienStrategy;
+	for (std::vector<AlienMission*>::iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 
@@ -214,7 +219,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	parser.GetNextDocument(doc);
 	std::string v;
 	doc["version"] >> v;
-	if (v != Options::getVersion())
+	if (v != OPENXCOM_VERSION_SHORT)
 	{
 		throw Exception("Version mismatch");
 	}
@@ -367,7 +372,7 @@ void SavedGame::save(const std::string &filename) const
 
 	// Saves the brief game info used in the saves list
 	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << Options::getVersion();
+	out << YAML::Key << "version" << YAML::Value << OPENXCOM_VERSION_SHORT;
 	out << YAML::Key << "time" << YAML::Value;
 	_time->save(out);
 	out << YAML::EndMap;

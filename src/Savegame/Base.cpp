@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -69,6 +69,10 @@ Base::~Base()
 		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
 			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
 				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's desctructor twice
+		delete *i;
+	}
+	for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
 		delete *i;
 	}
 	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)

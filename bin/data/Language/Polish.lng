@@ -2099,7 +2099,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Zarezerwowano PR dla krótkiej serii.
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Zarezerwowano PR dla strzału celowanego.
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Przerwać misję?
 STR_CORPSE
 Zwłoki

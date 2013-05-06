@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -167,12 +167,12 @@ bool Node::isAllocated() const
 	return _allocated;
 }
 
-void Node::allocate()
+void Node::allocateNode()
 {
 	_allocated = true;
 }
 
-void Node::free()
+void Node::freeNode()
 {
 	_allocated = false;
 }
