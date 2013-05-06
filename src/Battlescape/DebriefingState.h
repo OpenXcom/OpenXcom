@@ -60,6 +60,7 @@ private:
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _destroyBase;
+	int _containmentLimit;
 public:
 	/// Creates the Debriefing state.
 	DebriefingState(Game *game);
