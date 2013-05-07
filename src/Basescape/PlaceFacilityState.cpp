@@ -85,6 +85,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(_game->getLanguage()->getString(_rule->getType()));

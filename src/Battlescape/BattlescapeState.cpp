@@ -1600,7 +1600,7 @@ void BattlescapeState::popup(State *state)
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing the screen for the mission.
  * @param abort Was the mission aborted?
- * @param number of soldiers in exit area OR number of survivors when battle finished due to either all aliens or objective was destroyed
+ * @param inExitArea number of soldiers in exit area OR number of survivors when battle finished due to either all aliens or objective was destroyed
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {

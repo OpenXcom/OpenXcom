@@ -69,8 +69,10 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 
 /**
  * Calculate the shortest path.
- * @param unit
- * @param endPosition
+ * @param unit Unit taking the path.
+ * @param endPosition The position we want to reach.
+ * @param target Target of the path.
+ * @param maxTUCost Maximum time units the path can cost.
  */
 
 void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *target, int maxTUCost)
@@ -167,6 +169,9 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
  * The path information is set only if a valid path is found.
  * @param startPosition The position to start from.
  * @param endPosition The position we want to reach.
+ * @param target Target of the path.
+ * @param sneak Is the unit sneaking?
+ * @param maxTUCost Maximum time units the path can cost.
  * @return True if a path exists, false otherwise.
  */
 bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPosition, BattleUnit *target, bool sneak, int maxTUCost)
@@ -224,13 +229,16 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 }
 
 /**
- * Get's the TU cost to move from 1 tile to the other(ONE STEP ONLY). But also updates the endPosition, because it is possible
+ * Gets the TU cost to move from 1 tile to the other (ONE STEP ONLY).
+ * But also updates the endPosition, because it is possible
  * the unit goes upstairs or falls down while walking.
- * @param startPosition
- * @param direction
- * @param endPosition pointer
- * @param unit
- * @return TU cost - 255 if movement impossible
+ * @param startPosition The position to start from.
+ * @param direction The direction we are facing.
+ * @param endPosition The position we want to reach.
+ * @param unit The unit moving.
+ * @param target The target unit.
+ * @param missile Is this a guided missile?
+ * @return TU cost or 255 if movement impossible
  */
 int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile)
 {
@@ -437,7 +445,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 /*
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
- * @param direction
+ * @param direction source direction
  * @param vector pointer to a position (which acts as a vector)
  */
 void Pathfinding::directionToVector(const int direction, Position *vector)
@@ -484,8 +492,9 @@ void Pathfinding::abortPath()
 
 /*
  * Whether a certain part of a tile blocks movement.
- * @param tile can be null pointer
- * @param movementType
+ * @param tile specified tile, can be null pointer
+ * @param part part of the tile
+ * @param missileTarget target for a missile
  * @return true/false
  */
 bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarget)
@@ -516,9 +525,10 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 
 /**
  * Whether going from one tile to another blocks movement.
- * @param startTile
- * @param endTile
- * @param direction
+ * @param startTile The tile to start from.
+ * @param endTile The tile we want to reach.
+ * @param direction The direction we are facing.
+ * @param missileTarget Target for a missile.
  * @return true/false
  */
 bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget)
@@ -593,8 +603,8 @@ bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction,
 /**
  * We can fall down here, if the tile does not exist, the tile has no floor
  * the current position is higher than 0, if there is no unit standing below us
- * @param here
- * @return bool
+ * @param here The current tile
+ * @return true/false
  */
 bool Pathfinding::canFallDown(Tile *here)
 {
@@ -605,6 +615,13 @@ bool Pathfinding::canFallDown(Tile *here)
 	return here->hasNoFloor(tileBelow);
 }
 
+/**
+ * We can fall down here, if the tile does not exist, the tile has no floor
+ * the current position is higher than 0, if there is no unit standing below us
+ * @param here The current tile
+ * @param size The size of the unit
+ * @return true/false
+ */
 bool Pathfinding::canFallDown(Tile *here, int size)
 {
 	for (int x = 0; x != size; ++x)
@@ -621,9 +638,9 @@ bool Pathfinding::canFallDown(Tile *here, int size)
 }
 /**
  * We are going upstairs here?
- * @param startPosition
- * @param endPosition
- * @return bool
+ * @param startPosition The position to start from.
+ * @param endPosition The position we wanna reach.
+ * @return true/false
  */
 bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endPosition)
 {
@@ -697,6 +714,7 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 
 /*
 * Preview path, marks tiles.
+* @param bRemove Remove preview?
 */
 bool Pathfinding::previewPath(bool bRemove)
 {
@@ -743,6 +761,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 /*
  * Preview path, unmarks tiles.
+ * @return Removed
  */
 bool Pathfinding::removePreview()
 {
@@ -752,7 +771,16 @@ bool Pathfinding::removePreview()
 	return true;
 }
 
-// this works in only x/y plane
+/**
+ * Calculate the shortest path using Brensenham path algorithm.
+ * @note This only works in the X/Y plane.
+ * @param origin The position to start from.
+ * @param target The position we want to reach.
+ * @param targetUnit Target of the path.
+ * @param sneak Is the unit sneaking?
+ * @param maxTUCost Maximum time units the path can cost.
+ * @return True if a path exists, false otherwise.
+ */
 bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *targetUnit, bool sneak, int maxTUCost)
 {
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
@@ -929,6 +957,10 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 	return tiles;
 }
 
+/**
+ * Get strafe move.
+ * @return strafe move
+ */
 bool Pathfinding::getStrafeMove() const {
 	return _strafeMove;
 }

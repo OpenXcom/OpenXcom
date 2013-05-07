@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -71,6 +72,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_btnOK->setColor(Palette::blockOffset(15)+6);
 	_btnOK->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
+	_btnOK->onKeyboardPress((ActionHandler)&NewResearchListState::btnOKClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -69,6 +70,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

@@ -21,6 +21,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -38,6 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
+ * @param cancellable Is there a Cancel button?
  */
 BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state, bool cancellable) : State(game), _base(base), _state(state), _facilities()
 {
@@ -71,6 +73,7 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BuildFacilitiesState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnOk->setVisible(cancellable);
 
 	_txtTitle->setColor(Palette::blockOffset(13));

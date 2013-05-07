@@ -92,10 +92,12 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&TransferItemsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&TransferItemsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -596,6 +598,7 @@ void TransferItemsState::decrease()
 
 /**
  * Decreases the quantity of the selected item to transfer by "change".
+ * @param change how much we want to remove
  */
 void TransferItemsState::decrease(int change)
 {

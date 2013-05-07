@@ -90,10 +90,12 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)&SellState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&SellState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&SellState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&SellState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -464,6 +466,7 @@ void SellState::decrease()
 
 /**
  * Decreases the quantity of the selected item to sell by "change".
+ * @param change how much we want to remove
  */
 void SellState::decrease(int change)
 {

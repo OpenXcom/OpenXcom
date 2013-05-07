@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -161,6 +162,8 @@ void ResearchInfoState::buildUi ()
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**

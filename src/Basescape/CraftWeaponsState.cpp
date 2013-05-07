@@ -23,6 +23,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -77,6 +78,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&CraftWeaponsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();

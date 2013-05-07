@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -71,6 +72,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&CraftArmorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

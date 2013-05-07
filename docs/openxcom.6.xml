@@ -4,11 +4,11 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://docbook.org/xml/4.5/docbookx.dtd" [
 
-  <!ENTITY dhdate	"<date>2012.11.05</date>">
+  <!ENTITY dhdate	"<date>2013.05.07</date>">
   <!ENTITY dhyear	"2012">
   <!ENTITY dhsection	"6">
   <!ENTITY dhpackage	"openxcom">
-  <!ENTITY dhversion	"0.4.5">
+  <!ENTITY dhversion	"0.9">
   <!ENTITY dhauthor	"OpenXcom Developers">
 ]>
 
@@ -35,7 +35,7 @@
 	<refnamediv>
 		<refname>&dhpackage;</refname>
 		<refpurpose>
-			An open-source reimplementation of the original "UFO: Enemy Unknown"
+			An open-source remake of the original "UFO: Enemy Unknown"
 		</refpurpose>
 	</refnamediv>
 	
@@ -50,7 +50,7 @@
 		<title>DESCRIPTION</title>
 		<para>
 			<command>&dhpackage;</command> is an open-source
-			reimplementation of the popular	UFO: Enemy Unknown
+			remake of the popular	UFO: Enemy Unknown
 			(X-Com: UFO Defense in USA) videogame by Microprose,
 			licensed under the GPL and written in C++ / SDL.
 		</para>

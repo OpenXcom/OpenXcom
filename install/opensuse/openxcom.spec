@@ -32,7 +32,7 @@ BuildRequires:	libSDL_gfx-devel >= 2.0.21
 BuildRequires:	yaml-cpp-devel <= 0.3.0
 
 %description
-Open source reimplementation of the original X-Com
+Open source remake of the original X-Com
 
 %prep
 %setup -q
