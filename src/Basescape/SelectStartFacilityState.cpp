@@ -39,10 +39,12 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
+ * @param globe Pointer to the globe to refresh.
+ * @param facilities List of facilities.
  */
-	SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities) : BuildFacilitiesState(game, base, state, false), _globe(globe)
+	SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> facilities) : BuildFacilitiesState(game, base, state, false), _globe(globe)
 {
-	_facilities = Facilities;
+	_facilities = facilities;
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
 	PopulateBuildList();
 }

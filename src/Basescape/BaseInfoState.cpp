@@ -23,6 +23,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -35,7 +36,6 @@
 #include "TransfersState.h"
 #include "StoresState.h"
 #include "BasescapeState.h"
-#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -178,6 +178,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(_game->getLanguage()->getString("STR_TRANSFERS_UC"));
