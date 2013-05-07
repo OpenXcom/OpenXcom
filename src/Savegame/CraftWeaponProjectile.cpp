@@ -21,6 +21,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Palette.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom {
 
@@ -38,46 +39,12 @@ CraftWeaponProjectile::~CraftWeaponProjectile(void)
  * weapon it was shot from. This is used for drawing the
  * projectiles.
  */
-void CraftWeaponProjectile::setType(const std::string &type)
+void CraftWeaponProjectile::setType(const int type)
 {
-	// Missiles.
-	if(type.compare("STR_STINGRAY") == 0)
+	_type = type;
+	if (type >= CWPT_LASER_BEAM)
 	{
-		_type = CWPT_STINGRAY_MISSILE;
-		_globalType = CWPGT_MISSILE;
-		_speed = 8;
-	}
-	else if(type.compare("STR_AVALANCHE") == 0)
-	{
-		_type = CWPT_AVALANCHE_MISSILE;
-		_globalType = CWPGT_MISSILE;
-		_speed = 8;
-	}
-	else if(type.compare("STR_CANNON_UC") == 0)
-	{
-		_type = CWPT_CANNON_ROUND;
-		_globalType = CWPGT_MISSILE;
-		_speed = 8;
-	}
-	else if(type.compare("STR_FUSION_BALL_UC") == 0)
-	{
-		_type = CWPT_FUSION_BALL;
-		_globalType = CWPGT_MISSILE;
-		_speed = 8;
-	}
-	// Beams.
-	else if(type.compare("STR_LASER_CANNON_UC") == 0)
-	{
-		_type = CWPT_LASER_BEAM;
 		_globalType = CWPGT_BEAM;
-		_speed = 0;
-		_state = 8;
-	}
-	else if(type.compare("STR_PLASMA_BEAM_UC") == 0)
-	{
-		_type = CWPT_PLASMA_BEAM;
-		_globalType = CWPGT_BEAM;
-		_speed = 0;
 		_state = 8;
 	}
 }
@@ -276,6 +243,14 @@ void CraftWeaponProjectile::setRange(const int &range)
 int CraftWeaponProjectile::getRange() const
 {
 	return _range;
+}
+
+/*
+ * Sets the speed of the projectile.
+ */
+void CraftWeaponProjectile::setSpeed(int speed)
+{
+	_speed = speed;
 }
 
 }
