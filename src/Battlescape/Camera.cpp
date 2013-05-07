@@ -31,6 +31,13 @@ namespace OpenXcom
 
 /**
  * Sets up a camera.
+ * @param spriteWidth Width of map sprite.
+ * @param spriteHeight Height of map sprite.
+ * @param mapsize_x Current map size in X axis.
+ * @param mapsize_y Current map size in Y axis.
+ * @param mapsize_z Current map size in Z axis.
+ * @param map Pointer to map surface.
+ * @param visibleMapHeight Current height the view is at.
  */
 Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()), _mapOffset(-250,250,0), _center(), _scrollX(0), _scrollY(0), _scrollTrigger(false), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
 {
@@ -44,6 +51,10 @@ Camera::~Camera()
 
 }
 
+/**
+ * Sets the camera's scrolling timer.
+ * @param timer Pointer to timer.
+ */
 void Camera::setScrollTimer(Timer *timer)
 {
 	_scrollTimer = timer;
@@ -291,6 +302,9 @@ void Camera::scroll()
 
 /**
  * Handle scrolling with given deviation.
+ * @param x X deviation.
+ * @param y Y deviation.
+ * @param redraw Redraw map or not.
  */
 void Camera::scrollXY(int x, int y, bool redraw)
 {
@@ -319,6 +333,8 @@ void Camera::scrollXY(int x, int y, bool redraw)
 
 /**
  * Handle jumping with given deviation.
+ * @param x X deviation.
+ * @param y Y deviation.
  */
 void Camera::jumpXY(int x, int y)
 {
@@ -356,7 +372,7 @@ void Camera::down()
 
 /**
  * Set view level.
- * @param view level
+ * @param viewlevel New view level
  */
 void Camera::setViewLevel(int viewlevel)
 {
@@ -477,22 +493,38 @@ int Camera::getMapSizeY() const
 	return _mapsize_y;
 }
 
+/**
+ * Get the map offset
+ * @return the map offset
+ */
 Position Camera::getMapOffset()
 {
 	return _mapOffset;
 }
 
+/**
+ * Set the map offset
+ * @param pos the map offset
+ */
 void Camera::setMapOffset(Position pos)
 {
 	_mapOffset = pos;
 }
 
+/**
+ * Toggle showing all map layers.
+ * @return New layer setting.
+ */
 int Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 	return _showAllLayers?2:1;
 }
 
+/**
+ * Check if camera is showing all map layers.
+ * @return Current layer setting.
+ */
 bool Camera::getShowAllLayers() const
 {
 	return _showAllLayers;
@@ -500,6 +532,7 @@ bool Camera::getShowAllLayers() const
 
 /**
  * Check if map coordinates X,Y,Z are on screen
+ * @param mapPos Coordinates to check
  */
 bool Camera::isOnScreen(const Position &mapPos) const
 {

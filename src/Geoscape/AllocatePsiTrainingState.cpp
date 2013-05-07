@@ -40,6 +40,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to handle.
  */
 AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : State(game)
 {

@@ -47,6 +47,7 @@ namespace OpenXcom
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
+ * @param bpp Bits-per-pixel depth.
  */
 Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
@@ -747,7 +748,6 @@ struct ColorReplace
 	* @param src source pixel
 	* @param shade value of shade of this surface
 	* @param newColor new color to set (it should be offseted by 4)
-	* @param notused
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
 	{

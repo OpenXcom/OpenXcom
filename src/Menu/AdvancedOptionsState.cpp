@@ -72,7 +72,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AdvancedOptionsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AdvancedOptionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	//_btnOk->onKeyboardPress((ActionHandler)&AdvancedOptionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));

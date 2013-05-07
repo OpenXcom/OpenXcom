@@ -336,6 +336,7 @@ bool showHelp(int argc, char** args)
  * and finding and loading any existing ones.
  * @param argc Number of arguments.
  * @param args Array of argument strings.
+ * @return Was initialized.
  */
 bool init(int argc, char** args)
 {

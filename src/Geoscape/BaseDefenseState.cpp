@@ -50,6 +50,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base being attacked.
  * @param ufo Pointer to the attacking ufo.
+ * @param state Pointer to the Geoscape.
  */
 BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state) : State(game), _state(state)
 {

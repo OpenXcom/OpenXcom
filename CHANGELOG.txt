@@ -1,4 +1,4 @@
-Version 0.9 (05-05-2013)
+Version 0.9 (07-05-2013)
 -------------------------
 New features:
   General:
@@ -81,12 +81,12 @@ New features:
 Bugfixes:
   General:
 - Updated translations.
-- Updated soldier names.
 - Added support for more Unicode letters.
 - Fix for extra mouse buttons.
 - Various cursor-related bugfixes/improvements.
 - Support for Haiku folder paths.
 - Fix for 8 KHz WAV-file (in SAMPLEx.CAT) playing.
+- Fixed various memory leaks.
 
   Geoscape:
 - Fix for a crash bug involving an edge case where several craft were sent to intercept a single UFO.

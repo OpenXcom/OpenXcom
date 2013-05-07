@@ -26,7 +26,8 @@ namespace OpenXcom
 /**
  * Sets up an Action menu item.
  * @param id the unique identifier of the menu item.
- * @param bigFont pointer to the font.
+ * @param big pointer to the big font.
+ * @param small pointer to the small font.
  * @param x position on the x-axis.
  * @param y position on the y-asis.
  */

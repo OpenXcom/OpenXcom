@@ -52,6 +52,7 @@ namespace OpenXcom
  * Initializes all the elements in the Inventory screen.
  * @param game Pointer to the core game.
  * @param tu Inventory Time Unit mode.
+ * @param parent Pointer to parent Battlescape.
  */
 InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
