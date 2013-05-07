@@ -12,10 +12,10 @@
 # norootforbuild
 
 Name:           openxcom
-Version:        0.4.5
+Version:        0.9.0
 Release:        0
 Group:          Amusements/Games/Strategy/Turn Based 
-License:        GPL
+License:        GPL-2.0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 URL:            http://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz
@@ -28,11 +28,12 @@ BuildRequires:	pkg-config
 BuildRequires:	timidity
 BuildRequires:	libSDL-devel
 BuildRequires:	libSDL_mixer-devel
+BuildRequires:	libSDL_image-devel
 BuildRequires:	libSDL_gfx-devel >= 2.0.21
-BuildRequires:	yaml-cpp-devel <= 0.3.0
+BuildRequires:	yaml-cpp-devel
 
 %description
-Open source remake of the original X-Com
+Open source reimplementation of the original X-Com
 
 %prep
 %setup -q
