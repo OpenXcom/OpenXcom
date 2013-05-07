@@ -1150,6 +1150,8 @@ craftWeapons:
     ammoMax: 6
     launcher: STR_STINGRAY_LAUNCHER
     clip: STR_STINGRAY_MISSILES
+    projectileType: 0
+    projectileSpeed: 8
   - type: STR_AVALANCHE
     sprite: 1
     sound: 5
@@ -1162,6 +1164,8 @@ craftWeapons:
     ammoMax: 3
     launcher: STR_AVALANCHE_LAUNCHER
     clip: STR_AVALANCHE_MISSILES
+    projectileType: 1
+    projectileSpeed: 8
   - type: STR_CANNON_UC
     sprite: 2
     sound: 4
@@ -1175,6 +1179,8 @@ craftWeapons:
     rearmRate: 50
     launcher: STR_CANNON
     clip: STR_CANNON_ROUNDS_X50
+    projectileType: 2
+    projectileSpeed: 8
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
@@ -1187,6 +1193,7 @@ craftWeapons:
     ammoMax: 99
     rearmRate: 99
     launcher: STR_LASER_CANNON
+    projectileType: 4
   - type: STR_PLASMA_BEAM_UC
     sprite: 5
     sound: 9
@@ -1199,6 +1206,7 @@ craftWeapons:
     ammoMax: 100
     rearmRate: 100
     launcher: STR_PLASMA_BEAM
+    projectileType: 5
   - type: STR_FUSION_BALL_UC
     sprite: 3
     sound: 7
@@ -1211,6 +1219,8 @@ craftWeapons:
     ammoMax: 2
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
+    projectileType: 3
+    projectileSpeed: 8
 # Item Definitions:
 #  - type: Item name, reference to string defined in .lng, must be unique. (string)
 #    size: How much space this item takes up in storage. (float) (default 0.0)
