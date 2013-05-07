@@ -26,6 +26,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -87,6 +88,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -366,6 +368,7 @@ void CraftEquipmentState::moveLeft()
 
 /**
  * Moves the given number of items (selected) to the base.
+ * @param change Item difference.
  */
 void CraftEquipmentState::moveLeft(int change)
 {
@@ -435,6 +438,7 @@ void CraftEquipmentState::moveRight()
 
 /**
  * Moves the given number of items (selected) to the craft.
+ * @param change Item difference.
  */
 void CraftEquipmentState::moveRight(int change)
 {

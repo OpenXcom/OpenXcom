@@ -21,8 +21,8 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -75,6 +75,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTraining->setText(_game->getLanguage()->getString("STR_PSIONIC_TRAINING"));
@@ -141,7 +142,7 @@ void SoldiersState::btnOkClick(Action *)
 }
 
 /**
- * Returns to the previous screen.
+ * Open Psionic Training screen.
  * @param action Pointer to an action.
  */
 void SoldiersState::btnPsiTrainingClick(Action *)

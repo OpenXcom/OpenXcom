@@ -72,6 +72,7 @@ namespace OpenXcom
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
+ * @param visibleMapHeight Current visible map height.
  */
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
@@ -936,7 +937,8 @@ int Map::getTerrainLevel(Position pos, int size)
 
 /**
  * Set the 3D cursor to selection/aim mode
- * @param type
+ * @param type Cursor type.
+ * @param size Size of cursor.
  */
 void Map::setCursorType(CursorType type, int size)
 {

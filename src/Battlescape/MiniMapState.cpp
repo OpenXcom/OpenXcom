@@ -40,7 +40,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the MiniMapState screen.
  * @param game Pointer to the core game.
- * @param map The Battlescape map.
+ * @param camera The Battlescape camera.
  * @param battleGame The Battlescape save.
 */
 MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State(game)

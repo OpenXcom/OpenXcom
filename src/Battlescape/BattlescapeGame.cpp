@@ -362,6 +362,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 /**
  * Kneel/Standup.
  * @param bu Pointer to a unit.
+ * @return If the action succeeded.
  */
 bool BattlescapeGame::kneel(BattleUnit *bu)
 {
@@ -1150,6 +1151,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 /**
   * This will cancel the current action the user had selected (firing, throwing,..)
+  * @param bForce Force the action to be cancelled.
   * @return Whether an action was cancelled or not.
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
@@ -1557,9 +1559,9 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 }
 
-
 /**
  * Get map
+ * @return map
  */
 Map *BattlescapeGame::getMap()
 {
@@ -1567,6 +1569,7 @@ Map *BattlescapeGame::getMap()
 }
 /**
  * Get save
+ * @return save
  */
 SavedBattleGame *BattlescapeGame::getSave()
 {
@@ -1574,6 +1577,7 @@ SavedBattleGame *BattlescapeGame::getSave()
 }
 /**
  * Get tilengine
+ * @return tilengine
  */
 TileEngine *BattlescapeGame::getTileEngine()
 {
@@ -1581,6 +1585,7 @@ TileEngine *BattlescapeGame::getTileEngine()
 }
 /**
  * Get pathfinding
+ * @return pathfinding
  */
 Pathfinding *BattlescapeGame::getPathfinding()
 {
@@ -1588,6 +1593,7 @@ Pathfinding *BattlescapeGame::getPathfinding()
 }
 /**
  * Get resourcepack
+ * @return resourcepack
  */
 ResourcePack *BattlescapeGame::getResourcePack()
 {
@@ -1595,6 +1601,7 @@ ResourcePack *BattlescapeGame::getResourcePack()
 }
 /**
  * Get ruleset
+ * @return ruleset
  */
 const Ruleset *BattlescapeGame::getRuleset() const
 {

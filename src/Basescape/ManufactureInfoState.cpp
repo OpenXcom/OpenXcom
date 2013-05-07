@@ -183,6 +183,8 @@ void ManufactureInfoState::buildUi()
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnStop->setColor(Palette::blockOffset(13)+10);
 	_btnStop->setText(_game->getLanguage()->getString("STR_STOP_PRODUCTION"));

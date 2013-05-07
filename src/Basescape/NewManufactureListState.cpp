@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/Ruleset.h"
@@ -93,6 +94,7 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewManufactureListState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NewManufactureListState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**

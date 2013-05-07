@@ -153,7 +153,7 @@ void BattlescapeGenerator::setBase(Base *base)
 
 /**
  * Sets the terror site involved in the battle.
- * @param base Pointer to terror site.
+ * @param terror Pointer to terror site.
  */
 void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
 {
