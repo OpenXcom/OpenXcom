@@ -1125,6 +1125,24 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 }
 
 /**
+ * Functor to check for completed facilities.
+ */
+struct isCompleted: public std::unary_function<BaseFacility*, bool>
+{
+	/// Check isMindShield() for @a facility.
+	bool operator()(const BaseFacility *facility) const;
+};
+
+/**
+ * Only fully operational facilities are checked.
+ * @param facility Pointer to the facility to check.
+ * @return If @a facility can act as a mind shield.
+ */
+bool isCompleted::operator()(const BaseFacility *facility) const
+{
+	return (facility->getBuildTime() == 0);
+}
+/**
  * Calculate the detection chance of this base.
  * Big bases without mindshields are easier to detect.
  * @return The detection chance.
@@ -1132,7 +1150,8 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 unsigned Base::getDetectionChance() const
 {
 	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
-	return (_facilities.size()/6 + 16) / (mindShields + 1);
+	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
+	return (completedFacilities / 6 + 16) / (mindShields + 1);
 }
 
 int Base::getGravShields() const
