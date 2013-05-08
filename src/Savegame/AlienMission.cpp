@@ -219,8 +219,8 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
-		int spawnTimer = _rule.getWave(_nextWave).spawnTimer;
-		_spawnCountdown = (spawnTimer/2 + RNG::generate(0, spawnTimer));
+		int spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
+		_spawnCountdown = (spawnTimer/2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 }
 

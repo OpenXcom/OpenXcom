@@ -1151,7 +1151,7 @@ unsigned Base::getDetectionChance() const
 {
 	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
-	return (completedFacilities / 6 + 16) / (mindShields + 1);
+	return (completedFacilities / 6 + 15) / (mindShields + 1);
 }
 
 int Base::getGravShields() const
