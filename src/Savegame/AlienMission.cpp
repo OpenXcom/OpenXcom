@@ -334,8 +334,8 @@ void AlienMission::start(unsigned initialCount)
 	_liveUfos = 0;
 	if (initialCount == 0)
 	{
-		int half = _rule.getWave(0).spawnTimer/2;
-		_spawnCountdown = half + (2 * RNG::generate(0, 1) - 1) * half/2;
+		int spawnTimer = _rule.getWave(0).spawnTimer / 30;
+		_spawnCountdown = (spawnTimer / 2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 	else
 	{
