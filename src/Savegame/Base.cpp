@@ -1129,14 +1129,14 @@ bool isMindShield::operator()(const BaseFacility *facility) const
  */
 struct isCompleted: public std::unary_function<BaseFacility*, bool>
 {
-	/// Check isMindShield() for @a facility.
+	/// Check isCompleted() for @a facility.
 	bool operator()(const BaseFacility *facility) const;
 };
 
 /**
- * Only fully operational facilities are checked.
+ * Facilities are checked for construction completion.
  * @param facility Pointer to the facility to check.
- * @return If @a facility can act as a mind shield.
+ * @return If @a facility has completed construction.
  */
 bool isCompleted::operator()(const BaseFacility *facility) const
 {
