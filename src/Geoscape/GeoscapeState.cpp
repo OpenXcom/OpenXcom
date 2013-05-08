@@ -1024,28 +1024,6 @@ void GeoscapeState::time10Minutes()
 	}
 }
 
-/** @brief Delete a finished mission.
- * This function object will delete an alien mission if it is over.
- */
-struct deleteFinishedAlienMission: public std::unary_function<AlienMission*, bool>
-{
-	/// Delete a mission if it's finished.
-	/**
-	 * Delete a mission if it has no UFOs and is not going to create any more.
-	 * @param am A pointer to the mission to check.
-	 * @return true if @a am was deleted.
-	 */
-	bool operator()(AlienMission *am) const
-	{
-		if (am->isOver())
-		{
-			delete am;
-			return true;
-		}
-		return false;
-	}
-};
-
 /** @brief Call AlienMission::think() with proper parameters.
  * This function object calls AlienMission::think() with the proper parameters.
  */
@@ -1131,11 +1109,19 @@ void GeoscapeState::time30Minutes()
 		      _game->getSavedGame()->getAlienMissions().end(),
 		      callThink(*_game, *_globe));
 	// Remove finished missions
-	std::vector<AlienMission*>::iterator last =
-	    std::remove_if(_game->getSavedGame()->getAlienMissions().begin(),
-			   _game->getSavedGame()->getAlienMissions().end(),
-			   deleteFinishedAlienMission());
-	_game->getSavedGame()->getAlienMissions().erase(last, _game->getSavedGame()->getAlienMissions().end());
+	for (std::vector<AlienMission*>::iterator am = _game->getSavedGame()->getAlienMissions().begin();
+		am != _game->getSavedGame()->getAlienMissions().end();)
+	{
+		if ((*am)->isOver())
+		{
+			delete *am;
+			am = _game->getSavedGame()->getAlienMissions().erase(am);
+		}
+		else
+		{
+			++am;
+		}
+	}
 
 	// Handle crashed UFOs expiration
 	std::for_each(_game->getSavedGame()->getUfos()->begin(),
