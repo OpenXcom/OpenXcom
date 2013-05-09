@@ -188,6 +188,9 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 	Options::createDefault();
 	Options::setString("language", "English");
 	Options::save();
+	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
+	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
+	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 	_game->popState();
 }
 
