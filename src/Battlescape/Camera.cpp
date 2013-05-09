@@ -115,9 +115,9 @@ void Camera::mouseRelease(Action *action, State *)
 		_scrollTrigger = false;
 		int posX = action->getXMouse();
 		int posY = action->getYMouse();
-		if ((posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
+		if ((posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0)
 			|| (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
-			|| (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+			|| (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0)
 			|| (posY > (_screenHeight - SCROLL_BORDER) * action->getYScale()))
 			// A cheap hack to avoid handling this event as a click
 			// on the map when the mouse is on the scroll-border
@@ -143,11 +143,11 @@ void Camera::mouseOver(Action *action, State *)
 		int posY = action->getYMouse();
 		int scrollSpeed = Options::getInt("battleScrollSpeed");
 
-		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
+		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0)
 		{
 			_scrollX = scrollSpeed;
 			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
 			{
 				_scrollY = scrollSpeed/2;
 			}
@@ -160,7 +160,7 @@ void Camera::mouseOver(Action *action, State *)
 		{
 			_scrollX = -scrollSpeed;
 			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
 			{
 				_scrollY = scrollSpeed/2;
 			}
@@ -174,11 +174,11 @@ void Camera::mouseOver(Action *action, State *)
 			_scrollX = 0;
 		}
 
-		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+		if (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0)
 		{
 			_scrollY = scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
 			{
 				_scrollX = scrollSpeed;
 				_scrollY /=2;
@@ -193,7 +193,7 @@ void Camera::mouseOver(Action *action, State *)
 		{
 			_scrollY = -scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
 			{
 				_scrollX = scrollSpeed;
 				_scrollY /=2;
