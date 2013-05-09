@@ -429,6 +429,10 @@ void UnitSprite::drawRoutine0()
 		itema->setY(itema->getY() + (22 - _unit->getStandHeight()));
 	}
 	
+	Surface *newTorso = new Surface(*torso);
+	Surface *newLegs = new Surface(*legs);
+	Surface *newLeftArm = new Surface(*leftArm);
+	Surface *newRightArm = new Surface(*rightArm);
 	if(_unit->getGeoscapeSoldier())
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
@@ -437,10 +441,6 @@ void UnitSprite::drawRoutine0()
 		{
 			Uint8 face_color = ColorFace::Face;
 			Uint8 hair_color = ColorFace::Hair;
-			Surface *newTorso = new Surface(*torso);
-			Surface *newLegs = new Surface(*legs);
-			Surface *newLeftArm = new Surface(*leftArm);
-			Surface *newRightArm = new Surface(*rightArm);
 			switch(look)
 			{
 				case LOOK_BLONDE:
@@ -482,6 +482,10 @@ void UnitSprite::drawRoutine0()
 	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
 	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
 	}
+	delete(newTorso);
+	delete(newLegs);
+	delete(newLeftArm);
+	delete(newRightArm);
 }
 
 
