@@ -19,7 +19,6 @@
 #include "Soldier.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Ruleset/SoldierNamePool.h"
@@ -441,34 +440,6 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
-	if (!_psiTraining)
-	{
-		_improvement = 0;
-		return;
-	}
-
-	if (Options::getBool("anytimePsiTraining"))
-	{
-		if (_currentStats.psiSkill > 0)
-		{
-			if (_currentStats.psiSkill < 100 && 100 * 10/_currentStats.psiSkill >= RNG::generate(1, 100))
-			{
-				++_currentStats.psiSkill;
-				++_improvement;
-			}
-		}
-		else if (_currentStats.psiSkill < 0)
-		{
-			if (++_currentStats.psiSkill == 0)	// initial training is over
-				_currentStats.psiSkill = RNG::generate(16, 24);
-		}
-		else if (_currentStats.psiSkill == 0)
-		{
-			_currentStats.psiSkill = -RNG::generate(30, 50);	// set initial training from 30 to 50 days
-		}
-		return;
-	}
-
 	_improvement = 0;
 	if (_currentStats.psiSkill < 0)
 		_currentStats.psiSkill = 0;
@@ -481,6 +452,36 @@ void Soldier::trainPsi()
 	_currentStats.psiSkill += _improvement;
 	if(_currentStats.psiSkill > 100)
 		_currentStats.psiSkill = 100;
+}
+
+/**
+ * Trains a soldier's Psychic abilities (anytimePsiTraining option)
+ */
+void Soldier::trainPsi1Day()
+{
+	if (!_psiTraining)
+	{
+		_improvement = 0;
+		return;
+	}
+
+	if (_currentStats.psiSkill > 0)
+	{
+		if (_currentStats.psiSkill < 100 && 100 * 10/_currentStats.psiSkill >= RNG::generate(1, 100))
+		{
+			++_currentStats.psiSkill;
+			++_improvement;
+		}
+	}
+	else if (_currentStats.psiSkill < 0)
+	{
+		if (++_currentStats.psiSkill == 0)	// initial training is over
+			_currentStats.psiSkill = RNG::generate(16, 24);
+	}
+	else if (_currentStats.psiSkill == 0)
+	{
+		_currentStats.psiSkill = -RNG::generate(30, 50);	// set initial training from 30 to 50 days
+	}
 }
 
 /**
