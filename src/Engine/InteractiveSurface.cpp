@@ -18,6 +18,7 @@
  */
 #include "InteractiveSurface.h"
 #include "Action.h"
+#include "../Interface/ArrowButton.h"
 #include "Options.h"
 
 namespace OpenXcom
@@ -498,6 +499,17 @@ void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
 	{
 		_keyRelease.erase(key);
 	}
+}
+
+/**
+ * Check this surface to see if it's a textlist button.
+ * @return whether it's a TextList's ArrowButton or not.
+ */
+bool InteractiveSurface::isTextList()
+{
+	ArrowButton* testSurface = dynamic_cast<ArrowButton*>(this);
+	if (testSurface == 0) return false;
+	return testSurface->getListButton();
 }
 
 }
