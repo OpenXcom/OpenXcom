@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat May 11 09:54:33 UTC 2013 - Angelos Tzotsos <tzotsos@opensuse.org>
+
+- restrict yaml-cpp to versions under 0.5.0
+
+-------------------------------------------------------------------
 Thu May  9 09:41:45 UTC 2013 - slavb18@gmail.com
 
 - moved installation to /usr istead of /usr/local
