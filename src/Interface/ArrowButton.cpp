@@ -67,21 +67,6 @@ void ArrowButton::setTextList(TextList *list)
 }
 
 /**
- * Sets a flag for this button to say "i'm a member of a textList" to true.
- */
-void ArrowButton::setListButton()
-{
-	_listButton = true;
-}
-
-/**
- * Gets a flag for this button saying "i'm a member of a textList".
- */
-bool ArrowButton::getListButton()
-{
-	return _listButton;
-}
-/**
  * Draws the button with the specified arrow shape.
  */
 void ArrowButton::draw()

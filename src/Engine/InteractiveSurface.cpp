@@ -18,7 +18,6 @@
  */
 #include "InteractiveSurface.h"
 #include "Action.h"
-#include "../Interface/ArrowButton.h"
 #include "Options.h"
 
 namespace OpenXcom
@@ -31,7 +30,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true), _listButton(false)
 {
 	_classic = Options::getBool("classicMouseHandling");
 }
@@ -118,7 +117,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 				_isHovered = true;
 				mouseIn(action, state);
 			}
-				if (_classic && isTextList())
+				if (_classic && _listButton)
 				{
 					_buttonsPressed = SDL_GetMouseState(0, 0);
 					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
@@ -138,7 +137,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
-				if (_classic && isTextList())
+				if (_classic && _listButton)
 				{
 					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 					{
@@ -500,14 +499,11 @@ void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
 }
 
 /**
- * Check this surface to see if it's a textlist button.
- * @return whether it's a TextList's ArrowButton or not.
+ * Sets a flag for this button to say "i'm a member of a textList" to true.
  */
-bool InteractiveSurface::isTextList()
+void InteractiveSurface::setListButton()
 {
-	ArrowButton* testSurface = dynamic_cast<ArrowButton*>(this);
-	if (testSurface == 0) return false;
-	return testSurface->getListButton();
+	_listButton = true;
 }
 
 }

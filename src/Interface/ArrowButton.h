@@ -62,10 +62,6 @@ public:
 	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
-	/// mark this as a member of a textList
-	void setListButton();
-	/// check if this is a member of a textList
-	bool getListButton();
 };
 
 }
