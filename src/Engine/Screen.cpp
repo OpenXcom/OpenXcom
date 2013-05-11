@@ -29,6 +29,7 @@
 #include "CrossPlatform.h"
 #include "Zoom.h"
 #include "OpenGL.h"
+#include "Timer.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -109,6 +110,19 @@ Surface *Screen::getSurface()
  */
 void Screen::handle(Action *action)
 {
+	if (Options::getBool("debug"))
+	{
+		if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F8)
+		{
+			switch(Timer::gameSlowSpeed)
+			{
+				case 1: Timer::gameSlowSpeed = 5; break;
+				case 5: Timer::gameSlowSpeed = 15; break;
+				default: Timer::gameSlowSpeed = 1; break;
+			}				
+		}
+	}
+	
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && (SDL_GetModState() & KMOD_ALT) != 0)
 	{
 		setFullscreen(!_fullscreen);

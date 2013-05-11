@@ -450,12 +450,11 @@ void NewBattleState::btnRandomClick(Action *)
 
 	const Ruleset *rule = _game->getRuleset();
 	SavedGame *save = new SavedGame();
+	const YAML::Node &starter = _game->getRuleset()->getStartingBase();
 	Base *base = new Base(rule);
+	base->load(starter, save, true, true);
 	save->getBases()->push_back(base);
-	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
-
-	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
-
+	_craft = new Craft(_game->getRuleset()->getCraft(_crafts[_selCraft]), base, 1);
 	base->getCrafts()->push_back(_craft);
 
 	// Generate soldiers
@@ -523,8 +522,6 @@ void NewBattleState::btnRandomClick(Action *)
             }
 		}
 	}
-
-
 
 	_game->setSavedGame(save);
 }

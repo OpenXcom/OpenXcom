@@ -428,20 +428,11 @@ void UnitSprite::drawRoutine0()
 	{
 		itema->setY(itema->getY() + (22 - _unit->getStandHeight()));
 	}
-
-	// blit order depends on unit direction
-	switch (_unit->getDirection())
-	{
-	case 0: leftArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); rightArm->blit(this); break;
-	case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
-	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
-	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
-	case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
-	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
-	}
 	
+	Surface *newTorso = new Surface(*torso);
+	Surface *newLegs = new Surface(*legs);
+	Surface *newLeftArm = new Surface(*leftArm);
+	Surface *newRightArm = new Surface(*rightArm);
 	if(_unit->getGeoscapeSoldier())
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
@@ -467,10 +458,34 @@ void UnitSprite::drawRoutine0()
 					break;
 			}
 			lock();
-			ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newLeftArm), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newRightArm), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newTorso), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newLegs), ShaderScalar(hair_color), ShaderScalar(face_color));
 			unlock();
+			torso = newTorso;
+			legs = newLegs;
+			leftArm = newLeftArm;
+			rightArm = newRightArm;
 		}
 	}
+
+	// blit order depends on unit direction
+	switch (_unit->getDirection())
+	{
+	case 0: leftArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); rightArm->blit(this); break;
+	case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
+	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
+	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
+	case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
+	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+	}
+	delete(newTorso);
+	delete(newLegs);
+	delete(newLeftArm);
+	delete(newRightArm);
 }
 
 
