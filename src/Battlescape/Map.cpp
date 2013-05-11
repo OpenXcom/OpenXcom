@@ -82,9 +82,11 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_save = _game->getSavedGame()->getBattleGame();
 	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
-	_scrollTimer = new Timer(SCROLL_INTERVAL);
-	_scrollTimer->onTimer((SurfaceHandler)&Map::scroll);
-	_camera->setScrollTimer(_scrollTimer);
+	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
+	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
+	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
+	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
+	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
 }
 
 /**
@@ -92,7 +94,8 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
  */
 Map::~Map()
 {
-	delete _scrollTimer;
+	delete _scrollMouseTimer;
+	delete _scrollKeyTimer;
 	delete _arrow;
 	delete _message;
 	delete _camera;
@@ -143,7 +146,8 @@ void Map::init()
  */
 void Map::think()
 {
-	_scrollTimer->think(0, this);
+	_scrollMouseTimer->think(0, this);
+	_scrollKeyTimer->think(0, this);
 }
 
 /**
@@ -1060,9 +1064,17 @@ Camera *Map::getCamera()
 /**
  * Timers only work on surfaces so we have to pass this on to the camera object.
 */
-void Map::scroll()
+void Map::scrollMouse()
 {
-	_camera->scroll();
+	_camera->scrollMouse();
+}
+
+/**
+ * Timers only work on surfaces so we have to pass this on to the camera object.
+*/
+void Map::scrollKey()
+{
+	_camera->scrollKey();
 }
 
 /**

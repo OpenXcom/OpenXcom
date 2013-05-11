@@ -377,11 +377,7 @@ BattlescapeOptionsState::~BattlescapeOptionsState()
 
 }
 
-/**
- * Saves options and returns to the previous screen.
- * @param action Pointer to an action.
- */
-void BattlescapeOptionsState::btnOkClick(Action *)
+void BattlescapeOptionsState::saveOptions()
 {
 	if (_scrollSpeed == _btnScrollSpeed1)
 		Options::setInt("battleScrollSpeed", 8);
@@ -441,6 +437,15 @@ void BattlescapeOptionsState::btnOkClick(Action *)
 		Options::setInt("battleAlienSpeed", 1);
 
 	Options::save();
+}
+
+/**
+ * Saves options and returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void BattlescapeOptionsState::btnOkClick(Action *)
+{
+	saveOptions();
 	_game->popState();
 }
 
@@ -450,6 +455,7 @@ void BattlescapeOptionsState::btnOkClick(Action *)
  */
 void BattlescapeOptionsState::btnLoadClick(Action *)
 {
+	saveOptions();
 	_game->pushState(new LoadState(_game, false));
 }
 
@@ -459,6 +465,7 @@ void BattlescapeOptionsState::btnLoadClick(Action *)
  */
 void BattlescapeOptionsState::btnSaveClick(Action *)
 {
+	saveOptions();
 	_game->pushState(new SaveState(_game, false));
 }
 

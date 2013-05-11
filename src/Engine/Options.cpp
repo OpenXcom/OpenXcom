@@ -384,7 +384,14 @@ bool init(int argc, char** args)
 		// Load existing options
 		if (CrossPlatform::folderExists(_configFolder))
 		{
-			load();
+			try
+			{
+				load();
+			}
+			catch (YAML::Exception &e)
+			{
+				Log(LOG_ERROR) << e.what();
+			}
 		}
 		// Create config folder and save options
 		else
