@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May  9 09:41:45 UTC 2013 - slavb18@gmail.com
+
+- moved installation to /usr istead of /usr/local
+
+-------------------------------------------------------------------
 Tue May  7 10:09:36 UTC 2013 - Angelos Tzotsos <tzotsos@opensuse.org>
 
 - update to version 0.9.0
