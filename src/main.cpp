@@ -28,7 +28,7 @@
 /** @mainpage
  * @author OpenXcom Developers
  *
- * OpenXcom is an open-source remake of the original X-Com
+ * OpenXcom is an open-source clone of the original X-Com
  * written entirely in C++ and SDL. This documentation contains info
  * on every class contained in the source code and its public methods.
  * The code itself also contains in-line comments for more complicated

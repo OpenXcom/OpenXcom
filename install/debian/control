@@ -24,7 +24,7 @@ Description: Classic turn-based strategy game
  strategy video game made by Mythos / Microprose, where you
  take control of the X-COM organization to fight off the alien
  menace invading Earth.
- OpenXcom is an open-source remake of that game,
+ OpenXcom is an open-source clone of that game,
  licensed under the GPL and written in C++ / SDL.
  IMPORTANT: OpenXcom requires game resources from original
  game (DOS, Windows or Steam version).

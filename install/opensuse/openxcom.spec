@@ -33,7 +33,7 @@ BuildRequires:	libSDL_gfx-devel >= 2.0.21
 BuildRequires:	yaml-cpp-devel
 
 %description
-OpenXcom is an open-source remake of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA) video game by Microprose, licensed under the GPL and written in C++ / SDL. OpenXcom requires game resources from the original game (DOS, Windows or Steam version)
+OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA) video game by Microprose, licensed under the GPL and written in C++ / SDL. OpenXcom requires game resources from the original game (DOS, Windows or Steam version)
 
 %prep
 %setup -q
