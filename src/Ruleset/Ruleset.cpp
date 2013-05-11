@@ -63,8 +63,10 @@ namespace OpenXcom
  */
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
+    // Check in which data dir the folder is stored
+    std::string path = CrossPlatform::getDataFolder("SoldierName/");
 	// Add soldier names
-	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
+	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam");
 
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
@@ -172,9 +174,9 @@ Ruleset::~Ruleset()
  */
 void Ruleset::load(const std::string &source)
 {
-	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
+	std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
 	if (!CrossPlatform::folderExists(dirname))
-		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
+		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
 		loadFiles(dirname);
 }
@@ -641,7 +643,7 @@ void Ruleset::loadFiles(const std::string &dirname)
  */
 void Ruleset::save(const std::string &filename) const
 {
-	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
+	std::string s = CrossPlatform::getDataFile("Ruleset/" + filename + ".rul");
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
