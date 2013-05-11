@@ -337,8 +337,8 @@ void SellState::lstItemsLeftArrowRelease(Action *action)
  */
 void SellState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increaseByValue(1);
 }
 
 /**
@@ -370,8 +370,8 @@ void SellState::lstItemsRightArrowRelease(Action *action)
  */
 void SellState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decreaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decreaseByValue(1);
 }
 
 /**
@@ -383,8 +383,8 @@ void SellState::lstItemsMousePress(Action *action)
 	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 	{
 		_sel = _lstItems->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increaseByValue(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decreaseByValue(_changeValueByMouseWheel);
 	}
 }
 
@@ -439,14 +439,14 @@ int SellState::getQuantity()
 void SellState::increase()
 {
 	_timerInc->setInterval(50);
-	increase(1);
+	increaseByValue(1);
 }
 
 /**
  * Increases the quantity of the selected item to sell by "change".
  * @param change how much we want to add
  */
-void SellState::increase(int change)
+void SellState::increaseByValue(int change)
 {
 	if (0 >= change || getQuantity() <=_qtys[_sel]) return;
 	change = std::min(getQuantity() - _qtys[_sel], change);
@@ -461,14 +461,14 @@ void SellState::increase(int change)
 void SellState::decrease()
 {
 	_timerDec->setInterval(50);
-	decrease(1);
+	decreaseByValue(1);
 }
 
 /**
  * Decreases the quantity of the selected item to sell by "change".
  * @param change how much we want to remove
  */
-void SellState::decrease(int change)
+void SellState::decreaseByValue(int change)
 {
 	if (0 >= change || 0 >= _qtys[_sel]) return;
 	change = std::min(_qtys[_sel], change);

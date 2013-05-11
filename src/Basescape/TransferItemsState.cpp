@@ -383,8 +383,8 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
  */
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increaseByValue(1);
 }
 
 /**
@@ -416,8 +416,8 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
  */
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decreaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decreaseByValue(1);
 }
 
 /**
@@ -429,8 +429,8 @@ void TransferItemsState::lstItemsMousePress(Action *action)
 	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 	{
 		_sel = _lstItems->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increaseByValue(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decreaseByValue(_changeValueByMouseWheel);
 	}
 }
 
@@ -494,14 +494,14 @@ int TransferItemsState::getQuantity()
 void TransferItemsState::increase()
 {
 	_timerInc->setInterval(50);
-	increase(1);
+	increaseByValue(1);
 }
 
 /**
  * Increases the quantity of the selected item to transfer by "change".
  * @param change how much we want to add
  */
-void TransferItemsState::increase(int change)
+void TransferItemsState::increaseByValue(int change)
 {
 	if (0 >= change || getQuantity() <= _qtys[_sel]) return;
 	if ((_sel < _soldiers.size() || (_sel >= _soldiers.size() + _crafts.size()  && _sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset)) && _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
@@ -593,14 +593,14 @@ void TransferItemsState::increase(int change)
 void TransferItemsState::decrease()
 {
 	_timerDec->setInterval(50);
-	decrease(1);
+	decreaseByValue(1);
 }
 
 /**
  * Decreases the quantity of the selected item to transfer by "change".
  * @param change how much we want to remove
  */
-void TransferItemsState::decrease(int change)
+void TransferItemsState::decreaseByValue(int change)
 {
 	if (0 >= change || 0 >= _qtys[_sel]) return;
 	Craft *craft = 0;

@@ -78,11 +78,11 @@ public:
 	/// Moves an item to the base.
 	void moveLeft();
 	/// Moves the given number of items to the base.
-	void moveLeft(int change);
+	void moveLeftByValue(int change);
 	/// Moves an item to the craft.
 	void moveRight();
 	/// Moves the given number of items to the craft.
-	void moveRight(int change);
+	void moveRightByValue(int change);
 };
 
 }

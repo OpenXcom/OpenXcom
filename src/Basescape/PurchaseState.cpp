@@ -319,8 +319,8 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increaseByValue(1);
 }
 
 /**
@@ -352,8 +352,8 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decreaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decreaseByValue(1);
 }
 
 /**
@@ -365,8 +365,8 @@ void PurchaseState::lstItemsMousePress(Action *action)
 	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 	{
 		_sel = _lstItems->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increaseByValue(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decreaseByValue(_changeValueByMouseWheel);
 	}
 }
 
@@ -408,14 +408,14 @@ int PurchaseState::getPrice()
 void PurchaseState::increase()
 {
 	_timerInc->setInterval(50);
-	increase(1);
+	increaseByValue(1);
 }
 
 /**
  * Increases the quantity of the selected item to buy by "change".
  * @param change how much we want to add
  */
-void PurchaseState::increase(int change)
+void PurchaseState::increaseByValue(int change)
 {
 	if (0 >= change) return;
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
@@ -482,14 +482,14 @@ void PurchaseState::increase(int change)
 void PurchaseState::decrease()
 {
 	_timerDec->setInterval(50);
-	decrease(1);
+	decreaseByValue(1);
 }
 
 /**
  * Decreases the quantity of the selected item to buy by "change".
  * @param change how much we want to add
  */
-void PurchaseState::decrease(int change)
+void PurchaseState::decreaseByValue(int change)
 {
 	if (0 >= change || 0 >= _qtys[_sel]) return;
 	change = std::min(_qtys[_sel], change);
