@@ -32,7 +32,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
+ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0), _listButton(false)
 {
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
@@ -66,6 +66,21 @@ void ArrowButton::setTextList(TextList *list)
 	_list = list;
 }
 
+/**
+ * Sets a flag for this button to say "i'm a member of a textList" to true.
+ */
+void ArrowButton::setListButton()
+{
+	_listButton = true;
+}
+
+/**
+ * Gets a flag for this button saying "i'm a member of a textList".
+ */
+bool ArrowButton::getListButton()
+{
+	return _listButton;
+}
 /**
  * Draws the button with the specified arrow shape.
  */

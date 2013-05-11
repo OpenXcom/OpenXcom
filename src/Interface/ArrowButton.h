@@ -40,6 +40,7 @@ private:
 	ArrowShape _shape;
 	TextList *_list;
 	Timer *_timer;
+	bool _listButton;
 public:
 	/// Creates a new arrow button with the specified size and position.
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);
@@ -61,6 +62,10 @@ public:
 	void mouseRelease(Action *action, State *state);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
+	/// mark this as a member of a textList
+	void setListButton();
+	/// check if this is a member of a textList
+	bool getListButton();
 };
 
 }
