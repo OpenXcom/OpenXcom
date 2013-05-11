@@ -53,6 +53,7 @@ private:
 	float _iQty;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
+	bool _allowChangeListValuesByMouseWheel;
 	/// Gets selected price.
 	int getPrice();
 public:

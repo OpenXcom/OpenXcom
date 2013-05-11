@@ -57,7 +57,7 @@ private:
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
-	bool _canTransferCraftsWhileAirborne, _containmentLimit;
+	bool _canTransferCraftsWhileAirborne, _containmentLimit, _allowChangeListValuesByMouseWheel;
 	/// Gets selected cost.
 	int getCost();
 	/// Gets selected quantity.

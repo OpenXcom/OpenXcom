@@ -55,7 +55,7 @@ namespace OpenXcom
 CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _base(base), _craft(craft)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -126,14 +126,14 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
-	if (allowChangeListValuesByMouseWheel) _lstEquipment->setAllowScrollOnArrowButtons(false);
+	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstEquipment->onLeftArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowPress);
 	_lstEquipment->onLeftArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowRelease);
 	_lstEquipment->onLeftArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowClick);
 	_lstEquipment->onRightArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowPress);
 	_lstEquipment->onRightArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowRelease);
 	_lstEquipment->onRightArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowClick);
-	if (allowChangeListValuesByMouseWheel) _lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
+	_lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
 
 	int row = 0;
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
@@ -234,7 +234,7 @@ void CraftEquipmentState::btnOkClick(Action *)
 void CraftEquipmentState::lstEquipmentLeftArrowPress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLeft->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerLeft->isRunning()) _timerLeft->start();
 }
 
 /**
@@ -245,7 +245,6 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLeft->setInterval(250);
 		_timerLeft->stop();
 	}
 }
@@ -257,7 +256,12 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeftByValue(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveLeftByValue(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		moveLeftByValue(1);
+		_timerRight->setInterval(250);
+		_timerLeft->setInterval(250);
+	}
 }
 
 /**
@@ -267,7 +271,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 void CraftEquipmentState::lstEquipmentRightArrowPress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerRight->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerRight->isRunning()) _timerRight->start();
 }
 
 /**
@@ -278,7 +282,6 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerRight->setInterval(250);
 		_timerRight->stop();
 	}
 }
@@ -290,7 +293,12 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRightByValue(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveRightByValue(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		moveRightByValue(1);
+		_timerRight->setInterval(250);
+		_timerLeft->setInterval(250);
+	}
 }
 
 /**
@@ -299,11 +307,28 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
  */
 void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 {
-	if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+	_sel = _lstEquipment->getSelectedRow();
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-		_sel = _lstEquipment->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moveRightByValue(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) moveLeftByValue(_changeValueByMouseWheel);
+		_timerRight->stop();
+		_timerLeft->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		{
+			moveRightByValue(_changeValueByMouseWheel);
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_timerRight->stop();
+		_timerLeft->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		{
+			moveLeftByValue(_changeValueByMouseWheel);
+		}
 	}
 }
 
@@ -363,6 +388,7 @@ void CraftEquipmentState::updateQuantity()
 void CraftEquipmentState::moveLeft()
 {
 	_timerLeft->setInterval(50);
+	_timerRight->setInterval(50);
 	moveLeftByValue(1);
 }
 
@@ -432,6 +458,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
  */
 void CraftEquipmentState::moveRight()
 {
+	_timerLeft->setInterval(50);
 	_timerRight->setInterval(50);
 	moveRightByValue(1);
 }

@@ -57,7 +57,7 @@ namespace OpenXcom
 TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0), _aOffset(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _distance(0.0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 	_containmentLimit = Options::getBool("alienContainmentHasUpperLimit");
 	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
 
@@ -123,14 +123,14 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	if (allowChangeListValuesByMouseWheel) _lstItems->setAllowScrollOnArrowButtons(false);
+	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)&TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&TransferItemsState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&TransferItemsState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&TransferItemsState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&TransferItemsState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&TransferItemsState::lstItemsRightArrowClick);
-	if (allowChangeListValuesByMouseWheel) _lstItems->onMousePress((ActionHandler)&TransferItemsState::lstItemsMousePress);
+	_lstItems->onMousePress((ActionHandler)&TransferItemsState::lstItemsMousePress);
 
 	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
@@ -361,7 +361,7 @@ void TransferItemsState::btnCancelClick(Action *)
 void TransferItemsState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _timerInc->isRunning()) _timerInc->start();
 }
 
 /**
@@ -372,7 +372,6 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerInc->setInterval(250);
 		_timerInc->stop();
 	}
 }
@@ -384,7 +383,12 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increaseByValue(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		increaseByValue(1);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
+	}
 }
 
 /**
@@ -394,7 +398,7 @@ void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 void TransferItemsState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _timerDec->isRunning()) _timerDec->start();
 }
 
 /**
@@ -405,7 +409,6 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerDec->setInterval(250);
 		_timerDec->stop();
 	}
 }
@@ -417,7 +420,12 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decreaseByValue(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decreaseByValue(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		decreaseByValue(1);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
+	}
 }
 
 /**
@@ -426,11 +434,28 @@ void TransferItemsState::lstItemsRightArrowClick(Action *action)
  */
 void TransferItemsState::lstItemsMousePress(Action *action)
 {
-	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+	_sel = _lstItems->getSelectedRow();
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-		_sel = _lstItems->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increaseByValue(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decreaseByValue(_changeValueByMouseWheel);
+		_timerInc->stop();
+		_timerDec->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		{
+			increaseByValue(_changeValueByMouseWheel);
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_timerInc->stop();
+		_timerDec->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		{
+			decreaseByValue(_changeValueByMouseWheel);
+		}
 	}
 }
 
@@ -493,6 +518,7 @@ int TransferItemsState::getQuantity()
  */
 void TransferItemsState::increase()
 {
+	_timerDec->setInterval(50);
 	_timerInc->setInterval(50);
 	increaseByValue(1);
 }
@@ -592,6 +618,7 @@ void TransferItemsState::increaseByValue(int change)
  */
 void TransferItemsState::decrease()
 {
+	_timerInc->setInterval(50);
 	_timerDec->setInterval(50);
 	decreaseByValue(1);
 }
