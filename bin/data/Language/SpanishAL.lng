@@ -22,7 +22,7 @@ Este rayo láser convencional se acciona por una cámara de reacción de antimat
 STR_PLASMA_BEAM_UFOPEDIA
 El rayo gravitatorio dirige la implosión de un campo gravitacional finamente calibrado. 
 STR_SECTOID_UFOPEDIA
-La jerarquía Sectoide consiste de soldados hasta lideres los cuales poseen poderosas habilidades psíquicas. Estos poderes psíquicos pueden ser usados para desmoralizar soldados en combate e incluso para controlar sus mentes. Secotides tienden a realizar abducciones de humanos y mutilaciones de ganado. Las abducciones se realizan para obtener material genético para realizar cruces raciales y crear clones para infiltrarse en la sociedad humana. El ganado provee alimentos al igual que material genético. Parece que esta raza quiere desarrollar híbridos genéticamente superiores para mejorar la eficacia de su sociedad tipo colmena.
+La casta social de los Sectoide consiste de soldados hasta lideres los cuales poseen poderosas habilidades psíquicas. Estos poderes psíquicos pueden ser usados para desmoralizar soldados en combate e incluso para controlar sus mentes. Secotides tienden a realizar abducciones de humanos y mutilaciones de ganado. Las abducciones se realizan para obtener material genético el cual se usa para realizar cruces raciales y crear clones para infiltrarse en la sociedad humana. El ganado provee alimentos al igual que material genético. Parece que esta raza quiere desarrollar híbridos genéticamente superiores para mejorar la eficacia de su tipo de sociedad tipo.
 STR_SECTOID_AUTOPSY
 Autopsia de Sectoide
 STR_SECTOID_AUTOPSY_UFOPEDIA
@@ -82,11 +82,11 @@ Examen de Sectópodo
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 El robot esta sólidamente construido con un blindaje reforzado capaz de resistir la mayoría de formas de ataque, sobretodo las armas de plasma. No obstante sus circuitos sensores parecen ser particularmente vulnerables a las armas láser.
 STR_CYBERDISC_UFOPEDIA
-Este platillo volante es una replicate a escala del tipico platillo volante, está equipado con un potente rayo de plasma y es usado para aterrorizar a la población. Su propulsión antigravitatoria le da una gran ventaja en terrenos difíciles. Su principal función es la destrucción y sembrar pánico al servicio de los sectoides.
+Este disco cibernetico es una replicate a escala del tipico platillo volador, está equipado con un potente rayo de plasma y es usado para aterrorizar a la población. Su propulsión antigravitatoria le da una gran ventaja en terrenos difíciles. Su función principal es la destrucción y aterrorizar al servicio de los sectoides.
 STR_CYBERDISC_AUTOPSY
 Examen de Ciberdisco
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
-Los ciberdiscos tienen un blindaje muy bueno, especialmente resistente a los ataques con munición explosiva. El sistema de antigravedad de este ejemplar está demasiado dañado como para averiguar su funcionamiento.
+Los discos cibernetico tienen un blindaje muy bueno, especialmente resistente a los ataques con munición explosiva. El sistema de antigravedad de este ejemplar está demasiado dañado como para averiguar su funcionamiento.
 STR_UFO_POWER_SOURCE_UFOPEDIA
 La planta de energia de las naves alienígenas consiste en un reactor de antimateria que utiliza elerio (elemento 115) para crear poderosas ondas gravitatorias así como otras formas de energía. La conversión de materia a energía tiene una eficacia del 99%, gracias a lo cual pequeñas cantidades de elerio producen cantidades enormes de energía. Este reactor se puede reproducir fácilmente usando aleaciones alienígenas.
 STR_UFO_NAVIGATION_UFOPEDIA
@@ -118,7 +118,7 @@ Ahora está claro que las hordas alienígenas son controladas desde una base sub
 STR_TERROR_SITE
 Lugar aterrorizado -
 STR_CENTER_ON_SITE_TIME_5_SECS
-CENTRAR EN SITIO - TIEMPO=5 Seg
+CENTRAR EN SITIO - TIEMPO = 5 Seg
 STR_CANCEL_UC
 CANCELAR
 STR_NONE
@@ -136,7 +136,7 @@ Excelente
 STR_BUILD_NEW_BASE_UC
 NUEVA BASE
 STR_BASE_INFORMATION
-INFORMACIÓN DE BASES
+INFORMACIÓN DE BASE
 STR_EQUIP_CRAFT
 ABASTECER NAVES
 STR_BUILD_FACILITIES
@@ -144,7 +144,7 @@ CONSTRUIR INSTALACIONES
 STR_RESEARCH
 INVESTIGAR
 STR_MANUFACTURE
-FABRICAR
+MANOFACTURAR
 STR_TRANSFER_UC
 TRANSFERIR
 STR_PURCHASE_RECRUIT
@@ -164,11 +164,11 @@ Construir nueva base
 STR_CANCEL
 Cancelar
 STR_COST_UC
-COSTO>
+COSTO > 
 STR_CONSTRUCTION_TIME_UC
-TIEMPO DE CONSTRUCCIÓN>
+TIEMPO DE CONSTRUCCIÓN > 
 STR_MAINTENANCE_UC
-MANTENIMIENTO>
+MANTENIMIENTO > 
 STR_OK
 OK
 STR_INSTALLATION
@@ -194,7 +194,7 @@ Proyectos de investigación
 STR_SCIENTISTS_AVAILABLE_UC
 Científicos disponibles >
 STR_LABORATORY_SPACE_AVAILABLE_UC
-ESPACIO DISPONIBLE EN EL LABORATORIO>
+ESPACIO DISPONIBLE EN EL LABORATORIO > 
 STR_INCREASE
 Aumentar
 STR_DECREASE
@@ -204,19 +204,19 @@ INICIAR PROYECTO
 STR_CURRENT_PRODUCTION
 PRODUCCIÓN ACTUAL
 STR_ENGINEERS_AVAILABLE
-Ingenieros disponibles >
+Ingenieros disponibles > 
 STR_ENGINEERS_ALLOCATED
-Ingenieros asignados>
+Ingenieros asignados > 
 STR_WORKSHOP_SPACE_AVAILABLE
-Espacio disponible >
+Espacio disponible > 
 STR_CURRENT_FUNDS
-Fondos actuales >
+Fondos actuales > 
 STR_ITEM
 Artículo
 STR_ENGINEERS__ALLOCATED
 Ingenieros
 STR_UNITS_PRODUCED
-Fabricadas
+Completo
 STR_TOTAL_TO_PRODUCE
 Total
 STR_COST__PER__UNIT
@@ -230,9 +230,9 @@ Artículos disponibles
 STR_CATEGORY
 Categoría
 STR_START_PRODUCTION
-INICIAR FABRICACIÓN
+INICIAR PRODUCCIÓN
 STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT
-Horas para producir una unidad
+ Horas para producir una unidad
 STR_COST_PER_UNIT_
 Costo p/u > $
 STR_WORK_SPACE_REQUIRED
@@ -248,9 +248,9 @@ DISPONIBLE
 STR_STOP_PRODUCTION
 DETENER PRODUCCIÓN
 STR_ENGINEERS_AVAILABLE_UC
-TÉCNICOS DISPONIBLES >
+TÉCNICOS DISPONIBLES > 
 STR_WORKSHOP_SPACE_AVAILABLE_UC
-ESPACIO DISPONIBLE >
+ESPACIO DISPONIBLE > 
 STR_ENGINEERS
 Técnicos
 STR_ALLOCATED
@@ -266,19 +266,19 @@ fabricar
 STR_PURCHASE_HIRE_PERSONNEL
 Comprar/Contratar personal
 STR_COST_OF_PURCHASES
-Costo de compras >
+Costo de compras > 
 STR_COST_PER_UNIT_UC
 Costo p/u
 STR_QUANTITY_UC
 Cantidad
 STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL
-DISPONIBLE : TOTAL >
+DISPONIBLE : TOTAL > 
 STR_SOLDIERS
 Soldados
 STR_SCIENTISTS
 Científicos
 STR_SPACE_USED_SPACE_AVAILABLE
-OCUPADO : DISPONIBLE >
+OCUPADO : DISPONIBLE > 
 STR_LIVING_QUARTERS
 Viviendas
 STR_STORES
@@ -298,11 +298,11 @@ TRANSFERENCIAS
 STR_TRANSFERS
 Transferencias
 STR_ARRIVAL_TIME_HOURS
-Hora de llegada (horas)
+Arrivo (h)
 STR_COST_
-Costo >$
+Costo > $
 STR_AREA_
-Zona >
+Zona > 
 STR_BASE_NAME
 ¿Nombre de la base?
 STR_SELECT_POSITION_FOR_ACCESS_LIFT
@@ -334,7 +334,7 @@ Ha fracasado en su misión de detener la acometida alienígena. Las naciones pat
 STR_TOTAL_UC
 TOTAL
 STR_INCOME
-Ingresos
+Ingresos 
 STR_EXPENDITURE
 Gastos
 STR_MAINTENANCE
@@ -470,13 +470,13 @@ Vender/Despedir
 STR_VALUE_OF_SALES
 VALOR DE LA VENTA > 
 STR_FUNDS
-FONDOS> 
+FONDOS > 
 STR_SELL_SACK
 Vender/Despedir
 STR_VALUE
 Valor
 STR_CRAFT_
-NAVE> 
+NAVE > 
 STR_UFO_CRASH_RECOVERY
 RECUPERACIÓN DE OVNI DERRIBADO
 STR_UFO_CRASH_RECOVERY_BRIEFING
@@ -566,7 +566,7 @@ Seleccione otro blanco
 STR_PATROL
 Patrullar
 STR_STATUS_
-SITUACIÓN>
+SITUACIÓN > 
 STR_DAMAGED_RETURNING_TO_BASE
 AVERIADO - REGRESANDO A LA BASE
 STR_LOW_FUEL_RETURNING_TO_BASE
@@ -582,11 +582,11 @@ REGRESANDO A LA BASE
 STR_DESTINATION_UC_
 DESTINO: 
 STR_SPEED_
-VELOCIDAD>
+VELOCIDAD > 
 STR_MAXIMUM_SPEED_UC
-VELOCIDAD MÁXIMA>
+VELOCIDAD MÁXIMA > 
 STR_ALTITUDE_
-ALTITUD>
+ALTITUD > 
 STR_VERY_LOW
 MUY BAJA
 STR_LOW_UC
@@ -596,15 +596,15 @@ ALTA
 STR_VERY_HIGH
 MUY ALTA
 STR_FUEL
-COMBUSTIBLE>
+COMBUSTIBLE > 
 STR_WEAPON_ONE
-ARMA-1>
+ARMA-1 > 
 STR_NONE_UC
 Ninguna
 STR_ROUNDS_
-MUNICIÓN >
+MUNICIÓN > 
 STR_WEAPON_TWO
-ARMA-2>
+ARMA-2 > 
 STR_HOSTILE
 HOSTIL
 STR_NEUTRAL
@@ -622,11 +622,11 @@ GUARDAR JEUGO
 STR_INTERCEPTION_CRAFT
 NAVES DISPONIBLES
 STR_BASE_
-Base >
+Base > 
 STR_NAME_UC
 Nombre
 STR_AMMO_
-MUNICIÓN >
+MUNICIÓN > 
 STR_CREW
 Tripulación
 STR_EQUIPMENT_UC
@@ -634,7 +634,7 @@ Armamento
 STR_ARMOR
 Armadura
 STR_MAX
-MÁX >
+MÁX > 
 STR_ROOKIE
 Recluta
 STR_SQUADDIE
@@ -648,9 +648,9 @@ Coronel
 STR_COMMANDER
 Comandante
 STR_SPACE_AVAILABLE
-ESPACIO DISPONIBLE >
+ESPACIO DISPONIBLE > 
 STR_SPACE_USED
-EN USO >
+En uso
 STR_RANK
 Rango
 STR_WOUNDED
@@ -732,7 +732,7 @@ RUMBO
 STR_SPEED
 VELOCIDAD
 STR_CENTER_ON_UFO_TIME_5_SECS
-CENTRAR EN OVNI-TIEMPO=5 Seg
+CENTRAR EN OVNI - TIEMPO = 5 Seg
 STR_TRACKING_LOST
 RASTRO PERDIDO
 STR_REDIRECT_CRAFT
@@ -786,17 +786,17 @@ OVNIS
 STR_SELECT_ITEM
 SELECCIONE ARTÍCULO
 STR_ACCELERATION
-ACELERACIÓN >
+ACELERACIÓN > 
 STR_FUEL_CAPACITY
-CAPACIDAD DE COMBUSTIBLE >
+CAPACIDAD DE COMBUSTIBLE > 
 STR_WEAPON_PODS
-ARMAS >
+ARMAS > 
 STR_DAMAGE_CAPACITY_UC
-RESISTENCIA >
+RESISTENCIA > 
 STR_CARGO_SPACE
-ESPACIO PARA CARGA >
+ESPACIO PARA CARGA > 
 STR_HWP_CAPACITY
-CAPACIDAD PARA PAP>
+CAPACIDAD PARA PAP > 
 STR_DAMAGE
 Daño
 STR_RANGE
@@ -1248,7 +1248,7 @@ Armas
 STR_HWPS
 PAPS
 STR_DAMAGE_UC_
-DAÑOS>
+DAÑOS > 
 STR_ACCESS_LIFT_UFOPEDIA
 El ascensor de acceso permite transportar equipo y personal dentro o fuera de una base subterránea. Es lo primero que se construya en un emplazamiento nuevo. El ascensor es vulnerable y puede ser invadido por cualquier fuerza hostil.
 STR_LIVING_QUARTERS_UFOPEDIA
@@ -1310,9 +1310,9 @@ Este explosivo debe emplearse únicamente para demolición. Mantenga a su person
 STR_MOTION_SCANNER_UFOPEDIA
 Este sofisticado dispositivo usa una gran variedad de detectores y avanzados algoritmos informáticos para identificar unidades enemigas en movimiento. No obstante lleva algun tiempo aprender a usarlo correctamente. Presione el icono del escáner de movimiento que hay en la pantalla táctica. Elija 'Usar escáner' en el menú. La pantalla del escáner mostrará una flecha en el centro que indica la dirección en la que mira el soldado (el norte está arriba). Los puntos parpadeantes indican unidades que se han movido hace poco. Las unidades grandes o las que se desplazan rápidamente aparecen como marcas más grandes. Las unidades que no se mueven o estan estaticas no aparecerán en la pantalla.
 STR_MEDI_KIT_UFOPEDIA
-Un pequeño botiquín que contiene utiles para curar heridas, ademas de calmantes y estimulantes. Para utilizarlo debes ponerte delante del operativo X-COM que requiera tratamiento. Si el operativo esta aturdido debes colocarte sobre su cuerpo. Presione el icono del botiquín y elija "usar botiquín" del menu. {NEWLINE}CURAR> Las partes rojas en el cuerpo indican heridas mortales. Presione en la parte del cuerpo que esta herida y presione en el boton "CURAR". Se curara una herida mortal y el operativo recuperara parte de la salud.{NEWLINE}ESTIMULANTE> Repone la energía y reaviva a los operativos aturdidos. Para reavivar a un operativo inconsciente, colócate justo encima de su cuerpo.{NEWLINE}CALMANTE> Le sube la moral a los operativos heridos hasta un maximo equivalente a la salud perdida del soldado.
+Un pequeño botiquín que contiene utiles para curar heridas, ademas de calmantes y estimulantes. Para utilizarlo debes ponerte delante del operativo X-COM que requiera tratamiento. Si el operativo esta aturdido debes colocarte sobre su cuerpo. Presione el icono del botiquín y elija "usar botiquín" del menu. {NEWLINE}CURAR > Las partes rojas en el cuerpo indican heridas mortales. Presione en la parte del cuerpo que esta herida y presione en el boton "CURAR". Se curara una herida mortal y el operativo recuperara parte de la salud.{NEWLINE}ESTIMULANTE > Repone la energía y reaviva a los operativos aturdidos. Para reavivar a un operativo inconsciente, colócate justo encima de su cuerpo.{NEWLINE}CALMANTE > Le sube la moral a los operativos heridos hasta un maximo equivalente a la salud perdida del soldado.
 STR_PSI_AMP_UFOPEDIA
-El amplificador psíquico (Amp-psi) sólo puede ser utilizado por soldados con habilidades psíquicas. Durante el combate, presione el Amp-psi, seleccione el tipo de ataque y elija un blanco. Hay dos tipos de ataque psíquico:{NEWLINE}ASUSTAR UNIDAD > Si el ataque tiene éxito, la moral del objetivo bajará y podria hacer que se asustara.{NEWLINE}CONTROL MENTAL > Si tiene éxito, controlarás inmediatamente al enemigo como si fuese uno de los tuyos (aunque no podras acceder a su pantalla de inventario). Es más difícil tener éxito con este tipo de ataque que con el de pánico.
+El amplificador psíquico (Amp-psi) sólo puede ser utilizado por soldados con habilidades psíquicas. Durante el combate, presione el Amp-psi, seleccione el tipo de ataque y elija un blanco. Hay dos tipos de ataque psíquico:{NEWLINE}AMEDRENTAR UNIDAD > Si el ataque tiene éxito, la moral del objetivo bajará y podria hacer que la unidad sienta panico.{NEWLINE}CONTROL MENTAL > Si tiene éxito, controlarás inmediatamente al enemigo como si fuese uno de los suyos (aunque no podra acceder a su pantalla de inventario). Es más difícil tener éxito con este tipo de ataque que con el de amedrentar.
 STR_STUN_ROD_UFOPEDIA
 Este ingenio sólo se puede usar en el combate cuerpo a cuerpo y aturde a un organismo vivo con descargas eléctricas, sin llegar a matarlo.
 STR_THE_SUBJECT_HAS_DIED
@@ -1666,7 +1666,7 @@ NO HAY ALOJAMIENTO{SMALLLINE}La base de destino no tiene suficiente espacio para
 STR_ITEMS_ARRIVING
 Artículos trasladados
 STR_DESTINATION_UC
-DESTINO
+Destino
 STR_PISTOL
 Pistola
 STR_PISTOL_CLIP
@@ -1850,7 +1850,7 @@ Salarios
 STR_BASE_MAINTENANCE
 Mantenimiento de bases
 STR_COST_PER_UNIT
-Costo p/u
+Costo
 STR_QUANTITY
 Cantidad
 STR_TOTAL
@@ -1966,7 +1966,7 @@ Fuerza>
 STR_ALIEN_ARTIFACT
 Artefacto alienígena
 STR_AMMO_ROUNDS_LEFT
-MUNICIÓN:{NEWLINE}DISPAROS{NEWLINE}RESTANTES=
+MUNICIÓN:{NEWLINE}DISPAROS{NEWLINE}RESTANTES = 
 STR_THROW
 Lanzar
 STR_AUTO_SHOT
@@ -2095,7 +2095,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 UT reservadas para ráfagas
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 UT reservadas para disparo de precisión
-STR_ABORT_MISSION_QUESTION
+STR_ABORT_MISSION
 ¿Cancelar la misión?
 STR_CORPSE
 Cadáver
@@ -2325,9 +2325,9 @@ STR_CANMANUFACTUREMOREITEMSPERHOUR
 Reglas de manufactura como TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
 Esta opción permite que proyectos de manufactura puedan producir más de un artículo por hora.
-STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+STR_CANTRANSFERCRAFTSINAIRBORNE
 Transferencias cuando en vuelo
-STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+STR_CANTRANSFERCRAFTSINAIRBORNE_DESC
 Esta opción permite que aeronaves que se encuentran en vuelo pueden ser transferidas.
 STR_CRAFTLAUNCHALWAYS
 Forzar despegue de aeronaves
