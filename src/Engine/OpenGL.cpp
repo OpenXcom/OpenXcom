@@ -61,6 +61,7 @@ std::string strGLError(GLenum glErr)
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 
+#ifndef __APPLE__
 PFNGLCREATEPROGRAMPROC glCreateProgram = 0;
 PFNGLUSEPROGRAMPROC glUseProgram = 0;
 PFNGLCREATESHADERPROC glCreateShader = 0;
@@ -74,6 +75,7 @@ PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = 0;
 PFNGLUNIFORM1IPROC glUniform1i = 0;
 PFNGLUNIFORM2FVPROC glUniform2fv = 0;
 PFNGLUNIFORM4FVPROC glUniform4fv = 0;
+#endif
 
 void * (APIENTRYP glXGetCurrentDisplay)() = 0;
 Uint32 (APIENTRYP glXGetCurrentDrawable)() = 0;
@@ -259,6 +261,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glEnable(GL_TEXTURE_2D);
 
     //bind shader functions
+#ifndef __APPLE__
     glCreateProgram = (PFNGLCREATEPROGRAMPROC)glGetProcAddress("glCreateProgram");
     glUseProgram = (PFNGLUSEPROGRAMPROC)glGetProcAddress("glUseProgram");
     glCreateShader = (PFNGLCREATESHADERPROC)glGetProcAddress("glCreateShader");
@@ -272,7 +275,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glUniform1i = (PFNGLUNIFORM1IPROC)glGetProcAddress("glUniform1i");
     glUniform2fv = (PFNGLUNIFORM2FVPROC)glGetProcAddress("glUniform2fv");
     glUniform4fv = (PFNGLUNIFORM4FVPROC)glGetProcAddress("glUniform4fv");
-
+#endif
 	glXGetCurrentDisplay = (void* (APIENTRYP)())glGetProcAddress("glXGetCurrentDisplay");
 	glXGetCurrentDrawable = (Uint32 (APIENTRYP)())glGetProcAddress("glXGetCurrentDrawable");
 	glXSwapIntervalEXT = (void (APIENTRYP)(void*, Uint32, int))glGetProcAddress("glXSwapIntervalEXT");
