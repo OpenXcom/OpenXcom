@@ -252,7 +252,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_filterPaths.push_back("");
 	_filterPaths.push_back("");
 
-	std::vector<std::string> filters = CrossPlatform::getFolderContents(Options::getDataFolder() + GL_FOLDER, GL_EXT);
+	std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
 	for (std::vector<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
 	{
 		std::string file = (*i);
