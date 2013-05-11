@@ -87,11 +87,11 @@ public:
 	/// Increases the quantity of an item by one.
 	void increase();
 	/// Increases the quantity of an item by the given value.
-	void increase(int change);
+	void increaseByValue(int change);
 	/// Decreases the quantity of an item by one.
 	void decrease();
 	/// Decreases the quantity of an item by the given value.
-	void decrease(int change);
+	void decreaseByValue(int change);
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();
 };

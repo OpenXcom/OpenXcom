@@ -256,8 +256,8 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
  */
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeft(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveLeft(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeftByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveLeftByValue(1);
 }
 
 /**
@@ -289,8 +289,8 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
  */
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRight(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveRight(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRightByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveRightByValue(1);
 }
 
 /**
@@ -302,8 +302,8 @@ void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 	if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 	{
 		_sel = _lstEquipment->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moveRight(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) moveLeft(_changeValueByMouseWheel);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moveRightByValue(_changeValueByMouseWheel);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) moveLeftByValue(_changeValueByMouseWheel);
 	}
 }
 
@@ -363,14 +363,14 @@ void CraftEquipmentState::updateQuantity()
 void CraftEquipmentState::moveLeft()
 {
 	_timerLeft->setInterval(50);
-	moveLeft(1);
+	moveLeftByValue(1);
 }
 
 /**
  * Moves the given number of items (selected) to the base.
  * @param change Item difference.
  */
-void CraftEquipmentState::moveLeft(int change)
+void CraftEquipmentState::moveLeftByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
@@ -398,7 +398,7 @@ void CraftEquipmentState::moveLeft(int change)
 			}
 			_base->getItems()->addItem(_items[_sel], cQty);
 			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
-			if (cQty > change) moveRight(cQty - change);
+			if (cQty > change) moveRightByValue(cQty - change);
 		}
 		else
 		{
@@ -433,14 +433,14 @@ void CraftEquipmentState::moveLeft(int change)
 void CraftEquipmentState::moveRight()
 {
 	_timerRight->setInterval(50);
-	moveRight(1);
+	moveRightByValue(1);
 }
 
 /**
  * Moves the given number of items (selected) to the craft.
  * @param change Item difference.
  */
-void CraftEquipmentState::moveRight(int change)
+void CraftEquipmentState::moveRightByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
@@ -462,7 +462,7 @@ void CraftEquipmentState::moveRight(int change)
 				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
 				int newVehiclesCount = oldVehiclesCount + change;
 				// ...and we move back all of this vehicle-type to the base.
-				if (0 < oldVehiclesCount) moveLeft(INT_MAX);
+				if (0 < oldVehiclesCount) moveLeftByValue(INT_MAX);
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
