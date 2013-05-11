@@ -33,6 +33,7 @@ namespace OpenXcom
  */
 InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true)
 {
+	_classic = Options::getBool("classicMouseHandling");
 }
 
 /**
@@ -107,8 +108,6 @@ void InteractiveSurface::handle(Action *action, State *state)
 
 	// Modern system mouse handling: Press/releases are only triggered by button up/down events
 	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
-	//bool classic = Options::getBool("classicMouseHandling");
-	bool classic = false;
 
 	if (action->isMouseAction())
 	{
@@ -119,7 +118,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = true;
 				mouseIn(action, state);
-				if (classic)
+				if (_classic && isTextList())
 				{
 					_buttonsPressed = SDL_GetMouseState(0, 0);
 					for (Uint8 i = 0; i <= NUM_BUTTONS; ++i)
@@ -140,7 +139,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
-				if (classic)
+				if (_classic && isTextList())
 				{
 					for (Uint8 i = 0; i <= NUM_BUTTONS; ++i)
 					{

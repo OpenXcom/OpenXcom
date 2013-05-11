@@ -45,7 +45,7 @@ protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
 	ActionHandler _in, _over, _out;
 	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
-	bool _isHovered, _isFocused;
+	bool _isHovered, _isFocused, _classic;
 
 	/// Is any mouse button pressed?
 	bool isButtonPressed(Uint8 button = 0);
