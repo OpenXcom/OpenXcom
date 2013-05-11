@@ -143,27 +143,33 @@ void Camera::mouseOver(Action *action, State *)
 		int posY = action->getYMouse();
 		int scrollSpeed = Options::getInt("battleScrollSpeed");
 
-		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
+		//left scroll
+		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0)
 		{
 			_scrollX = scrollSpeed;
 			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			//downleft
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
 			{
 				_scrollY = scrollSpeed/2;
 			}
+			//upleft
 			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
 			{
 				_scrollY = -scrollSpeed/2;
 			}
 		}
+		//right scroll
 		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
 		{
 			_scrollX = -scrollSpeed;
 			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			//downright
+			if (posY <= (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
 			{
 				_scrollY = scrollSpeed/2;
 			}
+			//upright
 			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
 			{
 				_scrollY = -scrollSpeed/2;
@@ -174,30 +180,36 @@ void Camera::mouseOver(Action *action, State *)
 			_scrollX = 0;
 		}
 
-		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+		//up
+		if (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0)
 		{
 			_scrollY = scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
+			//up left
 			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
 			{
 				_scrollX = scrollSpeed;
 				_scrollY /=2;
 			}
+			//up right
 			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 			{
 				_scrollX = -scrollSpeed;
 				_scrollY /=2;
 			}
 		}
+		//down
 		else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
 		{
 			_scrollY = -scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			//down left
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
 			{
 				_scrollX = scrollSpeed;
 				_scrollY /=2;
 			}
+			//down right
 			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 			{
 				_scrollX = -scrollSpeed;
