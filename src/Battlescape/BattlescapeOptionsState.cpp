@@ -88,11 +88,11 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 
 	switch (Options::getInt("battleScrollSpeed"))
 	{
-	case 8: _scrollSpeed = _btnScrollSpeed1; break;
-	case 16: _scrollSpeed = _btnScrollSpeed2; break;
-	case 24: _scrollSpeed = _btnScrollSpeed3; break;
-	case 32: _scrollSpeed = _btnScrollSpeed4; break;
-	case 40: _scrollSpeed = _btnScrollSpeed5; break;
+	case 4: _scrollSpeed = _btnScrollSpeed1; break;
+	case 8: _scrollSpeed = _btnScrollSpeed2; break;
+	case 12: _scrollSpeed = _btnScrollSpeed3; break;
+	case 16: _scrollSpeed = _btnScrollSpeed4; break;
+	case 20: _scrollSpeed = _btnScrollSpeed5; break;
 	default: _scrollSpeed = 0; break;
 	}
 	switch (Options::getInt("battleScrollType"))
@@ -380,15 +380,15 @@ BattlescapeOptionsState::~BattlescapeOptionsState()
 void BattlescapeOptionsState::saveOptions()
 {
 	if (_scrollSpeed == _btnScrollSpeed1)
-		Options::setInt("battleScrollSpeed", 8);
+		Options::setInt("battleScrollSpeed", 4);
 	else if (_scrollSpeed == _btnScrollSpeed2)
-		Options::setInt("battleScrollSpeed", 16);
+		Options::setInt("battleScrollSpeed", 8);
 	else if (_scrollSpeed == _btnScrollSpeed3)
-		Options::setInt("battleScrollSpeed", 24);
+		Options::setInt("battleScrollSpeed", 12);
 	else if (_scrollSpeed == _btnScrollSpeed4)
-		Options::setInt("battleScrollSpeed", 32);
+		Options::setInt("battleScrollSpeed", 16);
 	else if (_scrollSpeed == _btnScrollSpeed5)
-		Options::setInt("battleScrollSpeed", 40);
+		Options::setInt("battleScrollSpeed", 20);
 
 	if (_scrollType == _btnScrollType1)
 		Options::setInt("battleScrollType", SCROLL_TRIGGER);

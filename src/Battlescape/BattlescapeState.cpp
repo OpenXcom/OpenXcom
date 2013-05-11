@@ -92,18 +92,18 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 {
 	//game->getScreen()->setScale(1.0);
-	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
-	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
+	int screenWidth = Options::getInt("baseXResolution");
+	int screenHeight = Options::getInt("baseYResolution");
 	int iconsWidth = 320;
 	int iconsHeight = 56;
 
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new Surface(iconsWidth, iconsHeight, mapWidth/2 - iconsWidth/2, mapHeight - iconsHeight);
+	_icons = new Surface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
-	int visibleMapHeight = mapHeight - iconsHeight;
-	_map = new Map(_game, mapWidth, mapHeight, 0, 0, visibleMapHeight);
+	int visibleMapHeight = screenHeight - iconsHeight;
+	_map = new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
 
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);

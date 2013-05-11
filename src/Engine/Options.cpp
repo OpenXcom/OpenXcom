@@ -85,7 +85,7 @@ void createDefault()
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
 	setString("language", "");
-	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
+	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
 	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
