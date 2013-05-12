@@ -186,7 +186,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			ss5 << _base->getItems()->getItem(launcher->getType());
 			std::wstring item = _game->getLanguage()->getString(launcher->getType());
 			_lstItems->addRow(4, item.c_str(), Text::formatFunding(launcher->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
-			for (std::vector<std::string>::const_iterator j = items.begin(); j != items.end(); ++j)
+			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
 			{
 				if (*j == launcher->getType())
 				{
@@ -204,7 +204,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			std::wstring item = _game->getLanguage()->getString(clip->getType());
 			item.insert(0, L"  ");
 			_lstItems->addRow(4, item.c_str(), Text::formatFunding(clip->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
-			for (std::vector<std::string>::const_iterator j = items.begin(); j != items.end(); ++j)
+			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
 			{
 				if (*j == clip->getType())
 				{
