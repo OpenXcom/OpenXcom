@@ -826,11 +826,11 @@ void UnitSprite::drawRoutine6()
 	const int larmStand = 0, rarmStand = 8, rarm1H = 99, larm2H = 107, ramr2H = 115, rarmShoot = 123;
 	const int legsWalk[8] = { 32, 40, 48, 56, 64, 72, 80, 88 };
 	const int yoffWalk[8] = {3, 3, 2, 1, 0, 0, 1, 2}; // bobbing up and down
-	const int xoffWalka[8] = {0, 0, 0, 1, 2, 2, 0, 0};
-	const int xoffWalkb[8] = {0, 0, 0, -1, -2, -2, 0, 0};
-	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
+	const int xoffWalka[8] = {0, 0, 1, 2, 3, 3, 2, 1};
+	const int xoffWalkb[8] = {0, 0, -1, -2, -3, -3, -2, -1};
+	const int offX[8] = { 8, 10, 8, 5, -8, -10, -5, -2 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, -3, 0, -4, -7, -9 }; // for the weapons
-	const int offX2[8] = { -8, 2, 6, 12, 6, -1, -5, -16 }; // for the weapons
+	const int offX2[8] = { -8, 2, 7, 13, 7, 0, -3, -15 }; // for the weapons
 	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 }; // for the weapons
 
 	if (_unit->isOut())
