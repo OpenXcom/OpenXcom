@@ -2267,24 +2267,26 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 				break;
 			unitpos.z--;
 		}
-		if (unitpos != occupant->getPosition() && occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
+		if (unitpos != occupant->getPosition())
 		{
-			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
-				_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
-			_save->addFallingUnit(occupant);
-		}
-		else if (unitpos != occupant->getPosition())
-		{
-			Position origin = occupant->getPosition();
-			for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
+			if (occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 			{
-				for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
-				{
-					_save->getTile(origin + Position(x, y, 0))->setUnit(0);
-					_save->getTile(unitpos + Position(x, y, 0))->setUnit(occupant);
-				}
+				occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
+					_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
+				_save->addFallingUnit(occupant);
 			}
-			occupant->setPosition(unitpos);
+			else
+			{
+				Position origin = occupant->getPosition();
+				for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
+				{
+					for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
+					{
+						_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+					}
+				}
+				occupant->setPosition(unitpos);
+			}
 		}
 	}
 	rt = t;
