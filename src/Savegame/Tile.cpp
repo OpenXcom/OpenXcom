@@ -650,6 +650,10 @@ void Tile::animate()
 				continue;
 			}
 			newframe = _currentFrame[i] + 1;
+			if (_objects[i]->isUFODoor() && _objects[i]->getSpecialType() == START_POINT && newframe == 3)
+			{
+				newframe = 7;
+			}
 			if (newframe == 8)
 			{
 				newframe = 0;
