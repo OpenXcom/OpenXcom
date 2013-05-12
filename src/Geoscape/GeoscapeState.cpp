@@ -775,6 +775,7 @@ void GeoscapeState::time5Seconds()
 						// Not more than 4 interceptions at a time.
 						if(_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 						{
+							++j;
 							continue;
 						}
 						if(!(*j)->isInDogfight() && !(*j)->getDistance(u))
