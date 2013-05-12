@@ -679,6 +679,7 @@ if ( APPLE AND CREATE_BUNDLE )
   endforeach ()
 endif ()
 
+# test
 #Setup source groups for IDE
 if ( MSVC )
   source_group ( "Basescape" FILES ${basescape_src} )
