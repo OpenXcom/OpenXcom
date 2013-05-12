@@ -104,10 +104,9 @@ void InteractiveSurface::handle(Action *action, State *state)
 	{
 		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
 	}
-
 	// Modern system mouse handling: Press/releases are only triggered by button up/down events
 	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
-	if (action->getDetails()->type == SDL_MOUSEMOTION)
+	if (action->isMouseAction())
 	{
 		if ((action->getAbsoluteXMouse() >= getX() && action->getAbsoluteXMouse() < getX() + getWidth()) &&
 			(action->getAbsoluteYMouse() >= getY() && action->getAbsoluteYMouse() < getY() + getHeight()))
@@ -117,7 +116,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 				_isHovered = true;
 				mouseIn(action, state);
 			}
-				if (_classic && _listButton)
+				if (_classic && _listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 				{
 					_buttonsPressed = SDL_GetMouseState(0, 0);
 					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
@@ -137,7 +136,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
-				if (_classic && _listButton)
+				if (_classic && _listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 				{
 					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 					{
