@@ -280,6 +280,10 @@ void BattleUnit::load(const YAML::Node &node)
 	{
 		(*pName) >> _kills;
 	}
+	if (const YAML::Node *pName = node.FindValue("dontReselect"))
+	{
+		(*pName) >> _dontReselect;
+	}
 	_charging = 0;
 
 
@@ -340,6 +344,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
 	if (_kills)
 		out << YAML::Key << "kills" << YAML::Value << _kills;
+	if (_faction == FACTION_PLAYER && _dontReselect)
+		out << YAML::Key << "dontReselect" << YAML::Value << _dontReselect;
 
 	out << YAML::EndMap;
 }
