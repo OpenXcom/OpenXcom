@@ -126,6 +126,8 @@ public:
 	bool detonate(Tile* tile);
 	/// validate a throwing action
 	bool validateThrow(BattleAction *action);
+	// open any doors this door is connected to.
+	void checkAdjacentDoors(Position pos, int part);
 
 };
 
