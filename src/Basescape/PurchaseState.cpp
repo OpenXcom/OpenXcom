@@ -43,6 +43,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom
 {
@@ -169,28 +170,65 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
-
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string> &cweapons = _game->getRuleset()->getCraftWeaponsList();
+	for (std::vector<std::string>::const_iterator i = cweapons.begin(); i != cweapons.end(); ++i)
 	{
-		// Is it suppressed in the options file?
-		std::vector<std::string> excludes = Options::getPurchaseExclusions();
-		bool exclude = false;
-		for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); s++ )
+		// Special handling for treating craft weapons as items
+		RuleCraftWeapon *rule = _game->getRuleset()->getCraftWeapon(*i);
+		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());
+		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());
+		if (launcher != 0 && launcher->getBuyCost() > 0 && !isExcluded(launcher->getType()))
 		{
-			if ( _game->getLanguage()->cpToWstr(*s) == _game->getLanguage()->getString(*i).c_str() ) {
-				exclude = true;
-				break;
+			_items.push_back(launcher->getType());
+			_qtys.push_back(0);
+			std::wstringstream ss5;
+			ss5 << _base->getItems()->getItem(launcher->getType());
+			std::wstring item = _game->getLanguage()->getString(launcher->getType());
+			_lstItems->addRow(4, item.c_str(), Text::formatFunding(launcher->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+			{
+				if (*i == launcher->getType())
+				{
+					items.erase(i);
+					break;
+				}
 			}
 		}
-
-		if ((_game->getRuleset()->getItem(*i)->getBuyCost() > 0) && !exclude)
+		if (clip != 0 && clip->getBuyCost() > 0 && !isExcluded(clip->getType()))
+		{
+			_items.push_back(clip->getType());
+			_qtys.push_back(0);
+			std::wstringstream ss5;
+			ss5 << _base->getItems()->getItem(clip->getType());
+			std::wstring item = _game->getLanguage()->getString(clip->getType());
+			item.insert(0, L"  ");
+			_lstItems->addRow(4, item.c_str(), Text::formatFunding(clip->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+			{
+				if (*i == clip->getType())
+				{
+					items.erase(i);
+					break;
+				}
+			}
+		}
+	}
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	{
+		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		if (rule->getBuyCost() > 0 && !isExcluded(*i))
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
 			std::wstringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			std::wstring item = _game->getLanguage()->getString(*i);
+			if (rule->getBattleType() == BT_AMMO)
+			{
+				item.insert(0, L"  ");
+			}
+			_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
 		}
 	}
 
@@ -218,6 +256,21 @@ void PurchaseState::think()
 
 	_timerInc->think(this, 0);
 	_timerDec->think(this, 0);
+}
+
+bool PurchaseState::isExcluded(std::string item)
+{
+	std::vector<std::string> excludes = Options::getPurchaseExclusions();
+	bool exclude = false;
+	for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); ++s)
+	{
+		if (item == *s)
+		{
+			exclude = true;
+			break;
+		}
+	}
+	return exclude;
 }
 
 /**

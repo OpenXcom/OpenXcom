@@ -56,6 +56,8 @@ private:
 	bool _allowChangeListValuesByMouseWheel;
 	/// Gets selected price.
 	int getPrice();
+	/// Is it excluded in the options file?
+	bool isExcluded(std::string item);
 public:
 	/// Creates the Purchase state.
 	PurchaseState(Game *game, Base *base);
