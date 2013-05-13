@@ -112,6 +112,12 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	node["armor"] >> armor;
 	_armor = rule->getArmor(armor);
 	node["psiTraining"] >> _psiTraining;
+	try {
+		node["improvement"] >> _improvement;
+	}
+	catch (YAML::Exception &e) {
+		_improvement = 0;
+	}
 	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
 		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
@@ -141,6 +147,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
 	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
 	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
+	out << YAML::Key << "improvement" << YAML::Value << _improvement;
 	if (!_equipmentLayout.empty())
 	{
 		out << YAML::Key << "equipmentLayout" << YAML::Value;
