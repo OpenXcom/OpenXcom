@@ -101,6 +101,7 @@ void UnitTurnBState::think()
 	{
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
+		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
