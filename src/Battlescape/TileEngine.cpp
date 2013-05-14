@@ -1614,14 +1614,38 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 			case 0: // north
 				checkPositions.push_back(std::pair<Position, int>(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
 				break;
+			case 1: // north east
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				checkPositions.push_back(std::pair<Position, int>(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
+				checkPositions.push_back(std::pair<Position, int>(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				checkPositions.push_back(std::pair<Position, int>(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
+				break;
 			case 2: // east
 				checkPositions.push_back(std::pair<Position, int>(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				break;
+			case 3: // south-east
+				checkPositions.push_back(std::pair<Position, int>(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+				checkPositions.push_back(std::pair<Position, int>(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
+				checkPositions.push_back(std::pair<Position, int>(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
 				break;
 			case 4: // south
 				checkPositions.push_back(std::pair<Position, int>(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
 				break;
+			case 5: // south-west
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+				checkPositions.push_back(std::pair<Position, int>(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
+				break;
 			case 6: // west
 				checkPositions.push_back(std::pair<Position, int>(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				break;
+			case 7: // north-west
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPositions.push_back(std::pair<Position, int>(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				checkPositions.push_back(std::pair<Position, int>(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
+				checkPositions.push_back(std::pair<Position, int>(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
 				break;
 			default:
 				break;
