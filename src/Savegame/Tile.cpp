@@ -287,7 +287,7 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
 bool Tile::isBigWall() const
 {
 	if (_objects[MapData::O_OBJECT])
-		return _objects[MapData::O_OBJECT]->isBigWall();
+		return _objects[MapData::O_OBJECT]->getBigWall();
 	else
 		return false;
 }
