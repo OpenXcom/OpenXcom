@@ -2299,6 +2299,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\MCDPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MCDPatch.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\RuleAlienMission.cpp"
 				>
 			</File>

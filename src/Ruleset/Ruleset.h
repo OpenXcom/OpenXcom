@@ -52,6 +52,7 @@ class UfoTrajectory;
 class RuleAlienMission;
 class City;
 class Base;
+class MCDPatch;
 
 /**
  * Set of rules and stats for a game.
@@ -83,10 +84,11 @@ protected:
 	std::map<std::string, RuleManufacture *> _manufacture;
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
+	std::map<std::string, MCDPatch *> _MCDPatches;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::auto_ptr<YAML::Node> _startingBase;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
-	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex;
+	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 
@@ -191,7 +193,10 @@ public:
 	const City *locateCity(double lon, double lat) const;
 	/// Get the alien item level table
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
+	/// Gets the Defined starting base.
 	const YAML::Node &getStartingBase();
+	/// Gets an MCDPatch.
+	MCDPatch *getMCDPatch(const std::string name) const;
 };
 
 }

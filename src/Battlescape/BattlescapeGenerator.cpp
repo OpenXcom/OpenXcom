@@ -42,6 +42,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
+#include "../Ruleset/MCDPatch.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/AlienRace.h"
@@ -1310,6 +1311,10 @@ void BattlescapeGenerator::generateMap()
 	for (std::vector<MapDataSet*>::iterator i = _terrain->getMapDataSets()->begin(); i != _terrain->getMapDataSets()->end(); ++i)
 	{
 		(*i)->loadData();
+		if (_game->getRuleset()->getMCDPatch((*i)->getName()))
+		{
+			_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+		}
 		_save->getMapDataSets()->push_back(*i);
 		mapDataSetIDOffset++;
 	}
@@ -1448,6 +1453,10 @@ void BattlescapeGenerator::generateMap()
 		for (std::vector<MapDataSet*>::iterator i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{
 			(*i)->loadData();
+			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
+			{
+				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+			}
 			_save->getMapDataSets()->push_back(*i);
 			craftDataSetIDOffset++;
 		}
@@ -1467,6 +1476,10 @@ void BattlescapeGenerator::generateMap()
 		for (std::vector<MapDataSet*>::iterator i = _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin(); i != _craft->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end(); ++i)
 		{
 			(*i)->loadData();
+			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
+			{
+				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+			}
 			_save->getMapDataSets()->push_back(*i);
 		}
 		loadMAP(craftMap, craftX * 10, craftY * 10, _craft->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset + craftDataSetIDOffset, true);

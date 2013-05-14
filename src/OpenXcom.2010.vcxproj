@@ -396,6 +396,7 @@
     </ClCompile>
     <ClCompile Include="Resource\ResourcePack.cpp" />
     <ClCompile Include="Resource\XcomResourcePack.cpp" />
+    <ClCompile Include="Ruleset\MCDPatch.cpp" />
     <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
@@ -667,6 +668,7 @@
     <ClInclude Include="Ruleset\MapData.h" />
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
+    <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />

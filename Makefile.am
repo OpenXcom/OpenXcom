@@ -475,6 +475,8 @@ openxcom_SOURCES = \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
+	src/Ruleset/MCDPatch.cpp \
+	src/Ruleset/MCDPatch.h \
 	src/Ruleset/AlienDeployment.cpp \
 	src/Ruleset/AlienDeployment.h \
 	src/Ruleset/AlienRace.cpp \

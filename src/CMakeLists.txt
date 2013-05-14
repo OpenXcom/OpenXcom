@@ -412,6 +412,8 @@ set ( ruleset_src
   Ruleset/RuleInventory.cpp
   Ruleset/MapBlock.h
   Ruleset/MapBlock.cpp
+  Ruleset/MCDPatch.h
+  Ruleset/MCDPatch.cpp
   Ruleset/RuleBaseFacility.cpp
   Ruleset/RuleBaseFacility.h
   Ruleset/SoldierNamePool.h
