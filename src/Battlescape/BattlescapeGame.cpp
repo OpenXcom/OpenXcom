@@ -249,7 +249,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		ai = unit->getCurrentAIState();
 		unit->think(&action);	
 	}
-
+	action.TU = 0;
 	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
 	{
 		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->size() == 0)
