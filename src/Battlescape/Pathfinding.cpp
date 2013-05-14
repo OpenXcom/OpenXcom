@@ -272,6 +272,16 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 				return 255;
 			
+			if (direction < DIR_UP)
+			{
+				// check if we can go this way
+				if (isBlocked(startTile, destinationTile, direction, target))
+					return 255;
+				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+					return 255;
+
+			}
+
 			// this will later be used to re-cast the start tile again.
 			Position verticalOffset (0, 0, 0);
 
@@ -312,7 +322,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			// this means the destination is probably outside the map
 			if (!destinationTile)
 				return 255;
-
+			
 			if (direction < DIR_UP && endPosition->z == startTile->getPosition().z)
 			{
 				// check if we can go this way
@@ -350,6 +360,17 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				}
 			}
 			startTile = _save->getTile(startTile->getPosition() + verticalOffset);
+			
+			
+			if (direction < DIR_UP && numberOfPartsGoingUp != 0)
+			{
+				// check if we can go this way
+				if (isBlocked(startTile, destinationTile, direction, target))
+					return 255;
+				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+					return 255;
+
+			}
 
 			int wallcost = 0; // walking through rubble walls
 			if (direction == 7 || direction == 0 || direction == 1)
