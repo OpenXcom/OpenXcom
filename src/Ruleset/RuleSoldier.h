@@ -37,7 +37,6 @@ private:
 	UnitStats _minStats, _maxStats;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _floatHeight;
-	std::vector<int> _loftempsSet;
 public:
 	/// Creates a blank unit ruleset.
 	RuleSoldier(const std::string &type);
@@ -59,9 +58,6 @@ public:
 	int getKneelHeight() const;
 	/// Get the elevation of soldier when it's flying.
 	int getFloatHeight() const;
-	/// Get the line of fire template (3D voxels)
-	int getLoftemps(int entry = 0) const;
-	std::vector<int> getLoftempsSet() const;
 	/// Get the armor name.
 	std::string getArmor() const;
 
