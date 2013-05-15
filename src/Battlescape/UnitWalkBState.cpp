@@ -467,6 +467,9 @@ void UnitWalkBState::postPathProcedures()
 {
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
+		Position voxelPosA = Position ((_finalFacing.x * 16)+8, (_finalFacing.y * 16)+8, (_finalFacing.z * 24)+12);
+		Position voxelPosB = Position ((_unit->getPosition().x * 16)+8, (_unit->getPosition().y * 16)+8, (_unit->getPosition().z * 24)+12);
+		int visibility = _parent->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, _unit, false);
 		if (_unit->getCharging() != 0)
 		{
 			_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
@@ -480,7 +483,8 @@ void UnitWalkBState::postPathProcedures()
 				_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
 				_unit->setCharging(0);
 			}
-		} else if (_parent->getSave()->getTile(_finalFacing) != 0) // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
+		} // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
+		else if (_parent->getSave()->getTile(_finalFacing) != 0 && (visibility == -1|| visibility == 4))
 		{
 			if (_pathfindForFinalTurn)
 			{        
