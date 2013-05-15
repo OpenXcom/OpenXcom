@@ -158,7 +158,9 @@ std::vector<std::string> findDataFolders()
 	list.push_back(path);
 #else
 	list.push_back("/usr/local/share/openxcom/data/");
+#ifndef __FreeBSD__
 	list.push_back("/usr/share/openxcom/data/");
+#endif
 #ifdef DATADIR
 	snprintf(path, MAXPATHLEN, "%s/data/", DATADIR);
 	list.push_back(path);

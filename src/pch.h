@@ -33,7 +33,7 @@
 #include <list>
 #include <locale>
 #ifndef __APPLE__
-#include <malloc.h>
+#include <stdlib.h>
 #endif
 #include <map>
 #include <queue>
