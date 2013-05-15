@@ -3745,6 +3745,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: STR_PERSONAL_ARMOR_UC
     spriteSheet: XCOM_1.PCK
     spriteInv: MAN_1
@@ -3765,6 +3766,7 @@ armors:
       - 1.0
       - 1.1
       - 1.0
+    loftemps: 3
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2
@@ -3785,6 +3787,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftemps: 3
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
@@ -3806,6 +3809,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftemps: 3
   - type: SECTOID_ARMOR0
     spriteSheet: SECTOID.PCK
     corpseItem: STR_SECTOID_CORPSE
@@ -3824,6 +3828,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 2
   - type: FLOATER_ARMOR0
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -3844,6 +3849,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: FLOATER_ARMOR1
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -3864,6 +3870,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: FLOATER_ARMOR2
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -3884,6 +3891,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
     corpseItem: CYBERDISC_CORPSE_
@@ -3905,6 +3913,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: REAPER_ARMOR
     spriteSheet: X_REAP.PCK
     corpseItem: REAPER_CORPSE_
@@ -3925,6 +3934,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: SECTOPOD_ARMOR
     spriteSheet: X_ROB.PCK
     corpseItem: SECTOPOD_CORPSE_
@@ -3946,6 +3956,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
     corpseItem: TANK_CORPSE_
@@ -3966,6 +3977,7 @@ armors:
       - 0.9
       - 0.4
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: HOVERTANK_ARMOR
     spriteSheet: TANKS.PCK
     corpseItem: HOVERTANK_CORPSE_
@@ -3987,6 +3999,7 @@ armors:
       - 0.9
       - 0.4
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseItem: CIVM_CORPSE
@@ -4006,6 +4019,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseItem: CIVF_CORPSE
@@ -4021,6 +4035,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 3
   - type: SNAKEMAN_ARMOR0
     spriteSheet: SNAKEMAN.PCK
     corpseItem: STR_SNAKEMAN_CORPSE
@@ -4040,6 +4055,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: SNAKEMAN_ARMOR1
     spriteSheet: SNAKEMAN.PCK
     corpseItem: STR_SNAKEMAN_CORPSE
@@ -4059,6 +4075,7 @@ armors:
       - 1.1
       - 1.5
       - 0.9
+    loftemps: 3
   - type: SNAKEMAN_ARMOR2
     spriteSheet: SNAKEMAN.PCK
     corpseItem: STR_SNAKEMAN_CORPSE
@@ -4078,6 +4095,7 @@ armors:
       - 1.0
       - 1.4
       - 0.8
+    loftemps: 3
   - type: MUTON_ARMOR0
     spriteSheet: MUTON.PCK
     corpseItem: STR_MUTON_CORPSE
@@ -4097,6 +4115,7 @@ armors:
       - 0.8
       - 0.9
       - 0.9
+    loftemps: 3
   - type: MUTON_ARMOR1
     spriteSheet: MUTON.PCK
     corpseItem: STR_MUTON_CORPSE
@@ -4116,6 +4135,7 @@ armors:
       - 0.7
       - 0.8
       - 0.8
+    loftemps: 3
   - type: MUTON_ARMOR2
     spriteSheet: MUTON.PCK
     corpseItem: STR_MUTON_CORPSE
@@ -4135,6 +4155,7 @@ armors:
       - 0.6
       - 0.7
       - 0.7  
+    loftemps: 3
   - type: ETHEREAL_ARMOR0
     spriteSheet: ETHEREAL.PCK
     corpseItem: STR_ETHEREAL_CORPSE
@@ -4155,6 +4176,7 @@ armors:
       - 0.9
       - 1.0
       - 0.9
+    loftemps: 3
   - type: ETHEREAL_ARMOR1
     spriteSheet: ETHEREAL.PCK
     corpseItem: STR_ETHEREAL_CORPSE
@@ -4175,6 +4197,7 @@ armors:
       - 0.8
       - 0.9
       - 0.8
+    loftemps: 3
   - type: ETHEREAL_ARMOR2
     spriteSheet: ETHEREAL.PCK
     corpseItem: STR_ETHEREAL_CORPSE
@@ -4195,6 +4218,7 @@ armors:
       - 0.7
       - 0.8
       - 0.7
+    loftemps: 3
   - type: CHRYSSALID_ARMOR
     spriteSheet: CHRYS.PCK
     corpseItem: STR_CHRYSSALID_CORPSE
@@ -4214,6 +4238,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 3
   - type: ZOMBIE_ARMOR
     spriteSheet: ZOMBIE.PCK
     corpseItem: STR_ZOMBIE_CORPSE
@@ -4233,6 +4258,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 2
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
     corpseItem: STR_SILACOID_CORPSE
@@ -4253,6 +4279,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 5
   - type: CELATID_ARMOR
     spriteSheet: CELATID.PCK
     corpseItem: STR_CELATID_CORPSE
@@ -4273,6 +4300,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 2
 soldiers:
   - type: XCOM
     minStats:
@@ -4302,7 +4330,6 @@ soldiers:
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
-    loftemps: 3
 units:
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
@@ -4322,7 +4349,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 10
     deathSound: 10
     intelligence: 3
@@ -4345,7 +4371,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 16
     deathSound: 10
     intelligence: 6
@@ -4368,7 +4393,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 14
     deathSound: 10
     intelligence: 5
@@ -4391,7 +4415,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 12
     deathSound: 10
     intelligence: 4
@@ -4414,7 +4437,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 20
     deathSound: 10
     intelligence: 7
@@ -4437,7 +4459,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 25
     deathSound: 10
     intelligence: 8
@@ -4460,7 +4481,6 @@ units:
     standHeight: 15
     kneelHeight: 15
     floatHeight: 2
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4486,7 +4506,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 12
     deathSound: 10
     moveSound: 15
@@ -4511,7 +4530,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 12
     deathSound: 10
     moveSound: 15
@@ -4536,7 +4554,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 12
     deathSound: 10
     moveSound: 15
@@ -4561,7 +4578,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 16
     deathSound: 10
     moveSound: 15
@@ -4586,7 +4602,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 25
     deathSound: 10
     moveSound: 15
@@ -4611,7 +4626,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 35
     deathSound: 10
     moveSound: 15
@@ -4634,7 +4648,6 @@ units:
     armor: REAPER_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 25
     deathSound: 48
     intelligence: 2
@@ -4656,7 +4669,6 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14	
@@ -4677,7 +4689,6 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4698,7 +4709,6 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4720,7 +4730,6 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4742,7 +4751,6 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4763,7 +4771,6 @@ units:
     armor: CIVM_ARMOR
     standHeight: 22
     kneelHeight: 14
-    loftemps: 3
     value: 30
     intelligence: 4
   - type: FEMALE_CIVILIAN
@@ -4783,7 +4790,6 @@ units:
     armor: CIVF_ARMOR
     standHeight: 22
     kneelHeight: 14
-    loftemps: 3
     value: 30
     intelligence: 4
   - type: STR_SNAKEMAN_SOLDIER
@@ -4804,7 +4810,6 @@ units:
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 15
     deathSound: 8
     moveSound: 0
@@ -4828,7 +4833,6 @@ units:
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 17
     deathSound: 8
     moveSound: 0
@@ -4852,7 +4856,6 @@ units:
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 20
     deathSound: 8
     moveSound: 0
@@ -4876,7 +4879,6 @@ units:
     armor: SNAKEMAN_ARMOR1
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 28
     deathSound: 8
     moveSound: 0
@@ -4900,7 +4902,6 @@ units:
     armor: SNAKEMAN_ARMOR2
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 36
     deathSound: 8
     moveSound: 0
@@ -4924,7 +4925,6 @@ units:
     armor: MUTON_ARMOR0
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 15
     deathSound: 6
     intelligence: 2
@@ -4947,7 +4947,6 @@ units:
     armor: MUTON_ARMOR1
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 17
     deathSound: 6
     intelligence: 3
@@ -4970,7 +4969,6 @@ units:
     armor: MUTON_ARMOR2
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 19
     deathSound: 6
     intelligence: 4
@@ -4993,7 +4991,6 @@ units:
     armor: ETHEREAL_ARMOR0
     standHeight: 20
     kneelHeight: 15
-    loftemps: 3
     value: 20
     deathSound: 9
     moveSound: 15
@@ -5017,7 +5014,6 @@ units:
     armor: ETHEREAL_ARMOR1
     standHeight: 20
     kneelHeight: 15
-    loftemps: 3
     value: 30
     deathSound: 9
     moveSound: 15
@@ -5041,7 +5037,6 @@ units:
     armor: ETHEREAL_ARMOR2
     standHeight: 20
     kneelHeight: 15
-    loftemps: 3
     value: 40
     deathSound: 9
     moveSound: 15
@@ -5065,7 +5060,6 @@ units:
     armor: CHRYSSALID_ARMOR
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 25
     deathSound: 49
     aggroSound: 49
@@ -5090,7 +5084,6 @@ units:
     armor: SILACOID_ARMOR
     standHeight: 10
     kneelHeight: 10
-    loftemps: 5
     value: 20
     deathSound: 51
     moveSound: 47
@@ -5116,7 +5109,6 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftemps: 2
     value: 20
     deathSound: 51
     moveSound: 16
@@ -5140,7 +5132,6 @@ units:
     armor: SECTOPOD_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 30
     deathSound: 23
     intelligence: 4
@@ -5163,7 +5154,6 @@ units:
     armor: ZOMBIE_ARMOR
     standHeight: 18
     kneelHeight: 18
-    loftemps: 2
     value: 18
     deathSound: 48
     intelligence: 3
