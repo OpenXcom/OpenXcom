@@ -279,7 +279,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					return 255;
 				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
 					return 255;
-
 			}
 
 			// this will later be used to re-cast the start tile again.
@@ -330,7 +329,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					return 255;
 				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
 					return 255;
-
 			}
 			else if (direction >= DIR_UP)
 			{
@@ -369,7 +367,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					return 255;
 				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
 					return 255;
-
 			}
 
 			int wallcost = 0; // walking through rubble walls
