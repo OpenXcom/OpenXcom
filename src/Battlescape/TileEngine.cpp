@@ -1280,7 +1280,7 @@ bool TileEngine::detonate(Tile* tile)
 	if (explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
-		tile->addSmoke(1);
+		tile->addSmoke(RNG::generate(0,2));
 		for (int i = 0; i < 7; ++i)
 		{
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
@@ -1290,10 +1290,10 @@ bool TileEngine::detonate(Tile* tile)
 				{
 					objective = tiles[i]->destroy(parts[i]);
 					if (i > 3) tiles[i]->addSmoke(2); //only current tile produces smoke[2]
-					if (tiles[i]->getMapData(parts[i]) && explosive >= 2 * armor) //double destruction
+					/*if (tiles[i]->getMapData(parts[i]) && explosive >= 2 * armor) //double destruction
 					{
 						tiles[i]->destroy(parts[i]);
-					}
+					}*/
 				}
 			}
 		}
