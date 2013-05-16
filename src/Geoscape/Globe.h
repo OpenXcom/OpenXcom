@@ -66,13 +66,11 @@ private:
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 	FastLineClip *_clipper;
 	///normal of each pixel in earth globe per zoom level
-	std::vector<std::vector<Cord> > earth_data;
+	std::vector<std::vector<Cord> > _earthData;
 	///data sample used for noise in shading
-	std::vector<Sint16> random_noise_data;
+	std::vector<Sint16> _randomNoiseData;
 	///list of dimension of earth on screen per zoom level
-	std::vector<double> radius;
-	///dimension of earth graphic surface
-	const std::pair<int,int> earth_size;
+	std::vector<double> _radius;
 
 
 	/// Checks if a point is behind the globe.
