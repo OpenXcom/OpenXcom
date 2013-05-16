@@ -448,7 +448,9 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 void Soldier::trainPsi()
 {
 	_improvement = 0;
-	if (_currentStats.psiSkill < 0)
+	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
+	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
+	if (_currentStats.psiSkill < -10)
 		_currentStats.psiSkill = 0;
 	else if(_currentStats.psiSkill <= _rules->getMinStats().psiSkill)
 		_improvement = RNG::generate(_rules->getMinStats().psiSkill, _rules->getMaxStats().psiSkill);
@@ -487,7 +489,7 @@ void Soldier::trainPsi1Day()
 	}
 	else if (_currentStats.psiSkill == 0)
 	{
-		_currentStats.psiSkill = -RNG::generate(30, 50);	// set initial training from 30 to 50 days
+		_currentStats.psiSkill = -RNG::generate(30, 60);	// set initial training from 30 to 60 days
 	}
 }
 
