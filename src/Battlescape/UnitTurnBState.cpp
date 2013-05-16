@@ -99,10 +99,15 @@ void UnitTurnBState::think()
 
 	if (_unit->spendTimeUnits(tu))
 	{
+		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
+		if (_unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+		{
+			_unit->abortTurn();
+		}
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_parent->popState();
