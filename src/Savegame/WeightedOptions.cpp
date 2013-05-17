@@ -60,6 +60,7 @@ void WeightedOptions::set(const std::string &id, unsigned weight)
 		if (0 != weight)
 		{
 			option->second = weight;
+			_totalWeight += weight;
 		}
 		else
 		{
