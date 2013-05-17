@@ -1686,7 +1686,15 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 
 			if (door == 0 && rClick)
 			{
-				TUCost = tile->getTUCost(part == MapData::O_WESTWALL ? MapData::O_NORTHWALL : MapData::O_WESTWALL, unit->getArmor()->getMovementType());
+				if (part == MapData::O_WESTWALL)
+				{
+					part = MapData::O_NORTHWALL;
+				}
+				else
+				{
+					part = MapData::O_WESTWALL;
+				}
+				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
 			}
 			else if (door == 1)
 			{
