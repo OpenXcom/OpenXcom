@@ -28,6 +28,7 @@
 #include "Node.h"
 #include <SDL.h>
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/MCDPatch.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/Position.h"
@@ -35,6 +36,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Language.h"
+#include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Battlescape/PatrolBAIState.h"
 #include "../Battlescape/AggroBAIState.h"
@@ -299,11 +301,16 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
  * Loads the resources required by the map in the battle save.
  * @param res Pointer to resource pack.
  */
-void SavedBattleGame::loadMapResources(ResourcePack *res)
+void SavedBattleGame::loadMapResources(Game *game)
 {
+	ResourcePack *res = game->getResourcePack();
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->loadData();
+		if (game->getRuleset()->getMCDPatch((*i)->getName()))
+		{
+			game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+		}
 	}
 
 	int mdsID, mdID;

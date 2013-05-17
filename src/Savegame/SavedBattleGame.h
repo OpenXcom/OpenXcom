@@ -36,7 +36,7 @@ class MapDataSet;
 class RuleUnit;
 class MapBlock;
 class Node;
-class ResourcePack;
+class Game;
 class BattleUnit;
 class Soldier;
 class Position;
@@ -182,7 +182,7 @@ public:
 	/// get debug mode
 	bool getDebugMode() const;
 	/// load map resources
-	void loadMapResources(ResourcePack *res);
+	void loadMapResources(Game *game);
 	/// resets tiles units are standing on
 	void resetUnitTiles();
 	/// Removes an item from the game.

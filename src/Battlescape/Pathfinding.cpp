@@ -523,6 +523,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() != 0 &&
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() <= BIGWALLNWSE &&
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion)
 			return true; // blocking part
 		else
