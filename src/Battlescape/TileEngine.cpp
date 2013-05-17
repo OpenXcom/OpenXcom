@@ -1261,6 +1261,25 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 }
 
 /**
+ * get the height of an object checking it's voxels at 8,8
+ * @return int height
+ */
+int TileEngine::getVoxelHeight(MapData *mp)
+{
+	int x = 8;
+	int y = 8;
+	for (int i=0; i < 12; i++)
+	{
+		int idx = (mp->getLoftID(i)*16) + y;
+		if ((_voxelData->at(idx) & (1 << x)) == 0)
+		{
+			return i;
+		}
+	}
+	return 12;
+}
+
+/**
  * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
  * Must affect on 7 objects (6 box sides and object inside)
  * @return bool Return true objective was destroyed
@@ -1285,28 +1304,24 @@ bool TileEngine::detonate(Tile* tile)
 		{
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
-				int armor = tiles[i]->getMapData(parts[i])->getArmor();
-				if (explosive >= armor)
+				int remainingPower = explosive;
+				while (remainingPower > 0 && tiles[i]->getMapData(parts[i]))
 				{
-					objective = tiles[i]->destroy(parts[i]);
-					if (i > 3) tiles[i]->addSmoke(2); //only current tile produces smoke[2]
-					/*if (tiles[i]->getMapData(parts[i]) && explosive >= 2 * armor) //double destruction
+					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
+					if (remainingPower > 0)
 					{
-						tiles[i]->destroy(parts[i]);
-					}*/
+						int height = getVoxelHeight(tiles[i]->getMapData(parts[i]));
+						if (i > 3) tiles[i]->addSmoke(RNG::generate((height/2), (height/2)+1)); //only current tile produces smoke[2]
+						objective = objective || tiles[i]->destroy(parts[i]);
+					}
 				}
 			}
 		}
 
-		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
-		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
 		int flam = tile->getFlammability();
-		if (flam <= 20)
+		if (explosive > flam)
 		{
-			if (RNG::generate(0, 20) - flam >= 0)
-			{
-				tile->ignite();
-			}
+			tile->ignite();
 		}
 	}
 
