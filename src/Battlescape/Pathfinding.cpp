@@ -523,8 +523,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() != 0 &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion &&
-			tile->getTUCost(MapData::O_OBJECT, _movementType) == 255)
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion)
 			return true; // blocking part
 		else
 			return false;
@@ -532,27 +531,23 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_WESTWALL)
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST &&
-			tile->getTUCost(MapData::O_OBJECT, _movementType) == 255)
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
 			return true; // blocking part
 		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
 		if (tileWest->getMapData(MapData::O_OBJECT) &&
 			(tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEAST ||
-			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH) &&
-			tileWest->getTUCost(MapData::O_OBJECT, _movementType) == 255)
+			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
 			return true; // blocking part
 	}
 	if (part == MapData::O_NORTHWALL)
 	{
 		if (tile->getMapData(MapData::O_OBJECT) &&
-			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH &&
-			tile->getTUCost(MapData::O_OBJECT, _movementType) == 255)
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
 			return true; // blocking part
 		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
 		if (tileNorth->getMapData(MapData::O_OBJECT) &&
 			(tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLSOUTH ||
-			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH) &&
-			tileNorth->getTUCost(MapData::O_OBJECT, _movementType) == 255)
+			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
 			return true; // blocking part
 	}
 	if (part == MapData::O_FLOOR)

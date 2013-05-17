@@ -436,7 +436,7 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 						// Draw object
-						if (tile->getMapData(MapData::O_OBJECT))
+						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
@@ -577,6 +577,16 @@ void Map::drawTerrain(Surface *surface)
 									tmpSurface->blitNShade(surface, screenPosition.x + offset.x, screenPosition.y + offset.y, 0);
 								}
 							}
+						}
+					}
+					if (!tile->isVoid())
+					{
+						// Draw object
+						if (tile->getMapData(MapData::O_OBJECT) && tile->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+						{
+							tmpSurface = tile->getSprite(MapData::O_OBJECT);
+							if (tmpSurface)
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false, tileColor);
 						}
 					}
 
