@@ -148,7 +148,7 @@ FABRICATION
 STR_TRANSFER_UC
 TRANSFERT
 STR_PURCHASE_RECRUIT
-ACHAT/RECRUTEMENT
+ACHETER/RECRUTER
 STR_SELL_SACK_UC
 VENDRE/LICENCIER
 STR_GEOSCAPE_UC
@@ -264,7 +264,7 @@ Unités à
 STR_PRODUCE
 Produire 
 STR_PURCHASE_HIRE_PERSONNEL
-Acheter/Recrutement Personnel
+Acheter/Recruter Personnel
 STR_COST_OF_PURCHASES
 Prix d'Achat>
 STR_COST_PER_UNIT_UC
@@ -360,11 +360,11 @@ STR_RD
 STR_TH
 
 STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE
-Insuffisant matériaux spéciaux pour produire{NEWLINE}
+Matériaux spéciaux insuffisant pour produire{NEWLINE}
 STR_NOT_ENOUGH_MONEY_TO_PRODUCE
-Insuffisant argent pour produire{NEWLINE}
+Argent insuffisant pour produire{NEWLINE}
 STR_PRODUCTION_COMPLETE
-Production finit:{NEWLINE}
+Production terminée:{NEWLINE}
 STR_PRODUCTION_OF
 Production de{NEWLINE}
 STR__AT__
@@ -374,7 +374,7 @@ STR_IS_COMPLETE
 STR_OK_5_SECS
 OK - 5 sec
 STR_RESEARCH_COMPLETED
-Recherche finit
+Recherche terminée
 STR_VIEW_REPORTS
 VOIR RAPPORTS
 STR_WE_CAN_NOW_RESEARCH
@@ -404,7 +404,7 @@ STR_TO_REARM
 STR_AT_
  à 
 STR_UFO_IS_NOT_RECOVERED
-L'OVNI ne récupéré pas
+L'OVNI n'a pas été récupéré
 STR_UFO_IS_RECOVERED
 L'OVNI est récupéré
 STR_CRAFT_IS_LOST
@@ -444,7 +444,7 @@ AGENTS XCOM ÉVACUÉS APRÈS BLESSURES
 STR_XCOM_OPERATIVES_MISSING_IN_ACTION
 AGENTS XCOM DISPARUS PENDANT L'ACTION
 STR_TANKS_DESTROYED
-CHAR D'ASSAUTS DÉTRUITS
+BLINDÉS DÉTRUITS
 STR_XCOM_CRAFT_LOST
 VAISSEAU XCOM PERDU
 STR_UFO_RECOVERY
@@ -460,11 +460,11 @@ LE BOUCLIER DE GRAVITE REPOUSSE L'OVNI!
 STR_FIRING
 TIR
 STR_HIT
-FRAPPÉ!
+TOUCHÉ!
 STR_UFO_DESTROYED
 OVNI DÉTRUIT!
 STR_MISSED
-RATÉ!
+MANQUÉ!
 STR_SELL_ITEMS_SACK_PERSONNEL
 Vendre/Licencier Personnel
 STR_VALUE_OF_SALES
@@ -512,9 +512,9 @@ IMPOSSIBLE DE CONSTRUIRE ICI!{SMALLLINE}Vous devez construire à côté d'une in
 STR_NO_FREE_ACCOMODATION
 PAS DE LOGEMENT DE LIBRE!{SMALLLINE}La base de destination n'a pas assez de place dans les baraquements.
 STR_NOT_ENOUGH_WORK_SPACE
-INSUFFISANT ESPACE DE TRAVAIL!{SMALLLINE}Construisez un nouvel atelier ou réduisez le travail sur d'autres projets.
+ESPACE DE TRAVAIL INSUFFISANT! {SMALLLINE}Construisez un nouvel atelier ou réduisez le travail sur d'autres projets.
 STR_NOT_ENOUGH_MONEY
-INSUFFISANT ARGENT!
+ARGENT INSUFFISANT!
 STR_NOT_ENOUGH_TRANSFER_SUPPORT
 PAS ASSEZ DE DISPONIBILITÉ!{SMALLLINE}Attendez que des transferts en cours ou des achats arrivent à la destination.
 STR_NO_MORE_SOLDIERS_ALLOWED
@@ -682,9 +682,9 @@ TYPE
 STR_PERSONAL_ARMOR_UC
 ARMURE PERSONNELLE
 STR_POWER_SUIT_UC
-ARMURE DE PUISSANCE
+ARMURE ÉNERGÉTIQUE
 STR_FLYING_SUIT_UC
-ARMURE DE VOL
+ARMURE ANTI-G
 STR_SELECT_ARMOR
 Sélectionner Armure
 STR_NORTH
@@ -818,7 +818,7 @@ EXPLOSIVE
 STR_LASER_BEAM
 RAYON LASER
 STR_PLASMA_BEAM_UC
-RAYON À PLASMA
+RAYON PLASMA
 STR_STUN_UC
 ASSOMMER
 STR_SHOT_TYPE
@@ -900,7 +900,7 @@ Cyberdisque
 STR_LIVE_COMMANDER
  Commandant
 STR_LIVE_LEADER
- Chef
+ Leader
 STR_LIVE_ENGINEER
  Ingénieur
 STR_LIVE_MEDIC
@@ -920,7 +920,7 @@ Docteur Flottant
 STR_FLOATER_ENGINEER
 Ingénieur Flottant
 STR_FLOATER_LEADER
-Chef Flottant
+Leader Flottant
 STR_FLOATER_COMMANDER
 Commandant Flottant
 STR_SECTOID_SOLDIER
@@ -932,7 +932,7 @@ Docteur Sectoïde
 STR_SECTOID_ENGINEER
 Ingénieur Sectoïde
 STR_SECTOID_LEADER
-Chef Sectoïde
+Leader Sectoïde
 STR_SECTOID_COMMANDER
 Commandant Sectoïde
 STR_SNAKEMAN_SOLDIER
@@ -942,7 +942,7 @@ Navigateur Homme-Serpent
 STR_SNAKEMAN_ENGINEER
 Ingénieur Homme-Serpent
 STR_SNAKEMAN_LEADER
-Chef Homme-Serpent
+Leader Homme-Serpent
 STR_SNAKEMAN_COMMANDER
 Commandant Homme-Serpent
 STR_MUTON_SOLDIER
@@ -954,7 +954,7 @@ Ingénieur Muton
 STR_ETHEREAL_SOLDIER
 Soldat Ethereal
 STR_ETHEREAL_LEADER
-Chef Ethereal
+Leader Ethereal
 STR_ETHEREAL_COMMANDER
 Commandant Ethereal
 STR_CYBERDISC_TERRORIST
@@ -990,9 +990,9 @@ Alliages Extraterrestre
 STR_ALIEN_HABITAT
 Habitat Extraterrestre
 STR_POWER_SUIT
-Armure de Puissance
+Armure Énergétique
 STR_FLYING_SUIT
-Armure de Vol
+Armure Anti-G
 STR_HWP_ROCKETS
 Roquettes PAL
 STR_HWP_FUSION_BOMB
@@ -1014,7 +1014,7 @@ Laser Lourd
 STR_LASER_CANNON
 Canon Laser
 STR_PLASMA_CANNON
-Canon à Plasma
+Canon Plasma
 STR_FUSION_MISSILE
 Missile à Fusion
 STR_LASER_DEFENSE
@@ -1024,25 +1024,25 @@ Défense à Plasma
 STR_FUSION_DEFENSE
 Défense à Fusion
 STR_GRAV_SHIELD
-Bouclier de Gravité
+Bouclier Gravitationnel
 STR_MIND_SHIELD
-Bouclier de l'Esprit
+Bouclier Psychique
 STR_PSI_LAB
 Psi-Labo
 STR_MOTION_SCANNER
-Scanneur de Mouvement
+Scanner de Mouvement
 STR_MEDI_KIT
 Trousse de Soins
 STR_TANK_CANNON
-Char d'Assaut/Canon
+Blindé Canon Lourd
 STR_TANK_ROCKET_LAUNCHER
-Char d'Assaut/Lance-Roquettes
+Blindé Lance-Roquettes
 STR_TANK_LASER_CANNON
-Char d'Assaut/Canon Laser
+Blindé Laser
 STR_HOVERTANK_PLASMA
-Aérochar/Plasma
+Blindé Anti-G Plasma
 STR_HOVERTANK_LAUNCHER
-Aérochar/Lance-Missiles
+Blindé Anti-G Blaster
 STR_STINGRAY_LAUNCHER
 Lance-Missile Stingray
 STR_AVALANCHE_LAUNCHER
@@ -1052,7 +1052,7 @@ Canon
 STR_FUSION_BALL_LAUNCHER
 Lance-Missile à Boules de Fusion
 STR_PLASMA_BEAM
-Rayon à Plasma
+Rayon Plasma
 STR_STINGRAY_MISSILES
 Missile Stingray
 STR_AVALANCHE_MISSILES
@@ -1088,7 +1088,7 @@ Asie du Sud-Est
 STR_SIBERIA
 Sibérie
 STR_AUSTRALASIA
-Australasie
+Océanie
 STR_PACIFIC
 Pacifique
 STR_NORTH_ATLANTIC
@@ -1098,7 +1098,7 @@ Atlantique Sud
 STR_INDIAN_OCEAN
 Océan Indien
 STR_ALIEN_RESEARCH
-Recherche sur les Extraterrestres
+Recherche Extraterrestres
 STR_ALIEN_HARVEST
 Moisson Extraterrestre
 STR_ALIEN_ABDUCTION
@@ -1180,7 +1180,7 @@ STR_USA
 STR_RUSSIA
 RUSSIE
 STR_UK
-R.U.
+ROYAUME-UNI
 STR_FRANCE
 FRANCE
 STR_GERMANY
@@ -1208,7 +1208,7 @@ STR_EGYPT
 STR_CANADA
 CANADA
 STR_TANK
-Char d'Assaut
+Blindé
 STR_CIVILIAN
 Civil
 STR_JAN
@@ -1328,7 +1328,7 @@ Taille
 STR_THE_CORPSE_MAY_BE_RESEARCHED
 Il faudrait examiner le corps pour un rapport complet d'autopsie.
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
-Insuffisant munitions pour recharger
+Munitions insuffisantes pour recharger
 STR_BLASTER_LAUNCHER_UFOPEDIA
 Un lance-missiles guidé extraterrestre qui tire de puissantes 'bombes blaster'.  Lorsque vous cliquez pour tirer, vous voyez apparaître les points de repère que la bombe blaster suivra.  Lorsque vous avez positionné assez de points de repère, cliquez sur l'icône lancement spécial.
 STR_SMALL_LAUNCHER_UFOPEDIA
@@ -1606,7 +1606,7 @@ Les armes laser sont un complément utile aux PAL.  Elles ont une grande puissan
 STR_HOVERTANK_PLASMA_UFOPEDIA
 La technologie extraterrestre a fait revivre les PAL.  La maniabilité du voyage aérien et la puissance des rayons à plasma est une combinaison mortelle.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
-Cet aérochar possède un lance-missile, à boules de fusion, capable de faire d'immenses dégâts.  Utilisez-le avec beaucoup de précaution.  Il vous faudra fabriquer les boules de fusion pour charger ces PAL.  Une boule de fusion est une arme guidée intelligente.  Pour tirer, vous devez sélectionner un certain nombre de 'points de repère' avec le curseur puis cliquer sur l'icône lancer pour tirer la boule de fusion.
+Cet "aérochar" possède un lance-missile, à boules de fusion, capable de faire d'immenses dégâts.  Utilisez-le avec beaucoup de précaution.  Il vous faudra fabriquer les boules de fusion pour charger ces PAL.  Une boule de fusion est une arme guidée intelligente.  Pour tirer, vous devez sélectionner un certain nombre de 'points de repère' avec le curseur puis cliquer sur l'icône lancer pour tirer la boule de fusion.
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
 Cet objet compact est utilisé comme munition pour un canon lourd à plasma.  Il contient une petite quantité d'Elerium.
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
@@ -1708,19 +1708,19 @@ Grenade de Proximité
 STR_HIGH_EXPLOSIVE
 Explosif
 STR_STUN_ROD
-Bâton pour Assommer
+Matraque
 STR_HEAVY_PLASMA
-Canon à Plasma Lourd
+Canon Plasma Lourd
 STR_HEAVY_PLASMA_CLIP
-Chargeur pour Canon à Plasma Lourd
+Chargeur de Canon Plasma Lourd
 STR_PLASMA_RIFLE
-Fusil à Plasma
+Fusil Plasma
 STR_PLASMA_RIFLE_CLIP
-Chargeur pour Fusil à Plasma
+Chargeur de Fusil Plasma
 STR_PLASMA_PISTOL
-Pistolet à Plasma
+Pistolet Plasma
 STR_PLASMA_PISTOL_CLIP
-Chargeur pour Pistolet à Plasma
+Chargeur de Pistolet Plasma
 STR_BLASTER_LAUNCHER
 Lanceur Blaster
 STR_BLASTER_BOMB
@@ -1758,7 +1758,7 @@ Corps Sectopode
 STR_CYBERDISC_CORPSE
 Corps Cyberdisque
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
-Insuffisant matériel pour rééquiper entièrement l'escouade
+Matériel Insuffisant pour rééquiper entièrement l'escouade
 STR_MARS_CYDONIA_LANDING
 Mars: Atterrissage sur Cydonia
 STR_MARS_CYDONIA_LANDING_BRIEFING
@@ -1774,7 +1774,7 @@ Les extraterrestres ont détruit la base non défendue
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
 Les agents Xcom ont localisé une base extraterrestre sur 
 STR_STANDOFF
-IMPASSE
+ATTENTE
 STR_CAUTIOUS_ATTACK
 ATTAQUE PRUDENTE
 STR_STANDARD_ATTACK
@@ -1784,19 +1784,19 @@ ATTAQUE AGRESSIVE
 STR_DISENGAGING
 DÉSENGAGEMENT
 STR_UFO_HIT
-L'OVNI EST FRAPPÉ!
+L'OVNI EST TOUCHÉ!
 STR_UFO_CRASH_LANDS
 L'OVNI S'ÉCRASE!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Réduction en mode impasse seulement
+Réduction en mode attente seulement
 STR_UFO_RETURN_FIRE
-L'OVNI TIRANT!
+L'OVNI RIPOSTE!
 STR_INTERCEPTOR_DAMAGED
 >>>INTERCEPTEUR ENDOMMAGÉ<<<
 STR_INTERCEPTOR_DESTROYED
 >>>INTERCEPTEUR DÉTRUIT<<<
 STR_UFO_OUTRUNNING_INTERCEPTOR
-L'OVNI DÈPASSER L'INTERCEPTEUR!
+L'OVNI DÈPASSE L'INTERCEPTEUR!
 STR_ALIENS_TERRORISE
 TERREUR EXTRATERRESTRE
 STR_LONG_RANGE_DETECTION
@@ -1838,9 +1838,9 @@ STR_PERFORMANCE_RATING
 STR_VICTORY_DATE
 Date de victoire
 STR_ELECTRO_FLARE
-Électrolumière
+Balise lumineuse
 STR_ELECTRO_FLARE_UFOPEDIA
-Cette fusée éclairante produit une lumière vive lorsqu'elle est lancée.  Ceci éclaire les unités ennemies proches lors des missions de nuit.
+Cette balise éclairante produit une lumière vive lorsqu'elle est lancée.  Ceci éclaire les unités ennemies proches lors des missions de nuit.
 STR_MONTHLY_COSTS
 Coûts mensuels
 STR_CRAFT_RENTAL
@@ -1988,7 +1988,7 @@ Assommer
 STR_PRIME_GRENADE
 Armer Grenade
 STR_USE_SCANNER
-Utiliser Scanneur
+Utiliser Scanner
 STR_USE_MEDI_KIT
 Utiliser Trousse de Soins
 STR_LAUNCH_MISSILE
@@ -1996,9 +1996,9 @@ Lancer Missile
 STR_ACC
 Préc>
 STR_NOT_ENOUGH_TIME_UNITS
-Insuffisant Unités de Temps!
+Unités de Temps Épuisées!
 STR_NOT_ENOUGH_ENERGY
-Insuffisant Énergie!
+Énergie Épuisée!
 STR_NO_ROUNDS_LEFT
 Plus de Munitions!
 STR_NO_AMMUNITION_LOADED
@@ -2040,9 +2040,9 @@ Panique de l'Unité
 STR_MIND_CONTROL_SUCCESSFUL
 Contrôle de l'Esprit Réussi
 STR_HAS_GONE_BERSERK_MALE
-est délirant
+est devenu fou
 STR_HAS_GONE_BERSERK_FEMALE
-est délirante
+est devenue folle
 STR_HAS_PANICKED_MALE
 a paniqué
 STR_HAS_PANICKED_FEMALE
@@ -2070,27 +2070,27 @@ VITESSE DE DÉFILEMENT
 STR_SCROLL_TYPE
 TYPE DE DÉFILEMENT
 STR_TRIGGER_SCROLL
-DÉFILEMENT MANUEL
+CLIQUE BORD ECRAN
 STR_AUTO_SCROLL
-DÉFILEMENT AUTOMATIQUE
+POINTEUR BORD ECRAN
 STR_FIRE_SPEED
 VITESSE DE TIR
 STR_XCOM_MOVEMENT_SPEED
-VITESSE DE MOUVEMENT XCOM
+VITESSE DE DEPLACEMENT XCOM
 STR_ALIEN_MOVEMENT_SPEED
-VITESSE DE MOUVEMENT EXTRATERRESTRES
+VITESSE DE DEPLACEMENT EXTRATERRESTRES
 STR_HAS_BECOME_UNCONSCIOUS_MALE
  a perdu connaissance
 STR_HAS_BECOME_UNCONSCIOUS_FEMALE
  a perdu connaissance
 STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
- a succombé à une blessure grave
+ a succombé à une blessure critique
 STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
- a succombé à une blessure grave
+ a succombé à une blessure critique
 STR_USE_MIND_PROBE
 Utiliser Sonde d'Esprit
 STR_FATAL_WOUNDS
-BLESSURES GRAVES
+BLESSURES CRITIQUES
 STR_UNDER_ARMOR_UC
 ARMURE DE DESSOUS
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
@@ -2108,7 +2108,7 @@ Décharger
 STR_NEW_SAVED_GAME
 <NOUVELLE SAUVEGARDE>
 STR_NEW_BATTLE
-Nouveau Combat
+Entrainement Tactique
 STR_OPTIONS
 Options
 STR_TERRAIN
@@ -2116,9 +2116,9 @@ Terrain
 STR_DARKNESS
 Obscurité
 STR_DISPLAY_RESOLUTION
-Définition d'écran
+Résolution d'écran
 STR_DISPLAY_MODE
-Mode d'écran
+Modes d'écran
 STR_WINDOWED
 Fenêtré
 STR_FULLSCREEN
@@ -2138,7 +2138,7 @@ Désert
 STR_POLAR
 Polaire
 STR_RANDOM_BATTLE
-RANDOMISER
+GENERATEUR ALEATOIRE
 STR_MIXED
 Divers
 STR_RIGHT_CLICK_TO_DELETE
@@ -2168,13 +2168,13 @@ a été tué.
 STR_HAS_BEEN_KILLED_FEMALE
 a été tuée.
 STR_DRAG_SCROLL
-TRAÎNER BARRE DE DÉFILEMENT
+BOUTON MILIEU SOURIS
 STR_HIT_MELEE
 Mêlée
 STR_CONTROLS
 COMMANDES
 STR_RESTORE_DEFAULTS
-Restaure Défauts
+Retour par Défaut
 STR_GENERAL
 Général
 STR_GEOSCAPE
@@ -2184,39 +2184,39 @@ Bataillescape
 STR_SCREENSHOT
 Capture d'Écran
 STR_FPS_COUNTER
-Compteur à FPS
+Compteur FPS
 STR_ROTATE_LEFT
-Tourner Gauche
+Pivoter vers la Gauche
 STR_ROTATE_RIGHT
-Tourner Droit
+Pivoter vers la Droite
 STR_ROTATE_UP
-Tourner en Haut
+Pivoter vers le Haut
 STR_ROTATE_DOWN
-Tourner en Bas
+Pivoter vers le Bas
 STR_ZOOM_IN
 Zoomer
 STR_ZOOM_OUT
 Dézoomer
 STR_TOGGLE_COUNTRY_DETAIL
-Commuter Détail de Pays
+Détail de Pays ON/OFF
 STR_TOGGLE_RADAR_RANGES
-Commuter Champs de Radar
+Champs de Radar ON/OFF
 STR_SCROLL_LEFT
-Traîner Gauche
+Défilement Gauche
 STR_SCROLL_RIGHT
-Traîner Droit
+Défilement Droit
 STR_SCROLL_UP
-Traîner en Haut
+Défilement Haut
 STR_SCROLL_DOWN
-Traîner en Bas
+Défilement Bas
 STR_VIEW_LEVEL_ABOVE
-Voir sur Niveau
+Voir Niveau Supérieur
 STR_VIEW_LEVEL_BELOW
-Voir sous Niveau
+Voir Niveau Inferieur
 STR_CENTER_SELECTED_UNIT
 Centrer l'unité sélectionné
 STR_PREVIOUS_UNIT
-Unité préalable
+Unité précédente
 STR_NEXT_UNIT
 Unité suivante
 STR_DESELECT_UNIT
@@ -2264,7 +2264,7 @@ Centrer sur l'ennemi #8
 STR_CENTER_ON_ENEMY_9
 Centrer sur l'ennemi #9
 STR_ENEMY_WEAPON_LEVEL
-Niveau à l'arme ennemi
+Niveau d'arme ennemi
 STR_GROUNDED
 SOL
 STR_LIVING_QUARTERS_PLURAL
@@ -2282,92 +2282,92 @@ OPTIONS AVANCÉES
 STR_AGGRESSIVERETALIATION
 Représaille agressive
 STR_AGGRESSIVERETALIATION_DESC
-Tous classes des OVNIs être d'essayant à détecter ta base, en dépit de paramètres mission.
+Tous les OVNIs tente de détécter les bases X-Com quelque soit les paramètres de mission.
 STR_ALIENCONTAINMENTHASUPPERLIMIT
-Limites pour les détentions des E.T.
+Limite pour la détention des E.T.
 STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
-Les limites sur les détentions des E.T. avoir imposé.
+Le nombre d'aliens détenu est limité par installation.
 STR_CANSELLLIVEALIENS
-Vendre les E.T. vivants
+Vente des E.T. vivants
 STR_CANSELLLIVEALIENS_DESC
-Accorder la vente des E.T. vivants, recommandé quand limites pour les détentions des E.T. est utilisé. 
+Autoriser la vente des aliens vivants, recommandé quand la limite des détentions est paramètré. 
 STR_ALLOWAUTOSELLPRODUCTION
-Auto-vente Fabrication
+Fabrication auto-vendu 
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Droit-clic la bouton augmentation sur "total à produire" avec un projet fabrication, pour auto-vente.
+Vend automatiquement les produits fabriqués par bouton droit souris sur la fléche de commande "haut". "Total à produire" indique alors "$$$".
 STR_ALLOWBUILDINGQUEUE
-Accorder queue de construisant
+Autoriser construction à la chaine
 STR_ALLOWBUILDINGQUEUE_DESC
-Installations incomplètes sont relié à l'ascenseur d'accés, accordant la construction des installations additionnelles.
+Permet d'ajouter une nouvelle installation adjacente à une salle en cour de construction.
 STR_BATTLEAUTOEND
-Bataille Auto-fin
+Fin de bataille automatique
 STR_BATTLEAUTOEND_DESC
-Automatiquement terminant la bataille quand l'ennemi final est tué.
+La bataille se termine immédiatement quand le dernier ennemi est tué.
 STR_BATTLEINSTANTGRENADE
-Grenades Instantes
+Grenades Instantés
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades armé pour 0 tours exploser immédiatement quand lancé, pas au fin du tour. 
+Les grenades sont armés sans délai et explosent immédiatement après être lancés. 
 STR_BATTLENOTIFYDEATH
-Montrer notifications de mort
+Notifications de mort
 STR_BATTLENOTIFYDEATH_DESC
 Recevoir une notification quand un soldat est tué.
 STR_BATTLEPREVIEWPATH
 Aperçu Mouvement
 STR_BATTLEPREVIEWPATH_DESC
-Gauche-clic apercevoir le sentier à la destination choisi, puis un double-clic meut le soldat.
+Un clique du bouton gauche souris visualise le trajet, le double-clique bouton gauche souris active le déplacement.
 STR_BATTLERANGEBASEDACCURACY
 Précision via distance
 STR_BATTLERANGEBASEDACCURACY_DESC
-Tir précision être dépendant sur la visibilitie, distance, et facteurs additionnels.
+La précision du tir dépend de la visibilité, de la distance et d'autres facteurs additionnels.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-Fabrication comme TFTD
+Accélérer fabrication comme TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Accorder les projets fabrication à produire plus que une item par heure.
+Permettre la production de plus d'une unité par heure.
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE
-Transferts les vaisseaux en vol
+Transférer les vaisseaux en vol
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
-Vaisseaux en vol sont transférables.
+Assigner à un Vaisseaux en vol une nouvelle base.
 STR_CRAFTLAUNCHALWAYS
-Forcer les vaisseaux à lance
+Forcer le lancement des vaisseaux
 STR_CRAFTLAUNCHALWAYS_DESC
-Accorder forçant les vaisseaux à lance, et ignore le ravitaillement / réarmement.
+Autoriser le lancement des vaisseaux en ignorant le ravitaillement et le réarmement.
 STR_CUSTOMINITIALBASE
-Personnalise la base initiale
+Personnaliser la base initiale
 STR_CUSTOMINITIALBASE_DESC
-Quand commencement un jeu nouveau, tes installations initiales sont placé manuellement, et ne utiliser pas le schéma typique.
+Les installations sont placés manuellement à la création de la première base.
 STR_GLOBESEASONS
-Éclairage realiste de la geospace
+Éclairage realiste du geospace
 STR_GLOBESEASONS_DESC
-Utiliser un angle realiste de la lumière du soleil sur le Geoscape, selon inclinaison de l'axe de la Terre.
+Utiliser un angle realiste de la lumière du soleil sur le Geoscape, selon l'inclinaison de l'axe de la Terre.
 STR_PLAYINTRO
-Regarder intro
+Visionner intro
 STR_PLAYINTRO_DESC
-Regarder la vidéo intro au commencement.
+Regarder la vidéo intro au démarrage.
 STR_SHOWFUNDSONGEOSCAPE
-Montrer les fonds sur la geoscape
+Montrer les fonds sur le geoscape
 STR_SHOWFUNDSONGEOSCAPE_DESC
-La geoscape inclura les informations additionnelles pour ta situation financière.
+La geoscape affiche les contributions financières.
 STR_SHOWMORESTATSININVENTORYVIEW
 Statistiques inventaire
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-L'écran inventaire présenter les informations additionnelles pour la soldat choisi actuellement.
+Des caractéristiques du soldat apparaissent sur l'écran d'inventaire.
 STR_SNEAKYAI
 IA Furtive
 STR_SNEAKYAI_DESC
-Quand possible, l'adversaire IA éviter exposant leur soldats.
+L'adversaire IA évite d'évoluer a découvert.
 STR_STRAFE
-Actions additionnelles 
+Actions additionnelles
 STR_STRAFE_DESC
-Accorder strafing, courant, et mouvement indépendant pour l'arme du char d'assaut. Appuyez CTRL à utilise ceci méthode alternatif de mouvement.
+Utilisation de la touche CTRL pour mouvement spéciaux (pas de coté, rotation tourelle, tir forcé).
 STR_BATTLESCROLLDRAGINVERT
-Traîner-faire-défiler invertu
+Inversion scrolling
 STR_BATTLESCROLLDRAGINVERT_DESC
-Durant le combat, traîner-faire-défiler est invertu.
+Durant le combat, le défilement est inversé.
 STR_BATTLEEXPLOSIONHEIGHT
 Hauteur des explosions
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Change la hauteur et l'aire des explosions.{NEWLINE}(Plate: 0, Ronde: 3)
 STR_ALLOWPSIONICCAPTURE
-Accorder psi-capture
+Victoire par psi-captures
 STR_ALLOWPSIONICCAPTURE_DESC
-Utilisant psi-capture sur les E.T. restant causer une victoire, et ils être considérant comme les captures vivants.
+Autoriser la victoire par psi-capture. Les aliens sont considérés comme capturés vivants.
