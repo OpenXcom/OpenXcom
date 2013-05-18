@@ -241,6 +241,63 @@ void Surface::loadSpk(const std::string &filename)
 }
 
 /**
+ * Loads the contents of a TFTD BDY image file into
+ * the surface. BDY files are compressed with a custom
+ * algorithm.
+ * @param filename Filename of the BDY image.
+ * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#BDY
+ */
+void Surface::loadBdy(const std::string &filename)
+{
+	// Load file and put pixels in surface
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	if (!imgFile)
+	{
+		throw Exception(filename + " not found");
+	}
+
+	// Lock the surface
+	lock();
+
+	Uint8 dataByte;
+	int pixelCnt;
+	int x = 0, y = 0;
+	int currentRow = 0;
+
+	while (imgFile.read((char*)&dataByte, sizeof(dataByte)))
+	{
+		if (dataByte >= 129)
+		{
+			pixelCnt = 257 - (int)dataByte;
+			imgFile.read((char*)&dataByte, sizeof(dataByte));
+			currentRow = y;
+			for (int i = 0; i < pixelCnt; ++i)
+			{
+				if (currentRow == y) // avoid overscan into next row
+					setPixelIterative(&x, &y, dataByte);
+			}
+		}
+		else
+		{
+			pixelCnt = 1 + (int)dataByte;
+			currentRow = y;
+			for (int i = 0; i < pixelCnt; ++i)
+			{
+				imgFile.read((char*)&dataByte, sizeof(dataByte));
+				if (currentRow == y) // avoid overscan into next row
+					setPixelIterative(&x, &y, dataByte);
+			}
+		}
+	}
+
+	// Unlock the surface
+	unlock();
+
+	imgFile.close();
+}
+
+
+/**
  * Clears the entire contents of the surface, resulting
  * in a blank image.
  */
