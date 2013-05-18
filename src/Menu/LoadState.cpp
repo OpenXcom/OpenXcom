@@ -148,7 +148,7 @@ void LoadState::quickLoad()
 		_game->setState(new GeoscapeState(_game));
 		if (_game->getSavedGame()->getBattleGame() != 0)
 		{
-			_game->getSavedGame()->getBattleGame()->loadMapResources(_game->getResourcePack());
+			_game->getSavedGame()->getBattleGame()->loadMapResources(_game);
 			BattlescapeState *bs = new BattlescapeState(_game);
 			_game->pushState(bs);
 			_game->getSavedGame()->getBattleGame()->setBattleState(bs);
