@@ -428,20 +428,11 @@ void UnitSprite::drawRoutine0()
 	{
 		itema->setY(itema->getY() + (22 - _unit->getStandHeight()));
 	}
-
-	// blit order depends on unit direction
-	switch (_unit->getDirection())
-	{
-	case 0: leftArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); rightArm->blit(this); break;
-	case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
-	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
-	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
-	case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
-	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
-	}
 	
+	Surface *newTorso = new Surface(*torso);
+	Surface *newLegs = new Surface(*legs);
+	Surface *newLeftArm = new Surface(*leftArm);
+	Surface *newRightArm = new Surface(*rightArm);
 	if(_unit->getGeoscapeSoldier())
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
@@ -467,10 +458,34 @@ void UnitSprite::drawRoutine0()
 					break;
 			}
 			lock();
-			ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newLeftArm), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newRightArm), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newTorso), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(ShaderSurface(newLegs), ShaderScalar(hair_color), ShaderScalar(face_color));
 			unlock();
+			torso = newTorso;
+			legs = newLegs;
+			leftArm = newLeftArm;
+			rightArm = newRightArm;
 		}
 	}
+
+	// blit order depends on unit direction
+	switch (_unit->getDirection())
+	{
+	case 0: leftArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); rightArm->blit(this); break;
+	case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
+	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); rightArm->blit(this); break;
+	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
+	case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); break;
+	case 5: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 6: rightArm->blit(this); legs->blit(this); item?item->blit(this):void(); itema?itema->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+	case 7: item?item->blit(this):void(); itema?itema->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+	}
+	delete(newTorso);
+	delete(newLegs);
+	delete(newLeftArm);
+	delete(newRightArm);
 }
 
 
@@ -790,7 +805,7 @@ void UnitSprite::drawRoutine5()
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		s = _unitSurface->getFrame( 32 + (_unit->getDirection() * 16) + (_part * 4) + (_unit->getWalkingPhase() % 4) );
+		s = _unitSurface->getFrame( 32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) % 4));
 	}
 	else
 	{
@@ -811,11 +826,11 @@ void UnitSprite::drawRoutine6()
 	const int larmStand = 0, rarmStand = 8, rarm1H = 99, larm2H = 107, ramr2H = 115, rarmShoot = 123;
 	const int legsWalk[8] = { 32, 40, 48, 56, 64, 72, 80, 88 };
 	const int yoffWalk[8] = {3, 3, 2, 1, 0, 0, 1, 2}; // bobbing up and down
-	const int xoffWalka[8] = {0, 0, 0, 1, 2, 2, 0, 0};
-	const int xoffWalkb[8] = {0, 0, 0, -1, -2, -2, 0, 0};
-	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
+	const int xoffWalka[8] = {0, 0, 1, 2, 3, 3, 2, 1};
+	const int xoffWalkb[8] = {0, 0, -1, -2, -3, -3, -2, -1};
+	const int offX[8] = { 8, 10, 8, 5, -8, -10, -5, -2 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, -3, 0, -4, -7, -9 }; // for the weapons
-	const int offX2[8] = { -8, 2, 6, 12, 6, -1, -5, -16 }; // for the weapons
+	const int offX2[8] = { -8, 2, 7, 13, 7, 0, -3, -15 }; // for the weapons
 	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 }; // for the weapons
 
 	if (_unit->isOut())

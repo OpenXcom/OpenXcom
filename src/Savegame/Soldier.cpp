@@ -441,8 +441,8 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 void Soldier::trainPsi()
 {
 	_improvement = 0;
-	if(_currentStats.psiSkill <= 16)
-		_improvement = RNG::generate(16, 24);
+	if(_currentStats.psiSkill <= _rules->getMinStats().psiSkill)
+		_improvement = RNG::generate(_rules->getMinStats().psiSkill, _rules->getMaxStats().psiSkill);
 	else if(_currentStats.psiSkill <= 50)
 		_improvement = RNG::generate(5, 12);
 	else if(_currentStats.psiSkill < 100)

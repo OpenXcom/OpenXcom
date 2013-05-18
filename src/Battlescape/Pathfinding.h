@@ -46,7 +46,7 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
-	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget);
+	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget, int bigWallExclusion = -1);
 	///Try to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	///Try to find a path between two positions.
@@ -63,6 +63,7 @@ public:
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
+	enum bigWallTypes{ BLOCK = 1, BIGWALLNESW, BIGWALLNWSE, BIGWALLWEST, BIGWALLNORTH, BIGWALLEAST, BIGWALLSOUTH, BIGWALLEASTANDSOUTH};
 	static const int O_BIGWALL = -1;
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);

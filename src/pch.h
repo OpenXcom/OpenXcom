@@ -5,7 +5,13 @@
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
 //#include <crtdbg.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
+#include <GLUT/glut.h>
 
+#endif
 #include <algorithm>
 #include <cassert>
 #include <cctype>
@@ -26,7 +32,9 @@
 #include <limits>
 #include <list>
 #include <locale>
-#include <malloc.h>
+#ifndef __APPLE__
+#include <stdlib.h>
+#endif
 #include <map>
 #include <queue>
 #include <SDL_endian.h>
@@ -38,6 +46,7 @@
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_types.h>
+
 #include <set>
 #include <sstream>
 #include <string>

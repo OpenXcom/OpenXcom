@@ -79,7 +79,7 @@ struct Cord
 	}
 	inline double norm() const
 	{
-		return sqrt(x*x+ y*y + z*z);
+		return std::sqrt(x*x+ y*y + z*z);
 	}
 };
 

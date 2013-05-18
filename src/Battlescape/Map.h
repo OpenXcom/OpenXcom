@@ -48,9 +48,9 @@ enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 class Map : public InteractiveSurface
 {
 private:
-	static const int SCROLL_INTERVAL = 50;
+	static const int SCROLL_INTERVAL = 20;
 	static const int BULLET_SPRITES = 37;
-	Timer *_scrollTimer;
+	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
@@ -121,7 +121,10 @@ public:
 	std::set<Explosion*> *getExplosions();
 	/// Get pointer to camera
 	Camera *getCamera();
-	void scroll();
+	/// Mouse-scrolls the camera
+	void scrollMouse();
+	/// Keyboard-scrolls the camera
+	void scrollKey();
 	/// Get waypoints vector
 	std::vector<Position> *getWaypoints();
 	/// Set mouse-buttons' pressed state

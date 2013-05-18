@@ -960,6 +960,7 @@ void DogfightState::move()
 	if (!_end && _ufo->isCrashed())
 	{
 		_ufoBreakingOff = false;
+		_ufo->setSpeed(0);
 		AlienMission *mission = _ufo->getMission();
 		mission->ufoShotDown(*_ufo, *_game, *_globe);
 		// Check for retaliation trigger.
@@ -1141,7 +1142,7 @@ void DogfightState::ufoFireWeapon()
 
 	setStatus("STR_UFO_RETURN_FIRE");
 	CraftWeaponProjectile *p = new CraftWeaponProjectile();
-	p->setType("STR_PLASMA_BEAM_UC");
+	p->setType(CWPT_PLASMA_BEAM);
 	p->setAccuracy(40);
 	p->setDamage(_ufo->getRules()->getWeaponPower());
 	p->setDirection(D_DOWN);

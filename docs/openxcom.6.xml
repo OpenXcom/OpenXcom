@@ -35,7 +35,7 @@
 	<refnamediv>
 		<refname>&dhpackage;</refname>
 		<refpurpose>
-			An open-source remake of the original "UFO: Enemy Unknown"
+			An open-source clone of the original "UFO: Enemy Unknown"
 		</refpurpose>
 	</refnamediv>
 	
@@ -50,7 +50,7 @@
 		<title>DESCRIPTION</title>
 		<para>
 			<command>&dhpackage;</command> is an open-source
-			remake of the popular	UFO: Enemy Unknown
+			clone of the popular UFO: Enemy Unknown
 			(X-Com: UFO Defense in USA) videogame by Microprose,
 			licensed under the GPL and written in C++ / SDL.
 		</para>

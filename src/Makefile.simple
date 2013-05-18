@@ -1,7 +1,8 @@
 # Target system.
 # Leave blank for standard Linux builds.
 # Put DINGOO for Dingoo A320 builds.
-TARGET =
+# Put OSX for MacOSX 10.7 unix-style builds.
+TARGET = OSX
 
 # Directories and files
 OBJDIR = ../obj/
@@ -20,11 +21,19 @@ BIN = openxcom
 endif
 
 # Compiler settings
+ifeq ($(TARGET),OSX)
+CXXFLAGS ?= -Wall -Wextra -O2 
+else
 CXXFLAGS ?= -Wall -Wextra -O2 -rdynamic
+endif
+
 CXXFLAGS += $(addprefix -D,$(TARGET))
 CXXFLAGS += $(shell $(PKG-CONFIG) --cflags sdl yaml-cpp)
-
+ifeq ($(TARGET),OSX)
+LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -framework OpenGL
+else
 LIBS = $(shell $(PKG-CONFIG) --libs sdl yaml-cpp) -lSDL_gfx -lSDL_mixer -lSDL_image -lGL
+endif
 
 # Rules
 all: $(BINDIR)$(BIN)

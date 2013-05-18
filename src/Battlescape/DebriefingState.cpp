@@ -465,6 +465,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (destroyAlienBase)
 				{
+					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
 					success = true;
 					// Take care to remove supply missions for this base.
 					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),

@@ -7,11 +7,11 @@ doc_DATA = \
 pkgdata_DATA = \
 	bin/data/README.txt
 
-rulesetdir =  $(pkgdatadir)/Ruleset
+rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = \
 	bin/data/Ruleset/Xcom1Ruleset.rul
 
-languagedir = $(pkgdatadir)/Language
+languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
 	bin/data/Language/Big.fnt \
 	bin/data/Language/Bulgarian.geo \
@@ -49,7 +49,7 @@ language_DATA = \
 	bin/data/Language/Ukrainian.geo \
 	bin/data/Language/Ukrainian.lng
 
-namedir = $(pkgdatadir)/SoldierName
+namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
 	bin/data/SoldierName/American.nam \
 	bin/data/SoldierName/British.nam \
@@ -68,7 +68,7 @@ name_DATA = \
 	bin/data/SoldierName/Spanish.nam \
 	bin/data/SoldierName/Swedish.nam
 	
-shaderdir = $(pkgdatadir)/Shaders
+shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
 	bin/data/Shaders/CRT.OpenGL.shader \
 	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
@@ -475,6 +475,8 @@ openxcom_SOURCES = \
 	src/Ruleset/MapData.h \
 	src/Ruleset/MapDataSet.cpp \
 	src/Ruleset/MapDataSet.h \
+	src/Ruleset/MCDPatch.cpp \
+	src/Ruleset/MCDPatch.h \
 	src/Ruleset/AlienDeployment.cpp \
 	src/Ruleset/AlienDeployment.h \
 	src/Ruleset/AlienRace.cpp \
@@ -536,7 +538,7 @@ openxcom_SOURCES = \
 	src/Savegame/CraftWeapon.cpp \
 	src/Savegame/CraftWeapon.h \
 	src/Savegame/CraftWeaponProjectile.cpp \
-	src/Savegame/CraftWeaponProkectile.h \
+	src/Savegame/CraftWeaponProjectile.h \
 	src/Savegame/EquipmentLayoutItem.cpp \
 	src/Savegame/EquipmentLayoutItem.h \
 	src/Savegame/GameTime.cpp \

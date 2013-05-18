@@ -43,6 +43,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 
 namespace OpenXcom
 {
@@ -55,7 +56,7 @@ namespace OpenXcom
 PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -129,14 +130,14 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
-	if (allowChangeListValuesByMouseWheel) _lstItems->setAllowScrollOnArrowButtons(false);
+	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
 	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
 	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
-	if (allowChangeListValuesByMouseWheel) _lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
+	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
 
 	_qtys.push_back(0);
 	std::wstringstream ss;
@@ -169,28 +170,65 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
-
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string> &cweapons = _game->getRuleset()->getCraftWeaponsList();
+	for (std::vector<std::string>::const_iterator i = cweapons.begin(); i != cweapons.end(); ++i)
 	{
-		// Is it suppressed in the options file?
-		std::vector<std::string> excludes = Options::getPurchaseExclusions();
-		bool exclude = false;
-		for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); s++ )
+		// Special handling for treating craft weapons as items
+		RuleCraftWeapon *rule = _game->getRuleset()->getCraftWeapon(*i);
+		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());
+		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());
+		if (launcher != 0 && launcher->getBuyCost() > 0 && !isExcluded(launcher->getType()))
 		{
-			if ( _game->getLanguage()->cpToWstr(*s) == _game->getLanguage()->getString(*i).c_str() ) {
-				exclude = true;
-				break;
+			_items.push_back(launcher->getType());
+			_qtys.push_back(0);
+			std::wstringstream ss5;
+			ss5 << _base->getItems()->getItem(launcher->getType());
+			std::wstring item = _game->getLanguage()->getString(launcher->getType());
+			_lstItems->addRow(4, item.c_str(), Text::formatFunding(launcher->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
+			{
+				if (*j == launcher->getType())
+				{
+					items.erase(j);
+					break;
+				}
 			}
 		}
-
-		if ((_game->getRuleset()->getItem(*i)->getBuyCost() > 0) && !exclude)
+		if (clip != 0 && clip->getBuyCost() > 0 && !isExcluded(clip->getType()))
+		{
+			_items.push_back(clip->getType());
+			_qtys.push_back(0);
+			std::wstringstream ss5;
+			ss5 << _base->getItems()->getItem(clip->getType());
+			std::wstring item = _game->getLanguage()->getString(clip->getType());
+			item.insert(0, L"  ");
+			_lstItems->addRow(4, item.c_str(), Text::formatFunding(clip->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
+			{
+				if (*j == clip->getType())
+				{
+					items.erase(j);
+					break;
+				}
+			}
+		}
+	}
+	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	{
+		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		if (rule->getBuyCost() > 0 && !isExcluded(*i))
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
 			std::wstringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getItem(*i)->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			std::wstring item = _game->getLanguage()->getString(*i);
+			if (rule->getBattleType() == BT_AMMO)
+			{
+				item.insert(0, L"  ");
+			}
+			_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
 		}
 	}
 
@@ -218,6 +256,21 @@ void PurchaseState::think()
 
 	_timerInc->think(this, 0);
 	_timerDec->think(this, 0);
+}
+
+bool PurchaseState::isExcluded(std::string item)
+{
+	std::vector<std::string> excludes = Options::getPurchaseExclusions();
+	bool exclude = false;
+	for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); ++s)
+	{
+		if (item == *s)
+		{
+			exclude = true;
+			break;
+		}
+	}
+	return exclude;
 }
 
 /**
@@ -297,7 +350,7 @@ void PurchaseState::btnCancelClick(Action *)
 void PurchaseState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
 }
 
 /**
@@ -308,7 +361,6 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerInc->setInterval(250);
 		_timerInc->stop();
 	}
 }
@@ -319,8 +371,13 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increase(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) increase(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		increaseByValue(1);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
+	}
 }
 
 /**
@@ -330,7 +387,7 @@ void PurchaseState::lstItemsLeftArrowClick(Action *action)
 void PurchaseState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
 }
 
 /**
@@ -341,7 +398,6 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerDec->setInterval(250);
 		_timerDec->stop();
 	}
 }
@@ -352,8 +408,13 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decrease(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) decrease(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decreaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		decreaseByValue(1);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
+	}
 }
 
 /**
@@ -362,11 +423,28 @@ void PurchaseState::lstItemsRightArrowClick(Action *action)
  */
 void PurchaseState::lstItemsMousePress(Action *action)
 {
-	if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+	_sel = _lstItems->getSelectedRow();
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-		_sel = _lstItems->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) increase(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) decrease(_changeValueByMouseWheel);
+		_timerInc->stop();
+		_timerDec->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		{
+			increaseByValue(_changeValueByMouseWheel);
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_timerInc->stop();
+		_timerDec->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		{
+			decreaseByValue(_changeValueByMouseWheel);
+		}
 	}
 }
 
@@ -407,15 +485,16 @@ int PurchaseState::getPrice()
  */
 void PurchaseState::increase()
 {
+	_timerDec->setInterval(50);
 	_timerInc->setInterval(50);
-	increase(1);
+	increaseByValue(1);
 }
 
 /**
  * Increases the quantity of the selected item to buy by "change".
  * @param change how much we want to add
  */
-void PurchaseState::increase(int change)
+void PurchaseState::increaseByValue(int change)
 {
 	if (0 >= change) return;
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
@@ -481,15 +560,16 @@ void PurchaseState::increase(int change)
  */
 void PurchaseState::decrease()
 {
+	_timerInc->setInterval(50);
 	_timerDec->setInterval(50);
-	decrease(1);
+	decreaseByValue(1);
 }
 
 /**
  * Decreases the quantity of the selected item to buy by "change".
  * @param change how much we want to add
  */
-void PurchaseState::decrease(int change)
+void PurchaseState::decreaseByValue(int change)
 {
 	if (0 >= change || 0 >= _qtys[_sel]) return;
 	change = std::min(_qtys[_sel], change);

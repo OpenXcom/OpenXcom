@@ -464,7 +464,7 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
  */
 std::vector<std::string> Language::getList(TextList *list)
 {
-	std::vector<std::string> langs = CrossPlatform::getFolderContents(Options::getDataFolder() + "Language/", "lng");
+	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "lng");
 
 	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end();)
 	{

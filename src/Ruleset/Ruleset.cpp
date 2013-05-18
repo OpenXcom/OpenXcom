@@ -52,6 +52,7 @@
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "City.h"
+#include "MCDPatch.h"
 #include "../Engine/Logger.h"
 #include <algorithm>
 
@@ -63,8 +64,10 @@ namespace OpenXcom
  */
 Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
 {
+    // Check in which data dir the folder is stored
+    std::string path = CrossPlatform::getDataFolder("SoldierName/");
 	// Add soldier names
-	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
+	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam");
 
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
@@ -164,6 +167,10 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -172,9 +179,9 @@ Ruleset::~Ruleset()
  */
 void Ruleset::load(const std::string &source)
 {
-	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
+	std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
 	if (!CrossPlatform::folderExists(dirname))
-		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
+		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
 		loadFiles(dirname);
 }
@@ -617,7 +624,25 @@ void Ruleset::loadFile(const std::string &filename)
 			}
 		}
 	}
-
+	if (const YAML::Node *pName = doc.FindValue("MCDPatches"))
+	{
+		for (YAML::Iterator i = (*pName).begin(); i != (*pName).end(); ++i)
+		{
+			std::string type;
+			(*i)["type"] >> type;
+			if (_MCDPatches.find(type) != _MCDPatches.end())
+			{
+				_MCDPatches[type]->load(*i, this);
+			}
+			else
+			{
+				std::auto_ptr<MCDPatch> patch(new MCDPatch());
+				patch->load(*i, this);
+				_MCDPatches[type] = patch.release();
+				_MCDPatchesIndex.push_back(type);
+			}
+		}
+	}
 	fin.close();
 }
 
@@ -641,7 +666,7 @@ void Ruleset::loadFiles(const std::string &dirname)
  */
 void Ruleset::save(const std::string &filename) const
 {
-	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
+	std::string s = CrossPlatform::getDataFile("Ruleset/" + filename + ".rul");
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -1361,13 +1386,30 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	return 0;
 }
 
+/**
+ * @return a deep array containing the alien item levels.
+ */
 const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
 
+/**
+ * @return the starting base definition.
+ */
 const YAML::Node &Ruleset::getStartingBase()
 {
 	return *_startingBase->begin();
 }
+
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+MCDPatch *Ruleset::getMCDPatch(const std::string id) const
+{
+	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
+	if (_MCDPatches.end() != i) return i->second; else return 0;
+}
+
 }

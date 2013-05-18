@@ -111,6 +111,16 @@ void Armor::load(const YAML::Node &node)
 				++dmg;
 			}
 		}
+		else if (key == "loftemps")
+		{
+			int a;
+			i.second() >> a;
+			_loftempsSet.push_back(a);
+		}
+		else if (key == "loftempsSet")
+		{
+			i.second() >> _loftempsSet;
+		}
 	}
 }
 
@@ -137,6 +147,14 @@ void Armor::save(YAML::Emitter &out) const
 	out << YAML::Key << "damageModifier" << YAML::Value << YAML::BeginSeq;
 	for (int i=0; i < 8; i++)
 		out << _damageModifier[i];
+	if (_loftempsSet.size() == 1)
+	{
+		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
+	}
+	else
+	{
+		out << YAML::Key << "loftempsSet" << YAML::Value << _loftempsSet;
+	}
 	out << YAML::EndSeq << YAML::EndMap;
 }
 
@@ -258,6 +276,14 @@ int Armor::getSize() const
 float Armor::getDamageModifier(ItemDamageType dt)
 {
 	return _damageModifier[(int)dt];
+}
+
+/** Gets loftempSet
+ * @return loftempsSet
+ */
+std::vector<int> Armor::getLoftempsSet() const
+{
+	return _loftempsSet;
 }
 
 }

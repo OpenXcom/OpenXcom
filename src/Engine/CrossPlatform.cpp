@@ -153,16 +153,20 @@ std::vector<std::string> findDataFolders()
 			dir = strtok(0, ":");
 		}
 	}
-	else
-	{
 #ifdef __APPLE__
-		snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
-		list.push_back(path);
+	snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
+	list.push_back(path);
 #else
-		list.push_back("/usr/local/share/openxcom/data/");
-		list.push_back("/usr/share/openxcom/data/");
+	list.push_back("/usr/local/share/openxcom/data/");
+#ifndef __FreeBSD__
+	list.push_back("/usr/share/openxcom/data/");
 #endif
-	}
+#ifdef DATADIR
+	snprintf(path, MAXPATHLEN, "%s/data/", DATADIR);
+	list.push_back(path);
+#endif
+
+#endif
 	
 	// Get working directory
 	list.push_back("./data/");
@@ -304,6 +308,46 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
 }
 
 /**
+ * Takes a path and tries to find it based on the
+ * system's case-sensitivity.
+ * @param base Base unaltered path.
+ * @param path Full path to check for casing.
+ * @return Correct foldername or "" if it doesn't exist.
+ * @note There's no actual method for figuring out the correct
+ * foldername on case-sensitive systems, this is just a workaround.
+ */
+std::string caseInsensitiveFolder(const std::string &base, const std::string &path)
+{
+	std::string fullPath = base + path, newPath = path;
+
+	// Try all various case mutations
+	// Normal unmangled
+	if (folderExists(fullPath.c_str()))
+	{
+		return fullPath;
+	}
+
+	// UPPERCASE
+	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
+	fullPath = base + newPath;
+	if (folderExists(fullPath.c_str()))
+	{
+		return fullPath;
+	}
+
+	// lowercase
+	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
+	fullPath = base + newPath;
+	if (folderExists(fullPath.c_str()))
+	{
+		return fullPath;
+	}
+
+	// If we got here nothing can help us
+	return "";
+}
+
+/**
  * Takes a filename and tries to find it in the game's Data folders,
  * accounting for the system's case-sensitivity and path style.
  * @param filename Original filename.
@@ -337,6 +381,42 @@ std::string getDataFile(const std::string &filename)
 
 	// Give up
 	return filename;
+}
+
+/**
+ * Takes a foldername and tries to find it in the game's Data folders,
+ * accounting for the system's case-sensitivity and path style.
+ * @param foldername Original foldername.
+ * @return Correct foldername or "" if it doesn't exist.
+ */
+std::string getDataFolder(const std::string &foldername)
+{
+	// Correct folder separator
+	std::string name = foldername;
+#ifdef _WIN32
+	std::replace(name.begin(), name.end(), '/', PATH_SEPARATOR);
+#endif
+
+	// Check current data path
+	std::string path = caseInsensitiveFolder(Options::getDataFolder(), name);
+	if (path != "")
+	{
+		return path;
+	}
+
+	// Check every other path
+	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	{
+		std::string path = caseInsensitiveFolder(*i, name);
+		if (path != "")
+		{
+			Options::setDataFolder(*i);
+			return path;
+		}
+	}
+
+	// Give up
+	return foldername;
 }
 
 /**

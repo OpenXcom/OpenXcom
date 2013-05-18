@@ -1150,6 +1150,8 @@ craftWeapons:
     ammoMax: 6
     launcher: STR_STINGRAY_LAUNCHER
     clip: STR_STINGRAY_MISSILES
+    projectileType: 0
+    projectileSpeed: 8
   - type: STR_AVALANCHE
     sprite: 1
     sound: 5
@@ -1162,6 +1164,8 @@ craftWeapons:
     ammoMax: 3
     launcher: STR_AVALANCHE_LAUNCHER
     clip: STR_AVALANCHE_MISSILES
+    projectileType: 1
+    projectileSpeed: 8
   - type: STR_CANNON_UC
     sprite: 2
     sound: 4
@@ -1175,6 +1179,8 @@ craftWeapons:
     rearmRate: 50
     launcher: STR_CANNON
     clip: STR_CANNON_ROUNDS_X50
+    projectileType: 2
+    projectileSpeed: 8
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
@@ -1187,6 +1193,7 @@ craftWeapons:
     ammoMax: 99
     rearmRate: 99
     launcher: STR_LASER_CANNON
+    projectileType: 4
   - type: STR_PLASMA_BEAM_UC
     sprite: 5
     sound: 9
@@ -1199,6 +1206,7 @@ craftWeapons:
     ammoMax: 100
     rearmRate: 100
     launcher: STR_PLASMA_BEAM
+    projectileType: 5
   - type: STR_FUSION_BALL_UC
     sprite: 3
     sound: 7
@@ -1211,6 +1219,8 @@ craftWeapons:
     ammoMax: 2
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
+    projectileType: 3
+    projectileSpeed: 8
 # Item Definitions:
 #  - type: Item name, reference to string defined in .lng, must be unique. (string)
 #    size: How much space this item takes up in storage. (float) (default 0.0)
@@ -1479,7 +1489,7 @@ items:
     invWidth: 1
     invHeight: 1
     armor: 20
-    blastRadius: 10
+    blastRadius: 11
   - type: STR_PISTOL
     size: 0.1
     costBuy: 800
@@ -1855,7 +1865,7 @@ items:
     damageType: 3
     battleType: 4
     armor: 20
-    blastRadius: 5
+    blastRadius: 6
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1867,7 +1877,7 @@ items:
     damageType: 9
     battleType: 4
     armor: 20
-    blastRadius: 5
+    blastRadius: 6
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1879,7 +1889,7 @@ items:
     damageType: 3
     battleType: 5
     armor: 20
-    blastRadius: 5
+    blastRadius: 6
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1893,7 +1903,7 @@ items:
     invWidth: 2
     invHeight: 1
     armor: 20
-    blastRadius: 5
+    blastRadius: 6
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -2162,7 +2172,7 @@ items:
     invHeight: 2
     recoveryPoints: 1
     armor: 20
-    blastRadius: 10
+    blastRadius: 11
     attraction: 1
   - type: STR_SMALL_LAUNCHER
     requires:
@@ -2218,7 +2228,7 @@ items:
     battleType: 4
     recoveryPoints: 1
     armor: 20
-    blastRadius: 5
+    blastRadius: 6
     attraction: 1
   - type: STR_ELERIUM_115
     size: 0.1
@@ -3735,6 +3745,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: STR_PERSONAL_ARMOR_UC
     spriteSheet: XCOM_1.PCK
     spriteInv: MAN_1
@@ -3755,6 +3766,7 @@ armors:
       - 1.0
       - 1.1
       - 1.0
+    loftemps: 3
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2
@@ -3775,6 +3787,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftemps: 3
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
@@ -3796,6 +3809,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftemps: 3
   - type: SECTOID_ARMOR0
     spriteSheet: SECTOID.PCK
     corpseItem: STR_SECTOID_CORPSE
@@ -3814,6 +3828,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 2
   - type: FLOATER_ARMOR0
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -3834,6 +3849,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: FLOATER_ARMOR1
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -3854,6 +3870,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: FLOATER_ARMOR2
     spriteSheet: FLOATER.PCK
     corpseItem: STR_FLOATER_CORPSE
@@ -3874,6 +3891,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
     corpseItem: CYBERDISC_CORPSE_
@@ -3895,6 +3913,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: REAPER_ARMOR
     spriteSheet: X_REAP.PCK
     corpseItem: REAPER_CORPSE_
@@ -3915,6 +3934,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: SECTOPOD_ARMOR
     spriteSheet: X_ROB.PCK
     corpseItem: SECTOPOD_CORPSE_
@@ -3936,6 +3956,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: TANK_ARMOR
     spriteSheet: TANKS.PCK
     corpseItem: TANK_CORPSE_
@@ -3956,6 +3977,7 @@ armors:
       - 0.9
       - 0.4
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: HOVERTANK_ARMOR
     spriteSheet: TANKS.PCK
     corpseItem: HOVERTANK_CORPSE_
@@ -3977,6 +3999,7 @@ armors:
       - 0.9
       - 0.4
       - 0.0
+    loftempsSet: [ 92, 89, 90, 91 ]
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseItem: CIVM_CORPSE
@@ -3996,6 +4019,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseItem: CIVF_CORPSE
@@ -4011,6 +4035,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 3
   - type: SNAKEMAN_ARMOR0
     spriteSheet: SNAKEMAN.PCK
     corpseItem: STR_SNAKEMAN_CORPSE
@@ -4030,6 +4055,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
+    loftemps: 3
   - type: SNAKEMAN_ARMOR1
     spriteSheet: SNAKEMAN.PCK
     corpseItem: STR_SNAKEMAN_CORPSE
@@ -4049,6 +4075,7 @@ armors:
       - 1.1
       - 1.5
       - 0.9
+    loftemps: 3
   - type: SNAKEMAN_ARMOR2
     spriteSheet: SNAKEMAN.PCK
     corpseItem: STR_SNAKEMAN_CORPSE
@@ -4068,6 +4095,7 @@ armors:
       - 1.0
       - 1.4
       - 0.8
+    loftemps: 3
   - type: MUTON_ARMOR0
     spriteSheet: MUTON.PCK
     corpseItem: STR_MUTON_CORPSE
@@ -4087,6 +4115,7 @@ armors:
       - 0.8
       - 0.9
       - 0.9
+    loftemps: 3
   - type: MUTON_ARMOR1
     spriteSheet: MUTON.PCK
     corpseItem: STR_MUTON_CORPSE
@@ -4106,6 +4135,7 @@ armors:
       - 0.7
       - 0.8
       - 0.8
+    loftemps: 3
   - type: MUTON_ARMOR2
     spriteSheet: MUTON.PCK
     corpseItem: STR_MUTON_CORPSE
@@ -4125,6 +4155,7 @@ armors:
       - 0.6
       - 0.7
       - 0.7  
+    loftemps: 3
   - type: ETHEREAL_ARMOR0
     spriteSheet: ETHEREAL.PCK
     corpseItem: STR_ETHEREAL_CORPSE
@@ -4145,6 +4176,7 @@ armors:
       - 0.9
       - 1.0
       - 0.9
+    loftemps: 3
   - type: ETHEREAL_ARMOR1
     spriteSheet: ETHEREAL.PCK
     corpseItem: STR_ETHEREAL_CORPSE
@@ -4165,6 +4197,7 @@ armors:
       - 0.8
       - 0.9
       - 0.8
+    loftemps: 3
   - type: ETHEREAL_ARMOR2
     spriteSheet: ETHEREAL.PCK
     corpseItem: STR_ETHEREAL_CORPSE
@@ -4185,6 +4218,7 @@ armors:
       - 0.7
       - 0.8
       - 0.7
+    loftemps: 3
   - type: CHRYSSALID_ARMOR
     spriteSheet: CHRYS.PCK
     corpseItem: STR_CHRYSSALID_CORPSE
@@ -4204,6 +4238,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 3
   - type: ZOMBIE_ARMOR
     spriteSheet: ZOMBIE.PCK
     corpseItem: STR_ZOMBIE_CORPSE
@@ -4223,6 +4258,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 2
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
     corpseItem: STR_SILACOID_CORPSE
@@ -4243,6 +4279,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 5
   - type: CELATID_ARMOR
     spriteSheet: CELATID.PCK
     corpseItem: STR_CELATID_CORPSE
@@ -4263,6 +4300,7 @@ armors:
       - 1.0
       - 1.0
       - 1.0
+    loftemps: 2
 soldiers:
   - type: XCOM
     minStats:
@@ -4292,7 +4330,6 @@ soldiers:
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
-    loftemps: 3
 units:
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
@@ -4312,7 +4349,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 10
     deathSound: 10
     intelligence: 3
@@ -4335,7 +4371,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 16
     deathSound: 10
     intelligence: 6
@@ -4358,7 +4393,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 14
     deathSound: 10
     intelligence: 5
@@ -4381,7 +4415,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 12
     deathSound: 10
     intelligence: 4
@@ -4404,7 +4437,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 20
     deathSound: 10
     intelligence: 7
@@ -4427,7 +4459,6 @@ units:
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
-    loftemps: 2
     value: 25
     deathSound: 10
     intelligence: 8
@@ -4450,7 +4481,6 @@ units:
     standHeight: 15
     kneelHeight: 15
     floatHeight: 2
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4476,7 +4506,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 12
     deathSound: 10
     moveSound: 15
@@ -4501,7 +4530,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 12
     deathSound: 10
     moveSound: 15
@@ -4526,7 +4554,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 12
     deathSound: 10
     moveSound: 15
@@ -4551,7 +4578,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 16
     deathSound: 10
     moveSound: 15
@@ -4576,7 +4602,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 25
     deathSound: 10
     moveSound: 15
@@ -4601,7 +4626,6 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    loftemps: 3
     value: 35
     deathSound: 10
     moveSound: 15
@@ -4624,7 +4648,6 @@ units:
     armor: REAPER_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 25
     deathSound: 48
     intelligence: 2
@@ -4646,7 +4669,6 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14	
@@ -4667,7 +4689,6 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4688,7 +4709,6 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 14
@@ -4710,7 +4730,6 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4732,7 +4751,6 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 20
     deathSound: 23
     moveSound: 40
@@ -4753,7 +4771,6 @@ units:
     armor: CIVM_ARMOR
     standHeight: 22
     kneelHeight: 14
-    loftemps: 3
     value: 30
     intelligence: 4
   - type: FEMALE_CIVILIAN
@@ -4773,7 +4790,6 @@ units:
     armor: CIVF_ARMOR
     standHeight: 22
     kneelHeight: 14
-    loftemps: 3
     value: 30
     intelligence: 4
   - type: STR_SNAKEMAN_SOLDIER
@@ -4794,7 +4810,6 @@ units:
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 15
     deathSound: 8
     moveSound: 0
@@ -4818,7 +4833,6 @@ units:
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 17
     deathSound: 8
     moveSound: 0
@@ -4842,7 +4856,6 @@ units:
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 20
     deathSound: 8
     moveSound: 0
@@ -4866,7 +4879,6 @@ units:
     armor: SNAKEMAN_ARMOR1
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 28
     deathSound: 8
     moveSound: 0
@@ -4890,7 +4902,6 @@ units:
     armor: SNAKEMAN_ARMOR2
     standHeight: 18
     kneelHeight: 18
-    loftemps: 3
     value: 36
     deathSound: 8
     moveSound: 0
@@ -4914,7 +4925,6 @@ units:
     armor: MUTON_ARMOR0
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 15
     deathSound: 6
     intelligence: 2
@@ -4937,7 +4947,6 @@ units:
     armor: MUTON_ARMOR1
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 17
     deathSound: 6
     intelligence: 3
@@ -4960,7 +4969,6 @@ units:
     armor: MUTON_ARMOR2
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 19
     deathSound: 6
     intelligence: 4
@@ -4983,7 +4991,6 @@ units:
     armor: ETHEREAL_ARMOR0
     standHeight: 20
     kneelHeight: 15
-    loftemps: 3
     value: 20
     deathSound: 9
     moveSound: 15
@@ -5007,7 +5014,6 @@ units:
     armor: ETHEREAL_ARMOR1
     standHeight: 20
     kneelHeight: 15
-    loftemps: 3
     value: 30
     deathSound: 9
     moveSound: 15
@@ -5031,7 +5037,6 @@ units:
     armor: ETHEREAL_ARMOR2
     standHeight: 20
     kneelHeight: 15
-    loftemps: 3
     value: 40
     deathSound: 9
     moveSound: 15
@@ -5055,7 +5060,6 @@ units:
     armor: CHRYSSALID_ARMOR
     standHeight: 21
     kneelHeight: 16
-    loftemps: 3
     value: 25
     deathSound: 49
     aggroSound: 49
@@ -5080,7 +5084,6 @@ units:
     armor: SILACOID_ARMOR
     standHeight: 10
     kneelHeight: 10
-    loftemps: 5
     value: 20
     deathSound: 51
     moveSound: 47
@@ -5106,7 +5109,6 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    loftemps: 2
     value: 20
     deathSound: 51
     moveSound: 16
@@ -5130,7 +5132,6 @@ units:
     armor: SECTOPOD_ARMOR
     standHeight: 23
     kneelHeight: 16
-    loftempsSet: [ 92, 89, 90, 91 ]
     value: 30
     deathSound: 23
     intelligence: 4
@@ -5153,7 +5154,6 @@ units:
     armor: ZOMBIE_ARMOR
     standHeight: 18
     kneelHeight: 18
-    loftemps: 2
     value: 18
     deathSound: 48
     intelligence: 3
@@ -9113,3 +9113,164 @@ alienItemLevels:
   - [1, 1, 1, 2, 2, 2, 2, 2, 2, 2]
   - [1, 1, 2, 2, 2, 2, 2, 2, 2, 2]
   - [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+MCDPatches:
+# pathFinding Hacks.
+# bigWall 1 = regular bigwall, no movement allowed.
+# bigWall 2 = can walk by north-east/south-west
+# bigWall 3 = can walk by north-west/south-east
+# bigWall 4 = acts as west wall
+# bigWall 5 = acts as north wall
+# bigWall 6 = acts as east wall
+# bigWall 7 = acts as south wall
+# bigWall 8 = acts as east and south wall
+  - type: XBASE1
+    data:
+      - MCDIndex: 2
+        bigWall: 2
+      - MCDIndex: 3
+        bigWall: 2
+      - MCDIndex: 4
+        bigWall: 3
+      - MCDIndex: 5
+        bigWall: 3
+      - MCDIndex: 19
+        bigWall: 2
+  - type: AVENGER
+    data:
+      - MCDIndex: 12
+        bigWall: 2
+      - MCDIndex: 14
+        bigWall: 3
+      - MCDIndex: 16
+        bigWall: 3
+      - MCDIndex: 26
+        bigWall: 4
+      - MCDIndex: 30
+        bigWall: 4
+      - MCDIndex: 31
+        bigWall: 4
+      - MCDIndex: 32
+        bigWall: 4
+      - MCDIndex: 33
+        bigWall: 4
+      - MCDIndex: 33
+        bigWall: 4
+      - MCDIndex: 43
+        bigWall: 6
+      - MCDIndex: 44
+        bigWall: 6
+      - MCDIndex: 45
+        bigWall: 6
+      - MCDIndex: 46
+        bigWall: 6
+      - MCDIndex: 48
+        bigWall: 2
+  - type: LIGHTNIN
+    data:
+      - MCDIndex: 0
+        bigWall: 6
+      - MCDIndex: 1
+        bigWall: 6
+      - MCDIndex: 2
+        bigWall: 2
+      - MCDIndex: 3
+        bigWall: 7
+      - MCDIndex: 4
+        bigWall: 3
+      - MCDIndex: 5
+        bigWall: 5
+      - MCDIndex: 6
+        bigWall: 5
+      - MCDIndex: 7
+        bigWall: 2
+      - MCDIndex: 8
+        bigWall: 2
+      - MCDIndex: 9
+        bigWall: 4
+      - MCDIndex: 10
+        bigWall: 4
+      - MCDIndex: 11
+        bigWall: 3
+      - MCDIndex: 12
+        bigWall: 2
+      - MCDIndex: 13
+        bigWall: 7
+  - type: U_EXT02
+    data:
+      - MCDIndex: 2
+        bigWall: 6
+      - MCDIndex: 3
+        bigWall: 7
+      - MCDIndex: 4
+        bigWall: 2
+      - MCDIndex: 5
+        bigWall: 2
+      - MCDIndex: 6
+        bigWall: 3
+      - MCDIndex: 7
+        bigWall: 3
+      - MCDIndex: 8
+        bigWall: 8
+      - MCDIndex: 13
+        bigWall: 2
+      - MCDIndex: 14
+        bigWall: 2
+      - MCDIndex: 15
+        bigWall: 2
+# Mountain terrain death tile fix
+  - type: MOUNT
+    data:
+      - MCDIndex: 0
+        deathTile: 77
+      - MCDIndex: 1
+        deathTile: 77
+      - MCDIndex: 2
+        deathTile: 77
+      - MCDIndex: 3
+        deathTile: 77
+      - MCDIndex: 4
+        deathTile: 77
+      - MCDIndex: 5
+        deathTile: 77
+      - MCDIndex: 6
+        deathTile: 77
+      - MCDIndex: 7
+        deathTile: 77
+      - MCDIndex: 8
+        deathTile: 77
+      - MCDIndex: 9
+        deathTile: 77
+      - MCDIndex: 10
+        deathTile: 77
+      - MCDIndex: 11
+        deathTile: 77
+      - MCDIndex: 12
+        deathTile: 77
+      - MCDIndex: 13
+        deathTile: 77
+      - MCDIndex: 14
+        deathTile: 77
+      - MCDIndex: 15
+        deathTile: 77
+      - MCDIndex: 16
+        deathTile: 77
+      - MCDIndex: 17
+        deathTile: 77
+      - MCDIndex: 18
+        deathTile: 77
+      - MCDIndex: 19
+        deathTile: 77
+      - MCDIndex: 20
+        deathTile: 77
+      - MCDIndex: 21
+        deathTile: 77
+      - MCDIndex: 22
+        deathTile: 77
+      - MCDIndex: 23
+        deathTile: 77
+      - MCDIndex: 71
+        deathTile: 74
+      - MCDIndex: 72
+        deathTile: 75
+      - MCDIndex: 73
+        deathTile: 76

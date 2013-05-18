@@ -1261,6 +1261,25 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 }
 
 /**
+ * get the height of an object checking it's voxels at 8,8
+ * @return int height
+ */
+int TileEngine::getVoxelHeight(MapData *mp)
+{
+	int x = 8;
+	int y = 8;
+	for (int i=0; i < 12; i++)
+	{
+		int idx = (mp->getLoftID(i)*16) + y;
+		if ((_voxelData->at(idx) & (1 << x)) == 0)
+		{
+			return i;
+		}
+	}
+	return 12;
+}
+
+/**
  * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
  * Must affect on 7 objects (6 box sides and object inside)
  * @return bool Return true objective was destroyed
@@ -1280,33 +1299,29 @@ bool TileEngine::detonate(Tile* tile)
 	if (explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
-		tile->addSmoke(1);
+		tile->addSmoke(RNG::generate(0,2));
 		for (int i = 0; i < 7; ++i)
 		{
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
-				int armor = tiles[i]->getMapData(parts[i])->getArmor();
-				if (explosive >= armor)
+				int remainingPower = explosive;
+				while (remainingPower > 0 && tiles[i]->getMapData(parts[i]))
 				{
-					objective = tiles[i]->destroy(parts[i]);
-					if (i > 3) tiles[i]->addSmoke(2); //only current tile produces smoke[2]
-					if (tiles[i]->getMapData(parts[i]) && explosive >= 2 * armor) //double destruction
+					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
+					if (remainingPower > 0)
 					{
-						tiles[i]->destroy(parts[i]);
+						int height = getVoxelHeight(tiles[i]->getMapData(parts[i]));
+						if (i > 3) tiles[i]->addSmoke(RNG::generate((height/2), (height/2)+1)); //only current tile produces smoke[2]
+						objective = objective || tiles[i]->destroy(parts[i]);
 					}
 				}
 			}
 		}
 
-		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
-		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
 		int flam = tile->getFlammability();
-		if (flam <= 20)
+		if (explosive > flam)
 		{
-			if (RNG::generate(0, 20) - flam >= 0)
-			{
-				tile->ignite();
-			}
+			tile->ignite();
 		}
 	}
 
@@ -1597,171 +1612,99 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 	int door = -1;
 	int TUCost = 0;
 	int size = unit->getArmor()->getSize();
-
+	int z = unit->getTile()->getTerrainLevel() < -12 ? 1 : 0; // if we're standing on stairs, check the tile above instead.
 	if (size > 1 && rClick)
 		return door;
 
-	for (int x = 0; x < size; x++)
+	for (int x = 0; x < size && door == -1; x++)
 	{
-		for (int y = 0; y < size; y++)
+		for (int y = 0; y < size && door == -1; y++)
 		{
-			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,0));
+			std::vector<std::pair<Position, int> > checkPositions;
+			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
-			if (unit->getDirection() == 0 || unit->getDirection() == 1 || unit->getDirection() == 7) // north, northeast or northwest
+			switch (unit->getDirection())
 			{
-				door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
-				if (door == 0 && rClick)
-					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
-				if (door == 1)
-				{
-					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
-					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-1, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(2, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-				}
+			case 0: // north
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				break;
+			case 1: // north east
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
+				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
+				break;
+			case 2: // east
+				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				break;
+			case 3: // south-east
+				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
+				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
+				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
+				break;
+			case 4: // south
+				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+				break;
+			case 5: // south-west
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
+				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
+				checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
+				break;
+			case 6: // west
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				break;
+			case 7: // north-west
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
+				checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
+				checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
+				break;
+			default:
+				break;
 			}
-			if ((unit->getDirection() == 2 || unit->getDirection() == 1 || unit->getDirection() == 3) && door == -1) // east, northeast or southeast
+
+			int part = 0;
+			for (std::vector<std::pair<Position, int> >::const_iterator i = checkPositions.begin(); i != checkPositions.end() && door == -1; ++i)
 			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
+				tile = _save->getTile(unit->getPosition() + Position(x,y,z) + i->first);
 				if (tile)
 				{
-					door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
+					door = tile->openDoor(i->second, unit, _save->getDebugMode());
+					if (door != -1)
+					{
+						part = i->second;
+						if (door == 1)
+						{
+							checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + i->first, i->second);
+						}
+					}
+				}
+			}
+
+			if (door == 0 && rClick)
+			{
+				if (part == MapData::O_WESTWALL)
+				{
+					part = MapData::O_NORTHWALL;
 				}
 				else
 				{
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
+					part = MapData::O_WESTWALL;
 				}
-				if (door == 0 && rClick)
-					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
-				if (door == 1)
-				{
-					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
-					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 1, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, -1, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 2, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, -2, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-				}
+				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
 			}
-			if ((unit->getDirection() == 4 || unit->getDirection() == 5 || unit->getDirection() == 3) && door == -1) // south, southwest or southeast
+			else if (door == 1)
 			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
-				if (tile)
-				{
-					door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
-				}
-				else
-				{
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
-				}
-				if (door == 0 && rClick)
-					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
-				if (door == 1)
-				{
-					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
-					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 1, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-1, 1, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(2, 1, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 1, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-				}
-			}
-			if ((unit->getDirection() == 6 || unit->getDirection() == 5 || unit->getDirection() == 7) && door == -1) // west, southwest or northwest
-			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,0));
-				door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
-				if (door == 0 && rClick)
-					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
-				if (door == 1)
-				{
-					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
-					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -1, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 2, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -2, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-				}
-			}
-			if (unit->getDirection() == 1 && door == -1)
-			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
-				if (tile)
-				{
-					door = tile->openDoor(MapData::O_NORTHWALL, unit, _save->getDebugMode());
-				}
-				else
-				{
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
-				}
-				if (door == 0 && rClick)
-					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
-				if (door == 1)
-				{
-					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
-					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(1, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-1, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(2, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(-2, 0, 0));
-					if (tile) tile->openDoor(MapData::O_NORTHWALL);
-				}
-			}
-			if (unit->getDirection() == 5 && door == -1)
-			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
-				if (tile)
-				{
-					door = tile->openDoor(MapData::O_WESTWALL, unit, _save->getDebugMode());
-				}
-				else
-				{
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0));
-				}
-				if (door == 0 && rClick)
-					TUCost = tile->getTUCost(MapData::O_NORTHWALL, unit->getArmor()->getMovementType());
-				if (door == 1)
-				{
-					TUCost = tile->getTUCost(MapData::O_WESTWALL, unit->getArmor()->getMovementType());
-					// check for adjacent door(s)
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 1, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -1, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, 2, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-					tile = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(0, -2, 0));
-					if (tile) tile->openDoor(MapData::O_WESTWALL);
-				}
+				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
 			}
 		}
 	}
 
-
 	if (door == 0 || door == 1)
 	{
-
 		unit->spendTimeUnits(TUCost);
 		calculateFOV(unit->getPosition());
 		// look from the other side (may be need check reaction fire?)
@@ -1773,6 +1716,38 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 	}
 
 	return door;
+}
+
+/**
+ * open any doors connected to this part at this position,
+ * keeps processing til it hits a non-ufo-door.
+ * @param pos the starting position
+ * @param part the part to open, defines which direction to check.
+ */
+void TileEngine::checkAdjacentDoors(Position pos, int part)
+{
+	Position offset;
+	bool westSide = (part == 1);
+	for (int i = 1;; ++i)
+	{
+		offset = westSide ? Position(0,i,0):Position(i,0,0);
+		Tile *tile = _save->getTile(pos + offset);
+		if (tile && tile->getMapData(part) && tile->getMapData(part)->isUFODoor())
+		{
+			tile->openDoor(part);
+		}
+		else break;
+	}
+	for (int i = -1;; --i)
+	{
+		offset = westSide ? Position(0,i,0):Position(i,0,0);
+		Tile *tile = _save->getTile(pos + offset);
+		if (tile && tile->getMapData(part) && tile->getMapData(part)->isUFODoor())
+		{
+			tile->openDoor(part);
+		}
+		else break;
+	}
 }
 
 /**
@@ -2214,6 +2189,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			calculateFOV(victim);
 			calculateUnitLighting();
 			victim->setTimeUnits(victim->getStats()->tu);
+			victim->lookAt(victim->getDirection()); // resets unit status to STANDING
 			// if all units from either faction are mind controlled - auto-end the mission.
 			if (Options::getBool("battleAutoEnd") && Options::getBool("allowPsionicCapture"))
 			{
@@ -2267,24 +2243,26 @@ Tile *TileEngine::applyItemGravity(Tile *t)
 				break;
 			unitpos.z--;
 		}
-		if (unitpos != occupant->getPosition() && occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
+		if (unitpos != occupant->getPosition())
 		{
-			occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
-				_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
-			_save->addFallingUnit(occupant);
-		}
-		else if (unitpos != occupant->getPosition())
-		{
-			Position origin = occupant->getPosition();
-			for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
+			if (occupant->getHealth() != 0 && occupant->getStunlevel() < occupant->getHealth())
 			{
-				for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
-				{
-					_save->getTile(origin + Position(x, y, 0))->setUnit(0);
-					_save->getTile(unitpos + Position(x, y, 0))->setUnit(occupant);
-				}
+				occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0,0,-1),
+					_save->getTile(occupant->getPosition() + Position(0,0,-1)), true);
+				_save->addFallingUnit(occupant);
 			}
-			occupant->setPosition(unitpos);
+			else
+			{
+				Position origin = occupant->getPosition();
+				for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
+				{
+					for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
+					{
+						_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+					}
+				}
+				occupant->setPosition(unitpos);
+			}
 		}
 	}
 	rt = t;

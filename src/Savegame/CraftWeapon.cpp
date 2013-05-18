@@ -137,7 +137,8 @@ void CraftWeapon::rearm()
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
 	CraftWeaponProjectile *p = new CraftWeaponProjectile();
-	p->setType(this->getRules()->getType());
+	p->setType(this->getRules()->getProjectileType());
+	p->setSpeed(this->getRules()->getProjectileSpeed());
 	p->setAccuracy(this->getRules()->getAccuracy());
 	p->setDamage(this->getRules()->getDamage());
 	p->setRange(this->getRules()->getRange());

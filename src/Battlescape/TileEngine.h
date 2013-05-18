@@ -122,10 +122,14 @@ public:
 	bool isVoxelVisible(const Position& voxel);
 	/// check what type of voxel occupies this space
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	/// get the height of an object checking it's voxels
+	int getVoxelHeight(MapData *mp);
 	/// blow this tile up
 	bool detonate(Tile* tile);
 	/// validate a throwing action
 	bool validateThrow(BattleAction *action);
+	// open any doors this door is connected to.
+	void checkAdjacentDoors(Position pos, int part);
 
 };
 

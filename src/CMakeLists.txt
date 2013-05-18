@@ -412,6 +412,8 @@ set ( ruleset_src
   Ruleset/RuleInventory.cpp
   Ruleset/MapBlock.h
   Ruleset/MapBlock.cpp
+  Ruleset/MCDPatch.h
+  Ruleset/MCDPatch.cpp
   Ruleset/RuleBaseFacility.cpp
   Ruleset/RuleBaseFacility.h
   Ruleset/SoldierNamePool.h
@@ -591,7 +593,12 @@ set ( install_dest RUNTIME )
 set ( set_exec_path ON )
 set ( install_dest_dir bin )
 if ( UNIX AND NOT APPLE )
-  set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
+  if ( ${DATADIR} EQUAL "" )
+    set ( data_install_dir "share/openxcom" )
+  else ()
+    set ( data_install_dir ${DATADIR} )
+    add_definitions( -DDATADIR="${data_install_dir}/" )
+  endif ()
 endif ()
 if ( APPLE )
   set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
@@ -603,7 +610,12 @@ if ( APPLE )
     set ( install_dest_dir "" )
     set ( data_install_dir bin )
   else ()
-    set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
+    if ( ${DATADIR} EQUAL "" )
+      set ( data_install_dir "share/openxcom" )
+    else ()
+      set ( data_install_dir ${DATADIR} )
+      add_definitions( -DDATADIR="${data_install_dir}/" )
+    endif ()
   endif ()
 endif ()
 if ( set_exec_path )

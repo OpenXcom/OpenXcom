@@ -2,7 +2,7 @@
 # OpenXcom v0.9 #
 #################
 
-OpenXcom is an open-source remake of the popular
+OpenXcom is an open-source clone of the popular
 UFO: Enemy Unknown (X-Com: UFO Defense in USA) videogame by
 Microprose, licensed under the GPL and written in C++ / SDL.
 See more info at the website: http://openxcom.org

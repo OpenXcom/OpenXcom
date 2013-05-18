@@ -166,7 +166,6 @@ void AdvancedOptionsState::btnOkClick(Action *)
 	{
 		Options::setInt((*i).first, (*i).second);
 	}
-	Options::save();
 	_game->popState();
 }
 
@@ -185,10 +184,28 @@ void AdvancedOptionsState::btnCancelClick(Action *)
  */
 void AdvancedOptionsState::btnDefaultClick(Action *)
 {
-	Options::createDefault();
-	Options::setString("language", "English");
-	Options::save();
-	_game->popState();
+	int sel = 0;
+	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
+	{
+		if (i->first == "playIntro")
+		{
+			i->second = true;
+			_lstOptions->setCellText(sel, 1, _game->getLanguage()->getString("STR_YES").c_str());
+		}
+		else
+		{
+			i->second = false;
+			_lstOptions->setCellText(sel, 1, _game->getLanguage()->getString("STR_NO").c_str());
+		}
+		++sel;
+	}
+	
+	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	{
+		i->second = 0;
+		_lstOptions->setCellText(sel, 1, L"0");
+		++sel;
+	}
 }
 
 void AdvancedOptionsState::lstOptionsClick(Action *)

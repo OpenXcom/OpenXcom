@@ -219,9 +219,8 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
-		const MissionWave &nwave = _rule.getWave(_nextWave);
-		int half = nwave.spawnTimer/2;
-		_spawnCountdown = (2 * RNG::generate(0, 1) - 1) * half/2 + half;
+		int spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
+		_spawnCountdown = (spawnTimer/2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 }
 
@@ -335,8 +334,8 @@ void AlienMission::start(unsigned initialCount)
 	_liveUfos = 0;
 	if (initialCount == 0)
 	{
-		int half = _rule.getWave(0).spawnTimer/2;
-		_spawnCountdown = half + (2 * RNG::generate(0, 1) - 1) * half/2;
+		int spawnTimer = _rule.getWave(0).spawnTimer / 30;
+		_spawnCountdown = (spawnTimer / 2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 	else
 	{

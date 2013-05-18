@@ -66,11 +66,11 @@ public:
 	/// Function called every time the _timerMore timer is triggered.
 	void more();
 	/// Add given number of scientists to the project if possible
-	void more(int change);
+	void moreByValue(int change);
 	/// Function called every time the _timerLess timer is triggered.
 	void less();
 	/// Remove the given number of scientists from the project if possible
-	void less(int change);
+	void lessByValue(int change);
 	/// Handler for using the mouse wheel.
 	void handleWheel(Action *action);
 	/// Handler for pressing the More button.
