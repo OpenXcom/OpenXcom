@@ -65,31 +65,16 @@ const double Globe::QUAD_LATITUDE = 0.2;
 const double Globe::ROTATE_LONGITUDE = 0.25;
 const double Globe::ROTATE_LATITUDE = 0.15;
 
-///helper class for `Globe` for drawing earth globe with shadows
-class GlobeStaticData
+namespace
 {
-	///normal of each pixel in earth globe per zoom level
-	std::vector<std::vector<Cord> > earth_data;
-	///data sample used for noise in shading
-	std::vector<Sint16> random_noise_data;
 	
-	///warper araund `earth_data` for `ShaderDraw` function
-	std::vector<ShaderMove<Cord>* > earth;
-	///warper araund `random_noise_data` for `ShaderDraw` function
-	ShaderRepeat<Sint16>* random_noise;
-	///list of dimension of earth on screen per zoom level
-	std::vector<double> radius;
-
-public: 
-	///dimension of earth graphic
-	const std::pair<int,int> earth_size;
-
+///helper class for `Globe` for drawing earth globe with shadows
+struct GlobeStaticData
+{
 	///array of shading gradient
 	Sint16 shade_gradient[240];
-
-	///earth inclination flag
-	bool is_seasons;
-
+	///size of x & y of noise surface
+	const int random_surf_size;
 	
 	/**
 	 * Function returning normal vector of sphere surface
@@ -125,38 +110,8 @@ public:
 	}
 	
 	//initialization	
-	GlobeStaticData():
-			earth_size(std::make_pair(260, 200)), is_seasons(false)
+	GlobeStaticData() : random_surf_size(60)
 	{
-		
-		radius.push_back(90);
-		radius.push_back(120);
-		radius.push_back(180);
-		radius.push_back(280);
-		radius.push_back(450);
-		radius.push_back(720);
-		earth_data.resize(radius.size());
-
-		//filling normal field for each radius
-		for(unsigned int r = 0; r<radius.size(); ++r)
-		{
-			earth_data[r].resize(earth_size.first * earth_size.second);
-			for(int j=0; j<earth_size.second; ++j)
-				for(int i=0; i<earth_size.first; ++i)
-				{
-					earth_data[r][earth_size.first*j + i] = circle_norm(earth_size.first/2, earth_size.second/2, radius[r], i+.5, j+.5);
-				}
-			earth.push_back(new ShaderMove<Cord>(earth_data[r], earth_size.first, earth_size.second));
-			earth[r]->setMove(-earth_size.first/2, -earth_size.second/2);
-		}
-
-		//filling random noise "texture"
-		const int random_surf_size = 60;
-		random_noise_data.resize(random_surf_size * random_surf_size);
-		for(unsigned int i=0; i< random_noise_data.size(); ++i)
-			random_noise_data[i] = rand()%4;
-		random_noise = new ShaderRepeat<Sint16>(random_noise_data, random_surf_size, random_surf_size );
-
 		//filling terminator gradient LUT
 		for (int i=0; i<240; ++i)
 		{
@@ -202,37 +157,9 @@ public:
 		}
 
 	}
-	~GlobeStaticData()
-	{
-		for(size_t i=0; i< earth.size(); ++i)
-			delete earth[i];
-		delete random_noise;
-	}
-	
-	inline const ShaderMove<Cord >& getEarthShape(size_t zoom)
-	{
-		return *earth[zoom];
-	}
-	inline const ShaderRepeat<Sint16>& getNoise()
-	{
-		return *random_noise;
-	}
-	inline double getRadius(size_t zoom)
-	{
-		return radius[zoom];
-	}
-	inline size_t getRadiusNum()
-	{
-		return radius.size();
-	}
-	inline void initSeasons()
-	{
-		is_seasons = Options::getBool("globeSeasons");
-	}
 };
 
 GlobeStaticData static_data;
-
 
 struct Ocean
 {
@@ -259,11 +186,12 @@ struct CreateShadow
 		temp.x -= 2;
 		temp.x *= 125.;
 
-		if (temp.x < -110) temp.x = -31;
+		if (temp.x < -110)
+			temp.x = -31;
+		else if (temp.x > 120)
+			temp.x = 50;
 		else
-		if (temp.x > 120) temp.x = 50;
-		else
-		temp.x = static_data.shade_gradient[(Sint16)temp.x + 120];
+			temp.x = static_data.shade_gradient[(Sint16)temp.x + 120];
 
 		temp.x -= noise;
 
@@ -312,6 +240,7 @@ struct CreateShadow
 	}
 };
 
+}//namespace
 
 
 /**
@@ -324,7 +253,11 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _rotLon(0.0), _rotLat(0.0), _cenX(cenX), _cenY(cenY), _game(game), _blink(true), _hover(false), _cacheLand()
+Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y):
+	InteractiveSurface(width, height, x, y),
+	_rotLon(0.0), _rotLat(0.0),
+	_cenX(cenX), _cenY(cenY), _game(game),
+	_blink(true), _hover(false), _cacheLand()
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -435,9 +368,31 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 
+	_radius.push_back(0.45*height);
+	_radius.push_back(0.60*height);
+	_radius.push_back(0.90*height);
+	_radius.push_back(1.40*height);
+	_radius.push_back(2.25*height);
+	_radius.push_back(3.60*height);
+	_earthData.resize(_radius.size());
+
+	//filling normal field for each radius
+	for(unsigned int r = 0; r<_radius.size(); ++r)
+	{
+		_earthData[r].resize(width * height);
+		for(int j=0; j<height; ++j)
+			for(int i=0; i<width; ++i)
+			{
+				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
+			}
+	}
+
+	//filling random noise "texture"
+	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
+	for(unsigned int i=0; i<_randomNoiseData.size(); ++i)
+		_randomNoiseData[i] = rand()%4;
+
 	cachePolygons();
-	
-	static_data.initSeasons();
 }
 
 /**
@@ -480,15 +435,15 @@ Globe::~Globe()
 void Globe::polarToCart(double lon, double lat, Sint16 *x, Sint16 *y) const
 {
 	// Orthographic projection
-	*x = _cenX + (Sint16)floor(static_data.getRadius(_zoom) * cos(lat) * sin(lon - _cenLon));
-	*y = _cenY + (Sint16)floor(static_data.getRadius(_zoom) * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
+	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon - _cenLon));
+	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
 
 void Globe::polarToCart(double lon, double lat, double *x, double *y) const
 {
 	// Orthographic projection
-	*x = _cenX + static_data.getRadius(_zoom) * cos(lat) * sin(lon - _cenLon);
-	*y = _cenY + static_data.getRadius(_zoom) * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon));
+	*x = _cenX + _radius[_zoom] * cos(lat) * sin(lon - _cenLon);
+	*y = _cenY + _radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon));
 }
 
 
@@ -507,7 +462,7 @@ void Globe::cartToPolar(Sint16 x, Sint16 y, double *lon, double *lat) const
 	y -= _cenY;
 
 	double rho = sqrt((double)(x*x + y*y));
-	double c = asin(rho / (static_data.getRadius(_zoom)));
+	double c = asin(rho / _radius[_zoom]);
 	if ( AreSame(rho, 0.0) )
 	{
 		*lat = _cenLat;
@@ -698,7 +653,7 @@ void Globe::rotateStop()
  */
 void Globe::zoomIn()
 {
-	if (_zoom < static_data.getRadiusNum() - 1)
+	if (_zoom < _radius.size() - 1)
 	{
 		_zoom++;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
@@ -734,7 +689,7 @@ void Globe::zoomMin()
  */
 void Globe::zoomMax()
 {
-	_zoom = static_data.getRadiusNum() - 1;
+	_zoom = _radius.size() - 1;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
 	cachePolygons();
 }
@@ -1027,7 +982,7 @@ void Globe::draw()
 void Globe::drawOcean()
 {
 	lock();
-	drawCircle(_cenX+1, _cenY, static_data.getRadius(_zoom)+20, Palette::blockOffset(12)+0);
+	drawCircle(_cenX+1, _cenY, _radius[_zoom]+20, Palette::blockOffset(12)+0);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1070,7 +1025,7 @@ Cord Globe::getSunDirection(double lon, double lat) const
 	const double rot = curTime * 2*M_PI;
 	double sun;
 
-	if (static_data.is_seasons)
+	if (Options::getBool("globeSeasons"))
 	{
 		const int MonthDays1[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 		const int MonthDays2[] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366};
@@ -1116,12 +1071,13 @@ Cord Globe::getSunDirection(double lon, double lat) const
 
 void Globe::drawShadow()
 {
+	ShaderMove<Cord> earth = ShaderMove<Cord>(_earthData[_zoom], getWidth(), getHeight());
+	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
 	
-	ShaderMove<Cord> earth(static_data.getEarthShape(_zoom));
-	earth.addMove(_cenX, _cenY);
+	earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
 	
 	lock();
-	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), static_data.getNoise());
+	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise);
 	unlock();
 		
 }
@@ -1778,7 +1734,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
  */
 bool Globe::isZoomedInToMax() const
 {
-	if(_zoom == static_data.getRadiusNum() - 1)
+	if(_zoom == _radius.size() - 1)
 	{
 		return true;
 	}
@@ -1833,4 +1789,4 @@ void Globe::toggleRadarLines()
 	drawRadars();
 }
 
-}
+}//namespace OpenXcom

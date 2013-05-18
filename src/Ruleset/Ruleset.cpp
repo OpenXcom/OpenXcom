@@ -52,6 +52,7 @@
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "City.h"
+#include "MCDPatch.h"
 #include "../Engine/Logger.h"
 #include <algorithm>
 
@@ -163,6 +164,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -619,7 +624,25 @@ void Ruleset::loadFile(const std::string &filename)
 			}
 		}
 	}
-
+	if (const YAML::Node *pName = doc.FindValue("MCDPatches"))
+	{
+		for (YAML::Iterator i = (*pName).begin(); i != (*pName).end(); ++i)
+		{
+			std::string type;
+			(*i)["type"] >> type;
+			if (_MCDPatches.find(type) != _MCDPatches.end())
+			{
+				_MCDPatches[type]->load(*i, this);
+			}
+			else
+			{
+				std::auto_ptr<MCDPatch> patch(new MCDPatch());
+				patch->load(*i, this);
+				_MCDPatches[type] = patch.release();
+				_MCDPatchesIndex.push_back(type);
+			}
+		}
+	}
 	fin.close();
 }
 
@@ -1363,13 +1386,30 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	return 0;
 }
 
+/**
+ * @return a deep array containing the alien item levels.
+ */
 const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
 
+/**
+ * @return the starting base definition.
+ */
 const YAML::Node &Ruleset::getStartingBase()
 {
 	return *_startingBase->begin();
 }
+
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+MCDPatch *Ruleset::getMCDPatch(const std::string id) const
+{
+	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
+	if (_MCDPatches.end() != i) return i->second; else return 0;
+}
+
 }

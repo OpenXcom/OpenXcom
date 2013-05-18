@@ -70,7 +70,7 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
 	out << YAML::Key << "pact" << YAML::Value << _pact;
-	out << YAML::Key << "newPact" << YAML::Value << _pact;
+	out << YAML::Key << "newPact" << YAML::Value << _newPact;
 	out << YAML::EndMap;
 }
 

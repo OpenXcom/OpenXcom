@@ -50,6 +50,7 @@ private:
 	size_t _craft;
 	std::vector<std::string> _items;
 	int _changeValueByMouseWheel;
+	bool _allowChangeListValuesByMouseWheel;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
@@ -78,11 +79,11 @@ public:
 	/// Moves an item to the base.
 	void moveLeft();
 	/// Moves the given number of items to the base.
-	void moveLeft(int change);
+	void moveLeftByValue(int change);
 	/// Moves an item to the craft.
 	void moveRight();
 	/// Moves the given number of items to the craft.
-	void moveRight(int change);
+	void moveRightByValue(int change);
 };
 
 }

@@ -87,13 +87,22 @@ bool MapData::isNoFloor() const
 
 /**
   * Get whether this is a big wall, which blocks all surrounding paths.
-  * @return bool
+  * return value key:
+  * 0: not a bigWall
+  * 1: regular bigWall
+  * 2: allows movement in ne/sw direction
+  * 3: allows movement in nw/se direction
+  * 4: acts as a west wall
+  * 5: acts as a north wall
+  * 6: acts as an east wall
+  * 7: acts as a south wall
+  * 8: acts as a south and east wall.
+  * @return an integer representing what kind of bigwall this is.
   */
-bool MapData::isBigWall() const
+int MapData::getBigWall() const
 {
-	if (_terrainLevel < 0) return false; // this is a hack for eg. Skyranger Ramps
-	if (_specialType == START_POINT && _stopLOS && _TUWalk == 255) return true; // this is another hack for avenger and lightning walls
-	return _isBigWall;
+	if (_terrainLevel < 0) return 0; // this is a hack for eg. Skyranger Ramps
+	return _bigWall;
 }
 
 /**
@@ -119,18 +128,18 @@ bool MapData::isGravLift() const
   * @param isUfoDoor
   * @param stopLOS
   * @param isNoFloor
-  * @param isBigWall
+  * @param bigWall
   * @param isGravLift
   * @param isDoor
   * @param blockFire
   * @param blockSmoke
   */
-void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
+void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
 {
 	_isUfoDoor = isUfoDoor;
 	_stopLOS = stopLOS;
 	_isNoFloor = isNoFloor;
-	_isBigWall = isBigWall;
+	_bigWall = bigWall;
 	_isGravLift = isGravLift;
 	_isDoor = isDoor;
 	_blockFire = blockFire;
@@ -453,5 +462,41 @@ void MapData::setMiniMapIndex(unsigned short i)
 unsigned short MapData::getMiniMapIndex() const
 {
 	return _miniMapIndex;
+}
+
+/**
+* Sets the bigWall value.
+* @param value the new bigWall value.
+*/
+void MapData::setBigWall(const int bigWall)
+{
+	_bigWall = bigWall;
+}
+
+/**
+* Sets the TUWalk value.
+* @param value the new TUWalk value.
+*/
+void MapData::setTUWalk(const int TUWalk)
+{
+	_TUWalk = TUWalk;
+}
+
+/**
+* Sets the TUFly value.
+* @param value the new TUFly value.
+*/
+void MapData::setTUFly(const int TUFly)
+{
+	_TUFly = TUFly;
+}
+
+/**
+* Sets the TUSlide value.
+* @param value the new TUSlide value.
+*/
+void MapData::setTUSlide(const int TUSlide)
+{
+	_TUSlide = TUSlide;
 }
 }

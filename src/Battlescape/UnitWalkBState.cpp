@@ -465,47 +465,51 @@ void UnitWalkBState::cancel()
  */
 void UnitWalkBState::postPathProcedures()
 {
-	if (_unit->getCharging() != 0)
+	if (_unit->getFaction() != FACTION_PLAYER)
 	{
-		_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
-		while (_unit->getStatus() == STATUS_TURNING)
-			_unit->turn();
-		if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
+		Position voxelPosA = Position ((_finalFacing.x * 16)+8, (_finalFacing.y * 16)+8, (_finalFacing.z * 24)+12);
+		Position voxelPosB = Position ((_unit->getPosition().x * 16)+8, (_unit->getPosition().y * 16)+8, (_unit->getPosition().z * 24)+12);
+		int visibility = _parent->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, _unit, false);
+		if (_unit->getCharging() != 0)
 		{
-			_action.target = _action.actor->getCharging()->getPosition();
-			_action.weapon = _action.actor->getMainHandWeapon();
-			_action.type = BA_HIT;
-			_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
-			_unit->setCharging(0);
+			_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
+			while (_unit->getStatus() == STATUS_TURNING)
+				_unit->turn();
+			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
+			{
+				_action.target = _action.actor->getCharging()->getPosition();
+				_action.weapon = _action.actor->getMainHandWeapon();
+				_action.type = BA_HIT;
+				_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
+				_unit->setCharging(0);
+			}
+		} // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
+		else if (_parent->getSave()->getTile(_finalFacing) != 0 && (visibility == -1|| visibility == 4))
+		{
+			if (_pathfindForFinalTurn)
+			{        
+				// if we can't see the target, try to face where they might come from        
+				_pf->abortPath();
+				_pf->calculate(_unit, _finalFacing, _parent->getSave()->getTile(_finalFacing)->getUnit());
+
+				if (_pf->getStartDirection() != -1)
+				{
+					_unit->lookAt(_pf->getStartDirection(), false);
+				} else
+				{
+					_unit->lookAt(_finalFacing);
+				}
+				_pf->abortPath();
+			} else
+			{
+				_unit->lookAt(_finalFacing); // this duplicated call looks weird but let's not run the pathfinding code if we don't have to; lookAt(), otoh, is very cheap
+			}
+
+			while (_unit->getStatus() == STATUS_TURNING) // cheat-turn by recommendation of warboy; use no time-units to face our foes in battle and such
+				_unit->turn();
 		}
-	} else if (_parent->getSave()->getTile(_finalFacing) != 0) // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
-    {
-        if (_pathfindForFinalTurn)
-        {        
-            // if we can't see the target, try to face where they might come from        
-            _pf->abortPath();
-            _pf->calculate(_unit, _finalFacing, _parent->getSave()->getTile(_finalFacing)->getUnit());
-
-            if (_pf->getStartDirection() != -1)
-            {
-                _unit->lookAt(_pf->getStartDirection(), false);
-            } else
-            {
-                _unit->lookAt(_finalFacing);
-            }
-            _pf->abortPath();
-        } else
-        {
-            _unit->lookAt(_finalFacing); // this duplicated call looks weird but let's not run the pathfinding code if we don't have to; lookAt(), otoh, is very cheap
-        }
-
-        while (_unit->getStatus() == STATUS_TURNING) // cheat-turn by recommendation of warboy; use no time-units to face our foes in battle and such
-            _unit->turn();
-
-
-    }
-
-	if (_unit->getFaction() == FACTION_PLAYER && !_parent->getPanicHandled())
+	}
+	else if (!_parent->getPanicHandled())
 	{
 		//todo: set the unit to aggrostate and try to find cover?
 		_unit->setTimeUnits(0);

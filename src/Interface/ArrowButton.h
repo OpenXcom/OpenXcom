@@ -40,6 +40,7 @@ private:
 	ArrowShape _shape;
 	TextList *_list;
 	Timer *_timer;
+	bool _listButton;
 public:
 	/// Creates a new arrow button with the specified size and position.
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);

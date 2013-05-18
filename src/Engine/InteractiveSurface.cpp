@@ -30,8 +30,9 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true)
+InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true), _listButton(false)
 {
+	_classic = Options::getBool("classicMouseHandling");
 }
 
 /**
@@ -103,12 +104,8 @@ void InteractiveSurface::handle(Action *action, State *state)
 	{
 		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
 	}
-
 	// Modern system mouse handling: Press/releases are only triggered by button up/down events
 	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
-	//bool classic = Options::getBool("classicMouseHandling");
-	bool classic = false;
-
 	if (action->isMouseAction())
 	{
 		if ((action->getAbsoluteXMouse() >= getX() && action->getAbsoluteXMouse() < getX() + getWidth()) &&
@@ -118,10 +115,11 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = true;
 				mouseIn(action, state);
-				if (classic)
+			}
+				if (_classic && _listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 				{
 					_buttonsPressed = SDL_GetMouseState(0, 0);
-					for (Uint8 i = 0; i <= NUM_BUTTONS; ++i)
+					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 					{
 						if (isButtonPressed(i))
 						{
@@ -130,7 +128,6 @@ void InteractiveSurface::handle(Action *action, State *state)
 						}
 					}
 				}
-			}
 			mouseOver(action, state);
 		}
 		else
@@ -139,9 +136,9 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
-				if (classic)
+				if (_classic && _listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 				{
-					for (Uint8 i = 0; i <= NUM_BUTTONS; ++i)
+					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 					{
 						if (isButtonPressed(i))
 						{
@@ -498,6 +495,14 @@ void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
 	{
 		_keyRelease.erase(key);
 	}
+}
+
+/**
+ * Sets a flag for this button to say "i'm a member of a textList" to true.
+ */
+void InteractiveSurface::setListButton()
+{
+	_listButton = true;
 }
 
 }

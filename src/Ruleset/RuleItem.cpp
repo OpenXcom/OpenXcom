@@ -739,9 +739,9 @@ int RuleItem::getExplosionRadius() const
 		radius = _blastRadius;
 	}
 
-	if (radius > 10)
+	if (radius > 11)
 	{
-		radius = 10;
+		radius = 11;
 	}
 
 	return radius;

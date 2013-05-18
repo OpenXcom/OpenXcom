@@ -251,19 +251,19 @@ void Camera::keyboardPress(Action *action, State *)
 	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
 	{
-		_scrollKeyX += scrollSpeed;
+		_scrollKeyX = scrollSpeed;
 	}
 	else if (key == Options::getInt("keyBattleRight"))
 	{
-		_scrollKeyX += -scrollSpeed;
+		_scrollKeyX = -scrollSpeed;
 	}
 	else if (key == Options::getInt("keyBattleUp"))
 	{
-		_scrollKeyY += scrollSpeed;
+		_scrollKeyY = scrollSpeed;
 	}
 	else if (key == Options::getInt("keyBattleDown"))
 	{
-		_scrollKeyY += -scrollSpeed;
+		_scrollKeyY = -scrollSpeed;
 	}
 
 	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
@@ -292,19 +292,19 @@ void Camera::keyboardRelease(Action *action, State *)
 	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
 	{
-		_scrollKeyX -= scrollSpeed;
+		_scrollKeyX = 0;
 	}
 	else if (key == Options::getInt("keyBattleRight"))
 	{
-		_scrollKeyX -= -scrollSpeed;
+		_scrollKeyX = 0;
 	}
 	else if (key == Options::getInt("keyBattleUp"))
 	{
-		_scrollKeyY -= scrollSpeed;
+		_scrollKeyY = 0;
 	}
 	else if (key == Options::getInt("keyBattleDown"))
 	{
-		_scrollKeyY -= -scrollSpeed;
+		_scrollKeyY = 0;
 	}
 
 	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())

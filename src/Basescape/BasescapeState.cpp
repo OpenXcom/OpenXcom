@@ -60,27 +60,27 @@ namespace OpenXcom
  */
 BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
 {
-	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
-	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
+	int screenWidth = Options::getInt("baseXResolution");
+	int screenHeight = Options::getInt("baseYResolution");
 
 	// Create objects
 	_txtFacility = new Text(192, 9, 0, 0);
 	_view = new BaseView(192, 192, 0, 8);
-	_mini = new MiniBaseView(128, 16, mapWidth-128, mapHeight/2-59);
-	_edtBase = new TextEdit(127, 17, mapWidth-127, mapHeight/2-100);
-	_txtLocation = new Text(126, 9, mapWidth-126, mapHeight/2-84);
-	_txtFunds = new Text(126, 9, mapWidth-126, mapHeight/2-76);
-	_btnNewBase = new TextButton(128, 12, mapWidth-128, mapHeight/2-42);
-	_btnBaseInfo = new TextButton(128, 12, mapWidth-128, mapHeight/2-29);
-	_btnSoldiers = new TextButton(128, 12, mapWidth-128, mapHeight/2-16);
-	_btnCrafts = new TextButton(128, 12, mapWidth-128, mapHeight/2-3);
-	_btnFacilities = new TextButton(128, 12, mapWidth-128, mapHeight/2+10);
-	_btnResearch = new TextButton(128, 12, mapWidth-128, mapHeight/2+23);
-	_btnManufacture = new TextButton(128, 12, mapWidth-128, mapHeight/2+36);
-	_btnTransfer = new TextButton(128, 12, mapWidth-128, mapHeight/2+49);
-	_btnPurchase = new TextButton(128, 12, mapWidth-128, mapHeight/2+62);
-	_btnSell = new TextButton(128, 12, mapWidth-128, mapHeight/2+75);
-	_btnGeoscape = new TextButton(128, 12, mapWidth-128, mapHeight/2+88);
+	_mini = new MiniBaseView(128, 16, screenWidth-128, screenHeight/2-59);
+	_edtBase = new TextEdit(127, 17, screenWidth-127, screenHeight/2-100);
+	_txtLocation = new Text(126, 9, screenWidth-126, screenHeight/2-84);
+	_txtFunds = new Text(126, 9, screenWidth-126, screenHeight/2-76);
+	_btnNewBase = new TextButton(128, 12, screenWidth-128, screenHeight/2-42);
+	_btnBaseInfo = new TextButton(128, 12, screenWidth-128, screenHeight/2-29);
+	_btnSoldiers = new TextButton(128, 12, screenWidth-128, screenHeight/2-16);
+	_btnCrafts = new TextButton(128, 12, screenWidth-128, screenHeight/2-3);
+	_btnFacilities = new TextButton(128, 12, screenWidth-128, screenHeight/2+10);
+	_btnResearch = new TextButton(128, 12, screenWidth-128, screenHeight/2+23);
+	_btnManufacture = new TextButton(128, 12, screenWidth-128, screenHeight/2+36);
+	_btnTransfer = new TextButton(128, 12, screenWidth-128, screenHeight/2+49);
+	_btnPurchase = new TextButton(128, 12, screenWidth-128, screenHeight/2+62);
+	_btnSell = new TextButton(128, 12, screenWidth-128, screenHeight/2+75);
+	_btnGeoscape = new TextButton(128, 12, screenWidth-128, screenHeight/2+88);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());

@@ -260,6 +260,8 @@ int Tile::getTUCost(int part, MovementType movementType) const
 	{
 		if (_objects[part]->isUFODoor() && _currentFrame[part] != 1)
 			return 0;
+		if (_objects[part]->getBigWall() >= 4)
+			return 0;
 		return _objects[part]->getTUCost(movementType);
 	}
 	else
@@ -287,7 +289,7 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
 bool Tile::isBigWall() const
 {
 	if (_objects[MapData::O_OBJECT])
-		return _objects[MapData::O_OBJECT]->isBigWall();
+		return _objects[MapData::O_OBJECT]->getBigWall();
 	else
 		return false;
 }
@@ -650,6 +652,10 @@ void Tile::animate()
 				continue;
 			}
 			newframe = _currentFrame[i] + 1;
+			if (_objects[i]->isUFODoor() && _objects[i]->getSpecialType() == START_POINT && newframe == 3)
+			{
+				newframe = 7;
+			}
 			if (newframe == 8)
 			{
 				newframe = 0;

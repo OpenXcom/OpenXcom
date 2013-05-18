@@ -48,7 +48,7 @@ enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 class Map : public InteractiveSurface
 {
 private:
-	static const int SCROLL_INTERVAL = 50;
+	static const int SCROLL_INTERVAL = 20;
 	static const int BULLET_SPRITES = 37;
 	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;

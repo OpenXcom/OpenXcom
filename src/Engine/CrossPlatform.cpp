@@ -153,16 +153,20 @@ std::vector<std::string> findDataFolders()
 			dir = strtok(0, ":");
 		}
 	}
-	else
-	{
 #ifdef __APPLE__
-		snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
-		list.push_back(path);
+	snprintf(path, MAXPATHLEN, "%s/Users/Shared/OpenXcom/data/", home);
+	list.push_back(path);
 #else
-		list.push_back("/usr/local/share/openxcom/data/");
-		list.push_back("/usr/share/openxcom/data/");
+	list.push_back("/usr/local/share/openxcom/data/");
+#ifndef __FreeBSD__
+	list.push_back("/usr/share/openxcom/data/");
 #endif
-	}
+#ifdef DATADIR
+	snprintf(path, MAXPATHLEN, "%s/data/", DATADIR);
+	list.push_back(path);
+#endif
+
+#endif
 	
 	// Get working directory
 	list.push_back("./data/");

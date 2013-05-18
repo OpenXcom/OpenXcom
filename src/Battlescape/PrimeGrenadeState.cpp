@@ -67,7 +67,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 	_bg->drawRect(&square, Palette::blockOffset(6)+9);
 
 	add(_window);
-	_window->setColor(Palette::blockOffset(6)+11);
+	_window->setColor(Palette::blockOffset(6)+5);
 
 	add(_title);
 	_title->setAlign(ALIGN_CENTER);
