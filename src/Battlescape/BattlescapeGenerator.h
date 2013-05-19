@@ -90,6 +90,7 @@ private:
 	void explodePowerSources();
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	void deployCivilians(int max);
+	RuleTerrain *getTerrain(int tex, double lat);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);

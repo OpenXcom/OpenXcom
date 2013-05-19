@@ -63,8 +63,11 @@ public:
 	MapBlockType getType() const;
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getSubType() const;
+	/// Get either remaining uses or frequency.
 	int getRemainingUses();
+	/// Decrease remaining uses.
 	void markUsed();
+	/// Reset remaining uses.
 	void reset();
 
 };

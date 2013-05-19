@@ -3153,6 +3153,7 @@ terrains:
       - BLANKS
       - CULTIVAT
       - BARN
+    textures: [1, 2, 3, 4]
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -3241,6 +3242,7 @@ terrains:
       - BLANKS
       - DESERT
     largeBlockLimit: 3
+    textures: [7, 8]
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -3289,6 +3291,8 @@ terrains:
       - BLANKS
       - FOREST
     largeBlockLimit: 2
+    textures: [0, 6, 10, 11]
+    hemisphere: -1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -3332,6 +3336,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - JUNGLE
+    textures: [0, 6, 10, 11]
+    hemisphere: 1
     mapBlocks:
       - name: JUNGLE00
         width: 10
@@ -3427,6 +3433,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - MOUNT
+    textures: [5]
     largeBlockLimit: 2
     mapBlocks:
       - name: MOUNT00
@@ -3475,6 +3482,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLAR
+    textures: [9, 12]
     largeBlockLimit: 1
     mapBlocks:
       - name: POLAR00
@@ -6054,6 +6062,7 @@ alienDeployments:
     civilians: 16
     # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
     roadTypeOdds: [50, 25]
+    terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 5
@@ -6202,6 +6211,8 @@ alienDeployments:
     width: 50
     length: 50
     height: 2
+    terrain: UBASE
+    shade: 15
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
@@ -6354,6 +6365,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
+    terrain: XBASE
+    shade: 5
   - type: STR_MARS_CYDONIA_LANDING
     data:
       - alienRank: 5
@@ -6419,6 +6432,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 4
+    terrain: MARS
+    shade: 15
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0
@@ -6538,6 +6553,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
+    terrain: UBASE
+    shade: 5
 research:
   - name: STR_LASER_WEAPONS
     cost: 50

@@ -59,6 +59,8 @@ private:
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
 	std::vector<int> _roadTypeOdds;
+	std::string _terrain;
+	int _shade;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -76,6 +78,11 @@ public:
 	void getDimensions(int *width, int *length, int *height);
 	int getCivilians() const;
 	std::vector<int> getRoadTypeOdds() const;
+	/// Gets the terrain for battlescape generation.
+	std::string getTerrain() const;
+	/// Gets the shade level for battlescape generation.
+	int getShade() const;
+
 };
 
 }
