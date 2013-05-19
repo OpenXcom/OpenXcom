@@ -616,6 +616,10 @@ void XcomResourcePack::loadBattlescapeResources()
 		_sets[usets[i]] = new SurfaceSet(32, 40);
 		_sets[usets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 	}
+
+	_sets["HANDOB2.PCK"] = new SurfaceSet(32, 40);
+	_sets["HANDOB2.PCK"]->loadPck(CrossPlatform::getDataFile("UNITS/HANDOB.PCK"), CrossPlatform::getDataFile("UNITS/HANDOB.TAB"));
+
 	s.str("");
 	s << "UNITS/" << "BIGOBS.PCK";
 	s2.str("");
