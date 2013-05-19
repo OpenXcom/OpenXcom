@@ -20,6 +20,7 @@
 #include "MapData.h"
 #include <fstream>
 #include <sstream>
+#include <SDL_endian.h>
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/CrossPlatform.h"
@@ -278,6 +279,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
+		value = SDL_SwapLE16(value);
 		voxelData->push_back(value);
 	}
 

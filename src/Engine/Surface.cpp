@@ -21,6 +21,7 @@
 #include <fstream>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
+#include <SDL_endian.h>
 #include "Palette.h"
 #include "Exception.h"
 #include "ShaderMove.h"
@@ -213,9 +214,14 @@ void Surface::loadSpk(const std::string &filename)
 	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read((char*)&flag, sizeof(flag)) && flag != 65533)
+	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
-		if (flag == 65535)
+		flag = SDL_SwapLE16(flag);
+		if (flag == 65533)
+		{
+			break;
+		}
+		else if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			for (int i = 0; i < flag * 2; ++i)
