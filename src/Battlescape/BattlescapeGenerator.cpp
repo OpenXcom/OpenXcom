@@ -1754,7 +1754,7 @@ RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
 		t =  _game->getRuleset()->getTerrain(*i);
 		for (std::vector<int>::iterator j = t->getTextures()->begin(); j != t->getTextures()->end(); ++j )
 		{
-			if (*j == tex && t->getHemisphere() == 0 || (t->getHemisphere() < 0 && lat < 0) || (t->getHemisphere() > 0 && lat >= 0))
+			if (*j == tex && (t->getHemisphere() == 0 || (t->getHemisphere() < 0 && lat < 0) || (t->getHemisphere() > 0 && lat >= 0)))
 			{
 				return t;
 			}
