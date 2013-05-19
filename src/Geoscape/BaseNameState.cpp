@@ -68,6 +68,9 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
+	//something must be in the name before it is acceptable
+	_btnOk->setVisible(false);
+
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
@@ -115,6 +118,17 @@ void BaseNameState::edtNameKeyPress(Action *action)
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		nameBase();
+	}
+	else
+	{
+		if(_edtName->getText().size() > 0)
+		{
+			_btnOk->setVisible(true);
+		}
+		else
+		{
+			_btnOk->setVisible(false);
+		}
 	}
 }
 
