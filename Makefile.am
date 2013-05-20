@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 SUBDIRS = docs
 
 doc_DATA = \
@@ -87,12 +89,13 @@ shader_DATA = \
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
-openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) -lGL
+openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) $(GL_LIBS)
 openxcom_CXXFLAGS = \
 	$(CXXFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
+	$(GL_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
 openxcom_SOURCES = \
 	src/aresame.h \
