@@ -1514,7 +1514,8 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFire(int fire)
 {
-	_fire = fire;
+	if (_specab != SPECAB_BURNFLOOR)
+		_fire = fire;
 }
 
 /**
