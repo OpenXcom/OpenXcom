@@ -6,6 +6,16 @@ doc_DATA = \
 	README.txt \
 	CHANGELOG.txt
 
+if WITH_OPENXCOM_MAN
+
+openxcom.6: $(srcdir)/docs/openxcom.6.xml
+	$(DOCBOOK2MAN) $<
+
+dist_man_MANS = \
+	openxcom.6
+
+endif
+
 pkgdata_DATA = \
 	bin/data/README.txt
 
@@ -626,6 +636,7 @@ openxcom_SOURCES = \
 
 EXTRA_DIST = \
 	autogen.sh \
+	openxcom.6.xml \
 	src/OpenXcom.2008.sln \
 	src/OpenXcom.2008.vcproj \
 	src/OpenXcom.2008.vcproj.user \
