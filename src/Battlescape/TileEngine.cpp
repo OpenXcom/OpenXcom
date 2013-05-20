@@ -2468,7 +2468,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 	while (!foundCurve && curvature < 5.0)
 	{
 		calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
-		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
+		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}
@@ -2482,6 +2482,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 	{
 		return false;
 	}
+
 	return ProjectileFlyBState::validThrowRange(action);
 }
 
