@@ -190,7 +190,7 @@ void UnitFallBState::think()
 				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR)
 				{
 					(*unit)->getTile()->ignite();
-					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,(*unit)->getTile()->getTerrainLevel());
+					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
 					_parent->getTileEngine()->hit(here, (*unit)->getStats()->strength, DT_IN, (*unit));
 				}
 				// move our personal lighting with us
