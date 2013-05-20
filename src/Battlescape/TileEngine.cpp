@@ -1308,10 +1308,10 @@ bool TileEngine::detonate(Tile* tile)
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
 				int remainingPower = explosive;
-				while (remainingPower > 0 && tiles[i]->getMapData(parts[i]))
+				while (remainingPower >= 0 && tiles[i]->getMapData(parts[i]))
 				{
 					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
-					if (remainingPower > 0)
+					if (remainingPower >= 0)
 					{
 						int height = getVoxelHeight(tiles[i]->getMapData(parts[i]));
 						if (i > 3) tiles[i]->addSmoke(RNG::generate((height/2), (height/2)+1)); //only current tile produces smoke[2]
