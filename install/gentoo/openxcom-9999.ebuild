@@ -1,38 +1,34 @@
 # Copyright 1999-2011 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
-EAPI=3
 
-inherit git autotools
+EAPI=5
 
-
-DESCRIPTION="OpenXcom is an open-source clone of the popular
-UFO: Enemy Unknown (X-Com: UFO Defense in USA)"
-HOMEPAGE="http://openxcom.org/"
 EGIT_REPO_URI="https://github.com/SupSuper/OpenXcom.git"
 
-LICENSE="GPL"
+inherit git-2 autotools
+
+DESCRIPTION="OpenXcom is an open-source clone of the popular UFO: Enemy Unknown"
+HOMEPAGE="http://openxcom.org/"
+SRC=""
+
+LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="x86 amd64"
+KEYWORDS=""
 IUSE=""
 
-DEPEND="media-libs/libsdl
+DEPEND="
+	dev-cpp/yaml-cpp
+	media-libs/libsdl
 	media-libs/sdl-mixer
-	media-sound/timidity++
 	media-libs/sdl-gfx
 	media-libs/sdl-image
-	dev-cpp/yaml-cpp"
+	virtual/opengl
+"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
 	eautoreconf
-}
-src_compile() {
-	emake || die "emake failed"
-}
-
-src_install() {
-	emake DESTDIR="${D}" install || die "emake install failed"
 }
 
 pkg_postinst() {
@@ -41,5 +37,3 @@ pkg_postinst() {
 	einfo "see http://ufopaedia.org/index.php?title=Installing_(OpenXcom)"
 	einfo "for more info."
 }
-
- 
