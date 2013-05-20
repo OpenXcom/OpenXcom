@@ -1162,7 +1162,7 @@ void UnitSprite::drawRoutine9()
 {
 	Surface *torso = 0;
 	// magic numbers
-	const int Body = 0, die = 24;
+	const int Body = 0, die = 25;
 	
 	if (_unit->isOut())
 	{
