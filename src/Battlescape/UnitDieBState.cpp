@@ -75,7 +75,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
-
+	_parent->getSave()->getBattleState()->showPsiButton(false);
     parent->resetSituationForAI();
 
     if (_unit->getFaction() == FACTION_HOSTILE)
