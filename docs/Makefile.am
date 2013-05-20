@@ -1,4 +1,5 @@
-EXTRA_DIST = Doxyfile \
+EXTRA_DIST = \
+	Doxyfile \
 	CMakeLists.txt \
 	language_id.html
 
