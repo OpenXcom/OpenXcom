@@ -1,4 +1,4 @@
-# Copyright 1999-2011 Gentoo Foundation
+# Copyright 1999-2013 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -10,7 +10,7 @@ inherit git-2 autotools
 
 DESCRIPTION="OpenXcom is an open-source clone of the popular UFO: Enemy Unknown"
 HOMEPAGE="http://openxcom.org/"
-SRC=""
+SRC_URI=""
 
 LICENSE="GPL-3"
 SLOT="0"
