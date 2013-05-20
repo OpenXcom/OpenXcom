@@ -1566,8 +1566,35 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type)
 	int blockage = 0;
 
 	if (tile == 0) return 0; // probably outside the map here
-
-	if (tile->getMapData(part))
+	bool gotPart = tile->getMapData(part);
+	if (!gotPart && part == MapData::O_WESTWALL)
+	{
+		if (tile->getMapData(MapData::O_OBJECT) &&
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLWEST)
+			blockage += tile->getMapData(MapData::O_OBJECT)->getBlock(type);
+		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+		if (tileWest->getMapData(MapData::O_OBJECT) &&
+			(tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLEAST ||
+			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLEASTANDSOUTH))
+			blockage += tileWest->getMapData(MapData::O_OBJECT)->getBlock(type);
+	}
+	if (!gotPart && part == MapData::O_NORTHWALL)
+	{
+		if (tile->getMapData(MapData::O_OBJECT) &&
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLNORTH)
+			blockage += tile->getMapData(MapData::O_OBJECT)->getBlock(type);
+		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (tileNorth->getMapData(MapData::O_OBJECT) &&
+			(tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLSOUTH ||
+			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLEASTANDSOUTH))
+			blockage += tileNorth->getMapData(MapData::O_OBJECT)->getBlock(type);
+	}
+	if (gotPart && part == MapData::O_OBJECT)
+	{
+		if (tile->getMapData(MapData::O_OBJECT)->getBigWall() <= Pathfinding::BIGWALLNWSE)
+			blockage += tile->getMapData(MapData::O_OBJECT)->getBlock(type);
+	}
+	else if (gotPart)
 	{
 		blockage += tile->getMapData(part)->getBlock(type);
 	}
