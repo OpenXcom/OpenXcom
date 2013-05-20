@@ -11,17 +11,22 @@ if WITH_OPENXCOM_MAN
 openxcom.6: $(srcdir)/docs/openxcom.6.xml
 	$(DOCBOOK2MAN) $<
 
-dist_man_MANS = \
-	openxcom.6
+dist_man_MANS = openxcom.6
 
 endif
 
-pkgdata_DATA = \
-	bin/data/README.txt
+icondir = $(datadir)/pixmaps
+icon_DATA = \
+	res/openxcom.svg \
+	res/openxcom.png
+
+desktopdir = $(datadir)/applications
+desktop_DATA = res/linux/openxcom.desktop
+
+pkgdata_DATA = bin/data/README.txt
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
-ruleset_DATA = \
-	bin/data/Ruleset/Xcom1Ruleset.rul
+ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
 languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
@@ -636,7 +641,7 @@ openxcom_SOURCES = \
 
 EXTRA_DIST = \
 	autogen.sh \
-	openxcom.6.xml \
+	docs/openxcom.6.xml \
 	src/OpenXcom.2008.sln \
 	src/OpenXcom.2008.vcproj \
 	src/OpenXcom.2008.vcproj.user \
@@ -653,12 +658,19 @@ EXTRA_DIST = \
 	cmake/modules/nsis.cmake \
 	cmake/modules/NSIS.template.in \
 	cmake/modules/rpm.cmake \
+	res/mac/openxcom.icns \
+	res/linux/icons/openxcom_128x128.png \
+	res/linux/icons/openxcom.svg \
+	res/linux/icons/openxcom_48x48.png \
+	res/windows/openxcom.ico \
 	$(doc_DATA) \
 	$(pkgdata_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
 	$(ruleset_DATA) \
-	$(shader_DATA)
+	$(shader_DATA) \
+	$(desktop_DATA) \
+	$(icon_DATA)
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \
