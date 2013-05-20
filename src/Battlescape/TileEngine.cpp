@@ -1067,7 +1067,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			}
 		}
 	}
-	applyItemGravity(tile);
+	applyGravity(tile);
 	calculateSunShading(); // roofs could have been destroyed
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
@@ -1251,7 +1251,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		{
 			if (detonate(*i))
 				_save->setObjectiveDestroyed(true);
-			applyItemGravity(*i);
+			applyGravity(*i);
+			Tile *j = _save->getTile((*i)->getPosition() + Position(0,0,1));
+			if (j)
+				applyGravity(j);
 		}
 	}
 
@@ -2235,11 +2238,11 @@ bool TileEngine::psiAttack(BattleAction *action)
 }
 
 /**
- * Apply gravity to a tile. Causes items to drop.
+ * Apply gravity to a tile. Causes items and units to drop.
  * @param t Tile
  * @return Tile where the items end up in eventually.
  */
-Tile *TileEngine::applyItemGravity(Tile *t)
+Tile *TileEngine::applyGravity(Tile *t)
 {
 	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
  
