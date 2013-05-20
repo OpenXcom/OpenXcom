@@ -422,13 +422,19 @@ void CraftEquipmentState::moveLeftByValue(int change)
 				}
 				else ++i;
 			}
-			_base->getItems()->addItem(_items[_sel], cQty);
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				_base->getItems()->addItem(_items[_sel], cQty);
+			}
 			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
 			if (cQty > change) moveRightByValue(cQty - change);
 		}
 		else
 		{
-			_base->getItems()->addItem(_items[_sel], change);
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				_base->getItems()->addItem(_items[_sel], change);
+			}
 			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
 			{
 				if ((*i)->getRules() == item)
@@ -444,10 +450,13 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	else
 	{
 		c->getItems()->removeItem(_items[_sel], change);
-		_base->getItems()->addItem(_items[_sel], change);
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
 			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
+		}
+		else
+		{
+			_base->getItems()->addItem(_items[_sel], change);
 		}
 	}
 	updateQuantity();
@@ -472,6 +481,14 @@ void CraftEquipmentState::moveRightByValue(int change)
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
 	int bqty = _base->getItems()->getItem(_items[_sel]);
+	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	{
+		if (change == INT_MAX)
+		{
+			change = 10;
+		}
+		bqty = change;
+	}
 	if (0 >= change || 0 >= bqty) return;
 	change = std::min(bqty, change);
 	// Do we need to convert item to vehicle?
@@ -505,8 +522,11 @@ void CraftEquipmentState::moveRightByValue(int change)
 						newAmmo = newAmmoPerVehicle;
 						if (i<remainder) ++newAmmo;
 						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
-						_base->getItems()->removeItem(ammo->getType(), newAmmo);
-						_base->getItems()->removeItem(_items[_sel]);
+						if (_game->getSavedGame()->getMonthsPassed() != -1)
+						{
+							_base->getItems()->removeItem(ammo->getType(), newAmmo);
+							_base->getItems()->removeItem(_items[_sel]);
+						}
 					}
 				}
 				if (oldVehiclesCount >= canBeAdded)
@@ -521,17 +541,23 @@ void CraftEquipmentState::moveRightByValue(int change)
 				for (int i=0; i < change; ++i)
 				{
 					c->getVehicles()->push_back(new Vehicle(item, 255));
-					_base->getItems()->removeItem(_items[_sel]);
+						if (_game->getSavedGame()->getMonthsPassed() != -1)
+						{
+							_base->getItems()->removeItem(_items[_sel]);
+						}
 				}
 		}
 	}
 	else
 	{
-		_base->getItems()->removeItem(_items[_sel],change);
 		c->getItems()->addItem(_items[_sel],change);
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
 				Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
+		}
+		else
+		{
+			_base->getItems()->removeItem(_items[_sel],change);
 		}
 	}
 	updateQuantity();
