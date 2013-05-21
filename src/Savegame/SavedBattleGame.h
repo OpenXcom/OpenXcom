@@ -78,7 +78,7 @@ private:
 	int _dragPixelTolerance;  // this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
-	std::vector<BattleUnit*> _fallingUnits;
+	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
 public:
 	/// Creates a new battle save, based on current generic save.
@@ -224,9 +224,9 @@ public:
 	/// get the number of units that can see this unit
 	int getSpottingUnits(BattleUnit* unit) const;
 	/// add this unit to the vector of falling units
-	void addFallingUnit(BattleUnit* unit);
+	bool addFallingUnit(BattleUnit* unit);
 	/// get the vector of falling units
-	std::vector<BattleUnit*> *getFallingUnits();
+	std::list<BattleUnit*> *getFallingUnits();
 	/// toggle the switch that says "there are units falling, start the fall state"
 	void setUnitsFalling(bool fall);
 	/// check the status of the switch that says "there are units falling"

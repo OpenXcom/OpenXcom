@@ -1457,10 +1457,10 @@ bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
 }
 
 
-void SavedBattleGame::addFallingUnit(BattleUnit* unit)
+bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
 	bool add = true;
-	for (std::vector<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
+	for (std::list<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
 	{
 		if (unit == *i)
 		{
@@ -1469,12 +1469,13 @@ void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 	}
 	if (add)
 	{
-		_fallingUnits.push_back(unit);
+		_fallingUnits.push_front(unit);
 		_unitsFalling = true;
 	}
+	return add;
 }
 
-std::vector<BattleUnit*> *SavedBattleGame::getFallingUnits()
+std::list<BattleUnit*> *SavedBattleGame::getFallingUnits()
 {
 	return &_fallingUnits;
 }

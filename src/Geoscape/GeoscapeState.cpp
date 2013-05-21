@@ -484,7 +484,7 @@ void GeoscapeState::think()
 			_popups.erase(_popups.begin());
 		}
 	}
-	if (_minimizedDogfights == 0 && _dogfights.empty() &&_battleMusic)
+	if (_battleMusic && _dogfights.empty() && !_dogfightStartTimer->isRunning())
 	{
 		_battleMusic = false;
 		musicStop();
@@ -1866,7 +1866,7 @@ void GeoscapeState::zoomOutEffect()
  */
 void GeoscapeState::handleDogfights()
 {
-	// If all dogfights are minimized rotate the golbe, etc.
+	// If all dogfights are minimized rotate the globe, etc.
 	if(_dogfights.size() == _minimizedDogfights)
 	{
 		_pause = false;

@@ -50,12 +50,17 @@ Ufo::Ufo(RuleUfo *rules)
  */
 Ufo::~Ufo()
 {
-	for (std::vector<Target*>::iterator i = _followers.begin(); i != _followers.end(); ++i)
+	for (std::vector<Target*>::iterator i = _followers.begin(); i != _followers.end();)
 	{
 		Craft *c = dynamic_cast<Craft*>(*i);
 		if (c)
 		{
 			c->returnToBase();
+			i = _followers.begin();
+		}
+		else
+		{
+			 ++i;
 		}
 	}
 	if (_mission)

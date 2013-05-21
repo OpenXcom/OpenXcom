@@ -146,7 +146,12 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
 	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ALTITUDE").c_str(), _game->getLanguage()->getString(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HEADING").c_str(), _game->getLanguage()->getString(_ufo->getDirection()).c_str());
+	std::string heading = _ufo->getDirection();
+	if (_ufo->getStatus() != Ufo::FLYING)
+	{
+		heading = "STR_NONE_UC";
+	}
+	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HEADING").c_str(), _game->getLanguage()->getString(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
 	std::wstringstream ss;
 	ss << _ufo->getSpeed();

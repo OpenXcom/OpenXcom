@@ -2603,7 +2603,7 @@ items:
     bulletSprite: 8
     fireSound: 51
     hitSound: 19
-    hitAnimation: 36
+    hitAnimation: 46
     power: 140
     damageType: 8
     accuracySnap: 75

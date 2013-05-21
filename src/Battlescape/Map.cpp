@@ -1024,7 +1024,8 @@ void Map::cacheUnit(BattleUnit *unit)
 				unitSprite->setBattleItem(0);
 			}
 			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
-									_res->getSurfaceSet("HANDOB.PCK"));
+									_res->getSurfaceSet("HANDOB.PCK"),
+									_res->getSurfaceSet("HANDOB2.PCK"));
 			unitSprite->setAnimationFrame(_animFrame);
 			cache->clear();
 			unitSprite->blit(cache);

@@ -727,6 +727,16 @@ void DogfightState::move()
 		endDogfight();
 		return;
 	}
+	
+	if(_minimized && _ufo->getSpeed() > _craft->getSpeed())
+	{
+		_craft->setSpeed(_craft->getRules()->getMaxSpeed());
+		if(_ufo->getSpeed() > _craft->getSpeed())
+		{
+			_ufoBreakingOff = true;
+			finalRun = true;
+		}
+	}
 	// Check if UFO is not breaking off.
 	if(_ufo->getSpeed() == _ufo->getRules()->getMaxSpeed())
 	{
@@ -929,7 +939,7 @@ void DogfightState::move()
 	}
 
 	// Check when battle is over.
-	if (_end == true && ((_currentDist > 640 && (_mode == _btnDisengage || _ufoBreakingOff == true)) || (_timeout == 0 && (_ufo->isCrashed() || _craft->isDestroyed()))))
+	if (_end == true && (((_currentDist > 640 || _minimized) && (_mode == _btnDisengage || _ufoBreakingOff == true)) || (_timeout == 0 && (_ufo->isCrashed() || _craft->isDestroyed()))))
 	{
 		if (_ufoBreakingOff)
 		{
@@ -1248,6 +1258,7 @@ void DogfightState::btnMinimizeClick(Action *)
 			_txtStatus->setVisible(false);
 			_btnMinimizedIcon->setVisible(true);
 			_txtInterceptionNumber->setVisible(true);
+			_ufoEscapeTimer->stop();
 		}
 		else
 		{

@@ -1478,7 +1478,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 		item->setOwner(0);
 	}
 
-	getTileEngine()->applyItemGravity(_save->getTile(p));
+	getTileEngine()->applyGravity(_save->getTile(p));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
@@ -1557,7 +1557,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
-	getTileEngine()->applyItemGravity(newUnit->getTile());
+	getTileEngine()->applyGravity(newUnit->getTile());
 	return newUnit;
 
 }

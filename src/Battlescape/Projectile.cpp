@@ -276,7 +276,7 @@ bool Projectile::calculateThrow(double accuracy)
 	while (!foundCurve && curvature < 5.0)
 	{
 		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
-		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
+		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}
