@@ -88,6 +88,7 @@ void SelectStartFacilityState::FacilityBuilt()
 	if( _facilities.size() == 0 )
 	{
 		_game->popState();
+		_game->popState(); // return to geoscape, force timer to start.
 	} else {
 		PopulateBuildList();
 	}
