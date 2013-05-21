@@ -117,7 +117,10 @@ void BaseNameState::edtNameKeyPress(Action *action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		nameBase();
+		if(_edtName->getText().size() > 0)
+		{
+			nameBase();
+		}
 	}
 	else
 	{
