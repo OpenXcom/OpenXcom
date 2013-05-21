@@ -4321,7 +4321,8 @@ soldiers:
       throwing: 50
       strength: 20
       psiStrength: 0
-      psiSkill: 16
+# psiSkill here is treated as the initial stat
+      psiSkill: 0
       melee: 20
     maxStats:
       tu: 60
@@ -4333,8 +4334,26 @@ soldiers:
       throwing: 80
       strength: 40
       psiStrength: 100
-      psiSkill: 24
+# psiSkill here is treated as the minimum value for the initial month of training using
+# a random number between (this) and (150% of this)
+      psiSkill: 16
       melee: 40
+# Note: caps are not absolute, it IS possible to go one or two points over (at most)
+# this is NOT a bug, it is a design choice, for variety's sake.
+# bravery is ALWAYS treated in multiples of 10, and cannot go above the cap. 101 will be treated as 110
+# psi strength is NEVER increased.
+    statCaps:
+      tu: 80
+      stamina: 100
+      health: 60
+      bravery: 100
+      reactions: 100
+      firing: 120
+      throwing: 120
+      strength: 70
+      psiStrength: 0
+      psiSkill: 100
+      melee: 120
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14

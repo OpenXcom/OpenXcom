@@ -1863,31 +1863,32 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addKillCount(_kills);
 
 	UnitStats *stats = s->getCurrentStats();
+	UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 
-	if (_expBravery && stats->bravery < 100)
+	if (_expBravery && stats->bravery < caps.bravery)
 	{
 		if (_expBravery > RNG::generate(0,10)) stats->bravery += 10;
 	}
-	if (_expReactions && stats->reactions < 100)
+	if (_expReactions && stats->reactions < caps.reactions)
 	{
 		stats->reactions += improveStat(_expReactions);
 	}
-	if (_expFiring && stats->firing < 120)
+	if (_expFiring && stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
 	}
-	if (_expMelee && stats->melee < 120)
+	if (_expMelee && stats->melee < caps.melee)
 	{
 		stats->melee += improveStat(_expMelee);
 	}
-	if (_expThrowing && stats->throwing < 120)
+	if (_expThrowing && stats->throwing < caps.throwing)
 	{
 		stats->throwing += improveStat(_expThrowing);
 	}
-	if (_expPsiSkill && stats->psiSkill < 100)
+	if (_expPsiSkill && stats->psiSkill < caps.psiSkill)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
@@ -1897,13 +1898,13 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();
 		int v;
-		v = 80 - stats->tu;
+		v = caps.tu - stats->tu;
 		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
-		v = 60 - stats->health;
+		v = caps.health - stats->health;
 		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
-		v = 70 - stats->strength;
+		v = caps.strength - stats->strength;
 		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
-		v = 100 - stats->stamina;
+		v = caps.stamina - stats->stamina;
 		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
 		return true;
 	}
