@@ -75,7 +75,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
-	_parent->getSave()->getBattleState()->showPsiButton(false);
     parent->resetSituationForAI();
 
     if (_unit->getFaction() == FACTION_HOSTILE)
@@ -212,6 +211,7 @@ void UnitDieBState::cancel()
  */
 void UnitDieBState::convertUnitToCorpse()
 {
+	_parent->getSave()->getBattleState()->showPsiButton(false);
 	// in case the unit was unconscious
 	_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
