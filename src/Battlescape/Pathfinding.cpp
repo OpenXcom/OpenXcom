@@ -24,7 +24,9 @@
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
 #include "../Engine/Game.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/BattlescapeGame.h"
@@ -793,6 +795,23 @@ bool Pathfinding::previewPath(bool bRemove)
 			{
 				Tile *tile = _save->getTile(pos + Position(x,y,0));
 				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
+				if (!bRemove)
+				{
+					BattleItem *item = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("PATHFINDER_ORB"), _save->getCurrentItemId());
+					tile->addItem(item, _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_GROUND"));
+				}
+				else
+				{
+					for (std::vector<BattleItem*>::iterator j = tile->getInventory()->begin(); j != tile->getInventory()->end(); ++j)
+					{
+						if ((*j)->getRules()->getType() == "PATHFINDER_ORB")
+						{
+							delete *j;
+							tile->getInventory()->erase(j);
+							break;
+						}
+					}
+				}
 				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
 				{
 					tileBelow->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));

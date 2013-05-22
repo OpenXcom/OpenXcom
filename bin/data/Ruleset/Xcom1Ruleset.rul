@@ -2826,6 +2826,13 @@ items:
     tuUse: 25
     flatRate: true
     recover: false
+# Special Pathfinding item
+# Usage of this is hard-coded.
+# DO NOT DELETE!
+  - type: PATHFINDER_ORB
+    recover: false
+    floorSprite: 73
+    weight: 1000
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
