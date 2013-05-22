@@ -2833,6 +2833,14 @@ items:
     recover: false
     floorSprite: 73
     weight: 1000
+  - type: FLOATING_ORB
+    recover: false
+    floorSprite: 74
+    weight: 1000
+  - type: PATHFINDER_SHADOW
+    recover: false
+    floorSprite: 75
+    weight: 999
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
@@ -9321,6 +9329,8 @@ extraSprites:
   - type: FLOOROB.PCK
     files:
       73: Resources/Pathfinding_Orb.png
+      74: Resources/Floating_Orb.png
+      75: Resources/Pathfinding_Shadow.png
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
 #    width: 32

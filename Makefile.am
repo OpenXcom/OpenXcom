@@ -28,6 +28,8 @@ pkgdata_DATA = bin/data/README.txt
 resourcesdir =  $(pkgdatadir)/data/Resources
 resources_DATA = \
 	bin/data/Resources/Pathfinding_Orb.png \
+	bin/data/Resources/Pathfinding_Shadow.png \
+	bin/data/Resources/Floating_Orb.png \
 	bin/data/Resources/Alternate_Pathfinding_Orb.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset

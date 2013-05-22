@@ -797,18 +797,33 @@ bool Pathfinding::previewPath(bool bRemove)
 				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
 				if (!bRemove)
 				{
-					BattleItem *item = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("PATHFINDER_ORB"), _save->getCurrentItemId());
+					BattleItem *item;
+					if (tile->getPosition().z > 0 && tile->hasNoFloor(tileBelow))
+					{
+						BattleItem *itemB = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("PATHFINDER_SHADOW"), _save->getCurrentItemId());
+						tile->addItem(itemB, _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_GROUND"));
+						_save->getTileEngine()->applyGravity(tile);
+						item = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("FLOATING_ORB"), _save->getCurrentItemId());
+					}
+					else
+					{
+						item = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("PATHFINDER_ORB"), _save->getCurrentItemId());
+					}
 					tile->addItem(item, _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_GROUND"));
 				}
 				else
 				{
-					for (std::vector<BattleItem*>::iterator j = tile->getInventory()->begin(); j != tile->getInventory()->end(); ++j)
+					Tile *tile2 = _save->getTileEngine()->applyGravity(tile);
+					for (std::vector<BattleItem*>::iterator j = tile2->getInventory()->begin(); j != tile2->getInventory()->end();)
 					{
-						if ((*j)->getRules()->getType() == "PATHFINDER_ORB")
+						if ((*j)->getRules()->getType() == "PATHFINDER_ORB" || (*j)->getRules()->getType() == "PATHFINDER_SHADOW" || (*j)->getRules()->getType() == "FLOATING_ORB")
 						{
 							delete *j;
-							tile->getInventory()->erase(j);
-							break;
+							j = tile2->getInventory()->erase(j);
+						}
+						else
+						{
+							++j;
 						}
 					}
 				}
