@@ -2836,7 +2836,7 @@ items:
   - type: FLOATING_ORB
     recover: false
     floorSprite: 74
-    weight: 1000
+    weight: 998
   - type: PATHFINDER_SHADOW
     recover: false
     floorSprite: 75
