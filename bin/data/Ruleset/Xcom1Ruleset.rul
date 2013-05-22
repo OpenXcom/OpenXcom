@@ -9310,3 +9310,15 @@ MCDPatches:
         deathTile: 75
       - MCDIndex: 73
         deathTile: 76
+extraSprites:
+  - type: FLOOROB.PCK
+    files:
+      73: Resources/Pathfinding Orb.png
+#New spritesheet Example:
+#  - type: GIANTBUNNY.PCK
+#    width: 32
+#    height: 40
+#    files:
+#      0: Resources/Bunny/Bunny00.png
+#      1: Resources/Bunny/Bunny01.bmp
+#      2: Resources/Bunny/Bunny02.gif
