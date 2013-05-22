@@ -25,6 +25,11 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
+resourcesdir =  $(pkgdatadir)/data/Resources
+resources_DATA = \
+	bin/data/Resources/Pathfinding_Orb.png \
+	bin/data/Resources/Alternate_Pathfinding_Orb.png
+
 rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
@@ -669,6 +674,7 @@ EXTRA_DIST = \
 	$(pkgdata_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
+	$(resources_DATA) \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \
