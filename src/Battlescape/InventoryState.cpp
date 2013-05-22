@@ -324,7 +324,7 @@ void InventoryState::btnOkClick(Action *)
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
 	}
-	_battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());
+	_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 }
 

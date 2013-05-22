@@ -1,15 +1,32 @@
+ACLOCAL_AMFLAGS = -I m4
+
 SUBDIRS = docs
 
 doc_DATA = \
 	README.txt \
 	CHANGELOG.txt
 
-pkgdata_DATA = \
-	bin/data/README.txt
+if WITH_OPENXCOM_MAN
+
+openxcom.6: $(srcdir)/docs/openxcom.6.xml
+	$(DOCBOOK2MAN) $<
+
+dist_man_MANS = openxcom.6
+
+endif
+
+icondir = $(datadir)/pixmaps
+icon_DATA = \
+	res/openxcom.svg \
+	res/openxcom.png
+
+desktopdir = $(datadir)/applications
+desktop_DATA = res/linux/openxcom.desktop
+
+pkgdata_DATA = bin/data/README.txt
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
-ruleset_DATA = \
-	bin/data/Ruleset/Xcom1Ruleset.rul
+ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
 languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
@@ -52,6 +69,7 @@ language_DATA = \
 namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
 	bin/data/SoldierName/American.nam \
+	bin/data/SoldierName/Arabic.nam \
 	bin/data/SoldierName/British.nam \
 	bin/data/SoldierName/Czech.nam \
 	bin/data/SoldierName/Danish.nam \
@@ -59,8 +77,11 @@ name_DATA = \
 	bin/data/SoldierName/French.nam \
 	bin/data/SoldierName/German.nam \
 	bin/data/SoldierName/Hungarian.nam \
+	bin/data/SoldierName/Chinese.nam \
+	bin/data/SoldierName/Irish.nam \
 	bin/data/SoldierName/Italian.nam \
 	bin/data/SoldierName/Japanese.nam \
+	bin/data/SoldierName/Nigerian.nam \
 	bin/data/SoldierName/Polish.nam \
 	bin/data/SoldierName/Portuguese.nam \
 	bin/data/SoldierName/Romanian.nam \
@@ -70,8 +91,8 @@ name_DATA = \
 	
 shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
-	bin/data/Shaders/CRT.OpenGL.shader \
 	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
+	bin/data/Shaders/CRT.OpenGL.shader \
 	bin/data/Shaders/CRT-simple.OpenGL.shader \
 	bin/data/Shaders/Curvature.OpenGL.shader \
 	bin/data/Shaders/dot_n_bloom.OpenGL.shader \
@@ -87,12 +108,13 @@ shader_DATA = \
 
 bin_PROGRAMS = openxcom
 AM_CFLAGS=-std=c99
-openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) -lGL
+openxcom_LDADD = $(SDL_LIBS) $(YAML_LIBS) $(GL_LIBS)
 openxcom_CXXFLAGS = \
 	$(CXXFLAGS) \
 	$(DEBUG_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(YAML_CFLAGS) \
+	$(GL_CFLAGS) \
 	-DDATADIR=\"$(pkgdatadir)/\"
 openxcom_SOURCES = \
 	src/aresame.h \
@@ -138,14 +160,14 @@ openxcom_SOURCES = \
 	src/Basescape/PlaceLiftState.h \
 	src/Basescape/PlaceStartFacilityState.cpp \
 	src/Basescape/PlaceStartFacilityState.h \
-	src/Basescape/SelectStartFacilityState.cpp \
-	src/Basescape/SelectStartFacilityState.h \
 	src/Basescape/PurchaseState.cpp \
 	src/Basescape/PurchaseState.h \
 	src/Basescape/ResearchInfoState.cpp \
 	src/Basescape/ResearchInfoState.h \
 	src/Basescape/ResearchState.cpp \
 	src/Basescape/ResearchState.h \
+	src/Basescape/SelectStartFacilityState.cpp \
+	src/Basescape/SelectStartFacilityState.h \
 	src/Basescape/SellState.cpp \
 	src/Basescape/SellState.h \
 	src/Basescape/SoldierArmorState.cpp \
@@ -192,6 +214,8 @@ openxcom_SOURCES = \
 	src/Battlescape/BulletSprite.h \
 	src/Battlescape/Camera.cpp \
 	src/Battlescape/Camera.h \
+	src/Battlescape/CannotReequipState.cpp \
+	src/Battlescape/CannotReequipState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
 	src/Battlescape/ExplosionBState.cpp \
@@ -200,12 +224,18 @@ openxcom_SOURCES = \
 	src/Battlescape/Explosion.h \
 	src/Battlescape/InfoboxOKState.cpp \
 	src/Battlescape/InfoboxOKState.h \
+	src/Battlescape/InfoboxState.cpp \
+	src/Battlescape/InfoboxState.h \
 	src/Battlescape/Inventory.cpp \
 	src/Battlescape/Inventory.h \
 	src/Battlescape/InventoryState.cpp \
 	src/Battlescape/InventoryState.h \
 	src/Battlescape/Map.cpp \
 	src/Battlescape/Map.h \
+	src/Battlescape/MedikitState.cpp \
+	src/Battlescape/MedikitState.h \
+	src/Battlescape/MedikitView.cpp \
+	src/Battlescape/MedikitView.h \
 	src/Battlescape/MiniMapState.cpp \
 	src/Battlescape/MiniMapState.h \
 	src/Battlescape/MiniMapView.cpp \
@@ -226,42 +256,34 @@ openxcom_SOURCES = \
 	src/Battlescape/Position.h \
 	src/Battlescape/PrimeGrenadeState.cpp \
 	src/Battlescape/PrimeGrenadeState.h \
+	src/Battlescape/Projectile.cpp \
 	src/Battlescape/ProjectileFlyBState.cpp \
 	src/Battlescape/ProjectileFlyBState.h \
-	src/Battlescape/Projectile.cpp \
 	src/Battlescape/Projectile.h \
 	src/Battlescape/PromotionsState.cpp \
 	src/Battlescape/PromotionsState.h \
+	src/Battlescape/ScannerState.cpp \
+	src/Battlescape/ScannerState.h \
+	src/Battlescape/ScannerView.cpp \
+	src/Battlescape/ScannerView.h \
+	src/Battlescape/TileEngine.cpp \
+	src/Battlescape/TileEngine.h \
+	src/Battlescape/UnitDieBState.cpp \
+	src/Battlescape/UnitDieBState.h \
 	src/Battlescape/UnitFallBState.cpp \
 	src/Battlescape/UnitFallBState.h \
 	src/Battlescape/UnitInfoState.cpp \
 	src/Battlescape/UnitInfoState.h \
+	src/Battlescape/UnitPanicBState.cpp \
+	src/Battlescape/UnitPanicBState.h \
 	src/Battlescape/UnitSprite.cpp \
 	src/Battlescape/UnitSprite.h \
 	src/Battlescape/UnitTurnBState.cpp \
 	src/Battlescape/UnitTurnBState.h \
 	src/Battlescape/UnitWalkBState.cpp \
 	src/Battlescape/UnitWalkBState.h \
-	src/Battlescape/UnitPanicBState.cpp \
-	src/Battlescape/UnitPanicBState.h \
 	src/Battlescape/WarningMessage.cpp \
 	src/Battlescape/WarningMessage.h \
-	src/Battlescape/TileEngine.cpp \
-	src/Battlescape/TileEngine.h \
-	src/Battlescape/UnitDieBState.cpp \
-	src/Battlescape/UnitDieBState.h \
-	src/Battlescape/InfoboxState.cpp \
-	src/Battlescape/InfoboxState.h \
-	src/Battlescape/MedikitView.cpp \
-	src/Battlescape/MedikitView.h \
-	src/Battlescape/MedikitState.cpp \
-	src/Battlescape/MedikitState.h \
-	src/Battlescape/ScannerView.cpp \
-	src/Battlescape/ScannerView.h \
-	src/Battlescape/ScannerState.cpp \
-	src/Battlescape/ScannerState.h \
-	src/Battlescape/CannotReequipState.cpp \
-	src/Battlescape/CannotReequipState.h \
 	src/dirent.h \
 	src/Engine/Action.cpp \
 	src/Engine/Action.h \
@@ -273,6 +295,7 @@ openxcom_SOURCES = \
 	src/Engine/Exception.h \
 	src/Engine/FastLineClip.cpp \
 	src/Engine/FastLineClip.h \
+	src/Engine/FixedFloat.h \
 	src/Engine/Flc.cpp \
 	src/Engine/Flc.h \
 	src/Engine/Font.cpp \
@@ -281,6 +304,7 @@ openxcom_SOURCES = \
 	src/Engine/Game.h \
 	src/Engine/GMCat.cpp \
 	src/Engine/GMCat.h \
+	src/Engine/GraphSubset.h \
 	src/Engine/InteractiveSurface.cpp \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
@@ -298,8 +322,25 @@ openxcom_SOURCES = \
 	src/Engine/Palette.h \
 	src/Engine/RNG.cpp \
 	src/Engine/RNG.h \
+	src/Engine/Scalers/common.h \
+	src/Engine/Scalers/hqx.h \
+	src/Engine/Scalers/hq2x.cpp \
+	src/Engine/Scalers/hq3x.cpp \
+	src/Engine/Scalers/hq4x.cpp \
+	src/Engine/Scalers/init.cpp \
+	src/Engine/Scalers/scalebit.cpp \
+	src/Engine/Scalers/scalebit.h \
+	src/Engine/Scalers/scale2x.cpp \
+	src/Engine/Scalers/scale2x.h \
+	src/Engine/Scalers/scale3x.cpp \
+	src/Engine/Scalers/scale3x.h \
 	src/Engine/Screen.cpp \
 	src/Engine/Screen.h \
+	src/Engine/ShaderDraw.h \
+	src/Engine/ShaderDrawHelper.h \
+	src/Engine/ShaderMove.h \
+	src/Engine/ShaderRepeat.h \
+	src/Engine/ShaderRotate.h \
 	src/Engine/Sound.cpp \
 	src/Engine/Sound.h \
 	src/Engine/SoundSet.cpp \
@@ -314,18 +355,6 @@ openxcom_SOURCES = \
 	src/Engine/Timer.h \
 	src/Engine/Zoom.cpp \
 	src/Engine/Zoom.h \
-	src/Engine/Scalers/scale2x.cpp \
-	src/Engine/Scalers/scale2x.h \
-	src/Engine/Scalers/scale3x.cpp \
-	src/Engine/Scalers/scale3x.h \
-	src/Engine/Scalers/scalebit.cpp \
-	src/Engine/Scalers/scalebit.h \
-	src/Engine/Scalers/common.h \
-	src/Engine/Scalers/hqx.h \
-	src/Engine/Scalers/hq2x.cpp \
-	src/Engine/Scalers/hq3x.cpp \
-	src/Engine/Scalers/hq4x.cpp \
-	src/Engine/Scalers/init.cpp \
 	src/Geoscape/AbandonGameState.cpp \
 	src/Geoscape/AbandonGameState.h \
 	src/Geoscape/AlienBaseState.cpp \
@@ -334,16 +363,14 @@ openxcom_SOURCES = \
 	src/Geoscape/AlienTerrorState.h \
 	src/Geoscape/AllocatePsiTrainingState.cpp \
 	src/Geoscape/AllocatePsiTrainingState.h \
-	src/Geoscape/BaseDestroyedState.cpp \
-	src/Geoscape/BaseDestroyedState.h \
 	src/Geoscape/BaseDefenseState.cpp \
 	src/Geoscape/BaseDefenseState.h \
+	src/Geoscape/BaseDestroyedState.cpp \
+	src/Geoscape/BaseDestroyedState.h \
 	src/Geoscape/BaseNameState.cpp \
 	src/Geoscape/BaseNameState.h \
 	src/Geoscape/BuildNewBaseState.cpp \
 	src/Geoscape/BuildNewBaseState.h \
-	src/Geoscape/CraftErrorState.cpp \
-	src/Geoscape/CraftErrorState.h \
 	src/Geoscape/ConfirmCydoniaState.cpp \
 	src/Geoscape/ConfirmCydoniaState.h \
 	src/Geoscape/ConfirmDestinationState.cpp \
@@ -352,6 +379,9 @@ openxcom_SOURCES = \
 	src/Geoscape/ConfirmLandingState.h \
 	src/Geoscape/ConfirmNewBaseState.cpp \
 	src/Geoscape/ConfirmNewBaseState.h \
+	src/Geoscape/Cord.h \
+	src/Geoscape/CraftErrorState.cpp \
+	src/Geoscape/CraftErrorState.h \
 	src/Geoscape/CraftPatrolState.cpp \
 	src/Geoscape/CraftPatrolState.h \
 	src/Geoscape/DefeatState.cpp \
@@ -362,6 +392,8 @@ openxcom_SOURCES = \
 	src/Geoscape/FundingState.h \
 	src/Geoscape/GeoscapeCraftState.cpp \
 	src/Geoscape/GeoscapeCraftState.h \
+	src/Geoscape/GeoscapeOptionsState.cpp \
+	src/Geoscape/GeoscapeOptionsState.h \
 	src/Geoscape/GeoscapeState.cpp \
 	src/Geoscape/GeoscapeState.h \
 	src/Geoscape/Globe.cpp \
@@ -382,8 +414,6 @@ openxcom_SOURCES = \
 	src/Geoscape/NewPossibleManufactureState.h \
 	src/Geoscape/NewPossibleResearchState.cpp \
 	src/Geoscape/NewPossibleResearchState.h \
-	src/Geoscape/GeoscapeOptionsState.cpp \
-	src/Geoscape/GeoscapeOptionsState.h \
 	src/Geoscape/Polygon.cpp \
 	src/Geoscape/Polygon.h \
 	src/Geoscape/Polyline.cpp \
@@ -418,14 +448,14 @@ openxcom_SOURCES = \
 	src/Interface/NumberText.h \
 	src/Interface/TextButton.cpp \
 	src/Interface/TextButton.h \
-	src/Interface/ToggleTextButton.cpp \
-	src/Interface/ToggleTextButton.h \
 	src/Interface/Text.cpp \
 	src/Interface/TextEdit.cpp \
 	src/Interface/TextEdit.h \
 	src/Interface/Text.h \
 	src/Interface/TextList.cpp \
 	src/Interface/TextList.h \
+	src/Interface/ToggleTextButton.cpp \
+	src/Interface/ToggleTextButton.h \
 	src/Interface/Window.cpp \
 	src/Interface/Window.h \
 	src/lodepng.cpp \
@@ -449,22 +479,31 @@ openxcom_SOURCES = \
 	src/Menu/NewGameState.h \
 	src/Menu/NoteState.cpp \
 	src/Menu/NoteState.h \
-	src/Menu/OptionsState.cpp \
-	src/Menu/OptionsState.h \
 	src/Menu/OptionsControlsState.cpp \
 	src/Menu/OptionsControlsState.h \
-	src/Menu/SaveState.cpp \
-	src/Menu/SaveState.h \
+	src/Menu/OptionsState.cpp \
+	src/Menu/OptionsState.h \
 	src/Menu/SavedGameState.cpp \
 	src/Menu/SavedGameState.h \
+	src/Menu/SaveState.cpp \
+	src/Menu/SaveState.h \
 	src/Menu/StartState.cpp \
 	src/Menu/StartState.h \
 	src/Menu/TestState.cpp \
 	src/Menu/TestState.h \
+	src/pch.cpp \
+	src/pch.h \
+	src/resource.h \
 	src/Resource/ResourcePack.cpp \
 	src/Resource/ResourcePack.h \
 	src/Resource/XcomResourcePack.cpp \
 	src/Resource/XcomResourcePack.h \
+	src/Ruleset/AlienDeployment.cpp \
+	src/Ruleset/AlienDeployment.h \
+	src/Ruleset/AlienRace.cpp \
+	src/Ruleset/AlienRace.h \
+	src/Ruleset/Armor.cpp \
+	src/Ruleset/Armor.h \
 	src/Ruleset/ArticleDefinition.cpp \
 	src/Ruleset/ArticleDefinition.h \
 	src/Ruleset/City.cpp \
@@ -477,14 +516,6 @@ openxcom_SOURCES = \
 	src/Ruleset/MapDataSet.h \
 	src/Ruleset/MCDPatch.cpp \
 	src/Ruleset/MCDPatch.h \
-	src/Ruleset/AlienDeployment.cpp \
-	src/Ruleset/AlienDeployment.h \
-	src/Ruleset/AlienRace.cpp \
-	src/Ruleset/AlienRace.h \
-	src/Ruleset/Armor.cpp \
-	src/Ruleset/Armor.h \
-	src/Ruleset/Unit.cpp \
-	src/Ruleset/Unit.h \
 	src/Ruleset/RuleAlienMission.cpp \
 	src/Ruleset/RuleAlienMission.h \
 	src/Ruleset/RuleBaseFacility.cpp \
@@ -501,10 +532,10 @@ openxcom_SOURCES = \
 	src/Ruleset/RuleItem.h \
 	src/Ruleset/RuleManufacture.cpp \
 	src/Ruleset/RuleManufacture.h \
-	src/Ruleset/RuleResearch.cpp \
-	src/Ruleset/RuleResearch.h \
 	src/Ruleset/RuleRegion.cpp \
 	src/Ruleset/RuleRegion.h \
+	src/Ruleset/RuleResearch.cpp \
+	src/Ruleset/RuleResearch.h \
 	src/Ruleset/Ruleset.cpp \
 	src/Ruleset/Ruleset.h \
 	src/Ruleset/RuleSoldier.cpp \
@@ -517,10 +548,12 @@ openxcom_SOURCES = \
 	src/Ruleset/SoldierNamePool.h \
 	src/Ruleset/UfoTrajectory.cpp \
 	src/Ruleset/UfoTrajectory.h \
-	src/Savegame/AlienMission.cpp \
-	src/Savegame/AlienMission.h \
+	src/Ruleset/Unit.cpp \
+	src/Ruleset/Unit.h \
 	src/Savegame/AlienBase.cpp \
 	src/Savegame/AlienBase.h \
+	src/Savegame/AlienMission.cpp \
+	src/Savegame/AlienMission.h \
 	src/Savegame/AlienStrategy.cpp \
 	src/Savegame/AlienStrategy.h \
 	src/Savegame/Base.cpp \
@@ -559,6 +592,7 @@ openxcom_SOURCES = \
 	src/Savegame/SavedBattleGame.h \
 	src/Savegame/SavedGame.cpp \
 	src/Savegame/SavedGame.h \
+	src/Savegame/SerializationHelper.h \
 	src/Savegame/Soldier.cpp \
 	src/Savegame/Soldier.h \
 	src/Savegame/Target.cpp \
@@ -577,6 +611,8 @@ openxcom_SOURCES = \
 	src/Savegame/Waypoint.h \
 	src/Savegame/WeightedOptions.cpp \
 	src/Savegame/WeightedOptions.h \
+	src/Ufopaedia/ArticleStateArmor.cpp \
+	src/Ufopaedia/ArticleStateArmor.h \
 	src/Ufopaedia/ArticleStateBaseFacility.cpp \
 	src/Ufopaedia/ArticleStateBaseFacility.h \
 	src/Ufopaedia/ArticleState.cpp \
@@ -593,8 +629,6 @@ openxcom_SOURCES = \
 	src/Ufopaedia/ArticleStateTextImage.h \
 	src/Ufopaedia/ArticleStateUfo.cpp \
 	src/Ufopaedia/ArticleStateUfo.h \
-	src/Ufopaedia/ArticleStateArmor.cpp \
-	src/Ufopaedia/ArticleStateArmor.h \
 	src/Ufopaedia/ArticleStateVehicle.cpp \
 	src/Ufopaedia/ArticleStateVehicle.h \
 	src/Ufopaedia/Ufopaedia.cpp \
@@ -605,9 +639,38 @@ openxcom_SOURCES = \
 	src/Ufopaedia/UfopaediaStartState.h \
 	src/version.h
 
-EXTRA_DIST = autogen.sh src/OpenXcom.* \
-	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt cmake/* \
-	$(doc_DATA) $(pkgdata_DATA) $(language_DATA) $(name_DATA)
+EXTRA_DIST = \
+	autogen.sh \
+	docs/openxcom.6.xml \
+	src/OpenXcom.2008.sln \
+	src/OpenXcom.2008.vcproj \
+	src/OpenXcom.2008.vcproj.user \
+	src/OpenXcom.2010.sln \
+	src/OpenXcom.2010.vcxproj \
+	src/OpenXcom.2010.vcxproj.filters \
+	src/OpenXcom.2010.vcxproj.user \
+	src/CMakeLists.txt docs/CMakeLists.txt CMakeLists.txt \
+	cmake/modules/apple.cmake \
+	cmake/modules/deb.cmake \
+	cmake/modules/FindSDL_gfx.cmake \
+	cmake/modules/FindSDL2.cmake \
+	cmake/modules/FindYaml_cpp.cmake \
+	cmake/modules/nsis.cmake \
+	cmake/modules/NSIS.template.in \
+	cmake/modules/rpm.cmake \
+	res/mac/openxcom.icns \
+	res/linux/icons/openxcom_128x128.png \
+	res/linux/icons/openxcom.svg \
+	res/linux/icons/openxcom_48x48.png \
+	res/windows/openxcom.ico \
+	$(doc_DATA) \
+	$(pkgdata_DATA) \
+	$(language_DATA) \
+	$(name_DATA) \
+	$(ruleset_DATA) \
+	$(shader_DATA) \
+	$(desktop_DATA) \
+	$(icon_DATA)
 
 dist-hook:
 	@if test -d "$(srcdir)/.git"; \

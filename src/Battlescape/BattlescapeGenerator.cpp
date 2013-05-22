@@ -273,80 +273,20 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	// find out the terrain type
-	if (_save->getMissionType() == "STR_TERROR_MISSION")
+	if (ruleDeploy->getTerrain().empty())
 	{
-		_terrain = _game->getRuleset()->getTerrain("URBAN");
-	}
-	else
-	if (_save->getMissionType() == "STR_BASE_DEFENSE")
-	{
-		_terrain = _game->getRuleset()->getTerrain("XBASE");
-		_worldShade = 5;
-	}
-	else
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_terrain = _game->getRuleset()->getTerrain("UBASE");
-		_worldShade = 15;
-	}
-	else
-	if (_save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
-	{
-		_terrain = _game->getRuleset()->getTerrain("MARS");
-		_worldShade = 15;
+		double lat = 0;
+		if (_ufo) lat = _ufo->getLatitude();
+		_terrain = getTerrain(_worldTexture, lat); 
 	}
 	else
 	{
-		switch (_worldTexture)
-		{
-		case 0:
-		case 6:
-		case 10:
-		case 11:
-			{
-				if (_ufo != 0)
-				{
-					if (_ufo->getLatitude() < 0)
-					{ // northern hemisphere
-						_terrain = _game->getRuleset()->getTerrain("FOREST");
-					}else
-					{ // southern hemisphere
-						_terrain = _game->getRuleset()->getTerrain("JUNGLE");
-					}
-				}
-				else
-				{
-					_terrain = _game->getRuleset()->getTerrain("FOREST");
-				}
-				break;
-			}
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-			{
-				_terrain = _game->getRuleset()->getTerrain("CULTA");
-				break;
-			}
-		case 5:
-			{
-				_terrain = _game->getRuleset()->getTerrain("MOUNT");
-				break;
-			}
-		case 7:
-		case 8:
-			{
-				_terrain = _game->getRuleset()->getTerrain("DESERT");
-				break;
-			}
-		case 9:
-		case 12:
-			{
-				_terrain = _game->getRuleset()->getTerrain("POLAR");
-				break;
-			}
-		}
+		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
+	}
+
+	if (ruleDeploy->getShade() != -1)
+	{
+		_worldShade = ruleDeploy->getShade();
 	}
 
 	// creates the tile objects
@@ -1798,6 +1738,31 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 		return true;
 	}
 	return false;
+}
+
+
+/**
+ * Get battlescape terrain using globe texture and latitude.
+ * @return Pointer to ruleterrain.
+ */
+RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
+{
+	RuleTerrain *t =  0;
+	const std::vector<std::string> &terrains = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator i = terrains.begin(); i != terrains.end(); ++i)
+	{
+		t =  _game->getRuleset()->getTerrain(*i);
+		for (std::vector<int>::iterator j = t->getTextures()->begin(); j != t->getTextures()->end(); ++j )
+		{
+			if (*j == tex && (t->getHemisphere() == 0 || (t->getHemisphere() < 0 && lat < 0) || (t->getHemisphere() > 0 && lat >= 0)))
+			{
+				return t;
+			}
+		}
+	}
+
+	assert(0 && "No matching terrain for globe texture");
+	return t;
 }
 
 }

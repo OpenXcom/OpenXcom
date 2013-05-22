@@ -988,7 +988,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param tu Number of time units to check.
  * @return bool Whether or not we got enough time units.
  */
-bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
+bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
@@ -1014,12 +1014,15 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
-		switch (effectiveTuReserved)
+		if (!justChecking)
 		{
-		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-		case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-		default: ;
+			switch (effectiveTuReserved)
+			{
+			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+			default: ;
+			}
 		}
 		return false;
 	}
@@ -1475,7 +1478,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 		item->setOwner(0);
 	}
 
-	getTileEngine()->applyItemGravity(_save->getTile(p));
+	getTileEngine()->applyGravity(_save->getTile(p));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
@@ -1489,6 +1492,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
  */
 BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 {
+	getSave()->getBattleState()->showPsiButton(false);
 	// in case the unit was unconscious
 	getSave()->removeUnconsciousBodyItem(unit);
 
@@ -1554,7 +1558,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
-	getTileEngine()->applyItemGravity(newUnit->getTile());
+	getTileEngine()->applyGravity(newUnit->getTile());
 	return newUnit;
 
 }

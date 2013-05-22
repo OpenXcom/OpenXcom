@@ -145,25 +145,11 @@ void UnitWalkBState::think()
 						Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
 						if (otherTileBelow && otherTileBelow->getUnit())
 						{
-							Position originalPosition(otherTileBelow->getUnit()->getPosition());
-							for (int dir = 0; dir < Pathfinding::DIR_UP; dir++)
-							{
-								Position offset;
-								Pathfinding::directionToVector(dir, &offset);
-								Tile *t = _parent->getSave()->getTile(originalPosition + offset);
-								Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
-								Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
-								if (t && !_parent->getPathfinding()->isBlocked(otherTileBelow, t, dir, 0) && t->getUnit() == 0 && (!t->hasNoFloor(bt) || otherTileBelow->getUnit()->getArmor()->getMovementType() == MT_FLY))
-								{
-									_falling = false;
-									_pf->dequeuePath();
-									otherTileBelow->getUnit()->startWalking(dir, t->getPosition(), bu, onScreen);
-									_parent->getSave()->addFallingUnit(otherTileBelow->getUnit());
-									_parent->getSave()->addFallingUnit(_unit);
-									_parent->statePushFront(new UnitFallBState(_parent));
-									return;
-								}
-							}
+							_falling = false;
+							_pf->dequeuePath();
+							_parent->getSave()->addFallingUnit(_unit);
+							_parent->statePushFront(new UnitFallBState(_parent));
+							return;
 						}
 					}
 				}
@@ -181,7 +167,9 @@ void UnitWalkBState::think()
 			// if the unit burns floortiles, burn floortiles
 			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 			{
-				_unit->getTile()->destroy(MapData::O_FLOOR);
+				_unit->getTile()->ignite();
+				Position here = (_unit->getPosition() * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
+				_parent->getTileEngine()->hit(here, _unit->getStats()->strength, DT_IN, _unit);
 			}
 
 			// move our personal lighting with us

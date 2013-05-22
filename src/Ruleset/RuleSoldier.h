@@ -34,7 +34,7 @@ class RuleSoldier
 {
 private:
 	std::string _type;
-	UnitStats _minStats, _maxStats;
+	UnitStats _minStats, _maxStats, _statCaps;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _floatHeight;
 public:
@@ -52,6 +52,8 @@ public:
 	UnitStats getMinStats() const;
 	/// Get the maximum stats for the random stats generator.
 	UnitStats getMaxStats() const;
+	/// Get the stat caps.
+	UnitStats getStatCaps() const;
 	/// Get the height of the soldier when it's standing.
 	int getStandHeight() const;
 	/// Get the height of the soldier when it's kneeling.

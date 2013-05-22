@@ -89,7 +89,7 @@ protected:
 	std::auto_ptr<YAML::Node> _startingBase;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 
 	/// Loads a ruleset from a YAML file.
@@ -137,6 +137,8 @@ public:
 	RuleUfo *getUfo(const std::string &id) const;
 	/// Gets the available UFOs.
 	const std::vector<std::string> &getUfosList() const;
+	/// Gets the available terrains.
+	const std::vector<std::string> &getTerrainList() const;
 	/// Gets terrains for battlescape games.
 	RuleTerrain *getTerrain(const std::string &name) const;
 	/// Gets mapdatafile for battlescape games.

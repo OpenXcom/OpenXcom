@@ -1067,7 +1067,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			}
 		}
 	}
-	applyItemGravity(tile);
+	applyGravity(tile);
 	calculateSunShading(); // roofs could have been destroyed
 	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
@@ -1251,7 +1251,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		{
 			if (detonate(*i))
 				_save->setObjectiveDestroyed(true);
-			applyItemGravity(*i);
+			applyGravity(*i);
+			Tile *j = _save->getTile((*i)->getPosition() + Position(0,0,1));
+			if (j)
+				applyGravity(j);
 		}
 	}
 
@@ -1305,10 +1308,10 @@ bool TileEngine::detonate(Tile* tile)
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
 				int remainingPower = explosive;
-				while (remainingPower > 0 && tiles[i]->getMapData(parts[i]))
+				while (remainingPower >= 0 && tiles[i]->getMapData(parts[i]))
 				{
 					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
-					if (remainingPower > 0)
+					if (remainingPower >= 0)
 					{
 						int height = getVoxelHeight(tiles[i]->getMapData(parts[i]));
 						if (i > 3) tiles[i]->addSmoke(RNG::generate((height/2), (height/2)+1)); //only current tile produces smoke[2]
@@ -1566,8 +1569,35 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type)
 	int blockage = 0;
 
 	if (tile == 0) return 0; // probably outside the map here
-
-	if (tile->getMapData(part))
+	bool gotPart = tile->getMapData(part);
+	if (!gotPart && part == MapData::O_WESTWALL)
+	{
+		if (tile->getMapData(MapData::O_OBJECT) &&
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLWEST)
+			blockage += tile->getMapData(MapData::O_OBJECT)->getBlock(type);
+		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+		if (tileWest->getMapData(MapData::O_OBJECT) &&
+			(tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLEAST ||
+			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLEASTANDSOUTH))
+			blockage += tileWest->getMapData(MapData::O_OBJECT)->getBlock(type);
+	}
+	if (!gotPart && part == MapData::O_NORTHWALL)
+	{
+		if (tile->getMapData(MapData::O_OBJECT) &&
+			tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLNORTH)
+			blockage += tile->getMapData(MapData::O_OBJECT)->getBlock(type);
+		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (tileNorth->getMapData(MapData::O_OBJECT) &&
+			(tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLSOUTH ||
+			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALLEASTANDSOUTH))
+			blockage += tileNorth->getMapData(MapData::O_OBJECT)->getBlock(type);
+	}
+	if (gotPart && part == MapData::O_OBJECT)
+	{
+		if (tile->getMapData(MapData::O_OBJECT)->getBigWall() <= Pathfinding::BIGWALLNWSE)
+			blockage += tile->getMapData(MapData::O_OBJECT)->getBlock(type);
+	}
+	else if (gotPart)
 	{
 		blockage += tile->getMapData(part)->getBlock(type);
 	}
@@ -2208,11 +2238,11 @@ bool TileEngine::psiAttack(BattleAction *action)
 }
 
 /**
- * Apply gravity to a tile. Causes items to drop.
+ * Apply gravity to a tile. Causes items and units to drop.
  * @param t Tile
  * @return Tile where the items end up in eventually.
  */
-Tile *TileEngine::applyItemGravity(Tile *t)
+Tile *TileEngine::applyGravity(Tile *t)
 {
 	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
  
@@ -2441,7 +2471,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 	while (!foundCurve && curvature < 5.0)
 	{
 		calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
-		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16)
+		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}
@@ -2455,6 +2485,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 	{
 		return false;
 	}
+
 	return ProjectileFlyBState::validThrowRange(action);
 }
 

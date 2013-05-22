@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SurfaceSet.h"
+#include <SDL_endian.h>
 #include <fstream>
 #include "Surface.h"
 #include "Exception.h"
@@ -84,9 +85,9 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	else
 	{
 		Uint16 off;
-
 		while (offsetFile.read((char*)&off, sizeof(off)))
 		{
+			off = SDL_SwapLE16(off);
 			Surface *surface = new Surface(_width, _height);
 			_frames.push_back(surface);
 			nframes++;

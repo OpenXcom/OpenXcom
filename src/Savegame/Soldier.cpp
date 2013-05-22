@@ -53,7 +53,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 		_initialStats.strength = RNG::generate(minStats.strength, maxStats.strength);
 		_initialStats.psiStrength = RNG::generate(minStats.psiStrength, maxStats.psiStrength);
 		_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
-		_initialStats.psiSkill = 0;
+		_initialStats.psiSkill = minStats.psiSkill;
 
 		_currentStats = _initialStats;	
 
@@ -450,13 +450,16 @@ void Soldier::trainPsi()
 	_improvement = 0;
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
-	if (_currentStats.psiSkill < -10)
-		_currentStats.psiSkill = 0;
-	else if(_currentStats.psiSkill <= _rules->getMinStats().psiSkill)
-		_improvement = RNG::generate(_rules->getMinStats().psiSkill, _rules->getMaxStats().psiSkill);
-	else if(_currentStats.psiSkill <= 50)
+	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
+		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	{
+		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
+		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
+	}
+	else if(_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
 		_improvement = RNG::generate(5, 12);
-	else if(_currentStats.psiSkill < 100)
+	else if(_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 		_improvement = RNG::generate(1, 3);
 	_currentStats.psiSkill += _improvement;
 	if(_currentStats.psiSkill > 100)
@@ -474,21 +477,21 @@ void Soldier::trainPsi1Day()
 		return;
 	}
 
-	if (_currentStats.psiSkill > 0)
+	if (_currentStats.psiSkill > _rules->getMinStats().psiSkill)
 	{
-		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100) && _currentStats.psiSkill < 100)
+		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100) && _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 		{
 			++_currentStats.psiSkill;
 			++_improvement;
 		}
 	}
-	else if (_currentStats.psiSkill < 0)
+	else if (_currentStats.psiSkill < _rules->getMinStats().psiSkill)
 	{
-		if (++_currentStats.psiSkill == 0)	// initial training is over
-			_currentStats.psiSkill = RNG::generate(_rules->getMinStats().psiSkill, _rules->getMaxStats().psiSkill);
+		if (++_currentStats.psiSkill == _rules->getMinStats().psiSkill)	// initial training is over
+			_currentStats.psiSkill = _rules->getMaxStats().psiSkill + RNG::generate(0, _rules->getMaxStats().psiSkill / 2);
 	}
-	else // if (_currentStats.psiSkill == 0)
-		_currentStats.psiSkill = RNG::generate(-60, -30);	// set initial training from 30 to 60 days
+	else // if (_currentStats.psiSkill == _rules->getMinStats().psiSkill)
+		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
 }
 
 /**

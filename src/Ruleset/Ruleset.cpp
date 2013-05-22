@@ -380,6 +380,7 @@ void Ruleset::loadFile(const std::string &filename)
 				{
 					rule = new RuleTerrain(type);
 					_terrains[type] = rule;
+					_terrainIndex.push_back(type);
 				}
 				rule->load(*j, this);
 			}
@@ -1054,6 +1055,16 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
 const std::vector<std::string> &Ruleset::getUfosList() const
 {
 	return _ufosIndex;
+}
+
+/**
+ * Returns the list of all terrains
+ * provided by the ruleset.
+ * @return List of terrains.
+ */
+const std::vector<std::string> &Ruleset::getTerrainList() const
+{
+	return _terrainIndex;
 }
 
 /**

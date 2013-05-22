@@ -114,7 +114,7 @@ public:
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.
-	bool checkReservedTU(BattleUnit *bu, int tu);
+	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
 	/// Add item & affect with gravity.

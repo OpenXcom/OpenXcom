@@ -102,8 +102,8 @@ public:
 	bool inTeamFOV(const Position &pos, UnitFaction team);
 	/// attempt a panic or mind control action
 	bool psiAttack(BattleAction *action);
-	/// apply gravity to items (and units) that occupy this tile.
-	Tile *applyItemGravity(Tile *t);
+	/// apply gravity to anything that occupy this tile.
+	Tile *applyGravity(Tile *t);
 	/// return melee validity between two units
 	bool validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir);
 	/// return validity of a melee attack from a given position

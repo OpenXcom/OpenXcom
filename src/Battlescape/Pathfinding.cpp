@@ -27,6 +27,8 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Engine/Game.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -763,8 +765,15 @@ bool Pathfinding::previewPath(bool bRemove)
 	Position pos = _unit->getPosition();
 	Position destination;
 	int tus = _unit->getTimeUnits();
+	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
- 
+	int total = 0;
+	bool switchBack = false;
+	if (_save->getBattleState()->getBattleGame()->getReservedAction() == BA_NONE)
+	{
+		switchBack = true;
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT);
+	}
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
@@ -773,8 +782,10 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			tu *= 0.75;
 		}
-
+		energy -= tu / 2;
 		tus -= tu;
+		total += tu;
+		bool reserve = _save->getBattleState()->getBattleGame()->checkReservedTU(_unit, total, true);
 		pos = destination;
 		for (int x = size; x >= 0; x--)
 		{
@@ -784,11 +795,15 @@ bool Pathfinding::previewPath(bool bRemove)
 				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
 				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
 				{
-					tileBelow->setMarkerColor(bRemove?0:(tus>=0?4:3));
+					tileBelow->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 				}
-				tile->setMarkerColor(bRemove?0:(tus>=0?4:3));
+				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}
 		}
+	}
+	if (switchBack)
+	{
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
 	}
 	return true;
 }

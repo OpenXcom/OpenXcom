@@ -74,11 +74,36 @@ AS_IF([test "x$with_docs" != "xno"], [
 ], [build_docs=no])
 AM_CONDITIONAL([WITH_OPENXCOM_DOCS], [test "x$build_docs" != "xno"])
 
+# =============
+# Documentation
+# =============
+AC_ARG_WITH(man,
+	[AS_HELP_STRING([--without-man], [Do not build manpage])],
+	[with_man="$withval"],
+	[with_man=yes]
+)
+
+AS_IF([test "x$with_man" != "xno"], [
+	build_man=yes
+	AS_IF([test -z "$DOCBOOK2MAN"], [
+		AC_PATH_PROG(DOCBOOK2MAN,[docbook-to-man])
+		AS_IF([test -z "$DOCBOOK2MAN"], [
+			AC_PATH_PROG(DOCBOOK2MAN,[docbook2man.pl])
+			AS_IF([test -z "$DOCBOOK2MAN"], [
+				AC_MSG_ERROR([docbook-to-man is missing. Install docbook2X package.])
+			])
+		])
+	])
+], [build_man=no])
+AC_SUBST(DOCBOOK2MAN)
+AM_CONDITIONAL([WITH_OPENXCOM_MAN], [test "x$build_man" != "xno"])
+
 # ==================
 # Check dependencies
 # ==================
 PKG_CHECK_MODULES([SDL],[sdl >= 1.2.13 SDL_mixer >= 1.2.11 SDL_gfx >= 2.0.22 SDL_image >= 1.2])
 PKG_CHECK_MODULES([YAML],[yaml-cpp <= 0.3.0])
+AX_CHECK_GL
 
 AC_CONFIG_FILES([
 	Makefile
@@ -95,6 +120,7 @@ AC_MSG_NOTICE([
 Build configuration:
 	debug:	${enable_debug}
 	docs:	${build_docs}
+	man:    ${build_man}
 	werror:	${enable_werror}
 ==============================================================================
 ])
