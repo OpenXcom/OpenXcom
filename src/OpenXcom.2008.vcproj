@@ -2275,6 +2275,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\ExtraSprites.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraSprites.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\MapBlock.cpp"
 				>
 			</File>

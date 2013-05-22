@@ -43,10 +43,10 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
 {
 	_width = other._width;
 	_height = other._height;
-
-	for (unsigned int f = 0; f < other._frames.size(); f++)
+	
+	for (std::map<int, Surface*>::const_iterator f = other._frames.begin(); f != other._frames.end(); ++f)
 	{
-		_frames.push_back(new Surface(*other._frames[f]));
+		_frames[f->first] = new Surface(*f->second);
 	}
 }
 
@@ -55,9 +55,9 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
  */
 SurfaceSet::~SurfaceSet()
 {
-	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
+	for (std::map<int, Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
 	{
-		delete *i;
+		delete (*i).second;
 	}
 }
 
@@ -80,7 +80,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 	{
 		nframes = 1;
 		Surface *surface = new Surface(_width, _height);
-		_frames.push_back(surface);
+		_frames[0] = surface;
 	}
 	else
 	{
@@ -89,7 +89,7 @@ void SurfaceSet::loadPck(const std::string &pck, const std::string &tab)
 		{
 			off = SDL_SwapLE16(off);
 			Surface *surface = new Surface(_width, _height);
-			_frames.push_back(surface);
+			_frames[nframes] = surface;
 			nframes++;
 		}
 	}
@@ -171,7 +171,7 @@ void SurfaceSet::loadDat(const std::string &filename)
 	for (int i = 0; i < nframes; ++i)
 	{
 		Surface *surface = new Surface(_width, _height);
-		_frames.push_back(surface);
+		_frames[i] = surface;
 	}
 
 	Uint8 value;
@@ -208,8 +208,13 @@ void SurfaceSet::loadDat(const std::string &filename)
  * @param i Frame number in the set.
  * @return Pointer to the respective surface.
  */
-Surface *SurfaceSet::getFrame(int i) const
+Surface *SurfaceSet::getFrame(int i)
 {
+	if (!_frames[i])
+	{
+		_frames[i] = new Surface(_width, _height);;
+	}
+
 	return _frames[i];
 }
 
@@ -249,9 +254,9 @@ int SurfaceSet::getTotalFrames() const
  */
 void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
-	for (std::vector<Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
+	for (std::map<int, Surface*>::iterator i = _frames.begin(); i != _frames.end(); ++i)
 	{
-		(*i)->setPalette(colors, firstcolor, ncolors);
+		(*i).second->setPalette(colors, firstcolor, ncolors);
 	}
 }
 

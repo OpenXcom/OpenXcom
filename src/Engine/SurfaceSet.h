@@ -38,7 +38,7 @@ class SurfaceSet
 {
 private:
 	int _width, _height;
-	std::vector<Surface*> _frames;
+	std::map<int, Surface*> _frames;
 public:
 	/// Crates a surface set with frames of the specified size.
 	SurfaceSet(int width, int height);
@@ -51,7 +51,7 @@ public:
 	/// Loads an X-Com DAT image file.
 	void loadDat(const std::string &filename);
 	/// Gets a particular frame from the set.
-	Surface *getFrame(int i) const;
+	Surface *getFrame(int i);
 	/// Gets the width of all frames.
 	int getWidth() const;
 	/// Gets the height of all frames.

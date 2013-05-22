@@ -16,27 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_XCOMRESOURCEPACK_H
-#define OPENXCOM_XCOMRESOURCEPACK_H
+#ifndef OPENXCOM_EXTRASPRITES_H
+#define OPENXCOM_EXTRASPRITES_H
 
-#include "ResourcePack.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
-class ExtraSprites;
 
-/**
- * Resource pack for the X-Com: UFO Defense game.
- */
-class XcomResourcePack : public ResourcePack
+class ExtraSprites
 {
+private:
+	std::map<int, std::string> _sprites;
+	int _width, _height;
 public:
-	/// Creates the X-Com ruleset.
-	XcomResourcePack(std::map<std::string, ExtraSprites *> extraSprites);
-	/// Cleans up the X-Com ruleset.
-	~XcomResourcePack();
-	/// Loads battlescape specific resources
-	void loadBattlescapeResources();
+	ExtraSprites();
+	virtual ~ExtraSprites();
+	void load(const YAML::Node &node);
+	std::map<int, std::string> *getSprites();
+	int getWidth();
+	int getHeight();
 };
 
 }

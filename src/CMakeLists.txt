@@ -428,6 +428,8 @@ set ( ruleset_src
   Ruleset/ArticleDefinition.h
   Ruleset/City.cpp
   Ruleset/City.h
+  Ruleset/ExtraSprites.cpp
+  Ruleset/ExtraSprites.h
   Ruleset/RuleTerrain.cpp
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp

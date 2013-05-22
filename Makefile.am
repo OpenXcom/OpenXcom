@@ -508,6 +508,8 @@ openxcom_SOURCES = \
 	src/Ruleset/ArticleDefinition.h \
 	src/Ruleset/City.cpp \
 	src/Ruleset/City.h \
+	src/Ruleset/ExtraSprites.cpp \
+	src/Ruleset/ExtraSprites.h \
 	src/Ruleset/MapBlock.cpp \
 	src/Ruleset/MapBlock.h \
 	src/Ruleset/MapData.cpp \
