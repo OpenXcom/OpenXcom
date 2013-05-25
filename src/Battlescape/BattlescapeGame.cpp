@@ -404,6 +404,11 @@ void BattlescapeGame::endTurn()
 	_debugPlay = false;
 	_currentAction.type = BA_NONE;
 
+	if (_save->getTileEngine()->closeUfoDoors())
+	{
+		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
+	}
+
 	// check for hot grenades on the ground
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
@@ -432,11 +437,6 @@ void BattlescapeGame::endTurn()
 		t = _save->getTileEngine()->checkForTerrainExplosions();
 		statePushBack(0);
 		return;
-	}
-
-	if (_save->getTileEngine()->closeUfoDoors())
-	{
-		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 	}
 
 	_save->endTurn();
