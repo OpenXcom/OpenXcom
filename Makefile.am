@@ -517,6 +517,8 @@ openxcom_SOURCES = \
 	src/Ruleset/City.h \
 	src/Ruleset/ExtraSprites.cpp \
 	src/Ruleset/ExtraSprites.h \
+	src/Ruleset/ExtraStrings.cpp \
+	src/Ruleset/ExtraStrings.h \
 	src/Ruleset/MapBlock.cpp \
 	src/Ruleset/MapBlock.h \
 	src/Ruleset/MapData.cpp \

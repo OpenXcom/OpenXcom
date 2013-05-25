@@ -9339,3 +9339,24 @@ extraSprites:
 #      0: Resources/Bunny/Bunny00.png
 #      1: Resources/Bunny/Bunny01.bmp
 #      2: Resources/Bunny/Bunny02.gif
+#
+#Extra strings:
+# type must correspond to the filename of the language you want to add to
+# the rest should be fairly straight forward
+#extraStrings:
+#  - type: English
+#    strings:
+#      STR_SNIPER_RIFLE: Sniper Rifle
+#      STR_SNIPER_RIFLE_CLIP: Sniper Rifle Clip
+#  - type: EnglishUk
+#    strings:
+#      STR_SNIPER_RIFLE: Sniper Rifle
+#      STR_SNIPER_RIFLE_CLIP: Sniper Rifle Clip
+#  - type: German
+#    strings:
+#      STR_SNIPER_RIFLE: Scharfschützengewehr
+#      STR_SNIPER_RIFLE_CLIP: Scharfschützengewehrmunition
+#  - type: Russian
+#    strings:
+#      STR_SNIPER_RIFLE: Снайперская винтовка
+#      STR_SNIPER_RIFLE_CLIP: Магазин к снайп. винтовке

@@ -769,6 +769,9 @@
     <ClCompile Include="Ruleset\ExtraSprites.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Ruleset\ExtraStrings.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1561,6 +1564,9 @@
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\ExtraSprites.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\ExtraStrings.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
   </ItemGroup>
