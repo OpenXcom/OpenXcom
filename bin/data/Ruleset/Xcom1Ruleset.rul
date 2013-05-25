@@ -1435,7 +1435,7 @@ items:
     floorSprite: 0
     handSprite: 0
     bulletSprite: 8
-    fireSound: 11
+    fireSound: 18
     hitSound: 19
     power: 110
     damageType: 5
@@ -2638,7 +2638,7 @@ items:
     bigSprite: 40
     floorSprite: 31
     handSprite: 104
-    fireSound: 11
+    fireSound: 18
     hitSound: 19
     hitAnimation: 46
     power: 100
