@@ -557,7 +557,11 @@ void Language::loadLng(const std::string &filename, ExtraStrings *extras)
 	{
 		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
 		{
-			_strings[i->first] = utf8ToWstr(i->second);
+			std::string s = i->second;
+			replace(s, "{NEWLINE}", "\n");
+			replace(s, "{SMALLLINE}", "\x02");
+			replace(s, "{ALT}", "\x01");
+			_strings[i->first] = utf8ToWstr(s);
 		}
 	}
 	txtFile.close();
