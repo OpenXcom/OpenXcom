@@ -428,7 +428,14 @@ void NewBattleState::btnOkClick(Action *)
 	ss << std::dec << _darkness[_selDarkness];
 	ss >> std::dec >> shade;
 	bgen.setWorldShade(shade);
-	bgen.setAlienRace(_alienRaces[_selAlien]);
+	if (_missionTypes[_selMission] == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		bgen.setAlienRace("STR_MIXED");
+	}
+	else
+	{
+		bgen.setAlienRace(_alienRaces[_selAlien]);
+	}
 	bgen.setAlienItemlevel(_selItemLevel);
 
 	bgen.run();
@@ -550,10 +557,18 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		updateIndex(_selAlien, _alienRaces, 1);
+		if (_alienRaces[_selAlien] == "STR_MIXED")
+		{
+			updateIndex(_selAlien, _alienRaces, 1);
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		updateIndex(_selAlien, _alienRaces, -1);
+		if (_alienRaces[_selAlien] == "STR_MIXED")
+		{
+			updateIndex(_selAlien, _alienRaces, -1);
+		}
 	}
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
 	Options::setInt("NewBattleAlienRace", _selAlien);
