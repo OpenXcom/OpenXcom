@@ -37,6 +37,7 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset//RuleTerrain.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
@@ -134,12 +135,15 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
-	_terrainTypes.push_back("STR_FARM");
-	_terrainTypes.push_back("STR_FOREST");
-	_terrainTypes.push_back("STR_JUNGLE");
-	_terrainTypes.push_back("STR_MOUNTAIN");
-	_terrainTypes.push_back("STR_DESERT");
-	_terrainTypes.push_back("STR_POLAR");
+	const std::vector<std::string> &terrainTypes = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator i = terrainTypes.begin(); i != terrainTypes.end(); ++i)
+	{
+		if (_game->getRuleset()->getTerrain(*i)->getTextures()->size())
+		{
+			_terrainTypes.push_back(*i);
+			_textures.push_back(_game->getRuleset()->getTerrain(*i)->getTextures()->at(0));
+		}
+	}
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
 
@@ -374,8 +378,7 @@ void NewBattleState::btnOkClick(Action *)
 	bgame->setMissionType(_missionTypes[_selMission]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	int textures[] = {1, 0, 0, 5, 7, 9};
-	bgen.setWorldTexture(textures[_selTerrain]);
+	bgen.setWorldTexture(_textures[_selTerrain]);
 
 	if (_missionTypes[_selMission] == "STR_TERROR_MISSION")
 	{
@@ -408,7 +411,7 @@ void NewBattleState::btnOkClick(Action *)
 		_craft->setDestination(u);
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
-		if (_terrainTypes[_selTerrain] == "STR_FOREST")
+		if (_terrainTypes[_selTerrain] == "FOREST")
 		{
 			u->setLatitude(-0.5);
 		}

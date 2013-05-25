@@ -105,7 +105,6 @@ void BattlescapeGenerator::setUfo(Ufo *ufo)
  */
 void BattlescapeGenerator::setWorldTexture(int texture)
 {
-	if (texture > 12) texture = 12;
 	if (texture < 0) texture = 0;
 	_worldTexture = texture;
 }
