@@ -65,6 +65,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
@@ -1599,11 +1600,12 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	if (_save->getNextStage() != "" && inExitArea)
+	std::string nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+	if (nextStage != "" && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
-		_save->setMissionType(_save->getNextStage());
+		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setAlienRace("STR_MIXED");
 		bgen.nextStage();

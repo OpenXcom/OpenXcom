@@ -61,6 +61,7 @@ private:
 	std::vector<int> _roadTypeOdds;
 	std::string _terrain;
 	int _shade;
+	std::string _nextStage;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -82,6 +83,8 @@ public:
 	std::string getTerrain() const;
 	/// Gets the shade level for battlescape generation.
 	int getShade() const;
+	/// Gets the next stage of the mission.
+	std::string getNextStage() const;
 
 };
 

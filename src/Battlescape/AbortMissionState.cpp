@@ -33,6 +33,8 @@
 #include "../Interface/FpsCounter.h"
 #include "BattlescapeState.h"
 #include "../Engine/Options.h"
+#include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/Ruleset.h"
 
 namespace OpenXcom
 {
@@ -61,12 +63,14 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	add(_btnOk);
 	add(_btnCancel);
 
+	std::string nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
+
 	// Calculate values
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
-			if ((_battleGame->getNextStage() != "" && (*i)->isInExitArea(END_POINT)) || ((*i)->isInExitArea() && _battleGame->getNextStage() == ""))
+			if ((nextStage != "" && (*i)->isInExitArea(END_POINT)) || ((*i)->isInExitArea() && nextStage == ""))
 			{
 				_inExitArea++;
 			}

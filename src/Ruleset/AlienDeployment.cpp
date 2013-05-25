@@ -83,7 +83,7 @@ YAML::Emitter& operator << (YAML::Emitter& out, const DeploymentData& s)
  * type of deployment data.
  * @param type String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _terrain(""), _shade(-1)
+AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _terrain(""), _shade(-1), _nextStage("")
 {
 }
 
@@ -140,6 +140,10 @@ void AlienDeployment::load(const YAML::Node &node)
 		{
 			i.second() >> _shade;
 		}
+		else if (key == "nextStage")
+		{
+			i.second() >> _nextStage;
+		}
 	}
 }
 
@@ -159,6 +163,7 @@ void AlienDeployment::save(YAML::Emitter &out) const
 	out << YAML::Key << "roadTypeOdds" << YAML::Value << _roadTypeOdds;
 	out << YAML::Key << "terrain" << YAML::Value << _terrain;
 	out << YAML::Key << "shade" << YAML::Value << _shade;
+	out << YAML::Key << "nextStage" << YAML::Value << _nextStage;
 	out << YAML::EndMap;
 }
 
@@ -206,6 +211,11 @@ std::string AlienDeployment::getTerrain() const
 int AlienDeployment::getShade() const
 {
 	return _shade;
+}
+/// Gets the next stage of the mission.
+std::string AlienDeployment::getNextStage() const
+{
+	return _nextStage;
 }
 
 }

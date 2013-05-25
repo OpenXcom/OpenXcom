@@ -99,8 +99,6 @@ public:
 	void setMissionType(const std::string &missionType);
 	/// Get the mission type.
 	std::string getMissionType() const;
-	/// Get the next mission type.
-	std::string getNextStage() const;
 	/// Set the global shade.
 	void setGlobalShade(int shade);
 	/// Get the global shade.

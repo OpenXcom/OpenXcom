@@ -191,11 +191,8 @@ void BattlescapeGenerator::nextStage()
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
-	if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		_terrain = _game->getRuleset()->getTerrain("UBASE");
-		_worldShade = 15;
-	}
+	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
+	_worldShade = ruleDeploy->getShade();
 
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	generateMap();

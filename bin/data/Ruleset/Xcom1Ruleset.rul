@@ -2248,7 +2248,7 @@ items:
     weight: 5
     bigSprite: 29
     floorSprite: 28
-    hitSound: 37	
+    hitSound: 37    
     battleType: 8
     invWidth: 2
     invHeight: 2
@@ -4713,7 +4713,7 @@ units:
     kneelHeight: 16
     value: 20
     deathSound: 23
-    moveSound: 14	
+    moveSound: 14    
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -5851,7 +5851,7 @@ alienDeployments:
           -
             []
           -
-            []			
+            []            
       - alienRank: 7
         lowQty: 0
         highQty: 2
@@ -6468,6 +6468,7 @@ alienDeployments:
     height: 4
     terrain: MARS
     shade: 15
+    nextStage: STR_MARS_THE_FINAL_ASSAULT
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0
