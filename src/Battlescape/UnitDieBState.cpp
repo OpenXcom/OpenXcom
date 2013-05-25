@@ -192,7 +192,7 @@ void UnitDieBState::think()
 
 		if (liveAliens == 0 || liveSoldiers == 0)
 		{
-			_parent->getSave()->getBattleState()->getBattleGame()->requestEndTurn();
+			_parent->getSave()->getBattleState()->finishBattle(false, liveSoldiers);
 		}
 	}
 

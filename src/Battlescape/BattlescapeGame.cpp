@@ -1190,7 +1190,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 		}
 	}
-	else if (!_states.empty())
+	else
 	{
 		_states.front()->cancel();
 		return true;
