@@ -98,6 +98,8 @@ void createDefault()
 	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
 	setBool("battlePreviewPath", false); // requires double-click to confirm moves
 	setBool("battleRangeBasedAccuracy", false);
+	setBool("battleSolderHairColorsFix", true); // fix personal armor hair colors to match basic armor
+	setBool("battleSolderHairColors", true);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
