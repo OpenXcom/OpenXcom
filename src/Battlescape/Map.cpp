@@ -579,6 +579,39 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
+					
+
+					// Draw smoke/fire
+					if (tile->getFire() && tile->isDiscovered(2))
+					{
+						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						{
+							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+						}
+						else
+						{
+							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
+						}
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+					}
+					if (tile->getSmoke() && tile->isDiscovered(2))
+					{
+						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
+						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						{
+							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+						}
+						else
+						{
+							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
+						}
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+					}
+
 					if (!tile->isVoid())
 					{
 						// Draw object
@@ -638,38 +671,6 @@ void Map::drawTerrain(Surface *surface)
 							_numWaypid->blitNShade(surface, screenPosition.x+2, screenPosition.y+2, 0);
 						}
 						waypid++;
-					}
-
-
-					// Draw smoke/fire
-					if (tile->getFire() && tile->isDiscovered(2))
-					{
-						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
-						{
-							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
-						}
-						else
-						{
-							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
-						}
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-					}
-					if (tile->getSmoke() && tile->isDiscovered(2))
-					{
-						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-
-						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
-						{
-							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
-						}
-						else
-						{
-							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
-						}
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 					}
 				}
 			}
