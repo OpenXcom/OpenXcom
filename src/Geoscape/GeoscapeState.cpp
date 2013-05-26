@@ -738,7 +738,7 @@ void GeoscapeState::time5Seconds()
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0 && !u->getDetected())
 				{
-					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && u->getStatus() == Ufo::LANDED)
+					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (u->getStatus() == Ufo::LANDED || u->getStatus() == Ufo::DESTROYED))
 					{
 						(*j)->returnToBase();
 					}
