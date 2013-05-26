@@ -22,7 +22,7 @@
 namespace OpenXcom
 {
 
-ExtraSprites::ExtraSprites() : _width(320), _height(200)
+ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false)
 {
 }
 
@@ -44,6 +44,10 @@ void ExtraSprites::load(const YAML::Node &node)
 		else if (key == "height")
 		{
 			i.second() >> _height;
+		}
+		else if (key == "singleImage")
+		{
+			i.second() >> _singleImage;
 		}
 		else if (key == "files")
 		{
@@ -74,4 +78,8 @@ int ExtraSprites::getHeight()
 	return _height;
 }
 
+bool ExtraSprites::getSingleImage()
+{
+	return _singleImage;
+}
 }

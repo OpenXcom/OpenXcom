@@ -29,6 +29,7 @@ class ExtraSprites
 private:
 	std::map<int, std::string> _sprites;
 	int _width, _height;
+	bool _singleImage;
 public:
 	ExtraSprites();
 	virtual ~ExtraSprites();
@@ -36,6 +37,7 @@ public:
 	std::map<int, std::string> *getSprites();
 	int getWidth();
 	int getHeight();
+	bool getSingleImage();
 };
 
 }

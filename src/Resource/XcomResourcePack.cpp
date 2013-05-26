@@ -517,15 +517,28 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 
 	for (std::map<std::string, ExtraSprites*>::iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
 	{
-		if (_sets.find(i->first) == _sets.end())
+		if (i->second->getSingleImage())
 		{
-			_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
-		}
-		for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
-		{
+			if (_surfaces.find(i->first) == _surfaces.end())
+			{
+				_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
+			}
 			s.str("");
-			s << CrossPlatform::getDataFile(j->second);
-			_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+			s << CrossPlatform::getDataFile(i->second->getSprites()->at(0));
+			_surfaces[i->first]->loadImage(s.str());
+		}
+		else
+		{
+			if (_sets.find(i->first) == _sets.end())
+			{
+				_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
+			}
+			for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
+			{
+				s.str("");
+				s << CrossPlatform::getDataFile(j->second);
+				_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+			}
 		}
 	}
 }
