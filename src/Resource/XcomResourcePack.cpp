@@ -477,67 +477,70 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 	Window::soundPopup[2] = getSound("GEO.CAT", 3);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
-	
-	//"fix" of hair color of male personal armor
-	SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
-	
-	for(int i=0; i< 16; ++i )
-	{
-		//cheast frame
-		Surface *surf = xcom_1->getFrame(4*8 + i);
-		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-		GraphSubset dim = head.getBaseDomain();
-		surf->lock();
-		dim.beg_y = 6;
-		dim.end_y = 9;
-		head.setDomain(dim);
-		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+5));
-		dim.beg_y = 9;
-		dim.end_y = 10;
-		head.setDomain(dim);
-		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
-		surf->unlock();
-	}
-	
-	for(int i=0; i< 3; ++i )
-	{
-		//fall frame
-		Surface *surf = xcom_1->getFrame(264 + i);
-		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-		GraphSubset dim = head.getBaseDomain();
-		dim.beg_y = 0;
-		dim.end_y = 24;
-		dim.beg_x = 11;
-		dim.end_x = 20;
-		head.setDomain(dim);
-		surf->lock();
-		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
-		surf->unlock();
-	}
 
-	for (std::map<std::string, ExtraSprites*>::iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
+	if(Options::getBool("battleSolderHairColors") && Options::getBool("battleSolderHairColorsFix"))
 	{
-		if (i->second->getSingleImage())
+		//"fix" of hair color of male personal armor
+		SurfaceSet *xcom_1 = _sets["XCOM_1.PCK"];
+
+		for(int i=0; i< 16; ++i )
 		{
-			if (_surfaces.find(i->first) == _surfaces.end())
-			{
-				_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
-			}
-			s.str("");
-			s << CrossPlatform::getDataFile(i->second->getSprites()->at(0));
-			_surfaces[i->first]->loadImage(s.str());
+			//cheast frame
+			Surface *surf = xcom_1->getFrame(4*8 + i);
+			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+			GraphSubset dim = head.getBaseDomain();
+			surf->lock();
+			dim.beg_y = 6;
+			dim.end_y = 9;
+			head.setDomain(dim);
+			ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+5));
+			dim.beg_y = 9;
+			dim.end_y = 10;
+			head.setDomain(dim);
+			ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
+			surf->unlock();
 		}
-		else
+
+		for(int i=0; i< 3; ++i )
 		{
-			if (_sets.find(i->first) == _sets.end())
+			//fall frame
+			Surface *surf = xcom_1->getFrame(264 + i);
+			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+			GraphSubset dim = head.getBaseDomain();
+			dim.beg_y = 0;
+			dim.end_y = 24;
+			dim.beg_x = 11;
+			dim.end_x = 20;
+			head.setDomain(dim);
+			surf->lock();
+			ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
+			surf->unlock();
+		}
+
+		for (std::map<std::string, ExtraSprites*>::iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
+		{
+			if (i->second->getSingleImage())
 			{
-				_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
-			}
-			for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
-			{
+				if (_surfaces.find(i->first) == _surfaces.end())
+				{
+					_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
+				}
 				s.str("");
-				s << CrossPlatform::getDataFile(j->second);
-				_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+				s << CrossPlatform::getDataFile(i->second->getSprites()->at(0));
+				_surfaces[i->first]->loadImage(s.str());
+			}
+			else
+			{
+				if (_sets.find(i->first) == _sets.end())
+				{
+					_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
+				}
+				for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
+				{
+					s.str("");
+					s << CrossPlatform::getDataFile(j->second);
+					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+				}
 			}
 		}
 	}

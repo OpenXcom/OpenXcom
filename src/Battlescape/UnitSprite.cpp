@@ -20,6 +20,7 @@
 #include <cmath>
 #include "UnitSprite.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Options.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -222,7 +223,7 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
-		if(_unit->getGeoscapeSoldier())
+		if(_unit->getGeoscapeSoldier() && Options::getBool("battleSolderHairColors"))
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
@@ -466,7 +467,7 @@ void UnitSprite::drawRoutine0()
 	Surface *newLegs = new Surface(*legs);
 	Surface *newLeftArm = new Surface(*leftArm);
 	Surface *newRightArm = new Surface(*rightArm);
-	if(_unit->getGeoscapeSoldier())
+	if(_unit->getGeoscapeSoldier() && Options::getBool("battleSolderHairColors"))
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 		
