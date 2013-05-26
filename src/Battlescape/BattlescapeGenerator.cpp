@@ -187,7 +187,10 @@ void BattlescapeGenerator::nextStage()
 	}
 	
 	while (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
+	{
 		_game->getSavedGame()->getBattleGame()->endTurn();
+	}
+	_save->resetTurnCounter();
 
 	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
@@ -197,12 +200,19 @@ void BattlescapeGenerator::nextStage()
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	generateMap();
 	int highestSoldierID = 0;
+	bool selectedFirstSoldier = false;
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getFaction() == FACTION_PLAYER)
 		{
 			if (!(*j)->isOut())
 			{
+				(*j)->setTurnsExposed(0);
+				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
+				{
+					_save->setSelectedUnit(*j);
+					selectedFirstSoldier = true;
+				}
 				Node* node = _save->getSpawnNode(NR_XCOM, (*j));
 				if (node)
 				{
@@ -224,6 +234,7 @@ void BattlescapeGenerator::nextStage()
 			}
 		}
 	}
+	_save->getExposedUnits()->clear();
 	
 	// remove all items not belonging to our soldiers from the map.
 	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)

@@ -247,6 +247,7 @@ public:
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 	/// attempt to place unit on or near entryPoint
 	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
+	void resetTurnCounter();
 };
 
 }

@@ -1583,4 +1583,8 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 	return false;
 }
 
+void SavedBattleGame::resetTurnCounter()
+{
+	_turn = 1;
+}
 }
