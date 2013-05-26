@@ -1600,7 +1600,11 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	std::string nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+	std::string nextStage = "";
+	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	{
+		nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
+	}
 	if (nextStage != "" && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage

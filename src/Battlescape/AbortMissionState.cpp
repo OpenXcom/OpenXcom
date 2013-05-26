@@ -63,7 +63,11 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	add(_btnOk);
 	add(_btnCancel);
 
-	std::string nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
+	std::string nextStage = "";
+	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	{
+		nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
+	}
 
 	// Calculate values
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
