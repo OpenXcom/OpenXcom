@@ -536,8 +536,26 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 			for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
 			{
 				s.str("");
-				s << CrossPlatform::getDataFile(j->second);
-				_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+				if ((*j).second.substr((*j).second.length() - 1, 1) == "/")
+				{
+					int offset = j->first;
+					std::stringstream folder;
+					folder << Options::getDataFolder() << j->second.substr(1);
+					std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
+					for (std::vector<std::string>::iterator k = contents.begin();
+						k != contents.end(); ++k)
+					{
+						s.str("");
+						s << folder.str() << CrossPlatform::getDataFile(*k);
+						_sets[i->first]->getFrame(offset)->loadImage(s.str());
+						offset++;
+					}
+				}
+				else
+				{
+					s << CrossPlatform::getDataFile(j->second);
+					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+				}
 			}
 		}
 	}
