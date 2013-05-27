@@ -817,7 +817,7 @@ struct ColorReplace
 		if(src)
 		{
 			const int newShade = (src&15) + shade;
-			if (src > 248)
+			if (src >= 240)
 				// preserve blacks.
 				dest = src;
 			else if (newShade > 15)

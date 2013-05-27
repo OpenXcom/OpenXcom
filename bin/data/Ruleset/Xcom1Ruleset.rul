@@ -2826,21 +2826,6 @@ items:
     tuUse: 25
     flatRate: true
     recover: false
-# Special Pathfinding item
-# Usage of this is hard-coded.
-# DO NOT DELETE!
-  - type: PATHFINDER_ORB
-    recover: false
-    floorSprite: 73
-    weight: 1000
-  - type: FLOATING_ORB
-    recover: false
-    floorSprite: 74
-    weight: 998
-  - type: PATHFINDER_SHADOW
-    recover: false
-    floorSprite: 75
-    weight: 999
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
@@ -9327,11 +9312,11 @@ MCDPatches:
       - MCDIndex: 73
         deathTile: 76
 extraSprites:
-  - type: FLOOROB.PCK
+  - type: Pathfinding
+    width: 64
+    height: 80
     files:
-      73: Resources/Pathfinding_Orb.png
-      74: Resources/Floating_Orb.png
-      75: Resources/Pathfinding_Shadow.png
+      0: Resources/Pathfinding/
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
 #    width: 32

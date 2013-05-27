@@ -447,7 +447,7 @@ void Map::drawTerrain(Surface *surface)
 						if (sprite != -1)
 						{
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false, tileColor);
+							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false);
 						}
 						
 					}
@@ -524,7 +524,6 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
-
 			        unit = tile->getUnit();
 					// Draw soldier
 					if (unit && (unit->getVisible() || _save->getDebugMode()))
@@ -622,7 +621,25 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 					}
-
+					if (tile->getPreview() != -1)
+					{
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
+						if (tmpSurface)
+						{
+							int adjustment = 20 - tile->getTerrainLevel();
+							int shade = tile->isDiscovered(0) ? 0 : 15;
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, shade, false, tileColor);
+						}
+					}
+					if (tile->getOverlay() != -1)
+					{
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getOverlay());
+						if (tmpSurface)
+						{
+							int adjustment = 36 - _save->getTile(tile->getPosition() - Position(1,1,0))->getTerrainLevel();
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getOverlayMarkerColor());
+						}
+					}
 					// Draw cursor front
 					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
 					{

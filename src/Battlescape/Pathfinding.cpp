@@ -795,42 +795,38 @@ bool Pathfinding::previewPath(bool bRemove)
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *tile = _save->getTile(pos + Position(x,y,0));
-				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
+				Tile *otherTile = _save->getTile(pos + Position(x,y,0) + Position(1,1,0));
 				if (!bRemove)
 				{
-					BattleItem *item;
-					if (tile->getPosition().z > 0 && tile->hasNoFloor(tileBelow))
+					if (i == _path.rend() - 1)
 					{
-						BattleItem *itemB = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("PATHFINDER_SHADOW"), _save->getCurrentItemId());
-						tile->addItem(itemB, _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_GROUND"));
-						_save->getTileEngine()->applyGravity(tile);
-						item = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("FLOATING_ORB"), _save->getCurrentItemId());
+						if (otherTile)
+						{
+							otherTile->setOverlay(21);
+						}
+						tile->setPreview(10);
 					}
 					else
 					{
-						item = new BattleItem(_save->getBattleState()->getGame()->getRuleset()->getItem("PATHFINDER_ORB"), _save->getCurrentItemId());
+						int nextDir = *(i + 1);
+						if (otherTile)
+						{
+							otherTile->setOverlay(nextDir + 11);
+						}
+						tile->setPreview(nextDir);
 					}
-					tile->addItem(item, _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_GROUND"));
 				}
 				else
 				{
-					Tile *tile2 = _save->getTileEngine()->applyGravity(tile);
-					for (std::vector<BattleItem*>::iterator j = tile2->getInventory()->begin(); j != tile2->getInventory()->end();)
+					if (otherTile)
 					{
-						if ((*j)->getRules()->getType() == "PATHFINDER_ORB" || (*j)->getRules()->getType() == "PATHFINDER_SHADOW" || (*j)->getRules()->getType() == "FLOATING_ORB")
-						{
-							delete *j;
-							j = tile2->getInventory()->erase(j);
-						}
-						else
-						{
-							++j;
-						}
+						otherTile->setOverlay(-1);
 					}
+					tile->setPreview(-1);
 				}
-				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
+				if (otherTile)
 				{
-					tileBelow->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
+					otherTile->setOverlayMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 				}
 				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}
