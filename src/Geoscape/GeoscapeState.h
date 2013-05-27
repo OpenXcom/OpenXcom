@@ -35,6 +35,7 @@ class DogfightState;
 class Craft;
 class Ufo;
 class TerrorSite;
+class Base;
 
 /**
  * Geoscape screen which shows an overview of
@@ -151,6 +152,8 @@ public:
 	void btnTimerClick(Action *action);
 	/// Process a terror site
 	bool processTerrorSite(TerrorSite *ts) const;
+	/// Handles base defense
+	void handleBaseDefense(Base *base, Ufo *ufo);
 private:
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
