@@ -208,7 +208,7 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
