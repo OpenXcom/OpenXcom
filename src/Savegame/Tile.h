@@ -80,9 +80,9 @@ protected:
 	BattleUnit *_unit;
 	std::vector<BattleItem *> _inventory;
 	int _animationOffset;
-	int _markerColor, _overlayMarkerColor;
+	int _markerColor;
 	int _visible;
-	int _preview, _overlay;
+	int _preview;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -178,18 +178,12 @@ public:
 	void setMarkerColor(int color);
 	/// Get the tile marker color.
 	int getMarkerColor();
-	/// Set the tile marker color.
-	void setOverlayMarkerColor(int color);
-	/// Get the tile marker color.
-	int getOverlayMarkerColor();
 	/// Set the tile visible flag.
 	void setVisible(int visibility);
 	/// Get the tile visible flag.
 	int getVisible();
 	void setPreview(int dir);
 	int getPreview();
-	void setOverlay(int dir);
-	int getOverlay();
 };
 
 }

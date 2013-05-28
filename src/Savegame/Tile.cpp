@@ -47,7 +47,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _overlayMarkerColor(0), _visible(false), _preview(-1), _overlay(-1)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -869,24 +869,6 @@ int Tile::getMarkerColor()
 }
 
 /**
- * Set the marker color on this tile.
- * @param color
- */
-void Tile::setOverlayMarkerColor(int color)
-{
-	_overlayMarkerColor = color;
-}
-
-/**
- * Get the marker color on this tile.
- * @return color
- */
-int Tile::getOverlayMarkerColor()
-{
-	return _overlayMarkerColor;
-}
-
-/**
  * Set the tile visible flag.
  */
 void Tile::setVisible(int visibility)
@@ -912,13 +894,4 @@ int Tile::getPreview()
 	return _preview;
 }
 
-void Tile::setOverlay(int dir)
-{
-	_overlay = dir;
-}
-
-int Tile::getOverlay()
-{
-	return _overlay;
-}
 }

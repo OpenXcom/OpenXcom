@@ -795,38 +795,21 @@ bool Pathfinding::previewPath(bool bRemove)
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *tile = _save->getTile(pos + Position(x,y,0));
-				Tile *otherTile = _save->getTile(pos + Position(x,y,0) + Position(1,1,0));
 				if (!bRemove)
 				{
 					if (i == _path.rend() - 1)
 					{
-						if (otherTile)
-						{
-							otherTile->setOverlay(21);
-						}
 						tile->setPreview(10);
 					}
 					else
 					{
 						int nextDir = *(i + 1);
-						if (otherTile)
-						{
-							otherTile->setOverlay(nextDir + 11);
-						}
 						tile->setPreview(nextDir);
 					}
 				}
 				else
 				{
-					if (otherTile)
-					{
-						otherTile->setOverlay(-1);
-					}
 					tile->setPreview(-1);
-				}
-				if (otherTile)
-				{
-					otherTile->setOverlayMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 				}
 				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}

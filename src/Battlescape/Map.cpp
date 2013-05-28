@@ -337,7 +337,7 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	surface->lock();
-
+	bool pathfinderTurnedOn = false;
 	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
 		for (int itX = beginX; itX <= endX; itX++)
@@ -371,7 +371,7 @@ void Map::drawTerrain(Surface *surface)
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
 					if (tmpSurface)
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false, tileColor);
 					unit = tile->getUnit();
 
 					// Draw cursor back
@@ -440,7 +440,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false, tileColor);
 						}
 						// draw an item on top of the floor (if any)
 						int sprite = tile->getTopItemSprite();
@@ -621,23 +621,21 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 					}
-					if (tile->getPreview() != -1)
+					if (tile->getPreview() != -1 && tile->isDiscovered(0))
 					{
+						pathfinderTurnedOn = true;
 						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
 						if (tmpSurface)
 						{
-							int adjustment = 20 - tile->getTerrainLevel();
-							int shade = tile->isDiscovered(0) ? 0 : 15;
-							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, shade, false, tileColor);
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - (20 - tile->getTerrainLevel()), 0, false, tileColor);
 						}
-					}
-					if (tile->getOverlay() != -1)
-					{
-						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getOverlay());
-						if (tmpSurface)
+						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
-							int adjustment = 36 - _save->getTile(tile->getPosition() - Position(1,1,0))->getTerrainLevel();
-							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getOverlayMarkerColor());
+							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(22);
+							if (tmpSurface)
+							{
+								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+							}
 						}
 					}
 					// Draw cursor front
@@ -688,6 +686,48 @@ void Map::drawTerrain(Surface *surface)
 							_numWaypid->blitNShade(surface, screenPosition.x+2, screenPosition.y+2, 0);
 						}
 						waypid++;
+					}
+				}
+			}
+		}
+	}
+	if (pathfinderTurnedOn)
+	{
+		for (int itZ = beginZ; itZ <= endZ; itZ++)
+		{
+			for (int itX = beginX; itX <= endX; itX++)
+			{
+				for (int itY = beginY; itY <= endY; itY++)
+				{
+					mapPosition = Position(itX, itY, itZ);
+					_camera->convertMapToScreen(mapPosition, &screenPosition);
+					screenPosition += _camera->getMapOffset();
+
+					// only render cells that are inside the surface
+					if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
+						screenPosition.y > -_spriteHeight && screenPosition.y < surface->getHeight() + _spriteHeight )
+					{
+						tile = _save->getTile(mapPosition);
+						Tile *tileBelow = _save->getTile(mapPosition - Position(0,0,1));
+						if (!tile || !tile->isDiscovered(0) || tile->getPreview() == -1)
+							continue;
+
+						int overlay = tile->getPreview() + 11;
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
+
+						if (tmpSurface)
+						{
+							int adjustment = 20 - tile->getTerrainLevel();
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
+						}
+						if (itZ > 0 && tile->hasNoFloor(tileBelow))
+						{
+							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
+							if (tmpSurface)
+							{
+								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+							}
+						}
 					}
 				}
 			}

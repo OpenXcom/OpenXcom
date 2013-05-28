@@ -817,10 +817,7 @@ struct ColorReplace
 		if(src)
 		{
 			const int newShade = (src&15) + shade;
-			if (src >= 240)
-				// preserve blacks.
-				dest = src;
-			else if (newShade > 15)
+			if (newShade > 15)
 				// so dark it would flip over to another color - make it black instead
 				dest = 15;
 			else
