@@ -48,7 +48,9 @@ resources_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_18.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_19.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png
+	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
