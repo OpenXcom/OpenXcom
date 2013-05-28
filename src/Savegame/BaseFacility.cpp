@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
  */
-BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base) : _rules(rules), _base(base), _x(-1), _y(-1), _buildTime(0)
+BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base) : _rules(rules), _base(base), _x(-1), _y(-1), _buildTime(0), _dismantled(false)
 {
 }
 
@@ -161,4 +161,20 @@ bool BaseFacility::inUse() const
 			(_rules->getAliens() > 0 && _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment()));
 }
 
+/**
+ * Returns if this facility has been marked for dismantlement.
+ * @return True if it's about to be dismantleed, False otherwise.
+ */
+bool BaseFacility::isBeingDismantled() const
+{
+   return _dismantled;
+}
+
+/**
+ * Marks this facility as a target for dismantlement.
+ */
+void BaseFacility::dismantle()
+{
+    _dismantled = true;
+}
 }
