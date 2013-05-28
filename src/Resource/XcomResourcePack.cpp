@@ -540,7 +540,7 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 				{
 					int offset = j->first;
 					std::stringstream folder;
-					folder << Options::getDataFolder() << j->second;
+					folder << CrossPlatform::getDataFolder(j->second);
 					std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
 					for (std::vector<std::string>::iterator k = contents.begin();
 						k != contents.end(); ++k)
