@@ -40,7 +40,7 @@ public:
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
 	/// Quick load game.
-	void quickLoad();
+	void quickLoad(const std::wstring &filename16);
 };
 
 }

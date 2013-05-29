@@ -76,7 +76,7 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
  */
 SaveState::SaveState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
 {
-	quickSave();
+	quickSave(L"autosave");
 }
 
 /**
@@ -203,15 +203,16 @@ void SaveState::edtSaveKeyPress(Action *action)
 
 /**
  * Quick save game.
+ * @param name of file without ".sav"
  */
-void SaveState::quickSave()
+void SaveState::quickSave(const std::wstring &filename16)
 {
 	if (_showMsg) updateStatus("STR_SAVING_GAME");
 
 #ifdef _WIN32
-		std::string filename = Language::wstrToCp(L"autosave");
+		std::string filename = Language::wstrToCp(filename16);
 #else
-		std::string filename = Language::wstrToUtf8(L"autosave");
+		std::string filename = Language::wstrToUtf8(filename16);
 #endif
 
 	try

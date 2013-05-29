@@ -45,6 +45,8 @@ namespace OpenXcom
 SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 {
 	_noUI = false;
+	_showMsg = true;
+
 	// Create objects
 	WindowPopup p = POPUP_BOTH;
 	if (!geo)
