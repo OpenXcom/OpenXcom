@@ -96,8 +96,11 @@ void LoadState::lstSavesPress(Action *action)
 					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 				else
 					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-			delete s;
-			_game->setSavedGame(0);
+
+			if (_game->getSavedGame() == s)
+				_game->setSavedGame(0);
+			else
+				delete s;
 		}
 		catch (YAML::Exception &e)
 		{
@@ -108,8 +111,11 @@ void LoadState::lstSavesPress(Action *action)
 					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 				else
 					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-			delete s;
-			_game->setSavedGame(0);
+
+			if (_game->getSavedGame() == s)
+				_game->setSavedGame(0);
+			else
+				delete s;
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
