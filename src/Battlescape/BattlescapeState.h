@@ -51,7 +51,8 @@ class BattlescapeGame;
 class BattlescapeState : public State
 {
 private:
-	Surface *_icons, *_rank;
+	Surface *_rank;
+	InteractiveSurface *_icons;
 	Map *_map;
 	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
 	InteractiveSurface *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
@@ -79,6 +80,7 @@ private:
 	Uint32 mouseScrollingStartTime;
 	int totalMouseMoveX, totalMouseMoveY;
 	bool mouseMovedOverThreshold;
+	bool _mouseOverIcons;
 
 	void handleItemClick(BattleItem *item);
 	void blinkVisibleUnitButtons();
@@ -185,7 +187,9 @@ public:
 	void SaveAIMap();
 	void SaveVoxelMap();
 	void SaveVoxelView();
-
+	void mouseOverIcons(Action *action);
+	void mouseOutIcons(Action *action);
+	bool getMouseOverIcons() const;
 };
 
 }

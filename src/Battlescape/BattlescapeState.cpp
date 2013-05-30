@@ -97,9 +97,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	int screenHeight = Options::getInt("baseYResolution");
 	int iconsWidth = 320;
 	int iconsHeight = 56;
-
+	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new Surface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
+	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
@@ -264,7 +264,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
-
+	
+	_icons->onMouseOver((ActionHandler)&BattlescapeState::mouseOverIcons);
+	_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
@@ -1687,4 +1689,16 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
+void BattlescapeState::mouseOverIcons(Action *action)
+{
+	_mouseOverIcons = true;
+}
+void BattlescapeState::mouseOutIcons(Action *action)
+{
+	_mouseOverIcons = false;
+}
+bool BattlescapeState::getMouseOverIcons() const
+{
+	return _mouseOverIcons;
+}
 }
