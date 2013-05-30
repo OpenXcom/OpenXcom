@@ -625,11 +625,6 @@ void Map::drawTerrain(Surface *surface)
 					if (tile->getPreview() != -1 && tile->isDiscovered(0))
 					{
 						pathfinderTurnedOn = true;
-						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
-						if (tmpSurface)
-						{
-							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - (20 - tile->getTerrainLevel()), 0, false, tileColor);
-						}
 						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(22);
@@ -637,6 +632,11 @@ void Map::drawTerrain(Surface *surface)
 							{
 								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
 							}
+						}
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
+						if (tmpSurface)
+						{
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - (20 - tile->getTerrainLevel()), 0, false, tileColor);
 						}
 					}
 					// Draw cursor front
@@ -712,15 +712,7 @@ void Map::drawTerrain(Surface *surface)
 						Tile *tileBelow = _save->getTile(mapPosition - Position(0,0,1));
 						if (!tile || !tile->isDiscovered(0) || tile->getPreview() == -1)
 							continue;
-
-						int overlay = tile->getPreview() + 11;
-						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
-
-						if (tmpSurface)
-						{
-							int adjustment = 20 - tile->getTerrainLevel();
-							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
-						}
+						
 						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
@@ -728,6 +720,14 @@ void Map::drawTerrain(Surface *surface)
 							{
 								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
 							}
+						}
+						int overlay = tile->getPreview() + 11;
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
+
+						if (tmpSurface)
+						{
+							int adjustment = 20 - tile->getTerrainLevel();
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
 						}
 					}
 				}
