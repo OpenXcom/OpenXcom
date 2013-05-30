@@ -265,7 +265,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
 	
-	_icons->onMouseOver((ActionHandler)&BattlescapeState::mouseOverIcons);
+	_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
 	_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
@@ -1689,7 +1689,7 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
-void BattlescapeState::mouseOverIcons(Action *action)
+void BattlescapeState::mouseInIcons(Action *action)
 {
 	_mouseOverIcons = true;
 }

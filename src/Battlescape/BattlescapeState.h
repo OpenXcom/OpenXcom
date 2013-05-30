@@ -187,7 +187,7 @@ public:
 	void SaveAIMap();
 	void SaveVoxelMap();
 	void SaveVoxelView();
-	void mouseOverIcons(Action *action);
+	void mouseInIcons(Action *action);
 	void mouseOutIcons(Action *action);
 	bool getMouseOverIcons() const;
 };
