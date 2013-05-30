@@ -1108,10 +1108,15 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!scout || n != fromNode)	// scouts push forward
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
-				if (!preferred 
-					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-					|| preferred->getFlags() < n->getFlags()) preferred = n;
-				compliantNodes.push_back(n);
+				getPathfinding()->calculate(unit, n->getPosition());
+				if (getPathfinding()->getStartDirection() != -1)
+				{
+					if (!preferred 
+						|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+						|| preferred->getFlags() < n->getFlags()) preferred = n;
+					compliantNodes.push_back(n);
+				}
+				getPathfinding()->abortPath();
 			}
 	}
 

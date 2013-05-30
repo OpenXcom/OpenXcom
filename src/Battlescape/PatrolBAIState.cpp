@@ -275,6 +275,10 @@ void PatrolBAIState::think(BattleAction *action)
 		if (_toNode == 0)
 		{
 			_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
+			if (_toNode == 0)
+			{
+				_toNode = _game->getPatrolNode(!scout, _unit, _fromNode);
+			}
 		}
 	}
 
