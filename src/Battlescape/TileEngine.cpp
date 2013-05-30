@@ -939,20 +939,21 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			}
 			Position originVoxel = getSightOriginVoxel(*i);
 			Position scanVoxel;
-			if ((*i)->getMainHandWeapon() &&
-			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-			validMeleeRange((*i), unit, (*i)->getDirection())) ||
-			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
-			(*i)->getMainHandWeapon()->getRules()->getTUSnap())) &&
-			(*i)->getReactionScore() > highestReactionScore)
+			if ((*i)->getMainHandWeapon() && (*i)->getReactionScore() > highestReactionScore && visible(*i, unit->getTile()))
 			{
-				for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
+				if (((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+				validMeleeRange((*i), unit, (*i)->getDirection())) ||
+				((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
+				(*i)->getMainHandWeapon()->getRules()->getTUSnap()))
 				{
-					if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
+					for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 					{
-						// I see you!
-						highestReactionScore = (*i)->getReactionScore();
-						action->actor = (*i);
+						if ((*j) == unit)
+						{
+							// I see you!
+							highestReactionScore = (*i)->getReactionScore();
+							action->actor = (*i);
+						}
 					}
 				}
 			}
@@ -965,7 +966,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
 
-		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) < 3)
+		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) < 3 && action->actor->getTimeUnits() >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
 			action->type = BA_AUTOSHOT;
 		else
 			action->type = BA_SNAPSHOT;
@@ -2515,13 +2516,24 @@ bool TileEngine::validateThrow(BattleAction *action)
 	// determine the target voxel.
 	// aim at the center of the floor
 	targetVoxel = Position(action->target.x*16 + 8, action->target.y*16 + 8, action->target.z*24 + 2);
+	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
+	if (action->type != BA_THROW)
+	{
+		BattleUnit *tu = _save->getTile(action->target)->getUnit();
+		if(!tu && action->target.z > 0)
+			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
+		if (tu)
+		{
+			targetVoxel.z += (tu->getHeight() / 2) + tu->getFloatHeight();
+		}
+	}
 
 	// we try 4 different curvatures to try and reach our goal.
 	double curvature = 1.0;
 	while (!foundCurve && curvature < 5.0)
 	{
-		calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
-		if ((int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		int check = calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
+		if (check != 5 && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
 		{
 			foundCurve = true;
 		}

@@ -34,6 +34,8 @@ class Node;
  */
 class PatrolBAIState : public BattleAIState
 {
+private:
+	bool _traceAI;
 protected:
 	Node *_fromNode, *_toNode;
 public:

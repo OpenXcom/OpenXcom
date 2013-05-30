@@ -460,6 +460,7 @@ void UnitWalkBState::cancel()
  */
 void UnitWalkBState::postPathProcedures()
 {
+	_action.TU = 0;
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		Position voxelPosA = Position ((_finalFacing.x * 16)+8, (_finalFacing.y * 16)+8, (_finalFacing.z * 24)+12);
