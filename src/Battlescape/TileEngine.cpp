@@ -939,20 +939,21 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			}
 			Position originVoxel = getSightOriginVoxel(*i);
 			Position scanVoxel;
-			if ((*i)->getMainHandWeapon() &&
-			(((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-			validMeleeRange((*i), unit, (*i)->getDirection())) ||
-			((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
-			(*i)->getMainHandWeapon()->getRules()->getTUSnap())) &&
-			(*i)->getReactionScore() > highestReactionScore)
+			if ((*i)->getMainHandWeapon() && (*i)->getReactionScore() > highestReactionScore && visible(*i, unit->getTile()))
 			{
-				for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
+				if (((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
+				validMeleeRange((*i), unit, (*i)->getDirection())) ||
+				((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
+				(*i)->getMainHandWeapon()->getRules()->getTUSnap()))
 				{
-					if ((*j) == unit && canTargetUnit(&originVoxel, unit->getTile(), &scanVoxel, *i))
+					for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
 					{
-						// I see you!
-						highestReactionScore = (*i)->getReactionScore();
-						action->actor = (*i);
+						if ((*j) == unit)
+						{
+							// I see you!
+							highestReactionScore = (*i)->getReactionScore();
+							action->actor = (*i);
+						}
 					}
 				}
 			}
@@ -965,7 +966,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = action->actor->getMainHandWeapon();
 
-		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) < 3)
+		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) < 3 && action->actor->getTimeUnits() >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
 			action->type = BA_AUTOSHOT;
 		else
 			action->type = BA_SNAPSHOT;
