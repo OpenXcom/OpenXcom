@@ -270,6 +270,17 @@ bool Projectile::calculateThrow(double accuracy)
 	// determine the target voxel.
 	// aim at the center of the floor
 	targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
+	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
+	if (_action.type != BA_THROW)
+	{
+		BattleUnit *tu = _save->getTile(_action.target)->getUnit();
+		if(!tu && _action.target.z > 0)
+			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z-1))->getUnit();
+		if (tu)
+		{
+			targetVoxel.z += (tu->getHeight()/2) + tu->getFloatHeight();
+		}
+	}
 
 	// we try 4 different curvatures to try and reach our goal.
 	double curvature = 1.0;

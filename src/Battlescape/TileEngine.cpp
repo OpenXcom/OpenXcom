@@ -2515,6 +2515,17 @@ bool TileEngine::validateThrow(BattleAction *action)
 	// determine the target voxel.
 	// aim at the center of the floor
 	targetVoxel = Position(action->target.x*16 + 8, action->target.y*16 + 8, action->target.z*24 + 2);
+	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
+	if (action->type != BA_THROW)
+	{
+		BattleUnit *tu = _save->getTile(action->target)->getUnit();
+		if(!tu && action->target.z > 0)
+			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z-1))->getUnit();
+		if (tu)
+		{
+			targetVoxel.z += (tu->getHeight() / 2) + tu->getFloatHeight();
+		}
+	}
 
 	// we try 4 different curvatures to try and reach our goal.
 	double curvature = 1.0;
