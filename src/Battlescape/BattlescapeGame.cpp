@@ -452,6 +452,9 @@ void BattlescapeGame::endTurn()
 
 	checkForCasualties(0, 0, false, false);
 
+	// turn off MCed alien lighting.
+	_save->getTileEngine()->calculateUnitLighting();
+
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
