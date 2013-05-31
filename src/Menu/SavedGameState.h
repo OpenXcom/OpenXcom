@@ -45,6 +45,7 @@ protected:
 public:
 	/// Creates the Saved Game state.
 	SavedGameState(Game *game, bool geo);
+	/// Creates the Saved Game state (autosave option).
 	SavedGameState(Game *game, bool geo, bool showMsg);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();

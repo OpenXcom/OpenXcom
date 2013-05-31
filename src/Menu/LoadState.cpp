@@ -50,7 +50,7 @@ LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
 }
 
 /**
- * Initializes all the elements in the Load Game screen.
+ * Creates the Quick Load Game state.
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
@@ -86,7 +86,7 @@ void LoadState::lstSavesPress(Action *action)
 
 /**
  * Quick load game.
- * @param name of file without ".sav"
+ * @param filename16 name of file without ".sav"
  */
 void LoadState::quickLoad(const std::wstring &filename16)
 {

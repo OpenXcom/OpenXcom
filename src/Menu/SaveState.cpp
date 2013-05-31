@@ -69,7 +69,7 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 }
 
 /**
- * Initializes all the elements in the Save Game screen.
+ * Creates the Quick Save Game state.
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
@@ -203,7 +203,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 
 /**
  * Quick save game.
- * @param name of file without ".sav"
+ * @param filename16 name of file without ".sav"
  */
 void SaveState::quickSave(const std::wstring &filename16)
 {

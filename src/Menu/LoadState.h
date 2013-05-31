@@ -34,6 +34,7 @@ private:
 public:
 	/// Creates the Load Game state.
 	LoadState(Game *game, bool geo);
+	/// Creates the Quick Load Game state.
 	LoadState(Game *game, bool geo, bool showMsg);
 	/// Cleans up the Load Game state.
 	~LoadState();

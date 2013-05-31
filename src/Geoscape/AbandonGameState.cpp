@@ -93,6 +93,7 @@ void AbandonGameState::btnYesClick(Action *)
 	if (Options::getInt("autosave") == 3)
 	{
 		SaveState *ss = new SaveState(_game, true, false);
+		delete ss;
 	}
 
 	_game->setState(new MainMenuState(_game));
