@@ -776,9 +776,14 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// Now calculate the clips for each type based on the recovered rounds.
-	assembleClips(base);
-	
+	// calculate the clips for each type based on the recovered rounds.
+	for (std::map<RuleItem*, int>::const_iterator i = _rounds.cbegin(); i != _rounds.cend(); ++i)
+	{
+		int total_clips = i->second / i->first->getClipSize();
+		if (total_clips > 0)
+			base->getItems()->addItem(i->first->getType(), total_clips);
+	}
+
 	// recover all our goodies
 	if (playersSurvived > 0)
 	{
@@ -1017,19 +1022,6 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 				}
 			}
 		}
-	}
-}
-
-/* Calculate the clips for each type based on the recovered rounds. */
-void DebriefingState::assembleClips(Base *base)
-{
-	int n;
-
-	for (std::map<RuleItem*, int>::const_iterator i = _rounds.cbegin(); i != _rounds.cend(); ++i)
-	{
-		n = i->second / i->first->getClipSize();
-		if (n > 0)
-			base->getItems()->addItem(i->first->getType(), n);
 	}
 }
 

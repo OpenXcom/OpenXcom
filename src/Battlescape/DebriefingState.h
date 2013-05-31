@@ -59,7 +59,6 @@ private:
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
-	void assembleClips(Base *base);
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _destroyBase;
 public:
