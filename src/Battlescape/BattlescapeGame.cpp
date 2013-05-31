@@ -1476,7 +1476,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	{
 		item->moveToOwner(0);
 	}
-	else
+	else if (item->getRules()->getBattleType() != BT_GRENADE && item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
 	{
 		item->setOwner(0);
 	}
