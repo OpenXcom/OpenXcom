@@ -80,7 +80,6 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	_lstStats = new TextList(280, 80, 16, 32);
 	_lstRecovery = new TextList(280, 80, 16, 32);
 	_lstTotal = new TextList(280, 9, 16, 12);
-	_bullets = new ItemContainer;
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -225,6 +224,7 @@ DebriefingState::~DebriefingState()
 	{
 		delete *i;
 	}
+	_rounds.clear();
 }
 
 /**
@@ -999,7 +999,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 						break;
 					case BT_AMMO:
 						// It's a clip, count any rounds left.
-						_bullets->addItem((*it)->getRules()->getType(), (*it)->getAmmoQuantity());
+						_rounds[(*it)->getRules()] += (*it)->getAmmoQuantity();
 						break;
 					case BT_FIREARM:
 					case BT_MELEE:
@@ -1008,7 +1008,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 							BattleItem *clip = (*it)->getAmmoItem();
 							if (clip && (*it)->getRules()->getClipSize() != -1)
 							{
-								_bullets->addItem(clip->getRules()->getType(), clip->getAmmoQuantity());
+								_rounds[clip->getRules()] += clip->getAmmoQuantity();
 							}
 						}
 						// Fall-through, to recover the weapon itself.
@@ -1025,11 +1025,11 @@ void DebriefingState::assembleClips(Base *base)
 {
 	int n;
 
-	for (std::map<std::string, int>::const_iterator i = _bullets->getContents()->begin(); i != _bullets->getContents()->end(); ++i)
+	for (std::map<RuleItem*, int>::const_iterator i = _rounds.cbegin(); i != _rounds.cend(); ++i)
 	{
-		n = i->second / _game->getRuleset()->getItem(i->first)->getClipSize();
+		n = i->second / i->first->getClipSize();
 		if (n > 0)
-			base->getItems()->addItem(i->first, n);
+			base->getItems()->addItem(i->first->getType(), n);
 	}
 }
 

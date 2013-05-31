@@ -35,7 +35,6 @@ class Craft;
 class Base;
 class Region;
 class Country;
-class ItemContainer;
 
 struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
 
@@ -56,7 +55,7 @@ private:
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtRecovery, *_txtRating;
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
-	ItemContainer *_bullets;
+	std::map<RuleItem*, int> _rounds;
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
