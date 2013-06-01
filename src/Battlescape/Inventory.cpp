@@ -647,9 +647,9 @@ void Inventory::arrangeGround()
 			}
 		}
 	}
-	if (xMax >= _groundOffset + slotsX)
+	if (xMax >= _groundOffset + slotsX - 1)
 	{
-		_groundOffset += slotsX;
+		_groundOffset += slotsX - 1;
 	}
 	else
 	{
