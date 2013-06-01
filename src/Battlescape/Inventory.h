@@ -86,6 +86,7 @@ public:
 	bool unload();
 	/// Arranges items on the ground.
 	void arrangeGround();
+	bool fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning);
 };
 
 }

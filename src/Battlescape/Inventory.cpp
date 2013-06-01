@@ -429,10 +429,82 @@ void Inventory::mouseClick(Action *action, State *state)
 				BattleItem *item = _selUnit->getItem(slot, x, y);
 				if (item != 0)
 				{
-					setSelectedItem(item);
-					if (item->getExplodeTurn() > 0)
+					if ((SDL_GetModState() & KMOD_CTRL))
 					{
-						_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
+						RuleInventory *newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+						std::string warning = "STR_NOT_ENOUGH_SPACE";
+						bool placed = false;
+
+						if (slot->getType() == INV_GROUND)
+						{
+							switch (item->getRules()->getBattleType())
+							{
+							case BT_FIREARM:
+								newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+								break;
+							case BT_MINDPROBE:
+							case BT_PSIAMP:
+							case BT_MELEE:
+							case BT_CORPSE:
+								newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+								break;
+							default:
+								if (item->getRules()->getInventoryHeight() > 2)
+								{
+									newSlot = _game->getRuleset()->getInventory("STR_BACK_PACK");
+								}
+								else
+								{
+									newSlot = _game->getRuleset()->getInventory("STR_BELT");
+								}
+								break;
+							}
+						}
+
+						if (newSlot->getType() != INV_GROUND)
+						{
+							placed = fitItem(newSlot, item, warning);
+
+							if (!placed)
+							{
+								for (std::map<std::string, RuleInventory *>::const_iterator wildCard = _game->getRuleset()->getInventories()->begin(); wildCard != _game->getRuleset()->getInventories()->end() && !placed; ++wildCard)
+								{
+									newSlot = wildCard->second;
+									if (newSlot->getType() == INV_GROUND)
+									{
+										continue;
+									}
+									placed = fitItem(newSlot, item, warning);
+								}
+							}
+						}
+						else
+						{
+							if (_selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot), !_tu))
+							{
+								placed = true;
+								moveItem(item, newSlot, 0, 0);
+								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+								arrangeGround();
+							}
+							else
+							{
+								warning = "STR_NOT_ENOUGH_TIME_UNITS";
+							}
+						}
+
+						if (!placed)
+						{
+							_warning->showMessage(_game->getLanguage()->getString(warning));
+						}
+					}
+					else
+					{
+						setSelectedItem(item);
+						if (item->getExplodeTurn() > 0)
+						{
+							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
+						}
 					}
 				}
 			}
@@ -658,4 +730,29 @@ void Inventory::arrangeGround()
 	drawItems();
 }
 
+bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning)
+{
+	bool placed = false;
+	for (int y2 = 0; y2 <= newSlot->getY() && !placed; ++y2)
+	{
+		for (int x2 = 0; x2 <= newSlot->getX() && !placed; ++x2)
+		{
+			if (!overlapItems(item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
+			{
+				if (_selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot), !_tu))
+				{
+					placed = true;
+					moveItem(item, newSlot, x2, y2);
+					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+					drawItems();
+				}
+				else
+				{
+					warning = "STR_NOT_ENOUGH_TIME_UNITS";
+				}
+			}
+		}
+	}
+	return placed;
+}
 }
