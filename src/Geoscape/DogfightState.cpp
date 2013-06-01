@@ -1301,11 +1301,15 @@ void DogfightState::btnCautiousClick(Action *)
 		setStatus("STR_CAUTIOUS_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
+			_w1Timer->stop();
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getCautiousReload() * 75);
+			_w1Timer->start();
 		}
 		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
+			_w2Timer->stop();
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getCautiousReload() * 75);
+			_w2Timer->start();
 		}
 		minimumDistance();
 		_ufoEscapeTimer->start();
@@ -1324,11 +1328,15 @@ void DogfightState::btnStandardClick(Action *)
 		setStatus("STR_STANDARD_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
+			_w1Timer->stop();
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getStandardReload() * 75);
+			_w1Timer->start();
 		}
 		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
+			_w2Timer->stop();
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getStandardReload() * 75);
+			_w2Timer->start();
 		}
 		maximumDistance();
 		_ufoEscapeTimer->start();
@@ -1347,11 +1355,15 @@ void DogfightState::btnAggressiveClick(Action *)
 		setStatus("STR_AGGRESSIVE_ATTACK");
 		if (_craft->getNumWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 		{
+			_w1Timer->stop();
 			_w1Timer->setInterval(_craft->getWeapons()->at(0)->getRules()->getAggressiveReload() * 75);
+			_w1Timer->start();
 		}
 		if (_craft->getNumWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 		{
+			_w2Timer->stop();
 			_w2Timer->setInterval(_craft->getWeapons()->at(1)->getRules()->getAggressiveReload() * 75);
+			_w2Timer->start();
 		}
 		_targetDist = 64;
 		_ufoEscapeTimer->start();
