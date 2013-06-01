@@ -2375,3 +2375,5 @@ STR_ALLOWPSIONICCAPTURE
 Дозволити псі-захоплення
 STR_ALLOWPSIONICCAPTURE_DESC
 Псі-контроль над всіма прибульцями, що залишились, означає перемогу і вони рахуються як захоплені живими.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

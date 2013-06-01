@@ -2371,3 +2371,5 @@ STR_ALLOWPSIONICCAPTURE
 Aktiviere Gefangennahme durch PSI-Gedankenkontrolle
 STR_ALLOWPSIONICCAPTURE_DESC
 Übernahme eines Aliens durch Gedankenkontrolle über das Missionsende hinaus zählt als Gefangennahme.{NEWLINE}Wenn nur noch durch den Spieler kontrollierte Aliens übrig sind gilt die Mission als gewonnen.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

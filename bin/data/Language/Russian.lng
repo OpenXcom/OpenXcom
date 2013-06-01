@@ -2377,3 +2377,5 @@ STR_ALLOWPSIONICCAPTURE
 Разрешить пси-захват
 STR_ALLOWPSIONICCAPTURE_DESC
 При победе все оставшиеся под контролем сознания пришельцы будут считаться захваченными в плен.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

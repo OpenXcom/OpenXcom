@@ -2381,3 +2381,5 @@ STR_ALLOWPSIONICCAPTURE
 Przechwycenie psioniczne
 STR_ALLOWPSIONICCAPTURE_DESC
 Kontrola jaźni nad wszystkimi pozostałymi przy życiu obcymi pozwala zakończyć misję. Są traktowani jako zneutralizowani{NEWLINE}i schwytani żywi.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

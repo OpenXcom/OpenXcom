@@ -2375,3 +2375,5 @@ STR_ALLOWPSIONICCAPTURE
 Abilita la cattura psi
 STR_ALLOWPSIONICCAPTURE_DESC
 Controllare mentalmente tutti gli alieni rimanenti porta alla vittoria, e loro contano come alieni vivi.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!
