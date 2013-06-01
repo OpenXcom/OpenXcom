@@ -29,6 +29,7 @@
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -141,13 +142,16 @@ void SoldierArmorState::btnCancelClick(Action *)
 void SoldierArmorState::lstArmorClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
-	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
-	}
-	if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
-	{
-		_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+		if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+		{
+			_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+		}
+		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
+		{
+			_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+		}
 	}
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
 

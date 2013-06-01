@@ -220,7 +220,6 @@ void AggroBAIState::think(BattleAction *action)
 		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		takeCoverAction(action);
-		action->reckless = true;
 	}
 	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
@@ -883,7 +882,6 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	if (action->number >= 3)
 	{
         takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
-        action->reckless = true;
 	}
 
 	// out of ammo or no weapon or ammo at all, we have to take cover

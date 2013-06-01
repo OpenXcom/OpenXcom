@@ -24,9 +24,13 @@
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
 #include "../Engine/Game.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/BattlescapeState.h"
 
 namespace OpenXcom
 {
@@ -409,6 +413,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			cost += wallcost;
 			if (_unit->getFaction() == FACTION_HOSTILE && 
 				destinationTile->getUnit() &&
+				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
 				destinationTile->getUnit() != _unit)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
@@ -763,8 +768,15 @@ bool Pathfinding::previewPath(bool bRemove)
 	Position pos = _unit->getPosition();
 	Position destination;
 	int tus = _unit->getTimeUnits();
+	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
- 
+	int total = 0;
+	bool switchBack = false;
+	if (_save->getBattleState()->getBattleGame()->getReservedAction() == BA_NONE)
+	{
+		switchBack = true;
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT);
+	}
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
@@ -773,22 +785,39 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			tu *= 0.75;
 		}
-
+		energy -= tu / 2;
 		tus -= tu;
+		total += tu;
+		bool reserve = _save->getBattleState()->getBattleGame()->checkReservedTU(_unit, total, true);
 		pos = destination;
 		for (int x = size; x >= 0; x--)
 		{
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *tile = _save->getTile(pos + Position(x,y,0));
-				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
-				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
+				if (!bRemove)
 				{
-					tileBelow->setMarkerColor(bRemove?0:(tus>=0?4:3));
+					if (i == _path.rend() - 1)
+					{
+						tile->setPreview(10);
+					}
+					else
+					{
+						int nextDir = *(i + 1);
+						tile->setPreview(nextDir);
+					}
 				}
-				tile->setMarkerColor(bRemove?0:(tus>=0?4:3));
+				else
+				{
+					tile->setPreview(-1);
+				}
+				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}
 		}
+	}
+	if (switchBack)
+	{
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
 	}
 	return true;
 }

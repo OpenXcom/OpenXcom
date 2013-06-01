@@ -23,6 +23,7 @@
 
 namespace OpenXcom
 {
+class ExtraSprites;
 
 /**
  * Resource pack for the X-Com: UFO Defense game.
@@ -31,7 +32,7 @@ class XcomResourcePack : public ResourcePack
 {
 public:
 	/// Creates the X-Com ruleset.
-	XcomResourcePack();
+	XcomResourcePack(std::map<std::string, ExtraSprites *> extraSprites);
 	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
 	/// Loads battlescape specific resources

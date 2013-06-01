@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Vollbild
 STR_LANGUAGE
 Sprache
-STR_FARM
+CULTA
 Farm
-STR_FOREST
+FOREST
 Wald
-STR_JUNGLE
+JUNGLE
 Jungle
-STR_MOUNTAIN
+MOUNT
 Berg
-STR_DESERT
+DESERT
 Wüste
-STR_POLAR
+POLAR
 Arktis
 STR_RANDOM_BATTLE
 Zufallskampf
@@ -2379,3 +2379,5 @@ STR_ALLOWPSIONICCAPTURE
 Aktiviere Gefangennahme durch PSI-Gedankenkontrolle
 STR_ALLOWPSIONICCAPTURE_DESC
 Übernahme eines Aliens durch Gedankenkontrolle über das Missionsende hinaus zählt als Gefangennahme.{NEWLINE}Wenn nur noch durch den Spieler kontrollierte Aliens übrig sind gilt die Mission als gewonnen.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

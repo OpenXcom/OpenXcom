@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0), _unitRules(0), _rankInt(-1), _hidingForTurn(false)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0), _unitRules(0), _rankInt(-1), _hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -105,7 +105,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),_hidingForTurn(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),_hidingForTurn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -285,7 +285,8 @@ void BattleUnit::load(const YAML::Node &node)
 		(*pName) >> _dontReselect;
 	}
 	_charging = 0;
-
+	_toDirection = _direction;
+	_toDirectionTurret = _directionTurret;
 
 }
 
@@ -659,9 +660,23 @@ void BattleUnit::turn(bool turret)
 	int a = 0;
 
 	if (turret)
+	{
+		if (_directionTurret == _toDirectionTurret)
+		{
+			abortTurn();
+			return;
+		}
 		a = _toDirectionTurret - _directionTurret;
+	}
 	else
+	{
+		if (_direction == _toDirection)
+		{
+			abortTurn();
+			return;
+		}
 		a = _toDirection - _direction;
+	}
 
 	if (a != 0) {
 		if (a > 0) {
@@ -1514,7 +1529,8 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFire(int fire)
 {
-	_fire = fire;
+	if (_specab != SPECAB_BURNFLOOR)
+		_fire = fire;
 }
 
 /**
@@ -1862,31 +1878,32 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addKillCount(_kills);
 
 	UnitStats *stats = s->getCurrentStats();
+	UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 
-	if (_expBravery && stats->bravery < 100)
+	if (_expBravery && stats->bravery < caps.bravery)
 	{
 		if (_expBravery > RNG::generate(0,10)) stats->bravery += 10;
 	}
-	if (_expReactions && stats->reactions < 100)
+	if (_expReactions && stats->reactions < caps.reactions)
 	{
 		stats->reactions += improveStat(_expReactions);
 	}
-	if (_expFiring && stats->firing < 120)
+	if (_expFiring && stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
 	}
-	if (_expMelee && stats->melee < 120)
+	if (_expMelee && stats->melee < caps.melee)
 	{
 		stats->melee += improveStat(_expMelee);
 	}
-	if (_expThrowing && stats->throwing < 120)
+	if (_expThrowing && stats->throwing < caps.throwing)
 	{
 		stats->throwing += improveStat(_expThrowing);
 	}
-	if (_expPsiSkill && stats->psiSkill < 100)
+	if (_expPsiSkill && stats->psiSkill < caps.psiSkill)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
@@ -1896,13 +1913,13 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();
 		int v;
-		v = 80 - stats->tu;
+		v = caps.tu - stats->tu;
 		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
-		v = 60 - stats->health;
+		v = caps.health - stats->health;
 		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
-		v = 70 - stats->strength;
+		v = caps.strength - stats->strength;
 		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
-		v = 100 - stats->stamina;
+		v = caps.stamina - stats->stamina;
 		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
 		return true;
 	}

@@ -1435,7 +1435,7 @@ items:
     floorSprite: 0
     handSprite: 0
     bulletSprite: 8
-    fireSound: 11
+    fireSound: 18
     hitSound: 19
     power: 110
     damageType: 5
@@ -2248,7 +2248,7 @@ items:
     weight: 5
     bigSprite: 29
     floorSprite: 28
-    hitSound: 37	
+    hitSound: 37    
     battleType: 8
     invWidth: 2
     invHeight: 2
@@ -2603,7 +2603,7 @@ items:
     bulletSprite: 8
     fireSound: 51
     hitSound: 19
-    hitAnimation: 36
+    hitAnimation: 46
     power: 140
     damageType: 8
     accuracySnap: 75
@@ -2638,7 +2638,7 @@ items:
     bigSprite: 40
     floorSprite: 31
     handSprite: 104
-    fireSound: 11
+    fireSound: 18
     hitSound: 19
     hitAnimation: 46
     power: 100
@@ -3153,6 +3153,7 @@ terrains:
       - BLANKS
       - CULTIVAT
       - BARN
+    textures: [1, 2, 3, 4]
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -3241,6 +3242,7 @@ terrains:
       - BLANKS
       - DESERT
     largeBlockLimit: 3
+    textures: [7, 8]
     mapBlocks:
       - name: DESERT00
         width: 10
@@ -3289,6 +3291,8 @@ terrains:
       - BLANKS
       - FOREST
     largeBlockLimit: 2
+    textures: [0, 6, 10, 11]
+    hemisphere: -1
     mapBlocks:
       - name: FOREST00
         width: 10
@@ -3332,6 +3336,8 @@ terrains:
     mapDataSets:
       - BLANKS
       - JUNGLE
+    textures: [0, 6, 10, 11]
+    hemisphere: 1
     mapBlocks:
       - name: JUNGLE00
         width: 10
@@ -3427,6 +3433,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - MOUNT
+    textures: [5]
     largeBlockLimit: 2
     mapBlocks:
       - name: MOUNT00
@@ -3475,6 +3482,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - POLAR
+    textures: [9, 12]
     largeBlockLimit: 1
     mapBlocks:
       - name: POLAR00
@@ -4313,7 +4321,8 @@ soldiers:
       throwing: 50
       strength: 20
       psiStrength: 0
-      psiSkill: 16
+# psiSkill here is treated as the initial stat
+      psiSkill: 0
       melee: 20
     maxStats:
       tu: 60
@@ -4325,8 +4334,26 @@ soldiers:
       throwing: 80
       strength: 40
       psiStrength: 100
-      psiSkill: 24
+# psiSkill here is treated as the minimum value for the initial month of training using
+# a random number between (this) and (150% of this)
+      psiSkill: 16
       melee: 40
+# Note: caps are not absolute, it IS possible to go one or two points over (at most)
+# this is NOT a bug, it is a design choice, for variety's sake.
+# bravery is ALWAYS treated in multiples of 10, and cannot go above the cap. 101 will be treated as 110
+# psi strength is NEVER increased.
+    statCaps:
+      tu: 80
+      stamina: 100
+      health: 60
+      bravery: 100
+      reactions: 100
+      firing: 120
+      throwing: 120
+      strength: 70
+      psiStrength: 0
+      psiSkill: 100
+      melee: 120
     armor: STR_NONE_UC
     standHeight: 22
     kneelHeight: 14
@@ -4671,7 +4698,7 @@ units:
     kneelHeight: 16
     value: 20
     deathSound: 23
-    moveSound: 14	
+    moveSound: 14    
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -5809,7 +5836,7 @@ alienDeployments:
           -
             []
           -
-            []			
+            []            
       - alienRank: 7
         lowQty: 0
         highQty: 2
@@ -6054,6 +6081,7 @@ alienDeployments:
     civilians: 16
     # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
     roadTypeOdds: [50, 25]
+    terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 5
@@ -6202,6 +6230,8 @@ alienDeployments:
     width: 50
     length: 50
     height: 2
+    terrain: UBASE
+    shade: 15
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 5
@@ -6354,6 +6384,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
+    terrain: XBASE
+    shade: 5
   - type: STR_MARS_CYDONIA_LANDING
     data:
       - alienRank: 5
@@ -6419,6 +6451,9 @@ alienDeployments:
     width: 60
     length: 60
     height: 4
+    terrain: MARS
+    shade: 15
+    nextStage: STR_MARS_THE_FINAL_ASSAULT
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 0
@@ -6538,6 +6573,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
+    terrain: UBASE
+    shade: 5
 research:
   - name: STR_LASER_WEAPONS
     cost: 50
@@ -9274,3 +9311,38 @@ MCDPatches:
         deathTile: 75
       - MCDIndex: 73
         deathTile: 76
+extraSprites:
+  - type: Pathfinding
+    width: 64
+    height: 80
+    files:
+      0: Resources/Pathfinding/
+#New spritesheet Example:
+#  - type: GIANTBUNNY.PCK
+#    width: 32
+#    height: 40
+#    files:
+#      0: Resources/Bunny/Bunny00.png
+#      1: Resources/Bunny/Bunny01.bmp
+#      2: Resources/Bunny/Bunny02.gif
+#
+#Extra strings:
+# type must correspond to the filename of the language you want to add to
+# the rest should be fairly straight forward
+#extraStrings:
+#  - type: English
+#    strings:
+#      STR_SNIPER_RIFLE: Sniper Rifle
+#      STR_SNIPER_RIFLE_CLIP: Sniper Rifle Clip
+#  - type: EnglishUk
+#    strings:
+#      STR_SNIPER_RIFLE: Sniper Rifle
+#      STR_SNIPER_RIFLE_CLIP: Sniper Rifle Clip
+#  - type: German
+#    strings:
+#      STR_SNIPER_RIFLE: Scharfschützengewehr
+#      STR_SNIPER_RIFLE_CLIP: Scharfschützengewehrmunition
+#  - type: Russian
+#    strings:
+#      STR_SNIPER_RIFLE: Снайперская винтовка
+#      STR_SNIPER_RIFLE_CLIP: Магазин к снайп. винтовке

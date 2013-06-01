@@ -65,6 +65,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Options.h"
@@ -96,9 +97,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	int screenHeight = Options::getInt("baseYResolution");
 	int iconsWidth = 320;
 	int iconsHeight = 56;
-
+	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new Surface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
+	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
@@ -263,7 +264,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
-
+	
+	_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
+	_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
@@ -1604,11 +1607,16 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	if (_save->getNextStage() != "" && inExitArea)
+	std::string nextStage = "";
+	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	{
+		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+	}
+	if (nextStage != "" && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
-		_save->setMissionType(_save->getNextStage());
+		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setAlienRace("STR_MIXED");
 		bgen.nextStage();
@@ -1686,4 +1694,16 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
+void BattlescapeState::mouseInIcons(Action *action)
+{
+	_mouseOverIcons = true;
+}
+void BattlescapeState::mouseOutIcons(Action *action)
+{
+	_mouseOverIcons = false;
+}
+bool BattlescapeState::getMouseOverIcons() const
+{
+	return _mouseOverIcons;
+}
 }

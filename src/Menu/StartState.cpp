@@ -31,6 +31,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/Ruleset.h"
 #include "TestState.h"
 #include "NoteState.h"
 #include "LanguageState.h"
@@ -428,12 +429,12 @@ void StartState::think()
 	case LOADING_STARTED:
 		try
 		{
-			Log(LOG_INFO) << "Loading resources...";
-			_game->setResourcePack(new XcomResourcePack());
-			Log(LOG_INFO) << "Resources loaded successfully.";
 			Log(LOG_INFO) << "Loading ruleset...";
 			_game->loadRuleset();
 			Log(LOG_INFO) << "Ruleset loaded successfully.";
+			Log(LOG_INFO) << "Loading resources...";
+			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites()));
+			Log(LOG_INFO) << "Resources loaded successfully.";
 			std::vector<std::string> langs = Language::getList(0);
 			if (langs.empty())
 			{

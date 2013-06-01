@@ -38,7 +38,7 @@ namespace OpenXcom
  */
 PatrolBAIState::PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _fromNode(node), _toNode(0)
 {
-
+	_traceAI = _game->getTraceSetting();
 }
 
 /**
@@ -134,14 +134,14 @@ void PatrolBAIState::think(BattleAction *action)
 	{
 		action->type = BA_NONE;
 		action->TU = 0;
-		if (Options::getBool("traceAI")) 
+		if (_traceAI) 
 		{
 			Log(LOG_INFO) << "PatrolBAIState::think()? Better not... #" << action->number;
 		}
 		return;
 	}
 
-	if (Options::getBool("traceAI")) 
+	if (_traceAI) 
 	{
 		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
 	}
@@ -149,7 +149,7 @@ void PatrolBAIState::think(BattleAction *action)
 	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
-		if (Options::getBool("traceAI"))
+		if (_traceAI)
 		{
 			Log(LOG_INFO) << "Patrol destination reached!";
 		}
@@ -275,6 +275,10 @@ void PatrolBAIState::think(BattleAction *action)
 		if (_toNode == 0)
 		{
 			_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
+			if (_toNode == 0)
+			{
+				_toNode = _game->getPatrolNode(!scout, _unit, _fromNode);
+			}
 		}
 	}
 

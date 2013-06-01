@@ -36,10 +36,8 @@ class UnitSprite : public Surface
 {
 private:
 	BattleUnit *_unit;
-	BattleItem *_item;
-	BattleItem *_itema;
-	SurfaceSet *_unitSurface;
-	SurfaceSet *_itemSurface;
+	BattleItem *_itemA, *_itemB;
+	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
 	int _part, _animationFrame;
 	void drawRoutine0();
 	void drawRoutine1();
@@ -53,13 +51,15 @@ private:
 	void drawRoutine9();
 	void drawRoutine10();
 	int _drawingRoutine;
+	/// sort two handed sprites out.
+	void sortRifles();
 public:
 	/// Creates a new UnitSprite at the specified position and size.
 	UnitSprite(int width, int height, int x, int y);
 	/// Cleans up the UnitSprite.
 	~UnitSprite();
 	/// Sets surfacesets for rendering.
-	void setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurface);
+	void setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, SurfaceSet *itemSurfaceB);
 	/// Sets the battleunit to be rendered.
 	void setBattleUnit(BattleUnit *unit, int part = 0);
 	/// Sets the battleitem to be rendered.

@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Pe Tot Ecranul
 STR_LANGUAGE
 LIMBĂ
-STR_FARM
+CULTA
 Fermă
-STR_FOREST
+FOREST
 Pădure
-STR_JUNGLE
+JUNGLE
 Junglă
-STR_MOUNTAIN
+MOUNT
 Munte
-STR_DESERT
+DESERT
 Deșert
-STR_POLAR
+POLAR
 Polar
 STR_RANDOM_BATTLE
 Luptă Aleatoare
@@ -2383,3 +2383,5 @@ STR_ALLOWPSIONICCAPTURE
 Permite captura psi
 STR_ALLOWPSIONICCAPTURE_DESC
 Controlul mental al tuturor extratereștrilor rămași finalizează automat misiunea și capturarea acestora ca fiind vii.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

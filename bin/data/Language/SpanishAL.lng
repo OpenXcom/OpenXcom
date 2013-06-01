@@ -2121,17 +2121,17 @@ STR_FULLSCREEN
 Pantalla completa
 STR_LANGUAGE
 Lenguaje
-STR_FARM
+CULTA
 Granja
-STR_FOREST
+FOREST
 Bosque
-STR_JUNGLE
+JUNGLE
 Jungla
-STR_MOUNTAIN
+MOUNT
 Montaña
-STR_DESERT
+DESERT
 Desierto
-STR_POLAR
+POLAR
 Polar
 STR_RANDOM_BATTLE
 Batalla aleatoria
@@ -2381,3 +2381,5 @@ STR_ALLOWPSIONICCAPTURE
 Permitir captura psíquica
 STR_ALLOWPSIONICCAPTURE_DESC
 Esta opción permite que al controlar mentalmente a todos los alienígena restantes, la misión finaliza automáticamente, y los alienígenas cuentan como las capturas vivas.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

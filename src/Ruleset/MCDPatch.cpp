@@ -44,7 +44,7 @@ MCDPatch::~MCDPatch()
  * TODO: fill this out with more data.
  * @param node YAML node.
  */
-void MCDPatch::load(const YAML::Node &node, Ruleset *rules)
+void MCDPatch::load(const YAML::Node &node)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{

@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Ecrã Cheio
 STR_LANGUAGE
 IDIOMA
-STR_FARM
+CULTA
 Zona Agrícola
-STR_FOREST
+FOREST
 Floresta
-STR_JUNGLE
+JUNGLE
 Selva
-STR_MOUNTAIN
+MOUNT
 Montanha
-STR_DESERT
+DESERT
 Deserto
-STR_POLAR
+POLAR
 Polar
 STR_RANDOM_BATTLE
 Aleatório
@@ -2383,3 +2383,5 @@ STR_ALLOWPSIONICCAPTURE
 Psi-captura
 STR_ALLOWPSIONICCAPTURE_DESC
 O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

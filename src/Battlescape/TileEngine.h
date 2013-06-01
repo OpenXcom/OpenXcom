@@ -47,7 +47,7 @@ private:
 	std::vector<Uint16> *_voxelData;
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
-	int blockage(Tile *tile, const int part, ItemDamageType type);
+	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
 	int vectorToDirection(const Position &vector);
 	bool _personalLighting;
 public:
@@ -102,8 +102,8 @@ public:
 	bool inTeamFOV(const Position &pos, UnitFaction team);
 	/// attempt a panic or mind control action
 	bool psiAttack(BattleAction *action);
-	/// apply gravity to items (and units) that occupy this tile.
-	Tile *applyItemGravity(Tile *t);
+	/// apply gravity to anything that occupy this tile.
+	Tile *applyGravity(Tile *t);
 	/// return melee validity between two units
 	bool validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir);
 	/// return validity of a melee attack from a given position

@@ -29,7 +29,7 @@ namespace OpenXcom
 /**
 * RuleTerrain construction
 */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0)
+RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0)
 {
 }
 
@@ -85,6 +85,14 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 		{
 			i.second() >> _largeBlockLimit;
 		}
+		else if (key == "textures")
+		{
+			i.second() >> _textures;
+		}
+		else if (key == "hemisphere")
+		{
+			i.second() >> _hemisphere;
+		}
 	}
 }
 
@@ -111,6 +119,8 @@ void RuleTerrain::save(YAML::Emitter &out) const
 	}
 	out << YAML::EndSeq;
 	out << YAML::Key << "largeBlockLimit" << YAML::Value << _largeBlockLimit;
+	out << YAML::Key << "textures" << YAML::Value << _textures;
+	out << YAML::Key << "hemisphere" << YAML::Value << _hemisphere;
 	out << YAML::EndMap;
 }
 
@@ -213,10 +223,16 @@ MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
 
 	return mdf->getObjects()->at(*id);
 }
+/**
+* Gets the maximum amount of large blocks this terrain.
+*/
 int RuleTerrain::getLargeBlockLimit() const
 {
 	return _largeBlockLimit;
 }
+/**
+* Resets the remaining uses of each mapblock.
+*/
 void RuleTerrain::resetMapBlocks()
 {
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
@@ -224,5 +240,23 @@ void RuleTerrain::resetMapBlocks()
 		(*i)->reset();
 	}
 }
+
+/**
+* gets a pointer to the array of globe texture IDs this terrain is loaded on
+* @return pointer to the array of texture IDs
+*/
+std::vector<int> *RuleTerrain::getTextures()
+{
+	return &_textures;
+}
+/**
+* Gets the hemishpere this terrain occurs on.
+* -1 = northern, 0 = either, 1 = southern
+*/
+int RuleTerrain::getHemisphere() const
+{
+	return _hemisphere;
+}
+
 
 }

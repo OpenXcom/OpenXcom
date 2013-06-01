@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Pantalla completa
 STR_LANGUAGE
 LENGUAJE
-STR_FARM
+CULTA
 Granja
-STR_FOREST
+FOREST
 Bosque
-STR_JUNGLE
+JUNGLE
 Jungla
-STR_MOUNTAIN
+MOUNT
 Montaña
-STR_DESERT
+DESERT
 Desierto
-STR_POLAR
+POLAR
 Polar
 STR_RANDOM_BATTLE
 Batalla Aleatoria
@@ -2383,3 +2383,5 @@ STR_ALLOWPSIONICCAPTURE
 Permitir captura psiquica
 STR_ALLOWPSIONICCAPTURE_DESC
 Al controlar mentalmente a todos los alienigenas restantes la mision finaliza, y cuentan como capturados vivos.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

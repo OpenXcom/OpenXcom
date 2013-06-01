@@ -188,9 +188,9 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	}
 	_distance = getDistance();
 
-	_timerInc = new Timer(50);
+	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)&TransferItemsState::increase);
-	_timerDec = new Timer(50);
+	_timerDec = new Timer(250);
 	_timerDec->onTimer((StateHandler)&TransferItemsState::decrease);
 }
 
@@ -361,7 +361,7 @@ void TransferItemsState::btnCancelClick(Action *)
 void TransferItemsState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _timerInc->isRunning()) _timerInc->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
 }
 
 /**
@@ -398,7 +398,7 @@ void TransferItemsState::lstItemsLeftArrowClick(Action *action)
 void TransferItemsState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _timerDec->isRunning()) _timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
 }
 
 /**

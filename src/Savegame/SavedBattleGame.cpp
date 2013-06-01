@@ -507,21 +507,6 @@ std::string SavedBattleGame::getMissionType() const
 }
 
 /**
- * Gets the next mission type.
- * @return missionType
- */
-std::string SavedBattleGame::getNextStage() const
-{
-	if (_missionType == "STR_MARS_CYDONIA_LANDING")
-	{
-		return "STR_MARS_THE_FINAL_ASSAULT";
-	}
-	else
-		return "";
-}
-
-
-/**
  * Sets the global shade.
  * @param shade
  */
@@ -1123,10 +1108,15 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!scout || n != fromNode)	// scouts push forward
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
-				if (!preferred 
-					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-					|| preferred->getFlags() < n->getFlags()) preferred = n;
-				compliantNodes.push_back(n);
+				getPathfinding()->calculate(unit, n->getPosition());
+				if (getPathfinding()->getStartDirection() != -1)
+				{
+					if (!preferred 
+						|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+						|| preferred->getFlags() < n->getFlags()) preferred = n;
+					compliantNodes.push_back(n);
+				}
+				getPathfinding()->abortPath();
 			}
 	}
 
@@ -1457,10 +1447,10 @@ bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
 }
 
 
-void SavedBattleGame::addFallingUnit(BattleUnit* unit)
+bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
 	bool add = true;
-	for (std::vector<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
+	for (std::list<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
 	{
 		if (unit == *i)
 		{
@@ -1469,12 +1459,13 @@ void SavedBattleGame::addFallingUnit(BattleUnit* unit)
 	}
 	if (add)
 	{
-		_fallingUnits.push_back(unit);
+		_fallingUnits.push_front(unit);
 		_unitsFalling = true;
 	}
+	return add;
 }
 
-std::vector<BattleUnit*> *SavedBattleGame::getFallingUnits()
+std::list<BattleUnit*> *SavedBattleGame::getFallingUnits()
 {
 	return &_fallingUnits;
 }
@@ -1597,4 +1588,8 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 	return false;
 }
 
+void SavedBattleGame::resetTurnCounter()
+{
+	_turn = 1;
+}
 }

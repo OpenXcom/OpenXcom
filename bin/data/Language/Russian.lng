@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Полноэкранный
 STR_LANGUAGE
 ЯЗЫК
-STR_FARM
+CULTA
 Ферма
-STR_FOREST
+FOREST
 Лес
-STR_JUNGLE
+JUNGLE
 Джунгли
-STR_MOUNTAIN
+MOUNT
 Горы
-STR_DESERT
+DESERT
 Пустыня
-STR_POLAR
+POLAR
 Заполярье
 STR_RANDOM_BATTLE
 случайная битва
@@ -2385,3 +2385,5 @@ STR_ALLOWPSIONICCAPTURE
 Разрешить пси-захват
 STR_ALLOWPSIONICCAPTURE_DESC
 При победе все оставшиеся под контролем сознания пришельцы будут считаться захваченными в плен.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

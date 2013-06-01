@@ -42,6 +42,7 @@
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Logger.h"
+#include "../Ruleset/ExtraSprites.h"
 
 namespace OpenXcom
 {
@@ -71,7 +72,7 @@ struct HairBleach
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
  */
-XcomResourcePack::XcomResourcePack() : ResourcePack()
+XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSprites) : ResourcePack()
 {
 	// Load palettes
 	for (int i = 0; i < 5; ++i)
@@ -483,10 +484,10 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 	for(int i=0; i< 16; ++i )
 	{
 		//cheast frame
-		Surface *s = xcom_1->getFrame(4*8 + i);
-		ShaderMove<Uint8> head = ShaderMove<Uint8>(s);
+		Surface *surf = xcom_1->getFrame(4*8 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 		GraphSubset dim = head.getBaseDomain();
-		s->lock();
+		surf->lock();
 		dim.beg_y = 6;
 		dim.end_y = 9;
 		head.setDomain(dim);
@@ -495,23 +496,68 @@ XcomResourcePack::XcomResourcePack() : ResourcePack()
 		dim.end_y = 10;
 		head.setDomain(dim);
 		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
-		s->unlock();
+		surf->unlock();
 	}
 	
 	for(int i=0; i< 3; ++i )
 	{
 		//fall frame
-		Surface *s = xcom_1->getFrame(264 + i);
-		ShaderMove<Uint8> head = ShaderMove<Uint8>(s);
+		Surface *surf = xcom_1->getFrame(264 + i);
+		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 		GraphSubset dim = head.getBaseDomain();
 		dim.beg_y = 0;
 		dim.end_y = 24;
 		dim.beg_x = 11;
 		dim.end_x = 20;
 		head.setDomain(dim);
-		s->lock();
+		surf->lock();
 		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
-		s->unlock();
+		surf->unlock();
+	}
+
+	for (std::map<std::string, ExtraSprites*>::iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
+	{
+		if (i->second->getSingleImage())
+		{
+			if (_surfaces.find(i->first) == _surfaces.end())
+			{
+				_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
+			}
+			s.str("");
+			s << CrossPlatform::getDataFile(i->second->getSprites()->operator[](0));
+			_surfaces[i->first]->loadImage(s.str());
+		}
+		else
+		{
+			if (_sets.find(i->first) == _sets.end())
+			{
+				_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
+			}
+			for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
+			{
+				s.str("");
+				if ((*j).second.substr((*j).second.length() - 1, 1) == "/")
+				{
+					int offset = j->first;
+					std::stringstream folder;
+					folder << CrossPlatform::getDataFolder(j->second);
+					std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
+					for (std::vector<std::string>::iterator k = contents.begin();
+						k != contents.end(); ++k)
+					{
+						s.str("");
+						s << folder.str() << CrossPlatform::getDataFile(*k);
+						_sets[i->first]->getFrame(offset)->loadImage(s.str());
+						offset++;
+					}
+				}
+				else
+				{
+					s << CrossPlatform::getDataFile(j->second);
+					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+				}
+			}
+		}
 	}
 }
 
@@ -616,6 +662,10 @@ void XcomResourcePack::loadBattlescapeResources()
 		_sets[usets[i]] = new SurfaceSet(32, 40);
 		_sets[usets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 	}
+
+	_sets["HANDOB2.PCK"] = new SurfaceSet(32, 40);
+	_sets["HANDOB2.PCK"]->loadPck(CrossPlatform::getDataFile("UNITS/HANDOB.PCK"), CrossPlatform::getDataFile("UNITS/HANDOB.TAB"));
+
 	s.str("");
 	s << "UNITS/" << "BIGOBS.PCK";
 	s2.str("");

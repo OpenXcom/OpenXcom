@@ -428,6 +428,10 @@ set ( ruleset_src
   Ruleset/ArticleDefinition.h
   Ruleset/City.cpp
   Ruleset/City.h
+  Ruleset/ExtraSprites.cpp
+  Ruleset/ExtraSprites.h
+  Ruleset/ExtraStrings.cpp
+  Ruleset/ExtraStrings.h
   Ruleset/RuleTerrain.cpp
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
@@ -593,7 +597,7 @@ set ( install_dest RUNTIME )
 set ( set_exec_path ON )
 set ( install_dest_dir bin )
 if ( UNIX AND NOT APPLE )
-  if ( ${DATADIR} EQUAL "" )
+  if ( "${DATADIR}" STREQUAL "" )
     set ( data_install_dir "share/openxcom" )
   else ()
     set ( data_install_dir ${DATADIR} )
@@ -610,7 +614,7 @@ if ( APPLE )
     set ( install_dest_dir "" )
     set ( data_install_dir bin )
   else ()
-    if ( ${DATADIR} EQUAL "" )
+    if ( "${DATADIR}" STREQUAL "" )
       set ( data_install_dir "share/openxcom" )
     else ()
       set ( data_install_dir ${DATADIR} )

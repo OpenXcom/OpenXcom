@@ -443,7 +443,10 @@ void TextEdit::keyboardPress(Action *action, State *state)
 			break;
 		case SDLK_RETURN:
 		case SDLK_KP_ENTER:
-			deFocus();
+			if (!_value.empty())
+			{
+				deFocus();
+			}
 			break;
 		default:
 			Uint16 key = action->getDetails()->key.keysym.unicode;

@@ -744,6 +744,14 @@ void DebriefingState::prepareDebriefing()
 				recoverItems(battle->getTiles()[i]->getInventory(), base);		
 			}
 		}
+		else
+		{
+			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
+			{
+				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR) && (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT))
+					recoverItems(battle->getTiles()[i]->getInventory(), base);		
+			}
+		}
 	}
 	else
 	{

@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 In Fullscreen
 STR_LANGUAGE
 LINGUA
-STR_FARM
+CULTA
 Fattoria
-STR_FOREST
+FOREST
 Foresta
-STR_JUNGLE
+JUNGLE
 Giungla
-STR_MOUNTAIN
+MOUNT
 Montagna
-STR_DESERT
+DESERT
 Deserto
-STR_POLAR
+POLAR
 Polare
 STR_RANDOM_BATTLE
 Battaglia Random
@@ -2383,3 +2383,5 @@ STR_ALLOWPSIONICCAPTURE
 Abilita la cattura psi
 STR_ALLOWPSIONICCAPTURE_DESC
 Controllare mentalmente tutti gli alieni rimanenti porta alla vittoria, e loro contano come alieni vivi.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

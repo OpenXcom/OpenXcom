@@ -36,6 +36,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Engine/Timer.h"
@@ -232,6 +233,10 @@ void SellState::btnOkClick(Action *)
 				{
 					if (*s == _soldiers[i])
 					{
+						if((*s)->getArmor()->getStoreItem() != "STR_NONE")
+						{
+							_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
+						}
 						_base->getSoldiers()->erase(s);
 						break;
 					}

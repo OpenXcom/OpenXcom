@@ -220,26 +220,7 @@ void BaseDefenseState::btnOkClick(Action *)
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		if (_base->getAvailableSoldiers(true) > 0)
-		{
-			size_t month = _game->getSavedGame()->getMonthsPassed();
-			if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-				month = _game->getRuleset()->getAlienItemLevels().size()-1;
-			SavedBattleGame *bgame = new SavedBattleGame();
-			_game->getSavedGame()->setBattleGame(bgame);
-			bgame->setMissionType("STR_BASE_DEFENSE");
-			BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-			bgen.setBase(_base);
-			bgen.setAlienRace(_ufo->getAlienRace());
-			bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-			bgen.run();
-			_state->musicStop();
-			_game->pushState(new BriefingState(_game, 0, _base));
-		}
-		else
-		{
-			_game->pushState(new BaseDestroyedState(_game, _base));
-		}
+        _state->handleBaseDefense(_base, _ufo);
 	}
 	// Whatever happens in the base defense, the UFO has finished its duty
 	_ufo->setStatus(Ufo::DESTROYED);

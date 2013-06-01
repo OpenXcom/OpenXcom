@@ -216,7 +216,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if(_AIActionCounter == 1)
 	{
 		unit->_hidingForTurn = 0;
-		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
+		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast only works when ai was already AggroBAIState at heart
 	
@@ -287,12 +287,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
             {
                 finalFacing = _save->getTile(action.target)->closestSoldierPos; // be ready for the nearest spotting unit for our destination
                 usePathfinding = false;
-				if (Options::getBool("traceAI")) { Log(LOG_INFO) << "setting final facing direction for closest soldier, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
+				if (_save->getTraceSetting()) { Log(LOG_INFO) << "setting final facing direction for closest soldier, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
             } else if (aggro != 0)
             {
                 finalFacing = aggro->getLastKnownPosition(); // or else be ready for our aggro target
                 usePathfinding = true;
-				if (Options::getBool("traceAI")) { Log(LOG_INFO) << "setting final facing direction for aggro target via pathfinding, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
+				if (_save->getTraceSetting()) { Log(LOG_INFO) << "setting final facing direction for aggro target via pathfinding, " << finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
             }
         }
 
@@ -404,6 +404,11 @@ void BattlescapeGame::endTurn()
 	_debugPlay = false;
 	_currentAction.type = BA_NONE;
 
+	if (_save->getTileEngine()->closeUfoDoors())
+	{
+		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
+	}
+
 	// check for hot grenades on the ground
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
@@ -434,11 +439,6 @@ void BattlescapeGame::endTurn()
 		return;
 	}
 
-	if (_save->getTileEngine()->closeUfoDoors())
-	{
-		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
-	}
-
 	_save->endTurn();
 
 	if (_save->getSide() == FACTION_PLAYER)
@@ -451,6 +451,9 @@ void BattlescapeGame::endTurn()
 	}
 
 	checkForCasualties(0, 0, false, false);
+
+	// turn off MCed alien lighting.
+	_save->getTileEngine()->calculateUnitLighting();
 
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
@@ -847,7 +850,7 @@ void BattlescapeGame::statePushBack(BattleState *bs)
  */
 void BattlescapeGame::popState()
 {
-	if (Options::getBool("traceAI"))
+	if (_save->getTraceSetting())
 	{
 		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with " << (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
 	}
@@ -988,7 +991,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param tu Number of time units to check.
  * @return bool Whether or not we got enough time units.
  */
-bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
+bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
@@ -1014,12 +1017,15 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu)
 		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
 		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
-		switch (effectiveTuReserved)
+		if (!justChecking)
 		{
-		case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-		case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-		case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-		default: ;
+			switch (effectiveTuReserved)
+			{
+			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+			default: ;
+			}
 		}
 		return false;
 	}
@@ -1470,12 +1476,12 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	{
 		item->moveToOwner(0);
 	}
-	else
+	else if (item->getRules()->getBattleType() != BT_GRENADE && item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
 	{
 		item->setOwner(0);
 	}
 
-	getTileEngine()->applyItemGravity(_save->getTile(p));
+	getTileEngine()->applyGravity(_save->getTile(p));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
@@ -1489,6 +1495,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
  */
 BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 {
+	getSave()->getBattleState()->showPsiButton(false);
 	// in case the unit was unconscious
 	getSave()->removeUnconsciousBodyItem(unit);
 
@@ -1554,7 +1561,8 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
 	getTileEngine()->calculateFOV(newUnit->getPosition());
-	getTileEngine()->applyItemGravity(newUnit->getTile());
+	getTileEngine()->applyGravity(newUnit->getTile());
+	//newUnit->getCurrentAIState()->think();
 	return newUnit;
 
 }
@@ -1622,7 +1630,7 @@ void BattlescapeGame::resetSituationForAI()
 
     // Log(LOG_INFO) << w*h*l << " tiles!";
 
-	if (Options::getBool("traceAI"))
+	if (_save->getTraceSetting())
 	{
 		for (int i = 0; i < w * l * h; ++i) if (tiles[i]->soldiersVisible != -1) { tiles[i]->setMarkerColor(0); } // clear old tile markers
 	}

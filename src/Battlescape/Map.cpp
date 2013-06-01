@@ -28,6 +28,7 @@
 #include "Projectile.h"
 #include "BulletSprite.h"
 #include "Explosion.h"
+#include "BattlescapeState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
 #include "../Engine/SurfaceSet.h"
@@ -337,7 +338,7 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	surface->lock();
-
+	bool pathfinderTurnedOn = false;
 	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
 		for (int itX = beginX; itX <= endX; itX++)
@@ -371,11 +372,11 @@ void Map::drawTerrain(Surface *surface)
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
 					if (tmpSurface)
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false, tileColor);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false);
 					unit = tile->getUnit();
 
 					// Draw cursor back
-					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
+					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && !_save->getBattleState()->getMouseOverIcons())
 					{
 						if (_camera->getViewLevel() == itZ)
 						{
@@ -440,7 +441,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false, tileColor);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 						// draw an item on top of the floor (if any)
 						int sprite = tile->getTopItemSprite();
@@ -524,7 +525,6 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
-
 			        unit = tile->getUnit();
 					// Draw soldier
 					if (unit && (unit->getVisible() || _save->getDebugMode()))
@@ -579,6 +579,39 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
+					
+
+					// Draw smoke/fire
+					if (tile->getFire() && tile->isDiscovered(2))
+					{
+						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						{
+							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+						}
+						else
+						{
+							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
+						}
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+					}
+					if (tile->getSmoke() && tile->isDiscovered(2))
+					{
+						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
+						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						{
+							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+						}
+						else
+						{
+							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
+						}
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+					}
+
 					if (!tile->isVoid())
 					{
 						// Draw object
@@ -586,12 +619,28 @@ void Map::drawTerrain(Surface *surface)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
-								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false, tileColor);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 					}
-
+					if (tile->getPreview() != -1 && tile->isDiscovered(0))
+					{
+						pathfinderTurnedOn = true;
+						if (itZ > 0 && tile->hasNoFloor(tileBelow))
+						{
+							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(22);
+							if (tmpSurface)
+							{
+								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+							}
+						}
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(tile->getPreview());
+						if (tmpSurface)
+						{
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - (20 - tile->getTerrainLevel()), 0, false, tileColor);
+						}
+					}
 					// Draw cursor front
-					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && _game->getCursor()->getY() < 144)
+					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && !_save->getBattleState()->getMouseOverIcons())
 					{
 						if (_camera->getViewLevel() == itZ)
 						{
@@ -639,37 +688,47 @@ void Map::drawTerrain(Surface *surface)
 						}
 						waypid++;
 					}
+				}
+			}
+		}
+	}
+	if (pathfinderTurnedOn)
+	{
+		for (int itZ = beginZ; itZ <= endZ; itZ++)
+		{
+			for (int itX = beginX; itX <= endX; itX++)
+			{
+				for (int itY = beginY; itY <= endY; itY++)
+				{
+					mapPosition = Position(itX, itY, itZ);
+					_camera->convertMapToScreen(mapPosition, &screenPosition);
+					screenPosition += _camera->getMapOffset();
 
-
-					// Draw smoke/fire
-					if (tile->getFire() && tile->isDiscovered(2))
+					// only render cells that are inside the surface
+					if (screenPosition.x > -_spriteWidth && screenPosition.x < surface->getWidth() + _spriteWidth &&
+						screenPosition.y > -_spriteHeight && screenPosition.y < surface->getHeight() + _spriteHeight )
 					{
-						frameNumber = 0; // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						tile = _save->getTile(mapPosition);
+						Tile *tileBelow = _save->getTile(mapPosition - Position(0,0,1));
+						if (!tile || !tile->isDiscovered(0) || tile->getPreview() == -1)
+							continue;
+						
+						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
-							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
+							if (tmpSurface)
+							{
+								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+							}
 						}
-						else
-						{
-							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
-						}
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-					}
-					if (tile->getSmoke() && tile->isDiscovered(2))
-					{
-						frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						int overlay = tile->getPreview() + 11;
+						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 
-						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
+						if (tmpSurface)
 						{
-							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
+							int adjustment = 20 - tile->getTerrainLevel();
+							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
 						}
-						else
-						{
-							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
-						}
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
-						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 					}
 				}
 			}
@@ -1024,7 +1083,8 @@ void Map::cacheUnit(BattleUnit *unit)
 				unitSprite->setBattleItem(0);
 			}
 			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
-									_res->getSurfaceSet("HANDOB.PCK"));
+									_res->getSurfaceSet("HANDOB.PCK"),
+									_res->getSurfaceSet("HANDOB2.PCK"));
 			unitSprite->setAnimationFrame(_animFrame);
 			cache->clear();
 			unitSprite->blit(cache);

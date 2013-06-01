@@ -53,6 +53,8 @@ public:
 	void loadScr(const std::string &filename);
 	/// Loads an X-Com SPK graphic.
 	void loadSpk(const std::string &filename);
+	/// Loads a TFTD BDY graphic.
+	void loadBdy(const std::string &filename);
 	/// Loads a general image file.
 	void loadImage(const std::string &filename);
 	/// Clears the surface's contents.

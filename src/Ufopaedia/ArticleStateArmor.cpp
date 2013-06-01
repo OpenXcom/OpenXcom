@@ -66,7 +66,7 @@ namespace OpenXcom
 
 		std::string look = armor->getSpriteInventory();
 		look += "M0.SPK";
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = armor->getSpriteInventory() + ".SPK";
 		}

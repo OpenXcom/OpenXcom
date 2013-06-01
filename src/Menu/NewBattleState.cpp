@@ -37,6 +37,7 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset//RuleTerrain.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
@@ -134,12 +135,15 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
-	_terrainTypes.push_back("STR_FARM");
-	_terrainTypes.push_back("STR_FOREST");
-	_terrainTypes.push_back("STR_JUNGLE");
-	_terrainTypes.push_back("STR_MOUNTAIN");
-	_terrainTypes.push_back("STR_DESERT");
-	_terrainTypes.push_back("STR_POLAR");
+	const std::vector<std::string> &terrainTypes = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator i = terrainTypes.begin(); i != terrainTypes.end(); ++i)
+	{
+		if (_game->getRuleset()->getTerrain(*i)->getTextures()->size())
+		{
+			_terrainTypes.push_back(*i);
+			_textures.push_back(_game->getRuleset()->getTerrain(*i)->getTextures()->at(0));
+		}
+	}
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
 
@@ -340,6 +344,8 @@ void NewBattleState::initSave()
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
 				int amount = Options::getInt("NewBattle_" + rule->getName());
+				amount = std::max(0, std::min(100, amount));
+
 				_craft->getItems()->addItem(*i, amount);
 			}
 		}
@@ -372,8 +378,7 @@ void NewBattleState::btnOkClick(Action *)
 	bgame->setMissionType(_missionTypes[_selMission]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	int textures[] = {1, 0, 0, 5, 7, 9};
-	bgen.setWorldTexture(textures[_selTerrain]);
+	bgen.setWorldTexture(_textures[_selTerrain]);
 
 	if (_missionTypes[_selMission] == "STR_TERROR_MISSION")
 	{
@@ -406,7 +411,7 @@ void NewBattleState::btnOkClick(Action *)
 		_craft->setDestination(u);
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
-		if (_terrainTypes[_selTerrain] == "STR_FOREST")
+		if (_terrainTypes[_selTerrain] == "FOREST")
 		{
 			u->setLatitude(-0.5);
 		}
@@ -426,7 +431,14 @@ void NewBattleState::btnOkClick(Action *)
 	ss << std::dec << _darkness[_selDarkness];
 	ss >> std::dec >> shade;
 	bgen.setWorldShade(shade);
-	bgen.setAlienRace(_alienRaces[_selAlien]);
+	if (_missionTypes[_selMission] == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		bgen.setAlienRace("STR_MIXED");
+	}
+	else
+	{
+		bgen.setAlienRace(_alienRaces[_selAlien]);
+	}
 	bgen.setAlienItemlevel(_selItemLevel);
 
 	bgen.run();
@@ -548,10 +560,18 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		updateIndex(_selAlien, _alienRaces, 1);
+		if (_alienRaces[_selAlien] == "STR_MIXED")
+		{
+			updateIndex(_selAlien, _alienRaces, 1);
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		updateIndex(_selAlien, _alienRaces, -1);
+		if (_alienRaces[_selAlien] == "STR_MIXED")
+		{
+			updateIndex(_selAlien, _alienRaces, -1);
+		}
 	}
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
 	Options::setInt("NewBattleAlienRace", _selAlien);

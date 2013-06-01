@@ -45,6 +45,8 @@ private:
 	std::vector<MapBlock*> _mapBlocks;
 	std::string _name;
 	int _largeBlockLimit;
+	std::vector<int> _textures;
+	int _hemisphere;
 public:
 	RuleTerrain(const std::string &name);
 	~RuleTerrain();
@@ -66,6 +68,9 @@ public:
 	MapData *getMapData(int *id, int *mapDataSetID) const;
 	int getLargeBlockLimit() const;
 	void resetMapBlocks();
+	std::vector<int> *getTextures();
+	int getHemisphere() const;
+
 };
 
 }

@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0)
+RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _statCaps(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0)
 {
 
 }
@@ -61,6 +61,10 @@ void RuleSoldier::load(const YAML::Node &node)
 		{
 			i.second() >> _maxStats;
 		}
+		else if (key == "statCaps")
+		{
+			i.second() >> _statCaps;
+		}
 		else if (key == "armor")
 		{
 			i.second() >> _armor;
@@ -91,6 +95,7 @@ void RuleSoldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "minStats" << YAML::Value << _minStats;
 	out << YAML::Key << "maxStats" << YAML::Value << _maxStats;
+	out << YAML::Key << "statCaps" << YAML::Value << _statCaps;
 	out << YAML::Key << "armor" << YAML::Value << _armor;
 	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
 	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
@@ -116,6 +121,11 @@ UnitStats RuleSoldier::getMinStats() const
 UnitStats RuleSoldier::getMaxStats() const
 {
 	return _maxStats;
+}
+///
+UnitStats RuleSoldier::getStatCaps() const
+{
+	return _statCaps;
 }
 ///
 int RuleSoldier::getStandHeight() const

@@ -41,6 +41,8 @@
 #include "RuleInventory.h"
 #include "RuleResearch.h"
 #include "RuleManufacture.h"
+#include "ExtraSprites.h"
+#include "ExtraStrings.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -168,6 +170,14 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, ExtraSprites *>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -380,6 +390,7 @@ void Ruleset::loadFile(const std::string &filename)
 				{
 					rule = new RuleTerrain(type);
 					_terrains[type] = rule;
+					_terrainIndex.push_back(type);
 				}
 				rule->load(*j, this);
 			}
@@ -616,6 +627,7 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 		else if (key == "alienItemLevels")
 		{
+			_alienItemLevels.clear();
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::vector<int> type;
@@ -623,23 +635,61 @@ void Ruleset::loadFile(const std::string &filename)
 				_alienItemLevels.push_back(type);
 			}
 		}
-	}
-	if (const YAML::Node *pName = doc.FindValue("MCDPatches"))
-	{
-		for (YAML::Iterator i = (*pName).begin(); i != (*pName).end(); ++i)
+		else if (key == "MCDPatches")
 		{
-			std::string type;
-			(*i)["type"] >> type;
-			if (_MCDPatches.find(type) != _MCDPatches.end())
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
-				_MCDPatches[type]->load(*i, this);
+				std::string type;
+				(*j)["type"] >> type;
+				if (_MCDPatches.find(type) != _MCDPatches.end())
+				{
+					_MCDPatches[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<MCDPatch> patch(new MCDPatch());
+					patch->load(*j);
+					_MCDPatches[type] = patch.release();
+					_MCDPatchesIndex.push_back(type);
+				}
 			}
-			else
+		}
+		else if (key == "extraSprites")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
-				std::auto_ptr<MCDPatch> patch(new MCDPatch());
-				patch->load(*i, this);
-				_MCDPatches[type] = patch.release();
-				_MCDPatchesIndex.push_back(type);
+				std::string type;
+				(*j)["type"] >> type;
+				if (_extraSprites.find(type) != _extraSprites.end())
+				{
+					_extraSprites[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
+					extraSprites->load(*j);
+					_extraSprites[type] = extraSprites.release();
+					_extraSpritesIndex.push_back(type);
+				}
+			}
+		}
+		else if (key == "extraStrings")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				if (_extraStrings.find(type) != _extraStrings.end())
+				{
+					_extraStrings[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<ExtraStrings> extraStrings(new ExtraStrings());
+					extraStrings->load(*j);
+					_extraStrings[type] = extraStrings.release();
+					_extraStringsIndex.push_back(type);
+				}
 			}
 		}
 	}
@@ -1057,6 +1107,16 @@ const std::vector<std::string> &Ruleset::getUfosList() const
 }
 
 /**
+ * Returns the list of all terrains
+ * provided by the ruleset.
+ * @return List of terrains.
+ */
+const std::vector<std::string> &Ruleset::getTerrainList() const
+{
+	return _terrainIndex;
+}
+
+/**
  * Returns the rules for the specified terrain.
  * @param name terrain name.
  * @return Rules for the terrain.
@@ -1412,4 +1472,21 @@ MCDPatch *Ruleset::getMCDPatch(const std::string id) const
 	if (_MCDPatches.end() != i) return i->second; else return 0;
 }
 
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+std::map<std::string, ExtraSprites *> Ruleset::getExtraSprites() const
+{
+	return _extraSprites;
+}
+
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
+{
+	return _extraStrings;
+}
 }
