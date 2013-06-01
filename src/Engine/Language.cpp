@@ -25,6 +25,7 @@
 #include "Exception.h"
 #include "Options.h"
 #include "LocalizedText.h"
+#include "../Ruleset/ExtraStrings.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -515,7 +516,7 @@ std::vector<std::string> Language::getList(TextList *list)
  * @param filename Filename of the LNG file.
  * @sa @ref LanguageFiles
  */
-void Language::loadLng(const std::string &filename)
+void Language::loadLng(const std::string &filename, ExtraStrings *extras)
 {
 	_strings.clear();
 
@@ -552,7 +553,17 @@ void Language::loadLng(const std::string &filename)
 	{
 		throw Exception("Invalid language file");
 	}
-
+	if (extras)
+	{
+		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
+		{
+			std::string s = i->second;
+			replace(s, "{NEWLINE}", "\n");
+			replace(s, "{SMALLLINE}", "\x02");
+			replace(s, "{ALT}", "\x01");
+			_strings[i->first] = utf8ToWstr(s);
+		}
+	}
 	txtFile.close();
 }
 

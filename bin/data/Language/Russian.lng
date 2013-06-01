@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Полноэкранный
 STR_LANGUAGE
 ЯЗЫК
-STR_FARM
+CULTA
 Ферма
-STR_FOREST
+FOREST
 Лес
-STR_JUNGLE
+JUNGLE
 Джунгли
-STR_MOUNTAIN
+MOUNT
 Горы
-STR_DESERT
+DESERT
 Пустыня
-STR_POLAR
+POLAR
 Заполярье
 STR_RANDOM_BATTLE
 случайная битва
@@ -2381,3 +2381,5 @@ STR_ANYTIMEPSITRAINING
 Псионическая тренировка в любое время
 STR_ANYTIMEPSITRAINING_DESC
 Вы можете в любое время отправить солдат на псионическую тренировку (или отменить ее). Помните, начальное обучение займет 30-60 дней.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

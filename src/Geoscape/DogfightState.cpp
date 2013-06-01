@@ -764,6 +764,10 @@ void DogfightState::move()
 			if (_currentDist < _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
 				distanceChange = 4;
+				if (_currentDist + distanceChange >_targetDist)
+				{
+					distanceChange = _targetDist - _currentDist;
+				}
 			}
 			else if (_currentDist > _targetDist && !_ufo->isCrashed() && !_craft->isDestroyed())
 			{
@@ -789,6 +793,7 @@ void DogfightState::move()
 		std::wstringstream ss;
 		ss << _currentDist;
 		_txtDistance->setText(ss.str());
+		bool projectileInFlight = false;
 
 		// Move projectiles and check for hits.
 		for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
@@ -836,9 +841,16 @@ void DogfightState::move()
 				}
 
 				// Check if projectile passed it's maximum range.
-				if(p->getGlobalType() == CWPGT_MISSILE && p->getPosition() / 8 >= p->getRange())
+				if(p->getGlobalType() == CWPGT_MISSILE)
 				{
-					p->remove();
+					if (p->getPosition() / 8 >= p->getRange())
+					{
+						p->remove();
+					}
+					else
+					{
+						projectileInFlight = true;
+					}
 				}
 			}
 			// Projectiles fired by UFO.
@@ -907,7 +919,7 @@ void DogfightState::move()
 					fireWeapon2();
 				}
 			}
-			else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || w->getAmmo() == 0 || _mode == _btnStandoff
+			else if (wTimer->isRunning() && (_currentDist > w->getRules()->getRange() * 8 || (w->getAmmo() == 0 && !projectileInFlight) || _mode == _btnStandoff
 				|| _mode == _btnDisengage || _ufo->isCrashed() || _craft->isDestroyed()))
 			{
 				wTimer->stop();

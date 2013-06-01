@@ -208,12 +208,21 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
+	else
+	{
+		Surface *armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		if (armorSurface)
+		{
+			armorSurface->blit(_soldier);
+		}
+	}
+
 	if (_showMoreStatsInInventoryView && !_tu)
 	{
 		std::wstringstream ss2;

@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Pełny ekran
 STR_LANGUAGE
 Wybór języka
-STR_FARM
+CULTA
 Farma
-STR_FOREST
+FOREST
 Zalesiony
-STR_JUNGLE
+JUNGLE
 Dżungla
-STR_MOUNTAIN
+MOUNT
 Górzysty
-STR_DESERT
+DESERT
 Pustynny
-STR_POLAR
+POLAR
 Polarny
 STR_RANDOM_BATTLE
 Potyczka losowa
@@ -2385,3 +2385,5 @@ STR_ANYTIMEPSITRAINING
 Psionic training at any time
 STR_ANYTIMEPSITRAINING_DESC
 You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

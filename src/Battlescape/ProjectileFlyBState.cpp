@@ -322,12 +322,12 @@ void ProjectileFlyBState::think()
 				if (_projectileImpact != 5) // out of map
 				{
 					int offset = 0;
-					// explosions impact not inside the voxel but one step back
+					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
 					if (_ammo && (
 						_ammo->getRules()->getDamageType() == DT_HE ||
 						_ammo->getRules()->getDamageType() == DT_IN))
 					{
-						offset = -1;
+						offset = -2;
 					}
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
 				}

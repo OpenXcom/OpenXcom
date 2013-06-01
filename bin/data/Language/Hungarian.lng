@@ -2125,17 +2125,17 @@ STR_FULLSCREEN
 Teljesképernyős
 STR_LANGUAGE
 NYELV
-STR_FARM
+CULTA
 Farm
-STR_FOREST
+FOREST
 Erdő
-STR_JUNGLE
+JUNGLE
 Dzsungel
-STR_MOUNTAIN
+MOUNT
 Hegység
-STR_DESERT
+DESERT
 Sivatag
-STR_POLAR
+POLAR
 Sarkvidék
 STR_RANDOM_BATTLE
 Random Csata
@@ -2373,3 +2373,5 @@ STR_ANYTIMEPSITRAINING
 Psionic training at any time
 STR_ANYTIMEPSITRAINING_DESC
 You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!

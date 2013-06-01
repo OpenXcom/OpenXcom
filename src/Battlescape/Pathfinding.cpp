@@ -24,7 +24,9 @@
 #include "../Savegame/Tile.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/BattleItem.h"
 #include "../Engine/Game.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/BattlescapeGame.h"
@@ -411,6 +413,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			cost += wallcost;
 			if (_unit->getFaction() == FACTION_HOSTILE && 
 				destinationTile->getUnit() &&
+				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
 				destinationTile->getUnit() != _unit)
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
@@ -792,10 +795,21 @@ bool Pathfinding::previewPath(bool bRemove)
 			for (int y = size; y >= 0; y--)
 			{
 				Tile *tile = _save->getTile(pos + Position(x,y,0));
-				Tile *tileBelow = _save->getTile(pos + Position(x,y,-1));
-				if (!tile->getMapData(MapData::O_FLOOR) && tileBelow && tileBelow->getTerrainLevel() == -24)
+				if (!bRemove)
 				{
-					tileBelow->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
+					if (i == _path.rend() - 1)
+					{
+						tile->setPreview(10);
+					}
+					else
+					{
+						int nextDir = *(i + 1);
+						tile->setPreview(nextDir);
+					}
+				}
+				else
+				{
+					tile->setPreview(-1);
 				}
 				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}

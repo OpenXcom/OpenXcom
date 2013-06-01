@@ -48,6 +48,7 @@ private:
 	bool _music;
 	size_t _alienEquipLevel;
 	Craft *_craft;
+	std::vector<int> _textures;
 
 	void updateIndex(size_t &index, std::vector<std::string> &list, int change);
 public:

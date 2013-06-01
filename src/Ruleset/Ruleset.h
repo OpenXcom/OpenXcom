@@ -53,6 +53,8 @@ class RuleAlienMission;
 class City;
 class Base;
 class MCDPatch;
+class ExtraSprites;
+class ExtraStrings;
 
 /**
  * Set of rules and stats for a game.
@@ -85,11 +87,13 @@ protected:
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, MCDPatch *> _MCDPatches;
+	std::map<std::string, ExtraSprites *> _extraSprites;
+	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::auto_ptr<YAML::Node> _startingBase;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex, _terrainIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
 
 	/// Loads a ruleset from a YAML file.
@@ -199,6 +203,8 @@ public:
 	const YAML::Node &getStartingBase();
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
+	std::map<std::string, ExtraSprites *> getExtraSprites() const;
+	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 };
 
 }

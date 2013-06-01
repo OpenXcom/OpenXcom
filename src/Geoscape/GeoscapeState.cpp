@@ -645,34 +645,8 @@ void GeoscapeState::time5Seconds()
 						}
 						else
 						{
-							int soldiersOnBase = 0;
-							for (std::vector<Soldier*>::iterator j = base->getSoldiers()->begin(); j != base->getSoldiers()->end() ; ++j)
-							{
-								if (((*j)->getCraft() == 0 || (*j)->getCraft()->getStatus() != "STR_OUT") && (*j)->getWoundRecovery() == 0) soldiersOnBase++;
-							}
-							if (soldiersOnBase > 0)
-							{
-								(*i)->setStatus(Ufo::DESTROYED);
-								size_t month = _game->getSavedGame()->getMonthsPassed();
-								if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-									month = _game->getRuleset()->getAlienItemLevels().size()-1;
-								SavedBattleGame *bgame = new SavedBattleGame();
-								_game->getSavedGame()->setBattleGame(bgame);
-								bgame->setMissionType("STR_BASE_DEFENSE");
-								BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-								bgen.setBase(base);
-								bgen.setAlienRace((*i)->getAlienRace());
-								bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-								bgen.run();
-								musicStop();
-								popup(new BriefingState(_game, 0, base));
-							}
-							else
-							{
-								(*i)->setStatus(Ufo::DESTROYED);
-								popup(new BaseDestroyedState(_game, base));
-								return;
-							}
+                            handleBaseDefense(base, *i);
+                            return;
 						}
 					}
 				}
@@ -738,7 +712,7 @@ void GeoscapeState::time5Seconds()
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0 && !u->getDetected())
 				{
-					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && u->getStatus() == Ufo::LANDED)
+					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (u->getStatus() == Ufo::LANDED || u->getStatus() == Ufo::DESTROYED))
 					{
 						(*j)->returnToBase();
 					}
@@ -1972,6 +1946,39 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 		}
 	}
 	return slotNo;
+}
+
+/**
+ * Handle base defense
+ * @param base Base to defend.
+ * @param ufo Ufo attacking base.
+ */
+void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
+{
+    // Whatever happens in the base defense, the UFO has finished its duty
+	ufo->setStatus(Ufo::DESTROYED);
+
+	if (base->getAvailableSoldiers(true) > 0)
+	{
+		size_t month = _game->getSavedGame()->getMonthsPassed();
+		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
+			month = _game->getRuleset()->getAlienItemLevels().size()-1;
+		SavedBattleGame *bgame = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(bgame);
+		bgame->setMissionType("STR_BASE_DEFENSE");
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.setBase(base);
+		bgen.setAlienRace(ufo->getAlienRace());
+		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+		bgen.run();
+		musicStop();
+		popup(new BriefingState(_game, 0, base));
+	}
+	else
+	{
+	    // Please garrison your bases in future
+		popup(new BaseDestroyedState(_game, base));
+	}
 }
 
 /**

@@ -25,6 +25,33 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
+resourcesdir =  $(pkgdatadir)/data/Resources/Pathfinding
+resources_DATA = \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_02.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_03.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_04.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_05.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_06.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_07.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_08.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_09.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_10.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_11.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_12.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_13.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_14.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_15.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_16.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_17.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_18.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_19.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
+
 rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
@@ -508,6 +535,10 @@ openxcom_SOURCES = \
 	src/Ruleset/ArticleDefinition.h \
 	src/Ruleset/City.cpp \
 	src/Ruleset/City.h \
+	src/Ruleset/ExtraSprites.cpp \
+	src/Ruleset/ExtraSprites.h \
+	src/Ruleset/ExtraStrings.cpp \
+	src/Ruleset/ExtraStrings.h \
 	src/Ruleset/MapBlock.cpp \
 	src/Ruleset/MapBlock.h \
 	src/Ruleset/MapData.cpp \
@@ -667,6 +698,7 @@ EXTRA_DIST = \
 	$(pkgdata_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
+	$(resources_DATA) \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \
