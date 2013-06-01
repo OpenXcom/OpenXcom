@@ -214,6 +214,15 @@ void InventoryState::init()
 		}
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
+	else
+	{
+		Surface *armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		if (armorSurface)
+		{
+			armorSurface->blit(_soldier);
+		}
+	}
+
 	if (_showMoreStatsInInventoryView && !_tu)
 	{
 		std::wstringstream ss2;
