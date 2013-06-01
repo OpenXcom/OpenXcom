@@ -25,7 +25,7 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
-resourcesdir =  $(pkgdatadir)/data/Resources
+resourcesdir =  $(pkgdatadir)/data/Resources/Pathfinding
 resources_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
