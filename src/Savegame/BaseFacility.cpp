@@ -162,8 +162,8 @@ bool BaseFacility::inUse() const
 }
 
 /**
- * Returns if this facility has been marked for dismantlement.
- * @return True if it's about to be dismantleed, False otherwise.
+ * Checks if the facility has been set to be dismantled.
+ * @return True if it's about to be dismantled, False otherwise.
  */
 bool BaseFacility::isBeingDismantled() const
 {
@@ -171,7 +171,7 @@ bool BaseFacility::isBeingDismantled() const
 }
 
 /**
- * Marks this facility as a target for dismantlement.
+ * Sets the facility to be dismantled.
  */
 void BaseFacility::dismantle()
 {
