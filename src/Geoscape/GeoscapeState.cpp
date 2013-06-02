@@ -363,6 +363,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_dogfightStartTimer->onTimer((StateHandler)&GeoscapeState::startDogfight);
 
 	timeDisplay();
+	_game->getResourcePack()->getMusic("GMGEO1")->play();
+	_music = true;
 }
 
 /**
