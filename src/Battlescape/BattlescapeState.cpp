@@ -787,7 +787,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
  */
 void BattlescapeState::btnHelpClick(Action *)
 {
-	if (_map->getProjectile() != 0) // we're deliberately not using allowButtons() here, so we can save if something goes wrong during the alien turn, and submit it for dissection.
+	if (_map->getProjectile() == 0) // we're deliberately not using allowButtons() here, so we can save if something goes wrong during the alien turn, and submit it for dissection.
 		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
@@ -1704,6 +1704,6 @@ bool BattlescapeState::getMouseOverIcons() const
 }
 bool BattlescapeState::allowButtons() const
 {
-	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() != 0;
+	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
 }
 }
