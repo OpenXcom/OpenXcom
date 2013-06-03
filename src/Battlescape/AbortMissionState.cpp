@@ -72,7 +72,7 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	// Calculate values
 	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
+		if ((*i)->getOriginalFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
 			if ((nextStage != "" && (*i)->isInExitArea(END_POINT)) || ((*i)->isInExitArea() && nextStage == ""))
 			{
