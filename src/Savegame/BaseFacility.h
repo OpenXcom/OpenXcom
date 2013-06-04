@@ -68,10 +68,6 @@ public:
 	void build();
 	/// Checks if the facility is currently in use.
 	bool inUse() const;
-	/// Checks if the facility has been set to be dismantled.
-	bool isBeingDismantled() const;
-	/// Sets the facility to be dismantled.
-	void dismantle();
 };
 
 }

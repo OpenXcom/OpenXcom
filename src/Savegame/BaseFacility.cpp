@@ -161,20 +161,5 @@ bool BaseFacility::inUse() const
 			(_rules->getAliens() > 0 && _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment()));
 }
 
-/**
- * Checks if the facility has been set to be dismantled.
- * @return True if it's about to be dismantled, False otherwise.
- */
-bool BaseFacility::isBeingDismantled() const
-{
-   return _dismantled;
-}
 
-/**
- * Sets the facility to be dismantled.
- */
-void BaseFacility::dismantle()
-{
-    _dismantled = true;
-}
 }

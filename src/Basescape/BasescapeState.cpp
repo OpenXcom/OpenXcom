@@ -418,7 +418,7 @@ void BasescapeState::viewClick(Action *)
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
-	if (f == 0 || (f && f->isBeingDismantled()))
+	if (f == 0)
 		_txtFacility->setText(L"");
 	else
 		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));

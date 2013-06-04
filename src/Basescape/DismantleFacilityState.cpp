@@ -107,7 +107,7 @@ void DismantleFacilityState::btnOkClick(Action *)
 			if (*i == _fac)
 			{
 				_base->getFacilities()->erase(i);
-				_fac->dismantle();
+				_view->resetSelectedFacility();
 				delete _fac;
 				if (Options::getBool("allowBuildingQueue")) _view->reCalcQueuedBuildings();
 				break;
