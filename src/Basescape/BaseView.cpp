@@ -129,10 +129,7 @@ BaseFacility *BaseView::getSelectedFacility() const
  */
 void BaseView::resetSelectedFacility()
 {
-    for (int x = 0; x < BASE_SIZE; ++x)
-        for (int y = 0; y < BASE_SIZE; ++y)
-            if (_facilities[x][y] == _selFacility)
-                _facilities[x][y] = 0;
+    _facilities[_selFacility->getX()][_selFacility->getY()] = 0;
     _selFacility = 0;
 }
 
