@@ -785,7 +785,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// calculate the clips for each type based on the recovered rounds.
-	for (std::map<RuleItem*, int>::const_iterator i = _rounds.cbegin(); i != _rounds.cend(); ++i)
+	for (std::map<RuleItem*, int>::const_iterator i = _rounds.begin(); i != _rounds.end(); ++i)
 	{
 		int total_clips = i->second / i->first->getClipSize();
 		if (total_clips > 0)
