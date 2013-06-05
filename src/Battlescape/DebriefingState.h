@@ -55,6 +55,7 @@ private:
 	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtRecovery, *_txtRating;
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
+	std::map<RuleItem*, int> _rounds;
 	void addStat(const std::string &name, int quantity, int score);
 	void prepareDebriefing();
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
