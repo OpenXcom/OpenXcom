@@ -2283,6 +2283,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\ExtraSounds.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraSounds.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\ExtraStrings.cpp"
 				>
 			</File>

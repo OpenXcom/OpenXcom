@@ -27,6 +27,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/GMCat.h"
 #include "../Engine/SoundSet.h"
+#include "../Engine/Sound.h"
 #include "../Engine/Options.h"
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"
@@ -43,6 +44,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Logger.h"
 #include "../Ruleset/ExtraSprites.h"
+#include "../Ruleset/ExtraSounds.h"
 
 namespace OpenXcom
 {
@@ -72,7 +74,7 @@ struct HairBleach
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
  */
-XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSprites) : ResourcePack()
+XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSprites, std::map<std::string, ExtraSounds *> extraSounds) : ResourcePack()
 {
 	// Load palettes
 	for (int i = 0; i < 5; ++i)
@@ -583,6 +585,53 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 					s << CrossPlatform::getDataFile(j->second);
 					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
 				}
+			}
+		}
+	}
+	for (std::map<std::string, ExtraSounds*>::iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
+	{
+		if (_sounds.find(i->first) == _sounds.end())
+		{
+			if (debugOutput)
+			{
+				Log(LOG_INFO) << "Creating new sound set: " << i->first;
+			}
+			_sounds[i->first] = new SoundSet();
+		}
+		else if (debugOutput)
+		{
+			Log(LOG_INFO) << "Adding/Replacing items in sound set: " << i->first;
+		}
+		for (std::map<int, std::string>::iterator j = i->second->getSounds()->begin(); j != i->second->getSounds()->end(); ++j)
+		{
+			s.str("");
+			if ((*j).second.substr((*j).second.length() - 1, 1) == "/")
+			{
+				if (debugOutput)
+				{
+					Log(LOG_INFO) << "Loading sound set from folder: " << j->second << " starting at index: " << j->first;
+				}
+				int offset = j->first;
+				std::stringstream folder;
+				folder << CrossPlatform::getDataFolder(j->second);
+				std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
+				for (std::vector<std::string>::iterator k = contents.begin();
+					k != contents.end(); ++k)
+				{
+					s.str("");
+					s << folder.str() << CrossPlatform::getDataFile(*k);
+					_sounds[i->first]->getSound(offset)->load(s.str());
+					offset++;
+				}
+			}
+			else
+			{
+				if (debugOutput)
+				{
+					Log(LOG_INFO) << "adding/Replacing index: " << j->first;
+				}
+				s << CrossPlatform::getDataFile(j->second);
+				_sounds[i->first]->getSound(j->first)->load(s.str());
 			}
 		}
 	}

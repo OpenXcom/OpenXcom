@@ -430,6 +430,8 @@ set ( ruleset_src
   Ruleset/City.h
   Ruleset/ExtraSprites.cpp
   Ruleset/ExtraSprites.h
+  Ruleset/ExtraSounds.cpp
+  Ruleset/ExtraSounds.h
   Ruleset/ExtraStrings.cpp
   Ruleset/ExtraStrings.h
   Ruleset/RuleTerrain.cpp

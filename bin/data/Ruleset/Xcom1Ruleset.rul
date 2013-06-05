@@ -9317,6 +9317,10 @@ extraSprites:
     height: 80
     files:
       0: Resources/Pathfinding/
+#extraSounds:
+#  - type: BATTLE.CAT
+#    files:
+#      55: Resources/Sounds/sample.wav
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
 #    width: 32

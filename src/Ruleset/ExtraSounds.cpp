@@ -16,39 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_SOUNDSET_H
-#define OPENXCOM_SOUNDSET_H
 
-#include <map>
-#include <string>
+#include "ExtraSounds.h"
 
 namespace OpenXcom
 {
 
-class Sound;
-
-/**
- * Container of a set of sounds.
- * Used to manage file sets that contain a pack
- * of sounds inside.
- */
-class SoundSet
+ExtraSounds::ExtraSounds()
 {
-private:
-	std::map<int, Sound*> _sounds;
-public:
-	/// Crates a sound set.
-	SoundSet();
-	/// Cleans up the sound set.
-	~SoundSet();
-	/// Loads an X-Com CAT set of sound files.
-	void loadCat(const std::string &filename, bool wav = true);
-	/// Gets a particular sound from the set.
-	Sound *getSound(unsigned int i);
-	/// Gets the total sounds in the set.
-	size_t getTotalSounds() const;
-};
-
 }
 
-#endif
+
+ExtraSounds::~ExtraSounds()
+{
+}
+
+void ExtraSounds::load(const YAML::Node &node)
+{
+	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	{
+		std::string key;
+		i.first() >> key;
+		if (key == "files")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				int index;
+				j.first() >> index;
+				std::string filename;
+				j.second() >> filename;
+				_sounds[index] = filename;
+			}
+		}
+	}
+}
+
+std::map<int, std::string> *ExtraSounds::getSounds()
+{
+	return &_sounds;
+}
+}
