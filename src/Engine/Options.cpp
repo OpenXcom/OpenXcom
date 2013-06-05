@@ -123,7 +123,6 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
 	setInt("windowedModePositionY", -1);
-	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
