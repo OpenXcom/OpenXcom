@@ -50,7 +50,6 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
 #include <sstream>
-#include <map>
 #include "../Menu/MainMenuState.h"
 #include "../Engine/RNG.h"
 #include "../Interface/Cursor.h"
