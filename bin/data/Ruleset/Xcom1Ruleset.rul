@@ -1221,6 +1221,7 @@ craftWeapons:
     clip: STR_FUSION_BALL
     projectileType: 3
     projectileSpeed: 8
+items:
 # Item Definitions:
 #  - type: Item name, reference to string defined in .lng, must be unique. (string)
 #    size: How much space this item takes up in storage. (float) (default 0.0)
@@ -1274,7 +1275,6 @@ craftWeapons:
 #    recover: tally this item for end of mission results? (boolean) (default false)
 #    liveAlien: does this require containment? (boolean) (default false)
 #    attraction: represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
-items:
   - type: STR_STINGRAY_LAUNCHER
     size: 0.8
     costBuy: 16000
@@ -8726,6 +8726,14 @@ startingBase:
       []
     productions:
       []
+startingTime:
+  second: 0
+  minute: 0
+  hour: 12
+  weekday: 6
+  day: 1
+  month: 1
+  year: 1999
 costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000

@@ -49,7 +49,6 @@ GameTime::~GameTime()
 void GameTime::load(const YAML::Node &node)
 {
 	node["second"] >> _second;
-	node["second"] >> _second;
 	node["minute"] >> _minute;
 	node["hour"] >> _hour;
 	node["weekday"] >> _weekday;

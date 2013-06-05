@@ -52,6 +52,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
+#include "../Savegame/GameTime.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "City.h"
@@ -577,6 +578,10 @@ void Ruleset::loadFile(const std::string &filename)
 			//_startingBase->load(i.second(), 0);
 			_startingBase = i.second().Clone();
 		}
+		else if (key == "startingTime")
+		{
+			_startingTime = i.second().Clone();
+		}
 		else if (key == "costSoldier")
 		{
 			i.second() >> _costSoldier;
@@ -968,6 +973,8 @@ SavedGame *Ruleset::newSave() const
 	save->getBases()->push_back(base);
 	// Setup alien strategy
 	save->getAlienStrategy().init(this);
+
+	save->getTime()->load(*_startingTime);
 
 	return save;
 }
