@@ -9317,10 +9317,6 @@ extraSprites:
     height: 80
     files:
       0: Resources/Pathfinding/
-#extraSounds:
-#  - type: BATTLE.CAT
-#    files:
-#      55: Resources/Sounds/sample.wav
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
 #    width: 32
@@ -9330,6 +9326,18 @@ extraSprites:
 #      1: Resources/Bunny/Bunny01.bmp
 #      2: Resources/Bunny/Bunny02.gif
 #
+#Extra Sounds:
+# type should correspond to one of the following: 
+#   - BATTLE.CAT     - battlescape noises, original cat file has 55 entries (0-54) 
+#                      see http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT
+#   - GMINTRO.CAT    - some intro sounds, probably best not to mess with these.
+#   - SAMPLE3.CAT    - some more intro sounds, probably best not to mess with these.
+#   - GEO.CAT        - geoscape/UI noises, original cat file has 14 entries (0-13)
+#                      see http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE.CAT
+#extraSounds:
+#  - type: BATTLE.CAT
+#    files:
+#      55: Resources/Sounds/sample.wav
 #Extra strings:
 # type must correspond to the filename of the language you want to add to
 # the rest should be fairly straight forward
