@@ -91,6 +91,7 @@ public:
 	std::vector<int> findReachable(BattleUnit *unit, int tuMax);
 	/// get _totalTUCost; find out whether we can hike somewhere in this turn or not
 	int getTotalTUCost() const { return _totalTUCost; }
+	bool isPathPreviewed() const;
 };
 
 }

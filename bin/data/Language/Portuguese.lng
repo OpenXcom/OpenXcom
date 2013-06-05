@@ -2315,9 +2315,9 @@ STR_BATTLENOTIFYDEATH
 Confirmações de morte
 STR_BATTLENOTIFYDEATH_DESC
 Exibir uma mensagem de cada vez que um soldado XCom morre em combate.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Pré-visualizar percursos
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Um clique com o botão esquerdo traça uma pré-visualização de percurso dos soldados em campo. Duplo-clique executa a ordem.
 STR_BATTLERANGEBASEDACCURACY
 Precisão de fogo realista
@@ -2381,3 +2381,7 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL

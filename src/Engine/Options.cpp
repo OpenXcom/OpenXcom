@@ -97,7 +97,7 @@ void createDefault()
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
 	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
-	setBool("battlePreviewPath", false); // requires double-click to confirm moves
+	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);

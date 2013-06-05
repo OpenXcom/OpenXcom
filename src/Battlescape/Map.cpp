@@ -77,6 +77,12 @@ namespace OpenXcom
  */
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
+	_previewSetting = Options::getInt("battleNewPreviewPath");
+	if (Options::getBool("TraceAI"))
+	{
+		// turn everything on because we want to see the markers.
+		_previewSetting = 3;
+	}
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
@@ -330,15 +336,16 @@ void Map::drawTerrain(Surface *surface)
 	if (beginY < 0)
 		beginY = 0;
 
-	if (!_waypoints.empty())
+	bool pathfinderTurnedOn = _save->getPathfinding()->isPathPreviewed();
+
+	if (!_waypoints.empty() || (pathfinderTurnedOn && _previewSetting >= 2))
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-		_numWaypid->setColor(Palette::blockOffset(1));
+		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
 	}
 
 	surface->lock();
-	bool pathfinderTurnedOn = false;
 	for (int itZ = beginZ; itZ <= endZ; itZ++)
 	{
 		for (int itX = beginX; itX <= endX; itX++)
@@ -622,9 +629,9 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(), tileShade, false);
 						}
 					}
-					if (tile->getPreview() != -1 && tile->isDiscovered(0))
+					// Draw Path Preview
+					if (tile->getPreview() != -1 && tile->isDiscovered(0) && _previewSetting % 2)
 					{
-						pathfinderTurnedOn = true;
 						if (itZ > 0 && tile->hasNoFloor(tileBelow))
 						{
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(22);
@@ -676,15 +683,27 @@ void Map::drawTerrain(Surface *surface)
 
 					// Draw waypoints if any on this tile
 					int waypid = 1;
+					int waypXOff = 2;
+					int waypYOff = 2;
+
 					for (std::vector<Position>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
 					{
 						if ((*i) == mapPosition)
 						{
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+							if (waypXOff == 2 && waypYOff == 2)
+							{
+								tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
+								tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+							}
 							_numWaypid->setValue(waypid);
 							_numWaypid->draw();
-							_numWaypid->blitNShade(surface, screenPosition.x+2, screenPosition.y+2, 0);
+							_numWaypid->blitNShade(surface, screenPosition.x + waypXOff, screenPosition.y + waypYOff, 0);
+							waypXOff += waypid > 9 ? 8 : 6;
+							if (waypXOff >= 26)
+							{
+								waypXOff = 2;
+								waypYOff += 8;
+							}
 						}
 						waypid++;
 					}
@@ -712,22 +731,33 @@ void Map::drawTerrain(Surface *surface)
 						Tile *tileBelow = _save->getTile(mapPosition - Position(0,0,1));
 						if (!tile || !tile->isDiscovered(0) || tile->getPreview() == -1)
 							continue;
-						
-						if (itZ > 0 && tile->hasNoFloor(tileBelow))
+						int adjustment = 20 - tile->getTerrainLevel();
+						if (_previewSetting % 2)
 						{
-							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
+							if (itZ > 0 && tile->hasNoFloor(tileBelow))
+							{
+								tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
+								if (tmpSurface)
+								{
+									tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+								}
+							}
+							int overlay = tile->getPreview() + 11;
+							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 							if (tmpSurface)
 							{
-								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
 							}
 						}
-						int overlay = tile->getPreview() + 11;
-						tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
-
-						if (tmpSurface)
+						
+						if (_previewSetting >= 2)
 						{
-							int adjustment = 20 - tile->getTerrainLevel();
-							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
+							int tuMarker = std::max(0, tile->getTUMarker());
+
+							_numWaypid->setValue(tuMarker);
+							_numWaypid->draw();
+							int off = tile->getTUMarker() > 9 ? 4 : 2;
+							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (50-adjustment), 0);
 						}
 					}
 				}

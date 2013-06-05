@@ -86,8 +86,8 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
 	_txtDescription->setWordWrap(true);
 
-
-	_lstOptions->setColumns(2, 245, 23);
+	_lstOptions->setAlign(ALIGN_RIGHT, 1);
+	_lstOptions->setColumns(2, 220, 48);
 	_lstOptions->setColor(Palette::blockOffset(8)+5);
 
 	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
@@ -98,7 +98,6 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleAutoEnd", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleInstantGrenade", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleNotifyDeath", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("battlePreviewPath", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleRangeBasedAccuracy", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
@@ -115,7 +114,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 
 	_boolQuantity = _settingBoolSet.size();
-
+	int sel = 0;
 	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
 	{
 		std::string settingName = (*i).first;
@@ -123,8 +122,10 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 		std::wstring setting =  (*i).second ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), setting.c_str());
+		++sel;
 	}
-
+	
+	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
 
 
@@ -133,9 +134,17 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 		std::string settingName = (*i).first;
 		(*i).second = Options::getInt(settingName);
 		std::wstringstream ss;
-		ss << (*i).second;
+		if (i->first == "battleNewPreviewPath")
+		{
+			ss << updatePathString(sel - _settingBoolSet.size()).c_str();
+		}
+		else
+		{
+			ss << (*i).second;
+		}
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), ss.str().c_str());
+		++sel;
 	}
 
 	_lstOptions->setSelectable(true);
@@ -204,7 +213,14 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
 		i->second = 0;
-		_lstOptions->setCellText(sel, 1, L"0");
+		if (i->first == "battleNewPreviewPath")
+		{
+			_lstOptions->setCellText(sel, 1, updatePathString(sel - _settingBoolSet.size()).c_str());
+		}
+		else
+		{
+			_lstOptions->setCellText(sel, 1, L"0");
+		}
 		++sel;
 	}
 }
@@ -222,21 +238,28 @@ void AdvancedOptionsState::lstOptionsClick(Action *)
 	{
 		size_t intSel = sel - _boolQuantity;
 		int increment = 1;
+		std::wstringstream ss;
 		// this is purely future-proofing.
 		switch (intSel)
 		{
-		case 0:
+		case 0: // pathfinding setting
 			if (_settingIntSet.at(intSel).second == 3)
 			{
 				increment = -3;
 			}
+			_settingIntSet.at(intSel).second += increment;
+			ss << updatePathString(intSel).c_str();
 			break;
+		case 1: // explosion height
+			if (_settingIntSet.at(intSel).second == 3)
+			{
+				increment = -3;
+			}
 		default:
+			_settingIntSet.at(intSel).second += increment;
+			ss << _settingIntSet.at(intSel).second;
 			break;
 		}
-		_settingIntSet.at(intSel).second += increment;
-		std::wstringstream ss;
-		ss << _settingIntSet.at(intSel).second;
 		settingText = ss.str();
 	}
 	_lstOptions->setCellText(sel, 1, settingText.c_str());
@@ -266,4 +289,21 @@ void AdvancedOptionsState::lstOptionsMouseOut(Action *)
 	_txtDescription->setText(L"");
 }
 
+std::wstring AdvancedOptionsState::updatePathString(int sel)
+{
+	switch (_settingIntSet.at(sel).second)
+	{
+	case 0:
+		return _game->getLanguage()->getString("STR_NONE_UC");
+	case 1:
+		return _game->getLanguage()->getString("STR_ARROWS");
+	case 2:
+		return _game->getLanguage()->getString("STR_TU_COST");
+	case 3:
+		return _game->getLanguage()->getString("STR_FULL");
+	default:
+		break;
+	}
+	return L"";
+}
 }

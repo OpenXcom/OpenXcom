@@ -1162,7 +1162,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
-	bool bPreviewed = Options::getBool("battlePreviewPath");
+	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
 	if (_save->getPathfinding()->removePreview() && bPreviewed) return true;
 
@@ -1225,7 +1225,7 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position &pos)
 {
-	bool bPreviewed = Options::getBool("battlePreviewPath");
+	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
 	if (_currentAction.targeting && _save->getSelectedUnit())
 	{

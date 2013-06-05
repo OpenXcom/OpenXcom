@@ -82,6 +82,7 @@ PathfindingNode *Pathfinding::getNode(const Position& pos)
 void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *target, int maxTUCost)
 {
 	_totalTUCost = 0;
+	_path.clear();
 	// i'm DONE with these out of bounds errors.
 	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize() || endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize() || endPosition.x < 0 || endPosition.y < 0) return;
 
@@ -146,8 +147,6 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
 	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) && 
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
-
-	_path.clear();
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
@@ -806,10 +805,12 @@ bool Pathfinding::previewPath(bool bRemove)
 						int nextDir = *(i + 1);
 						tile->setPreview(nextDir);
 					}
+						tile->setTUMarker(tus);
 				}
 				else
 				{
 					tile->setPreview(-1);
+					tile->setTUMarker(0);
 				}
 				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
 			}
@@ -1024,8 +1025,14 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
  * Get strafe move.
  * @return strafe move
  */
-bool Pathfinding::getStrafeMove() const {
+bool Pathfinding::getStrafeMove() const
+{
 	return _strafeMove;
+}
+
+bool Pathfinding::isPathPreviewed() const
+{
+	return _pathPreviewed;
 }
 
 }

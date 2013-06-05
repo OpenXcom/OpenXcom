@@ -2317,9 +2317,9 @@ STR_BATTLENOTIFYDEATH
 Show death notifications
 STR_BATTLENOTIFYDEATH_DESC
 Display notifications every time one of your soldiers die.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Pathfinding preview
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Left-click highlights the path your unit will take to the destination, double-click moves the unit.
 STR_BATTLERANGEBASEDACCURACY
 Range-based accuracy
@@ -2383,3 +2383,7 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL
