@@ -514,14 +514,20 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 		ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face+6));
 		surf->unlock();
 	}
-
+	
+	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 	for (std::map<std::string, ExtraSprites*>::iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
 	{
 		if (i->second->getSingleImage())
 		{
 			if (_surfaces.find(i->first) == _surfaces.end())
 			{
+				Log(LOG_DEBUG) << "Creating new single image: " << i->first;
 				_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
+			}
+			else
+			{
+				Log(LOG_DEBUG) << "Replacing single image: " << i->first;
 			}
 			s.str("");
 			s << CrossPlatform::getDataFile(i->second->getSprites()->operator[](0));
@@ -531,13 +537,19 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 		{
 			if (_sets.find(i->first) == _sets.end())
 			{
+				Log(LOG_DEBUG) << "Creating new surface set: " << i->first;
 				_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
+			}
+			else
+			{
+				Log(LOG_DEBUG) << "Replacing items in surface set: " << i->first;
 			}
 			for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
 			{
 				s.str("");
 				if ((*j).second.substr((*j).second.length() - 1, 1) == "/")
 				{
+					Log(LOG_DEBUG) << "Loading surface set from folder: " << j->second << " starting at frame: " << j->first;
 					int offset = j->first;
 					std::stringstream folder;
 					folder << CrossPlatform::getDataFolder(j->second);
@@ -553,6 +565,7 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 				}
 				else
 				{
+					Log(LOG_DEBUG) << "Replacing frame: " << j->first;
 					s << CrossPlatform::getDataFile(j->second);
 					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
 				}
