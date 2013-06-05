@@ -2378,10 +2378,10 @@ Controlul mental al tuturor extratereștrilor rămași finalizează automat misi
 STR_NOT_ENOUGH_SPACE
 Insuficient Spațiu!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Recuperare articole tip XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
 STR_ARROWS
-ARROWS
+SĂGEȚI
 STR_FULL
-FULL
+COMPLETĂ
