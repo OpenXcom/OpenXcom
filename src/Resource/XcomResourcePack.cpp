@@ -534,7 +534,7 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 			}
 			else if (debugOutput)
 			{
-				Log(LOG_INFO) << "Replacing single image: " << i->first;
+				Log(LOG_INFO) << "Adding/Replacing single image: " << i->first;
 			}
 			s.str("");
 			s << CrossPlatform::getDataFile(i->second->getSprites()->operator[](0));
@@ -552,7 +552,7 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 			}
 			else if (debugOutput)
 			{
-				Log(LOG_INFO) << "Replacing items in surface set: " << i->first;
+				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << i->first;
 			}
 			for (std::map<int, std::string>::iterator j = i->second->getSprites()->begin(); j != i->second->getSprites()->end(); ++j)
 			{
@@ -580,7 +580,7 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 				{
 					if (debugOutput)
 					{
-						Log(LOG_INFO) << "Replacing frame: " << j->first;
+						Log(LOG_INFO) << "Adding/Replacing frame: " << j->first;
 					}
 					s << CrossPlatform::getDataFile(j->second);
 					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
