@@ -2377,3 +2377,7 @@ STR_ALLOWPSIONICCAPTURE_DESC
 Псі-контроль над всіма прибульцями, що залишились, означає перемогу і вони рахуються як захоплені живими.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.

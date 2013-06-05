@@ -2379,3 +2379,7 @@ STR_ALLOWPSIONICCAPTURE_DESC
 Mind-controlling all remaining aliens results in victory, and they count as live captures.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.

@@ -2373,3 +2373,7 @@ STR_ALLOWPSIONICCAPTURE_DESC
 Autoriser la victoire par psi-capture. Les aliens sont considérés comme capturés vivants.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.

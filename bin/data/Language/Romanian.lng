@@ -2377,3 +2377,7 @@ STR_ALLOWPSIONICCAPTURE_DESC
 Controlul mental al tuturor extratereștrilor rămași finalizează automat misiunea și capturarea acestora ca fiind vii.
 STR_NOT_ENOUGH_SPACE
 Insuficient Spațiu!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.

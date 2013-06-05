@@ -2377,3 +2377,7 @@ STR_ALLOWPSIONICCAPTURE_DESC
 O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.

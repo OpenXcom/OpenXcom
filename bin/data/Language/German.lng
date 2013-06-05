@@ -2373,3 +2373,7 @@ STR_ALLOWPSIONICCAPTURE_DESC
 Übernahme eines Aliens durch Gedankenkontrolle über das Missionsende hinaus zählt als Gefangennahme.{NEWLINE}Wenn nur noch durch den Spieler kontrollierte Aliens übrig sind gilt die Mission als gewonnen.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.

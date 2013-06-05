@@ -110,6 +110,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("weaponSelfDestruction", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 
