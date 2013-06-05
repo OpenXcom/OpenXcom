@@ -12,7 +12,7 @@ New features:
 - New Battle only assigns mixed alien races for the Final Base Assualt mission.
 
   Geoscape:
-- Automatically end dogfights if the UFO outpaces the fighter and the window is minimised
+- Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.
   
   Battlescape:
 - Inventory: Control-click an item to attempt to swap it between the ground and your soldier's inventory.
