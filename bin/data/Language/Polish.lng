@@ -2384,10 +2384,10 @@ Kontrola jaźni nad wszystkimi pozostałymi przy życiu obcymi pozwala zakończy
 STR_NOT_ENOUGH_SPACE
 Niewystarczająca ilość miejsca!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Odzyskiwanie wyposażenia jak w XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
 STR_ARROWS
-ARROWS
+STRZAŁKI
 STR_FULL
-FULL
+WSZYSTKO
