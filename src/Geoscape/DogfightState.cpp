@@ -1007,7 +1007,7 @@ void DogfightState::move()
 				const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 				AlienMission *mission = new AlienMission(rule);
 				mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-				mission->setRegion(targetRegion);
+				mission->setRegion(targetRegion, *_game->getRuleset());
 				mission->setRace(_ufo->getAlienRace());
 				mission->start();
 				_game->getSavedGame()->getAlienMissions().push_back(mission);

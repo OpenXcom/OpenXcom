@@ -411,6 +411,7 @@ void TextList::setHighContrast(bool contrast)
  * Changes the horizontal alignment of the text in the list. This doesn't change
  * the alignment of existing text, just the alignment of text added from then on.
  * @param align Horizontal alignment.
+ * @param col the column to set the alignment for (defaults to -1, meaning "all")
  */
 void TextList::setAlign(TextHAlign align, int col)
 {

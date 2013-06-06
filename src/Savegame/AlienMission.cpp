@@ -633,4 +633,24 @@ void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
 	addScore(pos.first, pos.second, engine);
 }
 
+/*
+ * Sets the mission's region. if the region is incompatible with
+ * actually carrying out an attack, use the "fallback" region as
+ * defined in the ruleset.
+ * (this is a slight difference from the original, which just
+ * defaulted them to zone[0], North America)
+ * @param region the region we want to try to set the mission to.
+ * @param rules the ruleset, in case we need to swap out the region.
+ */
+void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
+{
+	if (rules.getRegion(region)->getMissionRegion() != "")
+	{
+		_region = rules.getRegion(region)->getMissionRegion();
+	}
+	else
+	{
+		_region = region;
+	}
+}
 }

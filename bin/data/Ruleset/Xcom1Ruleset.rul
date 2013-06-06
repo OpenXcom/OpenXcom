@@ -868,18 +868,21 @@ regions:
         - [62.125, 101.375, -66.625, -57.125]
   - type: STR_NORTH_ATLANTIC
     cost: 500000
+    missionRegion: STR_NORTH_AMERICA
     areas:
       - [305, 335, -70, -30]
       - [300, 335, -30, -10]
       - [315, 335, -10, 0]
   - type: STR_SOUTH_ATLANTIC
     cost: 500000
+    missionRegion: STR_ANTARCTICA
     areas:
       - [330, 5, 0,  15]
       - [325, 5, 15, 60]
       - [5, 55, 40, 60]
   - type: STR_INDIAN_OCEAN
     cost: 500000
+    missionRegion: STR_SOUTHERN_AFRICA
     areas:
       - [55, 70, -15, 10]
       - [70, 90, -5, 10]
