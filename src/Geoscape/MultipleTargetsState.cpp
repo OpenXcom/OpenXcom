@@ -81,8 +81,8 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 		_lstTargets->setColor(Palette::blockOffset(8)+5);
-		_lstTargets->setAlign(ALIGN_CENTER);
 		_lstTargets->setColumns(1, 116);
+		_lstTargets->setAlign(ALIGN_CENTER);
 		_lstTargets->setSelectable(true);
 		_lstTargets->setBackground(_window);
 		_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
