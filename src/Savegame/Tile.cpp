@@ -47,7 +47,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -889,9 +889,19 @@ void Tile::setPreview(int dir)
 	_preview = dir;
 }
 
-int Tile::getPreview()
+const int Tile::getPreview() const
 {
 	return _preview;
+}
+
+void Tile::setTUMarker(int tu)
+{
+	_TUMarker = tu;
+}
+
+const int Tile::getTUMarker() const
+{
+	return _TUMarker;
 }
 
 }

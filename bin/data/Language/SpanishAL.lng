@@ -2317,9 +2317,9 @@ STR_BATTLENOTIFYDEATH
 Mostrar bajas
 STR_BATTLENOTIFYDEATH_DESC
 Esta opción permite mostrar notificaciones cada vez que uno de sus soldados muere.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Mostrar ruta de paso
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Esta opción permite resaltar la ruta que su unidad tomara para llegar a su destino al precionar el botón izquierdo, al presionar dos veces su unidad se movera.
 STR_BATTLERANGEBASEDACCURACY
 Precisión basada en alcance
@@ -2383,3 +2383,11 @@ STR_ALLOWPSIONICCAPTURE_DESC
 Esta opción permite que al controlar mentalmente a todos los alienígena restantes, la misión finaliza automáticamente, y los alienígenas cuentan como las capturas vivas.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL

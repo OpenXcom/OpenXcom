@@ -868,18 +868,21 @@ regions:
         - [62.125, 101.375, -66.625, -57.125]
   - type: STR_NORTH_ATLANTIC
     cost: 500000
+    missionRegion: STR_NORTH_AMERICA
     areas:
       - [305, 335, -70, -30]
       - [300, 335, -30, -10]
       - [315, 335, -10, 0]
   - type: STR_SOUTH_ATLANTIC
     cost: 500000
+    missionRegion: STR_ANTARCTICA
     areas:
       - [330, 5, 0,  15]
       - [325, 5, 15, 60]
       - [5, 55, 40, 60]
   - type: STR_INDIAN_OCEAN
     cost: 500000
+    missionRegion: STR_SOUTHERN_AFRICA
     areas:
       - [55, 70, -15, 10]
       - [70, 90, -5, 10]
@@ -1221,6 +1224,7 @@ craftWeapons:
     clip: STR_FUSION_BALL
     projectileType: 3
     projectileSpeed: 8
+items:
 # Item Definitions:
 #  - type: Item name, reference to string defined in .lng, must be unique. (string)
 #    size: How much space this item takes up in storage. (float) (default 0.0)
@@ -1274,7 +1278,6 @@ craftWeapons:
 #    recover: tally this item for end of mission results? (boolean) (default false)
 #    liveAlien: does this require containment? (boolean) (default false)
 #    attraction: represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
-items:
   - type: STR_STINGRAY_LAUNCHER
     size: 0.8
     costBuy: 16000
@@ -8726,6 +8729,14 @@ startingBase:
       []
     productions:
       []
+startingTime:
+  second: 0
+  minute: 0
+  hour: 12
+  weekday: 6
+  day: 1
+  month: 1
+  year: 1999
 costSoldier: 20000
 costEngineer: 25000
 costScientist: 30000
@@ -9326,6 +9337,18 @@ extraSprites:
 #      1: Resources/Bunny/Bunny01.bmp
 #      2: Resources/Bunny/Bunny02.gif
 #
+#Extra Sounds:
+# type should correspond to one of the following: 
+#   - BATTLE.CAT     - battlescape noises, original cat file has 55 entries (0-54) 
+#                      see http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT
+#   - GMINTRO.CAT    - some intro sounds, probably best not to mess with these.
+#   - SAMPLE3.CAT    - some more intro sounds, probably best not to mess with these.
+#   - GEO.CAT        - geoscape/UI noises, original cat file has 14 entries (0-13)
+#                      see http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE.CAT
+#extraSounds:
+#  - type: BATTLE.CAT
+#    files:
+#      55: Resources/Sounds/sample.wav
 #Extra strings:
 # type must correspond to the filename of the language you want to add to
 # the rest should be fairly straight forward

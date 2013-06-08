@@ -32,7 +32,6 @@ namespace OpenXcom
  */
 InteractiveSurface::InteractiveSurface(int width, int height, int x, int y) : Surface(width, height, x, y), _buttonsPressed(0), _in(0), _over(0), _out(0), _isHovered(false), _isFocused(true), _listButton(false)
 {
-	_classic = Options::getBool("classicMouseHandling");
 }
 
 /**
@@ -116,7 +115,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 				_isHovered = true;
 				mouseIn(action, state);
 			}
-				if (_classic && _listButton && action->getDetails()->type == SDL_MOUSEMOTION)
+				if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 				{
 					_buttonsPressed = SDL_GetMouseState(0, 0);
 					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
@@ -136,7 +135,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
-				if (_classic && _listButton && action->getDetails()->type == SDL_MOUSEMOTION)
+				if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 				{
 					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 					{

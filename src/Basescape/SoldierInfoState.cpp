@@ -505,6 +505,8 @@ void SoldierInfoState::btnOkClick(Action *)
  */
 void SoldierInfoState::btnPrevClick(Action *)
 {
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (_soldier == 0)
 		_soldier = _base->getSoldiers()->size() - 1;
 	else
@@ -518,6 +520,8 @@ void SoldierInfoState::btnPrevClick(Action *)
  */
 void SoldierInfoState::btnNextClick(Action *)
 {
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;
@@ -530,6 +534,8 @@ void SoldierInfoState::btnNextClick(Action *)
  */
 void SoldierInfoState::btnArmorClick(Action *)
 {	
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));

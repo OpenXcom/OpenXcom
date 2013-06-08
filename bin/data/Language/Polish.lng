@@ -2325,9 +2325,9 @@ STR_BATTLENOTIFYDEATH
 Wyświetlaj powiadomienia o śmierci
 STR_BATTLENOTIFYDEATH_DESC
 Wyświetla powiadomienie za każdym razem gdy jeden z Twoich żołnierzy umiera.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Wyświetlaj ścieżkę ruchu
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Wyświetla podgląd ścieżki ruchu podczas wskazywaniu celu przemieszczenia się jednostki.
 STR_BATTLERANGEBASEDACCURACY
 Celność zależna od odległości
@@ -2390,4 +2390,12 @@ Przechwycenie psioniczne
 STR_ALLOWPSIONICCAPTURE_DESC
 Kontrola jaźni nad wszystkimi pozostałymi przy życiu obcymi pozwala zakończyć misję. Są traktowani jako zneutralizowani{NEWLINE}i schwytani żywi.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+Niewystarczająca ilość miejsca!
+STR_WEAPONSELFDESTRUCTION
+Odzyskiwanie wyposażenia jak w XCom 2012
+STR_WEAPONSELFDESTRUCTION_DESC
+Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
+STR_ARROWS
+STRZAŁKI
+STR_FULL
+WSZYSTKO

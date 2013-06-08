@@ -42,6 +42,7 @@
 #include "RuleResearch.h"
 #include "RuleManufacture.h"
 #include "ExtraSprites.h"
+#include "ExtraSounds.h"
 #include "ExtraStrings.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
@@ -51,6 +52,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
+#include "../Savegame/GameTime.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "City.h"
@@ -174,6 +176,10 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 	for (std::map<std::string, ExtraSprites *>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, ExtraSounds *>::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -572,6 +578,10 @@ void Ruleset::loadFile(const std::string &filename)
 			//_startingBase->load(i.second(), 0);
 			_startingBase = i.second().Clone();
 		}
+		else if (key == "startingTime")
+		{
+			_startingTime = i.second().Clone();
+		}
 		else if (key == "costSoldier")
 		{
 			i.second() >> _costSoldier;
@@ -670,6 +680,25 @@ void Ruleset::loadFile(const std::string &filename)
 					extraSprites->load(*j);
 					_extraSprites[type] = extraSprites.release();
 					_extraSpritesIndex.push_back(type);
+				}
+			}
+		}
+		else if (key == "extraSounds")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				if (_extraSounds.find(type) != _extraSounds.end())
+				{
+					_extraSounds[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
+					extraSounds->load(*j);
+					_extraSounds[type] = extraSounds.release();
+					_extraSoundsIndex.push_back(type);
 				}
 			}
 		}
@@ -944,6 +973,8 @@ SavedGame *Ruleset::newSave() const
 	save->getBases()->push_back(base);
 	// Setup alien strategy
 	save->getAlienStrategy().init(this);
+
+	save->getTime()->load(*_startingTime);
 
 	return save;
 }
@@ -1481,6 +1512,14 @@ std::map<std::string, ExtraSprites *> Ruleset::getExtraSprites() const
 	return _extraSprites;
 }
 
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+std::map<std::string, ExtraSounds *> Ruleset::getExtraSounds() const
+{
+	return _extraSounds;
+}
 /**
  * @param id the ID of the MCDPatch we want.
  * @return the MCDPatch based on ID, or 0 if none defined.

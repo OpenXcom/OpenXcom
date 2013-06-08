@@ -659,7 +659,7 @@ void BattlescapeState::btnMapDownClick(Action *)
 void BattlescapeState::btnShowMapClick(Action *)
 {
 	//MiniMapState
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
 }
 
@@ -669,7 +669,7 @@ void BattlescapeState::btnShowMapClick(Action *)
  */
 void BattlescapeState::btnKneelClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		BattleUnit *bu = _save->getSelectedUnit();
 		if (bu)
@@ -712,7 +712,7 @@ void BattlescapeState::btnCenterClick(Action *)
  */
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		selectNextPlayerUnit(true, false);
 }
 
@@ -722,7 +722,7 @@ void BattlescapeState::btnNextSoldierClick(Action *)
  */
 void BattlescapeState::btnNextStopClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		selectNextPlayerUnit(true, true);
 }
 
@@ -732,7 +732,7 @@ void BattlescapeState::btnNextStopClick(Action *)
  */
 void BattlescapeState::btnPrevSoldierClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		selectPreviousPlayerUnit(true);
 }
 
@@ -743,7 +743,7 @@ void BattlescapeState::btnPrevSoldierClick(Action *)
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
@@ -761,7 +761,7 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
  */
 void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
@@ -778,8 +778,7 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
  */
 void BattlescapeState::btnShowLayersClick(Action *)
 {	
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
+	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
 
 /**
@@ -788,6 +787,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
  */
 void BattlescapeState::btnHelpClick(Action *)
 {
+	if (_map->getProjectile() == 0) // we're deliberately not using allowButtons() here, so we can save if something goes wrong during the alien turn, and submit it for dissection.
 		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
@@ -798,7 +798,7 @@ void BattlescapeState::btnHelpClick(Action *)
  */
 void BattlescapeState::btnEndTurnClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		_battleGame->requestEndTurn();
 }
 /**
@@ -807,7 +807,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
  */
 void BattlescapeState::btnAbortClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		_game->pushState(new AbortMissionState(_game, _save, this));
 }
 
@@ -922,7 +922,7 @@ void BattlescapeState::btnPsiClick(Action *action)
  */
 void BattlescapeState::btnReserveClick(Action *action)
 {
-	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
@@ -960,7 +960,8 @@ void BattlescapeState::btnReloadClick(Action *)
  */
 void BattlescapeState::btnPersonalLightingClick(Action *)
 {
-	_save->getTileEngine()->togglePersonalLighting();
+	if (allowButtons())
+		_save->getTileEngine()->togglePersonalLighting();
 }
 
 /**
@@ -970,7 +971,7 @@ void BattlescapeState::btnPersonalLightingClick(Action *)
  */
 bool BattlescapeState::playableUnitSelected()
 {
-	return _save->getSelectedUnit() != 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode());
+	return _save->getSelectedUnit() != 0 && allowButtons();
 }
 
 /**
@@ -1705,5 +1706,9 @@ void BattlescapeState::mouseOutIcons(Action *action)
 bool BattlescapeState::getMouseOverIcons() const
 {
 	return _mouseOverIcons;
+}
+bool BattlescapeState::allowButtons() const
+{
+	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
 }
 }

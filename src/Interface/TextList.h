@@ -20,6 +20,7 @@
 #define OPENXCOM_TEXTLIST_H
 
 #include <vector>
+#include <map>
 #include "../Engine/InteractiveSurface.h"
 #include "Text.h"
 
@@ -45,7 +46,7 @@ private:
 	Font *_big, *_small, *_font;
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color, _color2;
-	TextHAlign _align;
+	std::map<int, TextHAlign> _align;
 	bool _dot, _selectable, _condensed, _contrast;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
@@ -105,7 +106,7 @@ public:
 	/// Sets the text list's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the text horizontal alignment of the text list.
-	void setAlign(TextHAlign align);
+	void setAlign(TextHAlign align, int col = -1);
 	/// Sets whether to separate columns with dots.
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.

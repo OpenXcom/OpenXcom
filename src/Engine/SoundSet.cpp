@@ -37,9 +37,9 @@ SoundSet::SoundSet() : _sounds()
  */
 SoundSet::~SoundSet()
 {
-	for (std::vector<Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+	for (std::map<int, Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
 	{
-		delete *i;
+		delete i->second;
 	}
 }
 
@@ -142,7 +142,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 		{
 			// Ignore junk in the file
 		}
-		_sounds.push_back(s);
+		_sounds[i] = s;
 
 		delete[] sound;
 		if (!wav)
@@ -157,11 +157,11 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
  * @param i Sound number in the set.
  * @return Pointer to the respective sound.
  */
-Sound *SoundSet::getSound(unsigned int i) const
+Sound *SoundSet::getSound(unsigned int i)
 {
-	if (i >= _sounds.size())
+	if (!_sounds[i])
 	{
-		return 0;
+		_sounds[i] = new Sound();
 	}
 	return _sounds[i];
 }
