@@ -2317,9 +2317,9 @@ STR_BATTLENOTIFYDEATH
 Показывать сообщения о смерти
 STR_BATTLENOTIFYDEATH_DESC
 Показывать сообщение каждый раз, когда один из ваших солдат умирает.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Предпросмотр пути
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Подсвечивать предполагаемый путь при выборе направления движения солдата.
 STR_BATTLERANGEBASEDACCURACY
 Точность зависит от расстояния
@@ -2383,3 +2383,11 @@ STR_ANYTIMEPSITRAINING_DESC
 Вы можете в любое время отправить солдат на псионическую тренировку (или отменить ее). Помните, начальное обучение займет 30-60 дней.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL

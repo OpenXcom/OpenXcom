@@ -71,6 +71,7 @@ void createDefault()
 	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
+	setBool("weaponSelfDestruction", false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
@@ -97,7 +98,7 @@ void createDefault()
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
 	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
-	setBool("battlePreviewPath", false); // requires double-click to confirm moves
+	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
@@ -123,7 +124,6 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
 	setInt("windowedModePositionY", -1);
-	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);

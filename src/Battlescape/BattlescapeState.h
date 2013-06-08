@@ -190,6 +190,7 @@ public:
 	void mouseInIcons(Action *action);
 	void mouseOutIcons(Action *action);
 	bool getMouseOverIcons() const;
+	bool allowButtons() const;
 };
 
 }

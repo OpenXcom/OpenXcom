@@ -85,7 +85,7 @@ const YAML::Node &operator>>(const YAML::Node &nd, MissionZone &mz)
  * Creates a blank ruleset for a certain type of region.
  * @param type String defining the type.
  */
-RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0)
+RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0), _missionRegion("")
 {
 }
 
@@ -150,6 +150,10 @@ void RuleRegion::load(const YAML::Node &node)
 		else if (key == "missionZones")
 		{
 			i.second() >> _missionZones;
+		}
+		else if (key == "missionRegion")
+		{
+			i.second() >> _missionRegion;
 		}
 	}
 }

@@ -83,6 +83,7 @@ protected:
 	int _markerColor;
 	int _visible;
 	int _preview;
+	int _TUMarker;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -183,7 +184,9 @@ public:
 	/// Get the tile visible flag.
 	int getVisible();
 	void setPreview(int dir);
-	int getPreview();
+	const int getPreview() const;
+	void setTUMarker(int tu);
+	const int getTUMarker() const;
 };
 
 }

@@ -2313,9 +2313,9 @@ STR_BATTLENOTIFYDEATH
 Mostrar bajas
 STR_BATTLENOTIFYDEATH_DESC
 Esta opción permite mostrar notificaciones cada vez que uno de sus soldados muere.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Mostrar ruta de paso
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Esta opción permite resaltar la ruta que su unidad tomara para llegar a su destino al precionar el botón izquierdo, al presionar dos veces su unidad se movera.
 STR_BATTLERANGEBASEDACCURACY
 Precisión basada en alcance
@@ -2379,3 +2379,11 @@ STR_ANYTIMEPSITRAINING_DESC
 You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL

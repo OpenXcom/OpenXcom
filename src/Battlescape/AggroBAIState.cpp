@@ -764,7 +764,12 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 						
 			if (_game->getTileEngine()->faceWindow(action->target) != -1) score -= WINDOW_PENALTY; // a window is not cover.
                         
-			if (_traceAI) { tile->setMarkerColor(score < 0 ? 3 : (score < FAST_PASS_THRESHOLD/2 ? 8 : (score < FAST_PASS_THRESHOLD ? 9 : 5))); }
+			if (_traceAI)
+			{
+				tile->setMarkerColor(score < 0 ? 3 : (score < FAST_PASS_THRESHOLD/2 ? 8 : (score < FAST_PASS_THRESHOLD ? 9 : 5)));
+				tile->setPreview(10);
+				tile->setTUMarker(score);
+			}
 		}
 
 		if (tile && score > bestTileScore)

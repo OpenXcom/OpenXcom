@@ -51,8 +51,8 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_btnCancel = new TextButton(288, 16, 16, 146);
 	_txtTitle = new Text(300, 16, 10, 46);
 	_txtCraft = new Text(86, 9, 14, 70);
-	_txtStatus = new Text(65, 9, 100, 70);
-	_txtBase = new Text(85, 9, 165, 70);
+	_txtStatus = new Text(70, 9, 100, 70);
+	_txtBase = new Text(80, 9, 170, 70);
 	_txtWeapons = new Text(80, 16, 238, 62);
 	_lstCrafts = new TextList(288, 64, 8, 78);
 
@@ -97,7 +97,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(4, 86, 65, 85, 46);
+	_lstCrafts->setColumns(4, 86, 70, 80, 46);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(6);

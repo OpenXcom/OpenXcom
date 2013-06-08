@@ -63,6 +63,8 @@ public:
 	void lstOptionsMouseOver(Action *action);
 	/// Handler for moving the mouse outside the menu borders.
 	void lstOptionsMouseOut(Action *action);
+	/// special function to sub out strings for pathfinding settings
+	std::wstring updatePathString(int sel);
 
 };
 

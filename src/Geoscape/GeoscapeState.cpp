@@ -363,6 +363,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_dogfightStartTimer->onTimer((StateHandler)&GeoscapeState::startDogfight);
 
 	timeDisplay();
+	_game->getResourcePack()->getMusic("GMGEO1")->play();
+	_music = true;
 }
 
 /**
@@ -1343,7 +1345,7 @@ void GenerateSupplyMission::operator()(const AlienBase *base) const
 		//Spawn supply mission for this base.
 		const RuleAlienMission &rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
 		AlienMission *mission = new AlienMission(rule);
-		mission->setRegion(_save.locateRegion(*base)->getRules()->getType());
+		mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _ruleset);
 		mission->setId(_save.getId("ALIEN_MISSIONS"));
 		mission->setRace(base->getAlienRace());
 		mission->setAlienBase(base);
@@ -1531,7 +1533,7 @@ void GeoscapeState::time1Month()
 						const RuleAlienMission &rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 						AlienMission *mission = new AlienMission(rule);
 						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-						mission->setRegion((*i)->getRules()->getType());
+						mission->setRegion((*i)->getRules()->getType(), *_game->getRuleset());
 						int race = RNG::generate(0, _game->getRuleset()->getAlienRacesList().size()-2); // -2 to avoid "MIXED" race
 						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
 						mission->start();
@@ -2005,7 +2007,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	const std::string &terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 	AlienMission *terrorMission = new AlienMission(terrorRules);
 	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-	terrorMission->setRegion(region->getType());
+	terrorMission->setRegion(region->getType(), *_game->getRuleset());
 	terrorMission->setRace(terrorRace);
 	terrorMission->start();
 	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
@@ -2023,7 +2025,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const std::string &missionRace = missionRules.generateRace(_game->getSavedGame()->getMonthsPassed());
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-		otherMission->setRegion(targetRegion);
+		otherMission->setRegion(targetRegion, *_game->getRuleset());
 		otherMission->setRace(missionRace);
 		otherMission->start();
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
@@ -2042,7 +2044,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		const RuleAlienMission &missionRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_RESEARCH");
 		AlienMission *otherMission = new AlienMission(missionRules);
 		otherMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-		otherMission->setRegion(targetRegion);
+		otherMission->setRegion(targetRegion, *_game->getRuleset());
 		otherMission->setRace("STR_SECTOID");
 		otherMission->start(150);
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);

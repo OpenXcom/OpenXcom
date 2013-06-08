@@ -2315,9 +2315,9 @@ STR_BATTLENOTIFYDEATH
 Afișează notificări decese
 STR_BATTLENOTIFYDEATH_DESC
 Afișează notificări de fiecare dată când un soldat propriu moare.
-STR_BATTLEPREVIEWPATH
+STR_BATTLENEWPREVIEWPATH
 Previzualizarea rutelor
-STR_BATTLEPREVIEWPATH_DESC
+STR_BATTLENEWPREVIEWPATH_DESC
 Click stânga previzualizează ruta urmată de unitate la alegerea unei destinații, dublu click mișcă unitatea.
 STR_BATTLERANGEBASEDACCURACY
 Precizie bazată pe distanță
@@ -2380,4 +2380,12 @@ Psionic training at any time
 STR_ANYTIMEPSITRAINING_DESC
 You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+Insuficient Spațiu!
+STR_WEAPONSELFDESTRUCTION
+Recuperare articole tip XCom 2012
+STR_WEAPONSELFDESTRUCTION_DESC
+Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
+STR_ARROWS
+SĂGEȚI
+STR_FULL
+COMPLETĂ

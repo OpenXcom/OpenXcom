@@ -55,7 +55,6 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtTitle = new Text(300, 16, 16, 8);
 	_txtMonth = new Text(110, 8, 16, 24);
 	_txtRating = new Text(180, 8, 125, 24);
-	_txtRatingTxt = new Text(100, 8, 225, 24);
 	_txtChange = new Text(300, 8, 16, 32);
 	_txtDesc = new Text(280, 140, 16, 40);
 	_txtFailure = new Text(270, 180, 25, 34);
@@ -68,7 +67,6 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	add(_txtTitle);
 	add(_txtMonth);
 	add(_txtRating);
-	add(_txtRatingTxt);
 	add(_txtChange);
 	add(_txtDesc);
 	add(_txtFailure);
@@ -127,13 +125,6 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtMonth->setText(ss.str());
 
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_MONTHLY_RATING") << L'\x01' << _ratingTotal;
-
-	_txtRating->setColor(Palette::blockOffset(15)-1);
-	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtRating->setText(ss2.str());
-	
 	// Calculate rating
 	std::wstring rating = _game->getLanguage()->getString("STR_RATING_TERRIBLE");
 	if (_ratingTotal > difficulty_threshold-300)
@@ -152,8 +143,13 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	{
 		rating = _game->getLanguage()->getString("STR_RATING_EXCELLENT");
 	}
-	_txtRatingTxt->setColor(Palette::blockOffset(15)-1);
-	_txtRatingTxt->setText(rating);
+
+	std::wstringstream ss2;
+	ss2 << _game->getLanguage()->getString("STR_MONTHLY_RATING") << L'\x01' << _ratingTotal << L' ' << L'\x01' << rating;
+	
+	_txtRating->setColor(Palette::blockOffset(15)-1);
+	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
+	_txtRating->setText(ss2.str());
 
 	std::wstringstream ss3;
 	ss3 << _game->getLanguage()->getString("STR_FUNDING_CHANGE") << L'\x01';
@@ -358,7 +354,6 @@ void MonthlyReportState::btnOkClick(Action *)
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);
 			_txtRating->setVisible(false);
-			_txtRatingTxt->setVisible(false);
 			_txtChange->setVisible(false);
 			_txtDesc->setVisible(false);
 			_txtFailure->setVisible(true);
