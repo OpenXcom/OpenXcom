@@ -295,7 +295,8 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	add(_txtInterceptionNumber);
 
 	// Set up objects
-	Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+	Surface *graphic;
+	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
 	graphic->setY(0);
 	graphic->getCrop()->x = 0;
@@ -313,9 +314,18 @@ DogfightState::DogfightState(Game *game, Globe *globe, Craft *craft, Ufo *ufo) :
 	graphic->getCrop()->y = 111;
 	graphic->getCrop()->h = 29;
 	graphic->blit(_preview);
-	graphic->setY(15);
-	graphic->getCrop()->y = 140 + 52 * _ufo->getRules()->getSprite();
-	graphic->getCrop()->h = 52;
+	if (ufo->getRules()->getModSprite() == "")
+	{
+		graphic->setY(15);
+		graphic->getCrop()->y = 140 + 52 * _ufo->getRules()->getSprite();
+		graphic->getCrop()->h = 52;
+	}
+	else
+	{
+		graphic = _game->getResourcePack()->getSurface(ufo->getRules()->getModSprite());
+		graphic->setX(0);
+		graphic->setY(0);
+	}
 	graphic->blit(_preview);
 	_preview->setVisible(false);
 	_preview->onMouseClick((ActionHandler)&DogfightState::previewClick);
