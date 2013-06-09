@@ -223,9 +223,9 @@ void UnitWalkBState::think()
 			// check for reaction fire
 			if (!_falling && !_action.reckless && _terrain->checkReactionFire(_unit, &action))
 			{
-				postPathProcedures();
 				action.cameraPosition = _parent->getMap()->getCamera()->getMapOffset();
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+				_parent->popState();
 				// unit got fired upon - stop walking
 				_pf->abortPath();
 				return;
