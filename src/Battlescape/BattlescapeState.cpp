@@ -1009,6 +1009,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (!playableUnit)
 	{
 		_txtName->setText(L"");
+		showPsiButton(false);
 		return;
 	}
 

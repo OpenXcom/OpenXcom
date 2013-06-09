@@ -404,9 +404,6 @@ void BattlescapeGame::endTurn()
 	_debugPlay = false;
 	_currentAction.type = BA_NONE;
 
-	// in case the selected unit is a MCed alien with psi abilities
-	_save->getBattleState()->showPsiButton(false);
-
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
 		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
