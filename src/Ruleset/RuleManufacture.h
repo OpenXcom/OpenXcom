@@ -35,11 +35,12 @@ private:
 	std::vector<std::string> _requires;
 	int _space, _time, _cost;
 	std::map<std::string, int> _requiredItems;
+	int _listOrder;
 public:
 	/// Create ManufactureInfo
 	RuleManufacture(const std::string &name);
 	/// Loads the manufacture from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int listOrder);
 	/// Saves the manufacture to YAML.
 	void save(YAML::Emitter& out) const;
 	///Get the manufacture name
@@ -56,6 +57,8 @@ public:
 	int getManufactureCost () const;
 	///Get the list of items required to manufacture one object
 	const std::map<std::string, int> & getRequiredItems() const;
+	/// get the list weight for this manufacture item.
+	int getListOrder() const;
 };
 
 }

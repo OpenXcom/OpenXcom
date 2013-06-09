@@ -33,7 +33,7 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _stun(0), _energy(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false)
+											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0)
 {
 }
 
@@ -47,8 +47,10 @@ RuleItem::~RuleItem()
 /**
  * Loads the item from a YAML file.
  * @param node YAML node.
+ * @param modIndex offsets the sounds and sprite values to avoid conflicts.
+ * @param listOrder the list weight for this item.
  */
-void RuleItem::load(const YAML::Node &node)
+void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	int a = 0;
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
@@ -90,14 +92,23 @@ void RuleItem::load(const YAML::Node &node)
 		else if (key == "bigSprite")
 		{
 			i.second() >> _bigSprite;
+			// BIGOBS.PCK: 57 entries
+			if (_bigSprite > 56)
+				_bigSprite += modIndex;
 		}
 		else if (key == "floorSprite")
 		{
 			i.second() >> _floorSprite;
+			// FLOOROB.PCK: 73 entries
+			if (_floorSprite > 72)
+				_floorSprite += modIndex;
 		}
 		else if (key == "handSprite")
 		{
 			i.second() >> _handSprite;
+			// HANDOBS.PCK: 128 entries
+			if (_handSprite > 127)
+				_handSprite += modIndex;
 		}
 		else if (key == "bulletSprite")
 		{
@@ -106,14 +117,23 @@ void RuleItem::load(const YAML::Node &node)
 		else if (key == "fireSound")
 		{
 			i.second() >> _fireSound;
+			// BATTLE.CAT: 55 entries
+			if (_fireSound > 54)
+				_fireSound += modIndex;
 		}
 		else if (key == "hitSound")
 		{
 			i.second() >> _hitSound;
+			// BATTLE.CAT: 55 entries
+			if (_hitSound > 54)
+				_hitSound += modIndex;
 		}
 		else if (key == "hitAnimation")
 		{
 			i.second() >> _hitAnimation;
+			// SMOKE.PCK: 56 entries
+			if (_hitAnimation > 55)
+				_hitAnimation += modIndex;
 		}
 		else if (key == "power")
 		{
@@ -261,6 +281,14 @@ void RuleItem::load(const YAML::Node &node)
 		{
 			i.second() >> _attraction;
 		}
+		else if (key == "listOrder")
+		{
+			i.second() >> _listOrder;
+		}
+	}
+	if (!_listOrder)
+	{
+		_listOrder = listOrder;
 	}
 }
 
@@ -796,18 +824,36 @@ bool RuleItem::getAlien() const
 	return _liveAlien;
 }
 
+/**
+ * @return if this charges a flat TU rate.
+ */
 bool RuleItem::getFlatRate() const
 {
 	return _flatRate;
 }
 
+/**
+ * @return if this weapon should arc it's shots.
+ */
 bool RuleItem::getArcingShot() const
 {
 	return _arcingShot;
 }
 
+/**
+ * @return the attraction value for this item (for AI)
+ */
 int RuleItem::getAttraction() const
 {
 	return _attraction;
 }
+
+/**
+ * @return the list weight for this research item.
+ */
+int RuleItem::getListOrder() const
+{
+	 return _listOrder;
+}
+
 }

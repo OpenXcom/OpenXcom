@@ -30,14 +30,24 @@ private:
 	std::map<int, std::string> _sprites;
 	int _width, _height;
 	bool _singleImage;
+	int _modIndex;
 public:
+	/// Creates a blank external sprite set.
 	ExtraSprites();
+	/// Cleans up the external sprite set.
 	virtual ~ExtraSprites();
-	void load(const YAML::Node &node);
+	/// Loads the data from yaml
+	void load(const YAML::Node &node, int modIndex);
+	/// Gets the list of sprites defined by this mod
 	std::map<int, std::string> *getSprites();
+	/// get the width of the surfaces (used for single images and new spritesets)
 	int getWidth();
+	/// get the height of the surfaces (used for single images and new spritesets)
 	int getHeight();
+	/// is this a single surface, or a set of surfaces?
 	bool getSingleImage();
+	/// get the mod index for this external sprite set.
+	int getModIndex();
 };
 
 }

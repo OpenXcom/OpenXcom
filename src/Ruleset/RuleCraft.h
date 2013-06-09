@@ -46,13 +46,14 @@ private:
 	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
+	int _listOrder;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(const std::string &type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Loads craft data from YAML.
-	void load(const YAML::Node& node, Ruleset *ruleset);
+	void load(const YAML::Node& node, Ruleset *ruleset, int modIndex, int nextCraftIndex);
 	/// Saves the craft data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft's type.
@@ -89,7 +90,10 @@ public:
 	int getScore() const;
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
-	bool getSpacecraft() const { return _spacecraft; }
+	/// Is this craft capable of travelling to mars.
+	bool getSpacecraft() const;
+	/// get the list weight for this craft.
+	int getListOrder() const;
 };
 
 }

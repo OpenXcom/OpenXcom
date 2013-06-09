@@ -22,16 +22,26 @@
 namespace OpenXcom
 {
 
-ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false)
+/*
+ * Creates a blank set of extra sprite data.
+ */
+ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0)
 {
 }
 
-
+/*
+ * Cleans up the extra sprite set.
+ */
 ExtraSprites::~ExtraSprites()
 {
 }
 
-void ExtraSprites::load(const YAML::Node &node)
+/*
+ * Loads the extra sprite set from yaml.
+ * @param node YAML node.
+ * @param modIndex the internal index of the associated mod.
+ */
+void ExtraSprites::load(const YAML::Node &node, int modIndex)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -61,25 +71,46 @@ void ExtraSprites::load(const YAML::Node &node)
 			}
 		}
 	}
+	_modIndex = modIndex;
 }
 
+/*
+ * @return the list of sprites defined my this mod.
+ */
 std::map<int, std::string> *ExtraSprites::getSprites()
 {
 	return &_sprites;
 }
 
+/*
+ * @return the width of the surfaces (used for single images and new spritesets)
+ */
 int ExtraSprites::getWidth()
 {
 	return _width;
 }
 
+/*
+ * @return the height of the surfaces (used for single images and new spritesets)
+ */
 int ExtraSprites::getHeight()
 {
 	return _height;
 }
 
+/*
+ * @return is this a single surface, or a set of surfaces?
+ */
 bool ExtraSprites::getSingleImage()
 {
 	return _singleImage;
+}
+
+/*
+ * @return the mod index for this external sprite set.
+ */
+int ExtraSprites::getModIndex()
+{
+	return _modIndex;
 }
 }

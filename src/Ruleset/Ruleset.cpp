@@ -66,7 +66,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -279,7 +279,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_facilities[type] = rule;
 					_facilitiesIndex.push_back(type);
 				}
-				rule->load(*j);
+				_facilityListOrder += 100;
+				rule->load(*j, _modIndex, _facilityListOrder);
 			}
 		}
 		else if (key == "crafts")
@@ -299,7 +300,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_crafts[type] = rule;
 					_craftsIndex.push_back(type);
 				}
-				rule->load(*j, this);
+				_craftListOrder += 100;
+				rule->load(*j, this, _modIndex, _craftListOrder);
 			}
 		}
 		else if (key == "craftWeapons")
@@ -319,7 +321,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_craftWeapons[type] = rule;
 					_craftWeaponsIndex.push_back(type);
 				}
-				rule->load(*j);
+				rule->load(*j, _modIndex);
 			}
 		}
 		else if (key == "items")
@@ -339,7 +341,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_items[type] = rule;
 					_itemsIndex.push_back(type);
 				}
-				rule->load(*j);
+				_itemListOrder += 100;
+				rule->load(*j, _modIndex, _itemListOrder);
 			}
 		}
 		else if (key == "ufos")
@@ -516,7 +519,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_research[type] = rule;
 					_researchIndex.push_back(type);
 				}
-				rule->load(*j);
+				_researchListOrder += 100;
+				rule->load(*j, _researchListOrder);
 			}
 		}
 		else if (key == "manufacture")
@@ -536,7 +540,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_manufacture[type] = rule;
 					_manufactureIndex.push_back(type);
 				}
-				rule->load(*j);
+				_manufactureListOrder += 100;
+				rule->load(*j, _manufactureListOrder);
 			}
 		}
 		else if (key == "ufopaedia")
@@ -570,7 +575,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_ufopaediaArticles[id] = rule;
 					_ufopaediaIndex.push_back(id);
 				}
-				rule->load(*j);
+				_ufopaediaListOrder += 100;
+				rule->load(*j, _ufopaediaListOrder);
 			}
 		}
 		else if (key == "startingBase")
@@ -672,12 +678,12 @@ void Ruleset::loadFile(const std::string &filename)
 				(*j)["type"] >> type;
 				if (_extraSprites.find(type) != _extraSprites.end())
 				{
-					_extraSprites[type]->load(*j);
+					_extraSprites[type]->load(*j, _modIndex);
 				}
 				else
 				{
 					std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
-					extraSprites->load(*j);
+					extraSprites->load(*j, _modIndex);
 					_extraSprites[type] = extraSprites.release();
 					_extraSpritesIndex.push_back(type);
 				}
@@ -691,12 +697,12 @@ void Ruleset::loadFile(const std::string &filename)
 				(*j)["type"] >> type;
 				if (_extraSounds.find(type) != _extraSounds.end())
 				{
-					_extraSounds[type]->load(*j);
+					_extraSounds[type]->load(*j, _modIndex);
 				}
 				else
 				{
 					std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
-					extraSounds->load(*j);
+					extraSounds->load(*j, _modIndex);
 					_extraSounds[type] = extraSounds.release();
 					_extraSoundsIndex.push_back(type);
 				}
@@ -723,6 +729,8 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 	fin.close();
+
+	_modIndex += 1000;
 }
 
 /**
@@ -1527,5 +1535,151 @@ std::map<std::string, ExtraSounds *> Ruleset::getExtraSounds() const
 std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
+}
+
+/*
+ * Sort all our lists according to their weight.
+ */
+void Ruleset::sortLists()
+{
+	std::map<int, std::string> list;
+	int offset = 0;
+
+	for (std::vector<std::string>::const_iterator i = _itemsIndex.begin(); i != _itemsIndex.end(); ++i)
+	{
+		while (list.find(getItem(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getItem(*i)->getListOrder() + offset] = *i;
+	}
+	_itemsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_itemsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+
+	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
+	{
+		while (list.find(getCraft(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getCraft(*i)->getListOrder() + offset] = *i;
+	}
+	_craftsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_craftsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+	{
+		while (list.find(getBaseFacility(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getBaseFacility(*i)->getListOrder() + offset] = *i;
+	}
+	_facilitiesIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_facilitiesIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
+	{
+		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset] = *i;
+	}
+	_craftWeaponsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_craftWeaponsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	int alternateEntry = 0;
+	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
+	{
+		if (getItem(getArmor(*i)->getStoreItem()))
+		{
+			while (list.find(getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset) != list.end())
+			{
+				++offset;
+			}
+			list[getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset] = *i;
+		}
+		else
+		{
+			list[alternateEntry] = *i;
+			alternateEntry += 1;
+		}
+	}
+	_armorsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_armorsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
+	{
+		while (list.find(getUfopaediaArticle(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getUfopaediaArticle(*i)->getListOrder() + offset] = *i;
+	}
+	_ufopaediaIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_ufopaediaIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _researchIndex.begin(); i != _researchIndex.end(); ++i)
+	{
+		while (list.find(getResearch(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getResearch(*i)->getListOrder() + offset] = *i;
+	}
+	_researchIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_researchIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _manufactureIndex.begin(); i != _manufactureIndex.end(); ++i)
+	{
+		while (list.find(getManufacture(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getManufacture(*i)->getListOrder() + offset] = *i;
+	}
+	_manufactureIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_manufactureIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
 }
 }

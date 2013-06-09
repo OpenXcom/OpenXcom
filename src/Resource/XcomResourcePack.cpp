@@ -542,12 +542,14 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 		}
 		else
 		{
+			bool adding = false;
 			if (_sets.find(i->first) == _sets.end())
 			{
 				if (debugOutput)
 				{
 					Log(LOG_INFO) << "Creating new surface set: " << i->first;
 				}
+				adding = true;
 				_sets[i->first] = new SurfaceSet((*i).second->getWidth(), (*i).second->getHeight());
 			}
 			else if (debugOutput)
@@ -572,22 +574,56 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 					{
 						s.str("");
 						s << folder.str() << CrossPlatform::getDataFile(*k);
-						_sets[i->first]->getFrame(offset)->loadImage(s.str());
+						if (_sets[i->first]->getFrame(offset))
+						{
+							if (debugOutput)
+							{
+								Log(LOG_INFO) << "Replacing frame: " << offset;
+							}
+							_sets[i->first]->getFrame(offset)->loadImage(s.str());
+						}
+						else
+						{
+							if (adding)
+							{
+								_sets[i->first]->addFrame(offset)->loadImage(s.str());
+							}
+							else
+							{
+								if (debugOutput)
+								{
+									Log(LOG_INFO) << "Adding frame: " << offset + i->second->getModIndex();
+								}
+								_sets[i->first]->addFrame(offset + i->second->getModIndex())->loadImage(s.str());
+							}
+						}
 						offset++;
 					}
 				}
 				else
 				{
-					if (debugOutput)
-					{
-						Log(LOG_INFO) << "Adding/Replacing frame: " << j->first;
-					}
 					s << CrossPlatform::getDataFile(j->second);
-					_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+					if (_sets[i->first]->getFrame(j->first))
+					{
+						if (debugOutput)
+						{
+							Log(LOG_INFO) << "Replacing frame: " << j->first;
+						}
+						_sets[i->first]->getFrame(j->first)->loadImage(s.str());
+					}
+					else
+					{
+						if (debugOutput)
+						{
+							Log(LOG_INFO) << "Adding frame: " << j->first << ", using index: " << j->first + i->second->getModIndex();
+						}
+						_sets[i->first]->addFrame(j->first + i->second->getModIndex())->loadImage(s.str());
+					}
 				}
 			}
 		}
 	}
+
 	for (std::map<std::string, ExtraSounds*>::iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
 		if (_sounds.find(i->first) == _sounds.end())
@@ -620,18 +656,36 @@ XcomResourcePack::XcomResourcePack(std::map<std::string, ExtraSprites *> extraSp
 				{
 					s.str("");
 					s << folder.str() << CrossPlatform::getDataFile(*k);
-					_sounds[i->first]->getSound(offset)->load(s.str());
+					if (_sounds[i->first]->getSound(offset))
+					{
+						_sounds[i->first]->getSound(offset)->load(s.str());
+					}
+					else
+					{
+						_sounds[i->first]->addSound(offset + i->second->getModIndex())->load(s.str());
+					}
 					offset++;
 				}
 			}
 			else
 			{
-				if (debugOutput)
-				{
-					Log(LOG_INFO) << "adding/Replacing index: " << j->first;
-				}
 				s << CrossPlatform::getDataFile(j->second);
-				_sounds[i->first]->getSound(j->first)->load(s.str());
+				if (_sounds[i->first]->getSound(j->first))
+				{
+					if (debugOutput)
+					{
+						Log(LOG_INFO) << "Replacing index: " << j->first;
+					}
+					_sounds[i->first]->getSound(j->first)->load(s.str());
+				}
+				else
+				{
+					if (debugOutput)
+					{
+						Log(LOG_INFO) << "Adding index: " << j->first;
+					}
+					_sounds[i->first]->addSound(j->first + i->second->getModIndex())->load(s.str());
+				}
 			}
 		}
 	}

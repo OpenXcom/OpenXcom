@@ -43,7 +43,7 @@ public:
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
 	/// Loads craft weapon data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int modIndex);
 	/// Saves the craft weapon data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft weapon's type.

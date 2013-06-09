@@ -28,11 +28,18 @@ class ExtraSounds
 {
 private:
 	std::map<int, std::string> _sounds;
+	int _modIndex;
 public:
+	/// Creates a blank external sound set.
 	ExtraSounds();
+	/// Cleans up the external sound set.
 	virtual ~ExtraSounds();
-	void load(const YAML::Node &node);
+	/// Loads the data from yaml
+	void load(const YAML::Node &node, int modIndex);
+	/// Gets the list of sounds defined by this mod
 	std::map<int, std::string> *getSounds();
+	/// get the mod index for this external sound set.
+	int getModIndex();
 };
 
 }

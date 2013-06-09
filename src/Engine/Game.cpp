@@ -474,6 +474,7 @@ void Game::loadRuleset()
 	{
 		_rules->load(*i);
 	}
+	_rules->sortLists();
 }
 
 /**

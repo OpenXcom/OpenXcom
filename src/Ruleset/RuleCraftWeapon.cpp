@@ -39,8 +39,9 @@ RuleCraftWeapon::~RuleCraftWeapon()
 /**
  * Loads the craft weapon from a YAML file.
  * @param node YAML node.
+ * @param modIndex offsets the sounds and sprite values to avoid conflicts.
  */
-void RuleCraftWeapon::load(const YAML::Node &node)
+void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -53,10 +54,16 @@ void RuleCraftWeapon::load(const YAML::Node &node)
 		else if (key == "sprite")
 		{
 			i.second() >> _sprite;
+			// this one is an offset within INTICONS.PCK
+			if (_sprite > 5)
+				_sprite += modIndex;
 		}
 		else if (key == "sound")
 		{
 			i.second() >> _sound;
+			// 14 entries in GEO.CAT
+			if (_sound > 13)
+				_sound += modIndex;
 		}
 		else if (key == "damage")
 		{

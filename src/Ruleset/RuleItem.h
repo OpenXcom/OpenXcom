@@ -66,13 +66,14 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
+	int _listOrder;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
 	/// Cleans up the item ruleset.
 	~RuleItem();
 	/// Loads item data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int modIndex, int listIndex);
 	/// Saves the item data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the item's type.
@@ -177,6 +178,8 @@ public:
 	bool getArcingShot() const;
 	/// how much do aliens want this thing?
 	int getAttraction() const;
+	/// get the list weight for this item.
+	int getListOrder() const;
 
 };
 

@@ -159,10 +159,22 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
  */
 Sound *SoundSet::getSound(unsigned int i)
 {
-	if (!_sounds[i])
+	if (_sounds.find(i) != _sounds.end())
 	{
-		_sounds[i] = new Sound();
+		return _sounds[i];
 	}
+	return 0;
+}
+
+
+/**
+ * Creates and returns a particular wave in the sound set.
+ * @param i Sound number in the set.
+ * @return Pointer to the respective sound.
+ */
+Sound *SoundSet::addSound(unsigned int i)
+{
+	_sounds[i] = new Sound();
 	return _sounds[i];
 }
 
