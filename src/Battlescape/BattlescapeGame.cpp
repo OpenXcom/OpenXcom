@@ -406,6 +406,10 @@ void BattlescapeGame::endTurn()
 	_tuReserved = _playerTUReserved;
 	_debugPlay = false;
 	_currentAction.type = BA_NONE;
+	getMap()->getWaypoints()->clear();
+	_currentAction.waypoints.clear();
+	_parentState->showLaunchButton(false);
+	_currentAction.targeting = false;
 
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
