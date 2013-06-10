@@ -80,7 +80,7 @@ void ProjectileFlyBState::init()
 	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 		return;
 
-	if (_action.actor->getTimeUnits() < _action.TU)
+	if (_parent->getPanicHandled() && _action.actor->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();

@@ -90,7 +90,7 @@ void UnitTurnBState::think()
 {
 	const int tu = 1; // one turn is 1 tu
 
-	if (_parent->checkReservedTU(_unit, tu) == false)
+	if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 	{
 		_unit->abortTurn();
 		_parent->popState();
@@ -104,7 +104,7 @@ void UnitTurnBState::think()
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
-		if (_unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+		if (_parent->getPanicHandled() && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
 		{
 			_unit->abortTurn();
 		}
@@ -113,7 +113,7 @@ void UnitTurnBState::think()
 			_parent->popState();
 		}
 	}
-	else
+	else if (_parent->getPanicHandled())
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_unit->abortTurn();
