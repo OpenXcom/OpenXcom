@@ -4014,10 +4014,10 @@ armors:
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseItem: CIVM_CORPSE
-    frontArmor: 4
-    sideArmor: 3
-    rearArmor: 2
-    underArmor: 2
+    frontArmor: 0
+    sideArmor: 0
+    rearArmor: 0
+    underArmor: 0
     drawingRoutine: 4
     damageModifier:
       - 1.0
@@ -4034,10 +4034,10 @@ armors:
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseItem: CIVF_CORPSE
-    frontArmor: 4
-    sideArmor: 3
-    rearArmor: 2
-    underArmor: 2
+    frontArmor: 0
+    sideArmor: 0
+    rearArmor: 0
+    underArmor: 0
     drawingRoutine: 4
     damageModifier:
       - 1.0
