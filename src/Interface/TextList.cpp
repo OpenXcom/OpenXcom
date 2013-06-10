@@ -647,6 +647,7 @@ void TextList::clearList()
 		u->clear();
 	}
 	_texts.clear();
+	_redraw = true;
 }
 
 /**
