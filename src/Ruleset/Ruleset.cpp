@@ -175,11 +175,11 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, ExtraSprites *>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector<std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
 	{
 		delete i->second;
 	}
-	for (std::map<std::string, ExtraSounds *>::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -676,17 +676,10 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
-				if (_extraSprites.find(type) != _extraSprites.end())
-				{
-					_extraSprites[type]->load(*j, _modIndex);
-				}
-				else
-				{
-					std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
-					extraSprites->load(*j, _modIndex);
-					_extraSprites[type] = extraSprites.release();
-					_extraSpritesIndex.push_back(type);
-				}
+				std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
+				extraSprites->load(*j, _modIndex);
+				_extraSprites.push_back(std::make_pair<std::string, ExtraSprites*> (type, extraSprites.release()));
+				_extraSpritesIndex.push_back(type);
 			}
 		}
 		else if (key == "extraSounds")
@@ -695,17 +688,10 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
-				if (_extraSounds.find(type) != _extraSounds.end())
-				{
-					_extraSounds[type]->load(*j, _modIndex);
-				}
-				else
-				{
-					std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
-					extraSounds->load(*j, _modIndex);
-					_extraSounds[type] = extraSounds.release();
-					_extraSoundsIndex.push_back(type);
-				}
+				std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
+				extraSounds->load(*j, _modIndex);
+				_extraSounds.push_back(std::make_pair<std::string, ExtraSounds*> (type, extraSounds.release()));
+				_extraSoundsIndex.push_back(type);
 			}
 		}
 		else if (key == "extraStrings")
@@ -1515,7 +1501,7 @@ MCDPatch *Ruleset::getMCDPatch(const std::string id) const
  * @param id the ID of the MCDPatch we want.
  * @return the MCDPatch based on ID, or 0 if none defined.
  */
-std::map<std::string, ExtraSprites *> Ruleset::getExtraSprites() const
+std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() const
 {
 	return _extraSprites;
 }
@@ -1524,7 +1510,7 @@ std::map<std::string, ExtraSprites *> Ruleset::getExtraSprites() const
  * @param id the ID of the MCDPatch we want.
  * @return the MCDPatch based on ID, or 0 if none defined.
  */
-std::map<std::string, ExtraSounds *> Ruleset::getExtraSounds() const
+std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() const
 {
 	return _extraSounds;
 }

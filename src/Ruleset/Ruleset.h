@@ -88,8 +88,8 @@ protected:
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, MCDPatch *> _MCDPatches;
-	std::map<std::string, ExtraSprites *> _extraSprites;
-	std::map<std::string, ExtraSounds *> _extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
+	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::auto_ptr<YAML::Node> _startingBase, _startingTime;
@@ -206,9 +206,9 @@ public:
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
 	/// Gets the list of external Sprites.
-	std::map<std::string, ExtraSprites *> getExtraSprites() const;
+	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
 	/// Gets the list of external Sounds.
-	std::map<std::string, ExtraSounds *> getExtraSounds() const;
+	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
 	/// sort all our lists according to their weight.
