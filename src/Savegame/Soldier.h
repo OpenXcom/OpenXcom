@@ -121,6 +121,8 @@ public:
 	std::vector<EquipmentLayoutItem*> *getEquipmentLayout();
 	/// Trains a soldier's psychic stats
 	void trainPsi();
+	/// Trains a soldier's psionic abilities (anytimePsiTraining option).
+	void trainPsi1Day();
 	/// Returns whether the unit is in psi training or not
 	bool isInPsiTraining();
 	/// set the psi training status

@@ -355,7 +355,7 @@ void AggroBAIState::psiAction(BattleAction *action)
 		if ((*i)->getArmor()->getSize() == 1 && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
 		{
 			int chanceToAttackMe = psiAttackStrength
-				+ ((*i)->getStats()->psiSkill * -0.4)
+				+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
 				- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
 				- ((*i)->getStats()->psiStrength)
 				+ (RNG::generate(0, 50))

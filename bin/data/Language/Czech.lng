@@ -2377,6 +2377,10 @@ STR_ALLOWPSIONICCAPTURE
 Povolit psionická zajmutí
 STR_ALLOWPSIONICCAPTURE_DESC
 Psionické ovládnutí zbývajících cizáků ukončí úspěšně misi. Ovládnutí cizáci jsou zajmuti živí.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
 Nedostatek místa.
 STR_WEAPONSELFDESTRUCTION

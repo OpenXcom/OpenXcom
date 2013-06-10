@@ -1464,6 +1464,12 @@ void GeoscapeState::time1Day()
 				(*j)->heal();
 			}
 		}
+		// Handle psionic training
+		if ((*i)->getAvailablePsiLabs() > 0 && Options::getBool("anytimePsiTraining"))
+		{
+			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
+				(*s)->trainPsi1Day();
+		}
 	}
 	// handle regional and country points for alien bases
 	for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
@@ -1538,15 +1544,15 @@ void GeoscapeState::time1Month()
 				}
 			}
 		}
-		if (!psi && (*b)->getAvailablePsiLabs() > 0)
+		if (!psi && (*b)->getAvailablePsiLabs() > 0 && !Options::getBool("anytimePsiTraining"))
 		{
 			psi = true;
-		}
-		for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
-		{
-			if ((*s)->isInPsiTraining())
+			for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
 			{
-				(*s)->trainPsi();
+				if ((*s)->isInPsiTraining())
+				{
+					(*s)->trainPsi();
+				}
 			}
 		}
 	}

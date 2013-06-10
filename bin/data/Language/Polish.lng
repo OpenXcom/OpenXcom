@@ -2381,6 +2381,10 @@ STR_ALLOWPSIONICCAPTURE
 Przechwycenie psioniczne
 STR_ALLOWPSIONICCAPTURE_DESC
 Kontrola jaźni nad wszystkimi pozostałymi przy życiu obcymi pozwala zakończyć misję. Są traktowani jako zneutralizowani{NEWLINE}i schwytani żywi.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
 Niewystarczająca ilość miejsca!
 STR_WEAPONSELFDESTRUCTION

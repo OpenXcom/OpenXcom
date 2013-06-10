@@ -171,42 +171,34 @@ void PsiTrainingState::btnOkClick(Action *)
 
 void PsiTrainingState::btnBase1Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base1));
 }
 void PsiTrainingState::btnBase2Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base2));
 }
 void PsiTrainingState::btnBase3Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base3));
 }
 void PsiTrainingState::btnBase4Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base4));
 }
 void PsiTrainingState::btnBase5Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base5));
 }
 void PsiTrainingState::btnBase6Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base6));
 }
 void PsiTrainingState::btnBase7Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base7));
 }
 void PsiTrainingState::btnBase8Click(Action *)
 {
-	_game->popState();
 	_game->pushState (new AllocatePsiTrainingState(_game, _base8));
 }
 }

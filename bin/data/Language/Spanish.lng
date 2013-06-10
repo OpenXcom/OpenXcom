@@ -2375,6 +2375,10 @@ STR_ALLOWPSIONICCAPTURE
 Permitir captura psiquica
 STR_ALLOWPSIONICCAPTURE_DESC
 Al controlar mentalmente a todos los alienigenas restantes la mision finaliza, y cuentan como capturados vivos.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION
