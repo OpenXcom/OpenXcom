@@ -88,6 +88,11 @@ void ProjectileFlyBState::init()
 	}
 
 	_unit = _action.actor;
+
+	_unit->lookAt(_action.target, _unit->getTurretType() != -1);
+	while (_unit->getStatus() == STATUS_TURNING)
+		_unit->turn(_unit->getTurretType() != -1);
+
 	_ammo = weapon->getAmmoItem();
 	if (_unit->isOut())
 	{
