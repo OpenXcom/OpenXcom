@@ -477,20 +477,23 @@ void Soldier::trainPsi1Day()
 		return;
 	}
 
-	if (_currentStats.psiSkill > _rules->getMinStats().psiSkill)
+	if (_currentStats.psiSkill > 0) // yes, 0. _rules->getMinStats().psiSkill was wrong.
 	{
 		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100) && _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 		{
-			++_currentStats.psiSkill;
 			++_improvement;
+			++_currentStats.psiSkill;
 		}
 	}
 	else if (_currentStats.psiSkill < _rules->getMinStats().psiSkill)
 	{
 		if (++_currentStats.psiSkill == _rules->getMinStats().psiSkill)	// initial training is over
-			_currentStats.psiSkill = _rules->getMaxStats().psiSkill + RNG::generate(0, _rules->getMaxStats().psiSkill / 2);
+		{
+			_improvement = _rules->getMaxStats().psiSkill + RNG::generate(0, _rules->getMaxStats().psiSkill / 2);
+			_currentStats.psiSkill = _improvement;
+		}
 	}
-	else // if (_currentStats.psiSkill == _rules->getMinStats().psiSkill)
+	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
 		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
 }
 
