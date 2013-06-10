@@ -591,6 +591,10 @@ void UnitInfoState::handle(Action *action)
 			}
 			init();
 		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)
+		{
+			_game->popState();
+		}
 	}
 }
 
