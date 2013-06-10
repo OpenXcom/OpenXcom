@@ -23,6 +23,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -43,9 +44,12 @@ namespace OpenXcom
  */
 SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 {
+	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
+	_btnOk = new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
+	_btnPsiTraining = new TextButton(148, 16, 8, 176);
 	_txtTitle = new Text(310, 16, 5, 8);
 	_txtName = new Text(114, 9, 16, 32);
 	_txtRank = new Text(102, 9, 130, 32);
@@ -57,6 +61,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	add(_window);
 	add(_btnOk);
+	add(_btnPsiTraining);
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
@@ -71,6 +76,11 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
+	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
+	_btnPsiTraining->setText(_game->getLanguage()->getString("STR_PSIONIC_TRAINING"));
+	_btnPsiTraining->onMouseClick((ActionHandler)&SoldiersState::btnPsiTrainingClick);
+	_btnPsiTraining->setVisible(isPsiBtnVisible);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -129,6 +139,15 @@ void SoldiersState::init()
 void SoldiersState::btnOkClick(Action *)
 {
 	_game->popState();
+}
+
+/**
+ * Open Psionic Training screen.
+ * @param action Pointer to an action.
+ */
+void SoldiersState::btnPsiTrainingClick(Action *)
+{
+	_game->pushState(new AllocatePsiTrainingState(_game, _base));
 }
 
 /**

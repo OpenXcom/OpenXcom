@@ -122,13 +122,14 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	std::wstringstream ssStr;
 	std::wstringstream ssSkl;
 		_soldiers.push_back(*s);
-		ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
-		if((*s)->getCurrentStats()->psiSkill == 0)
+		if((*s)->getCurrentStats()->psiSkill <= 0)
 		{
+			ssSkl << "0/+0";
 			ssStr << _game->getLanguage()->getString("STR_UNKNOWN").c_str();
 		}
 		else
 		{
+			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
 			ssStr << ((*s)->getCurrentStats()->psiStrength);
 		}
 		if((*s)->isInPsiTraining())
@@ -167,7 +168,6 @@ void AllocatePsiTrainingState::init()
 void AllocatePsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new PsiTrainingState(_game));
 }
 
 void AllocatePsiTrainingState::lstSoldiersPress(Action *)

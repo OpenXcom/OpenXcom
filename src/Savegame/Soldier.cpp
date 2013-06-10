@@ -112,6 +112,12 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	node["armor"] >> armor;
 	_armor = rule->getArmor(armor);
 	node["psiTraining"] >> _psiTraining;
+	try {
+		node["improvement"] >> _improvement;
+	}
+	catch (YAML::Exception &e) {
+		_improvement = 0;
+	}
 	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
 		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
@@ -141,6 +147,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
 	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
 	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
+	out << YAML::Key << "improvement" << YAML::Value << _improvement;
 	if (!_equipmentLayout.empty())
 	{
 		out << YAML::Key << "equipmentLayout" << YAML::Value;
@@ -441,7 +448,11 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 void Soldier::trainPsi()
 {
 	_improvement = 0;
-	if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
+	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
+	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
+		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
 	{
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
@@ -453,6 +464,37 @@ void Soldier::trainPsi()
 	_currentStats.psiSkill += _improvement;
 	if(_currentStats.psiSkill > 100)
 		_currentStats.psiSkill = 100;
+}
+
+/**
+ * Trains a soldier's Psychic abilities (anytimePsiTraining option)
+ */
+void Soldier::trainPsi1Day()
+{
+	if (!_psiTraining)
+	{
+		_improvement = 0;
+		return;
+	}
+
+	if (_currentStats.psiSkill > 0) // yes, 0. _rules->getMinStats().psiSkill was wrong.
+	{
+		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100) && _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+		{
+			++_improvement;
+			++_currentStats.psiSkill;
+		}
+	}
+	else if (_currentStats.psiSkill < _rules->getMinStats().psiSkill)
+	{
+		if (++_currentStats.psiSkill == _rules->getMinStats().psiSkill)	// initial training is over
+		{
+			_improvement = _rules->getMaxStats().psiSkill + RNG::generate(0, _rules->getMaxStats().psiSkill / 2);
+			_currentStats.psiSkill = _improvement;
+		}
+	}
+	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
+		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
 }
 
 /**

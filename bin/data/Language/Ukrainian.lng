@@ -2375,6 +2375,10 @@ STR_ALLOWPSIONICCAPTURE
 Дозволити псі-захоплення
 STR_ALLOWPSIONICCAPTURE_DESC
 Псі-контроль над всіма прибульцями, що залишились, означає перемогу і вони рахуються як захоплені живими.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION

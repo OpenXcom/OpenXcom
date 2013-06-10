@@ -2246,7 +2246,8 @@ bool TileEngine::psiAttack(BattleAction *action)
 {
 	BattleUnit *victim = _save->getTile(action->target)->getUnit();
 	double attackStrength = static_cast<double>(action->actor->getStats()->psiStrength) * action->actor->getStats()->psiSkill / 50;
-	double defenseStrength = static_cast<double>(victim->getStats()->psiStrength) + 10.0 + (static_cast<double>(victim->getStats()->psiSkill) / 5);
+	double defenseStrength = static_cast<double>(victim->getStats()->psiStrength)
+		+ (victim->getStats()->psiSkill > 0) ? 10.0 + static_cast<double>(victim->getStats()->psiSkill) / 5 : 10.0;
 	int d = distance(action->actor->getPosition(), action->target);
 	attackStrength -= static_cast<double>(d)/2;
 	attackStrength += RNG::generate(0,55);
