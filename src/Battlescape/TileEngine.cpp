@@ -962,21 +962,25 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	if (action->actor)
 	{
-		action->actor->addReactionExp();
+		BattleUnit *reactor = action->actor;
+		reactor->addReactionExp();
 		// lets try and shoot: we need a weapon, ammo and enough time units
-		action->weapon = action->actor->getMainHandWeapon();
+		action->weapon = reactor->getMainHandWeapon();
 
-		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) == 3 && action->actor->getTimeUnits() >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
+		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) == 3 && reactor->getTimeUnits() >= reactor->getActionTUs(BA_AUTOSHOT, action->weapon))
 			action->type = BA_AUTOSHOT;
 		else
 			action->type = BA_SNAPSHOT;
 
 		action->target = unit->getPosition();
 
-		int tu = action->actor->getActionTUs(action->type, action->weapon);
+		int tu = reactor->getActionTUs(action->type, action->weapon);
 		action->TU = tu;
-		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && action->actor->getTimeUnits() >= tu)
+		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && reactor->getTimeUnits() >= tu)
 		{
+			reactor->lookAt(action->target, reactor->getTurretType() != -1);
+			while (reactor->getStatus() == STATUS_TURNING)
+				reactor->turn(reactor->getTurretType() != -1);
 			action->targeting = true;
 			// if the target is hostile, it will aggro
 			if (unit->getFaction() == FACTION_HOSTILE)
@@ -987,7 +991,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 					aggro = new AggroBAIState(_save, unit);
 					unit->setAIState(aggro);
 				}
-				aggro->setAggroTarget(action->actor);
+				aggro->setAggroTarget(reactor);
 			}
 			return true;
 		}
