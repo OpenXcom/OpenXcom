@@ -227,6 +227,10 @@ void UnitWalkBState::think()
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 				_parent->popState();
 				// unit got fired upon - stop walking
+				_unit->setCache(0);
+				_terrain->calculateUnitLighting();
+				_terrain->calculateFOV(_unit);
+				_parent->getMap()->cacheUnit(_unit);
 				_pf->abortPath();
 				return;
 			}
