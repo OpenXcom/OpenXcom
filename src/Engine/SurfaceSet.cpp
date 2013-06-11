@@ -270,4 +270,8 @@ void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 }
 
+std::map<int, Surface*> *SurfaceSet::getFrames()
+{
+	return &_frames;
+}
 }

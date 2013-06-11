@@ -624,7 +624,12 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		}
 	}
 
-	_sets["HANDOB2.PCK"] = new SurfaceSet(*_sets["HANDOB.PCK"]);
+	_sets["HANDOB2.PCK"] = new SurfaceSet(_sets["HANDOB.PCK"]->getWidth(), _sets["HANDOB.PCK"]->getHeight());
+	std::map<int, Surface*> *handob = _sets["HANDOB.PCK"]->getFrames();
+	for (std::map<int, Surface*>::const_iterator i = handob->begin(); i != handob->end(); ++i)
+	{
+		(i->second)->blit(_sets["HANDOB2.PCK"]->addFrame(i->first));
+	}
 
 	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
