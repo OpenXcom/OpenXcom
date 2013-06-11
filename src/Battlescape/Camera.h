@@ -47,6 +47,8 @@ private:
 	int _visibleMapHeight;
 	bool _showAllLayers;
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
+	/// handling for keyboard input.
+	void handleKeyboardInput(Action *action, int scrollSpeed);
 	Map *_map;
 	bool _mouseScroll, _keyboardScroll;
 public:
