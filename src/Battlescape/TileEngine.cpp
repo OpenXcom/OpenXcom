@@ -922,6 +922,15 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 			potentialVictim->setAIState(aggro);
 		}
 		aggro->setAggroTarget(unit);
+		if (action->weapon && action->weapon->getRules()->getBattleType() != BT_MELEE && distance(potentialVictim->getPosition(), unit->getPosition()) <= 19)
+		{
+			potentialVictim->lookAt(unit->getPosition());
+			while (potentialVictim->getStatus() == STATUS_TURNING)
+			{
+				potentialVictim->turn();
+			}
+			calculateFOV(potentialVictim);
+		}
 	}
 
 	// we reset the unit to false here - if it is seen by any unit in range below the unit becomes visible again
@@ -929,7 +938,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(unit->getPosition(), (*i)->getPosition()) < 19 &&
+		if (distance(unit->getPosition(), (*i)->getPosition()) <= 19 &&
 			(*i)->getFaction() != _save->getSide() &&
 			!(*i)->isOut())
 		{
@@ -967,7 +976,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, Battl
 		// lets try and shoot: we need a weapon, ammo and enough time units
 		action->weapon = reactor->getMainHandWeapon();
 
-		if (action->weapon->getRules()->getTUAuto() && RNG::generate(0,3) == 3 && reactor->getTimeUnits() >= reactor->getActionTUs(BA_AUTOSHOT, action->weapon))
+		if (reactor->getFaction() != FACTION_PLAYER &&
+			action->weapon->getRules()->getTUAuto() &&
+			RNG::generate(0,4) >= 3 &&
+			reactor->getTimeUnits() >= reactor->getActionTUs(BA_AUTOSHOT, action->weapon))
 			action->type = BA_AUTOSHOT;
 		else
 			action->type = BA_SNAPSHOT;
