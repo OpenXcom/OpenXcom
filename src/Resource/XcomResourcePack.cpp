@@ -532,9 +532,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				}
 				_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
 			}
-			else if (debugOutput)
+			else
 			{
-				Log(LOG_INFO) << "Adding/Replacing single image: " << i->first;
+				if (debugOutput)
+				{
+					Log(LOG_INFO) << "Adding/Replacing single image: " << i->first;
+				}
+				delete _surfaces[i->first];
+				_surfaces[i->first] = new Surface((*i).second->getWidth(), (*i).second->getHeight());
 			}
 			s.str("");
 			s << CrossPlatform::getDataFile(i->second->getSprites()->operator[](0));
