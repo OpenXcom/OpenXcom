@@ -624,6 +624,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		}
 	}
 
+	_sets["HANDOB2.PCK"] = new SurfaceSet(*_sets["HANDOB.PCK"]);
+
 	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)
 	{
 		if (_sounds.find(i->first) == _sounds.end())
@@ -792,9 +794,6 @@ void XcomResourcePack::loadBattlescapeResources()
 		_sets[usets[i]] = new SurfaceSet(32, 40);
 		_sets[usets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
 	}
-
-	_sets["HANDOB2.PCK"] = new SurfaceSet(32, 40);
-	_sets["HANDOB2.PCK"]->loadPck(CrossPlatform::getDataFile("UNITS/HANDOB.PCK"), CrossPlatform::getDataFile("UNITS/HANDOB.TAB"));
 
 	s.str("");
 	s << "UNITS/" << "BIGOBS.PCK";
