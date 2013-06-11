@@ -202,6 +202,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
+			{
+				_parent->getSave()->removeItem(_ammo);
+				_action.weapon->setAmmoItem(0);
+			}
 		}
 		else
 		{
