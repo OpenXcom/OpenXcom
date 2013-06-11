@@ -46,7 +46,8 @@ SurfaceSet::SurfaceSet(const SurfaceSet& other)
 	
 	for (std::map<int, Surface*>::const_iterator f = other._frames.begin(); f != other._frames.end(); ++f)
 	{
-		_frames[f->first] = new Surface(*f->second);
+		_frames[f->first] = new Surface(f->second->getWidth(), f->second->getHeight(), f->second->getX(), f->second->getY());
+		f->second->blit(_frames[f->first]);
 	}
 }
 
