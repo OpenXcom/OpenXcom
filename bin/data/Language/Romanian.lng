@@ -2376,9 +2376,9 @@ Permite captura psi
 STR_ALLOWPSIONICCAPTURE_DESC
 Controlul mental al tuturor extratereștrilor rămași finalizează automat misiunea și capturarea acestora ca fiind vii.
 STR_ANYTIMEPSITRAINING
-Psionic training at any time
+Antrenament psi în orice moment
 STR_ANYTIMEPSITRAINING_DESC
-You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+Soldații pot fi trimiși (sau scoși de) la antrenament psionic în orice moment. De reținut, antrenamentul inițial durează între 30 și 60 de zile.
 STR_NOT_ENOUGH_SPACE
 Insuficient Spațiu!
 STR_WEAPONSELFDESTRUCTION
