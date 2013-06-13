@@ -157,6 +157,7 @@ void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2; // Dynamic lighting layer.
 	const int personalLightPower = 15; // amount of light a unit generates
+	const int fireLightPower = 15; // amount of light a fire generates
 
 	// reset all light to 0 first
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
@@ -164,21 +165,23 @@ void TileEngine::calculateUnitLighting()
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
-	if (_personalLighting)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		// add lighting of soldiers
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		if (_personalLighting && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
-			{
-				addLight((*i)->getPosition(), personalLightPower, layer);
-			}
+			addLight((*i)->getPosition(), personalLightPower, layer);
+		}
+		// add lighting of units on fire
+		if ((*i)->getFire())
+		{
+			addLight((*i)->getPosition(), fireLightPower, layer);
 		}
 	}
 }
 
 /**
- * Adds circular light pattern starting from center and loosing power with distance travelled.
+ * Adds circular light pattern starting from center and losing power with distance travelled.
  * @param center
  * @param power
  * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
