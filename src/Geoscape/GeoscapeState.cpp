@@ -1544,7 +1544,7 @@ void GeoscapeState::time1Month()
 				}
 			}
 		}
-		if (!psi && (*b)->getAvailablePsiLabs() > 0 && !Options::getBool("anytimePsiTraining"))
+		if ((*b)->getAvailablePsiLabs() > 0 && !Options::getBool("anytimePsiTraining"))
 		{
 			psi = true;
 			for(std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
