@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "AggroBAIState.h"
 #include "Camera.h"
 
 namespace OpenXcom
@@ -75,10 +76,16 @@ void ProjectileFlyBState::init()
 	_projectileItem = 0;
 
 	if (!weapon) // can't shoot without weapon
+	{
+		_parent->popState();
 		return;
+	}
 
 	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
+	{
+		_parent->popState();
 		return;
+	}
 
 	if (_parent->getPanicHandled() && _action.actor->getTimeUnits() < _action.TU)
 	{
@@ -88,13 +95,26 @@ void ProjectileFlyBState::init()
 	}
 
 	_unit = _action.actor;
-
+	
 	_ammo = weapon->getAmmoItem();
+	
 	if (_unit->isOut())
 	{
 		// something went wrong - we can't shoot when dead or unconscious
 		_parent->popState();
 		return;
+	}
+
+	// reaction fire
+	if (_unit->getFaction() != _parent->getSave()->getSide())
+	{
+		// no ammo or target is dead: give the time units back and cancel the shot.
+		if (_ammo == 0 || !_parent->getSave()->getTile(_action.target)->getUnit() || _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
+		{
+			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+			_parent->popState();
+			return;
+		}
 	}
 
 	// autoshot will default back to snapshot if it's not possible
@@ -271,21 +291,9 @@ void ProjectileFlyBState::think()
 			}
 			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
 			{
-				BattleAction action;
-				action.cameraPosition = _action.cameraPosition;
-				BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
-				if (potentialVictim && potentialVictim->getFaction() == FACTION_HOSTILE && !potentialVictim->isOut())
-				{
-					if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
-					{
-						_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-					}
-				}
-				else if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action))
-				{
-					_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-				}
+				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
+			_unit->abortTurn();
 			_parent->popState();
 		}
 	}
@@ -340,6 +348,20 @@ void ProjectileFlyBState::think()
 						offset = -2;
 					}
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
+					if (_projectileImpact == 4)
+					{
+						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
+						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
+						{
+							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(victim->getCurrentAIState());
+							if (aggro == 0)
+							{
+								aggro = new AggroBAIState(_parent->getSave(), victim);
+								victim->setAIState(aggro);
+							}
+							aggro->setAggroTarget(_action.actor);
+						}
+					}
 				}
 				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())
 				{
