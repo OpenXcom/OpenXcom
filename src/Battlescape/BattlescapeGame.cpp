@@ -1537,12 +1537,10 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty);
 	
-	int divider = 1;
 	if (!difficulty)
-		divider = 2;
-	
-	if (divider > 1)
-		unit->halveArmor();
+	{
+		newUnit->halveArmor();
+	}
 
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
 	newUnit->setPosition(unit->getPosition());
