@@ -185,8 +185,6 @@ void UnitWalkBState::think()
 			}
 			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
-			BattleAction action;
-			
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
 			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
@@ -219,18 +217,27 @@ void UnitWalkBState::think()
 					}
 				}
 			}
-
-			// check for reaction fire
-			if (!_falling && !_action.reckless && _terrain->checkReactionFire(_unit, &action))
+			if (unitSpotted)
 			{
-				action.cameraPosition = _parent->getMap()->getCamera()->getMapOffset();
-				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-				_parent->popState();
-				// unit got fired upon - stop walking
+				_terrain->calculateFOV(_unit->getPosition());
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 				_pf->abortPath();
+				_parent->popState();
 				return;
+			}
+			// check for reaction fire
+			if (!_falling && !_action.reckless)
+			{
+				if (_terrain->checkReactionFire(_unit))
+				{
+					// unit got fired upon - stop walking
+					_unit->setCache(0);
+					_parent->getMap()->cacheUnit(_unit);
+					_pf->abortPath();
+					_parent->popState();
+					return;
+				}
 			}
 		}
 		else if (onScreen)
