@@ -252,6 +252,7 @@ void BattleUnit::load(const YAML::Node &node)
 		node["armor"][i] >> _currentArmor[i];
 	for (int i=0; i < 6; i++)
 		node["fatalWounds"][i] >> _fatalWounds[i];
+	node["fire"] >> _fire;
 	node["expBravery"] >> _expBravery;
 	node["expReactions"] >> _expReactions;
 	node["expFiring"] >> _expFiring;
