@@ -64,7 +64,7 @@ public:
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Check reaction fire.
-	bool checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim = 0, bool recalculateFOV = true);
+	bool checkReactionFire(BattleUnit *unit);
 	/// Recalculate lighting of the battlescape.
 	void calculateTerrainLighting();
 	/// Recalculate lighting of the battlescape.
@@ -128,9 +128,16 @@ public:
 	bool detonate(Tile* tile);
 	/// validate a throwing action
 	bool validateThrow(BattleAction *action);
-	// open any doors this door is connected to.
+	/// open any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
-
+	/// create a vector of units that can spot this unit.
+	std::vector<BattleUnit *> getSpottingUnits(BattleUnit* unit);
+	/// given a vector of spotters, and a unit, this will pick the one with the highest reaction score.
+	BattleUnit* getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit);
+	/// check validity of a snap shot to this position.
+	bool canMakeSnap(BattleUnit *unit, BattleUnit *target);
+	/// try to perform a reaction snap shot to this location.
+	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
 };
 
 }

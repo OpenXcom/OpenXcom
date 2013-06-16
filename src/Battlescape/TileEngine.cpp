@@ -25,6 +25,9 @@
 #include <SDL.h>
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
+#include "UnitTurnBState.h"
+#include "Map.h"
+#include "Camera.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "ExplosionBState.h"
 #include "../Savegame/Tile.h"
@@ -546,8 +549,8 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
  */
 bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 {
-	// if the tile is too dark, we can't see it
-	if (!tile || tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS || !tile->getUnit())
+	// if there is no tile or no unit, we can't see it
+	if (!tile || !tile->getUnit())
 	{
 		return false;
 	}
@@ -896,119 +899,202 @@ void TileEngine::calculateFOV(const Position &position)
 /**
  * Checks if of the opposing faction a sniper sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
  * If it's higher, a shot is fired when enough time units a weapon and ammo available.
- * @param unit
- * @param action
- * @param potentialVictim The unit that is targeted when shot.
- * @param recalculateFOV Whether to recalculate first the FOV of the units within range.
+ * @param unit the unit to check reaction fire upon
+ * @return whether or not reaction fire took place.
  */
-bool TileEngine::checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim, bool recalculateFOV)
+bool TileEngine::checkReactionFire(BattleUnit *unit)
 {
-	double highestReactionScore = unit->getReactionScore();
-	action->actor = 0;
-
 	// reaction fire only triggered when the actioning unit is of the currently playing side
 	if (unit->getFaction() != _save->getSide())
 	{
 		return false;
 	}
 
-	if (potentialVictim && potentialVictim->getFaction() == FACTION_HOSTILE)
+	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);
+	bool result = false;
+
+	// not mind controlled, or controlled by the player
+	if (unit->getFaction() == unit->getOriginalFaction()
+		|| unit->getFaction() != FACTION_HOSTILE)
 	{
-		// if the potentialVictim is hostile, he will aggro if he wasn't already or at least change aggro target
-		AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(potentialVictim->getCurrentAIState());
-		if (aggro == 0)
+		BattleUnit *reactor = getReactor(spotters, unit);
+		if (reactor != unit)
 		{
-			aggro = new AggroBAIState(_save, potentialVictim);
-			potentialVictim->setAIState(aggro);
-		}
-		aggro->setAggroTarget(unit);
-		if (action->weapon && action->weapon->getRules()->getBattleType() != BT_MELEE && distance(potentialVictim->getPosition(), unit->getPosition()) <= 19)
-		{
-			potentialVictim->lookAt(unit->getPosition());
-			while (potentialVictim->getStatus() == STATUS_TURNING)
+			while (true)
 			{
-				potentialVictim->turn();
+				if (!tryReactionSnap(reactor, unit))
+					break;
+				reactor = getReactor(spotters, unit);
+				result = true;
+				if (reactor == unit)
+					break;
 			}
-			calculateFOV(potentialVictim);
 		}
 	}
+	return result;
+}
 
-	// we reset the unit to false here - if it is seen by any unit in range below the unit becomes visible again
-	//unit->setVisible(false);
-
+/*
+ * create a vector of units that can spot this unit.
+ * @param unit the unit to check for spotters of
+ * @return a vector of units that can see this unit.
+ */
+std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
+{
+	std::vector<BattleUnit*> spotters;
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(unit->getPosition(), (*i)->getPosition()) <= 19 &&
+			// not dead/unconscious
+		if (!(*i)->isOut() &&
+			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
-			!(*i)->isOut())
+			// closer than 20 tiles
+			distance(unit->getPosition(), (*i)->getPosition()) <= 20)
 		{
-			if (recalculateFOV)
+			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
+				// can actually see the target Tile, or is aggro
+			if (((*i)->checkViewSector(unit->getPosition()) || aggro != 0) &&
+				// can actually see the unit
+				visible(*i, unit->getTile()) &&
+				// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
+				((*i)->getFaction() != FACTION_PLAYER ||
+				distance(unit->getPosition(), (*i)->getPosition()) <= 18 ||
+				unit->getTile()->getShade() <= MAX_DARKNESS_TO_SEE_UNITS))
 			{
-				calculateFOV(*i);
-			}
-			Position originVoxel = getSightOriginVoxel(*i);
-			Position scanVoxel;
-			if ((*i)->getMainHandWeapon() && (*i)->getReactionScore() > highestReactionScore && visible(*i, unit->getTile()))
-			{
-				if (((*i)->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE &&
-				validMeleeRange((*i), unit, (*i)->getDirection())) ||
-				((*i)->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE &&
-				(*i)->getMainHandWeapon()->getRules()->getTUSnap()))
+				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
-					for (std::vector<BattleUnit*>::iterator j = (*i)->getVisibleUnits()->begin(); j != (*i)->getVisibleUnits()->end(); ++j)
-					{
-						if ((*j) == unit)
-						{
-							// I see you!
-							highestReactionScore = (*i)->getReactionScore();
-							action->actor = (*i);
-						}
-					}
+					unit->setVisible(true);
+				}
+				// no reaction on civilian turn.
+				if (_save->getSide() != FACTION_NEUTRAL &&
+					canMakeSnap(*i, unit))
+				{
+					spotters.push_back(*i);
 				}
 			}
 		}
 	}
+	return spotters;
+}
 
-	if (action->actor)
+/*
+ * get the unit with the highest reaction score from the spotter vector.
+ * @param spotters the vector of spotting units.
+ * @param unit the unit to check scores against.
+ * @return the unit with the highest reactions.
+ */
+BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit)
+{
+	int bestScore = -1;
+	BattleUnit *bu = 0;
+	for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
-		BattleUnit *reactor = action->actor;
-		reactor->addReactionExp();
-		// lets try and shoot: we need a weapon, ammo and enough time units
-		action->weapon = reactor->getMainHandWeapon();
-
-		if (reactor->getFaction() != FACTION_PLAYER &&
-			action->weapon->getRules()->getTUAuto() &&
-			RNG::generate(0,4) >= 3 &&
-			reactor->getTimeUnits() >= reactor->getActionTUs(BA_AUTOSHOT, action->weapon))
-			action->type = BA_AUTOSHOT;
-		else
-			action->type = BA_SNAPSHOT;
-
-		action->target = unit->getPosition();
-
-		int tu = reactor->getActionTUs(action->type, action->weapon);
-		action->TU = tu;
-		if (action->weapon && action->weapon->getAmmoItem() && action->weapon->getAmmoItem()->getAmmoQuantity() && reactor->getTimeUnits() >= tu)
+		if (!(*i)->isOut() &&
+		canMakeSnap(*i, unit) &&
+		(*i)->getReactionScore() > bestScore)
 		{
-			reactor->lookAt(action->target, reactor->getTurretType() != -1);
-			while (reactor->getStatus() == STATUS_TURNING)
-				reactor->turn(reactor->getTurretType() != -1);
-			action->targeting = true;
-			// if the target is hostile, it will aggro
-			if (unit->getFaction() == FACTION_HOSTILE)
-			{
-				AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
-				if (aggro == 0)
-				{
-					aggro = new AggroBAIState(_save, unit);
-					unit->setAIState(aggro);
-				}
-				aggro->setAggroTarget(reactor);
-			}
+			bestScore = (*i)->getReactionScore();
+			bu = *i;
+		}
+	}
+	if (unit->getReactionScore() <= bestScore)
+	{
+		if (bu->getOriginalFaction() == FACTION_PLAYER)
+		{
+			bu->addReactionExp();
+		}
+	}
+	else
+	{
+		bu = unit;
+	}
+	return bu;
+}
+
+/*
+ * check the validity of a snap shot performed here.
+ * @param unit the unit to check sight from
+ * @param target the unit to check sight TO
+ * @return if the target is valid
+ */
+bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
+{
+	BattleItem *weapon = unit->getMainHandWeapon();
+	// has a weapon
+	if (weapon && 
+		// has a melee weapon and is in melee range
+		((weapon->getRules()->getBattleType() == BT_MELEE &&
+		validMeleeRange(unit, target, unit->getDirection()) &&
+		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon)) ||
+		// has a gun capable of snap shot with ammo
+		(weapon->getRules()->getBattleType() != BT_MELEE &&
+		weapon->getRules()->getTUSnap() &&
+		weapon->getAmmoItem() &&
+		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
+	{
+		Position origin = getSightOriginVoxel(unit);
+		Position scanVoxel;
+		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
+		{
 			return true;
 		}
 	}
+	return false;
+}
 
+/*
+ * attempt to perform a reaction snap shot.
+ * @param unit the unit to check sight from
+ * @param target the unit to check sight TO
+ * @return if the action should (theoretically) succeed
+ */
+bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
+{
+	BattleAction action;
+	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
+	action.actor = unit;
+	action.weapon = unit->getMainHandWeapon();
+	// reaction fire is ALWAYS snap shot.
+	action.type = BA_SNAPSHOT;
+	action.target = target->getPosition();
+	action.TU = unit->getActionTUs(action.type, action.weapon);
+
+	if (action.weapon && action.weapon->getAmmoItem() && action.weapon->getAmmoItem()->getAmmoQuantity() && unit->getTimeUnits() >= action.TU)
+	{
+		action.targeting = true;
+
+		// hostile units will go into an "aggro" state when they react.
+		if (unit->getFaction() == FACTION_HOSTILE)
+		{
+			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+			if (aggro == 0)
+			{
+				aggro = new AggroBAIState(_save, unit);
+				unit->setAIState(aggro);
+			}
+			if (!target->isOut())
+			{
+				aggro->setAggroTarget(target);
+			}
+
+			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
+				aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
+			{
+				// don't shoot. it's too early in the game or we'll kill ourselves or someone we care about
+				// this will cause the alien to NOT actually fire, but allow the loop to continue in case someone else CAN.
+				// the unit won't get it's time units back, so it won't react again this turn
+				action.targeting = false;
+			}
+		}
+
+		if (unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)) && action.targeting)
+		{
+			action.TU = 0;
+			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
+			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));
+		}
+		return true;
+	}
 	return false;
 }
 
