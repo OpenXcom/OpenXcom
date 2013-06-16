@@ -88,7 +88,7 @@ void UnitTurnBState::init()
 
 void UnitTurnBState::think()
 {
-	const int tu = 1; // one turn is 1 tu
+	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
 
 	if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 	{
@@ -104,7 +104,7 @@ void UnitTurnBState::think()
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
-		if (_parent->getPanicHandled() && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+		if (_parent->getPanicHandled() && _action.type == BA_NONE && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
 		{
 			_unit->abortTurn();
 		}
