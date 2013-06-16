@@ -251,6 +251,10 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	if (_game->getTurn() < 3)
 		return false;
+	if (diff == -1)
+	{
+		diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+	}
 	int distance = _game->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
 	int injurylevel = attackingUnit->getStats()->health - attackingUnit->getHealth();
 	int desperation = (100 - attackingUnit->getMorale()) / 10;
