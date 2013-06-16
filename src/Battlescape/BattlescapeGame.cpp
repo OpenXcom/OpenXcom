@@ -379,12 +379,7 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
 			getTileEngine()->calculateFOV(bu);
 			getMap()->cacheUnits();
 			_parentState->updateSoldierInfo();
-			BattleAction action;
-			if (getTileEngine()->checkReactionFire(bu, &action, 0, false))
-			{
-				action.cameraPosition = getMap()->getCamera()->getMapOffset();
-				statePushBack(new ProjectileFlyBState(this, action));
-			}
+			getTileEngine()->checkReactionFire(bu);
 			return true;
 		}
 		else
