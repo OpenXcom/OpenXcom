@@ -401,7 +401,8 @@ public:
 	int getRankInt() const;
 	/// derive a rank integer based on rank string (for xcom soldiers ONLY)
 	void deriveRank();
-
+	/// this function checks if a tile is visible, using maths.
+	bool checkViewSector(Position pos) const;
 };
 
 }

@@ -2469,4 +2469,54 @@ void BattleUnit::deriveRank()
 	}
 }
 
+/*
+ * this function checks if a tile is visible, using maths.
+ * @param pos the position to check against
+ * @return what the maths decide
+ */
+bool BattleUnit::checkViewSector (Position pos) const
+{
+	int deltaX = pos.x - _pos.x;
+	int deltaY = _pos.y - pos.y;
+
+	switch (_direction)
+	{
+		case 0:
+			if ( (deltaX + deltaY >= 0) && (deltaY - deltaX >= 0) )
+				return true;
+			break;
+		case 1:
+			if ( (deltaX >= 0) && (deltaY >= 0) )
+				return true;
+			break;
+		case 2:
+			if ( (deltaX + deltaY >= 0) && (deltaY - deltaX <= 0) )
+				return true;
+			break;
+		case 3:
+			if ( (deltaY <= 0) && (deltaX >= 0) )
+				return true;
+			break;
+		case 4:
+			if ( (deltaX + deltaY <= 0) && (deltaY - deltaX <= 0) )
+				return true;
+			break;
+		case 5:
+			if ( (deltaX <= 0) && (deltaY <= 0) )
+				return true;
+			break;
+		case 6:
+			if ( (deltaX + deltaY <= 0) && (deltaY - deltaX >= 0) )
+				return true;
+			break;
+		case 7:
+			if ( (deltaY >= 0) && (deltaX <= 0) )
+				return true;
+			break;
+		default:
+			return false;
+	}
+	return false;
+}
+
 }
