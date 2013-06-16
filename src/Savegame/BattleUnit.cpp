@@ -104,13 +104,18 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * Initializes a BattleUnit from a Unit object.
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
+ * @param difficulty level (for stat adjustement)
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),_hidingForTurn(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),_hidingForTurn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
 	_race = unit->getRace();
 	_stats = *unit->getStats();
+	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	}
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
@@ -2518,6 +2523,20 @@ bool BattleUnit::checkViewSector (Position pos) const
 			return false;
 	}
 	return false;
+}
+
+void BattleUnit::adjustStats(const int diff)
+{
+	// adjust the unit's stats according to the difficulty level.
+	_stats.tu += 4 * diff * _stats.tu / 100;
+	_stats.stamina += 4 * diff * _stats.stamina / 100;
+	_stats.reactions += 6 * diff * _stats.reactions / 100;
+	_stats.strength += 2 * diff * _stats.strength / 100;
+	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
+	_stats.strength += 2 * diff * _stats.strength / 100;
+	_stats.melee += 4 * diff * _stats.melee / 100;
+	_stats.psiSkill += 4 * diff * _stats.psiSkill / 100;
+	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
 }
 
 }

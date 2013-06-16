@@ -115,7 +115,7 @@ public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
-	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor);
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
 	BattleUnit(BattleUnit&);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
@@ -403,6 +403,7 @@ public:
 	void deriveRank();
 	/// this function checks if a tile is visible, using maths.
 	bool checkViewSector(Position pos) const;
+	void adjustStats(const int diff);
 };
 
 }

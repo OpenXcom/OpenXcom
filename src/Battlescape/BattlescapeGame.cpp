@@ -1533,28 +1533,14 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
 	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
-
-	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()));
-	
 	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
+
+	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty);
+	
 	int divider = 1;
 	if (!difficulty)
 		divider = 2;
 	
-	UnitStats *stats = newUnit->getStats();
-
-	// adjust the unit's stats according to the difficulty level.
-	stats->tu += 4 * difficulty * stats->tu / 100;
-	newUnit->setTimeUnits(0);
-	stats->stamina += 4 * difficulty * stats->stamina / 100;
-	newUnit->setEnergy(stats->stamina);
-	stats->reactions += 6 * difficulty * stats->reactions / 100;
-	stats->strength += 2 * difficulty * stats->strength / 100;
-	stats->firing = (stats->firing + 6 * difficulty * stats->firing / 100) / divider;
-	stats->strength += 2 * difficulty * stats->strength / 100;
-	stats->melee += 4 * difficulty * stats->melee / 100;
-	stats->psiSkill += 4 * difficulty * stats->psiSkill / 100;
-	stats->psiStrength += 4 * difficulty * stats->psiStrength / 100;
 	if (divider > 1)
 		unit->halveArmor();
 

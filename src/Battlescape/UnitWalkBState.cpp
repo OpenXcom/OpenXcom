@@ -227,7 +227,7 @@ void UnitWalkBState::think()
 				return;
 			}
 			// check for reaction fire
-			if (!_falling && !_action.reckless)
+			if (!_falling)
 			{
 				if (_terrain->checkReactionFire(_unit))
 				{

@@ -481,7 +481,7 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 {
 	std::string vehicle = v->getRules()->getType();
 	Unit *rule = _game->getRuleset()->getUnit(vehicle);
-	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor())));
+	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor()), 0));
 	addItem(_game->getRuleset()->getItem(vehicle), unit);
 	if(v->getRules()->getClipSize() != -1)
 	{
@@ -619,7 +619,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 {
 	int difficulty = (int)(_game->getSavedGame()->getDifficulty());
 	int divider = difficulty > 0 ? 1 : 2;
-	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
+	BattleUnit *unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()), difficulty);
 	Node *node = 0;
 
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
@@ -649,18 +649,6 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 		UnitStats *stats = unit->getStats();
 
-		// adjust the unit's stats according to the difficulty level.
-		stats->tu += 4 * difficulty * stats->tu / 100;
-		unit->setTimeUnits(stats->tu);
-		stats->stamina += 4 * difficulty * stats->stamina / 100;
-		unit->setEnergy(stats->stamina);
-		stats->reactions += 6 * difficulty * stats->reactions / 100;
-		stats->strength += 2 * difficulty * stats->strength / 100;
-		stats->firing = (stats->firing + 6 * difficulty * stats->firing / 100) / divider;
-		stats->strength += 2 * difficulty * stats->strength / 100;
-		stats->melee += 4 * difficulty * stats->melee / 100;
-		stats->psiSkill += 4 * difficulty * stats->psiSkill / 100;
-		stats->psiStrength += 4 * difficulty * stats->psiStrength / 100;
 		if (divider > 1)
 			unit->halveArmor();
 
@@ -678,7 +666,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
  */
 BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 {
-	BattleUnit *unit = new BattleUnit(rules, FACTION_NEUTRAL, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()));
+	BattleUnit *unit = new BattleUnit(rules, FACTION_NEUTRAL, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()), 0);
 	Node *node = _save->getSpawnNode(0, unit);
 
 	if (node)
