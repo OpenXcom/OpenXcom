@@ -38,6 +38,7 @@
 #include "Region.h"
 #include "Country.h"
 #include "Waypoint.h"
+#include <assert.h>
 #include <algorithm>
 #include <functional>
 
