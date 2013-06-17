@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #define _USE_MATH_DEFINES
+#include <assert.h>
 #include <cmath>
 #include <climits>
 #include <set>

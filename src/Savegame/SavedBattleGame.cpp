@@ -18,6 +18,7 @@
  */
  
  
+#include <assert.h>
 #include <vector>
 #include <deque>
 #include <queue>

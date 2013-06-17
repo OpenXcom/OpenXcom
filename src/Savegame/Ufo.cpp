@@ -26,6 +26,7 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
+#include <assert.h>
 #include <cmath>
 #include <sstream>
 #include <algorithm>
