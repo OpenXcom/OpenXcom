@@ -1157,8 +1157,12 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 			return (int)(getStats()->tu * item->getRules()->getTUAuto() / 100);
 		case BA_SNAPSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUSnap() / 100);
+		case BA_STUN:
 		case BA_HIT:
-			return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
+			if (item->getRules()->getFlatRate())
+				return item->getRules()->getTUMelee();
+			else
+				return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
