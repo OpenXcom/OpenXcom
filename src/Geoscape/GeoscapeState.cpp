@@ -466,6 +466,7 @@ void GeoscapeState::think()
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions(true);
+		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _game->getSavedGame()->getBaseMaintenance());
 	}
 	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
