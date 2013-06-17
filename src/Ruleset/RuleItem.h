@@ -66,7 +66,7 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
-	int _listOrder;
+	int _listOrder, _range;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -180,6 +180,8 @@ public:
 	int getAttraction() const;
 	/// get the list weight for this item.
 	int getListOrder() const;
+	/// get the max range of this weapon.
+	int getRange() const;
 
 };
 
