@@ -1581,6 +1581,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
 	{
 		if (dynamic_cast<AggroBAIState*>(aiState) != 0 && dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
 		{
+			delete aiState;
 			return; // try not to overwrite an existing aggro AI state
 			// I tried using typeid but it does not produce the expected results :(
 		}

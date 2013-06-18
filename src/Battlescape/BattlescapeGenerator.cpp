@@ -336,7 +336,7 @@ void BattlescapeGenerator::run()
 				(_craft == 0 && (*i)->getWoundRecovery() == 0 && ((*i)->getCraft() == 0 || (*i)->getCraft()->getStatus() != "STR_OUT")))
 			{
 				unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
-				if (!_save->getSelectedUnit())
+				if (unit && !_save->getSelectedUnit())
 					_save->setSelectedUnit(unit);
 			}
 		}
@@ -483,13 +483,16 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 	std::string vehicle = v->getRules()->getType();
 	Unit *rule = _game->getRuleset()->getUnit(vehicle);
 	BattleUnit *unit = addXCOMUnit(new BattleUnit(rule, FACTION_PLAYER, _unitSequence++, _game->getRuleset()->getArmor(rule->getArmor()), 0));
-	addItem(_game->getRuleset()->getItem(vehicle), unit);
-	if(v->getRules()->getClipSize() != -1)
+	if (unit)
 	{
-		std::string ammo = v->getRules()->getCompatibleAmmo()->front();
-		addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity(v->getAmmo());
+		addItem(_game->getRuleset()->getItem(vehicle), unit);
+		if(v->getRules()->getClipSize() != -1)
+		{
+			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
+			addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity(v->getAmmo());
+		}
+		unit->setTurretType(v->getRules()->getTurretType());
 	}
-	unit->setTurretType(v->getRules()->getTurretType());
 }
 
 
@@ -516,6 +519,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			_save->getUnits()->push_back(unit);
 			_save->getTileEngine()->calculateFOV(unit);
 			unit->deriveRank();
+			return unit;
 		}
 		else if (_save->getMissionType() != "STR_BASE_DEFENSE")
 		{
@@ -526,6 +530,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 				_save->getUnits()->push_back(unit);
 				_save->getTileEngine()->calculateFOV(unit);
 				unit->deriveRank();
+				return unit;
 			}
 		}
 	}
@@ -551,13 +556,14 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 						_save->getUnits()->push_back(unit);
 						_save->getTileEngine()->calculateFOV(unit);
 						unit->deriveRank();
-						break;
+						return unit;
 					}
 				}
 			}
 		}
 	}
-	return unit;
+	delete unit;
+	return 0;
 }
 
 /**
@@ -584,23 +590,26 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 				outside = false;
 			Unit *rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
-			for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
+			if (unit)
 			{
-				RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
-				if (ruleItem)
+				for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
 				{
-					addItem(ruleItem, unit);
+					RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
+					if (ruleItem)
+					{
+						addItem(ruleItem, unit);
+					}
 				}
-			}
-			// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
-			if ((*d).alienRank == AR_TERRORIST || (*d).alienRank == AR_TERRORIST2)
-			{
-				std::string terroristWeapon = rule->getRace().substr(4);
-				terroristWeapon += "_WEAPON";
-				RuleItem *ruleItem = _game->getRuleset()->getItem(terroristWeapon);
-				if (ruleItem)
+				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
+				if ((*d).alienRank == AR_TERRORIST || (*d).alienRank == AR_TERRORIST2)
 				{
-					addItem(ruleItem, unit);
+					std::string terroristWeapon = rule->getRace().substr(4);
+					terroristWeapon += "_WEAPON";
+					RuleItem *ruleItem = _game->getRuleset()->getItem(terroristWeapon);
+					if (ruleItem)
+					{
+						addItem(ruleItem, unit);
+					}
 				}
 			}
 		}
@@ -656,6 +665,12 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		// (stops them spawning at 0,0,0)
 		_save->getUnits()->push_back(unit);
 	}
+	else
+	{
+		delete unit;
+		unit = 0;
+	}
+
 	return unit;
 }
 
@@ -684,6 +699,11 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
+	}
+	else
+	{
+		delete unit;
+		unit = 0;
 	}
 
 	return unit;
