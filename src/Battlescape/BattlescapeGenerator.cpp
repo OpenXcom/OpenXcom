@@ -40,6 +40,7 @@
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleTerrain.h"
+#include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
@@ -922,13 +923,27 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 		{	
 			for (int i = 0; i != 4; ++i)
 			{
-				if (!unit->getItem("STR_BELT", i))
+				if (!unit->getItem("STR_BELT", i) && _game->getRuleset()->getInventory("STR_BELT")->fitItemInSlot(item, i, 0))
 				{
 					bi->moveToOwner(unit);
 					bi->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
 					bi->setSlotX(i);
 					placed = true;
 					break;
+				}
+			}
+			if (!placed)
+			{
+				for (int i = 0; i != 3; ++i)
+				{
+					if (!unit->getItem("STR_BACK_PACK", i) && _game->getRuleset()->getInventory("STR_BACK_PACK")->fitItemInSlot(item, i, 0))
+					{
+						bi->moveToOwner(unit);
+						bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
+						bi->setSlotX(i);
+						placed = true;
+						break;
+					}
 				}
 			}
 		}
