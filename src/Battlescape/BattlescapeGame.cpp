@@ -262,6 +262,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
+	if (dynamic_cast<AggroBAIState*>(ai) != 0)
+	{
+		_tuReserved= BA_NONE;
+	}
+
 	if (action.type == BA_WALK)
 	{
 		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;

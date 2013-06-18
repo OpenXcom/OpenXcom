@@ -49,7 +49,7 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
  * @param game pointer to the game.
  * @param unit pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _charge(false)
+AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false)
 {
 	_traceAI = _game->getTraceSetting();
 
@@ -70,6 +70,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
         std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
         _randomTileSearchAge = 0;
     }
+	_coverAction = new BattleAction();
 }
 
 /**
@@ -77,7 +78,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
  */
 AggroBAIState::~AggroBAIState()
 {
-
+	delete _coverAction;
 }
 
 /**
@@ -193,7 +194,13 @@ void AggroBAIState::think(BattleAction *action)
 	*/
 	
 	action->weapon = _unit->getMainHandWeapon();
-
+	if (_coverCharge == 0)
+	{
+		_coverAction->actor = action->actor;
+		_coverAction->number = action->number;
+		_coverAction->weapon = action->weapon;
+		takeCoverAction(_coverAction);
+	}
 	if (_unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
 	{
 		psiAction(action);
@@ -219,6 +226,7 @@ void AggroBAIState::think(BattleAction *action)
 	{
 		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
+		_coverCharge = 0;
 		takeCoverAction(action);
 	}
 	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
@@ -639,18 +647,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int ALLY_BONUS = civ ? -50 : 4;
 	const int SOLDIER_PROXIMITY_BASE_PENALTY = civ ? 0 : 100; // this is divided by distance^2 to nearest soldier
 	
-	int tu = _unit->getTimeUnits();
-
-	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
-	{
-		switch (_game->getBattleState()->getBattleGame()->getReservedAction())
-		{
-		case BA_SNAPSHOT: tu -= action->actor->getStats()->tu / 3; break;
-		case BA_AUTOSHOT: tu -= action->actor->getStats()->tu / 2; break;
-		default: break;
-		}
-		if (tu < 0) tu = 0;
-	}
+	int tu = _coverCharge ? _coverCharge : _unit->getTimeUnits() / 2;
 
 	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, tu);
 
@@ -787,6 +784,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			{
 				bestTileScore = score;
 				bestTile = action->target;
+				_coverCharge = _game->getPathfinding()->getTotalTUCost();
 				if (_traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); }
 			}
 			_game->getPathfinding()->abortPath();
@@ -888,7 +886,7 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 		takeCover = false;
 			
 
-	if (action->number >= 3)
+	if (action->number >= 3 && (!_unit->getMainHandWeapon() || _unit->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE))
 	{
         takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
 	}
@@ -930,6 +928,9 @@ void AggroBAIState::selectNearestTarget()
 	}
 }	
 
+/*
+ * pick a point near enough to our target to perform a melee attack
+ */
 bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs)
 {
 	int size = action->actor->getArmor()->getSize();
@@ -960,6 +961,10 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 	}
 	return returnValue;
 }
+
+/*
+ * Perform a melee attack action
+ */
 void AggroBAIState::meleeAttack(BattleAction *action)
 {
 	_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
