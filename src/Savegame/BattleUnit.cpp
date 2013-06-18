@@ -1055,18 +1055,18 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 		{
 			// health damage
 			_health -= power;
-			if (_health <= 0)
+			if (_health < 0)
 			{
 				_health = 0;
-			}
-			else if (_armor->getSize() == 1)
-			{
-				// conventional weapons can cause additional stun damage
-				_stunlevel += RNG::generate(0, power / 4);
 			}
 
 			if (type != DT_IN)
 			{
+				if (_armor->getSize() == 1)
+				{
+					// conventional weapons can cause additional stun damage
+					_stunlevel += RNG::generate(0, power / 4);
+				}
 				// fatal wounds
 				if (isWoundable())
 				{
@@ -1480,7 +1480,7 @@ void BattleUnit::prepareNewTurn()
 	// suffer from fire
 	if (_fire > 0)
 	{
-		_health -= RNG::generate(5, 10);
+		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
 		_fire--;
 	}
 

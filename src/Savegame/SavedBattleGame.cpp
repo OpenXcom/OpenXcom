@@ -1213,12 +1213,20 @@ void SavedBattleGame::prepareNewTurn()
 	{
 		if ((*i)->getUnit())
 		{
-			// units on a flaming tile suffer damage
-			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12), DT_IN, true);
-			// units on a flaming tile can catch fire 33% chance
-			if (RNG::generate(0,2) == 1)
+			float resistance = (*i)->getUnit()->getArmor()->getDamageModifier(DT_IN);
+			if (resistance > 0.0)
 			{
-				(*i)->getUnit()->setFire(RNG::generate(1,5));
+				// units on a flaming tile suffer damage
+				(*i)->getUnit()->damage(Position(8, 8, 12 - (*i)->getTerrainLevel()), RNG::generate(0, 5) + 5, DT_IN, true);
+				// units on a flaming tile can catch fire 33% chance
+				if (RNG::generate(0,2) == 1)
+				{
+					int burnTime = RNG::generate(0, int(5 * resistance));
+					if ((*i)->getUnit()->getFire() < burnTime)
+					{
+						(*i)->getUnit()->setFire(burnTime); // catch fire and burn
+					}
+				}
 			}
 		}
 

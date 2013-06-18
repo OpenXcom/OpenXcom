@@ -161,6 +161,8 @@ public:
 	int getSmoke() const;
 	/// Get flammability.
 	int getFlammability() const;
+	/// Get turns to burn
+	const int getFuel() const;
 	/// Sets the objects on the tile on fire.
 	void ignite();
 	/// Get fire and smoke animation offset.

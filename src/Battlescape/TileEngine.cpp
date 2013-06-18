@@ -1328,8 +1328,16 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							}
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_/3), type); // immediate IN damage
-								dest->getUnit()->setFire(RNG::generate(1, 5)); // catch fire and burn for 1-5 rounds
+								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
+								if (resistance > 0.0)
+								{
+									dest->getUnit()->damage(Position(8, 8, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+									int burnTime = RNG::generate(0, int(5 * resistance));
+									if (dest->getUnit()->getFire() < burnTime)
+									{
+										dest->getUnit()->setFire(burnTime); // catch fire and burn
+									}
+								}
 							}
 						}
 

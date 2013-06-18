@@ -597,41 +597,61 @@ int Tile::getFlammability() const
 {
 	int flam = 255;
 
-	for (int i=0; i < 4; ++i)
+	if (_objects[3])
 	{
-		if (_objects[i])
-		{
-			if (_objects[i]->getFlammable() < flam)
-			{
-				flam = _objects[i]->getFlammable();
-			}
-		}
+		flam = _objects[3]->getFlammable();
 	}
+	else if (_objects[0])
+	{
+		flam = _objects[0]->getFlammable();
+	}
+
 	return flam;
 }
 
 /*
- * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
- * NOT the sum of the fuel of the objects! TODO: check if this is like in the original.
+ * Fuel of a tile is the lowest flammability of it's objects.
+ * @return how long to burn.
  */
-void Tile::ignite()
+const int Tile::getFuel() const
 {
-	int fuel = 0;
+	int fuel = 255;
 
 	for (int i=0; i < 4; ++i)
 	{
-		if (_objects[i])
+		if (_objects[i] && _objects[i]->getFuel() < fuel)
 		{
-			if (_objects[i]->getFuel() > fuel)
-			{
-				fuel = _objects[i]->getFuel();
-			}
+			fuel = _objects[i]->getFuel();
 		}
 	}
-	setFire(fuel + 1);
-	if (fuel > 1)
+
+	return fuel == 255 ? 1 : fuel;
+}
+/*
+ * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
+ * NOT the sum of the fuel of the objects!
+ */
+void Tile::ignite()
+{
+	if (getFlammability() != 255)
 	{
-		addSmoke(fuel * 2); // not sure
+		int power = (getFlammability() * 0.6) + 15;
+		if (power < 0)
+		{
+			power = 0;
+		}
+		if (power > RNG::generate(0, 100))
+		{
+			if (getFire() == 0)
+			{
+				_smoke = std::max(1, std::min(getFuel() + 1, 15));
+				setFire(getFuel() + 1);
+			}
+		}
+		if (power >= 1)
+		{
+			addSmoke(getFuel() * 2); // not sure
+		}
 	}
 }
 
