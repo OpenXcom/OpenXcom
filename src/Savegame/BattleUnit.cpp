@@ -1046,7 +1046,7 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 			{
 				_health = 0;
 			}
-			else
+			else if (_armor->getSize() == 1)
 			{
 				// conventional weapons can cause additional stun damage
 				_stunlevel += RNG::generate(0, power / 4);
