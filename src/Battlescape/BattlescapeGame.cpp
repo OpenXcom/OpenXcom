@@ -265,7 +265,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (aggro)
 	{
 		_tuReserved = BA_NONE;
-		if (unit->getAggroSound() && !_playedAggroSound)
+		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
