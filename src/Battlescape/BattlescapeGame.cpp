@@ -261,22 +261,22 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			findItem(&action);
 		}
 	}
-
-	if (dynamic_cast<AggroBAIState*>(ai) != 0)
+	bool aggro = dynamic_cast<AggroBAIState*>(ai) != 0;
+	if (aggro)
 	{
-		_tuReserved= BA_NONE;
-	}
-
-	if (action.type == BA_WALK)
-	{
-		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;
-		_parentState->debug(ss.str());
-		if (unit->getAggroSound() && unit->getCharging() && !_playedAggroSound)
+		_tuReserved = BA_NONE;
+		if (unit->getAggroSound() && !_playedAggroSound)
 		{
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
-    if (_save->getTile(action.target)) {
+	}
+	if (action.type == BA_WALK)
+	{
+		ss << L"Walking to " << action.target.x << " "<< action.target.y << " "<< action.target.z;
+		_parentState->debug(ss.str());
+
+		if (_save->getTile(action.target)) {
       _save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
 		}
     if (_save->getPathfinding()->getStartDirection() == -1)
@@ -528,7 +528,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 					murderer->moraleChange(20 * modifier / 100);
 				}
 				// murderer will get a penalty with friendly fire
-				if (victim->getOriginalFaction() == murderer->getFaction())
+				if (victim->getOriginalFaction() == murderer->getOriginalFaction())
 				{
 					murderer->moraleChange(-(2000 / modifier));
 				}
