@@ -452,6 +452,7 @@ void UnitWalkBState::think()
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
+			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			return;
 		}

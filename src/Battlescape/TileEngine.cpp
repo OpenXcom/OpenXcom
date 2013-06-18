@@ -969,6 +969,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 				{
 					unit->setVisible(true);
 				}
+				(*i)->addToVisibleUnits(unit);
 				// no reaction on civilian turn.
 				if (_save->getSide() != FACTION_NEUTRAL &&
 					canMakeSnap(*i, unit))
