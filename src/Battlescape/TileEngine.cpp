@@ -1147,12 +1147,6 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			}
 		}
 
-		// conventional weapons can cause additional stun damage
-		if (type == DT_AP && bu)
-		{
-			bu->damage(Position(center.x%16, center.y%16, center.z%24), RNG::generate(0, rndPower/4), DT_STUN, true);
-		}
-
 		if (bu && bu->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER && type != DT_NONE)
 		{
 			unit->addFiringExp();
