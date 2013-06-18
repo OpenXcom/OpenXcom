@@ -678,7 +678,7 @@ void Ruleset::loadFile(const std::string &filename)
 				(*j)["type"] >> type;
 				std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
 				extraSprites->load(*j, _modIndex);
-				_extraSprites.push_back(std::make_pair<std::string, ExtraSprites*> (type, extraSprites.release()));
+				_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
 				_extraSpritesIndex.push_back(type);
 			}
 		}
@@ -690,7 +690,7 @@ void Ruleset::loadFile(const std::string &filename)
 				(*j)["type"] >> type;
 				std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
 				extraSounds->load(*j, _modIndex);
-				_extraSounds.push_back(std::make_pair<std::string, ExtraSounds*> (type, extraSounds.release()));
+				_extraSounds.push_back(std::make_pair(type, extraSounds.release()));
 				_extraSoundsIndex.push_back(type);
 			}
 		}
