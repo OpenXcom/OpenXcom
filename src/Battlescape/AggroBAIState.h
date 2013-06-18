@@ -90,6 +90,8 @@ public:
 	bool selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs);
 	/// perform a melee attack action
 	void meleeAttack(BattleAction *action);
+	/// select a fire method
+	void selectFireMethod(BattleAction *action);
 };
 
 }

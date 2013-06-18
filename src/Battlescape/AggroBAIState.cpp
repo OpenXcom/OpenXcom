@@ -540,18 +540,7 @@ void AggroBAIState::projectileAction(BattleAction *action)
 		{
 			if (!action->weapon->getAmmoItem()->getRules()->getExplosionRadius() || explosiveEfficacy(_aggroTarget->getPosition(), _unit, action->weapon->getAmmoItem()->getRules()->getExplosionRadius(), action->diff))
 			{
-				if (RNG::generate(1,10) < 5 && action->weapon->getAmmoQuantity() > 2)
-				{
-					action->type = BA_AUTOSHOT;
-				}
-				else
-				{
-					action->type = BA_SNAPSHOT;
-				}
-				if (action->actor->getActionTUs(action->type, action->weapon) > action->actor->getTimeUnits())
-				{
-					action->type = BA_RETHINK;
-				}
+				selectFireMethod(action);
 			}
 		}
 	}
@@ -974,5 +963,69 @@ void AggroBAIState::meleeAttack(BattleAction *action)
 	action->target = _aggroTarget->getPosition();
 	action->type = BA_HIT;
 	_charge = true;
+}
+
+/*
+ *	select a fire method based on range, time units, and time units reserved for cover.
+ */
+void AggroBAIState::selectFireMethod(BattleAction *action)
+{
+	int distance = _game->getTileEngine()->distance(_unit->getPosition(), action->target);
+	action->type = BA_RETHINK;
+	int tuAuto = action->weapon->getRules()->getTUAuto();
+	int tuSnap = action->weapon->getRules()->getTUSnap();
+	int tuAimed = action->weapon->getRules()->getTUAimed();
+	int currentTU = action->actor->getTimeUnits() - _coverCharge;
+
+	if (distance < 8)
+	{
+		if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+		{
+			action->type = BA_AUTOSHOT;
+			return;
+		}
+		if ( !tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+		{
+			if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+			{
+				action->type = BA_AIMEDSHOT;
+			}
+			return;
+		}
+		action->type = BA_SNAPSHOT;
+		return;
+	}
+
+
+	if ( distance >= 25 )
+	{
+		if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+		{
+			action->type = BA_AIMEDSHOT;
+			return;
+		}
+		if ( distance < 40
+			&& tuSnap
+			&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+		{
+			action->type = BA_SNAPSHOT;
+			return;
+		}
+	}
+	
+	if ( tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+	{
+			action->type = BA_SNAPSHOT;
+			return;
+	}
+	if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+	{
+			action->type = BA_AIMEDSHOT;
+			return;
+	}
+	if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+	{
+			action->type = BA_AUTOSHOT;
+	}
 }
 }
