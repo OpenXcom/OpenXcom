@@ -261,8 +261,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			findItem(&action);
 		}
 	}
-	bool aggro = dynamic_cast<AggroBAIState*>(ai) != 0;
-	if (aggro)
+
+	if (dynamic_cast<AggroBAIState*>(ai) != 0)
 	{
 		_tuReserved = BA_NONE;
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
