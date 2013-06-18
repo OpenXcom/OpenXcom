@@ -303,7 +303,10 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
-
+	if (node.FindValue("objectiveDestroyed"))
+	{
+		node["objectiveDestroyed"] >> _objectiveDestroyed;
+	}
 }
 
 /**
@@ -353,7 +356,10 @@ void SavedBattleGame::loadMapResources(Game *game)
 void SavedBattleGame::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
-
+	if (_objectiveDestroyed)
+	{
+		out << YAML::Key << "objectiveDestroyed" << YAML::Value << _objectiveDestroyed;
+	}
 	out << YAML::Key << "width" << YAML::Value << _mapsize_x;
 	out << YAML::Key << "length" << YAML::Value << _mapsize_y;
 	out << YAML::Key << "height" << YAML::Value << _mapsize_z;
