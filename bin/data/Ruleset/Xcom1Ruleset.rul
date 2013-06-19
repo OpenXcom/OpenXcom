@@ -4560,7 +4560,7 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    value: 12
+    value: 18
     deathSound: 10
     moveSound: 15
     intelligence: 7
@@ -4584,7 +4584,7 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    value: 12
+    value: 14
     deathSound: 10
     moveSound: 15
     intelligence: 5
