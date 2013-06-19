@@ -237,11 +237,9 @@ void Map::drawTerrain(Surface *surface)
 	NumberText *_numWaypid = 0;
 	
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile /* && !_projectile->getItem()*/) //thrown items also need to be sen by level
+	if (_projectile)
 	{
-		int part = _projectile->getParticle(0);
-		if (part == 0)
-			part = 1;
+		int part = _projectile->getItem() ? 1 : 35;
 		for (int i = 1; i <= part; ++i)
 		{
 			if (_projectile->getPosition(1-i).x < bulletLowX)
@@ -501,32 +499,30 @@ void Map::drawTerrain(Surface *surface)
 							// draw bullet on the correct tile
 							if (itX >= bulletLowX && itX <= bulletHighX && itY >= bulletLowY && itY <= bulletHighY)
 							{
-								for (int i = 1; i <= _projectile->getParticle(0); ++i)
+								for (int i = 1; i <= 35; ++i)
 								{
-									if (_projectile->getParticle(i) != 0xFF)
+									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
+									Position voxelPos = _projectile->getPosition(1-i);
+									// draw shadow on the floor
+									voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
+									if (voxelPos.x / 16 == itX &&
+										voxelPos.y / 16 == itY &&
+										voxelPos.z / 24 == itZ &&
+										_save->getTileEngine()->isVoxelVisible(voxelPos))
 									{
-										Position voxelPos = _projectile->getPosition(1-i);
-										// draw shadow on the floor
-										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-										if (voxelPos.x / 16 == itX &&
-											voxelPos.y / 16 == itY &&
-											voxelPos.z / 24 == itZ &&
-											_save->getTileEngine()->isVoxelVisible(voxelPos))
-										{
-											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
-										}
-										// draw bullet itself
-										voxelPos = _projectile->getPosition(1-i);
-										if (voxelPos.x / 16 == itX &&
-											voxelPos.y / 16 == itY &&
-											voxelPos.z / 24 == itZ &&
-											_save->getTileEngine()->isVoxelVisible(voxelPos))
-										{
-											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-											_bullet[_projectile->getParticle(i)]->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
-										}
-
+										_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+										tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
+									}
+										
+									// draw bullet itself
+									voxelPos = _projectile->getPosition(1-i);
+									if (voxelPos.x / 16 == itX &&
+										voxelPos.y / 16 == itY &&
+										voxelPos.z / 24 == itZ &&
+										_save->getTileEngine()->isVoxelVisible(voxelPos))
+									{
+										_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+										tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
 									}
 								}
 							}

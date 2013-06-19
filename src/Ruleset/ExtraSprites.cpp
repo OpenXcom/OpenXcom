@@ -25,7 +25,7 @@ namespace OpenXcom
 /*
  * Creates a blank set of extra sprite data.
  */
-ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0)
+ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0)
 {
 }
 
@@ -54,6 +54,14 @@ void ExtraSprites::load(const YAML::Node &node, int modIndex)
 		else if (key == "height")
 		{
 			i.second() >> _height;
+		}
+		else if (key == "subX")
+		{
+			i.second() >> _subX;
+		}
+		else if (key == "subY")
+		{
+			i.second() >> _subY;
 		}
 		else if (key == "singleImage")
 		{
@@ -85,7 +93,7 @@ std::map<int, std::string> *ExtraSprites::getSprites()
 /*
  * @return the width of the surfaces (used for single images and new spritesets)
  */
-int ExtraSprites::getWidth()
+const int ExtraSprites::getWidth() const
 {
 	return _width;
 }
@@ -93,7 +101,7 @@ int ExtraSprites::getWidth()
 /*
  * @return the height of the surfaces (used for single images and new spritesets)
  */
-int ExtraSprites::getHeight()
+const int ExtraSprites::getHeight() const
 {
 	return _height;
 }
@@ -101,7 +109,7 @@ int ExtraSprites::getHeight()
 /*
  * @return is this a single surface, or a set of surfaces?
  */
-bool ExtraSprites::getSingleImage()
+const bool ExtraSprites::getSingleImage() const
 {
 	return _singleImage;
 }
@@ -109,8 +117,19 @@ bool ExtraSprites::getSingleImage()
 /*
  * @return the mod index for this external sprite set.
  */
-int ExtraSprites::getModIndex()
+const int ExtraSprites::getModIndex() const
 {
 	return _modIndex;
 }
+
+const int ExtraSprites::getSubX() const
+{
+	return _subX;
+}
+
+const int ExtraSprites::getSubY() const
+{
+	return _subY;
+}
+
 }
