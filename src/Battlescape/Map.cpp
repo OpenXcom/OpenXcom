@@ -502,27 +502,30 @@ void Map::drawTerrain(Surface *surface)
 								for (int i = 1; i <= 35; ++i)
 								{
 									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
-									Position voxelPos = _projectile->getPosition(1-i);
-									// draw shadow on the floor
-									voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-									if (voxelPos.x / 16 == itX &&
-										voxelPos.y / 16 == itY &&
-										voxelPos.z / 24 == itZ &&
-										_save->getTileEngine()->isVoxelVisible(voxelPos))
+									if (tmpSurface)
 									{
-										_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-										tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
-									}
+										Position voxelPos = _projectile->getPosition(1-i);
+										// draw shadow on the floor
+										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
+										if (voxelPos.x / 16 == itX &&
+											voxelPos.y / 16 == itY &&
+											voxelPos.z / 24 == itZ &&
+											_save->getTileEngine()->isVoxelVisible(voxelPos))
+										{
+											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
+										}
 										
-									// draw bullet itself
-									voxelPos = _projectile->getPosition(1-i);
-									if (voxelPos.x / 16 == itX &&
-										voxelPos.y / 16 == itY &&
-										voxelPos.z / 24 == itZ &&
-										_save->getTileEngine()->isVoxelVisible(voxelPos))
-									{
-										_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
-										tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
+										// draw bullet itself
+										voxelPos = _projectile->getPosition(1-i);
+										if (voxelPos.x / 16 == itX &&
+											voxelPos.y / 16 == itY &&
+											voxelPos.z / 24 == itZ &&
+											_save->getTileEngine()->isVoxelVisible(voxelPos))
+										{
+											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
+										}
 									}
 								}
 							}
