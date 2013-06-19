@@ -70,7 +70,7 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	
+
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
@@ -107,6 +107,7 @@ void DismantleFacilityState::btnOkClick(Action *)
 			if (*i == _fac)
 			{
 				_base->getFacilities()->erase(i);
+				_view->resetSelectedFacility();
 				delete _fac;
 				if (Options::getBool("allowBuildingQueue")) _view->reCalcQueuedBuildings();
 				break;
