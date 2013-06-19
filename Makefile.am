@@ -25,8 +25,8 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
-resourcesdir =  $(pkgdatadir)/data/Resources
-resources_DATA = \
+pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
+pathfinding_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_02.png \
@@ -50,7 +50,10 @@ resources_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png \
+	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
+
+bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
+bulletsprite_DATA = \    
 	bin/data/Resources/BulletSprites/BulletSprites.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
@@ -701,7 +704,8 @@ EXTRA_DIST = \
 	$(pkgdata_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
-	$(resources_DATA) \
+	$(pathfinding_DATA) \
+	$(bulletsprite_DATA) \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \
