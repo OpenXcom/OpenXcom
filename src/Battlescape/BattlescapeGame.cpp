@@ -1500,6 +1500,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
 		getTileEngine()->calculateTerrainLighting();
+		getTileEngine()->calculateFOV(position);
 	}
 
 }
