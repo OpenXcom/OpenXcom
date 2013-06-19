@@ -25,7 +25,7 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
-resourcesdir =  $(pkgdatadir)/data/Resources/Pathfinding
+resourcesdir =  $(pkgdatadir)/data/Resources
 resources_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
@@ -50,7 +50,8 @@ resources_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_20.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
-	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
+	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png \
+	bin/data/Resources/BulletSprites/BulletSprites.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
