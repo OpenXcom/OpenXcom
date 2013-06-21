@@ -644,13 +644,9 @@ void Tile::ignite()
 		{
 			if (getFire() == 0)
 			{
-				_smoke = std::max(1, std::min(getFuel() + 1, 15));
-				setFire(getFuel() + 1);
+				setFire(std::max(1, std::min(getFuel() + 1, 15)));
+				_smoke = 0;
 			}
-		}
-		if (power >= 1)
-		{
-			addSmoke(getFuel() * 2); // not sure
 		}
 	}
 }
@@ -832,6 +828,7 @@ bool Tile::prepareNewTurn()
 	{
 		// fire will be finished in this turn
 		// destroy all objects that burned, and try to ignite again
+		int smoke = getFuel();
 		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
@@ -849,12 +846,16 @@ bool Tile::prepareNewTurn()
 		else
 		{
 			_fire = 0;
+			_smoke = smoke;
 		}
 	}
 	else
 	{
 		_fire--;
-		if (_fire < 0) _fire = 0;
+		if (_fire < 0)
+		{
+			_fire = 0;
+		}
 	}
 
 	return objective;
