@@ -112,6 +112,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
  */
 BaseDefenseState::~BaseDefenseState()
 {
+	delete _timer;
 }
 
 /**
@@ -220,9 +221,9 @@ void BaseDefenseState::btnOkClick(Action *)
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{
+		// Whatever happens in the base defense, the UFO has finished its duty
+		_ufo->setStatus(Ufo::DESTROYED);
         _state->handleBaseDefense(_base, _ufo);
 	}
-	// Whatever happens in the base defense, the UFO has finished its duty
-	_ufo->setStatus(Ufo::DESTROYED);
 }
 }
