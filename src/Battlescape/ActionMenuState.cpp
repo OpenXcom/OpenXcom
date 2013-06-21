@@ -277,7 +277,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			if (!_game->getSavedGame()->getBattleGame()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),
-				_action->actor->getArmor()->getSize(),
+				_action->actor,
 				0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";

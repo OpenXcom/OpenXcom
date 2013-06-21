@@ -481,6 +481,25 @@ void Pathfinding::directionToVector(const int direction, Position *vector)
 }
 
 /*
+ * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
+ * @param vector pointer to a position (which acts as a vector)
+ * @return direction
+ */
+void Pathfinding::vectorToDirection(const Position &vector, int &dir)
+{
+	dir = -1;
+	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+	int y[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+	for (int i = 0; i < 8; ++i)
+	{
+		if (x[i] == vector.x && y[i] == vector.y)
+		{
+			dir = i;
+			return;
+		}
+	}
+}
+/*
  * Check whether a path is ready and gives first direction.
  * @return direction where the unit needs to go next, -1 if it's the end of the path.
  */

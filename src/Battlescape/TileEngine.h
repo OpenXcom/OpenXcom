@@ -48,7 +48,6 @@ private:
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
-	int vectorToDirection(const Position &vector);
 	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.
@@ -105,9 +104,9 @@ public:
 	/// apply gravity to anything that occupy this tile.
 	Tile *applyGravity(Tile *t);
 	/// return melee validity between two units
-	bool validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir);
+	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// return validity of a melee attack from a given position
-	bool validMeleeRange(Position pos, int direction, int size, BattleUnit *target);
+	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target);
 	/// get the ai to look through a window
 	int faceWindow(const Position &position);
 	/// get the exposure % of a unit on a tile

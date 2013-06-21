@@ -73,6 +73,8 @@ public:
 	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
+	/// convert a vector to a direction.
+	static void vectorToDirection(const Position &vector, int &dir);
 	/// Check whether a path is ready gives the first direction.
 	int getStartDirection();
 	/// Dequeue a direction.

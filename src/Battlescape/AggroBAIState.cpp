@@ -345,7 +345,7 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	}
 	if (_aggroTarget != 0)
 	{
-		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, -1))
+		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirectionTo(_aggroTarget->getPosition())))
 		{
 			meleeAttack(action);
 		}
@@ -932,7 +932,9 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 			if (x || y) // skip the unit itself
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
-				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), target);
+				int dir;
+				Pathfinding::vectorToDirection(target->getPosition() - checkPath, dir);
+				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, dir, action->actor, target);
 				bool fitHere = _game->setUnitPosition(action->actor, checkPath, true);
 								
 				if (valid && fitHere)
