@@ -486,11 +486,15 @@ void UnitWalkBState::postPathProcedures()
 				_unit->turn();
 			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
 			{
-				_action.target = _action.actor->getCharging()->getPosition();
-				_action.weapon = _action.actor->getMainHandWeapon();
-				_action.type = BA_HIT;
-				_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
+				BattleAction action;
+				action.actor = _unit;
+				action.target = _unit->getCharging()->getPosition();
+				action.weapon = _unit->getMainHandWeapon();
+				action.type = BA_HIT;
+				action.TU = _unit->getActionTUs(action.type, action.weapon);
+				action.targeting = true;
 				_unit->setCharging(0);
+				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		} // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
 		else if (_parent->getSave()->getTile(_finalFacing) != 0 && (visibility == -1|| visibility == 4))
