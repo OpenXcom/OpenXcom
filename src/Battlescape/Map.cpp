@@ -513,6 +513,8 @@ void Map::drawTerrain(Surface *surface)
 											_save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											bulletPositionScreen.x -= tmpSurface->getWidth() / 2;
+											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
 										}
 										
@@ -524,6 +526,8 @@ void Map::drawTerrain(Surface *surface)
 											_save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											bulletPositionScreen.x -= tmpSurface->getWidth() / 2;
+											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 0);
 										}
 									}
