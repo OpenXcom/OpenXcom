@@ -169,23 +169,20 @@ void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
  */
 void BattlescapeGenerator::nextStage()
 {
-	// if you didn't win by killing everything.
-	if (_game->getSavedGame()->getBattleGame()->isAborted())
+	// kill all enemy units, or those not in endpoint area (if aborted)
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		// kill all units not in endpoint area
-		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+		if ((_game->getSavedGame()->getBattleGame()->isAborted() && !(*j)->isInExitArea(END_POINT))
+			|| (*j)->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			if (!(*j)->isInExitArea(END_POINT) || (*j)->getOriginalFaction() == FACTION_HOSTILE)
-			{
-				(*j)->instaKill();
-			}
-			if ((*j)->getTile())
-			{
-				(*j)->getTile()->setUnit(0);
-			}
-			(*j)->setTile(0);
-			(*j)->setPosition(Position(-1,-1,-1), false);
+			(*j)->instaKill();
 		}
+		if ((*j)->getTile())
+		{
+			(*j)->getTile()->setUnit(0);
+		}
+		(*j)->setTile(0);
+		(*j)->setPosition(Position(-1,-1,-1), false);
 	}
 	
 	while (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
@@ -205,10 +202,11 @@ void BattlescapeGenerator::nextStage()
 	bool selectedFirstSoldier = false;
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if ((*j)->getFaction() == FACTION_PLAYER)
+		if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 		{
 			if (!(*j)->isOut())
 			{
+				(*j)->convertToFaction(FACTION_PLAYER);
 				(*j)->setTurnsExposed(0);
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
 				{
