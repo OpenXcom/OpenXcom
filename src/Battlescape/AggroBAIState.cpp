@@ -224,6 +224,7 @@ void AggroBAIState::think(BattleAction *action)
 
 	if (takeCoverAssessment(action))
 	{
+		_unit->_hidingForTurn = true;
 		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		_coverCharge = 0;
@@ -594,7 +595,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	int unitsSpottingMe =_game->getSpottingUnits(action->actor);
 	action->type = BA_WALK;
 	int currentTilePreference = _unit->_hidingForTurn ? action->number * 5 : 0;
-	_unit->_hidingForTurn = true;
 	int tries = -1;
 	bool coverFound = false;
 	int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target

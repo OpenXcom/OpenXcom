@@ -561,6 +561,14 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
 		if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 	}
+	// missiles can't pathfind through closed doors.
+	if (missileTarget != 0 && tile->getMapData(part) &&
+		(tile->getMapData(part)->isDoor() ||
+		(tile->getMapData(part)->isUFODoor() &&
+		!tile->isUfoDoorOpen(part))))
+	{
+		return false;
+	}
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
 	return false;
 }
