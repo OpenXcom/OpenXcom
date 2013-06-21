@@ -879,7 +879,7 @@ void DogfightState::move()
 						drawCraftDamage();
 						setStatus("STR_INTERCEPTOR_DAMAGED");
 						_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); //10
-						if (_mode == _btnCautious && _craft->getDamagePercentage() > 50)
+						if (_mode == _btnCautious && _craft->getDamagePercentage() >= 50)
 						{
 							_targetDist = STANDOFF_DIST;
 						}
