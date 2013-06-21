@@ -335,6 +335,7 @@ void InventoryState::btnOkClick(Action *)
 	}
 	_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+	_battleGame->getTileEngine()->recalculateFOV();
 }
 
 /**

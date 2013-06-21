@@ -260,15 +260,11 @@ void BattlescapeGenerator::nextStage()
 			_save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
 				_save->getTiles()[i]->setDiscovered(true, 2);
 	}
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
-	{
-		if (!(*j)->isOut())
-			_save->getTileEngine()->calculateFOV((*j));
-	}
 	_save->setGlobalShade(_worldShade);
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
 	_save->getTileEngine()->calculateUnitLighting();
+	_save->getTileEngine()->recalculateFOV();
 }
 
 /**
@@ -472,6 +468,7 @@ void BattlescapeGenerator::run()
 	_save->getTileEngine()->calculateSunShading();
 	_save->getTileEngine()->calculateTerrainLighting();
 	_save->getTileEngine()->calculateUnitLighting();
+	_save->getTileEngine()->recalculateFOV();
 }
 
 /**

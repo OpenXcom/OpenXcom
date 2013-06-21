@@ -137,6 +137,7 @@ public:
 	bool canMakeSnap(BattleUnit *unit, BattleUnit *target);
 	/// try to perform a reaction snap shot to this location.
 	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
+	void recalculateFOV();
 };
 
 }

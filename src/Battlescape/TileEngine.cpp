@@ -1181,8 +1181,8 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	}
 	applyGravity(tile);
 	calculateSunShading(); // roofs could have been destroyed
-	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
+	calculateFOV(center);
 	return bu;
 }
 
@@ -1379,8 +1379,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	}
 
 	calculateSunShading(); // roofs could have been destroyed
-	calculateFOV(center);
 	calculateTerrainLighting(); // fires could have been started
+	calculateFOV(center);
 }
 
 /**
@@ -2624,6 +2624,17 @@ bool TileEngine::validateThrow(BattleAction *action)
 	}
 
 	return ProjectileFlyBState::validThrowRange(action);
+}
+
+/*
+ * Recalculate FOV of all units in-game.
+ */
+void TileEngine::recalculateFOV()
+{
+	for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+	{
+		calculateFOV(*bu);
+	}
 }
 
 }

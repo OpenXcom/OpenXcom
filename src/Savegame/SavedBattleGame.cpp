@@ -343,10 +343,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 	getTileEngine()->calculateSunShading();
 	getTileEngine()->calculateTerrainLighting();
 	getTileEngine()->calculateUnitLighting();
-	for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-	{
-		_tileEngine->calculateFOV(*bu);
-	}
+	getTileEngine()->recalculateFOV();
 }
 
 /**
@@ -871,10 +868,7 @@ void SavedBattleGame::endTurn()
 	}
 	
 	// re-run calculateFOV() *after* all aliens have been set not-visible
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(), end = _units.end(); i != end; ++i)
-	{
-		_tileEngine->calculateFOV(*i);
-	}
+	_tileEngine->recalculateFOV();
 
 	if (_side != FACTION_PLAYER)
 		selectNextPlayerUnit();
