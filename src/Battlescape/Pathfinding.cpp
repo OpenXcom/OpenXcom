@@ -567,7 +567,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 		(tile->getMapData(part)->isUFODoor() &&
 		!tile->isUfoDoorOpen(part))))
 	{
-		return false;
+		return true;
 	}
 	if (tile->getTUCost(part, _movementType) == 255) return true; // blocking part
 	return false;
