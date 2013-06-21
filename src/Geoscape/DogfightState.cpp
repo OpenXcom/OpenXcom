@@ -766,6 +766,7 @@ void DogfightState::move()
 		}
 
 	}
+	bool projectileInFlight = false;
 	if(!_minimized)
 	{
 		int distanceChange = 0;
@@ -805,7 +806,6 @@ void DogfightState::move()
 		std::wstringstream ss;
 		ss << _currentDist;
 		_txtDistance->setText(ss.str());
-		bool projectileInFlight = false;
 
 		// Move projectiles and check for hits.
 		for(std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
@@ -957,11 +957,16 @@ void DogfightState::move()
 		// Handle UFO firing.
 		if(!_ufoWtimer->isRunning() && _currentDist <= _ufo->getRules()->getWeaponRange() * 8 && !_ufo->isCrashed() && !_craft->isDestroyed())
 		{
-			_ufoWtimer->start();
-			ufoFireWeapon();
+			if (_ufo->getShootingAt() == 0)
+			{
+				_ufo->setShootingAt(_interceptionNumber);
+				_ufoWtimer->start();
+				ufoFireWeapon();
+			}
 		}
 		else if(_ufoWtimer->isRunning() && (_currentDist > _ufo->getRules()->getWeaponRange() * 8 || _ufo->isCrashed() || _craft->isDestroyed()))
 		{
+			_ufo->setShootingAt(0);
 			_ufoWtimer->stop();
 		}
 	}
@@ -989,6 +994,7 @@ void DogfightState::move()
 		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
 		finalRun = true;
 		_destroyCraft = true;
+		_ufo->setShootingAt(0);
 		_ufoWtimer->stop();
 		_w1Timer->stop();
 		_w2Timer->stop();
@@ -1104,12 +1110,13 @@ void DogfightState::move()
 	{
 		_timeout += 30;
 		finalRun = true;
+		_ufo->setShootingAt(0);
 		_ufoWtimer->stop();
 		_w1Timer->stop();
 		_w2Timer->stop();
 	}
 
-	if (finalRun)
+	if (!projectileInFlight && finalRun)
 	{
 		_end = true;
 	}

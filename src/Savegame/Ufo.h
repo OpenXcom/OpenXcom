@@ -54,7 +54,7 @@ private:
 	const UfoTrajectory *_trajectory;
 	unsigned _trajectoryPoint;
 	bool _detected, _hyperDetected;
-
+	int _shootingAt;
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 public:
@@ -134,6 +134,9 @@ public:
 	AlienMission *getMission() const { return _mission; }
 	/// Sets the UFO's destination.
 	void setDestination(Target *dest);
+	const int getShootingAt() const;
+	void setShootingAt(int target);
+
 };
 
 }
