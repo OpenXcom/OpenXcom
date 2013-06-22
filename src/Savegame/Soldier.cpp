@@ -66,7 +66,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 			_name = L"";
 			_gender = (SoldierGender)RNG::generate(0, 1);
 		}
-		_look = (SoldierLook)RNG::generate(0, 3);
+		_look = (SoldierLook)genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
 	}
 	if (id != 0)
 	{
