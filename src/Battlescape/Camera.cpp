@@ -238,9 +238,9 @@ void Camera::mouseOver(Action *action, State *)
 /**
  * Handles camera keyboard shortcuts.
  * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param scrollSpeed The scroll speed.
  */
-void Camera::keyboardPress(Action *action, State *)
+void Camera::handleKeyboardInput(Action *action, int scrollSpeed)
 {
 	if (_map->getCursorType() == CT_NONE)
 	{
@@ -248,7 +248,7 @@ void Camera::keyboardPress(Action *action, State *)
 	}
 
 	int key = action->getDetails()->key.keysym.sym;
-	int scrollSpeed = Options::getInt("battleScrollSpeed");
+
 	if (key == Options::getInt("keyBattleLeft"))
 	{
 		_scrollKeyX = scrollSpeed;
@@ -281,40 +281,19 @@ void Camera::keyboardPress(Action *action, State *)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
+void Camera::keyboardPress(Action *action, State *)
+{
+	handleKeyboardInput(action, Options::getInt("battleScrollSpeed"));
+}
+
+/**
+ * Handles camera keyboard shortcuts.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
 void Camera::keyboardRelease(Action *action, State *)
 {
-	if (_map->getCursorType() == CT_NONE)
-	{
-		return;
-	}
-
-	int key = action->getDetails()->key.keysym.sym;
-	int scrollSpeed = Options::getInt("battleScrollSpeed");
-	if (key == Options::getInt("keyBattleLeft"))
-	{
-		_scrollKeyX = 0;
-	}
-	else if (key == Options::getInt("keyBattleRight"))
-	{
-		_scrollKeyX = 0;
-	}
-	else if (key == Options::getInt("keyBattleUp"))
-	{
-		_scrollKeyY = 0;
-	}
-	else if (key == Options::getInt("keyBattleDown"))
-	{
-		_scrollKeyY = 0;
-	}
-
-	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
-	{
-		_scrollKeyTimer->start();
-	}
-	else if ((!_scrollKeyX && !_scrollKeyY) && _scrollKeyTimer->isRunning())
-	{
-		_scrollKeyTimer->stop();
-	}
+	handleKeyboardInput(action, 0);
 }
 
 /**
