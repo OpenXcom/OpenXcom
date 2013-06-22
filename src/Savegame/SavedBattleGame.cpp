@@ -32,6 +32,9 @@
 #include "../Ruleset/MCDPatch.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/EndBattleBState.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
@@ -1021,6 +1024,11 @@ bool SavedBattleGame::isAborted() const
 void SavedBattleGame::setObjectiveDestroyed(bool flag)
 {
 	_objectiveDestroyed = flag;
+	if (flag && Options::getBool("battleAutoEnd"))
+	{
+		// doesn't really matter what number we push here, as long as it's not 0. the player already won, so let's push 1.
+		_battleState->getBattleGame()->statePushBack(new EndBattleBState(_battleState->getBattleGame(), 1, _battleState));
+	}
 }
 
 /**
