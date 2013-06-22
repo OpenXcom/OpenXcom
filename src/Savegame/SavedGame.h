@@ -144,7 +144,7 @@ public:
 	/// Gets the list of terror sites.
 	std::vector<TerrorSite*> *getTerrorSites();
 	/// Gets the current battle game.
-	SavedBattleGame *getBattleGame();
+	SavedBattleGame *getSavedBattle();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject

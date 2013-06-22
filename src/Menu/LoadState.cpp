@@ -79,12 +79,12 @@ void LoadState::lstSavesPress(Action *action)
 			s->load(filename, _game->getRuleset());
 			_game->setSavedGame(s);
 			_game->setState(new GeoscapeState(_game));
-			if (_game->getSavedGame()->getBattleGame() != 0)
+			if (_game->getSavedGame()->getSavedBattle() != 0)
 			{
-				_game->getSavedGame()->getBattleGame()->loadMapResources(_game);
+				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
 				BattlescapeState *bs = new BattlescapeState(_game);
 				_game->pushState(bs);
-				_game->getSavedGame()->getBattleGame()->setBattleState(bs);
+				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 			}
 		}
 		catch (Exception &e)

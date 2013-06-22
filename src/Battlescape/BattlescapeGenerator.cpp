@@ -68,7 +68,7 @@ namespace OpenXcom
  * Sets up a BattlescapeGenerator.
  * @param game pointer to Game object.
  */
-BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getBattleGame()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _terrain(0),
+BattlescapeGenerator::BattlescapeGenerator(Game *game) : _game(game), _save(game->getSavedGame()->getSavedBattle()), _res(_game->getResourcePack()), _craft(0), _ufo(0), _base(0), _terror(0), _terrain(0),
 														 _mapsize_x(0), _mapsize_y(0), _mapsize_z(0), _worldTexture(0), _worldShade(0), _unitSequence(0), _craftInventoryTile(0), _alienRace(""), _alienItemLevel(0)
 {
 }
@@ -172,7 +172,7 @@ void BattlescapeGenerator::nextStage()
 	// kill all enemy units, or those not in endpoint area (if aborted)
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if ((_game->getSavedGame()->getBattleGame()->isAborted() && !(*j)->isInExitArea(END_POINT))
+		if ((_game->getSavedGame()->getSavedBattle()->isAborted() && !(*j)->isInExitArea(END_POINT))
 			|| (*j)->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			(*j)->instaKill();
@@ -185,9 +185,9 @@ void BattlescapeGenerator::nextStage()
 		(*j)->setPosition(Position(-1,-1,-1), false);
 	}
 	
-	while (_game->getSavedGame()->getBattleGame()->getSide() != FACTION_PLAYER)
+	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
 	{
-		_game->getSavedGame()->getBattleGame()->endTurn();
+		_game->getSavedGame()->getSavedBattle()->endTurn();
 	}
 	_save->resetTurnCounter();
 
@@ -641,10 +641,10 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
-		Position craft = _game->getSavedGame()->getBattleGame()->getUnits()->at(0)->getPosition();
+		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
 			dir = unit->getDirectionTo(craft);
 		if (dir != -1)
@@ -683,7 +683,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		
 		// we only add a unit if it has a node to spawn on.
@@ -692,7 +692,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getBattleGame(), unit, node));
+		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}

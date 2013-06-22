@@ -240,7 +240,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	// Set up objects
 
-	_save = _game->getSavedGame()->getBattleGame();
+	_save = _game->getSavedGame()->getSavedBattle();
 	_map->init();
 	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
 	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);

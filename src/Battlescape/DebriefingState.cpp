@@ -336,7 +336,7 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_ELERIUM_115", true));
 
 	SavedGame *save = _game->getSavedGame();
-	SavedBattleGame *battle = save->getBattleGame();
+	SavedBattleGame *battle = save->getSavedBattle();
 	bool aborted = battle->isAborted();
 	bool success = !aborted;
 	Craft* craft = 0;

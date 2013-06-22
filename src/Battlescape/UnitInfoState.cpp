@@ -540,25 +540,25 @@ void UnitInfoState::handle(Action *action)
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
-			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
+			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			while (_unit->getArmor()->getSize() > 1
 					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
-				_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
-				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
+				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			}
 			init();
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
-			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
+			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			while (_unit->getArmor()->getSize() >1
 					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
-				_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
-				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
+				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			}
 			init();
 		}
@@ -568,26 +568,26 @@ void UnitInfoState::handle(Action *action)
 		// "tab" - next solider
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
-			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
+			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			while (_unit->getArmor()->getSize() >1
 					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
-				_game->getSavedGame()->getBattleGame()->getBattleState()->selectNextPlayerUnit(false, false);
-				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
+				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			}
 			init();
 		}
 		// prev soldier
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
-			_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
+			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			while (_unit->getArmor()->getSize() >1
 					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
 			{
-				_game->getSavedGame()->getBattleGame()->getBattleState()->selectPreviousPlayerUnit(false);
-				_unit = _game->getSavedGame()->getBattleGame()->getSelectedUnit();
+				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
+				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 			}
 			init();
 		}
