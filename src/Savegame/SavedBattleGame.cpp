@@ -1253,12 +1253,12 @@ void SavedBattleGame::prepareNewTurn()
 			}
 		}
 
-		int z = (*i)->getPosition().z;
+		Position currentPosition = (*i)->getPosition();
 		for (int dir = 0; dir <= 6; dir += 2)
 		{
-			Position pos;
-			Pathfinding::directionToVector(dir, &pos);
-			Tile *t = getTile(Position(pos.x, pos.y, z));
+			Position offset;
+			Pathfinding::directionToVector(dir, &offset);
+			Tile *t = getTile(currentPosition + offset);
 			if (t && t->getFire() == 0)
 			{
 				// check adjacent tiles - if they have a flammability of < 255, there is a chance...
