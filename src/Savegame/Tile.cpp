@@ -574,14 +574,12 @@ bool Tile::detonate()
 			}
 		}
 
-		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
-		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
-		int flam = getFlammability();
-		if (flam <= 20)
+		if (getMapData(MapData::O_OBJECT))
 		{
-			if (RNG::generate(0, 20) - flam >= 0)
+			if (!_fire && explosive > RNG::generate(10, 30))
 			{
-				ignite();
+				setFire(getFuel() + 1);
+				setSmoke(std::max(1, std::min(15 - (getFlammability() / 10), 12)));
 			}
 		}
 	}
@@ -615,38 +613,40 @@ int Tile::getFlammability() const
  */
 const int Tile::getFuel() const
 {
-	int fuel = 255;
+	int fuel = 0;
 
-	for (int i=0; i < 4; ++i)
+	if (_objects[3])
 	{
-		if (_objects[i] && _objects[i]->getFuel() < fuel)
-		{
-			fuel = _objects[i]->getFuel();
-		}
+		fuel = _objects[3]->getFuel();
+	}
+	else if (_objects[0])
+	{
+		fuel = _objects[0]->getFuel();
 	}
 
-	return fuel == 255 ? 1 : fuel;
+	return fuel;
 }
 /*
  * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
  * NOT the sum of the fuel of the objects!
  */
-void Tile::ignite()
+void Tile::ignite(int power)
 {
 	if (getFlammability() != 255)
 	{
-		int power = (getFlammability() * 0.6) + 15;
+		power = power - (getFlammability() / 10) + 15;
 		if (power < 0)
 		{
 			power = 0;
 		}
 		if (power > RNG::generate(0, 100))
 		{
-			if (getFire() == 0)
+			if (_fire == 0)
 			{
-				setFire(std::max(1, std::min(getFuel() + 1, 15)));
-				_smoke = 0;
+				_smoke = 15 - std::max(1, std::min((getFlammability() / 10), 12));
 				_overlaps = 1;
+				_fire = getFuel() + 1;
+				_animationOffset = RNG::generate(0,3);
 			}
 		}
 	}
@@ -742,11 +742,31 @@ int Tile::getFire() const
  */
 void Tile::addSmoke(int smoke)
 {
-	_smoke += smoke;
-	if (_smoke > 40) _smoke = 40;
+	if (_fire == 0)
+	{
+		if (_overlaps == 0)
+		{
+			_smoke = std::max(1, std::min(_smoke + smoke, 15));
+		}
+		else
+		{
+			_smoke += smoke;
+		}
+		_animationOffset = RNG::generate(0,3);
 		addOverlap();
+	}
+}
+
+/**
+ * Set the amount of turns this tile is smoking. 0 = no smoke.
+ * @param smoke : amount of turns this tile is smoking.
+ */
+void Tile::setSmoke(int smoke)
+{
+	_smoke = smoke;
 	_animationOffset = RNG::generate(0,3);
 }
+
 
 /**
  * Get the amount of turns this tile is smoking. 0 = no smoke.

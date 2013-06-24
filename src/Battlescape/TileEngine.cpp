@@ -1332,7 +1332,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 							if (dest->getSmoke() < 10)
 							{
-								dest->addSmoke(RNG::generate(power_/10, 14));
+								dest->setFire(0);
+								dest->setSmoke(RNG::generate(7, 15));
 							}
 						}
 
@@ -1340,7 +1341,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 						{
 							if (dest->getFire() == 0)
 							{
-								dest->ignite();
+								dest->setFire(dest->getFuel() + 1);
+								dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
 							}
 							if (dest->getUnit())
 							{
@@ -1444,10 +1446,10 @@ bool TileEngine::detonate(Tile* tile)
 			}
 		}
 
-		int flam = tile->getFlammability();
-		if (explosive > flam)
+		if (2 * tile->getFlammability() < explosive)
 		{
-			tile->ignite();
+			tile->setFire(tile->getFuel() + 1);
+			tile->setSmoke(std::max(1, std::min(15 - (tile->getFlammability() / 10), 12)));
 		}
 	}
 
