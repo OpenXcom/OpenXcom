@@ -234,7 +234,7 @@ void AggroBAIState::think(BattleAction *action)
 	{
 		grenadeAction(action);
 	}
-
+	action->TU = action->actor->getActionTUs(action->type, action->weapon);
 	if (_aggroTarget != 0) { setAggroTarget(_aggroTarget); }
 	else if (_lastKnownTarget) { stalkingAction(action); }
 }
@@ -851,7 +851,7 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 	int aggression = _unit->getAggression();
 
-	if (_charge)
+	if (_charge || !_aggroTarget)
 		return false;
 
 	// extra 5% chance per unit that sees us
