@@ -122,6 +122,7 @@ name_DATA = \
 	
 shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
+	bin/data/Shaders/Raw.OpenGL.shader \
 	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
 	bin/data/Shaders/CRT.OpenGL.shader \
 	bin/data/Shaders/CRT-simple.OpenGL.shader \
