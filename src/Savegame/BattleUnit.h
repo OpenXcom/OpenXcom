@@ -111,6 +111,7 @@ private:
 	std::vector<int> _loftempsSet;
 	Unit *_unitRules;
 	int _rankInt;
+	bool _hitByFire;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -403,7 +404,12 @@ public:
 	void deriveRank();
 	/// this function checks if a tile is visible, using maths.
 	bool checkViewSector(Position pos) const;
+	/// adjust this unit's stats according to difficulty.
 	void adjustStats(const int diff);
+	/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)
+	bool tookFireDamage() const;
+	/// switch the state of the fire damage tracker.
+	void toggleFireDamage();
 };
 
 }
