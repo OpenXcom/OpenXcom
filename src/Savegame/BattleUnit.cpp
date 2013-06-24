@@ -1202,13 +1202,10 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 /**
  * Spend time units if it can. Return false if it can't.
  * @param tu
- * @param debugmode If this is true, the function actually does noting.
  * @return flag if it could spend the time units or not.
  */
-bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
+bool BattleUnit::spendTimeUnits(int tu)
 {
-	if (debugmode) return true;
-
 	if (tu <= _tu)
 	{
 		_tu -= tu;
@@ -1827,7 +1824,7 @@ bool BattleUnit::checkAmmo()
 
 	if (wrong) return false; // didn't find any compatible ammo in inventory
 
-	spendTimeUnits(15,false);
+	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
 	ammo->moveToOwner(0);
 
