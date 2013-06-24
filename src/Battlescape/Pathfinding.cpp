@@ -411,9 +411,10 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 			cost += wallcost;
 			if (_unit->getFaction() == FACTION_HOSTILE && 
-				destinationTile->getUnit() &&
+				((destinationTile->getUnit() &&
 				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
-				destinationTile->getUnit() != _unit)
+				destinationTile->getUnit() != _unit) ||
+				destinationTile->getFire() > 0))
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
