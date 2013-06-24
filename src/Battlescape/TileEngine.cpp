@@ -1390,25 +1390,6 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 }
 
 /**
- * get the height of an object checking it's voxels at 8,8
- * @return int height
- */
-int TileEngine::getVoxelHeight(MapData *mp)
-{
-	int x = 8;
-	int y = 8;
-	for (int i=0; i < 12; i++)
-	{
-		int idx = (mp->getLoftID(i)*16) + y;
-		if ((_voxelData->at(idx) & (1 << x)) == 0)
-		{
-			return i;
-		}
-	}
-	return 12;
-}
-
-/**
  * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
  * Must affect on 7 objects (6 box sides and object inside)
  * @return bool Return true objective was destroyed
@@ -1439,8 +1420,24 @@ bool TileEngine::detonate(Tile* tile)
 					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
 					if (remainingPower >= 0)
 					{
-						int height = getVoxelHeight(tiles[i]->getMapData(parts[i]));
-						if (i > 3) tiles[i]->addSmoke(RNG::generate((height/2), (height/2)+1)); //only current tile produces smoke[2]
+						int volume = 0;
+						// get the volume of the object by checking it's loftemps objects.
+						for (int j=0; j < 12; j++)
+						{
+							if (tiles[i]->getMapData(parts[i])->getLoftID(j) != 0)
+								++volume;
+						}
+
+						if (i > 3)
+						{
+							tiles[i]->setFire(0);
+							int smoke = RNG::generate(0, (volume / 2) + 2);
+							smoke += (volume / 2) + 1;
+							if (smoke > tiles[i]->getSmoke())
+							{
+								tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
+							}
+						}
 						objective = objective || tiles[i]->destroy(parts[i]);
 					}
 				}
