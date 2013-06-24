@@ -1168,148 +1168,149 @@ void SavedBattleGame::prepareNewTurn()
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
-	// prepare a list of tiles on fire/smoke
+	// prepare a list of tiles on fire
 	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
 		if (getTiles()[i]->getFire() > 0)
 		{
 			tilesOnFire.push_back(getTiles()[i]);
 		}
+	}
+
+	// first: fires spread
+	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
+	{
+		// if we haven't added fire here this turn
+		if ((*i)->getOverlaps() == 0)
+		{
+			// reduce the fire timer
+			(*i)->setFire((*i)->getFire() -1);
+
+			// if we're still burning
+			if ((*i)->getFire())
+			{
+				// propegate in four cardinal directions (0, 2, 4, 6)
+				for (int dir = 0; dir <= 6; dir += 2)
+				{
+					Position pos;
+					Pathfinding::directionToVector(dir, &pos);
+					Tile *t = getTile((*i)->getPosition() + pos);
+					// if there's no wall blocking the path of the flames...
+					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0)
+					{
+						// attempt to set this tile on fire
+						t->ignite((*i)->getSmoke());
+					}
+				}
+			}
+			// fire has burnt out
+			else
+			{
+				(*i)->setSmoke(0);
+				// burn this tile, and any object in it, if it's not fireproof/indestructible.
+				if ((*i)->getMapData(MapData::O_OBJECT))
+				{
+					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
+					{
+						if ((*i)->destroy(MapData::O_OBJECT))
+						{
+							_objectiveDestroyed = true;
+						}
+						if ((*i)->destroy(MapData::O_FLOOR))
+						{
+							_objectiveDestroyed = true;
+						}
+					}
+				}
+				else if ((*i)->getMapData(MapData::O_FLOOR))
+				{
+					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+					{
+						if ((*i)->destroy(MapData::O_FLOOR))
+						{
+							_objectiveDestroyed = true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
+	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+	{
 		if (getTiles()[i]->getSmoke() > 0)
 		{
 			tilesOnSmoke.push_back(getTiles()[i]);
 		}
 	}
 
-	// smoke spreads in 1 random direction, but the direction is same for all smoke
-	int spreadX = RNG::generate(-1, +1);
-	int spreadY = RNG::generate(-1, +1);
+	// now make the smoke spread.
 	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i)
 	{
-		int x = (*i)->getPosition().x;
-		int y = (*i)->getPosition().y;
-		int z = (*i)->getPosition().z;
-
-		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
+		// smoke and fire follow slightly different rules.
+		if ((*i)->getFire() == 0)
 		{
-			// units in smoke suffer stun
-			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_SMOKE, true);
-		}
-
-		Tile *t = getTile(Position(x+spreadX, y+spreadY, z));
-		if (t && !t->getSmoke() && !t->getFire() && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
-		{
-			t->addSmoke((*i)->getSmoke()/2);
-			if (t->getUnit() && !t->getUnit()->isOut())
+			// reduce the smoke counter
+			(*i)->setSmoke((*i)->getSmoke() - 1);
+			// if we're still smoking
+			if ((*i)->getSmoke())
 			{
-				// units in smoke suffer stun
-				t->getUnit()->damage(Position(), (t->getSmoke()/5)+1, DT_SMOKE, true);
-			}
-		}
-		Tile *t2 = getTile(Position(x+spreadX+spreadX, y+spreadY+spreadY, z));
-		if (t && t2 && !t2->getSmoke() && !t2->getFire() && getTileEngine()->horizontalBlockage(t, t2, DT_SMOKE) == 0)
-		{
-			t2->addSmoke((*i)->getSmoke()/4);
-			if (t2->getUnit() && !t2->getUnit()->isOut())
-			{
-				// units in smoke suffer stun
-				t2->getUnit()->damage(Position(), (t2->getSmoke()/5)+1, DT_SMOKE, true);
-			}
-		}
-
-		// smoke also spreads upwards
-		t = getTile(Position(x, y, z+1));
-		if (t && !t->getSmoke() && !t->getFire() && getTileEngine()->verticalBlockage((*i), t, DT_SMOKE) == 0)
-		{
-			t->addSmoke((*i)->getSmoke()/2);
-			if (t->getUnit() && !t->getUnit()->isOut())
-			{
-				// units in smoke suffer stun
-				t->getUnit()->damage(Position(), (t->getSmoke()/5)+1, DT_SMOKE, true);
-			}
-		}
-
-		(*i)->prepareNewTurn();
-	}
-
-	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
-	{
-		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
-		{
-			float resistance = (*i)->getUnit()->getArmor()->getDamageModifier(DT_IN);
-			if (resistance > 0.0)
-			{
-				// units on a flaming tile suffer damage
-				(*i)->getUnit()->damage(Position(8, 8, 12 - (*i)->getTerrainLevel()), RNG::generate(0, 5) + 5, DT_IN, true);
-				// units on a flaming tile can catch fire 33% chance
-				if (RNG::generate(0,2) == 1)
+				// spread in four cardinal directions
+				for (int dir = 0; dir <= 6; dir += 2)
 				{
-					int burnTime = RNG::generate(0, int(5 * resistance));
-					if ((*i)->getUnit()->getFire() < burnTime)
+					Position pos;
+					Pathfinding::directionToVector(dir, &pos);
+					Tile *t = getTile((*i)->getPosition() + pos);
+					// as long as there are no walls blocking us
+					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
 					{
-						(*i)->getUnit()->setFire(burnTime); // catch fire and burn
-					}
-				}
-			}
-		}
-
-		int z = (*i)->getPosition().z;
-		for (int dir = 0; dir <= 6; dir += 2)
-		{
-			Position pos;
-			Pathfinding::directionToVector(dir, &pos);
-			Tile *t = getTile(Position(pos.x, pos.y, z));
-			if (t && t->getFire() == 0)
-			{
-				// check adjacent tiles - if they have a flammability of < 255, there is a chance...
-				if (getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0)
-				{
-					int flam = t->getFlammability();
-					if (flam < 255)
-					{
-						double base = RNG::boxMuller(0,126);
-						if (base < 0) base *= -1;
-
-						if (flam < base)
+						// only add smoke to empty tiles, or tiles with no fire, and smoke that was added this turn
+						if (t->getSmoke() == 0 || (t->getFire() == 0 && t->getOverlaps() != 0))
 						{
-							if (RNG::generate(0, flam) < 2)
-							{
-								t->ignite();
-								if (t->getUnit())
-								{
-									float resistance = t->getUnit()->getArmor()->getDamageModifier(DT_IN);
-									if (resistance > 0.0)
-									{
-										// units on a flaming tile suffer damage
-										t->getUnit()->damage(Position(8, 8, 12 - t->getTerrainLevel()), RNG::generate(0, 5) + 5, DT_IN, true);
-										// units on a flaming tile can catch fire 33% chance
-										if (RNG::generate(0,2) == 1)
-										{
-											int burnTime = RNG::generate(0, int(5 * resistance));
-											if (t->getUnit()->getFire() < burnTime)
-											{
-												t->getUnit()->setFire(burnTime); // catch fire and burn
-											}
-										}
-									}
-								}
-							}
+							t->addSmoke((*i)->getSmoke());
 						}
 					}
 				}
 			}
 		}
-		if (!_objectiveDestroyed)
-			_objectiveDestroyed = (*i)->prepareNewTurn();
+		else
+		{
+			// smoke from fire spreads upwards one level if there's no floor blocking it.
+			Position pos = Position(0,0,1);
+			Tile *t = getTile((*i)->getPosition() + pos);
+			if (t && t->hasNoFloor(*i))
+			{
+				// only add smoke equal to half the intensity of the fire
+				t->addSmoke((*i)->getSmoke()/2);
+			}
+			// then it spreads in the four cardinal directions.
+			for (int dir = 0; dir <= 6; dir += 2)
+			{
+				Pathfinding::directionToVector(dir, &pos);
+				t = getTile((*i)->getPosition() + pos);
+				if (t && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
+				{
+					t->addSmoke((*i)->getSmoke()/2);
+				}
+			}
+		}
+	}
+
+	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
+	{
+		// do damage to units, average out the smoke, etc.
+		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+		{
+			if (getTiles()[i]->getSmoke() != 0)
+				getTiles()[i]->prepareNewTurn();
+		}
+		// fires could have been started, stopped or smoke could reveal/conceal units.
+		getTileEngine()->calculateTerrainLighting();
 	}
 
 	reviveUnconsciousUnits();
 
-	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
-	{
-		// fires could have been started, stopped or smoke could reveal/conceal units.
-		getTileEngine()->calculateTerrainLighting();
-	}
 }
 
 /**
