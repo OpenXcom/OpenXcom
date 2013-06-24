@@ -794,6 +794,10 @@ bool Pathfinding::previewPath(bool bRemove)
 	Position pos = _unit->getPosition();
 	Position destination;
 	int tus = _unit->getTimeUnits();
+	if (_unit->isKneeled())
+	{
+		tus -= 8;
+	}
 	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
 	int total = 0;
