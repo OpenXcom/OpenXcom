@@ -47,7 +47,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0), _overlaps(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -646,6 +646,7 @@ void Tile::ignite()
 			{
 				setFire(std::max(1, std::min(getFuel() + 1, 15)));
 				_smoke = 0;
+				_overlaps = 1;
 			}
 		}
 	}
@@ -743,6 +744,7 @@ void Tile::addSmoke(int smoke)
 {
 	_smoke += smoke;
 	if (_smoke > 40) _smoke = 40;
+		addOverlap();
 	_animationOffset = RNG::generate(0,3);
 }
 
@@ -858,6 +860,7 @@ bool Tile::prepareNewTurn()
 		}
 	}
 
+	_overlaps = 0;
 	return objective;
 }
 
@@ -905,24 +908,52 @@ int Tile::getVisible()
 	return _visible;
 }
 
+/**
+ * set the direction used for path previewing.
+ */
 void Tile::setPreview(int dir)
 {
 	_preview = dir;
 }
 
+/*
+ * retrieve the direction stored by the pathfinding.
+ */
 const int Tile::getPreview() const
 {
 	return _preview;
 }
 
+/*
+ * set the number to be displayed for pathfinding preview.
+ */
 void Tile::setTUMarker(int tu)
 {
 	_TUMarker = tu;
 }
 
+/*
+ * get the number to be displayed for pathfinding preview.
+ */
 const int Tile::getTUMarker() const
 {
 	return _TUMarker;
+}
+
+/*
+ * get the overlap value of this tile.
+ */
+const int Tile::getOverlaps() const
+{
+	return _overlaps;
+}
+
+/*
+ * increment the overlap value on this tile.
+ */
+void Tile::addOverlap()
+{
+	++_overlaps;
 }
 
 }
