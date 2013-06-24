@@ -1812,73 +1812,88 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 	if (size > 1 && rClick)
 		return door;
 
+  struct checkPos_t {
+    Position pos;
+    int dir;
+  };
+
+  static checkPos_t northPositions[] = {{ Position(0,0,0), MapData::O_NORTHWALL }};
+  
+  static checkPos_t northEastPositions[] = {{ Position(0, 0, 0), MapData::O_NORTHWALL },
+                                            { Position(1, -1, 0), MapData::O_WESTWALL },
+                                            { Position(1, 0, 0), MapData::O_WESTWALL },
+                                            { Position(1, 0, 0), MapData::O_NORTHWALL }};
+
+  static checkPos_t eastPositions[] = {{ Position(1, 0, 0), MapData::O_WESTWALL }};
+
+  static checkPos_t southEastPositions[] = {{ Position(1, 0, 0), MapData::O_WESTWALL },
+                                            { Position(0, 1, 0), MapData::O_NORTHWALL },
+                                            { Position(1, 1, 0), MapData::O_WESTWALL },
+                                            { Position(1, 1, 0), MapData::O_NORTHWALL }};
+
+  static checkPos_t southPositions[] = {{ Position(0, 1, 0), MapData::O_NORTHWALL }};
+
+  static checkPos_t southWestPositions[] = {{ Position(0, 0, 0), MapData::O_WESTWALL }, 
+                                            { Position(0, 1, 0), MapData::O_WESTWALL }, 
+                                            { Position(0, 1, 0), MapData::O_NORTHWALL }, 
+                                            { Position(-1, 1, 0), MapData::O_NORTHWALL }};
+
+  static checkPos_t westPositions[] = {{ Position(0, 0, 0), MapData::O_WESTWALL }};
+  static checkPos_t northWestPositions[] = {{ Position(0, 0, 0), MapData::O_WESTWALL},
+                                            { Position(0, 0, 0), MapData::O_NORTHWALL},
+                                            { Position(0, -1, 0), MapData::O_WESTWALL},
+                                            { Position(-1, 0, 0), MapData::O_NORTHWALL}};
+
+  struct dirToMap_t {
+    size_t size;
+    checkPos_t* positions;
+  };
+
+#define MAKEPOSMAP(name) { sizeof(name)/sizeof(name[0]), name }
+
+  static dirToMap_t dirToPosMap[] = {
+    MAKEPOSMAP(northPositions),     // 0
+    MAKEPOSMAP(northEastPositions), // 1
+    MAKEPOSMAP(eastPositions),      // 2
+    MAKEPOSMAP(southEastPositions), // 3
+    MAKEPOSMAP(southPositions),     // 4
+    MAKEPOSMAP(southWestPositions), // 5
+    MAKEPOSMAP(westPositions),      // 6
+    MAKEPOSMAP(northWestPositions)  // 7
+  };
+
+#undef MAKEPOSMAP
+
 	for (int x = 0; x < size && door == -1; x++)
 	{
 		for (int y = 0; y < size && door == -1; y++)
 		{
-			std::vector<std::pair<Position, int> > checkPositions;
 			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
-			switch (unit->getDirection())
-			{
-			case 0: // north
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				break;
-			case 1: // north east
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(1, -1, 0), MapData::O_WESTWALL)); // one tile north-east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL)); // one tile east
-				break;
-			case 2: // east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				break;
-			case 3: // south-east
-				checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL)); // one tile east
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL)); // one tile south-east
-				checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL)); // one tile south-east
-				break;
-			case 4: // south
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				break;
-			case 5: // south-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL)); // one tile south
-				checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL)); // one tile south-west
-				break;
-			case 6: // west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				break;
-			case 7: // north-west
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
-				checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL)); // one tile north
-				checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL)); // one tile west
-				break;
-			default:
-				break;
-			}
+      int dir = unit->getDirection();
+      if (dir >= sizeof(dirToPosMap)/sizeof(dirToPosMap[0]))
+        throw std::out_of_range("There are no predefined behaviour for given direction");
+
+      const dirToMap_t& checkPositions = dirToPosMap[dir];
 
 			int part = 0;
-			for (std::vector<std::pair<Position, int> >::const_iterator i = checkPositions.begin(); i != checkPositions.end() && door == -1; ++i)
-			{
-				tile = _save->getTile(unit->getPosition() + Position(x,y,z) + i->first);
-				if (tile)
-				{
-					door = tile->openDoor(i->second, unit, _save->getDebugMode());
-					if (door != -1)
-					{
-						part = i->second;
-						if (door == 1)
-						{
-							checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + i->first, i->second);
-						}
-					}
-				}
-			}
+      for (size_t i = 0; i < checkPositions.size; ++i)
+      {
+        tile = _save->getTile(unit->getPosition() + Position(x,y,z) + checkPositions.positions[i].pos);
+        if (tile) 
+        {
+          door = tile->openDoor(checkPositions.positions[i].dir, unit, _save->getDebugMode());
+          if (door != -1) 
+          {
+            part = checkPositions.positions[i].dir;
+            if (door == 1)
+            {
+              checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + checkPositions.positions[i].pos, part);
+            }
+          }
+        }
+      }
 
 			if (door == 0 && rClick)
 			{
