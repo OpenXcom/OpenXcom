@@ -183,6 +183,13 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	
 	_tuReserved = BA_NONE;
 
+	if (unit->getTimeUnits() <= 5)
+	{
+		_save->selectNextPlayerUnit(true, true);
+		_AIActionCounter = 0;
+		return;
+	}
+
 	if (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_FIREARM)
 	{
 		switch (unit->getAggression())
