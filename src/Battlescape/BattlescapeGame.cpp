@@ -185,7 +185,18 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (unit->getTimeUnits() <= 5)
 	{
-		_save->selectNextPlayerUnit(true, true);
+		if (_save->selectNextPlayerUnit(true, true) == 0)
+		{
+			if (!_save->getDebugMode())
+			{
+				statePushBack(0); // end AI turn
+			}
+			else
+			{
+				_save->selectNextPlayerUnit();
+				_debugPlay = true;
+			}
+		}
 		_AIActionCounter = 0;
 		return;
 	}
