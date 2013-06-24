@@ -1264,6 +1264,12 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
 					if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
+					if (type == DT_IN)
+					{
+						int dir;
+						Pathfinding::vectorToDirection(origin->getPosition() - dest->getPosition(), dir);
+						if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
+					}
 				}
 
 				if (power_ > 0)

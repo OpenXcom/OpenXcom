@@ -759,7 +759,7 @@ int RuleItem::getExplosionRadius() const
 	{
 		if (_damageType == DT_IN)
 		{
-			radius = _power / 30;
+			radius = (_power / 30) + 1;
 		}
 		else if (_damageType == DT_HE || _damageType == DT_STUN)
 		{
