@@ -369,8 +369,6 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_dogfightStartTimer->onTimer((StateHandler)&GeoscapeState::startDogfight);
 
 	timeDisplay();
-	_game->getResourcePack()->getMusic("GMGEO1")->play();
-	_music = true;
 }
 
 /**
@@ -451,7 +449,14 @@ void GeoscapeState::init()
 	// Set music if it's not already playing
 	if (!_music && !_battleMusic)
 	{
-		_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+		if (_game->getSavedGame()->getMonthsPassed() == -1)
+		{
+			_game->getResourcePack()->getMusic("GMGEO1")->play();
+		}
+		else
+		{
+			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+		}
 		_music = true;
 	}
 	_globe->unsetNewBaseHover();
