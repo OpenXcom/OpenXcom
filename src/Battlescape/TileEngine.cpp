@@ -1702,9 +1702,10 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 	if (tile->getMapData(part))
 	{
 		bool check = true;
+		int wall = -1;
 		if (direction != -1)
 		{
-			int wall = tile->getMapData(MapData::O_OBJECT)->getBigWall();
+			wall = tile->getMapData(MapData::O_OBJECT)->getBigWall();
 			switch (direction)
 			{
 			case 0: // north
@@ -1777,6 +1778,10 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 
 		if (check)
 		{
+			if (type == DT_SMOKE && check && wall != 0)
+			{
+				return 255;
+			}
 			blockage += tile->getMapData(part)->getBlock(type);
 		}
 	}
