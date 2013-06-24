@@ -197,6 +197,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 				_debugPlay = true;
 			}
 		}
+		if (_save->getSelectedUnit())
+		{
+			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		}
 		_AIActionCounter = 0;
 		return;
 	}

@@ -1411,7 +1411,7 @@ bool TileEngine::detonate(Tile* tile)
 	if (explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
-		tile->addSmoke(RNG::generate(0,2));
+		tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
 		for (int i = 0; i < 7; ++i)
 		{
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))

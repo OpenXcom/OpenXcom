@@ -556,7 +556,7 @@ bool Tile::detonate()
 	if (explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
-		addSmoke(1);
+		setSmoke(std::max(1, std::min(_smoke + 1, 15)));
 		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
@@ -565,7 +565,7 @@ bool Tile::detonate()
 				{
 					int decrease = _objects[i]->getArmor();
 					objective = destroy(i);
-					addSmoke(2);
+					setSmoke(std::max(1, std::min(_smoke + 2, 15)));
 					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
 					{
 						objective = destroy(i);
