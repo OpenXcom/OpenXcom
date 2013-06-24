@@ -836,52 +836,57 @@ int Tile::getTopItemSprite()
 }
 
 /**
- * New turn preparations. Decrease smoke and fire timers.
- * @return bool Return true objective was destroyed
+ * New turn preparations.
+ * average out any smoke added by the number of overlaps.
+ * apply fire/smoke damage to units as applicable.
  */
-bool Tile::prepareNewTurn()
+void Tile::prepareNewTurn()
 {
-	bool objective = false;
-
-	_smoke--;
-	if (_smoke < 0) _smoke = 0;
-
-	if (_fire == 1)
+	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
+	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
-		// fire will be finished in this turn
-		// destroy all objects that burned, and try to ignite again
-		int smoke = getFuel();
-		for (int i = 0; i < 4; ++i)
+		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));
+	}
+	// if we still have smoke/fire
+	if (_smoke)
+	{
+		if (_unit && !_unit->isOut())
 		{
-			if(_objects[i])
+			if (_fire)
 			{
-				if (_objects[i]->getFlammable() < 255)
+				// this is how we avoid hitting the same unit multiple times.
+				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
 				{
-					objective = destroy(i);
+					_unit->toggleFireDamage();
+					// _smoke becomes our damage value
+					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true);
+					// try to set the unit on fire.
+					if ( RNG::generate(0, 100) < 40 * _unit->getArmor()->getDamageModifier(DT_IN))
+					{
+						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
+						if (_unit->getFire() < burnTime)
+						{
+							_unit->setFire(burnTime);
+						}
+					}
+				}
+			}
+			// no fire: must be smoke
+			else
+			{
+				// aliens don't breathe
+				if (_unit->getOriginalFaction() != FACTION_HOSTILE)
+				{
+					// try to knock this guy out.
+					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
+					{
+						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
+					}
 				}
 			}
 		}
-		if (getFlammability() < 255)
-		{
-			ignite();
-		}
-		else
-		{
-			_fire = 0;
-			_smoke = smoke;
-		}
 	}
-	else
-	{
-		_fire--;
-		if (_fire < 0)
-		{
-			_fire = 0;
-		}
-	}
-
 	_overlaps = 0;
-	return objective;
 }
 
 /**

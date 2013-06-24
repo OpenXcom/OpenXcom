@@ -176,8 +176,8 @@ public:
 	void removeItem(BattleItem *item);
 	/// Get top-most item
 	int getTopItemSprite();
-	/// Decrease fire and smoke timers.
-	bool prepareNewTurn();
+	/// New turn preparations.
+	void prepareNewTurn();
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
 	/// Set the tile marker color.
