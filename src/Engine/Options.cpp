@@ -28,6 +28,7 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <climits>
 #include <yaml-cpp/yaml.h>
 #include "Exception.h"
 #include "Logger.h"
@@ -544,7 +545,7 @@ std::string getString(const std::string& id)
 int getInt(const std::string& id)
 {
 	std::stringstream ss;
-	int value;
+	int value = INT_MAX;
 	ss << std::dec << _options[id];
 	ss >> std::dec >> value;
 	return value;
