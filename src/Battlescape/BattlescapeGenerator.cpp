@@ -588,16 +588,8 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
 			if (unit)
 			{
-				for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
-				{
-					RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
-					if (ruleItem)
-					{
-						addItem(ruleItem, unit);
-					}
-				}
 				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
-				if ((*d).alienRank == AR_TERRORIST || (*d).alienRank == AR_TERRORIST2)
+				if (rule->isLivingWeapon())
 				{
 					std::string terroristWeapon = rule->getRace().substr(4);
 					terroristWeapon += "_WEAPON";
@@ -605,6 +597,17 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 					if (ruleItem)
 					{
 						addItem(ruleItem, unit);
+					}
+				}
+				else
+				{
+					for (std::vector<std::string>::iterator it = (*d).itemSets.at(_alienItemLevel).items.begin(); it != (*d).itemSets.at(_alienItemLevel).items.end(); ++it)
+					{
+						RuleItem *ruleItem = _game->getRuleset()->getItem((*it));
+						if (ruleItem)
+						{
+							addItem(ruleItem, unit);
+						}
 					}
 				}
 			}

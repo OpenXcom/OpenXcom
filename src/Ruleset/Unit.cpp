@@ -62,7 +62,7 @@ YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
  */
 Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0),
 																		_value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE),
-																		_zombieUnit(""), _spawnUnit("")
+																		_zombieUnit(""), _spawnUnit(""), _livingWeapon(false)
 {
 }
 
@@ -155,6 +155,10 @@ void Unit::load(const YAML::Node &node)
 		{
 			i.second() >> _spawnUnit;
 		}
+		else if (key == "livingWeapon")
+		{
+			i.second() >> _livingWeapon;
+		}
 	}
 }
 
@@ -182,6 +186,7 @@ void Unit::save(YAML::Emitter &out) const
 	out << YAML::Key << "specab" << YAML::Value << _specab;
 	out << YAML::Key << "zombieUnit" << YAML::Value << _zombieUnit;
 	out << YAML::Key << "spawnUnit" << YAML::Value << _spawnUnit;
+	out << YAML::Key << "livingWeapon" << YAML::Value << _livingWeapon;
 	out << YAML::EndMap;
 }
 
@@ -338,6 +343,15 @@ std::string Unit::getSpawnUnit() const
 int Unit::getAggroSound() const
 {
 	return _aggroSound;
+}
+
+/**
+ * is this unit a living weapon? (ie: chryssalid).
+ * @return if it is or not.
+ */
+bool Unit::isLivingWeapon() const
+{
+	return _livingWeapon;
 }
 
 }
