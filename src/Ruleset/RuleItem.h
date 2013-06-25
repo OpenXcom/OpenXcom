@@ -48,7 +48,7 @@ private:
 	int _costBuy, _costSell, _transferTime, _weight;
 	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
 	int _fireSound, _hitSound, _hitAnimation;
-	int _power, _priority;
+	int _power;
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
 	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
@@ -66,7 +66,7 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
-	int _listOrder, _range;
+	int _listOrder, _range, _bulletSpeed;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -182,6 +182,8 @@ public:
 	int getListOrder() const;
 	/// get the max range of this weapon.
 	int getRange() const;
+	/// how fast does a projectile fired from this weapon travel?
+	int getBulletSpeed() const;
 
 };
 

@@ -29,11 +29,11 @@ namespace OpenXcom
  * @param type String defining the type.
  */
 RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(999), _bigSprite(0), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
-											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _priority(0), _compatibleAmmo(), _damageType(DT_NONE),
+											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(DT_NONE),
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
 											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _stun(0), _energy(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0)
+											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0), _bulletSpeed(0)
 {
 }
 
@@ -144,10 +144,6 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		else if (key == "power")
 		{
 			i.second() >> _power;
-		}
-		else if (key == "priority")
-		{
-			i.second() >> _priority;
 		}
 		else if (key == "compatibleAmmo")
 		{
@@ -295,6 +291,10 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		{
 			i.second() >> _range;
 		}
+		else if (key == "bulletSpeed")
+		{
+			i.second() >> _bulletSpeed;
+		}
 	}
 	if (!_listOrder)
 	{
@@ -325,7 +325,6 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "hitSound" << YAML::Value << _hitSound;
 	out << YAML::Key << "hitAnimation" << YAML::Value << _hitAnimation;
 	out << YAML::Key << "power" << YAML::Value << _power;
-	out << YAML::Key << "priority" << YAML::Value << _priority;
 	out << YAML::Key << "compatibleAmmo" << YAML::Value << _compatibleAmmo;
 	out << YAML::Key << "damageType" << YAML::Value << _damageType;
 	out << YAML::Key << "accuracyAuto" << YAML::Value << _accuracyAuto;
@@ -360,6 +359,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "flatRate" << YAML::Value << _flatRate;
 	out << YAML::Key << "arcingShot" << YAML::Value << _arcingShot;
 	out << YAML::Key << "attraction" << YAML::Value << _attraction;
+	out << YAML::Key << "bulletSpeed" << YAML::Value << _bulletSpeed;
 	out << YAML::EndMap;
 }
 
@@ -873,6 +873,15 @@ int RuleItem::getListOrder() const
 int RuleItem::getRange() const
 {
 	return _range;
+}
+
+/**
+ * get the speed at which this bullet travels.
+ * @return the speed.
+ */
+int RuleItem::getBulletSpeed() const
+{
+	return _bulletSpeed;
 }
 
 }

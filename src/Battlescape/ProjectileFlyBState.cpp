@@ -195,7 +195,16 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
-	_parent->setStateInterval(Options::getInt("battleFireSpeed"));
+
+	// set the speed of the projectile
+	if (_action.type == BA_THROW)
+	{
+		_parent->setStateInterval(Options::getInt("battleFireSpeed"));
+	}
+	else
+	{
+		_parent->setStateInterval(std::max(1, Options::getInt("battleFireSpeed") - _action.weapon->getRules()->getBulletSpeed()));
+	}
 
 	// let it calculate a trajectory
 	_projectileImpact = -1;

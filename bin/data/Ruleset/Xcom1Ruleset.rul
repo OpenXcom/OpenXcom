@@ -1226,48 +1226,56 @@ craftWeapons:
     projectileSpeed: 8
 items:
 # Item Definitions:
-#  - type: Item name, reference to string defined in .lng, must be unique. (string)
+#  - type: Internal item name, reference to string defined in .lng, must be unique. (string)
+#    name: used to replace type name, if defined (string)
+#    requires: this corresponds to a research entry, if one is defined, then that research is required to use this item (string)
 #    size: How much space this item takes up in storage. (float) (default 0.0)
 #    costBuy: Cost in purchase menu. undefined/0 = cannot buy. (int) (default 0)
 #    costSell: Value in sell menu. undefined/0 = cannot sell. (int) (default 0)
 #    transferTime: time (in hours) to transfer this item (int) (default factor of distance vs weight)
 #    weight: Weight penalty to soldiers carrying this item. (int) (default 0)
-#    bigSprite: Sprite reference in BigObs.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=BIGOBS.PCK)
-#    floorSprite: Sprite reference in FloorOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
-#    handSprite: Sprite reference in HandOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
+#    bigSprite: Sprite reference in BigObs.pck. -1 for none. values higher than 56 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=BIGOBS.PCK)
+#    floorSprite: Sprite reference in FloorOb.pck. -1 for none. values higher than 72 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
+#    handSprite: Sprite reference in HandOb.pck. -1 for none. values higher than 128 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
 #    bulletSprite: Projectile sprite. (int) 0 = rocket, 1 = pistol bullet, 2 = rifle bullet, 3 = auto cannon bullet, 
 #    4 = heavy cannon bullet, 5 = small laser, 6 = laser rifle, 7 = heavy laser, 8 = plasma, 9 = small launcher, 10 = blaster launcher
-#    fireSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
-#    hitSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#       note: if you are adding a new projectile (for example 11), its corresponding sprite definition must be 35 times this number
+#       (so for projectile 11, you'd need to define the extraSprites 385+)
+#    fireSound: Sound effect Reference in Sample2.cat. -1 for none. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitSound: Sound effect Reference in Sample2.cat. -1 for none. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitAnimation: reference in smoke.pck for "hit" explosion. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (0-2 * 18) (int) (http://www.ufopaedia.org/index.php?title=SMOKE.PCK)
+#       NOTE - melee and psi-amp weapons use HIT.PCK instead, DO NOT define a hitAnimation for these types.
+#    power: average damage of the weapon, in most cases, the damage will be +- 50% (int)
 #    compatibleAmmo:
 #      - Name of ammo item 1
 #      - Name of ammo item 2
 #      - etc.
+#    damageType: What kind of damage does this do? (int)
+#        0 = NONE, 1 = ARMOR PIERCING, 2 = INCENDIARY, 3 = HIGH EXPLOSIVE, 4 = LASER, 5 = PLASMA,
+#        6 = STUN, 7 = MELEE, 8 = ACID, 9 = SMOKE
 #    accuracyAuto: Auto-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
 #    accuracySnap: Snap-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
 #    accuracyAimed: Aimed-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
-#    accuracyMelee: Melee accuracy, as a percentage, affected by the unit's melee skill. (int)
 #    tuAuto: Auto-Shot time unit usage, as a percentage of the firing unit's TU. (int)
 #    tuSnap: Snap-Shot time unit usage, as a percentage of the firing unit's TU. (int)
 #    tuAimed: Aimed-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    clipSize: How many bullets in this clip? -1 for infinite. (int) (default 0)
+#    accuracyMelee: Melee accuracy, as a percentage, affected by the unit's melee skill. (int)
 #    tuMelee: Melee time unit usage, as a percentage of the attacking unit's TU. (int)
-#    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int)
 #    battleType: What kind of item is this? (int) (default 0)
 #        0 = NONE, 1 = FIREARM, 2 = AMMO, 3 = MELEE, 4 = GRENADE, 5 = PROXIMITYGRENADE, 6 = MEDIKIT,
 #        7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE
 #    twoHanded: Is this a two-handed weapon. (boolean) (default false)
+#    waypoint: Does this weapon use waypoints or direct fire? (boolean) (default false)
+#    fixedWeapon: can this item be dropped? (boolean) (default true)
 #    invWidth: Width of this item in the inventory screen. (int) (default 1)
 #    invHeight: Height of this item in the inventory screen. (int) (default 1)
-#    armor: How much damage is needed to destoy this item on the ground. (int)
-#    fixedWeapon: can this item be dropped? (boolean) (default true)
-#    turretType: which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
-#    hitAnimation: reference in smoke.pck for "hit" explosion. (0-2) (int) (http://www.ufopaedia.org/index.php?title=SMOKE.PCK)
-#    NOTE - melee and psi-amp weapons use HIT.PCK instead, DO NOT define a hitAnimation for these types.
-#    power: average damage of the weapon, in most cases, the damage will be +- 50% (int)
-#    damageType: What kind of damage does this do? (int)
-#        0 = NONE, 1 = ARMOR PIERCING, 2 = INCENDIARY, 3 = HIGH EXPLOSIVE, 4 = LASER, 5 = PLASMA,
-#        6 = STUN, 7 = MELEE, 8 = ACID, 9 = SMOKE
-#    clipSize: How many bullets in this clip? -1 for infinite. (int) (default 0)
 #    painKiller: 10
 #    heal: 10
 #    stimulant: 10
@@ -1275,9 +1283,21 @@ items:
 #    healthAmount: 3
 #    stun: 4
 #    energy: 10
-#    recover: tally this item for end of mission results? (boolean) (default false)
-#    liveAlien: does this require containment? (boolean) (default false)
-#    attraction: represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
+#    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int) (default 0)
+#    recoveryPoints: How many points does XCom get for recovering this item? (int) (default 0)
+#    armor: How much damage is needed to destoy this item on the ground. (int) (default 0)
+#    recover: Tally this item for end of mission results? (boolean) (default false)
+#    turretType: Which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
+#    liveAlien: Does this require containment? (boolean) (default false)
+#    blastRadius: How big of an explosion does this cause? (int) (default 0, meaning "use formula")
+#    flatRate: Does using this weapon charge a flat rate for TU usage? (boolean) (default false)
+#    arcingShot: Does this weapon fire in an arc? (boolean) (default false)
+#    attraction: Represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
+#    listOrder: Where in the lists should this item appear? (int) (default: 100 higher than the previous item that was defined, starting at 100)
+#    maxRange: The maximum range at which this weapon can operate, 0 for "no limit" (int) (default 0)
+#    bulletSpeed: how much faster (or slower, if you use a negative number) is a projectile fired from this weapon
+#       compared to the average? (int) (default 0)
+#    
   - type: STR_STINGRAY_LAUNCHER
     size: 0.8
     costBuy: 16000
