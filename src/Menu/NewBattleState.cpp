@@ -44,7 +44,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Basescape/CraftInfoState.h"
-#include <climits>
 
 namespace OpenXcom
 {
@@ -345,11 +344,6 @@ void NewBattleState::initSave()
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
 				int amount = Options::getInt("NewBattle_" + rule->getName());
-				if (amount == INT_MAX)
-				{
-					amount=0;
-					Options::setInt("NewBattle_" + rule->getName(), 0);
-				}
 				amount = std::max(0, std::min(amount, 100));
 				_craft->getItems()->addItem(*i, amount);
 			}
