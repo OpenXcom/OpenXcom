@@ -1289,7 +1289,7 @@ items:
 #    recover: Tally this item for end of mission results? (boolean) (default false)
 #    turretType: Which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
 #    liveAlien: Does this require containment? (boolean) (default false)
-#    blastRadius: How big of an explosion does this cause? (int) (default 0, meaning "use formula")
+#    blastRadius: How big of an explosion does this cause? 0 for none. (int) (default -1, meaning "use formula")
 #    flatRate: Does using this weapon charge a flat rate for TU usage? (boolean) (default false)
 #    arcingShot: Does this weapon fire in an arc? (boolean) (default false)
 #    attraction: Represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
