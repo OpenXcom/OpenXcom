@@ -1868,7 +1868,7 @@ items:
     damageType: 3
     battleType: 4
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1880,7 +1880,7 @@ items:
     damageType: 9
     battleType: 4
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1892,7 +1892,7 @@ items:
     damageType: 3
     battleType: 5
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1906,7 +1906,7 @@ items:
     invWidth: 2
     invHeight: 1
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -2231,7 +2231,7 @@ items:
     battleType: 4
     recoveryPoints: 1
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
     attraction: 1
   - type: STR_ELERIUM_115
     size: 0.1
