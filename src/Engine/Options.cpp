@@ -546,8 +546,11 @@ int getInt(const std::string& id)
 {
 	std::stringstream ss;
 	int value = INT_MAX;
-	ss << std::dec << _options[id];
-	ss >> std::dec >> value;
+	if (_options.find(id) != _options.end())
+	{
+		ss << std::dec << _options[id];
+		ss >> std::dec >> value;
+	}
 	return value;
 }
 
