@@ -242,8 +242,6 @@ openxcom_SOURCES = \
 	src/Battlescape/BattleState.h \
 	src/Battlescape/BriefingState.cpp \
 	src/Battlescape/BriefingState.h \
-	src/Battlescape/BulletSprite.cpp \
-	src/Battlescape/BulletSprite.h \
 	src/Battlescape/Camera.cpp \
 	src/Battlescape/Camera.h \
 	src/Battlescape/CannotReequipState.cpp \

@@ -251,7 +251,6 @@
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BattleState.cpp" />
     <ClCompile Include="Battlescape\BriefingState.cpp" />
-    <ClCompile Include="Battlescape\BulletSprite.cpp" />
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\CannotReequipState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
@@ -518,7 +517,6 @@
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BattleState.h" />
     <ClInclude Include="Battlescape\BriefingState.h" />
-    <ClInclude Include="Battlescape\BulletSprite.h" />
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\CannotReequipState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />

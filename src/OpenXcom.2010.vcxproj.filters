@@ -368,9 +368,6 @@
     <ClCompile Include="Battlescape\Projectile.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\BulletSprite.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\Transfer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -1149,9 +1146,6 @@
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\Projectile.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\BulletSprite.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\Transfer.h">

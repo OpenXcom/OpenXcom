@@ -33,7 +33,6 @@ class MapData;
 class Position;
 class Tile;
 class BattleUnit;
-class BulletSprite;
 class Projectile;
 class Explosion;
 class BattlescapeMessage;
@@ -49,7 +48,7 @@ class Map : public InteractiveSurface
 {
 private:
 	static const int SCROLL_INTERVAL = 20;
-	static const int BULLET_SPRITES = 37;
+	static const int BULLET_SPRITES = 35;
 	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;
 	SavedBattleGame *_save;
@@ -61,7 +60,6 @@ private:
 	CursorType _cursorType;
 	int _cursorSize;
 	int _animFrame;
-	BulletSprite *_bullet[BULLET_SPRITES];
 	Projectile *_projectile;
 	bool projectileInFOV;
 	std::set<Explosion *> _explosions;

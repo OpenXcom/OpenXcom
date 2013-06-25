@@ -455,7 +455,7 @@ int Projectile::getParticle(int i) const
 	if (_action.weapon->getRules()->getBulletSprite() == -1)
 		return -1;
 	else
-		return (_action.weapon->getRules()->getBulletSprite()*35) + (i-1);
+		return _action.weapon->getRules()->getBulletSprite() + i;
 }
 
 /**

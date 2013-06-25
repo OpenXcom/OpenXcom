@@ -109,8 +109,6 @@ set ( battlescape_src
   Battlescape/BattlescapeState.h
   Battlescape/BattlescapeGenerator.h
   Battlescape/BattlescapeGenerator.cpp
-  Battlescape/BulletSprite.h
-  Battlescape/BulletSprite.cpp
   Battlescape/Camera.h
   Battlescape/Camera.cpp
   Battlescape/Projectile.cpp
