@@ -6539,11 +6539,20 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - CHRYSSALID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CHRYSSALID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CHRYSSALID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 4
         lowQty: 3
         highQty: 5
@@ -6551,11 +6560,20 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - SILACOID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - SILACOID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - SILACOID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 5
         lowQty: 3
         highQty: 5
@@ -6563,11 +6581,20 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - CELATID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CELATID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CELATID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 6
         lowQty: 1
         highQty: 4
