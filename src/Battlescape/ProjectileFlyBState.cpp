@@ -363,7 +363,7 @@ void ProjectileFlyBState::think()
 					{
 						offset = -2;
 					}
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
+					_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
 
 					// if the unit burns floortiles, burn floortiles
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)

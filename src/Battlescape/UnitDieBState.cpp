@@ -49,6 +49,26 @@ namespace OpenXcom
  */
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
+
+}
+
+/**
+ * Deletes the UnitDieBState.
+ */
+UnitDieBState::~UnitDieBState()
+{
+
+}
+
+void UnitDieBState::init()
+{
+	// unit is already dead, no need to do this state.
+	if (_unit->getStatus() == STATUS_DEAD)
+	{
+		_parent->popState();
+		return;
+	}
+
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
@@ -76,34 +96,21 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
-    parent->resetSituationForAI();
+    _parent->resetSituationForAI();
 
     if (_unit->getFaction() == FACTION_HOSTILE)
     {
-        std::vector<Node *> *nodes = parent->getSave()->getNodes();
+        std::vector<Node *> *nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
         for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
         {
-            if (parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), unit->getPosition()) < 4)
+            if (_parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
             {
                 (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
             }
         }
     }
-}
-
-/**
- * Deletes the UnitDieBState.
- */
-UnitDieBState::~UnitDieBState()
-{
-
-}
-
-void UnitDieBState::init()
-{
-
 
 }
 
