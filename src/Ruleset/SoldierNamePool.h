@@ -36,6 +36,8 @@ class SoldierNamePool
 {
 private:
 	std::vector<std::wstring> _maleFirst, _femaleFirst, _maleLast, _femaleLast;
+	std::vector<int> _lookWeights;
+	int _totalWeight;
 public:
 	/// Creates a blank pool.
 	SoldierNamePool();
