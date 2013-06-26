@@ -59,7 +59,8 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
+	_btnOk = new TextButton(140, 16, 16, 176);
+	_btnClear = new TextButton(140, 16, 164, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
@@ -73,6 +74,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	add(_window);
 	add(_btnOk);
+	add(_btnClear);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtStores);
@@ -89,6 +91,10 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	
+	_btnClear->setColor(Palette::blockOffset(15)+1);
+	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
+	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -563,4 +569,14 @@ void CraftEquipmentState::moveRightByValue(int change)
 	updateQuantity();
 }
 
+/**
+ * Empties the contents of the craft, moving all of the items back to the base.
+ */
+void CraftEquipmentState::btnClearClick(Action *)
+{
+	for (_sel = 0; _sel != _items.size(); ++_sel)
+	{
+		moveLeftByValue(INT_MAX);
+	}
+}
 }
