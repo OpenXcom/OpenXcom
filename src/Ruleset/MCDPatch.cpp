@@ -60,31 +60,31 @@ void MCDPatch::load(const YAML::Node &node)
 				{
 					int bigWall;
 					(*pName) >> bigWall;
-					_bigWalls.push_back(std::pair<size_t, int>(MCDIndex, bigWall));
+					_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
 				}
 				if (const YAML::Node *pName = (*j).FindValue("TUWalk"))
 				{
 					int TUWalk;
 					(*pName) >> TUWalk;
-					_TUWalks.push_back(std::pair<size_t, int>(MCDIndex, TUWalk));
+					_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
 				}
 				if (const YAML::Node *pName = (*j).FindValue("TUFly"))
 				{
 					int TUFly;
 					(*pName) >> TUFly;
-					_TUFlys.push_back(std::pair<size_t, int>(MCDIndex, TUFly));
+					_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
 				}
 				if (const YAML::Node *pName = (*j).FindValue("TUSlide"))
 				{
 					int TUSlide;
 					(*pName) >> TUSlide;
-					_TUSlides.push_back(std::pair<size_t, int>(MCDIndex, TUSlide));
+					_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
 				}
 				if (const YAML::Node *pName = (*j).FindValue("deathTile"))
 				{
 					int deathTile;
 					(*pName) >> deathTile;
-					_deathTiles.push_back(std::pair<size_t, int>(MCDIndex, deathTile));
+					_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
 				}
 			}
 		}

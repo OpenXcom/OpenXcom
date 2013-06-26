@@ -66,6 +66,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
 	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
@@ -138,46 +139,46 @@ void createDefault()
 	setInt("NewBattleCraft", 0);
 	
 	// new battle loadout data
-	setInt("NewBattle_STR_AC_AP_AMMO", 1);
-	setInt("NewBattle_STR_AC_HE_AMMO", 1);
-	setInt("NewBattle_STR_AC_I_AMMO", 1);
-	setInt("NewBattle_STR_ALIEN_GRENADE", 1);
-	setInt("NewBattle_STR_AUTO_CANNON", 1);
-	setInt("NewBattle_STR_BLASTER_BOMB", 1);
-	setInt("NewBattle_STR_BLASTER_LAUNCHER", 1);
-	setInt("NewBattle_STR_ELECTRO_FLARE", 1);
-	setInt("NewBattle_STR_GRENADE", 1);
-	setInt("NewBattle_STR_HC_AP_AMMO", 1);
-	setInt("NewBattle_STR_HC_HE_AMMO", 1);
-	setInt("NewBattle_STR_HC_I_AMMO", 1);
-	setInt("NewBattle_STR_HEAVY_CANNON", 1);
-	setInt("NewBattle_STR_HEAVY_LASER", 1);
-	setInt("NewBattle_STR_HEAVY_PLASMA", 1);
-	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 1);
-	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 1);
-	setInt("NewBattle_STR_INCENDIARY_ROCKET", 1);
-	setInt("NewBattle_STR_LARGE_ROCKET", 1);
-	setInt("NewBattle_STR_LASER_PISTOL", 1);
-	setInt("NewBattle_STR_LASER_RIFLE", 1);
-	setInt("NewBattle_STR_MEDI_KIT", 1);
-	setInt("NewBattle_STR_MIND_PROBE", 1);
-	setInt("NewBattle_STR_MOTION_SCANNER", 1);
-	setInt("NewBattle_STR_PISTOL", 1);
-	setInt("NewBattle_STR_PISTOL_CLIP", 1);
-	setInt("NewBattle_STR_PLASMA_PISTOL", 1);
-	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 1);
-	setInt("NewBattle_STR_PLASMA_RIFLE", 1);
-	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 1);
-	setInt("NewBattle_STR_PROXIMITY_GRENADE", 1);
-	setInt("NewBattle_STR_PSI_AMP", 1);
-	setInt("NewBattle_STR_RIFLE", 1);
-	setInt("NewBattle_STR_RIFLE_CLIP", 1);
-	setInt("NewBattle_STR_ROCKET_LAUNCHER", 1);
-	setInt("NewBattle_STR_SMALL_LAUNCHER", 1);
-	setInt("NewBattle_STR_SMALL_ROCKET", 1);
-	setInt("NewBattle_STR_SMOKE_GRENADE", 1);
-	setInt("NewBattle_STR_STUN_BOMB", 1);
-	setInt("NewBattle_STR_STUN_ROD", 1);
+	setInt("NewBattle_STR_AC_AP_AMMO", 0);
+	setInt("NewBattle_STR_AC_HE_AMMO", 0);
+	setInt("NewBattle_STR_AC_I_AMMO", 0);
+	setInt("NewBattle_STR_ALIEN_GRENADE", 0);
+	setInt("NewBattle_STR_AUTO_CANNON", 0);
+	setInt("NewBattle_STR_BLASTER_BOMB", 0);
+	setInt("NewBattle_STR_BLASTER_LAUNCHER", 0);
+	setInt("NewBattle_STR_ELECTRO_FLARE", 0);
+	setInt("NewBattle_STR_GRENADE", 0);
+	setInt("NewBattle_STR_HC_AP_AMMO", 0);
+	setInt("NewBattle_STR_HC_HE_AMMO", 0);
+	setInt("NewBattle_STR_HC_I_AMMO", 0);
+	setInt("NewBattle_STR_HEAVY_CANNON", 0);
+	setInt("NewBattle_STR_HEAVY_LASER", 0);
+	setInt("NewBattle_STR_HEAVY_PLASMA", 0);
+	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 0);
+	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 0);
+	setInt("NewBattle_STR_INCENDIARY_ROCKET", 0);
+	setInt("NewBattle_STR_LARGE_ROCKET", 0);
+	setInt("NewBattle_STR_LASER_PISTOL", 0);
+	setInt("NewBattle_STR_LASER_RIFLE", 0);
+	setInt("NewBattle_STR_MEDI_KIT", 0);
+	setInt("NewBattle_STR_MIND_PROBE", 0);
+	setInt("NewBattle_STR_MOTION_SCANNER", 0);
+	setInt("NewBattle_STR_PISTOL", 0);
+	setInt("NewBattle_STR_PISTOL_CLIP", 0);
+	setInt("NewBattle_STR_PLASMA_PISTOL", 0);
+	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 0);
+	setInt("NewBattle_STR_PLASMA_RIFLE", 0);
+	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 0);
+	setInt("NewBattle_STR_PROXIMITY_GRENADE", 0);
+	setInt("NewBattle_STR_PSI_AMP", 0);
+	setInt("NewBattle_STR_RIFLE", 0);
+	setInt("NewBattle_STR_RIFLE_CLIP", 0);
+	setInt("NewBattle_STR_ROCKET_LAUNCHER", 0);
+	setInt("NewBattle_STR_SMALL_LAUNCHER", 0);
+	setInt("NewBattle_STR_SMALL_ROCKET", 0);
+	setInt("NewBattle_STR_SMOKE_GRENADE", 0);
+	setInt("NewBattle_STR_STUN_BOMB", 0);
+	setInt("NewBattle_STR_STUN_ROD", 0);
 
 	// controls
 	setInt("keyOk", SDLK_RETURN);
@@ -546,9 +547,12 @@ std::string getString(const std::string& id)
 int getInt(const std::string& id)
 {
 	std::stringstream ss;
-	int value;
-	ss << std::dec << _options[id];
-	ss >> std::dec >> value;
+	int value = 0;
+	if (_options.find(id) != _options.end())
+	{
+		ss << std::dec << _options[id];
+		ss >> std::dec >> value;
+	}
 	return value;
 }
 

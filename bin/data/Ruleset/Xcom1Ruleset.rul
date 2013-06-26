@@ -1226,48 +1226,56 @@ craftWeapons:
     projectileSpeed: 8
 items:
 # Item Definitions:
-#  - type: Item name, reference to string defined in .lng, must be unique. (string)
+#  - type: Internal item name, reference to string defined in .lng, must be unique. (string)
+#    name: used to replace type name, if defined (string)
+#    requires: this corresponds to a research entry, if one is defined, then that research is required to use this item (string)
 #    size: How much space this item takes up in storage. (float) (default 0.0)
 #    costBuy: Cost in purchase menu. undefined/0 = cannot buy. (int) (default 0)
 #    costSell: Value in sell menu. undefined/0 = cannot sell. (int) (default 0)
 #    transferTime: time (in hours) to transfer this item (int) (default factor of distance vs weight)
 #    weight: Weight penalty to soldiers carrying this item. (int) (default 0)
-#    bigSprite: Sprite reference in BigObs.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=BIGOBS.PCK)
-#    floorSprite: Sprite reference in FloorOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
-#    handSprite: Sprite reference in HandOb.pck. -1 for none. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
+#    bigSprite: Sprite reference in BigObs.pck. -1 for none. values higher than 56 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=BIGOBS.PCK)
+#    floorSprite: Sprite reference in FloorOb.pck. -1 for none. values higher than 72 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=FLOOROB.PCK)
+#    handSprite: Sprite reference in HandOb.pck. -1 for none. values higher than 128 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=HANDOB.PCK)
 #    bulletSprite: Projectile sprite. (int) 0 = rocket, 1 = pistol bullet, 2 = rifle bullet, 3 = auto cannon bullet, 
 #    4 = heavy cannon bullet, 5 = small laser, 6 = laser rifle, 7 = heavy laser, 8 = plasma, 9 = small launcher, 10 = blaster launcher
-#    fireSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
-#    hitSound: Sound effect Reference in Sample2.cat. -1 for none (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#       note: if you are adding a new projectile (for example 11), its corresponding sprite definition must be 35 times this number
+#       (so for projectile 11, you'd need to define the extraSprites 385+)
+#    fireSound: Sound effect Reference in Sample2.cat. -1 for none. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitSound: Sound effect Reference in Sample2.cat. -1 for none. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (int) (default -1) (http://www.ufopaedia.org/index.php?title=SOUND#SAMPLE2.CAT)
+#    hitAnimation: reference in smoke.pck for "hit" explosion. values higher than 54 will be considered additions rather than replacements,
+#       and will be indexed internally to avoid conflicts. (0-2 * 18) (int) (http://www.ufopaedia.org/index.php?title=SMOKE.PCK)
+#       NOTE - melee and psi-amp weapons use HIT.PCK instead, DO NOT define a hitAnimation for these types.
+#    power: average damage of the weapon, in most cases, the damage will be +- 50% (int)
 #    compatibleAmmo:
 #      - Name of ammo item 1
 #      - Name of ammo item 2
 #      - etc.
+#    damageType: What kind of damage does this do? (int)
+#        0 = NONE, 1 = ARMOR PIERCING, 2 = INCENDIARY, 3 = HIGH EXPLOSIVE, 4 = LASER, 5 = PLASMA,
+#        6 = STUN, 7 = MELEE, 8 = ACID, 9 = SMOKE
 #    accuracyAuto: Auto-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
 #    accuracySnap: Snap-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
 #    accuracyAimed: Aimed-Shot accuracy, as a percentage, affected by the unit's firing skill. (int)
-#    accuracyMelee: Melee accuracy, as a percentage, affected by the unit's melee skill. (int)
 #    tuAuto: Auto-Shot time unit usage, as a percentage of the firing unit's TU. (int)
 #    tuSnap: Snap-Shot time unit usage, as a percentage of the firing unit's TU. (int)
 #    tuAimed: Aimed-Shot time unit usage, as a percentage of the firing unit's TU. (int)
+#    clipSize: How many bullets in this clip? -1 for infinite. (int) (default 0)
+#    accuracyMelee: Melee accuracy, as a percentage, affected by the unit's melee skill. (int)
 #    tuMelee: Melee time unit usage, as a percentage of the attacking unit's TU. (int)
-#    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int)
 #    battleType: What kind of item is this? (int) (default 0)
 #        0 = NONE, 1 = FIREARM, 2 = AMMO, 3 = MELEE, 4 = GRENADE, 5 = PROXIMITYGRENADE, 6 = MEDIKIT,
 #        7 = SCANNER, 8 = MINDPROBE, 9 = PSIAMP, 10 = FLARE, 11 = CORPSE
 #    twoHanded: Is this a two-handed weapon. (boolean) (default false)
+#    waypoint: Does this weapon use waypoints or direct fire? (boolean) (default false)
+#    fixedWeapon: can this item be dropped? (boolean) (default true)
 #    invWidth: Width of this item in the inventory screen. (int) (default 1)
 #    invHeight: Height of this item in the inventory screen. (int) (default 1)
-#    armor: How much damage is needed to destoy this item on the ground. (int)
-#    fixedWeapon: can this item be dropped? (boolean) (default true)
-#    turretType: which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
-#    hitAnimation: reference in smoke.pck for "hit" explosion. (0-2) (int) (http://www.ufopaedia.org/index.php?title=SMOKE.PCK)
-#    NOTE - melee and psi-amp weapons use HIT.PCK instead, DO NOT define a hitAnimation for these types.
-#    power: average damage of the weapon, in most cases, the damage will be +- 50% (int)
-#    damageType: What kind of damage does this do? (int)
-#        0 = NONE, 1 = ARMOR PIERCING, 2 = INCENDIARY, 3 = HIGH EXPLOSIVE, 4 = LASER, 5 = PLASMA,
-#        6 = STUN, 7 = MELEE, 8 = ACID, 9 = SMOKE
-#    clipSize: How many bullets in this clip? -1 for infinite. (int) (default 0)
 #    painKiller: 10
 #    heal: 10
 #    stimulant: 10
@@ -1275,9 +1283,21 @@ items:
 #    healthAmount: 3
 #    stun: 4
 #    energy: 10
-#    recover: tally this item for end of mission results? (boolean) (default false)
-#    liveAlien: does this require containment? (boolean) (default false)
-#    attraction: represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
+#    tuUse: TU usage for "special" actions, ie: psi-amp. flat TU cost. (int) (default 0)
+#    recoveryPoints: How many points does XCom get for recovering this item? (int) (default 0)
+#    armor: How much damage is needed to destoy this item on the ground. (int) (default 0)
+#    recover: Tally this item for end of mission results? (boolean) (default false)
+#    turretType: Which turret number to use for this tank (0-4) (int) (http://www.ufopaedia.org/index.php?title=TANKS.PCK)
+#    liveAlien: Does this require containment? (boolean) (default false)
+#    blastRadius: How big of an explosion does this cause? 0 for none. (int) (default -1, meaning "use formula")
+#    flatRate: Does using this weapon charge a flat rate for TU usage? (boolean) (default false)
+#    arcingShot: Does this weapon fire in an arc? (boolean) (default false)
+#    attraction: Represents how likely an alien is to pick this up. values below 5 will be ignored (by design) (int) (default 0)
+#    listOrder: Where in the lists should this item appear? (int) (default: 100 higher than the previous item that was defined, starting at 100)
+#    maxRange: The maximum range at which this weapon can operate, 0 for "no limit" (int) (default 0)
+#    bulletSpeed: how much faster (or slower, if you use a negative number) is a projectile fired from this weapon
+#       compared to the average? (int) (default 0)
+#    
   - type: STR_STINGRAY_LAUNCHER
     size: 0.8
     costBuy: 16000
@@ -1868,7 +1888,7 @@ items:
     damageType: 3
     battleType: 4
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1880,7 +1900,7 @@ items:
     damageType: 9
     battleType: 4
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1892,7 +1912,7 @@ items:
     damageType: 3
     battleType: 5
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1906,7 +1926,7 @@ items:
     invWidth: 2
     invHeight: 1
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -2231,7 +2251,7 @@ items:
     battleType: 4
     recoveryPoints: 1
     armor: 20
-    blastRadius: 6
+    blastRadius: 5
     attraction: 1
   - type: STR_ELERIUM_115
     size: 0.1
@@ -4014,10 +4034,10 @@ armors:
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseItem: CIVM_CORPSE
-    frontArmor: 4
-    sideArmor: 3
-    rearArmor: 2
-    underArmor: 2
+    frontArmor: 0
+    sideArmor: 0
+    rearArmor: 0
+    underArmor: 0
     drawingRoutine: 4
     damageModifier:
       - 1.0
@@ -4034,10 +4054,10 @@ armors:
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
     corpseItem: CIVF_CORPSE
-    frontArmor: 4
-    sideArmor: 3
-    rearArmor: 2
-    underArmor: 2
+    frontArmor: 0
+    sideArmor: 0
+    rearArmor: 0
+    underArmor: 0
     drawingRoutine: 4
     damageModifier:
       - 1.0
@@ -4517,6 +4537,7 @@ units:
     intelligence: 5
     aggression: 1
     specab: 1
+    livingWeapon: true
   - type: STR_FLOATER_SOLDIER
     race: STR_FLOATER
     rank: STR_LIVE_SOLDIER
@@ -4560,7 +4581,7 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    value: 12
+    value: 18
     deathSound: 10
     moveSound: 15
     intelligence: 7
@@ -4584,7 +4605,7 @@ units:
     standHeight: 21
     kneelHeight: 16
     floatHeight: 2
-    value: 12
+    value: 14
     deathSound: 10
     moveSound: 15
     intelligence: 5
@@ -4682,6 +4703,7 @@ units:
     deathSound: 48
     intelligence: 2
     aggression: 2
+    livingWeapon: true
   - type: STR_TANK_CANNON
     race: STR_TANK_CANNON
     stats:
@@ -5096,6 +5118,7 @@ units:
     intelligence: 4
     aggression: 1
     zombieUnit: STR_ZOMBIE
+    livingWeapon: true
   - type: STR_SILACOID_TERRORIST
     race: STR_SILACOID
     rank: STR_LIVE_TERRORIST
@@ -5120,6 +5143,7 @@ units:
     intelligence: 3
     aggression: 2
     specab: 2
+    livingWeapon: true
   - type: STR_CELATID_TERRORIST
     race: STR_CELATID
     rank: STR_LIVE_TERRORIST
@@ -5144,6 +5168,7 @@ units:
     moveSound: 16
     intelligence: 3
     aggression: 2
+    livingWeapon: true
   - type: STR_SECTOPOD_TERRORIST
     race: STR_SECTOPOD
     rank: STR_LIVE_TERRORIST
@@ -5166,6 +5191,7 @@ units:
     deathSound: 23
     intelligence: 4
     aggression: 1
+    livingWeapon: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
     rank: STR_LIVE_TERRORIST
@@ -5189,6 +5215,7 @@ units:
     intelligence: 3
     aggression: 2
     spawnUnit: STR_CHRYSSALID_TERRORIST
+    livingWeapon: true
 alienRaces:
   - id: STR_SECTOID
     members:
@@ -6532,11 +6559,20 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - CHRYSSALID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CHRYSSALID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CHRYSSALID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 4
         lowQty: 3
         highQty: 5
@@ -6544,11 +6580,20 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - SILACOID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - SILACOID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - SILACOID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 5
         lowQty: 3
         highQty: 5
@@ -6556,11 +6601,20 @@ alienDeployments:
         percentageOutsideUfo: 0
         itemSets:
           -
-            - CELATID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CELATID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
           -
-            - CELATID_WEAPON
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+            - STR_HEAVY_PLASMA_CLIP
       - alienRank: 6
         lowQty: 1
         highQty: 4
@@ -9328,6 +9382,13 @@ extraSprites:
     height: 80
     files:
       0: Resources/Pathfinding/
+  - type: Projectiles
+    width: 105
+    height: 33
+    subX: 3
+    subY: 3
+    files:
+      0: Resources/BulletSprites/BulletSprites.png
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
 #    width: 32

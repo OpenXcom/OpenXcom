@@ -125,6 +125,16 @@ BaseFacility *BaseView::getSelectedFacility() const
 }
 
 /**
+ * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base
+ */
+void BaseView::resetSelectedFacility()
+{
+    _facilities[_selFacility->getX()][_selFacility->getY()] = 0;
+    _selFacility = 0;
+}
+
+
+/**
  * Returns the X position of the grid square
  * the mouse is currently over.
  * @return X position on the grid.

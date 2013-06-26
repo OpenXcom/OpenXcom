@@ -210,11 +210,21 @@ void SurfaceSet::loadDat(const std::string &filename)
  */
 Surface *SurfaceSet::getFrame(int i)
 {
-	if (!_frames[i])
+	if (_frames.find(i) != _frames.end())
 	{
-		_frames[i] = new Surface(_width, _height);;
+		return _frames[i];
 	}
+	return 0;
+}
 
+/**
+ * Creates and returns a particular frame in the surface set.
+ * @param i Frame number in the set.
+ * @return Pointer to the respective surface.
+ */
+Surface *SurfaceSet::addFrame(int i)
+{
+	_frames[i] = new Surface(_width, _height);
 	return _frames[i];
 }
 
@@ -260,4 +270,8 @@ void SurfaceSet::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	}
 }
 
+std::map<int, Surface*> *SurfaceSet::getFrames()
+{
+	return &_frames;
+}
 }

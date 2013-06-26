@@ -109,6 +109,12 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&SelectDestinationState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
 
+	// dirty hacks to get the rotate buttons to work in "classic" style
+	_btnRotateLeft->setListButton();
+	_btnRotateRight->setListButton();
+	_btnRotateUp->setListButton();
+	_btnRotateDown->setListButton();
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 

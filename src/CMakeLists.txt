@@ -89,6 +89,8 @@ set ( battlescape_src
   Battlescape/Map.cpp
   Battlescape/Pathfinding.h
   Battlescape/Pathfinding.cpp
+  Battlescape/EndBattleBState.h
+  Battlescape/EndBattleBState.cpp
   Battlescape/ExplosionBState.h
   Battlescape/ExplosionBState.cpp
   Battlescape/UnitTurnBState.cpp
@@ -107,8 +109,6 @@ set ( battlescape_src
   Battlescape/BattlescapeState.h
   Battlescape/BattlescapeGenerator.h
   Battlescape/BattlescapeGenerator.cpp
-  Battlescape/BulletSprite.h
-  Battlescape/BulletSprite.cpp
   Battlescape/Camera.h
   Battlescape/Camera.cpp
   Battlescape/Projectile.cpp

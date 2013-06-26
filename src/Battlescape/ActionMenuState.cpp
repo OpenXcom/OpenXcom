@@ -214,7 +214,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit *targetUnit = NULL;
-			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
+			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getSavedBattle()->getUnits());
 			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
@@ -227,7 +227,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
-				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
+				Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->actor->getPosition() + p));
 				if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
 					targetUnit = tile->getUnit();
 			}
@@ -274,10 +274,10 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
 			
-			if (!_game->getSavedGame()->getBattleGame()->getTileEngine()->validMeleeRange(
+			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),
-				_action->actor->getArmor()->getSize(),
+				_action->actor,
 				0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";

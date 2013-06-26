@@ -18,6 +18,7 @@
  */
  
  
+#include <assert.h>
 #include <vector>
 #include <deque>
 #include <queue>
@@ -31,6 +32,9 @@
 #include "../Ruleset/MCDPatch.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/EndBattleBState.h"
 #include "../Battlescape/Position.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
@@ -205,7 +209,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			(*i)["genUnitType"] >> type;
 			(*i)["genUnitArmor"] >> armor;
 			// create a new Unit.
-			b = new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor));
+			b = new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor), savedGame->getDifficulty());
 		}
 		b->load(*i);
 		_units.push_back(b);
@@ -302,7 +306,10 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
-
+	if (node.FindValue("objectiveDestroyed"))
+	{
+		node["objectiveDestroyed"] >> _objectiveDestroyed;
+	}
 }
 
 /**
@@ -339,10 +346,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 	getTileEngine()->calculateSunShading();
 	getTileEngine()->calculateTerrainLighting();
 	getTileEngine()->calculateUnitLighting();
-	for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
-	{
-		_tileEngine->calculateFOV(*bu);
-	}
+	getTileEngine()->recalculateFOV();
 }
 
 /**
@@ -352,7 +356,10 @@ void SavedBattleGame::loadMapResources(Game *game)
 void SavedBattleGame::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
-
+	if (_objectiveDestroyed)
+	{
+		out << YAML::Key << "objectiveDestroyed" << YAML::Value << _objectiveDestroyed;
+	}
 	out << YAML::Key << "width" << YAML::Value << _mapsize_x;
 	out << YAML::Key << "length" << YAML::Value << _mapsize_y;
 	out << YAML::Key << "height" << YAML::Value << _mapsize_z;
@@ -864,10 +871,7 @@ void SavedBattleGame::endTurn()
 	}
 	
 	// re-run calculateFOV() *after* all aliens have been set not-visible
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(), end = _units.end(); i != end; ++i)
-	{
-		_tileEngine->calculateFOV(*i);
-	}
+	_tileEngine->recalculateFOV();
 
 	if (_side != FACTION_PLAYER)
 		selectNextPlayerUnit();
@@ -1020,6 +1024,11 @@ bool SavedBattleGame::isAborted() const
 void SavedBattleGame::setObjectiveDestroyed(bool flag)
 {
 	_objectiveDestroyed = flag;
+	if (flag && Options::getBool("battleAutoEnd"))
+	{
+		// doesn't really matter what number we push here, as long as it's not 0. the player already won, so let's push 1.
+		_battleState->getBattleGame()->statePushBack(new EndBattleBState(_battleState->getBattleGame(), 1, _battleState));
+	}
 }
 
 /**
@@ -1159,104 +1168,145 @@ void SavedBattleGame::prepareNewTurn()
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
-	// prepare a list of tiles on fire/smoke
+	// prepare a list of tiles on fire
 	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
 		if (getTiles()[i]->getFire() > 0)
 		{
 			tilesOnFire.push_back(getTiles()[i]);
 		}
+	}
+
+	// first: fires spread
+	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
+	{
+		// if we haven't added fire here this turn
+		if ((*i)->getOverlaps() == 0)
+		{
+			// reduce the fire timer
+			(*i)->setFire((*i)->getFire() -1);
+
+			// if we're still burning
+			if ((*i)->getFire())
+			{
+				// propegate in four cardinal directions (0, 2, 4, 6)
+				for (int dir = 0; dir <= 6; dir += 2)
+				{
+					Position pos;
+					Pathfinding::directionToVector(dir, &pos);
+					Tile *t = getTile((*i)->getPosition() + pos);
+					// if there's no wall blocking the path of the flames...
+					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0)
+					{
+						// attempt to set this tile on fire
+						t->ignite((*i)->getSmoke());
+					}
+				}
+			}
+			// fire has burnt out
+			else
+			{
+				(*i)->setSmoke(0);
+				// burn this tile, and any object in it, if it's not fireproof/indestructible.
+				if ((*i)->getMapData(MapData::O_OBJECT))
+				{
+					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
+					{
+						if ((*i)->destroy(MapData::O_OBJECT))
+						{
+							_objectiveDestroyed = true;
+						}
+						if ((*i)->destroy(MapData::O_FLOOR))
+						{
+							_objectiveDestroyed = true;
+						}
+					}
+				}
+				else if ((*i)->getMapData(MapData::O_FLOOR))
+				{
+					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+					{
+						if ((*i)->destroy(MapData::O_FLOOR))
+						{
+							_objectiveDestroyed = true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
+	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+	{
 		if (getTiles()[i]->getSmoke() > 0)
 		{
 			tilesOnSmoke.push_back(getTiles()[i]);
 		}
 	}
 
-	// smoke spreads in 1 random direction, but the direction is same for all smoke
-	int spreadX = RNG::generate(-1, +1);
-	int spreadY = RNG::generate(-1, +1);
+	// now make the smoke spread.
 	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i)
 	{
-		int x = (*i)->getPosition().x;
-		int y = (*i)->getPosition().y;
-		int z = (*i)->getPosition().z;
-
-		if ((*i)->getUnit() && !(*i)->getUnit()->isOut())
+		// smoke and fire follow slightly different rules.
+		if ((*i)->getFire() == 0)
 		{
-			// units in smoke suffer stun
-			(*i)->getUnit()->damage(Position(), ((*i)->getSmoke()/5)+1, DT_SMOKE, true);
-		}
-
-		Tile *t = getTile(Position(x+spreadX, y+spreadY, z));
-		if (t && !t->getSmoke() && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
-		{
-			t->addSmoke((*i)->getSmoke()/2);
-		}
-		Tile *t2 = getTile(Position(x+spreadX+spreadX, y+spreadY+spreadY, z));
-		if (t && t2 && !t2->getSmoke() && getTileEngine()->horizontalBlockage(t, t2, DT_SMOKE) == 0)
-		{
-			t2->addSmoke((*i)->getSmoke()/4);
-		}
-
-		// smoke also spreads upwards
-		t = getTile(Position(x, y, z+1));
-		if (t && !t->getSmoke() && getTileEngine()->verticalBlockage((*i), t, DT_SMOKE) == 0)
-		{
-			t->addSmoke((*i)->getSmoke()/2);
-		}
-
-		(*i)->prepareNewTurn();
-	}
-
-	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
-	{
-		if ((*i)->getUnit())
-		{
-			// units on a flaming tile suffer damage
-			(*i)->getUnit()->damage(Position(0,0,0), RNG::generate(1,12), DT_IN, true);
-			// units on a flaming tile can catch fire 33% chance
-			if (RNG::generate(0,2) == 1)
+			// reduce the smoke counter
+			(*i)->setSmoke((*i)->getSmoke() - 1);
+			// if we're still smoking
+			if ((*i)->getSmoke())
 			{
-				(*i)->getUnit()->setFire(RNG::generate(1,5));
-			}
-		}
-
-		int z = (*i)->getPosition().z;
-		for (int x = (*i)->getPosition().x-1; x <= (*i)->getPosition().x+1; ++x)
-		{
-			for (int y = (*i)->getPosition().y-1; y <= (*i)->getPosition().y+1; ++y)
-			{
-				Tile *t = getTile(Position(x, y, z));
-				if (t && t->getFire() == 0)
+				// spread in four cardinal directions
+				for (int dir = 0; dir <= 6; dir += 2)
 				{
-					// check adjacent tiles - if they have a flammability of < 255, there is a chance...
-					if (getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0)
+					Position pos;
+					Pathfinding::directionToVector(dir, &pos);
+					Tile *t = getTile((*i)->getPosition() + pos);
+					// as long as there are no walls blocking us
+					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
 					{
-						int flam = t->getFlammability();
-						if (flam < 255)
+						// only add smoke to empty tiles, or tiles with no fire, and smoke that was added this turn
+						if (t->getSmoke() == 0 || (t->getFire() == 0 && t->getOverlaps() != 0))
 						{
-							double base = RNG::boxMuller(0,126);
-							if (base < 0) base *= -1;
-
-							if (flam < base)
-							{
-								if (RNG::generate(0, flam) < 2)
-								{
-									t->ignite();
-								}
-							}
+							t->addSmoke((*i)->getSmoke());
 						}
 					}
 				}
 			}
 		}
-		if (!_objectiveDestroyed)
-			_objectiveDestroyed = (*i)->prepareNewTurn();
+		else
+		{
+			// smoke from fire spreads upwards one level if there's no floor blocking it.
+			Position pos = Position(0,0,1);
+			Tile *t = getTile((*i)->getPosition() + pos);
+			if (t && t->hasNoFloor(*i))
+			{
+				// only add smoke equal to half the intensity of the fire
+				t->addSmoke((*i)->getSmoke()/2);
+			}
+			// then it spreads in the four cardinal directions.
+			for (int dir = 0; dir <= 6; dir += 2)
+			{
+				Pathfinding::directionToVector(dir, &pos);
+				t = getTile((*i)->getPosition() + pos);
+				if (t && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
+				{
+					t->addSmoke((*i)->getSmoke()/2);
+				}
+			}
+		}
 	}
 
-	if (!tilesOnFire.empty())
+	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
 	{
-		getTileEngine()->calculateTerrainLighting(); // fires could have been stopped
+		// do damage to units, average out the smoke, etc.
+		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+		{
+			if (getTiles()[i]->getSmoke() != 0)
+				getTiles()[i]->prepareNewTurn();
+		}
+		// fires could have been started, stopped or smoke could reveal/conceal units.
+		getTileEngine()->calculateTerrainLighting();
 	}
 
 	reviveUnconsciousUnits();

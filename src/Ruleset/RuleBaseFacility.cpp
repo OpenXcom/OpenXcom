@@ -26,7 +26,7 @@ namespace OpenXcom
  * type of base facility.
  * @param type String defining the type.
  */
-RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defense(0), _hitRatio(0), _fireSound(0), _hitSound(0)
+RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defense(0), _hitRatio(0), _fireSound(0), _hitSound(0), _listOrder(0)
 {
 }
 
@@ -40,8 +40,10 @@ RuleBaseFacility::~RuleBaseFacility()
 /**
  * Loads the base facility type from a YAML file.
  * @param node YAML node.
+ * @param modIndex offsets the sounds and sprite values to avoid conflicts.
+ * @param listOrder the list weight for this facility.
  */
-void RuleBaseFacility::load(const YAML::Node &node)
+void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -62,6 +64,11 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		else if (key == "spriteFacility")
 		{
 			i.second() >> _spriteFacility;
+			// BASEBITS.PCK: 34 entries
+			if (_spriteFacility > 33)
+			{
+				_spriteFacility += modIndex;
+			}
 		}
 		else if (key == "lift")
 		{
@@ -141,16 +148,30 @@ void RuleBaseFacility::load(const YAML::Node &node)
 		}
 		else if (key == "fireSound")
 		{
+			// GEO.CAT: 14 entries
 			i.second() >> _fireSound;
+			if (_fireSound > 13)
+				_fireSound += modIndex;
 		}
 		else if (key == "hitSound")
 		{
 			i.second() >> _hitSound;
+			// GEO.CAT: 14 entries
+			if (_hitSound > 13)
+				_hitSound += modIndex;
 		}
 		else if (key == "mapName")
 		{
 			i.second() >> _mapName;
 		}
+		else if (key == "listOrder")
+		{
+			i.second() >> _listOrder;
+		}
+	}
+	if (!_listOrder)
+	{
+		_listOrder = listOrder;
 	}
 }
 
@@ -446,5 +467,13 @@ int RuleBaseFacility::getHitSound() const
 int RuleBaseFacility::getFireSound() const
 {
 	return _fireSound;
+}
+
+/**
+ * @return the list weight for this research item.
+ */
+int RuleBaseFacility::getListOrder() const
+{
+	return _listOrder;
 }
 }

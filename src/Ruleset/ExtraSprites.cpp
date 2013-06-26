@@ -22,16 +22,26 @@
 namespace OpenXcom
 {
 
-ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false)
+/*
+ * Creates a blank set of extra sprite data.
+ */
+ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0)
 {
 }
 
-
+/*
+ * Cleans up the extra sprite set.
+ */
 ExtraSprites::~ExtraSprites()
 {
 }
 
-void ExtraSprites::load(const YAML::Node &node)
+/*
+ * Loads the extra sprite set from yaml.
+ * @param node YAML node.
+ * @param modIndex the internal index of the associated mod.
+ */
+void ExtraSprites::load(const YAML::Node &node, int modIndex)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -44,6 +54,14 @@ void ExtraSprites::load(const YAML::Node &node)
 		else if (key == "height")
 		{
 			i.second() >> _height;
+		}
+		else if (key == "subX")
+		{
+			i.second() >> _subX;
+		}
+		else if (key == "subY")
+		{
+			i.second() >> _subY;
 		}
 		else if (key == "singleImage")
 		{
@@ -61,25 +79,57 @@ void ExtraSprites::load(const YAML::Node &node)
 			}
 		}
 	}
+	_modIndex = modIndex;
 }
 
+/*
+ * @return the list of sprites defined my this mod.
+ */
 std::map<int, std::string> *ExtraSprites::getSprites()
 {
 	return &_sprites;
 }
 
-int ExtraSprites::getWidth()
+/*
+ * @return the width of the surfaces (used for single images and new spritesets)
+ */
+const int ExtraSprites::getWidth() const
 {
 	return _width;
 }
 
-int ExtraSprites::getHeight()
+/*
+ * @return the height of the surfaces (used for single images and new spritesets)
+ */
+const int ExtraSprites::getHeight() const
 {
 	return _height;
 }
 
-bool ExtraSprites::getSingleImage()
+/*
+ * @return is this a single surface, or a set of surfaces?
+ */
+const bool ExtraSprites::getSingleImage() const
 {
 	return _singleImage;
 }
+
+/*
+ * @return the mod index for this external sprite set.
+ */
+const int ExtraSprites::getModIndex() const
+{
+	return _modIndex;
+}
+
+const int ExtraSprites::getSubX() const
+{
+	return _subX;
+}
+
+const int ExtraSprites::getSubY() const
+{
+	return _subY;
+}
+
 }

@@ -16,30 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BULLETSPRITE_H
-#define OPENXCOM_BULLETSPRITE_H
+#ifndef OPENXCOM_ENDBATTLEBSTATE_H
+#define OPENXCOM_ENDBATTLEBSTATE_H
 
-#include "../Engine/Surface.h"
+#include "BattleState.h"
 
 namespace OpenXcom
 {
 
-/**
- * A class that renders a bullet sprite, which is a 3x3 Surface.
- * This small sprite either represents the bullet itself or it's trailing particles.
- */
-class BulletSprite : public Surface
+class BattleUnit;
+
+class EndBattleBState : public BattleState
 {
 private:
-	static const int pixels[37][9];
-	int _type;
+	int _liveSoldiers;
+	BattlescapeState *_battle;
 public:
-	/// Creates a new BulletSprite.
-	BulletSprite(int type);
-	/// Cleans up the BulletSprite.
-	~BulletSprite();
-	/// Draw the bullet.
-	void draw();
+	/// Creates a new UnitPanicBState class
+	EndBattleBState(BattlescapeGame *parent, int liveSoldiers, BattlescapeState *battle);
+	/// Cleans up the UnitPanicBState.
+	~EndBattleBState();
+	/// Initializes the state.
+	void init();
+	/// Handles a cancels request.
+	void cancel();
+	/// Runs state functionality every cycle.
+	void think();
 };
 
 }

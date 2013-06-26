@@ -46,7 +46,13 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0), _unitRules(0), _rankInt(-1), _hidingForTurn(false)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0),
+																_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
+																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
+																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
+																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
+																_turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0),
+																_unitRules(0), _rankInt(-1), _hidingForTurn(false), _hitByFire(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -57,7 +63,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
 	_deathSound = 0; // this one is hardcoded
-	_aggroSound = 0;
+	_aggroSound = -1;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
 	_aggression = 1;
@@ -104,13 +110,25 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * Initializes a BattleUnit from a Unit object.
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
+ * @param difficulty level (for stat adjustement)
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),_hidingForTurn(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
+																						_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
+																						_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
+																						_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
+																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
+																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0),
+																						_armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),
+																						_hidingForTurn(false), _hitByFire(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
 	_race = unit->getRace();
 	_stats = *unit->getStats();
+	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	}
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
@@ -252,6 +270,7 @@ void BattleUnit::load(const YAML::Node &node)
 		node["armor"][i] >> _currentArmor[i];
 	for (int i=0; i < 6; i++)
 		node["fatalWounds"][i] >> _fatalWounds[i];
+	node["fire"] >> _fire;
 	node["expBravery"] >> _expBravery;
 	node["expReactions"] >> _expReactions;
 	node["expFiring"] >> _expFiring;
@@ -1037,10 +1056,17 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 			// health damage
 			_health -= power;
 			if (_health < 0)
+			{
 				_health = 0;
+			}
 
 			if (type != DT_IN)
 			{
+				if (_armor->getSize() == 1 && type != DT_STUN)
+				{
+					// conventional weapons can cause additional stun damage
+					_stunlevel += RNG::generate(0, power / 4);
+				}
 				// fatal wounds
 				if (isWoundable())
 				{
@@ -1151,8 +1177,12 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 			return (int)(getStats()->tu * item->getRules()->getTUAuto() / 100);
 		case BA_SNAPSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUSnap() / 100);
+		case BA_STUN:
 		case BA_HIT:
-			return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
+			if (item->getRules()->getFlatRate())
+				return item->getRules()->getTUMelee();
+			else
+				return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
@@ -1172,13 +1202,10 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 /**
  * Spend time units if it can. Return false if it can't.
  * @param tu
- * @param debugmode If this is true, the function actually does noting.
  * @return flag if it could spend the time units or not.
  */
-bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
+bool BattleUnit::spendTimeUnits(int tu)
 {
-	if (debugmode) return true;
-
 	if (tu <= _tu)
 	{
 		_tu -= tu;
@@ -1448,9 +1475,9 @@ void BattleUnit::prepareNewTurn()
 	_health -= getFatalWounds();
 
 	// suffer from fire
-	if (_fire > 0)
+	if (!_hitByFire && _fire > 0)
 	{
-		_health -= RNG::generate(5, 10);
+		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
 		_fire--;
 	}
 
@@ -1485,7 +1512,7 @@ void BattleUnit::prepareNewTurn()
 				_expBravery++;
 		}
 	}
-
+	_hitByFire = false;
 	_dontReselect = false;
 	_motionPoints = 0;
 }
@@ -1571,6 +1598,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
 	{
 		if (dynamic_cast<AggroBAIState*>(aiState) != 0 && dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
 		{
+			delete aiState;
 			return; // try not to overwrite an existing aggro AI state
 			// I tried using typeid but it does not produce the expected results :(
 		}
@@ -1796,7 +1824,7 @@ bool BattleUnit::checkAmmo()
 
 	if (wrong) return false; // didn't find any compatible ammo in inventory
 
-	spendTimeUnits(15,false);
+	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
 	ammo->moveToOwner(0);
 
@@ -2467,6 +2495,90 @@ void BattleUnit::deriveRank()
 		else if (_rank == "STR_ROOKIE")
 			_rankInt = 0;
 	}
+}
+
+/*
+ * this function checks if a tile is visible, using maths.
+ * @param pos the position to check against
+ * @return what the maths decide
+ */
+bool BattleUnit::checkViewSector (Position pos) const
+{
+	int deltaX = pos.x - _pos.x;
+	int deltaY = _pos.y - pos.y;
+
+	switch (_direction)
+	{
+		case 0:
+			if ( (deltaX + deltaY >= 0) && (deltaY - deltaX >= 0) )
+				return true;
+			break;
+		case 1:
+			if ( (deltaX >= 0) && (deltaY >= 0) )
+				return true;
+			break;
+		case 2:
+			if ( (deltaX + deltaY >= 0) && (deltaY - deltaX <= 0) )
+				return true;
+			break;
+		case 3:
+			if ( (deltaY <= 0) && (deltaX >= 0) )
+				return true;
+			break;
+		case 4:
+			if ( (deltaX + deltaY <= 0) && (deltaY - deltaX <= 0) )
+				return true;
+			break;
+		case 5:
+			if ( (deltaX <= 0) && (deltaY <= 0) )
+				return true;
+			break;
+		case 6:
+			if ( (deltaX + deltaY <= 0) && (deltaY - deltaX >= 0) )
+				return true;
+			break;
+		case 7:
+			if ( (deltaY >= 0) && (deltaX <= 0) )
+				return true;
+			break;
+		default:
+			return false;
+	}
+	return false;
+}
+
+/*
+ * common function to adjust a unit's stats according to difficulty setting.
+ */
+void BattleUnit::adjustStats(const int diff)
+{
+	// adjust the unit's stats according to the difficulty level.
+	_stats.tu += 4 * diff * _stats.tu / 100;
+	_stats.stamina += 4 * diff * _stats.stamina / 100;
+	_stats.reactions += 6 * diff * _stats.reactions / 100;
+	_stats.strength += 2 * diff * _stats.strength / 100;
+	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
+	_stats.strength += 2 * diff * _stats.strength / 100;
+	_stats.melee += 4 * diff * _stats.melee / 100;
+	_stats.psiSkill += 4 * diff * _stats.psiSkill / 100;
+	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
+}
+
+/*
+ * did this unit already take fire damage this turn?
+ * (used to avoid damaging large units multiple times.)
+ */
+bool BattleUnit::tookFireDamage() const
+{
+	return _hitByFire;
+}
+
+/*
+ * toggle the state of the fire damage tracking boolean.
+ */
+void BattleUnit::toggleFireDamage()
+{
+	_hitByFire = !_hitByFire;
 }
 
 }

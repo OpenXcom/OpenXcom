@@ -240,7 +240,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	// Set up objects
 
-	_save = _game->getSavedGame()->getBattleGame();
+	_save = _game->getSavedGame()->getSavedBattle();
 	_map->init();
 	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
 	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
@@ -585,13 +585,13 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (_save->getTile(pos) != 0) // don't allow to click into void
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
-			_battleGame->primaryAction(pos);
-		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && playableUnitSelected())
+		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT || (action->getDetails()->button.button == SDL_BUTTON_LEFT && (SDL_GetModState() & KMOD_ALT) != 0)) && playableUnitSelected())
 		{
 			_battleGame->secondaryAction(pos);
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_battleGame->primaryAction(pos);
 		}
 	}
 }
@@ -1009,6 +1009,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (!playableUnit)
 	{
 		_txtName->setText(L"");
+		showPsiButton(false);
 		return;
 	}
 
@@ -1608,6 +1609,7 @@ void BattlescapeState::popup(State *state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
+	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{

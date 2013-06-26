@@ -31,9 +31,13 @@ class ExtraStrings
 private:
 	std::map<std::string, std::string> _strings;
 public:
+	/// Creates a blank external strings set.
 	ExtraStrings();
+	/// Cleans up the external strings set.
 	virtual ~ExtraStrings();
+	/// Loads the data from yaml
 	void load(const YAML::Node &node);
+	/// Gets the list of strings defined by this mod
 	std::map<std::string, std::string> *getStrings();
 };
 

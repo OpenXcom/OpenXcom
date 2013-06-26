@@ -47,7 +47,7 @@ Tile::SerializationKey Tile::serializationKey =
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0)
+Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0), _overlaps(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -556,7 +556,7 @@ bool Tile::detonate()
 	if (explosive)
 	{
 		// explosions create smoke which only stays 1 or 2 turns
-		addSmoke(1);
+		setSmoke(std::max(1, std::min(_smoke + 1, 15)));
 		for (int i = 0; i < 4; ++i)
 		{
 			if(_objects[i])
@@ -565,7 +565,7 @@ bool Tile::detonate()
 				{
 					int decrease = _objects[i]->getArmor();
 					objective = destroy(i);
-					addSmoke(2);
+					setSmoke(std::max(1, std::min(_smoke + 2, 15)));
 					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
 					{
 						objective = destroy(i);
@@ -574,14 +574,12 @@ bool Tile::detonate()
 			}
 		}
 
-		// flammable of the tile needs to be 20 or lower (lower is better chance of catching fire) to catch fire
-		// note that when we get here, flammable objects can already be destroyed by the explosion, thus not catching fire.
-		int flam = getFlammability();
-		if (flam <= 20)
+		if (getMapData(MapData::O_OBJECT))
 		{
-			if (RNG::generate(0, 20) - flam >= 0)
+			if (!_fire && explosive > RNG::generate(10, 30))
 			{
-				ignite();
+				setFire(getFuel() + 1);
+				setSmoke(std::max(1, std::min(15 - (getFlammability() / 10), 12)));
 			}
 		}
 	}
@@ -597,41 +595,60 @@ int Tile::getFlammability() const
 {
 	int flam = 255;
 
-	for (int i=0; i < 4; ++i)
+	if (_objects[3])
 	{
-		if (_objects[i])
-		{
-			if (_objects[i]->getFlammable() < flam)
-			{
-				flam = _objects[i]->getFlammable();
-			}
-		}
+		flam = _objects[3]->getFlammable();
 	}
+	else if (_objects[0])
+	{
+		flam = _objects[0]->getFlammable();
+	}
+
 	return flam;
 }
 
 /*
- * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
- * NOT the sum of the fuel of the objects! TODO: check if this is like in the original.
+ * Fuel of a tile is the lowest flammability of it's objects.
+ * @return how long to burn.
  */
-void Tile::ignite()
+const int Tile::getFuel() const
 {
 	int fuel = 0;
 
-	for (int i=0; i < 4; ++i)
+	if (_objects[3])
 	{
-		if (_objects[i])
+		fuel = _objects[3]->getFuel();
+	}
+	else if (_objects[0])
+	{
+		fuel = _objects[0]->getFuel();
+	}
+
+	return fuel;
+}
+/*
+ * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
+ * NOT the sum of the fuel of the objects!
+ */
+void Tile::ignite(int power)
+{
+	if (getFlammability() != 255)
+	{
+		power = power - (getFlammability() / 10) + 15;
+		if (power < 0)
 		{
-			if (_objects[i]->getFuel() > fuel)
+			power = 0;
+		}
+		if (power > RNG::generate(0, 100))
+		{
+			if (_fire == 0)
 			{
-				fuel = _objects[i]->getFuel();
+				_smoke = 15 - std::max(1, std::min((getFlammability() / 10), 12));
+				_overlaps = 1;
+				_fire = getFuel() + 1;
+				_animationOffset = RNG::generate(0,3);
 			}
 		}
-	}
-	setFire(fuel + 1);
-	if (fuel > 1)
-	{
-		addSmoke(fuel * 2); // not sure
 	}
 }
 
@@ -725,10 +742,31 @@ int Tile::getFire() const
  */
 void Tile::addSmoke(int smoke)
 {
-	_smoke += smoke;
-	if (_smoke > 40) _smoke = 40;
+	if (_fire == 0)
+	{
+		if (_overlaps == 0)
+		{
+			_smoke = std::max(1, std::min(_smoke + smoke, 15));
+		}
+		else
+		{
+			_smoke += smoke;
+		}
+		_animationOffset = RNG::generate(0,3);
+		addOverlap();
+	}
+}
+
+/**
+ * Set the amount of turns this tile is smoking. 0 = no smoke.
+ * @param smoke : amount of turns this tile is smoking.
+ */
+void Tile::setSmoke(int smoke)
+{
+	_smoke = smoke;
 	_animationOffset = RNG::generate(0,3);
 }
+
 
 /**
  * Get the amount of turns this tile is smoking. 0 = no smoke.
@@ -798,46 +836,57 @@ int Tile::getTopItemSprite()
 }
 
 /**
- * New turn preparations. Decrease smoke and fire timers.
- * @return bool Return true objective was destroyed
+ * New turn preparations.
+ * average out any smoke added by the number of overlaps.
+ * apply fire/smoke damage to units as applicable.
  */
-bool Tile::prepareNewTurn()
+void Tile::prepareNewTurn()
 {
-	bool objective = false;
-
-	_smoke--;
-	if (_smoke < 0) _smoke = 0;
-
-	if (_fire == 1)
+	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
+	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
-		// fire will be finished in this turn
-		// destroy all objects that burned, and try to ignite again
-		for (int i = 0; i < 4; ++i)
+		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));
+	}
+	// if we still have smoke/fire
+	if (_smoke)
+	{
+		if (_unit && !_unit->isOut())
 		{
-			if(_objects[i])
+			if (_fire)
 			{
-				if (_objects[i]->getFlammable() < 255)
+				// this is how we avoid hitting the same unit multiple times.
+				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
 				{
-					objective = destroy(i);
+					_unit->toggleFireDamage();
+					// _smoke becomes our damage value
+					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true);
+					// try to set the unit on fire.
+					if ( RNG::generate(0, 100) < 40 * _unit->getArmor()->getDamageModifier(DT_IN))
+					{
+						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
+						if (_unit->getFire() < burnTime)
+						{
+							_unit->setFire(burnTime);
+						}
+					}
+				}
+			}
+			// no fire: must be smoke
+			else
+			{
+				// aliens don't breathe
+				if (_unit->getOriginalFaction() != FACTION_HOSTILE)
+				{
+					// try to knock this guy out.
+					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
+					{
+						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
+					}
 				}
 			}
 		}
-		if (getFlammability() < 255)
-		{
-			ignite();
-		}
-		else
-		{
-			_fire = 0;
-		}
 	}
-	else
-	{
-		_fire--;
-		if (_fire < 0) _fire = 0;
-	}
-
-	return objective;
+	_overlaps = 0;
 }
 
 /**
@@ -884,24 +933,52 @@ int Tile::getVisible()
 	return _visible;
 }
 
+/**
+ * set the direction used for path previewing.
+ */
 void Tile::setPreview(int dir)
 {
 	_preview = dir;
 }
 
+/*
+ * retrieve the direction stored by the pathfinding.
+ */
 const int Tile::getPreview() const
 {
 	return _preview;
 }
 
+/*
+ * set the number to be displayed for pathfinding preview.
+ */
 void Tile::setTUMarker(int tu)
 {
 	_TUMarker = tu;
 }
 
+/*
+ * get the number to be displayed for pathfinding preview.
+ */
 const int Tile::getTUMarker() const
 {
 	return _TUMarker;
+}
+
+/*
+ * get the overlap value of this tile.
+ */
+const int Tile::getOverlaps() const
+{
+	return _overlaps;
+}
+
+/*
+ * increment the overlap value on this tile.
+ */
+void Tile::addOverlap()
+{
+	++_overlaps;
 }
 
 }

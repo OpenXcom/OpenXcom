@@ -480,7 +480,7 @@ void Inventory::mouseClick(Action *action, State *state)
 						}
 						else
 						{
-							if (_selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot), !_tu))
+							if (!_tu || _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
 							{
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
@@ -527,7 +527,7 @@ void Inventory::mouseClick(Action *action, State *state)
 				{
 					if (!overlapItems(_selItem, slot, x, y) && slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
-						if (_selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot), !_tu))
+						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
 							moveItem(_selItem, slot, x, y);
 							setSelectedItem(0);
@@ -561,7 +561,7 @@ void Inventory::mouseClick(Action *action, State *state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
 						}
-						else if (_selUnit->spendTimeUnits(15, !_tu))
+						else if (!_tu || _selUnit->spendTimeUnits(15))
 						{
 							moveItem(_selItem, 0, 0, 0);
 							item->setAmmoItem(_selItem);
@@ -634,7 +634,7 @@ bool Inventory::unload()
 			return false;
 	}
 
-	if (_selUnit->spendTimeUnits(8, !_tu))
+	if (!_tu || _selUnit->spendTimeUnits(8))
 	{
 		moveItem(_selItem->getAmmoItem(), _game->getRuleset()->getInventory("STR_LEFT_HAND"), 0, 0);
 		_selItem->getAmmoItem()->moveToOwner(_selUnit);
@@ -739,7 +739,7 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 		{
 			if (!overlapItems(item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{
-				if (_selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot), !_tu))
+				if (!_tu || _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
 				{
 					placed = true;
 					moveItem(item, newSlot, x2, y2);

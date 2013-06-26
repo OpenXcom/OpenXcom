@@ -56,7 +56,7 @@ namespace OpenXcom
  */
 InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
-	_battleGame = _game->getSavedGame()->getBattleGame();
+	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// Create objects
@@ -160,7 +160,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
-	_inv->setSelectedUnit(_game->getSavedGame()->getBattleGame()->getSelectedUnit());
+	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
 }
 
@@ -335,6 +335,7 @@ void InventoryState::btnOkClick(Action *)
 	}
 	_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+	_battleGame->getTileEngine()->recalculateFOV();
 }
 
 /**

@@ -21,15 +21,16 @@
 namespace OpenXcom
 {
 
-RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""), _cost(0), _points(0), _getOneFree(0), _requires(0), _needItem(false)
+RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""), _cost(0), _points(0), _getOneFree(0), _requires(0), _needItem(false), _listOrder(0)
 {
 }
 
 /**
  * Loads the research project from a YAML file.
  * @param node YAML node.
+ * @param listOrder the list weight for this research.
  */
-void RuleResearch::load(const YAML::Node &node)
+void RuleResearch::load(const YAML::Node &node, int listOrder)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -71,6 +72,14 @@ void RuleResearch::load(const YAML::Node &node)
 		{
 			i.second() >> _requires;
 		}
+		else if (key == "listOrder")
+		{
+			i.second() >> _listOrder;
+		}
+	}
+	if (!_listOrder)
+	{
+		_listOrder = listOrder;
 	}
 }
 
@@ -168,6 +177,14 @@ const std::string RuleResearch::getLookup () const
 const std::vector<std::string> & RuleResearch::getRequirements() const
 {
 	return _requires;
+}
+
+/**
+ * @return the list weight for this research item.
+ */
+int RuleResearch::getListOrder() const
+{
+	return _listOrder;
 }
 
 }

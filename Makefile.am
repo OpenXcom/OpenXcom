@@ -25,8 +25,8 @@ desktop_DATA = res/linux/openxcom.desktop
 
 pkgdata_DATA = bin/data/README.txt
 
-resourcesdir =  $(pkgdatadir)/data/Resources/Pathfinding
-resources_DATA = \
+pathfindingdir =  $(pkgdatadir)/data/Resources/Pathfinding/
+pathfinding_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_00.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_01.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_02.png \
@@ -51,6 +51,10 @@ resources_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_21.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_22.png \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
+
+bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
+bulletsprite_DATA = \    
+	bin/data/Resources/BulletSprites/BulletSprites.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
 ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
@@ -118,6 +122,7 @@ name_DATA = \
 	
 shaderdir = $(pkgdatadir)/data/Shaders
 shader_DATA = \
+	bin/data/Shaders/Raw.OpenGL.shader \
 	bin/data/Shaders/CRT-interlaced.OpenGL.shader \
 	bin/data/Shaders/CRT.OpenGL.shader \
 	bin/data/Shaders/CRT-simple.OpenGL.shader \
@@ -237,14 +242,14 @@ openxcom_SOURCES = \
 	src/Battlescape/BattleState.h \
 	src/Battlescape/BriefingState.cpp \
 	src/Battlescape/BriefingState.h \
-	src/Battlescape/BulletSprite.cpp \
-	src/Battlescape/BulletSprite.h \
 	src/Battlescape/Camera.cpp \
 	src/Battlescape/Camera.h \
 	src/Battlescape/CannotReequipState.cpp \
 	src/Battlescape/CannotReequipState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
+	src/Battlescape/EndBattleBState.cpp \
+	src/Battlescape/EndBattleBState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
@@ -700,7 +705,8 @@ EXTRA_DIST = \
 	$(pkgdata_DATA) \
 	$(language_DATA) \
 	$(name_DATA) \
-	$(resources_DATA) \
+	$(pathfinding_DATA) \
+	$(bulletsprite_DATA) \
 	$(ruleset_DATA) \
 	$(shader_DATA) \
 	$(desktop_DATA) \

@@ -344,8 +344,7 @@ void NewBattleState::initSave()
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
 				int amount = Options::getInt("NewBattle_" + rule->getName());
-				amount = std::max(0, std::min(100, amount));
-
+				amount = std::max(0, std::min(amount, 100));
 				_craft->getItems()->addItem(*i, amount);
 			}
 		}
@@ -431,14 +430,7 @@ void NewBattleState::btnOkClick(Action *)
 	ss << std::dec << _darkness[_selDarkness];
 	ss >> std::dec >> shade;
 	bgen.setWorldShade(shade);
-	if (_missionTypes[_selMission] == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		bgen.setAlienRace("STR_MIXED");
-	}
-	else
-	{
-		bgen.setAlienRace(_alienRaces[_selAlien]);
-	}
+	bgen.setAlienRace(_alienRaces[_selAlien]);
 	bgen.setAlienItemlevel(_selItemLevel);
 
 	bgen.run();
@@ -560,18 +552,10 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		updateIndex(_selAlien, _alienRaces, 1);
-		if (_alienRaces[_selAlien] == "STR_MIXED")
-		{
-			updateIndex(_selAlien, _alienRaces, 1);
-		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		updateIndex(_selAlien, _alienRaces, -1);
-		if (_alienRaces[_selAlien] == "STR_MIXED")
-		{
-			updateIndex(_selAlien, _alienRaces, -1);
-		}
 	}
 	_btnAlienRace->setText(_game->getLanguage()->getString(_alienRaces[_selAlien]));
 	Options::setInt("NewBattleAlienRace", _selAlien);

@@ -35,6 +35,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+#include "AggroBAIState.h"
 #include "Camera.h"
 
 namespace OpenXcom
@@ -75,12 +76,18 @@ void ProjectileFlyBState::init()
 	_projectileItem = 0;
 
 	if (!weapon) // can't shoot without weapon
+	{
+		_parent->popState();
 		return;
+	}
 
 	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
+	{
+		_parent->popState();
 		return;
+	}
 
-	if (_action.actor->getTimeUnits() < _action.TU)
+	if (_parent->getPanicHandled() && _action.actor->getTimeUnits() < _action.TU)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
@@ -88,12 +95,26 @@ void ProjectileFlyBState::init()
 	}
 
 	_unit = _action.actor;
+	
 	_ammo = weapon->getAmmoItem();
+	
 	if (_unit->isOut())
 	{
 		// something went wrong - we can't shoot when dead or unconscious
 		_parent->popState();
 		return;
+	}
+
+	// reaction fire
+	if (_unit->getFaction() != _parent->getSave()->getSide())
+	{
+		// no ammo or target is dead: give the time units back and cancel the shot.
+		if (_ammo == 0 || !_parent->getSave()->getTile(_action.target)->getUnit() || _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
+		{
+			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+			_parent->popState();
+			return;
+		}
 	}
 
 	// autoshot will default back to snapshot if it's not possible
@@ -123,6 +144,13 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 			return;
 		}
+		if (weapon->getRules()->getRange() != 0 && _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getRange())
+		{
+			// out of range
+			_action.result = "STR_OUT_OF_RANGE";
+			_parent->popState();
+			return;
+		}
 		break;
 	case BA_THROW:
 		if (!validThrowRange(&_action))
@@ -135,7 +163,7 @@ void ProjectileFlyBState::init()
 		_projectileItem = weapon;
 		break;
 	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor->getArmor()->getSize(), 0))
+		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor, 0))
 		{
 			_action.result = "STR_THERE_IS_NO_ONE_THERE";
 			_parent->popState();
@@ -167,7 +195,16 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
-	_parent->setStateInterval(Options::getInt("battleFireSpeed"));
+
+	// set the speed of the projectile
+	if (_action.type == BA_THROW)
+	{
+		_parent->setStateInterval(Options::getInt("battleFireSpeed"));
+	}
+	else
+	{
+		_parent->setStateInterval(std::max(1, Options::getInt("battleFireSpeed") - _action.weapon->getRules()->getBulletSpeed()));
+	}
 
 	// let it calculate a trajectory
 	_projectileImpact = -1;
@@ -201,6 +238,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
+			{
+				_parent->getSave()->removeItem(_ammo);
+				_action.weapon->setAmmoItem(0);
+			}
 		}
 		else
 		{
@@ -263,19 +305,11 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 			}
-			BattleAction action;
-			BattleUnit *potentialVictim = _parent->getSave()->getTile(_action.target)->getUnit();
-			if (potentialVictim && potentialVictim->getFaction() != _unit->getFaction() && !potentialVictim->isOut())
+			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
 			{
-				if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
-				{
-					if (_parent->getSave()->getTileEngine()->checkReactionFire(_unit, &action, potentialVictim, false))
-					{
-						action.cameraPosition = _action.cameraPosition;
-						_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-					}
-				}
+				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
+			_unit->abortTurn();
 			_parent->popState();
 		}
 	}
@@ -293,7 +327,7 @@ void ProjectileFlyBState::think()
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
-				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() <= _parent->getSave()->getTurn())
+				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() != 0 && item->getExplodeTurn() <= _parent->getSave()->getTurn())
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
@@ -330,6 +364,27 @@ void ProjectileFlyBState::think()
 						offset = -2;
 					}
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
+
+					// if the unit burns floortiles, burn floortiles
+					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+					{
+						_parent->getSave()->getTile(_action.target)->ignite(15);
+					}
+
+					if (_projectileImpact == 4)
+					{
+						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
+						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
+						{
+							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(victim->getCurrentAIState());
+							if (aggro == 0)
+							{
+								aggro = new AggroBAIState(_parent->getSave(), victim);
+								victim->setAIState(aggro);
+							}
+							aggro->setAggroTarget(_action.actor);
+						}
+					}
 				}
 				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())
 				{

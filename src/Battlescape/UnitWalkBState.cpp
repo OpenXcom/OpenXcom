@@ -167,7 +167,7 @@ void UnitWalkBState::think()
 			// if the unit burns floortiles, burn floortiles
 			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 			{
-				_unit->getTile()->ignite();
+				_unit->getTile()->ignite(1);
 				Position here = (_unit->getPosition() * Position(16,16,24)) + Position(8,8,-(_unit->getTile()->getTerrainLevel()));
 				_parent->getTileEngine()->hit(here, _unit->getStats()->strength, DT_IN, _unit);
 			}
@@ -183,10 +183,8 @@ void UnitWalkBState::think()
 			{
 				_terrain->calculateFOV(_unit);
 			}
-			unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
-			BattleAction action;
-			
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
 			int size = _unit->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
@@ -219,16 +217,27 @@ void UnitWalkBState::think()
 					}
 				}
 			}
-
-			// check for reaction fire
-			if (!_falling && !_action.reckless && _terrain->checkReactionFire(_unit, &action))
+			if (unitSpotted)
 			{
-				postPathProcedures();
-				action.cameraPosition = _parent->getMap()->getCamera()->getMapOffset();
-				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
-				// unit got fired upon - stop walking
+				_terrain->calculateFOV(_unit->getPosition());
+				_unit->setCache(0);
+				_parent->getMap()->cacheUnit(_unit);
 				_pf->abortPath();
+				_parent->popState();
 				return;
+			}
+			// check for reaction fire
+			if (!_falling)
+			{
+				if (_terrain->checkReactionFire(_unit))
+				{
+					// unit got fired upon - stop walking
+					_unit->setCache(0);
+					_parent->getMap()->cacheUnit(_unit);
+					_pf->abortPath();
+					_parent->popState();
+					return;
+				}
 			}
 		}
 		else if (onScreen)
@@ -286,9 +295,10 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
 			if (_unit->getFaction() == FACTION_HOSTILE &&
-				_parent->getSave()->getTile(destination)->getUnit() &&
+				((_parent->getSave()->getTile(destination)->getUnit() &&
 				_parent->getSave()->getTile(destination)->getUnit()->getFaction() == FACTION_HOSTILE &&
-				_parent->getSave()->getTile(destination)->getUnit() != _unit)
+				_parent->getSave()->getTile(destination)->getUnit() != _unit) ||
+				_parent->getSave()->getTile(destination)->getFire() > 0))
 			{
 				tu -= 32; // we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 			}
@@ -305,7 +315,7 @@ void UnitWalkBState::think()
 
 			if (tu > _unit->getTimeUnits())
 			{
-				if (tu < 255)
+				if (_parent->getPanicHandled() && tu < 255)
 				{
 					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
@@ -318,7 +328,10 @@ void UnitWalkBState::think()
 
 			if (energy / 2 > _unit->getEnergy())
 			{
-				_action.result = "STR_NOT_ENOUGH_ENERGY";
+				if (_parent->getPanicHandled())
+				{
+					_action.result = "STR_NOT_ENOUGH_ENERGY";
+				}
 				_pf->abortPath();
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
@@ -326,7 +339,7 @@ void UnitWalkBState::think()
 				return;
 			}
 
-			if (_parent->checkReservedTU(_unit, tu) == false)
+			if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 			{
 				_pf->abortPath();
 				_unit->setCache(0);
@@ -345,7 +358,7 @@ void UnitWalkBState::think()
 			// now open doors (if any)
 			if (dir < Pathfinding::DIR_UP)
 			{
-				int door = _terrain->unitOpensDoor(_unit);
+				int door = _terrain->unitOpensDoor(_unit, false, dir);
 				if (door == 3)
 				{
 					return; // don't start walking yet, wait for the ufo door to open
@@ -427,7 +440,7 @@ void UnitWalkBState::think()
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
-		unitSpotted = (_numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+		unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
@@ -440,6 +453,7 @@ void UnitWalkBState::think()
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			_unit->_hidingForTurn = false; // not hidden, are we...
 			_pf->abortPath();
+			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 			return;
 		}
@@ -473,11 +487,15 @@ void UnitWalkBState::postPathProcedures()
 				_unit->turn();
 			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
 			{
-				_action.target = _action.actor->getCharging()->getPosition();
-				_action.weapon = _action.actor->getMainHandWeapon();
-				_action.type = BA_HIT;
-				_action.TU = _action.actor->getActionTUs(_action.type, _action.weapon);
+				BattleAction action;
+				action.actor = _unit;
+				action.target = _unit->getCharging()->getPosition();
+				action.weapon = _unit->getMainHandWeapon();
+				action.type = BA_HIT;
+				action.TU = _unit->getActionTUs(action.type, action.weapon);
+				action.targeting = true;
 				_unit->setCharging(0);
+				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		} // check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
 		else if (_parent->getSave()->getTile(_finalFacing) != 0 && (visibility == -1|| visibility == 4))

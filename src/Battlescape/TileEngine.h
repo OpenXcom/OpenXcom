@@ -48,7 +48,6 @@ private:
 	static const int heightFromCenter[11];
 	void addLight(const Position &center, int power, int layer);
 	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1);
-	int vectorToDirection(const Position &vector);
 	bool _personalLighting;
 public:
 	/// Creates a new TileEngine class.
@@ -64,7 +63,7 @@ public:
 	/// Calculate the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
 	/// Check reaction fire.
-	bool checkReactionFire(BattleUnit *unit, BattleAction *action, BattleUnit *potentialVictim = 0, bool recalculateFOV = true);
+	bool checkReactionFire(BattleUnit *unit);
 	/// Recalculate lighting of the battlescape.
 	void calculateTerrainLighting();
 	/// Recalculate lighting of the battlescape.
@@ -75,7 +74,7 @@ public:
 	/// Check if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
-	int unitOpensDoor(BattleUnit *unit, bool rClick = false);
+	int unitOpensDoor(BattleUnit *unit, bool rClick = false, int dir = -1);
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
@@ -105,9 +104,9 @@ public:
 	/// apply gravity to anything that occupy this tile.
 	Tile *applyGravity(Tile *t);
 	/// return melee validity between two units
-	bool validMeleeRange(BattleUnit *unit, BattleUnit *target, int dir);
+	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
 	/// return validity of a melee attack from a given position
-	bool validMeleeRange(Position pos, int direction, int size, BattleUnit *target);
+	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target);
 	/// get the ai to look through a window
 	int faceWindow(const Position &position);
 	/// get the exposure % of a unit on a tile
@@ -122,15 +121,21 @@ public:
 	bool isVoxelVisible(const Position& voxel);
 	/// check what type of voxel occupies this space
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
-	/// get the height of an object checking it's voxels
-	int getVoxelHeight(MapData *mp);
 	/// blow this tile up
 	bool detonate(Tile* tile);
 	/// validate a throwing action
 	bool validateThrow(BattleAction *action);
-	// open any doors this door is connected to.
+	/// open any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
-
+	/// create a vector of units that can spot this unit.
+	std::vector<BattleUnit *> getSpottingUnits(BattleUnit* unit);
+	/// given a vector of spotters, and a unit, this will pick the one with the highest reaction score.
+	BattleUnit* getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit);
+	/// check validity of a snap shot to this position.
+	bool canMakeSnap(BattleUnit *unit, BattleUnit *target);
+	/// try to perform a reaction snap shot to this location.
+	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
+	void recalculateFOV();
 };
 
 }

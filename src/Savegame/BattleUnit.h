@@ -111,11 +111,12 @@ private:
 	std::vector<int> _loftempsSet;
 	Unit *_unitRules;
 	int _rankInt;
+	bool _hitByFire;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
-	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor);
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
 	BattleUnit(BattleUnit&);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
@@ -208,7 +209,7 @@ public:
 	/// Get the number of time units a certain action takes.
 	int getActionTUs(BattleActionType actionType, BattleItem *item);
 	/// Spend time units if it can.
-	bool spendTimeUnits(int tu, bool debugmode = false);
+	bool spendTimeUnits(int tu);
 	/// Spend energy if it can.
 	bool spendEnergy(int tu);
 	/// Set time units.
@@ -401,7 +402,14 @@ public:
 	int getRankInt() const;
 	/// derive a rank integer based on rank string (for xcom soldiers ONLY)
 	void deriveRank();
-
+	/// this function checks if a tile is visible, using maths.
+	bool checkViewSector(Position pos) const;
+	/// adjust this unit's stats according to difficulty.
+	void adjustStats(const int diff);
+	/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)
+	bool tookFireDamage() const;
+	/// switch the state of the fire damage tracker.
+	void toggleFireDamage();
 };
 
 }

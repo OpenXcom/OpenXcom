@@ -53,6 +53,7 @@ private:
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
 	std::string _zombieUnit, _spawnUnit;
+	bool _livingWeapon;
 public:
 	/// Creates a blank unit ruleset.
 	Unit(const std::string &type, std::string race, std::string rank);
@@ -96,6 +97,8 @@ public:
 	std::string getSpawnUnit() const;
 	/// Gets the unit's war cry.
 	int getAggroSound() const;
+	/// does this unit have a built in weapon?
+	bool isLivingWeapon() const;
 };
 
 }

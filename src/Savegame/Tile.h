@@ -84,6 +84,7 @@ protected:
 	int _visible;
 	int _preview;
 	int _TUMarker;
+	int _overlaps;
 public:
 	/// Creates a tile.
 	Tile(const Position& pos);
@@ -151,18 +152,22 @@ public:
 	void setUnit(BattleUnit *unit, Tile *tileBelow = 0);
 	/// Get the (alive) unit on this tile.
 	BattleUnit *getUnit() const;
-	/// Set fire.
+	/// Set fire, does not increment overlaps.
 	void setFire(int fire);
 	/// Get fire.
 	int getFire() const;
-	/// Set smoke.
+	/// Add smoke, increments overlap.
 	void addSmoke(int smoke);
+	/// Set smoke, does not increment overlaps.
+	void setSmoke(int smoke);
 	/// Get smoke.
 	int getSmoke() const;
 	/// Get flammability.
 	int getFlammability() const;
-	/// Sets the objects on the tile on fire.
-	void ignite();
+	/// Get turns to burn
+	const int getFuel() const;
+	/// attempt to set the tile on fire, sets overlaps to one if successful.
+	void ignite(int power);
 	/// Get fire and smoke animation offset.
 	int getAnimationOffset() const;
 	/// Add item
@@ -171,8 +176,8 @@ public:
 	void removeItem(BattleItem *item);
 	/// Get top-most item
 	int getTopItemSprite();
-	/// Decrease fire and smoke timers.
-	bool prepareNewTurn();
+	/// New turn preparations.
+	void prepareNewTurn();
 	/// Get inventory on this tile.
 	std::vector<BattleItem *> *getInventory();
 	/// Set the tile marker color.
@@ -183,10 +188,18 @@ public:
 	void setVisible(int visibility);
 	/// Get the tile visible flag.
 	int getVisible();
+	/// set the direction (used for path previewing)
 	void setPreview(int dir);
+	/// retrieve the direction stored by the pathfinding.
 	const int getPreview() const;
+	/// set the number to be displayed for pathfinding preview.
 	void setTUMarker(int tu);
+	/// get the number to be displayed for pathfinding preview.
 	const int getTUMarker() const;
+	/// how many times has this tile been overlapped with smoke/fire (runtime only)
+	const int getOverlaps() const;
+	/// increment the overlap value on this tile.
+	void addOverlap();
 };
 
 }

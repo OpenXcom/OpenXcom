@@ -1115,14 +1115,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\BulletSprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\BulletSprite.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Battlescape\Camera.cpp"
 				>
 			</File>
@@ -1144,6 +1136,14 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\DebriefingState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\EndBattleBState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Battlescape\EndBattleBState.h"
 				>
 			</File>
 			<File

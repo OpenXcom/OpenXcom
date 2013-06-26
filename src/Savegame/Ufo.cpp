@@ -26,6 +26,7 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
+#include <assert.h>
 #include <cmath>
 #include <sstream>
 #include <algorithm>
@@ -40,7 +41,8 @@ namespace OpenXcom
 Ufo::Ufo(RuleUfo *rules)
   : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
-  , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0), _detected(false), _hyperDetected(false)
+  , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
+  , _detected(false), _hyperDetected(false), _shootingAt(0)
 {
 }
 
@@ -588,4 +590,13 @@ void Ufo::setDestination(Target *dest)
 	delete old;
 }
 
+const int Ufo::getShootingAt() const
+{
+	return _shootingAt;
+}
+
+void Ufo::setShootingAt(int target)
+{
+	_shootingAt = target;
+}
 }

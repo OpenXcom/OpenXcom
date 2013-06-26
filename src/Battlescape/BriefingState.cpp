@@ -55,7 +55,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_txtCraft = new Text(300, 16, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
 
-	std::string mission = _game->getSavedGame()->getBattleGame()->getMissionType();
+	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -169,8 +169,8 @@ void BriefingState::btnOkClick(Action *)
 	_game->popState();
 	BattlescapeState *bs = new BattlescapeState(_game);
 	_game->pushState(bs);
-	_game->getSavedGame()->getBattleGame()->setBattleState(bs);
-	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame(), bs));
+	_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
 	_game->pushState(new InventoryState(_game, false, bs));
 }
 

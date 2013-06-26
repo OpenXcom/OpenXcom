@@ -167,7 +167,6 @@
 #include "./Battlescape/BattleState.h"
 #include "./Battlescape/InfoboxState.h"
 #include "./Battlescape/Projectile.h"
-#include "./Battlescape/BulletSprite.h"
 #include "./Battlescape/Map.h"
 #include "./Battlescape/UnitTurnBState.h"
 #include "./Ufopaedia/ArticleStateBaseFacility.h"

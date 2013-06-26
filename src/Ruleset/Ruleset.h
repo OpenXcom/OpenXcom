@@ -88,8 +88,8 @@ protected:
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
 	std::map<std::string, MCDPatch *> _MCDPatches;
-	std::map<std::string, ExtraSprites *> _extraSprites;
-	std::map<std::string, ExtraSounds *> _extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
+	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
 	std::auto_ptr<YAML::Node> _startingBase, _startingTime;
@@ -97,7 +97,7 @@ protected:
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
-
+	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder;
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
@@ -205,9 +205,14 @@ public:
 	const YAML::Node &getStartingBase();
 	/// Gets an MCDPatch.
 	MCDPatch *getMCDPatch(const std::string name) const;
-	std::map<std::string, ExtraSprites *> getExtraSprites() const;
-	std::map<std::string, ExtraSounds *> getExtraSounds() const;
+	/// Gets the list of external Sprites.
+	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
+	/// Gets the list of external Sounds.
+	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
+	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
+	/// sort all our lists according to their weight.
+	void sortLists();
 };
 
 }

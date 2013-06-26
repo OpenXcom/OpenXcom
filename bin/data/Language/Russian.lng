@@ -2385,6 +2385,10 @@ STR_ALLOWPSIONICCAPTURE
 Разрешить пси-захват
 STR_ALLOWPSIONICCAPTURE_DESC
 При победе все оставшиеся под контролем сознания пришельцы будут считаться захваченными в плен.
+STR_ANYTIMEPSITRAINING
+Псионическая тренировка в любое время
+STR_ANYTIMEPSITRAINING_DESC
+Вы можете в любое время отправить солдат на псионическую тренировку (или отменить ее). Помните, начальное обучение займет 30-60 дней.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION

@@ -368,9 +368,6 @@
     <ClCompile Include="Battlescape\Projectile.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\BulletSprite.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\Transfer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -775,6 +772,9 @@
     <ClCompile Include="Ruleset\ExtraSounds.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\EndBattleBState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1146,9 +1146,6 @@
       <Filter>Savegame</Filter>
     </ClInclude>
     <ClInclude Include="Battlescape\Projectile.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\BulletSprite.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\Transfer.h">
@@ -1574,6 +1571,9 @@
     </ClInclude>
     <ClInclude Include="Ruleset\ExtraSounds.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\EndBattleBState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -727,7 +727,7 @@ std::vector<TerrorSite*> *SavedGame::getTerrorSites()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *SavedGame::getBattleGame()
+SavedBattleGame *SavedGame::getSavedBattle()
 {
 	return _battleGame;
 }
