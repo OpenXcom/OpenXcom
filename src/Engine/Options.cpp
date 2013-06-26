@@ -43,7 +43,7 @@ std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-std::map<std::string, std::string> _options;
+std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
 std::vector<std::string> _purchaseexclusions;
 
@@ -263,12 +263,7 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
-				std::map<std::string, std::string>::iterator it = _options.find(argname);
-				if (it != _options.end())
-				{
-					it->second = args[i+1];
-				}
-				else if (argname == "data")
+                if (argname == "data")
 				{
 					_dataFolder = CrossPlatform::endPath(args[i+1]);
 				}
@@ -278,8 +273,25 @@ void loadArgs(int argc, char** args)
 				}
 				else
 				{
-					Log(LOG_WARNING) << "Unknown option: " << argname;
-				}
+                    // case insensitive lookup of the argument
+                    bool found = false;
+                    for(std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
+                    {
+                        std::string option = it->first;
+                        std::transform(option.begin(), option.end(), option.begin(), ::tolower);
+                        if (option == argname)
+                        {
+                            //save this command line option for now, we will apply it later
+                            _commandLineOptions[it->first]= args[i+1];
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found)
+                    {
+                        Log(LOG_WARNING) << "Unknown option: " << argname;
+                    }
+                }
 			}
 			else
 			{
@@ -416,6 +428,12 @@ bool init(int argc, char** args)
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
+
+    // now apply options set on the command line, overriding defaults and those loaded from config file
+    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+    {
+        _options[it->first] = it->second;
+    }
 	return true;
 }
 
