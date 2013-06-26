@@ -591,7 +591,7 @@ void UnitInfoState::handle(Action *action)
 			}
 			init();
 		}
-		else if (action->getDetails()->key.keysym.sym == SDLK_ESCAPE)
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel"))
 		{
 			_game->popState();
 		}
