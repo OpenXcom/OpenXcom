@@ -127,13 +127,13 @@ int SoldierNamePool::GenLook(int numLooks)
 {
         if (const YAML::Node *pName = doc.FindValue("lookWeights"))
         {
-			int totalWeight = 0;
-			int currentWeight = 0;
-			int seed = 0;
-			int returnValue = 0;
-			if (_lookWeights.size() > numLooks || _lookWeights.empty)
-				{return RNG::generate(0,numLooks - 1);}
-			for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
+		int totalWeight = 0;
+		int currentWeight = 0;
+		int seed = 0;
+		int returnValue = 0;
+		if (_lookWeights.size() > numLooks || _lookWeights.empty)
+			{return RNG::generate(0,numLooks - 1);}
+		for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
                 {
                         totalWeight += _lookWeights.push_back(*i);
                 }
@@ -147,16 +147,16 @@ int SoldierNamePool::GenLook(int numLooks)
 
         }
 
-		 if (const YAML::Node *pName = doc.FindValue("lookWeights"))
+	if (const YAML::Node *pName = doc.FindValue("lookWeights"))
         {
-			int totalWeight = 0;
-			for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
-            {
+		int totalWeight = 0;
+		for (YAML::Iterator i = pName->begin(); i < numLooks; ++i)
+            	{
                     _lookWeights.push_back(*i);
                     totalWeight += (*i);
-            }
-			const int minimumChance = 2;	// minimum chance of a look being selected if it isn't enumerated. This ensures that looks MUST be zeroed to not appear.
-			if (totalWeight == 0)	// If all weights are set to zero, default to even weights.
+            	}
+		const int minimumChance = 2;	// minimum chance of a look being selected if it isn't enumerated. This ensures that looks MUST be zeroed to not appear.
+		if (totalWeight <= 0)	// If all weights total zero or lower, default to even weights.
 			{
 				for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
 				{
@@ -164,7 +164,7 @@ int SoldierNamePool::GenLook(int numLooks)
 					totalWeight += (minimumChance);
 				}
 			}
-			const int raceDifference = std::abs(lookWeights.size() - numLooks);
+		const int raceDifference = std::abs(lookWeights.size() - numLooks);
             for (int i = 0; i != raceDifference; ++i)	// If some weights are omitted, then add the minimum weight to them. Modders adding looks should zero their weight in namefiles they don't match.
             {
                     _lookWeights.push_back(minimumChance);
@@ -178,7 +178,9 @@ int SoldierNamePool::GenLook(int numLooks)
 				if (quota <= 0)
 				{break;}
 				look++;
-	return look;
+			}
+        }
+        return look;
 }
 
 }
