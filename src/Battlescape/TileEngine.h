@@ -74,7 +74,7 @@ public:
 	/// Check if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
-	int unitOpensDoor(BattleUnit *unit, bool rClick = false);
+	int unitOpensDoor(BattleUnit *unit, bool rClick = false, int dir = -1);
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.

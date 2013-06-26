@@ -1803,7 +1803,7 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
  *		  1 ufo door is starting to open, make a whoosh sound, don't walk through.
  *		  3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
  */
-int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
+int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 {
 	int door = -1;
 	int TUCost = 0;
@@ -1811,7 +1811,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 	int z = unit->getTile()->getTerrainLevel() < -12 ? 1 : 0; // if we're standing on stairs, check the tile above instead.
 	if (size > 1 && rClick)
 		return door;
-
+	if (dir == -1)
+	{
+		dir = unit->getDirection();
+	}
 	for (int x = 0; x < size && door == -1; x++)
 	{
 		for (int y = 0; y < size && door == -1; y++)
@@ -1820,7 +1823,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick)
 			Tile *tile = _save->getTile(unit->getPosition() + Position(x,y,z));
 			if (!tile) continue;
 
-			switch (unit->getDirection())
+			switch (dir)
 			{
 			case 0: // north
 				checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL)); // origin
