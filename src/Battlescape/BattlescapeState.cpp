@@ -1692,11 +1692,11 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
-void BattlescapeState::mouseInIcons(Action *action)
+void BattlescapeState::mouseInIcons(Action *action UNUSED_PARAM)
 {
 	_mouseOverIcons = true;
 }
-void BattlescapeState::mouseOutIcons(Action *action)
+void BattlescapeState::mouseOutIcons(Action *action UNUSED_PARAM)
 {
 	_mouseOverIcons = false;
 }

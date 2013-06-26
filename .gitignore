@@ -75,3 +75,5 @@ build/
 Dependencies/
 #Ignore Vim swap files
 *.swp
+#Ignore NetBeans project directory
+nbproject/

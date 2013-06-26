@@ -134,7 +134,7 @@ public:
 	AlienMission *getMission() const { return _mission; }
 	/// Sets the UFO's destination.
 	void setDestination(Target *dest);
-	const int getShootingAt() const;
+	int getShootingAt() const;
 	void setShootingAt(int target);
 
 };

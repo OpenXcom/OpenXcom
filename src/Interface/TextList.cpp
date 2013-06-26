@@ -417,7 +417,7 @@ void TextList::setAlign(TextHAlign align, int col)
 {
 	if (col == -1)
 	{
-		for (int i = 0; i <= _columns.size() - 1; ++i)
+		for (size_t i = 0; i <= _columns.size() - 1; ++i)
 		{
 			_align[i] = align;
 		}
