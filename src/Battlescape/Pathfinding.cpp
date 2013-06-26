@@ -578,8 +578,11 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 	if (part == MapData::O_FLOOR)
 	{
 		BattleUnit *unit = tile->getUnit();
-		if (unit == 0 || unit == _unit || unit == missileTarget || unit->isOut()) return false;
-		if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+		if (unit != 0)
+		{
+			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
+			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
+		}
 	}
 	// missiles can't pathfind through closed doors.
 	if (missileTarget != 0 && tile->getMapData(part) &&
