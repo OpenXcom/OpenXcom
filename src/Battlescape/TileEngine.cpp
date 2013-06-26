@@ -1569,10 +1569,12 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 		{
 			block = blockage(startTile, MapData::O_NORTHWALL, type) + blockage(endTile, MapData::O_WESTWALL, type); //up+right
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 2);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth + oneTileEast), MapData::O_OBJECT, type, 6);
 			if (block == 0) break; //this way is opened
 			block = blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_NORTHWALL, type)
 				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_WESTWALL, type); //right+up
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type, 0);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth + oneTileEast), MapData::O_OBJECT, type, 4);
 		}
 		else
 		{
@@ -1596,10 +1598,12 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			block = blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_NORTHWALL, type)
 				+ blockage(endTile, MapData::O_WESTWALL, type); //down+right
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type, 2);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth + oneTileEast), MapData::O_OBJECT, type, 6);
 			if (block == 0) break; //this way is opened
 			block = blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_WESTWALL, type)
 				+ blockage(endTile, MapData::O_NORTHWALL, type); //right+down
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type, 4);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth + oneTileEast), MapData::O_OBJECT, type, 0);
 		}
 		else
 		{
@@ -1623,9 +1627,11 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			block = blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_NORTHWALL, type)
 				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_WESTWALL, type); //down+left
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type, 6);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth + oneTileWest), MapData::O_OBJECT, type, 2);
 			if (block == 0) break; //this way is opened
 			block = blockage(startTile, MapData::O_WESTWALL, type) + blockage(endTile, MapData::O_NORTHWALL, type); //left+down
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 4);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileSouth + oneTileWest), MapData::O_OBJECT, type, 0);
 		}
 		else
 		{
@@ -1650,10 +1656,12 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 			block = blockage(startTile, MapData::O_NORTHWALL, type)
 				+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_WESTWALL, type); //up+left
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 6);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth + oneTileWest), MapData::O_OBJECT, type, 2);
 			if (block == 0) break; //this way is opened
 			block = blockage(startTile, MapData::O_WESTWALL, type)
 				+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_NORTHWALL, type); //left+up
 			block += blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 0);
+			block += blockage(_save->getTile(startTile->getPosition() + oneTileNorth + oneTileWest), MapData::O_OBJECT, type, 4);
 		}
 		else
 		{
