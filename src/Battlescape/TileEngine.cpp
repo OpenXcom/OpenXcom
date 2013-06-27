@@ -1071,6 +1071,11 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 	action.weapon = unit->getMainHandWeapon();
 	// reaction fire is ALWAYS snap shot.
 	action.type = BA_SNAPSHOT;
+	// unless we're a melee unit.
+	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
+	{
+		action.type = BA_HIT;
+	}
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
