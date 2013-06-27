@@ -1451,7 +1451,7 @@ bool TileEngine::detonate(Tile* tile)
 			}
 		}
 
-		if (2 * tile->getFlammability() < explosive)
+		if (tile->getFlammability() < explosive)
 		{
 			tile->setFire(tile->getFuel() + 1);
 			tile->setSmoke(std::max(1, std::min(15 - (tile->getFlammability() / 10), 12)));
