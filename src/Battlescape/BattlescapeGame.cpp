@@ -336,14 +336,15 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 			action.TU = action.weapon->getRules()->getTUUse();
 		}
+		else
+		{
+			statePushBack(new UnitTurnBState(this, action));
+		}
 
 		ss.clear();
 		ss << L"Attack type=" << action.type << " target="<< action.target.x << " "<< action.target.y << " "<< action.target.z << " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
-		action.actor->lookAt(action.target);
-		while (action.actor->getStatus() == STATUS_TURNING)
-			action.actor->turn();
 		statePushBack(new ProjectileFlyBState(this, action));
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{

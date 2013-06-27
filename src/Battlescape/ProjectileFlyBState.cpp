@@ -309,7 +309,10 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
-			_unit->abortTurn();
+			if (!_action.actor->isOut())
+			{
+				_unit->abortTurn();
+			}
 			_parent->popState();
 		}
 	}
@@ -343,7 +346,7 @@ void ProjectileFlyBState::think()
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
 				// launch the next projectile in the waypoint cascade
-				_parent->statePushBack(new ProjectileFlyBState(_parent, _action, _origin));
+				_parent->statePushNext(new ProjectileFlyBState(_parent, _action, _origin));
 			}
 			else
 			{
@@ -363,7 +366,7 @@ void ProjectileFlyBState::think()
 					{
 						offset = -2;
 					}
-					_parent->statePushNext(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
 
 					// if the unit burns floortiles, burn floortiles
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)

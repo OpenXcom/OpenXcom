@@ -49,35 +49,10 @@ namespace OpenXcom
  */
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
-
-}
-
-/**
- * Deletes the UnitDieBState.
- */
-UnitDieBState::~UnitDieBState()
-{
-
-}
-
-void UnitDieBState::init()
-{
-	// unit is already dead, no need to do this state.
-	if (_unit->getStatus() == STATUS_DEAD)
-	{
-		_parent->popState();
-		return;
-	}
-
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
-
-		if (!_noSound)
-		{
-			playDeathSound();
-		}
 
 		while (_unit->getStatus() == STATUS_COLLAPSING)
 		{
@@ -111,7 +86,18 @@ void UnitDieBState::init()
             }
         }
     }
+}
 
+/**
+ * Deletes the UnitDieBState.
+ */
+UnitDieBState::~UnitDieBState()
+{
+
+}
+
+void UnitDieBState::init()
+{
 }
 
 /*
@@ -139,6 +125,11 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
+
+		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
+		{
+			playDeathSound();
+		}
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			_unit->instaKill();
@@ -178,7 +169,7 @@ void UnitDieBState::think()
 					std::wstringstream ss;
 					ss << _unit->getName(game->getLanguage()) << L'\n';
 					ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender());
-					game->pushState(new InfoboxState(game, ss.str()));
+					game->pushState(new InfoboxOKState(game, ss.str()));
 				}
 			}
 			else
@@ -189,21 +180,19 @@ void UnitDieBState::think()
 				game->pushState(new InfoboxOKState(game, ss.str()));
 			}
 		}
-	}
-
-	// if all units from either faction are killed - auto-end the mission.
-	if (Options::getBool("battleAutoEnd"))
-	{
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		_parent->tallyUnits(liveAliens, liveSoldiers, false);
-
-		if (liveAliens == 0 || liveSoldiers == 0)
+		// if all units from either faction are killed - auto-end the mission.
+		if (Options::getBool("battleAutoEnd"))
 		{
-			_parent->statePushBack(new EndBattleBState(_parent, liveSoldiers, _parent->getSave()->getBattleState()));
+			int liveAliens = 0;
+			int liveSoldiers = 0;
+			_parent->tallyUnits(liveAliens, liveSoldiers, false);
+
+			if (liveAliens == 0 || liveSoldiers == 0)
+			{
+				_parent->statePushBack(new EndBattleBState(_parent, liveSoldiers, _parent->getSave()->getBattleState()));
+			}
 		}
 	}
-
 	_parent->getMap()->cacheUnit(_unit);
 }
 
