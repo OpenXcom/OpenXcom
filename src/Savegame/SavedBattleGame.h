@@ -247,7 +247,10 @@ public:
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 	/// attempt to place unit on or near entryPoint
 	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
+	/// resets the turn counter.
 	void resetTurnCounter();
+	/// resets visibility of all tiles on the map.
+	void resetTiles();
 };
 
 }

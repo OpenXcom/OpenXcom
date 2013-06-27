@@ -1231,6 +1231,12 @@ inline void BattlescapeState::handle(Action *action)
 					_save->setDebugMode();
 					debug(L"Debug Mode");
 				}
+				// "ctrl-l" - reset tile visibility
+				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_l && (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Resetting tile visibility");
+					_save->resetTiles();
+				}
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
