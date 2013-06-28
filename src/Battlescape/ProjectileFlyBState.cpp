@@ -386,6 +386,7 @@ void ProjectileFlyBState::think()
 								victim->setAIState(aggro);
 							}
 							aggro->setAggroTarget(_action.actor);
+							aggro->setWasHit(true);
 						}
 					}
 				}

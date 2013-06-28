@@ -42,9 +42,8 @@ protected:
 	int _timesNotSeen, _coverCharge;
 	static std::vector<Position> _randomTileSearch;
 	static int _randomTileSearchAge;
-	bool _charge, _traceAI;
+	bool _charge, _traceAI, _wasHit;
 	BattleAction *_coverAction;
-	
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
@@ -92,6 +91,8 @@ public:
 	void meleeAttack(BattleAction *action);
 	/// select a fire method
 	void selectFireMethod(BattleAction *action);
+	void setWasHit(bool wasHit);
+	bool getWasHit();
 };
 
 }

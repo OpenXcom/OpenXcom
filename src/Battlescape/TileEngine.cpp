@@ -966,8 +966,9 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			distance(unit->getPosition(), (*i)->getPosition()) <= 20)
 		{
 			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
-				// can actually see the target Tile, or is aggro
-			if (((*i)->checkViewSector(unit->getPosition()) || aggro != 0) &&
+			bool gotHit = (aggro != 0 && aggro->getWasHit());
+				// can actually see the target Tile, or we got hit
+			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually see the unit
 				visible(*i, unit->getTile()) &&
 				// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
