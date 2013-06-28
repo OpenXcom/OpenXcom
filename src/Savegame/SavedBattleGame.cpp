@@ -1650,4 +1650,15 @@ void SavedBattleGame::resetTurnCounter()
 {
 	_turn = 1;
 }
+
+/**
+ * resets visibility of all tiles on the map.
+ */
+void SavedBattleGame::resetTiles()
+{
+	for (int i = 0; i != getMapSizeXYZ(); ++i)
+	{
+		_tiles[i]->setDiscovered(false, 2);
+	}
+}
 }

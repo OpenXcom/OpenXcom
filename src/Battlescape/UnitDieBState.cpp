@@ -54,11 +54,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	{
 		_unit->startFalling();
 
-		if (!_noSound)
-		{
-			playDeathSound();
-		}
-
 		while (_unit->getStatus() == STATUS_COLLAPSING)
 		{
 			_unit->keepFalling();
@@ -76,16 +71,16 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
-    parent->resetSituationForAI();
+    _parent->resetSituationForAI();
 
     if (_unit->getFaction() == FACTION_HOSTILE)
     {
-        std::vector<Node *> *nodes = parent->getSave()->getNodes();
+        std::vector<Node *> *nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
         for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
         {
-            if (parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), unit->getPosition()) < 4)
+            if (_parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
             {
                 (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
             }
@@ -103,8 +98,6 @@ UnitDieBState::~UnitDieBState()
 
 void UnitDieBState::init()
 {
-
-
 }
 
 /*
@@ -132,6 +125,11 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
+
+		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
+		{
+			playDeathSound();
+		}
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			_unit->instaKill();
@@ -171,7 +169,7 @@ void UnitDieBState::think()
 					std::wstringstream ss;
 					ss << _unit->getName(game->getLanguage()) << L'\n';
 					ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender());
-					game->pushState(new InfoboxState(game, ss.str()));
+					game->pushState(new InfoboxOKState(game, ss.str()));
 				}
 			}
 			else
@@ -182,21 +180,19 @@ void UnitDieBState::think()
 				game->pushState(new InfoboxOKState(game, ss.str()));
 			}
 		}
-	}
-
-	// if all units from either faction are killed - auto-end the mission.
-	if (Options::getBool("battleAutoEnd"))
-	{
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-		_parent->tallyUnits(liveAliens, liveSoldiers, false);
-
-		if (liveAliens == 0 || liveSoldiers == 0)
+		// if all units from either faction are killed - auto-end the mission.
+		if (Options::getBool("battleAutoEnd"))
 		{
-			_parent->statePushBack(new EndBattleBState(_parent, liveSoldiers, _parent->getSave()->getBattleState()));
+			int liveAliens = 0;
+			int liveSoldiers = 0;
+			_parent->tallyUnits(liveAliens, liveSoldiers, false);
+
+			if (liveAliens == 0 || liveSoldiers == 0)
+			{
+				_parent->statePushBack(new EndBattleBState(_parent, liveSoldiers, _parent->getSave()->getBattleState()));
+			}
 		}
 	}
-
 	_parent->getMap()->cacheUnit(_unit);
 }
 
