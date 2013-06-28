@@ -251,7 +251,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
 			Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
 			ufo->setMissionInfo(this, &assaultTrajectory);
-			std::pair<double, double> pos = regionRules.getRandomPoint(assaultTrajectory.getZone(0));
+			std::pair<double, double> pos;
+			if (trajectory.getAltitude(0) == "STR_GROUND")
+			{
+				pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
+			}
+			else
+			{
+				pos = regionRules.getRandomPoint(trajectory.getZone(0));
+			}
 			ufo->setAltitude(assaultTrajectory.getAltitude(0));
 			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 			ufo->setLongitude(pos.first);
@@ -275,7 +283,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 		ufo->setMissionInfo(this, &trajectory);
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
-		std::pair<double, double> pos = regionRules.getRandomPoint(trajectory.getZone(0));
+		std::pair<double, double> pos;
+		if (trajectory.getAltitude(0) == "STR_GROUND")
+		{
+			pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
+		}
+		else
+		{
+			pos = regionRules.getRandomPoint(trajectory.getZone(0));
+		}
 		ufo->setAltitude(trajectory.getAltitude(0));
 		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 		ufo->setLongitude(pos.first);
@@ -308,7 +324,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
-	std::pair<double, double> pos = regionRules.getRandomPoint(trajectory.getZone(0));
+	std::pair<double, double> pos;
+	if (trajectory.getAltitude(0) == "STR_GROUND")
+	{
+		pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
+	}
+	else
+	{
+		pos = regionRules.getRandomPoint(trajectory.getZone(0));
+	}
 	ufo->setAltitude(trajectory.getAltitude(0));
 	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 	ufo->setLongitude(pos.first);
