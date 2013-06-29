@@ -281,29 +281,33 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
 						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
 						{
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
-								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+							if (distanceSqr <= (MAX_VIEW_DISTANCE / 2)*(MAX_VIEW_DISTANCE / 2) || 
+								((visibleUnit->getFaction() == FACTION_HOSTILE && visibleUnit->getVisible()) ||
+								visibleUnit->getTurnsExposed()))
 							{
-								unit->addToVisibleUnits(visibleUnit);
-								unit->addToVisibleTiles(visibleUnit->getTile());
+								if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+									|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+								{
+									unit->addToVisibleUnits(visibleUnit);
+									unit->addToVisibleTiles(visibleUnit->getTile());
+									if (unit->getFaction() == FACTION_PLAYER)
+									{
+										visibleUnit->getTile()->setVisible(+1);
+									}
+								}
 								if (unit->getFaction() == FACTION_PLAYER)
 								{
-								//	visibleUnit->getTile()->setDiscovered(true, 2);
-									visibleUnit->getTile()->setVisible(+1);
+									visibleUnit->setVisible(true);
 								}
-							}
-							if (unit->getFaction() == FACTION_PLAYER)
-							{
-								visibleUnit->setVisible(true);
-							}
-							else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
-							{
-								visibleUnit->setTurnsExposed(unit->getIntelligence());
-								_save->updateExposedUnits();
+								else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
+								{
+									visibleUnit->setTurnsExposed(unit->getIntelligence());
+									_save->updateExposedUnits();
+								}
 							}
 						}
 
-						if (unit->getFaction() == FACTION_PLAYER)
+						if (distanceSqr <= (MAX_VIEW_DISTANCE / 2)*(MAX_VIEW_DISTANCE / 2) && unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
 							// large units have "4 pair of eyes"
@@ -560,9 +564,9 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
+	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	if (currentUnit->getFaction() == FACTION_PLAYER &&
-		distance(currentUnit->getPosition(), tile->getPosition()) > 18 &&
+		distance(currentUnit->getPosition(), tile->getPosition()) > 9 &&
 		tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
 		return false;
@@ -903,7 +907,7 @@ void TileEngine::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(position, (*i)->getPosition()) < 20 && (*i)->getFaction() == _save->getSide())
+		if (distance(position, (*i)->getPosition()) < 40 && (*i)->getFaction() == _save->getSide())
 		{
 			calculateFOV(*i);
 		}
@@ -963,18 +967,14 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
-			distance(unit->getPosition(), (*i)->getPosition()) <= 20)
+			distance(unit->getPosition(), (*i)->getPosition()) <= 40)
 		{
 			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually see the unit
-				visible(*i, unit->getTile()) &&
-				// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
-				((*i)->getFaction() != FACTION_PLAYER ||
-				distance(unit->getPosition(), (*i)->getPosition()) <= 18 ||
-				unit->getTile()->getShade() <= MAX_DARKNESS_TO_SEE_UNITS))
+				visible(*i, unit->getTile()))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -2399,8 +2399,8 @@ bool TileEngine::psiAttack(BattleAction *action)
 	double attackStrength = static_cast<double>(action->actor->getStats()->psiStrength) * action->actor->getStats()->psiSkill / 50;
 	double defenseStrength = static_cast<double>(victim->getStats()->psiStrength)
 		+ (victim->getStats()->psiSkill > 0) ? 10.0 + static_cast<double>(victim->getStats()->psiSkill) / 5 : 10.0;
-	int d = distance(action->actor->getPosition(), action->target);
-	attackStrength -= static_cast<double>(d)/2;
+	double d = static_cast<double>(distance(action->actor->getPosition(), action->target));
+	attackStrength -= d;
 	attackStrength += RNG::generate(0,55);
 
 	if (action->type == BA_MINDCONTROL)
