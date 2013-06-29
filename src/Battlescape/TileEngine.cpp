@@ -1188,7 +1188,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	applyGravity(tile);
 	calculateSunShading(); // roofs could have been destroyed
 	calculateTerrainLighting(); // fires could have been started
-	calculateFOV(center);
+	calculateFOV(center / Position(16,16,24));
 	return bu;
 }
 
