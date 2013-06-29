@@ -560,10 +560,8 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
-	if (currentUnit->getFaction() == FACTION_PLAYER &&
-		distance(currentUnit->getPosition(), tile->getPosition()) > 18 &&
-		tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+	// aliens can see in the dark, xcom can't see if there's not enough light.
+	if (currentUnit->getFaction() == FACTION_PLAYER && tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
 		return false;
 	}
@@ -970,11 +968,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually see the unit
-				visible(*i, unit->getTile()) &&
-				// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
-				((*i)->getFaction() != FACTION_PLAYER ||
-				distance(unit->getPosition(), (*i)->getPosition()) <= 18 ||
-				unit->getTile()->getShade() <= MAX_DARKNESS_TO_SEE_UNITS))
+				visible(*i, unit->getTile()))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
