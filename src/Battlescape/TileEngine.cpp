@@ -2682,7 +2682,10 @@ void TileEngine::recalculateFOV()
 {
 	for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 	{
-		calculateFOV(*bu);
+		if ((*bu)->getTile() != 0)
+		{
+			calculateFOV(*bu);
+		}
 	}
 }
 
