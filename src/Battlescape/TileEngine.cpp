@@ -1282,8 +1282,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				{
 					if (type == DT_HE)
 					{
-						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
-						dest->setExplosive(power_ / 2);
+						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units (the halving is handled elsewhere)
+						dest->setExplosive(power_);
 					}
 
 					ret = tilesAffected.insert(dest); // check if we had this tile already
@@ -1416,16 +1416,19 @@ bool TileEngine::detonate(Tile* tile)
 	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
 	if (explosive)
 	{
+		int remainingPower = explosive;
+		int flam = tile->getFlammability();
+		int fuel = tile->getFuel() + 1;
 		// explosions create smoke which only stays 1 or 2 turns
 		tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
 		for (int i = 0; i < 7; ++i)
 		{
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
-				int remainingPower = explosive;
+				remainingPower = explosive;
 				while (remainingPower >= 0 && tiles[i]->getMapData(parts[i]))
 				{
-					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
+					remainingPower -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
 					if (remainingPower >= 0)
 					{
 						int volume = 0;
@@ -1446,16 +1449,23 @@ bool TileEngine::detonate(Tile* tile)
 								tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
 							}
 						}
-						objective = objective || tiles[i]->destroy(parts[i]);
+						if (tiles[i]->destroy(parts[i]))
+						{
+							objective = true;
+						}
+						if (tiles[i]->getMapData(parts[i]))
+						{
+							flam = tiles[i]->getFlammability();
+							fuel = tiles[i]->getFuel() + 1;
+						}
 					}
 				}
+				if (2 * flam < remainingPower)
+				{
+					tile->setFire(fuel);
+					tile->setSmoke(std::max(1, std::min(15 - (flam / 10), 12)));
+				}
 			}
-		}
-
-		if (tile->getFlammability() < explosive)
-		{
-			tile->setFire(tile->getFuel() + 1);
-			tile->setSmoke(std::max(1, std::min(15 - (tile->getFlammability() / 10), 12)));
 		}
 	}
 
