@@ -32,7 +32,7 @@ namespace OpenXcom
 /**
  * Initializes a new pool with blank lists of names.
  */
-SoldierNamePool::SoldierNamePool() : _maleFirst(), _femaleFirst(), _maleLast(), _femaleLast()
+SoldierNamePool::SoldierNamePool() : _maleFirst(), _femaleFirst(), _maleLast(), _femaleLast(), _totalWeight(0)
 {
 }
 
@@ -90,7 +90,16 @@ void SoldierNamePool::load(const std::string &filename)
 	{
 		_femaleLast = _maleLast;
 	}
-
+	if (const YAML::Node *pName = doc.FindValue("lookWeights"))
+	{
+		for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
+		{
+			int a;
+			*i >> a;
+			_totalWeight += a;
+			_lookWeights.push_back(a);
+		}
+	}
 	fin.close();
 }
 
@@ -121,6 +130,36 @@ std::wstring SoldierNamePool::genName(SoldierGender *gender) const
 		name << " " << _femaleLast[last];
 	}
 	return name.str();
+}
+
+int SoldierNamePool::genLook(int numLooks)
+{
+	int look = 0;
+	const int minimumChance = 2;	// minimum chance of a look being selected if it isn't enumerated. This ensures that looks MUST be zeroed to not appear.
+
+	while (_lookWeights.size() < numLooks)
+	{
+		_lookWeights.push_back(minimumChance);
+		_totalWeight += minimumChance;
+	}
+	while (_lookWeights.size() > numLooks)
+	{
+		_totalWeight -= _lookWeights.back();
+		_lookWeights.pop_back();
+	}
+	
+	int random = RNG::generate(0, _totalWeight);
+	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
+	{
+		if (random <= *i)
+		{
+			return look;
+		}
+		random -= *i;
+		++look;
+	}
+
+	return RNG::generate(0, numLooks - 1);
 }
 
 }

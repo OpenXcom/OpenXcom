@@ -1,3 +1,8 @@
+lookWeights:
+  - 48
+  - 48
+  - 2
+  - 2
 maleFirst:
   - Aidan
   - Andrew
@@ -33,7 +38,7 @@ maleFirst:
   - Sean
   - Thomas
 femaleFirst:
-  - Áine
+  - ï¿½ine
   - Aisling
   - Aoife
   - Caoimhe
