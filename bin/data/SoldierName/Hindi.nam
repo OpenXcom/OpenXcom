@@ -1,4 +1,8 @@
----
+lookWeights:
+  - 1
+  - 1
+  - 80
+  - 18
 maleFirst:
   - Abhijay
   - Adil
