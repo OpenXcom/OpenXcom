@@ -549,14 +549,35 @@ void Inventory::mouseClick(Action *action, State *state)
 					x += _groundOffset;
 				}
 				BattleItem *item = _selUnit->getItem(slot, x, y);
-				// Put item in empty slot
-				if (item == 0 || item == _selItem)
+
+				bool canStack = slot->getType() == INV_GROUND && canBeStacked(item, _selItem);
+
+				// Put item in empty slot, or stack it, if possible.
+				if (item == 0 || item == _selItem || canStack)
 				{
 					if (!overlapItems(_selItem, slot, x, y) && slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
 						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
 							moveItem(_selItem, slot, x, y);
+							if (slot->getType() == INV_GROUND)
+							{
+								_stackLevel[x][y] += 1;
+							}
+							setSelectedItem(0);
+							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+						}
+						else
+						{
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						}
+					}
+					else if (canStack)
+					{
+						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						{
+							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
+							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
@@ -595,6 +616,32 @@ void Inventory::mouseClick(Action *action, State *state)
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+						}
+						else
+						{
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						}
+					}
+				}
+			}
+			else
+			{
+				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
+				x = (int)floor(action->getAbsoluteXMouse());
+				y = (int)floor(action->getAbsoluteYMouse());
+				slot = getSlotInPosition(&x, &y);
+				if (slot != 0 && slot->getType() == INV_GROUND)
+				{
+					x += _groundOffset;
+					BattleItem *item = _selUnit->getItem(slot, x, y);
+					if (canBeStacked(item, _selItem))
+					{
+						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						{
+							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
+							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+							setSelectedItem(0);
+							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
 						{
@@ -731,14 +778,7 @@ void Inventory::arrangeGround(bool alterOffset)
 						{
 							BattleItem *item = _selUnit->getItem(ground, x + xd, y + yd);
 							ok = item == 0;
-							if (item &&
-								(*i)->getRules() == item->getRules() &&
-								((!(*i)->getAmmoItem() && !item->getAmmoItem()) ||
-								((*i)->getAmmoItem() && item->getAmmoItem() &&
-								(*i)->getAmmoItem()->getRules() == item->getAmmoItem()->getRules() &&
-								(*i)->getAmmoItem()->getAmmoQuantity() == item->getAmmoItem()->getAmmoQuantity())) &&
-								(*i)->getExplodeTurn() == 0 && item->getExplodeTurn() == 0 &&
-								(*i)->getUnit() == 0)
+							if (canBeStacked(item, *i))
 							{
 								ok = true;
 							}
@@ -802,5 +842,30 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 		}
 	}
 	return placed;
+}
+
+/**
+ * check if two items can be stacked on one another
+ *
+ */
+bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
+{
+		//both items actually exist
+	return (itemA != 0 && itemB != 0 &&
+		//both items have the same ruleset
+		itemA->getRules() == itemB->getRules() &&
+		// either they both have no ammo
+		((!itemA->getAmmoItem() && !itemB->getAmmoItem()) ||
+		// or they both have ammo
+		(itemA->getAmmoItem() && itemB->getAmmoItem() &&
+		// and the same ammo type
+		itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules() &&
+		// and the same ammo quantity
+		itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity())) &&
+		// and neither is set to explode
+		itemA->getExplodeTurn() == 0 && itemB->getExplodeTurn() == 0 &&
+		// and neither is a corpse or unconscious unit
+		itemA->getUnit() == 0 && itemB->getUnit() == 0);
+
 }
 }

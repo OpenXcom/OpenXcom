@@ -90,6 +90,7 @@ public:
 	/// Arranges items on the ground.
 	void arrangeGround(bool alterOffset = true);
 	bool fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning);
+	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
 };
 
 }
