@@ -1575,6 +1575,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(3);
 	newUnit->setCache(0);
+	newUnit->setTimeUnits(0);
 	getSave()->getUnits()->push_back(newUnit);
 	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new PatrolBAIState(getSave(), newUnit, 0));
