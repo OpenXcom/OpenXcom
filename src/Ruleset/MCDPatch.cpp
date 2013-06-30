@@ -86,6 +86,12 @@ void MCDPatch::load(const YAML::Node &node)
 					(*pName) >> deathTile;
 					_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
 				}
+				if (const YAML::Node *pName = (*j).FindValue("terrainHeight"))
+				{
+					int terrainHeight;
+					(*pName) >> terrainHeight;
+					_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
+				}
 			}
 		}
 	}
@@ -124,6 +130,10 @@ void MCDPatch::modifyData(MapDataSet *dataSet) const
 	for (std::vector<std::pair<size_t, int> >::const_iterator i = _deathTiles.begin(); i != _deathTiles.end(); ++i)
 	{
 		dataSet->getObjects()->at(i->first)->setDieMCD(i->second);
+	}
+	for (std::vector<std::pair<size_t, int> >::const_iterator i = _terrainHeight.begin(); i != _terrainHeight.end(); ++i)
+	{
+		dataSet->getObjects()->at(i->first)->setTerrainLevel(i->second);
 	}
 }
 
