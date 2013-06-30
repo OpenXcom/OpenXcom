@@ -281,7 +281,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
 						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
 						{
-							if (distanceSqr <= (MAX_VIEW_DISTANCE / 2)*(MAX_VIEW_DISTANCE / 2) || 
+							if (distanceSqr <= (MAX_VIEW_DISTANCE)*(MAX_VIEW_DISTANCE) || 
 								((visibleUnit->getFaction() == FACTION_HOSTILE && visibleUnit->getVisible()) ||
 								visibleUnit->getTurnsExposed()))
 							{
@@ -307,7 +307,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 							}
 						}
 
-						if (distanceSqr <= (MAX_VIEW_DISTANCE / 2)*(MAX_VIEW_DISTANCE / 2) && unit->getFaction() == FACTION_PLAYER)
+						if (distanceSqr <= (MAX_VIEW_DISTANCE)*(MAX_VIEW_DISTANCE) && unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
 							// large units have "4 pair of eyes"
@@ -907,7 +907,7 @@ void TileEngine::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(position, (*i)->getPosition()) < 40 && (*i)->getFaction() == _save->getSide())
+		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE && (*i)->getFaction() == _save->getSide())
 		{
 			calculateFOV(*i);
 		}
@@ -967,7 +967,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
-			distance(unit->getPosition(), (*i)->getPosition()) <= 40)
+			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
 		{
 			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
