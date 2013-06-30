@@ -52,7 +52,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0),
-																_unitRules(0), _rankInt(-1), _hidingForTurn(false), _hitByFire(false)
+																_unitRules(0), _rankInt(-1), _hitByFire(false), _hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -119,7 +119,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0),
 																						_armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),
-																						_hidingForTurn(false), _hitByFire(false)
+																						_hitByFire(false), _hidingForTurn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
