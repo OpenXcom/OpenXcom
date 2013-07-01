@@ -116,6 +116,8 @@ TestState::TestState(Game *game) : State(game)
 	add(_text);
 	add(_list);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));

@@ -142,6 +142,8 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(
 			}
 		}
 	}
+
+	centerAllSurfaces();
 }
 /**
  *

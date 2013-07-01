@@ -47,7 +47,9 @@ namespace OpenXcom
 StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 {
 	// Create objects
-	_surface = new Surface(320, 200, 0, 0);
+	int dx = (Options::getInt("baseXResolution") - 320) / 2;
+	int dy = (Options::getInt("baseYResolution") - 200) / 2;
+	_surface = new Surface(320, 200, dx, dy);
 
 	// Set palette
 	SDL_Color bnw[3];

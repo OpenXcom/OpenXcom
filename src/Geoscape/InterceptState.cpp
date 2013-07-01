@@ -68,6 +68,8 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	add(_txtWeapons);
 	add(_lstCrafts);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));

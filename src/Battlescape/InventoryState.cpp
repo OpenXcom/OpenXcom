@@ -106,6 +106,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	add(_selAmmo);
 	add(_inv);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 

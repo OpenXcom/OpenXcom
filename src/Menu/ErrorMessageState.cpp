@@ -81,6 +81,8 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	add(_btnOk);
 	add(_txtMessage);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(color);
 	_window->setBackground(_game->getResourcePack()->getSurface(bg));

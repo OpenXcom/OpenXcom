@@ -87,6 +87,8 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 
 	add(_btnStart);
 
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 

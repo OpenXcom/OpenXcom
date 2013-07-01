@@ -70,6 +70,8 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	add(_txtCategory);
 	add(_lstManufacture);
 
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);

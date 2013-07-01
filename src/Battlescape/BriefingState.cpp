@@ -47,6 +47,7 @@ namespace OpenXcom
  */
 BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 {
+	_screen = false;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
@@ -93,6 +94,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 		add(_txtCraft);
 	}
 	add(_txtBriefing);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

@@ -29,7 +29,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Options.h"
-#include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Action.h"
 #include <algorithm>
@@ -59,6 +58,8 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	add(_btnDefault);
 	add(_lstOptions);
 	add(_txtDescription);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

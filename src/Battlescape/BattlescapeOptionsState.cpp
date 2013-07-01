@@ -39,8 +39,10 @@ namespace OpenXcom
  */
 BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 {
+	_screen = false;
+
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
+	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 16);
 
 	_txtScrollSpeed = new Text(130, 9, 16, 32);
@@ -178,6 +180,8 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	add(_btnOk);
 	add(_btnLoad);
 	add(_btnSave);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0));

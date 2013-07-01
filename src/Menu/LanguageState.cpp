@@ -46,6 +46,8 @@ LanguageState::LanguageState(Game *game) : State(game)
 	add(_window);
 	add(_lstLanguages);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

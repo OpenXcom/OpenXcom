@@ -69,6 +69,8 @@ DeleteGameState::DeleteGameState(Game *game, bool geo, const std::wstring &save,
 	add(_btnNo);
 	add(_txtMessage);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);

@@ -68,6 +68,8 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	add(_txtHwp);
 	add(_lstCrafts);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));

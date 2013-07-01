@@ -48,6 +48,8 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 	add(_btnOk);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(1)-1);
 	_window->setHighContrast(true);

@@ -154,6 +154,8 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_numLongRange);
 	add(_barLongRange);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	std::stringstream ss;
 	if (_containmentLimit)

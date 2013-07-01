@@ -63,6 +63,8 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 		_txtText[text]->setVisible(false);
 	}
 
+	centerAllSurfaces();
+
 	_timer->onTimer((StateHandler)&VictoryState::windowClick);
 	_timer->start();
 }

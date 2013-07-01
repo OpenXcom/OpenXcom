@@ -75,6 +75,8 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	add(_txtReady);
 	add(_txtBegin);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));

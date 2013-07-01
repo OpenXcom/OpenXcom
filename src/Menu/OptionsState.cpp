@@ -171,6 +171,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	add(_btnSoundVolume4);
 	add(_btnSoundVolume5);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

@@ -63,6 +63,8 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	add(_txtSpaceUsed);
 	add(_lstStores);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

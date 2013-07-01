@@ -71,6 +71,8 @@ MonthlyReportState::MonthlyReportState(Game *game, bool psi, Globe *globe) : Sta
 	add(_txtDesc);
 	add(_txtFailure);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

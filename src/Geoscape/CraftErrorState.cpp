@@ -54,6 +54,8 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	add(_btnOk5Secs);
 	add(_txtMessage);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));

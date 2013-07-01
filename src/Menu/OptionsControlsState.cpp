@@ -120,6 +120,8 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 	add(_txtTitle);
 	add(_lstControls);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));

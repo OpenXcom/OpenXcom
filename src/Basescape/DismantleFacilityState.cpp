@@ -62,6 +62,8 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	add(_txtTitle);
 	add(_txtFacility);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

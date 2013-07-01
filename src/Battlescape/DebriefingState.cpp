@@ -96,6 +96,8 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	add(_lstRecovery);
 	add(_lstTotal);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

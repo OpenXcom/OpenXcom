@@ -193,6 +193,8 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	add(_numUnderArmor);
 	add(_barUnderArmor);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
 

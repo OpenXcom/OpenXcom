@@ -65,6 +65,8 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	add(_txtArmor);
 	add(_lstSoldiers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));

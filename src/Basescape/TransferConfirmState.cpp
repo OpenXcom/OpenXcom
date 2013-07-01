@@ -59,6 +59,8 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	add(_txtCost);
 	add(_txtTotal);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

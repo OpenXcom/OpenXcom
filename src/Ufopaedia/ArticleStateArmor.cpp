@@ -107,6 +107,7 @@ namespace OpenXcom
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 
 		_lstInfo->draw();
+		centerAllSurfaces();
 	}
 
 	ArticleStateArmor::~ArticleStateArmor()

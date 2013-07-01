@@ -419,8 +419,8 @@ void Inventory::blit(Surface *surface)
  */
 void Inventory::mouseOver(Action *action, State *state)
 {
-	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2);
-	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2);
+	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - _dx);
+	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - _dy);
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -438,8 +438,8 @@ void Inventory::mouseClick(Action *action, State *state)
 		// Pickup item
 		if (_selItem == 0)
 		{
-			int x = (int)floor(action->getAbsoluteXMouse()),
-				y = (int)floor(action->getAbsoluteYMouse());
+			int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
+				y = (int)floor(action->getAbsoluteYMouse()) - _dy;
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
@@ -627,8 +627,8 @@ void Inventory::mouseClick(Action *action, State *state)
 			else
 			{
 				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
-				x = (int)floor(action->getAbsoluteXMouse());
-				y = (int)floor(action->getAbsoluteYMouse());
+				x = (int)floor(action->getAbsoluteXMouse())-_dx;
+				y = (int)floor(action->getAbsoluteYMouse())-_dy;
 				slot = getSlotInPosition(&x, &y);
 				if (slot != 0 && slot->getType() == INV_GROUND)
 				{
@@ -658,8 +658,8 @@ void Inventory::mouseClick(Action *action, State *state)
 		{
 			if (!_tu)
 			{
-				int x = (int)floor(action->getAbsoluteXMouse()),
-					y = (int)floor(action->getAbsoluteYMouse());
+				int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
+					y = (int)floor(action->getAbsoluteYMouse()) - _dy;
 				RuleInventory *slot = getSlotInPosition(&x, &y);
 				if (slot != 0)
 				{

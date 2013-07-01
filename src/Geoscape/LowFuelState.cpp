@@ -58,6 +58,8 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	add(_txtTitle);
 	add(_txtMessage);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
