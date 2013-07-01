@@ -234,4 +234,37 @@ LocalizedText State::tr(const std::string &id, unsigned n) const
 	return _game->getLanguage()->getString(id, n);
 }
 
+void State::centerAllSurfaces()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		TextList *tl = dynamic_cast<TextList*>(*i);
+		if (tl)
+		{
+			tl->setX((*i)->getX() + Screen::getDX());
+			tl->setY((*i)->getY() + Screen::getDY());
+		}
+		else
+		{
+			(*i)->setX((*i)->getX() + Screen::getDX());
+			(*i)->setY((*i)->getY() + Screen::getDY());
+		}
+	}
+}
+
+void State::lowerAllSurfaces()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		TextList *tl = dynamic_cast<TextList*>(*i);
+		if (tl)
+		{
+			tl->setY((*i)->getY() + Screen::getDY() / 2);
+		}
+		else
+		{
+			(*i)->setY((*i)->getY() + Screen::getDY() / 2);
+		}
+	}
+}
 }
