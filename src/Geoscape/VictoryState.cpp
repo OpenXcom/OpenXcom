@@ -72,7 +72,7 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
  */
 VictoryState::~VictoryState()
 {
-
+	delete _timer;
 }
 
 void VictoryState::init()

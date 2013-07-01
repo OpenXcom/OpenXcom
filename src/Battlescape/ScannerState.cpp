@@ -61,6 +61,11 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 	update();
 }
 
+ScannerState::~ScannerState()
+{
+	delete _timerAnimate;
+}
+
 /**
  * Closes the window on right-click.
  * @param action Pointer to an action.

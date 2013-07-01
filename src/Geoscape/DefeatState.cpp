@@ -70,7 +70,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
  */
 DefeatState::~DefeatState()
 {
-
+	delete _timer;
 }
 
 void DefeatState::init()
