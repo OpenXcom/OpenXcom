@@ -281,19 +281,14 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
 						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
 						{
-							if (distanceSqr <= (MAX_VIEW_DISTANCE)*(MAX_VIEW_DISTANCE) || 
-								((visibleUnit->getFaction() == FACTION_HOSTILE && visibleUnit->getVisible()) ||
-								visibleUnit->getTurnsExposed()))
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
-								if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
-									|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+								unit->addToVisibleUnits(visibleUnit);
+								unit->addToVisibleTiles(visibleUnit->getTile());
+								if (unit->getFaction() == FACTION_PLAYER)
 								{
-									unit->addToVisibleUnits(visibleUnit);
-									unit->addToVisibleTiles(visibleUnit->getTile());
-									if (unit->getFaction() == FACTION_PLAYER)
-									{
-										visibleUnit->getTile()->setVisible(+1);
-									}
+									visibleUnit->getTile()->setVisible(+1);
 								}
 								if (unit->getFaction() == FACTION_PLAYER)
 								{
@@ -307,7 +302,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 							}
 						}
 
-						if (distanceSqr <= (MAX_VIEW_DISTANCE)*(MAX_VIEW_DISTANCE) && unit->getFaction() == FACTION_PLAYER)
+						if (unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
 							// large units have "4 pair of eyes"
