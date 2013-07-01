@@ -29,7 +29,6 @@
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
 #include "../Engine/Surface.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"

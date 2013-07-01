@@ -142,8 +142,6 @@ public:
 	void setExplosive(int power, bool force = false);
 	/// Get explosive power of this tile.
 	int getExplosive() const;
-	/// Apply the explosive power to the tile parts.
-	bool detonate();
 	/// Animated the tile parts.
 	void animate();
 	/// Get object sprites.

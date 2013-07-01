@@ -31,6 +31,7 @@ class Game;
 class WarningMessage;
 class BattleItem;
 class BattleUnit;
+class NumberText;
 
 /**
  * Interactive view of an inventory.
@@ -46,6 +47,8 @@ private:
 	BattleItem *_selItem;
 	bool _tu;
 	int _groundOffset;
+	std::map<int, std::map<int, int> > _stackLevel;
+	NumberText *_stackNumber;
 
 	/// Move item to specified slot.
 	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
@@ -85,8 +88,9 @@ public:
 	/// Unloads the selected weapon
 	bool unload();
 	/// Arranges items on the ground.
-	void arrangeGround();
+	void arrangeGround(bool alterOffset = true);
 	bool fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning);
+	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
 };
 
 }

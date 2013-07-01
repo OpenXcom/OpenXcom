@@ -9267,6 +9267,8 @@ MCDPatches:
         bigWall: 6
       - MCDIndex: 48
         bigWall: 2
+      - MCDIndex: 56
+        terrainHeight: -7
   - type: LIGHTNIN
     data:
       - MCDIndex: 0

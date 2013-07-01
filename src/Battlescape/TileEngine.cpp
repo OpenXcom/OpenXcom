@@ -281,29 +281,33 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
 						if (visibleUnit && !visibleUnit->isOut() && visible(unit, _save->getTile(test)))
 						{
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
-								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+							if (distanceSqr <= (MAX_VIEW_DISTANCE)*(MAX_VIEW_DISTANCE) || 
+								((visibleUnit->getFaction() == FACTION_HOSTILE && visibleUnit->getVisible()) ||
+								visibleUnit->getTurnsExposed()))
 							{
-								unit->addToVisibleUnits(visibleUnit);
-								unit->addToVisibleTiles(visibleUnit->getTile());
+								if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+									|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+								{
+									unit->addToVisibleUnits(visibleUnit);
+									unit->addToVisibleTiles(visibleUnit->getTile());
+									if (unit->getFaction() == FACTION_PLAYER)
+									{
+										visibleUnit->getTile()->setVisible(+1);
+									}
+								}
 								if (unit->getFaction() == FACTION_PLAYER)
 								{
-								//	visibleUnit->getTile()->setDiscovered(true, 2);
-									visibleUnit->getTile()->setVisible(+1);
+									visibleUnit->setVisible(true);
 								}
-							}
-							if (unit->getFaction() == FACTION_PLAYER)
-							{
-								visibleUnit->setVisible(true);
-							}
-							else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
-							{
-								visibleUnit->setTurnsExposed(unit->getIntelligence());
-								_save->updateExposedUnits();
+								else if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
+								{
+									visibleUnit->setTurnsExposed(unit->getIntelligence());
+									_save->updateExposedUnits();
+								}
 							}
 						}
 
-						if (unit->getFaction() == FACTION_PLAYER)
+						if (distanceSqr <= (MAX_VIEW_DISTANCE)*(MAX_VIEW_DISTANCE) && unit->getFaction() == FACTION_PLAYER)
 						{
 							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
 							// large units have "4 pair of eyes"
@@ -560,9 +564,9 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
+	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	if (currentUnit->getFaction() == FACTION_PLAYER &&
-		distance(currentUnit->getPosition(), tile->getPosition()) > 18 &&
+		distance(currentUnit->getPosition(), tile->getPosition()) > 9 &&
 		tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
 		return false;
@@ -907,7 +911,7 @@ void TileEngine::calculateFOV(const Position &position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (distance(position, (*i)->getPosition()) < 20 && (*i)->getFaction() == _save->getSide())
+		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE && (*i)->getFaction() == _save->getSide())
 		{
 			calculateFOV(*i);
 		}
@@ -967,18 +971,14 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// not a friend
 			(*i)->getFaction() != _save->getSide() &&
 			// closer than 20 tiles
-			distance(unit->getPosition(), (*i)->getPosition()) <= 20)
+			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
 		{
 			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually see the unit
-				visible(*i, unit->getTile()) &&
-				// aliens can see in the dark, xcom can see at a distance of 18 or less, 2 further if there's enough light.
-				((*i)->getFaction() != FACTION_PLAYER ||
-				distance(unit->getPosition(), (*i)->getPosition()) <= 18 ||
-				unit->getTile()->getShade() <= MAX_DARKNESS_TO_SEE_UNITS))
+				visible(*i, unit->getTile()))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1192,7 +1192,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	applyGravity(tile);
 	calculateSunShading(); // roofs could have been destroyed
 	calculateTerrainLighting(); // fires could have been started
-	calculateFOV(center);
+	calculateFOV(center / Position(16,16,24));
 	return bu;
 }
 
@@ -1286,8 +1286,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				{
 					if (type == DT_HE)
 					{
-						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units
-						dest->setExplosive(power_ / 2);
+						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units (the halving is handled elsewhere)
+						dest->setExplosive(power_);
 					}
 
 					ret = tilesAffected.insert(dest); // check if we had this tile already
@@ -1398,7 +1398,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 
 	calculateSunShading(); // roofs could have been destroyed
 	calculateTerrainLighting(); // fires could have been started
-	calculateFOV(center);
+	calculateFOV(center / Position(16,16,24));
 }
 
 /**
@@ -1420,16 +1420,19 @@ bool TileEngine::detonate(Tile* tile)
 	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
 	if (explosive)
 	{
+		int remainingPower = explosive;
+		int flam = tile->getFlammability();
+		int fuel = tile->getFuel() + 1;
 		// explosions create smoke which only stays 1 or 2 turns
 		tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
 		for (int i = 0; i < 7; ++i)
 		{
 			if(tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
-				int remainingPower = explosive;
+				remainingPower = explosive;
 				while (remainingPower >= 0 && tiles[i]->getMapData(parts[i]))
 				{
-					remainingPower -= tiles[i]->getMapData(parts[i])->getArmor();
+					remainingPower -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
 					if (remainingPower >= 0)
 					{
 						int volume = 0;
@@ -1450,16 +1453,23 @@ bool TileEngine::detonate(Tile* tile)
 								tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
 							}
 						}
-						objective = objective || tiles[i]->destroy(parts[i]);
+						if (tiles[i]->destroy(parts[i]))
+						{
+							objective = true;
+						}
+						if (tiles[i]->getMapData(parts[i]))
+						{
+							flam = tiles[i]->getFlammability();
+							fuel = tiles[i]->getFuel() + 1;
+						}
 					}
 				}
+				if (2 * flam < remainingPower)
+				{
+					tile->setFire(fuel);
+					tile->setSmoke(std::max(1, std::min(15 - (flam / 10), 12)));
+				}
 			}
-		}
-
-		if (tile->getFlammability() < explosive)
-		{
-			tile->setFire(tile->getFuel() + 1);
-			tile->setSmoke(std::max(1, std::min(15 - (tile->getFlammability() / 10), 12)));
 		}
 	}
 
@@ -2393,8 +2403,8 @@ bool TileEngine::psiAttack(BattleAction *action)
 	double attackStrength = static_cast<double>(action->actor->getStats()->psiStrength) * action->actor->getStats()->psiSkill / 50;
 	double defenseStrength = static_cast<double>(victim->getStats()->psiStrength)
 		+ (victim->getStats()->psiSkill > 0) ? 10.0 + static_cast<double>(victim->getStats()->psiSkill) / 5 : 10.0;
-	int d = distance(action->actor->getPosition(), action->target);
-	attackStrength -= static_cast<double>(d)/2;
+	double d = static_cast<double>(distance(action->actor->getPosition(), action->target));
+	attackStrength -= d;
 	attackStrength += RNG::generate(0,55);
 
 	if (action->type == BA_MINDCONTROL)
@@ -2676,7 +2686,10 @@ void TileEngine::recalculateFOV()
 {
 	for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 	{
-		calculateFOV(*bu);
+		if ((*bu)->getTile() != 0)
+		{
+			calculateFOV(*bu);
+		}
 	}
 }
 
