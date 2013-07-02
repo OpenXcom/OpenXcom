@@ -451,6 +451,8 @@ void StartState::think()
 				audioSequence = new AudioSequence(_game->getResourcePack());
 				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
+				Flc::flc.dx = (Options::getInt("baseXResolution") - 320) / 2;
+				Flc::flc.dy = (Options::getInt("baseYResolution") - 200) / 2;
 				Flc::flc.loop = 0; // just the one time, please
 				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
