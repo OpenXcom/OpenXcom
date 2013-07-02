@@ -2384,7 +2384,7 @@ STR_NOT_ENOUGH_SPACE
 STR_WEAPONSELFDESTRUCTION
 Захоплення зброї як в XCOM 2012
 STR_WEAPONSELFDESTRUCTION_DESC
-Збря прибульців буде самознищуватись, якщо її власник буде вбитий.
+Зброя прибульців буде самознищуватись, якщо її власник буде вбитий.
 STR_ARROWS
 СТРІЛКИ
 STR_FULL
