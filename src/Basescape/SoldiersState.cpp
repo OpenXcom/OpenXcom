@@ -68,6 +68,8 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	add(_txtCraft);
 	add(_lstSoldiers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));

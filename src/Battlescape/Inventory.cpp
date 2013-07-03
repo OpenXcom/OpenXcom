@@ -90,7 +90,6 @@ void Inventory::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_selection->setPalette(colors, firstcolor, ncolors);
 	_warning->setPalette(colors, firstcolor, ncolors);
 	_stackNumber->setPalette(getPalette());
-	_stackNumber->setColor(Palette::blockOffset(0));
 }
 
 /**
@@ -228,6 +227,8 @@ void Inventory::drawItems()
 			}
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
+		Surface *stackLayer = new Surface(getWidth(), getHeight(), getX(), getY());
+		stackLayer->setPalette(getPalette());
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
@@ -248,9 +249,41 @@ void Inventory::drawItems()
 				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-5);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
-				_stackNumber->blit(_items);
+
+				int originalX = _stackNumber->getX();
+				int originalY = _stackNumber->getY();
+				// give it a border
+				// this is the "darker" shade that goes in the corners.
+				_stackNumber->setColor(Palette::blockOffset(4)+13);
+				for (int x = -1; x <= 1; x += 2)
+				{
+					for (int y = -1; y <= 1; y += 2)
+					{
+						_stackNumber->setX(originalX + x);
+						_stackNumber->setY(originalY + y);
+						_stackNumber->blit(stackLayer);
+					}
+				}
+				// this is the "slightly darker" version that goes in four cardinals.
+				_stackNumber->setColor(Palette::blockOffset(4)+10);
+				for (int z = -1; z <= 1; z += 2)
+				{
+					_stackNumber->setX(originalX + z);
+					_stackNumber->setY(originalY);
+					_stackNumber->blit(stackLayer);
+					_stackNumber->setX(originalX);
+					_stackNumber->setY(originalY + z);
+					_stackNumber->blit(stackLayer);
+				}
+				// and finally the number itself
+				_stackNumber->setColor(Palette::blockOffset(4)+2);
+				_stackNumber->setX(originalX);
+				_stackNumber->setY(originalY);
+				_stackNumber->blit(stackLayer);
 			}
 		}
+		stackLayer->blit(_items);
+		delete stackLayer;
 	}
 }
 
@@ -419,8 +452,8 @@ void Inventory::blit(Surface *surface)
  */
 void Inventory::mouseOver(Action *action, State *state)
 {
-	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2);
-	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2);
+	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - _dx);
+	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - _dy);
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -438,8 +471,8 @@ void Inventory::mouseClick(Action *action, State *state)
 		// Pickup item
 		if (_selItem == 0)
 		{
-			int x = (int)floor(action->getAbsoluteXMouse()),
-				y = (int)floor(action->getAbsoluteYMouse());
+			int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
+				y = (int)floor(action->getAbsoluteYMouse()) - _dy;
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
@@ -627,8 +660,8 @@ void Inventory::mouseClick(Action *action, State *state)
 			else
 			{
 				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
-				x = (int)floor(action->getAbsoluteXMouse());
-				y = (int)floor(action->getAbsoluteYMouse());
+				x = (int)floor(action->getAbsoluteXMouse())-_dx;
+				y = (int)floor(action->getAbsoluteYMouse())-_dy;
 				slot = getSlotInPosition(&x, &y);
 				if (slot != 0 && slot->getType() == INV_GROUND)
 				{
@@ -658,8 +691,8 @@ void Inventory::mouseClick(Action *action, State *state)
 		{
 			if (!_tu)
 			{
-				int x = (int)floor(action->getAbsoluteXMouse()),
-					y = (int)floor(action->getAbsoluteYMouse());
+				int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
+					y = (int)floor(action->getAbsoluteYMouse()) - _dy;
 				RuleInventory *slot = getSlotInPosition(&x, &y);
 				if (slot != 0)
 				{

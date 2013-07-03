@@ -44,6 +44,7 @@ namespace OpenXcom
  */
 SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 {
+	_screen = false;
 	// Create objects
 	WindowPopup p = POPUP_BOTH;
 	if (!geo)
@@ -73,6 +74,8 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 	add(_txtDate);
 	add(_lstSaves);
 	add(_txtStatus);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	if (_geo)

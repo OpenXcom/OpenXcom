@@ -2376,16 +2376,16 @@ STR_ALLOWPSIONICCAPTURE
 STR_ALLOWPSIONICCAPTURE_DESC
 Псі-контроль над всіма прибульцями, що залишились, означає перемогу і вони рахуються як захоплені живими.
 STR_ANYTIMEPSITRAINING
-Psionic training at any time
+Псі-тренування в будь-який час
 STR_ANYTIMEPSITRAINING_DESC
-You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+Ви можете в будь-який час призначати солдатів до (або забирати з) псі-тренування. Пам'ятайте - початкове тренування потребує від 30 до 60 днів.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+Не достатньо вільного місця!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Захоплення зброї як в XCOM 2012
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Збря прибульців буде самознищуватись, якщо її власник буде вбитий.
 STR_ARROWS
-ARROWS
+СТРІЛКИ
 STR_FULL
-FULL
+ПОВНИЙ

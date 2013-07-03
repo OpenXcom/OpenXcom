@@ -49,6 +49,8 @@ NoteState::NoteState(Game *game) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+	
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

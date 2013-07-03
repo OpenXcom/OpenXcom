@@ -55,6 +55,8 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	add(_txtTargetted);
 	add(_txtFollowers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

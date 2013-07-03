@@ -46,6 +46,8 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	add(_window);
 	add(_text);
 
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(0));
 	_window->setHighContrast(true);
 

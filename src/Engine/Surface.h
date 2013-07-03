@@ -42,6 +42,7 @@ protected:
 	bool _visible, _hidden, _redraw;
 	SDL_Color *_originalColors;
 	void *_misalignedPixelBuffer, *_alignedBuffer;
+	int _dx, _dy;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
@@ -129,6 +130,8 @@ public:
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
 	/// Invalidate the surface: force it to be redrawn
 	void invalidate();
+	void setDX(int dx);
+	void setDY(int dy);
 };
 
 }

@@ -49,6 +49,8 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	add(_window);
 	add(_btnOk);
 	add(_txtMessage);
+
+	centerAllSurfaces();
 	
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
@@ -64,9 +66,11 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
+
 	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE") << _base->getName();
 	_txtMessage->setText(ss.str());
+
 	std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin();
 	for (; k != _game->getSavedGame()->getRegions()->end(); ++k)
 	{
@@ -75,6 +79,7 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 			break;
 		}
 	}
+
 	AlienMission* am = _game->getSavedGame()->getAlienMission((*k)->getRules()->getType(), "STR_ALIEN_RETALIATION");
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
@@ -88,6 +93,7 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 			++i;
 		}
 	}
+
 	for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
 		i != _game->getSavedGame()->getAlienMissions().end(); ++i)
 	{

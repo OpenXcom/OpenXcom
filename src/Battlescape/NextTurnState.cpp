@@ -55,6 +55,8 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	add(_txtSide);
 	add(_txtMessage);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(0));
 	_window->setHighContrast(true);

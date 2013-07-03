@@ -63,6 +63,8 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	add(_txtArea);
 	add(_lstBases);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

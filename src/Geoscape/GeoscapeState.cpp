@@ -151,7 +151,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtYear = new Text(59, 8, screenWidth-61, screenHeight/2+1);
 	if (_showFundsOnGeoscape)
 	{
-		_txtFunds = new Text(59, 8, 259, 73);
+		_txtFunds = new Text(59, 8, screenWidth-61, screenHeight/2-27);
 		_txtHour->setY(_txtHour->getY()+6);
 		_txtHourSep->setY(_txtHourSep->getY()+6);
 		_txtMin->setY(_txtMin->getY()+6);

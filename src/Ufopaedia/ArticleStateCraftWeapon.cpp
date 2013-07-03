@@ -98,6 +98,8 @@ namespace OpenXcom
 		ss << weapon->getStandardReload() << _game->getLanguage()->getString("STR_S").c_str();
 		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_RE_LOAD_TIME").c_str(), ss.str().c_str());
 		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
+
+		centerAllSurfaces();
 	}
 
 	ArticleStateCraftWeapon::~ArticleStateCraftWeapon()

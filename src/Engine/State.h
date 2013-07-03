@@ -76,7 +76,8 @@ public:
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
-	
+	void centerAllSurfaces();
+	void lowerAllSurfaces();
 	friend class Timer;
 };
 

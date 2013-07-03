@@ -55,6 +55,8 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
 	add(_view);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));

@@ -182,7 +182,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 		{
 			i.second() >> _clipSize;
 		}
-		else if (key == "accuracyMeee")
+		else if (key == "accuracyMelee")
 		{
 			i.second() >> _accuracyMelee;
 		}

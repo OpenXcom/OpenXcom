@@ -85,6 +85,8 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	add(_txtTimeLeft);
 	add(_lstManufacture);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));

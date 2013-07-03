@@ -103,7 +103,8 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		_number[i]->setVerticalAlign(ALIGN_MIDDLE);
 	}
 
-
+	centerAllSurfaces();
+	lowerAllSurfaces();
 }
 
 /**

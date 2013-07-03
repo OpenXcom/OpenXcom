@@ -124,6 +124,9 @@ void ManufactureInfoState::buildUi()
 	add(_btnUnitDown);
 	add(_btnOk);
 	add(_btnStop);
+
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);

@@ -65,6 +65,8 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	add(_txtTitle);
 	add(_lstResearch);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));

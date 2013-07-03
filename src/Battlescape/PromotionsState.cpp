@@ -59,6 +59,8 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	add(_txtBase);
 	add(_lstSoldiers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

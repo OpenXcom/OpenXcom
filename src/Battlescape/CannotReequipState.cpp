@@ -60,6 +60,8 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 	add(_txtCraft);
 	add(_lstItems);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

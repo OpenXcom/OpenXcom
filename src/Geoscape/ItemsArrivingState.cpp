@@ -71,6 +71,8 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	add(_txtDestination);
 	add(_lstTransfers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

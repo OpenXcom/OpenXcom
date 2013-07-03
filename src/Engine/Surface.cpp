@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
+#include "Screen.h"
 #include "ShaderDraw.h"
 #include <fstream>
 #include <SDL_gfxPrimitives.h>
@@ -85,6 +86,8 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 	_crop.h = 0;
 	_crop.x = 0;
 	_crop.y = 0;
+	_dx = Screen::getDX();
+	_dy = Screen::getDY();
 }
 
 /**
@@ -896,4 +899,15 @@ void Surface::invalidate()
 {
 	_redraw = true;
 }
+
+void Surface::setDX(int dx)
+{
+	_dx = dx;
+}
+
+void Surface::setDY(int dy)
+{
+	_dy = dy;
+}
+
 }

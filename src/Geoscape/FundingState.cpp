@@ -40,8 +40,10 @@ namespace OpenXcom
  */
 FundingState::FundingState(Game *game) : State(game)
 {
+	_screen = false;
+
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
+	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(50, 12, 135, 180);
 	_txtTitle = new Text(320, 16, 0, 8);
 	_txtCountry = new Text(100, 9, 32, 30);
@@ -59,6 +61,8 @@ FundingState::FundingState(Game *game) : State(game)
 	add(_txtFunding);
 	add(_txtChange);
 	add(_lstCountries);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

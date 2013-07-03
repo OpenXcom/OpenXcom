@@ -50,6 +50,8 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 	add(_btnOk);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));

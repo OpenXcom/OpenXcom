@@ -66,6 +66,8 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 	add(_txtTitle);
 	add(_lstFacilities);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));

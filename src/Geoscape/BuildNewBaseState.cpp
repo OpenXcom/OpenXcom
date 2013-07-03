@@ -26,6 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Screen.h"
 #include "../Interface/Window.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
@@ -48,27 +49,30 @@ namespace OpenXcom
  */
 BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
 {
+	int dx = Screen::getDX();
+	int dy = Screen::getDY();
 	_screen = false;
 
 	_oldshowradar = _globe->getShowRadar();
 	if (!_oldshowradar)
 		_globe->toggleRadarLines();
 	// Create objects
-	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
-	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
-	_btnRotateUp = new InteractiveSurface(13, 12, 271, 162);
-	_btnRotateDown = new InteractiveSurface(13, 12, 271, 187);
-	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
-	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
+	_btnRotateLeft = new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
+	_btnRotateRight = new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
+	_btnRotateUp = new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
+	_btnRotateDown = new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
+	_btnZoomIn = new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
+	_btnZoomOut = new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
 
-	_window = new Window(this, 256, 28, 0, 0);
-	_btnCancel = new TextButton(54, 12, 186, 8);
-	_txtTitle = new Text(180, 16, 8, 6);
+	_window = new Window(this, 256, 28, 0 + dx, 0);
+	_window->setDY(0);
+	_btnCancel = new TextButton(54, 12, 186 + dx, 8);
+	_txtTitle = new Text(180, 16, 8 + dx, 6);
 
 	_hoverTimer = new Timer(50);
 	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
-
+	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 

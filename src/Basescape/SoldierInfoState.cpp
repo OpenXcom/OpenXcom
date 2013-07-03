@@ -159,6 +159,8 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_numPsiSkill);
 	add(_barPsiSkill);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 

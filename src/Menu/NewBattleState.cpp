@@ -98,6 +98,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	add(_txtItemLevel);
 	add(_btnItemLevel);
 
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

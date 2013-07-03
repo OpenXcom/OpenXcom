@@ -63,6 +63,8 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	add(_btnOk);
 	add(_btnCancel);
 
+	centerAllSurfaces();
+
 	std::string nextStage = "";
 	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{

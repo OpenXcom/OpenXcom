@@ -57,6 +57,8 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	add(_txtTitle);
 	add(_lstPossibilities);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));

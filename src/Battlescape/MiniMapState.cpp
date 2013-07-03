@@ -20,6 +20,7 @@
 #include <iostream>
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
@@ -57,6 +58,20 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	add(btnLvlDwn);
 	add(btnOk);
 	add(_txtLevel);
+
+	centerAllSurfaces();
+
+	if (Screen::getDY() > 50)
+	{
+		_screen = false;
+		SDL_Rect current;
+		current.w = 223;
+		current.h = 151;
+		current.x = 46;
+		current.y = 14;
+		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+	}
+
 	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
 	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
 	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
