@@ -163,7 +163,7 @@ public:
 	/// Get flammability.
 	int getFlammability() const;
 	/// Get turns to burn
-	const int getFuel() const;
+	int getFuel() const;
 	/// attempt to set the tile on fire, sets overlaps to one if successful.
 	void ignite(int power);
 	/// Get fire and smoke animation offset.
@@ -189,13 +189,13 @@ public:
 	/// set the direction (used for path previewing)
 	void setPreview(int dir);
 	/// retrieve the direction stored by the pathfinding.
-	const int getPreview() const;
+	int getPreview() const;
 	/// set the number to be displayed for pathfinding preview.
 	void setTUMarker(int tu);
 	/// get the number to be displayed for pathfinding preview.
-	const int getTUMarker() const;
+	int getTUMarker() const;
 	/// how many times has this tile been overlapped with smoke/fire (runtime only)
-	const int getOverlaps() const;
+	int getOverlaps() const;
 	/// increment the overlap value on this tile.
 	void addOverlap();
 };

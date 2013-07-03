@@ -28,6 +28,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Engine/Game.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Battlescape/TileEngine.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattlescapeState.h"
@@ -604,7 +605,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
  * @param missileTarget Target for a missile.
  * @return true/false
  */
-bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget)
+bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile UNUSED_PARAM, const int direction, BattleUnit *missileTarget)
 {
 
 	// check if the difference in height between start and destination is not too high
