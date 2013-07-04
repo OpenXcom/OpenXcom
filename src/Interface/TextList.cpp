@@ -914,7 +914,7 @@ int TextList::getScroll()
 	return _scroll;
 }
 
-void TextList::setX(int x)
+void TextList::setAllX(int x)
 {
 	_x = x;
 	_up->setX(getX() + getWidth() + _scrollPos);
@@ -922,7 +922,7 @@ void TextList::setX(int x)
 	_selector->setX(x);
 }
 
-void TextList::setY(int y)
+void TextList::setAllY(int y)
 {
 	_y = y;
 	_up->setY(getY() + 1);
