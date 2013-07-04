@@ -55,7 +55,7 @@ private:
 	unsigned int _sel;
 	int _total, _pQty, _cQty, _aQty;
 	float _iQty;
-    bool _hasSci, _hasEng;
+    int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
