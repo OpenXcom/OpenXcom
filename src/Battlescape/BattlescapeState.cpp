@@ -1406,15 +1406,7 @@ void BattlescapeState::SaveVoxelView()
 	std::stringstream ss;
 	std::vector<unsigned char> image;
 	int test;
-	Position originVoxel = Position(viewPos.x*16+8,
-		viewPos.y*16+8,
-		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getFloatHeight() + bu->getHeight()-1) );
-	if (bu->getArmor()->getSize() > 1)
-	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 1; //topmost voxel
-	}
+	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
 
 	Position targetVoxel,hitPos;
 	double dist;

@@ -539,6 +539,10 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 		originVoxel.y += 8;
 		originVoxel.z += 1; //topmost voxel
 	}
+	if (!_save->getTile(currentUnit->getPosition() + Position(0,0,1))->hasNoFloor(0) && originVoxel.z >= 24)
+	{
+		originVoxel.z = 23;
+	}
 
 	return originVoxel;
 }
@@ -2315,7 +2319,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		BattleUnit *unit = tile->getUnit();
 		// sometimes there is unit on the tile below, but sticks up to this tile with his head,
 		// in this case we couldn't have unit standing at current tile.
-		if (unit == 0) 
+		if (unit == 0 && tile->hasNoFloor(0))
 		{
 			tile = _save->getTile(Position(voxel.x/16, voxel.y/16, (voxel.z/24)-1)); //below
 			if (tile) unit = tile->getUnit();
