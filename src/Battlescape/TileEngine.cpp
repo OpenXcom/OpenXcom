@@ -532,14 +532,14 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
 	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
-	
+	Tile *tileAbove = _save->getTile(currentUnit->getPosition() + Position(0,0,1));
 	if (currentUnit->getArmor()->getSize() > 1)
 	{
 		originVoxel.x += 8;
 		originVoxel.y += 8;
 		originVoxel.z += 1; //topmost voxel
 	}
-	if (!_save->getTile(currentUnit->getPosition() + Position(0,0,1))->hasNoFloor(0) && originVoxel.z >= 24)
+	if (originVoxel.z >= 24 && (!tileAbove || !tileAbove->hasNoFloor(0)))
 	{
 		originVoxel.z = 23;
 	}

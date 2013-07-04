@@ -106,7 +106,8 @@ int Projectile::calculateTrajectory(double accuracy)
 			direction = bu->getTurretDirection();
 		originVoxel.x += dirXshift[direction+offset]*bu->getArmor()->getSize();
 		originVoxel.y += dirYshift[direction+offset]*bu->getArmor()->getSize();
-		if (!_save->getTile(_origin + Position(0,0,1))->hasNoFloor(0) && originVoxel.z >= 24)
+		Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
+		if (originVoxel.z >= 24 && (!tileAbove || !tileAbove->hasNoFloor(0)))
 		{
 			originVoxel.z = 20;
 		}
