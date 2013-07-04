@@ -539,9 +539,12 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 		originVoxel.y += 8;
 		originVoxel.z += 1; //topmost voxel
 	}
-	if (originVoxel.z >= 24 && (!tileAbove || !tileAbove->hasNoFloor(0)))
+	if (originVoxel.z >= (currentUnit->getPosition().z + 1)*24 && (!tileAbove || !tileAbove->hasNoFloor(0)))
 	{
-		originVoxel.z = 23;
+		while (originVoxel.z >= (currentUnit->getPosition().z + 1)*24)
+		{
+			originVoxel.z--;
+		}
 	}
 
 	return originVoxel;
