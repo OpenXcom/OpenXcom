@@ -649,6 +649,10 @@ void Inventory::mouseClick(Action *action, State *state)
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+							if (item->getSlot()->getType() == INV_GROUND)
+							{
+								arrangeGround(false);
+							}
 						}
 						else
 						{
