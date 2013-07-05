@@ -270,7 +270,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distanceSqr = x*x + y*y;
+				const int distanceSqr = x*x + y*y;
 				test.z = z;
 				if (distanceSqr <= MAX_VIEW_DISTANCE*MAX_VIEW_DISTANCE)
 				{
@@ -1146,9 +1146,12 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 0 - 200%
 		int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+		const int sz = bu->getArmor()->getSize() * 8;
+		const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz,bu->getFloatHeight() - tile->getTerrainLevel());
+		const Position relative = center - target;
 		if (bu)
 		{
-			adjustedDamage = bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
+			adjustedDamage = bu->damage(relative, rndPower, type);
 		}
 		else
 		{
@@ -1160,7 +1163,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				if (buBelow)
 				{
 					bu = buBelow;
-					adjustedDamage = bu->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
+					adjustedDamage = bu->damage(relative, rndPower, type);
 				}
 			}
 		}
@@ -1357,7 +1360,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
 								if (resistance > 0.0)
 								{
-									dest->getUnit()->damage(Position(8, 8, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
 									int burnTime = RNG::generate(0, int(5 * resistance));
 									if (dest->getUnit()->getFire() < burnTime)
 									{
