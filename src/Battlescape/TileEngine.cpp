@@ -1146,14 +1146,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 0 - 200%
 		int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
-		const int sz = bu->getArmor()->getSize() * 8;
-		const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz,bu->getFloatHeight() - tile->getTerrainLevel());
-		const Position relative = center - target;
-		if (bu)
-		{
-			adjustedDamage = bu->damage(relative, rndPower, type);
-		}
-		else
+		if (!bu)
 		{
 			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
 			Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
@@ -1163,14 +1156,20 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				if (buBelow)
 				{
 					bu = buBelow;
-					adjustedDamage = bu->damage(relative, rndPower, type);
 				}
 			}
 		}
-
-		if (bu && bu->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER && type != DT_NONE)
+		if (bu)
 		{
-			unit->addFiringExp();
+			const int sz = bu->getArmor()->getSize() * 8;
+			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz,bu->getHeight() + bu->getFloatHeight() - tile->getTerrainLevel());
+			const Position relative = center - target;
+			adjustedDamage = bu->damage(relative, rndPower, type);
+
+			if (bu && bu->getOriginalFaction() == FACTION_HOSTILE && unit->getOriginalFaction() == FACTION_PLAYER && type != DT_NONE)
+			{
+				unit->addFiringExp();
+			}
 		}
 	}
 	if (bu)
