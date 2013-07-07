@@ -249,39 +249,27 @@ void Inventory::drawItems()
 				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-5);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
-
-				int originalX = _stackNumber->getX();
-				int originalY = _stackNumber->getY();
-				// give it a border
-				// this is the "darker" shade that goes in the corners.
-				_stackNumber->setColor(Palette::blockOffset(4)+13);
-				for (int x = -1; x <= 1; x += 2)
-				{
-					for (int y = -1; y <= 1; y += 2)
-					{
-						_stackNumber->setX(originalX + x);
-						_stackNumber->setY(originalY + y);
-						_stackNumber->blit(stackLayer);
-					}
-				}
-				// this is the "slightly darker" version that goes in four cardinals.
-				_stackNumber->setColor(Palette::blockOffset(4)+10);
-				for (int z = -1; z <= 1; z += 2)
-				{
-					_stackNumber->setX(originalX + z);
-					_stackNumber->setY(originalY);
-					_stackNumber->blit(stackLayer);
-					_stackNumber->setX(originalX);
-					_stackNumber->setY(originalY + z);
-					_stackNumber->blit(stackLayer);
-				}
-				// and finally the number itself
 				_stackNumber->setColor(Palette::blockOffset(4)+2);
-				_stackNumber->setX(originalX);
-				_stackNumber->setY(originalY);
 				_stackNumber->blit(stackLayer);
 			}
 		}
+
+		// give it a border
+		// this is the "darker" shade that goes in the corners.
+		for (int x = -1; x <= 1; x += 2)
+		{
+			for (int y = -1; y <= 1; y += 2)
+			{
+				stackLayer->blitNShade(_items, x, y, 11);
+			}
+		}
+		// this is the "slightly darker" version that goes in four cardinals.
+		for (int z = -1; z <= 1; z += 2)
+		{
+			stackLayer->blitNShade(_items, z, 0, 8);
+			stackLayer->blitNShade(_items, 0, z, 8);
+		}
+		// and finally the number itself
 		stackLayer->blit(_items);
 		delete stackLayer;
 	}
