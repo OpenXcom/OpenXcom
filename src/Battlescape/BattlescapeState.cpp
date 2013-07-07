@@ -1240,21 +1240,18 @@ inline void BattlescapeState::handle(Action *action)
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
-					if (_save->getDebugMode())
-					{
-						SaveVoxelMap();
-					}
-				}
-				// f10 - voxel view dump
-				else if (action->getDetails()->key.keysym.sym == SDLK_F10)
-				{
-					SaveVoxelView();
+					SaveVoxelMap();
 				}
 				// f9 - ai 
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
 				{
 					SaveAIMap();
 				}
+			}
+			// voxel view dump
+			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
+			{
+				SaveVoxelView();
 			}
 		}
 	}

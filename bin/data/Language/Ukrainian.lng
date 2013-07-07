@@ -2391,3 +2391,5 @@ STR_ARROWS
 СТРІЛКИ
 STR_FULL
 ПОВНИЙ
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot
