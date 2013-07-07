@@ -227,7 +227,7 @@ void Inventory::drawItems()
 			}
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
-		Surface *stackLayer = new Surface(getWidth(), getHeight(), getX(), getY());
+		Surface *stackLayer = new Surface(getWidth(), getHeight(), 0, 0);
 		stackLayer->setPalette(getPalette());
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
