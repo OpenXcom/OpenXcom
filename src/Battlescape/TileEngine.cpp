@@ -270,7 +270,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distanceSqr = x*x + y*y;
+				const int distanceSqr = x*x + y*y;
 				test.z = z;
 				if (distanceSqr <= MAX_VIEW_DISTANCE*MAX_VIEW_DISTANCE)
 				{
@@ -532,12 +532,19 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
 	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; //one voxel lower (eye level)
-	
+	Tile *tileAbove = _save->getTile(currentUnit->getPosition() + Position(0,0,1));
 	if (currentUnit->getArmor()->getSize() > 1)
 	{
 		originVoxel.x += 8;
 		originVoxel.y += 8;
 		originVoxel.z += 1; //topmost voxel
+	}
+	if (originVoxel.z >= (currentUnit->getPosition().z + 1)*24 && (!tileAbove || !tileAbove->hasNoFloor(0)))
+	{
+		while (originVoxel.z >= (currentUnit->getPosition().z + 1)*24)
+		{
+			originVoxel.z--;
+		}
 	}
 
 	return originVoxel;
@@ -1131,23 +1138,19 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
 	BattleUnit *bu = tile->getUnit();
 	int adjustedDamage = 0;
-	int part = voxelCheck(center, unit);
+	const int part = voxelCheck(center, unit);
 	if (part >= 0 && part <= 3)
 	{
 		// power 25% to 75%
-		int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
 		if (tile->damage(part, rndPower))
 			_save->setObjectiveDestroyed(true);
 	}
 	else if (part == 4)
 	{
 		// power 0 - 200%
-		int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
-		if (bu)
-		{
-			adjustedDamage = bu->damage(Position(center.x%16, center.y%16, center.z%24 + tile->getTerrainLevel()), rndPower, type);
-		}
-		else
+		const int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+		if (!bu)
 		{
 			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
 			Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
@@ -1157,30 +1160,35 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				if (buBelow)
 				{
 					bu = buBelow;
-					adjustedDamage = bu->damage(Position(center.x%16, center.y%16, center.z%24 + below->getTerrainLevel() + 24), rndPower, type);
 				}
 			}
 		}
-
-		if (bu && bu->getFaction() == FACTION_HOSTILE && unit->getFaction() == FACTION_PLAYER && type != DT_NONE)
+		if (bu)
 		{
-			unit->addFiringExp();
-		}
-	}
-	if (bu)
-	{
+			const int sz = bu->getArmor()->getSize() * 8;
+			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz,bu->getHeight() + bu->getFloatHeight() - tile->getTerrainLevel());
+			const Position relative = center - target;
 
-		int bravery = (110 - bu->getStats()->bravery) / 10;
-		int modifier = bu->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
-		int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
-		bu->moraleChange(-morale_loss);
+			adjustedDamage = bu->damage(relative, rndPower, type);
 
-		if (bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
-		{
-			if (type != DT_STUN && type != DT_HE)
+			const int bravery = (110 - bu->getStats()->bravery) / 10;
+			const int modifier = bu->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
+			const int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
+
+			bu->moraleChange(-morale_loss);
+
+			if (bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH && !bu->isOut() && (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
 			{
-				Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
-				_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
+				if (type != DT_STUN && type != DT_HE)
+				{
+					Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
+					_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));
+				}
+			}
+
+			if (bu->getOriginalFaction() == FACTION_HOSTILE && unit->getOriginalFaction() == FACTION_PLAYER && type != DT_NONE)
+			{
+				unit->addFiringExp();
 			}
 		}
 	}
@@ -1354,7 +1362,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
 								if (resistance > 0.0)
 								{
-									dest->getUnit()->damage(Position(8, 8, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
 									int burnTime = RNG::generate(0, int(5 * resistance));
 									if (dest->getUnit()->getFire() < burnTime)
 									{
@@ -2319,7 +2327,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		BattleUnit *unit = tile->getUnit();
 		// sometimes there is unit on the tile below, but sticks up to this tile with his head,
 		// in this case we couldn't have unit standing at current tile.
-		if (unit == 0) 
+		if (unit == 0 && tile->hasNoFloor(0))
 		{
 			tile = _save->getTile(Position(voxel.x/16, voxel.y/16, (voxel.z/24)-1)); //below
 			if (tile) unit = tile->getUnit();

@@ -2269,6 +2269,8 @@ STR_CENTER_ON_ENEMY_8
 Vycentrovat na nepřítele 8
 STR_CENTER_ON_ENEMY_9
 Vycentrovat na nepřítele 9
+STR_CENTER_ON_ENEMY_10
+Vycentrovat na nepřítele 10
 STR_ENEMY_WEAPON_LEVEL
 Uroveň cizáckých zbraní
 STR_GROUNDED
@@ -2391,3 +2393,5 @@ STR_ARROWS
 ARROWS
 STR_FULL
 FULL
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot

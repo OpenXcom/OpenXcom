@@ -2267,6 +2267,8 @@ STR_CENTER_ON_ENEMY_8
 Centrare pe Inamicul 8
 STR_CENTER_ON_ENEMY_9
 Centrare pe Inamicul 9
+STR_CENTER_ON_ENEMY_10
+Centrare pe Inamicul 10
 STR_ENEMY_WEAPON_LEVEL
 Nivel Armament Inamic
 STR_GROUNDED
@@ -2389,3 +2391,5 @@ STR_ARROWS
 SĂGEȚI
 STR_FULL
 COMPLETĂ
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot

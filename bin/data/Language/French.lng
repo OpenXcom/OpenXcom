@@ -2263,6 +2263,8 @@ STR_CENTER_ON_ENEMY_8
 Centrer sur l'ennemi #8
 STR_CENTER_ON_ENEMY_9
 Centrer sur l'ennemi #9
+STR_CENTER_ON_ENEMY_10
+Centrer sur l'ennemi #10
 STR_ENEMY_WEAPON_LEVEL
 Niveau d'arme ennemi
 STR_GROUNDED
@@ -2385,3 +2387,5 @@ STR_ARROWS
 ARROWS
 STR_FULL
 FULL
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot

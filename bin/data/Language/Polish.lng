@@ -2273,6 +2273,8 @@ STR_CENTER_ON_ENEMY_8
 Centruj na przeciwniku nr 8
 STR_CENTER_ON_ENEMY_9
 Centruj na przeciwniku nr 9
+STR_CENTER_ON_ENEMY_10
+Centruj na przeciwniku nr 10
 STR_ENEMY_WEAPON_LEVEL
 Uzbrojenie Wroga
 STR_GROUNDED
@@ -2395,3 +2397,5 @@ STR_ARROWS
 STRZAŁKI
 STR_FULL
 WSZYSTKO
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot

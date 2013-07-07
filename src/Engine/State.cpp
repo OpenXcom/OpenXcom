@@ -241,8 +241,8 @@ void State::centerAllSurfaces()
 		TextList *tl = dynamic_cast<TextList*>(*i);
 		if (tl)
 		{
-			tl->setX((*i)->getX() + Screen::getDX());
-			tl->setY((*i)->getY() + Screen::getDY());
+			tl->setAllX((*i)->getX() + Screen::getDX());
+			tl->setAllY((*i)->getY() + Screen::getDY());
 		}
 		else
 		{
@@ -259,7 +259,7 @@ void State::lowerAllSurfaces()
 		TextList *tl = dynamic_cast<TextList*>(*i);
 		if (tl)
 		{
-			tl->setY((*i)->getY() + Screen::getDY() / 2);
+			tl->setAllY((*i)->getY() + Screen::getDY() / 2);
 		}
 		else
 		{

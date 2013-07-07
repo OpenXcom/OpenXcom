@@ -2267,6 +2267,8 @@ STR_CENTER_ON_ENEMY_8
 Центрувати на ворога 8
 STR_CENTER_ON_ENEMY_9
 Центрувати на ворога 9
+STR_CENTER_ON_ENEMY_10
+Центрувати на ворога 10
 STR_ENEMY_WEAPON_LEVEL
 Рівень зброї ворог
 STR_GROUNDED
@@ -2384,8 +2386,10 @@ STR_NOT_ENOUGH_SPACE
 STR_WEAPONSELFDESTRUCTION
 Захоплення зброї як в XCOM 2012
 STR_WEAPONSELFDESTRUCTION_DESC
-Збря прибульців буде самознищуватись, якщо її власник буде вбитий.
+Зброя прибульців буде самознищуватись, якщо її власник буде вбитий.
 STR_ARROWS
 СТРІЛКИ
 STR_FULL
 ПОВНИЙ
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot

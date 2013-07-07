@@ -97,9 +97,21 @@ int Projectile::calculateTrajectory(double accuracy)
 
 		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 		originVoxel.z -= 4;
+		Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
 		if (originVoxel.z >= (_origin.z + 1)*24)
 		{
-			_origin.z++;
+			if (tileAbove && tileAbove->hasNoFloor(0))
+			{
+				_origin.z++;
+			}
+			else
+			{
+				while (originVoxel.z >= (_origin.z + 1)*24)
+				{
+					originVoxel.z--;
+				}
+				originVoxel.z -= 4;
+			}
 		}
 		direction = bu->getDirection();
 		if (bu->getTurretType() != -1)
@@ -242,13 +254,25 @@ bool Projectile::calculateThrow(double accuracy)
 	originVoxel = Position(_origin.x*16 + 8, _origin.y*16 + 8, _origin.z*24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+	Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
 	if(!bu)
 		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
 	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 	originVoxel.z -= 3;
 	if (originVoxel.z >= (_origin.z + 1)*24)
 	{
-		_origin.z++;
+		if (!tileAbove || !tileAbove->hasNoFloor(0))
+		{
+			while (originVoxel.z > (_origin.z + 1)*24)
+			{
+				originVoxel.z--;
+			}
+			originVoxel.z -=4;
+		}
+		else
+		{
+			_origin.z++;
+		}
 	}
 
 
@@ -259,7 +283,7 @@ bool Projectile::calculateThrow(double accuracy)
 	if (_action.type != BA_THROW)
 	{
 		BattleUnit *tu = _save->getTile(_action.target)->getUnit();
-		if(!tu && _action.target.z > 0)
+		if(!tu && _action.target.z > 0 && _save->getTile(_action.target)->hasNoFloor(0))
 			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z-1))->getUnit();
 		if (tu)
 		{
