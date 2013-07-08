@@ -30,9 +30,9 @@ Sekcja wyjawiła prostą budowę ciała z podskórnymi organami trawiennymi. Mó
 STR_SNAKEMAN_UFOPEDIA
 Ta rasa rozwinęła się w nadzwyczaj nieprzyjaznym środowisku. Jest niezwykle wytrzymała i może przetrwać w skrajnie zmieniających się temperaturach. Osobniki przemieszczają się za pomocą olbrzymiej wężopodobnej 'stopy', która chroni wszystkie istotne organy wewnętrzne. Powodem ich przybycia jest zwykłe drapieżnictwo. Wydaje się, że są pod kontrolą innych inteligentnych istot, które kierują ich militarnymi działaniami na Ziemi.
 STR_SNAKEMAN_AUTOPSY
-Sekcja-Wężownik
+Sekcja-Snakeman
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
-Skóra jest bardzo twarda i wytrzymała na ciepło. Układ sercowo-naczyniowy jest częścią układu mięśniowego, które razem tworzą 'układ hydrauliczny' poruszający częściami ciała. Jedynym prawdziwym mięśniem jest serce. Układ rozrodczy wydaje się bardzo wydajny. Wężowniki są obojnakami. Każdy z nich może jednocześnie przenosić do 50 jaj wewnątrz swojego ciała. Ta rasa powinna być tępiona, bo jest poważnym zagrożeniem dla ziemskich gatunków.
+Skóra jest bardzo twarda i wytrzymała na ciepło. Układ sercowo-naczyniowy jest częścią układu mięśniowego, które razem tworzą 'układ hydrauliczny' poruszający częściami ciała. Jedynym prawdziwym mięśniem jest serce. Układ rozrodczy wydaje się bardzo wydajny. Snakemani są obojnakami. Każdy z nich może jednocześnie przenosić do 50 jaj wewnątrz swojego ciała. Ta rasa powinna być tępiona, bo jest poważnym zagrożeniem dla ziemskich gatunków.
 STR_ETHEREAL_UFOPEDIA
 Ta istota ma niesamowitą moc umysłową, która umożliwia jej komunikację telepatyczną oraz telekinezę. Prawdopodobnie małe możliwości fizyczne tej istoty są wspomagane przez moc umysłu. Nie rozumiemy, jak działają te telekinetyczne zdolności, ponieważ zdają się przeczyć prawom fizyki, które znamy. W walce w każdej sytuacji Etereale są bardzo niebezpieczne, ale tylko dopóki mogą liczyć na siłę swojego umysłu. Rzadko zjawiają się na Ziemi, gdyż wydaje się, że liczą na inne rasy, które wykonują ich rozkazy.
 STR_ETHEREAL_AUTOPSY
@@ -58,21 +58,21 @@ Sekcja-Silakoid
 STR_SILACOID_AUTOPSY_UFOPEDIA
 Wnętrze tych istot jest bardzo gorące, a ciepło wydaje się podstawowym czynnikiem trawiennym. Ich unikalny system mięśniowy jest niesamowicie silny i szybki. Ich skałopodobna skóra nie jest wrażliwa na ogień czy amunicję zapalającą.
 STR_CHRYSSALID_UFOPEDIA
-Krabowate szczypce tych istot są potężną bronią w bezpośrednim kontakcie. Dobra przemiana materii oraz siła tych stworzeń sprawiają, że są one szybkie i sprawne. Zamiast zabijać swoją ofiarę, składają jajo do wnętrza jej ciała oraz wprowadzają jad, który zamienia ją w zombi - żywego trupa. Wkrótce po złożeniu jaja nowy Chrysalid rozrywa od wewnątrz swoją ofiarę. Chrysalidy współpracują z rasą Wężowników.
+Krabowate szczypce tych istot są potężną bronią w bezpośrednim kontakcie. Dobra przemiana materii oraz siła tych stworzeń sprawiają, że są one szybkie i sprawne. Zamiast zabijać swoją ofiarę, składają jajo do wnętrza jej ciała oraz wprowadzają jad, który zamienia ją w zombi - żywego trupa. Wkrótce po złożeniu jaja nowy Chrysalid rozrywa od wewnątrz swoją ofiarę. Chrysalidy współpracują z rasą Snakemanów.
 STR_CHRYSSALID_AUTOPSY
 Sekcja-Chrysalid
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 Egzoszkielet tych istot jest bardzo twardy, ale kruchy, przez co zadziwiająco podatny na uszkodzenia z amunicji eksplodującej. Mózg jest dobrze rozwinięty, a rozwój komórek jest bardzo szybki. Stworzenia te przenoszą około 20 jaj, które znoszą do wnętrza innych organizmów. Istoty te są bardzo efektywną bronią terrorystyczną.
 STR_FLOATER_UFOPEDIA
-Lewitony są przede wszystkim żołnierzami i terrorystami. Z natury są zabójczymi bestiami wspomaganymi cybernetyką oraz dodatkowo genetycznie poprawionymi, by lepiej walczyć. Dolna część ciała i większość organów wewnętrznych zostały chirurgicznie usunięte, a na ich miejsce został wstawiony system podtrzymywania życia. System ten zawiera jednostkę antygrawitacyjną, która pozwala tym stworzeniom, chociaż niestabilnie, lewitować w powietrzu.
+Floaterzy są przede wszystkim żołnierzami i terrorystami. Z natury są zabójczymi bestiami wspomaganymi cybernetyką oraz dodatkowo genetycznie poprawionymi, by lepiej walczyć. Dolna część ciała i większość organów wewnętrznych zostały chirurgicznie usunięte, a na ich miejsce został wstawiony system podtrzymywania życia. System ten zawiera jednostkę antygrawitacyjną, która pozwala tym stworzeniom, chociaż niestabilnie, lewitować w powietrzu.
 STR_FLOATER_AUTOPSY
-Sekcja-Lewiton
+Sekcja-Floater
 STR_FLOATER_AUTOPSY_UFOPEDIA
 Ta istota została drastycznie przerobiona chirurgicznie. Urządzenie, które zdaje się tworzyć tułów, jest systemem podtrzymywania życia. System ten przejął funkcje usuniętych serca, płuc i układu trawiennego. Umożliwia to tym istotom przetrwanie w ekstremalnie nieprzyjaznym środowisku. Mózg jest mniejszy niż nasz, za to narządy zmysłów są dobrze rozwinięte.
 STR_REAPER_UFOPEDIA
-Ten stwór ma potężne szczęki i ogromny apetyt. Posiada też liczne implanty w mózgu, które są używane do kontrolowania jego aktywności. Prymitywne instynkty tych zabójczych stworzeń są mało użyteczne, chyba że chodzi o terroryzowanie i niszczenie. Kosiarze zwykle zrzeszają się z Lewitonami.
+Ten stwór ma potężne szczęki i ogromny apetyt. Posiada też liczne implanty w mózgu, które są używane do kontrolowania jego aktywności. Prymitywne instynkty tych zabójczych stworzeń są mało użyteczne, chyba że chodzi o terroryzowanie i niszczenie. Reapery zwykle zrzeszają się z Floaterami.
 STR_REAPER_AUTOPSY
-Sekcja-Kosiarz
+Sekcja-Reaper
 STR_REAPER_AUTOPSY_UFOPEDIA
 Kosiarze posiadają dwa mózgi i dwa serca, które pozwalają im funkcjonować, nawet gdy są ciężko ranne. Jednak ich futrzana skóra jest łatwopalna, więc są podatne na broń zapalającą.
 STR_SECTOPOD_UFOPEDIA
@@ -876,13 +876,13 @@ Obcy
 STR_SECTOID
 Sektoid
 STR_SNAKEMAN
-Wężownik
+Snakeman
 STR_ETHEREAL
 Etereal
 STR_MUTON
 Muton
 STR_FLOATER
-Lewiton
+Floater
 STR_CELATID
 Celatyd
 STR_SILACOID
@@ -892,7 +892,7 @@ Chrysalid
 STR_ZOMBIE
 Zombi
 STR_REAPER
-Kosiarz
+Reaper
 STR_SECTOPOD
 Sektopod
 STR_CYBERDISC
@@ -912,17 +912,17 @@ STR_LIVE_SOLDIER
 STR_LIVE_TERRORIST
  Terrorysta
 STR_FLOATER_SOLDIER
-Lewiton Żołnierz
+Floater Żołnierz
 STR_FLOATER_NAVIGATOR
-Lewiton Nawigator
+Floater Nawigator
 STR_FLOATER_MEDIC
-Lewiton Medyk
+Floater Medyk
 STR_FLOATER_ENGINEER
-Lewiton Inżynier
+Floater Inżynier
 STR_FLOATER_LEADER
-Lewiton Lider
+Floater Lider
 STR_FLOATER_COMMANDER
-Lewiton Komandor
+Floater Komandor
 STR_SECTOID_SOLDIER
 Sektoid Żołnierz
 STR_SECTOID_NAVIGATOR
@@ -936,15 +936,15 @@ Sektoid Lider
 STR_SECTOID_COMMANDER
 Sektoid Komandor
 STR_SNAKEMAN_SOLDIER
-Wężownik Żołnierz
+Snakeman Żołnierz
 STR_SNAKEMAN_NAVIGATOR
-Wężownik Nawigator
+Snakeman Nawigator
 STR_SNAKEMAN_ENGINEER
-Wężownik Inżynier
+Snakeman Inżynier
 STR_SNAKEMAN_LEADER
-Wężownik Lider
+Snakeman Lider
 STR_SNAKEMAN_COMMANDER
-Wężownik Komandor
+Snakeman Komandor
 STR_MUTON_SOLDIER
 Muton Żołnierz
 STR_MUTON_NAVIGATOR
@@ -960,7 +960,7 @@ Etereal Komandor
 STR_CYBERDISC_TERRORIST
 Cyberdysk Terrorysta
 STR_REAPER_TERRORIST
-Kosiarz Terrorysta
+Reaper Terrorysta
 STR_CHRYSSALID_TERRORIST
 Chrysalid Terrorysta
 STR_CELATID_TERRORIST
@@ -1120,15 +1120,15 @@ Prędkość maksymalna
 STR_HYPER_WAVE_DECODER_UC
 DEKODER HIPERFAL
 STR_SKYRANGER
-TRANSPORTER
+SKYRANGER
 STR_LIGHTNING
-BŁYSKAWICA
+LIGHNTNING
 STR_AVENGER
 MŚCICIEL
 STR_INTERCEPTOR
-MYŚLIWIEC
+INTERCEPTOR
 STR_FIRESTORM
-NAWAŁNICA
+FIRESTORM
 STR_UFO
 UFO
 STR_STINGRAY
@@ -1738,13 +1738,13 @@ Próbnik myśli
 STR_SECTOID_CORPSE
 Ciało Sektoida
 STR_SNAKEMAN_CORPSE
-Ciało Wężownika
+Ciało Snakemana
 STR_ETHEREAL_CORPSE
 Ciało Etereala
 STR_MUTON_CORPSE
 Ciało Mutona
 STR_FLOATER_CORPSE
-Ciało Lewitona
+Ciało Floatera
 STR_CELATID_CORPSE
 Ciało Celatyda
 STR_SILACOID_CORPSE
@@ -1752,7 +1752,7 @@ Ciało Silakoida
 STR_CHRYSSALID_CORPSE
 Ciało Chrysalida
 STR_REAPER_CORPSE
-Ciało Kosiarza
+Ciało Repeara
 STR_SECTOPOD_CORPSE
 Części Sektopoda
 STR_CYBERDISC_CORPSE
