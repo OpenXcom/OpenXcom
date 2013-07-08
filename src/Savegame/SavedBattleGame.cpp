@@ -1125,15 +1125,10 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				&& (!scout || n != fromNode)	// scouts push forward
 				&& n->getPosition().x > 0 && n->getPosition().y > 0)
 			{
-				getPathfinding()->calculate(unit, n->getPosition());
-				if (getPathfinding()->getStartDirection() != -1)
-				{
-					if (!preferred 
-						|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-						|| preferred->getFlags() < n->getFlags()) preferred = n;
-					compliantNodes.push_back(n);
-				}
-				getPathfinding()->abortPath();
+				if (!preferred 
+					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+					|| preferred->getFlags() < n->getFlags()) preferred = n;
+				compliantNodes.push_back(n);
 			}
 	}
 
@@ -1649,5 +1644,16 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 void SavedBattleGame::resetTurnCounter()
 {
 	_turn = 1;
+}
+
+/**
+ * resets visibility of all tiles on the map.
+ */
+void SavedBattleGame::resetTiles()
+{
+	for (int i = 0; i != getMapSizeXYZ(); ++i)
+	{
+		_tiles[i]->setDiscovered(false, 2);
+	}
 }
 }

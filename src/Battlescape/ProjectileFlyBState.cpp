@@ -309,7 +309,10 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
-			_unit->abortTurn();
+			if (!_action.actor->isOut())
+			{
+				_unit->abortTurn();
+			}
 			_parent->popState();
 		}
 	}
@@ -343,7 +346,7 @@ void ProjectileFlyBState::think()
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
 				// launch the next projectile in the waypoint cascade
-				_parent->statePushBack(new ProjectileFlyBState(_parent, _action, _origin));
+				_parent->statePushNext(new ProjectileFlyBState(_parent, _action, _origin));
 			}
 			else
 			{
@@ -383,6 +386,7 @@ void ProjectileFlyBState::think()
 								victim->setAIState(aggro);
 							}
 							aggro->setAggroTarget(_action.actor);
+							aggro->setWasHit(true);
 						}
 					}
 				}

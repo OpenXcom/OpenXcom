@@ -129,6 +129,7 @@ namespace OpenXcom
 			ss8 << item->getPower();
 			_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 		}
+		centerAllSurfaces();
 	}
 
 	ArticleStateVehicle::~ArticleStateVehicle()

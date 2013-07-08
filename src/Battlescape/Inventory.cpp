@@ -23,6 +23,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Game.h"
 #include "../Interface/Text.h"
+#include "../Interface/NumberText.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -56,6 +57,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y) : Interact
 	_items = new Surface(width, height, x, y);
 	_selection = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, x, y);
 	_warning = new WarningMessage(224, 24, 48, 176);
+	_stackNumber = new NumberText(15, 15, 0, 0);
 
 	_warning->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_warning->setColor(Palette::blockOffset(2));
@@ -71,6 +73,7 @@ Inventory::~Inventory()
 	delete _items;
 	delete _selection;
 	delete _warning;
+	delete _stackNumber;
 }
 
 /**
@@ -86,6 +89,7 @@ void Inventory::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_items->setPalette(colors, firstcolor, ncolors);
 	_selection->setPalette(colors, firstcolor, ncolors);
 	_warning->setPalette(colors, firstcolor, ncolors);
+	_stackNumber->setPalette(getPalette());
 }
 
 /**
@@ -223,6 +227,8 @@ void Inventory::drawItems()
 			}
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
+		Surface *stackLayer = new Surface(getWidth(), getHeight(), 0, 0);
+		stackLayer->setPalette(getPalette());
 		// Ground items
 		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
@@ -233,7 +239,39 @@ void Inventory::drawItems()
 			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
 			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
+			{
+				_stackNumber->setX(((*i)->getSlot()->getX() + (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset) * RuleInventory::SLOT_W)-3);
+				if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 9)
+				{
+					_stackNumber->setX(_stackNumber->getX()-4);
+				}
+				_stackNumber->setY(((*i)->getSlot()->getY() + ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H)-5);
+				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
+				_stackNumber->draw();
+				_stackNumber->setColor(Palette::blockOffset(4)+2);
+				_stackNumber->blit(stackLayer);
+			}
 		}
+
+		// give it a border
+		// this is the "darker" shade that goes in the corners.
+		for (int x = -1; x <= 1; x += 2)
+		{
+			for (int y = -1; y <= 1; y += 2)
+			{
+				stackLayer->blitNShade(_items, x, y, 11);
+			}
+		}
+		// this is the "slightly darker" version that goes in four cardinals.
+		for (int z = -1; z <= 1; z += 2)
+		{
+			stackLayer->blitNShade(_items, z, 0, 8);
+			stackLayer->blitNShade(_items, 0, z, 8);
+		}
+		// and finally the number itself
+		stackLayer->blit(_items);
+		delete stackLayer;
 	}
 }
 
@@ -364,6 +402,10 @@ void Inventory::setSelectedItem(BattleItem *item)
 	}
 	else
 	{
+		if (_selItem->getSlot()->getType() == INV_GROUND)
+		{
+			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
+		}
 		_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
 	}
 	drawItems();
@@ -398,8 +440,8 @@ void Inventory::blit(Surface *surface)
  */
 void Inventory::mouseOver(Action *action, State *state)
 {
-	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2);
-	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2);
+	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - _dx);
+	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - _dy);
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -417,8 +459,8 @@ void Inventory::mouseClick(Action *action, State *state)
 		// Pickup item
 		if (_selItem == 0)
 		{
-			int x = (int)floor(action->getAbsoluteXMouse()),
-				y = (int)floor(action->getAbsoluteYMouse());
+			int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
+				y = (int)floor(action->getAbsoluteYMouse()) - _dy;
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
@@ -463,6 +505,8 @@ void Inventory::mouseClick(Action *action, State *state)
 
 						if (newSlot->getType() != INV_GROUND)
 						{
+							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
+
 							placed = fitItem(newSlot, item, warning);
 
 							if (!placed)
@@ -477,6 +521,10 @@ void Inventory::mouseClick(Action *action, State *state)
 									placed = fitItem(newSlot, item, warning);
 								}
 							}
+							if (!placed)
+							{
+								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+							}
 						}
 						else
 						{
@@ -485,7 +533,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								placed = true;
 								moveItem(item, newSlot, 0, 0);
 								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
-								arrangeGround();
+								arrangeGround(false);
 							}
 							else
 							{
@@ -522,14 +570,35 @@ void Inventory::mouseClick(Action *action, State *state)
 					x += _groundOffset;
 				}
 				BattleItem *item = _selUnit->getItem(slot, x, y);
-				// Put item in empty slot
-				if (item == 0 || item == _selItem)
+
+				bool canStack = slot->getType() == INV_GROUND && canBeStacked(item, _selItem);
+
+				// Put item in empty slot, or stack it, if possible.
+				if (item == 0 || item == _selItem || canStack)
 				{
 					if (!overlapItems(_selItem, slot, x, y) && slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
 						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
 							moveItem(_selItem, slot, x, y);
+							if (slot->getType() == INV_GROUND)
+							{
+								_stackLevel[x][y] += 1;
+							}
+							setSelectedItem(0);
+							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+						}
+						else
+						{
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						}
+					}
+					else if (canStack)
+					{
+						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						{
+							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
+							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
@@ -568,6 +637,36 @@ void Inventory::mouseClick(Action *action, State *state)
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+							if (item->getSlot()->getType() == INV_GROUND)
+							{
+								arrangeGround(false);
+							}
+						}
+						else
+						{
+							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						}
+					}
+				}
+			}
+			else
+			{
+				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
+				x = (int)floor(action->getAbsoluteXMouse())-_dx;
+				y = (int)floor(action->getAbsoluteYMouse())-_dy;
+				slot = getSlotInPosition(&x, &y);
+				if (slot != 0 && slot->getType() == INV_GROUND)
+				{
+					x += _groundOffset;
+					BattleItem *item = _selUnit->getItem(slot, x, y);
+					if (canBeStacked(item, _selItem))
+					{
+						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
+						{
+							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
+							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+							setSelectedItem(0);
+							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
 						{
@@ -584,8 +683,8 @@ void Inventory::mouseClick(Action *action, State *state)
 		{
 			if (!_tu)
 			{
-				int x = (int)floor(action->getAbsoluteXMouse()),
-					y = (int)floor(action->getAbsoluteYMouse());
+				int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
+					y = (int)floor(action->getAbsoluteYMouse()) - _dy;
 				RuleInventory *slot = getSlotInPosition(&x, &y);
 				if (slot != 0)
 				{
@@ -613,6 +712,10 @@ void Inventory::mouseClick(Action *action, State *state)
 		}
 		else
 		{
+			if (_selItem->getSlot()->getType() == INV_GROUND)
+			{
+				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
+			}
 			// Return item to original position
 			setSelectedItem(0);
 		}
@@ -657,7 +760,7 @@ bool Inventory::unload()
  * Since items on the ground aren't assigned to anyone,
  * they don't actually have permanent slot positions.
  */
-void Inventory::arrangeGround()
+void Inventory::arrangeGround(bool alterOffset)
 {
 	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
 
@@ -667,6 +770,7 @@ void Inventory::arrangeGround()
 	int y = 0;
 	bool ok = false;
 	int xMax = 0;
+	_stackLevel.clear();
 
 	if (_selUnit != 0)
 	{
@@ -697,7 +801,12 @@ void Inventory::arrangeGround()
 					{
 						for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
 						{
-							ok = _selUnit->getItem(ground, x + xd, y + yd) == 0;
+							BattleItem *item = _selUnit->getItem(ground, x + xd, y + yd);
+							ok = item == 0;
+							if (canBeStacked(item, *i))
+							{
+								ok = true;
+							}
 						}
 					}
 				}
@@ -705,6 +814,7 @@ void Inventory::arrangeGround()
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
+					_stackLevel[x][y] += 1;
 					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
 				}
 				else
@@ -719,13 +829,16 @@ void Inventory::arrangeGround()
 			}
 		}
 	}
-	if (xMax >= _groundOffset + slotsX - 1)
+	if (alterOffset)
 	{
-		_groundOffset += slotsX - 1;
-	}
-	else
-	{
-		_groundOffset = 0;
+		if (xMax >= _groundOffset + slotsX - 1)
+		{
+			_groundOffset += slotsX - 1;
+		}
+		else
+		{
+			_groundOffset = 0;
+		}
 	}
 	drawItems();
 }
@@ -754,5 +867,30 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 		}
 	}
 	return placed;
+}
+
+/**
+ * check if two items can be stacked on one another
+ *
+ */
+bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
+{
+		//both items actually exist
+	return (itemA != 0 && itemB != 0 &&
+		//both items have the same ruleset
+		itemA->getRules() == itemB->getRules() &&
+		// either they both have no ammo
+		((!itemA->getAmmoItem() && !itemB->getAmmoItem()) ||
+		// or they both have ammo
+		(itemA->getAmmoItem() && itemB->getAmmoItem() &&
+		// and the same ammo type
+		itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules() &&
+		// and the same ammo quantity
+		itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity())) &&
+		// and neither is set to explode
+		itemA->getExplodeTurn() == 0 && itemB->getExplodeTurn() == 0 &&
+		// and neither is a corpse or unconscious unit
+		itemA->getUnit() == 0 && itemB->getUnit() == 0);
+
 }
 }

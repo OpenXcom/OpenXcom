@@ -97,7 +97,9 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 	{"keyBattleCenterEnemy6", "STR_CENTER_ON_ENEMY_6", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy7", "STR_CENTER_ON_ENEMY_7", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy8", "STR_CENTER_ON_ENEMY_8", SDLK_UNKNOWN},
-	{"keyBattleCenterEnemy9", "STR_CENTER_ON_ENEMY_9", SDLK_UNKNOWN}};
+	{"keyBattleCenterEnemy9", "STR_CENTER_ON_ENEMY_9", SDLK_UNKNOWN},
+	{"keyBattleCenterEnemy10", "STR_CENTER_ON_ENEMY_10", SDLK_UNKNOWN},
+	{"keyBattleVoxelView", "STR_SAVE_VOXEL_VIEW", SDLK_UNKNOWN}};
 
 /**
  * Initializes all the elements in the Controls screen.
@@ -107,9 +109,9 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 {
 	_countGeneral = 4;
 	_countGeo = 20;
-	_countBattle = 32;
+	_countBattle = 34;
 	if (Options::getInt("autosave") == 1)
-		_countGeo += 2;
+		_countGeo += 2;	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -123,6 +125,8 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 	add(_btnCancel);
 	add(_txtTitle);
 	add(_lstControls);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

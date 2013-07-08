@@ -84,6 +84,8 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	add(_txtValue);
 	add(_lstItems);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

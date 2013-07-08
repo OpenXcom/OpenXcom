@@ -25,6 +25,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Text.h"
+#include "../Engine/Screen.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Ruleset/RuleItem.h"
@@ -122,6 +123,17 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_unit = action->actor;
 	_item = action->weapon;
 	_surface = new InteractiveSurface(320, 200);
+
+	if (Screen::getDY() > 50)
+	{
+		_screen = false;
+		SDL_Rect current;
+		current.w = 190;
+		current.h = 100;
+		current.x = 67;
+		current.y = 44;
+		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+	}
 	_partTxt = new Text(50, 15, 90, 120);
 	_woundTxt = new Text(10, 15, 145, 120);
 	_medikitView = new MedikitView(52, 58, 95, 60, _game, _targetUnit, _partTxt, _woundTxt);
@@ -149,6 +161,9 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	add(_healTxt);
 	add(_partTxt);
 	add(_woundTxt);
+
+	centerAllSurfaces();
+
 	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_surface);
 	_pkText->setBig();
 	_stimulantTxt->setBig();
@@ -175,7 +190,6 @@ void MedikitState::handle(Action *action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
-		_game->popState();
 	}
 }
 
@@ -185,7 +199,6 @@ void MedikitState::handle(Action *action)
  */
 void MedikitState::onEndClick(Action *)
 {
-	_game->popState();
 	_game->popState();
 }
 
@@ -212,7 +225,6 @@ void MedikitState::onHealClick(Action *)
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_game->popState();
-		_game->popState();
 	}
 }
 
@@ -238,13 +250,11 @@ void MedikitState::onStimulantClick(Action *)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
 			_game->popState();
-			_game->popState();
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_game->popState();
 		_game->popState();
 	}
 }
@@ -269,7 +279,6 @@ void MedikitState::onPainKillerClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_game->popState();
 		_game->popState();
 	}
 }

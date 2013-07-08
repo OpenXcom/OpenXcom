@@ -60,6 +60,8 @@ AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *
 	add(_txtTitle);
 	add(_txtCity);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));

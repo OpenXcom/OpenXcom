@@ -336,14 +336,15 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			action.weapon = new BattleItem(_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"), _save->getCurrentItemId());
 			action.TU = action.weapon->getRules()->getTUUse();
 		}
+		else
+		{
+			statePushBack(new UnitTurnBState(this, action));
+		}
 
 		ss.clear();
 		ss << L"Attack type=" << action.type << " target="<< action.target.x << " "<< action.target.y << " "<< action.target.z << " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
-		action.actor->lookAt(action.target);
-		while (action.actor->getStatus() == STATUS_TURNING)
-			action.actor->turn();
 		statePushBack(new ProjectileFlyBState(this, action));
 		if (action.type == BA_MINDCONTROL || action.type == BA_PANIC)
 		{
@@ -1574,6 +1575,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(3);
 	newUnit->setCache(0);
+	newUnit->setTimeUnits(0);
 	getSave()->getUnits()->push_back(newUnit);
 	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new PatrolBAIState(getSave(), newUnit, 0));
@@ -1728,7 +1730,7 @@ BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
 	// (are we still talking about items?)
 	for (std::vector<BattleItem*>::iterator i = droppedItems.begin(); i != droppedItems.end(); ++i)
 	{
-		int currentWorth = (*i)->getRules()->getAttraction() / (_save->getTileEngine()->distance(action->actor->getPosition(), (*i)->getTile()->getPosition()) + 1);
+		int currentWorth = (*i)->getRules()->getAttraction() / ((_save->getTileEngine()->distance(action->actor->getPosition(), (*i)->getTile()->getPosition()) * 2)+1);
 		if (currentWorth > maxWorth)
 		{
 			maxWorth = currentWorth;
@@ -1831,7 +1833,7 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 	}
 
 	// return false for any item that we aren't standing directly on top of with an attraction value less than 6 (aka always)
-	return (worthToTake - _save->getTileEngine()->distance(action->actor->getPosition(), item->getTile()->getPosition())) > 5;
+	return (worthToTake - (_save->getTileEngine()->distance(action->actor->getPosition(), item->getTile()->getPosition())*2)) > 5;
 }
 
 

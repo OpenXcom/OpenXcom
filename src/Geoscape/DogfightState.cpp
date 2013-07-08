@@ -19,6 +19,7 @@
 #include "DogfightState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -1677,6 +1678,7 @@ void DogfightState::setInterceptionsCount(const int count)
  */
 void DogfightState::calculateWindowPosition()
 {
+
 	_minimizedIconX = 5;
 	_minimizedIconY = (5 * _interceptionNumber) + (16 * (_interceptionNumber - 1));
 	
@@ -1747,6 +1749,8 @@ void DogfightState::calculateWindowPosition()
 			_y = 200 - _window->getHeight();//96;
 		}
 	}
+	_x += Screen::getDX();
+	_y += Screen::getDY();
 }
 
 /**

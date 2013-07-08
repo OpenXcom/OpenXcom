@@ -103,7 +103,8 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		_number[i]->setVerticalAlign(ALIGN_MIDDLE);
 	}
 
-
+	centerAllSurfaces();
+	lowerAllSurfaces();
 }
 
 /**
@@ -145,7 +146,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 	}
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; ++i)
+	for (int i = 0; i < 24 && btnID == -1; ++i)
 	{
 		if (action->getSender() == _button[i])
 		{

@@ -68,6 +68,8 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	add(_btnCancel);
 	add(_txtTarget);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));

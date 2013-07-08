@@ -233,6 +233,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			}
 			if (targetUnit)
 			{
+				_game->popState();
 				_game->pushState (new MedikitState (_game, targetUnit, _action));
 			}
 			else
@@ -246,6 +247,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			// spend TUs first, then show the scanner
 			if (_action->actor->spendTimeUnits (_action->TU))
 			{
+				_game->popState();
 				_game->pushState (new ScannerState (_game, _action));
 			}
 			else

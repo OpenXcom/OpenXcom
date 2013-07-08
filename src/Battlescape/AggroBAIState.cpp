@@ -31,7 +31,6 @@
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
@@ -49,7 +48,7 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
  * @param game pointer to the game.
  * @param unit pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false)
+AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
 
@@ -176,7 +175,7 @@ void AggroBAIState::think(BattleAction *action)
  	action->type = BA_RETHINK;
 	action->actor = _unit;
 	_aggroTarget = 0;
-	
+	_wasHit = false;
 	if (_lastKnownTarget && _lastKnownTarget->isOut())
 	{
 		_lastKnownTarget = 0;
@@ -369,7 +368,7 @@ void AggroBAIState::psiAction(BattleAction *action)
 		{
 			int chanceToAttackMe = psiAttackStrength
 				+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
-				- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
+				- _game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition())
 				- ((*i)->getStats()->psiStrength)
 				+ (RNG::generate(0, 50))
 				+ 55;
@@ -979,7 +978,7 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 	int tuAimed = action->weapon->getRules()->getTUAimed();
 	int currentTU = action->actor->getTimeUnits() - _coverCharge;
 
-	if (distance < 8)
+	if (distance < 4)
 	{
 		if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
 		{
@@ -999,14 +998,14 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 	}
 
 
-	if ( distance >= 25 )
+	if ( distance > 12 )
 	{
 		if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
 		{
 			action->type = BA_AIMEDSHOT;
 			return;
 		}
-		if ( distance < 40
+		if ( distance < 20
 			&& tuSnap
 			&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
 		{
@@ -1030,4 +1029,15 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 			action->type = BA_AUTOSHOT;
 	}
 }
+
+void AggroBAIState::setWasHit(bool wasHit)
+{
+	_wasHit = wasHit;
+}
+
+bool AggroBAIState::getWasHit()
+{
+	return _wasHit;
+}
+
 }

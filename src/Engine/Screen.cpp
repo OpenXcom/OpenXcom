@@ -403,10 +403,31 @@ bool Screen::isHQXEnabled()
 	return false;
 }
 
-
+/**
+ * Check if openGl is enabled.
+ * @return if it is enabled.
+ */
 bool Screen::isOpenGLEnabled()
 {
 	return Options::getBool("useOpenGL");
+}
+
+/**
+ * Gets the Horizontal offset from the mid-point of the screen, in pixels.
+ * @return the horizontal offset.
+ */
+int Screen::getDX()
+{
+	return (BASE_WIDTH - 320) / 2;
+}
+
+/**
+ * Gets the Vertical offset from the mid-point of the screen, in pixels.
+ * @return the vertical offset.
+ */
+int Screen::getDY()
+{
+	return (BASE_HEIGHT - 200) / 2;
 }
 
 }

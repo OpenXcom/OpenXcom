@@ -2263,6 +2263,8 @@ STR_CENTER_ON_ENEMY_8
 zentriere Gegner 8
 STR_CENTER_ON_ENEMY_9
 zentriere Gegner 9
+STR_CENTER_ON_ENEMY_10
+zentriere Gegner 10
 STR_ENEMY_WEAPON_LEVEL
 Enemy Weapon Level
 STR_GROUNDED
@@ -2393,3 +2395,5 @@ STR_ARROWS
 ARROWS
 STR_FULL
 FULL
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot

@@ -543,50 +543,6 @@ int Tile::getExplosive() const
 	return _explosive;
 }
 
-/**
- * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
- * @return bool Return true objective was destroyed
- */
-bool Tile::detonate()
-{
-	int explosive = _explosive;
-	_explosive = 0;
-	bool objective = false;
-
-	if (explosive)
-	{
-		// explosions create smoke which only stays 1 or 2 turns
-		setSmoke(std::max(1, std::min(_smoke + 1, 15)));
-		for (int i = 0; i < 4; ++i)
-		{
-			if(_objects[i])
-			{
-				if ((explosive) >= _objects[i]->getArmor())
-				{
-					int decrease = _objects[i]->getArmor();
-					objective = destroy(i);
-					setSmoke(std::max(1, std::min(_smoke + 2, 15)));
-					if (_objects[i] && (explosive - decrease) >= _objects[i]->getArmor())
-					{
-						objective = destroy(i);
-					}
-				}
-			}
-		}
-
-		if (getMapData(MapData::O_OBJECT))
-		{
-			if (!_fire && explosive > RNG::generate(10, 30))
-			{
-				setFire(getFuel() + 1);
-				setSmoke(std::max(1, std::min(15 - (getFlammability() / 10), 12)));
-			}
-		}
-	}
-
-	return objective;
-}
-
 /*
  * Flammability of a tile is the lowest flammability of it's objects.
  * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.

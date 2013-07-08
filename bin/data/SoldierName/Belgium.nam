@@ -4,6 +4,11 @@
 # ratio 
 # Distribution of lastNames can be visualised at http://www.familienaam.be
 # 12 Flemish/8 French (names from statbel.fgov.be)
+lookWeights:
+  - 70
+  - 28
+  - 1
+  - 1
 maleFirst:
   - Nathan
   - Wouter

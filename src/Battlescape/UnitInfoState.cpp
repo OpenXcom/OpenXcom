@@ -29,7 +29,6 @@
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
 #include "../Engine/Surface.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -193,6 +192,8 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 	add(_txtUnderArmor);
 	add(_numUnderArmor);
 	add(_barUnderArmor);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);

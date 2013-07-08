@@ -25,6 +25,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Screen.h"
 #include "../Interface/Text.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -46,10 +47,17 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 	_surface1 = new InteractiveSurface(320, 200);
 	_surface2 = new InteractiveSurface(320, 200);
 	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
+	
+	if (Screen::getDY() > 50)
+	{
+		_screen = false;
+	}
 
 	add(_surface2);
 	add(_scannerView);
 	add(_surface1);
+
+	centerAllSurfaces();
 	
 	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_surface1);
 	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_surface2);
@@ -59,6 +67,11 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 	_timerAnimate->start();
 
 	update();
+}
+
+ScannerState::~ScannerState()
+{
+	delete _timerAnimate;
 }
 
 /**

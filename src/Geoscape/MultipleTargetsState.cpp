@@ -71,6 +71,8 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		add(_btnCancel);
 		add(_lstTargets);
 
+		centerAllSurfaces();
+
 		// Set up objects
 		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));

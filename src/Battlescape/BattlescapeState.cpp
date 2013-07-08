@@ -1231,18 +1231,16 @@ inline void BattlescapeState::handle(Action *action)
 					_save->setDebugMode();
 					debug(L"Debug Mode");
 				}
+				// "ctrl-l" - reset tile visibility
+				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_l && (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Resetting tile visibility");
+					_save->resetTiles();
+				}
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
-					if (_save->getDebugMode())
-					{
-						SaveVoxelMap();
-					}
-				}
-				// f10 - voxel view dump
-				else if (action->getDetails()->key.keysym.sym == SDLK_F10)
-				{
-					SaveVoxelView();
+					SaveVoxelMap();
 				}
 				// f9 - ai 
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
@@ -1251,10 +1249,21 @@ inline void BattlescapeState::handle(Action *action)
 				}
 			}
 			// quick save and quick load
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			// not works in debug mode to prevent conflict in hotkeys by default
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			{
 				_game->pushState(new SaveState(_game, false, true));
-			else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			}
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			{
 				_game->pushState(new LoadState(_game, false, true));
+			}
+
+			// voxel view dump
+			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
+			{
+				SaveVoxelView();
+			}
 		}
 	}
 }
@@ -1405,15 +1414,7 @@ void BattlescapeState::SaveVoxelView()
 	std::stringstream ss;
 	std::vector<unsigned char> image;
 	int test;
-	Position originVoxel = Position(viewPos.x*16+8,
-		viewPos.y*16+8,
-		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getFloatHeight() + bu->getHeight()-1) );
-	if (bu->getArmor()->getSize() > 1)
-	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 1; //topmost voxel
-	}
+	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
 
 	Position targetVoxel,hitPos;
 	double dist;

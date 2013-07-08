@@ -142,9 +142,9 @@ void InteractiveSurface::handle(Action *action, State *state)
 						if (isButtonPressed(i))
 						{
 							setButtonPressed(i, false);
-							action->getDetails()->button.button = i;
-							mouseRelease(action, state);
 						}
+						action->getDetails()->button.button = i;
+						mouseRelease(action, state);
 					}
 				}
 			}

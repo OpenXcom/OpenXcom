@@ -67,6 +67,8 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	add(_txtQuantity);
 	add(_lstArmor);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));

@@ -21,6 +21,7 @@
 #include "PatrolBAIState.h"
 #include "TileEngine.h"
 #include "AggroBAIState.h"
+#include "Pathfinding.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
@@ -197,9 +198,10 @@ void PatrolBAIState::think(BattleAction *action)
 			}
 		}
 	}
-
-	if (_toNode == 0)
+	int triesLeft = 20;
+	while (_toNode == 0 && triesLeft)
 	{
+		triesLeft--;
 		// look for a new node to walk towards
 		bool scout = true;
 		if (_game->getMissionType() != "STR_BASE_DEFENSE")
@@ -275,10 +277,21 @@ void PatrolBAIState::think(BattleAction *action)
 		if (_toNode == 0)
 		{
 			_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
+
 			if (_toNode == 0)
 			{
 				_toNode = _game->getPatrolNode(!scout, _unit, _fromNode);
 			}
+		}
+		
+		if (_toNode != 0)
+		{
+			_game->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_game->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_game->getPathfinding()->abortPath();
 		}
 	}
 

@@ -206,7 +206,7 @@ void createDefault()
 	setInt("keyGeoToggleDetail", SDLK_TAB);
 	setInt("keyGeoToggleRadar", SDLK_r);
 	setInt("keyQuickSave", SDLK_F6);
-	setInt("keyQuickLoad", SDLK_F10);
+	setInt("keyQuickLoad", SDLK_F9);
 	setInt("keyBattleLeft", SDLK_LEFT);
 	setInt("keyBattleRight", SDLK_RIGHT);
 	setInt("keyBattleUp", SDLK_UP);
@@ -240,6 +240,7 @@ void createDefault()
 	setInt("keyBattleCenterEnemy8", SDLK_8);
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
+	setInt("keyBattleVoxelView", SDLK_F10);
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");

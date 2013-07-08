@@ -219,6 +219,8 @@ namespace OpenXcom
 				break;
 			default: break;
 		}
+
+		centerAllSurfaces();
 	}
 
 	void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)

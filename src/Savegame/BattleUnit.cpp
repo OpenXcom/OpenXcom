@@ -52,7 +52,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0),
-																_unitRules(0), _rankInt(-1), _hidingForTurn(false), _hitByFire(false)
+																_unitRules(0), _rankInt(-1), _hitByFire(false), _hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -119,7 +119,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0),
 																						_armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),
-																						_hidingForTurn(false), _hitByFire(false)
+																						_hitByFire(false), _hidingForTurn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -941,7 +941,7 @@ int BattleUnit::getMorale() const
  * @param type
  * @return damage done after adjustment
  */
-int BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	int impactheight;
@@ -958,90 +958,72 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 
 	if (!ignoreArmor)
 	{
-		if (position == Position(0, 0, 0))
+		if (relative == Position(0, 0, 0))
 		{
 			side = SIDE_UNDER;
 		}
 		else
 		{
-			// normalize x and y towards north
-			int x = 8, y = 8;
-			switch(_direction)
-			{
-			case 0: // heading north
-				x = position.x;
-				y = 15 - position.y;
-				break;
-			case 1: // somewhere in between 0 and 2
-				x = (position.x + position.y)/2;
-				y = ((15 - position.y) + position.x)/2;
-				break;
-			case 2: // heading east
-				x = 15 - position.y;
-				y = 15 - position.x;
-				break;
-			case 3:
-				x = (position.y + (15 - position.x))/2;
-				y = (position.x + position.y)/2;
-				break;
-			case 4: // heading south
-				x = 15 - position.x;
-				y = position.y;
-				break;
-			case 5:
-				x = ((15 - position.x) + (15 - position.y))/2;
-				y = (position.y + (15 - position.x))/2;
-				break;
-			case 6: // heading west
-				x = 15 - position.y;
-				y = 15 - position.x;
-				break;
-			case 7:
-				x = ((15 - position.y) + position.x)/2;
-				y = ((15 - position.x) + (15 - position.y))/2;
-				break;
-			}
-			// determine side
-			if (y > 9)
-				side = SIDE_FRONT;
-			else if (y < 6)
-				side = SIDE_REAR;
-			else if (x < 6)
-				side = SIDE_LEFT;
-			else if (x > 9)
-				side = SIDE_RIGHT;
+			int relativeDirection;
+			const int abs_x = abs(relative.x);
+			const int abs_y = abs(relative.y);
+			if (abs_y > abs_x * 2)
+				relativeDirection = 8 + 4 * (relative.y > 0);
+			else if (abs_x > abs_y * 2)
+				relativeDirection = 10 + 4 * (relative.x < 0);
 			else
-				side = SIDE_FRONT;
-		}
-
-		impactheight = 10*position.z/getHeight();
-
-		if (impactheight > 4 && impactheight < 7) // torso
-		{
-			if (side == SIDE_LEFT)
 			{
-				bodypart = BODYPART_LEFTARM;
-			}else if (side == SIDE_RIGHT)
-			{
-				bodypart = BODYPART_RIGHTARM;
-			}else
-			{
-				bodypart = BODYPART_TORSO;
+				if (relative.x < 0)
+				{
+					if (relative.y > 0)
+						relativeDirection = 13;
+					else
+						relativeDirection = 15;
+				}
+				else
+				{
+					if (relative.y > 0)
+						relativeDirection = 11;
+					else
+						relativeDirection = 9;
+				}
 			}
-		}else if (impactheight >= 7) //head
-		{
-			bodypart = BODYPART_HEAD;
-		}else if (impactheight <=4) //legs
-		{
-			if (side == SIDE_LEFT || side == SIDE_FRONT)
+
+			switch((relativeDirection - _direction) % 8)
 			{
-				bodypart = BODYPART_LEFTLEG;
-			}else
+			case 0:	side = SIDE_FRONT; 										break;
+			case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
+			case 2:	side = SIDE_RIGHT; 										break;
+			case 3:	side = RNG::generate(0,2) < 2 ? SIDE_REAR:SIDE_RIGHT; 	break;
+			case 4:	side = SIDE_REAR; 										break;
+			case 5:	side = RNG::generate(0,2) < 2 ? SIDE_REAR:SIDE_LEFT; 	break;
+			case 6:	side = SIDE_LEFT; 										break;
+			case 7:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
+			}
+			if (relative.z > getHeight())
 			{
-				bodypart = BODYPART_RIGHTLEG;
+				bodypart = BODYPART_HEAD;
+			}
+			else if (relative.z > 4)
+			{
+				switch(side)
+				{
+				case SIDE_LEFT:		bodypart = BODYPART_LEFTARM; break;
+				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM; break;
+				default:			bodypart = BODYPART_TORSO;
+				}
+			}
+			else
+			{
+				switch(side)
+				{
+				case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
+				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
+				default:
+					bodypart = (UnitBodyPart) RNG::generate(BODYPART_RIGHTLEG,BODYPART_LEFTLEG);
+				}
 			}
 		}
-
 		power -= getArmor(side);
 	}
 
@@ -1062,7 +1044,7 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 
 			if (type != DT_IN)
 			{
-				if (_armor->getSize() == 1 && type != DT_STUN)
+				if (_armor->getSize() == 1)
 				{
 					// conventional weapons can cause additional stun damage
 					_stunlevel += RNG::generate(0, power / 4);

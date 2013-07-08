@@ -1,5 +1,10 @@
 # A good article about dutch firstnames can be found at
 # http://www.historischnieuwsblad.nl/nl/artikel/5849/voornamen-in-nederland.html
+lookWeights:
+  - 45
+  - 45
+  - 5
+  - 5
 maleFirst:
   - Jan
   - Piet

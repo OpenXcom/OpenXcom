@@ -54,6 +54,8 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	add(_btnOk);
 	add(_txtMessage);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));

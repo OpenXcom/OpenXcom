@@ -83,6 +83,8 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	add(_txtCrew);
 	add(_lstEquipment);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));

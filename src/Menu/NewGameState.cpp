@@ -58,6 +58,8 @@ NewGameState::NewGameState(Game *game) : State(game)
 	add(_btnCancel);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

@@ -99,6 +99,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	add(_crew);
 	add(_equip);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));

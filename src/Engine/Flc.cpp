@@ -197,7 +197,7 @@ void SS2()
   Uint16 Lines, Count;
 
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
   ReadU16(&Lines, pSrc);
   pSrc+=2;
   while(Lines--) {
@@ -257,7 +257,7 @@ void DECODE_BRUN()
 
   HeightCount=flc.HeaderHeight;
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
   while(HeightCount--) {
     pTmpDst=pDst;
     PacketsCount=*(pSrc++);
@@ -291,7 +291,7 @@ void DECODE_LC()
   int PacketsCount;
 
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
 
   ReadU16(&tmp, pSrc);
   pSrc+=2;
@@ -355,7 +355,7 @@ void DECODE_COPY()
 { Uint8 *pSrc, *pDst;
   int Lines = flc.screen_h;
   pSrc=flc.pChunk+6;
-  pDst=(Uint8*)flc.mainscreen->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
   while(Lines-- > 0) {
     memcpy(pDst, pSrc, flc.screen_w);
     pSrc+=flc.screen_w;
@@ -366,7 +366,7 @@ void DECODE_COPY()
 void BLACK()
 { Uint8 *pDst;
   int Lines = flc.screen_h;
-  pDst=(Uint8*)flc.mainscreen->pixels;
+  pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
   while(Lines-- > 0) {
     memset(pDst, 0, flc.screen_w);
     pDst+=flc.mainscreen->pitch;
@@ -489,6 +489,7 @@ void FlcMain(void (*frameCallBack)())
 { flc.quit=false;
   SDL_Event event;
   FlcInitFirstFrame();
+  flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
   while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;

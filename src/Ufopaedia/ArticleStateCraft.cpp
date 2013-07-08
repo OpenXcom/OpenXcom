@@ -83,6 +83,8 @@ namespace OpenXcom
 		ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << craft->getSoldiers() << L'\x01' << L'\n';
 		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << craft->getVehicles();
 		_txtStats->setText(ss.str());
+
+		centerAllSurfaces();
 	}
 
 	ArticleStateCraft::~ArticleStateCraft()

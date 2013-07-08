@@ -67,6 +67,8 @@ struct Flc_t {
   int screen_h;
   int screen_depth;
   int loop;
+  int dx, dy;
+  int offset;
   bool quit;
 };
 

@@ -56,6 +56,8 @@ ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * r
 	add(_btnReport);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));

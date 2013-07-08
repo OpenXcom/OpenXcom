@@ -21,6 +21,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+#include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Region.h"
@@ -282,6 +283,8 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnFinance->onMouseClick((ActionHandler)&GraphsState::btnFinanceClick);
 	_btnGeoscape->onMouseClick((ActionHandler)&GraphsState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
+
+	centerAllSurfaces();
 }
 
 /**
@@ -436,7 +439,7 @@ void GraphsState::btnFinanceClick(Action *)
  */
 void GraphsState::btnRegionListClick(Action * action)
 {
-	size_t number = action->getSender()->getY()/11;
+	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
 	ToggleTextButton *button = 0;
 
 	if (number == _btnRegions.size())
@@ -458,7 +461,7 @@ void GraphsState::btnRegionListClick(Action * action)
  */
 void GraphsState::btnCountryListClick(Action * action)
 {
-	size_t number = action->getSender()->getY()/11;
+	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
 	ToggleTextButton *button = 0;
 
 	if (number == _btnCountries.size())
@@ -480,7 +483,7 @@ void GraphsState::btnCountryListClick(Action * action)
  */
 void GraphsState::btnFinanceListClick(Action *action)
 {
-	int number = action->getSender()->getY()/11;
+	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
 	ToggleTextButton *button = _btnFinances.at(number);
 	
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));
