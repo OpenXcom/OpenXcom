@@ -22,13 +22,6 @@
 #include <string>
 #include <vector>
 
-
-#ifdef _WIN32
-#  define UNUSED_PARAM
-#else
-#  define UNUSED_PARAM __attribute__ ((__unused__))
-#endif
-
 namespace OpenXcom
 {
 

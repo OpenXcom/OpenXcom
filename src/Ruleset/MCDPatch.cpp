@@ -20,7 +20,6 @@
 #include "Ruleset.h"
 #include "MapDataSet.h"
 #include "MapData.h"
-#include "../Engine/CrossPlatform.h"
 #include <sstream>
 
 namespace OpenXcom
@@ -102,7 +101,7 @@ void MCDPatch::load(const YAML::Node &node)
  * Saves the MCD Patch to a YAML file.
  * @param out YAML emitter.
  */
-void MCDPatch::save(YAML::Emitter &out UNUSED_PARAM) const
+void MCDPatch::save(YAML::Emitter & /* out */) const
 {
 }
 
