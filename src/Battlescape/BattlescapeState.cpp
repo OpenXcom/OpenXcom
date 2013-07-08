@@ -1405,7 +1405,6 @@ void BattlescapeState::SaveVoxelView()
 
 	BattleUnit * bu = _save->getSelectedUnit();
 	if (bu==0) return; //no unit selected
-	Position viewPos = _save->getSelectedUnit()->getPosition();
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
@@ -1698,11 +1697,11 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
-void BattlescapeState::mouseInIcons(Action *action)
+void BattlescapeState::mouseInIcons(Action * /* action */)
 {
 	_mouseOverIcons = true;
 }
-void BattlescapeState::mouseOutIcons(Action *action)
+void BattlescapeState::mouseOutIcons(Action * /* action */)
 {
 	_mouseOverIcons = false;
 }

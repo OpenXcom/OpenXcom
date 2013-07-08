@@ -48,7 +48,7 @@ public:
 	/// Generates a new name from the pool.
 	std::wstring genName(SoldierGender *gender) const;
 	/// generates an int representing the index of the soldier's look, when passed the maximum index value.
-	int genLook(int numLooks);
+	int genLook(size_t numLooks);
 };
 
 }

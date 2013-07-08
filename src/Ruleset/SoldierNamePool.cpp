@@ -132,7 +132,7 @@ std::wstring SoldierNamePool::genName(SoldierGender *gender) const
 	return name.str();
 }
 
-int SoldierNamePool::genLook(int numLooks)
+int SoldierNamePool::genLook(size_t numLooks)
 {
 	int look = 0;
 	const int minimumChance = 2;	// minimum chance of a look being selected if it isn't enumerated. This ensures that looks MUST be zeroed to not appear.
