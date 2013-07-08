@@ -2277,6 +2277,10 @@ STR_LIST_ITEM
 GEGENSTAND
 STR_DISPLAY_FILTER
 Filter anzeigen
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
 STR_ADVANCED
 ERWEITERT
 STR_ADVANCED_OPTIONS
@@ -2369,6 +2373,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Explosionshöhe
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Wieviele Höhenebenen (hoch und runter) hat die Reichweite von Explosionen.{NEWLINE}(Normal: 0, Voluminös: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
 STR_ALLOWPSIONICCAPTURE
 Aktiviere Gefangennahme durch PSI-Gedankenkontrolle
 STR_ALLOWPSIONICCAPTURE_DESC

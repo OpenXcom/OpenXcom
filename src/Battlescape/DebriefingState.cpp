@@ -234,7 +234,6 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
-	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -874,6 +873,8 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+	// Now ending the battle.
+	save->setBattleGame(0);
 }
 
 void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed)

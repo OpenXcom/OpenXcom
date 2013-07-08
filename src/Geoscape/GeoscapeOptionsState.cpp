@@ -85,6 +85,12 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+
+	if (Options::getInt("autosave") >= 2)
+	{
+		_btnSave->setVisible(false);
+		_btnLoad->setVisible(false);
+	}
 }
 
 /**

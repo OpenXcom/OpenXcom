@@ -41,10 +41,12 @@ protected:
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
 	TextList *_lstSaves;
-	bool _geo;
+	bool _geo, _showMsg, _noUI;
 public:
 	/// Creates the Saved Game state.
 	SavedGameState(Game *game, bool geo);
+	/// Creates the Saved Game state (autosave option).
+	SavedGameState(Game *game, bool geo, bool showMsg);
 	/// Cleans up the Saved Game state.
 	virtual ~SavedGameState();
 	/// Updates the palette.

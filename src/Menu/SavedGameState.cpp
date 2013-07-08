@@ -42,7 +42,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
+SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo), _showMsg(true), _noUI(false)
 {
 	_screen = false;
 	// Create objects
@@ -157,6 +157,31 @@ SavedGameState::SavedGameState(Game *game, bool geo) : State(game), _geo(geo)
 }
 
 /**
+ * Initializes all the elements in the Saved Game screen.
+ * @param game Pointer to the core game.
+ * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param showMsg True if need to show messages like "Loading game" or "Saving game".
+ */
+SavedGameState::SavedGameState(Game *game, bool geo, bool showMsg) : State(game), _geo(geo), _showMsg(showMsg), _noUI(true)
+{
+	if (_showMsg)
+	{
+		_txtStatus = new Text(320, 16, 0, 92);
+		add(_txtStatus);
+
+		_txtStatus->setBig();
+		_txtStatus->setAlign(ALIGN_CENTER);
+		if (_geo)
+			_txtStatus->setColor(Palette::blockOffset(8)+5);
+		else
+		{
+			_txtStatus->setColor(Palette::blockOffset(5));
+			_txtStatus->setHighContrast(true);
+		}
+	}
+}
+
+/**
  *
  */
 SavedGameState::~SavedGameState()
@@ -169,6 +194,12 @@ SavedGameState::~SavedGameState()
  */
 void SavedGameState::init()
 {
+	if (_noUI)
+	{
+		_game->popState();
+		return;
+	}
+
 	_txtStatus->setText(L"");
 
 	if (_geo)

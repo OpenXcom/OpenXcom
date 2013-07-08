@@ -2281,6 +2281,10 @@ STR_LIST_ITEM
 OGGETTO
 STR_DISPLAY_FILTER
 Filtro Grafico
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
 STR_ADVANCED
 AVANZATE
 STR_ADVANCED_OPTIONS
@@ -2373,6 +2377,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Altezza di esplosione
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Modifica quanto le esplosioni che prevedono l'altezza possono diffondersi.{NEWLINE}(Flat: 0, Round: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
 STR_ALLOWPSIONICCAPTURE
 Abilita la cattura psi
 STR_ALLOWPSIONICCAPTURE_DESC

@@ -40,6 +40,8 @@ private:
 public:
 	/// Creates the Save Game state.
 	SaveState(Game *game, bool geo);
+	/// Creates the Quick Save Game state.
+	SaveState(Game *game, bool geo, bool showMsg);
 	/// Cleans up the Save Game state.
 	~SaveState();
 	/// Updates the savegame list.
@@ -48,6 +50,8 @@ public:
 	void edtSaveKeyPress(Action *action);
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
+	/// Quick save game.
+	void quickSave(const std::wstring &filename16);
 };
 
 }

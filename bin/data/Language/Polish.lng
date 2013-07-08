@@ -2287,6 +2287,10 @@ STR_LIST_ITEM
 PRZEDMIOT
 STR_DISPLAY_FILTER
 Filtr wyświetlania
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
 STR_ADVANCED
 Zaawansowane
 STR_ADVANCED_OPTIONS
@@ -2379,6 +2383,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Rozmiar eksplozji
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Ustal w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
 STR_ALLOWPSIONICCAPTURE
 Przechwycenie psioniczne
 STR_ALLOWPSIONICCAPTURE_DESC
