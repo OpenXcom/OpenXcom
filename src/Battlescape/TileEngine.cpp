@@ -819,6 +819,10 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 		minZfound = true; minZ=0;
 		maxZfound = true; maxZ=0;
 	}
+	else
+	{
+		return false;
+	}
 
 // find out height range
 

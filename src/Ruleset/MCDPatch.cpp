@@ -101,7 +101,7 @@ void MCDPatch::load(const YAML::Node &node)
  * Saves the MCD Patch to a YAML file.
  * @param out YAML emitter.
  */
-void MCDPatch::save(YAML::Emitter &out) const
+void MCDPatch::save(YAML::Emitter & /* out */) const
 {
 }
 

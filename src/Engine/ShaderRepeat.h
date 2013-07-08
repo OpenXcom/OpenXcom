@@ -40,12 +40,12 @@ public:
 	inline ShaderRepeat(const Surface* s):
 		_base(s)
 	{
-			
+        setOffset(0, 0);
 	}
 	inline ShaderRepeat(const std::vector<Pixel>& f, int max_x, int max_y):
 		_base(f, max_x, max_y)
 	{
-			
+        setOffset(0, 0);
 	}
 	
 	inline void setOffset(int x, int y)

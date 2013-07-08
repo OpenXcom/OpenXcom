@@ -19,6 +19,7 @@
 #include "CraftSoldiersState.h"
 #include <string>
 #include <sstream>
+#include <climits>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -173,7 +174,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		size_t row = _lstSoldiers->getSelectedRow();
+		int row = _lstSoldiers->getSelectedRow();
 		if (row > 0 )
 		{
 			Soldier *s = _base->getSoldiers()->at(row);
@@ -209,8 +210,9 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		size_t row = _lstSoldiers->getSelectedRow();
-		if (row < _base->getSoldiers()->size() - 1 )
+		int row = _lstSoldiers->getSelectedRow();
+		size_t numSoldiers = _base->getSoldiers()->size();
+		if (0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
 		{
 			Soldier *s = _base->getSoldiers()->at(row);
 			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
