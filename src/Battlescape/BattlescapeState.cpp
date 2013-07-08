@@ -1248,6 +1248,17 @@ inline void BattlescapeState::handle(Action *action)
 					SaveAIMap();
 				}
 			}
+			// quick save and quick load
+			// not works in debug mode to prevent conflict in hotkeys by default
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			{
+				_game->pushState(new SaveState(_game, false, true));
+			}
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			{
+				_game->pushState(new LoadState(_game, false, true));
+			}
+
 			// voxel view dump
 			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
 			{

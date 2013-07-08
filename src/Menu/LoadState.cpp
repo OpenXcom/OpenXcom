@@ -44,11 +44,20 @@ namespace OpenXcom
  */
 LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
 {
-	_geo = geo;
 	// Set up objects
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
-	
 	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);
+}
+
+/**
+ * Creates the Quick Load Game state.
+ * @param game Pointer to the core game.
+ * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param showMsg True if need to show messages like "Loading game" or "Saving game".
+ */
+LoadState::LoadState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+{
+	quickLoad(L"autosave");
 }
 
 /**
@@ -67,60 +76,71 @@ void LoadState::lstSavesPress(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		updateStatus("STR_LOADING_GAME");
-		SavedGame *s = new SavedGame();
-		try
-		{
-#ifdef _WIN32
-			std::string filename = Language::wstrToCp(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
-#else
-			std::string filename = Language::wstrToUtf8(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
-#endif
-			s->load(filename, _game->getRuleset());
-			_game->setSavedGame(s);
-			_game->setState(new GeoscapeState(_game));
-			if (_game->getSavedGame()->getSavedBattle() != 0)
-			{
-				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
-				BattlescapeState *bs = new BattlescapeState(_game);
-				_game->pushState(bs);
-				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-			}
-		}
-		catch (Exception &e)
-		{
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error << _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
-					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-				else
-					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-
-			if (_game->getSavedGame() == s)
-				_game->setSavedGame(0);
-			else
-				delete s;
-		}
-		catch (YAML::Exception &e)
-		{
-			Log(LOG_ERROR) << e.what();
-			std::wstringstream error;
-			error << _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
-					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
-				else
-					_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
-
-			if (_game->getSavedGame() == s)
-				_game->setSavedGame(0);
-			else
-				delete s;
-		}
+		quickLoad(_lstSaves->getCellText(_lstSaves->getSelectedRow(), 0));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->pushState(new DeleteGameState(_game, _geo, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+	}
+}
+
+/**
+ * Quick load game.
+ * @param filename16 name of file without ".sav"
+ */
+void LoadState::quickLoad(const std::wstring &filename16)
+{
+	if (_showMsg) updateStatus("STR_LOADING_GAME");
+
+#ifdef _WIN32
+		std::string filename = Language::wstrToCp(filename16);
+#else
+		std::string filename = Language::wstrToUtf8(filename16);
+#endif
+
+	SavedGame *s = new SavedGame();
+	try
+	{
+		s->load(filename, _game->getRuleset());
+		_game->setSavedGame(s);
+		_game->setState(new GeoscapeState(_game));
+		if (_game->getSavedGame()->getSavedBattle() != 0)
+		{
+			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+			BattlescapeState *bs = new BattlescapeState(_game);
+			_game->pushState(bs);
+			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+		}
+	}
+	catch (Exception &e)
+	{
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+
+		if (_game->getSavedGame() == s)
+			_game->setSavedGame(0);
+		else
+			delete s;
+	}
+	catch (YAML::Exception &e)
+	{
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+
+		if (_game->getSavedGame() == s)
+			_game->setSavedGame(0);
+		else
+			delete s;
 	}
 }
 

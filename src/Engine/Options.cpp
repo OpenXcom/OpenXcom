@@ -43,7 +43,7 @@ std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-std::map<std::string, std::string> _options;
+std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
 std::vector<std::string> _purchaseexclusions;
 
@@ -105,6 +105,7 @@ void createDefault()
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
+	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
@@ -204,6 +205,8 @@ void createDefault()
 	setInt("keyGeoFunding", SDLK_f);
 	setInt("keyGeoToggleDetail", SDLK_TAB);
 	setInt("keyGeoToggleRadar", SDLK_r);
+	setInt("keyQuickSave", SDLK_F6);
+	setInt("keyQuickLoad", SDLK_F9);
 	setInt("keyBattleLeft", SDLK_LEFT);
 	setInt("keyBattleRight", SDLK_RIGHT);
 	setInt("keyBattleUp", SDLK_UP);
@@ -264,12 +267,7 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
-				std::map<std::string, std::string>::iterator it = _options.find(argname);
-				if (it != _options.end())
-				{
-					it->second = args[i+1];
-				}
-				else if (argname == "data")
+                if (argname == "data")
 				{
 					_dataFolder = CrossPlatform::endPath(args[i+1]);
 				}
@@ -279,8 +277,25 @@ void loadArgs(int argc, char** args)
 				}
 				else
 				{
-					Log(LOG_WARNING) << "Unknown option: " << argname;
-				}
+                    // case insensitive lookup of the argument
+                    bool found = false;
+                    for(std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
+                    {
+                        std::string option = it->first;
+                        std::transform(option.begin(), option.end(), option.begin(), ::tolower);
+                        if (option == argname)
+                        {
+                            //save this command line option for now, we will apply it later
+                            _commandLineOptions[it->first]= args[i+1];
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found)
+                    {
+                        Log(LOG_WARNING) << "Unknown option: " << argname;
+                    }
+                }
 			}
 			else
 			{
@@ -353,61 +368,20 @@ bool init(int argc, char** args)
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
-	{
-		std::vector<std::string> user = CrossPlatform::findUserFolders();
-		_configFolder = CrossPlatform::findConfigFolder();
+		setUserFolder();
 
-		// Look for an existing user folder
-		for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
-		{
-			if (CrossPlatform::folderExists(*i))
-			{
-				_userFolder = *i;
-				break;
-			}
-		}
-
-		// Set up folders
-		if (_userFolder == "")
-		{
-			for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
-			{
-				if (CrossPlatform::createFolder(*i))
-				{
-					_userFolder = *i;
-					break;
-				}
-			}
-		}
-		if (_configFolder == "")
-		{
-			_configFolder = _userFolder;
-		}
-
-		// Load existing options
-		if (CrossPlatform::folderExists(_configFolder))
-		{
-			try
-			{
-				load();
-			}
-			catch (YAML::Exception &e)
-			{
-				Log(LOG_ERROR) << e.what();
-			}
-		}
-		// Create config folder and save options
-		else
-		{
-			CrossPlatform::createFolder(_configFolder);
-			save();
-		}
-	}
 	std::string s = getUserFolder();
 	s += "openxcom.log";
 	Logger::logFile() = s;
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
-    fflush(file);
+	if(!file)
+	{
+		std::stringstream error;
+		error << "Error: invalid User Folder " << _userFolder << std::endl;
+		std::cout << error.str();
+		return false;
+	}
+	fflush(file);
 	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
@@ -417,6 +391,12 @@ bool init(int argc, char** args)
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
+
+    // now apply options set on the command line, overriding defaults and those loaded from config file
+    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+    {
+        _options[it->first] = it->second;
+    }
 	return true;
 }
 
@@ -525,6 +505,62 @@ std::vector<std::string> *getDataList()
 std::string getUserFolder()
 {
 	return _userFolder;
+}
+
+/**
+ * Sets up the game's User folder where settings
+ * and saves are stored in.
+ */
+void setUserFolder()
+{
+    std::vector<std::string> user = CrossPlatform::findUserFolders();
+    _configFolder = CrossPlatform::findConfigFolder();
+
+    // Look for an existing user folder
+    for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+    {
+        if (CrossPlatform::folderExists(*i))
+        {
+            _userFolder = *i;
+            break;
+        }
+    }
+
+    // Set up folders
+    if (_userFolder == "")
+    {
+        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        {
+            if (CrossPlatform::createFolder(*i))
+            {
+                _userFolder = *i;
+                break;
+            }
+        }
+    }
+    if (_configFolder == "")
+    {
+        _configFolder = _userFolder;
+    }
+
+    // Load existing options
+    if (CrossPlatform::folderExists(_configFolder))
+    {
+        try
+        {
+            load();
+        }
+        catch (YAML::Exception &e)
+        {
+            Log(LOG_ERROR) << e.what();
+        }
+    }
+    // Create config folder and save options
+    else
+    {
+        CrossPlatform::createFolder(_configFolder);
+        save();
+    }
 }
 
 /**
