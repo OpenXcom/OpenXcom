@@ -36,6 +36,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -50,7 +51,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _sOffset(0), _eOffset(0)
+SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _hasSci(0), _hasEng(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
@@ -157,13 +158,14 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
-			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+			RuleCraft *rule = (*i)->getRules();
+			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding(rule->getSellCost()).c_str());
 		}
 	}
 	if (_base->getAvailableScientists() > 0)
 	{
 		_qtys.push_back(0);
-		_sOffset++;
+		_hasSci = 1;
 		std::wstringstream ss;
 		ss << _base->getAvailableScientists();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
@@ -171,7 +173,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	if (_base->getAvailableEngineers() > 0)
 	{
 		_qtys.push_back(0);
-		_eOffset++;
+		_hasEng = 1;
 		std::wstringstream ss;
 		ss << _base->getAvailableEngineers();
 		_lstItems->addRow(4, _game->getLanguage()->getString("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
@@ -217,6 +219,11 @@ void SellState::think()
 	_timerDec->think(this, 0);
 }
 
+int SellState::getCraftIndex(unsigned selected) const
+{
+	return selected - _soldiers.size();
+}
+
 /**
  * Sells the selected items.
  * @param action Pointer to an action.
@@ -229,7 +236,7 @@ void SellState::btnOkClick(Action *)
 		if (_qtys[i] > 0)
 		{
 			// Sell soldiers
-			if (i < _soldiers.size())
+			if (SELL_SOLDIER == getType(i))
 			{
 				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
@@ -246,9 +253,9 @@ void SellState::btnOkClick(Action *)
 				delete _soldiers[i];
 			}
 			// Sell crafts
-			else if (i >= _soldiers.size() && i < _soldiers.size() + _crafts.size())
+			else if (SELL_CRAFT == getType(i))
 			{
-				Craft *craft =  _crafts[i - _soldiers.size()];
+				Craft *craft =  _crafts[getCraftIndex(i)];
 
 				// Remove weapons from craft
 				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
@@ -287,19 +294,19 @@ void SellState::btnOkClick(Action *)
 				delete craft;
 			}
 			// Sell scientists
-			else if (_base->getAvailableScientists() > 0 && i == _soldiers.size() + _crafts.size())
+			else if (SELL_SCIENTIST == getType(i))
 			{
 				_base->setScientists(_base->getScientists() - _qtys[i]);
 			}
 			// Sell engineers
-			else if (_base->getAvailableEngineers() > 0 && i == _soldiers.size() + _crafts.size() + _sOffset)
+			else if (SELL_ENGINEER == getType(i))
 			{
 				_base->setEngineers(_base->getEngineers() - _qtys[i]);
 			}
 			// Sell items
 			else
 			{
-				_base->getItems()->removeItem(_items[i - _soldiers.size() - _crafts.size() - _sOffset - _eOffset], _qtys[i]);
+				_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
 			}
 		}
 	}
@@ -426,15 +433,19 @@ void SellState::lstItemsMousePress(Action *action)
 int SellState::getPrice()
 {
 	// Personnel/craft aren't worth anything
-	if (_sel < _soldiers.size() + _crafts.size() + _sOffset + _eOffset)
+	switch(getType(_sel))
 	{
+	case SELL_SOLDIER:
+	case SELL_ENGINEER:
+	case SELL_SCIENTIST:
 		return 0;
+	case SELL_ITEM:
+		return _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSellCost();
+	case SELL_CRAFT:
+		Craft *craft =  _crafts[getCraftIndex(_sel)];
+		return craft->getRules()->getSellCost();
 	}
-	// Item cost
-	else
-	{
-		return _game->getRuleset()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset])->getSellCost();
-	}
+    return 0;
 }
 
 /**
@@ -444,25 +455,20 @@ int SellState::getPrice()
 int SellState::getQuantity()
 {
 	// Soldiers/crafts are individual
-	if (_sel < _soldiers.size() + _crafts.size())
+	switch(getType(_sel))
 	{
+	case SELL_SOLDIER:
+	case SELL_CRAFT:
 		return 1;
-	}
-	// Scientist quantity
-	else if (_base->getAvailableScientists() > 0 && _sel == _soldiers.size() + _crafts.size())
-	{
+	case SELL_SCIENTIST:
 		return _base->getAvailableScientists();
-	}
-	// Engineer quantity
-	else if (_base->getAvailableEngineers() > 0 && _sel == _soldiers.size() + _crafts.size() + _sOffset)
-	{
+	case SELL_ENGINEER:
 		return _base->getAvailableEngineers();
+	case SELL_ITEM:
+		return _base->getItems()->getItem(_items[getItemIndex(_sel)]);
 	}
-	// Item quantity
-	else
-	{
-		return _base->getItems()->getItem(_items[_sel - _soldiers.size() - _crafts.size() - _sOffset - _eOffset]);
-	}
+
+	return 0;
 }
 
 /**
@@ -526,4 +532,27 @@ void SellState::updateItemStrings()
 	_txtSales->setText(s);
 }
 
+enum SellType SellState::getType(unsigned selected) const
+{
+	unsigned max = _soldiers.size();
+
+	if (selected < max)
+		return SELL_SOLDIER;
+	if (selected < (max += _crafts.size()) )
+		return SELL_CRAFT;
+	if (selected < (max += _hasSci))
+		return SELL_SCIENTIST;
+	if (selected < (max += _hasEng))
+		return SELL_ENGINEER;
+
+	return SELL_ITEM;
+}
+/**
+ * Gets the shortest distance between the two bases.
+ * @return Distance
+ */
+int SellState::getItemIndex(unsigned selected) const
+{
+	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
+}
 }
