@@ -28,6 +28,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Options.h"
+#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {

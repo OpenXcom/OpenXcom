@@ -775,6 +775,9 @@
     <ClCompile Include="Battlescape\EndBattleBState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\SerializationHelper.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />

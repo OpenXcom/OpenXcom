@@ -2131,6 +2131,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\SerializationHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SerializationHelper.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Soldier.cpp"
 				>
 			</File>

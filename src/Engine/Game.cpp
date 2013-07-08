@@ -39,6 +39,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
+#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {

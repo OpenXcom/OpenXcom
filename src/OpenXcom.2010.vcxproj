@@ -445,6 +445,7 @@
     <ClCompile Include="Savegame\ResearchProject.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
+    <ClCompile Include="Savegame\SerializationHelper.cpp" />
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />

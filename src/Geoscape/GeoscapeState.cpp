@@ -100,6 +100,8 @@
 #include <functional>
 
 #include <assert.h>
+#include "../Menu/SaveState.h"
+#include "../Menu/LoadState.h"
 
 namespace OpenXcom
 {

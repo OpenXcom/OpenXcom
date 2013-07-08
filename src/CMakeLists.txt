@@ -515,6 +515,8 @@ set ( savegame_src
   Savegame/WeightedOptions.h
   Savegame/AlienStrategy.cpp
   Savegame/AlienStrategy.h
+  Savegame/SerializationHelper.cpp
+  Savegame/SerializationHelper.h
 )
 
 set ( ufopedia_src

@@ -82,6 +82,8 @@
 #include "../lodepng.h"
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Menu/SaveState.h"
+#include "../Menu/LoadState.h"
 
 namespace OpenXcom
 {
