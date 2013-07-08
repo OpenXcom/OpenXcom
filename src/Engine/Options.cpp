@@ -356,61 +356,20 @@ bool init(int argc, char** args)
 		// Missing data folder is handled in StartState
 	}
 	if (_userFolder == "")
-	{
-		std::vector<std::string> user = CrossPlatform::findUserFolders();
-		_configFolder = CrossPlatform::findConfigFolder();
+		setUserFolder();
 
-		// Look for an existing user folder
-		for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
-		{
-			if (CrossPlatform::folderExists(*i))
-			{
-				_userFolder = *i;
-				break;
-			}
-		}
-
-		// Set up folders
-		if (_userFolder == "")
-		{
-			for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
-			{
-				if (CrossPlatform::createFolder(*i))
-				{
-					_userFolder = *i;
-					break;
-				}
-			}
-		}
-		if (_configFolder == "")
-		{
-			_configFolder = _userFolder;
-		}
-
-		// Load existing options
-		if (CrossPlatform::folderExists(_configFolder))
-		{
-			try
-			{
-				load();
-			}
-			catch (YAML::Exception &e)
-			{
-				Log(LOG_ERROR) << e.what();
-			}
-		}
-		// Create config folder and save options
-		else
-		{
-			CrossPlatform::createFolder(_configFolder);
-			save();
-		}
-	}
 	std::string s = getUserFolder();
 	s += "openxcom.log";
 	Logger::logFile() = s;
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
-    fflush(file);
+	if(!file)
+	{
+		std::stringstream error;
+		error << "Error: invalid User Folder " << _userFolder << std::endl;
+		std::cout << error.str();
+		return false;
+	}
+	fflush(file);
 	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
@@ -528,6 +487,62 @@ std::vector<std::string> *getDataList()
 std::string getUserFolder()
 {
 	return _userFolder;
+}
+
+/**
+ * Sets up the game's User folder where settings
+ * and saves are stored in.
+ */
+void setUserFolder()
+{
+    std::vector<std::string> user = CrossPlatform::findUserFolders();
+    _configFolder = CrossPlatform::findConfigFolder();
+
+    // Look for an existing user folder
+    for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+    {
+        if (CrossPlatform::folderExists(*i))
+        {
+            _userFolder = *i;
+            break;
+        }
+    }
+
+    // Set up folders
+    if (_userFolder == "")
+    {
+        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        {
+            if (CrossPlatform::createFolder(*i))
+            {
+                _userFolder = *i;
+                break;
+            }
+        }
+    }
+    if (_configFolder == "")
+    {
+        _configFolder = _userFolder;
+    }
+
+    // Load existing options
+    if (CrossPlatform::folderExists(_configFolder))
+    {
+        try
+        {
+            load();
+        }
+        catch (YAML::Exception &e)
+        {
+            Log(LOG_ERROR) << e.what();
+        }
+    }
+    // Create config folder and save options
+    else
+    {
+        CrossPlatform::createFolder(_configFolder);
+        save();
+    }
 }
 
 /**
