@@ -22,6 +22,10 @@
 #include "Options.h"
 #include "Logger.h"
 
+#ifdef __MORPHOS__
+#define SDL_RWFromConstMem( A, B ) SDL_RWFromMem( (void *)A, (unsigned int) B )
+#endif
+
 namespace OpenXcom
 {
 

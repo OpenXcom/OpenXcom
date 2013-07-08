@@ -18,6 +18,7 @@
 
 namespace OpenXcom 
 {
+#ifndef __NO_SHADERS
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 #ifndef __APPLE__
@@ -34,6 +35,8 @@ extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
 extern PFNGLUNIFORM1IPROC glUniform1i;
 extern PFNGLUNIFORM2FVPROC glUniform2fv;
 extern PFNGLUNIFORM4FVPROC glUniform4fv;
+
+#endif
 #endif
 std::string strGLError(GLenum glErr);
 

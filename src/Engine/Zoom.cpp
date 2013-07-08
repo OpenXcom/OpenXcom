@@ -48,7 +48,9 @@
 #endif
 
 #ifdef __GNUC__
+#ifndef __MORPHOS__
 #include <cpuid.h>
+#endif
 #endif
 
 #ifdef __SSE2__

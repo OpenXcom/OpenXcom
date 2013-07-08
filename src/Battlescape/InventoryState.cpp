@@ -471,7 +471,9 @@ void InventoryState::invClick(Action *)
 void InventoryState::handle(Action *action)
 {
 	State::handle(action);
-	
+
+
+#ifndef __MORPHOS__	
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -483,6 +485,7 @@ void InventoryState::handle(Action *action)
 			btnPrevClick(action);
 		}
 	}
+#endif
 }
 
 }

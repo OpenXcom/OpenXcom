@@ -359,12 +359,15 @@ static struct AudioSequence
 
 	void operator ()()
 	{
+	
+#ifndef __NO_FLC
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
 			int command = introSoundTrack[trackPosition].sound;
 
 			if (command & 0x200)
 			{
+#ifndef __NO_MUSIC
 				switch(command)
 				{
 				case 0x200:
@@ -383,7 +386,8 @@ static struct AudioSequence
 					m->play(1);
 					Mix_HookMusicFinished(musicDone);
 					break;
-				}		
+				}
+#endif		
 			}
 			else if (command & 0x400)
 			{
@@ -409,6 +413,7 @@ static struct AudioSequence
 			}
 			++trackPosition;
 		}
+#endif
 	}
 } *audioSequence;
 
@@ -444,6 +449,7 @@ void StartState::think()
 			}
 			_load = LOADING_SUCCESSFUL;
 
+#ifndef __NO_FLC
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
@@ -488,6 +494,7 @@ void StartState::think()
 
 				Mix_HaltChannel(-1);
 			}
+#endif
 		}
 		catch (Exception &e)
 		{

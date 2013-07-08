@@ -267,6 +267,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_selFilter = 0;
 	if (Options::getBool("useOpenGL"))
 	{
+		#ifndef __NO_SHADERS
 		std::string path = Options::getString("useOpenGLShader");
 		for (size_t i = 0; i < _filterPaths.size(); ++i)
 		{
@@ -275,6 +276,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 				_selFilter = i;
 			}
 		}
+		#endif
 	}
 	else if (Options::getBool("useScaleFilter"))
 	{

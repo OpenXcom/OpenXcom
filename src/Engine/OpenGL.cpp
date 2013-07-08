@@ -57,7 +57,7 @@ std::string strGLError(GLenum glErr)
 	return err;
 }
 
-
+#ifndef __NO_SHADERS
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 
@@ -75,6 +75,7 @@ PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = 0;
 PFNGLUNIFORM1IPROC glUniform1i = 0;
 PFNGLUNIFORM2FVPROC glUniform2fv = 0;
 PFNGLUNIFORM4FVPROC glUniform4fv = 0;
+#endif
 #endif
 
 void * (APIENTRYP glXGetCurrentDisplay)() = 0;
@@ -121,7 +122,8 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
   void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
-    if(shader_support && (fragmentshader || vertexshader)) {
+#ifndef __NO_SHADERS
+    if(shader_support && (fragmentshader || vertexshader)) {    
       glUseProgram(glprogram);
       GLint location;
 
@@ -137,6 +139,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
       location = glGetUniformLocation(glprogram, "rubyTextureSize");
       glUniform2fv(location, 1, textureSize);
     }
+#endif
 
 	glErrorCheck();
 
@@ -186,12 +189,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glFlush();
 	glErrorCheck();
 
+	#ifndef __NO_SHADERS
     if(shader_support) {
       glUseProgram(0);
     }
+    #endif
   }
 
   void OpenGL::set_shader(const char *source_yaml_filename) {
+#ifndef __NO_SHADERS
+
     if(!shader_support) return;
 
     if(fragmentshader) {
@@ -232,20 +239,27 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     }
 
     glLinkProgram(glprogram);
+#endif
   }
 
   void OpenGL::set_fragment_shader(const char *source) {
+  #ifndef __NO_SHADERS
+
     fragmentshader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentshader, 1, &source, 0);
     glCompileShader(fragmentshader);
     glAttachShader(glprogram, fragmentshader);
+    #endif
   }
 
   void OpenGL::set_vertex_shader(const char *source) {
+  #ifndef __NO_SHADERS
+
     vertexshader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexshader, 1, &source, 0);
     glCompileShader(vertexshader);
     glAttachShader(glprogram, vertexshader);
+	#endif
   }
 
   void OpenGL::init(int w, int h) {
@@ -260,6 +274,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glEnable(GL_DITHER);
     glEnable(GL_TEXTURE_2D);
 
+	#ifndef __NO_SHADERS
     //bind shader functions
 #ifndef __APPLE__
     glCreateProgram = (PFNGLCREATEPROGRAMPROC)glGetProcAddress("glCreateProgram");
@@ -290,6 +305,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     && glUniform1i && glUniform2fv && glUniform4fv;
 	
     if(shader_support) glprogram = glCreateProgram();
+    #endif
 
     //create surface texture
     resize(w, h);
@@ -297,6 +313,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 
 	void OpenGL::setVSync(bool sync)
 	{
+	#ifndef __NO_SHADERS
 		const int interval = sync ? 1 : 0;
 		if (glXGetCurrentDisplay && glXGetCurrentDrawable && glXSwapIntervalEXT)
 		{
@@ -312,6 +329,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 			wglSwapIntervalEXT(interval);
 			// Log(LOG_INFO) << "Made an attempt to set vsync via WGL.";
 		}
+		#endif
 	}
 
   void OpenGL::term() {

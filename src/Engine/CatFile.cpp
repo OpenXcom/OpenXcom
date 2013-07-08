@@ -22,6 +22,19 @@
 namespace OpenXcom
 {
 
+inline void swapUINT( unsigned int *d )
+{
+	unsigned int tmp;
+	char *sp =(char *)d;
+	char *dp =(char *)&tmp;
+	
+	dp[ 0 ] = sp[ 3 ];
+	dp[ 1 ] = sp[ 2 ];
+	dp[ 2 ] = sp[ 1 ];
+	dp[ 3 ] = sp[ 0 ];
+	*d = tmp;
+}
+
 /**
  * Creates a CAT file stream. A CAT file starts with an index of the
  * offset and size of every file contained within. Each file consists
@@ -33,8 +46,13 @@ CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios
 	if (!this)
 		return;
 
+	
 	// Get amount of files
 	read((char*)&_amount, sizeof(_amount));
+	
+#ifdef __MORPHOS__
+	swapUINT( &_amount );
+#endif	
 	_amount /= 2 * sizeof(_amount);
 
 	// Get object offsets
@@ -46,7 +64,13 @@ CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios
 	for (unsigned int i = 0; i < _amount; ++i)
 	{
 		read((char*)&_offset[i], sizeof(*_offset));
+#ifdef __MORPHOS__
+		swapUINT( &_offset[i] );
+#endif	
 		read((char*)&_size[i],   sizeof(*_size));
+#ifdef __MORPHOS__
+		swapUINT( &_size[i] );
+#endif	
 	}
 }
 

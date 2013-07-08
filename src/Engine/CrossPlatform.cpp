@@ -96,6 +96,12 @@ static char const *getHome()
 std::vector<std::string> findDataFolders()
 {
 	std::vector<std::string> list;
+	
+#ifdef __MORPHOS__
+	list.push_back("PROGDIR:data/");
+	return list;
+#endif
+	
 #ifdef _WIN32
 	char path[MAX_PATH];
 
@@ -183,6 +189,13 @@ std::vector<std::string> findDataFolders()
 std::vector<std::string> findUserFolders()
 {
 	std::vector<std::string> list;
+	
+#ifdef __MORPHOS__
+	list.push_back("PROGDIR:");
+	return list;
+#endif
+
+	
 #ifdef _WIN32
 	char path[MAX_PATH];
 
@@ -246,6 +259,10 @@ std::vector<std::string> findUserFolders()
  */
 std::string findConfigFolder()
 {
+#ifdef __MORPHOS__
+	return "PROGDIR:";
+#endif
+
 #if defined(_WIN32) || defined(__APPLE__)
 	return "";
 #elif defined (__HAIKU__)

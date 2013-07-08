@@ -73,11 +73,21 @@ void SDLInit(char *header)
 
 #endif
 
+
+#ifdef __MORPHOS__
+
+#define DEBUG
+#define ReadU16(tmp1, tmp2) /* (Uint16) */ (*(tmp1) = ((Uint8)*(tmp2+1)>>8)+(Uint8)*(tmp2));
+#define ReadU32(tmp1, tmp2) /* (Uint32) */ (*(tmp1) = (((((((Uint8)*(tmp2+3)>>8)+((Uint8)*(tmp2+2)))>>8)+((Uint8)*(tmp2+1)))>>8)+(Uint8)*(tmp2)));
+#else
 #define ReadU16(tmp1, tmp2) /* (Uint16) */ (*(tmp1) = ((Uint8)*(tmp2+1)<<8)+(Uint8)*(tmp2));
 #define ReadU32(tmp1, tmp2) /* (Uint32) */ (*(tmp1) = (((((((Uint8)*(tmp2+3)<<8)+((Uint8)*(tmp2+2)))<<8)+((Uint8)*(tmp2+1)))<<8)+(Uint8)*(tmp2)));
+#endif
 
 void FlcReadFile(Uint32 size)
-{ if(size>flc.membufSize) {
+{ 
+#ifndef __NO_FLC
+if(size>flc.membufSize) {
     if(!(flc.pMembuf=(Uint8*)realloc(flc.pMembuf, size+1))) {
       //printf("Realloc failed: %d\n", size);
       Log(LOG_FATAL) << "Realloc failed: " << size;
@@ -90,10 +100,13 @@ void FlcReadFile(Uint32 size)
     Log(LOG_ERROR) << "Can't read flx file :(";
 		return;
   }
+#endif
 } /* FlcReadFile */
 
 int FlcCheckHeader(const char *filename)
-{ if((flc.file=fopen(filename, "rb"))==NULL) {
+{ 
+#ifndef __NO_FLC
+if((flc.file=fopen(filename, "rb"))==NULL) {
     Log(LOG_ERROR) << "Could not open flx file: " << filename;
 		return -1;
   }
@@ -118,6 +131,21 @@ int FlcCheckHeader(const char *filename)
   printf("flc.HeaderSpeed: %lf\n", flc.HeaderSpeed);
 #endif
 
+
+#ifdef __MORPHOS__
+	char *pt = (char *)&flc.HeaderCheck;
+
+	printf("flx header %x %x\n", pt[0], pt[ 1 ] );
+
+  if((flc.HeaderCheck==0x012AF) || (flc.HeaderCheck==0x011AF)) { 
+    flc.screen_w=flc.HeaderWidth;
+    flc.screen_h=flc.HeaderHeight;
+	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
+    flc.screen_depth=8;
+    if(flc.HeaderCheck==0x011AF) {
+      flc.HeaderSpeed*=1000.0/70.0;
+    }
+#else
   if((flc.HeaderCheck==0x0AF12) || (flc.HeaderCheck==0x0AF11)) { 
     flc.screen_w=flc.HeaderWidth;
     flc.screen_h=flc.HeaderHeight;
@@ -126,13 +154,19 @@ int FlcCheckHeader(const char *filename)
     if(flc.HeaderCheck==0x0AF11) {
       flc.HeaderSpeed*=1000.0/70.0;
     }
+#endif
     return(0);
   }
   return(1);
+#else  
+  return (0);
+#endif
 } /* FlcCheckHeader */
 
 int FlcCheckFrame()
-{ flc.pFrame=flc.pMembuf+flc.FrameSize-16;
+{ 
+#ifndef __NO_FLC
+flc.pFrame=flc.pMembuf+flc.FrameSize-16;
   ReadU32(&flc.FrameSize, flc.pFrame+0);
   ReadU16(&flc.FrameCheck, flc.pFrame+4);
   ReadU16(&flc.FrameChunks, flc.pFrame+6);
@@ -155,11 +189,14 @@ int FlcCheckFrame()
   if(flc.FrameCheck==0x0f100) { 
 #ifdef DEBUG
     printf("Ani info!!!\n");
-#endif
+#endif	
     return(0);
   }
 
   return(1);
+#else
+  return(0);
+#endif
 } /* FlcCheckFrame */
 
 void COLORS256()
@@ -427,7 +464,9 @@ void FlcDoOneFrame()
 } /* FlcDoOneFrame */
 
 void SDLWaitFrame(void)
-{ static double oldTick=0.0;
+{ 
+#ifndef __NO_FLC
+static double oldTick=0.0;
   Uint32 currentTick;
   double waitTicks;
   double delay = flc.DelayOverride ? flc.DelayOverride : flc.HeaderSpeed;
@@ -446,6 +485,7 @@ void SDLWaitFrame(void)
 			SDL_Delay(1);
 		}
 	} while (waitTicks > 0.0); 
+#endif
 } /* SDLWaitFrame */
 
 void FlcInitFirstFrame()
@@ -488,6 +528,8 @@ void FlcDeInit()
 void FlcMain(void (*frameCallBack)())
 { flc.quit=false;
   SDL_Event event;
+  
+#ifndef __NO_FLC
   FlcInitFirstFrame();
   flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
   while(!flc.quit) {
@@ -542,6 +584,7 @@ void FlcMain(void (*frameCallBack)())
 	} while (!flc.quit && finalFrame && SDL_GetTicks() - pauseStart < 10000); // 10 sec pause but we're actually just fading out and going to main menu when the music ends
 	if (finalFrame) flc.quit = true;;
   }
+#endif
 } /* FlcMain */
 
 

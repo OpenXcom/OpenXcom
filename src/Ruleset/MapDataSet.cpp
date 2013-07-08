@@ -200,6 +200,15 @@ void MapDataSet::loadData()
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 		to->setExplosive((int)mcd.HE_Strength);
+		
+	#ifdef __MORPHOS__
+		unsigned short p = mcd.ScanG;
+		char *src = (char *)&p;
+		char *dst = (char *)&mcd.ScanG;
+		dst[ 0 ] = src[ 1 ];
+		dst[ 1 ] = src[ 0 ];
+	#endif		
+		
 		to->setMiniMapIndex (mcd.ScanG);
 
 		for (int layer = 0; layer < 12; layer++)
@@ -279,7 +288,15 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		value = SDL_SwapLE16(value);
+//value = SDL_SwapLE16(value);   ??
+	#ifdef __MORPHOS__
+		Uint16 p = value;
+		char *src = (char *)&p;
+		char *dst = (char *)&value;
+		dst[ 0 ] = src[ 1 ];
+		dst[ 1 ] = src[ 0 ];
+	#endif			
+	
 		voxelData->push_back(value);
 	}
 
