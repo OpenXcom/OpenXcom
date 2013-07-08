@@ -127,7 +127,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
-	if (_save != 0 && Options::getInt("autosave") == 3)
+	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
 	{
 		SaveState *ss = new SaveState(this, true, false);
 		delete ss;
