@@ -371,6 +371,12 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnSave->setHighContrast(true);
 	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
+
+	if (Options::getInt("autosave") >= 2)
+	{
+		_btnSave->setVisible(false);
+		_btnLoad->setVisible(false);
+	}
 }
 
 /**

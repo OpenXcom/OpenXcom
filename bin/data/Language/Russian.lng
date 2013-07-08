@@ -2283,6 +2283,10 @@ STR_LIST_ITEM
 Наименование
 STR_DISPLAY_FILTER
 Фильтр изображения
+STR_QUICK_SAVE
+Быстрое сохранение
+STR_QUICK_LOAD
+Быстрая загрузка
 STR_ADVANCED
 ДОПОЛНИТЕЛЬНО
 STR_ADVANCED_OPTIONS
@@ -2375,6 +2379,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Высота взрыва
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Как высоко могут распространяться взрывы.{NEWLINE}(Плоский: 0, Объемный: 3)
+STR_AUTOSAVE
+Режим автоматического сохранения
+STR_AUTOSAVE_DESC
+0 - Отключено. 1 - Быстрое сохранение и загрузка. 2 - Автосохранение только в 00:00. Все кнопки сохранения и загрузки отключены. 3 - То же. Дополнительно автосохранение при выходе из игры.
 STR_ALLOWPSIONICCAPTURE
 Разрешить пси-захват
 STR_ALLOWPSIONICCAPTURE_DESC
