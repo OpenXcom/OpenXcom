@@ -1238,6 +1238,7 @@ void GeoscapeState::time30Minutes()
 				if (!detected)
 				{
 					(*u)->setDetected(false);
+					(*u)->setHyperDetected(false); // i'm not 100% sure this is correct, need verification.
 					if (!(*u)->getFollowers()->empty())
 					{
 						popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
