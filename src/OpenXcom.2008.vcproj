@@ -1139,14 +1139,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Battlescape\EndBattleBState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\EndBattleBState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Battlescape\Explosion.cpp"
 				>
 			</File>

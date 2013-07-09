@@ -23,7 +23,6 @@
 #include "BattlescapeState.h"
 #include "Map.h"
 #include "Camera.h"
-#include "EndBattleBState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -189,7 +188,7 @@ void UnitDieBState::think()
 
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
-				_parent->statePushBack(new EndBattleBState(_parent, liveSoldiers, _parent->getSave()->getBattleState()));
+				_parent->statePushBack(0);
 			}
 		}
 	}

@@ -27,7 +27,6 @@
 #include "BattleAIState.h"
 #include "AggroBAIState.h"
 #include "UnitTurnBState.h"
-#include "EndBattleBState.h"
 #include "Map.h"
 #include "Camera.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -2439,7 +2438,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 				_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 				if (liveAliens == 0 || liveSoldiers == 0)
 				{
-					_save->getBattleState()->getBattleGame()->statePushBack(new EndBattleBState(_save->getBattleState()->getBattleGame(), liveSoldiers, _save->getBattleState()));
+					_save->getBattleState()->getBattleGame()->statePushBack(0);
 				}
 			}
 		}
