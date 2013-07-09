@@ -1500,7 +1500,6 @@ items:
     costSell: 31500
     transferTime: 48
     weight: 1
-    weight: 3
     bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 36
     floorSprite: 35
     hitSound: 0
