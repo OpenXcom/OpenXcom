@@ -811,11 +811,12 @@ bool Pathfinding::previewPath(bool bRemove)
 		switchBack = true;
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT);
 	}
+	bool running = (SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
-		if ((SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1)
+		if (running)
 		{
 			tu *= 0.75;
 		}
