@@ -661,7 +661,10 @@ void BattleUnit::lookAt(int direction, bool force)
 	{
 		if (direction < 0 || direction >= 8) return;
 		_toDirection = direction;
-		_status = STATUS_TURNING;
+		if (_toDirection != _direction)
+		{
+			_status = STATUS_TURNING;
+		}
 	}
 	else
 	{
