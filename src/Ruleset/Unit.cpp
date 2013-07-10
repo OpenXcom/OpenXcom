@@ -302,7 +302,7 @@ int Unit::getIntelligence() const
 
 /**
  * Get the aggression. Determines the chance of revenge and taking cover.
- * @return intelligence.
+ * @return aggression.
  */
 int Unit::getAggression() const
 {
