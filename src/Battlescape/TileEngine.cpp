@@ -585,23 +585,29 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	if (unitSeen)
 	{
 		// now check if we really see it taking into account smoke tiles
-		// initial smoke "density" of a smoke grenade is around 10 per tile
-		// we do density/2 to get the decay of visibility, so in fresh smoke we only have 4 tiles of visibility
+		// initial smoke "density" of a smoke grenade is around 15 per tile
+		// we do 2*density/3 to get the decay of visibility
+		// so in fresh smoke we should only have 4 tiles of visibility
+		// this is traced in voxel space, with smoke affecting visibility every step of the way
 		_trajectory.clear();
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 		Tile *t = _save->getTile(currentUnit->getPosition());
-		int maxViewDistance = MAX_VIEW_DISTANCE - (2 * t->getSmoke() / 3);
+		int visibleDistance = _trajectory.size();
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
 		{
 			if (t != _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24)))
 			{
 				t = _save->getTile(Position(_trajectory.at(i).x/16,_trajectory.at(i).y/16, _trajectory.at(i).z/24));
-				maxViewDistance -= 2 * t->getSmoke() / 3;
 			}
-		}
-		if (distance(currentUnit->getPosition(), tile->getPosition()) > maxViewDistance)
-		{
-			unitSeen = false;
+			if (t->getFire() == 0)
+			{
+				visibleDistance += 2 * t->getSmoke() / 3;
+			}
+			if (visibleDistance > MAX_VOXEL_VIEW_DISTANCE)
+			{
+				unitSeen = false;
+				break;
+			}
 		}
 	}
 	return unitSeen;
