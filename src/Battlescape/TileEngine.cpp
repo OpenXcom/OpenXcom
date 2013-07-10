@@ -586,7 +586,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	{
 		// now check if we really see it taking into account smoke tiles
 		// initial smoke "density" of a smoke grenade is around 15 per tile
-		// we do 2*density/3 to get the decay of visibility
+		// we do density/3 to get the decay of visibility
 		// so in fresh smoke we should only have 4 tiles of visibility
 		// this is traced in voxel space, with smoke affecting visibility every step of the way
 		_trajectory.clear();
@@ -601,7 +601,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 			}
 			if (t->getFire() == 0)
 			{
-				visibleDistance += 2 * t->getSmoke() / 3;
+				visibleDistance += t->getSmoke() / 3;
 			}
 			if (visibleDistance > MAX_VOXEL_VIEW_DISTANCE)
 			{
