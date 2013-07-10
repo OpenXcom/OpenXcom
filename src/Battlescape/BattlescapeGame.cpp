@@ -469,6 +469,11 @@ void BattlescapeGame::endTurn()
 		return;
 	}
 
+	// if all units from either faction are killed - the mission is over.
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+	tallyUnits(liveAliens, liveSoldiers, true);
+
 	_save->endTurn();
 
 	if (_save->getSide() == FACTION_PLAYER)
@@ -484,11 +489,6 @@ void BattlescapeGame::endTurn()
 
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
-
-	// if all units from either faction are killed - the mission is over.
-	int liveAliens = 0;
-	int liveSoldiers = 0;
-	tallyUnits(liveAliens, liveSoldiers, true);
 
 	if (_save->isObjectiveDestroyed())
 	{
