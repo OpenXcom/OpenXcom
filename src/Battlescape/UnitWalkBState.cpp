@@ -177,12 +177,8 @@ void UnitWalkBState::think()
 			if (_unit->getFaction() != FACTION_PLAYER)
 			{
 				_unit->setVisible(false);
-				_terrain->calculateFOV(_unit->getPosition());
 			}
-			else
-			{
-				_terrain->calculateFOV(_unit);
-			}
+			_terrain->calculateFOV(_unit->getPosition());
 			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
@@ -219,7 +215,6 @@ void UnitWalkBState::think()
 			}
 			if (unitSpotted)
 			{
-				_terrain->calculateFOV(_unit->getPosition());
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 				_pf->abortPath();

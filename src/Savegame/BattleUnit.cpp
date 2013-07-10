@@ -553,15 +553,14 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 				middle = 1;
 		}
 	}
+	if (!cache)
+	{
+		middle = 1;
+		end = 2;
+	}
 
 	_walkPhase++;
 	
-	if (!cache)
-	{
-		_walkPhase = 1;
-		middle = 1;
-		end = 1;
-	}
 
 	if (_walkPhase == middle)
 	{

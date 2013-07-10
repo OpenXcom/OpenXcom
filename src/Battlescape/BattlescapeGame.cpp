@@ -472,6 +472,7 @@ void BattlescapeGame::endTurn()
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
+	// we'll tally them NOW, so that any infected units will... change
 	tallyUnits(liveAliens, liveSoldiers, true);
 
 	_save->endTurn();
