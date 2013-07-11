@@ -85,6 +85,7 @@ void ResearchInfoState::buildUi ()
 	int button_x_border = 16;
 	int button_y_border = 10;
 	int button_height = 16;
+	int footer_button_width = width / 2 - (4 + button_x_border);
 
 	_screen = false;
 	_window = new Window(this, width, height, start_x, start_y);
@@ -96,7 +97,8 @@ void ResearchInfoState::buildUi ()
 	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
 	_txtMore = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
 	_txtLess = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
-	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnOk = new TextButton(footer_button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnCancel = new TextButton(footer_button_width, button_height, start_x + button_x_border + footer_button_width + 8, start_y + height - button_height - button_y_border);
 
 	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
@@ -104,6 +106,7 @@ void ResearchInfoState::buildUi ()
 	add(_surface);
 	add(_window);
 	add(_btnOk);
+	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtAvailableScientist);
 	add(_txtAvailableSpace);
@@ -165,7 +168,18 @@ void ResearchInfoState::buildUi ()
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
+	if (_rule)
+	{
+		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+		_btnCancel->onKeyboardPress((ActionHandler)&ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	}
+	else
+	{
+		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_PROJECT"));
+		_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	}
+	_btnCancel->onMouseClick((ActionHandler)&ResearchInfoState::btnCancelClick);
 }
 
 /**
@@ -174,6 +188,17 @@ void ResearchInfoState::buildUi ()
  */
 void ResearchInfoState::btnOkClick(Action *)
 {
+	_game->popState();
+}
+
+/**
+ * Returns to the previous screen, removing the current project from the active
+ * research list.
+ * @param action Pointer to an action.
+ */
+void ResearchInfoState::btnCancelClick(Action *)
+{
+	_base->removeResearch(_project);
 	_game->popState();
 }
 
