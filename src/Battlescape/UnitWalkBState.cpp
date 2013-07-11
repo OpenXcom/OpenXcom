@@ -67,7 +67,7 @@ void UnitWalkBState::init()
 	_target = _action.target;
 	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: " << _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z << "," << " to " << _target.x << "," << _target.y << "," << _target.z;}
 	int dir = _pf->getStartDirection();
-	if (dir != -1 && dir != _unit->getDirection())
+	if (!_action.strafe && dir != -1 && dir != _unit->getDirection())
 	{
 		_unit->lookAt(dir);
 		_beforeFirstStep = true;
