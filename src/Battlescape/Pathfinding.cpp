@@ -583,7 +583,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 		}
-		else if (tile->hasNoFloor(0)) // this whole section is devoted to making large units not take part in any kind of falling behaviour
+		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 		{
 			Position pos = tile->getPosition();
 			while (pos.z >= 0)
