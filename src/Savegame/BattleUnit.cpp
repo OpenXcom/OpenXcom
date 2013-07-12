@@ -555,8 +555,8 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 	}
 	if (!cache)
 	{
-		middle = 1;
-		end = 2;
+		_pos = _destination;
+		end = 1;
 	}
 
 	_walkPhase++;
@@ -569,7 +569,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		_pos = _destination;
 	}
 
-	if (_walkPhase == end)
+	if (_walkPhase >= end)
 	{
 		if (_floating && !_tile->hasNoFloor(tileBelowMe))
 		{
