@@ -1094,6 +1094,10 @@ void DogfightState::move()
 			{
 				_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
 				_ufo->setAltitude("STR_GROUND");
+				if (_ufo->getCrashId() == 0)
+				{
+					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
+				}
 			}
 		}
 		_timeout += 30;

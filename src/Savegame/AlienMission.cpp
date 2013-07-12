@@ -404,6 +404,10 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	ufo.setAltitude(ufo.getTrajectory().getAltitude(ufo.getTrajectoryPoint() + 1));
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
+		if (ufo.getLandId() != 0)
+		{
+			ufo.setLandId(0);
+		}
 		ufo.setTrajectoryPoint(ufo.getTrajectoryPoint() + 1);
 		// Set next waypoint.
 		Waypoint *wp = new Waypoint();
@@ -475,6 +479,10 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		{
 			// Set timer for UFO on the ground.
 			ufo.setSecondsRemaining(ufo.getTrajectory().groundTimer());
+			if (ufo.getDetected() && ufo.getLandId() == 0)
+			{
+				ufo.setLandId(engine.getSavedGame()->getId("STR_LANDING_SITE"));
+			}
 		}
 	}
 }
