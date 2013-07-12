@@ -57,8 +57,10 @@ namespace Options
 	std::vector<std::string> *getDataList();
 	/// Gets the game's user folder.
 	std::string getUserFolder();
-	/// Sets the game's user folder.
-	void setUserFolder();
+	/// Sets the game's data, user and config folders.
+	void setFolders();
+	/// Update game options from config file and command line.
+	void updateOptions();
 	/// Gets a string option.
 	std::string getString(const std::string& id);
 	/// Gets an integer option.
