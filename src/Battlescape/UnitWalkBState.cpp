@@ -69,7 +69,6 @@ void UnitWalkBState::init()
 	int dir = _pf->getStartDirection();
 	if (!_action.strafe && dir != -1 && dir != _unit->getDirection())
 	{
-		_unit->lookAt(dir);
 		_beforeFirstStep = true;
 	}
 }
