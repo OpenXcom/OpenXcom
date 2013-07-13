@@ -1153,6 +1153,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 	{
 		// power 0 - 200%
 		const int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+		int verticaloffset = 0;
 		if (!bu)
 		{
 			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
@@ -1163,14 +1164,15 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 				if (buBelow)
 				{
 					bu = buBelow;
+					verticaloffset = 24;
 				}
 			}
 		}
 		if (bu)
 		{
 			const int sz = bu->getArmor()->getSize() * 8;
-			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz,bu->getHeight() + bu->getFloatHeight() - tile->getTerrainLevel());
-			const Position relative = center - target;
+			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz, bu->getFloatHeight() - tile->getTerrainLevel());
+			const Position relative = (center - target) - Position(0,0,verticaloffset);
 
 			adjustedDamage = bu->damage(relative, rndPower, type);
 
