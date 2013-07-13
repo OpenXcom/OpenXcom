@@ -66,7 +66,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtItem = new Text(130, 9, 10, 32);
 	_txtQuantity = new Text(54, 9, 126, 32);
 	_txtSell = new Text(96, 9, 180, 32);
-	_txtValue = new Text(40, 9, 266, 32);
+	_txtValue = new Text(40, 9, 260, 32);
 	_lstItems = new TextList(287, 120, 8, 44);
 
 	// Set palette
@@ -128,8 +128,8 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtValue->setText(_game->getLanguage()->getString("STR_VALUE"));
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColumn(189, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 66, 22, 40);
+	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
+	_lstItems->setColumns(4, 150, 60, 22, 55);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
