@@ -370,7 +370,7 @@ public:
 	void setEnergy(int energy);
 	/// Halve the unit's armor values.
 	void halveArmor();
-	/// Gets the unit's faction.
+	/// Get the faction that killed this unit.
 	UnitFaction killedBy() const;
 	/// Set the faction that killed this unit.
 	void killedBy(UnitFaction f);
