@@ -1180,7 +1180,7 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			if (Options::getInt("autopsyBonus")
 				&& bu->getOriginalFaction() == FACTION_HOSTILE
 				&& unit->getOriginalFaction() == FACTION_PLAYER
-				&& _save->getBattleState()->getGame()->getSavedGame()->isResearched(bu->getRace()))
+				&& _save->getBattleState()->getGame()->getSavedGame()->isResearched(bu->getRace()+"_AUTOPSY"))
 			{
 				damageModifier += Options::getInt("autopsyBonus") / 100.0f;
 			}
