@@ -4291,7 +4291,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
-    loftemps: 2
+    loftemps: 3
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
     corpseItem: STR_SILACOID_CORPSE
@@ -4331,7 +4331,7 @@ armors:
       - 1.2
       - 1.6
       - 1.0
-    loftemps: 2
+    loftemps: 3
 soldiers:
   - type: XCOM
     minStats:
@@ -4821,7 +4821,7 @@ units:
       psiSkill: 0
       melee: 50
     armor: CIVM_ARMOR
-    standHeight: 22
+    standHeight: 21
     kneelHeight: 14
     value: 30
     intelligence: 4
@@ -4840,7 +4840,7 @@ units:
       psiSkill: 0
       melee: 50
     armor: CIVF_ARMOR
-    standHeight: 22
+    standHeight: 21
     kneelHeight: 14
     value: 30
     intelligence: 4
