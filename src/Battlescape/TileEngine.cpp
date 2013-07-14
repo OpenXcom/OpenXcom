@@ -48,6 +48,8 @@
 #include "ProjectileFlyBState.h"
 #include "../Engine/Logger.h"
 #include "../aresame.h"
+#include "../Engine/Game.h"
+#include "../Savegame/SavedGame.h"
 
 namespace OpenXcom
 {
@@ -1174,7 +1176,15 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 			const Position target = bu->getPosition() * Position(16,16,24) + Position(sz,sz, bu->getFloatHeight() - tile->getTerrainLevel());
 			const Position relative = (center - target) - Position(0,0,verticaloffset);
 
-			adjustedDamage = bu->damage(relative, rndPower, type);
+			float damageModifier = 1.0f;
+			if (Options::getInt("autopsyBonus")
+				&& bu->getOriginalFaction() == FACTION_HOSTILE
+				&& unit->getOriginalFaction() == FACTION_PLAYER
+				&& _save->getBattleState()->getGame()->getSavedGame()->isResearched(bu->getRace()))
+			{
+				damageModifier += Options::getInt("autopsyBonus") / 100.0f;
+			}
+			adjustedDamage = bu->damage(relative, rndPower, type, false, damageModifier);
 
 			const int bravery = (110 - bu->getStats()->bravery) / 10;
 			const int modifier = bu->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;

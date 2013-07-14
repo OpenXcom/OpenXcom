@@ -941,9 +941,10 @@ int BattleUnit::getMorale() const
  * @param position The position defines which part of armor and/or bodypart is hit.
  * @param power
  * @param type
+ * @param multiplier Bonus or penalty to apply to the damage
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor, float multiplier)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -953,7 +954,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 		return 0;
 	}
 
-	power = (int)floor(power * _armor->getDamageModifier(type));
+	power = (int)floor(power * _armor->getDamageModifier(type) * multiplier);
 
 	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
 
@@ -2562,6 +2563,15 @@ bool BattleUnit::tookFireDamage() const
 void BattleUnit::toggleFireDamage()
 {
 	_hitByFire = !_hitByFire;
+}
+
+/**
+ * Returns the race of this unit.
+ * @return race.
+ */
+std::string BattleUnit::getRace()
+{
+    return _race;
 }
 
 }

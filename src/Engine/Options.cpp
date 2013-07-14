@@ -128,6 +128,7 @@ void createDefault()
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
+	setInt("autopsyBonus", 0); // percentage damage modifier from knowing alien's weak spots
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
