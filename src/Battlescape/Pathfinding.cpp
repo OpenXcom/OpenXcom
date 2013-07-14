@@ -310,6 +310,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						endPosition->z--;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+						fellDown = true;
 					}
 			}
 			else if (_movementType == MT_FLY && belowDestination && belowDestination->getUnit() && belowDestination->getUnit() != unit)
@@ -400,6 +401,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				if (!fellDown && !triedStairs && destinationTile->getMapData(MapData::O_OBJECT))
 				{
 					cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+				}
+				// climbing up a level costs one extra
+				if (verticalOffset.z > 0)
+				{
+					cost++;
 				}
 			}
 
@@ -591,7 +597,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 				Tile *t = _save->getTile(pos);
 				BattleUnit *unit = t->getUnit();
 
-				if (unit != 0)
+				if (unit != 0 && unit != _unit)
 				{
 					// don't let large units fall on other units
 					if (_unit && _unit->getArmor()->getSize() > 1)
