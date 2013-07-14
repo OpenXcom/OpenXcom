@@ -59,8 +59,8 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(140, 16, 16, 176);
-	_btnClear = new TextButton(140, 16, 164, 176);
+	_btnOk = new TextButton(140, 16, 164, 176);
+	_btnClear = new TextButton(140, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);

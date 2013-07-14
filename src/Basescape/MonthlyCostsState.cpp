@@ -48,11 +48,11 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtTitle = new Text(310, 16, 5, 12);
 	_txtCost = new Text(80, 9, 115, 32);
 	_txtQuantity = new Text(55, 9, 195, 32);
-	_txtTotal = new Text(60, 9, 250, 32);
+	_txtTotal = new Text(60, 9, 249, 32);
 	_txtRental = new Text(150, 9, 10, 48);
 	_txtSalaries = new Text(150, 9, 10, 80);
 	_txtIncome = new Text(150, 9, 10, 136);
-	_lstCrafts = new TextList(300, 20, 10, 56);
+	_lstCrafts = new TextList(288, 24, 10, 56);
 	_lstSalaries = new TextList(300, 30, 10, 88);
 	_lstMaintenance = new TextList(300, 9, 10, 120);
 	_lstTotal = new TextList(100, 9, 205, 136);
@@ -111,7 +111,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_txtIncome->setText(ss.str());
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-	_lstCrafts->setColumns(4, 125, 70, 45, 60);
+	_lstCrafts->setColumns(4, 125, 70, 44, 60);
 	_lstCrafts->setDot(true);
 
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
@@ -127,7 +127,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	}
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
-	_lstSalaries->setColumns(4, 125, 70, 45, 60);
+	_lstSalaries->setColumns(4, 125, 70, 44, 60);
 	_lstSalaries->setDot(true);
 
 	std::wstringstream ss4;
@@ -141,13 +141,13 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	_lstSalaries->addRow(4, _game->getLanguage()->getString("STR_SCIENTISTS").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost()).c_str(), ss6.str().c_str(), Text::formatFunding(_base->getTotalScientists() * _game->getRuleset()->getScientistCost()).c_str());
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
-	_lstMaintenance->setColumns(2, 240, 60);
+	_lstMaintenance->setColumns(2, 239, 60);
 	_lstMaintenance->setDot(true);
 	_lstMaintenance->addRow(2, _game->getLanguage()->getString("STR_BASE_MAINTENANCE").c_str(), Text::formatFunding(_base->getFacilityMaintenance()).c_str());
 	_lstMaintenance->setCellColor(0, 0, Palette::blockOffset(15)+1);
 
 	_lstTotal->setColor(Palette::blockOffset(13));
-	_lstTotal->setColumns(2, 45, 55);
+	_lstTotal->setColumns(2, 44, 55);
 	_lstTotal->setDot(true);
 	_lstTotal->addRow(2, _game->getLanguage()->getString("STR_TOTAL").c_str(), Text::formatFunding(_base->getMonthlyMaintenace()).c_str());
 }
