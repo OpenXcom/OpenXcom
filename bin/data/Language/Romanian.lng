@@ -2282,9 +2282,9 @@ ARTICOL
 STR_DISPLAY_FILTER
 Filtru Afișaj
 STR_QUICK_SAVE
-Quick Save
+Salvare Rapidă
 STR_QUICK_LOAD
-Quick Load
+Încărcare Rapidă
 STR_ADVANCED
 AVANSAT
 STR_ADVANCED_OPTIONS
@@ -2378,9 +2378,9 @@ STR_BATTLEEXPLOSIONHEIGHT
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
 STR_AUTOSAVE
-Autosave mode
+Mod salvare automată
 STR_AUTOSAVE_DESC
-0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+0 - Dezactivată. 1 - Salvare și încărcare rapidă. 2 - Salvare automată numai la 00:00. Toate butoanele de salvare și încărcare sunt dezactivate. 3 - La fel ca precenta, precum și salvare automată la ieșirea din joc.
 STR_ALLOWPSIONICCAPTURE
 Permite captura psi
 STR_ALLOWPSIONICCAPTURE_DESC
@@ -2400,4 +2400,4 @@ SĂGEȚI
 STR_FULL
 COMPLETĂ
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Salvează Vedere la Persoana-Întâi
