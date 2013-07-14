@@ -2288,9 +2288,9 @@ PRZEDMIOT
 STR_DISPLAY_FILTER
 Filtr wyświetlania
 STR_QUICK_SAVE
-Quick Save
+Szybki zapis
 STR_QUICK_LOAD
-Quick Load
+Szybkie wczytanie
 STR_ADVANCED
 Zaawansowane
 STR_ADVANCED_OPTIONS
@@ -2384,9 +2384,9 @@ Rozmiar eksplozji
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Ustal w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
 STR_AUTOSAVE
-Autosave mode
+Tryb automatycznego zapisu
 STR_AUTOSAVE_DESC
-0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+0 - Wyłączony. 1 - Szybki zapis i wczytanie. 2 - Automatyczny zapis jedynie o 00:00. Wszystkie przyciski zapisu i wczytania są wyłączone. 3 - Taki jak poprzednio, wraz z automatycznym zapisem przy wyjściu z gry.
 STR_ALLOWPSIONICCAPTURE
 Przechwycenie psioniczne
 STR_ALLOWPSIONICCAPTURE_DESC
@@ -2406,4 +2406,4 @@ STRZAŁKI
 STR_FULL
 WSZYSTKO
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Zrzut ekranu, widok pierwszoosobowy
