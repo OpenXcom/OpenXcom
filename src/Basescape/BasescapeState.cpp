@@ -104,7 +104,8 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	// Set up objects
 	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->onMouseClick((ActionHandler)&BasescapeState::viewClick);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
 
@@ -374,7 +375,7 @@ void BasescapeState::btnGeoscapeClick(Action *)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewClick(Action *)
+void BasescapeState::viewLeftClick(Action *)
 {
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
@@ -407,6 +408,41 @@ void BasescapeState::viewClick(Action *)
 			_game->pushState(new DismantleFacilityState(_game, _base, _view, fac));
 		}
 	}
+}
+
+/**
+ * Processes clicking on facilities.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::viewRightClick(Action *)
+{
+	BaseFacility *fac = _view->getSelectedFacility();
+	if (fac == 0)
+		_game->pushState(new BaseInfoState(_game, _base, this));
+
+	else if (fac->getRules()->isLift())
+		_game->popState();
+
+	else if (fac->getRules()->getStorage() > 0)
+		_game->pushState(new SellState(_game, _base));
+
+	else if (fac->getRules()->getPersonnel() > 0)
+		_game->pushState(new SoldiersState(_game, _base));
+
+	else if (fac->getRules()->getCrafts() > 0)
+		_game->pushState(new CraftsState(_game, _base));
+
+	else if (fac->getRules()->getLaboratories() > 0)
+		_game->pushState(new ResearchState(_game, _base));
+
+	else if (fac->getRules()->getWorkshops() > 0)
+		_game->pushState(new ManufactureState(_game, _base));
+
+	else if (fac->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+		_game->pushState(new AllocatePsiTrainingState(_game, _base));
+
+	else if (fac->getRules()->getRadarRange() > 0)
+		_game->popState();
 }
 
 /**
