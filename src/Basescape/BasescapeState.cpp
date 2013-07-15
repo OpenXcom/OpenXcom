@@ -416,33 +416,42 @@ void BasescapeState::viewLeftClick(Action *)
  */
 void BasescapeState::viewRightClick(Action *)
 {
-	BaseFacility *fac = _view->getSelectedFacility();
-	if (fac == 0)
+	BaseFacility *f = _view->getSelectedFacility();
+	if (f == 0)
 		_game->pushState(new BaseInfoState(_game, _base, this));
 
-	else if (fac->getRules()->isLift())
+	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
 		_game->popState();
 
-	else if (fac->getRules()->getStorage() > 0)
+	else if (f->getRules()->getStorage() > 0)
 		_game->pushState(new SellState(_game, _base));
 
-	else if (fac->getRules()->getPersonnel() > 0)
+	else if (f->getRules()->getPersonnel() > 0)
 		_game->pushState(new SoldiersState(_game, _base));
 
-	else if (fac->getRules()->getCrafts() > 0)
-		_game->pushState(new CraftsState(_game, _base));
-
-	else if (fac->getRules()->getLaboratories() > 0)
+	else if (f->getRules()->getLaboratories() > 0)
 		_game->pushState(new ResearchState(_game, _base));
 
-	else if (fac->getRules()->getWorkshops() > 0)
+	else if (f->getRules()->getWorkshops() > 0)
 		_game->pushState(new ManufactureState(_game, _base));
 
-	else if (fac->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
 		_game->pushState(new AllocatePsiTrainingState(_game, _base));
 
-	else if (fac->getRules()->getRadarRange() > 0)
-		_game->popState();
+	else if (f->getRules()->getCrafts() > 0)
+	{
+		if (f->getCraft() == 0)
+			_game->pushState(new CraftsState(_game, _base));
+		else
+			for (size_t craft = 0; craft < _base->getCrafts()->size(); ++craft)
+			{
+				if (f->getCraft() == _base->getCrafts()->at(craft))
+				{
+					_game->pushState(new CraftInfoState(_game, _base, craft));
+					break;
+				}
+			}
+	}
 }
 
 /**

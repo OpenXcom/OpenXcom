@@ -28,7 +28,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
  */
-BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base) : _rules(rules), _base(base), _x(-1), _y(-1), _buildTime(0)
+BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base) : _rules(rules), _base(base), _x(-1), _y(-1), _buildTime(0), _craft(0)
 {
 }
 
@@ -159,6 +159,24 @@ bool BaseFacility::inUse() const
 			(_rules->getCrafts() > 0 && _base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars()) ||
 			(_rules->getPsiLaboratories() > 0 && _base->getAvailablePsiLabs() - _rules->getPsiLaboratories() < _base->getUsedPsiLabs()) ||
 			(_rules->getAliens() > 0 && _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment()));
+}
+
+/**
+ * Gets craft, used for rendering facility.
+ * @return craft
+ */
+Craft *BaseFacility::getCraft() const
+{
+	return _craft;
+}
+
+/**
+ * Sets craft, used for rendering facility.
+ * @param craft prototype for rendering hangar.
+ */
+void BaseFacility::setCraft(Craft *craft)
+{
+	_craft = craft;
 }
 
 }
