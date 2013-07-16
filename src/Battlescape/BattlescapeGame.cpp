@@ -222,8 +222,9 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
-    _save->getTileEngine()->calculateFOV(unit); // might need this populate _visibleUnit for a newly-created alien
+	_save->getTileEngine()->calculateFOV(unit->getPosition()); // might need this populate _visibleUnit for a newly-created alien
         // it might also help chryssalids realize they've zombified someone and need to move on
+		// it should also hide units when they've killed the guy spotting them
         // it's also for good luck
 
     BattleAIState *ai = unit->getCurrentAIState();
