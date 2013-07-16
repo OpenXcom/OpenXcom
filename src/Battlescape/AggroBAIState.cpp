@@ -205,7 +205,7 @@ void AggroBAIState::think(BattleAction *action)
 	
 	action->weapon = _unit->getMainHandWeapon();
 	// the living weapon rule here doubles for "being a terrorist"
-	if (_coverCharge == 0 && !_unit->getUnitRules()->isLivingWeapon())
+	if (_coverCharge == 0 && !(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()))
 	{
 		_coverAction->actor = action->actor;
 		_coverAction->number = action->number;
@@ -233,7 +233,7 @@ void AggroBAIState::think(BattleAction *action)
 		}
 	}
 	// terrorists don't run or hide, they only live to kill.
-	if (!_unit->getUnitRules()->isLivingWeapon() && takeCoverAssessment(action))
+	if (!(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()) && takeCoverAssessment(action))
 	{
 		_unit->_hidingForTurn = true;
 		_aggroTarget = 0;
