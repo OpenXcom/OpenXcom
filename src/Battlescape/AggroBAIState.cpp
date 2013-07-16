@@ -193,7 +193,8 @@ void AggroBAIState::think(BattleAction *action)
 	*/
 	
 	action->weapon = _unit->getMainHandWeapon();
-	if (_coverCharge == 0)
+	// the living weapon rule here doubles for "being a terrorist"
+	if (_coverCharge == 0 && !_unit->getUnitRules()->isLivingWeapon())
 	{
 		_coverAction->actor = action->actor;
 		_coverAction->number = action->number;
@@ -220,14 +221,15 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 	}
-
-	if (takeCoverAssessment(action))
+	// terrorists don't run or hide, they only live to kill.
+	if (!_unit->getUnitRules()->isLivingWeapon() && takeCoverAssessment(action))
 	{
 		_unit->_hidingForTurn = true;
 		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		_coverCharge = 0;
-		takeCoverAction(action);
+		action->target = _coverAction->target;
+		action->type = BA_WALK;
 	}
 	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
