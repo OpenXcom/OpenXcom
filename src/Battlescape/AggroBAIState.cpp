@@ -174,13 +174,24 @@ void AggroBAIState::think(BattleAction *action)
 	action->diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
  	action->type = BA_RETHINK;
 	action->actor = _unit;
-	_aggroTarget = 0;
-	_wasHit = false;
 	if (_lastKnownTarget && _lastKnownTarget->isOut())
 	{
 		_lastKnownTarget = 0;
 		_lastKnownPosition = Position(0,0,-1);
 	}
+	// we were hit, but we can't see who did it, try turning around...
+	if (_wasHit && _unit->getVisibleUnits()->empty())
+	{
+		_unit->lookAt(_lastKnownPosition);
+		while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
+		{
+			_unit->turn();
+			_game->getTileEngine()->calculateFOV(_unit);
+		}
+		_unit->abortTurn();
+		_wasHit = false;
+	}
+	_aggroTarget = 0;
 
 	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
