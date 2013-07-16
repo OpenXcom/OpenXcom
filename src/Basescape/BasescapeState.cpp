@@ -463,8 +463,11 @@ void BasescapeState::viewMouseOver(Action *)
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
 		_txtFacility->setText(L"");
-	else
+	else if (f->getCraft() == 0)
 		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));
+	else
+		_txtFacility->setText(static_cast<std::wstring const> (_game->getLanguage()->getString(f->getRules()->getType()))
+			+ L": " + f->getCraft()->getName(_game->getLanguage()));
 }
 
 /**
