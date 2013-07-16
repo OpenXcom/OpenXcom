@@ -331,9 +331,9 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	{
 		int newDistance = _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition());
 		//pick closest living unit that we can move to
-		if (newDistance <  distance && !(*j)->isOut())
+		if ((newDistance < distance || newDistance == 1) && !(*j)->isOut())
 		{
-			if (selectPointNearTarget(action, (*j), chargeReserve))
+			if (newDistance == 1 || selectPointNearTarget(action, (*j), chargeReserve))
 			{
 				_aggroTarget = (*j);
 				action->type = BA_WALK;
