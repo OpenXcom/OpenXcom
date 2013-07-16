@@ -522,6 +522,9 @@ void BaseView::draw()
 				frame->blit(this);
 				(*i)->setCraft(*craft);
 			}
+			else
+				(*i)->setCraft(0);
+
 			++craft;
 		}
 
