@@ -162,7 +162,7 @@ bool BaseFacility::inUse() const
 }
 
 /**
- * Gets craft, used for rendering facility.
+ * Gets craft, used for drawing facility.
  * @return craft
  */
 Craft *BaseFacility::getCraft() const
@@ -171,8 +171,8 @@ Craft *BaseFacility::getCraft() const
 }
 
 /**
- * Sets craft, used for rendering facility.
- * @param craft prototype for rendering hangar.
+ * Sets craft, used for drawing facility.
+ * @param craft prototype for drawing hangar.
  */
 void BaseFacility::setCraft(Craft *craft)
 {

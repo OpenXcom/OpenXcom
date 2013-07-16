@@ -461,13 +461,19 @@ void BasescapeState::viewRightClick(Action *)
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
+	std::wstring t;
 	if (f == 0)
-		_txtFacility->setText(L"");
+		t = L"";
 	else if (f->getCraft() == 0)
-		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));
+		t = _game->getLanguage()->getString(f->getRules()->getType());
 	else
-		_txtFacility->setText(static_cast<std::wstring const> (_game->getLanguage()->getString(f->getRules()->getType()))
-			+ L": " + f->getCraft()->getName(_game->getLanguage()));
+	{
+		t.reserve(30);
+		t = _game->getLanguage()->getString(f->getRules()->getType());
+		t += L": ";
+		t += f->getCraft()->getName(_game->getLanguage());
+	}
+	_txtFacility->setText(t);
 }
 
 /**
