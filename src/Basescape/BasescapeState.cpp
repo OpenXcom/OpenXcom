@@ -468,9 +468,10 @@ void BasescapeState::viewMouseOver(Action *)
 		t = _game->getLanguage()->getString(f->getRules()->getType());
 	else
 	{
-		t.reserve(30);
-		t = _game->getLanguage()->getString(f->getRules()->getType());
-		t += L": ";
+		t.reserve(31);
+		t =  _game->getLanguage()->getString(f->getRules()->getType());
+		t += L" ";
+		t += _game->getLanguage()->getString("STR_CRAFT_");
 		t += f->getCraft()->getName(_game->getLanguage());
 	}
 	_txtFacility->setText(t);
