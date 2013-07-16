@@ -926,6 +926,7 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 	int size = action->actor->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
 	bool returnValue = false;
+	int distance = 1000;
 	for (int x = -size; x <= targetsize; ++x)
 	{
 		for (int y = -size; y <= targetsize; ++y)
@@ -941,10 +942,11 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 				if (valid && fitHere)
 				{
 					_game->getPathfinding()->calculate(action->actor, checkPath, 0, maxTUs);
-					if (_game->getPathfinding()->getStartDirection() != -1)
+					if (_game->getPathfinding()->getStartDirection() != -1 && _game->getTileEngine()->distance(checkPath, action->actor->getPosition()) < distance)
 					{
 						action->target = checkPath;
 						returnValue = true;
+						distance = _game->getTileEngine()->distance(checkPath, action->actor->getPosition());
 					}
 					_game->getPathfinding()->abortPath();
 				}
