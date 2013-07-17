@@ -212,6 +212,7 @@ void UnitDieBState::convertUnitToCorpse()
 	_parent->getSave()->removeUnconsciousBodyItem(_unit);
 	Position lastPosition = _unit->getPosition();
 	int size = _unit->getArmor()->getSize() - 1;
+	BattleItem *itemToKeep = 0;
 	bool dropItems = !Options::getBool("weaponSelfDestruction") || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
 	// move inventory from unit to the ground for non-large units
 	if (size == 0 && dropItems)
@@ -219,10 +220,22 @@ void UnitDieBState::convertUnitToCorpse()
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
-			(*i)->setOwner(0);
+			if (!(*i)->getRules()->isFixed())
+			{
+				(*i)->setOwner(0);
+			}
+			else
+			{
+				itemToKeep = *i;
+			}
 		}
 	}
 	_unit->getInventory()->clear();
+
+	if (itemToKeep != 0)
+	{
+		_unit->getInventory()->push_back(itemToKeep);
+	}
 
 	// remove unit-tile link
 	_unit->setTile(0);
