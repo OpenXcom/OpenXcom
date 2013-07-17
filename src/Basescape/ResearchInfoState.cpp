@@ -29,6 +29,8 @@
 #include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
 #include "ResearchState.h"
 #include "NewResearchListState.h"
@@ -199,6 +201,11 @@ void ResearchInfoState::btnOkClick(Action *)
 void ResearchInfoState::btnCancelClick(Action *)
 {
 	_base->removeResearch(_project);
+	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
+	if (ruleResearch->needItem() && _game->getRuleset()->getUnit(ruleResearch->getName()))
+	{
+		_base->getItems()->addItem(ruleResearch->getName(), 1);
+	}
 	_game->popState();
 }
 
