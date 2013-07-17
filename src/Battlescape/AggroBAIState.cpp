@@ -212,7 +212,7 @@ void AggroBAIState::think(BattleAction *action)
 		_coverAction->weapon = action->weapon;
 		takeCoverAction(_coverAction);
 	}
-	if (_unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
+	if (_unit->getOriginalFaction() != FACTION_PLAYER && _unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
 	{
 		psiAction(action);
 	}
