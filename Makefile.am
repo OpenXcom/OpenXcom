@@ -200,6 +200,8 @@ openxcom_SOURCES = \
 	src/Basescape/ResearchState.h \
 	src/Basescape/SelectStartFacilityState.cpp \
 	src/Basescape/SelectStartFacilityState.h \
+	src/Basescape/SackSoldierState.cpp \
+	src/Basescape/SackSoldierState.h \
 	src/Basescape/SellState.cpp \
 	src/Basescape/SellState.h \
 	src/Basescape/SoldierArmorState.cpp \
