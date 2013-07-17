@@ -89,6 +89,8 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 	{"keyBattleReserveSnap", "STR_RESERVE_TUS_FOR_SNAP_SHOT", SDLK_UNKNOWN},
 	{"keyBattleReserveAimed", "STR_RESERVE_TUS_FOR_AIMED_SHOT", SDLK_UNKNOWN},
 	{"keyBattleReserveAuto", "STR_RESERVE_TUS_FOR_AUTO_SHOT", SDLK_UNKNOWN},
+	{"keyBattleReserveKneel", "STR_RESERVE_TUS_FOR_KNEEL", SDLK_UNKNOWN},
+	{"keyBattleZeroTUs", "STR_EXPEND_ALL_TIME_UNITS", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy1", "STR_CENTER_ON_ENEMY_1", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy2", "STR_CENTER_ON_ENEMY_2", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy3", "STR_CENTER_ON_ENEMY_3", SDLK_UNKNOWN},
@@ -109,7 +111,7 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 {
 	_countGeneral = 4;
 	_countGeo = 20;
-	_countBattle = 34;
+	_countBattle = 36;
 	if (Options::getInt("autosave") == 1)
 		_countGeo += 2;	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
 
