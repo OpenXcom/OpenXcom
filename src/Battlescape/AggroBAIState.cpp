@@ -174,11 +174,6 @@ void AggroBAIState::think(BattleAction *action)
 	action->diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
  	action->type = BA_RETHINK;
 	action->actor = _unit;
-	if (_lastKnownTarget && _lastKnownTarget->isOut())
-	{
-		_lastKnownTarget = 0;
-		_lastKnownPosition = Position(0,0,-1);
-	}
 	// we were hit, but we can't see who did it, try turning around...
 	if (_wasHit && _unit->getVisibleUnits()->empty())
 	{
@@ -190,6 +185,11 @@ void AggroBAIState::think(BattleAction *action)
 		}
 		_unit->abortTurn();
 		_wasHit = false;
+	}
+	if (_lastKnownTarget && _lastKnownTarget->isOut())
+	{
+		_lastKnownTarget = 0;
+		_lastKnownPosition = Position(0,0,-1);
 	}
 	_aggroTarget = 0;
 
@@ -573,7 +573,6 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 		int tu = 4; // 4TUs for picking up the grenade
 		if(_unit->getFaction() == FACTION_HOSTILE)
 		{
-			action->weapon = grenade;
 			tu += _unit->getActionTUs(BA_PRIME, grenade);
 			tu += _unit->getActionTUs(BA_THROW, grenade);
 			// do we have enough TUs to prime and throw the grenade?
@@ -585,6 +584,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 					grenade->setExplodeTurn(_game->getTurn());
 					_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade));
 					action->type = BA_THROW;
+					action->weapon = grenade;
 				}
 			}
 		}
