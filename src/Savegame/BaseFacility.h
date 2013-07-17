@@ -40,7 +40,7 @@ private:
 	RuleBaseFacility *_rules;
 	Base *_base;
 	int _x, _y, _buildTime;
-	Craft *_craft;	// craft, used for drawing facility
+	Craft *_craftForDrawing;	// craft, used for drawing facility
 public:
 	/// Creates a base facility of the specified type.
 	BaseFacility(RuleBaseFacility *rules, Base *base);

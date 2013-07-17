@@ -411,7 +411,7 @@ void BasescapeState::viewLeftClick(Action *)
 }
 
 /**
- * Processes clicking on facilities.
+ * Processes right clicking on facilities.
  * @param action Pointer to an action.
  */
 void BasescapeState::viewRightClick(Action *)
@@ -419,24 +419,6 @@ void BasescapeState::viewRightClick(Action *)
 	BaseFacility *f = _view->getSelectedFacility();
 	if (f == 0)
 		_game->pushState(new BaseInfoState(_game, _base, this));
-
-	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
-		_game->popState();
-
-	else if (f->getRules()->getStorage() > 0)
-		_game->pushState(new SellState(_game, _base));
-
-	else if (f->getRules()->getPersonnel() > 0)
-		_game->pushState(new SoldiersState(_game, _base));
-
-	else if (f->getRules()->getLaboratories() > 0)
-		_game->pushState(new ResearchState(_game, _base));
-
-	else if (f->getRules()->getWorkshops() > 0)
-		_game->pushState(new ManufactureState(_game, _base));
-
-	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
-		_game->pushState(new AllocatePsiTrainingState(_game, _base));
 
 	else if (f->getRules()->getCrafts() > 0)
 	{
@@ -452,6 +434,23 @@ void BasescapeState::viewRightClick(Action *)
 				}
 			}
 	}
+	else if (f->getRules()->getStorage() > 0)
+		_game->pushState(new SellState(_game, _base));
+
+	else if (f->getRules()->getPersonnel() > 0)
+		_game->pushState(new SoldiersState(_game, _base));
+
+	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+		_game->pushState(new AllocatePsiTrainingState(_game, _base));
+
+	else if (f->getRules()->getLaboratories() > 0)
+		_game->pushState(new ResearchState(_game, _base));
+
+	else if (f->getRules()->getWorkshops() > 0)
+		_game->pushState(new ManufactureState(_game, _base));
+
+	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
+		_game->popState();
 }
 
 /**
@@ -464,7 +463,7 @@ void BasescapeState::viewMouseOver(Action *)
 	std::wstring t;
 	if (f == 0)
 		t = L"";
-	else if (f->getCraft() == 0)
+	else if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
 		t = _game->getLanguage()->getString(f->getRules()->getType());
 	else
 	{
@@ -472,7 +471,8 @@ void BasescapeState::viewMouseOver(Action *)
 		t =  _game->getLanguage()->getString(f->getRules()->getType());
 		t += L" ";
 		t += _game->getLanguage()->getString("STR_CRAFT_");
-		t += f->getCraft()->getName(_game->getLanguage());
+		if (f->getCraft() != 0)
+			t += f->getCraft()->getName(_game->getLanguage());
 	}
 	_txtFacility->setText(t);
 }
