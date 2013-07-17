@@ -30,7 +30,6 @@
 #include "../Basescape/BaseView.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
-#include "../Engine/Options.h"
 
 namespace OpenXcom
 {

@@ -41,7 +41,6 @@
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
