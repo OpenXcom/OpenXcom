@@ -72,6 +72,7 @@ void createDefault()
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setBool("weaponSelfDestruction", false);
+	setBool("xcom2012research",false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);

@@ -106,7 +106,8 @@ void NewResearchListState::onSelectProject(Action *)
 {
 	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 	RuleResearch *_proj = _projects[_lstResearch->getSelectedRow()];
-	if ((_proj)->needItem() && _game->getRuleset()->getUnit(_proj->getName()))
+	if (_proj->needItem()
+		&& (_game->getRuleset()->getUnit(_proj->getName())) || Options::getBool("xcom2012research"))
 	{
 		_base->getItems()->removeItem(_proj->getName(), 1);
 	}
