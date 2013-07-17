@@ -558,7 +558,7 @@ void TransferItemsState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 		return;
 	}
-	if (TRANSFER_ITEM == selType && selItem->getAlien()
+	if (TRANSFER_ITEM == selType && selItem->getAlien() && _containmentLimit
 		&& _containmentLimit * _aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
