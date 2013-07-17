@@ -36,7 +36,6 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Armor.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -158,8 +157,7 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
-			RuleCraft *rule = (*i)->getRules();
-			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding(rule->getSellCost()).c_str());
+			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
 		}
 	}
 	if (_base->getAvailableScientists() > 0)
@@ -234,10 +232,10 @@ void SellState::btnOkClick(Action *)
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
-		{
-			// Sell soldiers
-			if (SELL_SOLDIER == getType(i))
+		{			
+			switch (getType(i))
 			{
+			case SELL_SOLDIER:
 				for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
@@ -251,11 +249,11 @@ void SellState::btnOkClick(Action *)
 					}
 				}
 				delete _soldiers[i];
-			}
-			// Sell crafts
-			else if (SELL_CRAFT == getType(i))
-			{
-				Craft *craft =  _crafts[getCraftIndex(i)];
+				break;
+
+			case SELL_CRAFT:
+				{
+				Craft *craft = _crafts[getCraftIndex(i)];
 
 				// Remove weapons from craft
 				for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
@@ -292,20 +290,18 @@ void SellState::btnOkClick(Action *)
 					}
 				}
 				delete craft;
-			}
-			// Sell scientists
-			else if (SELL_SCIENTIST == getType(i))
-			{
+				}
+				break;
+
+			case SELL_SCIENTIST:
 				_base->setScientists(_base->getScientists() - _qtys[i]);
-			}
-			// Sell engineers
-			else if (SELL_ENGINEER == getType(i))
-			{
+				break;
+
+			case SELL_ENGINEER:
 				_base->setEngineers(_base->getEngineers() - _qtys[i]);
-			}
-			// Sell items
-			else
-			{
+				break;
+
+			case SELL_ITEM:
 				_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
 			}
 		}

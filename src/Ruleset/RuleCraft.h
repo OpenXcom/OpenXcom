@@ -40,7 +40,7 @@ class RuleCraft
 private:
 	std::string _type;
 	int _sprite;
-	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costSell;
+	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
 	// battlescape:
@@ -76,6 +76,8 @@ public:
 	int getVehicles() const;
 	/// Gets the craft's cost.
 	int getBuyCost() const;
+	/// Gets the craft's rent for a month.
+	int getRentCost() const;
 	/// Gets the craft's value.
 	int getSellCost() const;
 	/// Gets the craft's refuel item.

@@ -29,9 +29,9 @@ namespace OpenXcom
  */
 RuleCraft::RuleCraft(const std::string &type) : 
     _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), 
-    _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costSell(0), _refuelItem(""), 
-    _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), 
-    _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
+    _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
+	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0),
+	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
 {
 
 }
@@ -99,6 +99,10 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 		else if (key == "costBuy")
 		{
 			i.second() >> _costBuy;
+		}
+		else if (key == "costRent")
+		{
+			i.second() >> _costRent;
 		}
 		else if (key == "costSell")
 		{
@@ -168,6 +172,7 @@ void RuleCraft::save(YAML::Emitter &out) const
 	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
 	out << YAML::Key << "vehicles" << YAML::Value << _vehicles;
 	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
+	out << YAML::Key << "costRent" << YAML::Value << _costRent;
 	out << YAML::Key << "costSell" << YAML::Value << _costSell;
 	out << YAML::Key << "refuelItem" << YAML::Value << _refuelItem;
 	out << YAML::Key << "repairRate" << YAML::Value << _repairRate;
@@ -281,6 +286,15 @@ int RuleCraft::getVehicles() const
 int RuleCraft::getBuyCost() const
 {
 	return _costBuy;
+}
+
+/**
+ * Returns the cost of rent for a month.
+ * @return Cost.
+ */
+int RuleCraft::getRentCost() const
+{
+	return _costRent;
 }
 
 /**
