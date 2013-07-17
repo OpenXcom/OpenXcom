@@ -89,7 +89,7 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false)
 {
 	_tuReserved = BA_NONE;
 	_playerTUReserved = BA_NONE;
@@ -1049,19 +1049,30 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 	{
 		effectiveTuReserved = BA_SNAPSHOT;
 	}
-
-	if (effectiveTuReserved != BA_NONE &&
-		tu + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
-		bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
+	const int tuKneel = _kneelReserved ? 4 : 0;
+	if ((effectiveTuReserved != BA_NONE || _kneelReserved) &&
+		tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits() &&
+		tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
 	{
 		if (!justChecking)
 		{
-			switch (effectiveTuReserved)
+			if (_kneelReserved)
 			{
-			case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
-			case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
-			case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
-			default: ;
+				switch (effectiveTuReserved)
+				{
+				case BA_NONE: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING"); break;
+				default: _parentState->warning("STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING");
+				}
+			}
+			else
+			{
+				switch (effectiveTuReserved)
+				{
+				case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT"); break;
+				case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT"); break;
+				case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT"); break;
+				default: ;
+				}
 			}
 		}
 		return false;
@@ -2015,4 +2026,24 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 	}
 }
 
+/*
+ * sets the kneel reservation setting.
+ * @param reserved should we reserve an extra 4 TUs to kneel?
+ */
+void BattlescapeGame::setKneelReserved(bool reserved)
+{
+	_kneelReserved = reserved;
+}
+
+/*
+ * @return kneel reservation setting.
+ */
+bool BattlescapeGame::getKneelReserved()
+{
+	if (_save->getSelectedUnit() && _save->getSelectedUnit()->getGeoscapeSoldier())
+	{
+		return _kneelReserved;
+	}
+	return false;
+}
 }

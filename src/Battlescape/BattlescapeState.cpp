@@ -131,6 +131,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveSnap = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
 	_btnReserveAimed = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 45);
 	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
+	// TODO: the following two are set for TFTD, but are unavailable except via hotkey
+	// until the battleScape UI layout is defined in the UI
+	_btnReserveKneel = new ImageButton(0,0,0,0);//10, 21, _icons->getX() + 43, _icons->getY() + 34);
+	_btnZeroTUs = new ImageButton(0,0,0,0);//10, 21, _icons->getX() + 97, _icons->getY() + 34);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 5);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
@@ -224,6 +228,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_btnReserveSnap);
 	add(_btnReserveAimed);
 	add(_btnReserveAuto);
+	add(_btnReserveKneel);
+	add(_btnZeroTUs);
 	add(_btnLeftHandItem);
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
@@ -307,6 +313,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAimed->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAimed"));
 	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveAuto->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAuto"));
+	_btnReserveKneel->onMouseClick((ActionHandler)&BattlescapeState::btnReserveKneelClick);
+	_btnReserveKneel->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
+	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick);
+	_btnZeroTUs->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
@@ -1714,5 +1724,43 @@ bool BattlescapeState::getMouseOverIcons() const
 bool BattlescapeState::allowButtons() const
 {
 	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
+}
+
+/**
+ * Reserve time units for kneeling.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveKneelClick(Action *action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
+	}
+}
+
+/**
+ * Remove all time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnZeroTUsClick(Action *action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+		if (_battleGame->getSave()->getSelectedUnit())
+		{
+			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
+			updateSoldierInfo();
+		}
+	}
 }
 }
