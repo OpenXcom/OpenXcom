@@ -68,7 +68,6 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Options.h"
 #include "WarningMessage.h"
 #include "BattlescapeOptionsState.h"
 #include "DebriefingState.h"
