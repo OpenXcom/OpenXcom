@@ -219,6 +219,7 @@ void UnitDieBState::convertUnitToCorpse()
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
+			(*i)->setOwner(0);
 		}
 	}
 	_unit->getInventory()->clear();
