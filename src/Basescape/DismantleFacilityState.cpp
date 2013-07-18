@@ -71,7 +71,7 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
