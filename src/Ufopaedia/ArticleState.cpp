@@ -21,6 +21,7 @@
 #include <sstream>
 #include "ArticleState.h"
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
 #include "../Resource/ResourcePack.h"
@@ -63,6 +64,8 @@ namespace OpenXcom
 
 		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&ArticleState::btnOkClick);
+		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyOk"));
+		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyCancel"));
 		_btnPrev->setText(L"<<");
 		_btnPrev->onMouseClick((ActionHandler)&ArticleState::btnPrevClick);
 		_btnNext->setText(L">>");
