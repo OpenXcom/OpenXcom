@@ -512,18 +512,28 @@ void BaseView::draw()
 		}
 
 		// Draw crafts
-		(*i)->setCraft(0);
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0)
 		{
-			if ((*craft)->getStatus() != "STR_OUT")
+			if (craft != _base->getCrafts()->end())
 			{
-				Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
-				frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
-				frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
-				frame->blit(this);
-				(*i)->setCraft(*craft);
+				if ((*craft)->getStatus() != "STR_OUT")
+				{
+					Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
+					frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
+					frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
+					frame->blit(this);
+					(*i)->setCraft(*craft);
+				}
+				else
+				{
+					(*i)->setCraft(0);
+				}
+				++craft;
 			}
-			++craft;
+			else
+			{
+				(*i)->setCraft(0);
+			}
 		}
 
 		// Draw time remaining
