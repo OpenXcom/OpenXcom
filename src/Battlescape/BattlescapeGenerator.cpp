@@ -42,7 +42,6 @@
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MCDPatch.h"
 #include "../Ruleset/Armor.h"
