@@ -70,8 +70,8 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	_btnCraft = new TextButton(100, 20, 215, 80);
 	_btnEquip = new TextButton(148, 16, 8, 154);
 	_btnRandom = new TextButton(148, 16, 164, 154);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
+	_btnCancel = new TextButton(148, 16, 8, 176);
+	_btnOk = new TextButton(148, 16, 164, 176);
 	
 	_txtItemLevel = new Text(136, 9, 110, 110);
 	_btnItemLevel = new TextButton(100, 20, 110, 120);
