@@ -559,7 +559,7 @@ void TransferItemsState::increaseByValue(int change)
 		return;
 	}
 	if (TRANSFER_ITEM == selType && selItem->getAlien()
-		&& _containmentLimit * _aQty + 1 > _baseTo->getAvailableContainment() - _baseTo->getUsedContainment())
+		&& _containmentLimit * _aQty + 1 > _baseTo->getAvailableContainment() - _containmentLimit * _baseTo->getUsedContainment())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
