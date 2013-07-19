@@ -203,7 +203,7 @@ void ResearchInfoState::btnCancelClick(Action *)
 	if (ruleResearch->needItem() &&_game->getRuleset()->getUnit(ruleResearch->getName()))
 	{
 		// !_rule since we should always be able to cancel if the project hasn't been started yet
-		if (!_rule && Options::getBool("alienContainmentHasUpperLimit")
+		if (!_rule && Options::getBool("alienContainmentHasUpperLimit") && !Options::getBool("alienResearchUsesContainment")
 		    && _base->getAvailableContainment() <= _base->getUsedContainment())
 		{
 			_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));

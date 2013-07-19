@@ -128,6 +128,7 @@ void createDefault()
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
+	setBool("alienResearchUsesContainment", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

@@ -2393,6 +2393,10 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
+STR_ALIENRESEARCHUSESCONTAINMENT
+Alien research requires containment
+STR_ALIENRESEARCHUSESCONTAINMENT_DESC
+Aliens use containment facility while in research, closing the "infinite live aliens" exploit
 STR_ARROWS
 ARROWS
 STR_FULL

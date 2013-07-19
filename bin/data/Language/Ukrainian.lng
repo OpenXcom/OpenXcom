@@ -2397,6 +2397,10 @@ STR_WEAPONSELFDESTRUCTION
 Захоплення зброї як в XCOM 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Зброя прибульців буде самознищуватись, якщо її власник буде вбитий.
+STR_ALIENRESEARCHUSESCONTAINMENT
+Alien research requires containment
+STR_ALIENRESEARCHUSESCONTAINMENT_DESC
+Aliens use containment facility while in research, closing the "infinite live aliens" exploit
 STR_ARROWS
 СТРІЛКИ
 STR_FULL

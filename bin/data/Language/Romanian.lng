@@ -2397,6 +2397,10 @@ STR_WEAPONSELFDESTRUCTION
 Recuperare articole tip XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
+STR_ALIENRESEARCHUSESCONTAINMENT
+Alien research requires containment
+STR_ALIENRESEARCHUSESCONTAINMENT_DESC
+Aliens use containment facility while in research, closing the "infinite live aliens" exploit
 STR_ARROWS
 SĂGEȚI
 STR_FULL

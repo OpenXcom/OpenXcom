@@ -114,6 +114,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("alienResearchUsesContainment", false));
 
 	_boolQuantity = _settingBoolSet.size();
 	int sel = 0;
