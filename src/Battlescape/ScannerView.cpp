@@ -29,7 +29,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Interface/Text.h"
-#include "../Resource/ResourcePack.h"
 #include <iostream>
 
 namespace OpenXcom

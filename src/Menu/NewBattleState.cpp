@@ -38,7 +38,6 @@
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset//RuleTerrain.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Action.h"

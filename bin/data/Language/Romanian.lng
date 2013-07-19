@@ -189,6 +189,8 @@ STR_PROGRESS
 EVOLUȚIE
 STR_NEW_PROJECT
 Proiect Nou
+STR_CANCEL_PROJECT
+Cancel Project
 STR_NEW_RESEARCH_PROJECTS
 NOI PROIECTE DE CERCETARE
 STR_SCIENTISTS_AVAILABLE_UC
@@ -2282,9 +2284,9 @@ ARTICOL
 STR_DISPLAY_FILTER
 Filtru Afișaj
 STR_QUICK_SAVE
-Quick Save
+Salvare Rapidă
 STR_QUICK_LOAD
-Quick Load
+Încărcare Rapidă
 STR_ADVANCED
 AVANSAT
 STR_ADVANCED_OPTIONS
@@ -2378,9 +2380,9 @@ STR_BATTLEEXPLOSIONHEIGHT
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
 STR_AUTOSAVE
-Autosave mode
+Mod salvare automată
 STR_AUTOSAVE_DESC
-0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+0 - Dezactivată. 1 - Salvare și încărcare rapidă. 2 - Salvare automată numai la 00:00. Toate butoanele de salvare și încărcare sunt inactive. 3 - Asemenea precedentei, precum și la ieșirea din joc.
 STR_ALLOWPSIONICCAPTURE
 Permite captura psi
 STR_ALLOWPSIONICCAPTURE_DESC
@@ -2400,12 +2402,12 @@ SĂGEȚI
 STR_FULL
 COMPLETĂ
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Salvează Vedere la Persoana-Întâi
 STR_TIME_UNITS_RESERVED_FOR_KNEELING
-Time Units reserved for Kneeling
+Unități de Timp rezervate pentru Îngenunchere
 STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
-TU's reserved for Kneeling and Firing
+UT rezervate pentru Îngenunchere și Foc
 STR_RESERVE_TUS_FOR_KNEEL
-Reserve Time Units for kneeling
+Rezervă Unități de Timp pentru îngenunchere
 STR_EXPEND_ALL_TIME_UNITS
-Expend all remaining Time Units
+Consumă toate Unitățile de Timp rămase

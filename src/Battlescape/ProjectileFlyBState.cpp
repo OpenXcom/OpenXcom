@@ -257,7 +257,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	else
 	{
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
-		if (_projectileImpact != -1 || _action.type == BA_LAUNCH || !_parent->getPanicHandled())
+		if (_projectileImpact != -1 || _action.type == BA_LAUNCH)
 		{
 				// set the soldier in an aiming position
 				_unit->aim(true);

@@ -19,7 +19,6 @@
 #include "DogfightState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"

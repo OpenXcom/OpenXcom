@@ -23,6 +23,7 @@
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
@@ -93,6 +94,7 @@ namespace OpenXcom
 		_btnOk->setColor(Palette::blockOffset(8)+5);
 		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
+		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	}
 
 	UfopaediaStartState::~UfopaediaStartState()
