@@ -189,6 +189,10 @@ void ResearchInfoState::buildUi ()
  */
 void ResearchInfoState::btnOkClick(Action *)
 {
+	if (_rule && _rule->needItem() && (_game->getRuleset()->getUnit(_rule->getName()) || Options::getBool("xcom2012ResearchRules")))
+	{
+		_base->getItems()->removeItem(_rule->getName(), 1);
+	}
 	_game->popState();
 }
 
@@ -199,17 +203,19 @@ void ResearchInfoState::btnOkClick(Action *)
  */
 void ResearchInfoState::btnCancelClick(Action *)
 {
-	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
-	if (ruleResearch->needItem() &&_game->getRuleset()->getUnit(ruleResearch->getName()))
+	if (_rule == 0)
 	{
-		// !_rule since we should always be able to cancel if the project hasn't been started yet
-		if (!_rule && Options::getBool("alienContainmentHasUpperLimit")
-		    && _base->getAvailableContainment() <= _base->getUsedContainment())
+		const RuleResearch *ruleResearch = _project->getRules();
+		const Unit *unit = _game->getRuleset()->getUnit(ruleResearch->getName());
+		if (ruleResearch->needItem() && (unit || Options::getBool("xcom2012ResearchRules")))
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-			return;
+			if (unit && Options::getBool("alienContainmentHasUpperLimit") && _base->getAvailableContainment() <= _base->getUsedContainment())
+			{
+				_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+				return;
+			}
+			_base->getItems()->addItem(ruleResearch->getName(), 1);
 		}
-		_base->getItems()->addItem(ruleResearch->getName(), 1);
 	}
 	_base->removeResearch(_project);
 	_game->popState();
