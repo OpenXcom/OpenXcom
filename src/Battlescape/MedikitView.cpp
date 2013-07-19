@@ -26,7 +26,6 @@
 #include "../Engine/Palette.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Interface/Text.h"
-#include "../Resource/ResourcePack.h"
 #include <iostream>
 
 namespace OpenXcom

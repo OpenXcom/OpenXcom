@@ -37,7 +37,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/Base.h"
 #include "../Engine/Action.h"
-#include "../Engine/Options.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/Soldier.h"
