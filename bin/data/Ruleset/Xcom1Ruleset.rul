@@ -1065,6 +1065,7 @@ crafts:
     soldiers: 14
     vehicles: 3
     costBuy: 500000
+    costRent: 500000
     refuelRate: 50
     transferTime: 72
     score: 200
@@ -1085,6 +1086,7 @@ crafts:
     accel: 3
     weapons: 2
     costBuy: 600000
+    costRent: 600000
     refuelRate: 50
     transferTime: 96
     score: 250
