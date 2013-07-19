@@ -2406,7 +2406,7 @@ Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel 
 STR_ALIENRESEARCHUSESCONTAINMENT
 Alien research requires containment
 STR_ALIENRESEARCHUSESCONTAINMENT_DESC
-Aliens use containment facility while in research, closing the "infinite live aliens" exploit
+Aliens use containment facility while in research, closing the "infinite live aliens" exploit.
 STR_ARROWS
 STRZAŁKI
 STR_FULL
