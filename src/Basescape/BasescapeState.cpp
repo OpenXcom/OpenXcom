@@ -245,10 +245,7 @@ void BasescapeState::init()
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
-	if (_game->getSavedGame()->getBases()->size() == 8)
-	{
-		_btnNewBase->setVisible(false);
-	}
+	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
 }
 
 /**
