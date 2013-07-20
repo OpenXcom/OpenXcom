@@ -2293,9 +2293,9 @@ STR_AGGRESSIVERETALIATION
 Represalias agresivas
 STR_AGGRESSIVERETALIATION_DESC
 Esta opción permite que los OVNIs intenten detectar sus bases en todo momento, independiente de los parámetros de la misión alienígena.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limite del confinamiento alienígena
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Esta opción permite imponer límites en la cantidad de alienígenas vivos permitidos en el confinamiento.
 STR_CANSELLLIVEALIENS
 Venta de alienígenas vivos
@@ -2396,9 +2396,9 @@ XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
 STR_RESEARCHEDITEMSWILLSPENT
-Researched items will spent
+Researched items will be spent
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" the living alien, his body sent to the stores of the base.
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
 STR_ARROWS
 ARROWS
 STR_FULL

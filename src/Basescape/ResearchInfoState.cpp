@@ -32,7 +32,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
-#include "../Menu/ErrorMessageState.h"
 #include "ResearchState.h"
 #include "NewResearchListState.h"
 #include "../Interface/ArrowButton.h"
@@ -149,6 +148,12 @@ void ResearchInfoState::buildUi ()
 	if (_rule)
 	{
 		_base->addResearch(_project);
+		if (_rule->needItem() &&
+				(_game->getRuleset()->getUnit(_rule->getName()) ||
+				 Options::getBool("researchedItemsWillSpent")))
+		{
+			_base->getItems()->removeItem(_rule->getName(), 1);
+		}
 	}
 	SetAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+5);
@@ -189,10 +194,6 @@ void ResearchInfoState::buildUi ()
  */
 void ResearchInfoState::btnOkClick(Action *)
 {
-	if (_rule && _rule->needItem() && (_game->getRuleset()->getUnit(_rule->getName()) || Options::getBool("researchedItemsWillSpent")))
-	{
-		_base->getItems()->removeItem(_rule->getName(), 1);
-	}
 	_game->popState();
 }
 
@@ -203,19 +204,12 @@ void ResearchInfoState::btnOkClick(Action *)
  */
 void ResearchInfoState::btnCancelClick(Action *)
 {
-	if (_rule == 0)
+	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
+	if (ruleResearch->needItem() &&
+			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
+			 Options::getBool("researchedItemsWillSpent")))
 	{
-		const RuleResearch *ruleResearch = _project->getRules();
-		const Unit *unit = _game->getRuleset()->getUnit(ruleResearch->getName());
-		if (ruleResearch->needItem() && (unit || Options::getBool("researchedItemsWillSpent")))
-		{
-			if (unit && Options::getBool("alienContainmentHasUpperLimit") && _base->getAvailableContainment() <= _base->getUsedContainment())
-			{
-				_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-				return;
-			}
-			_base->getItems()->addItem(ruleResearch->getName(), 1);
-		}
+		_base->getItems()->addItem(ruleResearch->getName(), 1);
 	}
 	_base->removeResearch(_project);
 	_game->popState();

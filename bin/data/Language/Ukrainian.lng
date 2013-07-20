@@ -2297,9 +2297,9 @@ STR_AGGRESSIVERETALIATION
 Агресивна відплата
 STR_AGGRESSIVERETALIATION_DESC
 НЛО завжди будуть намагатись знайти Вашу базу, незалежно від виконуваного завдання.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Ліміт тюрми для прибульців
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Буде введено ліміт на кількість живих прибульців в тюрмах.
 STR_CANSELLLIVEALIENS
 Продаж живих прибульців
@@ -2400,9 +2400,9 @@ STR_WEAPONSELFDESTRUCTION
 STR_WEAPONSELFDESTRUCTION_DESC
 Зброя прибульців буде самознищуватись, якщо її власник буде вбитий.
 STR_RESEARCHEDITEMSWILLSPENT
-Researched items will spent
+Researched items will be spent
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" the living alien, his body sent to the stores of the base.
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
 STR_ARROWS
 СТРІЛКИ
 STR_FULL
