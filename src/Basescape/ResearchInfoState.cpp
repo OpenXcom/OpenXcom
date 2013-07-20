@@ -148,6 +148,12 @@ void ResearchInfoState::buildUi ()
 	if (_rule)
 	{
 		_base->addResearch(_project);
+		if (_rule->needItem() &&
+				(_game->getRuleset()->getUnit(_rule->getName()) ||
+				 Options::getBool("researchedItemsWillSpent")))
+		{
+			_base->getItems()->removeItem(_rule->getName(), 1);
+		}
 	}
 	SetAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+5);
@@ -188,10 +194,6 @@ void ResearchInfoState::buildUi ()
  */
 void ResearchInfoState::btnOkClick(Action *)
 {
-	if (_rule && _rule->needItem() && (_game->getRuleset()->getUnit(_rule->getName()) || Options::getBool("researchedItemsWillSpent")))
-	{
-		_base->getItems()->removeItem(_rule->getName(), 1);
-	}
 	_game->popState();
 }
 
@@ -204,8 +206,8 @@ void ResearchInfoState::btnCancelClick(Action *)
 {
 	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
 	if (ruleResearch->needItem() &&
-            (_game->getRuleset()->getUnit(ruleResearch->getName())) ||
-             Options::getBool("researchedItemsWillSpent"))
+			(_game->getRuleset()->getUnit(ruleResearch->getName())) ||
+			 Options::getBool("researchedItemsWillSpent"))
 	{
 		_base->getItems()->addItem(ruleResearch->getName(), 1);
 	}
