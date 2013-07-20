@@ -21,7 +21,6 @@
 
 #include "../Engine/State.h"
 #include "Globe.h"
-#include "BuildNewBaseState.h"
 
 namespace OpenXcom
 {

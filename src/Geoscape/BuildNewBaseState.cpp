@@ -371,13 +371,4 @@ void BuildNewBaseState::btnCancelClick(Action *)
 	_game->popState();
 }
 
-/**
- * Suppresses mouse-hover events.
- */
-void BuildNewBaseState::emptyHandler()
-{
-	return;
-}
-
-
 }

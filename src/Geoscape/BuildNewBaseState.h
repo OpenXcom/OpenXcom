@@ -93,8 +93,6 @@ public:
 	void btnZoomOutRightClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
-	/// Handler for suppressing mouse-hover events.
-	void emptyHandler();
 };
 
 }

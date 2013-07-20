@@ -143,7 +143,7 @@ void BaseNameState::edtNameKeyPress(Action *action)
  */
 void BaseNameState::btnOkClick(Action *)
 {
-	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::emptyHandler);
+	_globe->onMouseOver(0);
 	nameBase();
 }
 
