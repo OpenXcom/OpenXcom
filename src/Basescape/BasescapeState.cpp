@@ -38,6 +38,7 @@
 #include "DismantleFacilityState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Engine/Action.h"
+#include "../Savegame/Craft.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
@@ -47,6 +48,8 @@
 #include "PurchaseState.h"
 #include "SellState.h"
 #include "TransferBaseState.h"
+#include "CraftInfoState.h"
+#include "../Geoscape/AllocatePsiTrainingState.h"
 
 namespace OpenXcom
 {
