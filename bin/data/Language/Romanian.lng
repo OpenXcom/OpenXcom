@@ -2399,6 +2399,10 @@ STR_WEAPONSELFDESTRUCTION
 Recuperare articole tip XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will be spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
 STR_ARROWS
 SĂGEȚI
 STR_FULL

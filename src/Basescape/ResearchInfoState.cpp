@@ -206,8 +206,8 @@ void ResearchInfoState::btnCancelClick(Action *)
 {
 	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
 	if (ruleResearch->needItem() &&
-			(_game->getRuleset()->getUnit(ruleResearch->getName())) ||
-			 Options::getBool("researchedItemsWillSpent"))
+			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
+			 Options::getBool("researchedItemsWillSpent")))
 	{
 		_base->getItems()->addItem(ruleResearch->getName(), 1);
 	}
