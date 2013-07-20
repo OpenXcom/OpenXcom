@@ -32,7 +32,6 @@ class InteractiveSurface;
 class Text;
 class Timer;
 class DogfightState;
-class Craft;
 class Ufo;
 class TerrorSite;
 class Base;
