@@ -2399,7 +2399,7 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
-yTR_RESEARCHEDITEMSWILLSPENT
+STR_RESEARCHEDITEMSWILLSPENT
 Researched items will be spent
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
