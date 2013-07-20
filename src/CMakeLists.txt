@@ -16,6 +16,8 @@ set ( basescape_src
   Basescape/TransfersState.h
   Basescape/StoresState.cpp
   Basescape/StoresState.h
+  Basescape/SackSoldierState.h
+  Basescape/SackSoldierState.cpp
   Basescape/SellState.h
   Basescape/SellState.cpp
   Basescape/CraftInfoState.cpp

@@ -25,6 +25,7 @@
 
 namespace OpenXcom
 {
+enum SellType { SELL_SOLDIER, SELL_CRAFT, SELL_ITEM, SELL_SCIENTIST, SELL_ENGINEER };
 
 class TextButton;
 class Window;
@@ -34,7 +35,6 @@ class Timer;
 class Base;
 class Soldier;
 class Craft;
-
 /**
  * Sell/Sack screen that lets the player sell
  * any items in a particular base.
@@ -52,7 +52,7 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	unsigned int _sel;
-	int _total, _sOffset, _eOffset;
+	int _total, _hasSci, _hasEng;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
 	bool _allowChangeListValuesByMouseWheel;
@@ -60,6 +60,11 @@ private:
 	int getPrice();
 	/// Gets selected quantity.
 	int getQuantity();
+	/// Gets the Type of the selected item.
+	enum SellType getType(unsigned selected) const;
+	/// Gets the index of selected item
+	int getItemIndex(unsigned selected) const;
+	int getCraftIndex(unsigned selected) const;
 public:
 	/// Creates the Sell state.
 	SellState(Game *game, Base *base);

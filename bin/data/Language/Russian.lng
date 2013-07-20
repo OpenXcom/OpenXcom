@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 ТРАНСПОРТИРОВКА
 STR_PURCHASE_RECRUIT
 ЗАКУПКА/ВЕРБОВКА
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 ПРОДАЖА/УВОЛЬНЕНИЕ
 STR_GEOSCAPE_UC

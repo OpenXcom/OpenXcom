@@ -38,6 +38,7 @@
 #include "DismantleFacilityState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Engine/Action.h"
+#include "../Savegame/Craft.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
@@ -47,6 +48,8 @@
 #include "PurchaseState.h"
 #include "SellState.h"
 #include "TransferBaseState.h"
+#include "CraftInfoState.h"
+#include "../Geoscape/AllocatePsiTrainingState.h"
 
 namespace OpenXcom
 {
@@ -104,7 +107,8 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	// Set up objects
 	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->onMouseClick((ActionHandler)&BasescapeState::viewClick);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
 
@@ -371,7 +375,7 @@ void BasescapeState::btnGeoscapeClick(Action *)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewClick(Action *)
+void BasescapeState::viewLeftClick(Action *)
 {
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
@@ -407,16 +411,70 @@ void BasescapeState::viewClick(Action *)
 }
 
 /**
+ * Processes right clicking on facilities.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::viewRightClick(Action *)
+{
+	BaseFacility *f = _view->getSelectedFacility();
+	if (f == 0)
+		_game->pushState(new BaseInfoState(_game, _base, this));
+
+	else if (f->getRules()->getCrafts() > 0)
+	{
+		if (f->getCraft() == 0)
+			_game->pushState(new CraftsState(_game, _base));
+		else
+			for (size_t craft = 0; craft < _base->getCrafts()->size(); ++craft)
+			{
+				if (f->getCraft() == _base->getCrafts()->at(craft))
+				{
+					_game->pushState(new CraftInfoState(_game, _base, craft));
+					break;
+				}
+			}
+	}
+	else if (f->getRules()->getStorage() > 0)
+		_game->pushState(new SellState(_game, _base));
+
+	else if (f->getRules()->getPersonnel() > 0)
+		_game->pushState(new SoldiersState(_game, _base));
+
+	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+		_game->pushState(new AllocatePsiTrainingState(_game, _base));
+
+	else if (f->getRules()->getLaboratories() > 0)
+		_game->pushState(new ResearchState(_game, _base));
+
+	else if (f->getRules()->getWorkshops() > 0)
+		_game->pushState(new ManufactureState(_game, _base));
+
+	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
+		_game->popState();
+}
+
+/**
  * Displays the name of the facility the mouse is over.
  * @param action Pointer to an action.
  */
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
+	std::wstring t;
 	if (f == 0)
-		_txtFacility->setText(L"");
+		t = L"";
+	else if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
+		t = _game->getLanguage()->getString(f->getRules()->getType());
 	else
-		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));
+	{
+		t.reserve(31);
+		t =  _game->getLanguage()->getString(f->getRules()->getType());
+		t += L" ";
+		t += _game->getLanguage()->getString("STR_CRAFT_");
+		if (f->getCraft() != 0)
+			t += f->getCraft()->getName(_game->getLanguage());
+	}
+	_txtFacility->setText(t);
 }
 
 /**

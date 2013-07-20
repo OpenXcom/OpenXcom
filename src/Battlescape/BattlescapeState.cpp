@@ -132,8 +132,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
 	// TODO: the following two are set for TFTD, but are unavailable except via hotkey
 	// until the battleScape UI layout is defined in the UI
-	_btnReserveKneel = new ImageButton(0,0,0,0);//10, 21, _icons->getX() + 43, _icons->getY() + 34);
-	_btnZeroTUs = new ImageButton(0,0,0,0);//10, 21, _icons->getX() + 97, _icons->getY() + 34);
+	_btnReserveKneel = new ImageButton(10, 21, _icons->getX() + 43, _icons->getY() + 34);
+	_btnZeroTUs = new ImageButton(10, 21, _icons->getX() + 97, _icons->getY() + 34);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 5);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
@@ -313,9 +313,12 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveAuto->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAuto"));
 	_btnReserveKneel->onMouseClick((ActionHandler)&BattlescapeState::btnReserveKneelClick);
-	_btnReserveKneel->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
 	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick);
-	_btnZeroTUs->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
+	// todo: make these visible based on ruleset and assign them to their own button
+	_btnReserveKneel->setVisible(false);
+	_btnZeroTUs->setVisible(false);
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));

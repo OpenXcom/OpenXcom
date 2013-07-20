@@ -39,8 +39,9 @@ class RuleCraft
 {
 private:
 	std::string _type;
+	std::vector<std::string> _requires;
 	int _sprite;
-	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy;
+	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
 	// battlescape:
@@ -58,6 +59,8 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft's type.
 	std::string getType() const;
+	/// Gets the craft's requirements.
+	const std::vector<std::string> &getRequirements () const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
 	/// Gets the craft's maximum fuel.
@@ -76,6 +79,10 @@ public:
 	int getVehicles() const;
 	/// Gets the craft's cost.
 	int getBuyCost() const;
+	/// Gets the craft's rent for a month.
+	int getRentCost() const;
+	/// Gets the craft's value.
+	int getSellCost() const;
 	/// Gets the craft's refuel item.
 	std::string getRefuelItem() const;
 	/// Gets the craft's repair rate.
