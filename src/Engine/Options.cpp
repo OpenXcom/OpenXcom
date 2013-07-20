@@ -46,6 +46,7 @@ std::vector<std::string> _userList;
 std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
 std::vector<std::string> _purchaseexclusions;
+std::stringstream _warnings;
 
 /**
  * Creates a default set of options based on the system.
@@ -295,19 +296,29 @@ void loadArgs(int argc, char** args)
 					}
 					if(!found)
 					{
-						Log(LOG_WARNING) << "Unknown option: " << argname;
+						handleUnknownOption(argname);
 					}
 				}
 			}
 			else
 			{
-				Log(LOG_WARNING) << "Unknown option: " << argname;
+				handleUnknownOption(argname);
 			}
 		}
 	}
 }
 
-/*
+/**
+ * Handles an unknown command line option.
+ * @param option Unknown option.
+ */
+void handleUnknownOption(const std::string& option)
+{
+	Log(LOG_WARNING) << "Unknown option: " << option;
+	_warnings << "Unknown option: " << option << std::endl;
+}
+
+/**
  * Displays command-line help when appropriate.
  * @param argc Number of arguments.
  * @param args Array of argument strings.
@@ -376,6 +387,7 @@ bool init(int argc, char** args)
 	}
 	fflush(file);
 	fclose(file);
+	std::cout << _warnings.str();
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{
@@ -459,11 +471,11 @@ void updateOptions()
 		save();
 	}
 
-    // now apply options set on the command line, overriding defaults and those loaded from config file
-    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
-    {
-        _options[it->first] = it->second;
-    }
+	// now apply options set on the command line, overriding defaults and those loaded from config file
+	for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+	{
+		_options[it->first] = it->second;
+	}
 }
 
 /**

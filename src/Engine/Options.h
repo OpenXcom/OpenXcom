@@ -59,8 +59,10 @@ namespace Options
 	std::string getUserFolder();
 	/// Sets the game's data, user and config folders.
 	void setFolders();
-	/// Update game options from config file and command line.
+	/// Updates game options from config file and command line.
 	void updateOptions();
+	/// Handles an unknown command line option.
+	void handleUnknownOption(const std::string& option);
 	/// Gets a string option.
 	std::string getString(const std::string& id);
 	/// Gets an integer option.
