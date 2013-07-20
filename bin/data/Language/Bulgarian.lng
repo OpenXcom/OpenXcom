@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 ПРЕХВЪРЛЯНЕ
 STR_PURCHASE_RECRUIT
 КУПУВАНЕ/НАЕМАНЕ
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 ПРОДАВАНЕ/УВОЛНЯВАНЕ
 STR_GEOSCAPE_UC

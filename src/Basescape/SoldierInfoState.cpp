@@ -33,9 +33,11 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
+#include "SackSoldierState.h"
 
 namespace OpenXcom
 {
@@ -56,6 +58,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnNext = new TextButton(28, 14, 80, 33);
 	_btnArmor = new TextButton(60, 14, 130, 33);
 	_edtSoldier = new TextEdit(200, 16, 40, 9);
+	_btnSack = new TextButton(60,14,248, 10);
 	_txtArmor = new Text(120, 9, 194, 38);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
@@ -111,6 +114,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_btnNext);
 	add(_btnArmor);
 	add(_edtSoldier);
+	add(_btnSack);
 	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
@@ -184,6 +188,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
+
+	_btnSack->setColor(Palette::blockOffset(15)+6);
+	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
+	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
 
 	_txtArmor->setColor(Palette::blockOffset(13));
 
@@ -321,11 +329,20 @@ SoldierInfoState::~SoldierInfoState()
  */
 void SoldierInfoState::init()
 {
+	if(_base->getSoldiers()->empty())
+	{
+		_game->popState();
+		return;
+	}
+	if(_soldier == _base->getSoldiers()->size())
+	{
+		_soldier = 0;
+	}
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
-	
+
 	if(current->psiSkill > 0)
 	{
 		_txtPsiStrength->setVisible(true);
@@ -542,6 +559,16 @@ void SoldierInfoState::btnArmorClick(Action *)
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 	}
+}
+
+/**
+ * Shows the Sack Soldier window.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::btnSackClick(Action *)
+{
+	Soldier *soldier = _base->getSoldiers()->at(_soldier);
+	_game->pushState(new SackSoldierState(_game, _base, soldier));
 }
 
 }
