@@ -2403,10 +2403,10 @@ STR_WEAPONSELFDESTRUCTION
 Odzyskiwanie wyposażenia jak w XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
-STR_XCOM2012RESEARCHRULES
-Reguły badań jak w XCom 2012
-STR_XCOM2012RESEARCHRULES_DESC
-Badane przedmioty są usuwane z twoich magazynów.{NEWLINE}Po "zbadaniu" żywego obcego, jego martwe ciało wysyłane jest do magazynów bazy.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" the living alien, his body sent to the stores of the base.
 STR_ARROWS
 STRZAŁKI
 STR_FULL

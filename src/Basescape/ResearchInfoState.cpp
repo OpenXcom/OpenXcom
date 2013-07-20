@@ -189,7 +189,7 @@ void ResearchInfoState::buildUi ()
  */
 void ResearchInfoState::btnOkClick(Action *)
 {
-	if (_rule && _rule->needItem() && (_game->getRuleset()->getUnit(_rule->getName()) || Options::getBool("xcom2012ResearchRules")))
+	if (_rule && _rule->needItem() && (_game->getRuleset()->getUnit(_rule->getName()) || Options::getBool("researchedItemsWillSpent")))
 	{
 		_base->getItems()->removeItem(_rule->getName(), 1);
 	}
@@ -207,7 +207,7 @@ void ResearchInfoState::btnCancelClick(Action *)
 	{
 		const RuleResearch *ruleResearch = _project->getRules();
 		const Unit *unit = _game->getRuleset()->getUnit(ruleResearch->getName());
-		if (ruleResearch->needItem() && (unit || Options::getBool("xcom2012ResearchRules")))
+		if (ruleResearch->needItem() && (unit || Options::getBool("researchedItemsWillSpent")))
 		{
 			if (unit && Options::getBool("alienContainmentHasUpperLimit") && _base->getAvailableContainment() <= _base->getUsedContainment())
 			{

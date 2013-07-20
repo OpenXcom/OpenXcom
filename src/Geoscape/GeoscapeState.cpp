@@ -1410,7 +1410,7 @@ void GeoscapeState::time1Day()
 			RuleResearch * bonus = 0;
 			const RuleResearch * research = (*iter)->getRules ();
 			// If "researched" the live alien, his body sent to the stores.
-			if (Options::getBool("xcom2012ResearchRules") && research->needItem() && _game->getRuleset()->getUnit(research->getName()))
+			if (Options::getBool("researchedItemsWillSpent") && research->needItem() && _game->getRuleset()->getUnit(research->getName()))
 			{
 				(*i)->getItems()->addItem(
 					_game->getRuleset()->getArmor(

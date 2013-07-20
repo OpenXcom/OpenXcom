@@ -2399,10 +2399,10 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
-STR_XCOM2012RESEARCHRULES
-Правила исcледований как в XCom 2012
-STR_XCOM2012RESEARCHRULES_DESC
-Вещи для исследования забираются со склада.{NEWLINE}После "исследования" живого пришельца, его тело отправляется на склад базы.
+STR_RESEARCHEDITEMSWILLSPENT
+Исследуемые вещи расходуются
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Вещи для исследования забираются со склада и будут разобраны. После "исследования" живого пришельца, его тело отправляется на склад базы.
 STR_ARROWS
 ARROWS
 STR_FULL
