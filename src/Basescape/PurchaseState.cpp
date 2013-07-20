@@ -156,7 +156,8 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
-		if (_game->getRuleset()->getCraft(*i)->getBuyCost() > 0)
+		RuleCraft *rule = _game->getRuleset()->getCraft(*i);
+		if (rule->getBuyCost() > 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
 			_crafts.push_back(*i);
 			_qtys.push_back(0);
@@ -168,7 +169,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			}
 			std::wstringstream ss4;
 			ss4 << crafts;
-			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(_game->getRuleset()->getCraft(*i)->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
+			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();

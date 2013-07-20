@@ -1091,6 +1091,8 @@ crafts:
     transferTime: 96
     score: 250
   - type: STR_FIRESTORM
+    requires:
+      - STR_NEW_FIGHTER_CRAFT
     sprite: 4
     fuelMax: 20
     damageMax: 500
@@ -1101,6 +1103,8 @@ crafts:
     refuelRate: 5
     score: 250
   - type: STR_LIGHTNING
+    requires:
+      - STR_NEW_FIGHTER_TRANSPORTER
     sprite: 1
     fuelMax: 30
     damageMax: 800
@@ -1121,6 +1125,8 @@ crafts:
           width: 20
           length: 10
   - type: STR_AVENGER
+    requires:
+      - STR_ULTIMATE_CRAFT
     sprite: 2
     fuelMax: 60
     damageMax: 1200

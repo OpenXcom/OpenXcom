@@ -39,6 +39,7 @@ class RuleCraft
 {
 private:
 	std::string _type;
+	std::vector<std::string> _requires;
 	int _sprite;
 	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
@@ -58,6 +59,8 @@ public:
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft's type.
 	std::string getType() const;
+	/// Gets the craft's requirements.
+	const std::vector<std::string> &getRequirements () const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
 	/// Gets the craft's maximum fuel.

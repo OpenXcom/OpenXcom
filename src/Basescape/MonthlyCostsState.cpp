@@ -119,7 +119,7 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
-		if (craft->getRentCost() > 0 && _game->getSavedGame()->isResearched(_game->getRuleset()->getUfopaediaArticle(craft->getType())->requires))
+		if (craft->getRentCost() > 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
 			std::wstringstream ss2;
 			ss2 << _base->getCraftCount((*i));

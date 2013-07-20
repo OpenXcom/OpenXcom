@@ -61,6 +61,10 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int
 		{
 			i.second() >> _type;
 		}
+		else if (key == "requires")
+		{
+			i.second() >> _requires;
+		}
 		else if (key == "sprite")
 		{
 			i.second() >> _sprite;
@@ -163,6 +167,7 @@ void RuleCraft::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "requires" << YAML::Value << _requires;
 	out << YAML::Key << "sprite" << YAML::Value << _sprite;
 	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
 	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
@@ -197,6 +202,16 @@ void RuleCraft::save(YAML::Emitter &out) const
 std::string RuleCraft::getType() const
 {
 	return _type;
+}
+
+/**
+ * Returns the list of research required to
+ * acquire this craft.
+ * @return List of research IDs.
+ */
+const std::vector<std::string> &RuleCraft::getRequirements() const
+{
+	return _requires;
 }
 
 /**
