@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 ПЕРЕДАЧА
 STR_PURCHASE_RECRUIT
 ЗАКУПІВЛЯ/НАЙМ
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 ПРОДАЖ/ЗВІЛЬНЕННЯ
 STR_GEOSCAPE_UC

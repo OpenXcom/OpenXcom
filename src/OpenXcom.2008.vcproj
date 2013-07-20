@@ -943,6 +943,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\SackSoldierState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SackSoldierState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\SellState.cpp"
 				>
 			</File>
