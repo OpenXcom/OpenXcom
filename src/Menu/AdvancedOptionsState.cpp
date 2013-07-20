@@ -92,7 +92,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_lstOptions->setColor(Palette::blockOffset(8)+5);
 
 	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentHasUpperLimit", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentLimitEnforced", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canSellLiveAliens", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowAutoSellProduction", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowBuildingQueue", false));
@@ -114,7 +114,6 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("alienResearchUsesContainment", false));
 
 	_boolQuantity = _settingBoolSet.size();
 	int sel = 0;

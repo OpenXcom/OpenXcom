@@ -2293,9 +2293,9 @@ STR_AGGRESSIVERETALIATION
 Aggressive retaliation
 STR_AGGRESSIVERETALIATION_DESC
 UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Alien containment limits
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Live alien containment limits will be imposed.
 STR_CANSELLLIVEALIENS
 Live alien sale
@@ -2391,10 +2391,6 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
-STR_ALIENRESEARCHUSESCONTAINMENT
-Alien research requires containment
-STR_ALIENRESEARCHUSESCONTAINMENT_DESC
-Aliens use containment facility while in research, closing the "infinite live aliens" exploit.
 STR_ARROWS
 ARROWS
 STR_FULL

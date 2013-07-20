@@ -2297,9 +2297,9 @@ STR_AGGRESSIVERETALIATION
 Represalii agresive
 STR_AGGRESSIVERETALIATION_DESC
 OZNurile vor încerca să îți detecteze bazele întotdeauna, indiferent de parametrii misiunii lor.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limite carantină extratereștrii
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Vor fi impuse limite pentru numărul de extratereștrii vii din carantină.
 STR_CANSELLLIVEALIENS
 Vânzarea extratereștrilor vii
@@ -2399,10 +2399,6 @@ STR_WEAPONSELFDESTRUCTION
 Recuperare articole tip XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
-STR_ALIENRESEARCHUSESCONTAINMENT
-Alien research requires containment
-STR_ALIENRESEARCHUSESCONTAINMENT_DESC
-Aliens use containment facility while in research, closing the "infinite live aliens" exploit.
 STR_ARROWS
 SĂGEȚI
 STR_FULL

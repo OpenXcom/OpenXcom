@@ -110,7 +110,7 @@ void createDefault()
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
-	setBool("alienContainmentHasUpperLimit", false);
+	setBool("alienContainmentLimitEnforced", false);
 	setBool("canSellLiveAliens", false);
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
@@ -128,7 +128,6 @@ void createDefault()
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
-	setBool("alienResearchUsesContainment", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

@@ -2303,9 +2303,9 @@ STR_AGGRESSIVERETALIATION
 Agresywne akcje odwetowe
 STR_AGGRESSIVERETALIATION_DESC
 UFO zawsze będzie próbowało wykryć Twoje bazy, bez względu na cel swojej misji.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limity cel dla obcych
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Limit ilości miejsca w celach dla żywych obcych.
 STR_CANSELLLIVEALIENS
 Sprzedaż żywych obcych
@@ -2405,10 +2405,6 @@ STR_WEAPONSELFDESTRUCTION
 Odzyskiwanie wyposażenia jak w XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
-STR_ALIENRESEARCHUSESCONTAINMENT
-Badania nad obcym wymagają cel
-STR_ALIENRESEARCHUSESCONTAINMENT_DESC
-Podczas przeprowadzania badań nad obcymi, zajmują oni przestrzeń w celach. Wyklucza to możliwość przetrzymywania nieskończonej ilości żywych obcych.
 STR_ARROWS
 STRZAŁKI
 STR_FULL

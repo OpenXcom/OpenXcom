@@ -1044,7 +1044,7 @@ int Base::getUsedContainment() const
 			}
 		}
 	}
-	if (Options::getBool("alienResearchUsesContainment"))
+	if (Options::getBool("alienContainmentLimitEnforced"))
 	{
 		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 		{

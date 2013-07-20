@@ -2293,9 +2293,9 @@ STR_AGGRESSIVERETALIATION
 Représaille agressive
 STR_AGGRESSIVERETALIATION_DESC
 Tous les OVNIs tente de détécter les bases X-Com quelque soit les paramètres de mission.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limite pour la détention des E.T.
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Le nombre d'aliens détenu est limité par installation.
 STR_CANSELLLIVEALIENS
 Vente des E.T. vivants
@@ -2395,10 +2395,6 @@ STR_WEAPONSELFDESTRUCTION
 XCom 2012 item recovery
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
-STR_ALIENRESEARCHUSESCONTAINMENT
-Alien research requires containment
-STR_ALIENRESEARCHUSESCONTAINMENT_DESC
-Aliens use containment facility while in research, closing the "infinite live aliens" exploit.
 STR_ARROWS
 ARROWS
 STR_FULL

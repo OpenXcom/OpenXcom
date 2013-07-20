@@ -2297,9 +2297,9 @@ STR_AGGRESSIVERETALIATION
 Агресивна відплата
 STR_AGGRESSIVERETALIATION_DESC
 НЛО завжди будуть намагатись знайти Вашу базу, незалежно від виконуваного завдання.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Ліміт тюрми для прибульців
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Буде введено ліміт на кількість живих прибульців в тюрмах.
 STR_CANSELLLIVEALIENS
 Продаж живих прибульців
@@ -2399,10 +2399,6 @@ STR_WEAPONSELFDESTRUCTION
 Захоплення зброї як в XCOM 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Зброя прибульців буде самознищуватись, якщо її власник буде вбитий.
-STR_ALIENRESEARCHUSESCONTAINMENT
-Alien research requires containment
-STR_ALIENRESEARCHUSESCONTAINMENT_DESC
-Aliens use containment facility while in research, closing the "infinite live aliens" exploit.
 STR_ARROWS
 СТРІЛКИ
 STR_FULL

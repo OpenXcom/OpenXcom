@@ -32,7 +32,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
-#include "../Menu/ErrorMessageState.h"
 #include "ResearchState.h"
 #include "NewResearchListState.h"
 #include "../Interface/ArrowButton.h"
@@ -202,13 +201,6 @@ void ResearchInfoState::btnCancelClick(Action *)
 	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
 	if (ruleResearch->needItem() &&_game->getRuleset()->getUnit(ruleResearch->getName()))
 	{
-		// !_rule since we should always be able to cancel if the project hasn't been started yet
-		if (!_rule && Options::getBool("alienContainmentHasUpperLimit") && !Options::getBool("alienResearchUsesContainment")
-		    && _base->getAvailableContainment() <= _base->getUsedContainment())
-		{
-			_game->pushState(new ErrorMessageState(_game, "STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
-			return;
-		}
 		_base->getItems()->addItem(ruleResearch->getName(), 1);
 	}
 	_base->removeResearch(_project);
