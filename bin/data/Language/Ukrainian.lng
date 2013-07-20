@@ -2399,6 +2399,10 @@ STR_WEAPONSELFDESTRUCTION
 Захоплення зброї як в XCOM 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Зброя прибульців буде самознищуватись, якщо її власник буде вбитий.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" the living alien, his body sent to the stores of the base.
 STR_ARROWS
 СТРІЛКИ
 STR_FULL
