@@ -92,6 +92,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BriefingState.h"
 #include "../Ruleset/UfoTrajectory.h"
+#include "../Ruleset/Armor.h"
 #include "BaseDefenseState.h"
 #include "BaseDestroyedState.h"
 #include "DefeatState.h"
