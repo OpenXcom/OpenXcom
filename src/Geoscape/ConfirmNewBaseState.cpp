@@ -134,6 +134,7 @@ void ConfirmNewBaseState::btnOkClick(Action *)
  */
 void ConfirmNewBaseState::btnCancelClick(Action *)
 {
+	_globe->onMouseOver(0);
 	_game->popState();
 }
 
