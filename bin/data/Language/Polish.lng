@@ -2405,6 +2405,10 @@ STR_WEAPONSELFDESTRUCTION
 Odzyskiwanie wyposażenia jak w XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
+STR_RESEARCHEDITEMSWILLSPENT
+Badane przedmioty zostają zużyte
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Badane przedmioty są pobierane z magazynów i zostaną utracone. Po "zbadaniu" żywego obcego, jego martwe ciało wysyłane jest do magazynów bazy.
 STR_ARROWS
 STRZAŁKI
 STR_FULL
