@@ -2299,9 +2299,9 @@ STR_AGGRESSIVERETALIATION
 Агрессивное возмездие
 STR_AGGRESSIVERETALIATION_DESC
 НЛО будут постоянно пытаться обнаружить вашу базу, вне зависимости от их типов миссий.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Ограничение содержания пришельцев
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Количество живых пришельцев в тюрьмах ограничено.
 STR_CANSELLLIVEALIENS
 Продажа живых пришельцев

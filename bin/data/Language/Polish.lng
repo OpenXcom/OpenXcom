@@ -2303,9 +2303,9 @@ STR_AGGRESSIVERETALIATION
 Agresywne akcje odwetowe
 STR_AGGRESSIVERETALIATION_DESC
 UFO zawsze będzie próbowało wykryć Twoje bazy, bez względu na cel swojej misji.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limity cel dla obcych
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Limit ilości miejsca w celach dla żywych obcych.
 STR_CANSELLLIVEALIENS
 Sprzedaż żywych obcych
