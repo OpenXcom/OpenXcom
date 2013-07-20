@@ -27,6 +27,7 @@ namespace OpenXcom
 class RuleBaseFacility;
 class Base;
 class Ruleset;
+class Craft;
 
 /**
  * Represents a base facility placed in a base.
