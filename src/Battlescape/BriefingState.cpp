@@ -80,20 +80,6 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
-	{
-		_txtCraft->setY(40);
-		_txtBriefing->setY(56);
-	}
-	else
-	{
-		add(_txtTarget);
-	}
-	if (mission != "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		add(_txtCraft);
-	}
-	add(_txtBriefing);
 
 	centerAllSurfaces();
 
@@ -130,8 +116,29 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	}
 	_txtCraft->setText(ss.str());
 
+	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
+	{
+		_txtCraft->setY(40);
+		_txtBriefing->setY(56);
+		delete _txtTarget;
+	}
+	else
+	{
+		add(_txtTarget);
+	}
+
+	if (mission != "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		add(_txtCraft);
+	}
+	else
+	{
+		delete _txtCraft;
+	}
+
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
+	add(_txtBriefing);
 
 	// Show respective mission briefing
 	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_THE_FINAL_ASSAULT")
@@ -160,7 +167,6 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
  */
 BriefingState::~BriefingState()
 {
-
 }
 
 /**
