@@ -316,18 +316,18 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
 	}
 
   void OpenGL::term() {
-	if(gltexture) {
-	  glDeleteTextures(1, &gltexture);
-	  gltexture = 0;
-	}
+    if(gltexture) {
+      glDeleteTextures(1, &gltexture);
+      gltexture = 0;
+    }
 
-	if(buffer) {
-	  buffer = 0;
-	  iwidth = 0;
-	  iheight = 0;
-	}
+    if(buffer) {
+      buffer = 0;
+      iwidth = 0;
+      iheight = 0;
+    }
 
-	delete buffer_surface;
+    delete buffer_surface;
   }
 
   OpenGL::OpenGL() : gltexture(0), glprogram(0), fragmentshader(0), linear(false), vertexshader(0),
@@ -337,6 +337,6 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
   { }
 
   OpenGL::~OpenGL() {
-	term();
+    term();
   }
 }
