@@ -2566,6 +2566,10 @@ bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int d
  */
 bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target)
 {
+	if (direction < 0 || direction > 7)
+	{
+		return false;
+	}
 	Position p;
 	int size = attacker->getArmor()->getSize() - 1;
 	Pathfinding::directionToVector(direction, &p);

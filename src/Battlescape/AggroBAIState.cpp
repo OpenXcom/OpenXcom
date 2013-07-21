@@ -945,8 +945,12 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 			if (x || y) // skip the unit itself
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
-				int dir;
-				Pathfinding::vectorToDirection(target->getPosition() - checkPath, dir);
+				// since vectorToDirection only works with tiles that are neighbours, we'll take the direction from the target instead.
+				int dir = target->getDirectionTo(checkPath) + 4;
+				if (dir >= 8)
+				{
+					dir -= 8;
+				}
 				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, dir, action->actor, target);
 				bool fitHere = _game->setUnitPosition(action->actor, checkPath, true);
 								
