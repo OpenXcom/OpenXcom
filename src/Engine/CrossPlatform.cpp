@@ -487,8 +487,12 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
 	{
+	#ifdef __MORPHOS__
+		return files;
+	#else
 		std::string errorMessage("Failed to open directory: " + path);
 		throw Exception(errorMessage);
+	#endif
 	}
 
 	struct dirent *dirp;
@@ -534,6 +538,14 @@ bool folderExists(const std::string &path)
 {
 #ifdef _WIN32
 	return (PathIsDirectoryA(path.c_str()) != FALSE);
+#elseif defined __MORPHOS__
+	BPTR l = Lock( path.c_str(), SHARED_LOCK );
+	if( l != NULL )
+	{
+		UnLock( l );
+		return 1;
+	}
+	return 0;
 #else
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode));
@@ -549,7 +561,15 @@ bool fileExists(const std::string &path)
 {
 #ifdef _WIN32
 	return (PathFileExistsA(path.c_str()) != FALSE);
-#else
+#elseif defined __MORPHOS__
+	BPTR l = Lock( path.c_str(), SHARED_LOCK );
+	if( l != NULL )
+	{
+		UnLock( l );
+		return 1;
+	}
+	return 0;
+#else 
 	struct stat info;
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
 #endif

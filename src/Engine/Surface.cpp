@@ -236,24 +236,16 @@ void Surface::loadSpk(const std::string &filename)
 
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
-	#ifdef __MORPHOS__
-		Uint16 p = flag;
-		char *src = (char *)&p;
-		char *dst = (char *)&flag;
-		dst[ 0 ] = src[ 1 ];
-		dst[ 1 ] = src[ 0 ];
-	#endif
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
 	
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			
-	#ifdef __MORPHOS__
-		Uint16 p = flag;
-		char *src = (char *)&p;
-		char *dst = (char *)&flag;
-		dst[ 0 ] = src[ 1 ];
-		dst[ 1 ] = src[ 0 ];
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
 	#endif			
 			
 			for (int i = 0; i < flag * 2; ++i)
@@ -265,13 +257,9 @@ void Surface::loadSpk(const std::string &filename)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			
-	#ifdef __MORPHOS__
-		Uint16 p = flag;
-		char *src = (char *)&p;
-		char *dst = (char *)&flag;
-		dst[ 0 ] = src[ 1 ];
-		dst[ 1 ] = src[ 0 ];
-	#endif
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
 			
 			for (int i = 0; i < flag * 2; ++i)
 			{

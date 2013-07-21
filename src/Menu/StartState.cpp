@@ -360,7 +360,7 @@ static struct AudioSequence
 	void operator ()()
 	{
 	
-#ifndef __NO_FLC
+
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
 			int command = introSoundTrack[trackPosition].sound;
@@ -413,7 +413,7 @@ static struct AudioSequence
 			}
 			++trackPosition;
 		}
-#endif
+
 	}
 } *audioSequence;
 
@@ -449,10 +449,11 @@ void StartState::think()
 			}
 			_load = LOADING_SUCCESSFUL;
 
-#ifndef __NO_FLC
+
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
-			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
+			std::string introSoundFile = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
+			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && CrossPlatform::fileExists(introSoundFile))
 			{
 				audioSequence = new AudioSequence(_game->getResourcePack());
 				Flc::flc.realscreen = _game->getScreen();
@@ -465,10 +466,12 @@ void StartState::think()
 				delete audioSequence;
 
 
+#ifndef __NO_MUSIC
 				// fade out!
 				Mix_FadeOutChannel(-1, 45*20);
 				if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45*20); } // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 				else { Mix_HaltMusic(); }
+#endif
 
 				SDL_Color pal[256];
 				SDL_Color pal2[256];
@@ -492,9 +495,10 @@ void StartState::think()
 
 				_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 
+#ifndef __NO_MUSIC
 				Mix_HaltChannel(-1);
-			}
 #endif
+			}
 		}
 		catch (Exception &e)
 		{

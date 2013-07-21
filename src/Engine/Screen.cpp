@@ -32,11 +32,6 @@
 #include "Timer.h"
 #include <SDL.h>
 
-#ifdef __MORPHOS__
-char *SDL_getenv( char *a ){ return NULL; };
-void SDL_setenv(char *a, char *b ){ };
-#endif
-
 namespace OpenXcom
 {
 
@@ -74,27 +69,21 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	char *prev;
 	if (!_fullscreen && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{
-		#ifdef __MORPHOS__
-		prev = NULL;
-		#else
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
-		#endif
+
 		if (0 == prev) prev = (char*)"";
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
 		
-		#ifndef __MORPHOS__
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
-		#endif
 	}
 	setResolution(width, height);
 	if (!_fullscreen  && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{ // We don't want to put the window back to the starting position later when the window is resized.
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
-		#ifndef __MORPHOS__
+
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
-		#endif
 	}
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
 }
