@@ -343,26 +343,6 @@ void SoldierInfoState::init()
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
 
-	if(current->psiSkill > 0)
-	{
-		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
-
-		_txtPsiSkill->setVisible(true);
-		_numPsiSkill->setVisible(true);
-		_barPsiSkill->setVisible(true);
-	}
-	else
-	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-
-		_txtPsiSkill->setVisible(false);
-		_numPsiSkill->setVisible(false);
-		_barPsiSkill->setVisible(false);
-	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
 	texture->getFrame(s->getRankSprite())->setY(0);
