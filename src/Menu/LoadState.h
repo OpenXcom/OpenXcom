@@ -36,6 +36,8 @@ public:
 	LoadState(Game *game, bool geo);
 	/// Creates the Quick Load Game state.
 	LoadState(Game *game, bool geo, bool showMsg);
+	/// Creates the command line Load Game state.
+	LoadState(Game *game);
 	/// Cleans up the Load Game state.
 	~LoadState();
 	/// Handler for clicking the Saves list.

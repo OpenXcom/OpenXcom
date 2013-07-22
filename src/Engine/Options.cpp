@@ -270,6 +270,10 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
+				if (argname == "load")
+				{
+					continue;
+				}
 				if (argname == "data")
 				{
 					_dataFolder = CrossPlatform::endPath(args[i+1]);

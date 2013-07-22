@@ -43,8 +43,9 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
+ * @param file Name of a saved game file (without the .sav)
  */
-StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
+StartState::StartState(Game *game, std::wstring file) : State(game), _saveFile(file), _load(LOADING_NONE)
 {
 	// Create objects
 	int dx = (Options::getInt("baseXResolution") - 320) / 2;
@@ -442,7 +443,10 @@ void StartState::think()
 			{
 				throw Exception("No languages available");
 			}
-			_load = LOADING_SUCCESSFUL;
+			if (_saveFile == L"")
+				_load = LOADING_SUCCESSFUL;
+			else
+				_load = LOADING_FROM_COMMAND_LINE;
 
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
@@ -523,6 +527,26 @@ void StartState::think()
 			{
 				_game->setState(new LanguageState(_game));
 			}
+		}
+		break;
+	case LOADING_FROM_COMMAND_LINE:
+		Log(LOG_INFO) << "OpenXcom started successfully!";
+		Log(LOG_INFO) << "Attempting to load save specified on command line.";
+		try
+		{
+			_game->loadLanguage(Options::getString("language"));
+			_game->setState(new MainMenuState(_game, _saveFile));
+		}
+		catch (Exception &e)
+		{
+			_surface->clear();
+			_surface->drawString(1, 9, "ERROR:", 2);
+			_surface->drawString(1, 17, e.what(), 2);
+			_surface->drawString(1, 49, "Unable to load", 1);
+			std::string file = Language::wstrToUtf8(_saveFile) + ".sav";
+			_surface->drawString(1, 57, file.c_str(), 1);
+			_surface->drawString(75, 183, "Press any key to continue", 1);
+			Log(LOG_ERROR) << e.what();
 		}
 		break;
 	default:
