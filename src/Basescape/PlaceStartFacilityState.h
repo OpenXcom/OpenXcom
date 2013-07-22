@@ -25,8 +25,6 @@
 namespace OpenXcom
 {
 
-class Globe;
-
 /**
  * Window shown when the player tries to
  * build a facility.
@@ -34,7 +32,6 @@ class Globe;
 class PlaceStartFacilityState : public PlaceFacilityState
 {
 private:
-	Globe *_globe;
 	SelectStartFacilityState *_select;
 
 public:

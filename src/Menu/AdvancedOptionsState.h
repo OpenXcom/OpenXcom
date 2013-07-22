@@ -20,7 +20,6 @@
 #define OPENXCOM_ADVANCEDOPTIONSSTATE_H
 
 #include "../Engine/State.h"
-#include <SDL.h>
 
 namespace OpenXcom
 {
