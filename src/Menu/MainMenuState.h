@@ -20,6 +20,7 @@
 #define OPENXCOM_MAINMENUSTATE_H
 
 #include "../Engine/State.h"
+#include <string>
 
 namespace OpenXcom
 {
@@ -38,9 +39,11 @@ private:
 	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnQuit;
 	Window *_window;
 	Text *_txtTitle;
+	std::wstring _saveFile;
+
 public:
 	/// Creates the Main Menu state.
-	MainMenuState(Game *game);
+	MainMenuState(Game *game, std::wstring saveFile = L"");
 	/// Cleans up the Main Menu state.
 	~MainMenuState();
 	/// Updates the palette.
