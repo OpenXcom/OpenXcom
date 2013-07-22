@@ -284,9 +284,8 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-//value = SDL_SwapLE16(value);   ??
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	value = SDL_Swap32( value );
+	value = SDL_SwapLE16( value );
 	#endif	
 	
 		voxelData->push_back(value);
