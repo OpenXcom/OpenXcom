@@ -84,15 +84,14 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	{
 		_txtCraft->setY(40);
 		_txtBriefing->setY(56);
+		_txtTarget->setVisible(false);
 	}
-	else
+	add(_txtTarget);
+	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		add(_txtTarget);
+		_txtCraft->setVisible(false);
 	}
-	if (mission != "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		add(_txtCraft);
-	}
+	add(_txtCraft);
 	add(_txtBriefing);
 
 	centerAllSurfaces();
