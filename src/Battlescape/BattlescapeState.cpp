@@ -1742,6 +1742,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		Action a = Action(&ev, 0.0, 0.0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
+		_btnKneel->invert(0);
 	}
 }
 
