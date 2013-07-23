@@ -312,7 +312,7 @@ void TransferItemsState::completeTransfer()
 						// Clear Hangar
 						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
 						{
-							if ((*f)->getCraft() == craft)
+							if ((*f)->getCraft() == *c)
 							{
 								(*f)->setCraft(0);
 							}
