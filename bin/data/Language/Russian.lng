@@ -2396,7 +2396,7 @@ STR_ANYTIMEPSITRAINING
 STR_ANYTIMEPSITRAINING_DESC
 Вы можете в любое время отправить солдат на псионическую тренировку (или отменить ее). Помните, начальное обучение займет 30-60 дней.
 STR_NOT_ENOUGH_SPACE
-Нехватает места!
+Не хватает места!
 STR_WEAPONSELFDESTRUCTION
 Добывание снаряжения как в XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
