@@ -109,7 +109,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
 	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
-	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
+	// Postponing setting up mouseOver handler because of potential mouseOver errors.
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
@@ -250,7 +250,20 @@ void BasescapeState::init()
 	_txtFunds->setText(s);
 
 	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
+
+	_view->onMouseOver((ActionHandler)&BasescapeState::temporaryHandler);
 }
+
+/**
+ * Temporarily disables the usual mouseOver handler, preventing mouseOver bugs,
+ * as returning to the view after the player removes craft from the base is causing issues.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::temporaryHandler(Action *)
+{
+	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
+}
+
 
 /**
  * Changes the base currently displayed on screen.
