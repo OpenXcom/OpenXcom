@@ -136,6 +136,7 @@ void BattlescapeGame::think()
 					{
 						if (!_save->getDebugMode())
 						{
+							_endTurnRequested = true;
 							statePushBack(0); // end AI turn
 						}
 						else
@@ -189,6 +190,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		{
 			if (!_save->getDebugMode())
 			{
+				_endTurnRequested = true;
 				statePushBack(0); // end AI turn
 			}
 			else
@@ -376,6 +378,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		{
 			if (!_save->getDebugMode())
 			{
+				_endTurnRequested = true;
 				statePushBack(0); // end AI turn
 			}
 			else
@@ -949,8 +952,8 @@ void BattlescapeGame::popState()
 					{
 						if (!_save->getDebugMode())
 						{
-							statePushBack(0); // end AI turn
 							_endTurnRequested = true;
+							statePushBack(0); // end AI turn
 						}
 						else
 						{
