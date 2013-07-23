@@ -36,6 +36,7 @@
 #include "NoteState.h"
 #include "LanguageState.h"
 #include "MainMenuState.h"
+#include "LoadState.h"
 
 namespace OpenXcom
 {
@@ -535,7 +536,8 @@ void StartState::think()
 		try
 		{
 			_game->loadLanguage(Options::getString("language"));
-			_game->setState(new MainMenuState(_game, _saveFile));
+			LoadState *load = (new LoadState(_game));
+			load->quickLoad(_saveFile);
 		}
 		catch (Exception &e)
 		{

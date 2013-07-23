@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param file Name of a saved game file (without the .sav)
  */
-MainMenuState::MainMenuState(Game *game, std::wstring saveFile) : State(game), _saveFile(saveFile)
+MainMenuState::MainMenuState(Game *game) : State(game)
 {
 	// Create objects
 	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
@@ -118,12 +118,6 @@ void MainMenuState::init()
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	if(_saveFile != L"")
-	{
-		LoadState *load = (new LoadState(_game));
-		load->quickLoad(_saveFile);
-		_saveFile=L"";
-	}
 }
 
 /**
