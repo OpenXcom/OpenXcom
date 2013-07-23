@@ -38,14 +38,6 @@ namespace OpenXcom
 {
 
 /**
- * Creates the state for loading from the command line.
- * @param game Pointer to the core game.
- */
-LoadState::LoadState(Game *game) : SavedGameState(game, true)
-{
-}
-
-/**
  * Initializes all the elements in the Load Game screen.
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
