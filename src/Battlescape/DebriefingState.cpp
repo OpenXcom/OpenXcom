@@ -221,6 +221,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
  */
 DebriefingState::~DebriefingState()
 {
+	if (_game->isQuitting())
+	{
+		_game->getSavedGame()->setBattleGame(0);
+	}
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		delete *i;
@@ -234,6 +238,7 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
+	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -873,8 +878,6 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-	// Now ending the battle.
-	save->setBattleGame(0);
 }
 
 void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed)
