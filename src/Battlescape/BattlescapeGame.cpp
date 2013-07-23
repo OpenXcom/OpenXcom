@@ -424,7 +424,6 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
  */
 void BattlescapeGame::endTurn()
 {
-	_endTurnRequested = false;
 	Position p;
 
 	_tuReserved = _playerTUReserved;
@@ -517,10 +516,11 @@ void BattlescapeGame::endTurn()
         resetSituationForAI();
     }
 
-	if (_save->getSide() != FACTION_NEUTRAL)
+	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
 	{
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}
+	_endTurnRequested = false;
 
 }
 
@@ -950,6 +950,7 @@ void BattlescapeGame::popState()
 						if (!_save->getDebugMode())
 						{
 							statePushBack(0); // end AI turn
+							_endTurnRequested = true;
 						}
 						else
 						{
