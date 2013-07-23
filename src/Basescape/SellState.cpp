@@ -281,6 +281,15 @@ void SellState::btnOkClick(Action *)
 					}
 				}
 
+				// Clear Hangar
+				for (std::vector<BaseFacility*>::iterator s = _base->getFacilities()->begin(); s != _base->getFacilities()->end(); ++s)
+				{
+					if ((*s)->getCraft() == craft)
+					{
+						(*s)->setCraft(0);
+					}
+				}
+
 				// Remove craft
 				for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 				{
