@@ -61,6 +61,14 @@ LoadState::LoadState(Game *game, bool geo, bool showMsg) : SavedGameState(game, 
 }
 
 /**
+ * Creates the command line Load Game state.
+ * @param game Pointer to the core game.
+ */
+LoadState::LoadState(Game *game) : SavedGameState(game, true)
+{
+}
+
+/**
  *
  */
 LoadState::~LoadState()
@@ -97,7 +105,6 @@ void LoadState::quickLoad(const std::wstring &filename16)
 #else
 		std::string filename = Language::wstrToUtf8(filename16);
 #endif
-
 	SavedGame *s = new SavedGame();
 	try
 	{

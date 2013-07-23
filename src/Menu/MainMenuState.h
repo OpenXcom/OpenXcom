@@ -38,6 +38,7 @@ private:
 	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnQuit;
 	Window *_window;
 	Text *_txtTitle;
+
 public:
 	/// Creates the Main Menu state.
 	MainMenuState(Game *game);
