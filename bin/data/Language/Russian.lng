@@ -2396,19 +2396,19 @@ STR_ANYTIMEPSITRAINING
 STR_ANYTIMEPSITRAINING_DESC
 Вы можете в любое время отправить солдат на псионическую тренировку (или отменить ее). Помните, начальное обучение займет 30-60 дней.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+Нехватает места!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Свойство оружия как в XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Оружие пришельцев самоуничтожается, если пришелец убит.
 STR_RESEARCHEDITEMSWILLSPENT
 Исследуемые вещи расходуются
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Вещи для исследования забираются со склада и будут разобраны. После "исследования" живого пришельца, его тело отправляется на склад базы.
 STR_ARROWS
-ARROWS
+УКАЗАТЕЛИ
 STR_FULL
-FULL
+ПОЛНОСТЬЮ
 STR_SAVE_VOXEL_VIEW
 Снимок экрана вида от первого лица
 STR_TIME_UNITS_RESERVED_FOR_KNEELING
@@ -2416,6 +2416,6 @@ STR_TIME_UNITS_RESERVED_FOR_KNEELING
 STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
 Время сохранено, чтобы присесть и выстрелить
 STR_RESERVE_TUS_FOR_KNEEL
-Сохранить время, чтобы присесть
+Оставить TU, чтобы присесть
 STR_EXPEND_ALL_TIME_UNITS
-Расходовать все оставшееся время
+Расходовать все TU
