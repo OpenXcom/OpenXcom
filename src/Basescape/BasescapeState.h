@@ -88,6 +88,8 @@ public:
 	void miniClick(Action *action);
 	/// Handler for pressing a key on the Name edit.
 	void edtBaseKeyPress(Action *action);
+	/// Temporary handler to prevent mouseOver errors.
+	void temporaryHandler(Action *);
 };
 
 }
