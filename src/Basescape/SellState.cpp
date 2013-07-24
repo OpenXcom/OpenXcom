@@ -29,6 +29,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Savegame/BaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
@@ -278,6 +279,16 @@ void SellState::btnOkClick(Action *)
 					if ((*s)->getCraft() == craft)
 					{
 						(*s)->setCraft(0);
+					}
+				}
+
+				// Clear Hangar
+				for (std::vector<BaseFacility*>::iterator f = _base->getFacilities()->begin(); f != _base->getFacilities()->end(); ++f)
+				{
+					if ((*f)->getCraft() == craft)
+					{
+						(*f)->setCraft(0);
+						break;
 					}
 				}
 

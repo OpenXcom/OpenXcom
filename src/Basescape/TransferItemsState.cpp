@@ -30,6 +30,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Savegame/BaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
@@ -309,6 +310,16 @@ void TransferItemsState::completeTransfer()
 							t->setCraft(*c);
 							_baseTo->getTransfers()->push_back(t);
 						}
+						// Clear Hangar
+						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
+						{
+							if ((*f)->getCraft() == *c)
+							{
+								(*f)->setCraft(0);
+								break;
+							}
+						}
+
 						_baseFrom->getCrafts()->erase(c);
 						break;
 					}
