@@ -42,6 +42,8 @@ namespace OpenXcom
  */
 BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
+	_globe->onMouseOver(0);
+
 	_screen = false;
 
 	// Create objects
@@ -143,7 +145,6 @@ void BaseNameState::edtNameKeyPress(Action *action)
  */
 void BaseNameState::btnOkClick(Action *)
 {
-	_globe->onMouseOver(0);
 	nameBase();
 }
 

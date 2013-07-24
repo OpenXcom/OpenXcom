@@ -150,7 +150,7 @@ TRANSFER
 STR_PURCHASE_RECRUIT
 CUMPĂRĂ/RECRUTEAZĂ
 STR_SACK
-SACK
+CONCEDIAZĂ
 STR_SELL_SACK_UC
 VINDE/CONCEDIAZĂ
 STR_GEOSCAPE_UC
@@ -192,7 +192,7 @@ EVOLUȚIE
 STR_NEW_PROJECT
 Proiect Nou
 STR_CANCEL_PROJECT
-Cancel Project
+Anulează Proiectul
 STR_NEW_RESEARCH_PROJECTS
 NOI PROIECTE DE CERCETARE
 STR_SCIENTISTS_AVAILABLE_UC
@@ -2400,9 +2400,9 @@ Recuperare articole tip XCom 2012
 STR_WEAPONSELFDESTRUCTION_DESC
 Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
 STR_RESEARCHEDITEMSWILLSPENT
-Researched items will be spent
+Articolele cercetate vor fi irosite
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+Articolele cercetate sunt scoase din depozite și vor fi dezasamblate. După "cercetarea" extratereștrilor vii, corpul se va întoarce în magazia bazei.
 STR_ARROWS
 SĂGEȚI
 STR_FULL
@@ -2414,6 +2414,6 @@ Unități de Timp rezervate pentru Îngenunchere
 STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
 UT rezervate pentru Îngenunchere și Foc
 STR_RESERVE_TUS_FOR_KNEEL
-Rezervă Unități de Timp pentru îngenunchere
+Rezervare UT pentru Îngenunchere
 STR_EXPEND_ALL_TIME_UNITS
-Consumă toate Unitățile de Timp rămase
+Consumă toate UT rămase
