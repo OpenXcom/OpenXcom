@@ -274,6 +274,7 @@ void MedikitState::onPainKillerClick(Action *)
 	}
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
+		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pk);
 		update();
 	}
