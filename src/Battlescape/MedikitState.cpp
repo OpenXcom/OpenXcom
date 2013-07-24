@@ -249,6 +249,7 @@ void MedikitState::onStimulantClick(Action *)
 		// if the unit has revived we quit this screen automatically
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
 		{
+			_targetUnit->setTimeUnits(0);
 			_game->popState();
 		}
 	}
