@@ -30,6 +30,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Savegame/BaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
@@ -315,6 +316,7 @@ void TransferItemsState::completeTransfer()
 							if ((*f)->getCraft() == *c)
 							{
 								(*f)->setCraft(0);
+								break;
 							}
 						}
 
