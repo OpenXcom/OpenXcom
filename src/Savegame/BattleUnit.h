@@ -193,7 +193,7 @@ public:
 	/// Gets the unit's bravery.
 	int getMorale() const;
 	/// Do damage to the unit.
-	int damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor = false);
+	int damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor = false, float multiplier = 1.0);
 	/// Heal stun level of the unit.
 	void healStun(int power);
 	/// Gets the unit's stun level.
@@ -410,6 +410,8 @@ public:
 	bool tookFireDamage() const;
 	/// switch the state of the fire damage tracker.
 	void toggleFireDamage();
+	/// Gets the race of this unit.
+	std::string getRace();
 };
 
 }
