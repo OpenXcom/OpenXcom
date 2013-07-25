@@ -1327,7 +1327,7 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		weaponAcc = item->getRules()->getAccuracyMelee();
+		return (double)(item->getRules()->getAccuracyMelee()/100.0);
 
 	result *= (double)(weaponAcc/100.0);
 
