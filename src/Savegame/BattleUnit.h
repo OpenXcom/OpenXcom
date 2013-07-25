@@ -86,7 +86,6 @@ private:
 	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 	int improveStat(int exp);
 	int _turretType;
-	bool _needPainKiller;
 	int _motionPoints;
 	int _kills;
 	int _faceDirection; // used only during strafeing moves
@@ -112,6 +111,7 @@ private:
 	Unit *_unitRules;
 	int _rankInt;
 	bool _hitByFire;
+	int _moraleRestored;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.

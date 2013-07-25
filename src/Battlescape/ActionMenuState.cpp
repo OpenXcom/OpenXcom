@@ -156,7 +156,7 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
-	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH)
+	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH || ba == BA_HIT)
 		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
 	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
 	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);

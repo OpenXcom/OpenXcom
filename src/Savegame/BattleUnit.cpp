@@ -52,7 +52,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0),
-																_unitRules(0), _rankInt(-1), _hitByFire(false), _hidingForTurn(false)
+																_unitRules(0), _rankInt(-1), _hitByFire(false), _hidingForTurn(false), _moraleRestored(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -119,7 +119,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
 																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0),
 																						_armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),
-																						_hitByFire(false), _hidingForTurn(false)
+																						_hitByFire(false), _hidingForTurn(false), _moraleRestored(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -165,7 +165,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	lastCover = Position(-1, -1, -1);
 	
 }
-
 
 /**
  *
@@ -216,6 +215,7 @@ void BattleUnit::load(const YAML::Node &node)
 	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
+	node["moraleRestored"] >> _moraleRestored;
 	if (const YAML::Node *pName = node.FindValue("rankInt"))
 	{
 		(*pName) >> _rankInt;
@@ -287,6 +287,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "visible" << YAML::Value << _visible;
 	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
 	out << YAML::Key << "rankInt" << YAML::Value << _rankInt;
+	out << YAML::Key << "moraleRestored" << YAML::Value << _moraleRestored;
 
 	if (getCurrentAIState())
 	{
@@ -996,7 +997,6 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				// armor damage
 				setArmor(getArmor(side) - (power/10) - 1, side);
 			}
-			_needPainKiller = true;
 		}
 	}
 
@@ -1261,7 +1261,7 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		weaponAcc = item->getRules()->getAccuracyMelee();
+		return (double)(item->getRules()->getAccuracyMelee()/100.0);
 
 	result *= (double)(weaponAcc/100.0);
 
@@ -1976,14 +1976,12 @@ void BattleUnit::heal(int part, int healAmount, int healthAmount)
  */
 void BattleUnit::painKillers ()
 {
-	if (!getFatalWounds() || !_needPainKiller)
-	{
-		return ;
-	}
-	_needPainKiller = false;
 	int lostHealth = getStats()->health - _health;
-	_morale += lostHealth;
-	if (_morale > 100) _morale = 100;
+	if (lostHealth > _moraleRestored)
+	{
+        _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
+		_moraleRestored = lostHealth;
+	}
 }
 
 /**
