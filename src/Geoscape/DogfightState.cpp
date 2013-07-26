@@ -859,7 +859,7 @@ void DogfightState::move()
 					{
 						p->remove();
 					}
-					else
+					else if (!_ufo->isCrashed())
 					{
 						projectileInFlight = true;
 					}
