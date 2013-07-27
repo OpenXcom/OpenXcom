@@ -429,7 +429,7 @@ void GeoscapeState::handle(Action *action)
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			_game->pushState(new LoadState(_game, true, true));
 		// next and previous alien activity
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity"))
+		else if (!hasMaximisedDogfights() && action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity"))
 		{
 			if(selectNextActivity())
 			{
@@ -439,7 +439,7 @@ void GeoscapeState::handle(Action *action)
 		}
 		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevActivity"))
 		{
-			if(selectPrevActivity())
+			if(!hasMaximisedDogfights() && selectPrevActivity())
 			{
 				setActivity(_currentActivity);
 				getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
@@ -455,6 +455,15 @@ void GeoscapeState::handle(Action *action)
 		}
 		_minimizedDogfights = minimizedDogfightsCount();
 	}
+}
+
+/**
+ * Returns whether there are any maximised Dogfights in the Geoscape.
+ * @return true if there are any maximised Dogfights in the Geoscape.
+ */
+bool GeoscapeState::hasMaximisedDogfights()
+{
+	return _dogfights.size() != (unsigned) minimizedDogfightsCount();
 }
 
 /**

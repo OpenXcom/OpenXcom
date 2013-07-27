@@ -168,6 +168,8 @@ private:
 	Target *selectPrevActivity();
 	/// Resets activity information.
 	void resetActivity();
+	/// Returns whether there are any maximised Dogfights in the Geoscape.
+	bool hasMaximisedDogfights();
 };
 
 }
