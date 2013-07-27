@@ -374,28 +374,23 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 {
 	if (tile->soldiersVisible != -1) return true; // already calculated this turn
 
-	BattleUnit hypotheticalUnit(*queryingUnit); // this is why I needed a copy constructor for BattleUnit
-	// I tried repeatedly to just move queryingUnit without making a copy of it but that caused mysterious crashes in loftemps calculations for 2x2 units. :<
-	
-	if (!_save->setUnitPosition(&hypotheticalUnit, tilePos, true)) 
-	{
+	if (!_save->setUnitPosition(queryingUnit, tilePos, true))
 		return false;
-	}
-	
+
 	std::map<int, BattleUnit*> originalTileUnits;
 	std::vector<Position> toBackUp;
 	
-	toBackUp.push_back(hypotheticalUnit.getPosition());
-	toBackUp.push_back(hypotheticalUnit.getTile()->getPosition()); // no such thing as too many backups??? .__.
-	toBackUp.push_back(hypotheticalUnit.getLastPosition());
+	toBackUp.push_back(queryingUnit->getPosition());
+	toBackUp.push_back(queryingUnit->getTile()->getPosition()); // no such thing as too many backups??? .__.
+	toBackUp.push_back(queryingUnit->getLastPosition());
 	toBackUp.push_back(tilePos);
 	
 	// back up the BattleUnit pointers from the live tile data
 	for (std::vector<Position>::iterator which = toBackUp.begin(); which != toBackUp.end(); ++which)
 	{
-		for (int x = hypotheticalUnit.getArmor()->getSize()-1; x >= 0; x--)
+		for (int x = queryingUnit->getArmor()->getSize()-1; x >= 0; x--)
 		{
-			for (int y = hypotheticalUnit.getArmor()->getSize()-1; y >= 0; y--)
+			for (int y = queryingUnit->getArmor()->getSize()-1; y >= 0; y--)
 			{
 				Position pos = *which;
 				pos.x += x;
@@ -409,26 +404,6 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 			}
 		}
 	}
-
-
-#if 0
-	// this block of code would make sure that the unit in question wouldn't occlude its own LOS checks
-	// since the LOS checks happen from soldiers to the hypothetical unit, this is possible, I think
-	// however, this code also causes the game to crash in other parts of the code for mysterious reasons
-	for (int x = hypotheticalUnit.getArmor()->getSize()-1; x >= 0; x--)
-	{
-		for (int y = hypotheticalUnit.getArmor()->getSize()-1; y >= 0; y--)
-		{
-			Position pos = hypotheticalUnit.getPosition();
-			pos.x += x;
-			pos.y += y;
-
-			Tile *zeroMe = _save->getTile(pos);
-			assert (!zeroMe || zeroMe->getUnit() == queryingUnit);
-			if (zeroMe) zeroMe->setUnit(0);
-		}
-	}
-#endif
 
 #ifdef _DEBUG
 	// sanity-check the tile data...
@@ -446,10 +421,12 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	}
 #endif
 	
-	_save->setUnitPosition(&hypotheticalUnit, tilePos); // updates the unit and the tiles
-	//_save->setUnitPosition(&hypotheticalUnit, tilePos); // reset its lastPosition too
+	Position curPos = queryingUnit->getPosition();
+	Position lastPos = queryingUnit->getLastPosition();
 
-		
+	// update the unit and the tiles
+	_save->setUnitPosition(queryingUnit, tilePos);
+	
 	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
 	tile->closestSoldierDSqr = INT_MAX;
 	tile->closestAlienDSqr = INT_MAX;
@@ -481,7 +458,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		//if ((*i)->getFaction() == FACTION_PLAYER && canTargetUnit(&originVoxel, tile, &targetVoxel, *i))		
 		// this should be the best, a routine that gives us the degree of exposure while economizing raytraces:
 		int exposure;
-		if ((*i)->getFaction() == FACTION_PLAYER && (exposure = checkVoxelExposure(&originVoxel, tile, *i, &hypotheticalUnit)))
+		if ((*i)->getFaction() == FACTION_PLAYER && (exposure = checkVoxelExposure(&originVoxel, tile, *i, queryingUnit)))
 		{
 			++tile->soldiersVisible;
 			tile->totalExposure += exposure;
@@ -514,6 +491,9 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 		tile->closestSoldierPos = Position(INT_MAX, INT_MAX, INT_MAX);
 	}
 	
+	queryingUnit->setPosition(lastPos);
+	queryingUnit->setPosition(curPos);
+
 	return true;
 }
 
@@ -622,7 +602,7 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
  * @param excludeAllBut [optional] is unit which is the only one to be considered for ray hits
  * @return degree of exposure (as percent)
  */
-int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut)
+int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, const BattleUnit *excludeAllBut)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position scanVoxel;
@@ -2027,7 +2007,7 @@ int TileEngine::closeUfoDoors()
  * @param excludeAllBut [optional] the only unit to be considered for ray hits
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, const BattleUnit *excludeAllBut)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -2292,7 +2272,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @param excludeAllBut if set, the only unit to be considered for ray hits
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
+int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, const BattleUnit *excludeAllBut)
 {
 
 	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));

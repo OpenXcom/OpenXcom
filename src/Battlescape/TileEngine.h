@@ -79,7 +79,7 @@ public:
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, const BattleUnit *excludeAllBut = 0);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
 	/// Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.
@@ -111,7 +111,7 @@ public:
 	/// get the ai to look through a window
 	int faceWindow(const Position &position);
 	/// get the exposure % of a unit on a tile
-	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut);
+	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, const BattleUnit *excludeAllBut);
 	/// check validity for targetting a unit
 	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
 	/// check validity for targetting a tile
@@ -121,7 +121,7 @@ public:
 	/// check the visibility of a given voxel
 	bool isVoxelVisible(const Position& voxel);
 	/// check what type of voxel occupies this space
-	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, const BattleUnit *excludeAllBut = 0);
 	/// blow this tile up
 	bool detonate(Tile* tile);
 	/// validate a throwing action

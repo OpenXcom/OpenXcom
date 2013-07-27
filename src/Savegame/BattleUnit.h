@@ -117,7 +117,6 @@ public:
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
 	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
-	BattleUnit(BattleUnit&);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
 	/// Loads the unit from YAML.

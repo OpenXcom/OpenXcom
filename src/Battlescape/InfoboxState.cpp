@@ -101,6 +101,8 @@ void InfoboxState::think()
  */
 void InfoboxState::close()
 {
+	_timer->stop();
+	delete _timer;
 	_game->popState();
 }
 
