@@ -124,13 +124,13 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	if (size >= 1)
 	{
 		int its = 0;
+		const int dir[3] = {4,2,3};
 		for (int x = 0; x <= size; x += size)
 		{
 			for (int y = 0; y <= size; y += size)
 			{
 				if (x || y)
 				{
-					int dir[3] = {4,2,3};
 					Tile *checkTile = _save->getTile(endPosition + Position(x, y, 0));
 					if ((isBlocked(destinationTile, checkTile, dir[its], unit) &&
 						isBlocked(destinationTile, checkTile, dir[its], target))||
@@ -1106,4 +1106,16 @@ bool Pathfinding::isPathPreviewed() const
 	return _pathPreviewed;
 }
 
+void Pathfinding::setUnit(BattleUnit* unit)
+{
+	_unit = unit;
+	if (unit != 0)
+	{
+		_movementType = unit->getArmor()->getMovementType();
+	}
+	else
+	{
+		_movementType = MT_WALK;
+	}
+};
 }

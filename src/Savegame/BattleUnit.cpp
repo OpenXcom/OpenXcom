@@ -215,7 +215,10 @@ void BattleUnit::load(const YAML::Node &node)
 	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
-	node["moraleRestored"] >> _moraleRestored;
+	if (const YAML::Node *pName = node.FindValue("moraleRestored"))
+	{
+		(*pName) >> _moraleRestored;
+	}
 	if (const YAML::Node *pName = node.FindValue("rankInt"))
 	{
 		(*pName) >> _rankInt;

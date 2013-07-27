@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_ARTICLESTATECRAFT_H
 #define OPENXCOM_ARTICLESTATECRAFT_H
 
-#include <string>
 #include "ArticleState.h"
 
 namespace OpenXcom

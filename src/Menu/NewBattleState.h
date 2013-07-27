@@ -46,7 +46,6 @@ private:
 	std::vector<std::string> _missionTypes, _terrainTypes, _alienRaces, _difficulty, _darkness, _crafts, _itemLevels;
 	size_t _selMission, _selTerrain, _selAlien, _selDifficulty, _selDarkness, _selCraft, _selItemLevel;
 	bool _music;
-	size_t _alienEquipLevel;
 	Craft *_craft;
 	std::vector<int> _textures;
 

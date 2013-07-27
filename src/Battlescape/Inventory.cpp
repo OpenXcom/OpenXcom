@@ -814,7 +814,11 @@ void Inventory::arrangeGround(bool alterOffset)
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
-					_stackLevel[x][y] += 1;
+					// only increase the stack level if the item is actually visible.
+					if ((*i)->getRules()->getInventoryWidth())
+					{
+						_stackLevel[x][y] += 1;
+					}
 					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
 				}
 				else

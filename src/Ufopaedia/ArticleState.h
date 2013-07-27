@@ -21,7 +21,6 @@
 #define OPENXCOM_ARTICLESTATE_H
 
 #include "../Engine/State.h"
-#include "Ufopaedia.h"
 #include <string>
 
 namespace OpenXcom

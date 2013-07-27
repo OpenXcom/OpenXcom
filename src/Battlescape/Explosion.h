@@ -19,7 +19,6 @@
 #ifndef OPENXCOM_EXPLOSION_H
 #define OPENXCOM_EXPLOSION_H
 
-#include <vector>
 #include "Position.h"
 
 namespace OpenXcom
@@ -36,9 +35,6 @@ class SavedBattleGame;
 class Explosion
 {
 private:
-	ResourcePack *_res;
-	SavedBattleGame *_save;
-	BattleItem *_item;
 	Position _position;
 	int _currentFrame, _startFrame;
 	bool _big, _hit;
