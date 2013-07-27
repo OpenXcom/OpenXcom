@@ -1383,10 +1383,10 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 
 	if (size > 0)
 	{
-		const int dir[3] = {4,2,3};
-		for (int its = 0; its <= 2; ++its)
+		getPathfinding()->setUnit(bu);
+		for (int dir = 2; dir <= 4; ++dir)
 		{
-			if (getPathfinding()->isBlocked(getTile(position), 0, dir[its], 0))
+			if (getPathfinding()->isBlocked(getTile(position), 0, dir, 0))
 				return false;
 		}
 	}

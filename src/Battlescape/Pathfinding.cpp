@@ -1106,4 +1106,16 @@ bool Pathfinding::isPathPreviewed() const
 	return _pathPreviewed;
 }
 
+void Pathfinding::setUnit(BattleUnit* unit)
+{
+	_unit = unit;
+	if (unit != 0)
+	{
+		_movementType = unit->getArmor()->getMovementType();
+	}
+	else
+	{
+		_movementType = MT_WALK;
+	}
+};
 }
