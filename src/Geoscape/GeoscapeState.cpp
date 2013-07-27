@@ -1867,7 +1867,6 @@ Globe *GeoscapeState::getGlobe() const
  * or right-clicks to scroll the globe.
  * @param action Pointer to an action.
  */
-
 void GeoscapeState::globeClick(Action *action)
 {
 	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
@@ -2188,7 +2187,7 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 }
 
 /**
- * Handle base defense
+ * Handles base defense.
  * @param base Base to defend.
  * @param ufo Ufo attacking base.
  */

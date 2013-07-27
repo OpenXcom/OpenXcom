@@ -67,7 +67,7 @@ public:
 	GeoscapeState(Game *game);
 	/// Cleans up the Geoscape state.
 	~GeoscapeState();
-	/// Handle keypresses.
+	/// Handles keypresses.
 	void handle(Action *action);
 	/// Updates the palette and timer.
 	void init();
@@ -91,7 +91,7 @@ public:
 	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
-	/// Stop the music!
+	/// Stops the music!
 	void musicStop(bool pause = false);
 	/// Displays a popup window.
 	void popup(State *state);
@@ -147,20 +147,20 @@ public:
 	int minimizedDogfightsCount();
 	/// Starts a new dogfight.
 	void startDogfight();
-	/// Get first free dogfight slot.
+	/// Gets first free dogfight slot.
 	int getFirstFreeDogfightSlot();
 	/// Create the starting missions.
 	void createStartingMissions() { determineAlienMissions(true); }
 	/// Handler for clicking the timer button.
 	void btnTimerClick(Action *action);
-	/// Process a terror site
+	/// Processes a terror site.
 	bool processTerrorSite(TerrorSite *ts) const;
-	/// Handles base defense
+	/// Handles base defense.
 	void handleBaseDefense(Base *base, Ufo *ufo);
 	/// Sets the activity information.
 	void setActivity(Target *target);
 private:
-	/// Handle alien mission generation.
+	/// Handles alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
 	/// Gets all the detected alien activity in the Geoscape.
 	std::vector<Target*> currentAlienActivity();
