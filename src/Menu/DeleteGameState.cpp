@@ -18,8 +18,6 @@
  */
 #include "DeleteGameState.h"
 #include "../Engine/CrossPlatform.h"
-#include <yaml-cpp/yaml.h>
-#include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"

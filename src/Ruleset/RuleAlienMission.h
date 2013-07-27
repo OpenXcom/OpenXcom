@@ -26,10 +26,7 @@
 namespace OpenXcom
 {
 
-class Ruleset;
 class WeightedOptions;
-class Region;
-class GameTime;
 
 /** @brief Information about a mission wave.
  * Mission waves control the UFOs that will be generated during an alien mission.
