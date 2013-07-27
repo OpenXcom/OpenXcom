@@ -17,10 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "RuleAlienMission.h"
-#include "Ruleset.h"
 #include "../Savegame/WeightedOptions.h"
-#include "../Engine/RNG.h"
-#include "../Savegame/GameTime.h"
 
 namespace OpenXcom
 {

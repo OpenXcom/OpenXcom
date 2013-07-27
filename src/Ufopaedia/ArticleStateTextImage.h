@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_ARTICLESTATETEXTIMAGE_H
 #define OPENXCOM_ARTICLESTATETEXTIMAGE_H
 
-#include <string>
 #include "ArticleState.h"
 
 namespace OpenXcom

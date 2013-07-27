@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_ARTICLESTATEVEHICLE_H
 #define OPENXCOM_ARTICLESTATEVEHICLE_H
 
-#include <string>
 #include "ArticleState.h"
 
 namespace OpenXcom

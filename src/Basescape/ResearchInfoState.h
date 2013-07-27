@@ -31,8 +31,6 @@ class TextList;
 class Base;
 class RuleResearch;
 class ResearchProject;
-class ResearchState;
-class NewResearchListState;
 class ArrowButton;
 class Timer;
 class InteractiveSurface;
@@ -49,8 +47,6 @@ private:
 	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAllocatedScientist, *_txtMore, *_txtLess;
-	TextList *_lstResearch;
-	std::vector<Text*> texts_;
 	void SetAssignedScientist();
 	ResearchProject * _project;
 	RuleResearch * _rule;
