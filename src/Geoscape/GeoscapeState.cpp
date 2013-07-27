@@ -46,6 +46,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Ufo.h"
+#include "../Savegame/Target.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
@@ -111,7 +112,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0), _currentActivity(0)
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -306,7 +307,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
-	
+
 	// dirty hacks to get the rotate buttons to work in "classic" style
 	_btnRotateLeft->setListButton();
 	_btnRotateRight->setListButton();
@@ -427,7 +428,25 @@ void GeoscapeState::handle(Action *action)
 			_game->pushState(new SaveState(_game, true, true));
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			_game->pushState(new LoadState(_game, true, true));
+		// next and previous alien activity
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity"))
+		{
+			if(selectNextActivity())
+			{
+				setActivity(_currentActivity);
+				getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
+			}
+		}
+		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevActivity"))
+		{
+			if(selectPrevActivity())
+			{
+				setActivity(_currentActivity);
+				getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
+			}
+		}
 	}
+
 	if(!_dogfights.empty())
 	{
 		for(std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
@@ -436,6 +455,155 @@ void GeoscapeState::handle(Action *action)
 		}
 		_minimizedDogfights = minimizedDogfightsCount();
 	}
+}
+
+/**
+ * Resets the activity information.
+ */
+void GeoscapeState::resetActivity()
+{
+	_currentActivity = 0;
+}
+
+/**
+ * Sets activity information to target.
+ * @param target The target to display information on.
+ */
+void GeoscapeState::setActivity(Target *target)
+{
+	_currentActivity = target;
+}
+
+/**
+ * Returns all the detected current alien activity in the Geoscape.
+ * Only returns detected flying or landed ufos, crashsites, terrorsites and bases.
+ * @return pointer to all alien activity.
+ */
+ std::vector<Target*> GeoscapeState::currentAlienActivity()
+ {
+	std::vector<Target*> detectedActivity;
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	{
+		if((*i)->getDetected())
+			detectedActivity.push_back(*i);
+
+	}
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		detectedActivity.push_back(*i);
+	}
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	{
+		if((*i)->isDiscovered())
+			detectedActivity.push_back(*i);
+	}
+	return detectedActivity;
+ }
+
+/**
+ * Selects the next alien activity detected in the Geoscape.
+ * @return pointer to next alien activity.
+ */
+Target *GeoscapeState::selectNextActivity()
+{
+	// What activity is in the Geoscape?
+	std::vector<Target*> detectedActivity = currentAlienActivity();
+	if(detectedActivity.empty())
+	{
+		_currentActivity = 0;
+		return _currentActivity;
+	}
+
+	// Find the next activity
+	std::vector<Target*>::iterator i = detectedActivity.begin();
+	bool bNext = false;
+	int wraps = 0;
+
+	if (_currentActivity == 0)
+	{
+		bNext = true;
+	}
+
+	do
+	{
+		if (bNext)
+		{
+			break;
+		}
+		if ((*i) == _currentActivity)
+		{
+			bNext = true;
+		}
+		++i;
+		if (i == detectedActivity.end())
+		{
+			i = detectedActivity.begin();
+			wraps++;
+		}
+		// back to where we started... no more activity found
+		if (wraps == 2)
+		{
+			_currentActivity = 0;
+			return _currentActivity;
+		}
+	}
+	while (true);
+
+	_currentActivity = (*i);
+	return _currentActivity;
+}
+
+/**
+ * Selects the previous alien activity detected in the Geoscape.
+ * @return pointer to an alien activity.
+ */
+Target *GeoscapeState::selectPrevActivity()
+{
+	// What activity is in the Geoscape?
+	std::vector<Target*> detectedActivity = currentAlienActivity();
+	if(detectedActivity.empty())
+	{
+		_currentActivity = 0;
+		return _currentActivity;
+	}
+
+	// Find the previous activity
+	std::vector<Target*>::iterator i = detectedActivity.begin();
+	bool bPrev = false;
+	int wraps = 0;
+
+	if (_currentActivity == 0)
+	{
+		bPrev = true;
+	}
+
+	do
+	{
+		if (bPrev)
+		{
+			break;
+		}
+		if ((*i) == _currentActivity)
+		{
+			bPrev = true;
+		}
+		if (i == detectedActivity.begin())
+		{
+			i = detectedActivity.end();
+			wraps++;
+		}
+		--i;
+		// back to where we started... no more activity found
+		if (wraps == 3)
+		{
+			_currentActivity = 0;
+			return _currentActivity;
+		}
+	}
+	while (true);
+
+	_currentActivity = (*i);
+	return _currentActivity;
 }
 
 /**
@@ -643,7 +811,10 @@ void GeoscapeState::time5Seconds()
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
 						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+						{
+							if (_currentActivity == (*i)) resetActivity();
 							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+						}
 					}
 					if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 					{
@@ -696,8 +867,19 @@ void GeoscapeState::time5Seconds()
 			}
 			break;
 		case Ufo::DESTROYED:
+			if(_currentActivity == *i) resetActivity();
+
 			// Nothing to do
 			break;
+		}
+
+		// ensure activity description is up to date
+		if( _currentActivity == *i)
+		{
+			if (*i)
+				setActivity(*i);
+			else
+				resetActivity();
 		}
 	}
 
@@ -1259,6 +1441,7 @@ void GeoscapeState::time30Minutes()
 	{
 		if (processTerrorSite(*ts))
 		{
+			if(_currentActivity == *ts) resetActivity();
 			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
 		}
 		else
@@ -1478,7 +1661,7 @@ void GeoscapeState::time1Day()
 			{
 				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
-					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() && 
+					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName() &&
 						_game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
@@ -1995,6 +2178,8 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
 {
     // Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
+
+	if (_currentActivity == ufo) resetActivity();
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{

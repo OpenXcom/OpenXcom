@@ -35,6 +35,7 @@ class DogfightState;
 class Ufo;
 class TerrorSite;
 class Base;
+class Target;
 
 /**
  * Geoscape screen which shows an overview of
@@ -58,6 +59,7 @@ private:
 	size_t _minimizedDogfights;
 	bool _gameStarted;
 	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
+	Target *_currentActivity; // the currently selected alien activity
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
@@ -153,9 +155,19 @@ public:
 	bool processTerrorSite(TerrorSite *ts) const;
 	/// Handles base defense
 	void handleBaseDefense(Base *base, Ufo *ufo);
+	/// Sets the activity information.
+	void setActivity(Target *target);
 private:
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
+	/// Gets all the detected alien activity in the Geoscape.
+	std::vector<Target*> currentAlienActivity();
+	/// Gets the next detected alien activity in the Geoscape.
+	Target *selectNextActivity();
+	/// Gets the previous detected alien activity in the Geoscape.
+	Target *selectPrevActivity();
+	/// Resets activity information.
+	void resetActivity();
 };
 
 }
