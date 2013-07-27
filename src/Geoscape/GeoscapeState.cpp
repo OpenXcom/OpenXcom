@@ -122,6 +122,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	// Create objects
 	_bg = new Surface(320, 200, screenWidth-320, screenHeight/2-100);
 	_globe = new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, 0, 0);
+	_globeAndSpace = new InteractiveSurface(screenWidth-64, screenHeight, 0, 0);
 
 	_btnIntercept = new ImageButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases = new ImageButton(63, 11, screenWidth-63, screenHeight/2-88);
@@ -183,6 +184,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 
 	add(_bg);
 	add(_globe);
+	add(_globeAndSpace);
 
 	add(_btnIntercept);
 	add(_btnBases);
@@ -221,6 +223,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
+
+	_globeAndSpace->onMouseClick((ActionHandler)&GeoscapeState::resetActivity);
 
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+5);

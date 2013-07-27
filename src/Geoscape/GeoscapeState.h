@@ -46,6 +46,7 @@ class GeoscapeState : public State
 private:
 	Surface *_bg;
 	Globe *_globe;
+	InteractiveSurface *_globeAndSpace;
 	ImageButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
 	ImageButton *_timeSpeed;
 	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
