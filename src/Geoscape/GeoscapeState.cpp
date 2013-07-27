@@ -172,6 +172,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_dogfightStartTimer = new Timer(250);
 
 	_txtDebug = new Text(100, 8, 0, 0);
+	_txtActivity = new Text(screenWidth - 80, 8, 0, screenHeight - 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -216,6 +217,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_txtYear);
 
 	add(_txtDebug);
+	add(_txtActivity);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
@@ -364,6 +366,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtYear->setAlign(ALIGN_CENTER);
 
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
+	_txtActivity->setColor(Palette::blockOffset(15)+4);
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_timer->start();
@@ -472,6 +475,7 @@ bool GeoscapeState::hasMaximisedDogfights()
 void GeoscapeState::resetActivity()
 {
 	_currentActivity = 0;
+	_txtActivity->setText(L"");
 }
 
 /**
@@ -481,6 +485,7 @@ void GeoscapeState::resetActivity()
 void GeoscapeState::setActivity(Target *target)
 {
 	_currentActivity = target;
+	_txtActivity->setText(_currentActivity->getName(_game->getLanguage()));
 }
 
 /**
