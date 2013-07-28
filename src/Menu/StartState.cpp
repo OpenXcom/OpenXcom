@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param file Name of a saved game file (without the .sav)
  */
-StartState::StartState(Game *game, std::wstring file) : State(game), _saveFile(file), _load(LOADING_NONE)
+StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 {
 	// Create objects
 	int dx = (Options::getInt("baseXResolution") - 320) / 2;
@@ -443,10 +443,7 @@ void StartState::think()
 			{
 				throw Exception("No languages available");
 			}
-			if (_saveFile == L"")
-				_load = LOADING_SUCCESSFUL;
-			else
-				_load = LOADING_FROM_COMMAND_LINE;
+			_load = LOADING_LANGUAGE;
 
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
@@ -510,8 +507,8 @@ void StartState::think()
 	case LOADING_NONE:
 		_load = LOADING_STARTED;
 		break;
-	case LOADING_SUCCESSFUL:
-		Log(LOG_INFO) << "OpenXcom started successfully!";
+	case LOADING_LANGUAGE:
+		Log(LOG_INFO) << "OpenXcom setting language!";
 		if (Options::getString("language").empty())
 		{
 			_game->setState(new LanguageState(_game));
@@ -521,33 +518,22 @@ void StartState::think()
 			try
 			{
 				_game->loadLanguage(Options::getString("language"));
-				_game->setState(new MainMenuState(_game));
 			}
 			catch (Exception)
 			{
 				_game->setState(new LanguageState(_game));
 			}
 		}
+		_load = LOADING_SUCCESSFUL;
 		break;
-	case LOADING_FROM_COMMAND_LINE:
+	case LOADING_SUCCESSFUL:
 		Log(LOG_INFO) << "OpenXcom started successfully!";
-		Log(LOG_INFO) << "Attempting to load save specified on command line.";
-		try
+		if(_saveFile != L"")
 		{
-			_game->loadLanguage(Options::getString("language"));
-			_game->setState(new MainMenuState(_game, _saveFile));
+			Log(LOG_INFO) << "Attempting to load save, " << Language::wstrToCp(_saveFile) << ", specified on command line.";
 		}
-		catch (Exception &e)
-		{
-			_surface->clear();
-			_surface->drawString(1, 9, "ERROR:", 2);
-			_surface->drawString(1, 17, e.what(), 2);
-			_surface->drawString(1, 49, "Unable to load", 1);
-			std::string file = Language::wstrToUtf8(_saveFile) + ".sav";
-			_surface->drawString(1, 57, file.c_str(), 1);
-			_surface->drawString(75, 183, "Press any key to continue", 1);
-			Log(LOG_ERROR) << e.what();
-		}
+		_game->setState(new MainMenuState(_game));
+
 		break;
 	default:
 		break;

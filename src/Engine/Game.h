@@ -55,6 +55,7 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
+	std::wstring _loadFile;
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -102,6 +103,10 @@ public:
 	bool isState(State *state) const;
 	/// Returns whether the game is shutting down.
 	bool isQuitting() const;
+	/// Sets the name of a saved game file to load directly.
+	void setLoadFile(const std::wstring &file);
+	/// Gets the name of the saved game file to directly load.
+	std::wstring getLoadFile();
 };
 
 }
