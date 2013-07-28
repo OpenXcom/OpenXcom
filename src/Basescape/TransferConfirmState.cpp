@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -58,6 +59,8 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	add(_txtCost);
 	add(_txtTotal);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -65,10 +68,12 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&TransferConfirmState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransferConfirmState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&TransferConfirmState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

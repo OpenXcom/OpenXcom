@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -51,6 +51,9 @@ public:
 	Position& operator*=(const Position& pos) { x*=pos.x; y*=pos.y; z*=pos.z; return *this; }
 	Position operator*(const int v) const { return Position(x * v, y * v, z * v); }
 	Position& operator*=(const int v) { x*=v; y*=v; z*=v; return *this; }
+	
+	Position operator/(const Position& pos) const { return Position(x / pos.x, y / pos.y, z / pos.z); }
+	Position& operator/=(const Position& pos) { x/=pos.x; y/=pos.y; z/=pos.z; return *this; }
 
     Position operator/(const int v) const { return Position(x / v, y / v, z / v); }
 

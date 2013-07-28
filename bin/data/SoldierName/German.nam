@@ -1,14 +1,19 @@
+lookWeights:
+  - 44
+  - 44
+  - 9
+  - 3
 maleFirst:
   - Thomas
   - Andreas
   - Michael
   - Frank
   - Peter
-  - Jorg
+  - Joerg
   - Uwe
   - Matthias
   - Stefan
-  - Jurgen
+  - Juergen
   - Ralf
   - Bernd
   - Klaus
@@ -43,7 +48,7 @@ femaleFirst:
   - Monika
   - Angela
 maleLast:
-  - Muller
+  - Mueller
   - Schmidt
   - Schneider
   - Fischer
@@ -53,18 +58,18 @@ maleLast:
   - Becker
   - Schulz
   - Hoffmann
-  - Schafer
+  - Schaefer
   - Koch
   - Bauer
   - Richter
   - Klein
   - Wolf
-  - Schroder 
+  - Schroeder 
   - Neumann
   - Schwarz
   - Zimmermann
   - Braun
-  - Kruger
+  - Krueger
   - Hartmann
   - Lange
   - Schmitz

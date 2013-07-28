@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,6 +26,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
+#include "../Engine/Screen.h"
 #include "../Interface/Window.h"
 #include "Globe.h"
 #include "../Interface/Text.h"
@@ -48,27 +49,30 @@ namespace OpenXcom
  */
 BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
 {
+	int dx = Screen::getDX();
+	int dy = Screen::getDY();
 	_screen = false;
 
 	_oldshowradar = _globe->getShowRadar();
 	if (!_oldshowradar)
 		_globe->toggleRadarLines();
 	// Create objects
-	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
-	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
-	_btnRotateUp = new InteractiveSurface(13, 12, 271, 162);
-	_btnRotateDown = new InteractiveSurface(13, 12, 271, 187);
-	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
-	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
+	_btnRotateLeft = new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
+	_btnRotateRight = new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
+	_btnRotateUp = new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
+	_btnRotateDown = new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
+	_btnZoomIn = new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
+	_btnZoomOut = new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
 
-	_window = new Window(this, 256, 28, 0, 0);
-	_btnCancel = new TextButton(54, 12, 186, 8);
-	_txtTitle = new Text(180, 16, 8, 6);
+	_window = new Window(this, 256, 28, 0 + dx, 0);
+	_window->setDY(0);
+	_btnCancel = new TextButton(54, 12, 186 + dx, 8);
+	_txtTitle = new Text(180, 16, 8 + dx, 6);
 
 	_hoverTimer = new Timer(50);
 	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
-
+	
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -85,7 +89,6 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 
 	// Set up objects
 	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
-	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
 
 	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
@@ -114,6 +117,12 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
+	
+	// dirty hacks to get the rotate buttons to work in "classic" style
+	_btnRotateLeft->setListButton();
+	_btnRotateRight->setListButton();
+	_btnRotateUp->setListButton();
+	_btnRotateDown->setListButton();
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -126,6 +135,7 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SITE_FOR_NEW_BASE"));
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTitle->setWordWrap(true);
 
 	if (_first)
 	{
@@ -151,6 +161,7 @@ BuildNewBaseState::~BuildNewBaseState()
 void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
 	_globe->setNewBaseHover();
 }
 

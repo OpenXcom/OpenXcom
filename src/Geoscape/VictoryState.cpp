@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Music.h"
+#include "../Engine/Timer.h"
 
 namespace OpenXcom
 {
@@ -44,6 +45,7 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 	_txtText.push_back(new Text(254, 48, 66, 152));
 	_txtText.push_back(new Text(300, 200, 5, 0));
 	_txtText.push_back(new Text(310, 42, 5, 158));
+	_timer = new Timer(20000);
 
 	add(_screen);
 	// Set up objects
@@ -60,6 +62,11 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 		add(_txtText[text]);
 		_txtText[text]->setVisible(false);
 	}
+
+	centerAllSurfaces();
+
+	_timer->onTimer((StateHandler)&VictoryState::windowClick);
+	_timer->start();
 }
 
 /**
@@ -67,13 +74,19 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
  */
 VictoryState::~VictoryState()
 {
-
+	delete _timer;
 }
 
 void VictoryState::init()
 {
 	nextScreen();
 }
+
+void VictoryState::think()
+{
+	_timer->think(this, 0);
+}
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

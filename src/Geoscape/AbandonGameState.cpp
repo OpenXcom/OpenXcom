@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -28,6 +28,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Options.h"
+#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
@@ -53,6 +54,8 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	add(_btnYes);
 	add(_btnNo);
 	add(_txtTitle);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
@@ -90,6 +93,12 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action *)
 {
+	if (Options::getInt("autosave") == 3)
+	{
+		SaveState *ss = new SaveState(_game, true, false);
+		delete ss;
+	}
+
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,6 +40,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
+ * @param base Pointer to the base to handle.
  */
 AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : State(game)
 {
@@ -70,6 +71,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	add(_txtPsiSkill);
 	add(_txtTraining);
 	add(_lstSoldiers);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
@@ -121,13 +124,14 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 	std::wstringstream ssStr;
 	std::wstringstream ssSkl;
 		_soldiers.push_back(*s);
-		ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
-		if((*s)->getCurrentStats()->psiSkill == 0)
+		if((*s)->getCurrentStats()->psiSkill <= 0)
 		{
+			ssSkl << "0/+0";
 			ssStr << _game->getLanguage()->getString("STR_UNKNOWN").c_str();
 		}
 		else
 		{
+			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
 			ssStr << ((*s)->getCurrentStats()->psiStrength);
 		}
 		if((*s)->isInPsiTraining())
@@ -166,7 +170,6 @@ void AllocatePsiTrainingState::init()
 void AllocatePsiTrainingState::btnOkClick(Action *)
 {
 	_game->popState();
-	_game->pushState (new PsiTrainingState(_game));
 }
 
 void AllocatePsiTrainingState::lstSoldiersPress(Action *)

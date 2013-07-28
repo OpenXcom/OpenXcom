@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -65,9 +65,9 @@
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Options.h"
 #include "WarningMessage.h"
 #include "BattlescapeOptionsState.h"
 #include "DebriefingState.h"
@@ -81,6 +81,8 @@
 #include "../lodepng.h"
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Menu/SaveState.h"
+#include "../Menu/LoadState.h"
 
 namespace OpenXcom
 {
@@ -92,18 +94,18 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 {
 	//game->getScreen()->setScale(1.0);
-	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
-	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
+	int screenWidth = Options::getInt("baseXResolution");
+	int screenHeight = Options::getInt("baseYResolution");
 	int iconsWidth = 320;
 	int iconsHeight = 56;
-
+	_mouseOverIcons = false;
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons = new Surface(iconsWidth, iconsHeight, mapWidth/2 - iconsWidth/2, mapHeight - iconsHeight);
+	_icons = new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
-	int visibleMapHeight = mapHeight - iconsHeight;
-	_map = new Map(_game, mapWidth, mapHeight, 0, 0, visibleMapHeight);
+	int visibleMapHeight = screenHeight - iconsHeight;
+	_map = new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
 
 	_numLayers = new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	_rank = new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
@@ -128,6 +130,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveSnap = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
 	_btnReserveAimed = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 45);
 	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
+	// TODO: the following two are set for TFTD, but are unavailable except via hotkey
+	// until the battleScape UI layout is defined in the UI
+	_btnReserveKneel = new ImageButton(10, 21, _icons->getX() + 43, _icons->getY() + 34);
+	_btnZeroTUs = new ImageButton(10, 21, _icons->getX() + 97, _icons->getY() + 34);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 5);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
@@ -221,6 +227,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_btnReserveSnap);
 	add(_btnReserveAimed);
 	add(_btnReserveAuto);
+	add(_btnReserveKneel);
+	add(_btnZeroTUs);
 	add(_btnLeftHandItem);
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
@@ -239,7 +247,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	// Set up objects
 
-	_save = _game->getSavedGame()->getBattleGame();
+	_save = _game->getSavedGame()->getSavedBattle();
 	_map->init();
 	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
 	_map->onMousePress((ActionHandler)&BattlescapeState::mapPress);
@@ -263,7 +271,9 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 
 	_numAmmoRight->setColor(2);
 	_numAmmoRight->setValue(999);
-
+	
+	_icons->onMouseIn((ActionHandler)&BattlescapeState::mouseInIcons);
+	_icons->onMouseOut((ActionHandler)&BattlescapeState::mouseOutIcons);
 	_btnUnitUp->onMouseClick((ActionHandler)&BattlescapeState::btnUnitUpClick);
 	_btnUnitDown->onMouseClick((ActionHandler)&BattlescapeState::btnUnitDownClick);
 	_btnMapUp->onMouseClick((ActionHandler)&BattlescapeState::btnMapUpClick);
@@ -302,6 +312,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAimed->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAimed"));
 	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveAuto->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAuto"));
+	_btnReserveKneel->onMouseClick((ActionHandler)&BattlescapeState::btnReserveKneelClick);
+	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick);
+	// todo: make these visible based on ruleset and assign them to their own button
+	_btnReserveKneel->setVisible(false);
+	_btnZeroTUs->setVisible(false);
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
@@ -582,13 +599,13 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (_save->getTile(pos) != 0) // don't allow to click into void
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
-			_battleGame->primaryAction(pos);
-		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && playableUnitSelected())
+		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT || (action->getDetails()->button.button == SDL_BUTTON_LEFT && (SDL_GetModState() & KMOD_ALT) != 0)) && playableUnitSelected())
 		{
 			_battleGame->secondaryAction(pos);
+		}
+		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
+			_battleGame->primaryAction(pos);
 		}
 	}
 }
@@ -656,7 +673,7 @@ void BattlescapeState::btnMapDownClick(Action *)
 void BattlescapeState::btnShowMapClick(Action *)
 {
 	//MiniMapState
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
 }
 
@@ -666,7 +683,7 @@ void BattlescapeState::btnShowMapClick(Action *)
  */
 void BattlescapeState::btnKneelClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		BattleUnit *bu = _save->getSelectedUnit();
 		if (bu)
@@ -682,7 +699,10 @@ void BattlescapeState::btnKneelClick(Action *)
  */
 void BattlescapeState::btnInventoryClick(Action *)
 {
-	if (playableUnitSelected() && (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode()))
+	if (playableUnitSelected()
+		&& (_save->getSelectedUnit()->getArmor()->getSize() == 1 || _save->getDebugMode())
+		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
+			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
@@ -706,7 +726,7 @@ void BattlescapeState::btnCenterClick(Action *)
  */
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		selectNextPlayerUnit(true, false);
 }
 
@@ -716,7 +736,7 @@ void BattlescapeState::btnNextSoldierClick(Action *)
  */
 void BattlescapeState::btnNextStopClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		selectNextPlayerUnit(true, true);
 }
 
@@ -726,7 +746,7 @@ void BattlescapeState::btnNextStopClick(Action *)
  */
 void BattlescapeState::btnPrevSoldierClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		selectPreviousPlayerUnit(true);
 }
 
@@ -737,7 +757,7 @@ void BattlescapeState::btnPrevSoldierClick(Action *)
  */
 void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
@@ -755,7 +775,7 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
  */
 void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
@@ -772,8 +792,7 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
  */
 void BattlescapeState::btnShowLayersClick(Action *)
 {	
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
+	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
 
 /**
@@ -782,6 +801,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
  */
 void BattlescapeState::btnHelpClick(Action *)
 {
+	if (_map->getProjectile() == 0) // we're deliberately not using allowButtons() here, so we can save if something goes wrong during the alien turn, and submit it for dissection.
 		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
@@ -792,7 +812,7 @@ void BattlescapeState::btnHelpClick(Action *)
  */
 void BattlescapeState::btnEndTurnClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		_battleGame->requestEndTurn();
 }
 /**
@@ -801,7 +821,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
  */
 void BattlescapeState::btnAbortClick(Action *)
 {
-	if(_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 		_game->pushState(new AbortMissionState(_game, _save, this));
 }
 
@@ -916,7 +936,7 @@ void BattlescapeState::btnPsiClick(Action *action)
  */
 void BattlescapeState::btnReserveClick(Action *action)
 {
-	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (allowButtons())
 	{
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
@@ -954,7 +974,8 @@ void BattlescapeState::btnReloadClick(Action *)
  */
 void BattlescapeState::btnPersonalLightingClick(Action *)
 {
-	_save->getTileEngine()->togglePersonalLighting();
+	if (allowButtons())
+		_save->getTileEngine()->togglePersonalLighting();
 }
 
 /**
@@ -964,7 +985,7 @@ void BattlescapeState::btnPersonalLightingClick(Action *)
  */
 bool BattlescapeState::playableUnitSelected()
 {
-	return _save->getSelectedUnit() != 0 && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode());
+	return _save->getSelectedUnit() != 0 && allowButtons();
 }
 
 /**
@@ -1002,6 +1023,7 @@ void BattlescapeState::updateSoldierInfo()
 	if (!playableUnit)
 	{
 		_txtName->setText(L"");
+		showPsiButton(false);
 		return;
 	}
 
@@ -1223,24 +1245,38 @@ inline void BattlescapeState::handle(Action *action)
 					_save->setDebugMode();
 					debug(L"Debug Mode");
 				}
+				// "ctrl-l" - reset tile visibility
+				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_l && (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Resetting tile visibility");
+					_save->resetTiles();
+				}
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
-					if (_save->getDebugMode())
-					{
-						SaveVoxelMap();
-					}
-				}
-				// f10 - voxel view dump
-				else if (action->getDetails()->key.keysym.sym == SDLK_F10)
-				{
-					SaveVoxelView();
+					SaveVoxelMap();
 				}
 				// f9 - ai 
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
 				{
 					SaveAIMap();
 				}
+			}
+			// quick save and quick load
+			// not works in debug mode to prevent conflict in hotkeys by default
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			{
+				_game->pushState(new SaveState(_game, false, true));
+			}
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			{
+				_game->pushState(new LoadState(_game, false, true));
+			}
+
+			// voxel view dump
+			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
+			{
+				SaveVoxelView();
 			}
 		}
 	}
@@ -1383,7 +1419,6 @@ void BattlescapeState::SaveVoxelView()
 
 	BattleUnit * bu = _save->getSelectedUnit();
 	if (bu==0) return; //no unit selected
-	Position viewPos = _save->getSelectedUnit()->getPosition();
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
@@ -1392,15 +1427,7 @@ void BattlescapeState::SaveVoxelView()
 	std::stringstream ss;
 	std::vector<unsigned char> image;
 	int test;
-	Position originVoxel = Position(viewPos.x*16+8,
-		viewPos.y*16+8,
-		viewPos.z*24 -_save->getTile(viewPos)->getTerrainLevel() + (bu->getFloatHeight() + bu->getHeight()-1) );
-	if (bu->getArmor()->getSize() > 1)
-	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 1; //topmost voxel
-	}
+	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
 
 	Position targetVoxel,hitPos;
 	double dist;
@@ -1592,15 +1619,21 @@ void BattlescapeState::popup(State *state)
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing the screen for the mission.
  * @param abort Was the mission aborted?
- * @param number of soldiers in exit area OR number of survivors when battle finished due to either all aliens or objective was destroyed
+ * @param inExitArea number of soldiers in exit area OR number of survivors when battle finished due to either all aliens or objective was destroyed
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	if (_save->getNextStage() != "" && inExitArea)
+	_game->getCursor()->setVisible(true);
+	std::string nextStage = "";
+	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	{
+		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+	}
+	if (nextStage != "" && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
-		_save->setMissionType(_save->getNextStage());
+		_save->setMissionType(nextStage);
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setAlienRace("STR_MIXED");
 		bgen.nextStage();
@@ -1678,4 +1711,59 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
+void BattlescapeState::mouseInIcons(Action * /* action */)
+{
+	_mouseOverIcons = true;
+}
+void BattlescapeState::mouseOutIcons(Action * /* action */)
+{
+	_mouseOverIcons = false;
+}
+bool BattlescapeState::getMouseOverIcons() const
+{
+	return _mouseOverIcons;
+}
+bool BattlescapeState::allowButtons() const
+{
+	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
+}
+
+/**
+ * Reserve time units for kneeling.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveKneelClick(Action *action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
+		_btnKneel->invert(0);
+	}
+}
+
+/**
+ * Remove all time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnZeroTUsClick(Action *action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+		if (_battleGame->getSave()->getSelectedUnit())
+		{
+			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
+			updateSoldierInfo();
+		}
+	}
+}
 }

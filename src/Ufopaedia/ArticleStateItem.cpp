@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -219,6 +219,8 @@ namespace OpenXcom
 				break;
 			default: break;
 		}
+
+		centerAllSurfaces();
 	}
 
 	void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)

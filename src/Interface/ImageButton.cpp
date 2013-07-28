@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,7 +29,7 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0)
+ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _inverted(false)
 {
 }
 
@@ -88,8 +88,9 @@ void ImageButton::mousePress(Action *action, State *state)
 			invert(_color + 3);
 		}
 	}
-	else if (isButtonPressed())
+	else if (!_inverted && isButtonPressed())
 	{
+		_inverted = true;
 		invert(_color + 3);
 	}
 	InteractiveSurface::mousePress(action, state);
@@ -102,8 +103,11 @@ void ImageButton::mousePress(Action *action, State *state)
  */
 void ImageButton::mouseRelease(Action *action, State *state)
 {
-	if (_group == 0)
+	if (_inverted)
+	{
+		_inverted = false;
 		invert(_color + 3);
+	}
 	InteractiveSurface::mouseRelease(action, state);
 }
 

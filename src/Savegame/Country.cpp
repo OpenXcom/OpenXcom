@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -70,7 +70,7 @@ void Country::save(YAML::Emitter &out) const
 	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
 	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
 	out << YAML::Key << "pact" << YAML::Value << _pact;
-	out << YAML::Key << "newPact" << YAML::Value << _pact;
+	out << YAML::Key << "newPact" << YAML::Value << _newPact;
 	out << YAML::EndMap;
 }
 

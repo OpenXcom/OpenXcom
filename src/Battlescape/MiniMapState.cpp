@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #include <iostream>
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
@@ -40,7 +41,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the MiniMapState screen.
  * @param game Pointer to the core game.
- * @param map The Battlescape map.
+ * @param camera The Battlescape camera.
  * @param battleGame The Battlescape save.
 */
 MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State(game)
@@ -57,6 +58,20 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	add(btnLvlDwn);
 	add(btnOk);
 	add(_txtLevel);
+
+	centerAllSurfaces();
+
+	if (Screen::getDY() > 50)
+	{
+		_screen = false;
+		SDL_Rect current;
+		current.w = 223;
+		current.h = 151;
+		current.x = 46;
+		current.y = 14;
+		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+	}
+
 	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
 	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
 	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
@@ -72,6 +87,14 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
 	_timerAnimate->start();
 	_miniMapView->draw();
+}
+
+/**
+ *
+ */
+MiniMapState::~MiniMapState()
+{
+	delete _timerAnimate;
 }
 
 /**

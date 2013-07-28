@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SaveState.h"
-#include <yaml-cpp/yaml.h>
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Savegame/SavedGame.h"
@@ -27,7 +26,6 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
 #include "ErrorMessageState.h"
@@ -66,6 +64,17 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
+}
+
+/**
+ * Creates the Quick Save Game state.
+ * @param game Pointer to the core game.
+ * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param showMsg True if need to show messages like "Loading game" or "Saving game".
+ */
+SaveState::SaveState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+{
+	quickSave(L"autosave");
 }
 
 /**
@@ -128,10 +137,7 @@ void SaveState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
 	{
-		if(_geo)
-			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(8)+10, "BACK01.SCR", 6, this));
-		else
-			_game->pushState(new DeleteGameState(_game, _lstSaves->getCellText(_lstSaves->getSelectedRow(),0), Palette::blockOffset(0), "TAC00.SCR", -1, this));
+		_game->pushState(new DeleteGameState(_game, _geo, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
 	}
 }
 
@@ -190,6 +196,46 @@ void SaveState::edtSaveKeyPress(Action *action)
 			else
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 		}
+	}
+}
+
+/**
+ * Quick save game.
+ * @param filename16 name of file without ".sav"
+ */
+void SaveState::quickSave(const std::wstring &filename16)
+{
+	if (_showMsg) updateStatus("STR_SAVING_GAME");
+
+#ifdef _WIN32
+		std::string filename = Language::wstrToCp(filename16);
+#else
+		std::string filename = Language::wstrToUtf8(filename16);
+#endif
+
+	try
+	{
+		_game->getSavedGame()->save(filename);
+	}
+	catch (Exception &e)
+	{
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+	}
+	catch (YAML::Exception &e)
+	{
+		Log(LOG_ERROR) << e.what();
+		std::wstringstream error;
+		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_geo)
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+		else
+			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }
 

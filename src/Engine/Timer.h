@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -38,6 +38,7 @@ class Timer
 {
 public:
 	static int maxFrameSkip;
+	static Uint32 gameSlowSpeed;
 	
 private:
 	Uint32 _start;

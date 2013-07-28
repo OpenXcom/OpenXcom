@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -38,6 +39,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
+ * @param cancellable Is there a Cancel button?
  */
 BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state, bool cancellable) : State(game), _base(base), _state(state), _facilities()
 {
@@ -45,12 +47,14 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 
 	// Create objects
 	_window = new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
+	_btnOk = new TextButton(112, 16, 200, 176);
 	if (cancellable)
 	{
-		_btnOk = new TextButton(112, 16, 200, 176);
-		_lstFacilities = new TextList(100, 96, 200, 64);
-	} else {
-		_lstFacilities = new TextList(100, 128, 200, 64);
+		_lstFacilities = new TextList(112, 104, 200, 64);
+	}
+	else
+	{
+		_lstFacilities = new TextList(112, 128, 200, 64);
 	}
 	_txtTitle = new Text(118, 16, 197, 48);
 
@@ -58,23 +62,21 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
-	if (cancellable)
-	{
-		add(_btnOk);
-	}
+	add(_btnOk);
 	add(_txtTitle);
 	add(_lstFacilities);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	if (cancellable)
-	{
-		_btnOk->setColor(Palette::blockOffset(13)+5);
-		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-		_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
-	}
+	_btnOk->setColor(Palette::blockOffset(13)+5);
+	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)&BuildFacilitiesState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&BuildFacilitiesState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->setVisible(cancellable);
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
@@ -83,8 +85,9 @@ BuildFacilitiesState::BuildFacilitiesState(Game *game, Base *base, State *state,
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 100);
+	_lstFacilities->setColumns(1, 112);
 	_lstFacilities->setSelectable(true);
+	_lstFacilities->setScrolling(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
 	_lstFacilities->onMouseClick((ActionHandler)&BuildFacilitiesState::lstFacilitiesClick);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,11 +23,13 @@
 #include <vector>
 #include <string>
 #include "LocalizedText.h"
+#include "../Savegame/Soldier.h"
 
 namespace OpenXcom
 {
 
 class TextList;
+class ExtraStrings;
 
 /**
  * Contains strings used throughout the game for localization.
@@ -56,7 +58,7 @@ public:
 	/// Gets list of languages in the data directory.
 	static std::vector<std::string> getList(TextList *list);
 	/// Loads an OpenXcom language file.
-	void loadLng(const std::string &filename);
+	void loadLng(const std::string &filename, ExtraStrings *extras);
 	/// Gets the language's name.
 	std::wstring getName() const;
 	/// Outputs the language to a HTML file.
@@ -65,6 +67,8 @@ public:
 	const LocalizedText &getString(const std::string &id) const;
 	/// Get a quantity-depended localized text.
 	LocalizedText getString(const std::string &id, unsigned n) const;
+	/// Get a gender-depended localized text.
+	const LocalizedText &getString(const std::string &id, SoldierGender gender) const;
 private:
 	std::wstring _name;
 	std::map<std::string, LocalizedText> _strings;

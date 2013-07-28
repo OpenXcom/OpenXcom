@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -70,6 +70,8 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	add(_txtQuantity);
 	add(_txtDestination);
 	add(_lstTransfers);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

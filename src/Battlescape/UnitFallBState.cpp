@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -67,9 +67,12 @@ void UnitFallBState::init()
 
 void UnitFallBState::think()
 {
-	
-	for (std::vector<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
+	for (std::list<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
+		if ((*unit)->getStatus() == STATUS_TURNING)
+		{
+			(*unit)->abortTurn();
+		}
 		bool largeCheck = true;
 		bool falling = true;
 		int size = (*unit)->getArmor()->getSize() - 1;
@@ -133,21 +136,39 @@ void UnitFallBState::think()
 					for (int y = (*unit)->getArmor()->getSize() - 1; y >= 0; --y)
 					{
 						Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
-						if (otherTileBelow && otherTileBelow->getUnit())
+						BattleUnit *unitBelow = otherTileBelow->getUnit();
+						if (otherTileBelow && unitBelow)
 						{
-							Position originalPosition(otherTileBelow->getUnit()->getPosition());
-							for (int dir = 0; dir < Pathfinding::DIR_UP; dir++)
+							int partsChecked = 0;
+							int partsToCheck = unitBelow->getArmor()->getSize() * unitBelow->getArmor()->getSize();
+							for (int dir = 0; dir < Pathfinding::DIR_UP && partsChecked != partsToCheck; dir++)
 							{
+								partsChecked = 0;
 								Position offset;
 								Pathfinding::directionToVector(dir, &offset);
-								Tile *t = _parent->getSave()->getTile(originalPosition + offset);
-								Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
-								Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
-								if (t && !_parent->getSave()->getPathfinding()->isBlocked(otherTileBelow, t, dir, 0) && t->getUnit() == 0 && (!t->hasNoFloor(bt) || otherTileBelow->getUnit()->getArmor()->getMovementType() == MT_FLY))
+								for (int x2 = unitBelow->getArmor()->getSize() - 1; x2 >= 0; --x2)
 								{
-									otherTileBelow->getUnit()->startWalking(dir, originalPosition + offset, bu, onScreen);
-									_parent->getSave()->addFallingUnit(otherTileBelow->getUnit());
-									break;
+									for (int y2 = unitBelow->getArmor()->getSize() - 1; y2 >= 0; --y2)
+									{
+										Position originalPosition(unitBelow->getPosition() + Position(x2, y2, 0));
+										otherTileBelow = _parent->getSave()->getTile(originalPosition);
+										Tile *t = _parent->getSave()->getTile(originalPosition + offset);
+										Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+										Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
+										if (t && 
+											!_parent->getSave()->getPathfinding()->isBlocked(otherTileBelow, t, dir, unitBelow) &&
+											(!t->hasNoFloor(bt) || unitBelow->getArmor()->getMovementType() == MT_FLY))
+										{
+											partsChecked++;
+										}
+										if (partsChecked == partsToCheck)
+										{
+											if (_parent->getSave()->addFallingUnit(unitBelow))
+											{
+												unitBelow->startWalking(dir, unitBelow->getPosition() + offset, bu, onScreen);
+											}
+										}
+									}
 								}
 							}
 						}
@@ -162,7 +183,6 @@ void UnitFallBState::think()
 			{
 				Position destination = (*unit)->getPosition() + Position(0,0,-1);
 				Tile *tileBelow = _parent->getSave()->getTile(destination);
-				Tile *tileBelowDestination = _parent->getSave()->getTile(destination + Position(0,0,-1));
 				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, onScreen);
 				(*unit)->setCache(0);
 				_parent->getMap()->cacheUnit(*unit);
@@ -173,7 +193,9 @@ void UnitFallBState::think()
 				// if the unit burns floortiles, burn floortiles
 				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR)
 				{
-					(*unit)->getTile()->destroy(MapData::O_FLOOR);
+					(*unit)->getTile()->ignite(1);
+					Position here = ((*unit)->getPosition() * Position(16,16,24)) + Position(8,8,-((*unit)->getTile()->getTerrainLevel()));
+					_parent->getTileEngine()->hit(here, (*unit)->getStats()->strength, DT_IN, (*unit));
 				}
 				// move our personal lighting with us
 				_terrain->calculateUnitLighting();

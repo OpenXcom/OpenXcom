@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,6 +47,7 @@ class ScannerState : public State
 public:
 	/// Create the ScannerState
 	ScannerState (Game * game, BattleAction *action);
+	~ScannerState();
 	/// Handler for right-clicking anything.
 	void handle(Action *action);
 	/// Handle timers

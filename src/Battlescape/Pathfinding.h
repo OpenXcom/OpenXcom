@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,7 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
 	/// whether a tile blocks a certain movementType
-	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget);
+	bool isBlocked(Tile *tile, const int part, BattleUnit *missileTarget, int bigWallExclusion = -1);
 	///Try to find a straight line path between two positions.
 	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit *missileTarget, bool sneak = false, int maxTUCost = 1000);
 	///Try to find a path between two positions.
@@ -63,6 +63,7 @@ public:
 	bool isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget);
 	static const int DIR_UP = 8;
 	static const int DIR_DOWN = 9;
+	enum bigWallTypes{ BLOCK = 1, BIGWALLNESW, BIGWALLNWSE, BIGWALLWEST, BIGWALLNORTH, BIGWALLEAST, BIGWALLSOUTH, BIGWALLEASTANDSOUTH};
 	static const int O_BIGWALL = -1;
 	/// Creates a new Pathfinding class
 	Pathfinding(SavedBattleGame *save);
@@ -72,6 +73,8 @@ public:
 	void calculate(BattleUnit *unit, Position endPosition, BattleUnit *missileTarget = 0, int maxTUCost = 1000);
 	/// Converts direction to a vector.
 	static void directionToVector(const int direction, Position *vector);
+	/// convert a vector to a direction.
+	static void vectorToDirection(const Position &vector, int &dir);
 	/// Check whether a path is ready gives the first direction.
 	int getStartDirection();
 	/// Dequeue a direction.
@@ -85,11 +88,12 @@ public:
 	bool previewPath(bool bRemove = false);
 	bool removePreview();
 	/// Set _unit in order to abuse low-level pathfinding functions from outside the class
-	void setUnit(BattleUnit *unit) { _unit = unit; };
+	void setUnit(BattleUnit *unit);
 	/// Get all reachable tiles, based on cost.
 	std::vector<int> findReachable(BattleUnit *unit, int tuMax);
 	/// get _totalTUCost; find out whether we can hike somewhere in this turn or not
 	int getTotalTUCost() const { return _totalTUCost; }
+	bool isPathPreviewed() const;
 };
 
 }

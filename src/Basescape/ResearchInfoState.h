@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,8 +31,6 @@ class TextList;
 class Base;
 class RuleResearch;
 class ResearchProject;
-class ResearchState;
-class NewResearchListState;
 class ArrowButton;
 class Timer;
 class InteractiveSurface;
@@ -45,11 +43,10 @@ class ResearchInfoState : public State
 private:
 	Base *_base;
 	TextButton *_btnOk;
+	TextButton *_btnCancel;
 	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAllocatedScientist, *_txtMore, *_txtLess;
-	TextList *_lstResearch;
-	std::vector<Text*> texts_;
 	void SetAssignedScientist();
 	ResearchProject * _project;
 	RuleResearch * _rule;
@@ -63,14 +60,16 @@ public:
 	ResearchInfoState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 	/// Function called every time the _timerMore timer is triggered.
 	void more();
 	/// Add given number of scientists to the project if possible
-	void more(int change);
+	void moreByValue(int change);
 	/// Function called every time the _timerLess timer is triggered.
 	void less();
 	/// Remove the given number of scientists from the project if possible
-	void less(int change);
+	void lessByValue(int change);
 	/// Handler for using the mouse wheel.
 	void handleWheel(Action *action);
 	/// Handler for pressing the More button.

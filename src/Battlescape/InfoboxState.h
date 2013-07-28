@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,11 +44,12 @@ public:
 	InfoboxState(Game *game, const std::wstring &msg);
 	/// Cleans up the Infobox state.
 	~InfoboxState();
+	/// Handler for clicking anything.
+	void handle(Action *action);
 	/// Handles the timers.
 	void think();
 	/// Closes the window.
 	void close();
-	void draw();
 
 };
 

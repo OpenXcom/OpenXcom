@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,6 +52,10 @@ class UfoTrajectory;
 class RuleAlienMission;
 class City;
 class Base;
+class MCDPatch;
+class ExtraSprites;
+class ExtraSounds;
+class ExtraStrings;
 
 /**
  * Set of rules and stats for a game.
@@ -83,13 +87,17 @@ protected:
 	std::map<std::string, RuleManufacture *> _manufacture;
 	std::map<std::string, UfoTrajectory *> _ufoTrajectories;
 	std::map<std::string, RuleAlienMission *> _alienMissions;
+	std::map<std::string, MCDPatch *> _MCDPatches;
+	std::vector<std::pair<std::string, ExtraSprites *> > _extraSprites;
+	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
+	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
-	std::auto_ptr<YAML::Node> _startingBase;
+	std::auto_ptr<YAML::Node> _startingBase, _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
-	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex;
-	std::vector<std::string> _alienMissionsIndex;
+	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
+	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
 	std::vector<std::vector<int> > _alienItemLevels;
-
+	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder;
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
@@ -135,6 +143,8 @@ public:
 	RuleUfo *getUfo(const std::string &id) const;
 	/// Gets the available UFOs.
 	const std::vector<std::string> &getUfosList() const;
+	/// Gets the available terrains.
+	const std::vector<std::string> &getTerrainList() const;
 	/// Gets terrains for battlescape games.
 	RuleTerrain *getTerrain(const std::string &name) const;
 	/// Gets mapdatafile for battlescape games.
@@ -191,7 +201,18 @@ public:
 	const City *locateCity(double lon, double lat) const;
 	/// Get the alien item level table
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
+	/// Gets the Defined starting base.
 	const YAML::Node &getStartingBase();
+	/// Gets an MCDPatch.
+	MCDPatch *getMCDPatch(const std::string name) const;
+	/// Gets the list of external Sprites.
+	std::vector<std::pair<std::string, ExtraSprites *> > getExtraSprites() const;
+	/// Gets the list of external Sounds.
+	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
+	/// Gets the list of external Strings.
+	std::map<std::string, ExtraStrings *> getExtraStrings() const;
+	/// sort all our lists according to their weight.
+	void sortLists();
 };
 
 }

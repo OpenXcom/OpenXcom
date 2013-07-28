@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -144,7 +144,7 @@ public:
 	/// Gets the list of terror sites.
 	std::vector<TerrorSite*> *getTerrorSites();
 	/// Gets the current battle game.
-	SavedBattleGame *getBattleGame();
+	SavedBattleGame *getSavedBattle();
 	/// Sets the current battle game.
 	void setBattleGame(SavedBattleGame *battleGame);
 	/// Add a finished ResearchProject

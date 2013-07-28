@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,6 +49,8 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	add(_btnYes);
 	add(_btnNo);
 	add(_txtMessage);
+
+	centerAllSurfaces();
 	
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

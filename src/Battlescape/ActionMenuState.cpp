@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -156,7 +156,7 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
-	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH)
+	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH || ba == BA_HIT)
 		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
 	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
 	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
@@ -201,7 +201,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		_action->TU = _actionMenu[btnID]->getTUs();
 		if (_action->type == BA_PRIME)
 		{
-			if (Options::getBool("battleInstantGrenade") || weapon->getBattleType() == BT_PROXIMITYGRENADE)
+			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 1;
 				_game->popState();
@@ -214,7 +214,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit *targetUnit = NULL;
-			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getBattleGame()->getUnits());
+			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getSavedBattle()->getUnits());
 			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
@@ -227,12 +227,13 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
-				Tile * tile (_game->getSavedGame()->getBattleGame()->getTile(_action->actor->getPosition() + p));
-				if (tile->getUnit() && tile->getUnit()->isWoundable())
+				Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->actor->getPosition() + p));
+				if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
 					targetUnit = tile->getUnit();
 			}
 			if (targetUnit)
 			{
+				_game->popState();
 				_game->pushState (new MedikitState (_game, targetUnit, _action));
 			}
 			else
@@ -246,6 +247,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			// spend TUs first, then show the scanner
 			if (_action->actor->spendTimeUnits (_action->TU))
 			{
+				_game->popState();
 				_game->pushState (new ScannerState (_game, _action));
 			}
 			else
@@ -274,10 +276,10 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
 			
-			if (!_game->getSavedGame()->getBattleGame()->getTileEngine()->validMeleeRange(
+			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),
-				_action->actor->getArmor()->getSize(),
+				_action->actor,
 				0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";

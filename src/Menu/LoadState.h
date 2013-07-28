@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,14 +31,17 @@ namespace OpenXcom
 class LoadState : public SavedGameState
 {
 private:
-	bool _geo;
 public:
 	/// Creates the Load Game state.
 	LoadState(Game *game, bool geo);
+	/// Creates the Quick Load Game state.
+	LoadState(Game *game, bool geo, bool showMsg);
 	/// Cleans up the Load Game state.
 	~LoadState();
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
+	/// Quick load game.
+	void quickLoad(const std::wstring &filename16);
 };
 
 }

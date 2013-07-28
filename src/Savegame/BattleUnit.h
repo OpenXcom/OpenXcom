@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -86,7 +86,6 @@ private:
 	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 	int improveStat(int exp);
 	int _turretType;
-	bool _needPainKiller;
 	int _motionPoints;
 	int _kills;
 	int _faceDirection; // used only during strafeing moves
@@ -111,11 +110,13 @@ private:
 	std::vector<int> _loftempsSet;
 	Unit *_unitRules;
 	int _rankInt;
+	bool _hitByFire;
+	int _moraleRestored;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
 	BattleUnit(Soldier *soldier, UnitFaction faction);
-	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor);
+	BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
 	BattleUnit(BattleUnit&);
 	/// Cleans up the BattleUnit.
 	~BattleUnit();
@@ -192,7 +193,7 @@ public:
 	/// Gets the unit's bravery.
 	int getMorale() const;
 	/// Do damage to the unit.
-	int damage(Position position, int power, ItemDamageType type, bool ignoreArmor = false);
+	int damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor = false);
 	/// Heal stun level of the unit.
 	void healStun(int power);
 	/// Gets the unit's stun level.
@@ -208,7 +209,7 @@ public:
 	/// Get the number of time units a certain action takes.
 	int getActionTUs(BattleActionType actionType, BattleItem *item);
 	/// Spend time units if it can.
-	bool spendTimeUnits(int tu, bool debugmode = false);
+	bool spendTimeUnits(int tu);
 	/// Spend energy if it can.
 	bool spendEnergy(int tu);
 	/// Set time units.
@@ -369,7 +370,7 @@ public:
 	void setEnergy(int energy);
 	/// Halve the unit's armor values.
 	void halveArmor();
-	/// Gets the unit's faction.
+	/// Get the faction that killed this unit.
 	UnitFaction killedBy() const;
 	/// Set the faction that killed this unit.
 	void killedBy(UnitFaction f);
@@ -401,7 +402,14 @@ public:
 	int getRankInt() const;
 	/// derive a rank integer based on rank string (for xcom soldiers ONLY)
 	void deriveRank();
-
+	/// this function checks if a tile is visible, using maths.
+	bool checkViewSector(Position pos) const;
+	/// adjust this unit's stats according to difficulty.
+	void adjustStats(const int diff);
+	/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)
+	bool tookFireDamage() const;
+	/// switch the state of the fire damage tracker.
+	void toggleFireDamage();
 };
 
 }

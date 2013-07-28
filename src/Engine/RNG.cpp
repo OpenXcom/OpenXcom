@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,6 +33,7 @@ long _count = 0;
 /**
  * Seeds the random generator with a new number.
  * Defaults to the current time if none is set.
+ * @param count Number of generations.
  * @param seed New seed.
  */
 void init(long count, unsigned int seed)

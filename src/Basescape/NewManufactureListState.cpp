@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,6 +25,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/Ruleset.h"
@@ -69,6 +70,8 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	add(_txtCategory);
 	add(_lstManufacture);
 
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
@@ -93,6 +96,7 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewManufactureListState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&NewManufactureListState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**

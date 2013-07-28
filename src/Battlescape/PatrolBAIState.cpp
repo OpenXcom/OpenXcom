@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #include "PatrolBAIState.h"
 #include "TileEngine.h"
 #include "AggroBAIState.h"
+#include "Pathfinding.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"
@@ -38,7 +39,7 @@ namespace OpenXcom
  */
 PatrolBAIState::PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _fromNode(node), _toNode(0)
 {
-
+	_traceAI = _game->getTraceSetting();
 }
 
 /**
@@ -109,7 +110,7 @@ void PatrolBAIState::enter()
  */
 void PatrolBAIState::exit()
 {
-	if (_toNode) _toNode->free();
+	if (_toNode) _toNode->freeNode();
 }
 
 /**
@@ -134,14 +135,14 @@ void PatrolBAIState::think(BattleAction *action)
 	{
 		action->type = BA_NONE;
 		action->TU = 0;
-		if (Options::getBool("traceAI")) 
+		if (_traceAI) 
 		{
 			Log(LOG_INFO) << "PatrolBAIState::think()? Better not... #" << action->number;
 		}
 		return;
 	}
 
-	if (Options::getBool("traceAI")) 
+	if (_traceAI) 
 	{
 		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
 	}
@@ -149,7 +150,7 @@ void PatrolBAIState::think(BattleAction *action)
 	
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
-		if (Options::getBool("traceAI"))
+		if (_traceAI)
 		{
 			Log(LOG_INFO) << "Patrol destination reached!";
 		}
@@ -174,7 +175,7 @@ void PatrolBAIState::think(BattleAction *action)
 		{
 			// head off to next patrol node
 			_fromNode = _toNode;
-			_toNode->free();
+			_toNode->freeNode();
 			_toNode = 0;
 		}
 	}
@@ -197,9 +198,10 @@ void PatrolBAIState::think(BattleAction *action)
 			}
 		}
 	}
-
-	if (_toNode == 0)
+	int triesLeft = 20;
+	while (_toNode == 0 && triesLeft)
 	{
+		triesLeft--;
 		// look for a new node to walk towards
 		bool scout = true;
 		if (_game->getMissionType() != "STR_BASE_DEFENSE")
@@ -275,12 +277,27 @@ void PatrolBAIState::think(BattleAction *action)
 		if (_toNode == 0)
 		{
 			_toNode = _game->getPatrolNode(scout, _unit, _fromNode);
+
+			if (_toNode == 0)
+			{
+				_toNode = _game->getPatrolNode(!scout, _unit, _fromNode);
+			}
+		}
+		
+		if (_toNode != 0)
+		{
+			_game->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_game->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_game->getPathfinding()->abortPath();
 		}
 	}
 
 	if (_toNode != 0)
 	{
-		_toNode->allocate();
+		_toNode->allocateNode();
 		action->actor = _unit;
 		action->type = BA_WALK;
 		action->target = _toNode->getPosition();

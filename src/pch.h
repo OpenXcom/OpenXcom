@@ -1,69 +1,84 @@
 #ifndef __OXC_PCH_H
 #define __OXC_PCH_H
 
+// uncomment to check memory leaks in VS
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
+#include <GLUT/glut.h>
+
+#endif
 #include <algorithm>
-#include <assert.h>
 #include <cassert>
 #include <cctype>
 #include <climits>
+#define _USE_MATH_DEFINES
 #include <cmath>
-//#include <cpuid.h>
 #include <cstdarg>
+#include <cstring>
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
-//#include <direct.h>
-#include <dirent.h>
-//#include <emmintrin.h> // for SSE2 intrinsics; see http://msdn.microsoft.com/en-us/library/has3d153%28v=vs.71%29.aspx
 #include <errno.h>
 #include <exception>
 #include <fstream>
 #include <functional>
-//#include <intrin.h>
 #include <iomanip>
 #include <iostream>
-#include <iostream>
 #include <limits>
-#include <limits.h>
 #include <list>
 #include <locale>
-#include <malloc.h>
+#ifndef __APPLE__
+#include <stdlib.h>
+#endif
 #include <map>
-#include <math.h>
-#include <pwd.h>
 #include <queue>
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
-#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
 #include <SDL_opengl.h>
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_types.h>
+
 #include <set>
-//#include <shlobj.h>
-//#include <shlwapi.h>
 #include <sstream>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <string>
-#include <string.h>
-#include <sys/param.h>
+#include <stdint.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <time.h>
 #include <typeinfo>
-#include <unistd.h>
 #include <utility>
 #include <vector>
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+//#include <shlobj.h>
+//#include <shlwapi.h>
+#include <direct.h>
+#else
+#include <unistd.h>
+#include <sys/param.h>
+#include <pwd.h>
 #endif
 #include <yaml-cpp/yaml.h>
 
 #include "./aresame.h"
+#include "./version.h"
+
+// uncomment to check memory leaks in VS
+//#ifdef _DEBUG
+//#ifndef DBG_NEW
+//#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+//#define new DBG_NEW
+//#endif
+//#endif
 
 #include "./Engine/State.h"
 #include "./Basescape/TransferConfirmState.h"
@@ -152,7 +167,6 @@
 #include "./Battlescape/BattleState.h"
 #include "./Battlescape/InfoboxState.h"
 #include "./Battlescape/Projectile.h"
-#include "./Battlescape/BulletSprite.h"
 #include "./Battlescape/Map.h"
 #include "./Battlescape/UnitTurnBState.h"
 #include "./Ufopaedia/ArticleStateBaseFacility.h"
@@ -190,6 +204,7 @@
 #include "./Basescape/DismantleFacilityState.h"
 #include "./Basescape/SoldierArmorState.h"
 #include "./Basescape/ManufactureStartState.h"
+#include "./Basescape/SackSoldierState.h"
 #include "./Basescape/SellState.h"
 #include "./Basescape/CraftArmorState.h"
 #include "./Basescape/CraftWeaponsState.h"
@@ -230,7 +245,6 @@
 #include "./Geoscape/ProductionCompleteState.h"
 #include "./Geoscape/AbandonGameState.h"
 #include "./Geoscape/SelectDestinationState.h"
-#include "./Geoscape/UfoHyperDetectedState.h"
 #include "./Geoscape/ConfirmNewBaseState.h"
 #include "./Geoscape/InterceptState.h"
 #include "./Geoscape/DefeatState.h"
@@ -327,5 +341,6 @@
 #include "./Savegame/Soldier.h"
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
+#include "./Menu/AdvancedOptionsState.h"
 
 #endif

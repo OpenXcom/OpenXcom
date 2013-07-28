@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,9 +37,9 @@ SoundSet::SoundSet() : _sounds()
  */
 SoundSet::~SoundSet()
 {
-	for (std::vector<Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+	for (std::map<int, Sound*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
 	{
-		delete *i;
+		delete i->second;
 	}
 }
 
@@ -98,6 +98,33 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 			}
 			size = newsize + 44;
 		}
+		else if (0x40 == sound[0x18] && 0x1F == sound[0x19] && 0x00 == sound[0x1A] && 0x00 == sound[0x1B])
+		{
+			// so it's WAV, but in 8 khz, we have to convert it to 11 khz sound
+
+			unsigned char *sound2 = new unsigned char[size*2];
+
+			// rewrite the samplerate in the header to 11 khz
+			sound[0x18]=0x11; sound[0x19]=0x2B; sound[0x1C]=0x11; sound[0x1D]=0x2B;
+
+			// copy and do the conversion...
+			memcpy(sound2, sound, size);
+			Uint32 step16 = (8000<<16)/11025;
+			Uint8 *w = sound2+44;
+			int newsize = 0;
+			for (Uint32 offset16 = 0; (offset16>>16) < size-44; offset16 += step16, ++w, ++newsize)
+			{
+				*w = sound[44 + (offset16>>16)];
+			}
+			size = newsize + 44;
+
+			// Rewrite the number of samples in the WAV file
+			memcpy(sound2 + 0x28, &newsize, sizeof(newsize));
+
+			// Ok, now replace the original with the converted:
+			delete[] sound;
+			sound = sound2;
+		}
 
 		Sound *s = new Sound();
 		try
@@ -115,7 +142,7 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
 		{
 			// Ignore junk in the file
 		}
-		_sounds.push_back(s);
+		_sounds[i] = s;
 
 		delete[] sound;
 		if (!wav)
@@ -130,12 +157,24 @@ void SoundSet::loadCat(const std::string &filename, bool wav)
  * @param i Sound number in the set.
  * @return Pointer to the respective sound.
  */
-Sound *SoundSet::getSound(unsigned int i) const
+Sound *SoundSet::getSound(unsigned int i)
 {
-	if (i >= _sounds.size())
+	if (_sounds.find(i) != _sounds.end())
 	{
-		return 0;
+		return _sounds[i];
 	}
+	return 0;
+}
+
+
+/**
+ * Creates and returns a particular wave in the sound set.
+ * @param i Sound number in the set.
+ * @return Pointer to the respective sound.
+ */
+Sound *SoundSet::addSound(unsigned int i)
+{
+	_sounds[i] = new Sound();
 	return _sounds[i];
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,6 +48,8 @@ private:
 	Text *_txtAlienSpeed;
 	TextButton *_alienSpeed, *_btnAlienSpeed1, *_btnAlienSpeed2, *_btnAlienSpeed3, *_btnAlienSpeed4, *_btnAlienSpeed5, *_btnAlienSpeed6;
 	TextButton *_btnOk, *_btnLoad, *_btnSave;
+	/// Saves battlescape options.
+	void saveOptions();
 public:
 	/// Creates the Battlescape Options state.
 	BattlescapeOptionsState(Game *game);

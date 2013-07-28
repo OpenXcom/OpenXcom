@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,6 +36,7 @@ class ImageButton : public InteractiveSurface
 protected:
 	Uint8 _color;
 	ImageButton **_group;
+	bool _inverted;
 public:
 	/// Creates a new image button with the specified size and position.
 	ImageButton(int width, int height, int x = 0, int y = 0);

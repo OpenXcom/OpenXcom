@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -62,6 +63,8 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	add(_txtArea);
 	add(_lstBases);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -69,6 +72,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();

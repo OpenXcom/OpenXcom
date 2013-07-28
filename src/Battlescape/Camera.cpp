@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,8 +31,16 @@ namespace OpenXcom
 
 /**
  * Sets up a camera.
+ * @param spriteWidth Width of map sprite.
+ * @param spriteHeight Height of map sprite.
+ * @param mapsize_x Current map size in X axis.
+ * @param mapsize_y Current map size in Y axis.
+ * @param mapsize_z Current map size in Z axis.
+ * @param map Pointer to map surface.
+ * @param visibleMapHeight Current height the view is at.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()), _mapOffset(-250,250,0), _center(), _scrollX(0), _scrollY(0), _scrollTrigger(false), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
+Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map *map, int visibleMapHeight) : _scrollMouseTimer(0), _scrollKeyTimer(0), _spriteWidth(spriteWidth), _spriteHeight(spriteHeight), _mapsize_x(mapsize_x), _mapsize_y(mapsize_y), _mapsize_z(mapsize_z), _screenWidth(map->getWidth()), _screenHeight(map->getHeight()),
+																																 _mapOffset(-250,250,0), _center(), _scrollMouseX(0), _scrollMouseY(0), _scrollKeyX(0), _scrollKeyY(0), _scrollTrigger(false), _visibleMapHeight(visibleMapHeight), _showAllLayers(false), _map(map)
 {
 }
 
@@ -44,9 +52,15 @@ Camera::~Camera()
 
 }
 
-void Camera::setScrollTimer(Timer *timer)
+/**
+ * Sets the camera's scrolling timer.
+ * @param mouse Pointer to mouse timer.
+ * @param key Pointer to key timer.
+ */
+void Camera::setScrollTimer(Timer *mouse, Timer *key)
 {
-	_scrollTimer = timer;
+	_scrollMouseTimer = mouse;
+	_scrollKeyTimer = key;
 }
 
 /**
@@ -98,9 +112,9 @@ void Camera::mouseRelease(Action *action, State *)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::getInt("battleScrollType") == SCROLL_TRIGGER)
 	{
-		_scrollX = 0;
-		_scrollY = 0;
-		_scrollTimer->stop();
+		_scrollMouseX = 0;
+		_scrollMouseY = 0;
+		_scrollMouseTimer->stop();
 		_scrollTrigger = false;
 		int posX = action->getXMouse();
 		int posY = action->getYMouse();
@@ -132,79 +146,91 @@ void Camera::mouseOver(Action *action, State *)
 		int posY = action->getYMouse();
 		int scrollSpeed = Options::getInt("battleScrollSpeed");
 
-		if (posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
+		//left scroll
+		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0)
 		{
-			_scrollX = scrollSpeed;
+			_scrollMouseX = scrollSpeed;
 			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			//downleft
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
 			{
-				_scrollY = scrollSpeed/2;
+				_scrollMouseY = scrollSpeed/2;
 			}
+			//upleft
 			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
 			{
-				_scrollY = -scrollSpeed/2;
+				_scrollMouseY = -scrollSpeed/2;
 			}
 		}
+		//right scroll
 		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
 		{
-			_scrollX = -scrollSpeed;
+			_scrollMouseX = -scrollSpeed;
 			// if close to top or bottom, also scroll diagonally
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY > 0)
+			//downright
+			if (posY <= (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
 			{
-				_scrollY = scrollSpeed/2;
+				_scrollMouseY = scrollSpeed/2;
 			}
+			//upright
 			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
 			{
-				_scrollY = -scrollSpeed/2;
+				_scrollMouseY = -scrollSpeed/2;
 			}
 		}
 		else if (posX)
 		{
-			_scrollX = 0;
+			_scrollMouseX = 0;
 		}
 
-		if (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+		//up
+		if (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0)
 		{
-			_scrollY = scrollSpeed;
+			_scrollMouseY = scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
+			//up left
 			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
 			{
-				_scrollX = scrollSpeed;
-				_scrollY /=2;
+				_scrollMouseX = scrollSpeed;
+				_scrollMouseY /=2;
 			}
+			//up right
 			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 			{
-				_scrollX = -scrollSpeed;
-				_scrollY /=2;
+				_scrollMouseX = -scrollSpeed;
+				_scrollMouseY /=2;
 			}
 		}
+		//down
 		else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
 		{
-			_scrollY = -scrollSpeed;
+			_scrollMouseY = -scrollSpeed;
 			// if close to left or right edge, also scroll diagonally
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+			//down left
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
 			{
-				_scrollX = scrollSpeed;
-				_scrollY /=2;
+				_scrollMouseX = scrollSpeed;
+				_scrollMouseY /=2;
 			}
+			//down right
 			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
 			{
-				_scrollX = -scrollSpeed;
-				_scrollY /=2;
+				_scrollMouseX = -scrollSpeed;
+				_scrollMouseY /=2;
 			}
 		}
-		else if (posY && _scrollX == 0)
+		else if (posY && _scrollMouseX == 0)
 		{
-			_scrollY = 0;
+			_scrollMouseY = 0;
 		}
 
-		if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
+		if ((_scrollMouseX || _scrollMouseY) && !_scrollMouseTimer->isRunning() && !_scrollKeyTimer->isRunning())
 		{
-			_scrollTimer->start();
+			_scrollMouseTimer->start();
 		}
-		else if ((!_scrollX && !_scrollY) && _scrollTimer->isRunning())
+		else if ((!_scrollMouseX && !_scrollMouseY) && _scrollMouseTimer->isRunning())
 		{
-			_scrollTimer->stop();
+			_scrollMouseTimer->stop();
 		}
 	}
 }
@@ -216,32 +242,37 @@ void Camera::mouseOver(Action *action, State *)
  */
 void Camera::keyboardPress(Action *action, State *)
 {
+	if (_map->getCursorType() == CT_NONE)
+	{
+		return;
+	}
+
 	int key = action->getDetails()->key.keysym.sym;
 	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
 	{
-		_scrollX += scrollSpeed;
+		_scrollKeyX = scrollSpeed;
 	}
 	else if (key == Options::getInt("keyBattleRight"))
 	{
-		_scrollX += -scrollSpeed;
+		_scrollKeyX = -scrollSpeed;
 	}
 	else if (key == Options::getInt("keyBattleUp"))
 	{
-		_scrollY += scrollSpeed;
+		_scrollKeyY = scrollSpeed;
 	}
 	else if (key == Options::getInt("keyBattleDown"))
 	{
-		_scrollY += -scrollSpeed;
+		_scrollKeyY = -scrollSpeed;
 	}
 
-	if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
+	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
 	{
-		_scrollTimer->start();
+		_scrollKeyTimer->start();
 	}
-	else if ((!_scrollX && !_scrollY) && _scrollTimer->isRunning())
+	else if ((!_scrollKeyX && !_scrollKeyY) && _scrollKeyTimer->isRunning())
 	{
-		_scrollTimer->stop();
+		_scrollKeyTimer->stop();
 	}
 }
 
@@ -252,45 +283,60 @@ void Camera::keyboardPress(Action *action, State *)
  */
 void Camera::keyboardRelease(Action *action, State *)
 {
+	if (_map->getCursorType() == CT_NONE)
+	{
+		return;
+	}
+
 	int key = action->getDetails()->key.keysym.sym;
-	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
 	{
-		_scrollX -= scrollSpeed;
+		_scrollKeyX = 0;
 	}
 	else if (key == Options::getInt("keyBattleRight"))
 	{
-		_scrollX -= -scrollSpeed;
+		_scrollKeyX = 0;
 	}
 	else if (key == Options::getInt("keyBattleUp"))
 	{
-		_scrollY -= scrollSpeed;
+		_scrollKeyY = 0;
 	}
 	else if (key == Options::getInt("keyBattleDown"))
 	{
-		_scrollY -= -scrollSpeed;
+		_scrollKeyY = 0;
 	}
 
-	if ((_scrollX || _scrollY) && !_scrollTimer->isRunning())
+	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
 	{
-		_scrollTimer->start();
+		_scrollKeyTimer->start();
 	}
-	else if ((!_scrollX && !_scrollY) && _scrollTimer->isRunning())
+	else if ((!_scrollKeyX && !_scrollKeyY) && _scrollKeyTimer->isRunning())
 	{
-		_scrollTimer->stop();
+		_scrollKeyTimer->stop();
 	}
 }
 
 /**
- * Handle scrolling.
+ * Handle mouse-scrolling.
  */
-void Camera::scroll()
+void Camera::scrollMouse()
 {
-	scrollXY(_scrollX, _scrollY, true);
+	scrollXY(_scrollMouseX, _scrollMouseY, true);
+}
+
+/**
+ * Handle keyboard-scrolling.
+ */
+void Camera::scrollKey()
+{
+	scrollXY(_scrollKeyX, _scrollKeyY, true);
 }
 
 /**
  * Handle scrolling with given deviation.
+ * @param x X deviation.
+ * @param y Y deviation.
+ * @param redraw Redraw map or not.
  */
 void Camera::scrollXY(int x, int y, bool redraw)
 {
@@ -319,34 +365,14 @@ void Camera::scrollXY(int x, int y, bool redraw)
 
 /**
  * Handle jumping with given deviation.
+ * @param x X deviation.
+ * @param y Y deviation.
  */
 void Camera::jumpXY(int x, int y)
 {
-	int oldX = _mapOffset.x, oldY= _mapOffset.y;
-
 	_mapOffset.x += x;
 	_mapOffset.y += y;
-
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-// if center goes out of map bounds, hold the scrolling
-	if (_center.x > _mapsize_x -1 || _center.x < 0 || 
-		_center.y > _mapsize_y -1  || _center.y < 0 )
-	{
-		for (int k=1; k<128; ++k) //try intermediate values
-		{
-			_mapOffset.x = oldX + x*k/128;
-			_mapOffset.y = oldY + y*k/128;
-			convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
-			if (_center.x > _mapsize_x -1 || _center.x < 0 || 
-				_center.y > _mapsize_y -1  || _center.y < 0 )
-			{
-				//step back
-				_mapOffset.x = oldX + x*(k-1)/128;
-				_mapOffset.y = oldY + y*(k-1)/128;
-				break;
-			}
-		}
-	}
 }
 
 
@@ -378,7 +404,7 @@ void Camera::down()
 
 /**
  * Set view level.
- * @param view level
+ * @param viewlevel New view level
  */
 void Camera::setViewLevel(int viewlevel)
 {
@@ -499,22 +525,38 @@ int Camera::getMapSizeY() const
 	return _mapsize_y;
 }
 
+/**
+ * Get the map offset
+ * @return the map offset
+ */
 Position Camera::getMapOffset()
 {
 	return _mapOffset;
 }
 
+/**
+ * Set the map offset
+ * @param pos the map offset
+ */
 void Camera::setMapOffset(Position pos)
 {
 	_mapOffset = pos;
 }
 
+/**
+ * Toggle showing all map layers.
+ * @return New layer setting.
+ */
 int Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 	return _showAllLayers?2:1;
 }
 
+/**
+ * Check if camera is showing all map layers.
+ * @return Current layer setting.
+ */
 bool Camera::getShowAllLayers() const
 {
 	return _showAllLayers;
@@ -522,6 +564,7 @@ bool Camera::getShowAllLayers() const
 
 /**
  * Check if map coordinates X,Y,Z are on screen
+ * @param mapPos Coordinates to check
  */
 bool Camera::isOnScreen(const Position &mapPos) const
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,8 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
+ * @param game pointer to the game.
+ * @param unit pointer to the unit.
  */
 BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(game), _unit(unit)
 {

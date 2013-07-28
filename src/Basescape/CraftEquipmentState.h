@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,7 +40,7 @@ class Base;
 class CraftEquipmentState : public State
 {
 private:
-	TextButton *_btnOk;
+	TextButton *_btnOk, *_btnClear;
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtStores, *_txtAvailable, *_txtUsed, *_txtCrew;
 	TextList *_lstEquipment;
@@ -50,6 +50,7 @@ private:
 	size_t _craft;
 	std::vector<std::string> _items;
 	int _changeValueByMouseWheel;
+	bool _allowChangeListValuesByMouseWheel;
 	/// Updates quantities of item.
 	void updateQuantity();
 public:
@@ -78,11 +79,13 @@ public:
 	/// Moves an item to the base.
 	void moveLeft();
 	/// Moves the given number of items to the base.
-	void moveLeft(int change);
+	void moveLeftByValue(int change);
 	/// Moves an item to the craft.
 	void moveRight();
 	/// Moves the given number of items to the craft.
-	void moveRight(int change);
+	void moveRightByValue(int change);
+	/// empties the contents of the craft, moving all of the items back to the base.
+	void btnClearClick(Action *action);
 };
 
 }

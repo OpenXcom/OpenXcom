@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_TRANSFERITEMSSTATE_H
 
 #include "../Engine/State.h"
+#include "../Savegame/Transfer.h"
 #include <vector>
 #include <string>
 
@@ -52,18 +53,23 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	unsigned int _sel;
-	int _total, _sOffset, _eOffset, _aOffset, _pQty, _cQty, _aQty;
+	int _total, _pQty, _cQty, _aQty;
 	float _iQty;
+    int _hasSci, _hasEng;
 	double _distance;
 	Timer *_timerInc, *_timerDec;
 	int _changeValueByMouseWheel;
-	bool _canTransferCraftsInAirborne; // this is a cache for Options::getBool("canTransferCraftsInAirborne")
+	bool _canTransferCraftsWhileAirborne, _containmentLimit, _allowChangeListValuesByMouseWheel;
 	/// Gets selected cost.
-	int getCost();
+	int getCost() const;
 	/// Gets selected quantity.
-	int getQuantity();
+	int getQuantity() const;
 	/// Gets distance between bases.
-	double getDistance();
+	double getDistance() const;
+	/// Gets type of selected index
+	enum TransferType getType(unsigned selected) const;
+	/// Gets item Index
+	int getItemIndex(unsigned selected) const;
 public:
 	/// Creates the Transfer Items state.
 	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);
@@ -96,11 +102,11 @@ public:
 	/// Increases the quantity of an item by one.
 	void increase();
 	/// Increases the quantity of an item by the given value.
-	void increase(int change);
+	void increaseByValue(int change);
 	/// Decreases the quantity of an item by one.
 	void decrease();
 	/// Decreases the quantity of an item by the given value.
-	void decrease(int change);
+	void decreaseByValue(int change);
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();
 	/// Gets the total of the transfer.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -168,13 +168,6 @@ void Window::draw()
 {
 	Surface::draw();
 	SDL_Rect square;
-	int mul = 1;
-	if (_contrast)
-	{
-		mul = 2;
-	}
-
-	Uint8 color = _color + 3 * mul;
 
 	if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
 	{
@@ -197,13 +190,25 @@ void Window::draw()
 		square.h = getHeight();
 	}
 
-	for (int i = 0; i < 5; ++i)
+	int mul = 1;
+	if (_contrast)
+	{
+		mul = 2;
+	}
+	Uint8 color = _color + 3 * mul;
+
+	int limit = 5;
+	if (_bg == 0)
+		limit++;
+	for (int i = 0; i < limit; ++i)
 	{
 		drawRect(&square, color);
 		if (i < 2)
 			color -= 1 * mul;
 		else
 			color += 1 * mul;
+		if (i == 4)
+			color += 2 * mul;
 		square.x++;
 		square.y++;
 		if (square.w >= 2)
@@ -219,14 +224,13 @@ void Window::draw()
 
 	if (_bg != 0)
 	{
-		_bg->getCrop()->x = getX() + square.x;
-		_bg->getCrop()->y = getY() + square.y;
-		_bg->getCrop()->w = square.w;
-		_bg->getCrop()->h = square.h;
+		_bg->getCrop()->x = getX() + square.x - _dx;
+		_bg->getCrop()->y = getY() + square.y - _dy;
+		_bg->getCrop()->w = square.w ;
+		_bg->getCrop()->h = square.h ;
 		_bg->setX(square.x);
 		_bg->setY(square.y);
 		_bg->blit(this);
 	}
 }
-
 }

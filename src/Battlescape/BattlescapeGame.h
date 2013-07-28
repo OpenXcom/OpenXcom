@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -84,7 +84,7 @@ private:
 	bool noActionsPending(BattleUnit *bu);
 	std::vector<InfoboxOKState*> _infoboxQueue;
 	void showInfoBoxQueue();
-	bool _playedAggroSound, _endTurnRequested;
+	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
@@ -114,7 +114,7 @@ public:
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.
-	bool checkReservedTU(BattleUnit *bu, int tu);
+	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
 	/// Add item & affect with gravity.
@@ -151,23 +151,30 @@ public:
 	TileEngine *getTileEngine();
 	Pathfinding *getPathfinding();
 	ResourcePack *getResourcePack();
-	BattleActionType getReservedAction();
 	const Ruleset *getRuleset() const;
-	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI
+	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI.
 	void resetSituationForAI();
 	static bool _debugPlay;
 	/// is panic done with yet?
 	bool getPanicHandled() { return _playerPanicHandled; }
 	/// try to find and pick up an item.
 	void findItem(BattleAction *action);
-	/// check through all the items on the ground and pick one
+	/// check through all the items on the ground and pick one.
 	BattleItem *surveyItems(BattleAction *action);
-	/// evaluate if it's worth while to take this item
+	/// evaluate if it's worth while to take this item.
 	bool worthTaking(BattleItem* item, BattleAction *action);
-	/// pick the item up from the ground
+	/// pick the item up from the ground.
 	int takeItemFromGround(BattleItem* item, BattleAction *action);
 	/// assign the item to a slot (stolen from battlescapeGenerator::addItem())
 	bool takeItem(BattleItem* item, BattleAction *action);
+	/// return the type of action that is reserved.
+	BattleActionType getReservedAction();
+	/// tally the living units, convert them if necessary.
+	void tallyUnits(int &liveAliens, int &liveSoldiers, bool convert);
+	/// set the kneel reservation setting.
+	void setKneelReserved(bool reserved);
+	/// check the kneel reservation setting.
+	bool getKneelReserved();
 
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,6 +41,9 @@
 #include "RuleInventory.h"
 #include "RuleResearch.h"
 #include "RuleManufacture.h"
+#include "ExtraSprites.h"
+#include "ExtraSounds.h"
+#include "ExtraStrings.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/Base.h"
@@ -49,9 +52,11 @@
 #include "../Savegame/Craft.h"
 #include "../Ufopaedia/Ufopaedia.h"
 #include "../Savegame/AlienStrategy.h"
+#include "../Savegame/GameTime.h"
 #include "UfoTrajectory.h"
 #include "RuleAlienMission.h"
 #include "City.h"
+#include "MCDPatch.h"
 #include "../Engine/Logger.h"
 #include <algorithm>
 
@@ -61,10 +66,12 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
 {
+    // Check in which data dir the folder is stored
+    std::string path = CrossPlatform::getDataFolder("SoldierName/");
 	// Add soldier names
-	std::vector<std::string> names = CrossPlatform::getFolderContents(Options::getDataFolder() + "SoldierName/", "nam");
+	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam");
 
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
@@ -164,6 +171,22 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::vector<std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	{
+		delete i->second;
+	}
+	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -172,9 +195,9 @@ Ruleset::~Ruleset()
  */
 void Ruleset::load(const std::string &source)
 {
-	std::string dirname = Options::getDataFolder() + "Ruleset/" + source + '/';
+	std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
 	if (!CrossPlatform::folderExists(dirname))
-		loadFile(Options::getDataFolder() + "Ruleset/" + source + ".rul");
+		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
 		loadFiles(dirname);
 }
@@ -256,7 +279,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_facilities[type] = rule;
 					_facilitiesIndex.push_back(type);
 				}
-				rule->load(*j);
+				_facilityListOrder += 100;
+				rule->load(*j, _modIndex, _facilityListOrder);
 			}
 		}
 		else if (key == "crafts")
@@ -276,7 +300,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_crafts[type] = rule;
 					_craftsIndex.push_back(type);
 				}
-				rule->load(*j, this);
+				_craftListOrder += 100;
+				rule->load(*j, this, _modIndex, _craftListOrder);
 			}
 		}
 		else if (key == "craftWeapons")
@@ -296,7 +321,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_craftWeapons[type] = rule;
 					_craftWeaponsIndex.push_back(type);
 				}
-				rule->load(*j);
+				rule->load(*j, _modIndex);
 			}
 		}
 		else if (key == "items")
@@ -316,7 +341,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_items[type] = rule;
 					_itemsIndex.push_back(type);
 				}
-				rule->load(*j);
+				_itemListOrder += 100;
+				rule->load(*j, _modIndex, _itemListOrder);
 			}
 		}
 		else if (key == "ufos")
@@ -373,6 +399,7 @@ void Ruleset::loadFile(const std::string &filename)
 				{
 					rule = new RuleTerrain(type);
 					_terrains[type] = rule;
+					_terrainIndex.push_back(type);
 				}
 				rule->load(*j, this);
 			}
@@ -492,7 +519,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_research[type] = rule;
 					_researchIndex.push_back(type);
 				}
-				rule->load(*j);
+				_researchListOrder += 100;
+				rule->load(*j, _researchListOrder);
 			}
 		}
 		else if (key == "manufacture")
@@ -512,7 +540,8 @@ void Ruleset::loadFile(const std::string &filename)
 					_manufacture[type] = rule;
 					_manufactureIndex.push_back(type);
 				}
-				rule->load(*j);
+				_manufactureListOrder += 100;
+				rule->load(*j, _manufactureListOrder);
 			}
 		}
 		else if (key == "ufopaedia")
@@ -546,13 +575,18 @@ void Ruleset::loadFile(const std::string &filename)
 					_ufopaediaArticles[id] = rule;
 					_ufopaediaIndex.push_back(id);
 				}
-				rule->load(*j);
+				_ufopaediaListOrder += 100;
+				rule->load(*j, _ufopaediaListOrder);
 			}
 		}
 		else if (key == "startingBase")
 		{
 			//_startingBase->load(i.second(), 0);
 			_startingBase = i.second().Clone();
+		}
+		else if (key == "startingTime")
+		{
+			_startingTime = i.second().Clone();
 		}
 		else if (key == "costSoldier")
 		{
@@ -609,6 +643,7 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 		else if (key == "alienItemLevels")
 		{
+			_alienItemLevels.clear();
 			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
 			{
 				std::vector<int> type;
@@ -616,9 +651,72 @@ void Ruleset::loadFile(const std::string &filename)
 				_alienItemLevels.push_back(type);
 			}
 		}
+		else if (key == "MCDPatches")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				if (_MCDPatches.find(type) != _MCDPatches.end())
+				{
+					_MCDPatches[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<MCDPatch> patch(new MCDPatch());
+					patch->load(*j);
+					_MCDPatches[type] = patch.release();
+					_MCDPatchesIndex.push_back(type);
+				}
+			}
+		}
+		else if (key == "extraSprites")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
+				extraSprites->load(*j, _modIndex);
+				_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
+				_extraSpritesIndex.push_back(type);
+			}
+		}
+		else if (key == "extraSounds")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
+				extraSounds->load(*j, _modIndex);
+				_extraSounds.push_back(std::make_pair(type, extraSounds.release()));
+				_extraSoundsIndex.push_back(type);
+			}
+		}
+		else if (key == "extraStrings")
+		{
+			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
+			{
+				std::string type;
+				(*j)["type"] >> type;
+				if (_extraStrings.find(type) != _extraStrings.end())
+				{
+					_extraStrings[type]->load(*j);
+				}
+				else
+				{
+					std::auto_ptr<ExtraStrings> extraStrings(new ExtraStrings());
+					extraStrings->load(*j);
+					_extraStrings[type] = extraStrings.release();
+					_extraStringsIndex.push_back(type);
+				}
+			}
+		}
 	}
-
 	fin.close();
+
+	_modIndex += 1000;
 }
 
 /**
@@ -641,7 +739,7 @@ void Ruleset::loadFiles(const std::string &dirname)
  */
 void Ruleset::save(const std::string &filename) const
 {
-	std::string s = Options::getDataFolder() + "Ruleset/" + filename + ".rul";
+	std::string s = CrossPlatform::getDataFile("Ruleset/" + filename + ".rul");
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -836,6 +934,8 @@ SavedGame *Ruleset::newSave() const
 		ids[*i] = 1;
 	}
 	ids["STR_UFO"] = 1;
+	ids["STR_LANDING_SITE"] = 1;
+	ids["STR_CRASH_SITE"] = 1;
 	ids["STR_WAYPOINT"] = 1;
 	ids["STR_TERROR_SITE"] = 1;
 	ids["STR_ALIEN_BASE"] = 1;
@@ -869,6 +969,8 @@ SavedGame *Ruleset::newSave() const
 	save->getBases()->push_back(base);
 	// Setup alien strategy
 	save->getAlienStrategy().init(this);
+
+	save->getTime()->load(*_startingTime);
 
 	return save;
 }
@@ -1029,6 +1131,16 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
 const std::vector<std::string> &Ruleset::getUfosList() const
 {
 	return _ufosIndex;
+}
+
+/**
+ * Returns the list of all terrains
+ * provided by the ruleset.
+ * @return List of terrains.
+ */
+const std::vector<std::string> &Ruleset::getTerrainList() const
+{
+	return _terrainIndex;
 }
 
 /**
@@ -1322,6 +1434,8 @@ const std::vector<std::string> &Ruleset::getAlienMissionList() const
 	return _alienMissionsIndex;
 }
 
+#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
+
 /** @brief Match a city based on coordinates.
  * This function object compare a city's coordinates with the stored coordinates.
  */
@@ -1331,7 +1445,9 @@ public:
 	/// Remember the coordinates.
 	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
 	/// Compare with stored coordinates.
-	bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
+	//bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
+	bool operator()(const City *city) const { return (fabs(city->getLongitude() - _lon) < CITY_EPSILON) &&
+	                                                 (fabs(city->getLatitude() - _lat) < CITY_EPSILON); }
 private:
 	double _lon, _lat;
 };
@@ -1357,13 +1473,201 @@ const City *Ruleset::locateCity(double lon, double lat) const
 	return 0;
 }
 
+/**
+ * @return a deep array containing the alien item levels.
+ */
 const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
 
+/**
+ * @return the starting base definition.
+ */
 const YAML::Node &Ruleset::getStartingBase()
 {
 	return *_startingBase->begin();
+}
+
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+MCDPatch *Ruleset::getMCDPatch(const std::string id) const
+{
+	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
+	if (_MCDPatches.end() != i) return i->second; else return 0;
+}
+
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() const
+{
+	return _extraSprites;
+}
+
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() const
+{
+	return _extraSounds;
+}
+/**
+ * @param id the ID of the MCDPatch we want.
+ * @return the MCDPatch based on ID, or 0 if none defined.
+ */
+std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
+{
+	return _extraStrings;
+}
+
+/*
+ * Sort all our lists according to their weight.
+ */
+void Ruleset::sortLists()
+{
+	std::map<int, std::string> list;
+	int offset = 0;
+
+	for (std::vector<std::string>::const_iterator i = _itemsIndex.begin(); i != _itemsIndex.end(); ++i)
+	{
+		while (list.find(getItem(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getItem(*i)->getListOrder() + offset] = *i;
+	}
+	_itemsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_itemsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+
+	for (std::vector<std::string>::const_iterator i = _craftsIndex.begin(); i != _craftsIndex.end(); ++i)
+	{
+		while (list.find(getCraft(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getCraft(*i)->getListOrder() + offset] = *i;
+	}
+	_craftsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_craftsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
+	{
+		while (list.find(getBaseFacility(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getBaseFacility(*i)->getListOrder() + offset] = *i;
+	}
+	_facilitiesIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_facilitiesIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
+	{
+		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset] = *i;
+	}
+	_craftWeaponsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_craftWeaponsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	int alternateEntry = 0;
+	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
+	{
+		if (getItem(getArmor(*i)->getStoreItem()))
+		{
+			while (list.find(getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset) != list.end())
+			{
+				++offset;
+			}
+			list[getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset] = *i;
+		}
+		else
+		{
+			list[alternateEntry] = *i;
+			alternateEntry += 1;
+		}
+	}
+	_armorsIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_armorsIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
+	{
+		while (list.find(getUfopaediaArticle(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getUfopaediaArticle(*i)->getListOrder() + offset] = *i;
+	}
+	_ufopaediaIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_ufopaediaIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _researchIndex.begin(); i != _researchIndex.end(); ++i)
+	{
+		while (list.find(getResearch(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getResearch(*i)->getListOrder() + offset] = *i;
+	}
+	_researchIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_researchIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
+	
+	for (std::vector<std::string>::const_iterator i = _manufactureIndex.begin(); i != _manufactureIndex.end(); ++i)
+	{
+		while (list.find(getManufacture(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+		list[getManufacture(*i)->getListOrder() + offset] = *i;
+	}
+	_manufactureIndex.clear();
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_manufactureIndex.push_back(i->second);
+	}
+	list.clear();
+	offset = 0;
 }
 }

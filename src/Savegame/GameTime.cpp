@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -48,7 +48,6 @@ GameTime::~GameTime()
  */
 void GameTime::load(const YAML::Node &node)
 {
-	node["second"] >> _second;
 	node["second"] >> _second;
 	node["minute"] >> _minute;
 	node["hour"] >> _hour;

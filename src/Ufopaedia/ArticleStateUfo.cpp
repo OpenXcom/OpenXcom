@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -82,8 +82,17 @@ namespace OpenXcom
 		graphic->getCrop()->h = 29;
 		graphic->blit(_image);
 */
-		graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
-		graphic->getCrop()->h = 52;
+		if (ufo->getModSprite() == "")
+		{
+			graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
+			graphic->getCrop()->h = 52;
+		}
+		else
+		{
+			graphic = _game->getResourcePack()->getSurface(ufo->getModSprite());
+			graphic->setX(0);
+			graphic->setY(0);
+		}
 		graphic->blit(_image);
 
 		_txtInfo = new Text(300, 50, 10, 140);
@@ -95,6 +104,8 @@ namespace OpenXcom
 
 		_lstInfo = new TextList(300, 64, 10, 68);
 		add(_lstInfo);
+
+		centerAllSurfaces();
 
 		_lstInfo->setColor(Palette::blockOffset(8)+5);
 		_lstInfo->setColumns(2, 200, 100);

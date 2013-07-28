@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,6 +19,7 @@
 #include "SelectDestinationState.h"
 #include <cmath>
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Action.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -47,20 +48,23 @@ namespace OpenXcom
  */
 SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
 {
+	int dx = Screen::getDX();
+	int dy = Screen::getDY();
 	_screen = false;
 
 	// Create objects
-	_btnRotateLeft = new InteractiveSurface(12, 10, 259, 176);
-	_btnRotateRight = new InteractiveSurface(12, 10, 283, 176);
-	_btnRotateUp = new InteractiveSurface(13, 12, 271, 162);
-	_btnRotateDown = new InteractiveSurface(13, 12, 271, 187);
-	_btnZoomIn = new InteractiveSurface(23, 23, 295, 156);
-	_btnZoomOut = new InteractiveSurface(13, 17, 300, 182);
+	_btnRotateLeft = new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
+	_btnRotateRight = new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
+	_btnRotateUp = new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
+	_btnRotateDown = new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
+	_btnZoomIn = new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
+	_btnZoomOut = new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
 
-	_window = new Window(this, 256, 28, 0, 0);
-	_btnCancel = new TextButton(60, 12, 110, 8);
-	_btnCydonia = new TextButton(60, 12, 180, 8);
-	_txtTitle = new Text(100, 9, 10, 10);
+	_window = new Window(this, 256, 28, 0 + dx, 0);
+	_window->setDY(0);
+	_btnCancel = new TextButton(60, 12, 110 + dx, 8);
+	_btnCydonia = new TextButton(60, 12, 180 + dx, 8);
+	_txtTitle = new Text(100, 16, 10 + dx, 6);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -109,6 +113,12 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_btnZoomOut->onMouseClick((ActionHandler)&SelectDestinationState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&SelectDestinationState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
 
+	// dirty hacks to get the rotate buttons to work in "classic" style
+	_btnRotateLeft->setListButton();
+	_btnRotateRight->setListButton();
+	_btnRotateUp->setListButton();
+	_btnRotateDown->setListButton();
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -119,6 +129,8 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION"));
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTitle->setWordWrap(true);
 
 	if (!_craft->getRules()->getSpacecraft() || !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
 	{

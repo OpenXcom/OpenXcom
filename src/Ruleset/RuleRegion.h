@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,6 +46,7 @@ private:
 	WeightedOptions _missionWeights;
 	unsigned _regionWeight; ///< Weight of this region when selecting regions for alien missions.
 	std::vector<MissionZone> _missionZones; ///< All the mission zones in this region.
+	std::string _missionRegion; ///< Do missions in the region defined by this string instead.
 public:
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
@@ -67,6 +68,8 @@ public:
 	unsigned getWeight() const;
 	/// Gets the weighted list of missions for this region.
 	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
+	/// Gets the substitute mission region.
+	const std::string &getMissionRegion() const { return _missionRegion; }
 	/// Gets a random point inside a mission site.
 	std::pair<double, double> getRandomPoint(unsigned site) const;
 	const std::vector<double> &getLonMax() const { return _lonMax; }

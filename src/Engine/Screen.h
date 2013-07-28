@@ -1,5 +1,5 @@
 	/*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -93,6 +93,8 @@ public:
 	static bool isOpenGLEnabled();
 	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 	void makeVideoFlags();
+	static int getDX();
+	static int getDY();
 };
 
 }

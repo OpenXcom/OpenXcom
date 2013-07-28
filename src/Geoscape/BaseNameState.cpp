@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,6 +42,8 @@ namespace OpenXcom
  */
 BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
+	_globe->onMouseOver(0);
+
 	_screen = false;
 
 	// Create objects
@@ -58,6 +60,8 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	add(_txtTitle);
 	add(_edtName);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -67,6 +71,9 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
 	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
+	//something must be in the name before it is acceptable
+	_btnOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -114,7 +121,21 @@ void BaseNameState::edtNameKeyPress(Action *action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		nameBase();
+		if(_edtName->getText().size() > 0)
+		{
+			nameBase();
+		}
+	}
+	else
+	{
+		if(_edtName->getText().size() > 0)
+		{
+			_btnOk->setVisible(true);
+		}
+		else
+		{
+			_btnOk->setVisible(false);
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,24 +39,28 @@ class RuleCraft
 {
 private:
 	std::string _type;
+	std::vector<std::string> _requires;
 	int _sprite;
-	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy;
+	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
 	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
+	int _listOrder;
 public:
 	/// Creates a blank craft ruleset.
 	RuleCraft(const std::string &type);
 	/// Cleans up the craft ruleset.
 	~RuleCraft();
 	/// Loads craft data from YAML.
-	void load(const YAML::Node& node, Ruleset *ruleset);
+	void load(const YAML::Node& node, Ruleset *ruleset, int modIndex, int nextCraftIndex);
 	/// Saves the craft data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft's type.
 	std::string getType() const;
+	/// Gets the craft's requirements.
+	const std::vector<std::string> &getRequirements () const;
 	/// Gets the craft's sprite.
 	int getSprite() const;
 	/// Gets the craft's maximum fuel.
@@ -75,6 +79,10 @@ public:
 	int getVehicles() const;
 	/// Gets the craft's cost.
 	int getBuyCost() const;
+	/// Gets the craft's rent for a month.
+	int getRentCost() const;
+	/// Gets the craft's value.
+	int getSellCost() const;
 	/// Gets the craft's refuel item.
 	std::string getRefuelItem() const;
 	/// Gets the craft's repair rate.
@@ -89,7 +97,10 @@ public:
 	int getScore() const;
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
-	bool getSpacecraft() const { return _spacecraft; }
+	/// Is this craft capable of travelling to mars.
+	bool getSpacecraft() const;
+	/// get the list weight for this craft.
+	int getListOrder() const;
 };
 
 }

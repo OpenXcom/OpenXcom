@@ -12,27 +12,29 @@
 # norootforbuild
 
 Name:           openxcom
-Version:        0.4.5
+Version:        0.9.0
 Release:        0
 Group:          Amusements/Games/Strategy/Turn Based 
-License:        GPL
+License:        GPL-2.0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 URL:            http://openxcom.org/
 Source0:        %{name}-%{version}.tar.gz
-Summary:        Open source X-Com
+Summary:        Open source remake of the original X-COM
 BuildRequires:  cmake 
 BuildRequires:  gcc-c++ 
 BuildRequires:  gcc 
 BuildRequires:  fdupes
 BuildRequires:	pkg-config
 BuildRequires:	timidity
+Requires:	timidity
 BuildRequires:	libSDL-devel
 BuildRequires:	libSDL_mixer-devel
+BuildRequires:	libSDL_image-devel
 BuildRequires:	libSDL_gfx-devel >= 2.0.21
-BuildRequires:	yaml-cpp-devel
+BuildRequires:	yaml-cpp-devel < 0.5.0
 
 %description
-Open source reimplementation of the original X-Com
+OpenXcom is an open-source clone of the popular UFO: Enemy Unknown (X-COM: UFO Defense in USA) video game by Microprose, licensed under the GPL and written in C++ / SDL. OpenXcom requires game resources from the original game (DOS, Windows or Steam version)
 
 %prep
 %setup -q
@@ -43,7 +45,7 @@ mkdir temp
 cd temp
 cmake  -DBUILD_PACKAGE:BOOL=ON \
        -DDEV_BUILD:BOOL=OFF \
-       -DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
+       -DCMAKE_INSTALL_PREFIX:PATH=/usr \
        -DCMAKE_BUILD_TYPE:STRING="Release" ../%{name}-%{version}/
 
 make VERBOSE=1 %{?_smp_mflags}
@@ -63,8 +65,8 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%dir /usr/local/share/openxcom
-/usr/local/share/openxcom/*
-/usr/local/bin/openxcom
+%dir /usr/share/openxcom
+/usr/share/openxcom/*
+/usr/bin/openxcom
 
 %changelog

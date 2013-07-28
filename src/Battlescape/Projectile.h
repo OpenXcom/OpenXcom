@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,7 +45,6 @@ private:
 	Position _origin;
 	std::vector<Position> _trajectory;
 	unsigned int _position;
-	static const int _trail[11][36];
 	Surface *_sprite;
 	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0);
 public:

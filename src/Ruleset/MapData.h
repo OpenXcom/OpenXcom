@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,9 +53,9 @@ class MapData
 private:
 	MapDataSet *_dataset;
 	SpecialTileType _specialType;
-	bool _isUfoDoor, _stopLOS, _isNoFloor, _isBigWall, _isGravLift, _isDoor, _blockFire, _blockSmoke;
+	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke;
 	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
-	int _armor, _flammable, _fuel, _explosive;
+	int _armor, _flammable, _fuel, _explosive, _bigWall;
 	int _sprite[8];
 	int _block[6];
 	int _loftID[12];
@@ -78,13 +78,13 @@ public:
 	/// Can we walk over it.
 	bool isNoFloor() const;
 	/// Can we walk over it.
-	bool isBigWall() const;
+	int getBigWall() const;
 	/// Is a normal door.
 	bool isDoor() const;
 	/// Is a grav lift.
 	bool isGravLift() const;
 	/// Sets all kinds of flags.
-	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, bool isBigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
+	void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
 	/// Get the amount of blockage of a certain type.
 	int getBlock(ItemDamageType type) const;
 	/// Sets the amount of blockage for all types.
@@ -147,6 +147,12 @@ public:
 	void setMiniMapIndex(unsigned short i);
 	/// Get the MiniMap index
 	unsigned short getMiniMapIndex() const;
+	/// set the bigwall int
+	void setBigWall(const int bigWall);
+	/// set the TU values individually
+	void setTUWalk(const int TUWalk);
+	void setTUFly(const int TUFly);
+	void setTUSlide(const int TUSlide);
 };
 
 }

@@ -13,6 +13,7 @@
 #include <yaml-cpp/yaml.h>
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 #include "OpenGL.h"
 #include "Logger.h"
@@ -61,6 +62,7 @@ std::string strGLError(GLenum glErr)
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
 
+#ifndef __APPLE__
 PFNGLCREATEPROGRAMPROC glCreateProgram = 0;
 PFNGLUSEPROGRAMPROC glUseProgram = 0;
 PFNGLCREATESHADERPROC glCreateShader = 0;
@@ -74,6 +76,7 @@ PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation = 0;
 PFNGLUNIFORM1IPROC glUniform1i = 0;
 PFNGLUNIFORM2FVPROC glUniform2fv = 0;
 PFNGLUNIFORM4FVPROC glUniform4fv = 0;
+#endif
 
 void * (APIENTRYP glXGetCurrentDisplay)() = 0;
 Uint32 (APIENTRYP glXGetCurrentDrawable)() = 0;
@@ -259,6 +262,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glEnable(GL_TEXTURE_2D);
 
     //bind shader functions
+#ifndef __APPLE__
     glCreateProgram = (PFNGLCREATEPROGRAMPROC)glGetProcAddress("glCreateProgram");
     glUseProgram = (PFNGLUSEPROGRAMPROC)glGetProcAddress("glUseProgram");
     glCreateShader = (PFNGLCREATESHADERPROC)glGetProcAddress("glCreateShader");
@@ -272,7 +276,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glUniform1i = (PFNGLUNIFORM1IPROC)glGetProcAddress("glUniform1i");
     glUniform2fv = (PFNGLUNIFORM2FVPROC)glGetProcAddress("glUniform2fv");
     glUniform4fv = (PFNGLUNIFORM4FVPROC)glGetProcAddress("glUniform4fv");
-
+#endif
 	glXGetCurrentDisplay = (void* (APIENTRYP)())glGetProcAddress("glXGetCurrentDisplay");
 	glXGetCurrentDrawable = (Uint32 (APIENTRYP)())glGetProcAddress("glXGetCurrentDrawable");
 	glXSwapIntervalEXT = (void (APIENTRYP)(void*, Uint32, int))glGetProcAddress("glXSwapIntervalEXT");
@@ -318,26 +322,21 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     }
 
     if(buffer) {
-      delete[] buffer;
       buffer = 0;
       iwidth = 0;
       iheight = 0;
     }
+
+    delete buffer_surface;
   }
 
-  OpenGL::OpenGL() {
-    gltexture = 0;
-    glprogram = 0;
-    fragmentshader = 0;
-    linear = 0;
-    vertexshader = 0;
+  OpenGL::OpenGL() : gltexture(0), glprogram(0), fragmentshader(0), linear(false), vertexshader(0),
+                     buffer(NULL), buffer_surface(NULL), iwidth(0), iheight(0),
+                     iformat(GL_UNSIGNED_INT_8_8_8_8_REV), // this didn't seem to be set anywhere before...
+                     ibpp(32)                              // ...nor this
+  { }
 
-    buffer = 0;
-    iwidth = 0;
-    iheight = 0;
-	ibpp = 32; // this didn't seem to be set anywhere before...
-	iformat = GL_UNSIGNED_INT_8_8_8_8_REV; // nor this
-	buffer_surface = 0;
+  OpenGL::~OpenGL() {
+    term();
   }
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,21 +24,26 @@
 namespace OpenXcom
 {
 	
+namespace
+{
+	
 const Uint32 accurate = 4;
-Uint32 slowness = 1;
 Uint32 slowTick()
 {
 	static Uint32 old_time = SDL_GetTicks();
 	static Uint64 false_time = static_cast<Uint64>(old_time) << accurate;
 	Uint64 new_time = ((Uint64)SDL_GetTicks()) << accurate;
-	false_time += (new_time - old_time) / slowness;
+	false_time += (new_time - old_time) / Timer::gameSlowSpeed;
 	old_time = new_time;
 	return false_time >> accurate;
 }
 
+}//namespace
+
+Uint32 Timer::gameSlowSpeed = 1;
 int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS. 
-	
-	
+
+
 /**
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.

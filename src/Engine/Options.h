@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,8 +49,6 @@ namespace Options
 	void load(const std::string &filename = "options");
 	/// Saves options to YAML.
 	void save(const std::string &filename = "options");
-	/// Gets the current game version.
-	std::string getVersion();
 	/// Gets the game's data folder.
 	std::string getDataFolder();
 	/// Sets the game's data folder.
@@ -59,6 +57,10 @@ namespace Options
 	std::vector<std::string> *getDataList();
 	/// Gets the game's user folder.
 	std::string getUserFolder();
+	/// Sets the game's data, user and config folders.
+	void setFolders();
+	/// Update game options from config file and command line.
+	void updateOptions();
 	/// Gets a string option.
 	std::string getString(const std::string& id);
 	/// Gets an integer option.

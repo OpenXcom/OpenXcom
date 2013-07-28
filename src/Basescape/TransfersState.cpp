@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -49,7 +50,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_txtItem = new Text(114, 8, 16, 34);
 	_txtQuantity = new Text(54, 8, 152, 34);
 	_txtArrivalTime = new Text(112, 8, 212, 34);
-	_lstTransfers = new TextList(271, 112, 16, 50);
+	_lstTransfers = new TextList(273, 112, 14, 50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -62,6 +63,8 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	add(_txtArrivalTime);
 	add(_lstTransfers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -69,6 +72,8 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransfersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();

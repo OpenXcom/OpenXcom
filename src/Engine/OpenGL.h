@@ -20,7 +20,7 @@ namespace OpenXcom
 {
 
 #define glGetProcAddress(name) SDL_GL_GetProcAddress(name)
-
+#ifndef __APPLE__
 extern PFNGLCREATEPROGRAMPROC glCreateProgram;
 extern PFNGLUSEPROGRAMPROC glUseProgram;
 extern PFNGLCREATESHADERPROC glCreateShader;
@@ -34,7 +34,7 @@ extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
 extern PFNGLUNIFORM1IPROC glUniform1i;
 extern PFNGLUNIFORM2FVPROC glUniform2fv;
 extern PFNGLUNIFORM4FVPROC glUniform4fv;
-
+#endif
 std::string strGLError(GLenum glErr);
 
 #define glErrorCheck() {\
@@ -89,6 +89,7 @@ public:
   void setVSync(bool sync);
   /// constructor -- like we said, we're too cool to actually construct things
   OpenGL();
+  ~OpenGL();
 };
 
 }

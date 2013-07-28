@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -49,6 +49,7 @@ namespace OpenXcom
  * @param craft Pointer to the craft to confirm.
  * @param texture Texture of the landing site.
  * @param shade Shade of the landing site.
+ * @param state Pointer to Geoscape.
  */
 ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state)
 {
@@ -59,7 +60,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
 	_txtCraft = new Text(206, 16, 25, 40);
-	_txtTarget = new Text(206, 16, 25, 88);
+	_txtTarget = new Text(206, 32, 25, 88);
 	_txtReady = new Text(206, 32, 25, 56);
 	_txtBegin = new Text(206, 16, 25, 130);
 
@@ -73,6 +74,8 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	add(_txtTarget);
 	add(_txtReady);
 	add(_txtBegin);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
@@ -96,6 +99,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_txtTarget->setColor(Palette::blockOffset(8)+10);
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
+	_txtTarget->setWordWrap(true);
 	_txtTarget->setText(_craft->getDestination()->getName(_game->getLanguage()));
 
 	_txtReady->setColor(Palette::blockOffset(8)+5);

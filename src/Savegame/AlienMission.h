@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -68,7 +68,7 @@ public:
 	/// Gets the mission's region.
 	const std::string &getRegion() const { return _region; }
 	/// Sets the mission's region.
-	void setRegion(const std::string &region) { _region = region; }
+	void setRegion(const std::string &region, const Ruleset &rules);
 	/// Gets the mission's race.
 	const std::string &getRace() const { return _race; }
 	/// Sets the mission's race.

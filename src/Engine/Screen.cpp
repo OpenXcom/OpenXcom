@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,6 +29,7 @@
 #include "CrossPlatform.h"
 #include "Zoom.h"
 #include "OpenGL.h"
+#include "Timer.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -44,6 +45,7 @@ void Screen::makeVideoFlags()
 	if (Options::getBool("asyncBlit")) _flags |= SDL_ASYNCBLIT;
 	if (isOpenGLEnabled()) _flags = SDL_OPENGL;
 	if (Options::getBool("allowResize")) _flags |= SDL_RESIZABLE;
+	if (Options::getBool("borderless")) _flags |= SDL_NOFRAME;
 	if (_fullscreen)
 	{
 		_flags |= SDL_FULLSCREEN;
@@ -109,6 +111,19 @@ Surface *Screen::getSurface()
  */
 void Screen::handle(Action *action)
 {
+	if (Options::getBool("debug"))
+	{
+		if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_F8)
+		{
+			switch(Timer::gameSlowSpeed)
+			{
+				case 1: Timer::gameSlowSpeed = 5; break;
+				case 5: Timer::gameSlowSpeed = 15; break;
+				default: Timer::gameSlowSpeed = 1; break;
+			}				
+		}
+	}
+	
 	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == SDLK_RETURN && (SDL_GetModState() & KMOD_ALT) != 0)
 	{
 		setFullscreen(!_fullscreen);
@@ -388,10 +403,31 @@ bool Screen::isHQXEnabled()
 	return false;
 }
 
-
+/**
+ * Check if openGl is enabled.
+ * @return if it is enabled.
+ */
 bool Screen::isOpenGLEnabled()
 {
 	return Options::getBool("useOpenGL");
+}
+
+/**
+ * Gets the Horizontal offset from the mid-point of the screen, in pixels.
+ * @return the horizontal offset.
+ */
+int Screen::getDX()
+{
+	return (BASE_WIDTH - 320) / 2;
+}
+
+/**
+ * Gets the Vertical offset from the mid-point of the screen, in pixels.
+ * @return the vertical offset.
+ */
+int Screen::getDY()
+{
+	return (BASE_HEIGHT - 200) / 2;
 }
 
 }

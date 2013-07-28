@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,6 +26,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -40,7 +41,6 @@
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
-#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -54,11 +54,12 @@ namespace OpenXcom
 CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) : State(game), _sel(0), _base(base), _craft(craft)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	bool allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
+	_btnOk = new TextButton(140, 16, 164, 176);
+	_btnClear = new TextButton(140, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
@@ -72,6 +73,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	add(_window);
 	add(_btnOk);
+	add(_btnClear);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtStores);
@@ -80,6 +82,8 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	add(_txtCrew);
 	add(_lstEquipment);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
@@ -87,6 +91,11 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	
+	_btnClear->setColor(Palette::blockOffset(15)+1);
+	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
+	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -124,14 +133,14 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
-	if (allowChangeListValuesByMouseWheel) _lstEquipment->setAllowScrollOnArrowButtons(false);
+	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstEquipment->onLeftArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowPress);
 	_lstEquipment->onLeftArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowRelease);
 	_lstEquipment->onLeftArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentLeftArrowClick);
 	_lstEquipment->onRightArrowPress((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowPress);
 	_lstEquipment->onRightArrowRelease((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowRelease);
 	_lstEquipment->onRightArrowClick((ActionHandler)&CraftEquipmentState::lstEquipmentRightArrowClick);
-	if (allowChangeListValuesByMouseWheel) _lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
+	_lstEquipment->onMousePress((ActionHandler)&CraftEquipmentState::lstEquipmentMousePress);
 
 	int row = 0;
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
@@ -232,7 +241,7 @@ void CraftEquipmentState::btnOkClick(Action *)
 void CraftEquipmentState::lstEquipmentLeftArrowPress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLeft->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerLeft->isRunning()) _timerLeft->start();
 }
 
 /**
@@ -243,7 +252,6 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLeft->setInterval(250);
 		_timerLeft->stop();
 	}
 }
@@ -254,8 +262,13 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action *action)
  */
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeft(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveLeft(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveLeftByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		moveLeftByValue(1);
+		_timerRight->setInterval(250);
+		_timerLeft->setInterval(250);
+	}
 }
 
 /**
@@ -265,7 +278,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action *action)
 void CraftEquipmentState::lstEquipmentRightArrowPress(Action *action)
 {
 	_sel = _lstEquipment->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerRight->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerRight->isRunning()) _timerRight->start();
 }
 
 /**
@@ -276,7 +289,6 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerRight->setInterval(250);
 		_timerRight->stop();
 	}
 }
@@ -287,8 +299,13 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action *action)
  */
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRight(INT_MAX);
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moveRight(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moveRightByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		moveRightByValue(1);
+		_timerRight->setInterval(250);
+		_timerLeft->setInterval(250);
+	}
 }
 
 /**
@@ -297,11 +314,28 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action *action)
  */
 void CraftEquipmentState::lstEquipmentMousePress(Action *action)
 {
-	if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge() && action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+	_sel = _lstEquipment->getSelectedRow();
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-		_sel = _lstEquipment->getSelectedRow();
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moveRight(_changeValueByMouseWheel);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) moveLeft(_changeValueByMouseWheel);
+		_timerRight->stop();
+		_timerLeft->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		{
+			moveRightByValue(_changeValueByMouseWheel);
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+	{
+		_timerRight->stop();
+		_timerLeft->stop();
+		if (_allowChangeListValuesByMouseWheel
+			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
+			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
+		{
+			moveLeftByValue(_changeValueByMouseWheel);
+		}
 	}
 }
 
@@ -361,13 +395,15 @@ void CraftEquipmentState::updateQuantity()
 void CraftEquipmentState::moveLeft()
 {
 	_timerLeft->setInterval(50);
-	moveLeft(1);
+	_timerRight->setInterval(50);
+	moveLeftByValue(1);
 }
 
 /**
  * Moves the given number of items (selected) to the base.
+ * @param change Item difference.
  */
-void CraftEquipmentState::moveLeft(int change)
+void CraftEquipmentState::moveLeftByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
@@ -393,13 +429,19 @@ void CraftEquipmentState::moveLeft(int change)
 				}
 				else ++i;
 			}
-			_base->getItems()->addItem(_items[_sel], cQty);
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				_base->getItems()->addItem(_items[_sel], cQty);
+			}
 			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
-			if (cQty > change) moveRight(cQty - change);
+			if (cQty > change) moveRightByValue(cQty - change);
 		}
 		else
 		{
-			_base->getItems()->addItem(_items[_sel], change);
+			if (_game->getSavedGame()->getMonthsPassed() != -1)
+			{
+				_base->getItems()->addItem(_items[_sel], change);
+			}
 			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
 			{
 				if ((*i)->getRules() == item)
@@ -415,10 +457,13 @@ void CraftEquipmentState::moveLeft(int change)
 	else
 	{
 		c->getItems()->removeItem(_items[_sel], change);
-		_base->getItems()->addItem(_items[_sel], change);
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
 			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
+		}
+		else
+		{
+			_base->getItems()->addItem(_items[_sel], change);
 		}
 	}
 	updateQuantity();
@@ -429,18 +474,28 @@ void CraftEquipmentState::moveLeft(int change)
  */
 void CraftEquipmentState::moveRight()
 {
+	_timerLeft->setInterval(50);
 	_timerRight->setInterval(50);
-	moveRight(1);
+	moveRightByValue(1);
 }
 
 /**
  * Moves the given number of items (selected) to the craft.
+ * @param change Item difference.
  */
-void CraftEquipmentState::moveRight(int change)
+void CraftEquipmentState::moveRightByValue(int change)
 {
 	Craft *c = _base->getCrafts()->at(_craft);
 	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
 	int bqty = _base->getItems()->getItem(_items[_sel]);
+	if (_game->getSavedGame()->getMonthsPassed() == -1)
+	{
+		if (change == INT_MAX)
+		{
+			change = 10;
+		}
+		bqty = change;
+	}
 	if (0 >= change || 0 >= bqty) return;
 	change = std::min(bqty, change);
 	// Do we need to convert item to vehicle?
@@ -458,7 +513,7 @@ void CraftEquipmentState::moveRight(int change)
 				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
 				int newVehiclesCount = oldVehiclesCount + change;
 				// ...and we move back all of this vehicle-type to the base.
-				if (0 < oldVehiclesCount) moveLeft(INT_MAX);
+				if (0 < oldVehiclesCount) moveLeftByValue(INT_MAX);
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
@@ -474,8 +529,11 @@ void CraftEquipmentState::moveRight(int change)
 						newAmmo = newAmmoPerVehicle;
 						if (i<remainder) ++newAmmo;
 						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
-						_base->getItems()->removeItem(ammo->getType(), newAmmo);
-						_base->getItems()->removeItem(_items[_sel]);
+						if (_game->getSavedGame()->getMonthsPassed() != -1)
+						{
+							_base->getItems()->removeItem(ammo->getType(), newAmmo);
+							_base->getItems()->removeItem(_items[_sel]);
+						}
 					}
 				}
 				if (oldVehiclesCount >= canBeAdded)
@@ -490,20 +548,36 @@ void CraftEquipmentState::moveRight(int change)
 				for (int i=0; i < change; ++i)
 				{
 					c->getVehicles()->push_back(new Vehicle(item, 255));
-					_base->getItems()->removeItem(_items[_sel]);
+						if (_game->getSavedGame()->getMonthsPassed() != -1)
+						{
+							_base->getItems()->removeItem(_items[_sel]);
+						}
 				}
 		}
 	}
 	else
 	{
-		_base->getItems()->removeItem(_items[_sel],change);
 		c->getItems()->addItem(_items[_sel],change);
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
 				Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
 		}
+		else
+		{
+			_base->getItems()->removeItem(_items[_sel],change);
+		}
 	}
 	updateQuantity();
 }
 
+/**
+ * Empties the contents of the craft, moving all of the items back to the base.
+ */
+void CraftEquipmentState::btnClearClick(Action *)
+{
+	for (_sel = 0; _sel != _items.size(); ++_sel)
+	{
+		moveLeftByValue(INT_MAX);
+	}
+}
 }

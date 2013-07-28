@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,9 +34,11 @@
 #include "SavedGame.h"
 #include "TerrorSite.h"
 #include "Ufo.h"
+#include "Craft.h"
 #include "Region.h"
 #include "Country.h"
 #include "Waypoint.h"
+#include <assert.h>
 #include <algorithm>
 #include <functional>
 
@@ -218,9 +220,8 @@ void AlienMission::think(Game &engine, const Globe &globe)
 	}
 	if (_nextWave != _rule.getWaveCount())
 	{
-		const MissionWave &nwave = _rule.getWave(_nextWave);
-		int half = nwave.spawnTimer/2;
-		_spawnCountdown = (2 * RNG::generate(0, 1) - 1) * half/2 + half;
+		int spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
+		_spawnCountdown = (spawnTimer/2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 }
 
@@ -250,7 +251,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 			const UfoTrajectory &assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
 			Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
 			ufo->setMissionInfo(this, &assaultTrajectory);
-			std::pair<double, double> pos = regionRules.getRandomPoint(assaultTrajectory.getZone(0));
+			std::pair<double, double> pos;
+			if (trajectory.getAltitude(0) == "STR_GROUND")
+			{
+				pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
+			}
+			else
+			{
+				pos = regionRules.getRandomPoint(trajectory.getZone(0));
+			}
 			ufo->setAltitude(assaultTrajectory.getAltitude(0));
 			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 			ufo->setLongitude(pos.first);
@@ -274,7 +283,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 		Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 		ufo->setMissionInfo(this, &trajectory);
 		const RuleRegion &regionRules = *ruleset.getRegion(_region);
-		std::pair<double, double> pos = regionRules.getRandomPoint(trajectory.getZone(0));
+		std::pair<double, double> pos;
+		if (trajectory.getAltitude(0) == "STR_GROUND")
+		{
+			pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
+		}
+		else
+		{
+			pos = regionRules.getRandomPoint(trajectory.getZone(0));
+		}
 		ufo->setAltitude(trajectory.getAltitude(0));
 		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 		ufo->setLongitude(pos.first);
@@ -307,7 +324,15 @@ Ufo *AlienMission::spawnUfo(const SavedGame &game, const Ruleset &ruleset, const
 	Ufo *ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion &regionRules = *ruleset.getRegion(_region);
-	std::pair<double, double> pos = regionRules.getRandomPoint(trajectory.getZone(0));
+	std::pair<double, double> pos;
+	if (trajectory.getAltitude(0) == "STR_GROUND")
+	{
+		pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
+	}
+	else
+	{
+		pos = regionRules.getRandomPoint(trajectory.getZone(0));
+	}
 	ufo->setAltitude(trajectory.getAltitude(0));
 	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
 	ufo->setLongitude(pos.first);
@@ -334,8 +359,8 @@ void AlienMission::start(unsigned initialCount)
 	_liveUfos = 0;
 	if (initialCount == 0)
 	{
-		int half = _rule.getWave(0).spawnTimer/2;
-		_spawnCountdown = half + (2 * RNG::generate(0, 1) - 1) * half/2;
+		int spawnTimer = _rule.getWave(0).spawnTimer / 30;
+		_spawnCountdown = (spawnTimer / 2 + RNG::generate(0, spawnTimer)) * 30;
 	}
 	else
 	{
@@ -379,6 +404,10 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	ufo.setAltitude(ufo.getTrajectory().getAltitude(ufo.getTrajectoryPoint() + 1));
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
+		if (ufo.getLandId() != 0)
+		{
+			ufo.setLandId(0);
+		}
 		ufo.setTrajectoryPoint(ufo.getTrajectoryPoint() + 1);
 		// Set next waypoint.
 		Waypoint *wp = new Waypoint();
@@ -407,7 +436,6 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			// Remove UFO, replace with TerrorSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
 			ufo.setStatus(Ufo::DESTROYED);
-			ufo.setDetected(false);
 			TerrorSite *terrorSite = new TerrorSite();
 			terrorSite->setLongitude(ufo.getLongitude());
 			terrorSite->setLatitude(ufo.getLatitude());
@@ -417,6 +445,19 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 			const City *city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
 			assert(city);
 			game.getTerrorSites()->push_back(terrorSite);
+			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
+			{
+				Craft* c = dynamic_cast<Craft*>(*t);
+				if (c && c->getNumSoldiers() != 0)
+				{
+					c->setDestination(terrorSite);
+					t = ufo.getFollowers()->begin();
+				}
+				else
+				{
+					++t;
+				}
+			}
 		}
 		else if (_rule.getType() == "STR_ALIEN_RETALIATION" && ufo.getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 		{
@@ -438,6 +479,10 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 		{
 			// Set timer for UFO on the ground.
 			ufo.setSecondsRemaining(ufo.getTrajectory().groundTimer());
+			if (ufo.getDetected() && ufo.getLandId() == 0)
+			{
+				ufo.setLandId(engine.getSavedGame()->getId("STR_LANDING_SITE"));
+			}
 		}
 	}
 }
@@ -621,4 +666,24 @@ void AlienMission::spawnAlienBase(Ufo* ufo, const Globe &globe, Game &engine)
 	addScore(pos.first, pos.second, engine);
 }
 
+/*
+ * Sets the mission's region. if the region is incompatible with
+ * actually carrying out an attack, use the "fallback" region as
+ * defined in the ruleset.
+ * (this is a slight difference from the original, which just
+ * defaulted them to zone[0], North America)
+ * @param region the region we want to try to set the mission to.
+ * @param rules the ruleset, in case we need to swap out the region.
+ */
+void AlienMission::setRegion(const std::string &region, const Ruleset &rules)
+{
+	if (rules.getRegion(region)->getMissionRegion() != "")
+	{
+		_region = rules.getRegion(region)->getMissionRegion();
+	}
+	else
+	{
+		_region = region;
+	}
+}
 }

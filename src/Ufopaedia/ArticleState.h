@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,6 @@
 #define OPENXCOM_ARTICLESTATE_H
 
 #include "../Engine/State.h"
-#include "Ufopaedia.h"
 #include <string>
 
 namespace OpenXcom

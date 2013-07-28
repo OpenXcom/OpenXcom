@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,7 @@ namespace OpenXcom
 	 * Constructor
 	 * @param type_id Article type of this instance.
 	 */
-	ArticleDefinition::ArticleDefinition(UfopaediaTypeId type_id) : _type_id(type_id)
+	ArticleDefinition::ArticleDefinition(UfopaediaTypeId type_id) : _type_id(type_id), _listOrder(0)
 	{}
 
 	/**
@@ -47,8 +47,9 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinition::load(const YAML::Node &node)
+	void ArticleDefinition::load(const YAML::Node &node, int listOrder)
 	{
 		int a = 0;
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
@@ -77,8 +78,17 @@ namespace OpenXcom
 			{
 				i.second() >> requires;
 			}
+			else if (key == "listOrder")
+			{
+				i.second() >> _listOrder;
+			}
+		}
+		if (!_listOrder)
+		{
+			_listOrder = listOrder;
 		}
 	}
+	
 
 	/**
 	 * Saves the article definition to a YAML file.
@@ -92,6 +102,14 @@ namespace OpenXcom
 		out << YAML::Key << "title" << YAML::Value << title;
 		out << YAML::Key << "section" << YAML::Value << section;
 		out << YAML::Key << "requires" << YAML::Value << requires;
+	}
+
+	/*
+	 * @return the list weight of the article.
+	 */
+	int ArticleDefinition::getListOrder() const
+	{
+		return _listOrder;
 	}
 
 	/**
@@ -138,10 +156,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionCraft::load(const YAML::Node &node)
+	void ArticleDefinitionCraft::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -188,10 +207,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionCraftWeapon::load(const YAML::Node &node)
+	void ArticleDefinitionCraftWeapon::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -228,10 +248,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionText::load(const YAML::Node &node)
+	void ArticleDefinitionText::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -263,10 +284,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionTextImage::load(const YAML::Node &node)
+	void ArticleDefinitionTextImage::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -308,10 +330,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionBaseFacility::load(const YAML::Node &node)
+	void ArticleDefinitionBaseFacility::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -343,10 +366,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionItem::load(const YAML::Node &node)
+	void ArticleDefinitionItem::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -378,10 +402,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionUfo::load(const YAML::Node &node)
+	void ArticleDefinitionUfo::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;
@@ -413,10 +438,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionArmor::load(const YAML::Node &node)
+	void ArticleDefinitionArmor::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 	}
 
 	/**
@@ -438,10 +464,11 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
+	 * @param listOrder the list weight for this article.
 	 */
-	void ArticleDefinitionVehicle::load(const YAML::Node &node)
+	void ArticleDefinitionVehicle::load(const YAML::Node &node, int listOrder)
 	{
-		ArticleDefinition::load(node);
+		ArticleDefinition::load(node, listOrder);
 		for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 		{
 			std::string key;

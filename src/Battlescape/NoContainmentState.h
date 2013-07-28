@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,20 +33,19 @@ class Text;
 class TextList;
 
 /**
- * Screen shown when there's not enough equipment
- * to re-equip a craft after a mission.
+ * Screen shown when there's not enough containment
+ * to capture a live alien after a mission.
  */
 class NoContainmentState : public State
 {
 private:
 	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtCraft;
-	TextList *_lstItems;
+	Text *_txtTitle;
 public:
-	/// Creates the Cannot Reequip state.
+	/// Creates the No Containment state.
 	NoContainmentState(Game *game);
-	/// Cleans up the Cannot Reequip state.
+	/// Cleans up the No Containment state.
 	~NoContainmentState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);

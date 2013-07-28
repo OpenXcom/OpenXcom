@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,20 +22,18 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
-#include "ResearchState.h"
-#include "NewResearchListState.h"
 #include "../Interface/ArrowButton.h"
 #include "../Engine/Timer.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Options.h"
-
 #include <sstream>
 #include <limits>
 
@@ -84,6 +82,7 @@ void ResearchInfoState::buildUi ()
 	int button_x_border = 16;
 	int button_y_border = 10;
 	int button_height = 16;
+	int footer_button_width = width / 2 - (4 + button_x_border);
 
 	_screen = false;
 	_window = new Window(this, width, height, start_x, start_y);
@@ -95,7 +94,8 @@ void ResearchInfoState::buildUi ()
 	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
 	_txtMore = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
 	_txtLess = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
-	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnCancel = new TextButton(footer_button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnOk = new TextButton(footer_button_width, button_height, start_x + button_x_border + footer_button_width + 8, start_y + height - button_height - button_y_border);
 
 	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
@@ -103,6 +103,7 @@ void ResearchInfoState::buildUi ()
 	add(_surface);
 	add(_window);
 	add(_btnOk);
+	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtAvailableScientist);
 	add(_txtAvailableSpace);
@@ -111,6 +112,8 @@ void ResearchInfoState::buildUi ()
 	add(_txtLess);
 	add(_btnMore);
 	add(_btnLess);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+5);
@@ -142,6 +145,12 @@ void ResearchInfoState::buildUi ()
 	if (_rule)
 	{
 		_base->addResearch(_project);
+		if (_rule->needItem() &&
+				(_game->getRuleset()->getUnit(_rule->getName()) ||
+				 Options::getBool("researchedItemsWillSpent")))
+		{
+			_base->getItems()->removeItem(_rule->getName(), 1);
+		}
 	}
 	SetAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+5);
@@ -161,6 +170,19 @@ void ResearchInfoState::buildUi ()
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
+	if (_rule)
+	{
+		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+		_btnCancel->onKeyboardPress((ActionHandler)&ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	}
+	else
+	{
+		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_PROJECT"));
+		_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	}
+	_btnCancel->onMouseClick((ActionHandler)&ResearchInfoState::btnCancelClick);
 }
 
 /**
@@ -169,6 +191,24 @@ void ResearchInfoState::buildUi ()
  */
 void ResearchInfoState::btnOkClick(Action *)
 {
+	_game->popState();
+}
+
+/**
+ * Returns to the previous screen, removing the current project from the active
+ * research list.
+ * @param action Pointer to an action.
+ */
+void ResearchInfoState::btnCancelClick(Action *)
+{
+	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
+	if (ruleResearch->needItem() &&
+			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
+			 Options::getBool("researchedItemsWillSpent")))
+	{
+		_base->getItems()->addItem(ruleResearch->getName(), 1);
+	}
+	_base->removeResearch(_project);
 	_game->popState();
 }
 
@@ -194,8 +234,8 @@ void ResearchInfoState::SetAssignedScientist()
  */
 void ResearchInfoState::handleWheel(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) more(_changeValueByMouseWheel);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) less(_changeValueByMouseWheel);
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreByValue(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessByValue(_changeValueByMouseWheel);
 }
 
 /**
@@ -227,9 +267,9 @@ void ResearchInfoState::moreRelease(Action *action)
 void ResearchInfoState::moreClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		more(std::numeric_limits<int>::max());
+		moreByValue(std::numeric_limits<int>::max());
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		more(1);
+		moreByValue(1);
 }
 
 /**
@@ -261,9 +301,9 @@ void ResearchInfoState::lessRelease(Action *action)
 void ResearchInfoState::lessClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		less(std::numeric_limits<int>::max());	
+		lessByValue(std::numeric_limits<int>::max());	
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		less(1);
+		lessByValue(1);
 }
 
 /**
@@ -272,14 +312,14 @@ void ResearchInfoState::lessClick(Action *action)
 void ResearchInfoState::more()
 {	
 	_timerMore->setInterval(50);
-	more(1);
+	moreByValue(1);
 }
 
 /**
  * Add given number of scientists to the project if possible
  * @param change how much we want to add
  */
-void ResearchInfoState::more(int change)
+void ResearchInfoState::moreByValue(int change)
 {
 	if (0 >= change) return;
 	int freeScientist = _base->getAvailableScientists();
@@ -299,14 +339,14 @@ void ResearchInfoState::more(int change)
 void ResearchInfoState::less()
 {
 	_timerLess->setInterval(50);
-	less(1);
+	lessByValue(1);
 }
 
 /**
  * Remove the given number of scientists from the project if possible
  * @param change how much we want to subtract
  */
-void ResearchInfoState::less(int change)
+void ResearchInfoState::lessByValue(int change)
 {
 	if (0 >= change) return;
 	int assigned = _project->getAssigned();

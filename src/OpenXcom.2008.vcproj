@@ -49,7 +49,9 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pch.h"
+				ForcedIncludeFiles="pch.h"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -129,7 +131,9 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pch.h"
+				ForcedIncludeFiles="pch.h"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
@@ -207,7 +211,9 @@
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pch.h"
+				ForcedIncludeFiles="pch.h"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -287,7 +293,9 @@
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\deps\include&quot;;&quot;$(ProjectDir)..\deps\include\SDL&quot;;&quot;$(ProjectDir)..\deps\include\yaml-cpp&quot;"
 				PreprocessorDefinitions="LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="pch.h"
+				ForcedIncludeFiles="pch.h"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
@@ -542,8 +550,44 @@
 				RelativePath=".\Engine\Zoom.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Engine\OpenGL.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\OpenGL.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\FixedFloat.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\GraphSubset.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\ShaderDraw.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\ShaderDrawHelper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\ShaderMove.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\ShaderRepeat.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Engine\ShaderRotate.h"
+				>
+			</File>
 			<Filter
-				Name="Interface"
+				Name="Scalers"
 				>
 				<File
 					RelativePath=".\Engine\Scalers\common.h"
@@ -698,6 +742,22 @@
 		<Filter
 			Name="Basescape"
 			>
+			<File
+				RelativePath=".\Basescape\PlaceStartFacilityState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\PlaceStartFacilityState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SelectStartFacilityState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SelectStartFacilityState.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Basescape\BaseInfoState.cpp"
 				>
@@ -883,6 +943,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\SackSoldierState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SackSoldierState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\SellState.cpp"
 				>
 			</File>
@@ -1052,14 +1120,6 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\BriefingState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\BulletSprite.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\BulletSprite.h"
 				>
 			</File>
 			<File
@@ -1651,14 +1711,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Geoscape\UfoHyperDetectedState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Geoscape\UfoHyperDetectedState.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Geoscape\UfoLostState.cpp"
 				>
 			</File>
@@ -1672,6 +1724,10 @@
 			</File>
 			<File
 				RelativePath=".\Geoscape\VictoryState.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Geoscape\Cord.h"
 				>
 			</File>
 		</Filter>
@@ -1774,10 +1830,26 @@
 				RelativePath=".\Ufopaedia\UfopaediaStartState.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateVehicle.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ufopaedia\ArticleStateVehicle.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Menu"
 			>
+			<File
+				RelativePath=".\Menu\AdvancedOptionsState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Menu\AdvancedOptionsState.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Menu\DeleteGameState.cpp"
 				>
@@ -2059,6 +2131,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Savegame\SerializationHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SerializationHelper.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Savegame\Soldier.cpp"
 				>
 			</File>
@@ -2130,6 +2210,14 @@
 				RelativePath=".\Savegame\WeightedOptions.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Savegame\CraftWeaponProjectile.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\CraftWeaponProjectile.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource"
@@ -2195,6 +2283,30 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Ruleset\ExtraSprites.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraSprites.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraSounds.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraSounds.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraStrings.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\ExtraStrings.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Ruleset\MapBlock.cpp"
 				>
 			</File>
@@ -2216,6 +2328,14 @@
 			</File>
 			<File
 				RelativePath=".\Ruleset\MapDataSet.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MCDPatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Ruleset\MCDPatch.h"
 				>
 			</File>
 			<File
@@ -2356,35 +2476,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\Ufopaedia\ArticleStateVehicle.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Ufopaedia\ArticleStateVehicle.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Geoscape\Cord.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Savegame\CraftWeaponProjectile.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Savegame\CraftWeaponProjectile.h"
-			>
-		</File>
-		<File
 			RelativePath=".\dirent.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\FixedFloat.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\GraphSubset.h"
 			>
 		</File>
 		<File
@@ -2400,23 +2492,43 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Engine\OpenGL.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\OpenGL.h"
-			>
-		</File>
-		<File
 			RelativePath=".\OpenXcom.rc"
 			>
 		</File>
 		<File
-			RelativePath=".\Basescape\PlaceStartFacilityState.cpp"
+			RelativePath=".\pch.cpp"
 			>
+			<FileConfiguration
+				Name="Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|x64">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|x64">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\Basescape\PlaceStartFacilityState.h"
+			RelativePath=".\pch.h"
 			>
 		</File>
 		<File
@@ -2424,31 +2536,7 @@
 			>
 		</File>
 		<File
-			RelativePath=".\Basescape\SelectStartFacilityState.cpp"
-			>
-		</File>
-		<File
-			RelativePath=".\Basescape\SelectStartFacilityState.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\ShaderDraw.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\ShaderDrawHelper.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\ShaderMove.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\ShaderRepeat.h"
-			>
-		</File>
-		<File
-			RelativePath=".\Engine\ShaderRotate.h"
+			RelativePath=".\version.h"
 			>
 		</File>
 	</Files>

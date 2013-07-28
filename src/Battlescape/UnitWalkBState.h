@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,6 +45,7 @@ private:
     const Position _finalFacing;
     const bool _pathfindForFinalTurn;
 	std::size_t _numUnitsSpotted;
+	int _preMovementCost;
 public:
 	/// Creates a new UnitWalkBState class
 	UnitWalkBState(BattlescapeGame *parent, BattleAction _action, const Position finalFacing = Position(0,0,INT_MAX), const bool pathfindForFinalTurn = true);

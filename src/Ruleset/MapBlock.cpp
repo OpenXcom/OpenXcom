@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -158,11 +158,21 @@ MapBlockType MapBlock::getType() const
 	return _type;
 }
 
+/**
+* Get the secondary type of mapblock, if the primary type is occupied.
+* @return type
+*/
 MapBlockType MapBlock::getSubType() const
 {
 	return _subType;
 }
 
+/**
+* Get either the remaining uses of the mapblock OR THE FREQUENCY!
+* Remaining limits the number of times a mapblock occurs.
+* Frequency increases the odds of a mapblock occuring.
+* @return int
+*/
 int MapBlock::getRemainingUses()
 {
 	if (_maxCount == -1)
@@ -172,6 +182,9 @@ int MapBlock::getRemainingUses()
 	return _maxCount - _timesUsed;
 }
 
+/**
+* Decreases the remaining uses of a mapblock for this session.
+*/
 void MapBlock::markUsed()
 {
 	if (_maxCount == -1)
@@ -185,6 +198,9 @@ void MapBlock::markUsed()
 	}
 }
 
+/**
+* Resets the remaining uses of a mapblock for this session.
+*/
 void MapBlock::reset()
 {
 	_timesUsed = 0;

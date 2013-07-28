@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ const int MAX_FRAME = 2;
  * @param x the MiniMapView x origin
  * @param y the MiniMapView y origin
  * @param game Pointer to the core game.
- * @param map The Battlescape map
+ * @param camera The Battlescape camera.
  * @param battleGame Pointer to the SavedBattleGame
 */
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), isMouseScrolling(false), isMouseScrolled(false)
@@ -153,6 +153,7 @@ void MiniMapView::draw()
 
 /**
  * Increment the displayed level
+ * @return new display level
  */
 int MiniMapView::up ()
 {
@@ -163,6 +164,7 @@ int MiniMapView::up ()
 
 /**
  * Decrement the displayed level
+ * @return new display level
  */
 int MiniMapView::down ()
 {
@@ -180,7 +182,7 @@ void MiniMapView::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-	if (-1 != _battleGame->getDragButton())
+	if (((Uint8)-1) != _battleGame->getDragButton())
 	{
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{

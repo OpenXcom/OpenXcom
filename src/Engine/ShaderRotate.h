@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #ifndef OPENXCOM_SHADERROTATE_H
 #define	OPENXCOM_SHADERROTATE_H
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
 #include "ShaderDraw.h"

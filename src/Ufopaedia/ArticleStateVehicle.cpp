@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -106,14 +106,15 @@ namespace OpenXcom
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
 		_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON").c_str(), _game->getLanguage()->getString(defs->weapon).c_str());
-		
-		std::wstringstream ss8;
-		ss8 << unit->getStats()->tu;
-		_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
-		
+				
 		if (item->getClipSize() != -1)
 		{
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+
+			std::wstringstream ss8;
+			ss8 << ammo->getPower();
+			_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
+
 			_lstStats->addRow(2, _game->getLanguage()->getString("STR_AMMUNITION").c_str(), _game->getLanguage()->getString(ammo->getName()).c_str());
 			
 			std::wstringstream ss9;
@@ -122,6 +123,13 @@ namespace OpenXcom
 			
 			_txtInfo->setY(138);
 		}
+		else
+		{
+			std::wstringstream ss8;
+			ss8 << item->getPower();
+			_lstStats->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
+		}
+		centerAllSurfaces();
 	}
 
 	ArticleStateVehicle::~ArticleStateVehicle()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,6 +59,8 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 	add(_txtQuantity);
 	add(_txtCraft);
 	add(_lstItems);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

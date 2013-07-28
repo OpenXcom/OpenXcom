@@ -56,7 +56,7 @@ public:
 	~CraftWeaponProjectile(void);
 
 	/// Sets projectile type. This determines it's speed.
-	void setType(const std::string &type);
+	void setType(const int type);
 	/// Returns projectile type.
 	int getType() const;
 	/// Returns projectile global type.
@@ -97,6 +97,8 @@ public:
 	void setRange(const int &range);
 	/// Gets maximum range of projectile.
 	int getRange() const;
+	/// Sets the speed of a missile type projectile.
+	void setSpeed(const int speed);
 };
 
 }

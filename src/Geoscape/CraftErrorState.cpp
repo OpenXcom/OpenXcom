@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,8 @@ CraftErrorState::CraftErrorState(Game *game, GeoscapeState *state, const std::ws
 	add(_btnOk);
 	add(_btnOk5Secs);
 	add(_txtMessage);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

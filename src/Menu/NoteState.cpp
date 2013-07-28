@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -49,6 +48,8 @@ NoteState::NoteState(Game *game) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+	
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

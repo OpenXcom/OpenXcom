@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -45,6 +45,8 @@ namespace OpenXcom
 		// add other elements
 		add(_txtTitle);
 		add(_txtInfo);
+
+		centerAllSurfaces();
 
 		// Set up objects
 		_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);

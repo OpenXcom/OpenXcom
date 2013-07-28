@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -63,8 +63,11 @@ public:
 	MapBlockType getType() const;
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getSubType() const;
+	/// Get either remaining uses or frequency.
 	int getRemainingUses();
+	/// Decrease remaining uses.
 	void markUsed();
+	/// Reset remaining uses.
 	void reset();
 
 };

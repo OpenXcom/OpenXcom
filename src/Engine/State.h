@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -76,7 +76,8 @@ public:
 	const LocalizedText &tr(const std::string &id) const;
 	/// Get the localized text.
 	LocalizedText tr(const std::string &id, unsigned n) const;
-	
+	void centerAllSurfaces();
+	void lowerAllSurfaces();
 	friend class Timer;
 };
 

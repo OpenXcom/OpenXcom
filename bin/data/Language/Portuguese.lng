@@ -1,4 +1,4 @@
-PORTUGUÊS (PT) 
+PORTUGUÊS (PT)
 STR_AVENGER_UFOPEDIA
 NAVE DE COMBATE E TRANSPORTE.  A MELHOR REPRODUÇÃO DA TECNOLOGIA ALIENÍGENA.
 STR_INTERCEPTOR_UFOPEDIA
@@ -14,11 +14,11 @@ MISSIL AR-AR, COM SISTEMAS ELETRÓNICOS ESPECIALMENTE PROTEGIDOS.
 STR_AVALANCHE_UFOPEDIA
 MISSIL AR-AR PESADO, CARREGADO COM UMA OGIVA NUCLEAR.
 STR_CANNON_UFOPEDIA
-UM PODEROSO CANHÃO QUE DISPARA PROJÉTEIS ANTI-BLINDAGEM CAPAZES DE PENETRAR ATÉ 40CM DE AÇO.
+UM PODEROSO CANHÃO QUE DISPARA PROJÉTEIS PERFURANTES CAPAZES DE PENETRAR ATÉ 40CM DE AÇO.
 STR_FUSION_BALL_UFOPEDIA
-ESTE LANÇADOR DISPARA UM PROJÉTIL ESFÉRICO ALIMENTADO POR UMA REACÇÃO DE ANTI-MATÉRIA. A BOLA DESTROI O ALVO ATRAVÉS DE UMA IMPLOSÃO GRAVITACIONAL.
+ESTE LANÇADOR DISPARA UM PROJÉTIL ESFÉRICO ALIMENTADO POR UMA REACÇÃO DE ANTIMATÉRIA. A BOLA DESTROI O ALVO ATRAVÉS DE UMA IMPLOSÃO GRAVITACIONAL.
 STR_LASER_CANNON_UFOPEDIA
-ESTE RAIO LASER CONVENCIONAL É ALIMENTADO POR UMA CÂMARA DE REAÇÃO ANTI-MATÉRIA.
+ESTE RAIO LASER CONVENCIONAL É ALIMENTADO POR UMA CÂMARA DE REAÇÃO ANTIMATÉRIA.
 STR_PLASMA_BEAM_UFOPEDIA
 UM RAIO DE GRAVIDADE QUE PROJETA UMA IMPLOSÃO GRAVITACIONAL ALTAMENTE CONCENTRADA. 
 STR_SECTOID_UFOPEDIA
@@ -34,37 +34,37 @@ Autopsia - Homem-Cobra
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
 A pele é extremamente rígida e resistente ao calor. O sistema cardiovascular faz parte do sistema muscular, que utiliza o princípio hidráulico para gerar movimento, sendo o único músculo verdadeiro o "coração". O sistema reprodutivo é assexual e aparenta ser bastante eficiente: cada homem-cobra pode transportar até cinquenta ovos dentro do seu corpo. A propagação desta espécie no nosso planeta poderia ser uma séria ameaça para toda a vida na Terra.
 STR_ETHEREAL_UFOPEDIA
-Estes seres possuem poderes mentais extraordinários. Para além de faculdades telepáticas, possuem também habilidades telequinéticas. Aparentemente, o seu próprio físico débil é sustentado pelas suas capacidades mentais. Não compreendemos ao certo como funcionam estes poderes telequinéticos, pois parecem desafiar as leis clássicas da física. São extremamente perigosos em qualquer situação de combate, pois os seus poderes mentais podem ser uma arma terrível. Raramente aparecem na Terra, preferindo fazer uso de outras raças para alcançar os seus objetivos.
+Estes seres possuem poderes mentais extraordinários. Para além de faculdades telepáticas, possuem também habilidades telecinéticas. Aparentemente, o seu próprio físico débil é sustentado pelas suas capacidades mentais. Não compreendemos ao certo como funcionam estes poderes telequinéticos, pois parecem desafiar as leis clássicas da física. São extremamente perigosos em qualquer situação de combate, pois os seus poderes mentais podem ser uma arma terrível. Raramente aparecem na Terra, preferindo fazer uso de outras raças para alcançar os seus objetivos.
 STR_ETHEREAL_AUTOPSY
 Autópsia - Etéreo
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
-Esta entidade possuí um físico débil que parece ser incapaz de manter quaisquer funções vitais. Os músculos estão muito atrofiados e os órgãos internos parecem sub-desenvolvidos. Os órgãos sensoriais, incluindo os olhos, parecem não funcionar de todo. No entanto, o cérebro é muito desenvolvido e utiliza grande parte do fluxo sanguíneo corporal. É um mistério como esta criatura é capaz de se manter viva sem suporte externo.
+Esta entidade possuí um físico débil que parece ser incapaz de manter quaisquer funções vitais. Os músculos estão muito atrofiados e os órgãos internos parecem subdesenvolvidos. Os órgãos sensoriais, incluindo os olhos, parecem não funcionar de todo. No entanto, o cérebro é muito desenvolvido e utiliza grande parte do fluxo sanguíneo corporal. É um mistério como esta criatura é capaz de se manter viva sem suporte externo.
 STR_MUTON_UFOPEDIA
 Estas criaturas humanóides são muito fortes e inteligentes. Têm um gosto especial por carne crua de qualquer espécie, da qual necessitam para sobreviver, tal como os carnívoros terrestres. Parecem depender das ordens telepáticas de uma outra raça chamada de "Etéreos". Uma vez cortada a ligação telepática, o seu sistema nervoso deixa de funcionar e morrem. Têm vários implantes cibernéticos espalhados por todo o corpo, que servem para melhorar o seu desempenho em situações de combate. Estes seres são obviamente meros peões ao serviço de uma inteligência superior.
 STR_MUTON_AUTOPSY
 Autópsia - Muton
 STR_MUTON_AUTOPSY_UFOPEDIA
-A "pele" desta criatura parece ser uma espécie de armadura orgânica, que foi postumamente enxertada sobre o seu corpo. Há vários implantes cibernéticos espalhados por todo o corpo que servem para melhorar o desempenho do sistema cardiovascular e das suas capacidades sensoriais. Os órgãos reprodutivos parecem ter sido removidos cirurgicamente. É evidente que estas pobres criaturas são forçadas a uma vida de guerra e de conquista. A pele reforçada é resistente a munições anti-blindagem.
+A "pele" desta criatura parece ser uma espécie de armadura orgânica, que foi postumamente enxertada sobre o seu corpo. Há vários implantes cibernéticos espalhados por todo o corpo que servem para melhorar o desempenho do sistema cardiovascular e das suas capacidades sensoriais. Os órgãos reprodutivos parecem ter sido removidos cirurgicamente. É evidente que estas pobres criaturas são forçadas a uma vida de guerra e de conquista. A pele reforçada é resistente a munições perfurantes.
 STR_CELATID_UFOPEDIA
 Esta forma de vida possuí a capacidade misteriosa de flutuar naturalmente. É sensível a ondas cerebrais, sendo capaz de detetar um ser humano, mesmo que bem escondido. Uma vez detetada a sua vítima, o Celátido pousa no chão e cospe pequenos globos de um veneno extremamente corrosivo. Esta criatura tem a habilidade de se clonar a um ritmo alarmante. Acompanha frequentemente a raça Muton. 
 STR_CELATID_AUTOPSY
 Autópsia - Celátido
 STR_CELATID_AUTOPSY_UFOPEDIA
-O seu núcleo contém um pequeno órgão biomecânico, que aparenta ser um sistema de propulsão anti-gravidade natural. A bolsa de veneno é o maior órgão do corpo e não parece haver nenhuma estrutura cerebral independente. Não há indícios de um sistema digestivo ou reprodutor. Um outro pequeno órgão contém vários embriões que podem rapidamente dar origem a uma nova criatura.
+O seu núcleo contém um pequeno órgão biomecânico, que aparenta ser um sistema de propulsão antigravidade natural. A bolsa de veneno é o maior órgão do corpo e não parece haver nenhuma estrutura cerebral independente. Não há indícios de um sistema digestivo ou reprodutor. Um outro pequeno órgão contém vários embriões que podem rapidamente dar origem a uma nova criatura.
 STR_SILACOID_UFOPEDIA
-Esta forma de vida, à base de silício é capaz de gerar enormes quantidades de calor. A sua força permite-lhe esmagar rochas para digerir no seu núcleo escaldante. Possui uma inteligência primitiva e é facilmente controlável através de implantes ou por entidades telepáticas. Trabalha em conjunto com a raça Muton.
+Esta forma de vida à base de silício é capaz de gerar enormes quantidades de calor. A sua força permite-lhe esmagar rochas para digerir no seu núcleo escaldante. Possui uma inteligência primitiva e é facilmente controlável através de implantes ou por entidades telepáticas. Trabalha em conjunto com a raça Muton.
 STR_SILACOID_AUTOPSY
 Autópsia - Silacóide
 STR_SILACOID_AUTOPSY_UFOPEDIA
 O núcleo desta criatura é extremamente quente e parece ser a base do seu sistema digestivo. O seu sistema muscular possui uma força e rapidez tremendas. A sua pele rochosa é impregnável ao fogo ou a munições incendiárias.
 STR_CHRYSSALID_UFOPEDIA
-As suas pinças são uma arma terrível em combate corpo a corpo. O seu metabolismo elevado e força física concedem-lhe uma velocidade e destreza incríveis. Em vez de matar as suas vítimas, a Crisálida deposita um ovo dentro dos seus corpos, e injeta-as com um veneno que as transforma em mortos-vivos. Pouco tempo depois de a vítima ter sido injetada, uma nova Crisálida eclodirá do seu corpo. Estes seres estão associados à raça dos Homens-Cobra.
+As suas tenazes são uma arma terrível em combate corpo a corpo. O seu metabolismo elevado e força física concedem-lhe uma velocidade e destreza incríveis. Em vez de matar as suas vítimas, a Crisálida deposita um ovo dentro dos seus corpos, e injeta-as com um veneno que as transforma em mortos-vivos. Pouco tempo depois de a vítima ter sido injetada, uma nova Crisálida eclodirá do seu corpo. Estes seres estão associados à raça dos Homens-Cobra.
 STR_CHRYSSALID_AUTOPSY
 Autópsia - Crisálida
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 O exoesqueleto desta criatura é muito resistente, mas, no entanto, é vulnerável a munição explosiva. O seu cérebro é muito desenvolvido, e o seu crescimento celular bastante rápido. Esta criatura transporta cerca de vinte ovos para serem depositados dentro de outros organismos vivos. É uma arma biológica de terror muito eficaz.
 STR_FLOATER_UFOPEDIA
-Os Flutuadores desempenham as funções de soldado e de agente terrorista. São predadores natos, desenvolvidos geneticamente e implantados com várias modificações cibernéticas para os tornar em guerreiros formidáveis. A parte inferior do seu corpo, tal como a maioria dos seus órgãos internos, foi removida cirurgicamente e substituída por um sistema de suporte de vida artificial. Este implante contém um sistema anti-gravidade que lhes permite flutuar de forma mais ou menos estável.
+Os Flutuadores desempenham as funções de soldado e de agente terrorista. São predadores natos, desenvolvidos geneticamente e implantados com várias modificações cibernéticas para os tornar em guerreiros formidáveis. A parte inferior do seu corpo, tal como a maioria dos seus órgãos internos, foi removida cirurgicamente e substituída por um sistema de suporte de vida artificial. Este implante contém um sistema antigravidade que lhes permite flutuar de forma mais ou menos estável.
 STR_FLOATER_AUTOPSY
 Autópsia - Flutuador
 STR_FLOATER_AUTOPSY_UFOPEDIA
@@ -82,13 +82,13 @@ Autópsia - Sectópode
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
 Este robô está construído de forma robusta, com uma blindagem capaz de resistir à grande maioria das formas de ataque, especialmente a armas de plasma. No entanto, os seus sensores parecem ser particularmente vulneráveis a armas laser.
 STR_CYBERDISC_UFOPEDIA
-Este disco voador em miniatura é uma arma de terror automatizada, equipada com um raio de plasma. O seu sistema de propulsão anti-gravidade, proporciona-lhe uma grande vantagem no combate em terreno acidentado. As suas diretivas principais são provocar a destruição e o terror ao serviço da raça Sectóide.
+Este disco voador em miniatura é uma arma de terror automatizada, equipada com um raio de plasma. O seu sistema de propulsão antigravidade, proporciona-lhe uma grande vantagem no combate em terreno acidentado. As suas diretivas principais são provocar a destruição e o terror ao serviço da raça Sectóide.
 STR_CYBERDISC_AUTOPSY
 Autópsia - Ciberdisco
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
-O Ciberdisco possuí uma blindagem forte e é especialmente resistente a munição explosiva. Infelizmente o sistema anti-gravidade está demasiado danificado para compreendermos o seu funcionamento.
+O Ciberdisco possuí uma blindagem forte e é especialmente resistente a munição explosiva. Infelizmente o sistema antigravidade está demasiado danificado para compreendermos o seu funcionamento.
 STR_UFO_POWER_SOURCE_UFOPEDIA
-As naves alienígenas são alimentadas por um reator de anti-matéria que utiliza Elério (elemento 115), para gerar ondas de gravidade e outras formas de energia. A conversão de matéria para energia possui um nível de eficiência incrível (99%), de maneira a que mesmo fragmentos minúsculos de Elério são capazes de gerar enormes quantidades de energia. Este dispositivo de conversão é facilmente fabricável através de ligas alienígenas. 
+As naves alienígenas são alimentadas por um reator de antimatéria, que utiliza Elério (elemento 115), para gerar ondas de gravidade e outras formas de energia. A conversão de matéria para energia possui um nível de eficiência incrível (99%), de maneira a que mesmo fragmentos minúsculos de Elério são capazes de gerar enormes quantidades de energia. Este dispositivo de conversão é facilmente fabricável através de ligas alienígenas. 
 STR_UFO_NAVIGATION_UFOPEDIA
 As naves alienígenas utilizam computadores sofisticados como sistemas de navegação, tanto em terra como no espaço. O seu sistema é baseado em processadores óticos ligados em rede. Os controles são relativamente simples: o navegador controla a direção das ondas de gravidade geradas pela fonte de energia para mover a nave na direção que desejar. Este sistema pode ser facilmente utilizado por humanos e é reproduzível através de ligas alienígenas e outros componentes.
 STR_UFO_CONSTRUCTION_UFOPEDIA
@@ -108,9 +108,9 @@ Os artefactos alienígenas são construídos a partir de ligas especiais com pro
 STR_YOU_WILL_NEED_TO_RESEARCH_A
 Precisa de investigar um{NEWLINE}
 STR_ELERIUM_115_UFOPEDIA
-Este elemento possuí a característica invulgar de produzir anti-matéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto,  não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
+Este elemento possuí a característica invulgar de produzir antimatéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto,  não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
 STR_ALIEN_ORIGINS_UFOPEDIA
-Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o epicentro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena, de  maneira a obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
+Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o centro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena, de  maneira a obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
 As nossas investigações indicam que a base de operações alienígena está localizada em Marte. Esta base está muito bem escondida e contém todas as instalações de manufatura e clonagem, essenciais para a infiltração no nosso planeta. Todas estas operações são controladas por uma espécie de computador, que também se encontra nesta mesma base. Aparentemente, a sociedade alienígena é semelhante a uma colmeia, controlada por uma "abelha-rainha", o que nos leva a crer que este é o seu ponto fraco. Se eliminarmos o "cérebro", o corpo morrerá com ele. Logo, é essencial continuarmos as nossas pesquisas antes que seja demasiado tarde. Para tal, precisamos de capturar um alienígena da mais alta patente, os Comandantes, que residem exclusivamente em bases alienígenas.
 STR_CYDONIA_OR_BUST_UFOPEDIA
@@ -146,9 +146,11 @@ PESQUISAS
 STR_MANUFACTURE
 MANUFATURAS
 STR_TRANSFER_UC
-TRANSFERIR
+TRANSFERÊNCIAS
 STR_PURCHASE_RECRUIT
 COMPRAR/CONTRATAR
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 VENDER/DESPEDIR
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 PROGRESSO
 STR_NEW_PROJECT
 Novo Projeto
+STR_CANCEL_PROJECT
+Cancel Project
 STR_NEW_RESEARCH_PROJECTS
 NOVOS PROJETOS DE INVESTIGAÇÃO
 STR_SCIENTISTS_AVAILABLE_UC
@@ -318,7 +322,7 @@ Valor
 STR_VICTORY_1
 Ao entrar na câmara, as nossas tropas avistam imediatamente o cérebro alienígena - o alvo da nossa missão. Antes de terem oportunidade para abrir fogo, o cérebro comunica através de um ecrã na sua base, implorando que escutemos os seus argumentos para que o deixemos vivo.
 STR_VICTORY_2
-Então o cérebro diz: "Há muitos milhões de anos, este planeta a que chamais de Marte foi outrora repleto de vida. Vida essa que foi trazida de outro planeta pela nossa civilização, e que foi postumamente levada para o vosso. Fomos nós que, ao longo de milhões de anos, visitámos a Terra e desenvolvemos geneticamente a vossa espécie. Não podeis matar-nos, porque sois parte de nós.
+Então o cérebro diz: "Há muitos milhões de anos, este planeta a que chamais de Marte foi outrora repleto de vida, que foi trazida de outro planeta pela nossa civilização, e que foi postumamente levada para o vosso. Fomos nós que, ao longo de milhões de anos, visitámos o vosso planeta e desenvolvemos geneticamente a vossa espécie. Não podeis matar-nos, porque sois parte de nós.
 STR_VICTORY_3
 Estas pirâmides são o núcleo da civilização marciana, construídas milhões de anos antes das que tendes na Terra, por uma espécie nossa antepassada. Nenhum planeta está fora do nosso alcance. Este poder poderá vir a ser vosso. Em troca só pedimos a vossa cooperação...
 STR_GAME_OVER_1
@@ -328,7 +332,7 @@ O conhecimento adquirido pelo projeto XCom foi perdido para sempre. Não consegu
 STR_VICTORY_4
 O discurso do cérebro alienígena é subitamente interrompido por uma rajada de plasma. As forças alienígenas foram derrotadas.
 STR_VICTORY_5
-Após a queda de Marte, os alienígenas perderam a batalha pela Terra. Alguns anos mais tarde, a tecnologia capturada pelo projeto XCom, conduz a humanidade a uma nova idade de ouro e à colonização de Marte. A ameaça alienígena foi repelida, mas por quanto tempo, ninguém sabe. 
+Após a queda de Marte, os alienígenas perderam a batalha pela Terra. Alguns anos mais tarde, a tecnologia capturada pelo projeto XCom, conduz a humanidade a uma nova idade de ouro, levando à colonização de Marte. A ameaça alienígena foi repelida, mas por quanto tempo, ninguém sabe... 
 STR_YOU_HAVE_FAILED
 Não conseguiu travar a ameaça alienígena. Uma a uma, as nações financiadoras assinam pactos com os alienígenas em troca de tecnologia, paz e prosperidade. No entanto cedo se apercebem que os alienígenas têm outros planos... 
 STR_TOTAL_UC
@@ -376,7 +380,7 @@ OK - 5 segs
 STR_RESEARCH_COMPLETED
 Investigação Completa
 STR_VIEW_REPORTS
-LER RELATÓRIOS
+VER RELATÓRIOS
 STR_WE_CAN_NOW_RESEARCH
 Agora podemos investigar
 STR_WE_CAN_NOW_PRODUCE
@@ -398,7 +402,7 @@ SÁBADO
 STR_NOT_ENOUGH
 Não há 
 STR_TO_REFUEL
-  suficiente para reabastecer
+ suficiente para reabastecer
 STR_TO_REARM
  para rearmar 
 STR_AT_
@@ -490,7 +494,7 @@ DEFESA DE BASE
 STR_BASE_UC_
 BASE> 
 STR_BASE_DEFENSE_BRIEFING
-Uma nave alienígena aterrou nas proximidades. A nossa base está em sério perigo. Todas as aeronaves XCom e o pessoal não-militar foram evacuados conforme o protocolo. As tropas alienígenas entrarão na base através dos hangares ou do elevador de acesso. Temos de defender a base e as suas instalações vitais a todo o custo, num combate até à morte. Se clicar no ícone "abortar missão", as nossas tropas render-se-ão e a base será destruída.
+Uma nave alienígena aterrou nas proximidades. A nossa base está em sério perigo. Todas as aeronaves XCom e o pessoal não-militar foram evacuados, conforme o protocolo. As tropas alienígenas entrarão na base através dos hangares ou do elevador de acesso. Temos de defender a base e as suas instalações vitais a todo o custo, num combate até à morte. Se clicar no ícone "abortar missão", as nossas tropas render-se-ão e a base será destruída.
 STR_ALIEN_BASE_ASSAULT
 ASSALTO A BASE ALIENÍGENA
 STR_ALIEN_BASE_ASSAULT_BRIEFING
@@ -502,11 +506,11 @@ MISSÃO DE TERROR
 STR_TERROR_MISSION_BRIEFING
 A missão será bem-sucedida quando todas as unidades inimigas forem eliminadas ou neutralizadas. Temos de neutralizar as forças alienígenas para salvar quaisquer civis que se encontrem na zona. Para abortar a missão, retorne os agentes XCom ao veículo de transporte e clique no ícone "Abortar Missão".
 STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION
-NÃO HÁ HANGARES LIVRES PARA A PRODUÇÃO!{SMALLLINE}Cada nave atribuída a uma base, transferida para uma base, comprada ou construída usa um hangar.  Construa um novo hangar ou transfira uma nave para outra base.
+NÃO HÁ HANGARES LIVRES PARA A PRODUÇÃO!{SMALLLINE}Cada nave atribuída a uma base, transferida, comprada ou construída usa um hangar.  Construa um novo hangar ou transfira uma nave para outra base.
 STR_NO_FREE_HANGARS_FOR_PURCHASE
-NÃO HÁ HANGARES LIVRES PARA A COMPRA!{SMALLLINE}Cada nave atribuída a uma base, transferida para uma base, comprada ou construída usa um hangar.  Construa um novo hangar ou transfira uma nave para outra base.
+NÃO HÁ HANGARES LIVRES PARA A COMPRA!{SMALLLINE}Cada nave atribuída a uma base, transferida, comprada ou construída usa um hangar.  Construa um novo hangar ou transfira uma nave para outra base.
 STR_NO_FREE_HANGARS_FOR_TRANSFER
-NÃO HÁ HANGARES LIVRES PARA A TRANSFERÊNCIA!{SMALLLINE}Cada nave atribuída a uma base, transferida para uma base, comprada ou construída usa um hangar.  Construa um novo hangar ou transfira uma nave para outra base.
+NÃO HÁ HANGARES LIVRES PARA A TRANSFERÊNCIA!{SMALLLINE}Cada nave atribuída a uma base, transferida, comprada ou construída usa um hangar.  Construa um novo hangar ou transfira uma nave para outra base.
 STR_CANNOT_BUILD_HERE
 IMPOSSÍVEL CONSTRUIR AQUI!{SMALLLINE}Todas as construções devem ser feitas ao lado de uma instalação existente.
 STR_NO_FREE_ACCOMODATION
@@ -810,7 +814,7 @@ Intervalo de fogo
 STR_S
 s
 STR_ARMOR_PIERCING
-ANTI-BLINDAGEM
+PERFURANTE
 STR_INCENDIARY
 INCENDIÁRIO
 STR_HIGH_EXPLOSIVE_UC
@@ -996,7 +1000,7 @@ Armadura Voadora
 STR_HWP_ROCKETS
 Mísseis PAP
 STR_HWP_FUSION_BOMB
-Bomba de Fusão PAP
+Bombas de Fusão PAP
 STR_LASER_WEAPONS
 Armas Laser
 STR_NEW_FIGHTER_CRAFT
@@ -1028,7 +1032,7 @@ Escudo de Gravidade
 STR_MIND_SHIELD
 Escudo Mental
 STR_PSI_LAB
-Laboratório de Psíquica
+Laboratório Psíquico
 STR_MOTION_SCANNER
 Sensor de Movimento
 STR_MEDI_KIT
@@ -1118,7 +1122,7 @@ Fontes de Energia
 STR_MAXIMUM_SPEED
 Velocidade Máxima
 STR_HYPER_WAVE_DECODER_UC
-RECETOR DE HIPER-ONDAS
+RECETOR DE HIPERONDAS
 STR_SKYRANGER
 SKYRANGER
 STR_LIGHTNING
@@ -1172,7 +1176,7 @@ Defesas de Fusão
 STR_PSIONIC_LABORATORY
 Laboratório Psíquico
 STR_HYPER_WAVE_DECODER
-Recetor Hiper-Onda
+Recetor Hiperonda
 STR_HANGAR
 Hangar
 STR_USA
@@ -1252,9 +1256,9 @@ DANO>
 STR_ACCESS_LIFT_UFOPEDIA
 O elevador de acesso permite a transferência de pessoal e equipamento para dentro ou fora da base subterrânea. É sempre a primeira instalação a ser construída numa nova base. A zona do elevador é vulnerável à intrusão por quaisquer forças hostis.
 STR_LIVING_QUARTERS_UFOPEDIA
-Cada bloco habitacional pode alojar o máximo de 50 pessoas. Estes blocos dispõem de instalações básicas para alimentação, descanso, e recreio.
+Cada bloco habitacional pode alojar o máximo de 50 pessoas. Estes blocos dispõem de instalações básicas para alimentação, descanso e recreio.
 STR_LABORATORY_UFOPEDIA
-Até 50 cientistas podem trabalhar num destes laboratórios. Estas instalações estão equipadas com a mais recente tecnologia para investigação de materiais, bioquímica e cosmologia e dispõem de acesso privilegiado aos melhores laboratórios de investigação de todo o mundo, incluindo estabelecimentos militares.
+Até 50 cientistas podem trabalhar num destes laboratórios. Estas instalações estão equipadas com a mais recente tecnologia para investigação de materiais, bioquímica e cosmologia, dispondo de acesso privilegiado aos melhores laboratórios de investigação de todo o mundo, incluindo estabelecimentos militares.
 STR_WORKSHOP_UFOPEDIA
 As oficinas dispõem de todo o equipamento necessário para fabricar produtos baseados nos projetos elaborados pelos laboratórios. Cada oficina tem capacidade para 50 engenheiros, ainda que os processos de fabricação de produtos também ocupem algum espaço. 
 STR_SMALL_RADAR_SYSTEM_UFOPEDIA
@@ -1262,17 +1266,17 @@ Este pequeno sistema de deteção por radar tem um alcance de 300 milhas náutic
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Este sistema de deteção por radar tem o alcance de 450 milhas náuticas e está ligado a uma rede de satélites para deteção ao nível do solo. Cada sistema tem a probabilidade de 5% de detetar um objeto de tamanho médio em cada 10 minutos.
 STR_MISSILE_DEFENSES_UFOPEDIA
-Estes mísseis defensivos proporcionam alguma proteção contra incursões de naves hostis que tentem aterrar perto da base.
+Estes mísseis defensivos proporcionam alguma proteção contra incursões de naves hostis, que tentem aterrar perto da base.
 STR_GENERAL_STORES_UFOPEDIA
-Todos os equipamentos, sistemas de armamento, munições, material recuperado e Plataformas de Armas Pesadas, são guardados nos armazéns, à exceção do equipamento atribuído a veículos em hangares.
+Todos os equipamentos, sistemas de armamento, munições, material recuperado e Plataformas de Armas Pesadas são guardados nos armazéns, à exceção do equipamento atribuído a veículos em hangar.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-É provável que alienígenas vivos capturados precisem de ser mantidos em habitats especiais para preservar os seus sistemas vitais. Estas instalações podem manter até 10 formas de vida alienígenas em unidades de contenção individuais.
+É provável que alienígenas vivos capturados precisem de ser mantidos em habitats especiais para preservar os seus sistemas vitais. Estas instalações podem manter até 10 formas de vida alienígena, em unidades de contenção individuais.
 STR_LASER_DEFENSES_UFOPEDIA
 Estes sistemas de defesa laser proporcionam proteção contra incursões de naves inimigas.
 STR_PLASMA_DEFENSES_UFOPEDIA
 Estes sistemas de defesa de raios plasma proporcionam uma proteção poderosa e eficiente contra incursões de naves inimigas. 
 STR_FUSION_BALL_DEFENSES_UFOPEDIA
-Os mísseis de fusão proporcionam o sistema de defesa mais eficaz contra ataques alienígenas. Estes mísseis geram uma implosão de anti-matéria que aniquila tudo o que se encontra no seu raio de ação.
+Os mísseis de fusão proporcionam o sistema de defesa mais eficaz contra ataques alienígenas. Estes mísseis geram uma implosão de antimatéria que aniquila tudo o que se encontra no seu raio de ação.
 STR_GRAV_SHIELD_UFOPEDIA
 O escudo de gravidade repele naves alienígenas que tentem aterrar perto de uma base durante tempo suficiente para que quaisquer sistemas de defesa voltem a abrir fogo, duplicando a sua eficácia.
 STR_MIND_SHIELD_UFOPEDIA
@@ -1280,15 +1284,15 @@ Como as naves alienígenas detetam a presença de humanos através de ondas cere
 STR_PSIONIC_LABORATORY_UFOPEDIA
 Estas instalações avaliam o potencial psíquico de todos os soldados da base. Cada laboratório pode treinar até dez soldados de cada vez. Os programas de treino são atribuídos no fim de cada mês. Quando usadas em conjunto com um Amplificador Psíquico, as habilidades psíquicas podem ser utilizadas para realizar ataques mentais durante situações de combate.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
-Os sistemas de comunicação alienígenas usam ondas supra-dimensionais que viajam quase instantaneamente. Esta instalação interceta transmissões feitas por OVNIs e descodifica a informação, o que permite identificar o tipo de OVNI, a espécie da tripulação, e o tipo de missão a que se destina.
+Os sistemas de comunicação alienígenas usam ondas supradimensionais que viajam quase instantaneamente. Esta instalação interceta transmissões feitas por OVNIs e descodifica a informação, o que permite identificar o tipo de OVNI, a espécie da tripulação, e o tipo de missão a que se destina.
 STR_HANGAR_UFOPEDIA
 Cada hangar pode albergar uma aeronave XCom, dispondo de instalações próprias para manutenção, abastecimento, e reparação. Uma aeronave atribuída a uma base deve dispor de um hangar exclusivo que não pode ser usado por outras, mesmo que esta esteja fora em missão. 
 STR_PISTOL_UFOPEDIA
-A pistola padrão utilizada pelas forças XCom. Semi-automática de alto calibre, com doze tiros.
+A pistola padrão utilizada pelas forças XCom. Semiautomática de alto calibre, com doze tiros.
 STR_RIFLE_UFOPEDIA
-Esta espingarda altamente precisa, está equipada com mira laser e usa munição de 6.7mm, em carregadores de vinte balas.
+Esta espingarda altamente precisa está equipada com mira laser e usa munição de 6.7mm, em carregadores de vinte balas.
 STR_HEAVY_CANNON_UFOPEDIA
-O canhão de combate é uma arma devastadora, mas de difícil uso. Funciona com três tipos de munição: anti-blindagem, incendiária ou explosiva.
+O canhão de combate é uma arma devastadora, mas de difícil uso. Funciona com três tipos de munição: perfurante, incendiária ou explosiva.
 STR_AUTO_CANNON_UFOPEDIA
 O canhão automático combina a versatilidade e poder do canhão de combate, com uma maior cadência de tiro.
 STR_ROCKET_LAUNCHER_UFOPEDIA
@@ -1300,7 +1304,7 @@ A espingarda laser é uma versão mais precisa e destrutiva do modelo da pistola
 STR_HEAVY_LASER_UFOPEDIA
 O laser pesado é uma arma difícil de manejar, mas bastante eficaz.
 STR_GRENADE_UFOPEDIA
-Esta granada padrão possuí um temporizador sofisticado que permite um controlo preciso.
+Esta granada padrão possuí um temporizador sofisticado, que permite um controlo preciso.
 STR_SMOKE_GRENADE_UFOPEDIA
 As granadas de fumo são úteis para criar cobertura para agentes expostos em situações de combate. Recomenda-se cuidado, pois o seu uso pode também beneficiar o inimigo.
 STR_PROXIMITY_GRENADE_UFOPEDIA
@@ -1320,9 +1324,9 @@ O alienígena morreu durante ao processo de interrogação.
 STR_MIND_PROBE_UFOPEDIA
 A sonda mental é um aparelho de comunicação alienígena, utilizado para extrair informação diretamente das ondas cerebrais. Os agentes XCom podem utilizar este dispositivo em combate, de maneira a saberem mais sobre as características de um determinado alienígena. Após equipar, clique no ícone da Sonda Mental e selecione a opção "usar". Em seguida, selecione o inimigo-alvo com o cursor.
 STR_PLASMA_PISTOL_UFOPEDIA
-As pistolas de plasma são armas mortíferas que funcionam com base na aceleração de partículas dentro de um campo de anti-gravidade instantâneo.
+As pistolas de plasma são armas mortíferas que funcionam com base na aceleração de partículas dentro de um campo de antigravidade instantâneo.
 STR_PLASMA_RIFLE_UFOPEDIA
-Esta arma devastadora funciona com base na aceleração de partículas dentro de um campo anti-gravidade instantâneo.
+Esta arma devastadora funciona com base na aceleração de partículas dentro de um campo antigravidade instantâneo.
 STR_SIZE
 Tamanho
 STR_THE_CORPSE_MAY_BE_RESEARCHED
@@ -1352,7 +1356,7 @@ Nave de Batalha
 STR_SUPPLY_SHIP
 Nave de Abastecimento
 STR_RATING
-AVALIAÇÃO>
+AVALIAÇÃO> 
 STR_RATING_TERRIBLE
 PÉSSIMO!
 STR_RATING_POOR
@@ -1366,7 +1370,7 @@ EXCELENTE!
 STR_SCORE
 PONTUAÇÃO
 STR_XCOM_PROJECT_MONTHLY_REPORT
-RELATÓRIO MENSAL DO PROJETO XCOM
+RELATÓRIO MENSAL XCOM
 STR_MONTH
 Mês> 
 STR_COUNCIL_IS_GENERALLY_SATISFIED
@@ -1394,13 +1398,13 @@ STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
  assinaram um pacto secreto com forças alienígenas desconhecidas e decidiram retirar-se do projeto
 STR_MONTHLY_RATING
-Avaliação Mensal>
+Avaliação Mensal> 
 STR_FUNDING_CHANGE
 Alteração de fundos> 
 STR_COUNCIL_REDUCE_DEBTS
 O conselho de nações financiadoras não está satisfeito com a sua posição financeira.  Reduza a sua dívida abaixo de 2 milhões ou o seu projeto será cancelado.
 STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED
-DESCODIFICAÇÃO DE TRANSMISSÃO HIPER-ONDA
+DESCODIFICAÇÃO DE TRANSMISSÃO HIPERONDA
 STR_CRAFT_TYPE
 TIPO DE NAVE
 STR_RACE
@@ -1566,11 +1570,11 @@ Lista de Soldados
 STR_RANK_
 POSTO> 
 STR_MISSIONS
-MISSÕES>
+MISSÕES> 
 STR_KILLS
 MORTOS> 
 STR_WOUND_RECOVERY
-RECUPERAÇÃO DE FERIMENTOS> 
+EM RECUPERAÇÃO> 
 STR_TIME_UNITS
 UNIDADES DE TEMPO
 STR_STAMINA
@@ -1602,11 +1606,11 @@ Estas Plataformas de Armas Pesadas de controlo à distância, são projetadas de
 STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
 Esta Plataforma de Armas Pesadas controlada à distância está armada com mísseis altamente destrutivos, eficazes contra qualquer tipo de alienígena. Certifique-se de que dispõe de mísseis PAP suficientes nos armazéns, para rearmar a plataforma após o combate.
 STR_TANK_LASER_CANNON_UFOPEDIA
-A tecnologia laser é uma adição excelente ao arsenal das  PAP, permitindo um poder de fogo superior sem quaisquer restrições de munição. 
+A tecnologia laser é uma adição excelente ao arsenal das PAP, permitindo um poder de fogo superior sem quaisquer restrições de munição. 
 STR_HOVERTANK_PLASMA_UFOPEDIA
-A tecnologia alienígena deu origem a uma nova geração de PAPs. A propulsão anti-gravítica e o poder de fogo da tecnologia plasma são uma combinação mortífera.
+A tecnologia alienígena deu origem a uma nova geração de PAPs. A propulsão antigravítica e o poder de fogo da tecnologia plasma são uma combinação mortífera.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
-Este tanque voador está equipado com um lançador de bolas de fusão de enorme poder destrutivo. Usar com extrema cautela. Também terá de fabricar as bolas de fusão para armar esta PAP. A bola de fusão é um projétil inteligente. Para disparar esta arma pode colocar vários pontos de referência no terreno com o cursor. De seguida clique no ícone "lançar míssil".
+Este tanque voador está equipado com um lançador de bolas de fusão de enorme poder destrutivo. Usar com extrema cautela. Para armar esta PAP será necessário fabricar bolas de fusão. Trata-se de um projétil inteligente; para disparar esta arma pode colocar vários pontos de referência no terreno com o cursor. De seguida clique no ícone "lançar míssil".
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
 Este pequeno dispositivo é utilizado como fonte de energia para as armas de Plasma Pesado. Contém uma pequena quantidade de Elério no seu interior. 
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
@@ -1614,13 +1618,13 @@ Este pequeno objeto é utilizado como fonte de energia para a espingarda de plas
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
 Fonte de energia para pistola de plasma alienígena. Contém Elério, a fonte de energia alienígena.
 STR_STUN_BOMB_UFOPEDIA
-A bomba atordoadora serve, originalmente, para a captura de humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um mini-lançador.
+A bomba atordoadora serve, originalmente, para capturar humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um minilançador.
 STR_ALIEN_RESEARCH_UFOPEDIA
 As missões alienígenas de investigação destinam-se a recolher informação básica sobre a Terra e os seus habitantes. Utilizam sobretudo veículos pequenos, aterrando ocasionalmente em áreas desertas. Este tipo de atividade alienígena é considerada a menos perigosa para o projeto XCom, devido a atrair pouca atenção dos governos e do público geral. 
 STR_ALIEN_HARVEST_UFOPEDIA
 Os alienígenas utilizam a fauna terrestre para vários fins. Os animais são raptados em segredo e devolvidos com vários órgãos removidos. Mutilações de gado são predominantemente relatadas em ocasiões de avistamento de OVNIs. Este tipo de atividade alienígena aumenta a ansiedade geral das populações, e o ocorre principalmente em zonas rurais. A teoria da "recoleção alienígena" sugere que foram estas espécies extraterrestres que originalmente "cultivaram" o nosso planeta com a sua flora e fauna, e que regressam agora para colherem o que semearam.
 STR_ALIEN_ABDUCTION_UFOPEDIA
-Esta é a forma mais perversa de atividade alienígena. Há muitos relatos de raptos feitos por alienígenas apesar de estes tentarem apagar o episódio da memória das vítimas. As vítimas de sequestro dizem ser sujeitas a experiências físicas humilhantes, incluindo impregnações com fetos alienígenas e outras experiências genéticas bizarras. O propósito desta atividade parece estar ligado à manipulação e mutação alienígena do seu próprio material genético. Estas atividades causam pânico geral, e ocorrem em zonas povoadas ou cidades.
+Esta é a forma mais perversa de atividade alienígena. Há muitos relatos de raptos feitos por alienígenas, apesar de estes tentarem apagar o episódio da memória das vítimas. As vítimas de sequestro dizem ser sujeitas a testes físicos humilhantes, incluindo impregnações com fetos alienígenas e outras experiências genéticas bizarras. O propósito desta atividade parece estar ligado à manipulação e mutação alienígena do seu próprio material genético. Estas atividades causam pânico geral e ocorrem em zonas povoadas ou cidades.
 STR_ALIEN_INFILTRATION_UFOPEDIA
 Os governos terrestres podem ser alvo de infiltração por parte de agentes alienígenas disfarçados de humanos. Isto pode resultar em contacto oficial entre alienígenas e entidades governamentais ao mais alto nível. Os picos deste género de atividade são caracterizados por atividade OVNI intensa nas proximidades de cidades importantes. Os alienígenas tentarão assinar um pacto com uma nação terrestre, oferecendo o seu conhecimento e tecnologia superiores. Em troca, o governo assinante permitirá aos alienígenas levarem a cabo as suas atividades sem impedimentos. Este género de missão representa a maior ameaça para o projeto XCom, pois se um governo concordar em assinar um pacto, irá cancelar o nosso financiamento.  
 STR_ALIEN_BASE_UFOPEDIA
@@ -1636,7 +1640,7 @@ Esta nave minúscula é utilizada para fins de reconhecimento e pesquisa. Preced
 STR_MEDIUM_SCOUT_UFOPEDIA
 Uma nave de reconhecimento ligeira, que não é grande ameaça para as forças terrestres. Precede a vinda de naves maiores, no início de incursões alienígenas.
 STR_LARGE_SCOUT_UFOPEDIA
-A maior nave de reconhecimento alienígena. Um veículo multi-usos, que serve para todo o tipo de missões.
+A maior nave de reconhecimento alienígena. Um veículo multiusos, que serve para todo o tipo de missões.
 STR_HARVESTER_UFOPEDIA
 Os "Recoletores" estão equipados com um feixe de tração para recolher gado e outros animais. Bisturis laser extraem rapidamente o material orgânico desejado, que é guardado em contentores próprios. Após a extração, o cadáver é despejado para o solo.  
 STR_ABDUCTOR_UFOPEDIA
@@ -1678,7 +1682,7 @@ Carregador de Espingarda
 STR_HEAVY_CANNON
 Canhão de Combate
 STR_HC_AP_AMMO
-Munição CC-AB
+Munição CC-P
 STR_HC_HE_AMMO
 Munição CC-E
 STR_HC_I_AMMO
@@ -1686,7 +1690,7 @@ Munição CC-I
 STR_AUTO_CANNON
 Canhão Automático
 STR_AC_AP_AMMO
-Munição CA-AB
+Munição CA-P
 STR_AC_HE_AMMO
 Munição CA-E
 STR_AC_I_AMMO
@@ -1726,7 +1730,7 @@ Desintegrador
 STR_BLASTER_BOMB
 Bomba Desintegradora
 STR_SMALL_LAUNCHER
-Mini-Lançador
+Minilançador
 STR_STUN_BOMB
 Bomba Atordoadora
 STR_ALIEN_GRENADE
@@ -1770,9 +1774,9 @@ O elevador da pirâmide transporta as nossas tropas até ao fundo da superfície
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
 {NEWLINE}para usar ou produzir o{NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
-Os alienígenas destruíram a base indefesa
+Os alienígenas destruíram a base indefesa 
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
-Detetámos uma base alienígena na seguinte localização:
+Detetámos uma base alienígena na seguinte localização: 
 STR_STANDOFF
 MODO DE PERSEGUIÇÃO
 STR_CAUTIOUS_ATTACK
@@ -1788,7 +1792,7 @@ ALVO ATINGIDO!
 STR_UFO_CRASH_LANDS
 O OVNI DESPENHOU-SE!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Só pode minimizar em Perseguição
+Minimizar apenas em perseguição
 STR_UFO_RETURN_FIRE
 O OVNI ABRIU FOGO!
 STR_INTERCEPTOR_DAMAGED
@@ -1816,7 +1820,7 @@ OVNIPÉDIA
 STR_OPTIONS_UC
 OPÇÕES
 STR_FUNDING_UC
-ORÇAMENTO
+FUNDOS
 STR_5_SECS
 5 Segs
 STR_1_MIN
@@ -1895,6 +1899,8 @@ STR_SAVE_SUCCESSFUL
 Jogo carregado com sucesso
 STR_DELETE
 ELIMINAR
+STR_DELETE_UNSUCCESSFUL
+Falha ao eliminar jogo
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Jogo X-COM anterior encontrado
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -1954,7 +1960,7 @@ ESTIMULANTE
 STR_HEAL
 CURAR
 STR_TUS
-UTs>
+UT>
 STR_WEIGHT
 Peso>
 STR_FACCURACY
@@ -2037,9 +2043,13 @@ STR_PANIC_UNIT
 Pânico
 STR_MIND_CONTROL_SUCCESSFUL
 Controlo Mental Bem-Sucedido
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 Enlouqueceu
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+Enlouqueceu
+STR_HAS_PANICKED_MALE
+entrou em Pânico
+STR_HAS_PANICKED_FEMALE
 entrou em Pânico
 STR_XCOM
 XCom
@@ -2073,9 +2083,13 @@ STR_XCOM_MOVEMENT_SPEED
 VELOCIDADE DE MOVIMENTOS XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VELOCIDADE DE MOVIMENTOS ALIENÍGENAS
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  está inconsciente
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ está inconsciente
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ morreu vítima de ferimentos graves
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  morreu vítima de ferimentos graves
 STR_USE_MIND_PROBE
 Usar Sonda Mental
@@ -2089,7 +2103,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 UTs reservadas para Rajada
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 UTs reservadas para Tiro Preciso
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Abortar Missão ?
 STR_CORPSE
 Cadáver
@@ -2115,17 +2129,17 @@ STR_FULLSCREEN
 Ecrã Cheio
 STR_LANGUAGE
 IDIOMA
-STR_FARM
+CULTA
 Zona Agrícola
-STR_FOREST
+FOREST
 Floresta
-STR_JUNGLE
+JUNGLE
 Selva
-STR_MOUNTAIN
+MOUNT
 Montanha
-STR_DESERT
+DESERT
 Deserto
-STR_POLAR
+POLAR
 Polar
 STR_RANDOM_BATTLE
 Aleatório
@@ -2142,7 +2156,7 @@ Clique no botão direito para apagar o ficheiro
 STR_EQUIPMENT_FOR_craftname
 Equipar {1}
 STR_SELECT_SQUAD_FOR_craftname
-Selecionar Esquadrão para {1}
+{1}: Selecionar Esquadrão
 STR_n_UNITS_IN_EXIT_AREA_0
 0 Unidades na Zona de Saída
 STR_n_UNITS_IN_EXIT_AREA_1
@@ -2157,8 +2171,10 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Unidades fora da Zona de Saída
 STR_ABANDON_GAME_QUESTION
 ABANDONAR JOGO?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
 foi morto.
+STR_HAS_BEEN_KILLED_FEMALE
+foi morta.
 STR_DRAG_SCROLL
 POR ARRASTO
 STR_HIT_MELEE
@@ -2255,11 +2271,149 @@ STR_CENTER_ON_ENEMY_8
 Centrar em Inimigo 8
 STR_CENTER_ON_ENEMY_9
 Centrar em Inimigo 9
-STR_OPENGL
-OpenGL
+STR_CENTER_ON_ENEMY_10
+Centrar em Inimigo 10
 STR_ENEMY_WEAPON_LEVEL
 Armamento Inimigo
 STR_GROUNDED
-Em Terra
+EM TERRA
 STR_LIVING_QUARTERS_PLURAL
 Habitações
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+RESULTADOS
+STR_DISPLAY_FILTER
+Filtro Gráfico
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
+STR_ADVANCED
+OPÇÕES AVANÇADAS
+STR_ADVANCED_OPTIONS
+OPÇÕES AVANÇADAS
+STR_AGGRESSIVERETALIATION
+Retaliação Agressiva
+STR_AGGRESSIVERETALIATION_DESC
+Todos os OVNIs tentarão detetar bases XCom, independentemente das suas diretivas.
+STR_ALIENCONTAINMENTLIMITENFORCED
+Contenção Alienígena limitada
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
+Limita o número de alienígenas em contenção. Recomenda-se o uso da opção "Vender alienígenas vivos".
+STR_CANSELLLIVEALIENS
+Vender alienígenas vivos
+STR_CANSELLLIVEALIENS_DESC
+Permite a venda de alienígenas vivos capturados.
+STR_ALLOWAUTOSELLPRODUCTION
+Venda automática de produtos
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Usar o botão direito do rato para vender automaticamente produtos fabricados no menu de manufaturas.
+STR_ALLOWBUILDINGQUEUE
+Permitir construções em espera
+STR_ALLOWBUILDINGQUEUE_DESC
+Permite ao jogador colocar construções em lista de espera, usando uma construção em curso como elo de ligação.
+STR_BATTLEAUTOEND
+Terminar combates automaticamente
+STR_BATTLEAUTOEND_DESC
+Os combates terminam automaticamente assim que último inimigo for neutralizado.
+STR_BATTLEINSTANTGRENADE
+Detonação instantânea
+STR_BATTLEINSTANTGRENADE_DESC
+Explosivos programados para 0 turnos detonam imediatamente após serem lançados.
+STR_BATTLENOTIFYDEATH
+Confirmações de morte
+STR_BATTLENOTIFYDEATH_DESC
+Exibir uma mensagem de cada vez que um soldado XCom morre em combate.
+STR_BATTLENEWPREVIEWPATH
+Pré-visualizar percursos
+STR_BATTLENEWPREVIEWPATH_DESC
+Um clique com o botão esquerdo traça uma pré-visualização de percurso dos soldados em campo. Duplo-clique executa a ordem.
+STR_BATTLERANGEBASEDACCURACY
+Precisão de fogo realista
+STR_BATTLERANGEBASEDACCURACY_DESC
+A precisão de fogo é afetada por visibilidade, distância e outros fatores similares.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+Novas regras de manufatura (TFTD)
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Permite uma produção superior a uma unidade por hora, em projetos de manufatura.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Transferência de aeronaves em voo
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Permite a transferência de aeronaves durante voo.
+STR_CRAFTLAUNCHALWAYS
+Forçar descolagem
+STR_CRAFTLAUNCHALWAYS_DESC
+Permite forçar a descolagem de aeronaves, independentemente de estarem reabastecidas e rearmadas a 100%.
+STR_CUSTOMINITIALBASE
+Personalizar base inicial
+STR_CUSTOMINITIALBASE_DESC
+Permite ao jogador colocar manualmente as instalações da primeira base, em vez de forçar o modelo padrão.
+STR_GLOBESEASONS
+Projeção solar realista
+STR_GLOBESEASONS_DESC
+Reproduz a projeção solar, no interface de controlo global, de acordo com a inclinação axial da Terra.
+STR_PLAYINTRO
+Reproduzir introdução
+STR_PLAYINTRO_DESC
+Reproduz o vídeo de introdução ao iniciar o jogo.
+STR_SHOWFUNDSONGEOSCAPE
+Indicador de fundos
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Adiciona informação sobre a situação financeira atual ao menu de Controlo Global.
+STR_SHOWMORESTATSININVENTORYVIEW
+Informações no menu de equipamento
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Adiciona informações sobre o soldado selecionado ao menu de equipamento.
+STR_SNEAKYAI
+IA Defensiva
+STR_SNEAKYAI_DESC
+A IA tentará evitar expor-se ao inimigo tanto quanto possível.
+STR_STRAFE
+Modos alternativos de movimento
+STR_STRAFE_DESC
+Permite movimento lateral, passo de corrida e movimento giratório da torre de uma PAP. (CTRL + botões do rato)
+STR_BATTLESCROLLDRAGINVERT
+Inverter movimentação por arrasto
+STR_BATTLESCROLLDRAGINVERT_DESC
+Inverte a direção da movimentação de ecrã por arrasto, em situações de combate.
+STR_BATTLEEXPLOSIONHEIGHT
+Alcance vertical de explosão
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Altera a altura e proporção das explosões.{NEWLINE}(Planas: 0, Esféricas: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+STR_ALLOWPSIONICCAPTURE
+Psi-captura
+STR_ALLOWPSIONICCAPTURE_DESC
+O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will be spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Time Units reserved for Kneeling
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+TU's reserved for Kneeling and Firing
+STR_RESERVE_TUS_FOR_KNEEL
+Reserve Time Units for kneeling
+STR_EXPEND_ALL_TIME_UNITS
+Expend all remaining Time Units

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,7 +42,7 @@ private:
 	size_t _soldier;
 
 	Surface *_bg, *_rank;
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor;
+	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack;
 	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
 	TextEdit *_edtSoldier;
 
@@ -66,6 +66,8 @@ public:
 	void btnNextClick(Action *action);
 	/// Handler for clicking the Armor button.
 	void btnArmorClick(Action *action);
+	/// Handler for clicking the Sack button.
+	void btnSackClick(Action *action);
 };
 
 }

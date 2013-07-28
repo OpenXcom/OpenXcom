@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,6 +18,7 @@
  */
 
 #include "Options.h"
+#include "../version.h"
 #include <SDL.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
@@ -37,13 +38,12 @@ namespace OpenXcom
 namespace Options
 {
 
-std::string _version = "0.5.0";
 std::string _dataFolder = "";
 std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-std::map<std::string, std::string> _options;
+std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
 std::vector<std::string> _purchaseexclusions;
 
@@ -66,10 +66,13 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
 	setInt("maxFrameSkip", 8);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
+	setBool("weaponSelfDestruction", false);
+	setBool("researchedItemsWillSpent", false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
@@ -77,7 +80,7 @@ void createDefault()
 	setBool("useOpenGL", false);
 	setBool("checkOpenGLErrors", false);
 	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
-	setBool("vSyncForOpenGL", false);
+	setBool("vSyncForOpenGL", true);
 	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
 	setBool("debugUi", false);
@@ -85,7 +88,7 @@ void createDefault()
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
 	setString("language", "");
-	setInt("battleScrollSpeed", 24); // 8, 16, 24, 32, 40
+	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
 	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
@@ -95,21 +98,22 @@ void createDefault()
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setInt("battleExplosionHeight", 3); //0, 1, 2, 3
-	setBool("battlePreviewPath", false); // requires double-click to confirm moves
+	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
+	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 	setBool("battleRangeBasedAccuracy", false);
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
+	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
-	setBool("alienContainmentHasUpperLimit", false);
+	setBool("alienContainmentLimitEnforced", false);
 	setBool("canSellLiveAliens", false);
-	setBool("canTransferCraftsInAirborne", false); // When the craft can reach the destination base with its fuel
+	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
 	setBool("customInitialBase", false);
 	setBool("aggressiveRetaliation", false);
@@ -122,8 +126,9 @@ void createDefault()
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
 	setInt("windowedModePositionY", -1);
-	setBool("classicMouseHandling", false);
 	setBool("battleAutoEnd", false);
+	setBool("allowPsionicCapture", false);
+	setBool("borderless", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -135,46 +140,46 @@ void createDefault()
 	setInt("NewBattleCraft", 0);
 	
 	// new battle loadout data
-	setInt("NewBattle_STR_AC_AP_AMMO", 1);
-	setInt("NewBattle_STR_AC_HE_AMMO", 1);
-	setInt("NewBattle_STR_AC_I_AMMO", 1);
-	setInt("NewBattle_STR_ALIEN_GRENADE", 1);
-	setInt("NewBattle_STR_AUTO_CANNON", 1);
-	setInt("NewBattle_STR_BLASTER_BOMB", 1);
-	setInt("NewBattle_STR_BLASTER_LAUNCHER", 1);
-	setInt("NewBattle_STR_ELECTRO_FLARE", 1);
-	setInt("NewBattle_STR_GRENADE", 1);
-	setInt("NewBattle_STR_HC_AP_AMMO", 1);
-	setInt("NewBattle_STR_HC_HE_AMMO", 1);
-	setInt("NewBattle_STR_HC_I_AMMO", 1);
-	setInt("NewBattle_STR_HEAVY_CANNON", 1);
-	setInt("NewBattle_STR_HEAVY_LASER", 1);
-	setInt("NewBattle_STR_HEAVY_PLASMA", 1);
-	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 1);
-	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 1);
-	setInt("NewBattle_STR_INCENDIARY_ROCKET", 1);
-	setInt("NewBattle_STR_LARGE_ROCKET", 1);
-	setInt("NewBattle_STR_LASER_PISTOL", 1);
-	setInt("NewBattle_STR_LASER_RIFLE", 1);
-	setInt("NewBattle_STR_MEDI_KIT", 1);
-	setInt("NewBattle_STR_MIND_PROBE", 1);
-	setInt("NewBattle_STR_MOTION_SCANNER", 1);
-	setInt("NewBattle_STR_PISTOL", 1);
-	setInt("NewBattle_STR_PISTOL_CLIP", 1);
-	setInt("NewBattle_STR_PLASMA_PISTOL", 1);
-	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 1);
-	setInt("NewBattle_STR_PLASMA_RIFLE", 1);
-	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 1);
-	setInt("NewBattle_STR_PROXIMITY_GRENADE", 1);
-	setInt("NewBattle_STR_PSI_AMP", 1);
-	setInt("NewBattle_STR_RIFLE", 1);
-	setInt("NewBattle_STR_RIFLE_CLIP", 1);
-	setInt("NewBattle_STR_ROCKET_LAUNCHER", 1);
-	setInt("NewBattle_STR_SMALL_LAUNCHER", 1);
-	setInt("NewBattle_STR_SMALL_ROCKET", 1);
-	setInt("NewBattle_STR_SMOKE_GRENADE", 1);
-	setInt("NewBattle_STR_STUN_BOMB", 1);
-	setInt("NewBattle_STR_STUN_ROD", 1);
+	setInt("NewBattle_STR_AC_AP_AMMO", 0);
+	setInt("NewBattle_STR_AC_HE_AMMO", 0);
+	setInt("NewBattle_STR_AC_I_AMMO", 0);
+	setInt("NewBattle_STR_ALIEN_GRENADE", 0);
+	setInt("NewBattle_STR_AUTO_CANNON", 0);
+	setInt("NewBattle_STR_BLASTER_BOMB", 0);
+	setInt("NewBattle_STR_BLASTER_LAUNCHER", 0);
+	setInt("NewBattle_STR_ELECTRO_FLARE", 0);
+	setInt("NewBattle_STR_GRENADE", 0);
+	setInt("NewBattle_STR_HC_AP_AMMO", 0);
+	setInt("NewBattle_STR_HC_HE_AMMO", 0);
+	setInt("NewBattle_STR_HC_I_AMMO", 0);
+	setInt("NewBattle_STR_HEAVY_CANNON", 0);
+	setInt("NewBattle_STR_HEAVY_LASER", 0);
+	setInt("NewBattle_STR_HEAVY_PLASMA", 0);
+	setInt("NewBattle_STR_HEAVY_PLASMA_CLIP", 0);
+	setInt("NewBattle_STR_HIGH_EXPLOSIVE", 0);
+	setInt("NewBattle_STR_INCENDIARY_ROCKET", 0);
+	setInt("NewBattle_STR_LARGE_ROCKET", 0);
+	setInt("NewBattle_STR_LASER_PISTOL", 0);
+	setInt("NewBattle_STR_LASER_RIFLE", 0);
+	setInt("NewBattle_STR_MEDI_KIT", 0);
+	setInt("NewBattle_STR_MIND_PROBE", 0);
+	setInt("NewBattle_STR_MOTION_SCANNER", 0);
+	setInt("NewBattle_STR_PISTOL", 0);
+	setInt("NewBattle_STR_PISTOL_CLIP", 0);
+	setInt("NewBattle_STR_PLASMA_PISTOL", 0);
+	setInt("NewBattle_STR_PLASMA_PISTOL_CLIP", 0);
+	setInt("NewBattle_STR_PLASMA_RIFLE", 0);
+	setInt("NewBattle_STR_PLASMA_RIFLE_CLIP", 0);
+	setInt("NewBattle_STR_PROXIMITY_GRENADE", 0);
+	setInt("NewBattle_STR_PSI_AMP", 0);
+	setInt("NewBattle_STR_RIFLE", 0);
+	setInt("NewBattle_STR_RIFLE_CLIP", 0);
+	setInt("NewBattle_STR_ROCKET_LAUNCHER", 0);
+	setInt("NewBattle_STR_SMALL_LAUNCHER", 0);
+	setInt("NewBattle_STR_SMALL_ROCKET", 0);
+	setInt("NewBattle_STR_SMOKE_GRENADE", 0);
+	setInt("NewBattle_STR_STUN_BOMB", 0);
+	setInt("NewBattle_STR_STUN_ROD", 0);
 
 	// controls
 	setInt("keyOk", SDLK_RETURN);
@@ -201,6 +206,8 @@ void createDefault()
 	setInt("keyGeoFunding", SDLK_f);
 	setInt("keyGeoToggleDetail", SDLK_TAB);
 	setInt("keyGeoToggleRadar", SDLK_r);
+	setInt("keyQuickSave", SDLK_F6);
+	setInt("keyQuickLoad", SDLK_F9);
 	setInt("keyBattleLeft", SDLK_LEFT);
 	setInt("keyBattleRight", SDLK_RIGHT);
 	setInt("keyBattleUp", SDLK_UP);
@@ -218,6 +225,7 @@ void createDefault()
 	setInt("keyBattleAbort", SDLK_a);
 	setInt("keyBattleStats", SDLK_s);
 	setInt("keyBattleKneel", SDLK_k);
+	setInt("keyBattleReserveKneel", SDLK_j);
 	setInt("keyBattleReload", SDLK_r);
 	setInt("keyBattlePersonalLighting", SDLK_l);
 	setInt("keyBattleReserveNone", SDLK_F1);
@@ -234,6 +242,8 @@ void createDefault()
 	setInt("keyBattleCenterEnemy8", SDLK_8);
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
+	setInt("keyBattleVoxelView", SDLK_F10);
+	setInt("keyBattleZeroTUs", SDLK_DELETE);
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
@@ -260,12 +270,7 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
-				std::map<std::string, std::string>::iterator it = _options.find(argname);
-				if (it != _options.end())
-				{
-					it->second = args[i+1];
-				}
-				else if (argname == "data")
+				if (argname == "data")
 				{
 					_dataFolder = CrossPlatform::endPath(args[i+1]);
 				}
@@ -275,7 +280,24 @@ void loadArgs(int argc, char** args)
 				}
 				else
 				{
-					Log(LOG_WARNING) << "Unknown option: " << argname;
+					// case insensitive lookup of the argument
+					bool found = false;
+					for(std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
+					{
+ 						std::string option = it->first;
+						std::transform(option.begin(), option.end(), option.begin(), ::tolower);
+						if (option == argname)
+						{
+							//save this command line option for now, we will apply it later
+							_commandLineOptions[it->first]= args[i+1];
+							found = true;
+							break;
+						}
+					}
+					if(!found)
+					{
+						Log(LOG_WARNING) << "Unknown option: " << argname;
+					}
 				}
 			}
 			else
@@ -283,10 +305,6 @@ void loadArgs(int argc, char** args)
 				Log(LOG_WARNING) << "Unknown option: " << argname;
 			}
 		}
-	}
-	if (_userFolder != "")
-	{
-		load();
 	}
 }
 
@@ -298,7 +316,7 @@ void loadArgs(int argc, char** args)
 bool showHelp(int argc, char** args)
 {
 	std::stringstream help;
-	help << "OpenXcom v" << Options::getVersion() << std::endl;
+	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
 	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
 	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
@@ -335,6 +353,7 @@ bool showHelp(int argc, char** args)
  * and finding and loading any existing ones.
  * @param argc Number of arguments.
  * @param args Array of argument strings.
+ * @return Was initialized.
  */
 bool init(int argc, char** args)
 {
@@ -342,18 +361,52 @@ bool init(int argc, char** args)
 		return false;
 	createDefault();
 	loadArgs(argc, args);
-	if (_dataFolder == "")
+	setFolders();
+	updateOptions();
+
+	std::string s = getUserFolder();
+	s += "openxcom.log";
+	Logger::logFile() = s;
+	FILE *file = fopen(Logger::logFile().c_str(), "w");
+	if(!file)
 	{
-		_dataList = CrossPlatform::findDataFolders();
-		// Missing data folder is handled in StartState
+		std::stringstream error;
+		error << "Error: invalid User Folder " << _userFolder << std::endl;
+		std::cout << error.str();
+		return false;
 	}
-	if (_userFolder == "")
+	fflush(file);
+	fclose(file);
+	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
+	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{
-		std::vector<std::string> user = CrossPlatform::findUserFolders();
-		_configFolder = CrossPlatform::findConfigFolder();
+		Log(LOG_INFO) << *i;
+	}
+	Log(LOG_INFO) << "User folder is: " << _userFolder;
+	Log(LOG_INFO) << "Config folder is: " << _configFolder;
+	Log(LOG_INFO) << "Options loaded successfully.";
+	return true;
+}
+
+/**
+ * Sets up the game's Data folder where the data files
+ * are loaded from and the User folder and Config
+ * folder where settings and saves are stored in.
+ */
+void setFolders()
+{
+    if (_dataFolder == "")
+    {
+        _dataList = CrossPlatform::findDataFolders();
+        // Missing data folder is handled in StartState
+    }
+    if (_userFolder == "")
+    {
+        std::vector<std::string> user = CrossPlatform::findUserFolders();
+        _configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-		for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
@@ -374,38 +427,44 @@ bool init(int argc, char** args)
 				}
 			}
 		}
-		if (_configFolder == "")
-		{
-			_configFolder = _userFolder;
-		}
+	}
 
-		// Load existing options
-		if (CrossPlatform::folderExists(_configFolder))
+	if (_configFolder == "")
+	{
+		_configFolder = _userFolder;
+	}
+}
+
+/**
+ * Updates the game's options with those in the configuation
+ * file, if it exists yet, and any supplied on the command line.
+ */
+void updateOptions()
+{
+	// Load existing options
+	if (CrossPlatform::folderExists(_configFolder))
+	{
+		try
 		{
 			load();
 		}
-		// Create config folder and save options
-		else
+		catch (YAML::Exception &e)
 		{
-			CrossPlatform::createFolder(_configFolder);
-			save();
+			Log(LOG_ERROR) << e.what();
 		}
 	}
-	std::string s = getUserFolder();
-	s += "openxcom.log";
-	Logger::logFile() = s;
-	FILE *file = fopen(Logger::logFile().c_str(), "w");
-    fflush(file);
-	fclose(file);
-	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
-	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
+	// Create config folder and save options
+	else
 	{
-		Log(LOG_INFO) << *i;
+		CrossPlatform::createFolder(_configFolder);
+		save();
 	}
-	Log(LOG_INFO) << "User folder is: " << _userFolder;
-	Log(LOG_INFO) << "Config folder is: " << _configFolder;
-	Log(LOG_INFO) << "Options loaded successfully.";
-	return true;
+
+    // now apply options set on the command line, overriding defaults and those loaded from config file
+    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+    {
+        _options[it->first] = it->second;
+    }
 }
 
 /**
@@ -477,15 +536,6 @@ void save(const std::string &filename)
 }
 
 /**
- * Returns the game's version in x.x format.
- * @return String with version number.
- */
-std::string getVersion()
-{
-	return _version;
-}
-
-/**
  * Returns the game's current Data folder where resources
  * and X-Com files are loaded from.
  * @return Full path to Data folder.
@@ -542,9 +592,12 @@ std::string getString(const std::string& id)
 int getInt(const std::string& id)
 {
 	std::stringstream ss;
-	int value;
-	ss << std::dec << _options[id];
-	ss >> std::dec >> value;
+	int value = 0;
+	if (_options.find(id) != _options.end())
+	{
+		ss << std::dec << _options[id];
+		ss >> std::dec >> value;
+	}
 	return value;
 }
 

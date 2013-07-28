@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 TRANSFER
 STR_PURCHASE_RECRUIT
 KUPNO/ZATRUDNIANIE
+STR_SACK
+ZWOLNIJ
 STR_SELL_SACK_UC
 SPRZEDAŻ/ZWALNIANIE
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 POSTĘP
 STR_NEW_PROJECT
 Nowy projekt
+STR_CANCEL_PROJECT
+Anuluj Projekt
 STR_NEW_RESEARCH_PROJECTS
 NOWE PROJEKTY
 STR_SCIENTISTS_AVAILABLE_UC
@@ -1732,7 +1736,7 @@ Bomba ogłuszająca
 STR_ALIEN_GRENADE
 Granat obcych
 STR_ELERIUM_115
-Elerium
+Elerium-115
 STR_MIND_PROBE
 Próbnik myśli
 STR_SECTOID_CORPSE
@@ -1895,6 +1899,8 @@ STR_SAVE_SUCCESSFUL
 Zapis powiódł się
 STR_DELETE
 USUŃ
+STR_DELETE_UNSUCCESSFUL
+Usuwanie nieudane.
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Wykryto poprzedni zapis gry XCom
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,10 +2043,14 @@ STR_PANIC_UNIT
 Panika
 STR_MIND_CONTROL_SUCCESSFUL
 Obcy pod kontrolą.
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 wpadł w szał.
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+wpadła w szał.
+STR_HAS_PANICKED_MALE
 spanikował.
+STR_HAS_PANICKED_FEMALE
+spanikowała.
 STR_XCOM
 XCom
 STR_ALIENS
@@ -2073,10 +2083,14 @@ STR_XCOM_MOVEMENT_SPEED
 PRĘDKOŚĆ PODCZAS RUCHU XComu
 STR_ALIEN_MOVEMENT_SPEED
 PRĘDKOŚĆ PODCZAS RUCHU OBCYCH
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  stracił przytomność.
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ straciła przytomność.
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
  wykrwawił się na śmierć.
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
+ wykrwawiła się na śmierć.
 STR_USE_MIND_PROBE
 Użyj
 STR_FATAL_WOUNDS
@@ -2089,7 +2103,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Zarezerwowano PR dla krótkiej serii.
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Zarezerwowano PR dla strzału celowanego.
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Przerwać misję?
 STR_CORPSE
 Zwłoki
@@ -2115,17 +2129,17 @@ STR_FULLSCREEN
 Pełny ekran
 STR_LANGUAGE
 Wybór języka
-STR_FARM
+CULTA
 Farma
-STR_FOREST
+FOREST
 Zalesiony
-STR_JUNGLE
+JUNGLE
 Dżungla
-STR_MOUNTAIN
+MOUNT
 Górzysty
-STR_DESERT
+DESERT
 Pustynny
-STR_POLAR
+POLAR
 Polarny
 STR_RANDOM_BATTLE
 Potyczka losowa
@@ -2163,8 +2177,10 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_3
 {N} jednostek poza terenem ewakuacji
 STR_ABANDON_GAME_QUESTION
 KONIEC GRY?
-STR_HAS_BEEN_KILLED
-nie żyje
+STR_HAS_BEEN_KILLED_MALE
+został zabity.
+STR_HAS_BEEN_KILLED_FEMALE
+została zabita.
 STR_DRAG_SCROLL
 PRZYTRZYMAJ I PRZESUŃ
 STR_HIT_MELEE
@@ -2261,11 +2277,149 @@ STR_CENTER_ON_ENEMY_8
 Centruj na przeciwniku nr 8
 STR_CENTER_ON_ENEMY_9
 Centruj na przeciwniku nr 9
-STR_OPENGL
-OpenGL
+STR_CENTER_ON_ENEMY_10
+Centruj na przeciwniku nr 10
 STR_ENEMY_WEAPON_LEVEL
 Uzbrojenie Wroga
 STR_GROUNDED
 ZIEMIA
 STR_LIVING_QUARTERS_PLURAL
 Kwatery
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+PRZEDMIOT
+STR_DISPLAY_FILTER
+Filtr wyświetlania
+STR_QUICK_SAVE
+Szybki zapis
+STR_QUICK_LOAD
+Szybkie wczytanie
+STR_ADVANCED
+Zaawansowane
+STR_ADVANCED_OPTIONS
+OPCJE ZAAWANSOWANE
+STR_AGGRESSIVERETALIATION
+Agresywne akcje odwetowe
+STR_AGGRESSIVERETALIATION_DESC
+UFO zawsze będzie próbowało wykryć Twoje bazy, bez względu na cel swojej misji.
+STR_ALIENCONTAINMENTLIMITENFORCED
+Limity cel dla obcych
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
+Limit ilości miejsca w celach dla żywych obcych.
+STR_CANSELLLIVEALIENS
+Sprzedaż żywych obcych
+STR_CANSELLLIVEALIENS_DESC
+Dozwolona będzie sprzedaż żywych obcych, zalecane gdy używasz limitu cel dla obcych.
+STR_ALLOWAUTOSELLPRODUCTION
+Automatyczna sprzedaż
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Automatyczna sprzedaż produkowanych przedmiotów:  kliknij prawym przyciskiem myszy na "Zwiększ"/"Zmniejsz" podczas planowania ilości w kolumnie "Ilość zlecona" ("$$$" oznacza że element będzie sprzedawany automatycznie).
+STR_ALLOWBUILDINGQUEUE
+Kolejkowanie rozbudowy bazy
+STR_ALLOWBUILDINGQUEUE_DESC
+Podczas wyznaczania nowych instalacji pod budowę, niedokończone instalacje pozwalają na połączenie z windą.
+STR_BATTLEAUTOEND
+Automatyczne zakończenie potyczki
+STR_BATTLEAUTOEND_DESC
+Potyczka jest automatycznie zakańczana gdy ostatni żywy obcy będzie zneutralizowany.
+STR_BATTLEINSTANTGRENADE
+Natychmiastowe granaty
+STR_BATTLEINSTANTGRENADE_DESC
+Granaty ustawione na 0 tur będą eksplodować od razu po rzucie a nie po zakończeniu tury.
+STR_BATTLENOTIFYDEATH
+Wyświetlaj powiadomienia o śmierci
+STR_BATTLENOTIFYDEATH_DESC
+Wyświetla powiadomienie za każdym razem gdy jeden z Twoich żołnierzy umiera.
+STR_BATTLENEWPREVIEWPATH
+Wyświetlaj ścieżkę ruchu
+STR_BATTLENEWPREVIEWPATH_DESC
+Wyświetla podgląd ścieżki ruchu podczas wskazywaniu celu przemieszczenia się jednostki.
+STR_BATTLERANGEBASEDACCURACY
+Celność zależna od odległości
+STR_BATTLERANGEBASEDACCURACY_DESC
+Skuteczność strzałów wynika z widoczności, odległości oraz innych czynników.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+Reguły produkcji z TFTD
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Dozwolona produkcja więcej niż jedenego przedmiotu na godzinę w procesie produkcyjnym.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Transfer w trakcie lotu
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Możliwość transferu samolotu będącego aktualnie w trakcie lotu.
+STR_CRAFTLAUNCHALWAYS
+Wymuszanie startu
+STR_CRAFTLAUNCHALWAYS_DESC
+Możliwość wymuszenia startu samolotu, bez konieczności całkowitego zatankowania i dozbrojenia.
+STR_CUSTOMINITIALBASE
+Reorganizacja początkowej bazy
+STR_CUSTOMINITIALBASE_DESC
+Po rozpoczęciu nowej gry można ręcznie rozmieścić swoje początkowe instalacje, zamiast standardowego ich układu{NEWLINE}w bazie.
+STR_GLOBESEASONS
+Pory roku
+STR_GLOBESEASONS_DESC
+Realistyczne odwzorowanie oświetlenia słonecznego{NEWLINE}w zależności od pory roku.
+STR_PLAYINTRO
+Odtwarzaj intro
+STR_PLAYINTRO_DESC
+Pokazuj animowane intro.
+STR_SHOWFUNDSONGEOSCAPE
+Wyświetlaj fundusze w widoku globu
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Rozszerzenie panelu informacyjnego w widoku globu{NEWLINE}o dodatkowe informacje na temat aktualnej sytuacji finansowej.
+STR_SHOWMORESTATSININVENTORYVIEW
+Statystyki na ekranie ekwipunku
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Pokazuj istotne informacje dotyczące wybranego żołnierza na ekranie ekwipunku.
+STR_SNEAKYAI
+Podstępna AI
+STR_SNEAKYAI_DESC
+AI w miarę możliwości stara się uniknąć narażania jednostek na ostrzał ze strony gracza. Starając się pozostawać poza jego zasięgiem w trakcie ruchu.
+STR_STRAFE
+Przemieszczanie się bokiem
+STR_STRAFE_DESC
+Włącz tryb chodzenia w bok i biegania, oraz jazdy{NEWLINE}z niezależnym ukierunkowaniem wieżyczki w czołgu. Przytrzymaj klawisz CTRL aby użyć alternatywnej metody ruchu.
+STR_BATTLESCROLLDRAGINVERT
+Odwrócenie dla "Przytrzymaj i przesuń"
+STR_BATTLESCROLLDRAGINVERT_DESC
+Odwrócenie kierunków w trybie "przytrzymaj by przesunąć" widok pola walki w trybie taktycznym.
+STR_BATTLEEXPLOSIONHEIGHT
+Rozmiar eksplozji
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Ustal w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
+STR_AUTOSAVE
+Tryb automatycznego zapisu
+STR_AUTOSAVE_DESC
+0 - Wyłączony. 1 - Szybki zapis i wczytanie. 2 - Automatyczny zapis jedynie o 00:00. Wszystkie przyciski zapisu i wczytania są wyłączone. 3 - Taki jak poprzednio, wraz z automatycznym zapisem przy wyjściu z gry.
+STR_ALLOWPSIONICCAPTURE
+Przechwycenie psioniczne
+STR_ALLOWPSIONICCAPTURE_DESC
+Kontrola jaźni nad wszystkimi pozostałymi przy życiu obcymi pozwala zakończyć misję. Są traktowani jako zneutralizowani{NEWLINE}i schwytani żywi.
+STR_ANYTIMEPSITRAINING
+Szkolenie psioniczne w dowolnym momencie
+STR_ANYTIMEPSITRAINING_DESC
+Możesz w każdej chwili wysłać żołnierzy na szkolenie psioniczne (lub też ich odwołać). Pamiętaj, szkolenie początkowe trwa od 30 do 60 dni.
+STR_NOT_ENOUGH_SPACE
+Niewystarczająca ilość miejsca!
+STR_WEAPONSELFDESTRUCTION
+Odzyskiwanie wyposażenia jak w XCom 2012
+STR_WEAPONSELFDESTRUCTION_DESC
+Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
+STR_RESEARCHEDITEMSWILLSPENT
+Badane przedmioty zostają zużyte
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Badane przedmioty są pobierane z magazynów i zostaną utracone. Po "zbadaniu" żywego obcego, jego martwe ciało wysyłane jest do magazynów bazy.
+STR_ARROWS
+STRZAŁKI
+STR_FULL
+WSZYSTKO
+STR_SAVE_VOXEL_VIEW
+Zrzut ekranu, widok pierwszoosobowy
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Zarezerwowano PR na przyklęknięcie
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+Zarezerwowano PR na przyklęknięcie i ostrzał
+STR_RESERVE_TUS_FOR_KNEEL
+Rezerwuj PR na przyklęknięcie
+STR_EXPEND_ALL_TIME_UNITS
+Wykorzystaj wszystkie posiadane PR

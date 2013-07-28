@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,30 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_BULLETSPRITE_H
-#define OPENXCOM_BULLETSPRITE_H
+#ifndef OPENXCOM_MCDPATCH_H
+#define OPENXCOM_MCDPATCH_H
 
-#include "../Engine/Surface.h"
+#include <string>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
-
+class Ruleset;
+class MapDataSet;
 /**
- * A class that renders a bullet sprite, which is a 3x3 Surface.
- * This small sprite either represents the bullet itself or it's trailing particles.
+ * An MCD data Patch.
  */
-class BulletSprite : public Surface
+class MCDPatch
 {
 private:
-	static const int pixels[37][9];
-	int _type;
+	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight;
 public:
-	/// Creates a new BulletSprite.
-	BulletSprite(int type);
-	/// Cleans up the BulletSprite.
-	~BulletSprite();
-	/// Draw the bullet.
-	void draw();
+	/// Creates an MCD Patch.
+	MCDPatch();
+	/// Cleans up the MCD Patch.
+	~MCDPatch();
+	/// Loads the MCD Patch from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the MCD Patch to YAML.
+	void save(YAML::Emitter& out) const;
+	/// Applies an MCD patch to a mapDataSet
+	void modifyData(MapDataSet *dataSet) const;
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,7 +31,6 @@
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/Armor.h"
@@ -49,7 +48,7 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
  * @param game pointer to the game.
  * @param unit pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _charge(false)
+AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
 
@@ -70,6 +69,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
         std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
         _randomTileSearchAge = 0;
     }
+	_coverAction = new BattleAction();
 }
 
 /**
@@ -77,7 +77,7 @@ AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAI
  */
 AggroBAIState::~AggroBAIState()
 {
-
+	delete _coverAction;
 }
 
 /**
@@ -174,13 +174,24 @@ void AggroBAIState::think(BattleAction *action)
 	action->diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
  	action->type = BA_RETHINK;
 	action->actor = _unit;
-	_aggroTarget = 0;
-	
+	// we were hit, but we can't see who did it, try turning around...
+	if (_wasHit && _unit->getVisibleUnits()->empty())
+	{
+		_unit->lookAt(_lastKnownPosition);
+		while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
+		{
+			_unit->turn();
+			_game->getTileEngine()->calculateFOV(_unit);
+		}
+		_unit->abortTurn();
+		_wasHit = false;
+	}
 	if (_lastKnownTarget && _lastKnownTarget->isOut())
 	{
 		_lastKnownTarget = 0;
 		_lastKnownPosition = Position(0,0,-1);
 	}
+	_aggroTarget = 0;
 
 	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
@@ -193,8 +204,15 @@ void AggroBAIState::think(BattleAction *action)
 	*/
 	
 	action->weapon = _unit->getMainHandWeapon();
-
-	if (_unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
+	// the living weapon rule here doubles for "being a terrorist"
+	if (_coverCharge == 0 && !(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()))
+	{
+		_coverAction->actor = action->actor;
+		_coverAction->number = action->number;
+		_coverAction->weapon = action->weapon;
+		takeCoverAction(_coverAction);
+	}
+	if (_unit->getOriginalFaction() != FACTION_PLAYER && _unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
 	{
 		psiAction(action);
 	}
@@ -214,19 +232,21 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 	}
-
-	if (takeCoverAssessment(action))
+	// terrorists don't run or hide, they only live to kill.
+	if (!(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()) && takeCoverAssessment(action))
 	{
+		_unit->_hidingForTurn = true;
 		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
-		takeCoverAction(action);
-		action->reckless = true;
+		_coverCharge = 0;
+		action->target = _coverAction->target;
+		action->type = BA_WALK;
 	}
 	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
 		grenadeAction(action);
 	}
-
+	action->TU = action->actor->getActionTUs(action->type, action->weapon);
 	if (_aggroTarget != 0) { setAggroTarget(_aggroTarget); }
 	else if (_lastKnownTarget) { stalkingAction(action); }
 }
@@ -252,6 +272,10 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	if (_game->getTurn() < 3)
 		return false;
+	if (diff == -1)
+	{
+		diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+	}
 	int distance = _game->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
 	int injurylevel = attackingUnit->getStats()->health - attackingUnit->getHealth();
 	int desperation = (100 - attackingUnit->getMorale()) / 10;
@@ -277,7 +301,7 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 		{
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
-			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true);
+			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
 			if (collidesWith == 4)
 			{
 				if ((*i)->getFaction() != attackingUnit->getFaction())
@@ -318,9 +342,9 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	{
 		int newDistance = _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition());
 		//pick closest living unit that we can move to
-		if (newDistance <  distance && !(*j)->isOut())
+		if ((newDistance < distance || newDistance == 1) && !(*j)->isOut())
 		{
-			if (selectPointNearTarget(action, (*j), chargeReserve))
+			if (newDistance == 1 || selectPointNearTarget(action, (*j), chargeReserve))
 			{
 				_aggroTarget = (*j);
 				action->type = BA_WALK;
@@ -333,7 +357,7 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	}
 	if (_aggroTarget != 0)
 	{
-		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, -1))
+		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirectionTo(_aggroTarget->getPosition())))
 		{
 			meleeAttack(action);
 		}
@@ -356,8 +380,8 @@ void AggroBAIState::psiAction(BattleAction *action)
 		if ((*i)->getArmor()->getSize() == 1 && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
 		{
 			int chanceToAttackMe = psiAttackStrength
-				+ ((*i)->getStats()->psiSkill * -0.4)
-				- (_game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition()) / 2)
+				+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
+				- _game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition())
 				- ((*i)->getStats()->psiStrength)
 				+ (RNG::generate(0, 50))
 				+ 55;
@@ -529,18 +553,7 @@ void AggroBAIState::projectileAction(BattleAction *action)
 		{
 			if (!action->weapon->getAmmoItem()->getRules()->getExplosionRadius() || explosiveEfficacy(_aggroTarget->getPosition(), _unit, action->weapon->getAmmoItem()->getRules()->getExplosionRadius(), action->diff))
 			{
-				if (RNG::generate(1,10) < 5 && action->weapon->getAmmoQuantity() > 2)
-				{
-					action->type = BA_AUTOSHOT;
-				}
-				else
-				{
-					action->type = BA_SNAPSHOT;
-				}
-				if (action->actor->getActionTUs(action->type, action->weapon) > action->actor->getTimeUnits())
-				{
-					action->type = BA_RETHINK;
-				}
+				selectFireMethod(action);
 			}
 		}
 	}
@@ -560,7 +573,6 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 		int tu = 4; // 4TUs for picking up the grenade
 		if(_unit->getFaction() == FACTION_HOSTILE)
 		{
-			action->weapon = grenade;
 			tu += _unit->getActionTUs(BA_PRIME, grenade);
 			tu += _unit->getActionTUs(BA_THROW, grenade);
 			// do we have enough TUs to prime and throw the grenade?
@@ -572,6 +584,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 					grenade->setExplodeTurn(_game->getTurn());
 					_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade));
 					action->type = BA_THROW;
+					action->weapon = grenade;
 				}
 			}
 		}
@@ -594,7 +607,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	int unitsSpottingMe =_game->getSpottingUnits(action->actor);
 	action->type = BA_WALK;
 	int currentTilePreference = _unit->_hidingForTurn ? action->number * 5 : 0;
-	_unit->_hidingForTurn = true;
 	int tries = -1;
 	bool coverFound = false;
 	int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
@@ -636,18 +648,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int ALLY_BONUS = civ ? -50 : 4;
 	const int SOLDIER_PROXIMITY_BASE_PENALTY = civ ? 0 : 100; // this is divided by distance^2 to nearest soldier
 	
-	int tu = _unit->getTimeUnits();
-
-	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_FIREARM)
-	{
-		switch (_game->getBattleState()->getBattleGame()->getReservedAction())
-		{
-		case BA_SNAPSHOT: tu -= action->actor->getStats()->tu / 3; break;
-		case BA_AUTOSHOT: tu -= action->actor->getStats()->tu / 2; break;
-		default: break;
-		}
-		if (tu < 0) tu = 0;
-	}
+	int tu = _coverCharge ? _coverCharge : _unit->getTimeUnits() / 2;
 
 	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, tu);
 
@@ -765,7 +766,12 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 						
 			if (_game->getTileEngine()->faceWindow(action->target) != -1) score -= WINDOW_PENALTY; // a window is not cover.
                         
-			if (_traceAI) { tile->setMarkerColor(score < 0 ? 3 : (score < FAST_PASS_THRESHOLD/2 ? 8 : (score < FAST_PASS_THRESHOLD ? 9 : 5))); }
+			if (_traceAI)
+			{
+				tile->setMarkerColor(score < 0 ? 3 : (score < FAST_PASS_THRESHOLD/2 ? 8 : (score < FAST_PASS_THRESHOLD ? 9 : 5)));
+				tile->setPreview(10);
+				tile->setTUMarker(score);
+			}
 		}
 
 		if (tile && score > bestTileScore)
@@ -779,6 +785,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			{
 				bestTileScore = score;
 				bestTile = action->target;
+				_coverCharge = _game->getPathfinding()->getTotalTUCost();
 				if (_traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); }
 			}
 			_game->getPathfinding()->abortPath();
@@ -856,7 +863,7 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 	int aggression = _unit->getAggression();
 
-	if (_charge)
+	if (_charge || !_aggroTarget)
 		return false;
 
 	// extra 5% chance per unit that sees us
@@ -880,10 +887,9 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 		takeCover = false;
 			
 
-	if (action->number >= 3)
+	if (action->number >= 3 && (!_unit->getMainHandWeapon() || _unit->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE))
 	{
         takeCover = true; // always seek cover as last action (unless melee... charge, stupid reapers!)
-        action->reckless = true;
 	}
 
 	// out of ammo or no weapon or ammo at all, we have to take cover
@@ -923,11 +929,15 @@ void AggroBAIState::selectNearestTarget()
 	}
 }	
 
+/*
+ * pick a point near enough to our target to perform a melee attack
+ */
 bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs)
 {
 	int size = action->actor->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
 	bool returnValue = false;
+	int distance = 1000;
 	for (int x = -size; x <= targetsize; ++x)
 	{
 		for (int y = -size; y <= targetsize; ++y)
@@ -935,16 +945,23 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 			if (x || y) // skip the unit itself
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
-				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, -1, action->actor->getArmor()->getSize(), target);
+				// since vectorToDirection only works with tiles that are neighbours, we'll take the direction from the target instead.
+				int dir = target->getDirectionTo(checkPath) + 4;
+				if (dir >= 8)
+				{
+					dir -= 8;
+				}
+				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, dir, action->actor, target);
 				bool fitHere = _game->setUnitPosition(action->actor, checkPath, true);
 								
 				if (valid && fitHere)
 				{
 					_game->getPathfinding()->calculate(action->actor, checkPath, 0, maxTUs);
-					if (_game->getPathfinding()->getStartDirection() != -1)
+					if (_game->getPathfinding()->getStartDirection() != -1 && _game->getTileEngine()->distance(checkPath, action->actor->getPosition()) < distance)
 					{
 						action->target = checkPath;
 						returnValue = true;
+						distance = _game->getTileEngine()->distance(checkPath, action->actor->getPosition());
 					}
 					_game->getPathfinding()->abortPath();
 				}
@@ -953,6 +970,10 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 	}
 	return returnValue;
 }
+
+/*
+ * Perform a melee attack action
+ */
 void AggroBAIState::meleeAttack(BattleAction *action)
 {
 	_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
@@ -963,4 +984,79 @@ void AggroBAIState::meleeAttack(BattleAction *action)
 	action->type = BA_HIT;
 	_charge = true;
 }
+
+/*
+ *	select a fire method based on range, time units, and time units reserved for cover.
+ */
+void AggroBAIState::selectFireMethod(BattleAction *action)
+{
+	int distance = _game->getTileEngine()->distance(_unit->getPosition(), action->target);
+	action->type = BA_RETHINK;
+	int tuAuto = action->weapon->getRules()->getTUAuto();
+	int tuSnap = action->weapon->getRules()->getTUSnap();
+	int tuAimed = action->weapon->getRules()->getTUAimed();
+	int currentTU = action->actor->getTimeUnits() - _coverCharge;
+
+	if (distance < 4)
+	{
+		if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+		{
+			action->type = BA_AUTOSHOT;
+			return;
+		}
+		if ( !tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+		{
+			if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+			{
+				action->type = BA_AIMEDSHOT;
+			}
+			return;
+		}
+		action->type = BA_SNAPSHOT;
+		return;
+	}
+
+
+	if ( distance > 12 )
+	{
+		if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+		{
+			action->type = BA_AIMEDSHOT;
+			return;
+		}
+		if ( distance < 20
+			&& tuSnap
+			&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+		{
+			action->type = BA_SNAPSHOT;
+			return;
+		}
+	}
+	
+	if ( tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+	{
+			action->type = BA_SNAPSHOT;
+			return;
+	}
+	if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+	{
+			action->type = BA_AIMEDSHOT;
+			return;
+	}
+	if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+	{
+			action->type = BA_AUTOSHOT;
+	}
+}
+
+void AggroBAIState::setWasHit(bool wasHit)
+{
+	_wasHit = wasHit;
+}
+
+bool AggroBAIState::getWasHit()
+{
+	return _wasHit;
+}
+
 }

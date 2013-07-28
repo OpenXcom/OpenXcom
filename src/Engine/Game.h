@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -55,7 +55,6 @@ private:
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
-	int _alienContainmentHasUpperLimit; // It's an int-type cache for Options::getBool("alienContainmentHasUpperLimit").
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);
@@ -99,8 +98,6 @@ public:
 	void loadRuleset();
 	/// Sets whether the mouse cursor is activated.
 	void setMouseActive(bool active);
-	/// Gets the value of alienContainmentHasUpperLimit.
-	int getAlienContainmentHasUpperLimit() const;
 	/// Returns whether current state is the param state
 	bool isState(State *state) const;
 	/// Returns whether the game is shutting down.

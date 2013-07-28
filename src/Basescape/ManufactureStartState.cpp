@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,6 +24,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Savegame/Base.h"
@@ -86,6 +87,8 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 
 	add(_btnStart);
 
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
@@ -114,6 +117,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&ManufactureStartState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	const std::map<std::string, int> & requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
@@ -158,6 +162,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(_game->getLanguage()->getString("STR_START_PRODUCTION"));
 	_btnStart->onMouseClick((ActionHandler)&ManufactureStartState::btnStartClick);
+	_btnStart->onKeyboardPress((ActionHandler)&ManufactureStartState::btnStartClick, (SDLKey)Options::getInt("keyOk"));
 	_btnStart->setVisible(productionPossible);
 }
 

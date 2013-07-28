@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,7 +27,7 @@ namespace OpenXcom
  * type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _battlescapeTerrainData(0)
+RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _battlescapeTerrainData(0), _modSprite("")
 {
 }
 
@@ -61,6 +61,10 @@ void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 		else if (key == "sprite")
 		{
 			i.second() >> _sprite;
+		}
+		else if (key == "modSprite")
+		{
+			i.second() >> _modSprite;
 		}
 		else if (key == "damageMax")
 		{
@@ -276,6 +280,15 @@ int RuleUfo::getWeaponReload() const
 int RuleUfo::getBreakOffTime() const
 {
 	return _breakOffTime;
+}
+
+/**
+ * For user-defined UFOs, use a surface for the "preview" image
+ * @return the name of the surface that represents this UFO
+ */
+std::string RuleUfo::getModSprite() const
+{
+	return _modSprite;
 }
 
 }

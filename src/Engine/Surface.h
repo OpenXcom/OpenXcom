@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,6 +42,7 @@ protected:
 	bool _visible, _hidden, _redraw;
 	SDL_Color *_originalColors;
 	void *_misalignedPixelBuffer, *_alignedBuffer;
+	int _dx, _dy;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
@@ -53,6 +54,8 @@ public:
 	void loadScr(const std::string &filename);
 	/// Loads an X-Com SPK graphic.
 	void loadSpk(const std::string &filename);
+	/// Loads a TFTD BDY graphic.
+	void loadBdy(const std::string &filename);
 	/// Loads a general image file.
 	void loadImage(const std::string &filename);
 	/// Clears the surface's contents.
@@ -127,6 +130,8 @@ public:
 	void blitNShade(Surface *surface, int x, int y, int off, bool half = false, int newBaseColor = 0);
 	/// Invalidate the surface: force it to be redrawn
 	void invalidate();
+	void setDX(int dx);
+	void setDY(int dy);
 };
 
 }

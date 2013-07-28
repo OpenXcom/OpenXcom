@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_TEXTLIST_H
 
 #include <vector>
+#include <map>
 #include "../Engine/InteractiveSurface.h"
 #include "Text.h"
 
@@ -45,7 +46,7 @@ private:
 	Font *_big, *_small, *_font;
 	unsigned int _scroll, _visibleRows;
 	Uint8 _color, _color2;
-	TextHAlign _align;
+	std::map<int, TextHAlign> _align;
 	bool _dot, _selectable, _condensed, _contrast;
 	unsigned int _selRow;
 	Surface *_bg, *_selector;
@@ -53,7 +54,7 @@ private:
 	int _margin;
 	bool _scrolling;
 	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
-	int _arrowPos;
+	int _arrowPos, _scrollPos;
 	ArrowOrientation _arrowType;
 	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
 	bool _allowScrollOnArrowButtons;
@@ -105,7 +106,7 @@ public:
 	/// Sets the text list's high contrast color setting.
 	void setHighContrast(bool contrast);
 	/// Sets the text horizontal alignment of the text list.
-	void setAlign(TextHAlign align);
+	void setAlign(TextHAlign align, int col = -1);
 	/// Sets whether to separate columns with dots.
 	void setDot(bool dot);
 	/// Sets whether the list is selectable.
@@ -147,7 +148,7 @@ public:
 	/// Scrolls the list down.
 	void scrollDown(bool toMax);
 	/// Sets the list scrolling.
-	void setScrolling(bool scrolling);
+	void setScrolling(bool scrolling, int scrollPos = 4);
 	/// Draws the text onto the text list.
 	void draw();
 	/// Blits the text list onto another surface.
@@ -166,7 +167,10 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse hovering out.
 	void mouseOut(Action *action, State *state);
-
+	/// get the scroll depth
+	int getScroll();
+	void setAllX(int x);
+	void setAllY(int y);
 };
 
 }

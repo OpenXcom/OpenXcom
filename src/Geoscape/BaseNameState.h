@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,6 +20,7 @@
 #define OPENXCOM_BASENAMESTATE_H
 
 #include "../Engine/State.h"
+#include "Globe.h"
 
 namespace OpenXcom
 {
@@ -33,6 +34,8 @@ class Globe;
 
 /**
  * Window used to input a name for a new base.
+ * Player's first Base uses this screen
+ * additional bases use ConfirmNewBaseState
  */
 class BaseNameState : public State
 {

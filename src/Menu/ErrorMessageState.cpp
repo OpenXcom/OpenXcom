@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -74,12 +73,14 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_txtMessage = new Text(246, 80, 37, 50);
 
 	// Set palette
-	if (bgColor != -1)
+	if (bgColor != ((Uint8)-1))
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
 	add(_txtMessage);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(color);
@@ -101,7 +102,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	else
 		_txtMessage->setText(_game->getLanguage()->getString(str));
 
-	if (bgColor == -1)
+	if (bgColor == ((Uint8)-1))
 	{
 		_window->setHighContrast(true);
 		_btnOk->setHighContrast(true);

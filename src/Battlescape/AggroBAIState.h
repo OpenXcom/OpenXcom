@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,11 +39,11 @@ protected:
 	BattleUnit *_aggroTarget;
 	BattleUnit *_lastKnownTarget;
 	Position _lastKnownPosition;
-	int _timesNotSeen;
+	int _timesNotSeen, _coverCharge;
 	static std::vector<Position> _randomTileSearch;
 	static int _randomTileSearchAge;
-	bool _charge, _traceAI;
-	
+	bool _charge, _traceAI, _wasHit;
+	BattleAction *_coverAction;
 public:
 	/// Creates a new AggroBAIState linked to the game and a certain unit.
 	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
@@ -87,7 +87,12 @@ public:
 	void selectNearestTarget();
 	/// select the nearest moveable relative to a target
 	bool selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs);
+	/// perform a melee attack action
 	void meleeAttack(BattleAction *action);
+	/// select a fire method
+	void selectFireMethod(BattleAction *action);
+	void setWasHit(bool wasHit);
+	bool getWasHit();
 };
 
 }

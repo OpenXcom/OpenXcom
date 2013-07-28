@@ -17,6 +17,9 @@
     <ClCompile Include="Basescape\ResearchState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\SackSoldierState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
     <ClCompile Include="Basescape\SellState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -368,9 +371,6 @@
     <ClCompile Include="Battlescape\Projectile.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\BulletSprite.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\Transfer.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -669,9 +669,6 @@
     <ClCompile Include="Geoscape\AlienBaseState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
-    <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
     <ClCompile Include="Geoscape\AllocatePsiTrainingState.cpp">
       <Filter>Geoscape</Filter>
     </ClCompile>
@@ -762,6 +759,25 @@
     <ClCompile Include="Interface\ToggleTextButton.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\AdvancedOptionsState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Ruleset\MCDPatch.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\ExtraSprites.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\ExtraStrings.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\ExtraSounds.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\SerializationHelper.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -781,6 +797,9 @@
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\ResearchState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\SackSoldierState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\SellState.h">
@@ -1135,9 +1154,6 @@
     <ClInclude Include="Battlescape\Projectile.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\BulletSprite.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\Transfer.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1433,9 +1449,6 @@
     <ClInclude Include="Geoscape\AlienBaseState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\UfoHyperDetectedState.h">
-      <Filter>Geoscape</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\EquipmentLayoutItem.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1527,6 +1540,44 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="aresame.h" />
+    <ClInclude Include="Menu\AdvancedOptionsState.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Engine\ShaderDraw.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderDrawHelper.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderMove.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderRepeat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ShaderRotate.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FixedFloat.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\GraphSubset.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="version.h" />
+    <ClInclude Include="Ruleset\MCDPatch.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\ExtraSprites.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\ExtraStrings.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Ruleset\ExtraSounds.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

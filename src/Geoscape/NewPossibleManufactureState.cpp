@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -56,6 +56,8 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	add(_btnManufacture);
 	add(_txtTitle);
 	add(_lstPossibilities);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

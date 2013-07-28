@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Language.h"
+#include <assert.h>
 #include <locale>
 #include <fstream>
 #include <cassert>
@@ -25,6 +26,7 @@
 #include "Exception.h"
 #include "Options.h"
 #include "LocalizedText.h"
+#include "../Ruleset/ExtraStrings.h"
 #include "../Interface/TextList.h"
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -464,7 +466,7 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
  */
 std::vector<std::string> Language::getList(TextList *list)
 {
-	std::vector<std::string> langs = CrossPlatform::getFolderContents(Options::getDataFolder() + "Language/", "lng");
+	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "lng");
 
 	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end();)
 	{
@@ -515,7 +517,7 @@ std::vector<std::string> Language::getList(TextList *list)
  * @param filename Filename of the LNG file.
  * @sa @ref LanguageFiles
  */
-void Language::loadLng(const std::string &filename)
+void Language::loadLng(const std::string &filename, ExtraStrings *extras)
 {
 	_strings.clear();
 
@@ -552,7 +554,17 @@ void Language::loadLng(const std::string &filename)
 	{
 		throw Exception("Invalid language file");
 	}
-
+	if (extras)
+	{
+		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
+		{
+			std::string s = i->second;
+			replace(s, "{NEWLINE}", "\n");
+			replace(s, "{SMALLLINE}", "\x02");
+			replace(s, "{ALT}", "\x01");
+			_strings[i->first] = utf8ToWstr(s);
+		}
+	}
 	txtFile.close();
 }
 
@@ -620,6 +632,26 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
 	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
 	replace(txt, marker, val);
 	return txt;
+}
+
+/**
+ * Returns the localized text with the specified ID, in the proper form for the gender.
+ * If it's not found, just returns the ID.
+ * @param id ID of the string.
+ * @return String with the requested ID.
+ */
+const LocalizedText &Language::getString(const std::string &id, SoldierGender gender) const
+{
+	std::string genderId;
+	if (gender == GENDER_MALE)
+	{
+		genderId = id + "_MALE";
+	}
+	else
+	{
+		genderId = id + "_FEMALE";
+	}
+	return getString(genderId);
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -46,7 +46,13 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0), _unitRules(0), _rankInt(-1), _hidingForTurn(false)
+BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0),
+																_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
+																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
+																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
+																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
+																_turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0),
+																_unitRules(0), _rankInt(-1), _hitByFire(false), _hidingForTurn(false), _moraleRestored(0)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -57,7 +63,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
 	_deathSound = 0; // this one is hardcoded
-	_aggroSound = 0;
+	_aggroSound = -1;
 	_moveSound = -1;  // this one is hardcoded
 	_intelligence = 2;
 	_aggression = 1;
@@ -104,13 +110,25 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
  * Initializes a BattleUnit from a Unit object.
  * @param unit Pointer to Unit object.
  * @param faction Which faction the units belongs to.
+ * @param difficulty level (for stat adjustement)
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()), _tile(0), _lastPos(Position()), _direction(0), _directionTurret(0), _toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0), _armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),_hidingForTurn(false)
+BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(id), _pos(Position()),
+																						_tile(0), _lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0),
+																						_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
+																						_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
+																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
+																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0),
+																						_armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),
+																						_hitByFire(false), _hidingForTurn(false), _moraleRestored(0)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
 	_race = unit->getRace();
 	_stats = *unit->getStats();
+	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	}
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
@@ -176,7 +194,6 @@ BattleUnit::BattleUnit(BattleUnit &b) :
 	_cacheInvalid(b._cacheInvalid),
 	_expBravery(b._expBravery), _expReactions(b._expReactions), _expFiring(b._expFiring), _expThrowing(b._expThrowing), _expPsiSkill(b._expPsiSkill), _expMelee(b._expMelee),
 	_turretType(b._expMelee),
-	_needPainKiller(b._needPainKiller),
 	_motionPoints(b._motionPoints),
 	_kills(b._kills),
 	_faceDirection(b._faceDirection),
@@ -222,6 +239,7 @@ BattleUnit::~BattleUnit()
 {
 	for (int i = 0; i < 5; ++i)
 		if (_cache[i]) delete _cache[i];
+	//delete _currentAIState;
 }
 
 /**
@@ -251,6 +269,7 @@ void BattleUnit::load(const YAML::Node &node)
 		node["armor"][i] >> _currentArmor[i];
 	for (int i=0; i < 6; i++)
 		node["fatalWounds"][i] >> _fatalWounds[i];
+	node["fire"] >> _fire;
 	node["expBravery"] >> _expBravery;
 	node["expReactions"] >> _expReactions;
 	node["expFiring"] >> _expFiring;
@@ -262,6 +281,10 @@ void BattleUnit::load(const YAML::Node &node)
 	node["turnsExposed"] >> _turnsExposed;
 	node["killedBy"] >> a;
 	_killedBy = (UnitFaction)a;
+	if (const YAML::Node *pName = node.FindValue("moraleRestored"))
+	{
+		(*pName) >> _moraleRestored;
+	}
 	if (const YAML::Node *pName = node.FindValue("rankInt"))
 	{
 		(*pName) >> _rankInt;
@@ -279,8 +302,13 @@ void BattleUnit::load(const YAML::Node &node)
 	{
 		(*pName) >> _kills;
 	}
+	if (const YAML::Node *pName = node.FindValue("dontReselect"))
+	{
+		(*pName) >> _dontReselect;
+	}
 	_charging = 0;
-
+	_toDirection = _direction;
+	_toDirectionTurret = _directionTurret;
 
 }
 
@@ -328,6 +356,7 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "visible" << YAML::Value << _visible;
 	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
 	out << YAML::Key << "rankInt" << YAML::Value << _rankInt;
+	out << YAML::Key << "moraleRestored" << YAML::Value << _moraleRestored;
 
 	if (getCurrentAIState())
 	{
@@ -339,6 +368,8 @@ void BattleUnit::save(YAML::Emitter &out) const
 		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
 	if (_kills)
 		out << YAML::Key << "kills" << YAML::Value << _kills;
+	if (_faction == FACTION_PLAYER && _dontReselect)
+		out << YAML::Key << "dontReselect" << YAML::Value << _dontReselect;
 
 	out << YAML::EndMap;
 }
@@ -526,15 +557,14 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 				middle = 1;
 		}
 	}
+	if (!cache)
+	{
+		_pos = _destination;
+		end = 1;
+	}
 
 	_walkPhase++;
 	
-	if (!cache)
-	{
-		_walkPhase = 1;
-		middle = 1;
-		end = 1;
-	}
 
 	if (_walkPhase == middle)
 	{
@@ -543,7 +573,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		_pos = _destination;
 	}
 
-	if (_walkPhase == end)
+	if (_walkPhase >= end)
 	{
 		if (_floating && !_tile->hasNoFloor(tileBelowMe))
 		{
@@ -635,7 +665,10 @@ void BattleUnit::lookAt(int direction, bool force)
 	{
 		if (direction < 0 || direction >= 8) return;
 		_toDirection = direction;
-		_status = STATUS_TURNING;
+		if (_toDirection != _direction)
+		{
+			_status = STATUS_TURNING;
+		}
 	}
 	else
 	{
@@ -652,9 +685,23 @@ void BattleUnit::turn(bool turret)
 	int a = 0;
 
 	if (turret)
+	{
+		if (_directionTurret == _toDirectionTurret)
+		{
+			abortTurn();
+			return;
+		}
 		a = _toDirectionTurret - _directionTurret;
+	}
 	else
+	{
+		if (_direction == _toDirection)
+		{
+			abortTurn();
+			return;
+		}
 		a = _toDirection - _direction;
+	}
 
 	if (a != 0) {
 		if (a > 0) {
@@ -900,10 +947,9 @@ int BattleUnit::getMorale() const
  * @param type
  * @return damage done after adjustment
  */
-int BattleUnit::damage(Position position, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
-	int impactheight;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
 	if (power <= 0)
@@ -917,90 +963,72 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 
 	if (!ignoreArmor)
 	{
-		if (position == Position(0, 0, 0))
+		if (relative == Position(0, 0, 0))
 		{
 			side = SIDE_UNDER;
 		}
 		else
 		{
-			// normalize x and y towards north
-			int x = 8, y = 8;
-			switch(_direction)
-			{
-			case 0: // heading north
-				x = position.x;
-				y = 15 - position.y;
-				break;
-			case 1: // somewhere in between 0 and 2
-				x = (position.x + position.y)/2;
-				y = ((15 - position.y) + position.x)/2;
-				break;
-			case 2: // heading east
-				x = 15 - position.y;
-				y = 15 - position.x;
-				break;
-			case 3:
-				x = (position.y + (15 - position.x))/2;
-				y = (position.x + position.y)/2;
-				break;
-			case 4: // heading south
-				x = 15 - position.x;
-				y = position.y;
-				break;
-			case 5:
-				x = ((15 - position.x) + (15 - position.y))/2;
-				y = (position.y + (15 - position.x))/2;
-				break;
-			case 6: // heading west
-				x = 15 - position.y;
-				y = 15 - position.x;
-				break;
-			case 7:
-				x = ((15 - position.y) + position.x)/2;
-				y = ((15 - position.x) + (15 - position.y))/2;
-				break;
-			}
-			// determine side
-			if (y > 9)
-				side = SIDE_FRONT;
-			else if (y < 6)
-				side = SIDE_REAR;
-			else if (x < 6)
-				side = SIDE_LEFT;
-			else if (x > 9)
-				side = SIDE_RIGHT;
+			int relativeDirection;
+			const int abs_x = abs(relative.x);
+			const int abs_y = abs(relative.y);
+			if (abs_y > abs_x * 2)
+				relativeDirection = 8 + 4 * (relative.y > 0);
+			else if (abs_x > abs_y * 2)
+				relativeDirection = 10 + 4 * (relative.x < 0);
 			else
-				side = SIDE_FRONT;
-		}
-
-		impactheight = 10*position.z/getHeight();
-
-		if (impactheight > 4 && impactheight < 7) // torso
-		{
-			if (side == SIDE_LEFT)
 			{
-				bodypart = BODYPART_LEFTARM;
-			}else if (side == SIDE_RIGHT)
-			{
-				bodypart = BODYPART_RIGHTARM;
-			}else
-			{
-				bodypart = BODYPART_TORSO;
+				if (relative.x < 0)
+				{
+					if (relative.y > 0)
+						relativeDirection = 13;
+					else
+						relativeDirection = 15;
+				}
+				else
+				{
+					if (relative.y > 0)
+						relativeDirection = 11;
+					else
+						relativeDirection = 9;
+				}
 			}
-		}else if (impactheight >= 7) //head
-		{
-			bodypart = BODYPART_HEAD;
-		}else if (impactheight <=4) //legs
-		{
-			if (side == SIDE_LEFT || side == SIDE_FRONT)
+
+			switch((relativeDirection - _direction) % 8)
 			{
-				bodypart = BODYPART_LEFTLEG;
-			}else
+			case 0:	side = SIDE_FRONT; 										break;
+			case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
+			case 2:	side = SIDE_RIGHT; 										break;
+			case 3:	side = RNG::generate(0,2) < 2 ? SIDE_REAR:SIDE_RIGHT; 	break;
+			case 4:	side = SIDE_REAR; 										break;
+			case 5:	side = RNG::generate(0,2) < 2 ? SIDE_REAR:SIDE_LEFT; 	break;
+			case 6:	side = SIDE_LEFT; 										break;
+			case 7:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
+			}
+			if (relative.z > getHeight())
 			{
-				bodypart = BODYPART_RIGHTLEG;
+				bodypart = BODYPART_HEAD;
+			}
+			else if (relative.z > 4)
+			{
+				switch(side)
+				{
+				case SIDE_LEFT:		bodypart = BODYPART_LEFTARM; break;
+				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM; break;
+				default:			bodypart = BODYPART_TORSO;
+				}
+			}
+			else
+			{
+				switch(side)
+				{
+				case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
+				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
+				default:
+					bodypart = (UnitBodyPart) RNG::generate(BODYPART_RIGHTLEG,BODYPART_LEFTLEG);
+				}
 			}
 		}
-
 		power -= getArmor(side);
 	}
 
@@ -1015,14 +1043,21 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 			// health damage
 			_health -= power;
 			if (_health < 0)
+			{
 				_health = 0;
+			}
 
 			if (type != DT_IN)
 			{
+				if (_armor->getSize() == 1)
+				{
+					// conventional weapons can cause additional stun damage
+					_stunlevel += RNG::generate(0, power / 4);
+				}
 				// fatal wounds
 				if (isWoundable())
 				{
-					if (RNG::generate(0,power) > 2)
+					if (RNG::generate(0, 10) < power)
 						_fatalWounds[bodypart] += RNG::generate(1,3);
 
 					if (_fatalWounds[bodypart])
@@ -1031,7 +1066,6 @@ int BattleUnit::damage(Position position, int power, ItemDamageType type, bool i
 				// armor damage
 				setArmor(getArmor(side) - (power/10) - 1, side);
 			}
-			_needPainKiller = true;
 		}
 	}
 
@@ -1129,8 +1163,12 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 			return (int)(getStats()->tu * item->getRules()->getTUAuto() / 100);
 		case BA_SNAPSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUSnap() / 100);
+		case BA_STUN:
 		case BA_HIT:
-			return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
+			if (item->getRules()->getFlatRate())
+				return item->getRules()->getTUMelee();
+			else
+				return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
 			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
@@ -1150,13 +1188,10 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 /**
  * Spend time units if it can. Return false if it can't.
  * @param tu
- * @param debugmode If this is true, the function actually does noting.
  * @return flag if it could spend the time units or not.
  */
-bool BattleUnit::spendTimeUnits(int tu, bool debugmode)
+bool BattleUnit::spendTimeUnits(int tu)
 {
-	if (debugmode) return true;
-
 	if (tu <= _tu)
 	{
 		_tu -= tu;
@@ -1295,7 +1330,7 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		weaponAcc = item->getRules()->getAccuracyMelee();
+		return (double)(item->getRules()->getAccuracyMelee()/100.0);
 
 	result *= (double)(weaponAcc/100.0);
 
@@ -1426,9 +1461,9 @@ void BattleUnit::prepareNewTurn()
 	_health -= getFatalWounds();
 
 	// suffer from fire
-	if (_fire > 0)
+	if (!_hitByFire && _fire > 0)
 	{
-		_health -= RNG::generate(5, 10);
+		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
 		_fire--;
 	}
 
@@ -1463,7 +1498,7 @@ void BattleUnit::prepareNewTurn()
 				_expBravery++;
 		}
 	}
-
+	_hitByFire = false;
 	_dontReselect = false;
 	_motionPoints = 0;
 }
@@ -1507,7 +1542,8 @@ bool BattleUnit::reselectAllowed() const
  */
 void BattleUnit::setFire(int fire)
 {
-	_fire = fire;
+	if (_specab != SPECAB_BURNFLOOR)
+		_fire = fire;
 }
 
 /**
@@ -1548,6 +1584,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
 	{
 		if (dynamic_cast<AggroBAIState*>(aiState) != 0 && dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
 		{
+			delete aiState;
 			return; // try not to overwrite an existing aggro AI state
 			// I tried using typeid but it does not produce the expected results :(
 		}
@@ -1773,7 +1810,7 @@ bool BattleUnit::checkAmmo()
 
 	if (wrong) return false; // didn't find any compatible ammo in inventory
 
-	spendTimeUnits(15,false);
+	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
 	ammo->moveToOwner(0);
 
@@ -1855,31 +1892,32 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addKillCount(_kills);
 
 	UnitStats *stats = s->getCurrentStats();
+	UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
 
-	if (_expBravery && stats->bravery < 100)
+	if (_expBravery && stats->bravery < caps.bravery)
 	{
 		if (_expBravery > RNG::generate(0,10)) stats->bravery += 10;
 	}
-	if (_expReactions && stats->reactions < 100)
+	if (_expReactions && stats->reactions < caps.reactions)
 	{
 		stats->reactions += improveStat(_expReactions);
 	}
-	if (_expFiring && stats->firing < 120)
+	if (_expFiring && stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
 	}
-	if (_expMelee && stats->melee < 120)
+	if (_expMelee && stats->melee < caps.melee)
 	{
 		stats->melee += improveStat(_expMelee);
 	}
-	if (_expThrowing && stats->throwing < 120)
+	if (_expThrowing && stats->throwing < caps.throwing)
 	{
 		stats->throwing += improveStat(_expThrowing);
 	}
-	if (_expPsiSkill && stats->psiSkill < 100)
+	if (_expPsiSkill && stats->psiSkill < caps.psiSkill)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
@@ -1889,13 +1927,13 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();
 		int v;
-		v = 80 - stats->tu;
+		v = caps.tu - stats->tu;
 		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
-		v = 60 - stats->health;
+		v = caps.health - stats->health;
 		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
-		v = 70 - stats->strength;
+		v = caps.strength - stats->strength;
 		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
-		v = 100 - stats->stamina;
+		v = caps.stamina - stats->stamina;
 		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
 		return true;
 	}
@@ -2006,14 +2044,12 @@ void BattleUnit::heal(int part, int healAmount, int healthAmount)
  */
 void BattleUnit::painKillers ()
 {
-	if (!getFatalWounds() || !_needPainKiller)
-	{
-		return ;
-	}
-	_needPainKiller = false;
 	int lostHealth = getStats()->health - _health;
-	_morale += lostHealth;
-	if (_morale > 100) _morale = 100;
+	if (lostHealth > _moraleRestored)
+	{
+        _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
+		_moraleRestored = lostHealth;
+	}
 }
 
 /**
@@ -2443,6 +2479,90 @@ void BattleUnit::deriveRank()
 		else if (_rank == "STR_ROOKIE")
 			_rankInt = 0;
 	}
+}
+
+/*
+ * this function checks if a tile is visible, using maths.
+ * @param pos the position to check against
+ * @return what the maths decide
+ */
+bool BattleUnit::checkViewSector (Position pos) const
+{
+	int deltaX = pos.x - _pos.x;
+	int deltaY = _pos.y - pos.y;
+
+	switch (_direction)
+	{
+		case 0:
+			if ( (deltaX + deltaY >= 0) && (deltaY - deltaX >= 0) )
+				return true;
+			break;
+		case 1:
+			if ( (deltaX >= 0) && (deltaY >= 0) )
+				return true;
+			break;
+		case 2:
+			if ( (deltaX + deltaY >= 0) && (deltaY - deltaX <= 0) )
+				return true;
+			break;
+		case 3:
+			if ( (deltaY <= 0) && (deltaX >= 0) )
+				return true;
+			break;
+		case 4:
+			if ( (deltaX + deltaY <= 0) && (deltaY - deltaX <= 0) )
+				return true;
+			break;
+		case 5:
+			if ( (deltaX <= 0) && (deltaY <= 0) )
+				return true;
+			break;
+		case 6:
+			if ( (deltaX + deltaY <= 0) && (deltaY - deltaX >= 0) )
+				return true;
+			break;
+		case 7:
+			if ( (deltaY >= 0) && (deltaX <= 0) )
+				return true;
+			break;
+		default:
+			return false;
+	}
+	return false;
+}
+
+/*
+ * common function to adjust a unit's stats according to difficulty setting.
+ */
+void BattleUnit::adjustStats(const int diff)
+{
+	// adjust the unit's stats according to the difficulty level.
+	_stats.tu += 4 * diff * _stats.tu / 100;
+	_stats.stamina += 4 * diff * _stats.stamina / 100;
+	_stats.reactions += 6 * diff * _stats.reactions / 100;
+	_stats.strength += 2 * diff * _stats.strength / 100;
+	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
+	_stats.strength += 2 * diff * _stats.strength / 100;
+	_stats.melee += 4 * diff * _stats.melee / 100;
+	_stats.psiSkill += 4 * diff * _stats.psiSkill / 100;
+	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
+}
+
+/*
+ * did this unit already take fire damage this turn?
+ * (used to avoid damaging large units multiple times.)
+ */
+bool BattleUnit::tookFireDamage() const
+{
+	return _hitByFire;
+}
+
+/*
+ * toggle the state of the fire damage tracking boolean.
+ */
+void BattleUnit::toggleFireDamage()
+{
+	_hitByFire = !_hitByFire;
 }
 
 }

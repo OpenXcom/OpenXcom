@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,6 +58,8 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	add(_txtRank);
 	add(_txtBase);
 	add(_lstSoldiers);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

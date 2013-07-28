@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,13 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PlaceStartFacilityState.h"
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "BaseView.h"
 #include "../Savegame/Base.h"
@@ -31,7 +27,6 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
-#include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 
 namespace OpenXcom
@@ -41,6 +36,7 @@ namespace OpenXcom
  * Initializes all the elements in the Place Facility window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param select Pointer to the selection state.
  * @param rule Pointer to the facility ruleset to build.
  */
 PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(game, base, rule), _select(select)

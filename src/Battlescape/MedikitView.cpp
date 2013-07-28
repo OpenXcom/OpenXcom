@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,7 +26,6 @@
 #include "../Engine/Palette.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Interface/Text.h"
-#include "../Resource/ResourcePack.h"
 #include <iostream>
 
 namespace OpenXcom

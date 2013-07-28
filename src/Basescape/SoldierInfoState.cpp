@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/Bar.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
@@ -32,9 +33,11 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
+#include "SackSoldierState.h"
 
 namespace OpenXcom
 {
@@ -55,6 +58,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnNext = new TextButton(28, 14, 80, 33);
 	_btnArmor = new TextButton(60, 14, 130, 33);
 	_edtSoldier = new TextEdit(200, 16, 40, 9);
+	_btnSack = new TextButton(60,14,248, 10);
 	_txtArmor = new Text(120, 9, 194, 38);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
@@ -110,6 +114,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_btnNext);
 	add(_btnArmor);
 	add(_edtSoldier);
+	add(_btnSack);
 	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
@@ -158,12 +163,15 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_numPsiSkill);
 	add(_barPsiSkill);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
@@ -180,6 +188,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
+
+	_btnSack->setColor(Palette::blockOffset(15)+6);
+	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
+	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
 
 	_txtArmor->setColor(Palette::blockOffset(13));
 
@@ -317,22 +329,21 @@ SoldierInfoState::~SoldierInfoState()
  */
 void SoldierInfoState::init()
 {
+	if(_base->getSoldiers()->empty())
+	{
+		_game->popState();
+		return;
+	}
+	if(_soldier == _base->getSoldiers()->size())
+	{
+		_soldier = 0;
+	}
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
-	
-	if(s->getCurrentStats()->psiSkill == 0)
-	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
 
-		_txtPsiSkill->setVisible(false);
-		_numPsiSkill->setVisible(false);
-		_barPsiSkill->setVisible(false);
-	}
-	else
+	if(current->psiSkill > 0)
 	{
 		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
@@ -341,6 +352,16 @@ void SoldierInfoState::init()
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);
 		_barPsiSkill->setVisible(true);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+
+		_txtPsiSkill->setVisible(false);
+		_numPsiSkill->setVisible(false);
+		_barPsiSkill->setVisible(false);
 	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
@@ -437,7 +458,7 @@ void SoldierInfoState::init()
 	}
 
 	_txtPsionic->setVisible(s->isInPsiTraining());
-	
+
 	if(current->psiSkill > 0)
 	{
 		std::wstringstream ss14;
@@ -503,6 +524,8 @@ void SoldierInfoState::btnOkClick(Action *)
  */
 void SoldierInfoState::btnPrevClick(Action *)
 {
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (_soldier == 0)
 		_soldier = _base->getSoldiers()->size() - 1;
 	else
@@ -516,6 +539,8 @@ void SoldierInfoState::btnPrevClick(Action *)
  */
 void SoldierInfoState::btnNextClick(Action *)
 {
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;
@@ -528,10 +553,22 @@ void SoldierInfoState::btnNextClick(Action *)
  */
 void SoldierInfoState::btnArmorClick(Action *)
 {	
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 	}
+}
+
+/**
+ * Shows the Sack Soldier window.
+ * @param action Pointer to an action.
+ */
+void SoldierInfoState::btnSackClick(Action *)
+{
+	Soldier *soldier = _base->getSoldiers()->at(_soldier);
+	_game->pushState(new SackSoldierState(_game, _base, soldier));
 }
 
 }

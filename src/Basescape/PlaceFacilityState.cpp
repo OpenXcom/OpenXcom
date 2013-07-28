@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -73,6 +73,8 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	add(_txtMaintenance);
 	add(_numMaintenance);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -85,6 +87,7 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(_game->getLanguage()->getString(_rule->getType()));

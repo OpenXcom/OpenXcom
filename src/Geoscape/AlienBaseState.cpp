@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,8 @@ AlienBaseState::AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+
+	centerAllSurfaces();
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 

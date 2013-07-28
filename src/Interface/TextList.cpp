@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,14 +34,14 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _align(ALIGN_LEFT), _dot(false), _selectable(false), _condensed(false), _contrast(false),
-																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+TextList::TextList(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0), _dot(false), _selectable(false), _condensed(false), _contrast(false),
+																								   _selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true), _arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL), _leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
 {
 	_allowScrollOnArrowButtons = true;
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + 4, getY() + 1);
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
 	_up->setVisible(false);
 	_up->setTextList(this);
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + 4, getY() + getHeight() - 12);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 12);
 	_down->setVisible(false);
 	_down->setTextList(this);
 }
@@ -205,7 +205,10 @@ void TextList::addRow(int cols, ...)
 		txt->setFonts(_big, _small);
 		txt->setColor(_color);
 		txt->setSecondaryColor(_color2);
-		txt->setAlign(_align);
+		if (_align[i])
+		{
+			txt->setAlign(_align[i]);
+		}
 		txt->setHighContrast(_contrast);
 		if (_font == _big)
 		{
@@ -257,6 +260,7 @@ void TextList::addRow(int cols, ...)
 			shape2 = ARROW_SMALL_RIGHT;
 		}
 		ArrowButton *a1 = new ArrowButton(shape1, 11, 8, getX() + _arrowPos, getY());
+		a1->setListButton();
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
 		a1->onMouseClick(_leftClick, 0);
@@ -264,6 +268,7 @@ void TextList::addRow(int cols, ...)
 		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
 		ArrowButton *a2 = new ArrowButton(shape2, 11, 8, getX() + _arrowPos + 12, getY());
+		a2->setListButton();
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
 		a2->onMouseClick(_rightClick, 0);
@@ -406,10 +411,21 @@ void TextList::setHighContrast(bool contrast)
  * Changes the horizontal alignment of the text in the list. This doesn't change
  * the alignment of existing text, just the alignment of text added from then on.
  * @param align Horizontal alignment.
+ * @param col the column to set the alignment for (defaults to -1, meaning "all")
  */
-void TextList::setAlign(TextHAlign align)
+void TextList::setAlign(TextHAlign align, int col)
 {
-	_align = align;
+	if (col == -1)
+	{
+		for (size_t i = 0; i <= _columns.size() - 1; ++i)
+		{
+			_align[i] = align;
+		}
+	}
+	else
+	{
+		_align[col] = align;
+	}
 }
 
 /**
@@ -631,6 +647,7 @@ void TextList::clearList()
 		u->clear();
 	}
 	_texts.clear();
+	_redraw = true;
 }
 
 /**
@@ -678,10 +695,17 @@ void TextList::updateArrows()
 /**
  * Changes whether the list can be scrolled.
  * @param scrolling True to allow scrolling, false otherwise.
+ * @param scrollPos Custom X position for the scroll buttons.
  */
-void TextList::setScrolling(bool scrolling)
+void TextList::setScrolling(bool scrolling, int scrollPos)
 {
 	_scrolling = scrolling;
+	if (scrollPos != _scrollPos)
+	{
+		_scrollPos = scrollPos;
+		_up->setX(getX() + getWidth() + _scrollPos);
+		_down->setX(getX() + getWidth() + _scrollPos);
+	}
 }
 
 /**
@@ -881,5 +905,28 @@ void TextList::mouseOut(Action *action, State *state)
 
 	InteractiveSurface::mouseOut(action, state);
 }
+/*
+ * get the scroll depth.
+ * @return scroll depth.
+ */
+int TextList::getScroll()
+{
+	return _scroll;
+}
 
+void TextList::setAllX(int x)
+{
+	_x = x;
+	_up->setX(getX() + getWidth() + _scrollPos);
+	_down->setX(getX() + getWidth() + _scrollPos);
+	_selector->setX(x);
+}
+
+void TextList::setAllY(int y)
+{
+	_y = y;
+	_up->setY(getY() + 1);
+	_down->setY(getY() + getHeight() - 12);
+	_selector->setY(y);
+}
 }

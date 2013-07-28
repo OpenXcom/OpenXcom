@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,6 +26,7 @@ namespace OpenXcom
 
 class InteractiveSurface;
 class Text;
+class Timer;
 
 /**
  * Game Over Screens.
@@ -36,12 +37,15 @@ private:
 	InteractiveSurface *_screen;
 	std::vector<Text*> _txtText;
 	int _screenNumber;
+	Timer *_timer;
 public:
 	/// Creates the Victory state.
 	VictoryState(Game *game);
 	/// Cleans up the Victory state.
 	~VictoryState();
 	void init();
+	/// Handle timers.
+	void think();
 	/// Handler for clicking the screen.
 	void windowClick(Action *action);
 	void nextScreen();

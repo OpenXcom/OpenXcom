@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -124,6 +124,9 @@ void ManufactureInfoState::buildUi()
 	add(_btnUnitDown);
 	add(_btnOk);
 	add(_btnStop);
+
+	centerAllSurfaces();
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
@@ -183,6 +186,8 @@ void ManufactureInfoState::buildUi()
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)&ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnStop->setColor(Palette::blockOffset(13)+10);
 	_btnStop->setText(_game->getLanguage()->getString("STR_STOP_PRODUCTION"));

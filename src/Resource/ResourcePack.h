@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,9 +37,6 @@ class Polyline;
 class Music;
 class SoundSet;
 class Sound;
-class SavedBattleGame;
-class RuleTerrain;
-class MapBlock;
 
 /**
  * Packs of external game media.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -31,8 +31,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
-#include "TestState.h"
-#include "NoteState.h"
+#include "../Ruleset/Ruleset.h"
 #include "LanguageState.h"
 #include "MainMenuState.h"
 
@@ -46,7 +45,9 @@ namespace OpenXcom
 StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 {
 	// Create objects
-	_surface = new Surface(320, 200, 0, 0);
+	int dx = (Options::getInt("baseXResolution") - 320) / 2;
+	int dy = (Options::getInt("baseYResolution") - 200) / 2;
+	_surface = new Surface(320, 200, dx, dy);
 
 	// Set palette
 	SDL_Color bnw[3];
@@ -428,12 +429,12 @@ void StartState::think()
 	case LOADING_STARTED:
 		try
 		{
-			Log(LOG_INFO) << "Loading resources...";
-			_game->setResourcePack(makeModifications(new XcomResourcePack()));
-			Log(LOG_INFO) << "Resources loaded successfully.";
 			Log(LOG_INFO) << "Loading ruleset...";
 			_game->loadRuleset();
 			Log(LOG_INFO) << "Ruleset loaded successfully.";
+			Log(LOG_INFO) << "Loading resources...";
+			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
+			Log(LOG_INFO) << "Resources loaded successfully.";
 			std::vector<std::string> langs = Language::getList(0);
 			if (langs.empty())
 			{
@@ -448,6 +449,8 @@ void StartState::think()
 				audioSequence = new AudioSequence(_game->getResourcePack());
 				Flc::flc.realscreen = _game->getScreen();
 				Flc::FlcInit(introFile.c_str());
+				Flc::flc.dx = (Options::getInt("baseXResolution") - 320) / 2;
+				Flc::flc.dy = (Options::getInt("baseYResolution") - 200) / 2;
 				Flc::flc.loop = 0; // just the one time, please
 				Flc::FlcMain(&audioHandler);
 				Flc::FlcDeInit();
@@ -537,29 +540,6 @@ void StartState::handle(Action *action)
 		if (action->getDetails()->type == SDL_KEYDOWN)
 			_game->quit();
 	}
-}
-
-/**
- * This method makes our modifications to the XcomResourcePack.
- * @param pack XcomResourcePack which is already read in from files.
- * @return The modified XcomResourcePack.
- */
-XcomResourcePack *StartState::makeModifications(XcomResourcePack *pack)
-{
-	if (_game->getAlienContainmentHasUpperLimit())
-	{
-		Surface *surface = pack->getSurface("BACK07.SCR");
-		for (int y = 172; y >= 152; --y)
-			for (int x = 5; x <= 314; ++x)
-				surface->setPixel(x, y+4, surface->getPixel(x,y));
-		for (int y = 147; y >= 134; --y)
-			for (int x = 5; x <= 314; ++x)
-				surface->setPixel(x, y+9, surface->getPixel(x,y));
-		for (int y = 132; y >= 109; --y)
-			for (int x = 5; x <= 314; ++x)
-				surface->setPixel(x, y+10, surface->getPixel(x,y));
-	}
-	return pack;
 }
 
 }

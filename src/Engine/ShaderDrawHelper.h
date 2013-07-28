@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -251,7 +251,7 @@ public:
 	 * surface will have same dimensions as `s`.
 	 * Attention: after use of this constructor you change size of surface `s` 
 	 * then `_orgin` will be invalid and use of this object will cause memory exception. 
-     * @param f vector that are treated as surface
+     * @param s vector that are treated as surface
      */		
 	inline ShaderBase(Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
@@ -354,7 +354,7 @@ public:
 	 * surface will have same dimensions as `s`.
 	 * Attention: after use of this constructor you change size of surface `s` 
 	 * then `_orgin` will be invalid and use of this object will cause memory exception. 
-     * @param f vector that are treated as surface
+     * @param s vector that are treated as surface
      */	
 	inline ShaderBase(const Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),

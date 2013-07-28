@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -67,11 +67,10 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 	_bg->drawRect(&square, Palette::blockOffset(6)+9);
 
 	add(_window);
-	_window->setColor(Palette::blockOffset(6)+11);
+	_window->setColor(Palette::blockOffset(6)+5);
 
 	add(_title);
 	_title->setAlign(ALIGN_CENTER);
-	_title->setFonts(_game->getResourcePack()->getFont("Big.fnt"), 0);
 	_title->setBig();
 	_title->setText(_game->getLanguage()->getString("STR_SET_TIMER"));
 	_title->setColor(Palette::blockOffset(1)-1);
@@ -104,7 +103,8 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		_number[i]->setVerticalAlign(ALIGN_MIDDLE);
 	}
 
-
+	centerAllSurfaces();
+	lowerAllSurfaces();
 }
 
 /**
@@ -146,7 +146,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 	}
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; ++i)
+	for (int i = 0; i < 24 && btnID == -1; ++i)
 	{
 		if (action->getSender() == _button[i])
 		{

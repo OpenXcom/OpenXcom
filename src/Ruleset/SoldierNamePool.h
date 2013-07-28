@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,6 +36,8 @@ class SoldierNamePool
 {
 private:
 	std::vector<std::wstring> _maleFirst, _femaleFirst, _maleLast, _femaleLast;
+	std::vector<int> _lookWeights;
+	int _totalWeight;
 public:
 	/// Creates a blank pool.
 	SoldierNamePool();
@@ -45,6 +47,8 @@ public:
 	void load(const std::string &filename);
 	/// Generates a new name from the pool.
 	std::wstring genName(SoldierGender *gender) const;
+	/// generates an int representing the index of the soldier's look, when passed the maximum index value.
+	int genLook(size_t numLooks);
 };
 
 }

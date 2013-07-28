@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -57,6 +57,8 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	add(_btnOk5Secs);
 	add(_txtTitle);
 	add(_txtMessage);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

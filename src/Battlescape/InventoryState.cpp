@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,10 +52,11 @@ namespace OpenXcom
  * Initializes all the elements in the Inventory screen.
  * @param game Pointer to the core game.
  * @param tu Inventory Time Unit mode.
+ * @param parent Pointer to parent Battlescape.
  */
 InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
 {
-	_battleGame = _game->getSavedGame()->getBattleGame();
+	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// Create objects
@@ -104,6 +105,8 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	add(_btnRank);
 	add(_selAmmo);
 	add(_inv);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
@@ -159,7 +162,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
-	_inv->setSelectedUnit(_game->getSavedGame()->getBattleGame()->getSelectedUnit());
+	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
 }
 
@@ -207,12 +210,21 @@ void InventoryState::init()
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 		look += ".SPK";
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
+	else
+	{
+		Surface *armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		if (armorSurface)
+		{
+			armorSurface->blit(_soldier);
+		}
+	}
+
 	if (_showMoreStatsInInventoryView && !_tu)
 	{
 		std::wstringstream ss2;
@@ -323,8 +335,9 @@ void InventoryState::btnOkClick(Action *)
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
 	}
-	_battleGame->getTileEngine()->applyItemGravity(_battleGame->getSelectedUnit()->getTile());
+	_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
 	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+	_battleGame->getTileEngine()->recalculateFOV();
 }
 
 /**
@@ -337,7 +350,8 @@ void InventoryState::btnPrevClick(Action *)
 		return;
 	_parent->selectPreviousPlayerUnit(false);
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
 		_parent->selectPreviousPlayerUnit(false);
 	}
@@ -354,7 +368,8 @@ void InventoryState::btnNextClick(Action *)
 		return;
 	_parent->selectNextPlayerUnit(false, false);
 	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1)
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
 		_parent->selectNextPlayerUnit(false, false);
 	}

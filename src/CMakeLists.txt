@@ -1,3 +1,12 @@
+set ( root_src
+  main.cpp
+  lodepng.cpp
+  lodepng.h
+  dirent.h
+  aresame.h
+  version.h
+)
+
 set ( basescape_src
   Basescape/BaseView.cpp
   Basescape/BaseView.h
@@ -7,6 +16,8 @@ set ( basescape_src
   Basescape/TransfersState.h
   Basescape/StoresState.cpp
   Basescape/StoresState.h
+  Basescape/SackSoldierState.h
+  Basescape/SackSoldierState.cpp
   Basescape/SellState.h
   Basescape/SellState.cpp
   Basescape/CraftInfoState.cpp
@@ -98,8 +109,6 @@ set ( battlescape_src
   Battlescape/BattlescapeState.h
   Battlescape/BattlescapeGenerator.h
   Battlescape/BattlescapeGenerator.cpp
-  Battlescape/BulletSprite.h
-  Battlescape/BulletSprite.cpp
   Battlescape/Camera.h
   Battlescape/Camera.cpp
   Battlescape/Projectile.cpp
@@ -241,8 +250,6 @@ set ( geoscape_src
   Geoscape/GeoscapeCraftState.h
   Geoscape/UfoDetectedState.h
   Geoscape/UfoDetectedState.cpp
-  Geoscape/UfoHyperDetectedState.h
-  Geoscape/UfoHyperDetectedState.cpp
   Geoscape/InterceptState.h
   Geoscape/InterceptState.cpp
   Geoscape/Polyline.h
@@ -347,6 +354,8 @@ set ( interface_src
 )
 
 set ( menu_src
+  Menu/AdvancedOptionsState.cpp
+  Menu/AdvancedOptionsState.h
   Menu/StartState.cpp
   Menu/StartState.h
   Menu/NoteState.cpp
@@ -403,6 +412,8 @@ set ( ruleset_src
   Ruleset/RuleInventory.cpp
   Ruleset/MapBlock.h
   Ruleset/MapBlock.cpp
+  Ruleset/MCDPatch.h
+  Ruleset/MCDPatch.cpp
   Ruleset/RuleBaseFacility.cpp
   Ruleset/RuleBaseFacility.h
   Ruleset/SoldierNamePool.h
@@ -417,6 +428,12 @@ set ( ruleset_src
   Ruleset/ArticleDefinition.h
   Ruleset/City.cpp
   Ruleset/City.h
+  Ruleset/ExtraSprites.cpp
+  Ruleset/ExtraSprites.h
+  Ruleset/ExtraSounds.cpp
+  Ruleset/ExtraSounds.h
+  Ruleset/ExtraStrings.cpp
+  Ruleset/ExtraStrings.h
   Ruleset/RuleTerrain.cpp
   Ruleset/RuleTerrain.h
   Ruleset/MapData.cpp
@@ -498,6 +515,8 @@ set ( savegame_src
   Savegame/WeightedOptions.h
   Savegame/AlienStrategy.cpp
   Savegame/AlienStrategy.h
+  Savegame/SerializationHelper.cpp
+  Savegame/SerializationHelper.h
 )
 
 set ( ufopedia_src
@@ -576,13 +595,18 @@ if ( WIN32 )
   set ( application_type WIN32 )
 endif ()
 
-set ( openxcom_src main.cpp lodepng.cpp lodepng.h dirent.h aresame.h ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
+set ( openxcom_src ${root_src} ${basescape_src} ${battlescape_src} ${engine_src} ${geoscape_src} ${interface_src} ${menu_src} ${resource_src} ${ruleset_src} ${savegame_src} ${ufopedia_src} )
 
 set ( install_dest RUNTIME )
 set ( set_exec_path ON )
 set ( install_dest_dir bin )
 if ( UNIX AND NOT APPLE )
-  set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
+  if ( "${DATADIR}" STREQUAL "" )
+    set ( data_install_dir "share/openxcom" )
+  else ()
+    set ( data_install_dir ${DATADIR} )
+    add_definitions( -DDATADIR="${data_install_dir}/" )
+  endif ()
 endif ()
 if ( APPLE )
   set ( openxcom_src ${openxcom_src} ${MACOS_SDLMAIN_M_PATH} )
@@ -594,7 +618,12 @@ if ( APPLE )
     set ( install_dest_dir "" )
     set ( data_install_dir bin )
   else ()
-    set ( data_install_dir ${CMAKE_INSTALL_PREFIX}/share/openxcom )
+    if ( "${DATADIR}" STREQUAL "" )
+      set ( data_install_dir "share/openxcom" )
+    else ()
+      set ( data_install_dir ${DATADIR} )
+      add_definitions( -DDATADIR="${data_install_dir}/" )
+    endif ()
   endif ()
 endif ()
 if ( set_exec_path )

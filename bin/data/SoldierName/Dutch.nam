@@ -1,0 +1,68 @@
+# A good article about dutch firstnames can be found at
+# http://www.historischnieuwsblad.nl/nl/artikel/5849/voornamen-in-nederland.html
+lookWeights:
+  - 45
+  - 45
+  - 5
+  - 5
+maleFirst:
+  - Jan
+  - Piet
+  - Henk
+  - Peter
+  - Hans
+  - Kees
+  - Wim
+  - Cor
+  - Gerard
+  - Gerrit
+  - Johan
+  - Rudi
+femaleFirst:
+  - Annie
+  - Emma
+  - Marietje
+  - Mien
+  - Willie
+  - Eva
+  - Corrie
+  - Lenie
+  - Greetje
+  - Hanna
+  - Sofie
+  - Ansje
+maleLast:
+  - de Jong
+  - Jansen
+  - de Vries
+  - van de Berg
+  - van Dijk
+  - Bakker
+  - Janssen
+  - Visser
+  - Smit
+  - Meyer
+  - de Boer
+  - Mulder
+  - de Groot
+  - Bos
+  - Vos
+  - Peters
+  - Hendriks
+  - van Leeuwen
+  - Dekker
+  - Brouwer
+  - de Wit
+  - Dijkstra
+  - Smits
+  - de Graaf
+  - van der Meer
+  - van der Linden
+  - Kok
+  - Jacobs
+  - de Haan
+  - Vermeulen
+  - van den Heuvel
+  - van der Veen
+  - van den Broek
+  - de Bruyn

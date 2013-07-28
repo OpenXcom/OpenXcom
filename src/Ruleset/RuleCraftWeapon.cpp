@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,7 +25,7 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1)
+RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1), _projectileType(0), _projectileSpeed(0)
 {
 }
 
@@ -39,8 +39,9 @@ RuleCraftWeapon::~RuleCraftWeapon()
 /**
  * Loads the craft weapon from a YAML file.
  * @param node YAML node.
+ * @param modIndex offsets the sounds and sprite values to avoid conflicts.
  */
-void RuleCraftWeapon::load(const YAML::Node &node)
+void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -53,10 +54,16 @@ void RuleCraftWeapon::load(const YAML::Node &node)
 		else if (key == "sprite")
 		{
 			i.second() >> _sprite;
+			// this one is an offset within INTICONS.PCK
+			if (_sprite > 5)
+				_sprite += modIndex;
 		}
 		else if (key == "sound")
 		{
 			i.second() >> _sound;
+			// 14 entries in GEO.CAT
+			if (_sound > 13)
+				_sound += modIndex;
 		}
 		else if (key == "damage")
 		{
@@ -98,6 +105,14 @@ void RuleCraftWeapon::load(const YAML::Node &node)
 		{
 			i.second() >> _clip;
 		}
+		else if (key == "projectileType")
+		{
+			i.second() >> _projectileType;
+		}
+		else if (key == "projectileSpeed")
+		{
+			i.second() >> _projectileSpeed;
+		}
 	}
 }
 
@@ -121,6 +136,8 @@ void RuleCraftWeapon::save(YAML::Emitter &out) const
 	out << YAML::Key << "rearmRate" << YAML::Value << _rearmRate;
 	out << YAML::Key << "launcher" << YAML::Value << _launcher;
 	out << YAML::Key << "clip" << YAML::Value << _clip;
+	out << YAML::Key << "projectileType" << YAML::Value << _projectileType;
+	out << YAML::Key << "projectileSpeed" << YAML::Value << _projectileSpeed;
 	out << YAML::EndMap;
 }
 
@@ -251,6 +268,25 @@ std::string RuleCraftWeapon::getLauncherItem() const
 std::string RuleCraftWeapon::getClipItem() const
 {
 	return _clip;
+}
+
+
+/**
+ * Returns the Projectile Type this weapon will fire
+ * @return Projectile Type.
+ */
+int RuleCraftWeapon::getProjectileType() const
+{
+	return _projectileType;
+}
+
+/**
+ * Returns the speed of the projectile fired by this weapon
+ * @return projectile Speed.
+ */
+int RuleCraftWeapon::getProjectileSpeed() const
+{
+	return _projectileSpeed;
 }
 
 }

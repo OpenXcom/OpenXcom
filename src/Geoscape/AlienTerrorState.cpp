@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,6 +59,8 @@ AlienTerrorState::AlienTerrorState(Game *game, const City *city, GeoscapeState *
 	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtCity);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

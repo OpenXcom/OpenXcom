@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -41,6 +41,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param globe Pointer to the Geoscape globe.
+ * @param first Is this a custom starting base?
  */
 PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
 {
@@ -53,6 +54,8 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
 
 	add(_view);
 	add(_txtTitle);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));

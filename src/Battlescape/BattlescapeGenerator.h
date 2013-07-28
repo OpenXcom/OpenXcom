@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -90,6 +90,7 @@ private:
 	void explodePowerSources();
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	void deployCivilians(int max);
+	RuleTerrain *getTerrain(int tex, double lat);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
@@ -115,7 +116,11 @@ public:
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
+	/// Set up the next stage (for cydonia/tftd terror missions)
 	void nextStage();
+	/// Find a spot near a friend to spawn at
+	bool placeUnitNearFriend(BattleUnit *unit);
+
 };
 
 }

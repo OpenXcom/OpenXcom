@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,7 +47,7 @@ namespace OpenXcom
  * @param unit Unit involved in the explosion (eg unit throwing the grenade)
  * @param tile Tile the explosion is on.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false)
+ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
 {
 
 }
@@ -205,7 +205,7 @@ void ExplosionBState::explode()
 	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
-	if (_unit && !_unit->isOut())
+	if (_unit && !_unit->isOut() && _lowerWeapon)
 	{
 		_unit->aim(false);
 	}

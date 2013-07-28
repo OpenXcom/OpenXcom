@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,8 +25,6 @@
 namespace OpenXcom
 {
 
-class Globe;
-
 /**
  * Window shown when the player tries to
  * build a facility.
@@ -34,7 +32,6 @@ class Globe;
 class PlaceStartFacilityState : public PlaceFacilityState
 {
 private:
-	Globe *_globe;
 	SelectStartFacilityState *_select;
 
 public:

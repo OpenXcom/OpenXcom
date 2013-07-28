@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -78,7 +78,8 @@ public:
 	/// Handler for clicking the Geoscape button.
 	void btnGeoscapeClick(Action *action);
 	/// Handler for clicking the base view.
-	void viewClick(Action *action);
+	void viewLeftClick(Action *action);
+	void viewRightClick(Action *action);
 	/// Handler for hovering the base view.
 	void viewMouseOver(Action *action);
 	/// Handler for hovering out of the base view.

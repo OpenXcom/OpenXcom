@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -37,7 +37,7 @@ class Base;
 class SoldiersState : public State
 {
 private:
-	TextButton *_btnOk;
+	TextButton *_btnOk, *_btnPsiTraining;
 	Window *_window;
 	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft;
 	TextList *_lstSoldiers;
@@ -53,6 +53,8 @@ public:
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Soldiers list.
 	void lstSoldiersClick(Action *action);
+	/// Handler for clicking the PsiTraining button.
+	void btnPsiTrainingClick(Action *action);
 };
 
 }

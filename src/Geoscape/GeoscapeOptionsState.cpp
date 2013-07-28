@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -58,6 +58,8 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	add(_btnCancel);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -83,6 +85,12 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+
+	if (Options::getInt("autosave") >= 2)
+	{
+		_btnSave->setVisible(false);
+		_btnLoad->setVisible(false);
+	}
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,7 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsControlsState.h"
-#include <SDL/SDL.h>
+#include <SDL.h>
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
@@ -61,7 +61,9 @@ KeyOption OptionsControlsState::_controlsGeo[] =
 	{"keyGeoOptions", "STR_OPTIONS_UC", SDLK_UNKNOWN},
 	{"keyGeoFunding", "STR_FUNDING_UC", SDLK_UNKNOWN},
 	{"keyGeoToggleDetail", "STR_TOGGLE_COUNTRY_DETAIL", SDLK_UNKNOWN},
-	{"keyGeoToggleRadar", "STR_TOGGLE_RADAR_RANGES", SDLK_UNKNOWN}};
+	{"keyGeoToggleRadar", "STR_TOGGLE_RADAR_RANGES", SDLK_UNKNOWN},
+	{"keyQuickSave", "STR_QUICK_SAVE", SDLK_UNKNOWN},
+	{"keyQuickLoad", "STR_QUICK_LOAD", SDLK_UNKNOWN}};
 
 KeyOption OptionsControlsState::_controlsBattle[] =
 	{{"keyBattleLeft", "STR_SCROLL_LEFT", SDLK_UNKNOWN},
@@ -87,6 +89,8 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 	{"keyBattleReserveSnap", "STR_RESERVE_TUS_FOR_SNAP_SHOT", SDLK_UNKNOWN},
 	{"keyBattleReserveAimed", "STR_RESERVE_TUS_FOR_AIMED_SHOT", SDLK_UNKNOWN},
 	{"keyBattleReserveAuto", "STR_RESERVE_TUS_FOR_AUTO_SHOT", SDLK_UNKNOWN},
+	{"keyBattleReserveKneel", "STR_RESERVE_TUS_FOR_KNEEL", SDLK_UNKNOWN},
+	{"keyBattleZeroTUs", "STR_EXPEND_ALL_TIME_UNITS", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy1", "STR_CENTER_ON_ENEMY_1", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy2", "STR_CENTER_ON_ENEMY_2", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy3", "STR_CENTER_ON_ENEMY_3", SDLK_UNKNOWN},
@@ -95,7 +99,9 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 	{"keyBattleCenterEnemy6", "STR_CENTER_ON_ENEMY_6", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy7", "STR_CENTER_ON_ENEMY_7", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy8", "STR_CENTER_ON_ENEMY_8", SDLK_UNKNOWN},
-	{"keyBattleCenterEnemy9", "STR_CENTER_ON_ENEMY_9", SDLK_UNKNOWN}};
+	{"keyBattleCenterEnemy9", "STR_CENTER_ON_ENEMY_9", SDLK_UNKNOWN},
+	{"keyBattleCenterEnemy10", "STR_CENTER_ON_ENEMY_10", SDLK_UNKNOWN},
+	{"keyBattleVoxelView", "STR_SAVE_VOXEL_VIEW", SDLK_UNKNOWN}};
 
 /**
  * Initializes all the elements in the Controls screen.
@@ -105,7 +111,9 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 {
 	_countGeneral = 4;
 	_countGeo = 20;
-	_countBattle = 32;
+	_countBattle = 36;
+	if (Options::getInt("autosave") == 1)
+		_countGeo += 2;	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -119,6 +127,8 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 	add(_btnCancel);
 	add(_txtTitle);
 	add(_lstControls);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -40,6 +40,7 @@ private:
 	ArrowShape _shape;
 	TextList *_list;
 	Timer *_timer;
+	bool _listButton;
 public:
 	/// Creates a new arrow button with the specified size and position.
 	ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);

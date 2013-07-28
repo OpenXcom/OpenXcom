@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 ÁTSZÁLLÍTÁS
 STR_PURCHASE_RECRUIT
 VÁSÁRLÁS/SOROZÁS
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 ELADÁS/KIRÚGÁS
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 HALADÁS
 STR_NEW_PROJECT
 Új tervezet
+STR_CANCEL_PROJECT
+Cancel Project
 STR_NEW_RESEARCH_PROJECTS
 ÚJ KUTATHATÓ TERVEZETEK
 STR_SCIENTISTS_AVAILABLE_UC
@@ -1895,10 +1899,12 @@ STR_SAVE_SUCCESSFUL
 Elmentés sikeres
 STR_DELETE
 TÖRLÉS
+STR_DELETE_UNSUCCESSFUL
+Törlés sikertelen
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Előző X-COM mentett játék észlelve
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
-A mentett játék törölhető?
+Biztosan törölni akarod a mentett játékot?
 STR_SOUND_OPTIONS
 HANG OPCIÓK
 STR_MUSIC_VOLUME
@@ -2037,9 +2043,13 @@ STR_PANIC_UNIT
 Pánikkeltés
 STR_MIND_CONTROL_SUCCESSFUL
 Sikeres Elmekontroll
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 megvadult
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+megvadult
+STR_HAS_PANICKED_MALE
+pánikba esett
+STR_HAS_PANICKED_FEMALE
 pánikba esett
 STR_XCOM
 Xcom
@@ -2073,9 +2083,13 @@ STR_XCOM_MOVEMENT_SPEED
 XCOM MOZGÁSI SEBESSÉGE
 STR_ALIEN_MOVEMENT_SPEED
 IDEGENEK MOZGÁSI SEBESSÉGE
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  öntudatlanságba esik
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ öntudatlanságba esik
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ meghalt egy végzetes seb miatt
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  meghalt egy végzetes seb miatt
 STR_USE_MIND_PROBE
 Elmeteszt
@@ -2089,7 +2103,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Az időegységek Automata Lövésre fenntartva
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Az időegységek Célzott Lövésre fenntartva
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Abbahagyod a küldetést?
 STR_CORPSE
 Tetem
@@ -2115,17 +2129,17 @@ STR_FULLSCREEN
 Teljesképernyős
 STR_LANGUAGE
 NYELV
-STR_FARM
+CULTA
 Farm
-STR_FOREST
+FOREST
 Erdő
-STR_JUNGLE
+JUNGLE
 Dzsungel
-STR_MOUNTAIN
+MOUNT
 Hegység
-STR_DESERT
+DESERT
 Sivatag
-STR_POLAR
+POLAR
 Sarkvidék
 STR_RANDOM_BATTLE
 Random Csata
@@ -2151,7 +2165,9 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_1
 {N} egység elhagyásra nem kész
 STR_ABANDON_GAME_QUESTION
 ABBAHAGYOD A JÁTÉKOT?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
+-t megölték
+STR_HAS_BEEN_KILLED_FEMALE
 -t megölték
 STR_DRAG_SCROLL
 VONSZOLÁS
@@ -2249,11 +2265,149 @@ STR_CENTER_ON_ENEMY_8
 Ellenség-8-at Középre
 STR_CENTER_ON_ENEMY_9
 Ellenség-9-et Középre
-STR_OPENGL
-OpenGL
+STR_CENTER_ON_ENEMY_10
+Ellenség-10-et Középre
 STR_ENEMY_WEAPON_LEVEL
 Ellenség fegyverzetszintje
 STR_GROUNDED
 LESZÁLLT
 STR_LIVING_QUARTERS_PLURAL
 Lakónegyed
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+TÉTEL
+STR_DISPLAY_FILTER
+Megjelenítő Szűrő (Filter)
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
+STR_ADVANCED
+HALADÓ
+STR_ADVANCED_OPTIONS
+HALADÓ BEÁLLÍTÁSOK
+STR_AGGRESSIVERETALIATION
+Aggresszív megtorlás
+STR_AGGRESSIVERETALIATION_DESC
+Az UFO-k - küldetésüktől függetlenül - minden alkalommal kíserletet tesznek a bázisod helyének kiderítésére.
+STR_ALIENCONTAINMENTLIMITENFORCED
+Idegen Tároló felső korlátossága
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
+Az Idegen Tároló csak meghatározott számú élő idegent képes tárolni. (alap: 10)
+STR_CANSELLLIVEALIENS
+Élő idegen eladhatósága
+STR_CANSELLLIVEALIENS_DESC
+Engedélyezi az élő idegenek eladását. Ez a funkció javasolt a felső korlát bekapcsolása esetén.
+STR_ALLOWAUTOSELLPRODUCTION
+Gyártás auto-eladása
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+A gyártás képernyőn az "Összesen gyártandó" rész növelő gombjára való jobb-kattintással az auto-eladás aktiválódik.
+STR_ALLOWBUILDINGQUEUE
+Épület-emelés sorba állíthatósága
+STR_ALLOWBUILDINGQUEUE_DESC
+A még nem elkészült bázisépületek összekötőként szolgálnak a Központi Lifthez, amikor újabb épületeket építtetünk.
+STR_BATTLEAUTOEND
+Csata automatikus befejezése
+STR_BATTLEAUTOEND_DESC
+A csaták automatikusan befejeződnek, amint az utolsó élő ellenség is semlegesítve lesz.
+STR_BATTLEINSTANTGRENADE
+Azonnali gránátok
+STR_BATTLEINSTANTGRENADE_DESC
+A 0-ra időzített gránátok azonnal felrobbannak eldobást követően, ahelyett, hogy a kör végén robbannának.
+STR_BATTLENOTIFYDEATH
+Elhalálozások értesítéseinek mutatása
+STR_BATTLENOTIFYDEATH_DESC
+Értesítő üzenet jelenik meg, valahányszor elhalálozik egy katonád.
+STR_BATTLENEWPREVIEWPATH
+Útvonal előnézete
+STR_BATTLENEWPREVIEWPATH_DESC
+Bal-kattintásra kiemeléssel mutatja az utat amikor célt választasz egy egységednek, dupla-kattintásra az egység megindul.
+STR_BATTLERANGEBASEDACCURACY
+Távolság-alapú pontosság
+STR_BATTLERANGEBASEDACCURACY_DESC
+A lövések pontosságánál figyelembe veszi a láthatóságot, távolságot, és egyéb faktorokat.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+TFTD gyártási szabályok
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Engedélyezi, hogy óránként egynél több darabot lehessen gyártani egy projektben.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Repülő jármű átcsoportosíthatósága
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Jelenleg levegőben lévő járművet át lehet csoportosítani.
+STR_CRAFTLAUNCHALWAYS
+Repülőgépek mindig elindíthatóak
+STR_CRAFTLAUNCHALWAYS_DESC
+Mindig elindíthatod a repülőgépeidet, felülírva a teljes újratöltés és újrafegyverzés szükségét.
+STR_CUSTOMINITIALBASE
+Egyéni kezdő-bázis
+STR_CUSTOMINITIALBASE_DESC
+Amikor új játékot indítasz, akkor egyesével helyezheted el a kezdő-épületeidet az alap elrendezés helyett.
+STR_GLOBESEASONS
+Bolygó évszak szerinti megvilágítása
+STR_GLOBESEASONS_DESC
+Engedélyezi a napfény valósághű kivetítését a Földgömbön az év szakának megfelelően (a Föld tengelyferdesége).
+STR_PLAYINTRO
+Bevezető lejátszása
+STR_PLAYINTRO_DESC
+A bevezető képsorok mutatása indításkor.
+STR_SHOWFUNDSONGEOSCAPE
+Tőke mutatása a földgömb képernyőn
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Kibővíti a földgömb információs paneljét egy további információval a jelenlegi pénzügyi helyzetedről.
+STR_SHOWMORESTATSININVENTORYVIEW
+Személy-Leltár adatok
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+A kiválasztott katonáról extra információkat mutat a Személy-Leltár képernyőjén.
+STR_SNEAKYAI
+Sunyi MI
+STR_SNEAKYAI_DESC
+A Mesterséges Intelligencia - amikor csak lehetséges - elkerüli, hogy felfedje az egységeit a játékos számára.
+STR_STRAFE
+Oldalazás, futás
+STR_STRAFE_DESC
+Oldalazás, futás, és tank tornyának független mozgatási lehetőségének bekapcsolása. CTRL nyomvatartásával lehetséges használni.
+STR_BATTLESCROLLDRAGINVERT
+Fordított vonszoló-görgetés
+STR_BATTLESCROLLDRAGINVERT_DESC
+A csatamezőn a vonszoló-görgetés fordított irányban működik.
+STR_BATTLEEXPLOSIONHEIGHT
+Robbanások magassága
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Megváltoztatja a robbanások magassági terjedését.{NEWLINE}(Sima: 0, Kör: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+STR_ALLOWPSIONICCAPTURE
+Psi-elfogás engedélyezése
+STR_ALLOWPSIONICCAPTURE_DESC
+Az összes megmaradt élő idegen elmekontroll alá vonása a csata győzelmét eredményezi, és mindegyik élve elfogott idegennek számít.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will be spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Time Units reserved for Kneeling
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+TU's reserved for Kneeling and Firing
+STR_RESERVE_TUS_FOR_KNEEL
+Reserve Time Units for kneeling
+STR_EXPEND_ALL_TIME_UNITS
+Expend all remaining Time Units

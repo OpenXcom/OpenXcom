@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,6 +27,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/Music.h"
+#include "../Engine/Timer.h"
 
 namespace OpenXcom
 {
@@ -41,6 +42,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 	_screen = new InteractiveSurface(320, 200, 0, 0);
 	_txtText.push_back(new Text(190, 104, 0, 0));
 	_txtText.push_back(new Text(200, 34, 32, 0));
+	_timer = new Timer(20000);
 
 	add(_screen);
 
@@ -58,6 +60,11 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 		add(_txtText[text]);
 		_txtText[text]->setVisible(false);
 	}
+
+	centerAllSurfaces();
+
+	_timer->onTimer((StateHandler)&DefeatState::windowClick);
+	_timer->start();
 }
 
 /**
@@ -65,13 +72,19 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
  */
 DefeatState::~DefeatState()
 {
-
+	delete _timer;
 }
 
 void DefeatState::init()
 {
 	nextScreen();
 }
+
+void DefeatState::think()
+{
+	_timer->think(this, 0);
+}
+
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.

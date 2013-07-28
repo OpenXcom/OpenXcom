@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,10 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Surface.h"
+#include "Screen.h"
 #include "ShaderDraw.h"
 #include <fstream>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
+#include <SDL_endian.h>
 #include "Palette.h"
 #include "Exception.h"
 #include "ShaderMove.h"
@@ -32,6 +34,7 @@
 #define _aligned_malloc __mingw_aligned_malloc
 #define _aligned_free   __mingw_aligned_free
 #endif //MINGW
+#include "Language.h"
 
 namespace OpenXcom
 {
@@ -46,6 +49,7 @@ namespace OpenXcom
  * @param height Height in pixels.
  * @param x X position in pixels.
  * @param y Y position in pixels.
+ * @param bpp Bits-per-pixel depth.
  */
 Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
@@ -82,6 +86,8 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
 	_crop.h = 0;
 	_crop.x = 0;
 	_crop.y = 0;
+	_dx = Screen::getDX();
+	_dy = Screen::getDY();
 }
 
 /**
@@ -175,8 +181,13 @@ void Surface::loadImage(const std::string &filename)
 	_surface = 0;
 	_misalignedPixelBuffer = 0;
 	
+	// SDL only takes UTF-8 filenames
+	// so here's an ugly hack to match this ugly reasoning
+	std::wstring wstr = Language::cpToWstr(filename);
+	std::string utf8 = Language::wstrToUtf8(wstr);
+	
 	// Load file
-	_surface = IMG_Load(filename.c_str());
+	_surface = IMG_Load(utf8.c_str());
 	if (!_surface)
 	{
 		throw Exception(IMG_GetError());
@@ -206,9 +217,14 @@ void Surface::loadSpk(const std::string &filename)
 	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read((char*)&flag, sizeof(flag)) && flag != 65533)
+	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
-		if (flag == 65535)
+		flag = SDL_SwapLE16(flag);
+		if (flag == 65533)
+		{
+			break;
+		}
+		else if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
 			for (int i = 0; i < flag * 2; ++i)
@@ -232,6 +248,63 @@ void Surface::loadSpk(const std::string &filename)
 
 	imgFile.close();
 }
+
+/**
+ * Loads the contents of a TFTD BDY image file into
+ * the surface. BDY files are compressed with a custom
+ * algorithm.
+ * @param filename Filename of the BDY image.
+ * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#BDY
+ */
+void Surface::loadBdy(const std::string &filename)
+{
+	// Load file and put pixels in surface
+	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	if (!imgFile)
+	{
+		throw Exception(filename + " not found");
+	}
+
+	// Lock the surface
+	lock();
+
+	Uint8 dataByte;
+	int pixelCnt;
+	int x = 0, y = 0;
+	int currentRow = 0;
+
+	while (imgFile.read((char*)&dataByte, sizeof(dataByte)))
+	{
+		if (dataByte >= 129)
+		{
+			pixelCnt = 257 - (int)dataByte;
+			imgFile.read((char*)&dataByte, sizeof(dataByte));
+			currentRow = y;
+			for (int i = 0; i < pixelCnt; ++i)
+			{
+				if (currentRow == y) // avoid overscan into next row
+					setPixelIterative(&x, &y, dataByte);
+			}
+		}
+		else
+		{
+			pixelCnt = 1 + (int)dataByte;
+			currentRow = y;
+			for (int i = 0; i < pixelCnt; ++i)
+			{
+				imgFile.read((char*)&dataByte, sizeof(dataByte));
+				if (currentRow == y) // avoid overscan into next row
+					setPixelIterative(&x, &y, dataByte);
+			}
+		}
+	}
+
+	// Unlock the surface
+	unlock();
+
+	imgFile.close();
+}
+
 
 /**
  * Clears the entire contents of the surface, resulting
@@ -741,7 +814,6 @@ struct ColorReplace
 	* @param src source pixel
 	* @param shade value of shade of this surface
 	* @param newColor new color to set (it should be offseted by 4)
-	* @param notused
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
 	{
@@ -827,4 +899,15 @@ void Surface::invalidate()
 {
 	_redraw = true;
 }
+
+void Surface::setDX(int dx)
+{
+	_dx = dx;
+}
+
+void Surface::setDY(int dy)
+{
+	_dy = dy;
+}
+
 }

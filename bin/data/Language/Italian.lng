@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 TRASFERISCI
 STR_PURCHASE_RECRUIT
 ACQUISTA/ASSUMI
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 VENDI/LICENZIA
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 PROGRESSI
 STR_NEW_PROJECT
 Nuovo progetto
+STR_CANCEL_PROJECT
+Cancel Project
 STR_NEW_RESEARCH_PROJECTS
 NUOVI PROGETTI DI RICERCA
 STR_SCIENTISTS_AVAILABLE_UC
@@ -1895,6 +1899,8 @@ STR_SAVE_SUCCESSFUL
 Salvataggio riuscito.
 STR_DELETE
 CANCELLARE
+STR_DELETE_UNSUCCESSFUL
+Cancellare non riuscito.
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
 Trovato salvataggio precedente.
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
@@ -2037,9 +2043,13 @@ STR_PANIC_UNIT
 Unità di panico
 STR_MIND_CONTROL_SUCCESSFUL
 Controllo mentale riuscito
-STR_HAS_GONE_BERSERK
+STR_HAS_GONE_BERSERK_MALE
 è impazzito
-STR_HAS_PANICKED
+STR_HAS_GONE_BERSERK_FEMALE
+è impazzito
+STR_HAS_PANICKED_MALE
+È in stato di panico
+STR_HAS_PANICKED_FEMALE
 È in stato di panico
 STR_XCOM
 XCom
@@ -2073,9 +2083,13 @@ STR_XCOM_MOVEMENT_SPEED
 VELOCITÀ MOVIMENTO XCOM
 STR_ALIEN_MOVEMENT_SPEED
 VELOCITÀ MOVIMENTO ALIENI
-STR_HAS_BECOME_UNCONSCIOUS
+STR_HAS_BECOME_UNCONSCIOUS_MALE
  ha perso coscienza
-STR_HAS_DIED_FROM_A_FATAL_WOUND
+STR_HAS_BECOME_UNCONSCIOUS_FEMALE
+ ha perso coscienza
+STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
+ è deceduto per ferita mortale
+STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
  è deceduto per ferita mortale
 STR_USE_MIND_PROBE
 Usa sonda mentale
@@ -2089,7 +2103,7 @@ STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
 Unità di tempo tiro automatico
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Unità di tempo tiro con mira
-STR_ABORT_MISSION
+STR_ABORT_MISSION_QUESTION
 Interrompi la missione ?
 STR_CORPSE
 Cadavere
@@ -2115,17 +2129,17 @@ STR_FULLSCREEN
 In Fullscreen
 STR_LANGUAGE
 LINGUA
-STR_FARM
+CULTA
 Fattoria
-STR_FOREST
+FOREST
 Foresta
-STR_JUNGLE
+JUNGLE
 Giungla
-STR_MOUNTAIN
+MOUNT
 Montagna
-STR_DESERT
+DESERT
 Deserto
-STR_POLAR
+POLAR
 Polare
 STR_RANDOM_BATTLE
 Battaglia Random
@@ -2157,7 +2171,9 @@ STR_n_UNITS_OUTSIDE_EXIT_AREA_2
 {N} Unità fuori dall'area di uscita
 STR_ABANDON_GAME_QUESTION
 ABBANDONA IL GIOCO?
-STR_HAS_BEEN_KILLED
+STR_HAS_BEEN_KILLED_MALE
+è stato ucciso
+STR_HAS_BEEN_KILLED_FEMALE
 è stato ucciso
 STR_DRAG_SCROLL
 DRAG SCROLL
@@ -2255,11 +2271,149 @@ STR_CENTER_ON_ENEMY_8
 Centra su Nemico 8
 STR_CENTER_ON_ENEMY_9
 Centra su Nemico 9
-STR_OPENGL
-OpenGL
+STR_CENTER_ON_ENEMY_10
+Centra su Nemico 10
 STR_ENEMY_WEAPON_LEVEL
 Livello dell'arma del nemico
 STR_GROUNDED
 A TERRA
 STR_LIVING_QUARTERS_PLURAL
 Quartieri abitativi
+STR_OPENXCOM
+OpenXcom
+STR_LIST_ITEM
+OGGETTO
+STR_DISPLAY_FILTER
+Filtro Grafico
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
+STR_ADVANCED
+AVANZATE
+STR_ADVANCED_OPTIONS
+OPZIONI AVANZATE
+STR_AGGRESSIVERETALIATION
+Rappresaglia aggressiva
+STR_AGGRESSIVERETALIATION_DESC
+Gli UFO cercheranno di individuare le tue basi in ogni momento, a prescindere dai loro parametri di missione.
+STR_ALIENCONTAINMENTLIMITENFORCED
+Limiti di contenimento alieni
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
+Saranno imposti limiti di contenimento alieni vivi.
+STR_CANSELLLIVEALIENS
+Vendita alieni vivi
+STR_CANSELLLIVEALIENS_DESC
+Permette la vendita di alieni vivi, consigliato quando si utilizzano i limiti di contenimento.
+STR_ALLOWAUTOSELLPRODUCTION
+Vendita automatica produzioni
+STR_ALLOWAUTOSELLPRODUCTION_DESC
+Click-destro sul pulsante di aumento del "totale da produrre" del progetto di produzione per la vendita automatica
+STR_ALLOWBUILDINGQUEUE
+Consenti coda di costruzione
+STR_ALLOWBUILDINGQUEUE_DESC
+Strutture incompiute fungono da collegamenti all'ascensore quando nuovi impianti sono collocati.
+STR_BATTLEAUTOEND
+Battaglia con fine automatica
+STR_BATTLEAUTOEND_DESC
+Battaglie finiscono automaticamente quando l'ultimo nemico vivente viene neutralizzato.
+STR_BATTLEINSTANTGRENADE
+Granate Immediata
+STR_BATTLEINSTANTGRENADE_DESC
+Granate innescate per esplodere in 0 turni esploderanno immediatamente quando gettate, invece che alla fine del turno.
+STR_BATTLENOTIFYDEATH
+Visualizzare le notifiche di morte
+STR_BATTLENOTIFYDEATH_DESC
+Visualizza notifiche ogni volta che uno dei tuoi soldati muore.
+STR_BATTLENEWPREVIEWPATH
+Anteprima percorso
+STR_BATTLENEWPREVIEWPATH_DESC
+Click sinistro evidenzia il percorso che l'unità farà fino alla destinazione, doppio click sposta l'unità.
+STR_BATTLERANGEBASEDACCURACY
+Precisione basata sul raggio
+STR_BATTLERANGEBASEDACCURACY_DESC
+La precisione degli spari dipende da visibilità, distanza, ed altri fattori.
+STR_CANMANUFACTUREMOREITEMSPERHOUR
+Regole di produzione TFTD
+STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
+Permette ai progetti di produzione di produrre più di un oggetto per ora.
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE
+Trasferimenti Aerei
+STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
+Gli aerei attualmente in volo possono essere trasferiti.
+STR_CRAFTLAUNCHALWAYS
+Forza il lancio dell'aereo
+STR_CRAFTLAUNCHALWAYS_DESC
+Puoi forzare il tuo aereo a volare, ignorando completamente la necessità di rifornirsi di carburante e riarmarsi.
+STR_CUSTOMINITIALBASE
+Base iniziale personalizzata
+STR_CUSTOMINITIALBASE_DESC
+Quando si inizia una partita, è possibile posizionare manualmente le strutture iniziali invece di utilizzare il layout predefinito.
+STR_GLOBESEASONS
+Illuminazione globo inclinata
+STR_GLOBESEASONS_DESC
+Abilita proiezione realistica della luce solare sulla Geoscape secondo l'inclinazione assiale della Terra.
+STR_PLAYINTRO
+Play intro
+STR_PLAYINTRO_DESC
+Visualizza l'intro cinematografica all'avvio.
+STR_SHOWFUNDSONGEOSCAPE
+Mostra fondi Geoscape
+STR_SHOWFUNDSONGEOSCAPE_DESC
+Espandere il pannello Informazioni Geoscape per includere ulteriori informazioni sulla vostra situazione finanziaria attuale.
+STR_SHOWMORESTATSININVENTORYVIEW
+Statistiche inventario
+STR_SHOWMORESTATSININVENTORYVIEW_DESC
+Mostra altre informazioni sul soldato selezionato nella schermata dell'inventario.
+STR_SNEAKYAI
+AI Sneaky
+STR_SNEAKYAI_DESC
+AI evita di esporsi al giocatore quando possibile.
+STR_STRAFE
+Impostazione strafe
+STR_STRAFE_DESC
+Abilita bombardamento, la corsa e il movimento del tank indipendente. Tenere premuto CTRL per usare metodi alternativi di movimento.
+STR_BATTLESCROLLDRAGINVERT
+Inverti il drag-scrolling
+STR_BATTLESCROLLDRAGINVERT_DESC
+Inverti drag-scrolling sul Battlescape.
+STR_BATTLEEXPLOSIONHEIGHT
+Altezza di esplosione
+STR_BATTLEEXPLOSIONHEIGHT_DESC
+Modifica quanto le esplosioni che prevedono l'altezza possono diffondersi.{NEWLINE}(Flat: 0, Round: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+STR_ALLOWPSIONICCAPTURE
+Abilita la cattura psi
+STR_ALLOWPSIONICCAPTURE_DESC
+Controllare mentalmente tutti gli alieni rimanenti porta alla vittoria, e loro contano come alieni vivi.
+STR_ANYTIMEPSITRAINING
+Psionic training at any time
+STR_ANYTIMEPSITRAINING_DESC
+You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+STR_NOT_ENOUGH_SPACE
+Not Enough Space!
+STR_WEAPONSELFDESTRUCTION
+XCom 2012 item recovery
+STR_WEAPONSELFDESTRUCTION_DESC
+Weapons carried by aliens will self destruct if their owner is killed.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will be spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+STR_ARROWS
+ARROWS
+STR_FULL
+FULL
+STR_SAVE_VOXEL_VIEW
+Save First-Person Screenshot
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Time Units reserved for Kneeling
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+TU's reserved for Kneeling and Firing
+STR_RESERVE_TUS_FOR_KNEEL
+Reserve Time Units for kneeling
+STR_EXPEND_ALL_TIME_UNITS
+Expend all remaining Time Units

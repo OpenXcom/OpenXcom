@@ -1,0 +1,160 @@
+# Note: It's not a coincidence that the last names mirror the male names, traditionally "last" names in ethiopia are the father or grandfather's first name.
+lookWeights:
+  - 0
+  - 0
+  - 0
+  - 100
+maleFirst:
+  - Abebe
+  - Adamu
+  - Ahadu
+  - Alem
+  - Alemu
+  - Alem Neh
+  - Amara
+  - Amare
+  - Assefa
+  - Asnake
+  - Bekele
+  - Berhanu
+  - Berihun
+  - Bogale
+  - Brehan
+  - Brehanu
+  - Dabir
+  - Dahnay
+  - Daniachew
+  - Dawit
+  - Demeke
+  - Demissie
+  - Desta
+  - Gebra Hana
+  - Gebre Kiristos
+  - Gere Mariam
+  - Geriel
+  - Getachew
+  - Geteye
+  - Girma
+  - Hagos
+  - Hakim
+  - Iskinder
+  - Kaleb
+  - Kebede
+  - Kelile
+  - Lake
+  - Lebna
+  - Lemma
+  - Li'ol
+  - Mebrete
+  - Mebreatu
+  - Mechela
+  - Melku
+  - Mulu Alem
+  - Negasi
+  - Nigus
+  - Tesfa
+  - Tesfaye
+  - Wendimu
+  - Werkneh
+  - Yonas
+femaleFirst:
+  - Aamina
+  - Abeba
+  - Abebech
+  - Abrihet
+  - Adina
+  - Afework
+  - Afeworki
+  - Aisha
+  - Alem Nesh
+  - Amira
+  - Asnaku
+  - Aster
+  - Ayana
+  - Berta
+  - Bogalech
+  - Brehane
+  - Brihan
+  - Dahnay
+  - Demeku
+  - Desta
+  - Edom
+  - Eldana
+  - Eleni
+  - Elhanan
+  - Elsa
+  - Gabra
+  - Genet
+  - Hagos
+  - Helen
+  - Kassa
+  - Kebedech
+  - Lakech
+  - Lielit
+  - Makeda
+  - Martha
+  - Melke
+  - Meseret
+  - Mihret
+  - Mulu Ken
+  - Nigest
+  - Rahel
+  - Samrawit
+  - Sara
+  - Tenagne
+  - Werknesh
+  - Yenee
+  - Zema
+maleLast:
+  - Abebe
+  - Adamu
+  - Ahadu
+  - Alem
+  - Alemu
+  - Alem Neh
+  - Amara
+  - Amare
+  - Assefa
+  - Asnake
+  - Bekele
+  - Berhanu
+  - Berihun
+  - Bogale
+  - Brehan
+  - Brehanu
+  - Dabir
+  - Dahnay
+  - Daniachew
+  - Dawit
+  - Demeke
+  - Demissie
+  - Desta
+  - Gebra Hana
+  - Gebre Kiristos
+  - Gere Mariam
+  - Geriel
+  - Getachew
+  - Geteye
+  - Girma
+  - Hagos
+  - Hakim
+  - Iskinder
+  - Kaleb
+  - Kebede
+  - Kelile
+  - Lake
+  - Lebna
+  - Lemma
+  - Li'ol
+  - Mebrete
+  - Mebreatu
+  - Mechela
+  - Melku
+  - Mulu Alem
+  - Negasi
+  - Nigus
+  - Tesfa
+  - Tesfaye
+  - Wendimu
+  - Werkneh
+  - Yonas

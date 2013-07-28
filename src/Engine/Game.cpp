@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -39,6 +39,7 @@
 #include "InteractiveSurface.h"
 #include "Options.h"
 #include "CrossPlatform.h"
+#include "../Menu/SaveState.h"
 
 namespace OpenXcom
 {
@@ -120,8 +121,6 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// Create blank language
 	_lang = new Language();
-
-	_alienContainmentHasUpperLimit = Options::getBool("alienContainmentHasUpperLimit") ? 1 : 0;
 }
 
 /**
@@ -129,6 +128,12 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
+	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+	{
+		SaveState *ss = new SaveState(this, true, false);
+		delete ss;
+	}
+
 	Mix_HaltChannel(-1);
 
 	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
@@ -174,8 +179,8 @@ void Game::run()
 		// Initialize active state
 		if (!_init)
 		{
-			_states.back()->init();
 			_init = true;
+			_states.back()->init();
 
 			// Unpress buttons
 			_states.back()->resetAll();
@@ -402,7 +407,8 @@ void Game::loadLanguage(const std::string &filename)
 	std::stringstream ss, ss2;
 	ss << "Language/" << filename << ".lng";
 	ss2 << "Language/" << filename << ".geo";
-	_lang->loadLng(CrossPlatform::getDataFile(ss.str()));
+
+	_lang->loadLng(CrossPlatform::getDataFile(ss.str()), _rules->getExtraStrings()[filename]);
 
 	std::auto_ptr<Surface> sidebar(new Surface(64, 154));
 	if (CrossPlatform::getDataFile(ss2.str()) != "")
@@ -475,6 +481,7 @@ void Game::loadRuleset()
 	{
 		_rules->load(*i);
 	}
+	_rules->sortLists();
 }
 
 /**
@@ -487,15 +494,6 @@ void Game::setMouseActive(bool active)
 {
 	_mouseActive = active;
 	_cursor->setVisible(active);
-}
-
-/**
- * Gets the value of alienContainmentHasUpperLimit.
- * @return An int, if alienContainmentHasUpperLimit is true, then 1, and it's 0 else.
- */
-int Game::getAlienContainmentHasUpperLimit() const
-{
-	return _alienContainmentHasUpperLimit;
 }
 
 /**

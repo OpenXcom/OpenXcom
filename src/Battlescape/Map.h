@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,6 @@ class MapData;
 class Position;
 class Tile;
 class BattleUnit;
-class BulletSprite;
 class Projectile;
 class Explosion;
 class BattlescapeMessage;
@@ -48,8 +47,9 @@ enum CursorType { CT_NONE, CT_NORMAL, CT_AIM, CT_PSI, CT_WAYPOINT, CT_THROW };
 class Map : public InteractiveSurface
 {
 private:
-	static const int SCROLL_INTERVAL = 50;
-	Timer *_scrollTimer;
+	static const int SCROLL_INTERVAL = 20;
+	static const int BULLET_SPRITES = 35;
+	Timer *_scrollMouseTimer, *_scrollKeyTimer;
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
@@ -60,7 +60,6 @@ private:
 	CursorType _cursorType;
 	int _cursorSize;
 	int _animFrame;
-	BulletSprite *_bullet[37];
 	Projectile *_projectile;
 	bool projectileInFOV;
 	std::set<Explosion *> _explosions;
@@ -73,6 +72,7 @@ private:
 	int getTerrainLevel(Position pos, int size);
 	std::vector<Position> _waypoints;
 	bool _unitDying;
+	int _previewSetting;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
@@ -120,7 +120,10 @@ public:
 	std::set<Explosion*> *getExplosions();
 	/// Get pointer to camera
 	Camera *getCamera();
-	void scroll();
+	/// Mouse-scrolls the camera
+	void scrollMouse();
+	/// Keyboard-scrolls the camera
+	void scrollKey();
 	/// Get waypoints vector
 	std::vector<Position> *getWaypoints();
 	/// Set mouse-buttons' pressed state

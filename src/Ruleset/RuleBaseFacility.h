@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -43,13 +43,14 @@ private:
 	int _storage, _personnel, _aliens, _crafts, _labs, _workshops, _psiLabs;
 	int _radarRange, _radarChance, _defense, _hitRatio, _fireSound, _hitSound;
 	std::string _mapName;
+	int _listOrder;
 public:
 	/// Creates a blank facility ruleset.
 	RuleBaseFacility(const std::string &type);
 	/// Cleans up the facility ruleset.
 	~RuleBaseFacility();
 	/// Loads the facility from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int modIndex, int listOrder);
 	/// Saves the facility to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the facility's type.
@@ -104,6 +105,8 @@ public:
 	int getFireSound() const;
 	/// Gets the facility's hit sound
 	int getHitSound() const;
+	/// Gets the facility's list weight
+	int getListOrder() const;
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -23,6 +23,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -34,7 +35,6 @@
 #include "../Savegame/Production.h"
 #include "NewManufactureListState.h"
 #include "ManufactureInfoState.h"
-#include "../Engine/Options.h"
 #include <limits>
 
 namespace OpenXcom
@@ -57,12 +57,11 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_txtSpace = new Text(150, 9, 8, 34);
 	_txtFunds = new Text(150, 9, 160, 34);
 	_txtItem = new Text(80, 9, 10, 52);
-	_txtEngineers = new Text(56, 18, 64, 44);
-	_txtProduced = new Text(56, 18, 120, 44);
-	_txtTotal = new Text(50, 18, 176, 44);
-	_txtCost = new Text(40, 27, 227, 44);
-	_txtTimeLeft = new Text(55, 18, 265, 44);
-	_lstManufacture = new TextList(300, 90, 8, 80);
+	_txtEngineers = new Text(56, 18, 112, 44);
+	_txtProduced = new Text(56, 18, 168, 44);
+	_txtCost = new Text(40, 27, 222, 44);
+	_txtTimeLeft = new Text(55, 18, 260, 44);
+	_lstManufacture = new TextList(307, 90, 8, 80);
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256*sizeof(SDL_Color));
@@ -82,10 +81,11 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	add(_txtItem);
 	add(_txtEngineers);
 	add(_txtProduced);
-	add(_txtTotal);
 	add(_txtCost);
 	add(_txtTimeLeft);
 	add(_lstManufacture);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
@@ -98,6 +98,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&ManufactureState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -127,10 +128,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
 	_txtProduced->setText(_game->getLanguage()->getString("STR_UNITS_PRODUCED"));
-
-	_txtTotal->setColor(Palette::blockOffset(15)+1);
-	_txtTotal->setText(_game->getLanguage()->getString("STR_TOTAL_TO_PRODUCE"));
-
+	
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(_game->getLanguage()->getString("STR_COST__PER__UNIT"));
 
@@ -139,7 +137,9 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-	_lstManufacture->setColumns(6, 105, 39, 45, 27, 47, 40);
+	_lstManufacture->setColumns(5, 132, 17, 42, 56, 32);
+	_lstManufacture->setAlign(ALIGN_RIGHT);
+	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(1);
@@ -193,14 +193,13 @@ void ManufactureState::fillProductionList()
 		std::wstringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
 		std::wstringstream s2;
-		s2 << (*iter)->getAmountProduced();
-		std::wstringstream s3;
+		s2 << (*iter)->getAmountProduced() << "/";
 		if (Options::getBool("allowAutoSellProduction") && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
-			s3 << "$$$";
-		else s3 << (*iter)->getAmountTotal();
+			s2 << "$$$";
+		else s2 << (*iter)->getAmountTotal();
+		std::wstringstream s3;
+		s3 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
 		std::wstringstream s4;
-		s4 << Text::formatFunding((*iter)->getRules()->getManufactureCost());
-		std::wstringstream s5;
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
@@ -210,14 +209,14 @@ void ManufactureState::fillProductionList()
 			timeLeft /= (*iter)->getAssignedEngineers();
 			float dayLeft = timeLeft / 24.0f;
 			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
-			s5 << static_cast<int>(dayLeft) << "/" << hours;
+			s4 << static_cast<int>(dayLeft) << "/" << hours;
 		}
 		else
 		{
 
-			s5 << L"-";
+			s4 << L"-";
 		}
-		_lstManufacture->addRow (6, _game->getLanguage()->getString((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str(), s5.str().c_str());
+		_lstManufacture->addRow (5, _game->getLanguage()->getString((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}
 	_lstManufacture->draw();
 	std::wstringstream ss;

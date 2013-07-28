@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,6 +50,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base being attacked.
  * @param ufo Pointer to the attacking ufo.
+ * @param state Pointer to the Geoscape.
  */
 BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state) : State(game), _state(state)
 {
@@ -76,6 +77,8 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	add(_txtTitle);
 	add(_txtInit);
 	add(_lstDefenses);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
@@ -111,6 +114,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
  */
 BaseDefenseState::~BaseDefenseState()
 {
+	delete _timer;
 }
 
 /**
@@ -219,28 +223,9 @@ void BaseDefenseState::btnOkClick(Action *)
 	_game->popState();
 	if(_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		if (_base->getAvailableSoldiers(true) > 0)
-		{
-			size_t month = _game->getSavedGame()->getMonthsPassed();
-			if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-				month = _game->getRuleset()->getAlienItemLevels().size()-1;
-			SavedBattleGame *bgame = new SavedBattleGame();
-			_game->getSavedGame()->setBattleGame(bgame);
-			bgame->setMissionType("STR_BASE_DEFENSE");
-			BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-			bgen.setBase(_base);
-			bgen.setAlienRace(_ufo->getAlienRace());
-			bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
-			bgen.run();
-			_state->musicStop();
-			_game->pushState(new BriefingState(_game, 0, _base));
-		}
-		else
-		{
-			_game->pushState(new BaseDestroyedState(_game, _base));
-		}
+		// Whatever happens in the base defense, the UFO has finished its duty
+		_ufo->setStatus(Ufo::DESTROYED);
+        _state->handleBaseDefense(_base, _ufo);
 	}
-	// Whatever happens in the base defense, the UFO has finished its duty
-	_ufo->setStatus(Ufo::DESTROYED);
 }
 }

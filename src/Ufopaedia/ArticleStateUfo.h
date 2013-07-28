@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_ARTICLESTATEUFO_H
 #define OPENXCOM_ARTICLESTATEUFO_H
 
-#include <string>
 #include "ArticleState.h"
 
 namespace OpenXcom

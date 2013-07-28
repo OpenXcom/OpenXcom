@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <yaml-cpp/yaml.h>
+#include "../version.h"
 #include "../Engine/Logger.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/RNG.h"
@@ -134,6 +135,10 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 	delete _alienStrategy;
+	for (std::vector<AlienMission*>::iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	{
+		delete *i;
+	}
 	delete _battleGame;
 }
 
@@ -214,7 +219,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	parser.GetNextDocument(doc);
 	std::string v;
 	doc["version"] >> v;
-	if (v != Options::getVersion())
+	if (v != OPENXCOM_VERSION_SHORT)
 	{
 		throw Exception("Version mismatch");
 	}
@@ -367,7 +372,7 @@ void SavedGame::save(const std::string &filename) const
 
 	// Saves the brief game info used in the saves list
 	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << Options::getVersion();
+	out << YAML::Key << "version" << YAML::Value << OPENXCOM_VERSION_SHORT;
 	out << YAML::Key << "time" << YAML::Value;
 	_time->save(out);
 	out << YAML::EndMap;
@@ -722,7 +727,7 @@ std::vector<TerrorSite*> *SavedGame::getTerrorSites()
  * Get pointer to the battleGame object.
  * @return Pointer to the battleGame object.
  */
-SavedBattleGame *SavedGame::getBattleGame()
+SavedBattleGame *SavedGame::getSavedBattle()
 {
 	return _battleGame;
 }
@@ -816,13 +821,10 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
 		
-		// i hate to do this, but it just looks so much cleaner.
-		std::vector<std::string>::const_iterator alien = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-		bool liveAlien ( alien != research->getUnlocked().end());
+		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end ())
 		{
-			// see?
 			if (!liveAlien)
 			{
 				continue;
@@ -931,8 +933,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
-	std::vector<std::string>::const_iterator alien = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-	bool liveAlien ( alien != r->getUnlocked().end());
+	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
 	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
@@ -1189,7 +1190,7 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
 				int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
 				int v3 = v2 + s->melee + s->throwing + s->strength;
-				//if (PsiSkill>0) c3 += PsiStrength + 2* PsiSkill
+				if (s->psiSkill > 0) v3 += s->psiStrength + 2 * s->psiSkill;
 				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
 				if (score > highestScore)
 				{

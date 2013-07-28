@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -66,7 +66,7 @@ namespace OpenXcom
 
 		std::string look = armor->getSpriteInventory();
 		look += "M0.SPK";
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)))
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = armor->getSpriteInventory() + ".SPK";
 		}
@@ -107,6 +107,7 @@ namespace OpenXcom
 		_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
 
 		_lstInfo->draw();
+		centerAllSurfaces();
 	}
 
 	ArticleStateArmor::~ArticleStateArmor()

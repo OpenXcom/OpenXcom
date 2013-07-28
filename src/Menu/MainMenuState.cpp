@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -17,17 +17,15 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainMenuState.h"
-#include <sstream>
+#include "../version.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
 #include "NewGameState.h"
 #include "NewBattleState.h"
 #include "LoadState.h"
@@ -63,6 +61,8 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	add(_btnQuit);
 	add(_txtTitle);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -90,9 +90,10 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	std::wstring s = L"OpenXcom\x02";
-	s += Language::utf8ToWstr(Options::getVersion());
-	_txtTitle->setText(s);
+	std::wstringstream title;
+	title << _game->getLanguage()->getString("STR_OPENXCOM") << L"\x02";
+	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
+	_txtTitle->setText(title.str());
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();

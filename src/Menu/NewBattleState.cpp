@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,7 +21,6 @@
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -37,7 +36,7 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Ruleset/RuleCraft.h"
-#include "../Resource/ResourcePack.h"
+#include "../Ruleset//RuleTerrain.h"
 #include "../Engine/Music.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Action.h"
@@ -51,7 +50,7 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _craft(0)
+NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -97,6 +96,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 	add(_txtItemLevel);
 	add(_btnItemLevel);
 
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
@@ -134,12 +134,15 @@ NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _
 
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
-	_terrainTypes.push_back("STR_FARM");
-	_terrainTypes.push_back("STR_FOREST");
-	_terrainTypes.push_back("STR_JUNGLE");
-	_terrainTypes.push_back("STR_MOUNTAIN");
-	_terrainTypes.push_back("STR_DESERT");
-	_terrainTypes.push_back("STR_POLAR");
+	const std::vector<std::string> &terrainTypes = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator i = terrainTypes.begin(); i != terrainTypes.end(); ++i)
+	{
+		if (_game->getRuleset()->getTerrain(*i)->getTextures()->size())
+		{
+			_terrainTypes.push_back(*i);
+			_textures.push_back(_game->getRuleset()->getTerrain(*i)->getTextures()->at(0));
+		}
+	}
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
 
@@ -303,6 +306,27 @@ void NewBattleState::initSave()
 	for (int i = 0; i < 30; ++i)
 	{
 		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
+
+        for (int n = 0; n < 5; ++n) 
+        {
+            if (RNG::generate(0, 100) < 70)
+                continue;
+            soldier->promoteRank();
+            
+            UnitStats* stats = soldier->getCurrentStats();
+            stats->tu        += RNG::generate(0, 5);
+            stats->stamina   += RNG::generate(0, 5);
+            stats->health    += RNG::generate(0, 5);
+            stats->bravery   += 0; /// Later
+            stats->reactions += RNG::generate(0, 5);
+            stats->firing    += RNG::generate(0, 5);
+            stats->throwing  += RNG::generate(0, 5);
+            stats->strength  += RNG::generate(0, 5);
+            stats->psiStrength += RNG::generate(0, 5);
+            stats->melee     += RNG::generate(0, 5);
+            stats->psiSkill  += RNG::generate(0, 20);
+        }
+
 		base->getSoldiers()->push_back(soldier);
 		if (i < 8)
 			soldier->setCraft(_craft);
@@ -319,6 +343,7 @@ void NewBattleState::initSave()
 			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
 			{
 				int amount = Options::getInt("NewBattle_" + rule->getName());
+				amount = std::max(0, std::min(amount, 100));
 				_craft->getItems()->addItem(*i, amount);
 			}
 		}
@@ -340,6 +365,10 @@ void NewBattleState::initSave()
  */
 void NewBattleState::btnOkClick(Action *)
 {
+	if (_missionTypes[_selMission] != "STR_BASE_DEFENSE" && _craft->getNumSoldiers() == 0)
+	{
+		return;
+	}
 	_music = false;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
@@ -347,8 +376,7 @@ void NewBattleState::btnOkClick(Action *)
 	bgame->setMissionType(_missionTypes[_selMission]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	int textures[] = {1, 0, 0, 5, 7, 9};
-	bgen.setWorldTexture(textures[_selTerrain]);
+	bgen.setWorldTexture(_textures[_selTerrain]);
 
 	if (_missionTypes[_selMission] == "STR_TERROR_MISSION")
 	{
@@ -381,7 +409,7 @@ void NewBattleState::btnOkClick(Action *)
 		_craft->setDestination(u);
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
-		if (_terrainTypes[_selTerrain] == "STR_FOREST")
+		if (_terrainTypes[_selTerrain] == "FOREST")
 		{
 			u->setLatitude(-0.5);
 		}
@@ -448,85 +476,7 @@ void NewBattleState::btnRandomClick(Action *)
 	_btnCraft->setText(_game->getLanguage()->getString(_crafts[_selCraft]));
 	_btnItemLevel->setText(_game->getLanguage()->getString(_itemLevels[_selItemLevel]));
 
-	const Ruleset *rule = _game->getRuleset();
-	SavedGame *save = new SavedGame();
-	Base *base = new Base(rule);
-	save->getBases()->push_back(base);
-	_craft = new Craft(rule->getCraft("STR_SKYRANGER"), base, 1);
-
-	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
-
-	base->getCrafts()->push_back(_craft);
-
-	// Generate soldiers
-	for (int i = 0; i < 30; ++i)
-	{
-		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
-        
-        for (int n = 0; n < 5; ++n) 
-        {
-            if (RNG::generate(0, 100) < 70)
-                break;
-            soldier->promoteRank();
-            
-            UnitStats* stats = soldier->getCurrentStats();
-            stats->tu        += RNG::generate(0, 5);
-            stats->stamina   += RNG::generate(0, 5);
-            stats->health    += RNG::generate(0, 5);
-            stats->bravery   += 0; /// Later
-            stats->reactions += RNG::generate(0, 5);
-            stats->firing    += RNG::generate(0, 5);
-            stats->throwing  += RNG::generate(0, 5);
-            stats->strength  += RNG::generate(0, 5);
-            stats->psiStrength += RNG::generate(0, 5);
-            stats->melee     += RNG::generate(0, 5);
-            stats->psiSkill  += 0;
-        }
-
-		base->getSoldiers()->push_back(soldier);
-		if (i < 8)
-			soldier->setCraft(_craft);
-	}
-
-	// Add research
-	const std::vector<std::string> &research = rule->getResearchList();
-	for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
-	{
-		if ((RNG::generate(0, 5) > 2))
-			save->addFinishedResearch(rule->getResearch(*i));
-	}
-
-	// Generate (usable) items
-	const std::vector<std::string> &items = rule->getItemsList();
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-	{
-		RuleItem *rule = _game->getRuleset()->getItem(*i);
-		if (!save->isResearched(rule->getRequirements()))
-			continue;
-		for (std::vector<std::string>::iterator j = rule->getCompatibleAmmo()->begin(); j != rule->getCompatibleAmmo()->end(); ++j)
-		{
-        	RuleItem *ammo = _game->getRuleset()->getItem(*i);
-        	if (!save->isResearched(ammo->getRequirements()))
-				continue;
-        }
-
-        if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
-		{
-            size_t num_items = RNG::generate(0, 14) ; 
-            if (num_items > 0) 
-            {
-                base->getItems()->addItem(*i, num_items);
-                if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
-                {
-                    _craft->getItems()->addItem(*i);
-                }
-            }
-		}
-	}
-
-
-
-	_game->setSavedGame(save);
+	initSave();
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -123,6 +123,16 @@ BaseFacility *BaseView::getSelectedFacility() const
 {
 	return _selFacility;
 }
+
+/**
+ * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base
+ */
+void BaseView::resetSelectedFacility()
+{
+    _facilities[_selFacility->getX()][_selFacility->getY()] = 0;
+    _selFacility = 0;
+}
+
 
 /**
  * Returns the X position of the grid square
@@ -502,16 +512,28 @@ void BaseView::draw()
 		}
 
 		// Draw crafts
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0)
 		{
-			if ((*craft)->getStatus() != "STR_OUT")
+			if (craft != _base->getCrafts()->end())
 			{
-				Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
-				frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
-				frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
-				frame->blit(this);
+				if ((*craft)->getStatus() != "STR_OUT")
+				{
+					Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
+					frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
+					frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
+					frame->blit(this);
+					(*i)->setCraft(*craft);
+				}
+				else
+				{
+					(*i)->setCraft(0);
+				}
+				++craft;
 			}
-			++craft;
+			else
+			{
+				(*i)->setCraft(0);
+			}
 		}
 
 		// Draw time remaining

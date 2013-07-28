@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,20 +53,22 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 		_initialStats.strength = RNG::generate(minStats.strength, maxStats.strength);
 		_initialStats.psiStrength = RNG::generate(minStats.psiStrength, maxStats.psiStrength);
 		_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
-		_initialStats.psiSkill = 0;
+		_initialStats.psiSkill = minStats.psiSkill;
 
 		_currentStats = _initialStats;	
 
 		if (!names->empty())
 		{
-			_name = names->at(RNG::generate(0, names->size()-1))->genName(&_gender);
+			int nationality = RNG::generate(0, names->size()-1);
+			_name = names->at(nationality)->genName(&_gender);
+			_look = (SoldierLook)names->at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
 		}
 		else
 		{
 			_name = L"";
 			_gender = (SoldierGender)RNG::generate(0, 1);
+			_look = (SoldierLook)RNG::generate(0,3);
 		}
-		_look = (SoldierLook)RNG::generate(0, 3);
 	}
 	if (id != 0)
 	{
@@ -112,6 +114,12 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	node["armor"] >> armor;
 	_armor = rule->getArmor(armor);
 	node["psiTraining"] >> _psiTraining;
+	try {
+		node["improvement"] >> _improvement;
+	}
+	catch (YAML::Exception &e) {
+		_improvement = 0;
+	}
 	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
 		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
@@ -141,6 +149,7 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "recovery" << YAML::Value << _recovery;
 	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
 	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
+	out << YAML::Key << "improvement" << YAML::Value << _improvement;
 	if (!_equipmentLayout.empty())
 	{
 		out << YAML::Key << "equipmentLayout" << YAML::Value;
@@ -224,21 +233,17 @@ std::string Soldier::getRankString() const
 	{
 	case RANK_ROOKIE:
 		return "STR_ROOKIE";
-		break;
 	case RANK_SQUADDIE:
 		return "STR_SQUADDIE";
-		break;
 	case RANK_SERGEANT:
 		return "STR_SERGEANT";
-		break;
 	case RANK_CAPTAIN:
 		return "STR_CAPTAIN";
-		break;
 	case RANK_COLONEL:
 		return "STR_COLONEL";
-		break;
 	case RANK_COMMANDER:
 		return "STR_COMMANDER";
+	default:
 		break;
 	}
 	return "";
@@ -441,15 +446,53 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 void Soldier::trainPsi()
 {
 	_improvement = 0;
-	if(_currentStats.psiSkill <= 16)
-		_improvement = RNG::generate(16, 24);
-	else if(_currentStats.psiSkill <= 50)
+	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
+	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
+	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
+		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	{
+		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
+		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
+	}
+	else if(_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
 		_improvement = RNG::generate(5, 12);
-	else if(_currentStats.psiSkill < 100)
+	else if(_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 		_improvement = RNG::generate(1, 3);
 	_currentStats.psiSkill += _improvement;
 	if(_currentStats.psiSkill > 100)
 		_currentStats.psiSkill = 100;
+}
+
+/**
+ * Trains a soldier's Psychic abilities (anytimePsiTraining option)
+ */
+void Soldier::trainPsi1Day()
+{
+	if (!_psiTraining)
+	{
+		_improvement = 0;
+		return;
+	}
+
+	if (_currentStats.psiSkill > 0) // yes, 0. _rules->getMinStats().psiSkill was wrong.
+	{
+		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100) && _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+		{
+			++_improvement;
+			++_currentStats.psiSkill;
+		}
+	}
+	else if (_currentStats.psiSkill < _rules->getMinStats().psiSkill)
+	{
+		if (++_currentStats.psiSkill == _rules->getMinStats().psiSkill)	// initial training is over
+		{
+			_improvement = _rules->getMaxStats().psiSkill + RNG::generate(0, _rules->getMaxStats().psiSkill / 2);
+			_currentStats.psiSkill = _improvement;
+		}
+	}
+	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
+		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
 }
 
 /**

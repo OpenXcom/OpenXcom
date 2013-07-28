@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,6 +22,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -52,25 +53,25 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk = new TextButton(64, 24, 128, 168);
-	_btnW1 = new TextButton(24, 32, 24, 48);
-	_btnW2 = new TextButton(24, 32, 272, 48);
-	_btnCrew = new TextButton(64, 16, 24, 96);
-	_btnEquip = new TextButton(64, 16, 24, 120);
-	_btnArmor = new TextButton(64, 16, 24, 144);
+	_btnW1 = new TextButton(24, 32, 14, 48);
+	_btnW2 = new TextButton(24, 32, 282, 48);
+	_btnCrew = new TextButton(64, 16, 14, 96);
+	_btnEquip = new TextButton(64, 16, 14, 120);
+	_btnArmor = new TextButton(64, 16, 14, 144);
 	_edtCraft = new TextEdit(160, 16, 80, 8);
-	_txtDamage = new Text(82, 9, 24, 24);
-	_txtFuel = new Text(82, 9, 232, 24);
-	_txtW1Name = new Text(90, 9, 56, 48);
-	_txtW1Ammo = new Text(60, 9, 56, 64);
-	_txtW1Max = new Text(60, 9, 56, 72);
+	_txtDamage = new Text(82, 9, 14, 24);
+	_txtFuel = new Text(82, 9, 228, 24);
+	_txtW1Name = new Text(90, 9, 46, 48);
+	_txtW1Ammo = new Text(60, 9, 46, 64);
+	_txtW1Max = new Text(60, 9, 46, 72);
 	_txtW2Name = new Text(90, 9, 204, 48);
 	_txtW2Ammo = new Text(60, 9, 204, 64);
 	_txtW2Max = new Text(60, 9, 204, 72);
 	_sprite = new Surface(32, 32, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);
-	_crew = new Surface(210, 18, 95, 96);
-	_equip = new Surface(210, 18, 95, 121);
+	_crew = new Surface(220, 18, 85, 96);
+	_equip = new Surface(220, 18, 85, 121);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -98,6 +99,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	add(_crew);
 	add(_equip);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
@@ -105,6 +108,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
@@ -201,16 +205,16 @@ void CraftInfoState::init()
 			frame1->blit(_crew);
 		}
 
-		Surface *frame2 = texture->getFrame(39);
+		Surface *frame2 = texture->getFrame(40);
 		frame2->setY(0);
 		int x = 0;
-		for (int i = 0; i < c->getNumEquipment(); i += 4, x += 10)
+		for (int i = 0; i < c->getNumVehicles(); ++i, x += 10)
 		{
 			frame2->setX(x);
 			frame2->blit(_equip);
 		}
-		Surface *frame3 = texture->getFrame(40);
-		for (int i = 0; i < c->getNumVehicles(); ++i, x += 10)
+		Surface *frame3 = texture->getFrame(39);
+		for (int i = 0; i < c->getNumEquipment(); i += 4, x += 10)
 		{
 			frame3->setX(x);
 			frame3->blit(_equip);

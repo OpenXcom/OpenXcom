@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,9 +42,12 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Briefing screen.
  * @param game Pointer to the core game.
+ * @param craft Pointer to the craft in the mission.
+ * @param base Pointer to the base in the mission.
  */
 BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 {
+	_screen = false;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 164);
@@ -53,7 +56,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_txtCraft = new Text(300, 16, 16, 56);
 	_txtBriefing = new Text(274, 64, 16, 72);
 
-	std::string mission = _game->getSavedGame()->getBattleGame()->getMissionType();
+	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -81,16 +84,17 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	{
 		_txtCraft->setY(40);
 		_txtBriefing->setY(56);
+		_txtTarget->setVisible(false);
 	}
-	else
+	add(_txtTarget);
+	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		add(_txtTarget);
+		_txtCraft->setVisible(false);
 	}
-	if (mission != "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		add(_txtCraft);
-	}
+	add(_txtCraft);
 	add(_txtBriefing);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
@@ -167,8 +171,8 @@ void BriefingState::btnOkClick(Action *)
 	_game->popState();
 	BattlescapeState *bs = new BattlescapeState(_game);
 	_game->pushState(bs);
-	_game->getSavedGame()->getBattleGame()->setBattleState(bs);
-	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getBattleGame(), bs));
+	_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
 	_game->pushState(new InventoryState(_game, false, bs));
 }
 

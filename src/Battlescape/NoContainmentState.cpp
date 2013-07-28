@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,9 +35,8 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Cannot Reequip screen.
+ * Initializes all the elements in the No Containment screen.
  * @param game Pointer to the core game.
- * @param missingItems List of items still needed for reequip.
  */
 NoContainmentState::NoContainmentState(Game *game) : State(game)
 {
@@ -51,6 +50,8 @@ NoContainmentState::NoContainmentState(Game *game) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

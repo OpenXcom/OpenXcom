@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -35,7 +35,7 @@ class RuleCraftWeapon
 {
 private:
 	std::string _type;
-	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearmRate;
+	int _sprite, _sound, _damage, _range, _accuracy, _reloadCautious, _reloadStandard, _reloadAggressive, _ammoMax, _rearmRate, _projectileType, _projectileSpeed;
 	std::string _launcher, _clip;
 public:
 	/// Creates a blank craft weapon ruleset.
@@ -43,7 +43,7 @@ public:
 	/// Cleans up the craft weapon ruleset.
 	~RuleCraftWeapon();
 	/// Loads craft weapon data from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int modIndex);
 	/// Saves the craft weapon data to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Gets the craft weapon's type.
@@ -72,6 +72,10 @@ public:
 	std::string getLauncherItem() const;
 	/// Gets the craft weapon's clip item.
 	std::string getClipItem() const;
+	/// Gets the craft weapon's projectile's type.
+	int getProjectileType() const;
+	/// Gets the craft weapon's projectile speed.
+	int getProjectileSpeed() const;
 };
 
 }

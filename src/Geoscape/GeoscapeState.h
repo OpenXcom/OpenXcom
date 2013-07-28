@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -32,9 +32,9 @@ class InteractiveSurface;
 class Text;
 class Timer;
 class DogfightState;
-class Craft;
 class Ufo;
 class TerrorSite;
+class Base;
 
 /**
  * Geoscape screen which shows an overview of
@@ -56,7 +56,6 @@ private:
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
-	bool _gameStarted;
 	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
 public:
 	/// Creates the Geoscape state.
@@ -151,6 +150,8 @@ public:
 	void btnTimerClick(Action *action);
 	/// Process a terror site
 	bool processTerrorSite(TerrorSite *ts) const;
+	/// Handles base defense
+	void handleBaseDefense(Base *base, Ufo *ufo);
 private:
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);

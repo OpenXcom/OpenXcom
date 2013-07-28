@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,10 +18,10 @@
  */
 #include "BasescapeState.h"
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
@@ -38,6 +38,7 @@
 #include "DismantleFacilityState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Engine/Action.h"
+#include "../Savegame/Craft.h"
 #include "BaseInfoState.h"
 #include "SoldiersState.h"
 #include "CraftsState.h"
@@ -47,6 +48,8 @@
 #include "PurchaseState.h"
 #include "SellState.h"
 #include "TransferBaseState.h"
+#include "CraftInfoState.h"
+#include "../Geoscape/AllocatePsiTrainingState.h"
 
 namespace OpenXcom
 {
@@ -59,27 +62,24 @@ namespace OpenXcom
  */
 BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe)
 {
-	int mapWidth = int(game->getScreen()->getWidth() / game->getScreen()->getXScale());
-	int mapHeight = int(game->getScreen()->getHeight() / game->getScreen()->getYScale());
-
 	// Create objects
 	_txtFacility = new Text(192, 9, 0, 0);
 	_view = new BaseView(192, 192, 0, 8);
-	_mini = new MiniBaseView(128, 16, mapWidth-128, mapHeight/2-59);
-	_edtBase = new TextEdit(127, 17, mapWidth-127, mapHeight/2-100);
-	_txtLocation = new Text(126, 9, mapWidth-126, mapHeight/2-84);
-	_txtFunds = new Text(126, 9, mapWidth-126, mapHeight/2-76);
-	_btnNewBase = new TextButton(128, 12, mapWidth-128, mapHeight/2-42);
-	_btnBaseInfo = new TextButton(128, 12, mapWidth-128, mapHeight/2-29);
-	_btnSoldiers = new TextButton(128, 12, mapWidth-128, mapHeight/2-16);
-	_btnCrafts = new TextButton(128, 12, mapWidth-128, mapHeight/2-3);
-	_btnFacilities = new TextButton(128, 12, mapWidth-128, mapHeight/2+10);
-	_btnResearch = new TextButton(128, 12, mapWidth-128, mapHeight/2+23);
-	_btnManufacture = new TextButton(128, 12, mapWidth-128, mapHeight/2+36);
-	_btnTransfer = new TextButton(128, 12, mapWidth-128, mapHeight/2+49);
-	_btnPurchase = new TextButton(128, 12, mapWidth-128, mapHeight/2+62);
-	_btnSell = new TextButton(128, 12, mapWidth-128, mapHeight/2+75);
-	_btnGeoscape = new TextButton(128, 12, mapWidth-128, mapHeight/2+88);
+	_mini = new MiniBaseView(128, 16, 192, 41);
+	_edtBase = new TextEdit(127, 17, 193, 0);
+	_txtLocation = new Text(126, 9, 194, 16);
+	_txtFunds = new Text(126, 9, 194, 24);
+	_btnNewBase = new TextButton(128, 12, 192, 58);
+	_btnBaseInfo = new TextButton(128, 12, 192, 71);
+	_btnSoldiers = new TextButton(128, 12, 192, 84);
+	_btnCrafts = new TextButton(128, 12, 192, 97);
+	_btnFacilities = new TextButton(128, 12, 192, 110);
+	_btnResearch = new TextButton(128, 12, 192, 123);
+	_btnManufacture = new TextButton(128, 12, 192, 136);
+	_btnTransfer = new TextButton(128, 12, 192, 149);
+	_btnPurchase = new TextButton(128, 12, 192, 162);
+	_btnSell = new TextButton(128, 12, 192, 175);
+	_btnGeoscape = new TextButton(128, 12, 192, 188);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -102,10 +102,13 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	add(_btnSell);
 	add(_btnGeoscape);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->onMouseClick((ActionHandler)&BasescapeState::viewClick);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
+	_view->onMouseClick((ActionHandler)&BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)&BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)&BasescapeState::viewMouseOut);
 
@@ -174,6 +177,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
 	_btnGeoscape->setText(_game->getLanguage()->getString("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMouseClick((ActionHandler)&BasescapeState::btnGeoscapeClick);
+	_btnGeoscape->onKeyboardPress((ActionHandler)&BasescapeState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**
@@ -245,10 +249,7 @@ void BasescapeState::init()
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
-	if (_game->getSavedGame()->getBases()->size() == 8)
-	{
-		_btnNewBase->setVisible(false);
-	}
+	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
 }
 
 /**
@@ -374,7 +375,7 @@ void BasescapeState::btnGeoscapeClick(Action *)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewClick(Action *)
+void BasescapeState::viewLeftClick(Action *)
 {
 	BaseFacility *fac = _view->getSelectedFacility();
 	if (fac != 0)
@@ -410,16 +411,70 @@ void BasescapeState::viewClick(Action *)
 }
 
 /**
+ * Processes right clicking on facilities.
+ * @param action Pointer to an action.
+ */
+void BasescapeState::viewRightClick(Action *)
+{
+	BaseFacility *f = _view->getSelectedFacility();
+	if (f == 0)
+		_game->pushState(new BaseInfoState(_game, _base, this));
+
+	else if (f->getRules()->getCrafts() > 0)
+	{
+		if (f->getCraft() == 0)
+			_game->pushState(new CraftsState(_game, _base));
+		else
+			for (size_t craft = 0; craft < _base->getCrafts()->size(); ++craft)
+			{
+				if (f->getCraft() == _base->getCrafts()->at(craft))
+				{
+					_game->pushState(new CraftInfoState(_game, _base, craft));
+					break;
+				}
+			}
+	}
+	else if (f->getRules()->getStorage() > 0)
+		_game->pushState(new SellState(_game, _base));
+
+	else if (f->getRules()->getPersonnel() > 0)
+		_game->pushState(new SoldiersState(_game, _base));
+
+	else if (f->getRules()->getPsiLaboratories() > 0 && Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0)
+		_game->pushState(new AllocatePsiTrainingState(_game, _base));
+
+	else if (f->getRules()->getLaboratories() > 0)
+		_game->pushState(new ResearchState(_game, _base));
+
+	else if (f->getRules()->getWorkshops() > 0)
+		_game->pushState(new ManufactureState(_game, _base));
+
+	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
+		_game->popState();
+}
+
+/**
  * Displays the name of the facility the mouse is over.
  * @param action Pointer to an action.
  */
 void BasescapeState::viewMouseOver(Action *)
 {
 	BaseFacility *f = _view->getSelectedFacility();
+	std::wstring t;
 	if (f == 0)
-		_txtFacility->setText(L"");
+		t = L"";
+	else if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
+		t = _game->getLanguage()->getString(f->getRules()->getType());
 	else
-		_txtFacility->setText(_game->getLanguage()->getString(f->getRules()->getType()));
+	{
+		t.reserve(31);
+		t =  _game->getLanguage()->getString(f->getRules()->getType());
+		t += L" ";
+		t += _game->getLanguage()->getString("STR_CRAFT_");
+		if (f->getCraft() != 0)
+			t += f->getCraft()->getName(_game->getLanguage());
+	}
+	_txtFacility->setText(t);
 }
 
 /**

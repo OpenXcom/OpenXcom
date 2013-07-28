@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -33,7 +33,6 @@
 #include "ConfirmDestinationState.h"
 #include "InterceptState.h"
 #include "UfoDetectedState.h"
-#include "UfoHyperDetectedState.h"
 #include "GeoscapeCraftState.h"
 #include "TargetInfoState.h"
 #include "../Engine/Options.h"
@@ -72,6 +71,8 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		add(_btnCancel);
 		add(_lstTargets);
 
+		centerAllSurfaces();
+
 		// Set up objects
 		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -82,8 +83,8 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 		_lstTargets->setColor(Palette::blockOffset(8)+5);
-		_lstTargets->setAlign(ALIGN_CENTER);
 		_lstTargets->setColumns(1, 116);
+		_lstTargets->setAlign(ALIGN_CENTER);
 		_lstTargets->setSelectable(true);
 		_lstTargets->setBackground(_window);
 		_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
@@ -138,14 +139,7 @@ void MultipleTargetsState::popupTarget(Target *target)
 		}
 		else if (u != 0)
 		{
-			if(!(u->getHyperDetected()))
-			{
-				_game->pushState(new UfoDetectedState(_game, u, _state, false));
-			}
-			else
-			{
-				_game->pushState(new UfoHyperDetectedState(_game, u, _state, false));
-			}
+			_game->pushState(new UfoDetectedState(_game, u, _state, false, u->getHyperDetected()));
 		}
 		else
 		{

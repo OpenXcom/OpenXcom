@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -44,7 +44,7 @@ public:
 	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
 private:
 	RuleUfo *_rules;
-	int _id, _damage;
+	int _id, _crashId, _landId, _damage;
 	std::string _direction, _altitude;
 	enum UfoStatus _status;
 	unsigned _secondsRemaining;
@@ -54,7 +54,7 @@ private:
 	const UfoTrajectory *_trajectory;
 	unsigned _trajectoryPoint;
 	bool _detected, _hyperDetected;
-
+	int _shootingAt;
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
 public:
@@ -134,6 +134,19 @@ public:
 	AlienMission *getMission() const { return _mission; }
 	/// Sets the UFO's destination.
 	void setDestination(Target *dest);
+	/// Get which interceptor this ufo is engaging.
+	int getShootingAt() const;
+	/// Set which interceptor this ufo is engaging.
+	void setShootingAt(int target);
+	/// Gets the UFO's landing site ID.
+	int getLandId() const;
+	/// Sets the UFO's landing site ID.
+	void setLandId(int id);
+	/// Gets the UFO's crash site ID.
+	int getCrashId() const;
+	/// Sets the UFO's crash site ID.
+	void setCrashId(int id);
+
 };
 
 }

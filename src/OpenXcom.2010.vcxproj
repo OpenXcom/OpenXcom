@@ -88,12 +88,13 @@
       <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level1</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -118,11 +119,12 @@
       <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cppd.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -144,14 +146,15 @@
       <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -172,21 +175,22 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\deps\include;..\deps\include\SDL;..\deps\include\yaml-cpp%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\deps\include;$(ProjectDir)..\deps\include\SDL;$(ProjectDir)..\deps\include\yaml-cpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LODEPNG_NO_COMPILE_DECODER;LODEPNG_NO_COMPILE_ANCILLARY_CHUNKS;WIN32;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -226,6 +230,7 @@
     <ClCompile Include="Basescape\ResearchInfoState.cpp" />
     <ClCompile Include="Basescape\ResearchState.cpp" />
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp" />
+    <ClCompile Include="Basescape\SackSoldierState.cpp" />
     <ClCompile Include="Basescape\SellState.cpp" />
     <ClCompile Include="Basescape\SoldierArmorState.cpp" />
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
@@ -247,7 +252,6 @@
     <ClCompile Include="Battlescape\BattlescapeState.cpp" />
     <ClCompile Include="Battlescape\BattleState.cpp" />
     <ClCompile Include="Battlescape\BriefingState.cpp" />
-    <ClCompile Include="Battlescape\BulletSprite.cpp" />
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\CannotReequipState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
@@ -354,7 +358,6 @@
     <ClCompile Include="Geoscape\SelectDestinationState.cpp" />
     <ClCompile Include="Geoscape\TargetInfoState.cpp" />
     <ClCompile Include="Geoscape\UfoDetectedState.cpp" />
-    <ClCompile Include="Geoscape\UfoHyperDetectedState.cpp" />
     <ClCompile Include="Geoscape\UfoLostState.cpp" />
     <ClCompile Include="Interface\ArrowButton.cpp" />
     <ClCompile Include="Interface\Bar.cpp" />
@@ -370,6 +373,7 @@
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu\AdvancedOptionsState.cpp" />
     <ClCompile Include="Menu\DeleteGameState.cpp" />
     <ClCompile Include="Menu\ErrorMessageState.cpp" />
     <ClCompile Include="Menu\LanguageState.cpp" />
@@ -384,8 +388,18 @@
     <ClCompile Include="Menu\SaveState.cpp" />
     <ClCompile Include="Menu\StartState.cpp" />
     <ClCompile Include="Menu\TestState.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Resource\ResourcePack.cpp" />
     <ClCompile Include="Resource\XcomResourcePack.cpp" />
+    <ClCompile Include="Ruleset\ExtraSounds.cpp" />
+    <ClCompile Include="Ruleset\ExtraSprites.cpp" />
+    <ClCompile Include="Ruleset\ExtraStrings.cpp" />
+    <ClCompile Include="Ruleset\MCDPatch.cpp" />
     <ClCompile Include="Ruleset\RuleAlienMission.cpp" />
     <ClCompile Include="Ruleset\ArticleDefinition.cpp" />
     <ClCompile Include="Ruleset\City.cpp" />
@@ -431,6 +445,7 @@
     <ClCompile Include="Savegame\ResearchProject.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
+    <ClCompile Include="Savegame\SerializationHelper.cpp" />
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />
@@ -482,6 +497,7 @@
     <ClInclude Include="Basescape\ResearchInfoState.h" />
     <ClInclude Include="Basescape\ResearchState.h" />
     <ClInclude Include="Basescape\SelectStartFacilityState.h" />
+    <ClInclude Include="Basescape\SackSoldierState.h" />
     <ClInclude Include="Basescape\SellState.h" />
     <ClInclude Include="Basescape\SoldierArmorState.h" />
     <ClInclude Include="Basescape\SoldierInfoState.h" />
@@ -503,7 +519,6 @@
     <ClInclude Include="Battlescape\BattlescapeState.h" />
     <ClInclude Include="Battlescape\BattleState.h" />
     <ClInclude Include="Battlescape\BriefingState.h" />
-    <ClInclude Include="Battlescape\BulletSprite.h" />
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\CannotReequipState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
@@ -546,10 +561,12 @@
     <ClInclude Include="Engine\CrossPlatform.h" />
     <ClInclude Include="Engine\Exception.h" />
     <ClInclude Include="Engine\FastLineClip.h" />
+    <ClInclude Include="Engine\FixedFloat.h" />
     <ClInclude Include="Engine\Flc.h" />
     <ClInclude Include="Engine\Font.h" />
     <ClInclude Include="Engine\Game.h" />
     <ClInclude Include="Engine\GMCat.h" />
+    <ClInclude Include="Engine\GraphSubset.h" />
     <ClInclude Include="Engine\InteractiveSurface.h" />
     <ClInclude Include="Engine\Language.h" />
     <ClInclude Include="Engine\LocalizedText.h" />
@@ -565,6 +582,11 @@
     <ClInclude Include="Engine\Scalers\scale3x.h" />
     <ClInclude Include="Engine\Scalers\scalebit.h" />
     <ClInclude Include="Engine\Screen.h" />
+    <ClInclude Include="Engine\ShaderDraw.h" />
+    <ClInclude Include="Engine\ShaderDrawHelper.h" />
+    <ClInclude Include="Engine\ShaderMove.h" />
+    <ClInclude Include="Engine\ShaderRepeat.h" />
+    <ClInclude Include="Engine\ShaderRotate.h" />
     <ClInclude Include="Engine\Sound.h" />
     <ClInclude Include="Engine\SoundSet.h" />
     <ClInclude Include="Engine\State.h" />
@@ -610,7 +632,6 @@
     <ClInclude Include="Geoscape\SelectDestinationState.h" />
     <ClInclude Include="Geoscape\TargetInfoState.h" />
     <ClInclude Include="Geoscape\UfoDetectedState.h" />
-    <ClInclude Include="Geoscape\UfoHyperDetectedState.h" />
     <ClInclude Include="Geoscape\UfoLostState.h" />
     <ClInclude Include="Interface\ArrowButton.h" />
     <ClInclude Include="Interface\Bar.h" />
@@ -625,6 +646,7 @@
     <ClInclude Include="Interface\ToggleTextButton.h" />
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="Menu\AdvancedOptionsState.h" />
     <ClInclude Include="Menu\DeleteGameState.h" />
     <ClInclude Include="Menu\ErrorMessageState.h" />
     <ClInclude Include="Menu\LanguageState.h" />
@@ -639,16 +661,21 @@
     <ClInclude Include="Menu\SaveState.h" />
     <ClInclude Include="Menu\StartState.h" />
     <ClInclude Include="Menu\TestState.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
     <ClInclude Include="Ruleset\ArticleDefinition.h" />
     <ClInclude Include="Ruleset\City.h" />
+    <ClInclude Include="Ruleset\ExtraSounds.h" />
+    <ClInclude Include="Ruleset\ExtraSprites.h" />
+    <ClInclude Include="Ruleset\ExtraStrings.h" />
     <ClInclude Include="Ruleset\MapBlock.h" />
     <ClInclude Include="Ruleset\MapDataSet.h" />
     <ClInclude Include="Ruleset\MapData.h" />
     <ClInclude Include="Ruleset\AlienDeployment.h" />
     <ClInclude Include="Ruleset\AlienRace.h" />
+    <ClInclude Include="Ruleset\MCDPatch.h" />
     <ClInclude Include="Ruleset\Unit.h" />
     <ClInclude Include="Ruleset\Armor.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />
@@ -711,6 +738,7 @@
     <ClInclude Include="Ufopaedia\Ufopaedia.h" />
     <ClInclude Include="Ufopaedia\UfopaediaSelectState.h" />
     <ClInclude Include="Ufopaedia\UfopaediaStartState.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

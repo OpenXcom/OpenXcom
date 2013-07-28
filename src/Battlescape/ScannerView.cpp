@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -29,7 +29,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Interface/Text.h"
-#include "../Resource/ResourcePack.h"
 #include <iostream>
 
 namespace OpenXcom
@@ -64,9 +63,9 @@ void ScannerView::draw()
 	{
 		for (int y = -9; y < 10; y++)
 		{
-			for (int z = 0; z < _game->getSavedGame()->getBattleGame()->getMapSizeZ(); z++)
+			for (int z = 0; z < _game->getSavedGame()->getSavedBattle()->getMapSizeZ(); z++)
 			{
-				Tile *t = _game->getSavedGame()->getBattleGame()->getTile(Position(x,y,z) + Position(_unit->getPosition().x, _unit->getPosition().y, 0));
+				Tile *t = _game->getSavedGame()->getSavedBattle()->getTile(Position(x,y,z) + Position(_unit->getPosition().x, _unit->getPosition().y, 0));
 				if (t && t->getUnit() && t->getUnit()->getMotionPoints())
 				{
 					int frame = (t->getUnit()->getMotionPoints() / 5);

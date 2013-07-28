@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,12 +22,14 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Armor.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -65,6 +67,8 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	add(_txtQuantity);
 	add(_lstArmor);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
@@ -72,6 +76,7 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SoldierArmorState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&SoldierArmorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -139,13 +144,16 @@ void SoldierArmorState::btnCancelClick(Action *)
 void SoldierArmorState::lstArmorClick(Action *)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
-	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
-	}
-	if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
-	{
-		_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+		if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+		{
+			_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+		}
+		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
+		{
+			_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+		}
 	}
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
 

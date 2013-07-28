@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -34,6 +34,8 @@ class Node;
  */
 class PatrolBAIState : public BattleAIState
 {
+private:
+	bool _traceAI;
 protected:
 	Node *_fromNode, *_toNode;
 public:

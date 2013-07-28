@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Basescape/ResearchState.h"
 #include "../Savegame/SavedGame.h"
@@ -59,6 +60,8 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	add(_txtTitle);
 	add(_lstPossibilities);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
@@ -83,8 +86,8 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	size_t tally(0);
 	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
-		std::vector<std::string>::const_iterator unlocked = std::find((*iter)->getUnlocked().begin(), (*iter)->getUnlocked().end(), "STR_ALIEN_ORIGINS");
-		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().size() == 0 && unlocked == (*iter)->getUnlocked().end())
+		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
+		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().size() == 0 && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));
 			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());

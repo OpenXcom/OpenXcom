@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,6 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include <assert.h>
+
 #include "ProductionCompleteState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -51,6 +53,8 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 	add(_window);
 	add(_btnOk);
 	add(_txtMessage);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);

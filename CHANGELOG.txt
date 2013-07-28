@@ -1,22 +1,116 @@
-Version 0.5.0 Pre-Release
----------------------------
+Version 1.0 (In progress)
+-------------------------
 New features:
   General:
+- Rudimentary mod support has been added to the ruleset loading, including:
+  -- The ability to define extra strings, sounds and sprites.
+  -- The starting date can now be set in the ruleset.
+  -- Soldier stat caps are now acquired from the ruleset.
+  -- Added support for custom images in the UFO craft preview window.
+  -- Implemented a list weight value for items, which determines where they appear in buy/sell lists.
+  -- Allow for resizing of UI surfaces through rulesets.
+  -- Rulesets will now internally number themselves and offset IDs by 1000 to avoid conflicts intelligently.
+- Begun development on loading TFTD content, specifically .BDY files.
+- Various translation updates, including: Polish, Romanian.
+- Updated soldier names: Italian
+- New soldier names: Belgian, Dutch, Indian, Polynesian, Slovakian.
+- New Battle will now load available terrains from the ruleset instead of having them hardcoded.
+- New Battle now allows unlimited items to be assigned to the craft.
+- New Battle only assigns mixed alien races for the Final Base Assualt mission.
+
+  Geoscape:
+- Automatically end dogfights if the UFO outpaces the fighter and the window is minimised.
+- When areas don't have mission data set, they will now fall back to data for an area that does.
+- Psionic training at any time option added: allows adding/removing soldiers from psionic training at your discretion rather than on a monthly basis, and updates their progress daily.*
+  
+  Battlescape:
+- Inventory: Control-click an item to attempt to swap it between the ground and your soldier's inventory.
+- Inventory: Added ability to define paper dolls for non-player units.
+- Alt-click can now be used as an alternative to right-clicking.
+- Various soldier weapon display changes:
+ -- When using two two-handed weapons, display the one currently in use.
+ -- Display soldier hands in front of rifles.
+ -- If holding a pistol and a two-handed weapon, display both while firing.
+- Factored height into the throwing calculation.
+- Plasma tanks and sectopods now play the correct firing sounds.
+- 2012 item recovery option added: only captured aliens drop intact weapons.*
+- Path preview option updated: displays yellow when you can move to a spot but are unable to perform auto shot (or the type of shot you have on reserve) with your remaining TUs.
+- Path preview option updated: can now be set to show arrows, remaining TUs, or both.*
+
+* These features are disabled by default but can be enabled in the advanced options menu or by editing your configuration file.
+
+Bugfixes:
+
+  General:
+- Fixed "classic mouse behaviour" and made it the default. (You should no longer be able to hold down the left mouse button and drag it down a list, incrementing several items)
+- Various Linux and OS X-related fixes.
+- Renamable fields no longer accept blank strings. (ie. no more bases, interceptors, or soldiers named "")
+  
+  Geoscape:
+- To avoid lawsuits, sacked soldiers no longer take their armour with them.
+- Crashed and landed UFOs no longer display a heading, even if that information is available.
+- If a base is lost and a craft from that base is following a UFO but running low on fuel, do not prompt the player to return the craft to the lost base.
+- Fighters no longer get quicker shots due to a bug that made them move in and out of their maximum weapon range when changing behaviours rapidly.
+- UFOs should no longer escape dogfights too quickly.
+- When the game starts, play the "GMGEO1" music track, instead of choosing randomly.
+- When only one item remains to research and is added to the active projects, properly clear it from the "new projects" menu.
+  
+  Battlescape:
+- Alien soldiers now reserve less TUs for reaction fire, and commanders reserve more.
+- Stop turning when a new enemy is spotted, but ensure units will always face their targets when shooting.
+- Re-wrote the reaction fire code to implement fixes and changes, including:
+ -- Better handling of reaction fire against the last alien in the battle.
+ -- Reaction shots should only be snap shots, not auto.
+ -- Firing will trigger a reaction check.
+ -- Hitting an alien with a non-melee weapon will cause it to face you.
+ -- When two units spot each other at the same time, no reaction fire will occur.
+- Aliens have night vision again, as per the original game, spotting soldiers within 20 tiles regardless of light.
+- XCOM soldiers should now always spot aliens within 18 tiles, regardless of light, and 20 tiles in good light.
+- Inventory: Allow scrolling of items on the ground when only two tiles of empty space remain, instead of just one.
+- When ending a turn, the game will now close doors before setting off explosions.
+- When returning a mind controlled alien to alien control, return their lighting to normal.
+- Corrected how gravity applies to Reapers.
+- Check tiles above explosions for whether items or units need to fall.
+- Fixed silacoid attack ability, and made them immune to fire, so that they don't roast themselves.
+- Fixed some celatid sprites.
+- Stop displaying the PSI button after a psi-capable unit dies.
+- Clear waypoints and top displaying the LAUNCH button if the turn is ended while setting waypoints for the blaster launcher.
+- Fixed a crash on loading the battlescape.
+- Fixed line of sight errors for certain walls.
+- Fixed a crash bug relating to automatically ending battles.
+- Tank inventories will no longer open during the cydonia phase two transition.
+- Properly reset the turn counter for phase two of Cydonia.
+- Improved attribution of grenade kills.
+- Fixed issues with shooting blaster bombs directly into walls not damaging nearby units.
+- Fixed a bug that caused run mode to "stick" after pressing Control while the Strafe setting option was enabled.
+- Fixed a bug that caused grenades primed above "0" to still instantly explode when Instant Grenades option was enabled.
+- When aborting a mission, mind controlled aliens no longer count as friendly units for scoring purposes.
+- Soldiers now panic in a way that's more consistent with the original game.
+- All buttons disabled while projectiles are in-flight to disable cheating.
+- Instant grenade behaviour fixed.
+- Clip recovery fixed.
+
+Version 0.9 (07-05-2013)
+-------------------------
+New features:
+  General:
+- Intro cinematic.
 - Game can now be completed, game over screens for winning and losing.
-- Random "New Battle" mode.
--- Your settings in this mode will be saved for next time you play.
-- Ukranian translation implemented.
-- Bulgarian translation implemented.
-- Italian Soldier Names added.
-- Hungarian Soldier Names added.
+- Randomizer for "New Battle" mode.
+- Your settings in "New Battle" mode will be saved for next time you play.
+- New translations: Ukranian, Bulgarian, Portuguese (Portugal), Spanish (Latin American), Danish.
+- New soldier names: Italian, Hungarian.
 - Aliens progress their equipment levels, races and aggression over time.
-- Added "Alien Research" button in New Battle menu to set alien item level.
+- Added "Alien Weapon Level" button in New Battle menu.
 - Added "Right Click to Delete" function in save/load menus.
-- Added various display filters to the game.*
-- The default windowed mode position can now be edited in the configuration file.
-- Increase/decrease buttons now respond to mouse wheel scrolling when the cursor is above them.*
-- The game can no longer be dynamically resized to a new display resolution when in windowed mode.+
-- Multi-Part Ruleset support.
+- Added various display filters to the game, including HQX and various OpenGL shaders.*
+- The game can be dynamically resized to a new display resolution when in windowed mode.*
+- The default windowed mode position can now be edited in the configuration file.*
+- Modular Ruleset support.
+- Added "Controls" menu.
+- Added "Advanced Options" menu.
+- Added button to Restore Defaults to options.
+- Pause Game on Loss of Focus.**
 
   Geoscape:
 - Live alien capture and interrogation.
@@ -27,26 +121,38 @@ New features:
 - Funding nation decision making.
 - Multiple dogfight handling.
 - Graphs screen.
-- Base Defense Screens.
+- Base Defense screens.
+- Full research tree.
 - Alien UFO Mission Generation.
 - Alien retaliatory attacks on Xcom bases.
+- Show radar-range lines on the globe after pressing R key.
+- Show funds above the time.*
+- Added the number of soldiers allocated on craft equipment-screen.
 - Custom initial base layout.* (requires a new game to take effect)
+- Building-Queue: Can place buildings next to uncompleted-buildings.*
+- AutoSell Production state for a manufacturing project by a right click on the increase button.*
 - Allowed multiple items to be produced per hour when very large numbers of engineers are assigned to a project.*
 - Upper limit for alien captures per containment facility.* (visible on Base Info screen)
 - Captive aliens can now be sold in the same manner as dead aliens.*
+- Can transfer crafts while airborne.*
+- Increase/decrease buttons now respond to mouse wheel scrolling when the cursor is above them.*
+- Allocate Scientists and Allocate Engineers screens now respond to mouse wheel scrolling.+
+- Debug mode now enables drawing of country and region borders.
 
   Battlescape:
 - Battlescape melee unit AI.
 - Unit conversion for chryssalids and zombies.
 - All missing units implemented, both alien units and xcom tanks.
+- All missing items implemented.
+- Psionic attacks implemented.
 - Units dual wielding single handed weapons is now represented on the battlescape.
 - The game now dynamically replaces sprite colours in order to represent soldier ethnicity and hair colour.
 - Equipment loadout saving.
+- Show more stats in inventory view.*
 - Proper A* pathfinding.
-- Battlescape RMB scrolling improved.
+- Battlescape RMB scrolling changed to MMB, renamed to Drag-Scroll, improved.
 - Landing Ufos/Ground Assault missions.
 - Ruleset support for multiple-stage missions.
-- Pause Game on Loss of Focus.**
 - Certain units now "Yell" when engaging another unit.
 - Enemy unit stats and armour are now affected by difficulty.
 - Grenade explosions now properly credit the previous owner of the grenade with the kill when a unit dies.
@@ -57,19 +163,22 @@ New features:
 - Various AI improvements.
 - Debug mode now has tile colourisation to represent AI evaluations.
 - Debug mode now has a time-slowing feature, which can be used for graphical or voxel debugging.
+- Alien Bases can now be neutralized by destroying the control room.
+- Mission can be won by mind-controlling all remaining units.*
 
-* These features are disabled by default but can be enabled as advanced options by editing your configuration file.
-+ These features are enabled by default but can be disabled as advanced options by editing your configuration file.
+* These features are disabled by default but can be enabled in the advanced options menu or by editing your configuration file.
++ These features are enabled by default but can be disabled in the advanced options menu or by editing your configuration file.
 ** These features can be altered by editing your configuration file.
 
 Bugfixes:
   General:
 - Updated translations.
-- Updated soldier names.
-- Added support for native cyrillic letters.
-- Fix for horizontal scroll-wheels.
+- Added support for more Unicode letters.
+- Fix for extra mouse buttons.
 - Various cursor-related bugfixes/improvements.
 - Support for Haiku folder paths.
+- Fix for 8 KHz WAV-file (in SAMPLEx.CAT) playing.
+- Fixed various memory leaks.
 
   Geoscape:
 - Fix for a crash bug involving an edge case where several craft were sent to intercept a single UFO.
@@ -83,6 +192,9 @@ Bugfixes:
 - Items are no longer removed from stores when they are researched.
 - Cut off input to dogfight screens when your craft is destroyed or the UFO decides to disengage.
 - "New research available" popups should now only display the first time you research a technology that will unlock a new branch of research.
+- Fixed: Can't dismantle ANY facility if some of the attributes is overflowed!
+- Fixed: Busy people weren't getting paychecks
+- Fixed radar detection calculation.
 
 Battlescape:
 - Battlescape buttons are now unavailable during alien turn.
@@ -110,6 +222,7 @@ Battlescape:
 - Various psi-related bugfixes.
 - Various clipping issues fixed.
 - Various pathfinding bugfixes/improvements.
+- Various sound-related fixes.
 - Ethereals can now fly as intended. You have been warned.
 - Added some more robust behaviour around what happens when a unit is forced into an occupied tile.
 (ie. for the floor collapsing beneath a soldier standing above another soldier, and for when an unconscious soldier revives when another soldier is standing in their tile)
@@ -123,6 +236,7 @@ New features:
 - Hungarian translation.
 - Rightclick mouse scrolling.
 - Rightclick arrow buttons to min/max values.
+- Can prime a grenade on mission pre-equip (Inventory view) with a right-click.
 - Weapons can be toggled on/off during dogfights.
 - Modular rulesets (specified in options.cfg).
 - Soldier reordering.

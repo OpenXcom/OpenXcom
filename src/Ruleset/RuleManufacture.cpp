@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -24,15 +24,16 @@ namespace OpenXcom
  * Create a new Manufacture
  * @param name The unique manufacture name
 */
-RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(0), _time(0), _cost(0)
+RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(0), _time(0), _cost(0), _listOrder(0)
 {
 }
 
 /**
  * Loads the manufacture project from a YAML file.
  * @param node YAML node.
+ * @param listOrder the list weight for this manufacture.
  */
-void RuleManufacture::load(const YAML::Node &node)
+void RuleManufacture::load(const YAML::Node &node, int listOrder)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -66,6 +67,14 @@ void RuleManufacture::load(const YAML::Node &node)
 		{
 			i.second() >> _requiredItems;
 		}
+		else if (key == "listOrder")
+		{
+			i.second() >> _listOrder;
+		}
+	}
+	if (!_listOrder)
+	{
+		_listOrder = listOrder;
 	}
 }
 
@@ -151,4 +160,11 @@ const std::map<std::string, int> & RuleManufacture::getRequiredItems() const
 	return _requiredItems;
 }
 
+/**
+ * @return the list weight for this manufacture item.
+ */
+int RuleManufacture::getListOrder() const
+{
+	return _listOrder;
+}
 }

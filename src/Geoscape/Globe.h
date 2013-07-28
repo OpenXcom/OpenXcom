@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -65,6 +65,13 @@ private:
 	Surface *_mkXcomBase, *_mkAlienBase, *_mkCraft, *_mkWaypoint, *_mkCity;
 	Surface *_mkFlyingUfo, *_mkLandedUfo, *_mkCrashedUfo, *_mkAlienSite;
 	FastLineClip *_clipper;
+	///normal of each pixel in earth globe per zoom level
+	std::vector<std::vector<Cord> > _earthData;
+	///data sample used for noise in shading
+	std::vector<Sint16> _randomNoiseData;
+	///list of dimension of earth on screen per zoom level
+	std::vector<double> _radius;
+
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
@@ -153,7 +160,7 @@ public:
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
 	/// Get the polygons texture and shade at the given point.
-	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade);
+	void getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const;
 	/// Checks if current globe zoom level is at maximum.
 	bool isZoomedInToMax() const;
 	/// Checks if current globe zoom level is at minimum.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -21,6 +21,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -29,7 +30,6 @@
 #include "../Basescape/BaseView.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
-#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -38,6 +38,7 @@ namespace OpenXcom
  * Initializes all the elements in a Dismantle Facility window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param view Pointer to the baseview to update.
  * @param fac Pointer to the facility to dismantle.
  */
 DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac) : State(game), _base(base), _view(view), _fac(fac)
@@ -60,6 +61,8 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	add(_txtTitle);
 	add(_txtFacility);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -67,10 +70,12 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -103,6 +108,7 @@ void DismantleFacilityState::btnOkClick(Action *)
 			if (*i == _fac)
 			{
 				_base->getFacilities()->erase(i);
+				_view->resetSelectedFacility();
 				delete _fac;
 				if (Options::getBool("allowBuildingQueue")) _view->reCalcQueuedBuildings();
 				break;

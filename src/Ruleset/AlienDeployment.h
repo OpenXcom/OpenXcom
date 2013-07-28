@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -59,6 +59,9 @@ private:
 	std::vector<DeploymentData> _data;
 	int _width, _length, _height, _civilians;
 	std::vector<int> _roadTypeOdds;
+	std::string _terrain;
+	int _shade;
+	std::string _nextStage;
 public:
 	/// Creates a blank Alien Deployment ruleset.
 	AlienDeployment(const std::string &type);
@@ -76,6 +79,13 @@ public:
 	void getDimensions(int *width, int *length, int *height);
 	int getCivilians() const;
 	std::vector<int> getRoadTypeOdds() const;
+	/// Gets the terrain for battlescape generation.
+	std::string getTerrain() const;
+	/// Gets the shade level for battlescape generation.
+	int getShade() const;
+	/// Gets the next stage of the mission.
+	std::string getNextStage() const;
+
 };
 
 }

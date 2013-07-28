@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -53,6 +53,7 @@ UnitTurnBState::~UnitTurnBState()
 void UnitTurnBState::init()
 {
 	_unit = _action.actor;
+	_action.TU = 0;
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 	else
@@ -88,9 +89,9 @@ void UnitTurnBState::init()
 
 void UnitTurnBState::think()
 {
-	const int tu = 1; // one turn is 1 tu
+	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
 
-	if (_parent->checkReservedTU(_unit, tu) == false)
+	if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 	{
 		_unit->abortTurn();
 		_parent->popState();
@@ -99,15 +100,21 @@ void UnitTurnBState::think()
 
 	if (_unit->spendTimeUnits(tu))
 	{
+		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
+		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
+		if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _action.type == BA_NONE && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+		{
+			_unit->abortTurn();
+		}
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_parent->popState();
 		}
 	}
-	else
+	else if (_parent->getPanicHandled())
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_unit->abortTurn();

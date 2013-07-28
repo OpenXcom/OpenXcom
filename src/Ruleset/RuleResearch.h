@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -42,10 +42,11 @@ class RuleResearch
 	int _cost, _points;
 	std::vector<std::string> _dependencies, _unlocks, _getOneFree, _requires;
 	bool _needItem;
+	int _listOrder;
 public:
 	RuleResearch(const std::string & name);
 	/// Loads the research from YAML.
-	void load(const YAML::Node& node);
+	void load(const YAML::Node& node, int listOrder);
 	/// Saves the research to YAML.
 	void save(YAML::Emitter& out) const;
 	/// Get time needed to discover this ResearchProject
@@ -66,6 +67,8 @@ public:
 	const std::string getLookup () const;
 	/// return the requirements
 	const std::vector<std::string> & getRequirements() const;
+	/// get the list weight for this research item.
+	int getListOrder() const;
 };
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -63,6 +63,8 @@ namespace OpenXcom
 		_txtInfo->setColor(Palette::blockOffset(15)-1);
 		_txtInfo->setWordWrap(true);
 		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+
+		centerAllSurfaces();
 	}
 
 	ArticleStateTextImage::~ArticleStateTextImage()

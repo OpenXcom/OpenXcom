@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -30,6 +30,7 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/RuleResearch.h"
 #include "Transfer.h"
 #include "ResearchProject.h"
 #include "Production.h"
@@ -69,6 +70,10 @@ Base::~Base()
 		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
 			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
 				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's desctructor twice
+		delete *i;
+	}
+	for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); ++i)
+	{
 		delete *i;
 	}
 	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)
@@ -849,7 +854,7 @@ int Base::getCraftMaintenance() const
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
-		total += (*i)->getRules()->getBuyCost();
+		total += (*i)->getRules()->getRentCost();
 	}
 	return total;
 }
@@ -1038,7 +1043,18 @@ int Base::getUsedContainment() const
 				total += (*i)->getQuantity();
 			}
 		}
-	}	
+	}
+	if (Options::getBool("alienContainmentLimitEnforced"))
+	{
+		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
+		{
+			const RuleResearch *projRules = (*i)->getRules();
+			if (projRules->needItem() && _rule->getUnit(projRules->getName()))
+			{
+				++total;
+			}
+		}
+	}
 	return total;
 }
 
@@ -1121,6 +1137,24 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 }
 
 /**
+ * Functor to check for completed facilities.
+ */
+struct isCompleted: public std::unary_function<BaseFacility*, bool>
+{
+	/// Check isCompleted() for @a facility.
+	bool operator()(const BaseFacility *facility) const;
+};
+
+/**
+ * Facilities are checked for construction completion.
+ * @param facility Pointer to the facility to check.
+ * @return If @a facility has completed construction.
+ */
+bool isCompleted::operator()(const BaseFacility *facility) const
+{
+	return (facility->getBuildTime() == 0);
+}
+/**
  * Calculate the detection chance of this base.
  * Big bases without mindshields are easier to detect.
  * @return The detection chance.
@@ -1128,7 +1162,8 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 unsigned Base::getDetectionChance() const
 {
 	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
-	return (_facilities.size()/6 + 16) / (mindShields + 1);
+	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
+	return (completedFacilities / 6 + 15) / (mindShields + 1);
 }
 
 int Base::getGravShields() const

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,11 +19,13 @@
 #include "CraftSoldiersState.h"
 #include <string>
 #include <sstream>
+#include <climits>
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Options.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
@@ -69,6 +71,8 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	add(_txtUsed);
 	add(_lstSoldiers);
 
+	centerAllSurfaces();
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
@@ -76,6 +80,7 @@ CraftSoldiersState::CraftSoldiersState(Game *game, Base *base, size_t craft) : S
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -177,6 +182,14 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 			{
 				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row-1);
 				_base->getSoldiers()->at(row-1) = s;
+				if (row != _lstSoldiers->getScroll())
+				{
+					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+				}
+				else
+				{
+					_lstSoldiers->scrollUp(false);
+				}
 			}
 			else
 			{
@@ -197,14 +210,23 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 	|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		unsigned int row = _lstSoldiers->getSelectedRow();
-		if (row < _base->getSoldiers()->size() - 1 )
+		int row = _lstSoldiers->getSelectedRow();
+		size_t numSoldiers = _base->getSoldiers()->size();
+		if (0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
 		{
 			Soldier *s = _base->getSoldiers()->at(row);
 			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
 			{
 				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row+1);
 				_base->getSoldiers()->at(row+1) = s;
+				if (row != 15 + _lstSoldiers->getScroll())
+				{
+					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+				}
+				else
+				{
+					_lstSoldiers->scrollDown(false);
+				}
 			}
 			else
 			{
@@ -222,8 +244,8 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
  */
 void CraftSoldiersState::lstSoldiersClick(Action *action)
 {
-	int mx = action->getAbsoluteXMouse();
-	if ( mx >= 186 && mx < 220 )
+	double mx = action->getAbsoluteXMouse();
+	if ( mx >= _lstSoldiers->getArrowsLeftEdge() && mx < _lstSoldiers->getArrowsRightEdge() )
 	{
 		return;
 	}

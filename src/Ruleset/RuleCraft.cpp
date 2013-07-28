@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,7 +27,11 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(const std::string &type) : _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0), _score(0), _battlescapeTerrainData(0), _spacecraft(false)
+RuleCraft::RuleCraft(const std::string &type) : 
+    _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0), 
+    _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
+	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0),
+	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
 {
 
 }
@@ -44,8 +48,10 @@ RuleCraft::~RuleCraft()
  * Loads the craft from a YAML file.
  * @param node YAML node.
  * @param ruleset Ruleset for the craft.
+ * @param modIndex offsets the sounds and sprite values to avoid conflicts.
+ * @param listOrder the list weight for this craft.
  */
-void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
+void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int listOrder)
 {
 	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -55,9 +61,16 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 		{
 			i.second() >> _type;
 		}
+		else if (key == "requires")
+		{
+			i.second() >> _requires;
+		}
 		else if (key == "sprite")
 		{
 			i.second() >> _sprite;
+			// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
+			if (_sprite > 4)
+				_sprite += modIndex;
 		}
 		else if (key == "fuelMax")
 		{
@@ -90,6 +103,14 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 		else if (key == "costBuy")
 		{
 			i.second() >> _costBuy;
+		}
+		else if (key == "costRent")
+		{
+			i.second() >> _costRent;
+		}
+		else if (key == "costSell")
+		{
+			i.second() >> _costSell;
 		}
 		else if (key == "refuelItem")
 		{
@@ -127,6 +148,14 @@ void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset)
 		{
 			i.second() >> _spacecraft;
 		}
+		else if (key == "listOrder")
+		{
+			i.second() >> _listOrder;
+		}
+	}
+	if (!_listOrder)
+	{
+		_listOrder = listOrder;
 	}
 }
 
@@ -138,6 +167,7 @@ void RuleCraft::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "type" << YAML::Value << _type;
+	out << YAML::Key << "requires" << YAML::Value << _requires;
 	out << YAML::Key << "sprite" << YAML::Value << _sprite;
 	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
 	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
@@ -147,6 +177,8 @@ void RuleCraft::save(YAML::Emitter &out) const
 	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
 	out << YAML::Key << "vehicles" << YAML::Value << _vehicles;
 	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
+	out << YAML::Key << "costRent" << YAML::Value << _costRent;
+	out << YAML::Key << "costSell" << YAML::Value << _costSell;
 	out << YAML::Key << "refuelItem" << YAML::Value << _refuelItem;
 	out << YAML::Key << "repairRate" << YAML::Value << _repairRate;
 	out << YAML::Key << "refuelRate" << YAML::Value << _refuelRate;
@@ -170,6 +202,16 @@ void RuleCraft::save(YAML::Emitter &out) const
 std::string RuleCraft::getType() const
 {
 	return _type;
+}
+
+/**
+ * Returns the list of research required to
+ * acquire this craft.
+ * @return List of research IDs.
+ */
+const std::vector<std::string> &RuleCraft::getRequirements() const
+{
+	return _requires;
 }
 
 /**
@@ -262,6 +304,25 @@ int RuleCraft::getBuyCost() const
 }
 
 /**
+ * Returns the cost of rent for a month.
+ * @return Cost.
+ */
+int RuleCraft::getRentCost() const
+{
+	return _costRent;
+}
+
+/**
+ * Returns sell value of this craft
+ * Rented craft should use 0.
+ * @return Cost.
+ */
+int RuleCraft::getSellCost() const
+{
+	return _costSell;
+}
+
+/**
  * Returns what item is required while
  * the craft is refuelling.
  * @return Item ID or "" if none.
@@ -330,5 +391,20 @@ RuleTerrain *RuleCraft::getBattlescapeTerrainData()
 	return _battlescapeTerrainData;
 }
 
+/**
+ * @return if this ship is capable of going to mars.
+ */
+bool RuleCraft::getSpacecraft() const
+{
+	return _spacecraft;
+}
+
+/**
+ * @return the list weight for this research item.
+ */
+int RuleCraft::getListOrder() const
+{
+	 return _listOrder;
+}
 }
 
