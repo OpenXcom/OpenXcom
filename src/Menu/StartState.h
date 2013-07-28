@@ -28,7 +28,7 @@ namespace OpenXcom
 
 class Surface;
 
-enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_FROM_COMMAND_LINE };
+enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_LANGUAGE };
 
 /**
  * Initializes the game and loads all required content.
@@ -41,7 +41,7 @@ private:
 	LoadingPhase _load;
 public:
 	/// Creates the Start state.
-	StartState(Game *game, std::wstring saveFile = L"");
+	StartState(Game *game);
 	/// Cleans up the Start state.
 	~StartState();
 	/// Loads the game resources.

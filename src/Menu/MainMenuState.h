@@ -39,11 +39,10 @@ private:
 	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnQuit;
 	Window *_window;
 	Text *_txtTitle;
-	std::wstring _saveFile;
 
 public:
 	/// Creates the Main Menu state.
-	MainMenuState(Game *game, std::wstring saveFile = L"");
+	MainMenuState(Game *game);
 	/// Cleans up the Main Menu state.
 	~MainMenuState();
 	/// Updates the palette.

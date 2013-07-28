@@ -85,8 +85,8 @@ int main(int argc, char** args)
 				}
 			}
 		}
-
-		game->setState(new StartState(game, file));
+		game->setLoadFile(file);
+		game->setState(new StartState(game));
 		game->run();
 
 #ifndef _DEBUG
