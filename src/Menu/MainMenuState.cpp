@@ -37,7 +37,6 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Main Menu window.
  * @param game Pointer to the core game.
- * @param file Name of a saved game file (without the .sav)
  */
 MainMenuState::MainMenuState(Game *game) : State(game)
 {
