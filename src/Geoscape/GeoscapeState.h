@@ -55,13 +55,13 @@ private:
 	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
 	Text *_txtDebug;
-	Text *_txtActivity;
+	Text *_txtTarget;
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _gameStarted;
 	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
-	Target *_currentActivity; // the currently selected alien activity
+	Target *_currentTarget; // the currently selected alien activity or Xcom craft/base
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
@@ -158,18 +158,18 @@ public:
 	/// Handles base defense.
 	void handleBaseDefense(Base *base, Ufo *ufo);
 	/// Sets the activity information.
-	void setActivity(Target *target);
+	void setTargetInfo(Target *target);
 private:
 	/// Handles alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
-	/// Gets all the detected alien activity in the Geoscape.
-	std::vector<Target*> currentAlienActivity();
-	/// Gets the next detected alien activity in the Geoscape.
-	Target *selectNextActivity();
-	/// Gets the previous detected alien activity in the Geoscape.
-	Target *selectPrevActivity();
-	/// Resets activity information.
-	void resetActivity();
+	/// Gets either xcom or alien activity targets in the Geoscape.
+	std::vector<Target*> getAvailableTargets(bool selectXcom);
+	/// Gets the next target in the Geoscape, either Xcom or alien.
+	Target *selectNextTarget(bool selectXcom);
+	/// Gets the previous target in the Geoscape, either Xcom or alien.
+	Target *selectPrevTarget(bool selectXcom);
+	/// Resets target information.
+	void resetTargetInfo();
 	/// Returns whether there are any maximised Dogfights in the Geoscape.
 	bool hasMaximisedDogfights();
 };

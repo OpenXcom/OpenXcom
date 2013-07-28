@@ -112,7 +112,7 @@ namespace OpenXcom
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
-GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0), _currentActivity(0)
+GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(false), _zoomInEffectDone(false), _zoomOutEffectDone(false), _battleMusic(false), _popups(), _dogfights(), _dogfightsToBeStarted(), _minimizedDogfights(0), _currentTarget(0)
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -173,7 +173,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_dogfightStartTimer = new Timer(250);
 
 	_txtDebug = new Text(100, 8, 0, 0);
-	_txtActivity = new Text(screenWidth - 80, 8, 0, screenHeight - 10);
+	_txtTarget = new Text(screenWidth - 80, 8, 0, screenHeight - 10);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -219,12 +219,12 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_txtYear);
 
 	add(_txtDebug);
-	add(_txtActivity);
+	add(_txtTarget);
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
-	_globeAndSpace->onMouseClick((ActionHandler)&GeoscapeState::resetActivity);
+	_globeAndSpace->onMouseClick((ActionHandler)&GeoscapeState::resetTargetInfo);
 
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+5);
@@ -370,7 +370,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_txtYear->setAlign(ALIGN_CENTER);
 
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
-	_txtActivity->setColor(Palette::blockOffset(15)+4);
+	_txtTarget->setColor(Palette::blockOffset(15)+4);
 
 	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
 	_timer->start();
@@ -436,21 +436,32 @@ void GeoscapeState::handle(Action *action)
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			_game->pushState(new LoadState(_game, true, true));
 		// next and previous alien activity
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity") && !hasMaximisedDogfights() && selectNextActivity())
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity") && !hasMaximisedDogfights() && selectNextTarget(false))
 		{
-			setActivity(_currentActivity);
-			getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
+			setTargetInfo(_currentTarget);
+			getGlobe()->center(_currentTarget->getLongitude(), _currentTarget->getLatitude());
 		}
-		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevActivity") && !hasMaximisedDogfights() && selectPrevActivity())
+		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevActivity") && !hasMaximisedDogfights() && selectPrevTarget(false))
 		{
-			setActivity(_currentActivity);
-			getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
+			setTargetInfo(_currentTarget);
+			getGlobe()->center(_currentTarget->getLongitude(), _currentTarget->getLatitude());
 		}
-		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyOk") && !hasMaximisedDogfights() && _currentActivity)
+		// next and previous xcom
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextXcom") && !hasMaximisedDogfights() && selectNextTarget(true))
+		{
+			setTargetInfo(_currentTarget);
+			getGlobe()->center(_currentTarget->getLongitude(), _currentTarget->getLatitude());
+		}
+		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevXcom") && !hasMaximisedDogfights() && selectPrevTarget(true))
+		{
+			setTargetInfo(_currentTarget);
+			getGlobe()->center(_currentTarget->getLongitude(), _currentTarget->getLatitude());
+		}
+		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyOk") && !hasMaximisedDogfights() && _currentTarget)
 		{
 			// MultipleTargetsState expects a vector of targets, not just one
 			std::vector<Target*> targets;
-			targets.push_back(_currentActivity);
+			targets.push_back(_currentTarget);
 			_game->pushState(new MultipleTargetsState(_game, targets, 0, this));
 		}
 	}
@@ -475,70 +486,107 @@ bool GeoscapeState::hasMaximisedDogfights()
 }
 
 /**
- * Resets the activity information.
+ * Resets the target information.
  */
-void GeoscapeState::resetActivity()
+void GeoscapeState::resetTargetInfo()
 {
-	_currentActivity = 0;
-	_txtActivity->setText(L"");
+	_currentTarget = 0;
+	_txtTarget->setText(L"");
 }
 
 /**
- * Sets activity information to target.
+ * Sets target information to target.
  * @param target The target to display information on.
  */
-void GeoscapeState::setActivity(Target *target)
+void GeoscapeState::setTargetInfo(Target *target)
 {
-	_currentActivity = target;
-	_txtActivity->setText(_currentActivity->getName(_game->getLanguage()));
+	_currentTarget = target;
+	_txtTarget->setText(_currentTarget->getName(_game->getLanguage()));
 }
 
 /**
- * Returns all the detected current alien activity in the Geoscape.
- * Only returns detected flying or landed ufos, crashsites, terrorsites and bases.
- * @return pointer to all alien activity.
+ * Returns targets in the Geoscape.
+ * Either returns xcom or detected alien targets.
+ * If xcom targets are selected, returns craft in the Geoscape and bases.
+ * If alien, then returns detected flying or landed ufos, crashsites, terrorsites and bases.
+ * @param xcom If true then we are looking for Xcom targets.  False means alien targets.
+ * @return pointer to targets.
  */
- std::vector<Target*> GeoscapeState::currentAlienActivity()
+ std::vector<Target*> GeoscapeState::getAvailableTargets(bool selectXcom)
  {
-	std::vector<Target*> detectedActivity;
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	std::vector<Target*> targets;
+
+	if(selectXcom)
 	{
-		if((*i)->getDetected())
-			detectedActivity.push_back(*i);
+		// craft first
+		for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+		{
+			for (std::vector<Craft*>::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end(); ++c)
+			{
+				if((*c)->getStatus() == "STR_OUT")
+					targets.push_back(*c);
+			}
+		}
+		// then bases
+		for (std::vector<Base*>::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+		{
+
+			targets.push_back(*b);
+		}
 
 	}
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	else
 	{
-		detectedActivity.push_back(*i);
+		for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
+		{
+			if((*u)->getDetected())
+				targets.push_back(*u);
+
+		}
+		for (std::vector<TerrorSite*>::iterator ts = _game->getSavedGame()->getTerrorSites()->begin(); ts != _game->getSavedGame()->getTerrorSites()->end(); ++ts)
+		{
+			targets.push_back(*ts);
+		}
+		for (std::vector<AlienBase*>::iterator ab = _game->getSavedGame()->getAlienBases()->begin(); ab != _game->getSavedGame()->getAlienBases()->end(); ++ab)
+		{
+			if((*ab)->isDiscovered())
+				targets.push_back(*ab);
+		}
 	}
-	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
-	{
-		if((*i)->isDiscovered())
-			detectedActivity.push_back(*i);
-	}
-	return detectedActivity;
+	return targets;
  }
 
 /**
- * Selects the next alien activity detected in the Geoscape.
- * @return pointer to next alien activity.
+ * Selects the next target in the Geoscape.
+ * Either returns an xcom target or an alien activity.
+ * @param selectXcom If true we select the next xcom target, false we return an alien activity.
+ * @return pointer to next target.
  */
-Target *GeoscapeState::selectNextActivity()
+Target *GeoscapeState::selectNextTarget(bool selectXcom)
 {
-	// What activity is in the Geoscape?
-	std::vector<Target*> detectedActivity = currentAlienActivity();
+	// What targets are in the Geoscape?
+	std::vector<Target*> detectedActivity = getAvailableTargets(selectXcom);
 	if(detectedActivity.empty())
 	{
-		_currentActivity = 0;
-		return _currentActivity;
+		_currentTarget = 0;
+		return _currentTarget;
 	}
 
-	// Find the next activity
+	// is the current target alien activity?
+	Base* b = dynamic_cast<Base*>(_currentTarget);
+	Craft* c = dynamic_cast<Craft*>(_currentTarget);
+	bool targetingAlien = true;
+	if (b != 0 || c != 0)
+		targetingAlien = false;
+
+	// Find the next target
 	std::vector<Target*>::iterator i = detectedActivity.begin();
 	bool bNext = false;
 	int wraps = 0;
 
-	if (_currentActivity == 0)
+	if (_currentTarget == 0 ||				// we do not currently have a target selected
+		(targetingAlien && selectXcom) ||	// we are currently targetting alien activity but now want an xcom target
+		(!targetingAlien && !selectXcom))	// we are currently targetting an xcom target but now want an alien target
 	{
 		bNext = true;
 	}
@@ -549,7 +597,7 @@ Target *GeoscapeState::selectNextActivity()
 		{
 			break;
 		}
-		if ((*i) == _currentActivity)
+		if ((*i) == _currentTarget)
 		{
 			bNext = true;
 		}
@@ -559,39 +607,50 @@ Target *GeoscapeState::selectNextActivity()
 			i = detectedActivity.begin();
 			wraps++;
 		}
-		// back to where we started... no more activity found
+		// back to where we started... no more targets found
 		if (wraps == 2)
 		{
-			_currentActivity = 0;
-			return _currentActivity;
+			_currentTarget = 0;
+			return _currentTarget;
 		}
 	}
 	while (true);
 
-	_currentActivity = (*i);
-	return _currentActivity;
+	_currentTarget = (*i);
+	return _currentTarget;
 }
 
 /**
- * Selects the previous alien activity detected in the Geoscape.
- * @return pointer to an alien activity.
+ * Selects the previous target in the Geoscape.
+ * Either returns an xcom target or an alien activity.
+ * @param selectXcom If true we select the previous xcom target, false we return an alien activity.
+ * @return pointer to target.
  */
-Target *GeoscapeState::selectPrevActivity()
+Target *GeoscapeState::selectPrevTarget(bool selectXcom)
 {
-	// What activity is in the Geoscape?
-	std::vector<Target*> detectedActivity = currentAlienActivity();
+	// What targets are in the Geoscape?
+	std::vector<Target*> detectedActivity = getAvailableTargets(selectXcom);
 	if(detectedActivity.empty())
 	{
-		_currentActivity = 0;
-		return _currentActivity;
+		_currentTarget = 0;
+		return _currentTarget;
 	}
 
-	// Find the previous activity
+	// is the current target alien activity?
+	Base* b = dynamic_cast<Base*>(_currentTarget);
+	Craft* c = dynamic_cast<Craft*>(_currentTarget);
+	bool targetingAlien = true;
+	if (b != 0 || c != 0)
+		targetingAlien = false;
+
+	// Find the next target
 	std::vector<Target*>::iterator i = detectedActivity.begin();
 	bool bPrev = false;
 	int wraps = 0;
 
-	if (_currentActivity == 0)
+	if (_currentTarget == 0 ||				// we do not currently have a target selected
+		(targetingAlien && selectXcom) ||	// we are currently targetting alien activity but now want an xcom target
+		(!targetingAlien && !selectXcom))	// we are currently targetting an xcom target but now want an alien target
 	{
 		bPrev = true;
 	}
@@ -602,7 +661,7 @@ Target *GeoscapeState::selectPrevActivity()
 		{
 			break;
 		}
-		if ((*i) == _currentActivity)
+		if ((*i) == _currentTarget)
 		{
 			bPrev = true;
 		}
@@ -612,17 +671,17 @@ Target *GeoscapeState::selectPrevActivity()
 			wraps++;
 		}
 		--i;
-		// back to where we started... no more activity found
+		// back to where we started... no more targets found
 		if (wraps == 3)
 		{
-			_currentActivity = 0;
-			return _currentActivity;
+			_currentTarget = 0;
+			return _currentTarget;
 		}
 	}
 	while (true);
 
-	_currentActivity = (*i);
-	return _currentActivity;
+	_currentTarget = (*i);
+	return _currentTarget;
 }
 
 /**
@@ -831,7 +890,7 @@ void GeoscapeState::time5Seconds()
 					{
 						if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
 						{
-							if (_currentActivity == (*i)) resetActivity();
+							if (_currentTarget == (*i)) resetTargetInfo();
 							popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 						}
 					}
@@ -886,19 +945,19 @@ void GeoscapeState::time5Seconds()
 			}
 			break;
 		case Ufo::DESTROYED:
-			if(_currentActivity == *i) resetActivity();
+			if(_currentTarget == *i) resetTargetInfo();
 
 			// Nothing to do
 			break;
 		}
 
 		// ensure activity description is up to date
-		if( _currentActivity == *i)
+		if( _currentTarget == *i)
 		{
 			if (*i)
-				setActivity(*i);
+				setTargetInfo(*i);
 			else
-				resetActivity();
+				resetTargetInfo();
 		}
 	}
 
@@ -1460,7 +1519,7 @@ void GeoscapeState::time30Minutes()
 	{
 		if (processTerrorSite(*ts))
 		{
-			if(_currentActivity == *ts) resetActivity();
+			if(_currentTarget == *ts) resetTargetInfo();
 			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
 		}
 		else
@@ -2197,7 +2256,7 @@ void GeoscapeState::handleBaseDefense(Base *base, Ufo *ufo)
     // Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
 
-	if (_currentActivity == ufo) resetActivity();
+	if (_currentTarget == ufo) resetTargetInfo();
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{

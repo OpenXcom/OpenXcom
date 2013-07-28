@@ -208,6 +208,8 @@ void createDefault()
 	setInt("keyGeoToggleRadar", SDLK_r);
 	setInt("keyGeoPrevActivity", SDLK_a);
 	setInt("keyGeoNextActivity", SDLK_s);
+	setInt("keyGeoPrevXcom", SDLK_z);
+	setInt("keyGeoNextXcom", SDLK_x);
 	setInt("keyQuickSave", SDLK_F6);
 	setInt("keyQuickLoad", SDLK_F9);
 	setInt("keyBattleLeft", SDLK_LEFT);
