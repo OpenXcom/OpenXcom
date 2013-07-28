@@ -436,21 +436,22 @@ void GeoscapeState::handle(Action *action)
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			_game->pushState(new LoadState(_game, true, true));
 		// next and previous alien activity
-		else if (!hasMaximisedDogfights() && action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity"))
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoNextActivity") && !hasMaximisedDogfights() && selectNextActivity())
 		{
-			if(selectNextActivity())
-			{
-				setActivity(_currentActivity);
-				getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
-			}
+			setActivity(_currentActivity);
+			getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
 		}
-		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevActivity"))
+		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyGeoPrevActivity") && !hasMaximisedDogfights() && selectPrevActivity())
 		{
-			if(!hasMaximisedDogfights() && selectPrevActivity())
-			{
-				setActivity(_currentActivity);
-				getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
-			}
+			setActivity(_currentActivity);
+			getGlobe()->center(_currentActivity->getLongitude(), _currentActivity->getLatitude());
+		}
+		else if(action->getDetails()->key.keysym.sym == Options::getInt("keyOk") && !hasMaximisedDogfights() && _currentActivity)
+		{
+			// MultipleTargetsState expects a vector of targets, not just one
+			std::vector<Target*> targets;
+			targets.push_back(_currentActivity);
+			_game->pushState(new MultipleTargetsState(_game, targets, 0, this));
 		}
 	}
 
