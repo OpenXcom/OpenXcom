@@ -76,6 +76,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	int offset = 0;
+	int densitySmoke;
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
@@ -224,13 +225,16 @@ int Projectile::calculateTrajectory(double accuracy)
 				return -1;
 			}
 		}
+		// Calculate density of smoke
+		Position hit = _trajectory.at(0);
+		densitySmoke = _save->getTileEngine()->calculateLine(originVoxel, hit, false, 0, bu, false, false, 0, true);
 		_trajectory.clear();
 	}
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile);
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, densitySmoke);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
@@ -347,7 +351,7 @@ bool Projectile::calculateThrow(double accuracy)
  * @param accuracy Accuracy modifier.
  * @param targetTile Tile of target. Default = 0.
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
+void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, int densitySmoke)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -358,23 +362,27 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
-		double baseDeviation, accuracyPenalty;
+		double baseDeviation, effectiveAccuracy = accuracy;
 
-		if (targetTile)
+		BattleUnit* shooterUnit = _save->getTile(Position(origin.x/16, origin.y/16, origin.z/24))->getUnit();
+		if (shooterUnit && shooterUnit->getFaction() == FACTION_PLAYER)	// Enemy units can see in the dark.
 		{
-			BattleUnit* targetUnit = targetTile->getUnit();
-			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
-				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+			if (targetTile)
+				effectiveAccuracy -= 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
 			else
-				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
-			// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-			if (targetUnit && targetUnit->isKneeled())
-				accuracyPenalty += 0.05;
+				effectiveAccuracy -= 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 		}
-		else
-			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
+		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
+		if (targetTile && targetTile->getUnit() && targetTile->getUnit()->isKneeled())
+			effectiveAccuracy -= 0.05;
+		// Taken into account smoke between shooter and target.
+		if (densitySmoke > 0)
+			effectiveAccuracy -= 0.03 * densitySmoke / 15.0;	// 3% per tile with max density of smoke 15.
 
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+		if (effectiveAccuracy > -0.2)
+			baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (effectiveAccuracy + 0.25);
+		else
+			baseDeviation = 5.0;	// 5.0 radian - max deviation for worst accuracy.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)

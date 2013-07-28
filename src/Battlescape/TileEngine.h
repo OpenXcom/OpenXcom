@@ -79,7 +79,7 @@ public:
 	/// Close ufo doors.
 	int closeUfoDoors();
 	/// Calculate line.
-	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
+	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0, bool doSmokeCalc = false);
 	/// Calculate a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
 	/// Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.

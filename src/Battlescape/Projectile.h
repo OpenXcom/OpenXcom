@@ -46,7 +46,7 @@ private:
 	std::vector<Position> _trajectory;
 	unsigned int _position;
 	Surface *_sprite;
-	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0);
+	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, int densitySmoke = 0);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
