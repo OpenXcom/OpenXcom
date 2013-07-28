@@ -17,12 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MainMenuState.h"
-#include <sstream>
 #include "../version.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -39,7 +37,6 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Main Menu window.
  * @param game Pointer to the core game.
- * @param file Name of a saved game file (without the .sav)
  */
 MainMenuState::MainMenuState(Game *game) : State(game)
 {

@@ -32,8 +32,6 @@
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/Ruleset.h"
-#include "TestState.h"
-#include "NoteState.h"
 #include "LanguageState.h"
 #include "MainMenuState.h"
 
@@ -43,7 +41,6 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
- * @param file Name of a saved game file (without the .sav)
  */
 StartState::StartState(Game *game) : State(game), _load(LOADING_NONE)
 {
