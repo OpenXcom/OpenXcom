@@ -719,7 +719,8 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	int heightRange;
  
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
-	if (otherUnit->getArmor()->getSize() > 1)
+	int targetSize = otherUnit->getArmor()->getSize() - 1;
+	if (targetSize > 0)
 	{
 		unitRadius = 3;
 	}
@@ -760,13 +761,19 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true);
 			if (test == 4)
 			{
-				//voxel of hit must be inside of scanned box
-				if (_trajectory.at(0).x/16 == scanVoxel->x/16 &&
-					_trajectory.at(0).y/16 == scanVoxel->y/16 &&
-					_trajectory.at(0).z >= targetMinHeight &&
-					_trajectory.at(0).z <= targetMaxHeight)
+				for (int x = 0; x <= targetSize; ++x)
 				{
-					return true;
+					for (int y = 0; y <= targetSize; ++y)
+					{
+						//voxel of hit must be inside of scanned box
+						if (_trajectory.at(0).x/16 == (scanVoxel->x/16) + x &&
+							_trajectory.at(0).y/16 == (scanVoxel->y/16) + y &&
+							_trajectory.at(0).z >= targetMinHeight &&
+							_trajectory.at(0).z <= targetMaxHeight)
+						{
+							return true;
+						}
+					}
 				}
 			}
 		}
