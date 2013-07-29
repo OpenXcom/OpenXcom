@@ -365,6 +365,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		double baseDeviation, effectiveAccuracy = accuracy;
 
 		BattleUnit* shooterUnit = _save->getTile(Position(origin.x/16, origin.y/16, origin.z/24))->getUnit();
+		BattleUnit* targetUnit = targetTile? targetTile->getUnit() : 0;
 		if (shooterUnit && shooterUnit->getFaction() == FACTION_PLAYER)	// Enemy units can see in the dark.
 		{
 			if (targetTile)
@@ -372,8 +373,19 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 			else
 				effectiveAccuracy -= 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 		}
+		// If targetUnit not visible by shooter, then chance to hit them reduced on 5%.
+		if (shooterUnit && targetUnit)
+		{
+			bool isTargetVisible = false;
+			for (std::vector<BattleUnit *>::const_iterator u = shooterUnit->getVisibleUnits()->begin(); u != shooterUnit->getVisibleUnits()->begin(); ++u)
+			{
+				if (isTargetVisible = (*u == targetUnit)) break;
+			}
+			if (!isTargetVisible)
+				effectiveAccuracy -= 0.05;
+		}
 		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
-		if (targetTile && targetTile->getUnit() && targetTile->getUnit()->isKneeled())
+		if (targetUnit && targetUnit->isKneeled())
 			effectiveAccuracy -= 0.05;
 		// Taken into account smoke between shooter and target.
 		if (densitySmoke > 0)
