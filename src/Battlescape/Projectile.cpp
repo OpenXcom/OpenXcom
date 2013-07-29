@@ -226,8 +226,7 @@ int Projectile::calculateTrajectory(double accuracy)
 			}
 		}
 		// Calculate density of smoke
-		Position hit = _trajectory.at(0);
-		densitySmoke = _save->getTileEngine()->calculateLine(originVoxel, hit, false, 0, bu, false, false, 0, true);
+		densitySmoke = _save->getTileEngine()->calculateLine(originVoxel, _trajectory.back(), false, 0, bu, false, false, 0, true);
 		_trajectory.clear();
 	}
 
@@ -350,6 +349,7 @@ bool Projectile::calculateThrow(double accuracy)
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
  * @param targetTile Tile of target. Default = 0.
+ * @param densitySmoke Density of smoke between positions. Default = 0.
  */
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, int densitySmoke)
 {
@@ -394,7 +394,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		if (effectiveAccuracy > -0.2)
 			baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (effectiveAccuracy + 0.25);
 		else
-			baseDeviation = 5.0;	// 5.0 radian - max deviation for worst accuracy.
+			baseDeviation = 5.0;	// 5.0 radian - max deviation for worst case.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
