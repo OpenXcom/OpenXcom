@@ -77,7 +77,7 @@ namespace OpenXcom
 Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
 {
 	_previewSetting = Options::getInt("battleNewPreviewPath");
-	if (Options::getBool("TraceAI"))
+	if (Options::getBool("traceAI"))
 	{
 		// turn everything on because we want to see the markers.
 		_previewSetting = 3;
