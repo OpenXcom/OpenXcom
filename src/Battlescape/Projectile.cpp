@@ -350,8 +350,10 @@ bool Projectile::calculateThrow(double accuracy)
  * @param accuracy Accuracy modifier.
  * @param targetTile Tile of target. Default = 0.
  * @param densitySmoke Density of smoke between positions. Default = 0.
+ * @param doCalcChance Do only calculation of chance to hit. Default = false.
+ * @return Chance to hit (-1 if cannot to calculate).
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, int densitySmoke)
+int Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, int densitySmoke, bool doCalcChance)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -399,19 +401,33 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
 			baseDeviation = 0.02;
-		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
-		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
-		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
-		double cos_fi = cos(fi);
 
-		// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
-		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
-		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
-		target->z = (int)(origin.z + maxRange * sin(fi));
+		if (!doCalcChance)
+		{
+			// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
+			double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
+			double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+			double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
+			double fi = atan2(double(target->z - origin.z), realDistance) + dV;
+			double cos_fi = cos(fi);
 
-		return;
+			// It is a simple task - to hit in target width of 5-7 voxels. Good luck!
+			target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
+			target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
+			target->z = (int)(origin.z + maxRange * sin(fi));
+			return -1;
+		}
+		else
+		{
+			if (targetUnit)
+			{
+				int loftemps = targetUnit->getLoftemps();
+				if (loftemps > 5) loftemps = 16;
+				return approxF(baseDeviation / 6.0, 0.5 * loftemps / realDistance);
+			}
+			else
+				return -1;
+		}
 	}
 
 	// maxDeviation is the max angle deviation for accuracy 0% in degrees
@@ -421,34 +437,71 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 	double dRot, dTilt;
 	double rotation, tilt;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	// check if we hit
-	if (RNG::generate(0.0, 1.0) < accuracy)
+
+	if (!doCalcChance)
 	{
-		// we hit, so no deviation
-		dRot = 0;
-		dTilt = 0;
+		// the angle deviations are spread using a normal distribution between 0 and baseDeviation
+		// check if we hit
+		if (RNG::generate(0.0, 1.0) < accuracy)
+		{
+			// we hit, so no deviation
+			dRot = 0;
+			dTilt = 0;
+		}
+		else
+		{
+			dRot = RNG::boxMuller(0, baseDeviation);
+			dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
+		}
+		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
+		tilt = atan2(double(target->z - origin.z),
+			sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
+		// add deviations
+		rotation += dRot;
+		tilt += dTilt;
+		// calculate new target
+		// this new target can be very far out of the map, but we don't care about that right now
+		double cos_fi = cos(tilt * M_PI / 180.0);
+		double sin_fi = sin(tilt * M_PI / 180.0);
+		double cos_te = cos(rotation * M_PI / 180.0);
+		double sin_te = sin(rotation * M_PI / 180.0);
+		target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
+		target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
+		target->z = (int)(origin.z + maxRange * sin_fi);
+
+		return -1;
 	}
 	else
 	{
-		dRot = RNG::boxMuller(0, baseDeviation);
-		dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
+		BattleUnit* targetUnit = targetTile? targetTile->getUnit() : 0;
+
+		if (targetUnit)
+		{
+			int loftemps = targetUnit->getLoftemps();
+			if (loftemps > 5) loftemps = 16;
+			return (int) (100.0 * accuracy + (1.0 - accuracy) * approxF(baseDeviation * M_PI / 180.0, 0.5 * loftemps / realDistance));
+		}
+		else
+			return -1;
 	}
-	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-	tilt = atan2(double(target->z - origin.z),
-		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
-	// add deviations
-	rotation += dRot;
-	tilt += dTilt;
-	// calculate new target
-	// this new target can be very far out of the map, but we don't care about that right now
-	double cos_fi = cos(tilt * M_PI / 180.0);
-	double sin_fi = sin(tilt * M_PI / 180.0);
-	double cos_te = cos(rotation * M_PI / 180.0);
-	double sin_te = sin(rotation * M_PI / 180.0);
-	target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
-	target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
-	target->z = (int)(origin.z + maxRange * sin_fi);
+}
+
+/**
+ * Approximation of the F-function (cumulative distribution function).
+ * @param sigm Standart deviation (in radians).
+ * @param delta Half of the angle of view of the profile of the enemy (in radians).
+ * @return Chance to hit.
+ */
+int Projectile::approxF(double sigm, double delta)
+{
+	double a = 0.7071067812 * delta / sigm;	// 1/sqrt(2) =  0.7071067812
+//	double b = 1.0 + accuracy * delta;	// empirical coefficient for error correction
+	// max error 6-7%
+//	int r = (int) (0.5 + 100.0 * 0.5641895835 * a * (exp(-a * a) + 1.0));	// 1/sqrt(pi) = 0.5641895835
+	// max error 1-2%
+	int r = (int) (0.5 + 100.0 * 0.2820947918 * a * (exp(-a * a) + 2*exp(-0.25 * a * a) + 1.0));	// 1/(2*sqrt(pi)) = 0.2820947918
+
+	return (r > 99)? 99 : r;
 }
 
 /**

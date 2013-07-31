@@ -46,7 +46,9 @@ private:
 	std::vector<Position> _trajectory;
 	unsigned int _position;
 	Surface *_sprite;
-	void applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, int densitySmoke = 0);
+	int applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, int densitySmoke = 0, bool doCalcChance = false);
+	/// Approximation of the F-function (cumulative distribution function).
+	int approxF(double sigm, double delta);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
