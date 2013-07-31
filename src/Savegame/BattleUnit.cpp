@@ -1892,7 +1892,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addKillCount(_kills);
 
 	UnitStats *stats = s->getCurrentStats();
-	UnitStats caps = s->getRules()->getStatCaps();
+	const UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
@@ -1950,11 +1950,16 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 */
 int BattleUnit::improveStat(int exp)
 {
-	double v = 4;
-	if (exp < 3) v = 1;
-	if (exp < 6) v = 2;
-	if (exp < 10) v = 3;
-	return (int)(v/2.0 + RNG::generate(0.0, v));
+	double tier = 4.0;
+	if (exp <= 10)
+	{
+		tier = 3.0;
+		if (exp <= 5)
+		{
+			tier = exp > 2 ? 2.0 : 1.0;
+		}
+	}
+	return (int)(tier/2.0 + RNG::generate(0.0, tier));
 }
 
 /*
