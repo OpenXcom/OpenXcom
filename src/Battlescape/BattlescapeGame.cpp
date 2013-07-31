@@ -255,7 +255,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
 	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
-		|| (_AIActionCounter > 2)
         || (unit->getVisibleUnits()->size() != 0)
 		|| (unit->_hidingForTurn))
 	{
