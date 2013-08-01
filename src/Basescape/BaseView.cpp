@@ -554,6 +554,133 @@ void BaseView::draw()
 			delete text;
 		}
 	}
+
+	// Base facility usage.
+	// Fills each type of facility up to its maximum before filling the next one;
+	// i.e. does not evenly spread out usage.
+	if(Options::getBool("showUsageInBaseView"))
+	{
+		int aliensToContain = _base->getUsedContainment();
+		int staffToPlace = _base->getUsedQuarters();
+		int psiTrainersToClass = _base->getUsedPsiLabs();
+		int scientistsToPlace = _base->getUsedLaboratories();
+		int workshopSpaceUsed = _base->getUsedWorkshops();
+
+		// General stores are a special case.
+		int stuffToStore = _base->getUsedStores();
+		int storesToFill = 0;
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+		{
+			if((*i)->getRules()->getStorage() > 0) ++storesToFill;
+		}
+
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+		{
+			Text *text = new Text(GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
+			text->setPalette(getPalette());
+			text->setFonts(_big, _small);
+			text->setX((*i)->getX() * GRID_SIZE);
+			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
+			text->setSmall();
+			text->setAlign(ALIGN_RIGHT);
+			text->setVerticalAlign(ALIGN_TOP);
+
+			int maximum = 0;
+			int placing = 0;
+
+			// Alien containment
+			if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getAliens() > 0)
+			{
+				maximum = (*i)->getRules()->getAliens();
+				if(Options::getBool("alienContainmentLimitEnforced"))
+				{
+					placing = std::min(maximum, aliensToContain);
+				}
+				else
+				{
+					// No such thing as alien rights; they can squeeze into one.
+					placing = aliensToContain;
+				}
+				aliensToContain -= placing;
+			}
+
+			// Living quarters
+			else if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getPersonnel() > 0)
+			{
+				maximum = (*i)->getRules()->getPersonnel();
+				placing = std::min(maximum, staffToPlace);
+				staffToPlace -= placing;
+			}
+
+			// General stores
+			else if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getStorage() > 0)
+			{
+				maximum = (*i)->getRules()->getStorage();
+				if(storesToFill == 1)
+				{
+					// Last store is hyperdimensional storing way more than you would expect.
+					placing = stuffToStore;
+				}
+				else
+				{
+					placing = std::min(maximum, stuffToStore);
+				}
+				--storesToFill;
+				stuffToStore -= placing;
+			}
+
+			// Psi-labs
+			else if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getPsiLaboratories() > 0)
+			{
+				maximum = (*i)->getRules()->getPsiLaboratories();
+				placing = std::min(maximum, psiTrainersToClass);
+				psiTrainersToClass -= placing;
+			}
+
+			// Labs
+			else if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getLaboratories() > 0)
+			{
+				maximum = (*i)->getRules()->getLaboratories();
+				placing = std::min(maximum, scientistsToPlace);
+				scientistsToPlace -= placing;
+			}
+
+			// Workshops
+			else if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getWorkshops() > 0)
+			{
+				maximum = (*i)->getRules()->getWorkshops();
+				placing = std::min(maximum, workshopSpaceUsed);
+				workshopSpaceUsed -= placing;
+			}
+
+			// Splash of color why not?
+			if(placing >= maximum)
+			{
+				// Full; red text.
+				text->setColor(Palette::blockOffset(1)+13);
+			}
+			else if(placing >= (int)floor(0.8 * maximum))
+			{
+				// Occupancy 80% and above; yellow text.
+				text->setColor(Palette::blockOffset(1)+1);
+			}
+			else
+			{
+				// Occupancy below 80% ; gray text.
+				text->setColor(Palette::blockOffset(0)+8);
+			}
+
+			// Ensure only base facilities we've checked get a usage label.
+			if(maximum > 0)
+			{
+				std::wstringstream ss;
+				ss << placing;
+				text->setText(ss.str());
+				text->blit(this);
+			}
+			delete text;
+		}
+	}
 }
 
 /**

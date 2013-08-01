@@ -123,6 +123,7 @@ void createDefault()
 	setBool("allowAutoSellProduction", false);
 	setBool("showFundsOnGeoscape", false);
 	setBool("showMoreStatsInInventoryView", false);
+	setBool("showUsageInBaseView", false);
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
 	setInt("windowedModePositionY", -1);
