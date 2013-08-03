@@ -136,19 +136,22 @@ void MiniMapView::draw()
 	int centerY = getHeight() / 2;
 	Uint8 color = 1 + _frame * 3;
 	int xOffset = CELL_WIDTH / 2;
+	xOffset--;
 	int yOffset = CELL_HEIGHT / 2;
-	drawLine(centerX - CELL_WIDTH, centerY - CELL_HEIGHT,
+	drawLine(centerX - CELL_WIDTH - 1, centerY - CELL_HEIGHT,
 		 centerX - xOffset, centerY - yOffset,
 		 color); // top left
 	drawLine(centerX + xOffset, centerY - yOffset,
-		 centerX + CELL_WIDTH, centerY - CELL_HEIGHT,
+		 centerX + CELL_WIDTH - 1, centerY - CELL_HEIGHT,
 		 color); // top right
-	drawLine(centerX - CELL_WIDTH, centerY + CELL_HEIGHT,
+	drawLine(centerX - CELL_WIDTH - 1, centerY + CELL_HEIGHT,
 		 centerX - xOffset, centerY + yOffset,
 		 color); // bottom left
-	drawLine(centerX + CELL_WIDTH, centerY + CELL_HEIGHT,
+	drawLine(centerX + CELL_WIDTH - 1, centerY + CELL_HEIGHT,
 		 centerX + xOffset, centerY + yOffset,
 		 color); //bottom right
+		 
+		 
 }
 
 /**
