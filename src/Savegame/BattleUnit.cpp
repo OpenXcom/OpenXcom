@@ -1520,12 +1520,21 @@ void BattleUnit::moraleChange(int change)
 }
 
 /**
- * Mark this unit is not reselectable.
+ * Mark this unit as not reselectable.
  */
 void BattleUnit::dontReselect()
 {
 	_dontReselect = true;
 }
+
+/**
+ * Mark this unit as reselectable.
+ */
+void BattleUnit::allowReselect()
+{
+	_dontReselect = false;
+}
+
 
 /**
  * Check whether reselecting this unit is allowed.

@@ -246,6 +246,8 @@ public:
 	void moraleChange(int change);
 	/// Don't reselect this unit
 	void dontReselect();
+	/// Reselect this unit
+	void allowReselect();
 	/// Check whether reselecting this unit is allowed.
 	bool reselectAllowed() const;
 	/// Set fire.
