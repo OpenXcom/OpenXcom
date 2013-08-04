@@ -2441,7 +2441,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 		else// if (action->type == BA_MINDCONTROL)
 		{
 			victim->convertToFaction(action->actor->getFaction());
-			calculateFOV(victim);
+			calculateFOV(victim->getPosition());
 			calculateUnitLighting();
 			victim->setTimeUnits(victim->getStats()->tu);
 			victim->allowReselect();
