@@ -57,11 +57,8 @@ public:
 
     // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
 	int closestSoldierDSqr;
-	Position closestSoldierPos;
-	int meanSoldierDSqr;
 	int soldiersVisible;
 	int closestAlienDSqr;
-	int totalExposure;
 
 	static const int NOT_CALCULATED = -1;
 

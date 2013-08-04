@@ -42,13 +42,11 @@ private:
 	void postPathProcedures();
 	void setNormalWalkSpeed();
 	void playMovementSound();
-    const Position _finalFacing;
-    const bool _pathfindForFinalTurn;
 	std::size_t _numUnitsSpotted;
 	int _preMovementCost;
 public:
 	/// Creates a new UnitWalkBState class
-	UnitWalkBState(BattlescapeGame *parent, BattleAction _action, const Position finalFacing = Position(0,0,INT_MAX), const bool pathfindForFinalTurn = true);
+	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
 	/// Set the target to walk to.
