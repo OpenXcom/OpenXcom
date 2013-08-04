@@ -373,11 +373,12 @@ void AggroBAIState::meleeAction(BattleAction *action)
 void AggroBAIState::psiAction(BattleAction *action)
 {
 	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
+	int intelligence = action->actor->getIntelligence();
 	int chanceToAttack = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
 	{
 		// don't target tanks or other aliens or units under mind control
-		if ((*i)->getArmor()->getSize() == 1 && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
+		if ((*i)->getArmor()->getSize() == 1 && !(*i)->isOut() && (*i)->getTurnsExposed() <= intelligence && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
 		{
 			int chanceToAttackMe = psiAttackStrength
 				+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)

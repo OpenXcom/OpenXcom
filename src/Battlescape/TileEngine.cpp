@@ -291,10 +291,9 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
 
-								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER && unit->getIntelligence() > visibleUnit->getTurnsExposed())
+								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER)
 								{
-									visibleUnit->setTurnsExposed(unit->getIntelligence());
-									_save->updateExposedUnits();
+									visibleUnit->setTurnsExposed(0);
 								}
 							}
 						}

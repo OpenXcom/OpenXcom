@@ -206,7 +206,7 @@ void BattlescapeGenerator::nextStage()
 			if (!(*j)->isOut())
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
-				(*j)->setTurnsExposed(0);
+				(*j)->setTurnsExposed(255);
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
 				{
 					_save->setSelectedUnit(*j);
@@ -233,7 +233,6 @@ void BattlescapeGenerator::nextStage()
 			}
 		}
 	}
-	_save->getExposedUnits()->clear();
 	
 	// remove all items not belonging to our soldiers from the map.
 	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)

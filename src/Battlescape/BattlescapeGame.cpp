@@ -253,7 +253,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
-	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
+	if ((unit->getStats()->psiSkill)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
         || (unit->getVisibleUnits()->size() != 0)
 		|| (unit->_hidingForTurn))
@@ -355,7 +355,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			bool success = _save->getTileEngine()->psiAttack(&action);
 			if (success && action.type == BA_MINDCONTROL)
 			{
-				_save->updateExposedUnits();
 				// show a little infobox with the name of the unit and "... is under alien control"
 				std::wstringstream ss;
 				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL");

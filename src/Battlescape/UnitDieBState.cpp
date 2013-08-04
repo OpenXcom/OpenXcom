@@ -136,8 +136,7 @@ void UnitDieBState::think()
 		_parent->getMap()->setUnitDying(false);
 		if (_unit->getTurnsExposed())
 		{
-			_unit->setTurnsExposed(0);
-			_parent->getSave()->updateExposedUnits();
+			_unit->setTurnsExposed(255);
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{
