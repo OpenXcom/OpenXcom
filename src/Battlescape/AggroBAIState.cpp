@@ -226,7 +226,7 @@ void AggroBAIState::think(BattleAction *action)
 		}
 	}
 
-	if (takeCoverAssessment(action))
+	if (takeCoverAssessment(action) && _coverAction->type != BA_RETHINK)
 	{
 		_unit->_hidingForTurn = true;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }

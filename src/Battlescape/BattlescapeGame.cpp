@@ -184,7 +184,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	
 	_tuReserved = BA_NONE;
 
-	if (unit->getTimeUnits() <= 5 || unit->_hidingForTurn)
+	if (unit->getTimeUnits() <= 5 || (unit->_hidingForTurn && unit->getPosition() == unit->lastCover && _AIActionCounter >= 2))
 	{
 		if (_save->selectNextPlayerUnit(true, true) == 0)
 		{
