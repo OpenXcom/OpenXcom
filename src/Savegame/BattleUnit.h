@@ -85,10 +85,16 @@ private:
 	bool _cacheInvalid;
 	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 	int improveStat(int exp);
-	int _turretType;
 	int _motionPoints;
 	int _kills;
 	int _faceDirection; // used only during strafeing moves
+	bool _hitByFire;
+	int _moraleRestored;
+	int _coverReserve;
+	BattleUnit *_charging;
+	int _turnsExposed;
+	std::string _zombieUnit, _spawnUnit;
+	std::string _activeHand;
 	
 	// static data
 	std::string _type;
@@ -100,18 +106,13 @@ private:
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
 	SpecialAbility _specab;
-	std::string _zombieUnit, _spawnUnit;
 	Armor *_armor;
 	SoldierGender _gender;
-	std::string _activeHand;
 	Soldier *_geoscapeSoldier;
-	BattleUnit *_charging;
-	int _turnsExposed;
 	std::vector<int> _loftempsSet;
 	Unit *_unitRules;
 	int _rankInt;
-	bool _hitByFire;
-	int _moraleRestored;
+	int _turretType;
 public:
 	static const int MAX_SOLDIER_ID = 1000000;
 	/// Creates a BattleUnit.
@@ -411,6 +412,8 @@ public:
 	bool tookFireDamage() const;
 	/// switch the state of the fire damage tracker.
 	void toggleFireDamage();
+	void setCoverReserve(int reserve);
+	int getCoverReserve();
 };
 
 }

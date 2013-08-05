@@ -207,6 +207,7 @@ void AggroBAIState::think(BattleAction *action)
 		_coverAction->number = action->number;
 		_coverAction->weapon = action->weapon;
 		takeCoverAction(_coverAction);
+		_unit->setCoverReserve(_coverCharge);
 	}
 	if (_unit->getOriginalFaction() != FACTION_PLAYER && _unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
 	{
@@ -237,6 +238,7 @@ void AggroBAIState::think(BattleAction *action)
 		action->target = _coverAction->target;
 		_unit->lastCover = action->target;
 		action->type = _coverAction->type;
+		_unit->setCoverReserve(0);
 	}
 	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
