@@ -324,7 +324,7 @@ SoldierInfoState::~SoldierInfoState()
 }
 
 /**
- * Update soldier stats when
+ * Updates soldier stats when
  * the soldier changes.
  */
 void SoldierInfoState::init()
@@ -496,7 +496,7 @@ void SoldierInfoState::init()
 }
 
 /**
- * Changes the soldier name.
+ * Changes the soldier's name.
  * @param action Pointer to an action.
  */
 void SoldierInfoState::edtSoldierKeyPress(Action *action)

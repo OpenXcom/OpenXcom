@@ -155,9 +155,9 @@ void ResearchState::btnNewClick(Action *)
 }
 
 /**
- * Display list of possible ResearchProject
+ * Displays the list of possible ResearchProjects.
  * @param action Pointer to an action.
-*/
+ */
 void ResearchState::onSelectProject(Action *)
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
@@ -165,16 +165,17 @@ void ResearchState::onSelectProject(Action *)
 }
 
 /**
- * Init State
-*/
+ * Updates the research list
+ * after going to other screens.
+ */
 void ResearchState::init()
 {
 	fillProjectList();
 }
 
 /**
- * Fill list with Base ResearchProject. Also update count of available lab space and available/allocated scientist.
-*/
+ * Fills the list with Base ResearchProjects. Also updates count of available lab space and available/allocated scientists.
+ */
 void ResearchState::fillProjectList()
 {
 	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());

@@ -37,31 +37,32 @@
 
 namespace OpenXcom
 {
+
 /**
- * Initialize all elements in the Production settings screen(new Production)
+ * Initializes all elements in the Production settings screen (new Production).
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param item the RuleManufacture to produce
-*/
+ * @param item The RuleManufacture to produce.
+ */
 ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, RuleManufacture * item) : State (game), _base(base), _item(item), _production(0)
 {
 	buildUi();
 }
 
 /**
- * Initialize all elements in the Production settings screen(modifying Production)
+ * Initializes all elements in the Production settings screen (modifying Production).
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param production the Production to modify
-*/
+ * @param production The Production to modify.
+ */
 ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, Production * production) : State (game), _base(base), _item(0), _production(production)
 {
 	buildUi();
 }
 
 /**
- * build screen User Interface
-*/
+ * Builds screen User Interface.
+ */
 void ManufactureInfoState::buildUi()
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
@@ -210,9 +211,9 @@ void ManufactureInfoState::buildUi()
 }
 
 /**
- * Stop this Production. Return to previous screen
- * @param action a pointer to an Action
-*/
+ * Stops this Production. Returns to the previous screen.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::btnStopClick (Action *)
 {
 	_base->removeProduction(_production);
@@ -220,9 +221,9 @@ void ManufactureInfoState::btnStopClick (Action *)
 }
 
 /**
- * Start this Production(if new). Return to previous screen
- * @param action a pointer to an Action
-*/
+ * Starts this Production (if new). Returns to the previous screen.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::btnOkClick (Action *)
 {
 	if(_item)
@@ -233,8 +234,8 @@ void ManufactureInfoState::btnOkClick (Action *)
 }
 
 /**
- * Return to previous screen
-*/
+ * Returns to the previous screen.
+ */
 void ManufactureInfoState::exitState()
 {
 	_game->popState();
@@ -245,7 +246,7 @@ void ManufactureInfoState::exitState()
 }
 
 /**
- * Update display of assigned/available engineer/workshop space
+ * Updates display of assigned/available engineer/workshop space.
  */
 void ManufactureInfoState::setAssignedEngineer()
 {
@@ -269,9 +270,9 @@ void ManufactureInfoState::setAssignedEngineer()
 }
 
 /**
- * Add given number of engineers to the project if possible
- * @param change how much we want to add
-*/
+ * Adds given number of engineers to the project if possible.
+ * @param change How much we want to add.
+ */
 void ManufactureInfoState::moreEngineer(int change)
 {
 	if (0 >= change) return;
@@ -287,18 +288,18 @@ void ManufactureInfoState::moreEngineer(int change)
 }
 
 /**
- * Start the timerMoreEngineer
- * @param action a pointer to an Action
-*/
+ * Starts the timerMoreEngineer.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::moreEngineerPress(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMoreEngineer->start();
 }
 
 /**
- * Stop the timerMoreEngineer
- * @param action a pointer to an Action
-*/
+ * Stops the timerMoreEngineer.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::moreEngineerRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -309,9 +310,9 @@ void ManufactureInfoState::moreEngineerRelease(Action * action)
 }
 
 /**
- * Allocate all engineers
- * @param action a pointer to an Action
-*/
+ * Allocates all engineers.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::moreEngineerClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moreEngineer(std::numeric_limits<int>::max());
@@ -319,9 +320,9 @@ void ManufactureInfoState::moreEngineerClick(Action * action)
 }
 
 /**
- * Remove the given number of engineers from the project if possible
- * @param change how much we want to subtract
-*/
+ * Removes the given number of engineers from the project if possible.
+ * @param change How much we want to subtract.
+ */
 void ManufactureInfoState::lessEngineer(int change)
 {
 	if (0 >= change) return;
@@ -336,18 +337,18 @@ void ManufactureInfoState::lessEngineer(int change)
 }
 
 /**
- * Start the timerLessEngineer
- * @param action a pointer to an Action
-*/
+ * Starts the timerLessEngineer.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::lessEngineerPress(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessEngineer->start();
 }
 
 /**
- * Stop the timerLessEngineer
- * @param action a pointer to an Action
-*/
+ * Stops the timerLessEngineer.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::lessEngineerRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -358,9 +359,9 @@ void ManufactureInfoState::lessEngineerRelease(Action * action)
 }
 
 /**
- * Allocate 0 engineers
- * @param action a pointer to an Action
-*/
+ * Removes engineers from the production.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::lessEngineerClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessEngineer(std::numeric_limits<int>::max());
@@ -368,9 +369,9 @@ void ManufactureInfoState::lessEngineerClick(Action * action)
 }
 
 /**
- * Add given number of units to produce to the project if possible
- * @param change how much we want to add
-*/
+ * Adds given number of units to produce to the project if possible.
+ * @param change How much we want to add.
+ */
 void ManufactureInfoState::moreUnit(int change)
 {
 	if (0 >= change) return;
@@ -391,9 +392,9 @@ void ManufactureInfoState::moreUnit(int change)
 }
 
 /**
- * Start the timerMoreUnit
- * @param action a pointer to an Action
-*/
+ * Starts the timerMoreUnit.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::moreUnitPress(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _production->getAmountTotal() < std::numeric_limits<int>::max())
@@ -401,9 +402,9 @@ void ManufactureInfoState::moreUnitPress(Action * action)
 }
 
 /**
- * Stop the timerMoreUnit
- * @param action a pointer to an Action
-*/
+ * Stops the timerMoreUnit.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::moreUnitRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -414,9 +415,9 @@ void ManufactureInfoState::moreUnitRelease(Action * action)
 }
 
 /**
- * Increases the units-to-produce to 999 or to $$$ when allowAutoSellProduction is true.
- * @param action a pointer to an Action
-*/
+ * Increases the units to produce to 999 or to $$$ when allowAutoSellProduction is true.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::moreUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -425,9 +426,9 @@ void ManufactureInfoState::moreUnitClick(Action * action)
 }
 
 /**
- * Remove the given number of units to produce from the project if possible
- * @param change how much we want to subtract
-*/
+ * Removes the given number of units to produce from the project if possible.
+ * @param change How much we want to subtract.
+ */
 void ManufactureInfoState::lessUnit(int change)
 {
 	if (0 >= change) return;
@@ -440,18 +441,18 @@ void ManufactureInfoState::lessUnit(int change)
 }
 
 /**
- * Start the timerLessUnit
- * @param action a pointer to an Action
-*/
+ * Starts the timerLessUnit.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::lessUnitPress(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessUnit->start();
 }
 
 /**
- * Stop the timerLessUnit
- * @param action a pointer to an Action
-*/
+ * Stops the timerLessUnit.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::lessUnitRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -462,9 +463,9 @@ void ManufactureInfoState::lessUnitRelease(Action * action)
 }
 
 /**
- * Build no more unit
- * @param action a pointer to an Action
-*/
+ * Decreases the units to produce.
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::lessUnitClick(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessUnit(std::numeric_limits<int>::max());
@@ -472,7 +473,7 @@ void ManufactureInfoState::lessUnitClick(Action * action)
 }
 
 /**
- * Assign one more engineer(if possible)
+ * Assigns one more engineer (if possible).
  */
 void ManufactureInfoState::onMoreEngineer()
 {
@@ -481,7 +482,7 @@ void ManufactureInfoState::onMoreEngineer()
 }
 
 /**
- * Remove one engineer(if possible)
+ * Removes one engineer (if possible).
  */
 void ManufactureInfoState::onLessEngineer()
 {
@@ -491,8 +492,8 @@ void ManufactureInfoState::onLessEngineer()
 
 /**
  * Increases or decreases the Engineers according the mouse-wheel used.
- * @param action a pointer to an Action
-*/
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::handleWheelEngineer(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreEngineer(_changeValueByMouseWheel);
@@ -500,7 +501,7 @@ void ManufactureInfoState::handleWheelEngineer(Action *action)
 }
 
 /**
- * Build one more unit
+ * Builds one more unit.
  */
 void ManufactureInfoState::onMoreUnit()
 {
@@ -509,7 +510,7 @@ void ManufactureInfoState::onMoreUnit()
 }
 
 /**
- * Build one less unit(if possible)
+ * Builds one less unit( if possible).
  */
 void ManufactureInfoState::onLessUnit()
 {
@@ -519,8 +520,8 @@ void ManufactureInfoState::onLessUnit()
 
 /**
  * Increases or decreases the Units to produce according the mouse-wheel used.
- * @param action a pointer to an Action
-*/
+ * @param action A pointer to an Action.
+ */
 void ManufactureInfoState::handleWheelUnit(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreUnit(_changeValueByMouseWheel);
@@ -528,7 +529,7 @@ void ManufactureInfoState::handleWheelUnit(Action *action)
 }
 
 /**
- * Runs state functionality every cycle(used to update the timer).
+ * Runs state functionality every cycle (used to update the timer).
  */
 void ManufactureInfoState::think()
 {

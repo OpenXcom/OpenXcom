@@ -116,8 +116,8 @@ SoldiersState::~SoldiersState()
 }
 
 /**
- * The soldier names can change
- * after going into other screens.
+ * Updates the soldiers list
+ * after going to other screens.
  */
 void SoldiersState::init()
 {
@@ -144,7 +144,7 @@ void SoldiersState::btnOkClick(Action *)
 }
 
 /**
- * Open Psionic Training screen.
+ * Opens the Psionic Training screen.
  * @param action Pointer to an action.
  */
 void SoldiersState::btnPsiTrainingClick(Action *)

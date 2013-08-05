@@ -72,7 +72,7 @@ void PlaceStartFacilityState::viewClick(Action *)
 		fac->setY(_view->getGridY());
 		_base->getFacilities()->push_back(fac);
 		_game->popState();
-		_select->FacilityBuilt();
+		_select->facilityBuilt();
 	}
 }
 

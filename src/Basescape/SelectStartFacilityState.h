@@ -39,12 +39,12 @@ public:
 	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> Facilities);
 	/// Cleans up the Build Facilities state.
 	~SelectStartFacilityState();
-	/// Populate the build option list
-	virtual void PopulateBuildList();
+	/// Populates the build option list.
+	virtual void populateBuildList();
 	/// Handler for clicking the Facilities list.
 	void lstFacilitiesClick(Action *action);
-	/// Handler for when facility actually built
-	void FacilityBuilt();
+	/// Handler for when the facility is actually built.
+	void facilityBuilt();
 };
 
 }

@@ -79,6 +79,7 @@ public:
 	void btnGeoscapeClick(Action *action);
 	/// Handler for clicking the base view.
 	void viewLeftClick(Action *action);
+	/// Handler for right clicking the base view.
 	void viewRightClick(Action *action);
 	/// Handler for hovering the base view.
 	void viewMouseOver(Action *action);

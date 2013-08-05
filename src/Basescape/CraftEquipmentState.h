@@ -84,7 +84,7 @@ public:
 	void moveRight();
 	/// Moves the given number of items to the craft.
 	void moveRightByValue(int change);
-	/// empties the contents of the craft, moving all of the items back to the base.
+	/// Empties the contents of the craft, moving all of the items back to the base.
 	void btnClearClick(Action *action);
 };
 
