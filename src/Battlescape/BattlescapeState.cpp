@@ -926,7 +926,7 @@ void BattlescapeState::btnLaunchClick(Action *action)
  */
 void BattlescapeState::btnPsiClick(Action *action)
 {
-	_battleGame->psiAction();
+	_battleGame->psiButtonAction();
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
 

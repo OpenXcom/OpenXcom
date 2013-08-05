@@ -1416,7 +1416,7 @@ void BattlescapeGame::launchAction()
 /**
  * Pressed the psi button.
  */
-void BattlescapeGame::psiAction()
+void BattlescapeGame::psiButtonAction()
 {
 	_currentAction.weapon = 0;
 	_currentAction.targeting = true;
