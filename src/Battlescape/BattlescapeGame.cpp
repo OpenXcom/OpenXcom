@@ -250,21 +250,20 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
-	if ((unit->getStats()->psiSkill)
-		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
-        || (unit->getVisibleUnits()->size() != 0)
-		|| (unit->_hidingForTurn))
+	if ((unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
+        || (unit->getVisibleUnits()->size() != 0))
 	{
 		if (aggro == 0)
 		{
 			aggro = new AggroBAIState(_save, unit);
 			unit->setAIState(aggro);
+			ai = aggro;
 		}
-		ai = unit->getCurrentAIState();
 		_parentState->debug(L"Aggro");
 	}
 
 	BattleAction action;
+	action.actor = unit;
     action.number = _AIActionCounter;
 	unit->think(&action);
 	
@@ -277,11 +276,15 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		aggro = 0;
 	}
 
+	if (unit->getStats()->psiSkill)
+	{
+		psiAction(&action);
+	}
+
 	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
 	{
 		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->size() == 0)
 		{
-			action.actor = unit;
 			findItem(&action);
 		}
 	}
@@ -2036,4 +2039,105 @@ bool BattlescapeGame::getKneelReserved()
 	}
 	return false;
 }
+
+/*	psionic targetting: pick from any of the "exposed" units.
+ *	exposed means they have been previously spotted, and are therefore "known" to the AI,
+ *	regardless of whether we can see them or not, because we're psychic.
+ */
+bool BattlescapeGame::psiAction(BattleAction *action)
+{
+	BattleUnit *unit = action->actor;
+		// don't let mind controlled soldiers mind control other soldiers.
+	if (unit->getOriginalFaction() != FACTION_PLAYER
+		// make sure we're actually psi-capable
+		&& unit->getStats()->psiSkill
+		// and we have the required 25 TUs and can still make it to cover
+		&& unit->getTimeUnits() > unit->getCoverReserve() + 25
+		// or make a reaction shot, if that's our intent
+		&& checkReservedTU(unit, 25)
+		// or we're not on our way to cover
+		&& !unit->_hidingForTurn)
+	{
+		int psiAttackStrength = unit->getStats()->psiSkill * unit->getStats()->psiStrength / 50;
+		int intelligence = unit->getIntelligence();
+		int chanceToAttack = 0;
+		BattleUnit *target = 0;
+
+		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+		{
+				// don't target tanks
+			if ((*i)->getArmor()->getSize() == 1 &&
+				// or units that are dead/unconscious
+				!(*i)->isOut() && 
+				// they must be units that we "know" about
+				(*i)->getTurnsExposed() <= intelligence &&
+				// they must be player units
+				(*i)->getOriginalFaction() == FACTION_PLAYER &&
+				// and they mustn't be under mind control already
+				(*i)->getFaction() == FACTION_PLAYER)
+			{
+				int chanceToAttackMe = psiAttackStrength
+					+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
+					- getTileEngine()->distance((*i)->getPosition(), unit->getPosition())
+					- ((*i)->getStats()->psiStrength)
+					+ RNG::generate(55, 105);
+
+				if (chanceToAttackMe > chanceToAttack)
+				{
+					chanceToAttack = chanceToAttackMe;
+					target = *i;
+				}
+			}
+		}
+
+		if (!target || !chanceToAttack) return false;
+
+		if (!unit->getVisibleUnits()->empty() && unit->getMainHandWeapon() && unit->getMainHandWeapon()->getAmmoItem())
+		{
+			if (unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
+			{
+				return false;
+			}
+		}
+		else if (RNG::generate(35, 155) >= chanceToAttack)
+		{
+			return false;
+		}
+
+		if (chanceToAttack >= 30)
+		{
+			int controlOrPanic = 60;
+			int morale = target->getMorale();
+			int bravery = (110 - target->getStats()->bravery) / 10;
+			if (bravery > 6)
+				controlOrPanic += 15;
+			if ( bravery < 4)
+				controlOrPanic -= 15;
+			if (morale >= 40)
+			{
+				if (morale - 10 * bravery < 50)
+					controlOrPanic += 15;
+			}
+			else
+			{
+				controlOrPanic -= 15;
+			}
+			if (!morale)
+			{
+				controlOrPanic = 0;
+			}
+			if (RNG::generate(0, 100) >= controlOrPanic)
+			{
+				action->type = BA_MINDCONTROL;
+				action->target = target->getPosition();
+				return true;
+			}
+		}
+		action->type = BA_PANIC;
+		action->target = target->getPosition();
+		return true;
+	}
+	return false;
+}
+
 }

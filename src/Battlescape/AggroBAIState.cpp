@@ -209,12 +209,8 @@ void AggroBAIState::think(BattleAction *action)
 		takeCoverAction(_coverAction);
 		_unit->setCoverReserve(_coverCharge);
 	}
-	if (_unit->getOriginalFaction() != FACTION_PLAYER && _unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
-	{
-		psiAction(action);
-	}
 
-	if (action->weapon && action->type == BA_RETHINK)
+	if (action->weapon)
 	{
 		_aggroTarget = 0;
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
@@ -244,7 +240,9 @@ void AggroBAIState::think(BattleAction *action)
 	{
 		grenadeAction(action);
 	}
+
 	action->TU = action->actor->getActionTUs(action->type, action->weapon);
+
 	if (_aggroTarget != 0) { setAggroTarget(_aggroTarget); }
 	else if (_lastKnownTarget) { stalkingAction(action); }
 }
@@ -362,97 +360,6 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	}
 	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "AggroBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << " at: "  << action->target.x << "," << action->target.y << "," << _aggroTarget->getId(); }
 	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "CHARGE!"; }
-}
-
-/*	psionic targetting: pick from any of the "exposed" units.
- *	exposed means they have been previously spotted, and are therefore "known" to the AI,
- *	regardless of whether we can see them or not, because we're psychic.
- */
-void AggroBAIState::psiAction(BattleAction *action)
-{
-	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
-	int intelligence = action->actor->getIntelligence();
-	int chanceToAttack = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
-	{
-		// don't target tanks or other aliens or units under mind control
-		if ((*i)->getArmor()->getSize() == 1 && !(*i)->isOut() && (*i)->getTurnsExposed() <= intelligence && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
-		{
-			int chanceToAttackMe = psiAttackStrength
-				+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
-				- _game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition())
-				- ((*i)->getStats()->psiStrength)
-				+ (RNG::generate(0, 50))
-				+ 55;
-
-			if (chanceToAttackMe > chanceToAttack)
-			{
-				chanceToAttack = chanceToAttackMe;
-				_aggroTarget = *i;
-			}
-		}
-	}
-
-	if (!_aggroTarget)
-		chanceToAttack = 0;
-
-	if (chanceToAttack)
-	{
-		if (!_unit->getVisibleUnits()->empty() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem())
-		{
-			if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
-			{
-				chanceToAttack = 0;
-				_aggroTarget = 0;
-			}
-		}
-		else
-		{
-			if (RNG::generate(35, 155) >= chanceToAttack)
-			{
-				chanceToAttack = 0;
-				_aggroTarget = 0;
-			}
-		}
-		if (chanceToAttack >= 30)
-		{
-			int controlOrPanic = 60;
-			int morale = _aggroTarget->getMorale();
-			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
-			if (bravery > 6)
-				controlOrPanic += 15;
-			if ( bravery < 4)
-				controlOrPanic -= 15;
-			if (morale >= 40)
-			{
-				if (morale - 10 * bravery < 50)
-					controlOrPanic += 15;
-			}
-			else
-			{
-				controlOrPanic -= 15;
-			}
-			if (!morale)
-			{
-				controlOrPanic = 0;
-			}
-			if (RNG::generate(0, 100) >= controlOrPanic)
-			{
-				action->type = BA_MINDCONTROL;
-				action->target = _aggroTarget->getPosition();
-			}
-			else
-			{
-				action->type = BA_PANIC;
-				action->target = _aggroTarget->getPosition();
-			}
-		}
-		else if (chanceToAttack)
-		{
-				action->type = BA_PANIC;
-				action->target = _aggroTarget->getPosition();
-		}
-	}
 }
 
 /*	

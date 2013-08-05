@@ -69,8 +69,6 @@ public:
 	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
 	/// attempt to take a melee attack/charge an enemy we can see.
 	void meleeAction(BattleAction *action);
-	/// attempt a psionic attack on an enemy we "know of".
-	void psiAction(BattleAction *action);
 	/// attempt to fire a waypoint projectile at an enemy we, or one of our teammates sees.
 	void wayPointAction(BattleAction *action);
 	/// attempt to fire at an enemy we can see.

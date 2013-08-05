@@ -175,6 +175,8 @@ public:
 	void setKneelReserved(bool reserved);
 	/// check the kneel reservation setting.
 	bool getKneelReserved();
+	/// attempt a psionic attack on an enemy we "know of".
+	bool psiAction(BattleAction *action);
 
 };
 
