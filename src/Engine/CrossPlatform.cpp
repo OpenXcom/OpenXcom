@@ -538,7 +538,7 @@ bool folderExists(const std::string &path)
 {
 #ifdef _WIN32
 	return (PathIsDirectoryA(path.c_str()) != FALSE);
-#elseif defined __MORPHOS__
+#elif __MORPHOS__
 	BPTR l = Lock( path.c_str(), SHARED_LOCK );
 	if( l != NULL )
 	{
@@ -561,7 +561,7 @@ bool fileExists(const std::string &path)
 {
 #ifdef _WIN32
 	return (PathFileExistsA(path.c_str()) != FALSE);
-#elseif defined __MORPHOS__
+#elif __MORPHOS__
 	BPTR l = Lock( path.c_str(), SHARED_LOCK );
 	if( l != NULL )
 	{
