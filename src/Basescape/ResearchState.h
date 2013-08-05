@@ -20,7 +20,6 @@
 #define OPENXCOM_RESEARCHSTATE_H
 
 #include "../Engine/State.h"
-#include <string>
 #include <SDL.h>
 
 namespace OpenXcom
@@ -56,9 +55,9 @@ public:
 	void btnNewClick(Action *action);
 	/// Handler for clicking the ResearchProject list.
 	void onSelectProject(Action *action);
-	/// Fill the ResearchProject list with Base ResearchProject.
+	/// Fills the ResearchProject list with Base ResearchProjects.
 	void fillProjectList();
-	/// Initializes the state.
+	/// Updates the research list.
 	void init ();
 };
 

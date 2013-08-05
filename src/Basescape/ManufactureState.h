@@ -52,8 +52,11 @@ public:
 	~ManufactureState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Updates the production list.
 	void init ();
+	/// Handler for the New Production button.
 	void btnNewProductionClick(Action * action);
+	/// Fills the list of base productions.
 	void fillProductionList();
 };
 

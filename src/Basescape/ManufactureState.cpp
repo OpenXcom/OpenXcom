@@ -155,6 +155,10 @@ ManufactureState::~ManufactureState()
 
 }
 
+/**
+ * Updates the production list
+ * after going to other screens.
+ */
 void ManufactureState::init ()
 {
 	fillProductionList();
@@ -173,17 +177,17 @@ void ManufactureState::btnOkClick(Action *)
 }
 
 /**
- * Open the screen with the list of possible productions
+ * Opens the screen with the list of possible productions.
  * @param action Pointer to an action.
-*/
+ */
 void ManufactureState::btnNewProductionClick(Action *)
 {
 	_game->pushState(new NewManufactureListState(_game, _base));
 }
 
 /**
- * Fill the list of base production's
-*/
+ * Fills the list of base productions.
+ */
 void ManufactureState::fillProductionList()
 {
 	const std::vector<Production *> productions(_base->getProductions ());
@@ -231,9 +235,9 @@ void ManufactureState::fillProductionList()
 }
 
 /**
- * Open the screen displaying production settings.
+ * Opens the screen displaying production settings.
  * @param action Pointer to an action.
-*/
+ */
 void ManufactureState::lstManufactureClick(Action *)
 {
 	const std::vector<Production *> productions(_base->getProductions ());

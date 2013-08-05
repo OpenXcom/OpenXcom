@@ -125,7 +125,7 @@ BaseFacility *BaseView::getSelectedFacility() const
 }
 
 /**
- * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base
+ * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base.
  */
 void BaseView::resetSelectedFacility()
 {
@@ -283,6 +283,8 @@ void BaseView::reCalcQueuedBuildings()
 
 /**
  * Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
+ * @param facility Pointer to a base facility.
+ * @param neighbor Pointer to a neighboring base facility.
  */
 void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor)
 {

@@ -35,6 +35,7 @@ class Timer;
 class Base;
 class Soldier;
 class Craft;
+
 /**
  * Sell/Sack screen that lets the player sell
  * any items in a particular base.
@@ -62,8 +63,9 @@ private:
 	int getQuantity();
 	/// Gets the Type of the selected item.
 	enum SellType getType(unsigned selected) const;
-	/// Gets the index of selected item
+	/// Gets the index of selected item.
 	int getItemIndex(unsigned selected) const;
+	/// Gets the index of the selected craft.
 	int getCraftIndex(unsigned selected) const;
 public:
 	/// Creates the Sell state.
