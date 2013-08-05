@@ -33,8 +33,8 @@ class TextList;
 class Armor;
 
 /**
- * Select Armor window that allows to
- * change the armor equipped on a soldier.
+ * Select Armor window that allows changing
+ * of the armor equipped on a soldier.
  */
 class SoldierArmorState : public State
 {

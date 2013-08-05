@@ -219,6 +219,11 @@ void SellState::think()
 	_timerDec->think(this, 0);
 }
 
+/**
+ * Gets the index of selected craft.
+ * @param selected Selected craft.
+ * @return Index of the selected craft.
+ */
 int SellState::getCraftIndex(unsigned selected) const
 {
 	return selected - _soldiers.size();
@@ -234,7 +239,7 @@ void SellState::btnOkClick(Action *)
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
-		{			
+		{
 			switch (getType(i))
 			{
 			case SELL_SOLDIER:
@@ -353,7 +358,8 @@ void SellState::lstItemsLeftArrowRelease(Action *action)
 }
 
 /**
- * Increase the item to max on right-click.
+ * Increases the selected item;
+ * by one on left-click, to max on right-click.
  * @param action Pointer to an action.
  */
 void SellState::lstItemsLeftArrowClick(Action *action)
@@ -390,7 +396,8 @@ void SellState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
- * Decrease the item to 0 on right-click.
+ * Decreases the selected item;
+ * by one on left-click, to 0 on right-click.
  * @param action Pointer to an action.
  */
 void SellState::lstItemsRightArrowClick(Action *action)
@@ -437,6 +444,7 @@ void SellState::lstItemsMousePress(Action *action)
 
 /**
  * Gets the price of the currently selected item.
+ * @return Price of the selected item.
  */
 int SellState::getPrice()
 {
@@ -459,6 +467,7 @@ int SellState::getPrice()
 /**
  * Gets the quantity of the currently selected item
  * on the base.
+ * @return Quantity of selected item on the base.
  */
 int SellState::getQuantity()
 {
@@ -491,7 +500,7 @@ void SellState::increase()
 
 /**
  * Increases the quantity of the selected item to sell by "change".
- * @param change how much we want to add
+ * @param change How much we want to add.
  */
 void SellState::increaseByValue(int change)
 {
@@ -514,7 +523,7 @@ void SellState::decrease()
 
 /**
  * Decreases the quantity of the selected item to sell by "change".
- * @param change how much we want to remove
+ * @param change How much we want to remove.
  */
 void SellState::decreaseByValue(int change)
 {
@@ -540,6 +549,11 @@ void SellState::updateItemStrings()
 	_txtSales->setText(s);
 }
 
+/**
+ * Gets the Type of the selected item.
+ * @param selected Currently selected item.
+ * @return The type of the selected item.
+ */
 enum SellType SellState::getType(unsigned selected) const
 {
 	unsigned max = _soldiers.size();
@@ -555,12 +569,15 @@ enum SellType SellState::getType(unsigned selected) const
 
 	return SELL_ITEM;
 }
+
 /**
- * Gets the shortest distance between the two bases.
- * @return Distance
+ * Gets the index of the selected item.
+ * @param selected Currently selected item.
+ * @return Index of the selected item.
  */
 int SellState::getItemIndex(unsigned selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }
+
 }

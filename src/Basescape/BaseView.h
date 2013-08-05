@@ -65,7 +65,7 @@ public:
 	void setTexture(SurfaceSet *texture);
 	/// Gets the currently selected facility.
 	BaseFacility *getSelectedFacility() const;
-	/// Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base
+	/// Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base.
 	void resetSelectedFacility();
 	/// Gets the X position of the currently selected square.
 	int getGridX() const;
