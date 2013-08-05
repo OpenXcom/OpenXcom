@@ -69,6 +69,11 @@ public:
 	/// Get approximate cost to reach target position.
 	int getTUGuess() const { return _tuGuess; }
 	/// Connect to previous node along the path.
+	
+	#ifdef __MORPHOS__
+	#undef connect
+	#endif
+	
 	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position &target);
 	/// Connect to previous node along a visit.
 	void connect(int tuCost, PathfindingNode* prevNode, int prevDir);

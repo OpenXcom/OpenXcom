@@ -244,7 +244,12 @@ void createDefault()
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
 	setInt("keyBattleVoxelView", SDLK_F10);
+
 	setInt("keyBattleZeroTUs", SDLK_DELETE);
+
+#ifdef __MORPHOS__
+	setInt("FPS", 15);
+#endif
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");

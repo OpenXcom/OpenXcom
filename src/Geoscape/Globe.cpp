@@ -569,6 +569,15 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 	{
 		Polygon* poly;
 		int points;
+		
+		
+		for( int z=0; z < 10 ; z++ )
+		{
+			char *ptr = (char *)&value[ z ];
+			char tmp = ptr[ 0 ];
+			ptr[ 0 ] = ptr[ 1 ];
+			ptr[ 1 ] = tmp;
+		}
 
 		if (value[6] != -1)
 		{
