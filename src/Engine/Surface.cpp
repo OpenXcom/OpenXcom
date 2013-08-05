@@ -51,17 +51,34 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
+
+#ifdef __MORPHOS__
+#include <ppcinline/exec.h>
+#endif 
+ 
 Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 	int pitch = (bpp/8) * ((width+15)& ~0xF);
 
 #ifndef _WIN32
+
+	#ifdef __MORPHOS__
+
+	_alignedBuffer = calloc( pitch * height * (bpp/8), 1 );
+	if (!_alignedBuffer)
+	{
+		throw Exception("Where's the memory, Lebowski?");
+	}
+
+	#else
 	int rc;
 	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height * (bpp/8))))
 	{
 		throw Exception(strerror(rc));
 	}
+	#endif
+	
 #else
 	// of course Windows has to be difficult about this!
 	_alignedBuffer = _aligned_malloc(pitch*height*(bpp/8), 16);
@@ -219,14 +236,18 @@ void Surface::loadSpk(const std::string &filename)
 
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
-		flag = SDL_SwapLE16(flag);
-		if (flag == 65533)
-		{
-			break;
-		}
-		else if (flag == 65535)
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
+	
+		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
+			
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
+			
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				setPixelIterative(&x, &y, 0);
@@ -235,6 +256,11 @@ void Surface::loadSpk(const std::string &filename)
 		else if (flag == 65534)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
+			
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
+			
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				imgFile.read((char*)&value, 1);
