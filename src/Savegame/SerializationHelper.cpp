@@ -16,34 +16,61 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ENDBATTLEBSTATE_H
-#define OPENXCOM_ENDBATTLEBSTATE_H
-
-#include "BattleState.h"
+#include "SerializationHelper.h"
+#include <assert.h>
 
 namespace OpenXcom
 {
 
-class BattleUnit;
-
-class EndBattleBState : public BattleState
+int unserializeInt(Uint8 **buffer, Uint8 sizeKey)
 {
-private:
-	int _liveSoldiers;
-	BattlescapeState *_battle;
-public:
-	/// Creates a new UnitPanicBState class
-	EndBattleBState(BattlescapeGame *parent, int liveSoldiers, BattlescapeState *battle);
-	/// Cleans up the UnitPanicBState.
-	~EndBattleBState();
-	/// Initializes the state.
-	void init();
-	/// Handles a cancels request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-};
+	int ret = 0;
+	switch(sizeKey)
+	{
+	case 1:
+		ret = **buffer;
+		break;
+	case 2:
+		ret = *(Sint16*)*buffer;
+		break;
+	case 3:
+		assert(false); // no.
+		break;
+	case 4:
+		ret = *(Uint32*)*buffer;
+		break;
+	default:
+		assert(false); // get out.
+	}
 
+	*buffer += sizeKey;
+
+	return ret;
 }
 
-#endif
+void serializeInt(Uint8 **buffer, Uint8 sizeKey, int value)
+{
+	switch(sizeKey)
+	{
+	case 1:
+		assert(value < 256);
+		**buffer = value;
+		break;
+	case 2:
+		assert(value < 65536);
+		*(Sint16*)*buffer = value;
+		break;
+	case 3:
+		assert(false); // no.
+		break;
+	case 4:
+		*(Uint32*)*buffer = value;
+		break;
+	default:
+		assert(false); // get out.
+	}
+
+	*buffer += sizeKey;
+}
+
+}

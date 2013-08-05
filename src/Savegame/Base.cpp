@@ -30,6 +30,7 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/RuleResearch.h"
 #include "Transfer.h"
 #include "ResearchProject.h"
 #include "Production.h"
@@ -853,7 +854,7 @@ int Base::getCraftMaintenance() const
 	int total = 0;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
-		total += (*i)->getRules()->getBuyCost();
+		total += (*i)->getRules()->getRentCost();
 	}
 	return total;
 }
@@ -1042,7 +1043,18 @@ int Base::getUsedContainment() const
 				total += (*i)->getQuantity();
 			}
 		}
-	}	
+	}
+	if (Options::getBool("alienContainmentLimitEnforced"))
+	{
+		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
+		{
+			const RuleResearch *projRules = (*i)->getRules();
+			if (projRules->needItem() && _rule->getUnit(projRules->getName()))
+			{
+				++total;
+			}
+		}
+	}
 	return total;
 }
 

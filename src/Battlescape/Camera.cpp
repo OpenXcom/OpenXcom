@@ -289,7 +289,6 @@ void Camera::keyboardRelease(Action *action, State *)
 	}
 
 	int key = action->getDetails()->key.keysym.sym;
-	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
 	{
 		_scrollKeyX = 0;

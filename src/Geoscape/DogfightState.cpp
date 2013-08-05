@@ -19,7 +19,6 @@
 #include "DogfightState.h"
 #include <sstream>
 #include "../Engine/Game.h"
-#include "../Engine/Screen.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -860,7 +859,7 @@ void DogfightState::move()
 					{
 						p->remove();
 					}
-					else
+					else if (!_ufo->isCrashed())
 					{
 						projectileInFlight = true;
 					}
@@ -1094,6 +1093,10 @@ void DogfightState::move()
 			{
 				_ufo->setSecondsRemaining(RNG::generate(24, 96)*3600);
 				_ufo->setAltitude("STR_GROUND");
+				if (_ufo->getCrashId() == 0)
+				{
+					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
+				}
 			}
 		}
 		_timeout += 30;

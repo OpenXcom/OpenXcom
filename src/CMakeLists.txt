@@ -16,6 +16,8 @@ set ( basescape_src
   Basescape/TransfersState.h
   Basescape/StoresState.cpp
   Basescape/StoresState.h
+  Basescape/SackSoldierState.h
+  Basescape/SackSoldierState.cpp
   Basescape/SellState.h
   Basescape/SellState.cpp
   Basescape/CraftInfoState.cpp
@@ -89,8 +91,6 @@ set ( battlescape_src
   Battlescape/Map.cpp
   Battlescape/Pathfinding.h
   Battlescape/Pathfinding.cpp
-  Battlescape/EndBattleBState.h
-  Battlescape/EndBattleBState.cpp
   Battlescape/ExplosionBState.h
   Battlescape/ExplosionBState.cpp
   Battlescape/UnitTurnBState.cpp
@@ -515,6 +515,8 @@ set ( savegame_src
   Savegame/WeightedOptions.h
   Savegame/AlienStrategy.cpp
   Savegame/AlienStrategy.h
+  Savegame/SerializationHelper.cpp
+  Savegame/SerializationHelper.h
 )
 
 set ( ufopedia_src

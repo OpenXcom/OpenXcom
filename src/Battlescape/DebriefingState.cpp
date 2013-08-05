@@ -66,7 +66,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
-	_containmentLimit = Options::getBool("alienContainmentHasUpperLimit") ? 1 : 0;
+	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(40, 12, 16, 180);
@@ -221,6 +221,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
  */
 DebriefingState::~DebriefingState()
 {
+	if (_game->isQuitting())
+	{
+		_game->getSavedGame()->setBattleGame(0);
+	}
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		delete *i;
@@ -559,7 +563,7 @@ void DebriefingState::prepareDebriefing()
 			else if (oldFaction == FACTION_NEUTRAL)
 			{
 				if ((*j)->killedBy() == FACTION_PLAYER)
-					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -(*j)->getValue() + (2 * ((*j)->getValue() / 3)));
+					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -(*j)->getValue() - (2 * ((*j)->getValue() / 3)));
 				else // if civilians happen to kill themselves XCOM shouldn't get penalty for it
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
 			}

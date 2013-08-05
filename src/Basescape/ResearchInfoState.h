@@ -27,30 +27,26 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class TextList;
 class Base;
 class RuleResearch;
 class ResearchProject;
-class ResearchState;
-class NewResearchListState;
 class ArrowButton;
 class Timer;
 class InteractiveSurface;
 
 /**
-   Window which allow to change number of assigned scientist to a project.
-*/
+ * Window which allows changing of the number of assigned scientist to a project.
+ */
 class ResearchInfoState : public State
 {
 private:
 	Base *_base;
 	TextButton *_btnOk;
+	TextButton *_btnCancel;
 	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAllocatedScientist, *_txtMore, *_txtLess;
-	TextList *_lstResearch;
-	std::vector<Text*> texts_;
-	void SetAssignedScientist();
+	void setAssignedScientist();
 	ResearchProject * _project;
 	RuleResearch * _rule;
 	void buildUi ();
@@ -63,6 +59,8 @@ public:
 	ResearchInfoState(Game *game, Base *base, ResearchProject * project);
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
 	/// Function called every time the _timerMore timer is triggered.
 	void more();
 	/// Add given number of scientists to the project if possible

@@ -24,7 +24,6 @@
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {

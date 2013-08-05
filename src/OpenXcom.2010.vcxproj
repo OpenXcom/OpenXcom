@@ -230,6 +230,7 @@
     <ClCompile Include="Basescape\ResearchInfoState.cpp" />
     <ClCompile Include="Basescape\ResearchState.cpp" />
     <ClCompile Include="Basescape\SelectStartFacilityState.cpp" />
+    <ClCompile Include="Basescape\SackSoldierState.cpp" />
     <ClCompile Include="Basescape\SellState.cpp" />
     <ClCompile Include="Basescape\SoldierArmorState.cpp" />
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
@@ -254,7 +255,6 @@
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\CannotReequipState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
-    <ClCompile Include="Battlescape\EndBattleBState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
     <ClCompile Include="Battlescape\InfoboxOKState.cpp" />
@@ -445,6 +445,7 @@
     <ClCompile Include="Savegame\ResearchProject.cpp" />
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
+    <ClCompile Include="Savegame\SerializationHelper.cpp" />
     <ClCompile Include="Savegame\Soldier.cpp" />
     <ClCompile Include="Savegame\Node.cpp" />
     <ClCompile Include="Savegame\Target.cpp" />
@@ -496,6 +497,7 @@
     <ClInclude Include="Basescape\ResearchInfoState.h" />
     <ClInclude Include="Basescape\ResearchState.h" />
     <ClInclude Include="Basescape\SelectStartFacilityState.h" />
+    <ClInclude Include="Basescape\SackSoldierState.h" />
     <ClInclude Include="Basescape\SellState.h" />
     <ClInclude Include="Basescape\SoldierArmorState.h" />
     <ClInclude Include="Basescape\SoldierInfoState.h" />
@@ -520,7 +522,6 @@
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\CannotReequipState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
-    <ClInclude Include="Battlescape\EndBattleBState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
     <ClInclude Include="Battlescape\InfoboxOKState.h" />

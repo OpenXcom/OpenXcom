@@ -104,7 +104,7 @@ BuildFacilitiesState::~BuildFacilitiesState()
 }
 
 /**
- * Populates the build list from the current "available" facilities
+ * Populates the build list from the current "available" facilities.
  */
 void BuildFacilitiesState::PopulateBuildList()
 {

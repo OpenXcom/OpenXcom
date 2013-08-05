@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 TRANSFERIR
 STR_PURCHASE_RECRUIT
 COMPRAR/RECLUTAR
+STR_SACK
+DESPEDIR
 STR_SELL_SACK_UC
 VENDER/DESPEDIR
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 PROGRESO
 STR_NEW_PROJECT
 Nuevo proyecto
+STR_CANCEL_PROJECT
+Cancel Project
 STR_NEW_RESEARCH_PROJECTS
 Proyectos de investigación
 STR_SCIENTISTS_AVAILABLE_UC
@@ -2277,6 +2281,10 @@ STR_LIST_ITEM
 Resultados
 STR_DISPLAY_FILTER
 Filtro de Pantalla
+STR_QUICK_SAVE
+Quick Save
+STR_QUICK_LOAD
+Quick Load
 STR_ADVANCED
 Avanzado
 STR_ADVANCED_OPTIONS
@@ -2285,9 +2293,9 @@ STR_AGGRESSIVERETALIATION
 Represalias agresivas
 STR_AGGRESSIVERETALIATION_DESC
 Esta opción permite que los OVNIs intenten detectar sus bases en todo momento, independiente de los parámetros de la misión alienígena.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limite del confinamiento alienígena
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Esta opción permite imponer límites en la cantidad de alienígenas vivos permitidos en el confinamiento.
 STR_CANSELLLIVEALIENS
 Venta de alienígenas vivos
@@ -2369,6 +2377,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Altura de explosión
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Esta opción permite cambiar la altura que las explosiones pueden extenderse {NEWLINE} (Plana: 0, Circular: 3)
+STR_AUTOSAVE
+Autosave mode
+STR_AUTOSAVE_DESC
+0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
 STR_ALLOWPSIONICCAPTURE
 Permitir captura psíquica
 STR_ALLOWPSIONICCAPTURE_DESC
@@ -2380,12 +2392,24 @@ You can at any time send soldiers into (or removed from) psionic training. Remem
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Alien weapon self destruction
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will be spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
 STR_ARROWS
 ARROWS
 STR_FULL
 FULL
 STR_SAVE_VOXEL_VIEW
 Save First-Person Screenshot
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Time Units reserved for Kneeling
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+TU's reserved for Kneeling and Firing
+STR_RESERVE_TUS_FOR_KNEEL
+Reserve Time Units for kneeling
+STR_EXPEND_ALL_TIME_UNITS
+Expend all remaining Time Units

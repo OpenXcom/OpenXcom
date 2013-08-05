@@ -27,6 +27,7 @@ namespace OpenXcom
 class RuleBaseFacility;
 class Base;
 class Ruleset;
+class Craft;
 
 /**
  * Represents a base facility placed in a base.
@@ -40,6 +41,7 @@ private:
 	RuleBaseFacility *_rules;
 	Base *_base;
 	int _x, _y, _buildTime;
+	Craft *_craftForDrawing;	// craft, used for drawing facility
 public:
 	/// Creates a base facility of the specified type.
 	BaseFacility(RuleBaseFacility *rules, Base *base);
@@ -67,6 +69,10 @@ public:
 	void build();
 	/// Checks if the facility is currently in use.
 	bool inUse() const;
+	/// Gets craft, used for drawing facility.
+	Craft *getCraft() const;
+	/// Sets craft, used for drawing facility.
+	void setCraft(Craft *craft);
 };
 
 }

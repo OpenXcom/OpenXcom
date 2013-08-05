@@ -26,17 +26,14 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
-#include "../Interface/TextList.h"
 #include "../Savegame/Base.h"
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
-#include "ResearchState.h"
-#include "NewResearchListState.h"
 #include "../Interface/ArrowButton.h"
 #include "../Engine/Timer.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Options.h"
-
 #include <sstream>
 #include <limits>
 
@@ -66,7 +63,7 @@ ResearchInfoState::ResearchInfoState(Game *game, Base *base, ResearchProject * p
 }
 
 /**
- * Build dialog
+ * Builds dialog.
  */
 void ResearchInfoState::buildUi ()
 {
@@ -85,6 +82,7 @@ void ResearchInfoState::buildUi ()
 	int button_x_border = 16;
 	int button_y_border = 10;
 	int button_height = 16;
+	int footer_button_width = width / 2 - (4 + button_x_border);
 
 	_screen = false;
 	_window = new Window(this, width, height, start_x, start_y);
@@ -96,7 +94,8 @@ void ResearchInfoState::buildUi ()
 	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
 	_txtMore = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
 	_txtLess = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
-	_btnOk = new TextButton(width - 2 * button_x_border , button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnCancel = new TextButton(footer_button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnOk = new TextButton(footer_button_width, button_height, start_x + button_x_border + footer_button_width + 8, start_y + height - button_height - button_y_border);
 
 	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
 	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
@@ -104,6 +103,7 @@ void ResearchInfoState::buildUi ()
 	add(_surface);
 	add(_window);
 	add(_btnOk);
+	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtAvailableScientist);
 	add(_txtAvailableSpace);
@@ -145,8 +145,14 @@ void ResearchInfoState::buildUi ()
 	if (_rule)
 	{
 		_base->addResearch(_project);
+		if (_rule->needItem() &&
+				(_game->getRuleset()->getUnit(_rule->getName()) ||
+				 Options::getBool("researchedItemsWillSpent")))
+		{
+			_base->getItems()->removeItem(_rule->getName(), 1);
+		}
 	}
-	SetAssignedScientist();
+	setAssignedScientist();
 	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)&ResearchInfoState::morePress);
@@ -165,7 +171,18 @@ void ResearchInfoState::buildUi ()
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
+	if (_rule)
+	{
+		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+		_btnCancel->onKeyboardPress((ActionHandler)&ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	}
+	else
+	{
+		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_PROJECT"));
+		_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	}
+	_btnCancel->onMouseClick((ActionHandler)&ResearchInfoState::btnCancelClick);
 }
 
 /**
@@ -178,9 +195,27 @@ void ResearchInfoState::btnOkClick(Action *)
 }
 
 /**
- * update count of assigned/free scientist, and available space lab
+ * Returns to the previous screen, removing the current project from the active
+ * research list.
+ * @param action Pointer to an action.
  */
-void ResearchInfoState::SetAssignedScientist()
+void ResearchInfoState::btnCancelClick(Action *)
+{
+	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
+	if (ruleResearch->needItem() &&
+			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
+			 Options::getBool("researchedItemsWillSpent")))
+	{
+		_base->getItems()->addItem(ruleResearch->getName(), 1);
+	}
+	_base->removeResearch(_project);
+	_game->popState();
+}
+
+/**
+ * Updates count of assigned/free scientists and available lab space.
+ */
+void ResearchInfoState::setAssignedScientist()
 {
 	std::wstringstream s1;
 	s1 << _game->getLanguage()->getString("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
@@ -195,7 +230,7 @@ void ResearchInfoState::SetAssignedScientist()
 
 /**
  * Increases or decreases the scientists according the mouse-wheel used.
- * @param action a Pointer to an Action
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::handleWheel(Action *action)
 {
@@ -204,8 +239,8 @@ void ResearchInfoState::handleWheel(Action *action)
 }
 
 /**
- * Start the timeMore timer
- * @param action a Pointer to an Action
+ * Starts the timeMore timer.
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::morePress(Action *action)
 {
@@ -213,8 +248,8 @@ void ResearchInfoState::morePress(Action *action)
 }
 
 /**
- * Stop the timeMore timer
- * @param action a Pointer to an Action
+ * Stops the timeMore timer.
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::moreRelease(Action *action)
 {
@@ -226,8 +261,9 @@ void ResearchInfoState::moreRelease(Action *action)
 }
 
 /**
- * Allocate all scientists on right-click
- * @param action a Pointer to an Action
+ * Allocates scientists to the current project;
+ * one scientist on left-click, all scientists on right-click.
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::moreClick(Action *action)
 {
@@ -238,8 +274,8 @@ void ResearchInfoState::moreClick(Action *action)
 }
 
 /**
- * Start the timeLess timer
- * @param action a Pointer to an Action
+ * Starts the timeLess timer.
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::lessPress(Action *action)
 {
@@ -247,8 +283,8 @@ void ResearchInfoState::lessPress(Action *action)
 }
 
 /**
- * Stop the timeLess timer
- * @param action a Pointer to an Action
+ * Stops the timeLess timer.
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::lessRelease(Action *action)
 {
@@ -260,29 +296,30 @@ void ResearchInfoState::lessRelease(Action *action)
 }
 
 /**
- * Allocate 0 scientists on right-click
- * @param action a Pointer to an Action
+ * Removes scientists from the current project;
+ * one scientist on left-click, all scientists on right-click.
+ * @param action Pointer to an Action.
  */
 void ResearchInfoState::lessClick(Action *action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		lessByValue(std::numeric_limits<int>::max());	
+		lessByValue(std::numeric_limits<int>::max());
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		lessByValue(1);
 }
 
 /**
- * Add one scientist to the project if possible
+ * Adds one scientist to the project if possible.
  */
 void ResearchInfoState::more()
-{	
+{
 	_timerMore->setInterval(50);
 	moreByValue(1);
 }
 
 /**
- * Add given number of scientists to the project if possible
- * @param change how much we want to add
+ * Adds the given number of scientists to the project if possible.
+ * @param change Number of scientists to add.
  */
 void ResearchInfoState::moreByValue(int change)
 {
@@ -294,12 +331,12 @@ void ResearchInfoState::moreByValue(int change)
 		change = std::min(std::min(freeScientist, freeSpaceLab), change);
 		_project->setAssigned(_project->getAssigned()+change);
 		_base->setScientists(_base->getScientists()-change);
-		SetAssignedScientist();
+		setAssignedScientist();
 	}
 }
 
 /**
- * Remove one scientist from the project if possible
+ * Removes one scientist from the project if possible.
  */
 void ResearchInfoState::less()
 {
@@ -308,8 +345,8 @@ void ResearchInfoState::less()
 }
 
 /**
- * Remove the given number of scientists from the project if possible
- * @param change how much we want to subtract
+ * Removes the given number of scientists from the project if possible.
+ * @param change Number of scientists to subtract.
  */
 void ResearchInfoState::lessByValue(int change)
 {
@@ -320,12 +357,12 @@ void ResearchInfoState::lessByValue(int change)
 		change = std::min(assigned, change);
 		_project->setAssigned(assigned-change);
 		_base->setScientists(_base->getScientists()+change);
-		SetAssignedScientist();
+		setAssignedScientist();
 	}
 }
 
 /**
- * Runs state functionality every cycle(used to update the timer).
+ * Runs state functionality every cycle (used to update the timer).
  */
 void ResearchInfoState::think()
 {

@@ -31,14 +31,17 @@ namespace OpenXcom
 class LoadState : public SavedGameState
 {
 private:
-	bool _geo;
 public:
 	/// Creates the Load Game state.
 	LoadState(Game *game, bool geo);
+	/// Creates the Quick Load Game state.
+	LoadState(Game *game, bool geo, bool showMsg);
 	/// Cleans up the Load Game state.
 	~LoadState();
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action *action);
+	/// Quick load game.
+	void quickLoad(const std::wstring &filename16);
 };
 
 }

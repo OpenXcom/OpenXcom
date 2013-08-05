@@ -16,43 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef OPENXCOM_SACKSOLDIERSTATE_H
+#define OPENXCOM_SACKSOLDIERSTATE_H
 
-#include "EndBattleBState.h"
-#include "BattlescapeState.h"
+#include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-/**
- * Sets up an EndBattleBState.
- * this just queues up an "end battle" action
- */
-EndBattleBState::EndBattleBState(BattlescapeGame *parent, int liveSoldiers, BattlescapeState *battle) : BattleState(parent), _liveSoldiers(liveSoldiers), _battle(battle)
-{
-	// nothing to see here
-}
+class Base;
+class Soldier;
+class TextButton;
+class Window;
+class Text;
 
 /**
- * Deletes the EndBattleBState.
+ * Window shown when the player tries to
+ * sack a soldier.
  */
-EndBattleBState::~EndBattleBState()
+class SackSoldierState : public State
 {
+private:
+	Base *_base;
+	Soldier *_soldier;
+
+	TextButton *_btnOk, *_btnCancel;
+	Window *_window;
+	Text *_txtTitle, *_txtSoldier;
+public:
+	/// Creates the Sack Soldier state.
+	SackSoldierState(Game *game, Base *base, Soldier *soldier);
+	/// Cleans up the Sack Soldier state.
+	~SackSoldierState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
+};
+
 }
 
-void EndBattleBState::init()
-{
-}
-
-/*
- * Think!
- */
-void EndBattleBState::think()
-{
-	_battle->finishBattle(false, _liveSoldiers);
-}
-
-void EndBattleBState::cancel()
-{
-}
-
-}
+#endif

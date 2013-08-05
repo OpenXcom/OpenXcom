@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 OVERFOER
 STR_PURCHASE_RECRUIT
 KOEB/ANSÆT
+STR_SACK
+SACK
 STR_SELL_SACK_UC
 SÆLG/FYR
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 FREMGANG
 STR_NEW_PROJECT
 Nyt Projekt
+STR_CANCEL_PROJECT
+Cancel Project
 STR_NEW_RESEARCH_PROJECTS
 NYE FORSKNINGSPROJEKTER
 STR_SCIENTISTS_AVAILABLE_UC
@@ -2289,9 +2293,9 @@ STR_AGGRESSIVERETALIATION
 Aggressive retaliation
 STR_AGGRESSIVERETALIATION_DESC
 UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Alien containment limits
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Live alien containment limits will be imposed.
 STR_CANSELLLIVEALIENS
 Live alien sale
@@ -2384,12 +2388,24 @@ You can at any time send soldiers into (or removed from) psionic training. Remem
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Alien weapon self destruction
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
+STR_RESEARCHEDITEMSWILLSPENT
+Researched items will be spent
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
 STR_ARROWS
 ARROWS
 STR_FULL
 FULL
 STR_SAVE_VOXEL_VIEW
 Save First-Person Screenshot
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Time Units reserved for Kneeling
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+TU's reserved for Kneeling and Firing
+STR_RESERVE_TUS_FOR_KNEEL
+Reserve Time Units for kneeling
+STR_EXPEND_ALL_TIME_UNITS
+Expend all remaining Time Units

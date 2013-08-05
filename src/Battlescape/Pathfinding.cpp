@@ -124,13 +124,13 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	if (size >= 1)
 	{
 		int its = 0;
+		const int dir[3] = {4,2,3};
 		for (int x = 0; x <= size; x += size)
 		{
 			for (int y = 0; y <= size; y += size)
 			{
 				if (x || y)
 				{
-					int dir[3] = {4,2,3};
 					Tile *checkTile = _save->getTile(endPosition + Position(x, y, 0));
 					if ((isBlocked(destinationTile, checkTile, dir[its], unit) &&
 						isBlocked(destinationTile, checkTile, dir[its], target))||
@@ -310,6 +310,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						endPosition->z--;
 						destinationTile = _save->getTile(*endPosition + offset);
 						belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+						fellDown = true;
 					}
 			}
 			else if (_movementType == MT_FLY && belowDestination && belowDestination->getUnit() && belowDestination->getUnit() != unit)
@@ -400,6 +401,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				if (!fellDown && !triedStairs && destinationTile->getMapData(MapData::O_OBJECT))
 				{
 					cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+				}
+				// climbing up a level costs one extra
+				if (verticalOffset.z > 0)
+				{
+					cost++;
 				}
 			}
 
@@ -583,6 +589,35 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			if (unit == _unit || unit == missileTarget || unit->isOut()) return false;
 			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) return true;		// player know all visible units
 		}
+		else if (tile->hasNoFloor(0) && _movementType != MT_FLY) // this whole section is devoted to making large units not take part in any kind of falling behaviour
+		{
+			Position pos = tile->getPosition();
+			while (pos.z >= 0)
+			{
+				Tile *t = _save->getTile(pos);
+				BattleUnit *unit = t->getUnit();
+
+				if (unit != 0 && unit != _unit)
+				{
+					// don't let large units fall on other units
+					if (_unit && _unit->getArmor()->getSize() > 1)
+					{
+						return true;
+					}
+					// don't let any units fall on large units
+					if (unit != _unit && unit != missileTarget && !unit->isOut() && unit->getArmor()->getSize() > 1)
+					{
+						return true;
+					}
+				}
+				// not gonna fall any further, so we can stop checking.
+				if (!t->hasNoFloor(0))
+				{
+					break;
+				}
+				pos.z--;
+			}
+		}
 	}
 	// missiles can't pathfind through closed doors.
 	if (missileTarget != 0 && tile->getMapData(part) &&
@@ -604,7 +639,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
  * @param missileTarget Target for a missile.
  * @return true/false
  */
-bool Pathfinding::isBlocked(Tile *startTile, Tile *endTile, const int direction, BattleUnit *missileTarget)
+bool Pathfinding::isBlocked(Tile *startTile, Tile * /* endTile */, const int direction, BattleUnit *missileTarget)
 {
 
 	// check if the difference in height between start and destination is not too high
@@ -811,11 +846,12 @@ bool Pathfinding::previewPath(bool bRemove)
 		switchBack = true;
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT);
 	}
+	bool running = (SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
-		if ((SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1)
+		if (running)
 		{
 			tu *= 0.75;
 		}
@@ -1070,4 +1106,16 @@ bool Pathfinding::isPathPreviewed() const
 	return _pathPreviewed;
 }
 
+void Pathfinding::setUnit(BattleUnit* unit)
+{
+	_unit = unit;
+	if (unit != 0)
+	{
+		_movementType = unit->getArmor()->getMovementType();
+	}
+	else
+	{
+		_movementType = MT_WALK;
+	}
+};
 }

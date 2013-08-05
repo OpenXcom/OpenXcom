@@ -32,8 +32,6 @@
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/Ruleset.h"
-#include "TestState.h"
-#include "NoteState.h"
 #include "LanguageState.h"
 #include "MainMenuState.h"
 

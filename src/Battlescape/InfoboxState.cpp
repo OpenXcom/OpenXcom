@@ -70,7 +70,7 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
  */
 InfoboxState::~InfoboxState()
 {
-
+	delete _timer;
 }
 
 /**

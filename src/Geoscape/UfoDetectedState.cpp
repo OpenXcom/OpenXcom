@@ -52,6 +52,10 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	{
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
 	}
+	if (_ufo->getAltitude() == "STR_GROUND" && _ufo->getLandId() == 0)
+	{
+		_ufo->setLandId(_game->getSavedGame()->getId("STR_LANDING_SITE"));
+	}
 
 	_screen = false;
 

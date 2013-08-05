@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 TRANSFER
 STR_PURCHASE_RECRUIT
 CUMPĂRĂ/RECRUTEAZĂ
+STR_SACK
+CONCEDIAZĂ
 STR_SELL_SACK_UC
 VINDE/CONCEDIAZĂ
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 EVOLUȚIE
 STR_NEW_PROJECT
 Proiect Nou
+STR_CANCEL_PROJECT
+Anulează Proiectul
 STR_NEW_RESEARCH_PROJECTS
 NOI PROIECTE DE CERCETARE
 STR_SCIENTISTS_AVAILABLE_UC
@@ -2281,6 +2285,10 @@ STR_LIST_ITEM
 ARTICOL
 STR_DISPLAY_FILTER
 Filtru Afișaj
+STR_QUICK_SAVE
+Salvare Rapidă
+STR_QUICK_LOAD
+Încărcare Rapidă
 STR_ADVANCED
 AVANSAT
 STR_ADVANCED_OPTIONS
@@ -2289,9 +2297,9 @@ STR_AGGRESSIVERETALIATION
 Represalii agresive
 STR_AGGRESSIVERETALIATION_DESC
 OZNurile vor încerca să îți detecteze bazele întotdeauna, indiferent de parametrii misiunii lor.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limite carantină extratereștrii
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Vor fi impuse limite pentru numărul de extratereștrii vii din carantină.
 STR_CANSELLLIVEALIENS
 Vânzarea extratereștrilor vii
@@ -2373,6 +2381,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Înălțimea exploziilor
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Modifică înălțimea la care pot ajunge exploziile.{NEWLINE}(Plată: 0, Sferică: 3)
+STR_AUTOSAVE
+Mod salvare automată
+STR_AUTOSAVE_DESC
+0 - Dezactivată. 1 - Salvare și încărcare rapidă. 2 - Salvare automată numai la 00:00. Toate butoanele de salvare și încărcare sunt inactive. 3 - Asemenea precedentei, precum și la ieșirea din joc.
 STR_ALLOWPSIONICCAPTURE
 Permite captura psi
 STR_ALLOWPSIONICCAPTURE_DESC
@@ -2384,12 +2396,24 @@ Soldații pot fi trimiși (sau scoși de) la antrenament psionic în orice momen
 STR_NOT_ENOUGH_SPACE
 Insuficient Spațiu!
 STR_WEAPONSELFDESTRUCTION
-Recuperare articole tip XCom 2012
+Autodistrugerea armelor extraterestre
 STR_WEAPONSELFDESTRUCTION_DESC
 Armele cărate de extratereștrii se autodistrug dacă posesorul este omorât.
+STR_RESEARCHEDITEMSWILLSPENT
+Articolele cercetate vor fi irosite
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Articolele cercetate sunt scoase din depozite și vor fi dezasamblate. După "cercetarea" extratereștrilor vii, corpul se va întoarce în magazia bazei.
 STR_ARROWS
 SĂGEȚI
 STR_FULL
 COMPLETĂ
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Salvează Vedere la Persoana-Întâi
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Unități de Timp rezervate pentru Îngenunchere
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+UT rezervate pentru Îngenunchere și Foc
+STR_RESERVE_TUS_FOR_KNEEL
+Rezervare UT pentru Îngenunchere
+STR_EXPEND_ALL_TIME_UNITS
+Consumă toate UT rămase

@@ -69,6 +69,10 @@ void UnitFallBState::think()
 {
 	for (std::list<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
+		if ((*unit)->getStatus() == STATUS_TURNING)
+		{
+			(*unit)->abortTurn();
+		}
 		bool largeCheck = true;
 		bool falling = true;
 		int size = (*unit)->getArmor()->getSize() - 1;

@@ -39,7 +39,7 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  */
 Ufo::Ufo(RuleUfo *rules)
-  : MovingTarget(), _rules(rules), _id(0), _damage(0), _direction("STR_NORTH")
+  : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
   , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
   , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
   , _detected(false), _hyperDetected(false), _shootingAt(0)
@@ -104,6 +104,14 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 {
 	MovingTarget::load(node);
 	node["id"] >> _id;
+	if (const YAML::Node *crashId = node.FindValue("crashId"))
+	{
+		*crashId >> _crashId;
+	}
+	else if (const YAML::Node *landId = node.FindValue("landId"))
+	{
+		*landId >> _landId;
+	}
 	node["damage"] >> _damage;
 	node["altitude"] >> _altitude;
 	node["direction"] >> _direction;
@@ -173,6 +181,14 @@ void Ufo::save(YAML::Emitter &out) const
 	MovingTarget::save(out);
 	out << YAML::Key << "type" << YAML::Value << _rules->getType();
 	out << YAML::Key << "id" << YAML::Value << _id;
+	if (_crashId)
+	{
+		out << YAML::Key << "crashId" << YAML::Value << _crashId;
+	}
+	else if (_landId)
+	{
+		out << YAML::Key << "landId" << YAML::Value << _landId;
+	}
 	out << YAML::Key << "damage" << YAML::Value << _damage;
 	out << YAML::Key << "altitude" << YAML::Value << _altitude;
 	out << YAML::Key << "direction" << YAML::Value << _direction;
@@ -239,16 +255,15 @@ std::wstring Ufo::getName(Language *lang) const
 	{
 	case FLYING:
 	case DESTROYED: // Destroyed also means leaving Earth.
-		name << lang->getString("STR_UFO_");
+		name << lang->getString("STR_UFO_") << _id;
 		break;
 	case LANDED:
-		name << lang->getString("STR_LANDING_SITE_");
+		name << lang->getString("STR_LANDING_SITE_") << _landId;
 		break;
 	case CRASHED:
-		name << lang->getString("STR_CRASH_SITE_");
+		name << lang->getString("STR_CRASH_SITE_") << _crashId;
 		break;
 	}
-	name << _id;
 	return name.str();
 }
 
@@ -590,7 +605,7 @@ void Ufo::setDestination(Target *dest)
 	delete old;
 }
 
-const int Ufo::getShootingAt() const
+int Ufo::getShootingAt() const
 {
 	return _shootingAt;
 }
@@ -598,5 +613,25 @@ const int Ufo::getShootingAt() const
 void Ufo::setShootingAt(int target)
 {
 	_shootingAt = target;
+}
+/// Gets the UFO's landing site ID.
+int Ufo::getLandId() const
+{
+	return _landId;
+}
+/// Sets the UFO's landing site ID.
+void Ufo::setLandId(int id)
+{
+	_landId = id;
+}
+/// Gets the UFO's crash site ID.
+int Ufo::getCrashId() const
+{
+	return _crashId;
+}
+/// Sets the UFO's crash site ID.
+void Ufo::setCrashId(int id)
+{
+	_crashId = id;
 }
 }

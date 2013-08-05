@@ -32,7 +32,6 @@ class InteractiveSurface;
 class Text;
 class Timer;
 class DogfightState;
-class Craft;
 class Ufo;
 class TerrorSite;
 class Base;
@@ -57,7 +56,6 @@ private:
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
-	bool _gameStarted;
 	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
 public:
 	/// Creates the Geoscape state.

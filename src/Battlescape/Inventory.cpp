@@ -814,7 +814,11 @@ void Inventory::arrangeGround(bool alterOffset)
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
-					_stackLevel[x][y] += 1;
+					// only increase the stack level if the item is actually visible.
+					if ((*i)->getRules()->getInventoryWidth())
+					{
+						_stackLevel[x][y] += 1;
+					}
 					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
 				}
 				else
@@ -846,9 +850,9 @@ void Inventory::arrangeGround(bool alterOffset)
 bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning)
 {
 	bool placed = false;
-	for (int y2 = 0; y2 <= newSlot->getY() && !placed; ++y2)
+	for (int y2 = 0; y2 <= newSlot->getY() / RuleInventory::SLOT_H && !placed; ++y2)
 	{
-		for (int x2 = 0; x2 <= newSlot->getX() && !placed; ++x2)
+		for (int x2 = 0; x2 <= newSlot->getX() / RuleInventory::SLOT_W && !placed; ++x2)
 		{
 			if (!overlapItems(item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{

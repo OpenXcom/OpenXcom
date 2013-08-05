@@ -44,7 +44,7 @@ public:
 	enum UfoStatus { FLYING, LANDED, CRASHED, DESTROYED };
 private:
 	RuleUfo *_rules;
-	int _id, _damage;
+	int _id, _crashId, _landId, _damage;
 	std::string _direction, _altitude;
 	enum UfoStatus _status;
 	unsigned _secondsRemaining;
@@ -134,8 +134,18 @@ public:
 	AlienMission *getMission() const { return _mission; }
 	/// Sets the UFO's destination.
 	void setDestination(Target *dest);
-	const int getShootingAt() const;
+	/// Get which interceptor this ufo is engaging.
+	int getShootingAt() const;
+	/// Set which interceptor this ufo is engaging.
 	void setShootingAt(int target);
+	/// Gets the UFO's landing site ID.
+	int getLandId() const;
+	/// Sets the UFO's landing site ID.
+	void setLandId(int id);
+	/// Gets the UFO's crash site ID.
+	int getCrashId() const;
+	/// Sets the UFO's crash site ID.
+	void setCrashId(int id);
 
 };
 

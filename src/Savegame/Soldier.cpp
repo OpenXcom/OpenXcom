@@ -233,21 +233,17 @@ std::string Soldier::getRankString() const
 	{
 	case RANK_ROOKIE:
 		return "STR_ROOKIE";
-		break;
 	case RANK_SQUADDIE:
 		return "STR_SQUADDIE";
-		break;
 	case RANK_SERGEANT:
 		return "STR_SERGEANT";
-		break;
 	case RANK_CAPTAIN:
 		return "STR_CAPTAIN";
-		break;
 	case RANK_COLONEL:
 		return "STR_COLONEL";
-		break;
 	case RANK_COMMANDER:
 		return "STR_COMMANDER";
+	default:
 		break;
 	}
 	return "";

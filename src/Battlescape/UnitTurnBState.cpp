@@ -53,6 +53,7 @@ UnitTurnBState::~UnitTurnBState()
 void UnitTurnBState::init()
 {
 	_unit = _action.actor;
+	_action.TU = 0;
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 	else
@@ -90,7 +91,7 @@ void UnitTurnBState::think()
 {
 	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
 
-	if (_parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
+	if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
 	{
 		_unit->abortTurn();
 		_parent->popState();
@@ -104,7 +105,7 @@ void UnitTurnBState::think()
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
-		if (_parent->getPanicHandled() && _action.type == BA_NONE && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+		if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _action.type == BA_NONE && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
 		{
 			_unit->abortTurn();
 		}

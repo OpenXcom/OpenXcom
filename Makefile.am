@@ -200,6 +200,8 @@ openxcom_SOURCES = \
 	src/Basescape/ResearchState.h \
 	src/Basescape/SelectStartFacilityState.cpp \
 	src/Basescape/SelectStartFacilityState.h \
+	src/Basescape/SackSoldierState.cpp \
+	src/Basescape/SackSoldierState.h \
 	src/Basescape/SellState.cpp \
 	src/Basescape/SellState.h \
 	src/Basescape/SoldierArmorState.cpp \
@@ -248,8 +250,6 @@ openxcom_SOURCES = \
 	src/Battlescape/CannotReequipState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
-	src/Battlescape/EndBattleBState.cpp \
-	src/Battlescape/EndBattleBState.h \
 	src/Battlescape/ExplosionBState.cpp \
 	src/Battlescape/ExplosionBState.h \
 	src/Battlescape/Explosion.cpp \
@@ -631,6 +631,7 @@ openxcom_SOURCES = \
 	src/Savegame/SavedGame.cpp \
 	src/Savegame/SavedGame.h \
 	src/Savegame/SerializationHelper.h \
+	src/Savegame/SerializationHelper.cpp \
 	src/Savegame/Soldier.cpp \
 	src/Savegame/Soldier.h \
 	src/Savegame/Target.cpp \

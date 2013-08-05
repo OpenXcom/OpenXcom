@@ -58,7 +58,7 @@ private:
 	InteractiveSurface *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
 	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats, *_btnLaunch, *_btnPsi;
 	ImageButton *_reserve;
-	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto;
+	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto, *_btnReserveKneel, *_btnZeroTUs;
 	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
 	InteractiveSurface *_btnVisibleUnit[10];
 	NumberText *_numVisibleUnit[10];
@@ -176,21 +176,32 @@ public:
 	void popup(State *state);
 	/// Finishes a battle.
 	void finishBattle(bool abort, int inExitArea);
-	/// show launch button
+	/// show launch button.
 	void showLaunchButton(bool show);
-	/// show PSI button
+	/// show PSI button.
 	void showPsiButton(bool show);
-	/// Clears mouse-scrolling state
+	/// Clears mouse-scrolling state.
 	void clearMouseScrollingState();
 	/// returns a pointer to the battlegame, in case we need it's functions.
 	BattlescapeGame *getBattleGame();
+	/// saves an map as used by the AI.
 	void SaveAIMap();
+	/// save each layer of voxels on the bettlescape as a png
 	void SaveVoxelMap();
+	/// save a first-person voxel view of the battlescape.
 	void SaveVoxelView();
+	/// handler for the mouse moving over the icons, disables the tile selection cube.
 	void mouseInIcons(Action *action);
+	/// handler for the mouse going out of the icons, enabling the tile selection cube.
 	void mouseOutIcons(Action *action);
+	/// check if the mouse is over the icons.
 	bool getMouseOverIcons() const;
+	/// is the player allowed to press buttons?
 	bool allowButtons() const;
+	/// Handler for clicking the reserve TUs to kneel button.
+	void btnReserveKneelClick(Action *action);
+	/// Handler for clicking the expend all TUs button.
+	void btnZeroTUsClick(Action *action);
 };
 
 }

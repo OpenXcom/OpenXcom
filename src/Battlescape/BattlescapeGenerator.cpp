@@ -42,7 +42,6 @@
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MCDPatch.h"
 #include "../Ruleset/Armor.h"
@@ -207,7 +206,7 @@ void BattlescapeGenerator::nextStage()
 			if (!(*j)->isOut())
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
-				(*j)->setTurnsExposed(0);
+				(*j)->setTurnsExposed(255);
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
 				{
 					_save->setSelectedUnit(*j);
@@ -234,7 +233,6 @@ void BattlescapeGenerator::nextStage()
 			}
 		}
 	}
-	_save->getExposedUnits()->clear();
 	
 	// remove all items not belonging to our soldiers from the map.
 	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
@@ -641,9 +639,8 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
 	}
 
-	if (node)
+	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
-		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());

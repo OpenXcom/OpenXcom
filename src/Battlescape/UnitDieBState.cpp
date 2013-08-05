@@ -23,7 +23,6 @@
 #include "BattlescapeState.h"
 #include "Map.h"
 #include "Camera.h"
-#include "EndBattleBState.h"
 #include "../Engine/Game.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -137,8 +136,7 @@ void UnitDieBState::think()
 		_parent->getMap()->setUnitDying(false);
 		if (_unit->getTurnsExposed())
 		{
-			_unit->setTurnsExposed(0);
-			_parent->getSave()->updateExposedUnits();
+			_unit->setTurnsExposed(255);
 		}
 		if (!_unit->getSpawnUnit().empty())
 		{
@@ -189,7 +187,7 @@ void UnitDieBState::think()
 
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
-				_parent->statePushBack(new EndBattleBState(_parent, liveSoldiers, _parent->getSave()->getBattleState()));
+				_parent->statePushBack(0);
 			}
 		}
 	}
@@ -211,8 +209,9 @@ void UnitDieBState::convertUnitToCorpse()
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 	// in case the unit was unconscious
 	_parent->getSave()->removeUnconsciousBodyItem(_unit);
-
+	Position lastPosition = _unit->getPosition();
 	int size = _unit->getArmor()->getSize() - 1;
+	BattleItem *itemToKeep = 0;
 	bool dropItems = !Options::getBool("weaponSelfDestruction") || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
 	// move inventory from unit to the ground for non-large units
 	if (size == 0 && dropItems)
@@ -220,9 +219,22 @@ void UnitDieBState::convertUnitToCorpse()
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
+			if (!(*i)->getRules()->isFixed())
+			{
+				(*i)->setOwner(0);
+			}
+			else
+			{
+				itemToKeep = *i;
+			}
 		}
 	}
 	_unit->getInventory()->clear();
+
+	if (itemToKeep != 0)
+	{
+		_unit->getInventory()->push_back(itemToKeep);
+	}
 
 	// remove unit-tile link
 	_unit->setTile(0);
@@ -232,11 +244,10 @@ void UnitDieBState::convertUnitToCorpse()
 		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
-		_parent->getSave()->getTile(_unit->getPosition())->setUnit(0);
+		_parent->getSave()->getTile(lastPosition)->setUnit(0);
 	}
 	else
 	{
-		Position p = _unit->getPosition();
 		int i = 1;
 		for (int y = 0; y <= size; y++)
 		{
@@ -245,11 +256,9 @@ void UnitDieBState::convertUnitToCorpse()
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
-				corpse->setUnit(_unit); // no need for this, because large units never can be revived as they don't go unconscious
-										// yes there freaking is because yes they freaking do, nerf their consciousness elswhere, 
-										// because we need to recover live reapers and i need this kept track of for corpse recovery. also i hate reapers.
-				_parent->dropItem(p + Position(x,y,0), corpse, true);
-				_parent->getSave()->getTile(p + Position(x,y,0))->setUnit(0);
+				corpse->setUnit(_unit);
+				_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
 				i++;
 			}
 		}

@@ -68,7 +68,6 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Options.h"
 #include "WarningMessage.h"
 #include "BattlescapeOptionsState.h"
 #include "DebriefingState.h"
@@ -82,6 +81,8 @@
 #include "../lodepng.h"
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Menu/SaveState.h"
+#include "../Menu/LoadState.h"
 
 namespace OpenXcom
 {
@@ -129,6 +130,10 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveSnap = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
 	_btnReserveAimed = new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 45);
 	_btnReserveAuto = new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
+	// TODO: the following two are set for TFTD, but are unavailable except via hotkey
+	// until the battleScape UI layout is defined in the UI
+	_btnReserveKneel = new ImageButton(10, 21, _icons->getX() + 43, _icons->getY() + 34);
+	_btnZeroTUs = new ImageButton(10, 21, _icons->getX() + 97, _icons->getY() + 34);
 	_btnLeftHandItem = new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 5);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
@@ -222,6 +227,8 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_btnReserveSnap);
 	add(_btnReserveAimed);
 	add(_btnReserveAuto);
+	add(_btnReserveKneel);
+	add(_btnZeroTUs);
 	add(_btnLeftHandItem);
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
@@ -305,6 +312,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnReserveAimed->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAimed"));
 	_btnReserveAuto->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveAuto->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveAuto"));
+	_btnReserveKneel->onMouseClick((ActionHandler)&BattlescapeState::btnReserveKneelClick);
+	_btnZeroTUs->onMouseClick((ActionHandler)&BattlescapeState::btnZeroTUsClick);
+	// todo: make these visible based on ruleset and assign them to their own button
+	_btnReserveKneel->setVisible(false);
+	_btnZeroTUs->setVisible(false);
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveKneelClick, (SDLKey)Options::getInt("keyBattleReserveKneel"));
+	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnZeroTUsClick, (SDLKey)Options::getInt("keyBattleZeroTUs"));
 	// shortcuts without a specific button
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
@@ -912,7 +926,7 @@ void BattlescapeState::btnLaunchClick(Action *action)
  */
 void BattlescapeState::btnPsiClick(Action *action)
 {
-	_battleGame->psiAction();
+	_battleGame->psiButtonAction();
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
 
@@ -1248,6 +1262,17 @@ inline void BattlescapeState::handle(Action *action)
 					SaveAIMap();
 				}
 			}
+			// quick save and quick load
+			// not works in debug mode to prevent conflict in hotkeys by default
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			{
+				_game->pushState(new SaveState(_game, false, true));
+			}
+			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			{
+				_game->pushState(new LoadState(_game, false, true));
+			}
+
 			// voxel view dump
 			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
 			{
@@ -1290,7 +1315,7 @@ void BattlescapeState::SaveAIMap()
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
 			
-			if (_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->totalExposure > expMax) expMax = t->totalExposure;
+			_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit);
 		}
 	}
 	
@@ -1312,8 +1337,7 @@ void BattlescapeState::SaveAIMap()
 
 			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255 && _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->soldiersVisible != Tile::NOT_CALCULATED)
 			{
-				int e = (t->totalExposure * 255) / expMax;
-				SDL_FillRect(img, &r, SDL_MapRGB(img->format, e, 255-e, 0x20));
+				SDL_FillRect(img, &r, SDL_MapRGB(img->format, 255, 0, 0x20));
 				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
 			} else
 			{
@@ -1394,7 +1418,6 @@ void BattlescapeState::SaveVoxelView()
 
 	BattleUnit * bu = _save->getSelectedUnit();
 	if (bu==0) return; //no unit selected
-	Position viewPos = _save->getSelectedUnit()->getPosition();
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
@@ -1687,11 +1710,11 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 	return _battleGame;
 }
 
-void BattlescapeState::mouseInIcons(Action *action)
+void BattlescapeState::mouseInIcons(Action * /* action */)
 {
 	_mouseOverIcons = true;
 }
-void BattlescapeState::mouseOutIcons(Action *action)
+void BattlescapeState::mouseOutIcons(Action * /* action */)
 {
 	_mouseOverIcons = false;
 }
@@ -1702,5 +1725,44 @@ bool BattlescapeState::getMouseOverIcons() const
 bool BattlescapeState::allowButtons() const
 {
 	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
+}
+
+/**
+ * Reserve time units for kneeling.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnReserveKneelClick(Action *action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
+		_btnKneel->invert(0);
+	}
+}
+
+/**
+ * Remove all time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnZeroTUsClick(Action *action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+		Action a = Action(&ev, 0.0, 0.0);
+		action->getSender()->mousePress(&a, this);
+		if (_battleGame->getSave()->getSelectedUnit())
+		{
+			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
+			updateSoldierInfo();
+		}
+	}
 }
 }

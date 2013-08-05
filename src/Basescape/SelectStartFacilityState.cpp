@@ -42,11 +42,11 @@ namespace OpenXcom
  * @param globe Pointer to the globe to refresh.
  * @param facilities List of facilities.
  */
-	SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> facilities) : BuildFacilitiesState(game, base, state, false), _globe(globe)
+SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe, std::vector<RuleBaseFacility*> facilities) : BuildFacilitiesState(game, base, state, false), _globe(globe)
 {
 	_facilities = facilities;
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
-	PopulateBuildList();
+	populateBuildList();
 }
 
 /**
@@ -58,9 +58,9 @@ SelectStartFacilityState::~SelectStartFacilityState()
 }
 
 /**
- * Populates the build list from the current "available" facilities
+ * Populates the build list from the current "available" facilities.
  */
-void SelectStartFacilityState::PopulateBuildList()
+void SelectStartFacilityState::populateBuildList()
 {
 	_lstFacilities->clearList();
 	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
@@ -79,10 +79,10 @@ void SelectStartFacilityState::lstFacilitiesClick(Action *)
 }
 
 /**
- * Callback from PlaceStartFacilityState
- * Removes placed facility from list
+ * Callback from PlaceStartFacilityState.
+ * Removes placed facility from the list.
  */
-void SelectStartFacilityState::FacilityBuilt()
+void SelectStartFacilityState::facilityBuilt()
 {
 	_facilities.erase(_facilities.begin() + _lstFacilities->getSelectedRow());
 	if( _facilities.size() == 0 )
@@ -90,7 +90,7 @@ void SelectStartFacilityState::FacilityBuilt()
 		_game->popState();
 		_game->popState(); // return to geoscape, force timer to start.
 	} else {
-		PopulateBuildList();
+		populateBuildList();
 	}
 }
 

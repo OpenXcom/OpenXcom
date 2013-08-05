@@ -149,6 +149,8 @@ STR_TRANSFER_UC
 TRANSFER
 STR_PURCHASE_RECRUIT
 KUPNO/ZATRUDNIANIE
+STR_SACK
+ZWOLNIJ
 STR_SELL_SACK_UC
 SPRZEDAŻ/ZWALNIANIE
 STR_GEOSCAPE_UC
@@ -189,6 +191,8 @@ STR_PROGRESS
 POSTĘP
 STR_NEW_PROJECT
 Nowy projekt
+STR_CANCEL_PROJECT
+Anuluj Projekt
 STR_NEW_RESEARCH_PROJECTS
 NOWE PROJEKTY
 STR_SCIENTISTS_AVAILABLE_UC
@@ -2287,6 +2291,10 @@ STR_LIST_ITEM
 PRZEDMIOT
 STR_DISPLAY_FILTER
 Filtr wyświetlania
+STR_QUICK_SAVE
+Szybki zapis
+STR_QUICK_LOAD
+Szybkie wczytanie
 STR_ADVANCED
 Zaawansowane
 STR_ADVANCED_OPTIONS
@@ -2295,9 +2303,9 @@ STR_AGGRESSIVERETALIATION
 Agresywne akcje odwetowe
 STR_AGGRESSIVERETALIATION_DESC
 UFO zawsze będzie próbowało wykryć Twoje bazy, bez względu na cel swojej misji.
-STR_ALIENCONTAINMENTHASUPPERLIMIT
+STR_ALIENCONTAINMENTLIMITENFORCED
 Limity cel dla obcych
-STR_ALIENCONTAINMENTHASUPPERLIMIT_DESC
+STR_ALIENCONTAINMENTLIMITENFORCED_DESC
 Limit ilości miejsca w celach dla żywych obcych.
 STR_CANSELLLIVEALIENS
 Sprzedaż żywych obcych
@@ -2379,6 +2387,10 @@ STR_BATTLEEXPLOSIONHEIGHT
 Rozmiar eksplozji
 STR_BATTLEEXPLOSIONHEIGHT_DESC
 Ustal w jakim rozsądnym stopniu mają rozprzestrzeniać się eksplozje. (Płasko: 0, Kuliście: 3)
+STR_AUTOSAVE
+Tryb automatycznego zapisu
+STR_AUTOSAVE_DESC
+0 - Wyłączony. 1 - Szybki zapis i wczytanie. 2 - Automatyczny zapis jedynie o 00:00. Wszystkie przyciski zapisu i wczytania są wyłączone. 3 - Taki jak poprzednio, wraz z automatycznym zapisem przy wyjściu z gry.
 STR_ALLOWPSIONICCAPTURE
 Przechwycenie psioniczne
 STR_ALLOWPSIONICCAPTURE_DESC
@@ -2390,12 +2402,24 @@ Możesz w każdej chwili wysłać żołnierzy na szkolenie psioniczne (lub też 
 STR_NOT_ENOUGH_SPACE
 Niewystarczająca ilość miejsca!
 STR_WEAPONSELFDESTRUCTION
-Odzyskiwanie wyposażenia jak w XCom 2012
+Samozniszczenie broni obcych
 STR_WEAPONSELFDESTRUCTION_DESC
 Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
+STR_RESEARCHEDITEMSWILLSPENT
+Badane przedmioty zostają zużyte
+STR_RESEARCHEDITEMSWILLSPENT_DESC
+Badane przedmioty są pobierane z magazynów i zostaną utracone. Po "zbadaniu" żywego obcego, jego martwe ciało wysyłane jest do magazynów bazy.
 STR_ARROWS
 STRZAŁKI
 STR_FULL
 WSZYSTKO
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Zrzut ekranu, widok pierwszoosobowy
+STR_TIME_UNITS_RESERVED_FOR_KNEELING
+Zarezerwowano PR na przyklęknięcie
+STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
+Zarezerwowano PR na przyklęknięcie i ostrzał
+STR_RESERVE_TUS_FOR_KNEEL
+Rezerwuj PR na przyklęknięcie
+STR_EXPEND_ALL_TIME_UNITS
+Wykorzystaj wszystkie posiadane PR

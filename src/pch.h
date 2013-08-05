@@ -209,6 +209,7 @@
 #include "./Basescape/DismantleFacilityState.h"
 #include "./Basescape/SoldierArmorState.h"
 #include "./Basescape/ManufactureStartState.h"
+#include "./Basescape/SackSoldierState.h"
 #include "./Basescape/SellState.h"
 #include "./Basescape/CraftArmorState.h"
 #include "./Basescape/CraftWeaponsState.h"

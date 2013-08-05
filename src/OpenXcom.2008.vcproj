@@ -943,6 +943,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Basescape\SackSoldierState.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Basescape\SackSoldierState.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Basescape\SellState.cpp"
 				>
 			</File>
@@ -1136,14 +1144,6 @@
 			</File>
 			<File
 				RelativePath=".\Battlescape\DebriefingState.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\EndBattleBState.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Battlescape\EndBattleBState.h"
 				>
 			</File>
 			<File
@@ -2128,6 +2128,14 @@
 			</File>
 			<File
 				RelativePath=".\Savegame\SavedGame.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SerializationHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Savegame\SerializationHelper.h"
 				>
 			</File>
 			<File

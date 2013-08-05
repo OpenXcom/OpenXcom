@@ -17,10 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "MCDPatch.h"
-#include "Ruleset.h"
 #include "MapDataSet.h"
 #include "MapData.h"
-#include <sstream>
 
 namespace OpenXcom
 {
@@ -101,7 +99,7 @@ void MCDPatch::load(const YAML::Node &node)
  * Saves the MCD Patch to a YAML file.
  * @param out YAML emitter.
  */
-void MCDPatch::save(YAML::Emitter &out) const
+void MCDPatch::save(YAML::Emitter & /* out */) const
 {
 }
 

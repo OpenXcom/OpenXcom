@@ -34,7 +34,7 @@ class Timer;
 class InteractiveSurface;
 
 /**
- * Screen which allow to change Production settings(assigned engineer, units to build).
+ * Screen that allows changing of Production settings (assigned engineer, units to build).
 */
 class ManufactureInfoState : public State
 {
@@ -49,66 +49,66 @@ private:
 	Timer * _timerMoreEngineer, * _timerMoreUnit, * _timerLessEngineer, * _timerLessUnit;
 	InteractiveSurface *_surface1, *_surface2;
 	int _changeValueByMouseWheel;
-	/// Handler for the Stop button
+	/// Handler for the Stop button.
 	void btnStopClick (Action * action);
-	/// Handler for the OK button
+	/// Handler for the OK button.
 	void btnOkClick (Action * action);
-	/// Add given number of engineers to the project if possible
+	/// Adds given number of engineers to the project if possible.
 	void moreEngineer(int change);
-	/// Handler for pressing the more engineer button
+	/// Handler for pressing the more engineer button.
 	void moreEngineerPress(Action * action);
-	/// Handler for releasing the more engineer button
+	/// Handler for releasing the more engineer button.
 	void moreEngineerRelease(Action * action);
-	/// Handler for clicking the more engineer button
+	/// Handler for clicking the more engineer button.
 	void moreEngineerClick(Action * action);
-	/// Add given number of units to produce to the project if possible
+	/// Adds given number of units to produce to the project if possible.
 	void moreUnit(int change);
-	/// Handler for pressing the more unit button
+	/// Handler for pressing the more unit button.
 	void moreUnitPress(Action * action);
-	/// Handler for releasing the more unit button
+	/// Handler for releasing the more unit button.
 	void moreUnitRelease(Action * action);
-	/// Handler for clicking the more unit button
+	/// Handler for clicking the more unit button.
 	void moreUnitClick(Action * action);
-	/// Remove the given number of engineers from the project if possible
+	/// Removes the given number of engineers from the project if possible.
 	void lessEngineer(int change);
-	/// Handler for pressing the less engineer button
+	/// Handler for pressing the less engineer button.
 	void lessEngineerPress(Action * action);
-	/// Handler for releasing the less engineer button
+	/// Handler for releasing the less engineer button.
 	void lessEngineerRelease(Action * action);
-	/// Handler for clicking the less engineer button
+	/// Handler for clicking the less engineer button.
 	void lessEngineerClick(Action * action);
-	/// Remove the given number of units to produce from the project if possible
+	/// Removes the given number of units to produce from the project if possible.
 	void lessUnit(int change);
-	/// Handler for pressing the less unit button
+	/// Handler for pressing the less unit button.
 	void lessUnitPress(Action * action);
-	/// Handler for releasing the less unit button
+	/// Handler for releasing the less unit button.
 	void lessUnitRelease(Action * action);
-	/// Handler for clicking the less unit button
+	/// Handler for clicking the less unit button.
 	void lessUnitClick(Action * action);
-	/// Add one engineer to production (if possible)
+	/// Adds one engineer to the production (if possible).
 	void onMoreEngineer();
-	/// Remove one engineer to production (if possible)
+	/// Removes one engineer from the production (if possible).
 	void onLessEngineer();
 	/// Handler for using the mouse wheel on the Engineer-part of the screen.
 	void handleWheelEngineer(Action *action);
-	/// Increase count of number of unit to do
+	/// Increases count of number of units to make.
 	void onMoreUnit();
-	/// Decrease count of number of unit to do(if possible)
+	/// Decreases count of number of units to make (if possible).
 	void onLessUnit();
 	/// Handler for using the mouse wheel on the Unit-part of the screen.
 	void handleWheelUnit(Action *action);
-	/// Update display of assigned/available engineer, workshop space
+	/// Updates display of assigned/available engineers and workshop space.
 	void setAssignedEngineer();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Build the User Interface
+	/// Builds the User Interface.
 	void buildUi();
-	/// Helper to exit the State
+	/// Helper to exit the State.
 	void exitState();
 public:
-	/// Create the State(new production)
+	/// Creates the State (new production).
 	ManufactureInfoState (Game * game, Base * base, RuleManufacture * _item);
-	/// Create the State(modify production)
+	/// Creates the State (modify production).
 	ManufactureInfoState (Game * game, Base * base, Production * production);
 };
 }

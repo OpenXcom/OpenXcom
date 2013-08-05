@@ -132,8 +132,8 @@ void MiniMapView::draw()
 		}
 	}
 	this->unlock();
-	int centerX = getWidth() / 2;
-	int centerY = getHeight() / 2;
+	int centerX = getWidth() / 2 - 1;
+	int centerY = getHeight() / 2 - 1;
 	Uint8 color = 1 + _frame * 3;
 	int xOffset = CELL_WIDTH / 2;
 	int yOffset = CELL_HEIGHT / 2;
@@ -149,6 +149,8 @@ void MiniMapView::draw()
 	drawLine(centerX + CELL_WIDTH, centerY + CELL_HEIGHT,
 		 centerX + xOffset, centerY + yOffset,
 		 color); //bottom right
+		 
+		 
 }
 
 /**

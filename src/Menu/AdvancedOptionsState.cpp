@@ -22,14 +22,12 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Engine/Options.h"
-#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Action.h"
 #include <algorithm>
 
@@ -92,7 +90,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_lstOptions->setColor(Palette::blockOffset(8)+5);
 
 	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
-	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentHasUpperLimit", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentLimitEnforced", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canSellLiveAliens", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowAutoSellProduction", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowBuildingQueue", false));
@@ -111,6 +109,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("weaponSelfDestruction", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("researchedItemsWillSpent", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
@@ -129,7 +128,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	
 	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
-
+	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
 
 	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
@@ -257,6 +256,13 @@ void AdvancedOptionsState::lstOptionsClick(Action *)
 			{
 				increment = -3;
 			}
+			_settingIntSet.at(intSel).second += increment;
+			ss << _settingIntSet.at(intSel).second;
+			break;
+		case 2: // autosave
+			_settingIntSet.at(intSel).second = ++_settingIntSet.at(intSel).second % 4;
+			ss << _settingIntSet.at(intSel).second;
+			break;
 		default:
 			_settingIntSet.at(intSel).second += increment;
 			ss << _settingIntSet.at(intSel).second;

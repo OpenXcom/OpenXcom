@@ -43,7 +43,7 @@ std::vector<std::string> _dataList;
 std::string _userFolder = "";
 std::string _configFolder = "";
 std::vector<std::string> _userList;
-std::map<std::string, std::string> _options;
+std::map<std::string, std::string> _options, _commandLineOptions;
 std::vector<std::string> _rulesets;
 std::vector<std::string> _purchaseexclusions;
 
@@ -72,6 +72,7 @@ void createDefault()
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setBool("weaponSelfDestruction", false);
+	setBool("researchedItemsWillSpent", false);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
@@ -105,11 +106,12 @@ void createDefault()
 	setBool("globeSeasons", false);
 	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
+	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
 	setInt("audioSampleRate", 22050);
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
-	setBool("alienContainmentHasUpperLimit", false);
+	setBool("alienContainmentLimitEnforced", false);
 	setBool("canSellLiveAliens", false);
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);
@@ -127,6 +129,7 @@ void createDefault()
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
+	setBool("captureMouse", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -204,6 +207,8 @@ void createDefault()
 	setInt("keyGeoFunding", SDLK_f);
 	setInt("keyGeoToggleDetail", SDLK_TAB);
 	setInt("keyGeoToggleRadar", SDLK_r);
+	setInt("keyQuickSave", SDLK_F6);
+	setInt("keyQuickLoad", SDLK_F9);
 	setInt("keyBattleLeft", SDLK_LEFT);
 	setInt("keyBattleRight", SDLK_RIGHT);
 	setInt("keyBattleUp", SDLK_UP);
@@ -221,6 +226,7 @@ void createDefault()
 	setInt("keyBattleAbort", SDLK_a);
 	setInt("keyBattleStats", SDLK_s);
 	setInt("keyBattleKneel", SDLK_k);
+	setInt("keyBattleReserveKneel", SDLK_j);
 	setInt("keyBattleReload", SDLK_r);
 	setInt("keyBattlePersonalLighting", SDLK_l);
 	setInt("keyBattleReserveNone", SDLK_F1);
@@ -238,6 +244,9 @@ void createDefault()
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
 	setInt("keyBattleVoxelView", SDLK_F10);
+
+	setInt("keyBattleZeroTUs", SDLK_DELETE);
+
 #ifdef __MORPHOS__
 	setInt("FPS", 15);
 #endif
@@ -267,12 +276,7 @@ void loadArgs(int argc, char** args)
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argc > i + 1)
 			{
-				std::map<std::string, std::string>::iterator it = _options.find(argname);
-				if (it != _options.end())
-				{
-					it->second = args[i+1];
-				}
-				else if (argname == "data")
+				if (argname == "data")
 				{
 					_dataFolder = CrossPlatform::endPath(args[i+1]);
 				}
@@ -282,7 +286,24 @@ void loadArgs(int argc, char** args)
 				}
 				else
 				{
-					Log(LOG_WARNING) << "Unknown option: " << argname;
+					// case insensitive lookup of the argument
+					bool found = false;
+					for(std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
+					{
+ 						std::string option = it->first;
+						std::transform(option.begin(), option.end(), option.begin(), ::tolower);
+						if (option == argname)
+						{
+							//save this command line option for now, we will apply it later
+							_commandLineOptions[it->first]= args[i+1];
+							found = true;
+							break;
+						}
+					}
+					if(!found)
+					{
+						Log(LOG_WARNING) << "Unknown option: " << argname;
+					}
 				}
 			}
 			else
@@ -290,10 +311,6 @@ void loadArgs(int argc, char** args)
 				Log(LOG_WARNING) << "Unknown option: " << argname;
 			}
 		}
-	}
-	if (_userFolder != "")
-	{
-		load();
 	}
 }
 
@@ -350,18 +367,52 @@ bool init(int argc, char** args)
 		return false;
 	createDefault();
 	loadArgs(argc, args);
-	if (_dataFolder == "")
+	setFolders();
+	updateOptions();
+
+	std::string s = getUserFolder();
+	s += "openxcom.log";
+	Logger::logFile() = s;
+	FILE *file = fopen(Logger::logFile().c_str(), "w");
+	if(!file)
 	{
-		_dataList = CrossPlatform::findDataFolders();
-		// Missing data folder is handled in StartState
+		std::stringstream error;
+		error << "Error: invalid User Folder " << _userFolder << std::endl;
+		std::cout << error.str();
+		return false;
 	}
-	if (_userFolder == "")
+	fflush(file);
+	fclose(file);
+	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
+	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{
-		std::vector<std::string> user = CrossPlatform::findUserFolders();
-		_configFolder = CrossPlatform::findConfigFolder();
+		Log(LOG_INFO) << *i;
+	}
+	Log(LOG_INFO) << "User folder is: " << _userFolder;
+	Log(LOG_INFO) << "Config folder is: " << _configFolder;
+	Log(LOG_INFO) << "Options loaded successfully.";
+	return true;
+}
+
+/**
+ * Sets up the game's Data folder where the data files
+ * are loaded from and the User folder and Config
+ * folder where settings and saves are stored in.
+ */
+void setFolders()
+{
+    if (_dataFolder == "")
+    {
+        _dataList = CrossPlatform::findDataFolders();
+        // Missing data folder is handled in StartState
+    }
+    if (_userFolder == "")
+    {
+        std::vector<std::string> user = CrossPlatform::findUserFolders();
+        _configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-		for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
@@ -382,45 +433,44 @@ bool init(int argc, char** args)
 				}
 			}
 		}
-		if (_configFolder == "")
-		{
-			_configFolder = _userFolder;
-		}
+	}
 
-		// Load existing options
-		if (CrossPlatform::folderExists(_configFolder))
-		{
-			try
-			{
-				load();
-			}
-			catch (YAML::Exception &e)
-			{
-				Log(LOG_ERROR) << e.what();
-			}
-		}
-		// Create config folder and save options
-		else
-		{
-			CrossPlatform::createFolder(_configFolder);
-			save();
-		}
-	}
-	std::string s = getUserFolder();
-	s += "openxcom.log";
-	Logger::logFile() = s;
-	FILE *file = fopen(Logger::logFile().c_str(), "w");
-    fflush(file);
-	fclose(file);
-	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
-	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
+	if (_configFolder == "")
 	{
-		Log(LOG_INFO) << *i;
+		_configFolder = _userFolder;
 	}
-	Log(LOG_INFO) << "User folder is: " << _userFolder;
-	Log(LOG_INFO) << "Config folder is: " << _configFolder;
-	Log(LOG_INFO) << "Options loaded successfully.";
-	return true;
+}
+
+/**
+ * Updates the game's options with those in the configuation
+ * file, if it exists yet, and any supplied on the command line.
+ */
+void updateOptions()
+{
+	// Load existing options
+	if (CrossPlatform::folderExists(_configFolder))
+	{
+		try
+		{
+			load();
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+		}
+	}
+	// Create config folder and save options
+	else
+	{
+		CrossPlatform::createFolder(_configFolder);
+		save();
+	}
+
+    // now apply options set on the command line, overriding defaults and those loaded from config file
+    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+    {
+        _options[it->first] = it->second;
+    }
 }
 
 /**

@@ -125,7 +125,7 @@ BaseFacility *BaseView::getSelectedFacility() const
 }
 
 /**
- * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base
+ * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base.
  */
 void BaseView::resetSelectedFacility()
 {
@@ -283,6 +283,8 @@ void BaseView::reCalcQueuedBuildings()
 
 /**
  * Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
+ * @param facility Pointer to a base facility.
+ * @param neighbor Pointer to a neighboring base facility.
  */
 void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor)
 {
@@ -512,16 +514,28 @@ void BaseView::draw()
 		}
 
 		// Draw crafts
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0 && craft != _base->getCrafts()->end())
+		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getCrafts() > 0)
 		{
-			if ((*craft)->getStatus() != "STR_OUT")
+			if (craft != _base->getCrafts()->end())
 			{
-				Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
-				frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
-				frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
-				frame->blit(this);
+				if ((*craft)->getStatus() != "STR_OUT")
+				{
+					Surface *frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
+					frame->setX((*i)->getX() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
+					frame->setY((*i)->getY() * GRID_SIZE + ((*i)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
+					frame->blit(this);
+					(*i)->setCraft(*craft);
+				}
+				else
+				{
+					(*i)->setCraft(0);
+				}
+				++craft;
 			}
-			++craft;
+			else
+			{
+				(*i)->setCraft(0);
+			}
 		}
 
 		// Draw time remaining
