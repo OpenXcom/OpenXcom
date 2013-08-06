@@ -375,7 +375,8 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 
 		BattleUnit* shooterUnit = _save->getTile(Position(origin.x/16, origin.y/16, origin.z/24))->getUnit();
 		BattleUnit* targetUnit = targetTile? targetTile->getUnit() : 0;
-		if (shooterUnit && shooterUnit->getFaction() == FACTION_PLAYER)	// Enemy units can see in the dark.
+		// Taken into account shades on the target. Enemy units can see in the dark.
+		if (shooterUnit && shooterUnit->getFaction() == FACTION_PLAYER)
 		{
 			if (targetTile)
 				effectiveAccuracy -= 0.01 * targetTile->getShade();		// Shade can be from 0 to 15

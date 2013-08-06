@@ -121,6 +121,7 @@ void createDefault()
 	setBool("battleNotifyDeath", false);
 	setBool("allowBuildingQueue", false);
 	setBool("allowAutoSellProduction", false);
+	setBool("showChanceToHit", false);
 	setBool("showFundsOnGeoscape", false);
 	setBool("showMoreStatsInInventoryView", false);
 	setBool("allowResize", false);

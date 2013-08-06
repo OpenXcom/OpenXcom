@@ -93,7 +93,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
-	_showChanceToHit = true;
+	_showChanceToHit = Options::getBool("showChanceToHit");
 	_numChanceToHit = new NumberText(15, 15, 20, 30);
 	_numChanceToHit->setPalette(getPalette());
 	_numChanceToHit->setColor(Palette::blockOffset(1));
@@ -648,13 +648,14 @@ void Map::drawTerrain(Surface *surface)
 								if (unit && (unit->getVisible() || _save->getDebugMode()))
 								{
 									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+
 									if (_showChanceToHit)
 									{
 										BattleAction *action = _save->getBattleState()->getBattleGame()->getCurrentAction();
 										if ((*action).type != BA_LAUNCH)
 										{
 											(*action).target = tile->getPosition();
-											Projectile projectile = Projectile(_res, _save, *action, (*action).actor->getPosition());
+											Projectile projectile = Projectile(_res, _save, *action, (*action).actor->getPosition());	// stack
 											int chance = projectile.calculateTrajectory((*action).actor->getFiringAccuracy((*action).type, (*action).weapon), true);
 
 											if (chance > 0)
