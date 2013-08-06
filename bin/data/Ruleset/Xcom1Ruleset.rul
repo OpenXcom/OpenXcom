@@ -3825,7 +3825,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
-    loftemps: 4
+    loftemps: 3
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
@@ -3847,7 +3847,7 @@ armors:
       - 1.0
       - 1.0
       - 0.0
-    loftemps: 4
+    loftemps: 3
   - type: SECTOID_ARMOR0
     spriteSheet: SECTOID.PCK
     corpseItem: STR_SECTOID_CORPSE

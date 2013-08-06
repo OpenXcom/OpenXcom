@@ -2025,10 +2025,10 @@ int TileEngine::closeUfoDoors()
  * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
  * @param onlyVisible skip invisible units? used in FPS view
  * @param excludeAllBut [optional] the only unit to be considered for ray hits
- * @param doSmokeCalc [optional] if you need doing calculation of smoke density between positions
+ * @param smokeRawData [optional] if you need doing calculation of smoke density between positions
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut, bool doSmokeCalc)
+int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut, int *smokeRawData)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -2038,7 +2038,9 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 	int cx, cy, cz;
 	Position lastPoint(origin);
 	int result;
-	int smoke = 0;
+
+	if (smokeRawData)
+		*smokeRawData = 0;
 
 	//start and end points
 	x0 = origin.x;	 x1 = target.x;
@@ -2104,7 +2106,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 				{ // store the position of impact
 					trajectory->push_back(Position(cx, cy, cz));
 				}
-				return doSmokeCalc? smoke/16 : result;
+				return result;
 			}
 		}
 		else
@@ -2117,20 +2119,20 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
                 {
                     result = 0;
                 } else {
-                return doSmokeCalc? smoke/16 : result;	// We hit a big wall
+                return result;	// We hit a big wall
                 }
             }
             result += temp_res;
 			if (result > 127)
 			{
-				return doSmokeCalc? smoke/16 : result;
+				return result;
 			}
 
 			lastPoint = Position(cx, cy, cz);
 		}
-		if (doSmokeCalc)
+		if (smokeRawData)
 		{
-			smoke += _save->getTile(Position(cx/16, cy/16, cz/24))->getSmoke();
+			*smokeRawData += _save->getTile(Position(cx/16, cy/16, cz/24))->getSmoke();
 		}
 		//update progress in other planes
 		drift_xy = drift_xy - delta_y;
@@ -2155,7 +2157,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 					{ // store the position of impact
 						trajectory->push_back(Position(cx, cy, cz));
 					}
-					return doSmokeCalc? smoke/16 : result;
+					return result;
 				}
 			}
 		}
@@ -2179,13 +2181,13 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 					{ // store the position of impact
 						trajectory->push_back(Position(cx, cy, cz));
 					}
-					return doSmokeCalc? smoke/16 : result;
+					return result;
 				}
 			}
 		}
 	}
 
-	return doSmokeCalc? smoke/16 : -1;
+	return -1;
 }
 
 /**

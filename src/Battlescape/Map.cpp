@@ -658,7 +658,7 @@ void Map::drawTerrain(Surface *surface)
 											Projectile projectile = Projectile(_res, _save, *action, (*action).actor->getPosition());	// stack
 											int chance = projectile.calculateTrajectory((*action).actor->getFiringAccuracy((*action).type, (*action).weapon), true);
 
-											if (chance > 0)
+											if (chance >= 0)
 											{
 												_numChanceToHit->setValue(chance);
 												_numChanceToHit->draw();
