@@ -66,9 +66,12 @@ Projectile::~Projectile()
 
 /**
  * calculateTrajectory.
+ * @param accuracy
+ * @param doCalcChance Do only clculating probability of hitting. Default = false.
  * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(no line of fire)
+ *			or chance to hit (-1 none; 0-99 percent)
  */
-int Projectile::calculateTrajectory(double accuracy)
+int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
@@ -130,6 +133,7 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0)
 	{
+		if (doCalcChance) return -1;
 		// target nothing, targets the middle of the tile
 		targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 	}
@@ -226,8 +230,11 @@ int Projectile::calculateTrajectory(double accuracy)
 			}
 		}
 		// Calculate density of smoke
-		densitySmoke = _save->getTileEngine()->calculateLine(originVoxel, _trajectory.back(), false, 0, bu, false, false, 0, true);
+		densitySmoke = _save->getTileEngine()->calculateLine(originVoxel, _trajectory.empty()? targetVoxel : _trajectory.back(), false, 0, bu, false, false, 0, true);
 		_trajectory.clear();
+
+		if (doCalcChance)
+			return (test != 4) ? -1 : applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, densitySmoke, true);
 	}
 
 	// apply some accuracy modifiers (todo: calculate this)
@@ -350,7 +357,7 @@ bool Projectile::calculateThrow(double accuracy)
  * @param accuracy Accuracy modifier.
  * @param targetTile Tile of target. Default = 0.
  * @param densitySmoke Density of smoke between positions. Default = 0.
- * @param doCalcChance Do only calculation of chance to hit. Default = false.
+ * @param doCalcChance Do only calculation the probability of hitting. Default = false.
  * @return Chance to hit (-1 if cannot to calculate).
  */
 int Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, int densitySmoke, bool doCalcChance)
@@ -477,6 +484,8 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 
 		if (targetUnit)
 		{
+			if (accuracy >= 1.0) return 99;
+
 			int loftemps = targetUnit->getLoftemps();
 			if (loftemps > 5) loftemps = 16;
 			return (int) (100.0 * accuracy + (1.0 - accuracy) * approxF(baseDeviation * M_PI / 180.0, 0.5 * loftemps / realDistance));

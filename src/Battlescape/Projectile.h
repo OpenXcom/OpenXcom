@@ -55,7 +55,7 @@ public:
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for straight path.
-	int calculateTrajectory(double accuracy);
+	int calculateTrajectory(double accuracy, bool doCalcCance = false);
 	/// Calculates the trajectory for curved path.
 	bool calculateThrow(double accuracy);
 	/// Move the projectile one step in it's trajectory.
