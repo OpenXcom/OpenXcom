@@ -765,24 +765,19 @@ void Map::drawTerrain(Surface *surface)
 	{
 		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
+			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
 			{
-				Position voxelPos = (*i)->getPosition();
-				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
 			}
 			else if ((*i)->isHit())
 			{
-				Position voxelPos = (*i)->getPosition();
-				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 			}
 			else
 			{
-				Position voxelPos = (*i)->getPosition();
-				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 			}
