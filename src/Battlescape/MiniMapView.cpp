@@ -26,7 +26,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
-#include "../Savegame/SavedGame.h"
 #include "../Ruleset/Armor.h"
 #include <sstream>
 

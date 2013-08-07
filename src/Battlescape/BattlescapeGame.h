@@ -23,6 +23,7 @@
 #include <SDL.h>
 #include <string>
 #include <list>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -32,7 +33,6 @@ class SavedBattleGame;
 class BattleItem;
 class BattleState;
 class BattlescapeState;
-class Timer;
 class ResourcePack;
 class Map;
 class TileEngine;

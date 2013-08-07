@@ -24,8 +24,8 @@
 
 namespace OpenXcom
 {
+
 class InteractiveSurface;
-class Timer;
 class MedikitView;
 class Text;
 class BattleItem;

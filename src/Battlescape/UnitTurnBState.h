@@ -20,7 +20,7 @@
 #define OPENXCOM_UNITTURNBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
+#include <string>
 
 namespace OpenXcom
 {

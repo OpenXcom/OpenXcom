@@ -24,12 +24,10 @@
 
 namespace OpenXcom
 {
+
 class InteractiveSurface;
 class Timer;
 class ScannerView;
-class Text;
-class BattleItem;
-class BattleUnit;
 
 /**
  * The Scanner User Interface.

@@ -26,7 +26,6 @@
 namespace OpenXcom
 {
 
-class Position;
 class SavedBattleGame;
 class PathfindingNode;
 class Tile;

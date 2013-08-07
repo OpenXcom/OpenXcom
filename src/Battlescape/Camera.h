@@ -26,7 +26,6 @@ namespace OpenXcom
 
 class Action;
 class State;
-class Position;
 class Timer;
 class Map;
 
