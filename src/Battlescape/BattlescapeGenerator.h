@@ -20,7 +20,6 @@
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
 #include "../Savegame/Node.h"
-#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -30,10 +29,10 @@ class Craft;
 class Ufo;
 class RuleTerrain;
 class ResourcePack;
-class RuleSet;
-class Soldier;
+class BattleItem;
+class MapBlock;
 class Vehicle;
-class Armor;
+class Tile;
 class RuleItem;
 class Unit;
 class AlienRace;
@@ -42,6 +41,7 @@ class Game;
 class Base;
 class TerrorSite;
 class AlienBase;
+class BattleUnit;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...

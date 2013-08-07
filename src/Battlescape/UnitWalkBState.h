@@ -21,6 +21,7 @@
 
 #include <climits>
 #include "BattleState.h"
+#include "BattlescapeGame.h"
 #include "Position.h"
 
 namespace OpenXcom

@@ -20,11 +20,11 @@
 #define OPENXCOM_UNITFALLBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
 
 namespace OpenXcom
 {
 
+class BattlescapeGame;
 class TileEngine;
 
 class UnitFallBState : public BattleState

@@ -29,6 +29,7 @@ class Game;
 class Text;
 class InteractiveSurface;
 class Window;
+class Surface;
 
 /**
  * Window that allows the player

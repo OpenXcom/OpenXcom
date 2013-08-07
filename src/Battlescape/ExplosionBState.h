@@ -21,6 +21,7 @@
 
 #include "BattleState.h"
 #include "Position.h"
+#include <string>
 
 namespace OpenXcom
 {

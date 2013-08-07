@@ -24,10 +24,6 @@
 namespace OpenXcom
 {
 
-class ResourcePack;
-class BattleItem;
-class SavedBattleGame;
-
 /**
  * A class that represents an explosion animation. Map is the owner of an instance of this class during it's short life.
  * It represents both a bullet hit, as a real explosion animation.

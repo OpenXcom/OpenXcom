@@ -21,8 +21,6 @@
 
 #include "../Engine/State.h"
 #include "DebriefingState.h"
-#include <vector>
-#include <string>
 
 namespace OpenXcom
 {
@@ -30,7 +28,6 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class TextList;
 
 /**
  * Screen shown when there's not enough containment

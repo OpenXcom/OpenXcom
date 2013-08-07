@@ -22,7 +22,6 @@
 #include <vector>
 #include "Position.h"
 #include "BattlescapeGame.h"
-#include "../Savegame/Tile.h"
 
 namespace OpenXcom
 {
@@ -31,6 +30,7 @@ class ResourcePack;
 class BattleItem;
 class SavedBattleGame;
 class Surface;
+class Tile;
 
 /**
  * A class that represents a projectile. Map is the owner of an instance of this class during it's short life.

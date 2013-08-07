@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class BattleItem;
 class State;
 class Font;
 class Text;

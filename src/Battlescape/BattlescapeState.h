@@ -38,10 +38,7 @@ class NumberText;
 class BattleUnit;
 class SavedBattleGame;
 class BattleItem;
-class Window;
-class BattleState;
 class Timer;
-class ActionMenuItem;
 class WarningMessage;
 class BattlescapeGame;
 

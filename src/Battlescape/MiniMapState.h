@@ -23,6 +23,7 @@
 
 namespace OpenXcom
 {
+
 class Camera;
 class InteractiveSurface;
 class Text;

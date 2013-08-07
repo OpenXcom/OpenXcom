@@ -27,9 +27,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {

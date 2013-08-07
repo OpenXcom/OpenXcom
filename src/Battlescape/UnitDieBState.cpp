@@ -35,9 +35,7 @@
 #include "../Engine/Language.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
-#include "PatrolBAIState.h"
 #include "InfoboxOKState.h"
-#include "InfoboxState.h"
 #include "../Savegame/Node.h"
 
 namespace OpenXcom

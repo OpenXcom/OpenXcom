@@ -34,7 +34,6 @@
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Armor.h"
 #include "AggroBAIState.h"
 #include "Camera.h"
 
@@ -52,7 +51,6 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction a
 {
 	;
 }
-
 
 /**
  * Deletes the ProjectileFlyBState.

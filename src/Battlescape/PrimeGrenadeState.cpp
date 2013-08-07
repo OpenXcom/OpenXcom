@@ -31,7 +31,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 
-
 namespace OpenXcom
 {
 

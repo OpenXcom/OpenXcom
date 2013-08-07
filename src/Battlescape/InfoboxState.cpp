@@ -17,10 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "InfoboxState.h"
-#include <sstream>
+#include <string>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
