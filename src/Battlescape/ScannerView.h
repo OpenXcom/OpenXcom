@@ -27,7 +27,7 @@ class BattleUnit;
 class Text;
 
 /**
- * Display a view of units movement
+ * Displays a view of units movement.
  */
 class ScannerView : public InteractiveSurface
 {

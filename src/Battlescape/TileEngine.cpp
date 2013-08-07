@@ -56,7 +56,8 @@ const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12}
 
 /**
  * Sets up a TileEngine.
- * @param save pointer to SavedBattleGame object.
+ * @param save Pointer to SavedBattleGame object.
+ * @param voxelData List of voxel data.
  */
 TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
 {
@@ -70,9 +71,8 @@ TileEngine::~TileEngine()
 
 }
 
-
 /**
-  * Calculate sun shading for the whole terrain.
+  * Calculates sun shading for the whole terrain.
   */
 void TileEngine::calculateSunShading()
 {
@@ -86,7 +86,7 @@ void TileEngine::calculateSunShading()
 }
 
 /**
-  * Calculate sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
+  * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
   * @param tile The tile to calculate sun shading for.
   */
 void TileEngine::calculateSunShading(Tile *tile)
@@ -108,7 +108,7 @@ void TileEngine::calculateSunShading(Tile *tile)
 }
 
 /**
-  * Recalculate lighting for the terrain: objects,items,fire.
+  * Recalculates lighting for the terrain: objects,items,fire.
   */
 void TileEngine::calculateTerrainLighting()
 {
@@ -155,7 +155,7 @@ void TileEngine::calculateTerrainLighting()
 }
 
 /**
-  * Recalculate lighting for the units.
+  * Recalculates lighting for the units.
   */
 void TileEngine::calculateUnitLighting()
 {
@@ -186,9 +186,9 @@ void TileEngine::calculateUnitLighting()
 
 /**
  * Adds circular light pattern starting from center and losing power with distance travelled.
- * @param center
- * @param power
- * @param layer Light is seperated in 3 layers: Ambient, Static and Dynamic.
+ * @param center Center.
+ * @param power Power.
+ * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
 void TileEngine::addLight(const Position &center, int power, int layer)
 {
@@ -219,8 +219,8 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 
 /**
  * Calculates line of sight of a soldier.
- * @param unit
- * @return true when new aliens spotted
+ * @param unit Unit to check line of sight of.
+ * @return True when new aliens are spotted.
  */
 bool TileEngine::calculateFOV(BattleUnit *unit)
 {
@@ -360,20 +360,18 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 }
 
-
-
 /**
- * @brief Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.
- * @param tile the tile to check
- * @param tilePos the position of the tile to check, redundantly
- * @param queryingUnit the unit to temporarily place at tilePos for calculations
- * @return false if the unit couldn't possibly be placed at tile (i.e., something's blocking it), true otherwise
+ * @brief Find all the soldiers that would see the queryingUnit at the tile (aka tilePos) and collect some statistics for AI.
+ * @param tile The tile to check.
+ * @param tilePos The position of the tile to check, redundantly.
+ * @param queryingUnit The unit to temporarily place at tilePos for calculations.
+ * @return False if the unit couldn't possibly be placed at tile (i.e., something's blocking it), true otherwise.
  */
 bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
 {
 	if (tile->soldiersVisible != -1) return true; // already calculated this turn
-	
-	if (!_save->setUnitPosition(queryingUnit, tilePos, true)) 
+
+	if (!_save->setUnitPosition(queryingUnit, tilePos, true))
 	{
 		return false;
 	}
@@ -381,20 +379,20 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
 	tile->closestSoldierDSqr = INT_MAX;
 	tile->closestAlienDSqr = INT_MAX;
-	
+
 	int dsqrTotal = 0;
-	
+
 	Position targetVoxel = tile->getPosition() * Position(16, 16, 24) + Position(8, 8, 8 - tile->getTerrainLevel());
-	
+
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if ((*i)->isOut()) continue;
-		
+
 		int dsqr = distanceSq(tilePos, (*i)->getPosition());
 		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
 
 		if (dsqr > (MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)) continue; // can't even see that far, yo
-		
+
 		Position originVoxel = getSightOriginVoxel(*i);
 		int target = calculateLine(originVoxel, targetVoxel, false, 0, *i, true, false, *i);
 		if ((*i)->getFaction() == FACTION_PLAYER && target == -1)
@@ -405,7 +403,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 			{
 				tile->closestSoldierDSqr = dsqr;
 			}
-			
+
 			dsqrTotal += dsqr;
 		}
 
@@ -421,9 +419,9 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 }
 
 /**
- * Get the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7??
- * @param currentUnit the watcher
- * @return approximately an eyeball voxel
+ * Gets the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7??
+ * @param currentUnit The watcher.
+ * @return Approximately an eyeball voxel.
  */
 Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 {
@@ -450,13 +448,11 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 	return originVoxel;
 }
 
-
-
 /**
- * Check for an opposing unit on this tile
- * @param currentUnit the watcher
- * @param tile the tile to check for
- * @return true/false
+ * Checks for an opposing unit on this tile.
+ * @param currentUnit The watcher.
+ * @param tile The tile to check for
+ * @return True if visible.
  */
 bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 {
@@ -516,14 +512,13 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	return unitSeen;
 }
 
-
 /**
- * Check for how exposed unit for another unit
- * @param originVoxel voxel of trace origin (eye or gun's barrel)
- * @param tile the tile to check for
- * @param excludeUnit is self (not to hit self)
- * @param excludeAllBut [optional] is unit which is the only one to be considered for ray hits
- * @return degree of exposure (as percent)
+ * Checks for how exposed unit is for another unit.
+ * @param originVoxel Voxel of trace origin (eye or gun's barrel).
+ * @param tile The tile to check for.
+ * @param excludeUnit Is self (not to hit self).
+ * @param excludeAllBut [Optional] is unit which is the only one to be considered for ray hits.
+ * @return Degree of exposure (as percent).
  */
 int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut)
 {
@@ -540,7 +535,7 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
- 
+
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
 	if (otherUnit->getArmor()->getSize() > 1)
 	{
@@ -554,7 +549,7 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 	int relY = floor(((float)-relPos.x)*normal+0.5);
 
 	int sliceTargets[10]={0,0, relX,relY, -relX,-relY};
- 
+
 	if (!otherUnit->isOut())
 	{
 		heightRange = otherUnit->getHeight();
@@ -563,7 +558,6 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 	{
 		heightRange = 12;
 	}
-
 
 	int targetMaxHeight=targetMinHeight+heightRange;
 	// scan ray from top to bottom  plus different parts of target cylinder
@@ -595,14 +589,13 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 	return (visible*100)/total;
 }
 
-
 /**
- * Check for an another unit is available for targeting and what particular voxel
- * @param originVoxel voxel of trace origin (eye or gun's barrel)
- * @param tile the tile to check for
- * @param scanVoxel is returned coordinate of hit
- * @param excludeUnit is self (not to hit self)
- * @return true/false
+ * Checks for another unit available for targeting and what particular voxel.
+ * @param originVoxel Voxel of trace origin (eye or gun's barrel).
+ * @param tile The tile to check for.
+ * @param scanVoxel Is returned coordinate of hit.
+ * @param excludeUnit Is self (not to hit self).
+ * @return True if the unit can be targetted.
  */
 bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit)
 {
@@ -620,7 +613,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
- 
+
 	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
 	int targetSize = otherUnit->getArmor()->getSize() - 1;
 	if (targetSize > 0)
@@ -635,7 +628,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	int relY = floor(((float)-relPos.x)*normal+0.5);
 
 	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
- 
+
 	if (!otherUnit->isOut())
 	{
 		heightRange = otherUnit->getHeight();
@@ -685,13 +678,13 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 }
 
 /**
- * Check for a tile part available for targeting and what particular voxel
- * @param originVoxel voxel of trace origin (gun's barrel)
- * @param tile the tile to check for
- * @param part tile part to check for
- * @param scanVoxel is returned coordinate of hit
- * @param excludeUnit is self (not to hit self)
- * @return true/false
+ * Checks for a tile part available for targeting and what particular voxel.
+ * @param originVoxel Voxel of trace origin (gun's barrel).
+ * @param tile The tile to check for.
+ * @param part Tile part to check for.
+ * @param scanVoxel Is returned coordinate of hit.
+ * @param excludeUnit Is self (not to hit self).
+ * @return True if the tile can be targetted.
  */
 bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit)
 {
@@ -703,7 +696,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 
 	Position targetVoxel = Position((tile->getPosition().x * 16), (tile->getPosition().y * 16), tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
-	
+
 	int *spiralArray;
 	int spiralCount;
 
@@ -816,10 +809,9 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 	return false;
 }
 
-
 /**
  * Calculates line of sight of a soldiers within range of the Position
- * (used when terrain has changed, which can reveal new parts of terrain or units)
+ * (used when terrain has changed, which can reveal new parts of terrain or units).
  * @param position Position of the changed terrain.
  */
 void TileEngine::calculateFOV(const Position &position)
@@ -834,10 +826,10 @@ void TileEngine::calculateFOV(const Position &position)
 }
 
 /**
- * Checks if of the opposing faction a sniper sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
- * If it's higher, a shot is fired when enough time units a weapon and ammo available.
- * @param unit the unit to check reaction fire upon
- * @return whether or not reaction fire took place.
+ * Checks if a sniper from tge opposing faction sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
+ * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
+ * @param unit The unit to check reaction fire upon.
+ * @return True if reaction fire took place.
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit)
 {
@@ -871,10 +863,10 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 	return result;
 }
 
-/*
- * create a vector of units that can spot this unit.
- * @param unit the unit to check for spotters of
- * @return a vector of units that can see this unit.
+/**
+ * Creates a vector of units that can spot this unit.
+ * @param unit The unit to check for spotters of.
+ * @return A vector of units that can see this unit.
  */
 std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
@@ -912,11 +904,11 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 	return spotters;
 }
 
-/*
- * get the unit with the highest reaction score from the spotter vector.
- * @param spotters the vector of spotting units.
- * @param unit the unit to check scores against.
- * @return the unit with the highest reactions.
+/**
+ * Gets the unit with the highest reaction score from the spotter vector.
+ * @param spotters The vector of spotting units.
+ * @param unit The unit to check scores against.
+ * @return The unit with the highest reactions.
  */
 BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit)
 {
@@ -946,17 +938,17 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
 	return bu;
 }
 
-/*
- * check the validity of a snap shot performed here.
- * @param unit the unit to check sight from
- * @param target the unit to check sight TO
- * @return if the target is valid
+/**
+ * Checks the validity of a snap shot performed here.
+ * @param unit The unit to check sight from.
+ * @param target The unit to check sight TO.
+ * @return True if the target is valid.
  */
 bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 {
 	BattleItem *weapon = unit->getMainHandWeapon();
 	// has a weapon
-	if (weapon && 
+	if (weapon &&
 		// has a melee weapon and is in melee range
 		((weapon->getRules()->getBattleType() == BT_MELEE &&
 		validMeleeRange(unit, target, unit->getDirection()) &&
@@ -977,11 +969,11 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 	return false;
 }
 
-/*
- * attempt to perform a reaction snap shot.
- * @param unit the unit to check sight from
- * @param target the unit to check sight TO
- * @return if the action should (theoretically) succeed
+/**
+ * Attempts to perform a reaction snap shot.
+ * @param unit The unit to check sight from.
+ * @param target The unit to check sight TO.
+ * @return True if the action should (theoretically) succeed.
  */
 bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 {
@@ -1039,12 +1031,14 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 }
 
 /**
+ * Handles bullet/weapon hits.
+ *
  * A bullet/weapon hits a voxel.
  * @param center Center of the explosion in voxelspace.
  * @param power Power of the explosion.
  * @param type The damage type of the explosion.
  * @param unit The unit that caused the explosion.
- * @return The Unit that got hit
+ * @return The Unit that got hit.
  */
 BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
@@ -1115,6 +1109,8 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 }
 
 /**
+ * Handles explosions.
+ *
  * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
  * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
@@ -1320,9 +1316,10 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 }
 
 /**
- * Apply the explosive power to the tile parts. This is where the actual destruction takes place.
- * Must affect on 7 objects (6 box sides and object inside)
- * @return bool Return true objective was destroyed
+ * Applies the explosive power to the tile parts. This is where the actual destruction takes place.
+ * Must affect 7 objects (6 box sides and the object inside).
+ * @param tile Tile affected.
+ * @return True if the objective was destroyed.
  */
 bool TileEngine::detonate(Tile* tile)
 {
@@ -1396,13 +1393,14 @@ bool TileEngine::detonate(Tile* tile)
 
 
 /**
+ * Checks for chained explosions.
+ *
  * Chained explosions are explosions which occur after an explosive map object is destroyed.
  * May be due a direct hit, other explosion or fire.
  * @return tile on which a explosion occurred
  */
 Tile *TileEngine::checkForTerrainExplosions()
 {
-
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getExplosive())
@@ -1414,7 +1412,7 @@ Tile *TileEngine::checkForTerrainExplosions()
 }
 
 /**
- * The amount of power that is blocked going from one tile to another on a different level.
+ * Calculates the amount of power that is blocked going from one tile to another on a different level.
  * Can cross more than one level. Only floor tiles are taken into account.
  * @param startTile The tile where the power starts.
  * @param endTile The adjacent tile where the power ends.
@@ -1475,11 +1473,11 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 }
 
 /**
- * The amount of power that is blocked going from one tile to another on the same level.
+ * Calculates the amount of power that is blocked going from one tile to another on the same level.
  * @param startTile The tile where the power starts.
  * @param endTile The adjacent tile where the power ends.
  * @param type The type of power/damage.
- * @return amount of blockage
+ * @return Amount of blockage.
  */
 int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
@@ -1632,15 +1630,13 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	return block;
 }
 
-
-
-
-/*
- * The amount this certain wall or floor-part of the tile blocks.
+/**
+ * Calculates the amount this certain wall or floor-part of the tile blocks.
  * @param startTile The tile where the power starts.
  * @param part The part of the tile the power needs to go through.
  * @param type The type of power/damage.
- * @return amount of blockage
+ * @param direction Direction the power travels.
+ * @return Amount of blockage.
  */
 int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int direction)
 {
@@ -1742,13 +1738,14 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 	return blockage;
 }
 
-
 /**
- * Soldier opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
- * @param unit
- * @return -1 there is no door, you can walk through.
- *		  0 normal door opened, make a squeaky sound and you can walk through.
- *		  1 ufo door is starting to open, make a whoosh sound, don't walk through.
+ * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
+ * @param unit Unit.
+ * @param rClick Whether the player right clicked.
+ * @param dir Direction.
+ * @return -1 there is no door, you can walk through;
+ *		  0 normal door opened, make a squeaky sound and you can walk through;
+ *		  1 ufo door is starting to open, make a whoosh sound, don't walk through;
  *		  3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
  */
 int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
@@ -1866,10 +1863,10 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 }
 
 /**
- * open any doors connected to this part at this position,
- * keeps processing til it hits a non-ufo-door.
- * @param pos the starting position
- * @param part the part to open, defines which direction to check.
+ * Opens any doors connected to this part at this position,
+ * Keeps processing til it hits a non-ufo-door.
+ * @param pos The starting position
+ * @param part The part to open, defines which direction to check.
  */
 void TileEngine::checkAdjacentDoors(Position pos, int part)
 {
@@ -1898,8 +1895,8 @@ void TileEngine::checkAdjacentDoors(Position pos, int part)
 }
 
 /**
- * Close ufo doors.
- * @return whether doors are closed.
+ * Closes ufo doors.
+ * @return Whether doors are closed.
  */
 int TileEngine::closeUfoDoors()
 {
@@ -1925,17 +1922,18 @@ int TileEngine::closeUfoDoors()
 
 	return doorsclosed;
 }
+
 /**
- * calculateLine. Using bresenham algorithm in 3D.
- * @param origin (voxel??)
- * @param target (also voxel??)
- * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
+ * Calculates a line trajectory, using bresenham algorithm in 3D.
+ * @param origin Origin (voxel??).
+ * @param target Target (also voxel??).
+ * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
  * @param trajectory A vector of positions in which the trajectory is stored.
  * @param excludeUnit Excludes this unit in the collision detection.
- * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility)
- * @param onlyVisible skip invisible units? used in FPS view
- * @param excludeAllBut [optional] the only unit to be considered for ray hits
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
+ * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
+ * @param onlyVisible Skip invisible units? used in FPS view.
+ * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
+ * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
 int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit *excludeAllBut)
 {
@@ -2093,14 +2091,15 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 }
 
 /**
- * Calculate a parabola trajectory, used for throwing items.
- * @param origin in voxelspace
- * @param target in voxelspace
- * @param storeTrajectory true will store the whole trajectory - otherwise it just stores the last position.
- * @param excludeUnit makes sure the trajectory does not hit the shooter itself
- * @param curvature how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
- * @param accuracy is the deviation of the angles it should take into account. 1.0 is perfection.
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
+ * Calculates a parabola trajectory, used for throwing items.
+ * @param origin Orign in voxelspace.
+ * @param target Target in voxelspace.
+ * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
+ * @param trajectory A vector of positions in which the trajectory is stored.
+ * @param excludeUnit Makes sure the trajectory does not hit the shooter itself.
+ * @param curvature How high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example.
+ * @param accuracy Is the deviation of the angles it should take into account. 1.0 is perfection.
+ * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
 int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy)
 {
@@ -2148,9 +2147,9 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 }
 
 /**
- * Calculate z "grounded" value for particular voxel (used for projectile shadow).
+ * Calculates z "grounded" value for a particular voxel (used for projectile shadow).
  * @param voxel The voxel to trace down.
- * @return z coord of "ground"
+ * @return z coord of "ground".
  */
 int TileEngine::castedShade(const Position& voxel)
 {
@@ -2161,15 +2160,15 @@ int TileEngine::castedShade(const Position& voxel)
 	{
 		tmpVoxel.z = z;
 		if (voxelCheck(tmpVoxel, 0) != -1) break;
-			
+
 	}
     return z;
 }
 
 /**
- * Trace voxel visibility.
- * @param voxel coordinate.
- * @return visible or not
+ * Traces voxel visibility.
+ * @param voxel Voxel coordinates.
+ * @return True if visible.
  */
 
 bool TileEngine::isVoxelVisible(const Position& voxel)
@@ -2192,28 +2191,26 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
     return true;
 }
 
-
-
 /**
- * Check if we hit a voxel.
+ * Checks if we hit a voxel.
  * @param voxel The voxel to check.
  * @param excludeUnit Don't do checks on this unit.
  * @param excludeAllUnits Don't do checks on any unit.
- * @param excludeAllBut if set, the only unit to be considered for ray hits
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing)
+ * @param onlyVisible Whether to consider only visible units.
+ * @param excludeAllBut If set, the only unit to be considered for ray hits.
+ * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit *excludeAllBut)
 {
-
 	Tile *tile = _save->getTile(Position(voxel.x/16, voxel.y/16, voxel.z/24));
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return 5;
 	}
-	
+
 	if (voxel.z % 24 == 0 && tile->getMapData(MapData::O_FLOOR) && tile->getMapData(MapData::O_FLOOR)->isGravLift())
-	{		
+	{
 		Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
 		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR) && !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
 			return 0;
@@ -2274,7 +2271,6 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 	return -1;
 }
 
-
 /**
  * Toggles personal lighting on / off.
  */
@@ -2285,8 +2281,10 @@ void TileEngine::togglePersonalLighting()
 }
 
 /**
- * Distance between 2 points. Rounded up to first INT.
- * @return distance
+ * Calculates the distance between 2 points. Rounded up to first INT.
+ * @param pos1 Position of first square.
+ * @param pos2 Position of second square.
+ * @return Distance.
  */
 int TileEngine::distance(const Position &pos1, const Position &pos2) const
 {
@@ -2295,10 +2293,12 @@ int TileEngine::distance(const Position &pos1, const Position &pos2) const
 	return int(floor(sqrt(float(x*x + y*y)) + 0.5));
 }
 
-
 /**
- * Distance squared between 2 points. No sqrt(), not floating point math, and sometimes it's all you need.
- * @return distance
+ * Calculates the distance squared between 2 points. No sqrt(), not floating point math, and sometimes it's all you need.
+ * @param pos1 Position of first square.
+ * @param pos2 Position of second square.
+ * @param considerZ Whether to consider the z coordinate.
+ * @return Distance.
  */
 int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool considerZ) const
 {
@@ -2308,12 +2308,10 @@ int TileEngine::distanceSq(const Position &pos1, const Position &pos2, bool cons
 	return x*x + y*y + z*z;
 }
 
-
-
 /**
- * Psionic attack mechanism.
- * @param action
- * @return whether it failed or succeeded
+ * Attempts a panic or mind control action.
+ * @param action Pointer to an action.
+ * @return Whether it failed or succeeded.
  */
 bool TileEngine::psiAttack(BattleAction *action)
 {
@@ -2367,19 +2365,19 @@ bool TileEngine::psiAttack(BattleAction *action)
 }
 
 /**
- * Apply gravity to a tile. Causes items and units to drop.
- * @param t Tile
+ * Applies gravity to a tile. Causes items and units to drop.
+ * @param t Tile.
  * @return Tile where the items end up in eventually.
  */
 Tile *TileEngine::applyGravity(Tile *t)
 {
 	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
- 
+
 	Position p = t->getPosition();
 	Tile *rt = t;
 	Tile *rtb;
 	BattleUnit *occupant = t->getUnit();
- 
+
 	if (occupant && (occupant->getArmor()->getMovementType() != MT_FLY || occupant->isOut()))
 	{
 		Position unitpos = occupant->getPosition();
@@ -2434,7 +2432,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 			canFall = false;
 		p.z--;
 	}
-	
+
 	for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 	{
 		if ((*it)->getUnit() && t->getPosition() == (*it)->getUnit()->getPosition())
@@ -2446,7 +2444,7 @@ Tile *TileEngine::applyGravity(Tile *t)
 			rt->addItem(*it, (*it)->getSlot());
 		}
 	}
-	
+
 	if (t != rt)
 	{
 		// clear tile
@@ -2455,25 +2453,26 @@ Tile *TileEngine::applyGravity(Tile *t)
 
 	return rt;
 }
-/*
- * Validate the melee range between two units.
- * @param *unit the attacking unit.
- * @param *target the unit we want to attack.
- * @param dir direction to check.
- * @return true when range is valid.
+
+/**
+ * Validates the melee range between two units.
+ * @param attacker The attacking unit.
+ * @param target The unit we want to attack.
+ * @param dir Direction to check.
+ * @return True when the range is valid.
  */
 bool TileEngine::validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir)
 {
 	return validMeleeRange(attacker->getPosition(), dir, attacker, target);
 }
 
-/*
- * Validate the melee range between a tile and a unit.
+/**
+ * Validates the melee range between a tile and a unit.
  * @param pos Position to check from.
- * @param direction direction to check.
- * @param size for large units, we have to do extra checks.
- * @param *target the unit we want to attack, 0 for any unit.
- * @return true when range is valid.
+ * @param direction Direction to check.
+ * @param size For large units, we have to do extra checks.
+ * @param target The unit we want to attack, 0 for any unit.
+ * @return True when the range is valid.
  */
 bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target)
 {
@@ -2516,9 +2515,10 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit *attack
 	}
 	return false;
 }
-/*
- * AI: Check for windows.
- * @return direction or -1 when no window found
+
+/**
+ * Gets the AI to look through a window.
+ * @return Direction or -1 when no window found.
  */
 int TileEngine::faceWindow(const Position &position)
 {
@@ -2537,10 +2537,10 @@ int TileEngine::faceWindow(const Position &position)
 	return -1;
 }
 
-/*
- * Validate a throw action
- * @param action the action to validate.
- * @return validity of action.
+/**
+ * Validates a throw action.
+ * @param action The action to validate.
+ * @return Validity of action.
  */
 bool TileEngine::validateThrow(BattleAction *action)
 {
@@ -2562,7 +2562,6 @@ bool TileEngine::validateThrow(BattleAction *action)
 	{
 		origin.z++;
 	}
-
 
 	// determine the target voxel.
 	// aim at the center of the floor
@@ -2602,8 +2601,8 @@ bool TileEngine::validateThrow(BattleAction *action)
 	return ProjectileFlyBState::validThrowRange(action);
 }
 
-/*
- * Recalculate FOV of all units in-game.
+/**
+ * Recalculates FOV of all units in-game.
  */
 void TileEngine::recalculateFOV()
 {

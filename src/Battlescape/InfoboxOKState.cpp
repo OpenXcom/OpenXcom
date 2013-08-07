@@ -43,7 +43,7 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 	_window = new Window(this, 261, 89, 30, 48);
 	_btnOk = new TextButton(120, 18, 100, 112);
 	_txtTitle = new Text(255, 61, 33, 51);
-	
+
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);

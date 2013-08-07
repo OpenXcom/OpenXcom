@@ -63,9 +63,9 @@ ProjectileFlyBState::~ProjectileFlyBState()
 }
 
 /**
- * init sequence:
- * - check if shot is valid
- * - calculate base accuracy
+ * Initializes the sequence:
+ * - checks if the shot is valid,
+ * - calculates the base accuracy.
  */
 void ProjectileFlyBState::init()
 {
@@ -95,9 +95,9 @@ void ProjectileFlyBState::init()
 	}
 
 	_unit = _action.actor;
-	
+
 	_ammo = weapon->getAmmoItem();
-	
+
 	if (_unit->isOut())
 	{
 		// something went wrong - we can't shoot when dead or unconscious
@@ -183,9 +183,9 @@ void ProjectileFlyBState::init()
 }
 
 /**
- * - create a projectile sprite & add it to the map
- * - calculate it's trajectory
- * @return whether it succeeded
+ * Tries to create a projectile sprite and add it to the map,
+ * calculating its trajectory.
+ * @return True, if the projectile was successfully created.
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
@@ -286,9 +286,9 @@ bool ProjectileFlyBState::createNewProjectile()
 }
 
 /**
- * Animates the projectile (move to the next point in it's trajectory).
- * If the animation is finished the projectile sprite is removed from the map.
- * And this state is finished.
+ * Animates the projectile (moves to the next point in its trajectory).
+ * If the animation is finished the projectile sprite is removed from the map,
+ * and this state is finished.
  */
 void ProjectileFlyBState::think()
 {
@@ -403,9 +403,9 @@ void ProjectileFlyBState::think()
 	}
 }
 
-/*
- * Flying projectiles cannot be cancelled.
- * but they can be "skipped"
+/**
+ * Flying projectiles cannot be cancelled,
+ * but they can be "skipped".
  */
 void ProjectileFlyBState::cancel()
 {
@@ -418,9 +418,9 @@ void ProjectileFlyBState::cancel()
 	}
 }
 
-/*
- * Validate the throwing range.
- * @return true when range is valid.
+/**
+ * Validates the throwing range.
+ * @return True when the range is valid.
  */
 bool ProjectileFlyBState::validThrowRange(BattleAction *action)
 {

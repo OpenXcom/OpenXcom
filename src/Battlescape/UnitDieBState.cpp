@@ -45,6 +45,10 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitDieBState.
+ * @param parent Pointer to the Battlescape.
+ * @param unit Dying unit.
+ * @param damageType Type of damage that caused the death.
+ * @param noSound Whether to disable the death sound.
  */
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
@@ -67,7 +71,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		_originalDir = _unit->getDirection();
 		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 	}
-	
+
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
     _parent->resetSituationForAI();
@@ -99,8 +103,9 @@ void UnitDieBState::init()
 {
 }
 
-/*
- * Think!
+/**
+ * Runs state functionality every cycle.
+ * Progresses the death, displays any messages, checks if the mission is over, ...
  */
 void UnitDieBState::think()
 {
@@ -194,15 +199,15 @@ void UnitDieBState::think()
 	_parent->getMap()->cacheUnit(_unit);
 }
 
-/*
+/**
  * Unit falling cannot be cancelled.
  */
 void UnitDieBState::cancel()
 {
 }
 
-/*
- * Convert unit to corpse(item).
+/**
+ * Converts unit to a corpse (item).
  */
 void UnitDieBState::convertUnitToCorpse()
 {
@@ -266,6 +271,9 @@ void UnitDieBState::convertUnitToCorpse()
 
 }
 
+/**
+ * Plays the death sound.
+ */
 void UnitDieBState::playDeathSound()
 {
 	if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")

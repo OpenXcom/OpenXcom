@@ -25,6 +25,8 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitPanicBState.
+ * @param parent Pointer to the Battlescape.
+ * @param unit Panicking unit.
  */
 UnitPanicBState::UnitPanicBState(BattlescapeGame *parent, BattleUnit *unit) : BattleState(parent), _unit(unit)
 {
@@ -42,8 +44,9 @@ void UnitPanicBState::init()
 {
 }
 
-/*
- * Think!
+/**
+ * Runs state functionality every cycle.
+ * Ends the panicking when done.
  */
 void UnitPanicBState::think()
 {
@@ -55,6 +58,9 @@ void UnitPanicBState::think()
 	_parent->popState();
 }
 
+/**
+ * Panicking cannot be cancelled.
+ */
 void UnitPanicBState::cancel()
 {
 }

@@ -26,6 +26,9 @@ namespace OpenXcom
 
 class BattleUnit;
 
+/**
+ * State for panicking units.
+ */
 class UnitPanicBState : public BattleState
 {
 private:
@@ -41,7 +44,7 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Get the result of the state.
+	/// Gets the result of the state.
 	std::string getResult() const;
 };
 
