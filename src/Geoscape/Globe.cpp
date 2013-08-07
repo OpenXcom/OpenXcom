@@ -570,7 +570,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 		Polygon* poly;
 		int points;
 		
-		
+		#ifdef __MORPHOS__ 
 		for( int z=0; z < 10 ; z++ )
 		{
 			char *ptr = (char *)&value[ z ];
@@ -578,6 +578,7 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 			ptr[ 0 ] = ptr[ 1 ];
 			ptr[ 1 ] = tmp;
 		}
+		#endif
 
 		if (value[6] != -1)
 		{
