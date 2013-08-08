@@ -1258,12 +1258,12 @@ inline void BattlescapeState::handle(Action *action)
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
 				{
-					SaveVoxelMap();
+					saveVoxelMap();
 				}
 				// f9 - ai 
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
 				{
-					SaveAIMap();
+					saveAIMap();
 				}
 			}
 			// quick save and quick load
@@ -1280,7 +1280,7 @@ inline void BattlescapeState::handle(Action *action)
 			// voxel view dump
 			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
 			{
-				SaveVoxelView();
+				saveVoxelView();
 			}
 		}
 	}
@@ -1412,13 +1412,13 @@ void BattlescapeState::saveAIMap()
 
 	SDL_FreeSurface(img);
 
-	Log(LOG_INFO) << "SaveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
+	Log(LOG_INFO) << "saveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
 }
 
 /**
  * Saves a first-person voxel view of the battlescape.
  */
-void BattlescapeState::SaveVoxelView()
+void BattlescapeState::saveVoxelView()
 {
 	static const unsigned char pal[30]=
 	//			ground		west wall	north wall		object		enem unit						xcom unit	neutr unit
@@ -1546,7 +1546,7 @@ void BattlescapeState::SaveVoxelView()
 /**
  * Saves each layer of voxels on the bettlescape as a png.
  */
-void BattlescapeState::SaveVoxelMap()
+void BattlescapeState::saveVoxelMap()
 {
 	std::stringstream ss;
 	std::vector<unsigned char> image;
