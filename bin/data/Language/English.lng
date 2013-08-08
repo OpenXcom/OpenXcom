@@ -2332,7 +2332,7 @@ Left-click highlights the path your unit will take to the destination, double-cl
 STR_BATTLERANGEBASEDACCURACY
 Range-based accuracy
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Accuracy of shots takes into account visibility, distance, kneeling, size of target, smoke density on the line of shot.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
 TFTD manufacture rules
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
