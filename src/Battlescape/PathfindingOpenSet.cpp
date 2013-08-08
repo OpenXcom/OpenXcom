@@ -36,7 +36,7 @@ PathfindingOpenSet::~PathfindingOpenSet()
 }
 
 /**
- * Keep removing all discarded entries that have come to the top of the queue.
+ * Keeps removing all discarded entries that have come to the top of the queue.
  */
 void PathfindingOpenSet::removeDiscarded()
 {
@@ -48,7 +48,7 @@ void PathfindingOpenSet::removeDiscarded()
 }
 
 /**
- * Get the node with the least cost.
+ * Gets the node with the least cost.
  * After this call, the node is no longer in the set. It is an error to call this when the set is empty.
  * @return A pointer to the node which had the least cost.
  */
@@ -66,7 +66,7 @@ PathfindingNode *PathfindingOpenSet::pop()
 }
 
 /**
- * Place the node in the set.
+ * Places the node in the set.
  * If the node was already in the set, the previous entry is discarded.
  * It is the caller's responsibility to never re-add a node with a worse cost.
  * @param node A pointer to the node to add.

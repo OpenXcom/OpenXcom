@@ -260,6 +260,11 @@ void PurchaseState::think()
 	_timerDec->think(this, 0);
 }
 
+/**
+ * Returns whether the item is excluded in the options file.
+ * @param item Item to look up.
+ * @return True if the item is excluded in the options file.
+ */
 bool PurchaseState::isExcluded(std::string item)
 {
 	std::vector<std::string> excludes = Options::getPurchaseExclusions();
@@ -368,7 +373,8 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
 }
 
 /**
- * Increases the item to max on right-click.
+ * Increases the item by one on left-click,
+ * to max on right-click.
  * @param action Pointer to an action.
  */
 void PurchaseState::lstItemsLeftArrowClick(Action *action)
@@ -405,7 +411,8 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
- * Decreases the item to 0 on right-click.
+ * Decreases the item by one on left-click,
+ * to 0 on right-click.
  * @param action Pointer to an action.
  */
 void PurchaseState::lstItemsRightArrowClick(Action *action)
@@ -452,6 +459,7 @@ void PurchaseState::lstItemsMousePress(Action *action)
 
 /**
  * Gets the price of the currently selected item.
+ * @return Price of the currently selected item.
  */
 int PurchaseState::getPrice()
 {
@@ -494,7 +502,7 @@ void PurchaseState::increase()
 
 /**
  * Increases the quantity of the selected item to buy by "change".
- * @param change how much we want to add
+ * @param change How much we want to add.
  */
 void PurchaseState::increaseByValue(int change)
 {
@@ -569,7 +577,7 @@ void PurchaseState::decrease()
 
 /**
  * Decreases the quantity of the selected item to buy by "change".
- * @param change how much we want to add
+ * @param change how much we want to add.
  */
 void PurchaseState::decreaseByValue(int change)
 {

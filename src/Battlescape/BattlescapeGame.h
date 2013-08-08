@@ -23,6 +23,7 @@
 #include <SDL.h>
 #include <string>
 #include <list>
+#include <vector>
 
 namespace OpenXcom
 {
@@ -32,7 +33,6 @@ class SavedBattleGame;
 class BattleItem;
 class BattleState;
 class BattlescapeState;
-class Timer;
 class ResourcePack;
 class Map;
 class TileEngine;
@@ -64,7 +64,7 @@ struct BattleAction
 };
 
 /**
- * Battlescape game - the core game engine of the battlescape game
+ * Battlescape game - the core game engine of the battlescape game.
  */
 class BattlescapeGame
 {
@@ -77,12 +77,16 @@ private:
 	int _AIActionCounter;
 	BattleAction _currentAction;
 
-	void selectNextPlayerUnit(bool checkReselect);
+	/// Ends the turn.
 	void endTurn();
+	/// Picks the first soldier that is panicking.
 	bool handlePanickingPlayer();
+	/// Common function for hanlding panicking units.
 	bool handlePanickingUnit(BattleUnit *unit);
+	/// Determines whether there are any actions pending for the given unit.
 	bool noActionsPending(BattleUnit *bu);
 	std::vector<InfoboxOKState*> _infoboxQueue;
+	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
 	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
 public:
@@ -90,91 +94,99 @@ public:
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
 	/// Cleans up the BattlescapeGame state.
 	~BattlescapeGame();
-	/// think.
+	/// Checks for units panicking or falling and so on.
 	void think();
+	/// Initializes the Battlescape game.
 	void init();
-	// playable unit selected?
+	/// Determines whether a playable unit is selected.
 	bool playableUnitSelected();
-	/// handlestates timer.
+	/// Handles states timer.
 	void handleState();
-	/// Push a state at the front of the list.
+	/// Pushes a state to the front of the list.
 	void statePushFront(BattleState *bs);
-	/// Push a state at the second of the list.
+	/// Pushes a state to second on the list.
 	void statePushNext(BattleState *bs);
-	/// Push a state at the back of the list.
+	/// Pushes a state to the back of the list.
 	void statePushBack(BattleState *bs);
 	/// Handles the result of non target actions, like priming a grenade.
 	void handleNonTargetAction();
-	/// Remove current state.
+	/// Removes current state.
 	void popState();
-	/// Set state think interval.
+	/// Sets state think interval.
 	void setStateInterval(Uint32 interval);
 	/// Checks for casualties in battle.
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 	/// Checks if a unit panics.
 	void checkForPanic(BattleUnit *unit);
-	/// Check reserved tu.
+	/// Checks reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.
 	void handleAI(BattleUnit *unit);
-	/// Add item & affect with gravity.
+	/// Drops an item and affects it with gravity.
 	void dropItem(const Position &position, BattleItem *item, bool newItem = false, bool removeItem = false);
-	/// Convert a unit into a unit of another type.
+	/// Converts a unit into a unit of another type.
 	BattleUnit *convertUnit(BattleUnit *unit, std::string newType);
-	/// Handle kneeling action.
+	/// Handles kneeling action.
 	bool kneel(BattleUnit *bu);
-	/// Cancel whatever action we were going at.
+	/// Cancels the current action.
 	bool cancelCurrentAction(bool bForce = false);
-	/// Get pointer to access action members directly.
+	/// Gets a pointer to access action members directly.
 	BattleAction *getCurrentAction();
-	/// Is there currently an action going on.
+	/// Determines whether there is an action currently going on.
 	bool isBusy();
-	/// Activate primary action (left click)
+	/// Activates primary action (left click).
 	void primaryAction(const Position &pos);
-	/// Activate secondary action (right click)
+	/// Activates secondary action (right click).
 	void secondaryAction(const Position &pos);
-	/// Pressed the launch action.
+	/// Handler for the blaster launcher button.
 	void launchAction();
-	/// Pressed the psi action.
-	void psiAction();
-	/// Move a unit up or down.
+	/// Handler for the psi button.
+	void psiButtonAction();
+	/// Moves a unit up or down.
 	void moveUpDown(BattleUnit *unit, int dir);
-	/// Request of the end of the turn (wait for explosions etc to really end the turn)
+	/// Requests the end of the turn (wait for explosions etc to really end the turn).
 	void requestEndTurn();
-	/// Set the TU reserved type.
+	/// Sets the TU reserved type.
 	void setTUReserved(BattleActionType tur);
 	/// Sets up the cursor taking into account the action.
 	void setupCursor();
-	/// Getters:
+	/// Gets the map.
 	Map *getMap();
+	/// Gets the save.
 	SavedBattleGame *getSave();
+	/// Gets the tilengine.
 	TileEngine *getTileEngine();
+	/// Gets the pathfinding.
 	Pathfinding *getPathfinding();
+	/// Gets the resourcepack.
 	ResourcePack *getResourcePack();
+	/// Gets the ruleset.
 	const Ruleset *getRuleset() const;
-	/// this method evaluates the threats from XCom soldiers to tiles, for later use by AI.
+	/// Evaluates the threats from XCom soldiers to tiles, for later use by AI.
 	void resetSituationForAI();
 	static bool _debugPlay;
-	/// is panic done with yet?
+	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
-	/// try to find and pick up an item.
+	/// Tries to find an item and pick it up if possible.
 	void findItem(BattleAction *action);
-	/// check through all the items on the ground and pick one.
+	/// Checks through all the items on the ground and picks one.
 	BattleItem *surveyItems(BattleAction *action);
-	/// evaluate if it's worth while to take this item.
+	/// Evaluates if it's worthwhile to take this item.
 	bool worthTaking(BattleItem* item, BattleAction *action);
-	/// pick the item up from the ground.
+	/// Picks the item up from the ground.
 	int takeItemFromGround(BattleItem* item, BattleAction *action);
-	/// assign the item to a slot (stolen from battlescapeGenerator::addItem())
+	/// Assigns the item to a slot (stolen from battlescapeGenerator::addItem()).
 	bool takeItem(BattleItem* item, BattleAction *action);
-	/// return the type of action that is reserved.
+	/// Returns the type of action that is reserved.
 	BattleActionType getReservedAction();
-	/// tally the living units, convert them if necessary.
+	/// Tallies the living units, converting them if necessary.
 	void tallyUnits(int &liveAliens, int &liveSoldiers, bool convert);
-	/// set the kneel reservation setting.
+	/// Sets the kneel reservation setting.
 	void setKneelReserved(bool reserved);
-	/// check the kneel reservation setting.
+	/// Checks the kneel reservation setting.
 	bool getKneelReserved();
+	/// Attempts a psionic attack on an enemy we "know of".
+	bool psiAction(BattleAction *action);
 
 };
 

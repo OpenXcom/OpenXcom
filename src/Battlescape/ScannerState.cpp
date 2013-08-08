@@ -38,16 +38,16 @@ namespace OpenXcom
 {
 
 /**
- * Initialize the Scanner State
+ * Initializes the Scanner State.
  * @param game Pointer to the core game.
- * @param action Pointer to action data canister
+ * @param action Pointer to an action.
  */
 ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _action(action)
 {
 	_surface1 = new InteractiveSurface(320, 200);
 	_surface2 = new InteractiveSurface(320, 200);
 	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
-	
+
 	if (Screen::getDY() > 50)
 	{
 		_screen = false;
@@ -58,7 +58,7 @@ ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _
 	add(_surface1);
 
 	centerAllSurfaces();
-	
+
 	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_surface1);
 	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_surface2);
 
@@ -88,7 +88,7 @@ void ScannerState::handle(Action *action)
 }
 
 /**
- * Update scanner state
+ * Updates scanner state.
  */
 void ScannerState::update()
 {
@@ -96,7 +96,7 @@ void ScannerState::update()
 }
 
 /**
- * Animation handler. Update the minimap view animation
+ * Animation handler. Updates the minimap view animation.
 */
 void ScannerState::animate()
 {
@@ -104,7 +104,7 @@ void ScannerState::animate()
 }
 
 /**
- * Handle timers
+ * Handles timers.
 */
 void ScannerState::think ()
 {

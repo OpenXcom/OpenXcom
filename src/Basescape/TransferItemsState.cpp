@@ -230,6 +230,9 @@ void TransferItemsState::btnOkClick(Action *)
 	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
 }
 
+/**
+ * Completes the transfer between bases.
+ */
 void TransferItemsState::completeTransfer()
 {
 	int time = (int)floor(6 + _distance / 10.0);
@@ -386,7 +389,8 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
 }
 
 /**
- * Increase the item to max on right-click.
+ * Increases the selected item;
+ * by one on left-click; to max on right-click.
  * @param action Pointer to an action.
  */
 void TransferItemsState::lstItemsLeftArrowClick(Action *action)
@@ -423,7 +427,8 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
 }
 
 /**
- * Decrease the item to 0 on right-click.
+ * Decreases the selected item;
+ * by one on left-click; to 0 on right-click.
  * @param action Pointer to an action.
  */
 void TransferItemsState::lstItemsRightArrowClick(Action *action)
@@ -527,7 +532,7 @@ void TransferItemsState::increase()
 
 /**
  * Increases the quantity of the selected item to transfer by "change".
- * @param change how much we want to add
+ * @param change How much we want to add.
  */
 void TransferItemsState::increaseByValue(int change)
 {
@@ -637,7 +642,7 @@ void TransferItemsState::decrease()
 
 /**
  * Decreases the quantity of the selected item to transfer by "change".
- * @param change how much we want to remove
+ * @param change How much we want to remove.
  */
 void TransferItemsState::decreaseByValue(int change)
 {
@@ -697,7 +702,7 @@ int TransferItemsState::getTotal() const
 
 /**
  * Gets the shortest distance between the two bases.
- * @return Distance
+ * @return Distance.
  */
 double TransferItemsState::getDistance() const
 {
@@ -715,6 +720,11 @@ double TransferItemsState::getDistance() const
 	return sqrt(x[2] * x[2] + y[2] * y[2] + z[2] * z[2]);
 }
 
+/**
+ * Gets type of selected item.
+ * @param selected The selected item.
+ * @return The type of the selected item.
+ */
 enum TransferType TransferItemsState::getType(unsigned selected) const
 {
 	unsigned max = _soldiers.size();
@@ -730,12 +740,15 @@ enum TransferType TransferItemsState::getType(unsigned selected) const
 
 	return TRANSFER_ITEM;
 }
+
 /**
- * Gets the shortest distance between the two bases.
- * @return Distance
+ * Gets the index of the selected item.
+ * @param selected Currently selected item.
+ * @return Index of the selected item.
  */
 int TransferItemsState::getItemIndex(unsigned selected) const
 {
 	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
 }
+
 }

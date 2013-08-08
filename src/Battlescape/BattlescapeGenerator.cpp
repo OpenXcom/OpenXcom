@@ -81,7 +81,7 @@ BattlescapeGenerator::~BattlescapeGenerator()
 }
 
 /**
- * Sets the x-com craft involved in the battle.
+ * Sets the XCom craft involved in the battle.
  * @param craft Pointer to XCom craft.
  */
 void BattlescapeGenerator::setCraft(Craft *craft)
@@ -123,7 +123,7 @@ void BattlescapeGenerator::setWorldShade(int shade)
 
 /**
  * Sets the alien race on the mission. This is used to determine the various alien types to spawn.
- * @param alienRace Alien (main)race.
+ * @param alienRace Alien (main) race.
  */
 void BattlescapeGenerator::setAlienRace(const std::string &alienRace)
 {
@@ -143,7 +143,7 @@ void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
 }
 
 /**
- * Sets the x-com base involved in the battle.
+ * Sets the XCom base involved in the battle.
  * @param base Pointer to XCom base.
  */
 void BattlescapeGenerator::setBase(Base *base)
@@ -164,7 +164,7 @@ void BattlescapeGenerator::setTerrorSite(TerrorSite *terror)
 
 
 /**
- * Switch an existing battlescapesavegame to a new stage.
+ * Switches an existing battlescapesavegame to a new stage.
  */
 void BattlescapeGenerator::nextStage()
 {
@@ -183,7 +183,7 @@ void BattlescapeGenerator::nextStage()
 		(*j)->setTile(0);
 		(*j)->setPosition(Position(-1,-1,-1), false);
 	}
-	
+
 	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
 	{
 		_game->getSavedGame()->getSavedBattle()->endTurn();
@@ -206,7 +206,7 @@ void BattlescapeGenerator::nextStage()
 			if (!(*j)->isOut())
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
-				(*j)->setTurnsExposed(0);
+				(*j)->setTurnsExposed(255);
 				if (!selectedFirstSoldier && (*j)->getGeoscapeSoldier())
 				{
 					_save->setSelectedUnit(*j);
@@ -233,8 +233,7 @@ void BattlescapeGenerator::nextStage()
 			}
 		}
 	}
-	_save->getExposedUnits()->clear();
-	
+
 	// remove all items not belonging to our soldiers from the map.
 	for (std::vector<BattleItem*>::iterator j = _save->getItems()->begin(); j != _save->getItems()->end(); ++j)
 	{
@@ -265,7 +264,7 @@ void BattlescapeGenerator::nextStage()
 }
 
 /**
- * This will start the generator: it will fill up the battlescapesavegame with data.
+ * Starts the generator; it fills up the battlescapesavegame with data.
  */
 void BattlescapeGenerator::run()
 {
@@ -279,7 +278,7 @@ void BattlescapeGenerator::run()
 	{
 		double lat = 0;
 		if (_ufo) lat = _ufo->getLatitude();
-		_terrain = getTerrain(_worldTexture, lat); 
+		_terrain = getTerrain(_worldTexture, lat);
 	}
 	else
 	{
@@ -458,7 +457,6 @@ void BattlescapeGenerator::run()
 		}
 	}
 
-
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	_save->setGlobalShade(_worldShade);
 
@@ -469,9 +467,9 @@ void BattlescapeGenerator::run()
 }
 
 /**
- * Adds a xcom vehicle to the game.
- * Set the correct turret depending on the ammo type
- * @param v pointer to the Vehicle
+ * Adds an XCom vehicle to the game.
+ * Sets the correct turret depending on the ammo type.
+ * @param v Pointer to the Vehicle.
  */
 void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 {
@@ -490,19 +488,17 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 	}
 }
 
-
-
-
 /**
- * Adds a soldier to the game and place him on a free spawnpoint.
- * Spawnpoints are either tiles in case of an xcom craft that landed.
+ * Adds a soldier to the game and places him on a free spawnpoint.
+ * Spawnpoints are either tiles in case of an XCom craft that landed.
  * Or they are mapnodes in case there's no craft.
- * @param soldier pointer to the Soldier
+ * @param soldier Pointer to the Soldier.
+ * @return Pointer to the spawned unit.
  */
 BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 {
 //	unit->setId(_unitCount++);
-	
+
 	if (_craft == 0 || _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		Node* node = _save->getSpawnNode(NR_XCOM, unit);
@@ -562,7 +558,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 }
 
 /**
- * Deploy the aliens, according to the alien deployment rules.
+ * Deploys the aliens, according to the alien deployment rules.
  * @param race Pointer to the alien race.
  * @param deployment Pointer to the deployment rules.
  */
@@ -617,11 +613,11 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 
 
 /**
- * Adds an alien to the game and place him on a free spawnpoint.
- * @param rules pointer to the Unit which holds info about alien .
+ * Adds an alien to the game and places him on a free spawnpoint.
+ * @param rules Pointer to the Unit which holds info about the alien .
  * @param alienRank The rank of the alien, used for spawn point search.
  * @param outside Whether the alien should spawn outside or inside the UFO.
- * @return pointer to the created unit.
+ * @return Pointer to the created unit.
  */
 BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outside)
 {
@@ -672,9 +668,9 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 }
 
 /**
- * Adds a civilian to the game and place him on a free spawnpoint.
- * @param rules pointer to the Unit which holds info about civilian .
- * @return pointer to the created unit.
+ * Adds a civilian to the game and places him on a free spawnpoint.
+ * @param rules Pointer to the Unit which holds info about the civilian.
+ * @return Pointer to the created unit.
  */
 BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 {
@@ -686,7 +682,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
-		
+
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)
 		_save->getUnits()->push_back(unit);
@@ -707,8 +703,9 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 }
 
 /**
- * Places an item to an X-Com soldier based on equipment-layout.
- * @param item pointer to the Item
+ * Places an item on an XCom soldier based on equipment layout.
+ * @param item Pointer to the Item.
+ * @return Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
 {
@@ -768,8 +765,10 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem *item)
  /*** TODO - refactoring - the two below functions are very similar, should try to join them ***/
 
 /**
- * Adds an item to an X-Com soldier. (auto-equip)
- * @param item pointer to the Item
+ * Adds an item to an XCom soldier (auto-equip).
+ * @param item Pointer to the Item.
+ * @param secondPass Is this the second time through the equipping routine?
+ * @return Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 {
@@ -895,9 +894,10 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem *item, bool secondPass)
 
 
 /**
- * Adds an item to the game and assign it to a unit.
- * @param item pointer to the Item
- * @param unit pointer to the Unit
+ * Adds an item to the game and assigns it to a unit.
+ * @param item Pointer to the Item.
+ * @param unit Pointer to the Unit.
+ * @return Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 {
@@ -915,8 +915,8 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem *item, BattleUnit *unit)
 				placed = true;
 			}
 		}
-		else 
-		{	
+		else
+		{
 			for (int i = 0; i != 4; ++i)
 			{
 				if (!unit->getItem("STR_BELT", i) && _game->getRuleset()->getInventory("STR_BELT")->fitItemInSlot(item, i, 0))
@@ -1485,7 +1485,7 @@ void BattlescapeGenerator::generateMap()
 			neighbourSegments[3] = -1;
 		else
 			neighbourSegments[3] = segments[segmentX][segmentY-1];
-			
+
 		for (std::vector<int>::iterator j = node->getNodeLinks()->begin(); j != node->getNodeLinks()->end(); ++j )
 		{
 			for (int n = 0; n < 4; n++)
@@ -1516,16 +1516,16 @@ void BattlescapeGenerator::generateMap()
 
 
 /**
- * Loads a X-Com format MAP file into the tiles of the battlegame.
+ * Loads an XCom format MAP file into the tiles of the battlegame.
  * @param mapblock Pointer to MapBlock.
  * @param xoff Mapblock offset in X direction.
  * @param yoff Mapblock offset in Y direction.
  * @param save Pointer to the current SavedBattleGame.
  * @param terrain Pointer to the Terrain rule.
- * @param discovered Whether or not this mapblock is discovered (eg. landingsite of the x-com plane)
+ * @param discovered Whether or not this mapblock is discovered (eg. landingsite of the XCom plane).
  * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
- * @note Y-axis is in reverse order
+ * @note Y-axis is in reverse order.
  */
 int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int mapDataSetOffset, bool discovered)
 {
@@ -1619,11 +1619,11 @@ int BattlescapeGenerator::loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTe
 }
 
 /**
- * Loads a X-Com format RMP file into the spawnpoints of the battlegame.
- * @param mapblock pointer to MapBlock.
- * @param xoff mapblock offset in X direction
- * @param yoff mapblock offset in Y direction
- * @param segment mapblock segment
+ * Loads an XCom format RMP file into the spawnpoints of the battlegame.
+ * @param mapblock Pointer to MapBlock.
+ * @param xoff Mapblock offset in X direction.
+ * @param yoff Mapblock offset in Y direction.
+ * @param segment Mapblock segment.
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 void BattlescapeGenerator::loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment)
@@ -1694,7 +1694,7 @@ void BattlescapeGenerator::explodePowerSources()
 {
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) 
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::generate(0,100) < 75)
 		{
 			Position pos;
@@ -1707,7 +1707,8 @@ void BattlescapeGenerator::explodePowerSources()
 }
 
 /**
- * spawn 1-16 civilians on a terror mission.
+ * Spawns 1-16 civilians on a terror mission.
+ * @param max Maximum number of civilians to spawn.
  */
 void BattlescapeGenerator::deployCivilians(int max)
 {
@@ -1741,10 +1742,11 @@ void BattlescapeGenerator::setAlienBase(AlienBase *base)
 	_alienBase = base;
 	_alienBase->setInBattlescape(true);
 }
+
 /**
- * Place a unit near a friendly unit.
+ * Places a unit near a friendly unit.
  * @param unit Pointer to the unit in question.
- * @return if we successfully placed the unit.
+ * @return If we successfully placed the unit.
  */
 bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 {
@@ -1768,7 +1770,9 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit *unit)
 
 
 /**
- * Get battlescape terrain using globe texture and latitude.
+ * Gets battlescape terrain using globe texture and latitude.
+ * @param tex Globe texture.
+ * @param lat Latitude.
  * @return Pointer to ruleterrain.
  */
 RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)

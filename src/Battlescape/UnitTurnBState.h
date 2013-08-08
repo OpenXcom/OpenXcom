@@ -20,13 +20,16 @@
 #define OPENXCOM_UNITTURNBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
+#include <string>
 
 namespace OpenXcom
 {
 
 class BattleUnit;
 
+/**
+ * State for turning units.
+ */
 class UnitTurnBState : public BattleState
 {
 private:
@@ -43,7 +46,7 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Get the result of the state.
+	/// Gets the result of the state.
 	std::string getResult() const;
 };
 

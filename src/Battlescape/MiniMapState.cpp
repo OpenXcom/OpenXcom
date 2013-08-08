@@ -22,15 +22,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/Screen.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Palette.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Savegame/SavedGame.h"
-#include "../Ruleset/MapDataSet.h"
 #include "../Interface/Text.h"
 #include "MiniMapView.h"
-#include "Map.h"
 #include "Camera.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Action.h"
@@ -43,7 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param camera The Battlescape camera.
  * @param battleGame The Battlescape save.
-*/
+ */
 MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State(game)
 {
 	_surface = new InteractiveSurface(320, 200);
@@ -118,7 +113,7 @@ void MiniMapState::handle(Action *action)
 }
 
 /**
- * return to the previous screen
+ * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void MiniMapState::btnOkClick(Action *)
@@ -127,7 +122,7 @@ void MiniMapState::btnOkClick(Action *)
 }
 
 /**
- * Change the currently displayed minimap level
+ * Changes the currently displayed minimap level.
  * @param action Pointer to an action.
  */
 void MiniMapState::btnLevelUpClick(Action *)
@@ -138,7 +133,7 @@ void MiniMapState::btnLevelUpClick(Action *)
 }
 
 /**
- * Change the currently displayed minimap level
+ * Changes the currently displayed minimap level.
  * @param action Pointer to an action.
  */
 void MiniMapState::btnLevelDownClick(Action *)
@@ -149,7 +144,7 @@ void MiniMapState::btnLevelDownClick(Action *)
 }
 
 /**
- * Animation handler. Update the minimap view animation
+ * Animation handler. Updates the minimap view animation.
 */
 void MiniMapState::animate()
 {
@@ -157,7 +152,7 @@ void MiniMapState::animate()
 }
 
 /**
- * Handle timers
+ * Handles timers.
 */
 void MiniMapState::think ()
 {

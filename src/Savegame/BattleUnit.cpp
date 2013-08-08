@@ -51,8 +51,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
 																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
-																_turretType(-1), _motionPoints(0), _kills(0), _geoscapeSoldier(soldier), _charging(0), _turnsExposed(0),
-																_unitRules(0), _rankInt(-1), _hitByFire(false), _hidingForTurn(false), _moraleRestored(0)
+																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
+																_turnsExposed(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -117,9 +117,10 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 																						_toDirectionTurret(0),  _verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0),
 																						_fallPhase(0), _kneeled(false), _floating(false), _dontReselect(false), _fire(0), _currentAIState(0),
 																						_visible(false), _cacheInvalid(true), _expBravery(0), _expReactions(0), _expFiring(0),
-																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _turretType(-1), _motionPoints(0), _kills(0),
-																						_armor(armor), _geoscapeSoldier(0), _charging(0), _turnsExposed(0), _unitRules(unit), _rankInt(-1),
-																						_hitByFire(false), _hidingForTurn(false), _moraleRestored(0)
+																						_expThrowing(0), _expPsiSkill(0), _expMelee(0), _motionPoints(0), _kills(0), _hitByFire(false),
+																						_moraleRestored(0), _coverReserve(0), _charging(0), _turnsExposed(255),
+																						_armor(armor), _geoscapeSoldier(0),  _unitRules(unit), _rankInt(-1),
+																						_turretType(-1), _hidingForTurn(false)
 {
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -165,71 +166,6 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	lastCover = Position(-1, -1, -1);
 	
 }
-
-/// tedious copy constructor because we can't copy _cache by the default method
-BattleUnit::BattleUnit(BattleUnit &b) : 
-	_faction(b._faction), _originalFaction(b._originalFaction),
-	_killedBy(b._killedBy),
-	_id(b._id),
-	_pos(b._pos),
-	_tile(b._tile),
-	_lastPos(b._lastPos),
-	_direction(b._direction), _toDirection(b._toDirection),
-	_directionTurret(b._directionTurret), _toDirectionTurret(b._toDirectionTurret),
-	_verticalDirection(b._verticalDirection),
-	_destination(b._destination),
-	_status(b._status),
-	_walkPhase(b._walkPhase), _fallPhase(b._fallPhase),
-	_visibleUnits(b._visibleUnits),
-	_visibleTiles(b._visibleTiles),
-	_tu(b._tu), _energy(b._energy), _health(b._health), _morale(b._morale), _stunlevel(b._stunlevel),
-	_kneeled(b._kneeled), _floating(b._floating), _dontReselect(b._dontReselect),
-	//int _currentArmor[5];
-	//int _fatalWounds[6];
-	_fire(b._fire),
-	_inventory(b._inventory),
-	_currentAIState(b._currentAIState),
-	_visible(b._visible),
-	//Surface *_cache[5];
-	_cacheInvalid(b._cacheInvalid),
-	_expBravery(b._expBravery), _expReactions(b._expReactions), _expFiring(b._expFiring), _expThrowing(b._expThrowing), _expPsiSkill(b._expPsiSkill), _expMelee(b._expMelee),
-	_turretType(b._expMelee),
-	_motionPoints(b._motionPoints),
-	_kills(b._kills),
-	_faceDirection(b._faceDirection),
-	_type(b._type),
-	_rank(b._rank),
-	_race(b._race),
-	_name(b._name),
-	_stats(b._stats),
-	_standHeight(b._standHeight), _kneelHeight(b._kneelHeight), _floatHeight(b._floatHeight),
-	_value(b._value), _deathSound(b._deathSound), _aggroSound(b._aggroSound), _moveSound(b._moveSound),
-	_intelligence(b._intelligence), _aggression(b._aggression),
-	_specab(b._specab),
-	_zombieUnit(b._zombieUnit), _spawnUnit(b._spawnUnit),
-	_armor(b._armor),
-	_gender(b._gender),
-	_activeHand(b._activeHand),
-	_geoscapeSoldier(b._geoscapeSoldier),
-	_charging(b._charging),
-	_turnsExposed(b._turnsExposed),
-	_loftempsSet(b._loftempsSet),
-	_unitRules(b._unitRules),
-	_hidingForTurn(b._hidingForTurn),
-	lastCover(b.lastCover)
-{
-	invalidateCache();
-	for (int i = 0; i < 5; ++i)
-	{
-		_currentArmor[i] = b._currentArmor[i];
-	}
-	
-	for (int i = 0; i < 6; ++i)
-	{
-		_fatalWounds[i] = b._fatalWounds[i];
-	}
-}
-
 
 
 /**
@@ -1520,12 +1456,21 @@ void BattleUnit::moraleChange(int change)
 }
 
 /**
- * Mark this unit is not reselectable.
+ * Mark this unit as not reselectable.
  */
 void BattleUnit::dontReselect()
 {
 	_dontReselect = true;
 }
+
+/**
+ * Mark this unit as reselectable.
+ */
+void BattleUnit::allowReselect()
+{
+	_dontReselect = false;
+}
+
 
 /**
  * Check whether reselecting this unit is allowed.
@@ -1892,7 +1837,7 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addKillCount(_kills);
 
 	UnitStats *stats = s->getCurrentStats();
-	UnitStats caps = s->getRules()->getStatCaps();
+	const UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
 	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
@@ -1950,11 +1895,16 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 */
 int BattleUnit::improveStat(int exp)
 {
-	double v = 4;
-	if (exp < 3) v = 1;
-	if (exp < 6) v = 2;
-	if (exp < 10) v = 3;
-	return (int)(v/2.0 + RNG::generate(0.0, v));
+	double tier = 4.0;
+	if (exp <= 10)
+	{
+		tier = 3.0;
+		if (exp <= 5)
+		{
+			tier = exp > 2 ? 2.0 : 1.0;
+		}
+	}
+	return (int)(tier/2.0 + RNG::generate(0.0, tier));
 }
 
 /*
@@ -2414,7 +2364,7 @@ int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 }
 
 /**
- * Set how long this unit will be exposed for.
+ * Set how long since this unit was last exposed.
  * @param turns
  */
 void BattleUnit::setTurnsExposed (int turns)
@@ -2423,7 +2373,7 @@ void BattleUnit::setTurnsExposed (int turns)
 }
 
 /**
- * Get how long this unit will be exposed for.
+ * Get how long since this unit was exposed.
  * @return turns
  */
 int BattleUnit::getTurnsExposed () const
@@ -2565,4 +2515,12 @@ void BattleUnit::toggleFireDamage()
 	_hitByFire = !_hitByFire;
 }
 
+void BattleUnit::setCoverReserve(int reserve)
+{
+	_coverReserve = reserve;
+}
+int BattleUnit::getCoverReserve()
+{
+	return _coverReserve;
+}
 }

@@ -241,8 +241,6 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
-	// it does what it says it does.
-	updateExposedUnits();
 	// matches up tiles and units
 	resetUnitTiles();
 
@@ -841,22 +839,29 @@ void SavedBattleGame::endTurn()
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
-	
-	// hide all aliens (VOF calculations below will turn them visible again)
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+
+	if (_side == FACTION_PLAYER)
 	{
-		if ((*i)->getTurnsExposed() && _side == FACTION_PLAYER)
+		int liveSoldiers, liveAliens;
+
+		_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+
+		// update the "number of turns since last spotted"
+		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
-			(*i)->setTurnsExposed((*i)->getTurnsExposed() - 1);
-			updateExposedUnits();
-		}
-		if (_side == FACTION_PLAYER && _turn == 20 && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
-		{
-			(*i)->setTurnsExposed(-1);
-			updateExposedUnits();
+			if ((*i)->getTurnsExposed() < 255 && _side == FACTION_PLAYER)
+			{
+				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
+			}
+			if (_side == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut()
+				&& (_turn >= 20 || liveAliens < 2))
+			{
+				(*i)->setTurnsExposed(0);
+			}
 		}
 	}
 
+	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if ((*i)->getFaction() == _side)
@@ -1444,21 +1449,6 @@ int SavedBattleGame::getDragTimeTolerance() const
 int SavedBattleGame::getDragPixelTolerance() const
 {
 	return _dragPixelTolerance;
-}
-
-void SavedBattleGame::updateExposedUnits()
-{
-	_exposedUnits.clear();
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
-	{
-		if ((*i)->getTurnsExposed() && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
-			_exposedUnits.push_back(*i);
-	}
-}
-
-std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
-{
-	return &_exposedUnits;
 }
 
 /**

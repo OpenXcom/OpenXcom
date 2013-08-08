@@ -215,10 +215,6 @@ public:
 	int getDragTimeTolerance() const;
 	/// get DragPixelTolerance
 	int getDragPixelTolerance() const;
-	/// update the psionic target array 
-	void updateExposedUnits();
-	/// get the vector of psionic targets
-	std::vector<BattleUnit*> *getExposedUnits();
 	/// get the number of units that can see this unit
 	int getSpottingUnits(BattleUnit* unit) const;
 	/// add this unit to the vector of falling units

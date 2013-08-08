@@ -44,40 +44,51 @@ private:
 	OpenSetEntry *_openentry;
 	friend class PathfindingOpenSet;
 public:
-	/// Creates a new PathfindingNode class
+	/// Creates a new PathfindingNode class.
 	PathfindingNode(Position pos);
 	/// Cleans up the PathfindingNode.
 	~PathfindingNode();
-	/// Get the node position
+	/// Gets the node position.
 	const Position &getPosition() const;
-	/// Reset node.
+	/// Resets the node.
 	void reset();
-	/// is checked?
+	/// Is checked?
 	bool isChecked() const;
-	/// Mark as checked
+	/// Marks the node as checked.
 	void setChecked() { _checked = true; }
-	/// get TU cost
+	/// Gets the TU cost.
 	int getTUCost(bool missile) const;
-	/// get steps num
-	int getStepsNum() const;
-	/// get previous node
+	/// Gets the previous node.
 	PathfindingNode* getPrevNode() const;
-	/// get previous walking direction
+	/// Gets the previous walking direction.
 	int getPrevDir() const;
 	/// Is this node already in a PathfindingOpenSet?
 	bool inOpenSet() const { return (_openentry != 0); }
-	/// Get approximate cost to reach target position.
+	/// Gets the approximate cost to reach the target position.
 	int getTUGuess() const { return _tuGuess; }
-	/// Connect to previous node along the path.
+
+	#ifdef __MORPHOS__
+	#undef connect
+	#endif
+
+	/// Connects to previous node along the path.
 	void connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position &target);
-	/// Connect to previous node along a visit.
+	/// Connects to previous node along a visit.
 	void connect(int tuCost, PathfindingNode* prevNode, int prevDir);
 };
 
-/** Compare PathfindingNode pointers based on TU cost. */
+/**
+ * Compares PathfindingNode pointers based on TU cost.
+ */
 class MinNodeCosts
 {
 public:
+	/**
+	 * Compares nodes @a *a and @a *b.
+	 * @param a Pointer to first node.
+	 * @param b Pointer to second node.
+	 * @return True if node @a *a must come before @a *b.
+	 */
 	bool operator()(const PathfindingNode *a, const PathfindingNode *b) const
 	{
 		return a->getTUCost(false) < b->getTUCost(false);

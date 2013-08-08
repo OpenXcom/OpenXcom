@@ -2390,7 +2390,7 @@ You can at any time send soldiers into (or removed from) psionic training. Remem
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION
-XCom 2012 item recovery
+Alien weapon self destruction
 STR_WEAPONSELFDESTRUCTION_DESC
 Weapons carried by aliens will self destruct if their owner is killed.
 STR_RESEARCHEDITEMSWILLSPENT

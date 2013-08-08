@@ -57,7 +57,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	_txtBriefing = new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	// Set palette
@@ -110,7 +110,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	_txtTarget->setColor(Palette::blockOffset(8)+5);
 	_txtTarget->setBig();
-	
+
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
 	std::wstringstream ss;

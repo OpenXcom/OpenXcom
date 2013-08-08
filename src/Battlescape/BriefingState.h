@@ -29,7 +29,6 @@ class Window;
 class Text;
 class Craft;
 class Base;
-class Ufo;
 
 /**
  * Briefing screen which displays info

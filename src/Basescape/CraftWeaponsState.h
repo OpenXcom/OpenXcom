@@ -33,8 +33,8 @@ class TextList;
 class RuleCraftWeapon;
 
 /**
- * Select Armament window that allows to
- * change the weapon equipped on a craft.
+ * Select Armament window for
+ * changing the weapon equipped on a craft.
  */
 class CraftWeaponsState : public State
 {

@@ -47,6 +47,8 @@ namespace OpenXcom
  * Sets up a UnitSprite with the specified size and position.
  * @param res Pointer to resourcepack.
  * @param save Pointer to battlesavegame.
+ * @param action An action.
+ * @param origin Position the projectile originates from.
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
 {
@@ -65,25 +67,25 @@ Projectile::~Projectile()
 }
 
 /**
- * calculateTrajectory.
- * @param accuracy
+ * Calculates the trajectory for a straight path.
+ * @param accuracy The unit's accuracy.
  * @param doCalcChance Do only clculating probability of hitting to unit. Default = false.
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(no line of fire)
+ * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire)
  *			or chance to hit (-1 none; 0-99 percent)
  */
 int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
-	int direction;		
+	int direction;
 	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	int offset = 0;
-	int densitySmoke;
+	int smokeDensity;
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
-	
+
 	if (bu->getArmor()->getSize() > 1)
 	{
 		offset = 16;
@@ -191,8 +193,8 @@ int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 			// target nothing, targets the middle of the tile
 			targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
 		}
-		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, false, 0, &densitySmoke);
-		densitySmoke /= 16;	// normalization (16 voxels per tile)
+		test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, false, 0, &smokeDensity);
+		smokeDensity /= 16;	// normalization (16 voxels per tile)
 		if (test == 4 && !_trajectory.empty())
 		{
 			hitPos = Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24);
@@ -233,20 +235,21 @@ int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 		_trajectory.clear();
 
 		if (doCalcChance)
-			return (test != 4) ? -1 : applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, densitySmoke, true);
+			return (test != 4) ? -1 : applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, smokeDensity, true);
 	}
 
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH)
-		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, densitySmoke);
+		applyAccuracy(originVoxel, &targetVoxel, accuracy, false, targetTile, smokeDensity);
 
 	// finally do a line calculation and store this trajectory.
 	return _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, true, &_trajectory, bu);
 }
 
 /**
- * calculateTrajectory.
- * @return true when a trajectory is possible.
+ * Calculates the trajectory for a curved path.
+ * @param accuracy The unit's accuracy.
+ * @return True when a trajectory is possible.
  */
 bool Projectile::calculateThrow(double accuracy)
 {
@@ -282,7 +285,6 @@ bool Projectile::calculateThrow(double accuracy)
 			_origin.z++;
 		}
 	}
-
 
 	// determine the target voxel.
 	// aim at the center of the floor
@@ -347,12 +349,12 @@ bool Projectile::calculateThrow(double accuracy)
 	return true;
 }
 
-
 /**
- * applyAccuracy calculates the new target in voxel space, based on the given accuracy modifier.
+ * Calculates the new target in voxel space, based on the given accuracy modifier.
  * @param origin Startposition of the trajectory.
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
+ * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
  * @param densitySmoke Density of smoke between positions. Default = 0.
  * @param doCalcChance Do only calculation the probability of hitting. Default = false.
@@ -513,7 +515,7 @@ int Projectile::approxF(double sigm, double delta)
 }
 
 /**
- * Move further in the trajectory.
+ * Moves further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.
  */
 bool Projectile::move()
@@ -537,9 +539,9 @@ bool Projectile::move()
 }
 
 /**
- * Get the current position in voxel space.
- * @param offset
- * @return position in voxel space.
+ * Gets the current position in voxel space.
+ * @param offset Offset.
+ * @return Position in voxel space.
  */
 Position Projectile::getPosition(int offset) const
 {
@@ -551,9 +553,9 @@ Position Projectile::getPosition(int offset) const
 }
 
 /**
- * Get a particle reference from the projectile surfaces.
- * @param i
- * @return particle id
+ * Gets a particle reference from the projectile surfaces.
+ * @param i Index.
+ * @return Particle id.
  */
 int Projectile::getParticle(int i) const
 {
@@ -564,9 +566,9 @@ int Projectile::getParticle(int i) const
 }
 
 /**
- * Get the project tile item.
+ * Gets the project tile item.
  * Returns 0 when there is no item thrown.
- * @return pointer to BattleItem
+ * @return Pointer to BattleItem.
  */
 BattleItem *Projectile::getItem() const
 {
@@ -577,16 +579,16 @@ BattleItem *Projectile::getItem() const
 }
 
 /**
- * Get the bullet sprite.
- * @return pointer to Surface
+ * Gets the bullet sprite.
+ * @return Pointer to Surface.
  */
 Surface *Projectile::getSprite() const
 {
 	return _sprite;
 }
 
-/** 
- * skip to the end of the trajectory
+/**
+ * Skips to the end of the trajectory.
  */
 void Projectile::skipTrajectory()
 {

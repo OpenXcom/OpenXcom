@@ -130,6 +130,7 @@ void createDefault()
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
+	setBool("captureMouse", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -244,7 +245,12 @@ void createDefault()
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
 	setInt("keyBattleVoxelView", SDLK_F10);
+
 	setInt("keyBattleZeroTUs", SDLK_DELETE);
+
+#ifdef __MORPHOS__
+	setInt("FPS", 15);
+#endif
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");

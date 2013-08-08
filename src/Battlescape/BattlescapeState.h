@@ -38,15 +38,12 @@ class NumberText;
 class BattleUnit;
 class SavedBattleGame;
 class BattleItem;
-class Window;
-class BattleState;
 class Timer;
-class ActionMenuItem;
 class WarningMessage;
 class BattlescapeGame;
 
 /**
- * Battlescape screen which shows the tactical battle
+ * Battlescape screen which shows the tactical battle.
  */
 class BattlescapeState : public State
 {
@@ -81,20 +78,23 @@ private:
 	int totalMouseMoveX, totalMouseMoveY;
 	bool mouseMovedOverThreshold;
 	bool _mouseOverIcons;
-
+	/// Popups a context sensitive list of actions the user can choose from.
 	void handleItemClick(BattleItem *item);
+	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
 public:
+	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
+	/// Selects the previous soldier.
 	void selectPreviousPlayerUnit(bool checkReselect);
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.
 	~BattlescapeState();
-	/// init
+	/// Initilizes the battlescapestate.
 	void init();
-	/// think
+	/// Runs the timers and handles popups.
 	void think();
 	/// Handler for moving mouse over the map.
 	void mapOver(Action *action);
@@ -152,51 +152,51 @@ public:
 	void btnReloadClick(Action *action);
 	/// Handler for clicking the lighting button.
 	void btnPersonalLightingClick(Action *action);
-	// playable unit selected?
+	/// Determines whether a playable unit is selected.
 	bool playableUnitSelected();
-	/// updates soldier name/rank/tu/energy/health/morale
+	/// Updates soldier name/rank/tu/energy/health/morale.
 	void updateSoldierInfo();
-	/// Animate other stuff.
+	/// Animates map objects on the map, also smoke,fire, ...
 	void animate();
-	/// handlestates timer.
+	/// Handles the battle game state.
 	void handleState();
-	/// state timer interval.
+	/// Sets the state timer interval.
 	void setStateInterval(Uint32 interval);
-	/// Get game.
+	/// Gets game.
 	Game *getGame() const;
-	/// Get map.
+	/// Gets map.
 	Map *getMap() const;
 	/// Show debug message.
 	void debug(const std::wstring &message);
 	/// Show warning message.
 	void warning(const std::string &message);
-	/// Handle keypresses.
+	/// Handles keypresses.
 	void handle(Action *action);
 	/// Displays a popup window.
 	void popup(State *state);
 	/// Finishes a battle.
 	void finishBattle(bool abort, int inExitArea);
-	/// show launch button.
+	/// Show the launch button.
 	void showLaunchButton(bool show);
-	/// show PSI button.
+	/// Shows the PSI button.
 	void showPsiButton(bool show);
 	/// Clears mouse-scrolling state.
 	void clearMouseScrollingState();
-	/// returns a pointer to the battlegame, in case we need it's functions.
+	/// Returns a pointer to the battlegame, in case we need its functions.
 	BattlescapeGame *getBattleGame();
-	/// saves an map as used by the AI.
-	void SaveAIMap();
-	/// save each layer of voxels on the bettlescape as a png
-	void SaveVoxelMap();
-	/// save a first-person voxel view of the battlescape.
-	void SaveVoxelView();
-	/// handler for the mouse moving over the icons, disables the tile selection cube.
+	/// Saves a map as used by the AI.
+	void saveAIMap();
+	/// Saves each layer of voxels on the bettlescape as a png.
+	void saveVoxelMap();
+	/// Saves a first-person voxel view of the battlescape.
+	void saveVoxelView();
+	/// Handler for the mouse moving over the icons, disables the tile selection cube.
 	void mouseInIcons(Action *action);
-	/// handler for the mouse going out of the icons, enabling the tile selection cube.
+	/// Handler for the mouse going out of the icons, enabling the tile selection cube.
 	void mouseOutIcons(Action *action);
-	/// check if the mouse is over the icons.
+	/// Checks if the mouse is over the icons.
 	bool getMouseOverIcons() const;
-	/// is the player allowed to press buttons?
+	/// Is the player allowed to press buttons?
 	bool allowButtons() const;
 	/// Handler for clicking the reserve TUs to kneel button.
 	void btnReserveKneelClick(Action *action);
