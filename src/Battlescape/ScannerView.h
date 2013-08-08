@@ -23,8 +23,9 @@
 
 namespace OpenXcom
 {
+
 class BattleUnit;
-class Text;
+class Game;
 
 /**
  * Display a view of units movement

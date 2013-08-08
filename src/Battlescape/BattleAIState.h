@@ -27,7 +27,6 @@ namespace OpenXcom
 
 class SavedBattleGame;
 class BattleUnit;
-class BattlescapeState;
 
 /**
  * This class is used by the BattleUnit AI.

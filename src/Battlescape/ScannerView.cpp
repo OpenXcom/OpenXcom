@@ -21,15 +21,11 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Interface/Text.h"
-#include <iostream>
 
 namespace OpenXcom
 {

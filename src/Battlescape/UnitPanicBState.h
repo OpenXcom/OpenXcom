@@ -20,6 +20,7 @@
 #define OPENXCOM_UNITPANICBSTATE_H
 
 #include "BattleState.h"
+#include <string>
 
 namespace OpenXcom
 {

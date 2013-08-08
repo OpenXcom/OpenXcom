@@ -20,14 +20,13 @@
 #define OPENXCOM_UNITDIEBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
 
+class BattlescapeGame;
 class BattleUnit;
-class TileEngine;
 
 /* Refactoring tip : UnitDieBState */
 

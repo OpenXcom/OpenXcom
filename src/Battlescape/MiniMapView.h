@@ -21,16 +21,15 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include "Position.h"
-#include <map>
 
 namespace OpenXcom
 {
+
 class Game;
 class Camera;
 class SavedBattleGame;
-class Tile;
-class BattleUnit;
 class SurfaceSet;
+
 /**
    MiniMapView is the class used to display the map in the MiniMapState
 */

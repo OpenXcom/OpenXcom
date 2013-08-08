@@ -21,7 +21,6 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Savegame/BattleUnit.h"

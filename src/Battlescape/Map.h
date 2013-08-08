@@ -29,9 +29,7 @@ namespace OpenXcom
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class MapData;
 class Position;
-class Tile;
 class BattleUnit;
 class Projectile;
 class Explosion;
