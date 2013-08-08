@@ -85,7 +85,6 @@ void InfoboxState::handle(Action *action)
 	}
 }
 
-
 /**
  * Keeps the animation timers running.
  */
@@ -95,13 +94,11 @@ void InfoboxState::think()
 }
 
 /**
- * closes the window.
+ * Closes the window.
  */
 void InfoboxState::close()
 {
 	_game->popState();
 }
-
-
 
 }

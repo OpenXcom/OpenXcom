@@ -58,9 +58,13 @@ private:
 	TextList *_lstStats, *_lstRecovery, *_lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
+	/// Adds to the debriefing stats.
 	void addStat(const std::string &name, int quantity, int score);
+	/// Prepares debriefing.
 	void prepareDebriefing();
+	/// Recovers items from the battlescape.
 	void recoverItems(std::vector<BattleItem*> *from, Base *base);
+	/// Reequips a craft after a mission.
 	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _destroyBase;
 	int _containmentLimit;

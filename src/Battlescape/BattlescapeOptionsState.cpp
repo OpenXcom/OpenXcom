@@ -387,6 +387,9 @@ BattlescapeOptionsState::~BattlescapeOptionsState()
 
 }
 
+/**
+ * Saves battlescape options.
+ */
 void BattlescapeOptionsState::saveOptions()
 {
 	if (_scrollSpeed == _btnScrollSpeed1)

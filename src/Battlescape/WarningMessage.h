@@ -29,7 +29,7 @@ class Timer;
 class Font;
 
 /**
- * Coloured box with text inside that fades out after displayed.
+ * Coloured box with text inside that fades out after it is displayed.
  * Used to display warning/error messages on the Battlescape.
  */
 class WarningMessage : public Surface

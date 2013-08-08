@@ -31,13 +31,13 @@ namespace OpenXcom
 {
 
 /**
- * Initialize the Scanner view
- * @param w the ScannerView width
- * @param h the ScannerView height
- * @param x the ScannerView x origin
- * @param y the ScannerView y origin
+ * Initializes the Scanner view.
+ * @param w The ScannerView width.
+ * @param h The ScannerView height.
+ * @param x The ScannerView x origin.
+ * @param y The ScannerView y origin.
  * @param game Pointer to the core game.
- * @param unit the current unit
+ * @param unit The current unit.
  */
 ScannerView::ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *unit) : InteractiveSurface(w, h, x, y), _game(game), _unit(unit), _frame(0)
 {
@@ -45,7 +45,7 @@ ScannerView::ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *u
 }
 
 /**
- * Draw the ScannerView view
+ * Draws the ScannerView view.
  */
 void ScannerView::draw()
 {
@@ -86,7 +86,7 @@ void ScannerView::draw()
 }
 
 /**
- * Handle click on the scanner view
+ * Handles clicks on the scanner view.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -95,7 +95,7 @@ void ScannerView::mouseClick (Action *, State *)
 }
 
 /**
- * Update scanner animation
+ * Updates the scanner animation.
 */
 void ScannerView::animate()
 {

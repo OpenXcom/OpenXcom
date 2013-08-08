@@ -32,30 +32,30 @@ class Timer;
 class SavedBattleGame;
 
 /**
-   The MiniMap is a representation of a Battlescape map. Allow to see more of the map.
-*/
+ * The MiniMap is a representation of a Battlescape map that allows you to see more of the map.
+ */
 class MiniMapState : public State
 {
 	InteractiveSurface * _surface;
 	MiniMapView * _miniMapView;
 	Text * _txtLevel;
 	Timer *_timerAnimate;
-	/// Handle Minimap animation
+	/// Handles Minimap animation.
 	void animate();
 public:
-	/// Create the MiniMapState
+	/// Creates the MiniMapState.
 	MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame);
-	/// Clean up the MiniMapState.
+	/// Cleans up the MiniMapState.
 	~MiniMapState();
-	/// Handler for the OK button
+	/// Handler for the OK button.
 	void btnOkClick (Action * action);
-	/// Handler for the one level up button
+	/// Handler for the one level up button.
 	void btnLevelUpClick (Action * action);
-	/// Handler for the one level down button
+	/// Handler for the one level down button.
 	void btnLevelDownClick (Action * action);
 	/// Handler for right-clicking anything.
 	void handle(Action *action);
-	/// Handle timers
+	/// Handles timers.
 	void think ();
 };
 }

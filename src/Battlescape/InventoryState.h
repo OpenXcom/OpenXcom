@@ -70,7 +70,7 @@ public:
 	void btnRankClick(Action *action);
 	/// Handler for clicking the Unload button.
 	void invClick(Action *action);
-	/// Handle keypresses.
+	/// Handles keypresses.
 	void handle(Action *action);
 };
 

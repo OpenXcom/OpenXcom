@@ -25,7 +25,8 @@ namespace OpenXcom
  * Sets up a Explosion sprite with the specified size and position.
  * @param position Explosion center position in voxel x/y/z.
  * @param startFrame A startframe - can be used to offset different explosions at different frames.
- * @param big Flag to indicate it is a bullet hit(false), or a real explosion(true).
+ * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
+ * @param hit True for melee and psi attacks.
  */
 Explosion::Explosion(Position position, int startFrame, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big), _hit(hit)
 {
@@ -40,10 +41,9 @@ Explosion::~Explosion()
 
 }
 
-
 /**
- * Animate the explosion further.
- * @return false if the animation is finished.
+ * Animates the explosion further.
+ * @return false If the animation is finished.
  */
 bool Explosion::animate()
 {
@@ -59,7 +59,7 @@ bool Explosion::animate()
 }
 
 /**
- * Get the current position in voxel space.
+ * Gets the current position in voxel space.
  * @return position in voxel space.
  */
 Position Explosion::getPosition() const
@@ -68,7 +68,7 @@ Position Explosion::getPosition() const
 }
 
 /**
- * Get the current frame in the animation.
+ * Gets the current frame in the animation.
  * @return frame number.
  */
 int Explosion::getCurrentFrame() const
@@ -77,14 +77,18 @@ int Explosion::getCurrentFrame() const
 }
 
 /**
- * Return flag to indicate it is a bullet hit(false), or a real explosion(true).
- * @return big
+ * Returns flag to indicate if it is a bullet hit (false), or a real explosion (true).
+ * @return True if it is a real explosion, false if it is a bullet hit.
  */
 bool Explosion::isBig() const
 {
 	return _big;
 }
 
+/**
+ * Returns flag to indicate if it is a melee or psi hit.
+ * @return True if it is a melee hit or psi hit.
+ */
 bool Explosion::isHit() const
 {
 	return _hit;

@@ -381,7 +381,7 @@ UnitInfoState::~UnitInfoState()
 }
 
 /**
- * The unit info can change
+ * Updates unit info which can change
  * after going into other screens.
  */
 void UnitInfoState::init()

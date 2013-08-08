@@ -36,10 +36,11 @@
 
 namespace OpenXcom
 {
+
 /**
- * Helper function return a string representation a type(mainly used for number)
- * t the value to stringify
- * @return a string representation of value
+ * Helper function that returns a string representation of a type (mainly used for numbers).
+ * @param t The value to stringify.
+ * @return A string representation of the value.
  */
 template<typename type>
 std::wstring toString (type t)
@@ -50,19 +51,19 @@ std::wstring toString (type t)
 }
 
 /**
- * Helper class for medikit title
+ * Helper class for the medikit title.
  */
 class MedikitTitle : public Text
 {
 public:
-	/// Create a medikit title
+	/// Creates a medikit title.
 	MedikitTitle(int y, const std::wstring & title);
 };
 
 /**
- * Initialize a Medikit title
- * @param y the Title y origin
- * @param title the title
+ * Initializes a Medikit title.
+ * @param y The title's y origin.
+ * @param title The title.
  */
 MedikitTitle::MedikitTitle (int y, const std::wstring & title) : Text (60, 16, 192, y)
 {
@@ -72,22 +73,22 @@ MedikitTitle::MedikitTitle (int y, const std::wstring & title) : Text (60, 16, 1
 }
 
 /**
- * Helper class for medikit value
+ * Helper class for the medikit value.
  */
 class MedikitTxt : public Text
 {
 public:
-	/// Create a medikit text
+	/// Creates a medikit text.
 	MedikitTxt(int y);
 };
 
 /**
- * Initialize a Medikit text
- * @param y the Text y origin
+ * Initializes a Medikit text.
+ * @param y The text's y origin.
  */
 MedikitTxt::MedikitTxt(int y) : Text(30, 22, 220, y)
 {
-	// Note: we can't set setBig here. The needed font is only setted when added to State
+	// Note: we can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
 	this->setHighContrast(true);
 	this->setAlign(ALIGN_CENTER);
@@ -95,25 +96,25 @@ MedikitTxt::MedikitTxt(int y) : Text(30, 22, 220, y)
 }
 
 /**
- * Helper class for medikit button
+ * Helper class for the medikit button.
  */
 class MedikitButton : public InteractiveSurface
 {
 public:
-	/// Create a medikit button
+	/// Creates a medikit button.
 	MedikitButton(int y);
 };
 
 /**
- * Initialize a Medikit button
- * @param y the button y origin
+ * Initializes a Medikit button.
+ * @param y The button's y origin.
  */
 MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
 {
 }
 
 /**
- * Initialize the Medikit State
+ * Initializes the Medikit State.
  * @param game Pointer to the core game.
  * @param targetUnit The wounded unit.
  * @param action The healing action.
@@ -194,7 +195,7 @@ void MedikitState::handle(Action *action)
 }
 
 /**
- * return to the previous screen
+ * Returns to the previous screen.
  * @param action Pointer to an action.
  */
 void MedikitState::onEndClick(Action *)
@@ -203,7 +204,7 @@ void MedikitState::onEndClick(Action *)
 }
 
 /**
- * Handler for clicking on the heal button
+ * Handler for clicking on the heal button.
  * @param action Pointer to an action.
  */
 void MedikitState::onHealClick(Action *)
@@ -229,7 +230,7 @@ void MedikitState::onHealClick(Action *)
 }
 
 /**
- * Handler for clicking on the stimulant button
+ * Handler for clicking on the stimulant button.
  * @param action Pointer to an action.
  */
 void MedikitState::onStimulantClick(Action *)
@@ -261,7 +262,7 @@ void MedikitState::onStimulantClick(Action *)
 }
 
 /**
- * Handler for clicking on the pain killer button
+ * Handler for clicking on the pain killer button.
  * @param action Pointer to an action.
  */
 void MedikitState::onPainKillerClick(Action *)
@@ -286,7 +287,7 @@ void MedikitState::onPainKillerClick(Action *)
 }
 
 /**
- * Update medikit state
+ * Updates the medikit state.
  */
 void MedikitState::update()
 {

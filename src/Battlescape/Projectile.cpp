@@ -47,6 +47,8 @@ namespace OpenXcom
  * Sets up a UnitSprite with the specified size and position.
  * @param res Pointer to resourcepack.
  * @param save Pointer to battlesavegame.
+ * @param action An action.
+ * @param origin Position the projectile originates from.
  */
 Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
 {
@@ -65,21 +67,22 @@ Projectile::~Projectile()
 }
 
 /**
- * calculateTrajectory.
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(no line of fire)
+ * Calculates the trajectory for a straight path.
+ * @param accuracy The unit's accuracy.
+ * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire).
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
-	int direction;		
+	int direction;
 	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	int offset = 0;
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
-	
+
 	if (bu->getArmor()->getSize() > 1)
 	{
 		offset = 16;
@@ -237,8 +240,9 @@ int Projectile::calculateTrajectory(double accuracy)
 }
 
 /**
- * calculateTrajectory.
- * @return true when a trajectory is possible.
+ * Calculates the trajectory for a curved path.
+ * @param accuracy The unit's accuracy.
+ * @return True when a trajectory is possible.
  */
 bool Projectile::calculateThrow(double accuracy)
 {
@@ -274,7 +278,6 @@ bool Projectile::calculateThrow(double accuracy)
 			_origin.z++;
 		}
 	}
-
 
 	// determine the target voxel.
 	// aim at the center of the floor
@@ -339,12 +342,12 @@ bool Projectile::calculateThrow(double accuracy)
 	return true;
 }
 
-
 /**
- * applyAccuracy calculates the new target in voxel space, based on the given accuracy modifier.
+ * Calculates the new target in voxel space, based on the given accuracy modifier.
  * @param origin Startposition of the trajectory.
  * @param target Endpoint of the trajectory.
  * @param accuracy Accuracy modifier.
+ * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
  */
 void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
@@ -432,7 +435,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 }
 
 /**
- * Move further in the trajectory.
+ * Moves further in the trajectory.
  * @return false if the trajectory is finished - no new position exists in the trajectory.
  */
 bool Projectile::move()
@@ -456,9 +459,9 @@ bool Projectile::move()
 }
 
 /**
- * Get the current position in voxel space.
- * @param offset
- * @return position in voxel space.
+ * Gets the current position in voxel space.
+ * @param offset Offset.
+ * @return Position in voxel space.
  */
 Position Projectile::getPosition(int offset) const
 {
@@ -470,9 +473,9 @@ Position Projectile::getPosition(int offset) const
 }
 
 /**
- * Get a particle reference from the projectile surfaces.
- * @param i
- * @return particle id
+ * Gets a particle reference from the projectile surfaces.
+ * @param i Index.
+ * @return Particle id.
  */
 int Projectile::getParticle(int i) const
 {
@@ -483,9 +486,9 @@ int Projectile::getParticle(int i) const
 }
 
 /**
- * Get the project tile item.
+ * Gets the project tile item.
  * Returns 0 when there is no item thrown.
- * @return pointer to BattleItem
+ * @return Pointer to BattleItem.
  */
 BattleItem *Projectile::getItem() const
 {
@@ -496,16 +499,16 @@ BattleItem *Projectile::getItem() const
 }
 
 /**
- * Get the bullet sprite.
- * @return pointer to Surface
+ * Gets the bullet sprite.
+ * @return Pointer to Surface.
  */
 Surface *Projectile::getSprite() const
 {
 	return _sprite;
 }
 
-/** 
- * skip to the end of the trajectory
+/**
+ * Skips to the end of the trajectory.
  */
 void Projectile::skipTrajectory()
 {
