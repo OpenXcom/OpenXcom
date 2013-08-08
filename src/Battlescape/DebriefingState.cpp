@@ -261,10 +261,8 @@ void DebriefingState::btnOkClick(Action *)
 	}
 }
 
-
-
 /**
- * Add to debriefing stats.
+ * Adds to the debriefing stats.
  * @param name The untranslated name of the stat.
  * @param quantity The quantity to add.
  * @param score The score to add.
@@ -283,21 +281,21 @@ void DebriefingState::addStat(const std::string &name, int quantity, int score)
 }
 
 /**
- * Clear the alien base from supply missions that use it.
+ * Clears the alien base from supply missions that use it.
  */
 class ClearAlienBase: public std::unary_function<AlienMission *, void>
 {
 public:
-	/// Remember the base.
+	/// Remembers the base.
 	ClearAlienBase(const AlienBase *base) : _base(base) { /* Empty by design. */ }
-	/// Clear the base if required.
+	/// Clears the base if required.
 	void operator()(AlienMission *am) const;
 private:
 	const AlienBase *_base;
 };
 
 /**
- * This function will remove the association between the alien mission and the alien base,
+ * Removes the association between the alien mission and the alien base,
  * if one existed.
  * @param am Pointer to the alien mission.
  */
@@ -653,7 +651,7 @@ void DebriefingState::prepareDebriefing()
 				if (aborted || playersSurvived == 0)
 				{
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
-				}				
+				}
 				else
 				{
 					addStat("STR_CIVILIANS_SAVED", 1, (*j)->getValue());
@@ -880,6 +878,12 @@ void DebriefingState::prepareDebriefing()
 	}
 }
 
+/**
+ * Reequips a craft after a mission.
+ * @param base Base to reequip from.
+ * @param craft Craft to reequip.
+ * @param vehicleItemsCanBeDestroyed Whether we can destroy the vehicles on the craft.
+ */
 void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed)
 {
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
@@ -958,7 +962,13 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	}
 }
 
-/* converts battlescape inventory into geoscape itemcontainer */
+/**
+ * Recovers items from the battlescape.
+ *
+ * Converts the battlescape inventory into a geoscape itemcontainer.
+ * @param from Items recovered from the battlescape.
+ * @param base Base to add items to.
+ */
 void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)

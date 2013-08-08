@@ -38,11 +38,11 @@ struct OpenSetEntry
 class EntryCompare
 {
 public:
- 	/**
-	 * Compare entries @a *a and @a *b.
-         * @param a Pointer to first entry.
-         * @param b Pointer to second entry.
-	 * @return true If entry @a *b must come before @a *a.
+	/**
+	 * Compares entries @a *a and @a *b.
+	 * @param a Pointer to first entry.
+	 * @param b Pointer to second entry.
+	 * @return True if entry @a *b must come before @a *a.
 	 */
 	bool operator()(OpenSetEntry *a, OpenSetEntry *b) const
 	{
@@ -56,11 +56,11 @@ public:
 class PathfindingOpenSet
 {
 public:
-	/// Cleanup the set and free allocated memory.
+	/// Cleans up the set and frees allocated memory.
 	~PathfindingOpenSet();
-	/// Get the next node to check.
+	/// Gets the next node to check.
 	PathfindingNode *pop();
-	/// Add a node in the set.
+	/// Adds a node to the set.
 	void push(PathfindingNode *node);
 	/// Is the set empty?
 	bool empty() const { return _queue.empty(); }
@@ -68,7 +68,7 @@ public:
 private:
 	std::priority_queue<OpenSetEntry*, std::vector<OpenSetEntry*>, EntryCompare> _queue;
 
-	/// Remove reachable discarded entries.
+	/// Removes reachable discarded entries.
 	void removeDiscarded();
 };
 

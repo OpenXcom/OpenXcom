@@ -97,6 +97,9 @@ void BattlescapeMessage::setPalette(SDL_Color *colors, int firstcolor, int ncolo
 	_text->setPalette(colors, firstcolor, ncolors);
 }
 
+/**
+ * Blits the warning message.
+ */
 void BattlescapeMessage::blit(Surface *surface)
 {
 	Surface::blit(surface);

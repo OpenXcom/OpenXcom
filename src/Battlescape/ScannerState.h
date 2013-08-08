@@ -37,18 +37,18 @@ class ScannerState : public State
 	InteractiveSurface *_surface1, *_surface2;
 	ScannerView *_scannerView;
 	BattleAction *_action;
-	/// update scanner interface
+	/// Updates scanner interface.
 	void update();
 	Timer *_timerAnimate;
-	/// Handle Minimap animation
+	/// Handles Minimap animation.
 	void animate();
 public:
-	/// Create the ScannerState
+	/// Creates the ScannerState.
 	ScannerState (Game * game, BattleAction *action);
 	~ScannerState();
 	/// Handler for right-clicking anything.
 	void handle(Action *action);
-	/// Handle timers
+	/// Handles timers.
 	void think ();
 };
 }

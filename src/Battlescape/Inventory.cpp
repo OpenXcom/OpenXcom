@@ -65,7 +65,7 @@ Inventory::Inventory(Game *game, int width, int height, int x, int y) : Interact
 }
 
 /**
- * Delete inventory surfaces.
+ * Deletes inventory surfaces.
  */
 Inventory::~Inventory()
 {
@@ -412,7 +412,7 @@ void Inventory::setSelectedItem(BattleItem *item)
 }
 
 /**
- * Handle timers.
+ * Handles timers.
  */
 void Inventory::think()
 {
@@ -726,7 +726,7 @@ void Inventory::mouseClick(Action *action, State *state)
 /**
  * Unloads the selected weapon, placing the gun
  * on the right hand and the ammo on the left hand.
- * @return The success of the weapon being unlaoded
+ * @return The success of the weapon being unlaoded.
  */
 bool Inventory::unload()
 {
@@ -759,6 +759,7 @@ bool Inventory::unload()
  * Arranges items on the ground for the inventory display.
  * Since items on the ground aren't assigned to anyone,
  * they don't actually have permanent slot positions.
+ * @param alterOffset Whether to alter the ground offset.
  */
 void Inventory::arrangeGround(bool alterOffset)
 {
@@ -847,6 +848,13 @@ void Inventory::arrangeGround(bool alterOffset)
 	drawItems();
 }
 
+/**
+ * Attempts to place the item in the inventory slot.
+ * @param newSlot Where to place the item.
+ * @param item Item to be placed.
+ * @param warning Warning message if item could not be placed.
+ * @return True, if the item was successfully placed in the inventory.
+ */
 bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning)
 {
 	bool placed = false;
@@ -874,8 +882,10 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 }
 
 /**
- * check if two items can be stacked on one another
- *
+ * Checks if two items can be stacked on one another.
+ * @param itemA First item.
+ * @param itemB Second item.
+ * @return True, if the items can be stacked on one another.
  */
 bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 {

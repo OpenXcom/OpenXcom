@@ -37,6 +37,7 @@ class ActionMenuState : public State
 private:
 	BattleAction *_action;
 	ActionMenuItem *_actionMenu[6];
+	/// Adds a new menu item for an action.
 	void addItem(BattleActionType ba, const std::string &name, int *id);
 public:
 	/// Creates the Action Menu state.

@@ -61,35 +61,37 @@ public:
 	void think(BattleAction *action);
 	/// Sets aggro target, triggered by reaction fire.
 	void setAggroTarget(BattleUnit *unit);
-	/// Get the aggro target, for savegame.
+	/// Gets the aggro target, for savegame.
 	BattleUnit *getAggroTarget() const { return _aggroTarget; }
-	/// Get the last known location of target, for turning.
+	/// Gets the last known location of target, for turning.
 	Position getLastKnownPosition() const { return _lastKnownPosition; }
-	/// decide if we should throw a grenade/launch a missile to this position.
+	/// Decides if we should throw a grenade/launch a missile to this position.
 	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
-	/// attempt to take a melee attack/charge an enemy we can see.
+	/// Attempts to take a melee attack/charge an enemy we can see.
 	void meleeAction(BattleAction *action);
-	/// attempt to fire a waypoint projectile at an enemy we, or one of our teammates sees.
+	/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
 	void wayPointAction(BattleAction *action);
-	/// attempt to fire at an enemy we can see.
+	/// Attempts to fire at an enemy we can see.
 	void projectileAction(BattleAction *action);
-	/// attempt to throw a grenade at an enemy (or group of enemies) we can see.
+	/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
 	void grenadeAction(BattleAction *action);
-	/// attempt to find cover, and move toward it.
+	/// Attempts to find cover, and move toward it.
 	void takeCoverAction(BattleAction *action);
-	/// attempt to track down an enemy we have lost sight of.
+	/// Attempts to track down an enemy we have lost sight of.
 	void stalkingAction(BattleAction *action);
-	/// should we take cover or not?
+	/// Assesses whether we should we take cover.
 	bool takeCoverAssessment(BattleAction *action);
-	/// select the nearest target we can see
+	/// Selects the nearest target we can see.
 	void selectNearestTarget();
-	/// select the nearest moveable relative to a target
+	/// Selects the nearest moveable relative to a target.
 	bool selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs);
-	/// perform a melee attack action
+	/// Performs a melee attack action.
 	void meleeAttack(BattleAction *action);
-	/// select a fire method
+	/// Selects a fire method.
 	void selectFireMethod(BattleAction *action);
+	/// Sets whether the unit was hit.
 	void setWasHit(bool wasHit);
+	/// Gets whether the unit was hit.
 	bool getWasHit();
 };
 

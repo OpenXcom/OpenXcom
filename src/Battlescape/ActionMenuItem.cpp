@@ -25,11 +25,11 @@ namespace OpenXcom
 
 /**
  * Sets up an Action menu item.
- * @param id the unique identifier of the menu item.
- * @param big pointer to the big font.
- * @param small pointer to the small font.
- * @param x position on the x-axis.
- * @param y position on the y-asis.
+ * @param id The unique identifier of the menu item.
+ * @param big Pointer to the big font.
+ * @param small Pointer to the small font.
+ * @param x Position on the x-axis.
+ * @param y Position on the y-asis.
  */
 ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false), _action(BA_NONE), _tu(0)
 {
@@ -64,12 +64,12 @@ ActionMenuItem::~ActionMenuItem()
 }
 
 /**
- * Link with an action and fill in the text fields.
- * @param action the battlescape action
- * @param description the actions description
- * @param accuracy the actions accuracy, including the Acc> prefix
- * @param timeunits the timeunits string, including the TUs> prefix
- * @param tu the timeunits value
+ * Links with an action and fills in the text fields.
+ * @param action The battlescape action.
+ * @param description The actions description.
+ * @param accuracy The actions accuracy, including the Acc> prefix.
+ * @param timeunits The timeunits string, including the TUs> prefix.
+ * @param tu The timeunits value.
  */
 void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu)
 {
@@ -82,8 +82,8 @@ void ActionMenuItem::setAction(BattleActionType action, std::wstring description
 }
 
 /**
- * Get the action that was linked to this menu item.
- * @return action
+ * Gets the action that was linked to this menu item.
+ * @return Action that was linked to this menu item.
  */
 BattleActionType ActionMenuItem::getAction() const
 {
@@ -91,8 +91,8 @@ BattleActionType ActionMenuItem::getAction() const
 }
 
 /**
- * Get the action tus that was linked to this menu item.
- * @return tu
+ * Gets the action tus that were linked to this menu item.
+ * @return The timeunits that were linked to this menu item.
  */
 int ActionMenuItem::getTUs() const
 {
@@ -162,7 +162,7 @@ void ActionMenuItem::draw()
 /**
  * Processes a mouse hover in event.
  * @param action Pointer to an action.
- * @param state Pointer to an state.
+ * @param state Pointer to a state.
  */
 void ActionMenuItem::mouseIn(Action *action, State *state)
 {
@@ -175,7 +175,7 @@ void ActionMenuItem::mouseIn(Action *action, State *state)
 /**
  * Processes a mouse hover out event.
  * @param action Pointer to an action.
- * @param state Pointer to an state.
+ * @param state Pointer to a state.
  */
 void ActionMenuItem::mouseOut(Action *action, State *state)
 {

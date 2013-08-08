@@ -104,7 +104,6 @@ void PatrolBAIState::enter()
 
 }
 
-
 /**
  * Exits the current AI state.
  */

@@ -27,6 +27,9 @@ namespace OpenXcom
 class BattlescapeGame;
 class TileEngine;
 
+/**
+ * State for falling units.
+ */
 class UnitFallBState : public BattleState
 {
 private:
@@ -38,7 +41,7 @@ public:
 	~UnitFallBState();
 	/// Initializes the state.
 	void init();
-	/// Runs state functionality every cycle. Returns false when finished.
+	/// Runs state functionality every cycle. Returns when finished.
 	void think();
 };
 
