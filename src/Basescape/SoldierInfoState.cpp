@@ -419,6 +419,8 @@ void SoldierInfoState::init()
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
 
+	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
+
 	std::wstringstream ss9;
 	ss9 << _game->getLanguage()->getString("STR_RANK_") << L'\x01' << _game->getLanguage()->getString(s->getRankString());
 	_txtRank->setText(ss9.str());
