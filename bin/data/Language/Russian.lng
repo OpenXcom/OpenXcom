@@ -2334,7 +2334,7 @@ STR_BATTLENEWPREVIEWPATH_DESC
 STR_BATTLERANGEBASEDACCURACY
 Точность зависит от расстояния
 STR_BATTLERANGEBASEDACCURACY_DESC
-На точность влияют видимость, дистанция и другие факторы.
+На точность влияют видимость, дистанция, размер цели, плотность дыма на линии стрельбы.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
 Правила производства в стиле TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
