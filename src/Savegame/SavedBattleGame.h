@@ -23,8 +23,8 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <SDL.h>
 #include <yaml-cpp/yaml.h>
-#include "BattleItem.h"
 #include "BattleUnit.h"
 
 namespace OpenXcom
@@ -33,18 +33,13 @@ namespace OpenXcom
 class Tile;
 class SavedGame;
 class MapDataSet;
-class RuleUnit;
-class MapBlock;
 class Node;
 class Game;
-class BattleUnit;
-class Soldier;
+class BattlescapeState;
 class Position;
 class Pathfinding;
 class TileEngine;
 class BattleItem;
-class Item;
-class RuleInventory;
 class Ruleset;
 
 /**

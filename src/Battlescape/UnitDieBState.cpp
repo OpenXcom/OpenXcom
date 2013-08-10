@@ -24,6 +24,7 @@
 #include "Map.h"
 #include "Camera.h"
 #include "../Engine/Game.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"

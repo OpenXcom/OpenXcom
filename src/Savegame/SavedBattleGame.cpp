@@ -16,18 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
- 
 #include <assert.h>
 #include <vector>
 #include <deque>
 #include <queue>
-
+#include "BattleItem.h"
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "Tile.h"
 #include "Node.h"
-#include <SDL.h>
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MCDPatch.h"
 #include "../Battlescape/Pathfinding.h"
@@ -47,7 +44,6 @@
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
 #include "SerializationHelper.h"
-
 
 namespace OpenXcom
 {

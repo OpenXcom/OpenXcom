@@ -22,6 +22,7 @@
 #include "TileEngine.h"
 #include "AggroBAIState.h"
 #include "Pathfinding.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Node.h"

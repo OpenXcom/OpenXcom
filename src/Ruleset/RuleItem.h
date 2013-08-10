@@ -31,7 +31,6 @@ namespace OpenXcom
 
 class SurfaceSet;
 class Surface;
-class RuleManufacture;
 
 /**
  * Represents a specific type of item.

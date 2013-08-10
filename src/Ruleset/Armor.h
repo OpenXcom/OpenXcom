@@ -22,7 +22,6 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
-#include "RuleItem.h"
 
 namespace OpenXcom
 {
