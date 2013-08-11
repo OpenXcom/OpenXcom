@@ -651,18 +651,15 @@ void Map::drawTerrain(Surface *surface)
 									if (_showChanceToHit)
 									{
 										BattleAction *action = _save->getBattleState()->getBattleGame()->getCurrentAction();
-										if ((*action).type != BA_LAUNCH)
-										{
-											(*action).target = tile->getPosition();
-											Projectile projectile = Projectile(_res, _save, *action, (*action).actor->getPosition());	// stack
-											int chance = projectile.calculateTrajectory((*action).actor->getFiringAccuracy((*action).type, (*action).weapon), true);
+										(*action).target = tile->getPosition();
+										Projectile p = Projectile(_res, _save, *action, (*action).actor->getPosition());	// stack
+										int chance = p.calculateTrajectory((*action).actor->getFiringAccuracy((*action).type, (*action).weapon), true);
 
-											if (chance >= 0)
-											{
-												_numChanceToHit->setValue(chance);
-												_numChanceToHit->draw();
-												_numChanceToHit->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-											}
+										if (chance >= 0)
+										{
+											_numChanceToHit->setValue(chance);
+											_numChanceToHit->draw();
+											_numChanceToHit->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
 										}
 									}
 								}

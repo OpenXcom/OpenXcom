@@ -358,7 +358,7 @@ bool Projectile::calculateThrow(double accuracy)
  * @param targetTile Tile of target. Default = 0.
  * @param densitySmoke Density of smoke between positions. Default = 0.
  * @param doCalcChance Do only calculation the probability of hitting. Default = false.
- * @return Chance to hit 0-99% (-1 if cannot to calculate).
+ * @return Chance to hit 0-100% (-1 if cannot to calculate).
  */
 int Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile, int smokeDensity, bool doCalcChance)
 {
