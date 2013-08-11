@@ -115,7 +115,7 @@ void UnitDieBState::think()
 	{
 		_unit->keepFalling();
 	}
-	else
+	else if (!_unit->isOut())
 	{
 		_unit->startFalling();
 
@@ -125,7 +125,7 @@ void UnitDieBState::think()
 		}
 	}
 
-	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
+	if (_unit->isOut())
 	{
 		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
