@@ -39,17 +39,26 @@ private:
 	BattleItem *_itemA, *_itemB;
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
 	int _part, _animationFrame;
+	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
 	void drawRoutine0();
+	/// Drawing routine for floaters.
 	void drawRoutine1();
+	/// Drawing routine for XCom tanks.
 	void drawRoutine2();
+	/// Drawing routine for cyberdiscs.
 	void drawRoutine3();
+	/// Drawing routine for civilians and ethereals.
 	void drawRoutine4();
+	/// Drawing routine for sectopods and reapers.
 	void drawRoutine5();
+	/// Drawing routine for snakemen.
 	void drawRoutine6();
+	/// Drawing routine for chryssalid.
 	void drawRoutine7();
+	/// Drawing routine for silacoids.
 	void drawRoutine8();
+	/// Drawing routine for celatids.
 	void drawRoutine9();
-	void drawRoutine10();
 	int _drawingRoutine;
 	/// sort two handed sprites out.
 	void sortRifles();
@@ -66,7 +75,7 @@ public:
 	void setBattleItem(BattleItem *item);
 	/// Sets the animation frame.
 	void setAnimationFrame(int frame);
-	/// Draw the unit.
+	/// Draws the unit.
 	void draw();
 };
 

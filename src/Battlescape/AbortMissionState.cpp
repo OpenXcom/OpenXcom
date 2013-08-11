@@ -135,7 +135,7 @@ AbortMissionState::~AbortMissionState()
 }
 
 /**
- * Confirms to abort the mission.
+ * Confirms mission abort.
  * @param action Pointer to an action.
  */
 void AbortMissionState::btnOkClick(Action *)

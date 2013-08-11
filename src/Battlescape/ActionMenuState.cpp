@@ -135,7 +135,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 }
 
 /**
- * Deletes the ActionMenuState
+ * Deletes the ActionMenuState.
  */
 ActionMenuState::~ActionMenuState()
 {
@@ -178,7 +178,7 @@ void ActionMenuState::handle(Action *action)
 }
 
 /**
- * Execute the action corresponding with this action menu item.
+ * Executes the action corresponding to this action menu item.
  * @param action Pointer to an action.
  */
 void ActionMenuState::btnActionMenuItemClick(Action *action)
@@ -275,7 +275,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
-			
+
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),

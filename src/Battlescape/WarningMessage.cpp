@@ -18,8 +18,8 @@
  */
 #include "WarningMessage.h"
 #include <SDL.h>
+#include <string>
 #include "../Engine/Timer.h"
-#include "../Engine/Sound.h"
 #include "../Interface/Text.h"
 
 namespace OpenXcom

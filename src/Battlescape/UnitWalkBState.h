@@ -21,6 +21,7 @@
 
 #include <climits>
 #include "BattleState.h"
+#include "BattlescapeGame.h"
 #include "Position.h"
 
 namespace OpenXcom
@@ -30,6 +31,9 @@ class BattleUnit;
 class Pathfinding;
 class TileEngine;
 
+/**
+ * State for walking units.
+ */
 class UnitWalkBState : public BattleState
 {
 private:
@@ -38,24 +42,27 @@ private:
 	Pathfinding *_pf;
 	TileEngine *_terrain;
 	bool _falling;
-    bool _beforeFirstStep;
+	bool _beforeFirstStep;
+	/// Handles some calculations when the path is finished.
 	void postPathProcedures();
+	/// Handles some calculations when the walking is finished.
 	void setNormalWalkSpeed();
+	/// Handles the stepping sounds.
 	void playMovementSound();
 	std::size_t _numUnitsSpotted;
 	int _preMovementCost;
 public:
-	/// Creates a new UnitWalkBState class
+	/// Creates a new UnitWalkBState class.
 	UnitWalkBState(BattlescapeGame *parent, BattleAction _action);
 	/// Cleans up the UnitWalkBState.
 	~UnitWalkBState();
-	/// Set the target to walk to.
+	/// Sets the target to walk to.
 	void setTarget(Position target);
 	/// Initializes the state.
 	void init();
 	/// Handles a cancels request.
 	void cancel();
-	/// Runs state functionality every cycle. Returns false when finished.
+	/// Runs state functionality every cycle.
 	void think();
 };
 

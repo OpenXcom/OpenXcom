@@ -31,7 +31,6 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 
-
 namespace OpenXcom
 {
 
@@ -131,7 +130,7 @@ void PrimeGrenadeState::handle(Action *action)
 
 
 /**
- * Execute the action corresponding with this action menu item.
+ * Executes the action corresponding to this action menu item.
  * @param action Pointer to an action.
  */
 void PrimeGrenadeState::btnClick(Action *action)

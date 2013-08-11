@@ -31,8 +31,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 
@@ -41,6 +39,7 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitFallBState.
+ * @param parent Pointer to the Battlescape.
  */
 UnitFallBState::UnitFallBState(BattlescapeGame *parent) : BattleState(parent), _terrain(0)
 {
@@ -55,6 +54,9 @@ UnitFallBState::~UnitFallBState()
 
 }
 
+/**
+ * Initializes the state.
+ */
 void UnitFallBState::init()
 {
 	_terrain = _parent->getTileEngine();
@@ -62,9 +64,13 @@ void UnitFallBState::init()
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 	else
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
-		
+
 }
 
+/**
+ * Runs state functionality every cycle.
+ * Progresses the fall, update the battlescape, ...
+ */
 void UnitFallBState::think()
 {
 	for (std::list<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
@@ -100,7 +106,7 @@ void UnitFallBState::think()
 			// make sure the unit sprites are up to date
 			_parent->getMap()->cacheUnit(*unit);
 		}
-		
+
 		// unit moved from one tile to the other, update the tiles
 		if ((*unit)->getPosition() != (*unit)->getLastPosition())
 		{
@@ -128,7 +134,7 @@ void UnitFallBState::think()
 				}
 			}
 			falling = largeCheck && (*unit)->getPosition().z != 0 && (*unit)->getTile()->hasNoFloor(tileBelow) && (*unit)->getArmor()->getMovementType() != MT_FLY && (*unit)->getWalkingPhase() == 0;
-			
+
 			if (falling)
 			{
 				for (int x = (*unit)->getArmor()->getSize() - 1; x >= 0; --x)

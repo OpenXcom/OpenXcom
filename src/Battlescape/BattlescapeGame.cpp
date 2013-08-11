@@ -113,8 +113,8 @@ BattlescapeGame::~BattlescapeGame()
 }
 
 /**
-  * think
-  */
+ * Checks for units panicking or falling and so on.
+ */
 void BattlescapeGame::think()
 {
 	// nothing is happening - see if we need some alien AI or units panicking or what have you
@@ -162,9 +162,11 @@ void BattlescapeGame::think()
 			_save->setUnitsFalling(false);
 		}
 	}
-
 }
 
+/**
+ * Initializes the Battlescape game.
+ */
 void BattlescapeGame::init()
 {
 	if (_save->getSide() == FACTION_PLAYER)
@@ -176,12 +178,12 @@ void BattlescapeGame::init()
 
 /**
  * Handles the processing of the AI states of a unit.
- * @param unit Pointer to an unit.
+ * @param unit Pointer to a unit.
  */
 void BattlescapeGame::handleAI(BattleUnit *unit)
 {
 	std::wstringstream ss;
-	
+
 	_tuReserved = BA_NONE;
 
 	if (unit->getTimeUnits() <= 5 || (unit->_hidingForTurn && unit->getPosition() == unit->lastCover && _AIActionCounter >= 2))
@@ -246,7 +248,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
 	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast only works when ai was already AggroBAIState at heart
-	
+
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
@@ -266,7 +268,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	action.actor = unit;
     action.number = _AIActionCounter;
 	unit->think(&action);
-	
+
 	if (action.type == BA_RETHINK)
 	{
 		_parentState->debug(L"Rethink");
@@ -377,7 +379,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 }
 
 /**
- * Kneel/Standup.
+ * Toggles the Kneel/Standup status of the unit.
  * @param bu Pointer to a unit.
  * @return If the action succeeded.
  */
@@ -405,7 +407,7 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
 }
 
 /**
- * End turn.
+ * Ends the turn.
  */
 void BattlescapeGame::endTurn()
 {
@@ -740,7 +742,7 @@ void BattlescapeGame::handleNonTargetAction()
 }
 
 /**
- * Set the cursor according to the selected action.
+ * Sets the cursor according to the selected action.
  */
 void BattlescapeGame::setupCursor()
 {
@@ -774,9 +776,9 @@ void BattlescapeGame::setupCursor()
 }
 
 /**
- * Whether a playable unit is selected. Normally only player side units can be selected, but in debug mode one can play with aliens too :)
+ * Determines whether a playable unit is selected. Normally only player side units can be selected, but in debug mode one can play with aliens too :)
  * Is used to see if stats can be displayed and action buttons will work.
- * @return whether a playable unit is selected.
+ * @return Whether a playable unit is selected.
  */
 bool BattlescapeGame::playableUnitSelected()
 {
@@ -784,7 +786,7 @@ bool BattlescapeGame::playableUnitSelected()
 }
 
 /**
- * Give time slice to the front state.
+ * Gives time slice to the front state.
  */
 void BattlescapeGame::handleState()
 {
@@ -806,7 +808,7 @@ void BattlescapeGame::handleState()
 }
 
 /**
- * Push a state at the front of the queue and start it.
+ * Pushes a state to the front of the queue and starts it.
  * @param bs Battlestate.
  */
 void BattlescapeGame::statePushFront(BattleState *bs)
@@ -816,7 +818,7 @@ void BattlescapeGame::statePushFront(BattleState *bs)
 }
 
 /**
- * Push a state as the next state after the current one.
+ * Pushes a state as the next state after the current one.
  * @param bs Battlestate.
  */
 void BattlescapeGame::statePushNext(BattleState *bs)
@@ -834,7 +836,7 @@ void BattlescapeGame::statePushNext(BattleState *bs)
 }
 
 /**
- * Push a state at the back.
+ * Pushes a state to the back.
  * @param bs Battlestate.
  */
 void BattlescapeGame::statePushBack(BattleState *bs)
@@ -861,7 +863,9 @@ void BattlescapeGame::statePushBack(BattleState *bs)
 }
 
 /**
- * This is a very important function. It is called by a BattleState (walking, projectile is flying, explosions,...) at the moment this state has finished it's action.
+ * Removes the current state.
+ *
+ * This is a very important function. It is called by a BattleState (walking, projectile is flying, explosions,...) at the moment this state has finished its action.
  * Here we check the result of that action and do all the aftermath.
  * The state is popped off the list.
  */
@@ -877,7 +881,7 @@ void BattlescapeGame::popState()
 
 	BattleAction action = _states.front()->getAction();
 
-	if (action.actor && action.result.length() > 0 && action.actor->getFaction() == FACTION_PLAYER 
+	if (action.actor && action.result.length() > 0 && action.actor->getFaction() == FACTION_PLAYER
     && _playerPanicHandled && (_save->getSide() == FACTION_PLAYER || _debugPlay))
 	{
 		_parentState->warning(action.result);
@@ -956,7 +960,7 @@ void BattlescapeGame::popState()
 			}
 		}
 	}
-	
+
 	if (!_states.empty())
 	{
 		// end turn request?
@@ -981,6 +985,11 @@ void BattlescapeGame::popState()
 	_parentState->updateSoldierInfo();
 }
 
+/**
+ * Determines whether there are any actions pending for the given unit.
+ * @param bu BattleUnit.
+ * @return True if there are no actions pending.
+ */
 bool BattlescapeGame::noActionsPending(BattleUnit *bu)
 {
 	if (_states.empty()) return true;
@@ -1004,7 +1013,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
 
 
 /**
- * Check against reserved time units.
+ * Checks against reserved time units.
  * @param bu Pointer to the unit.
  * @param tu Number of time units to check.
  * @return bool Whether or not we got enough time units.
@@ -1070,7 +1079,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 
 
 /**
- * Pick the first soldier from the list in status panic.
+ * Picks the first soldier that is panicking.
  * @return True when all panicking is over.
  */
 bool BattlescapeGame::handlePanickingPlayer()
@@ -1084,7 +1093,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 }
 
 /**
- * Common function for panicking units.
+ * Common function for hanlding panicking units.
  * @return False when unit not in panicking mode.
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
@@ -1191,7 +1200,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 }
 
 /**
-  * This will cancel the current action the user had selected (firing, throwing,..)
+  * Cancels the current action the user had selected (firing, throwing,..)
   * @param bForce Force the action to be cancelled.
   * @return Whether an action was cancelled or not.
   */
@@ -1237,8 +1246,8 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 	return false;
 }
 /**
- * Get pointer to access action members directly.
- * @return pointer to action.
+ * Gets a pointer to access action members directly.
+ * @return Pointer to action.
  */
 BattleAction *BattlescapeGame::getCurrentAction()
 {
@@ -1246,7 +1255,7 @@ BattleAction *BattlescapeGame::getCurrentAction()
 }
 
 /**
- * Is there currently an action going on.
+ * Determines whether an action is currently going on?
  * @return true or false.
  */
 bool BattlescapeGame::isBusy()
@@ -1255,7 +1264,7 @@ bool BattlescapeGame::isBusy()
 }
 
 /**
- * Activate primary action (left click)
+ * Activates primary action (left click).
  * @param pos Position on the map.
  */
 void BattlescapeGame::primaryAction(const Position &pos)
@@ -1389,7 +1398,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 }
 
 /**
- * Activate secondary action (right click)
+ * Activates secondary action (right click).
  * @param pos Position on the map.
  */
 void BattlescapeGame::secondaryAction(const Position &pos)
@@ -1402,7 +1411,7 @@ void BattlescapeGame::secondaryAction(const Position &pos)
 }
 
 /**
- * Pressed the blaster launcher button.
+ * Handler for the blaster launcher button.
  */
 void BattlescapeGame::launchAction()
 {
@@ -1417,7 +1426,7 @@ void BattlescapeGame::launchAction()
 }
 
 /**
- * Pressed the psi button.
+ * Handler for the psi button.
  */
 void BattlescapeGame::psiButtonAction()
 {
@@ -1430,9 +1439,9 @@ void BattlescapeGame::psiButtonAction()
 
 
 /**
- * Move a unit up or down.
+ * Moves a unit up or down.
  * @param unit The unit.
- * @param dir Direction DIR_UP or DIR_DOWN
+ * @param dir Direction DIR_UP or DIR_DOWN.
  */
 void BattlescapeGame::moveUpDown(BattleUnit *unit, int dir)
 {
@@ -1456,7 +1465,7 @@ void BattlescapeGame::moveUpDown(BattleUnit *unit, int dir)
 }
 
 /**
- * Request of the end of the turn (wait for explosions etc to really end the turn)
+ * Requests the end of the turn (waits for explosions etc to really end the turn).
  */
 void BattlescapeGame::requestEndTurn()
 {
@@ -1469,8 +1478,8 @@ void BattlescapeGame::requestEndTurn()
 }
 
 /**
- * Set the TU reserved type.
- * @param tur A battleactiontype
+ * Sets the TU reserved type.
+ * @param tur A battleactiontype.
  */
 void BattlescapeGame::setTUReserved(BattleActionType tur)
 {
@@ -1479,11 +1488,11 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
 }
 
 /**
- * Drop item to the floor & affect with gravity.
+ * Drops an item to the floor and affects it with gravity.
  * @param position Position to spawn the item.
  * @param item Pointer to the item.
  * @param newItem Bool whether this is a new item.
- * @param removeItem Bool whether to remove the item from owner.
+ * @param removeItem Bool whether to remove the item from the owner.
  */
 void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool newItem, bool removeItem)
 {
@@ -1527,8 +1536,11 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 
 }
 
-/*
- * Convert a unit into a unit of another type.
+/**
+ * Converts a unit into a unit of another type.
+ * @param unit The unit to convert.
+ * @param newType The type of unit to convert to.
+ * @param Pointer to the new unit.
  */
 BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 {
@@ -1565,7 +1577,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
 
 	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty);
-	
+
 	if (!difficulty)
 	{
 		newUnit->halveArmor();
@@ -1591,57 +1603,56 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 }
 
 /**
- * Get map
- * @return map
+ * Gets the map.
+ * @return map.
  */
 Map *BattlescapeGame::getMap()
 {
 	return _parentState->getMap();
 }
 /**
- * Get save
- * @return save
+ * Gets the save.
+ * @return save.
  */
 SavedBattleGame *BattlescapeGame::getSave()
 {
 	return _save;
 }
 /**
- * Get tilengine
- * @return tilengine
+ * Gets the tilengine.
+ * @return tilengine.
  */
 TileEngine *BattlescapeGame::getTileEngine()
 {
 	return _save->getTileEngine();
 }
 /**
- * Get pathfinding
- * @return pathfinding
+ * Gets the pathfinding.
+ * @return pathfinding.
  */
 Pathfinding *BattlescapeGame::getPathfinding()
 {
 	return _save->getPathfinding();
 }
 /**
- * Get resourcepack
- * @return resourcepack
+ * Gets the resourcepack.
+ * @return resourcepack.
  */
 ResourcePack *BattlescapeGame::getResourcePack()
 {
 	return _parentState->getGame()->getResourcePack();
 }
 /**
- * Get ruleset
- * @return ruleset
+ * Gets the ruleset.
+ * @return ruleset.
  */
 const Ruleset *BattlescapeGame::getRuleset() const
 {
 	return _parentState->getGame()->getRuleset();
 }
 
-
-/** 
- * Evaluate the situation for ease of AI decisions in the following turn.
+/**
+ * Evaluates the situation for ease of AI decisions in the following turn.
  */
 void BattlescapeGame::resetSituationForAI()
 {
@@ -1666,9 +1677,8 @@ void BattlescapeGame::resetSituationForAI()
 
 }
 
-
 /**
- * Try and find an item and pick it up if possible
+ * Tries to find an item and pick it up if possible.
  */
 void BattlescapeGame::findItem(BattleAction *action)
 {
@@ -1706,9 +1716,9 @@ void BattlescapeGame::findItem(BattleAction *action)
 
 
 /**
- * Search through items on the map that were dropped on an alien turn, then pick the most "attractive" one
- * @param action a pointer to the action being performed.
- * @return the item to attempt to take.
+ * Searches through items on the map that were dropped on an alien turn, then picks the most "attractive" one.
+ * @param action A pointer to the action being performed.
+ * @return The item to attempt to take.
  */
 BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
 {
@@ -1743,20 +1753,20 @@ BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
 
 
 /**
- * Assess whether this item is worth trying to pick up, taking into account how many units we see,
+ * Assesses whether this item is worth trying to pick up, taking into account how many units we see,
  * whether or not the Weapon has ammo, and if we have ammo FOR it,
- * or if it's ammo, check if we have the weapon to go with it,
- * assess the attraction value of the item and compare it with the distance to the object,
- * then return false anyway.
- * @param item the item to attempt to take.
- * @param action a pointer to the action being performed.
+ * or, if it's ammo, checks if we have the weapon to go with it,
+ * assesses the attraction value of the item and compares it with the distance to the object,
+ * then returns false anyway.
+ * @param item The item to attempt to take.
+ * @param action A pointer to the action being performed.
  * @return false.
  */
 bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 {
 	int worthToTake = 0;
 
-	// don't even think about making a move for that gun if you can see a target, for some reason 
+	// don't even think about making a move for that gun if you can see a target, for some reason
 	// (maybe this should check for enemies spotting the tile the item is on?)
 	if (action->actor->getVisibleUnits()->size() == 0)
 	{
@@ -1838,12 +1848,14 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 
 
 /**
- * at this point we've decided it's worth our while to grab this item, so we try to do just that.
- * first we check to make sure we have time units, then that we have space (using horrifying logic)
+ * Picks the item up from the ground.
+ *
+ * At this point we've decided it's worth our while to grab this item, so we try to do just that.
+ * First we check to make sure we have time units, then that we have space (using horrifying logic)
  * then we attempt to actually recover the item.
- * @param item the item to attempt to take.
- * @param action a pointer to the action being performed.
- * @return 0 if successful, 1 for no TUs, 2 for not enough room, 3 for "won't fit" and -1 for "something went horribly wrong"
+ * @param item The item to attempt to take.
+ * @param action A pointer to the action being performed.
+ * @return 0 if successful, 1 for no TUs, 2 for not enough room, 3 for "won't fit" and -1 for "something went horribly wrong".
  */
 int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 {
@@ -1861,7 +1873,7 @@ int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 	}
 	else
 	{
-		// check to make sure we have enough space by checking all the sizes of items in our inventory 
+		// check to make sure we have enough space by checking all the sizes of items in our inventory
 		for (std::vector<BattleItem*>::iterator i = action->actor->getInventory()->begin(); i != action->actor->getInventory()->end(); ++i)
 		{
 			freeSlots -= (*i)->getRules()->getInventoryHeight() * (*i)->getRules()->getInventoryWidth();
@@ -1891,10 +1903,10 @@ int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 
 
 /**
- * try to fit an item into the unit's inventory, return false if you can't.
- * @param item the item to attempt to take.
- * @param action a pointer to the action being performed.
- * @return whether or not the item was successfully retrieved.
+ * Tries to fit an item into the unit's inventory, return false if you can't.
+ * @param item The item to attempt to take.
+ * @param action A pointer to the action being performed.
+ * @return Whether or not the item was successfully retrieved.
  */
 bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 {
@@ -1971,19 +1983,20 @@ bool BattlescapeGame::takeItem(BattleItem* item, BattleAction *action)
 	return placed;
 }
 
-/*
- * @return the type of action that is reserved.
+/**
+ * Returns the action type that is reserved.
+ * @return The type of action that is reserved.
  */
 BattleActionType BattlescapeGame::getReservedAction()
 {
 	return _tuReserved;
 }
 
-/*
- * tally the living units in the game, and if required, convert units into their spawn unit.
- * @param &liveAliens the integer in which to store the live alien tally
- * @param &liveSoldiers the integer in which to store the live XCom tally
- * @param convert should we convert infected units?
+/**
+ * Tallies the living units in the game and, if required, converts units into their spawn unit.
+ * @param &liveAliens The integer in which to store the live alien tally.
+ * @param &liveSoldiers The integer in which to store the live XCom tally.
+ * @param convert Should we convert infected units?
  */
 void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
 {
@@ -2019,17 +2032,18 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 	}
 }
 
-/*
- * sets the kneel reservation setting.
- * @param reserved should we reserve an extra 4 TUs to kneel?
+/**
+ * Sets the kneel reservation setting.
+ * @param reserved Should we reserve an extra 4 TUs to kneel?
  */
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
 	_kneelReserved = reserved;
 }
 
-/*
- * @return kneel reservation setting.
+/**
+ * Gets the kneel reservation setting.
+ * @return Kneel reservation setting.
  */
 bool BattlescapeGame::getKneelReserved()
 {
@@ -2040,9 +2054,14 @@ bool BattlescapeGame::getKneelReserved()
 	return false;
 }
 
-/*	psionic targetting: pick from any of the "exposed" units.
- *	exposed means they have been previously spotted, and are therefore "known" to the AI,
- *	regardless of whether we can see them or not, because we're psychic.
+/**
+ * Attempts a psionic attack on an enemy we "know of".
+ *
+ * Psionic targetting: pick from any of the "exposed" units.
+ * Exposed means they have been previously spotted, and are therefore "known" to the AI,
+ * regardless of whether we can see them or not, because we're psychic.
+ * @param action Pointer to an action.
+ * @return True if a psionic attack is performed.
  */
 bool BattlescapeGame::psiAction(BattleAction *action)
 {
@@ -2068,7 +2087,7 @@ bool BattlescapeGame::psiAction(BattleAction *action)
 				// don't target tanks
 			if ((*i)->getArmor()->getSize() == 1 &&
 				// or units that are dead/unconscious
-				!(*i)->isOut() && 
+				!(*i)->isOut() &&
 				// they must be units that we "know" about
 				(*i)->getTurnsExposed() <= intelligence &&
 				// they must be player units

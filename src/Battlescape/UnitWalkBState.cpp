@@ -32,7 +32,6 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Logger.h"
@@ -57,6 +56,9 @@ UnitWalkBState::~UnitWalkBState()
 
 }
 
+/**
+ * Initializes the state.
+ */
 void UnitWalkBState::init()
 {
 	_unit = _action.actor;
@@ -73,6 +75,9 @@ void UnitWalkBState::init()
 	}
 }
 
+/**
+ * Runs state functionality every cycle.
+ */
 void UnitWalkBState::think()
 {
 	bool unitSpotted = false;
@@ -140,7 +145,7 @@ void UnitWalkBState::think()
 				}
 			}
 			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY && _unit->getWalkingPhase() == 0;
-			
+
 			if (_falling)
 			{
 				for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
@@ -264,7 +269,7 @@ void UnitWalkBState::think()
 		// check if we did spot new units
 		if (unitSpotted && !_action.desperate && _unit->getCharging() == 0 && !_falling)
 		{
-			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }			
+			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 			_unit->_hidingForTurn = false; // clearly we're not hidden now
 			_parent->getMap()->cacheUnit(_unit);
 			postPathProcedures();
@@ -409,7 +414,7 @@ void UnitWalkBState::think()
 				if (_unit->spendEnergy(energy))
 				{
 					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
-					_unit->startWalking(dir, destination, tileBelow, onScreen);					
+					_unit->startWalking(dir, destination, tileBelow, onScreen);
 					_beforeFirstStep = false;
 				}
 			}
@@ -443,7 +448,7 @@ void UnitWalkBState::think()
 		}
 
 		_unit->turn();
-		
+
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
@@ -471,8 +476,8 @@ void UnitWalkBState::think()
 	}
 }
 
-/*
- * Abort unit walking.
+/**
+ * Aborts unit walking.
  */
 void UnitWalkBState::cancel()
 {
@@ -480,8 +485,8 @@ void UnitWalkBState::cancel()
 	_pf->abortPath();
 }
 
-/*
- * Handle some calculations when the path is finished.
+/**
+ * Handles some calculations when the path is finished.
  */
 void UnitWalkBState::postPathProcedures()
 {
@@ -538,8 +543,8 @@ void UnitWalkBState::postPathProcedures()
 		_parent->popState();
 }
 
-/*
- * Handle some calculations when the walking finished.
+/**
+ * Handles some calculations when the walking is finished.
  */
 void UnitWalkBState::setNormalWalkSpeed()
 {
@@ -550,8 +555,8 @@ void UnitWalkBState::setNormalWalkSpeed()
 }
 
 
-/*
- * Handle the stepping sounds.
+/**
+ * Handles the stepping sounds.
  */
 void UnitWalkBState::playMovementSound()
 {

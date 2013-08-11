@@ -26,7 +26,6 @@ namespace OpenXcom
 
 class Action;
 class State;
-class Position;
 class Timer;
 class Map;
 
@@ -62,7 +61,7 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse release.
 	void mouseRelease(Action *action, State *state);
-	/// Special handling for mouse over
+	/// Special handling for mouse over.
 	void mouseOver(Action *action, State *state);
 	/// Special handling for key presses.
 	void keyboardPress(Action *action, State *state);
@@ -74,13 +73,13 @@ public:
 	void scrollKey();
 	/// Scrolls the view a certain amount.
 	void scrollXY(int x, int y, bool redraw);
-	/// Jump the view (when projectile in motion)
+	/// Jumps the view (when projectile in motion).
 	void jumpXY(int x, int y);
-	/// move map layer up
+	/// Moves map layer up.
 	void up();
-	/// move map layer down
+	/// Move map layer down.
 	void down();
-	/// set view level
+	/// Sets the view level.
 	void setViewLevel(int viewlevel);
 	/// Converts map coordinates to screen coordinates.
 	void convertMapToScreen(const Position &mapPos, Position *screenPos) const;
@@ -90,20 +89,23 @@ public:
 	void convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const;
 	/// Center map on a position.
 	void centerOnPosition(const Position &pos, bool redraw = true);
-	/// Get map's center position.
+	/// Gets map's center position.
 	Position getCenterPosition();
-	/// Check if the camera was following a bullet.
-	bool didCameraFollow();
-	/// Get the map displayed level
+	/// Gets the map displayed level.
 	int getViewLevel() const;
+	/// Gets the map size x.
 	int getMapSizeX() const;
+	/// Gets the map size y.
 	int getMapSizeY() const;
-	/// Get the map x/y screen offset
+	/// Get the map x/y screen offset.
 	Position getMapOffset();
-	/// Set the map x/y screen offset
+	/// Sets the map x/y screen offset.
 	void setMapOffset(Position pos);
+	/// Toggles showing all map layers.
 	int toggleShowAllLayers();
+	/// Checks if the camera is showing all map layers.
 	bool getShowAllLayers() const;
+	/// Checks if map coordinates X,Y,Z are on screen.
 	bool isOnScreen(const Position &mapPos) const;
 };
 }
