@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class Item;
 class RuleItem;
 class RuleInventory;
 class BattleUnit;
