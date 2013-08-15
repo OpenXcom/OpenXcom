@@ -202,20 +202,6 @@ void Tile::saveBinary(Uint8** buffer) const
 }
 
 /**
- * Get the MapData pointer of a part of the tile.
- * @param part the part 0-3.
- * @return pointer to mapdata
- */
-MapData *Tile::getMapData(int part) const
-{
-	if (part < 0 || part > 3)
-	{
-		throw Exception("unknown MapDataID part");
-	}
-	return _objects[part];
-}
-
-/**
  * Set the MapData references of part 0 to 3.
  * @param dat pointer to the data object
  * @param newObjectID The ID in the total list of the objects of this battlegame.
@@ -311,16 +297,6 @@ int Tile::getTerrainLevel() const
 }
 
 /**
- * Gets the tile's position.
- * @return position
- */
-const Position& Tile::getPosition() const
-{
-	return _pos;
-}
-
-
-/**
  * Gets the tile's footstep sound.
  * @return sound ID
  */
@@ -369,21 +345,6 @@ int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 		return 3;
 	}
 	return -1;
-}
-
-/**
- * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
- * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
- * @param part
- * @return bool
- */
-bool Tile::isUfoDoorOpen(int part) const
-{
-	if (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0)
-	{
-		return true;
-	}
-	return false;
 }
 
 int Tile::closeUfoDoor()
@@ -662,15 +623,6 @@ void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 		unit->setTile(this, tileBelow);
 	}
 	_unit = unit;
-}
-
-/**
- * Get the (alive) unit on this tile.
- * @return BattleUnit.
- */
-BattleUnit *Tile::getUnit() const
-{
-	return _unit;
 }
 
 /**

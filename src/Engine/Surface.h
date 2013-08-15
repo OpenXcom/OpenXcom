@@ -86,8 +86,14 @@ public:
     void drawString(Sint16 x, Sint16 y, const char *s, Uint8 color);
 	/// Sets the surface's palette.
 	virtual void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Gets the surface's palette.
-	SDL_Color *getPalette() const;
+	/**
+	 * Returns the surface's 8bpp palette.
+	 * @return Pointer to the palette's colors.
+	 */
+	SDL_Color *getPalette() const
+	{
+		return _surface->format->palette->colors;
+	}
 	/// Sets the X position of the surface.
 	void setX(int x);
 	/// Gets the X position of the surface.
@@ -104,18 +110,77 @@ public:
 	void resetCrop();
 	/// Gets the cropping rectangle for the surface.
 	SDL_Rect *getCrop();
-	/// Changes a pixel in the surface.
-	void setPixel(int x, int y, Uint8 pixel);
-	/// Changes a pixel in the surface and returns the next one.
-	void setPixelIterative(int *x, int *y, Uint8 pixel);
-	/// Gets a pixel of the surface.
-	Uint8 getPixel(int x, int y) const;
-	/// Gets the internal SDL surface.
-	SDL_Surface *getSurface() const;
-	/// Gets the surface's width.
-	int getWidth() const;
-	/// Gets the surface's height.
-	int getHeight() const;
+	/**
+	 * Changes the color of a pixel in the surface, relative to
+	 * the top-left corner of the surface.
+	 * @param x X position of the pixel.
+	 * @param y Y position of the pixel.
+	 * @param pixel New color for the pixel.
+	 */
+	void setPixel(int x, int y, Uint8 pixel)
+	{
+		if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
+		{
+			return;
+		}
+		((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
+	}
+	/**
+	 * Changes the color of a pixel in the surface and returns the
+	 * next pixel position. Useful when changing a lot of pixels in
+	 * a row, eg. loading images.
+	 * @param x Pointer to the X position of the pixel. Changed to the next X position in the sequence.
+	 * @param y Pointer to the Y position of the pixel. Changed to the next Y position in the sequence.
+	 * @param pixel New color for the pixel.
+	 */
+	void setPixelIterative(int *x, int *y, Uint8 pixel)
+	{
+		setPixel(*x, *y, pixel);
+		(*x)++;
+		if (*x == getWidth())
+		{
+			(*y)++;
+			*x = 0;
+		}
+	}
+	/**
+	 * Returns the color of a specified pixel in the surface.
+	 * @param x X position of the pixel.
+	 * @param y Y position of the pixel.
+	 * @return Color of the pixel.
+	 */
+	Uint8 getPixel(int x, int y) const
+	{
+		if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
+		{
+			return 0;
+		}
+		return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
+	}
+	/**
+	 * Returns the internal SDL_Surface for SDL calls.
+	 * @return Pointer to the surface.
+	 */
+	SDL_Surface *getSurface() const
+	{
+		return _surface;
+	}
+	/**
+	 * Returns the width of the surface.
+	 * @return Width in pixels.
+	 */
+	int getWidth() const
+	{
+		return _surface->w;
+	}
+	/**
+	 * Returns the height of the surface.
+	 * @return Height in pixels
+	 */
+	int getHeight() const
+	{
+		return _surface->h;
+	}
 	/// Sets the surface's special hidden flag.
 	void setHidden(bool hidden);
 	/// Locks the surface.
