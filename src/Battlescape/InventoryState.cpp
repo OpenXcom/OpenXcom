@@ -30,6 +30,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/EquipmentLayoutItem.h"

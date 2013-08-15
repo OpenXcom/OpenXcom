@@ -27,7 +27,6 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Engine/Options.h"
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
 #include "MedikitState.h"
@@ -36,7 +35,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
-#include "../Ruleset/Armor.h"
 #include "TileEngine.h"
 
 namespace OpenXcom

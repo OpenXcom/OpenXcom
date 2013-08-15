@@ -19,8 +19,6 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
-#include "../Savegame/Node.h"
-
 namespace OpenXcom
 {
 
