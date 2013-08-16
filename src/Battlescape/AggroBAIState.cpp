@@ -79,8 +79,7 @@ AggroBAIState::~AggroBAIState()
  */
 void AggroBAIState::load(const YAML::Node &node)
 {
-	int targetID;
-	node["aggrotarget"] >> targetID;
+	int targetID = node["aggrotarget"].as<int>();
 	if (targetID != -1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
@@ -89,7 +88,7 @@ void AggroBAIState::load(const YAML::Node &node)
 				_aggroTarget = (*j);
 		}
 	}
-	node["lastKnownTarget"] >> targetID;
+	targetID = node["lastKnownTarget"].as<int>();
 	if (targetID != -1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
@@ -98,44 +97,39 @@ void AggroBAIState::load(const YAML::Node &node)
 				_lastKnownTarget = (*j);
 		}
 	}
-	node["lastKnownPosition"][0] >> _lastKnownPosition.x;
-	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
-	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
-	node["timesNotSeen"] >> _timesNotSeen;
-
-	_charge = false;
-	if (const YAML::Node *chargeNode = node.FindValue("charge")) *chargeNode >> _charge;
+	_lastKnownPosition = node["lastKnownPosition"].as<Position>(_lastKnownPosition);
+	_timesNotSeen = node["timesNotSeen"].as<int>(_timesNotSeen);
+	_charge = node["charge"].as<bool>(_charge);
 }
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void AggroBAIState::save(YAML::Emitter &out) const
+YAML::Node AggroBAIState::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "state" << YAML::Value << "AGGRO";
+	YAML::Node node;
+	node["state"] = "AGGRO";
 	if (_aggroTarget)
 	{
-		out << YAML::Key << "aggrotarget" << YAML::Value << _aggroTarget->getId();
+		node["aggrotarget"] = _aggroTarget->getId();
 	}
 	else
 	{
-		out << YAML::Key << "aggrotarget" << YAML::Value << -1;
+		node["aggrotarget"] = -1;
 	}
 	if (_lastKnownTarget)
 	{
-		out << YAML::Key << "lastKnownTarget" << YAML::Value << _lastKnownTarget->getId();
+		node["lastKnownTarget"] = _lastKnownTarget->getId();
 	}
 	else
 	{
-		out << YAML::Key << "lastKnownTarget" << YAML::Value << -1;
+		node["lastKnownTarget"] = -1;
 	}
-	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
-	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
-	out << YAML::Key << "charge" << YAML::Value << _charge;
-	out << YAML::EndMap;
+	node["lastKnownPosition"] = _lastKnownPosition;
+	node["timesNotSeen"] = _timesNotSeen;
+	node["charge"] = _charge;
+	return node;
 }
 
 /**

@@ -50,57 +50,38 @@ SoldierNamePool::~SoldierNamePool()
 void SoldierNamePool::load(const std::string &filename)
 {
 	std::string s = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
-	std::ifstream fin(s.c_str());
-	if (!fin)
-	{
-		throw Exception(filename + " not found");
-	}
-	YAML::Parser parser(fin);
-	YAML::Node doc;
-	parser.GetNextDocument(doc);
+	YAML::Node doc = YAML::LoadFile(s);
 
-	for (YAML::Iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
+	for (YAML::const_iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
 	{
-		std::string name;
-		*i >> name;
-		_maleFirst.push_back(Language::utf8ToWstr(name));
+		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		_maleFirst.push_back(name);
 	}
-	for (YAML::Iterator i = doc["femaleFirst"].begin(); i != doc["femaleFirst"].end(); ++i)
+	for (YAML::const_iterator i = doc["femaleFirst"].begin(); i != doc["femaleFirst"].end(); ++i)
 	{
-		std::string name;
-		*i >> name;
-		_femaleFirst.push_back(Language::utf8ToWstr(name));
+		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		_femaleFirst.push_back(name);
 	}
-	for (YAML::Iterator i = doc["maleLast"].begin(); i != doc["maleLast"].end(); ++i)
+	for (YAML::const_iterator i = doc["maleLast"].begin(); i != doc["maleLast"].end(); ++i)
 	{
-		std::string name;
-		*i >> name;
-		_maleLast.push_back(Language::utf8ToWstr(name));
+		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		_maleLast.push_back(name);
 	}
-	if (const YAML::Node *pName = doc.FindValue("femaleLast"))
+	for (YAML::const_iterator i = doc["femaleLast"].begin(); i != doc["femaleLast"].end(); ++i)
 	{
-		for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
-		{
-			std::string name;
-			*i >> name;
-			_femaleLast.push_back(Language::utf8ToWstr(name));
-		}
+		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
+		_femaleLast.push_back(name);
 	}
-	else
+	if (_femaleLast.empty())
 	{
 		_femaleLast = _maleLast;
 	}
-	if (const YAML::Node *pName = doc.FindValue("lookWeights"))
+	_lookWeights = doc["lookWeights"].as<std::vector<int>>(_lookWeights);
+	_totalWeight = 0;
+	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
 	{
-		for (YAML::Iterator i = pName->begin(); i != pName->end(); ++i)
-		{
-			int a;
-			*i >> a;
-			_totalWeight += a;
-			_lookWeights.push_back(a);
-		}
+		_totalWeight += (*i);
 	}
-	fin.close();
 }
 
 /**

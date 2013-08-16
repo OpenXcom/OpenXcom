@@ -45,7 +45,7 @@ public:
 	/// Loads the item container from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the item container to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Adds an item to the container.
 	void addItem(const std::string &id, int qty = 1);
 	/// Removes an item from the container.

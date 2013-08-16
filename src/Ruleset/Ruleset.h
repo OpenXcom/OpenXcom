@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <yaml-cpp/yaml.h>
+#include "../Savegame/GameTime.h"
 
 namespace OpenXcom
 {
@@ -92,7 +93,8 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
-	std::auto_ptr<YAML::Node> _startingBase, _startingTime;
+	YAML::Node _startingBase;
+	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
@@ -109,8 +111,6 @@ public:
 	virtual ~Ruleset();
 	/// Loads a ruleset from the given source.
 	void load(const std::string &source);
-	/// Saves a ruleset to a YAML file.
-	void save(const std::string &filename) const;
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.

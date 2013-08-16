@@ -49,12 +49,6 @@ struct MissionWave
 	unsigned spawnTimer;
 };
 
-
-/// Output a MissionWave on YAML.
-void operator<<(YAML::Emitter &emitter, const MissionWave &wave);
-/// Load a MissionWave from YAML.
-void operator>>(const YAML::Node &node, MissionWave &wave);
-
 /**
  * Store fixed information about a mission type.
  * It stores the mission waves and the distribution of the races that can
@@ -71,8 +65,6 @@ public:
         const std::string &generateRace(const unsigned monthsPassed) const;
 	/// Loads alien mission data from YAML.
 	void load(const YAML::Node &node);
-	/// Saves the alien mission data to YAML.
-	void save(YAML::Emitter &out) const;
 	/// Get the number of waves.
 	unsigned getWaveCount() const { return _waves.size(); }
 	/// Gets the full wave information.

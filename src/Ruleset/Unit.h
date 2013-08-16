@@ -33,8 +33,6 @@ struct UnitStats
 {
 	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
 };
-void operator>> (const YAML::Node& node, UnitStats& stats);
-YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats);
 
 /**
  * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
@@ -61,8 +59,6 @@ public:
 	~Unit();
 	/// Loads the unit data from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the unit data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the unit's type.
 	std::string getType() const;
 	/// Get the unit's stats.
@@ -101,6 +97,49 @@ public:
 	bool isLivingWeapon() const;
 };
 
+}
+
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::UnitStats>
+	{
+		static Node encode(const OpenXcom::UnitStats& rhs)
+		{
+			Node node;
+			node["tu"] = rhs.tu;
+			node["stamina"] = rhs.stamina;
+			node["health"] = rhs.health;
+			node["bravery"] = rhs.bravery;
+			node["reactions"] = rhs.reactions;
+			node["firing"] = rhs.firing;
+			node["throwing"] = rhs.throwing;
+			node["strength"] = rhs.strength;
+			node["psiStrength"] = rhs.psiStrength;
+			node["psiSkill"] = rhs.psiSkill;
+			node["melee"] = rhs.melee;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::UnitStats& rhs)
+		{
+			if (!node.IsMap())
+				return false;
+
+			rhs.tu = node["tu"].as<int>(rhs.tu);
+			rhs.stamina = node["stamina"].as<int>(rhs.stamina);
+			rhs.health = node["health"].as<int>(rhs.health);
+			rhs.bravery = node["bravery"].as<int>(rhs.bravery);
+			rhs.reactions = node["reactions"].as<int>(rhs.reactions);
+			rhs.firing = node["firing"].as<int>(rhs.firing);
+			rhs.throwing = node["throwing"].as<int>(rhs.throwing);
+			rhs.strength = node["strength"].as<int>(rhs.strength);
+			rhs.psiStrength = node["psiStrength"].as<int>(rhs.psiStrength);
+			rhs.psiSkill = node["psiSkill"].as<int>(rhs.psiSkill);
+			rhs.melee = node["melee"].as<int>(rhs.melee);
+			return true;
+		}
+	};
 }
 
 #endif

@@ -53,8 +53,6 @@ public:
 	const std::string &getID() const { return _id; }
 	/// Loads trajectory data from YAML.
 	void load(const YAML::Node &node);
-	/// Saves the trajectory data to YAML.
-	void save(YAML::Emitter &out) const;
 	/// Gets the number of waypoints in this trajectory.
 	unsigned getWaypointCount() const { return _waypoints.size(); }
 	/// Gets the zone index at a waypoint.

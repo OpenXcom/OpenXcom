@@ -69,37 +69,36 @@ const int Node::nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
  */
 void Node::load(const YAML::Node &node)
 {
-	node["id"] >> _id;
-	node["position"] >> _pos;
-	//node["segment"] >> _segment;
-	node["type"] >> _type;
-	node["rank"] >> _rank;
-	node["flags"] >> _flags;
-	const YAML::Node *res = node.FindValue("reserved");
-	if (res) *res >> _reserved;
-	node["priority"] >> _priority;
-	node["allocated"] >> _allocated;
-	node["links"] >> _nodeLinks;
+	_id = node["id"].as<int>(_id);
+	_pos = node["position"].as<Position>(_pos);
+	//_segment = node["segment"].as<int>(_segment);
+	_type = node["type"].as<int>(_type);
+	_rank = node["rank"].as<int>(_rank);
+	_flags = node["flags"].as<int>(_flags);
+	_reserved = node["reserved"].as<int>(_reserved);
+	_priority = node["priority"].as<int>(_priority);
+	_allocated = node["allocated"].as<bool>(_allocated);
+	_nodeLinks = node["links"].as<std::vector<int>>(_nodeLinks);
 }
 
 /**
  * Saves the UFO to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Node::save(YAML::Emitter &out) const
+YAML::Node Node::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "position" << YAML::Value << _pos;
-	//out << YAML::Key << "segment" << YAML::Value << _segment;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "rank" << YAML::Value << _rank;
-	out << YAML::Key << "flags" << YAML::Value << _flags;
-	out << YAML::Key << "reserved" << YAML::Value << _reserved;
-	out << YAML::Key << "priority" << YAML::Value << _priority;
-	out << YAML::Key << "allocated" << YAML::Value << _allocated;
-	out << YAML::Key << "links" << YAML::Value << YAML::Flow << _nodeLinks;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["id"] = _id;
+	node["position"] = _pos;
+	//node["segment"] = _segment;
+	node["type"] = _type;
+	node["rank"] = _rank;
+	node["flags"] = _flags;
+	node["reserved"] = _reserved;
+	node["priority"] = _priority;
+	node["allocated"] = _allocated;
+	node["links"] = _nodeLinks;
+	return node;
 }
 
 /**

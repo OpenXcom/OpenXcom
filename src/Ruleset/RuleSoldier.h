@@ -44,8 +44,6 @@ public:
 	~RuleSoldier();
 	/// Loads the unit data from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the unit data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the unit's type.
 	std::string getType() const;
 	/// Get the minimum stats for the random stats generator.

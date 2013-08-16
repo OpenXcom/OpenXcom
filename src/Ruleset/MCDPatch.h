@@ -40,8 +40,6 @@ public:
 	~MCDPatch();
 	/// Loads the MCD Patch from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the MCD Patch to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Applies an MCD patch to a mapDataSet
 	void modifyData(MapDataSet *dataSet) const;
 };

@@ -27,8 +27,29 @@
 namespace OpenXcom
 {
 
+/**
+ * Defines a rectangle in polar coordinates.
+ * It is used to define areas for a mission zone.
+ */
+struct MissionArea
+{
+	double lonMin, lonMax, latMin, latMax;
+};
+
+/**
+ * A zone (set of areas) on the globe.
+ */
+struct MissionZone
+{
+	std::vector<MissionArea> areas;
+
+	void swap(MissionZone &other)
+	{
+		areas.swap(other.areas);
+	}
+};
+
 class City;
-struct MissionZone;
 
 /**
  * Represents a specific region of the world.
@@ -54,8 +75,6 @@ public:
 	~RuleRegion();
 	/// Loads the region from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the region to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the region's type.
 	std::string getType() const;
 	/// Gets the region's base cost.
@@ -78,6 +97,55 @@ public:
 	const std::vector<double> &getLatMin() const { return _latMin; }
 };
 
+}
+
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::MissionArea>
+	{
+		static Node encode(const OpenXcom::MissionArea& rhs)
+		{
+			Node node;
+			node.push_back(rhs.lonMin);
+			node.push_back(rhs.lonMax);
+			node.push_back(rhs.latMin);
+			node.push_back(rhs.latMax);
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::MissionArea& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 4)
+				return false;
+
+			rhs.lonMin = node[0].as<double>();
+			rhs.lonMax = node[1].as<double>();
+			rhs.latMin = node[2].as<double>();
+			rhs.latMax = node[3].as<double>();
+			return true;
+		}
+	};
+
+	template<>
+	struct convert<OpenXcom::MissionZone>
+	{
+		static Node encode(const OpenXcom::MissionZone& rhs)
+		{
+			Node node;
+			node = rhs.areas;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::MissionZone& rhs)
+		{
+			if (!node.IsSequence())
+				return false;
+
+			rhs.areas = node.as<std::vector<OpenXcom::MissionArea>>(rhs.areas);
+			return true;
+		}
+	};
 }
 
 #endif

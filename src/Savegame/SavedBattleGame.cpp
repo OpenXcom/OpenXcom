@@ -106,63 +106,49 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
 {
-	int a,b;
-	int selectedUnit = 0;
+	_mapsize_x = node["width"].as<int>(_mapsize_x);
+	_mapsize_y = node["length"].as<int>(_mapsize_y);
+	_mapsize_z = node["height"].as<int>(_mapsize_z);
+	_missionType = node["missionType"].as<std::string>(_missionType);
+	_globalShade = node["globalshade"].as<int>(_globalShade);
+	_turn = node["turn"].as<int>(_turn);
+	int selectedUnit = node["selectedUnit"].as<int>();
 
-	node["width"] >> _mapsize_x;
-	node["length"] >> _mapsize_y;
-	node["height"] >> _mapsize_z;
-	node["missionType"] >> _missionType;
-	node["globalshade"] >> _globalShade;
-	node["turn"] >> _turn;
-	node["selectedUnit"] >> selectedUnit;
-
-	for (YAML::Iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
+	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
 	{
-		std::string name;
-		*i >> name;
+		std::string name = i->as<std::string>();
 		MapDataSet *mds = new MapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 
 	initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 	
-	if (!node.FindValue("tileTotalBytesPer"))
+	if (!node["tileTotalBytesPer"])
 	{
 		// binary tile data not found, load old-style text tiles :(
-		for (YAML::Iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
+		for (YAML::const_iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
 		{
-			Position pos;
-			(*i)["position"][0] >> pos.x;
-			(*i)["position"][1] >> pos.y;
-			(*i)["position"][2] >> pos.z;
+			Position pos = (*i)["position"].as<Position>();
 			getTile(pos)->load((*i));
 		}
-	} else 
+	}
+	else 
 	{
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
-		size_t totalTiles;
+		size_t totalTiles = node["totalTiles"].as<size_t>();
 
         memset(&serKey, 0, sizeof(Tile::SerializationKey));
-		node["tileIndexSize"] >> serKey.index;
-		node["tileTotalBytesPer"] >> serKey.totalBytes;
-		node["tileFireSize"] >> serKey._fire;
-		node["tileSmokeSize"] >> serKey._smoke;
-		node["tileIDSize"] >> serKey._mapDataID;
-		node["tileSetIDSize"] >> serKey._mapDataSetID;
-		node["totalTiles"] >> totalTiles;
-        if (const YAML::Node *boolFieldsNode = node.FindValue("tileBoolFieldsSize")) 
-        {
-            *boolFieldsNode >> serKey.boolFields;
-        } else
-        {
-            serKey.boolFields = 1; // boolean flags used to be stored in an unmentioned byte (Uint8) :|
-        }
+		serKey.index = node["tileIndexSize"].as<Uint8>(serKey.index);
+		serKey.totalBytes = node["tileTotalBytesPer"].as<Uint32>(serKey.totalBytes);
+		serKey._fire = node["tileFireSize"].as<Uint8>(serKey._fire);
+		serKey._smoke = node["tileSmokeSize"].as<Uint8>(serKey._smoke);
+		serKey._mapDataID = node["tileIDSize"].as<Uint8>(serKey._mapDataID);
+		serKey._mapDataSetID = node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
+		serKey.boolFields = node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
 		// load binary tile data! 
-		YAML::Binary binTiles;
-		node["binTiles"] >> binTiles;
+		YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8 *r = (Uint8*)binTiles.data();
 		Uint8 *dataEnd = r + totalTiles * serKey.totalBytes;
@@ -176,93 +162,85 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		}		
 	}
 
-	for (YAML::Iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
+	for (YAML::const_iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
 	{
 		Node *n = new Node();
 		n->load(*i);
 		_nodes.push_back(n);
 	}
 
-	for (YAML::Iterator i = node["units"].begin(); i != node["units"].end(); ++i)
+	for (YAML::const_iterator i = node["units"].begin(); i != node["units"].end(); ++i)
 	{
-		UnitFaction faction;
-
-		(*i)["faction"] >> a;
-		faction = (UnitFaction)a;
-
-		(*i)["soldierId"] >> a;
-
-		BattleUnit *b;
-		if (a < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
+		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
+		int id = (*i)["soldierId"].as<int>();
+		BattleUnit *unit;
+		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
 			// look up the matching soldier
-			b = new BattleUnit(savedGame->getSoldier(a), faction);
+			unit = new BattleUnit(savedGame->getSoldier(id), faction);
 		}
 		else
 		{
-			std::string type, armor;
-			(*i)["genUnitType"] >> type;
-			(*i)["genUnitArmor"] >> armor;
+			std::string type = (*i)["genUnitType"].as<std::string>();
+			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 			// create a new Unit.
-			b = new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor), savedGame->getDifficulty());
+			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty());
 		}
-		b->load(*i);
-		_units.push_back(b);
+		unit->load(*i);
+		_units.push_back(unit);
 		if (faction == FACTION_PLAYER)
 		{
-			if (b->getId() == selectedUnit)
-				_selectedUnit = b;
+			if (unit->getId() == selectedUnit)
+				_selectedUnit = unit;
 		}
-		else if (b->getStatus() != STATUS_DEAD)
+		else if (unit->getStatus() != STATUS_DEAD)
 		{
-			if (const YAML::Node *ai = (*i).FindValue("AI"))
+			if (const YAML::Node &ai = (*i)["AI"])
 			{
-				std::string state;
+				std::string state = ai["state"].as<std::string>();
 				BattleAIState *aiState;
-				(*ai)["state"] >> state;
 				if (state == "PATROL")
 				{
-					aiState = new PatrolBAIState(this, b, 0);
+					aiState = new PatrolBAIState(this, unit, 0);
 				}
 				else if (state == "AGGRO")
 				{
-					aiState = new AggroBAIState(this, b);
+					aiState = new AggroBAIState(this, unit);
 				}
 				else
 				{
 					continue;
 				}
-				aiState->load((*ai));
-				b->setAIState(aiState);
+				aiState->load(ai);
+				unit->setAIState(aiState);
 			}
 		}
 	}
 	// matches up tiles and units
 	resetUnitTiles();
 
-	for (YAML::Iterator i = node["items"].begin(); i != node["items"].end(); ++i)
+	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
-		(*i)["id"] >> _itemId;
+		std::string type = (*i)["type"].as<std::string>();
+		_itemId = (*i)["id"].as<int>(_itemId);
 		if (type != "0")
 		{
 			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
 			item->load(*i);
-			(*i)["inventoryslot"] >> type;
+			type = (*i)["inventoryslot"].as<std::string>();
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
-			(*i)["owner"] >> a;
-			(*i)["unit"] >> b;
+			int owner = (*i)["owner"].as<int>();
+			int unit = (*i)["unit"].as<int>();
 
 			// match up items and units
 			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 			{
-				if ((*bu)->getId() == a)
+				if ((*bu)->getId() == owner)
 				{
 					item->moveToOwner(*bu);
 				}
-				if ((*bu)->getId() == b)
+				if ((*bu)->getId() == unit)
 				{
 					item->setUnit(*bu);
 				}
@@ -271,10 +249,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			// match up items and tiles
 			if (item->getSlot() && item->getSlot()->getType() == INV_GROUND)
 			{
-				Position pos;
-				(*i)["position"][0] >> pos.x;
-				(*i)["position"][1] >> pos.y;
-				(*i)["position"][2] >> pos.z;
+				Position pos = (*i)["position"].as<Position>();
 				if (pos.x != -1)
 					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
 			}
@@ -284,14 +259,14 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 
 	// tie ammo items to their weapons, running through the items again
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
-	for (YAML::Iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
+	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
 	{
-		(*i)["ammoItem"] >> a;
-		if (a != -1)
+		int ammo = (*i)["ammoItem"].as<int>();
+		if (ammo != -1)
 		{
 			for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
 			{
-				if ((*ammoi)->getId() == a)
+				if ((*ammoi)->getId() == ammo)
 				{
 					(*weaponi)->setAmmoItem((*ammoi));
 					break;
@@ -299,10 +274,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
-	if (node.FindValue("objectiveDestroyed"))
-	{
-		node["objectiveDestroyed"] >> _objectiveDestroyed;
-	}
+	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
 }
 
 /**
@@ -344,50 +316,43 @@ void SavedBattleGame::loadMapResources(Game *game)
 
 /**
  * Saves the saved battle game to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void SavedBattleGame::save(YAML::Emitter &out) const
+YAML::Node SavedBattleGame::save() const
 {
-	out << YAML::BeginMap;
+	YAML::Node node;
 	if (_objectiveDestroyed)
 	{
-		out << YAML::Key << "objectiveDestroyed" << YAML::Value << _objectiveDestroyed;
+		node["objectiveDestroyed"] = _objectiveDestroyed;
 	}
-	out << YAML::Key << "width" << YAML::Value << _mapsize_x;
-	out << YAML::Key << "length" << YAML::Value << _mapsize_y;
-	out << YAML::Key << "height" << YAML::Value << _mapsize_z;
-	out << YAML::Key << "missionType" << YAML::Value << _missionType;
-	out << YAML::Key << "globalshade" << YAML::Value << _globalShade;
-	out << YAML::Key << "turn" << YAML::Value << _turn;
-	out << YAML::Key << "selectedUnit" << YAML::Value << (_selectedUnit?_selectedUnit->getId():-1);
-
-	out << YAML::Key << "mapdatasets" << YAML::Value;
-	out << YAML::BeginSeq;
+	node["width"] = _mapsize_x;
+	node["length"] = _mapsize_y;
+	node["height"] = _mapsize_z;
+	node["missionType"] = _missionType;
+	node["globalshade"] = _globalShade;
+	node["turn"] = _turn;
+	node["selectedUnit"] = (_selectedUnit?_selectedUnit->getId():-1);
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
-		out << (*i)->getName();
+		node["mapdatasets"].push_back((*i)->getName());
 	}
-	out << YAML::EndSeq;
 #if 0
-	out << YAML::Key << "tiles" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
-			_tiles[i]->save(out);
+			node["tiles"].push_back(_tiles[i]->save());
 		}
 	}
-	out << YAML::EndSeq;
 #else
 	// first, write out the field sizes we're going to use to write the tile data
-	out << YAML::Key << "tileIndexSize" << YAML::Value << Tile::serializationKey.index;
-	out << YAML::Key << "tileTotalBytesPer" << YAML::Value << Tile::serializationKey.totalBytes;
-	out << YAML::Key << "tileFireSize" << YAML::Value << Tile::serializationKey._fire;
-	out << YAML::Key << "tileSmokeSize" << YAML::Value << Tile::serializationKey._smoke;
-	out << YAML::Key << "tileIDSize" << YAML::Value << Tile::serializationKey._mapDataID;
-	out << YAML::Key << "tileSetIDSize" << YAML::Value << Tile::serializationKey._mapDataSetID;
-    out << YAML::Key << "tileBoolFieldsSize" << YAML::Value << Tile::serializationKey.boolFields;
+	node["tileIndexSize"] = Tile::serializationKey.index;
+	node["tileTotalBytesPer"] = Tile::serializationKey.totalBytes;
+	node["tileFireSize"] = Tile::serializationKey._fire;
+	node["tileSmokeSize"] = Tile::serializationKey._smoke;
+	node["tileIDSize"] = Tile::serializationKey._mapDataID;
+	node["tileSetIDSize"] = Tile::serializationKey._mapDataSetID;
+    node["tileBoolFieldsSize"] = Tile::serializationKey.boolFields;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
@@ -405,38 +370,24 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 			tileDataSize -= Tile::serializationKey.totalBytes;
 		}
 	}
-	out << YAML::Key << "totalTiles" << YAML::Value << tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
-	out << YAML::Key << "binTiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
+	node["totalTiles"] = tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
+	node["binTiles"] = YAML::Binary(tileData, tileDataSize);
     free(tileData);
-
-
 #endif
-
-	out << YAML::Key << "nodes" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
-		(*i)->save(out);
+		node["nodes"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-
-	out << YAML::Key << "units" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
 	{
-		(*i)->save(out);
+		node["units"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-
-	out << YAML::Key << "items" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
 	{
-		(*i)->save(out);
+		node["items"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
 
-	out << YAML::EndMap;
+	return node;
 }
 
 /**

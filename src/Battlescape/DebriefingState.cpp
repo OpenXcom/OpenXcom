@@ -909,13 +909,13 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	ItemContainer craftVehicles;
 	for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 		craftVehicles.addItem((*i)->getRules()->getType());
-	// Now we know how many vehicles (separated by types) we have to readd
+	// Now we know how many vehicles (separated by types) we have to read
 	// Erase the current vehicles, because we have to reAdd them (cause we want to redistribute their ammo)
 	if (vehicleItemsCanBeDestroyed)
 		for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 			delete (*i);
 	craft->getVehicles()->clear();
-	// Ok, now readd those vehicles
+	// Ok, now read those vehicles
 	for (std::map<std::string, int>::iterator i = craftVehicles.getContents()->begin(); i != craftVehicles.getContents()->end(); ++i)
 	{
 		int qty = base->getItems()->getItem(i->first);

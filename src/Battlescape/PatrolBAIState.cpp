@@ -57,9 +57,8 @@ PatrolBAIState::~PatrolBAIState()
  */
 void PatrolBAIState::load(const YAML::Node &node)
 {
-	int fromnodeID, tonodeID;
-	node["fromnode"] >> fromnodeID;
-	node["tonode"] >> tonodeID;
+	int fromnodeID = node["fromnode"].as<int>();
+	int tonodeID = node["tonode"].as<int>();
 	if (fromnodeID != -1)
 	{
 		_fromNode = _game->getNodes()->at(fromnodeID);
@@ -72,29 +71,29 @@ void PatrolBAIState::load(const YAML::Node &node)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void PatrolBAIState::save(YAML::Emitter &out) const
+YAML::Node PatrolBAIState::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "state" << YAML::Value << "PATROL";
+	YAML::Node node;
+	node["state"] = "PATROL";
 	if (_fromNode)
 	{
-		out << YAML::Key << "fromnode" << YAML::Value << _fromNode->getID();
+		node["fromnode"] = _fromNode->getID();
 	}
 	else
 	{
-		out << YAML::Key << "fromnode" << YAML::Value << -1;
+		node["fromnode"] = -1;
 	}
 	if (_toNode)
 	{
-		out << YAML::Key << "tonode" << YAML::Value << _toNode->getID();
+		node["tonode"] = _toNode->getID();
 	}
 	else
 	{
-		out << YAML::Key << "tonode" << YAML::Value << -1;
+		node["tonode"] = -1;
 	}
-	out << YAML::EndMap;
+	return node;
 }
 
 /**

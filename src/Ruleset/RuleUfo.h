@@ -50,8 +50,6 @@ public:
 	~RuleUfo();
 	/// Loads UFO data from YAML.
 	void load(const YAML::Node& node, Ruleset *ruleset);
-	/// Saves the UFO data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the UFO's type.
 	std::string getType() const;
 	/// Gets the UFO's size.

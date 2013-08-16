@@ -184,130 +184,94 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node &node)
 {
-	int a = 0;
-
-	node["id"] >> _id;
-	node["faction"] >> a;
-	_faction = (UnitFaction)a;
-	node["status"] >> a;
-	_status = (UnitStatus)a;
-	node["position"] >> _pos;
-	node["direction"] >> _direction;
-	node["directionTurret"] >> _directionTurret;
-	node["tu"] >> _tu;
-	node["health"] >> _health;
-	node["stunlevel"] >> _stunlevel;
-	node["energy"] >> _energy;
-	node["morale"] >> _morale;
-	node["kneeled"] >> _kneeled;
-	node["floating"] >> _floating;
+	_id = node["id"].as<int>(_id);
+	_faction = _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
+	_status = (UnitStatus)node["status"].as<int>(_status);
+	_pos = node["position"].as<Position>(_pos);
+	_direction = _toDirection = node["direction"].as<int>(_direction);
+	_directionTurret = _toDirectionTurret = node["directionTurret"].as<int>(_directionTurret);
+	_tu = node["tu"].as<int>(_tu);
+	_health = node["health"].as<int>(_health);
+	_stunlevel = node["stunlevel"].as<int>(_stunlevel);
+	_energy = node["energy"].as<int>(_energy);
+	_morale = node["morale"].as<int>(_morale);
+	_kneeled = node["kneeled"].as<bool>(_kneeled);
+	_floating = node["floating"].as<bool>(_floating);
 	for (int i=0; i < 5; i++)
-		node["armor"][i] >> _currentArmor[i];
+		_currentArmor[i] = node["armor"][i].as<int>(_currentArmor[i]);
 	for (int i=0; i < 6; i++)
-		node["fatalWounds"][i] >> _fatalWounds[i];
-	node["fire"] >> _fire;
-	node["expBravery"] >> _expBravery;
-	node["expReactions"] >> _expReactions;
-	node["expFiring"] >> _expFiring;
-	node["expThrowing"] >> _expThrowing;
-	node["expPsiSkill"] >> _expPsiSkill;
-	node["expMelee"] >> _expMelee;
-	node["turretType"] >> _turretType;
-	node["visible"] >> _visible;
-	node["turnsExposed"] >> _turnsExposed;
-	node["killedBy"] >> a;
-	_killedBy = (UnitFaction)a;
-	if (const YAML::Node *pName = node.FindValue("moraleRestored"))
-	{
-		(*pName) >> _moraleRestored;
-	}
-	if (const YAML::Node *pName = node.FindValue("rankInt"))
-	{
-		(*pName) >> _rankInt;
-	}
-	if (const YAML::Node *pName = node.FindValue("originalFaction"))
-	{
-		(*pName) >> a;
-		_originalFaction = (UnitFaction)a;
-	}
-	else
-	{
-		_originalFaction = _faction;
-	}
-	if (const YAML::Node *pName = node.FindValue("kills"))
-	{
-		(*pName) >> _kills;
-	}
-	if (const YAML::Node *pName = node.FindValue("dontReselect"))
-	{
-		(*pName) >> _dontReselect;
-	}
+		_fatalWounds[i] = node["fatalWounds"][i].as<int>(_fatalWounds[i]);
+	_fire = node["fire"].as<int>(_fire);
+	_expBravery = node["expBravery"].as<int>(_expBravery);
+	_expReactions = node["expReactions"].as<int>(_expReactions);
+	_expFiring = node["expFiring"].as<int>(_expFiring);
+	_expThrowing = node["expThrowing"].as<int>(_expThrowing);
+	_expPsiSkill = node["expPsiSkill"].as<int>(_expPsiSkill);
+	_expMelee = node["expMelee"].as<int>(_expMelee);
+	_turretType = node["turretType"].as<int>(_turretType);
+	_visible = node["visible"].as<bool>(_visible);
+	_turnsExposed = node["turnsExposed"].as<int>(_turnsExposed);
+	_killedBy = (UnitFaction)node["killedBy"].as<int>(_killedBy);
+	_moraleRestored = node["moraleRestored"].as<int>(_moraleRestored);
+	_rankInt = node["rankInt"].as<int>(_rankInt);
+	_originalFaction = (UnitFaction)node["originalFaction"].as<int>(_originalFaction);
+	_kills = node["kills"].as<int>(_kills);
+	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
 	_charging = 0;
-	_toDirection = _direction;
-	_toDirectionTurret = _directionTurret;
-
 }
 
 /**
  * Saves the soldier to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void BattleUnit::save(YAML::Emitter &out) const
+YAML::Node BattleUnit::save() const
 {
-	out << YAML::BeginMap;
+	YAML::Node node;
 
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "faction" << YAML::Value << _faction;
-	out << YAML::Key << "soldierId" << YAML::Value << _id;
-	out << YAML::Key << "genUnitType" << YAML::Value << _type;
-	out << YAML::Key << "genUnitArmor" << YAML::Value << _armor->getType();
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(getName(0));
-	out << YAML::Key << "status" << YAML::Value << _status;
-	out << YAML::Key << "position" << YAML::Value << _pos;
-	out << YAML::Key << "direction" << YAML::Value << _direction;
-	out << YAML::Key << "directionTurret" << YAML::Value << _directionTurret;
-	out << YAML::Key << "tu" << YAML::Value << _tu;
-	out << YAML::Key << "health" << YAML::Value << _health;
-	out << YAML::Key << "stunlevel" << YAML::Value << _stunlevel;
-	out << YAML::Key << "energy" << YAML::Value << _energy;
-	out << YAML::Key << "morale" << YAML::Value << _morale;
-	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
-	out << YAML::Key << "floating" << YAML::Value << _floating;
-	out << YAML::Key << "armor" << YAML::Value;
-	out << YAML::Flow << YAML::BeginSeq;
-	for (int i=0; i < 5; i++) out << _currentArmor[i];
-	out << YAML::EndSeq;
-	out << YAML::Key << "fatalWounds" << YAML::Value;
-	out << YAML::Flow << YAML::BeginSeq;
-	for (int i=0; i < 6; i++) out << _fatalWounds[i];
-	out << YAML::EndSeq;
-	out << YAML::Key << "fire" << YAML::Value << _fire;
-	out << YAML::Key << "expBravery" << YAML::Value << _expBravery;
-	out << YAML::Key << "expReactions" << YAML::Value << _expReactions;
-	out << YAML::Key << "expFiring" << YAML::Value << _expFiring;
-	out << YAML::Key << "expThrowing" << YAML::Value << _expThrowing;
-	out << YAML::Key << "expPsiSkill" << YAML::Value << _expPsiSkill;
-	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
-	out << YAML::Key << "turretType" << YAML::Value << _turretType;
-	out << YAML::Key << "visible" << YAML::Value << _visible;
-	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
-	out << YAML::Key << "rankInt" << YAML::Value << _rankInt;
-	out << YAML::Key << "moraleRestored" << YAML::Value << _moraleRestored;
-
+	node["id"] = _id;
+	node["faction"] = (int)_faction;
+	node["soldierId"] = _id;
+	node["genUnitType"] = _type;
+	node["genUnitArmor"] = _armor->getType();
+	node["name"] = Language::wstrToUtf8(getName(0));
+	node["status"] = (int)_status;
+	node["position"] = _pos;
+	node["direction"] = _direction;
+	node["directionTurret"] = _directionTurret;
+	node["tu"] = _tu;
+	node["health"] = _health;
+	node["stunlevel"] = _stunlevel;
+	node["energy"] = _energy;
+	node["morale"] = _morale;
+	node["kneeled"] = _kneeled;
+	node["floating"] = _floating;
+	for (int i=0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
+	for (int i=0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
+	node["fire"] = _fire;
+	node["expBravery"] = _expBravery;
+	node["expReactions"] = _expReactions;
+	node["expFiring"] = _expFiring;
+	node["expThrowing"] = _expThrowing;
+	node["expPsiSkill"] = _expPsiSkill;
+	node["expMelee"] = _expMelee;
+	node["turretType"] = _turretType;
+	node["visible"] = _visible;
+	node["turnsExposed"] = _turnsExposed;
+	node["rankInt"] = _rankInt;
+	node["moraleRestored"] = _moraleRestored;
 	if (getCurrentAIState())
 	{
-		out << YAML::Key << "AI" << YAML::Value;
-		getCurrentAIState()->save(out);
+		node["AI"] = getCurrentAIState()->save();
 	}
-	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
+	node["killedBy"] = (int)_killedBy;
 	if (_originalFaction != _faction)
-		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
+		node["originalFaction"] = (int)_originalFaction;
 	if (_kills)
-		out << YAML::Key << "kills" << YAML::Value << _kills;
+		node["kills"] = _kills;
 	if (_faction == FACTION_PLAYER && _dontReselect)
-		out << YAML::Key << "dontReselect" << YAML::Value << _dontReselect;
+		node["dontReselect"] = _dontReselect;
 
-	out << YAML::EndMap;
+	return node;
 }
 
 /**

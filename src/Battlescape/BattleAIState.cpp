@@ -49,10 +49,11 @@ void BattleAIState::load(const YAML::Node &)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void BattleAIState::save(YAML::Emitter &) const
+YAML::Node BattleAIState::save() const
 {
+	return YAML::Node();
 }
 
 

@@ -44,7 +44,6 @@ private:
 	int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
 	std::string _refuelItem;
 	int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
-	// battlescape:
 	RuleTerrain *_battlescapeTerrainData;
 	bool _spacecraft;
 	int _listOrder;
@@ -55,8 +54,6 @@ public:
 	~RuleCraft();
 	/// Loads craft data from YAML.
 	void load(const YAML::Node& node, Ruleset *ruleset, int modIndex, int nextCraftIndex);
-	/// Saves the craft data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the craft's type.
 	std::string getType() const;
 	/// Gets the craft's requirements.

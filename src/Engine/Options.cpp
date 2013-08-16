@@ -480,41 +480,25 @@ void updateOptions()
 void load(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
-	std::ifstream fin(s.c_str());
-	if (!fin)
+	try
 	{
-		//throw Exception(filename + ".cfg" + "not found");
+		YAML::Node doc = YAML::LoadFile(s);
+		YAML::Node &options = doc;
+		if (doc["options"])
+		{
+			options = doc["options"];
+		}
+		for (YAML::const_iterator i = options.begin(); i != options.end(); ++i)
+		{
+			_options[i->first.as<std::string>()] = i->second.as<std::string>();
+		}
+		_purchaseexclusions = doc["purchaseexclusions"].as<std::vector<std::string>>(_purchaseexclusions);
+		_rulesets = doc["rulesets"].as<std::vector<std::string>>(_rulesets);
+	}
+	catch (YAML::Exception)
+	{
 		return;
 	}
-	YAML::Parser parser(fin);
-	YAML::Node doc;
-
-	parser.GetNextDocument(doc);
-	const YAML::Node *options = doc.FindValue("options");
-	if (!options)
-	{
-		options = &doc;
-	}
-
-	for (YAML::Iterator i = options->begin(); i != options->end(); ++i)
-	{
-		std::string key, value;
-		i.first() >> key;
-		i.second() >> value;
-		_options[key] = value;
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
-	{
-		(*pName) >> _purchaseexclusions;
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("rulesets"))
-	{
-		(*pName) >> _rulesets;
-	}
-
-	fin.close();
 }
 
 /**
@@ -532,10 +516,11 @@ void save(const std::string &filename)
 	}
 	YAML::Emitter out;
 
-	out << YAML::BeginMap;
-	out << YAML::Key << "options" << YAML::Value << _options;
-	out << YAML::Key << "rulesets" << YAML::Value << _rulesets;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["options"] = _options;
+	node["purchaseexclusions"] = _purchaseexclusions;
+	node["rulesets"] = _rulesets;
+	out << node;
 
 	sav << out.c_str();
 	sav.close();

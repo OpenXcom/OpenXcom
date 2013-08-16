@@ -32,74 +32,20 @@ RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""),
  */
 void RuleResearch::load(const YAML::Node &node, int listOrder)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "cost")
-		{
-			i.second() >> _cost;
-		}
-		else if (key == "needItem")
-		{
-			i.second() >> _needItem;
-		}
-		else if (key == "dependencies")
-		{
-			i.second() >> _dependencies;
-		}
-		else if (key == "unlocks")
-		{
-			i.second() >> _unlocks;
-		}
-		else if (key == "points")
-		{
-			i.second() >> _points;
-		}
-		else if (key == "getOneFree")
-		{
-			i.second() >> _getOneFree;
-		}
-		else if (key == "lookup")
-		{
-			i.second() >> _lookup;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
-	}
+	_name = node["name"].as<std::string>(_name);
+	_lookup = node["lookup"].as<std::string>(_lookup);
+	_cost = node["cost"].as<int>(_cost);
+	_points = node["points"].as<int>(_points);
+	_dependencies = node["dependencies"].as<std::vector<std::string>>(_dependencies);
+	_unlocks = node["unlocks"].as<std::vector<std::string>>(_unlocks);
+	_getOneFree = node["getOneFree"].as<std::vector<std::string>>(_getOneFree);
+	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_needItem = node["needItem"].as<bool>(_needItem);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
 	}
-}
-
-/**
- * Saves the research project to a YAML file.
- * @param out YAML emitter.
- */
-void RuleResearch::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "needItem" << YAML::Value << _needItem;
-	out << YAML::Key << "dependencies" << YAML::Value << _dependencies;
-	out << YAML::Key << "unlocks" << YAML::Value << _unlocks;
-	out << YAML::Key << "points" << YAML::Value << _points;
-	out << YAML::Key << "getOneFree" << YAML::Value << _getOneFree;
-	out << YAML::Key << "lookup" << YAML::Value << _lookup;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::EndMap;
 }
 
 /**

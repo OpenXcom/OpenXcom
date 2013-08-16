@@ -41,67 +41,17 @@ MapBlock::~MapBlock()
  */
 void MapBlock::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "width")
-		{
-			i.second() >> _size_x;
-		}
-		else if (key == "length")
-		{
-			i.second() >> _size_y;
-		}
-		else if (key == "height")
-		{
-			i.second() >> _size_z;
-		}
-		else if (key == "type")
-		{
-			int a;
-			i.second() >> a;
-			_type = (MapBlockType)a;
-			if (_subType == MT_UNDEFINED)
-				_subType = (MapBlockType)a;
-		}
-		else if (key == "subType")
-		{
-			int a;
-			i.second() >> a;
-			_subType = (MapBlockType)a;
-		}
-		else if (key == "frequency")
-		{
-			i.second() >> _frequency;
-		}
-		else if (key == "maxCount")
-		{
-			i.second() >> _maxCount;
-		}
-	}
-}
-
-/**
- * Saves the map block to a YAML file.
- * @param out YAML emitter.
- */
-void MapBlock::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "width" << YAML::Value << _size_x;
-	out << YAML::Key << "length" << YAML::Value << _size_y;
-	out << YAML::Key << "height" << YAML::Value << _size_z;
-	out << YAML::Key << "type" << YAML::Value << (int)_type;
-	out << YAML::Key << "subType" << YAML::Value << (int)_subType;
-	out << YAML::Key << "frequency" << YAML::Value << _frequency;
-	out << YAML::Key << "maxCount" << YAML::Value << _maxCount;
-	out << YAML::EndMap;
+	_name = node["name"].as<std::string>(_name);
+	_size_x = node["width"].as<int>(_size_x);
+	_size_y = node["length"].as<int>(_size_y);
+	_size_z = node["height"].as<int>(_size_z);
+	_type = (MapBlockType)node["type"].as<int>(_type);
+	if (_subType == MT_UNDEFINED)
+		_subType = (MapBlockType)node["type"].as<int>(_type);
+	_subType = (MapBlockType)node["subType"].as<int>(_subType);
+	_frequency = node["frequency"].as<int>(_frequency);
+	_timesUsed = node["timesUsed"].as<int>(_timesUsed);
+	_maxCount = node["maxCount"].as<int>(_maxCount);
 }
 
 /**

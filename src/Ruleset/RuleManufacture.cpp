@@ -35,64 +35,18 @@ RuleManufacture::RuleManufacture(const std::string &name) : _name(name), _space(
  */
 void RuleManufacture::load(const YAML::Node &node, int listOrder)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "category")
-		{
-			i.second() >> _category;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "space")
-		{
-			i.second() >> _space;
-		}
-		else if (key == "time")
-		{
-			i.second() >> _time;
-		}
-		else if (key == "cost")
-		{
-			i.second() >> _cost;
-		}
-		else if (key == "requiredItems")
-		{
-			i.second() >> _requiredItems;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
-	}
+	_name = node["name"].as<std::string>(_name);
+	_category = node["category"].as<std::string>(_category);
+	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_space = node["space"].as<int>(_space);
+	_time = node["time"].as<int>(_time);
+	_cost = node["cost"].as<int>(_cost);
+	_requiredItems = node["requiredItems"].as<std::map<std::string, int>>(_requiredItems);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
 	}
-}
-
-/**
- * Saves the manufacture project to a YAML file.
- * @param out YAML emitter.
- */
-void RuleManufacture::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "category" << YAML::Value << _category;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::Key << "space" << YAML::Value << _space;
-	out << YAML::Key << "time" << YAML::Value << _time;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "requiredItems" << YAML::Value << _requiredItems;
-	out << YAML::EndMap;
 }
 
 /**

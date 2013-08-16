@@ -51,8 +51,6 @@ public:
 	~MapDataSet();
 	/// Loads the map data set from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the map data set to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Loads voxeldata from a DAT file.
 	static void loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData);
 	/// Get the dataset name (used for MAP generation).

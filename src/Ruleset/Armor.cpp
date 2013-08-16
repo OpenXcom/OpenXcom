@@ -47,115 +47,30 @@ Armor::~Armor()
  */
 void Armor::load(const YAML::Node &node)
 {
-	int a = 0;
-
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
+	_spriteInv = node["spriteInv"].as<std::string>(_spriteInv);
+	_corpseItem = node["corpseItem"].as<std::string>(_corpseItem);
+	_storeItem = node["storeItem"].as<std::string>(_storeItem);
+	_frontArmor = node["frontArmor"].as<int>(_frontArmor);
+	_sideArmor = node["sideArmor"].as<int>(_sideArmor);
+	_rearArmor = node["rearArmor"].as<int>(_rearArmor);
+	_underArmor = node["underArmor"].as<int>(_underArmor);
+	_drawingRoutine = node["drawingRoutine"].as<int>(_drawingRoutine);
+	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
+	_size = node["size"].as<int>(_size);
+	if (const YAML::Node &dmg = node["damageModifier"])
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
+		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
 		{
-			i.second() >> _type;
-		}
-		else if (key == "spriteSheet")
-		{
-			i.second() >> _spriteSheet;
-		}
-		else if (key == "spriteInv")
-		{
-			i.second() >> _spriteInv;
-		}
-		else if (key == "corpseItem")
-		{
-			i.second() >> _corpseItem;
-		}
-		else if (key == "storeItem")
-		{
-			i.second() >> _storeItem;
-		}
-		else if (key == "frontArmor")
-		{
-			i.second() >> _frontArmor;
-		}
-		else if (key == "sideArmor")
-		{
-			i.second() >> _sideArmor;
-		}
-		else if (key == "rearArmor")
-		{
-			i.second() >> _rearArmor;
-		}
-		else if (key == "underArmor")
-		{
-			i.second() >> _underArmor;
-		}
-		else if (key == "drawingRoutine")
-		{
-			i.second() >> _drawingRoutine;
-		}
-		else if (key == "movementType")
-		{
-			i.second() >> a;
-			_movementType = (MovementType)a;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "damageModifier")
-		{
-			int dmg = 0;
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				*j >> _damageModifier[dmg];
-				++dmg;
-			}
-		}
-		else if (key == "loftemps")
-		{
-			int a;
-			i.second() >> a;
-			_loftempsSet.push_back(a);
-		}
-		else if (key == "loftempsSet")
-		{
-			i.second() >> _loftempsSet;
+			_damageModifier[i] = dmg[i].as<float>();
 		}
 	}
-}
-
-/**
- * Saves the armor to a YAML file.
- * @param out YAML emitter.
- */
-void Armor::save(YAML::Emitter &out) const
-{
-
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "spriteSheet" << YAML::Value << _spriteSheet;
-	out << YAML::Key << "spriteInv" << YAML::Value << _spriteInv;
-	out << YAML::Key << "corpseItem" << YAML::Value << _corpseItem;
-	out << YAML::Key << "storeItem" << YAML::Value << _storeItem;
-	out << YAML::Key << "frontArmor" << YAML::Value << _frontArmor;
-	out << YAML::Key << "sideArmor" << YAML::Value << _sideArmor;
-	out << YAML::Key << "rearArmor" << YAML::Value << _rearArmor;
-	out << YAML::Key << "underArmor" << YAML::Value << _underArmor;
-	out << YAML::Key << "drawingRoutine" << YAML::Value << _drawingRoutine;
-	out << YAML::Key << "movementType" << YAML::Value << _movementType;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "damageModifier" << YAML::Value << YAML::BeginSeq;
-	for (int i=0; i < 8; i++)
-		out << _damageModifier[i];
-	if (_loftempsSet.size() == 1)
+	_loftempsSet = node["loftempsSet"].as<std::vector<int>>(_loftempsSet);
+	if (const YAML::Node &loftemps = node["loftemps"])
 	{
-		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
+		_loftempsSet.push_back(loftemps.as<int>());
 	}
-	else
-	{
-		out << YAML::Key << "loftempsSet" << YAML::Value << _loftempsSet;
-	}
-	out << YAML::EndSeq << YAML::EndMap;
 }
 
 /**

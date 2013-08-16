@@ -41,8 +41,6 @@ public:
 	RuleManufacture(const std::string &name);
 	/// Loads the manufacture from YAML.
 	void load(const YAML::Node& node, int listOrder);
-	/// Saves the manufacture to YAML.
-	void save(YAML::Emitter& out) const;
 	///Get the manufacture name
 	std::string getName () const;
 	///Get the manufacture category

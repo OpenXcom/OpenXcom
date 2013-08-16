@@ -45,23 +45,24 @@ BaseFacility::~BaseFacility()
  */
 void BaseFacility::load(const YAML::Node &node)
 {
-	node["x"] >> _x;
-	node["y"] >> _y;
-	node["buildTime"] >> _buildTime;
+	_x = node["x"].as<int>(_x);
+	_y = node["y"].as<int>(_y);
+	_buildTime = node["buildTime"].as<int>(_buildTime);
 }
 
 /**
  * Saves the base facility to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void BaseFacility::save(YAML::Emitter &out) const
+YAML::Node BaseFacility::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "x" << YAML::Value << _x;
-	out << YAML::Key << "y" << YAML::Value << _y;
-	out << YAML::Key << "buildTime" << YAML::Value << _buildTime;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["type"] = _rules->getType();
+	node["x"] = _x;
+	node["y"] = _y;
+	if (_buildTime != 0)
+		node["buildTime"] = _buildTime;
+	return node;
 }
 
 /**

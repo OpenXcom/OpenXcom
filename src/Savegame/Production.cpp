@@ -143,26 +143,20 @@ void Production::startItem(Base * b, SavedGame * g)
 	}
 }
 
-void Production::save(YAML::Emitter &out)
+YAML::Node Production::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "item" << YAML::Value << getRules ()->getName ();
-	out << YAML::Key << "assigned" << YAML::Value << getAssignedEngineers ();
-	out << YAML::Key << "spent" << YAML::Value << getTimeSpent ();
-	out << YAML::Key << "amount" << YAML::Value << getAmountTotal ();
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["item"] = getRules ()->getName ();
+	node["assigned"] = getAssignedEngineers ();
+	node["spent"] = getTimeSpent ();
+	node["amount"] = getAmountTotal ();
+	return node;
 }
 
 void Production::load(const YAML::Node &node)
 {
-	int assigned;
-	int spent;
-	int amount;
-	node["assigned"] >> assigned;
-	node["spent"] >> spent;
-	node["amount"] >> amount;
-	setAssignedEngineers(assigned);
-	setTimeSpent(spent);
-	setAmountTotal(amount);
+	setAssignedEngineers(node["assigned"].as<int>());
+	setTimeSpent(node["spent"].as<int>());
+	setAmountTotal(node["amount"].as<int>());
 }
 };

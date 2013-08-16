@@ -47,8 +47,6 @@ public:
 	RuleResearch(const std::string & name);
 	/// Loads the research from YAML.
 	void load(const YAML::Node& node, int listOrder);
-	/// Saves the research to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Get time needed to discover this ResearchProject
 	int getCost() const;
 	/// Get the research name

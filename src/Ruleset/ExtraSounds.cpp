@@ -43,22 +43,7 @@ ExtraSounds::~ExtraSounds()
  */
 void ExtraSounds::load(const YAML::Node &node, int modIndex)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "files")
-		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				int index;
-				j.first() >> index;
-				std::string filename;
-				j.second() >> filename;
-				_sounds[index] = filename;
-			}
-		}
-	}
+	_sounds = node["files"].as<std::map<int, std::string>>(_sounds);
 	_modIndex = modIndex;
 }
 

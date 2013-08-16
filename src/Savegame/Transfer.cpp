@@ -55,68 +55,58 @@ Transfer::~Transfer()
  */
 void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 {
-	node["hours"] >> _hours;
-	if (const YAML::Node *pName = node.FindValue("soldier"))
+	_hours = node["hours"].as<int>(_hours);
+	if (const YAML::Node &soldier = node["soldier"])
 	{
 		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(*pName, rule);
+		_soldier->load(soldier, rule);
 	}
-	else if (const YAML::Node *pName = node.FindValue("craft"))
+	if (const YAML::Node &craft = node["craft"])
 	{
-		std::string type;
-		(*pName)["type"] >> type;
-		_craft = new Craft(rule->getCraft(type), base);
-		_craft->load(*pName, rule, 0);
+		_craft = new Craft(rule->getCraft(craft["type"].as<std::string>()), base);
+		_craft->load(craft, rule, 0);
 	}
-	else if (const YAML::Node *pName = node.FindValue("itemId"))
-	{
-		*pName >> _itemId;
-		node["itemQty"] >> _itemQty;
-	}
-	else if (const YAML::Node *pName = node.FindValue("scientists"))
-	{
-		*pName >> _scientists;
-	}
-	else if (const YAML::Node *pName = node.FindValue("engineers"))
-	{
-		*pName >> _engineers;
-	}
-	node["delivered"] >> _delivered;
+	_itemId = node["itemId"].as<std::string>(_itemId);
+	_itemQty = node["itemQty"].as<int>(_itemQty);
+	_scientists = node["scientists"].as<int>(_scientists);
+	_engineers = node["engineers"].as<int>(_engineers);
+	_delivered = node["delivered"].as<bool>(_delivered);
 }
 
 /**
  * Saves the transfer to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Transfer::save(YAML::Emitter &out) const
+YAML::Node Transfer::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "hours" << YAML::Value << _hours;
+	YAML::Node node;
+	node["hours"] = _hours;
 	if (_soldier != 0)
 	{
-		out << YAML::Key << "soldier" << YAML::Value;
-		_soldier->save(out);
+		node["soldier"] = _soldier->save();
 	}
 	else if (_craft != 0)
 	{
-		out << YAML::Key << "craft" << YAML::Value;
-		_craft->save(out);
+		node["craft"] = _craft->save();
 	}
 	else if (_itemQty != 0)
 	{
-		out << YAML::Key << "itemId" << YAML::Value << _itemId;
-		out << YAML::Key << "itemQty" << YAML::Value << _itemQty;
+		node["itemId"] = _itemId;
+		node["itemQty"] = _itemQty;
 	}
 	else if (_scientists != 0)
 	{
-		out << YAML::Key << "scientists" << YAML::Value << _scientists;
+		node["scientists"] = _scientists;
 	}
 	else if (_engineers != 0)
 	{
-		out << YAML::Key << "engineers" << YAML::Value << _engineers;
+		node["engineers"] = _engineers;
 	}
-	out << YAML::Key << "delivered" << YAML::Value << _delivered;
-	out << YAML::EndMap;
+	if (_delivered)
+	{
+		node["delivered"] = _delivered;
+	}
+	return node;
 }
 
 /**

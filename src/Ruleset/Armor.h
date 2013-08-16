@@ -48,8 +48,6 @@ public:
 	~Armor();
 	/// Loads the armor data from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the armor data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the armor's type.
 	std::string getType() const;
 	/// Gets the unit's sprite sheet.

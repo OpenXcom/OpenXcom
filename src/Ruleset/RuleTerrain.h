@@ -52,8 +52,6 @@ public:
 	~RuleTerrain();
 	/// Loads the terrain from YAML.
 	void load(const YAML::Node& node, Ruleset *ruleset);
-	/// Saves the terrain to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the terrain's name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the terrain's mapblocks.

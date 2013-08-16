@@ -69,8 +69,6 @@ public:
 	~AlienDeployment();
 	/// Loads Alien Deployment data from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the Alien Deployment data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the Alien Deployment's type.
 	std::string getType() const;
 	/// Gets a pointer to the data.
@@ -88,6 +86,29 @@ public:
 
 };
 
+}
+
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::ItemSet>
+	{
+		static Node encode(const OpenXcom::ItemSet& rhs)
+		{
+			Node node;
+			node = rhs.items;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::ItemSet& rhs)
+		{
+			if (!node.IsSequence())
+				return false;
+
+			rhs.items = node.as<std::vector<std::string>>(rhs.items);
+			return true;
+		}
+	};
 }
 
 #endif

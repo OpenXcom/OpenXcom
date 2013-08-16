@@ -92,7 +92,7 @@ public:
 	/// Load the tile from binary buffer in memory
 	void loadBinary(Uint8 *buffer, Tile::SerializationKey& serializationKey);
 	/// Saves the tile to yaml
-	void save(YAML::Emitter &out) const;
+	YAML::Node save() const;
 	/// Saves the tile to binary
 	void saveBinary(Uint8** buffer) const;
 

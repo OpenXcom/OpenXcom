@@ -43,42 +43,12 @@ ExtraSprites::~ExtraSprites()
  */
 void ExtraSprites::load(const YAML::Node &node, int modIndex)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "width")
-		{
-			i.second() >> _width;
-		}
-		else if (key == "height")
-		{
-			i.second() >> _height;
-		}
-		else if (key == "subX")
-		{
-			i.second() >> _subX;
-		}
-		else if (key == "subY")
-		{
-			i.second() >> _subY;
-		}
-		else if (key == "singleImage")
-		{
-			i.second() >> _singleImage;
-		}
-		else if (key == "files")
-		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				int index;
-				j.first() >> index;
-				std::string filename;
-				j.second() >> filename;
-				_sprites[index] = filename;
-			}
-		}
-	}
+	_sprites = node["sprites"].as<std::map<int, std::string>>(_sprites);
+	_width = node["width"].as<int>(_width);
+	_height = node["height"].as<int>(_height);
+	_singleImage = node["singleImage"].as<bool>(_singleImage);
+	_subX = node["subX"].as<int>(_subX);
+	_subY = node["subY"].as<int>(_subY);
 	_modIndex = modIndex;
 }
 

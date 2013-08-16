@@ -45,170 +45,46 @@ RuleBaseFacility::~RuleBaseFacility()
  */
 void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "spriteShape")
-		{
-			i.second() >> _spriteShape;
-		}
-		else if (key == "spriteFacility")
-		{
-			i.second() >> _spriteFacility;
-			// BASEBITS.PCK: 34 entries
-			if (_spriteFacility > 33)
-			{
-				_spriteFacility += modIndex;
-			}
-		}
-		else if (key == "lift")
-		{
-			i.second() >> _lift;
-		}
-		else if (key == "hyper")
-		{
-			i.second() >> _hyper;
-		}
-		else if (key == "mind")
-		{
-			i.second() >> _mind;
-		}
-		else if (key == "grav")
-		{
-			i.second() >> _grav;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "buildCost")
-		{
-			i.second() >> _buildCost;
-		}
-		else if (key == "buildTime")
-		{
-			i.second() >> _buildTime;
-		}
-		else if (key == "monthlyCost")
-		{
-			i.second() >> _monthlyCost;
-		}
-		else if (key == "storage")
-		{
-			i.second() >> _storage;
-		}
-		else if (key == "personnel")
-		{
-			i.second() >> _personnel;
-		}
-		else if (key == "aliens")
-		{
-			i.second() >> _aliens;
-		}
-		else if (key == "crafts")
-		{
-			i.second() >> _crafts;
-		}
-		else if (key == "labs")
-		{
-			i.second() >> _labs;
-		}
-		else if (key == "workshops")
-		{
-			i.second() >> _workshops;
-		}
-		else if (key == "psiLabs")
-		{
-			i.second() >> _psiLabs;
-		}
-		else if (key == "radarRange")
-		{
-			i.second() >> _radarRange;
-		}
-		else if (key == "radarChance")
-		{
-			i.second() >> _radarChance;
-		}
-		else if (key == "defense")
-		{
-			i.second() >> _defense;
-		}
-		else if (key == "hitRatio")
-		{
-			i.second() >> _hitRatio;
-		}
-		else if (key == "fireSound")
-		{
-			// GEO.CAT: 14 entries
-			i.second() >> _fireSound;
-			if (_fireSound > 13)
-				_fireSound += modIndex;
-		}
-		else if (key == "hitSound")
-		{
-			i.second() >> _hitSound;
-			// GEO.CAT: 14 entries
-			if (_hitSound > 13)
-				_hitSound += modIndex;
-		}
-		else if (key == "mapName")
-		{
-			i.second() >> _mapName;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
-	}
+	_type = node["type"].as<std::string>(_type);
+	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_spriteShape = node["spriteShape"].as<int>(_spriteShape);
+	_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
+	// BASEBITS.PCK: 34 entries
+	if (_spriteFacility > 33)
+		_spriteFacility += modIndex;
+	_lift = node["lift"].as<bool>(_lift);
+	_hyper = node["hyper"].as<bool>(_hyper);
+	_mind = node["mind"].as<bool>(_mind);
+	_grav = node["grav"].as<bool>(_grav);
+	_size = node["size"].as<int>(_size);
+	_buildCost = node["buildCost"].as<int>(_buildCost);
+	_buildTime = node["buildTime"].as<int>(_buildTime);
+	_monthlyCost = node["monthlyCost"].as<int>(_monthlyCost);
+	_storage = node["storage"].as<int>(_storage);
+	_personnel = node["personnel"].as<int>(_personnel);
+	_aliens = node["aliens"].as<int>(_aliens);
+	_crafts = node["crafts"].as<int>(_crafts);
+	_labs = node["labs"].as<int>(_labs);
+	_workshops = node["workshops"].as<int>(_workshops);
+	_psiLabs = node["psiLabs"].as<int>(_psiLabs);
+	_radarRange = node["radarRange"].as<int>(_radarRange);
+	_radarChance = node["radarChance"].as<int>(_radarChance);
+	_defense = node["defense"].as<int>(_defense);
+	_hitRatio = node["hitRatio"].as<int>(_hitRatio);
+	_fireSound = node["fireSound"].as<int>(_fireSound);
+	// GEO.CAT: 14 entries
+	if (_fireSound > 13)
+		_fireSound += modIndex;
+	_hitSound = node["hitSound"].as<int>(_hitSound);
+	// GEO.CAT: 14 entries
+	if (_hitSound > 13)
+		_hitSound += modIndex;
+	_mapName = node["mapName"].as<std::string>(_mapName);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
 	}
-}
-
-/**
- * Saves the base facility type to a YAML file.
- * @param out YAML emitter.
- */
-void RuleBaseFacility::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::Key << "spriteShape" << YAML::Value << _spriteShape;
-	out << YAML::Key << "spriteFacility" << YAML::Value << _spriteFacility;
-	out << YAML::Key << "lift" << YAML::Value << _lift;
-	out << YAML::Key << "hyper" << YAML::Value << _hyper;
-	out << YAML::Key << "mind" << YAML::Value << _mind;
-	out << YAML::Key << "grav" << YAML::Value << _grav;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "buildCost" << YAML::Value << _buildCost;
-	out << YAML::Key << "buildTime" << YAML::Value << _buildTime;
-	out << YAML::Key << "monthlyCost" << YAML::Value << _monthlyCost;
-	out << YAML::Key << "storage" << YAML::Value << _storage;
-	out << YAML::Key << "personnel" << YAML::Value << _personnel;
-	out << YAML::Key << "aliens" << YAML::Value << _aliens;
-	out << YAML::Key << "crafts" << YAML::Value << _crafts;
-	out << YAML::Key << "labs" << YAML::Value << _labs;
-	out << YAML::Key << "workshops" << YAML::Value << _workshops;
-	out << YAML::Key << "psiLabs" << YAML::Value << _psiLabs;
-	out << YAML::Key << "radarRange" << YAML::Value << _radarRange;
-	out << YAML::Key << "radarChance" << YAML::Value << _radarChance;
-	out << YAML::Key << "defense" << YAML::Value << _defense;
-	out << YAML::Key << "hitRatio" << YAML::Value << _hitRatio;
-	out << YAML::Key << "fireSound" << YAML::Value << _fireSound;
-	out << YAML::Key << "hitSound" << YAML::Value << _hitSound;
-	out << YAML::Key << "mapName" << YAML::Value << _mapName;
-	out << YAML::EndMap;
 }
 
 /**

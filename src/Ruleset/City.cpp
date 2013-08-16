@@ -46,38 +46,9 @@ City::~City()
  */
 void City::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "lon")
-		{
-			i.second() >> _lon;
-			_lon *= M_PI / 180;
-		}
-		else if (key == "lat")
-		{
-			i.second() >> _lat;
-			_lat *= M_PI / 180;
-		}
-	}
-}
-
-/**
- * Saves the region type to a YAML file.
- * @param out YAML emitter.
- */
-void City::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "lon" << YAML::Value << _lon;
-	out << YAML::Key << "lat" << YAML::Value << _lat;
-	out << YAML::EndMap;
+	_name = node["name"].as<std::string>(_name);
+	_lon = node["lon"].as<double>(_lon) * M_PI / 180;
+	_lat = node["lat"].as<double>(_lat) * M_PI / 180;
 }
 
 /**

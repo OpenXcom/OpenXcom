@@ -83,7 +83,7 @@ public:
 	/// Loads a saved battle game from YAML.
 	void load(const YAML::Node& node, Ruleset *rule, SavedGame* savedGame);
 	/// Saves a saved battle game to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Set the dimensions of the map and initializes it.
 	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 	/// initialises pathfinding and tileengine

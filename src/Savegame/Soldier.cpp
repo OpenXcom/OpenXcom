@@ -94,71 +94,56 @@ Soldier::~Soldier()
  */
 void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 {
-	int a = 0;
-	node["id"] >> _id;
-	std::string name;
-	node["name"] >> name;
-	_name = Language::utf8ToWstr(name);
-	node["initialStats"] >> _initialStats;
-	node["currentStats"] >> _currentStats;
-	node["rank"] >> a;
-	_rank = (SoldierRank)a;
-	node["gender"] >> a;
-	_gender = (SoldierGender)a;
-	node["look"] >> a;
-	_look = (SoldierLook)a;
-	node["missions"] >> _missions;
-	node["kills"] >> _kills;
-	node["recovery"] >> _recovery;
-	std::string armor;
-	node["armor"] >> armor;
-	_armor = rule->getArmor(armor);
-	node["psiTraining"] >> _psiTraining;
-	try {
-		node["improvement"] >> _improvement;
-	}
-	catch (YAML::Exception &e) {
-		_improvement = 0;
-	}
-	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
-		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
+	_id = node["id"].as<int>(_id);
+	_name = Language::utf8ToWstr(node["name"].as<std::string>());
+	_initialStats = node["initialStats"].as<UnitStats>(_initialStats);
+	_currentStats = node["currentStats"].as<UnitStats>(_currentStats);
+	_rank = (SoldierRank)node["rank"].as<int>();
+	_gender = (SoldierGender)node["rank"].as<int>();
+	_look = (SoldierLook)node["rank"].as<int>();
+	_missions = node["missions"].as<int>(_missions);
+	_kills = node["kills"].as<int>(_kills);
+	_recovery = node["recovery"].as<int>(_recovery);
+	_armor = rule->getArmor(node["armor"].as<std::string>());
+	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
+	_improvement = node["improvement"].as<int>(_improvement);
+	if (const YAML::Node &layout = node["equipmentLayout"])
+	{
+		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+	}
 }
 
 /**
  * Saves the soldier to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Soldier::save(YAML::Emitter &out) const
+YAML::Node Soldier::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::Key << "initialStats" << YAML::Value << _initialStats;
-	out << YAML::Key << "currentStats" << YAML::Value << _currentStats;
-	out << YAML::Key << "rank" << YAML::Value << _rank;
+	YAML::Node node;
+	node["id"] = _id;
+	node["name"] = Language::wstrToUtf8(_name);
+	node["initialStats"] = _initialStats;
+	node["currentStats"] = _currentStats;
+	node["rank"] = (int)_rank;
 	if (_craft != 0)
 	{
-		out << YAML::Key << "craft" << YAML::Value;
-		_craft->saveId(out);
+		node["craft"] = _craft->saveId();
 	}
-	out << YAML::Key << "gender" << YAML::Value << _gender;
-	out << YAML::Key << "look" << YAML::Value << _look;
-	out << YAML::Key << "missions" << YAML::Value << _missions;
-	out << YAML::Key << "kills" << YAML::Value << _kills;
-	out << YAML::Key << "recovery" << YAML::Value << _recovery;
-	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
-	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
-	out << YAML::Key << "improvement" << YAML::Value << _improvement;
+	node["gender"] = (int)_gender;
+	node["look"] = (int)_look;
+	node["missions"] = _missions;
+	node["kills"] = _kills;
+	node["recovery"] = _recovery;
+	node["armor"] = _armor->getType();
+	node["psiTraining"] = _psiTraining;
+	node["improvement"] = _improvement;
 	if (!_equipmentLayout.empty())
 	{
-		out << YAML::Key << "equipmentLayout" << YAML::Value;
-		out << YAML::BeginSeq;
-		for (std::vector<EquipmentLayoutItem*>::const_iterator j = _equipmentLayout.begin(); j != _equipmentLayout.end(); ++j)
-			(*j)->save(out);
-		out << YAML::EndSeq;
+		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+			node["equipmentLayout"].push_back((*i)->save());
 	}
-	out << YAML::EndMap;
+	return node;
 }
 
 /**

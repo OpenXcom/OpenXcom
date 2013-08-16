@@ -47,8 +47,6 @@ public:
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the map block to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the mapblock's name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the mapblock's x size.

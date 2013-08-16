@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -52,315 +52,85 @@ RuleItem::~RuleItem()
  */
 void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 {
-	int a = 0;
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "costBuy")
-		{
-			i.second() >> _costBuy;
-		}
-		else if (key == "costSell")
-		{
-			i.second() >> _costSell;
-		}
-		else if (key == "transferTime")
-		{
-			i.second() >> _transferTime;
-		}
-		else if (key == "weight")
-		{
-			i.second() >> _weight;
-		}
-		else if (key == "bigSprite")
-		{
-			i.second() >> _bigSprite;
-			// BIGOBS.PCK: 57 entries
-			if (_bigSprite > 56)
-				_bigSprite += modIndex;
-		}
-		else if (key == "floorSprite")
-		{
-			i.second() >> _floorSprite;
-			// FLOOROB.PCK: 73 entries
-			if (_floorSprite > 72)
-				_floorSprite += modIndex;
-		}
-		else if (key == "handSprite")
-		{
-			i.second() >> _handSprite;
-			// HANDOBS.PCK: 128 entries
-			if (_handSprite > 127)
-				_handSprite += modIndex;
-		}
-		else if (key == "bulletSprite")
-		{
-			i.second() >> _bulletSprite;
-			// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-			_bulletSprite *= 35;
-			if (_bulletSprite >= 385)
-			{
-				_bulletSprite += modIndex;
-			}
-		}
-		else if (key == "fireSound")
-		{
-			i.second() >> _fireSound;
-			// BATTLE.CAT: 55 entries
-			if (_fireSound > 54)
-				_fireSound += modIndex;
-		}
-		else if (key == "hitSound")
-		{
-			i.second() >> _hitSound;
-			// BATTLE.CAT: 55 entries
-			if (_hitSound > 54)
-				_hitSound += modIndex;
-		}
-		else if (key == "hitAnimation")
-		{
-			i.second() >> _hitAnimation;
-			// SMOKE.PCK: 56 entries
-			if (_hitAnimation > 55)
-				_hitAnimation += modIndex;
-		}
-		else if (key == "power")
-		{
-			i.second() >> _power;
-		}
-		else if (key == "compatibleAmmo")
-		{
-			i.second() >> _compatibleAmmo;
-		}
-		else if (key == "damageType")
-		{
-			i.second() >> a;
-			_damageType = (ItemDamageType)a;
-		}
-		else if (key == "accuracyAuto")
-		{
-			i.second() >> _accuracyAuto;
-		}
-		else if (key == "accuracySnap")
-		{
-			i.second() >> _accuracySnap;
-		}
-		else if (key == "accuracyAimed")
-		{
-			i.second() >> _accuracyAimed;
-		}
-		else if (key == "tuAuto")
-		{
-			i.second() >> _tuAuto;
-		}
-		else if (key == "tuSnap")
-		{
-			i.second() >> _tuSnap;
-		}
-		else if (key == "tuAimed")
-		{
-			i.second() >> _tuAimed;
-		}
-		else if (key == "clipSize")
-		{
-			i.second() >> _clipSize;
-		}
-		else if (key == "accuracyMelee")
-		{
-			i.second() >> _accuracyMelee;
-		}
-		else if (key == "tuMelee")
-		{
-			i.second() >> _tuMelee;
-		}
-		else if (key == "battleType")
-		{
-			i.second() >> a;
-			_battleType = (BattleType)a;
-		}
-		else if (key == "twoHanded")
-		{
-			i.second() >> _twoHanded;
-		}
-		else if (key == "waypoint")
-		{
-			i.second() >> _waypoint;
-		}
-		else if (key == "fixedWeapon")
-		{
-			i.second() >> _fixedWeapon;
-		}
-		else if (key == "invWidth")
-		{
-			i.second() >> _invWidth;
-		}
-		else if (key == "invHeight")
-		{
-			i.second() >> _invHeight;
-		}
-		else if (key == "painKiller")
-		{
-			i.second() >> _painKiller;
-		}
-		else if (key == "heal")
-		{
-			i.second() >> _heal;
-		}
-		else if (key == "stimulant")
-		{
-			i.second() >> _stimulant;
-		}
-		else if (key == "healAmount")
-		{
-			i.second() >> _healAmount;
-		}
-		else if (key == "healthAmount")
-		{
-			i.second() >> _healthAmount;
-		}
-		else if (key == "stun")
-		{
-			i.second() >> _stun;
-		}
-		else if (key == "energy")
-		{
-			i.second() >> _energy;
-		}
-		else if (key == "tuUse")
-		{
-			i.second() >> _tuUse;
-		}
-		else if (key == "recoveryPoints")
-		{
-			i.second() >> _recoveryPoints;
-		}
-		else if (key == "armor")
-		{
-			i.second() >> _armor;
-		}
-		else if (key == "recover")
-		{
-			i.second() >> _recover;
-		}
-		else if (key == "turretType")
-		{
-			i.second() >> _turretType;
-		}
-		else if (key == "liveAlien")
-		{
-			i.second() >> _liveAlien;
-		}
-		else if (key == "blastRadius")
-		{
-			i.second() >> _blastRadius;
-		}
-		else if (key == "flatRate")
-		{
-			i.second() >> _flatRate;
-		}
-		else if (key == "arcingShot")
-		{
-			i.second() >> _arcingShot;
-		}
-		else if (key == "attraction")
-		{
-			i.second() >> _attraction;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
-		else if (key == "maxRange")
-		{
-			i.second() >> _range;
-		}
-		else if (key == "bulletSpeed")
-		{
-			i.second() >> _bulletSpeed;
-		}
-	}
+	_type = node["type"].as<std::string>(_type);
+	_name = node["name"].as<std::string>(_name);
+	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_size = node["size"].as<float>(_size);
+	_costBuy = node["costBuy"].as<int>(_costBuy);
+	_costSell = node["costSell"].as<int>(_costSell);
+	_transferTime = node["transferTime"].as<int>(_transferTime);
+	_weight = node["weight"].as<int>(_weight);
+	_bigSprite = node["bigSprite"].as<int>(_bigSprite);
+	// BIGOBS.PCK: 57 entries
+	if (_bigSprite > 56)
+		_bigSprite += modIndex;
+	_floorSprite = node["floorSprite"].as<int>(_floorSprite);
+	// FLOOROB.PCK: 73 entries
+	if (_floorSprite > 72)
+		_floorSprite += modIndex;
+	_handSprite = node["handSprite"].as<int>(_handSprite);
+	// HANDOBS.PCK: 128 entries
+	if (_handSprite > 127)
+		_handSprite += modIndex;
+	_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite);
+	// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
+	_bulletSprite *= 35;
+	if (_bulletSprite >= 385)
+		_bulletSprite += modIndex;
+	_fireSound = node["fireSound"].as<int>(_fireSound);
+	// BATTLE.CAT: 55 entries
+	if (_fireSound > 54)
+		_fireSound += modIndex;
+	_hitSound = node["hitSound"].as<int>(_hitSound);
+	// BATTLE.CAT: 55 entries
+	if (_hitSound > 54)
+		_hitSound += modIndex;
+	_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
+	// SMOKE.PCK: 56 entries
+	if (_hitAnimation > 55)
+		_hitAnimation += modIndex;
+	_power = node["power"].as<int>(_power);
+	_compatibleAmmo = node["compatibleAmmo"].as<std::vector<std::string>>(_compatibleAmmo);
+	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
+	_accuracyAuto = node["accuracyAuto"].as<int>(_accuracyAuto);
+	_accuracySnap = node["accuracySnap"].as<int>(_accuracySnap);
+	_accuracyAimed = node["accuracyAimed"].as<int>(_accuracyAimed);
+	_tuAuto = node["tuAuto"].as<int>(_tuAuto);
+	_tuSnap = node["tuSnap"].as<int>(_tuSnap);
+	_tuAimed = node["tuAimed"].as<int>(_tuAimed);
+	_clipSize = node["clipSize"].as<int>(_clipSize);
+	_accuracyMelee = node["accuracyMelee"].as<int>(_accuracyMelee);
+	_tuMelee = node["tuMelee"].as<int>(_tuMelee);
+	_battleType = (BattleType)node["battleType"].as<int>(_battleType);
+	_twoHanded = node["twoHanded"].as<bool>(_twoHanded);
+	_waypoint = node["waypoint"].as<bool>(_waypoint);
+	_fixedWeapon = node["fixedWeapon"].as<bool>(_fixedWeapon);
+	_invWidth = node["invWidth"].as<int>(_invWidth);
+	_invHeight = node["invHeight"].as<int>(_invHeight);
+	_painKiller = node["painKiller"].as<int>(_painKiller);
+	_heal = node["heal"].as<int>(_heal);
+	_stimulant = node["stimulant"].as<int>(_stimulant);
+	_healAmount = node["healAmount"].as<int>(_healAmount);
+	_healthAmount = node["healthAmount"].as<int>(_healthAmount);
+	_stun = node["stun"].as<int>(_stun);
+	_energy = node["energy"].as<int>(_energy);
+	_tuUse = node["tuUse"].as<int>(_tuUse);
+	_recoveryPoints = node["recoveryPoints"].as<int>(_recoveryPoints);
+	_armor = node["armor"].as<int>(_armor);
+	_turretType = node["turretType"].as<int>(_turretType);
+	_recover = node["recover"].as<bool>(_recover);
+	_liveAlien = node["liveAlien"].as<bool>(_liveAlien);
+	_blastRadius = node["blastRadius"].as<int>(_blastRadius);
+	_attraction = node["attraction"].as<int>(_attraction);
+	_flatRate = node["flatRate"].as<bool>(_flatRate);
+	_arcingShot = node["arcingShot"].as<bool>(_arcingShot);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
+	_range = node["maxRange"].as<int>(_range);
+	_bulletSpeed = node["bulletSpeed"].as<int>(_bulletSpeed);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
 	}
-}
-
-/**
- * Saves the item to a YAML file.
- * @param out YAML emitter.
- */
-void RuleItem::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
-	out << YAML::Key << "costSell" << YAML::Value << _costSell;
-	out << YAML::Key << "transferTime" << YAML::Value << _transferTime;
-	out << YAML::Key << "weight" << YAML::Value << _weight;
-	out << YAML::Key << "bigSprite" << YAML::Value << _bigSprite;
-	out << YAML::Key << "floorSprite" << YAML::Value << _floorSprite;
-	out << YAML::Key << "handSprite" << YAML::Value << _handSprite;
-	out << YAML::Key << "bulletSprite" << YAML::Value << _bulletSprite;
-	out << YAML::Key << "fireSound" << YAML::Value << _fireSound;
-	out << YAML::Key << "hitSound" << YAML::Value << _hitSound;
-	out << YAML::Key << "hitAnimation" << YAML::Value << _hitAnimation;
-	out << YAML::Key << "power" << YAML::Value << _power;
-	out << YAML::Key << "compatibleAmmo" << YAML::Value << _compatibleAmmo;
-	out << YAML::Key << "damageType" << YAML::Value << _damageType;
-	out << YAML::Key << "accuracyAuto" << YAML::Value << _accuracyAuto;
-	out << YAML::Key << "accuracySnap" << YAML::Value << _accuracySnap;
-	out << YAML::Key << "accuracyAimed" << YAML::Value << _accuracyAimed;
-	out << YAML::Key << "tuAuto" << YAML::Value << _tuAuto;
-	out << YAML::Key << "tuSnap" << YAML::Value << _tuSnap;
-	out << YAML::Key << "tuAimed" << YAML::Value << _tuAimed;
-	out << YAML::Key << "clipSize" << YAML::Value << _clipSize;
-	out << YAML::Key << "accuracyMelee" << YAML::Value << _accuracyMelee;
-	out << YAML::Key << "tuMelee" << YAML::Value << _tuMelee;
-	out << YAML::Key << "battleType" << YAML::Value << _battleType;
-	out << YAML::Key << "twoHanded" << YAML::Value << _twoHanded;
-	out << YAML::Key << "waypoint" << YAML::Value << _waypoint;
-	out << YAML::Key << "fixedWeapon" << YAML::Value << _fixedWeapon;
-	out << YAML::Key << "invWidth" << YAML::Value << _invWidth;
-	out << YAML::Key << "invHeight" << YAML::Value << _invHeight;
-	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
-	out << YAML::Key << "heal" << YAML::Value << _heal;
-	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
-	out << YAML::Key << "healAmount" << YAML::Value << _healAmount;
-	out << YAML::Key << "healthAmount" << YAML::Value << _healthAmount;
-	out << YAML::Key << "stun" << YAML::Value << _stun;
-	out << YAML::Key << "energy" << YAML::Value << _energy;
-	out << YAML::Key << "tuUse" << YAML::Value << _tuUse;
-	out << YAML::Key << "recoveryPoints" << YAML::Value << _recoveryPoints;
-	out << YAML::Key << "armor" << YAML::Value << _armor;
-	out << YAML::Key << "recover" << YAML::Value << _recover;
-	out << YAML::Key << "turretType" << YAML::Value << _turretType;
-	out << YAML::Key << "liveAlien" << YAML::Value << _liveAlien;
-	out << YAML::Key << "blastRadius" << YAML::Value << _blastRadius;
-	out << YAML::Key << "flatRate" << YAML::Value << _flatRate;
-	out << YAML::Key << "arcingShot" << YAML::Value << _arcingShot;
-	out << YAML::Key << "attraction" << YAML::Value << _attraction;
-	out << YAML::Key << "bulletSpeed" << YAML::Value << _bulletSpeed;
-	out << YAML::EndMap;
 }
 
 /**

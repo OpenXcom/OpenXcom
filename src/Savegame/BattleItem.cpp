@@ -63,85 +63,79 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-	//node["inventoryslot"] >> _inventorySlot;
-	node["inventoryX"] >> _inventoryX;
-	node["inventoryY"] >> _inventoryY;
-	node["ammoqty"] >> _ammoQuantity;
-	node["painKiller"] >> _painKiller;
-	node["heal"] >> _heal;
-	node["stimulant"] >> _stimulant;
-	node["explodeTurn"] >> _explodeTurn;
-	if(const YAML::Node *pName = node.FindValue("droppedOnAlienTurn"))
-	{
-		*pName >> _droppedOnAlienTurn;
-	}
+	_inventoryX = node["inventoryX"].as<int>(_inventoryX);
+	_inventoryY = node["inventoryY"].as<int>(_inventoryY);
+	_ammoQuantity = node["ammoqty"].as<int>(_ammoQuantity);
+	_painKiller = node["painKiller"].as<int>(_painKiller);
+	_heal = node["heal"].as<int>(_heal);
+	_stimulant = node["stimulant"].as<int>(_stimulant);
+	_explodeTurn = node["explodeTurn"].as<int>(_explodeTurn);
+	_droppedOnAlienTurn = node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
 /**
  * Saves the item to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void BattleItem::save(YAML::Emitter &out) const
+YAML::Node BattleItem::save() const
 {
-	out << YAML::BeginMap;
-
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	YAML::Node node;
+	node["id"] = _id;
+	node["type"] = _rules->getType();
 	if (_owner)
 	{
-		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
+		node["owner"] = _owner->getId();
 	}
 	else
 	{
-		out << YAML::Key << "owner" << YAML::Value << -1;
+		node["owner"] = -1;
 	}
 	if (_unit)
 	{
-		out << YAML::Key << "unit" << YAML::Value << _unit->getId();
+		node["unit"] = _unit->getId();
 	}
 	else
 	{
-		out << YAML::Key << "unit" << YAML::Value << -1;
+		node["unit"] = -1;
 	}
 
 	if (_inventorySlot)
 	{
-		out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();
+		node["inventoryslot"] = _inventorySlot->getId();
 	}
 	else
 	{
-		out << YAML::Key << "inventoryslot" << YAML::Value << "NULL";
+		node["inventoryslot"] = "NULL";
 	}
-	out << YAML::Key << "inventoryX" << YAML::Value << _inventoryX;
-	out << YAML::Key << "inventoryY" << YAML::Value << _inventoryY;
+	node["inventoryX"] = _inventoryX;
+	node["inventoryY"] = _inventoryY;
 
-	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
 	if (_tile)
 	{
-		out << YAML::BeginSeq << _tile->getPosition().x << _tile->getPosition().y << _tile->getPosition().z << YAML::EndSeq;
+		node["position"] = _tile->getPosition();
 	}
 	else
 	{
-		out << YAML::BeginSeq << -1 << -1 << -1 << YAML::EndSeq;
+		node["position"] = Position(-1, -1, -1);
 	}
-	out << YAML::Key << "ammoqty" << YAML::Value << _ammoQuantity;
+	node["ammoqty"] = _ammoQuantity;
 	if (_ammoItem)
 	{
-		out << YAML::Key << "ammoItem" << YAML::Value << _ammoItem->getId();
+		node["ammoItem"] = _ammoItem->getId();
 	}
 	else
 	{
-		out << YAML::Key << "ammoItem" << YAML::Value << -1;
+		node["ammoItem"] = -1;
 	}
 
-	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
-	out << YAML::Key << "heal" << YAML::Value << _heal;
-	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
-	out << YAML::Key << "explodeTurn" << YAML::Value << _explodeTurn;
+	node["painKiller"] = _painKiller;
+	node["heal"] = _heal;
+	node["stimulant"] = _stimulant;
+	node["explodeTurn"] = _explodeTurn;
 	if (_droppedOnAlienTurn)
-		out << YAML::Key << "droppedOnAlienTurn" << YAML::Value << _droppedOnAlienTurn;
+		node["droppedOnAlienTurn"] = _droppedOnAlienTurn;
 
-	out << YAML::EndMap;
+	return node;
 }
 
 /**

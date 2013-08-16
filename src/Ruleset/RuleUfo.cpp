@@ -46,93 +46,24 @@ RuleUfo::~RuleUfo()
  */
 void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_size = node["size"].as<std::string>(_size);
+	_sprite = node["sprite"].as<int>(_sprite);
+	_damageMax = node["damageMax"].as<int>(_damageMax);
+	_speedMax = node["speedMax"].as<int>(_speedMax);
+	_accel = node["accel"].as<int>(_accel);
+	_power = node["power"].as<int>(_power);
+	_range = node["range"].as<int>(_range);
+	_score = node["score"].as<int>(_score);
+	_reload = node["reload"].as<int>(_reload);
+	_breakOffTime = node["breakOffTime"].as<int>(_breakOffTime);
+	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "sprite")
-		{
-			i.second() >> _sprite;
-		}
-		else if (key == "modSprite")
-		{
-			i.second() >> _modSprite;
-		}
-		else if (key == "damageMax")
-		{
-			i.second() >> _damageMax;
-		}
-		else if (key == "speedMax")
-		{
-			i.second() >> _speedMax;
-		}
-		else if (key == "accel")
-		{
-			i.second() >> _accel;
-		}
-		else if (key == "power")
-		{
-			i.second() >> _power;
-		}
-		else if (key == "range")
-		{
-			i.second() >> _range;
-		}
-		else if (key == "score")
-		{
-			i.second() >> _score;
-		}
-		else if (key == "reload")
-		{
-			i.second() >> _reload;
-		}
-		else if (key == "breakOffTime")
-		{
-			i.second() >> _breakOffTime;
-		}
-		else if (key == "battlescapeTerrainData")
-		{
-			std::string name;
-			i.second()["name"] >> name;
-			RuleTerrain *rule = new RuleTerrain(name);
-			rule->load(i.second(), ruleset);
-			_battlescapeTerrainData = rule;
-		}
+		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
+		rule->load(terrain, ruleset);
+		_battlescapeTerrainData = rule;
 	}
-}
-
-/**
- * Saves the UFO to a YAML file.
- * @param out YAML emitter.
- */
-void RuleUfo::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
-	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
-	out << YAML::Key << "accel" << YAML::Value << _accel;
-	out << YAML::Key << "power" << YAML::Value << _power;
-	out << YAML::Key << "range" << YAML::Value << _range;
-	out << YAML::Key << "score" << YAML::Value << _score;
-	out << YAML::Key << "reload" << YAML::Value << _reload;
-	out << YAML::Key << "breakOffTime" << YAML::Value << _breakOffTime;
-	if (_battlescapeTerrainData != 0)
-	{
-		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;
-		_battlescapeTerrainData->save(out);
-	}
-	out << YAML::EndMap;
+	_modSprite = node["modSprite"].as<std::string>(_modSprite);
 }
 
 

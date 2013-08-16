@@ -43,102 +43,27 @@ RuleCraftWeapon::~RuleCraftWeapon()
  */
 void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "sprite")
-		{
-			i.second() >> _sprite;
-			// this one is an offset within INTICONS.PCK
-			if (_sprite > 5)
-				_sprite += modIndex;
-		}
-		else if (key == "sound")
-		{
-			i.second() >> _sound;
-			// 14 entries in GEO.CAT
-			if (_sound > 13)
-				_sound += modIndex;
-		}
-		else if (key == "damage")
-		{
-			i.second() >> _damage;
-		}
-		else if (key == "range")
-		{
-			i.second() >> _range;
-		}
-		else if (key == "accuracy")
-		{
-			i.second() >> _accuracy;
-		}
-		else if (key == "reloadCautious")
-		{
-			i.second() >> _reloadCautious;
-		}
-		else if (key == "reloadStandard")
-		{
-			i.second() >> _reloadStandard;
-		}
-		else if (key == "reloadAggressive")
-		{
-			i.second() >> _reloadAggressive;
-		}
-		else if (key == "ammoMax")
-		{
-			i.second() >> _ammoMax;
-		}
-		else if (key == "rearmRate")
-		{
-			i.second() >> _rearmRate;
-		}
-		else if (key == "launcher")
-		{
-			i.second() >> _launcher;
-		}
-		else if (key == "clip")
-		{
-			i.second() >> _clip;
-		}
-		else if (key == "projectileType")
-		{
-			i.second() >> _projectileType;
-		}
-		else if (key == "projectileSpeed")
-		{
-			i.second() >> _projectileSpeed;
-		}
-	}
-}
-
-/**
- * Saves the craft weapon to a YAML file.
- * @param out YAML emitter.
- */
-void RuleCraftWeapon::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "sound" << YAML::Value << _sound;
-	out << YAML::Key << "damage" << YAML::Value << _damage;
-	out << YAML::Key << "range" << YAML::Value << _range;
-	out << YAML::Key << "accuracy" << YAML::Value << _accuracy;
-	out << YAML::Key << "reloadCautious" << YAML::Value << _reloadCautious;
-	out << YAML::Key << "reloadStandard" << YAML::Value << _reloadStandard;
-	out << YAML::Key << "reloadAggressive" << YAML::Value << _reloadAggressive;
-	out << YAML::Key << "ammoMax" << YAML::Value << _ammoMax;
-	out << YAML::Key << "rearmRate" << YAML::Value << _rearmRate;
-	out << YAML::Key << "launcher" << YAML::Value << _launcher;
-	out << YAML::Key << "clip" << YAML::Value << _clip;
-	out << YAML::Key << "projectileType" << YAML::Value << _projectileType;
-	out << YAML::Key << "projectileSpeed" << YAML::Value << _projectileSpeed;
-	out << YAML::EndMap;
+	_type = node["type"].as<std::string>(_type);
+	_sprite = node["sprite"].as<int>(_sprite);
+	// this one is an offset within INTICONS.PCK
+	if (_sprite > 5)
+		_sprite += modIndex;
+	_sound = node["sound"].as<int>(_sound);
+	// 14 entries in GEO.CAT
+	if (_sound > 13)
+		_sound += modIndex;
+	_damage = node["damage"].as<int>(_damage);
+	_range = node["range"].as<int>(_range);
+	_accuracy = node["accuracy"].as<int>(_accuracy);
+	_reloadCautious = node["reloadCautious"].as<int>(_reloadCautious);
+	_reloadStandard = node["reloadStandard"].as<int>(_reloadStandard);
+	_reloadAggressive = node["reloadAggressive"].as<int>(_reloadAggressive);
+	_ammoMax = node["ammoMax"].as<int>(_ammoMax);
+	_rearmRate = node["rearmRate"].as<int>(_rearmRate);
+	_projectileType = node["projectileType"].as<int>(_projectileType);
+	_projectileSpeed = node["projectileSpeed"].as<int>(_projectileSpeed);
+	_launcher = node["launcher"].as<std::string>(_launcher);
+	_clip = node["clip"].as<std::string>(_clip);
 }
 
 /**

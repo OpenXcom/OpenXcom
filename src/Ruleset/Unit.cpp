@@ -21,39 +21,6 @@
 namespace OpenXcom
 {
 
-void operator>> (const YAML::Node& node, UnitStats& stats)
-{
-	node["tu"] >> stats.tu;
-	node["stamina"] >> stats.stamina;
-	node["health"] >> stats.health;
-	node["bravery"] >> stats.bravery;
-	node["reactions"] >> stats.reactions;
-	node["firing"] >> stats.firing;
-	node["throwing"] >> stats.throwing;
-	node["strength"] >> stats.strength;
-	node["psiStrength"] >> stats.psiStrength;
-	node["psiSkill"] >> stats.psiSkill;
-	node["melee"] >> stats.melee;
-}
-
-YAML::Emitter& operator<< (YAML::Emitter& out, const UnitStats& stats)
-{
-	out << YAML::BeginMap;
-    out << YAML::Key << "tu" << YAML::Value << stats.tu;
-	out << YAML::Key << "stamina" << YAML::Value << stats.stamina;
-	out << YAML::Key << "health" << YAML::Value << stats.health;
-	out << YAML::Key << "bravery" << YAML::Value << stats.bravery;
-	out << YAML::Key << "reactions" << YAML::Value << stats.reactions;
-	out << YAML::Key << "firing" << YAML::Value << stats.firing;
-	out << YAML::Key << "throwing" << YAML::Value << stats.throwing;
-	out << YAML::Key << "strength" << YAML::Value << stats.strength;
-	out << YAML::Key << "psiStrength" << YAML::Value << stats.psiStrength;
-	out << YAML::Key << "psiSkill" << YAML::Value << stats.psiSkill;
-	out << YAML::Key << "melee" << YAML::Value << stats.melee;
-	out << YAML::EndMap;
-    return out;
-}
-
 /**
  * Creates a certain type of unit.
  * @param type String defining the type.
@@ -80,114 +47,24 @@ Unit::~Unit()
  */
 void Unit::load(const YAML::Node &node)
 {
-	int a = 0;
-
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "race")
-		{
-			i.second() >> _race;
-		}
-		else if (key == "rank")
-		{
-			i.second() >> _rank;
-		}
-		else if (key == "stats")
-		{
-			i.second() >> _stats;
-		}
-		else if (key == "armor")
-		{
-			i.second() >> _armor;
-		}
-		else if (key == "standHeight")
-		{
-			i.second() >> _standHeight;
-		}
-		else if (key == "kneelHeight")
-		{
-			i.second() >> _kneelHeight;
-		}
-		else if (key == "floatHeight")
-		{
-			i.second() >> _floatHeight;
-		}
-		else if (key == "value")
-		{
-			i.second() >> _value;
-		}
-		else if (key == "deathSound")
-		{
-			i.second() >> _deathSound;
-		}
-		else if (key == "aggroSound")
-		{
-			i.second() >> _aggroSound;
-		}
-		else if (key == "moveSound")
-		{
-			i.second() >> _moveSound;
-		}
-		else if (key == "intelligence")
-		{
-			i.second() >> _intelligence;
-		}
-		else if (key == "aggression")
-		{
-			i.second() >> _aggression;
-		}
-		else if (key == "specab")
-		{
-			i.second() >> a;
-			_specab = (SpecialAbility)a;
-		}
-		else if (key == "zombieUnit")
-		{
-			i.second() >> _zombieUnit;
-		}
-		else if (key == "spawnUnit")
-		{
-			i.second() >> _spawnUnit;
-		}
-		else if (key == "livingWeapon")
-		{
-			i.second() >> _livingWeapon;
-		}
-	}
-}
-
-/**
- * Saves the unit to a YAML file.
- * @param out YAML emitter.
- */
-void Unit::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "race" << YAML::Value << _race;
-	out << YAML::Key << "rank" << YAML::Value << _rank;
-	out << YAML::Key << "stats" << YAML::Value << _stats;
-	out << YAML::Key << "armor" << YAML::Value << _armor;
-	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
-	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
-	out << YAML::Key << "floatHeight" << YAML::Value << _floatHeight;
-	out << YAML::Key << "value" << YAML::Value << _value;
-	out << YAML::Key << "deathSound" << YAML::Value << _deathSound;
-	out << YAML::Key << "aggroSound" << YAML::Value << _aggroSound;
-	out << YAML::Key << "moveSound" << YAML::Value << _moveSound;
-	out << YAML::Key << "intelligence" << YAML::Value << _intelligence;
-	out << YAML::Key << "aggression" << YAML::Value << _aggression;
-	out << YAML::Key << "specab" << YAML::Value << _specab;
-	out << YAML::Key << "zombieUnit" << YAML::Value << _zombieUnit;
-	out << YAML::Key << "spawnUnit" << YAML::Value << _spawnUnit;
-	out << YAML::Key << "livingWeapon" << YAML::Value << _livingWeapon;
-	out << YAML::EndMap;
+	_type = node["type"].as<std::string>(_type);
+	_race = node["race"].as<std::string>(_race);
+	_rank = node["rank"].as<std::string>(_rank);
+	_stats = node["stats"].as<UnitStats>(_stats);
+	_armor = node["armor"].as<std::string>(_armor);
+	_standHeight = node["standHeight"].as<int>(_standHeight);
+	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
+	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
+	_value = node["value"].as<int>(_value);
+	_deathSound = node["deathSound"].as<int>(_deathSound);
+	_aggroSound = node["aggroSound"].as<int>(_aggroSound);
+	_moveSound = node["moveSound"].as<int>(_moveSound);
+	_intelligence = node["intelligence"].as<int>(_intelligence);
+	_aggression = node["aggression"].as<int>(_aggression);
+	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
+	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
+	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
+	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
 }
 
 /**

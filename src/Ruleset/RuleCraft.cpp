@@ -53,145 +53,40 @@ RuleCraft::~RuleCraft()
  */
 void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int listOrder)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_sprite = node["sprite"].as<int>(_sprite);
+	// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
+	if (_sprite > 4)
+		_sprite += modIndex;
+	_fuelMax = node["fuelMax"].as<int>(_fuelMax);
+	_damageMax = node["damageMax"].as<int>(_damageMax);
+	_speedMax = node["speedMax"].as<int>(_speedMax);
+	_accel = node["accel"].as<int>(_accel);
+	_weapons = node["weapons"].as<int>(_weapons);
+	_soldiers = node["soldiers"].as<int>(_soldiers);
+	_vehicles = node["vehicles"].as<int>(_vehicles);
+	_costBuy = node["costBuy"].as<int>(_costBuy);
+	_costRent = node["costRent"].as<int>(_costRent);
+	_costSell = node["costSell"].as<int>(_costSell);
+	_refuelItem = node["refuelItem"].as<std::string>(_refuelItem);
+	_repairRate = node["repairRate"].as<int>(_repairRate);
+	_refuelRate = node["refuelRate"].as<int>(_refuelRate);
+	_radarRange = node["radarRange"].as<int>(_radarRange);
+	_transferTime = node["transferTime"].as<int>(_transferTime);
+	_score = node["score"].as<int>(_score);
+	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "sprite")
-		{
-			i.second() >> _sprite;
-			// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
-			if (_sprite > 4)
-				_sprite += modIndex;
-		}
-		else if (key == "fuelMax")
-		{
-			i.second() >> _fuelMax;
-		}
-		else if (key == "damageMax")
-		{
-			i.second() >> _damageMax;
-		}
-		else if (key == "speedMax")
-		{
-			i.second() >> _speedMax;
-		}
-		else if (key == "accel")
-		{
-			i.second() >> _accel;
-		}
-		else if (key == "weapons")
-		{
-			i.second() >> _weapons;
-		}
-		else if (key == "soldiers")
-		{
-			i.second() >> _soldiers;
-		}
-		else if (key == "vehicles")
-		{
-			i.second() >> _vehicles;
-		}
-		else if (key == "costBuy")
-		{
-			i.second() >> _costBuy;
-		}
-		else if (key == "costRent")
-		{
-			i.second() >> _costRent;
-		}
-		else if (key == "costSell")
-		{
-			i.second() >> _costSell;
-		}
-		else if (key == "refuelItem")
-		{
-			i.second() >> _refuelItem;
-		}
-		else if (key == "repairRate")
-		{
-			i.second() >> _repairRate;
-		}
-		else if (key == "refuelRate")
-		{
-			i.second() >> _refuelRate;
-		}
-		else if (key == "radarRange")
-		{
-			i.second() >> _radarRange;
-		}
-		else if (key == "transferTime")
-		{
-			i.second() >> _transferTime;
-		}
-		else if (key == "score")
-		{
-			i.second() >> _score;
-		}
-		else if (key == "battlescapeTerrainData")
-		{
-			std::string name;
-			i.second()["name"] >> name;
-			RuleTerrain *rule = new RuleTerrain(name);
-			rule->load(i.second(), ruleset);
-			_battlescapeTerrainData = rule;
-		}
-		else if (key == "spacecraft")
-		{
-			i.second() >> _spacecraft;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
+		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
+		rule->load(terrain, ruleset);
+		_battlescapeTerrainData = rule;
 	}
+	_spacecraft = node["spacecraft"].as<bool>(_spacecraft);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
 	}
-}
-
-/**
- * Saves the craft to a YAML file.
- * @param out YAML emitter.
- */
-void RuleCraft::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "fuelMax" << YAML::Value << _fuelMax;
-	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
-	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
-	out << YAML::Key << "accel" << YAML::Value << _accel;
-	out << YAML::Key << "weapons" << YAML::Value << _weapons;
-	out << YAML::Key << "soldiers" << YAML::Value << _soldiers;
-	out << YAML::Key << "vehicles" << YAML::Value << _vehicles;
-	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
-	out << YAML::Key << "costRent" << YAML::Value << _costRent;
-	out << YAML::Key << "costSell" << YAML::Value << _costSell;
-	out << YAML::Key << "refuelItem" << YAML::Value << _refuelItem;
-	out << YAML::Key << "repairRate" << YAML::Value << _repairRate;
-	out << YAML::Key << "refuelRate" << YAML::Value << _refuelRate;
-	out << YAML::Key << "radarRange" << YAML::Value << _radarRange;
-	out << YAML::Key << "transferTime" << YAML::Value << _transferTime;
-	out << YAML::Key << "score" << YAML::Value << _score;
-	out << YAML::Key << "spacecraft" << YAML::Value << _spacecraft;
-	if (_battlescapeTerrainData != 0)
-	{
-		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;
-		_battlescapeTerrainData->save(out);
-	}
-	out << YAML::EndMap;
 }
 
 /**

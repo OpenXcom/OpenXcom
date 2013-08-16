@@ -45,62 +45,14 @@ RuleSoldier::~RuleSoldier()
  */
 void RuleSoldier::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "minStats")
-		{
-			i.second() >> _minStats;
-		}
-		else if (key == "maxStats")
-		{
-			i.second() >> _maxStats;
-		}
-		else if (key == "statCaps")
-		{
-			i.second() >> _statCaps;
-		}
-		else if (key == "armor")
-		{
-			i.second() >> _armor;
-		}
-		else if (key == "standHeight")
-		{
-			i.second() >> _standHeight;
-		}
-		else if (key == "kneelHeight")
-		{
-			i.second() >> _kneelHeight;
-		}
-		else if (key == "floatHeight")
-		{
-			i.second() >> _floatHeight;
-		}
-	}
-}
-
-/**
- * Saves the unit to a YAML file.
- * @param out YAML emitter.
- */
-void RuleSoldier::save(YAML::Emitter &out) const
-{
-
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "minStats" << YAML::Value << _minStats;
-	out << YAML::Key << "maxStats" << YAML::Value << _maxStats;
-	out << YAML::Key << "statCaps" << YAML::Value << _statCaps;
-	out << YAML::Key << "armor" << YAML::Value << _armor;
-	out << YAML::Key << "standHeight" << YAML::Value << _standHeight;
-	out << YAML::Key << "kneelHeight" << YAML::Value << _kneelHeight;
-	out << YAML::Key << "floatHeight" << YAML::Value << _floatHeight;
-	out << YAML::EndMap;
+	_type = node["type"].as<std::string>(_type);
+	_minStats = node["minStats"].as<UnitStats>(_minStats);
+	_maxStats = node["maxStats"].as<UnitStats>(_maxStats);
+	_statCaps = node["statCaps"].as<UnitStats>(_statCaps);
+	_armor = node["armor"].as<std::string>(_armor);
+	_standHeight = node["standHeight"].as<int>(_standHeight);
+	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
+	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
 }
 
 /**

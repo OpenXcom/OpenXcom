@@ -45,7 +45,7 @@ public:
 	/// Loads the region from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the region to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Gets the region's ruleset.
 	RuleRegion *getRules() const;
 	/// add xcom activity in this region

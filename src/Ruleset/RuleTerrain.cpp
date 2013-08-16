@@ -51,77 +51,28 @@ RuleTerrain::~RuleTerrain()
  */
 void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	if (const YAML::Node &map = node["mapDataSets"])
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
+		_mapDataSets.clear();
+		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
-			i.second() >> _name;
-		}
-		else if (key == "mapDataSets")
-		{
-			_mapDataSets.clear();
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				std::string name;
-				*j >> name;
-				_mapDataSets.push_back(ruleset->getMapDataSet(name));
-			}
-		}
-		else if (key == "mapBlocks")
-		{
-			_mapBlocks.clear();
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				std::string name;
-				(*j)["name"] >> name;
-				MapBlock *map = new MapBlock(this, name, 0, 0, MT_DEFAULT);
-				map->load(*j);
-				_mapBlocks.push_back(map);
-			}
-		}
-		else if (key == "largeBlockLimit")
-		{
-			i.second() >> _largeBlockLimit;
-		}
-		else if (key == "textures")
-		{
-			i.second() >> _textures;
-		}
-		else if (key == "hemisphere")
-		{
-			i.second() >> _hemisphere;
+			_mapDataSets.push_back(ruleset->getMapDataSet(i->as<std::string>()));
 		}
 	}
-}
-
-/**
- * Saves the terrain to a YAML file.
- * @param out YAML emitter.
- */
-void RuleTerrain::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "mapDataSets" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	if (const YAML::Node &map = node["mapBlocks"])
 	{
-		out << (*i)->getName();
+		_mapBlocks.clear();
+		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+		{
+			MapBlock *map = new MapBlock(this, (*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
+			map->load(*i);
+			_mapBlocks.push_back(map);
+		}
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "mapBlocks" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "largeBlockLimit" << YAML::Value << _largeBlockLimit;
-	out << YAML::Key << "textures" << YAML::Value << _textures;
-	out << YAML::Key << "hemisphere" << YAML::Value << _hemisphere;
-	out << YAML::EndMap;
+	_name = node["name"].as<std::string>(_name);
+	_largeBlockLimit = node["largeBlockLimit"].as<int>(_largeBlockLimit);
+	_textures = node["textures"].as<std::vector<int>>(_textures);
+	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
 }
 
 /**

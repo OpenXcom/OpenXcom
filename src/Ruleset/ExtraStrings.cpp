@@ -42,22 +42,7 @@ ExtraStrings::~ExtraStrings()
  */
 void ExtraStrings::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "strings")
-		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				std::string index;
-				j.first() >> index;
-				std::string translation;
-				j.second() >> translation;
-				_strings[index] = translation;
-			}
-		}
-	}
+	_strings = node["strings"].as<std::map<std::string, std::string>>(_strings);
 }
 
 /*

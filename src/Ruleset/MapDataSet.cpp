@@ -52,19 +52,10 @@ MapDataSet::~MapDataSet()
  */
 void MapDataSet::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	for (YAML::const_iterator i = node.begin(); i != node.end(); ++i)
 	{
-		*i >> _name;
+		_name = i->as<std::string>(_name);
 	}
-}
-
-/**
- * Saves the map data set to a YAML file.
- * @param out YAML emitter.
- */
-void MapDataSet::save(YAML::Emitter &out) const
-{
-	out << _name;
 }
 
 /**
