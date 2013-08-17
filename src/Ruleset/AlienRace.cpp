@@ -40,7 +40,7 @@ AlienRace::~AlienRace()
 void AlienRace::load(const YAML::Node &node)
 {
 	_id = node["id"].as<std::string>(_id);
-	_members = node["members"].as<std::vector<std::string>>(_members);
+	_members = node["members"].as< std::vector<std::string> >(_members);
 }
 
 /**

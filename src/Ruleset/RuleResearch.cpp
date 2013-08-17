@@ -36,10 +36,10 @@ void RuleResearch::load(const YAML::Node &node, int listOrder)
 	_lookup = node["lookup"].as<std::string>(_lookup);
 	_cost = node["cost"].as<int>(_cost);
 	_points = node["points"].as<int>(_points);
-	_dependencies = node["dependencies"].as<std::vector<std::string>>(_dependencies);
-	_unlocks = node["unlocks"].as<std::vector<std::string>>(_unlocks);
-	_getOneFree = node["getOneFree"].as<std::vector<std::string>>(_getOneFree);
-	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_dependencies = node["dependencies"].as< std::vector<std::string> >(_dependencies);
+	_unlocks = node["unlocks"].as< std::vector<std::string> >(_unlocks);
+	_getOneFree = node["getOneFree"].as< std::vector<std::string> >(_getOneFree);
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_needItem = node["needItem"].as<bool>(_needItem);
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)

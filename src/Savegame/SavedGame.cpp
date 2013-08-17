@@ -220,9 +220,9 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_graphRegionToggles = doc["GraphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles = doc["GraphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles = doc["GraphFinanceToggles"].as<std::string>(_graphFinanceToggles);
-	_funds = doc["funds"].as<std::vector<int>>(_funds);
-	_maintenance = doc["maintenance"].as<std::vector<int>>(_maintenance);
-	_researchScores = doc["researchScores"].as<std::vector<int>>(_researchScores);
+	_funds = doc["funds"].as< std::vector<int> >(_funds);
+	_maintenance = doc["maintenance"].as< std::vector<int> >(_maintenance);
+	_researchScores = doc["researchScores"].as< std::vector<int> >(_researchScores);
 	_warned = doc["warned"].as<bool>(_warned);
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);

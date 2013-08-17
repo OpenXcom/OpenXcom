@@ -78,7 +78,7 @@ void Node::load(const YAML::Node &node)
 	_reserved = node["reserved"].as<int>(_reserved);
 	_priority = node["priority"].as<int>(_priority);
 	_allocated = node["allocated"].as<bool>(_allocated);
-	_nodeLinks = node["links"].as<std::vector<int>>(_nodeLinks);
+	_nodeLinks = node["links"].as< std::vector<int> >(_nodeLinks);
 }
 
 /**

@@ -37,7 +37,7 @@ void RuleManufacture::load(const YAML::Node &node, int listOrder)
 {
 	_name = node["name"].as<std::string>(_name);
 	_category = node["category"].as<std::string>(_category);
-	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_space = node["space"].as<int>(_space);
 	_time = node["time"].as<int>(_time);
 	_cost = node["cost"].as<int>(_cost);

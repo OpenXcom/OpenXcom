@@ -54,7 +54,7 @@ RuleCraft::~RuleCraft()
 void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
-	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_sprite = node["sprite"].as<int>(_sprite);
 	// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
 	if (_sprite > 4)

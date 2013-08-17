@@ -75,7 +75,7 @@ void RuleRegion::load(const YAML::Node &node)
 		_missionWeights.load(weights);
 	}
 	_regionWeight = node["regionWeight"].as<unsigned>(_regionWeight);
-	_missionZones = node["missionZones"].as<std::vector<MissionZone>>(_missionZones);
+	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
 	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
 }
 

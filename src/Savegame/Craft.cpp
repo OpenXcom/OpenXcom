@@ -212,7 +212,7 @@ YAML::Node Craft::save() const
 	if (_inDogfight)
 		node["inDogfight"] = _inDogfight;
 	node["interceptionOrder"] = _interceptionOrder;
-	if (_name != "")
+	if (!_name.empty())
 		node["name"] = Language::wstrToUtf8(_name);
 	return node;
 }

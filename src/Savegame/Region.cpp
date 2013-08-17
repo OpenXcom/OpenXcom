@@ -45,8 +45,8 @@ Region::~Region()
  */
 void Region::load(const YAML::Node &node)
 {
-	_activityXcom = node["activityXcom"].as<std::vector<int>>(_activityXcom);
-	_activityAlien = node["activityAlien"].as<std::vector<int>>(_activityAlien);
+	_activityXcom = node["activityXcom"].as< std::vector<int> >(_activityXcom);
+	_activityAlien = node["activityAlien"].as< std::vector<int> >(_activityAlien);
 }
 
 /**

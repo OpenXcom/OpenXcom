@@ -105,7 +105,7 @@ namespace YAML
 			if (!node.IsSequence())
 				return false;
 
-			rhs.items = node.as<std::vector<std::string>>(rhs.items);
+			rhs.items = node.as< std::vector<std::string> >(rhs.items);
 			return true;
 		}
 	};

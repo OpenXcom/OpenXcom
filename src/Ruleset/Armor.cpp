@@ -66,7 +66,7 @@ void Armor::load(const YAML::Node &node)
 			_damageModifier[i] = dmg[i].as<float>();
 		}
 	}
-	_loftempsSet = node["loftempsSet"].as<std::vector<int>>(_loftempsSet);
+	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
 	if (const YAML::Node &loftemps = node["loftemps"])
 	{
 		_loftempsSet.push_back(loftemps.as<int>());

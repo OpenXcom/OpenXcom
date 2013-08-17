@@ -76,7 +76,7 @@ void SoldierNamePool::load(const std::string &filename)
 	{
 		_femaleLast = _maleLast;
 	}
-	_lookWeights = doc["lookWeights"].as<std::vector<int>>(_lookWeights);
+	_lookWeights = doc["lookWeights"].as< std::vector<int> >(_lookWeights);
 	_totalWeight = 0;
 	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
 	{

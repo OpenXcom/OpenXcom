@@ -71,7 +71,7 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 	}
 	_name = node["name"].as<std::string>(_name);
 	_largeBlockLimit = node["largeBlockLimit"].as<int>(_largeBlockLimit);
-	_textures = node["textures"].as<std::vector<int>>(_textures);
+	_textures = node["textures"].as< std::vector<int> >(_textures);
 	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
 }
 

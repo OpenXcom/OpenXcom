@@ -54,7 +54,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_name = node["name"].as<std::string>(_name);
-	_requires = node["requires"].as<std::vector<std::string>>(_requires);
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_size = node["size"].as<float>(_size);
 	_costBuy = node["costBuy"].as<int>(_costBuy);
 	_costSell = node["costSell"].as<int>(_costSell);
@@ -90,7 +90,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	if (_hitAnimation > 55)
 		_hitAnimation += modIndex;
 	_power = node["power"].as<int>(_power);
-	_compatibleAmmo = node["compatibleAmmo"].as<std::vector<std::string>>(_compatibleAmmo);
+	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
 	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
 	_accuracyAuto = node["accuracyAuto"].as<int>(_accuracyAuto);
 	_accuracySnap = node["accuracySnap"].as<int>(_accuracySnap);

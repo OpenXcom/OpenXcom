@@ -45,7 +45,7 @@ namespace YAML
 			rhs.highQty = node["highQty"].as<int>(rhs.highQty);
 			rhs.dQty = node["dQty"].as<int>(rhs.dQty);
 			rhs.percentageOutsideUfo = node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
-			rhs.itemSets = node["itemSets"].as<std::vector<OpenXcom::ItemSet>>(rhs.itemSets);
+			rhs.itemSets = node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
 			return true;
 		}
 	};
@@ -77,12 +77,12 @@ AlienDeployment::~AlienDeployment()
 void AlienDeployment::load(const YAML::Node &node)
 {
 	_type = node["type"].as<std::string>(_type);
-	_data = node["data"].as<std::vector<DeploymentData>>(_data);
+	_data = node["data"].as< std::vector<DeploymentData> >(_data);
 	_width = node["width"].as<int>(_width);
 	_length = node["length"].as<int>(_length);
 	_height = node["height"].as<int>(_height);
 	_civilians = node["civilians"].as<int>(_civilians);
-	_roadTypeOdds = node["roadTypeOdds"].as<std::vector<int>>(_roadTypeOdds);
+	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
 	_terrain = node["terrain"].as<std::string>(_terrain);
 	_shade = node["shade"].as<int>(_shade);
 	_nextStage = node["nextStage"].as<std::string>(_nextStage);

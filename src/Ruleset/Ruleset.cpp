@@ -538,7 +538,7 @@ void Ruleset::loadFile(const std::string &filename)
  	_alienItemLevels.clear();
 	for (YAML::const_iterator i = doc["alienItemLevels"].begin(); i != doc["alienItemLevels"].end(); ++i)
 	{
-		std::vector<int> type = (*i).as<std::vector<int>>();
+		std::vector<int> type = (*i).as< std::vector<int> >();
 		_alienItemLevels.push_back(type);
 	}
  	for (YAML::const_iterator i = doc["MCDPatches"].begin(); i != doc["MCDPatches"].end(); ++i)

@@ -142,7 +142,7 @@ namespace YAML
 			if (!node.IsSequence())
 				return false;
 
-			rhs.areas = node.as<std::vector<OpenXcom::MissionArea>>(rhs.areas);
+			rhs.areas = node.as< std::vector<OpenXcom::MissionArea> >(rhs.areas);
 			return true;
 		}
 	};

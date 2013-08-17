@@ -492,8 +492,8 @@ void load(const std::string &filename)
 		{
 			_options[i->first.as<std::string>()] = i->second.as<std::string>();
 		}
-		_purchaseexclusions = doc["purchaseexclusions"].as<std::vector<std::string>>(_purchaseexclusions);
-		_rulesets = doc["rulesets"].as<std::vector<std::string>>(_rulesets);
+		_purchaseexclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(_purchaseexclusions);
+		_rulesets = doc["rulesets"].as< std::vector<std::string> >(_rulesets);
 	}
 	catch (YAML::Exception)
 	{
