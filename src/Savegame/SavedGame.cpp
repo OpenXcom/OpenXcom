@@ -227,7 +227,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
 	_globeZoom = doc["globeZoom"].as<int>(_globeZoom);
-	_ids = doc["ids"].as<std::map<std::string, int>>(_ids);
+	_ids = doc["ids"].as< std::map<std::string, int> >(_ids);
 
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{

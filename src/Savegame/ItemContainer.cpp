@@ -43,7 +43,7 @@ ItemContainer::~ItemContainer()
  */
 void ItemContainer::load(const YAML::Node &node)
 {
-	_qty = node.as<std::map<std::string, int>>(_qty);
+	_qty = node.as< std::map<std::string, int> >(_qty);
 }
 
 /**

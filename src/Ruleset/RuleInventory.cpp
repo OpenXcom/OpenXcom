@@ -72,7 +72,7 @@ void RuleInventory::load(const YAML::Node &node)
 	_y = node["y"].as<int>(_y);
 	_type = (InventoryType)node["type"].as<int>(_type);
 	_slots = node["slots"].as< std::vector<RuleSlot> >(_slots);
-	_costs = node["costs"].as<std::map<std::string, int>>(_costs);
+	_costs = node["costs"].as< std::map<std::string, int> >(_costs);
 }
 
 /**
