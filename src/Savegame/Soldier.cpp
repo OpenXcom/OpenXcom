@@ -99,8 +99,8 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	_initialStats = node["initialStats"].as<UnitStats>(_initialStats);
 	_currentStats = node["currentStats"].as<UnitStats>(_currentStats);
 	_rank = (SoldierRank)node["rank"].as<int>();
-	_gender = (SoldierGender)node["rank"].as<int>();
-	_look = (SoldierLook)node["rank"].as<int>();
+	_gender = (SoldierGender)node["gender"].as<int>();
+	_look = (SoldierLook)node["look"].as<int>();
 	_missions = node["missions"].as<int>(_missions);
 	_kills = node["kills"].as<int>(_kills);
 	_recovery = node["recovery"].as<int>(_recovery);
