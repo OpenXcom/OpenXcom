@@ -638,14 +638,6 @@ SavedGame *Ruleset::newSave() const
 	{
 		ids[*i] = 1;
 	}
-	ids["STR_UFO"] = 1;
-	ids["STR_LANDING_SITE"] = 1;
-	ids["STR_CRASH_SITE"] = 1;
-	ids["STR_WAYPOINT"] = 1;
-	ids["STR_TERROR_SITE"] = 1;
-	ids["STR_ALIEN_BASE"] = 1;
-	ids["STR_SOLDIER"] = 1;
-	ids["ALIEN_MISSIONS"] = 1;
 	save->initIds(ids);
 
 	// Set up starting base

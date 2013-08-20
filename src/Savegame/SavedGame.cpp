@@ -227,7 +227,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	_globeLon = doc["globeLon"].as<double>(_globeLon);
 	_globeLat = doc["globeLat"].as<double>(_globeLat);
 	_globeZoom = doc["globeZoom"].as<int>(_globeZoom);
-	_ids = doc["ids"].as< std::map<std::string, int> >(_ids);
+	initIds(doc["ids"].as< std::map<std::string, int> >(_ids));
 
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
@@ -332,6 +332,7 @@ void SavedGame::save(const std::string &filename) const
 	// Saves the brief game info used in the saves list
 	YAML::Node brief;
 	brief["version"] = OPENXCOM_VERSION_SHORT;
+	brief["build"] = OPENXCOM_VERSION_GIT;
 	brief["time"] = _time->save();
 	out << brief;
 	// Saves the full game data to the save
@@ -563,7 +564,18 @@ int SavedGame::getId(const std::string &name)
  */
 void SavedGame::initIds(const std::map<std::string, int> &ids)
 {
-	_ids = ids;
+	_ids["STR_UFO"] = 1;
+	_ids["STR_LANDING_SITE"] = 1;
+	_ids["STR_CRASH_SITE"] = 1;
+	_ids["STR_WAYPOINT"] = 1;
+	_ids["STR_TERROR_SITE"] = 1;
+	_ids["STR_ALIEN_BASE"] = 1;
+	_ids["STR_SOLDIER"] = 1;
+	_ids["ALIEN_MISSIONS"] = 1;
+	for (std::map<std::string, int>::const_iterator i = ids.begin(); i != ids.end(); ++i)
+	{
+		_ids[i->first] = i->second;
+	}
 }
 
 /**

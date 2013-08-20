@@ -34,6 +34,7 @@
 #include "OptionsControlsState.h"
 #include "AdvancedOptionsState.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -88,8 +89,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnSoundVolume4 = new TextButton(22, 26, 246, 82);
 	_btnSoundVolume5 = new TextButton(22, 30, 270, 82);
 
-	/* Get available fullscreen/hardware modes */
-	_res = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWPALETTE);
+	/* Get available fullscreen modes */
+	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
 	if (_res > (SDL_Rect**)0)
 	{
 		int i;
@@ -105,7 +106,15 @@ OptionsState::OptionsState(Game *game) : State(game)
 		}
 		_resAmount = i;
 	}
-
+	else
+	{
+		_resCurrent = -1;
+		_resAmount = 0;
+		_btnDisplayDown->setVisible(false);
+		_btnDisplayUp->setVisible(false);
+		Log(LOG_WARNING) << "Couldn't get display resolutions";
+	}
+		
 	if (Options::getBool("fullscreen"))
 		_displayMode = _btnDisplayFullscreen;
 	else
