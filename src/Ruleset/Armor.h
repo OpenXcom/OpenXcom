@@ -54,23 +54,23 @@ public:
 	std::string getSpriteSheet() const;
 	/// Gets the unit's inventory sprite.
 	std::string getSpriteInventory() const;
-	/// Get the front armor level.
+	/// Gets the front armor level.
 	int getFrontArmor() const;
-	/// Get the side armor level.
+	/// Gets the side armor level.
 	int getSideArmor() const;
-	/// get the rear armor level.
+	/// Gets the rear armor level.
 	int getRearArmor() const;
-	/// get the under armor level.
+	/// Gets the under armor level.
 	int getUnderArmor() const;
-	/// Get the corpse item.
+	/// Gets the corpse item.
 	std::string getCorpseItem() const;
-	/// Get the stores item.
+	/// Gets the stores item.
 	std::string getStoreItem() const;
-	/// Get the battlescape drawing routine ID.
+	/// Gets the battlescape drawing routine ID.
 	int getDrawingRoutine() const;
-	/// Get whether the armor can fly.
+	/// Gets whether the armor can fly.
 	MovementType getMovementType() const;
-	/// Get whether this is a normal or big unit.
+	/// Gets whether this is a normal or big unit.
 	int getSize() const;
 	/// Gets damage modifier.
 	float getDamageModifier(ItemDamageType dt);

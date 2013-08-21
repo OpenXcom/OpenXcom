@@ -99,11 +99,11 @@ public:
 	int getHitRatio() const;
 	/// Gets the facility's battlescape map name.
 	std::string getMapName() const;
-	/// Gets the facility's fire sound
+	/// Gets the facility's fire sound.
 	int getFireSound() const;
-	/// Gets the facility's hit sound
+	/// Gets the facility's hit sound.
 	int getHitSound() const;
-	/// Gets the facility's list weight
+	/// Gets the facility's list weight.
 	int getListOrder() const;
 };
 

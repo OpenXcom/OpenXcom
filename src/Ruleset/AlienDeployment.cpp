@@ -98,13 +98,21 @@ std::string AlienDeployment::getType() const
 	return _type;
 }
 
-/// Gets a pointer to the data.
+/**
+ * Gets a pointer to the data.
+ * @return Pointer to the data.
+ */
 std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
 	return &_data;
 }
 
-/// Get dimensions.
+/**
+ * Gets dimensions.
+ * @param width Width.
+ * @param length Length.
+ * @param height Height.
+ */
 void AlienDeployment::getDimensions(int *width, int *length, int *height)
 {
 	*width = _width;
@@ -112,27 +120,46 @@ void AlienDeployment::getDimensions(int *width, int *length, int *height)
 	*height = _height;
 }
 
+/**
+ * Gets the number of civilians.
+ * @return The number of civilians.
+ */
 int AlienDeployment::getCivilians() const
 {
 	return _civilians;
 }
 
+/**
+ * Gets the road type odds.
+ * @return The road type odds.
+ */
 std::vector<int> AlienDeployment::getRoadTypeOdds() const
 {
 	return _roadTypeOdds;
 }
 
-/// Gets the terrain for battlescape generation.
+/**
+ * Gets the terrain for battlescape generation.
+ * @return The terrain.
+ */
 std::string AlienDeployment::getTerrain() const
 {
 	return _terrain;
 }
-/// Gets the shade level for battlescape generation.
+
+/**
+ * Gets the shade level for battlescape generation.
+ * @return The shade level.
+ */
 int AlienDeployment::getShade() const
 {
 	return _shade;
 }
-/// Gets the next stage of the mission.
+
+/**
+ * Gets the next stage of the mission.
+ * @return The next stage of the mission.
+ */
 std::string AlienDeployment::getNextStage() const
 {
 	return _nextStage;

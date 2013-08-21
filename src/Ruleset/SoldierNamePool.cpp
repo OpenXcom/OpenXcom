@@ -88,7 +88,7 @@ void SoldierNamePool::load(const std::string &filename)
  * Returns a new random name (first + last) from the
  * lists of names contained within.
  * @param gender Returned gender of the name.
- * @return Soldier name.
+ * @return The soldier's name.
  */
 std::wstring SoldierNamePool::genName(SoldierGender *gender) const
 {
@@ -113,6 +113,11 @@ std::wstring SoldierNamePool::genName(SoldierGender *gender) const
 	return name.str();
 }
 
+/**
+ * Generates an int representing the index of the soldier's look, when passed the maximum index value.
+ * @param numLooks The maximum index.
+ * @return The index of the soldier's look.
+ */
 int SoldierNamePool::genLook(size_t numLooks)
 {
 	int look = 0;
@@ -128,7 +133,7 @@ int SoldierNamePool::genLook(size_t numLooks)
 		_totalWeight -= _lookWeights.back();
 		_lookWeights.pop_back();
 	}
-	
+
 	int random = RNG::generate(0, _totalWeight);
 	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
 	{

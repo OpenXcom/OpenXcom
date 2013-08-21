@@ -22,15 +22,15 @@ namespace OpenXcom
 {
 
 /**
-* MapBlock construction
-*/
+ * MapBlock construction.
+ */
 MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type):_terrain(terrain), _name(name), _size_x(size_x), _size_y(size_y), _size_z(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
 {
 }
 
 /**
-* MapBlock DESTRUCTION.
-*/
+ * MapBlock desctruction.
+ */
 MapBlock::~MapBlock()
 {
 }
@@ -55,74 +55,74 @@ void MapBlock::load(const YAML::Node &node)
 }
 
 /**
-* Gets the MapBlock name (string).
-* @return name
-*/
+ * Gets the MapBlock name (string).
+ * @return The name.
+ */
 std::string MapBlock::getName() const
 {
 	return _name;
 }
 
 /**
-* Gets the MapBlock size x.
-* @return size x in tiles.
-*/
+ * Gets the MapBlock size x.
+ * @return The size x in tiles.
+ */
 int MapBlock::getSizeX() const
 {
 	return _size_x;
 }
 
 /**
-* Gets the MapBlock size y.
-* @return size y in tiles.
-*/
+ * Gets the MapBlock size y.
+ * @return The size y in tiles.
+ */
 int MapBlock::getSizeY() const
 {
 	return _size_y;
 }
 
 /**
-* Sets the MapBlock size z.
-* @param size z
-*/
+ * Sets the MapBlock size z.
+ * @param size_z The size z.
+ */
 void MapBlock::setSizeZ(int size_z)
 {
 	_size_z = size_z;
 }
 
 /**
-* Gets the MapBlock size z.
-* @return size z
-*/
+ * Gets the MapBlock size z.
+ * @return The size z.
+ */
 int MapBlock::getSizeZ() const
 {
 	return _size_z;
 }
 
 /**
-* Get the type of mapblock.
-* @return type
-*/
+ * Gets the type of mapblock.
+ * @return The mapblock's type.
+ */
 MapBlockType MapBlock::getType() const
 {
 	return _type;
 }
 
 /**
-* Get the secondary type of mapblock, if the primary type is occupied.
-* @return type
-*/
+ * Gets the secondary type of the mapblock, if the primary type is occupied.
+ * @return The mapblock's secondary type.
+ */
 MapBlockType MapBlock::getSubType() const
 {
 	return _subType;
 }
 
 /**
-* Get either the remaining uses of the mapblock OR THE FREQUENCY!
-* Remaining limits the number of times a mapblock occurs.
-* Frequency increases the odds of a mapblock occuring.
-* @return int
-*/
+ * Gets either the remaining uses of the mapblock OR THE FREQUENCY!
+ * Remaining limits the number of times a mapblock occurs.
+ * Frequency increases the odds of a mapblock occuring.
+ * @return int
+ */
 int MapBlock::getRemainingUses()
 {
 	if (_maxCount == -1)
@@ -133,8 +133,8 @@ int MapBlock::getRemainingUses()
 }
 
 /**
-* Decreases the remaining uses of a mapblock for this session.
-*/
+ * Decreases the remaining uses of a mapblock for this session.
+ */
 void MapBlock::markUsed()
 {
 	if (_maxCount == -1)
@@ -149,8 +149,8 @@ void MapBlock::markUsed()
 }
 
 /**
-* Resets the remaining uses of a mapblock for this session.
-*/
+ * Resets the remaining uses of a mapblock for this session.
+ */
 void MapBlock::reset()
 {
 	_timesUsed = 0;

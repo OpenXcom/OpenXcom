@@ -24,7 +24,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes an MCD Patch
+ * Initializes an MCD Patch.
  */
 MCDPatch::MCDPatch()
 {
@@ -83,7 +83,7 @@ void MCDPatch::load(const YAML::Node &node)
 
 /**
  * Applies an MCD patch to a mapDataSet.
- * @param dataSet the MapDataSet we want to modify.
+ * @param dataSet The MapDataSet we want to modify.
  */
 void MCDPatch::modifyData(MapDataSet *dataSet) const
 {

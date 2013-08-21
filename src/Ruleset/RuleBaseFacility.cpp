@@ -40,8 +40,8 @@ RuleBaseFacility::~RuleBaseFacility()
 /**
  * Loads the base facility type from a YAML file.
  * @param node YAML node.
- * @param modIndex offsets the sounds and sprite values to avoid conflicts.
- * @param listOrder the list weight for this facility.
+ * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
+ * @param listOrder The list weight for this facility.
  */
 void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 {
@@ -88,10 +88,10 @@ void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 }
 
 /**
- * Returns the language string that names
+ * Gets the language string that names
  * this base facility. Each base facility type
  * has a unique name.
- * @return Facility name.
+ * @return The facility's name.
  */
 std::string RuleBaseFacility::getType() const
 {
@@ -99,9 +99,9 @@ std::string RuleBaseFacility::getType() const
 }
 
 /**
- * Returns the list of research required to
+ * Gets the list of research required to
  * build this base facility.
- * @return List of research IDs..
+ * @return A list of research IDs.
  */
 const std::vector<std::string> &RuleBaseFacility::getRequirements() const
 {
@@ -109,9 +109,9 @@ const std::vector<std::string> &RuleBaseFacility::getRequirements() const
 }
 
 /**
- * Returns the ID of the sprite used to draw the
+ * Gets the ID of the sprite used to draw the
  * base structure of the facility that defines its shape.
- * @return Sprite ID.
+ * @return The sprite ID.
  */
 int RuleBaseFacility::getSpriteShape() const
 {
@@ -119,9 +119,9 @@ int RuleBaseFacility::getSpriteShape() const
 }
 
 /**
- * Returns the ID of the sprite used to draw the
+ * Gets the ID of the sprite used to draw the
  * facility's contents inside the base shape.
- * @return Sprite ID.
+ * @return The sprite ID.
  */
 int RuleBaseFacility::getSpriteFacility() const
 {
@@ -129,8 +129,8 @@ int RuleBaseFacility::getSpriteFacility() const
 }
 
 /**
- * Returns the size of the facility on the base grid.
- * @return Length in grid squares.
+ * Gets the size of the facility on the base grid.
+ * @return The length in grid squares.
  */
 int RuleBaseFacility::getSize() const
 {
@@ -138,10 +138,10 @@ int RuleBaseFacility::getSize() const
 }
 
 /**
- * Returns whether this facility is the core access lift
+ * Checks if this facility is the core access lift
  * of a base. Every base has an access lift and all
  * facilities have to be connected to it.
- * @return True if it's a lift, False otherwise.
+ * @return True if it's a lift.
  */
 bool RuleBaseFacility::isLift() const
 {
@@ -149,9 +149,9 @@ bool RuleBaseFacility::isLift() const
 }
 
 /**
- * Returns whether this facility has hyperwave detection
+ * Checks if this facility has hyperwave detection
  * capabilities. This allows it to get extra details about UFOs.
- * @return Hyperwave flag.
+ * @return True if it has hyperwave detection.
  */
 bool RuleBaseFacility::isHyperwave() const
 {
@@ -159,9 +159,9 @@ bool RuleBaseFacility::isHyperwave() const
 }
 
 /**
- * Returns whether this facility has a mind shield,
+ * Checks if this facility has a mind shield,
  * which covers your base from alien detection.
- * @return Mind Shield flag.
+ * @return True if it has a mind shield.
  */
 bool RuleBaseFacility::isMindShield() const
 {
@@ -169,9 +169,9 @@ bool RuleBaseFacility::isMindShield() const
 }
 
 /**
- * Returns whether this facility has a grav shield,
+ * Checks if this facility has a grav shield,
  * which doubles base defense's fire ratio.
- * @return Grav Shield flag.
+ * @return True if it has a grav shield.
  */
 bool RuleBaseFacility::isGravShield() const
 {
@@ -179,9 +179,9 @@ bool RuleBaseFacility::isGravShield() const
 }
 
 /**
- * Returns the amount of funds that this facility costs
+ * Gets the amount of funds that this facility costs
  * to build on a base.
- * @return Building cost.
+ * @return The building cost.
  */
 int RuleBaseFacility::getBuildCost() const
 {
@@ -189,9 +189,9 @@ int RuleBaseFacility::getBuildCost() const
 }
 
 /**
- * Returns the amount of time that this facility takes
+ * Gets the amount of time that this facility takes
  * to be constructed since placement.
- * @return Time in days.
+ * @return The time in days.
  */
 int RuleBaseFacility::getBuildTime() const
 {
@@ -199,9 +199,9 @@ int RuleBaseFacility::getBuildTime() const
 }
 
 /**
- * Returns the amount of funds this facility costs monthly
+ * Gets the amount of funds this facility costs monthly
  * to maintain once it's fully built.
- * @return Monthly cost.
+ * @return The monthly cost.
  */
 int RuleBaseFacility::getMonthlyCost() const
 {
@@ -209,9 +209,9 @@ int RuleBaseFacility::getMonthlyCost() const
 }
 
 /**
- * Returns the amount of storage space this facility provides
+ * Gets the amount of storage space this facility provides
  * for base equipment.
- * @return Storage space.
+ * @return The storage space.
  */
 int RuleBaseFacility::getStorage() const
 {
@@ -219,9 +219,9 @@ int RuleBaseFacility::getStorage() const
 }
 
 /**
- * Returns the amount of base personnel (soldiers, scientists,
- * engineers) const this facility can contain.
- * @return Amount of personnel.
+ * Gets the number of base personnel (soldiers, scientists,
+ * engineers) this facility can contain.
+ * @return The number of personnel.
  */
 int RuleBaseFacility::getPersonnel() const
 {
@@ -229,9 +229,9 @@ int RuleBaseFacility::getPersonnel() const
 }
 
 /**
- * Returns the amount of captured live aliens this facility
+ * Gets the number of captured live aliens this facility
  * can contain.
- * @return Amount of aliens.
+ * @return The number of aliens.
  */
 int RuleBaseFacility::getAliens() const
 {
@@ -239,8 +239,8 @@ int RuleBaseFacility::getAliens() const
 }
 
 /**
- * Returns the amount of base craft this facility can contain.
- * @return Amount of craft.
+ * Gets the number of base craft this facility can contain.
+ * @return The number of craft.
  */
 int RuleBaseFacility::getCrafts() const
 {
@@ -248,9 +248,9 @@ int RuleBaseFacility::getCrafts() const
 }
 
 /**
- * Returns the amount of laboratory space this facility provides
+ * Gets the amount of laboratory space this facility provides
  * for research projects.
- * @return Laboratory space.
+ * @return The laboratory space.
  */
 int RuleBaseFacility::getLaboratories() const
 {
@@ -258,9 +258,9 @@ int RuleBaseFacility::getLaboratories() const
 }
 
 /**
- * Returns the amount of workshop space this facility provides
+ * Gets the amount of workshop space this facility provides
  * for manufacturing projects.
- * @return Workshop space.
+ * @return The workshop space.
  */
 int RuleBaseFacility::getWorkshops() const
 {
@@ -268,9 +268,9 @@ int RuleBaseFacility::getWorkshops() const
 }
 
 /**
- * Returns the amount of soldiers this facility can contain
+ * Gets the number of soldiers this facility can contain
  * for monthly psi-training.
- * @return Amount of soldiers.
+ * @return The number of soldiers.
  */
 int RuleBaseFacility::getPsiLaboratories() const
 {
@@ -278,9 +278,9 @@ int RuleBaseFacility::getPsiLaboratories() const
 }
 
 /**
- * Returns the radar range this facility provides for the
+ * Gets the radar range this facility provides for the
  * detection of UFOs.
- * @return Range in nautical miles.
+ * @return The range in nautical miles.
  */
 int RuleBaseFacility::getRadarRange() const
 {
@@ -288,9 +288,9 @@ int RuleBaseFacility::getRadarRange() const
 }
 
 /**
- * Returns the chance of UFOs that come within the facility's
- * radar range to be detected.
- * @return Chance in percentage.
+ * Gets the chance of UFOs that come within the facility's
+ * radar range being detected.
+ * @return The chance as a percentage.
  */
 int RuleBaseFacility::getRadarChance() const
 {
@@ -298,9 +298,9 @@ int RuleBaseFacility::getRadarChance() const
 }
 
 /**
- * Returns the defense value of this facility's weaponry
+ * Gets the defense value of this facility's weaponry
  * against UFO invasions on the base.
- * @return Defense value.
+ * @return The defense value.
  */
 int RuleBaseFacility::getDefenseValue() const
 {
@@ -308,9 +308,9 @@ int RuleBaseFacility::getDefenseValue() const
 }
 
 /**
- * Returns the hit ratio of this facility's weaponry
+ * Gets the hit ratio of this facility's weaponry
  * against UFO invasions on the base.
- * @return Ratio in percentage.
+ * @return The hit ratio as a percentage.
  */
 int RuleBaseFacility::getHitRatio() const
 {
@@ -318,9 +318,9 @@ int RuleBaseFacility::getHitRatio() const
 }
 
 /**
- * Returns the battlescape map block name for this facility
+ * Gets the battlescape map block name for this facility
  * to construct the base defense mission map.
- * @return Map name.
+ * @return The map name.
  */
 std::string RuleBaseFacility::getMapName() const
 {
@@ -328,8 +328,8 @@ std::string RuleBaseFacility::getMapName() const
 }
 
 /**
- * Returns the hit sound of this facility's weaponry
- * @return Sound index number.
+ * Gets the hit sound of this facility's weaponry.
+ * @return The sound index number.
  */
 int RuleBaseFacility::getHitSound() const
 {
@@ -337,8 +337,8 @@ int RuleBaseFacility::getHitSound() const
 }
 
 /**
- * Returns the fire sound of this facility's weaponry
- * @return Sound index number.
+ * Gets the fire sound of this facility's weaponry.
+ * @return The sound index number.
  */
 int RuleBaseFacility::getFireSound() const
 {
@@ -346,7 +346,8 @@ int RuleBaseFacility::getFireSound() const
 }
 
 /**
- * @return the list weight for this research item.
+ * Gets the facility's list weight.
+ * @return The list weight for this research item.
  */
 int RuleBaseFacility::getListOrder() const
 {
