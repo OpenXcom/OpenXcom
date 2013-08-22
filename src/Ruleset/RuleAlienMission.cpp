@@ -112,9 +112,9 @@ void RuleAlienMission::load(const YAML::Node &node)
 }
 
 /**
- * Choose one of the available races for this mission.
+ * Chooses one of the available races for this mission.
  * The racial distribution may vary based on the current game date.
- * @param gameTime The current date and time of the game world.
+ * @param monthsPassed The number of months that have passed in the game world.
  * @return The string id of the race.
  */
 const std::string &RuleAlienMission::generateRace(const unsigned monthsPassed) const
@@ -126,7 +126,7 @@ const std::string &RuleAlienMission::generateRace(const unsigned monthsPassed) c
 }
 
 /**
- * Make sure the allocated memory is released.
+ * Ensures the allocated memory is released.
  */
 RuleAlienMission::~RuleAlienMission()
 {
@@ -137,7 +137,7 @@ RuleAlienMission::~RuleAlienMission()
 }
 
 /**
- * Return the Alien score for this mission.
+ * Returns the Alien score for this mission.
  */
 int RuleAlienMission::getPoints() const
 {

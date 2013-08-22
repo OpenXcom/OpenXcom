@@ -24,6 +24,9 @@
 namespace OpenXcom
 {
 
+/**
+ * For adding a set of extra sound data to the game.
+ */
 class ExtraSounds
 {
 private:

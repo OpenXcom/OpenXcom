@@ -65,36 +65,64 @@ std::string RuleSoldier::getType() const
 	return _type;
 }
 
+/**
+ * Gets the minimum stats for the random stats generator.
+ * @return The minimum stats.
+ */
 UnitStats RuleSoldier::getMinStats() const
 {
 	return _minStats;
 }
-///
+
+/**
+ * Gets the maximum stats for the random stats generator.
+ * @return The maximum stats.
+ */
 UnitStats RuleSoldier::getMaxStats() const
 {
 	return _maxStats;
 }
-///
+
+/**
+ * Gets the stat caps.
+ * @return The stat caps.
+ */
 UnitStats RuleSoldier::getStatCaps() const
 {
 	return _statCaps;
 }
-///
+
+/**
+ * Gets the height of the soldier when it's standing.
+ * @return The standing height.
+ */
 int RuleSoldier::getStandHeight() const
 {
 	return _standHeight;
 }
-///
+
+/**
+ * Gets the height of the soldier when it's kneeling.
+ * @return The kneeling height.
+ */
 int RuleSoldier::getKneelHeight() const
 {
 	return _kneelHeight;
 }
-///
+
+/**
+ * Gets the elevation of the soldier when it's flying.
+ * @return The floating height.
+ */
 int RuleSoldier::getFloatHeight() const
 {
 	return _floatHeight;
 }
 
+/**
+ * Gets the armor name.
+ * @return The armor name.
+ */
 std::string RuleSoldier::getArmor() const
 {
 	return _armor;

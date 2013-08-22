@@ -66,7 +66,7 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0), _startingTime(6, 1, 1, 1999, 12, 0, 0)
+Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
 {
     // Check in which data dir the folder is stored
     std::string path = CrossPlatform::getDataFolder("SoldierName/");
@@ -592,7 +592,7 @@ void Ruleset::loadFile(const std::string &filename)
 }
 
 /**
- * Load the contents of all rule files in the given directory.
+ * Loads the contents of all the rule files in the given directory.
  * @param dirname The name of an existing directory containing rule files.
  */
 void Ruleset::loadFiles(const std::string &dirname)
@@ -607,7 +607,7 @@ void Ruleset::loadFiles(const std::string &dirname)
 
 /**
  * Generates a brand new saved game with starting data.
- * @return New saved game.
+ * @return A new saved game.
  */
 SavedGame *Ruleset::newSave() const
 {
@@ -688,7 +688,7 @@ RuleCountry *Ruleset::getCountry(const std::string &id) const
 }
 
 /**
- * Returns the list of all countries.
+ * Returns the list of all countries
  * provided by the ruleset.
  * @return List of countries.
  */
@@ -784,7 +784,7 @@ const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
 /**
  * Returns the rules for the specified item.
  * @param id Item type.
- * @return Rules for the item. Or 0 when the item is not found.
+ * @return Rules for the item, or 0 when the item is not found.
  */
 RuleItem *Ruleset::getItem(const std::string &id) const
 {
@@ -837,7 +837,7 @@ const std::vector<std::string> &Ruleset::getTerrainList() const
 
 /**
  * Returns the rules for the specified terrain.
- * @param name terrain name.
+ * @param name Terrain name.
  * @return Rules for the terrain.
  */
 RuleTerrain *Ruleset::getTerrain(const std::string &name) const
@@ -847,8 +847,8 @@ RuleTerrain *Ruleset::getTerrain(const std::string &name) const
 }
 
 /**
- * Returns the info about a specific map data file
- * @param name datafile name.
+ * Returns the info about a specific map data file.
+ * @param name Datafile name.
  * @return Rules for the datafile.
  */
 MapDataSet *Ruleset::getMapDataSet(const std::string &name)
@@ -867,7 +867,7 @@ MapDataSet *Ruleset::getMapDataSet(const std::string &name)
 }
 
 /**
- * Returns the info about a specific unit
+ * Returns the info about a specific unit.
  * @param name Unit name.
  * @return Rules for the units.
  */
@@ -878,7 +878,7 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
 }
 
 /**
- * Returns the info about a specific unit
+ * Returns the info about a specific unit.
  * @param name Unit name.
  * @return Rules for the units.
  */
@@ -889,7 +889,7 @@ Unit *Ruleset::getUnit(const std::string &name) const
 }
 
 /**
- * Returns the info about a specific alien race
+ * Returns the info about a specific alien race.
  * @param name Race name.
  * @return Rules for the race.
  */
@@ -900,7 +900,7 @@ AlienRace *Ruleset::getAlienRace(const std::string &name) const
 }
 
 /**
- * Returns the list of all alien races
+ * Returns the list of all alien races.
  * provided by the ruleset.
  * @return List of alien races.
  */
@@ -910,7 +910,7 @@ const std::vector<std::string> &Ruleset::getAlienRacesList() const
 }
 
 /**
- * Returns the info about a specific deployment
+ * Returns the info about a specific deployment.
  * @param name Deployment name.
  * @return Rules for the deployment.
  */
@@ -931,7 +931,7 @@ const std::vector<std::string> &Ruleset::getDeploymentsList() const
 }
 
 /**
- * Returns the info about a specific armor
+ * Returns the info about a specific armor.
  * @param name Armor name.
  * @return Rules for the armor.
  */
@@ -1126,15 +1126,16 @@ const std::vector<std::string> &Ruleset::getAlienMissionList() const
 
 #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
 
-/** @brief Match a city based on coordinates.
- * This function object compare a city's coordinates with the stored coordinates.
+/**
+ * @brief Match a city based on coordinates.
+ * This function object compares a city's coordinates with the stored coordinates.
  */
 class EqualCoordinates: std::unary_function<const City *, bool>
 {
 public:
-	/// Remember the coordinates.
+	/// Remembers the coordinates.
 	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
-	/// Compare with stored coordinates.
+	/// Compares with stored coordinates.
 	//bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
 	bool operator()(const City *city) const { return (fabs(city->getLongitude() - _lon) < CITY_EPSILON) &&
 	                                                 (fabs(city->getLatitude() - _lat) < CITY_EPSILON); }
@@ -1143,7 +1144,7 @@ private:
 };
 
 /**
- * Find the city at coordinates @a lon, @a lat.
+ * Finds the city at coordinates @a lon, @a lat.
  * The search will only match exact coordinates.
  * @param lon The longtitude.
  * @param lat The latitude.
@@ -1164,7 +1165,8 @@ const City *Ruleset::locateCity(double lon, double lat) const
 }
 
 /**
- * @return a deep array containing the alien item levels.
+ * Gets the alien item level table.
+ * @return A deep array containing the alien item levels.
  */
 const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 {
@@ -1172,7 +1174,8 @@ const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
 }
 
 /**
- * @return the starting base definition.
+ * Gets the Defined starting base.
+ * @return The starting base definition.
  */
 const YAML::Node &Ruleset::getStartingBase()
 {
@@ -1180,8 +1183,9 @@ const YAML::Node &Ruleset::getStartingBase()
 }
 
 /**
- * @param id the ID of the MCDPatch we want.
- * @return the MCDPatch based on ID, or 0 if none defined.
+ * Gets an MCDPatch.
+ * @param id The ID of the MCDPatch we want.
+ * @return The MCDPatch based on ID, or 0 if none defined.
  */
 MCDPatch *Ruleset::getMCDPatch(const std::string id) const
 {
@@ -1190,8 +1194,8 @@ MCDPatch *Ruleset::getMCDPatch(const std::string id) const
 }
 
 /**
- * @param id the ID of the MCDPatch we want.
- * @return the MCDPatch based on ID, or 0 if none defined.
+ * Gets the list of external sprites.
+ * @return The list of external sprites.
  */
 std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() const
 {
@@ -1199,24 +1203,24 @@ std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() 
 }
 
 /**
- * @param id the ID of the MCDPatch we want.
- * @return the MCDPatch based on ID, or 0 if none defined.
+ * Gets the list of external sounds.
+ * @return The list of external sounds.
  */
 std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() const
 {
 	return _extraSounds;
 }
 /**
- * @param id the ID of the MCDPatch we want.
- * @return the MCDPatch based on ID, or 0 if none defined.
+ * Gets the list of external strings.
+ * @return The list of external strings.
  */
 std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
 }
 
-/*
- * Sort all our lists according to their weight.
+/**
+ * Sorts all our lists according to their weight.
  */
 void Ruleset::sortLists()
 {

@@ -65,9 +65,12 @@ private:
 	std::vector<City*> _cities;
 	/// Weighted list of the different mission types for this region.
 	WeightedOptions _missionWeights;
-	unsigned _regionWeight; ///< Weight of this region when selecting regions for alien missions.
-	std::vector<MissionZone> _missionZones; ///< All the mission zones in this region.
-	std::string _missionRegion; ///< Do missions in the region defined by this string instead.
+	/// Weight of this region when selecting regions for alien missions.
+	unsigned _regionWeight;
+	/// All the mission zones in this region.
+	std::vector<MissionZone> _missionZones;
+	/// Do missions in the region defined by this string instead.
+	std::string _missionRegion;
 public:
 	/// Creates a blank region ruleset.
 	RuleRegion(const std::string &type);
@@ -91,9 +94,13 @@ public:
 	const std::string &getMissionRegion() const { return _missionRegion; }
 	/// Gets a random point inside a mission site.
 	std::pair<double, double> getRandomPoint(unsigned site) const;
+	/// Gets the maximum longitude.
 	const std::vector<double> &getLonMax() const { return _lonMax; }
+	/// Gets the minimum longitude.
 	const std::vector<double> &getLonMin() const { return _lonMin; }
+	/// Gets the maximum latitude.
 	const std::vector<double> &getLatMax() const { return _latMax; }
+	/// Gets the minimum latitude.
 	const std::vector<double> &getLatMin() const { return _latMin; }
 };
 

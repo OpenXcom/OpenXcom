@@ -22,22 +22,22 @@
 namespace OpenXcom
 {
 
-/*
+/**
  * Creates a blank set of extra strings data.
  */
 ExtraStrings::ExtraStrings()
 {
 }
 
-/*
+/**
  * Cleans up the extra strings set.
  */
 ExtraStrings::~ExtraStrings()
 {
 }
 
-/*
- * Loads the extra strings set from yaml.
+/**
+ * Loads the extra strings set from YAML.
  * @param node YAML node.
  */
 void ExtraStrings::load(const YAML::Node &node)
@@ -45,8 +45,9 @@ void ExtraStrings::load(const YAML::Node &node)
 	_strings = node["strings"].as< std::map<std::string, std::string> >(_strings);
 }
 
-/*
- * @return the list of strings defined my this mod.
+/**
+ * Gets the list of strings defined my this mod.
+ * @return The list of strings.
  */
 std::map<std::string, std::string> *ExtraStrings::getStrings()
 {

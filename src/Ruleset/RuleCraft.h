@@ -94,9 +94,9 @@ public:
 	int getScore() const;
 	/// Gets the craft's terrain data.
 	RuleTerrain *getBattlescapeTerrainData();
-	/// Is this craft capable of travelling to mars.
+	/// Checks if this craft is capable of travelling to mars.
 	bool getSpacecraft() const;
-	/// get the list weight for this craft.
+	/// Gets the list weight for this craft.
 	int getListOrder() const;
 };
 
