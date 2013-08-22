@@ -500,7 +500,8 @@ void Ruleset::loadFile(const std::string &filename)
 		rule->load(*i, _ufopaediaListOrder);
 	}
  	//_startingBase->load(i->second, 0);
-	_startingBase = YAML::Node(doc["startingBase"]);
+	if (doc["startingBase"])
+		_startingBase = YAML::Node(doc["startingBase"]);
  	_startingTime.load(doc["startingTime"]);
  	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);
  	_costEngineer = doc["costEngineer"].as<int>(_costEngineer);
