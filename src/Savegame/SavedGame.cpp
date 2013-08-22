@@ -200,6 +200,10 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
+	if (file.empty())
+	{
+		throw Exception(filename + " is not a vaild save file");
+	}
 
 	// Get brief save info
 	YAML::Node brief = file[0];
