@@ -130,6 +130,7 @@ void createDefault()
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
 	setBool("captureMouse", false);
+	setBool("battleTooltips", true);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -483,21 +484,16 @@ void load(const std::string &filename)
 	try
 	{
 		YAML::Node doc = YAML::LoadFile(s);
-		YAML::Node &options = doc;
-		if (doc["options"])
-		{
-			options = doc["options"];
-		}
-		for (YAML::const_iterator i = options.begin(); i != options.end(); ++i)
+		for (YAML::const_iterator i = doc["options"].begin(); i != doc["options"].end(); ++i)
 		{
 			_options[i->first.as<std::string>()] = i->second.as<std::string>();
 		}
 		_purchaseexclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(_purchaseexclusions);
 		_rulesets = doc["rulesets"].as< std::vector<std::string> >(_rulesets);
 	}
-	catch (YAML::Exception)
+	catch (YAML::Exception e)
 	{
-		return;
+		Log(LOG_WARNING) << e.what();
 	}
 }
 
