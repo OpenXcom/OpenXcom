@@ -397,9 +397,9 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 		// If unit is kneeled, then chance to hit them reduced on 5%. This is a compromise, because vertical deviation in 2 times less.
 		if (targetUnit && targetUnit->isKneeled())
 			effectiveAccuracy -= 0.05;
-		// Taken into account smoke between shooter and target. 3% per tile with max density of smoke 15.
+		// Taken into account smoke between shooter and target. 5% per tile with max density of smoke 15.
 		if (smokeDensity > 0)
-			effectiveAccuracy -= 0.03 * smokeDensity / 15.0;
+			effectiveAccuracy -= 0.05 * smokeDensity / 15.0;
 
 		if (effectiveAccuracy > -0.2)
 			baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (effectiveAccuracy + 0.25);
