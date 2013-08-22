@@ -70,7 +70,11 @@ void UfoTrajectory::load(const YAML::Node &node)
 	_waypoints = node["waypoints"].as< std::vector<TrajectoryWaypoint> >(_waypoints);
 }
 
-/// Gets the altitude at a waypoint.
+/**
+ * Gets the altitude at a waypoint.
+ * @param wp The waypoint.
+ * @return The altitude.
+ */
 std::string UfoTrajectory::getAltitude(unsigned wp) const
 {
 	return altitudeString[_waypoints[wp].altitude];

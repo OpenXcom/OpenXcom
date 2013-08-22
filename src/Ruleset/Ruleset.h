@@ -183,23 +183,23 @@ public:
 	int getPersonnelTime() const;
 	/// Gets the ruleset for a specific research project.
 	RuleResearch *getResearch (const std::string &id) const;
-	/// Get the list of all research projects.
+	/// Gets the list of all research projects.
 	const std::vector<std::string> &getResearchList () const;
 	/// Gets the ruleset for a specific manufacture project.
 	RuleManufacture *getManufacture (const std::string &id) const;
-	/// Get the list of all manufacture projects.
+	/// Gets the list of all manufacture projects.
 	const std::vector<std::string> &getManufactureList () const;
-	/// Get facilities for custom bases.
+	/// Gets facilities for custom bases.
 	std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
 	/// Gets a specific UfoTrajectory.
 	const UfoTrajectory *getUfoTrajectory(const std::string &id) const;
 	/// Gets the ruleset for a specific alien mission.
 	const RuleAlienMission *getAlienMission(const std::string &id) const;
-	/// Get the list of all alien missions.
+	/// Gets the list of all alien missions.
 	const std::vector<std::string> &getAlienMissionList() const;
-	/// Get the city at the specified coordinates.
+	/// Gets the city at the specified coordinates.
 	const City *locateCity(double lon, double lat) const;
-	/// Get the alien item level table
+	/// Gets the alien item level table.
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
 	/// Gets the Defined starting base.
 	const YAML::Node &getStartingBase();
@@ -211,7 +211,7 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
-	/// sort all our lists according to their weight.
+	/// Sorts all our lists according to their weight.
 	void sortLists();
 };
 

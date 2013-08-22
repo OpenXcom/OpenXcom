@@ -53,7 +53,7 @@ void City::load(const YAML::Node &node)
 
 /**
  * Returns the name of the city.
- * @return City name.
+ * @return The city's name.
  */
 std::string City::getName() const
 {
@@ -62,7 +62,7 @@ std::string City::getName() const
 
 /**
  * Returns the latitude coordinate of the city.
- * @return Latitude in radian.
+ * @return The city's latitude in radians.
  */
 double City::getLatitude() const
 {
@@ -71,7 +71,7 @@ double City::getLatitude() const
 
 /**
  * Returns the longitude coordinate of the city.
- * @return Longitude in radian.
+ * @return The city's longitude in radians.
  */
 double City::getLongitude() const
 {

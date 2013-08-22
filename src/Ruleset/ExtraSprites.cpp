@@ -22,22 +22,22 @@
 namespace OpenXcom
 {
 
-/*
+/**
  * Creates a blank set of extra sprite data.
  */
 ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0)
 {
 }
 
-/*
+/**
  * Cleans up the extra sprite set.
  */
 ExtraSprites::~ExtraSprites()
 {
 }
 
-/*
- * Loads the extra sprite set from yaml.
+/**
+ * Loads the extra sprite set from YAML.
  * @param node YAML node.
  * @param modIndex the internal index of the associated mod.
  */
@@ -52,51 +52,64 @@ void ExtraSprites::load(const YAML::Node &node, int modIndex)
 	_modIndex = modIndex;
 }
 
-/*
- * @return the list of sprites defined my this mod.
+/**
+ * Gets the list of sprites defined my this mod.
+ * @return The list of sprites.
  */
 std::map<int, std::string> *ExtraSprites::getSprites()
 {
 	return &_sprites;
 }
 
-/*
- * @return the width of the surfaces (used for single images and new spritesets)
+/**
+ * Gets the width of the surfaces (used for single images and new spritesets).
+ * @return The width of the surfaces.
  */
 int ExtraSprites::getWidth() const
 {
 	return _width;
 }
 
-/*
- * @return the height of the surfaces (used for single images and new spritesets)
+/**
+ * Gets the height of the surfaces (used for single images and new spritesets).
+ * @return The height of the surfaces.
  */
 int ExtraSprites::getHeight() const
 {
 	return _height;
 }
 
-/*
- * @return is this a single surface, or a set of surfaces?
+/**
+ * Returns whether this is a single surface as opposed to a set of surfaces.
+ * @return True if this is a single surface.
  */
 bool ExtraSprites::getSingleImage() const
 {
 	return _singleImage;
 }
 
-/*
- * @return the mod index for this external sprite set.
+/**
+ * Gets the mod index for this external sprite set.
+ * @return The mod index.
  */
 int ExtraSprites::getModIndex() const
 {
 	return _modIndex;
 }
 
+/**
+ * Gets the x subdivision.
+ * @return The x subdivision.
+ */
 int ExtraSprites::getSubX() const
 {
 	return _subX;
 }
 
+/**
+ * Gets the y subdivision.
+ * @return The y subdivision.
+ */
 int ExtraSprites::getSubY() const
 {
 	return _subY;

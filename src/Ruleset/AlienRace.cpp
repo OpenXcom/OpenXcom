@@ -55,8 +55,8 @@ std::string AlienRace::getId() const
 
 /**
  * Gets a certain member of this alien race family.
- * @param id The members id.
- * @return The members name.
+ * @param id The member's id.
+ * @return The member's name.
  */
 std::string AlienRace::getMember(int id) const
 {

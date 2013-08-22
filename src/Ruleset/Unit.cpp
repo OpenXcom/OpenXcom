@@ -70,7 +70,7 @@ void Unit::load(const YAML::Node &node)
 /**
  * Returns the language string that names
  * this unit. Each unit type has a unique name.
- * @return Unit name.
+ * @return The unit's name.
  */
 std::string Unit::getType() const
 {
@@ -79,7 +79,7 @@ std::string Unit::getType() const
 
 /**
  * Returns the unit's stats data object.
- * @return Stats.
+ * @return The unit's stats.
  */
 UnitStats *Unit::getStats()
 {
@@ -88,7 +88,7 @@ UnitStats *Unit::getStats()
 
 /**
  * Returns the unit's height at standing.
- * @return height.
+ * @return The unit's height.
  */
 int Unit::getStandHeight() const
 {
@@ -97,7 +97,7 @@ int Unit::getStandHeight() const
 
 /**
  * Returns the unit's height at kneeling.
- * @return height.
+ * @return The unit's kneeling height.
  */
 int Unit::getKneelHeight() const
 {
@@ -105,8 +105,8 @@ int Unit::getKneelHeight() const
 }
 
 /**
- * Returns the unit's floating eleavtion.
- * @return height.
+ * Returns the unit's floating elevation.
+ * @return The unit's floating height.
  */
 int Unit::getFloatHeight() const
 {
@@ -115,7 +115,7 @@ int Unit::getFloatHeight() const
 
 /**
  * Gets the unit's armor type.
- * @return string.
+ * @return The unit's armor type.
  */
 std::string Unit::getArmor() const
 {
@@ -124,7 +124,7 @@ std::string Unit::getArmor() const
 
 /**
  * Gets the alien's race.
- * @return string.
+ * @return The alien's race.
  */
 std::string Unit::getRace() const
 {
@@ -132,8 +132,8 @@ std::string Unit::getRace() const
 }
 
 /**
- * Gets the alien's rank.
- * @return string.
+ * Gets the unit's rank.
+ * @return The unit's rank.
  */
 std::string Unit::getRank() const
 {
@@ -141,8 +141,8 @@ std::string Unit::getRank() const
 }
 
 /**
- * Get the unit's value - for scoring.
- * @return value.
+ * Gets the unit's value - for scoring.
+ * @return The unit's value.
  */
 int Unit::getValue() const
 {
@@ -150,8 +150,8 @@ int Unit::getValue() const
 }
 
 /**
- * Get the unit's death sound.
- * @return id.
+ * Gets the unit's death sound.
+ * @return The id of the unit's death sound.
  */
 int Unit::getDeathSound() const
 {
@@ -159,18 +159,17 @@ int Unit::getDeathSound() const
 }
 
 /**
- * Get the unit's move sound.
- * @return id.
+ * Gets the unit's move sound.
+ * @return The id of the unit's move sound.
  */
 int Unit::getMoveSound() const
 {
 	return _moveSound;
 }
 
-
 /**
- * Get the intelligence. This is the number of turns AI remembers your troops position.
- * @return intelligence.
+ * Gets the intelligence. This is the number of turns the AI remembers your troop positions.
+ * @return The unit's intelligence.
  */
 int Unit::getIntelligence() const
 {
@@ -178,8 +177,8 @@ int Unit::getIntelligence() const
 }
 
 /**
- * Get the aggression. Determines the chance of revenge and taking cover.
- * @return aggression.
+ * Gets the aggression. Determines the chance of revenge and taking cover.
+ * @return The unit's aggression.
  */
 int Unit::getAggression() const
 {
@@ -187,8 +186,8 @@ int Unit::getAggression() const
 }
 
 /**
- * Get the unit's special ability.
- * @return specab.
+ * Gets the unit's special ability.
+ * @return The unit's specab.
  */
 int Unit::getSpecialAbility() const
 {
@@ -196,8 +195,8 @@ int Unit::getSpecialAbility() const
 }
 
 /**
- * Get the unit that the victim is morphed into when attacked.
- * @return unit.
+ * Gets the unit that the victim is morphed into when attacked.
+ * @return The unit's zombie unit.
  */
 std::string Unit::getZombieUnit() const
 {
@@ -205,8 +204,8 @@ std::string Unit::getZombieUnit() const
 }
 
 /**
- * Get the unit that is spawned when this one dies.
- * @return unit.
+ * Gets the unit that is spawned when this one dies.
+ * @return The unit's spawn unit.
  */
 std::string Unit::getSpawnUnit() const
 {
@@ -214,8 +213,8 @@ std::string Unit::getSpawnUnit() const
 }
 
 /**
- * Get the unit's war cry.
- * @return sound number.
+ * Gets the unit's war cry.
+ * @return The id of the unit's aggro sound.
  */
 int Unit::getAggroSound() const
 {
@@ -223,8 +222,8 @@ int Unit::getAggroSound() const
 }
 
 /**
- * is this unit a living weapon? (ie: chryssalid).
- * @return if it is or not.
+ * Checks if this unit is a living weapon. (ie: chryssalid).
+ * @return True if this unit is a living weapon.
  */
 bool Unit::isLivingWeapon() const
 {

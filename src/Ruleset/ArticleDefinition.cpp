@@ -52,21 +52,21 @@ namespace OpenXcom
 {
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 * @param type_id Article type of this instance.
 	 */
 	ArticleDefinition::ArticleDefinition(UfopaediaTypeId type_id) : _type_id(type_id), _listOrder(0)
 	{}
 
 	/**
-	 * Destructor
+	 * Destructor.
 	 */
 	ArticleDefinition::~ArticleDefinition()
 	{}
 
 	/**
-	 * Get the article definition type. (Text, TextImage, Craft, ...)
-	 * @returns The type of article definition of this instance.
+	 * Gets the article definition type. (Text, TextImage, Craft, ...)
+	 * @return The type of article definition of this instance.
 	 */
 	UfopaediaTypeId ArticleDefinition::getType() const
 	{
@@ -76,7 +76,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinition::load(const YAML::Node &node, int listOrder)
 	{
@@ -93,8 +93,9 @@ namespace OpenXcom
 		}
 	}
 
-	/*
-	 * @return the list weight of the article.
+	/**
+	 * Gets the list weight of the article.
+	 * @return The list weight of the article.
 	 */
 	int ArticleDefinition::getListOrder() const
 	{
@@ -102,12 +103,16 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	ArticleDefinitionRect::ArticleDefinitionRect() : x(0), y(0), width(0), height(0) {}
 
 	/**
-	 * Set the rectangle parameters in a function
+	 * Sets the rectangle parameters in a function.
+	 * @param set_x X.
+	 * @param set_y Y.
+	 * @param set_width Width.
+	 * @param set_height Height.
 	 */
 	void ArticleDefinitionRect::set(int set_x, int set_y, int set_width, int set_height)
 	{
@@ -118,7 +123,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionCraft::ArticleDefinitionCraft() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT)
 	{}
@@ -126,7 +131,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionCraft::load(const YAML::Node &node, int listOrder)
 	{
@@ -138,7 +143,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon() : ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON)
 	{}
@@ -146,7 +151,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionCraftWeapon::load(const YAML::Node &node, int listOrder)
 	{
@@ -156,7 +161,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionText::ArticleDefinitionText() : ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
 	{}
@@ -164,7 +169,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionText::load(const YAML::Node &node, int listOrder)
 	{
@@ -173,7 +178,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionTextImage::ArticleDefinitionTextImage() : ArticleDefinition(UFOPAEDIA_TYPE_TEXTIMAGE), text_width(0)
 	{}
@@ -181,7 +186,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionTextImage::load(const YAML::Node &node, int listOrder)
 	{
@@ -192,7 +197,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility() : ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY)
 	{}
@@ -200,7 +205,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionBaseFacility::load(const YAML::Node &node, int listOrder)
 	{
@@ -209,7 +214,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionItem::ArticleDefinitionItem() : ArticleDefinition(UFOPAEDIA_TYPE_ITEM)
 	{}
@@ -217,7 +222,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionItem::load(const YAML::Node &node, int listOrder)
 	{
@@ -226,7 +231,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionUfo::ArticleDefinitionUfo() : ArticleDefinition(UFOPAEDIA_TYPE_UFO)
 	{}
@@ -234,7 +239,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionUfo::load(const YAML::Node &node, int listOrder)
 	{
@@ -243,7 +248,7 @@ namespace OpenXcom
 	}
 
 	/**
-	 * Constructor (only setting type of base class)
+	 * Constructor (only setting type of base class).
 	 */
 	ArticleDefinitionArmor::ArticleDefinitionArmor() : ArticleDefinition(UFOPAEDIA_TYPE_ARMOR)
 	{}
@@ -251,7 +256,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionArmor::load(const YAML::Node &node, int listOrder)
 	{
@@ -267,7 +272,7 @@ namespace OpenXcom
 	/**
 	 * Loads the article definition from a YAML file.
 	 * @param node YAML node.
-	 * @param listOrder the list weight for this article.
+	 * @param listOrder The list weight for this article.
 	 */
 	void ArticleDefinitionVehicle::load(const YAML::Node &node, int listOrder)
 	{

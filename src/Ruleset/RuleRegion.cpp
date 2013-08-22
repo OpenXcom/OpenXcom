@@ -80,10 +80,10 @@ void RuleRegion::load(const YAML::Node &node)
 }
 
 /**
- * Returns the language string that names
+ * Gets the language string that names
  * this region. Each region type
  * has a unique name.
- * @return Region name.
+ * @return The region type.
  */
 std::string RuleRegion::getType() const
 {
@@ -91,8 +91,8 @@ std::string RuleRegion::getType() const
 }
 
 /**
- * Returns the cost of building a base inside this region.
- * @return Construction cost.
+ * Gets the cost of building a base inside this region.
+ * @return The construction cost.
  */
 int RuleRegion::getBaseCost() const
 {
@@ -103,7 +103,7 @@ int RuleRegion::getBaseCost() const
  * Checks if a point is inside this region.
  * @param lon Longitude in radians.
  * @param lat Latitude in radians.
- * @return True if it's inside, False if it's outside.
+ * @return True if it's inside, false if it's outside.
  */
 bool RuleRegion::insideRegion(double lon, double lat) const
 {
@@ -125,8 +125,8 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 }
 
 /**
- * Returns the list of cities contained.
- * @return Pointer to list.
+ * Gets the list of cities contained in this region.
+ * @return Pointer to a list.
  */
 std::vector<City*> *RuleRegion::getCities()
 {
@@ -134,8 +134,8 @@ std::vector<City*> *RuleRegion::getCities()
 }
 
 /**
- * Returns the weight of this region for mission selection.
- * This is only used when creating a new game, since these weights change in the cource of the game.
+ * Gets the weight of this region for mission selection.
+ * This is only used when creating a new game, since these weights change in the course of the game.
  * @return The initial weight of this region.
  */
 unsigned RuleRegion::getWeight() const
@@ -144,7 +144,7 @@ unsigned RuleRegion::getWeight() const
 }
 
 /**
- * Returns a random point that is guaranteed to be inside the give zone.
+ * Gets a random point that is guaranteed to be inside the give zone.
  * If the region contains cities, they are the sites of zone 0 and the rest of the zones get one index higher.
  * @return A pair of longtitude and latitude.
  */

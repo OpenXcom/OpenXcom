@@ -62,10 +62,10 @@ void RuleCountry::load(const YAML::Node &node)
 }
 
 /**
- * Returns the language string that names
+ * Gets the language string that names
  * this country. Each country type
  * has a unique name.
- * @return Country name.
+ * @return The country's name.
  */
 std::string RuleCountry::getType() const
 {
@@ -74,7 +74,7 @@ std::string RuleCountry::getType() const
 
 /**
  * Generates the random starting funding for the country.
- * @return Monthly funding.
+ * @return The monthly funding.
  */
 int RuleCountry::generateFunding() const
 {
@@ -82,9 +82,9 @@ int RuleCountry::generateFunding() const
 }
 
 /**
- * Returns the country's funding cap.
+ * Gets the country's funding cap.
  * Country funding can never exceed this.
- * @return Funding cap, in thousands.
+ * @return The funding cap, in thousands.
  */
 int RuleCountry::getFundingCap() const
 {
@@ -92,8 +92,8 @@ int RuleCountry::getFundingCap() const
 }
 
 /**
- * Returns the longitude of the country's label on the globe.
- * @return Longitude in radians.
+ * Gets the longitude of the country's label on the globe.
+ * @return The longitude in radians.
  */
 double RuleCountry::getLabelLongitude() const
 {
@@ -101,8 +101,8 @@ double RuleCountry::getLabelLongitude() const
 }
 
 /**
- * Returns the latitude of the country's label on the globe.
- * @return Latitude in radians.
+ * Gets the latitude of the country's label on the globe.
+ * @return The latitude in radians.
  */
 double RuleCountry::getLabelLatitude() const
 {
@@ -113,7 +113,7 @@ double RuleCountry::getLabelLatitude() const
  * Checks if a point is inside this country.
  * @param lon Longitude in radians.
  * @param lat Latitude in radians.
- * @return True if it's inside, False if it's outside.
+ * @return True if it's inside, false if it's outside.
  */
 bool RuleCountry::insideCountry(double lon, double lat) const
 {

@@ -26,6 +26,9 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
+ * @param drawingRoutine The drawing routine for this armor.
+ * @param movementType The movement type for this armor (walk, fly or slide).
+ * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
 Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
 {
@@ -76,7 +79,7 @@ void Armor::load(const YAML::Node &node)
 /**
  * Returns the language string that names
  * this armor. Each armor has a unique name. Coveralls, Power Suit,...
- * @return Armor name.
+ * @return The armor name.
  */
 std::string Armor::getType() const
 {
@@ -85,7 +88,7 @@ std::string Armor::getType() const
 
 /**
  * Gets the unit's sprite sheet.
- * @return Sprite sheet name.
+ * @return The sprite sheet name.
  */
 std::string Armor::getSpriteSheet() const
 {
@@ -94,7 +97,7 @@ std::string Armor::getSpriteSheet() const
 
 /**
  * Gets the unit's inventory sprite.
- * @return Inventory sprite name.
+ * @return The inventory sprite name.
  */
 std::string Armor::getSpriteInventory() const
 {
@@ -102,8 +105,8 @@ std::string Armor::getSpriteInventory() const
 }
 
 /**
- * Get the front armor level.
- * @return Front armor level.
+ * Gets the front armor level.
+ * @return The front armor level.
  */
 int Armor::getFrontArmor() const
 {
@@ -111,8 +114,8 @@ int Armor::getFrontArmor() const
 }
 
 /**
- * Get the side armor level.
- * @return Side armor level. 
+ * Gets the side armor level.
+ * @return The side armor level.
  */
 int Armor::getSideArmor() const
 {
@@ -120,8 +123,8 @@ int Armor::getSideArmor() const
 }
 
 /**
- * get the rear armor level.
- * @return Rear armor level. 
+ * Gets the rear armor level.
+ * @return The rear armor level.
  */
 int Armor::getRearArmor() const
 {
@@ -129,8 +132,8 @@ int Armor::getRearArmor() const
 }
 
 /**
- * get the under armor level.
- * @return Under armor level. 
+ * Gets the under armor level.
+ * @return The under armor level.
  */
 int Armor::getUnderArmor() const
 {
@@ -139,8 +142,8 @@ int Armor::getUnderArmor() const
 
 
 /**
- * Get the corpse item.
- * @return Name of the corpse item.
+ * Gets the corpse item.
+ * @return The name of the corpse item.
  */
 std::string Armor::getCorpseItem() const
 {
@@ -148,8 +151,8 @@ std::string Armor::getCorpseItem() const
 }
 
 /**
- * Get the storage item needed to equip this.
- * @return Name of the store item.
+ * Gets the storage item needed to equip this.
+ * @return The name of the store item.
  */
 std::string Armor::getStoreItem() const
 {
@@ -157,7 +160,7 @@ std::string Armor::getStoreItem() const
 }
 
 /**
- * get the drawing routine ID.
+ * Gets the drawing routine ID.
  * @return The drawing routine ID.
  */
 int Armor::getDrawingRoutine() const
@@ -166,8 +169,9 @@ int Armor::getDrawingRoutine() const
 }
 
 /**
- * Get whether the armor can fly.
- * @return Movementtype
+ * Gets the movement type of this armor.
+ * Useful for determining whether the armor can fly.
+ * @return The movement type.
  */
 MovementType Armor::getMovementType() const
 {
@@ -175,8 +179,8 @@ MovementType Armor::getMovementType() const
 }
 
 /**
- * Get the size of the unit. Normally this is 1(small) or 2(big).
- * @return size
+ * Gets the size of the unit. Normally this is 1 (small) or 2 (big).
+ * @return The unit's size.
  */
 int Armor::getSize() const
 {
@@ -184,17 +188,17 @@ int Armor::getSize() const
 }
 
 /**
- * Gets damage modifier for a certain damage type.
- * @param dt DamageType
- * @return damage modifier 0->1
+ * Gets the damage modifier for a certain damage type.
+ * @param dt The damageType.
+ * @return The damage modifier 0->1.
  */
 float Armor::getDamageModifier(ItemDamageType dt)
 {
 	return _damageModifier[(int)dt];
 }
 
-/** Gets loftempSet
- * @return loftempsSet
+/** Gets the loftempSet.
+ * @return The loftempsSet.
  */
 std::vector<int> Armor::getLoftempsSet() const
 {
