@@ -850,4 +850,24 @@ void Surface::setDY(int dy)
 	_dy = dy;
 }
 
+/**
+ * Returns the help description of this surface,
+ * for example for showing in tooltips.
+ * @return String ID.
+ */
+std::string Surface::getTooltip() const
+{
+	return _tooltip;
+}
+
+/**
+* Changes the help description of this surface,
+* for example for showing in tooltips.
+* @param str String ID.
+*/
+void Surface::setTooltip(const std::string &tooltip)
+{
+	_tooltip = tooltip;
+}
+
 }

@@ -43,6 +43,7 @@ protected:
 	SDL_Color *_originalColors;
 	void *_misalignedPixelBuffer, *_alignedBuffer;
 	int _dx, _dy;
+	std::string _tooltip;
 public:
 	/// Creates a new surface with the specified size and position.
 	Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
@@ -197,6 +198,11 @@ public:
 	void invalidate();
 	void setDX(int dx);
 	void setDY(int dy);
+	/// Gets the tooltip of the surface.
+	std::string getTooltip() const;
+	/// Sets the tooltip of the surface.
+	void setTooltip(const std::string &tooltip);
+	
 };
 
 }

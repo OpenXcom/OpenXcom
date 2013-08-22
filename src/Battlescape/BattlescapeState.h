@@ -66,7 +66,7 @@ private:
 	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
 	Timer *_animTimer, *_gameTimer;
 	SavedBattleGame *_save;
-	Text *_txtDebug;
+	Text *_txtDebug, *_txtTooltip;
 	std::vector<State*> _popups;
 	BattlescapeGame *_battleGame;
 	bool firstInit;
@@ -78,6 +78,7 @@ private:
 	int totalMouseMoveX, totalMouseMoveY;
 	bool mouseMovedOverThreshold;
 	bool _mouseOverIcons;
+	std::string _currentTooltip;
 	/// Popups a context sensitive list of actions the user can choose from.
 	void handleItemClick(BattleItem *item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
@@ -202,6 +203,10 @@ public:
 	void btnReserveKneelClick(Action *action);
 	/// Handler for clicking the expend all TUs button.
 	void btnZeroTUsClick(Action *action);
+	/// Handler for showing tooltip.
+	void txtTooltipIn(Action *action);
+	/// Handler for hiding tooltip.
+	void txtTooltipOut(Action *action);
 };
 
 }
