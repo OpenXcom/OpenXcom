@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_ARTICLESTATEBASEFACILITY_H
 #define OPENXCOM_ARTICLESTATEBASEFACILITY_H
 
-#include <string>
 #include "ArticleState.h"
 
 namespace OpenXcom

@@ -23,8 +23,8 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param game pointer to the game.
- * @param unit pointer to the unit.
+ * @param game Pointer to the game.
+ * @param unit Pointer to the unit.
  */
 BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(game), _unit(unit)
 {
@@ -49,10 +49,11 @@ void BattleAIState::load(const YAML::Node &)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void BattleAIState::save(YAML::Emitter &) const
+YAML::Node BattleAIState::save() const
 {
+	return YAML::Node();
 }
 
 

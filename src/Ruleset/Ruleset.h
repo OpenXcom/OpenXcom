@@ -23,6 +23,7 @@
 #include <vector>
 #include <string>
 #include <yaml-cpp/yaml.h>
+#include "../Savegame/GameTime.h"
 
 namespace OpenXcom
 {
@@ -92,7 +93,8 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds *> > _extraSounds;
 	std::map<std::string, ExtraStrings *> _extraStrings;
 	int _costSoldier, _costEngineer, _costScientist, _timePersonnel;
-	std::auto_ptr<YAML::Node> _startingBase, _startingTime;
+	YAML::Node _startingBase;
+	GameTime _startingTime;
 	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
 	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
 	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
@@ -109,8 +111,6 @@ public:
 	virtual ~Ruleset();
 	/// Loads a ruleset from the given source.
 	void load(const std::string &source);
-	/// Saves a ruleset to a YAML file.
-	void save(const std::string &filename) const;
 	/// Generates the starting saved game.
 	virtual SavedGame *newSave() const;
 	/// Gets the pool list for soldier names.
@@ -183,23 +183,23 @@ public:
 	int getPersonnelTime() const;
 	/// Gets the ruleset for a specific research project.
 	RuleResearch *getResearch (const std::string &id) const;
-	/// Get the list of all research projects.
+	/// Gets the list of all research projects.
 	const std::vector<std::string> &getResearchList () const;
 	/// Gets the ruleset for a specific manufacture project.
 	RuleManufacture *getManufacture (const std::string &id) const;
-	/// Get the list of all manufacture projects.
+	/// Gets the list of all manufacture projects.
 	const std::vector<std::string> &getManufactureList () const;
-	/// Get facilities for custom bases.
+	/// Gets facilities for custom bases.
 	std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
 	/// Gets a specific UfoTrajectory.
 	const UfoTrajectory *getUfoTrajectory(const std::string &id) const;
 	/// Gets the ruleset for a specific alien mission.
 	const RuleAlienMission *getAlienMission(const std::string &id) const;
-	/// Get the list of all alien missions.
+	/// Gets the list of all alien missions.
 	const std::vector<std::string> &getAlienMissionList() const;
-	/// Get the city at the specified coordinates.
+	/// Gets the city at the specified coordinates.
 	const City *locateCity(double lon, double lat) const;
-	/// Get the alien item level table
+	/// Gets the alien item level table.
 	const std::vector<std::vector<int> > &getAlienItemLevels() const;
 	/// Gets the Defined starting base.
 	const YAML::Node &getStartingBase();
@@ -211,7 +211,7 @@ public:
 	std::vector<std::pair<std::string, ExtraSounds *> > getExtraSounds() const;
 	/// Gets the list of external Strings.
 	std::map<std::string, ExtraStrings *> getExtraStrings() const;
-	/// sort all our lists according to their weight.
+	/// Sorts all our lists according to their weight.
 	void sortLists();
 };
 

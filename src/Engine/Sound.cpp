@@ -49,7 +49,9 @@ void Sound::load(const std::string &filename)
 	_sound = Mix_LoadWAV(filename.c_str());
 	if (_sound == 0)
 	{
-		throw Exception(Mix_GetError());
+		std::string err;
+		err = Mix_GetError() + std::string(":") + filename;
+		throw Exception(err);
 	}
 }
 

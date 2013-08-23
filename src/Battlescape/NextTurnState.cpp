@@ -28,7 +28,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "BattlescapeState.h"
 
 namespace OpenXcom

@@ -19,13 +19,14 @@
 #include "NewBattleState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -51,7 +52,7 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game *game) : State(game), _alienEquipLevel(0), _craft(0)
+NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);

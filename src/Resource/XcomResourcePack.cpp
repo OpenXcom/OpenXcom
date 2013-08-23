@@ -350,6 +350,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		std::string exts[] = {"flac", "ogg", "mp3", "mod"};
 		int tracks[] = {3, 6, 0, 18, -1, -1, 2, 19, 20, 21, 10, 9, 8, 12, 17, -1, 11};
 
+#ifndef __NO_MUSIC
 		// Check which music version is available
 		bool cat = true;
 		GMCatFile *gmcat = 0;
@@ -408,7 +409,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			}
 		}
 		delete gmcat;
-
+#endif		
+		
 		// Load sounds
 		std::string catsId[] = {"GEO.CAT",
 								"BATTLE.CAT"};

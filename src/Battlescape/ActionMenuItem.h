@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class BattleItem;
 class State;
 class Font;
 class Text;
@@ -48,15 +47,15 @@ public:
 	ActionMenuItem(int id, Font *big, Font *small, int x, int y);
 	/// Cleans up the ActionMenuItem.
 	~ActionMenuItem();
-	/// Assign an action to it.
+	/// Assigns an action to it.
 	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
-	/// Get the assigned action.
+	/// Gets the assigned action.
 	BattleActionType getAction() const;
-	/// Get the assigned action TUs.
+	/// Gets the assigned action TUs.
 	int getTUs() const;
-	/// Set the palettes.
+	/// Sets the palettes.
 	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
-	/// Redraw it.
+	/// Redraws it.
 	void draw();
 	/// Processes a mouse hover in event.
 	void mouseIn(Action *action, State *state);

@@ -64,10 +64,10 @@ void Camera::setScrollTimer(Timer *mouse, Timer *key)
 }
 
 /**
- * Sets the value to min if it is below min, sets value to max if above max.
- * @param value pointer to the value
- * @param minimum value
- * @param maximum value
+ * Sets the value to min if it is below min and to max if it is above max.
+ * @param value Pointer to the value.
+ * @param minValue The minimum value.
+ * @param maxValue The maximum value.
  */
 void Camera::minMaxInt(int *value, const int minValue, const int maxValue) const
 {
@@ -317,7 +317,7 @@ void Camera::keyboardRelease(Action *action, State *)
 }
 
 /**
- * Handle mouse-scrolling.
+ * Handles mouse-scrolling.
  */
 void Camera::scrollMouse()
 {
@@ -325,7 +325,7 @@ void Camera::scrollMouse()
 }
 
 /**
- * Handle keyboard-scrolling.
+ * Handles keyboard-scrolling.
  */
 void Camera::scrollKey()
 {
@@ -333,7 +333,7 @@ void Camera::scrollKey()
 }
 
 /**
- * Handle scrolling with given deviation.
+ * Handles scrolling with given deviation.
  * @param x X deviation.
  * @param y Y deviation.
  * @param redraw Redraw map or not.
@@ -364,7 +364,7 @@ void Camera::scrollXY(int x, int y, bool redraw)
 
 
 /**
- * Handle jumping with given deviation.
+ * Handles jumping with given deviation.
  * @param x X deviation.
  * @param y Y deviation.
  */
@@ -377,7 +377,7 @@ void Camera::jumpXY(int x, int y)
 
 
 /**
- * Go one level up.
+ * Goes one level up.
  */
 void Camera::up()
 {
@@ -390,7 +390,7 @@ void Camera::up()
 }
 
 /**
- * Go one level down.
+ * Goes one level down.
  */
 void Camera::down()
 {
@@ -403,8 +403,8 @@ void Camera::down()
 }
 
 /**
- * Set view level.
- * @param viewlevel New view level
+ * Sets the view level.
+ * @param viewlevel New view level.
  */
 void Camera::setViewLevel(int viewlevel)
 {
@@ -415,7 +415,7 @@ void Camera::setViewLevel(int viewlevel)
 
 
 /**
- * Center map on a certain position.
+ * Centers map on a certain position.
  * @param mapPos Position to center on.
  * @param redraw Redraw map or not.
  */
@@ -435,7 +435,8 @@ void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 }
 
 /**
- * Get map's center position.
+ * Gets map's center position.
+ * @return Map's center position.
  */
 Position Camera::getCenterPosition()
 {
@@ -445,10 +446,10 @@ Position Camera::getCenterPosition()
 
 /**
  * Converts screen coordinates to map coordinates.
- * @param screenX screen x position
- * @param screenY screen y position
- * @param mapX map x position
- * @param mapY map y position
+ * @param screenX Screen x position.
+ * @param screenY Screen y position.
+ * @param mapX Map x position.
+ * @param mapY Map y position.
  */
 void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) const
 {
@@ -469,9 +470,9 @@ void Camera::convertScreenToMap(int screenX, int screenY, int *mapX, int *mapY) 
 }
 
 /**
- * Convert map coordinates X,Y,Z to screen positions X, Y.
+ * Converts map coordinates X,Y,Z to screen positions X, Y.
  * @param mapPos X,Y,Z coordinates on the map.
- * @param screenPos to screen position.
+ * @param screenPos Screen position.
  */
 void Camera::convertMapToScreen(const Position &mapPos, Position *screenPos) const
 {
@@ -481,9 +482,9 @@ void Camera::convertMapToScreen(const Position &mapPos, Position *screenPos) con
 }
 
 /**
- * Convert voxel coordinates X,Y,Z to screen positions X, Y.
- * @param voxelPos X,Y,Z coordinates on the voxel.
- * @param screenPos to screen position.
+ * Converts voxel coordinates X,Y,Z to screen positions X, Y.
+ * @param voxelPos X,Y,Z coordinates of the voxel.
+ * @param screenPos Screen position.
  */
 void Camera::convertVoxelToScreen(const Position &voxelPos, Position *screenPos) const
 {
@@ -499,35 +500,35 @@ void Camera::convertVoxelToScreen(const Position &voxelPos, Position *screenPos)
 }
 
 /**
- * Get the displayed level
- * @return the displayed layer
-*/
+ * Gets the displayed level.
+ * @return The displayed layer.
+ */
 int Camera::getViewLevel() const
 {
 	return _mapOffset.z;
 }
 
 /**
- * Get the map size x
- * @return the map size x
-*/
+ * Gets the map size x.
+ * @return The map size x.
+ */
 int Camera::getMapSizeX() const
 {
 	return _mapsize_x;
 }
 
 /**
- * Get the map size y
- * @return the map size y
-*/
+ * Gets the map size y.
+ * @return The map size y.
+ */
 int Camera::getMapSizeY() const
 {
 	return _mapsize_y;
 }
 
 /**
- * Get the map offset
- * @return the map offset
+ * Gets the map offset.
+ * @return The map offset.
  */
 Position Camera::getMapOffset()
 {
@@ -535,8 +536,8 @@ Position Camera::getMapOffset()
 }
 
 /**
- * Set the map offset
- * @param pos the map offset
+ * Sets the map offset.
+ * @param pos The map offset.
  */
 void Camera::setMapOffset(Position pos)
 {
@@ -544,7 +545,7 @@ void Camera::setMapOffset(Position pos)
 }
 
 /**
- * Toggle showing all map layers.
+ * Toggles showing all map layers.
  * @return New layer setting.
  */
 int Camera::toggleShowAllLayers()
@@ -554,7 +555,7 @@ int Camera::toggleShowAllLayers()
 }
 
 /**
- * Check if camera is showing all map layers.
+ * Checks if the camera is showing all map layers.
  * @return Current layer setting.
  */
 bool Camera::getShowAllLayers() const
@@ -563,8 +564,9 @@ bool Camera::getShowAllLayers() const
 }
 
 /**
- * Check if map coordinates X,Y,Z are on screen
- * @param mapPos Coordinates to check
+ * Checks if map coordinates X,Y,Z are on screen.
+ * @param mapPos Coordinates to check.
+ * @return True if the map coordinates are on screen.
  */
 bool Camera::isOnScreen(const Position &mapPos) const
 {

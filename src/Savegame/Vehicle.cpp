@@ -44,19 +44,19 @@ Vehicle::~Vehicle()
  */
 void Vehicle::load(const YAML::Node &node)
 {
-	node["ammo"] >> _ammo;
+	_ammo = node["ammo"].as<int>(_ammo);
 }
 
 /**
  * Saves the base to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Vehicle::save(YAML::Emitter &out) const
+YAML::Node Vehicle::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "ammo" << YAML::Value << _ammo;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["type"] = _rules->getType();
+	node["ammo"] = _ammo;
+	return node;
 }
 
 /**

@@ -17,7 +17,6 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "SaveState.h"
-#include <yaml-cpp/yaml.h>
 #include "../Engine/Logger.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Savegame/SavedGame.h"
@@ -27,7 +26,6 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Interface/TextEdit.h"
 #include "ErrorMessageState.h"

@@ -43,9 +43,10 @@ namespace OpenXcom
  * Sets up an ExplosionBState.
  * @param parent Pointer to the BattleScape.
  * @param center Center position in voxelspace.
- * @param item Item involved in the explosion (eg grenade)
- * @param unit Unit involved in the explosion (eg unit throwing the grenade)
+ * @param item Item involved in the explosion (eg grenade).
+ * @param unit Unit involved in the explosion (eg unit throwing the grenade).
  * @param tile Tile the explosion is on.
+ * @param lowerWeapon Whether the unit causing this explosion should now lower their weapon.
  */
 ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
 {
@@ -61,9 +62,9 @@ ExplosionBState::~ExplosionBState()
 }
 
 /**
- * init explosion :
+ * Initializes the explosion.
  * The animation and sound starts here.
- * If the animation is finished, the actually effect takes place.
+ * If the animation is finished, the actual effect takes place.
  */
 void ExplosionBState::init()
 {
@@ -89,7 +90,7 @@ void ExplosionBState::init()
 		_power = 120;
 		_areaOfEffect = true;
 	}
-	
+
 	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
 	if (_areaOfEffect)
 	{
@@ -133,8 +134,8 @@ void ExplosionBState::init()
 	}
 }
 
-/*
- * Animate explosion sprites. If their animation is finished remove them from the list.
+/**
+ * Animates explosion sprites. If their animation is finished remove them from the list.
  * If the list is empty, this state is finished and the actual calculations take place.
  */
 void ExplosionBState::think()
@@ -154,13 +155,16 @@ void ExplosionBState::think()
 	}
 }
 
-/*
- * Explosion cannot be cancelled.
+/**
+ * Explosions cannot be cancelled.
  */
 void ExplosionBState::cancel()
 {
 }
 
+/**
+ * Calculates the effects of the explosion.
+ */
 void ExplosionBState::explode()
 {
 	bool terrainExplosion = false;
@@ -232,7 +236,6 @@ void ExplosionBState::explode()
 			}
 		}
 	}
-
 }
 
 }

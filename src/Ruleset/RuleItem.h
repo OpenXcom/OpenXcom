@@ -31,7 +31,6 @@ namespace OpenXcom
 
 class SurfaceSet;
 class Surface;
-class RuleManufacture;
 
 /**
  * Represents a specific type of item.
@@ -74,8 +73,6 @@ public:
 	~RuleItem();
 	/// Loads item data from YAML.
 	void load(const YAML::Node& node, int modIndex, int listIndex);
-	/// Saves the item data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the item's type.
 	std::string getType() const;
 	/// Gets the item's name.
@@ -144,39 +141,39 @@ public:
 	int getClipSize() const;
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
-	/// Get medikit heal quantity
+	/// Gets the medikit heal quantity.
 	int getHealQuantity () const;
-	/// Get medikit pain killer quantity
+	/// Gets the medikit pain killer quantity.
 	int getPainKillerQuantity () const;
-	/// Get medikit stimulant quantity
+	/// Gets the medikit stimulant quantity.
 	int getStimulantQuantity () const;
-	/// Get medikit heal amount per shot
+	/// Gets the medikit heal amount per shot.
 	int getHealAmount () const;
-	/// Get medikit health amount per shot
+	/// Gets the medikit health amount per shot.
 	int getHealthAmount () const;
-	/// Get medikit energy amount per shot
+	/// Gets the medikit energy amount per shot.
 	int getEnergy () const;
-	/// Get medikit stun amount per shot
+	/// Gets the medikit stun amount per shot.
 	int getStun () const;
-	/// Get use Time Unit use
+	/// Gets the Time Unit use.
 	int getTUUse() const;
-	/// Gets the max explosion radius
+	/// Gets the max explosion radius.
 	int getExplosionRadius() const;
 	/// Gets the recovery points score
 	int getRecoveryPoints() const;
-	/// Gets the item's armor
+	/// Gets the item's armor.
 	int getArmor() const;
 	/// Gets the item's recoverability.
 	bool isRecoverable() const;
-	/// Gets the item's turret type
+	/// Gets the item's turret type.
 	int getTurretType() const;
-	/// is this a live alien?
+	/// Checks if this a live alien.
 	bool getAlien() const;
-	/// should we charge a flat rate?
+	/// Should we charge a flat rate?
 	bool getFlatRate() const;
-	/// should this weapon arc?
+	/// Should this weapon arc?
 	bool getArcingShot() const;
-	/// how much do aliens want this thing?
+	/// How much do aliens want this thing?
 	int getAttraction() const;
 	/// get the list weight for this item.
 	int getListOrder() const;
@@ -184,7 +181,6 @@ public:
 	int getRange() const;
 	/// how fast does a projectile fired from this weapon travel?
 	int getBulletSpeed() const;
-
 };
 
 }

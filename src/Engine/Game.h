@@ -56,6 +56,11 @@ private:
 	FpsCounter *_fpsCounter;
 	bool _mouseActive;
 	std::wstring _loadFile;
+#ifdef __MORPHOS__		
+	Uint32 waittime;// = 1000.0f/FPS;
+	Uint32 framestarttime;// = 0;
+	Sint32 delaytime;
+#endif
 public:
 	/// Creates a new game and initializes SDL.
 	Game(const std::string &title);

@@ -39,112 +39,37 @@ RuleCraftWeapon::~RuleCraftWeapon()
 /**
  * Loads the craft weapon from a YAML file.
  * @param node YAML node.
- * @param modIndex offsets the sounds and sprite values to avoid conflicts.
+ * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  */
 void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "sprite")
-		{
-			i.second() >> _sprite;
-			// this one is an offset within INTICONS.PCK
-			if (_sprite > 5)
-				_sprite += modIndex;
-		}
-		else if (key == "sound")
-		{
-			i.second() >> _sound;
-			// 14 entries in GEO.CAT
-			if (_sound > 13)
-				_sound += modIndex;
-		}
-		else if (key == "damage")
-		{
-			i.second() >> _damage;
-		}
-		else if (key == "range")
-		{
-			i.second() >> _range;
-		}
-		else if (key == "accuracy")
-		{
-			i.second() >> _accuracy;
-		}
-		else if (key == "reloadCautious")
-		{
-			i.second() >> _reloadCautious;
-		}
-		else if (key == "reloadStandard")
-		{
-			i.second() >> _reloadStandard;
-		}
-		else if (key == "reloadAggressive")
-		{
-			i.second() >> _reloadAggressive;
-		}
-		else if (key == "ammoMax")
-		{
-			i.second() >> _ammoMax;
-		}
-		else if (key == "rearmRate")
-		{
-			i.second() >> _rearmRate;
-		}
-		else if (key == "launcher")
-		{
-			i.second() >> _launcher;
-		}
-		else if (key == "clip")
-		{
-			i.second() >> _clip;
-		}
-		else if (key == "projectileType")
-		{
-			i.second() >> _projectileType;
-		}
-		else if (key == "projectileSpeed")
-		{
-			i.second() >> _projectileSpeed;
-		}
-	}
+	_type = node["type"].as<std::string>(_type);
+	_sprite = node["sprite"].as<int>(_sprite);
+	// this one is an offset within INTICONS.PCK
+	if (_sprite > 5)
+		_sprite += modIndex;
+	_sound = node["sound"].as<int>(_sound);
+	// 14 entries in GEO.CAT
+	if (_sound > 13)
+		_sound += modIndex;
+	_damage = node["damage"].as<int>(_damage);
+	_range = node["range"].as<int>(_range);
+	_accuracy = node["accuracy"].as<int>(_accuracy);
+	_reloadCautious = node["reloadCautious"].as<int>(_reloadCautious);
+	_reloadStandard = node["reloadStandard"].as<int>(_reloadStandard);
+	_reloadAggressive = node["reloadAggressive"].as<int>(_reloadAggressive);
+	_ammoMax = node["ammoMax"].as<int>(_ammoMax);
+	_rearmRate = node["rearmRate"].as<int>(_rearmRate);
+	_projectileType = node["projectileType"].as<int>(_projectileType);
+	_projectileSpeed = node["projectileSpeed"].as<int>(_projectileSpeed);
+	_launcher = node["launcher"].as<std::string>(_launcher);
+	_clip = node["clip"].as<std::string>(_clip);
 }
 
 /**
- * Saves the craft weapon to a YAML file.
- * @param out YAML emitter.
- */
-void RuleCraftWeapon::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "sound" << YAML::Value << _sound;
-	out << YAML::Key << "damage" << YAML::Value << _damage;
-	out << YAML::Key << "range" << YAML::Value << _range;
-	out << YAML::Key << "accuracy" << YAML::Value << _accuracy;
-	out << YAML::Key << "reloadCautious" << YAML::Value << _reloadCautious;
-	out << YAML::Key << "reloadStandard" << YAML::Value << _reloadStandard;
-	out << YAML::Key << "reloadAggressive" << YAML::Value << _reloadAggressive;
-	out << YAML::Key << "ammoMax" << YAML::Value << _ammoMax;
-	out << YAML::Key << "rearmRate" << YAML::Value << _rearmRate;
-	out << YAML::Key << "launcher" << YAML::Value << _launcher;
-	out << YAML::Key << "clip" << YAML::Value << _clip;
-	out << YAML::Key << "projectileType" << YAML::Value << _projectileType;
-	out << YAML::Key << "projectileSpeed" << YAML::Value << _projectileSpeed;
-	out << YAML::EndMap;
-}
-
-/**
- * Returns the language string that names this craft weapon.
+ * Gets the language string that names this craft weapon.
  * Each craft weapon type has a unique name.
- * @return Craft weapon name.
+ * @return The craft weapon's name.
  */
 std::string RuleCraftWeapon::getType() const
 {
@@ -152,9 +77,9 @@ std::string RuleCraftWeapon::getType() const
 }
 
 /**
- * Returns the ID of the sprite used to draw the craft weapon
+ * Gets the ID of the sprite used to draw the craft weapon
  * in the Equip Craft and Interception screens.
- * @return Sprite ID.
+ * @return The sprite ID.
  */
 int RuleCraftWeapon::getSprite() const
 {
@@ -162,9 +87,9 @@ int RuleCraftWeapon::getSprite() const
 }
 
 /**
- * Returns the ID of the sound used when firing the weapon
+ * Gets the ID of the sound used when firing the weapon
  * in the Dogfight screen.
- * @return Sound ID.
+ * @return The sound ID.
  */
 int RuleCraftWeapon::getSound() const
 {
@@ -172,9 +97,9 @@ int RuleCraftWeapon::getSound() const
 }
 
 /**
- * Returns the amount of damage this craft weapon
+ * Gets the amount of damage this craft weapon
  * inflicts on enemy crafts.
- * @return Damage amount.
+ * @return The damage amount.
  */
 int RuleCraftWeapon::getDamage() const
 {
@@ -182,8 +107,8 @@ int RuleCraftWeapon::getDamage() const
 }
 
 /**
- * Returns the maximum range of this craft weapon.
- * @return Range in km.
+ * Gets the maximum range of this craft weapon.
+ * @return The range in km.
  */
 int RuleCraftWeapon::getRange() const
 {
@@ -191,9 +116,9 @@ int RuleCraftWeapon::getRange() const
 }
 
 /**
- * Returns the percentage chance of each shot of
+ * Gets the percentage chance of each shot of
  * this craft weapon hitting an enemy craft.
- * @return Percentage accuracy.
+ * @return The accuracy as a percentage.
  */
 int RuleCraftWeapon::getAccuracy() const
 {
@@ -201,9 +126,9 @@ int RuleCraftWeapon::getAccuracy() const
 }
 
 /**
- * Returns the amount of time the craft weapon takes to
+ * Gets the amount of time the craft weapon takes to
  * reload in cautious mode.
- * @return Time in game seconds.
+ * @return The time in game seconds.
  */
 int RuleCraftWeapon::getCautiousReload() const
 {
@@ -211,9 +136,9 @@ int RuleCraftWeapon::getCautiousReload() const
 }
 
 /**
- * Returns the amount of time the craft weapon takes to
+ * Gets the amount of time the craft weapon takes to
  * reload in standard mode.
- * @return Time in game seconds.
+ * @return The time in game seconds.
  */
 int RuleCraftWeapon::getStandardReload() const
 {
@@ -221,9 +146,9 @@ int RuleCraftWeapon::getStandardReload() const
 }
 
 /**
- * Returns the amount of time the craft weapon takes to
+ * Gets the amount of time the craft weapon takes to
  * reload in aggressive mode.
- * @return Time in game seconds.
+ * @return The time in game seconds.
  */
 int RuleCraftWeapon::getAggressiveReload() const
 {
@@ -231,9 +156,9 @@ int RuleCraftWeapon::getAggressiveReload() const
 }
 
 /**
- * Returns the maximum amount of ammo the craft weapon
+ * Gets the maximum amount of ammo the craft weapon
  * can carry.
- * @return Amount of ammo.
+ * @return The amount of ammo.
  */
 int RuleCraftWeapon::getAmmoMax() const
 {
@@ -241,9 +166,9 @@ int RuleCraftWeapon::getAmmoMax() const
 }
 
 /**
- * Returns how much ammo is added to the craft weapon
+ * Gets how much ammo is added to the craft weapon
  * while rearming (the amount of ammo in each clip item).
- * @return Amount of ammo.
+ * @return The amount of ammo.
  */
 int RuleCraftWeapon::getRearmRate() const
 {
@@ -251,9 +176,9 @@ int RuleCraftWeapon::getRearmRate() const
 }
 
 /**
- * Returns the language string of the item used to
+ * Gets the language string of the item used to
  * equip this craft weapon.
- * @return Item name.
+ * @return The item name.
  */
 std::string RuleCraftWeapon::getLauncherItem() const
 {
@@ -261,19 +186,18 @@ std::string RuleCraftWeapon::getLauncherItem() const
 }
 
 /**
- * Returns the language string of the item used to
+ * Gets the language string of the item used to
  * load this craft weapon with ammo.
- * @return Item name.
+ * @return The item name.
  */
 std::string RuleCraftWeapon::getClipItem() const
 {
 	return _clip;
 }
 
-
 /**
- * Returns the Projectile Type this weapon will fire
- * @return Projectile Type.
+ * Gets the Projectile Type this weapon will fire
+ * @return The projectile type.
  */
 int RuleCraftWeapon::getProjectileType() const
 {
@@ -281,8 +205,8 @@ int RuleCraftWeapon::getProjectileType() const
 }
 
 /**
- * Returns the speed of the projectile fired by this weapon
- * @return projectile Speed.
+ * Gets the speed of the projectile fired by this weapon
+ * @return The projectile speed.
  */
 int RuleCraftWeapon::getProjectileSpeed() const
 {

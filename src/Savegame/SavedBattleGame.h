@@ -23,8 +23,8 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <SDL.h>
 #include <yaml-cpp/yaml.h>
-#include "BattleItem.h"
 #include "BattleUnit.h"
 
 namespace OpenXcom
@@ -33,23 +33,18 @@ namespace OpenXcom
 class Tile;
 class SavedGame;
 class MapDataSet;
-class RuleUnit;
-class MapBlock;
 class Node;
 class Game;
-class BattleUnit;
-class Soldier;
+class BattlescapeState;
 class Position;
 class Pathfinding;
 class TileEngine;
 class BattleItem;
-class Item;
-class RuleInventory;
 class Ruleset;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
- * A saved game holds all the variable info in a game like mapdata
+ * A saved game holds all the variable info in a game like mapdata,
  * soldiers, items, etc.
  */
 class SavedBattleGame
@@ -81,35 +76,35 @@ private:
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
 public:
-	/// Creates a new battle save, based on current generic save.
+	/// Creates a new battle save, based on the current generic save.
 	SavedBattleGame();
 	/// Cleans up the saved game.
 	~SavedBattleGame();
 	/// Loads a saved battle game from YAML.
 	void load(const YAML::Node& node, Ruleset *rule, SavedGame* savedGame);
 	/// Saves a saved battle game to YAML.
-	void save(YAML::Emitter& out) const;
-	/// Set the dimensions of the map and initializes it.
+	YAML::Node save() const;
+	/// Sets the dimensions of the map and initializes it.
 	void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
-	/// initialises pathfinding and tileengine
+	/// Initialises the pathfinding and tileengine.
 	void initUtilities(ResourcePack *res);
 	/// Gets the game's mapdatafiles.
 	std::vector<MapDataSet*> *getMapDataSets();
-	/// Set the mission type.
+	/// Sets the mission type.
 	void setMissionType(const std::string &missionType);
-	/// Get the mission type.
+	/// Gets the mission type.
 	std::string getMissionType() const;
-	/// Set the global shade.
+	/// Sets the global shade.
 	void setGlobalShade(int shade);
-	/// Get the global shade.
+	/// Gets the global shade.
 	int getGlobalShade() const;
-	/// Gets pointer to the tiles, a tile is the smallest component of battlescape.
+	/// Gets a pointer to the tiles, a tile is the smallest component of battlescape.
 	Tile **getTiles() const;
-	/// Get pointer to the list of nodes.
+	/// Gets a pointer to the list of nodes.
 	std::vector<Node*> *getNodes();
-	/// Get pointer to the list of items.
+	/// Gets a pointer to the list of items.
 	std::vector<BattleItem*> *getItems();
-	/// Get pointer to the list of units.
+	/// Gets a pointer to the list of units.
 	std::vector<BattleUnit*> *getUnits();
 	/// Gets terrain size x.
 	int getMapSizeX() const;
@@ -120,30 +115,26 @@ public:
 	/// Gets terrain x*y*z
 	int getMapSizeXYZ() const;
 
-
-	/// Conversion between coordinates and the tile index.
-	//  int getTileIndex(const Position& pos) const;
 	/**
-	 * This method converts coordinates into a unique index.
+	 * Converts coordinates into a unique index.
 	 * getTile() calls this every time, so should be inlined along with it.
-	 * @param pos position
-	 * @return Unique index.
+	 * @param pos The position to convert.
+	 * @return A unique index.
 	 */
 	inline int getTileIndex(const Position& pos) const
 	{
 		return pos.z * _mapsize_y * _mapsize_x + pos.y * _mapsize_x + pos.x;
 	}
 
-	/// Conversion between tile index and coordinates.
+	/// Converts a tile index to its coordinates.
 	void getTileCoords(int index, int *x, int *y, int *z) const;
-	/// Gets the tile at certain position.
-	//  Tile *getTile(const Position& pos) const;
+
 	/**
-	 * Gets the Tile on a given position on the map.
+	 * Gets the Tile at a given position on the map.
 	 * This method is called over 50mil+ times per turn so it seems useful
 	 * to inline it.
-	 * @param pos position
-	 * @return Pointer to tile.
+	 * @param pos Map position.
+	 * @return Pointer to the tile at that position.
 	 */
 	inline Tile *getTile(const Position& pos) const
 	{
@@ -153,45 +144,44 @@ public:
 
 		return _tiles[getTileIndex(pos)];
 	}
-	/// get the currently selected unit
+
+	/// Gets the currently selected unit.
 	BattleUnit *getSelectedUnit() const;
-	/// set the currently selected unit
+	/// Sets the currently selected unit.
 	void setSelectedUnit(BattleUnit *unit);
-	/// select previous soldier
+	/// Selects the previous soldier.
 	BattleUnit *selectPreviousPlayerUnit(bool checkReselect = false);
-	/// select next soldier
+	/// Selects the next soldier.
 	BattleUnit *selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
-	/// select unit with position on map
+	/// Selects the unit with position on map.
 	BattleUnit *selectUnit(const Position& pos);
-	/// select unit with position on map
-	BattleUnit *selectUnit(Tile *tile);
-	/// get the pathfinding object
+	/// Gets the pathfinding object.
 	Pathfinding *getPathfinding() const;
-	/// get a pointer to the tileengine
+	/// Gets a pointer to the tileengine.
 	TileEngine *getTileEngine() const;
-	/// get the playing side
+	/// Gets the playing side.
 	UnitFaction getSide() const;
-	/// get the turn number
+	/// Gets the turn number.
 	int getTurn() const;
-	/// end the turn
+	/// Ends the turn.
 	void endTurn();
-	/// set debug mode
+	/// Sets debug mode.
 	void setDebugMode();
-	/// get debug mode
+	/// Gets debug mode.
 	bool getDebugMode() const;
-	/// load map resources
+	/// Load map resources.
 	void loadMapResources(Game *game);
-	/// resets tiles units are standing on
+	/// Resets tiles units are standing on
 	void resetUnitTiles();
 	/// Removes an item from the game.
 	void removeItem(BattleItem *item);
-	/// Whether the mission was aborted.
+	/// Sets whether the mission was aborted.
 	void setAborted(bool flag);
-	/// Whether the mission was aborted.
+	/// Checks if the mission was aborted.
 	bool isAborted() const;
-	/// Whether the objective is destroyed.
+	/// Sets whether the objective is destroyed.
 	void setObjectiveDestroyed(bool flag);
-	/// Whether the objective is detroyed.
+	/// Checks if the objective is detroyed.
 	bool isObjectiveDestroyed();
 	/// Gets the current item ID.
 	int *getCurrentItemId();
@@ -199,57 +189,53 @@ public:
 	Node *getSpawnNode(int nodeRank, BattleUnit *unit);
 	/// Gets a patrol node.
 	Node *getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode);
-	/// New turn preparations.
+	/// Carries out new turn preparations.
 	void prepareNewTurn();
-	/// Revive unconscious units (healthcheck).
+	/// Revives unconscious units (healthcheck).
 	void reviveUnconsciousUnits();
-	/// Remove the body item that corresponds to the unit
+	/// Removes the body item that corresponds to the unit.
 	void removeUnconsciousBodyItem(BattleUnit *bu);
-	/// Set or try to set a unit of a certain size on a certain position of the map.
+	/// Sets or tries to set a unit of a certain size on a certain position of the map.
 	bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
-	/// get DragButton
+	/// Gets DragButton.
 	Uint8 getDragButton() const;
-	/// get DragInverted
+	/// Gets DragInverted.
 	bool isDragInverted() const;
-	/// get DragTimeTolerance
+	/// Gets DragTimeTolerance.
 	int getDragTimeTolerance() const;
-	/// get DragPixelTolerance
+	/// Gets DragPixelTolerance.
 	int getDragPixelTolerance() const;
-	/// update the psionic target array 
-	void updateExposedUnits();
-	/// get the vector of psionic targets
-	std::vector<BattleUnit*> *getExposedUnits();
-	/// get the number of units that can see this unit
+	/// Gets the number of units that can see this unit.
 	int getSpottingUnits(BattleUnit* unit) const;
-	/// add this unit to the vector of falling units
+	/// Adds this unit to the vector of falling units.
 	bool addFallingUnit(BattleUnit* unit);
-	/// get the vector of falling units
+	/// Gets the vector of falling units.
 	std::list<BattleUnit*> *getFallingUnits();
-	/// toggle the switch that says "there are units falling, start the fall state"
+	/// Toggles the switch that says "there are units falling, start the fall state".
 	void setUnitsFalling(bool fall);
-	/// check the status of the switch that says "there are units falling"
+	/// Checks the status of the switch that says "there are units falling".
 	bool getUnitsFalling() const;
-	/// check the strafe setting
+	/// Checks the strafe setting.
 	bool getStrafeSetting() const;
-	/// check the sneaky ai setting
+	/// Checks the sneaky AI setting.
 	bool getSneakySetting() const;
-	/// get the traceAI setting
+	/// Checks the traceAI setting.
 	bool getTraceSetting() const;
-	/// get a pointer to the BattlescapeState
+	/// Gets a pointer to the BattlescapeState.
 	BattlescapeState *getBattleState();
-	/// set the pointer to the BattlescapeState
+	/// Sets the pointer to the BattlescapeState.
 	void setBattleState(BattlescapeState *bs);
-	/// return a pointer to the highest ranked, living XCOM unit
+	/// Gets the highest ranked, living XCom unit.
 	BattleUnit* getHighestRankedXCom();
-	/// get the morale modifier for XCOM based on the highest ranked, living XCOM unit, or the modifier for the unit passed to this function.
+	/// Gets the morale modifier for XCom based on the highest ranked, living XCom unit, or the modifier for the unit passed to this function.
 	int getMoraleModifier(BattleUnit* unit = 0);
-	/// check whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit)
+	/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
-	/// attempt to place unit on or near entryPoint
+	/// Attempts to place a unit on or near entryPoint.
 	bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
-	/// resets the turn counter.
+	/// Resets the turn counter.
 	void resetTurnCounter();
-	/// resets visibility of all tiles on the map.
+	/// Resets the visibility of all tiles on the map.
 	void resetTiles();
 };
 

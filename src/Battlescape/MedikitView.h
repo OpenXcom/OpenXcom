@@ -23,6 +23,7 @@
 
 namespace OpenXcom
 {
+
 class BattleUnit;
 class Text;
 
@@ -32,17 +33,17 @@ class Text;
 class MedikitView : public InteractiveSurface
 {
 	Game * _game;
-	/// Handle clicking on the body view
+	/// Handles clicking on the body view.
 	void mouseClick (Action *action, State *state);
 	int _selectedPart;
 	BattleUnit *_unit;
 	Text *_partTxt, *_woundTxt;
 public:
-	/// Create the MedikitView
+	/// Creates the MedikitView.
 	MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt);
-	/// Draw the body view
+	/// Draws the body view.
 	void draw();
-	/// Get the selected body part
+	/// Gets the selected body part.
 	int getSelectedPart() const;
 };
 }

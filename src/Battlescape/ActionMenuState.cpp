@@ -27,7 +27,6 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/BattleItem.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Engine/Options.h"
 #include "ActionMenuItem.h"
 #include "PrimeGrenadeState.h"
 #include "MedikitState.h"
@@ -36,7 +35,6 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
-#include "../Ruleset/Armor.h"
 #include "TileEngine.h"
 
 namespace OpenXcom
@@ -135,7 +133,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 }
 
 /**
- * Deletes the ActionMenuState
+ * Deletes the ActionMenuState.
  */
 ActionMenuState::~ActionMenuState()
 {
@@ -156,7 +154,7 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
-	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH)
+	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH || ba == BA_HIT)
 		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
 	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
 	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
@@ -178,7 +176,7 @@ void ActionMenuState::handle(Action *action)
 }
 
 /**
- * Execute the action corresponding with this action menu item.
+ * Executes the action corresponding to this action menu item.
  * @param action Pointer to an action.
  */
 void ActionMenuState::btnActionMenuItemClick(Action *action)
@@ -275,7 +273,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
 		{
-			
+
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 				_action->actor->getPosition(),
 				_action->actor->getDirection(),

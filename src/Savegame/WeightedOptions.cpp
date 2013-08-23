@@ -83,12 +83,10 @@ void WeightedOptions::set(const std::string &id, unsigned weight)
  */
 void WeightedOptions::load(const YAML::Node &nd)
 {
-	for (YAML::Iterator val = nd.begin(); val != nd.end(); ++val)
+	for (YAML::const_iterator val = nd.begin(); val != nd.end(); ++val)
 	{
-		std::string id;
-		unsigned w;
-		val.first() >> id;
-		val.second() >> w;
+		std::string id = val->first.as<std::string>();
+		unsigned w = val->second.as<unsigned>();
 		set(id, w);
 	}
 }
@@ -97,14 +95,14 @@ void WeightedOptions::load(const YAML::Node &nd)
  * Send the WeightedOption contents to a YAML::Emitter.
  * @param out The YAML emitter.
  */
-void WeightedOptions::save(YAML::Emitter &out) const
+YAML::Node WeightedOptions::save() const
 {
-	out << YAML::BeginMap;
+	YAML::Node node;
 	for (std::map<std::string, unsigned>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
 	{
-		out << YAML::Key << ii->first << YAML::Value << ii->second;
+		node[ii->first] = ii->second;
 	}
-	out << YAML::EndMap;
+	return node;
 }
 
 }

@@ -87,7 +87,11 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 		}
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 	}
-
+	// trap the mouse inside the window
+	if (Options::getBool("captureMouse"))
+	{
+		SDL_WM_GrabInput( SDL_GRAB_ON );
+	}
 	// Set the window caption
 	SDL_WM_SetCaption(title.c_str(), 0);
 
@@ -121,6 +125,11 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// Create blank language
 	_lang = new Language();
+
+#ifdef __MORPHOS__	
+	waittime = 1000.0f / Options::getInt("FPS");	//20 - FPS
+	framestarttime = 0;
+#endif
 }
 
 /**
@@ -269,7 +278,17 @@ void Game::run()
 		// Save on CPU
 		switch (runningState)
 		{
-			case RUNNING: SDL_Delay(1); break; //Save CPU from going 100%
+			case RUNNING: 
+#ifdef __MORPHOS__
+				delaytime = waittime - (SDL_GetTicks() - framestarttime);
+				if(delaytime > 0)
+					SDL_Delay((Uint32)delaytime);
+				framestarttime = SDL_GetTicks();
+#else
+				SDL_Delay(1); 
+#endif
+				
+				break; //Save CPU from going 100%
 			case SLOWED: case PAUSED:
 				SDL_Delay(100); break; //More slowing down.
 		}

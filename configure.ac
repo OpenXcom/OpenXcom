@@ -102,7 +102,7 @@ AM_CONDITIONAL([WITH_OPENXCOM_MAN], [test "x$build_man" != "xno"])
 # Check dependencies
 # ==================
 PKG_CHECK_MODULES([SDL],[sdl >= 1.2.13 SDL_mixer >= 1.2.11 SDL_gfx >= 2.0.22 SDL_image >= 1.2])
-PKG_CHECK_MODULES([YAML],[yaml-cpp <= 0.3.0])
+PKG_CHECK_MODULES([YAML],[yaml-cpp >= 0.5.0])
 AX_CHECK_GL
 
 AC_CONFIG_FILES([

@@ -39,6 +39,7 @@
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
@@ -221,6 +222,10 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
  */
 DebriefingState::~DebriefingState()
 {
+	if (_game->isQuitting())
+	{
+		_game->getSavedGame()->setBattleGame(0);
+	}
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		delete *i;
@@ -234,6 +239,7 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action *)
 {
+	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
@@ -256,10 +262,8 @@ void DebriefingState::btnOkClick(Action *)
 	}
 }
 
-
-
 /**
- * Add to debriefing stats.
+ * Adds to the debriefing stats.
  * @param name The untranslated name of the stat.
  * @param quantity The quantity to add.
  * @param score The score to add.
@@ -278,21 +282,21 @@ void DebriefingState::addStat(const std::string &name, int quantity, int score)
 }
 
 /**
- * Clear the alien base from supply missions that use it.
+ * Clears the alien base from supply missions that use it.
  */
 class ClearAlienBase: public std::unary_function<AlienMission *, void>
 {
 public:
-	/// Remember the base.
+	/// Remembers the base.
 	ClearAlienBase(const AlienBase *base) : _base(base) { /* Empty by design. */ }
-	/// Clear the base if required.
+	/// Clears the base if required.
 	void operator()(AlienMission *am) const;
 private:
 	const AlienBase *_base;
 };
 
 /**
- * This function will remove the association between the alien mission and the alien base,
+ * Removes the association between the alien mission and the alien base,
  * if one existed.
  * @param am Pointer to the alien mission.
  */
@@ -648,7 +652,7 @@ void DebriefingState::prepareDebriefing()
 				if (aborted || playersSurvived == 0)
 				{
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
-				}				
+				}
 				else
 				{
 					addStat("STR_CIVILIANS_SAVED", 1, (*j)->getValue());
@@ -873,10 +877,14 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
-	// Now ending the battle.
-	save->setBattleGame(0);
 }
 
+/**
+ * Reequips a craft after a mission.
+ * @param base Base to reequip from.
+ * @param craft Craft to reequip.
+ * @param vehicleItemsCanBeDestroyed Whether we can destroy the vehicles on the craft.
+ */
 void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed)
 {
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
@@ -901,13 +909,13 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	ItemContainer craftVehicles;
 	for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 		craftVehicles.addItem((*i)->getRules()->getType());
-	// Now we know how many vehicles (separated by types) we have to readd
+	// Now we know how many vehicles (separated by types) we have to read
 	// Erase the current vehicles, because we have to reAdd them (cause we want to redistribute their ammo)
 	if (vehicleItemsCanBeDestroyed)
 		for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 			delete (*i);
 	craft->getVehicles()->clear();
-	// Ok, now readd those vehicles
+	// Ok, now read those vehicles
 	for (std::map<std::string, int>::iterator i = craftVehicles.getContents()->begin(); i != craftVehicles.getContents()->end(); ++i)
 	{
 		int qty = base->getItems()->getItem(i->first);
@@ -955,7 +963,13 @@ void DebriefingState::reequipCraft(Base *base, Craft *craft, bool vehicleItemsCa
 	}
 }
 
-/* converts battlescape inventory into geoscape itemcontainer */
+/**
+ * Recovers items from the battlescape.
+ *
+ * Converts the battlescape inventory into a geoscape itemcontainer.
+ * @param from Items recovered from the battlescape.
+ * @param base Base to add items to.
+ */
 void DebriefingState::recoverItems(std::vector<BattleItem*> *from, Base *base)
 {
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)

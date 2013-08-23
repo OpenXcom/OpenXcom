@@ -17,15 +17,12 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "OptionsState.h"
-#include <iostream>
-#include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/ToggleTextButton.h"
+#include "../Engine/Action.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
@@ -37,6 +34,7 @@
 #include "OptionsControlsState.h"
 #include "AdvancedOptionsState.h"
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Logger.h"
 
 namespace OpenXcom
 {
@@ -91,8 +89,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnSoundVolume4 = new TextButton(22, 26, 246, 82);
 	_btnSoundVolume5 = new TextButton(22, 30, 270, 82);
 
-	/* Get available fullscreen/hardware modes */
-	_res = SDL_ListModes(NULL, SDL_FULLSCREEN|SDL_HWPALETTE);
+	/* Get available fullscreen modes */
+	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
 	if (_res > (SDL_Rect**)0)
 	{
 		int i;
@@ -108,7 +106,15 @@ OptionsState::OptionsState(Game *game) : State(game)
 		}
 		_resAmount = i;
 	}
-
+	else
+	{
+		_resCurrent = -1;
+		_resAmount = 0;
+		_btnDisplayDown->setVisible(false);
+		_btnDisplayUp->setVisible(false);
+		Log(LOG_WARNING) << "Couldn't get display resolutions";
+	}
+		
 	if (Options::getBool("fullscreen"))
 		_displayMode = _btnDisplayFullscreen;
 	else
@@ -267,6 +273,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_selFilter = 0;
 	if (Options::getBool("useOpenGL"))
 	{
+		#ifndef __NO_SHADERS
 		std::string path = Options::getString("useOpenGLShader");
 		for (size_t i = 0; i < _filterPaths.size(); ++i)
 		{
@@ -275,6 +282,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 				_selFilter = i;
 			}
 		}
+		#endif
 	}
 	else if (Options::getBool("useScaleFilter"))
 	{

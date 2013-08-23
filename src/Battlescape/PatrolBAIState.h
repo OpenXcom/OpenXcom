@@ -20,13 +20,14 @@
 #define OPENXCOM_PATROLBAISTATE_H
 
 #include "BattleAIState.h"
+#include "BattlescapeGame.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
 
-class BattlescapeGame;
 class BattleUnit;
-class BattlescapeState;
+class SavedBattleGame;
 class Node;
 
 /**
@@ -46,7 +47,7 @@ public:
 	/// Loads the AI state from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the AI state to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Enters the state.
 	void enter();
 	/// Exits the state.

@@ -21,19 +21,18 @@
 
 #include "../Engine/InteractiveSurface.h"
 #include "Position.h"
-#include <map>
 
 namespace OpenXcom
 {
+
 class Game;
 class Camera;
 class SavedBattleGame;
-class Tile;
-class BattleUnit;
 class SurfaceSet;
+
 /**
-   MiniMapView is the class used to display the map in the MiniMapState
-*/
+ * MiniMapView is the class used to display the map in the MiniMapState.
+ */
 class MiniMapView : public InteractiveSurface
 {
 	Game * _game;
@@ -50,24 +49,24 @@ class MiniMapView : public InteractiveSurface
 	Uint32 mouseScrollingStartTime;
 	int totalMouseMoveX, totalMouseMoveY;
 	bool mouseMovedOverThreshold;
-	/// Handle pressing on the MiniMap
+	/// Handles pressing on the MiniMap.
 	void mousePress(Action *action, State *state);
-	/// Handle clicking on the MiniMap
+	/// Handles clicking on the MiniMap.
 	void mouseClick(Action *action, State *state);
-	/// Handle moving mouse over the MiniMap
+	/// Handles moving mouse over the MiniMap.
 	void mouseOver(Action *action, State *state);
-	/// Handle moving the mouse in to the MiniMap surface.
+	/// Handles moving the mouse into the MiniMap surface.
 	void mouseIn(Action *action, State *state);
 public:
-	/// Create the MiniMapView
+	/// Creates the MiniMapView.
 	MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame);
-	/// Draw the minimap
+	/// Draws the minimap.
 	void draw();
-	/// Change the displayed minimap level
+	/// Changes the displayed minimap level.
 	int up ();
-	/// Change the displayed minimap level
+	/// Changes the displayed minimap level.
 	int down ();
-	/// update minimap animation
+	/// Updates the minimap animation.
 	void animate();
 };
 

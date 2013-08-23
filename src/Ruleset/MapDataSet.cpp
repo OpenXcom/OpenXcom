@@ -24,7 +24,6 @@
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Resource/ResourcePack.h"
 
 namespace OpenXcom
 {
@@ -33,15 +32,15 @@ MapData *MapDataSet::_blankTile = 0;
 MapData *MapDataSet::_scorchedTile = 0;
 
 /**
-* MapDataSet construction.
-*/
+ * MapDataSet construction.
+ */
 MapDataSet::MapDataSet(const std::string &name) : _name(name), _objects(), _surfaceSet(0), _loaded(false)
 {
 }
 
 /**
-* MapDataSet DESTRUCTION.
-*/
+ * MapDataSet destruction.
+ */
 MapDataSet::~MapDataSet()
 {
 	unloadData();
@@ -53,58 +52,50 @@ MapDataSet::~MapDataSet()
  */
 void MapDataSet::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	for (YAML::const_iterator i = node.begin(); i != node.end(); ++i)
 	{
-		*i >> _name;
+		_name = i->as<std::string>(_name);
 	}
 }
 
 /**
- * Saves the map data set to a YAML file.
- * @param out YAML emitter.
+ * Gets the MapDataSet name (string).
+ * @return The MapDataSet name.
  */
-void MapDataSet::save(YAML::Emitter &out) const
-{
-	out << _name;
-}
-
-/**
-* Gets the MapDataSet name (string).
-* @return name.
-*/
 std::string MapDataSet::getName() const
 {
 	return _name;
 }
 
 /**
-* Gets the MapDataSet size.
-* @return size in number of records.
-*/
+ * Gets the MapDataSet size.
+ * @return The size in number of records.
+ */
 int MapDataSet::getSize() const
 {
 	return _objects.size();
 }
 
-
 /**
-* @return pointer to the objects
-*/
+ * Gets the objects in this dataset.
+ * @return Pointer to the objects.
+ */
 std::vector<MapData*> *MapDataSet::getObjects()
 {
 	return &_objects;
 }
 
 /**
-* @return pointer to the surfaceset
-*/
+ * Gets the surfaces in this dataset.
+ * @return Pointer to the surfaceset.
+ */
 SurfaceSet *MapDataSet::getSurfaceset() const
 {
 	return _surfaceSet;
 }
 
 /**
- * Loads terraindata in X-Com format (MCD & PCK files)
+ * Loads terrain data in XCom format (MCD & PCK files).
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
 void MapDataSet::loadData()
@@ -200,6 +191,11 @@ void MapDataSet::loadData()
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 		to->setExplosive((int)mcd.HE_Strength);
+
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	mcd.ScanG = SDL_Swap16( mcd.ScanG );
+	#endif
+
 		to->setMiniMapIndex (mcd.ScanG);
 
 		for (int layer = 0; layer < 12; layer++)
@@ -249,6 +245,9 @@ void MapDataSet::loadData()
 
 }
 
+/**
+ * Unloads the terrain data.
+ */
 void MapDataSet::unloadData()
 {
 	if (_loaded)
@@ -262,10 +261,10 @@ void MapDataSet::unloadData()
 }
 
 /**
-* loadLOFTEMPS loads the LOFTEMPS.DAT into the ruleset voxeldata
-* @param filename
-* @param voxelData
-*/
+ * Loads the LOFTEMPS.DAT into the ruleset voxeldata.
+ * @param filename Filename of the DAT file.
+ * @param voxelData The ruleset.
+ */
 void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData)
 {
 	// Load file
@@ -279,7 +278,10 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-		value = SDL_SwapLE16(value);
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+	value = SDL_SwapLE16( value );
+	#endif
+
 		voxelData->push_back(value);
 	}
 
@@ -291,11 +293,19 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 	mapFile.close();
 }
 
+/**
+ * Gets a blank floor tile.
+ * @return Pointer to a blank tile.
+ */
 MapData *MapDataSet::getBlankFloorTile()
 {
 	return MapDataSet::_blankTile;
 }
 
+/**
+ * Gets a scorched earth tile.
+ * @return Pointer to a scorched earth tile.
+ */
 MapData *MapDataSet::getScorchedEarthTile()
 {
 	return MapDataSet::_scorchedTile;

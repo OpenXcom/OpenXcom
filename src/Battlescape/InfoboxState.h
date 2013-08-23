@@ -28,9 +28,10 @@ namespace OpenXcom
 class Game;
 class Text;
 class Timer;
+class Window;
 
 /**
- * Window that briefly shows an info like : Yasuaki Okamoto Has Panicked. It disappears after 2 seconds.
+ * Window that briefly shows some info like : Yasuaki Okamoto Has Panicked. It disappears after 2 seconds.
  */
 class InfoboxState : public State
 {

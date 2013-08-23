@@ -52,7 +52,7 @@ public:
 	BuildFacilitiesState(Game *game, Base *base, State *state, bool cancellable);
 	/// Cleans up the Build Facilities state.
 	~BuildFacilitiesState();
-	/// Populate the build option list
+	/// Populates the build option list.
 	virtual void PopulateBuildList();
 	/// Updates the base stats.
 	void init();

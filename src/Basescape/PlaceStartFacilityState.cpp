@@ -17,13 +17,9 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "PlaceStartFacilityState.h"
-#include <sstream>
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "BaseView.h"
 #include "../Savegame/Base.h"
@@ -31,7 +27,6 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
-#include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 
 namespace OpenXcom
@@ -77,7 +72,7 @@ void PlaceStartFacilityState::viewClick(Action *)
 		fac->setY(_view->getGridY());
 		_base->getFacilities()->push_back(fac);
 		_game->popState();
-		_select->FacilityBuilt();
+		_select->facilityBuilt();
 	}
 }
 

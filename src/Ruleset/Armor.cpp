@@ -26,6 +26,9 @@ namespace OpenXcom
  * type of armor.
  * @param type String defining the type.
  * @param spriteSheet Spritesheet used to render the unit.
+ * @param drawingRoutine The drawing routine for this armor.
+ * @param movementType The movement type for this armor (walk, fly or slide).
+ * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
 Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
 {
@@ -47,121 +50,36 @@ Armor::~Armor()
  */
 void Armor::load(const YAML::Node &node)
 {
-	int a = 0;
-
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
+	_spriteInv = node["spriteInv"].as<std::string>(_spriteInv);
+	_corpseItem = node["corpseItem"].as<std::string>(_corpseItem);
+	_storeItem = node["storeItem"].as<std::string>(_storeItem);
+	_frontArmor = node["frontArmor"].as<int>(_frontArmor);
+	_sideArmor = node["sideArmor"].as<int>(_sideArmor);
+	_rearArmor = node["rearArmor"].as<int>(_rearArmor);
+	_underArmor = node["underArmor"].as<int>(_underArmor);
+	_drawingRoutine = node["drawingRoutine"].as<int>(_drawingRoutine);
+	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
+	_size = node["size"].as<int>(_size);
+	if (const YAML::Node &dmg = node["damageModifier"])
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
+		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
 		{
-			i.second() >> _type;
-		}
-		else if (key == "spriteSheet")
-		{
-			i.second() >> _spriteSheet;
-		}
-		else if (key == "spriteInv")
-		{
-			i.second() >> _spriteInv;
-		}
-		else if (key == "corpseItem")
-		{
-			i.second() >> _corpseItem;
-		}
-		else if (key == "storeItem")
-		{
-			i.second() >> _storeItem;
-		}
-		else if (key == "frontArmor")
-		{
-			i.second() >> _frontArmor;
-		}
-		else if (key == "sideArmor")
-		{
-			i.second() >> _sideArmor;
-		}
-		else if (key == "rearArmor")
-		{
-			i.second() >> _rearArmor;
-		}
-		else if (key == "underArmor")
-		{
-			i.second() >> _underArmor;
-		}
-		else if (key == "drawingRoutine")
-		{
-			i.second() >> _drawingRoutine;
-		}
-		else if (key == "movementType")
-		{
-			i.second() >> a;
-			_movementType = (MovementType)a;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "damageModifier")
-		{
-			int dmg = 0;
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				*j >> _damageModifier[dmg];
-				++dmg;
-			}
-		}
-		else if (key == "loftemps")
-		{
-			int a;
-			i.second() >> a;
-			_loftempsSet.push_back(a);
-		}
-		else if (key == "loftempsSet")
-		{
-			i.second() >> _loftempsSet;
+			_damageModifier[i] = dmg[i].as<float>();
 		}
 	}
-}
-
-/**
- * Saves the armor to a YAML file.
- * @param out YAML emitter.
- */
-void Armor::save(YAML::Emitter &out) const
-{
-
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "spriteSheet" << YAML::Value << _spriteSheet;
-	out << YAML::Key << "spriteInv" << YAML::Value << _spriteInv;
-	out << YAML::Key << "corpseItem" << YAML::Value << _corpseItem;
-	out << YAML::Key << "storeItem" << YAML::Value << _storeItem;
-	out << YAML::Key << "frontArmor" << YAML::Value << _frontArmor;
-	out << YAML::Key << "sideArmor" << YAML::Value << _sideArmor;
-	out << YAML::Key << "rearArmor" << YAML::Value << _rearArmor;
-	out << YAML::Key << "underArmor" << YAML::Value << _underArmor;
-	out << YAML::Key << "drawingRoutine" << YAML::Value << _drawingRoutine;
-	out << YAML::Key << "movementType" << YAML::Value << _movementType;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "damageModifier" << YAML::Value << YAML::BeginSeq;
-	for (int i=0; i < 8; i++)
-		out << _damageModifier[i];
-	if (_loftempsSet.size() == 1)
+	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
+	if (const YAML::Node &loftemps = node["loftemps"])
 	{
-		out << YAML::Key << "loftemps" << YAML::Value << _loftempsSet.front();
+		_loftempsSet.push_back(loftemps.as<int>());
 	}
-	else
-	{
-		out << YAML::Key << "loftempsSet" << YAML::Value << _loftempsSet;
-	}
-	out << YAML::EndSeq << YAML::EndMap;
 }
 
 /**
  * Returns the language string that names
  * this armor. Each armor has a unique name. Coveralls, Power Suit,...
- * @return Armor name.
+ * @return The armor name.
  */
 std::string Armor::getType() const
 {
@@ -170,7 +88,7 @@ std::string Armor::getType() const
 
 /**
  * Gets the unit's sprite sheet.
- * @return Sprite sheet name.
+ * @return The sprite sheet name.
  */
 std::string Armor::getSpriteSheet() const
 {
@@ -179,7 +97,7 @@ std::string Armor::getSpriteSheet() const
 
 /**
  * Gets the unit's inventory sprite.
- * @return Inventory sprite name.
+ * @return The inventory sprite name.
  */
 std::string Armor::getSpriteInventory() const
 {
@@ -187,8 +105,8 @@ std::string Armor::getSpriteInventory() const
 }
 
 /**
- * Get the front armor level.
- * @return Front armor level.
+ * Gets the front armor level.
+ * @return The front armor level.
  */
 int Armor::getFrontArmor() const
 {
@@ -196,8 +114,8 @@ int Armor::getFrontArmor() const
 }
 
 /**
- * Get the side armor level.
- * @return Side armor level. 
+ * Gets the side armor level.
+ * @return The side armor level.
  */
 int Armor::getSideArmor() const
 {
@@ -205,8 +123,8 @@ int Armor::getSideArmor() const
 }
 
 /**
- * get the rear armor level.
- * @return Rear armor level. 
+ * Gets the rear armor level.
+ * @return The rear armor level.
  */
 int Armor::getRearArmor() const
 {
@@ -214,8 +132,8 @@ int Armor::getRearArmor() const
 }
 
 /**
- * get the under armor level.
- * @return Under armor level. 
+ * Gets the under armor level.
+ * @return The under armor level.
  */
 int Armor::getUnderArmor() const
 {
@@ -224,8 +142,8 @@ int Armor::getUnderArmor() const
 
 
 /**
- * Get the corpse item.
- * @return Name of the corpse item.
+ * Gets the corpse item.
+ * @return The name of the corpse item.
  */
 std::string Armor::getCorpseItem() const
 {
@@ -233,8 +151,8 @@ std::string Armor::getCorpseItem() const
 }
 
 /**
- * Get the storage item needed to equip this.
- * @return Name of the store item.
+ * Gets the storage item needed to equip this.
+ * @return The name of the store item.
  */
 std::string Armor::getStoreItem() const
 {
@@ -242,7 +160,7 @@ std::string Armor::getStoreItem() const
 }
 
 /**
- * get the drawing routine ID.
+ * Gets the drawing routine ID.
  * @return The drawing routine ID.
  */
 int Armor::getDrawingRoutine() const
@@ -251,8 +169,9 @@ int Armor::getDrawingRoutine() const
 }
 
 /**
- * Get whether the armor can fly.
- * @return Movementtype
+ * Gets the movement type of this armor.
+ * Useful for determining whether the armor can fly.
+ * @return The movement type.
  */
 MovementType Armor::getMovementType() const
 {
@@ -260,8 +179,8 @@ MovementType Armor::getMovementType() const
 }
 
 /**
- * Get the size of the unit. Normally this is 1(small) or 2(big).
- * @return size
+ * Gets the size of the unit. Normally this is 1 (small) or 2 (big).
+ * @return The unit's size.
  */
 int Armor::getSize() const
 {
@@ -269,17 +188,17 @@ int Armor::getSize() const
 }
 
 /**
- * Gets damage modifier for a certain damage type.
- * @param dt DamageType
- * @return damage modifier 0->1
+ * Gets the damage modifier for a certain damage type.
+ * @param dt The damageType.
+ * @return The damage modifier 0->1.
  */
 float Armor::getDamageModifier(ItemDamageType dt)
 {
 	return _damageModifier[(int)dt];
 }
 
-/** Gets loftempSet
- * @return loftempsSet
+/** Gets the loftempSet.
+ * @return The loftempsSet.
  */
 std::vector<int> Armor::getLoftempsSet() const
 {

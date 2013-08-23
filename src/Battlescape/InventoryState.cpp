@@ -30,6 +30,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/EquipmentLayoutItem.h"
@@ -471,7 +472,9 @@ void InventoryState::invClick(Action *)
 void InventoryState::handle(Action *action)
 {
 	State::handle(action);
-	
+
+
+#ifndef __MORPHOS__	
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -483,6 +486,7 @@ void InventoryState::handle(Action *action)
 			btnPrevClick(action);
 		}
 	}
+#endif
 }
 
 }

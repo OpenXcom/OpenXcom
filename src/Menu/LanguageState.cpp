@@ -19,7 +19,6 @@
 #include "LanguageState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
-#include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Window.h"
 #include "../Interface/TextList.h"

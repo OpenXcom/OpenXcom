@@ -103,37 +103,29 @@ private:
 void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 {
 	MovingTarget::load(node);
-	node["id"] >> _id;
-	if (const YAML::Node *crashId = node.FindValue("crashId"))
-	{
-		*crashId >> _crashId;
-	}
-	else if (const YAML::Node *landId = node.FindValue("landId"))
-	{
-		*landId >> _landId;
-	}
-	node["damage"] >> _damage;
-	node["altitude"] >> _altitude;
-	node["direction"] >> _direction;
-	node["detected"] >> _detected;
-	node["hyperDetected"] >> _hyperDetected;
-	node["secondsRemaining"] >> _secondsRemaining;
-	node["inBattlescape"] >> _inBattlescape;
+	_id = _crashId = _landId = node["id"].as<int>(_id);
+	_crashId = node["crashId"].as<int>(_crashId);
+	_landId = node["landId"].as<int>(_landId);
+	_damage = node["damage"].as<int>(_damage);
+	_altitude = node["altitude"].as<std::string>(_altitude);
+	_direction = node["direction"].as<std::string>(_direction);
+	_detected = node["detected"].as<bool>(_detected);
+	_hyperDetected = node["hyperDetected"].as<bool>(_hyperDetected);
+	_secondsRemaining = node["secondsRemaining"].as<int>(_secondsRemaining);
+	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 	double lon = _lon;
 	double lat = _lat;
-	if (const YAML::Node *dest = node.FindValue("dest"))
+	if (const YAML::Node &dest = node["dest"])
 	{
-		(*dest)["lon"] >> lon;
-		(*dest)["lat"] >> lat;
+		lon = dest["lon"].as<double>();
+		lat = dest["lat"].as<double>();
 	}
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);
 	_dest->setLatitude(lat);
-	if (const YAML::Node *status = node.FindValue("status"))
+	if (const YAML::Node &status = node["status"])
 	{
-		int a;
-		(*status) >> a;
-		_status = (UfoStatus)a;
+		_status = (UfoStatus)status.as<int>();
 	}
 	else
 	{
@@ -154,8 +146,7 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 			_status = FLYING;
 		}
 	}
-	int missionID;
-	node["mission"] >> missionID;
+	int missionID = node["mission"].as<int>();
 	std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
 	if (found == game.getAlienMissions().end())
 	{
@@ -164,55 +155,58 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	}
 	_mission = *found;
 
-	std::string tid;
-	node["trajectory"] >> tid;
+	std::string tid = node["trajectory"].as<std::string>();
 	_trajectory = ruleset.getUfoTrajectory(tid);
-	node["trajectoryPoint"] >> _trajectoryPoint;
+	_trajectoryPoint = node["trajectoryPoint"].as<unsigned>(_trajectoryPoint);
 	if (_inBattlescape)
 		setSpeed(0);
 }
 
 /**
  * Saves the UFO to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Ufo::save(YAML::Emitter &out) const
+YAML::Node Ufo::save() const
 {
-	MovingTarget::save(out);
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "id" << YAML::Value << _id;
+	YAML::Node node = MovingTarget::save();
+	node["type"] = _rules->getType();
+	node["id"] = _id;
 	if (_crashId)
 	{
-		out << YAML::Key << "crashId" << YAML::Value << _crashId;
+		node["crashId"] = _crashId;
 	}
 	else if (_landId)
 	{
-		out << YAML::Key << "landId" << YAML::Value << _landId;
+		node["landId"] = _landId;
 	}
-	out << YAML::Key << "damage" << YAML::Value << _damage;
-	out << YAML::Key << "altitude" << YAML::Value << _altitude;
-	out << YAML::Key << "direction" << YAML::Value << _direction;
-	out << YAML::Key << "status" << YAML::Value << _status;
-	out << YAML::Key << "detected" << YAML::Value << _detected;
-	out << YAML::Key << "hyperDetected" << YAML::Value << _hyperDetected;
-	out << YAML::Key << "secondsRemaining" << YAML::Value << _secondsRemaining;
-	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	out << YAML::Key << "mission" << YAML::Value << _mission->getId();
-	out << YAML::Key << "trajectory" << YAML::Value << _trajectory->getID();
-	out << YAML::Key << "trajectoryPoint" << YAML::Value << _trajectoryPoint;
-	out << YAML::EndMap;
+	node["damage"] = _damage;
+	node["altitude"] = _altitude;
+	node["direction"] = _direction;
+	node["status"] = (int)_status;
+	if (_detected)
+		node["detected"] = _detected;
+	if (_hyperDetected)
+		node["hyperDetected"] = _hyperDetected;
+	if (_secondsRemaining)
+		node["secondsRemaining"] = _secondsRemaining;
+	if (_inBattlescape)
+		node["inBattlescape"] = _inBattlescape;
+	node["mission"] = _mission->getId();
+	node["trajectory"] = _trajectory->getID();
+	node["trajectoryPoint"] = _trajectoryPoint;
+	return node;
 }
 
 /**
  * Saves the UFO's unique identifiers to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Ufo::saveId(YAML::Emitter &out) const
+YAML::Node Ufo::saveId() const
 {
-	MovingTarget::saveId(out);
-	out << YAML::Key << "type" << YAML::Value << "STR_UFO";
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::EndMap;
+	YAML::Node node = MovingTarget::saveId();
+	node["type"] = "STR_UFO";
+	node["id"] = _id;
+	return node;
 }
 
 /**

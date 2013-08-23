@@ -20,20 +20,33 @@
 #include <cmath>
 #include "RuleItem.h"
 
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::RuleSlot>
+	{
+		static Node encode(const OpenXcom::RuleSlot& rhs)
+		{
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::RuleSlot& rhs)
+		{
+			if(!node.IsSequence() || node.size() != 2)
+				return false;
+
+			rhs.x = node[0].as<int>();
+			rhs.y = node[1].as<int>();
+			return true;
+		}
+	};
+}
+
 namespace OpenXcom
 {
-
-void operator >> (const YAML::Node& node, RuleSlot& s)
-{
-	node[0] >> s.x;
-	node[1] >> s.y;
-}
-YAML::Emitter& operator << (YAML::Emitter& out, const RuleSlot& s)
-{
-	out << YAML::Flow;
-	out << YAML::BeginSeq << s.x << s.y << YAML::EndSeq;
-	return out;
-}
 
 /**
  * Creates a blank ruleset for a certain
@@ -54,59 +67,18 @@ RuleInventory::~RuleInventory()
  */
 void RuleInventory::load(const YAML::Node &node)
 {
-	int a = 0;
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "id")
-		{
-			i.second() >> _id;
-		}
-		else if (key == "x")
-		{
-			i.second() >> _x;
-		}
-		else if (key == "y")
-		{
-			i.second() >> _y;
-		}
-		else if (key == "type")
-		{
-			i.second() >> a;
-			_type = (InventoryType)a;
-		}
-		else if (key == "slots")
-		{
-			i.second() >> _slots;
-		}
-		else if (key == "costs")
-		{
-			i.second() >> _costs;
-		}
-	}
+	_id = node["id"].as<std::string>(_id);
+	_x = node["x"].as<int>(_x);
+	_y = node["y"].as<int>(_y);
+	_type = (InventoryType)node["type"].as<int>(_type);
+	_slots = node["slots"].as< std::vector<RuleSlot> >(_slots);
+	_costs = node["costs"].as< std::map<std::string, int> >(_costs);
 }
 
 /**
- * Saves the inventory to a YAML file.
- * @param out YAML emitter.
- */
-void RuleInventory::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "x" << YAML::Value << _x;
-	out << YAML::Key << "y" << YAML::Value << _y;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "slots" << YAML::Value << _slots;
-	out << YAML::Key << "costs" << YAML::Value << _costs;
-	out << YAML::EndMap;
-}
-
-/**
- * Returns the language string that names
+ * Gets the language string that names
  * this inventory section. Each section has a unique name.
- * @return Section name.
+ * @return The section name.
  */
 std::string RuleInventory::getId() const
 {
@@ -114,8 +86,8 @@ std::string RuleInventory::getId() const
 }
 
 /**
- * Returns the X position of the inventory section on the screen.
- * @return Position in pixels.
+ * Gets the X position of the inventory section on the screen.
+ * @return The X position in pixels.
  */
 int RuleInventory::getX() const
 {
@@ -123,8 +95,8 @@ int RuleInventory::getX() const
 }
 
 /**
- * Returns the Y position of the inventory section on the screen.
- * @return Position in pixels.
+ * Gets the Y position of the inventory section on the screen.
+ * @return The Y position in pixels.
  */
 int RuleInventory::getY() const
 {
@@ -132,7 +104,7 @@ int RuleInventory::getY() const
 }
 
 /**
- * Returns the type of the inventory section.
+ * Gets the type of the inventory section.
  * Slot-based contain a limited number of slots.
  * Hands only contain one slot but can hold any item.
  * Ground can hold infinite items but don't attach to soldiers.
@@ -145,7 +117,7 @@ InventoryType RuleInventory::getType() const
 
 /**
  * Gets all the slots in the inventory section.
- * @return List of slots.
+ * @return The list of slots.
  */
 std::vector<struct RuleSlot> *RuleInventory::getSlots()
 {
@@ -156,7 +128,7 @@ std::vector<struct RuleSlot> *RuleInventory::getSlots()
  * Gets the slot located in the specified mouse position.
  * @param x Mouse X position. Returns the slot's X position.
  * @param y Mouse Y position. Returns the slot's Y position.
- * @return True if there's a slot there, False otherwise.
+ * @return True if there's a slot there.
  */
 bool RuleInventory::checkSlotInPosition(int *x, int *y) const
 {
@@ -208,7 +180,7 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
  * @param item Pointer to item ruleset.
  * @param x Slot X position.
  * @param y Slot Y position.
- * @return True if there's a slot there, False otherwise.
+ * @return True if there's a slot there.
  */
 bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 {
@@ -250,7 +222,7 @@ bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 }
 
 /**
- * Returns the time unit cost to place an item in another section.
+ * Gets the time unit cost to place an item in another section.
  * @param slot The new section id.
  * @return The time unit cost.
  */

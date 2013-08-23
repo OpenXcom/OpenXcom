@@ -67,6 +67,11 @@
 #include <sys/param.h>
 #include <pwd.h>
 #endif
+
+#ifdef __MORPHOS__
+#undef Insert
+#endif
+
 #include <yaml-cpp/yaml.h>
 
 #include "./aresame.h"

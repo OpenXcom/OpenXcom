@@ -100,25 +100,25 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 }
 
 /**
-   Initialize state(fill list of possible productions)
-*/
+ * Initializes state (fills list of possible productions).
+ */
 void NewManufactureListState::init ()
 {
 	fillProductionList();
 }
 
 /**
- * Return to previous screen
- * @param action a pointer to an Action
-*/
+ * Returns to the previous screen.
+ * @param action A pointer to an Action.
+ */
 void NewManufactureListState::btnOkClick(Action *)
 {
 	_game->popState();
 }
 
 /**
- * Open the Production settings screen
- * @param action a pointer to an Action
+ * Opens the Production settings screen.
+ * @param action A pointer to an Action.
 */
 void NewManufactureListState::lstProdClick (Action *)
 {
@@ -139,7 +139,7 @@ void NewManufactureListState::lstProdClick (Action *)
 
 
 /**
- * Fill the list of possible productions
+ * Fills the list of possible productions.
  */
 void NewManufactureListState::fillProductionList()
 {

@@ -2402,7 +2402,7 @@ Możesz w każdej chwili wysłać żołnierzy na szkolenie psioniczne (lub też 
 STR_NOT_ENOUGH_SPACE
 Niewystarczająca ilość miejsca!
 STR_WEAPONSELFDESTRUCTION
-Odzyskiwanie wyposażenia jak w XCom 2012
+Samozniszczenie broni obcych
 STR_WEAPONSELFDESTRUCTION_DESC
 Broń używana przez kosmitów ulegnie samozniszczeniu, jeśli jej właściciel zostanie zabity.
 STR_RESEARCHEDITEMSWILLSPENT

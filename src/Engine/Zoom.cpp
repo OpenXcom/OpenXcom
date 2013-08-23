@@ -48,7 +48,9 @@
 #endif
 
 #ifdef __GNUC__
+#ifndef __MORPHOS__
 #include <cpuid.h>
+#endif
 #endif
 
 #ifdef __SSE2__
@@ -150,6 +152,7 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 		Log(LOG_INFO) << "Using 32-bit 2X zoom routine.";
 	}
 
+
 	for (sy = 0; sy < src->h; ++sy, pixelDstRow += dst->pitch*2)
 	{
 		Uint32 *pixelDst = (Uint32*)pixelDstRow;
@@ -157,13 +160,33 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
 		{
 			dataSrc = *((Uint32*) pixelSrc);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+			
+			
+			#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			SDL_Swap32(dataSrc);
-#endif
+			dataSrc = SDL_Swap32(dataSrc);
+			
+			dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+				((dataSrc & 0xFF00) << 16)  );
 
+			*pixelDst = dataDst;
+			*pixelDst2 = dataDst;
+			pixelDst++; // forward 4 bytes!
+			pixelDst2++;
+
+			dataSrc >>= 16; 
+
+			dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+				((dataSrc & 0xFF00) << 16)  );
+
+			*pixelDst = dataDst;
+			*pixelDst2 = dataDst;
+			pixelDst++; // forward 4 bytes!
+			pixelDst2++;	
+			#else
+			
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-				((dataSrc & 0xFF00) << 16);
+				((dataSrc & 0xFF00) << 16) ;
 
 			*pixelDst = dataDst;
 			*pixelDst2 = dataDst;
@@ -173,13 +196,16 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 			dataSrc >>= 16; 
 
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-				((dataSrc & 0xFF00) << 16);
+				((dataSrc & 0xFF00) << 16) ;
 
 			*pixelDst = dataDst;
 			*pixelDst2 = dataDst;
 			pixelDst++; // forward 4 bytes!
-			pixelDst2++;
+			pixelDst2++;	
+			
+			#endif
 		}
+		
 	}
 	
 	return 0;
@@ -279,12 +305,19 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 			dataSrc = *((Uint32*) pixelSrc);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			SDL_Swap32(dataSrc);
-#endif
+			dataSrc = SDL_Swap32(dataSrc);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) ); 
+#else
 			for (int i = 0; i < 4; ++i)
 			{
 				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24); 
+
+#endif
 
 				*pixelDst = dataDst;
 				*pixelDst2 = dataDst;
@@ -361,12 +394,20 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 			dataSrc = *((Uint32*) pixelSrc);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			SDL_Swap32(dataSrc);
-#endif
+			dataSrc = SDL_Swap32(dataSrc);
+			
+			for (int i = 0; i < 2; ++i)
+			{
+				dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+					((dataSrc & 0xFF00) << 16) );
+			
+#else
 			for (int i = 0; i < 2; ++i)
 			{
 				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
 					((dataSrc & 0xFF00) << 16);
+
+#endif
 
 				int j = 0;
 				do
@@ -444,13 +485,19 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 			dataSrc = *((Uint32*) pixelSrc);
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			SDL_Swap32(dataSrc);
-#endif
+			dataSrc = SDL_Swap32(dataSrc);
+			
+			for (int i = 0; i < 4; ++i)
+			{
+				dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) ); 
+			
+#else
 			for (int i = 0; i < 4; ++i)
 			{
 				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24); 
-
+#endif
 				int j = 0;
 				do
 				{

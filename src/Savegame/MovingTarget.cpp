@@ -56,28 +56,28 @@ MovingTarget::~MovingTarget()
 void MovingTarget::load(const YAML::Node &node)
 {
 	Target::load(node);
-	node["speedLon"] >> _speedLon;
-	node["speedLat"] >> _speedLat;
-	node["speedRadian"] >> _speedRadian;
-	node["speed"] >> _speed;
+	_speedLon = node["speedLon"].as<double>(_speedLon);
+	_speedLat = node["speedLat"].as<double>(_speedLat);
+	_speedRadian = node["speedRadian"].as<double>(_speedRadian);
+	_speed = node["speed"].as<int>(_speed);
 }
 
 /**
  * Saves the moving target to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void MovingTarget::save(YAML::Emitter &out) const
+YAML::Node MovingTarget::save() const
 {
-	Target::save(out);
+	YAML::Node node = Target::save();
 	if (_dest != 0)
 	{
-		out << YAML::Key << "dest" << YAML::Value;
-		_dest->saveId(out);
+		node["dest"] = _dest->saveId();
 	}
-	out << YAML::Key << "speedLon" << YAML::Value << _speedLon;
-	out << YAML::Key << "speedLat" << YAML::Value << _speedLat;
-	out << YAML::Key << "speedRadian" << YAML::Value << _speedRadian;
-	out << YAML::Key << "speed" << YAML::Value << _speed;
+	node["speedLon"] = _speedLon;
+	node["speedLat"] = _speedLat;
+	node["speedRadian"] = _speedRadian;
+	node["speed"] = _speed;
+	return node;
 }
 
 /**

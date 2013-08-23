@@ -28,9 +28,6 @@
 #include "../Interface/TextButton.h"
 #include "../Engine/Action.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
-#include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "BattlescapeState.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/AlienDeployment.h"
@@ -135,7 +132,7 @@ AbortMissionState::~AbortMissionState()
 }
 
 /**
- * Confirms to abort the mission.
+ * Confirms mission abort.
  * @param action Pointer to an action.
  */
 void AbortMissionState::btnOkClick(Action *)

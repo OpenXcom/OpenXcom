@@ -19,9 +19,6 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
-#include "../Savegame/Node.h"
-#include "../Savegame/SavedBattleGame.h"
-
 namespace OpenXcom
 {
 
@@ -30,10 +27,10 @@ class Craft;
 class Ufo;
 class RuleTerrain;
 class ResourcePack;
-class RuleSet;
-class Soldier;
+class BattleItem;
+class MapBlock;
 class Vehicle;
-class Armor;
+class Tile;
 class RuleItem;
 class Unit;
 class AlienRace;
@@ -42,6 +39,7 @@ class Game;
 class Base;
 class TerrorSite;
 class AlienBase;
+class BattleUnit;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -65,38 +63,42 @@ private:
 	std::string _alienRace;
 	int _alienItemLevel;
 
-	/// Generate a new battlescape map.
+	/// Generates a new battlescape map.
 	void generateMap();
-	/// links tiles with terrainobjects, for easier/faster lookup
-	void linkTilesWithMapDatas();
-	/// Add a vehicle to the game
+	/// Adds a vehicle to the game.
 	void addXCOMVehicle(Vehicle *v);
-	/// Add a soldier to the game
+	/// Adds a soldier to the game.
 	BattleUnit *addXCOMUnit(BattleUnit *unit);
-	/// Add an alien to the game
+	/// Adds an alien to the game.
 	BattleUnit *addAlien(Unit *rules, int alienRank, bool outside);
+	/// Adds a civlian to the game.
 	BattleUnit *addCivilian(Unit *rules);
-	/// Place an item to a soldier based on equipment layout
+	/// Places an item on a soldier based on equipment layout.
 	BattleItem* placeItemByLayout(BattleItem *item);
-	/// Add an item to the game
+	/// Adds an item to the game.
 	BattleItem* addItem(BattleItem *item, bool secondPass);
-	// Add an item to a unit
+	/// Adds an item to a unit.
 	BattleItem* addItem(RuleItem *item, BattleUnit *unit);
-	/// loads an XCOM MAP file
+	/// Loads an XCom MAP file.
 	int loadMAP(MapBlock *mapblock, int xoff, int yoff, RuleTerrain *terrain, int objectIDOffset, bool discovered = false);
-	/// loads an XCOM RMP file
+	/// Loads an XCom RMP file.
 	void loadRMP(MapBlock *mapblock, int xoff, int yoff, int segment);
+	/// Fills power sources with an elerium-115 object.
 	void fuelPowerSources();
+	/// Possibly explodes ufo powersources.
 	void explodePowerSources();
+	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
+	/// Spawns civilians on a terror mission.
 	void deployCivilians(int max);
+	/// Gets battlescape terrain.
 	RuleTerrain *getTerrain(int tex, double lat);
 public:
 	/// Creates a new BattlescapeGenerator class
 	BattlescapeGenerator(Game *game);
 	/// Cleans up the BattlescapeGenerator.
 	~BattlescapeGenerator();
-	/// Sets the xcom craft.
+	/// Sets the XCom craft.
 	void setCraft(Craft *craft);
 	/// Sets the ufo.
 	void setUfo(Ufo* ufo);
@@ -104,11 +106,11 @@ public:
 	void setWorldTexture(int texture);
 	/// Sets the polygon shade.
 	void setWorldShade(int shade);
-	/// Set the alien race.
+	/// Sets the alien race.
 	void setAlienRace(const std::string &alienRace);
-	/// Set the alien item level.
+	/// Sets the alien item level.
 	void setAlienItemlevel(int alienItemLevel);
-	/// Sets the xcom base.
+	/// Sets the XCom base.
 	void setBase(Base *base);
 	/// Sets the terror site.
 	void setTerrorSite(TerrorSite* site);
@@ -116,9 +118,9 @@ public:
 	void setAlienBase(AlienBase* base);
 	/// Runs the generator.
 	void run();
-	/// Set up the next stage (for cydonia/tftd terror missions)
+	/// Sets up the next stage (for cydonia/tftd terror missions).
 	void nextStage();
-	/// Find a spot near a friend to spawn at
+	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit *unit);
 
 };

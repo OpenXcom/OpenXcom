@@ -39,31 +39,8 @@ AlienRace::~AlienRace()
  */
 void AlienRace::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "id")
-		{
-			i.second() >> _id;
-		}
-		else if (key == "members")
-		{
-			i.second() >> _members;
-		}
-	}
-}
-
-/**
- * Saves the alien race to a YAML file.
- * @param out YAML emitter.
- */
-void AlienRace::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "members" << YAML::Value << _members;
-	out << YAML::EndMap;
+	_id = node["id"].as<std::string>(_id);
+	_members = node["members"].as< std::vector<std::string> >(_members);
 }
 
 /**
@@ -78,8 +55,8 @@ std::string AlienRace::getId() const
 
 /**
  * Gets a certain member of this alien race family.
- * @param id The members id.
- * @return The members name.
+ * @param id The member's id.
+ * @return The member's name.
  */
 std::string AlienRace::getMember(int id) const
 {

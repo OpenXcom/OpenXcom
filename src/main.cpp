@@ -105,3 +105,8 @@ int main(int argc, char** args)
 	//_CrtDumpMemoryLeaks();
 	return EXIT_SUCCESS;
 }
+
+
+#ifdef __MORPHOS__
+const char Version[] = "$VER: OpenXCom 0.9 (" __AMIGADATE__  ")";
+#endif

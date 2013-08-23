@@ -62,7 +62,7 @@ public:
 	/// Loads the mission from YAML.
 	void load(const YAML::Node& node, SavedGame &game);
 	/// Saves the mission to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Gets the mission's type.
 	const std::string &getType() const;
 	/// Gets the mission's region.

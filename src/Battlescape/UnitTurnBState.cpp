@@ -27,15 +27,15 @@
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Ruleset/Armor.h"
 
 namespace OpenXcom
 {
 
 /**
  * Sets up an UnitTurnBState.
+ * @param parent Pointer to the Battlescape.
+ * @param action Pointer to an action.
  */
 UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _turret(false)
 {
@@ -50,6 +50,9 @@ UnitTurnBState::~UnitTurnBState()
 
 }
 
+/**
+ * Initializes the state.
+ */
 void UnitTurnBState::init()
 {
 	_unit = _action.actor;
@@ -87,6 +90,9 @@ void UnitTurnBState::init()
 	}
 }
 
+/**
+ * Runs state functionality every cycle.
+ */
 void UnitTurnBState::think()
 {
 	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
@@ -122,7 +128,7 @@ void UnitTurnBState::think()
 	}
 }
 
-/*
+/**
  * Unit turning cannot be cancelled.
  */
 void UnitTurnBState::cancel()

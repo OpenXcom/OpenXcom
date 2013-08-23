@@ -66,13 +66,15 @@ void Screen::makeVideoFlags()
  */
 Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY) : _bpp(bpp), _scaleX(1.0), _scaleY(1.0), _fullscreen(fullscreen), _numColors(0), _firstColor(0), _surface(0)
 {
-	char *prev;
+	char *prev = (char*)"";
 	if (!_fullscreen && (windowedModePositionX != -1 || windowedModePositionY != -1))
 	{
 		prev = SDL_getenv("SDL_VIDEO_WINDOW_POS");
+
 		if (0 == prev) prev = (char*)"";
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
+		
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 	}
 	setResolution(width, height);
@@ -80,6 +82,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 	{ // We don't want to put the window back to the starting position later when the window is resized.
 		std::stringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
+
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 	}
 	memset(deferredPalette, 0, 256*sizeof(SDL_Color));
@@ -364,11 +367,15 @@ void Screen::screenshot(const std::string &filename) const
 	{
 		GLenum format = GL_RGB;
 
+		#ifndef __NO_OPENGL
+
 		for (int y = 0; y < getHeight(); ++y)
 		{
 			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
 		}
 		glErrorCheck();
+		
+		#endif
 	} else
 	{
 		SDL_BlitSurface(_screen, 0, screenshot, 0);
@@ -409,7 +416,11 @@ bool Screen::isHQXEnabled()
  */
 bool Screen::isOpenGLEnabled()
 {
+#ifdef __NO_OPENGL
+	return false;
+#else
 	return Options::getBool("useOpenGL");
+#endif
 }
 
 /**

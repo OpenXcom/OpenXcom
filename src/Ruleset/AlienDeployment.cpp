@@ -18,65 +18,41 @@
  */
 #include "AlienDeployment.h"
 
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::DeploymentData>
+	{
+		static Node encode(const OpenXcom::DeploymentData& rhs)
+		{
+			Node node;
+			node["alienRank"] = rhs.alienRank;
+			node["lowQty"] = rhs.lowQty;
+			node["highQty"] = rhs.highQty;
+			node["dQty"] = rhs.dQty;
+			node["percentageOutsideUfo"] = rhs.percentageOutsideUfo;
+			node["itemSets"] = rhs.itemSets;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::DeploymentData& rhs)
+		{
+			if (!node.IsMap())
+				return false;
+
+			rhs.alienRank = node["alienRank"].as<int>(rhs.alienRank);
+			rhs.lowQty = node["lowQty"].as<int>(rhs.lowQty);
+			rhs.highQty = node["highQty"].as<int>(rhs.highQty);
+			rhs.dQty = node["dQty"].as<int>(rhs.dQty);
+			rhs.percentageOutsideUfo = node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
+			rhs.itemSets = node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+			return true;
+		}
+	};
+}
+
 namespace OpenXcom
 {
-
-void operator >> (const YAML::Node& node, ItemSet& s)
-{
-	node >> s.items;
-}
-
-YAML::Emitter& operator << (YAML::Emitter& out, const ItemSet& s)
-{
-	out << s.items;
-	return out;
-}
-
-void operator >> (const YAML::Node& node, DeploymentData& s)
-{
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "alienRank")
-		{
-			i.second() >> s.alienRank;
-		}
-		else if (key == "lowQty")
-		{
-			i.second() >> s.lowQty;
-		}
-		else if (key == "highQty")
-		{
-			i.second() >> s.highQty;
-		}
-		else if (key == "dQty")
-		{
-			i.second() >> s.dQty;
-		}
-		else if (key == "percentageOutsideUfo")
-		{
-			i.second() >> s.percentageOutsideUfo;
-		}
-		else if (key == "itemSets")
-		{
-			i.second() >> s.itemSets;
-		}
-	}
-}
-
-YAML::Emitter& operator << (YAML::Emitter& out, const DeploymentData& s)
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "alienRank" << YAML::Value << s.alienRank;
-	out << YAML::Key << "lowQty" << YAML::Value << s.lowQty;
-	out << YAML::Key << "highQty" << YAML::Value << s.highQty;
-	out << YAML::Key << "dQty" << YAML::Value << s.dQty;
-	out << YAML::Key << "percentageOutsideUfo" << YAML::Value << s.percentageOutsideUfo;
-	out << YAML::Key << "itemSets" << YAML::Value << s.itemSets;
-	out << YAML::EndMap;
-	return out;
-}
 
 /**
  * Creates a blank ruleset for a certain
@@ -100,73 +76,17 @@ AlienDeployment::~AlienDeployment()
  */
 void AlienDeployment::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "data")
-		{
-			i.second() >> _data;
-		}
-		else if (key == "width")
-		{
-			i.second() >> _width;
-		}
-		else if (key == "length")
-		{
-			i.second() >> _length;
-		}
-		else if (key == "height")
-		{
-			i.second() >> _height;
-		}
-		else if (key == "civilians")
-		{
-			i.second() >> _civilians;
-		}
-		else if (key == "roadTypeOdds")
-		{
-			i.second() >> _roadTypeOdds;
-		}
-		else if (key == "terrain")
-		{
-			i.second() >> _terrain;
-		}
-		else if (key == "shade")
-		{
-			i.second() >> _shade;
-		}
-		else if (key == "nextStage")
-		{
-			i.second() >> _nextStage;
-		}
-	}
+	_type = node["type"].as<std::string>(_type);
+	_data = node["data"].as< std::vector<DeploymentData> >(_data);
+	_width = node["width"].as<int>(_width);
+	_length = node["length"].as<int>(_length);
+	_height = node["height"].as<int>(_height);
+	_civilians = node["civilians"].as<int>(_civilians);
+	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
+	_terrain = node["terrain"].as<std::string>(_terrain);
+	_shade = node["shade"].as<int>(_shade);
+	_nextStage = node["nextStage"].as<std::string>(_nextStage);
 }
-
-/**
- * Saves the Deployment to a YAML file.
- * @param out YAML emitter.
- */
-void AlienDeployment::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "data" << YAML::Value << _data;
-	out << YAML::Key << "width" << YAML::Value << _width;
-	out << YAML::Key << "length" << YAML::Value << _length;
-	out << YAML::Key << "height" << YAML::Value << _height;
-	out << YAML::Key << "civilians" << YAML::Value << _civilians;	
-	out << YAML::Key << "roadTypeOdds" << YAML::Value << _roadTypeOdds;
-	out << YAML::Key << "terrain" << YAML::Value << _terrain;
-	out << YAML::Key << "shade" << YAML::Value << _shade;
-	out << YAML::Key << "nextStage" << YAML::Value << _nextStage;
-	out << YAML::EndMap;
-}
-
 
 /**
  * Returns the language string that names
@@ -178,13 +98,21 @@ std::string AlienDeployment::getType() const
 	return _type;
 }
 
-/// Gets a pointer to the data.
+/**
+ * Gets a pointer to the data.
+ * @return Pointer to the data.
+ */
 std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
 	return &_data;
 }
 
-/// Get dimensions.
+/**
+ * Gets dimensions.
+ * @param width Width.
+ * @param length Length.
+ * @param height Height.
+ */
 void AlienDeployment::getDimensions(int *width, int *length, int *height)
 {
 	*width = _width;
@@ -192,27 +120,46 @@ void AlienDeployment::getDimensions(int *width, int *length, int *height)
 	*height = _height;
 }
 
+/**
+ * Gets the number of civilians.
+ * @return The number of civilians.
+ */
 int AlienDeployment::getCivilians() const
 {
 	return _civilians;
 }
 
+/**
+ * Gets the road type odds.
+ * @return The road type odds.
+ */
 std::vector<int> AlienDeployment::getRoadTypeOdds() const
 {
 	return _roadTypeOdds;
 }
 
-/// Gets the terrain for battlescape generation.
+/**
+ * Gets the terrain for battlescape generation.
+ * @return The terrain.
+ */
 std::string AlienDeployment::getTerrain() const
 {
 	return _terrain;
 }
-/// Gets the shade level for battlescape generation.
+
+/**
+ * Gets the shade level for battlescape generation.
+ * @return The shade level.
+ */
 int AlienDeployment::getShade() const
 {
 	return _shade;
 }
-/// Gets the next stage of the mission.
+
+/**
+ * Gets the next stage of the mission.
+ * @return The next stage of the mission.
+ */
 std::string AlienDeployment::getNextStage() const
 {
 	return _nextStage;

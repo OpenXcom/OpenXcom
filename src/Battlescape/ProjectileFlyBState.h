@@ -29,6 +29,9 @@ class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
 
+/**
+ * A projectile state.
+ */
 class ProjectileFlyBState : public BattleState
 {
 private:
@@ -37,6 +40,7 @@ private:
 	BattleItem *_projectileItem;
 	Position _origin;
 	int _projectileImpact;
+	/// Tries to create a projectile sprite.
 	bool createNewProjectile();
 	bool _initialized;
 public:
@@ -47,10 +51,11 @@ public:
 	~ProjectileFlyBState();
 	/// Initializes the state.
 	void init();
-	/// Handles a cancels request.
+	/// Handles a cancel request.
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
+	/// Validates the throwing range.
 	static bool validThrowRange(BattleAction *action);
 };
 

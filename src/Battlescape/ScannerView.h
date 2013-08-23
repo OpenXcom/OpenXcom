@@ -23,11 +23,12 @@
 
 namespace OpenXcom
 {
+
 class BattleUnit;
-class Text;
+class Game;
 
 /**
- * Display a view of units movement
+ * Displays a view of units movement.
  */
 class ScannerView : public InteractiveSurface
 {

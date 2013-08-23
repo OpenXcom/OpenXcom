@@ -55,87 +55,87 @@ public:
 	TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData);
 	/// Cleans up the TileEngine.
 	~TileEngine();
-	/// Calculate sun shading of the whole map.
+	/// Calculates sun shading of the whole map.
 	void calculateSunShading();
-	/// Calculate sun shading of a single tile.
+	/// Calculates sun shading of a single tile.
 	void calculateSunShading(Tile *tile);
-	/// Calculate the field of view from a units view point.
+	/// Calculates the field of view from a units view point.
 	bool calculateFOV(BattleUnit *unit);
-	/// Calculate the field of view within range of a certain position.
+	/// Calculates the field of view within range of a certain position.
 	void calculateFOV(const Position &position);
-	/// Check reaction fire.
+	/// Checks reaction fire.
 	bool checkReactionFire(BattleUnit *unit);
-	/// Recalculate lighting of the battlescape.
+	/// Recalculates lighting of the battlescape for terrain.
 	void calculateTerrainLighting();
-	/// Recalculate lighting of the battlescape.
+	/// Recalculates lighting of the battlescape for units.
 	void calculateUnitLighting();
-	/// Explosions.
+	/// Handles bullet/weapon hits.
 	BattleUnit *hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit);
+	/// Handles explosions.
 	void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
-	/// Check if a destroyed tile starts an explosion.
+	/// Checks if a destroyed tile starts an explosion.
 	Tile *checkForTerrainExplosions();
 	/// Unit opens door?
 	int unitOpensDoor(BattleUnit *unit, bool rClick = false, int dir = -1);
-	/// Close ufo doors.
+	/// Closes ufo doors.
 	int closeUfoDoors();
-	/// Calculate line.
+	/// Calculates a line trajectory.
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
-	/// Calculate a parabola trajectory.
+	/// Calculates a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
-	/// Find all the soldiers that would see queryingUnit at tile (aka tilePos) and collect some statistics for AI.
-	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);	
-	/// Get the origin voxel of a unit's eyesight
+	/// Finds all the soldiers that would see queryingUnit at tile (aka tilePos) and collects some statistics for AI.
+	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);
+	/// Gets the origin voxel of a unit's eyesight.
 	Position getSightOriginVoxel(BattleUnit *currentUnit);
-	/// Check visibility of a unit on this tile
+	/// Checks visibility of a unit on this tile.
 	bool visible(BattleUnit *currentUnit, Tile *tile);
-	/// turn xcom soldier's personal lighting on or off
+	/// Turn XCom soldier's personal lighting on or off.
 	void togglePersonalLighting();
-	/// check the distance between two positions
+	/// Checks the distance between two positions.
 	int distance(const Position &pos1, const Position &pos2) const;
-	/// check the distance squared between two positions
-	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;	
-	/// check the horizontal blockage of a tile
+	/// Checks the distance squared between two positions.
+	int distanceSq(const Position &pos1, const Position &pos2, bool considerZ = true) const;
+	/// Checks the horizontal blockage of a tile.
 	int horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
-	/// check the vertical blockage of a tile
+	/// Checks the vertical blockage of a tile.
 	int verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type);
-	/// can someone on our team see this position?
-	bool inTeamFOV(const Position &pos, UnitFaction team);
-	/// attempt a panic or mind control action
+	/// Attempts a panic or mind control action.
 	bool psiAttack(BattleAction *action);
-	/// apply gravity to anything that occupy this tile.
+	/// Applies gravity to anything that occupy this tile.
 	Tile *applyGravity(Tile *t);
-	/// return melee validity between two units
+	/// Returns melee validity between two units.
 	bool validMeleeRange(BattleUnit *attacker, BattleUnit *target, int dir);
-	/// return validity of a melee attack from a given position
+	/// Returns validity of a melee attack from a given position.
 	bool validMeleeRange(Position pos, int direction, BattleUnit *attacker, BattleUnit *target);
-	/// get the ai to look through a window
+	/// Gets the AI to look through a window.
 	int faceWindow(const Position &position);
-	/// get the exposure % of a unit on a tile
+	/// Checks a unit's % exposure on a tile.
 	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut);
-	/// check validity for targetting a unit
+	/// Checks validity for targetting a unit.
 	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
-	/// check validity for targetting a tile
+	/// Check validity for targetting a tile.
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
-	/// calculate te z voxel for shadows
+	/// Calculates the z voxel for shadows.
 	int castedShade(const Position& voxel);
-	/// check the visibility of a given voxel
+	/// Checks the visibility of a given voxel.
 	bool isVoxelVisible(const Position& voxel);
-	/// check what type of voxel occupies this space
+	/// Checks what type of voxel occupies this space.
 	int voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
-	/// blow this tile up
+	/// Blows this tile up.
 	bool detonate(Tile* tile);
-	/// validate a throwing action
+	/// Validates a throwing action.
 	bool validateThrow(BattleAction *action);
-	/// open any doors this door is connected to.
+	/// Opens any doors this door is connected to.
 	void checkAdjacentDoors(Position pos, int part);
-	/// create a vector of units that can spot this unit.
+	/// Creates a vector of units that can spot this unit.
 	std::vector<BattleUnit *> getSpottingUnits(BattleUnit* unit);
-	/// given a vector of spotters, and a unit, this will pick the one with the highest reaction score.
+	/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
 	BattleUnit* getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit);
-	/// check validity of a snap shot to this position.
+	/// Checks validity of a snap shot to this position.
 	bool canMakeSnap(BattleUnit *unit, BattleUnit *target);
-	/// try to perform a reaction snap shot to this location.
+	/// Tries to perform a reaction snap shot to this location.
 	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
+	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
 };
 

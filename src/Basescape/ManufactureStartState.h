@@ -31,8 +31,8 @@ class Text;
 class TextList;
 
 /**
- * Screen which display needed elements to start productions(items/required workshop state/cost to build a unit, ...).
-*/
+ * Screen which displays needed elements to start productions (items/required workshop state/cost to build a unit, ...).
+ */
 class ManufactureStartState : public State
 {
 private:
@@ -43,11 +43,11 @@ private:
 	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtRequiredItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
 	TextList * _lstRequiredItems;
 public:
-	/// Create the State
+	/// Creates the State.
 	ManufactureStartState(Game * game, Base * base, RuleManufacture * item);
-	/// Handler for the Cancel button
+	/// Handler for the Cancel button.
 	void btnCancelClick(Action * action);
-	/// Handler for the start button
+	/// Handler for the start button.
 	void btnStartClick(Action * action);
 };
 }

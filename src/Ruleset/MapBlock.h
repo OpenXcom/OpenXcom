@@ -30,8 +30,8 @@ class RuleTerrain;
 
 /**
  * Represents a Terrain Map Block.
- * It contains constant info about this mapblock, like it's name, dimensions, attributes...
- * Map blocks are stored in RuleTerrain objects
+ * It contains constant info about this mapblock, like its name, dimensions, attributes...
+ * Map blocks are stored in RuleTerrain objects.
  * @sa http://www.ufopaedia.org/index.php?title=MAPS_Terrain
  */
 class MapBlock
@@ -47,27 +47,25 @@ public:
 	~MapBlock();
 	/// Loads the map block from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the map block to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the mapblock's name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the mapblock's x size.
 	int getSizeX() const;
-	/// Get the mapblock's y size.
+	/// Gets the mapblock's y size.
 	int getSizeY() const;
-	/// Get the mapblock's z size.
+	/// Gets the mapblock's z size.
 	int getSizeZ() const;
-	/// Set the mapblock's z size.
+	/// Sets the mapblock's z size.
 	void setSizeZ(int size_z);
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getType() const;
 	/// Returns whether this mapblock is a landingzone.
 	MapBlockType getSubType() const;
-	/// Get either remaining uses or frequency.
+	/// Gets either remaining uses or frequency.
 	int getRemainingUses();
-	/// Decrease remaining uses.
+	/// Decreases remaining uses.
 	void markUsed();
-	/// Reset remaining uses.
+	/// Resets remaining uses.
 	void reset();
 
 };

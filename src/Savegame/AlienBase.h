@@ -43,9 +43,9 @@ public:
 	/// Loads the alien base from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the alien base to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Saves the alien base's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	YAML::Node saveId() const;
 	/// Gets the alien base's ID.
 	int getId() const;
 	/// Sets the alien base's ID.
