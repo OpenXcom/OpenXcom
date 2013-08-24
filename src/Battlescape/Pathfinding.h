@@ -54,6 +54,8 @@ private:
 	bool canFallDown(Tile *destinationTile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile *destinationTile, int size);
+	/// Checks if going one step from start to destination in the given direction requires going through a closed UFO door.
+	bool isThroughClosedUfoDoor(int direction, Position start, Position destination);
 	BattleUnit *_unit;
 	bool _pathPreviewed;
 	bool _strafeMove;
