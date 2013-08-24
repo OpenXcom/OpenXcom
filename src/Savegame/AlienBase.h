@@ -34,7 +34,9 @@ class AlienBase : public Target
 private:
 	int _id;
 	std::string _race;
-	bool _inBattlescape, _discovered;
+	bool _inBattlescape;
+	int _discovered;
+
 public:
 	/// Creates an alien base.
 	AlienBase();
@@ -63,7 +65,7 @@ public:
 	/// Gets the alien base's discovered status.
 	bool isDiscovered() const;
 	/// Sets the alien base's discovered status.
-	void setDiscovered(bool discovered);
+	void setDiscovered(int discovered);
 };
 
 }
