@@ -53,6 +53,10 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
+	// Fix system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+
 	add(_window);
 	add(_btnNewGame);
 	add(_btnNewBattle);

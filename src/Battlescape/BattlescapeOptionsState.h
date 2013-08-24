@@ -47,7 +47,7 @@ private:
 	TextButton *_xcomSpeed, *_btnXcomSpeed1, *_btnXcomSpeed2, *_btnXcomSpeed3, *_btnXcomSpeed4, *_btnXcomSpeed5, *_btnXcomSpeed6;
 	Text *_txtAlienSpeed;
 	TextButton *_alienSpeed, *_btnAlienSpeed1, *_btnAlienSpeed2, *_btnAlienSpeed3, *_btnAlienSpeed4, *_btnAlienSpeed5, *_btnAlienSpeed6;
-	TextButton *_btnOk, *_btnLoad, *_btnSave;
+	TextButton *_btnOk, *_btnLoad, *_btnSave, *_btnAbandon;
 	/// Saves battlescape options.
 	void saveOptions();
 public:
@@ -61,6 +61,8 @@ public:
 	void btnLoadClick(Action *action);
 	/// Handler for clicking the Save Game button.
 	void btnSaveClick(Action *action);
+	/// Handler for clicking the Abandon Game button.
+	void btnAbandonClick(Action *action);
 };
 
 }

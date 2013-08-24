@@ -2412,6 +2412,8 @@ Badane przedmioty są pobierane z magazynów i zostaną utracone. Po "zbadaniu" 
 STR_ARROWS
 STRZAŁKI
 STR_FULL
+STR_SAVE_GAME_AND_QUIT
+SAVE GAME AND QUIT
 WSZYSTKO
 STR_SAVE_VOXEL_VIEW
 Zrzut ekranu, widok pierwszoosobowy

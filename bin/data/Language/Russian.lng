@@ -2409,6 +2409,8 @@ STR_ARROWS
 УКАЗАТЕЛИ
 STR_FULL
 ПОЛНОСТЬЮ
+STR_SAVE_GAME_AND_QUIT
+СОХРАНИТЬ ИГРУ И ВЫЙТИ
 STR_SAVE_VOXEL_VIEW
 Снимок экрана вида от первого лица
 STR_TIME_UNITS_RESERVED_FOR_KNEELING
