@@ -53,7 +53,8 @@ void RuleRegion::load(const YAML::Node &node)
 {
 	_type = node["type"].as<std::string>(_type);
 	_cost = node["cost"].as<int>(_cost);
-	std::vector< std::vector<double> > areas = node["areas"].as< std::vector< std::vector<double> > >();
+	std::vector< std::vector<double> > areas;
+	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
 		_lonMin.push_back(areas[i][0] * M_PI / 180);

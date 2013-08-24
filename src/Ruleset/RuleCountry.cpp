@@ -51,7 +51,8 @@ void RuleCountry::load(const YAML::Node &node)
 	_fundingCap = node["fundingCap"].as<int>(_fundingCap);
 	_labelLon = node["labelLon"].as<double>(_labelLon) * M_PI / 180;
 	_labelLat = node["labelLat"].as<double>(_labelLat) * M_PI / 180;
-	std::vector< std::vector<double> > areas = node["areas"].as< std::vector< std::vector<double> > >();
+	std::vector< std::vector<double> > areas;
+	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
 		_lonMin.push_back(areas[i][0] * M_PI / 180);
