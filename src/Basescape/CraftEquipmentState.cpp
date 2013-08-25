@@ -43,6 +43,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "../Battlescape/InventoryState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/InfoboxOKState.h"
 #include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
@@ -610,13 +611,24 @@ void CraftEquipmentState::btnClearClick(Action *)
 */
 void CraftEquipmentState::btnInventoryClick(Action *)
 {
+	Craft *craft = _base->getCrafts()->at(_craft);
+	if (craft->getNumSoldiers() == 0)
+	{
+		std::wstringstream ss;
+		ss << craft->getName(_game->getLanguage()) << L'\n';
+		ss << _game->getLanguage()->getString("STR_NO_CREW");
+		_game->pushState(new InfoboxOKState(_game, ss.str()));
+
+		return;
+	}
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-	bgen.runInventory(_base->getCrafts()->at(_craft));
+	bgen.runInventory(craft);
 
 	_game->pushState(new InventoryState(_game, false, 0));
 }
