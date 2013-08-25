@@ -445,7 +445,7 @@ void StartState::think()
 			{
 				throw Exception("No languages available");
 			}
-			_load = LOADING_SUCCESSFUL;
+			_load = LOADING_LANGUAGE;
 
 
 			// loading done? let's play intro!
@@ -515,8 +515,8 @@ void StartState::think()
 	case LOADING_NONE:
 		_load = LOADING_STARTED;
 		break;
-	case LOADING_SUCCESSFUL:
-		Log(LOG_INFO) << "OpenXcom started successfully!";
+	case LOADING_LANGUAGE:
+		Log(LOG_INFO) << "OpenXcom setting language!";
 		if (Options::getString("language").empty())
 		{
 			_game->setState(new LanguageState(_game));
@@ -526,13 +526,22 @@ void StartState::think()
 			try
 			{
 				_game->loadLanguage(Options::getString("language"));
-				_game->setState(new MainMenuState(_game));
 			}
 			catch (Exception)
 			{
 				_game->setState(new LanguageState(_game));
 			}
 		}
+		_load = LOADING_SUCCESSFUL;
+		break;
+	case LOADING_SUCCESSFUL:
+		Log(LOG_INFO) << "OpenXcom started successfully!";
+		if(_saveFile != L"")
+		{
+			Log(LOG_INFO) << "Attempting to load save, " << Language::wstrToCp(_saveFile) << ", specified on command line.";
+		}
+		_game->setState(new MainMenuState(_game));
+
 		break;
 	default:
 		break;

@@ -21,13 +21,14 @@
 
 #include "../Engine/State.h"
 #include "../Resource/XcomResourcePack.h"
+#include <string>
 
 namespace OpenXcom
 {
 
 class Surface;
 
-enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL };
+enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL, LOADING_LANGUAGE };
 
 /**
  * Initializes the game and loads all required content.
@@ -36,6 +37,7 @@ class StartState : public State
 {
 private:
 	Surface *_surface;
+	std::wstring _saveFile;
 	LoadingPhase _load;
 public:
 	/// Creates the Start state.

@@ -49,7 +49,7 @@ namespace OpenXcom
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true), _loadFile(L"")
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -532,5 +532,22 @@ bool Game::isQuitting() const
 	return _quit;
 }
 
+/**
+ * Sets the name of a saved game file to load directly.
+ * @param file Name of the saved game file without the .sav extension.
+ */
+void Game::setLoadFile(const std::wstring &file)
+{
+	_loadFile = file;
+}
+
+/**
+ * Gets the name of the saved game file to directly load.
+ * @return the name of the file without the .sav extension.
+ */
+std::wstring Game::getLoadFile()
+{
+	return _loadFile;
+}
 
 }

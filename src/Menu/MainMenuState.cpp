@@ -115,6 +115,13 @@ void MainMenuState::init()
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	std::wstring fileName = _game->getLoadFile();
+	if(!fileName.empty())
+	{
+		LoadState *load = (new LoadState(_game));
+		load->quickLoad(fileName);
+		_game->setLoadFile(L"");
+	}
 }
 
 /**

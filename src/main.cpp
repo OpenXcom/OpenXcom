@@ -19,11 +19,14 @@
 #include <exception>
 #include <sstream>
 #include "version.h"
+#include "Engine/Language.h"
 #include "Engine/Logger.h"
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
 #include "Engine/Options.h"
 #include "Menu/StartState.h"
+#include <algorithm>
+#include <iostream>
 
 /** @mainpage
  * @author OpenXcom Developers
@@ -55,12 +58,37 @@ int main(int argc, char** args)
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;
+
 		std::stringstream title;
 		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		game = new Game(title.str());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
+
+		std::wstring file = L"";
+		for (int i = 1; i < argc; ++i)
+		{
+			std::string arg = args[i];
+			if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
+			{
+				std::string argname;
+				if (arg[1] == '-' && arg.length() > 2)
+					argname = arg.substr(2, arg.length()-1);
+				else
+					argname = arg.substr(1, arg.length()-1);
+				std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
+				if (argc > i + 1)
+				{
+					if (argname == "load")
+					{
+						file = Language::utf8ToWstr(args[i+1]);
+					}
+				}
+			}
+		}
+		game->setLoadFile(file);
 		game->setState(new StartState(game));
 		game->run();
+
 #ifndef _DEBUG
 	}
 	catch (std::exception &e)
