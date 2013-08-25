@@ -59,12 +59,14 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	Craft *c = _base->getCrafts()->at(_craft);
+	bool isInvBtnVisible = c->getNumSoldiers() > 0;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(90, 16, 210, 176);
-	_btnClear = new TextButton(90, 16, 112, 176);
-	_btnInventory = new TextButton(90, 16, 16, 176);
+	_btnOk = new TextButton(isInvBtnVisible? 148:288, 16, isInvBtnVisible? 164:16, 176); // (90, 16, 210, 176);
+//	_btnClear = new TextButton(90, 16, 112, 176);
+	_btnInventory = new TextButton(148, 16, 8, 176); // (90, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
@@ -79,7 +81,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	add(_window);
 	add(_btnOk);
-	add(_btnClear);
+//	add(_btnClear);
 	add(_btnInventory);
 	add(_txtTitle);
 	add(_txtItem);
@@ -100,17 +102,17 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnClear->setColor(Palette::blockOffset(15)+1);
-	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
-	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
+//	_btnClear->setColor(Palette::blockOffset(15)+1);
+//	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
+//	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
 
 	_btnInventory->setColor(Palette::blockOffset(15) + 1);
 	_btnInventory->setText(_game->getLanguage()->getString("STR_INVENTORY"));
 	_btnInventory->onMouseClick((ActionHandler)&CraftEquipmentState::btnInventoryClick);
+	_btnInventory->setVisible(isInvBtnVisible);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	Craft *c = _base->getCrafts()->at(_craft);
 	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_craftname").arg(c->getName(_game->getLanguage())));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
