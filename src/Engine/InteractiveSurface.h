@@ -45,7 +45,7 @@ protected:
 	std::map<Uint8, ActionHandler> _click, _press, _release;
 	ActionHandler _in, _over, _out;
 	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
-	bool _isHovered, _isFocused, _listButton;
+	bool _isHovered, _isFocused, _listButton, _active;
 
 	/// Is any mouse button pressed?
 	bool isButtonPressed(Uint8 button = 0);
@@ -100,6 +100,10 @@ public:
 	virtual void keyboardRelease(Action *action, State *state);
 	/// Check this surface to see if it's a textlist button.
 	void setListButton();
+	/// Sets the activity flag of the interactive surface.
+	void setActive(bool active) {_active = active;}
+	/// Gets the activity flag of the interactive surface.
+	bool isActive() const {return _active;}
 };
 
 }

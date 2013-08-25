@@ -66,14 +66,14 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setColor(Palette::blockOffset(8)+5, Palette::blockOffset(10));
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
 	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	//something must be in the name before it is acceptable
-	_btnOk->setVisible(false);
+	_btnOk->setActive(false);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -128,14 +128,7 @@ void BaseNameState::edtNameKeyPress(Action *action)
 	}
 	else
 	{
-		if(_edtName->getText().size() > 0)
-		{
-			_btnOk->setVisible(true);
-		}
-		else
-		{
-			_btnOk->setVisible(false);
-		}
+		_btnOk->setActive(_edtName->getText().size() > 0);
 	}
 }
 

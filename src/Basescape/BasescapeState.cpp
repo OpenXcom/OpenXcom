@@ -134,7 +134,7 @@ BasescapeState::BasescapeState(Game *game, Base *base, Globe *globe) : State(gam
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 
-	_btnNewBase->setColor(Palette::blockOffset(13)+5);
+	_btnNewBase->setColor(Palette::blockOffset(13)+5, Palette::blockOffset(0)+3);
 	_btnNewBase->setText(_game->getLanguage()->getString("STR_BUILD_NEW_BASE_UC"));
 	_btnNewBase->onMouseClick((ActionHandler)&BasescapeState::btnNewBaseClick);
 
@@ -249,7 +249,7 @@ void BasescapeState::init()
 	s += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
-	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
+	_btnNewBase->setActive(_game->getSavedGame()->getBases()->size() < 8);
 }
 
 /**

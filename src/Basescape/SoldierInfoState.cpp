@@ -181,7 +181,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnNext->setText(L">>");
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
-	_btnArmor->setColor(Palette::blockOffset(15)+6);
+	_btnArmor->setColor(Palette::blockOffset(15)+6, Palette::blockOffset(0)+3);
 	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
 
@@ -189,7 +189,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_edtSoldier->setBig();
 	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
 
-	_btnSack->setColor(Palette::blockOffset(15)+6);
+	_btnSack->setColor(Palette::blockOffset(15)+6, Palette::blockOffset(0)+3);
 	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
 
@@ -426,6 +426,10 @@ void SoldierInfoState::init()
 
 	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
 
+	bool isSoldierOnBase = !(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT");
+	_btnArmor->setActive(isSoldierOnBase);
+	_btnSack->setActive(isSoldierOnBase);
+
 	std::wstringstream ss9;
 	ss9 << _game->getLanguage()->getString("STR_RANK_") << L'\x01' << _game->getLanguage()->getString(s->getRankString());
 	_txtRank->setText(ss9.str());
@@ -555,10 +559,7 @@ void SoldierInfoState::btnArmorClick(Action *)
 {	
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
-	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
-	{
-		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
-	}
+	_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 }
 
 /**

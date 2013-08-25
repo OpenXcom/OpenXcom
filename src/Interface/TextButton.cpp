@@ -35,7 +35,7 @@ Sound *TextButton::soundPress = 0;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false)
+TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _inactiveColor(0), _group(0), _contrast(false)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
@@ -55,11 +55,13 @@ TextButton::~TextButton()
 /**
  * Changes the color for the button and text.
  * @param color Color value.
+ * @param inactiveColor Color value for inactive button.
  */
-void TextButton::setColor(Uint8 color)
+void TextButton::setColor(Uint8 color, Uint8 inactiveColor)
 {
 	_color = color;
-	_text->setColor(_color);
+	_inactiveColor = inactiveColor;
+	_text->setColor(_active? color : inactiveColor);
 	_redraw = true;
 }
 
@@ -87,13 +89,13 @@ void TextButton::setFonts(Font *big, Font *small)
 
 /**
  * Enables/disables high contrast color. Mostly used for
- * Battlescape UI.
+ * Battlescape UI. Inactive buttons have a low contrast.
  * @param contrast High contrast setting.
  */
 void TextButton::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
-	_text->setHighContrast(contrast);
+	_text->setHighContrast(contrast && _active);
 	_redraw = true;
 }
 
@@ -148,13 +150,9 @@ void TextButton::draw()
 	Surface::draw();
 	SDL_Rect square;
 
-	int mul = 1;
-	if (_contrast)
-	{
-		mul = 2;
-	}
-
-	int color = _color + 1 * mul;
+	int mul = (_contrast && _active)? 2 : 1;
+	int baseColor = _active? _color : _inactiveColor;
+	int color = baseColor + 1 * mul;
 
 	square.x = 0;
 	square.y = 0;
@@ -176,18 +174,18 @@ void TextButton::draw()
 		switch (i)
 		{
 		case 0:
-			color = _color + 5 * mul;
+			color = baseColor + 5 * mul;
 			setPixel(square.w, 0, color);
 			break;
 		case 1:
-			color = _color + 2 * mul;
+			color = baseColor + 2 * mul;
 			break;
 		case 2:
-			color = _color + 4 * mul;
+			color = baseColor + 4 * mul;
 			setPixel(square.w+1, 1, color);
 			break;
 		case 3:
-			color = _color + 3 * mul;
+			color = baseColor + 3 * mul;
 			break;
 		}
 	}
@@ -200,7 +198,7 @@ void TextButton::draw()
 
 	if (press)
 	{
-		this->invert(_color + 3 * mul);
+		this->invert(baseColor + 3 * mul);
 	}
 	_text->setInvert(press);
 
@@ -242,6 +240,18 @@ void TextButton::mouseRelease(Action *action, State *state)
 	draw();
 	InteractiveSurface::mouseRelease(action, state);
 	//_redraw = true;
+}
+
+/**
+ * Enables/disables activity. Inactive buttons have a low contrast.
+ * @param active Sets activity flag.
+ */
+void TextButton::setActive(bool active)
+{
+	InteractiveSurface::setActive(active);
+	_text->setHighContrast(_contrast && _active);
+	_text->setColor(_active? _color : _inactiveColor);
+	_redraw = true;
 }
 
 }
