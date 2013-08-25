@@ -41,6 +41,9 @@
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Battlescape/InventoryState.h"
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -58,8 +61,9 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(140, 16, 164, 176);
-	_btnClear = new TextButton(140, 16, 16, 176);
+	_btnOk = new TextButton(90, 16, 210, 176);
+	_btnClear = new TextButton(90, 16, 112, 176);
+	_btnInventory = new TextButton(90, 16, 16, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
@@ -69,11 +73,13 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
 	add(_btnClear);
+	add(_btnInventory);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtStores);
@@ -96,6 +102,10 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
+
+	_btnInventory->setColor(Palette::blockOffset(15) + 1);
+	_btnInventory->setText(_game->getLanguage()->getString("STR_INVENTORY"));
+	_btnInventory->onMouseClick((ActionHandler)&CraftEquipmentState::btnInventoryClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -211,6 +221,18 @@ CraftEquipmentState::~CraftEquipmentState()
 {
 	delete _timerLeft;
 	delete _timerRight;
+}
+
+/**
+* Resets the savegame when coming back from the inventory.
+*/
+void CraftEquipmentState::init()
+{
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+
+	_game->getSavedGame()->setBattleGame(0);
 }
 
 /**
@@ -580,4 +602,23 @@ void CraftEquipmentState::btnClearClick(Action *)
 		moveLeftByValue(INT_MAX);
 	}
 }
+
+/**
+* Displays the inventory screen for the soldiers
+* inside the craft.
+* @param action Pointer to an action.
+*/
+void CraftEquipmentState::btnInventoryClick(Action *)
+{
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+
+	SavedBattleGame *bgame = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(bgame);
+
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	bgen.runInventory(_base->getCrafts()->at(_craft));
+
+	_game->pushState(new InventoryState(_game, false, 0));
+}
+
 }
