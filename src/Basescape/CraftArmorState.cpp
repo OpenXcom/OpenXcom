@@ -156,7 +156,9 @@ void CraftArmorState::btnOkClick(Action *)
  */
 void CraftArmorState::lstSoldiersClick(Action *)
 {
-	_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
+	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
+		_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
 }
 
 }
