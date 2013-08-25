@@ -98,7 +98,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	
+
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
@@ -233,6 +233,9 @@ void CraftEquipmentState::init()
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	_game->getSavedGame()->setBattleGame(0);
+
+	Craft *c = _base->getCrafts()->at(_craft);
+	c->setInBattlescape(false);
 }
 
 /**
