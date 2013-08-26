@@ -42,7 +42,7 @@ namespace OpenXcom
 SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
-	
+
 	_edtSave = new TextEdit(168, 9, 0, 0);
 
 	add(_edtSave);
@@ -160,14 +160,14 @@ void SaveState::edtSaveKeyPress(Action *action)
 			std::string selected = Language::wstrToUtf8(_selected);
 			std::string filename = Language::wstrToUtf8(_edtSave->getText());
 #endif
-			_game->getSavedGame()->save(filename);
+			_game->getSavedGame()->save(filename, _game->getLanguage());
 			std::string oldName = Options::getUserFolder() + selected + ".sav";
 			std::string newName = Options::getUserFolder() + filename + ".sav";
 			if (_selectedRow > 0 && oldName != newName)
 			{
 				if (!CrossPlatform::deleteFile(oldName))
 				{
-					throw Exception("Failed to overwrite save");
+					throw Exception(Language::wstrToUtf8(lang->getString("STR_OVERWRITE_FAIL")));
 				}
 			}
 			_game->popState();
@@ -215,7 +215,7 @@ void SaveState::quickSave(const std::wstring &filename16)
 
 	try
 	{
-		_game->getSavedGame()->save(filename);
+		_game->getSavedGame()->save(filename, _game->getLanguage());
 	}
 	catch (Exception &e)
 	{

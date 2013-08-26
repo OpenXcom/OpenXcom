@@ -195,14 +195,15 @@ void SavedGame::getList(TextList *list, Language *lang)
  * @note Assumes the saved game is blank.
  * @param filename YAML filename.
  * @param rule Ruleset for the saved game.
+ * @param lang Loaded language.
  */
-void SavedGame::load(const std::string &filename, Ruleset *rule)
+void SavedGame::load(const std::string &filename, Ruleset *rule, Language *lang)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
 	if (file.empty())
 	{
-		throw Exception(filename + " is not a vaild save file");
+		throw Exception(filename + Language::wstrToUtf8(lang->getString("STR_INVALID_SAVE")));
 	}
 
 	// Get brief save info
@@ -210,7 +211,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
-		throw Exception("Version mismatch");
+		throw Exception(Language::wstrToUtf8(lang->getString("STR_VERSION_MISMATCH")));
 	}
 	_time->load(brief["time"]);
 
@@ -321,14 +322,15 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 /**
  * Saves a saved game's contents to a YAML file.
  * @param filename YAML filename.
+ * @param lang Loaded language.
  */
-void SavedGame::save(const std::string &filename) const
+void SavedGame::save(const std::string &filename, Language *lang) const
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
-		throw Exception("Failed to save " + filename + ".sav");
+		throw Exception(Language::wstrToUtf8(lang->getString("STR_SAVE_FAIL")) + " " + filename + ".sav");
 	}
 
 	YAML::Emitter out;
