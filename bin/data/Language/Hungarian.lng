@@ -1895,6 +1895,14 @@ STR_LOAD_UNSUCCESSFUL
 Betöltés sikertelen
 STR_SAVE_UNSUCCESSFUL
 Elmentés sikertelen
+STR_SAVE_FAIL
+Failed to save
+STR_OVERWRITE_FAIL
+Failed to overwrite save
+STR_VERSION_MISMATCH
+Version mismatch
+STR_INVALID_SAVE
+ is not a vaild save file
 STR_LOAD_SUCCESSFUL
 Betöltés sikeres
 STR_SAVE_SUCCESSFUL

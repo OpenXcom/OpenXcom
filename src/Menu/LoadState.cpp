@@ -99,7 +99,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 	SavedGame *s = new SavedGame();
 	try
 	{
-		s->load(filename, _game->getRuleset());
+		s->load(filename, _game->getRuleset(),_game->getLanguage());
 		_game->setSavedGame(s);
 		_game->setState(new GeoscapeState(_game));
 		if (_game->getSavedGame()->getSavedBattle() != 0)

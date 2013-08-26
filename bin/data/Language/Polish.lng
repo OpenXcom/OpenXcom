@@ -1895,6 +1895,14 @@ STR_LOAD_UNSUCCESSFUL
 Ładowanie nie powiodło się
 STR_SAVE_UNSUCCESSFUL
 Zapis nie powiódł się
+STR_SAVE_FAIL
+Failed to save
+STR_OVERWRITE_FAIL
+Failed to overwrite save
+STR_VERSION_MISMATCH
+Version mismatch
+STR_INVALID_SAVE
+ is not a vaild save file
 STR_LOAD_SUCCESSFUL
 Ładowanie powiodło się
 STR_SAVE_SUCCESSFUL

@@ -1895,6 +1895,14 @@ STR_LOAD_UNSUCCESSFUL
 Ladevorgang fehlgeschlagen.
 STR_SAVE_UNSUCCESSFUL
 Sicherungsvorgang fehlgeschlagen.
+STR_SAVE_FAIL
+Failed to save
+STR_OVERWRITE_FAIL
+Failed to overwrite save
+STR_VERSION_MISMATCH
+Version mismatch
+STR_INVALID_SAVE
+ is not a vaild save file
 STR_LOAD_SUCCESSFUL
 Ladevorgang abgeschlossen.
 STR_SAVE_SUCCESSFUL

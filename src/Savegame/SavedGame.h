@@ -92,9 +92,9 @@ public:
 	/// Gets list of saves in the user directory.
 	static void getList(TextList *list, Language *lang);
 	/// Loads a saved game from YAML.
-	void load(const std::string &filename, Ruleset *rule);
+	void load(const std::string &filename, Ruleset *rule, Language *lang);
 	/// Saves a saved game to YAML.
-	void save(const std::string &filename) const;
+	void save(const std::string &filename, Language *lang) const;
 	/// Gets game difficulty.
 	GameDifficulty getDifficulty() const;
 	/// Sets game difficulty.
