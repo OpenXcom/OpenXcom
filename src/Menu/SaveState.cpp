@@ -167,7 +167,7 @@ void SaveState::edtSaveKeyPress(Action *action)
 			{
 				if (!CrossPlatform::deleteFile(oldName))
 				{
-					throw Exception(Language::wstrToUtf8(lang->getString("STR_OVERWRITE_FAIL")));
+					throw Exception(Language::wstrToUtf8(_game->getLanguage()->getString("STR_OVERWRITE_FAIL")));
 				}
 			}
 			_game->popState();
