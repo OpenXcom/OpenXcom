@@ -419,8 +419,6 @@ void SoldierInfoState::init()
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
 
-	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
-
 	bool isSoldierOnBase = !(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT");
 	_btnArmor->setActive(isSoldierOnBase);
 	_btnSack->setActive(isSoldierOnBase);
