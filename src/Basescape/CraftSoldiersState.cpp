@@ -262,6 +262,10 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
 	}
+	else if (s->getCraft() && s->getCraft()->getStatus() == "STR_OUT")
+	{
+		color = Palette::blockOffset(15)+6;
+	}
 	else if (c->getSpaceAvailable() > 0 && s->getWoundRecovery() == 0)
 	{
 		s->setCraft(c);

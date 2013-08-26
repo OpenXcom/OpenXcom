@@ -633,6 +633,8 @@ STR_AMMO_
 MUNICIÓN > 
 STR_CREW
 Tripulación
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 Armamento
 STR_ARMOR

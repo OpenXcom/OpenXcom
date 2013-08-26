@@ -56,10 +56,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnPrev = new TextButton(28, 14, 0, 33);
 	_btnOk = new TextButton(48, 14, 30, 33);
 	_btnNext = new TextButton(28, 14, 80, 33);
-	_btnArmor = new TextButton(60, 14, 130, 33);
+	_btnArmor = new TextButton(110, 14, 130, 33);	// (60, 14, 130, 33);
 	_edtSoldier = new TextEdit(200, 16, 40, 9);
-	_btnSack = new TextButton(60,14,248, 10);
-	_txtArmor = new Text(120, 9, 194, 38);
+	_btnSack = new TextButton(60, 14, 260, 33); 	// (60, 14, 248, 10);
+//	_txtArmor = new Text(120, 9, 194, 38);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
 	_txtKills = new Text(100, 9, 230, 48);
@@ -115,7 +115,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_btnArmor);
 	add(_edtSoldier);
 	add(_btnSack);
-	add(_txtArmor);
+//	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
@@ -193,7 +193,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
 
-	_txtArmor->setColor(Palette::blockOffset(13));
+//	_txtArmor->setColor(Palette::blockOffset(13));
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
@@ -343,26 +343,6 @@ void SoldierInfoState::init()
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
 
-	if(current->psiSkill > 0)
-	{
-		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
-
-		_txtPsiSkill->setVisible(true);
-		_numPsiSkill->setVisible(true);
-		_barPsiSkill->setVisible(true);
-	}
-	else
-	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-
-		_txtPsiSkill->setVisible(false);
-		_numPsiSkill->setVisible(false);
-		_barPsiSkill->setVisible(false);
-	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
 	texture->getFrame(s->getRankSprite())->setY(0);
@@ -424,7 +404,22 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 	_barStrength->setValue2(initial->strength);
 
-	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
+	std::wstring wsArmor;
+	std::string armorType = s->getArmor()->getType();
+	if (armorType == "STR_NONE_UC")
+	{
+		wsArmor.reserve(15);
+		wsArmor = _game->getLanguage()->getString("STR_ARMOR");
+		wsArmor += L"> ";
+		wsArmor += _game->getLanguage()->getString(armorType);
+	}
+	else
+		wsArmor = _game->getLanguage()->getString(armorType);
+
+	_btnArmor->setText(wsArmor);
+//	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
+
+	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
 
 	bool isSoldierOnBase = !(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT");
 	_btnArmor->setActive(isSoldierOnBase);

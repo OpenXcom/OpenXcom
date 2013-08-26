@@ -43,6 +43,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "../Battlescape/InventoryState.h"
 #include "../Battlescape/BattlescapeGenerator.h"
+#include "../Menu/ErrorMessageState.h"
 #include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
@@ -98,7 +99,7 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	
+
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
@@ -233,6 +234,9 @@ void CraftEquipmentState::init()
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	_game->getSavedGame()->setBattleGame(0);
+
+	Craft *c = _base->getCrafts()->at(_craft);
+	c->setInBattlescape(false);
 }
 
 /**
@@ -610,15 +614,25 @@ void CraftEquipmentState::btnClearClick(Action *)
 */
 void CraftEquipmentState::btnInventoryClick(Action *)
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+	Craft *craft = _base->getCrafts()->at(_craft);
+	if (craft->getNumSoldiers() == 0)
+	{
+		std::wstringstream ss;
+		ss << craft->getName(_game->getLanguage()) << L'\n' << _game->getLanguage()->getString("STR_NO_CREW");
+		_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+	}
+	else
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-	SavedBattleGame *bgame = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(bgame);
+		SavedBattleGame *bgame = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(bgame);
 
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-	bgen.runInventory(_base->getCrafts()->at(_craft));
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.runInventory(craft);
 
-	_game->pushState(new InventoryState(_game, false, 0));
+		_game->pushState(new InventoryState(_game, false, 0));
+	}
 }
 
 }
