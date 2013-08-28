@@ -571,7 +571,7 @@ int Base::getAvailableStores() const
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			total += (*i)->getRules()->getStorage();
+			total += (*i)->getRules()->getStorage() + Options::getInt("storageInHangar") * (*i)->getRules()->getCrafts();
 		}
 	}
 	return total;
