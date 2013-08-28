@@ -400,9 +400,12 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 		// Taken into account smoke between shooter and target. 5% per tile with max density of smoke 15.
 		if (smokeDensity > 0)
 			effectiveAccuracy -= 0.05 * smokeDensity / 15.0;
+		// Each next shot of autoshot reduces accuracy.
+		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter > 1)
+			effectiveAccuracy -= 0.05 * (_action.autoShotCounter - 1);
 
 		if (effectiveAccuracy > -0.2)
-			baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT? 0.28 : 0.26) / (effectiveAccuracy + 0.25);
+			baseDeviation = -0.15 + 0.26 / (effectiveAccuracy + 0.25);
 		else
 			baseDeviation = 5.0;	// 5.0 radian - max deviation for worst case.
 

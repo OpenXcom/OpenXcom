@@ -93,7 +93,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
-	_showChanceToHit = Options::getBool("showChanceToHit");
+	_showChanceToHit = Options::getBool("battleShowChanceToHit");
 	_numChanceToHit = new NumberText(15, 15, 20, 30);
 	_numChanceToHit->setPalette(getPalette());
 	_numChanceToHit->setColor(Palette::blockOffset(1));
