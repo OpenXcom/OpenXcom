@@ -131,6 +131,7 @@ void createDefault()
 	setBool("borderless", false);
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
+	setInt("storageInHangar", 0);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
