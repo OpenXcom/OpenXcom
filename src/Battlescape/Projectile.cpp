@@ -398,16 +398,20 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 		if (targetUnit && targetUnit->isKneeled())
 			effectiveAccuracy -= 0.05;
 		// Taken into account smoke between shooter and target. 5% per tile with max density of smoke 15.
+		// Anyway, we cannot to see more 4 tiles in dense smoke. Therefore maximum decrease is 20%.
 		if (smokeDensity > 0)
-			effectiveAccuracy -= 0.05 * smokeDensity / 15.0;
+		{
+			double accPenalty = 0.05 * smokeDensity / 15.0;
+			effectiveAccuracy -= (accPenalty < 0.20)? accPenalty : 0.20;
+		}
 		// Each next shot of autoshot reduces accuracy.
 		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter > 1)
-			effectiveAccuracy -= 0.05 * (_action.autoShotCounter - 1);
+			effectiveAccuracy -= 0.10;
 
-		if (effectiveAccuracy > -0.2)
+		if (effectiveAccuracy > -0.15)
 			baseDeviation = -0.15 + 0.26 / (effectiveAccuracy + 0.25);
 		else
-			baseDeviation = 5.0;	// 5.0 radian - max deviation for worst case.
+			baseDeviation = 2.45;	// 2.45 radian - max deviation for worst case.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02)
