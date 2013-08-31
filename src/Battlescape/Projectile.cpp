@@ -437,7 +437,9 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 			{
 				int loftemps = targetUnit->getLoftemps();
 				if (loftemps > 5) loftemps = 8;
-				return approxF(baseDeviation / 6.0, (0.5 + loftemps) / realDistance);
+				return approxF(baseDeviation / 6.0, (0.5 + loftemps) / realDistance)
+					* approxF(baseDeviation / 12.0, 0.5 * targetUnit->getHeight() / realDistance)
+					/ 100;
 			}
 			else
 				return -1;
@@ -495,7 +497,8 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 
 			int loftemps = targetUnit->getLoftemps();
 			if (loftemps > 5) loftemps = 8;
-			return (int) (100.0 * accuracy + (1.0 - accuracy) * approxF(baseDeviation * M_PI / 180.0, (0.5 + loftemps) / realDistance));
+			return (int) (100.0 * accuracy + (1.0 - accuracy) * (approxF(baseDeviation * M_PI / 180.0, (0.5 + loftemps) / realDistance)
+				* approxF(baseDeviation / 2.0 * M_PI / 180.0, 0.5 * targetUnit->getHeight() / realDistance)) / 100.0);
 		}
 		else
 			return -1;
