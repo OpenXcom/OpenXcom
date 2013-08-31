@@ -121,7 +121,7 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glFlush();
   }
 
-  void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight) {
+  void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
 #ifndef __NO_SHADERS
     if(shader_support && (fragmentshader || vertexshader)) {    
@@ -176,14 +176,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     //vertex range = x1:0, y1:0, x2:width, y2:height
     double w = double(inwidth)  / double(iwidth);
     double h = double(inheight) / double(iheight);
-    int u = outwidth;
-    int v = outheight;
+    int u1 = leftBlackBand;
+    int u2 = outwidth - rightBlackBand;
+    int v1 = outheight - topBlackBand;
+    int v2 = bottomBlackBand;
 	
     glBegin(GL_TRIANGLE_STRIP);
-    glTexCoord2f(0, 0); glVertex3i(0, v, 0);
-    glTexCoord2f(w, 0); glVertex3i(u, v, 0);
-    glTexCoord2f(0, h); glVertex3i(0, 0, 0);
-    glTexCoord2f(w, h); glVertex3i(u, 0, 0);
+    glTexCoord2f(0, 0); glVertex3i(u1, v1, 0);
+    glTexCoord2f(w, 0); glVertex3i(u2, v1, 0);
+    glTexCoord2f(0, h); glVertex3i(u1, v2, 0);
+    glTexCoord2f(w, h); glVertex3i(u2, v2, 0);
     glEnd();
 	glErrorCheck();
 

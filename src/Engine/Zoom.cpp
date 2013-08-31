@@ -648,13 +648,13 @@ bool Zoom::haveSSE2()
  * Wrapper around various software and OpenGL screen buffer pushing functions which zoom.
  * Basically called just from Screen::flip()
  */
-void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, OpenGL *glOut)
+void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
 {
 	if (Screen::isOpenGLEnabled() && glOut->buffer_surface)
 	{
 		SDL_BlitSurface(src, 0, glOut->buffer_surface->getSurface(), 0); // TODO; this is less than ideal...
 
-		glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h);
+		glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h, topBlackBand, bottomBlackBand, leftBlackBand, rightBlackBand);
 		SDL_GL_SwapBuffers();
 	} else
 	{
