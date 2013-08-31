@@ -399,14 +399,13 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 			effectiveAccuracy -= 0.05;
 		// Taken into account smoke between shooter and target. 5% per tile with max density of smoke 15.
 		// Anyway, we cannot to see more 4 tiles in dense smoke. Therefore maximum decrease is 20%.
-		if (smokeDensity > 0)
-		{
-			double accPenalty = 0.05 * smokeDensity / 15.0;
-			effectiveAccuracy -= (accPenalty < 0.20)? accPenalty : 0.20;
-		}
+		if (smokeDensity >= 60)
+			effectiveAccuracy -= 0.20;
+		else if (smokeDensity > 0)
+			effectiveAccuracy -= 0.05 * smokeDensity / 15.0;
 		// Each next shot of autoshot reduces accuracy.
 		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter > 1)
-			effectiveAccuracy -= 0.10;
+			effectiveAccuracy -= 0.05;
 
 		if (effectiveAccuracy > -0.15)
 			baseDeviation = -0.15 + 0.26 / (effectiveAccuracy + 0.25);
