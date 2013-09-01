@@ -399,7 +399,7 @@ void SavedGame::save(const std::string &filename) const
 	}
 	for (std::vector<const RuleResearch *>::const_iterator i = _poppedResearch.begin(); i != _poppedResearch.end(); ++i)
 	{
-		node["discovered"].push_back((*i)->getName());
+		node["poppedResearch"].push_back((*i)->getName());
 	}
 	node["alienStrategy"] = _alienStrategy->save();
 	if (_battleGame != 0)
