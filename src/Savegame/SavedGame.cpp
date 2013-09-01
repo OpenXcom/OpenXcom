@@ -89,7 +89,6 @@ bool equalProduction::operator()(const Production * p) const
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
- * @param starting time
  */
 SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles("")
 {

@@ -65,7 +65,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_txtKills = new Text(100, 9, 230, 48);
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
-	_txtPsionic = new Text(140, 9, 0, 66);
+	_txtPsionic = new Text(150, 9, 0, 66);
 
 	_txtTimeUnits = new Text(120, 9, 6, 82);
 	_numTimeUnits = new Text(18, 9, 131, 82);

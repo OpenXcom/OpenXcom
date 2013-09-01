@@ -181,7 +181,14 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 		{
 			_items.push_back(*i);
 			std::wstringstream ss, ss2;
-			ss << _base->getItems()->getItem(*i);
+			if (_game->getSavedGame()->getMonthsPassed() > -1)
+			{
+				ss << _base->getItems()->getItem(*i);
+			}
+			else
+			{
+				ss << "-";
+			}
 			ss2 << cQty;
 
 			std::wstring s = _game->getLanguage()->getString(*i);
@@ -387,7 +394,14 @@ void CraftEquipmentState::updateQuantity()
 		cQty = c->getItems()->getItem(_items[_sel]);
 	}
 	std::wstringstream ss, ss2;
-	ss << _base->getItems()->getItem(_items[_sel]);
+	if (_game->getSavedGame()->getMonthsPassed() > -1)
+	{
+		ss << _base->getItems()->getItem(_items[_sel]);
+	}
+	else
+	{
+		ss << "-";
+	}
 	ss2 << cQty;
 
 	Uint8 color;
