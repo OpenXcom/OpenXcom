@@ -383,7 +383,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 		for(int j=0; j<height; ++j)
 			for(int i=0; i<width; ++i)
 			{
-				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
+				_earthData[r][width*j + i] = static_data.circle_norm(x+_cenX, y+_cenY, _radius[r], i+.5, j+.5);
 			}
 	}
 
@@ -1631,7 +1631,7 @@ void Globe::blit(Surface *surface)
 void Globe::mousePress(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	cartToPolar((Sint16)action->getRelativeXMouse(), (Sint16)action->getRelativeYMouse(), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1646,7 +1646,7 @@ void Globe::mousePress(Action *action, State *state)
 void Globe::mouseRelease(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	cartToPolar((Sint16)action->getRelativeXMouse(), (Sint16)action->getRelativeYMouse(), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1662,7 +1662,7 @@ void Globe::mouseRelease(Action *action, State *state)
 void Globe::mouseClick(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	cartToPolar((Sint16)action->getRelativeXMouse(), (Sint16)action->getRelativeYMouse(), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)

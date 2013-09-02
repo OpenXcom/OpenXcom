@@ -237,8 +237,8 @@ void MiniMapView::mouseClick (Action *action, State *state)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		int origX = action->getRelativeXMouse() / action->getXScale();
-		int origY = action->getRelativeYMouse() / action->getYScale();
+		int origX = (int)action->getRelativeXMouse();
+		int origY = (int)action->getRelativeYMouse();
 		// get offset (in cells) of the click relative to center of screen
 		int xOff = (origX / CELL_WIDTH) - ((getWidth() / 2) / CELL_WIDTH);
 		int yOff = (origY / CELL_HEIGHT) - ((getHeight() / 2) / CELL_HEIGHT);
