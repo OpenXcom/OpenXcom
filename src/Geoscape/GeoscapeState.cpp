@@ -119,7 +119,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 
 	// Create objects
 	_bg = new Surface(320, 200, screenWidth-320, screenHeight/2-100);
-	_globe = new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, 0, 0);
+	_globe = new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, Screen::getDX(), Screen::getDY());
 
 	_btnIntercept = new ImageButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases = new ImageButton(63, 11, screenWidth-63, screenHeight/2-88);
@@ -214,6 +214,8 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	add(_txtYear);
 
 	add(_txtDebug);
+
+	centerAllSurfaces();
 
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
