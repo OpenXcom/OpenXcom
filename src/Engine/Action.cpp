@@ -135,7 +135,7 @@ double Action::getRelativeXMouse() const
 {
 	if (_mouseX == -1)
 		return -1;
-	return _mouseX - _surfaceX * _scaleX;
+	return _mouseX / _scaleX - _surfaceX;
 }
 
 /**
@@ -148,7 +148,7 @@ double Action::getRelativeYMouse() const
 {
 	if (_mouseY == -1)
 		return -1;
-	return _mouseY - _surfaceY * _scaleY;
+	return _mouseY / _scaleY - _surfaceY;
 }
 
 /**

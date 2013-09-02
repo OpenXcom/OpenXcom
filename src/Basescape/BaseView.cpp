@@ -578,8 +578,8 @@ void BaseView::blit(Surface *surface)
  */
 void BaseView::mouseOver(Action *action, State *state)
 {
-	_gridX = (int)floor(action->getRelativeXMouse() / (GRID_SIZE * action->getXScale()));
-	_gridY = (int)floor(action->getRelativeYMouse() / (GRID_SIZE * action->getYScale()));
+	_gridX = (int)floor(action->getRelativeXMouse() / GRID_SIZE);
+	_gridY = (int)floor(action->getRelativeYMouse() / GRID_SIZE);
 	if (_gridX >= 0 && _gridX < BASE_SIZE && _gridY >= 0 && _gridY < BASE_SIZE)
 	{
 		_selFacility = _facilities[_gridX][_gridY];

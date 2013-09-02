@@ -254,7 +254,7 @@ struct CreateShadow
  * @param y Y position in pixels.
  */
 Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y):
-	InteractiveSurface(width, height, x, y),
+	InteractiveSurface(width, height, 0, 0),	// 0,0 because this surface will be centered in the GeoscapeState
 	_rotLon(0.0), _rotLat(0.0),
 	_cenX(cenX), _cenY(cenY), _game(game),
 	_blink(true), _hover(false), _cacheLand()
@@ -383,7 +383,7 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 		for(int j=0; j<height; ++j)
 			for(int i=0; i<width; ++i)
 			{
-				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
+				_earthData[r][width*j + i] = static_data.circle_norm(_cenX, _cenY, _radius[r], i+.5, j+.5);
 			}
 	}
 
@@ -1084,7 +1084,7 @@ void Globe::drawShadow()
 	ShaderMove<Cord> earth = ShaderMove<Cord>(_earthData[_zoom], getWidth(), getHeight());
 	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
 	
-	earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
+	earth.setMove(getX()+_cenX-getWidth()/2, getY()+_cenY-getHeight()/2);
 	
 	lock();
 	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise);
@@ -1631,7 +1631,7 @@ void Globe::blit(Surface *surface)
 void Globe::mousePress(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	cartToPolar((Sint16)action->getRelativeXMouse(), (Sint16)action->getRelativeYMouse(), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1646,7 +1646,7 @@ void Globe::mousePress(Action *action, State *state)
 void Globe::mouseRelease(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	cartToPolar((Sint16)action->getRelativeXMouse(), (Sint16)action->getRelativeYMouse(), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1662,7 +1662,7 @@ void Globe::mouseRelease(Action *action, State *state)
 void Globe::mouseClick(Action *action, State *state)
 {
 	double lon, lat;
-	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
+	cartToPolar((Sint16)action->getRelativeXMouse(), (Sint16)action->getRelativeYMouse(), &lon, &lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
