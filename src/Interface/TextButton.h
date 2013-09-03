@@ -38,7 +38,7 @@ class Sound;
 class TextButton : public InteractiveSurface
 {
 private:
-	Uint8 _color;
+	Uint8 _color, _inactiveColor;
 	Text *_text;
 	TextButton **_group;
 	bool _contrast;
@@ -49,7 +49,7 @@ public:
 	/// Cleans up the text button.
 	~TextButton();
 	/// Sets the text button's color.
-	void setColor(Uint8 color);
+	void setColor(Uint8 color, Uint8 inactiveColor = 0);
 	/// Gets the text button's color.
 	Uint8 getColor() const;
 	/// Sets the text button's various fonts.
@@ -70,6 +70,8 @@ public:
 	void mousePress(Action *action, State *state);
 	/// Special handling for mouse releases.
 	void mouseRelease(Action *action, State *state);
+	/// Sets the activity flag.
+	void setActive(bool active);
 };
 
 }

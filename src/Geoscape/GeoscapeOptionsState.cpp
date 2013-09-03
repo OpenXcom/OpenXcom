@@ -64,11 +64,11 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnLoad->setColor(Palette::blockOffset(15)-1);
+	_btnLoad->setColor(Palette::blockOffset(15)-1, Palette::blockOffset(10));
 	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
 
-	_btnSave->setColor(Palette::blockOffset(15)-1);
+	_btnSave->setColor(Palette::blockOffset(15)-1, Palette::blockOffset(10));
 	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
 
@@ -88,8 +88,8 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 
 	if (Options::getInt("autosave") >= 2)
 	{
-		_btnSave->setVisible(false);
-		_btnLoad->setVisible(false);
+		_btnSave->setActive(false);
+		_btnLoad->setActive(false);
 	}
 }
 
