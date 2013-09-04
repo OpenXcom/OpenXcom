@@ -166,7 +166,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	_tuReserved = BA_NONE;
 
-	if (unit->getTimeUnits() <= 5 || (unit->_hidingForTurn && unit->getPosition() == unit->lastCover && _AIActionCounter >= 2))
+	// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
+	// melee get more because chryssalids and reapers need to attack many times to be scary
+	const int AIActionLimit = (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
+
+	if (unit->getTimeUnits() <= 5 || (unit->_hidingForTurn && unit->getPosition() == unit->lastCover && _AIActionCounter >= 2) || _AIActionCounter > AIActionLimit )
 	{
 		if (_save->selectNextPlayerUnit(true, true) == 0)
 		{
@@ -903,10 +907,7 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
-				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-				 // melee get more because chryssalids and reapers need to attack many times to be scary
-				if (_AIActionCounter > AIActionLimit || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
