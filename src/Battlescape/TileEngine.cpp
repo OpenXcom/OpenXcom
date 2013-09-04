@@ -1044,12 +1044,12 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
-	BattleUnit *bu;
-	if(tile)
+	if(!tile)
 	{
-		bu = tile->getUnit();
+		return 0;
 	}
 
+	BattleUnit *bu = tile->getUnit();
 	int adjustedDamage = 0;
 	const int part = voxelCheck(center, unit);
 	if (part >= 0 && part <= 3)
