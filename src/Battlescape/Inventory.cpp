@@ -704,7 +704,7 @@ void Inventory::mouseClick(Action *action, State *state)
 								if (BT_PROXIMITYGRENADE == itemType) item->setExplodeTurn(1);
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
-							else item->setExplodeTurn(25);  // Unprime the grenade
+							else item->defuse();  // Unprime the grenade
 						}
 					}
 				}

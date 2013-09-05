@@ -69,7 +69,7 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false), _g(0)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false)
 {
 	_tuReserved = BA_NONE;
 	_playerTUReserved = BA_NONE;
@@ -392,6 +392,7 @@ bool BattlescapeGame::kneel(BattleUnit *bu)
 void BattlescapeGame::endTurn()
 {
 	Position p;
+	static int i = 0;
 
 	_tuReserved = _playerTUReserved;
 	_debugPlay = false;
@@ -408,15 +409,15 @@ void BattlescapeGame::endTurn()
 
 	// check for hot grenades on the ground
 	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
-		for ( ; _g < _save->getMapSizeXYZ(); ++_g)
+		for ( ; i < _save->getMapSizeXYZ(); ++i)
 		{
-			for (std::vector<BattleItem*>::iterator it = _save->getTiles()[_g]->getInventory()->begin(); it != _save->getTiles()[_g]->getInventory()->end(); )
+			for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 			{
 				if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->isCountdownOver())  // it's a grenade to explode now
 				{
-					p.x = _save->getTiles()[_g]->getPosition().x*16 + 8;
-					p.y = _save->getTiles()[_g]->getPosition().y*16 + 8;
-					p.z = _save->getTiles()[_g]->getPosition().z*24 - _save->getTiles()[_g]->getTerrainLevel();
+					p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
+					p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
+					p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
 					statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
 					_save->removeItem((*it));
 					statePushBack(0);
@@ -489,7 +490,7 @@ void BattlescapeGame::endTurn()
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}
 	_endTurnRequested = false;
-	_g = 0;
+	i = 0;
 }
 
 
