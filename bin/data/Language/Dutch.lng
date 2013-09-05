@@ -46,9 +46,9 @@ Muton-autopsie
 STR_MUTON_AUTOPSY_UFOPEDIA
 De 'huid' van dit schepsel lijkt een organisch beschermend harnas, dat geënt is op het lichaam. Er zijn tal van cybernetische implantaten die gebruikt worden om het hart- en vaatstelsel en de zintuigen te verbeteren. De voortplantingsorganen lijken operatief te zijn verwijderd. Deze ongelukkige wezens zijn beperkt tot een leven van oorlog en verovering. Pantserdoorborende munitie is niet erg doeltreffend tegen hun geharde huid.
 STR_CELATID_UFOPEDIA
-Deze levensvorm heeft het mysterieuze natuurlijke vermogen om te zweven door de lucht. Het lijkt menselijke hersengolven op te sporen en te volgen. Zodra een doelwit wordt gedetecteerd, landt de Celatid en vuurt kleine bolletjes extreem bijtend gif af. Het wezen heeft het vermogen om zichzelf te klonen in een alarmerend tempo. Het begeleidt het Muton ras in zijn zoektocht.
+Deze levensvorm heeft het mysterieuze natuurlijke vermogen om te zweven door de lucht. Het lijkt menselijke hersengolven op te sporen en te volgen. Zodra een doelwit wordt gedetecteerd, landt de Celatide en vuurt kleine bolletjes extreem bijtend gif af. Het wezen heeft het vermogen om zichzelf te klonen in een alarmerend tempo. Het begeleidt het Muton ras in zijn zoektocht.
 STR_CELATID_AUTOPSY
-Celatid-autopsie
+Celatide-autopsie
 STR_CELATID_AUTOPSY_UFOPEDIA
 De kern bevat een klein bio-mechanisch apparaat welk een natuurlijk geëvolueerde anti-zwaartekrachtaandrijving lijkt te zijn. De gifzak is het grootste orgaan en er lijkt geen aparte hersenstructuur te zijn. Er zijn geen waarneembare spijsverterings- of voortplantingsorganen. Een klein orgaan bevat embryo's die snel kunnen uitgroeien tot een nieuw wezen.
 STR_SILACOID_UFOPEDIA
@@ -84,9 +84,9 @@ De robot is stevig gebouwd met een krachtig pantser wat de meeste soorten aanval
 STR_CYBERDISC_UFOPEDIA
 Deze miniatuur-vliegende schotel is een geautomatiseerd terreurwapen uitgerust met een krachtige plasmastraal. De anti-zwaartekrachtaandrijving is een groot voordeel op zwaar terrein. De primaire functie is vernietiging en terreur tot dienst van het ras der Sectoïden.
 STR_CYBERDISC_AUTOPSY
-Cyberdisc-autopsie
+Cyberschijf-autopsie
 STR_CYBERDISC_AUTOPSY_UFOPEDIA
-De Cyberdisc is goed afgeschermd en is zeer goed bestand tegen explosieve munitie.  Het primaire anti-zwaartekrachtsysteem is te zwaar beschadigd om een goed beeld te krijgen van hoe het functioneert.
+De Cyberschijf is goed afgeschermd en is zeer goed bestand tegen explosieve munitie.  Het primaire anti-zwaartekrachtsysteem is te zwaar beschadigd om een goed beeld te krijgen van hoe het functioneert.
 STR_UFO_POWER_SOURCE_UFOPEDIA
 De energiebron van buitenaardse vaartuigen is een antimaterie-reactor welke gebruik maakt van Elerium (element 115) om krachtige zwaartekrachtgolven alsook andere vormen van energie te genereren. De conversie van materie naar energie behaalt een indrukwekkend rendement van 99%, dus uiterst kleine hoeveelheden Elerium kunnen een gigantische hoeveelheid energie produceren. Deze eenheid kan eenvoudig worden geproduceerd met behulp van buitenaardse legeringen.
 STR_UFO_NAVIGATION_UFOPEDIA
@@ -254,7 +254,7 @@ STOP PRODUCTIE
 STR_ENGINEERS_AVAILABLE_UC
 INGENIEURS BESCHIKBAAR>
 STR_WORKSHOP_SPACE_AVAILABLE_UC
-WERKRUIMTE BESCHIKBAAR>
+BESCHIKBAARE WERKPLAATS>
 STR_ENGINEERS
 Ingenieurs
 STR_ALLOCATED
@@ -518,405 +518,411 @@ KAN HIER NIET BOUWEN!{SMALLLINE}Je moet naast een bestaande ruimte bouwen.
 STR_NO_FREE_ACCOMODATION
 GEEN ACCOMODATIE BESCHIKBAAR!{SMALLLINE}De doelbasis heeft niet genoeg leefruimte.
 STR_NOT_ENOUGH_WORK_SPACE
-NIET GENOEG WERKRUIMTE BESCHIKBAAR!{SMALLLINE}Bouw een nieuwe werkruimte of verminder werk op andere projecten.
+ONVOLDOENDE WERKPLAATS BESCHIKBAAR!{SMALLLINE}Bouw meer werkplaatsen of verminder werk op andere projecten.
 STR_NOT_ENOUGH_MONEY
-NIET GENOEG GELD!
+TE WEINIG GELD!
 STR_NOT_ENOUGH_TRANSFER_SUPPORT
-NIET GENOEG TRANSFER SUPPORT!{SMALLLINE}Wacht tot de huidige transfers zijn toegekomen.
+NIET GENOEG RUIMTE VOOR OVERPLAATSING!{SMALLLINE}Wacht tot de huidige overplaatsingen zijn voltooid.
 STR_NO_MORE_SOLDIERS_ALLOWED
-NIET MEER SOLDATEN TOEGLATEN!{SMALLLINE}Je hebt het maximum aantal soldaten in dienst.
+GEEN EXTRA SOLDATEN TOEGLATEN!{SMALLLINE}Je hebt het maximum aantal soldaten in dienst.
 STR_NOT_ENOUGH_STORE_SPACE
 NIET GENOEG OPSLAGRUIMTE!{SMALLLINE}Bouw nieuwe opslagruimte of maak ruimte vrij.
 STR_NOT_ENOUGH_LIVING_SPACE
-NIET GENOEG LEEFRUIMTE!{SMALLLINE}Bouw nieuwe leefruimten of verplaats personeel naar andere basissen.
+NIET GENOEG LEEFRUIMTE!{SMALLLINE}Bouw nieuwe leefruimte of verplaats personeel naar andere bases.
 STR_NO_MORE_EQUIPMENT_ALLOWED_ON_BOARD
-NIET MEER UITRUSTING TOEGELATEN AAN BOORD!{SMALLLINE}Maximum 80 voorwerpen zijn toegelaten op een missie.
+NIET MEER UITRUSTING TOEGELATEN AAN BOORD!{SMALLLINE}Maximaal 80 voorwerpen zijn toegelaten op een missie.
 STR_LAUNCH_INTERCEPTION
-LAUNCH INTERCEPTION
+LANCEER ONDERSCHEPPING
 STR_CRAFT
-CRAFT
+VAARTUIG
 STR_STATUS
 STATUS
 STR_BASE
-BASE
+BASIS
 STR_READY
-READY
+GEREED
 STR_OUT
-OUT
+ONDERWEG
 STR_REPAIRS
-REPAIRS
+REPARATIE
 STR_REFUELLING
-REFUELING
+BIJTANKEN
 STR_REARMING
-REARMING
+BEWAPENEN
 STR_TARGET
-TARGET: 
+DOELWIT: 
 STR_TARGET_WAY_POINT
-TARGET: WAY POINT
+DOELWIT: MARKEERPUNT
 STR_ARE_YOU_SURE_CYDONIA
-Are you sure you want to send this craft on a mission to Cydonia?
+Weet je zeker dat je dit vaartuig op missie naar Cydonia wil sturen?
 STR_YES
-YES
+JA
 STR_NO
-NO
+NEE
 STR_SELECT_DESTINATION
-SELECT DESTINATION
+SELECTEER BESTEMMING
 STR_CYDONIA
 CYDONIA
 STR_SELECT_SITE_FOR_NEW_BASE
-SELECT SITE FOR NEW BASE
+KIES PLAATS VOOR NIEUWE BASIS
 STR_RETURN_TO_BASE
-RETURN TO BASE
+TERUGKEREN NAAR BASIS
 STR_SELECT_NEW_TARGET
-SELECT NEW TARGET
+SELECTEER NIEUW DOELWIT
 STR_PATROL
-PATROL
+PATROUILLEREN
 STR_STATUS_
 STATUS>
 STR_DAMAGED_RETURNING_TO_BASE
-DAMAGED - RETURNING TO BASE
+BESCHADIGD - KEERT TERUG NAAR BASIS
 STR_LOW_FUEL_RETURNING_TO_BASE
-LOW FUEL - RETURNING TO BASE
+WEINIG BRANDSTOF - KEERT TERUG NAAR BASIS
 STR_PATROLLING
-PATROLLING
+PATROUILLEERT
 STR_TAILING_UFO
-TAILING UFO
+ACHTERVOLGT UFO
 STR_INTERCEPTING_UFO
-INTERCEPTING UFO-
+ONDERSCHEPT UFO 
 STR_RETURNING_TO_BASE
-RETURNING TO BASE
-STR_DESTINATION_UC_
-DESTINATION: 
+KEERT TERUG NAAR BASIS
+STR_DESTINATION_ALIEN_BASE
+BESTEMMING: BUITENAARDSE BASIS 
+STR_DESTINATION_CRASH_SITE
+BESTEMMING: CRASHPLAATS 
+STR_DESTINATION_LANDING_SITE
+BESTEMMING: LANDINGSPLAATS 
+STR_DESTINATION_WAY_POINT
+BESTEMMING: MARKEERPUNT 
 STR_SPEED_
-SPEED>
+SNELHEID>
 STR_MAXIMUM_SPEED_UC
-MAXIMUM SPEED>
+MAXIMUMSNELHEID>
 STR_ALTITUDE_
-ALTITUDE>
+HOOGTE>
 STR_VERY_LOW
-VERY LOW
+ZEER LAAG
 STR_LOW_UC
-LOW
+LAAG
 STR_HIGH_UC
-HIGH
+HOOG
 STR_VERY_HIGH
-VERY HIGH
+ZEER HOOG
 STR_FUEL
-FUEL>
+BRANDSTOF>
 STR_WEAPON_ONE
-WEAPON-1>
+WAPEN 1>
 STR_NONE_UC
-NONE
+GEEN
 STR_ROUNDS_
-ROUNDS>
+RONDES>
 STR_WEAPON_TWO
-WEAPON-2>
+WAPEN 2>
 STR_HOSTILE
-HOSTILE
+KWAADGEZIND
 STR_NEUTRAL
-NEUTRAL
+NEUTRAAL
 STR_FRIENDLY
-FRIENDLY
+BEVRIEND
 STR_COMMITTED
-COMMITTED
+TOEGEWEZEN
 STR_GAME_OPTIONS
-GAME OPTIONS
+SPELOPTIES
 STR_LOAD_GAME
-LOAD GAME
+SPEL LADEN
 STR_SAVE_GAME
-SAVE GAME
+SPEL OPSLAAN
 STR_INTERCEPTION_CRAFT
-INTERCEPTION CRAFT
+ONDERSCHEPPINGSVAARTUIGEN
 STR_BASE_
-Base>
+Basis>
 STR_NAME_UC
-NAME
+NAAM
 STR_AMMO_
-AMMO>
+MUNITIE>
 STR_CREW
-CREW
+BEZETTING
 STR_NO_CREW
-has no crew
+Heeft geen bezetting
 STR_EQUIPMENT_UC
-EQUIPMENT
+UITRUSTING
 STR_ARMOR
-ARMOR
+PANTSERS
 STR_MAX
 MAX>
 STR_ROOKIE
-Rookie
+Nieuweling
 STR_SQUADDIE
-Squaddie
+Soldaat
 STR_SERGEANT
 Sergeant
 STR_CAPTAIN
-Captain
+Kapitein
 STR_COLONEL
-Colonel
+Kolonel
 STR_COMMANDER
-Commander
+Commandeur
 STR_SPACE_AVAILABLE
-SPACE AVAILABLE>
+BESCHIKBARE RUIMTE>
 STR_SPACE_USED
-SPACE USED>
+GEBRUIKTE RUIMTE>
 STR_RANK
-RANK
+RANG
 STR_WOUNDED
-WOUNDED
+GEWOND
 STR_ARM
 Arm 
-STR_DEFENSE_VALUE
-Defense Value
+STR_DEFENCE_VALUE
+Defensieve Waarde
 STR_HIT_RATIO
-Hit Ratio
+Verhouding Treffers
 STR_READY_TO_LAND_NEAR
-ready to{NEWLINE}land near
+klaar om te{NEWLINE}landen bij
 STR_BEGIN_MISSION
-Begin Mission?
+Missie Starten?
 STR_SELECT_ARMAMENT
-Select Armament
+Bewapening Kiezen
 STR_AMMUNITION_UC
-AMMUNITION
+MUNITIE
 STR_ARMAMENT
-ARMAMENT
+BEWAPENING
 STR_AVAILABLE
-AVAILABLE
+BESCHIKBAAR
 STR_NOT_AVAILABLE
-N.A.
+NB
 STR_SELECT_ARMOR_FOR
-SELECT ARMOR FOR
+KIES BEPANTSERING VOOR
 STR_TYPE
 TYPE
 STR_PERSONAL_ARMOR_UC
-PERSONAL ARMOR
+PERSOONLIJK PANTSER
 STR_POWER_SUIT_UC
-POWER SUIT
+ENERGIEPAK
 STR_FLYING_SUIT_UC
-FLYING SUIT
+VLIEGEND PAK
 STR_SELECT_ARMOR
-Select Armor
+Kies Pantser
 STR_NORTH
-NORTH
+NOORDEN
 STR_NORTH_EAST
-NORTH EAST
+NOORD-OOSTEN
 STR_EAST
-EAST
+OOSTEN
 STR_SOUTH_EAST
-SOUTH EAST
+ZUID-OOSTEN
 STR_SOUTH
-SOUTH
+ZUIDEN
 STR_SOUTH_WEST
-SOUTH WEST
+ZUID-WESTEN
 STR_WEST
-WEST
+WESTEN
 STR_NORTH_WEST
-NORTH WEST
+NOORD-WESTEN
 STR_SELECT_ACTION
-SELECT ACTION
+KIES ACTIE
 STR_CONTINUE_INTERCEPTION_PURSUIT
-CONTINUE INTERCEPTION PURSUIT
+DOORGAAN MET ONDERSCHEPPINGSACHTERVOLGING
 STR_PURSUE_WITHOUT_INTERCEPTION
-PURSUE WITHOUT INTERCEPTION
+DOORGAAN ZONDER ONDERSCHEPPING
 STR_VERY_LARGE
-VERY LARGE
+ZEER GROOT
 STR_LARGE
-LARGE
+GROOT
 STR_MEDIUM_UC
-MEDIUM
+MIDDELGROOT
 STR_SMALL
-SMALL
+KLEIN
 STR_VERY_SMALL
-VERY SMALL
+ZEER KLEIN
 STR_GROUND
-GROUND
+GROND
 STR_DETECTED
-Detected
+Gedetecteerd
 STR_SIZE_UC
-SIZE
+GROOTTE
 STR_ALTITUDE
-ALTITUDE
+HOOGTE
 STR_HEADING
-HEADING
+RICHTING
 STR_SPEED
-SPEED
+SNELHEID
 STR_CENTER_ON_UFO_TIME_5_SECS
-CENTER ON UFO-TIME=5 Secs
+CENTREREN OP UFO-TIJD=5 Sec.
 STR_TRACKING_LOST
-TRACKING LOST
+SPOOR BIJSTER
 STR_REDIRECT_CRAFT
-REDIRECT CRAFT
+VAARTUIG OMLEIDEN
 STR_GO_TO_LAST_KNOWN_UFO_POSITION
-GO TO LAST KNOWN UFO POSITION
+GA NAAR LAATST BEKENDE UFO-POSITIE
 STR_UFO_
-UFO-
+UFO 
 STR_ALIEN_BASE_
-ALIEN BASE-
+BUITENAARDSE BASIS 
 STR_CRASH_SITE_
-CRASH SITE-
+CRASHPLAATS 
 STR_LANDING_SITE_
-LANDING SITE-
+LANDINGSPLAATS 
 STR_WAY_POINT_
-WAY POINT-
-STR_TERROR_SITE_UC
-TERROR SITE-
+MARKEERPUNT 
+STR_TERROR_SITE_
+TERREURLOCATIE-
 STR_HAS_REACHED
-has reached
+bereikt
 STR_DESTINATION
-Destination
+Bestemming
 STR_NOW_PATROLLING
-Now patrolling
+Patrioulleert nu
 STR_ALIEN_ORIGINS
-Alien Origins
+Buitenaardse Oorsprong
 STR_THE_MARTIAN_SOLUTION
-The Martian Solution
+De Martiaanse Oplossing
 STR_CYDONIA_OR_BUST
-Cydonia or Bust
+Cydonia of Niets
 STR_UFOPAEDIA
-UFOpedia
+UFOpedie
 STR_XCOM_CRAFT_ARMAMENT
-XCOM CRAFT & ARMAMENT
+XCOM VAARTUIGEN & BEWAPENING
 STR_HEAVY_WEAPONS_PLATFORMS
-HEAVY WEAPONS PLATFORMS
+ZWARE WAPENPLATFORMS
 STR_WEAPONS_AND_EQUIPMENT
-WEAPONS AND EQUIPMENT
+WAPENS EN UITRUSTING
 STR_ALIEN_ARTIFACTS
-ALIEN ARTIFACTS
+BUITENAARDSE VOORWERPEN
 STR_BASE_FACILITIES
-BASE FACILITIES
+BASISFACILITEITEN
 STR_ALIEN_LIFE_FORMS
-ALIEN LIFE FORMS
+BUITENAARDSE LEVENSVORMEN
 STR_ALIEN_RESEARCH_UC
-ALIEN RESEARCH
+ONDERZOEK NAAR HET BUITENAARDSE
 STR_UFO_COMPONENTS
-UFO COMPONENTS
+UFO-ONDERDELEN
 STR_UFOS
-UFOs
+UFO's
 STR_SELECT_ITEM
-SELECT ITEM
+SELECTEER ONDERDEEL
+STR_AUTOPSY
+ autopsie
 STR_ACCELERATION
-ACCELERATION>
+VERSNELLING>
 STR_FUEL_CAPACITY
-FUEL CAPACITY>
+BRANDSTOFCAPACITEIT>
 STR_WEAPON_PODS
-WEAPON PODS>
+MAGAZIJNEN>
 STR_DAMAGE_CAPACITY_UC
-DAMAGE CAPACITY>
+CAPACITEIT VOOR SCHADE>
 STR_CARGO_SPACE
-CARGO SPACE>
+LAADRUIMTE>
 STR_HWP_CAPACITY
-HWP CAPACITY>
+CAPACITEIT VOOR ZWP's>
 STR_DAMAGE
-Damage
+Schade
 STR_RANGE
-Range
+Bereik
 STR_KM
  km
 STR_ACCURACY
-Accuracy
+Nauwkeurigheid
 STR_RE_LOAD_TIME
-Re-load time
+Herlaadtijd
 STR_S
 s
 STR_ARMOR_PIERCING
-ARMOR PIERCING
+PANTSERDOORBOREND
 STR_INCENDIARY
-INCENDIARY
+VUUR
 STR_HIGH_EXPLOSIVE_UC
-HIGH EXPLOSIVE
+HOOG EXPLOSIEF
 STR_LASER_BEAM
-LASER BEAM
+LASERSTRAAL
 STR_PLASMA_BEAM_UC
-PLASMA BEAM
+PLASMASTRAAL
 STR_STUN_UC
-STUN
+VERDOVING
 STR_SHOT_TYPE
-SHOT TYPE
+SOORT SCHOT
 STR_ACCURACY_UC
-ACCURACY
+NAUWKEURIGHEID
 STR_TU_COST
-TU COST
+TE-KOSTEN
 STR_DAMAGE_UC
-DAMAGE
+SCHADE
 STR_AMMO
-AMMO
+MUNITIE
 STR_AUTO
 Auto
 STR_SNAP
-Snap
+Vlug
 STR_AIMED
-Aimed
+Gericht
 STR_CONSTRUCTION_TIME
-Construction Time
+Constructietijd
 STR_CONSTRUCTION_COST
-Construction Cost
+Constructieprijs
 STR_MAINTENANCE_COST
-Maintenance Cost
+Onderhoudsprijs
 STR_LOW
-Low
+Laag
 STR_MEDIUM
-Medium
+Gemiddels
 STR_HIGH
-High
+Hoog
 STR_CRAFT_WEAPON
-Craft Weapon
+Wapen voor Vaartuig
 STR_CRAFT_AMMUNITION
-Craft Ammunition
+Munitie voor Vaartuig
 STR_HEAVY_WEAPONS_PLATFORM
-Heavy Weapons Platform
+Zwaar Wapenplatform
 STR_WEAPON
-Weapon
+Wapen
 STR_AMMUNITION
-Ammunition
+Munitie
 STR_EQUIPMENT
-Equipment
+Uitrusting
 STR_ALIEN_CORPSE
-Alien Corpse
+Dode Buitenaardsen
 STR_UFO_COMPONENT
-UFO component
+UFO-onderdeel
 STR_PERSONAL_ARMOR
-Personal Armor
+Persoonlijke Pantsers
 STR_RAW_MATERIALS
-Raw Materials
+Grondstoffen
 STR_HWP_CANNON_SHELLS
-HWP Cannon Shells
+Geschutsmunitie ZWP
 STR_ALIEN
-Alien
+Buitenaardse
 STR_SECTOID
-Sectoid
+Sectoïde
 STR_SNAKEMAN
-Snakeman
+Slangeman
 STR_ETHEREAL
-Ethereal
+Etherische
 STR_MUTON
 Muton
 STR_FLOATER
-Floater
+Zwever
 STR_CELATID
-Celatid
+Celatide
 STR_SILACOID
-Silacoid
+Silacoïde
 STR_CHRYSSALID
-Chryssalid
-STR_ZOMBIE
-Zombie
+Chrysalide
 STR_REAPER
-Reaper
+Maaier
 STR_SECTOPOD
 Sectopod
 STR_CYBERDISC
-Cyberdisc
+Cyberschijf
 STR_LIVE_COMMANDER
- Commander
+ Commandant
 STR_LIVE_LEADER
- Leader
+ Leider
 STR_LIVE_ENGINEER
- Engineer
+ Ingenieur
 STR_LIVE_MEDIC
- Medic
+ Hospik
 STR_LIVE_NAVIGATOR
  Navigator
 STR_LIVE_SOLDIER
- Soldier
+ Soldaat
 STR_LIVE_TERRORIST
  Terrorist
 STR_FLOATER_SOLDIER
@@ -978,155 +984,155 @@ Silacoid Terrorist
 STR_SECTOPOD_TERRORIST
 Sectopod Terrorist
 STR_UFO_POWER_SOURCE
-UFO Power Source
+UFO-Energiebron
 STR_UFO_NAVIGATION
-UFO Navigation
+UFO-Navigatie
 STR_UFO_CONSTRUCTION
-UFO Construction
+UFO-Constructie
 STR_ALIEN_FOOD
-Alien Food
+Buitenaards Voedsel
 STR_ALIEN_REPRODUCTION
-Alien Reproduction
+Buitenaardse Voortplanting
 STR_ALIEN_ENTERTAINMENT
-Alien Entertainment
+Buitenaardse Recreatie
 STR_ALIEN_SURGERY
-Alien Surgery
+Buitenaardse Chirurgie
 STR_EXAMINATION_ROOM
-Examination Room
+Onderzoekskamer
 STR_ALIEN_ALLOYS
-Alien Alloys
+Buitenaardse Legeringen
 STR_ALIEN_HABITAT
-Alien Habitat
+Buitenaardse Leefomgeving
 STR_POWER_SUIT
-Power Suit
+Energiepak
 STR_FLYING_SUIT
-Flying Suit
+Vliegend Pak
 STR_HWP_ROCKETS
-HWP Rockets
+ZWP-Raketten
 STR_HWP_FUSION_BOMB
-HWP Fusion Bomb
+ZWP-Fusiebom
 STR_LASER_WEAPONS
-Laser Weapons
+Laserwapens
 STR_NEW_FIGHTER_CRAFT
-New Fighter Craft
+Nieuw gevechtsvliegtuig
 STR_NEW_FIGHTER_TRANSPORTER
-New Fighter-Transporter
+Nieuw transport- en gevechtsvliegtuig
 STR_ULTIMATE_CRAFT
-Ultimate Craft
+Ultiem Vaartuig
 STR_LASER_PISTOL
-Laser Pistol
+Laserpistool
 STR_LASER_RIFLE
-Laser Rifle
+Lasergeweer
 STR_HEAVY_LASER
-Heavy Laser
+Zware laser
 STR_LASER_CANNON
-Laser Cannon
+Laserkanon
 STR_PLASMA_CANNON
-Plasma Cannon
+Plasmakanon
 STR_FUSION_MISSILE
-Fusion Missile
-STR_LASER_DEFENSE
-Laser Defense
-STR_PLASMA_DEFENSE
-Plasma Defense
-STR_FUSION_DEFENSE
-Fusion Defense
+Fusie-raket
+STR_LASER_DEFENCE
+Laserverdediging
+STR_PLASMA_DEFENCE
+Plasmaverdediging
+STR_FUSION_DEFENCE
+Fusie-verdediging
 STR_GRAV_SHIELD
 Grav Shield
 STR_MIND_SHIELD
-Mind Shield
+Gedachtenschild
 STR_PSI_LAB
 Psi-Lab
 STR_MOTION_SCANNER
-Motion Scanner
+Bewegingsscanner
 STR_MEDI_KIT
-Medi-Kit
+Medicijnkit
 STR_TANK_CANNON
-Tank/Cannon
+Tank/Kanon
 STR_TANK_ROCKET_LAUNCHER
-Tank/Rocket Launcher
+Tank/Raketwerper
 STR_TANK_LASER_CANNON
-Tank/Laser Cannon
+Tank/Laserkanon
 STR_HOVERTANK_PLASMA
 Hovertank/Plasma
 STR_HOVERTANK_LAUNCHER
-Hovertank/Launcher
+Hovertank/Werper
 STR_STINGRAY_LAUNCHER
-Stingray Launcher
+Stingray-werper
 STR_AVALANCHE_LAUNCHER
-Avalanche Launcher
+Avalanche-werper
 STR_CANNON
-Cannon
+Kanon
 STR_FUSION_BALL_LAUNCHER
-Fusion Ball Launcher
+Fusiebal-werper
 STR_PLASMA_BEAM
-Plasma Beam
+Plasmastraal
 STR_STINGRAY_MISSILES
-Stingray Missiles
+Stingray-Raketten
 STR_AVALANCHE_MISSILES
-Avalanche Missiles
+Avalanche-Raketten
 STR_CANNON_ROUNDS_X50
-Cannon Rounds(x50)
+Kanonrondes(x50)
 STR_FUSION_BALL
-Fusion Ball
+Fusie-bal
 STR_SOLDIER
-Soldier
+Soldaat
 STR_SCIENTIST
-Scientist
+Wetenschapper
 STR_ENGINEER
-Engineer
+Ingenieur
 STR_NORTH_AMERICA
-North America
+Noord-Amerika
 STR_ARCTIC
-Arctic
+Noordpool
 STR_ANTARCTICA
 Antarctica
 STR_SOUTH_AMERICA
-South America
+Zuid-Amerika
 STR_EUROPE
-Europe
+Europa
 STR_NORTH_AFRICA
-North Africa
+Noord-Afrika
 STR_SOUTHERN_AFRICA
-Southern Africa
+Zuid-Afrika
 STR_CENTRAL_ASIA
-Central Asia
+Centraal-Azië
 STR_SOUTH_EAST_ASIA
-South East Asia
+Zuid-Oost-Azië
 STR_SIBERIA
-Siberia
+Siberië
 STR_AUSTRALASIA
-Australasia
+Australazië
 STR_PACIFIC
-Pacific
+Pacifische Oceaan
 STR_NORTH_ATLANTIC
-North Atlantic
+Noord-Atlantische Oceaan
 STR_SOUTH_ATLANTIC
-South Atlantic
+Zuid-Atlantische Oceaan
 STR_INDIAN_OCEAN
-Indian Ocean
+Indische Oceaan
 STR_ALIEN_RESEARCH
-Alien Research
+Onderzoek naar het Buitenaardse
 STR_ALIEN_HARVEST
-Alien Harvest
+Buitenaards Oogstwerk
 STR_ALIEN_ABDUCTION
-Alien Abduction
+Buitenaardse Ontvoeringen
 STR_ALIEN_INFILTRATION
-Alien Infiltration
+Buitenaardse Infiltratie
 STR_ALIEN_BASE
-Alien Base
+Buitenaardse Basis
 STR_ALIEN_TERROR
-Alien Terror
+Buitenaardse Terreur
 STR_ALIEN_RETALIATION
-Alien Retaliation
+Buitenaardse Wraakacties
 STR_ALIEN_SUPPLY
-Alien Supply
+Buitenaardse Toeleveringen
 STR_POWER_SOURCES
-Power Sources
+Energiebronnen
 STR_MAXIMUM_SPEED
-Maximum Speed
+Maximumsnelheid
 STR_HYPER_WAVE_DECODER_UC
-HYPER-WAVE DECODER
+HYPERGOLF-DECODER
 STR_SKYRANGER
 SKYRANGER
 STR_LIGHTNING
@@ -1134,7 +1140,7 @@ LIGHTNING
 STR_AVENGER
 AVENGER
 STR_INTERCEPTOR
-INTERCEPTOR
+ONDERSCHEPPER
 STR_FIRESTORM
 FIRESTORM
 STR_UFO
@@ -1144,59 +1150,59 @@ STINGRAY
 STR_AVALANCHE
 AVALANCHE
 STR_CANNON_UC
-CANNON
+KANON
 STR_FUSION_BALL_UC
-FUSION BALL
+FUSIE-BAL
 STR_LASER_CANNON_UC
-LASER CANNON
+LASERKANON
 STR_DAMAGE_CAPACITY
-Damage Capacity
+Capaciteit voor Schade
 STR_WEAPON_POWER
-Weapon Power
+Wapenkracht
 STR_WEAPON_RANGE
-Weapon Range
+Wapenbereik
 STR_ACCESS_LIFT
-Access Lift
+Toegangslift
 STR_LABORATORY
-Laboratory
+Laboratorium
 STR_WORKSHOP
-Workshop
+Werkplaats
 STR_SMALL_RADAR_SYSTEM
-Small Radar System
+Klein Radarsysteem
 STR_LARGE_RADAR_SYSTEM
-Large Radar System
+Groot Radarsystem
 STR_MISSILE_DEFENSES
-Missile Defenses
+Raketverdediging
 STR_GENERAL_STORES
-General Stores
+Opslagruimte
 STR_ALIEN_CONTAINMENT
-Alien Containment
+Buitenaardse Klimaatcel
 STR_LASER_DEFENSES
-Laser Defenses
+Laserverdediging
 STR_PLASMA_DEFENSES
-Plasma Defenses
+Plasmaverdediging
 STR_FUSION_BALL_DEFENSES
-Fusion Ball Defenses
+Fusiebal-verdediging
 STR_PSIONIC_LABORATORY
-Psionic Laboratory
+Psionisch Laboratorium
 STR_HYPER_WAVE_DECODER
-Hyper-wave Decoder
+Hypergolf-decoder
 STR_HANGAR
-Hangar
+Loods
 STR_USA
-USA
+VS
 STR_RUSSIA
-RUSSIA
+RUSLAND
 STR_UK
-UK
+VK
 STR_FRANCE
-FRANCE
+FRANKRIJK
 STR_GERMANY
-GERMANY
+DUITSLAND
 STR_ITALY
-ITALY
+ITALIË
 STR_SPAIN
-SPAIN
+SPANJE
 STR_CHINA
 CHINA
 STR_JAPAN
@@ -1204,31 +1210,43 @@ JAPAN
 STR_INDIA
 INDIA
 STR_BRAZIL
-BRAZIL
+BRAZILIË
 STR_AUSTRALIA
-AUSTRALIA
+AUSTRALIË
 STR_NIGERIA
 NIGERIA
 STR_SOUTH_AFRICA
-SOUTH AFRICA
+ZUID-AFRIKA
 STR_EGYPT
-EGYPT
+EGYPTE
 STR_CANADA
 CANADA
+STR_FLOATER_SOLDIER
+Zwever-Soldaat
+STR_FLOATER_NAVIGATOR
+Zwever-Navigator
+STR_FLOATER_MEDIC
+Zwever-Hospik
+STR_FLOATER_ENGINEER
+Zwever-Ingenieur
+STR_FLOATER_LEADER
+Zwever-Leider
+STR_FLOATER_COMMANDER
+Zwever-Commandant
 STR_TANK
 Tank
 STR_CIVILIAN
-Civilian
+Burger
 STR_JAN
 Jan
 STR_FEB
 Feb
 STR_MAR
-Mar
+Maa
 STR_APR
 Apr
 STR_MAY
-May
+Mei
 STR_JUN
 Jun
 STR_JUL
@@ -1238,25 +1256,25 @@ Aug
 STR_SEP
 Sep
 STR_OCT
-Oct
+Okt
 STR_NOV
 Nov
 STR_DEC
 Dec
 STR_INTERNATIONAL_RELATIONS
-International Relations
+Internationale Betrekkingen
 STR_COUNTRY
-Country
+Land
 STR_FUNDING
-Funding
+Steun
 STR_CHANGE
-Change
+Verandering
 STR_WEAPON_SYSTEMS
-WEAPON{NEWLINE}SYSTEMS
+WAPEN-{NEWLINE}SYSTEMEN
 STR_HWPS
-HWPs
+ZWP's
 STR_DAMAGE_UC_
-DAMAGE>
+SCHADE>
 STR_ACCESS_LIFT_UFOPEDIA
 The access lift allows equipment and personnel to be transferred into or out of an underground base.  It is always the first facility to be constructed on a new site.  The lift area is vulnerable to intrusion from any potential hostile force.
 STR_LIVING_QUARTERS_UFOPEDIA
