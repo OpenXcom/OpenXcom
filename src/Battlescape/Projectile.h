@@ -48,7 +48,7 @@ private:
 	Surface *_sprite;
 	int applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange = false, Tile *targetTile = 0, int smokeDensity = 0, bool doCalcChance = false);
 	/// Approximation of the F-function (cumulative distribution function).
-	int approxF(double sigm, double delta);
+	static double approxF(double sigm, double delta);
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);

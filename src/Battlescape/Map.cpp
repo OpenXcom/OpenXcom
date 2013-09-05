@@ -651,7 +651,7 @@ void Map::drawTerrain(Surface *surface)
 									if (_showChanceToHit)
 									{
 										BattleAction *action = _save->getBattleState()->getBattleGame()->getCurrentAction();
-										(*action).target = tile->getPosition();
+										(*action).target = mapPosition;
 										Projectile p = Projectile(_res, _save, *action, (*action).actor->getPosition());	// stack
 										int chance = p.calculateTrajectory((*action).actor->getFiringAccuracy((*action).type, (*action).weapon), true);
 

@@ -437,9 +437,8 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 			{
 				int loftemps = targetUnit->getLoftemps();
 				if (loftemps > 5) loftemps = 8;
-				return approxF(baseDeviation / 6.0, (0.5 + loftemps) / realDistance)
-					* approxF(baseDeviation / 12.0, 0.5 * targetUnit->getHeight() / realDistance)
-					/ 100;
+				return (int) (0.5 + 100.0 * approxF(baseDeviation / 6.0, (0.5 + loftemps) / realDistance)
+					* approxF(baseDeviation / 12.0, 0.5 * targetUnit->getHeight() / realDistance));
 			}
 			else
 				return -1;
@@ -497,8 +496,8 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
 
 			int loftemps = targetUnit->getLoftemps();
 			if (loftemps > 5) loftemps = 8;
-			return (int) (100.0 * accuracy + (1.0 - accuracy) * (approxF(baseDeviation * M_PI / 180.0, (0.5 + loftemps) / realDistance)
-				* approxF(baseDeviation / 2.0 * M_PI / 180.0, 0.5 * targetUnit->getHeight() / realDistance)) / 100.0);
+			return (int) (0.5 + 100.0 * (accuracy + (1.0 - accuracy) * approxF(baseDeviation * M_PI / 180.0, (0.5 + loftemps) / realDistance)
+				* approxF(baseDeviation / 2.0 * M_PI / 180.0, 0.5 * targetUnit->getHeight() / realDistance)));
 		}
 		else
 			return -1;
@@ -509,18 +508,15 @@ int Projectile::applyAccuracy(const Position& origin, Position *target, double a
  * Approximation of the F-function (cumulative distribution function).
  * @param sigm Standart deviation (in radians).
  * @param delta Half of the angle of view of the profile of the enemy (in radians).
- * @return Chance to hit.
+ * @return Chance to hit from 0 to 1.
  */
-int Projectile::approxF(double sigm, double delta)
+double Projectile::approxF(double sigm, double delta)
 {
 	double a = 0.7071067812 * delta / sigm;	// 1/sqrt(2) =  0.7071067812
-//	double b = 1.0 + accuracy * delta;	// empirical coefficient for error correction
-	// max error 6-7%
-//	int r = (int) (0.5 + 100.0 * 0.5641895835 * a * (exp(-a * a) + 1.0));	// 1/sqrt(pi) = 0.5641895835
 	// max error 1-2%
-	int r = (int) (0.5 + 100.0 * 0.2820947918 * a * (exp(-a * a) + 2*exp(-0.25 * a * a) + 1.0));	// 1/(2*sqrt(pi)) = 0.2820947918
+	double r = 0.2820947918 * a * (exp(-a * a) + 2*exp(-0.25 * a * a) + 1.0);	// 1/(2*sqrt(pi)) = 0.2820947918
 
-	return (r > 100)? 100 : r;
+	return (r > 1.0)? 1.0 : r;
 }
 
 /**
