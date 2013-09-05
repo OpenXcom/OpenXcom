@@ -36,6 +36,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
@@ -86,7 +87,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 	_save = _game->getSavedGame()->getSavedBattle();
-	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
+	_message = new BattlescapeMessage(320, visibleMapHeight, Screen::getDX(), Screen::getDY());
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
@@ -108,7 +109,7 @@ Map::~Map()
 }
 
 /**
- * initializes stuff
+ * Initializes the map.
  */
 void Map::init()
 {
@@ -152,7 +153,7 @@ void Map::draw()
 {
 	Surface::draw();
 	Tile *t;
-	
+
 	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
@@ -203,10 +204,10 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
-* Draw the terrain.
-* Keep this function as optimised as possible. It's big to minimise overhead of function calls.
-* @param surface The surface to draw on.
-*/
+ * Draw the terrain.
+ * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
+ * @param surface The surface to draw on.
+ */
 void Map::drawTerrain(Surface *surface)
 {
 	int frameNumber = 0;
@@ -223,7 +224,7 @@ void Map::drawTerrain(Surface *surface)
 	int tileShade, wallShade, tileColor;
 
 	NumberText *_numWaypid = 0;
-	
+
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile)
 	{
@@ -443,7 +444,7 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false);
 						}
-						
+
 					}
 
 					// check if we got bullet && it is in Field Of View
@@ -505,7 +506,7 @@ void Map::drawTerrain(Surface *surface)
 											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(surface, bulletPositionScreen.x, bulletPositionScreen.y, 16);
 										}
-										
+
 										// draw bullet itself
 										voxelPos = _projectile->getPosition(1-i);
 										if (voxelPos.x / 16 == itX &&
@@ -577,7 +578,6 @@ void Map::drawTerrain(Surface *surface)
 							}
 						}
 					}
-					
 
 					// Draw smoke/fire
 					if (tile->getSmoke() && tile->isDiscovered(2))
@@ -730,7 +730,7 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
 							}
 						}
-						
+
 						if (_previewSetting >= 2)
 						{
 							int tuMarker = std::max(0, tile->getTUMarker());
@@ -765,24 +765,19 @@ void Map::drawTerrain(Surface *surface)
 	{
 		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
+			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
 			{
-				Position voxelPos = (*i)->getPosition();
-				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
 			}
 			else if ((*i)->isHit())
 			{
-				Position voxelPos = (*i)->getPosition();
-				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 			}
 			else
 			{
-				Position voxelPos = (*i)->getPosition();
-				_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
 				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 15, bulletPositionScreen.y - 15, 0);
 			}
@@ -792,7 +787,7 @@ void Map::drawTerrain(Surface *surface)
 }
 
 /**
- * Handles map mouse shortcuts.
+ * Handles mouse presses on the map.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -803,7 +798,7 @@ void Map::mousePress(Action *action, State *state)
 }
 
 /**
- * Handles map mouse shortcuts.
+ * Handles mouse releases on the map.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -814,7 +809,7 @@ void Map::mouseRelease(Action *action, State *state)
 }
 
 /**
- * Handles map keyboard shortcuts.
+ * Handles keyboard presses on the map.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -825,7 +820,7 @@ void Map::keyboardPress(Action *action, State *state)
 }
 
 /**
- * Handles map keyboard shortcuts.
+ * Handles keyboard releases on the map.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -836,7 +831,7 @@ void Map::keyboardRelease(Action *action, State *state)
 }
 
 /**
- * Handles mouse over events.
+ * Handles mouse over events on the map.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -852,8 +847,8 @@ void Map::mouseOver(Action *action, State *state)
 
 /**
  * Sets the selector to a certain tile on the map.
- * @param mx mouse x position
- * @param my mouse y position
+ * @param mx mouse x position.
+ * @param my mouse y position.
  */
 void Map::setSelectorPosition(int mx, int my)
 {
@@ -869,7 +864,7 @@ void Map::setSelectorPosition(int mx, int my)
 }
 
 /**
- * Handle animating tiles. 8 Frames per animation.
+ * Handles animating tiles. 8 Frames per animation.
  * @param redraw Redraw the battlescape?
  */
 void Map::animate(bool redraw)
@@ -900,7 +895,7 @@ void Map::animate(bool redraw)
 
 /**
  * Draws the rectangle selector.
- * @param pos pointer to a position
+ * @param pos Pointer to a position.
  */
 void Map::getSelectorPosition(Position *pos) const
 {
@@ -910,9 +905,9 @@ void Map::getSelectorPosition(Position *pos) const
 }
 
 /**
- * Calculate the offset of a soldier, when it is walking in the middle of 2 tiles.
- * @param unit pointer to BattleUnit
- * @param offset pointer to the offset to return the calculation.
+ * Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
+ * @param unit Pointer to BattleUnit.
+ * @param offset Pointer to the offset to return the calculation.
  */
 void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 {
@@ -998,9 +993,9 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 
 /**
   * Terrainlevel goes from 0 to -24. For a larger sized unit, we need to pick the heighest terrain level, which is the lowest number...
-  * @param pos
-  * @param size Of the unit we want to get the level from.
-  * @return terrainlevel
+  * @param pos Position.
+  * @param size Size of the unit we want to get the level from.
+  * @return terrainlevel.
   */
 int Map::getTerrainLevel(Position pos, int size)
 {
@@ -1020,7 +1015,7 @@ int Map::getTerrainLevel(Position pos, int size)
 }
 
 /**
- * Set the 3D cursor to selection/aim mode
+ * Sets the 3D cursor to selection/aim mode.
  * @param type Cursor type.
  * @param size Size of cursor.
  */
@@ -1034,8 +1029,8 @@ void Map::setCursorType(CursorType type, int size)
 }
 
 /**
- * Get cursor type.
- * @return cursortype
+ * Gets the cursor type.
+ * @return cursortype.
  */
 CursorType Map::getCursorType() const
 {
@@ -1043,7 +1038,7 @@ CursorType Map::getCursorType() const
 }
 
 /**
- * Check all units if they need to be redrawn.
+ * Checks all units for if they need to be redrawn.
  */
 void Map::cacheUnits()
 {
@@ -1055,7 +1050,7 @@ void Map::cacheUnits()
 
 /**
  * Check if a certain unit needs to be redrawn.
- * @param unit Pointer to battleUnit
+ * @param unit Pointer to battleUnit.
  */
 void Map::cacheUnit(BattleUnit *unit)
 {
@@ -1088,7 +1083,7 @@ void Map::cacheUnit(BattleUnit *unit)
 			{
 				unitSprite->setBattleItem(lhandItem);
 			}
-			
+
 			if(!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
@@ -1101,13 +1096,13 @@ void Map::cacheUnit(BattleUnit *unit)
 			unitSprite->blit(cache);
 			unit->setCache(cache, i);
 		}
-	}	
+	}
 	delete unitSprite;
 }
 
 /**
- * Put a projectile sprite on the map
- * @param projectile
+ * Puts a projectile sprite on the map.
+ * @param projectile Projectile to place.
  */
 void Map::setProjectile(Projectile *projectile)
 {
@@ -1116,8 +1111,8 @@ void Map::setProjectile(Projectile *projectile)
 }
 
 /**
- * Get the current projectile sprite on the map
- * @return 0 if there is no projectile sprite on the map.
+ * Gets the current projectile sprite on the map.
+ * @return Projectile or 0 if there is no projectile sprite on the map.
  */
 Projectile *Map::getProjectile() const
 {
@@ -1125,8 +1120,8 @@ Projectile *Map::getProjectile() const
 }
 
 /**
- * Get a list of explosion sprites on the map.
- * @return a list of explosion sprites.
+ * Gets a list of explosion sprites on the map.
+ * @return A list of explosion sprites.
  */
 std::set<Explosion*> *Map::getExplosions()
 {
@@ -1134,9 +1129,9 @@ std::set<Explosion*> *Map::getExplosions()
 }
 
 /**
- * Get pointer to camera
- * @return pointer to camera
-*/
+ * Gets the pointer to the camera.
+ * @return Pointer to camera.
+ */
 Camera *Map::getCamera()
 {
 	return _camera;
@@ -1144,7 +1139,7 @@ Camera *Map::getCamera()
 
 /**
  * Timers only work on surfaces so we have to pass this on to the camera object.
-*/
+ */
 void Map::scrollMouse()
 {
 	_camera->scrollMouse();
@@ -1152,15 +1147,15 @@ void Map::scrollMouse()
 
 /**
  * Timers only work on surfaces so we have to pass this on to the camera object.
-*/
+ */
 void Map::scrollKey()
 {
 	_camera->scrollKey();
 }
 
 /**
- * Get a list of waypoints on the map.
- * @return a list of waypoints
+ * Gets a list of waypoints on the map.
+ * @return A list of waypoints.
  */
 std::vector<Position> *Map::getWaypoints()
 {
@@ -1168,15 +1163,19 @@ std::vector<Position> *Map::getWaypoints()
 }
 
 /**
- * Set mouse-buttons' pressed state
- * @param button index of the button
- * @param pressed is the state
+ * Sets mouse-buttons' pressed state.
+ * @param button Index of the button.
+ * @param pressed The state of the button.
  */
 void Map::setButtonsPressed(Uint8 button, bool pressed)
 {
 	setButtonPressed(button, pressed);
 }
 
+/**
+ * Sets the unitDying flag.
+ * @param flag True if the unit is dying.
+ */
 void Map::setUnitDying(bool flag)
 {
 	_unitDying = flag;

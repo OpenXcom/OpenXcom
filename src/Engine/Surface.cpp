@@ -51,17 +51,34 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
+
+#ifdef __MORPHOS__
+#include <ppcinline/exec.h>
+#endif 
+ 
 Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 	int pitch = (bpp/8) * ((width+15)& ~0xF);
 
 #ifndef _WIN32
+
+	#ifdef __MORPHOS__
+
+	_alignedBuffer = calloc( pitch * height * (bpp/8), 1 );
+	if (!_alignedBuffer)
+	{
+		throw Exception("Where's the memory, Lebowski?");
+	}
+
+	#else
 	int rc;
 	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height * (bpp/8))))
 	{
 		throw Exception(strerror(rc));
 	}
+	#endif
+	
 #else
 	// of course Windows has to be difficult about this!
 	_alignedBuffer = _aligned_malloc(pitch*height*(bpp/8), 16);
@@ -219,14 +236,18 @@ void Surface::loadSpk(const std::string &filename)
 
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
-		flag = SDL_SwapLE16(flag);
-		if (flag == 65533)
-		{
-			break;
-		}
-		else if (flag == 65535)
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
+	
+		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
+			
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
+			
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				setPixelIterative(&x, &y, 0);
@@ -235,6 +256,11 @@ void Surface::loadSpk(const std::string &filename)
 		else if (flag == 65534)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
+			
+	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+		flag = SDL_Swap16( flag );
+	#endif			
+			
 			for (int i = 0; i < flag * 2; ++i)
 			{
 				imgFile.read((char*)&value, 1);
@@ -629,92 +655,6 @@ void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 }
 
 /**
- * Returns the surface's 8bpp palette.
- * @return Pointer to the palette's colors.
- */
-SDL_Color *Surface::getPalette() const
-{
-	return _surface->format->palette->colors;
-}
-
-/**
- * Changes the color of a pixel in the surface, relative to
- * the top-left corner of the surface.
- * @param x X position of the pixel.
- * @param y Y position of the pixel.
- * @param pixel New color for the pixel.
- */
-void Surface::setPixel(int x, int y, Uint8 pixel)
-{
-	if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
-	{
-		return;
-	}
-	((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
-}
-
-/**
- * Changes the color of a pixel in the surface and returns the
- * next pixel position. Useful when changing a lot of pixels in
- * a row, eg. loading images.
- * @param x Pointer to the X position of the pixel. Changed to the next X position in the sequence.
- * @param y Pointer to the Y position of the pixel. Changed to the next Y position in the sequence.
- * @param pixel New color for the pixel.
- */
-void Surface::setPixelIterative(int *x, int *y, Uint8 pixel)
-{
-	setPixel(*x, *y, pixel);
-	(*x)++;
-	if (*x == getWidth())
-	{
-		(*y)++;
-		*x = 0;
-	}
-}
-
-/**
- * Returns the color of a specified pixel in the surface.
- * @param x X position of the pixel.
- * @param y Y position of the pixel.
- * @return Color of the pixel.
- */
-Uint8 Surface::getPixel(int x, int y) const
-{
-	if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight())
-	{
-		return 0;
-	}
-	return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
-}
-
-/**
- * Returns the internal SDL_Surface for SDL calls.
- * @return Pointer to the surface.
- */
-SDL_Surface *Surface::getSurface() const
-{
-	return _surface;
-}
-
-/**
- * Returns the width of the surface.
- * @return Width in pixels.
- */
-int Surface::getWidth() const
-{
-	return _surface->w;
-}
-
-/**
- * Returns the height of the surface.
- * @return Height in pixels
- */
-int Surface::getHeight() const
-{
-	return _surface->h;
-}
-
-/**
  * This is a separate visibility setting intended
  * for temporary effects like window popups,
  * so as to not override the default visibility setting.
@@ -908,6 +848,26 @@ void Surface::setDX(int dx)
 void Surface::setDY(int dy)
 {
 	_dy = dy;
+}
+
+/**
+ * Returns the help description of this surface,
+ * for example for showing in tooltips.
+ * @return String ID.
+ */
+std::string Surface::getTooltip() const
+{
+	return _tooltip;
+}
+
+/**
+* Changes the help description of this surface,
+* for example for showing in tooltips.
+* @param str String ID.
+*/
+void Surface::setTooltip(const std::string &tooltip)
+{
+	_tooltip = tooltip;
 }
 
 }

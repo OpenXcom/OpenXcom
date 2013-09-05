@@ -28,41 +28,35 @@ const char *altitudeString[] = {
 };
 }
 
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::TrajectoryWaypoint>
+	{
+		static Node encode(const OpenXcom::TrajectoryWaypoint& rhs)
+		{
+			Node node;
+			node.push_back(rhs.zone);
+			node.push_back(rhs.altitude);
+			node.push_back(rhs.speed);
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::TrajectoryWaypoint& rhs)
+		{
+			if(!node.IsSequence() || node.size() != 3)
+				return false;
+
+			rhs.zone = node[0].as<int>();
+			rhs.altitude = node[1].as<int>();
+			rhs.speed = node[2].as<int>();
+			return true;
+		}
+	};
+}
+
 namespace OpenXcom
 {
-
-/**
- * Send @a wp over @a emitter.
- * @param emitter The YAML emitter.
- * @param wp The waypoint.
- * @return A reference to @a emitter, to allow chaining.
- */
-YAML::Emitter &operator<<(YAML::Emitter &emitter, const TrajectoryWaypoint &wp)
-{
-	emitter << YAML::Flow << YAML::BeginSeq;
-	emitter << wp.zone << wp.altitude << wp.speed;
-	emitter << YAML::EndSeq;
-	return emitter;
-}
-
-/**
- * Read @a wp from @a node.
- * @param node The YAML node.
- * @param wp The waypoint.
- * @return If we succeeded in reading.
- */
-bool operator>>(const YAML::Node &node, TrajectoryWaypoint &wp)
-{
-	if (node.Type() != YAML::NodeType::Sequence || node.size() != 3)
-	{
-		return false;
-	}
-	YAML::Iterator ii = node.begin();
-	(*ii) >> wp.zone;
-	(*++ii) >> wp.altitude;
-	(*++ii) >> wp.speed;
-	return true;
-}
 
 /**
  * Overwrites trajectory data with the data stored in @a node.
@@ -71,28 +65,16 @@ bool operator>>(const YAML::Node &node, TrajectoryWaypoint &wp)
  */
 void UfoTrajectory::load(const YAML::Node &node)
 {
-	node["id"] >> _id;
-	if (const YAML::Node *np = node.FindValue("groundTimer"))
-	{
-		 *np >> _groundTimer;
-	}
-	if (const YAML::Node *np = node.FindValue("waypoints"))
-	{
-		*np >> _waypoints;
-	}
+	_id = node["id"].as<std::string>(_id);
+	_groundTimer = node["groundTimer"].as<unsigned>(_groundTimer);
+	_waypoints = node["waypoints"].as< std::vector<TrajectoryWaypoint> >(_waypoints);
 }
 
-/// Saves the trajectory data to YAML.
-void UfoTrajectory::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "groundTimer" << YAML::Value << _groundTimer;
-	out << YAML::Key << "waypoints" << YAML::Value << _waypoints;
-	out << YAML::EndMap;
-}
-
-/// Gets the altitude at a waypoint.
+/**
+ * Gets the altitude at a waypoint.
+ * @param wp The waypoint.
+ * @return The altitude.
+ */
 std::string UfoTrajectory::getAltitude(unsigned wp) const
 {
 	return altitudeString[_waypoints[wp].altitude];

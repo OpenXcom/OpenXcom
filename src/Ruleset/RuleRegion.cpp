@@ -27,61 +27,6 @@ namespace OpenXcom
 {
 
 /**
- * Defines a rectangle in polar coordinates.
- * It is used to define areas for a mission zone.
- */
-struct MissionArea
-{
-	double lonMin, lonMax, latMin, latMax;
-};
-
-/// Write a MissionArea to YAML.
-YAML::Emitter &operator<<(YAML::Emitter &out, const MissionArea &ma)
-{
-	out << YAML::Flow << YAML::BeginSeq;
-	out << ma.lonMin << ma.lonMax << ma.latMin << ma.latMax;
-	out << YAML::EndSeq;
-	return out;
-}
-
-/// Read a MissionArea from YAML.
-const YAML::Node &operator>>(const YAML::Node &nd, MissionArea &ma)
-{
-	nd[0] >> ma.lonMin;
-	nd[1] >> ma.lonMax;
-	nd[2] >> ma.latMin;
-	nd[3] >> ma.latMax;
-	return nd;
-}
-
-/**
- * A zone (set of areas) on the globe.
- */
-struct MissionZone
-{
-	std::vector<MissionArea> areas;
-
-	void swap(MissionZone &other)
-	{
-		areas.swap(other.areas);
-	}
-};
-
-/// Write a MissionZone to YAML.
-YAML::Emitter &operator<<(YAML::Emitter &out, const MissionZone &mz)
-{
-	out << mz.areas;
-	return out;
-}
-
-/// Read a MissionZone from YAML.
-const YAML::Node &operator>>(const YAML::Node &nd, MissionZone &mz)
-{
-	nd >> mz.areas;
-	return nd;
-}
-
-/**
  * Creates a blank ruleset for a certain type of region.
  * @param type String defining the type.
  */
@@ -106,90 +51,40 @@ RuleRegion::~RuleRegion()
  */
 void RuleRegion::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_cost = node["cost"].as<int>(_cost);
+	std::vector< std::vector<double> > areas;
+	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
+	for (size_t i = 0; i != areas.size(); ++i)
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
+		_lonMin.push_back(areas[i][0] * M_PI / 180);
+		_lonMax.push_back(areas[i][1] * M_PI / 180);
+		_latMin.push_back(areas[i][2] * M_PI / 180);
+		_latMax.push_back(areas[i][3] * M_PI / 180);
+	}
+	if (const YAML::Node &cities = node["cities"])
+	{
+		for (YAML::const_iterator i = cities.begin(); i != cities.end(); ++i)
 		{
-			i.second() >> _type;
-		}
-		else if (key == "cost")
-		{
-			i.second() >> _cost;
-		}
-		else if (key == "areas")
-		{
-			for (size_t j = 0; j != i.second().size(); ++j)
-			{
-				std::vector<double> k;
-				i.second()[j] >> k;
-				_lonMin.push_back(k[0] * M_PI / 180);
-				_lonMax.push_back(k[1] * M_PI / 180);
-				_latMin.push_back(k[2] * M_PI / 180);
-				_latMax.push_back(k[3] * M_PI / 180);
-			}
-		}
-		else if (key == "cities")
-		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				City *rule = new City("", 0.0, 0.0);
-				rule->load(*j);
-				_cities.push_back(rule);
-			}
-		}
-		else if (key == "regionWeight")
-		{
-			i.second() >> _regionWeight;
-		}
-		else if (key == "missionWeights")
-		{
-			_missionWeights.load(i.second());
-		}
-		else if (key == "missionZones")
-		{
-			i.second() >> _missionZones;
-		}
-		else if (key == "missionRegion")
-		{
-			i.second() >> _missionRegion;
+			City *rule = new City("", 0.0, 0.0);
+			rule->load(*i);
+			_cities.push_back(rule);
 		}
 	}
+	if (const YAML::Node &weights = node["missionWeights"])
+	{
+		_missionWeights.load(weights);
+	}
+	_regionWeight = node["regionWeight"].as<unsigned>(_regionWeight);
+	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
+	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
 }
 
 /**
- * Saves the region type to a YAML file.
- * @param out YAML emitter.
- */
-void RuleRegion::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "lonMin" << YAML::Value << _lonMin;
-	out << YAML::Key << "lonMax" << YAML::Value << _lonMax;
-	out << YAML::Key << "latMin" << YAML::Value << _latMin;
-	out << YAML::Key << "latMax" << YAML::Value << _latMax;
-	out << YAML::Key << "cities" << YAML::Value;
-	out << YAML::BeginSeq;
-	for (std::vector<City*>::const_iterator i = _cities.begin(); i != _cities.end(); ++i)
-	{
-		(*i)->save(out);
-	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "regionWeight" << YAML::Value << _regionWeight;
-	out << YAML::Key << "missionWeights" << YAML::Value;
-	_missionWeights.save(out);
-	out << YAML::EndMap;
-	out << YAML::Key << "missionZones" << YAML::Value << _missionZones;
-}
-
-/**
- * Returns the language string that names
+ * Gets the language string that names
  * this region. Each region type
  * has a unique name.
- * @return Region name.
+ * @return The region type.
  */
 std::string RuleRegion::getType() const
 {
@@ -197,8 +92,8 @@ std::string RuleRegion::getType() const
 }
 
 /**
- * Returns the cost of building a base inside this region.
- * @return Construction cost.
+ * Gets the cost of building a base inside this region.
+ * @return The construction cost.
  */
 int RuleRegion::getBaseCost() const
 {
@@ -209,7 +104,7 @@ int RuleRegion::getBaseCost() const
  * Checks if a point is inside this region.
  * @param lon Longitude in radians.
  * @param lat Latitude in radians.
- * @return True if it's inside, False if it's outside.
+ * @return True if it's inside, false if it's outside.
  */
 bool RuleRegion::insideRegion(double lon, double lat) const
 {
@@ -231,8 +126,8 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 }
 
 /**
- * Returns the list of cities contained.
- * @return Pointer to list.
+ * Gets the list of cities contained in this region.
+ * @return Pointer to a list.
  */
 std::vector<City*> *RuleRegion::getCities()
 {
@@ -240,8 +135,8 @@ std::vector<City*> *RuleRegion::getCities()
 }
 
 /**
- * Returns the weight of this region for mission selection.
- * This is only used when creating a new game, since these weights change in the cource of the game.
+ * Gets the weight of this region for mission selection.
+ * This is only used when creating a new game, since these weights change in the course of the game.
  * @return The initial weight of this region.
  */
 unsigned RuleRegion::getWeight() const
@@ -250,7 +145,7 @@ unsigned RuleRegion::getWeight() const
 }
 
 /**
- * Returns a random point that is guaranteed to be inside the give zone.
+ * Gets a random point that is guaranteed to be inside the give zone.
  * If the region contains cities, they are the sites of zone 0 and the rest of the zones get one index higher.
  * @return A pair of longtitude and latitude.
  */

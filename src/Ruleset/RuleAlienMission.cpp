@@ -19,6 +19,35 @@
 #include "RuleAlienMission.h"
 #include "../Savegame/WeightedOptions.h"
 
+namespace YAML
+{
+	template<>
+	struct convert<OpenXcom::MissionWave>
+	{
+		static Node encode(const OpenXcom::MissionWave& rhs)
+		{
+			Node node;
+			node["ufo"] = rhs.ufoType;
+			node["count"] = rhs.ufoCount;
+			node["trajectory"] = rhs.trajectory;
+			node["timer"] = rhs.spawnTimer;
+			return node;
+		}
+
+		static bool decode(const Node& node, OpenXcom::MissionWave& rhs)
+		{
+			if(!node.IsMap())
+				return false;
+
+			rhs.ufoType = node["ufo"].as<std::string>();
+			rhs.ufoCount = node["count"].as<unsigned>();
+			rhs.trajectory = node["trajectory"].as<std::string>();
+			rhs.spawnTimer = node["timer"].as<unsigned>();
+			return true;
+		}
+	};
+}
+
 namespace OpenXcom
 {
 
@@ -28,10 +57,11 @@ namespace OpenXcom
  */
 void RuleAlienMission::load(const YAML::Node &node)
 {
-	node["type"] >> _type;
-	node["points"] >> _points;
+	_type = node["type"].as<std::string>(_type);
+	_points = node["points"].as<int>(_points);
+	_waves = node["waves"].as< std::vector<MissionWave> >(_waves);
 	//Only allow full replacement of mission racial distribution.
-	if (const YAML::Node *pNode = node.FindValue("raceWeights"))
+	if (const YAML::Node &weights = node["raceWeights"])
 	{
 		typedef std::map<unsigned, WeightedOptions*> Associative;
 		typedef std::vector<std::pair<unsigned, WeightedOptions*> > Linear;
@@ -44,22 +74,21 @@ void RuleAlienMission::load(const YAML::Node &node)
 		}
 
 		// Now go through the node contents and merge with existing data.
-		for (YAML::Iterator nn = pNode->begin(); nn != pNode->end(); ++nn)
+		for (YAML::const_iterator nn = weights.begin(); nn != weights.end(); ++nn)
 		{
-			unsigned month;
-			nn.first() >> month;
+			unsigned month = nn->first.as<unsigned>();
 			Associative::iterator existing = assoc.find(month);
 			if (assoc.end() == existing)
 			{
 				// New entry, load and add it.
 				std::auto_ptr<WeightedOptions> nw(new WeightedOptions);
-				nw->load(nn.second());
+				nw->load(nn->second);
 				assoc.insert(std::make_pair(month, nw.release()));
 			}
 			else
 			{
 				// Existing entry, update it.
-				existing->second->load(nn.second());
+				existing->second->load(nn->second);
 			}
 		}
 
@@ -80,37 +109,12 @@ void RuleAlienMission::load(const YAML::Node &node)
 			}
 		}
 	}
-	//Only allow full replacement of mission waves.
-	if (const YAML::Node *pNode = node.FindValue("waves"))
-	{
-		*pNode >> _waves;
-	}
 }
 
 /**
- * Saves the alien mission data to a YAML file.
- * @param out YAML emitter.
- */
-void RuleAlienMission::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value <<_type;
-	out << YAML::Key << "raceWeights" << YAML::Value;
-	out << YAML::BeginMap;
-	for (std::vector<std::pair<unsigned, WeightedOptions*> >::const_iterator ii = _raceDistribution.begin();
-	     ii != _raceDistribution.end(); ++ii)
-	{
-		out << YAML::Key << ii->first << YAML::Value;
-		ii->second->save(out);
-	}
-	out << YAML::EndMap;
-	out << YAML::Key << "waves" << YAML::Value << _waves;
-}
-
-/**
- * Choose one of the available races for this mission.
+ * Chooses one of the available races for this mission.
  * The racial distribution may vary based on the current game date.
- * @param gameTime The current date and time of the game world.
+ * @param monthsPassed The number of months that have passed in the game world.
  * @return The string id of the race.
  */
 const std::string &RuleAlienMission::generateRace(const unsigned monthsPassed) const
@@ -122,7 +126,7 @@ const std::string &RuleAlienMission::generateRace(const unsigned monthsPassed) c
 }
 
 /**
- * Make sure the allocated memory is released.
+ * Ensures the allocated memory is released.
  */
 RuleAlienMission::~RuleAlienMission()
 {
@@ -133,29 +137,11 @@ RuleAlienMission::~RuleAlienMission()
 }
 
 /**
- * Return the Alien score for this mission.
+ * Returns the Alien score for this mission.
  */
 int RuleAlienMission::getPoints() const
 {
 	return _points;
-}
-
-void operator<<(YAML::Emitter &out, const MissionWave &wave)
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "ufo" << YAML::Value << wave.ufoType;
-	out << YAML::Key << "count" << YAML::Value << wave.ufoCount;
-	out << YAML::Key << "trajectory" << YAML::Value << wave.trajectory;
-	out << YAML::Key << "timer" << YAML::Value << wave.spawnTimer;
-	out << YAML::EndMap;
-}
-
-void operator>>(const YAML::Node &node, MissionWave &wave)
-{
-	node["ufo"] >> wave.ufoType;
-	node["count"] >> wave.ufoCount;
-	node["trajectory"] >> wave.trajectory;
-	node["timer"] >> wave.spawnTimer;
 }
 
 }

@@ -27,15 +27,11 @@
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Interface/Bar.h"
-#include "../Interface/TextButton.h"
 #include "../Interface/Text.h"
 #include "../Engine/Surface.h"
 #include "../Savegame/Base.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Armor.h"
-#include "../Savegame/Soldier.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Ruleset/Unit.h"
 #include "../Engine/Options.h"
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
@@ -385,7 +381,7 @@ UnitInfoState::~UnitInfoState()
 }
 
 /**
- * The unit info can change
+ * Updates unit info which can change
  * after going into other screens.
  */
 void UnitInfoState::init()

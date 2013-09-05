@@ -61,7 +61,8 @@ UnitSprite::~UnitSprite()
 /**
  * Changes the surface sets for the UnitSprite to get resources for rendering.
  * @param unitSurface Pointer to the unit surface set.
- * @param itemSurface Pointer to the item surface set.
+ * @param itemSurfaceA Pointer to the item surface set.
+ * @param itemSurfaceB Pointer to the item surface set.
  */
 void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, SurfaceSet *itemSurfaceB)
 {
@@ -182,11 +183,10 @@ void UnitSprite::draw()
 }
 
 /**
- * Drawing routine for xcom soldiers in overalls and Sectoids and Mutons (routine 10).
+ * Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
  */
 void UnitSprite::drawRoutine0()
 {
-
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
 	// magic numbers
 	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264, legsFloat = 275;
@@ -355,7 +355,7 @@ void UnitSprite::drawRoutine0()
 			else
 				rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 		}
-		
+
 
 		// the fixed arm(s) have to be animated up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
@@ -461,7 +461,7 @@ void UnitSprite::drawRoutine0()
 	{
 		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
 	}
-	
+
 	Surface *newTorso = new Surface(*torso);
 	Surface *newLegs = new Surface(*legs);
 	Surface *newLeftArm = new Surface(*leftArm);
@@ -469,7 +469,7 @@ void UnitSprite::drawRoutine0()
 	if(_unit->getGeoscapeSoldier())
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
-		
+
 		if(look)
 		{
 			Uint8 face_color = ColorFace::Face;
@@ -688,7 +688,7 @@ void UnitSprite::drawRoutine1()
 }
 
 /**
- * Drawing routine for x-com tanks.
+ * Drawing routine for XCom tanks.
  */
 void UnitSprite::drawRoutine2()
 {
@@ -834,7 +834,7 @@ void UnitSprite::drawRoutine4()
 			}
 		}
 	}
-		
+
 	//if we are dual wielding...
 	if(_itemB && !_itemB->getRules()->isFixed())
 	{
@@ -858,7 +858,7 @@ void UnitSprite::drawRoutine4()
 			itemB->setY(offY3[_unit->getDirection()]);
 		}
 	}
-		
+
 	switch (_unit->getDirection())
 	{
 	case 0: itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); s->blit(this); break;
@@ -898,7 +898,7 @@ void UnitSprite::drawRoutine5()
 }
 
 /**
- * Drawing routine for snakemen
+ * Drawing routine for snakemen.
  */
 void UnitSprite::drawRoutine6()
 {
@@ -933,7 +933,7 @@ void UnitSprite::drawRoutine6()
 		torso = _unitSurface->getFrame(Torso + _unit->getDirection());
 		leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
 		rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
-	
+
 
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
@@ -994,7 +994,7 @@ void UnitSprite::drawRoutine6()
 		{
 			rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 		}
-		
+
 
 		// the fixed arm(s) have to be animated up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
@@ -1046,7 +1046,7 @@ void UnitSprite::drawRoutine6()
 		rightArm->setY(0);
 		torso->setY(0);
 	}
-	
+
 	// blit order depends on unit direction.
 	switch (_unit->getDirection())
 	{
@@ -1062,7 +1062,7 @@ void UnitSprite::drawRoutine6()
 }
 
 /**
- * Drawing routine for chryssalid
+ * Drawing routine for chryssalid.
  */
 void UnitSprite::drawRoutine7()
 {
@@ -1103,7 +1103,7 @@ void UnitSprite::drawRoutine7()
 	}
 	else
 	{
-		
+
 		legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
 		rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
@@ -1125,14 +1125,17 @@ void UnitSprite::drawRoutine7()
 	case 7: leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
 	}
 }
-//silacoids
+
+/**
+ * Drawing routine for silacoids.
+ */
 void UnitSprite::drawRoutine8()
 {
 	Surface *legs = 0;
 	// magic numbers
 	const int Body = 0, aim = 5, die = 6;
 	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
-	
+
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
@@ -1144,19 +1147,22 @@ void UnitSprite::drawRoutine8()
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		legs = _unitSurface->getFrame(die + _unit->getFallingPhase());
-	
+
 	if (_unit->getStatus() == STATUS_AIMING)
 		legs = _unitSurface->getFrame(aim);
 
 	legs->blit(this);
 }
-//celatids
+
+/**
+ * Drawing routine for celatids.
+ */
 void UnitSprite::drawRoutine9()
 {
 	Surface *torso = 0;
 	// magic numbers
 	const int Body = 0, die = 25;
-	
+
 	if (_unit->isOut())
 	{
 		// unit is drawn as an item
@@ -1172,8 +1178,8 @@ void UnitSprite::drawRoutine9()
 	torso->blit(this);
 }
 
-/*
- * in case of 2-handed weapons, determine which ones to display.
+/**
+ * Determines which weapons to display in the case of two-handed weapons.
  */
 void UnitSprite::sortRifles()
 {

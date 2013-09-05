@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Represents the creation data for a specific type of unit.
- * This info is copied to either Soldier for x-com soldiers or BattleUnit for aliens and civilians.
+ * This info is copied to either Soldier for XCom soldiers or BattleUnit for aliens and civilians.
  * @sa Soldier BattleUnit
  */
 class RuleSoldier
@@ -44,23 +44,21 @@ public:
 	~RuleSoldier();
 	/// Loads the unit data from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the unit data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the unit's type.
 	std::string getType() const;
-	/// Get the minimum stats for the random stats generator.
+	/// Gets the minimum stats for the random stats generator.
 	UnitStats getMinStats() const;
-	/// Get the maximum stats for the random stats generator.
+	/// Gets the maximum stats for the random stats generator.
 	UnitStats getMaxStats() const;
-	/// Get the stat caps.
+	/// Gets the stat caps.
 	UnitStats getStatCaps() const;
-	/// Get the height of the soldier when it's standing.
+	/// Gets the height of the soldier when it's standing.
 	int getStandHeight() const;
-	/// Get the height of the soldier when it's kneeling.
+	/// Gets the height of the soldier when it's kneeling.
 	int getKneelHeight() const;
-	/// Get the elevation of soldier when it's flying.
+	/// Gets the elevation of the soldier when it's flying.
 	int getFloatHeight() const;
-	/// Get the armor name.
+	/// Gets the armor name.
 	std::string getArmor() const;
 
 };

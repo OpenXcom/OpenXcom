@@ -130,6 +130,7 @@ void createDefault()
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
 	setBool("captureMouse", false);
+	setBool("battleTooltips", true);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -244,7 +245,12 @@ void createDefault()
 	setInt("keyBattleCenterEnemy9", SDLK_9);
 	setInt("keyBattleCenterEnemy10", SDLK_0);
 	setInt("keyBattleVoxelView", SDLK_F10);
+
 	setInt("keyBattleZeroTUs", SDLK_DELETE);
+
+#ifdef __MORPHOS__
+	setInt("FPS", 15);
+#endif
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
@@ -475,41 +481,20 @@ void updateOptions()
 void load(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
-	std::ifstream fin(s.c_str());
-	if (!fin)
+	try
 	{
-		//throw Exception(filename + ".cfg" + "not found");
-		return;
+		YAML::Node doc = YAML::LoadFile(s);
+		for (YAML::const_iterator i = doc["options"].begin(); i != doc["options"].end(); ++i)
+		{
+			_options[i->first.as<std::string>()] = i->second.as<std::string>();
+		}
+		_purchaseexclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(_purchaseexclusions);
+		_rulesets = doc["rulesets"].as< std::vector<std::string> >(_rulesets);
 	}
-	YAML::Parser parser(fin);
-	YAML::Node doc;
-
-	parser.GetNextDocument(doc);
-	const YAML::Node *options = doc.FindValue("options");
-	if (!options)
+	catch (YAML::Exception e)
 	{
-		options = &doc;
+		Log(LOG_WARNING) << e.what();
 	}
-
-	for (YAML::Iterator i = options->begin(); i != options->end(); ++i)
-	{
-		std::string key, value;
-		i.first() >> key;
-		i.second() >> value;
-		_options[key] = value;
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
-	{
-		(*pName) >> _purchaseexclusions;
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("rulesets"))
-	{
-		(*pName) >> _rulesets;
-	}
-
-	fin.close();
 }
 
 /**
@@ -527,10 +512,11 @@ void save(const std::string &filename)
 	}
 	YAML::Emitter out;
 
-	out << YAML::BeginMap;
-	out << YAML::Key << "options" << YAML::Value << _options;
-	out << YAML::Key << "rulesets" << YAML::Value << _rulesets;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["options"] = _options;
+	node["purchaseexclusions"] = _purchaseexclusions;
+	node["rulesets"] = _rulesets;
+	out << node;
 
 	sav << out.c_str();
 	sav.close();

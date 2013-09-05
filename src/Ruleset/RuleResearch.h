@@ -26,15 +26,17 @@
 namespace OpenXcom
 {
 /**
-   Represent one research project.
-   Dependency and unlock. Dependency is the list of RuleResearch which must be discovered before a RuleResearch became available. Unlock  are used to immediately unlock a RuleResearch(even if not all dependency have been researched).
-
-   Fake ResearchProject. A RuleResearch is fake one, if t's cost is 0. They are used to to create check point in the dependency tree.
-   For example if we have a Research E which need either A & B or C & D. We create 2 fake research project:
-   * F which need A & B
-   * G which need C & D
-   both F and G can unlock E.
-*/
+ * Represents one research project.
+ * Dependency is the list of RuleResearchs which must be discovered before a RuleResearch became available.
+ * Unlocks are used to immediately unlock a RuleResearch (even if not all the dependencies have been researched).
+ *
+ * Fake ResearchProjects: A RuleResearch is fake one, if its cost is 0. They are used to to create check points in the dependency tree.
+ *
+ * For example, if we have a Research E which needs either A & B or C & D, we create two fake research projects:
+ *  - F which need A & B
+ *  - G which need C & D
+ * both F and G can unlock E.
+ */
 class RuleResearch
 {
  private:
@@ -47,27 +49,25 @@ public:
 	RuleResearch(const std::string & name);
 	/// Loads the research from YAML.
 	void load(const YAML::Node& node, int listOrder);
-	/// Saves the research to YAML.
-	void save(YAML::Emitter& out) const;
-	/// Get time needed to discover this ResearchProject
+	/// Gets time needed to discover this ResearchProject.
 	int getCost() const;
-	/// Get the research name
+	/// Gets the research name.
 	const std::string & getName () const;
-	/// Get the research dependencies
+	/// Gets the research dependencies.
 	const std::vector<std::string> & getDependencies () const;
-	/// Does this ResearchProject need a corresponding Item to be researched ?
+	/// Checks if this ResearchProject needs a corresponding Item to be researched.
 	bool needItem() const;
-	/// Get the list of ResearchProjects unlocked by this research
+	/// Gets the list of ResearchProjects unlocked by this research.
 	const std::vector<std::string> & getUnlocked () const;
-	/// Get points earned for discovering this ResearchProject
+	/// Gets the points earned for discovering this ResearchProject.
 	int getPoints() const;
-	/// get the list of ResearchProjects granted at random for free by this research
+	/// Gets the list of ResearchProjects granted at random for free by this research.
 	const std::vector<std::string> & getGetOneFree() const;
-	/// what to look up on ufopedia
+	/// Gets what to look up in the ufopedia.
 	const std::string getLookup () const;
-	/// return the requirements
+	/// Gets the requirements for this ResearchProject.
 	const std::vector<std::string> & getRequirements() const;
-	/// get the list weight for this research item.
+	/// Gets the list weight for this research item.
 	int getListOrder() const;
 };
 }

@@ -81,39 +81,23 @@ Tile::~Tile()
  */
 void Tile::load(const YAML::Node &node)
 {
-	//node["position"] >> _pos;
-	for (int i =0; i < 4; i++)
+	//_position = node["position"].as<Position>(_position);
+	for (int i = 0; i < 4; i++)
 	{
-		node["mapDataID"][i] >> _mapDataID[i];
-		node["mapDataSetID"][i] >> _mapDataSetID[i];
+		_mapDataID[i] = node["mapDataID"][i].as<int>(_mapDataID[i]);
+		_mapDataSetID[i] = node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
 	}
-	if(const YAML::Node *pName = node.FindValue("fire"))
+	_fire = node["fire"].as<int>(_fire);
+	_smoke = node["smoke"].as<int>(_smoke);
+	for (int i = 0; i < 3; i++)
 	{
-		*pName >> _fire;
+		_discovered[i] = node["discovered"][i].as<bool>();
 	}
-	else
-	{
-		_fire = 0;
-	}
-	if(const YAML::Node *pName = node.FindValue("smoke"))
-	{
-		*pName >> _smoke;
-	}
-	else
-	{
-		_smoke = 0;
-	}
-	if(const YAML::Node *pName = node.FindValue("discovered"))
-	{
-		(*pName)[0] >> _discovered[0];
-		(*pName)[1] >> _discovered[1];
-		(*pName)[2] >> _discovered[2];
-	}
-	if (node.FindValue("openDoorWest"))
+	if (node["openDoorWest"])
 	{
 		_currentFrame[1] = 7;
 	}
-	if (node.FindValue("openDoorNorth"))
+	if (node["openDoorNorth"])
 	{
 		_currentFrame[2] = 7;
 	}
@@ -148,34 +132,37 @@ void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 
 /**
  * Saves the tile to a YAML node.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Tile::save(YAML::Emitter &out) const
+YAML::Node Tile::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "position" << YAML::Value << _pos;
-	out << YAML::Key << "mapDataID" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _mapDataID[0] << _mapDataID[1] << _mapDataID[2] << _mapDataID[3] << YAML::EndSeq;
-	out << YAML::Key << "mapDataSetID" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _mapDataSetID[0] << _mapDataSetID[1] << _mapDataSetID[2] << _mapDataSetID[3] << YAML::EndSeq;
+	YAML::Node node;
+	node["position"] = _pos;
+	for (int i = 0; i < 4; i++)
+	{
+		node["mapDataID"].push_back(_mapDataID[i]);
+		node["mapDataSetID"].push_back(_mapDataSetID[i]);
+	}
 	if (_smoke)
-		out << YAML::Key << "smoke" << YAML::Value << _smoke;
+		node["smoke"] = _smoke;
 	if (_fire)
-		out << YAML::Key << "fire" << YAML::Value << _fire;
+		node["fire"] = _fire;
 	if (_discovered[0] || _discovered[1] || _discovered[2])
 	{
-		out << YAML::Key << "discovered" << YAML::Value << YAML::Flow;
-		out << YAML::BeginSeq << _discovered[0] << _discovered[1] << _discovered[2] << YAML::EndSeq;
+		for (int i = 0; i < 3; i++)
+		{
+			node["discovered"].push_back(_discovered[i]);
+		}
 	}
 	if (isUfoDoorOpen(1))
 	{
-		out << YAML::Key << "openDoorWest" <<  YAML::Value << true;
+		node["openDoorWest"] = true;
 	}
 	if (isUfoDoorOpen(2))
 	{
-		out << YAML::Key << "openDoorNorth" <<  YAML::Value << true;
+		node["openDoorNorth"] = true;
 	}
-	out << YAML::EndMap;
+	return node;
 }
 /**
  * Saves the tile to binary.
@@ -199,20 +186,6 @@ void Tile::saveBinary(Uint8** buffer) const
 	boolFields |= isUfoDoorOpen(1) ? 8 : 0; // west
 	boolFields |= isUfoDoorOpen(2) ? 0x10 : 0; // north?
 	serializeInt(buffer, serializationKey.boolFields, boolFields);
-}
-
-/**
- * Get the MapData pointer of a part of the tile.
- * @param part the part 0-3.
- * @return pointer to mapdata
- */
-MapData *Tile::getMapData(int part) const
-{
-	if (part < 0 || part > 3)
-	{
-		throw Exception("unknown MapDataID part");
-	}
-	return _objects[part];
 }
 
 /**
@@ -311,16 +284,6 @@ int Tile::getTerrainLevel() const
 }
 
 /**
- * Gets the tile's position.
- * @return position
- */
-const Position& Tile::getPosition() const
-{
-	return _pos;
-}
-
-
-/**
  * Gets the tile's footstep sound.
  * @return sound ID
  */
@@ -369,21 +332,6 @@ int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 		return 3;
 	}
 	return -1;
-}
-
-/**
- * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
- * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
- * @param part
- * @return bool
- */
-bool Tile::isUfoDoorOpen(int part) const
-{
-	if (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0)
-	{
-		return true;
-	}
-	return false;
 }
 
 int Tile::closeUfoDoor()
@@ -662,15 +610,6 @@ void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 		unit->setTile(this, tileBelow);
 	}
 	_unit = unit;
-}
-
-/**
- * Get the (alive) unit on this tile.
- * @return BattleUnit.
- */
-BattleUnit *Tile::getUnit() const
-{
-	return _unit;
 }
 
 /**

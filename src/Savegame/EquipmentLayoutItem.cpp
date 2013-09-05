@@ -110,28 +110,28 @@ int EquipmentLayoutItem::getExplodeTurn() const
  */
 void EquipmentLayoutItem::load(const YAML::Node &node)
 {
-	node["itemType"] >> _itemType;
-	node["slot"] >> _slot;
-	node["slotX"] >> _slotX;
-	node["slotY"] >> _slotY;
-	node["ammoItem"] >> _ammoItem;
-	node["explodeTurn"] >> _explodeTurn;
+	_itemType = node["itemType"].as<std::string>(_itemType);
+	_slot = node["slot"].as<std::string>(_slot);
+	_slotX = node["slotX"].as<int>(_slotX);
+	_slotY = node["slotY"].as<int>(_slotY);
+	_ammoItem = node["ammoItem"].as<std::string>(_ammoItem);
+	_explodeTurn = node["explodeTurn"].as<int>(_explodeTurn);
 }
 
 /**
  * Saves the soldier-equipment layout item to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void EquipmentLayoutItem::save(YAML::Emitter &out) const
+YAML::Node EquipmentLayoutItem::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "itemType" << YAML::Value << _itemType;
-	out << YAML::Key << "slot" << YAML::Value << _slot;
-	out << YAML::Key << "slotX" << YAML::Value << _slotX;
-	out << YAML::Key << "slotY" << YAML::Value << _slotY;
-	out << YAML::Key << "ammoItem" << YAML::Value << _ammoItem;
-	out << YAML::Key << "explodeTurn" << YAML::Value << _explodeTurn;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["itemType"] = _itemType;
+	node["slot"] = _slot;
+	node["slotX"] = _slotX;
+	node["slotY"] = _slotY;
+	node["ammoItem"] = _ammoItem;
+	node["explodeTurn"] = _explodeTurn;
+	return node;
 }
 
 }

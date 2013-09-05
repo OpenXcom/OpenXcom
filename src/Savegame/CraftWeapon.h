@@ -47,7 +47,7 @@ public:
 	/// Loads the craft weapon from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the craft weapon to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Gets the craft weapon's ruleset.
 	RuleCraftWeapon *getRules() const;
 	/// Gets the craft weapon's ammo.

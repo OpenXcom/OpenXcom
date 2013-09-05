@@ -41,7 +41,7 @@ public:
 	/// Loads the data from YAML.
 	void load(const Ruleset *rules, const YAML::Node& node);
 	/// Saves the data to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Choose a random region for a regular mission.
 	const std::string &chooseRandomRegion() const;
 	/// Choose a random mission for a region.

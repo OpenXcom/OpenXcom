@@ -28,6 +28,7 @@
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BriefingState.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/RNG.h"
 #include "../Ruleset/Ruleset.h"
@@ -44,14 +45,14 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_btnYes = new TextButton(80, 20, 70, 142);
 	_btnNo = new TextButton(80, 20, 170, 142);
 	_txtMessage = new Text(224, 48, 48, 76);
-	
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
 	add(_txtMessage);
 
 	centerAllSurfaces();
-	
+
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -65,7 +66,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Game *game, Craft *craft) : State(game)
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmCydoniaState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmCydoniaState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
-	
+
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
@@ -95,8 +96,8 @@ void ConfirmCydoniaState::btnYesClick(Action *)
 {
 	_game->popState();
 	_game->popState();
-	
-	int month = 
+
+	int month =
 		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
 		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
 		_game->getSavedGame()->getMonthsPassed() ;  // else
@@ -112,7 +113,7 @@ void ConfirmCydoniaState::btnYesClick(Action *)
 	bgen.run();
 
 	_game->pushState(new BriefingState(_game, _craft));
-	
+
 }
 
 /**

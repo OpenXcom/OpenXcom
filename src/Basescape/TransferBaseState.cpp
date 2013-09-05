@@ -142,7 +142,7 @@ void TransferBaseState::btnCancelClick(Action *)
 }
 
 /**
- * Shows Transfer screen for the selected base.
+ * Shows the Transfer screen for the selected base.
  * @param action Pointer to an action.
  */
 void TransferBaseState::lstBasesClick(Action *)

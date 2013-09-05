@@ -41,9 +41,9 @@ public:
 	/// Loads the waypoint from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the waypoint to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Saves the waypoint's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	YAML::Node saveId() const;
 	/// Gets the waypoint's ID.
 	int getId() const;
 	/// Sets the waypoint's ID.

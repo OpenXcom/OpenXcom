@@ -47,7 +47,7 @@ public:
 	/// Loads the moving target from YAML.
 	virtual void load(const YAML::Node& node);
 	/// Saves the moving target to YAML.
-	virtual void save(YAML::Emitter& out) const;
+	virtual YAML::Node save() const;
 	/// Gets the moving target's destination.
 	Target *getDestination() const;
 	/// Sets the moving target's destination.

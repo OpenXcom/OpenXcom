@@ -45,21 +45,21 @@ Region::~Region()
  */
 void Region::load(const YAML::Node &node)
 {
-	node["activityXcom"] >> _activityXcom;
-	node["activityAlien"] >> _activityAlien;
+	_activityXcom = node["activityXcom"].as< std::vector<int> >(_activityXcom);
+	_activityAlien = node["activityAlien"].as< std::vector<int> >(_activityAlien);
 }
 
 /**
  * Saves the region to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Region::save(YAML::Emitter &out) const
+YAML::Node Region::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "activityXcom" << YAML::Value << _activityXcom;
-	out << YAML::Key << "activityAlien" << YAML::Value << _activityAlien;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["type"] = _rules->getType();
+	node["activityXcom"] = _activityXcom;
+	node["activityAlien"] = _activityAlien;
+	return node;
 }
 
 /**

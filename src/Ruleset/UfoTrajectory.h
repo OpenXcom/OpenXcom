@@ -49,21 +49,42 @@ bool operator>>(const YAML::Node &node, TrajectoryWaypoint &wp);
 class UfoTrajectory
 {
 public:
-	/// Get the trajectory's ID.
+	/**
+	 * Gets the trajectory's ID.
+	 * @return The trajectory's ID.
+	 */
 	const std::string &getID() const { return _id; }
+
 	/// Loads trajectory data from YAML.
 	void load(const YAML::Node &node);
-	/// Saves the trajectory data to YAML.
-	void save(YAML::Emitter &out) const;
-	/// Gets the number of waypoints in this trajectory.
+
+	/**
+	 * Gets the number of waypoints in this trajectory.
+	 * @return The number of waypoints.
+	 */
 	unsigned getWaypointCount() const { return _waypoints.size(); }
-	/// Gets the zone index at a waypoint.
+
+	/**
+	 * Gets the zone index at a waypoint.
+	 * @param wp The waypoint.
+	 * @return The zone index.
+	 */
 	unsigned getZone(unsigned wp) const { return _waypoints[wp].zone; }
+
 	/// Gets the altitude at a waypoint.
 	std::string getAltitude(unsigned wp) const;
-	/// Gets the speed percentage at a waypoint.
+
+	/**
+	 * Gets the speed percentage at a waypoint.
+	 * @param wp The waypoint.
+	 * @return The speed as a percentage.
+	 */
 	float getSpeedPercentage(unsigned wp) const { return _waypoints[wp].speed / 100.0f; }
-	/// Gets the number of seconds UFOs should spend on the ground.
+
+	/**
+	 * Gets the number of seconds UFOs should spend on the ground.
+	 * @return The number of seconds.
+	 */
 	unsigned groundTimer() const { return _groundTimer; }
 private:
 	std::string _id;

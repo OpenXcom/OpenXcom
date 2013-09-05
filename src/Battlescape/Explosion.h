@@ -24,12 +24,8 @@
 namespace OpenXcom
 {
 
-class ResourcePack;
-class BattleItem;
-class SavedBattleGame;
-
 /**
- * A class that represents an explosion animation. Map is the owner of an instance of this class during it's short life.
+ * A class that represents an explosion animation. Map is the owner of an instance of this class during its short life.
  * It represents both a bullet hit, as a real explosion animation.
  */
 class Explosion
@@ -43,14 +39,15 @@ public:
 	Explosion(Position _position, int startFrame, bool big, bool hit = false);
 	/// Cleans up the Explosion.
 	~Explosion();
-	/// Move the Explosion one frame.
+	/// Moves the Explosion on one frame.
 	bool animate();
-	/// Get the current position in voxel space.
+	/// Gets the current position in voxel space.
 	Position getPosition() const;
-	/// Get a the current frame.
+	/// Gets the current frame.
 	int getCurrentFrame() const;
-	/// Is big?
+	/// Checks if this is a real explosion.
 	bool isBig() const;
+	/// Checks if this is a melee or psi hit.
 	bool isHit() const;
 };
 

@@ -586,7 +586,8 @@ std::wstring Language::getName() const
 const LocalizedText &Language::getString(const std::string &id) const
 {
 	static LocalizedText hack(L"");
-	// assert(!id.empty()); // Isn't an empty ID an error?
+	if (id.empty())
+		return hack;
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{

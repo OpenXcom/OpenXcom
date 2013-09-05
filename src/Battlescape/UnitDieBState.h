@@ -20,17 +20,18 @@
 #define OPENXCOM_UNITDIEBSTATE_H
 
 #include "BattleState.h"
-#include "Position.h"
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
 {
 
+class BattlescapeGame;
 class BattleUnit;
-class TileEngine;
 
 /* Refactoring tip : UnitDieBState */
-
+/**
+ * State for dying units.
+ */
 class UnitDieBState : public BattleState
 {
 private:
@@ -49,11 +50,11 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Get the result of the state.
+	/// Gets the result of the state.
 	std::string getResult() const;
-	/// Convert a unit to a corpse.
+	/// Converts a unit to a corpse.
 	void convertUnitToCorpse();
-	/// Play the death sound
+	/// Plays the death sound.
 	void playDeathSound();
 };
 

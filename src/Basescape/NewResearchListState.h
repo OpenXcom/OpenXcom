@@ -18,7 +18,9 @@
  */
 #ifndef OPENXCOM_NEWRESEARCHLISTSTATE_H
 #define OPENXCOM_NEWRESEARCHLISTSTATE_H
+
 #include "../Engine/State.h"
+#include <vector>
 
 namespace OpenXcom
 {
@@ -29,11 +31,10 @@ class Text;
 class TextList;
 class Base;
 class RuleResearch;
-class ResearchState;
 
 /**
-   Window which display possible research projects.
-*/
+ * Window which displays possible research projects.
+ */
 class NewResearchListState : public State
 {
 private:
@@ -47,9 +48,9 @@ private:
 public:
 	/// Creates the New research list state.
 	NewResearchListState(Game *game, Base *base);
-	/// Handler for clicking the OK button
+	/// Handler for clicking the OK button.
 	void btnOKClick(Action *action);
-	/// Fill the ResearchProject list with possible ResearchProject.
+	/// Fills the ResearchProject list with possible ResearchProjects.
 	void fillProjectList ();
 	/// Initializes the state.
 	void init();

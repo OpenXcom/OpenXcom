@@ -44,9 +44,9 @@ public:
 	/// Loads the terror site from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the terror site to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Saves the terror site's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	YAML::Node saveId() const;
 	/// Gets the terror site's ID.
 	int getId() const;
 	/// Sets the terror site's ID.

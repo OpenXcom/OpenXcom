@@ -27,7 +27,6 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-class TextList;
 class Base;
 class RuleResearch;
 class ResearchProject;
@@ -36,8 +35,8 @@ class Timer;
 class InteractiveSurface;
 
 /**
-   Window which allow to change number of assigned scientist to a project.
-*/
+ * Window which allows changing of the number of assigned scientist to a project.
+ */
 class ResearchInfoState : public State
 {
 private:
@@ -47,7 +46,7 @@ private:
 	ArrowButton * _btnMore, *_btnLess;
 	Window *_window;
 	Text *_txtTitle, *_txtAvailableScientist, *_txtAvailableSpace, *_txtAllocatedScientist, *_txtMore, *_txtLess;
-	void SetAssignedScientist();
+	void setAssignedScientist();
 	ResearchProject * _project;
 	RuleResearch * _rule;
 	void buildUi ();

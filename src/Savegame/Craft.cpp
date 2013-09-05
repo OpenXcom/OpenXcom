@@ -84,16 +84,14 @@ Craft::~Craft()
 void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 {
 	MovingTarget::load(node);
-	node["id"] >> _id;
-	node["fuel"] >> _fuel;
-	node["damage"] >> _damage;
+	_id = node["id"].as<int>(_id);
+	_fuel = node["fuel"].as<int>(_fuel);
+	_damage = node["damage"].as<int>(_damage);
 
-	if (const YAML::Node *pName = node.FindValue("dest"))
+	if (const YAML::Node &dest = node["dest"])
 	{
-		std::string type;
-		int id;
-		(*pName)["type"] >> type;
-		(*pName)["id"] >> id;
+		std::string type = dest["type"].as<std::string>();
+		int id = dest["id"].as<int>();
 		if (type == "STR_BASE")
 		{
 			returnToBase();
@@ -145,10 +143,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	}
 
 	unsigned int j = 0;
-	for (YAML::Iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
+	for (YAML::const_iterator i = node["weapons"].begin(); i != node["weapons"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
+		std::string type = (*i)["type"].as<std::string>();
 		if (type != "0")
 		{
 			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
@@ -158,24 +155,20 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	}
 
 	_items->load(node["items"]);
-	for (YAML::Iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
+	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
+		std::string type = (*i)["type"].as<std::string>();
 		Vehicle *v = new Vehicle(rule->getItem(type), 0);
 		v->load(*i);
 		_vehicles.push_back(v);
 	}
-	node["status"] >> _status;
-	node["lowFuel"] >> _lowFuel;
-	node["inBattlescape"] >> _inBattlescape;
-	node["inDogfight"] >> _inDogfight;
-	node["interceptionOrder"] >> _interceptionOrder;
-	if (const YAML::Node *pName = node.FindValue("name"))
+	_status = node["status"].as<std::string>(_status);
+	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
+	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
+	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
+	if (const YAML::Node name = node["name"])
 	{
-		std::string name;
-		(*pName) >> name;
-		_name = Language::utf8ToWstr(name);
+		_name = Language::utf8ToWstr(name.as<std::string>());
 	}
 	if (_inBattlescape)
 		setSpeed(0);
@@ -183,59 +176,54 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 
 /**
  * Saves the craft to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Craft::save(YAML::Emitter &out) const
+YAML::Node Craft::save() const
 {
-	MovingTarget::save(out);
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "fuel" << YAML::Value << _fuel;
-	out << YAML::Key << "damage" << YAML::Value << _damage;
-	out << YAML::Key << "weapons" << YAML::Value;
-	out << YAML::BeginSeq;
+	YAML::Node node = MovingTarget::save();
+	node["type"] = _rules->getType();
+	node["id"] = _id;
+	node["fuel"] = _fuel;
+	node["damage"] = _damage;
 	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
+		YAML::Node subnode;
 		if (*i != 0)
 		{
-			(*i)->save(out);
+			subnode = (*i)->save();
 		}
 		else
 		{
-			out << YAML::BeginMap;
-			out << YAML::Key << "type" << YAML::Value << "0";
-			out << YAML::EndMap;
+			subnode["type"] = "0";
 		}
+		node["weapons"].push_back(subnode);
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "items" << YAML::Value;
-	_items->save(out);
-	out << YAML::Key << "vehicles" << YAML::Value;
-	out << YAML::BeginSeq;
+	node["items"] = _items->save();
 	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
-		(*i)->save(out);
+		node["vehicles"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "status" << YAML::Value << _status;
-	out << YAML::Key << "lowFuel" << YAML::Value << _lowFuel;
-	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	out << YAML::Key << "inDogfight" << YAML::Value << false;
-	out << YAML::Key << "interceptionOrder" << YAML::Value << _interceptionOrder;
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::EndMap;
+	node["status"] = _status;
+	if (_lowFuel)
+		node["lowFuel"] = _lowFuel;
+	if (_inBattlescape)
+		node["inBattlescape"] = _inBattlescape;
+	node["interceptionOrder"] = _interceptionOrder;
+	if (!_name.empty())
+		node["name"] = Language::wstrToUtf8(_name);
+	return node;
 }
 
 /**
  * Saves the craft's unique identifiers to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Craft::saveId(YAML::Emitter &out) const
+YAML::Node Craft::saveId() const
 {
-	MovingTarget::saveId(out);
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::EndMap;
+	YAML::Node node = MovingTarget::saveId();
+	node["type"] = _rules->getType();
+	node["id"] = _id;
+	return node;
 }
 
 /**

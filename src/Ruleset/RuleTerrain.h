@@ -34,8 +34,8 @@ class Ruleset;
 
 /**
  * Represents a specific type of Battlescape Terrain.
- * - the names of the objectsets needed in this specific terrain
- * - the mapblocks that can be used to build this terrain
+ * - the names of the objectsets needed in this specific terrain.
+ * - the mapblocks that can be used to build this terrain.
  * @sa http://www.ufopaedia.org/index.php?title=TERRAIN
  */
 class RuleTerrain
@@ -52,8 +52,6 @@ public:
 	~RuleTerrain();
 	/// Loads the terrain from YAML.
 	void load(const YAML::Node& node, Ruleset *ruleset);
-	/// Saves the terrain to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the terrain's name (used for MAP generation).
 	std::string getName() const;
 	/// Gets the terrain's mapblocks.
@@ -62,10 +60,11 @@ public:
 	std::vector<MapDataSet*> *getMapDataSets();
 	/// Gets a random mapblock.
 	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type, bool force = false);
-	/// Get a mapblock given it's name.
-	MapBlock* getMapBlock(const std::string &name);
-	/// Get the mapdata object.
+	/// Gets a mapblock given its name.
+	MapBlock *getMapBlock(const std::string &name);
+	/// Gets the mapdata object.
 	MapData *getMapData(int *id, int *mapDataSetID) const;
+	/// Gets the maximum amount of large blocks in this terrain.
 	int getLargeBlockLimit() const;
 	void resetMapBlocks();
 	std::vector<int> *getTextures();

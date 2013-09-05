@@ -35,11 +35,12 @@
 
 namespace OpenXcom
 {
+
 /**
- * Initializes all the elements in the productions start screen
+ * Initializes all the elements in the productions start screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
- * @param item the RuleManufacture to produce
+ * @param item The RuleManufacture to produce.
  */
 ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManufacture * item) : State(game), _base(base), _item(item)
 {
@@ -167,18 +168,18 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 }
 
 /**
- * Return to previous screen
- * @param action a pointer to an Action
-*/
+ * Returns to previous screen.
+ * @param action A pointer to an Action.
+ */
 void ManufactureStartState::btnCancelClick(Action *)
 {
 	_game->popState();
 }
 
 /**
- * Go to the Production settings screen
- * @param action a pointer to an Action
-*/
+ * Go to the Production settings screen.
+ * @param action A pointer to an Action.
+ */
 void ManufactureStartState::btnStartClick(Action *)
 {
 	_game->pushState(new ManufactureInfoState(_game, _base, _item));

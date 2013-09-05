@@ -27,7 +27,6 @@ namespace OpenXcom
 
 class SavedBattleGame;
 class BattleUnit;
-class BattlescapeState;
 
 /**
  * This class is used by the BattleUnit AI.
@@ -45,7 +44,7 @@ public:
 	/// Loads the AI state from YAML.
 	virtual void load(const YAML::Node& node);
 	/// Saves the AI state to YAML.
-	virtual void save(YAML::Emitter& out) const;
+	virtual YAML::Node save() const;
 	/// Enters the state.
 	virtual void enter();
 	/// Exits the state.

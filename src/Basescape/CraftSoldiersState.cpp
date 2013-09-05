@@ -137,6 +137,9 @@ void CraftSoldiersState::btnOkClick(Action *)
 	_game->popState();
 }
 
+/**
+ * Shows the soldiers in a list.
+ */
 void CraftSoldiersState::populateList()
 {
 	Craft *c = _base->getCrafts()->at(_craft);
@@ -166,7 +169,7 @@ void CraftSoldiersState::populateList()
 }
 
 /**
- * Reorders a soldier
+ * Reorders a soldier.
  * @param action Pointer to an action.
  */
 void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
@@ -202,7 +205,7 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action *action)
 }
 
 /**
- * Reorders a soldier
+ * Reorders a soldier.
  * @param action Pointer to an action.
  */
 void CraftSoldiersState::lstItemsRightArrowClick(Action *action)
@@ -258,6 +261,10 @@ void CraftSoldiersState::lstSoldiersClick(Action *action)
 		s->setCraft(0);
 		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 		color = Palette::blockOffset(13)+10;
+	}
+	else if (s->getCraft() && s->getCraft()->getStatus() == "STR_OUT")
+	{
+		color = Palette::blockOffset(15)+6;
 	}
 	else if (c->getSpaceAvailable() > 0 && s->getWoundRecovery() == 0)
 	{

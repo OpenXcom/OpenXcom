@@ -28,6 +28,7 @@ namespace OpenXcom
 /**
  * Initializes a item of the specified type.
  * @param rules Pointer to ruleset.
+ * @param id The id of the item.
  */
 BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
 {
@@ -63,89 +64,83 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node &node)
 {
-	//node["inventoryslot"] >> _inventorySlot;
-	node["inventoryX"] >> _inventoryX;
-	node["inventoryY"] >> _inventoryY;
-	node["ammoqty"] >> _ammoQuantity;
-	node["painKiller"] >> _painKiller;
-	node["heal"] >> _heal;
-	node["stimulant"] >> _stimulant;
-	node["explodeTurn"] >> _explodeTurn;
-	if(const YAML::Node *pName = node.FindValue("droppedOnAlienTurn"))
-	{
-		*pName >> _droppedOnAlienTurn;
-	}
+	_inventoryX = node["inventoryX"].as<int>(_inventoryX);
+	_inventoryY = node["inventoryY"].as<int>(_inventoryY);
+	_ammoQuantity = node["ammoqty"].as<int>(_ammoQuantity);
+	_painKiller = node["painKiller"].as<int>(_painKiller);
+	_heal = node["heal"].as<int>(_heal);
+	_stimulant = node["stimulant"].as<int>(_stimulant);
+	_explodeTurn = node["explodeTurn"].as<int>(_explodeTurn);
+	_droppedOnAlienTurn = node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
 /**
  * Saves the item to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void BattleItem::save(YAML::Emitter &out) const
+YAML::Node BattleItem::save() const
 {
-	out << YAML::BeginMap;
-
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
+	YAML::Node node;
+	node["id"] = _id;
+	node["type"] = _rules->getType();
 	if (_owner)
 	{
-		out << YAML::Key << "owner" << YAML::Value << _owner->getId();
+		node["owner"] = _owner->getId();
 	}
 	else
 	{
-		out << YAML::Key << "owner" << YAML::Value << -1;
+		node["owner"] = -1;
 	}
 	if (_unit)
 	{
-		out << YAML::Key << "unit" << YAML::Value << _unit->getId();
+		node["unit"] = _unit->getId();
 	}
 	else
 	{
-		out << YAML::Key << "unit" << YAML::Value << -1;
+		node["unit"] = -1;
 	}
 
 	if (_inventorySlot)
 	{
-		out << YAML::Key << "inventoryslot" << YAML::Value << _inventorySlot->getId();
+		node["inventoryslot"] = _inventorySlot->getId();
 	}
 	else
 	{
-		out << YAML::Key << "inventoryslot" << YAML::Value << "NULL";
+		node["inventoryslot"] = "NULL";
 	}
-	out << YAML::Key << "inventoryX" << YAML::Value << _inventoryX;
-	out << YAML::Key << "inventoryY" << YAML::Value << _inventoryY;
+	node["inventoryX"] = _inventoryX;
+	node["inventoryY"] = _inventoryY;
 
-	out << YAML::Key << "position" << YAML::Value << YAML::Flow;
 	if (_tile)
 	{
-		out << YAML::BeginSeq << _tile->getPosition().x << _tile->getPosition().y << _tile->getPosition().z << YAML::EndSeq;
+		node["position"] = _tile->getPosition();
 	}
 	else
 	{
-		out << YAML::BeginSeq << -1 << -1 << -1 << YAML::EndSeq;
+		node["position"] = Position(-1, -1, -1);
 	}
-	out << YAML::Key << "ammoqty" << YAML::Value << _ammoQuantity;
+	node["ammoqty"] = _ammoQuantity;
 	if (_ammoItem)
 	{
-		out << YAML::Key << "ammoItem" << YAML::Value << _ammoItem->getId();
+		node["ammoItem"] = _ammoItem->getId();
 	}
 	else
 	{
-		out << YAML::Key << "ammoItem" << YAML::Value << -1;
+		node["ammoItem"] = -1;
 	}
 
-	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
-	out << YAML::Key << "heal" << YAML::Value << _heal;
-	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
-	out << YAML::Key << "explodeTurn" << YAML::Value << _explodeTurn;
+	node["painKiller"] = _painKiller;
+	node["heal"] = _heal;
+	node["stimulant"] = _stimulant;
+	node["explodeTurn"] = _explodeTurn;
 	if (_droppedOnAlienTurn)
-		out << YAML::Key << "droppedOnAlienTurn" << YAML::Value << _droppedOnAlienTurn;
+		node["droppedOnAlienTurn"] = _droppedOnAlienTurn;
 
-	out << YAML::EndMap;
+	return node;
 }
 
 /**
- * Returns the ruleset for the item's type.
+ * Gets the ruleset for the item's type.
  * @return Pointer to ruleset.
  */
 RuleItem *BattleItem::getRules() const
@@ -154,7 +149,7 @@ RuleItem *BattleItem::getRules() const
 }
 
 /**
- * Returns the turn to explode on. 0 = unprimed grenade
+ * Gets the turn to explode on. 0 = unprimed grenade
  * @return Explode turn.
  */
 int BattleItem::getExplodeTurn() const
@@ -163,7 +158,7 @@ int BattleItem::getExplodeTurn() const
 }
 
 /**
- * Set the turn to explode on.
+ * Sets the turn to explode on.
  * @param turn Turn to explode on.
  */
 void BattleItem::setExplodeTurn(int turn)
@@ -172,7 +167,7 @@ void BattleItem::setExplodeTurn(int turn)
 }
 
 /**
- * Returns the quantity of ammo in this item.
+ * Gets the quantity of ammo in this item.
  * @return Ammo quantity.
  */
 int BattleItem::getAmmoQuantity() const
@@ -191,7 +186,7 @@ void BattleItem::setAmmoQuantity(int qty)
 
 /**
  * Spends a bullet from the ammo in this item.
- * @return bool Got bullets left?
+ * @return True if there are bullets left.
  */
 bool BattleItem::spendBullet()
 {
@@ -204,14 +199,17 @@ bool BattleItem::spendBullet()
 
 /**
  * Gets the item's owner.
- * @return pointer to Battleunit
+ * @return Pointer to Battleunit.
  */
 BattleUnit *BattleItem::getOwner() const
 {
 	return _owner;
 }
 
-/// Gets the item's previous owner.
+/**
+ * Gets the item's previous owner.
+ * @return Pointer to Battleunit.
+ */
 BattleUnit *BattleItem::getPreviousOwner() const
 {
 	return _previousOwner;
@@ -219,7 +217,7 @@ BattleUnit *BattleItem::getPreviousOwner() const
 
 /**
  * Sets the item's owner.
- * @param owner pointer to Battleunit
+ * @param owner Pointer to Battleunit.
  */
 void BattleItem::setOwner(BattleUnit *owner)
 {
@@ -228,12 +226,11 @@ void BattleItem::setOwner(BattleUnit *owner)
 }
 
 /**
- * Removes the item from previous owner and moves to new owner.
- * @param owner pointer to Battleunit
+ * Removes the item from the previous owner and moves it to the new owner.
+ * @param owner Pointer to Battleunit.
  */
 void BattleItem::moveToOwner(BattleUnit *owner)
 {
-	
 	_previousOwner = _owner ? _owner:owner;
 	_owner = owner;
 	if (_previousOwner != 0)
@@ -255,7 +252,7 @@ void BattleItem::moveToOwner(BattleUnit *owner)
 
 /**
  * Gets the item's inventory slot.
- * @return slot id
+ * @return The slot id.
  */
 RuleInventory *BattleItem::getSlot() const
 {
@@ -264,7 +261,7 @@ RuleInventory *BattleItem::getSlot() const
 
 /**
  * Sets the item's inventory slot.
- * @param slot slot id
+ * @param slot The slot id.
  */
 void BattleItem::setSlot(RuleInventory *slot)
 {
@@ -312,7 +309,7 @@ void BattleItem::setSlotY(int y)
  * @param x Slot X position.
  * @param y Slot Y position.
  * @param item Item to check for overlap, or NULL if none.
- * @return Whether it's covering or not.
+ * @return True if it is covering.
  */
 bool BattleItem::occupiesSlot(int x, int y, BattleItem *item) const
 {
@@ -336,7 +333,7 @@ bool BattleItem::occupiesSlot(int x, int y, BattleItem *item) const
 
 /**
  * Gets the item's ammo item.
- * @return BattleItem
+ * @return The ammo item.
  */
 BattleItem *BattleItem::getAmmoItem()
 {
@@ -344,8 +341,8 @@ BattleItem *BattleItem::getAmmoItem()
 }
 
 /**
- * Gets the item's ammo item.
- * @return BattleItem
+ * Determines if the item uses ammo.
+ * @return True if ammo is used.
  */
 bool BattleItem::needsAmmo() const
 {
@@ -354,8 +351,8 @@ bool BattleItem::needsAmmo() const
 
 /**
  * Sets the item's ammo item.
- * @param item BattleItem
- * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo
+ * @param item The ammo item.
+ * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo.
  */
 int BattleItem::setAmmoItem(BattleItem *item)
 {
@@ -382,10 +379,9 @@ int BattleItem::setAmmoItem(BattleItem *item)
 	return -2;
 }
 
-
 /**
  * Gets the item's tile.
- * @return Tile
+ * @return The tile.
  */
 Tile *BattleItem::getTile() const
 {
@@ -394,13 +390,17 @@ Tile *BattleItem::getTile() const
 
 /**
  * Sets the item's tile.
- * @param Tile
+ * @param The tile.
  */
 void BattleItem::setTile(Tile *tile)
 {
 	_tile = tile;
 }
 
+/**
+ * Gets the item's id.
+ * @return The item's id.
+ */
 int BattleItem::getId() const
 {
 	return _id;
@@ -408,7 +408,7 @@ int BattleItem::getId() const
 
 /**
  * Gets the corpse's unit.
- * @return BattleUnit
+ * @return Pointer to BattleUnit.
  */
 BattleUnit *BattleItem::getUnit() const
 {
@@ -417,7 +417,7 @@ BattleUnit *BattleItem::getUnit() const
 
 /**
  * Sets the corpse's unit.
- * @param unit
+ * @param Pointer to BattleUnit.
  */
 void BattleItem::setUnit(BattleUnit *unit)
 {
@@ -425,8 +425,8 @@ void BattleItem::setUnit(BattleUnit *unit)
 }
 
 /**
- * Set the heal quantity of item
- * @param heal the new heal quantity
+ * Sets the heal quantity of the item.
+ * @param heal The new heal quantity.
  */
 void BattleItem::setHealQuantity (int heal)
 {
@@ -434,17 +434,17 @@ void BattleItem::setHealQuantity (int heal)
 }
 
 /**
- * Get the heal quantity of item
- * @return The new heal quantity
+ * Gets the heal quantity of the item.
+ * @return The new heal quantity.
  */
 int BattleItem::getHealQuantity () const
 {
 	return _heal;
 }
 
-/**
- * Set the pain killer quantity of item
- * @param pk the new pain killer quantity
+/**.
+ * Sets the pain killer quantity of the item.
+ * @param pk The new pain killer quantity.
  */
 void BattleItem::setPainKillerQuantity (int pk)
 {
@@ -452,8 +452,8 @@ void BattleItem::setPainKillerQuantity (int pk)
 }
 
 /**
- * Get the pain killer quantity of item
- * @return The new pain killer quantity
+ * Gets the pain killer quantity of the item.
+ * @return The new pain killer quantity.
  */
 int BattleItem::getPainKillerQuantity () const
 {
@@ -461,8 +461,8 @@ int BattleItem::getPainKillerQuantity () const
 }
 
 /**
- * Set the stimulant quantity of item
- * @param stimulant the new stimulant quantity
+ * Sets the stimulant quantity of the item.
+ * @param stimulant The new stimulant quantity.
  */
 void BattleItem::setStimulantQuantity (int stimulant)
 {
@@ -470,8 +470,8 @@ void BattleItem::setStimulantQuantity (int stimulant)
 }
 
 /**
- * Get the stimulant quantity of item
- * @return The new stimulant quantity
+ * Gets the stimulant quantity of the item.
+ * @return The new stimulant quantity.
  */
 int BattleItem::getStimulantQuantity () const
 {
@@ -479,16 +479,16 @@ int BattleItem::getStimulantQuantity () const
 }
 
 /**
- * Set the XCOM property flag. This is to determine at debriefing what goes into base/craft
- * @param bool
+ * Sets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
+ * @param flag True if it's XCom property.
  */
 void BattleItem::setXCOMProperty (bool flag)
 {
 	_XCOMProperty = flag;
 }
 /**
- * Get the XCOM property flag. This is to determine at debriefing what goes into base/craft
- * @return bool
+ * Gets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
+ * @return True if it's XCom property.
  */
 bool BattleItem::getXCOMProperty () const
 {
@@ -496,9 +496,9 @@ bool BattleItem::getXCOMProperty () const
 }
 
 /**
- * Get the "dropped on non-player turn" flag. This is to determine whether or not
- * aliens should attempt to pick this item up, as items dropped by the player may be "honey traps"
- * @return bool
+ * Gets the "dropped on non-player turn" flag. This is to determine whether or not
+ * aliens should attempt to pick this item up, as items dropped by the player may be "honey traps".
+ * @return True if the aliens dropped the item.
  */
 bool BattleItem::getTurnFlag() const
 {
@@ -506,9 +506,9 @@ bool BattleItem::getTurnFlag() const
 }
 
 /**
- * Set the "dropped on non-player turn" flag. This is set when the item is dropped in the battlescape
- * or picked up in the inventory screen
- * @param bool
+ * Sets the "dropped on non-player turn" flag. This is set when the item is dropped in the battlescape
+ * or picked up in the inventory screen.
+ * @param flag True if the aliens dropped the item.
  */
 void BattleItem::setTurnFlag(bool flag)
 {

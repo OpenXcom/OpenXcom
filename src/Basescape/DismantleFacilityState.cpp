@@ -103,6 +103,12 @@ void DismantleFacilityState::btnOkClick(Action *)
 {
 	if (!_fac->getRules()->isLift())
 	{
+		// Give refund if this is an unstarted, queued build.
+		if (_fac->getBuildTime() > _fac->getRules()->getBuildTime())
+		{
+			_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _fac->getRules()->getBuildCost());
+		}
+
 		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
 			if (*i == _fac)

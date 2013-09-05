@@ -27,6 +27,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Battlescape/TileEngine.h"
+#include "../Battlescape/Map.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Savegame/Tile.h"
 #include "../Battlescape/Pathfinding.h"
@@ -39,36 +40,28 @@
 namespace OpenXcom
 {
 
-
 std::vector<Position> AggroBAIState::_randomTileSearch;
 int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
 
 /**
  * Sets up a BattleAIState.
- * @param game pointer to the game.
- * @param unit pointer to the unit.
+ * @param game Pointer to the game.
+ * @param unit Pointer to the unit.
  */
 AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
+	if (_randomTileSearch.size() == 0)
+	{
+		_randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
 
-    if (_randomTileSearch.size() == 0)
-    {
-        _randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
+		for (int i = 0; i < 121; ++i)
+		{
+			_randomTileSearch[i].x = ((i%11) - 5);
+			_randomTileSearch[i].y = ((i/11) - 5); 
+		}
+	}
 
-        for (int i = 0; i < 121; ++i)
-        {
-            _randomTileSearch[i].x = ((i%11) - 5);
-	        _randomTileSearch[i].y = ((i/11) - 5); 
-        }
-    }
-
-    if (_randomTileSearchAge > 42) // shuffle the search pattern after an arbitrary number of uses
-    {
-
-        std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
-        _randomTileSearchAge = 0;
-    }
 	_coverAction = new BattleAction();
 }
 
@@ -86,8 +79,7 @@ AggroBAIState::~AggroBAIState()
  */
 void AggroBAIState::load(const YAML::Node &node)
 {
-	int targetID;
-	node["aggrotarget"] >> targetID;
+	int targetID = node["aggrotarget"].as<int>();
 	if (targetID != -1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
@@ -96,7 +88,7 @@ void AggroBAIState::load(const YAML::Node &node)
 				_aggroTarget = (*j);
 		}
 	}
-	node["lastKnownTarget"] >> targetID;
+	targetID = node["lastKnownTarget"].as<int>();
 	if (targetID != -1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
@@ -105,44 +97,39 @@ void AggroBAIState::load(const YAML::Node &node)
 				_lastKnownTarget = (*j);
 		}
 	}
-	node["lastKnownPosition"][0] >> _lastKnownPosition.x;
-	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
-	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
-	node["timesNotSeen"] >> _timesNotSeen;
-	
-	_charge = false;
-	if (const YAML::Node *chargeNode = node.FindValue("charge")) *chargeNode >> _charge;
+	_lastKnownPosition = node["lastKnownPosition"].as<Position>(_lastKnownPosition);
+	_timesNotSeen = node["timesNotSeen"].as<int>(_timesNotSeen);
+	_charge = node["charge"].as<bool>(_charge);
 }
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void AggroBAIState::save(YAML::Emitter &out) const
+YAML::Node AggroBAIState::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "state" << YAML::Value << "AGGRO";
+	YAML::Node node;
+	node["state"] = "AGGRO";
 	if (_aggroTarget)
 	{
-		out << YAML::Key << "aggrotarget" << YAML::Value << _aggroTarget->getId();
+		node["aggrotarget"] = _aggroTarget->getId();
 	}
 	else
 	{
-		out << YAML::Key << "aggrotarget" << YAML::Value << -1;
+		node["aggrotarget"] = -1;
 	}
 	if (_lastKnownTarget)
 	{
-		out << YAML::Key << "lastKnownTarget" << YAML::Value << _lastKnownTarget->getId();
+		node["lastKnownTarget"] = _lastKnownTarget->getId();
 	}
 	else
 	{
-		out << YAML::Key << "lastKnownTarget" << YAML::Value << -1;
+		node["lastKnownTarget"] = -1;
 	}
-	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
-	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
-	out << YAML::Key << "charge" << YAML::Value << _charge;
-	out << YAML::EndMap;
+	node["lastKnownPosition"] = _lastKnownPosition;
+	node["timesNotSeen"] = _timesNotSeen;
+	node["charge"] = _charge;
+	return node;
 }
 
 /**
@@ -184,6 +171,8 @@ void AggroBAIState::think(BattleAction *action)
 			_game->getTileEngine()->calculateFOV(_unit);
 		}
 		_unit->abortTurn();
+		_unit->setCache(0);
+		_game->getBattleState()->getMap()->cacheUnit(_unit);
 		_wasHit = false;
 	}
 	if (_lastKnownTarget && _lastKnownTarget->isOut())
@@ -202,7 +191,7 @@ void AggroBAIState::think(BattleAction *action)
 	/* Aggro is mainly either shooting a target or running towards it (melee).
 	   If we do no action here - we assume we lost aggro and will go back to patrol state.
 	*/
-	
+
 	action->weapon = _unit->getMainHandWeapon();
 	// the living weapon rule here doubles for "being a terrorist"
 	if (_coverCharge == 0 && !(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()))
@@ -211,13 +200,10 @@ void AggroBAIState::think(BattleAction *action)
 		_coverAction->number = action->number;
 		_coverAction->weapon = action->weapon;
 		takeCoverAction(_coverAction);
-	}
-	if (_unit->getOriginalFaction() != FACTION_PLAYER && _unit->getStats()->psiSkill && RNG::generate(0,3 - (action->diff / 2)) == 0)
-	{
-		psiAction(action);
+		_unit->setCoverReserve(_coverCharge);
 	}
 
-	if (action->weapon && action->type == BA_RETHINK)
+	if (action->weapon)
 	{
 		_aggroTarget = 0;
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
@@ -232,21 +218,24 @@ void AggroBAIState::think(BattleAction *action)
 			}
 		}
 	}
-	// terrorists don't run or hide, they only live to kill.
-	if (!(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()) && takeCoverAssessment(action))
+
+	if (takeCoverAssessment(action) && _coverAction->type != BA_RETHINK)
 	{
 		_unit->_hidingForTurn = true;
-		_aggroTarget = 0;
 		if (_traceAI) { Log(LOG_INFO) << "changed my mind, TAKING COVER!"; }
 		_coverCharge = 0;
 		action->target = _coverAction->target;
-		action->type = BA_WALK;
+		_unit->lastCover = action->target;
+		action->type = _coverAction->type;
+		_unit->setCoverReserve(0);
 	}
 	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
 		grenadeAction(action);
 	}
+
 	action->TU = action->actor->getActionTUs(action->type, action->weapon);
+
 	if (_aggroTarget != 0) { setAggroTarget(_aggroTarget); }
 	else if (_lastKnownTarget) { stalkingAction(action); }
 }
@@ -264,8 +253,13 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 	_lastKnownPosition = unit->getPosition();
 }
 
-/*
- * decide if it worth our while to create an explosion here.
+/**
+ * Decides if it worth our while to create an explosion here.
+ * @param targetPos The target's position.
+ * @param attackingUnit The attacking unit.
+ * @param radius How big the explosion will be.
+ * @param diff Game difficulty.
+ * @return True if it is worthwile creating an explosion in the target position.
  */
 bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
 {
@@ -321,8 +315,11 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	return false;
 }
 
-/*
- *	Melee targetting: we can see an enemy, we can move to it so we're charging blindly toward an enemy
+/**
+ * Attempts to take a melee attack/charge an enemy we can see.
+ *
+ * Melee targetting: we can see an enemy, we can move to it so we're charging blindly toward an enemy.
+ * @param action Pointer to an action.
  */
 void AggroBAIState::meleeAction(BattleAction *action)
 {
@@ -366,99 +363,12 @@ void AggroBAIState::meleeAction(BattleAction *action)
 	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "CHARGE!"; }
 }
 
-/*	psionic targetting: pick from any of the "exposed" units.
- *	exposed means they have been previously spotted, and are therefore "known" to the AI,
- *	regardless of whether we can see them or not, because we're psychic.
+/**
+ * Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
+ *
+ * Waypoint targetting: pick from any units currently spotted by our allies.
+ * @param action Pointer to an action.
  */
-void AggroBAIState::psiAction(BattleAction *action)
-{
-	int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
-	int chanceToAttack = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _game->getExposedUnits()->begin(); i != _game->getExposedUnits()->end(); ++i)
-	{
-		// don't target tanks or other aliens or units under mind control
-		if ((*i)->getArmor()->getSize() == 1 && (*i)->getOriginalFaction() == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER)
-		{
-			int chanceToAttackMe = psiAttackStrength
-				+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
-				- _game->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition())
-				- ((*i)->getStats()->psiStrength)
-				+ (RNG::generate(0, 50))
-				+ 55;
-
-			if (chanceToAttackMe > chanceToAttack)
-			{
-				chanceToAttack = chanceToAttackMe;
-				_aggroTarget = *i;
-			}
-		}
-	}
-
-	if (!_aggroTarget)
-		chanceToAttack = 0;
-
-	if (chanceToAttack)
-	{
-		if (!_unit->getVisibleUnits()->empty() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem())
-		{
-			if (_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
-			{
-				chanceToAttack = 0;
-				_aggroTarget = 0;
-			}
-		}
-		else
-		{
-			if (RNG::generate(35, 155) >= chanceToAttack)
-			{
-				chanceToAttack = 0;
-				_aggroTarget = 0;
-			}
-		}
-		if (chanceToAttack >= 30)
-		{
-			int controlOrPanic = 60;
-			int morale = _aggroTarget->getMorale();
-			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
-			if (bravery > 6)
-				controlOrPanic += 15;
-			if ( bravery < 4)
-				controlOrPanic -= 15;
-			if (morale >= 40)
-			{
-				if (morale - 10 * bravery < 50)
-					controlOrPanic += 15;
-			}
-			else
-			{
-				controlOrPanic -= 15;
-			}
-			if (!morale)
-			{
-				controlOrPanic = 0;
-			}
-			if (RNG::generate(0, 100) >= controlOrPanic)
-			{
-				action->type = BA_MINDCONTROL;
-				action->target = _aggroTarget->getPosition();
-			}
-			else
-			{
-				action->type = BA_PANIC;
-				action->target = _aggroTarget->getPosition();
-			}
-		}
-		else if (chanceToAttack)
-		{
-				action->type = BA_PANIC;
-				action->target = _aggroTarget->getPosition();
-		}
-	}
-}
-
-/*	
-*	waypoint targetting: pick from any units currently spotted by our allies.
-*/
 void AggroBAIState::wayPointAction(BattleAction *action)
 {
 	for (std::vector<BattleUnit*>::const_iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end() && _aggroTarget == 0; ++i)
@@ -530,8 +440,11 @@ void AggroBAIState::wayPointAction(BattleAction *action)
 	}
 }
 
-/*
- *	Regular targetting: we can see an enemy, we have a gun, let's try to shoot.
+/**
+ * Attempts to fire at an enemy we can see.
+ *
+ * Regular targetting: we can see an enemy, we have a gun, let's try to shoot.
+ * @param action Pointer to an action.
  */
 void AggroBAIState::projectileAction(BattleAction *action)
 {
@@ -559,12 +472,12 @@ void AggroBAIState::projectileAction(BattleAction *action)
 	}
 }
 
-/*
- * let's evaluate if we could throw a grenade
+/**
+ * Evaluates whether to throw a grenade at an enemy (or group of enemies) we can see.
+ * @param action Pointer to an action.
  */
 void AggroBAIState::grenadeAction(BattleAction *action)
 {
-
 	// do we have a grenade on our belt?
 	BattleItem *grenade = _unit->getGrenadeFromBelt();
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
@@ -591,10 +504,13 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 	}
 }
 
-/*
-* the idea is to check within a 11x11 tile square for a tile which is not seen by our aggroTarget
-* if there is no such tile, we run away from the target.
-*/
+/**
+ * Attempts to find cover, and move toward it.
+ *
+ * The idea is to check within a 11x11 tile square for a tile which is not seen by our aggroTarget.
+ * If there is no such tile, we run away from the target.
+ * @param action Pointer to an action.
+ */
 void AggroBAIState::takeCoverAction(BattleAction *action)
 {
 	selectNearestTarget();
@@ -604,40 +520,34 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		return;
 	}
 	Uint32 start = SDL_GetTicks();
+	++_randomTileSearchAge;
+	if (_randomTileSearchAge > 10) // shuffle the search pattern after an arbitrary number of uses
+	{
+		std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
+		_randomTileSearchAge = 0;
+	}
 	int unitsSpottingMe =_game->getSpottingUnits(action->actor);
 	action->type = BA_WALK;
-	int currentTilePreference = _unit->_hidingForTurn ? action->number * 5 : 0;
+	int currentTilePreference = 15;
 	int tries = -1;
 	bool coverFound = false;
-	int dx = _unit->getPosition().x - _aggroTarget->getPosition().x; // 2d vector in the direction away from the aggro target
-	int dy = _unit->getPosition().y - _aggroTarget->getPosition().y;
+	int dir = _unit->getDirectionTo(_aggroTarget->getPosition()) + 4;
+	if (dir >= 8) dir -= 8;
 	int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
     dist = dist ? dist : 1; // division by zero paranoia
 	Position runOffset;
-	runOffset.x = (dx * 5) / dist;
-	runOffset.y = (dy * 5) / dist;
-	runOffset.z = 0;
-				
+	_game->getPathfinding()->directionToVector(dir, &runOffset);
+
 	int bestTileScore = -100000;
 	int score = -100000;
 	Position bestTile(0, 0, 0);
-	++_randomTileSearchAge;
-	if (action->number > 1) action->desperate = true;
-				
+
 	Tile *tile = 0;
-				
+
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
 
-	if (_unit->getTimeUnits() <= 5)
-	{
-		action->target = _unit->getPosition(); // stop wasting our time with calculations when you can't walk anywhere, reapers
-		return;
-	}
-				
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = civ ? -20 : 20;
-	const int WINDOW_PENALTY = 30;
-	const int WALL_BONUS = 1;
 	const int FIRE_PENALTY = 40;
 	const int SMOKE_PENALTY = 5;
 	const int BASE_SYSTEMATIC_SUCCESS = 100;
@@ -647,8 +557,8 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	const int MIN_ALLY_DISTANCE = civ ? 0 : 4; // don't clump up too much and get grenaded, OK?
 	const int ALLY_BONUS = civ ? -50 : 4;
 	const int SOLDIER_PROXIMITY_BASE_PENALTY = civ ? 0 : 100; // this is divided by distance^2 to nearest soldier
-	
-	int tu = _coverCharge ? _coverCharge : _unit->getTimeUnits() / 2;
+
+	int tu = _unit->getTimeUnits() / 2;
 
 	std::vector<int> reachable = _game->getPathfinding()->findReachable(_unit, tu);
 
@@ -661,6 +571,8 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			action->target = _unit->getPosition(); // cornered at the edge of the map perhaps? 
 		}
 		
+		score = 0;
+
 		if (tries == -1)
 		{
 			// you know, maybe we should just stay where we are and not risk reaction fire... 
@@ -674,6 +586,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			// looking for cover
 			action->target.x += _randomTileSearch[tries].x;
 			action->target.y += _randomTileSearch[tries].y;
+			score = BASE_SYSTEMATIC_SUCCESS;
 			if (action->target == _unit->getPosition()) 
 			{
 				if (unitsSpottingMe > 0)
@@ -686,8 +599,6 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 					score += currentTilePreference;
 				}
 			}
-			//score = _game->getTileEngine()->visible(_aggroTarget, _game->getTile(action->target)) ? 0 : 100;
-			score = BASE_SYSTEMATIC_SUCCESS; // no need for visible here, the TileEngine code will take care of it
 		}
 		else
 		{
@@ -730,28 +641,19 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 
 			_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
-			if (tile->soldiersVisible == Tile::NOT_CALCULATED) continue; // you can't go there.
+			if (tile->soldiersVisible == Tile::NOT_CALCULATED)
+				continue; // you can't go there.
 						
 			if (tile->soldiersVisible && tile->closestSoldierDSqr <= SOLDIER_PROXIMITY_BASE_PENALTY && tile->closestSoldierDSqr > 0) 
 			{
 				score -= (SOLDIER_PROXIMITY_BASE_PENALTY/tile->closestSoldierDSqr);
 			}
-						
-			if (tile->soldiersVisible && tile->meanSoldierDSqr <= (SOLDIER_PROXIMITY_BASE_PENALTY/2) && tile->meanSoldierDSqr > 0) 
-			{
-				score -= ((SOLDIER_PROXIMITY_BASE_PENALTY/2)/tile->meanSoldierDSqr); // less important than above
-			}
 
-			//score += (dist-_game->getTileEngine()->distance(_aggroTarget->getPosition(), action->target)); // get away from aggrotarget, modest priority
+			score += (dist-_game->getTileEngine()->distance(_aggroTarget->getPosition(), action->target)); // get away from aggrotarget, modest priority
 						
-			if (!tile->soldiersVisible)
+			if (tile->soldiersVisible > 0)
 			{
-				// yay.
-			} else
-			{						
-				// score -= tile->soldiersVisible * EXPOSURE_PENALTY;
-				score -= EXPOSURE_PENALTY; // that's for giving away our position
-				score -= tile->totalExposure / (100 / EXPOSURE_PENALTY); // this is for how easy it'd be to shoot at us
+				score -= tile->soldiersVisible * EXPOSURE_PENALTY; // that's for giving away our position
 			}
 						
 			// strength in numbers but not in "grenade us!" huddles:
@@ -759,12 +661,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			if (tile->closestAlienDSqr <= MIN_ALLY_DISTANCE) score -= ALLY_BONUS;
 										
 			if (tile->getFire()) score -= FIRE_PENALTY; // maybe stop, drop, and roll?
-						
-			if (tile->getSmoke()) score -= SMOKE_PENALTY; // *cough* *cough*
-						
-			if (tile->getMapData(MapData::O_NORTHWALL) || tile->getMapData(MapData::O_WESTWALL)) score += WALL_BONUS; // hug the walls
-						
-			if (_game->getTileEngine()->faceWindow(action->target) != -1) score -= WINDOW_PENALTY; // a window is not cover.
+			else if (tile->getSmoke()) score -= SMOKE_PENALTY; // *cough* *cough*
                         
 			if (_traceAI)
 			{
@@ -777,7 +674,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		if (tile && score > bestTileScore)
 		{
 			// calculate TUs to tile; we could be getting this from findReachable() somehow but that would break something for sure...
-			_game->getPathfinding()->calculate(_unit, action->target);
+			_game->getPathfinding()->calculate(_unit, action->target, 0, tu);
 			int TUBonus = (_unit->getTimeUnits() - (_game->getPathfinding()->getTotalTUCost()+4));
 			TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
 			if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
@@ -786,17 +683,21 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 				bestTileScore = score;
 				bestTile = action->target;
 				_coverCharge = _game->getPathfinding()->getTotalTUCost();
-				if (_traceAI) { tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5))); }
+				if (_traceAI)
+				{
+					tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5)));
+					tile->setPreview(10);
+					tile->setTUMarker(score);
+				}
 			}
 			_game->getPathfinding()->abortPath();
 			if (bestTileScore > FAST_PASS_THRESHOLD) coverFound = true; // good enough, gogogo
 		}
 	}
 	action->target = bestTile;
-	_unit->lastCover = bestTile;
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, with total exposure " << ((tile=_game->getTile(bestTile)) ? tile->totalExposure : -9999) << ", " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Time: " << (SDL_GetTicks() - start) << " Action #" << action->number;
+		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Time: " << (SDL_GetTicks() - start) << " Action #" << action->number;
 		// Log(LOG_INFO) << "Walking " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so.";
 		_game->getTile(action->target)->setMarkerColor(13);
 	}
@@ -804,15 +705,17 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	if (bestTileScore <= -100000) 
 	{
 		coverFound = false;
-		_unit->_hidingForTurn = false; 
 		action->type = BA_RETHINK; // do something, just don't look dumbstruck :P
 		action->TU = 0;
 		return;
 	}
 }
 
-/*
- * if we currently see no target, we either can move to it's last seen position or lose aggro
+/**
+ * Attempts to track down an enemy we have lost sight of.
+ *
+ * If we currently see no target, we either can move to its last seen position or lose aggro.
+ * @param action Pointer to an action.
  */
 void AggroBAIState::stalkingAction(BattleAction *action)
 {
@@ -829,50 +732,38 @@ void AggroBAIState::stalkingAction(BattleAction *action)
 		return;
 	}
 	// lets go looking where we've last seen him
-	if (_game->getTile(_lastKnownPosition)->getUnit())
+	action->target = _lastKnownPosition;
+	action->type = BA_WALK;
+	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_MELEE)
 	{
-		if(selectPointNearTarget(action, _game->getTile(_lastKnownPosition)->getUnit(), _unit->getTimeUnits()))
-		{
-			action->type = BA_WALK;
-			if (action->weapon && action->weapon->getRules()->getBattleType() == BT_MELEE)
-			{
-				action->actor->setCharging(_game->getTile(_lastKnownPosition)->getUnit());
-			}
-		}
-		else
-		{
-			action->type = BA_RETHINK;
-		}			
-	}
-	else
-	{
-		action->target = _lastKnownPosition;
-		action->type = BA_WALK;
+		action->actor->setCharging(_game->getTile(_lastKnownPosition)->getUnit());
 	}
 }
 
-/*
- * should we take cover from our current target?
-*/
+/**
+ * Assesses whether we should take cover or not from our current target.
+ * @param action Pointer to an action.
+ * @return True if we should take cover.
+ */
 bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 {
-	action->actor->_hidingForTurn = false;
+	// no need for cover if we're performing our first or second action, and it's not "rethink"
+	if ((action->type != BA_RETHINK && action->number < 3)
+	// terrorists and mind controlled soldiers don't run or hide, they only live to kill.
+	|| (_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()))
+		return false;
 
 	bool takeCover = true;
 	int number = RNG::generate(0,100);
 	int unitsSpottingMe = _game->getSpottingUnits(_unit);
 	int aggression = _unit->getAggression();
 
-	if (_charge || !_aggroTarget)
-		return false;
-
 	// extra 5% chance per unit that sees us
 	number += unitsSpottingMe * 5;
 
-	// lost health, chances to take cover get bigger
-	if (_unit->getHealth() < _unit->getStats()->health)
+	// half health or lower, chances to take cover get bigger
+	if (_unit->getHealth() < _unit->getStats()->health / 2)
 		number += 10;
-
 
 	// aggrotarget has no weapon - chances of take cover get smaller
 	if (!_unit->getVisibleUnits()->empty() && _aggroTarget && !_aggroTarget->getMainHandWeapon())
@@ -885,7 +776,13 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 		takeCover = false;
 	if (action->type == BA_MINDCONTROL || action->type == BA_PANIC)
 		takeCover = false;
-			
+	
+	
+	if (action->type == BA_RETHINK)
+	{
+		if (!_unit->getVisibleUnits()->empty())
+			takeCover = true;
+	}
 
 	if (action->number >= 3 && (!_unit->getMainHandWeapon() || _unit->getMainHandWeapon()->getRules()->getBattleType() != BT_MELEE))
 	{
@@ -899,7 +796,7 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	}
 	else
 	{
-		if(action->type != BA_RETHINK && action->type != BA_WALK)
+		if (action->type != BA_RETHINK && action->type != BA_WALK)
 		{
 			int tu = action->actor->getActionTUs(action->type, action->weapon);
 			// enough time units to shoot?
@@ -912,8 +809,8 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	return takeCover;
 }
 
-/*
- * pick closest living unit
+/**
+ * Selects the nearest living target we can see.
  */
 void AggroBAIState::selectNearestTarget()
 {
@@ -927,10 +824,14 @@ void AggroBAIState::selectNearestTarget()
 				_aggroTarget = (*j);
 		}
 	}
-}	
+}
 
-/*
- * pick a point near enough to our target to perform a melee attack
+/**
+ * Selects a point near enough to our target to perform a melee attack.
+ * @param action Pointer to an action.
+ * @param target Pointer to a target.
+ * @param maxTUs Maximum time units the path to the target can cost.
+ * @return True if a point was found.
  */
 bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs)
 {
@@ -953,7 +854,7 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 				}
 				bool valid = _game->getTileEngine()->validMeleeRange(checkPath, dir, action->actor, target);
 				bool fitHere = _game->setUnitPosition(action->actor, checkPath, true);
-								
+
 				if (valid && fitHere)
 				{
 					_game->getPathfinding()->calculate(action->actor, checkPath, 0, maxTUs);
@@ -971,8 +872,9 @@ bool AggroBAIState::selectPointNearTarget(BattleAction *action, BattleUnit *targ
 	return returnValue;
 }
 
-/*
- * Perform a melee attack action
+/**
+ * Performs a melee attack action.
+ * @param action Pointer to an action.
  */
 void AggroBAIState::meleeAttack(BattleAction *action)
 {
@@ -985,8 +887,9 @@ void AggroBAIState::meleeAttack(BattleAction *action)
 	_charge = true;
 }
 
-/*
- *	select a fire method based on range, time units, and time units reserved for cover.
+/**
+ * Selects a fire method based on range, time units, and time units reserved for cover.
+ * @param action Pointer to an action.
  */
 void AggroBAIState::selectFireMethod(BattleAction *action)
 {
@@ -1032,7 +935,7 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 			return;
 		}
 	}
-	
+
 	if ( tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
 	{
 			action->type = BA_SNAPSHOT;
@@ -1049,11 +952,19 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 	}
 }
 
+/**
+ * Sets whether the unit was hit.
+ * @param wasHit Set the _wasHit flag to this.
+ */
 void AggroBAIState::setWasHit(bool wasHit)
 {
 	_wasHit = wasHit;
 }
 
+/**
+ * Gets whether the unit was hit.
+ * @return True if the unit was hit.
+ */
 bool AggroBAIState::getWasHit()
 {
 	return _wasHit;

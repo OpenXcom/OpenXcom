@@ -53,30 +53,32 @@ Target::~Target()
  */
 void Target::load(const YAML::Node &node)
 {
-	node["lon"] >> _lon;
-	node["lat"] >> _lat;
+	_lon = node["lon"].as<double>(_lon);
+	_lat = node["lat"].as<double>(_lat);
 }
 
 /**
  * Saves the target to a YAML file.
- * @param out YAML emitter.
+ * @returns YAML node.
  */
-void Target::save(YAML::Emitter &out) const
+YAML::Node Target::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "lon" << YAML::Value << _lon;
-	out << YAML::Key << "lat" << YAML::Value << _lat;
+	YAML::Node node;
+	node["lon"] = _lon;
+	node["lat"] = _lat;
+	return node;
 }
 
 /**
  * Saves the target's unique identifiers to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Target::saveId(YAML::Emitter &out) const
+YAML::Node Target::saveId() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "lon" << YAML::Value << _lon;
-	out << YAML::Key << "lat" << YAML::Value << _lat;
+	YAML::Node node;
+	node["lon"] = _lon;
+	node["lat"] = _lat;
+	return node;
 }
 
 /**

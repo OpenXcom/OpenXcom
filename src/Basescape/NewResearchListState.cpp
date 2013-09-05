@@ -91,7 +91,7 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 }
 
 /**
- * initialize screen(Fill list)
+ * Initializes the screen (fills the list).
  */
 void NewResearchListState::init()
 {
@@ -99,7 +99,7 @@ void NewResearchListState::init()
 }
 
 /**
- * Select the RuleResearch to work on.
+ * Selects the RuleResearch to work on.
  * @param action Pointer to an action.
  */
 void NewResearchListState::onSelectProject(Action *)
@@ -117,7 +117,7 @@ void NewResearchListState::btnOKClick(Action *)
 }
 
 /**
- * Fill list with possible ResearchProject
+ * Fills the list with possible ResearchProjects.
  */
 void NewResearchListState::fillProjectList ()
 {

@@ -66,9 +66,9 @@ private:
 	int getQuantity() const;
 	/// Gets distance between bases.
 	double getDistance() const;
-	/// Gets type of selected index
+	/// Gets type of selected item.
 	enum TransferType getType(unsigned selected) const;
-	/// Gets item Index
+	/// Gets item Index.
 	int getItemIndex(unsigned selected) const;
 public:
 	/// Creates the Transfer Items state.

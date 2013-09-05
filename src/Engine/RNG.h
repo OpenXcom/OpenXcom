@@ -37,7 +37,7 @@ namespace RNG
 	/// Loads the RNG from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the RNG to YAML.
-	void save(YAML::Emitter& out);
+	void save(YAML::Node& node);
 	/// Generates a random integer number.
 	int generate(int min, int max);
 	/// Generates a random decimal number.

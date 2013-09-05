@@ -50,9 +50,9 @@ private:
 	std::map<int, std::map<int, int> > _stackLevel;
 	NumberText *_stackNumber;
 
-	/// Move item to specified slot.
+	/// Moves an item to a specified slot.
 	void moveItem(BattleItem *item, RuleInventory *slot, int x, int y);
-	/// Check for item overlap.
+	/// Checks for item overlap.
 	bool overlapItems(BattleItem *item, RuleInventory *slot, int x, int y) const;
 	/// Gets the slot in the specified position.
 	RuleInventory *getSlotInPosition(int *x, int *y) const;
@@ -77,7 +77,7 @@ public:
 	BattleItem *getSelectedItem() const;
 	/// Sets the currently selected item.
 	void setSelectedItem(BattleItem *item);
-	/// Handle timers.
+	/// Handles timers.
 	void think();
 	/// Blits the inventory onto another surface.
 	void blit(Surface *surface);
@@ -85,11 +85,13 @@ public:
 	void mouseOver(Action *action, State *state);
 	/// Special handling for mouse clicks.
 	void mouseClick(Action *action, State *state);
-	/// Unloads the selected weapon
+	/// Unloads the selected weapon.
 	bool unload();
 	/// Arranges items on the ground.
 	void arrangeGround(bool alterOffset = true);
+	/// Attempts to place an item in an inventory slot.
 	bool fitItem(RuleInventory *newSlot, BattleItem *item, std::string &warning);
+	/// Checks if two items can be stacked on one another.
 	bool canBeStacked(BattleItem *itemA, BattleItem *itemB);
 };
 

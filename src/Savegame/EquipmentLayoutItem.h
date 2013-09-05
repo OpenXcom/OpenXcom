@@ -59,7 +59,7 @@ public:
 	/// Loads the soldier-equipment layout item from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the soldier-equipment layout item to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 };
 
 }

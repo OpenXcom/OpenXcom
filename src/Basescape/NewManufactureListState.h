@@ -45,15 +45,15 @@ private:
 	std::vector<RuleManufacture *> _possibleProductions;
 
 public:
-	/// Create the state
+	/// Creates the state.
 	NewManufactureListState(Game *game, Base *base);
-	/// Initialize state
+	/// Initializes state.
 	void init ();
-	/// Handler for clicking the OK button
+	/// Handler for clicking the OK button.
 	void btnOkClick(Action * action);
-	/// Handler for clicking on the list
+	/// Handler for clicking on the list.
 	void lstProdClick (Action * action);
-	/// Fill the list with Base production's
+	/// Fills the list of possible productions.
 	void fillProductionList();
 };
 }

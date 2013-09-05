@@ -121,6 +121,8 @@ public:
 	void monthlyFunding();
 	/// Gets the current game time.
 	GameTime *getTime() const;
+	/// Sets the current game time.
+	void setTime(GameTime time);
 	/// Gets the current ID for an object.
 	int getId(const std::string &name);
 	/// Initializes te IDs list.

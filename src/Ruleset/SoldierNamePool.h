@@ -47,7 +47,7 @@ public:
 	void load(const std::string &filename);
 	/// Generates a new name from the pool.
 	std::wstring genName(SoldierGender *gender) const;
-	/// generates an int representing the index of the soldier's look, when passed the maximum index value.
+	/// Generates an int representing the index of the soldier's look, when passed the maximum index value.
 	int genLook(size_t numLooks);
 };
 
