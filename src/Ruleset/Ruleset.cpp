@@ -536,12 +536,7 @@ void Ruleset::loadFile(const std::string &filename)
 			_alienMissionsIndex.push_back(type);
 		}
 	}
- 	_alienItemLevels.clear();
-	for (YAML::const_iterator i = doc["alienItemLevels"].begin(); i != doc["alienItemLevels"].end(); ++i)
-	{
-		std::vector<int> type = (*i).as< std::vector<int> >();
-		_alienItemLevels.push_back(type);
-	}
+ 	_alienItemLevels = doc["alienItemLevels"].as< std::vector< std::vector<int> > >(_alienItemLevels);
  	for (YAML::const_iterator i = doc["MCDPatches"].begin(); i != doc["MCDPatches"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();

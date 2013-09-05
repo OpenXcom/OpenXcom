@@ -633,6 +633,8 @@ STR_AMMO_
 AMUNICJA>
 STR_CREW
 ZAŁOGA
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 SPRZĘT
 STR_ARMOR
@@ -2223,6 +2225,10 @@ STR_SCROLL_UP
 Przesunięcie w górę
 STR_SCROLL_DOWN
 Przesunięcie w dół
+STR_UNIT_LEVEL_ABOVE
+Przesuń jednostkę poziom wyżej
+STR_UNIT_LEVEL_BELOW
+Przesuń jednostkę poziom niżej
 STR_VIEW_LEVEL_ABOVE
 Widok poziom wyżej
 STR_VIEW_LEVEL_BELOW
@@ -2234,11 +2240,13 @@ Zaznacz poprzednią jednostkę
 STR_NEXT_UNIT
 Zaznacz następną jednostkę
 STR_DESELECT_UNIT
-Odznacz jednostkę
+Nie zaznaczaj tej jednostki
 STR_INVENTORY
 Ekwipunek
 STR_MINIMAP
 Minimapa
+STR_MULTI_LEVEL_VIEW
+Widok wielopoziomowy
 STR_END_TURN
 Zakończ turę
 STR_ABORT_MISSION

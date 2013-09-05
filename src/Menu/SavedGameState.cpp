@@ -163,7 +163,7 @@ SavedGameState::SavedGameState(Game *game, bool geo, bool showMsg) : State(game)
 {
 	if (_showMsg)
 	{
-		_txtStatus = new Text(320, 16, 0, 92);
+		_txtStatus = new Text(320, 16, Screen::getDX(), 92 + Screen::getDY());
 		add(_txtStatus);
 
 		_txtStatus->setBig();

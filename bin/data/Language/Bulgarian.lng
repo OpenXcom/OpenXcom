@@ -633,6 +633,8 @@ STR_AMMO_
 МУНИЦИИ>
 STR_CREW
 ЕКИПАЖ
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 СНАРЯЖЕНИЕ
 STR_ARMOR

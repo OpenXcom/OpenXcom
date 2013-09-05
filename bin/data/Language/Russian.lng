@@ -633,6 +633,8 @@ STR_AMMO_
 ОРУЖИЕ>
 STR_CREW
 ЭКИПАЖ
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 СНАРЯЖЕНИЕ
 STR_ARMOR
@@ -742,7 +744,7 @@ STR_TRACKING_LOST
 STR_REDIRECT_CRAFT
 ПЕРЕНАПРАВИТЬ КОРАБЛЬ
 STR_GO_TO_LAST_KNOWN_UFO_POSITION
-СЛЕДОВАТЬ К ПОСЛЕДНЕЙ ИЗВЕСТНОЙ ПОЗИЦИИ НЛО
+К ПОСЛЕДНЕЙ ИЗВЕСТНОЙ ПОЗИЦИИ НЛО
 STR_UFO_
 НЛО-
 STR_ALIEN_BASE_
@@ -1274,7 +1276,7 @@ STR_ALIEN_CONTAINMENT_UFOPEDIA
 STR_LASER_DEFENSES_UFOPEDIA
 Лазерная система противовоздушной обороны обеспечивает защиту против враждебных летательных аппаратов.
 STR_PLASMA_DEFENSES_UFOPEDIA
-Плазменно-лучевая система противовоздушной обороны эффективную защиту против враждебных летательных аппаратов.
+Плазменно-лучевая система противовоздушной обороны дает эффективную защиту против враждебных летательных аппаратов.
 STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Бластер-ракеты обеспечивают наиболее эффективную защиту против атак пришельцев. Выброс антиматерии при взрыве ракеты уничтожает все внутри определенного радиуса.
 STR_GRAV_SHIELD_UFOPEDIA
@@ -2219,6 +2221,10 @@ STR_SCROLL_UP
 Пролистать вверх
 STR_SCROLL_DOWN
 Пролистать вниз
+STR_UNIT_LEVEL_ABOVE
+Подняться выше
+STR_UNIT_LEVEL_BELOW
+Спуститься ниже
 STR_VIEW_LEVEL_ABOVE
 Смотреть уровень выше
 STR_VIEW_LEVEL_BELOW
@@ -2235,6 +2241,8 @@ STR_INVENTORY
 Инвентарь
 STR_MINIMAP
 Миникарта
+STR_MULTI_LEVEL_VIEW
+Показ всех уровней
 STR_END_TURN
 Конец хода
 STR_ABORT_MISSION
@@ -2398,7 +2406,7 @@ STR_ANYTIMEPSITRAINING_DESC
 STR_NOT_ENOUGH_SPACE
 Не хватает места!
 STR_WEAPONSELFDESTRUCTION
-Захват трофеев как в XCom 2012
+Оружие пришельцев разрушается
 STR_WEAPONSELFDESTRUCTION_DESC
 Оружие пришельцев самоуничтожается, если пришелец убит.
 STR_RESEARCHEDITEMSWILLSPENT
