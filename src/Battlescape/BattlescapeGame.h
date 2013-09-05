@@ -76,6 +76,7 @@ private:
 	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
+	int _g;	// for checking hot grenades
 
 	/// Ends the turn.
 	void endTurn();

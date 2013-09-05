@@ -69,7 +69,7 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false), _g(0)
 {
 	_tuReserved = BA_NONE;
 	_playerTUReserved = BA_NONE;
@@ -407,23 +407,24 @@ void BattlescapeGame::endTurn()
 	}
 
 	// check for hot grenades on the ground
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-	{
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
+	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
+		for ( ; _g < _save->getMapSizeXYZ(); ++_g)
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
+			for (std::vector<BattleItem*>::iterator it = _save->getTiles()[_g]->getInventory()->begin(); it != _save->getTiles()[_g]->getInventory()->end(); )
 			{
-				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
-				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
-				p.z = _save->getTiles()[i]->getPosition().z*24 - _save->getTiles()[i]->getTerrainLevel();
-				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
-				_save->removeItem((*it));
-				statePushBack(0);
-				return;
+				if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->isCountdownOver())  // it's a grenade to explode now
+				{
+					p.x = _save->getTiles()[_g]->getPosition().x*16 + 8;
+					p.y = _save->getTiles()[_g]->getPosition().y*16 + 8;
+					p.z = _save->getTiles()[_g]->getPosition().z*24 - _save->getTiles()[_g]->getTerrainLevel();
+					statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
+					_save->removeItem((*it));
+					statePushBack(0);
+					return;
+				}
+				++it;
 			}
-			++it;
 		}
-	}
 
 	// check for terrain explosions
 	Tile *t = _save->getTileEngine()->checkForTerrainExplosions();
@@ -488,7 +489,7 @@ void BattlescapeGame::endTurn()
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}
 	_endTurnRequested = false;
-
+	_g = 0;
 }
 
 
@@ -661,7 +662,7 @@ void BattlescapeGame::handleNonTargetAction()
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
-				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
+				_currentAction.weapon->setExplodeTurn(_currentAction.value);
 			}
 			else
 			{
@@ -1157,9 +1158,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				}
 				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 				{
-					if (ba.weapon->getExplodeTurn() == 0)
+					if (!ba.weapon->isPrimed())
 					{
-						ba.weapon->setExplodeTurn(_save->getTurn());
+						ba.weapon->setExplodeTurn(1);
 					}
 					ba.type = BA_THROW;
 					statePushBack(new ProjectileFlyBState(this, ba));

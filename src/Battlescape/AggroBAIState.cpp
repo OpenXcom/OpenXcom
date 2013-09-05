@@ -494,7 +494,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 				// are we within range?
 				if (_game->getTileEngine()->validateThrow(action))
 				{
-					grenade->setExplodeTurn(_game->getTurn());
+					grenade->setExplodeTurn(1);
 					_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, grenade));
 					action->type = BA_THROW;
 					action->weapon = grenade;
