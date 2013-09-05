@@ -36,6 +36,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
