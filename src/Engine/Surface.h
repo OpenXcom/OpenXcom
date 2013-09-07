@@ -79,6 +79,8 @@ public:
     void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
 	/// Draws an antialiasing line on the surface.
 	void drawAALine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
+	/// Draws a filled trigon on the surface.
+	void drawTrigon(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3, Uint8 color);
     /// Draws a filled circle on the surface.
     void drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color);
 	/// Draws a filled ellipse on the surface.
