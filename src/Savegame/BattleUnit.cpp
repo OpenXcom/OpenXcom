@@ -1938,16 +1938,16 @@ int BattleUnit::getFatalWound(int part) const
 /**
  * Heal a fatal wound of the soldier
  * @param part the body part to heal
- * @param healAmount the amount of fatal wound healed
+ * @param woundAmount the amount of fatal wound healed
  * @param healthAmount The amount of health to add to soldier health
  */
-void BattleUnit::heal(int part, int healAmount, int healthAmount)
+void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 {
 	if (part < 0 || part > 5)
 		return;
 	if(!_fatalWounds[part])
 		return;
-	_fatalWounds[part] -= healAmount;
+	_fatalWounds[part] -= woundAmount;
 	_health += healthAmount;
 	if (_health > getStats()->health)
 		_health = getStats()->health;
@@ -2255,7 +2255,7 @@ int BattleUnit::getAggroSound() const
 	return _aggroSound;
 }
 /**
- * Set a specific number of timeunits.
+ * Set a specific number of energy.
  * @param tu
  */
 void BattleUnit::setEnergy(int energy)

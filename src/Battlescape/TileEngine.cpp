@@ -339,7 +339,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
 	// or we stop if there are more visible units seen
-	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
+	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && !unit->getVisibleUnits()->empty())
 	{
 		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
 		if (unit->getFaction() == FACTION_HOSTILE)
@@ -1233,7 +1233,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							bool done = false;
 							while (!done)
 							{
-								done = dest->getInventory()->size() == 0;
+								done = dest->getInventory()->empty();
 								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
 								{
 									if (power_ > (*it)->getRules()->getArmor())
@@ -2372,7 +2372,7 @@ bool TileEngine::psiAttack(BattleAction *action)
  */
 Tile *TileEngine::applyGravity(Tile *t)
 {
-	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
+	if (t->getInventory()->empty() && !t->getUnit()) return t; // skip this if there are no items
 
 	Position p = t->getPosition();
 	Tile *rt = t;

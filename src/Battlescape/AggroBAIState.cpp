@@ -51,7 +51,7 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
 AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
-	if (_randomTileSearch.size() == 0)
+	if (_randomTileSearch.empty())
 	{
 		_randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
 

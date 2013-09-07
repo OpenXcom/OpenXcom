@@ -56,8 +56,7 @@ private:
 	bool _twoHanded, _waypoint, _fixedWeapon;
 	int _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
-	int _healAmount, _healthAmount;
-	int _stun, _energy;
+	int _woundRecovery, _healthRecovery, _stunRecovery, _energyRecovery;
 	int _tuUse;
 	int _recoveryPoints;
 	int _armor;
@@ -147,14 +146,14 @@ public:
 	int getPainKillerQuantity () const;
 	/// Gets the medikit stimulant quantity.
 	int getStimulantQuantity () const;
-	/// Gets the medikit heal amount per shot.
-	int getHealAmount () const;
-	/// Gets the medikit health amount per shot.
-	int getHealthAmount () const;
-	/// Gets the medikit energy amount per shot.
-	int getEnergy () const;
-	/// Gets the medikit stun amount per shot.
-	int getStun () const;
+	/// Gets the medikit wound healed per shot.
+	int getWoundRecovery () const;
+	/// Gets the medikit health recovered per shot.
+	int getHealthRecovery () const;
+	/// Gets the medikit energy recovered per shot.
+	int getEnergyRecovery () const;
+	/// Gets the medikit stun recovered per shot.
+	int getStunRecovery () const;
 	/// Gets the Time Unit use.
 	int getTUUse() const;
 	/// Gets the max explosion radius.

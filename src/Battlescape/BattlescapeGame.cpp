@@ -265,7 +265,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
 	{
-		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->size() == 0)
+		if (unit->getOriginalFaction() == FACTION_HOSTILE && unit->getVisibleUnits()->empty())
 		{
 			findItem(&action);
 		}
@@ -1748,7 +1748,7 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 
 	// don't even think about making a move for that gun if you can see a target, for some reason
 	// (maybe this should check for enemies spotting the tile the item is on?)
-	if (action->actor->getVisibleUnits()->size() == 0)
+	if (action->actor->getVisibleUnits()->empty())
 	{
 		// retrieve an insignificantly low value from the ruleset.
 		worthToTake = item->getRules()->getAttraction();

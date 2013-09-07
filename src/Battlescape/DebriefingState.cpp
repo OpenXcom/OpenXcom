@@ -685,7 +685,7 @@ void DebriefingState::prepareDebriefing()
 		_txtTitle->setText(_game->getLanguage()->getString("STR_CRAFT_IS_LOST"));
 		return;
 	}
-	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && base->getCrafts()->size() > 0)
+	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && !base->getCrafts()->empty())
 	{
 		for(std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
 		{
