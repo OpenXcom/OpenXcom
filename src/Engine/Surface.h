@@ -77,8 +77,12 @@ public:
     void drawRect(SDL_Rect *rect, Uint8 color);
     /// Draws a line on the surface.
     void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
+	/// Draws an antialiasing line on the surface.
+	void drawAALine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
     /// Draws a filled circle on the surface.
     void drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color);
+	/// Draws a filled ellipse on the surface.
+	void drawEllipse(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 color);
     /// Draws a filled polygon on the surface.
     void drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color);
     /// Draws a textured polygon on the surface.

@@ -50,12 +50,13 @@ private:
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
+	Projectile() {;}
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.
 	int calculateTrajectory(double accuracy);
 	/// Calculates the trajectory for a curved path.
-	bool calculateThrow(double accuracy);
+	bool calculateThrow(double accuracy, bool doTestTrajectory = false);
 	/// Moves the projectile one step in its trajectory.
 	bool move();
 	/// Gets the current position in voxel space.
@@ -68,6 +69,8 @@ public:
 	Surface *getSprite() const;
 	/// Skips the bullet flight.
 	void skipTrajectory();
+	/// Gets the trajectory.
+	std::vector<Position> *getTrajectory() {return &_trajectory;}
 };
 
 }

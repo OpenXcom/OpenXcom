@@ -51,7 +51,7 @@ private:
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Surface *_arrow;
+	Surface *_arrow, *_trowSurface, *_trowFrame;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
 	int _mouseX, _mouseY;
@@ -71,6 +71,7 @@ private:
 	std::vector<Position> _waypoints;
 	bool _unitDying;
 	int _previewSetting;
+	bool _showTrowTrajectory;
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
@@ -130,6 +131,12 @@ public:
 	void setUnitDying(bool flag);
 	/// Refreshes the battlescape selector after scrolling.
 	void refreshSelectorPosition();
+	/// Draw blast radius.
+	bool drawBlastRadius(std::vector<Position> *_trajectory, BattleAction *action);
+	/// Draw trow trajectory.
+	void drawTrowTrajectory(std::vector<Position> *_trajectory);
+	/// Special "transparent" line.
+	void XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 color);
 };
 
 }

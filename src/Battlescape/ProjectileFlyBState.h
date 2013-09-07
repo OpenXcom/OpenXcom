@@ -55,8 +55,6 @@ public:
 	void cancel();
 	/// Runs state functionality every cycle.
 	void think();
-	/// Validates the throwing range.
-	static bool validThrowRange(BattleAction *action);
 };
 
 }
