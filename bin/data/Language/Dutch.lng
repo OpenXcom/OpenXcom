@@ -460,7 +460,7 @@ STR_UNDER_ATTACK
 STR_BASE_DEFENSES_INITIATED
 BASISDEFENSIE GEACTIVEERD
 STR_GRAV_SHIELD_REPELS_UFO
-ZWAARTEKRACHTSHILD STOOT UFO AF!
+ZWAARTEKRACHTSCHILD STOOT UFO AF!
 STR_FIRING
 VUURT
 STR_HIT
@@ -828,7 +828,7 @@ s
 STR_ARMOR_PIERCING
 PANTSERDOORBOREND
 STR_INCENDIARY
-VUUR
+BRANDEND
 STR_HIGH_EXPLOSIVE_UC
 HOOG EXPLOSIEF
 STR_LASER_BEAM
@@ -1276,169 +1276,169 @@ ZWP's
 STR_DAMAGE_UC_
 SCHADE>
 STR_ACCESS_LIFT_UFOPEDIA
-The access lift allows equipment and personnel to be transferred into or out of an underground base.  It is always the first facility to be constructed on a new site.  The lift area is vulnerable to intrusion from any potential hostile force.
+Via de toegangslift kan materieel en personeel de ondergrondse basis in- en uitgaan.  Het is altijd de eerste faciliteit die wordt gebouwd op een nieuwe locatie.  Het gebied rond de lift is kwetsbaar voor vijandige indringers.
 STR_LIVING_QUARTERS_UFOPEDIA
-Each accommodation block provides for up to 50 personnel.  The facility provides basic recreation, food and sleeping areas.
+Ieder accommodatieblok kan tot 50 man personeel huisvesten.  De faciliteit biedt basale recreatie-, voedsel- en slaapvoorzieningen.
 STR_LABORATORY_UFOPEDIA
-Up to 50 scientists can work in a laboratory facility.  Laboratories are equipped with the latest technology for research into materials, biochemistry and cosmology.  There is privileged access to the best research labs throughout the world, including military establishments.
+In een laboratoriumfaciliteit kunen tot 50 wetenschappers werken.  Laboratoria zijn ingericht met de laatste technologie voor onderzoek naar materialen, biochemie en kosmologie.  Er is vrijgestelde toegang tot de beste onderzoekslabs ter wereld, waaronder ook militaire instellingen.
 STR_WORKSHOP_UFOPEDIA
-A workshop contains all the equipment necessary to manufacture equipment based on designs from the science labs.  Up to 50 engineers can occupy a workshop, although items under construction will also consume some space.
+Een werkplaats  alle uitrusting die nodig is om uitrusting te maken gebaseerd op ontwerpen uit de wetenschappenlijke labs.  Tot 50 ingenieurs kunnen een werkplaats bezetten, maar eenheden onder constructie zullen ook wat ruimte in beslag nemen.
 STR_SMALL_RADAR_SYSTEM_UFOPEDIA
-A small detection system has an effective radar range of 300 nautical miles and is linked to satellite systems for ground search.  Each system has a 5% chance of detecting an average sized object every 10 minutes.
+Een klein detectiesysteem heeft een effectief bereik van 300 zeemijl en in verbinding met sattelietsystemen voor grondopsporing.  Ieder systeem heeft iedere 10 minuten een kans van 5% om een middelgroot object te detecteren.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
-A large detection system has an effective range of 450 nautical miles and is linked to satellite systems for ground search.  Each system has a 5% chance of detecting an average sized object every 10 minutes.
-STR_MISSILE_DEFENSES_UFOPEDIA
-Missile defenses provide some protection against incursion by hostile craft which are attempting to land near the base.
+Een groot detectiesysteem heeft een effectief bereik van 450 zeemijl en staat in verbinding met sattelietsystemen voor grondopsporing.  Ieder systeem heeft iedere 10 minuten een kans van 5% om een middelgroot object te detecteren.
+STR_MISSILE_DEFENCES_UFOPEDIA
+Raketverdediging biedt enige bescherming tegen een inval door vijandige vaartuigen welke proberen te landen in de buurt van de basis.
 STR_GENERAL_STORES_UFOPEDIA
-All equipment, weapons systems, munitions, recovered material and Heavy Weapons Platforms are placed in stores, with the exception of equipment assigned to craft in hangars.
+Alle uitrusting, wapensystemen, munitie, geborgen materiaal en Zware WapenPlatforms worden in opslagruimte geplaatst, met uitzondering van uitrusting die is toegewezen aan vaartuigen.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-Living aliens are likely to require a special habitat to maintain their life systems.  The containment facility can keep up to 10 alien life forms in self-contained units.
-STR_LASER_DEFENSES_UFOPEDIA
-Laser defenses provide protection against incursion by hostile craft.
-STR_PLASMA_DEFENSES_UFOPEDIA
-Plasma beam defenses provide powerful and efficient protection against incursion by hostile craft.
-STR_FUSION_BALL_DEFENSES_UFOPEDIA
-Fusion missiles provide the most effective defense against alien attacks.  These missiles create an anti-matter implosion which destroys everything within a specific radius.
+Levende buitenaardsen hebben waarschijnlijk een speciale habitat nodig om hun vitale functies te ondersteunen.  De klimaatcel kan tot 10 buitenaardsen huisvesten in onafhankelijke eenheden.
+STR_LASER_DEFENCES_UFOPEDIA
+Laserverdediging biedt bescherming tegen invallen door vijandige vaartuigen.
+STR_PLASMA_DEFENCES_UFOPEDIA
+Plasmastraal-verdediging biedt krachtige en efficiënte bescherming tegen invallen door vijandige vaartuigen.
+STR_FUSION_BALL_DEFENCES_UFOPEDIA
+Fusie-raketten bieden de meeste effectieve verdediging tegen buitenaardse aanvallen.  Deze raketten creëren een antimaterie-implosie die alles binnen een bepaalde straal vernietigt.
 STR_GRAV_SHIELD_UFOPEDIA
-Het zwaartekrachtshild stoot buitenaardse tuigen weg van de basis lang genoeg om defensieve maatregelen te herhalen. In de praktijk verdubbelt op die manier de defensieve kracht van de basis.
+Het zwaartekrachtschild kan buitenaardse vaartuigen lang genoeg afslaan om verdedigingssystemen te herhalen.  In de praktijk verdubbelt op die manier de defensieve kracht van de basis.
 STR_MIND_SHIELD_UFOPEDIA
-Since alien craft rely on brain waves to detect human presence then the most effective counter measure is to shield brain waves from the base.  This facility will drastically reduce the chances of detection by alien craft.
+Omdat buitenaardse vaartuigen de aanwezigheid van mensen kunnen bepalen op basis van hersengolven is de meest effectieve tegenmaatregel het afschermen van hersengolven in de basis.  Deze faciliteit zal de detectiekans voor buitenaardse vaartuigen drastisch verminderen.
 STR_PSIONIC_LABORATORY_UFOPEDIA
-The psionics lab can assess the psionic potential of all soldiers at the base and give them the necessary training to utilize their psionic skills.  Each lab can train up to ten soldiers.  Training is allocated at the end of each month.  Psionic skills used in conjunction with a Psi-amp can be used for psionic attacks during combat.
+Het psionische lab kan de psionische potentie van iedere soldaat in de basis bepalen, en de nodige training bieden om gebruik te kunnen gaan maken van hun psionische vaardigheden.  Ieder lab kan tot tien soldaten trainen.  Training wordt aan het eind van iedere maand toegewezen.  Psionische vaardigheden kunnen met behulp van een Psi-versterker worden ingezet voor psionische aanvallen tijdens een gevecht.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
-Alien communications rely on a supra-dimensional wave which travels almost instantaneously.  The decoder facility intercepts UFO transmissions and decodes the information.  This will show the type of UFO, the alien race and the type of activity.
+De communicatie van buitenaardsen onderling gaat via een supra-dimensionale golf die vrijwel instantaan is.  De decoder-faciliteit onderschept berichten van UFO's en decodeert de informatie.  Dit zal het type UFO, het buitenaardse ras en de aard van de activiteiten onthullen.
 STR_HANGAR_UFOPEDIA
-Each hangar can accommodate one craft.  There are facilities for maintenance, refueling and repair of XCom craft.  Each craft stationed at a base must have a free hangar assigned to it which cannot be used by other craft, even if the assigned craft is out on a mission.
+Iedere loods kan één vaartuig huisvesten.  Er zijn faciliteiten voor het onderhoud, het bijtanken en de reparatie van XCom-vaartuigen.  Aan ieder vaartuig wat gestationeerd is op een basis moet een vrije loods worden toegewezen, welke door geen enkel ander vaartuig kan worden gebruikt, zelfs al is het toegewezen vaartuig weg op missie.
 STR_PISTOL_UFOPEDIA
-The standard issue XCom pistol is a high powered semi-automatic with a 12 round capacity.
+Het standaard XCom-pistool is een krachtige half-automaat met een capaciteit van 12 rondes.
 STR_RIFLE_UFOPEDIA
-This highly accurate sniper rifle has laser guided sights and takes 6.7mm ammunition in 20 round clips.
+Dit zeer nauwkeurige scherpschuttersgeweer heeft een lasergeleide richtkijker en gebruikt 6.7mm munitie in een 20-patroonsmagazijn.
 STR_HEAVY_CANNON_UFOPEDIA
-The heavy cannon is a devastating, but cumbersome, weapon.  Its versatility comes from the fact that it can take three types of ammunition - armor piercing, incendiary and high explosive.
+Het zware kanon is een allesvernietigend, maar onhandig wapen.  Zijn veelzijdigheid ontleent hij aan het feit dat er drie soorten munitie in passen - pantserdoorborende, brandende en hoog-explosieve munitie.
 STR_AUTO_CANNON_UFOPEDIA
-The auto-cannon combines the versatility and power of a heavy cannon with a faster fire rate.
+Het automatisch kanon combineert de veelzijdigheid en kracht van een zwaar kannon met een hogere snelheid van vuren.
 STR_ROCKET_LAUNCHER_UFOPEDIA
-The rocket launcher is a laser guided system which can fire three different sizes of missile.
+De raketwerper is een lasergestuurd systeem waarmee raketten van drie verschillende afmetingen mee kunnen worden afgevuurd.
 STR_LASER_PISTOL_UFOPEDIA
-The laser pistol is an effective implementation of new technology.  It has the convenience of a pistol with faster and more accurate firing.
+Het laserpistool is een effectieve toepassing van nieuwe technologie.  Het heeft het gemak van een pistool met een snellere en nauwkeurigere afvuring.
 STR_LASER_RIFLE_UFOPEDIA
-The laser rifle is a more powerful and accurate version of the earlier pistol design.
+Het lasergeweer is een krachtigere en nauwkeurigere versie van het oudere ontwerp van het pistool.
 STR_HEAVY_LASER_UFOPEDIA
-The heavy laser is cumbersome, but extremely effective.
+De zware laser is onhandig maar extreem effectief.
 STR_GRENADE_UFOPEDIA
-This standard issue grenade has an accurate and sophisticated timer for precision control.
+Deze granaat uit de standaarduitrusting heeft een nauwkeurige en complexe timer voor precieze controle.
 STR_SMOKE_GRENADE_UFOPEDIA
-Smoke grenades are useful for providing cover in exposed combat situations.  Use with care because they can benefit the enemy as well
+Rookgranaten zijn handig voor het bieden van dekking in een open gevecht.  Gebruik ze met beleid want de vijand kan er ook voordeel bij hebben.
 STR_PROXIMITY_GRENADE_UFOPEDIA
-A proximity grenade can be thrown like an ordinary grenade but is triggered by nearby movement after it lands.  Great skill and care is required to use these devices properly.
+Een afstandsgranaat wordt gegooid zoals een gewone granaat, maar gaat pas af wanneer er beweging wordt waargenomen.  Correct gebruik van dit apparaat vergt bekwaamheid en zorg.
 STR_HIGH_EXPLOSIVE_UFOPEDIA
-This explosive should only be used for demolition purposes.  Keep personnel clear of demolition sites.
+Dit explosief moet alleen gebruikt worden voor de sloop.  Houd personeel op afstand bij sloopwerkzaamheden.
 STR_MOTION_SCANNER_UFOPEDIA
-This sophisticated device uses a variety of detectors and advanced computer algorithms to identify moving enemy units. However, it requires some practice to use effectively. Click on the motion scanner icon on the tactical display. Select 'Use Scanner' from the menu.  The Scanner display shows an arrow in the center which is the direction the soldier is facing (North is at the top). The flashing blobs show units which have moved recently. Large units, or fast moving units, will produce larger blobs. Static units will not be detected.
+Dit complexe apparaat gebruikt een veelheid aan sensoren en geavanceerde computeralgoritmes om bewegende vijanden te identificeren.  Echter, het vergt wat oefening voordat het effectief kan worden gebruikt.  Klik op het bewegingssensor-icoon in het tactische scherm.  Selecteer 'Gebruik Scanner' in het menu.  Het Scannerscherm toont in het midden een pijl dit wijst in de kijkrichting van de soldaat (het noorden staat bovenaan).  De knipperende stippen tonen eenheden die recentelijk hebben bewogen.  Grote of snel bewegende eenheden zullen grotere stippen produceren.  Onbeweeglijke eenheden worden niet gedecteerd.
 STR_MEDI_KIT_UFOPEDIA
-The medi-kit combines a healing facility with pain killers and stimulants. In order to use the medi-kit you must face towards the soldier requiring treatment. If the soldier is stunned you must stand over the body. Click on the medi-kit icon and select 'use medi-kit' from the menu.{NEWLINE}HEALING> Red body parts show fatal wounds. Click on a body part that is wounded. Click on the 'Heal' button. One fatal wound will be cured and some health restored.{NEWLINE}STIMULANT> This will restore energy and revive unconscious (stunned) soldiers. In order to revive an unconscious soldier you must stand directly over the body.{NEWLINE}PAIN KILLER> This will restore the morale of wounded soldiers up to an amount equivalent to the soldier's lost health.
+De medicijnkit combineert een genezingsvoorziening met pijnstillers en opwekkende middelen.  Om de medicijnkit te gebruiken moet je naar de soldaat toe staan die de behandeling nodig heeft.  Als de soldaat is verdoofd moet je boven het lichaam gaan staan.  Klik op het icoon van de medicijnkit en klik op 'Gebruik Medicijnkit' in het menu.{NEWLINE}GENEZEN> Rode lichaamsdelen tonen fatale verwondingen.  Klik op een lichaamsdeel met verwondingen.  Klik op de 'Genees'-knop.  Een fatale wond zal worden genezen en een deel van de gezondheid zal worden hersteld.{NEWLINE}OPWEKKEND MIDDEL> Dit zal energie herstellen en bewusteloze (verdoofde) soldaten weer bij kennis brengen.{NEWLINE}PIJNSTILLER> Dit zal het moreel van de soldaat herstellen in gelijke mate met de verminderde gezondheidstoestand.
 STR_PSI_AMP_UFOPEDIA
-The Psi-amp can only be used by soldiers with psionic skill. During combat, click on the Psi-amp, select the type of attack, and select a target unit with the cursor. There are two types of psionic attack:{NEWLINE}PANIC UNIT> If the attack is successful it will reduce the target's morale and may cause it to panic.{NEWLINE}MIND CONTROL> If this is successful then you will gain immediate control of the enemy unit as if it was one of your own (except that you cannot access the object screen). It is more difficult to be successful with this type of attack.
+De Psi-versterker kan alleen worden gebruikt door soldaten met psionische vaardigheden.  Tijdens het gevecht klik je op de Psi-versterker, vervolgens selecteer je het type aanval en kiest een doelwit met de cursor.  Er zijn twee soorten psionische aanval:{NEWLINE}EENHEID BEANGSTIGEN> Als de aanval succesvol is zal deze het moreel van het doelwit verlagen en mogelijk tot paniek leiden.{NEWLINE}HERSENSPOELEN> Wanneer dit lukt zul je meteen controle krijgen over de vijandige eenheid alsof die onder jouw bevel stond (behalve dat je het uitrustingsscherm niet kunt benaderen).  Het is moeilijker om deze aanval succesvol uit te voeren.
 STR_STUN_ROD_UFOPEDIA
-This device can only be used in close combat, but will stun a living organism without killing it by using electric shocks.
+Dit apparaat kan alleen in een lijf-aan-lijfgevecht worden gebruikt, maar het zal een levend organisme niet doden, maar verdoven via elektrische schokken.
 STR_THE_SUBJECT_HAS_DIED
-The subject has died due to the trauma of interrogation.
+De ondervraagde is bezweken aan de gevolgen van het verhoor.
 STR_MIND_PROBE_UFOPEDIA
-The mind probe is an alien communication device which is used to take information directly from brain waves.  XCom units can use this device in combat to display an alien's characteristics.  Click on the mind probe and the 'use' option.  Then click on an alien with the cursor.
+De hersenpeiler is een buitenaards communicatie-apparaat waarme informatie rechtstreekt uit hersengolven kan worden geplukt.  XCom-eenheden kunnen dit appaat tijdens een gevecht gebruiken om de karakteristieken van een buitenaardse te tonen.  Klik op de hersenpeiler en de optie 'gebruiken'.  Klik daarna op de buitenaardse met de cursor.
 STR_PLASMA_PISTOL_UFOPEDIA
-Plasma pistols are a lethal alien weapon based on accelerating particles from within a minute anti-gravity field
+Plasmapistolen zijn dodelijke buitenaards wapens gebaseerd op het versnellen van deeltjes vanuit een miniem antizwaartekrachtsveld.
 STR_PLASMA_RIFLE_UFOPEDIA
-This is a devastatingly powerful weapon based on accelerating particles from within a minute anti-gravity field
+Dit is een verwoestend buitenaards wapen gebaseerd op het versnellen van deeltjes vanuit een miniem antizwaartekrachtsveld.
 STR_SIZE
-Size
+Grootte
 STR_THE_CORPSE_MAY_BE_RESEARCHED
-The corpse may be researched for a full autopsy report.
+Het lijk kan worden onderzocht voor een volledig autopsieverslag.
 STR_NOT_ENOUGH_AMMUNITION_TO_ARM
-Not enough ammunition to arm
+Niet genoeg munitie voor bewapening.
 STR_BLASTER_LAUNCHER_UFOPEDIA
-This is an alien guided missile launcher which fires powerful 'blaster bombs'. When you click to fire the weapon it will generate 'way points' for the blaster bomb to follow.  When you have positioned enough way points click on the special launch icon.
+Dit is een buitenaardse geleide raketwerper welke krachtige 'springbommen' afvuurt.  Als je klikt om te vuren zal deze 'markeerpunten' zetten door de springbom worden gevolgd.  Wanneer je voldoende markeerpunten hebt neergezet, klik op het speciale icoon om te vuren.
 STR_SMALL_LAUNCHER_UFOPEDIA
-A small launcher which fires stun bombs.  Very useful for capturing live aliens.
+Een kleine werper voor verdovingsbommen.  Zeer bruikbaar bij het vangen van levende buitenaardsen.
 STR_ALIEN_GRENADE_UFOPEDIA
-This device works in the same way as a terrestrial grenade - except that it is more powerful.
+Dit apparaat werkt op dezelfde wijze als een aardse granaat - behalve dat deze krachtiger is.
 STR_SMALL_SCOUT
-Small Scout
+Kleine Verkenner
 STR_MEDIUM_SCOUT
-Medium Scout
+Middelgrote Verkenner
 STR_LARGE_SCOUT
-Large Scout
+Grote Verkenner
 STR_HARVESTER
-Harvester
-STR_ABDUCTOR
-Abductor
+Oogster
+STR_ABDUCTER
+Ontvoerder
 STR_TERROR_SHIP
-Terror ship
+Terreurschip
 STR_BATTLESHIP
-Battleship
+Slagschip
 STR_SUPPLY_SHIP
-Supply ship
+Toeleveringsschip
 STR_RATING
-RATING> 
+BEOORDELING> 
 STR_RATING_TERRIBLE
-TERRIBLE!
+VERSCHRIKKELIJK!
 STR_RATING_POOR
-POOR!
+ZWAK!
 STR_RATING_OK
-OK
+ACCEPTABEL
 STR_RATING_GOOD
-GOOD!
+GOED!
 STR_RATING_EXCELLENT
-EXCELLENT!
+UITSTEKEND!
 STR_SCORE
 SCORE
 STR_XCOM_PROJECT_MONTHLY_REPORT
-XCOM PROJECT MONTHLY REPORT
+MAANDELIJKS VERSLAG VAN XCOM-PROJECT
 STR_MONTH
-Month> 
+Maand> 
 STR_COUNCIL_IS_GENERALLY_SATISFIED
-The council of funding nations is generally satisfied with your progress so far.
+De raad van steunende naties is over het algemeen tevreden met je voortgang tot nu toe.
 STR_COUNCIL_IS_VERY_PLEASED
-The council of funding nations is very pleased with your excellent progress.  Keep up the good work.
+De raad van steunende naties is zeer tevreden met je uitstekende voortgang.  Hou dit goede werk vol.
 STR_COUNCIL_IS_DISSATISFIED
-The council of funding nations is dissatisfied with your performance.  You must improve your effectiveness in dealing with the alien menace or risk termination of the project.
+De raad van steunende naties is ontevreden met je prestaties.  Je moet effectiever omgaan met de buitenaardse dreiging, anders loop je het risico dat het project wordt beëindigd.
 STR_YOU_HAVE_NOT_SUCCEEDED
-You have not succeeded in dealing with the alien invasion and the council of funding nations has regrettably decided to terminate the project.  Each nation shall deal with the problem as they see fit.  We can only hope that we can come to some accommodation with these apparently hostile forces, and that the general population will come to terms with the alien visitors.
+Je hebt niet succesvol omgegaan met de buitenaardse invasie en de raad van steunende naties heeft helaas besloten het project te beëindigen.  Iedere natie zal met het probleem omgaan als hun goeddunkt.  We kunnen alleen maar hopen dat we op de een of andere manier een regeling kunnen treffen met deze ogenschijnlijk vijandelijke macht, en dat de bevolking zich zal kunnen neerleggen met de aanwezigheid van deze buitenaardse bezoekers.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
- is particularly pleased with your ability to deal with the localized threat and has agreed to increase its funding.
+ is bijzonder tevreden met de manier waarop je omgaat met de lokale dreiging en heeft ingestemd met een verhoging van hun financiële steun.
 STR_COUNTRIES_ARE_PARTICULARLY_HAPPY
- are particularly happy with your progress in dealing with local alien incursion and have agreed to increase their funding.
+ zijn bijzonder blij met je voortgang in het tegengaan van buitenaardse invallen en heeft ingestemd met een verhoging van hun financiële steun.
 STR_AND
- and 
+ en 
 STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY
- is unhappy with your ability to deal with alien activity in its territory and has decided to reduce its financial commitment.
+ is ontevreden met de manier waarop je omgaat met buitenaardse activiteit in hun territorium en heeft besloten hun financiële verplichtingen te verminderen.
 STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY
- are unhappy with your ability to deal with alien activity in their territory and have decided to reduce their funding.
+ zijn ontevreden met de manier waarop je omgaat met buitenaardse activiteit in hun territoria en hebben besloten hun financiële verplichtingen te verminderen.
 STR_KNOTS
-knots
+knopen
 STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT
- has signed a secret pact with unknown alien forces and has withdrawn from the project.
+ heeft een geheim verdrag getekend met onbekende buitenaardse machten en heeft zich teruggetrokken uit het project.
 STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT
- have signed a secret pact with unknown alien forces and have withdrawn from the project.
+ hebben een geheim verdrag getekend met onbekende buitenaardse machten en hebben zich teruggetrokken uit het project.
 STR_MONTHLY_RATING
-Monthly Rating> 
+Maandelijkse Beoordeling> 
 STR_FUNDING_CHANGE
-Funding change> 
+Veranderingen in Steun> 
 STR_COUNCIL_REDUCE_DEBTS
-The funding council is not happy with your financial position.  You must reduce your debts below $2million or the project will be terminated.
+De steunende raad is ontevreden met je financiële situatie.  Je moet je schuld verlagen tot onder de $2 miljoen of het project zal worden beëindigd.
 STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED
-HYPER-WAVE TRANSMISSIONS ARE DECODED
+HYPERGOLF-UITZENDINGEN ZIJN GEDECODEERD
 STR_CRAFT_TYPE
-CRAFT TYPE
+TYPE VAARTUIG
 STR_RACE
-RACE
+RAS
 STR_MISSION
-MISSION
+MISSIE
 STR_ZONE
-ZONE
+GEBIED
 STR_ALLOCATE_RESEARCH
-Allocate Research
+Onderzoek Toewijzen
 STR_ALLOCATE_MANUFACTURE
-Allocate Manufacture
+Productie Toewijzen
 STR_NEW_YORK
 New York
 STR_WASHINGTON
@@ -1450,7 +1450,7 @@ Montreal
 STR_HAVANA
 Havana
 STR_MEXICO_CITY
-Mexico City
+Mexico Stad
 STR_CHICAGO
 Chicago
 STR_VANCOUVER
@@ -1458,7 +1458,7 @@ Vancouver
 STR_DALLAS
 Dallas
 STR_BRASILIA
-Brasilia
+Brazilië
 STR_BOGOTA
 Bogota
 STR_BUENOS_AIRES
@@ -1472,13 +1472,13 @@ Lima
 STR_CARACAS
 Caracas
 STR_LONDON
-London
+Londen
 STR_PARIS
-Paris
+Parijs
 STR_BERLIN
-Berlin
+Berlijn
 STR_MOSCOW
-Moscow
+Moskou
 STR_ROME
 Rome
 STR_MADRID
@@ -1488,7 +1488,7 @@ Budapest
 STR_LAGOS
 Lagos
 STR_CAIRO
-Cairo
+Caïro
 STR_CASABLANCA
 Casablanca
 STR_PRETORIA
@@ -1496,7 +1496,7 @@ Pretoria
 STR_NAIROBI
 Nairobi
 STR_CAPE_TOWN
-Cape Town
+Kaapstad
 STR_KINSHASA
 Kinshasa
 STR_ANKARA
@@ -1506,29 +1506,29 @@ Delhi
 STR_KARACHI
 Karachi
 STR_BAGHDAD
-Baghdad
+Bagdad
 STR_TEHRAN
-Tehran
+Teheran
 STR_BOMBAY
-Bombay
+Mumbai
 STR_CALCUTTA
-Calcutta
+Kolkata
 STR_TOKYO
-Tokyo
+Tokio
 STR_BEIJING
-Beijing
+Peking
 STR_BANGKOK
 Bangkok
 STR_MANILA
-Manila
+Manilla
 STR_SEOUL
-Seoul
+Seoel
 STR_SINGAPORE
 Singapore
 STR_JAKARTA
 Jakarta
 STR_SHANGHAI
-Shanghai
+Sjanghai
 STR_HONG_KONG
 Hong Kong
 STR_NOVOSIBIRSK
@@ -1542,113 +1542,113 @@ Melbourne
 STR_PERTH
 Perth
 STR_NEW_GAME
-New Game
+Nieuw Spel
 STR_LOAD_SAVED_GAME
-Load Game
+Laad Opgeslagen Spel
 STR_SELECT_DIFFICULTY_LEVEL
-Select Difficulty Level
+Kies Moeilijkheidsgraad
 STR_1_BEGINNER
 1> Beginner
 STR_2_EXPERIENCED
-2> Experienced
+2> Ervaren
 STR_3_VETERAN
-3> Veteran
+3> Veteraan
 STR_4_GENIUS
-4> Genius
+4> Genie
 STR_5_SUPERHUMAN
-5> Superhuman
+5> Supermens
 STR_TIME
-Time
+Tijd
 STR_DATE
-Date
+Datum
 STR_SELECT_GAME_TO_LOAD
-Select game to load
+Kies te laden spel
 STR_SELECT_SAVE_POSITION
-Select save position
+Kies opslagpositie
 STR_PSIONIC_TRAINING
-PSIONIC TRAINING
+PSIONISCHE TRAINING
 STR_REMAINING_PSI_LAB_CAPACITY
-Remaining Psi-lab capacity> 
+Vrije Psi-lab-capaciteit> 
 STR_PSIONIC__STRENGTH
-Psionic{NEWLINE}Strength
+Psionische{NEWLINE}Kracht
 STR_PSIONIC_SKILL_IMPROVEMENT
-Psionic Skill{NEWLINE}/Improvement
+Psionische Vaardigheid{NEWLINE}/Verbetering
 STR_PSI_AMP
-Psi-Amp
+Psi-Versterker
 STR_IN_TRAINING
-In{NEWLINE}Training?
+Wordt{NEWLINE}Getraind?
 STR_TARGETTED_BY
-TARGETTED BY:
+DOELWIT VAN:
 STR_WEAPONS_CREW_HWPS
-WEAPONS/{NEWLINE}CREW/HWPs
+WAPENS/{NEWLINE}BEZETTING/ZWP's
 STR_ABANDON_GAME
-ABANDON GAME
+SPEL AFBREKEN
 STR_QUIT
-Quit
+Afsluiten
 STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE
-is low on fuel,{NEWLINE}returning to base
+heeft weinig brandstof,{NEWLINE}keert terug naar basis
 STR_SOLDIER_LIST
-Soldier List
+Lijst van Soldaten
 STR_RANK_
-RANK> 
+RANG> 
 STR_MISSIONS
-MISSIONS> 
+MISSIES> 
 STR_KILLS
-KILLS> 
+GEDOOD> 
 STR_WOUND_RECOVERY
-WOUND RECOVERY> 
+HERSTEL VAN WONDEN> 
 STR_TIME_UNITS
-TIME UNITS
+TIJDSEENHEDEN
 STR_STAMINA
-STAMINA
+UITHOUDINGSVERMOGEN
 STR_HEALTH
-HEALTH
+GEZONDHEIDSTOESTAND
 STR_BRAVERY
-BRAVERY
+MOED
 STR_REACTIONS
-REACTIONS
+REACTIES
 STR_FIRING_ACCURACY
-FIRING ACCURACY
+SCHIETNAUWKEURIGHEID
 STR_THROWING_ACCURACY
-THROWING ACCURACY
+GOOINAUWKEURIGHEID
 STR_STRENGTH
-STRENGTH
+KRACHT
 STR_PSIONIC_STRENGTH
-PSIONIC STRENGTH
+PSIONISCHE KRAHT
 STR_PSIONIC_SKILL
-PSIONIC SKILL
+PSIONISCHE VAARDIGHEID
 STR_NEW_RANK
-NEW RANK
+NIEUWE RANG
 STR_PROMOTIONS
-Promotions
+Promoties
 STR_SOLDIERS_UC
-SOLDIERS
+SOLDATEN
 STR_TANK_CANNON_UFOPEDIA
-Automated heavy weapons platforms are designed to complement an XCom squad.  The combination of high fire power and strong armor makes these units valuable for open terrain fire fights.  Make sure that there are sufficient cannon shells in your stores to re-arm tanks.  They are armed automatically when you assign them to a squad.
+Geautomatiseerde zware wapenplatforms zijn ontworpen om een XCom-geweergroep aan te vullen.  Dankzij de combinatie van hoge vuurkracht en een stevig pantser zijn deze eenheden waardevol voor vuurgevechten in open terrein.  Zorg dat je voldoende geschutsmunitie hebt om tanks te herbewapenen.  Ze worden automatisch bewapend wanneer je ze toewijst aan een groep.
 STR_TANK_ROCKET_LAUNCHER_UFOPEDIA
-This automated heavy weapons platform is armed with powerful rockets.  This will be devastating for any alien foe.  Make sure your stores are kept supplied with HWP rockets.
+Dit geautomatiseerde zware wapenplatform is bewapend met krachtige raketten.  Dit is vernietigend voor iedere buitenaardse tegenstander.  Zorg dat je opslagruimte blijft bevoorraad met ZWP-raketten.
 STR_TANK_LASER_CANNON_UFOPEDIA
-Laser weapons are a useful addition for HWPs.  It combines heavy firepower with no ammunition restrictions.
+Laserwapens zijn een bruikbare toevoeging voor ZWP's.  Het combineert zware vuurkracht met een gebrek aan beperkingen op munitie.
 STR_HOVERTANK_PLASMA_UFOPEDIA
-Alien technology has given the HWP a new lease of life.  The added maneuverability of air travel and the power of plasma beams is a lethal combination.
+Buitenaardse technologie heeft ZWP's nieuw leven ingeblazen.  De toegevoegde manoeuvreerbaarheid dankzij het reizen door de lucht en de kracht van plasmastralen is een dodelijke combinatie.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
-This hovertank has a fusion ball launcher that is capable of immense devastation.  Use it with great care.  You will have to manufacture the fusion balls to keep these HWPs fully armed.  A fusion ball is an intelligent guided weapon.  In order to fire it you select a number of 'way points' with the cursor and then click on the launch icon to fire the fusion ball.
+Deze hovertank heeft een fusiebal-werper die ongekende vernietiging teweeg kan brengen.  Pas goed op wanneer je hier gebruik van maakt.  Je zult de fusieballen moeten produceren om deze ZWP's volledig bewapend te houden.  Een fusiebal is een intelligent geleid wapen.  Bij het afvuren kun je een aantal markeerpunten neerzetten met je cursor en vervolgens op het icoon klikken om de fusiebal te lanceren.
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
-This compact device is used as ammunition for a Heavy Plasma Gun.  It contains a small quantity of Elerium.
+Dit compacte apparaat wordt gebruikt als munitie voor het Zwaar Plasma-wapen.  Er zit een kleine hoeveelheid Elerium in.
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
-This small object is used as a power source for a plasma rifle - a medium powered alien weapon.  Contains a small quantity of Elerium.
+Dit kleine object wordt gebruikt als energiebron voor een plasmageweer - een buitenaards wapen van gemiddelde kracht.  Er zit een kleine hoeveelheid Elerium in.
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
-Power source for the small alien plasma pistol.  Contains Elerium - the source of all alien power.
+Energiebron voor het kleine buitenaardse plasmapistool.  Bevat Elerium - de bron van alle buitenaardse energie.
 STR_STUN_BOMB_UFOPEDIA
-The Stun bomb is used for capturing live human specimens, but it can also be used against most alien races.  It is fired from a small launcher.
+De verdovingsbom wordt gebruikt om levende mensen te vangen, maar het kan ook gebruikt worden op de meeste buitenaardse rassen.  Deze worden afgevuurd met behulp van een kleine werper.
 STR_ALIEN_RESEARCH_UFOPEDIA
-The alien research mission is used for collecting basic data on earth and its inhabitants.  Small vehicles are predominantly used, with occasional landings in deserted areas.  This type of alien activity poses the least threat to XCom, with little concern from governments or the public.
+De buitenaardse onderzoeksmissie wordt gebruikt om basale informatie over de aarde en haar inwoners te verzamelen.  Er wordt voornamelijk gebruik gemaakt van kleine vaartuigen, af en toe wordt er geland in verlaten gebieden.  Dit soort buitenaardse activiteit is het minst bedreigend voor XCom, en er is ook weinig aandacht vanuit overheden of het algemene publiek.
 STR_ALIEN_HARVEST_UFOPEDIA
-The aliens have many uses for earth's fauna.  Animals are abducted secretly, and returned with various organs removed.  Cattle mutilations are predominantly reported along with UFO sightings.  This type of alien activity causes great concern by governments and considerable anxiety amongst the population.  This type of activity occurs mainly in farming land.  The theory behind the 'alien harvest' suggests that alien races originally 'seeded' the planet with its flora and fauna, and now they have returned to reap the harvest they have sown.
+De buitenaardsen kunnen veel met de aardse fauna.  Dieren worden in het geheim ontvoerd en zonder een aantal organen weer teruggezet.  Verminkingen van vee worden over het algemeen tegelijk gerapporteerd met UFO-waarnemingen.  Dit soort buitenaardse activiteit baart overheden zorgen en levert behoorlijk wat onrust op onder de bevolking.  Dit soort activiteit vindt vooral plaats in landbouwgebieden.  De theorie achter de 'buitenaardse oogst' suggereert dat buitenaardse rassen oorspronkelijk de planeet hebben 'bezaaid' met flora en fauna en dat ze nu zijn teruggekeerd om hun oogst binnen te halen.
 STR_ALIEN_ABDUCTION_UFOPEDIA
-This is the most insidious form of alien activity.  The abduction by aliens is widely reported, despite the aliens' attempts to erase the experience from their victims' memories.  Abductees report being subject to humiliating physical examinations, including impregnation of alien fetuses and bizarre genetic experiments.  The purpose behind this activity appears to be linked to genetic mutation and manipulation of the aliens own genetic material.  This activity causes great alarm, and occurs in populated areas or cities
+Dit is de meest verraderlijke vorm van buitenaardse activiteit.  Ontvoeringen door buitenaardsen worden breed gerapporteerd, ondanks pogingen om de ervaring uit het geheugen van de slachtoffers te wissen.  Ontvoerden melden dat ze werden onderworpen aan vernederende lichamelijke onderzoeken, waaronder bevruchting met buitenaardse foetussen en bizarre genetische experimenten.  Het doel achter deze activiteit lijkt te maken te hebben met genetische mutatie en manipulatie van het eigen genetisch materiaal van de buitenaardsen.  Deze activiteit veroorzaakt grote ophef, en vindt plaats in bevolkte gebieden of steden.
 STR_ALIEN_INFILTRATION_UFOPEDIA
-Earth governments can be infiltrated by alien agents which are human in appearance.  This can result in official contact between aliens and governments at the highest level.  The climax of this activity is characterized by intense UFO activity in the vicinity of major cities.  The aliens will attempt to sign a pact with an earth government by offering knowledge of their superior technology.  In return the government will allow the aliens to conduct their activity unhindered.  This alien mission represents the worst threat to XCom.  If a government agrees to a pact then its funding will cease.
+Overheden op aarde kunnen worden geïnfiltreerd door buitenaardse agenten met een menselijk uiterlijk.  Dit kan officieel contact tussen buitenaardsen en overheden op het hoogste niveau tot gevolg hebben.  Het hoogtepunt van deze activiteit wordt gekenmerkt door intensieve UFO-activiteit in de buurt van grote steden.  De buitenaardsen zullen proberen een verdrag te tekenen met een aardse overheid door kennis aan te bieden van hun superieure technologie.  Als tegenprestatie zal de overheid de buitenaardsen ongehinderd hun gang laten gaan.  Deze buitenaardse missie vertegenwoordigt het ergste gevaar voor XCom.  Als een overheid zo'n verdrag tekent, dan zal deze haar financiële steun stopzetten.
 STR_ALIEN_BASE_UFOPEDIA
 Aliens will construct secret underground bases in remote locations.  After some initial reconnaissance flights some intense UFO activity will occur as the base is being built.  These bases are known to contain experimental labs for human abductees, and supplies for further activity in the region.  The presence of alien bases will generate a large amount of reported alien activity without the presence of UFOs.  In order to locate a base an XCom craft must patrol an area for a few hours to stand some chance of detection.
 STR_ALIEN_TERROR_UFOPEDIA
