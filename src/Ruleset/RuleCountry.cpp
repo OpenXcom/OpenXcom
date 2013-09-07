@@ -46,71 +46,27 @@ RuleCountry::~RuleCountry()
  */
 void RuleCountry::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_fundingBase = node["fundingBase"].as<int>(_fundingBase);
+	_fundingCap = node["fundingCap"].as<int>(_fundingCap);
+	_labelLon = node["labelLon"].as<double>(_labelLon) * M_PI / 180;
+	_labelLat = node["labelLat"].as<double>(_labelLat) * M_PI / 180;
+	std::vector< std::vector<double> > areas;
+	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
+	for (size_t i = 0; i != areas.size(); ++i)
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "fundingBase")
-		{
-			i.second() >> _fundingBase;
-		}
-		else if (key == "fundingCap")
-		{
-			i.second() >> _fundingCap;
-		}
-		else if (key == "labelLon")
-		{
-			i.second() >> _labelLon;
-			_labelLon *= M_PI / 180;
-		}
-		else if (key == "labelLat")
-		{
-			i.second() >> _labelLat;
-			_labelLat *= M_PI / 180;
-		}
-		else if (key == "areas")
-		{
-			for (size_t j = 0; j != i.second().size(); ++j)
-			{
-				std::vector<double> k;
-				i.second()[j] >> k;
-				_lonMin.push_back(k[0] * M_PI / 180);
-				_lonMax.push_back(k[1] * M_PI / 180);
-				_latMin.push_back(k[2] * M_PI / 180);
-				_latMax.push_back(k[3] * M_PI / 180);
-			}
-		}
+		_lonMin.push_back(areas[i][0] * M_PI / 180);
+		_lonMax.push_back(areas[i][1] * M_PI / 180);
+		_latMin.push_back(areas[i][2] * M_PI / 180);
+		_latMax.push_back(areas[i][3] * M_PI / 180);
 	}
 }
 
 /**
- * Saves the country type to a YAML file.
- * @param out YAML emitter.
- */
-void RuleCountry::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "fundingBase" << YAML::Value << _fundingBase;
-	out << YAML::Key << "fundingCap" << YAML::Value << _fundingCap;
-	out << YAML::Key << "labelLon" << YAML::Value << _labelLon;
-	out << YAML::Key << "labelLat" << YAML::Value << _labelLat;
-	out << YAML::Key << "lonMin" << YAML::Value << _lonMin;
-	out << YAML::Key << "lonMax" << YAML::Value << _lonMax;
-	out << YAML::Key << "latMin" << YAML::Value << _latMin;
-	out << YAML::Key << "latMax" << YAML::Value << _latMax;
-	out << YAML::EndMap;
-}
-
-/**
- * Returns the language string that names
+ * Gets the language string that names
  * this country. Each country type
  * has a unique name.
- * @return Country name.
+ * @return The country's name.
  */
 std::string RuleCountry::getType() const
 {
@@ -119,7 +75,7 @@ std::string RuleCountry::getType() const
 
 /**
  * Generates the random starting funding for the country.
- * @return Monthly funding.
+ * @return The monthly funding.
  */
 int RuleCountry::generateFunding() const
 {
@@ -127,9 +83,9 @@ int RuleCountry::generateFunding() const
 }
 
 /**
- * Returns the country's funding cap.
+ * Gets the country's funding cap.
  * Country funding can never exceed this.
- * @return Funding cap, in thousands.
+ * @return The funding cap, in thousands.
  */
 int RuleCountry::getFundingCap() const
 {
@@ -137,8 +93,8 @@ int RuleCountry::getFundingCap() const
 }
 
 /**
- * Returns the longitude of the country's label on the globe.
- * @return Longitude in radians.
+ * Gets the longitude of the country's label on the globe.
+ * @return The longitude in radians.
  */
 double RuleCountry::getLabelLongitude() const
 {
@@ -146,8 +102,8 @@ double RuleCountry::getLabelLongitude() const
 }
 
 /**
- * Returns the latitude of the country's label on the globe.
- * @return Latitude in radians.
+ * Gets the latitude of the country's label on the globe.
+ * @return The latitude in radians.
  */
 double RuleCountry::getLabelLatitude() const
 {
@@ -158,7 +114,7 @@ double RuleCountry::getLabelLatitude() const
  * Checks if a point is inside this country.
  * @param lon Longitude in radians.
  * @param lat Latitude in radians.
- * @return True if it's inside, False if it's outside.
+ * @return True if it's inside, false if it's outside.
  */
 bool RuleCountry::insideCountry(double lon, double lat) const
 {

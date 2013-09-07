@@ -215,23 +215,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     }
 
     if(source_yaml_filename && strlen(source_yaml_filename)) {
-      std::ifstream fin(source_yaml_filename);
-      YAML::Parser parser(fin);
-      YAML::Node document;
-	  parser.GetNextDocument(document);
+      YAML::Node document = YAML::LoadFile(source_yaml_filename);
 
       bool is_glsl;
-	  std::string s;
-
-	  document["language"] >> s;
-	  is_glsl = (s == "GLSL");
+	  std::string language = document["language"].as<std::string>();
+	  is_glsl = (language == "GLSL");
 
 
-      document["linear"] >> linear; // some shaders want texture linear interpolation and some don't
-      std::string fragment_source;
-      std::string vertex_source;
-	  if (const YAML::Node *pFrag = document.FindValue("fragment")) *pFrag >> fragment_source;
-	  if (const YAML::Node *pVert = document.FindValue("vertex")) *pVert >> vertex_source;
+      linear = document["linear"].as<bool>(false); // some shaders want texture linear interpolation and some don't
+      std::string fragment_source = document["fragment"].as<std::string>("");
+	  std::string vertex_source = document["vertex"].as<std::string>("");
 
       if(is_glsl) {
         if(fragment_source != "") set_fragment_shader(fragment_source.c_str());

@@ -69,7 +69,7 @@ Base::~Base()
 	{
 		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
 			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
-				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's desctructor twice
+				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's destructor twice
 		delete *i;
 	}
 	for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); ++i)
@@ -99,41 +99,35 @@ Base::~Base()
 void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newBattleGame)
 {
 	Target::load(node);
-	std::string name;
-	node["name"] >> name;
-	_name = Language::utf8ToWstr(name);
+	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 
 	if (!newGame || !Options::getBool("customInitialBase") || newBattleGame)
 	{
-		for (YAML::Iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
+		for (YAML::const_iterator i = node["facilities"].begin(); i != node["facilities"].end(); ++i)
 		{
-			std::string type;
-			(*i)["type"] >> type;
+			std::string type = (*i)["type"].as<std::string>();
 			BaseFacility *f = new BaseFacility(_rule->getBaseFacility(type), this);
 			f->load(*i);
 			_facilities.push_back(f);
 		}
 	}
 
-	for (YAML::Iterator i = node["crafts"].begin(); i != node["crafts"].end(); ++i)
+	for (YAML::const_iterator i = node["crafts"].begin(); i != node["crafts"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
+		std::string type = (*i)["type"].as<std::string>();
 		Craft *c = new Craft(_rule->getCraft(type), this);
 		c->load(*i, _rule, save);		
 		_crafts.push_back(c);
 	}
 
-	for (YAML::Iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
+	for (YAML::const_iterator i = node["soldiers"].begin(); i != node["soldiers"].end(); ++i)
 	{
 		Soldier *s = new Soldier(_rule->getSoldier("XCOM"), _rule->getArmor("STR_NONE_UC"));
 		s->load(*i, _rule);
-		if (const YAML::Node *pName = (*i).FindValue("craft"))
+		if (const YAML::Node &craft = (*i)["craft"])
 		{
-			std::string type;
-			int id;
-			(*pName)["type"] >> type;
-			(*pName)["id"] >> id;
+			std::string type = craft["type"].as<std::string>();
+			int id = craft["id"].as<int>();
 			for (std::vector<Craft*>::iterator j = _crafts.begin(); j != _crafts.end(); ++j)
 			{
 				if ((*j)->getRules()->getType() == type && (*j)->getId() == id)
@@ -164,114 +158,87 @@ void Base::load(const YAML::Node &node, SavedGame *save, bool newGame, bool newB
 		}
 	}
 
-	node["scientists"] >> _scientists;
-	node["engineers"] >> _engineers;
-	node["inBattlescape"] >> _inBattlescape;
+	_scientists = node["scientists"].as<int>(_scientists);
+	_engineers = node["engineers"].as<int>(_engineers);
+	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
 
-	for (YAML::Iterator i = node["transfers"].begin(); i != node["transfers"].end(); ++i)
+	for (YAML::const_iterator i = node["transfers"].begin(); i != node["transfers"].end(); ++i)
 	{
-		int hours;
-		(*i)["hours"] >> hours;
+		int hours = (*i)["hours"].as<int>();
 		Transfer *t = new Transfer(hours);
 		t->load(*i, this, _rule);
 		_transfers.push_back(t);
 	}
 
-	for (YAML::Iterator i = node["research"].begin(); i != node["research"].end(); ++i)
+	for (YAML::const_iterator i = node["research"].begin(); i != node["research"].end(); ++i)
 	{
-		std::string research;
-		(*i)["project"] >> research;
+		std::string research = (*i)["project"].as<std::string>();
 		ResearchProject *r = new ResearchProject(_rule->getResearch(research));
 		r->load(*i);
 		_research.push_back(r);
 	}
 
-	for (YAML::Iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
+	for (YAML::const_iterator i = node["productions"].begin(); i != node["productions"].end(); ++i)
 	{
-		std::string item;
-		(*i)["item"] >> item;
+		std::string item = (*i)["item"].as<std::string>();
 		Production *p = new Production(_rule->getManufacture(item), 0);
 		p->load(*i);
 		_productions.push_back(p);
 	}
 
-	if (const YAML::Node *pNode = node.FindValue("retaliationTarget"))
-	{
-		*pNode >> _retaliationTarget;
-	}
+	_retaliationTarget = node["retaliationTarget"].as<bool>(_retaliationTarget);
 }
 
 /**
  * Saves the base to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Base::save(YAML::Emitter &out) const
+YAML::Node Base::save() const
 {
-	Target::save(out);
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::Key << "facilities" << YAML::Value;
-	out << YAML::BeginSeq;
+	YAML::Node node = Target::save();
+	node["name"] = Language::wstrToUtf8(_name);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		(*i)->save(out);
+		node["facilities"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "soldiers" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
-		(*i)->save(out);
+		node["soldiers"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "crafts" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Craft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
-		(*i)->save(out);
+		node["crafts"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "items" << YAML::Value;
-	_items->save(out);
-	out << YAML::Key << "scientists" << YAML::Value << _scientists;
-	out << YAML::Key << "engineers" << YAML::Value << _engineers;
-	out << YAML::Key << "inBattlescape" << YAML::Value << _inBattlescape;
-	out << YAML::Key << "transfers" << YAML::Value;
-	out << YAML::BeginSeq;
+	node["items"] = _items->save();
+	node["scientists"] = _scientists;
+	node["engineers"] = _engineers;
+	node["inBattlescape"] = _inBattlescape;
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
-		(*i)->save(out);
+		node["transfers"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-
-	out << YAML::Key << "research" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
-		(*i)->save(out);
+		node["research"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-
-	out << YAML::Key << "productions" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Production*>::const_iterator i = _productions.begin(); i != _productions.end(); ++i)
 	{
-		(*i)->save(out);
+		node["productions"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "retaliationTarget" << YAML::Value << _retaliationTarget;
-	out << YAML::EndMap;
+	node["retaliationTarget"] = _retaliationTarget;
+	return node;
 }
 
 /**
  * Saves the base's unique identifiers to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Base::saveId(YAML::Emitter &out) const
+YAML::Node Base::saveId() const
 {
-	Target::saveId(out);
-	out << YAML::Key << "type" << YAML::Value << "STR_BASE";
-	out << YAML::Key << "id" << YAML::Value << 0;
-	out << YAML::EndMap;
+	YAML::Node node = Target::saveId();
+	node["type"] = "STR_BASE";
+	node["id"] = 0;
+	return node;
 }
 
 /**

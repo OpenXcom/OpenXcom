@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,255 +47,86 @@ RuleItem::~RuleItem()
 /**
  * Loads the item from a YAML file.
  * @param node YAML node.
- * @param modIndex offsets the sounds and sprite values to avoid conflicts.
- * @param listOrder the list weight for this item.
+ * @param modIndex Offsets the sounds and sprite values to avoid conflicts.
+ * @param listOrder The list weight for this item.
  */
 void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 {
-	int a = 0;
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "costBuy")
-		{
-			i.second() >> _costBuy;
-		}
-		else if (key == "costSell")
-		{
-			i.second() >> _costSell;
-		}
-		else if (key == "transferTime")
-		{
-			i.second() >> _transferTime;
-		}
-		else if (key == "weight")
-		{
-			i.second() >> _weight;
-		}
-		else if (key == "bigSprite")
-		{
-			i.second() >> _bigSprite;
-			// BIGOBS.PCK: 57 entries
-			if (_bigSprite > 56)
-				_bigSprite += modIndex;
-		}
-		else if (key == "floorSprite")
-		{
-			i.second() >> _floorSprite;
-			// FLOOROB.PCK: 73 entries
-			if (_floorSprite > 72)
-				_floorSprite += modIndex;
-		}
-		else if (key == "handSprite")
-		{
-			i.second() >> _handSprite;
-			// HANDOBS.PCK: 128 entries
-			if (_handSprite > 127)
-				_handSprite += modIndex;
-		}
-		else if (key == "bulletSprite")
-		{
-			i.second() >> _bulletSprite;
-			// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-			_bulletSprite *= 35;
-			if (_bulletSprite >= 385)
-			{
-				_bulletSprite += modIndex;
-			}
-		}
-		else if (key == "fireSound")
-		{
-			i.second() >> _fireSound;
-			// BATTLE.CAT: 55 entries
-			if (_fireSound > 54)
-				_fireSound += modIndex;
-		}
-		else if (key == "hitSound")
-		{
-			i.second() >> _hitSound;
-			// BATTLE.CAT: 55 entries
-			if (_hitSound > 54)
-				_hitSound += modIndex;
-		}
-		else if (key == "hitAnimation")
-		{
-			i.second() >> _hitAnimation;
-			// SMOKE.PCK: 56 entries
-			if (_hitAnimation > 55)
-				_hitAnimation += modIndex;
-		}
-		else if (key == "power")
-		{
-			i.second() >> _power;
-		}
-		else if (key == "compatibleAmmo")
-		{
-			i.second() >> _compatibleAmmo;
-		}
-		else if (key == "damageType")
-		{
-			i.second() >> a;
-			_damageType = (ItemDamageType)a;
-		}
-		else if (key == "accuracyAuto")
-		{
-			i.second() >> _accuracyAuto;
-		}
-		else if (key == "accuracySnap")
-		{
-			i.second() >> _accuracySnap;
-		}
-		else if (key == "accuracyAimed")
-		{
-			i.second() >> _accuracyAimed;
-		}
-		else if (key == "tuAuto")
-		{
-			i.second() >> _tuAuto;
-		}
-		else if (key == "tuSnap")
-		{
-			i.second() >> _tuSnap;
-		}
-		else if (key == "tuAimed")
-		{
-			i.second() >> _tuAimed;
-		}
-		else if (key == "clipSize")
-		{
-			i.second() >> _clipSize;
-		}
-		else if (key == "accuracyMelee")
-		{
-			i.second() >> _accuracyMelee;
-		}
-		else if (key == "tuMelee")
-		{
-			i.second() >> _tuMelee;
-		}
-		else if (key == "battleType")
-		{
-			i.second() >> a;
-			_battleType = (BattleType)a;
-		}
-		else if (key == "twoHanded")
-		{
-			i.second() >> _twoHanded;
-		}
-		else if (key == "waypoint")
-		{
-			i.second() >> _waypoint;
-		}
-		else if (key == "fixedWeapon")
-		{
-			i.second() >> _fixedWeapon;
-		}
-		else if (key == "invWidth")
-		{
-			i.second() >> _invWidth;
-		}
-		else if (key == "invHeight")
-		{
-			i.second() >> _invHeight;
-		}
-		else if (key == "painKiller")
-		{
-			i.second() >> _painKiller;
-		}
-		else if (key == "heal")
-		{
-			i.second() >> _heal;
-		}
-		else if (key == "stimulant")
-		{
-			i.second() >> _stimulant;
-		}
-		else if (key == "healAmount")
-		{
-			i.second() >> _healAmount;
-		}
-		else if (key == "healthAmount")
-		{
-			i.second() >> _healthAmount;
-		}
-		else if (key == "stun")
-		{
-			i.second() >> _stun;
-		}
-		else if (key == "energy")
-		{
-			i.second() >> _energy;
-		}
-		else if (key == "tuUse")
-		{
-			i.second() >> _tuUse;
-		}
-		else if (key == "recoveryPoints")
-		{
-			i.second() >> _recoveryPoints;
-		}
-		else if (key == "armor")
-		{
-			i.second() >> _armor;
-		}
-		else if (key == "recover")
-		{
-			i.second() >> _recover;
-		}
-		else if (key == "turretType")
-		{
-			i.second() >> _turretType;
-		}
-		else if (key == "liveAlien")
-		{
-			i.second() >> _liveAlien;
-		}
-		else if (key == "blastRadius")
-		{
-			i.second() >> _blastRadius;
-		}
-		else if (key == "flatRate")
-		{
-			i.second() >> _flatRate;
-		}
-		else if (key == "arcingShot")
-		{
-			i.second() >> _arcingShot;
-		}
-		else if (key == "attraction")
-		{
-			i.second() >> _attraction;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
-		else if (key == "maxRange")
-		{
-			i.second() >> _range;
-		}
-		else if (key == "bulletSpeed")
-		{
-			i.second() >> _bulletSpeed;
-		}
-	}
+	_type = node["type"].as<std::string>(_type);
+	_name = node["name"].as<std::string>(_name);
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
+	_size = node["size"].as<float>(_size);
+	_costBuy = node["costBuy"].as<int>(_costBuy);
+	_costSell = node["costSell"].as<int>(_costSell);
+	_transferTime = node["transferTime"].as<int>(_transferTime);
+	_weight = node["weight"].as<int>(_weight);
+	_bigSprite = node["bigSprite"].as<int>(_bigSprite);
+	// BIGOBS.PCK: 57 entries
+	if (_bigSprite > 56)
+		_bigSprite += modIndex;
+	_floorSprite = node["floorSprite"].as<int>(_floorSprite);
+	// FLOOROB.PCK: 73 entries
+	if (_floorSprite > 72)
+		_floorSprite += modIndex;
+	_handSprite = node["handSprite"].as<int>(_handSprite);
+	// HANDOBS.PCK: 128 entries
+	if (_handSprite > 127)
+		_handSprite += modIndex;
+	_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite);
+	// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
+	_bulletSprite *= 35;
+	if (_bulletSprite >= 385)
+		_bulletSprite += modIndex;
+	_fireSound = node["fireSound"].as<int>(_fireSound);
+	// BATTLE.CAT: 55 entries
+	if (_fireSound > 54)
+		_fireSound += modIndex;
+	_hitSound = node["hitSound"].as<int>(_hitSound);
+	// BATTLE.CAT: 55 entries
+	if (_hitSound > 54)
+		_hitSound += modIndex;
+	_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
+	// SMOKE.PCK: 56 entries
+	if (_hitAnimation > 55)
+		_hitAnimation += modIndex;
+	_power = node["power"].as<int>(_power);
+	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
+	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
+	_accuracyAuto = node["accuracyAuto"].as<int>(_accuracyAuto);
+	_accuracySnap = node["accuracySnap"].as<int>(_accuracySnap);
+	_accuracyAimed = node["accuracyAimed"].as<int>(_accuracyAimed);
+	_tuAuto = node["tuAuto"].as<int>(_tuAuto);
+	_tuSnap = node["tuSnap"].as<int>(_tuSnap);
+	_tuAimed = node["tuAimed"].as<int>(_tuAimed);
+	_clipSize = node["clipSize"].as<int>(_clipSize);
+	_accuracyMelee = node["accuracyMelee"].as<int>(_accuracyMelee);
+	_tuMelee = node["tuMelee"].as<int>(_tuMelee);
+	_battleType = (BattleType)node["battleType"].as<int>(_battleType);
+	_twoHanded = node["twoHanded"].as<bool>(_twoHanded);
+	_waypoint = node["waypoint"].as<bool>(_waypoint);
+	_fixedWeapon = node["fixedWeapon"].as<bool>(_fixedWeapon);
+	_invWidth = node["invWidth"].as<int>(_invWidth);
+	_invHeight = node["invHeight"].as<int>(_invHeight);
+	_painKiller = node["painKiller"].as<int>(_painKiller);
+	_heal = node["heal"].as<int>(_heal);
+	_stimulant = node["stimulant"].as<int>(_stimulant);
+	_healAmount = node["healAmount"].as<int>(_healAmount);
+	_healthAmount = node["healthAmount"].as<int>(_healthAmount);
+	_stun = node["stun"].as<int>(_stun);
+	_energy = node["energy"].as<int>(_energy);
+	_tuUse = node["tuUse"].as<int>(_tuUse);
+	_recoveryPoints = node["recoveryPoints"].as<int>(_recoveryPoints);
+	_armor = node["armor"].as<int>(_armor);
+	_turretType = node["turretType"].as<int>(_turretType);
+	_recover = node["recover"].as<bool>(_recover);
+	_liveAlien = node["liveAlien"].as<bool>(_liveAlien);
+	_blastRadius = node["blastRadius"].as<int>(_blastRadius);
+	_attraction = node["attraction"].as<int>(_attraction);
+	_flatRate = node["flatRate"].as<bool>(_flatRate);
+	_arcingShot = node["arcingShot"].as<bool>(_arcingShot);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
+	_range = node["maxRange"].as<int>(_range);
+	_bulletSpeed = node["bulletSpeed"].as<int>(_bulletSpeed);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
@@ -303,69 +134,8 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 }
 
 /**
- * Saves the item to a YAML file.
- * @param out YAML emitter.
- */
-void RuleItem::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "costBuy" << YAML::Value << _costBuy;
-	out << YAML::Key << "costSell" << YAML::Value << _costSell;
-	out << YAML::Key << "transferTime" << YAML::Value << _transferTime;
-	out << YAML::Key << "weight" << YAML::Value << _weight;
-	out << YAML::Key << "bigSprite" << YAML::Value << _bigSprite;
-	out << YAML::Key << "floorSprite" << YAML::Value << _floorSprite;
-	out << YAML::Key << "handSprite" << YAML::Value << _handSprite;
-	out << YAML::Key << "bulletSprite" << YAML::Value << _bulletSprite;
-	out << YAML::Key << "fireSound" << YAML::Value << _fireSound;
-	out << YAML::Key << "hitSound" << YAML::Value << _hitSound;
-	out << YAML::Key << "hitAnimation" << YAML::Value << _hitAnimation;
-	out << YAML::Key << "power" << YAML::Value << _power;
-	out << YAML::Key << "compatibleAmmo" << YAML::Value << _compatibleAmmo;
-	out << YAML::Key << "damageType" << YAML::Value << _damageType;
-	out << YAML::Key << "accuracyAuto" << YAML::Value << _accuracyAuto;
-	out << YAML::Key << "accuracySnap" << YAML::Value << _accuracySnap;
-	out << YAML::Key << "accuracyAimed" << YAML::Value << _accuracyAimed;
-	out << YAML::Key << "tuAuto" << YAML::Value << _tuAuto;
-	out << YAML::Key << "tuSnap" << YAML::Value << _tuSnap;
-	out << YAML::Key << "tuAimed" << YAML::Value << _tuAimed;
-	out << YAML::Key << "clipSize" << YAML::Value << _clipSize;
-	out << YAML::Key << "accuracyMelee" << YAML::Value << _accuracyMelee;
-	out << YAML::Key << "tuMelee" << YAML::Value << _tuMelee;
-	out << YAML::Key << "battleType" << YAML::Value << _battleType;
-	out << YAML::Key << "twoHanded" << YAML::Value << _twoHanded;
-	out << YAML::Key << "waypoint" << YAML::Value << _waypoint;
-	out << YAML::Key << "fixedWeapon" << YAML::Value << _fixedWeapon;
-	out << YAML::Key << "invWidth" << YAML::Value << _invWidth;
-	out << YAML::Key << "invHeight" << YAML::Value << _invHeight;
-	out << YAML::Key << "painKiller" << YAML::Value << _painKiller;
-	out << YAML::Key << "heal" << YAML::Value << _heal;
-	out << YAML::Key << "stimulant" << YAML::Value << _stimulant;
-	out << YAML::Key << "healAmount" << YAML::Value << _healAmount;
-	out << YAML::Key << "healthAmount" << YAML::Value << _healthAmount;
-	out << YAML::Key << "stun" << YAML::Value << _stun;
-	out << YAML::Key << "energy" << YAML::Value << _energy;
-	out << YAML::Key << "tuUse" << YAML::Value << _tuUse;
-	out << YAML::Key << "recoveryPoints" << YAML::Value << _recoveryPoints;
-	out << YAML::Key << "armor" << YAML::Value << _armor;
-	out << YAML::Key << "recover" << YAML::Value << _recover;
-	out << YAML::Key << "turretType" << YAML::Value << _turretType;
-	out << YAML::Key << "liveAlien" << YAML::Value << _liveAlien;
-	out << YAML::Key << "blastRadius" << YAML::Value << _blastRadius;
-	out << YAML::Key << "flatRate" << YAML::Value << _flatRate;
-	out << YAML::Key << "arcingShot" << YAML::Value << _arcingShot;
-	out << YAML::Key << "attraction" << YAML::Value << _attraction;
-	out << YAML::Key << "bulletSpeed" << YAML::Value << _bulletSpeed;
-	out << YAML::EndMap;
-}
-
-/**
- * Returns the item type. Each item has a unique type.
- * @return Item name.
+ * Gets the item type. Each item has a unique type.
+ * @return The item's type.
  */
 std::string RuleItem::getType() const
 {
@@ -373,9 +143,9 @@ std::string RuleItem::getType() const
 }
 
 /**
- * Returns the language string that names
+ * Gets the language string that names
  * this item. This is not necessarily unique.
- * @return Item name.
+ * @return  The item's name.
  */
 std::string RuleItem::getName() const
 {
@@ -383,9 +153,9 @@ std::string RuleItem::getName() const
 }
 
 /**
- * Returns the list of research required to
+ * Gets the list of research required to
  * use this item.
- * @return List of research IDs.
+ * @return The list of research IDs.
  */
 const std::vector<std::string> &RuleItem::getRequirements() const
 {
@@ -393,9 +163,9 @@ const std::vector<std::string> &RuleItem::getRequirements() const
 }
 
 /**
- * Returns the amount of space this item
+ * Gets the amount of space this item
  * takes up in a storage facility.
- * @return Storage size.
+ * @return The storage size.
  */
 float RuleItem::getSize() const
 {
@@ -403,9 +173,9 @@ float RuleItem::getSize() const
 }
 
 /**
- * Returns the amount of money this item
+ * Gets the amount of money this item
  * costs to purchase (0 if not purchasable).
- * @return Cost.
+ * @return The buy cost.
  */
 int RuleItem::getBuyCost() const
 {
@@ -413,9 +183,9 @@ int RuleItem::getBuyCost() const
 }
 
 /**
- * Returns the amount of money this item
+ * Gets the amount of money this item
  * is worth to sell.
- * @return Cost.
+ * @return The sell cost.
  */
 int RuleItem::getSellCost() const
 {
@@ -423,9 +193,9 @@ int RuleItem::getSellCost() const
 }
 
 /**
- * Returns the amount of time this item
+ * Gets the amount of time this item
  * takes to arrive at a base.
- * @return Time in hours.
+ * @return The time in hours.
  */
 int RuleItem::getTransferTime() const
 {
@@ -433,8 +203,8 @@ int RuleItem::getTransferTime() const
 }
 
 /**
- * Returns the weight of the item.
- * @return Weight in strength units.
+ * Gets the weight of the item.
+ * @return The weight in strength units.
  */
 int RuleItem::getWeight() const
 {
@@ -442,8 +212,8 @@ int RuleItem::getWeight() const
 }
 
 /**
- * Returns the reference in BIGOBS.PCK for use in inventory.
- * @return Sprite reference.
+ * Gets the reference in BIGOBS.PCK for use in inventory.
+ * @return The sprite reference.
  */
 int RuleItem::getBigSprite() const
 {
@@ -451,8 +221,8 @@ int RuleItem::getBigSprite() const
 }
 
 /**
- * Returns the reference in FLOOROB.PCK for use in inventory.
- * @return Sprite reference.
+ * Gets the reference in FLOOROB.PCK for use in inventory.
+ * @return The sprite reference.
  */
 int RuleItem::getFloorSprite() const
 {
@@ -460,8 +230,8 @@ int RuleItem::getFloorSprite() const
 }
 
 /**
- * Returns the reference in HANDOB.PCK for use in inventory.
- * @return Sprite reference.
+ * Gets the reference in HANDOB.PCK for use in inventory.
+ * @return The sprite reference.
  */
 int RuleItem::getHandSprite() const
 {
@@ -470,7 +240,7 @@ int RuleItem::getHandSprite() const
 
 /**
  * Returns whether this item is held with two hands.
- * @return Is it two-handed?
+ * @return True if it is two-handed.
  */
 bool RuleItem::isTwoHanded() const
 {
@@ -478,8 +248,8 @@ bool RuleItem::isTwoHanded() const
 }
 
 /**
- * Returns whether this uses waypoints.
- * @return Uses waypoints?
+ * Returns whether this item uses waypoints.
+ * @return True if it uses waypoints.
  */
 bool RuleItem::isWaypoint() const
 {
@@ -488,8 +258,8 @@ bool RuleItem::isWaypoint() const
 
 /**
  * Returns whether this item is a fixed weapon.
- * You can't move/throw/drop fixed weapons - ie. HWP turrets.
- * @return Is it fixed weapon?
+ * You can't move/throw/drop fixed weapons - e.g. HWP turrets.
+ * @return True if it is a fixed weapon.
  */
 bool RuleItem::isFixed() const
 {
@@ -497,8 +267,8 @@ bool RuleItem::isFixed() const
 }
 
 /**
- * Returns the item's bullet sprite reference.
- * @return Sprite reference.
+ * Gets the item's bullet sprite reference.
+ * @return The sprite reference.
  */
 int RuleItem::getBulletSprite() const
 {
@@ -506,8 +276,8 @@ int RuleItem::getBulletSprite() const
 }
 
 /**
- * Returns the item's fire sound.
- * @return Sound id.
+ * Gets the item's fire sound.
+ * @return The fire sound id.
  */
 int RuleItem::getFireSound() const
 {
@@ -515,8 +285,8 @@ int RuleItem::getFireSound() const
 }
 
 /**
- * Returns the item's hit sound.
- * @return Sound id.
+ * Gets the item's hit sound.
+ * @return The hit sound id.
  */
 int RuleItem::getHitSound() const
 {
@@ -524,8 +294,8 @@ int RuleItem::getHitSound() const
 }
 
 /**
- * Returns the item's hit sound.
- * @return Sound id.
+ * Gets the item's hit animation.
+ * @return The hit animation id.
  */
 int RuleItem::getHitAnimation() const
 {
@@ -533,8 +303,8 @@ int RuleItem::getHitAnimation() const
 }
 
 /**
- * Returns the item's power.
- * @return Teh powah.
+ * Gets the item's power.
+ * @return The power.
  */
 int RuleItem::getPower() const
 {
@@ -542,8 +312,8 @@ int RuleItem::getPower() const
 }
 
 /**
- * Returns the item's accuracy for snapshots.
- * @return item's accuracy for snapshots.
+ * Gets the item's accuracy for snapshots.
+ * @return The snapshot accuracy.
  */
 int RuleItem::getAccuracySnap() const
 {
@@ -551,8 +321,8 @@ int RuleItem::getAccuracySnap() const
 }
 
 /**
- * Returns the item's accuracy for autoshots.
- * @return item's accuracy for autoshots.
+ * Gets the item's accuracy for autoshots.
+ * @return The autoshot accuracy.
  */
 int RuleItem::getAccuracyAuto() const
 {
@@ -560,8 +330,8 @@ int RuleItem::getAccuracyAuto() const
 }
 
 /**
- * Returns the item's accuracy for aimed shots.
- * @return item's accuracy for aimed shots.
+ * Gets the item's accuracy for aimed shots.
+ * @return The aimed accuracy.
  */
 int RuleItem::getAccuracyAimed() const
 {
@@ -569,8 +339,8 @@ int RuleItem::getAccuracyAimed() const
 }
 
 /**
- * Returns the item's accuracy for melee.
- * @return item's accuracy for melee.
+ * Gets the item's accuracy for melee attacks.
+ * @return The melee accuracy.
  */
 int RuleItem::getAccuracyMelee() const
 {
@@ -578,8 +348,8 @@ int RuleItem::getAccuracyMelee() const
 }
 
 /**
- * Returns the item's time unit percentage for snapshots.
- * @return item's time unit percentage for snapshots.
+ * Gets the item's time unit percentage for snapshots.
+ * @return The snapshot TU percentage.
  */
 int RuleItem::getTUSnap() const
 {
@@ -587,8 +357,8 @@ int RuleItem::getTUSnap() const
 }
 
 /**
- * Returns the item's time unit percentage for autoshots.
- * @return item's time unit percentage for autoshots.
+ * Gets the item's time unit percentage for autoshots.
+ * @return The autoshot TU percentage.
  */
 int RuleItem::getTUAuto() const
 {
@@ -596,8 +366,8 @@ int RuleItem::getTUAuto() const
 }
 
 /**
- * Returns the item's time unit percentage for aimed shots.
- * @return item's time unit percentage for aimed shots.
+ * Gets the item's time unit percentage for aimed shots.
+ * @return The aimed shot TU percentage.
  */
 int RuleItem::getTUAimed() const
 {
@@ -605,8 +375,8 @@ int RuleItem::getTUAimed() const
 }
 
 /**
- * Returns the item's time unit percentage for melee.
- * @return item's time unit percentage for melee.
+ * Gets the item's time unit percentage for melee attacks.
+ * @return The melee TU percentage.
  */
 int RuleItem::getTUMelee() const
 {
@@ -614,8 +384,8 @@ int RuleItem::getTUMelee() const
 }
 
 /**
- * Returns a list of compatible ammo.
- * @return pointer to a list of compatible ammo.
+ * Gets a list of compatible ammo.
+ * @return Pointer to a list of compatible ammo.
  */
 std::vector<std::string> *RuleItem::getCompatibleAmmo()
 {
@@ -623,8 +393,8 @@ std::vector<std::string> *RuleItem::getCompatibleAmmo()
 }
 
 /**
- * Returns the item's damage type.
- * @return damagetype the item's damage type.
+ * Gets the item's damage type.
+ * @return The damage type.
  */
 ItemDamageType RuleItem::getDamageType() const
 {
@@ -632,8 +402,8 @@ ItemDamageType RuleItem::getDamageType() const
 }
 
 /**
- * Returns the item's type.
- * @return type the item's type.
+ * Gets the item's battlye type.
+ * @return The battle type.
  */
 BattleType RuleItem::getBattleType() const
 {
@@ -641,8 +411,8 @@ BattleType RuleItem::getBattleType() const
 }
 
 /**
- * Returns the item's width in a soldier's inventory.
- * @return the item's width.
+ * Gets the item's width in a soldier's inventory.
+ * @return The width.
  */
 int RuleItem::getInventoryWidth() const
 {
@@ -650,8 +420,8 @@ int RuleItem::getInventoryWidth() const
 }
 
 /**
- * Returns the item's height in a soldier's inventory.
- * @return the item's height.
+ * Gets the item's height in a soldier's inventory.
+ * @return The height.
  */
 int RuleItem::getInventoryHeight() const
 {
@@ -659,8 +429,8 @@ int RuleItem::getInventoryHeight() const
 }
 
 /**
- * Returns the item's ammo clip size.
- * @return the item's ammo clip size.
+ * Gets the item's ammo clip size.
+ * @return The ammo clip size.
  */
 int RuleItem::getClipSize() const
 {
@@ -670,8 +440,8 @@ int RuleItem::getClipSize() const
 /**
  * Draws and centers the hand sprite on a surface
  * according to its dimensions.
- * @param texture Pointer to surface set to get the sprite from.
- * @param surface Pointer to surface to draw to.
+ * @param texture Pointer to the surface set to get the sprite from.
+ * @param surface Pointer to the surface to draw to.
  */
 void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 {
@@ -682,8 +452,8 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
 }
 
 /**
- * Get the heal quantity of item
- * @return The new heal quantity
+ * Gets the heal quantity of the item.
+ * @return The new heal quantity.
  */
 int RuleItem::getHealQuantity () const
 {
@@ -691,8 +461,8 @@ int RuleItem::getHealQuantity () const
 }
 
 /**
- * Get the pain killer quantity of item
- * @return The new pain killer quantity
+ * Gets the pain killer quantity of the item.
+ * @return The new pain killer quantity.
  */
 int RuleItem::getPainKillerQuantity () const
 {
@@ -700,8 +470,8 @@ int RuleItem::getPainKillerQuantity () const
 }
 
 /**
- * Get the stimulant quantity of item
- * @return The new stimulant quantity
+ * Gets the stimulant quantity of the item.
+ * @return The new stimulant quantity.
  */
 int RuleItem::getStimulantQuantity () const
 {
@@ -709,8 +479,8 @@ int RuleItem::getStimulantQuantity () const
 }
 
 /**
- * Get the amount of fatal wound healed per usage
- * @return The amount of fatal wound healed
+ * Gets the amount of fatal wound healed per usage.
+ * @return The amount of fatal wound healed.
  */
 int RuleItem::getHealAmount () const
 {
@@ -718,8 +488,8 @@ int RuleItem::getHealAmount () const
 }
 
 /**
- * Get the amount of health added to wounded soldier health
- * @return The amount of health to add
+ * Gets the amount of health added to a wounded soldier's health.
+ * @return The amount of health to add.
  */
 int RuleItem::getHealthAmount () const
 {
@@ -727,8 +497,8 @@ int RuleItem::getHealthAmount () const
 }
 
 /**
- * Get the amount of energy added to soldier energy
- * @return The amount of energy to add
+ * Gets the amount of energy added to a soldier's energy.
+ * @return The amount of energy to add.
  */
 int RuleItem::getEnergy () const
 {
@@ -736,8 +506,8 @@ int RuleItem::getEnergy () const
 }
 
 /**
- * Get the amount of stun removed to soldier stun level
- * @return The amount of stun to remove
+ * Gets the amount of stun removed from a soldier's stun level.
+ * @return The amount of stun removed.
  */
 int RuleItem::getStun () const
 {
@@ -745,8 +515,8 @@ int RuleItem::getStun () const
 }
 
 /**
- * Get the amount of Time Unit needed to use this item
- * @return The amount of Time Unit needed to use this item
+ * Gets the number of Time Units needed to use this item.
+ * @return The number of Time Units needed to use this item.
  */
 int RuleItem::getTUUse() const
 {
@@ -756,7 +526,7 @@ int RuleItem::getTUUse() const
 /**
  * Returns the item's max explosion radius. Small explosions don't have a restriction.
  * Larger explosions are restricted using a formula, with a maximum of radius 10 no matter how large the explosion is.
- * @return radius.
+ * @return The radius.
  */
 int RuleItem::getExplosionRadius() const
 {
@@ -787,8 +557,8 @@ int RuleItem::getExplosionRadius() const
 
 /**
  * Returns the item's recovery points.
- * This is used at battlescape debriefing score calculation.
- * @return points.
+ * This is used during the battlescape debriefing score calculation.
+ * @return The recovery points.
  */
 int RuleItem::getRecoveryPoints() const
 {
@@ -797,8 +567,8 @@ int RuleItem::getRecoveryPoints() const
 
 /**
  * Returns the item's armor.
- * Item is destroyed when an explosion power -bigger than it's armor- hits the item.
- * @return armor.
+ * The item is destroyed when an explosion power bigger than its armor hits it.
+ * @return The armor.
  */
 int RuleItem::getArmor() const
 {
@@ -808,7 +578,7 @@ int RuleItem::getArmor() const
 /**
  * Returns if the item should be recoverable
  * from the battlescape.
- * @return Is it recoverable.
+ * @return True if it is recoverable.
  */
 bool RuleItem::isRecoverable() const
 {
@@ -817,8 +587,8 @@ bool RuleItem::isRecoverable() const
 
 
 /**
- * Returns the item's Turret Type
- * @return turret index (-1 for no turret)
+ * Returns the item's Turret Type.
+ * @return The turret index (-1 for no turret).
  */
 int RuleItem::getTurretType() const
 {
@@ -827,7 +597,7 @@ int RuleItem::getTurretType() const
 
 /**
  * Returns if this is a live alien.
- * @return alien
+ * @return True if this is a live alien.
  */
 bool RuleItem::getAlien() const
 {
@@ -835,7 +605,8 @@ bool RuleItem::getAlien() const
 }
 
 /**
- * @return if this charges a flat TU rate.
+ * Returns whether this item charges a flat TU rate.
+ * @return True if this item charges a flat TU rate.
  */
 bool RuleItem::getFlatRate() const
 {
@@ -843,7 +614,8 @@ bool RuleItem::getFlatRate() const
 }
 
 /**
- * @return if this weapon should arc it's shots.
+ * Returns if this weapon should arc its shots.
+ * @return True if this weapon should arc its shots.
  */
 bool RuleItem::getArcingShot() const
 {
@@ -851,7 +623,8 @@ bool RuleItem::getArcingShot() const
 }
 
 /**
- * @return the attraction value for this item (for AI)
+ * Gets the attraction value for this item (for AI).
+ * @return The attraction value.
  */
 int RuleItem::getAttraction() const
 {
@@ -859,16 +632,17 @@ int RuleItem::getAttraction() const
 }
 
 /**
- * @return the list weight for this research item.
+ * Gets the list weight for this research item
+ * @return The list weight.
  */
 int RuleItem::getListOrder() const
 {
 	 return _listOrder;
 }
 
-/*
- * get the max range of this weapon (0 = unlimited)
- * @return max range
+/**
+ * Gets the maximim range of this weapon (0 = unlimited)
+ * @return The maximum range.
  */
 int RuleItem::getRange() const
 {
@@ -876,8 +650,8 @@ int RuleItem::getRange() const
 }
 
 /**
- * get the speed at which this bullet travels.
- * @return the speed.
+ * Gets the speed at which this bullet travels.
+ * @return The speed.
  */
 int RuleItem::getBulletSpeed() const
 {

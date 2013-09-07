@@ -63,9 +63,9 @@ public:
 	/// Loads the craft from YAML.
 	void load(const YAML::Node& node, const Ruleset *rule, SavedGame *save);
 	/// Saves the craft to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Saves the craft's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	YAML::Node saveId() const;
 	/// Gets the craft's ruleset.
 	RuleCraft *getRules() const;
 	/// Sets the craft's ruleset.

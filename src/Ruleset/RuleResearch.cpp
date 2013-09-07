@@ -28,55 +28,20 @@ RuleResearch::RuleResearch(const std::string & name) : _name(name), _lookup(""),
 /**
  * Loads the research project from a YAML file.
  * @param node YAML node.
- * @param listOrder the list weight for this research.
+ * @param listOrder The list weight for this research.
  */
 void RuleResearch::load(const YAML::Node &node, int listOrder)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
-	{
-		std::string key;
-		i.first() >> key;
-		if (key == "name")
-		{
-			i.second() >> _name;
-		}
-		else if (key == "cost")
-		{
-			i.second() >> _cost;
-		}
-		else if (key == "needItem")
-		{
-			i.second() >> _needItem;
-		}
-		else if (key == "dependencies")
-		{
-			i.second() >> _dependencies;
-		}
-		else if (key == "unlocks")
-		{
-			i.second() >> _unlocks;
-		}
-		else if (key == "points")
-		{
-			i.second() >> _points;
-		}
-		else if (key == "getOneFree")
-		{
-			i.second() >> _getOneFree;
-		}
-		else if (key == "lookup")
-		{
-			i.second() >> _lookup;
-		}
-		else if (key == "requires")
-		{
-			i.second() >> _requires;
-		}
-		else if (key == "listOrder")
-		{
-			i.second() >> _listOrder;
-		}
-	}
+	_name = node["name"].as<std::string>(_name);
+	_lookup = node["lookup"].as<std::string>(_lookup);
+	_cost = node["cost"].as<int>(_cost);
+	_points = node["points"].as<int>(_points);
+	_dependencies = node["dependencies"].as< std::vector<std::string> >(_dependencies);
+	_unlocks = node["unlocks"].as< std::vector<std::string> >(_unlocks);
+	_getOneFree = node["getOneFree"].as< std::vector<std::string> >(_getOneFree);
+	_requires = node["requires"].as< std::vector<std::string> >(_requires);
+	_needItem = node["needItem"].as<bool>(_needItem);
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
@@ -84,71 +49,53 @@ void RuleResearch::load(const YAML::Node &node, int listOrder)
 }
 
 /**
- * Saves the research project to a YAML file.
- * @param out YAML emitter.
+ * Gets the cost of this ResearchProject.
+ * @return The cost of this ResearchProject (in man/day).
  */
-void RuleResearch::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "name" << YAML::Value << _name;
-	out << YAML::Key << "cost" << YAML::Value << _cost;
-	out << YAML::Key << "needItem" << YAML::Value << _needItem;
-	out << YAML::Key << "dependencies" << YAML::Value << _dependencies;
-	out << YAML::Key << "unlocks" << YAML::Value << _unlocks;
-	out << YAML::Key << "points" << YAML::Value << _points;
-	out << YAML::Key << "getOneFree" << YAML::Value << _getOneFree;
-	out << YAML::Key << "lookup" << YAML::Value << _lookup;
-	out << YAML::Key << "requires" << YAML::Value << _requires;
-	out << YAML::EndMap;
-}
-
-/**
-   Get the cost of this ResearchProject
-   @return cost of this ResearchProject(in man/day)
-*/
 int RuleResearch::getCost() const
 {
 	return _cost;
 }
 
 /**
-   Get the name of this ResearchProject
-   @return name of this ResearchProject
-*/
+ * Gets the name of this ResearchProject.
+ * @return The name of this ResearchProject.
+ */
 const std::string & RuleResearch::getName () const
 {
 	return _name;
 }
 
 /**
-   Get the list of dependencies
-   @return the list of ResearchProject that must be discovered before this one
-*/
+ * Gets the list of dependencies, i.e. ResearchProjects, that must be discovered before this one.
+ * @return The list of ResearchProjects.
+ */
 const std::vector<std::string> & RuleResearch::getDependencies () const
 {
 	return _dependencies;
 }
 
 /**
-   Does this ResearchProject need a corresponding Item to be researched ?
-   @return true if the ResearchProject need a corresponding item
-*/
+ * Checks if this ResearchProject needs a corresponding Item to be researched.
+ *  @return True if the ResearchProject needs a corresponding item.
+ */
 bool RuleResearch::needItem() const
 {
 	return _needItem;
 }
 
 /**
-   @return The list of ResearchProject unlocked by this research project.
-*/
+ * Gets the list of ResearchProjects unlocked by this research.
+ * @return The list of ResearchProjects.
+ */
 const std::vector<std::string> & RuleResearch::getUnlocked () const
 {
 	return _unlocks;
 }
 
 /**
- * Get the points earned for this ResearchProject
- * @return points for this ResearchProject
+ * Get the points earned for this ResearchProject.
+ * @return The points earned for this ResearchProject.
  */
 int RuleResearch::getPoints() const
 {
@@ -156,7 +103,8 @@ int RuleResearch::getPoints() const
 }
 
 /**
- *@return The list of ResearchProject unlocked by this research project.
+ * Gets the list of ResearchProjects granted at random for free by this research.
+ * @return The list of ResearchProjects.
  */
 const std::vector<std::string> & RuleResearch::getGetOneFree () const
 {
@@ -164,7 +112,8 @@ const std::vector<std::string> & RuleResearch::getGetOneFree () const
 }
 
 /**
- * @return what article to look up on the ufopaedia
+ * Gets what article to look up in the ufopedia.
+ * @return The article to look up in the ufopaedia
  */
 const std::string RuleResearch::getLookup () const
 {
@@ -172,6 +121,7 @@ const std::string RuleResearch::getLookup () const
 }
 
 /**
+ * Gets the requirements for this ResearchProject.
  * @return The requirement for this research.
  */
 const std::vector<std::string> & RuleResearch::getRequirements() const
@@ -180,7 +130,8 @@ const std::vector<std::string> & RuleResearch::getRequirements() const
 }
 
 /**
- * @return the list weight for this research item.
+ * Gets the list weight for this research item.
+ * @return The list weight for this research item.
  */
 int RuleResearch::getListOrder() const
 {

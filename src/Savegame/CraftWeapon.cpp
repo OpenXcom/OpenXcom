@@ -45,21 +45,22 @@ CraftWeapon::~CraftWeapon()
  */
 void CraftWeapon::load(const YAML::Node &node)
 {
-	node["ammo"] >> _ammo;
-	node["rearming"] >> _rearming;
+	_ammo = node["ammo"].as<int>(_ammo);
+	_rearming = node["rearming"].as<bool>(_rearming);
 }
 
 /**
  * Saves the base to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void CraftWeapon::save(YAML::Emitter &out) const
+YAML::Node CraftWeapon::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _rules->getType();
-	out << YAML::Key << "ammo" << YAML::Value << _ammo;
-	out << YAML::Key << "rearming" << YAML::Value << _rearming;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["type"] = _rules->getType();
+	node["ammo"] = _ammo;
+	if (_rearming)
+		node["rearming"] = _rearming;
+	return node;
 }
 
 /**

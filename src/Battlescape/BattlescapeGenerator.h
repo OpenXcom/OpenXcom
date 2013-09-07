@@ -19,8 +19,6 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
-#include "../Savegame/Node.h"
-
 namespace OpenXcom
 {
 
@@ -89,6 +87,8 @@ private:
 	void fuelPowerSources();
 	/// Possibly explodes ufo powersources.
 	void explodePowerSources();
+	/// Deploys the XCOM units on the mission.
+	void deployXCOM();
 	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
@@ -124,7 +124,8 @@ public:
 	void nextStage();
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit *unit);
-
+	/// Generates an inventory battlescape.
+	void runInventory(Craft *craft);
 };
 
 }

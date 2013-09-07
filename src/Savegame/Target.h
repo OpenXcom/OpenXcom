@@ -45,9 +45,9 @@ public:
 	/// Loads the target from YAML.
 	virtual void load(const YAML::Node& node);
 	/// Saves the target to YAML.
-	virtual void save(YAML::Emitter& out) const;
+	virtual YAML::Node save() const;
 	/// Saves the target's ID to YAML.
-	virtual void saveId(YAML::Emitter& out) const;
+	virtual YAML::Node saveId() const;
 	/// Gets the target's longitude.
 	double getLongitude() const;
 	/// Sets the target's longitude.

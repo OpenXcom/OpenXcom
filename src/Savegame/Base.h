@@ -69,9 +69,9 @@ public:
 	/// Loads the base from YAML.
 	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
 	/// Saves the base to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Saves the base's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	YAML::Node saveId() const;
 	/// Gets the base's name.
 	std::wstring getName(Language* lang = 0) const;
 	/// Sets the base's name.

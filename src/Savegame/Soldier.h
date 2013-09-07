@@ -66,7 +66,7 @@ public:
 	/// Loads the soldier from YAML.
 	void load(const YAML::Node& node, const Ruleset *rule);
 	/// Saves the soldier to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Gets the soldier's name.
 	std::wstring getName() const;
 	/// Sets the soldier's name.

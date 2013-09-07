@@ -24,6 +24,7 @@
 #include "Map.h"
 #include "Camera.h"
 #include "../Engine/Game.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
@@ -111,7 +112,11 @@ void UnitDieBState::think()
 	{
 		_unit->turn();
 	}
-	else if (_unit->getStatus() == STATUS_STANDING)
+	else if (_unit->getStatus() == STATUS_COLLAPSING)
+	{
+		_unit->keepFalling();
+	}
+	else if (!_unit->isOut())
 	{
 		_unit->startFalling();
 
@@ -120,14 +125,9 @@ void UnitDieBState::think()
 			playDeathSound();
 		}
 	}
-	else if (_unit->getStatus() == STATUS_COLLAPSING)
-	{
-		_unit->keepFalling();
-	}
 
-	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
+	if (_unit->isOut())
 	{
-
 		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();
@@ -147,7 +147,7 @@ void UnitDieBState::think()
 			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir);
 		}
-		else 
+		else
 		{
 			convertUnitToCorpse();
 		}

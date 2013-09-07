@@ -47,7 +47,7 @@ public:
 	/// Update our list with data from YAML.
 	void load(const YAML::Node &node);
 	/// Store our list in YAML.
-	void save(YAML::Emitter &out) const;
+	YAML::Node save() const;
 private:
 	std::map<std::string, unsigned> _choices; //!< Options and weights
 	unsigned _totalWeight; //!< The total weight of all options.

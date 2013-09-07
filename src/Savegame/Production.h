@@ -42,7 +42,7 @@ public:
 	productionProgress_e step(Base * b, SavedGame * g, const Ruleset *r);
 	const RuleManufacture * getRules() const;
 	void startItem(Base * b, SavedGame * g);
-	void save(YAML::Emitter &out);
+	YAML::Node save() const;
 	void load(const YAML::Node &node);
 private:
 	const RuleManufacture * _rules;

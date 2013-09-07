@@ -96,17 +96,16 @@ private:
  */
 void AlienMission::load(const YAML::Node& node, SavedGame &game)
 {
-	node["region"] >> _region;
-	node["race"] >> _race;
-	node["nextWave"] >> _nextWave;
-	node["nextUfoCounter"] >> _nextUfoCounter;
-	node["spawnCountdown"] >> _spawnCountdown;
-	node["liveUfos"] >> _liveUfos;
-	node["uniqueID"] >> _uniqueID;
-	if (const YAML::Node *bnode = node.FindValue("alienBase"))
+	_region = node["region"].as<std::string>(_region);
+	_race = node["race"].as<std::string>(_race);
+	_nextWave = node["nextWave"].as<unsigned>(_nextWave);
+	_nextUfoCounter = node["nextUfoCounter"].as<unsigned>(_nextUfoCounter);
+	_spawnCountdown = node["spawnCountdown"].as<unsigned>(_spawnCountdown);
+	_liveUfos = node["liveUfos"].as<unsigned>(_liveUfos);
+	_uniqueID = node["uniqueID"].as<int>(_uniqueID);
+	if (const YAML::Node &base = node["alienBase"])
 	{
-		int id;
-		(*bnode) >> id;
+		int id = base.as<int>();
 		std::vector<AlienBase*>::const_iterator found = std::find_if(game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
 		if (found == game.getAlienBases()->end())
 		{
@@ -117,22 +116,22 @@ void AlienMission::load(const YAML::Node& node, SavedGame &game)
 
 }
 
-void AlienMission::save(YAML::Emitter& out) const
+YAML::Node AlienMission::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _rule.getType();
-	out << YAML::Key << "region" << YAML::Value << _region;
-	out << YAML::Key << "race" << YAML::Value << _race;
-	out << YAML::Key << "nextWave" << YAML::Value << _nextWave;
-	out << YAML::Key << "nextUfoCounter" << YAML::Value << _nextUfoCounter;
-	out << YAML::Key << "spawnCountdown" << YAML::Value << _spawnCountdown;
-	out << YAML::Key << "liveUfos" << YAML::Value << _liveUfos;
-	out << YAML::Key << "uniqueID" << YAML::Value << _uniqueID;
+	YAML::Node node;
+	node["type"] = _rule.getType();
+	node["region"] = _region;
+	node["race"] = _race;
+	node["nextWave"] = _nextWave;
+	node["nextUfoCounter"] = _nextUfoCounter;
+	node["spawnCountdown"] = _spawnCountdown;
+	node["liveUfos"] = _liveUfos;
+	node["uniqueID"] = _uniqueID;
 	if (_base)
 	{
-		out << YAML::Key << "alienBase" << YAML::Value << _base->getId();
+		node["alienBase"] = _base->getId();
 	}
-	out << YAML::EndMap;
+	return node;
 }
 
 const std::string &AlienMission::getType() const

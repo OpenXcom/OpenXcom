@@ -65,9 +65,9 @@ public:
 	/// Loads the UFO from YAML.
 	void load(const YAML::Node& node, const Ruleset &ruleset, SavedGame &game);
 	/// Saves the UFO to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Saves the UFO's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	YAML::Node saveId() const;
 	/// Gets the UFO's ruleset.
 	RuleUfo *getRules() const;
 	/// Gets the UFO's ID.

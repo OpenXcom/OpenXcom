@@ -324,7 +324,7 @@ Când intrii în cameră observi creierul extraterestru - ținta căutărilor ta
 STR_VICTORY_2
 Creierul spune: 'Acum multe milioane de ani planeta numită de voi Marte era vie.  Viața aceasta a fost adusă pe o planetă aridă de către civilizația noastră, asa cum s-a întâmplat și cu a voastră.  De milioane de ani v-am vizitat planeta și v-am dezvoltat genetic specia.  Nu puteți să ne omorâți, faceți parte din noi...
 STR_VICTORY_3
-Acesta este centrul civilizației Marțiene - piramidele construite cu milioane de ani înaintea alor voastre - de către o specie care vă este stramoș.  Nici o planetă nu ne este inaccesibilă.  Această putere poate fi în scurt timp a ta.  Tot ceea ce iți cerem este cooperarea...
+Acesta este centrul civilizației Marțiene - piramidele construite cu milioane de ani înaintea alor voastre - de către o specie care vă este stramoș.  Nicio planetă nu ne este inaccesibilă.  Această putere poate fi în scurt timp a ta.  Tot ceea ce iți cerem este cooperarea...
 STR_GAME_OVER_1
 Extratereștrii încearcă să extermine umanitatea, distrugând orașe și otrăvind aerul și marea.  Rezistența forțelor armate pământene este zadarnică în fața tehnologiei vast superioare.  Generațiile supraviețuitoare suferă mutații teribile pe masură ce fug din calea distrugerii.  Sunt adunați în tabere de sclavi pentru a transforma Pământul într-o colonie extraterestră, parte a unui Imperiu necunoscut.
 STR_GAME_OVER_2
@@ -633,6 +633,8 @@ STR_AMMO_
 MUNIȚIE>
 STR_CREW
 ECHIPAJ
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 ECHIPAMENT
 STR_ARMOR
@@ -2217,22 +2219,28 @@ STR_SCROLL_UP
 Glisare Sus
 STR_SCROLL_DOWN
 Glisare Jos
+STR_UNIT_LEVEL_ABOVE
+Ridică Soldatul Pe Verticală
+STR_UNIT_LEVEL_BELOW
+Coboară Soldatul Pe Verticală
 STR_VIEW_LEVEL_ABOVE
 Afișare Nivel Superior
 STR_VIEW_LEVEL_BELOW
 Afișare Nivel Inferior
 STR_CENTER_SELECTED_UNIT
-Centrează Unitatea Selectată
+Centrează Soldatul Selectat
 STR_PREVIOUS_UNIT
-Unitatea Anterioară
+Selectează Soldatul Precedent
 STR_NEXT_UNIT
-Unitatea Următoare
+Selectează Soldatul Următor
 STR_DESELECT_UNIT
-Deselectează Unitatea
+Nu Mai Selecta Soldatul
 STR_INVENTORY
 Inventar
 STR_MINIMAP
 Mini-Hartă
+STR_MULTI_LEVEL_VIEW
+Vedere De Ansamblu
 STR_END_TURN
 Finalizează Runda
 STR_ABORT_MISSION

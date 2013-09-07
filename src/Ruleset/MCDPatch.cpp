@@ -24,7 +24,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes an MCD Patch
+ * Initializes an MCD Patch.
  */
 MCDPatch::MCDPatch()
 {
@@ -44,68 +44,46 @@ MCDPatch::~MCDPatch()
  */
 void MCDPatch::load(const YAML::Node &node)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	YAML::Node data = node["data"];
+	for (YAML::const_iterator i = data.begin(); i != data.end(); ++i)
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "data")
+		size_t MCDIndex = (*i)["MCDIndex"].as<size_t>();
+		if ((*i)["bigWall"])
 		{
-			for (YAML::Iterator j = i.second().begin(); j != i.second().end(); ++j)
-			{
-				size_t MCDIndex;
-				(*j)["MCDIndex"] >> MCDIndex;
-				if (const YAML::Node *pName = (*j).FindValue("bigWall"))
-				{
-					int bigWall;
-					(*pName) >> bigWall;
-					_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
-				}
-				if (const YAML::Node *pName = (*j).FindValue("TUWalk"))
-				{
-					int TUWalk;
-					(*pName) >> TUWalk;
-					_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
-				}
-				if (const YAML::Node *pName = (*j).FindValue("TUFly"))
-				{
-					int TUFly;
-					(*pName) >> TUFly;
-					_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
-				}
-				if (const YAML::Node *pName = (*j).FindValue("TUSlide"))
-				{
-					int TUSlide;
-					(*pName) >> TUSlide;
-					_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
-				}
-				if (const YAML::Node *pName = (*j).FindValue("deathTile"))
-				{
-					int deathTile;
-					(*pName) >> deathTile;
-					_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
-				}
-				if (const YAML::Node *pName = (*j).FindValue("terrainHeight"))
-				{
-					int terrainHeight;
-					(*pName) >> terrainHeight;
-					_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
-				}
-			}
+			int bigWall = (*i)["bigWall"].as<int>();
+			_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
+		}
+		if ((*i)["TUWalk"])
+		{
+			int TUWalk = (*i)["TUWalk"].as<int>();
+			_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
+		}
+		if ((*i)["TUFly"])
+		{
+			int TUFly = (*i)["TUFly"].as<int>();
+			_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
+		}
+		if ((*i)["TUSlide"])
+		{
+			int TUSlide = (*i)["TUSlide"].as<int>();
+			_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
+		}
+		if ((*i)["deathTile"])
+		{
+			int deathTile = (*i)["deathTile"].as<int>();
+			_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
+		}
+		if ((*i)["terrainHeight"])
+		{
+			int terrainHeight = (*i)["terrainHeight"].as<int>();
+			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
 		}
 	}
 }
 
 /**
- * Saves the MCD Patch to a YAML file.
- * @param out YAML emitter.
- */
-void MCDPatch::save(YAML::Emitter & /* out */) const
-{
-}
-
-/**
  * Applies an MCD patch to a mapDataSet.
- * @param dataSet the MapDataSet we want to modify.
+ * @param dataSet The MapDataSet we want to modify.
  */
 void MCDPatch::modifyData(MapDataSet *dataSet) const
 {

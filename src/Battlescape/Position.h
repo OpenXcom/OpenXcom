@@ -70,21 +70,35 @@ public:
 
 };
 
-typedef Position Vector3i; 
+typedef Position Vector3i;
 
-inline void operator>> (const YAML::Node& node, Position& pos)
-{
-	node[0] >> pos.x;
-	node[1] >> pos.y;
-	node[2] >> pos.z;
 }
 
-inline YAML::Emitter& operator<< (YAML::Emitter& out, const Position& pos)
+namespace YAML
 {
-	out << YAML::Flow << YAML::BeginSeq << pos.x << pos.y << pos.z << YAML::EndSeq;
-    return out;
-}
+	template<>
+	struct convert<OpenXcom::Position>
+	{
+		static Node encode(const OpenXcom::Position& rhs)
+		{
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			node.push_back(rhs.z);
+			return node;
+		}
 
+		static bool decode(const Node& node, OpenXcom::Position& rhs)
+		{
+			if(!node.IsSequence() || node.size() != 3)
+				return false;
+
+			rhs.x = node[0].as<int>();
+			rhs.y = node[1].as<int>();
+			rhs.z = node[2].as<int>();
+			return true;
+		}
+	};
 }
 
 

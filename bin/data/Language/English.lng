@@ -633,6 +633,8 @@ STR_AMMO_
 AMMO>
 STR_CREW
 CREW
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 EQUIPMENT
 STR_ARMOR
@@ -2217,6 +2219,10 @@ STR_SCROLL_UP
 Scroll Up
 STR_SCROLL_DOWN
 Scroll Down
+STR_UNIT_LEVEL_ABOVE
+Move Unit to Level Above
+STR_UNIT_LEVEL_BELOW
+Move Unit to Level Below
 STR_VIEW_LEVEL_ABOVE
 View Level Above
 STR_VIEW_LEVEL_BELOW
@@ -2224,15 +2230,17 @@ View Level Below
 STR_CENTER_SELECTED_UNIT
 Center Selected Unit
 STR_PREVIOUS_UNIT
-Previous Unit
+Select Previous Unit
 STR_NEXT_UNIT
-Next Unit
+Select Next Unit
 STR_DESELECT_UNIT
-Deselect Unit
+Don't Reselect Unit
 STR_INVENTORY
 Inventory
 STR_MINIMAP
 Minimap
+STR_MULTI_LEVEL_VIEW
+Multi-Level View
 STR_END_TURN
 End Turn
 STR_ABORT_MISSION
@@ -2392,7 +2400,7 @@ Mind-controlling all remaining aliens results in victory, and they count as live
 STR_ANYTIMEPSITRAINING
 Psionic training at any time
 STR_ANYTIMEPSITRAINING_DESC
-You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+You can at any time send soldiers into (or remove from) psionic training. Remember, initial training takes from 30 to 60 days.
 STR_NOT_ENOUGH_SPACE
 Not Enough Space!
 STR_WEAPONSELFDESTRUCTION
@@ -2402,7 +2410,7 @@ Weapons carried by aliens will self destruct if their owner is killed.
 STR_RESEARCHEDITEMSWILLSPENT
 Researched items will be spent
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the base stores.
 STR_ARROWS
 ARROWS
 STR_FULL

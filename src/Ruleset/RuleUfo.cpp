@@ -46,100 +46,30 @@ RuleUfo::~RuleUfo()
  */
 void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
 {
-	for (YAML::Iterator i = node.begin(); i != node.end(); ++i)
+	_type = node["type"].as<std::string>(_type);
+	_size = node["size"].as<std::string>(_size);
+	_sprite = node["sprite"].as<int>(_sprite);
+	_damageMax = node["damageMax"].as<int>(_damageMax);
+	_speedMax = node["speedMax"].as<int>(_speedMax);
+	_accel = node["accel"].as<int>(_accel);
+	_power = node["power"].as<int>(_power);
+	_range = node["range"].as<int>(_range);
+	_score = node["score"].as<int>(_score);
+	_reload = node["reload"].as<int>(_reload);
+	_breakOffTime = node["breakOffTime"].as<int>(_breakOffTime);
+	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
 	{
-		std::string key;
-		i.first() >> key;
-		if (key == "type")
-		{
-			i.second() >> _type;
-		}
-		else if (key == "size")
-		{
-			i.second() >> _size;
-		}
-		else if (key == "sprite")
-		{
-			i.second() >> _sprite;
-		}
-		else if (key == "modSprite")
-		{
-			i.second() >> _modSprite;
-		}
-		else if (key == "damageMax")
-		{
-			i.second() >> _damageMax;
-		}
-		else if (key == "speedMax")
-		{
-			i.second() >> _speedMax;
-		}
-		else if (key == "accel")
-		{
-			i.second() >> _accel;
-		}
-		else if (key == "power")
-		{
-			i.second() >> _power;
-		}
-		else if (key == "range")
-		{
-			i.second() >> _range;
-		}
-		else if (key == "score")
-		{
-			i.second() >> _score;
-		}
-		else if (key == "reload")
-		{
-			i.second() >> _reload;
-		}
-		else if (key == "breakOffTime")
-		{
-			i.second() >> _breakOffTime;
-		}
-		else if (key == "battlescapeTerrainData")
-		{
-			std::string name;
-			i.second()["name"] >> name;
-			RuleTerrain *rule = new RuleTerrain(name);
-			rule->load(i.second(), ruleset);
-			_battlescapeTerrainData = rule;
-		}
+		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
+		rule->load(terrain, ruleset);
+		_battlescapeTerrainData = rule;
 	}
+	_modSprite = node["modSprite"].as<std::string>(_modSprite);
 }
 
 /**
- * Saves the UFO to a YAML file.
- * @param out YAML emitter.
- */
-void RuleUfo::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-	out << YAML::Key << "type" << YAML::Value << _type;
-	out << YAML::Key << "size" << YAML::Value << _size;
-	out << YAML::Key << "sprite" << YAML::Value << _sprite;
-	out << YAML::Key << "damageMax" << YAML::Value << _damageMax;
-	out << YAML::Key << "speedMax" << YAML::Value << _speedMax;
-	out << YAML::Key << "accel" << YAML::Value << _accel;
-	out << YAML::Key << "power" << YAML::Value << _power;
-	out << YAML::Key << "range" << YAML::Value << _range;
-	out << YAML::Key << "score" << YAML::Value << _score;
-	out << YAML::Key << "reload" << YAML::Value << _reload;
-	out << YAML::Key << "breakOffTime" << YAML::Value << _breakOffTime;
-	if (_battlescapeTerrainData != 0)
-	{
-		out << YAML::Key << "battlescapeTerrainData" << YAML::Value;
-		_battlescapeTerrainData->save(out);
-	}
-	out << YAML::EndMap;
-}
-
-
-/**
- * Returns the language string that names
+ * Gets the language string that names
  * this UFO. Each UFO type has a unique name.
- * @return Ufo name.
+ * @return The Ufo's name.
  */
 std::string RuleUfo::getType() const
 {
@@ -147,8 +77,8 @@ std::string RuleUfo::getType() const
 }
 
 /**
- * Returns the size of this type of UFO.
- * @return Size.
+ * Gets the size of this type of UFO.
+ * @return The Ufo's size.
  */
 std::string RuleUfo::getSize() const
 {
@@ -156,9 +86,9 @@ std::string RuleUfo::getSize() const
 }
 
 /**
- * Returns the radius of this type of UFO
+ * Gets the radius of this type of UFO
  * on the dogfighting window.
- * @return Radius in pixels.
+ * @return The radius in pixels.
  */
 int RuleUfo::getRadius() const
 {
@@ -185,10 +115,10 @@ int RuleUfo::getRadius() const
 	return 0;
 }
 
-/*
- * Returns the ID of the sprite used to draw the UFO
+/**
+ * Gets the ID of the sprite used to draw the UFO
  * in the Dogfight window.
- * @return Sprite ID.
+ * @return The sprite ID.
  */
 int RuleUfo::getSprite() const
 {
@@ -196,9 +126,9 @@ int RuleUfo::getSprite() const
 }
 
 /**
- * Returns the maximum damage (damage the UFO can take)
+ * Gets the maximum damage (damage the UFO can take)
  * of the UFO.
- * @return Damage.
+ * @return The maximum damage.
  */
 int RuleUfo::getMaxDamage() const
 {
@@ -206,9 +136,9 @@ int RuleUfo::getMaxDamage() const
 }
 
 /**
- * Returns the maximum speed of the UFO flying
+ * Gets the maximum speed of the UFO flying
  * around the Geoscape.
- * @return Speed.
+ * @return The maximum speed.
  */
 int RuleUfo::getMaxSpeed() const
 {
@@ -216,9 +146,9 @@ int RuleUfo::getMaxSpeed() const
 }
 
 /**
- * Returns the acceleration of the UFO for
+ * Gets the acceleration of the UFO for
  * taking off / stopping.
- * @return Acceleration.
+ * @return The acceleration.
  */
 int RuleUfo::getAcceleration() const
 {
@@ -226,9 +156,9 @@ int RuleUfo::getAcceleration() const
 }
 
 /**
- * Returns the maximum damage done by the
+ * Gets the maximum damage done by the
  * UFO's weapons per shot.
- * @return Weapon power.
+ * @return The weapon power.
  */
 int RuleUfo::getWeaponPower() const
 {
@@ -236,9 +166,9 @@ int RuleUfo::getWeaponPower() const
 }
 
 /**
- * Returns the maximum range for the
+ * Gets the maximum range for the
  * UFO's weapons.
- * @return Weapon range.
+ * @return The weapon range.
  */
 int RuleUfo::getWeaponRange() const
 {
@@ -246,9 +176,9 @@ int RuleUfo::getWeaponRange() const
 }
 
 /**
- * Returns the amount of points the player
+ * Gets the amount of points the player
  * gets for shooting down the UFO.
- * @return Score.
+ * @return The score.
  */
 int RuleUfo::getScore() const
 {
@@ -256,8 +186,8 @@ int RuleUfo::getScore() const
 }
 
 /**
- * Returns the terrain data needed to draw the UFO in the battlescape.
- * @return RuleTerrain.
+ * Gets the terrain data needed to draw the UFO in the battlescape.
+ * @return The RuleTerrain.
  */
 RuleTerrain *RuleUfo::getBattlescapeTerrainData()
 {
@@ -265,8 +195,8 @@ RuleTerrain *RuleUfo::getBattlescapeTerrainData()
 }
 
 /**
- * Gets weapon reload for UFO ships.
- * @return UFO weapon relod time.
+ * Gets the weapon reload for UFO ships.
+ * @return The UFO weapon reload time.
  */
 int RuleUfo::getWeaponReload() const
 {
@@ -274,8 +204,8 @@ int RuleUfo::getWeaponReload() const
 }
 
 /**
- * Gets UFO break off time.
- * @return UFO break off time in game seconds.
+ * Gets the UFO's break off time.
+ * @return The UFO's break off time in game seconds.
  */
 int RuleUfo::getBreakOffTime() const
 {
@@ -283,8 +213,8 @@ int RuleUfo::getBreakOffTime() const
 }
 
 /**
- * For user-defined UFOs, use a surface for the "preview" image
- * @return the name of the surface that represents this UFO
+ * For user-defined UFOs, use a surface for the "preview" image.
+ * @return The name of the surface that represents this UFO.
  */
 std::string RuleUfo::getModSprite() const
 {

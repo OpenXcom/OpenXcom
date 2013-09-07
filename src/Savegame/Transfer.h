@@ -55,7 +55,7 @@ public:
 	/// Loads the transfer from YAML.
 	void load(const YAML::Node& node, Base *base, const Ruleset *rule);
 	/// Saves the transfer to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Sets the soldier of the transfer.
 	void setSoldier(Soldier *soldier);
 	/// Sets the craft of the transfer.

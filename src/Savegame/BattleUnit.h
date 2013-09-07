@@ -123,7 +123,7 @@ public:
 	/// Loads the unit from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the unit to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Gets the BattleUnit's ID.
 	int getId() const;
 	/// Sets the unit's position

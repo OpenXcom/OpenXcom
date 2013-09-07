@@ -79,7 +79,7 @@ public:
 	void remove();
 	/// Returns true if the projectile should be removed.
 	bool toBeRemoved() const;
-	/// Retruns state of the beam.
+	/// Returns state of the beam.
 	int getState() const;
 	/// Sets power of the projectile.
 	void setDamage(const int &damage);

@@ -633,6 +633,8 @@ STR_AMMO_
 MUNICIÓN > 
 STR_CREW
 Tripulación
+STR_NO_CREW
+has no crew
 STR_EQUIPMENT_UC
 Armamento
 STR_ARMOR
@@ -2386,30 +2388,30 @@ Permitir captura psíquica
 STR_ALLOWPSIONICCAPTURE_DESC
 Esta opción permite que al controlar mentalmente a todos los alienígena restantes, la misión finaliza automáticamente, y los alienígenas cuentan como las capturas vivas.
 STR_ANYTIMEPSITRAINING
-Psionic training at any time
+Entrenamineto psiónica en cualquier momento
 STR_ANYTIMEPSITRAINING_DESC
-You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+En cualquier momento puede enviar soldados a (o removerlos del) entrenamiento psiónica. Recuerde, el entrenamiento inicial tarda de 30 a 60 días.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+¡No hay suficiente espacio!
 STR_WEAPONSELFDESTRUCTION
-Alien weapon self destruction
+Autodestrucción de armas alienígenas
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Armas cargadas por alienígena se autodestruyen si su dueño muere.
 STR_RESEARCHEDITEMSWILLSPENT
-Researched items will be spent
+Artículos investigados seran consumidos
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+Artículos investigadas se retiran del almacén y serán desmantelados. Después de investigar los "alienígenas" vivos, el cuerpo será devuelto a los almacenes de la base.
 STR_ARROWS
-ARROWS
+FLECHAS
 STR_FULL
-FULL
+LLENO
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Captura de pantalla en primera persona
 STR_TIME_UNITS_RESERVED_FOR_KNEELING
-Time Units reserved for Kneeling
+Unidades de tiempo reservados para arrodillarse
 STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
-TU's reserved for Kneeling and Firing
+Unidades de tiempo está reservado para arrodillarse y disparar
 STR_RESERVE_TUS_FOR_KNEEL
-Reserve Time Units for kneeling
+Reservar unidades de tiempo para arrodillarse
 STR_EXPEND_ALL_TIME_UNITS
-Expend all remaining Time Units
+Consumir todas las unidades de tiempo restante

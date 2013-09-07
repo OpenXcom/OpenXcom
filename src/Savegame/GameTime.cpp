@@ -48,30 +48,30 @@ GameTime::~GameTime()
  */
 void GameTime::load(const YAML::Node &node)
 {
-	node["second"] >> _second;
-	node["minute"] >> _minute;
-	node["hour"] >> _hour;
-	node["weekday"] >> _weekday;
-	node["day"] >> _day;
-	node["month"] >> _month;
-	node["year"] >> _year;
+	_second = node["second"].as<int>(_second);
+	_minute = node["minute"].as<int>(_minute);
+	_hour = node["hour"].as<int>(_hour);
+	_weekday = node["weekday"].as<int>(_weekday);
+	_day = node["day"].as<int>(_day);
+	_month = node["month"].as<int>(_month);
+	_year = node["year"].as<int>(_year);
 }
 
 /**
  * Saves the time to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void GameTime::save(YAML::Emitter &out) const
+YAML::Node GameTime::save() const
 {
-	out << YAML::BeginMap;
-	out << YAML::Key << "second" << YAML::Value << _second;
-	out << YAML::Key << "minute" << YAML::Value << _minute;
-	out << YAML::Key << "hour" << YAML::Value << _hour;
-	out << YAML::Key << "weekday" << YAML::Value << _weekday;
-	out << YAML::Key << "day" << YAML::Value << _day;
-	out << YAML::Key << "month" << YAML::Value << _month;
-	out << YAML::Key << "year" << YAML::Value << _year;
-	out << YAML::EndMap;
+	YAML::Node node;
+	node["second"] = _second;
+	node["minute"] = _minute;
+	node["hour"] = _hour;
+	node["weekday"] = _weekday;
+	node["day"] = _day;
+	node["month"] = _month;
+	node["year"] = _year;
+	return node;
 }
 
 /**

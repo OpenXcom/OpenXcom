@@ -28,7 +28,6 @@ namespace OpenXcom
 class RuleTerrain;
 class Ruleset;
 
-
 /**
  * Represents a specific type of UFO.
  * Contains constant info about a UFO like
@@ -50,8 +49,6 @@ public:
 	~RuleUfo();
 	/// Loads UFO data from YAML.
 	void load(const YAML::Node& node, Ruleset *ruleset);
-	/// Saves the UFO data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the UFO's type.
 	std::string getType() const;
 	/// Gets the UFO's size.
@@ -74,11 +71,11 @@ public:
 	int getScore() const;
 	/// Sets the battlescape terrain data ruleset for this UFO
 	RuleTerrain *getBattlescapeTerrainData();
-	/// Get reload time of UFO weapon.
+	/// Gets the reload time of the UFO's weapon.
 	int getWeaponReload() const;
-	/// Get UFO escape time.
+	/// Gets the UFO's escape time.
 	int getBreakOffTime() const;
-	/// Get the name of the surface that represents this UFO.
+	/// Gets the name of the surface that represents this UFO.
 	std::string getModSprite() const;
 };
 

@@ -156,17 +156,9 @@ void SavedGame::getList(TextList *list, Language *lang)
 	{
 		std::string file = (*i);
 		std::string fullname = Options::getUserFolder() + file;
-		std::ifstream fin(fullname.c_str());
 		try
 		{
-			if (!fin)
-			{
-				throw Exception("Failed to load " + file);
-			}
-			YAML::Parser parser(fin);
-			YAML::Node doc;
-
-			parser.GetNextDocument(doc);
+			YAML::Node doc = YAML::LoadFile(fullname);
 			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 			time.load(doc["time"]);
 			std::stringstream saveTime;
@@ -183,7 +175,6 @@ void SavedGame::getList(TextList *list, Language *lang)
 			std::wstring wstr = Language::utf8ToWstr(s);
 #endif
 			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
-			fin.close();
 		}
 		catch (Exception &e)
 		{
@@ -207,79 +198,58 @@ void SavedGame::getList(TextList *list, Language *lang)
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
-	std::ifstream fin(s.c_str());
-	if (!fin)
+	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
+	if (file.empty())
 	{
-		throw Exception("Failed to load " + filename + ".sav");
+		throw Exception(filename + " is not a vaild save file");
 	}
-	YAML::Parser parser(fin);
-	YAML::Node doc;
 
 	// Get brief save info
-	parser.GetNextDocument(doc);
-	std::string v;
-	doc["version"] >> v;
-	if (v != OPENXCOM_VERSION_SHORT)
+	YAML::Node brief = file[0];
+	std::string version = brief["version"].as<std::string>();
+	if (version != OPENXCOM_VERSION_SHORT)
 	{
 		throw Exception("Version mismatch");
 	}
-	_time->load(doc["time"]);
+	_time->load(brief["time"]);
 
 	// Get full save data
-	parser.GetNextDocument(doc);
-	int a = 0;
-	doc["difficulty"] >> a;
-	_difficulty = (GameDifficulty)a;
+	YAML::Node doc = file[1];
+	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
 	RNG::load(doc);
-	doc["monthsPassed"] >> _monthsPassed;
-	if(const YAML::Node *pName = doc.FindValue("radarLines"))
-	{
-		*pName >> _radarLines;
-	}
-	else
-	{
-		_radarLines = false;
-	}
-	if(const YAML::Node *pName = doc.FindValue("detail"))
-	{
-		*pName >> _detail;
-	}
-	else
-	{
-		_detail = true;
-	}
-	if (const YAML::Node *pName = doc.FindValue("GraphRegionToggles")) *pName >> _graphRegionToggles; else _graphRegionToggles="";
-	if (const YAML::Node *pName = doc.FindValue("GraphCountryToggles")) *pName >> _graphCountryToggles; else _graphCountryToggles="";
-	if (const YAML::Node *pName = doc.FindValue("GraphFinanceToggles")) *pName >> _graphFinanceToggles; else _graphFinanceToggles="";
-	doc["funds"] >> _funds;
-	doc["maintenance"] >> _maintenance;
-	doc["researchScores"] >> _researchScores;
-	doc["warned"] >> _warned;
-	doc["globeLon"] >> _globeLon;
-	doc["globeLat"] >> _globeLat;
-	doc["globeZoom"] >> _globeZoom;
-	doc["ids"] >> _ids;
+	_monthsPassed = doc["monthsPassed"].as<int>(_monthsPassed);
+	_radarLines = doc["radarLines"].as<bool>(_radarLines);
+	_detail = doc["detail"].as<bool>(_detail);
+	_graphRegionToggles = doc["GraphRegionToggles"].as<std::string>(_graphRegionToggles);
+	_graphCountryToggles = doc["GraphCountryToggles"].as<std::string>(_graphCountryToggles);
+	_graphFinanceToggles = doc["GraphFinanceToggles"].as<std::string>(_graphFinanceToggles);
+	_funds = doc["funds"].as< std::vector<int> >(_funds);
+	_maintenance = doc["maintenance"].as< std::vector<int> >(_maintenance);
+	_researchScores = doc["researchScores"].as< std::vector<int> >(_researchScores);
+	_warned = doc["warned"].as<bool>(_warned);
+	_globeLon = doc["globeLon"].as<double>(_globeLon);
+	_globeLat = doc["globeLat"].as<double>(_globeLat);
+	_globeZoom = doc["globeZoom"].as<int>(_globeZoom);
+	initIds(doc["ids"].as< std::map<std::string, int> >(_ids));
 
-	for (YAML::Iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
+	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
+		std::string type = (*i)["type"].as<std::string>();
 		Country *c = new Country(rule->getCountry(type), false);
 		c->load(*i);
 		_countries.push_back(c);
 	}
 
-	for (YAML::Iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
+	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
+		std::string type = (*i)["type"].as<std::string>();
 		Region *r = new Region(rule->getRegion(type));
 		r->load(*i);
 		_regions.push_back(r);
 	}
 
 	// Alien bases must be loaded before alien missions
-	for (YAML::Iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	for (YAML::const_iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
 	{
 		AlienBase *b = new AlienBase();
 		b->load(*i);
@@ -287,72 +257,64 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	}
 
 	// Missions must be loaded before UFOs.
-	const YAML::Node &missions = *doc.FindValue("alienMissions");
-	for (YAML::Iterator it = missions.begin(); it != missions.end(); ++it)
+	const YAML::Node &missions = doc["alienMissions"];
+	for (YAML::const_iterator it = missions.begin(); it != missions.end(); ++it)
 	{
-		std::string missionType;
-		(*it)["type"] >> missionType;
+		std::string missionType = (*it)["type"].as<std::string>();
 		const RuleAlienMission &mRule = *rule->getAlienMission(missionType);
 		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
 		mission->load(*it, *this);
 		_activeMissions.push_back(mission.release());
 	}
 
-	for (YAML::Iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
+	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
 	{
-		std::string type;
-		(*i)["type"] >> type;
+		std::string type = (*i)["type"].as<std::string>();
 		Ufo *u = new Ufo(rule->getUfo(type));
 		u->load(*i, *rule, *this);
 		_ufos.push_back(u);
 	}
 
-	for (YAML::Iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
+	for (YAML::const_iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
 	{
 		Waypoint *w = new Waypoint();
 		w->load(*i);
 		_waypoints.push_back(w);
 	}
 
-	for (YAML::Iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
+	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
 	{
 		TerrorSite *t = new TerrorSite();
 		t->load(*i);
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::Iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
+	for (YAML::const_iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
 	{
 		Base *b = new Base(rule);
 		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
 
-	for(YAML::Iterator it=doc["discovered"].begin();it!=doc["discovered"].end();++it)
+	for(YAML::const_iterator it = doc["discovered"].begin(); it != doc["discovered"].end(); ++it)
 	{
-		std::string research;
-		*it >> research;
+		std::string research = it->as<std::string>();
 		_discovered.push_back(rule->getResearch(research));
 	}
 	
-	if (const YAML::Node *pName = doc.FindValue("poppedResearch"))
+	const YAML::Node &research = doc["poppedResearch"];
+	for(YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
-		for(YAML::Iterator it= pName->begin();it!=pName->end();++it)
-		{
-			std::string research;
-			*it >> research;
-			_poppedResearch.push_back(rule->getResearch(research));
-		}
+		std::string research = it->as<std::string>();
+		_poppedResearch.push_back(rule->getResearch(research));
 	}
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
-	if (const YAML::Node *pName = doc.FindValue("battleGame"))
+	if (const YAML::Node &battle = doc["battleGame"])
 	{
 		_battleGame = new SavedBattleGame();
-		_battleGame->load(*pName, rule, this);
+		_battleGame->load(battle, rule, this);
 	}
-
-	fin.close();
 }
 
 /**
@@ -371,112 +333,79 @@ void SavedGame::save(const std::string &filename) const
 	YAML::Emitter out;
 
 	// Saves the brief game info used in the saves list
-	out << YAML::BeginMap;
-	out << YAML::Key << "version" << YAML::Value << OPENXCOM_VERSION_SHORT;
-	out << YAML::Key << "time" << YAML::Value;
-	_time->save(out);
-	out << YAML::EndMap;
-
+	YAML::Node brief;
+	brief["version"] = OPENXCOM_VERSION_SHORT;
+	brief["build"] = OPENXCOM_VERSION_GIT;
+	brief["time"] = _time->save();
+	out << brief;
 	// Saves the full game data to the save
 	out << YAML::BeginDoc;
-	out << YAML::BeginMap;
-	out << YAML::Key << "difficulty" << YAML::Value << _difficulty;
-	out << YAML::Key << "monthsPassed" << YAML::Value << _monthsPassed;
-	out << YAML::Key << "radarLines" << YAML::Value << _radarLines;
-	out << YAML::Key << "detail" << YAML::Value << _detail;
-	out << YAML::Key << "GraphRegionToggles" << YAML::Value << _graphRegionToggles;
-	out << YAML::Key << "GraphCountryToggles" << YAML::Value << _graphCountryToggles;
-	out << YAML::Key << "GraphFinanceToggles" << YAML::Value << _graphFinanceToggles;
-	RNG::save(out);
-	out << YAML::Key << "funds" << YAML::Value << _funds;
-	out << YAML::Key << "maintenance" << YAML::Value << _maintenance;
-	out << YAML::Key << "researchScores" << YAML::Value << _researchScores;
-	out << YAML::Key << "warned" << YAML::Value << _warned;
-	out << YAML::Key << "globeLon" << YAML::Value << _globeLon;
-	out << YAML::Key << "globeLat" << YAML::Value << _globeLat;
-	out << YAML::Key << "globeZoom" << YAML::Value << _globeZoom;
-	out << YAML::Key << "ids" << YAML::Value << _ids;
-	out << YAML::Key << "countries" << YAML::Value;
-	out << YAML::BeginSeq;
+	YAML::Node node;
+	node["difficulty"] = (int)_difficulty;
+	node["monthsPassed"] = _monthsPassed;
+	node["radarLines"] = _radarLines;
+	node["detail"] = _detail;
+	node["GraphRegionToggles"] = _graphRegionToggles;
+	node["GraphCountryToggles"] = _graphCountryToggles;
+	node["GraphFinanceToggles"] = _graphFinanceToggles;
+	RNG::save(node);
+	node["funds"] = _funds;
+	node["maintenance"] = _maintenance;
+	node["researchScores"] = _researchScores;
+	node["warned"] = _warned;
+	node["globeLon"] = _globeLon;
+	node["globeLat"] = _globeLat;
+	node["globeZoom"] = _globeZoom;
+	node["ids"] = _ids;
 	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
-		(*i)->save(out);
+		node["countries"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "regions" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
-		(*i)->save(out);
+		node["regions"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "bases" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
-		(*i)->save(out);
+		node["bases"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "waypoints" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
 	{
-		(*i)->save(out);
+		node["waypoints"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "terrorSites" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
 	{
-		(*i)->save(out);
+		node["terrorSites"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
 	// Alien bases must be saved before alien missions.
-	out << YAML::Key << "alienBases" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
 	{
-		(*i)->save(out);
+		node["alienBases"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
 	// Missions must be saved before UFOs, but after alien bases.
-	out << YAML::Key << "alienMissions" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<AlienMission *>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
 	{
-		(*i)->save(out);
+		node["alienMissions"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
 	// UFOs must be after missions
-	out << YAML::Key << "ufos" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
-		(*i)->save(out);
+		node["ufos"].push_back((*i)->save());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "discovered" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<const RuleResearch *>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
 	{
-		out << (*i)->getName ();
+		node["discovered"].push_back((*i)->getName());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "poppedResearch" << YAML::Value;
-	out << YAML::BeginSeq;
 	for (std::vector<const RuleResearch *>::const_iterator i = _poppedResearch.begin(); i != _poppedResearch.end(); ++i)
 	{
-		out << (*i)->getName ();
+		node["poppedResearch"].push_back((*i)->getName());
 	}
-	out << YAML::EndSeq;
-	out << YAML::Key << "alienStrategy" << YAML::Value;
-	_alienStrategy->save(out);
+	node["alienStrategy"] = _alienStrategy->save();
 	if (_battleGame != 0)
 	{
-		out << YAML::Key << "battleGame" << YAML::Value;
-		_battleGame->save(out);
+		node["battleGame"] = _battleGame->save();
 	}
-	out << YAML::EndMap;
+	out << node;
 	sav << out.c_str();
 	sav.close();
 }
@@ -611,6 +540,15 @@ GameTime *SavedGame::getTime() const
 }
 
 /**
+ * Changes the current time of the game.
+ * @param time Game time.
+ */
+void SavedGame::setTime(GameTime time)
+{
+	_time = new GameTime(time);
+}
+
+/**
  * Returns the latest ID for the specified object
  * and increases it.
  * @param name Object name.
@@ -629,7 +567,18 @@ int SavedGame::getId(const std::string &name)
  */
 void SavedGame::initIds(const std::map<std::string, int> &ids)
 {
-	_ids = ids;
+	_ids["STR_UFO"] = 1;
+	_ids["STR_LANDING_SITE"] = 1;
+	_ids["STR_CRASH_SITE"] = 1;
+	_ids["STR_WAYPOINT"] = 1;
+	_ids["STR_TERROR_SITE"] = 1;
+	_ids["STR_ALIEN_BASE"] = 1;
+	_ids["STR_SOLDIER"] = 1;
+	_ids["ALIEN_MISSIONS"] = 1;
+	for (std::map<std::string, int>::const_iterator i = ids.begin(); i != ids.end(); ++i)
+	{
+		_ids[i->first] = i->second;
+	}
 }
 
 /**

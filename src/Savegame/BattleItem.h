@@ -25,7 +25,6 @@
 namespace OpenXcom
 {
 
-class Item;
 class RuleItem;
 class RuleInventory;
 class BattleUnit;
@@ -59,7 +58,7 @@ public:
 	/// Loads the item from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the item to YAML.
-	void save(YAML::Emitter& out) const;
+	YAML::Node save() const;
 	/// Gets the item's ruleset.
 	RuleItem *getRules() const;
 	/// Gets the item's ammo quantity
@@ -96,6 +95,7 @@ public:
 	bool occupiesSlot(int x, int y, BattleItem *item = 0) const;
 	/// Gets the item's ammo item.
 	BattleItem *getAmmoItem();
+	/// Determines if this item uses ammo.
 	bool needsAmmo() const;
 	/// Sets the item's ammo item.
 	int setAmmoItem(BattleItem *item);

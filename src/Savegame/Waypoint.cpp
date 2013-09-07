@@ -44,30 +44,30 @@ Waypoint::~Waypoint()
 void Waypoint::load(const YAML::Node &node)
 {
 	Target::load(node);
-	node["id"] >> _id;
+	_id = node["id"].as<int>(_id);
 }
 
 /**
  * Saves the waypoint to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Waypoint::save(YAML::Emitter &out) const
+YAML::Node Waypoint::save() const
 {
-	Target::save(out);
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::EndMap;
+	YAML::Node node = Target::save();
+	node["id"] = _id;
+	return node;
 }
 
 /**
  * Saves the waypoint's unique identifiers to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
-void Waypoint::saveId(YAML::Emitter &out) const
+YAML::Node Waypoint::saveId() const
 {
-	Target::saveId(out);
-	out << YAML::Key << "type" << YAML::Value << "STR_WAYPOINT";
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::EndMap;
+	YAML::Node node = Target::saveId();
+	node["type"] = "STR_WAYPOINT";
+	node["id"] = _id;
+	return node;
 }
 
 /**

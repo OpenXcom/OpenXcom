@@ -47,7 +47,7 @@ private:
 	std::string _id;
 	int _x, _y;
 	InventoryType _type;
-	std::vector<struct RuleSlot> _slots;
+	std::vector<RuleSlot> _slots;
 	std::map<std::string, int> _costs;
 public:
 	static const int SLOT_W = 16;
@@ -60,8 +60,6 @@ public:
 	~RuleInventory();
 	/// Loads inventory data from YAML.
 	void load(const YAML::Node& node);
-	/// Saves the inventory data to YAML.
-	void save(YAML::Emitter& out) const;
 	/// Gets the inventory's id.
 	std::string getId() const;
 	/// Gets the X position of the inventory.

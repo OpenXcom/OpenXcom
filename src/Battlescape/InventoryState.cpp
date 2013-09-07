@@ -30,6 +30,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/EquipmentLayoutItem.h"
@@ -179,7 +180,8 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
-	_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+	if (_parent)
+		_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	unit->setCache(0);
@@ -335,9 +337,12 @@ void InventoryState::btnOkClick(Action *)
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
 	}
-	_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
-	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
-	_battleGame->getTileEngine()->recalculateFOV();
+	if (_battleGame->getTileEngine())
+	{
+		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
+		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+		_battleGame->getTileEngine()->recalculateFOV();
+	}
 }
 
 /**
@@ -348,12 +353,18 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	_parent->selectPreviousPlayerUnit(false);
+	if (_parent)
+		_parent->selectPreviousPlayerUnit(false);
+	else
+		_battleGame->selectPreviousPlayerUnit(false);
 	// skip large units
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
 		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
-		_parent->selectPreviousPlayerUnit(false);
+		if (_parent)
+			_parent->selectPreviousPlayerUnit(false);
+		else
+			_battleGame->selectPreviousPlayerUnit(false);
 	}
 	init();
 }
@@ -366,12 +377,18 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	_parent->selectNextPlayerUnit(false, false);
+	if (_parent)
+		_parent->selectNextPlayerUnit(false, false);
+	else
+		_battleGame->selectNextPlayerUnit(false, false);
 	// skip large units
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
 		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
 	{
-		_parent->selectNextPlayerUnit(false, false);
+		if (_parent)
+			_parent->selectNextPlayerUnit(false, false);
+		else
+			_battleGame->selectNextPlayerUnit(false, false);
 	}
 	init();
 }
