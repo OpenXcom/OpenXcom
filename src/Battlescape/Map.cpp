@@ -96,8 +96,6 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
 	_showChanceToHit = Options::getBool("battleShowChanceToHit");
 	_numChanceToHit = new NumberText(15, 15, 20, 30);
-	_numChanceToHit->setPalette(getPalette());
-	_numChanceToHit->setColor(Palette::blockOffset(1));
 }
 
 /**
@@ -140,6 +138,8 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
+	_numChanceToHit->setPalette(getPalette());
+	_numChanceToHit->setColor(Palette::blockOffset(1));
 }
 
 /**
@@ -336,6 +336,8 @@ void Map::drawTerrain(Surface *surface)
 		_numWaypid->setPalette(getPalette());
 		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
 	}
+	static Projectile p;
+	BattleAction *action;
 
 	surface->lock();
 	for (int itZ = beginZ; itZ <= endZ; itZ++)
@@ -651,10 +653,10 @@ void Map::drawTerrain(Surface *surface)
 
 									if (_showChanceToHit)
 									{
-										BattleAction *action = _save->getBattleState()->getBattleGame()->getCurrentAction();
-										(*action).target = mapPosition;
-										Projectile p = Projectile(_res, _save, *action, (*action).actor->getPosition());	// stack
-										int chance = p.calculateTrajectory((*action).actor->getFiringAccuracy((*action).type, (*action).weapon), true);
+										action = _save->getBattleState()->getBattleGame()->getCurrentAction();
+										action->target = mapPosition;
+										p = Projectile(_res, _save, *action, action->actor->getPosition());
+										int chance = p.calculateTrajectory(action->actor->getFiringAccuracy(action->type, action->weapon), true);
 
 										if (chance >= 0)
 										{
