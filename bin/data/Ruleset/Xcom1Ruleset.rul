@@ -1426,7 +1426,7 @@ items:
     invHeight: 3
     turretType: 4
   - type: STR_HWP_FUSION_BOMB
-    size: 6
+    size: 0.6
     costSell: 31500
     transferTime: 48
     weight: 1
