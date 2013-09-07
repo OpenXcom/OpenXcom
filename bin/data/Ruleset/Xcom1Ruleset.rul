@@ -1853,7 +1853,7 @@ items:
     painKiller: 10
     heal: 10
     stimulant: 10
-    woundRcovery: 1
+    woundRecovery: 1
     healthRecovery: 3
     stunRecovery: 4
     energyRecovery: 10
