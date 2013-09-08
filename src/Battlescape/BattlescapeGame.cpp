@@ -1982,13 +1982,22 @@ BattleActionType BattlescapeGame::getReservedAction()
 void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
 {
 	bool psiCapture = Options::getBool("allowPsionicCapture");
+
+	if (convert)
+	{
+		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+		{
+			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			{
+				(*j)->setSpecialAbility(SPECAB_NONE);
+				convertUnit((*j), (*j)->getSpawnUnit());
+				j = _save->getUnits()->begin();
+			}
+		}
+	}
+
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if (convert && (*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
-		{
-			(*j)->setSpecialAbility(SPECAB_NONE);
-			convertUnit((*j), (*j)->getSpawnUnit());
-		}
 		if (!(*j)->isOut())
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
