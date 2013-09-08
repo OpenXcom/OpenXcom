@@ -48,7 +48,7 @@
 #endif
 
 #ifdef __GNUC__
-#ifndef __MORPHOS__
+#if (__i386__ || __x86_64__)
 #include <cpuid.h>
 #endif
 #endif
