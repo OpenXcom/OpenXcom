@@ -64,7 +64,7 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
-	int _listOrder, _range, _bulletSpeed;
+	int _listOrder, _range, _bulletSpeed, _autoShots;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -174,12 +174,14 @@ public:
 	bool getArcingShot() const;
 	/// How much do aliens want this thing?
 	int getAttraction() const;
-	/// get the list weight for this item.
+	/// Get the list weight for this item.
 	int getListOrder() const;
-	/// get the max range of this weapon.
+	/// Get the max range of this weapon.
 	int getRange() const;
-	/// how fast does a projectile fired from this weapon travel?
+	/// How fast does a projectile fired from this weapon travel?
 	int getBulletSpeed() const;
+	/// How many auto shots does this weapon fire.
+	int getAutoShots() const;
 };
 
 }
