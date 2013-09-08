@@ -1249,17 +1249,45 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 {
 	if (action->weapon->getExplodeTurn() == 0) return false;
 
-	Sint16 rx = 24 * action->weapon->getRules()->getExplosionRadius();
-	Sint16 ry = rx / 2;
+	int blastRadius = action->weapon->getRules()->getExplosionRadius();
+	if (blastRadius <= 0) return false;
 
-	if (rx == 0) return false;
+	Sint16 rx = 24 * blastRadius;
+	Sint16 ry = 12 * blastRadius;
+
+	int beginX = action->target.x - blastRadius, endX = action->target.x + blastRadius;
+	int beginY = action->target.y - blastRadius, endY = action->target.y + blastRadius;
+	if (beginX < 0) beginX = 0;
+	if (beginY < 0) beginY = 0;
+	if (endX > _save->getMapSizeX() - 1) endX = _save->getMapSizeX() - 1;
+	if (endY > _save->getMapSizeY() - 1) endY = _save->getMapSizeY() - 1;
+
+	// search battle units in lethal area
+	BattleUnit *bu;
+	bool blink = false;
+	blastRadius *= blastRadius;
+	for (int itX = beginX; itX <= endX && !blink; ++itX)
+		for (int itY = beginY; itY <= endY; ++itY)
+		{
+			if (blastRadius >= (action->target.x - itX) * (action->target.x - itX) + (action->target.y - itY) * (action->target.y - itY))
+			{
+				bu = _save->getTile(Position(itX, itY, action->target.z))->getUnit();
+				blink = bu && bu->getVisible() && !bu->isOut();
+				if (blink) break;
+			}
+		}
+
+	Uint8 color1 = !blink? Palette::blockOffset(2)+3 : Palette::blockOffset(9)+2 + (_animFrame & 2);
+	Uint8 color2 = !blink? Palette::blockOffset(2)+5 : Palette::blockOffset(9)+5 + (_animFrame & 2);
 
 	Position blastCenter;
 	_camera->convertVoxelToScreen(trajectory->back(), &blastCenter);
+	blastCenter.y += 8;
 
 	_throwSurface->draw();
-	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx, ry, Palette::blockOffset(8)+3);
-	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y - rx/50, rx * 92/100, ry * 88/100, 0);
+	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx, ry, color1);
+	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx - 3, ry - 2, color2);
+	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx - 6, ry - 4, 0);
 	_throwSurface->getCrop()->w = blastCenter.x + rx + _spriteWidth;
 	_throwSurface->getCrop()->h = blastCenter.y + ry + _spriteHeight;
 	_throwSurface->getCrop()->x = blastCenter.x - rx - _spriteWidth;
@@ -1289,7 +1317,8 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y1 = blastCenter.y - ry;
 		y2 = blastCenter.y + ry;
 		x2 = (y2 - top.y) * (right.x - top.x) / (right.y - top.y) + top.x;
-		_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+		if (x2 < blastCenter.x + 5 * ry)
+			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 	// from top to left
 	x1 = (blastCenter.y - ry - top.y) * (left.x - top.x) / (left.y - top.y) + top.x;
@@ -1298,7 +1327,8 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y1 = blastCenter.y - ry;
 		y2 = blastCenter.y + ry;
 		x2 = (y2 - top.y) * (left.x - top.x) / (left.y - top.y) + top.x;
-		_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+		if (x2 > blastCenter.x - 5 * ry)
+			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 	// from right to bottom
 	x1 = (blastCenter.y + ry - bottom.y) * (right.x - bottom.x) / (right.y - bottom.y) + bottom.x;
@@ -1307,7 +1337,8 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y1 = blastCenter.y + ry;
 		y2 = blastCenter.y - ry;
 		x2 = (y2 - bottom.y) * (right.x - bottom.x) / (right.y - bottom.y) + bottom.x;
-		_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+		if (x2 < blastCenter.x + 5 * ry)
+			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 	// from left to bottom
 	x1 = (blastCenter.y + ry - bottom.y) * (left.x - bottom.x) / (left.y - bottom.y) + bottom.x;
@@ -1316,7 +1347,8 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y1 = blastCenter.y + ry;
 		y2 = blastCenter.y - ry;
 		x2 = (y2 - bottom.y) * (left.x - bottom.x) / (left.y - bottom.y) + bottom.x;
-		_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+		if (x2 > blastCenter.x - 5 * ry)
+			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 
 	return true;
@@ -1330,12 +1362,13 @@ void Map::drawThrowTrajectory(std::vector<Position> *trajectory)
 {
 	_throwSurface->clear();
 	int step = 10;
-	if (trajectory == 0 || trajectory->size() < step) return;
+	if (trajectory == 0 || (int)trajectory->size() < step) return;
 
 	std::vector<Position>::iterator i = trajectory->begin();
 	Position sp1, sp2, *p1, *p2 = &(*i), *tb = &(trajectory->back());
 
 	_camera->convertVoxelToScreen(*p2, &sp2);
+	sp2.y += 8;
 
 	while (++i != trajectory->end())
 	{
@@ -1344,10 +1377,12 @@ void Map::drawThrowTrajectory(std::vector<Position> *trajectory)
 		p1 = p2;
 		p2 = &(*i);
 		_camera->convertVoxelToScreen(*p2, &sp2);
+		sp2.y += 8;
+
 		if ((sp1.x < 0 && sp2.x < 0) || (sp1.x > _throwSurface->getSurface()->w && sp2.x > _throwSurface->getSurface()->w) ||
 			(sp1.y < 0 && sp2.y < 0) || (sp1.y > _throwSurface->getSurface()->h && sp2.y > _throwSurface->getSurface()->h))
 			continue;
-		_throwSurface->drawAALine(sp1.x, sp1.y, sp2.x, sp2.y, Palette::blockOffset(8)+3);
+		_throwSurface->drawAALine(sp1.x, sp1.y, sp2.x, sp2.y, Palette::blockOffset(8)+2);
 	}
 }
 
