@@ -1044,6 +1044,11 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
+	if(!tile)
+	{
+		return 0;
+	}
+
 	BattleUnit *bu = tile->getUnit();
 	int adjustedDamage = 0;
 	const int part = voxelCheck(center, unit);
@@ -2373,6 +2378,10 @@ bool TileEngine::psiAttack(BattleAction *action)
 Tile *TileEngine::applyGravity(Tile *t)
 {
 	if (t->getInventory()->empty() && !t->getUnit()) return t; // skip this if there are no items
+	if (!t)
+	{
+		return 0;
+	}
 
 	Position p = t->getPosition();
 	Tile *rt = t;
