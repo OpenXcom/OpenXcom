@@ -94,7 +94,8 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
 	_showThrowTrajectory = Options::getBool("battleShowThrowTrajectory");
-	_throwSurface = new Surface(width, height + 26, x, y);
+	_throwCrosshair = new Surface(width, height, x, y);
+	_throwTrajectory = new Surface(width, height, x, y);
 	_throwFrame = new Surface(_spriteWidth, _spriteHeight, 0, 0);
 	_throwFrame->getCrop()->w = _spriteWidth;
 	_throwFrame->getCrop()->h = _spriteHeight;
@@ -110,7 +111,8 @@ Map::~Map()
 	delete _arrow;
 	delete _message;
 	delete _camera;
-	delete _throwSurface;
+	delete _throwCrosshair;
+	delete _throwTrajectory;
 	delete _throwFrame;
 }
 
@@ -141,7 +143,8 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
-	_throwSurface->setPalette(getPalette());
+	_throwCrosshair->setPalette(getPalette());
+	_throwTrajectory->setPalette(getPalette());
 	_throwFrame->setPalette(getPalette());
 }
 
@@ -340,8 +343,9 @@ void Map::drawTerrain(Surface *surface)
 		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
 	}
 	// prepare to draw the blast radius and the throw trajectory
-	bool showBlastRadius = false;
-	static Projectile p;
+	bool needDrawBlastRadius = false;
+	bool needDrawThrowTrajectory = false;
+	static Projectile tmpProjectile;
 	BattleAction *action;
 	if (_showThrowTrajectory && _cursorType == CT_THROW)
 	{
@@ -352,11 +356,13 @@ void Map::drawTerrain(Surface *surface)
 			&& mapPosition.y >= beginY && mapPosition.y < endY
 			&& mapPosition.z >= beginZ && mapPosition.z <= endZ)
 		{
-			p = Projectile(_res, _save, *action, action->actor->getPosition());
-			if (BattlescapeGame::validThrowRange(action) && p.calculateThrow(1.0, true))
+			tmpProjectile = Projectile(_res, _save, *action, action->actor->getPosition());
+			if (BattlescapeGame::validThrowRange(action) && tmpProjectile.calculateThrow(1.0, true))
 			{
-				showBlastRadius = drawBlastRadius(p.getTrajectory(), action);
+				needDrawBlastRadius = drawBlastRadius(tmpProjectile.getTrajectory(), action);
 			}
+			needDrawThrowTrajectory = drawThrowTrajectory(tmpProjectile.getTrajectory());
+			tmpProjectile.getTrajectory()->clear();
 		}
 	}
 
@@ -390,27 +396,25 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					tileColor = tile->getMarkerColor();
+					unit = tile->getUnit();
 
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
 					if (tmpSurface)
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false);
 					// Draw blast radius
-					if (showBlastRadius && action->target.z == itZ
-						&& screenPosition.x > _throwSurface->getCrop()->x
-						&& screenPosition.x < _throwSurface->getCrop()->w
-						&& screenPosition.y + 26 > _throwSurface->getCrop()->y
-						&& screenPosition.y + 26 < _throwSurface->getCrop()->h)
+					if (needDrawBlastRadius && action->target.z == itZ
+						&& screenPosition.x > _throwCrosshair->getCrop()->x
+						&& screenPosition.x < _throwCrosshair->getCrop()->w
+						&& screenPosition.y > _throwCrosshair->getCrop()->y
+						&& screenPosition.y < _throwCrosshair->getCrop()->h)
 					{
 						_throwFrame->getCrop()->x = screenPosition.x;
 						_throwFrame->getCrop()->y = screenPosition.y + 26;
 						_throwFrame->clear();
-						SDL_BlitSurface(_throwSurface->getSurface(), _throwFrame->getCrop(), _throwFrame->getSurface(), 0);
-						_throwFrame->blitNShade(surface, screenPosition.x, screenPosition.y + 26-1, 0);
+						SDL_BlitSurface(_throwCrosshair->getSurface(), _throwFrame->getCrop(), _throwFrame->getSurface(), 0);
+						_throwFrame->blitNShade(surface, screenPosition.x, screenPosition.y + 26-1, 0);	// -1 because tiles is crossing previous tiles
 					}
-
-					unit = tile->getUnit();
-
 					// Draw cursor back
 					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && !_save->getBattleState()->getMouseOverIcons())
 					{
@@ -669,6 +673,19 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - (20 - tile->getTerrainLevel()), 0, false, tileColor);
 						}
 					}
+					// Draw throw trajectory
+					if (needDrawThrowTrajectory && action->target.z == itZ
+						&& screenPosition.x > _throwTrajectory->getCrop()->x
+						&& screenPosition.x < _throwTrajectory->getCrop()->w
+						&& screenPosition.y > _throwTrajectory->getCrop()->y
+						&& screenPosition.y < _throwTrajectory->getCrop()->h)
+					{
+						_throwFrame->getCrop()->x = screenPosition.x;
+						_throwFrame->getCrop()->y = screenPosition.y;
+						_throwFrame->clear();
+						SDL_BlitSurface(_throwTrajectory->getSurface(), _throwFrame->getCrop(), _throwFrame->getSurface(), 0);
+						_throwFrame->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+					}
 					// Draw cursor front
 					if (_cursorType != CT_NONE && _selectorX > itX - _cursorSize && _selectorY > itY - _cursorSize && _selectorX < itX+1 && _selectorY < itY+1 && !_save->getBattleState()->getMouseOverIcons())
 					{
@@ -786,13 +803,6 @@ void Map::drawTerrain(Surface *surface)
 				}
 			}
 		}
-	}
-	// Draw throw trajectory
-	if (_showThrowTrajectory && _cursorType == CT_THROW)
-	{
-		drawThrowTrajectory(p.getTrajectory());
-		p.getTrajectory()->clear();
-		_throwSurface->blitNShade(surface, 0, 0, 0);
 	}
 
 	unit = (BattleUnit*)_save->getSelectedUnit();
@@ -1247,6 +1257,9 @@ void Map::refreshSelectorPosition()
  */
 bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *action)
 {
+	static Position oldBlastCenter(0,0,0);
+	static int blinkFrame = -1;
+
 	if (action->weapon->getExplodeTurn() == 0) return false;
 
 	int blastRadius = action->weapon->getRules()->getExplosionRadius();
@@ -1255,6 +1268,19 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 	Sint16 rx = 24 * blastRadius;
 	Sint16 ry = 12 * blastRadius;
 
+	Position blastCenter;
+	_camera->convertVoxelToScreen(trajectory->back(), &blastCenter);
+	blastCenter.y += 8;
+
+	// need to check, maybe surface already ready
+	if (oldBlastCenter == blastCenter && blinkFrame == (_animFrame & 2))
+		return true;
+	else
+	{
+		oldBlastCenter = blastCenter;
+		blinkFrame = _animFrame & 2;	// blinking 2 times slowly
+	}
+
 	int beginX = action->target.x - blastRadius, endX = action->target.x + blastRadius;
 	int beginY = action->target.y - blastRadius, endY = action->target.y + blastRadius;
 	if (beginX < 0) beginX = 0;
@@ -1262,7 +1288,7 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 	if (endX > _save->getMapSizeX() - 1) endX = _save->getMapSizeX() - 1;
 	if (endY > _save->getMapSizeY() - 1) endY = _save->getMapSizeY() - 1;
 
-	// search battle units in lethal area
+	// search visible battle units in lethal area
 	BattleUnit *bu;
 	bool blink = false;
 	blastRadius *= blastRadius;
@@ -1277,21 +1303,18 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 			}
 		}
 
-	Uint8 color1 = !blink? Palette::blockOffset(2)+3 : Palette::blockOffset(9)+2 + (_animFrame & 2);
-	Uint8 color2 = !blink? Palette::blockOffset(2)+5 : Palette::blockOffset(9)+5 + (_animFrame & 2);
+	Uint8 color1 = !blink? Palette::blockOffset(2)+3 : Palette::blockOffset(9)+2 + blinkFrame;
+	Uint8 color2 = !blink? Palette::blockOffset(2)+5 : Palette::blockOffset(9)+5 + blinkFrame;
 
-	Position blastCenter;
-	_camera->convertVoxelToScreen(trajectory->back(), &blastCenter);
-	blastCenter.y += 8;
-
-	_throwSurface->draw();
-	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx, ry, color1);
-	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx - 3, ry - 2, color2);
-	_throwSurface->drawEllipse(blastCenter.x, blastCenter.y, rx - 6, ry - 4, 0);
-	_throwSurface->getCrop()->w = blastCenter.x + rx + _spriteWidth;
-	_throwSurface->getCrop()->h = blastCenter.y + ry + _spriteHeight;
-	_throwSurface->getCrop()->x = blastCenter.x - rx - _spriteWidth;
-	_throwSurface->getCrop()->y = blastCenter.y - ry - _spriteHeight;
+	// draw the crosshair
+	_throwCrosshair->draw();
+	_throwCrosshair->drawEllipse(blastCenter.x, blastCenter.y, rx, ry, color1);
+	_throwCrosshair->drawEllipse(blastCenter.x, blastCenter.y, rx - 3, ry - 2, color2);
+	_throwCrosshair->drawEllipse(blastCenter.x, blastCenter.y, rx - 6, ry - 4, 0);
+	_throwCrosshair->getCrop()->w = blastCenter.x + rx;	// + _spriteWidth;
+	_throwCrosshair->getCrop()->h = blastCenter.y + ry;	// + _spriteHeight;
+	_throwCrosshair->getCrop()->x = blastCenter.x - rx - _spriteWidth;
+	_throwCrosshair->getCrop()->y = blastCenter.y - ry - _spriteHeight;
 
 	// check crossing with corners ...
 	Position top, bottom, right, left, tmp(2, 1, 0); // I really don't know why 2 and 1 (must be 0, 0).
@@ -1318,7 +1341,7 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y2 = blastCenter.y + ry;
 		x2 = (y2 - top.y) * (right.x - top.x) / (right.y - top.y) + top.x;
 		if (x2 < blastCenter.x + 5 * ry)
-			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+			_throwCrosshair->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 	// from top to left
 	x1 = (blastCenter.y - ry - top.y) * (left.x - top.x) / (left.y - top.y) + top.x;
@@ -1328,7 +1351,7 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y2 = blastCenter.y + ry;
 		x2 = (y2 - top.y) * (left.x - top.x) / (left.y - top.y) + top.x;
 		if (x2 > blastCenter.x - 5 * ry)
-			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+			_throwCrosshair->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 	// from right to bottom
 	x1 = (blastCenter.y + ry - bottom.y) * (right.x - bottom.x) / (right.y - bottom.y) + bottom.x;
@@ -1338,7 +1361,7 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y2 = blastCenter.y - ry;
 		x2 = (y2 - bottom.y) * (right.x - bottom.x) / (right.y - bottom.y) + bottom.x;
 		if (x2 < blastCenter.x + 5 * ry)
-			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+			_throwCrosshair->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 	// from left to bottom
 	x1 = (blastCenter.y + ry - bottom.y) * (left.x - bottom.x) / (left.y - bottom.y) + bottom.x;
@@ -1348,7 +1371,7 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 		y2 = blastCenter.y - ry;
 		x2 = (y2 - bottom.y) * (left.x - bottom.x) / (left.y - bottom.y) + bottom.x;
 		if (x2 > blastCenter.x - 5 * ry)
-			_throwSurface->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
+			_throwCrosshair->drawTrigon(x1, y1, x2, y2, x2, y1, 0);
 	}
 
 	return true;
@@ -1357,33 +1380,58 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 /**
  * Draw throw trajectory.
  * @param Trajectory in voxels.
+ * @return False if nothing to draw. Else - True.
  */
-void Map::drawThrowTrajectory(std::vector<Position> *trajectory)
+bool Map::drawThrowTrajectory(std::vector<Position> *trajectory)
 {
-	_throwSurface->clear();
-	int step = 10;
-	if (trajectory == 0 || (int)trajectory->size() < step) return;
+	static Position oldSP1(0,0,0), oldSP2(0,0,0);
+
+	int step = 5;
+	if (trajectory == 0 || (int)trajectory->size() < step) return false;
+	if (trajectory->size() > 200) step = 10;
 
 	std::vector<Position>::iterator i = trajectory->begin();
-	Position sp1, sp2, *p1, *p2 = &(*i), *tb = &(trajectory->back());
+	Position sp1, sp2, *te = &(trajectory->back());
 
-	_camera->convertVoxelToScreen(*p2, &sp2);
+	_camera->convertVoxelToScreen(*i, &sp2);
 	sp2.y += 8;
+	_camera->convertVoxelToScreen(*te, &sp1);
+	sp1.y += 8;
 
+	// need to check, maybe surface already ready
+	if (oldSP1 == sp1 && oldSP2 == sp2)
+		return true;
+	else
+	{
+		oldSP1 = sp1;
+		oldSP2 = sp2;
+	}
+
+	_throwTrajectory->draw();
+	_throwTrajectory->getCrop()->w = ((sp1.x > sp2.x)? sp1.x : sp2.x);	// + _spriteWidth;
+	_throwTrajectory->getCrop()->h = ((sp1.y > sp2.y)? sp1.y : sp2.y);	// + _spriteHeight;
+	_throwTrajectory->getCrop()->x = ((sp1.x < sp2.x)? sp1.x : sp2.x) - _spriteWidth;
+	_throwTrajectory->getCrop()->y = ((sp1.y < sp2.y)? sp1.y : sp2.y);	// - _spriteHeight;
+
+	// drawing trajectory
 	while (++i != trajectory->end())
 	{
-		for (int j = 1; j < step && &(*i) != tb; ++j) ++i;
-		sp1 = sp2;
-		p1 = p2;
-		p2 = &(*i);
-		_camera->convertVoxelToScreen(*p2, &sp2);
-		sp2.y += 8;
+		for (int j = 1; j < step && &(*i) != te; ++j) ++i;
 
-		if ((sp1.x < 0 && sp2.x < 0) || (sp1.x > _throwSurface->getSurface()->w && sp2.x > _throwSurface->getSurface()->w) ||
-			(sp1.y < 0 && sp2.y < 0) || (sp1.y > _throwSurface->getSurface()->h && sp2.y > _throwSurface->getSurface()->h))
+		sp1 = sp2;
+		_camera->convertVoxelToScreen(*i, &sp2);
+		sp2.y += 8;
+		if (_throwTrajectory->getCrop()->y > sp2.y)
+			_throwTrajectory->getCrop()->y = sp2.y;
+
+		if ((sp1.x < 0 && sp2.x < 0) || (sp1.x > _throwTrajectory->getSurface()->w && sp2.x > _throwTrajectory->getSurface()->w) ||
+			(sp1.y < 0 && sp2.y < 0) || (sp1.y > _throwTrajectory->getSurface()->h && sp2.y > _throwTrajectory->getSurface()->h))
 			continue;
-		_throwSurface->drawAALine(sp1.x, sp1.y, sp2.x, sp2.y, Palette::blockOffset(8)+2);
+		_throwTrajectory->drawAALine(sp1.x, sp1.y, sp2.x, sp2.y, Palette::blockOffset(8)+2);
 	}
+
+	_throwTrajectory->getCrop()->y -= _spriteHeight;
+	return true;
 }
 
 

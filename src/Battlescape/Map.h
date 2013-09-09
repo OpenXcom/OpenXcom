@@ -51,7 +51,7 @@ private:
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Surface *_arrow, *_throwSurface, *_throwFrame;
+	Surface *_arrow, *_throwCrosshair, *_throwTrajectory, *_throwFrame;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
 	int _mouseX, _mouseY;
@@ -75,7 +75,7 @@ private:
 	/// Draw blast radius.
 	bool drawBlastRadius(std::vector<Position> *_trajectory, BattleAction *action);
 	/// Draw throw trajectory.
-	void drawThrowTrajectory(std::vector<Position> *_trajectory);
+	bool drawThrowTrajectory(std::vector<Position> *_trajectory);
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
