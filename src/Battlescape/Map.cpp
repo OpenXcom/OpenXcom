@@ -413,6 +413,7 @@ void Map::drawTerrain(Surface *surface)
 						_throwFrame->getCrop()->y = screenPosition.y + 26;
 						_throwFrame->clear();
 						SDL_BlitSurface(_throwCrosshair->getSurface(), _throwFrame->getCrop(), _throwFrame->getSurface(), 0);
+						clipCorners(_throwFrame);
 						_throwFrame->blitNShade(surface, screenPosition.x, screenPosition.y + 26-1, 0);	// -1 because tiles is crossing previous tiles
 					}
 					// Draw cursor back
@@ -1432,6 +1433,24 @@ bool Map::drawThrowTrajectory(std::vector<Position> *trajectory)
 
 	_throwTrajectory->getCrop()->y -= _spriteHeight;
 	return true;
+}
+
+/**
+ * Fast cliping top left and top right corners.
+ * @param Surface.
+ */
+void Map::clipCorners(Surface *surface)
+{
+	Uint16 *pixels = (Uint16*)surface->getSurface()->pixels;
+	int pitch = surface->getSurface()->pitch * surface->getSurface()->format->BytesPerPixel / 2;
+//	int max = 14 * surface->getSurface()->format->BytesPerPixel / 2;
+
+	for (int y = 0; y < 6; ++y)
+	 for (int x = 0; x < 7 - y; ++x)
+	 {
+		 pixels[y * pitch + x] = 0;
+		 pixels[y * pitch + pitch - 1 - x] = 0;
+	 }
 }
 
 

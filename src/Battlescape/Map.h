@@ -76,6 +76,8 @@ private:
 	bool drawBlastRadius(std::vector<Position> *_trajectory, BattleAction *action);
 	/// Draw throw trajectory.
 	bool drawThrowTrajectory(std::vector<Position> *_trajectory);
+	/// Cliping left and right top corners.
+	static void clipCorners(Surface *surface);
 public:
 	/// Creates a new map at the specified position and size.
 	Map(Game *game, int width, int height, int x, int y, int visibleMapHeight);
