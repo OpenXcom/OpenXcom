@@ -336,7 +336,7 @@ void Map::drawTerrain(Surface *surface)
 		_numWaypid->setPalette(getPalette());
 		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
 	}
-	static Projectile p;
+	static Projectile tmpProjectile;
 	BattleAction *action;
 
 	surface->lock();
@@ -655,8 +655,8 @@ void Map::drawTerrain(Surface *surface)
 									{
 										action = _save->getBattleState()->getBattleGame()->getCurrentAction();
 										action->target = mapPosition;
-										p = Projectile(_res, _save, *action, action->actor->getPosition());
-										int chance = p.calculateTrajectory(action->actor->getFiringAccuracy(action->type, action->weapon), true);
+										tmpProjectile = Projectile(_res, _save, *action, action->actor->getPosition());
+										int chance = tmpProjectile.calculateTrajectory(action->actor->getFiringAccuracy(action->type, action->weapon), true);
 
 										if (chance >= 0)
 										{

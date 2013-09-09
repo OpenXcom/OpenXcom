@@ -52,7 +52,7 @@ private:
 public:
 	/// Creates a new Projectile.
 	Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin);
-	Projectile() {;}
+	Projectile() : _res(0), _save(0), _position(0), _sprite(0) {;}
 	/// Cleans up the Projectile.
 	~Projectile();
 	/// Calculates the trajectory for a straight path.
