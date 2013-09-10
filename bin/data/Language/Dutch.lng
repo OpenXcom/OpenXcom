@@ -36,11 +36,11 @@ De huid is zeer taai en hittebestendig. Hun hart- en vaatstelsel maakt deel uit 
 STR_ETHEREAL_UFOPEDIA
 Dit wezen heeft ontzagwekkende mentale krachten, welke hun in staat stellen tot telepathie en telekinese. De schijnbaar zwakke fysieke vaardigheden van dit schepsel worden ondersteund door haar mentale krachten. We begrijpen niet hoe deze telekinetische krachten werken, omdat ze tegen alle bekende natuurkundige wetten lijken in te gaan. Ze zijn extreem gevaarlijk in een gevechtssituatie, waarbij ze hun mentale krachten in de strijd gooien. Ze verschijnen zelden op aarde, omdat ze lijken te vertrouwen op andere rassen om hun doelstellingen te verwezenlijken.
 STR_ETHEREAL_AUTOPSY
-Autopsie van Etherische
+Autopsie van Etheriër
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
 Dit wezen is lichamelijk achtergebleven en lijkt amper levensvatbaar. De spieren zijn ernstig verschrompeld en de inwendige organen lijken onderontwikkeld. De zintuigen, waaronder ook de ogen, lijken helemaal niet te werken. De hersenen zijn echter goed ontwikkeld en hebben een hoge bloedtoevoer ten opzichte van de rest van het lichaam. Het is een raadsel hoe dit schepsel stand kan houden zonder enige vorm van externe ondersteuning.
 STR_MUTON_UFOPEDIA
-Dit humanoïde wezen is fysiek sterk en intelligent. Ze hebben een bijzondere voorkeur voor consumptie van rauw vlees van welke aard ook, welk ze nodig hebben als voedsel zoals de bij ons gekende carnivoren. Ze vertrouwen blijkbaar op telepathische opdrachten van een ras bekend als de 'Etherischen'. Eenmaal gescheiden van deze telepathische band lijkt hun mentale systeem af te breken en sterven ze. De cybernetische implantaten worden gebruikt om hun vechtprestaties te verbeteren. Zij zijn duidelijk het voetvolk voor een hogere intelligentie.
+Dit mensachtige wezen is fysiek sterk en intelligent. Ze hebben een voorkeur voor consumptie van rauw vlees van welke aard ook, wat ze nodig hebben als voedsel net als bij carnivoren zoals wij die kennen. Ze vertrouwen op telepathische opdrachten van een ras bekend als de 'Etheriërs'.  Eenmaal gescheiden van deze telepathische band lijkt hun mentale systeem af te breken en sterven ze.  De implantaten worden gebruikt om hun vechtprestaties te verbeteren. Zij zijn duidelijk het voetvolk voor een hogere intelligentie.
 STR_MUTON_AUTOPSY
 Autopsie van Muton
 STR_MUTON_AUTOPSY_UFOPEDIA
@@ -70,13 +70,13 @@ Autopsie van Zwever
 STR_FLOATER_AUTOPSY_UFOPEDIA
 Dit schepsel is drastisch veranderd door middel van chirurgie. Het apparaat welk de kern van het lichaam lijkt te zijn is een levensinstandhoudingssysteem, welk de functies van hart, longen en spijsverteringssysteem overneemt. Dit zou het in staat stellen om te kunnen overleven in vijandige omgevingen. Het brein is kleiner dan het onze, maar de zintuigen zijn goed ontwikkeld.
 STR_REAPER_UFOPEDIA
-Deze tweevoetige carnivoor heeft krachtige kaken en een vraatzuchtige eetlust. Het heeft een aantal hersenimplantaten waarmee zijn activiteiten worden gecontroleerd. De primitieve roofinstincten van dit wezen hebben weinig nut behalve om te terroriseren en te vernietigen. Maaiers worden vaak geassocieerd met Zwevers.
+Deze tweevoetige carnivoor heeft krachtige kaken en een vraatzuchtige eetlust. Het heeft een aantal hersenimplantaten waarmee zijn activiteiten worden gecontroleerd. De primitieve roofinstincten van dit wezen hebben weinig nut behalve om te terroriseren en te vernietigen. Vreters worden vaak geassocieerd met Zwevers.
 STR_REAPER_AUTOPSY
-Autopsie van Maaier
+Autopsie van Vreter
 STR_REAPER_AUTOPSY_UFOPEDIA
-De Maaier bevat twee stel 'hersens' en twee 'harten' welke ervoor zorgen dat deze zelfs kan functioneren als hij zwaargewond is.  Echter, zijn bonte vacht is hoogst ontvlambaar, waardoor dit schepsel kwetsbaar is voor brandwapens.
+De Vreter bevat twee stel 'hersens' en twee 'harten' welke ervoor zorgen dat deze zelfs kan functioneren als hij zwaargewond is.  Echter, zijn bonte vacht is hoogst ontvlambaar, waardoor dit schepsel kwetsbaar is voor brandwapens.
 STR_SECTOPOD_UFOPEDIA
-Sectopods zijn robotschepsels met een krachtig plasmastraalwapen.  De besturing van deze mechanische wezens gaat via een telepatische verbinding met hun bestuurders, de Etherischen. Sectopods zijn het krachtigste terreurwapen ter beschikking van de buitenaardse krijgsmacht.
+Sectopods zijn robotschepsels met een krachtig plasmastraalwapen.  De besturing van deze mechanische wezens gaat via een telepatische verbinding met hun bestuurders, de Etheriërs. Sectopods zijn het krachtigste terreurwapen ter beschikking van de buitenaardse krijgsmacht.
 STR_SECTOPOD_AUTOPSY
 Autopsie van Sectopod
 STR_SECTOPOD_AUTOPSY_UFOPEDIA
@@ -884,7 +884,7 @@ Sectoïde
 STR_SNAKEMAN
 Slangeman
 STR_ETHEREAL
-Etherische
+Etheriër
 STR_MUTON
 Muton
 STR_FLOATER
@@ -898,7 +898,7 @@ Chrysalide
 STR_ZOMBIE
 Zombie
 STR_REAPER
-Maaier
+Vreter
 STR_SECTOPOD
 Sectopod
 STR_CYBERDISC
@@ -930,17 +930,17 @@ Zwever-Leider
 STR_FLOATER_COMMANDER
 Zwever-Commandant
 STR_SECTOID_SOLDIER
-Sectoïde-Soldaat
+Sectoïde Soldaat
 STR_SECTOID_NAVIGATOR
-Sectoïde-Navigator
+Sectoïde Navigator
 STR_SECTOID_MEDIC
-Sectoïde-Hospik
+Sectoïde Hospik
 STR_SECTOID_ENGINEER
-Sectoïde-Ingenieur
+Sectoïde Ingenieur
 STR_SECTOID_LEADER
-Sectoïde-Leider
+Sectoïde Leider
 STR_SECTOID_COMMANDER
-Sectoïde-Commandant
+Sectoïde Commandant
 STR_SNAKEMAN_SOLDIER
 Slangeman-Soldaat
 STR_SNAKEMAN_NAVIGATOR
@@ -966,7 +966,7 @@ Etherische Commandant
 STR_CYBERDISC_TERRORIST
 Cyberschijf-Terrorist
 STR_REAPER_TERRORIST
-Maaier-Terrorist
+Vreter-Terrorist
 STR_CHRYSSALID_TERRORIST
 Chrysalide Terrorist
 STR_CELATID_TERRORIST
@@ -1050,9 +1050,9 @@ Hovertank/Plasma
 STR_HOVERTANK_LAUNCHER
 Hovertank/Werper
 STR_STINGRAY_LAUNCHER
-Stingray-werper
+Pijlstaart-werper
 STR_AVALANCHE_LAUNCHER
-Avalanche-werper
+Lawine-werper
 STR_CANNON
 Kanon
 STR_FUSION_BALL_LAUNCHER
@@ -1060,9 +1060,9 @@ Fusiebal-werper
 STR_PLASMA_BEAM
 Plasmastraal
 STR_STINGRAY_MISSILES
-Stingray-Raketten
+Pijlstaart-Raketten
 STR_AVALANCHE_MISSILES
-Avalanche-Raketten
+Lawine-Raketten
 STR_CANNON_ROUNDS_X50
 Kanonrondes(x50)
 STR_FUSION_BALL
@@ -1126,21 +1126,21 @@ Maximumsnelheid
 STR_HYPER_WAVE_DECODER_UC
 HYPERGOLF-DECODER
 STR_SKYRANGER
-SKYRANGER
+LUCHTWAKER
 STR_LIGHTNING
-LIGHTNING
+BLIKSEMSCHICHT
 STR_AVENGER
-AVENGER
+WREKER
 STR_INTERCEPTOR
 ONDERSCHEPPER
 STR_FIRESTORM
-FIRESTORM
+VUURSTORM
 STR_UFO
 UFO
 STR_STINGRAY
-STINGRAY
+PIJLSTAART
 STR_AVALANCHE
-AVALANCHE
+LAWINE
 STR_CANNON_UC
 KANON
 STR_FUSION_BALL_UC
@@ -1162,7 +1162,7 @@ Werkplaats
 STR_SMALL_RADAR_SYSTEM
 Klein Radarsysteem
 STR_LARGE_RADAR_SYSTEM
-Groot Radarsystem
+Groot Radarsysteem
 STR_MISSILE_DEFENSES
 Raketverdediging
 STR_GENERAL_STORES
@@ -1746,7 +1746,7 @@ Lichaam van Sectoïde
 STR_SNAKEMAN_CORPSE
 Lichaam van Slangeman
 STR_ETHEREAL_CORPSE
-Lichaam van Etherische
+Lichaam van Etheriër
 STR_MUTON_CORPSE
 Lichaam van Muton
 STR_FLOATER_CORPSE
@@ -1758,7 +1758,7 @@ Lichaam van Silacoïde
 STR_CHRYSSALID_CORPSE
 Lichaam van Chrysalide
 STR_REAPER_CORPSE
-Lichaam van Maaier
+Lichaam van Vreter
 STR_SECTOPOD_CORPSE
 Lichaam van Sectopod
 STR_CYBERDISC_CORPSE
