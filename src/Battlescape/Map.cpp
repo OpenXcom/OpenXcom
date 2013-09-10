@@ -1316,7 +1316,7 @@ bool Map::drawBlastRadius(std::vector<Position> *trajectory, BattleAction *actio
 	_throwCrosshair->getCrop()->y = blastCenter.y - ry - _spriteHeight;
 
 	// check crossing with corners ...
-	Position top, bottom, right, left, tmp(2, 1, 0); // I really don't know why 2 and 1 (must be 0, 0).
+	Position top, bottom, right, left, tmp(2, 1, action->target.z); // I really don't know why 2 and 1 (must be 0, 0).
 	_camera->convertMapToScreen(tmp, &top);
 	tmp.x = _save->getMapSizeX() + 2;
 	_camera->convertMapToScreen(tmp, &right);
