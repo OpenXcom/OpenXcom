@@ -98,7 +98,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_throwTrajectory = new Surface(width, height, x, y);
 	_throwFrame = new Surface(_spriteWidth, _spriteHeight, 0, 0);
 	_throwFrame->getCrop()->w = _spriteWidth;
-	_throwFrame->getCrop()->h = _spriteHeight;
+	_throwFrame->getCrop()->h = _spriteWidth / 2;	//_spriteHeight;
 }
 
 /**
@@ -345,7 +345,6 @@ void Map::drawTerrain(Surface *surface)
 	// prepare to draw the blast radius and the throw trajectory
 	bool needDrawBlastRadius = false;
 	bool needDrawThrowTrajectory = false;
-	static Projectile tmpProjectile;
 	BattleAction *action;
 	if (_showThrowTrajectory && _cursorType == CT_THROW)
 	{
@@ -356,13 +355,12 @@ void Map::drawTerrain(Surface *surface)
 			&& mapPosition.y >= beginY && mapPosition.y < endY
 			&& mapPosition.z >= beginZ && mapPosition.z <= endZ)
 		{
-			tmpProjectile = Projectile(_res, _save, *action, action->actor->getPosition());
-			if (BattlescapeGame::validThrowRange(action) && tmpProjectile.calculateThrow(1.0, true))
+			Projectile p = Projectile(_res, _save, *action, action->actor->getPosition());
+			if (BattlescapeGame::validThrowRange(action) && p.calculateThrow(1.0, true))
 			{
-				needDrawBlastRadius = drawBlastRadius(tmpProjectile.getTrajectory(), action);
+				needDrawBlastRadius = drawBlastRadius(p.getTrajectory(), action);
+				needDrawThrowTrajectory = drawThrowTrajectory(p.getTrajectory());
 			}
-			needDrawThrowTrajectory = drawThrowTrajectory(tmpProjectile.getTrajectory());
-			tmpProjectile.getTrajectory()->clear();
 		}
 	}
 
