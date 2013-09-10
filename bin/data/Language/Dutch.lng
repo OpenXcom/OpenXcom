@@ -1524,7 +1524,7 @@ Perth
 STR_NEW_GAME
 Nieuw Spel
 STR_LOAD_SAVED_GAME
-Laad Opgeslagen Spel
+Opgeslagen Spel
 STR_SELECT_DIFFICULTY_LEVEL
 Kies Moeilijkheidsgraad
 STR_1_BEGINNER
@@ -2208,9 +2208,9 @@ Inzoomen
 STR_ZOOM_OUT
 Uitzoomen
 STR_TOGGLE_COUNTRY_DETAIL
-Details voor landen wel/niet weergeven
+Landen wel/niet gedetailleerd weergeven
 STR_TOGGLE_RADAR_RANGES
-Weergave radarbereik wel/niet weergeven
+Radarbereik wel/niet weergeven
 STR_SCROLL_LEFT
 Links Schuiven
 STR_SCROLL_RIGHT
