@@ -153,7 +153,7 @@ STR_SACK
 ONSLAAN
 STR_SELL_SACK_UC
 VERKOOP/ONTSLAG
-STR_GEOSCAPE
+STR_GEOSCAPE_UC
 GLOBE
 STR_XCOM_BASES
 XCom-Bases
@@ -489,11 +489,11 @@ STR_UFO_GROUND_ASSAULT
 AANVAL OP GELANDE UFO
 STR_UFO_GROUND_ASSAULT_BRIEFING
 Verken de landingsplaats en verschaf indien mogelijk toegang tot de UFO.  De missie is geslaagd wanneer alle vijandelijke eenheden zijn uitgeschakeld.  Er kan dan worden begonnen aan de berging van het wrak van de UFO, voorwerpen en lichamen. Om te missie af te breken, plaats de XCom-agenten in het transport en klik op het pictogram 'Missie Afbreken'.
-STR_BASE_DEFENCE
+STR_BASE_DEFENSE
 VERDEDIGING BASIS
 STR_BASE_UC_
 BASIS> 
-STR_BASE_DEFENCE_BRIEFING
+STR_BASE_DEFENSE_BRIEFING
 Een buitenaards vaartuig is in de buurt geland.  Onze basis loopt ernstig gevaar.  Volgens de standaardprocedure zijn alle niet-gevechtstroepen en XCom-vaartuigen geëvacueerd.  Buitenaardse eenheden kunnen binnendringen via deuren van de loodsen of de toegangslift.  Verdedig de basis en de vitale installaties koste wat het kost - dit is een gevecht op leven en dood.  Als je klikt op het pictogram 'Missie Afbreken' verlies je de basis.
 STR_ALIEN_BASE_ASSAULT
 AANVAL OP BUITENAARDSE BASIS
@@ -501,8 +501,6 @@ STR_ALIEN_BASE_ASSAULT_BRIEFING
 XCom-agenten hebben toegang verschaft tot een buitenaardse basis.  Het controlecentrum moet worden vernietigd om de basis buiten werking te stellen.  De missie eindigt wanneer alle vijanden zijn uitgeschakeld, of wanneer je team is teruggekeerd naar het groene gebied (klik op het pictogram 'Missie Afbreken' om de basis te verlaten).
 STR_CYDONIA_BRIEFING
 Je bent aangekomen in Cydonia.  Je verschaft toegang tot een groot ondergronds complex in de buurt van de Martiaanse Sphinx.  Je moet het Buitenaardse Brein vernietigen dat alle buitenaardse activiteit bestuurt.  Het lot van de mensheid ligt in jouw handen ....
-STR_TERROR_SITE_UC
-TERREURLOCATIE-
 STR_TERROR_MISSION
 TERREURMISSIE
 STR_TERROR_MISSION_BRIEFING
@@ -585,14 +583,8 @@ STR_INTERCEPTING_UFO
 ONDERSCHEPT UFO 
 STR_RETURNING_TO_BASE
 KEERT TERUG NAAR BASIS
-STR_DESTINATION_ALIEN_BASE
-BESTEMMING: BUITENAARDSE BASIS 
-STR_DESTINATION_CRASH_SITE
-BESTEMMING: CRASHPLAATS 
-STR_DESTINATION_LANDING_SITE
-BESTEMMING: LANDINGSPLAATS 
-STR_DESTINATION_WAY_POINT
-BESTEMMING: MARKEERPUNT 
+STR_DESTINATION_UC_
+BESTEMMING: 
 STR_SPEED_
 SNELHEID>
 STR_MAXIMUM_SPEED_UC
@@ -671,7 +663,7 @@ STR_WOUNDED
 GEWOND
 STR_ARM
 Arm 
-STR_DEFENCE_VALUE
+STR_DEFENSE_VALUE
 Defensieve Waarde
 STR_HIT_RATIO
 Verhouding Treffers
@@ -763,7 +755,7 @@ STR_LANDING_SITE_
 LANDINGSPLAATS 
 STR_WAY_POINT_
 MARKEERPUNT 
-STR_TERROR_SITE_
+STR_TERROR_SITE_UC
 TERREURLOCATIE-
 STR_HAS_REACHED
 bereikt
@@ -799,8 +791,6 @@ STR_UFOS
 UFO's
 STR_SELECT_ITEM
 SELECTEER ONDERDEEL
-STR_AUTOPSY
- autopsie
 STR_ACCELERATION
 VERSNELLING>
 STR_FUEL_CAPACITY
@@ -905,6 +895,8 @@ STR_SILACOID
 Silacoïde
 STR_CHRYSSALID
 Chrysalide
+STR_ZOMBIE
+Zombie
 STR_REAPER
 Maaier
 STR_SECTOPOD
@@ -1031,11 +1023,11 @@ STR_PLASMA_CANNON
 Plasmakanon
 STR_FUSION_MISSILE
 Fusie-raket
-STR_LASER_DEFENCE
+STR_LASER_DEFENSE
 Laserverdediging
-STR_PLASMA_DEFENCE
+STR_PLASMA_DEFENSE
 Plasmaverdediging
-STR_FUSION_DEFENCE
+STR_FUSION_DEFENSE
 Fusie-verdediging
 STR_GRAV_SHIELD
 Grav Shield
@@ -1221,18 +1213,6 @@ STR_EGYPT
 EGYPTE
 STR_CANADA
 CANADA
-STR_FLOATER_SOLDIER
-Zwever-Soldaat
-STR_FLOATER_NAVIGATOR
-Zwever-Navigator
-STR_FLOATER_MEDIC
-Zwever-Hospik
-STR_FLOATER_ENGINEER
-Zwever-Ingenieur
-STR_FLOATER_LEADER
-Zwever-Leider
-STR_FLOATER_COMMANDER
-Zwever-Commandant
 STR_TANK
 Tank
 STR_CIVILIAN
@@ -1287,17 +1267,17 @@ STR_SMALL_RADAR_SYSTEM_UFOPEDIA
 Een klein detectiesysteem heeft een effectief bereik van 300 zeemijl en in verbinding met sattelietsystemen voor grondopsporing.  Ieder systeem heeft iedere 10 minuten een kans van 5% om een middelgroot object te detecteren.
 STR_LARGE_RADAR_SYSTEM_UFOPEDIA
 Een groot detectiesysteem heeft een effectief bereik van 450 zeemijl en staat in verbinding met sattelietsystemen voor grondopsporing.  Ieder systeem heeft iedere 10 minuten een kans van 5% om een middelgroot object te detecteren.
-STR_MISSILE_DEFENCES_UFOPEDIA
+STR_MISSILE_DEFENSES_UFOPEDIA
 Raketverdediging biedt enige bescherming tegen een inval door vijandige vaartuigen welke proberen te landen in de buurt van de basis.
 STR_GENERAL_STORES_UFOPEDIA
 Alle uitrusting, wapensystemen, munitie, geborgen materiaal en Zware WapenPlatforms worden in opslagruimte geplaatst, met uitzondering van uitrusting die is toegewezen aan vaartuigen.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
 Levende buitenaardsen hebben waarschijnlijk een speciale habitat nodig om hun vitale functies te ondersteunen.  De klimaatcel kan tot 10 buitenaardsen huisvesten in onafhankelijke eenheden.
-STR_LASER_DEFENCES_UFOPEDIA
+STR_LASER_DEFENSES_UFOPEDIA
 Laserverdediging biedt bescherming tegen invallen door vijandige vaartuigen.
-STR_PLASMA_DEFENCES_UFOPEDIA
+STR_PLASMA_DEFENSES_UFOPEDIA
 Plasmastraal-verdediging biedt krachtige en efficiënte bescherming tegen invallen door vijandige vaartuigen.
-STR_FUSION_BALL_DEFENCES_UFOPEDIA
+STR_FUSION_BALL_DEFENSES_UFOPEDIA
 Fusie-raketten bieden de meeste effectieve verdediging tegen buitenaardse aanvallen.  Deze raketten creëren een antimaterie-implosie die alles binnen een bepaalde straal vernietigt.
 STR_GRAV_SHIELD_UFOPEDIA
 Het zwaartekrachtschild kan buitenaardse vaartuigen lang genoeg afslaan om verdedigingssystemen te herhalen.  In de praktijk verdubbelt op die manier de defensieve kracht van de basis.
@@ -1369,7 +1349,7 @@ STR_LARGE_SCOUT
 Grote Verkenner
 STR_HARVESTER
 Oogster
-STR_ABDUCTER
+STR_ABDUCTOR
 Ontvoerder
 STR_TERROR_SHIP
 Terreurschip
