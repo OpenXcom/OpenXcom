@@ -842,7 +842,7 @@ SOORT SCHOT
 STR_ACCURACY_UC
 NAUWKEURIGHEID
 STR_TU_COST
-TE-KOSTEN
+AP-KOSTEN
 STR_DAMAGE_UC
 SCHADE
 STR_AMMO
@@ -926,63 +926,63 @@ STR_LIVE_SOLDIER
 STR_LIVE_TERRORIST
  Terrorist
 STR_FLOATER_SOLDIER
-Floater Soldier
+Zwever-Soldaat
 STR_FLOATER_NAVIGATOR
-Floater Navigator
+Zwever-Navigator
 STR_FLOATER_MEDIC
-Floater Medic
+Zwever-Hospik
 STR_FLOATER_ENGINEER
-Floater Engineer
+Zwever-Ingenieur
 STR_FLOATER_LEADER
-Floater Leader
+Zwever-Leider
 STR_FLOATER_COMMANDER
-Floater Commander
+Zwever-Commandant
 STR_SECTOID_SOLDIER
-Sectoid Soldier
+Sectoïde-Soldaat
 STR_SECTOID_NAVIGATOR
-Sectoid Navigator
+Sectoïde-Navigator
 STR_SECTOID_MEDIC
-Sectoid Medic
+Sectoïde-Hospik
 STR_SECTOID_ENGINEER
-Sectoid Engineer
+Sectoïde-Ingenieur
 STR_SECTOID_LEADER
-Sectoid Leader
+Sectoïde-Leider
 STR_SECTOID_COMMANDER
-Sectoid Commander
+Sectoïde-Commandant
 STR_SNAKEMAN_SOLDIER
-Snakeman Soldier
+Slangeman-Soldaat
 STR_SNAKEMAN_NAVIGATOR
-Snakeman Navigator
+Slangeman-Navigator
 STR_SNAKEMAN_ENGINEER
-Snakeman Engineer
+Slangeman-Ingenieur
 STR_SNAKEMAN_LEADER
-Snakeman Leader
+Slangeman-Leider
 STR_SNAKEMAN_COMMANDER
-Snakeman Commander
+Slangeman-Commandant
 STR_MUTON_SOLDIER
-Muton Soldier
+Muton-Soldaat
 STR_MUTON_NAVIGATOR
-Muton Navigator
+Muton-Navigator
 STR_MUTON_ENGINEER
-Muton Engineer
+Muton-Ingenieur
 STR_ETHEREAL_SOLDIER
-Ethereal Soldier
+Etherische Soldaat
 STR_ETHEREAL_LEADER
-Ethereal Leader
+Etherische Leider
 STR_ETHEREAL_COMMANDER
-Ethereal Commander
+Etherische Commandant
 STR_CYBERDISC_TERRORIST
-Cyberdisc Terrorist
+Cyberschijf-Terrorist
 STR_REAPER_TERRORIST
-Reaper Terrorist
+Maaier-Terrorist
 STR_CHRYSSALID_TERRORIST
-Chryssalid Terrorist
+Chrysalide Terrorist
 STR_CELATID_TERRORIST
-Celatid Terrorist
+Celatide Terrorist
 STR_SILACOID_TERRORIST
-Silacoid Terrorist
+Silacoïde Terrorist
 STR_SECTOPOD_TERRORIST
-Sectopod Terrorist
+Sectopod-Terrorist
 STR_UFO_POWER_SOURCE
 UFO-Energiebron
 STR_UFO_NAVIGATION
@@ -1126,7 +1126,7 @@ Buitenaardse Terreur
 STR_ALIEN_RETALIATION
 Buitenaardse Wraakacties
 STR_ALIEN_SUPPLY
-Buitenaardse Toeleveringen
+Buitenaardse Bevoorrading
 STR_POWER_SOURCES
 Energiebronnen
 STR_MAXIMUM_SPEED
@@ -1344,7 +1344,7 @@ Dit apparaat kan alleen in een lijf-aan-lijfgevecht worden gebruikt, maar het za
 STR_THE_SUBJECT_HAS_DIED
 De ondervraagde is bezweken aan de gevolgen van het verhoor.
 STR_MIND_PROBE_UFOPEDIA
-De hersenpeiler is een buitenaards communicatie-apparaat waarme informatie rechtstreekt uit hersengolven kan worden geplukt.  XCom-eenheden kunnen dit appaat tijdens een gevecht gebruiken om de karakteristieken van een buitenaardse te tonen.  Klik op de hersenpeiler en de optie 'gebruiken'.  Klik daarna op de buitenaardse met de cursor.
+De gedachtenlezer is een buitenaards communicatie-apparaat waarme informatie rechtstreekt uit hersengolven kan worden geplukt.  XCom-eenheden kunnen dit appaat tijdens een gevecht gebruiken om de karakteristieken van een buitenaardse te tonen.  Klik op de hersenpeiler en de optie 'gebruiken'.  Klik daarna op de buitenaardse met de cursor.
 STR_PLASMA_PISTOL_UFOPEDIA
 Plasmapistolen zijn dodelijke buitenaards wapens gebaseerd op het versnellen van deeltjes vanuit een miniem antizwaartekrachtsveld.
 STR_PLASMA_RIFLE_UFOPEDIA
@@ -1376,7 +1376,7 @@ Terreurschip
 STR_BATTLESHIP
 Slagschip
 STR_SUPPLY_SHIP
-Toeleveringsschip
+Bevoorradingsschip
 STR_RATING
 BEOORDELING> 
 STR_RATING_TERRIBLE
@@ -1598,7 +1598,7 @@ GEDOOD>
 STR_WOUND_RECOVERY
 HERSTEL VAN WONDEN> 
 STR_TIME_UNITS
-TIJDSEENHEDEN
+ACTIEPUNTEN
 STR_STAMINA
 UITHOUDINGSVERMOGEN
 STR_HEALTH
@@ -1650,195 +1650,195 @@ Dit is de meest verraderlijke vorm van buitenaardse activiteit.  Ontvoeringen do
 STR_ALIEN_INFILTRATION_UFOPEDIA
 Overheden op aarde kunnen worden geïnfiltreerd door buitenaardse agenten met een menselijk uiterlijk.  Dit kan officieel contact tussen buitenaardsen en overheden op het hoogste niveau tot gevolg hebben.  Het hoogtepunt van deze activiteit wordt gekenmerkt door intensieve UFO-activiteit in de buurt van grote steden.  De buitenaardsen zullen proberen een verdrag te tekenen met een aardse overheid door kennis aan te bieden van hun superieure technologie.  Als tegenprestatie zal de overheid de buitenaardsen ongehinderd hun gang laten gaan.  Deze buitenaardse missie vertegenwoordigt het ergste gevaar voor XCom.  Als een overheid zo'n verdrag tekent, dan zal deze haar financiële steun stopzetten.
 STR_ALIEN_BASE_UFOPEDIA
-Aliens will construct secret underground bases in remote locations.  After some initial reconnaissance flights some intense UFO activity will occur as the base is being built.  These bases are known to contain experimental labs for human abductees, and supplies for further activity in the region.  The presence of alien bases will generate a large amount of reported alien activity without the presence of UFOs.  In order to locate a base an XCom craft must patrol an area for a few hours to stand some chance of detection.
+Buitenaardsen zullen geheime ondergrondse bases bouwen in afgelegen gebieden.  Na enkele initiële verkenningsvluchten zal er intense UFO-activiteit worden waargenomen terwijl de basis wordt aangebouwd.  Deze bases staan er bekend om dat ze experimentele labs voor menselijke ontvoeringsslachtoffers huisvesten, en dat ze de bevoorrading verzorgen voor activiteiten in de buurt.  De aanwezigheid van buitenaardse bases zal een groot aantal gerapporteerde buitenaardse activiteiten teweegbrengen, zonder dat er UFO's worden waargenomen.  Om een basis te vinden moet een XCom-vaartuig enkele uren in een gebied patrioulleren, zodat er enige kans op detectie is.
 STR_ALIEN_TERROR_UFOPEDIA
-When the aliens terrorize a city they will deploy some special forces with awesome powers.  Civilians will be directly threatened, and governments will be forced to evacuate whole areas.  The main purpose behind this activity is to generate sufficient public hysteria so that governments will threaten the XCom project.
+Wanneer buitenaardsen een stad terroriseren zetten ze speciale eenheden met ontzagwekkende krachten in.  Burgers zullen direct bedreigd worden, en overheden zullen zich gedwongen voelen om complete gebieden te evacueren.  Het hoofddoel achter deze activiteit is het aanwakkeren van de publieke hysterie zodat deze overheden het XCom-project onder druk zullen zetten.
 STR_ALIEN_RETALIATION_UFOPEDIA
-If XCom interceptors are being particularly successful in shooting down UFOs then the aliens may take some retaliatory action.  This could result in a direct attack against an XCom base.  However, the aliens have to find an XCom base in order to attack it, and provided UFOs are kept away then there should be little danger of an assault.
+Als XCom-onderscheppingsvaartuigen erg succesvol zijn in het neerhalen van UFO's, dan kunnen de buitenaardsen een wraakactie opzetten.  Dit kan resulteren in een directe aanval jegens een XCom-basis.  Echter, de buitenaardsen zullen eerst een XCom-basis moeten vinden alvorens ze deze kunnen aanvallen, en als UFOs worden weggehouden dan is er weinig kans op een inval.
 STR_ALIEN_SUPPLY_UFOPEDIA
-Once an alien base is constructed then it is resupplied on a regular basis by a special supply vessel.  If one of these vessels is detected while landing then it is certain that an alien base is nearby.
+Wanneer een buitenaardse basis eenmaal gebouwd is, dan wordt deze geregeld bevoorraad door een speciaal bevoorradingsschip.  Als een van deze vaartuigen wordt gedetecteerd tijdens het landen, dan weten we zeker dat er een buitenaardse basis in de buurt is.
 STR_SMALL_SCOUT_UFOPEDIA
-This tiny craft is primarily used for reconnaissance or research.  It normally precedes larger vessels at the start of an alien mission.
+Dit piepkleine vaartuig wordt voornamelijk gebruikt voor verkenning of onderzoek.  Gebruikelijk lopen deze schepen voor op grotere vaartuigen aan het begin van een buitenaardse missie.
 STR_MEDIUM_SCOUT_UFOPEDIA
-A medium sized scout vessel that poses little threat to earth forces.  Normally appears before larger vessels during missions.
+Een verkenningsvaartuig van gemiddelde grootte, welk weinig dreiging vormt voor de aardse krijgsmacht.  Normaal gesproken verschijnt dit voordat de grotere schepen komen tijdens een missie.
 STR_LARGE_SCOUT_UFOPEDIA
-The largest alien scout craft is a general purpose vessel that is used in all types of alien mission.
+Het grootste verkenningsvaartuig is een schip voor algemeen gebruik wat ingezet wordt voor verscheidene soorten buitenaardse missies.
 STR_HARVESTER_UFOPEDIA
-The harvester has a trap door in its base and is equipped with lifting gear to haul up cattle or other beasts.  Laser cutters are used to extract the desired material and the carcass is dumped on the ground.  There are also storage containers for body parts.
+De oogster heeft een klapdeur aan de onderkant en is uitgerust met hef-apparatuur die vee of andere dieren kan optillen.  Lasersnijders worden gebruikt om het gewenste materiaal te onttrekken en het kadaver wordt op de grond gedumpt.  Er zijn ook opslagruimtes voor lichaamsdelen.
 STR_ABDUCTOR_UFOPEDIA
-This vessel is equipped with an examination room for performing horrific experiments on human subjects.  The victim is normally paralyzed by telepathic powers, but remains conscious while on the operating table.
+Dit vaartuig is uitgerust met een onderzoekskamer waar verschrikkelijke experimenten worden uitgevoerd op menselijke patiënten.  Het slachtoffer wordt meestal op telepatische wijze verlamd, maar blijft op de operatietafel bij bewustzijn.
 STR_TERROR_SHIP_UFOPEDIA
-The terror ship has a containment facility for large alien terror weapons or creatures.  It is used to transport these alien terrorists into populated areas.
+Het terreurschip bevat een opslagfaciliteit voor grote buitenaardse terreurwapens of wezens.  Het wordt gebruikt om deze buitenaardse terroristen te verplaatsen naar bevolkte gebieden.
 STR_BATTLESHIP_UFOPEDIA
-The battleship is the largest and most powerful alien craft.  It is normally the primary alien mission craft, equipped with powerful weapons and numerous crew members.
+Het slagschip is het grootste en machtigste buitenaardse vaartuig.  Het is gewoonlijk het primaire vaartuig in een missie, en uitgerust met krachtige wapens en een brede bezetting.
 STR_SUPPLY_SHIP_UFOPEDIA
-The supply vessel is used during the construction of alien bases or for supplying existing bases.  It carries alien food containers and reproduction chambers.
+Het bevoorradingsschip wordt gebruikt tijdens de aanbouw van buitenaardse bases of om bestaande bases te bevoorraaden.  Het vervoert voedsel en voortplantingsruimtes.
 STR_DISMANTLE
-Dismantle
+Ontmantelen
 STR_FACILITY_IN_USE
-FACILITY IN USE
+FACILITEIT IN GEBRUIK
 STR_CANNOT_DISMANTLE_FACILITY
-CANNOT DISMANTLE FACILITY!{SMALLLINE}All base facilities must be linked to the access lift.
+KAN FACILITEIT NIET ONTMANTELEN!{SMALLLINE}Alle basisfaciliteiten moeten aangesloten zijn op de toegangslift.
 STR_TRANSFER_ITEMS_TO
-Transfer Items to 
+Artikelen Overbrengen Naar 
 STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER
-NO ALIEN CONTAINMENT FOR TRANSFER!{SMALLLINE}Live aliens need an alien containment facility in order to survive.
+GEEN KLIMAATCEL OM NAAR OVER TE BRENGEN!{SMALLLINE}Levende buitenaardsen hebben een klimaatcel nodig om te kunnen overleven.
 STR_AMOUNT_AT_DESTINATION
-AMOUNT AT{NEWLINE}DESTINATION
+AANTAL OP{NEWLINE}BESTEMMING
 STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY
-Alien dies as there is no alien containment facility
+Buitenaardse sterft vanwege het ontbreken van een klimaatcel.
 STR_NO_FREE_ACCOMODATION_CREW
-NO FREE ACCOMMODATION!{SMALLLINE}The destination base does not have enough space in the living quarters for the crew assigned to the craft.
+GEEN BESCHIKBARE LEEFRUIMTE!{SMALLLINE}De bestemmingsbasis heeft niet genoeg ruimte in de accommodatieblokken voor de aan het vaartuig toegewezen bezetting.
 STR_ITEMS_ARRIVING
-Items Arriving
+Aankomende Artikelen
 STR_DESTINATION_UC
-DESTINATION
+BESTEMMING
 STR_PISTOL
-Pistol
+Pistool
 STR_PISTOL_CLIP
-Pistol Clip
+Magazijn Voor Pistool
 STR_RIFLE
-Rifle
+Geweer
 STR_RIFLE_CLIP
-Rifle Clip
+Magazijn Voor Geweer
 STR_HEAVY_CANNON
-Heavy Cannon
+Zwaar Kanon
 STR_HC_AP_AMMO
-HC-AP Ammo
+ZK-PD-Munitie
 STR_HC_HE_AMMO
-HC-HE Ammo
+ZK-HE-Munitie
 STR_HC_I_AMMO
-HC-I Ammo
+ZK-B-Munitie
 STR_AUTO_CANNON
-Auto-Cannon
+Automatisch Kanon
 STR_AC_AP_AMMO
-AC-AP Ammo
+AK-PD-Munitie
 STR_AC_HE_AMMO
-AC-HE Ammo
+AK-HE-Munitie
 STR_AC_I_AMMO
-AC-I Ammo
+AK-B-Munitie
 STR_ROCKET_LAUNCHER
-Rocket Launcher
+Raketwerper
 STR_SMALL_ROCKET
-Small Rocket
+Kleine Raket
 STR_LARGE_ROCKET
-Large Rocket
+Grote Raket
 STR_INCENDIARY_ROCKET
-Incendiary Rocket
+Brandraket
 STR_GRENADE
-Grenade
+Granaat
 STR_SMOKE_GRENADE
-Smoke Grenade
+Rookgranaat
 STR_PROXIMITY_GRENADE
-Proximity Grenade
+Afstandsgranaat
 STR_HIGH_EXPLOSIVE
-High Explosive
+Hoog Explosief
 STR_STUN_ROD
-Stun Rod
+Verdovingsstok
 STR_HEAVY_PLASMA
-Heavy Plasma
+Zwaar Plasmageweer
 STR_HEAVY_PLASMA_CLIP
-Heavy Plasma Clip
+Magazijn Voor Zwaar Plasmageweer
 STR_PLASMA_RIFLE
-Plasma Rifle
+Plasmageweer
 STR_PLASMA_RIFLE_CLIP
-Plasma Rifle Clip
+Magazijn Voor Plasmageweer
 STR_PLASMA_PISTOL
-Plasma Pistol
+Plasmapistool
 STR_PLASMA_PISTOL_CLIP
-Plasma Pistol Clip
+Magazijn Voor Plasmapistool
 STR_BLASTER_LAUNCHER
-Blaster Launcher
+Springbommenwerper
 STR_BLASTER_BOMB
-Blaster Bomb
+Springbom
 STR_SMALL_LAUNCHER
-Small Launcher
+Kleine werper
 STR_STUN_BOMB
-Stun Bom
+Verdovingsbom
 STR_ALIEN_GRENADE
-Alien Granaat
+Buitenaardse Granaat
 STR_ELERIUM_115
 Elerium-115
 STR_MIND_PROBE
-Mind Probe
+Gedachtenlezer
 STR_SECTOID_CORPSE
-Sectoid Lichaam
+Lichaam van Sectoïde
 STR_SNAKEMAN_CORPSE
-Snakeman Lichaam
+Lichaam van Slangeman
 STR_ETHEREAL_CORPSE
-Ethereal Lichaam
+Lichaam van Etherische
 STR_MUTON_CORPSE
-Muton Lichaam
+Lichaam van Muton
 STR_FLOATER_CORPSE
-Floater Lichaam
+Lichaam van Zwever
 STR_CELATID_CORPSE
-Celatid Lichaam
+Lichaam van Celatide
 STR_SILACOID_CORPSE
-Silacoid Lichaam
+Lichaam van Silacoïde
 STR_CHRYSSALID_CORPSE
-Chryssalid Lichaam
+Lichaam van Chrysalide
 STR_REAPER_CORPSE
-Reaper Lichaam
+Lichaam van Maaier
 STR_SECTOPOD_CORPSE
-Sectopod Lichaam
+Lichaam van Sectopod
 STR_CYBERDISC_CORPSE
-Cyberdisc Lichaam
+Lichaam van Cyberdisc
 STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD
-Not enough equipment to fully re-equip squad
+Onvoldoende materieel om geweergroep volledig opnieuw uit te rusten.
 STR_MARS_CYDONIA_LANDING
-Mars: Cydonia Landing
+Mars: Landing in Cydonia
 STR_MARS_CYDONIA_LANDING_BRIEFING
-Your Avenger craft has landed in the region of Cydonia on the surface of Mars.  Our information indicates that one of the pyramid constructions contains a green access lift to an underground complex.  Once you have assembled all your soldiers in the lift area click on the 'abort mission' icon to continue to the next stage.
+Je Wreker-vaartuig is geland op de Cydonia-vlakte van Mars.  Volgens onze informatie bevat een van de piramidevormige gebouwen een groene toegangslift naar een ondergronds complex.  Wanneer je al je soldaten hebt verzameld in het liftgebied, klik op het icoon  'missie afbreken' om door te gaan naar de volgende fase.
 STR_MARS_THE_FINAL_ASSAULT
-Mars: The Final Assault
+Mars: De Laatste Aanval
 STR_MARS_THE_FINAL_ASSAULT_BRIEFING
-The pyramid lift takes your battle weary soldiers deep below the planet's surface.  They arrive in the heart of a large complex of tunnels and chambers.  The alien brain is hidden somewhere in the labyrinth.  It must be destroyed if the earth is to be saved from alien enslavement.{NEWLINE}{NEWLINE}Good Luck!
+De lift in de piramide vervoert je door de strijd vermoeide soldaten diep onder het oppervlak van de planeet.  Ze komen aan in het hart van een groot complex van tunnels en kamers.  Het buitenaardse brein zit ergens in het doolhof verscholen.  Het moet vernietigd worden om de aarde te redden van buitenaardse onderdrukking.{NEWLINE}{NEWLINE}Veel Succes!
 STR_IN_ORDER_TO_USE_OR_PRODUCE_THE
-{NEWLINE}voor het gebruiken/fabriceren van{NEWLINE}
+{NEWLINE}om gebruik te maken/productie te starten van{NEWLINE}
 STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE
-De aliens hebben een niet verdedigde basis vernietigd: 
+De buitenaardse hebben een onverdedigde basis vernietigd:
 STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN
-XCom agenten hebben een alien basis gelocaliseerd in 
+Agenten van XCom hebben een buitenaardse basis opgespoord in 
 STR_STANDOFF
 HOU AFSTAND
 STR_CAUTIOUS_ATTACK
 VOORZICHTIGE AANVAL
 STR_STANDARD_ATTACK
-STANDAARD AANVAL
+STANDAARDAANVAL
 STR_AGGRESSIVE_ATTACK
 AGGRESSIEVE AANVAL
 STR_DISENGAGING
-TERUGTREKKEN
+TREKT TERUG
 STR_UFO_HIT
 UFO GERAAKT!
 STR_UFO_CRASH_LANDS
-UFO IS GECRASHED!
+UFO STORT NEER!
 STR_MINIMISE_AT_STANDOFF_RANGE_ONLY
-Minimaliseren enkel op Veilige Afstand
+Minimaliseren Enkel op Veilige Afstand
 STR_UFO_RETURN_FIRE
 UFO VUURT TERUG!
 STR_INTERCEPTOR_DAMAGED
->>> INTERCEPTOR BESCHADIGD <<<
+>>> ONDERSCHEPPER BESCHADIGD <<<
 STR_INTERCEPTOR_DESTROYED
->>> INTERCEPTOR VERNIETIGD <<<
+>>> ONDERSCHEPPER VERNIETIGD <<<
 STR_UFO_OUTRUNNING_INTERCEPTOR
-UFO LOOPT UIT OP INTERCEPTOR!
+UFO ONTSNAPT AAN ONDERSCHEPPER!
 STR_ALIENS_TERRORISE
-ALIENS TERRORISEREN
+BUITENAARDSEN TERRORISEREN
 STR_LONG_RANGE_DETECTION
-Lange afstand detectie
+Lange-afstandsdetectie
 STR_STORES_UC
-VOORRAAD
+OPSLAGRUIMTE
 STR_DIFFICULTY_LEVEL
 Moeilijkheidsgraad
 STR_INTERCEPT
-ONDERSCHEP
+ONDERSCHEPPING
 STR_BASES
-BASISSEN
+BASES
 STR_GRAPHS
 GRAFIEKEN
 STR_UFOPAEDIA_UC
-UFOPAEDIA
+UFOPEDIE
 STR_OPTIONS_UC
 OPTIES
 STR_FUNDING_UC
@@ -1856,17 +1856,17 @@ STR_1_HOUR
 STR_1_DAY
 1 Dag
 STR_XCOM_PERFORMANCE_ROSTER
-XCom Performance Roster
+XCom Prestatieschema
 STR_ENTER_NAME
-Enter Name
+Naam Invoeren
 STR_PERFORMANCE_RATING
-Performance Rating
+Beoordeling van Prestatie
 STR_VICTORY_DATE
-Victory Date
+Datum Overwinning
 STR_ELECTRO_FLARE
-Electro-flare
+Elektrische Fakkel
 STR_ELECTRO_FLARE_UFOPEDIA
-Dit compacte apparaatje produceert een fel licht. Het kan de positie van vijandelijke eenheden in de buurt van de electro-flare oplichten tijdens nachtelijke missies.
+Dit compacte apparaatje produceert een fel licht wanneer het gegooid wordt.  Het kan de positie van vijandelijke eenheden in de buurt van de fakkel verlichten tijdens nachtelijke missies.
 STR_MONTHLY_COSTS
 Maandelijkse Kosten
 STR_CRAFT_RENTAL
@@ -1874,9 +1874,9 @@ Huur Vaartuigen
 STR_SALARIES
 Salarissen
 STR_BASE_MAINTENANCE
-Onderhoud basis
+Onderhoud Basis
 STR_COST_PER_UNIT
-Kost per eenheid
+Kosten per eenheid
 STR_QUANTITY
 Hoeveelheid
 STR_TOTAL
@@ -1884,7 +1884,7 @@ Totaal
 STR_IN_PSIONIC_TRAINING
 In Psionische Training
 STR_BLASTER_BOMB_UFOPEDIA
-Dit is een zeer explosief projectiel met een intelligente telegeleiding. Het wordt afgevuurd met een blasterkanon.
+Dit is een zeer explosief projectiel met een intelligente telegeleiding.  Het wordt afgevuurd met behulp van een springbommenwerper.
 STR_FRONT_ARMOR
 Pantser Voor
 STR_LEFT_ARMOR
@@ -1902,7 +1902,7 @@ Opslaan afgebroken
 STR_CURRENT_LOAD_ABORTED
 Laden afgebroken
 STR_FORMAT
-FORMATTEER
+FORMATTEREN
 STR_SAVING_GAME
 Opslaan spel
 STR_LOADING_GAME
@@ -1922,23 +1922,23 @@ Spel opgeslagen
 STR_DELETE
 VERWIJDER
 STR_DELETE_UNSUCCESSFUL
-Delete failed
+Niet verwijderd
 STR_PREVIOUS_X_COM_SAVED_GAME_DETECTED
-Previous X-COM saved game detected
+Eerder opgeslagen spel gedetecteerd
 STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME
 Opgeslagen spel verwijderen?
 STR_SOUND_OPTIONS
 GELUIDSOPTIES
 STR_MUSIC_VOLUME
-Muziek volume
+Volumne Muziek
 STR_SFX_VOLUME
-SFX volume
+Volume Effecten
 STR_CONTROLLER_OPTIONS
-CONTROLLER OPTIONS
+OPTIES VOOR CONTROLLER
 STR_CONTROLLER_MODE_1_HOTSPOT_INTERFACE
-CONTROLLER MODE 1{NEWLINE}(HOTSPOT INTERFACE)
+CONTROLLERMODUS 1{NEWLINE}(HOTSPOT INTERFACE)
 STR_CONTROLLER_MODE_2_POINT_CLICK_INTERFACE
-CONTROLLER MODE 2{NEWLINE}(POINT & CLICK INTERFACE)
+CONTROLLERMODUS 2{NEWLINE}(POINT & CLICK INTERFACE)
 STR_LOADING
 Laden...
 STR_FORMAT_UNSUCCESSFUL
@@ -1948,7 +1948,7 @@ EENHEID>
 STR_ENERGY
 ENERGIE
 STR_MORALE
-MORAAL
+MOREEL
 STR_ARMOR_
 PANTSER>
 STR_FRONT_ARMOR_UC
@@ -1960,9 +1960,9 @@ PANTSER RECHTS
 STR_REAR_ARMOR_UC
 PANTSER ACHTER
 STR_SKILLS
-SKILLS>
+VAARDIGHEDEN>
 STR_LEVEL
-LEVEL>
+NIVEAU>
 STR_HEAD
 HOOFD
 STR_TORSO
@@ -1978,97 +1978,97 @@ LINKERBEEN
 STR_PAIN_KILLER
 PIJNSTILLER
 STR_STIMULANT
-STIMULANT
+OPWEKKEND MIDDEL
 STR_HEAL
 GENEZEN
 STR_TUS
 AP>
 STR_WEIGHT
-Weight>
+Gewicht>
 STR_FACCURACY
-F.Acc>
+Sch.Nwk>
 STR_REACT
 React>
 STR_PSKILL
-P.Skill>
+P.Vaard>
 STR_PSTRENGTH
-P.Str>
+P.Kracht>
 STR_ALIEN_ARTIFACT
-Alien Artifact
+Buitenaards Voorwerp
 STR_AMMO_ROUNDS_LEFT
-MUNITIE:{NEWLINE}PATRONEN{NEWLINE}RESTEREND=
+MUNITIE:{NEWLINE}RESTERENDE{NEWLINE}PATRONEN=
 STR_THROW
-Werp
+Werpen
 STR_AUTO_SHOT
-Autom Schot
+Automatisch Schot
 STR_SNAP_SHOT
-Snel Schot
+Vlug Schot
 STR_AIMED_SHOT
 Gericht Schot
 STR_OPEN
-Open
+Openen
 STR_CLOSE
-Sluit
+Sluiten
 STR_STUN
-Stun
+Verdoven
 STR_PRIME_GRENADE
-Granaat Activeren
+Granaat Afstellen
 STR_USE_SCANNER
 Gebruik Scanner
 STR_USE_MEDI_KIT
-Gebruik Medikit
+Gebruik Medicijnkit
 STR_LAUNCH_MISSILE
 Afvuren Projectiel
 STR_ACC
 Prec>
 STR_NOT_ENOUGH_TIME_UNITS
-Niet genoeg Actiepunten!
+Onvoldoende Actiepunten!
 STR_NOT_ENOUGH_ENERGY
-Niet genoeg Energie!
+Onvoldoende Energie!
 STR_NO_ROUNDS_LEFT
-Wapen niet geladen!
+Geen Resterende Patronen!
 STR_NO_AMMUNITION_LOADED
-Wapen niet geladen!
+Wapen Niet geladen!
 STR_WRONG_AMMUNITION_FOR_THIS_WEAPON
-Vekeerde munitie voor dit wapen!
+Vekeerde Munitie voor dit wapen!
 STR_WEAPON_IS_ALREADY_LOADED
-Wapen is reeds geladen!
+Wapen is reeds Geladen!
 STR_NO_LINE_OF_FIRE
 Obstructie in de Vuurlinie!
 STR_GRENADE_IS_ACTIVATED
 Granaat is Geactiveerd!
 STR_THERE_IS_NO_ONE_THERE
-Daar is niemand!
+Daar staat niemand!
 STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED
-Onmogelijk artefact te gebruiken voordat het onderzocht is!
+Kan buitenaards voorwerp niet gebruiken totdat het onderzocht is!
 STR_OUT_OF_RANGE
 Buiten Bereik!
 STR_UNABLE_TO_THROW_HERE
-Onmogelijk hier te gooien!
+Kan hier niet heen gooien!
 STR_NUMBER_OF_ROUNDS
 Aantal Beurten?
 STR_SET_TIMER
-Stel Tijd In
+Tijd Instellen
 STR_HIDDEN_MOVEMENT
-VERBORGEN BEWEGING
+VERBORGEN ACTIE
 STR_TURN
 BEURT>
 STR_SIDE
-TEAM> 
+ZIJDE> 
 STR_X_COM
 X-COM
 STR_PRESS_BUTTON_TO_CONTINUE
 Druk een toets om verder te gaan
 STR_MIND_CONTROL
-Gedachtencontrole
+Hersenspoelen
 STR_PANIC_UNIT
-Creer Paniek
+EENHEID BEANGSTIGEN
 STR_MIND_CONTROL_SUCCESSFUL
-Gedachtencontrole Gelukt
+Hersenspoelen Gelukt
 STR_HAS_GONE_BERSERK_MALE
-is Gek geworden
+is Losgeslagen
 STR_HAS_GONE_BERSERK_FEMALE
-is Gek geworden
+is Losgeslagen
 STR_HAS_PANICKED_MALE
 is in Paniek
 STR_HAS_PANICKED_FEMALE
@@ -2076,43 +2076,43 @@ is in Paniek
 STR_XCOM
 Xcom
 STR_ALIENS
-Aliens
+Buitenaardsen
 STR_RIGHT_HAND
 RECHTERHAND
 STR_LEFT_HAND
 LINKERHAND
 STR_RIGHT_SHOULDER
-SCHOUDER RECHTS
+RECHTERSCHOUDER
 STR_LEFT_SHOULDER
-SCHOUDER LINKS
+LINKERSCHOUDER
 STR_BACK_PACK
 RUGZAK
 STR_BELT
 RIEM
 STR_IS_UNDER_ALIEN_CONTROL
-is onder alien controle
+is onder buitenaardse invloed
 STR_SCROLL_SPEED
-SCROLL SNELHEID
+SCHUIFSNELHEID
 STR_SCROLL_TYPE
-SCROLL TYPE
+SCHUIVINGSTYPE
 STR_TRIGGER_SCROLL
-TRIGGER SCROLL
+KLIKKEN OM TE SCHUIVEN
 STR_AUTO_SCROLL
-AUTO-SCROLL
+AUTOMATISCH SCHUIVEN
 STR_FIRE_SPEED
 VUURSNELHEID
 STR_XCOM_MOVEMENT_SPEED
 BEWEGINGSSNELHEID XCOM
 STR_ALIEN_MOVEMENT_SPEED
-BEWEGINGSSNELHEID ALIENS
+BEWEGINGSSNELHEID BUITENAARDSEN
 STR_HAS_BECOME_UNCONSCIOUS_MALE
  is bewusteloos
 STR_HAS_BECOME_UNCONSCIOUS_FEMALE
  is bewusteloos
 STR_HAS_DIED_FROM_A_FATAL_WOUND_MALE
- is gestorven aan een fatale wonde
+ is bezweken aan een fatale wond
 STR_HAS_DIED_FROM_A_FATAL_WOUND_FEMALE
- is gestorven aan een fatale wonde
+ is bezweken aan een fatale wond
 STR_USE_MIND_PROBE
 Gebruik Gedachtenlezer
 STR_FATAL_WOUNDS
@@ -2120,9 +2120,9 @@ FATALE WONDEN
 STR_UNDER_ARMOR_UC
 PANTSER ONDER
 STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT
-Actiepunten gereserveerd voor Snel Schot
+Actiepunten gereserveerd voor Vlug Schot
 STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT
-Actiepunten gereserveerd voor Autom Schot
+Actiepunten gereserveerd voor Automatisch Schot
 STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT
 Actiepunten gereserveerd voor Gericht Schot
 STR_ABORT_MISSION_QUESTION
@@ -2130,318 +2130,318 @@ Missie Afbreken ?
 STR_CORPSE
 Lichaam
 STR_UNLOAD
-Unload
+Uitladen
 STR_NEW_SAVED_GAME
-<NEW SAVED GAME>
+<NIEUW OPGESLAGEN SPEL>
 STR_NEW_BATTLE
-New Battle
+Nieuw Gevecht
 STR_OPTIONS
-Options
+Opties
 STR_TERRAIN
-TERRAIN
+TERREIN
 STR_DARKNESS
-DARKNESS
+DUISTERNIS
 STR_DISPLAY_RESOLUTION
-Display Resolution
+Schermresolutie
 STR_DISPLAY_MODE
-Display Mode
+Scherm-modus
 STR_WINDOWED
-Windowed
+Venster
 STR_FULLSCREEN
-Fullscreen
+Volledig scherm
 STR_LANGUAGE
-LANGUAGE
+TAAL
 CULTA
-Farm
+Platteland
 FOREST
-Forest
+Bosrijk
 JUNGLE
-Jungle
+Oerwoud
 MOUNT
-Mountain
+Gebergte
 DESERT
-Desert
+Woestijn
 POLAR
-Polar
+Poolgebied
 STR_RANDOM_BATTLE
-Random Battle
+Willekeurig Gevecht
 STR_NOT_ENOUGH_ammotype_TO_ARM_HWP
-Not enough {1} to arm HWP
+Onvoldoende {1} om ZWP te bewapenen
 STR_DAY_1
-{N} day
+{N} dag
 STR_DAY_2
-{N} days
+{N} dagen
 STR_MIXED
-Mixed
+Gemengd
 STR_RIGHT_CLICK_TO_DELETE
-Right click to delete.
+Rechtsklikken om te verwijderen.
 STR_EQUIPMENT_FOR_craftname
-Equipment for {1}
+Uitrusting voor {1}
 STR_SELECT_SQUAD_FOR_craftname
-Select Squad for {1}
+Selecteer geweergroep voor {1}
 STR_n_UNITS_IN_EXIT_AREA_0
-No Units in Exit Area
+Geen Eenheden in Vertrekgebied
 STR_n_UNITS_IN_EXIT_AREA_1
-{N} Unit in Exit Area
+{N} Eenheid in Vertrekgebied
 STR_n_UNITS_IN_EXIT_AREA_2
-{N} Units in Exit Area
+{N} Eenheden in Vertrekgebied
 STR_n_UNITS_OUTSIDE_EXIT_AREA_0
-No Units outside Exit Area
+Geen Eenheden Buiten Vertrekgebied
 STR_n_UNITS_OUTSIDE_EXIT_AREA_1
-{N} Unit outside Exit Area
+{N} Eenheid Buiten Vertrekgebied
 STR_n_UNITS_OUTSIDE_EXIT_AREA_2
-{N} Units outside Exit Area
+{N} Eenheden Buiten Vertrekgebied
 STR_ABANDON_GAME_QUESTION
-ABANDON GAME?
+SPEL AFBREKEN?
 STR_HAS_BEEN_KILLED_MALE
-has been Killed
+is Gedood
 STR_HAS_BEEN_KILLED_FEMALE
-has been Killed
+is Gedood
 STR_DRAG_SCROLL
-DRAG SCROLL
+SLEPEN OM TE SCHUIVEN
 STR_HIT_MELEE
-Hit
+Slag
 STR_CONTROLS
-CONTROLS
+BESTURING
 STR_RESTORE_DEFAULTS
-Restore Defaults
+Standaardinstellingen Terugzetten
 STR_GENERAL
-General
+Algemeen
 STR_GEOSCAPE
-Geoscape
+Globe
 STR_BATTLESCAPE
-Battlescape
+Gevechtsscherm
 STR_SCREENSHOT
-Screenshot
+Schermafbeelding
 STR_FPS_COUNTER
-FPS Counter
+FPS-teller
 STR_ROTATE_LEFT
-Rotate Left
+Linksom Draaien
 STR_ROTATE_RIGHT
-Rotate Right
+Rechtsom Draaien
 STR_ROTATE_UP
-Rotate Up
+Omhoog Draaien
 STR_ROTATE_DOWN
-Rotate Down
+Omlaag Draaien
 STR_ZOOM_IN
-Zoom In
+Inzoomen
 STR_ZOOM_OUT
-Zoom Out
+Uitzoomen
 STR_TOGGLE_COUNTRY_DETAIL
-Toggle Country Detail
+Details voor landen wel/niet weergeven
 STR_TOGGLE_RADAR_RANGES
-Toggle Radar Ranges
+Weergave radarbereik wel/niet weergeven
 STR_SCROLL_LEFT
-Scroll Left
+Links Schuiven
 STR_SCROLL_RIGHT
-Scroll Right
+Rechts Schuiven
 STR_SCROLL_UP
-Scroll Up
+Omhoog Schuiven
 STR_SCROLL_DOWN
-Scroll Down
+Omlaag Schuiven
 STR_UNIT_LEVEL_ABOVE
-Move Unit to Level Above
+Eenheid naar Bovenliggend Niveau Verplaatsen
 STR_UNIT_LEVEL_BELOW
-Move Unit to Level Below
+Eenheid naar Onderliggend Niveau Verplaatsen
 STR_VIEW_LEVEL_ABOVE
-View Level Above
+Bovenliggend Niveau Tonen
 STR_VIEW_LEVEL_BELOW
-View Level Below
+Onderliggend Niveau Tonen
 STR_CENTER_SELECTED_UNIT
-Center Selected Unit
+Geselecteerde Eenheid Centreren
 STR_PREVIOUS_UNIT
-Select Previous Unit
+Vorige Eenheid Selecteren
 STR_NEXT_UNIT
-Select Next Unit
+Volgende Eenheid Selecteren
 STR_DESELECT_UNIT
-Don't Reselect Unit
+Eenheid Niet Herselecteren
 STR_INVENTORY
-Inventory
+Inventaris
 STR_MINIMAP
-Minimap
+Mini-kaart
 STR_MULTI_LEVEL_VIEW
-Multi-Level View
+Meerdere Niveaus Tonen
 STR_END_TURN
-End Turn
+Beurt Beëindigen
 STR_ABORT_MISSION
-Abort Mission
+Missie Afbreken
 STR_UNIT_STATS
-Unit Stats
+Eigenschappen van Eenheden
 STR_KNEEL
-Kneel
+Knielen
 STR_RELOAD
-Reload
+Herladen
 STR_TOGGLE_PERSONAL_LIGHTING
-Toggle Personal Lighting
+Persoonlijke Belichting Aan-/Uitzetten
 STR_DONT_RESERVE_TUS
-Don't Reserve TUs
+Geen AP Reserveren
 STR_RESERVE_TUS_FOR_SNAP_SHOT
-Reserve TUs for Snap Shot
+AP Reserveren voor Vlug Schot
 STR_RESERVE_TUS_FOR_AIMED_SHOT
-Reserve TUs for Aimed Shot
+AP Reserveren voor Gericht Schot
 STR_RESERVE_TUS_FOR_AUTO_SHOT
-Reserve TUs for Auto Shot
+AP Reserveren voor Automatisch Schot
 STR_CENTER_ON_ENEMY_1
-Center on Enemy 1
+Centreren op Vijand 1
 STR_CENTER_ON_ENEMY_2
-Center on Enemy 2
+Centreren op Vijand 2
 STR_CENTER_ON_ENEMY_3
-Center on Enemy 3
+Centreren op Vijand 3
 STR_CENTER_ON_ENEMY_4
-Center on Enemy 4
+Centreren op Vijand 4
 STR_CENTER_ON_ENEMY_5
-Center on Enemy 5
+Centreren op Vijand 5
 STR_CENTER_ON_ENEMY_6
-Center on Enemy 6
+Centreren op Vijand 6
 STR_CENTER_ON_ENEMY_7
-Center on Enemy 7
+Centreren op Vijand 7
 STR_CENTER_ON_ENEMY_8
-Center on Enemy 8
+Centreren op Vijand 8
 STR_CENTER_ON_ENEMY_9
-Center on Enemy 9
+Centreren op Vijand 9
 STR_CENTER_ON_ENEMY_10
-Center on Enemy 10
+Centreren op Vijand 10
 STR_ENEMY_WEAPON_LEVEL
-Enemy Weapon Level
+Wapensniveau Vijand
 STR_GROUNDED
-GROUND
+GROND
 STR_LIVING_QUARTERS_PLURAL
-Living Quarters
+Leefruimtes
 STR_OPENXCOM
 OpenXcom
 STR_LIST_ITEM
-ITEM
+ARTIKEL
 STR_DISPLAY_FILTER
-Display Filter
+Weergavefilter
 STR_QUICK_SAVE
-Quick Save
+Snel Opslaan
 STR_QUICK_LOAD
-Quick Load
+Snel Laden
 STR_ADVANCED
-ADVANCED
+GEAVANCEERD
 STR_ADVANCED_OPTIONS
-ADVANCED OPTIONS
+GEAVANCEERDE INSTELLINGEN
 STR_AGGRESSIVERETALIATION
-Aggressive retaliation
+Aggressieve wraakactie
 STR_AGGRESSIVERETALIATION_DESC
-UFOs will attempt to detect your bases at all times, regardless of their mission parameters.
+UFO's zullen altijd proberen je basis op te sporen, onafhankelijk van de parameters van hun missie.
 STR_ALIENCONTAINMENTLIMITENFORCED
-Alien containment limits
+Klimaatcelbeperkingen
 STR_ALIENCONTAINMENTLIMITENFORCED_DESC
-Live alien containment limits will be imposed.
+Klimaatcellen zullen een beperking hebben op hoeveel buitenaardsen er in kunnen worden bewaard.
 STR_CANSELLLIVEALIENS
-Live alien sale
+Verkoop levende buitenaardsen
 STR_CANSELLLIVEALIENS_DESC
-Allows the sale of live aliens, recommended when using containment limits.
+Staat je toe om levende buitenaardsen te verkopen, aanbevolen als je speelt met klimaatcelbeperkingen.
 STR_ALLOWAUTOSELLPRODUCTION
-Manufacture auto-sale
+Verkoop vanuit productie
 STR_ALLOWAUTOSELLPRODUCTION_DESC
-Right-click the increase button on a manufacturing project's "total to produce" to auto-sell.
+Rechtsklikken op de knop voor 'productie ophogen' maakt dat geproduceerde eenheden automatisch worden verkocht.
 STR_ALLOWBUILDINGQUEUE
-Allow building queue
+Aanbouwplanning
 STR_ALLOWBUILDINGQUEUE_DESC
-Unfinished facilities act as links to the access lift when new facilities are placed.
+Faciliteiten in aanbouw fungeren als aansluiting op de toegangslift bij plaatsing van nieuwe faciliteiten.
 STR_BATTLEAUTOEND
-Auto-end battle
+Automatische gevechtsbeëindiging
 STR_BATTLEAUTOEND_DESC
-Battles automatically end when the last living enemy is neutralized.
+Gevechten eindigen vanzelf als de laatste levende vijand is geneutraliseerd.
 STR_BATTLEINSTANTGRENADE
-Instant grenades
+Instant-granaten
 STR_BATTLEINSTANTGRENADE_DESC
-Grenades primed to go off in 0 turns will explode immediately when thrown, instead of at the end of the turn.
+Granaten die ingesteld zijn op 0 beurten zullen direct ontploffen na het gooien in plaats van aan het eind van de beury.
 STR_BATTLENOTIFYDEATH
-Show death notifications
+Toon Sterfmeldingen
 STR_BATTLENOTIFYDEATH_DESC
-Display notifications every time one of your soldiers dies.
+Laat iedere keer een melding zien als een van je soldaten sterft.
 STR_BATTLENEWPREVIEWPATH
-Pathfinding preview
+Pad vooraf tonen
 STR_BATTLENEWPREVIEWPATH_DESC
-Left-click highlights the path your unit will take to the destination, double-click moves the unit.
+Eenmaal klikken toont het pad wat je eenheid zal volgen naar zijn bestemming, met dubbelklikken wordt de eenheid verplaatst.
 STR_BATTLERANGEBASEDACCURACY
-Range-based accuracy
+Afstandafhankelijke nauwkeurigheid
 STR_BATTLERANGEBASEDACCURACY_DESC
-Accuracy of shots takes visibility, distance, and other factors into account.
+Rekening houden met zichtbaarheid, afstand en andere factoren bij het bepalen van de nauwkeurigheid van een schot.
 STR_CANMANUFACTUREMOREITEMSPERHOUR
-TFTD manufacture rules
+TFTD productieregels
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Allows manufacturing projects to produce more than one item per hour.
+Er kan meer dan een artikel per uur geproduceerd worden.
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE
-Airborne transfers
+Vliegende overdracht
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC
-Aircraft currently in-flight can be transferred.
+Vaartuigen die zich op dit moment in de lucht bevinden kunnen worden overgedragen.
 STR_CRAFTLAUNCHALWAYS
-Force aircraft launch
+Vaartuigen geforceerd lanceren
 STR_CRAFTLAUNCHALWAYS_DESC
-You may force your aircraft into flight, overriding the need to completely refuel and rearm.
+Het is mogelijk om je vaartuigen te lanceren, ook als ze nog niet volledig bewapend of bijgetankt zijn.
 STR_CUSTOMINITIALBASE
-Custom initial base
+Afwijkende startbasis
 STR_CUSTOMINITIALBASE_DESC
-When starting a new game, you can manually place your starting facilities instead of using the default layout.
+Als je een nieuw spel begint kun je handmatig je initiële faciliteiten bepalen in plaats van de standaardindeling.
 STR_GLOBESEASONS
-Globe tilted lighting
+Schuine belichting op globe
 STR_GLOBESEASONS_DESC
-Enable realistic projection of sunlight on the Geoscape according to the Earth axial tilt.
+Gebruik maken van realistische projectie van zonlicht op de globe, rekening houdend met de schuine as van de aarde.
 STR_PLAYINTRO
-Play intro
+Intro spelen
 STR_PLAYINTRO_DESC
-Show the intro cinematic on startup.
+Toont de cinematische introductie bij het opstarten.
 STR_SHOWFUNDSONGEOSCAPE
-Show geoscape funds
+Middelen tonen bij globe
 STR_SHOWFUNDSONGEOSCAPE_DESC
-Expand the geoscape info panel to include additional information on your current financial situation.
+Het informatiepaneel bij de globe uitbreiden met extra informatie over je huidige financiële situatie.
 STR_SHOWMORESTATSININVENTORYVIEW
-Inventory stats
+Inventaris-informatie
 STR_SHOWMORESTATSININVENTORYVIEW_DESC
-Show extra information on the selected soldier in the inventory screen.
+Extra informatie tonen over de geselecteerde soldaat in het inventaris-scherm.
 STR_SNEAKYAI
-Sneaky AI
+Sluipende AI
 STR_SNEAKYAI_DESC
-AI avoids exposing themselves to the player whenever possible.
+De AI voorkomt, wanneer mogelijk, dat hij zijn locatie onthult aan de speler.
 STR_STRAFE
-Strafe setting
+Zijdelings bewegen
 STR_STRAFE_DESC
-Enable strafing, running, and independent tank turret movement. Hold CTRL to use alternate movement methods.
+Zijdelings bewegen, schieten en onafhankelijke beweging van de geschutstoren op tanks.  Maak hier gebruik van door CTRL in te houden.
 STR_BATTLESCROLLDRAGINVERT
-Inverted drag-scrolling
+Geïnverteerd slepend schuiven
 STR_BATTLESCROLLDRAGINVERT_DESC
-Inverts drag-scrolling on the battlescape.
+Het scherm verschuift in omgekeerde richting van het slepen.
 STR_BATTLEEXPLOSIONHEIGHT
-Explosion height
+Explosie-hoogte
 STR_BATTLEEXPLOSIONHEIGHT_DESC
-Change how far height-wise explosions may spread.{NEWLINE}(Flat: 0, Round: 3)
+Stel in hoe ver explosies de hoogte in mogen gaan.{NEWLINE}(Plat: 0, Rond: 3)
 STR_AUTOSAVE
-Autosave mode
+Automatisch opslaan
 STR_AUTOSAVE_DESC
-0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
+0 - Uitgeschakeld. 1 - Snel opslaan en snel laden. 2 - Alleen om 00:00 automatisch opslaan. Alle knoppen voor laden en opslaan worden uitgeschakeld. 3 - Als hiervoor, maar ook automatisch opslaan bij afsluiten van het spel.
 STR_ALLOWPSIONICCAPTURE
-Allow psi-capture
+Toestaan psi-vangst
 STR_ALLOWPSIONICCAPTURE_DESC
-Mind-controlling all remaining aliens results in victory, and they count as live captures.
+Door alle overgebleven buitenaardsen te hersenspoelen behaal je een overwinning, omdat dit telt als een gevangenneming.
 STR_ANYTIMEPSITRAINING
-Psionic training at any time
+Psionische training op ieder moment
 STR_ANYTIMEPSITRAINING_DESC
-You can at any time send soldiers into (or remove from) psionic training. Remember, initial training takes from 30 to 60 days.
+Je kan op ieder moment soldaten in- of uitschrijven voor psionische training.  Denk eraan, initiële training duurt tussen de 30 en 60 dagen.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+Onvoldoende Ruimte!
 STR_WEAPONSELFDESTRUCTION
-Alien weapon self destruction
+Zelfvernietigende buitenaardse wapens
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Wapens die door buitenaardsen worden meegedragen zullen zichzelf automatisch vernietigen wanneer hun eigenaar sterft.
 STR_RESEARCHEDITEMSWILLSPENT
-Researched items will be spent
+Onderzochte artikelen zijn opgebruikt
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the base stores.
+Artikelen die onderzocht worden, worden uit je opslag gehaald en ontmanteld.  Na levende buitenaardsen te "onderzoeken" zal het lichaam worden geretourneerd naar de opslagruimten van de basis.
 STR_ARROWS
-ARROWS
+PIJLEN
 STR_FULL
-FULL
+VOL
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Schermafbeelding Opslaan van Eerste-Persoonszicht
 STR_TIME_UNITS_RESERVED_FOR_KNEELING
-Time Units reserved for Kneeling
+Actiepunten gereserveerd voor knielen
 STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
-TU's reserved for Kneeling and Firing
+Actiepunten gereserveerd voor Knielen en Vuren
 STR_RESERVE_TUS_FOR_KNEEL
-Reserve Time Units for kneeling
+AP Reserveren voor Knielen
 STR_EXPEND_ALL_TIME_UNITS
-Expend all remaining Time Units
+Alle overgebleven actiepunten opgebruiken
