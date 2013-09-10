@@ -67,7 +67,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(_game->getLanguage()->getString("STR_ADVANCED_OPTIONS"));
-	
+
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AdvancedOptionsState::btnOkClick);
@@ -81,7 +81,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
 	_btnDefault->setText(_game->getLanguage()->getString("STR_RESTORE_DEFAULTS"));
 	_btnDefault->onMouseClick((ActionHandler)&AdvancedOptionsState::btnDefaultClick);
-	
+
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
 	_txtDescription->setWordWrap(true);
 
@@ -101,6 +101,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("interceptCraftAlwaysSelectable", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("customInitialBase", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
@@ -125,7 +126,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), setting.c_str());
 		++sel;
 	}
-	
+
 	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
@@ -160,7 +161,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
  */
 AdvancedOptionsState::~AdvancedOptionsState()
 {
-	
+
 }
 
 /**
@@ -210,7 +211,7 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 		}
 		++sel;
 	}
-	
+
 	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
 		i->second = 0;

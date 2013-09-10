@@ -2411,6 +2411,10 @@ STR_RESEARCHEDITEMSWILLSPENT
 Articolele cercetate vor fi irosite
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Articolele cercetate sunt scoase din depozite și vor fi dezasamblate. După "cercetarea" extratereștrilor vii, corpul se va întoarce în magazia bazei.
+STR_INTERCEPTCRAFTALWAYSSELECTABLE
+Intercept craft always selectable
+STR_INTERCEPTCRAFTALWAYSSELECTABLE_DESC
+Improves the intercept screen for craft that are out: left click opens its options screen; right click centers on it in the globe.
 STR_ARROWS
 SĂGEȚI
 STR_FULL

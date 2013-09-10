@@ -31,6 +31,8 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "GeoscapeCraftState.h"
+#include "Globe.h"
 #include "SelectDestinationState.h"
 
 namespace OpenXcom
@@ -104,6 +106,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(6);
 	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 
 	int row = 0;
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -119,7 +122,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			}
 			else
 			{
-				ss << (*j)->getNumWeapons();
+				ss << 0;
 			}
 			ss << "/";
 			if ((*j)->getNumSoldiers() > 0)
@@ -128,7 +131,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			}
 			else
 			{
-				ss << (*j)->getNumSoldiers();
+				ss << 0;
 			}
 			ss << "/";
 			if ((*j)->getNumVehicles() > 0)
@@ -137,7 +140,7 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base) : State(gam
 			}
 			else
 			{
-				ss << (*j)->getNumVehicles();
+				ss << 0;
 			}
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(4, (*j)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*j)->getStatus()).c_str(), (*i)->getName().c_str(), ss.str().c_str());
@@ -178,6 +181,25 @@ void InterceptState::lstCraftsClick(Action *)
 	{
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));
+	}
+	else if (Options::getBool("interceptCraftAlwaysSelectable") && c->getStatus() == "STR_OUT")
+	{
+		_game->popState();
+		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
+	}
+}
+
+/**
+ * Centers on the selected craft.
+ * @param action Pointer to an action.
+ */
+void InterceptState::lstCraftsRightClick(Action *)
+{
+	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
+	if (Options::getBool("interceptCraftAlwaysSelectable") && c->getStatus() == "STR_OUT")
+	{
+		_globe->center(c->getLongitude(), c->getLatitude());
+		_game->popState();
 	}
 }
 
