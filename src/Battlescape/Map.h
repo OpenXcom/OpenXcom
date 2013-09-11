@@ -51,7 +51,7 @@ private:
 	Game *_game;
 	SavedBattleGame *_save;
 	ResourcePack *_res;
-	Surface *_arrow, *_throwCrosshair, *_throwTrajectory, *_throwFrame;
+	Surface *_arrow, *_throwCrosshair, *_throwFrame;
 	int _spriteWidth, _spriteHeight;
 	int _selectorX, _selectorY;
 	int _mouseX, _mouseY;
@@ -71,11 +71,9 @@ private:
 	std::vector<Position> _waypoints;
 	bool _unitDying;
 	int _previewSetting;
-	bool _showThrowTrajectory;
+	bool _showThrowCrosshair;
 	/// Draw blast radius.
 	bool drawBlastRadius(std::vector<Position> *_trajectory, BattleAction *action);
-	/// Draw throw trajectory.
-	bool drawThrowTrajectory(std::vector<Position> *_trajectory);
 	/// Cliping left and right top corners.
 	static void clipCorners(Surface *surface);
 public:

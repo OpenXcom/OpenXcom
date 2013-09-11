@@ -518,19 +518,6 @@ void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
 }
 
 /**
- * Draws an antialiasing line on the surface.
- * @param x1 Start x coordinate in pixels.
- * @param y1 Start y coordinate in pixels.
- * @param x2 End x coordinate in pixels.
- * @param y2 End y coordinate in pixels.
- * @param color Color of the line.
- */
-void Surface::drawAALine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
-{
-	aalineColor(_surface, x1, y1, x2, y2, Palette::getRGBA(getPalette(), color));
-}
-
-/**
  * Draws a filled trigon.
  * @param x1
  * @param y1
