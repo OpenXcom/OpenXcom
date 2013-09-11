@@ -66,7 +66,7 @@ http://timidity.sourceforge.net/
 http://www.ferzkopp.net/joomla/content/view/19/14/
 - SDL_image (libsdl-image1.2)
 http://www.libsdl.org/projects/SDL_image/
-- yaml-cpp, version 0.3.0 or older:
+- yaml-cpp, version 0.5.1 or later:
 http://code.google.com/p/yaml-cpp/
 
 Check your distribution's package manager or the library
@@ -126,7 +126,7 @@ http://www.libsdl.org/projects/SDL_mixer/
 http://www.ferzkopp.net/joomla/content/view/19/14/
 - SDL_image (libsdl-image1.2):
 http://www.libsdl.org/projects/SDL_image/
-- yaml-cpp, version 0.3.0 or older:
+- yaml-cpp, version 0.5.1 or later:
 http://code.google.com/p/yaml-cpp/
 
 The source code includes files for the following tools:
