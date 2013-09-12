@@ -2608,7 +2608,7 @@ bool TileEngine::validateThrow(BattleAction *action)
 		return false;
 	}
 
-	return ProjectileFlyBState::validThrowRange(action);
+	return BattlescapeGame::validThrowRange(action);
 }
 
 /**

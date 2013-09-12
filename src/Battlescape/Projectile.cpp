@@ -242,9 +242,10 @@ int Projectile::calculateTrajectory(double accuracy)
 /**
  * Calculates the trajectory for a curved path.
  * @param accuracy The unit's accuracy.
+ * @param doTestTrajectory
  * @return True when a trajectory is possible.
  */
-bool Projectile::calculateThrow(double accuracy)
+bool Projectile::calculateThrow(double accuracy, bool doTestTrajectory)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
@@ -312,6 +313,13 @@ bool Projectile::calculateThrow(double accuracy)
 	if ( AreSame(curvature, 5.0) )
 	{
 		return false;
+	}
+
+	// calc only test trajectory
+	if (doTestTrajectory)
+	{
+		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
+		return true;
 	}
 
 	// apply some accuracy modifiers

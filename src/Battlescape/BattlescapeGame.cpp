@@ -2149,4 +2149,26 @@ bool BattlescapeGame::psiAction(BattleAction *action)
 	return false;
 }
 
+/**
+ * Validates the throwing range.
+ * @return True when the range is valid.
+ */
+bool BattlescapeGame::validThrowRange(BattleAction *action)
+{
+	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
+	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
+	double maxDistance = 2.5 * action->actor->getStats()->strength / action->weapon->getRules()->getWeight();
+	int xdiff = action->target.x - action->actor->getPosition().x;
+	int ydiff = action->target.y - action->actor->getPosition().y;
+	int zdiff = action->target.z - action->actor->getPosition().z;
+	double realDistance = sqrt((double)(xdiff*xdiff)+(double)(ydiff*ydiff));
+
+	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
+	// throwing up the roof of this building lets your throw 2 tiles less further
+	realDistance += zdiff*2;
+
+	return realDistance < maxDistance;
+}
+
+
 }

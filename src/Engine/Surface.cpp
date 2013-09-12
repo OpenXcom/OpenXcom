@@ -518,6 +518,21 @@ void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
 }
 
 /**
+ * Draws a filled trigon.
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @param x3
+ * @param y3
+ * @param color Color of the line.
+ */
+void Surface::drawTrigon(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Sint16 x3, Sint16 y3, Uint8 color)
+{
+	filledTrigonColor(_surface, x1, y1, x2, y2, x3, y3, Palette::getRGBA(getPalette(), color));
+}
+
+/**
  * Draws a filled circle on the surface.
  * @param x X coordinate in pixels.
  * @param y Y coordinate in pixels.
@@ -527,6 +542,19 @@ void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
 void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
 {
 	filledCircleColor(_surface, x, y, r, Palette::getRGBA(getPalette(), color));
+}
+
+/**
+ * Draws a filled ellipse on the surface.
+ * @param x X coordinate in pixels.
+ * @param y Y coordinate in pixels.
+ * @param rx Radius in pixels on X axis.
+ * @param ry Radius in pixels on Y axis.
+ * @param color Color of the circle.
+ */
+void Surface::drawEllipse(Sint16 x, Sint16 y, Sint16 rx, Sint16 ry, Uint8 color)
+{
+	filledEllipseColor(_surface, x, y, rx, ry, Palette::getRGBA(getPalette(), color));
 }
 
 /**
