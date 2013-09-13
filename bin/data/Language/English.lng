@@ -2411,10 +2411,6 @@ STR_RESEARCHEDITEMSWILLSPENT
 Researched items will be spent
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the base stores.
-STR_INTERCEPTCRAFTALWAYSSELECTABLE
-Intercept craft always selectable
-STR_INTERCEPTCRAFTALWAYSSELECTABLE_DESC
-Improves the intercept screen for craft that are out: left click opens its options screen; right click centers on it in the globe.
 STR_ARROWS
 ARROWS
 STR_FULL

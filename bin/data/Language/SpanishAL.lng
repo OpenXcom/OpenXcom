@@ -2401,10 +2401,6 @@ STR_RESEARCHEDITEMSWILLSPENT
 Artículos investigados seran consumidos
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Artículos investigadas se retiran del almacén y serán desmantelados. Después de investigar los "alienígenas" vivos, el cuerpo será devuelto a los almacenes de la base.
-STR_INTERCEPTCRAFTALWAYSSELECTABLE
-Intercept craft always selectable
-STR_INTERCEPTCRAFTALWAYSSELECTABLE_DESC
-Improves the intercept screen for craft that are out: left click opens its options screen; right click centers on it in the globe.
 STR_ARROWS
 FLECHAS
 STR_FULL

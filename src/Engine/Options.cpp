@@ -112,7 +112,6 @@ void createDefault()
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("alienContainmentLimitEnforced", false);
-	setBool("interceptCraftAlwaysSelectable", false);
 	setBool("canSellLiveAliens", false);
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 	setBool("canManufactureMoreItemsPerHour", false);

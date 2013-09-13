@@ -2413,10 +2413,6 @@ STR_RESEARCHEDITEMSWILLSPENT
 Исследуемые вещи расходуются
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Вещи для исследования забираются со склада и будут разобраны. После "исследования" живого пришельца, его тело отправляется на склад базы.
-STR_INTERCEPTCRAFTALWAYSSELECTABLE
-Intercept craft always selectable
-STR_INTERCEPTCRAFTALWAYSSELECTABLE_DESC
-Improves the intercept screen for craft that are out: left click opens its options screen; right click centers on it in the globe.
 STR_ARROWS
 УКАЗАТЕЛИ
 STR_FULL

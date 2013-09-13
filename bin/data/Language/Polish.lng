@@ -2417,10 +2417,6 @@ STR_RESEARCHEDITEMSWILLSPENT
 Badane przedmioty zostają zużyte
 STR_RESEARCHEDITEMSWILLSPENT_DESC
 Badane przedmioty są pobierane z magazynów i zostaną utracone. Po "zbadaniu" żywego obcego, jego martwe ciało wysyłane jest do magazynów bazy.
-STR_INTERCEPTCRAFTALWAYSSELECTABLE
-Intercept craft always selectable
-STR_INTERCEPTCRAFTALWAYSSELECTABLE_DESC
-Improves the intercept screen for craft that are out: left click opens its options screen; right click centers on it in the globe.
 STR_ARROWS
 STRZAŁKI
 STR_FULL

@@ -182,7 +182,7 @@ void InterceptState::lstCraftsClick(Action *)
 		_game->popState();
 		_game->pushState(new SelectDestinationState(_game, c, _globe));
 	}
-	else if (Options::getBool("interceptCraftAlwaysSelectable") && c->getStatus() == "STR_OUT")
+	else if (c->getStatus() == "STR_OUT")
 	{
 		_game->popState();
 		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
@@ -196,7 +196,7 @@ void InterceptState::lstCraftsClick(Action *)
 void InterceptState::lstCraftsRightClick(Action *)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (Options::getBool("interceptCraftAlwaysSelectable") && c->getStatus() == "STR_OUT")
+	if (c->getStatus() == "STR_OUT")
 	{
 		_globe->center(c->getLongitude(), c->getLatitude());
 		_game->popState();
