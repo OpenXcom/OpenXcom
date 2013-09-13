@@ -31,7 +31,6 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
-#include "GeoscapeCraftState.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
