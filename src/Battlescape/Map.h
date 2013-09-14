@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class BattleAction;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;

@@ -30,12 +30,14 @@
 #include "BattlescapeState.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Action.h"
+#include "../Engine/Screen.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
@@ -1367,7 +1369,6 @@ void Map::clipCorners(Surface *surface)
 {
 	Uint16 *pixels = (Uint16*)surface->getSurface()->pixels;
 	int pitch = surface->getSurface()->pitch * surface->getSurface()->format->BytesPerPixel / 2;
-//	int max = 14 * surface->getSurface()->format->BytesPerPixel / 2;
 
 	for (int y = 0; y < 6; ++y)
 	 for (int x = 0; x < 7 - y; ++x)
