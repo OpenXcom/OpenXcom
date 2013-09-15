@@ -330,7 +330,7 @@ void SelectDestinationState::btnCancelClick(Action *)
 
 void SelectDestinationState::btnCydoniaClick(Action *)
 {
-	if (_craft->getNumSoldiers() > 0)
+	if (_craft->getNumSoldiers() > 0 || _craft->getNumVehicles() > 0)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(5)), Palette::backPos, 16);
 		_game->pushState(new ConfirmCydoniaState(_game, _craft));

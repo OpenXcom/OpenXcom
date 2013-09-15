@@ -367,7 +367,7 @@ void NewBattleState::initSave()
  */
 void NewBattleState::btnOkClick(Action *)
 {
-	if (_missionTypes[_selMission] != "STR_BASE_DEFENSE" && _craft->getNumSoldiers() == 0)
+	if (_missionTypes[_selMission] != "STR_BASE_DEFENSE" && _craft->getNumSoldiers() == 0 && _craft->getNumVehicles() == 0)
 	{
 		return;
 	}
