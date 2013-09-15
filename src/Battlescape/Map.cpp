@@ -213,6 +213,30 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_message->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 
+
+
+
+namespace
+{
+
+struct Transparent
+{
+	static inline void func(Uint8& dest, const Uint8& src, const int& tileShade, const int&, const int&)
+	{
+		if(src)
+		{
+			const int newShade = ((src&15) + (dest&15)*3)/4;
+			if (newShade > 15)
+			// so dark it would flip over to another color - make it black instead
+				dest = 15;
+			else
+				dest = (dest&(15<<4)) | newShade;//src + (((dest-tileShade)&0xF)>>1);
+		}
+	}
+};
+
+}
+
 /**
  * Draw the terrain.
  * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
@@ -398,12 +422,13 @@ void Map::drawTerrain(Surface *surface)
 					if (tmpSurface)
 						tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(), tileShade, false);
 					// Draw blast radius
-					if (needDrawBlastRadius && action->target.z == itZ
+					bool blastRadiusConditions = needDrawBlastRadius && action->target.z == itZ
 						&& (tileShade != 16 || tile->hasNoFloor(_save->getTile(mapPosition + Position(0, 0, -1))))
 						&& screenPosition.x > _throwCrosshair->getCrop()->x
 						&& screenPosition.x < _throwCrosshair->getCrop()->w
 						&& screenPosition.y > _throwCrosshair->getCrop()->y
-						&& screenPosition.y < _throwCrosshair->getCrop()->h)
+						&& screenPosition.y < _throwCrosshair->getCrop()->h;
+					if (blastRadiusConditions)
 					{
 						_throwFrame->getCrop()->x = screenPosition.x;
 						_throwFrame->getCrop()->y = screenPosition.y + 26;
@@ -487,7 +512,17 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
 							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y + tile->getTerrainLevel(), tileShade, false);
 						}
-
+						// Draw a shadow of the blast circle
+						if (blastRadiusConditions)
+						{
+							_throwFrame->getCrop()->x = screenPosition.x;
+							_throwFrame->getCrop()->y = screenPosition.y;
+							_throwFrame->clear();
+							SDL_BlitSurface(_throwCrosshair->getSurface(), _throwFrame->getCrop(), _throwFrame->getSurface(), 0);
+							clipCorners(_throwFrame);
+							ShaderDraw<Transparent>(ShaderSurface(surface), ShaderSurface(_throwFrame, screenPosition.x, screenPosition.y-1), ShaderScalar(tileShade)); // -1 because tiles is crossing previous tiles
+							//_throwFrame->blitNShade(surface, screenPosition.x, screenPosition.y + 26-1, 0);	// -1 because tiles is crossing previous tiles
+						}
 					}
 
 					// check if we got bullet && it is in Field Of View
