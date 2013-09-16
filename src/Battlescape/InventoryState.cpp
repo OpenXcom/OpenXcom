@@ -195,11 +195,7 @@ void InventoryState::init()
 		if (unit == selectNextUnit())
 		{
 			// starting a mission with just vehicles
-			_battleGame->resetUnitTiles();
-			for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
-				if ((*i)->getFaction() == _battleGame->getSide())
-					(*i)->prepareNewTurn();
-			_game->popState();
+			btnOkClick(0);
 			return;
 		}
 		else
