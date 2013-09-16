@@ -194,7 +194,8 @@ void InventoryState::init()
 		// no available unit, close inventory
 		if (unit == selectNextUnit())
 		{
-			_game->popState();
+			// starting a mission with just vehicles
+			btnOkClick(0);
 			return;
 		}
 		else
