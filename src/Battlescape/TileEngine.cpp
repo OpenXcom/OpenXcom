@@ -840,15 +840,15 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 		return false;
 	}
 
-	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);
 	bool result = false;
 
 	// not mind controlled, or controlled by the player
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
+		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
 		BattleUnit *reactor = getReactor(spotters, unit);
-		if (reactor != unit)
+/*		if (reactor != unit) // old reaction code
 		{
 			while (true)
 			{
@@ -859,6 +859,18 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 				if (reactor == unit)
 					break;
 			}
+		} */
+		// new reaction code
+		for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+		{
+			if (reactor == unit) continue;
+
+			if (tryReactionSnap(reactor, unit))
+			{
+				result = true;
+			}
+
+			reactor = getReactor(spotters, unit);
 		}
 	}
 	return result;
@@ -918,8 +930,9 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
 	for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		if (!(*i)->isOut() &&
-		canMakeSnap(*i, unit) &&
-		(*i)->getReactionScore() > bestScore)
+			canMakeSnap(*i, unit) &&
+			(*i)->getReactionScore() > bestScore &&
+			*i != bu) // new reaction code: stop unit from firing 2+
 		{
 			bestScore = (*i)->getReactionScore();
 			bu = *i;
