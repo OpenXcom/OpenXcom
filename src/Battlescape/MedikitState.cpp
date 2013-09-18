@@ -221,6 +221,11 @@ void MedikitState::onHealClick(Action *)
 		_item->setHealQuantity(--heal);
 		_medikitView->invalidate();
 		update();
+
+		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
+		{
+			_targetUnit->setTimeUnits(0);
+		}
 	}
 	else
 	{
