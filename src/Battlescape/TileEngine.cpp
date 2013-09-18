@@ -2350,7 +2350,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			victim->convertToFaction(action->actor->getFaction());
 			calculateFOV(victim->getPosition());
 			calculateUnitLighting();
-			victim->setTimeUnits(victim->getStats()->tu);
+			victim->setTimeUnits(victim->getFullTU());
 			victim->allowReselect();
 			victim->abortTurn(); // resets unit status to STANDING
 			// if all units from either faction are mind controlled - auto-end the mission.
