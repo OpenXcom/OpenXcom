@@ -50,14 +50,14 @@ private:
 	int _power;
 	std::vector<std::string> _compatibleAmmo;
 	ItemDamageType _damageType;
-	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
-	int _clipSize, _accuracyMelee, _tuMelee;
+	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed, _capsAuto, _capsSnap, _capsAimed;
+	int _clipSize, _accuracyMelee, _tuMelee, _capsMelee;
 	BattleType _battleType;
 	bool _twoHanded, _waypoint, _fixedWeapon;
 	int _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
 	int _woundRecovery, _healthRecovery, _stunRecovery, _energyRecovery;
-	int _tuUse;
+	int _tuUse, _capsUse, _tuPrime, _capsPrime, _tuThrow, _capsThrow;
 	int _recoveryPoints;
 	int _armor;
 	int _turretType;
@@ -126,6 +126,10 @@ public:
 	int getTUAimed() const;
 	/// Gets the item's melee TU cost.
 	int getTUMelee() const;
+	/// Gets the item's melee TU cost.
+	int getTUPrime() const;
+	/// Gets the item's melee TU cost.
+	int getTUThrow() const;
 	/// Gets list of compatible ammo.
 	std::vector<std::string> *getCompatibleAmmo();
 	/// Gets the item's damage type.
@@ -182,6 +186,20 @@ public:
 	int getBulletSpeed() const;
 	/// How many auto shots does this weapon fire.
 	int getAutoShots() const;
+	/// Gets the item's melee TU caps.
+	int getCapsMelee() const;
+	/// Gets the item's auto TU caps.
+	int getCapsAuto() const;
+	/// Gets the item's snap TU caps.
+	int getCapsSnap() const;
+	/// Gets the item's aimed TU caps.
+	int getCapsAimed() const;
+	/// Gets the item's priming TU caps.
+	int getCapsPrime() const;
+	/// Gets the item's use TU caps.
+	int getCapsUse() const;
+	/// Gets the item's throw TU caps.
+	int getCapsThrow() const;
 };
 
 }
