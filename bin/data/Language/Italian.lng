@@ -2419,3 +2419,17 @@ STR_RESERVE_TUS_FOR_KNEEL
 Reserve Time Units for kneeling
 STR_EXPEND_ALL_TIME_UNITS
 Expend all remaining Time Units
+STR_PERSONAL_ARMOR_UFOPAEDIA
+Using the newly discovered Alien Alloys, this new armor gives our men a fighting chance against the alien threat.
+STR_POWER_SUIT_UFOPAEDIA
+A powerful new protection for soldiers, this armor is powered by an Elerium energy source and greatly amplifies the speed and strength of the wearer. It offers the best protection yet for combat troops.
+STR_FLYING_SUIT_UFOPAEDIA
+An enhancement for the Power Suit incorporating the scaled UFO navigation technology to allow full freedom of movement across the battlefield.
+STR_ADVANCEDARMORBONUSES
+TU and stamina armor bonuses
+STR_ADVANCEDARMORBONUSES_DESC
+Stamina, strength and TU bonuses may be offered to the armor wearers. By default only the Power suit and the Flying suit offer such bonuses.
+STR_WEAPONTUCAPS
+Weapon max. TU usage enable
+STR_WEAPONTUCAPS_DESC
+An action TU is limited to a maximum value per item per action type (by default around 94% of the absolute maximum given by TU Caps and weapons action TU rule)

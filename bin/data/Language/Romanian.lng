@@ -2425,3 +2425,17 @@ STR_RESERVE_TUS_FOR_KNEEL
 Rezervare UT pentru Îngenunchere
 STR_EXPEND_ALL_TIME_UNITS
 Consumă toate UT rămase
+STR_PERSONAL_ARMOR_UFOPAEDIA
+Construită din aliajele extraterestre recent descoperite, această nouă armură acordă o şansă oamenilor noştri în lupta cu pericolul extraterestru.
+STR_POWER_SUIT_UFOPAEDIA
+O nouă şi puternică protecţie pentru soldaţi această armură este alimentată de o sursă de enrgie cu Elerium şi îmbunătăţeşte considerabil viteza şi puterea purtătorului. Oferă momentan cea mai bună protecţie pentru personalul combatant.
+STR_FLYING_SUIT_UFOPAEDIA
+O îmbunătăţire a costumului de putere încorporând tehnologia miniaturizată a navigaţiei OZN-urilor, permiţând deplină libertate de mişcare în luptă.
+STR_ADVANCEDARMORBONUSES
+TU and stamina armor bonuses
+STR_ADVANCEDARMORBONUSES_DESC
+Stamina, strength and TU bonuses may be offered to the armor wearers. By default only the Power suit and the Flying suit offer such bonuses.
+STR_WEAPONTUCAPS
+Weapon max. TU usage enable
+STR_WEAPONTUCAPS_DESC
+An action TU is limited to a maximum value per item per action type (by default around 94% of the absolute maximum given by TU Caps and weapons action TU rule)

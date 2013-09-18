@@ -17,6 +17,7 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "Armor.h"
+#include "../Engine/Options.h"
 
 namespace OpenXcom
 {
@@ -30,7 +31,8 @@ namespace OpenXcom
  * @param movementType The movement type for this armor (walk, fly or slide).
  * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
+Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine),
+	_tuBonusAbs(0), _tuBonusPercent(0), _staminaBonusAbs(0), _staminaBonusPercent(0), _strengthBonusAbs(0), _strengthBonusPercent(0), _movementType(movementType), _size(size)
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0;
@@ -70,6 +72,12 @@ void Armor::load(const YAML::Node &node)
 		}
 	}
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
+	_tuBonusAbs = node["tuBonusAbs"].as<int>(_tuBonusAbs);
+	_tuBonusPercent = node["tuBonusPercent"].as<int>(_tuBonusPercent);
+	_staminaBonusAbs = node["staminaBonusAbs"].as<int>(_staminaBonusAbs);
+	_staminaBonusPercent = node["staminaBonusPercent"].as<int>(_staminaBonusPercent);
+	_strengthBonusAbs = node["strengthBonusAbs"].as<int>(_strengthBonusAbs);
+	_strengthBonusPercent = node["strengthBonusPercent"].as<int>(_strengthBonusPercent);
 }
 
 /**
@@ -199,6 +207,45 @@ float Armor::getDamageModifier(ItemDamageType dt)
 std::vector<int> Armor::getLoftempsSet() const
 {
 	return _loftempsSet;
+}
+
+/**
+ * Gets the armor TU bonus relative to a certain TU's amount.
+ * @param tu The base TU.
+ * @return The TU bonus.
+ */
+int Armor::getTUBonus(int tu)
+{
+	if(Options::getBool("advancedArmorBonuses")==true)
+		return tu*_tuBonusPercent/100+_tuBonusAbs;
+	else
+		return 0;
+}
+
+/**
+ * Gets the armor stamina bonus relative to a certain stamina amount.
+ * @param stamina The base stamina.
+ * @return The stamina bonus.
+ */
+int Armor::getStaminaBonus(int stamina)
+{
+	if(Options::getBool("advancedArmorBonuses")==true)
+		return stamina*_staminaBonusPercent/100+_staminaBonusAbs;
+	else
+		return 0;
+}
+
+/**
+ * Gets the strength bonus relative to a certain strength amount.
+ * @param strength The base strength.
+ * @return The strength bonus.
+ */
+int Armor::getStrengthBonus(int strength)
+{
+	if(Options::getBool("advancedArmorBonuses")==true)
+		return strength*_strengthBonusPercent/100+_strengthBonusAbs;
+	else
+		return 0;
 }
 
 }

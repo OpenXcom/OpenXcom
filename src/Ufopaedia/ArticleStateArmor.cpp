@@ -79,6 +79,13 @@ namespace OpenXcom
 		_lstInfo->setColor(Palette::blockOffset(14)+15);
 		_lstInfo->setColumns(2, 125, 25);
 		_lstInfo->setDot(true);
+		
+		_txtInfo = new Text(300, 56, 8, 150);
+		add(_txtInfo);
+
+		_txtInfo->setColor(Palette::blockOffset(14)+15);
+		_txtInfo->setWordWrap(true);
+		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();

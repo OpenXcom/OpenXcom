@@ -1461,6 +1461,10 @@ items:
     invWidth: 1
     invHeight: 2
     attraction: 1
+    capsSnap: 14
+    capsAimed: 23
+    tuThrow: 26
+    capsThrow: 20
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 70
@@ -1476,6 +1480,8 @@ items:
     battleType: 2
     armor: 12
     attraction: 1
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_RIFLE
     size: 0.2
     costBuy: 3000
@@ -1498,6 +1504,11 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    capsSnap: 19
+    capsAuto: 26
+    capsAimed: 60
+    tuThrow: 30
+    capsThrow: 23
   - type: STR_RIFLE_CLIP
     size: 0.1
     costBuy: 200
@@ -1511,6 +1522,8 @@ items:
     damageType: 1
     clipSize: 20
     battleType: 2
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_HEAVY_CANNON
     size: 0.3
     costBuy: 6400
@@ -1533,6 +1546,10 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    capsSnap: 25
+    capsAimed: 60
+    tuThrow: 40
+    capsThrow: 30
   - type: STR_HC_AP_AMMO
     size: 0.1
     costBuy: 300
@@ -1549,6 +1566,8 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    tuThrow: 28
+    capsThrow: 21
   - type: STR_HC_HE_AMMO
     size: 0.1
     costBuy: 500
@@ -1565,6 +1584,8 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    tuThrow: 28
+    capsThrow: 21
   - type: STR_HC_I_AMMO
     size: 0.1
     costBuy: 400
@@ -1581,6 +1602,8 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    tuThrow: 28
+    capsThrow: 21
   - type: STR_AUTO_CANNON
     size: 0.3
     costBuy: 13500
@@ -1605,6 +1628,11 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    capsSnap: 25
+    capsAuto: 30
+    capsAimed: 60
+    tuThrow: 41
+    capsThrow: 31
   - type: STR_AC_AP_AMMO
     size: 0.1
     costBuy: 500
@@ -1620,6 +1648,8 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    tuThrow: 27
+    capsThrow: 20
   - type: STR_AC_HE_AMMO
     size: 0.1
     costBuy: 700
@@ -1635,6 +1665,8 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    tuThrow: 27
+    capsThrow: 20
   - type: STR_AC_I_AMMO
     size: 0.1
     costBuy: 650
@@ -1651,6 +1683,8 @@ items:
     invWidth: 2
     invHeight: 1
     attraction: 1
+    tuThrow: 27
+    capsThrow: 20
   - type: STR_ROCKET_LAUNCHER
     size: 0.4
     costBuy: 4000
@@ -1673,6 +1707,10 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    capsSnap: 34
+    capsAimed: 45
+    tuThrow: 32
+    capsThrow: 24
   - type: STR_SMALL_ROCKET
     size: 0.2
     costBuy: 600
@@ -1688,6 +1726,8 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    tuThrow: 28
+    capsThrow: 21
   - type: STR_LARGE_ROCKET
     size: 0.2
     costBuy: 900
@@ -1703,6 +1743,8 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    tuThrow: 30
+    capsThrow: 23
   - type: STR_INCENDIARY_ROCKET
     size: 0.2
     costBuy: 1200
@@ -1718,6 +1760,8 @@ items:
     battleType: 2
     invWidth: 1
     invHeight: 3
+    tuThrow: 30
+    capsThrow: 23
   - type: STR_LASER_PISTOL
     size: 0.1
     costSell: 20000
@@ -1741,6 +1785,11 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
+    capsSnap: 15
+    capsAuto: 19
+    capsAimed: 41
+    tuThrow: 29
+    capsThrow: 22
   - type: STR_LASER_RIFLE
     size: 0.2
     costSell: 36900
@@ -1765,6 +1814,11 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    capsSnap: 19
+    capsAuto: 26
+    capsAimed: 38
+    tuThrow: 30
+    capsThrow: 23
   - type: STR_HEAVY_LASER
     size: 0.3
     costSell: 61000
@@ -1787,6 +1841,10 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
+    capsSnap: 25
+    capsAimed: 56
+    tuThrow: 40
+    capsThrow: 30
   - type: STR_GRENADE
     size: 0.1
     costBuy: 300
@@ -1798,6 +1856,10 @@ items:
     damageType: 3
     battleType: 4
     blastRadius: 5
+    tuPrime: 50
+    tuThrow: 25
+    capsPrime: 38
+    capsThrow: 19
   - type: STR_SMOKE_GRENADE
     size: 0.1
     costBuy: 150
@@ -1809,6 +1871,10 @@ items:
     damageType: 9
     battleType: 4
     blastRadius: 5
+    tuPrime: 50
+    tuThrow: 25
+    capsPrime: 38
+    capsThrow: 19
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
     costBuy: 500
@@ -1820,6 +1886,10 @@ items:
     damageType: 3
     battleType: 5
     blastRadius: 5
+    tuPrime: 50
+    tuThrow: 25
+    capsPrime: 38
+    capsThrow: 19
   - type: STR_HIGH_EXPLOSIVE
     size: 0.25
     costBuy: 1500
@@ -1833,6 +1903,10 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 5
+    tuPrime: 50
+    tuThrow: 28
+    capsPrime: 38
+    capsThrow: 21
   - type: STR_MOTION_SCANNER
     size: 0.1
     costSell: 45600
@@ -1841,6 +1915,9 @@ items:
     floorSprite: 23
     battleType: 7
     tuUse: 25
+    capsUse: 19
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_MEDI_KIT
     size: 0.1
     costSell: 46500
@@ -1859,6 +1936,8 @@ items:
     energyRecovery: 10
     tuUse: 10
     flatRate: true
+    tuThrow: 27
+    capsThrow: 20
   - type: STR_PSI_AMP
     requires:
       - STR_PSI_AMP
@@ -1875,6 +1954,8 @@ items:
     invHeight: 3
     tuUse: 25
     flatRate: true
+    tuThrow: 32
+    capsThrow: 24
   - type: STR_STUN_ROD
     size: 0.1
     costBuy: 1260
@@ -1892,6 +1973,9 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
+    capsMelee: 23
+    tuThrow: 28
+    capsThrow: 21
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -1902,6 +1986,8 @@ items:
     power: 15
     battleType: 10
     armor: 8
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_CORPSE
     weight: 22
     bigSprite: 45
@@ -1909,6 +1995,8 @@ items:
     invWidth: 2
     invHeight: 3
     recover: false
+    tuThrow: 54
+    capsThrow: 41
   - type: STR_CORPSE_ARMOR
     name: STR_CORPSE
     weight: 24
@@ -1918,6 +2006,8 @@ items:
     invHeight: 3
     armor: 30
     recover: false
+    tuThrow: 56
+    capsThrow: 42
   - type: STR_CORPSE_SUIT
     name: STR_CORPSE
     weight: 26
@@ -1927,6 +2017,8 @@ items:
     invHeight: 3
     armor: 40
     recover: false
+    tuThrow: 58
+    capsThrow: 44
   - type: STR_HEAVY_PLASMA
     requires:
       - STR_HEAVY_PLASMA
@@ -1953,6 +2045,11 @@ items:
     recoveryPoints: 5
     armor: 50
     attraction: 1
+    capsSnap: 23
+    capsAuto: 26
+    capsAimed: 45
+    tuThrow: 30
+    capsThrow: 23
   - type: STR_HEAVY_PLASMA_CLIP
     requires:
       - STR_HEAVY_PLASMA_CLIP
@@ -1969,6 +2066,8 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_PLASMA_RIFLE
     requires:
       - STR_PLASMA_RIFLE
@@ -1995,6 +2094,11 @@ items:
     recoveryPoints: 4
     armor: 50
     attraction: 1
+    capsSnap: 23
+    capsAuto: 27
+    capsAimed: 45
+    tuThrow: 27
+    capsThrow: 20
   - type: STR_PLASMA_RIFLE_CLIP
     requires:
       - STR_PLASMA_RIFLE_CLIP
@@ -2011,6 +2115,8 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_PLASMA_PISTOL
     requires:
       - STR_PLASMA_PISTOL
@@ -2036,6 +2142,11 @@ items:
     recoveryPoints: 3
     armor: 45
     attraction: 1
+    capsSnap: 23
+    capsAuto: 23
+    capsAimed: 45
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_PLASMA_PISTOL_CLIP
     requires:
       - STR_PLASMA_PISTOL_CLIP
@@ -2052,6 +2163,8 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_BLASTER_LAUNCHER
     requires:
       - STR_BLASTER_LAUNCHER
@@ -2075,6 +2188,9 @@ items:
     recoveryPoints: 5
     armor: 40
     attraction: 1
+    capsAimed: 60
+    tuThrow: 38
+    capsThrow: 29
   - type: STR_BLASTER_BOMB
     requires:
       - STR_BLASTER_BOMB
@@ -2094,6 +2210,8 @@ items:
     recoveryPoints: 1
     blastRadius: 11
     attraction: 1
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_SMALL_LAUNCHER
     requires:
       - STR_SMALL_LAUNCHER
@@ -2117,6 +2235,10 @@ items:
     invHeight: 2
     recoveryPoints: 4
     attraction: 1
+    capsSnap: 30
+    capsAimed: 56
+    tuThrow: 32
+    capsThrow: 21
   - type: STR_STUN_BOMB
     requires:
       - STR_STUN_BOMB
@@ -2133,6 +2255,8 @@ items:
     battleType: 2
     recoveryPoints: 1
     attraction: 1
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_ALIEN_GRENADE
     requires:
       - STR_ALIEN_GRENADE
@@ -2147,6 +2271,10 @@ items:
     recoveryPoints: 1
     blastRadius: 5
     attraction: 1
+    tuPrime: 52   # alittle bit more than normal grenades - it's alien...
+    capsPrime: 41
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_ELERIUM_115
     size: 0.1
     costSell: 5000
@@ -2156,6 +2284,8 @@ items:
     invWidth: 1
     invHeight: 1
     attraction: 4
+    tuThrow: 25
+    capsThrow: 19
   - type: STR_MIND_PROBE
     requires:
       - STR_MIND_PROBE
@@ -2171,6 +2301,9 @@ items:
     tuUse: 50
     recoveryPoints: 1
     attraction: 1
+    capsUse: 38
+    tuThrow: 27
+    capsThrow: 20
   - type: STR_SECTOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -2182,6 +2315,8 @@ items:
     recoveryPoints: 5
     battleType: 11
     armor: 26
+    tuThrow: 52
+    capsThrow: 39
   - type: STR_SNAKEMAN_CORPSE
     size: 0.4
     costSell: 20000
@@ -2193,6 +2328,8 @@ items:
     recoveryPoints: 5
     battleType: 11
     armor: 26
+    tuThrow: 62
+    capsThrow: 47
   - type: STR_ETHEREAL_CORPSE
     size: 0.4
     costSell: 20000
@@ -2204,6 +2341,8 @@ items:
     recoveryPoints: 5
     battleType: 11
     armor: 26
+    tuThrow: 47
+    capsThrow: 35
   - type: STR_MUTON_CORPSE
     size: 0.4
     costSell: 20000
@@ -2215,6 +2354,8 @@ items:
     recoveryPoints: 5
     battleType: 11
     armor: 26
+    tuThrow: 62
+    capsThrow: 47
   - type: STR_FLOATER_CORPSE
     size: 0.4
     costSell: 20000
@@ -2226,6 +2367,8 @@ items:
     recoveryPoints: 5
     battleType: 11
     armor: 26
+    tuThrow: 42
+    capsThrow: 32
   - type: STR_CELATID_CORPSE
     size: 0.4
     costSell: 20000
@@ -2237,6 +2380,8 @@ items:
     recoveryPoints: 3
     battleType: 11
     armor: 26
+    tuThrow: 57
+    capsThrow: 43
   - type: STR_SILACOID_CORPSE
     size: 0.4
     costSell: 20000
@@ -2248,6 +2393,8 @@ items:
     recoveryPoints: 3
     battleType: 11
     armor: 26
+    tuThrow: 62
+    capsThrow: 47
   - type: STR_CHRYSSALID_CORPSE
     size: 0.4
     costSell: 20000
@@ -2258,6 +2405,8 @@ items:
     invHeight: 3
     recoveryPoints: 3
     battleType: 11
+    tuThrow: 62
+    capsThrow: 47
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 20000
@@ -3698,6 +3847,12 @@ armors:
       - 1.0
       - 0.0
     loftempsSet: [ 3 ]
+    tuBonusAbs: 10
+    tuBonusPercent: 10
+    staminaBonusAbs: 10
+    staminaBonusPercent: 10
+    strengthBonusAbs: 10
+    strengthBonusPercent: 10
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
@@ -3720,6 +3875,12 @@ armors:
       - 1.0
       - 0.0
     loftempsSet: [ 3 ]
+    tuBonusAbs: 15
+    tuBonusPercent: 15
+    staminaBonusAbs: 15
+    staminaBonusPercent: 15
+    strengthBonusAbs: 15
+    strengthBonusPercent: 15
   - type: SECTOID_ARMOR0
     spriteSheet: SECTOID.PCK
     corpseItem: STR_SECTOID_CORPSE
@@ -7854,16 +8015,19 @@ ufopaedia:
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_PERSONAL_ARMOR
+    text: STR_PERSONAL_ARMOR_UFOPAEDIA
   - id: STR_POWER_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_POWER_SUIT
+    text: STR_POWER_SUIT_UFOPAEDIA
   - id: STR_FLYING_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_FLYING_SUIT
+    text: STR_FLYING_SUIT_UFOPAEDIA
   - id: STR_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT

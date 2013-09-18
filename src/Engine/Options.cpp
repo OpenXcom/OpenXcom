@@ -131,6 +131,8 @@ void createDefault()
 	setBool("borderless", false);
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
+	setBool("advancedArmorBonuses",false);
+	setBool("weaponTUCaps",false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
