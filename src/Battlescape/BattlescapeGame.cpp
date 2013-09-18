@@ -665,6 +665,7 @@ void BattlescapeGame::handleNonTargetAction()
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
+				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
 				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
 			}
 			else
