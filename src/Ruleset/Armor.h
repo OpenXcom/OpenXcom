@@ -37,6 +37,7 @@ private:
 	static const int DAMAGE_TYPES = 10;
 	std::string _type, _spriteSheet, _spriteInv, _corpseItem, _storeItem;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
+	int _tuBonusAbs, _tuBonusPercent, _staminaBonusAbs, _staminaBonusPercent, _strengthBonusAbs, _strengthBonusPercent;
 	MovementType _movementType;
 	int _size;
 	float _damageModifier[DAMAGE_TYPES];
@@ -76,6 +77,12 @@ public:
 	float getDamageModifier(ItemDamageType dt);
 	/// Gets loftempSet
 	std::vector<int> getLoftempsSet() const;
+	/// Gets bonuses for a given amount of tu's
+	int getTUBonus(int tu);
+	/// Gets bonuses for a given stamina
+	int getStaminaBonus(int stamina);
+	/// Gets bonuses for a given strength
+	int getStrengthBonus(int strength);
 };
 
 }
