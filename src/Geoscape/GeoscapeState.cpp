@@ -618,7 +618,7 @@ void GeoscapeState::timeAdvance()
 void GeoscapeState::time5Seconds()
 {
 	// Game over if there are no more bases.
-	if (_game->getSavedGame()->getBases()->size() == 0)
+	if (_game->getSavedGame()->getBases()->empty())
 	{
 		popup(new DefeatState(_game));
 		return;
@@ -660,7 +660,7 @@ void GeoscapeState::time5Seconds()
 						(*i)->setDestination(0);
 						base->setupDefenses();
 						timerReset();
-						if (base->getDefenses()->size() > 0)
+						if (!base->getDefenses()->empty())
 						{
 							popup(new BaseDefenseState(_game, base, *i, this));
 						}
@@ -796,7 +796,7 @@ void GeoscapeState::time5Seconds()
 					case Ufo::LANDED:
 					case Ufo::CRASHED:
 					case Ufo::DESTROYED: // Just before expiration
-						if ((*j)->getNumSoldiers() > 0)
+						if ((*j)->getNumSoldiers() > 0 || (*j)->getNumVehicles() > 0)
 						{
 							if(!(*j)->isInDogfight())
 							{
@@ -1697,7 +1697,7 @@ void GeoscapeState::btnInterceptClick(Action *)
 void GeoscapeState::btnBasesClick(Action *)
 {
 	timerReset();
-	if (_game->getSavedGame()->getBases()->size() > 0)
+	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
 	}

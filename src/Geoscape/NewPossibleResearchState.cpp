@@ -87,7 +87,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
 		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
-		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().size() == 0 && !liveAlien)
+		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));
 			_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());

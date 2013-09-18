@@ -161,6 +161,7 @@ void Camera::mouseOver(Action *action, State *)
 			{
 				_scrollMouseY = -scrollSpeed/2;
 			}
+			else _scrollMouseY = 0;
 		}
 		//right scroll
 		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
@@ -177,6 +178,7 @@ void Camera::mouseOver(Action *action, State *)
 			{
 				_scrollMouseY = -scrollSpeed/2;
 			}
+			else _scrollMouseY = 0;
 		}
 		else if (posX)
 		{

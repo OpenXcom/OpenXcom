@@ -180,9 +180,31 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
-	if (_parent)
-		_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	BattleUnit *unit = _battleGame->getSelectedUnit();
+
+	// no selected unit, close inventory
+	if (unit == 0)
+	{
+		_game->popState();
+		return;
+	}
+	// skip to the first unit with inventory
+	if (!hasInventory(unit))
+	{
+		// no available unit, close inventory
+		if (unit == selectNextUnit())
+		{
+			_game->popState();
+			return;
+		}
+		else
+		{
+			unit = _battleGame->getSelectedUnit();
+		}
+	}
+
+	if (_parent)
+		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
 	unit->setCache(0);
 	_soldier->clear();
@@ -353,19 +375,7 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	if (_parent)
-		_parent->selectPreviousPlayerUnit(false);
-	else
-		_battleGame->selectPreviousPlayerUnit(false);
-	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
-		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
-	{
-		if (_parent)
-			_parent->selectPreviousPlayerUnit(false);
-		else
-			_battleGame->selectPreviousPlayerUnit(false);
-	}
+	selectPreviousUnit();
 	init();
 }
 
@@ -377,19 +387,7 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	if (_parent)
-		_parent->selectNextPlayerUnit(false, false);
-	else
-		_battleGame->selectNextPlayerUnit(false, false);
-	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
-		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
-	{
-		if (_parent)
-			_parent->selectNextPlayerUnit(false, false);
-		else
-			_battleGame->selectNextPlayerUnit(false, false);
-	}
+	selectNextUnit();
 	init();
 }
 
@@ -406,7 +404,6 @@ void InventoryState::btnUnloadClick(Action *)
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
 		updateStats();
-
 	}
 }
 
@@ -503,6 +500,55 @@ void InventoryState::handle(Action *action)
 		}
 	}
 #endif
+}
+
+/**
+* Selects the previous player unit, ignoring units without inventory.
+* @return Pointer to selected unit.
+*/
+BattleUnit *InventoryState::selectPreviousUnit() const
+{
+	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
+	do
+	{
+		if (_parent)
+			_parent->selectPreviousPlayerUnit(false);
+		else
+			_battleGame->selectPreviousPlayerUnit(false);
+		unit = _battleGame->getSelectedUnit();
+	}
+	while (!hasInventory(unit) && unit != current);
+	return unit;
+}
+
+/**
+* Selects the next player unit, ignoring units without inventory.
+* @return Pointer to selected unit.
+*/
+BattleUnit *InventoryState::selectNextUnit() const
+{
+	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
+	do
+	{
+		if (_parent)
+			_parent->selectNextPlayerUnit(false, false);
+		else
+			_battleGame->selectNextPlayerUnit(false, false);
+		unit = _battleGame->getSelectedUnit();
+	}
+	while (!hasInventory(unit) && unit != current);
+	return unit;
+}
+
+/**
+* Checks if a unit has an inventory. Large units and
+* terror units don't have inventories.
+* @param Pointer to battle unit.
+* @return True if an inventory is available, false otherwise.
+*/
+bool InventoryState::hasInventory(BattleUnit *unit) const
+{
+	return ((unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode());
 }
 
 }

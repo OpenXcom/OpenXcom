@@ -66,7 +66,7 @@ private:
 	/// Generates a new battlescape map.
 	void generateMap();
 	/// Adds a vehicle to the game.
-	void addXCOMVehicle(Vehicle *v);
+	BattleUnit *addXCOMVehicle(Vehicle *v);
 	/// Adds a soldier to the game.
 	BattleUnit *addXCOMUnit(BattleUnit *unit);
 	/// Adds an alien to the game.
