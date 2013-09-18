@@ -18,6 +18,7 @@
  */
 #include "RuleItem.h"
 #include "RuleInventory.h"
+#include "../Engine/Options.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
 
@@ -30,9 +31,10 @@ namespace OpenXcom
  */
 RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.0), _costBuy(0), _costSell(0), _transferTime(24), _weight(999), _bigSprite(0), _floorSprite(-1), _handSprite(120), _bulletSprite(-1),
 											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(DT_NONE),
-											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
-											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
-											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
+											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _capsAuto(-1), _capsSnap(-1), _capsAimed(-1), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
+											_capsMelee(-1), _battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
+											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _capsUse(-1), _tuPrime(0), _capsPrime(-1), 
+											_tuThrow(0), _capsThrow(-1), _recoveryPoints(0), _armor(20), _turretType(-1),
 											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0), _bulletSpeed(0), _autoShots(3)
 {
 }
@@ -132,6 +134,15 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	{
 		_listOrder = listOrder;
 	}
+	_tuPrime = node["tuPrime"].as<int>(_tuPrime);
+	_tuThrow = node["tuThrow"].as<int>(_tuThrow);
+	_capsAuto = node["capsAuto"].as<int>(_capsAuto);
+	_capsSnap = node["capsSnap"].as<int>(_capsSnap);
+	_capsAimed = node["capsAimed"].as<int>(_capsAimed);
+	_capsMelee = node["capsMelee"].as<int>(_capsMelee);
+	_capsUse = node["capsUse"].as<int>(_capsUse);
+	_capsPrime = node["capsPrime"].as<int>(_capsPrime);
+	_capsThrow = node["capsThrow"].as<int>(_capsThrow);
 }
 
 /**
@@ -382,6 +393,24 @@ int RuleItem::getTUAimed() const
 int RuleItem::getTUMelee() const
 {
 	return _tuMelee;
+}
+
+/**
+ * Gets the item's time unit percentage for priming.
+ * @return The priming TU percentage.
+ */
+int RuleItem::getTUPrime() const
+{
+	return _tuPrime;
+}
+
+/**
+ * Gets the item's time unit percentage for throwing.
+ * @return The throwing TU percentage.
+ */
+int RuleItem::getTUThrow() const
+{
+	return _tuThrow;
 }
 
 /**
@@ -666,6 +695,90 @@ int RuleItem::getBulletSpeed() const
 int RuleItem::getAutoShots() const
 {
 	return _autoShots;
+}
+
+/**
+ * Gets the item's time unit caps for priming.
+ * @return The priming TU caps.
+ */
+int RuleItem::getCapsPrime() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsPrime;
+	else
+		return -1;
+}
+
+/**
+ * Gets the item's time unit caps for melee.
+ * @return The melee TU caps.
+ */
+int RuleItem::getCapsMelee() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsMelee;
+	else
+		return -1;
+}
+
+/**
+ * Gets the item's time unit caps for throw.
+ * @return The throw TU caps.
+ */
+int RuleItem::getCapsThrow() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsThrow;
+	else
+		return -1;
+}
+
+/**
+ * Gets the item's time unit caps for auto.
+ * @return The auto TU caps.
+ */
+int RuleItem::getCapsAuto() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsAuto;
+	else
+		return -1;
+}
+
+/**
+ * Gets the item's time unit caps for snap.
+ * @return The snap TU caps.
+ */
+int RuleItem::getCapsSnap() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsSnap;
+	else
+		return -1;
+}
+
+/**
+ * Gets the item's time unit caps for aimed.
+ * @return The aimed TU caps.
+ */
+int RuleItem::getCapsAimed() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsAimed;
+	else
+		return -1;
+}
+
+/**
+ * Gets the item's time unit caps for use.
+ * @return The use TU caps.
+ */
+int RuleItem::getCapsUse() const
+{
+	if(Options::getBool("weaponTUCaps")==true)
+		return _capsUse;
+	else
+		return -1;
 }
 
 }
