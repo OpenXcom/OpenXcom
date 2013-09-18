@@ -709,6 +709,10 @@ void Inventory::mouseClick(Action *action, State *state)
 					}
 				}
 			}
+			else
+			{
+				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
+			}
 		}
 		else
 		{
