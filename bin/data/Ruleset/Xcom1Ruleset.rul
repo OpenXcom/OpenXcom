@@ -2271,7 +2271,7 @@ items:
     recoveryPoints: 1
     blastRadius: 5
     attraction: 1
-    tuPrime: 55
+    tuPrime: 52   # alittle bit more than normal grenades - it's alien...
     capsPrime: 41
     tuThrow: 25
     capsThrow: 19
