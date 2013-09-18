@@ -206,6 +206,7 @@ void UfoDetectedState::init()
  */
 void UfoDetectedState::btnCentreClick(Action *)
 {
+	_state->setTargetInfo(_ufo);
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
 	_game->popState();

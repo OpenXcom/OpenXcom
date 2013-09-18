@@ -35,6 +35,7 @@ class DogfightState;
 class Ufo;
 class TerrorSite;
 class Base;
+class Target;
 
 /**
  * Geoscape screen which shows an overview of
@@ -45,6 +46,7 @@ class GeoscapeState : public State
 private:
 	Surface *_bg;
 	Globe *_globe;
+	InteractiveSurface *_globeAndSpace;
 	ImageButton *_btnIntercept, *_btnBases, *_btnGraphs, *_btnUfopaedia, *_btnOptions, *_btnFunding;
 	ImageButton *_timeSpeed;
 	ImageButton *_btn5Secs, *_btn1Min, *_btn5Mins, *_btn30Mins, *_btn1Hour, *_btn1Day;
@@ -53,16 +55,18 @@ private:
 	Timer *_timer, *_zoomInEffectTimer, *_zoomOutEffectTimer, *_dogfightStartTimer;
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
 	Text *_txtDebug;
+	Text *_txtTarget;
 	std::vector<State*> _popups;
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _showFundsOnGeoscape;  // this is a cache for Options::getBool("showFundsOnGeoscape")
+	Target *_currentTarget; // the currently selected alien activity or Xcom craft/base
 public:
 	/// Creates the Geoscape state.
 	GeoscapeState(Game *game);
 	/// Cleans up the Geoscape state.
 	~GeoscapeState();
-	/// Handle keypresses.
+	/// Handles keypresses.
 	void handle(Action *action);
 	/// Updates the palette and timer.
 	void init();
@@ -86,7 +90,7 @@ public:
 	void time1Month();
 	/// Resets the timer to minimum speed.
 	void timerReset();
-	/// Stop the music!
+	/// Stops the music!
 	void musicStop(bool pause = false);
 	/// Displays a popup window.
 	void popup(State *state);
@@ -142,19 +146,31 @@ public:
 	int minimizedDogfightsCount();
 	/// Starts a new dogfight.
 	void startDogfight();
-	/// Get first free dogfight slot.
+	/// Gets first free dogfight slot.
 	int getFirstFreeDogfightSlot();
 	/// Create the starting missions.
 	void createStartingMissions() { determineAlienMissions(true); }
 	/// Handler for clicking the timer button.
 	void btnTimerClick(Action *action);
-	/// Process a terror site
+	/// Processes a terror site.
 	bool processTerrorSite(TerrorSite *ts) const;
-	/// Handles base defense
+	/// Handles base defense.
 	void handleBaseDefense(Base *base, Ufo *ufo);
+	/// Sets the activity information.
+	void setTargetInfo(Target *target);
 private:
-	/// Handle alien mission generation.
+	/// Handles alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
+	/// Gets either xcom or alien activity targets in the Geoscape.
+	std::vector<Target*> getAvailableTargets(bool selectXcom);
+	/// Gets the next target in the Geoscape, either Xcom or alien.
+	Target *selectNextTarget(bool selectXcom);
+	/// Gets the previous target in the Geoscape, either Xcom or alien.
+	Target *selectPrevTarget(bool selectXcom);
+	/// Resets target information.
+	void resetTargetInfo();
+	/// Returns whether there are any maximised Dogfights in the Geoscape.
+	bool hasMaximisedDogfights();
 };
 
 }
