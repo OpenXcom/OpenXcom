@@ -363,8 +363,10 @@
     <ClCompile Include="Interface\Bar.cpp" />
     <ClCompile Include="Interface\Cursor.cpp" />
     <ClCompile Include="Interface\FpsCounter.cpp" />
+    <ClCompile Include="Interface\Frame.cpp" />
     <ClCompile Include="Interface\ImageButton.cpp" />
     <ClCompile Include="Interface\NumberText.cpp" />
+    <ClCompile Include="Interface\Slider.cpp" />
     <ClCompile Include="Interface\Text.cpp" />
     <ClCompile Include="Interface\TextButton.cpp" />
     <ClCompile Include="Interface\TextEdit.cpp" />
@@ -637,8 +639,10 @@
     <ClInclude Include="Interface\Bar.h" />
     <ClInclude Include="Interface\Cursor.h" />
     <ClInclude Include="Interface\FpsCounter.h" />
+    <ClInclude Include="Interface\Frame.h" />
     <ClInclude Include="Interface\ImageButton.h" />
     <ClInclude Include="Interface\NumberText.h" />
+    <ClInclude Include="Interface\Slider.h" />
     <ClInclude Include="Interface\Text.h" />
     <ClInclude Include="Interface\TextButton.h" />
     <ClInclude Include="Interface\TextEdit.h" />

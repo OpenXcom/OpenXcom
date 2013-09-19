@@ -32,6 +32,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Slider.h"
 
 namespace OpenXcom
 {
@@ -105,6 +106,7 @@ TestState::TestState(Game *game) : State(game)
 	_list = new TextList(300, 180, 10, 10);
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
+	_slider = new Slider(100, 15, 50, 50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -114,6 +116,7 @@ TestState::TestState(Game *game) : State(game)
 	add(_button);
 	add(_text);
 	add(_list);
+	add(_slider);
 
 	centerAllSurfaces();
 
@@ -137,14 +140,16 @@ TestState::TestState(Game *game) : State(game)
 	_list->addRow(3, L"lol", L"welp", L"yo");
 	_list->addRow(1, L"0123456789");
 
+	_slider->setColor(Palette::blockOffset(15) + 1);
+
 	_i = 0;
 
 	//FontToBmp("../../fonts/BIGLETS_R", 16, 16);
 	//FontToBmp("../../fonts/SMALLSET_R", 8, 9);
 	//FontToBmp("../../fonts/BIGLETS_P", 16, 16);
 	//FontToBmp("../../fonts/SMALLSET_P", 8, 9);
-	BmpToFont("../../fonts/BIGLETS - New");
-	BmpToFont("../../fonts/SMALLSET - New");
+	//BmpToFont("../../fonts/BIGLETS - New");
+	//BmpToFont("../../fonts/SMALLSET - New");
 }
 
 TestState::~TestState()

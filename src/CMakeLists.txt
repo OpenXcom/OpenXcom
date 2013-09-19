@@ -351,6 +351,10 @@ set ( interface_src
   Interface/TextList.cpp
   Interface/Cursor.h
   Interface/Cursor.cpp
+  Interface/Frame.h
+  Interface/Frame.cpp
+  Interface/Slider.h
+  Interface/Slider.cpp
 )
 
 set ( menu_src
