@@ -902,51 +902,44 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 
 	if (distance < 4)
 	{
-		if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+		if (tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
 		{
 			action->type = BA_AUTOSHOT;
-			return;
 		}
-		if ( !tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+		else if (!tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{
-			if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+			if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 			{
 				action->type = BA_AIMEDSHOT;
 			}
-			return;
 		}
-		action->type = BA_SNAPSHOT;
-		return;
-	}
-
-
-	if ( distance > 12 )
-	{
-		if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
-		{
-			action->type = BA_AIMEDSHOT;
-			return;
-		}
-		if ( distance < 20
-			&& tuSnap
-			&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+		else
 		{
 			action->type = BA_SNAPSHOT;
-			return;
 		}
 	}
-
-	if ( tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon) )
+	else if (distance > 12)
+	{
+		if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
+		{
+			action->type = BA_AIMEDSHOT;
+		}
+		else if (distance < 20
+			  && tuSnap
+			  && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+		{
+			action->type = BA_SNAPSHOT;
+		}
+	}
+	else if (tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
 	{
 			action->type = BA_SNAPSHOT;
-			return;
 	}
-	if ( tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon) )
+	else if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 	{
 			action->type = BA_AIMEDSHOT;
-			return;
 	}
-	if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+	else if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
 	{
 			action->type = BA_AUTOSHOT;
 	}

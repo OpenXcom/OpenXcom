@@ -1053,35 +1053,45 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 		return 0;
 	}
 
+	int cost = 0;
 	switch (actionType)
 	{
 		case BA_PRIME:
-			return (int)floor(getStats()->tu * 0.50);
+			cost = 50; // maybe this should go in the ruleset
+			break;
 		case BA_THROW:
-			return (int)floor(getStats()->tu * 0.25);
+			cost = 25;
+			break;
 		case BA_AUTOSHOT:
-			return (int)(getStats()->tu * item->getRules()->getTUAuto() / 100);
+			cost = item->getRules()->getTUAuto();
+			break;
 		case BA_SNAPSHOT:
-			return (int)(getStats()->tu * item->getRules()->getTUSnap() / 100);
+			cost = item->getRules()->getTUSnap();
+			break;
 		case BA_STUN:
 		case BA_HIT:
-			if (item->getRules()->getFlatRate())
-				return item->getRules()->getTUMelee();
-			else
-				return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
+			cost = item->getRules()->getTUMelee();
+			break;
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
-			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
+			cost = item->getRules()->getTUAimed();
+			break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			if (item->getRules()->getFlatRate())
-				return item->getRules()->getTUUse();
-			else
-				return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
+			cost = item->getRules()->getTUUse();
+			break;
 		default:
-			return 0;
+			cost = 0;
 	}
+
+	// if it's a percentage, apply it to unit TUs
+	if (!item->getRules()->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
+	{
+		cost = (int)floor(getStats()->tu * cost / 100.0f);
+	}
+
+	return cost;
 }
 
 

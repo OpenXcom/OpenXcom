@@ -100,32 +100,47 @@ namespace OpenXcom
 			_lstInfo->setBig();
 
 			int current_row = 0;
-			if (item->getAccuracyAuto()>0)
+			if (item->getTUAuto()>0)
 			{
+				std::wstring tu = Text::formatPercentage(item->getTUAuto());
+				if (item->getFlatRate())
+				{
+					tu.erase(tu.end() - 1);
+				}
 				_lstInfo->addRow(3,
 								 _game->getLanguage()->getString("STR_AUTO").c_str(),
 								 Text::formatPercentage(item->getAccuracyAuto()).c_str(),
-								 Text::formatPercentage(item->getTUAuto()).c_str());
+								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
 
-			if (item->getAccuracySnap()>0)
+			if (item->getTUSnap()>0)
 			{
+				std::wstring tu = Text::formatPercentage(item->getTUSnap());
+				if (item->getFlatRate())
+				{
+					tu.erase(tu.end() - 1);
+				}
 				_lstInfo->addRow(3,
 								 _game->getLanguage()->getString("STR_SNAP").c_str(),
 								 Text::formatPercentage(item->getAccuracySnap()).c_str(),
-								 Text::formatPercentage(item->getTUSnap()).c_str());
+								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
 
-			if (item->getAccuracyAimed()>0)
+			if (item->getTUAimed()>0)
 			{
+				std::wstring tu = Text::formatPercentage(item->getTUAimed());
+				if (item->getFlatRate())
+				{
+					tu.erase(tu.end() - 1);
+				}
 				_lstInfo->addRow(3,
 								 _game->getLanguage()->getString("STR_AIMED").c_str(),
 								 Text::formatPercentage(item->getAccuracyAimed()).c_str(),
-								 Text::formatPercentage(item->getTUAimed()).c_str());
+								 tu.c_str());
 				_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 				current_row++;
 			}
