@@ -26,6 +26,8 @@
 namespace OpenXcom
 {
 
+class Font;
+
 /**
  * Element that is blit (rendered) onto the screen.
  * Mainly an encapsulation for SDL's SDL_Surface struct, so it
@@ -71,6 +73,8 @@ public:
 	virtual void draw();
 	/// Blits this surface onto another one.
 	virtual void blit(Surface *surface);
+	/// Sets the surface's various fonts.
+	virtual void setFonts(Font *big, Font *small) {};
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
     /// Draws a filled rectangle on the surface.
