@@ -4,358 +4,68 @@ lookWeight:
   - 2
   - 8
 maleFirst:
-  - Abilio
-  - Abrahan
-  - Adao
-  - Affonso
   - Afonso
-  - Agostinho
-  - Albano
   - Alberto
   - Alexandre
-  - Alexio
-  - Alfredo
-  - Aloisio
   - Alvaro
-  - Andre
-  - Angelo
-  - Anibal
-  - Antonio
-  - Antos
-  - Armando
-  - Arnaldo
-  - Artur
-  - Atilio
-  - Augusto
-  - Balduino
-  - Baltasar
-  - Bartolmeu
-  - Batista
-  - Belmiro
-  - Benedicto
-  - Benedito
-  - Benjamin
-  - Bento
-  - Berengar
-  - Bernardo
-  - Bonifacio
-  - Bras
-  - Braz
-  - Breno
-  - Caetano
-  - Carlito
-  - Carlitos
-  - Carlos
-  - Casimiro
-  - Cecilio
-  - Chico
-  - Claudio
-  - Clemente
-  - Cornelio
-  - Cristiano
-  - Cristovao
-  - Damiano
-  - Daniel
-  - Davi
-  - David
-  - Demetrio
-  - Desiderio
-  - Dimas
-  - Dinis
-  - Diogo
-  - Dionisio
-  - Domingos
-  - Donato
-  - Duarte
-  - Edmundo
-  - Eduardo
-  - Elder
-  - Eleuterio
-  - Eloi
-  - Emanuel
-  - Emerico
-  - Emilio
-  - Eneas
-  - Erico
-  - Ermenegildo
-  - Ernesto
-  - Estevao
-  - Eugenio
-  - Eusebio
-  - Eustaquio
-  - Ezequiel
-  - Fabiao
-  - Fabio
-  - Faustino
-  - Fausto
-  - Felciano
-  - Fernando
-  - Fernao
-  - Ferrao
-  - Filipe
-  - Flavio
-  - Florencio
-  - Fortunato
-  - Francisco
-  - Fransisco
-  - Frederico
-  - Gabrielo
-  - Gaspar
-  - Germano
-  - Gervasio
-  - Giacinto
-  - Gil
-  - Gilberto
-  - Glaucio
-  - Godofredo
-  - Goncalo
-  - Goncalvo
-  - Graciano
-  - Gregorio
-  - Gualter
-  - Guilherme
-  - Gustavo
-  - Heitor
-  - Helder
-  - Heliodoro
-  - Henrique
-  - Henriques
-  - Herberto
-  - Heriberto
-  - Hermenegildo
-  - Herminio
-  - Hilario
-  - Hipolito
-  - Horacio
-  - Huberto
-  - Humberto
-  - Hunfredo
-  - Inacio
-  - Isidoro
-  - Isidro
-  - Jacinto
-  - Jaco
-  - Jacob
-  - Jaime
-  - Januario
-  - Jaoquim
-  - Jayme
-  - Jesus
-  - Joao
-  - Joaquim
-  - Jordao
-  - Jorge
-  - Jose
-  - Josefa
-  - Josue
-  - Julio
-  - Lando
-  - Laudalino
-  - Laurencho
-  - Leandro
-  - Leonaldo
-  - Leonardo
-  - Leopoldo
-  - Liberio
-  - Lidio
-  - Lino
-  - Lorenco
-  - Lourenco
-  - Lucas
-  - Lucio
-  - Luis
-  - Luiz
-  - Macario
-  - Macio
-  - Manoel
-  - Manuel
-  - Marcelino
-  - Marcelo
-  - Marco
-  - Marcos
-  - Mario
-  - Markes
-  - Marques
-  - Marquese
-  - Marquez
-  - Martial
-  - Martinho
-  - Martins
-  - Mateus
-  - Mauricio
-  - Maximiano
-  - Maximiliano
-  - Maximino
-  - Migel
-  - Miguel
-  - Modesto
-  - Moise
-  - Moises
-  - Narciso
-  - Natanael
-  - Netuno
-  - Nicodemo
-  - Nicolao
-  - Nicolau
-  - Nuno
-  - Olavo
-  - Osvaldo
-  - Otavio
-  - Ovidio
-  - Pascoal
-  - Patricio
-  - Paulino
-  - Paulo
-  - Pedro
-  - Pio
-  - Placido
-  - Plinio
-  - Quim
-  - Rafael
-  - Raimundo
-  - Ramiro
-  - Raymundo
-  - Reinaldo
-  - Remigio
-  - Renato
-  - Ricardo
-  - Roberto
-  - Rodolfo
-  - Rodrigo
-  - Rogerio
-  - Rolando
-  - Roldao
-  - Ronaldo
-  - Roque
-  - Rosario
-  - Rufino
-  - Rui
-  - Sabio
-  - Sabion
-  - Salomao
-  - Saturnino
-  - Serafim
-  - Serafino
-  - Sergio
-  - Severino
-  - Silvino
-  - Silvio
-  - Simao
-  - Tacito
-  - Tadeu
-  - Teobaldo
-  - Teodosio
-  - Thiago
-  - Tiago
-  - Tiburcio
-  - Timoteo
-  - Tomas
-  - Tomaz
-  - Tome
-  - Tonio
-  - Tristao
-  - Ulisses
-  - Valentim
-  - Valerio
-  - Verissimo
-  - Victorino
-  - Vincente
-  - Vinicius
-  - Virgilio
-  - Zacarias
-  - Ze
-  - Zeferino
-  - Zeusef
   - Amaro
+  - Andre
+  - Antonio
   - Arcanjo
+  - Augusto
+  - Bernardo
   - Bruno
+  - Carlos
   - Cavaco
   - Cid
+  - Cristiano
+  - Daniel
+  - David
+  - Diogo
+  - Duarte
+  - Eduardo
+  - Fabio
+  - Fernando
+  - Filipe
+  - Francisco
+  - Frederico
   - Gabriel
+  - Guilherme
+  - Helder
+  - Henrique
   - Hugo
+  - Joao
+  - Joaquim
+  - Jorge
+  - Jose
+  - Leonardo
+  - Luis
+  - Marco
+  - Mario
+  - Manuel
+  - Miguel
   - Nelson
+  - Nuno
   - Orlando
+  - Paulo
+  - Pedro
+  - Rafael
+  - Ricardo
+  - Rui
   - Samuel
+  - Sergio
+  - Tiago
   - Vasco
   - Vitor
 femaleFirst:
-  - Adelgunda
-  - Agostinha
-  - Alexandra
   - Ana
-  - Andrea
-  - Baptista
-  - Beatrix
-  - Carolina
-  - Catarina
-  - Cecilia
-  - Clementina
-  - Cristina
-  - Eduarda
-  - Elisa
-  - Elisabete
-  - Emilia
-  - Fatima
-  - Florinda
-  - Fortunata
-  - Genoveva
-  - Georgina
-  - Heloisa
-  - Horacia
-  - Hortensia
-  - Isabel
-  - Isabelina
-  - Isaura
-  - Isolda
-  - Ivone
-  - Izabel
-  - Izadora
-  - Joana
-  - Laura
-  - Laurenco
-  - Leilah
-  - Leticia
-  - Lorena
-  - Luciana
-  - Luisa
-  - Luiza
-  - Madalena
-  - Mafalda
-  - Magda
-  - Manuela
-  - Mapuana
-  - Marcelina
-  - Maria
-  - Marina
-  - Mariquita
-  - Marisa
-  - Marta
-  - Matilda
-  - Matilde
-  - Micaela
-  - Noemi
-  - Olga
-  - Paz
-  - Rafaela
-  - Raquel
-  - Rebeca
-  - Renata
-  - Rio
-  - Rosa
-  - Sabina
-  - Salome
-  - Senna
-  - Silvia
-  - Susana
-  - Teresa
-  - Tereza
-  - Veronica
   - Andreia
   - Aurora
   - Beatriz
   - Bia
   - Carina
   - Carla
+  - Catarina
   - Catia
   - Cristiana
   - Daniela
@@ -367,246 +77,116 @@ femaleFirst:
   - Gabriela
   - Gloria
   - Helena
+  - Isabel
   - Ines
+  - Joana
   - Lara
   - Leonilde
+  - Luisa
+  - Madalena
   - Margarida
+  - Maria
   - Mariana
+  - Marta
   - Patricia
   - Paula
+  - Raquel
   - Rita
   - Sara
   - Sofia
+  - Susana
   - Tania
   - Vanessa
 maleLast:
-  - Abrao
-  - Acuna
-  - Aldair
-  - Alvares
-  - Alves
-  - Andrade
-  - Anjos
-  - Arnos
-  - Azevedo
-  - Azocar
-  - Baia
-  - Baiano
-  - Balsemao
-  - Barbosa
-  - Barreto
-  - Barrios
-  - Barros
-  - Bastos
-  - Bessa
-  - Boas
-  - Borreco
-  - Botelho
-  - Branco
-  - Cabral
-  - Cadete
-  - Caeiro
-  - Cafu
-  - Calado
-  - Caldeira
-  - Cardenas
-  - Carvalhal
-  - Castelbranco
-  - Castro
-  - Catarino
-  - Chagas
-  - Chiamulera
-  - Chissano
-  - Cintra
-  - Coelho
-  - Coimbra
-  - Conceicao
-  - Corneja
-  - Correia
-  - Correja
-  - Costa
-  - Couto
-  - Cristostome
-  - Cruz
-  - Cunha
-  - Cuthiliero
-  - DaAssucao
-  - DaCunha
-  - Lisboa
-  - DaSilva
-  - Dano
-  - Dasmarinas
-  - DeAlbreuin
-  - DeAlmeida
-  - DeBrito
-  - DeFaria
-  - DeFreitas
-  - DeMenses
-  - DeMesquites
-  - DeSa
-  - Carneiro
-  - Dida
-  - Diniz
-  - Domingues
-  - DosSantos
-  - Dourado
-  - Dunga
-  - EcadeQueiroz
-  - Edhino
-  - Elizalde
-  - Eronilde
-  - Feijo
-  - Feitor
-  - Fernandes
-  - Figo
-  - Figueiredo
-  - Figuiera
-  - Filho
-  - Fofao
-  - Folha
-  - Frana
-  - Futre
-  - Granda
-  - Guajira
-  - Guera
-  - Guerra
-  - Guterres
-  - Haraculamo
-  - Hechevaria
-  - Izquierdo
-  - Jardim
-  - Joje
-  - Juliao
-  - Junqueira
-  - Kenedy
-  - Labat
-  - Lapuente
-  - Leal
-  - Lobato
-  - Lopes
-  - Machado
-  - Madeira
-  - Magellan
-  - Maia
-  - Masarenhas
-  - Medeiros
-  - Meireles
-  - Meirelles
-  - Mendes
-  - Mestres
-  - Milazar
-  - Monteiro
-  - Morais
-  - Morillo
-  - Mota
-  - Moura
-  - Mundo
-  - Musrri
-  - Negrao
-  - Neto
-  - Neves
-  - Nunes
-  - Nunho
-  - Oceano
-  - Oliveira
-  - Paes
-  - Paneira
-  - Parrela
-  - Pauleta
-  - Peixe
-  - Peixoto
-  - Pereira
-  - Pessao
-  - Pessoa
-  - Peteira
-  - Pinto
-  - Pitta
-  - Pombal
-  - Porfirio
-  - Prazeres
-  - Prestes
-  - Ramos
-  - Regalo
-  - Reis
-  - Resende
-  - Ribeiro
-  - Rios
-  - Rivaldo
-  - Rocha
-  - Rodrigues
-  - Rubalcaba
-  - SaPinto
-  - Sacramento
-  - Salazar
-  - Salvador
-  - Sampaio
-  - Santos
-  - Santoso
-  - Secretario
-  - Serpa
-  - Serrao
-  - Simoes
-  - Simos
-  - Soares
-  - Sobrinho
-  - Sousa
-  - Soveral
-  - Taffarel
-  - Tanse
-  - Teixeira
-  - Torres
-  - Travada
-  - Travassos
-  - Trigoso
-  - Vaz
-  - Vento
-  - Vidigal
-  - Vieira
-  - Vilela
-  - Villa
-  - Vilna
-  - Vozone
-  - Zeimoto
-  - Zonta
   - Abrantes
+  - Afonso
+  - Albano
   - Almeida
+  - Alves
   - Antunes
   - Barroso
+  - Bastos
+  - Bento
+  - Bernardo
   - Brito
+  - Cadete
+  - Caldeira
   - Cardoso
   - Carneiro
   - Carvalho
+  - Coelho
+  - Correia
+  - Costa
+  - Couto
+  - Cristovao
+  - Cruz
   - Delgado
   - Dias
+  - Domingos
+  - Duarte
+  - Fernandes
   - Ferreira
+  - Francisco
   - Freitas
   - Fonseca
+  - Futre
   - Garcia
   - Gomes
   - Goncalves
   - Gouveia
   - Guedes
+  - Henriques
   - Horta
+  - Joaquim
+  - Jesus
   - Lameiras
   - Laranjeiro
+  - Lopes
+  - Lourenco
+  - Machado
+  - Madeira
+  - Maia
+  - Marques
+  - Martins
+  - Mateus
   - Matos
+  - Meireles
+  - Mendes
   - Mira
+  - Monteiro
   - Moreira
+  - Mota
   - Mourinho
+  - Neves
+  - Oliveira
   - Pacheco
   - Paiva
+  - Paulo
   - Pato
+  - Peixe
+  - Pereira
   - Pinho
+  - Pinto
   - Pires
   - Raposo
   - Rato
   - Real
   - Rebelo
+  - Reis
   - Relvas
+  - Ribeiro
+  - Rocha
+  - Rodrigues
+  - Ronaldo
   - Roseiro
+  - Santos
   - Sebastiao
   - Sequeira
   - Serra
   - Silva
   - Sobral
+  - Sousa
   - Tavares
+  - Teixeira
+  - Torres
+  - Vieira
