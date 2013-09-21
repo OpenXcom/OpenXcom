@@ -36,8 +36,8 @@ const int HP_RIGHT = 1;
 class CraftWeaponProjectile
 {
 private:
-	int _type;
-	int _globalType;
+	CraftWeaponProjectileType _type;
+	CraftWeaponProjectileGlobalType _globalType;
 	int _speed;
 	int _direction;
 	int _currentPosition; // relative to interceptor, apparently, which is a problem when the interceptor disengages while projectile is in flight
@@ -56,11 +56,11 @@ public:
 	~CraftWeaponProjectile(void);
 
 	/// Sets projectile type. This determines it's speed.
-	void setType(const int type);
+	void setType(CraftWeaponProjectileType type);
 	/// Returns projectile type.
-	int getType() const;
+	CraftWeaponProjectileType getType() const;
 	/// Returns projectile global type.
-	int getGlobalType() const;
+	CraftWeaponProjectileGlobalType getGlobalType() const;
 	/// Sets projectile direction. This determines it's initial position.
 	void setDirection(const int &directon);
 	/// Gets projectile direction.

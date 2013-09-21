@@ -2350,7 +2350,7 @@ Skuteczność strzałów wynika z widoczności, odległości oraz innych czynnik
 STR_CANMANUFACTUREMOREITEMSPERHOUR
 Reguły produkcji z TFTD
 STR_CANMANUFACTUREMOREITEMSPERHOUR_DESC
-Dozwolona produkcja więcej niż jedenego przedmiotu na godzinę w procesie produkcyjnym.
+Dozwolona produkcja więcej niż jednego przedmiotu na godzinę w procesie produkcyjnym.
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE
 Transfer w trakcie lotu
 STR_CANTRANSFERCRAFTSWHILEAIRBORNE_DESC

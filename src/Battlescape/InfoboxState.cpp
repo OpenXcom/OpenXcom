@@ -22,7 +22,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
-#include "../Interface/Window.h"
+#include "../Interface/Frame.h"
 #include "../Engine/Action.h"
 
 namespace OpenXcom
@@ -38,16 +38,18 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 261, 122, 34, 10);
+	_frame = new Frame(261, 122, 34, 10);
 	_text = new Text(251, 112, 39, 15);
 
-	add(_window);
+	add(_frame);
 	add(_text);
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(0));
-	_window->setHighContrast(true);
+	_frame->setHighContrast(true);
+	_frame->setColor(Palette::blockOffset(0) + 7);
+	_frame->setBackground(Palette::blockOffset(0) + 14);
+	_frame->setThickness(9);
 
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
@@ -56,7 +58,7 @@ InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
 	_text->setText(msg);
 	_text->setColor(Palette::blockOffset(0));
 	_text->setHighContrast(true);
-	_text->setPalette(_window->getPalette());
+	_text->setPalette(_frame->getPalette());
 
 	_timer = new Timer(INFOBOX_DELAY);
 	_timer->onTimer((StateHandler)&InfoboxState::close);

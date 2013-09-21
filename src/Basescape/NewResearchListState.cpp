@@ -127,7 +127,7 @@ void NewResearchListState::fillProjectList ()
 	std::vector<RuleResearch *>::iterator it = _projects.begin ();
 	while  ( it != _projects.end ())
 	{
-		if((*it)->getRequirements().size() == 0)
+		if((*it)->getRequirements().empty())
 		{
 			_lstResearch->addRow(1, _game->getLanguage()->getString((*it)->getName ()).c_str());
 			++it;

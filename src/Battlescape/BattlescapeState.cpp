@@ -248,7 +248,6 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
 	// Set up objects
-
 	_save = _game->getSavedGame()->getSavedBattle();
 	_map->init();
 	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
@@ -366,13 +365,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnStats->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
-	_btnLeftHandItem->setTooltip("STR_LEFT_HAND");
-	_btnLeftHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
-	_btnLeftHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
-	_btnRightHandItem->setTooltip("STR_RIGHT_HAND");
-	_btnRightHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
-	_btnRightHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveNone->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveNone"));
@@ -511,6 +504,7 @@ void BattlescapeState::init()
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 		firstInit = false;
 	}
+	_txtTooltip->setText(L"");
 }
 
 /**
@@ -783,6 +777,14 @@ void BattlescapeState::btnKneelClick(Action *)
 		{
 			_battleGame->kneel(bu);
 		}
+
+		// update any path preview if unit kneels
+		if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
+		{
+			_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 }
 
@@ -906,7 +908,10 @@ void BattlescapeState::btnHelpClick(Action *)
 void BattlescapeState::btnEndTurnClick(Action *)
 {
 	if (allowButtons())
+	{
+		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
+	}
 }
 /**
  * Aborts the game.
@@ -1890,7 +1895,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 */
 void BattlescapeState::txtTooltipIn(Action *action)
 {
-	if (Options::getBool("battleTooltips"))
+	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
 		_currentTooltip = action->getSender()->getTooltip();
 		_txtTooltip->setText(_game->getLanguage()->getString(_currentTooltip));
@@ -1903,7 +1908,7 @@ void BattlescapeState::txtTooltipIn(Action *action)
 */
 void BattlescapeState::txtTooltipOut(Action *action)
 {
-	if (Options::getBool("battleTooltips"))
+	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
 		if (_currentTooltip == action->getSender()->getTooltip())
 		{

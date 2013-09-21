@@ -85,7 +85,7 @@ void SelectStartFacilityState::lstFacilitiesClick(Action *)
 void SelectStartFacilityState::facilityBuilt()
 {
 	_facilities.erase(_facilities.begin() + _lstFacilities->getSelectedRow());
-	if( _facilities.size() == 0 )
+	if( _facilities.empty() )
 	{
 		_game->popState();
 		_game->popState(); // return to geoscape, force timer to start.

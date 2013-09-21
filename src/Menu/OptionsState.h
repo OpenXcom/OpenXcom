@@ -31,6 +31,7 @@ class Window;
 class Text;
 class TextEdit;
 class ArrowButton;
+class Slider;
 
 /**
  * Options window that displays all
@@ -49,11 +50,11 @@ private:
 	Text *_txtDisplayMode;
 	TextButton *_displayMode, *_btnDisplayWindowed, *_btnDisplayFullscreen;
 	Text *_txtDisplayFilter;
-    TextButton *_btnDisplayFilter;
+	TextButton *_btnDisplayFilter;
 	Text *_txtMusicVolume;
-	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
+	Slider *_slrMusicVolume;
 	Text *_txtSoundVolume;
-	TextButton *_soundVolume, *_btnSoundVolume1, *_btnSoundVolume2, *_btnSoundVolume3, *_btnSoundVolume4, *_btnSoundVolume5;
+	Slider *_slrSoundVolume;
 	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls, *_btnAdvanced;
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
