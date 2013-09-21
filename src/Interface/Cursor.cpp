@@ -56,8 +56,8 @@ void Cursor::handle(Action *action)
 {
 	if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-		setX((int)floor(action->getDetails()->motion.x / action->getXScale()));
-		setY((int)floor(action->getDetails()->motion.y / action->getYScale()));
+		setX((int)floor((action->getDetails()->motion.x - action->getLeftBlackBand()) / action->getXScale()));
+		setY((int)floor((action->getDetails()->motion.y - action->getTopBlackBand()) / action->getYScale()));
 	}
 }
 

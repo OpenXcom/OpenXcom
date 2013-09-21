@@ -26,9 +26,11 @@ namespace OpenXcom
  * Creates a new action.
  * @param scaleX Screen's X scaling factor.
  * @param scaleY Screen's Y scaling factor.
+ * @param topBlackBand Screen's top black band height.
+ * @param leftBlackBand Screen's left black band width.
  * @param ev Pointer to SDL_event.
  */
-Action::Action(SDL_Event *ev, double scaleX, double scaleY) : _ev(ev), _scaleX(scaleX), _scaleY(scaleY), _mouseX(-1), _mouseY(-1), _surfaceX(-1), _surfaceY(-1), _sender(0)
+Action::Action(SDL_Event *ev, double scaleX, double scaleY, int topBlackBand, int leftBlackBand) : _ev(ev), _scaleX(scaleX), _scaleY(scaleY), _topBlackBand(topBlackBand), _leftBlackBand(leftBlackBand), _mouseX(-1), _mouseY(-1), _surfaceX(-1), _surfaceY(-1), _sender(0)
 {
 }
 
@@ -66,8 +68,8 @@ double Action::getYScale() const
  */
 void Action::setMouseAction(int mouseX, int mouseY, int surfaceX, int surfaceY)
 {
-	_mouseX = mouseX;
-	_mouseY = mouseY;
+	_mouseX = mouseX - _leftBlackBand;
+	_mouseY = mouseY - _topBlackBand;
 	_surfaceX = surfaceX;
 	_surfaceY = surfaceY;
 }
@@ -75,6 +77,26 @@ void Action::setMouseAction(int mouseX, int mouseY, int surfaceX, int surfaceY)
 bool Action::isMouseAction() const
 {
 	return (_mouseX != -1);
+}
+
+/**
+ * Returns the height in pixel of the
+ * top black band if any.
+ * @return Screen's top black band.
+ */
+int Action::getTopBlackBand() const
+{
+	return _topBlackBand;
+}
+
+/**
+ * Returns the width in pixel of the
+ * left black band if any.
+ * @return Screen's left black band.
+ */
+int Action::getLeftBlackBand() const
+{
+	return _leftBlackBand;
 }
 
 /**
