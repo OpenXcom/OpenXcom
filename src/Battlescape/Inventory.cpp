@@ -701,13 +701,21 @@ void Inventory::mouseClick(Action *action, State *state)
 							if (0 == item->getExplodeTurn())
 							{
 								// Prime that grenade!
-								if (BT_PROXIMITYGRENADE == itemType) item->setExplodeTurn(1);
+								if (BT_PROXIMITYGRENADE == itemType)
+								{
+									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
+									item->setExplodeTurn(1);
+								}
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
 							else item->setExplodeTurn(0);  // Unprime the grenade
 						}
 					}
 				}
+			}
+			else
+			{
+				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
 			}
 		}
 		else

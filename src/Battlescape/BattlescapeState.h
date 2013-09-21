@@ -57,9 +57,10 @@ private:
 	ImageButton *_reserve;
 	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto, *_btnReserveKneel, *_btnZeroTUs;
 	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
-	InteractiveSurface *_btnVisibleUnit[10];
-	NumberText *_numVisibleUnit[10];
-	BattleUnit *_visibleUnit[10];
+	static const int VISIBLE_MAX = 10;
+	InteractiveSurface *_btnVisibleUnit[VISIBLE_MAX];
+	NumberText *_numVisibleUnit[VISIBLE_MAX];
+	BattleUnit *_visibleUnit[VISIBLE_MAX];
 	WarningMessage *_warning;
 	Text *_txtName;
 	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;

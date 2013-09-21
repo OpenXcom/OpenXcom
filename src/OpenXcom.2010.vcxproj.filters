@@ -778,6 +778,12 @@
     <ClCompile Include="Savegame\SerializationHelper.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\Slider.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\Frame.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1577,6 +1583,12 @@
     </ClInclude>
     <ClInclude Include="Ruleset\ExtraSounds.h">
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Slider.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Frame.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
+#include "../Interface/Slider.h"
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Interface/ArrowButton.h"
@@ -76,18 +77,10 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnDisplayFilter = new TextButton(126, 16, 28, 132);
 
 	_txtMusicVolume = new Text(140, 9, 174, 32);
-	_btnMusicVolume1 = new TextButton(22, 14, 174, 42);
-	_btnMusicVolume2 = new TextButton(22, 18, 198, 42);
-	_btnMusicVolume3 = new TextButton(22, 22, 222, 42);
-	_btnMusicVolume4 = new TextButton(22, 26, 246, 42);
-	_btnMusicVolume5 = new TextButton(22, 30, 270, 42);
+	_slrMusicVolume = new Slider(118, 20, 174, 42);
 
 	_txtSoundVolume = new Text(140, 9, 174, 72);
-	_btnSoundVolume1 = new TextButton(22, 14, 174, 82);
-	_btnSoundVolume2 = new TextButton(22, 18, 198, 82);
-	_btnSoundVolume3 = new TextButton(22, 22, 222, 82);
-	_btnSoundVolume4 = new TextButton(22, 26, 246, 82);
-	_btnSoundVolume5 = new TextButton(22, 30, 270, 82);
+	_slrSoundVolume = new Slider(118, 20, 174, 82);
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
@@ -120,26 +113,6 @@ OptionsState::OptionsState(Game *game) : State(game)
 	else
 		_displayMode = _btnDisplayWindowed;
 
-	switch (Options::getInt("musicVolume"))
-	{
-	case 0: _musicVolume = _btnMusicVolume1; break;
-	case 32: _musicVolume = _btnMusicVolume2; break;
-	case 64: _musicVolume = _btnMusicVolume3; break;
-	case 96: _musicVolume = _btnMusicVolume4; break;
-	case 128: _musicVolume = _btnMusicVolume5; break;
-	default: _musicVolume = 0; break;
-	}
-
-	switch (Options::getInt("soundVolume"))
-	{
-	case 0: _soundVolume = _btnSoundVolume1; break;
-	case 32: _soundVolume = _btnSoundVolume2; break;
-	case 64: _soundVolume = _btnSoundVolume3; break;
-	case 96: _soundVolume = _btnSoundVolume4; break;
-	case 128: _soundVolume = _btnSoundVolume5; break;
-	default: _soundVolume = 0; break;
-	}
-
 	add(_window);
 	add(_txtTitle);
 	add(_btnOk);
@@ -164,18 +137,10 @@ OptionsState::OptionsState(Game *game) : State(game)
     add(_btnDisplayFilter);
 
 	add(_txtMusicVolume);
-	add(_btnMusicVolume1);
-	add(_btnMusicVolume2);
-	add(_btnMusicVolume3);
-	add(_btnMusicVolume4);
-	add(_btnMusicVolume5);
+	add(_slrMusicVolume);
 
 	add(_txtSoundVolume);
-	add(_btnSoundVolume1);
-	add(_btnSoundVolume2);
-	add(_btnSoundVolume3);
-	add(_btnSoundVolume4);
-	add(_btnSoundVolume5);
+	add(_slrSoundVolume);
 
 	centerAllSurfaces();
 
@@ -259,7 +224,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_filterPaths.push_back("");
 	_filterPaths.push_back("");
 	_filterPaths.push_back("");
-
+	
+	#ifndef __NO_SHADERS
 	std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
 	for (std::vector<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
 	{
@@ -269,6 +235,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 		_filters.push_back(name);
 		_filterPaths.push_back(path);
 	}
+	#endif
 	
 	_selFilter = 0;
 	if (Options::getBool("useOpenGL"))
@@ -303,49 +270,14 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
 	_txtMusicVolume->setText(_game->getLanguage()->getString("STR_MUSIC_VOLUME"));
 
-	_btnMusicVolume1->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume1->setText(L"0");
-	_btnMusicVolume1->setGroup(&_musicVolume);
-
-	_btnMusicVolume2->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume2->setText(L"1");
-	_btnMusicVolume2->setGroup(&_musicVolume);
-
-	_btnMusicVolume3->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume3->setText(L"2");
-	_btnMusicVolume3->setGroup(&_musicVolume);
-
-	_btnMusicVolume4->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume4->setText(L"3");
-	_btnMusicVolume4->setGroup(&_musicVolume);
-
-	_btnMusicVolume5->setColor(Palette::blockOffset(15)-1);
-	_btnMusicVolume5->setText(L"4");
-	_btnMusicVolume5->setGroup(&_musicVolume);
-
+	_slrMusicVolume->setColor(Palette::blockOffset(15)-1);
+	_slrMusicVolume->setValue((double)Options::getInt("musicVolume") / SDL_MIX_MAXVOLUME);
 
 	_txtSoundVolume->setColor(Palette::blockOffset(8)+10);
 	_txtSoundVolume->setText(_game->getLanguage()->getString("STR_SFX_VOLUME"));
 
-	_btnSoundVolume1->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume1->setText(L"0");
-	_btnSoundVolume1->setGroup(&_soundVolume);
-
-	_btnSoundVolume2->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume2->setText(L"1");
-	_btnSoundVolume2->setGroup(&_soundVolume);
-
-	_btnSoundVolume3->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume3->setText(L"2");
-	_btnSoundVolume3->setGroup(&_soundVolume);
-
-	_btnSoundVolume4->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume4->setText(L"3");
-	_btnSoundVolume4->setGroup(&_soundVolume);
-
-	_btnSoundVolume5->setColor(Palette::blockOffset(15)-1);
-	_btnSoundVolume5->setText(L"4");
-	_btnSoundVolume5->setGroup(&_soundVolume);
+	_slrSoundVolume->setColor(Palette::blockOffset(15) - 1);
+	_slrSoundVolume->setValue((double)Options::getInt("soundVolume") / SDL_MIX_MAXVOLUME);
 }
 
 /**
@@ -370,27 +302,8 @@ void OptionsState::btnOkClick(Action *)
 	else if (_displayMode == _btnDisplayFullscreen)
 		Options::setBool("fullscreen", true);
 
-	if (_musicVolume == _btnMusicVolume1)
-		Options::setInt("musicVolume", 0);
-	else if (_musicVolume == _btnMusicVolume2)
-		Options::setInt("musicVolume", 32);
-	else if (_musicVolume == _btnMusicVolume3)
-		Options::setInt("musicVolume", 64);
-	else if (_musicVolume == _btnMusicVolume4)
-		Options::setInt("musicVolume", 96);
-	else if (_musicVolume == _btnMusicVolume5)
-		Options::setInt("musicVolume", 128);
-
-	if (_soundVolume == _btnSoundVolume1)
-		Options::setInt("soundVolume", 0);
-	else if (_soundVolume == _btnSoundVolume2)
-		Options::setInt("soundVolume", 32);
-	else if (_soundVolume == _btnSoundVolume3)
-		Options::setInt("soundVolume", 64);
-	else if (_soundVolume == _btnSoundVolume4)
-		Options::setInt("soundVolume", 96);
-	else if (_soundVolume == _btnSoundVolume5)
-		Options::setInt("soundVolume", 128);
+	Options::setInt("musicVolume", _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME);
+	Options::setInt("soundVolume", _slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME);
 
 	switch (_selFilter)
 	{

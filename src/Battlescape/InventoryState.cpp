@@ -45,6 +45,7 @@
 #include "TileEngine.h"
 #include "Map.h"
 #include "Camera.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -60,6 +61,12 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
+	// remove any path preview if in the middle of a battlegame
+	if(tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
+	{
+		_battleGame->getPathfinding()->removePreview();
+	}
+
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
@@ -73,7 +80,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 		_txtPSkill = new Text(40, 9, 245, 48);
 		_txtPStr = new Text(40, 9, 245, 56);
 	}
-	_txtItem = new Text(140, 9, 128, 140);
+	_txtItem = new Text(160, 9, 128, 140);
 	_txtAmmo = new Text(66, 24, 254, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
@@ -185,7 +192,7 @@ void InventoryState::init()
 	// no selected unit, close inventory
 	if (unit == 0)
 	{
-		_game->popState();
+		btnOkClick(0);
 		return;
 	}
 	// skip to the first unit with inventory
@@ -194,7 +201,8 @@ void InventoryState::init()
 		// no available unit, close inventory
 		if (unit == selectNextUnit())
 		{
-			_game->popState();
+			// starting a mission with just vehicles
+			btnOkClick(0);
 			return;
 		}
 		else

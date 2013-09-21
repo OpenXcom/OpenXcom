@@ -16,13 +16,13 @@ MISSIL AR-AR PESADO, CARREGADO COM UMA OGIVA NUCLEAR.
 STR_CANNON_UFOPEDIA
 UM PODEROSO CANHÃO QUE DISPARA PROJÉTEIS PERFURANTES CAPAZES DE PENETRAR ATÉ 40CM DE AÇO.
 STR_FUSION_BALL_UFOPEDIA
-ESTE LANÇADOR DISPARA UM PROJÉTIL ESFÉRICO ALIMENTADO POR UMA REACÇÃO DE ANTIMATÉRIA. A BOLA DESTROI O ALVO ATRAVÉS DE UMA IMPLOSÃO GRAVITACIONAL.
+ESTE LANÇADOR DISPARA UM PROJÉTIL ESFÉRICO ALIMENTADO POR UMA REAÇÃO DE ANTIMATÉRIA. A BOLA DESTROI O ALVO ATRAVÉS DE UMA IMPLOSÃO GRAVITACIONAL.
 STR_LASER_CANNON_UFOPEDIA
 ESTE RAIO LASER CONVENCIONAL É ALIMENTADO POR UMA CÂMARA DE REAÇÃO ANTIMATÉRIA.
 STR_PLASMA_BEAM_UFOPEDIA
 UM RAIO DE GRAVIDADE QUE PROJETA UMA IMPLOSÃO GRAVITACIONAL ALTAMENTE CONCENTRADA. 
 STR_SECTOID_UFOPEDIA
-Os Sectóides organizam-se numa hierarquia, que assenta nos soldados e é comandada por líderes detentores de poderosas habilidades psíquicas, utilizadas para desmoralizar, ou até para controlar as mentes dos seus inimigos. Praticam frequentemente sequestros humanos e mutilação de gado. Os sequestros humanos destinam-se à recolha de material genético para realizar cruzamentos e criar clones para fins de infiltração na sociedade humana. O gado serve tanto para alimentação como para material genético. Crê-se que esta raça procura desenvolver híbridos genéticos, para melhorar a eficiência da sua própria sociedade.
+Os Sectóides organizam-se numa hierarquia que assenta nos soldados, e é comandada por líderes detentores de poderosas habilidades psíquicas, utilizadas para desmoralizar ou até para controlar as mentes dos seus inimigos. Praticam frequentemente sequestros humanos e mutilação de gado. Os sequestros humanos destinam-se à recolha de material genético para realizar cruzamentos e criar clones para fins de infiltração na sociedade humana. O gado serve tanto para alimentação como para material genético. Crê-se que esta raça procura desenvolver híbridos genéticos, para melhorar a eficiência da sua própria sociedade.
 STR_SECTOID_AUTOPSY
 Autopsia - Sectóide
 STR_SECTOID_AUTOPSY_UFOPEDIA
@@ -34,7 +34,7 @@ Autopsia - Homem-Cobra
 STR_SNAKEMAN_AUTOPSY_UFOPEDIA
 A pele é extremamente rígida e resistente ao calor. O sistema cardiovascular faz parte do sistema muscular, que utiliza o princípio hidráulico para gerar movimento, sendo o único músculo verdadeiro o "coração". O sistema reprodutivo é assexual e aparenta ser bastante eficiente: cada homem-cobra pode transportar até cinquenta ovos dentro do seu corpo. A propagação desta espécie no nosso planeta poderia ser uma séria ameaça para toda a vida na Terra.
 STR_ETHEREAL_UFOPEDIA
-Estes seres possuem poderes mentais extraordinários. Para além de faculdades telepáticas, possuem também habilidades telecinéticas. Aparentemente, o seu próprio físico débil é sustentado pelas suas capacidades mentais. Não compreendemos ao certo como funcionam estes poderes telequinéticos, pois parecem desafiar as leis clássicas da física. São extremamente perigosos em qualquer situação de combate, pois os seus poderes mentais podem ser uma arma terrível. Raramente aparecem na Terra, preferindo fazer uso de outras raças para alcançar os seus objetivos.
+Estes seres possuem poderes mentais extraordinários. Para além de faculdades telepáticas, possuem também habilidades telecinéticas. Aparentemente, o seu próprio físico débil é sustentado pelas suas capacidades mentais. Não compreendemos ao certo como funcionam estes poderes telecinéticos, pois parecem desafiar as leis clássicas da física. São extremamente perigosos em qualquer situação de combate, pois os seus poderes mentais podem ser uma arma terrível. Raramente aparecem na Terra, preferindo fazer uso de outras raças para alcançar os seus objetivos.
 STR_ETHEREAL_AUTOPSY
 Autópsia - Etéreo
 STR_ETHEREAL_AUTOPSY_UFOPEDIA
@@ -64,7 +64,7 @@ Autópsia - Crisálida
 STR_CHRYSSALID_AUTOPSY_UFOPEDIA
 O exoesqueleto desta criatura é muito resistente, mas, no entanto, é vulnerável a munição explosiva. O seu cérebro é muito desenvolvido, e o seu crescimento celular bastante rápido. Esta criatura transporta cerca de vinte ovos para serem depositados dentro de outros organismos vivos. É uma arma biológica de terror muito eficaz.
 STR_FLOATER_UFOPEDIA
-Os Flutuadores desempenham as funções de soldado e de agente terrorista. São predadores natos, desenvolvidos geneticamente e implantados com várias modificações cibernéticas para os tornar em guerreiros formidáveis. A parte inferior do seu corpo, tal como a maioria dos seus órgãos internos, foi removida cirurgicamente e substituída por um sistema de suporte de vida artificial. Este implante contém um sistema antigravidade que lhes permite flutuar de forma mais ou menos estável.
+Os Flutuadores desempenham as funções de soldado e de agente terrorista. São predadores natos, desenvolvidos geneticamente e implantados com várias modificações cibernéticas para os tornar em guerreiros formidáveis. A parte inferior do seu corpo, tal como a maioria dos seus órgãos internos, foi removida cirurgicamente e substituída por um sistema de suporte de vida artificial. Este implante contém um sistema antigravidade, que lhes permite flutuar de forma mais ou menos estável.
 STR_FLOATER_AUTOPSY
 Autópsia - Flutuador
 STR_FLOATER_AUTOPSY_UFOPEDIA
@@ -102,19 +102,19 @@ STR_ALIEN_ENTERTAINMENT_UFOPEDIA
 STR_ALIEN_SURGERY_UFOPEDIA
 Este equipamento cirúrgico utiliza bisturis laser para extrair partes do corpo específicas de gado e outros animais. A ocorrência frequente de casos de mutilação de gado deve-se provavelmente a esta prática bizarra. Crê-se que os alienígenas utilizem as partes extraídas para alimentação ou investigação genética.
 STR_EXAMINATION_ROOM_UFOPEDIA
-Há milhares de casos registados de pessoas que afirmam terem sido raptadas por alienígenas, por vezes mais do que uma vez. A realidade é bem mais sinistra: as vítimas são raptadas, estudadas e monitorizadas. Os alienígenas extraem o material genético dos melhores espécimes e implantam fetos híbridos entre humanos e alienígenas nas mulheres, que são removidos meses mais tarde. Quem sabe quais os propósitos sinistros dos alienígenas?
+Há milhares de casos registados de pessoas que afirmam terem sido raptadas por alienígenas, por vezes mais do que uma vez. A realidade é bem mais sinistra: as vítimas são raptadas, estudadas e monitorizadas. Os alienígenas extraem o material genético dos melhores espécimes e implantam fetos híbridos entre humanos e alienígenas nas mulheres, que são removidos meses mais tarde. Quem sabe quais os seus propósitos sinistros?
 STR_ALIEN_ALLOYS_UFOPEDIA
 Os artefactos alienígenas são construídos a partir de ligas especiais com propriedades únicas. São incrivelmente leves e duráveis e muito fáceis de moldar através de eletromagnetismo. Estes materiais podem ser reproduzidos e utilizados em vários processos de fabricação.
 STR_YOU_WILL_NEED_TO_RESEARCH_A
 Precisa de investigar um{NEWLINE}
 STR_ELERIUM_115_UFOPEDIA
-Este elemento possuí a característica invulgar de produzir antimatéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto,  não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
+Este elemento possuí a característica invulgar de produzir antimatéria quando bombardeado com certos tipos de partículas, gerando ondas de gravidade e outras formas de energia. No entanto, não ocorre naturalmente no nosso sistema solar e não pode ser reproduzido por meios artificiais.
 STR_ALIEN_ORIGINS_UFOPEDIA
-Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o centro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena, de  maneira a obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
+Travamos uma batalha inútil no nosso planeta. As forças alienígenas são esmagadoras em número, e o melhor que conseguimos fazer é retardar o seu progresso. A única esperança para a humanidade é atacar os alienígenas na sua origem. As nossas pesquisas indicam a existência de uma base de operações no nosso sistema solar, que os alienígenas descrevem como o centro de uma civilização anterior à humanidade. Temos de localizar este local o mais depressa possível. No entanto, precisamos de capturar e interrogar um líder alienígena para obtermos informações mais detalhadas. É provável que encontremos pelo menos um líder numa das naves de maior dimensão.
 STR_THE_MARTIAN_SOLUTION_UFOPEDIA
-As nossas investigações indicam que a base de operações alienígena está localizada em Marte. Esta base está muito bem escondida e contém todas as instalações de manufatura e clonagem, essenciais para a infiltração no nosso planeta. Todas estas operações são controladas por uma espécie de computador, que também se encontra nesta mesma base. Aparentemente, a sociedade alienígena é semelhante a uma colmeia, controlada por uma "abelha-rainha", o que nos leva a crer que este é o seu ponto fraco. Se eliminarmos o "cérebro", o corpo morrerá com ele. Logo, é essencial continuarmos as nossas pesquisas antes que seja demasiado tarde. Para tal, precisamos de capturar um alienígena da mais alta patente, os Comandantes, que residem exclusivamente em bases alienígenas.
+As nossas investigações indicam que a base de operações alienígena está localizada em Marte. Esta base está muito bem escondida e contém todas as instalações de manufatura e clonagem essenciais para a infiltração no nosso planeta. Todas estas operações são controladas por uma espécie de computador, localizado nesta mesma base. Aparentemente, a sociedade alienígena é semelhante a uma colmeia, controlada por uma "abelha-rainha", o que nos leva a crer que este é o seu ponto fraco: se eliminarmos o "cérebro", o corpo morrerá com ele. Logo, é essencial continuarmos as nossas pesquisas antes que seja demasiado tarde. Para tal, precisamos de capturar um alienígena da mais alta patente, os Comandantes, que residem exclusivamente em bases alienígenas.
 STR_CYDONIA_OR_BUST_UFOPEDIA
-Foi-nos esclarecido que as forças Alienígenas são controladas através de uma base subterrânea em Cidónia, uma região de Marte muito peculiar, que apresenta construções piramidais com cinco lados e uma grande formação rochosa, semelhante a um rosto humano. Sabemos que a civilização Cidoniana prosperou em Marte há muitos milhões de anos atrás,  mas desconhecemos os motivos que levaram ao seu declínio, ou qual a sua ligação com a recente atividade alienígena. Seja qual for a razão, é imperativo enviarmos uma força expedicionária a Cidónia, pois a única maneira de derrotar-mos os alienígenas é destruindo o "cérebro-mãe" que os controla. Para tal, será necessário equiparmos um Avenger com as armas mais poderosas ao nosso dispor. Não há mais informação que possamos recolher aqui na Terra - só nos resta aguardar o desfecho do assalto final a Cidónia.
+Foi-nos esclarecido que as forças alienígenas são controladas através de uma base subterrânea em Cidónia, uma região de Marte muito peculiar, que apresenta construções piramidais com cinco lados e uma grande formação rochosa, semelhante a um rosto humano. Sabemos que a civilização Cidoniana prosperou em Marte há muitos milhões de anos atrás, mas desconhecemos os motivos que levaram ao seu declínio ou qual a sua ligação com a recente atividade alienígena. Seja qual for a razão, é imperativo enviarmos uma força expedicionária a Cidónia, pois a única maneira de derrotar-mos os alienígenas é destruindo o "cérebro-mãe" que os controla. Para tal, será necessário equiparmos um Avenger com as armas mais poderosas ao nosso dispor. Não há mais informação que possamos recolher aqui na Terra - só nos resta aguardar o desfecho do assalto final a Cidónia.
 STR_TERROR_SITE
 Local de Terror-
 STR_CENTER_ON_SITE_TIME_5_SECS
@@ -150,7 +150,7 @@ TRANSFERÊNCIAS
 STR_PURCHASE_RECRUIT
 COMPRAR/CONTRATAR
 STR_SACK
-SACK
+DESPEDIR
 STR_SELL_SACK_UC
 VENDER/DESPEDIR
 STR_GEOSCAPE_UC
@@ -192,7 +192,7 @@ PROGRESSO
 STR_NEW_PROJECT
 Novo Projeto
 STR_CANCEL_PROJECT
-Cancel Project
+Cancelar Projeto
 STR_NEW_RESEARCH_PROJECTS
 NOVOS PROJETOS DE INVESTIGAÇÃO
 STR_SCIENTISTS_AVAILABLE_UC
@@ -498,7 +498,7 @@ Uma nave alienígena aterrou nas proximidades. A nossa base está em sério peri
 STR_ALIEN_BASE_ASSAULT
 ASSALTO A BASE ALIENÍGENA
 STR_ALIEN_BASE_ASSAULT_BRIEFING
-Os agentes XCom conseguiram aceder à base alienígena. Para desativar a base temos de destruir o centro de comando. A missão terminará quando todos os inimigos forem eliminados, ou quando as nossas tropas regressarem à zona verde de saída (clique no ícone "abortar missão" para retirar).
+Os agentes XCom conseguiram aceder à base alienígena. Para desativar a base temos de destruir o centro de comando. A missão terminará quando todos os inimigos forem eliminados ou quando as nossas tropas regressarem à zona verde de saída (clique no ícone "abortar missão" para retirar).
 STR_CYDONIA_BRIEFING
 Chegámos a Cidónia. As nossas tropas entram num enorme complexo subterrâneo perto da Esfinge Marciana. Temos de destruir o Cérebro que controla toda a atividade alienígena. O destino da humanidade está nas nossas mãos...
 STR_TERROR_MISSION
@@ -633,8 +633,6 @@ STR_AMMO_
 MUNIÇÃO>
 STR_CREW
 TRIPULAÇÃO
-STR_NO_CREW
-has no crew
 STR_EQUIPMENT_UC
 EQUIPAMENTO
 STR_ARMOR
@@ -942,15 +940,15 @@ Líder Sectóide
 STR_SECTOID_COMMANDER
 Comandante Sectóide
 STR_SNAKEMAN_SOLDIER
-Soldado Homem-cobra
+Soldado Homem-Cobra
 STR_SNAKEMAN_NAVIGATOR
-Navegador Homem-cobra
+Navegador Homem-Cobra
 STR_SNAKEMAN_ENGINEER
-Engenheiro Homem-cobra
+Engenheiro Homem-Cobra
 STR_SNAKEMAN_LEADER
-Líder Homem-cobra
+Líder Homem-Cobra
 STR_SNAKEMAN_COMMANDER
-Comandante Homem-cobra
+Comandante Homem-Cobra
 STR_MUTON_SOLDIER
 Soldado Muton
 STR_MUTON_NAVIGATOR
@@ -1272,7 +1270,7 @@ Estes mísseis defensivos proporcionam alguma proteção contra incursões de na
 STR_GENERAL_STORES_UFOPEDIA
 Todos os equipamentos, sistemas de armamento, munições, material recuperado e Plataformas de Armas Pesadas são guardados nos armazéns, à exceção do equipamento atribuído a veículos em hangar.
 STR_ALIEN_CONTAINMENT_UFOPEDIA
-É provável que alienígenas vivos capturados precisem de ser mantidos em habitats especiais para preservar os seus sistemas vitais. Estas instalações podem manter até 10 formas de vida alienígena, em unidades de contenção individuais.
+É provável que alienígenas vivos capturados precisem de ser mantidos em habitats especiais para preservar os seus sistemas vitais. Estas instalações podem manter até dez formas de vida alienígena, em unidades de contenção individuais.
 STR_LASER_DEFENSES_UFOPEDIA
 Estes sistemas de defesa laser proporcionam proteção contra incursões de naves inimigas.
 STR_PLASMA_DEFENSES_UFOPEDIA
@@ -1286,9 +1284,9 @@ Como as naves alienígenas detetam a presença de humanos através de ondas cere
 STR_PSIONIC_LABORATORY_UFOPEDIA
 Estas instalações avaliam o potencial psíquico de todos os soldados da base. Cada laboratório pode treinar até dez soldados de cada vez. Os programas de treino são atribuídos no fim de cada mês. Quando usadas em conjunto com um Amplificador Psíquico, as habilidades psíquicas podem ser utilizadas para realizar ataques mentais durante situações de combate.
 STR_HYPER_WAVE_DECODER_UFOPEDIA
-Os sistemas de comunicação alienígenas usam ondas supradimensionais que viajam quase instantaneamente. Esta instalação interceta transmissões feitas por OVNIs e descodifica a informação, o que permite identificar o tipo de OVNI, a espécie da tripulação, e o tipo de missão a que se destina.
+Os sistemas de comunicação alienígenas usam ondas supradimensionais que viajam quase instantaneamente. Esta instalação interceta transmissões feitas por OVNIs e descodifica a informação, o que permite identificar o tipo de OVNI, a espécie da tripulação e o tipo de missão a que se destina.
 STR_HANGAR_UFOPEDIA
-Cada hangar pode albergar uma aeronave XCom, dispondo de instalações próprias para manutenção, abastecimento, e reparação. Uma aeronave atribuída a uma base deve dispor de um hangar exclusivo que não pode ser usado por outras, mesmo que esta esteja fora em missão. 
+Cada hangar pode albergar uma aeronave XCom, dispondo de instalações próprias para manutenção, abastecimento e reparação. Uma aeronave atribuída a uma base deve dispor de um hangar exclusivo, que não pode ser usado por outras, mesmo que esta esteja fora em missão. 
 STR_PISTOL_UFOPEDIA
 A pistola padrão utilizada pelas forças XCom. Semiautomática de alto calibre, com doze tiros.
 STR_RIFLE_UFOPEDIA
@@ -1304,7 +1302,7 @@ A pistola laser é uma aplicação eficaz da nova tecnologia de armas laser, ali
 STR_LASER_RIFLE_UFOPEDIA
 A espingarda laser é uma versão mais precisa e destrutiva do modelo da pistola laser.
 STR_HEAVY_LASER_UFOPEDIA
-O laser pesado é uma arma difícil de manejar, mas bastante eficaz.
+O laser pesado é uma arma de difícil de manejo, mas altamente eficaz.
 STR_GRENADE_UFOPEDIA
 Esta granada padrão possuí um temporizador sofisticado, que permite um controlo preciso.
 STR_SMOKE_GRENADE_UFOPEDIA
@@ -1380,7 +1378,7 @@ O concelho de nações financiadoras está satisfeito com o seu progresso atual.
 STR_COUNCIL_IS_VERY_PLEASED
 O conselho de nações financiadoras está muito satisfeito com os seus excelentes progressos. Continue o bom trabalho.
 STR_COUNCIL_IS_DISSATISFIED
-O conselho de nações financiadoras está insatisfeito com a sua performance. Deve melhorar a eficácia da maneira como está a lidar com a ameaça alienígena, ou arrisca-se a que o projeto XCom seja cancelado.
+O conselho de nações financiadoras está insatisfeito com a sua performance. Deve melhorar a eficácia da maneira como está a lidar com a ameaça alienígena ou arrisca-se a que o projeto XCom seja cancelado.
 STR_YOU_HAVE_NOT_SUCCEEDED
 Como não conseguiu lidar adequadamente com a invasão alienígena, o concelho de nações financiadoras decidiu, a muito custo, terminar o projeto XCom. Cada nação irá lidar com o problema à sua maneira. Só nos resta esperar que cheguemos a um acordo com estas forças aparentemente hostis, e que a população consiga aceitar os visitantes alienígenas.
 STR_COUNTRY_IS_PARTICULARLY_PLEASED
@@ -1610,7 +1608,7 @@ Esta Plataforma de Armas Pesadas controlada à distância está armada com míss
 STR_TANK_LASER_CANNON_UFOPEDIA
 A tecnologia laser é uma adição excelente ao arsenal das PAP, permitindo um poder de fogo superior sem quaisquer restrições de munição. 
 STR_HOVERTANK_PLASMA_UFOPEDIA
-A tecnologia alienígena deu origem a uma nova geração de PAPs. A propulsão antigravítica e o poder de fogo da tecnologia plasma são uma combinação mortífera.
+A tecnologia alienígena deu origem a uma nova geração de PAPs, aliando propulsão antigravítica e o poder de fogo da tecnologia plasma numa combinação mortífera.
 STR_HOVERTANK_LAUNCHER_UFOPEDIA
 Este tanque voador está equipado com um lançador de bolas de fusão de enorme poder destrutivo. Usar com extrema cautela. Para armar esta PAP será necessário fabricar bolas de fusão. Trata-se de um projétil inteligente; para disparar esta arma pode colocar vários pontos de referência no terreno com o cursor. De seguida clique no ícone "lançar míssil".
 STR_HEAVY_PLASMA_CLIP_UFOPEDIA
@@ -1618,7 +1616,7 @@ Este pequeno dispositivo é utilizado como fonte de energia para as armas de Pla
 STR_PLASMA_RIFLE_CLIP_UFOPEDIA
 Este pequeno objeto é utilizado como fonte de energia para a espingarda de plasma - uma arma alienígena de potência média. Contém uma pequena quantidade de Elério no seu interior. 
 STR_PLASMA_PISTOL_CLIP_UFOPEDIA
-Fonte de energia para pistola de plasma alienígena. Contém Elério, a fonte de energia alienígena.
+Dispositivo de alimentação para a pistola de plasma alienígena. Contém Elério, a fonte de energia alienígena.
 STR_STUN_BOMB_UFOPEDIA
 A bomba atordoadora serve, originalmente, para capturar humanos vivos, mas também pode ser utilizada contra a maioria das espécies alienígenas. É disparada através de um minilançador.
 STR_ALIEN_RESEARCH_UFOPEDIA
@@ -1632,7 +1630,7 @@ Os governos terrestres podem ser alvo de infiltração por parte de agentes alie
 STR_ALIEN_BASE_UFOPEDIA
 Os alienígenas constroem bases subterrâneas secretas, em localizações remotas. Após alguns voos de reconhecimento iniciais, a atividade OVNI intensifica-se, enquanto a base está a ser construída. Sabe-se que estas bases contém laboratórios experimentais para vitimas humanas de sequestro, e materiais para desenvolver outros tipos de atividades. A presença de uma base irá causar um aumento de atividade alienígena na zona, sem que se registe a presença de OVNIs. Para termos a possibilidade de localizar uma base, é necessário patrulhar a área-alvo com uma aeronave XCom durante algumas horas. 
 STR_ALIEN_TERROR_UFOPEDIA
-Quando os alienígenas aterrorizam uma cidade, fazem uso de forças especiais dotadas de poderes horríveis. Com vidas civis em risco, os governos são forçados a evacuar áreas inteiras. O objetivo desta atividade é provocar medo suficiente nas populações para forçar os governos a abandonarem o projeto XCom.
+Quando os alienígenas aterrorizam uma cidade, fazem uso de forças especiais dotadas de poderes terríveis. Com vidas civis em risco, os governos são forçados a evacuar áreas inteiras. O objetivo desta atividade é provocar medo suficiente nas populações para forçar os governos a abandonarem o projeto XCom.
 STR_ALIEN_RETALIATION_UFOPEDIA
 Se as missões de interceção XCom forem especialmente bem-sucedidas em abater naves alienígenas, é possível que as forças extraterrestres tomem medidas de retaliação, o que pode culminar num assalto direto às bases XCom. No entanto, como é necessário aos alienígenas encontrar uma base para lançar uma incursão, é pouco provável que tal suceda, desde de que as naves alienígenas sejam mantidas à distância. 
 STR_ALIEN_SUPPLY_UFOPEDIA
@@ -1652,7 +1650,7 @@ A nave de terror possui uma unidade de contenção para armas e entidades terror
 STR_BATTLESHIP_UFOPEDIA
 A nave de batalha é a maior e mais poderosa das naves alienígenas. Equipada com armas devastadoras e uma tripulação numerosa, é utilizada nas missões mais importantes.
 STR_SUPPLY_SHIP_UFOPEDIA
-A nave de abastecimento é utilizada durante a construção de bases alienígenas, ou para o abastecimento das mesmas. Transporta contentores de alimentos e câmaras de reprodução. 
+A nave de abastecimento é utilizada durante a construção de bases alienígenas ou para o abastecimento das mesmas. Transporta contentores de alimentos e câmaras de reprodução. 
 STR_DISMANTLE
 Demolir
 STR_FACILITY_IN_USE
@@ -1854,7 +1852,7 @@ Aluguer de Aeronaves
 STR_SALARIES
 Salários
 STR_BASE_MAINTENANCE
-Manutenção de bases
+Manutenção da Base
 STR_COST_PER_UNIT
 Valor Individual
 STR_QUANTITY
@@ -2110,7 +2108,7 @@ Abortar Missão ?
 STR_CORPSE
 Cadáver
 STR_UNLOAD
-Descarregar
+Remover Todos
 STR_NEW_SAVED_GAME
 <NOVO FICHEIRO>
 STR_NEW_BATTLE
@@ -2158,7 +2156,7 @@ Clique no botão direito para apagar o ficheiro
 STR_EQUIPMENT_FOR_craftname
 Equipar {1}
 STR_SELECT_SQUAD_FOR_craftname
-{1}: Selecionar Esquadrão
+{1}: Selecionar Tropas
 STR_n_UNITS_IN_EXIT_AREA_0
 0 Unidades na Zona de Saída
 STR_n_UNITS_IN_EXIT_AREA_1
@@ -2219,6 +2217,10 @@ STR_SCROLL_UP
 Navegar para Cima
 STR_SCROLL_DOWN
 Navegar para Baixo
+STR_UNIT_LEVEL_ABOVE
+Subir Um Nível
+STR_UNIT_LEVEL_BELOW
+Descer Um Nível
 STR_VIEW_LEVEL_ABOVE
 Ver Nível Acima
 STR_VIEW_LEVEL_BELOW
@@ -2230,11 +2232,13 @@ Unidade Anterior
 STR_NEXT_UNIT
 Unidade Seguinte
 STR_DESELECT_UNIT
-Desselecionar Unidade
+Marcar Como Não-Selecionável 
 STR_INVENTORY
 Equipamento
 STR_MINIMAP
 Minimapa
+STR_MULTI_LEVEL_VIEW
+Ver Todos os Níveis
 STR_END_TURN
 Fim de Turno
 STR_ABORT_MISSION
@@ -2388,34 +2392,34 @@ Autosave mode
 STR_AUTOSAVE_DESC
 0 - Disabled. 1 - Quick save and quick load. 2 - Autosave only at 00:00. All save and load buttons is disabled. 3 - Same as previous, as well autosave on exit of the game.
 STR_ALLOWPSIONICCAPTURE
-Psi-captura
+Captura Psíquica
 STR_ALLOWPSIONICCAPTURE_DESC
-O jogador vence a missão se os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
+O jogador vence a missão se todos os inimigos restantes estiverem sob controlo mental, sendo capturados vivos.
 STR_ANYTIMEPSITRAINING
-Psionic training at any time
+Iniciar treino psíquico a qualquer altura
 STR_ANYTIMEPSITRAINING_DESC
-You can at any time send soldiers into (or removed from) psionic training. Remember, initial training takes from 30 to 60 days.
+Permite atribuir ou remover soldados do programa de treino psíquico em qualquer momento.
 STR_NOT_ENOUGH_SPACE
-Not Enough Space!
+Não Há Espaço Suficiente!
 STR_WEAPONSELFDESTRUCTION
-Alien weapon self destruction
+Autodestruição de armas alienígenas
 STR_WEAPONSELFDESTRUCTION_DESC
-Weapons carried by aliens will self destruct if their owner is killed.
+Se um alienígena for morto, todas as armas que transporta são automaticamente destruídas. 
 STR_RESEARCHEDITEMSWILLSPENT
-Researched items will be spent
+Consumo de artefactos investigados
 STR_RESEARCHEDITEMSWILLSPENT_DESC
-Researched items are removed from your stores and will be disassembled. After "researching" living aliens, the body will be returned to the based stores.
+A investigação de artefactos remove e destroi um exemplar respectivo dos armazéns. A interrogação de alienígenas vivos produz um cadáver, que é colocado nos armazéns. 
 STR_ARROWS
-ARROWS
+SETAS
 STR_FULL
-FULL
+TUDO
 STR_SAVE_VOXEL_VIEW
-Save First-Person Screenshot
+Captura de Ecrã (Plano Subjetivo)
 STR_TIME_UNITS_RESERVED_FOR_KNEELING
-Time Units reserved for Kneeling
+UTs reservadas para Ajoelhar
 STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING
-TU's reserved for Kneeling and Firing
+UTs reservadas para Ajoelhar e Disparar
 STR_RESERVE_TUS_FOR_KNEEL
-Reserve Time Units for kneeling
+Reservar UTs para Ajoelhar
 STR_EXPEND_ALL_TIME_UNITS
-Expend all remaining Time Units
+Usar UTs restantes

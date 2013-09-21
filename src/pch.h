@@ -298,6 +298,7 @@
 #include "./Interface/NumberText.h"
 #include "./Interface/ImageButton.h"
 #include "./Interface/TextList.h"
+#include "./Interface/Slider.h"
 #include "./lodepng.h"
 #include "./Menu/SaveState.h"
 #include "./Menu/DeleteGameState.h"
