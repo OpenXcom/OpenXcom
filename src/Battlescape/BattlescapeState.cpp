@@ -1183,7 +1183,7 @@ void BattlescapeState::updateSoldierInfo()
 
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);
