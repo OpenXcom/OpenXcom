@@ -36,6 +36,7 @@
 #include "AdvancedOptionsState.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Sound.h"
 
 namespace OpenXcom
 {
@@ -272,12 +273,14 @@ OptionsState::OptionsState(Game *game) : State(game)
 
 	_slrMusicVolume->setColor(Palette::blockOffset(15)-1);
 	_slrMusicVolume->setValue((double)Options::getInt("musicVolume") / SDL_MIX_MAXVOLUME);
+	_slrMusicVolume->onMouseRelease((ActionHandler)&OptionsState::slrMusicVolumeRelease);
 
 	_txtSoundVolume->setColor(Palette::blockOffset(8)+10);
 	_txtSoundVolume->setText(_game->getLanguage()->getString("STR_SFX_VOLUME"));
 
 	_slrSoundVolume->setColor(Palette::blockOffset(15) - 1);
 	_slrSoundVolume->setValue((double)Options::getInt("soundVolume") / SDL_MIX_MAXVOLUME);
+	_slrSoundVolume->onMouseRelease((ActionHandler)&OptionsState::slrSoundVolumeRelease);
 }
 
 /**
@@ -285,7 +288,35 @@ OptionsState::OptionsState(Game *game) : State(game)
  */
 OptionsState::~OptionsState()
 {
-	
+
+}
+
+/**
+ * Stores the current volume settings.
+ */
+void OptionsState::init()
+{
+	_musicVolume = _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME;
+	_soundVolume = _slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME;
+}
+
+/**
+ * Adjusts the music volume for prehearing.
+ * @param action Pointer to an action.
+ */
+void OptionsState::slrMusicVolumeRelease(Action *)
+{
+	_game->setVolume(_slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME, _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME);
+}
+
+/**
+ * Adjusts the sound volume for prehearing.
+ * @param action Pointer to an action.
+ */
+void OptionsState::slrSoundVolumeRelease(Action *)
+{
+	_game->setVolume(_slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME, _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME);
+	_game->getResourcePack()->getSound("GEO.CAT", 0)->play();
 }
 
 /**
@@ -344,6 +375,11 @@ void OptionsState::btnOkClick(Action *)
  */
 void OptionsState::btnCancelClick(Action *)
 {
+	// restore previous volume settings
+	Options::setInt("musicVolume", _musicVolume);
+	Options::setInt("soundVolume", _soundVolume);
+	_game->setVolume(_soundVolume,_musicVolume);
+
 	_game->popState();
 }
 
