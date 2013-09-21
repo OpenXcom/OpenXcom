@@ -61,11 +61,14 @@ private:
 	bool _wClicked, _hClicked;
 	std::vector<std::string> _filters, _filterPaths;
 	size_t _selFilter;
+	int _musicVolume, _soundVolume;
 public:
 	/// Creates the Options state.
 	OptionsState(Game *game);
 	/// Cleans up the Options state.
 	~OptionsState();
+	/// Initilizes the Options state.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
@@ -88,6 +91,10 @@ public:
     void btnDisplayFilterClick(Action *action);
     /// Handler for clicking the advanced options button
     void btnAdvancedClick(Action *action);
+	/// Handler for music slider release.
+    void slrMusicVolumeRelease(Action *);
+    /// Handler for sound slider release.
+    void slrSoundVolumeRelease(Action *);
 };
 
 }
