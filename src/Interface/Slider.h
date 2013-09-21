@@ -36,7 +36,8 @@ class Slider : public InteractiveSurface
 private:
 	Frame *_frame;
 	TextButton *_button;
-	int _value, _min, _max;
+	double _value;
+	int _min, _max;
 	bool _pressed;
 
 	int _minX, _maxX;
@@ -56,9 +57,9 @@ public:
 	/// Sets the slider's palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Sets the slider's value.
-	void setValue(int value);
+	void setValue(double value);
 	/// Sets the slider's value.
-	int getValue() const;
+	double getValue() const;
 	/// Blits the slider onto another surface.
 	void blit(Surface *surface);
 	/// Moves the slider.
