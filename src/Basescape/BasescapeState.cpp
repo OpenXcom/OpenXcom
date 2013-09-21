@@ -207,7 +207,7 @@ BasescapeState::~BasescapeState()
  */
 void BasescapeState::init()
 {
-	if (_game->getSavedGame()->getBases()->size() > 0)
+	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false;
 		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)

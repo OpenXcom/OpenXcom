@@ -521,7 +521,7 @@ void Game::setMouseActive(bool active)
  */
 bool Game::isState(State *state) const
 {
-	return _states.size() > 0 && _states.back() == state;
+	return !_states.empty() && _states.back() == state;
 }
 
 /**

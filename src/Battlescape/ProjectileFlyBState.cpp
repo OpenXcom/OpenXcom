@@ -293,7 +293,7 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter < 3 && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
+		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter < _action.weapon->getRules()->getAutoShots() && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
 		{
 			createNewProjectile();
 		}
@@ -365,7 +365,7 @@ void ProjectileFlyBState::think()
 					{
 						offset = -2;
 					}
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
 
 					// if the unit burns floortiles, burn floortiles
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
@@ -389,7 +389,7 @@ void ProjectileFlyBState::think()
 						}
 					}
 				}
-				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())
+				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
 					_parent->getMap()->cacheUnits();

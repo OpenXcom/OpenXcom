@@ -181,6 +181,8 @@ void ActionMenuState::handle(Action *action)
  */
 void ActionMenuState::btnActionMenuItemClick(Action *action)
 {
+	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
+
 	int btnID = -1;
 	RuleItem *weapon = _action->weapon->getRules();
 

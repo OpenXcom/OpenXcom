@@ -59,8 +59,8 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_btnEquip = new TextButton(64, 16, 14, 120);
 	_btnArmor = new TextButton(64, 16, 14, 144);
 	_edtCraft = new TextEdit(160, 16, 80, 8);
-	_txtDamage = new Text(82, 9, 14, 24);
-	_txtFuel = new Text(82, 9, 228, 24);
+	_txtDamage = new Text(82, 16, 14, 24);
+	_txtFuel = new Text(82, 16, 228, 24);
 	_txtW1Name = new Text(90, 9, 46, 48);
 	_txtW1Ammo = new Text(60, 9, 46, 64);
 	_txtW1Max = new Text(60, 9, 46, 72);
@@ -185,11 +185,21 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << "%";
+	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << L'%';
+	if (c->getStatus() == "STR_REPAIRS")
+	{
+		int damageDays = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate() / 24.0f);
+		ss << L"\n(" << tr("STR_DAY", damageDays) << ")";
+	}
 	_txtDamage->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << c->getFuelPercentage() << "%";
+	ss2 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << c->getFuelPercentage() << L'%';
+	if (c->getStatus() == "STR_REFUELLING")
+	{
+		int fuelDays = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 48.0f);
+		ss2 << L"\n(" << tr("STR_DAY", fuelDays) << ")";
+	}
 	_txtFuel->setText(ss2.str());
 
 	if (c->getRules()->getSoldiers() > 0)

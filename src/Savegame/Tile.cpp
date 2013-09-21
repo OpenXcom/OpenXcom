@@ -218,7 +218,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0 && _inventory.size() == 0;
+	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0 && _inventory.empty();
 }
 
 /**
@@ -262,7 +262,7 @@ bool Tile::hasNoFloor(Tile *tileBelow) const
 bool Tile::isBigWall() const
 {
 	if (_objects[MapData::O_OBJECT])
-		return _objects[MapData::O_OBJECT]->getBigWall();
+		return (_objects[MapData::O_OBJECT]->getBigWall() != 0);
 	else
 		return false;
 }

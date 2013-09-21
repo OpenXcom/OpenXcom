@@ -36,6 +36,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
@@ -86,7 +87,7 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 	_save = _game->getSavedGame()->getSavedBattle();
-	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
+	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);

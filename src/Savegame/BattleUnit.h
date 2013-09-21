@@ -307,7 +307,7 @@ public:
 	/// Get fatal wound amount of a body part
 	int getFatalWound(int part) const;
 	/// Heal one fatal wound
-	void heal(int part, int healAmount, int healthAmount);
+	void heal(int part, int woundAmount, int healthAmount);
 	/// Give pain killers to this unit
 	void painKillers ();
 	/// Give stimulant to this unit

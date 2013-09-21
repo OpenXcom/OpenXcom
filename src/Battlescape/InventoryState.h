@@ -30,6 +30,7 @@ class InteractiveSurface;
 class Inventory;
 class SavedBattleGame;
 class BattlescapeState;
+class BattleUnit;
 
 /**
  * Screen which displays soldier's inventory.
@@ -45,6 +46,10 @@ private:
 	SavedBattleGame *_battleGame;
 	bool _tu, _showMoreStatsInInventoryView;
 	BattlescapeState *_parent;
+
+	bool hasInventory(BattleUnit *unit) const;
+	BattleUnit *selectPreviousUnit() const;
+	BattleUnit *selectNextUnit() const;
 public:
 	/// Creates the Inventory state.
 	InventoryState(Game *game, bool tu, BattlescapeState *parent);

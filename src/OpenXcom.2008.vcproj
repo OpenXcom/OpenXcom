@@ -675,6 +675,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Interface\Frame.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Frame.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Interface\ImageButton.cpp"
 				>
 			</File>
@@ -688,6 +696,14 @@
 			</File>
 			<File
 				RelativePath=".\Interface\NumberText.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Slider.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Interface\Slider.h"
 				>
 			</File>
 			<File

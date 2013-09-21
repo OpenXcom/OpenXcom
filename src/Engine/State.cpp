@@ -72,36 +72,8 @@ void State::add(Surface *surface)
 	surface->setPalette(_game->getScreen()->getPalette());
 
 	// Set default fonts
-	Text *t = dynamic_cast<Text*>(surface);
-	TextButton *tb = dynamic_cast<TextButton*>(surface);
-	TextEdit *te = dynamic_cast<TextEdit*>(surface);
-	TextList *tl = dynamic_cast<TextList*>(surface);
-	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
-	BaseView *bv = dynamic_cast<BaseView*>(surface);
-	if (t)
-	{
-		t->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (tb)
-	{
-		tb->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (te)
-	{
-		te->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (tl)
-	{
-		tl->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (bv)
-	{
-		bv->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (wm)
-	{
-		wm->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
+	if (_game->getResourcePack())
+		surface->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 
 	_surfaces.push_back(surface);
 }
