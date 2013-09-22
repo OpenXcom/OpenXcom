@@ -848,9 +848,9 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 	{
 		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
 		BattleUnit *reactor = getReactor(spotters, unit);
-/*		if (reactor != unit) // old reaction code
+		if (reactor != unit)
 		{
-			while (true)
+/*			while (true) // old reaction code
 			{
 				if (!tryReactionSnap(reactor, unit))
 					break;
@@ -858,19 +858,18 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 				result = true;
 				if (reactor == unit)
 					break;
-			}
-		} */
-		// new reaction code
-		for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
-		{
-			if (reactor == unit) continue;
-
-			if (tryReactionSnap(reactor, unit))
+			} */
+			// new reaction code
+			for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
 			{
-				result = true;
-			}
+				if (tryReactionSnap(reactor, unit))
+				{
+					result = true;
+				}
 
-			reactor = getReactor(spotters, unit);
+				reactor = getReactor(spotters, unit);
+				if (reactor == unit) break;
+			}
 		}
 	}
 	return result;
@@ -931,8 +930,7 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
 	{
 		if (!(*i)->isOut() &&
 			canMakeSnap(*i, unit) &&
-			(*i)->getReactionScore() > bestScore &&
-			*i != bu) // new reaction code: stop unit from firing 2+
+			(*i)->getReactionScore() > bestScore)
 		{
 			bestScore = (*i)->getReactionScore();
 			bu = *i;
