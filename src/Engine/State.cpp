@@ -210,17 +210,8 @@ void State::centerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		TextList *tl = dynamic_cast<TextList*>(*i);
-		if (tl)
-		{
-			tl->setAllX((*i)->getX() + Screen::getDX());
-			tl->setAllY((*i)->getY() + Screen::getDY());
-		}
-		else
-		{
-			(*i)->setX((*i)->getX() + Screen::getDX());
-			(*i)->setY((*i)->getY() + Screen::getDY());
-		}
+		(*i)->setX((*i)->getX() + Screen::getDX());
+		(*i)->setY((*i)->getY() + Screen::getDY());
 	}
 }
 
@@ -228,15 +219,7 @@ void State::lowerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		TextList *tl = dynamic_cast<TextList*>(*i);
-		if (tl)
-		{
-			tl->setAllY((*i)->getY() + Screen::getDY() / 2);
-		}
-		else
-		{
-			(*i)->setY((*i)->getY() + Screen::getDY() / 2);
-		}
+		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
 	}
 }
 

@@ -67,6 +67,10 @@ public:
 	TextList(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text list.
 	~TextList();
+	/// Sets the X position of the surface.
+	void setX(int x);
+	/// Sets the Y position of the surface.
+	void setY(int y);
 	/// Sets the allowScrollOnArrowButtons.
 	void setAllowScrollOnArrowButtons(bool value);
 	/// Gets the arrowsLeftEdge.
@@ -169,8 +173,6 @@ public:
 	void mouseOut(Action *action, State *state);
 	/// get the scroll depth
 	int getScroll();
-	void setAllX(int x);
-	void setAllY(int y);
 };
 
 }

@@ -37,11 +37,11 @@ namespace OpenXcom
  */
 Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(0.0), _min(0), _max(100), _pressed(false)
 {
-	int thickness = 5;
-	_frame = new Frame(width, thickness, x, y + (height - thickness) / 2);
+	_thickness = 5;
+	_frame = new Frame(width, _thickness, x, y + (height - _thickness) / 2);
 	_button = new TextButton(19, height, x, y);
 
-	_frame->setThickness(thickness);
+	_frame->setThickness(_thickness);
 
 	_minX = getX();
 	_maxX = getX() + getWidth() - _button->getWidth();
@@ -56,6 +56,31 @@ Slider::~Slider()
 {
 	delete _frame;
 	delete _button;
+}
+
+/**
+* Changes the position of the surface in the X axis.
+* @param x X position in pixels.
+*/
+void Slider::setX(int x)
+{
+	Surface::setX(x);
+	_frame->setX(getX());
+
+	_minX = getX();
+	_maxX = getX() + getWidth() - _button->getWidth();
+	setValue(_value);
+}
+
+/**
+* Changes the position of the surface in the Y axis.
+* @param y Y position in pixels.
+*/
+void Slider::setY(int y)
+{
+	Surface::setY(y);
+	_frame->setY(getY() + (getHeight() - _thickness) / 2);
+	_button->setY(getY());
 }
 
 /**

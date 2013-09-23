@@ -100,11 +100,11 @@ public:
 		return _surface->format->palette->colors;
 	}
 	/// Sets the X position of the surface.
-	void setX(int x);
+	virtual void setX(int x);
 	/// Gets the X position of the surface.
 	int getX() const;
 	/// Sets the Y position of the surface.
-	void setY(int y);
+	virtual void setY(int y);
 	/// Gets the Y position of the surface.
 	int getY() const;
 	/// Sets the surface's visibility.
