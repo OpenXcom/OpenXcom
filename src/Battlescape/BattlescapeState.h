@@ -199,7 +199,7 @@ public:
 	/// Checks if the mouse is over the icons.
 	bool getMouseOverIcons() const;
 	/// Is the player allowed to press buttons?
-	bool allowButtons() const;
+	bool allowButtons(bool allowSaving = false) const;
 	/// Handler for clicking the reserve TUs to kneel button.
 	void btnReserveKneelClick(Action *action);
 	/// Handler for clicking the expend all TUs button.

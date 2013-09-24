@@ -896,7 +896,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
  */
 void BattlescapeState::btnHelpClick(Action *)
 {
-	if (_map->getProjectile() == 0) // we're deliberately not using allowButtons() here, so we can save if something goes wrong during the alien turn, and submit it for dissection.
+	if (allowButtons(true))
 		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
@@ -1843,11 +1843,18 @@ bool BattlescapeState::getMouseOverIcons() const
 }
 
 /**
- * Determines whether the player is allowed to press buttons?
+ * Determines whether the player is allowed to press buttons.
+ * Buttons are disabled in the middle of a shot, during the alien turn,
+ * and while a player's units are panicking.
+ * The save button is an exception as we want to still be able to save if something
+ * goes wrong during the alien turn, and submit the save file for dissection.
+ * @param allowSaving True, if the help button was clicked.
  */
-bool BattlescapeState::allowButtons() const
+bool BattlescapeState::allowButtons(bool allowSaving) const
 {
-	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
+	return ((allowSaving || _save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		&& _battleGame->getPanicHandled()
+		&& (_map->getProjectile() == 0));
 }
 
 /**
