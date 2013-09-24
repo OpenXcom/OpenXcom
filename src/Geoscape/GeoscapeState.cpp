@@ -1143,8 +1143,9 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
+						(*j)->setLowFuel(false);
 					}
-					else
+					else if (!(*j)->getLowFuel())
 					{
 						std::wstringstream ss;
 						ss << _game->getLanguage()->getString("STR_NOT_ENOUGH");
@@ -1154,7 +1155,10 @@ void GeoscapeState::time30Minutes()
 						ss << _game->getLanguage()->getString("STR_AT_");
 						ss << (*i)->getName();
 						popup(new CraftErrorState(_game, this, ss.str()));
-						(*j)->setStatus("STR_READY");
+						if ((*j)->getFuel() > 0)
+							(*j)->setStatus("STR_READY");
+						else
+							(*j)->setLowFuel(true);
 					}
 				}
 			}
