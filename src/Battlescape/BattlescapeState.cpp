@@ -1853,7 +1853,7 @@ bool BattlescapeState::getMouseOverIcons() const
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
 	return ((allowSaving || _save->getSide() == FACTION_PLAYER || _save->getDebugMode())
-		&& _battleGame->getPanicHandled()
+		&& (_battleGame->getPanicHandled() || firstInit )
 		&& (_map->getProjectile() == 0));
 }
 
