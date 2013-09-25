@@ -75,12 +75,12 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ConfirmDestinationState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ConfirmDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -92,11 +92,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	std::wstringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
-		ss << _game->getLanguage()->getString("STR_TARGET_WAY_POINT");
+		ss << tr("STR_TARGET_WAY_POINT");
 	}
 	else
 	{
-		ss << _game->getLanguage()->getString("STR_TARGET") << _target->getName(_game->getLanguage());
+		ss << tr("STR_TARGET") << _target->getName(_game->getLanguage());
 	}
 	_txtTarget->setText(ss.str());
 }

@@ -58,14 +58,13 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
 	centerAllSurfaces();
 
 	// Set up objects
-	_view->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
 	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
+	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
 }
 
 /**

@@ -152,36 +152,36 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_OPTIONS_UC"));
+	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsState::btnOkClick);
 	//_btnOk->onKeyboardPress((ActionHandler)&OptionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&OptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
-	_btnDefault->setText(_game->getLanguage()->getString("STR_RESTORE_DEFAULTS"));
+	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
 	_btnDefault->onMouseClick((ActionHandler)&OptionsState::btnDefaultClick);
 
 	_btnLanguage->setColor(Palette::blockOffset(8)+5);
-	_btnLanguage->setText(_game->getLanguage()->getString("STR_LANGUAGE"));
+	_btnLanguage->setText(tr("STR_LANGUAGE"));
 	_btnLanguage->onMouseClick((ActionHandler)&OptionsState::btnLanguageClick);
 
 	_btnControls->setColor(Palette::blockOffset(8)+5);
-	_btnControls->setText(_game->getLanguage()->getString("STR_CONTROLS"));
+	_btnControls->setText(tr("STR_CONTROLS"));
 	_btnControls->onMouseClick((ActionHandler)&OptionsState::btnControlsClick);
 	
 	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
-	_btnAdvanced->setText(_game->getLanguage()->getString("STR_ADVANCED"));
+	_btnAdvanced->setText(tr("STR_ADVANCED"));
 	_btnAdvanced->onMouseClick((ActionHandler)&OptionsState::btnAdvancedClick);
 
 	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
-	_txtDisplayResolution->setText(_game->getLanguage()->getString("STR_DISPLAY_RESOLUTION"));
+	_txtDisplayResolution->setText(tr("STR_DISPLAY_RESOLUTION"));
 
 	_txtDisplayWidth->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
@@ -209,14 +209,14 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnDisplayDown->onMouseClick((ActionHandler)&OptionsState::btnDisplayDownClick);
 
 	_txtDisplayMode->setColor(Palette::blockOffset(8)+10);
-	_txtDisplayMode->setText(_game->getLanguage()->getString("STR_DISPLAY_MODE"));
+	_txtDisplayMode->setText(tr("STR_DISPLAY_MODE"));
 
 	_btnDisplayWindowed->setColor(Palette::blockOffset(15)-1);
-	_btnDisplayWindowed->setText(_game->getLanguage()->getString("STR_WINDOWED"));
+	_btnDisplayWindowed->setText(tr("STR_WINDOWED"));
 	_btnDisplayWindowed->setGroup(&_displayMode);
 
 	_btnDisplayFullscreen->setColor(Palette::blockOffset(15)-1);
-	_btnDisplayFullscreen->setText(_game->getLanguage()->getString("STR_FULLSCREEN"));
+	_btnDisplayFullscreen->setText(tr("STR_FULLSCREEN"));
 	_btnDisplayFullscreen->setGroup(&_displayMode);
 	
 	_filters.push_back("-");
@@ -262,21 +262,21 @@ OptionsState::OptionsState(Game *game) : State(game)
 	}
 
 	_txtDisplayFilter->setColor(Palette::blockOffset(8)+10);
-	_txtDisplayFilter->setText(_game->getLanguage()->getString("STR_DISPLAY_FILTER"));
+	_txtDisplayFilter->setText(tr("STR_DISPLAY_FILTER"));
 
     _btnDisplayFilter->setColor(Palette::blockOffset(15)-1);
     _btnDisplayFilter->setText(Language::utf8ToWstr(_filters[_selFilter]));
 	_btnDisplayFilter->onMouseClick((ActionHandler)&OptionsState::btnDisplayFilterClick, 0);
 
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
-	_txtMusicVolume->setText(_game->getLanguage()->getString("STR_MUSIC_VOLUME"));
+	_txtMusicVolume->setText(tr("STR_MUSIC_VOLUME"));
 
 	_slrMusicVolume->setColor(Palette::blockOffset(15)-1);
 	_slrMusicVolume->setValue((double)Options::getInt("musicVolume") / SDL_MIX_MAXVOLUME);
 	_slrMusicVolume->onMouseRelease((ActionHandler)&OptionsState::slrMusicVolumeRelease);
 
 	_txtSoundVolume->setColor(Palette::blockOffset(8)+10);
-	_txtSoundVolume->setText(_game->getLanguage()->getString("STR_SFX_VOLUME"));
+	_txtSoundVolume->setText(tr("STR_SFX_VOLUME"));
 
 	_slrSoundVolume->setColor(Palette::blockOffset(15) - 1);
 	_slrSoundVolume->setValue((double)Options::getInt("soundVolume") / SDL_MIX_MAXVOLUME);

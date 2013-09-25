@@ -43,7 +43,7 @@ namespace OpenXcom
 LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
 {
 	// Set up objects
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_GAME_TO_LOAD"));
+	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);
 }
 
@@ -114,7 +114,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 		if (_geo)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
@@ -129,7 +129,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << _game->getLanguage()->getString("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
 		if (_geo)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else

@@ -93,21 +93,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 128);
 
 	// Load fonts
-	Font::loadIndex(CrossPlatform::getDataFile("Language/Font.dat"));
-
-	std::string font[] = {"Big.fnt",
-						  "Small.fnt"};
-
-	for (int i = 0; i < 2; ++i)
+	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/Font.dat"));
+	Font::setIndex(Language::utf8ToWstr(doc["chars"].as<std::string>()));
+	for (YAML::const_iterator i = doc["fonts"].begin(); i != doc["fonts"].end(); ++i)
 	{
-		std::stringstream s;
-		s << "Language/" << font[i];
-		if (font[i] == "Big.fnt")
-			_fonts[font[i]] = new Font(16, 16, 0);
-		else if (font[i] == "Small.fnt")
-			_fonts[font[i]] = new Font(8, 9, -1);
-		_fonts[font[i]]->getSurface()->loadScr(CrossPlatform::getDataFile(s.str()));
-		_fonts[font[i]]->load();
+		std::string id = (*i)["id"].as<std::string>();
+		Font *font = new Font();
+		font->load(*i);
+		_fonts[id] = font;
 	}
 
 	// Load surfaces
@@ -487,7 +480,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	
 	for(int i=0; i< 16; ++i )
 	{
-		//cheast frame
+		//chest frame
 		Surface *surf = xcom_1->getFrame(4*8 + i);
 		ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 		GraphSubset dim = head.getBaseDomain();
@@ -657,10 +650,10 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					}
 					else
 					{
-						_surfaces["tempSurface"] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+						Surface *temp = new Surface(spritePack->getWidth(), spritePack->getHeight());
 						s.str("");
 						s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](startFrame));
-						_surfaces["tempSurface"]->loadImage(s.str());
+						temp->loadImage(s.str());
 						int xDivision = spritePack->getWidth() / spritePack->getSubX();
 						int yDivision = spritePack->getHeight() / spritePack->getSubY();
 						int offset = startFrame;
@@ -677,14 +670,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 									}
 									_sets[sheetName]->getFrame(offset)->clear();
 									// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-									_surfaces["tempSurface"]->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+									temp->blitNShade(_sets[sheetName]->getFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 								}
 								else
 								{
 									if (adding)
 									{
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-										_surfaces["tempSurface"]->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+										temp->blitNShade(_sets[sheetName]->addFrame(offset), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 									}
 									else
 									{
@@ -693,14 +686,13 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 											Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 										}
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
-										_surfaces["tempSurface"]->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
+										temp->blitNShade(_sets[sheetName]->addFrame(offset + spritePack->getModIndex()), 0 - (x * spritePack->getSubX()), 0 - (y * spritePack->getSubY()), 0);
 									}
 								}
 								++offset;
 							}
 						}
-						delete _surfaces["tempSurface"];
-						_surfaces.erase("tempSurface");
+						delete temp;
 					}
 				}
 			}

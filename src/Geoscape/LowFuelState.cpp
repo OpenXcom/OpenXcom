@@ -65,12 +65,12 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&LowFuelState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&LowFuelState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(_game->getLanguage()->getString("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)&LowFuelState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress((ActionHandler)&LowFuelState::btnOk5SecsClick, (SDLKey)Options::getInt("keyOk"));
 
@@ -81,7 +81,7 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
-	_txtMessage->setText(_game->getLanguage()->getString("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
+	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
 
 }

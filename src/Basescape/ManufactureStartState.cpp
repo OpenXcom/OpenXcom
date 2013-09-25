@@ -94,29 +94,29 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
-	_txtTitle->setText(_game->getLanguage()->getString(_item->getName()));
+	_txtTitle->setText(tr(_item->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	_txtManHour->setColor(Palette::blockOffset(13)+10);
 	std::wstringstream sstr;
-	sstr << _item->getManufactureTime () << _game->getLanguage()->getString("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT");
+	sstr << _item->getManufactureTime () << tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT");
 	_txtManHour->setText(sstr.str());
 
 	std::wstringstream sstr1;
-	sstr1 << _game->getLanguage()->getString("STR_COST_PER_UNIT_") << L'\x01' << _item->getManufactureCost ();
+	sstr1 << tr("STR_COST_PER_UNIT_") << L'\x01' << _item->getManufactureCost ();
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setSecondaryColor(Palette::blockOffset(13));
 	_txtCost->setText(sstr1.str());
 
 	std::wstringstream sstr2;
-	sstr2 << _game->getLanguage()->getString("STR_WORK_SPACE_REQUIRED") << L'\x01' << _item->getRequiredSpace ();
+	sstr2 << tr("STR_WORK_SPACE_REQUIRED") << L'\x01' << _item->getRequiredSpace ();
 	_txtWorkSpace->setColor(Palette::blockOffset(13)+10);
 	_txtWorkSpace->setSecondaryColor(Palette::blockOffset(13));
 	_txtWorkSpace->setText(sstr2.str());
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&ManufactureStartState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&ManufactureStartState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -126,14 +126,14 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	productionPossible &= (availableWorkSpace > 0);
 
 	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
-	_txtRequiredItemsTitle->setText(_game->getLanguage()->getString("STR_SPECIAL_MATERIALS_REQUIRED"));
+	_txtRequiredItemsTitle->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
 	_txtRequiredItemsTitle->setAlign(ALIGN_CENTER);
 	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
-	_txtItemNameColumn->setText(_game->getLanguage()->getString("STR_ITEM_REQUIRED"));
+	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));
 	_txtUnitRequiredColumn->setColor(Palette::blockOffset(13)+10);
-	_txtUnitRequiredColumn->setText(_game->getLanguage()->getString("STR_UNITS_REQUIRED"));
+	_txtUnitRequiredColumn->setText(tr("STR_UNITS_REQUIRED"));
 	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
-	_txtUnitAvailableColumn->setText(_game->getLanguage()->getString("STR_UNITS_AVAILABLE"));
+	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
 
 	_lstRequiredItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
 	_lstRequiredItems->setBackground(_window);
@@ -149,7 +149,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 		s1 << iter->second;
 		s2 << itemContainer->getItem(iter->first);
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
-		_lstRequiredItems->addRow(3, _game->getLanguage()->getString(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
+		_lstRequiredItems->addRow(3, tr(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
 		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
 		_lstRequiredItems->addRow(1, L"");
 		row += 2;
@@ -161,7 +161,7 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_lstRequiredItems->setVisible(!requiredItems.empty());
 
 	_btnStart->setColor(Palette::blockOffset(13)+10);
-	_btnStart->setText(_game->getLanguage()->getString("STR_START_PRODUCTION"));
+	_btnStart->setText(tr("STR_START_PRODUCTION"));
 	_btnStart->onMouseClick((ActionHandler)&ManufactureStartState::btnStartClick);
 	_btnStart->onKeyboardPress((ActionHandler)&ManufactureStartState::btnStartClick, (SDLKey)Options::getInt("keyOk"));
 	_btnStart->setVisible(productionPossible);

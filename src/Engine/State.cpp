@@ -73,7 +73,7 @@ void State::add(Surface *surface)
 
 	// Set default fonts
 	if (_game->getResourcePack())
-		surface->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 
 	_surfaces.push_back(surface);
 }

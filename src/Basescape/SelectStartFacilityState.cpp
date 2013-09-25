@@ -65,7 +65,7 @@ void SelectStartFacilityState::populateBuildList()
 	_lstFacilities->clearList();
 	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
+		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
 	}
 }
 

@@ -66,25 +66,25 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&TransferConfirmState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TransferConfirmState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TransferConfirmState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	std::wstring s = _game->getLanguage()->getString("STR_TRANSFER_ITEMS_TO");
+	std::wstring s = tr("STR_TRANSFER_ITEMS_TO");
 	s += _base->getName();
 	_txtTitle->setText(s);
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setBig();
-	_txtCost->setText(_game->getLanguage()->getString("STR_COST"));
+	_txtCost->setText(tr("STR_COST"));
 
 	_txtTotal->setColor(Palette::blockOffset(15)+1);
 	_txtTotal->setBig();

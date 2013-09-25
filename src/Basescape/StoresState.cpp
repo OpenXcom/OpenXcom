@@ -70,7 +70,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -78,16 +78,16 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_STORES"));
+	_txtTitle->setText(tr("STR_STORES"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setText(_game->getLanguage()->getString("STR_SPACE_USED"));
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 162, 92, 32);
@@ -105,7 +105,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 			std::wstringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();
-			_lstStores->addRow(3, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstStores->addRow(3, tr(*i).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
 }

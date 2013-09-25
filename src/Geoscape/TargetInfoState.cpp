@@ -62,7 +62,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -76,7 +76,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 
 	_txtTargetted->setColor(Palette::blockOffset(15)-1);
 	_txtTargetted->setAlign(ALIGN_CENTER);
-	_txtTargetted->setText(_game->getLanguage()->getString("STR_TARGETTED_BY"));
+	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);

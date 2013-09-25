@@ -1312,7 +1312,7 @@ void BattlescapeState::debug(const std::wstring &message)
  */
 void BattlescapeState::warning(const std::string &message)
 {
-	_warning->showMessage(_game->getLanguage()->getString(message));
+	_warning->showMessage(tr(message));
 }
 
 /**
@@ -1905,7 +1905,7 @@ void BattlescapeState::txtTooltipIn(Action *action)
 	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
 		_currentTooltip = action->getSender()->getTooltip();
-		_txtTooltip->setText(_game->getLanguage()->getString(_currentTooltip));
+		_txtTooltip->setText(tr(_currentTooltip));
 	}
 }
 

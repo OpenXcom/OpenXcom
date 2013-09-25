@@ -61,7 +61,6 @@ ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
 languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
-	bin/data/Language/Big.fnt \
 	bin/data/Language/Bulgarian.geo \
 	bin/data/Language/Bulgarian.lng \
 	bin/data/Language/Czech.geo \
@@ -73,6 +72,10 @@ language_DATA = \
 	bin/data/Language/EnglishUk.geo \
 	bin/data/Language/EnglishUk.lng \
 	bin/data/Language/Font.dat \
+	bin/data/Language/FontBig.png \
+	bin/data/Language/FontSmall.png \
+	bin/data/Language/FontGeoBig.png \
+	bin/data/Language/FontGeoSmall.png \
 	bin/data/Language/French.geo \
 	bin/data/Language/French.lng \
 	bin/data/Language/German.geo \
@@ -341,6 +344,8 @@ openxcom_SOURCES = \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
+	src/Engine/LanguagePlurality.cpp \
+	src/Engine/LanguagePlurality.h \
 	src/Engine/LocalizedText.cpp \
 	src/Engine/LocalizedText.h \
 	src/Engine/Logger.h \
