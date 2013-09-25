@@ -169,7 +169,7 @@ GeoscapeState::GeoscapeState(Game *game) : State(game), _pause(false), _music(fa
 	_zoomOutEffectTimer = new Timer(50);
 	_dogfightStartTimer = new Timer(250);
 
-	_txtDebug = new Text(100, 8, 0, 0);
+	_txtDebug = new Text(200, 18, 0, 0);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -1678,6 +1678,17 @@ void GeoscapeState::globeClick(Action *action)
 		{
 			_game->pushState(new MultipleTargetsState(_game, v, 0, this));
 		}
+	}
+
+	if (_game->getSavedGame()->getDebugMode())
+	{
+		double lon, lat;
+		_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
+		double lonDeg = lon / M_PI * 180, latDeg = lat / M_PI * 180;
+		std::wstringstream ss;
+		ss << "rad: " << lon << " , " << lat << std::endl;
+		ss << "deg: " << lonDeg << " , " << latDeg << std::endl;
+		_txtDebug->setText(ss.str());
 	}
 }
 

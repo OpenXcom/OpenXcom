@@ -35,13 +35,13 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(0), _min(0), _max(100), _pressed(false)
+Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(0.0), _min(0), _max(100), _pressed(false)
 {
-	int thickness = 5;
-	_frame = new Frame(width, thickness, x, y + (height - thickness) / 2);
-	_button = new TextButton(20, height, x, y);
+	_thickness = 5;
+	_frame = new Frame(width, _thickness, x, y + (height - _thickness) / 2);
+	_button = new TextButton(19, height, x, y);
 
-	_frame->setThickness(thickness);
+	_frame->setThickness(_thickness);
 
 	_minX = getX();
 	_maxX = getX() + getWidth() - _button->getWidth();
@@ -56,6 +56,31 @@ Slider::~Slider()
 {
 	delete _frame;
 	delete _button;
+}
+
+/**
+* Changes the position of the surface in the X axis.
+* @param x X position in pixels.
+*/
+void Slider::setX(int x)
+{
+	Surface::setX(x);
+	_frame->setX(getX());
+
+	_minX = getX();
+	_maxX = getX() + getWidth() - _button->getWidth();
+	setValue(_value);
+}
+
+/**
+* Changes the position of the surface in the Y axis.
+* @param y Y position in pixels.
+*/
+void Slider::setY(int y)
+{
+	Surface::setY(y);
+	_frame->setY(getY() + (getHeight() - _thickness) / 2);
+	_button->setY(getY());
 }
 
 /**
@@ -125,8 +150,7 @@ void Slider::handle(Action *action, State *state)
 	{
 		int cursorX = (int) floor(action->getDetails()->motion.x / action->getXScale());
 		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
-		double pos = (buttonX - getX()) / (_maxX - _minX);
-		int val = (int) floor(_min + (_max - _min) * pos);
+		double val = (buttonX - getX()) / (_maxX - _minX);
 		setValue(val);
 	}
 }
@@ -135,17 +159,14 @@ void Slider::handle(Action *action, State *state)
 * Moves the slider to the new value position.
 * @param value New value.
 */
-void Slider::setValue(int value)
+void Slider::setValue(double value)
 {
-	_value = value;
-
-	double val = _value;
-	double pos = (val - _min) / (_max - _min);
-	int width = _maxX - _minX;
-	_button->setX((int) floor(getX() + width * pos));
+	_value = std::min(std::max(0.0, value), 1.0);
+	_button->setX((int) floor(getX() + (_maxX - _minX) * _value));
 
 	std::wstringstream ss;
-	ss << _value;
+	int val = _min + _value * (_max - _min);
+	ss << val;
 	_button->setText(ss.str());
 }
 
@@ -153,7 +174,7 @@ void Slider::setValue(int value)
 * Returns the current value of the slider.
 * @return Value.
 */
-int Slider::getValue() const
+double Slider::getValue() const
 {
 	return _value;
 }
@@ -165,8 +186,11 @@ int Slider::getValue() const
 void Slider::blit(Surface *surface)
 {
 	Surface::blit(surface);
-	_frame->blit(surface);
-	_button->blit(surface);
+	if (_visible && !_hidden)
+	{
+		_frame->blit(surface);
+		_button->blit(surface);
+	}
 }
 
 /**

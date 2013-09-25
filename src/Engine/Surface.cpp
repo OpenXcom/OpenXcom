@@ -266,7 +266,8 @@ void Surface::loadImage(const std::string &filename)
 	_surface = IMG_Load(utf8.c_str());
 	if (!_surface)
 	{
-		throw Exception(IMG_GetError());
+		std::string err = filename + ":" + IMG_GetError();
+		throw Exception(err);
 	}
 }
 

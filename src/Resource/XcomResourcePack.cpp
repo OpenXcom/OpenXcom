@@ -598,32 +598,39 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 					for (std::vector<std::string>::iterator k = contents.begin();
 						k != contents.end(); ++k)
 					{
-						s.str("");
-						s << folder.str() << CrossPlatform::getDataFile(*k);
-						if (_sets[sheetName]->getFrame(offset))
+						try
 						{
-							if (debugOutput)
-							{
-								Log(LOG_INFO) << "Replacing frame: " << offset;
-							}
-							_sets[sheetName]->getFrame(offset)->loadImage(s.str());
-						}
-						else
-						{
-							if (adding)
-							{
-								_sets[sheetName]->addFrame(offset)->loadImage(s.str());
-							}
-							else
+							s.str("");
+							s << folder.str() << CrossPlatform::getDataFile(*k);
+							if (_sets[sheetName]->getFrame(offset))
 							{
 								if (debugOutput)
 								{
-									Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+									Log(LOG_INFO) << "Replacing frame: " << offset;
 								}
-								_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
+								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
 							}
+							else
+							{
+								if (adding)
+								{
+									_sets[sheetName]->addFrame(offset)->loadImage(s.str());
+								}
+								else
+								{
+									if (debugOutput)
+									{
+										Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+									}
+									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
+								}
+							}
+							offset++;
 						}
-						offset++;
+						catch (Exception &e)
+						{
+							Log(LOG_WARNING) << e.what();
+						}
 					}
 				}
 				else
@@ -743,17 +750,24 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 				for (std::vector<std::string>::iterator k = contents.begin();
 					k != contents.end(); ++k)
 				{
-					s.str("");
-					s << folder.str() << CrossPlatform::getDataFile(*k);
-					if (_sounds[setName]->getSound(offset))
+					try
 					{
-						_sounds[setName]->getSound(offset)->load(s.str());
+						s.str("");
+						s << folder.str() << CrossPlatform::getDataFile(*k);
+						if (_sounds[setName]->getSound(offset))
+						{
+							_sounds[setName]->getSound(offset)->load(s.str());
+						}
+						else
+						{
+							_sounds[setName]->addSound(offset + soundPack->getModIndex())->load(s.str());
+						}
+						offset++;
 					}
-					else
+					catch (Exception &e)
 					{
-						_sounds[setName]->addSound(offset + soundPack->getModIndex())->load(s.str());
+						Log(LOG_WARNING) << e.what();
 					}
-					offset++;
 				}
 			}
 			else
