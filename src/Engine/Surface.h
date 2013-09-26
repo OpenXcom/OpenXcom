@@ -43,7 +43,7 @@ protected:
 	SDL_Rect _crop;
 	bool _visible, _hidden, _redraw;
 	SDL_Color *_originalColors;
-	void *_misalignedPixelBuffer, *_alignedBuffer;
+	void *_alignedBuffer;
 	int _dx, _dy;
 	std::string _tooltip;
 public:
