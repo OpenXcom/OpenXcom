@@ -67,7 +67,7 @@ CraftInfoState::CraftInfoState(Game *game, Base *base, size_t craft) : State(gam
 	_txtW2Name = new Text(90, 9, 204, 48);
 	_txtW2Ammo = new Text(60, 9, 204, 64);
 	_txtW2Max = new Text(60, 9, 204, 72);
-	_sprite = new Surface(32, 32, 144, 52);
+	_sprite = new Surface(32, 40, 144, 52);
 	_weapon1 = new Surface(15, 17, 121, 63);
 	_weapon2 = new Surface(15, 17, 184, 63);
 	_crew = new Surface(220, 18, 85, 96);
