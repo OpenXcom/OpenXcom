@@ -525,7 +525,7 @@ void StartState::think()
 		{
 			try
 			{
-				_game->loadLanguage(Options::getString("language"));
+				_game->loadLng(Options::getString("language"));
 				_game->setState(new MainMenuState(_game));
 			}
 			catch (Exception)

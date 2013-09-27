@@ -194,6 +194,8 @@ set ( engine_src
   Engine/Timer.h
   Engine/Language.cpp
   Engine/Language.h
+  Engine/LanguagePlurality.cpp
+  Engine/LanguagePlurality.h
   Engine/Game.cpp
   Engine/Game.h
   Engine/Action.cpp

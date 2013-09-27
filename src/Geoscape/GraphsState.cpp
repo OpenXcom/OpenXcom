@@ -91,7 +91,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		_regionToggles.push_back(false);
 		_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
-		_btnRegions.at(offset)->setText(_game->getLanguage()->getString((*iter)->getRules()->getType()));
+		_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType()));
 		_btnRegions.at(offset)->onMouseClick((ActionHandler)&GraphsState::btnRegionListClick);
 		add(_btnRegions.at(offset));
 		_alienRegionLines.push_back(new Surface(320,200,0,0));
@@ -107,7 +107,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnRegionTotal->onMouseClick((ActionHandler)&GraphsState::btnRegionListClick);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
     _btnRegionTotal->setInvertColor(22);
-	_btnRegionTotal->setText(_game->getLanguage()->getString("STR_TOTAL_UC"));
+	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
 	_alienRegionLines.push_back(new Surface(320,200,0,0));
 	add(_alienRegionLines.at(offset));
 	_xcomRegionLines.push_back(new Surface(320,200,0,0));
@@ -121,7 +121,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 		_countryToggles.push_back(false);
 		_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnCountries.at(offset)->setInvertColor(-42 + (4*offset));
-		_btnCountries.at(offset)->setText(_game->getLanguage()->getString((*iter)->getRules()->getType()));
+		_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
 		_btnCountries.at(offset)->onMouseClick((ActionHandler)&GraphsState::btnCountryListClick);
 		add(_btnCountries.at(offset));
 		_alienCountryLines.push_back(new Surface(320,200,0,0));
@@ -139,7 +139,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 	_btnCountryTotal->onMouseClick((ActionHandler)&GraphsState::btnCountryListClick);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
     _btnCountryTotal->setInvertColor(22);
-	_btnCountryTotal->setText(_game->getLanguage()->getString("STR_TOTAL_UC"));
+	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
 	_alienCountryLines.push_back(new Surface(320,200,0,0));
 	add(_alienCountryLines.at(offset));
 	_xcomCountryLines.push_back(new Surface(320,200,0,0));
@@ -162,11 +162,11 @@ GraphsState::GraphsState(Game *game) : State(game)
 		add(_financeLines.at(offset));
 	}
 
-	_btnFinances.at(0)->setText(_game->getLanguage()->getString("STR_INCOME"));
-	_btnFinances.at(1)->setText(_game->getLanguage()->getString("STR_EXPENDITURE"));
-	_btnFinances.at(2)->setText(_game->getLanguage()->getString("STR_MAINTENANCE"));
-	_btnFinances.at(3)->setText(_game->getLanguage()->getString("STR_BALANCE"));
-	_btnFinances.at(4)->setText(_game->getLanguage()->getString("STR_SCORE"));
+	_btnFinances.at(0)->setText(tr("STR_INCOME"));
+	_btnFinances.at(1)->setText(tr("STR_EXPENDITURE"));
+	_btnFinances.at(2)->setText(tr("STR_MAINTENANCE"));
+	_btnFinances.at(3)->setText(tr("STR_BALANCE"));
+	_btnFinances.at(4)->setText(tr("STR_SCORE"));
 
 	// load back the button states
 	std::string graphRegionToggles = _game->getSavedGame()->getGraphRegionToggles();
@@ -254,7 +254,7 @@ GraphsState::GraphsState(Game *game) : State(game)
 				_txtYears->setCellText(0, 0, ss2.str());
 			}
 		}
-		_txtMonths->setCellText(0, iter, _game->getLanguage()->getString(months[month]));
+		_txtMonths->setCellText(0, iter, tr(months[month]));
 		++month;
 	}
 
@@ -329,7 +329,7 @@ void GraphsState::btnUfoRegionClick(Action *)
 	}
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_AREAS"));
+	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_AREAS"));
 }
 
 /**
@@ -349,7 +349,7 @@ void GraphsState::btnUfoCountryClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_UFO_ACTIVITY_IN_COUNTRIES"));
+	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_COUNTRIES"));
 }
 
 /**
@@ -369,7 +369,7 @@ void GraphsState::btnXcomRegionClick(Action *)
 	}
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_AREAS"));
+	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_AREAS"));
 }
 
 /**
@@ -389,7 +389,7 @@ void GraphsState::btnXcomCountryClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
+	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
 }
 
 /**
@@ -410,7 +410,7 @@ void GraphsState::btnIncomeClick(Action *)
 	}
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_INCOME"));
+	_txtTitle->setText(tr("STR_INCOME"));
 }
 
 /**
@@ -430,7 +430,7 @@ void GraphsState::btnFinanceClick(Action *)
 		(*iter)->setVisible(true);
 	}
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_FINANCE"));
+	_txtTitle->setText(tr("STR_FINANCE"));
 
 }
 

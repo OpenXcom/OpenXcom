@@ -82,17 +82,17 @@ namespace OpenXcom
 		_txtTitle->setColor(Palette::blockOffset(8)+10);
 		_txtTitle->setBig();
 		_txtTitle->setAlign(ALIGN_CENTER);
-		_txtTitle->setText(_game->getLanguage()->getString("STR_UFOPAEDIA"));
+		_txtTitle->setText(tr("STR_UFOPAEDIA"));
 		
 		for (int i = 0; i < NUM_SECTIONS; ++i)
 		{
 			_btnSection[i]->setColor(Palette::blockOffset(8)+5);
-			_btnSection[i]->setText(_game->getLanguage()->getString(SECTIONS[i]));
+			_btnSection[i]->setText(tr(SECTIONS[i]));
 			_btnSection[i]->onMouseClick((ActionHandler)&UfopaediaStartState::btnSectionClick);
 		}		
 
 		_btnOk->setColor(Palette::blockOffset(8)+5);
-		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
 		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	}

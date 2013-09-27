@@ -1,1 +1,23 @@
-!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖŐŰÙÚÛÜÝÞŸßàáâãäåæçèéêëìíîïðñòóôõöőűùúûüýþÿФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯфисвуапршолдьтщзйкыегмцчнябБжЖхХъЪэЭюЮĆĘęąŁćłĄŚśźżŻŹŃńĂăȘȚșțČĎĚŇŘŠŤŮŽčďěňřšťůžЄєŒœіІїЇøØ
+chars: >
+  !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖŐŰÙÚÛÜÝÞŸßàáâãäåæçèéêëìíîïðñòóôõöőűùúûüýþÿФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯфисвуапршолдьтщзйкыегмцчнябБжЖхХъЪэЭюЮĆĘęąŁćłĄŚśźżŻŹŃńĂăȘȚșțČĎĚŇŘŠŤŮŽčďěňřšťůžЄєŒœіІїЇøØ
+fonts:
+  - id: FONT_BIG
+    image: FontBig.png
+    width: 16
+    height: 16
+    spacing: 0
+  - id: FONT_SMALL
+    image: FontSmall.png
+    width: 8
+    height: 9
+    spacing: -1
+  - id: FONT_GEO_BIG
+    image: FontGeoBig.png
+    width: 5
+    height: 9
+    spacing: 1
+  - id: FONT_GEO_SMALL
+    image: FontGeoSmall.png
+    width: 5
+    height: 7
+    spacing: 1

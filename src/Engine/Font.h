@@ -22,6 +22,7 @@
 #include <map>
 #include <string>
 #include <SDL.h>
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
@@ -39,19 +40,22 @@ class Font
 {
 private:
 	static std::wstring _index;
+	static SDL_Color _palette[6];
 	Surface *_surface;
 	int _width, _height;
 	std::map<wchar_t, SDL_Rect> _chars;
 	int _spacing; // For some reason the X-Com small font is smooshed together by one pixel...
 public:
-	/// Creates a font with a blank surface.
-	Font(int width, int height, int spacing);
+	/// Creates a blank font.
+	Font();
 	/// Cleans up the font.
 	~Font();
+	/// Sets the character index for every font.
+	static void setIndex(const std::wstring &index);
+	/// Loads the font from YAML.
+	void load(const YAML::Node& node);
 	/// Determines the size and position of each character in the font.
-	void load();
-	/// Loads the character index for every font.
-	static void loadIndex(const std::string &filename);
+	void init();
 	/// Gets a particular character from the font, with its real size.
 	Surface *getChar(wchar_t c);
 	/// Gets the font's character width.
@@ -62,6 +66,8 @@ public:
 	int getSpacing() const;
 	/// Gets the font's surface.
 	Surface *getSurface() const;
+
+	void fix(const std::string &file, int width);
 };
 
 }

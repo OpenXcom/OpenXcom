@@ -85,29 +85,29 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
-	_txtFacility->setText(_game->getLanguage()->getString(_rule->getType()));
+	_txtFacility->setText(tr(_rule->getType()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
-	_txtCost->setText(_game->getLanguage()->getString("STR_COST_UC"));
+	_txtCost->setText(tr("STR_COST_UC"));
 
 	_numCost->setColor(Palette::blockOffset(13));
 	_numCost->setBig();
 	_numCost->setText(Text::formatFunding(_rule->getBuildCost()));
 
 	_txtTime->setColor(Palette::blockOffset(13)+10);
-	_txtTime->setText(_game->getLanguage()->getString("STR_CONSTRUCTION_TIME_UC"));
+	_txtTime->setText(tr("STR_CONSTRUCTION_TIME_UC"));
 
 	_numTime->setColor(Palette::blockOffset(13));
 	_numTime->setBig();
 	_numTime->setText(tr("STR_DAY", _rule->getBuildTime()));
 
 	_txtMaintenance->setColor(Palette::blockOffset(13)+10);
-	_txtMaintenance->setText(_game->getLanguage()->getString("STR_MAINTENANCE_UC"));
+	_txtMaintenance->setText(tr("STR_MAINTENANCE_UC"));
 
 	_numMaintenance->setColor(Palette::blockOffset(13));
 	_numMaintenance->setBig();

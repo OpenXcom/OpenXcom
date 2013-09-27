@@ -151,9 +151,9 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	add(_surface);
 	add(_medikitView);
 	add(endButton);
-	add(new MedikitTitle (37, _game->getLanguage()->getString("STR_PAIN_KILLER")));
-	add(new MedikitTitle (73, _game->getLanguage()->getString("STR_STIMULANT")));
-	add(new MedikitTitle (109, _game->getLanguage()->getString("STR_HEAL")));
+	add(new MedikitTitle (37, tr("STR_PAIN_KILLER")));
+	add(new MedikitTitle (73, tr("STR_STIMULANT")));
+	add(new MedikitTitle (109, tr("STR_HEAL")));
 	add(healButton);
 	add(stimulantButton);
 	add(pkButton);

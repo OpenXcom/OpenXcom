@@ -52,6 +52,14 @@ public:
 	void setColor(Uint8 color);
 	/// Gets the text button's color.
 	Uint8 getColor() const;
+	/// Sets the text button's text color.
+	void setTextColor(Uint8 color);
+	/// Sets the text size to big.
+	void setBig();
+	/// Sets the text size to small.
+	void setSmall();
+	/// Gets the text button's current font.
+	Font *getFont() const;
 	/// Sets the text button's various fonts.
 	void setFonts(Font *big, Font *small);
 	/// Sets the text button's high contrast color setting.

@@ -299,6 +299,7 @@
     <ClCompile Include="Engine\GMCat.cpp" />
     <ClCompile Include="Engine\InteractiveSurface.cpp" />
     <ClCompile Include="Engine\Language.cpp" />
+    <ClCompile Include="Engine\LanguagePlurality.cpp" />
     <ClCompile Include="Engine\LocalizedText.cpp" />
     <ClCompile Include="Engine\Music.cpp" />
     <ClCompile Include="Engine\OpenGL.cpp" />
@@ -571,6 +572,7 @@
     <ClInclude Include="Engine\GraphSubset.h" />
     <ClInclude Include="Engine\InteractiveSurface.h" />
     <ClInclude Include="Engine\Language.h" />
+    <ClInclude Include="Engine\LanguagePlurality.h" />
     <ClInclude Include="Engine\LocalizedText.h" />
     <ClInclude Include="Engine\Logger.h" />
     <ClInclude Include="Engine\Music.h" />
@@ -745,10 +747,10 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
+    <None Include="..\media\openxcom.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

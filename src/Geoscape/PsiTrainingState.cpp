@@ -58,14 +58,14 @@ PsiTrainingState::PsiTrainingState(Game *game) : State(game), _base1(0), _base2(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&PsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&PsiTrainingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_PSIONIC_TRAINING"));
+	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 	int buttons = 0;
 	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{

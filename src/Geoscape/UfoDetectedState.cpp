@@ -116,19 +116,19 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	centerAllSurfaces();
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(_game->getLanguage()->getString("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
 	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
 	_btnCentre->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
 	{
-		_txtDetected->setText(_game->getLanguage()->getString("STR_DETECTED"));
+		_txtDetected->setText(tr("STR_DETECTED"));
 	}
 	else
 	{
@@ -138,7 +138,7 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_txtHyperwave->setColor(Palette::blockOffset(8)+5);
 	_txtHyperwave->setAlign(ALIGN_CENTER);
 	_txtHyperwave->setWordWrap(true);
-	_txtHyperwave->setText(_game->getLanguage()->getString("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
+	_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
 
 	_txtUfo->setColor(Palette::blockOffset(8)+5);
 	_txtUfo->setBig();
@@ -147,33 +147,33 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 87, 120);
 	_lstInfo->setDot(true);
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SIZE_UC").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getSize()).c_str());
+	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_ALTITUDE").c_str(), _game->getLanguage()->getString(altitude).c_str());
+	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
 		heading = "STR_NONE_UC";
 	}
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_HEADING").c_str(), _game->getLanguage()->getString(heading).c_str());
+	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
 	std::wstringstream ss;
 	ss << _ufo->getSpeed();
-	_lstInfo->addRow(2, _game->getLanguage()->getString("STR_SPEED").c_str(), ss.str().c_str());
+	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
 	_lstInfo2->setColor(Palette::blockOffset(8)+5);
 	_lstInfo2->setColumns(2, 87, 120);
 	_lstInfo2->setDot(true);
-	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_CRAFT_TYPE").c_str(), _game->getLanguage()->getString(_ufo->getRules()->getType()).c_str());
+	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), tr(_ufo->getRules()->getType()).c_str());
 	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_RACE").c_str(), _game->getLanguage()->getString(_ufo->getAlienRace()).c_str());
+	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), tr(_ufo->getAlienRace()).c_str());
 	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_MISSION").c_str(), _game->getLanguage()->getString(_ufo->getMissionType()).c_str());
+	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMissionType()).c_str());
 	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, _game->getLanguage()->getString("STR_ZONE").c_str(), _game->getLanguage()->getString(_ufo->getMission()->getRegion()).c_str());
+	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), tr(_ufo->getMission()->getRegion()).c_str());
 	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 }
 

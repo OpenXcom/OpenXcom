@@ -42,8 +42,8 @@ namespace OpenXcom
 PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(game, base, rule), _select(select)
 {
 	_view->onMouseClick((ActionHandler)&PlaceStartFacilityState::viewClick);
-	_numCost->setText(_game->getLanguage()->getString("STR_NONE"));
-	_numTime->setText(_game->getLanguage()->getString("STR_NONE"));
+	_numCost->setText(tr("STR_NONE"));
+	_numTime->setText(tr("STR_NONE"));
 }
 
 /**

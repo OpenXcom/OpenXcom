@@ -116,21 +116,21 @@ namespace OpenXcom
 		std::wstringstream ss;
 		ss.str(L"");ss.clear();
 		ss << ufo->getMaxDamage();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_DAMAGE_CAPACITY").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), ss.str().c_str());
 
 		ss.str(L"");ss.clear();
 		ss << ufo->getWeaponPower();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_WEAPON_POWER").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss.str().c_str());
 
 		ss.str(L"");ss.clear();
 		ss << ufo->getWeaponRange();
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
+		_lstInfo->addRow(2, tr("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
 
 		ss.str(L"");ss.clear();
 		ss << ufo->getMaxSpeed();
 		ss << " ";
-		ss << _game->getLanguage()->getString("STR_KNOTS");
-		_lstInfo->addRow(2, _game->getLanguage()->getString("STR_MAXIMUM_SPEED").c_str(), ss.str().c_str());
+		ss << tr("STR_KNOTS");
+		_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), ss.str().c_str());
 
 		_lstInfo->draw();
 	}

@@ -178,20 +178,20 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
-	_btnTransfers->setText(_game->getLanguage()->getString("STR_TRANSFERS_UC"));
+	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
 	_btnTransfers->onMouseClick((ActionHandler)&BaseInfoState::btnTransfersClick);
 
 	_btnStores->setColor(Palette::blockOffset(15)+6);
-	_btnStores->setText(_game->getLanguage()->getString("STR_STORES_UC"));
+	_btnStores->setText(tr("STR_STORES_UC"));
 	_btnStores->onMouseClick((ActionHandler)&BaseInfoState::btnStoresClick);
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+6);
-	_btnMonthlyCosts->setText(_game->getLanguage()->getString("STR_MONTHLY_COSTS"));
+	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)&BaseInfoState::btnMonthlyCostsClick);
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
@@ -200,10 +200,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
-	_txtPersonnel->setText(_game->getLanguage()->getString("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
+	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
-	_txtSoldiers->setText(_game->getLanguage()->getString("STR_SOLDIERS"));
+	_txtSoldiers->setText(tr("STR_SOLDIERS"));
 
 	_numSoldiers->setColor(Palette::blockOffset(13));
 
@@ -211,7 +211,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barSoldiers->setScale(1.0);
 
 	_txtEngineers->setColor(Palette::blockOffset(13)+5);
-	_txtEngineers->setText(_game->getLanguage()->getString("STR_ENGINEERS"));
+	_txtEngineers->setText(tr("STR_ENGINEERS"));
 
 	_numEngineers->setColor(Palette::blockOffset(13));
 
@@ -219,7 +219,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barEngineers->setScale(1.0);
 
 	_txtScientists->setColor(Palette::blockOffset(13)+5);
-	_txtScientists->setText(_game->getLanguage()->getString("STR_SCIENTISTS"));
+	_txtScientists->setText(tr("STR_SCIENTISTS"));
 
 	_numScientists->setColor(Palette::blockOffset(13));
 
@@ -228,10 +228,10 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);
-	_txtSpace->setText(_game->getLanguage()->getString("STR_SPACE_USED_SPACE_AVAILABLE"));
+	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_AVAILABLE"));
 
 	_txtQuarters->setColor(Palette::blockOffset(13)+5);
-	_txtQuarters->setText(_game->getLanguage()->getString("STR_LIVING_QUARTERS_PLURAL"));
+	_txtQuarters->setText(tr("STR_LIVING_QUARTERS_PLURAL"));
 
 	_numQuarters->setColor(Palette::blockOffset(13));
 
@@ -239,7 +239,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barQuarters->setScale(0.5);
 
 	_txtStores->setColor(Palette::blockOffset(13)+5);
-	_txtStores->setText(_game->getLanguage()->getString("STR_STORES"));
+	_txtStores->setText(tr("STR_STORES"));
 
 	_numStores->setColor(Palette::blockOffset(13));
 
@@ -247,7 +247,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barStores->setScale(0.5);
 
 	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
-	_txtLaboratories->setText(_game->getLanguage()->getString("STR_LABORATORIES"));
+	_txtLaboratories->setText(tr("STR_LABORATORIES"));
 
 	_numLaboratories->setColor(Palette::blockOffset(13));
 
@@ -255,7 +255,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barLaboratories->setScale(0.5);
 
 	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
-	_txtWorkshops->setText(_game->getLanguage()->getString("STR_WORK_SHOPS"));
+	_txtWorkshops->setText(tr("STR_WORK_SHOPS"));
 
 	_numWorkshops->setColor(Palette::blockOffset(13));
 
@@ -265,7 +265,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	if (_containmentLimit)
 	{
 		_txtContainment->setColor(Palette::blockOffset(13)+5);
-		_txtContainment->setText(_game->getLanguage()->getString("STR_ALIEN_CONTAINMENT"));
+		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
 
 		_numContainment->setColor(Palette::blockOffset(13));
 
@@ -274,7 +274,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	}
 
 	_txtHangars->setColor(Palette::blockOffset(13)+5);
-	_txtHangars->setText(_game->getLanguage()->getString("STR_HANGARS"));
+	_txtHangars->setText(tr("STR_HANGARS"));
 
 	_numHangars->setColor(Palette::blockOffset(13));
 
@@ -283,7 +283,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 
 
 	_txtDefense->setColor(Palette::blockOffset(13)+5);
-	_txtDefense->setText(_game->getLanguage()->getString("STR_DEFENSE_STRENGTH"));
+	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));
 
 	_numDefense->setColor(Palette::blockOffset(13));
 
@@ -291,7 +291,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barDefense->setScale(0.125);
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
-	_txtShortRange->setText(_game->getLanguage()->getString("STR_SHORT_RANGE_DETECTION"));
+	_txtShortRange->setText(tr("STR_SHORT_RANGE_DETECTION"));
 
 	_numShortRange->setColor(Palette::blockOffset(13));
 
@@ -299,7 +299,7 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	_barShortRange->setScale(25.0);
 
 	_txtLongRange->setColor(Palette::blockOffset(13)+5);
-	_txtLongRange->setText(_game->getLanguage()->getString("STR_LONG_RANGE_DETECTION"));
+	_txtLongRange->setText(tr("STR_LONG_RANGE_DETECTION"));
 
 	_numLongRange->setColor(Palette::blockOffset(13));
 

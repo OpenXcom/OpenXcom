@@ -784,6 +784,9 @@
     <ClCompile Include="Interface\Frame.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\LanguagePlurality.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1590,9 +1593,9 @@
     <ClInclude Include="Interface\Frame.h">
       <Filter>Interface</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
+    <ClInclude Include="Engine\LanguagePlurality.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1631,5 +1634,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

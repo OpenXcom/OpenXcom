@@ -87,7 +87,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	_window->setBackground(_game->getResourcePack()->getSurface(bg));
 
 	_btnOk->setColor(color);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ErrorMessageState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -100,7 +100,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	if (str.empty())
 		_txtMessage->setText(wstr);
 	else
-		_txtMessage->setText(_game->getLanguage()->getString(str));
+		_txtMessage->setText(tr(str));
 
 	if (bgColor == ((Uint8)-1))
 	{
