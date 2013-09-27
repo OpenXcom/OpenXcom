@@ -47,14 +47,14 @@ namespace
 {
 
 /**
- * Helper function counting pitch with 16byte align
+ * Helper function counting pitch in bytes with 16byte padding
  * @param bpp bytes per pixel
  * @param width number of pixel in row
  * @return pitch in bytes
  */
 inline int GetPitch(int bpp, int width)
 {
-	return (bpp/8) * ((width+15)& ~0xF);
+	return ((bpp/8) * width + 15) & ~0xF;
 }
 
 /**
@@ -66,14 +66,15 @@ inline int GetPitch(int bpp, int width)
  */
 inline void* NewAligned(int bpp, int width, int height)
 {
-	int pitch = GetPitch(bpp, width);
+	const int pitch = GetPitch(bpp, width);
+	const int total = pitch * height;
 	void* buffer = 0;
 
 #ifndef _WIN32
 
 	#ifdef __MORPHOS__
 
-	buffer = calloc( pitch * height * (bpp/8), 1 );
+	buffer = calloc( total, 1 );
 	if (!buffer)
 	{
 		throw Exception("Where's the memory, Lebowski?");
@@ -81,7 +82,7 @@ inline void* NewAligned(int bpp, int width, int height)
 
 	#else
 	int rc;
-	if ((rc = posix_memalign(&buffer, 16, pitch * height * (bpp/8))))
+	if ((rc = posix_memalign(&buffer, 16, total)))
 	{
 		throw Exception(strerror(rc));
 	}
@@ -90,7 +91,7 @@ inline void* NewAligned(int bpp, int width, int height)
 #else
 
 	// of course Windows has to be difficult about this!
-	buffer = _aligned_malloc(pitch*height*(bpp/8), 16);
+	buffer = _aligned_malloc(total, 16);
 	if (!buffer)
 	{
 		throw Exception("Where's the memory, Lebowski?");
@@ -98,7 +99,7 @@ inline void* NewAligned(int bpp, int width, int height)
 
 #endif
 
-	memset(buffer, 0, pitch * height * (bpp/8));
+	memset(buffer, 0, total);
 	return buffer;
 }
 
