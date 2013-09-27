@@ -74,7 +74,11 @@ public:
 	/// Blits this surface onto another one.
 	virtual void blit(Surface *surface);
 	/// Sets the surface's various fonts.
+#ifdef __GNUC__
+	virtual void setFonts(Font *big __attribute__((unused)), Font *small __attribute__((unused))) {};
+#else
 	virtual void setFonts(Font *big, Font *small) {};
+#endif
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
     /// Draws a filled rectangle on the surface.
