@@ -175,12 +175,12 @@ LanguagePlurality *LanguagePlurality::create(const std::string &language)
 	// Populate factory the first time we are called.
 	if (s_factoryFunctions.empty())
 	{
-		s_factoryFunctions.insert(std::make_pair("FRANÇAIS", &FrenchRules::create));
-		s_factoryFunctions.insert(std::make_pair("ČESKY", &CzechRules::create));
-		s_factoryFunctions.insert(std::make_pair("POLSKI", &PolishRules::create));
-		s_factoryFunctions.insert(std::make_pair("ROMÂNĂ", &RomanianRules::create));
-		s_factoryFunctions.insert(std::make_pair("РУССКИЙ", &RusianRules::create));
-		s_factoryFunctions.insert(std::make_pair("MAGYAR", &HungarianRules::create));
+		s_factoryFunctions.insert(std::make_pair("fr", &FrenchRules::create));
+		s_factoryFunctions.insert(std::make_pair("cs-CZ", &CzechRules::create));
+		s_factoryFunctions.insert(std::make_pair("pl-PL", &PolishRules::create));
+		s_factoryFunctions.insert(std::make_pair("ro", &RomanianRules::create));
+		s_factoryFunctions.insert(std::make_pair("ru", &RusianRules::create));
+		s_factoryFunctions.insert(std::make_pair("hu-HU", &HungarianRules::create));
 	}
 	PFCreate creator = &ManyOneMany::create;
 	std::map<std::string, PFCreate>::const_iterator found = s_factoryFunctions.find(language);

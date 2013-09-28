@@ -44,25 +44,26 @@ std::map<std::string, std::wstring> Language::_names;
  */
 Language::Language() : _id(""), _strings(), _handler(0)
 {
+	// maps don't have initializers :(
 	if (_names.empty())
 	{
-		_names["Bulgarian"] = L"Български";
-		_names["Czech"] = L"Česky";
-		_names["Danish"] = L"Dansk";
-		_names["Dutch"] = L"Nederlands";
-		_names["English"] = L"English (US)";
-		_names["EnglishUk"] = L"English (UK)";
-		_names["French"] = L"Français";
-		_names["German"] = L"Deutsch";
-		_names["Hungarian"] = L"Magyar";
-		_names["Italian"] = L"Italiano";
-		_names["Polish"] = L"Polski";
-		_names["Portuguese"] = L"Português (PT)";
-		_names["Romanian"] = L"Română";
-		_names["Russian"] = L"Русский";
-		_names["Spanish"] = L"Español (ES)";
-		_names["SpanishAL"] = L"Español (AL)";
-		_names["Ukranian"] = L"Українська";
+		_names["bg-BG"] = utf8ToWstr("Български");
+		_names["cs-CZ"] = utf8ToWstr("Česky");
+		_names["da"] = utf8ToWstr("Dansk");
+		_names["nl"] = utf8ToWstr("Nederlands");
+		_names["en-US"] = utf8ToWstr("English (US)");
+		_names["en-GB"] = utf8ToWstr("English (UK)");
+		_names["fr"] = utf8ToWstr("Français");
+		_names["de"] = utf8ToWstr("Deutsch");
+		_names["hu-HU"] = utf8ToWstr("Magyar");
+		_names["it"] = utf8ToWstr("Italiano");
+		_names["pl-PL"] = utf8ToWstr("Polski");
+		_names["pt-PT"] = utf8ToWstr("Português (PT)");
+		_names["ro"] = utf8ToWstr("Română");
+		_names["ru"] = utf8ToWstr("Русский");
+		_names["es"] = utf8ToWstr("Español (ES)");
+		_names["es-419"] = utf8ToWstr("Español (AL)");
+		_names["uk"] = utf8ToWstr("Українська");
 	}
 }
 
@@ -284,7 +285,7 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
  */
 std::vector<std::string> Language::getList(TextList *list)
 {
-	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "lng");
+	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
 
 	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
 	{
@@ -317,15 +318,15 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 		// Regular strings
 		if (i->second.IsScalar())
 		{
-			_strings[i->first.as<std::string>()] = utf8ToWstr(i->second.as<std::string>());
+			_strings[i->first.as<std::string>()] = loadString(i->second.as<std::string>());
 		}
 		// Strings with plurality
-		else
+		else if (i->second.IsMap())
 		{
-			for (YAML::const_iterator j = i->begin(); j != i->end(); ++j)
+			for (YAML::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
 			{
 				std::string s = i->first.as<std::string>() + "_" + j->first.as<std::string>();
-				_strings[s] = utf8ToWstr(j->second.as<std::string>());
+				_strings[s] = loadString(j->second.as<std::string>());
 			}
 		}
 	}
@@ -335,13 +336,24 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 	{
 		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
 		{
-			std::string s = i->second;
-			replace(s, "{NEWLINE}", "\n");
-			replace(s, "{SMALLLINE}", "\x02");
-			replace(s, "{ALT}", "\x01");
-			_strings[i->first] = utf8ToWstr(s);
+			_strings[i->first] = loadString(i->second);
 		}
 	}
+}
+
+/**
+* Replaces all special string markers with the approriate characters
+* and converts the string encoding.
+* @param string Original UTF-8 string.
+* @return New widechar string.
+*/
+std::wstring Language::loadString(const std::string &string) const
+{
+	std::string s = string;
+	replace(s, "{NEWLINE}", "\n");
+	replace(s, "{SMALLLINE}", "\x02");
+	replace(s, "{ALT}", "\x01");
+	return utf8ToWstr(s);
 }
 
 /**

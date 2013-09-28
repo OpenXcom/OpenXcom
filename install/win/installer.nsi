@@ -170,6 +170,14 @@ ${EndIf}
 	
 	File "..\..\bin\data\Ruleset\Xcom1Ruleset.rul"
 	
+	SetOutPath "$INSTDIR\data\Resources\BulletSprites"
+	
+	File "..\..\bin\data\Resources\BulletSprites\*.*"
+	
+	SetOutPath "$INSTDIR\data\Resources\Pathfinding"
+	
+	File "..\..\bin\data\Resources\Pathfinding\*.*"
+	
 	SetOutPath "$INSTDIR\data\SoldierName"
 	
 	File "..\..\bin\data\SoldierName\*.*"

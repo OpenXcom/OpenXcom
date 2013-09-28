@@ -45,6 +45,9 @@ private:
 	LanguagePlurality *_handler;
 
 	static std::map<std::string, std::wstring> _names;
+
+	/// Parses a text string loaded from an external file.
+	std::wstring loadString(const std::string &s) const;
 public:
 	/// Creates a blank language.
 	Language();
