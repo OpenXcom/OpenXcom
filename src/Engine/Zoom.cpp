@@ -597,17 +597,35 @@ bool Zoom::haveSSE2()
  * Wrapper around various software and OpenGL screen buffer pushing functions which zoom.
  * Basically called just from Screen::flip()
  */
-void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, OpenGL *glOut)
+void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand, OpenGL *glOut)
 {
 	if (Screen::isOpenGLEnabled() && glOut->buffer_surface)
 	{
 		SDL_BlitSurface(src, 0, glOut->buffer_surface->getSurface(), 0); // TODO; this is less than ideal...
 
-		glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h);
+		glOut->refresh(glOut->linear, glOut->iwidth, glOut->iheight, dst->w, dst->h, topBlackBand, bottomBlackBand, leftBlackBand, rightBlackBand);
 		SDL_GL_SwapBuffers();
-	} else
+	}
+	else if (topBlackBand <= 0 && bottomBlackBand <= 0 && leftBlackBand <= 0 && rightBlackBand <= 0)
 	{
 		_zoomSurfaceY(src, dst, 0, 0);
+	}
+	else if (dst->w - leftBlackBand - rightBlackBand == src->w && dst->h - topBlackBand - bottomBlackBand == src->h)
+	{
+		SDL_Rect dstrect = {x: leftBlackBand, y: topBlackBand, w: src->w, h: src->h};
+		SDL_BlitSurface(src, NULL, dst, &dstrect);
+	}
+	else
+	{
+		SDL_Surface *tmp = SDL_CreateRGBSurface(dst->flags, dst->w - leftBlackBand - rightBlackBand, dst->h - topBlackBand - bottomBlackBand, dst->format->BitsPerPixel, 0, 0, 0, 0);
+		_zoomSurfaceY(src, tmp, 0, 0);
+		if (src->format->palette != NULL)
+		{
+			SDL_SetPalette(tmp, SDL_LOGPAL|SDL_PHYSPAL, src->format->palette->colors, 0, src->format->palette->ncolors);
+		}
+		SDL_Rect dstrect = {x: leftBlackBand, y: topBlackBand, w: tmp->w, h: tmp->h};
+		SDL_BlitSurface(tmp, NULL, dst, &dstrect);
+		SDL_FreeSurface(tmp);
 	}
 }
 
