@@ -38,8 +38,8 @@
 #include "../Engine/Language.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
-#include "../Battlescape/PatrolBAIState.h"
-#include "../Battlescape/AggroBAIState.h"
+#include "../Battlescape/CivilianBAIState.h"
+#include "../Battlescape/AlienBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
@@ -206,15 +206,14 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		{
 			if (const YAML::Node &ai = (*i)["AI"])
 			{
-				std::string state = ai["state"].as<std::string>();
 				BattleAIState *aiState;
-				if (state == "PATROL")
+				if (faction == FACTION_NEUTRAL)
 				{
-					aiState = new PatrolBAIState(this, unit, 0);
+					aiState = new CivilianBAIState(this, unit, 0);
 				}
-				else if (state == "AGGRO")
+				else if (faction == FACTION_HOSTILE)
 				{
-					aiState = new AggroBAIState(this, unit);
+					aiState = new AlienBAIState(this, unit, 0);
 				}
 				else
 				{

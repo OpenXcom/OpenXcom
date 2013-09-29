@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_PATROLBAISTATE_H
-#define OPENXCOM_PATROLBAISTATE_H
+#ifndef OPENXCOM_CIVILIANBAISTATE_H
+#define OPENXCOM_CIVILIANBAISTATE_H
 
 #include "BattleAIState.h"
 #include "BattlescapeGame.h"
@@ -33,17 +33,20 @@ class Node;
 /**
  * This is the intial AI state of units, walking around and looking for intruders.
  */
-class PatrolBAIState : public BattleAIState
+class CivilianBAIState : public BattleAIState
 {
 private:
+	BattleAction *_escapeAction, *_patrolAction;
+	BattleUnit *_aggroTarget;
+	int _escapeTUs, _AIMode, _visibleEnemies, _spottingEnemies;
 	bool _traceAI;
 protected:
 	Node *_fromNode, *_toNode;
 public:
 	/// Creates a new BattleAIState linked to the game and a certain unit.
-	PatrolBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node);
+	CivilianBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node);
 	/// Cleans up the BattleAIState.
-	~PatrolBAIState();
+	~CivilianBAIState();
 	/// Loads the AI state from YAML.
 	void load(const YAML::Node& node);
 	/// Saves the AI state to YAML.
@@ -54,6 +57,11 @@ public:
 	void exit();
 	/// Runs state functionality every AI cycle.
 	void think(BattleAction *action);
+	const int getSpottingUnits(Position pos);
+	int selectNearestTarget();
+	void setupEscape();
+	void setupPatrol();
+	void evaluateAIMode();
 };
 
 }

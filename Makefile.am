@@ -212,8 +212,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ActionMenuItem.h \
 	src/Battlescape/ActionMenuState.cpp \
 	src/Battlescape/ActionMenuState.h \
-	src/Battlescape/AggroBAIState.cpp \
-	src/Battlescape/AggroBAIState.h \
+	src/Battlescape/AlienBAIState.cpp \
+	src/Battlescape/AlienBAIState.h \
 	src/Battlescape/BattleAIState.cpp \
 	src/Battlescape/BattleAIState.h \
 	src/Battlescape/BattlescapeGame.cpp \
@@ -234,6 +234,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Camera.h \
 	src/Battlescape/CannotReequipState.cpp \
 	src/Battlescape/CannotReequipState.h \
+	src/Battlescape/CivilianBAIState.cpp \
+	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
 	src/Battlescape/ExplosionBState.cpp \
@@ -268,8 +270,6 @@ openxcom_SOURCES = \
 	src/Battlescape/PathfindingNode.h \
 	src/Battlescape/PathfindingOpenSet.cpp \
 	src/Battlescape/PathfindingOpenSet.h \
-	src/Battlescape/PatrolBAIState.cpp \
-	src/Battlescape/PatrolBAIState.h \
 	src/Battlescape/Position.cpp \
 	src/Battlescape/Position.h \
 	src/Battlescape/PrimeGrenadeState.cpp \

@@ -25,7 +25,7 @@
 #include "TileEngine.h"
 #include <SDL.h>
 #include "BattleAIState.h"
-#include "AggroBAIState.h"
+#include "AlienBAIState.h"
 #include "UnitTurnBState.h"
 #include "Map.h"
 #include "Camera.h"
@@ -292,7 +292,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
 
-								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER)
+								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() != FACTION_HOSTILE)
 								{
 									visibleUnit->setTurnsExposed(0);
 								}
@@ -341,19 +341,6 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	// or we stop if there are more visible units seen
 	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && !unit->getVisibleUnits()->empty())
 	{
-		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
-		if (unit->getFaction() == FACTION_HOSTILE)
-		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
-			if (aggro == 0)
-			{
-				aggro = new AggroBAIState(_save, unit);
-				unit->setAIState(aggro);
-				unit->_hidingForTurn = false; // something new happened, react at will...
-			}
-			aggro->setAggroTarget(unit->getVisibleUnits()->at(0)); // just pick the first one - maybe we need to prioritize on distance to unit or other parameters?
-		}
-
 		return true;
 	}
 
@@ -832,7 +819,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// closer than 20 tiles
 			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
 		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
+			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
@@ -950,15 +937,12 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 		// hostile units will go into an "aggro" state when they react.
 		if (unit->getFaction() == FACTION_HOSTILE)
 		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
 			if (aggro == 0)
 			{
-				aggro = new AggroBAIState(_save, unit);
+				// should not happen, but just in case...
+				aggro = new AlienBAIState(_save, unit, 0);
 				unit->setAIState(aggro);
-			}
-			if (!target->isOut())
-			{
-				aggro->setAggroTarget(target);
 			}
 
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&

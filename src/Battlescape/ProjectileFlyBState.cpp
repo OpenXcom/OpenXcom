@@ -34,7 +34,7 @@
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
-#include "AggroBAIState.h"
+#include "AlienBAIState.h"
 #include "Camera.h"
 
 namespace OpenXcom
@@ -377,14 +377,12 @@ void ProjectileFlyBState::think()
 						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
 						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
 						{
-							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(victim->getCurrentAIState());
-							if (aggro == 0)
+							AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
+							if (aggro != 0)
 							{
-								aggro = new AggroBAIState(_parent->getSave(), victim);
-								victim->setAIState(aggro);
+								aggro->setWasHit();
+								_unit->setTurnsExposed(0);
 							}
-							aggro->setAggroTarget(_action.actor);
-							aggro->setWasHit(true);
 						}
 					}
 				}

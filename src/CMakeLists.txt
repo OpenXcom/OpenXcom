@@ -133,16 +133,16 @@ set ( battlescape_src
   Battlescape/NextTurnState.h
   Battlescape/NoContainmentState.cpp
   Battlescape/NoContainmentState.h
-  Battlescape/AggroBAIState.cpp
-  Battlescape/AggroBAIState.h
+  Battlescape/AlienBAIState.cpp
+  Battlescape/AlienBAIState.h
   Battlescape/BattleAIState.cpp
   Battlescape/BattleAIState.h
   Battlescape/BattlescapeMessage.cpp
   Battlescape/BattlescapeMessage.h
   Battlescape/Inventory.cpp
   Battlescape/Inventory.h
-  Battlescape/PatrolBAIState.cpp
-  Battlescape/PatrolBAIState.h
+  Battlescape/CivilianBAIState.cpp
+  Battlescape/CivilianBAIState.h
   Battlescape/WarningMessage.cpp
   Battlescape/WarningMessage.h
   Battlescape/BattlescapeOptionsState.cpp
