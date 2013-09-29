@@ -78,7 +78,7 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->isWaypoint())
+		if (weapon->isWaypoint() || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
 		{
 			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}
