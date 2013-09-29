@@ -367,6 +367,7 @@ void NewBattleState::initSave()
  */
 void NewBattleState::btnOkClick(Action *)
 {
+	Options::save();
 	if (_missionTypes[_selMission] != "STR_BASE_DEFENSE" && _craft->getNumSoldiers() == 0 && _craft->getNumVehicles() == 0)
 	{
 		return;
@@ -452,6 +453,7 @@ void NewBattleState::btnOkClick(Action *)
  */
 void NewBattleState::btnCancelClick(Action *)
 {
+	Options::save();
 	_game->setSavedGame(0);
 	_game->popState();
 }
@@ -462,13 +464,22 @@ void NewBattleState::btnCancelClick(Action *)
  */
 void NewBattleState::btnRandomClick(Action *)
 {
-	_selMission = RNG::generate(0,_missionTypes.size()-1) ;
-	_selAlien   = RNG::generate(0,_alienRaces.size()-1) ;
-	_selTerrain = RNG::generate(0,5) ;
-	_selCraft   = RNG::generate(0,_crafts.size()-1) ;
-	_selDifficulty = RNG::generate(0,4) ;
-	_selDarkness = RNG::generate(0,5) ;
-	_selItemLevel = RNG::generate(0,2);
+	_selMission = RNG::generate(0, _missionTypes.size()-1);
+	_selAlien   = RNG::generate(0, _alienRaces.size()-1);
+	_selTerrain = RNG::generate(0, 5);
+	_selCraft   = RNG::generate(0, _crafts.size()-1);
+	_selDifficulty = RNG::generate(0, 4);
+	_selDarkness = RNG::generate(0, 5);
+	_selItemLevel = RNG::generate(0, 2);
+
+	Options::setInt("NewBattleMission", _selMission);
+	Options::setInt("NewBattleTerrain", _selTerrain);
+	Options::setInt("NewBattleItemLevel", _selItemLevel);
+	Options::setInt("NewBattleItemLevel", _selItemLevel);
+	Options::setInt("NewBattleAlienRace", _selAlien);
+	Options::setInt("NewBattleDifficulty", _selDifficulty);
+	Options::setInt("NewBattleDarkness", _selDarkness);
+	Options::setInt("NewBattleCraft", _selCraft);
 
 	_btnMissionType->setText(tr(_missionTypes[_selMission]));
 	_btnTerrainType->setText(tr(_terrainTypes[_selTerrain]));
