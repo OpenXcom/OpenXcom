@@ -1953,6 +1953,8 @@ BattleActionType BattlescapeGame::getReservedAction()
  */
 void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
 {
+	liveSoldiers = 0;
+	liveAliens = 0;
 	bool psiCapture = Options::getBool("allowPsionicCapture");
 
 	if (convert)
