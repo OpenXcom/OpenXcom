@@ -190,7 +190,7 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 			_terrain->calculateFOV(_unit->getPosition());
-			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
 			int size = _unit->getArmor()->getSize() - 1;
@@ -453,7 +453,7 @@ void UnitWalkBState::think()
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
-		unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+		unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
@@ -494,11 +494,10 @@ void UnitWalkBState::postPathProcedures()
 	_action.TU = 0;
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
+		int dir = _action.finalFacing;
 		if (_unit->getCharging() != 0)
 		{
-			_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
-			while (_unit->getStatus() == STATUS_TURNING)
-				_unit->turn();
+			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());
 			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
 			{
 				BattleAction action;
@@ -514,20 +513,23 @@ void UnitWalkBState::postPathProcedures()
 		}
 		else if (_unit->_hidingForTurn)
 		{
-			int dir = _unit->getDirection() + 4;
+			dir = _unit->getDirection() + 4;
+		}
+		if (dir != -1)
+		{
 			if (dir >= 8)
 			{
 				dir -= 8;
 			}
 			_unit->lookAt(dir);
-			while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
+			while (_unit->getStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
 			}
-			_unit->abortTurn();
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+
 		}
 	}
 	else if (!_parent->getPanicHandled())
