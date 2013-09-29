@@ -75,7 +75,6 @@ int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
-	int direction;
 	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	// maybe if i get around to making that function to calculate a firepoint origin for fire point estimations i'll use the array above

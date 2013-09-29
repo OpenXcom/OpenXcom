@@ -37,7 +37,7 @@ namespace OpenXcom
 /**
  * Sets up a CivilianBAIState.
  */
-CivilianBAIState::CivilianBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _fromNode(node), _toNode(0), _escapeTUs(0), _AIMode(0), _visibleEnemies(0), _spottingEnemies(0), _aggroTarget(0)
+CivilianBAIState::CivilianBAIState(SavedBattleGame *game, BattleUnit *unit, Node *node) : BattleAIState(game, unit), _aggroTarget(0), _escapeTUs(0), _AIMode(0), _visibleEnemies(0), _spottingEnemies(0), _fromNode(node), _toNode(0)
 {
 	_traceAI = _save->getTraceSetting();
 	_escapeAction = new BattleAction();
