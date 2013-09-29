@@ -144,7 +144,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		}
 	}
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) && 
+	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
 							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
 
 	// look for a possible fast and accurate bresenham path and skip A*
@@ -415,7 +415,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				cost = (int)((double)cost * 1.5);
 			}
 			cost += wallcost;
-			if (_unit->getFaction() == FACTION_HOSTILE && 
+			if (_unit->getFaction() == FACTION_HOSTILE &&
 				((destinationTile->getUnit() &&
 				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
 				destinationTile->getUnit() != _unit) ||
@@ -565,6 +565,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
 			return true; // blocking part
 		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+		if (!tileWest) return true;	// do not look outside of map
 		if (tileWest->getMapData(MapData::O_OBJECT) &&
 			(tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEAST ||
 			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
@@ -576,6 +577,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
 			return true; // blocking part
 		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (!tileNorth) return true; // do not look outside of map
 		if (tileNorth->getMapData(MapData::O_OBJECT) &&
 			(tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLSOUTH ||
 			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
