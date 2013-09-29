@@ -59,7 +59,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
                                      _turn(1), _debugMode(false), _aborted(false),
                                      _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
                                      _unitsFalling(false), _strafeEnabled(false), _sneaky(false),
-                                     _traceAI(false)
+                                     _traceAI(false), _cheating(false)
 {
 	_dragButton = Options::getInt("battleScrollDragButton");
 	_dragInvert = Options::getBool("battleScrollDragInvert");
@@ -787,28 +787,30 @@ void SavedBattleGame::endTurn()
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
+	int liveSoldiers, liveAliens;
+
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+		
+	if (_turn >= 20 || liveAliens < 2)
+	{
+		_cheating = true;
+	}
 
 	if (_side == FACTION_PLAYER)
 	{
-		int liveSoldiers, liveAliens;
-
-		_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-
 		// update the "number of turns since last spotted"
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
-			if ((*i)->getTurnsExposed() < 255 && _side == FACTION_PLAYER)
+			if ((*i)->getTurnsExposed() < 255)
 			{
 				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
 			}
-			if (_side == FACTION_PLAYER && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut()
-				&& (_turn >= 20 || liveAliens < 2))
+			if (_cheating && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 			{
 				(*i)->setTurnsExposed(0);
 			}
 		}
 	}
-
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
@@ -1633,5 +1635,14 @@ void SavedBattleGame::resetTiles()
 	{
 		_tiles[i]->setDiscovered(false, 2);
 	}
+}
+
+/**
+ * is the AI allowed to cheat?
+ * @return true if cheating.
+ */
+bool SavedBattleGame::isCheating()
+{
+	return _cheating;
 }
 }

@@ -74,7 +74,7 @@ private:
 	bool _objectiveDestroyed;
 	std::vector<BattleUnit*> _exposedUnits;
 	std::list<BattleUnit*> _fallingUnits;
-	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
+	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 public:
 	/// Creates a new battle save, based on the current generic save.
 	SavedBattleGame();
@@ -235,6 +235,8 @@ public:
 	void resetTurnCounter();
 	/// Resets the visibility of all tiles on the map.
 	void resetTiles();
+	/// check if the AI has engaged cheat mode.
+	bool isCheating();
 };
 
 }
