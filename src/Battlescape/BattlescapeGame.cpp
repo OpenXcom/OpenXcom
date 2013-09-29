@@ -944,9 +944,22 @@ void BattlescapeGame::popState()
 		// end turn request?
 		if (_states.front() == 0)
 		{
-			_states.pop_front();
-			endTurn();
-			return;
+			while (!_states.empty())
+			{
+				if (_states.front() == 0)
+					_states.pop_front();
+				else
+					break;
+			}
+			if (_states.empty())
+			{
+				endTurn();
+				return;
+			}
+			else
+			{
+				_states.push_back(0);
+			}
 		}
 		// init the next state in queue
 		_states.front()->init();
