@@ -183,7 +183,7 @@ public:
 	/// Aim.
 	void aim(bool aiming);
 	/// Get direction to a certain point
-	int getDirectionTo(const Position &point) const;
+	int directionTo(const Position &point) const;
 	/// Gets the unit's time units.
 	int getTimeUnits() const;
 	/// Gets the unit's stamina.

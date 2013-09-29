@@ -135,6 +135,8 @@ public:
 	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
 	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
+	/// Get direction to a certain point
+	int getDirectionTo(const Position &origin, const Position &target) const;
 };
 
 }

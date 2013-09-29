@@ -2567,4 +2567,51 @@ void TileEngine::recalculateFOV()
 	}
 }
 
+/**
+ * Returns the direction from origin to target.
+ * @return direction.
+ */
+int TileEngine::getDirectionTo(const Position &origin, const Position &target) const
+{
+	double ox = target.x - origin.x;
+	double oy = target.y - origin.y;
+	double angle = atan2(ox, -oy);
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	int dir = 0;
+
+	if (angle > pie[0] || angle < -pie[0])
+	{
+		dir = 4;
+	}
+	else if (angle > pie[1])
+	{
+		dir = 3;
+	}
+	else if (angle > pie[2])
+	{
+		dir = 2;
+	}
+	else if (angle > pie[3])
+	{
+		dir = 1;
+	}
+	else if (angle < -pie[1])
+	{
+		dir = 5;
+	}
+	else if (angle < -pie[2])
+	{
+		dir = 6;
+	}
+	else if (angle < -pie[3])
+	{
+		dir = 7;
+	}
+	else if (angle < pie[0])
+	{
+		dir = 0;
+	}
+	return dir;
+}
 }

@@ -538,7 +538,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
-	int dir = getDirectionTo (point);
+	int dir = directionTo (point);
 
 	if (turret)
 	{
@@ -762,10 +762,10 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
- * Returns the soldier's amount of time units.
- * @return Time units.
+ * Returns the direction from this unit to a given point.
+ * @return direction.
  */
-int BattleUnit::getDirectionTo(const Position &point) const
+int BattleUnit::directionTo(const Position &point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;

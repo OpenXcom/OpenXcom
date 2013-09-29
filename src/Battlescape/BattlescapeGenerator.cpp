@@ -660,7 +660,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
-			dir = unit->getDirectionTo(craft);
+			dir = unit->directionTo(craft);
 		if (dir != -1)
 			unit->setDirection(dir);
 		else
