@@ -47,8 +47,8 @@ namespace OpenXcom
  */
 BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction), _originalFaction(faction), _killedBy(faction), _id(0), _pos(Position()), _tile(0),
 																_lastPos(Position()), _direction(0), _toDirection(0), _directionTurret(0), _toDirectionTurret(0),
-																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _kneeled(false), _floating(false),
-																_dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
+																_verticalDirection(0), _status(STATUS_STANDING), _walkPhase(0), _fallPhase(0), _spinPhase(-1), _kneeled(false),
+																_floating(false), _dontReselect(false), _fire(0), _currentAIState(0), _visible(false), _cacheInvalid(true),
 																_expBravery(0), _expReactions(0), _expFiring(0), _expThrowing(0), _expPsiSkill(0), _expMelee(0),
 																_motionPoints(0), _kills(0), _hitByFire(false), _moraleRestored(0), _coverReserve(0), _charging(0),
 																_turnsExposed(255), _geoscapeSoldier(soldier), _unitRules(0), _rankInt(-1), _turretType(-1), _hidingForTurn(false)
@@ -2494,4 +2494,88 @@ int BattleUnit::getCoverReserve()
 {
 	return _coverReserve;
 }
+
+/**
+ * Initializes a death spin. See Battlescape/UnitDieBState.cpp, ctor
+ */
+void BattleUnit::initDeathSpin()
+{
+	_status = STATUS_TURNING;
+	_spinPhase = 0;
+	_cacheInvalid = true;
+}
+
+/**
+ * Continues a death spin.
+ * See Battlescape/UnitDieBState.cpp, think()
+ */
+void BattleUnit::contDeathSpin()
+{
+	int d = _direction;
+	if (3 == d) // if facing player...
+	{
+		if (3 == _spinPhase || 4 == _spinPhase) // start = 0
+		{
+			 _spinPhase = -1; // end.
+			_status = STATUS_STANDING;
+
+			 return;
+		}
+		else if (1 == _spinPhase)
+		{
+			_spinPhase = 3; // 2nd CW rotation
+		}
+		else if (2 == _spinPhase)
+		{
+			_spinPhase = 4; // 2nd CCW rotation
+		}
+	}
+
+	if (0 == _spinPhase)
+	{
+		if (-1 < d && d < 4)
+		{
+			_spinPhase = 1; // 1st CW rotation
+		}
+		else
+		{
+			_spinPhase = 2; // 1st CCW rotation
+		}
+	}
+
+	if (1 == _spinPhase || 3 == _spinPhase)
+	{
+		d++;
+		if (8 == d) d = 0;
+	}
+	else
+	{
+		d--;
+		if (-1 == d) d = 7;
+	}
+
+	setDirection(d);
+	_cacheInvalid = true;
+}
+
+/**
+ * Regulates init, direction & duration of the death spin-cycle.
+ * see UnitDieBState::think()
+ * @ return int, Tracks deathspin rotation
+ */
+int BattleUnit::getSpinPhase()
+{
+	return _spinPhase;
+}
+
+/**
+ * Sets the spinPhase of a unit.
+ * see UnitDieBState::UnitDieBState() ctor
+ * @ param spinphase, The spinPhase to set
+ */
+void BattleUnit::setSpinPhase(int spinphase)
+{
+	_spinPhase = spinphase;
+}
+
 }

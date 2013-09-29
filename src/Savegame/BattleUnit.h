@@ -70,7 +70,7 @@ private:
 	int _verticalDirection;
 	Position _destination;
 	UnitStatus _status;
-	int _walkPhase, _fallPhase;
+	int _walkPhase, _fallPhase, _spinPhase;
 	std::vector<BattleUnit *> _visibleUnits, _unitsSpottedThisTurn;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
@@ -414,6 +414,14 @@ public:
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
 	int getCoverReserve();
+	/// Initializes a death spin.
+	void initDeathSpin();
+	/// Continues a death spin.
+	void contDeathSpin();
+	/// Regulates init, direction & duration of the death spin-cycle.
+	int getSpinPhase();
+	/// Sets the spinPhase of a unit.
+	void setSpinPhase(int spinphase);
 };
 
 }

@@ -66,9 +66,22 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		if (_unit->getFaction() == FACTION_PLAYER)
 			_parent->getMap()->setUnitDying(true);
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		_originalDir = _unit->getDirection();
-		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
+		_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns.
+
+		_unit->setSpinPhase(-1); // safety. (esp. for newly spawned units)
+
+		if (!_unit->getSpawnUnit().empty())
+		{
+			// unit goes into status TURNING to prepare for a nice dead animation
+			_unit->lookAt(3); // else -> STATUS_STANDING (...)
+		}
+		else if (_unit->getVisible())
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED /2);
+			_unit->initDeathSpin(); // -> STATUS_TURNING
+		}
 	}
 
 	_unit->clearVisibleTiles();
@@ -109,15 +122,21 @@ void UnitDieBState::think()
 {
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		_unit->turn();
+		if (_unit->getSpinPhase() > -1)
+		{
+			_unit->contDeathSpin(); // -> STATUS_STANDING
+		}
+		else
+			_unit->turn(); // -> STATUS_STANDING
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
-		_unit->keepFalling();
+		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 	else if (!_unit->isOut())
 	{
-		_unit->startFalling();
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		_unit->startFalling(); // -> STATUS_COLLAPSING
 
 		if (!_noSound)
 		{
