@@ -810,7 +810,8 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	std::vector<BattleUnit*> spotters;
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	Tile *tile = unit->getTile();
+	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 			// not dead/unconscious
 		if (!(*i)->isOut() &&
@@ -819,12 +820,15 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// closer than 20 tiles
 			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
 		{
+			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
+			originVoxel.z -= 2;
+			Position targetVoxel;
 			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually see the unit
-				visible(*i, unit->getTile()))
+				canTargetUnit(&originVoxel, tile, &targetVoxel, *i))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -898,9 +902,15 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		weapon->getAmmoItem() &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
 	{
-		Position origin = getSightOriginVoxel(unit);
-		Position scanVoxel;
-		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
+		Position originVoxel = getSightOriginVoxel(unit);
+		originVoxel.z -= 2;
+		Position targetVoxel = getSightOriginVoxel(target);
+		targetVoxel.z -= 2;
+		std::vector<Position> trajectory;
+		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4 &&
+			trajectory.back().x / 16 == targetVoxel.x / 16 &&
+			trajectory.back().y / 16 == targetVoxel.y / 16 &&
+			trajectory.back().z / 24 == targetVoxel.z / 24)
 		{
 			return true;
 		}
@@ -920,6 +930,10 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
 	action.actor = unit;
 	action.weapon = unit->getMainHandWeapon();
+	if (!action.weapon)
+	{
+		return false;
+	}
 	// reaction fire is ALWAYS snap shot.
 	action.type = BA_SNAPSHOT;
 	// unless we're a melee unit.
@@ -930,7 +944,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
-	if (action.weapon && action.weapon->getAmmoItem() && action.weapon->getAmmoItem()->getAmmoQuantity() && unit->getTimeUnits() >= action.TU)
+	if (action.weapon->getAmmoItem() && action.weapon->getAmmoItem()->getAmmoQuantity() && unit->getTimeUnits() >= action.TU)
 	{
 		action.targeting = true;
 
@@ -955,13 +969,13 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 			}
 		}
 
-		if (unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)) && action.targeting)
+		if (action.targeting && unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)))
 		{
 			action.TU = 0;
 			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
 			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));
+			return true;
 		}
-		return true;
 	}
 	return false;
 }
