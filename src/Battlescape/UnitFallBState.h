@@ -26,6 +26,8 @@ namespace OpenXcom
 
 class BattlescapeGame;
 class TileEngine;
+class Tile;
+class BattleUnit;
 
 /**
  * State for falling units.
@@ -34,6 +36,8 @@ class UnitFallBState : public BattleState
 {
 private:
 	TileEngine *_terrain;
+	std::vector<Tile*> tilesToFallInto;
+	std::vector<BattleUnit*> unitsToMove;
 public:
 	/// Creates a new UnitWalkBState class
 	UnitFallBState(BattlescapeGame *parent);
