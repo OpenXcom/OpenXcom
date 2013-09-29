@@ -76,12 +76,14 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	_debugPlay = false;
 	_playerPanicHandled = true;
 	_AIActionCounter = 0;
+	_AISecondMove = false;
 	_currentAction.actor = 0;
 
 	checkForCasualties(0, 0, true);
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
+	
 }
 
 
@@ -112,7 +114,7 @@ void BattlescapeGame::think()
 				}
 				else
 				{
-					if (_save->selectNextPlayerUnit(true, true) == 0)
+					if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -166,14 +168,13 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	std::wstringstream ss;
 
 	_tuReserved = BA_NONE;
-
-	// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-	// melee get more because chryssalids and reapers need to attack many times to be scary
-	const int AIActionLimit = (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
-
-	if (unit->getTimeUnits() <= 5 || (unit->_hidingForTurn && unit->getPosition() == unit->lastCover && _AIActionCounter >= 2) || _AIActionCounter > AIActionLimit )
+	if (unit->getTimeUnits() <= 5)
 	{
-		if (_save->selectNextPlayerUnit(true, true) == 0)
+		unit->dontReselect();
+	}
+	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2)
+	{
+		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -189,6 +190,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		if (_save->getSelectedUnit())
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+			if (_save->getSelectedUnit()->getId() <= unit->getId())
+			{
+				_AISecondMove = true;
+			}
 		}
 		_AIActionCounter = 0;
 		return;
@@ -316,7 +321,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
-		if (_save->selectNextPlayerUnit(true, true) == 0)
+		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -332,6 +337,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		if (_save->getSelectedUnit())
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+			if (_save->getSelectedUnit()->getId() <= unit->getId())
+			{
+				_AISecondMove = true;
+			}
 		}
 	}
 }
@@ -378,6 +387,7 @@ void BattlescapeGame::endTurn()
 	_currentAction.waypoints.clear();
 	_parentState->showLaunchButton(false);
 	_currentAction.targeting = false;
+	_AISecondMove = false;
 
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
@@ -848,7 +858,8 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
+				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -856,7 +867,7 @@ void BattlescapeGame::popState()
 						getMap()->cacheUnit(_save->getSelectedUnit());
 					}
 					_AIActionCounter = 0;
-					if (_save->selectNextPlayerUnit(true, true) == 0 && _states.empty())
+					if (_save->selectNextPlayerUnit(true) == 0 && _states.empty())
 					{
 						if (!_save->getDebugMode())
 						{

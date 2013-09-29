@@ -76,6 +76,7 @@ private:
 	bool _playerPanicHandled;
 	int _AIActionCounter;
 	BattleAction _currentAction;
+	bool _AISecondMove;
 
 	/// Ends the turn.
 	void endTurn();
