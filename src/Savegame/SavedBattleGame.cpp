@@ -68,6 +68,13 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
 	_strafeEnabled = Options::getBool("strafe");
 	_sneaky = Options::getBool("sneakyAI");
 	_traceAI = Options::getBool("traceAI");
+	
+	_tileSearch.resize(11*11);
+	for (int i = 0; i < 121; ++i)
+	{
+		_tileSearch[i].x = ((i%11) - 5);
+		_tileSearch[i].y = ((i/11) - 5); 
+	}
 }
 
 /**
@@ -1635,6 +1642,14 @@ void SavedBattleGame::resetTiles()
 	{
 		_tiles[i]->setDiscovered(false, 2);
 	}
+}
+
+/**
+ * @return the tilesearch vector for use in AI functions.
+ */
+const std::vector<Position> SavedBattleGame::getTileSearch()
+{
+	return _tileSearch;
 }
 
 /**
