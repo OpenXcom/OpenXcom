@@ -108,9 +108,6 @@ int Projectile::calculateTrajectory(double accuracy)
 				originVoxel.z -= 4;
 			}
 		}
-		direction = bu->getDirection();
-		if (bu->getTurretType() != -1)
-			direction = bu->getTurretDirection();
 		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
 		originVoxel.x += offset;
 		originVoxel.y += offset;
