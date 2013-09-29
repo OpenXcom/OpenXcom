@@ -462,8 +462,9 @@ void StartState::think()
 
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
-			std::string introSoundFile = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
-			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && CrossPlatform::fileExists(introSoundFile))
+			std::string introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
+			std::string introSoundFileWin = CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
+			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && (CrossPlatform::fileExists(introSoundFileDOS) || CrossPlatform::fileExists(introSoundFileWin)))
 			{
 				audioSequence = new AudioSequence(_game->getResourcePack());
 				Flc::flc.realscreen = _game->getScreen();
