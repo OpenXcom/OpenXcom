@@ -1412,23 +1412,6 @@ int SavedBattleGame::getDragPixelTolerance() const
 }
 
 /**
- * Gets the number of units that can see the given unit.
- * @param unit The unit to check for visibility.
- * @return The number of spotting units.
- */
-int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
-{
-	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i) // cheating! perhaps only consider visible units here
-	{																															// k
-		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
-		if (find != (*i)->getVisibleUnits()->end())
-			++spotting;
-	}
-	return spotting;
-}
-
-/**
  * @brief Checks whether anyone on a particular faction is looking at the unit.
  *
  * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.

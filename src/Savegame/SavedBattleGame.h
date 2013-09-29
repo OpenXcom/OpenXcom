@@ -205,8 +205,6 @@ public:
 	int getDragTimeTolerance() const;
 	/// Gets DragPixelTolerance.
 	int getDragPixelTolerance() const;
-	/// Gets the number of units that can see this unit.
-	int getSpottingUnits(BattleUnit* unit) const;
 	/// Adds this unit to the vector of falling units.
 	bool addFallingUnit(BattleUnit* unit);
 	/// Gets the vector of falling units.

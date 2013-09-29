@@ -362,64 +362,6 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 }
 
 /**
- * @brief Find all the soldiers that would see the queryingUnit at the tile (aka tilePos) and collect some statistics for AI.
- * @param tile The tile to check.
- * @param tilePos The position of the tile to check, redundantly.
- * @param queryingUnit The unit to temporarily place at tilePos for calculations.
- * @return False if the unit couldn't possibly be placed at tile (i.e., something's blocking it), true otherwise.
- */
-bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
-{
-	if (tile->soldiersVisible != -1) return true; // already calculated this turn
-
-	if (!_save->setUnitPosition(queryingUnit, tilePos, true))
-	{
-		return false;
-	}
-
-	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
-	tile->closestSoldierDSqr = INT_MAX;
-	tile->closestAlienDSqr = INT_MAX;
-
-	int dsqrTotal = 0;
-
-	Position targetVoxel = tile->getPosition() * Position(16, 16, 24) + Position(8, 8, 8 - tile->getTerrainLevel());
-
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		if ((*i)->isOut()) continue;
-
-		int dsqr = distanceSq(tilePos, (*i)->getPosition());
-		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
-
-		if (dsqr > (MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)) continue; // can't even see that far, yo
-
-		Position originVoxel = getSightOriginVoxel(*i);
-		int target = calculateLine(originVoxel, targetVoxel, false, 0, *i, true, false, *i);
-		if ((*i)->getFaction() == FACTION_PLAYER && target == -1)
-		{
-			++tile->soldiersVisible;
-
-			if (dsqr < tile->closestSoldierDSqr)
-			{
-				tile->closestSoldierDSqr = dsqr;
-			}
-
-			dsqrTotal += dsqr;
-		}
-
-		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->closestAlienDSqr) tile->closestAlienDSqr = dsqr;
-	}
-
-	if (tile->soldiersVisible == 0)
-	{
-		tile->closestSoldierDSqr = -1; 
-	}
-	
-	return true;
-}
-
-/**
  * Gets the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7??
  * @param currentUnit The watcher.
  * @return Approximately an eyeball voxel.

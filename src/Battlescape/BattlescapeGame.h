@@ -162,8 +162,6 @@ public:
 	ResourcePack *getResourcePack();
 	/// Gets the ruleset.
 	const Ruleset *getRuleset() const;
-	/// Evaluates the threats from XCom soldiers to tiles, for later use by AI.
-	void resetSituationForAI();
 	static bool _debugPlay;
 	/// Returns whether panic has been handled.
 	bool getPanicHandled() { return _playerPanicHandled; }
@@ -185,9 +183,6 @@ public:
 	void setKneelReserved(bool reserved);
 	/// Checks the kneel reservation setting.
 	bool getKneelReserved();
-	/// Attempts a psionic attack on an enemy we "know of".
-	bool psiAction(BattleAction *action);
-
 };
 
 }

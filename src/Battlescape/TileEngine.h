@@ -83,8 +83,6 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Calculates a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
-	/// Finds all the soldiers that would see queryingUnit at tile (aka tilePos) and collects some statistics for AI.
-	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);
 	/// Gets the origin voxel of a unit's eyesight.
 	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	/// Checks visibility of a unit on this tile.
