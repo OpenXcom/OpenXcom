@@ -90,10 +90,8 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 8, pixelSrc += 8)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			SDL_Swap64(dataSrc);
-#endif
+			SDL_SwapLE64(dataSrc);
 /* expanded form of of data shift: 
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 				((dataSrc & 0xFF00 ) << 8) | ((dataSrc & 0xFF00)) << 16)  | 
@@ -160,13 +158,11 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
 		{
 			dataSrc = *((Uint32*) pixelSrc);
-			
-			
-			#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+
 			// boo
-			dataSrc = SDL_Swap32(dataSrc);
+			dataSrc = SDL_SwapLE32(dataSrc);
 			
-			dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
 				((dataSrc & 0xFF00) << 16)  );
 
 			*pixelDst = dataDst;
@@ -176,34 +172,13 @@ static int zoomSurface2X_32bit(SDL_Surface *src, SDL_Surface *dst)
 
 			dataSrc >>= 16; 
 
-			dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
 				((dataSrc & 0xFF00) << 16)  );
 
 			*pixelDst = dataDst;
 			*pixelDst2 = dataDst;
 			pixelDst++; // forward 4 bytes!
-			pixelDst2++;	
-			#else
-			
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-				((dataSrc & 0xFF00) << 16) ;
-
-			*pixelDst = dataDst;
-			*pixelDst2 = dataDst;
-			pixelDst++; // forward 4 bytes!
 			pixelDst2++;
-
-			dataSrc >>= 16; 
-
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-				((dataSrc & 0xFF00) << 16) ;
-
-			*pixelDst = dataDst;
-			*pixelDst2 = dataDst;
-			pixelDst++; // forward 4 bytes!
-			pixelDst2++;	
-			
-			#endif
 		}
 		
 	}
@@ -239,10 +214,8 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 8, pixelSrc += 8)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			SDL_Swap64(dataSrc);
-#endif
+			SDL_SwapLE64(dataSrc);
 			/* expanded form of of data shift:
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 				((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
@@ -303,21 +276,13 @@ static int zoomSurface4X_32bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
 		{
 			dataSrc = *((Uint32*) pixelSrc);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			dataSrc = SDL_Swap32(dataSrc);
+			dataSrc = SDL_SwapLE32(dataSrc);
 			
 			for (int i = 0; i < 4; ++i)
 			{
-				dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) ); 
-#else
-			for (int i = 0; i < 4; ++i)
-			{
-				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24); 
-
-#endif
 
 				*pixelDst = dataDst;
 				*pixelDst2 = dataDst;
@@ -392,22 +357,13 @@ static int zoomSurface2X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
 		{
 			dataSrc = *((Uint32*) pixelSrc);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			dataSrc = SDL_Swap32(dataSrc);
+			dataSrc = SDL_SwapLE32(dataSrc);
 			
 			for (int i = 0; i < 2; ++i)
 			{
-				dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
+				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
 					((dataSrc & 0xFF00) << 16) );
-			
-#else
-			for (int i = 0; i < 2; ++i)
-			{
-				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) | 
-					((dataSrc & 0xFF00) << 16);
-
-#endif
 
 				int j = 0;
 				do
@@ -483,21 +439,14 @@ static int zoomSurface4X_XAxis_32bit(SDL_Surface *src, SDL_Surface *dst)
 		for (sx = 0; sx < src->w; sx += 4, pixelSrc += 4)
 		{
 			dataSrc = *((Uint32*) pixelSrc);
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 			// boo
-			dataSrc = SDL_Swap32(dataSrc);
+			dataSrc = SDL_SwapLE32(dataSrc);
 			
 			for (int i = 0; i < 4; ++i)
 			{
-				dataDst = SDL_Swap32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+				dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24) ); 
 			
-#else
-			for (int i = 0; i < 4; ++i)
-			{
-				dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
-					((dataSrc & 0xFF) << 16) | ((dataSrc & 0xFF ) << 24); 
-#endif
 				int j = 0;
 				do
 				{

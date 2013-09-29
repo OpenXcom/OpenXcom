@@ -297,17 +297,12 @@ void Surface::loadSpk(const std::string &filename)
 
 	while (imgFile.read((char*)&flag, sizeof(flag)))
 	{
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		flag = SDL_Swap16( flag );
-	#endif			
+		flag = SDL_SwapLE16(flag);
 	
 		if (flag == 65535)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		flag = SDL_Swap16( flag );
-	#endif			
+			flag = SDL_SwapLE16(flag);
 			
 			for (int i = 0; i < flag * 2; ++i)
 			{
@@ -317,10 +312,7 @@ void Surface::loadSpk(const std::string &filename)
 		else if (flag == 65534)
 		{
 			imgFile.read((char*)&flag, sizeof(flag));
-			
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		flag = SDL_Swap16( flag );
-	#endif			
+			flag = SDL_SwapLE16(flag);
 			
 			for (int i = 0; i < flag * 2; ++i)
 			{

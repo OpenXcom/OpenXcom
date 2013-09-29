@@ -131,6 +131,7 @@ void createDefault()
 	setBool("borderless", false);
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
+	setBool("battleHairBleach", true);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

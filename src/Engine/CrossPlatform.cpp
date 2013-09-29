@@ -483,6 +483,8 @@ std::string endPath(const std::string &path)
 std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext)
 {
 	std::vector<std::string> files;
+	std::string extl = ext;
+	std::transform(extl.begin(), extl.end(), extl.begin(), ::tolower);
 
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
@@ -504,12 +506,13 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 		{
 			continue;
 		}
-		if (!ext.empty())
+		if (!extl.empty())
 		{
-			if (file.length() >= ext.length() + 1)
+			if (file.length() >= extl.length() + 1)
 			{
-				std::string end = file.substr(file.length() - ext.length() - 1);
-				if (end != "." + ext)
+				std::string end = file.substr(file.length() - extl.length() - 1);
+				std::transform(end.begin(), end.end(), end.begin(), ::tolower);
+				if (end != "." + extl)
 				{
 					continue;
 				}
@@ -587,6 +590,30 @@ bool deleteFile(const std::string &path)
 #else
 	return (remove(path.c_str()) == 0);
 #endif
+}
+
+/**
+* Gets the base filename of a path.
+* @param path Full path to file.
+* @return Base filename.
+*/
+std::string baseFilename(const std::string &path, int (*transform)(int))
+{
+	size_t sep = path.find_last_of(PATH_SEPARATOR);
+	std::string filename;
+	if (sep == std::string::npos)
+	{
+		filename = path;
+	}
+	else
+	{
+		filename = path.substr(0, sep + 1);
+	}
+	if (transform != 0)
+	{
+		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
+	}
+	return filename;
 }
 
 }

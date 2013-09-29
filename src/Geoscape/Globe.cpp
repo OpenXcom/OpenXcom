@@ -570,15 +570,10 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 		Polygon* poly;
 		int points;
 		
-		#ifdef __MORPHOS__ 
-		for( int z=0; z < 10 ; z++ )
+		for (int i = 0; i < 10; ++i)
 		{
-			char *ptr = (char *)&value[ z ];
-			char tmp = ptr[ 0 ];
-			ptr[ 0 ] = ptr[ 1 ];
-			ptr[ 1 ] = tmp;
+			value[i] = SDL_SwapLE16(value[i]);
 		}
-		#endif
 
 		if (value[6] != -1)
 		{

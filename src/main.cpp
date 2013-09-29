@@ -80,5 +80,5 @@ int main(int argc, char** args)
 
 
 #ifdef __MORPHOS__
-const char Version[] = "$VER: OpenXCom 0.9 (" __AMIGADATE__  ")";
+const char Version[] = "$VER: OpenXCom " OPENXCOM_VERSION_SHORT " (" __AMIGADATE__  ")";
 #endif
