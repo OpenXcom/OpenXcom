@@ -155,13 +155,12 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	}
 	else
 	{
-		_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
-		_totalTUCost = 0;
+		abortPath(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
 	}
 	// Now try through A*.
 	if (!aStarPath(startPosition, endPosition, target, sneak, maxTUCost))
 	{
-		_path.clear();
+		abortPath();
 	}
 }
 
