@@ -209,7 +209,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
-		throw Exception("Version mismatch");
+		//throw Exception("Version mismatch");
 	}
 	_time->load(brief["time"]);
 

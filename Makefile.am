@@ -462,10 +462,14 @@ openxcom_SOURCES = \
 	src/Interface/Cursor.h \
 	src/Interface/FpsCounter.cpp \
 	src/Interface/FpsCounter.h \
+	src/Interface/Frame.cpp \
+	src/Interface/Frame.h \
 	src/Interface/ImageButton.cpp \
 	src/Interface/ImageButton.h \
 	src/Interface/NumberText.cpp \
 	src/Interface/NumberText.h \
+	src/Interface/Slider.cpp \
+	src/Interface/Slider.h \
 	src/Interface/TextButton.cpp \
 	src/Interface/TextButton.h \
 	src/Interface/Text.cpp \
@@ -669,9 +673,6 @@ openxcom_SOURCES = \
 EXTRA_DIST = \
 	autogen.sh \
 	docs/openxcom.6.xml \
-	src/OpenXcom.2008.sln \
-	src/OpenXcom.2008.vcproj \
-	src/OpenXcom.2008.vcproj.user \
 	src/OpenXcom.2010.sln \
 	src/OpenXcom.2010.vcxproj \
 	src/OpenXcom.2010.vcxproj.filters \

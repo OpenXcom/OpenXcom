@@ -299,6 +299,7 @@
 #include "./Interface/ImageButton.h"
 #include "./Interface/TextList.h"
 #include "./Interface/Slider.h"
+#include "./Interface/Frame.h"
 #include "./lodepng.h"
 #include "./Menu/SaveState.h"
 #include "./Menu/DeleteGameState.h"
