@@ -77,23 +77,15 @@ int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 {
 	Position originVoxel, targetVoxel;
 	Tile *targetTile = 0;
-	int direction;
-	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
-	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
-	int offset = 0;
 	int smokeDensity;
+	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
+	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+	// maybe if i get around to making that function to calculate a firepoint origin for fire point estimations i'll use the array above
+	// so i'll leave it commented for the time being.
 
 	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
 	BattleUnit *bu = _action.actor;
-
-	if (bu->getArmor()->getSize() > 1)
-	{
-		offset = 16;
-	}
-	else if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND") && !_action.weapon->getRules()->isTwoHanded())
-	{
-		offset = 8;
-	}
+	int offset = 8 * bu->getArmor()->getSize();
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (_action.actor->getPosition() == _origin)
@@ -119,11 +111,9 @@ int Projectile::calculateTrajectory(double accuracy, bool doCalcChance)
 				originVoxel.z -= 4;
 			}
 		}
-		direction = bu->getDirection();
-		if (bu->getTurretType() != -1)
-			direction = bu->getTurretDirection();
-		originVoxel.x += dirXshift[direction+offset]*bu->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction+offset]*bu->getArmor()->getSize();
+		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
+		originVoxel.x += offset;
+		originVoxel.y += offset;
 	}
 	else
 	{

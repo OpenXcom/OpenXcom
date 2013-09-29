@@ -66,20 +66,20 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_ADVANCED_OPTIONS"));
+	_txtTitle->setText(tr("STR_ADVANCED_OPTIONS"));
 	
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&AdvancedOptionsState::btnOkClick);
 	//_btnOk->onKeyboardPress((ActionHandler)&AdvancedOptionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&AdvancedOptionsState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&AdvancedOptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
-	_btnDefault->setText(_game->getLanguage()->getString("STR_RESTORE_DEFAULTS"));
+	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
 	_btnDefault->onMouseClick((ActionHandler)&AdvancedOptionsState::btnDefaultClick);
 	
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
@@ -120,9 +120,9 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 	{
 		std::string settingName = (*i).first;
 		(*i).second = Options::getBool(settingName);
-		std::wstring setting =  (*i).second ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
+		std::wstring setting =  (*i).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), setting.c_str());
+		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), setting.c_str());
 		++sel;
 	}
 	
@@ -144,7 +144,7 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
 			ss << (*i).second;
 		}
 		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, _game->getLanguage()->getString("STR_" + settingName).c_str(), ss.str().c_str());
+		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
 		++sel;
 	}
 
@@ -201,12 +201,12 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 		if (i->first == "playIntro")
 		{
 			i->second = true;
-			_lstOptions->setCellText(sel, 1, _game->getLanguage()->getString("STR_YES").c_str());
+			_lstOptions->setCellText(sel, 1, tr("STR_YES").c_str());
 		}
 		else
 		{
 			i->second = false;
-			_lstOptions->setCellText(sel, 1, _game->getLanguage()->getString("STR_NO").c_str());
+			_lstOptions->setCellText(sel, 1, tr("STR_NO").c_str());
 		}
 		++sel;
 	}
@@ -233,7 +233,7 @@ void AdvancedOptionsState::lstOptionsClick(Action *)
 	if (sel < _boolQuantity)
 	{
 		_settingBoolSet.at(sel).second = !_settingBoolSet.at(sel).second;
-		settingText = _settingBoolSet.at(sel).second ? _game->getLanguage()->getString("STR_YES").c_str() : _game->getLanguage()->getString("STR_NO").c_str();
+		settingText = _settingBoolSet.at(sel).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
 	}
 	else // integer variables will need special handling
 	{
@@ -289,7 +289,7 @@ void AdvancedOptionsState::lstOptionsMouseOver(Action *)
 
 	transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
 	ss << "STR_" << settingName.c_str() << "_DESC";
-	_txtDescription->setText(_game->getLanguage()->getString(ss.str()).c_str());
+	_txtDescription->setText(tr(ss.str()).c_str());
 }
 
 void AdvancedOptionsState::lstOptionsMouseOut(Action *)
@@ -302,13 +302,13 @@ std::wstring AdvancedOptionsState::updatePathString(int sel)
 	switch (_settingIntSet.at(sel).second)
 	{
 	case 0:
-		return _game->getLanguage()->getString("STR_NONE_UC");
+		return tr("STR_NONE_UC");
 	case 1:
-		return _game->getLanguage()->getString("STR_ARROWS");
+		return tr("STR_ARROWS");
 	case 2:
-		return _game->getLanguage()->getString("STR_TU_COST");
+		return tr("STR_TU_COST");
 	case 3:
-		return _game->getLanguage()->getString("STR_FULL");
+		return tr("STR_FULL");
 	default:
 		break;
 	}

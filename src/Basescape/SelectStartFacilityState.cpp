@@ -65,7 +65,7 @@ void SelectStartFacilityState::populateBuildList()
 	_lstFacilities->clearList();
 	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		_lstFacilities->addRow(1, _game->getLanguage()->getString((*i)->getType()).c_str());
+		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
 	}
 }
 
@@ -85,7 +85,7 @@ void SelectStartFacilityState::lstFacilitiesClick(Action *)
 void SelectStartFacilityState::facilityBuilt()
 {
 	_facilities.erase(_facilities.begin() + _lstFacilities->getSelectedRow());
-	if( _facilities.size() == 0 )
+	if( _facilities.empty() )
 	{
 		_game->popState();
 		_game->popState(); // return to geoscape, force timer to start.

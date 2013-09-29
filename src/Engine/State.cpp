@@ -72,36 +72,8 @@ void State::add(Surface *surface)
 	surface->setPalette(_game->getScreen()->getPalette());
 
 	// Set default fonts
-	Text *t = dynamic_cast<Text*>(surface);
-	TextButton *tb = dynamic_cast<TextButton*>(surface);
-	TextEdit *te = dynamic_cast<TextEdit*>(surface);
-	TextList *tl = dynamic_cast<TextList*>(surface);
-	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
-	BaseView *bv = dynamic_cast<BaseView*>(surface);
-	if (t)
-	{
-		t->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (tb)
-	{
-		tb->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (te)
-	{
-		te->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (tl)
-	{
-		tl->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (bv)
-	{
-		bv->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (wm)
-	{
-		wm->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
+	if (_game->getResourcePack())
+		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 
 	_surfaces.push_back(surface);
 }
@@ -238,17 +210,8 @@ void State::centerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		TextList *tl = dynamic_cast<TextList*>(*i);
-		if (tl)
-		{
-			tl->setAllX((*i)->getX() + Screen::getDX());
-			tl->setAllY((*i)->getY() + Screen::getDY());
-		}
-		else
-		{
-			(*i)->setX((*i)->getX() + Screen::getDX());
-			(*i)->setY((*i)->getY() + Screen::getDY());
-		}
+		(*i)->setX((*i)->getX() + Screen::getDX());
+		(*i)->setY((*i)->getY() + Screen::getDY());
 	}
 }
 
@@ -256,15 +219,7 @@ void State::lowerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		TextList *tl = dynamic_cast<TextList*>(*i);
-		if (tl)
-		{
-			tl->setAllY((*i)->getY() + Screen::getDY() / 2);
-		}
-		else
-		{
-			(*i)->setY((*i)->getY() + Screen::getDY() / 2);
-		}
+		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
 	}
 }
 

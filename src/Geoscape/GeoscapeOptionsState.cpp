@@ -65,26 +65,26 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setColor(Palette::blockOffset(15)-1);
-	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_GAME"));
+	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(15)-1);
-	_btnSave->setText(_game->getLanguage()->getString("STR_SAVE_GAME"));
+	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)-1);
-	_btnAbandon->setText(_game->getLanguage()->getString("STR_ABANDON_GAME"));
+	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
 	_btnAbandon->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&GeoscapeOptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_GAME_OPTIONS"));
+	_txtTitle->setText(tr("STR_GAME_OPTIONS"));
 
 	if (Options::getInt("autosave") >= 2)
 	{

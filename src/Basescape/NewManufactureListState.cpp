@@ -75,15 +75,15 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_PRODUCTION_ITEMS"));
+	_txtTitle->setText(tr("STR_PRODUCTION_ITEMS"));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtCategory->setColor(Palette::blockOffset(15)+1);
-	_txtCategory->setText(_game->getLanguage()->getString("STR_CATEGORY"));
+	_txtCategory->setText(tr("STR_CATEGORY"));
 
 	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
 	_lstManufacture->setSelectable(true);
@@ -94,7 +94,7 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	_lstManufacture->onMouseClick((ActionHandler)&NewManufactureListState::lstProdClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewManufactureListState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewManufactureListState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 }
@@ -149,7 +149,7 @@ void NewManufactureListState::fillProductionList()
 
 	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
 	{
-		_lstManufacture->addRow(2, _game->getLanguage()->getString((*it)->getName()).c_str(), _game->getLanguage()->getString((*it)->getCategory ()).c_str());
+		_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory ()).c_str());
 	}
 }
 

@@ -18,6 +18,7 @@
  */
 #include "ActionMenuItem.h"
 #include "../Interface/Text.h"
+#include "../Interface/Frame.h"
 #include "../Engine/Palette.h"
 
 namespace OpenXcom
@@ -33,6 +34,12 @@ namespace OpenXcom
  */
 ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : InteractiveSurface(270, 40, x + 25, y - (id*40)), _id(id), _highlighted(false), _action(BA_NONE), _tu(0)
 {
+	_frame = new Frame(getWidth(), getHeight(), 0, 0);
+	_frame->setHighContrast(true);
+	_frame->setColor(Palette::blockOffset(0)+7);
+	_frame->setBackground(Palette::blockOffset(0)+14);
+	_frame->setThickness(9);
+
 	_txtDescription = new Text(200, 20, 10, 13);
 	_txtDescription->setFonts(big, small);
 	_txtDescription->setBig();
@@ -58,6 +65,7 @@ ActionMenuItem::ActionMenuItem(int id, Font *big, Font *small, int x, int y) : I
  */
 ActionMenuItem::~ActionMenuItem()
 {
+	delete _frame;
 	delete _txtDescription;
 	delete _txtAcc;
 	delete _txtTU;
@@ -78,7 +86,7 @@ void ActionMenuItem::setAction(BattleActionType action, std::wstring description
 	_txtAcc->setText(accuracy);
 	_txtTU->setText(timeunits);
 	_tu = tu;
-	draw();
+	_redraw = true;
 }
 
 /**
@@ -108,6 +116,7 @@ int ActionMenuItem::getTUs() const
 void ActionMenuItem::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
+	_frame->setPalette(colors, firstcolor, ncolors);
 	_txtDescription->setPalette(colors, firstcolor, ncolors);
 	_txtAcc->setPalette(colors, firstcolor, ncolors);
 	_txtTU->setPalette(colors, firstcolor, ncolors);
@@ -118,44 +127,9 @@ void ActionMenuItem::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  */
 void ActionMenuItem::draw()
 {
-	SDL_Rect square;
-	Uint8 color = 11;
-
-	clear();
-
-	square.x = 0;
-	square.w = getWidth();
-
-	square.y = 0;
-	square.h = getHeight();
-
-	for (int i = 0; i < 9; ++i)
-	{
-		if (i == 8 && _highlighted)
-			color -= 4;
-		drawRect(&square, color);
-		if (i < 3)
-			color-=2;
-		else
-			color+=2;
-		square.x++;
-		square.y++;
-		if (square.w >= 2)
-			square.w -= 2;
-		else
-			square.w = 1;
-
-		if (square.h >= 2)
-			square.h -= 2;
-		else
-			square.h = 1;
-	}
-
-	_txtDescription->draw();
+	_frame->blit(this);
 	_txtDescription->blit(this);
-	_txtAcc->draw();
 	_txtAcc->blit(this);
-	_txtTU->draw();
 	_txtTU->blit(this);
 }
 
@@ -167,6 +141,7 @@ void ActionMenuItem::draw()
 void ActionMenuItem::mouseIn(Action *action, State *state)
 {
 	_highlighted = true;
+	_frame->setBackground(Palette::blockOffset(0) + 11);
 	draw();
 	InteractiveSurface::mouseIn(action, state);
 }
@@ -180,6 +155,7 @@ void ActionMenuItem::mouseIn(Action *action, State *state)
 void ActionMenuItem::mouseOut(Action *action, State *state)
 {
 	_highlighted = false;
+	_frame->setBackground(Palette::blockOffset(0) + 14);
 	draw();
 	InteractiveSurface::mouseOut(action, state);
 }

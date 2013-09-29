@@ -28,7 +28,7 @@ namespace OpenXcom
 class Game;
 class Text;
 class InteractiveSurface;
-class Window;
+class Frame;
 class Surface;
 
 /**
@@ -43,7 +43,7 @@ private:
 	BattleItem *_grenadeInInventory;
 	Text *_number[24];
 	Text *_title;
-	Window *_window;
+	Frame *_frame;
 	InteractiveSurface *_button[24];
 	Surface *_bg;
 public:

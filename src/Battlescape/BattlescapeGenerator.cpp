@@ -57,7 +57,8 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
-#include "PatrolBAIState.h"
+#include "CivilianBAIState.h"
+#include "AlienBAIState.h"
 #include "Pathfinding.h"
 
 namespace OpenXcom
@@ -359,8 +360,9 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
 		{
-			addXCOMVehicle(*i);
-
+			BattleUnit *unit = addXCOMVehicle(*i);
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
 		}
 	}
 	else if (_base != 0)
@@ -368,7 +370,9 @@ void BattlescapeGenerator::deployXCOM()
 		// add vehicles that are in the base inventory
 		for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 		{
-			addXCOMVehicle(*i);
+			BattleUnit *unit = addXCOMVehicle(*i);
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
 		}
 	}
 
@@ -479,8 +483,9 @@ void BattlescapeGenerator::deployXCOM()
  * Adds an XCom vehicle to the game.
  * Sets the correct turret depending on the ammo type.
  * @param v Pointer to the Vehicle.
+ * @return Pointer to the spawned unit.
  */
-void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
+BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 {
 	std::string vehicle = v->getRules()->getType();
 	Unit *rule = _game->getRuleset()->getUnit(vehicle);
@@ -495,6 +500,7 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 		}
 		unit->setTurretType(v->getRules()->getTurretType());
 	}
+	return unit;
 }
 
 /**
@@ -650,12 +656,12 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
-			dir = unit->getDirectionTo(craft);
+			dir = unit->directionTo(craft);
 		if (dir != -1)
 			unit->setDirection(dir);
 		else
@@ -692,7 +698,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 
 		// we only add a unit if it has a node to spawn on.
@@ -701,7 +707,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}

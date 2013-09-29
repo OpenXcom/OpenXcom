@@ -75,34 +75,34 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_INTERCEPTION_CRAFT"));
+	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
-	std::wstring baseName = _game->getLanguage()->getString("STR_BASE_");
+	std::wstring baseName = tr("STR_BASE_");
 	baseName += _base->getName();
 	_txtBase->setText(baseName);
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
+	_txtName->setText(tr("STR_NAME_UC"));
 
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
-	_txtStatus->setText(_game->getLanguage()->getString("STR_STATUS"));
+	_txtStatus->setText(tr("STR_STATUS"));
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
-	_txtWeapon->setText(_game->getLanguage()->getString("STR_WEAPON_SYSTEMS"));
+	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
-	_txtCrew->setText(_game->getLanguage()->getString("STR_CREW"));
+	_txtCrew->setText(tr("STR_CREW"));
 
 	_txtHwp->setColor(Palette::blockOffset(15)+1);
-	_txtHwp->setText(_game->getLanguage()->getString("STR_HWPS"));
+	_txtHwp->setText(tr("STR_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
@@ -134,7 +134,7 @@ void CraftsState::init()
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumVehicles();
-		_lstCrafts->addRow(5, (*i)->getName(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
+		_lstCrafts->addRow(5, (*i)->getName(_game->getLanguage()).c_str(), tr((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
 	}
 }
 

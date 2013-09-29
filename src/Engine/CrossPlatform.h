@@ -55,6 +55,8 @@ namespace CrossPlatform
 	bool fileExists(const std::string &path);
 	/// Deletes the specified file.
 	bool deleteFile(const std::string &path);
+	/// Gets the basename of a file.
+	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
 }
 
 }

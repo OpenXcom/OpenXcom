@@ -85,7 +85,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseDefenseState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&BaseDefenseState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -94,12 +94,12 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	std::wstringstream ss;
-	ss << _base->getName() << _game->getLanguage()->getString("STR_UNDER_ATTACK");
+	ss << _base->getName() << tr("STR_UNDER_ATTACK");
 	_txtTitle->setText(ss.str());
 	_txtInit->setVisible(false);
 
 	_txtInit->setColor(Palette::blockOffset(13)+10);
-	_txtInit->setText(_game->getLanguage()->getString("STR_BASE_DEFENSES_INITIATED"));
+	_txtInit->setText(tr("STR_BASE_DEFENSES_INITIATED"));
 
 	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
@@ -149,7 +149,7 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 		case BDA_DESTROY:
-			_lstDefenses->addRow(2, _game->getLanguage()->getString("STR_UFO_DESTROYED").c_str(),L" ",L" ");
+			_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(),L" ",L" ");
 			_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
 			_action = BDA_END;
 			return;
@@ -167,7 +167,7 @@ void BaseDefenseState::nextStep()
 		}
 		else if (_attacks == _defenses && _passes < _gravShields)
 		{
-			_lstDefenses->addRow(3, _game->getLanguage()->getString("STR_GRAV_SHIELD_REPELS_UFO").c_str(),L" ",L" ");
+			_lstDefenses->addRow(3, tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),L" ",L" ");
 			++_row;
 			++_passes;
 			_attacks = 0;
@@ -181,23 +181,23 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 		case  BDA_NONE:
-			_lstDefenses->addRow(3, _game->getLanguage()->getString((def)->getRules()->getType()).c_str(),L" ",L" ");
+			_lstDefenses->addRow(3, tr((def)->getRules()->getType()).c_str(),L" ",L" ");
 			++_row;
 			_action = BDA_FIRE;
 			return;
 		case BDA_FIRE:
-			_lstDefenses->setCellText(_row, 1, _game->getLanguage()->getString("STR_FIRING").c_str());
+			_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
 			_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
 			_action = BDA_RESOLVE;
 			return;
 		case BDA_RESOLVE:
 			if (RNG::generate(0, 100) > (def)->getRules()->getHitRatio())
 			{
-				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_MISSED").c_str());
+				_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
 			}
 			else
 			{
-				_lstDefenses->setCellText(_row, 2, _game->getLanguage()->getString("STR_HIT").c_str());
+				_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
 				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
 				_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
 			}

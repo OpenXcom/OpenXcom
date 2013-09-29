@@ -36,7 +36,7 @@ MovingTarget::MovingTarget() : Target(), _dest(0), _speedLon(0.0), _speedLat(0.0
  */
 MovingTarget::~MovingTarget()
 {
-	if (_dest != 0 && _dest->getFollowers()->size() > 0)
+	if (_dest != 0 && !_dest->getFollowers()->empty())
 	{
 		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
 		{

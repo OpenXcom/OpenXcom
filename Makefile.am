@@ -61,41 +61,27 @@ ruleset_DATA = bin/data/Ruleset/Xcom1Ruleset.rul
 
 languagedir = $(pkgdatadir)/data/Language
 language_DATA = \
-	bin/data/Language/Big.fnt \
-	bin/data/Language/Bulgarian.geo \
-	bin/data/Language/Bulgarian.lng \
-	bin/data/Language/Czech.geo \
-	bin/data/Language/Czech.lng \
-	bin/data/Language/Danish.geo \
-	bin/data/Language/Danish.lng \
-	bin/data/Language/English.geo \
-	bin/data/Language/English.lng \
-	bin/data/Language/EnglishUk.geo \
-	bin/data/Language/EnglishUk.lng \
 	bin/data/Language/Font.dat \
-	bin/data/Language/French.geo \
-	bin/data/Language/French.lng \
-	bin/data/Language/German.geo \
-	bin/data/Language/German.lng \
-	bin/data/Language/Hungarian.geo \
-	bin/data/Language/Hungarian.lng \
-	bin/data/Language/Italian.geo \
-	bin/data/Language/Italian.lng \
-	bin/data/Language/Polish.geo \
-	bin/data/Language/Polish.lng \
-	bin/data/Language/Portuguese.geo \
-	bin/data/Language/Portuguese.lng \
-	bin/data/Language/Romanian.geo \
-	bin/data/Language/Romanian.lng \
-	bin/data/Language/Russian.geo \
-	bin/data/Language/Russian.lng \
-	bin/data/Language/Small.fnt \
-	bin/data/Language/Spanish.geo \
-	bin/data/Language/Spanish.lng \
-	bin/data/Language/SpanishAL.geo \
-	bin/data/Language/SpanishAL.lng \
-	bin/data/Language/Ukrainian.geo \
-	bin/data/Language/Ukrainian.lng
+	bin/data/Language/FontBig.png \
+	bin/data/Language/FontSmall.png \
+	bin/data/Language/FontGeoBig.png \
+	bin/data/Language/FontGeoSmall.png \
+	bin/data/Language/bg-BG.yml \
+	bin/data/Language/cs-CZ.yml \
+	bin/data/Language/da.yml \
+	bin/data/Language/de.yml \
+	bin/data/Language/en-GB.yml \
+	bin/data/Language/es.yml \
+	bin/data/Language/es-419.yml \
+	bin/data/Language/fr.yml \
+	bin/data/Language/hu-HU.yml \
+	bin/data/Language/it.yml \
+	bin/data/Language/nl.yml \
+	bin/data/Language/pl-PL.yml \
+	bin/data/Language/pt-PT.yml \
+	bin/data/Language/ro.yml \
+	bin/data/Language/ru.yml \
+	bin/data/Language/uk.yml
 
 namedir = $(pkgdatadir)/data/SoldierName
 name_DATA = \
@@ -226,8 +212,8 @@ openxcom_SOURCES = \
 	src/Battlescape/ActionMenuItem.h \
 	src/Battlescape/ActionMenuState.cpp \
 	src/Battlescape/ActionMenuState.h \
-	src/Battlescape/AggroBAIState.cpp \
-	src/Battlescape/AggroBAIState.h \
+	src/Battlescape/AlienBAIState.cpp \
+	src/Battlescape/AlienBAIState.h \
 	src/Battlescape/BattleAIState.cpp \
 	src/Battlescape/BattleAIState.h \
 	src/Battlescape/BattlescapeGame.cpp \
@@ -248,6 +234,8 @@ openxcom_SOURCES = \
 	src/Battlescape/Camera.h \
 	src/Battlescape/CannotReequipState.cpp \
 	src/Battlescape/CannotReequipState.h \
+	src/Battlescape/CivilianBAIState.cpp \
+	src/Battlescape/CivilianBAIState.h \
 	src/Battlescape/DebriefingState.cpp \
 	src/Battlescape/DebriefingState.h \
 	src/Battlescape/ExplosionBState.cpp \
@@ -282,8 +270,6 @@ openxcom_SOURCES = \
 	src/Battlescape/PathfindingNode.h \
 	src/Battlescape/PathfindingOpenSet.cpp \
 	src/Battlescape/PathfindingOpenSet.h \
-	src/Battlescape/PatrolBAIState.cpp \
-	src/Battlescape/PatrolBAIState.h \
 	src/Battlescape/Position.cpp \
 	src/Battlescape/Position.h \
 	src/Battlescape/PrimeGrenadeState.cpp \
@@ -341,6 +327,8 @@ openxcom_SOURCES = \
 	src/Engine/InteractiveSurface.h \
 	src/Engine/Language.cpp \
 	src/Engine/Language.h \
+	src/Engine/LanguagePlurality.cpp \
+	src/Engine/LanguagePlurality.h \
 	src/Engine/LocalizedText.cpp \
 	src/Engine/LocalizedText.h \
 	src/Engine/Logger.h \

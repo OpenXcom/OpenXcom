@@ -36,7 +36,7 @@ LocalizedText LocalizedText::arg(std::wstring const &val) const
 	if (std::wstring::npos == pos)
 		return *this;
 	std::wstring ntext(_text);
-	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + 1))
+	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + val.length()))
 	{
 		ntext.replace(pos, marker.length(), val);
 	}
@@ -56,7 +56,7 @@ LocalizedText &LocalizedText::arg(std::wstring const &val)
 	size_t pos = _text.find(marker);
 	if (std::wstring::npos != pos)
 	{
-		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + 1))
+		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + val.length()))
 		{
 			_text.replace(pos, marker.length(), val);
 		}

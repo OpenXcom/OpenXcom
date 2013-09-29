@@ -45,9 +45,9 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(120, 18, 100, 174);
 	_txtTitle = new Text(220, 32, 50, 8);
-	_txtItem = new Text(180, 9, 16, 50);
-	_txtQuantity = new Text(60, 9, 130, 50);
-	_txtCraft = new Text(50, 9, 200, 50);
+	_txtItem = new Text(142, 9, 10, 50);
+	_txtQuantity = new Text(88, 9, 152, 50);
+	_txtCraft = new Text(74, 9, 218, 50);
 	_lstItems = new TextList(288, 112, 8, 58);
 
 	// Set palette
@@ -67,37 +67,37 @@ CannotReequipState::CannotReequipState(Game *game, std::vector<ReequipStat> miss
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CannotReequipState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&CannotReequipState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
+	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
 
 	_txtItem->setColor(Palette::blockOffset(15)-1);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(15)-1);
-	_txtQuantity->setText(_game->getLanguage()->getString("STR_QUANTITY_UC"));
+	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtCraft->setColor(Palette::blockOffset(15)-1);
-	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_lstItems->setColor(Palette::blockOffset(8)+10);
-	_lstItems->setColumns(3, 114, 70, 104);
+	_lstItems->setColumns(3, 162, 46, 80);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin(8);
+	_lstItems->setMargin(2);
 
 	for (std::vector<ReequipStat>::iterator i = missingItems.begin(); i != missingItems.end(); ++i)
 	{
 		std::wstringstream ss;
 		ss << i->qty;
-		_lstItems->addRow(3, _game->getLanguage()->getString(i->item).c_str(), ss.str().c_str(), i->craft.c_str());
+		_lstItems->addRow(3, tr(i->item).c_str(), ss.str().c_str(), i->craft.c_str());
 	}
 }
 

@@ -50,7 +50,6 @@ void MapBlock::load(const YAML::Node &node)
 		_subType = (MapBlockType)node["type"].as<int>(_type);
 	_subType = (MapBlockType)node["subType"].as<int>(_subType);
 	_frequency = node["frequency"].as<int>(_frequency);
-	_timesUsed = node["timesUsed"].as<int>(_timesUsed);
 	_maxCount = node["maxCount"].as<int>(_maxCount);
 }
 

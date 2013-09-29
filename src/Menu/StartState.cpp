@@ -440,13 +440,25 @@ void StartState::think()
 			Log(LOG_INFO) << "Loading resources...";
 			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
 			Log(LOG_INFO) << "Resources loaded successfully.";
-			std::vector<std::string> langs = Language::getList(0);
-			if (langs.empty())
+			Log(LOG_INFO) << "Loading language...";
+			std::string defaultLang = "en-US";
+			if (Options::getString("language").empty())
 			{
-				throw Exception("No languages available");
+				_game->loadLanguage(defaultLang);
 			}
+			else
+			{
+				try
+				{
+					_game->loadLanguage(Options::getString("language"));
+				}
+				catch (std::exception)
+				{
+					_game->loadLanguage(defaultLang);
+				}
+			}
+			Log(LOG_INFO) << "Language loaded successfully.";
 			_load = LOADING_SUCCESSFUL;
-
 
 			// loading done? let's play intro!
 			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
@@ -517,22 +529,7 @@ void StartState::think()
 		break;
 	case LOADING_SUCCESSFUL:
 		Log(LOG_INFO) << "OpenXcom started successfully!";
-		if (Options::getString("language").empty())
-		{
-			_game->setState(new LanguageState(_game));
-		}
-		else
-		{
-			try
-			{
-				_game->loadLanguage(Options::getString("language"));
-				_game->setState(new MainMenuState(_game));
-			}
-			catch (Exception)
-			{
-				_game->setState(new LanguageState(_game));
-			}
-		}
+		_game->setState(new MainMenuState(_game));
 		break;
 	default:
 		break;

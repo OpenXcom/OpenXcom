@@ -197,18 +197,13 @@ void Window::draw()
 	}
 	Uint8 color = _color + 3 * mul;
 
-	int limit = 5;
-	if (_bg == 0)
-		limit++;
-	for (int i = 0; i < limit; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		drawRect(&square, color);
 		if (i < 2)
 			color -= 1 * mul;
 		else
 			color += 1 * mul;
-		if (i == 4)
-			color += 2 * mul;
 		square.x++;
 		square.y++;
 		if (square.w >= 2)

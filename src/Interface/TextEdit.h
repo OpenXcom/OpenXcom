@@ -47,7 +47,7 @@ private:
 	/// Checks if a character will exceed the maximum width.
 	bool exceedsMaxWidth(wchar_t c);
 public:
-	/// Creates a new text edit with the specified size, position and fonts.
+	/// Creates a new text edit with the specified size and position.
 	TextEdit(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the text edit.
 	~TextEdit();

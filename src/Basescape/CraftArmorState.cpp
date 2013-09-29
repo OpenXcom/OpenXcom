@@ -72,22 +72,22 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftArmorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_ARMOR"));
+	_txtTitle->setText(tr("STR_SELECT_ARMOR"));
 
 	_txtName->setColor(Palette::blockOffset(13)+10);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME_UC"));
+	_txtName->setText(tr("STR_NAME_UC"));
 
 	_txtCraft->setColor(Palette::blockOffset(13)+10);
-	_txtCraft->setText(_game->getLanguage()->getString("STR_CRAFT"));
+	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_txtArmor->setColor(Palette::blockOffset(13)+10);
-	_txtArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setColumns(3, 114, 80, 86);
@@ -100,7 +100,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	Craft *c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), _game->getLanguage()->getString((*i)->getArmor()->getType()).c_str());
+		_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
 
 		Uint8 color;
 		if ((*i)->getCraft() == c)
@@ -136,7 +136,7 @@ void CraftArmorState::init()
 	int row = 0;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->setCellText(row, 2, _game->getLanguage()->getString((*i)->getArmor()->getType()));
+		_lstSoldiers->setCellText(row, 2, tr((*i)->getArmor()->getType()));
 		row++;
 	}
 }

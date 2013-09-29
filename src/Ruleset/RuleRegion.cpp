@@ -151,7 +151,7 @@ unsigned RuleRegion::getWeight() const
  */
 std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 {
-	if (zone == 0 && _cities.size() > 0)
+	if (zone == 0 && !_cities.empty())
 	{
 		unsigned p = RNG::generate(0, _cities.size() - 1);
 		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());

@@ -45,6 +45,7 @@
 #include "TileEngine.h"
 #include "Map.h"
 #include "Camera.h"
+#include "Pathfinding.h"
 
 namespace OpenXcom
 {
@@ -60,6 +61,12 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
+	// remove any path preview if in the middle of a battlegame
+	if(tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
+	{
+		_battleGame->getPathfinding()->removePreview();
+	}
+
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_soldier = new Surface(320, 200, 0, 0);
@@ -73,7 +80,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 		_txtPSkill = new Text(40, 9, 245, 48);
 		_txtPStr = new Text(40, 9, 245, 56);
 	}
-	_txtItem = new Text(140, 9, 128, 140);
+	_txtItem = new Text(160, 9, 128, 140);
 	_txtAmmo = new Text(66, 24, 254, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
 	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
@@ -180,14 +187,38 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
-	if (_parent)
-		_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 	BattleUnit *unit = _battleGame->getSelectedUnit();
+
+	// no selected unit, close inventory
+	if (unit == 0)
+	{
+		btnOkClick(0);
+		return;
+	}
+	// skip to the first unit with inventory
+	if (!hasInventory(unit))
+	{
+		// no available unit, close inventory
+		if (unit == selectNextUnit())
+		{
+			// starting a mission with just vehicles
+			btnOkClick(0);
+			return;
+		}
+		else
+		{
+			unit = _battleGame->getSelectedUnit();
+		}
+	}
+
+	if (_parent)
+		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
 	unit->setCache(0);
 	_soldier->clear();
 	_btnRank->clear();
 
+	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
 	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
@@ -230,21 +261,21 @@ void InventoryState::init()
 	if (_showMoreStatsInInventoryView && !_tu)
 	{
 		std::wstringstream ss2;
-		ss2 << _game->getLanguage()->getString("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
+		ss2 << tr("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
 		_txtFAcc->setText(ss2.str());
 
 		std::wstringstream ss3;
-		ss3 << _game->getLanguage()->getString("STR_REACT") << L'\x01' << unit->getStats()->reactions;
+		ss3 << tr("STR_REACT") << L'\x01' << unit->getStats()->reactions;
 		_txtReact->setText(ss3.str());
 
 		if (unit->getStats()->psiSkill > 0)
 		{
 			std::wstringstream ss4;
-			ss4 << _game->getLanguage()->getString("STR_PSKILL") << L'\x01' << unit->getStats()->psiSkill;
+			ss4 << tr("STR_PSKILL") << L'\x01' << unit->getStats()->psiSkill;
 			_txtPSkill->setText(ss4.str());
 
 			std::wstringstream ss5;
-			ss5 << _game->getLanguage()->getString("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
+			ss5 << tr("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
 			_txtPStr->setText(ss5.str());
 		}
 		else
@@ -266,7 +297,7 @@ void InventoryState::updateStats()
 	{
 		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
+		ss << tr("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
 		_txtWeight->setText(ss.str());
 		if (Weight > unit->getStats()->strength)
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
@@ -275,7 +306,7 @@ void InventoryState::updateStats()
 	if (_tu)
 	{
 		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << unit->getTimeUnits();
+		ss << tr("STR_TUS") << L'\x01' << unit->getTimeUnits();
 		_txtTus->setText(ss.str());
 	}
 }
@@ -353,19 +384,7 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	if (_parent)
-		_parent->selectPreviousPlayerUnit(false);
-	else
-		_battleGame->selectPreviousPlayerUnit(false);
-	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
-		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
-	{
-		if (_parent)
-			_parent->selectPreviousPlayerUnit(false);
-		else
-			_battleGame->selectPreviousPlayerUnit(false);
-	}
+	selectPreviousUnit();
 	init();
 }
 
@@ -377,19 +396,7 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
-	if (_parent)
-		_parent->selectNextPlayerUnit(false, false);
-	else
-		_battleGame->selectNextPlayerUnit(false, false);
-	// skip large units
-	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
-		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
-	{
-		if (_parent)
-			_parent->selectNextPlayerUnit(false, false);
-		else
-			_battleGame->selectNextPlayerUnit(false, false);
-	}
+	selectNextUnit();
 	init();
 }
 
@@ -406,7 +413,6 @@ void InventoryState::btnUnloadClick(Action *)
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
 		updateStats();
-
 	}
 }
 
@@ -448,17 +454,17 @@ void InventoryState::invClick(Action *)
 		{
 			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
 			{
-				_txtItem->setText(_game->getLanguage()->getString(item->getRules()->getName()));
+				_txtItem->setText(tr(item->getRules()->getName()));
 			}
 			else
 			{
-				_txtItem->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACT"));
+				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 			}
 		}
 		std::wstringstream ss;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
@@ -474,7 +480,7 @@ void InventoryState::invClick(Action *)
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
+			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}
 		_txtAmmo->setText(ss.str());
 	}
@@ -503,6 +509,55 @@ void InventoryState::handle(Action *action)
 		}
 	}
 #endif
+}
+
+/**
+* Selects the previous player unit, ignoring units without inventory.
+* @return Pointer to selected unit.
+*/
+BattleUnit *InventoryState::selectPreviousUnit() const
+{
+	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
+	do
+	{
+		if (_parent)
+			_parent->selectPreviousPlayerUnit(false);
+		else
+			_battleGame->selectPreviousPlayerUnit(false);
+		unit = _battleGame->getSelectedUnit();
+	}
+	while (!hasInventory(unit) && unit != current);
+	return unit;
+}
+
+/**
+* Selects the next player unit, ignoring units without inventory.
+* @return Pointer to selected unit.
+*/
+BattleUnit *InventoryState::selectNextUnit() const
+{
+	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
+	do
+	{
+		if (_parent)
+			_parent->selectNextPlayerUnit(false, false);
+		else
+			_battleGame->selectNextPlayerUnit(false, false);
+		unit = _battleGame->getSelectedUnit();
+	}
+	while (!hasInventory(unit) && unit != current);
+	return unit;
+}
+
+/**
+* Checks if a unit has an inventory. Large units and
+* terror units don't have inventories.
+* @param Pointer to battle unit.
+* @return True if an inventory is available, false otherwise.
+*/
+bool InventoryState::hasInventory(BattleUnit *unit) const
+{
+	return ((unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode());
 }
 
 }

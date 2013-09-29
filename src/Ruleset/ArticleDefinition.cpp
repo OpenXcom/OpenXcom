@@ -80,8 +80,7 @@ namespace OpenXcom
 	 */
 	void ArticleDefinition::load(const YAML::Node &node, int listOrder)
 	{
-		id = node["id"].as<std::string>(id);
-		title = node["id"].as<std::string>(title);
+		id = title = node["id"].as<std::string>(id);
 		section = node["section"].as<std::string>(section);
 		requires = node["requires"].as< std::vector<std::string> >(requires);
 		title = node["title"].as<std::string>(title);

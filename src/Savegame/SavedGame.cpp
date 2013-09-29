@@ -713,7 +713,7 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 		}
 		for(std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
 		{
-			if((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
+			if((*it)->getCost() == 0 && (*it)->getRequirements().empty())
 			{
 				addFinishedResearch(*it, ruleset);
 			}
@@ -889,7 +889,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 	}
 	else if (liveAlien)
 	{		
-		if (r->getGetOneFree().size() > 0)
+		if (!r->getGetOneFree().empty())
 		{
 			for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
 			{
