@@ -536,29 +536,34 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
  * Checks for another unit available for targeting and what particular voxel.
  * @param originVoxel Voxel of trace origin (eye or gun's barrel).
  * @param tile The tile to check for.
- * @param scanVoxel Is returned coordinate of hit.
- * @param excludeUnit Is self (not to hit self).
+ * @param scanVoxel is returned coordinate of hit.
+ * @param excludeUnit is self (not to hit self).
+ * @param potentialUnit is a hypothetical unit to draw a virtual line of fire for AI. if left blank, this function behaves normally.
  * @return True if the unit can be targetted.
  */
-bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit)
+bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
-	BattleUnit *otherUnit = tile->getUnit();
-	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
-	if (otherUnit == excludeUnit) return false; //skip self
+	bool hypothetical = potentialUnit != 0;
+	if (potentialUnit == 0)
+	{
+		potentialUnit = tile->getUnit();
+		if (potentialUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+	}
+
+	if (potentialUnit == excludeUnit) return false; //skip self
 
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
-	if (otherUnit)
-		 targetMinHeight += otherUnit->getFloatHeight();
+	targetMinHeight += potentialUnit->getFloatHeight();
 
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
 
-	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
-	int targetSize = otherUnit->getArmor()->getSize() - 1;
+	int unitRadius = potentialUnit->getLoftemps(); //width == loft in default loftemps set
+	int targetSize = potentialUnit->getArmor()->getSize() - 1;
 	if (targetSize > 0)
 	{
 		unitRadius = 3;
@@ -572,9 +577,9 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 
 	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
 
-	if (!otherUnit->isOut())
+	if (!potentialUnit->isOut())
 	{
-		heightRange = otherUnit->getHeight();
+		heightRange = potentialUnit->getHeight();
 	}
 	else
 	{
@@ -597,7 +602,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
-			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true);
+			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false, potentialUnit);
 			if (test == 4)
 			{
 				for (int x = 0; x <= targetSize; ++x)
@@ -614,6 +619,10 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 						}
 					}
 				}
+			}
+			else if (test == -1 && hypothetical)
+			{
+				return true;
 			}
 		}
 	}
