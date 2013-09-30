@@ -35,7 +35,7 @@ private:
 	Surface *_chars[10];
 	Uint8 _color;
 public:
-	/// Creates a new number text with the specified size, position and fonts.
+	/// Creates a new number text with the specified size and position.
 	NumberText(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the number text.
 	~NumberText();

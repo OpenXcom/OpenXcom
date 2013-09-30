@@ -62,12 +62,12 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(15)-1);
-	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
-	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -75,7 +75,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_ABANDON_GAME_QUESTION");
+	ss << tr("STR_ABANDON_GAME_QUESTION");
 	_txtTitle->setText(ss.str());
 }
 

@@ -36,8 +36,8 @@
 #include "UnitInfoState.h"
 #include "UnitDieBState.h"
 #include "InventoryState.h"
-#include "AggroBAIState.h"
-#include "PatrolBAIState.h"
+#include "AlienBAIState.h"
+#include "CivilianBAIState.h"
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
 #include "../Engine/Game.h"
@@ -138,12 +138,12 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
 	}
-	_numVisibleUnit[9]->setX(304); // center number 10
+	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
 	_btnLaunch = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 0);
 	_btnLaunch->setVisible(false);
@@ -234,7 +234,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
@@ -365,13 +365,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnStats->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnLeftHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnLeftHandItemClick);
-	_btnLeftHandItem->setTooltip("STR_LEFT_HAND");
-	_btnLeftHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
-	_btnLeftHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 	_btnRightHandItem->onMouseClick((ActionHandler)&BattlescapeState::btnRightHandItemClick);
-	_btnRightHandItem->setTooltip("STR_RIGHT_HAND");
-	_btnRightHandItem->onMouseIn((ActionHandler)&BattlescapeState::txtTooltipIn);
-	_btnRightHandItem->onMouseOut((ActionHandler)&BattlescapeState::txtTooltipOut);
 
 	_btnReserveNone->onMouseClick((ActionHandler)&BattlescapeState::btnReserveClick);
 	_btnReserveNone->onKeyboardPress((ActionHandler)&BattlescapeState::btnReserveClick, (SDLKey)Options::getInt("keyBattleReserveNone"));
@@ -408,7 +402,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		std::stringstream key, tooltip;
 		key << "keyBattleCenterEnemy" << (i+1);
@@ -783,6 +777,14 @@ void BattlescapeState::btnKneelClick(Action *)
 		{
 			_battleGame->kneel(bu);
 		}
+
+		// update any path preview if unit kneels
+		if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
+		{
+			_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 }
 
@@ -894,7 +896,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
  */
 void BattlescapeState::btnHelpClick(Action *)
 {
-	if (_map->getProjectile() == 0) // we're deliberately not using allowButtons() here, so we can save if something goes wrong during the alien turn, and submit it for dissection.
+	if (allowButtons(true))
 		_game->pushState(new BattlescapeOptionsState(_game));
 }
 
@@ -990,7 +992,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	int btnID = -1;
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; ++i)
+	for (int i = 0; i < VISIBLE_MAX && btnID == -1; ++i)
 	{
 		if (action->getSender() == _btnVisibleUnit[i])
 		{
@@ -1037,7 +1039,7 @@ void BattlescapeState::btnReserveClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
 		if (_reserve == _btnReserveNone)
@@ -1091,7 +1093,7 @@ void BattlescapeState::updateSoldierInfo()
 {
 	BattleUnit *battleUnit = _save->getSelectedUnit();
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[i]->setVisible(false);
 		_numVisibleUnit[i]->setVisible(false);
@@ -1181,7 +1183,7 @@ void BattlescapeState::updateSoldierInfo()
 
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);
@@ -1210,7 +1212,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	square2.w = 13;
 	square2.h = 10;
 
-	for (int i = 0; i < 10;  ++i)
+	for (int i = 0; i < VISIBLE_MAX;  ++i)
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
@@ -1310,7 +1312,7 @@ void BattlescapeState::debug(const std::wstring &message)
  */
 void BattlescapeState::warning(const std::string &message)
 {
-	_warning->showMessage(_game->getLanguage()->getString(message));
+	_warning->showMessage(tr(message));
 }
 
 /**
@@ -1417,7 +1419,6 @@ void BattlescapeState::saveAIMap()
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
 
-			_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit);
 		}
 	}
 
@@ -1437,10 +1438,10 @@ void BattlescapeState::saveAIMap()
 			r.x = x * r.w;
 			r.y = y * r.h;
 
-			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255 && _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->soldiersVisible != Tile::NOT_CALCULATED)
+			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255)
 			{
 				SDL_FillRect(img, &r, SDL_MapRGB(img->format, 255, 0, 0x20));
-				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
+				characterRGBA(img, r.x, r.y,'*' , 0x7f, 0x7f, 0x7f, 0x7f);
 			} else
 			{
 				if (!t->getUnit()) SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
@@ -1841,11 +1842,18 @@ bool BattlescapeState::getMouseOverIcons() const
 }
 
 /**
- * Determines whether the player is allowed to press buttons?
+ * Determines whether the player is allowed to press buttons.
+ * Buttons are disabled in the middle of a shot, during the alien turn,
+ * and while a player's units are panicking.
+ * The save button is an exception as we want to still be able to save if something
+ * goes wrong during the alien turn, and submit the save file for dissection.
+ * @param allowSaving True, if the help button was clicked.
  */
-bool BattlescapeState::allowButtons() const
+bool BattlescapeState::allowButtons(bool allowSaving) const
 {
-	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
+	return ((allowSaving || _save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		&& (_battleGame->getPanicHandled() || firstInit )
+		&& (_map->getProjectile() == 0));
 }
 
 /**
@@ -1859,7 +1867,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 		_btnKneel->invert(0);
@@ -1877,7 +1885,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		if (_battleGame->getSave()->getSelectedUnit())
 		{
@@ -1896,7 +1904,7 @@ void BattlescapeState::txtTooltipIn(Action *action)
 	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
 		_currentTooltip = action->getSender()->getTooltip();
-		_txtTooltip->setText(_game->getLanguage()->getString(_currentTooltip));
+		_txtTooltip->setText(tr(_currentTooltip));
 	}
 }
 

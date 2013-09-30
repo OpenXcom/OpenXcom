@@ -43,8 +43,8 @@ class Soldier;
 class Armor;
 class SavedGame;
 class Language;
-class AggroBAIState;
-class PatrolBAIState;
+class AlienBAIState;
+class CivilianBAIState;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -183,7 +183,7 @@ public:
 	/// Aim.
 	void aim(bool aiming);
 	/// Get direction to a certain point
-	int getDirectionTo(const Position &point) const;
+	int directionTo(const Position &point) const;
 	/// Gets the unit's time units.
 	int getTimeUnits() const;
 	/// Gets the unit's stamina.

@@ -55,7 +55,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 	{
 		std::stringstream ss2;
 		ss2 << "STR_GAME_OVER_" << text+1;
-		_txtText[text]->setText(_game->getLanguage()->getString(ss2.str()));
+		_txtText[text]->setText(tr(ss2.str()));
 		_txtText[text]->setWordWrap(true);
 		add(_txtText[text]);
 		_txtText[text]->setVisible(false);

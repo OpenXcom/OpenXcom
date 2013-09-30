@@ -48,6 +48,7 @@ private:
 	void *_misalignedPixelBuffer;
 	int _bpp;
 	double _scaleX, _scaleY;
+	int _topBlackBand, _bottomBlackBand, _leftBlackBand, _rightBlackBand, _cursorTopBlackBand, _cursorLeftBlackBand;
 	Uint32 _flags;
 	bool _fullscreen;
 	int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
@@ -85,6 +86,10 @@ public:
 	double getXScale() const;
 	/// Gets the screen's Y scale.
 	double getYScale() const;
+	/// Gets the screen's top black forbidden to cursor band's height.
+	int getCursorTopBlackBand() const;
+	/// Gets the screen's left black forbidden to cursor band's width.
+	int getCursorLeftBlackBand() const;
 	/// Takes a screenshot.
 	void screenshot(const std::string &filename) const;
 	/// Checks whether HQX is requested and works for the selected resolution

@@ -491,12 +491,6 @@
     <ClCompile Include="Battlescape\BattleAIState.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\PatrolBAIState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\AggroBAIState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Battlescape\WarningMessage.cpp">
       <Filter>Battlescape</Filter>
     </ClCompile>
@@ -777,6 +771,21 @@
     </ClCompile>
     <ClCompile Include="Savegame\SerializationHelper.cpp">
       <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\Slider.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\Frame.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LanguagePlurality.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\AlienBAIState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\CivilianBAIState.cpp">
+      <Filter>Battlescape</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1274,12 +1283,6 @@
     <ClInclude Include="Battlescape\BattleAIState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\PatrolBAIState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\AggroBAIState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
     <ClInclude Include="Battlescape\WarningMessage.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
@@ -1578,6 +1581,21 @@
     <ClInclude Include="Ruleset\ExtraSounds.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\Slider.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Frame.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\LanguagePlurality.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\AlienBAIState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\CivilianBAIState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
@@ -1619,5 +1637,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

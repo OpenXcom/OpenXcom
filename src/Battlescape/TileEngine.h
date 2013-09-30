@@ -83,8 +83,6 @@ public:
 	int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit *excludeAllBut = 0);
 	/// Calculates a parabola trajectory.
 	int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position> *trajectory, BattleUnit *excludeUnit, double curvature, double accuracy);
-	/// Finds all the soldiers that would see queryingUnit at tile (aka tilePos) and collects some statistics for AI.
-	bool surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *hypotheticalUnit);
 	/// Gets the origin voxel of a unit's eyesight.
 	Position getSightOriginVoxel(BattleUnit *currentUnit);
 	/// Checks visibility of a unit on this tile.
@@ -112,7 +110,7 @@ public:
 	/// Checks a unit's % exposure on a tile.
 	int checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut);
 	/// Checks validity for targetting a unit.
-	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit);
+	bool canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit = 0);
 	/// Check validity for targetting a tile.
 	bool canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit);
 	/// Calculates the z voxel for shadows.
@@ -137,6 +135,8 @@ public:
 	bool tryReactionSnap(BattleUnit *unit, BattleUnit *target);
 	/// Recalculates FOV of all units in-game.
 	void recalculateFOV();
+	/// Get direction to a certain point
+	int getDirectionTo(const Position &origin, const Position &target) const;
 };
 
 }

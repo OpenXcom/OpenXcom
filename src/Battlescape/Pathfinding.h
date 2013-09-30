@@ -40,7 +40,6 @@ private:
 	SavedBattleGame *_save;
 	std::vector<PathfindingNode> _nodes;
 	int _size;
-	std::vector<int> _path;
 	MovementType _movementType;
 	/// Gets the node at certain position.
 	PathfindingNode *getNode(const Position& pos);
@@ -59,6 +58,7 @@ private:
 	bool _strafeMove;
 	int _totalTUCost;
 public:
+	std::vector<int> _path;
 	/// Determines whether the unit is going up a stairs.
 	bool isOnStairs(const Position &startPosition, const Position &endPosition);
 	/// Determines whether or not movement between starttile and endtile is possible in the direction.

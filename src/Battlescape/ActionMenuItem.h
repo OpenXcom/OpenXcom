@@ -28,6 +28,7 @@ namespace OpenXcom
 class State;
 class Font;
 class Text;
+class Frame;
 
 /**
  * A class that represents a single box in the action popup menu on the battlescape.
@@ -41,6 +42,7 @@ private:
 	bool _highlighted;
 	BattleActionType _action;
 	int _tu;
+	Frame *_frame;
 	Text *_txtDescription, *_txtAcc, *_txtTU;
 public:
 	/// Creates a new ActionMenuItem.

@@ -30,6 +30,8 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class NumberText;
+class Slider;
 
 /**
  * A state purely for testing game functionality.
@@ -46,7 +48,9 @@ private:
 	TextButton *_button;
 	Window *_window;
 	Text *_text;
+	NumberText *_number;
 	TextList *_list;
+	Slider *_slider;
 	int _i;
 
 	/// Creates a surface with every color in the palette.

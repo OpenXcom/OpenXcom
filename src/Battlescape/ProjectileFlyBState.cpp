@@ -34,7 +34,7 @@
 #include "../Engine/Sound.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
-#include "AggroBAIState.h"
+#include "AlienBAIState.h"
 #include "Camera.h"
 
 namespace OpenXcom
@@ -257,17 +257,17 @@ bool ProjectileFlyBState::createNewProjectile()
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
 		if (_projectileImpact != -1 || _action.type == BA_LAUNCH)
 		{
-				// set the soldier in an aiming position
-				_unit->aim(true);
-				_parent->getMap()->cacheUnit(_unit);
-				// and we have a lift-off
-				if (_action.weapon->getRules()->getFireSound() != -1)
-					_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
-				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
-				{
-					_parent->getSave()->removeItem(_ammo);
-					_action.weapon->setAmmoItem(0);
-				}
+			// set the soldier in an aiming position
+			_unit->aim(true);
+			_parent->getMap()->cacheUnit(_unit);
+			// and we have a lift-off
+			if (_action.weapon->getRules()->getFireSound() != -1)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
+			{
+				_parent->getSave()->removeItem(_ammo);
+				_action.weapon->setAmmoItem(0);
+			}
 		}
 		else
 		{
@@ -377,14 +377,12 @@ void ProjectileFlyBState::think()
 						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
 						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
 						{
-							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(victim->getCurrentAIState());
-							if (aggro == 0)
+							AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
+							if (aggro != 0)
 							{
-								aggro = new AggroBAIState(_parent->getSave(), victim);
-								victim->setAIState(aggro);
+								aggro->setWasHit();
+								_unit->setTurnsExposed(0);
 							}
-							aggro->setAggroTarget(_action.actor);
-							aggro->setWasHit(true);
 						}
 					}
 				}

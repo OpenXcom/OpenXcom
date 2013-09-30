@@ -78,7 +78,7 @@ MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targ
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
-		_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
 		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 

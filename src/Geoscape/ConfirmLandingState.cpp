@@ -83,12 +83,12 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
-	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
-	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -106,12 +106,12 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_txtReady->setColor(Palette::blockOffset(8)+5);
 	_txtReady->setBig();
 	_txtReady->setAlign(ALIGN_CENTER);
-	_txtReady->setText(_game->getLanguage()->getString("STR_READY_TO_LAND_NEAR"));
+	_txtReady->setText(tr("STR_READY_TO_LAND_NEAR"));
 
 	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
-	_txtBegin->setText(_game->getLanguage()->getString("STR_BEGIN_MISSION"));
+	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
 }
 
 /**

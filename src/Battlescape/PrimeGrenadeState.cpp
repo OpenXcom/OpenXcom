@@ -25,7 +25,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Action.h"
 #include "../Interface/Text.h"
-#include "../Interface/Window.h"
+#include "../Interface/Frame.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
@@ -44,16 +44,16 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 	_screen = false;
 
 	// Create objects
-	_title = new Text(192, 24, 65, 45);
-	_window = new Window(this, 192, 27, 65, 37);
+	_title = new Text(192, 24, 65, 44);
+	_frame = new Frame(192, 27, 65, 37);
 	_bg = new Surface(192, 93, 65, 45);
 
 	int x = 67;
-	int y = 69;
+	int y = 68;
 	for (int i = 0; i < 24; ++i)
 	{
 		_button[i] = new InteractiveSurface(22, 22, x-1+((i%8)*24), y-4+((i/8)*25));
-		_number[i] = new Text(20, 20, x+((i%8)*24), y+((i/8)*25));
+		_number[i] = new Text(20, 20, x+((i%8)*24), y-1+((i/8)*25));
 	}
 
 	// Set up objects
@@ -65,13 +65,16 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 	add(_bg);
 	_bg->drawRect(&square, Palette::blockOffset(6)+9);
 
-	add(_window);
-	_window->setColor(Palette::blockOffset(6)+5);
+	add(_frame);
+	_frame->setColor(Palette::blockOffset(6)+3);
+	_frame->setBackground(Palette::blockOffset(6)+12);
+	_frame->setThickness(3);
+	_frame->setHighContrast(true);
 
 	add(_title);
 	_title->setAlign(ALIGN_CENTER);
 	_title->setBig();
-	_title->setText(_game->getLanguage()->getString("STR_SET_TIMER"));
+	_title->setText(tr("STR_SET_TIMER"));
 	_title->setColor(Palette::blockOffset(1)-1);
 	_title->setHighContrast(true);
 
@@ -88,12 +91,11 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 		square.y = 1;
 		square.w = _button[i]->getWidth()-2;
 		square.h = _button[i]->getHeight()-2;
-		_button[i]->drawRect(&square, Palette::blockOffset(2)+12);
+		_button[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
 		std::wstringstream ss;
 		ss << i;
 		add(_number[i]);
-		_number[i]->setFonts(_game->getResourcePack()->getFont("Big.fnt"), 0);
 		_number[i]->setBig();
 		_number[i]->setText(ss.str());
 		_number[i]->setColor(Palette::blockOffset(1)-1);

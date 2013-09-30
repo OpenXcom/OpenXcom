@@ -28,7 +28,6 @@
 #include "../Engine/Logger.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
-#include "../Battlescape/AggroBAIState.h"
 #include "Soldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
@@ -218,6 +217,8 @@ void BattleUnit::load(const YAML::Node &node)
 	_kills = node["kills"].as<int>(_kills);
 	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
 	_charging = 0;
+	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
+	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
 }
 
 /**
@@ -270,6 +271,9 @@ YAML::Node BattleUnit::save() const
 		node["kills"] = _kills;
 	if (_faction == FACTION_PLAYER && _dontReselect)
 		node["dontReselect"] = _dontReselect;
+	node["specab"] = (int)_specab;
+	if (!_spawnUnit.empty())
+		node["spawnUnit"] = _spawnUnit;
 
 	return node;
 }
@@ -533,7 +537,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
-	int dir = getDirectionTo (point);
+	int dir = directionTo (point);
 
 	if (turret)
 	{
@@ -757,10 +761,10 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
- * Returns the soldier's amount of time units.
- * @return Time units.
+ * Returns the direction from this unit to a given point.
+ * @return direction.
  */
-int BattleUnit::getDirectionTo(const Position &point) const
+int BattleUnit::directionTo(const Position &point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1053,35 +1057,45 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 		return 0;
 	}
 
+	int cost = 0;
 	switch (actionType)
 	{
 		case BA_PRIME:
-			return (int)floor(getStats()->tu * 0.50);
+			cost = 50; // maybe this should go in the ruleset
+			break;
 		case BA_THROW:
-			return (int)floor(getStats()->tu * 0.25);
+			cost = 25;
+			break;
 		case BA_AUTOSHOT:
-			return (int)(getStats()->tu * item->getRules()->getTUAuto() / 100);
+			cost = item->getRules()->getTUAuto();
+			break;
 		case BA_SNAPSHOT:
-			return (int)(getStats()->tu * item->getRules()->getTUSnap() / 100);
+			cost = item->getRules()->getTUSnap();
+			break;
 		case BA_STUN:
 		case BA_HIT:
-			if (item->getRules()->getFlatRate())
-				return item->getRules()->getTUMelee();
-			else
-				return (int)(getStats()->tu * item->getRules()->getTUMelee() / 100);
+			cost = item->getRules()->getTUMelee();
+			break;
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
-			return (int)(getStats()->tu * item->getRules()->getTUAimed() / 100);
+			cost = item->getRules()->getTUAimed();
+			break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			if (item->getRules()->getFlatRate())
-				return item->getRules()->getTUUse();
-			else
-				return (int)(getStats()->tu * item->getRules()->getTUUse() / 100);
+			cost = item->getRules()->getTUUse();
+			break;
 		default:
-			return 0;
+			cost = 0;
 	}
+
+	// if it's a percentage, apply it to unit TUs
+	if (!item->getRules()->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
+	{
+		cost = (int)floor(getStats()->tu * cost / 100.0f);
+	}
+
+	return cost;
 }
 
 
@@ -1490,14 +1504,7 @@ void BattleUnit::think(BattleAction *action)
 void BattleUnit::setAIState(BattleAIState *aiState)
 {
 	if (_currentAIState)
-	{
-		if (dynamic_cast<AggroBAIState*>(aiState) != 0 && dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
-		{
-			delete aiState;
-			return; // try not to overwrite an existing aggro AI state
-			// I tried using typeid but it does not produce the expected results :(
-		}
-		
+	{		
 		_currentAIState->exit();
 		delete _currentAIState;
 	}
