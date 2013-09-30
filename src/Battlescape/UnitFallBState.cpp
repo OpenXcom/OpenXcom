@@ -190,7 +190,7 @@ void UnitFallBState::think()
 					}
 
 					// Check in each compass direction.
-					for (int dir = 0; dir < Pathfinding::DIR_UP && !escapeFound ; dir++)
+					for (int dir = 0; dir < Pathfinding::DIR_UP && !escapeFound; dir++)
 					{
 						Position offset;
 						Pathfinding::directionToVector(dir, &offset);
@@ -210,7 +210,6 @@ void UnitFallBState::think()
 							bool unitCanFly = unitBelow->getArmor()->getMovementType() == MT_FLY;
 
 							bool canMoveToTile = t && !alreadyOccupied && !alreadyTaken && !aboutToBeOccupiedFromAbove && !movementBlocked && (hasFloor || unitCanFly);
-
 							if (canMoveToTile)
 							{
 								// Check next section of the unit.
@@ -218,7 +217,7 @@ void UnitFallBState::think()
 							}
 							else
 							{
-								// Check next direction.
+								// Try next direction.
 								break;
 							}
 
@@ -240,13 +239,16 @@ void UnitFallBState::think()
 
 									Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
 									unitBelow->startWalking(dir, unitBelow->getPosition() + offset, bu, onScreen);
-									unitsToMove.erase(ub);
-									ub = unitsToMove.begin();
+									ub = unitsToMove.erase(ub);
 								}
 							}
 						}
 					}
-					// TODO We could knock out any unit that couldn't find an escape, better than them turning invisible!
+					if (!escapeFound)
+					{
+						// TODO We could knock out any unit that couldn't find an escape, better than them turning invisible!
+						ub = unitsToMove.erase(ub);
+					}
 				}
 			}
 		}
