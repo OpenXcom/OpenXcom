@@ -45,6 +45,7 @@ namespace OpenXcom
 		Surface *_image;
 		Text *_txtTitle;
 		TextList *_lstInfo;
+		Text *_txtInfo;
 	};
 }
 
