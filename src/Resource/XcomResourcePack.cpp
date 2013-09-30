@@ -757,7 +757,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	for (std::vector<std::string>::iterator i = usets.begin(); i != usets.end(); ++i)
 	{
 		std::string path = units + *i;
-		std::string tab = path.substr(0, path.length() - 4) + ".TAB";
+		std::string tab = CrossPlatform::getDataFile("UNITS/" + i->substr(0, i->length() - 4) + ".TAB");
 		std::transform(i->begin(), i->end(), i->begin(), toupper);
 		if (*i != "BIGOBS.PCK")
 			_sets[*i] = new SurfaceSet(32, 40);
