@@ -765,15 +765,15 @@ void TileEngine::calculateFOV(const Position &position)
 }
 
 /**
- * Checks if a sniper from tge opposing faction sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
+ * Checks if a sniper from the opposing faction sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
  * @param unit The unit to check reaction fire upon.
  * @return True if reaction fire took place.
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit)
 {
-	// reaction fire only triggered when the actioning unit is of the currently playing side
-	if (unit->getFaction() != _save->getSide())
+	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
+	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
 	{
 		return false;
 	}

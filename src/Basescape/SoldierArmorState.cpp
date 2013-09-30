@@ -108,7 +108,14 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 		{
 			_armors.push_back(a);
 			std::wstringstream ss;
-			ss << _base->getItems()->getItem(a->getStoreItem());
+			if (_game->getSavedGame()->getMonthsPassed() > -1)
+			{
+				ss << _base->getItems()->getItem(a->getStoreItem());
+			}
+			else
+			{
+				ss << "-";
+			}
 			_lstArmor->addRow(2, tr(a->getType()).c_str(), ss.str().c_str());
 		}
 		else if (a->getStoreItem() == "STR_NONE")

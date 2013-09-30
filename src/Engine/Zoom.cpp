@@ -612,7 +612,7 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 	}
 	else if (dst->w - leftBlackBand - rightBlackBand == src->w && dst->h - topBlackBand - bottomBlackBand == src->h)
 	{
-		SDL_Rect dstrect = {x: leftBlackBand, y: topBlackBand, w: src->w, h: src->h};
+		SDL_Rect dstrect = {leftBlackBand, topBlackBand, src->w, src->h};
 		SDL_BlitSurface(src, NULL, dst, &dstrect);
 	}
 	else
@@ -623,7 +623,7 @@ void Zoom::flipWithZoom(SDL_Surface *src, SDL_Surface *dst, int topBlackBand, in
 		{
 			SDL_SetPalette(tmp, SDL_LOGPAL|SDL_PHYSPAL, src->format->palette->colors, 0, src->format->palette->ncolors);
 		}
-		SDL_Rect dstrect = {x: leftBlackBand, y: topBlackBand, w: tmp->w, h: tmp->h};
+		SDL_Rect dstrect = {leftBlackBand, topBlackBand, tmp->w, tmp->h};
 		SDL_BlitSurface(tmp, NULL, dst, &dstrect);
 		SDL_FreeSurface(tmp);
 	}
