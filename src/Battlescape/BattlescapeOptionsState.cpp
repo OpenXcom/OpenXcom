@@ -40,6 +40,8 @@ namespace OpenXcom
 BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 {
 	_screen = false;
+	int autosaveMode = Options::getInt("autosave");
+	bool isAutosaveMode01 = autosaveMode <= 1;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -84,9 +86,10 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnAlienSpeed5 = new TextButton(56, 12, 155, 154);
 	_btnAlienSpeed6 = new TextButton(69, 12, 213, 154);
 
-	_btnOk = new TextButton(90, 16, 16, 174);
+	_btnOk = new TextButton(isAutosaveMode01? 90 : 120, 16, 16, 174);
 	_btnLoad = new TextButton(90, 16, 117, 174);
 	_btnSave = new TextButton(90, 16, 214, 174);
+	_btnAbandon = new TextButton(120, 16, 184, 174);
 
 	switch (Options::getInt("battleScrollSpeed"))
 	{
@@ -180,6 +183,7 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	add(_btnOk);
 	add(_btnLoad);
 	add(_btnSave);
+	add(_btnAbandon);
 
 	centerAllSurfaces();
 
@@ -366,17 +370,22 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnLoad->setHighContrast(true);
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnLoadClick);
+	_btnLoad->setVisible(isAutosaveMode01);
 
 	_btnSave->setColor(Palette::blockOffset(0));
 	_btnSave->setHighContrast(true);
 	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
+	_btnSave->setVisible(isAutosaveMode01);
 
-	if (Options::getInt("autosave") >= 2)
-	{
-		_btnSave->setVisible(false);
-		_btnLoad->setVisible(false);
-	}
+	_btnAbandon->setColor(Palette::blockOffset(0));
+	_btnAbandon->setHighContrast(true);
+	if (autosaveMode == 2)
+		_btnAbandon->setText(_game->getLanguage()->getString("STR_ABANDON_GAME"));
+	else if (autosaveMode == 3)
+		_btnAbandon->setText(_game->getLanguage()->getString("STR_SAVE_GAME_AND_QUIT"));
+	_btnAbandon->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnAbandonClick);
+	_btnAbandon->setVisible(!isAutosaveMode01);
 }
 
 /**
@@ -480,6 +489,16 @@ void BattlescapeOptionsState::btnSaveClick(Action *)
 {
 	saveOptions();
 	_game->pushState(new SaveState(_game, false));
+}
+
+/**
+ * Opens the Abandon Game screen.
+ * @param action Pointer to an action.
+ */
+void BattlescapeOptionsState::btnAbandonClick(Action *)
+{
+	saveOptions();
+	_game->pushState(new AbandonGameState(_game));
 }
 
 }

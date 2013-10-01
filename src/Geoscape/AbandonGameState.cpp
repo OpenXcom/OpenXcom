@@ -48,7 +48,9 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_txtTitle = new Text(206, 15, 25, 70);
 
 	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+//	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	bool isGeoscape = game->getSavedGame()->getSavedBattle() == 0;
+	Uint8 color = isGeoscape? Palette::blockOffset(15)-1 : Palette::blockOffset(0);
 
 	add(_window);
 	add(_btnYes);
@@ -58,22 +60,31 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(15)-1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setColor(color);
+	_window->setBackground(_game->getResourcePack()->getSurface(isGeoscape? "BACK01.SCR" : "TAC00.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(15)-1);
+	_btnYes->setColor(color);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnNo->setColor(Palette::blockOffset(15)-1);
+	_btnNo->setColor(color);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setColor(color);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
+
+	if (!isGeoscape)
+	{
+		_window->setHighContrast(true);
+		_btnYes->setHighContrast(true);
+		_btnNo->setHighContrast(true);
+		_txtTitle->setHighContrast(true);
+	}
+
 	std::wstringstream ss;
 	ss << tr("STR_ABANDON_GAME_QUESTION");
 	_txtTitle->setText(ss.str());

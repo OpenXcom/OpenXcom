@@ -39,6 +39,7 @@ namespace OpenXcom
 GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 {
 	_screen = false;
+	int autosaveMode = Options::getInt("autosave");
 
 	// Create objects
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
@@ -67,13 +68,15 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_btnLoad->setColor(Palette::blockOffset(15)-1);
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnLoadClick);
+	_btnLoad->setVisible(autosaveMode <= 1);
 
 	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(tr("STR_SAVE_GAME"));
 	_btnSave->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnSaveClick);
+	_btnSave->setVisible(autosaveMode <= 1);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)-1);
-	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
+	_btnAbandon->setText(tr((autosaveMode != 3)? "STR_ABANDON_GAME" : "STR_SAVE_GAME_AND_QUIT"));
 	_btnAbandon->onMouseClick((ActionHandler)&GeoscapeOptionsState::btnAbandonClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
@@ -85,12 +88,6 @@ GeoscapeOptionsState::GeoscapeOptionsState(Game *game) : State(game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_GAME_OPTIONS"));
-
-	if (Options::getInt("autosave") >= 2)
-	{
-		_btnSave->setVisible(false);
-		_btnLoad->setVisible(false);
-	}
 }
 
 /**

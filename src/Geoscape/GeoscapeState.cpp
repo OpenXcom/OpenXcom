@@ -452,9 +452,10 @@ void GeoscapeState::handle(Action *action)
 			}
 		}
 		// quick save and quick load
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+		// may not works in debug mode to prevent conflict in hotkeys by default
+		else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
 			_game->pushState(new SaveState(_game, true, true));
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+		else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
 			_game->pushState(new LoadState(_game, true, true));
 	}
 	if(!_dogfights.empty())

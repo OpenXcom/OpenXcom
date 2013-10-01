@@ -1209,6 +1209,7 @@ en-US:
   STR_RESEARCHEDITEMSWILLSPENT_DESC: "Researched items are removed from your stores and will be disassembled. After \"researching\" living aliens, the body will be returned to the base stores."
   STR_ARROWS: "ARROWS"
   STR_FULL: "FULL"
+  STR_SAVE_GAME_AND_QUIT: "SAVE GAME AND QUIT"
   STR_SAVE_VOXEL_VIEW: "Save First-Person Screenshot"
   STR_TIME_UNITS_RESERVED_FOR_KNEELING: "Time Units reserved for Kneeling"
   STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING: "TU's reserved for Kneeling and Firing"
