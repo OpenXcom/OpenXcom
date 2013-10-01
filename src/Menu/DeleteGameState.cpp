@@ -70,18 +70,18 @@ DeleteGameState::DeleteGameState(Game *game, bool geo, const std::wstring &save,
 	centerAllSurfaces();
 
 	// Set up objects
-	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 	
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
-	_txtMessage->setText(_game->getLanguage()->getString("STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME"));
+	_txtMessage->setText(tr("STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME"));
 
 	if (_geo)
 	{
@@ -129,7 +129,7 @@ void DeleteGameState::btnYesClick(Action *)
 	_game->popState();
 	if (!CrossPlatform::deleteFile(_filename))
 	{
-		std::wstring error = _game->getLanguage()->getString("STR_DELETE_UNSUCCESSFUL");
+		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 		if (_geo)
 			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else

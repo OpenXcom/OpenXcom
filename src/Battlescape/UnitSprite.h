@@ -39,6 +39,7 @@ private:
 	BattleItem *_itemA, *_itemB;
 	SurfaceSet *_unitSurface, *_itemSurfaceA, *_itemSurfaceB;
 	int _part, _animationFrame;
+	bool _hairBleach;
 	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
 	void drawRoutine0();
 	/// Drawing routine for floaters.

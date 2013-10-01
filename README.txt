@@ -131,7 +131,6 @@ http://code.google.com/p/yaml-cpp/
 
 The source code includes files for the following tools:
 - Microsoft Visual C++ 2010.
-- Microsoft Visual C++ 2008.
 - XCode (check the forum).
 - Makefile.
 - CMake.

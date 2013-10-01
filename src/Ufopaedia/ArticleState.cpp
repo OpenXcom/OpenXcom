@@ -62,7 +62,7 @@ namespace OpenXcom
 		add(_btnPrev);
 		add(_btnNext);
 
-		_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onMouseClick((ActionHandler)&ArticleState::btnOkClick);
 		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyOk"));
 		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyCancel"));

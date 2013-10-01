@@ -243,7 +243,7 @@
     <ClCompile Include="Battlescape\AbortMissionState.cpp" />
     <ClCompile Include="Battlescape\ActionMenuItem.cpp" />
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
-    <ClCompile Include="Battlescape\AggroBAIState.cpp" />
+    <ClCompile Include="Battlescape\AlienBAIState.cpp" />
     <ClCompile Include="Battlescape\BattleAIState.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGame.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
@@ -271,7 +271,7 @@
     <ClCompile Include="Battlescape\Pathfinding.cpp" />
     <ClCompile Include="Battlescape\PathfindingNode.cpp" />
     <ClCompile Include="Battlescape\PathfindingOpenSet.cpp" />
-    <ClCompile Include="Battlescape\PatrolBAIState.cpp" />
+    <ClCompile Include="Battlescape\CivilianBAIState.cpp" />
     <ClCompile Include="Battlescape\Position.cpp" />
     <ClCompile Include="Battlescape\PrimeGrenadeState.cpp" />
     <ClCompile Include="Battlescape\Projectile.cpp" />
@@ -299,6 +299,7 @@
     <ClCompile Include="Engine\GMCat.cpp" />
     <ClCompile Include="Engine\InteractiveSurface.cpp" />
     <ClCompile Include="Engine\Language.cpp" />
+    <ClCompile Include="Engine\LanguagePlurality.cpp" />
     <ClCompile Include="Engine\LocalizedText.cpp" />
     <ClCompile Include="Engine\Music.cpp" />
     <ClCompile Include="Engine\OpenGL.cpp" />
@@ -512,7 +513,7 @@
     <ClInclude Include="Battlescape\AbortMissionState.h" />
     <ClInclude Include="Battlescape\ActionMenuItem.h" />
     <ClInclude Include="Battlescape\ActionMenuState.h" />
-    <ClInclude Include="Battlescape\AggroBAIState.h" />
+    <ClInclude Include="Battlescape\AlienBAIState.h" />
     <ClInclude Include="Battlescape\BattleAIState.h" />
     <ClInclude Include="Battlescape\BattlescapeGame.h" />
     <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
@@ -540,7 +541,7 @@
     <ClInclude Include="Battlescape\Pathfinding.h" />
     <ClInclude Include="Battlescape\PathfindingNode.h" />
     <ClInclude Include="Battlescape\PathfindingOpenSet.h" />
-    <ClInclude Include="Battlescape\PatrolBAIState.h" />
+    <ClInclude Include="Battlescape\CivilianBAIState.h" />
     <ClInclude Include="Battlescape\Position.h" />
     <ClInclude Include="Battlescape\PrimeGrenadeState.h" />
     <ClInclude Include="Battlescape\Projectile.h" />
@@ -571,6 +572,7 @@
     <ClInclude Include="Engine\GraphSubset.h" />
     <ClInclude Include="Engine\InteractiveSurface.h" />
     <ClInclude Include="Engine\Language.h" />
+    <ClInclude Include="Engine\LanguagePlurality.h" />
     <ClInclude Include="Engine\LocalizedText.h" />
     <ClInclude Include="Engine\Logger.h" />
     <ClInclude Include="Engine\Music.h" />
@@ -745,10 +747,10 @@
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
+    <None Include="..\media\openxcom.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

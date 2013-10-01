@@ -64,12 +64,12 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface(isGeoscape? "BACK01.SCR" : "TAC00.SCR"));
 
 	_btnYes->setColor(color);
-	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
+	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
 	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(color);
-	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
+	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -86,7 +86,7 @@ AbandonGameState::AbandonGameState(Game *game) : State(game)
 	}
 
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_ABANDON_GAME_QUESTION");
+	ss << tr("STR_ABANDON_GAME_QUESTION");
 	_txtTitle->setText(ss.str());
 }
 

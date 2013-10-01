@@ -66,12 +66,12 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftPatrolState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftPatrolState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+5);
-	_btnRedirect->setText(_game->getLanguage()->getString("STR_REDIRECT_CRAFT"));
+	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)&CraftPatrolState::btnRedirectClick);
 	_btnRedirect->onKeyboardPress((ActionHandler)&CraftPatrolState::btnRedirectClick, (SDLKey)Options::getInt("keyOk"));
 
@@ -81,15 +81,15 @@ CraftPatrolState::CraftPatrolState(Game *game, Craft *craft, Globe *globe) : Sta
 	_txtDestination->setWordWrap(true);
 	std::wstringstream s;
 	s <<_craft->getName(_game->getLanguage()) << L'\n';
-	s << _game->getLanguage()->getString("STR_HAS_REACHED") << L'\n';
-	s << _game->getLanguage()->getString("STR_DESTINATION") << L'\n';
+	s << tr("STR_HAS_REACHED") << L'\n';
+	s << tr("STR_DESTINATION") << L'\n';
 	s << _craft->getDestination()->getName(_game->getLanguage());
 	_txtDestination->setText(s.str());
 
 	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
-	_txtPatrolling->setText(_game->getLanguage()->getString("STR_NOW_PATROLLING"));
+	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
 }
 
 /**

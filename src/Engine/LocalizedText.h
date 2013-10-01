@@ -117,7 +117,7 @@ LocalizedText LocalizedText::arg(T val) const
 	os.str(L"");
 	os << val;
 	std::wstring tval(os.str());
-	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + 1))
+	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + tval.length()))
 	{
 		ntext.replace(pos, marker.length(), tval);
 	}
@@ -142,7 +142,7 @@ LocalizedText &LocalizedText::arg(T val)
 		os.str(L"");
 		os << val;
 		std::wstring tval(os.str());
-		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + 1))
+		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + tval.length()))
 		{
 			_text.replace(pos, marker.length(), tval);
 		}

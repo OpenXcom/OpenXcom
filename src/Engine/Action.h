@@ -36,11 +36,11 @@ class Action
 private:
 	SDL_Event *_ev;
 	double _scaleX, _scaleY;
-	int _mouseX, _mouseY, _surfaceX, _surfaceY;
+	int _topBlackBand, _leftBlackBand, _mouseX, _mouseY, _surfaceX, _surfaceY;
 	InteractiveSurface *_sender;
 public:
 	/// Creates an action with given event data.
-	Action(SDL_Event *ev, double scaleX, double scaleY);
+	Action(SDL_Event *ev, double scaleX, double scaleY, int topBlackBand, int leftBlackBand);
 	/// Cleans up the action.
 	~Action();
 	/// Gets the screen's X scale.
@@ -51,6 +51,10 @@ public:
 	void setMouseAction(int mouseX, int mouseY, int surfaceX, int surfaceY);
 	/// Gets if the action is a mouse action.
 	bool isMouseAction() const;
+	/// Gets the top black band height.
+	int getTopBlackBand() const;
+	/// Gets the left black band width.
+	int getLeftBlackBand() const;
 	/// Gets the mouse's X position.
 	int getXMouse() const;
 	/// Gets the mouse's Y position.

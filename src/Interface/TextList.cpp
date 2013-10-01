@@ -72,6 +72,32 @@ TextList::~TextList()
 }
 
 /**
+* Changes the position of the surface in the X axis.
+* @param x X position in pixels.
+*/
+void TextList::setX(int x)
+{
+	Surface::setX(x);
+	_up->setX(getX() + getWidth() + _scrollPos);
+	_down->setX(getX() + getWidth() + _scrollPos);
+	if (_selector != 0)
+		_selector->setX(getX());
+}
+
+/**
+* Changes the position of the surface in the Y axis.
+* @param y Y position in pixels.
+*/
+void TextList::setY(int y)
+{
+	Surface::setY(y);
+	_up->setY(getY() + 1);
+	_down->setY(getY() + getHeight() - 12);
+	if (_selector != 0)
+		_selector->setY(getY());
+}
+
+/**
  * Sets the allowScrollOnArrowButtons.
  * @param value new value.
  */
@@ -905,6 +931,7 @@ void TextList::mouseOut(Action *action, State *state)
 
 	InteractiveSurface::mouseOut(action, state);
 }
+
 /*
  * get the scroll depth.
  * @return scroll depth.
@@ -914,19 +941,4 @@ int TextList::getScroll()
 	return _scroll;
 }
 
-void TextList::setAllX(int x)
-{
-	_x = x;
-	_up->setX(getX() + getWidth() + _scrollPos);
-	_down->setX(getX() + getWidth() + _scrollPos);
-	_selector->setX(x);
-}
-
-void TextList::setAllY(int y)
-{
-	_y = y;
-	_up->setY(getY() + 1);
-	_down->setY(getY() + getHeight() - 12);
-	_selector->setY(y);
-}
 }
