@@ -278,7 +278,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 		if (_save->getTile(action.target))
 		{
-			_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
+			_save->getPathfinding()->calculate(action.actor, action.target);//, _save->getTile(action.target)->getUnit());
 		}
 		if (_save->getPathfinding()->getStartDirection() != -1)
 		{

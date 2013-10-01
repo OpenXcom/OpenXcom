@@ -186,7 +186,7 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 	start->connect(0, 0, 0, endPosition);
 	PathfindingOpenSet openList;
 	openList.push(start);
-	bool missile = (target && maxTUCost == 10000);
+	bool missile = (target && maxTUCost == -1);
 	// if the open list is empty, we've reached the end
 	while(!openList.empty())
 	{
