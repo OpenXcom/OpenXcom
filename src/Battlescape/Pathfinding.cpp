@@ -823,9 +823,9 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
  * @param direction The direction of travel.
  * @param start The starting position of the travel.
  * @param destination Where the travel ends.
- * @return True if going through a closed UFO door.
- */
-bool Pathfinding::isThroughClosedUfoDoor(int direction, Position start, Position destination)
+ * @return The TU cost of opening the door. 0 if no UFO door opened.
+  */
+int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination)
 {
 	Tile *s = _save->getTile(start);
 	Tile *d = _save->getTile(destination);
@@ -833,28 +833,50 @@ bool Pathfinding::isThroughClosedUfoDoor(int direction, Position start, Position
 	switch (direction)
 	{
 	case 0:
-		return s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL);
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		break;
 	case 1:
-		return (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL) ||
-				d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL));
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
 	case 2:
-		return d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
 	case 3:
-		return (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL) ||
-				d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL));
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
 	case 4:
-		return d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL);
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		break;
 	case 5:
-		return (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL) ||
-				s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL));
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
 	case 6:
-		return s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
 	case 7:
-		return (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL) ||
-				s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL));
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
 	default:
-		return false;
+		return 0;
 	}
+
+	return 0;
 }
 
 /**
@@ -893,18 +915,13 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
-
 		if (running)
 		{
 			tu *= 0.75;
 		}
-
 		energy -= tu / 2;
 
-		if (isThroughClosedUfoDoor(dir, pos, destination))
-		{
-			tu += 4;
-		}
+		tu += getOpeningUfoDoorCost(dir, pos, destination);
 
 		tus -= tu;
 		total += tu;
