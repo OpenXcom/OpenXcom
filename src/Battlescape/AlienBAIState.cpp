@@ -147,7 +147,9 @@ void AlienBAIState::think(BattleAction *action)
 	_knownEnemies = countKnownTargets();
 	_visibleEnemies = selectNearestTarget();
 	_spottingEnemies = getSpottingUnits(_unit->getPosition());
-	
+	_melee = false;
+	_rifle = false;
+	_blaster = false;
 	
 	if (_traceAI)
 	{
@@ -171,7 +173,7 @@ void AlienBAIState::think(BattleAction *action)
 		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
 	}
 
-	if (action->weapon)
+	if (action->weapon && action->weapon->getAmmoItem())
 	{
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 			_melee = true;
@@ -1479,6 +1481,7 @@ void AlienBAIState::meleeAction()
  */
 void AlienBAIState::wayPointAction()
 {
+	_aggroTarget = 0;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end() && _aggroTarget == 0; ++i)
 	{
 		if ((*i)->isOut() ||
@@ -1512,7 +1515,7 @@ void AlienBAIState::wayPointAction()
 		Position CurrentPosition = _unit->getPosition();
 		Position DirectionVector;
 
-		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget);
+		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget, -1);
 		PathDirection = _save->getPathfinding()->dequeuePath();
 		while (PathDirection != -1)
 		{
