@@ -489,12 +489,27 @@ void CivilianBAIState::setupPatrol()
 	}
 
 	// look for a new node to walk towards
-	if (_toNode == 0)
+	
+	int triesLeft = 5;
+
+	while (_toNode == 0 && triesLeft)
 	{
+		triesLeft--;
+
 		_toNode = _save->getPatrolNode(true, _unit, _fromNode);
 		if (_toNode == 0)
 		{
 			_toNode = _save->getPatrolNode(false, _unit, _fromNode);
+		}
+
+		if (_toNode != 0)
+		{
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_save->getPathfinding()->abortPath();
 		}
 	}
 

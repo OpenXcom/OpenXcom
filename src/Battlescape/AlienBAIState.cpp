@@ -468,6 +468,16 @@ void AlienBAIState::setupPatrol()
 				_toNode = _save->getPatrolNode(!scout, _unit, _fromNode);
 			}
 		}
+		
+		if (_toNode != 0)
+		{
+			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			if (_save->getPathfinding()->getStartDirection() == -1)
+			{
+				_toNode = 0;
+			}
+			_save->getPathfinding()->abortPath();
+		}
 	}
 
 	if (_toNode != 0)
@@ -502,6 +512,7 @@ void AlienBAIState::setupAmbush()
 		Position target;
 		const int BASE_SYSTEMATIC_SUCCESS = 100;
 		const int COVER_BONUS = 25;
+		const int FAST_PASS_THRESHOLD = 80;
 		Position origin = _save->getTileEngine()->getSightOriginVoxel(_aggroTarget);
 
 		// we'll use node positions for this, as it gives map makers a good degree of control over how the units will use the environment.
@@ -548,6 +559,10 @@ void AlienBAIState::setupAmbush()
 							bestScore = score;
 							_ambushTUs = (pos == _unit->getPosition()) ? 1 : ambushTUs;
 							_ambushAction->target = pos;
+							if (bestScore > FAST_PASS_THRESHOLD)
+							{
+								break;
+							}
 						}
 					}
 				}
