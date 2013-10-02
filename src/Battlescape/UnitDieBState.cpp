@@ -157,7 +157,7 @@ void UnitDieBState::think()
 			Game *game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_damageType == DT_NONE)
+				if (_damageType == DT_NONE && _unit->getArmor()->getSize() == 1)
 				{
 					std::wstringstream ss;
 					ss << _unit->getName(game->getLanguage()) << L'\n';
