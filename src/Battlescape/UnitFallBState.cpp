@@ -246,10 +246,11 @@ void UnitFallBState::think()
 					}
 					if (!escapeFound)
 					{
-						// TODO We could knock out any unit that couldn't find an escape, better than them turning invisible!
+						unitBelow->knockOut();
 						ub = unitsToMove.erase(ub);
 					}
 				}
+				_parent->checkForCasualties(0,*unit);
 			}
 		}
 		// we are just standing around, we are done falling.

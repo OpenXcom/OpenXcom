@@ -992,6 +992,18 @@ int BattleUnit::getStunlevel() const
 }
 
 /**
+ * Raises a unit's stun level sufficiently so that the unit is ready to become unconscious.
+ * Used when another unit falls on top of this unit.
+ */
+void BattleUnit::knockOut()
+{
+	if (getArmor()->getSideArmor() > 1)
+		_health = 0;
+	else
+		_stunlevel = _health;
+}
+
+/**
  * Intialises the falling sequence. Occurs after death or stunned.
  */
 void BattleUnit::startFalling()
