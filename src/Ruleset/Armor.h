@@ -41,6 +41,7 @@ private:
 	int _size;
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
+	int _baseTUBonus, _percentTUBonus, _baseStaminaBonus, _percentStaminaBonus, _baseStrengthBonus, _percentStrengthBonus;
 public:
 	/// Creates a blank armor ruleset.
 	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
