@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-
+#include <algorithm>
 #include "Ufopaedia.h"
 #include "ArticleStateItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -206,7 +206,7 @@ namespace OpenXcom
 				}
 				else
 				{
-					for (unsigned int i = 0; i < ammo_data->size(); ++i)
+					for (unsigned int i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 					{
 						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
 						if (Ufopaedia::isArticleAvailable(_game, ammo_article))

@@ -7917,10 +7917,6 @@ ufopaedia:
   - id: STR_INCENDIARY_ROCKET
     type_id: 4
     section: STR_NOT_AVAILABLE
-  - id: STR_ROCKET_LAUNCHER
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_ROCKET_LAUNCHER_UFOPEDIA
   - id: STR_LASER_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
