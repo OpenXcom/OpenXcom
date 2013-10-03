@@ -1133,7 +1133,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			}
 		}
 		// replace the TUs from shooting
-		unit->setTimeUnits(unit->getStats()->tu);
+		unit->setTimeUnits(unit->getFullTU());
 		ba.type = BA_NONE;
 		break;
 	default: break;
