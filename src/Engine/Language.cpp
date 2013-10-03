@@ -54,6 +54,8 @@ Language::Language() : _id(""), _strings(), _handler(0)
 		_names["en-US"] = utf8ToWstr("English (US)");
 		_names["en-GB"] = utf8ToWstr("English (UK)");
 		_names["fr"] = utf8ToWstr("Français");
+		_names["fi"] = utf8ToWstr("Suomi");
+		_names["grk"] = utf8ToWstr("Ελληνικά");
 		_names["de"] = utf8ToWstr("Deutsch");
 		_names["hu-HU"] = utf8ToWstr("Magyar");
 		_names["it"] = utf8ToWstr("Italiano");
