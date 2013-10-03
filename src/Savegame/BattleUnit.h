@@ -414,7 +414,10 @@ public:
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
 	int getCoverReserve();
-};
+	/// get full stats including armor bonuses
+	int getFullTU();
+	int getFullStamina();
+	int getFullStrength();};
 
 }
 
