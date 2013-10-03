@@ -77,6 +77,12 @@ public:
 	float getDamageModifier(ItemDamageType dt);
 	/// Gets loftempSet
 	std::vector<int> getLoftempsSet() const;
+	/// Gets the TU bonus.
+	int getTUBonus(int tu) const;
+	/// Gets the Stamina bonus.
+	int getStaminaBonus(int stamina) const;
+	/// Gets the Strength bonus.
+	int getStrengthBonus(int strength) const;
 };
 
 }
