@@ -77,7 +77,7 @@ private:
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 	std::vector<Position> _tileSearch;
 	/// Selects a soldier.
-	BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+	BattleUnit *selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 public:
 	/// Creates a new battle save, based on the current generic save.
 	SavedBattleGame();
