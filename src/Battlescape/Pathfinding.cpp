@@ -818,6 +818,67 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	return false;
 }
 
+/**
+ * Checks if going one step from start to destination in the given direction requires
+ * going through a closed UFO door.
+ * @param direction The direction of travel.
+ * @param start The starting position of the travel.
+ * @param destination Where the travel ends.
+ * @return The TU cost of opening the door. 0 if no UFO door opened.
+  */
+int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination)
+{
+	Tile *s = _save->getTile(start);
+	Tile *d = _save->getTile(destination);
+
+	switch (direction)
+	{
+	case 0:
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		break;
+	case 1:
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 2:
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 3:
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (d->getMapData(MapData::O_WESTWALL) && d->getMapData(MapData::O_WESTWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_WESTWALL))
+			return d->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 4:
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		break;
+	case 5:
+		if (d->getMapData(MapData::O_NORTHWALL) && d->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !d->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return d->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 6:
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	case 7:
+		if (s->getMapData(MapData::O_NORTHWALL) && s->getMapData(MapData::O_NORTHWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_NORTHWALL))
+			return s->getMapData(MapData::O_NORTHWALL)->getTUCost(_movementType);
+		if (s->getMapData(MapData::O_WESTWALL) && s->getMapData(MapData::O_WESTWALL)->isUFODoor() && !s->isUfoDoorOpen(MapData::O_WESTWALL))
+			return s->getMapData(MapData::O_WESTWALL)->getTUCost(_movementType);
+		break;
+	default:
+		return 0;
+	}
+
+	return 0;
+}
 
 /**
  * Marks tiles for the path preview.
@@ -860,6 +921,9 @@ bool Pathfinding::previewPath(bool bRemove)
 			tu *= 0.75;
 		}
 		energy -= tu / 2;
+
+		tu += getOpeningUfoDoorCost(dir, pos, destination);
+
 		tus -= tu;
 		total += tu;
 		bool reserve = _save->getBattleState()->getBattleGame()->checkReservedTU(_unit, total, true);
