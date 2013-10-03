@@ -83,7 +83,7 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
-	
+
 }
 
 
@@ -557,7 +557,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (hiddenExplosion)
 				{
 					// this is instant death from UFO powersources, without screaming sounds
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true)); 
+					statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
 				}
 				else
 				{
@@ -1453,6 +1453,11 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 		return;
 
 	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
+
+	if (item->getUnit())
+	{
+		item->getUnit()->setPosition(p);
+	}
 
 	if(newItem)
 	{

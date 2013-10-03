@@ -68,7 +68,7 @@ SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(
 	_strafeEnabled = Options::getBool("strafe");
 	_sneaky = Options::getBool("sneakyAI");
 	_traceAI = Options::getBool("traceAI");
-	
+
 	_tileSearch.resize(11*11);
 	for (int i = 0; i < 121; ++i)
 	{
@@ -796,7 +796,7 @@ void SavedBattleGame::endTurn()
 	int liveSoldiers, liveAliens;
 
 	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-		
+
 	if (_turn >= 20 || liveAliens < 2)
 	{
 		_cheating = true;
@@ -1304,6 +1304,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				{
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
+					(*i)->kneel(false);
 					(*i)->setCache(0);
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
