@@ -297,9 +297,9 @@ void InventoryState::updateStats()
 	{
 		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		std::wstringstream ss;
-		ss << tr("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
+		ss << tr("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getFullStrength();
 		_txtWeight->setText(ss.str());
-		if (Weight > unit->getStats()->strength)
+		if (Weight > unit->getFullStrength())
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
 		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	}
