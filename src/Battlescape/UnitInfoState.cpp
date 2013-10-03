@@ -43,8 +43,9 @@ namespace OpenXcom
  * Initializes all the elements in the Unit Info screen.
  * @param game Pointer to the core game.
  * @param unit Pointer to the selected unit.
+ * @param parent Pointer to parent Battlescape.
  */
-UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(unit)
+UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent) : State(game), _unit(unit), _parent(parent)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -529,6 +530,7 @@ void UnitInfoState::init()
 void UnitInfoState::handle(Action *action)
 {
 	State::handle(action);
+	SavedBattleGame *battleGame = _game->getSavedGame()->getSavedBattle();
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -537,61 +539,77 @@ void UnitInfoState::handle(Action *action)
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() > 1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnNextClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnPrevClick(action);
 		}
 	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		// "tab" - next solider
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnNextClick(action);
 		}
-		// prev soldier
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnPrevClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel"))
 		{
 			_game->popState();
 		}
+	}
+}
+
+/**
+* Selects the previous soldier.
+* @param action Pointer to an action.
+*/
+void UnitInfoState::btnPrevClick(Action *)
+{
+	if (_parent)
+	{
+		_parent->selectPreviousPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(false, false, true);
+	}
+	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	if (_unit != 0)
+	{
+		init();
+	}
+	else
+	{
+		_game->popState();
+	}
+}
+
+/**
+* Selects the next soldier.
+* @param action Pointer to an action.
+*/
+void UnitInfoState::btnNextClick(Action *)
+{
+	if (_parent)
+	{
+		_parent->selectNextPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(false, false, true);
+	}
+	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	if (_unit != 0)
+	{
+		init();
+	}
+	else
+	{
+		_game->popState();
 	}
 }
 

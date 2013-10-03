@@ -849,13 +849,14 @@ void BattlescapeState::btnPrevSoldierClick(Action *)
  * Selects the next soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
  * @param setReselect When true, flag the current unit first.
+ * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect)
+void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect);
+		BattleUnit *unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -867,13 +868,15 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 /**
  * Selects the previous soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
+ * @param setReselect When true, flag the current unit first.
+ * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect)
+void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect);
+		BattleUnit *unit = _save->selectPreviousPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
 		_battleGame->cancelCurrentAction();
@@ -945,7 +948,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 				// on the stats button when the mouse is on the scroll-border
 				b = false;
 		}
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit()));
+		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
 	}
 }
 

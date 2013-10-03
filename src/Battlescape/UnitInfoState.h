@@ -37,6 +37,7 @@ class UnitInfoState : public State
 {
 private:
 	BattleUnit *_unit;
+	BattlescapeState *_parent;
 
 	Surface *_bg;
 	Text *_txtName;
@@ -53,13 +54,17 @@ private:
 	Bar *_barFrontArmor, *_barLeftArmor, *_barRightArmor, *_barRearArmor, *_barUnderArmor;
 public:
 	/// Creates the Unit Info state.
-	UnitInfoState(Game *game, BattleUnit *unit);
+	UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent);
 	/// Cleans up the Unit Info state.
 	~UnitInfoState();
 	/// Updates the unit info.
 	void init();
 	/// Handler for clicking the button.
 	void handle(Action *action);
+	/// Handler for clicking the Previous button.
+	void btnPrevClick(Action *action);
+	/// Handler for clicking the Next button.
+	void btnNextClick(Action *action);
 };
 
 }

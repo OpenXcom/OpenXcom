@@ -413,7 +413,11 @@ public:
 	/// switch the state of the fire damage tracker.
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
-	int getCoverReserve();
+	int getCoverReserve() const;
+	/// Is this unit selectable?
+	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
+	/// Does this unit have an inventory?
+	bool hasInventory() const;
 };
 
 }
