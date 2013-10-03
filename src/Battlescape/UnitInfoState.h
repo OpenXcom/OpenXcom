@@ -28,6 +28,7 @@ class BattleUnit;
 class Text;
 class Bar;
 class Surface;
+class BattlescapeState;
 
 /**
  * Unit Info screen that shows all the
