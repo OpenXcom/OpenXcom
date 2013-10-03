@@ -4,78 +4,126 @@ lookWeights:
   - 0
   - 0
 maleFirst:
+  - Alexandr
+  - Alexey
   - Anatoly
-  - Andrei
-  - Boris
+  - Andrey
+  - Anton
+  - Denis
   - Dmitry
+  - Eugeny
   - Gennady
-  - Grigoriy
   - Igor
   - Ivan
+  - Konstantin
   - Leonid
+  - Maxim
   - Mikhail
-  - Nikolai
-  - Sergei
-  - Victor
+  - Nikolay
+  - Oleg
+  - Pavel
+  - Petr
+  - Roman
+  - Ruslan
+  - Sergey
+  - Vadim
+  - Valery
+  - Vasily
+  - Viktor
+  - Vitaly
   - Vladimir
-  - Yuri
+  - Vyacheslav
+  - Yury
 femaleFirst:
+  - Alexandra
+  - Alla
+  - Anastasiya
   - Anna
+  - Ekaterina
   - Elena
+  - Eugeniya
   - Galina
-  - Inna
   - Irina
+  - Julia
+  - Larisa
+  - Lidiya
+  - Liliya
+  - Lyubov
   - Lyudmila
   - Marina
+  - Mariya
+  - Nadezhda
+  - Natalya
+  - Nina
   - Oksana
+  - Olesya
   - Olga
-  - Tatyana
+  - Raisa
+  - Svetlana
   - Tamara
-  - Varvara
-  - Yana
+  - Tatyana
+  - Valentina
+  - Vera
+  - Viktoriya
 maleLast:
+  - Alekseev
+  - Andreev
   - Antonov
-  - Belov
-  - Chernov
-  - Doronin
+  - Fedorov
+  - Egorov
   - Gromov
+  - Ivanov
   - Komarov
   - Korolev
+  - Kozlov
+  - Kuznetsov
   - Lebedev
-  - Likhachev
-  - Matveev
+  - Makarov
   - Mikhailov
+  - Morozov
   - Nikitin
+  - Nikolaev
+  - Novikov
+  - Orlov
+  - Pavlov
   - Petrov
+  - Popov
   - Romanov
-  - Samoylenko
-  - Sharov
-  - Shedrin
-  - Shalimov
-  - Tarasov
-  - Voronin
-  - Yakushev
-  - Zhdanovich
+  - Semenov
+  - Smirnov
+  - Sokolov
+  - Stepanov
+  - Vasilyev
+  - Volkov
+  - Zakharov
 femaleLast:
+  - Alekseeva
+  - Andreeva
   - Antonova
-  - Belova
-  - Chernova
-  - Doronina
+  - Fedorova
+  - Egorova
   - Gromova
+  - Ivanova
   - Komarova
   - Koroleva
+  - Kozlova
+  - Kuznetsova
   - Lebedeva
-  - Likhacheva
-  - Matveeva
+  - Makarova
   - Mikhailova
+  - Morozova
   - Nikitina
+  - Nikolaeva
+  - Novikova
+  - Orlova
+  - Pavlova
   - Petrova
+  - Popova
   - Romanova
-  - Samoylenko
-  - Sharova
-  - Shedrina
-  - Shalimova
-  - Tarasova
-  - Voronina
-  - Yakusheva
-  - Zhdanovich
+  - Semenova
+  - Smirnova
+  - Sokolova
+  - Stepanova
+  - Vasilyeva
+  - Volkova
+  - Zakharova
