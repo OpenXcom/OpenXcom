@@ -145,8 +145,8 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
 
-	_tu = _stats.tu;
-	_energy = _stats.stamina;
+	_tu = getFullTU();
+	_energy = getFullStamina();
 	_health = _stats.health;
 	_morale = 100;
 	_stunlevel = 0;
@@ -1350,8 +1350,8 @@ void BattleUnit::prepareNewTurn()
 	_unitsSpottedThisTurn.clear();
 
 	// recover TUs
-	int TURecovery = getStats()->tu;
-	float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
+	int TURecovery = getFullTU();
+	float encumbrance = (float)getFullStrength() / (float)getCarriedWeight();
 	if (encumbrance < 1)
 	{
 	  TURecovery = int(encumbrance * TURecovery);
@@ -1363,12 +1363,12 @@ void BattleUnit::prepareNewTurn()
 	// recover energy
 	if (!isOut())
 	{
-		int ENRecovery = getStats()->tu / 3;
+		int ENRecovery = getFullTU() / 3;
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
 		_energy += ENRecovery;
-		if (_energy > getStats()->stamina)
-			_energy = getStats()->stamina;
+		if (_energy > getFullStamina())
+			_energy = getFullStamina();
 	}
 
 	// suffer from fatal wounds
@@ -2493,5 +2493,20 @@ void BattleUnit::setCoverReserve(int reserve)
 int BattleUnit::getCoverReserve()
 {
 	return _coverReserve;
+}
+/*
+ * get the unit + armor bonuses stats.
+ */
+int BattleUnit::getFullTU()
+{
+	return _stats.tu + _armor->getTUBonus(_stats.tu);
+}
+int BattleUnit::getFullStamina()
+{
+	return _stats.stamina + _armor->getStaminaBonus(_stats.stamina);
+}
+int BattleUnit::getFullStrength()
+{
+	return _stats.strength + _armor->getStrengthBonus(_stats.strength);
 }
 }
