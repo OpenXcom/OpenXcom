@@ -43,7 +43,7 @@ protected:
 	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction;
 	bool _rifle, _melee, _blaster;
 	bool _traceAI, _wasHit;
-	int _AIMode, _intelligence;
+	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
 public:
 	/// Creates a new AlienBAIState linked to the game and a certain unit.

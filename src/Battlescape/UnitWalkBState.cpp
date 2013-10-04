@@ -358,6 +358,8 @@ void UnitWalkBState::think()
 			if (dir != _unit->getDirection() && dir < Pathfinding::DIR_UP && !_pf->getStrafeMove())
 			{
 				_unit->lookAt(dir);
+				_unit->setCache(0);
+				_parent->getMap()->cacheUnit(_unit);
 				return;
 			}
 
@@ -398,7 +400,10 @@ void UnitWalkBState::think()
 						>= 28)))  // 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						_action.TU = 0;
-						postPathProcedures();
+						_pf->abortPath();
+						_unit->setCache(0);
+						_parent->getMap()->cacheUnit(_unit);
+						_parent->popState();
 						return;
 					}
 				}
@@ -495,6 +500,10 @@ void UnitWalkBState::postPathProcedures()
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		int dir = _action.finalFacing;
+		if (_action.finalAction)
+		{
+			_unit->dontReselect();
+		}
 		if (_unit->getCharging() != 0)
 		{
 			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());

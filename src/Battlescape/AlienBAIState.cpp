@@ -50,7 +50,7 @@ namespace OpenXcom
  */
 AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node) : BattleAIState(save, unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
 																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
-																				_wasHit(false), _AIMode(AI_PATROL), _fromNode(node), _toNode(0)
+																				_wasHit(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
 	_traceAI = _save->getTraceSetting();
 
@@ -271,9 +271,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->type = _escapeAction->type;
 		action->target = _escapeAction->target;
 		// end this unit's turn.
-		action->number = 3;
-		// don't do a second action.
-		_unit->dontReselect();
+		action->finalAction = true;
 		// ignore new targets.
 		action->desperate = true;
 		// spin 180 at the end of your route.
@@ -312,10 +310,7 @@ void AlienBAIState::think(BattleAction *action)
 		// face where we think our target will appear.
 		action->finalFacing = _ambushAction->finalFacing;
 		// end this unit's turn.
-		action->number = 3;
-		_unit->dontReselect();
-		// ignore newly spotted units.
-		action->desperate = true;
+		action->finalAction = true;
 		// we've factored in the reserved TUs already, so don't worry.
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
 		break;
@@ -937,7 +932,7 @@ const int AlienBAIState::getSpottingUnits(Position pos)
 const int AlienBAIState::selectNearestTarget()
 {
 	int tally = 0;
-	int closest = 100;
+	_closestDist= 100;
 	_aggroTarget = 0;
 	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
 	origin.z -= 2;
@@ -950,7 +945,7 @@ const int AlienBAIState::selectNearestTarget()
 			{
 				tally++;
 				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
-				if (dist < closest)
+				if (dist < _closestDist)
 				{
 					bool validTarget = false;
 					if (_rifle || !_melee)
@@ -967,7 +962,7 @@ const int AlienBAIState::selectNearestTarget()
 					}
 					if (validTarget)
 					{
-						closest = dist;
+						_closestDist = dist;
 						_aggroTarget = *i;
 					}
 				}
@@ -1196,8 +1191,13 @@ void AlienBAIState::evaluateAIMode()
 	
 	// factor in visible enemies.
 	if (_visibleEnemies)
+	{
 		combatOdds = 10 * combatOdds * (_visibleEnemies + 10) /100;
-
+		if (_closestDist < 5)
+		{
+			ambushOdds = 0;
+		}
+	}
 	// make sure we have an ambush lined up, or don't even consider it.
 	if (_ambushTUs)
 	{
