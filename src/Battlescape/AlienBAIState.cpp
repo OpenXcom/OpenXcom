@@ -277,7 +277,7 @@ void AlienBAIState::think(BattleAction *action)
 		// spin 180 at the end of your route.
 		_unit->_hidingForTurn = true;
 		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	case AI_PATROL:
 		action->type = _patrolAction->type;
@@ -297,7 +297,7 @@ void AlienBAIState::think(BattleAction *action)
 		action->finalFacing = _attackAction->finalFacing;
 		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
 		// don't worry about reserving TUs, we've factored that in already.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		// if this is a "find fire point" action, don't increment the AI counter.
 		if (action->type == BA_WALK && _rifle)
 		{
@@ -312,7 +312,7 @@ void AlienBAIState::think(BattleAction *action)
 		// end this unit's turn.
 		action->finalAction = true;
 		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 	default:
 		break;

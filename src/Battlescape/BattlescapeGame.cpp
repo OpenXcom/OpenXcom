@@ -1426,11 +1426,15 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Sets the TU reserved type.
  * @param tur A battleactiontype.
+ * @param player is this requested by the player?
  */
-void BattlescapeGame::setTUReserved(BattleActionType tur)
+void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 {
 	_tuReserved = tur;
-	_playerTUReserved = tur;
+	if (player)
+	{
+		_playerTUReserved = tur;
+	}
 }
 
 /**
