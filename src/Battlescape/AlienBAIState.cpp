@@ -173,7 +173,7 @@ void AlienBAIState::think(BattleAction *action)
 		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
 	}
 
-	if (action->weapon && action->weapon->getAmmoItem())
+	if (action->weapon)
 	{
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 			_melee = true;
