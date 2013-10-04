@@ -1068,27 +1068,27 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 
 	for (int i = 0; i < end; ++i)
 	{
-			if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
-			Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
-			if ((n->getFlags() > 0 || n->getRank() > 0 || scout)										// for non-scouts we find a node with a desirability above 0
-			    && (!(n->getType() & Node::TYPE_SMALL) 
-					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-				&& (!(n->getType() & Node::TYPE_FLYING) 
-					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-				&& !n->isAllocated() // check if not allocated
-				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
-				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
-				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
-				&& (!scout || n != fromNode)	// scouts push forward
-				&& n->getPosition().x > 0 && n->getPosition().y > 0)
+		if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
+
+		Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+		if ((n->getFlags() > 0 || n->getRank() > 0 || scout)											// for non-scouts we find a node with a desirability above 0
+			&& (!(n->getType() & Node::TYPE_SMALL) || unit->getArmor()->getSize() == 1)					// the small unit bit is not set or the unit is small
+			&& (!(n->getType() & Node::TYPE_FLYING) || unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& !n->isAllocated()																		// check if not allocated
+			&& !(n->getType() & Node::TYPE_DANGEROUS)													// don't go there if an alien got shot there; stupid behavior like that
+			&& setUnitPosition(unit, n->getPosition(), true)											// check if not already occupied
+			&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire()						// you are not a firefighter; do not patrol into fire
+			&& (!scout || n != fromNode)																// scouts push forward
+			&& n->getPosition().x > 0 && n->getPosition().y > 0)
+		{
+			if (!preferred 
+				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+				|| preferred->getFlags() < n->getFlags())
 			{
-				if (!preferred 
-					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-					|| preferred->getFlags() < n->getFlags()) preferred = n;
-				{
-					compliantNodes.push_back(n);
-				}
+				preferred = n;
 			}
+			compliantNodes.push_back(n);
+		}
 	}
 
 	if (compliantNodes.empty())
@@ -1097,16 +1097,20 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 		if (unit->getArmor()->getSize() > 1 && !scout)
 		{
 			return getPatrolNode(true, unit, fromNode); // move dammit
-		} else return 0;
+		}
+		else
+			return 0;
 	}
 
 	if (scout)
 	{
 		// scout picks a random destination:
 		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
-	} else
+	}
+	else
 	{
 		if (!preferred) return 0;
+
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags(); }
 		return preferred;
