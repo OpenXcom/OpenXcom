@@ -263,7 +263,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
-	if (aggro != 0)
+	if (unit->getCharging() != 0)
 	{
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
