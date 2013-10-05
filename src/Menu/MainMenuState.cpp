@@ -30,6 +30,8 @@
 #include "NewBattleState.h"
 #include "LoadState.h"
 #include "OptionsState.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -97,6 +99,9 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();
+
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -141,7 +146,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, true));
+	_game->pushState(new LoadState(_game, OPT_MENU));
 }
 
 /**
@@ -150,7 +155,7 @@ void MainMenuState::btnLoadClick(Action *)
  */
 void MainMenuState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game));
+	_game->pushState(new OptionsState(_game, OPT_MENU));
 }
 
 /**

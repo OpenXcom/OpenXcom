@@ -20,6 +20,7 @@
 #define OPENXCOM_OPTIONSSTATE_H
 
 #include "../Engine/State.h"
+#include "OptionsBaseState.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -37,7 +38,7 @@ class Slider;
  * Options window that displays all
  * the settings the player can configure.
  */
-class OptionsState : public State
+class OptionsState : public OptionsBaseState
 {
 private:
 	static const std::string GL_EXT, GL_FOLDER, GL_STRING;
@@ -64,7 +65,7 @@ private:
 	int _musicVolume, _soundVolume;
 public:
 	/// Creates the Options state.
-	OptionsState(Game *game);
+	OptionsState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsState();
 	/// Initilizes the Options state.

@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM__OPTIONSCONTROLSSTATE_H
-#define OPENXCOM__OPTIONSCONTROLSSTATE_H
+#ifndef OPENXCOM_OPTIONSCONTROLSSTATE_H
+#define OPENXCOM_OPTIONSCONTROLSSTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -30,7 +30,8 @@ class Window;
 class Text;
 class TextList;
 
-struct KeyOption {
+struct KeyOption
+{
 	std::string option;
 	std::string name;
 	SDLKey key;
@@ -40,7 +41,7 @@ struct KeyOption {
  * Controls screen which allows the user to
  * customize the various key shortcuts in the game.
  */
-class OptionsControlsState : public State
+class OptionsControlsState : public OptionsBaseState
 {
 private:
 	TextButton *_btnOk, *_btnCancel;
@@ -55,10 +56,10 @@ private:
 	void addControls(KeyOption keys[], int count);
 	std::string ucWords(std::string str);
 public:
-	/// Creates the Saved Game state.
-	OptionsControlsState(Game *game);
-	/// Cleans up the Saved Game state.
-	virtual ~OptionsControlsState();
+	/// Creates the Controls state.
+	OptionsControlsState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Controls state.
+	~OptionsControlsState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.

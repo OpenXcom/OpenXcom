@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "BattlescapeOptionsState.h"
+#include "OptionsBattlescapeState.h"
 #include <sstream>
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -36,14 +36,15 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Battlescape Options screen.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
+OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
 {
 	_screen = false;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 16, 0, 16);
+	_txtTitle = new Text(320, 16, 0, 10);
 
 	_txtScrollSpeed = new Text(130, 9, 16, 32);
 	_btnScrollSpeed1 = new TextButton(22, 14, 16, 42);
@@ -84,9 +85,8 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	_btnAlienSpeed5 = new TextButton(56, 12, 155, 154);
 	_btnAlienSpeed6 = new TextButton(69, 12, 213, 154);
 
-	_btnOk = new TextButton(90, 16, 16, 174);
-	_btnLoad = new TextButton(90, 16, 117, 174);
-	_btnSave = new TextButton(90, 16, 214, 174);
+	_btnOk = new TextButton(148, 16, 8, 176);
+	_btnCancel = new TextButton(148, 16, 164, 176);
 
 	switch (Options::getInt("battleScrollSpeed"))
 	{
@@ -178,219 +178,171 @@ BattlescapeOptionsState::BattlescapeOptionsState(Game *game) : State(game)
 	add(_btnAlienSpeed6);
 
 	add(_btnOk);
-	add(_btnLoad);
-	add(_btnSave);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(0));
-	_window->setHighContrast(true);
-	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setColor(Palette::blockOffset(8) + 5);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(0));
+	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setHighContrast(true);
-	_txtTitle->setText(tr("STR_GAME_OPTIONS"));
+	_txtTitle->setText(tr("STR_BATTLESCAPE"));
 
-	_txtScrollSpeed->setColor(Palette::blockOffset(0));
-	_txtScrollSpeed->setHighContrast(true);
+	_txtScrollSpeed->setColor(Palette::blockOffset(8) + 10);
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
-	_btnScrollSpeed1->setColor(Palette::blockOffset(0));
-	_btnScrollSpeed1->setHighContrast(true);
+	_btnScrollSpeed1->setColor(Palette::blockOffset(15)-1);
 	_btnScrollSpeed1->setText(L"1");
 	_btnScrollSpeed1->setGroup(&_scrollSpeed);
 
-	_btnScrollSpeed2->setColor(Palette::blockOffset(0));
-	_btnScrollSpeed2->setHighContrast(true);
+	_btnScrollSpeed2->setColor(Palette::blockOffset(15)-1);
 	_btnScrollSpeed2->setText(L"2");
 	_btnScrollSpeed2->setGroup(&_scrollSpeed);
 
-	_btnScrollSpeed3->setColor(Palette::blockOffset(0));
-	_btnScrollSpeed3->setHighContrast(true);
+	_btnScrollSpeed3->setColor(Palette::blockOffset(15)-1);
 	_btnScrollSpeed3->setText(L"3");
 	_btnScrollSpeed3->setGroup(&_scrollSpeed);
 
-	_btnScrollSpeed4->setColor(Palette::blockOffset(0));
-	_btnScrollSpeed4->setHighContrast(true);
+	_btnScrollSpeed4->setColor(Palette::blockOffset(15)-1);
 	_btnScrollSpeed4->setText(L"4");
 	_btnScrollSpeed4->setGroup(&_scrollSpeed);
 
-	_btnScrollSpeed5->setColor(Palette::blockOffset(0));
-	_btnScrollSpeed5->setHighContrast(true);
+	_btnScrollSpeed5->setColor(Palette::blockOffset(15)-1);
 	_btnScrollSpeed5->setText(L"5");
 	_btnScrollSpeed5->setGroup(&_scrollSpeed);
 
-	_txtScrollType->setColor(Palette::blockOffset(0));
-	_txtScrollType->setHighContrast(true);
+	_txtScrollType->setColor(Palette::blockOffset(8) + 10);
 	_txtScrollType->setText(tr("STR_SCROLL_TYPE"));
 
-	_txtTriggerScroll->setColor(Palette::blockOffset(0));
-	_txtTriggerScroll->setHighContrast(true);
+	_txtTriggerScroll->setColor(Palette::blockOffset(15) - 1);
 	_txtTriggerScroll->setText(tr("STR_TRIGGER_SCROLL"));
 
-	_txtAutoScroll->setColor(Palette::blockOffset(0));
-	_txtAutoScroll->setHighContrast(true);
+	_txtAutoScroll->setColor(Palette::blockOffset(15) - 1);
 	_txtAutoScroll->setText(tr("STR_AUTO_SCROLL"));
 
-	_txtDragScroll->setColor(Palette::blockOffset(0));
-	_txtDragScroll->setHighContrast(true);
+	_txtDragScroll->setColor(Palette::blockOffset(15) - 1);
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
 
-	_btnScrollType1->setColor(Palette::blockOffset(0));
-	_btnScrollType1->setHighContrast(true);
+	_btnScrollType1->setColor(Palette::blockOffset(15)-1);
 	_btnScrollType1->setText(L"1");
 	_btnScrollType1->setGroup(&_scrollType);
 
-	_btnScrollType2->setColor(Palette::blockOffset(0));
-	_btnScrollType2->setHighContrast(true);
+	_btnScrollType2->setColor(Palette::blockOffset(15)-1);
 	_btnScrollType2->setText(L"2");
 	_btnScrollType2->setGroup(&_scrollType);
 
-	_btnScrollType3->setColor(Palette::blockOffset(0));
-	_btnScrollType3->setHighContrast(true);
+	_btnScrollType3->setColor(Palette::blockOffset(15)-1);
 	_btnScrollType3->setText(L"3");
 	_btnScrollType3->setGroup(&_scrollType);
 
-	_txtFireSpeed->setColor(Palette::blockOffset(0));
-	_txtFireSpeed->setHighContrast(true);
+	_txtFireSpeed->setColor(Palette::blockOffset(8) + 10);
 	_txtFireSpeed->setText(tr("STR_FIRE_SPEED"));
 
-	_btnFireSpeed1->setColor(Palette::blockOffset(0));
-	_btnFireSpeed1->setHighContrast(true);
+	_btnFireSpeed1->setColor(Palette::blockOffset(15)-1);
 	_btnFireSpeed1->setText(L"1");
 	_btnFireSpeed1->setGroup(&_fireSpeed);
 
-	_btnFireSpeed2->setColor(Palette::blockOffset(0));
-	_btnFireSpeed2->setHighContrast(true);
+	_btnFireSpeed2->setColor(Palette::blockOffset(15)-1);
 	_btnFireSpeed2->setText(L"2");
 	_btnFireSpeed2->setGroup(&_fireSpeed);
 
-	_btnFireSpeed3->setColor(Palette::blockOffset(0));
-	_btnFireSpeed3->setHighContrast(true);
+	_btnFireSpeed3->setColor(Palette::blockOffset(15)-1);
 	_btnFireSpeed3->setText(L"3");
 	_btnFireSpeed3->setGroup(&_fireSpeed);
 
-	_btnFireSpeed4->setColor(Palette::blockOffset(0));
-	_btnFireSpeed4->setHighContrast(true);
+	_btnFireSpeed4->setColor(Palette::blockOffset(15)-1);
 	_btnFireSpeed4->setText(L"4");
 	_btnFireSpeed4->setGroup(&_fireSpeed);
 
-	_btnFireSpeed5->setColor(Palette::blockOffset(0));
-	_btnFireSpeed5->setHighContrast(true);
+	_btnFireSpeed5->setColor(Palette::blockOffset(15)-1);
 	_btnFireSpeed5->setText(L"5");
 	_btnFireSpeed5->setGroup(&_fireSpeed);
 
-	_btnFireSpeed6->setColor(Palette::blockOffset(0));
-	_btnFireSpeed6->setHighContrast(true);
+	_btnFireSpeed6->setColor(Palette::blockOffset(15)-1);
 	_btnFireSpeed6->setText(L"6");
 	_btnFireSpeed6->setGroup(&_fireSpeed);
 
-	_txtXcomSpeed->setColor(Palette::blockOffset(0));
-	_txtXcomSpeed->setHighContrast(true);
+	_txtXcomSpeed->setColor(Palette::blockOffset(8) + 10);
 	_txtXcomSpeed->setText(tr("STR_XCOM_MOVEMENT_SPEED"));
 
-	_btnXcomSpeed1->setColor(Palette::blockOffset(0));
-	_btnXcomSpeed1->setHighContrast(true);
+	_btnXcomSpeed1->setColor(Palette::blockOffset(15)-1);
 	_btnXcomSpeed1->setText(L"1");
 	_btnXcomSpeed1->setGroup(&_xcomSpeed);
 
-	_btnXcomSpeed2->setColor(Palette::blockOffset(0));
-	_btnXcomSpeed2->setHighContrast(true);
+	_btnXcomSpeed2->setColor(Palette::blockOffset(15)-1);
 	_btnXcomSpeed2->setText(L"2");
 	_btnXcomSpeed2->setGroup(&_xcomSpeed);
 
-	_btnXcomSpeed3->setColor(Palette::blockOffset(0));
-	_btnXcomSpeed3->setHighContrast(true);
+	_btnXcomSpeed3->setColor(Palette::blockOffset(15)-1);
 	_btnXcomSpeed3->setText(L"3");
 	_btnXcomSpeed3->setGroup(&_xcomSpeed);
 
-	_btnXcomSpeed4->setColor(Palette::blockOffset(0));
-	_btnXcomSpeed4->setHighContrast(true);
+	_btnXcomSpeed4->setColor(Palette::blockOffset(15)-1);
 	_btnXcomSpeed4->setText(L"4");
 	_btnXcomSpeed4->setGroup(&_xcomSpeed);
 
-	_btnXcomSpeed5->setColor(Palette::blockOffset(0));
-	_btnXcomSpeed5->setHighContrast(true);
+	_btnXcomSpeed5->setColor(Palette::blockOffset(15)-1);
 	_btnXcomSpeed5->setText(L"5");
 	_btnXcomSpeed5->setGroup(&_xcomSpeed);
 
-	_btnXcomSpeed6->setColor(Palette::blockOffset(0));
-	_btnXcomSpeed6->setHighContrast(true);
+	_btnXcomSpeed6->setColor(Palette::blockOffset(15)-1);
 	_btnXcomSpeed6->setText(L"6");
 	_btnXcomSpeed6->setGroup(&_xcomSpeed);
 
-	_txtAlienSpeed->setColor(Palette::blockOffset(0));
-	_txtAlienSpeed->setHighContrast(true);
+	_txtAlienSpeed->setColor(Palette::blockOffset(8) + 10);
 	_txtAlienSpeed->setText(tr("STR_ALIEN_MOVEMENT_SPEED"));
 
-	_btnAlienSpeed1->setColor(Palette::blockOffset(0));
-	_btnAlienSpeed1->setHighContrast(true);
+	_btnAlienSpeed1->setColor(Palette::blockOffset(15)-1);
 	_btnAlienSpeed1->setText(L"1");
 	_btnAlienSpeed1->setGroup(&_alienSpeed);
 
-	_btnAlienSpeed2->setColor(Palette::blockOffset(0));
-	_btnAlienSpeed2->setHighContrast(true);
+	_btnAlienSpeed2->setColor(Palette::blockOffset(15)-1);
 	_btnAlienSpeed2->setText(L"2");
 	_btnAlienSpeed2->setGroup(&_alienSpeed);
 
-	_btnAlienSpeed3->setColor(Palette::blockOffset(0));
-	_btnAlienSpeed3->setHighContrast(true);
+	_btnAlienSpeed3->setColor(Palette::blockOffset(15)-1);
 	_btnAlienSpeed3->setText(L"3");
 	_btnAlienSpeed3->setGroup(&_alienSpeed);
 
-	_btnAlienSpeed4->setColor(Palette::blockOffset(0));
-	_btnAlienSpeed4->setHighContrast(true);
+	_btnAlienSpeed4->setColor(Palette::blockOffset(15)-1);
 	_btnAlienSpeed4->setText(L"4");
 	_btnAlienSpeed4->setGroup(&_alienSpeed);
 
-	_btnAlienSpeed5->setColor(Palette::blockOffset(0));
-	_btnAlienSpeed5->setHighContrast(true);
+	_btnAlienSpeed5->setColor(Palette::blockOffset(15)-1);
 	_btnAlienSpeed5->setText(L"5");
 	_btnAlienSpeed5->setGroup(&_alienSpeed);
 
-	_btnAlienSpeed6->setColor(Palette::blockOffset(0));
-	_btnAlienSpeed6->setHighContrast(true);
+	_btnAlienSpeed6->setColor(Palette::blockOffset(15)-1);
 	_btnAlienSpeed6->setText(L"6");
 	_btnAlienSpeed6->setGroup(&_alienSpeed);
 
-	_btnOk->setColor(Palette::blockOffset(0));
-	_btnOk->setHighContrast(true);
+	_btnOk->setColor(Palette::blockOffset(8) + 5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BattlescapeOptionsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)&OptionsBattlescapeState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnLoad->setColor(Palette::blockOffset(0));
-	_btnLoad->setHighContrast(true);
-	_btnLoad->setText(tr("STR_LOAD_GAME"));
-	_btnLoad->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnLoadClick);
-
-	_btnSave->setColor(Palette::blockOffset(0));
-	_btnSave->setHighContrast(true);
-	_btnSave->setText(tr("STR_SAVE_GAME"));
-	_btnSave->onMouseClick((ActionHandler)&BattlescapeOptionsState::btnSaveClick);
-
-	if (Options::getInt("autosave") >= 2)
-	{
-		_btnSave->setVisible(false);
-		_btnLoad->setVisible(false);
-	}
+	_btnCancel->setColor(Palette::blockOffset(8) + 5);
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
+	_btnCancel->onMouseClick((ActionHandler) &OptionsBattlescapeState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler) &OptionsBattlescapeState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
 }
 
 /**
  *
  */
-BattlescapeOptionsState::~BattlescapeOptionsState()
+OptionsBattlescapeState::~OptionsBattlescapeState()
 {
 
 }
 
 /**
- * Saves battlescape options.
+ * Saves options and returns to the previous screen.
+ * @param action Pointer to an action.
  */
-void BattlescapeOptionsState::saveOptions()
+void OptionsBattlescapeState::btnOkClick(Action *)
 {
 	if (_scrollSpeed == _btnScrollSpeed1)
 		Options::setInt("battleScrollSpeed", 4);
@@ -449,37 +401,16 @@ void BattlescapeOptionsState::saveOptions()
 	else if (_alienSpeed == _btnAlienSpeed6)
 		Options::setInt("battleAlienSpeed", 1);
 
-	Options::save();
-}
-
-/**
- * Saves options and returns to the previous screen.
- * @param action Pointer to an action.
- */
-void BattlescapeOptionsState::btnOkClick(Action *)
-{
-	saveOptions();
 	_game->popState();
 }
 
 /**
- * Opens the Load Game screen.
- * @param action Pointer to an action.
- */
-void BattlescapeOptionsState::btnLoadClick(Action *)
+* Returns to the previous screen.
+* @param action Pointer to an action.
+*/
+void OptionsBattlescapeState::btnCancelClick(Action *)
 {
-	saveOptions();
-	_game->pushState(new LoadState(_game, false));
-}
-
-/**
- * Opens the Save Game screen.
- * @param action Pointer to an action.
- */
-void BattlescapeOptionsState::btnSaveClick(Action *)
-{
-	saveOptions();
-	_game->pushState(new SaveState(_game, false));
+	_game->popState();
 }
 
 }

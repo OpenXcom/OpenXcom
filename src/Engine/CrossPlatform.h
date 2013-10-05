@@ -57,6 +57,8 @@ namespace CrossPlatform
 	bool deleteFile(const std::string &path);
 	/// Gets the basename of a file.
 	std::string baseFilename(const std::string &path, int(*transform)(int) = 0);
+	/// Gets the system locale.
+	std::string getLocale();
 }
 
 }

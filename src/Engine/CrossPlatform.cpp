@@ -19,6 +19,9 @@
 #include "CrossPlatform.h"
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <locale>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -614,6 +617,39 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
 	}
 	return filename;
+}
+
+/**
+* Gets the current locale of the system in language-COUNTRY format.
+* @return Locale string.
+*/
+std::string getLocale()
+{
+#ifdef _WIN32
+	char language[9], country[9];
+
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
+
+	std::stringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
+	/*
+	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
+	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
+
+	return Language::wstrToUtf8(locale);
+	*/
+#else
+	std::locale l("");
+	std::string name = l.name();
+	std::string language = name.substr(0, name.find_first_of('_')-1);
+	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
+	
+	std::stringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
+#endif
 }
 
 }

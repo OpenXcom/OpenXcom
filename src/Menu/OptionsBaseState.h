@@ -16,37 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_LANGUAGESTATE_H
-#define OPENXCOM_LANGUAGESTATE_H
+#ifndef OPENXCOM_OPTIONSBASESTATE_H
+#define OPENXCOM_OPTIONSBASESTATE_H
 
-#include <vector>
-#include <string>
 #include "../Engine/State.h"
 
 namespace OpenXcom
 {
 
-class Window;
-class Text;
-class TextList;
+enum OptionsOrigin
+{
+	OPT_MENU,
+	OPT_GEOSCAPE,
+	OPT_BATTLESCAPE
+};
 
 /**
- * Language window that lets the player pick a
- * language at the start of the game.
+ * Options base state for common stuff
+ * across Options windows.
  */
-class LanguageState : public State
+class OptionsBaseState : public State
 {
-private:
-	Window *_window;
-	TextList *_lstLanguages;
-	std::vector<std::string> _langs;
+protected:
+	OptionsOrigin _origin;
 public:
-	/// Creates the Start state.
-	LanguageState(Game *game);
-	/// Cleans up the Start state.
-	~LanguageState();
-	/// Handler for clicking the Language list.
-	void lstLanguagesClick(Action *action);
+	/// Creates the Options state.
+	OptionsBaseState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Options state.
+	~OptionsBaseState();
+	/// Initializes palettes.
+	void init();
+	/// Saves the game options.
+	void saveOptions();
 };
 
 }

@@ -50,7 +50,7 @@
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
-#include "GeoscapeOptionsState.h"
+#include "../Menu/PauseState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
 #include "GraphsState.h"
@@ -453,9 +453,9 @@ void GeoscapeState::handle(Action *action)
 		}
 		// quick save and quick load
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
-			_game->pushState(new SaveState(_game, true, true));
+			_game->pushState(new SaveState(_game, OPT_GEOSCAPE, true));
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
-			_game->pushState(new LoadState(_game, true, true));
+			_game->pushState(new LoadState(_game, OPT_GEOSCAPE, true));
 	}
 	if(!_dogfights.empty())
 	{
@@ -1559,7 +1559,7 @@ void GeoscapeState::time1Day()
 
 	// Autosave
 	if (Options::getInt("autosave") >= 2)
-		_game->pushState(new SaveState(_game, true, false));
+		_game->pushState(new SaveState(_game, OPT_GEOSCAPE, false));
 }
 
 /**
@@ -1772,7 +1772,7 @@ void GeoscapeState::btnUfopaediaClick(Action *)
  */
 void GeoscapeState::btnOptionsClick(Action *)
 {
-	_game->pushState(new GeoscapeOptionsState(_game));
+	_game->pushState(new PauseState(_game, OPT_GEOSCAPE));
 }
 
 /**

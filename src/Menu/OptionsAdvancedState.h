@@ -16,10 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_ADVANCEDOPTIONSSTATE_H
-#define OPENXCOM_ADVANCEDOPTIONSSTATE_H
+#ifndef OPENXCOM_OPTIONSADVANCEDSTATE_H
+#define OPENXCOM_OPTIONSADVANCEDSTATE_H
 
-#include "../Engine/State.h"
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
@@ -31,31 +31,29 @@ class TextList;
 class InteractiveSurface;
 
 /**
- * Options window that displays all
- * the settings the player can configure.
+ * Options window that displays the
+ * advanced game settings.
  */
-class AdvancedOptionsState : public State
+class OptionsAdvancedState : public OptionsBaseState
 {
 private:
 	Window *_window;
 	Text *_txtTitle, *_txtDescription;
 	TextList *_lstOptions;
 	size_t _boolQuantity;
-	TextButton *_btnOk, *_btnCancel, *_btnDefault;
+	TextButton *_btnOk, *_btnCancel;
 	// intentionally avoiding using a map here, to avoid auto-sorting.
 	std::vector<std::pair<std::string, bool> > _settingBoolSet;
 	std::vector<std::pair<std::string, int> > _settingIntSet;
 public:
-	/// Creates the Options state.
-	AdvancedOptionsState(Game *game);
-	/// Cleans up the Options state.
-	~AdvancedOptionsState();
+	/// Creates the Advanced state.
+	OptionsAdvancedState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Advanced state.
+	~OptionsAdvancedState();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
 	void btnCancelClick(Action *action);
-	/// Handler for clicking the Restore Defaults button.
-	void btnDefaultClick(Action *action);
 	/// Handler for clicking an item on the menu.
 	void lstOptionsClick(Action *action);
 	/// Handler for moving the mouse over a menu item.

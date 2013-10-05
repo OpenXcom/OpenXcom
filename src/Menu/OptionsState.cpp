@@ -30,10 +30,10 @@
 #include "../Engine/Options.h"
 #include "../Engine/Screen.h"
 #include "../Interface/ArrowButton.h"
-#include "LanguageState.h"
-#include "MainMenuState.h"
+#include "OptionsLanguageState.h"
 #include "OptionsControlsState.h"
-#include "AdvancedOptionsState.h"
+#include "OptionsAdvancedState.h"
+#include "OptionsBattlescapeState.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Sound.h"
@@ -48,11 +48,13 @@ const std::string OptionsState::GL_STRING = " (OpenGL)";
 /**
  * Initializes all the elements in the Options window.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-OptionsState::OptionsState(Game *game) : State(game)
+OptionsState::OptionsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
 {
 	_wClicked = false;
 	_hClicked = false;
+
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 8);
@@ -152,7 +154,7 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_OPTIONS_UC"));
+	_txtTitle->setText(tr("STR_GAME_OPTIONS"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
@@ -165,7 +167,8 @@ OptionsState::OptionsState(Game *game) : State(game)
 	_btnCancel->onKeyboardPress((ActionHandler)&OptionsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
-	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
+	//_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
+	_btnDefault->setText(tr("STR_BATTLESCAPE"));
 	_btnDefault->onMouseClick((ActionHandler)&OptionsState::btnDefaultClick);
 
 	_btnLanguage->setColor(Palette::blockOffset(8)+5);
@@ -296,6 +299,7 @@ OptionsState::~OptionsState()
  */
 void OptionsState::init()
 {
+	OptionsBaseState::init();
 	_musicVolume = _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME;
 	_soundVolume = _slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME;
 }
@@ -365,8 +369,7 @@ void OptionsState::btnOkClick(Action *)
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 
-	Options::save();
-	_game->popState();
+	saveOptions();
 }
 
 /**
@@ -389,6 +392,7 @@ void OptionsState::btnCancelClick(Action *)
  */
 void OptionsState::btnDefaultClick(Action *)
 {
+	/*
 	Options::createDefault();
 	Options::setString("language", "English");
 	Options::save();
@@ -397,6 +401,8 @@ void OptionsState::btnDefaultClick(Action *)
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 	
 	_game->popState();
+	*/
+	_game->pushState(new OptionsBattlescapeState(_game, _origin));
 }
 
 /**
@@ -405,7 +411,7 @@ void OptionsState::btnDefaultClick(Action *)
  */
 void OptionsState::btnLanguageClick(Action *)
 {
-	_game->setState(new LanguageState(_game));
+	_game->pushState(new OptionsLanguageState(_game, _origin));
 }
 
 /**
@@ -414,7 +420,7 @@ void OptionsState::btnLanguageClick(Action *)
  */
 void OptionsState::btnControlsClick(Action *)
 {
-	_game->pushState(new OptionsControlsState(_game));
+	_game->pushState(new OptionsControlsState(_game, _origin));
 }
 
 /**
@@ -511,7 +517,7 @@ void OptionsState::btnDisplayFilterClick(Action *action)
 
 void OptionsState::btnAdvancedClick(Action *)
 {
-	_game->pushState(new AdvancedOptionsState(_game));
+	_game->pushState(new OptionsAdvancedState(_game, _origin));
 }
 
 }

@@ -145,8 +145,6 @@ set ( battlescape_src
   Battlescape/CivilianBAIState.h
   Battlescape/WarningMessage.cpp
   Battlescape/WarningMessage.h
-  Battlescape/BattlescapeOptionsState.cpp
-  Battlescape/BattlescapeOptionsState.h
   Battlescape/AbortMissionState.cpp
   Battlescape/AbortMissionState.h
   Battlescape/DebriefingState.cpp
@@ -284,16 +282,12 @@ set ( geoscape_src
   Geoscape/Polygon.cpp
   Geoscape/UfoLostState.cpp
   Geoscape/UfoLostState.h
-  Geoscape/AbandonGameState.cpp
-  Geoscape/AbandonGameState.h
   Geoscape/GraphsState.cpp
   Geoscape/GraphsState.h
   Geoscape/ConfirmCydoniaState.cpp
   Geoscape/ConfirmCydoniaState.h
   Geoscape/ConfirmLandingState.cpp
   Geoscape/ConfirmLandingState.h
-  Geoscape/GeoscapeOptionsState.h
-  Geoscape/GeoscapeOptionsState.cpp
   Geoscape/BaseNameState.cpp
   Geoscape/BaseNameState.h
   Geoscape/BaseDestroyedState.cpp
@@ -360,18 +354,12 @@ set ( interface_src
 )
 
 set ( menu_src
-  Menu/AdvancedOptionsState.cpp
-  Menu/AdvancedOptionsState.h
   Menu/StartState.cpp
   Menu/StartState.h
-  Menu/NoteState.cpp
-  Menu/NoteState.h
   Menu/MainMenuState.cpp
   Menu/MainMenuState.h
   Menu/TestState.h
   Menu/TestState.cpp
-  Menu/LanguageState.h
-  Menu/LanguageState.cpp
   Menu/SaveState.cpp
   Menu/SaveState.h
   Menu/LoadState.cpp
@@ -380,16 +368,28 @@ set ( menu_src
   Menu/NewGameState.h
   Menu/NewBattleState.cpp
   Menu/NewBattleState.h
-  Menu/OptionsState.cpp
-  Menu/OptionsState.h
   Menu/ErrorMessageState.cpp
   Menu/ErrorMessageState.h
   Menu/DeleteGameState.cpp
   Menu/DeleteGameState.h
   Menu/SavedGameState.cpp
   Menu/SavedGameState.h
+  Menu/OptionsBaseState.cpp
+  Menu/OptionsBaseState.h
+  Menu/OptionsState.cpp
+  Menu/OptionsState.h
   Menu/OptionsControlsState.cpp
   Menu/OptionsControlsState.h
+  Menu/OptionsLanguageState.cpp
+  Menu/OptionsLanguageState.h
+  Menu/OptionsAdvancedState.cpp
+  Menu/OptionsAdvancedState.h
+  Menu/OptionsBattlescapeState.cpp
+  Menu/OptionsBattlescapeState.h
+  Menu/AbandonGameState.cpp
+  Menu/AbandonGameState.h
+  Menu/PauseState.cpp
+  Menu/PauseState.h
 )
 
 set ( resource_src
