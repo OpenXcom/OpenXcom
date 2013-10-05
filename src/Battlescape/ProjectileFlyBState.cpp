@@ -32,6 +32,7 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "AlienBAIState.h"
@@ -293,7 +294,16 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter < _action.weapon->getRules()->getAutoShots() && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
+		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
+		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
+		bool hasFloor = t && !t->hasNoFloor(bt);
+		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+
+		if (_action.type == BA_AUTOSHOT
+			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
+			&& !_action.actor->isOut()
+			&& _ammo->getAmmoQuantity() != 0
+			&& (hasFloor || unitCanFly))
 		{
 			createNewProjectile();
 		}
