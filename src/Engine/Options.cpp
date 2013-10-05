@@ -90,7 +90,7 @@ void createDefault()
 	setString("language", "");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
-	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE); 
+	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
 	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
 	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
@@ -145,7 +145,7 @@ void createDefault()
 	setInt("NewBattleDifficulty", 0);
 	setInt("NewBattleDarkness", 0);
 	setInt("NewBattleCraft", 0);
-	
+
 	// new battle loadout data
 	setInt("NewBattle_STR_AC_AP_AMMO", 0);
 	setInt("NewBattle_STR_AC_HE_AMMO", 0);

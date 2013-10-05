@@ -56,6 +56,8 @@ public:
 	void btnCancelClick(Action *action);
 	/// Handler for clicking the Crafts list.
 	void lstCraftsClick(Action *action);
+	/// Handler for right clicking the Crafts list.
+	void lstCraftsRightClick(Action *action);
 };
 
 }
