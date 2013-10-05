@@ -189,7 +189,7 @@ void UnitDieBState::think()
 
 			if (liveAliens == 0 || liveSoldiers == 0)
 			{
-				_parent->statePushBack(0);
+				_parent->requestEndTurn();
 			}
 		}
 	}
