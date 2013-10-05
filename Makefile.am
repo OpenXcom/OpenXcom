@@ -53,7 +53,7 @@ pathfinding_DATA = \
 	bin/data/Resources/Pathfinding/Pathfinding_dir_23.png
 
 bulletspritedir =  $(pkgdatadir)/data/Resources/BulletSprites/
-bulletsprite_DATA = \    
+bulletsprite_DATA = \
 	bin/data/Resources/BulletSprites/BulletSprites.png
 
 rulesetdir =  $(pkgdatadir)/data/Ruleset
@@ -483,8 +483,6 @@ openxcom_SOURCES = \
 	src/Menu/DeleteGameState.h \
 	src/Menu/ErrorMessageState.cpp \
 	src/Menu/ErrorMessageState.h \
-	src/Menu/LanguageState.cpp \
-	src/Menu/LanguageState.h \
 	src/Menu/LoadState.cpp \
 	src/Menu/LoadState.h \
 	src/Menu/MainMenuState.cpp \
