@@ -1985,4 +1985,49 @@ bool BattlescapeGame::getKneelReserved()
 	}
 	return false;
 }
+
+/**
+ * Checks if a unit has moved next to a proximity grenade.
+ * Checks one tile around the unit in every direction.
+ * For a large unit we check every tile it occupies.
+ * @param unit Pointer to a unit.
+ * @return True if a proximity grenade was triggered.
+ */
+bool BattlescapeGame::checkForProximityGrenades(BattleUnit *unit)
+{
+	int size = unit->getArmor()->getSize() - 1;
+	for (int x = size; x >= 0; x--)
+	{
+		for (int y = size; y >= 0; y--)
+		{
+			for (int tx = -1; tx < 2; tx++)
+			{
+				for (int ty = -1; ty < 2; ty++)
+				{
+					Tile *t = _save->getTile(unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
+					if (t)
+					{
+						for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+						{
+							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
+							{
+								Position p;
+								p.x = t->getPosition().x*16 + 8;
+								p.y = t->getPosition().y*16 + 8;
+								p.z = t->getPosition().z*24 + t->getTerrainLevel();
+								statePushNext(new ExplosionBState(this, p, (*i), (*i)->getPreviousOwner()));
+								t->getInventory()->erase(i);
+								unit->setCache(0);
+								getMap()->cacheUnit(unit);
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
 }

@@ -278,7 +278,7 @@ void UnitFallBState::think()
 				_parent->getMap()->cacheUnit(*unit);
 				(*unit)->setCache(0);
 				_terrain->calculateFOV(*unit);
-
+				_parent->checkForProximityGrenades(*unit);
 				unit = _parent->getSave()->getFallingUnits()->erase(unit);
 			}
 		}

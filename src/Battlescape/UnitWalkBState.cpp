@@ -192,38 +192,12 @@ void UnitWalkBState::think()
 			_terrain->calculateFOV(_unit->getPosition());
 			unitSpotted = (!_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
-			// check for proximity grenades (1 tile around the unit in every direction) (for large units, we need to check every tile it occupies)
-			int size = _unit->getArmor()->getSize() - 1;
-			for (int x = size; x >= 0; x--)
+			if (_parent->checkForProximityGrenades(_unit))
 			{
-				for (int y = size; y >= 0; y--)
-				{
-					for (int tx = -1; tx < 2; tx++)
-					{
-						for (int ty = -1; ty < 2; ty++)
-						{
-							Tile *t = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0) + Position(tx,ty,0));
-							if (t)
-							for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
-							{
-								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() > 0)
-								{
-									Position p;
-									p.x = t->getPosition().x*16 + 8;
-									p.y = t->getPosition().y*16 + 8;
-									p.z = t->getPosition().z*24 + t->getTerrainLevel();
-									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
-									t->getInventory()->erase(i);
-									_unit->setCache(0);
-									_parent->getMap()->cacheUnit(_unit);
-									_parent->popState();
-									return;
-								}
-							}
-						}
-					}
-				}
+				_parent->popState();
+				return;
 			}
+
 			if (unitSpotted)
 			{
 				_unit->setCache(0);
