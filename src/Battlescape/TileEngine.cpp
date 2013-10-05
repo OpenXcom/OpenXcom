@@ -400,7 +400,8 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		return false;
 	}
 
-	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) return true; //friendlies are always seen
+	BattleUnit *targetUnit = tile->getUnit();
+	if (currentUnit->getFaction() == targetUnit->getFaction()) return true; // friendlies are always seen
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 
@@ -437,6 +438,10 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 				unitSeen = false;
 				break;
 			}
+		}
+		if (t->getUnit() != targetUnit)
+		{
+			unitSeen = false;
 		}
 	}
 	return unitSeen;
