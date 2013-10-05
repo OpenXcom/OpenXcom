@@ -37,31 +37,21 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Save Game screen.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  */
-SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
+SaveState::SaveState(Game *game, OptionsOrigin origin) : SavedGameState(game, origin), _selected(L""), _previousSelectedRow(-1), _selectedRow(-1)
 {
 	// Create objects
-	
 	_edtSave = new TextEdit(168, 9, 0, 0);
 
 	add(_edtSave);
 
 	// Set up objects
-	if (_geo)
-	{
-		_edtSave->setColor(Palette::blockOffset(8)+10);
-	}
-	else
-	{
-		_edtSave->setColor(Palette::blockOffset(0));
-		_edtSave->setHighContrast(true);
-	}
-
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_SAVE_POSITION"));
+	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
 	_lstSaves->onMousePress((ActionHandler)&SaveState::lstSavesPress);
 
+	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)&SaveState::edtSaveKeyPress);
 }
@@ -69,10 +59,10 @@ SaveState::SaveState(Game *game, bool geo) : SavedGameState(game, geo), _selecte
 /**
  * Creates the Quick Save Game state.
  * @param game Pointer to the core game.
- * @param geo True to use Geoscape palette, false to use Battlescape palette.
+ * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SaveState::SaveState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+SaveState::SaveState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, showMsg)
 {
 	quickSave(L"autosave");
 }
@@ -92,7 +82,7 @@ SaveState::~SaveState()
 void SaveState::updateList()
 {
 	_lstSaves->clearList();
-	_lstSaves->addRow(1, _game->getLanguage()->getString("STR_NEW_SAVED_GAME").c_str());
+	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
 	SavedGame::getList(_lstSaves, _game->getLanguage());
 }
 
@@ -112,7 +102,7 @@ void SaveState::lstSavesPress(Action *action)
 			case -1:	// first click on the savegame list
 				break;
 			case 0:
-				_lstSaves->setCellText(_previousSelectedRow	, 0, _game->getLanguage()->getString("STR_NEW_SAVED_GAME"));
+				_lstSaves->setCellText(_previousSelectedRow	, 0, tr("STR_NEW_SAVED_GAME"));
 				break;
 			default:
 				_lstSaves->setCellText(_previousSelectedRow	, 0, _selected);
@@ -137,7 +127,7 @@ void SaveState::lstSavesPress(Action *action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT && _lstSaves->getSelectedRow())
 	{
-		_game->pushState(new DeleteGameState(_game, _geo, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
 	}
 }
 
@@ -178,8 +168,8 @@ void SaveState::edtSaveKeyPress(Action *action)
 			_edtSave->setVisible(false);
 			Log(LOG_ERROR) << e.what();
 			std::wstringstream error;
-			error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
+			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+			if (_origin != OPT_BATTLESCAPE)
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			else
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
@@ -190,8 +180,8 @@ void SaveState::edtSaveKeyPress(Action *action)
 			Log(LOG_ERROR) << e.what();
 			std::wstringstream error;
 			error <<
-			_game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-			if (_geo)
+			tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+			if (_origin != OPT_BATTLESCAPE)
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 			else
 				_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
@@ -221,8 +211,8 @@ void SaveState::quickSave(const std::wstring &filename16)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-		if (_geo)
+		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
@@ -231,8 +221,8 @@ void SaveState::quickSave(const std::wstring &filename16)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << _game->getLanguage()->getString("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
-		if (_geo)
+		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));

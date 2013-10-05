@@ -67,7 +67,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
 	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -78,7 +78,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(_game->getLanguage()->getString("STR_BASE_NAME"));
+	_txtTitle->setText(tr("STR_BASE_NAME"));
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
@@ -121,21 +121,14 @@ void BaseNameState::edtNameKeyPress(Action *action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
 		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		if(_edtName->getText().size() > 0)
+		if(!_edtName->getText().empty())
 		{
 			nameBase();
 		}
 	}
 	else
 	{
-		if(_edtName->getText().size() > 0)
-		{
-			_btnOk->setVisible(true);
-		}
-		else
-		{
-			_btnOk->setVisible(false);
-		}
+		_btnOk->setVisible(!_edtName->getText().empty());
 	}
 }
 

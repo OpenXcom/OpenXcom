@@ -77,7 +77,7 @@ public:
   /// make all the pixels go away
   void clear();
   /// make the buffer show up on screen
-  void refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight);
+  void refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand);
   /// set a shader! but what kind?
   void set_shader(const char *source);
   /// same but for fragment shader?

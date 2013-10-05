@@ -26,7 +26,7 @@ namespace OpenXcom
 {
 
 class TextButton;
-class Window;
+class Frame;
 class Text;
 
 /**
@@ -36,7 +36,7 @@ class InfoboxOKState : public State
 {
 private:
 	TextButton *_btnOk;
-	Window *_window;
+	Frame *_frame;
 	Text *_txtTitle;
 public:
 	/// Creates the InfoboxOKState.

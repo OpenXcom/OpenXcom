@@ -70,27 +70,27 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION_BASE"));
+	_txtTitle->setText(tr("STR_SELECT_DESTINATION_BASE"));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+5);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
+	std::wstring s = tr("STR_CURRENT_FUNDS");
 	s += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
 	_txtName->setColor(Palette::blockOffset(13)+5);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
+	_txtName->setText(tr("STR_NAME"));
 	_txtName->setBig();
 
 	_txtArea->setColor(Palette::blockOffset(13)+5);
-	_txtArea->setText(_game->getLanguage()->getString("STR_AREA"));
+	_txtArea->setText(tr("STR_AREA"));
 	_txtArea->setBig();
 
 	_lstBases->setColor(Palette::blockOffset(15)+1);
@@ -112,7 +112,7 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
-					area = _game->getLanguage()->getString((*j)->getRules()->getType());
+					area = tr((*j)->getRules()->getType());
 					break;
 				}
 			}

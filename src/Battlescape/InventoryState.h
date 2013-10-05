@@ -30,6 +30,7 @@ class InteractiveSurface;
 class Inventory;
 class SavedBattleGame;
 class BattlescapeState;
+class BattleUnit;
 
 /**
  * Screen which displays soldier's inventory.

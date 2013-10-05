@@ -53,7 +53,8 @@ void RuleRegion::load(const YAML::Node &node)
 {
 	_type = node["type"].as<std::string>(_type);
 	_cost = node["cost"].as<int>(_cost);
-	std::vector< std::vector<double> > areas = node["areas"].as< std::vector< std::vector<double> > >();
+	std::vector< std::vector<double> > areas;
+	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
 	for (size_t i = 0; i != areas.size(); ++i)
 	{
 		_lonMin.push_back(areas[i][0] * M_PI / 180);
@@ -150,7 +151,7 @@ unsigned RuleRegion::getWeight() const
  */
 std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 {
-	if (zone == 0 && _cities.size() > 0)
+	if (zone == 0 && !_cities.empty())
 	{
 		unsigned p = RNG::generate(0, _cities.size() - 1);
 		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());

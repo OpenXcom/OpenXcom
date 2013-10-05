@@ -54,12 +54,7 @@ public:
         Uint8 boolFields;
 		Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 	} serializationKey;
-
-    // scratch variables for AI, regarding how many soldiers are visible from a square and how close is the closest one:
-	int closestSoldierDSqr;
-	int soldiersVisible;
-	int closestAlienDSqr;
-
+	
 	static const int NOT_CALCULATED = -1;
 
 protected:

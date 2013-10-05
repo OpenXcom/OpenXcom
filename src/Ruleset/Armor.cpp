@@ -70,10 +70,8 @@ void Armor::load(const YAML::Node &node)
 		}
 	}
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
-	if (const YAML::Node &loftemps = node["loftemps"])
-	{
-		_loftempsSet.push_back(loftemps.as<int>());
-	}
+	if (node["loftemps"])
+		_loftempsSet.push_back(node["loftemps"].as<int>());
 }
 
 /**

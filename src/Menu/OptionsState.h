@@ -20,6 +20,7 @@
 #define OPENXCOM_OPTIONSSTATE_H
 
 #include "../Engine/State.h"
+#include "OptionsBaseState.h"
 #include <SDL.h>
 
 namespace OpenXcom
@@ -31,12 +32,13 @@ class Window;
 class Text;
 class TextEdit;
 class ArrowButton;
+class Slider;
 
 /**
  * Options window that displays all
  * the settings the player can configure.
  */
-class OptionsState : public State
+class OptionsState : public OptionsBaseState
 {
 private:
 	static const std::string GL_EXT, GL_FOLDER, GL_STRING;
@@ -49,22 +51,25 @@ private:
 	Text *_txtDisplayMode;
 	TextButton *_displayMode, *_btnDisplayWindowed, *_btnDisplayFullscreen;
 	Text *_txtDisplayFilter;
-    TextButton *_btnDisplayFilter;
+	TextButton *_btnDisplayFilter;
 	Text *_txtMusicVolume;
-	TextButton *_musicVolume, *_btnMusicVolume1, *_btnMusicVolume2, *_btnMusicVolume3, *_btnMusicVolume4, *_btnMusicVolume5;
+	Slider *_slrMusicVolume;
 	Text *_txtSoundVolume;
-	TextButton *_soundVolume, *_btnSoundVolume1, *_btnSoundVolume2, *_btnSoundVolume3, *_btnSoundVolume4, *_btnSoundVolume5;
+	Slider *_slrSoundVolume;
 	TextButton *_btnOk, *_btnCancel, *_btnDefault, *_btnLanguage, *_btnControls, *_btnAdvanced;
 	SDL_Rect** _res;
 	int _resAmount, _resCurrent;
 	bool _wClicked, _hClicked;
 	std::vector<std::string> _filters, _filterPaths;
 	size_t _selFilter;
+	int _musicVolume, _soundVolume;
 public:
 	/// Creates the Options state.
-	OptionsState(Game *game);
+	OptionsState(Game *game, OptionsOrigin origin);
 	/// Cleans up the Options state.
 	~OptionsState();
+	/// Initilizes the Options state.
+	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action *action);
 	/// Handler for clicking the Cancel button.
@@ -87,6 +92,10 @@ public:
     void btnDisplayFilterClick(Action *action);
     /// Handler for clicking the advanced options button
     void btnAdvancedClick(Action *action);
+	/// Handler for music slider release.
+    void slrMusicVolumeRelease(Action *);
+    /// Handler for sound slider release.
+    void slrSoundVolumeRelease(Action *);
 };
 
 }

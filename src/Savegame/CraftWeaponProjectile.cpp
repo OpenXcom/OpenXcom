@@ -39,7 +39,7 @@ CraftWeaponProjectile::~CraftWeaponProjectile(void)
  * weapon it was shot from. This is used for drawing the
  * projectiles.
  */
-void CraftWeaponProjectile::setType(const int type)
+void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
 {
 	_type = type;
 	if (type >= CWPT_LASER_BEAM)
@@ -53,7 +53,7 @@ void CraftWeaponProjectile::setType(const int type)
  * Returns the type of projectile.
  * @return Projectile type as an integer value.
  */
-int CraftWeaponProjectile::getType() const
+CraftWeaponProjectileType CraftWeaponProjectile::getType() const
 {
 	return _type;
 }
@@ -62,7 +62,7 @@ int CraftWeaponProjectile::getType() const
  * Returns the global type of projectile.
  * @return 0 - if it's a missile, 1 if beam.
  */
-int CraftWeaponProjectile::getGlobalType() const
+CraftWeaponProjectileGlobalType CraftWeaponProjectile::getGlobalType() const
 {
 	return _globalType;
 }

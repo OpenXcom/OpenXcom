@@ -43,8 +43,8 @@ class Soldier;
 class Armor;
 class SavedGame;
 class Language;
-class AggroBAIState;
-class PatrolBAIState;
+class AlienBAIState;
+class CivilianBAIState;
 
 enum UnitStatus {STATUS_STANDING, STATUS_WALKING, STATUS_FLYING, STATUS_TURNING, STATUS_AIMING, STATUS_COLLAPSING, STATUS_DEAD, STATUS_UNCONSCIOUS, STATUS_PANICKING, STATUS_BERSERK};
 enum UnitFaction {FACTION_PLAYER, FACTION_HOSTILE, FACTION_NEUTRAL};
@@ -183,7 +183,7 @@ public:
 	/// Aim.
 	void aim(bool aiming);
 	/// Get direction to a certain point
-	int getDirectionTo(const Position &point) const;
+	int directionTo(const Position &point) const;
 	/// Gets the unit's time units.
 	int getTimeUnits() const;
 	/// Gets the unit's stamina.
@@ -307,7 +307,7 @@ public:
 	/// Get fatal wound amount of a body part
 	int getFatalWound(int part) const;
 	/// Heal one fatal wound
-	void heal(int part, int healAmount, int healthAmount);
+	void heal(int part, int woundAmount, int healthAmount);
 	/// Give pain killers to this unit
 	void painKillers ();
 	/// Give stimulant to this unit
@@ -413,7 +413,11 @@ public:
 	/// switch the state of the fire damage tracker.
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
-	int getCoverReserve();
+	int getCoverReserve() const;
+	/// Is this unit selectable?
+	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
+	/// Does this unit have an inventory?
+	bool hasInventory() const;
 };
 
 }

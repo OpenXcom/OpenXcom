@@ -40,6 +40,7 @@
 #include "Options.h"
 #include "CrossPlatform.h"
 #include "../Menu/SaveState.h"
+#include "../Menu/TestState.h"
 
 namespace OpenXcom
 {
@@ -139,7 +140,7 @@ Game::~Game()
 {
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(this, true, false);
+		SaveState *ss = new SaveState(this, OPT_MENU, false);
 		delete ss;
 	}
 
@@ -201,7 +202,7 @@ void Game::run()
 			ev.type = SDL_MOUSEMOTION;
 			ev.motion.x = x;
 			ev.motion.y = y;
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale());
+			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 			_states.back()->handle(&action);
 		}
 
@@ -239,11 +240,18 @@ void Game::run()
 					runningState = RUNNING;
 					// Go on, feed the event to others
 				default:
-					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
+					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
+					if (Options::getBool("debug"))
+					{
+						if (action.getDetails()->type == SDL_KEYDOWN && action.getDetails()->key.keysym.sym == SDLK_t && (SDL_GetModState() & KMOD_CTRL) != 0)
+						{
+							setState(new TestState(this));
+						}
+					}
 					break;
 			}
 		}
@@ -418,10 +426,24 @@ Language *Game::getLanguage() const
 }
 
 /**
+* Changes the language currently in use by the game.
+* @param filename Filename of the language file.
+*/
+void Game::loadLanguage(const std::string &filename)
+{
+	std::stringstream ss;
+	ss << "Language/" << filename << ".yml";
+
+	_lang->load(CrossPlatform::getDataFile(ss.str()), _rules->getExtraStrings()[filename]);
+
+	Options::setString("language", filename);
+}
+
+/**
  * Changes the language currently in use by the game.
  * @param filename Filename of the language file.
  */
-void Game::loadLanguage(const std::string &filename)
+void Game::loadLng(const std::string &filename)
 {
 	std::stringstream ss, ss2;
 	ss << "Language/" << filename << ".lng";
@@ -521,7 +543,7 @@ void Game::setMouseActive(bool active)
  */
 bool Game::isState(State *state) const
 {
-	return _states.size() > 0 && _states.back() == state;
+	return !_states.empty() && _states.back() == state;
 }
 
 /**

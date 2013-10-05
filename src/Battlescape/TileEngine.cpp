@@ -25,7 +25,7 @@
 #include "TileEngine.h"
 #include <SDL.h>
 #include "BattleAIState.h"
-#include "AggroBAIState.h"
+#include "AlienBAIState.h"
 #include "UnitTurnBState.h"
 #include "Map.h"
 #include "Camera.h"
@@ -292,7 +292,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
 
-								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() == FACTION_PLAYER)
+								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() != FACTION_HOSTILE)
 								{
 									visibleUnit->setTurnsExposed(0);
 								}
@@ -339,84 +339,13 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different
 	// this way we stop if there are the same amount of visible units, but a different unit is seen
 	// or we stop if there are more visible units seen
-	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && unit->getVisibleUnits()->size() > 0)
+	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits && !unit->getVisibleUnits()->empty())
 	{
-		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
-		if (unit->getFaction() == FACTION_HOSTILE)
-		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
-			if (aggro == 0)
-			{
-				aggro = new AggroBAIState(_save, unit);
-				unit->setAIState(aggro);
-				unit->_hidingForTurn = false; // something new happened, react at will...
-			}
-			aggro->setAggroTarget(unit->getVisibleUnits()->at(0)); // just pick the first one - maybe we need to prioritize on distance to unit or other parameters?
-		}
-
 		return true;
 	}
 
 	return false;
 
-}
-
-/**
- * @brief Find all the soldiers that would see the queryingUnit at the tile (aka tilePos) and collect some statistics for AI.
- * @param tile The tile to check.
- * @param tilePos The position of the tile to check, redundantly.
- * @param queryingUnit The unit to temporarily place at tilePos for calculations.
- * @return False if the unit couldn't possibly be placed at tile (i.e., something's blocking it), true otherwise.
- */
-bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
-{
-	if (tile->soldiersVisible != -1) return true; // already calculated this turn
-
-	if (!_save->setUnitPosition(queryingUnit, tilePos, true))
-	{
-		return false;
-	}
-
-	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
-	tile->closestSoldierDSqr = INT_MAX;
-	tile->closestAlienDSqr = INT_MAX;
-
-	int dsqrTotal = 0;
-
-	Position targetVoxel = tile->getPosition() * Position(16, 16, 24) + Position(8, 8, 8 - tile->getTerrainLevel());
-
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		if ((*i)->isOut()) continue;
-
-		int dsqr = distanceSq(tilePos, (*i)->getPosition());
-		if (dsqr < 1) dsqr = 1; // sanity buffer against dividing by 0
-
-		if (dsqr > (MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)) continue; // can't even see that far, yo
-
-		Position originVoxel = getSightOriginVoxel(*i);
-		int target = calculateLine(originVoxel, targetVoxel, false, 0, *i, true, false, *i);
-		if ((*i)->getFaction() == FACTION_PLAYER && target == -1)
-		{
-			++tile->soldiersVisible;
-
-			if (dsqr < tile->closestSoldierDSqr)
-			{
-				tile->closestSoldierDSqr = dsqr;
-			}
-
-			dsqrTotal += dsqr;
-		}
-
-		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->closestAlienDSqr) tile->closestAlienDSqr = dsqr;
-	}
-
-	if (tile->soldiersVisible == 0)
-	{
-		tile->closestSoldierDSqr = -1; 
-	}
-	
-	return true;
 }
 
 /**
@@ -594,29 +523,34 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
  * Checks for another unit available for targeting and what particular voxel.
  * @param originVoxel Voxel of trace origin (eye or gun's barrel).
  * @param tile The tile to check for.
- * @param scanVoxel Is returned coordinate of hit.
- * @param excludeUnit Is self (not to hit self).
+ * @param scanVoxel is returned coordinate of hit.
+ * @param excludeUnit is self (not to hit self).
+ * @param potentialUnit is a hypothetical unit to draw a virtual line of fire for AI. if left blank, this function behaves normally.
  * @return True if the unit can be targetted.
  */
-bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit)
+bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
-	BattleUnit *otherUnit = tile->getUnit();
-	if (otherUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
-	if (otherUnit == excludeUnit) return false; //skip self
+	bool hypothetical = potentialUnit != 0;
+	if (potentialUnit == 0)
+	{
+		potentialUnit = tile->getUnit();
+		if (potentialUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+	}
+
+	if (potentialUnit == excludeUnit) return false; //skip self
 
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
-	if (otherUnit)
-		 targetMinHeight += otherUnit->getFloatHeight();
+	targetMinHeight += potentialUnit->getFloatHeight();
 
 	int targetMaxHeight = targetMinHeight;
 	int targetCenterHeight;
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
 
-	int unitRadius = otherUnit->getLoftemps(); //width == loft in default loftemps set
-	int targetSize = otherUnit->getArmor()->getSize() - 1;
+	int unitRadius = potentialUnit->getLoftemps(); //width == loft in default loftemps set
+	int targetSize = potentialUnit->getArmor()->getSize() - 1;
 	if (targetSize > 0)
 	{
 		unitRadius = 3;
@@ -630,9 +564,9 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 
 	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
 
-	if (!otherUnit->isOut())
+	if (!potentialUnit->isOut())
 	{
-		heightRange = otherUnit->getHeight();
+		heightRange = potentialUnit->getHeight();
 	}
 	else
 	{
@@ -655,7 +589,7 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 			scanVoxel->x=targetVoxel.x + sliceTargets[j*2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j*2+1];
 			_trajectory.clear();
-			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true);
+			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false, potentialUnit);
 			if (test == 4)
 			{
 				for (int x = 0; x <= targetSize; ++x)
@@ -672,6 +606,10 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 						}
 					}
 				}
+			}
+			else if (test == -1 && hypothetical)
+			{
+				return true;
 			}
 		}
 	}
@@ -827,15 +765,15 @@ void TileEngine::calculateFOV(const Position &position)
 }
 
 /**
- * Checks if a sniper from tge opposing faction sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
+ * Checks if a sniper from the opposing faction sees this unit. The unit with the highest reaction score will be compared with the current unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
  * @param unit The unit to check reaction fire upon.
  * @return True if reaction fire took place.
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit)
 {
-	// reaction fire only triggered when the actioning unit is of the currently playing side
-	if (unit->getFaction() != _save->getSide())
+	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
+	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
 	{
 		return false;
 	}
@@ -872,7 +810,8 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	std::vector<BattleUnit*> spotters;
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	Tile *tile = unit->getTile();
+	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 			// not dead/unconscious
 		if (!(*i)->isOut() &&
@@ -881,12 +820,15 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			// closer than 20 tiles
 			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
 		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
+			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
+			originVoxel.z -= 2;
+			Position targetVoxel;
+			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 				// can actually see the target Tile, or we got hit
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
 				// can actually see the unit
-				visible(*i, unit->getTile()))
+				canTargetUnit(&originVoxel, tile, &targetVoxel, *i))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -960,9 +902,15 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 		weapon->getAmmoItem() &&
 		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
 	{
-		Position origin = getSightOriginVoxel(unit);
-		Position scanVoxel;
-		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
+		Position originVoxel = getSightOriginVoxel(unit);
+		originVoxel.z -= 2;
+		Position targetVoxel = getSightOriginVoxel(target);
+		targetVoxel.z -= 2;
+		std::vector<Position> trajectory;
+		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4 &&
+			trajectory.back().x / 16 == targetVoxel.x / 16 &&
+			trajectory.back().y / 16 == targetVoxel.y / 16 &&
+			trajectory.back().z / 24 == targetVoxel.z / 24)
 		{
 			return true;
 		}
@@ -982,6 +930,10 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
 	action.actor = unit;
 	action.weapon = unit->getMainHandWeapon();
+	if (!action.weapon)
+	{
+		return false;
+	}
 	// reaction fire is ALWAYS snap shot.
 	action.type = BA_SNAPSHOT;
 	// unless we're a melee unit.
@@ -992,22 +944,19 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
-	if (action.weapon && action.weapon->getAmmoItem() && action.weapon->getAmmoItem()->getAmmoQuantity() && unit->getTimeUnits() >= action.TU)
+	if (action.weapon->getAmmoItem() && action.weapon->getAmmoItem()->getAmmoQuantity() && unit->getTimeUnits() >= action.TU)
 	{
 		action.targeting = true;
 
 		// hostile units will go into an "aggro" state when they react.
 		if (unit->getFaction() == FACTION_HOSTILE)
 		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
 			if (aggro == 0)
 			{
-				aggro = new AggroBAIState(_save, unit);
+				// should not happen, but just in case...
+				aggro = new AlienBAIState(_save, unit, 0);
 				unit->setAIState(aggro);
-			}
-			if (!target->isOut())
-			{
-				aggro->setAggroTarget(target);
 			}
 
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
@@ -1020,13 +969,13 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 			}
 		}
 
-		if (unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)) && action.targeting)
+		if (action.targeting && unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)))
 		{
 			action.TU = 0;
 			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
 			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));
+			return true;
 		}
-		return true;
 	}
 	return false;
 }
@@ -1044,6 +993,11 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
 {
 	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
+	if(!tile)
+	{
+		return 0;
+	}
+
 	BattleUnit *bu = tile->getUnit();
 	int adjustedDamage = 0;
 	const int part = voxelCheck(center, unit);
@@ -1233,7 +1187,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							bool done = false;
 							while (!done)
 							{
-								done = dest->getInventory()->size() == 0;
+								done = dest->getInventory()->empty();
 								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
 								{
 									if (power_ > (*it)->getRules()->getArmor())
@@ -2372,7 +2326,11 @@ bool TileEngine::psiAttack(BattleAction *action)
  */
 Tile *TileEngine::applyGravity(Tile *t)
 {
-	if (t->getInventory()->size() == 0 && !t->getUnit()) return t; // skip this if there are no items
+	if (t->getInventory()->empty() && !t->getUnit()) return t; // skip this if there are no items
+	if (!t)
+	{
+		return 0;
+	}
 
 	Position p = t->getPosition();
 	Tile *rt = t;
@@ -2616,4 +2574,51 @@ void TileEngine::recalculateFOV()
 	}
 }
 
+/**
+ * Returns the direction from origin to target.
+ * @return direction.
+ */
+int TileEngine::getDirectionTo(const Position &origin, const Position &target) const
+{
+	double ox = target.x - origin.x;
+	double oy = target.y - origin.y;
+	double angle = atan2(ox, -oy);
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	int dir = 0;
+
+	if (angle > pie[0] || angle < -pie[0])
+	{
+		dir = 4;
+	}
+	else if (angle > pie[1])
+	{
+		dir = 3;
+	}
+	else if (angle > pie[2])
+	{
+		dir = 2;
+	}
+	else if (angle > pie[3])
+	{
+		dir = 1;
+	}
+	else if (angle < -pie[1])
+	{
+		dir = 5;
+	}
+	else if (angle < -pie[2])
+	{
+		dir = 6;
+	}
+	else if (angle < -pie[3])
+	{
+		dir = 7;
+	}
+	else if (angle < pie[0])
+	{
+		dir = 0;
+	}
+	return dir;
+}
 }

@@ -56,8 +56,7 @@ private:
 	bool _twoHanded, _waypoint, _fixedWeapon;
 	int _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
-	int _healAmount, _healthAmount;
-	int _stun, _energy;
+	int _woundRecovery, _healthRecovery, _stunRecovery, _energyRecovery;
 	int _tuUse;
 	int _recoveryPoints;
 	int _armor;
@@ -65,7 +64,7 @@ private:
 	bool _recover, _liveAlien;
 	int _blastRadius, _attraction;
 	bool _flatRate, _arcingShot;
-	int _listOrder, _range, _bulletSpeed;
+	int _listOrder, _range, _bulletSpeed, _autoShots;
 public:
 	/// Creates a blank item ruleset.
 	RuleItem(const std::string &type);
@@ -147,14 +146,14 @@ public:
 	int getPainKillerQuantity () const;
 	/// Gets the medikit stimulant quantity.
 	int getStimulantQuantity () const;
-	/// Gets the medikit heal amount per shot.
-	int getHealAmount () const;
-	/// Gets the medikit health amount per shot.
-	int getHealthAmount () const;
-	/// Gets the medikit energy amount per shot.
-	int getEnergy () const;
-	/// Gets the medikit stun amount per shot.
-	int getStun () const;
+	/// Gets the medikit wound healed per shot.
+	int getWoundRecovery () const;
+	/// Gets the medikit health recovered per shot.
+	int getHealthRecovery () const;
+	/// Gets the medikit energy recovered per shot.
+	int getEnergyRecovery () const;
+	/// Gets the medikit stun recovered per shot.
+	int getStunRecovery () const;
 	/// Gets the Time Unit use.
 	int getTUUse() const;
 	/// Gets the max explosion radius.
@@ -175,12 +174,14 @@ public:
 	bool getArcingShot() const;
 	/// How much do aliens want this thing?
 	int getAttraction() const;
-	/// get the list weight for this item.
+	/// Get the list weight for this item.
 	int getListOrder() const;
-	/// get the max range of this weapon.
+	/// Get the max range of this weapon.
 	int getRange() const;
-	/// how fast does a projectile fired from this weapon travel?
+	/// How fast does a projectile fired from this weapon travel?
 	int getBulletSpeed() const;
+	/// How many auto shots does this weapon fire.
+	int getAutoShots() const;
 };
 
 }

@@ -66,7 +66,7 @@ private:
 	/// Generates a new battlescape map.
 	void generateMap();
 	/// Adds a vehicle to the game.
-	void addXCOMVehicle(Vehicle *v);
+	BattleUnit *addXCOMVehicle(Vehicle *v);
 	/// Adds a soldier to the game.
 	BattleUnit *addXCOMUnit(BattleUnit *unit);
 	/// Adds an alien to the game.
@@ -87,6 +87,8 @@ private:
 	void fuelPowerSources();
 	/// Possibly explodes ufo powersources.
 	void explodePowerSources();
+	/// Deploys the XCOM units on the mission.
+	void deployXCOM();
 	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(AlienRace *race, AlienDeployment *deployment);
 	/// Spawns civilians on a terror mission.
@@ -122,7 +124,8 @@ public:
 	void nextStage();
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit *unit);
-
+	/// Generates an inventory battlescape.
+	void runInventory(Craft *craft);
 };
 
 }

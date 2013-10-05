@@ -24,13 +24,15 @@
 #include "Font.h"
 #include "Language.h"
 #include "LocalizedText.h"
+#include "Palette.h"
 #include "../Resource/ResourcePack.h"
+#include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
-#include "../Basescape/BaseView.h"
-#include "../Battlescape/WarningMessage.h"
+#include "../Interface/ArrowButton.h"
+#include "../Interface/Slider.h"
 
 namespace OpenXcom
 {
@@ -72,36 +74,8 @@ void State::add(Surface *surface)
 	surface->setPalette(_game->getScreen()->getPalette());
 
 	// Set default fonts
-	Text *t = dynamic_cast<Text*>(surface);
-	TextButton *tb = dynamic_cast<TextButton*>(surface);
-	TextEdit *te = dynamic_cast<TextEdit*>(surface);
-	TextList *tl = dynamic_cast<TextList*>(surface);
-	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
-	BaseView *bv = dynamic_cast<BaseView*>(surface);
-	if (t)
-	{
-		t->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (tb)
-	{
-		tb->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (te)
-	{
-		te->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (tl)
-	{
-		tl->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (bv)
-	{
-		bv->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
-	else if (wm)
-	{
-		wm->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
-	}
+	if (_game->getResourcePack())
+		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 
 	_surfaces.push_back(surface);
 }
@@ -238,17 +212,8 @@ void State::centerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		TextList *tl = dynamic_cast<TextList*>(*i);
-		if (tl)
-		{
-			tl->setAllX((*i)->getX() + Screen::getDX());
-			tl->setAllY((*i)->getY() + Screen::getDY());
-		}
-		else
-		{
-			(*i)->setX((*i)->getX() + Screen::getDX());
-			(*i)->setY((*i)->getY() + Screen::getDY());
-		}
+		(*i)->setX((*i)->getX() + Screen::getDX());
+		(*i)->setY((*i)->getY() + Screen::getDY());
 	}
 }
 
@@ -256,14 +221,55 @@ void State::lowerAllSurfaces()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		TextList *tl = dynamic_cast<TextList*>(*i);
-		if (tl)
+		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
+	}
+}
+
+void State::applyBattlescapeTheme()
+{
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	{
+		Window* window = dynamic_cast<Window*>(*i);
+		if (window)
 		{
-			tl->setAllY((*i)->getY() + Screen::getDY() / 2);
+			window->setColor(Palette::blockOffset(0));
+			window->setHighContrast(true);
+			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 		}
-		else
+		Text* text = dynamic_cast<Text*>(*i);
+		if (text)
 		{
-			(*i)->setY((*i)->getY() + Screen::getDY() / 2);
+			text->setColor(Palette::blockOffset(0));
+			text->setHighContrast(true);
+		}
+		TextButton* button = dynamic_cast<TextButton*>(*i);
+		if (button)
+		{
+			button->setColor(Palette::blockOffset(0));
+			button->setHighContrast(true);
+		}
+		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
+		if (edit)
+		{
+			edit->setColor(Palette::blockOffset(0));
+			edit->setHighContrast(true);
+		}
+		TextList* list = dynamic_cast<TextList*>(*i);
+		if (list)
+		{
+			list->setColor(Palette::blockOffset(0));
+			list->setHighContrast(true);
+		}
+		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
+		if (arrow)
+		{
+			arrow->setColor(Palette::blockOffset(0));
+		}
+		Slider *slider = dynamic_cast<Slider*>(*i);
+		if (slider)
+		{
+			slider->setColor(Palette::blockOffset(0));
+			slider->setHighContrast(true);
 		}
 	}
 }

@@ -20,6 +20,7 @@
 #define OPENXCOM_DELETEGAMESTATE_H
 
 #include <string>
+#include "OptionsBaseState.h"
 #include "../Engine/State.h"
 
 namespace OpenXcom
@@ -41,10 +42,10 @@ private:
 	Text *_txtMessage;
 	SavedGameState *_parent;
 	std::string _filename;
-	bool _geo;
+	OptionsOrigin _origin;
 public:
 	/// Creates the Confirm state.
-	DeleteGameState(Game *game, bool geo, const std::wstring &save, SavedGameState *parent);
+	DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent);
 	/// Cleans up the Confirm state.
 	~DeleteGameState();
 	/// Handler for clicking the confirm button.

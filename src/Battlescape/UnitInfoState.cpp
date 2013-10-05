@@ -43,8 +43,9 @@ namespace OpenXcom
  * Initializes all the elements in the Unit Info screen.
  * @param game Pointer to the core game.
  * @param unit Pointer to the selected unit.
+ * @param parent Pointer to parent Battlescape.
  */
-UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(unit)
+UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent) : State(game), _unit(unit), _parent(parent)
 {
 	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
@@ -201,7 +202,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtTimeUnits->setColor(Palette::blockOffset(3));
 	_txtTimeUnits->setHighContrast(true);
-	_txtTimeUnits->setText(_game->getLanguage()->getString("STR_TIME_UNITS"));
+	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
 	_numTimeUnits->setColor(Palette::blockOffset(9));
 	_numTimeUnits->setHighContrast(true);
@@ -211,7 +212,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtEnergy->setColor(Palette::blockOffset(3));
 	_txtEnergy->setHighContrast(true);
-	_txtEnergy->setText(_game->getLanguage()->getString("STR_ENERGY"));
+	_txtEnergy->setText(tr("STR_ENERGY"));
 
 	_numEnergy->setColor(Palette::blockOffset(9));
 	_numEnergy->setHighContrast(true);
@@ -221,7 +222,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtHealth->setColor(Palette::blockOffset(3));
 	_txtHealth->setHighContrast(true);
-	_txtHealth->setText(_game->getLanguage()->getString("STR_HEALTH"));
+	_txtHealth->setText(tr("STR_HEALTH"));
 
 	_numHealth->setColor(Palette::blockOffset(9));
 	_numHealth->setHighContrast(true);
@@ -232,7 +233,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtFatalWounds->setColor(Palette::blockOffset(3));
 	_txtFatalWounds->setHighContrast(true);
-	_txtFatalWounds->setText(_game->getLanguage()->getString("STR_FATAL_WOUNDS"));
+	_txtFatalWounds->setText(tr("STR_FATAL_WOUNDS"));
 
 	_numFatalWounds->setColor(Palette::blockOffset(9));
 	_numFatalWounds->setHighContrast(true);
@@ -242,7 +243,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtBravery->setColor(Palette::blockOffset(3));
 	_txtBravery->setHighContrast(true);
-	_txtBravery->setText(_game->getLanguage()->getString("STR_BRAVERY"));
+	_txtBravery->setText(tr("STR_BRAVERY"));
 
 	_numBravery->setColor(Palette::blockOffset(9));
 	_numBravery->setHighContrast(true);
@@ -252,7 +253,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtMorale->setColor(Palette::blockOffset(3));
 	_txtMorale->setHighContrast(true);
-	_txtMorale->setText(_game->getLanguage()->getString("STR_MORALE"));
+	_txtMorale->setText(tr("STR_MORALE"));
 
 	_numMorale->setColor(Palette::blockOffset(9));
 	_numMorale->setHighContrast(true);
@@ -262,7 +263,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtReactions->setColor(Palette::blockOffset(3));
 	_txtReactions->setHighContrast(true);
-	_txtReactions->setText(_game->getLanguage()->getString("STR_REACTIONS"));
+	_txtReactions->setText(tr("STR_REACTIONS"));
 
 	_numReactions->setColor(Palette::blockOffset(9));
 	_numReactions->setHighContrast(true);
@@ -272,7 +273,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtFiring->setColor(Palette::blockOffset(3));
 	_txtFiring->setHighContrast(true);
-	_txtFiring->setText(_game->getLanguage()->getString("STR_FIRING_ACCURACY"));
+	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
 	_numFiring->setColor(Palette::blockOffset(9));
 	_numFiring->setHighContrast(true);
@@ -282,7 +283,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtThrowing->setColor(Palette::blockOffset(3));
 	_txtThrowing->setHighContrast(true);
-	_txtThrowing->setText(_game->getLanguage()->getString("STR_THROWING_ACCURACY"));
+	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
 	_numThrowing->setColor(Palette::blockOffset(9));
 	_numThrowing->setHighContrast(true);
@@ -292,7 +293,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtStrength->setColor(Palette::blockOffset(3));
 	_txtStrength->setHighContrast(true);
-	_txtStrength->setText(_game->getLanguage()->getString("STR_STRENGTH"));
+	_txtStrength->setText(tr("STR_STRENGTH"));
 
 	_numStrength->setColor(Palette::blockOffset(9));
 	_numStrength->setHighContrast(true);
@@ -302,7 +303,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtPsiStrength->setColor(Palette::blockOffset(3));
 	_txtPsiStrength->setHighContrast(true);
-	_txtPsiStrength->setText(_game->getLanguage()->getString("STR_PSIONIC_STRENGTH"));
+	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
 	_numPsiStrength->setColor(Palette::blockOffset(9));
 	_numPsiStrength->setHighContrast(true);
@@ -312,7 +313,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtPsiSkill->setColor(Palette::blockOffset(3));
 	_txtPsiSkill->setHighContrast(true);
-	_txtPsiSkill->setText(_game->getLanguage()->getString("STR_PSIONIC_SKILL"));
+	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 
 	_numPsiSkill->setColor(Palette::blockOffset(9));
 	_numPsiSkill->setHighContrast(true);
@@ -322,7 +323,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtFrontArmor->setColor(Palette::blockOffset(3));
 	_txtFrontArmor->setHighContrast(true);
-	_txtFrontArmor->setText(_game->getLanguage()->getString("STR_FRONT_ARMOR_UC"));
+	_txtFrontArmor->setText(tr("STR_FRONT_ARMOR_UC"));
 
 	_numFrontArmor->setColor(Palette::blockOffset(9));
 	_numFrontArmor->setHighContrast(true);
@@ -332,7 +333,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtLeftArmor->setColor(Palette::blockOffset(3));
 	_txtLeftArmor->setHighContrast(true);
-	_txtLeftArmor->setText(_game->getLanguage()->getString("STR_LEFT_ARMOR_UC"));
+	_txtLeftArmor->setText(tr("STR_LEFT_ARMOR_UC"));
 
 	_numLeftArmor->setColor(Palette::blockOffset(9));
 	_numLeftArmor->setHighContrast(true);
@@ -342,7 +343,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtRightArmor->setColor(Palette::blockOffset(3));
 	_txtRightArmor->setHighContrast(true);
-	_txtRightArmor->setText(_game->getLanguage()->getString("STR_RIGHT_ARMOR_UC"));
+	_txtRightArmor->setText(tr("STR_RIGHT_ARMOR_UC"));
 
 	_numRightArmor->setColor(Palette::blockOffset(9));
 	_numRightArmor->setHighContrast(true);
@@ -352,7 +353,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtRearArmor->setColor(Palette::blockOffset(3));
 	_txtRearArmor->setHighContrast(true);
-	_txtRearArmor->setText(_game->getLanguage()->getString("STR_REAR_ARMOR_UC"));
+	_txtRearArmor->setText(tr("STR_REAR_ARMOR_UC"));
 
 	_numRearArmor->setColor(Palette::blockOffset(9));
 	_numRearArmor->setHighContrast(true);
@@ -362,7 +363,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
 
 	_txtUnderArmor->setColor(Palette::blockOffset(3));
 	_txtUnderArmor->setHighContrast(true);
-	_txtUnderArmor->setText(_game->getLanguage()->getString("STR_UNDER_ARMOR_UC"));
+	_txtUnderArmor->setText(tr("STR_UNDER_ARMOR_UC"));
 
 	_numUnderArmor->setColor(Palette::blockOffset(9));
 	_numUnderArmor->setHighContrast(true);
@@ -396,7 +397,7 @@ void UnitInfoState::init()
 	// aliens have their rank in their "name", soldiers don't
 	if (_unit->getType() == "SOLDIER")
 	{
-		ss << _game->getLanguage()->getString(_unit->getRankString());
+		ss << tr(_unit->getRankString());
 		ss << " ";
 	}
 	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
@@ -529,6 +530,7 @@ void UnitInfoState::init()
 void UnitInfoState::handle(Action *action)
 {
 	State::handle(action);
+	SavedBattleGame *battleGame = _game->getSavedGame()->getSavedBattle();
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -537,61 +539,77 @@ void UnitInfoState::handle(Action *action)
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() > 1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnNextClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnPrevClick(action);
 		}
 	}
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		// "tab" - next solider
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectNextPlayerUnit(false, false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnNextClick(action);
 		}
-		// prev soldier
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-			_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			while (_unit->getArmor()->getSize() >1
-					|| _unit->getRankString() == "STR_LIVE_TERRORIST")
-			{
-				_game->getSavedGame()->getSavedBattle()->getBattleState()->selectPreviousPlayerUnit(false);
-				_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
-			}
-			init();
+			btnPrevClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel"))
 		{
 			_game->popState();
 		}
+	}
+}
+
+/**
+* Selects the previous soldier.
+* @param action Pointer to an action.
+*/
+void UnitInfoState::btnPrevClick(Action *)
+{
+	if (_parent)
+	{
+		_parent->selectPreviousPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(false, false, true);
+	}
+	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	if (_unit != 0)
+	{
+		init();
+	}
+	else
+	{
+		_game->popState();
+	}
+}
+
+/**
+* Selects the next soldier.
+* @param action Pointer to an action.
+*/
+void UnitInfoState::btnNextClick(Action *)
+{
+	if (_parent)
+	{
+		_parent->selectNextPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(false, false, true);
+	}
+	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	if (_unit != 0)
+	{
+		init();
+	}
+	else
+	{
+		_game->popState();
 	}
 }
 

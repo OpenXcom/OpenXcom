@@ -40,7 +40,7 @@ class Base;
 class CraftEquipmentState : public State
 {
 private:
-	TextButton *_btnOk, *_btnClear;
+	TextButton *_btnOk, *_btnClear, *_btnInventory;
 	Window *_window;
 	Text *_txtTitle, *_txtItem, *_txtStores, *_txtAvailable, *_txtUsed, *_txtCrew;
 	TextList *_lstEquipment;
@@ -58,6 +58,8 @@ public:
 	CraftEquipmentState(Game *game, Base *base, size_t craft);
 	/// Cleans up the Craft Equipment state.
 	~CraftEquipmentState();
+	/// Resets state.
+	void init();
 	/// Runs the timers.
 	void think();
 	/// Handler for clicking the OK button.
@@ -86,6 +88,8 @@ public:
 	void moveRightByValue(int change);
 	/// Empties the contents of the craft, moving all of the items back to the base.
 	void btnClearClick(Action *action);
+	/// Handler for clicking the Inventory button.
+	void btnInventoryClick(Action *action);
 };
 
 }

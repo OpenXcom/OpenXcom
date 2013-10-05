@@ -89,7 +89,6 @@ bool equalProduction::operator()(const Production * p) const
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
- * @param starting time
  */
 SavedGame::SavedGame() : _difficulty(DIFF_BEGINNER), _globeLon(0.0), _globeLat(0.0), _globeZoom(0), _battleGame(0), _debug(false), _warned(false), _detail(true), _radarLines(false), _monthsPassed(-1), _graphRegionToggles(""), _graphCountryToggles(""), _graphFinanceToggles("")
 {
@@ -210,7 +209,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
-		throw Exception("Version mismatch");
+		//throw Exception("Version mismatch");
 	}
 	_time->load(brief["time"]);
 
@@ -399,7 +398,7 @@ void SavedGame::save(const std::string &filename) const
 	}
 	for (std::vector<const RuleResearch *>::const_iterator i = _poppedResearch.begin(); i != _poppedResearch.end(); ++i)
 	{
-		node["discovered"].push_back((*i)->getName());
+		node["poppedResearch"].push_back((*i)->getName());
 	}
 	node["alienStrategy"] = _alienStrategy->save();
 	if (_battleGame != 0)
@@ -714,7 +713,7 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 		}
 		for(std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
 		{
-			if((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
+			if((*it)->getCost() == 0 && (*it)->getRequirements().empty())
 			{
 				addFinishedResearch(*it, ruleset);
 			}
@@ -890,7 +889,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 	}
 	else if (liveAlien)
 	{		
-		if (r->getGetOneFree().size() > 0)
+		if (!r->getGetOneFree().empty())
 		{
 			for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
 			{

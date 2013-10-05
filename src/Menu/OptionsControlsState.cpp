@@ -106,8 +106,9 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 /**
  * Initializes all the elements in the Controls screen.
  * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
  */
-OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(-1), _selKey(0)
+OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin), _selected(-1), _selKey(0)
 {
 	_countGeneral = 4;
 	_countGeo = 20;
@@ -135,19 +136,19 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsControlsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&OptionsControlsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsControlsState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&OptionsControlsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_CONTROLS"));
+	_txtTitle->setText(tr("STR_CONTROLS"));
 
 	_lstControls->setColor(Palette::blockOffset(8)+10);
 	_lstControls->setArrowColor(Palette::blockOffset(8)+5);
@@ -159,15 +160,15 @@ OptionsControlsState::OptionsControlsState(Game *game) : State(game), _selected(
 	_lstControls->onKeyboardPress((ActionHandler)&OptionsControlsState::lstControlsKeyPress);
 	_lstControls->focus();
 
-	_lstControls->addRow(2, _game->getLanguage()->getString("STR_GENERAL").c_str(), L"");
+	_lstControls->addRow(2, tr("STR_GENERAL").c_str(), L"");
 	_lstControls->setCellColor(0, 0, Palette::blockOffset(15)-1);
 	addControls(_controlsGeneral, _countGeneral);
 	_lstControls->addRow(2, L"", L"");
-	_lstControls->addRow(2, _game->getLanguage()->getString("STR_GEOSCAPE").c_str(), L"");
+	_lstControls->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
 	_lstControls->setCellColor(_countGeneral + 2, 0, Palette::blockOffset(15)-1);
 	addControls(_controlsGeo, _countGeo);
 	_lstControls->addRow(2, L"", L"");
-	_lstControls->addRow(2, _game->getLanguage()->getString("STR_BATTLESCAPE").c_str(), L"");
+	_lstControls->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
 	_lstControls->setCellColor(_countGeneral + 2 + _countGeo + 2, 0, Palette::blockOffset(15)-1);
 	addControls(_controlsBattle, _countBattle);
 }
@@ -211,7 +212,7 @@ void OptionsControlsState::addControls(KeyOption keys[], int count)
 	for (int i = 0; i < count; ++i)
 	{
 		keys[i].key = (SDLKey)Options::getInt(keys[i].option);
-		std::wstring name = _game->getLanguage()->getString(keys[i].name);
+		std::wstring name = tr(keys[i].name);
 		std::wstring key = Language::utf8ToWstr(ucWords(SDL_GetKeyName(keys[i].key)));
 		if (keys[i].key == SDLK_UNKNOWN)
 			key = L"";

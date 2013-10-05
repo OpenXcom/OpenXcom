@@ -131,6 +131,11 @@ void createDefault()
 	setBool("borderless", false);
 	setBool("captureMouse", false);
 	setBool("battleTooltips", true);
+	setBool("battleHairBleach", true);
+    setBool("keepAspectRatio", false);
+    setBool("cursorInBlackBandsInFullscreen", false);
+    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInBorderlessWindow", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -385,9 +390,10 @@ bool init(int argc, char** args)
 	fflush(file);
 	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
+	Log(LOG_INFO) << "Data search is: ";
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{
-		Log(LOG_INFO) << *i;
+		Log(LOG_INFO) << "- " << *i;
 	}
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
@@ -402,10 +408,10 @@ bool init(int argc, char** args)
  */
 void setFolders()
 {
-    if (_dataFolder == "")
+	_dataList = CrossPlatform::findDataFolders();
+    if (_dataFolder != "")
     {
-        _dataList = CrossPlatform::findDataFolders();
-        // Missing data folder is handled in StartState
+		_dataList.insert(_dataList.begin(), _dataFolder);
     }
     if (_userFolder == "")
     {

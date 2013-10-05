@@ -32,8 +32,8 @@ RuleItem::RuleItem(const std::string &type) : _type(type), _name(type), _size(0.
 											_fireSound(-1), _hitSound(-1), _hitAnimation(0), _power(0), _compatibleAmmo(), _damageType(DT_NONE),
 											_accuracyAuto(0), _accuracySnap(0), _accuracyAimed(0), _tuAuto(0), _tuSnap(0), _tuAimed(0), _clipSize(0), _accuracyMelee(0), _tuMelee(0),
 											_battleType(BT_NONE), _twoHanded(false), _waypoint(false), _fixedWeapon(false), _invWidth(1), _invHeight(1),
-											_painKiller(0), _heal(0), _stimulant(0), _healAmount(0), _healthAmount(0), _stun(0), _energy(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
-											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0), _bulletSpeed(0)
+											_painKiller(0), _heal(0), _stimulant(0), _woundRecovery(0), _healthRecovery(0), _stunRecovery(0), _energyRecovery(0), _tuUse(0), _recoveryPoints(0), _armor(20), _turretType(-1),
+											_recover(true), _liveAlien(false), _blastRadius(-1), _attraction(0), _flatRate(false), _arcingShot(false), _listOrder(0), _range(0), _bulletSpeed(0), _autoShots(3)
 {
 }
 
@@ -110,10 +110,10 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_painKiller = node["painKiller"].as<int>(_painKiller);
 	_heal = node["heal"].as<int>(_heal);
 	_stimulant = node["stimulant"].as<int>(_stimulant);
-	_healAmount = node["healAmount"].as<int>(_healAmount);
-	_healthAmount = node["healthAmount"].as<int>(_healthAmount);
-	_stun = node["stun"].as<int>(_stun);
-	_energy = node["energy"].as<int>(_energy);
+	_woundRecovery = node["woundRecovery"].as<int>(_woundRecovery);
+	_healthRecovery = node["healthRecovery"].as<int>(_healthRecovery);
+	_stunRecovery = node["stunRecovery"].as<int>(_stunRecovery);
+	_energyRecovery = node["energyRecovery"].as<int>(_energyRecovery);
 	_tuUse = node["tuUse"].as<int>(_tuUse);
 	_recoveryPoints = node["recoveryPoints"].as<int>(_recoveryPoints);
 	_armor = node["armor"].as<int>(_armor);
@@ -127,6 +127,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	_range = node["maxRange"].as<int>(_range);
 	_bulletSpeed = node["bulletSpeed"].as<int>(_bulletSpeed);
+	_autoShots = node["autoShots"].as<int>(_autoShots);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
@@ -482,36 +483,36 @@ int RuleItem::getStimulantQuantity () const
  * Gets the amount of fatal wound healed per usage.
  * @return The amount of fatal wound healed.
  */
-int RuleItem::getHealAmount () const
+int RuleItem::getWoundRecovery () const
 {
-	return _healAmount;
+	return _woundRecovery;
 }
 
 /**
  * Gets the amount of health added to a wounded soldier's health.
  * @return The amount of health to add.
  */
-int RuleItem::getHealthAmount () const
+int RuleItem::getHealthRecovery () const
 {
-	return _healthAmount;
+	return _healthRecovery;
 }
 
 /**
  * Gets the amount of energy added to a soldier's energy.
  * @return The amount of energy to add.
  */
-int RuleItem::getEnergy () const
+int RuleItem::getEnergyRecovery () const
 {
-	return _energy;
+	return _energyRecovery;
 }
 
 /**
  * Gets the amount of stun removed from a soldier's stun level.
  * @return The amount of stun removed.
  */
-int RuleItem::getStun () const
+int RuleItem::getStunRecovery () const
 {
-	return _stun;
+	return _stunRecovery;
 }
 
 /**
@@ -656,6 +657,15 @@ int RuleItem::getRange() const
 int RuleItem::getBulletSpeed() const
 {
 	return _bulletSpeed;
+}
+
+/**
+* Gets the amount of auto shots fired by this weapon.
+* @return The shots.
+*/
+int RuleItem::getAutoShots() const
+{
+	return _autoShots;
 }
 
 }

@@ -41,6 +41,10 @@
 #include "../Savegame/Vehicle.h"
 #include "../Savegame/SavedGame.h"
 #include "../Menu/ErrorMessageState.h"
+#include "../Battlescape/InventoryState.h"
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Menu/ErrorMessageState.h"
+#include "../Savegame/SavedBattleGame.h"
 
 namespace OpenXcom
 {
@@ -55,11 +59,15 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	Craft *c = _base->getCrafts()->at(_craft);
+	bool craftHasACrew = c->getNumSoldiers() > 0;
+	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
 
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(140, 16, 164, 176);
-	_btnClear = new TextButton(140, 16, 16, 176);
+	_btnOk = new TextButton((craftHasACrew || isNewBattle)? 148:288, 16, (craftHasACrew || isNewBattle)? 164:16, 176);
+	_btnClear = new TextButton(148, 16, 8, 176);
+	_btnInventory = new TextButton(148, 16, 8, 176);
 	_txtTitle = new Text(300, 16, 16, 7);
 	_txtItem = new Text(144, 9, 16, 32);
 	_txtStores = new Text(150, 9, 160, 32);
@@ -69,11 +77,13 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_lstEquipment = new TextList(288, 128, 8, 40);
 
 	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
 	add(_btnClear);
+	add(_btnInventory);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtStores);
@@ -89,41 +99,46 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	
+
 	_btnClear->setColor(Palette::blockOffset(15)+1);
-	_btnClear->setText(_game->getLanguage()->getString("STR_UNLOAD"));
+	_btnClear->setText(tr("STR_UNLOAD"));
 	_btnClear->onMouseClick((ActionHandler)&CraftEquipmentState::btnClearClick);
+	_btnClear->setVisible(isNewBattle);
+
+	_btnInventory->setColor(Palette::blockOffset(15) + 1);
+	_btnInventory->setText(tr("STR_INVENTORY"));
+	_btnInventory->onMouseClick((ActionHandler)&CraftEquipmentState::btnInventoryClick);
+	_btnInventory->setVisible(craftHasACrew && !isNewBattle);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	Craft *c = _base->getCrafts()->at(_craft);
-	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_craftname").arg(c->getName(_game->getLanguage())));
+	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_CRAFT").arg(c->getName(_game->getLanguage())));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
-	_txtItem->setText(_game->getLanguage()->getString("STR_ITEM"));
+	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtStores->setColor(Palette::blockOffset(15)+1);
-	_txtStores->setText(_game->getLanguage()->getString("STR_STORES"));
+	_txtStores->setText(tr("STR_STORES"));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+1);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01'<< c->getSpaceAvailable();
+	ss << tr("STR_SPACE_AVAILABLE") << L'\x01'<< c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
 
 	_txtUsed->setColor(Palette::blockOffset(15)+1);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
+	ss2 << tr("STR_SPACE_USED") << L'\x01'<< c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
+	ss3 << tr("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
 	_txtCrew->setText(ss3.str());
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
@@ -166,10 +181,17 @@ CraftEquipmentState::CraftEquipmentState(Game *game, Base *base, size_t craft) :
 		{
 			_items.push_back(*i);
 			std::wstringstream ss, ss2;
-			ss << _base->getItems()->getItem(*i);
+			if (_game->getSavedGame()->getMonthsPassed() > -1)
+			{
+				ss << _base->getItems()->getItem(*i);
+			}
+			else
+			{
+				ss << "-";
+			}
 			ss2 << cQty;
 
-			std::wstring s = _game->getLanguage()->getString(*i);
+			std::wstring s = tr(*i);
 			if (rule->getBattleType() == BT_AMMO)
 			{
 				s.insert(0, L"  ");
@@ -211,6 +233,21 @@ CraftEquipmentState::~CraftEquipmentState()
 {
 	delete _timerLeft;
 	delete _timerRight;
+}
+
+/**
+* Resets the savegame when coming back from the inventory.
+*/
+void CraftEquipmentState::init()
+{
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+
+	_game->getSavedGame()->setBattleGame(0);
+
+	Craft *c = _base->getCrafts()->at(_craft);
+	c->setInBattlescape(false);
 }
 
 /**
@@ -357,7 +394,14 @@ void CraftEquipmentState::updateQuantity()
 		cQty = c->getItems()->getItem(_items[_sel]);
 	}
 	std::wstringstream ss, ss2;
-	ss << _base->getItems()->getItem(_items[_sel]);
+	if (_game->getSavedGame()->getMonthsPassed() > -1)
+	{
+		ss << _base->getItems()->getItem(_items[_sel]);
+	}
+	else
+	{
+		ss << "-";
+	}
 	ss2 << cQty;
 
 	Uint8 color;
@@ -382,10 +426,10 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
 
 	std::wstringstream ss3;
-	ss3 << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
+	ss3 << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
 	_txtAvailable->setText(ss3.str());
 	std::wstringstream ss4;
-	ss4 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
+	ss4 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
 	_txtUsed->setText(ss4.str());
 }
 
@@ -540,7 +584,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
-					LocalizedText msg(tr("STR_NOT_ENOUGH_ammotype_TO_ARM_HWP").arg(tr(ammo->getType())));
+					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
 					_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
 			}
@@ -580,4 +624,33 @@ void CraftEquipmentState::btnClearClick(Action *)
 		moveLeftByValue(INT_MAX);
 	}
 }
+
+/**
+* Displays the inventory screen for the soldiers
+* inside the craft.
+* @param action Pointer to an action.
+*/
+void CraftEquipmentState::btnInventoryClick(Action *)
+{
+	Craft *craft = _base->getCrafts()->at(_craft);
+	if (craft->getNumSoldiers() == 0)
+	{
+		std::wstringstream ss;
+		ss << craft->getName(_game->getLanguage()) << L'\n' << tr("STR_NO_CREW");
+		_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+	}
+	else
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+
+		SavedBattleGame *bgame = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(bgame);
+
+		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+		bgen.runInventory(craft);
+
+		_game->pushState(new InventoryState(_game, false, 0));
+	}
+}
+
 }

@@ -56,16 +56,16 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnPrev = new TextButton(28, 14, 0, 33);
 	_btnOk = new TextButton(48, 14, 30, 33);
 	_btnNext = new TextButton(28, 14, 80, 33);
-	_btnArmor = new TextButton(60, 14, 130, 33);
+	_btnArmor = new TextButton(110, 14, 130, 33);	// (60, 14, 130, 33);
 	_edtSoldier = new TextEdit(200, 16, 40, 9);
-	_btnSack = new TextButton(60,14,248, 10);
-	_txtArmor = new Text(120, 9, 194, 38);
+	_btnSack = new TextButton(60, 14, 260, 33); 	// (60, 14, 248, 10);
+//	_txtArmor = new Text(120, 9, 194, 38);
 	_txtRank = new Text(130, 9, 0, 48);
 	_txtMissions = new Text(100, 9, 130, 48);
 	_txtKills = new Text(100, 9, 230, 48);
 	_txtCraft = new Text(130, 9, 0, 56);
 	_txtRecovery = new Text(180, 9, 130, 56);
-	_txtPsionic = new Text(140, 9, 0, 66);
+	_txtPsionic = new Text(150, 9, 0, 66);
 
 	_txtTimeUnits = new Text(120, 9, 6, 82);
 	_numTimeUnits = new Text(18, 9, 131, 82);
@@ -115,7 +115,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_btnArmor);
 	add(_edtSoldier);
 	add(_btnSack);
-	add(_txtArmor);
+//	add(_txtArmor);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
@@ -169,7 +169,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
@@ -182,7 +182,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
-	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
@@ -190,10 +190,10 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
-	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
+	_btnSack->setText(tr("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
 
-	_txtArmor->setColor(Palette::blockOffset(13));
+//	_txtArmor->setColor(Palette::blockOffset(13));
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
@@ -211,11 +211,11 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
-	_txtPsionic->setText(_game->getLanguage()->getString("STR_IN_PSIONIC_TRAINING"));
+	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
-	_txtTimeUnits->setText(_game->getLanguage()->getString("STR_TIME_UNITS"));
+	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
 	_numTimeUnits->setColor(Palette::blockOffset(13));
 
@@ -225,7 +225,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barTimeUnits->setInvert(true);
 
 	_txtStamina->setColor(Palette::blockOffset(15)+1);
-	_txtStamina->setText(_game->getLanguage()->getString("STR_STAMINA"));
+	_txtStamina->setText(tr("STR_STAMINA"));
 
 	_numStamina->setColor(Palette::blockOffset(13));
 
@@ -235,7 +235,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barStamina->setInvert(true);
 
 	_txtHealth->setColor(Palette::blockOffset(15)+1);
-	_txtHealth->setText(_game->getLanguage()->getString("STR_HEALTH"));
+	_txtHealth->setText(tr("STR_HEALTH"));
 
 	_numHealth->setColor(Palette::blockOffset(13));
 
@@ -245,7 +245,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barHealth->setInvert(true);
 
 	_txtBravery->setColor(Palette::blockOffset(15)+1);
-	_txtBravery->setText(_game->getLanguage()->getString("STR_BRAVERY"));
+	_txtBravery->setText(tr("STR_BRAVERY"));
 
 	_numBravery->setColor(Palette::blockOffset(13));
 
@@ -255,7 +255,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barBravery->setInvert(true);
 
 	_txtReactions->setColor(Palette::blockOffset(15)+1);
-	_txtReactions->setText(_game->getLanguage()->getString("STR_REACTIONS"));
+	_txtReactions->setText(tr("STR_REACTIONS"));
 
 	_numReactions->setColor(Palette::blockOffset(13));
 
@@ -265,7 +265,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barReactions->setInvert(true);
 
 	_txtFiring->setColor(Palette::blockOffset(15)+1);
-	_txtFiring->setText(_game->getLanguage()->getString("STR_FIRING_ACCURACY"));
+	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
 
 	_numFiring->setColor(Palette::blockOffset(13));
 
@@ -275,7 +275,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barFiring->setInvert(true);
 
 	_txtThrowing->setColor(Palette::blockOffset(15)+1);
-	_txtThrowing->setText(_game->getLanguage()->getString("STR_THROWING_ACCURACY"));
+	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
 	_numThrowing->setColor(Palette::blockOffset(13));
 
@@ -285,7 +285,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barThrowing->setInvert(true);
 
 	_txtStrength->setColor(Palette::blockOffset(15)+1);
-	_txtStrength->setText(_game->getLanguage()->getString("STR_STRENGTH"));
+	_txtStrength->setText(tr("STR_STRENGTH"));
 
 	_numStrength->setColor(Palette::blockOffset(13));
 
@@ -295,7 +295,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barStrength->setInvert(true);
 
 	_txtPsiStrength->setColor(Palette::blockOffset(15)+1);
-	_txtPsiStrength->setText(_game->getLanguage()->getString("STR_PSIONIC_STRENGTH"));
+	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
 	_numPsiStrength->setColor(Palette::blockOffset(13));
 
@@ -305,7 +305,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	_barPsiStrength->setInvert(true);
 
 	_txtPsiSkill->setColor(Palette::blockOffset(15)+1);
-	_txtPsiSkill->setText(_game->getLanguage()->getString("STR_PSIONIC_SKILL"));
+	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
 
 	_numPsiSkill->setColor(Palette::blockOffset(13));
 
@@ -343,26 +343,6 @@ void SoldierInfoState::init()
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
 
-	if(current->psiSkill > 0)
-	{
-		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
-
-		_txtPsiSkill->setVisible(true);
-		_numPsiSkill->setVisible(true);
-		_barPsiSkill->setVisible(true);
-	}
-	else
-	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-
-		_txtPsiSkill->setVisible(false);
-		_numPsiSkill->setVisible(false);
-		_barPsiSkill->setVisible(false);
-	}
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
 	texture->getFrame(s->getRankSprite())->setY(0);
@@ -424,24 +404,39 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 	_barStrength->setValue2(initial->strength);
 
-	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
+	std::wstring wsArmor;
+	std::string armorType = s->getArmor()->getType();
+	if (armorType == "STR_NONE_UC")
+	{
+		wsArmor.reserve(15);
+		wsArmor = tr("STR_ARMOR");
+		wsArmor += L"> ";
+		wsArmor += tr(armorType);
+	}
+	else
+		wsArmor = tr(armorType);
+
+	_btnArmor->setText(wsArmor);
+//	_txtArmor->setText(tr(s->getArmor()->getType()));
+
+	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
 
 	std::wstringstream ss9;
-	ss9 << _game->getLanguage()->getString("STR_RANK_") << L'\x01' << _game->getLanguage()->getString(s->getRankString());
+	ss9 << tr("STR_RANK_") << L'\x01' << tr(s->getRankString());
 	_txtRank->setText(ss9.str());
 
 	std::wstringstream ss10;
-	ss10 << _game->getLanguage()->getString("STR_MISSIONS") << L'\x01' << s->getMissions();
+	ss10 << tr("STR_MISSIONS") << L'\x01' << s->getMissions();
 	_txtMissions->setText(ss10.str());
 
 	std::wstringstream ss11;
-	ss11 << _game->getLanguage()->getString("STR_KILLS") << L'\x01' << s->getKills();
+	ss11 << tr("STR_KILLS") << L'\x01' << s->getKills();
 	_txtKills->setText(ss11.str());
 
 	std::wstringstream ss12;
-	ss12 << _game->getLanguage()->getString("STR_CRAFT_") << L'\x01';
+	ss12 << tr("STR_CRAFT_") << L'\x01';
 	if (s->getCraft() == 0)
-		ss12 << _game->getLanguage()->getString("STR_NONE_UC");
+		ss12 << tr("STR_NONE_UC");
 	else
 		ss12 << s->getCraft()->getName(_game->getLanguage());
 	_txtCraft->setText(ss12.str());

@@ -72,6 +72,32 @@ TextList::~TextList()
 }
 
 /**
+* Changes the position of the surface in the X axis.
+* @param x X position in pixels.
+*/
+void TextList::setX(int x)
+{
+	Surface::setX(x);
+	_up->setX(getX() + getWidth() + _scrollPos);
+	_down->setX(getX() + getWidth() + _scrollPos);
+	if (_selector != 0)
+		_selector->setX(getX());
+}
+
+/**
+* Changes the position of the surface in the Y axis.
+* @param y Y position in pixels.
+*/
+void TextList::setY(int y)
+{
+	Surface::setY(y);
+	_up->setY(getY() + 1);
+	_down->setY(getY() + getHeight() - 12);
+	if (_selector != 0)
+		_selector->setY(getY());
+}
+
+/**
  * Sets the allowScrollOnArrowButtons.
  * @param value new value.
  */
@@ -368,6 +394,13 @@ void TextList::setColor(Uint8 color)
 	_color = color;
 	_up->setColor(color);
 	_down->setColor(color);
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	{
+		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
+		{
+			(*v)->setColor(color);
+		}
+	}
 }
 
 /**
@@ -405,6 +438,13 @@ Uint8 TextList::getSecondaryColor() const
 void TextList::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	{
+		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
+		{
+			(*v)->setHighContrast(contrast);
+		}
+	}
 }
 
 /**
@@ -905,6 +945,7 @@ void TextList::mouseOut(Action *action, State *state)
 
 	InteractiveSurface::mouseOut(action, state);
 }
+
 /*
  * get the scroll depth.
  * @return scroll depth.
@@ -914,19 +955,4 @@ int TextList::getScroll()
 	return _scroll;
 }
 
-void TextList::setAllX(int x)
-{
-	_x = x;
-	_up->setX(getX() + getWidth() + _scrollPos);
-	_down->setX(getX() + getWidth() + _scrollPos);
-	_selector->setX(x);
-}
-
-void TextList::setAllY(int y)
-{
-	_y = y;
-	_up->setY(getY() + 1);
-	_down->setY(getY() + getHeight() - 12);
-	_selector->setY(y);
-}
 }

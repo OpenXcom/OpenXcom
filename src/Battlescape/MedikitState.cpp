@@ -151,9 +151,9 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	add(_surface);
 	add(_medikitView);
 	add(endButton);
-	add(new MedikitTitle (37, _game->getLanguage()->getString("STR_PAIN_KILLER")));
-	add(new MedikitTitle (73, _game->getLanguage()->getString("STR_STIMULANT")));
-	add(new MedikitTitle (109, _game->getLanguage()->getString("STR_HEAL")));
+	add(new MedikitTitle (37, tr("STR_PAIN_KILLER")));
+	add(new MedikitTitle (73, tr("STR_STIMULANT")));
+	add(new MedikitTitle (109, tr("STR_HEAL")));
 	add(healButton);
 	add(stimulantButton);
 	add(pkButton);
@@ -217,10 +217,15 @@ void MedikitState::onHealClick(Action *)
 	}
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
-		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getHealAmount(), rule->getHealthAmount());
+		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getWoundRecovery(), rule->getHealthRecovery());
 		_item->setHealQuantity(--heal);
 		_medikitView->invalidate();
 		update();
+
+		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
+		{
+			_targetUnit->setTimeUnits(0);
+		}
 	}
 	else
 	{
@@ -243,7 +248,7 @@ void MedikitState::onStimulantClick(Action *)
 	}
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
-		_targetUnit->stimulant(rule->getEnergy(), rule->getStun());
+		_targetUnit->stimulant(rule->getEnergyRecovery(), rule->getStunRecovery());
 		_item->setStimulantQuantity(--stimulant);
 		update();
 

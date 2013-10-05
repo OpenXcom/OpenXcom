@@ -57,7 +57,8 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
-#include "PatrolBAIState.h"
+#include "CivilianBAIState.h"
+#include "AlienBAIState.h"
 #include "Pathfinding.h"
 
 namespace OpenXcom
@@ -296,133 +297,10 @@ void BattlescapeGenerator::run()
 
 	// lets generate the map now and store it inside the tile objects
 	generateMap();
-	BattleUnit *unit;
 
 	if (_craft != 0 || _base != 0)
 	{
-		if (_craft !=0)
-			_base = _craft->getBase();
-
-		// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
-		// however the item itself becomes the weapon it "holds".
-		if (_craft != 0)
-		{
-			for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
-			{
-				addXCOMVehicle(*i);
-
-			}
-		}
-		else if (_base != 0)
-		{
-			// add vehicles that are in the base inventory
-			for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
-			{
-				addXCOMVehicle(*i);
-			}
-		}
-
-		// add soldiers that are in the craft or base
-		for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
-		{
-			if ((_craft != 0 && (*i)->getCraft() == _craft) ||
-				(_craft == 0 && (*i)->getWoundRecovery() == 0 && ((*i)->getCraft() == 0 || (*i)->getCraft()->getStatus() != "STR_OUT")))
-			{
-				unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
-				if (unit && !_save->getSelectedUnit())
-					_save->setSelectedUnit(unit);
-			}
-		}
-
-		// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
-		// fix: make them invisible, they are made visible afterwards.
-		for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-		{
-			if ((*i)->getFaction() == FACTION_PLAYER)
-			{
-				_craftInventoryTile->setUnit(*i);
-				(*i)->setVisible(false);
-			}
-		}
-
-		if (_craft != 0)
-		{
-			// add items that are in the craft
-			for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
-			{
-				for (int count=0; count < i->second; count++)
-				{
-					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
-						_game->getRuleset()->getInventory("STR_GROUND"));
-				}
-			}
-		}
-		else
-		{
-			// add items that are in the base
-			for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end();)
-			{
-				// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
-				RuleItem *rule = _game->getRuleset()->getItem(i->first);
-				if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && !rule->isFixed() && _game->getSavedGame()->isResearched(rule->getRequirements()))
-				{
-					for (int count=0; count < i->second; count++)
-					{
-						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
-							_game->getRuleset()->getInventory("STR_GROUND"));
-					}
-					std::map<std::string, int>::iterator tmp = i;
-					++i;
-					_base->getItems()->removeItem(tmp->first, tmp->second);
-				}
-				else
-				{
-					++i;
-				}
-			}
-			// add items from crafts in base
-			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
-			{
-				if ((*c)->getStatus() == "STR_OUT")
-					continue;
-				for (std::map<std::string, int>::iterator i = (*c)->getItems()->getContents()->begin(); i != (*c)->getItems()->getContents()->end(); ++i)
-				{
-					for (int count=0; count < i->second; count++)
-					{
-						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
-							_game->getRuleset()->getInventory("STR_GROUND"));
-					}
-				}
-			}
-		}
-
-		// equip soldiers based on equipment-layout
-		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
-		{
-			placeItemByLayout(*i);
-		}
-		// auto-equip soldiers (only soldiers without layout)
-		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
-		{
-			addItem(*i, false);
-		}
-		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
-		{
-			addItem(*i, true);
-		}
-		// clean up moved items
-		RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
-		for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end();)
-		{
-			if ((*i)->getSlot() != ground)
-			{
-				i = _craftInventoryTile->getInventory()->erase(i);
-			}
-			else
-			{
-				++i;
-			}
-		}
+		deployXCOM();
 	}
 
 	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
@@ -467,11 +345,147 @@ void BattlescapeGenerator::run()
 }
 
 /**
+* Deploys all the X-COM units and equipment based
+* on the Geoscape base / craft.
+* @param inventoryTile The tile to place all the extra equipment on.
+*/
+void BattlescapeGenerator::deployXCOM()
+{
+	if (_craft != 0)
+		_base = _craft->getBase();
+
+	// add vehicles that are in the craft - a vehicle is actually an item, which you will never see as it is converted to a unit
+	// however the item itself becomes the weapon it "holds".
+	if (_craft != 0)
+	{
+		for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
+		{
+			BattleUnit *unit = addXCOMVehicle(*i);
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
+		}
+	}
+	else if (_base != 0)
+	{
+		// add vehicles that are in the base inventory
+		for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
+		{
+			BattleUnit *unit = addXCOMVehicle(*i);
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
+		}
+	}
+
+	// add soldiers that are in the craft or base
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	{
+		if ((_craft != 0 && (*i)->getCraft() == _craft) ||
+			(_craft == 0 && (*i)->getWoundRecovery() == 0 && ((*i)->getCraft() == 0 || (*i)->getCraft()->getStatus() != "STR_OUT")))
+		{
+			BattleUnit *unit = addXCOMUnit(new BattleUnit(*i, FACTION_PLAYER));
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
+		}
+	}
+
+	// maybe we should assign all units to the first tile of the skyranger before the inventory pre-equip and then reassign them to their correct tile afterwards?
+	// fix: make them invisible, they are made visible afterwards.
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if ((*i)->getFaction() == FACTION_PLAYER)
+		{
+			_craftInventoryTile->setUnit(*i);
+			(*i)->setVisible(false);
+		}
+	}
+
+	if (_craft != 0)
+	{
+		// add items that are in the craft
+		for (std::map<std::string, int>::iterator i = _craft->getItems()->getContents()->begin(); i != _craft->getItems()->getContents()->end(); ++i)
+		{
+			for (int count = 0; count < i->second; count++)
+			{
+				_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
+					_game->getRuleset()->getInventory("STR_GROUND"));
+			}
+		}
+	}
+	else
+	{
+		// add items that are in the base
+		for (std::map<std::string, int>::iterator i = _base->getItems()->getContents()->begin(); i != _base->getItems()->getContents()->end();)
+		{
+			// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
+			RuleItem *rule = _game->getRuleset()->getItem(i->first);
+			if (rule->getBigSprite() > -1 && rule->getBattleType() != BT_NONE && rule->getBattleType() != BT_CORPSE && !rule->isFixed() && _game->getSavedGame()->isResearched(rule->getRequirements()))
+			{
+				for (int count = 0; count < i->second; count++)
+				{
+					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
+						_game->getRuleset()->getInventory("STR_GROUND"));
+				}
+				std::map<std::string, int>::iterator tmp = i;
+				++i;
+				_base->getItems()->removeItem(tmp->first, tmp->second);
+			}
+			else
+			{
+				++i;
+			}
+		}
+		// add items from crafts in base
+		for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+		{
+			if ((*c)->getStatus() == "STR_OUT")
+				continue;
+			for (std::map<std::string, int>::iterator i = (*c)->getItems()->getContents()->begin(); i != (*c)->getItems()->getContents()->end(); ++i)
+			{
+				for (int count = 0; count < i->second; count++)
+				{
+					_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
+						_game->getRuleset()->getInventory("STR_GROUND"));
+				}
+			}
+		}
+	}
+
+	// equip soldiers based on equipment-layout
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	{
+		placeItemByLayout(*i);
+	}
+	// auto-equip soldiers (only soldiers without layout)
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	{
+		addItem(*i, false);
+	}
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	{
+		addItem(*i, true);
+	}
+	// clean up moved items
+	RuleInventory *ground = _game->getRuleset()->getInventory("STR_GROUND");
+	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end();)
+	{
+		if ((*i)->getSlot() != ground)
+		{
+			i = _craftInventoryTile->getInventory()->erase(i);
+		}
+		else
+		{
+			++i;
+		}
+	}
+}
+
+/**
  * Adds an XCom vehicle to the game.
  * Sets the correct turret depending on the ammo type.
  * @param v Pointer to the Vehicle.
+ * @return Pointer to the spawned unit.
  */
-void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
+BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 {
 	std::string vehicle = v->getRules()->getType();
 	Unit *rule = _game->getRuleset()->getUnit(vehicle);
@@ -486,6 +500,7 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 		}
 		unit->setTurretType(v->getRules()->getTurretType());
 	}
+	return unit;
 }
 
 /**
@@ -545,7 +560,10 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
 					{
 						_save->getUnits()->push_back(unit);
-						_save->getTileEngine()->calculateFOV(unit);
+						if (_save->getTileEngine())
+						{
+							_save->getTileEngine()->calculateFOV(unit);
+						}
 						unit->deriveRank();
 						return unit;
 					}
@@ -638,12 +656,12 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
-			dir = unit->getDirectionTo(craft);
+			dir = unit->directionTo(craft);
 		if (dir != -1)
 			unit->setDirection(dir);
 		else
@@ -680,7 +698,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 
 		// we only add a unit if it has a node to spawn on.
@@ -689,7 +707,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0,7));
 		_save->getUnits()->push_back(unit);
 	}
@@ -1793,6 +1811,37 @@ RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
 
 	assert(0 && "No matching terrain for globe texture");
 	return t;
+}
+
+/**
+* Creates a mini-battle-save for managing inventory from the Geoscape.
+* Kids, don't try this at home!
+* @param craft Pointer to craft to manage.
+*/
+void BattlescapeGenerator::runInventory(Craft *craft)
+{
+	// we need to fake a map for soldier placement
+	int soldiers = craft->getNumSoldiers();
+	_mapsize_x = soldiers;
+	_mapsize_y = 1;
+	_mapsize_z = 1;
+	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	MapDataSet *set = new MapDataSet("dummy");
+	MapData *data = new MapData(set);
+	for (int i = 0; i < soldiers; ++i)
+	{
+		Tile *tile = _save->getTiles()[i];
+		tile->setMapData(data, 0, 0, MapData::O_FLOOR);
+		tile->getMapData(MapData::O_FLOOR)->setSpecialType(START_POINT, 0);
+		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);
+	}
+
+	// ok now generate the battleitems for inventory
+	setCraft(craft);
+	deployXCOM();
+
+	delete data;
+	delete set;
 }
 
 }
