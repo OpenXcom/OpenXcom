@@ -126,7 +126,13 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, bool showMsg) :
 
 		_txtStatus->setBig();
 		_txtStatus->setAlign(ALIGN_CENTER);
-		_txtStatus->setColor(Palette::blockOffset(8)+5);
+		if (origin == OPT_BATTLESCAPE)
+		{
+			_txtStatus->setColor(Palette::blockOffset(5));
+			_txtStatus->setHighContrast(true);
+		}
+		else
+			_txtStatus->setColor(Palette::blockOffset(8)+5);
 	}
 }
 
