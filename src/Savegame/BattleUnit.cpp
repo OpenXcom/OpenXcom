@@ -27,6 +27,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Battlescape/Pathfinding.h"
+#include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattleAIState.h"
 #include "Soldier.h"
 #include "../Ruleset/Armor.h"
@@ -994,13 +995,25 @@ int BattleUnit::getStunlevel() const
 /**
  * Raises a unit's stun level sufficiently so that the unit is ready to become unconscious.
  * Used when another unit falls on top of this unit.
+ * Zombified units first convert to their spawn unit.
+ * @param battle Pointer to the battlescape game.
  */
-void BattleUnit::knockOut()
+void BattleUnit::knockOut(BattlescapeGame *battle)
 {
-	if (getArmor()->getSize() > 1)
+	if (getArmor()->getSize() > 1) // large units die
+	{
 		_health = 0;
+	}
+	else if (_spawnUnit != "")
+	{
+		setSpecialAbility(SPECAB_NONE);
+		BattleUnit *newUnit = battle->convertUnit(this, _spawnUnit);
+		newUnit->knockOut(battle);
+	}
 	else
+	{
 		_stunlevel = _health;
+	}
 }
 
 /**

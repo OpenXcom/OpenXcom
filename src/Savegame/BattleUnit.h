@@ -35,7 +35,6 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
-class BattlescapeState;
 class Node;
 class Surface;
 class RuleInventory;
@@ -199,7 +198,7 @@ public:
 	/// Gets the unit's stun level.
 	int getStunlevel() const;
 	/// Knocks the unit out instantly.
-	void knockOut();
+	void knockOut(BattlescapeGame *battle);
 	/// Start falling sequence.
 	void startFalling();
 	/// Increment the falling sequence.

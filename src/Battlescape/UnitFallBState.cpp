@@ -245,7 +245,7 @@ void UnitFallBState::think()
 					}
 					if (!escapeFound)
 					{
-						unitBelow->knockOut();
+						unitBelow->knockOut(_parent);
 						ub = unitsToMove.erase(ub);
 					}
 				}
