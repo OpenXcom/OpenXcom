@@ -799,6 +799,12 @@ void BattlescapeState::btnInventoryClick(Action *)
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
 			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
+		_battleGame->getCurrentAction()->waypoints.clear();
+		_battleGame->getCurrentAction()->type = BA_NONE;
+		_battleGame->getCurrentAction()->targeting = false;
+		showLaunchButton(false);
+		getMap()->getWaypoints()->clear();
+		getMap()->setCursorType(CT_NORMAL);
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
@@ -1361,7 +1367,7 @@ inline void BattlescapeState::handle(Action *action)
 				{
 					saveVoxelMap();
 				}
-				// f9 - ai 
+				// f9 - ai
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9 && Options::getBool("traceAI"))
 				{
 					saveAIMap();
@@ -1455,7 +1461,7 @@ void BattlescapeState::saveAIMap()
 				Position pos(tilePos.x, tilePos.y, z);
 				t = _save->getTile(pos);
 				BattleUnit *wat = t->getUnit();
-				if (wat) 
+				if (wat)
 				{
 					switch(wat->getFaction())
 					{
