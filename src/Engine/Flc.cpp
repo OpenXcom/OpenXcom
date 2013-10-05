@@ -506,7 +506,8 @@ int FlcInit(const char *filename)
 	  flc.mainscreen = flc.realscreen->getSurface()->getSurface();
   } else
   {
-	  flc.mainscreen = SDL_AllocSurface(SDL_SWSURFACE, flc.screen_w, flc.screen_h, 8, 0, 0, 0, 0);
+	  flc.mainscreen = SDL_AllocSurface(SDL_HWSURFACE, flc.screen_w, flc.screen_h, 8, 0, 0, 0, 0);
+	  flc.offset = 0;
   }
   return 0;
   //SDLInit(filename);
@@ -522,10 +523,11 @@ void FlcDeInit()
 void FlcMain(void (*frameCallBack)())
 { flc.quit=false;
   SDL_Event event;
+  SDL_Rect dstRect = {flc.dx, flc.dy, flc.screen_w, flc.screen_h};
   
 //#ifndef __NO_FLC
   FlcInitFirstFrame();
-  flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
+  //flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
   while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
@@ -556,7 +558,7 @@ void FlcMain(void (*frameCallBack)())
       SDLWaitFrame();
       /* TODO: Track which rectangles have really changed */
       //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
-      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
+      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), &dstRect);
       flc.realscreen->flip();
     }
 
