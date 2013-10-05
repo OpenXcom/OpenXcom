@@ -997,7 +997,7 @@ int BattleUnit::getStunlevel() const
  */
 void BattleUnit::knockOut()
 {
-	if (getArmor()->getSideArmor() > 1)
+	if (getArmor()->getSize() > 1)
 		_health = 0;
 	else
 		_stunlevel = _health;

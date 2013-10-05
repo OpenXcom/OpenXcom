@@ -109,9 +109,6 @@ void UnitFallBState::think()
 
 		if (falling)
 		{
-			tilesToFallInto.clear();
-			unitsToMove.clear();
-
 			// Tile(s) unit is falling into.
 			for (int x = (*unit)->getArmor()->getSize() - 1; x >= 0; --x)
 			{
@@ -126,7 +123,9 @@ void UnitFallBState::think()
 			for (std::vector<Tile*>::iterator i = tilesToFallInto.begin(); i < tilesToFallInto.end(); ++i)
 			{
 				BattleUnit *unitBelow = (*i)->getUnit();
-				if (unitBelow && !(std::find(unitsToMove.begin(), unitsToMove.end(), unitBelow) != unitsToMove.end()))
+				if (unitBelow
+					&& (*unit) != unitBelow                                                                     // falling units do not fall on themselves
+					&& !(std::find(unitsToMove.begin(), unitsToMove.end(), unitBelow) != unitsToMove.end()))    // already added
 				{
 					unitsToMove.push_back(unitBelow);
 				}
@@ -291,6 +290,8 @@ void UnitFallBState::think()
 
 	if (_parent->getSave()->getFallingUnits()->empty())
 	{
+		tilesToFallInto.clear();
+		unitsToMove.clear();
 		_parent->popState();
 		return;
 	}
