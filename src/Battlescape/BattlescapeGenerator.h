@@ -62,6 +62,7 @@ private:
 	Tile *_craftInventoryTile;
 	std::string _alienRace;
 	int _alienItemLevel;
+	static const int NIGHT_SHADE_LEVEL = 12;
 
 	/// Generates a new battlescape map.
 	void generateMap();
