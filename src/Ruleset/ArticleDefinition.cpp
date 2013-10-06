@@ -260,6 +260,7 @@ namespace OpenXcom
 	void ArticleDefinitionArmor::load(const YAML::Node &node, int listOrder)
 	{
 		ArticleDefinition::load(node, listOrder);
+		text = node["text"].as<std::string>(text);
 	}
 
 	/**
