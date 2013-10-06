@@ -590,7 +590,7 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 		
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
 			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
-		else if (_game->getSavedGame()->getDifficulty() < DIFF_GENIUS)
+		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
 			quantity = (*d).lowQty+(((*d).highQty-(*d).lowQty)/2) + RNG::generate(0, (*d).dQty); // veteran/genius
 		else
 			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super (and beyond?)
