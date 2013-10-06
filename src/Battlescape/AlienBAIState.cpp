@@ -82,6 +82,7 @@ void AlienBAIState::load(const YAML::Node &node)
 	fromNodeID = node["fromNode"].as<int>();
 	toNodeID = node["toNode"].as<int>();
 	_AIMode = node["AIMode"].as<int>();
+	_wasHit = node["wasHit"].as<bool>();
 	if (fromNodeID != -1)
 	{
 		_fromNode = _save->getNodes()->at(fromNodeID);
@@ -108,6 +109,7 @@ YAML::Node AlienBAIState::save() const
 	node["fromNode"] = fromNodeID;
 	node["toNode"] = toNodeID;
 	node["AIMode"] = _AIMode;
+	node["wasHit"] = _wasHit;
 	return node;
 }
 
