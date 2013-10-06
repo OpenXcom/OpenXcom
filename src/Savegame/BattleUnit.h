@@ -418,6 +418,10 @@ public:
 	bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
 	/// Does this unit have an inventory?
 	bool hasInventory() const;
+	/// get full stats including armor bonuses
+	int getFullTU() const;
+	int getFullStamina() const;
+	int getFullStrength() const;
 };
 
 }

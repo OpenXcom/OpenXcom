@@ -1160,10 +1160,10 @@ void BattlescapeState::updateSoldierInfo()
 		_rank->clear();
 	}
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-	_barTimeUnits->setMax(battleUnit->getStats()->tu);
+	_barTimeUnits->setMax(battleUnit->getFullTU());
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
-	_barEnergy->setMax(battleUnit->getStats()->stamina);
+	_barEnergy->setMax(battleUnit->getFullStamina());
 	_barEnergy->setValue(battleUnit->getEnergy());
 	_numHealth->setValue(battleUnit->getHealth());
 	_barHealth->setMax(battleUnit->getStats()->health);

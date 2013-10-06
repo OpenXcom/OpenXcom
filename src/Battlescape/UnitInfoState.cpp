@@ -390,7 +390,7 @@ void UnitInfoState::init()
 	std::wstringstream ss;
 	ss << _unit->getTimeUnits();
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(_unit->getStats()->tu);
+	_barTimeUnits->setMax(_unit->getFullTU());
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
 	ss.str(L"");
@@ -406,7 +406,7 @@ void UnitInfoState::init()
 	ss.str(L"");
 	ss << _unit->getEnergy();
 	_numEnergy->setText(ss.str());
-	_barEnergy->setMax(_unit->getStats()->stamina);
+	_barEnergy->setMax(_unit->getFullStamina());
 	_barEnergy->setValue(_unit->getEnergy());
 
 	ss.str(L"");
@@ -455,8 +455,8 @@ void UnitInfoState::init()
 	ss.str(L"");
 	ss << _unit->getStats()->strength;
 	_numStrength->setText(ss.str());
-	_barStrength->setMax(_unit->getStats()->strength);
-	_barStrength->setValue(_unit->getStats()->strength);
+	_barStrength->setMax(_unit->getFullStrength());
+	_barStrength->setValue(_unit->getFullStrength());
 
 	if (_unit->getStats()->psiSkill > 0)
 	{

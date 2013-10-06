@@ -342,6 +342,7 @@ void SoldierInfoState::init()
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
 	UnitStats *current = s->getCurrentStats();
+	Armor *armor=s->getArmor();
 
 	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
@@ -349,17 +350,17 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
 	std::wstringstream ss;
-	ss << current->tu;
+	ss << current->tu + armor->getTUBonus(current->tu);
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(current->tu);
-	_barTimeUnits->setValue(current->tu);
+	_barTimeUnits->setMax(current->tu + armor->getTUBonus(current->tu));
+	_barTimeUnits->setValue(current->tu + armor->getTUBonus(current->tu));
 	_barTimeUnits->setValue2(initial->tu);
 
 	std::wstringstream ss2;
-	ss2 << current->stamina;
+	ss2 << current->stamina + armor->getStaminaBonus(current->stamina);
 	_numStamina->setText(ss2.str());
-	_barStamina->setMax(current->stamina);
-	_barStamina->setValue(current->stamina);
+	_barStamina->setMax(current->stamina + armor->getStaminaBonus(current->stamina));
+	_barStamina->setValue(current->stamina + armor->getStaminaBonus(current->stamina));
 	_barStamina->setValue2(initial->stamina);
 
 	std::wstringstream ss3;
@@ -398,14 +399,14 @@ void SoldierInfoState::init()
 	_barThrowing->setValue2(initial->throwing);
 
 	std::wstringstream ss8;
-	ss8 << current->strength;
+	ss8 << current->strength + armor->getStrengthBonus(current->strength);
 	_numStrength->setText(ss8.str());
-	_barStrength->setMax(current->strength);
-	_barStrength->setValue(current->strength);
+	_barStrength->setMax(current->strength + armor->getStrengthBonus(current->strength));
+	_barStrength->setValue(current->strength + armor->getStrengthBonus(current->strength));
 	_barStrength->setValue2(initial->strength);
 
 	std::wstring wsArmor;
-	std::string armorType = s->getArmor()->getType();
+	std::string armorType = armor->getType();
 	if (armorType == "STR_NONE_UC")
 	{
 		wsArmor.reserve(15);

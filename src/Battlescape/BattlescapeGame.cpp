@@ -976,9 +976,9 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		}
 		switch (effectiveTuReserved)
 		{
-		case BA_SNAPSHOT: return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits(); break; // 33%
-		case BA_AUTOSHOT: return tu + ((bu->getStats()->tu / 5)*2) < bu->getTimeUnits(); break; // 40%
-		case BA_AIMEDSHOT: return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits(); break; // 50%
+		case BA_SNAPSHOT: return tu + (bu->getFullTU() / 3) < bu->getTimeUnits(); break; // 33%
+		case BA_AUTOSHOT: return tu + ((bu->getFullTU() / 5)*2) < bu->getTimeUnits(); break; // 40%
+		case BA_AIMEDSHOT: return tu + (bu->getFullTU() / 2) < bu->getTimeUnits(); break; // 50%
 		default: return tu < bu->getTimeUnits(); break;
 		}
 	}
@@ -1133,7 +1133,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			}
 		}
 		// replace the TUs from shooting
-		unit->setTimeUnits(unit->getStats()->tu);
+		unit->setTimeUnits(unit->getFullTU());
 		ba.type = BA_NONE;
 		break;
 	default: break;
