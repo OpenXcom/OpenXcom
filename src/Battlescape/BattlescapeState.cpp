@@ -799,6 +799,16 @@ void BattlescapeState::btnInventoryClick(Action *)
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER ||
 			_save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
@@ -948,6 +958,16 @@ void BattlescapeState::btnStatsClick(Action *action)
 				// on the stats button when the mouse is on the scroll-border
 				b = false;
 		}
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
 		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
 	}
 }
