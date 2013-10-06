@@ -6,14 +6,21 @@ lookWeights:
 maleFirst:
   - Alexandr
   - Alexey
-  - Anatoly
+  - Anatoliy
   - Andrey
   - Anton
+  - Artem
+  - Artur
+  - Boris
   - Denis
-  - Dmitry
-  - Eugeny
-  - Gennady
+  - Dmitriy
+  - Eduard
+  - Eugeniy
+  - Gennadiy
+  - Georgiy
+  - Grigoriy
   - Igor
+  - Ilya
   - Ivan
   - Konstantin
   - Leonid
@@ -26,30 +33,41 @@ maleFirst:
   - Roman
   - Ruslan
   - Sergey
+  - Stanislav
   - Vadim
-  - Valery
-  - Vasily
+  - Valentin
+  - Valeriy
+  - Vasiliy
   - Viktor
-  - Vitaly
+  - Vitaliy
   - Vladimir
+  - Vladislav
   - Vyacheslav
-  - Yury
+  - Yuriy
 femaleFirst:
+  - Albina
   - Alexandra
   - Alla
+  - Alyona
   - Anastasiya
   - Anna
+  - Antonina
+  - Darya
   - Ekaterina
   - Elena
   - Eugeniya
   - Galina
+  - Inna
   - Irina
   - Julia
+  - Kristina
+  - Kseniya
   - Larisa
   - Lidiya
   - Liliya
   - Lyubov
   - Lyudmila
+  - Margarita
   - Marina
   - Mariya
   - Nadezhda
@@ -65,17 +83,22 @@ femaleFirst:
   - Valentina
   - Vera
   - Viktoriya
+  - Zinaida
+  - Zoya  
 maleLast:
   - Alekseev
   - Andreev
   - Antonov
+  - Borisov
   - Fedorov
   - Egorov
+  - Grigoriev
   - Gromov
   - Ivanov
   - Komarov
   - Korolev
   - Kozlov
+  - Kuzmin
   - Kuznetsov
   - Lebedev
   - Makarov
@@ -90,23 +113,31 @@ maleLast:
   - Popov
   - Romanov
   - Semenov
+  - Sergeev
   - Smirnov
   - Sokolov
+  - Solovyov
   - Stepanov
-  - Vasilyev
+  - Vasiliev
   - Volkov
+  - Vorobyov
+  - Yakovlev
+  - Zaitsev
   - Zakharov
 femaleLast:
   - Alekseeva
   - Andreeva
   - Antonova
+  - Borisova
   - Fedorova
   - Egorova
+  - Grigorieva
   - Gromova
   - Ivanova
   - Komarova
   - Koroleva
   - Kozlova
+  - Kuzmina
   - Kuznetsova
   - Lebedeva
   - Makarova
@@ -121,9 +152,14 @@ femaleLast:
   - Popova
   - Romanova
   - Semenova
+  - Sergeeva
   - Smirnova
   - Sokolova
+  - Solovyova
   - Stepanova
   - Vasilyeva
   - Volkova
+  - Vorobyova
+  - Yakovleva
+  - Zaitseva
   - Zakharova
