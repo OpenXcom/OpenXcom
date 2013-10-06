@@ -491,7 +491,6 @@ int FlcInit(const char *filename)
   } else
   {
 	  flc.mainscreen = SDL_AllocSurface(SDL_HWSURFACE, flc.screen_w, flc.screen_h, 8, 0, 0, 0, 0);
-	  flc.offset = 0;
   }
   return 0;
   //SDLInit(filename);
@@ -512,6 +511,7 @@ void FlcMain(void (*frameCallBack)())
 //#ifndef __NO_FLC
   FlcInitFirstFrame();
   //flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
+  flc.offset = 0;
   while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
