@@ -967,7 +967,7 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 	{
 		return false;
 	}
-	return ((int)_base.getDetectionChance() < RNG::generate(0, 100));
+	return ((int)_base.getDetectionChance() > RNG::generate(0, 100));
 }
 
 /**
