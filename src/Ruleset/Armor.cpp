@@ -30,7 +30,8 @@ namespace OpenXcom
  * @param movementType The movement type for this armor (walk, fly or slide).
  * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size)
+Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size),
+	_baseTUBonus(0), _percentTUBonus(0),_baseStaminaBonus(0), _percentStaminaBonus(0), _baseStrengthBonus(0), _percentStrengthBonus(0) 
 {
 	for (int i=0; i < DAMAGE_TYPES; i++)
 		_damageModifier[i] = 1.0;
@@ -72,6 +73,12 @@ void Armor::load(const YAML::Node &node)
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
 		_loftempsSet.push_back(node["loftemps"].as<int>());
+	_baseTUBonus = node["baseTUBonus"].as<int>(_baseTUBonus); 
+	_percentTUBonus = node["percentTUBonus"].as<int>(_percentTUBonus);
+	_baseStaminaBonus = node["baseStaminaBonus"].as<int>(_baseStaminaBonus);
+	_percentStaminaBonus = node["percentStaminaBonus"].as<int>(_percentStaminaBonus);
+	_baseStrengthBonus = node["baseStrengthBonus"].as<int>(_baseStrengthBonus);
+	_percentStrengthBonus = node["percentStrengthBonus"].as<int>(_percentStrengthBonus);
 }
 
 /**
@@ -201,6 +208,36 @@ float Armor::getDamageModifier(ItemDamageType dt)
 std::vector<int> Armor::getLoftempsSet() const
 {
 	return _loftempsSet;
+}
+
+/**
+ * Gets the TU Bonus.
+ * @param tu The wearer's TU's.
+ * @return The TU bonus.
+ */
+int Armor::getTUBonus(int tu) const
+{
+	return _baseTUBonus + (_percentTUBonus * tu) / 100;
+}
+
+/**
+ * Gets the Stamina bonus.
+ * @param stamina The wearer's stamina's.
+ * @return The stamina bonus.
+ */
+int Armor::getStaminaBonus(int stamina) const
+{
+	return _baseStaminaBonus + (_percentStaminaBonus * stamina) / 100;
+}
+
+/**
+ * Gets the Strength bonus.
+ * @param strength The wearer's strength's.
+ * @return The strength bonus.
+ */
+int Armor::getStrengthBonus(int strength) const
+{
+	return _baseStrengthBonus + (_percentStrengthBonus * strength) / 100;
 }
 
 }

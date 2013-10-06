@@ -1648,7 +1648,7 @@ void AlienBAIState::grenadeAction()
 			tu += _unit->getActionTUs(BA_PRIME, grenade);
 			tu += _unit->getActionTUs(BA_THROW, grenade);
 			// do we have enough TUs to prime and throw the grenade?
-			if (tu <= _unit->getStats()->tu)
+			if (tu <= _unit->getFullTU())
 			{
 				// are we within range?
 				if (_save->getTileEngine()->validateThrow(_attackAction))
