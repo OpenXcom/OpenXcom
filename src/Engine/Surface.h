@@ -43,7 +43,7 @@ protected:
 	SDL_Rect _crop;
 	bool _visible, _hidden, _redraw;
 	SDL_Color *_originalColors;
-	void *_misalignedPixelBuffer, *_alignedBuffer;
+	void *_alignedBuffer;
 	int _dx, _dy;
 	std::string _tooltip;
 public:
@@ -74,7 +74,7 @@ public:
 	/// Blits this surface onto another one.
 	virtual void blit(Surface *surface);
 	/// Sets the surface's various fonts.
-	virtual void setFonts(Font *big, Font *small) {};
+	virtual void setFonts(Font *, Font *) {};
 	/// Copies a portion of another surface into this one.
 	void copy(Surface *surface);
     /// Draws a filled rectangle on the surface.

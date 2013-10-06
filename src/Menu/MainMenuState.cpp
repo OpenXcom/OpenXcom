@@ -30,6 +30,8 @@
 #include "NewBattleState.h"
 #include "LoadState.h"
 #include "OptionsState.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 
 namespace OpenXcom
 {
@@ -68,35 +70,38 @@ MainMenuState::MainMenuState(Game *game) : State(game)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnNewGame->setColor(Palette::blockOffset(8)+5);
-	_btnNewGame->setText(_game->getLanguage()->getString("STR_NEW_GAME"));
+	_btnNewGame->setText(tr("STR_NEW_GAME"));
 	_btnNewGame->onMouseClick((ActionHandler)&MainMenuState::btnNewGameClick);
 
 	_btnNewBattle->setColor(Palette::blockOffset(8)+5);
-	_btnNewBattle->setText(_game->getLanguage()->getString("STR_NEW_BATTLE"));
+	_btnNewBattle->setText(tr("STR_NEW_BATTLE"));
 	_btnNewBattle->onMouseClick((ActionHandler)&MainMenuState::btnNewBattleClick);
 
 	_btnLoad->setColor(Palette::blockOffset(8)+5);
-	_btnLoad->setText(_game->getLanguage()->getString("STR_LOAD_SAVED_GAME"));
+	_btnLoad->setText(tr("STR_LOAD_SAVED_GAME"));
 	_btnLoad->onMouseClick((ActionHandler)&MainMenuState::btnLoadClick);
 
 	_btnOptions->setColor(Palette::blockOffset(8)+5);
-	_btnOptions->setText(_game->getLanguage()->getString("STR_OPTIONS"));
+	_btnOptions->setText(tr("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)&MainMenuState::btnOptionsClick);
 
 	_btnQuit->setColor(Palette::blockOffset(8)+5);
-	_btnQuit->setText(_game->getLanguage()->getString("STR_QUIT"));
+	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)&MainMenuState::btnQuitClick);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	std::wstringstream title;
-	title << _game->getLanguage()->getString("STR_OPENXCOM") << L"\x02";
+	title << tr("STR_OPENXCOM") << L"\x02";
 	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
 	_txtTitle->setText(title.str());
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMSTORY")->play();
+
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -141,7 +146,7 @@ void MainMenuState::btnNewBattleClick(Action *)
  */
 void MainMenuState::btnLoadClick(Action *)
 {
-	_game->pushState(new LoadState(_game, true));
+	_game->pushState(new LoadState(_game, OPT_MENU));
 }
 
 /**
@@ -150,7 +155,7 @@ void MainMenuState::btnLoadClick(Action *)
  */
 void MainMenuState::btnOptionsClick(Action *)
 {
-	_game->pushState(new OptionsState(_game));
+	_game->pushState(new OptionsState(_game, OPT_MENU));
 }
 
 /**

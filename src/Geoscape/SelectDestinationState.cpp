@@ -123,12 +123,12 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&SelectDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&SelectDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION"));
+	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setWordWrap(true);
 
@@ -139,7 +139,7 @@ SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *
 	else
 	{
 		_btnCydonia->setColor(Palette::blockOffset(8)+5);
-		_btnCydonia->setText(_game->getLanguage()->getString("STR_CYDONIA"));
+		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)&SelectDestinationState::btnCydoniaClick);
 	}
 }

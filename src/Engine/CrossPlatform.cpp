@@ -19,6 +19,9 @@
 #include "CrossPlatform.h"
 #include <algorithm>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <locale>
 #include "../dirent.h"
 #include "Logger.h"
 #include "Exception.h"
@@ -483,6 +486,8 @@ std::string endPath(const std::string &path)
 std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext)
 {
 	std::vector<std::string> files;
+	std::string extl = ext;
+	std::transform(extl.begin(), extl.end(), extl.begin(), ::tolower);
 
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
@@ -504,12 +509,13 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 		{
 			continue;
 		}
-		if (!ext.empty())
+		if (!extl.empty())
 		{
-			if (file.length() >= ext.length() + 1)
+			if (file.length() >= extl.length() + 1)
 			{
-				std::string end = file.substr(file.length() - ext.length() - 1);
-				if (end != "." + ext)
+				std::string end = file.substr(file.length() - extl.length() - 1);
+				std::transform(end.begin(), end.end(), end.begin(), ::tolower);
+				if (end != "." + extl)
 				{
 					continue;
 				}
@@ -586,6 +592,63 @@ bool deleteFile(const std::string &path)
 	return (DeleteFileA(path.c_str()) != 0);
 #else
 	return (remove(path.c_str()) == 0);
+#endif
+}
+
+/**
+* Gets the base filename of a path.
+* @param path Full path to file.
+* @return Base filename.
+*/
+std::string baseFilename(const std::string &path, int (*transform)(int))
+{
+	size_t sep = path.find_last_of(PATH_SEPARATOR);
+	std::string filename;
+	if (sep == std::string::npos)
+	{
+		filename = path;
+	}
+	else
+	{
+		filename = path.substr(0, sep + 1);
+	}
+	if (transform != 0)
+	{
+		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
+	}
+	return filename;
+}
+
+/**
+* Gets the current locale of the system in language-COUNTRY format.
+* @return Locale string.
+*/
+std::string getLocale()
+{
+#ifdef _WIN32
+	char language[9], country[9];
+
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
+	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
+
+	std::stringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
+	/*
+	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
+	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
+
+	return Language::wstrToUtf8(locale);
+	*/
+#else
+	std::locale l("");
+	std::string name = l.name();
+	std::string language = name.substr(0, name.find_first_of('_')-1);
+	std::string country = name.substr(name.find_first_of('_')-1, name.find_first_of(".")-1);
+	
+	std::stringstream locale;
+	locale << language << "-" << country;
+	return locale.str();
 #endif
 }
 

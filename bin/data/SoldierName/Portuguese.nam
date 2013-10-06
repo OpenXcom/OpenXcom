@@ -8,16 +8,12 @@ maleFirst:
   - Alberto
   - Alexandre
   - Alvaro
-  - Amaro
   - Andre
   - Antonio
-  - Arcanjo
   - Augusto
   - Bernardo
   - Bruno
   - Carlos
-  - Cavaco
-  - Cid
   - Cristiano
   - Daniel
   - David
@@ -27,22 +23,30 @@ maleFirst:
   - Fabio
   - Fernando
   - Filipe
+  - Flavio
   - Francisco
   - Frederico
   - Gabriel
+  - Goncalo
   - Guilherme
+  - Gustavo
   - Helder
   - Henrique
   - Hugo
+  - Jaime
   - Joao
   - Joaquim
   - Jorge
   - Jose
+  - Julio
   - Leonardo
+  - Leonel
   - Luis
   - Marco
   - Mario
   - Manuel
+  - Marcelo
+  - Marcio
   - Miguel
   - Nelson
   - Nuno
@@ -50,124 +54,253 @@ maleFirst:
   - Paulo
   - Pedro
   - Rafael
+  - Raul
   - Ricardo
+  - Roberto
+  - Rodolfo
+  - Rodrigo
   - Rui
   - Samuel
   - Sergio
   - Tiago
+  - Telmo
   - Vasco
   - Vitor
 femaleFirst:
+  - Alice
   - Ana
+  - Anabela
   - Andreia
+  - Angela
   - Aurora
+  - Barbara
   - Beatriz
   - Bia
   - Carina
   - Carla
+  - Carolina
   - Catarina
   - Catia
+  - Celeste
+  - Celia
+  - Celina
+  - Clara
+  - Claudia
   - Cristiana
+  - Cristina
   - Daniela
+  - Dalia
+  - Debora
   - Diana
-  - Esmeralda
+  - Dulce
+  - Elsa
+  - Eva
+  - Fatima
   - Fernanda
   - Filipa
+  - Filomena
+  - Flavia
+  - Florbela
   - Francisca
   - Gabriela
   - Gloria
   - Helena
-  - Isabel
   - Ines
+  - Ilda
+  - Irene
+  - Isabel
   - Joana
+  - Josefina
+  - Julia
   - Lara
-  - Leonilde
+  - Laura
+  - Leonor
+  - Liliana
   - Luisa
   - Madalena
+  - Mafalda
+  - Manuela
   - Margarida
   - Maria
   - Mariana
+  - Marina
+  - Marisa
   - Marta
+  - Matilde
+  - Monica
+  - Natalia
+  - Olivia
   - Patricia
   - Paula
+  - Rafaela
   - Raquel
   - Rita
+  - Rute
+  - Sandra
   - Sara
   - Sofia
+  - Sonia
+  - Soraia
   - Susana
   - Tania
+  - Teresa
+  - Telma
   - Vanessa
+  - Vera
 maleLast:
   - Abrantes
+  - Abreu
   - Afonso
+  - Agostinho
   - Albano
+  - Albuquerque
+  - Aleixo
   - Almeida
   - Alves
+  - Amaro
+  - Amaral
+  - Andrade
   - Antunes
+  - Araujo
+  - Assis
+  - Azevedo
+  - Barata
+  - Barreiras
+  - Barreto
+  - Barros
   - Barroso
   - Bastos
   - Bento
+  - Beja
   - Bernardo
+  - Borges
+  - Brandao
   - Brito
+  - Cabral
   - Cadete
+  - Caetano
   - Caldeira
+  - Campos
   - Cardoso
   - Carneiro
+  - Carrico
+  - Carrilho
   - Carvalho
+  - Castro
+  - Cavaco
+  - Cavaleiro
+  - Chaves
   - Coelho
+  - Conceicao
   - Correia
+  - Cortes
   - Costa
+  - Coutinho
   - Couto
+  - Crespo
   - Cristovao
   - Cruz
+  - Cunha
+  - Cunhal
   - Delgado
   - Dias
+  - Dinis
+  - Dionisio
   - Domingos
   - Duarte
+  - Farinha
   - Fernandes
   - Ferreira
+  - Figueira
+  - Figueiredo
+  - Fitas
+  - Fragoso
+  - Fragata
   - Francisco
   - Freitas
   - Fonseca
+  - Fontes
+  - Fortes
+  - Furtado
   - Futre
+  - Gama
   - Garcia
   - Gomes
+  - Godinho
   - Goncalves
   - Gouveia
+  - Graca
+  - Grilo
   - Guedes
+  - Guerra
+  - Guerreiro
+  - Guimaraes
   - Henriques
+  - Homem
   - Horta
+  - Jacinto
   - Joaquim
   - Jesus
   - Lameiras
   - Laranjeiro
+  - Leal
+  - Lima
   - Lopes
   - Lourenco
+  - Luz
+  - Macedo
   - Machado
   - Madeira
   - Maia
+  - Magalhaes
   - Marques
+  - Martinho
   - Martins
+  - Marujo
   - Mateus
+  - Matias
   - Matos
   - Meireles
+  - Melo
   - Mendes
+  - Mestre
   - Mira
+  - Miranda
+  - Moniz
   - Monteiro
+  - Morais
   - Moreira
+  - Morgado
   - Mota
+  - Moura
   - Mourinho
+  - Nascimento
   - Neves
+  - Neto
+  - Nogueira
+  - Noronha
   - Oliveira
   - Pacheco
   - Paiva
+  - Pais
   - Paulo
+  - Parreira
   - Pato
   - Peixe
+  - Peixoto
   - Pereira
+  - Pessoa
+  - Pimentel
+  - Pinheiro
   - Pinho
   - Pinto
   - Pires
+  - Povoa
+  - Portugal
+  - Prata
+  - Queiros
+  - Raimundo
+  - Ramos
   - Raposo
   - Rato
   - Real
@@ -175,18 +308,45 @@ maleLast:
   - Reis
   - Relvas
   - Ribeiro
+  - Rio
   - Rocha
   - Rodrigues
   - Ronaldo
+  - Rosario
   - Roseiro
+  - Salgado
+  - Salgueiro
+  - Sanches
+  - Santana
   - Santos
   - Sebastiao
+  - Semedo
   - Sequeira
+  - Serrao
   - Serra
+  - Serras
   - Silva
+  - Silvino
+  - Silvestre
+  - Simoes
+  - Soares
   - Sobral
   - Sousa
   - Tavares
   - Teixeira
+  - Teles
   - Torres
+  - Valadas
+  - Valente
+  - Varandas
+  - Varela
+  - Vasconcelos
+  - Vaz
+  - Veloso
+  - Viana
+  - Vicente
+  - Vidal
   - Vieira
+  - Viegas
+  - Vitorino
+  - Xavier

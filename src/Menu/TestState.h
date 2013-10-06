@@ -30,6 +30,7 @@ class TextButton;
 class Window;
 class Text;
 class TextList;
+class NumberText;
 class Slider;
 
 /**
@@ -47,6 +48,7 @@ private:
 	TextButton *_button;
 	Window *_window;
 	Text *_text;
+	NumberText *_number;
 	TextList *_list;
 	Slider *_slider;
 	int _i;

@@ -570,15 +570,10 @@ void Globe::loadDat(const std::string &filename, std::list<Polygon*> *polygons)
 		Polygon* poly;
 		int points;
 		
-		#ifdef __MORPHOS__ 
-		for( int z=0; z < 10 ; z++ )
+		for (int i = 0; i < 10; ++i)
 		{
-			char *ptr = (char *)&value[ z ];
-			char tmp = ptr[ 0 ];
-			ptr[ 0 ] = ptr[ 1 ];
-			ptr[ 1 ] = tmp;
+			value[i] = SDL_SwapLE16(value[i]);
 		}
-		#endif
 
 		if (value[6] != -1)
 		{
@@ -1171,7 +1166,7 @@ void Globe::drawRadars()
 		return;
 /*	Text *label = new Text(80, 9, 0, 0);
 	label->setPalette(getPalette());
-	label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+	label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 	label->setAlign(ALIGN_LEFT);
 	label->setColor(Palette::blockOffset(15)-1);
 */
@@ -1382,7 +1377,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(15)-1);
 
@@ -1410,7 +1405,7 @@ void Globe::drawDetail()
 	{
 		Text *label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
+		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(8)+10);
 
@@ -1768,29 +1763,6 @@ bool Globe::isZoomedOutToMax() const
 	{
 		return false;
 	}
-}
-
-/**
- * Get the localized text for dictionary key @a id.
- * This function forwards the call to Language::getString(const std::string &).
- * @param id The dictionary key to search for.
- * @return A reference to the localized text.
- */
-const LocalizedText &Globe::tr(const std::string &id) const
-{
-	return _game->getLanguage()->getString(id);
-}
-
-/**
- * Get a modifiable copy of the localized text for dictionary key @a id.
- * This function forwards the call to Language::getString(const std::string &, unsigned).
- * @param id The dictionary key to search for.
- * @param n The number to use for the proper version.
- * @return A copy of the localized text.
- */
-LocalizedText Globe::tr(const std::string &id, unsigned n) const
-{
-	return _game->getLanguage()->getString(id, n);
 }
 
 void Globe::toggleRadarLines()

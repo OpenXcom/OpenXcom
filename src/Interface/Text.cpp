@@ -16,8 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <cctype>
 #include "Text.h"
+#include <cctype>
+#include <cmath>
 #include <sstream>
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
@@ -436,7 +437,7 @@ void Text::draw()
 		y = 0;
 		break;
 	case ALIGN_MIDDLE:
-		y = (getHeight() - height) / 2;
+		y = (int)ceil((getHeight() - height) / 2.0);
 		break;
 	case ALIGN_BOTTOM:
 		y = getHeight() - height;
@@ -449,7 +450,7 @@ void Text::draw()
 		x = 0;
 		break;
 	case ALIGN_CENTER:
-		x = (getWidth() - _lineWidth[line]) / 2;
+		x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
 		break;
 	case ALIGN_RIGHT:
 		x = (getWidth() - _lineWidth[line]) - 1;

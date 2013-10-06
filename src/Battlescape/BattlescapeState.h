@@ -86,9 +86,9 @@ private:
 	void blinkVisibleUnitButtons();
 public:
 	/// Selects the next soldier.
-	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
+	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	/// Selects the previous soldier.
-	void selectPreviousPlayerUnit(bool checkReselect);
+	void selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
@@ -199,7 +199,7 @@ public:
 	/// Checks if the mouse is over the icons.
 	bool getMouseOverIcons() const;
 	/// Is the player allowed to press buttons?
-	bool allowButtons() const;
+	bool allowButtons(bool allowSaving = false) const;
 	/// Handler for clicking the reserve TUs to kneel button.
 	void btnReserveKneelClick(Action *action);
 	/// Handler for clicking the expend all TUs button.

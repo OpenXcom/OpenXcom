@@ -35,8 +35,8 @@
 #include "UnitInfoState.h"
 #include "UnitDieBState.h"
 #include "UnitPanicBState.h"
-#include "AggroBAIState.h"
-#include "PatrolBAIState.h"
+#include "AlienBAIState.h"
+#include "CivilianBAIState.h"
 #include "Pathfinding.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -76,12 +76,14 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	_debugPlay = false;
 	_playerPanicHandled = true;
 	_AIActionCounter = 0;
+	_AISecondMove = false;
 	_currentAction.actor = 0;
 
 	checkForCasualties(0, 0, true);
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
+
 }
 
 
@@ -112,7 +114,7 @@ void BattlescapeGame::think()
 				}
 				else
 				{
-					if (_save->selectNextPlayerUnit(true, true) == 0)
+					if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -134,6 +136,7 @@ void BattlescapeGame::think()
 			if (!_playerPanicHandled)
 			{
 				_playerPanicHandled = handlePanickingPlayer();
+				_save->getBattleState()->updateSoldierInfo();
 			}
 		}
 		if (_save->getUnitsFalling())
@@ -165,14 +168,13 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	std::wstringstream ss;
 
 	_tuReserved = BA_NONE;
-
-	// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-	// melee get more because chryssalids and reapers need to attack many times to be scary
-	const int AIActionLimit = (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
-
-	if (unit->getTimeUnits() <= 5 || (unit->_hidingForTurn && unit->getPosition() == unit->lastCover && _AIActionCounter >= 2) || _AIActionCounter > AIActionLimit )
+	if (unit->getTimeUnits() <= 5)
 	{
-		if (_save->selectNextPlayerUnit(true, true) == 0)
+		unit->dontReselect();
+	}
+	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2 || !unit->reselectAllowed())
+	{
+		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -188,6 +190,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		if (_save->getSelectedUnit())
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+			if (_save->getSelectedUnit()->getId() <= unit->getId())
+			{
+				_AISecondMove = true;
+			}
 		}
 		_AIActionCounter = 0;
 		return;
@@ -221,7 +227,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
-        unit->setAIState(new PatrolBAIState(_save, unit, 0));
+		if (unit->getFaction() == FACTION_HOSTILE)
+			unit->setAIState(new AlienBAIState(_save, unit, 0));
+		else
+			unit->setAIState(new CivilianBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 	}
 	_AIActionCounter++;
@@ -231,22 +240,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->_hidingForTurn = false;
 		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
-	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai); // this cast only works when ai was already AggroBAIState at heart
-
-	// psionic or blaster launcher units may attack remotely
-	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
-	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
-	if ((unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
-        || (unit->getVisibleUnits()->size() != 0))
-	{
-		if (aggro == 0)
-		{
-			aggro = new AggroBAIState(_save, unit);
-			unit->setAIState(aggro);
-			ai = aggro;
-		}
-		_parentState->debug(L"Aggro");
-	}
+	AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(ai); // this cast only works when ai was already AlienBAIState at heart
 
 	BattleAction action;
 	action.actor = unit;
@@ -256,16 +250,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	if (action.type == BA_RETHINK)
 	{
 		_parentState->debug(L"Rethink");
-		unit->setAIState(new PatrolBAIState(_save, unit, 0));
-		ai = unit->getCurrentAIState();
 		unit->think(&action);
-		aggro = 0;
 	}
 
-	if (unit->getStats()->psiSkill)
-	{
-		psiAction(&action);
-	}
+    _AIActionCounter = action.number;
 
 	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
 	{
@@ -275,9 +263,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
-	if (aggro != 0)
+	if (unit->getCharging() != 0)
 	{
-		_tuReserved = BA_NONE;
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
 		{
 			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
@@ -291,14 +278,12 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 		if (_save->getTile(action.target))
 		{
-			_save->getPathfinding()->calculate(action.actor, action.target, _save->getTile(action.target)->getUnit());
+			_save->getPathfinding()->calculate(action.actor, action.target);//, _save->getTile(action.target)->getUnit());
 		}
-		if (_save->getPathfinding()->getStartDirection() == -1)
+		if (_save->getPathfinding()->getStartDirection() != -1)
 		{
-			PatrolBAIState *pbai = dynamic_cast<PatrolBAIState*>(unit->getCurrentAIState());
-			if (pbai) unit->setAIState(new PatrolBAIState(_save, unit, 0)); // can't reach destination, pick someplace else to walk toward
+			statePushBack(new UnitWalkBState(this, action));
 		}
-		statePushBack(new UnitWalkBState(this, action));
 	}
 
 	if (action.type == BA_SNAPSHOT || action.type == BA_AUTOSHOT || action.type == BA_AIMEDSHOT || action.type == BA_THROW || action.type == BA_HIT || action.type == BA_MINDCONTROL || action.type == BA_PANIC || action.type == BA_LAUNCH)
@@ -336,13 +321,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	{
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
-		if (aggro != 0)
-		{
-			// we lost aggro
-			unit->setAIState(new PatrolBAIState(_save, unit, 0));
-			_parentState->debug(L"Lost aggro");
-		}
-		if (_save->selectNextPlayerUnit(true, true) == 0)
+		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -358,6 +337,10 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		if (_save->getSelectedUnit())
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+			if (_save->getSelectedUnit()->getId() <= unit->getId())
+			{
+				_AISecondMove = true;
+			}
 		}
 	}
 }
@@ -404,6 +387,7 @@ void BattlescapeGame::endTurn()
 	_currentAction.waypoints.clear();
 	_parentState->showLaunchButton(false);
 	_currentAction.targeting = false;
+	_AISecondMove = false;
 
 	if (_save->getTileEngine()->closeUfoDoors())
 	{
@@ -482,11 +466,6 @@ void BattlescapeGame::endTurn()
 		}
 	}
 
-    if (_save->getSide() == FACTION_HOSTILE)
-    {
-        resetSituationForAI();
-    }
-
 	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
 	{
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
@@ -556,38 +535,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
 							(*i)->moraleChange(-(modifier * 200 * bravery / loserMod / 100));
 
-							// revenge procedure:
-							// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
 							if (victim->getFaction() == FACTION_HOSTILE && murderer)
 							{
-								int closest = 1000000;
-								BattleUnit *revenger = 0;
-								bool revenge = RNG::generate(0,100) < 50;
-								for (std::vector<BattleUnit*>::iterator h = _save->getUnits()->begin(); h != _save->getUnits()->end(); ++h)
-								{
-									if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
-									{
-										int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
-										if (d < closest)
-										{
-											revenger = (*h);
-											closest = d;
-										}
-									}
-								}
-								// aliens with aggression level 2 always revenge
-								// aliens with aggression level 1 have 50% chance to revenge
-								// aliens with aggression level 0 never revenge
-								if (revenger && (revenger->getAggression() == 2 || (revenger->getAggression() == 1 && revenge)))
-								{
-									AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
-									if (aggro == 0)
-									{
-										aggro = new AggroBAIState(_save, revenger);
-										revenger->setAIState(aggro);
-									}
-									aggro->setAggroTarget(murderer);
-								}
+								murderer->setTurnsExposed(0);
 							}
 						}
 						// the winning squad all get a morale increase
@@ -607,7 +557,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				if (hiddenExplosion)
 				{
 					// this is instant death from UFO powersources, without screaming sounds
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true)); 
+					statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
 				}
 				else
 				{
@@ -908,7 +858,8 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU);
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
+				if (_AIActionCounter > 2 || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -916,7 +867,7 @@ void BattlescapeGame::popState()
 						getMap()->cacheUnit(_save->getSelectedUnit());
 					}
 					_AIActionCounter = 0;
-					if (_save->selectNextPlayerUnit(true, true) == 0 && _states.empty())
+					if (_save->selectNextPlayerUnit(true) == 0 && _states.empty())
 					{
 						if (!_save->getDebugMode())
 						{
@@ -948,9 +899,22 @@ void BattlescapeGame::popState()
 		// end turn request?
 		if (_states.front() == 0)
 		{
-			_states.pop_front();
-			endTurn();
-			return;
+			while (!_states.empty())
+			{
+				if (_states.front() == 0)
+					_states.pop_front();
+				else
+					break;
+			}
+			if (_states.empty())
+			{
+				endTurn();
+				return;
+			}
+			else
+			{
+				_states.push_back(0);
+			}
 		}
 		// init the next state in queue
 		_states.front()->init();
@@ -1268,7 +1232,7 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
+					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
 					cancelCurrentAction();
 				}
 				else
@@ -1462,11 +1426,15 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Sets the TU reserved type.
  * @param tur A battleactiontype.
+ * @param player is this requested by the player?
  */
-void BattlescapeGame::setTUReserved(BattleActionType tur)
+void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 {
 	_tuReserved = tur;
-	_playerTUReserved = tur;
+	if (player)
+	{
+		_playerTUReserved = tur;
+	}
 }
 
 /**
@@ -1489,6 +1457,11 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 		return;
 
 	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
+
+	if (item->getUnit())
+	{
+		item->getUnit()->setPosition(p);
+	}
 
 	if(newItem)
 	{
@@ -1572,7 +1545,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 	newUnit->setTimeUnits(0);
 	getSave()->getUnits()->push_back(newUnit);
 	getMap()->cacheUnit(newUnit);
-	newUnit->setAIState(new PatrolBAIState(getSave(), newUnit, 0));
+	newUnit->setAIState(new AlienBAIState(getSave(), newUnit, 0));
 	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(newUnit);
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
@@ -1633,31 +1606,6 @@ const Ruleset *BattlescapeGame::getRuleset() const
 	return _parentState->getGame()->getRuleset();
 }
 
-/**
- * Evaluates the situation for ease of AI decisions in the following turn.
- */
-void BattlescapeGame::resetSituationForAI()
-{
-    int w = _save->getMapSizeX();
-    int h = _save->getMapSizeZ();
-    int l = _save->getMapSizeY();
-
-    Tile **tiles = _save->getTiles();
-
-    // Log(LOG_INFO) << w*h*l << " tiles!";
-
-	if (_save->getTraceSetting())
-	{
-		for (int i = 0; i < w * l * h; ++i) if (tiles[i]->soldiersVisible != -1) { tiles[i]->setMarkerColor(0); } // clear old tile markers
-	}
-
-    for (int i = 0; i < w * l * h; ++i)
-    {
-		tiles[i]->soldiersVisible = Tile::NOT_CALCULATED;    // -1 for "not calculated"; actual calculations will take place as needed
-		tiles[i]->closestSoldierDSqr = Tile::NOT_CALCULATED; // for most of the tiles most of the time, this data is not needed
-    }
-
-}
 
 /**
  * Tries to find an item and pick it up if possible.
@@ -1982,6 +1930,8 @@ BattleActionType BattlescapeGame::getReservedAction()
  */
 void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
 {
+	liveSoldiers = 0;
+	liveAliens = 0;
 	bool psiCapture = Options::getBool("allowPsionicCapture");
 
 	if (convert)
@@ -2044,110 +1994,4 @@ bool BattlescapeGame::getKneelReserved()
 	}
 	return false;
 }
-
-/**
- * Attempts a psionic attack on an enemy we "know of".
- *
- * Psionic targetting: pick from any of the "exposed" units.
- * Exposed means they have been previously spotted, and are therefore "known" to the AI,
- * regardless of whether we can see them or not, because we're psychic.
- * @param action Pointer to an action.
- * @return True if a psionic attack is performed.
- */
-bool BattlescapeGame::psiAction(BattleAction *action)
-{
-	BattleUnit *unit = action->actor;
-		// don't let mind controlled soldiers mind control other soldiers.
-	if (unit->getOriginalFaction() != FACTION_PLAYER
-		// make sure we're actually psi-capable
-		&& unit->getStats()->psiSkill
-		// and we have the required 25 TUs and can still make it to cover
-		&& unit->getTimeUnits() > unit->getCoverReserve() + 25
-		// or make a reaction shot, if that's our intent
-		&& checkReservedTU(unit, 25)
-		// or we're not on our way to cover
-		&& !unit->_hidingForTurn)
-	{
-		int psiAttackStrength = unit->getStats()->psiSkill * unit->getStats()->psiStrength / 50;
-		int intelligence = unit->getIntelligence();
-		int chanceToAttack = 0;
-		BattleUnit *target = 0;
-
-		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-		{
-				// don't target tanks
-			if ((*i)->getArmor()->getSize() == 1 &&
-				// or units that are dead/unconscious
-				!(*i)->isOut() &&
-				// they must be units that we "know" about
-				(*i)->getTurnsExposed() <= intelligence &&
-				// they must be player units
-				(*i)->getOriginalFaction() == FACTION_PLAYER &&
-				// and they mustn't be under mind control already
-				(*i)->getFaction() == FACTION_PLAYER)
-			{
-				int chanceToAttackMe = psiAttackStrength
-					+ (((*i)->getStats()->psiSkill > 0) ? (*i)->getStats()->psiSkill * -0.4 : 0)
-					- getTileEngine()->distance((*i)->getPosition(), unit->getPosition())
-					- ((*i)->getStats()->psiStrength)
-					+ RNG::generate(55, 105);
-
-				if (chanceToAttackMe > chanceToAttack)
-				{
-					chanceToAttack = chanceToAttackMe;
-					target = *i;
-				}
-			}
-		}
-
-		if (!target || !chanceToAttack) return false;
-
-		if (!unit->getVisibleUnits()->empty() && unit->getMainHandWeapon() && unit->getMainHandWeapon()->getAmmoItem())
-		{
-			if (unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
-			{
-				return false;
-			}
-		}
-		else if (RNG::generate(35, 155) >= chanceToAttack)
-		{
-			return false;
-		}
-
-		if (chanceToAttack >= 30)
-		{
-			int controlOrPanic = 60;
-			int morale = target->getMorale();
-			int bravery = (110 - target->getStats()->bravery) / 10;
-			if (bravery > 6)
-				controlOrPanic += 15;
-			if ( bravery < 4)
-				controlOrPanic -= 15;
-			if (morale >= 40)
-			{
-				if (morale - 10 * bravery < 50)
-					controlOrPanic += 15;
-			}
-			else
-			{
-				controlOrPanic -= 15;
-			}
-			if (!morale)
-			{
-				controlOrPanic = 0;
-			}
-			if (RNG::generate(0, 100) >= controlOrPanic)
-			{
-				action->type = BA_MINDCONTROL;
-				action->target = target->getPosition();
-				return true;
-			}
-		}
-		action->type = BA_PANIC;
-		action->target = target->getPosition();
-		return true;
-	}
-	return false;
-}
-
 }

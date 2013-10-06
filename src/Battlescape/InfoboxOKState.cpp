@@ -56,7 +56,7 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 	_frame->setHighContrast(true);
 
 	_btnOk->setColor(Palette::blockOffset(1)-1);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&InfoboxOKState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));

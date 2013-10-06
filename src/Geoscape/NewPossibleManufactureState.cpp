@@ -64,17 +64,17 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnManufacture->setColor(Palette::blockOffset(8)+5);
-	_btnManufacture->setText(_game->getLanguage()->getString("STR_ALLOCATE_MANUFACTURE"));
+	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnManufactureClick);
 	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, (SDLKey)Options::getInt("keyOk"));
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(_game->getLanguage()->getString("STR_WE_CAN_NOW_PRODUCE"));
+	_txtTitle->setText(tr("STR_WE_CAN_NOW_PRODUCE"));
 
 	_lstPossibilities->setColor(Palette::blockOffset(8)+10);
 	_lstPossibilities->setColumns(1, 288);
@@ -82,7 +82,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	for(std::vector<RuleManufacture *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
-		_lstPossibilities->addRow (1, _game->getLanguage()->getString((*iter)->getName ()).c_str());
+		_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
 	}
 }
 
