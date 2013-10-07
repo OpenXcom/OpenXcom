@@ -241,7 +241,7 @@ int CivilianBAIState::selectNearestTarget()
 	return 0;
 }
 
-const int CivilianBAIState::getSpottingUnits(Position pos)
+int CivilianBAIState::getSpottingUnits(Position pos) const
 {
 	bool checking = pos != _unit->getPosition();
 	int tally = 0;
