@@ -343,7 +343,7 @@ void AlienBAIState::setWasHit()
  * Gets whether the unit was hit.
  * @return if it was hit.
  */
-const bool AlienBAIState::getWasHit()
+bool AlienBAIState::getWasHit() const
 {
 	return _wasHit;
 }
@@ -876,7 +876,7 @@ void AlienBAIState::setupEscape()
  * Counts how many targets, both xcom and civilian are known to this unit
  * @return how many targets are known to us.
  */
-const int AlienBAIState::countKnownTargets()
+int AlienBAIState::countKnownTargets() const
 {
 	int knownEnemies = 0;
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -897,7 +897,7 @@ const int AlienBAIState::countKnownTargets()
  * @param pos the Position to check for spotters.
  * @return spotters.
  */
-const int AlienBAIState::getSpottingUnits(Position pos)
+int AlienBAIState::getSpottingUnits(Position pos) const
 {
 	// if we don't actually occupy the position being checked, we need to do a virtual LOF check.
 	bool checking = pos != _unit->getPosition();
@@ -935,7 +935,7 @@ const int AlienBAIState::getSpottingUnits(Position pos)
  * This function includes civilians as viable targets.
  * @return viable targets.
  */
-const int AlienBAIState::selectNearestTarget()
+int AlienBAIState::selectNearestTarget()
 {
 	int tally = 0;
 	_closestDist= 100;
@@ -986,7 +986,7 @@ const int AlienBAIState::selectNearestTarget()
  * used for ambush calculations
  * @return if we found one.
  */
-const bool AlienBAIState::selectClosestKnownEnemy()
+bool AlienBAIState::selectClosestKnownEnemy()
 {
 	_aggroTarget = 0;
 	int minDist = 255;
@@ -1015,7 +1015,7 @@ const bool AlienBAIState::selectClosestKnownEnemy()
  * Selects a random known living Xcom or civilian unit.
  * @return if we found one.
  */
-const bool AlienBAIState::selectRandomTarget()
+bool AlienBAIState::selectRandomTarget()
 {
 	int farthest = -100;
 	_aggroTarget = 0;
@@ -1041,7 +1041,7 @@ const bool AlienBAIState::selectRandomTarget()
  * @param maxTUs Maximum time units the path to the target can cost.
  * @return True if a point was found.
  */
-const bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs)
+bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
 {
 	int size = _unit->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
@@ -1298,7 +1298,7 @@ void AlienBAIState::evaluateAIMode()
  * Find a position where we can see our target, and move there.
  * check the 11x11 grid for a position nearby where we can potentially target him.
  */
-const bool AlienBAIState::findFirePoint()
+bool AlienBAIState::findFirePoint()
 {
 	if (!selectClosestKnownEnemy())
 		return false;
@@ -1374,7 +1374,7 @@ const bool AlienBAIState::findFirePoint()
  * @param diff Game difficulty.
  * @return True if it is worthwile creating an explosion in the target position.
  */
-const bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
+bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
 	if (_save->getTurn() < 3)

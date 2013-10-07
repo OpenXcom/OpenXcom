@@ -43,7 +43,9 @@
 #endif
 
 #ifdef _WIN32
+#ifndef __GNUC__
 #pragma optimize("a", on)
+#endif
 #endif
 
 
