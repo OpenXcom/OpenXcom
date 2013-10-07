@@ -70,6 +70,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtW2Name = new Text(120, 9, 32, 100);
 	_txtW2Ammo = new Text(60, 9, 164, 100);
 	_txtRedirect = new Text(230, 16, 13, 108);
+	_txtSoldier = new Text(60, 9, 164, 68);
+	_txtHWP = new Text(60, 9, 164, 76);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -92,6 +94,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	add(_txtW2Name);
 	add(_txtW2Ammo);
 	add(_txtRedirect);
+	add(_txtSoldier);
+	add(_txtHWP);
 
 	centerAllSurfaces();
 
@@ -258,6 +262,18 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtRedirect->setAlign(ALIGN_CENTER);
 	_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 
+	_txtSoldier->setColor(Palette::blockOffset(15)-1);
+	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
+	std::wstringstream ss11;
+	ss11 << tr("STR_SOLDIERS_UC") << ">" << L'\x01' << _craft->getNumSoldiers();
+	_txtSoldier->setText(ss11.str());
+
+	_txtHWP->setColor(Palette::blockOffset(15)-1);
+	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
+	std::wstringstream ss12;
+	ss12 << tr("STR_HWPS") << ">" << L'\x01' << _craft->getNumVehicles();
+	_txtHWP->setText(ss12.str());
+
 	if (_waypoint == 0)
 	{
 		_txtRedirect->setVisible(false);
@@ -273,6 +289,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 		_btnTarget->setVisible(false);
 		_btnPatrol->setVisible(false);
 	}
+
+	if (_craft->getRules()->getSoldiers() == 0)
+		_txtSoldier->setVisible(false);
+	if (_craft->getRules()->getVehicles() == 0)
+		_txtHWP->setVisible(false);
 }
 
 /**

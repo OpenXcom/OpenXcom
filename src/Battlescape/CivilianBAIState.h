@@ -57,7 +57,7 @@ public:
 	void exit();
 	/// Runs state functionality every AI cycle.
 	void think(BattleAction *action);
-	const int getSpottingUnits(Position pos);
+	int getSpottingUnits(Position pos) const;
 	int selectNearestTarget();
 	void setupEscape();
 	void setupPatrol();

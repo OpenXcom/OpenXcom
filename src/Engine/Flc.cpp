@@ -508,8 +508,10 @@ void FlcMain(void (*frameCallBack)())
   SDL_Event event;
   
 //#ifndef __NO_FLC
+  SDL_Rect dstRect = {flc.dx, flc.dy, flc.screen_w, flc.screen_h};
   FlcInitFirstFrame();
-  flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
+  //flc.offset = flc.dy*flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel*flc.dx;
+  flc.offset = 0;
   while(!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
@@ -536,7 +538,7 @@ void FlcMain(void (*frameCallBack)())
       SDLWaitFrame();
       /* TODO: Track which rectangles have really changed */
       //SDL_UpdateRect(flc.mainscreen, 0, 0, 0, 0);
-      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), 0);
+      if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_BlitSurface(flc.mainscreen, 0, flc.realscreen->getSurface()->getSurface(), &dstRect);
       flc.realscreen->flip();
     }
 
