@@ -305,6 +305,10 @@ void AlienBAIState::think(BattleAction *action)
 		{
 			action->number -= 1;
 		}
+		else if (action->type == BA_LAUNCH)
+		{
+			action->waypoints = _attackAction->waypoints;
+		}
 		break;
 	case AI_AMBUSH:
 		action->type = _ambushAction->type;
