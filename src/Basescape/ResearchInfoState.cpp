@@ -168,17 +168,18 @@ void ResearchInfoState::buildUi ()
 	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	if (_rule)
 	{
-		_btnCancel->setText(tr("STR_CANCEL"));
+		_btnOk->setText(tr("STR_START_PROJECT"));
+		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress((ActionHandler)&ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 	}
 	else
 	{
+		_btnOk->setText(tr("STR_OK"));
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
 		_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	}
