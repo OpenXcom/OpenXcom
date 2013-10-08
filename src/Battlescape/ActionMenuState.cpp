@@ -36,6 +36,7 @@
 #include "../Savegame/Tile.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
+#include "../Interface/Text.h"
 
 namespace OpenXcom
 {
