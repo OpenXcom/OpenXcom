@@ -91,7 +91,7 @@ static int zoomSurface2X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
 			// boo
-			SDL_SwapLE64(dataSrc);
+			(void)SDL_SwapLE64(dataSrc);
 /* expanded form of of data shift: 
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 				((dataSrc & 0xFF00 ) << 8) | ((dataSrc & 0xFF00)) << 16)  | 
@@ -215,7 +215,7 @@ static int zoomSurface4X_64bit(SDL_Surface *src, SDL_Surface *dst)
 		{
 			dataSrc = *((Uint64*) pixelSrc);
 			// boo
-			SDL_SwapLE64(dataSrc);
+			(void)SDL_SwapLE64(dataSrc);
 			/* expanded form of of data shift:
 			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
 				((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
