@@ -103,9 +103,7 @@ void AlienBase::setId(int id)
  */
 std::wstring AlienBase::getName(Language *lang) const
 {
-	std::wstringstream name;
-	name << lang->getString("STR_ALIEN_BASE_") << _id;
-	return name.str();
+	return lang->getString("STR_ALIEN_BASE_").arg(_id);
 }
 
 /**

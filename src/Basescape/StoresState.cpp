@@ -87,7 +87,7 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 162, 92, 32);

@@ -67,9 +67,7 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
 
-	std::wstringstream ss;
-	ss << tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE") << _base->getName();
-	_txtMessage->setText(ss.str());
+	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE").arg(_base->getName()));
 
 	std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin();
 	for (; k != _game->getSavedGame()->getRegions()->end(); ++k)

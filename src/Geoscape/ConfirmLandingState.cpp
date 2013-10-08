@@ -60,9 +60,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnYes = new TextButton(80, 20, 40, 150);
 	_btnNo = new TextButton(80, 20, 136, 150);
-	_txtCraft = new Text(206, 16, 25, 40);
-	_txtTarget = new Text(206, 32, 25, 88);
-	_txtReady = new Text(206, 32, 25, 56);
+	_txtMessage = new Text(206, 48, 25, 40);
 	_txtBegin = new Text(206, 16, 25, 130);
 
 	// Set palette
@@ -71,9 +69,7 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
-	add(_txtCraft);
-	add(_txtTarget);
-	add(_txtReady);
+	add(_txtMessage);
 	add(_txtBegin);
 
 	centerAllSurfaces();
@@ -92,21 +88,14 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_txtCraft->setColor(Palette::blockOffset(8)+10);
-	_txtCraft->setBig();
-	_txtCraft->setAlign(ALIGN_CENTER);
-	_txtCraft->setText(_craft->getName(_game->getLanguage()));
-
-	_txtTarget->setColor(Palette::blockOffset(8)+10);
-	_txtTarget->setBig();
-	_txtTarget->setAlign(ALIGN_CENTER);
-	_txtTarget->setWordWrap(true);
-	_txtTarget->setText(_craft->getDestination()->getName(_game->getLanguage()));
-
-	_txtReady->setColor(Palette::blockOffset(8)+5);
-	_txtReady->setBig();
-	_txtReady->setAlign(ALIGN_CENTER);
-	_txtReady->setText(tr("STR_READY_TO_LAND_NEAR"));
+	_txtMessage->setColor(Palette::blockOffset(8)+10);
+	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
+	_txtMessage->setBig();
+	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setWordWrap(true);
+	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_NEAR_DESTINATION")
+						 .arg(_craft->getName(_game->getLanguage()))
+						 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
 	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();

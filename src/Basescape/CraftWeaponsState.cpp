@@ -55,8 +55,7 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_txtTitle = new Text(208, 16, 56, 28);
 	_txtArmament = new Text(76, 9, 66, 52);
 	_txtQuantity = new Text(50, 9, 145, 52);
-	_txtAmmunition = new Text(68, 9, 195, 44);
-	_txtAvailable = new Text(68, 9, 195, 52);
+	_txtAmmunition = new Text(68, 16, 195, 44);
 	_lstWeapons = new TextList(188, 80, 58, 68);
 
 	// Set palette
@@ -68,7 +67,6 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	add(_txtArmament);
 	add(_txtQuantity);
 	add(_txtAmmunition);
-	add(_txtAvailable);
 	add(_lstWeapons);
 
 	centerAllSurfaces();
@@ -94,10 +92,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
-	_txtAmmunition->setText(tr("STR_AMMUNITION_UC"));
-
-	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setText(tr("STR_AVAILABLE"));
+	_txtAmmunition->setText(tr("STR_AMMUNITION_AVAILABLE"));
+	_txtAmmunition->setWordWrap(true);
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);

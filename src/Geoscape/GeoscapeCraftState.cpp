@@ -127,133 +127,118 @@ GeoscapeCraftState::GeoscapeCraftState(Game *game, Craft *craft, Globe *globe, W
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtStatus->setWordWrap(true);
-	std::wstringstream ss;
-	ss << tr("STR_STATUS_") << L'\x01';
+	std::wstring status;
 	if (_waypoint != 0)
 	{
-		ss << tr("STR_INTERCEPTING_UFO") << _waypoint->getId();
+		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
 	}
 	else if (_craft->getLowFuel())
 	{
-		ss << tr("STR_LOW_FUEL_RETURNING_TO_BASE");
+		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 	}
 	else if (_craft->getDestination() == 0)
 	{
-		ss << tr("STR_PATROLLING");
+		status = tr("STR_PATROLLING");
 	}
 	else if (_craft->getDestination() == (Target*)_craft->getBase())
 	{
-		ss << tr("STR_RETURNING_TO_BASE");
+		status = tr("STR_RETURNING_TO_BASE");
 	}
 	else
 	{
 		Ufo *u = dynamic_cast<Ufo*>(_craft->getDestination());
 		if (u != 0)
 		{
-			if (u->getStatus() == Ufo::FLYING)
+			if (_craft->isInDogfight())
 			{
-				ss << tr("STR_INTERCEPTING_UFO") << u->getId();
+				status = tr("STR_TAILING_UFO");
+			}
+			else if (u->getStatus() == Ufo::FLYING)
+			{
+				status = tr("STR_INTERCEPTING_UFO").arg(u->getId());
 			}
 			else
 			{
-				ss << tr("STR_DESTINATION_UC_") << u->getName(_game->getLanguage());
+				status = tr("STR_DESTINATION_UC_").arg(u->getName(_game->getLanguage()));
 			}
 		}
 		else
 		{
-			ss << tr("STR_DESTINATION_UC_") << _craft->getDestination()->getName(_game->getLanguage());
+			status = tr("STR_DESTINATION_UC_").arg(_craft->getDestination()->getName(_game->getLanguage()));
 		}
 	}
-	_txtStatus->setText(ss.str());
+	_txtStatus->setText(tr("STR_STATUS_").arg(status));
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss2;
-	ss2 << tr("STR_BASE_UC_") << L'\x01' << _craft->getBase()->getName();
+	ss2 << tr("STR_BASE_UC_").arg(_craft->getBase()->getName());
 	_txtBase->setText(ss2.str());
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss3;
-	ss3 << tr("STR_SPEED_") << L'\x01' << _craft->getSpeed();
+	ss3 << tr("STR_SPEED_").arg(_craft->getSpeed());
 	_txtSpeed->setText(ss3.str());
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss4;
-	ss4 << tr("STR_MAXIMUM_SPEED_UC") << L'\x01' << _craft->getRules()->getMaxSpeed();
+	ss4 << tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed());
 	_txtMaxSpeed->setText(ss4.str());
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss5;
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	ss5 << tr("STR_ALTITUDE_") << L'\x01' << tr(altitude);
+	ss5 << tr("STR_ALTITUDE_").arg(tr(altitude));
 	_txtAltitude->setText(ss5.str());
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss6;
-	ss6 << tr("STR_FUEL") << L'\x01' << _craft->getFuelPercentage() << "%";
+	ss6 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
 	_txtFuel->setText(ss6.str());
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss62;
-	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
+	ss62 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
 	_txtDamage->setText(ss62.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss7;
-	ss7 << tr("STR_WEAPON_ONE") << L'\x01';
 
 	_txtW1Ammo->setColor(Palette::blockOffset(15)-1);
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss8;
-	ss8 << tr("STR_ROUNDS_") << L'\x01';
 
 	if (_craft->getRules()->getWeapons() > 0 && _craft->getWeapons()->at(0) != 0)
 	{
 		CraftWeapon *w1 = _craft->getWeapons()->at(0);
-
-		ss7 << tr(w1->getRules()->getType());
-		_txtW1Name->setText(ss7.str());
-
-		ss8 << w1->getAmmo();
-		_txtW1Ammo->setText(ss8.str());
+		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
+		_txtW1Ammo->setText(tr("STR_ROUNDS_").arg(w1->getAmmo()));
 	}
 	else
 	{
-		ss7 << tr("STR_NONE_UC");
-		_txtW1Name->setText(ss7.str());
+		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr("STR_NONE_UC")));
 		_txtW1Ammo->setVisible(false);
 	}
 
 	_txtW2Name->setColor(Palette::blockOffset(15)-1);
 	_txtW2Name->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss9;
-	ss9 << tr("STR_WEAPON_TWO") << L'\x01';
 
 	_txtW2Ammo->setColor(Palette::blockOffset(15)-1);
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss10;
-	ss10 << tr("STR_ROUNDS_") << L'\x01';
 
 	if (_craft->getRules()->getWeapons() > 1 && _craft->getWeapons()->at(1) != 0)
 	{
 		CraftWeapon *w2 = _craft->getWeapons()->at(1);
-
-		ss9 << tr(w2->getRules()->getType());
-		_txtW2Name->setText(ss9.str());
-
-		ss10 << w2->getAmmo();
-		_txtW2Ammo->setText(ss10.str());
+		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
+		_txtW2Ammo->setText(tr("STR_ROUNDS_").arg(w2->getAmmo()));
 	}
 	else
 	{
-		ss9 << tr("STR_NONE_UC");
-		_txtW2Name->setText(ss9.str());
+		_txtW1Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
 		_txtW2Ammo->setVisible(false);
 	}
 

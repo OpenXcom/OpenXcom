@@ -106,15 +106,11 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s1 = tr("STR_CURRENT_FUNDS");
-	s1 += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtFunds->setText(s1);
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
 	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s2 = tr("STR_COST_OF_PURCHASES");
-	s2 += L'\x01' + Text::formatFunding(_total);
-	_txtPurchases->setText(s2);
+	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
@@ -599,9 +595,7 @@ void PurchaseState::decreaseByValue(int change)
  */
 void PurchaseState::updateItemStrings()
 {
-	std::wstring s = tr("STR_COST_OF_PURCHASES");
-	s += L'\x01' + Text::formatFunding(_total);
-	_txtPurchases->setText(s);
+	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
 	std::wstringstream ss;
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
