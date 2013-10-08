@@ -25,6 +25,8 @@
 namespace OpenXcom
 {
 
+class Language;
+
 /**
  * Enumerator for time periods.
  */
@@ -63,7 +65,7 @@ public:
 	/// Gets the ingame day.
 	int getDay() const;
 	// Gets a string version of the ingame day.
-	std::string getDayString() const;
+	std::wstring getDayString(Language *lang) const;
 	/// Gets the ingame month.
 	int getMonth() const;
 	// Gets a string version of the ingame month.

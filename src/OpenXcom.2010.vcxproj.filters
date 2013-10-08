@@ -787,6 +787,9 @@
     <ClCompile Include="Menu\OptionsLanguageState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\AliensCrashState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1595,6 +1598,9 @@
     </ClInclude>
     <ClInclude Include="Menu\OptionsLanguageState.h">
       <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Battlescape\AliensCrashState.h">
+      <Filter>Battlescape</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

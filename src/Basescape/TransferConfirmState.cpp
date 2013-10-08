@@ -78,9 +78,7 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	std::wstring s = tr("STR_TRANSFER_ITEMS_TO");
-	s += _base->getName();
-	_txtTitle->setText(s);
+	_txtTitle->setText(tr("STR_TRANSFER_ITEMS_TO").arg(_base->getName()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setBig();

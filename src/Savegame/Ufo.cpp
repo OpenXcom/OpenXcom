@@ -244,21 +244,21 @@ void Ufo::setId(int id)
  */
 std::wstring Ufo::getName(Language *lang) const
 {
-	std::wstringstream name;
 	switch (_status)
 	{
 	case FLYING:
 	case DESTROYED: // Destroyed also means leaving Earth.
-		name << lang->getString("STR_UFO_") << _id;
+		return lang->getString("STR_UFO_").arg(_id);
 		break;
 	case LANDED:
-		name << lang->getString("STR_LANDING_SITE_") << _landId;
+		return lang->getString("STR_LANDING_SITE_").arg(_landId);
 		break;
 	case CRASHED:
-		name << lang->getString("STR_CRASH_SITE_") << _crashId;
+		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
 		break;
+	default:
+		return L"";
 	}
-	return name.str();
 }
 
 /**

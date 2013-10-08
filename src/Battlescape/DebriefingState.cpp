@@ -190,28 +190,28 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	}
 
 	// Calculate rating
-	std::wstring rating = tr("STR_RATING");
+	std::wstring rating;
 	if (total <= -200)
 	{
-		rating += tr("STR_RATING_TERRIBLE");
+		rating = tr("STR_RATING_TERRIBLE");
 	}
 	else if (total <= 0)
 	{
-		rating += tr("STR_RATING_POOR");
+		rating = tr("STR_RATING_POOR");
 	}
 	else if (total <= 200)
 	{
-		rating += tr("STR_RATING_OK");
+		rating = tr("STR_RATING_OK");
 	}
 	else if (total <= 500)
 	{
-		rating += tr("STR_RATING_GOOD");
+		rating = tr("STR_RATING_GOOD");
 	}
 	else
 	{
-		rating += tr("STR_RATING_EXCELLENT");
+		rating = tr("STR_RATING_EXCELLENT");
 	}
-	_txtRating->setText(rating);
+	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMMARS")->play();

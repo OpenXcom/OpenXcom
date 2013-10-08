@@ -75,7 +75,7 @@ private:
  * Create a LocalizedText from a localized std::wstring.
  */
 inline LocalizedText::LocalizedText(const std::wstring &text)
-  : _text(text), _nextArg(1)
+  : _text(text), _nextArg(0)
 {
 	// Empty by design.
 }

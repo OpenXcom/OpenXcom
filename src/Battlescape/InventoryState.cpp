@@ -268,23 +268,15 @@ void InventoryState::init()
 
 	if (_showMoreStatsInInventoryView && !_tu)
 	{
-		std::wstringstream ss2;
-		ss2 << tr("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
-		_txtFAcc->setText(ss2.str());
+		_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
 
-		std::wstringstream ss3;
-		ss3 << tr("STR_REACT") << L'\x01' << unit->getStats()->reactions;
-		_txtReact->setText(ss3.str());
+		_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
 
 		if (unit->getStats()->psiSkill > 0)
 		{
-			std::wstringstream ss4;
-			ss4 << tr("STR_PSKILL") << L'\x01' << unit->getStats()->psiSkill;
-			_txtPSkill->setText(ss4.str());
+			_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
 
-			std::wstringstream ss5;
-			ss5 << tr("STR_PSTRENGTH") << L'\x01' << unit->getStats()->psiStrength;
-			_txtPStr->setText(ss5.str());
+			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
 		}
 		else
 		{
@@ -303,19 +295,20 @@ void InventoryState::updateStats()
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 	if (_showMoreStatsInInventoryView)
 	{
-		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
-		std::wstringstream ss;
-		ss << tr("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
-		_txtWeight->setText(ss.str());
-		if (Weight > unit->getStats()->strength)
+		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
+		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
+		if (weight > unit->getStats()->strength)
+		{
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
-		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		}
+		else
+		{
+			_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		}
 	}
 	if (_tu)
 	{
-		std::wstringstream ss;
-		ss << tr("STR_TUS") << L'\x01' << unit->getTimeUnits();
-		_txtTus->setText(ss.str());
+		_txtTus->setText(tr("STR_TUS").arg(unit->getTimeUnits()));
 	}
 }
 
@@ -487,10 +480,10 @@ void InventoryState::invClick(Action *)
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 			}
 		}
-		std::wstringstream ss;
+		std::wstring s;
 		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
-			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
@@ -506,9 +499,9 @@ void InventoryState::invClick(Action *)
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
-			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
-		_txtAmmo->setText(ss.str());
+		_txtAmmo->setText(s);
 	}
 	updateStats();
 }

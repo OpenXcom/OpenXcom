@@ -107,7 +107,7 @@ FundingState::FundingState(Game *game) : State(game)
 		}
 		else
 		{
-			ss2 << L"$0";
+			ss2 << Text::formatFunding(0);
 		}
 		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}

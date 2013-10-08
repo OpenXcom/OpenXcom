@@ -107,15 +107,11 @@ SellState::SellState(Game *game, Base *base) : State(game), _base(base), _qtys()
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
-	std::wstring s1 = tr("STR_VALUE_OF_SALES");
-	s1 += Text::formatFunding(_total);
 	_txtSales->setColor(Palette::blockOffset(13)+10);
-	_txtSales->setText(s1);
+	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 
-	std::wstring s2 = tr("STR_FUNDS");
-	s2 += Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(s2);
+	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
@@ -544,9 +540,7 @@ void SellState::updateItemStrings()
 	_lstItems->setCellText(_sel, 2, ss.str());
 	ss2 << getQuantity() - _qtys[_sel];
 	_lstItems->setCellText(_sel, 1, ss2.str());
-	std::wstring s = tr("STR_VALUE_OF_SALES");
-	s += Text::formatFunding(_total);
-	_txtSales->setText(s);
+	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 }
 
 /**

@@ -44,7 +44,7 @@ private:
 
 	TextButton *_btnCancel;
 	Window *_window;
-	Text *_txtTitle, *_txtArmament, *_txtQuantity, *_txtAmmunition, *_txtAvailable;
+	Text *_txtTitle, *_txtArmament, *_txtQuantity, *_txtAmmunition;
 	TextList *_lstWeapons;
 	std::vector<RuleCraftWeapon*> _weapons;
 public:

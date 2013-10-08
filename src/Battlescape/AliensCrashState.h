@@ -16,37 +16,38 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef OPENXCOM_ALIENSDIEDSTATE_H
+#define OPENXCOM_ALIENSDIEDSTATE_H
 
-#ifndef OPENXCOM_ARTICLESTATEARMOR_H
-#define OPENXCOM_ARTICLESTATEARMOR_H
-
-#include "ArticleState.h"
+#include "../Engine/State.h"
+#include "DebriefingState.h"
 
 namespace OpenXcom
 {
-	class Game;
-	class Surface;
-	class Text;
-	class TextList;
-	class ArticleDefinitionArmor;
 
-	/**
-	 * ArticleStateArmor has a caption, preview image and a stats block.
-	 * The image is found using the Armor class.
-	 */
+class TextButton;
+class Window;
+class Text;
 
-	class ArticleStateArmor : public ArticleState
-	{
-	public:
-		ArticleStateArmor(Game *game, ArticleDefinitionArmor *article_defs, int palSwitch);
-		virtual ~ArticleStateArmor();
+/**
+ * Screen shown when all aliens died
+ * during a crash site.
+ */
+class AliensCrashState : public State
+{
+private:
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle;
+public:
+	/// Creates the Aliens Crash state.
+	AliensCrashState(Game *game);
+	/// Cleans up the Aliens Crash state.
+	~AliensCrashState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+};
 
-	protected:
-		Surface *_image;
-		Text *_txtTitle;
-		TextList *_lstInfo;
-		Text *_txtInfo;
-	};
 }
 
 #endif

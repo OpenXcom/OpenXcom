@@ -164,7 +164,7 @@ void SavedGame::getList(TextList *list, Language *lang)
 			std::stringstream saveTime;
 			std::wstringstream saveDay, saveMonth, saveYear;
 			saveTime << time.getHour() << ":" << std::setfill('0') << std::setw(2) << time.getMinute();
-			saveDay << time.getDay() << lang->getString(time.getDayString());
+			saveDay << time.getDayString(lang);
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
 
