@@ -3483,15 +3483,18 @@ terrains:
       - name: UBASE_11
         width: 10
         length: 10
-      - name: UBASE_12
-        width: 10
-        length: 10
-      - name: UBASE_13
-        width: 10
-        length: 10
-      - name: UBASE_14
-        width: 10
-        length: 10
+#       UBASE_12 is impassable, 13 and 14 are apparently unused.
+#       in the interest of preserving an original experience,
+#       they have been disabled. delete the hashes to re-enable.
+#      - name: UBASE_12
+#        width: 10
+#        length: 10
+#      - name: UBASE_13
+#        width: 10
+#        length: 10
+#      - name: UBASE_14
+#        width: 10
+#        length: 10
       - name: UBASE_15
         width: 20
         length: 20
