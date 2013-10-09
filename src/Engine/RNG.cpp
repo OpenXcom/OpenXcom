@@ -43,7 +43,7 @@ namespace RNG
 {
 
 unsigned int rseed = 1;
-unsigned long mt[CMATH_N];    /*the array for the state vector */
+unsigned int mt[CMATH_N];    /*the array for the state vector */
 int mti = CMATH_N+1;    /*mti==N+1 means mt [N ] is not initialized **/
 
 /**
@@ -77,10 +77,10 @@ void setSeed(unsigned int n)
  * pseudorandom number generator.
  * @return Random unsigned 32-bit number (0-LONG_MAX)
  */
-unsigned long random()
+unsigned int random()
 {
-	unsigned long y;
-    static unsigned long mag01[2]={0x0, CMATH_MATRIX_A};
+	unsigned int y;
+    static unsigned int mag01[2]={0x0, CMATH_MATRIX_A};
 
     /* mag01[x] = x * MATRIX_A  for x=0,1 */
 
@@ -118,7 +118,7 @@ unsigned long random()
 */
 void init()
 {
-	setSeed((unsigned int) time(NULL));
+	setSeed((unsigned int)time(NULL));
 }
 
 /**
@@ -138,7 +138,7 @@ void init(unsigned int seed)
  */
 int generate(int min, int max)
 {
-	unsigned long num = random();
+	int num = random();
 	return (int)(num % (max - min + 1) + min);
 }
 
@@ -151,7 +151,7 @@ int generate(int min, int max)
 double generate(double min, double max)
 {
 	double num = random();
-	return (double)(num / ((double)LONG_MAX / (max - min)) + min);
+	return (double)(num / ((double)UINT_MAX / (max - min)) + min);
 }
 
 /**
