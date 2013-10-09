@@ -62,8 +62,10 @@ public:
 	int getWidth() const;
 	/// Gets the font's character height.
 	int getHeight() const;
-	/// Gets the horizontal spacing between characters.
+	/// Gets the spacing between characters.
 	int getSpacing() const;
+	/// Gets the size of a particular character;
+	SDL_Rect getCharSize(wchar_t c);
 	/// Gets the font's surface.
 	Surface *getSurface() const;
 

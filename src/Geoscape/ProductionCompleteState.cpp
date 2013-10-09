@@ -81,10 +81,10 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 		s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE").arg(item).arg(base);
 		break;
 	case PROGRESS_NOT_ENOUGH_MONEY:
-		s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM").arg(item);
+		s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
 		break;
 	case PROGRESS_NOT_ENOUGH_MATERIALS:
-		s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM").arg(item);
+		s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
 		break;
 	default:
 		assert(false);

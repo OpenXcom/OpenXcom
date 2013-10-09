@@ -162,14 +162,39 @@ int Font::getHeight() const
 }
 
 /**
- * Returns the horizontal spacing for any character in the font.
+ * Returns the spacing for any character in the font.
  * @return Spacing in pixels.
  * @note This does not refer to character spacing within the surface,
- * but to the spacing used when drawing a series of characters.
+ * but to the spacing used between multiple characters in a line.
  */
 int Font::getSpacing() const
 {
 	return _spacing;
+}
+
+/**
+ * Returns the dimensions of a particular character in the font.
+ * @param c Font character.
+ * @return Width and Height dimensions (X and Y are ignored).
+ */
+SDL_Rect Font::getCharSize(wchar_t c)
+{
+	SDL_Rect size = { 0, 0, 0, 0 };
+	// Consider non-breakable space as a non-space character
+	if (c != L' ' && c != L'\xa0' && c != '\n' && c != 2)
+	{
+		size.w = _chars[c].w + _spacing;
+		size.h = _chars[c].h + _spacing;
+	}
+	else
+	{
+		size.w = _width / 2;
+		size.h = _height + _spacing;
+	}
+	// In case anyone mixes them up
+	size.x = size.w;
+	size.y = size.h;
+	return size;
 }
 
 /**
