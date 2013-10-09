@@ -346,10 +346,10 @@ void SavedGame::save(const std::string &filename) const
 	node["monthsPassed"] = _monthsPassed;
 	node["radarLines"] = _radarLines;
 	node["detail"] = _detail;
-	node["GraphRegionToggles"] = _graphRegionToggles;
-	node["GraphCountryToggles"] = _graphCountryToggles;
-	node["GraphFinanceToggles"] = _graphFinanceToggles;
-	node["seed"] = RNG::getSeed();
+	node["graphRegionToggles"] = _graphRegionToggles;
+	node["graphCountryToggles"] = _graphCountryToggles;
+	node["graphFinanceToggles"] = _graphFinanceToggles;
+	node["rng"] = RNG::getSeed();
 	node["funds"] = _funds;
 	node["maintenance"] = _maintenance;
 	node["researchScores"] = _researchScores;
