@@ -195,9 +195,9 @@ double boxMuller(double m, double s)
  * @param value Value percentage (0-100%)
  * @return True if the chance succeeded.
  */
-bool RNG::percent(int value)
+bool percent(int value)
 {
-	return (RNG::generate(0, 99) < value);
+	return (generate(0, 99) < value);
 }
 
 }
