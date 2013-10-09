@@ -4,8 +4,8 @@ lookWeights:
   - 0
   - 0
 maleFirst:
-  - Alexandr
-  - Alexey
+  - Aleksandr
+  - Aleksey
   - Anatoliy
   - Andrey
   - Anton
@@ -15,7 +15,7 @@ maleFirst:
   - Denis
   - Dmitriy
   - Eduard
-  - Eugeniy
+  - Evgeniy
   - Gennadiy
   - Georgiy
   - Grigoriy
@@ -25,7 +25,7 @@ maleFirst:
   - Konstantin
   - Leonid
   - Maxim
-  - Mikhail
+  - Mihail
   - Nikolay
   - Oleg
   - Pavel
@@ -46,7 +46,7 @@ maleFirst:
   - Yuriy
 femaleFirst:
   - Albina
-  - Alexandra
+  - Aleksandra
   - Alla
   - Alyona
   - Anastasiya
@@ -55,11 +55,10 @@ femaleFirst:
   - Darya
   - Ekaterina
   - Elena
-  - Eugeniya
+  - Evgeniya
   - Galina
   - Inna
   - Irina
-  - Julia
   - Kristina
   - Kseniya
   - Larisa
@@ -81,8 +80,10 @@ femaleFirst:
   - Tamara
   - Tatyana
   - Valentina
+  - Varvara
   - Vera
   - Viktoriya
+  - Yulia
   - Zinaida
   - Zoya  
 maleLast:
@@ -92,17 +93,17 @@ maleLast:
   - Borisov
   - Fedorov
   - Egorov
-  - Grigoriev
+  - Grigoryev
   - Gromov
   - Ivanov
   - Komarov
-  - Korolev
+  - Korolyov
   - Kozlov
   - Kuzmin
   - Kuznetsov
   - Lebedev
   - Makarov
-  - Mikhailov
+  - Mihailov
   - Morozov
   - Nikitin
   - Nikolaev
@@ -112,18 +113,18 @@ maleLast:
   - Petrov
   - Popov
   - Romanov
-  - Semenov
+  - Semyonov
   - Sergeev
   - Smirnov
   - Sokolov
   - Solovyov
   - Stepanov
-  - Vasiliev
+  - Vasilyev
   - Volkov
   - Vorobyov
   - Yakovlev
   - Zaitsev
-  - Zakharov
+  - Zaharov
 femaleLast:
   - Alekseeva
   - Andreeva
@@ -131,17 +132,17 @@ femaleLast:
   - Borisova
   - Fedorova
   - Egorova
-  - Grigorieva
+  - Grigoryeva
   - Gromova
   - Ivanova
   - Komarova
-  - Koroleva
+  - Korolyova
   - Kozlova
   - Kuzmina
   - Kuznetsova
   - Lebedeva
   - Makarova
-  - Mikhailova
+  - Mihailova
   - Morozova
   - Nikitina
   - Nikolaeva
@@ -151,7 +152,7 @@ femaleLast:
   - Petrova
   - Popova
   - Romanova
-  - Semenova
+  - Semyonova
   - Sergeeva
   - Smirnova
   - Sokolova
@@ -162,4 +163,4 @@ femaleLast:
   - Vorobyova
   - Yakovleva
   - Zaitseva
-  - Zakharova
+  - Zaharova
