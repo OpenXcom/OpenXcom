@@ -543,7 +543,7 @@ void Tile::ignite(int power)
 		{
 			power = 0;
 		}
-		if (power > RNG::generate(0, 100))
+		if (RNG::percent(power))
 		{
 			if (_fire == 0)
 			{
@@ -756,7 +756,7 @@ void Tile::prepareNewTurn()
 					// _smoke becomes our damage value
 					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true);
 					// try to set the unit on fire.
-					if ( RNG::generate(0, 100) < 40 * _unit->getArmor()->getDamageModifier(DT_IN))
+					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN)))
 					{
 						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)

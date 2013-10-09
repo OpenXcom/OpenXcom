@@ -154,7 +154,7 @@ void CivilianBAIState::think(BattleAction *action)
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies || _visibleEnemies || RNG::generate(0, 100) < 10)
+		if (_spottingEnemies || _visibleEnemies || RNG::percent(10))
 		{
 			evaluate = true;
 		}

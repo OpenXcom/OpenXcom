@@ -209,7 +209,7 @@ void AlienBAIState::think(BattleAction *action)
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::generate(0, 100) < 10)
+		if (_spottingEnemies || _visibleEnemies || _knownEnemies || RNG::percent(10))
 		{
 			evaluate = true;
 		}
@@ -1754,7 +1754,7 @@ void AlienBAIState::psiAction()
 			{
 				controlOrPanic = 0;
 			}
-			if (RNG::generate(0, 100) >= controlOrPanic)
+			if (!RNG::percent(controlOrPanic))
 			{
 				_attackAction->type = BA_MINDCONTROL;
 				_attackAction->target = _aggroTarget->getPosition();

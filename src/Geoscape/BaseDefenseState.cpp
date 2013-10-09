@@ -189,7 +189,7 @@ void BaseDefenseState::nextStep()
 			_action = BDA_RESOLVE;
 			return;
 		case BDA_RESOLVE:
-			if (RNG::generate(0, 100) > (def)->getRules()->getHitRatio())
+			if (!RNG::percent((def)->getRules()->getHitRatio()))
 			{
 				_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
 			}

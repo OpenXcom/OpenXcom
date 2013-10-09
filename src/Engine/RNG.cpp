@@ -19,63 +19,115 @@
 #include "RNG.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include <cstdlib>
 #include <ctime>
+#include <climits>
+
+/*Period parameters */
+#define CMATH_N 624
+#define CMATH_M 397
+#define CMATH_MATRIX_A 0x9908b0df   /*constant vector a */
+#define CMATH_UPPER_MASK 0x80000000 /*most significant w-r bits */
+#define CMATH_LOWER_MASK 0x7fffffff /*least significant r bits */
+
+/*Tempering parameters */
+#define CMATH_TEMPERING_MASK_B 0x9d2c5680
+#define CMATH_TEMPERING_MASK_C 0xefc60000
+#define CMATH_TEMPERING_SHIFT_U(y)  (y >> 11)
+#define CMATH_TEMPERING_SHIFT_S(y)  (y << 7)
+#define CMATH_TEMPERING_SHIFT_T(y)  (y << 15)
+#define CMATH_TEMPERING_SHIFT_L(y)  (y >> 18)
 
 namespace OpenXcom
 {
 namespace RNG
 {
 
-unsigned int _seed = 0;
-long _count = 0;
+unsigned int rseed = 1;
+unsigned long mt[CMATH_N];    /*the array for the state vector */
+int mti = CMATH_N+1;    /*mti==N+1 means mt [N ] is not initialized **/
 
 /**
- * Seeds the random generator with a new number.
- * Defaults to the current time if none is set.
- * @param count Number of generations.
- * @param seed New seed.
- */
-void init(long count, unsigned int seed)
+* Returns the current seed in use by the generator.
+* @return Current seed.
+*/
+unsigned int getSeed()
 {
-	_seed = seed;
-	_count = count;
-	if (count == -1)
-	{
-		_seed = (unsigned int)time(NULL);
-		_count = 0;
-		srand(_seed);
-	}
-	else
-	{
-		srand(_seed);
-		for (long i = 0; i < count; ++i)
-		{
-			rand();
-		}
-	}
+	return rseed;
 }
 
 /**
- * Loads the RNG from a YAML file.
- * @param node YAML node.
- */
-void load(const YAML::Node &node)
+* Changes the current seed in use by the generator.
+* @param n New seed.
+*/
+void setSeed(unsigned int n)
 {
-	if (node["rngCount"])
-	{
-		init(node["rngCount"].as<int>(), node["rngSeed"].as<int>());
-	}
+	/* setting initial seeds to mt[N] using         */
+	/* the generator Line 25 of Table 1 in          */
+	/* [KNUTH 1981, The Art of Computer Programming */
+	/*    Vol. 2 (2nd Ed.), pp102]                  */
+	mt[0]= n & 0xffffffff;
+	for (mti=1; mti<CMATH_N; mti++)
+		mt[mti] = (69069 * mt[mti-1]) & 0xffffffff;
+
+	rseed = n;
 }
 
 /**
- * Saves the RNG to a YAML file.
- * @return YAML node.
+ * Generates a number using a Mersenne Twister
+ * pseudorandom number generator.
+ * @return Random unsigned 32-bit number (0-LONG_MAX)
  */
-void save(YAML::Node &node)
+unsigned long random()
 {
-	node["rngCount"] = _count;
-	node["rngSeed"] = _seed;
+	unsigned long y;
+    static unsigned long mag01[2]={0x0, CMATH_MATRIX_A};
+
+    /* mag01[x] = x * MATRIX_A  for x=0,1 */
+
+    if (mti >= CMATH_N) { /* generate N words at one time */
+        int kk;
+
+        if (mti == CMATH_N+1)   /* if sgenrand() has not been called, */
+            setSeed(4357);      /* a default initial seed is used   */
+
+        for (kk=0;kk<CMATH_N-CMATH_M;kk++) {
+            y = (mt[kk]&CMATH_UPPER_MASK)|(mt[kk+1]&CMATH_LOWER_MASK);
+            mt[kk] = mt[kk+CMATH_M] ^ (y >> 1) ^ mag01[y & 0x1];
+        }
+        for (;kk<CMATH_N-1;kk++) {
+            y = (mt[kk]&CMATH_UPPER_MASK)|(mt[kk+1]&CMATH_LOWER_MASK);
+            mt[kk] = mt[kk+(CMATH_M-CMATH_N)] ^ (y >> 1) ^ mag01[y & 0x1];
+        }
+        y = (mt[CMATH_N-1]&CMATH_UPPER_MASK)|(mt[0]&CMATH_LOWER_MASK);
+        mt[CMATH_N-1] = mt[CMATH_M-1] ^ (y >> 1) ^ mag01[y & 0x1];
+
+        mti = 0;
+    }
+  
+    y = mt[mti++];
+    y ^= CMATH_TEMPERING_SHIFT_U(y);
+    y ^= CMATH_TEMPERING_SHIFT_S(y) & CMATH_TEMPERING_MASK_B;
+    y ^= CMATH_TEMPERING_SHIFT_T(y) & CMATH_TEMPERING_MASK_C;
+    y ^= CMATH_TEMPERING_SHIFT_L(y);
+
+	return y;
+}
+
+/**
+* Seeds the random generator with the current time.
+*/
+void init()
+{
+	setSeed((unsigned int) time(NULL));
+}
+
+/**
+* Seeds the random generator with a new number.
+* @param seed New seed.
+*/
+void init(unsigned int seed)
+{
+	setSeed(seed);
 }
 
 /**
@@ -86,9 +138,8 @@ void save(YAML::Node &node)
  */
 int generate(int min, int max)
 {
-	_count++;
-	int num = rand();
-	return (num % (max - min + 1) + min);
+	unsigned long num = random();
+	return (int)(num % (max - min + 1) + min);
 }
 
 /**
@@ -99,9 +150,8 @@ int generate(int min, int max)
  */
 double generate(double min, double max)
 {
-	_count++;
-	int num = rand();
-	return (num * (max - min) / RAND_MAX + min);
+	double num = random();
+	return (double)(num / ((double)LONG_MAX / (max - min)) + min);
 }
 
 /**
@@ -137,6 +187,17 @@ double boxMuller(double m, double s)
 	}
 
 	return( m + y1 * s );
+}
+
+/**
+ * Generates a random percent chance of an event occuring,
+ * and returns the result
+ * @param value Value percentage (0-100%)
+ * @return True if the chance succeeded.
+ */
+bool RNG::percent(int value)
+{
+	return (RNG::generate(0, 99) < value);
 }
 
 }

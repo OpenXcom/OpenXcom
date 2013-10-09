@@ -972,7 +972,7 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 	{
 		return false;
 	}
-	return ((int)_base.getDetectionChance() > RNG::generate(0, 100));
+	return RNG::percent(_base.getDetectionChance());
 }
 
 /**
@@ -1010,10 +1010,11 @@ void GeoscapeState::time10Minutes()
 				{
 					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
-						if ((*j)->getDistance(*b) <= (1696 * (1 / 60.0) * (M_PI / 180) ))
+						double range = (1696 * (1 / 60.0) * (M_PI / 180));
+						if ((*j)->getDistance(*b) <= range)
 						{
 							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
-							if ((50-((*j)->getDistance(*b) / (1696 * (1 / 60.0) * (M_PI / 180) )) * 50 >= RNG::generate(0, 100)) && !(*b)->isDiscovered())
+							if (RNG::percent(50-((*j)->getDistance(*b) / range) * 50) && !(*b)->isDiscovered())
 							{
 								(*b)->setDiscovered(true);
 							}
@@ -1389,7 +1390,7 @@ private:
  */
 void GenerateSupplyMission::operator()(const AlienBase *base) const
 {
-	if (RNG::generate(0, 100) < 6)
+	if (RNG::percent(6))
 	{
 		//Spawn supply mission for this base.
 		const RuleAlienMission &rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
@@ -1632,8 +1633,7 @@ void GeoscapeState::time1Month()
 		bool _baseDiscovered = false;
 		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			int number = RNG::generate(1, 100);
-			if(!(*b)->isDiscovered() && number <= 5 && !_baseDiscovered)
+			if(!(*b)->isDiscovered() && RNG::percent(5) && !_baseDiscovered)
 			{
 				(*b)->setDiscovered(true);
 				_baseDiscovered = true;

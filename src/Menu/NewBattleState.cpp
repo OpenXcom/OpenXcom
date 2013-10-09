@@ -311,7 +311,7 @@ void NewBattleState::initSave()
 
         for (int n = 0; n < 5; ++n) 
         {
-            if (RNG::generate(0, 100) < 70)
+            if (RNG::percent(70))
                 continue;
             soldier->promoteRank();
             

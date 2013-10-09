@@ -510,7 +510,7 @@ void FlcMain(void (*frameCallBack)())
 //#ifndef __NO_FLC
   FlcInitFirstFrame();
 #ifdef _WIN32
-  flc.offset = flc.dy * flc.mainscreen->pitch + flc.mainscreen->BytesPerPixel * flc.dx;
+  flc.offset = flc.dy * flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel * flc.dx;
 #else
   SDL_Rect dstRect = {(Sint16)flc.dx, (Sint16)flc.dy, (Uint16)flc.screen_w, (Uint16)flc.screen_h};
   flc.offset = 0;
