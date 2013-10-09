@@ -135,7 +135,7 @@ Surface *Font::getChar(wchar_t c)
 {
 	if (_chars.find(c) == _chars.end())
 	{
-		c = '?';
+		return 0;
 	}
 	_surface->getCrop()->x = _chars[c].x;
 	_surface->getCrop()->y = _chars[c].y;

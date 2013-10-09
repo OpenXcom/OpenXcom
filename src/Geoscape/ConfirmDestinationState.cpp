@@ -91,7 +91,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setWordWrap(true);
 	if (w != 0 && w->getId() == 0)
 	{
-		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
+		_txtTarget->setText(tr("STR_TARGET").arg(tr("STR_WAY_POINT")));
 	}
 	else
 	{

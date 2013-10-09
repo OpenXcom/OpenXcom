@@ -50,24 +50,26 @@ Language::Language() : _id(""), _strings(), _handler(0)
 	// maps don't have initializers :(
 	if (_names.empty())
 	{
+		_names["en-US"] = utf8ToWstr("English (US)");
+		_names["en-GB"] = utf8ToWstr("English (UK)");
 		_names["bg-BG"] = utf8ToWstr("Български");
 		_names["cs-CZ"] = utf8ToWstr("Česky");
 		_names["da"] = utf8ToWstr("Dansk");
-		_names["nl"] = utf8ToWstr("Nederlands");
-		_names["en-US"] = utf8ToWstr("English (US)");
-		_names["en-GB"] = utf8ToWstr("English (UK)");
+		_names["de"] = utf8ToWstr("Deutsch");
+		_names["es"] = utf8ToWstr("Español (ES)");
+		_names["es-419"] = utf8ToWstr("Español (AL)");
 		_names["fr"] = utf8ToWstr("Français");
 		_names["fi"] = utf8ToWstr("Suomi");
 		_names["grk"] = utf8ToWstr("Ελληνικά");
-		_names["de"] = utf8ToWstr("Deutsch");
 		_names["hu-HU"] = utf8ToWstr("Magyar");
 		_names["it"] = utf8ToWstr("Italiano");
+		_names["nl"] = utf8ToWstr("Nederlands");
+		_names["no"] = utf8ToWstr("Norsk");
 		_names["pl-PL"] = utf8ToWstr("Polski");
 		_names["pt-PT"] = utf8ToWstr("Português (PT)");
 		_names["ro"] = utf8ToWstr("Română");
 		_names["ru"] = utf8ToWstr("Русский");
-		_names["es"] = utf8ToWstr("Español (ES)");
-		_names["es-419"] = utf8ToWstr("Español (AL)");
+		_names["tr-TR"] = utf8ToWstr("Türkçe");
 		_names["uk"] = utf8ToWstr("Українська");
 	}
 }
