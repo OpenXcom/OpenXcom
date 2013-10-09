@@ -1734,27 +1734,27 @@ void AlienBAIState::psiAction()
 
 		if (chanceToAttack >= 30)
 		{
-			int controlOrPanic = 60;
+			int controlOdds = 40;
 			int morale = _aggroTarget->getMorale();
 			int bravery = (110 - _aggroTarget->getStats()->bravery) / 10;
 			if (bravery > 6)
-				controlOrPanic += 15;
-			if ( bravery < 4)
-				controlOrPanic -= 15;
+				controlOdds -= 15;
+			if (bravery < 4)
+				controlOdds += 15;
 			if (morale >= 40)
 			{
 				if (morale - 10 * bravery < 50)
-					controlOrPanic += 15;
+					controlOdds -= 15;
 			}
 			else
 			{
-				controlOrPanic -= 15;
+				controlOdds += 15;
 			}
 			if (!morale)
 			{
-				controlOrPanic = 0;
+				controlOdds = 100;
 			}
-			if (!RNG::percent(controlOrPanic))
+			if (RNG::percent(controlOdds))
 			{
 				_attackAction->type = BA_MINDCONTROL;
 				_attackAction->target = _aggroTarget->getPosition();
