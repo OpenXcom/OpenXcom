@@ -4,78 +4,214 @@ lookWeights:
   - 0
   - 0
 maleFirst:
-  - Anatoly
-  - Andrei
+  - Alexandr
+  - Alexey
+  - Anatoliy
+  - Andrey
+  - Anton
+  - Arseniy
+  - Artyom
   - Boris
-  - Dmitry
-  - Gennady
+  - Bogdan
+  - Daniil
+  - Denis
+  - Dmitriy
+  - Eduard
+  - Efim
+  - Egor
+  - Evgeniy
+  - Filipp
+  - Gennadiy
+  - Georgiy
+  - Gleb
   - Grigoriy
+  - Ignat
   - Igor
+  - Ilya
   - Ivan
+  - Kirill
+  - Klim
+  - Konstantin
   - Leonid
+  - Lev
+  - Maxim
   - Mikhail
-  - Nikolai
-  - Sergei
+  - Nikita
+  - Nikolay
+  - Oleg
+  - Roman
+  - Ruslan
+  - Pavel
+  - Sergey
+  - Stanislav
+  - Stepan
+  - Taras
+  - Timur
+  - Vadim
+  - Valentin
+  - Valeriy
+  - Vasiliy
   - Victor
+  - Vitaliy
   - Vladimir
-  - Yuri
+  - Vladislav
+  - Vyacheslav
+  - Yaroslav
+  - Yuriy
 femaleFirst:
+  - Alevtina
+  - Alexandra
+  - Alisa
+  - Alla
+  - Alyona
+  - Anastasiya
+  - Angelina
   - Anna
+  - Antonina
+  - Anzhelika
+  - Darya
+  - Diana
+  - Ekaterina
   - Elena
+  - Eleonora
+  - Elizaveta
+  - Eva
+  - Evgeniya
   - Galina
+  - Ilona
   - Inna
   - Irina
+  - Kamila
+  - Karina
+  - Kira
+  - Kristina
+  - Kseniya
+  - Lyubov
   - Lyudmila
+  - Margarita
   - Marina
+  - Mariya
+  - Marta
+  - Maya
+  - Nadezhda
+  - Nataliya
+  - Nina
   - Oksana
+  - Olesya
   - Olga
+  - Polina
+  - Roza
+  - Sofia
+  - Svetlana
+  - Syuzanna
   - Tatyana
   - Tamara
+  - Ulyana
   - Varvara
+  - Vera
+  - Veronika
+  - Victoriya
   - Yana
+  - Yulia
 maleLast:
+  - Aksyonov
   - Antonov
+  - Baranov
   - Belov
   - Chernov
+  - Chernyshov
+  - Dmitriev
   - Doronin
+  - Galinskiy
   - Gromov
+  - Kalyanin
+  - Kilimov
   - Komarov
-  - Korolev
+  - Konstantinov
+  - Korobov
+  - Korolyov
+  - Kryukov
+  - Kucheryavenko
+  - Kuznetsov
   - Lebedev
   - Likhachev
-  - Matveev
+  - Matveyev
+  - Medvedev
   - Mikhailov
+  - Neserov
   - Nikitin
+  - Nikolaev
+  - Orlov
+  - Osokin
   - Petrov
+  - Popov
+  - Rogov
   - Romanov
   - Samoylenko
+  - Savchenko
+  - Sergeyev
   - Sharov
   - Shedrin
   - Shalimov
+  - Skachkov
   - Tarasov
+  - Telegov
+  - Ukhov
+  - Uvarov
+  - Volkov
   - Voronin
+  - Yakovlev
   - Yakushev
+  - Zaytsev
   - Zhdanovich
 femaleLast:
+  - Aksyonova
   - Antonova
+  - Baranova
   - Belova
   - Chernova
+  - Chernyshova
+  - Dmitrieva
   - Doronina
+  - Galinskaya
   - Gromova
+  - Kalyanina
+  - Kilimova
   - Komarova
-  - Koroleva
+  - Konstantinova
+  - Korobova
+  - Korolyova
+  - Kryukova
+  - Kucheryavenko
+  - Kuznetsova
   - Lebedeva
   - Likhacheva
-  - Matveeva
+  - Matveyeva
+  - Medvedeva
   - Mikhailova
+  - Nesterova
   - Nikitina
+  - Nikolaeva
+  - Orlova
+  - Osokina
   - Petrova
+  - Popova
+  - Rogova
   - Romanova
   - Samoylenko
+  - Savchenko
+  - Sergeyeva
   - Sharova
   - Shedrina
   - Shalimova
+  - Skachkova
   - Tarasova
+  - Telegova
+  - Ukhova
+  - Uvarova
+  - Volkova
   - Voronina
+  - Yakovleva
   - Yakusheva
+  - Zaytseva
   - Zhdanovich
