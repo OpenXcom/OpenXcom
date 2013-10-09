@@ -50,7 +50,7 @@ namespace OpenXcom
  */
 AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node) : BattleAIState(save, unit), _aggroTarget(0), _knownEnemies(0), _visibleEnemies(0), _spottingEnemies(0),
 																				_escapeTUs(0), _ambushTUs(0), _reserveTUs(0), _rifle(false), _melee(false), _blaster(false),
-																				_wasHit(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
+																				_wasHit(false), _didPsi(false), _AIMode(AI_PATROL), _closestDist(100), _fromNode(node), _toNode(0)
 {
 	_traceAI = _save->getTraceSetting();
 
@@ -59,6 +59,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame *save, BattleUnit *unit, Node *node
 	_ambushAction = new BattleAction();
 	_attackAction = new BattleAction();
 	_patrolAction = new BattleAction();
+	_psiAction = new BattleAction();
 }
 
 /**
@@ -70,6 +71,7 @@ AlienBAIState::~AlienBAIState()
 	delete _ambushAction;
 	delete _attackAction;
 	delete _patrolAction;
+	delete _psiAction;
 }
 
 /**
@@ -267,61 +269,72 @@ void AlienBAIState::think(BattleAction *action)
 		}
 	}
 	
-	switch (_AIMode)
+	if (_psiAction->type == BA_NONE || _didPsi)
 	{
-	case AI_ESCAPE:
-		action->type = _escapeAction->type;
-		action->target = _escapeAction->target;
-		// end this unit's turn.
-		action->finalAction = true;
-		// ignore new targets.
-		action->desperate = true;
-		// spin 180 at the end of your route.
-		_unit->_hidingForTurn = true;
-		// forget about reserving TUs, we need to get out of here.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
-		break;
-	case AI_PATROL:
-		action->type = _patrolAction->type;
-		action->target = _patrolAction->target;
-		break;
-	case AI_COMBAT:
-		action->type = _attackAction->type;
-		action->target = _attackAction->target;
-		// this may have changed to a grenade.
-		action->weapon = _attackAction->weapon;
-		if (action->weapon && action->type == BA_THROW && action->weapon->getRules()->getBattleType() == BT_GRENADE)
+		_didPsi = false;
+		switch (_AIMode)
 		{
-			action->weapon->setExplodeTurn(_save->getTurn());
-			_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
+		case AI_ESCAPE:
+			action->type = _escapeAction->type;
+			action->target = _escapeAction->target;
+			// end this unit's turn.
+			action->finalAction = true;
+			// ignore new targets.
+			action->desperate = true;
+			// spin 180 at the end of your route.
+			_unit->_hidingForTurn = true;
+			// forget about reserving TUs, we need to get out of here.
+			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+			break;
+		case AI_PATROL:
+			action->type = _patrolAction->type;
+			action->target = _patrolAction->target;
+			break;
+		case AI_COMBAT:
+			action->type = _attackAction->type;
+			action->target = _attackAction->target;
+			// this may have changed to a grenade.
+			action->weapon = _attackAction->weapon;
+			if (action->weapon && action->type == BA_THROW && action->weapon->getRules()->getBattleType() == BT_GRENADE)
+			{
+				action->weapon->setExplodeTurn(_save->getTurn());
+				_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
+			}
+			// if this is a firepoint action, set our facing.
+			action->finalFacing = _attackAction->finalFacing;
+			action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
+			// don't worry about reserving TUs, we've factored that in already.
+			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+			// if this is a "find fire point" action, don't increment the AI counter.
+			if (action->type == BA_WALK && _rifle)
+			{
+				action->number -= 1;
+			}
+			else if (action->type == BA_LAUNCH)
+			{
+				action->waypoints = _attackAction->waypoints;
+			}
+			break;
+		case AI_AMBUSH:
+			action->type = _ambushAction->type;
+			action->target = _ambushAction->target;
+			// face where we think our target will appear.
+			action->finalFacing = _ambushAction->finalFacing;
+			// end this unit's turn.
+			action->finalAction = true;
+			// we've factored in the reserved TUs already, so don't worry.
+			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
+			break;
+		default:
+			break;
 		}
-		// if this is a firepoint action, set our facing.
-		action->finalFacing = _attackAction->finalFacing;
-		action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
-		// don't worry about reserving TUs, we've factored that in already.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
-		// if this is a "find fire point" action, don't increment the AI counter.
-		if (action->type == BA_WALK && _rifle)
-		{
-			action->number -= 1;
-		}
-		else if (action->type == BA_LAUNCH)
-		{
-			action->waypoints = _attackAction->waypoints;
-		}
-		break;
-	case AI_AMBUSH:
-		action->type = _ambushAction->type;
-		action->target = _ambushAction->target;
-		// face where we think our target will appear.
-		action->finalFacing = _ambushAction->finalFacing;
-		// end this unit's turn.
-		action->finalAction = true;
-		// we've factored in the reserved TUs already, so don't worry.
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
-		break;
-	default:
-		break;
+	}
+	else
+	{
+		_didPsi = true;
+		action->type = _psiAction->type;
+		action->target = _psiAction->target;
+		action->number -= 1;
 	}
 	// if we're moving, we'll have to re-evaluate our escape/ambush position.
 	if (action->type == BA_WALK && action->target != _unit->getPosition())
@@ -523,7 +536,7 @@ void AlienBAIState::setupAmbush()
 		{
 			Position pos = (*i)->getPosition();
 			Tile *tile = _save->getTile(pos);
-			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10)
+			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z)
 				continue;
 
 			if (_traceAI)
@@ -626,10 +639,15 @@ void AlienBAIState::setupAttack()
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
 	{
+		if (_unit->getStats()->psiSkill && psiAction())
+		{
+			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
+			return;
+		}
 		if (_blaster)
+		{
 			wayPointAction();
-		if (_unit->getStats()->psiSkill)
-			psiAction();
+		}
 	}
 	
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
@@ -1695,14 +1713,16 @@ void AlienBAIState::grenadeAction()
  * @param action Pointer to an action.
  * @return True if a psionic attack is performed.
  */
-void AlienBAIState::psiAction()
+bool AlienBAIState::psiAction()
 {
+	_psiAction->type = BA_NONE;
+	_aggroTarget = 0;
 		// don't let mind controlled soldiers mind control other soldiers.
 	if (_unit->getOriginalFaction() != FACTION_PLAYER
-		// make sure we're actually psi-capable
-		&& _unit->getStats()->psiSkill
 		// and we have the required 25 TUs and can still make it to cover
-		&& _unit->getTimeUnits() > _escapeTUs + 25)
+		&& _unit->getTimeUnits() > _escapeTUs + 25
+		// and we didn't already do a psi action this round
+		&& !_didPsi)
 	{
 		int psiAttackStrength = _unit->getStats()->psiSkill * _unit->getStats()->psiStrength / 50;
 		int chanceToAttack = 0;
@@ -1734,20 +1754,25 @@ void AlienBAIState::psiAction()
 			}
 		}
 
-		if (!_aggroTarget || !chanceToAttack) return;
+		if (!_aggroTarget || !chanceToAttack) return false;
 
 		if (_visibleEnemies && _attackAction->weapon && _attackAction->weapon->getAmmoItem())
 		{
 			if (_attackAction->weapon->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
 			{
-				return;
+				return false;
 			}
 		}
 		else if (RNG::generate(35, 155) >= chanceToAttack)
 		{
-			return;
+			return false;
 		}
-
+		
+		if (_traceAI)
+		{
+			Log(LOG_INFO) << "making a psionic attack this turn";
+		}
+		
 		if (chanceToAttack >= 30)
 		{
 			int controlOdds = 40;
@@ -1772,14 +1797,16 @@ void AlienBAIState::psiAction()
 			}
 			if (RNG::percent(controlOdds))
 			{
-				_attackAction->type = BA_MINDCONTROL;
-				_attackAction->target = _aggroTarget->getPosition();
-				return;
+				_psiAction->type = BA_MINDCONTROL;
+				_psiAction->target = _aggroTarget->getPosition();
+				return true;
 			}
 		}
-		_attackAction->type = BA_PANIC;
-		_attackAction->target = _aggroTarget->getPosition();
+		_psiAction->type = BA_PANIC;
+		_psiAction->target = _aggroTarget->getPosition();
+		return true;
 	}
+	return false;
 }
 
 /**
