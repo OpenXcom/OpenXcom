@@ -97,7 +97,7 @@ void UnitTurnBState::think()
 {
 	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
 
-	if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
+	if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && !_action.targeting && !_parent->checkReservedTU(_unit, tu))
 	{
 		_unit->abortTurn();
 		_parent->popState();
