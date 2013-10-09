@@ -636,11 +636,17 @@ void AlienBAIState::setupAttack()
 	if (selectNearestTarget())
 	{
 		if (_unit->getGrenadeFromBelt())
+		{
 			grenadeAction();
+		}
 		if (_melee)
+		{
 			meleeAction();
+		}
 		if (_rifle)
+		{
 			projectileAction();
+		}
 	}
 
 	if (_attackAction->type != BA_RETHINK)
@@ -730,7 +736,8 @@ void AlienBAIState::setupEscape()
 			{
 				_escapeAction->target = _unit->lastCover;
 			} 
-		} else if (tries < 121) 
+		}
+		else if (tries < 121) 
 		{
 			// looking for cover
 			_escapeAction->target.x += randomTileSearch[tries].x;
@@ -743,7 +750,8 @@ void AlienBAIState::setupEscape()
 					// maybe don't stay in the same spot? move or something if there's any point to it?
 					_escapeAction->target.x += RNG::generate(-20,20);
 					_escapeAction->target.y += RNG::generate(-20,20);
-				} else
+				}
+				else
 				{
 					score += currentTilePreference;
 				}
@@ -976,7 +984,9 @@ int AlienBAIState::selectNearestTarget()
 		}
 	}
 	if (_aggroTarget)
+	{
 		return tally;
+	}
 
 	return 0;
 }
@@ -1112,14 +1122,20 @@ void AlienBAIState::evaluateAIMode()
 	if (_knownEnemies)
 	{
 		if (_knownEnemies == 1)
+		{
 			combatOdds *= 1.2;
-		
+		}
+
 		if (_escapeTUs == 0)
 		{
 			if (selectClosestKnownEnemy())
+			{
 				setupEscape();
+			}
 			else
+			{
 				escapeOdds = 0;
+			}
 		}
 	}
 	else
