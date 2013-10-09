@@ -16,46 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_CRAFTWEAPONSSTATE_H
-#define OPENXCOM_CRAFTWEAPONSSTATE_H
+#ifndef OPENXCOM_ALIENSDIEDSTATE_H
+#define OPENXCOM_ALIENSDIEDSTATE_H
 
-#include <vector>
 #include "../Engine/State.h"
+#include "DebriefingState.h"
 
 namespace OpenXcom
 {
 
-class Base;
 class TextButton;
 class Window;
 class Text;
-class TextList;
-class RuleCraftWeapon;
 
 /**
- * Select Armament window for
- * changing the weapon equipped on a craft.
+ * Screen shown when all aliens died
+ * during a crash site.
  */
-class CraftWeaponsState : public State
+class AliensCrashState : public State
 {
 private:
-	Base *_base;
-	size_t _craft, _weapon;
-
-	TextButton *_btnCancel;
+	TextButton *_btnOk;
 	Window *_window;
-	Text *_txtTitle, *_txtArmament, *_txtQuantity, *_txtAmmunition;
-	TextList *_lstWeapons;
-	std::vector<RuleCraftWeapon*> _weapons;
+	Text *_txtTitle;
 public:
-	/// Creates the Craft Weapons state.
-	CraftWeaponsState(Game *game, Base *base, size_t craft, size_t weapon);
-	/// Cleans up the Craft Weapons state.
-	~CraftWeaponsState();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the Weapons list.
-	void lstWeaponsClick(Action *action);
+	/// Creates the Aliens Crash state.
+	AliensCrashState(Game *game);
+	/// Cleans up the Aliens Crash state.
+	~AliensCrashState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
 };
 
 }

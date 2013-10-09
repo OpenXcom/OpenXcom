@@ -99,21 +99,15 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	_txtManHour->setColor(Palette::blockOffset(13)+10);
-	std::wstringstream sstr;
-	sstr << _item->getManufactureTime () << tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT");
-	_txtManHour->setText(sstr.str());
+	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT").arg(_item->getManufactureTime()));
 
-	std::wstringstream sstr1;
-	sstr1 << tr("STR_COST_PER_UNIT_") << L'\x01' << _item->getManufactureCost ();
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setSecondaryColor(Palette::blockOffset(13));
-	_txtCost->setText(sstr1.str());
+	_txtCost->setText(tr("STR_COST_PER_UNIT_").arg(Text::formatFunding(_item->getManufactureCost())));
 
-	std::wstringstream sstr2;
-	sstr2 << tr("STR_WORK_SPACE_REQUIRED") << L'\x01' << _item->getRequiredSpace ();
 	_txtWorkSpace->setColor(Palette::blockOffset(13)+10);
 	_txtWorkSpace->setSecondaryColor(Palette::blockOffset(13));
-	_txtWorkSpace->setText(sstr2.str());
+	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED").arg(_item->getRequiredSpace()));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
@@ -130,10 +124,13 @@ ManufactureStartState::ManufactureStartState(Game * game, Base * base, RuleManuf
 	_txtRequiredItemsTitle->setAlign(ALIGN_CENTER);
 	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
 	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));
+	_txtItemNameColumn->setWordWrap(true);
 	_txtUnitRequiredColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitRequiredColumn->setText(tr("STR_UNITS_REQUIRED"));
+	_txtUnitRequiredColumn->setWordWrap(true);
 	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
+	_txtUnitAvailableColumn->setWordWrap(true);
 
 	_lstRequiredItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
 	_lstRequiredItems->setBackground(_window);

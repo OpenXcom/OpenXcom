@@ -308,14 +308,7 @@ void TextEdit::draw()
 			}
 			for (unsigned int i = 0; i < _caretPos; ++i)
 			{
-				if (_value[i] == ' ')
-				{
-					x += _text->getFont()->getWidth() / 2;
-				}
-				else
-				{
-					x += _text->getFont()->getChar(_value[i])->getCrop()->w + _text->getFont()->getSpacing();
-				}
+				x += _text->getFont()->getCharSize(_value[i]).w;
 			}
 			_caret->setX(x);
 			_caret->blit(this);
@@ -338,14 +331,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 	s += c;
 	for (std::wstring::iterator i = s.begin(); i < s.end(); ++i)
 	{
-		if (*i == ' ')
-		{
-			w += _text->getFont()->getWidth() / 2;
-		}
-		else
-		{
-			w += _text->getFont()->getChar(*i)->getCrop()->w + _text->getFont()->getSpacing();
-		}
+		w += _text->getFont()->getCharSize(*i).w;
 	}
 
 	return (w > getWidth());
@@ -360,7 +346,32 @@ void TextEdit::mousePress(Action *action, State *state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		focus();
+		if (!_isFocused)
+		{
+			focus();
+		}
+		else
+		{
+			double mouseX = action->getRelativeXMouse();
+			double scaleX = action->getXScale();
+			double w = 0;
+			int c = 0;
+			for (std::wstring::iterator i = _value.begin(); i < _value.end(); ++i)
+			{
+				if (mouseX <= w)
+				{
+					break;
+				}
+				w += (double)_text->getFont()->getCharSize(*i).w / 2 * scaleX;
+				if (mouseX <= w)
+				{
+					break;
+				}
+				c++;
+				w += (double) _text->getFont()->getCharSize(*i).w / 2 * scaleX;
+			}
+			_caretPos = c;
+		}
 	}
 	InteractiveSurface::mousePress(action, state);
 }

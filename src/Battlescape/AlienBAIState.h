@@ -40,9 +40,9 @@ protected:
 	BattleUnit *_aggroTarget;
 	int _knownEnemies, _visibleEnemies, _spottingEnemies;
 	int _escapeTUs, _ambushTUs, _reserveTUs;
-	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction;
+	BattleAction *_escapeAction, *_ambushAction, *_attackAction, *_patrolAction, *_psiAction;
 	bool _rifle, _melee, _blaster;
-	bool _traceAI, _wasHit;
+	bool _traceAI, _wasHit, _didPsi;
 	int _AIMode, _intelligence, _closestDist;
 	Node *_fromNode, *_toNode;
 public:
@@ -101,7 +101,7 @@ public:
 	/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
 	void grenadeAction();
 	/// Performs a psionic attack.
-	void psiAction();
+	bool psiAction();
 	/// Performs a melee attack action.
 	void meleeAttack();
 };

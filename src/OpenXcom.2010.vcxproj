@@ -244,6 +244,7 @@
     <ClCompile Include="Battlescape\ActionMenuItem.cpp" />
     <ClCompile Include="Battlescape\ActionMenuState.cpp" />
     <ClCompile Include="Battlescape\AlienBAIState.cpp" />
+    <ClCompile Include="Battlescape\AliensCrashState.cpp" />
     <ClCompile Include="Battlescape\BattleAIState.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGame.cpp" />
     <ClCompile Include="Battlescape\BattlescapeGenerator.cpp" />
@@ -514,6 +515,7 @@
     <ClInclude Include="Battlescape\ActionMenuItem.h" />
     <ClInclude Include="Battlescape\ActionMenuState.h" />
     <ClInclude Include="Battlescape\AlienBAIState.h" />
+    <ClInclude Include="Battlescape\AliensCrashState.h" />
     <ClInclude Include="Battlescape\BattleAIState.h" />
     <ClInclude Include="Battlescape\BattlescapeGame.h" />
     <ClInclude Include="Battlescape\BattlescapeGenerator.h" />
@@ -748,9 +750,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

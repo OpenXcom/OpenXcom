@@ -89,16 +89,14 @@ ConfirmDestinationState::ConfirmDestinationState(Game *game, Craft *craft, Targe
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTarget->setWordWrap(true);
-	std::wstringstream ss;
 	if (w != 0 && w->getId() == 0)
 	{
-		ss << tr("STR_TARGET_WAY_POINT");
+		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
 	}
 	else
 	{
-		ss << tr("STR_TARGET") << _target->getName(_game->getLanguage());
+		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
 	}
-	_txtTarget->setText(ss.str());
 }
 
 /**

@@ -602,7 +602,10 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	std::map<int, Surface*> *handob = _sets["HANDOB.PCK"]->getFrames();
 	for (std::map<int, Surface*>::const_iterator i = handob->begin(); i != handob->end(); ++i)
 	{
-		(i->second)->blit(_sets["HANDOB2.PCK"]->addFrame(i->first));
+		Surface *surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first);
+		Surface *surface2 = i->second;
+		surface1->setPalette(surface2->getPalette());
+		surface2->blit(surface1);
 	}
 
 	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = extraSounds.begin(); i != extraSounds.end(); ++i)

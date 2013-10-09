@@ -71,17 +71,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
-	std::wstringstream ss;
-	ss << tr("STR_TURN") << L" " << _battleGame->getTurn();
-	_txtTurn->setText(ss.str());
+	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
 
 	_txtSide->setColor(Palette::blockOffset(0));
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
-	ss.str(L"");
-	ss << tr("STR_SIDE") << tr((_battleGame->getSide() == FACTION_PLAYER?"STR_XCOM":"STR_ALIENS"));
-	_txtSide->setText(ss.str());
+	_txtSide->setText(tr("STR_SIDE").arg(tr((_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"))));
 
 	_txtMessage->setColor(Palette::blockOffset(0));
 	_txtMessage->setBig();

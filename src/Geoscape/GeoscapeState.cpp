@@ -565,7 +565,7 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDay() << tr(_game->getSavedGame()->getTime()->getDayString());
+	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
 	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
@@ -952,22 +952,14 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
-	// only UFOs on retaliation missions actively scan for bases
-	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation"))
-		return false;
-
-	// UFOs attacking a base don't detect!
-	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
+	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation")) || // only UFOs on retaliation missions actively scan for bases
+		ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" || 	                                    // UFOs attacking a base don't detect!
+		ufo->isCrashed() ||                                                                                 // Crashed UFOs don't detect!
+		_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))                                         // UFOs have a detection range of 80 XCOM units.
 	{
 		return false;
 	}
-
-	// UFOs have a detection range of 80 XCOM units.
-	if (_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))
-	{
-		return false;
-	}
-	return ((int)_base.getDetectionChance() < RNG::generate(0, 100));
+	return RNG::percent(_base.getDetectionChance());
 }
 
 /**
@@ -1005,10 +997,11 @@ void GeoscapeState::time10Minutes()
 				{
 					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
-						if ((*j)->getDistance(*b) <= (1696 * (1 / 60.0) * (M_PI / 180) ))
+						double range = (1696 * (1 / 60.0) * (M_PI / 180));
+						if ((*j)->getDistance(*b) <= range)
 						{
 							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
-							if ((50-((*j)->getDistance(*b) / (1696 * (1 / 60.0) * (M_PI / 180) )) * 50 >= RNG::generate(0, 100)) && !(*b)->isDiscovered())
+							if (RNG::percent(50-((*j)->getDistance(*b) / range) * 50) && !(*b)->isDiscovered())
 							{
 								(*b)->setDiscovered(true);
 							}
@@ -1176,14 +1169,11 @@ void GeoscapeState::time30Minutes()
 					}
 					else
 					{
-						std::wstringstream ss;
-						ss << tr("STR_NOT_ENOUGH");
-						ss << tr(item);
-						ss << tr("STR_TO_REFUEL");
-						ss << (*j)->getName(_game->getLanguage());
-						ss << tr("STR_AT_");
-						ss << (*i)->getName();
-						popup(new CraftErrorState(_game, this, ss.str()));
+						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
+										   .arg(tr(item))
+										   .arg((*j)->getName(_game->getLanguage()))
+										   .arg((*i)->getName());
+						popup(new CraftErrorState(_game, this, msg));
 						(*j)->setStatus("STR_READY");
 					}
 				}
@@ -1317,14 +1307,11 @@ void GeoscapeState::time1Hour()
 				std::string s = (*j)->rearm();
 				if (s != "")
 				{
-					std::wstringstream ss;
-					ss << tr("STR_NOT_ENOUGH");
-					ss << tr(s);
-					ss << tr("STR_TO_REARM");
-					ss << (*j)->getName(_game->getLanguage());
-					ss << tr("STR_AT_");
-					ss << (*i)->getName();
-					popup(new CraftErrorState(_game, this, ss.str()));
+					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
+									   .arg(tr(s))
+									   .arg((*j)->getName(_game->getLanguage()))
+									   .arg((*i)->getName());
+					popup(new CraftErrorState(_game, this, msg));
 				}
 			}
 		}
@@ -1390,7 +1377,7 @@ private:
  */
 void GenerateSupplyMission::operator()(const AlienBase *base) const
 {
-	if (RNG::generate(0, 100) < 6)
+	if (RNG::percent(6))
 	{
 		//Spawn supply mission for this base.
 		const RuleAlienMission &rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
@@ -1421,7 +1408,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					popup(new ProductionCompleteState(_game, tr((*j)->getRules()->getType()), (*i)->getName()));
+					popup(new ProductionCompleteState(_game, tr((*j)->getRules()->getType()), (*i)->getName(), PROGRESS_CONSTRUCTION));
 				}
 			}
 		}
@@ -1633,8 +1620,7 @@ void GeoscapeState::time1Month()
 		bool _baseDiscovered = false;
 		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			int number = RNG::generate(1, 100);
-			if(!(*b)->isDiscovered() && number <= 5 && !_baseDiscovered)
+			if(!(*b)->isDiscovered() && RNG::percent(5) && !_baseDiscovered)
 			{
 				(*b)->setDiscovered(true);
 				_baseDiscovered = true;

@@ -787,6 +787,9 @@
     <ClCompile Include="Menu\OptionsLanguageState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Battlescape\AliensCrashState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1596,6 +1599,9 @@
     <ClInclude Include="Menu\OptionsLanguageState.h">
       <Filter>Menu</Filter>
     </ClInclude>
+    <ClInclude Include="Battlescape\AliensCrashState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1634,8 +1640,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

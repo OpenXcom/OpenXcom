@@ -84,10 +84,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
-	_txtBase->setBig();
-	std::wstring baseName = tr("STR_BASE_");
-	baseName += _base->getName();
-	_txtBase->setText(baseName);
+	_txtBase->setText(tr("STR_BASE_").arg(_base->getName()));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
@@ -97,6 +94,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
+	_txtWeapon->setWordWrap(true);
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setText(tr("STR_CREW"));

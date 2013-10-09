@@ -94,8 +94,7 @@ std::wstring Text::formatFunding(int funds)
 std::wstring Text::formatPercentage(int value)
 {
 	std::wstringstream ss;
-	ss << value;
-	ss << "%";
+	ss << value << "%";
 	return ss.str();
 }
 
@@ -243,6 +242,7 @@ void Text::setVerticalAlign(TextVAlign valign)
 void Text::setColor(Uint8 color)
 {
 	_color = color;
+	_color2 = color;
 	_redraw = true;
 }
 
@@ -343,7 +343,7 @@ void Text::processText()
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
-			_lineHeight.push_back(font->getHeight() + font->getSpacing());
+			_lineHeight.push_back(font->getCharSize(L'\n').h);
 			width = 0;
 			word = 0;
 			start = true;
@@ -358,20 +358,14 @@ void Text::processText()
 		else if (*c == L' ')
 		{
 			space = c;
-			width += font->getWidth() / 2;
+			width += font->getCharSize(*c).w;
 			word = 0;
 			start = false;
 		}
 		// Keep track of the width of the last line and word
 		else if (*c != 1)
 		{
-			int charWidth;
-
-			// Consider non-breakable space as a non-space character
-			if (*c == L'\xa0')
-				charWidth = font->getWidth() / 2;
-			else
-				charWidth = font->getChar(*c)->getCrop()->w + font->getSpacing();
+			int charWidth = font->getCharSize(*c).w;
 
 			width += charWidth;
 			word += charWidth;
@@ -381,7 +375,7 @@ void Text::processText()
 			{
 				// Go back to the last space and put a linebreak there
 				*space = L'\n';
-				width -= word + font->getWidth() / 2;
+				width -= word + font->getCharSize(L' ').w;
 				_lineWidth.push_back(width);
 				_lineHeight.push_back(font->getHeight() + font->getSpacing());
 				width = word;
@@ -479,12 +473,12 @@ void Text::draw()
 	{
 		if (*c == ' ' || *c == L'\xa0')
 		{
-			x += font->getWidth() / 2;
+			x += font->getCharSize(*c).w;
 		}
 		else if (*c == '\n' || *c == 2)
 		{
 			line++;
-			y += font->getHeight() + font->getSpacing();
+			y += font->getCharSize(*c).h;
 			switch (_align)
 			{
 			case ALIGN_LEFT:
@@ -516,7 +510,7 @@ void Text::draw()
 			chr->setX(x);
 			chr->setY(y);
 			chr->blit(this);
-			x += chr->getCrop()->w + font->getSpacing();
+			x += font->getCharSize(*c).w;
 		}
 	}
 

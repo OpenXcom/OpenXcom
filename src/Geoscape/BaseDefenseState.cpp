@@ -93,9 +93,7 @@ BaseDefenseState::BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeSta
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	std::wstringstream ss;
-	ss << _base->getName() << tr("STR_UNDER_ATTACK");
-	_txtTitle->setText(ss.str());
+	_txtTitle->setText(tr("STR_UNDER_ATTACK").arg(_base->getName()));
 	_txtInit->setVisible(false);
 
 	_txtInit->setColor(Palette::blockOffset(13)+10);
@@ -191,7 +189,7 @@ void BaseDefenseState::nextStep()
 			_action = BDA_RESOLVE;
 			return;
 		case BDA_RESOLVE:
-			if (RNG::generate(0, 100) > (def)->getRules()->getHitRatio())
+			if (!RNG::percent((def)->getRules()->getHitRatio()))
 			{
 				_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
 			}

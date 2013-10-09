@@ -40,7 +40,7 @@ private:
 	Craft *_craft;
 	Window *_window;
 	int _texture, _shade;
-	Text *_txtCraft, *_txtTarget, *_txtReady, *_txtBegin;
+	Text *_txtMessage, *_txtBegin;
 	TextButton *_btnYes, *_btnNo;
 	GeoscapeState *_state;
 public:

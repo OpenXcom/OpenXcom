@@ -3483,15 +3483,18 @@ terrains:
       - name: UBASE_11
         width: 10
         length: 10
-      - name: UBASE_12
-        width: 10
-        length: 10
-      - name: UBASE_13
-        width: 10
-        length: 10
-      - name: UBASE_14
-        width: 10
-        length: 10
+#       UBASE_12 is impassable, 13 and 14 are apparently unused.
+#       in the interest of preserving an original experience,
+#       they have been disabled. delete the hashes to re-enable.
+#      - name: UBASE_12
+#        width: 10
+#        length: 10
+#      - name: UBASE_13
+#        width: 10
+#        length: 10
+#      - name: UBASE_14
+#        width: 10
+#        length: 10
       - name: UBASE_15
         width: 20
         length: 20
@@ -7854,19 +7857,19 @@ ufopaedia:
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_PERSONAL_ARMOR
-    text: STR_PERSONAL_ARMOR_UFOPAEDIA
+    text: STR_PERSONAL_ARMOR_UFOPEDIA
   - id: STR_POWER_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_POWER_SUIT
-    text: STR_POWER_SUIT_UFOPAEDIA
+    text: STR_POWER_SUIT_UFOPEDIA
   - id: STR_FLYING_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_FLYING_SUIT
-    text: STR_FLYING_SUIT_UFOPAEDIA
+    text: STR_FLYING_SUIT_UFOPEDIA
   - id: STR_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
