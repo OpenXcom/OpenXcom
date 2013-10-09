@@ -138,7 +138,7 @@ void init(unsigned int seed)
  */
 int generate(int min, int max)
 {
-	int num = random();
+	unsigned int num = random();
 	return (int)(num % (max - min + 1) + min);
 }
 
