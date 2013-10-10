@@ -61,6 +61,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_standHeight = soldier->getRules()->getStandHeight();
 	_kneelHeight = soldier->getRules()->getKneelHeight();
 	_floatHeight = soldier->getRules()->getFloatHeight();
+	_extraWeight = soldier->getRules()->getExtraWeight();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = -1;
 	_moveSound = -1;  // this one is hardcoded
@@ -142,6 +143,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_zombieUnit = unit->getZombieUnit();
 	_spawnUnit = unit->getSpawnUnit();
 	_value = unit->getValue();
+	_extraWeight = unit->getExtraWeight();
 	_gender = GENDER_MALE;
 	_faceDirection = -1;
 
@@ -1354,7 +1356,7 @@ void BattleUnit::prepareNewTurn()
 	float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
 	if (encumbrance < 1)
 	{
-	  TURecovery = int(encumbrance * TURecovery);
+		TURecovery = int(encumbrance * TURecovery);
 	}
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
@@ -1913,18 +1915,18 @@ int BattleUnit::getMiniMapSpriteIndex () const
 }
 
 /**
-  * Set the turret type. -1 is no turret.
-  * @param turretType
-  */
+ * Set the turret type. -1 is no turret.
+ * @param turretType
+ */
 void BattleUnit::setTurretType(int turretType)
 {
 	_turretType = turretType;
 }
 
 /**
-  * Get the turret type. -1 is no turret.
-  * @return type
-  */
+ * Get the turret type. -1 is no turret.
+ * @return type
+ */
 int BattleUnit::getTurretType() const
 {
 	return _turretType;
@@ -1968,7 +1970,7 @@ void BattleUnit::painKillers ()
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
-        _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
+				_morale = std::min(100, (lostHealth - _moraleRestored + _morale));
 		_moraleRestored = lostHealth;
 	}
 }
@@ -2036,54 +2038,54 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
 	return _name;
 }
 /**
-  * Gets pointer to the unit's stats.
-  * @return stats Pointer to the unit's stats.
-  */
+ * Gets pointer to the unit's stats.
+ * @return stats Pointer to the unit's stats.
+ */
 UnitStats *BattleUnit::getStats()
 {
 	return &_stats;
 }
 
 /**
-  * Get the unit's stand height.
-  * @return The unit's height in voxels, when standing up.
-  */
+ * Get the unit's stand height.
+ * @return The unit's height in voxels, when standing up.
+ */
 int BattleUnit::getStandHeight() const
 {
 	return _standHeight;
 }
 
 /**
-  * Get the unit's kneel height.
-  * @return The unit's height in voxels, when kneeling.
-  */
+ * Get the unit's kneel height.
+ * @return The unit's height in voxels, when kneeling.
+ */
 int BattleUnit::getKneelHeight() const
 {
 	return _kneelHeight;
 }
 
 /**
-  * Get the unit's floating elevation.
-  * @return The unit's elevation over the ground in voxels, when flying.
-  */
+ * Get the unit's floating elevation.
+ * @return The unit's elevation over the ground in voxels, when flying.
+ */
 int BattleUnit::getFloatHeight() const
 {
 	return _floatHeight;
 }
 
 /**
-  * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
-  * @return The unit's line of fire template ID.
-  */
+ * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
+ * @return The unit's line of fire template ID.
+ */
 int BattleUnit::getLoftemps(int entry) const
 {
 	return _loftempsSet.at(entry);
 }
 
 /**
-  * Get the unit's value. Used for score at debriefing.
-  * @return value score
-  */
+ * Get the unit's value. Used for score at debriefing.
+ * @return value score
+ */
 int BattleUnit::getValue() const
 {
 	return _value;
@@ -2109,28 +2111,28 @@ int BattleUnit::getMoveSound() const
 
 
 /**
-  * Get whether the unit is affected by fatal wounds.
-  * Normally only soldiers are affected by fatal wounds.
-  * @return true or false
-  */
+ * Get whether the unit is affected by fatal wounds.
+ * Normally only soldiers are affected by fatal wounds.
+ * @return true or false
+ */
 bool BattleUnit::isWoundable() const
 {
 	return (_type=="SOLDIER");
 }
 /**
-  * Get whether the unit is affected by morale loss.
-  * Normally only small units are affected by morale loss.
-  * @return true or false
-  */
+ * Get whether the unit is affected by morale loss.
+ * Normally only small units are affected by morale loss.
+ * @return true or false
+ */
 bool BattleUnit::isFearable() const
 {
 	return (_armor->getSize() == 1);
 }
 
 /**
-  * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
-  * @return intelligence 
-  */
+ * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
+ * @return intelligence
+ */
 int BattleUnit::getIntelligence() const
 {
 	return _intelligence;
@@ -2324,7 +2326,7 @@ BattleUnit *BattleUnit::getCharging()
  */
 int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
 {
-	int weight = 6;
+	int weight = _extraWeight;
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
 		if ((*i) == draggingItem) continue;

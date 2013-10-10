@@ -53,6 +53,7 @@ void RuleSoldier::load(const YAML::Node &node)
 	_standHeight = node["standHeight"].as<int>(_standHeight);
 	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
 	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
+	_extraWeight = node["extraWeight"].as<int>(_extraWeight);
 }
 
 /**
@@ -126,6 +127,15 @@ int RuleSoldier::getFloatHeight() const
 std::string RuleSoldier::getArmor() const
 {
 	return _armor;
+}
+
+/**
+ * Gets the extra weight when calculating the carried weight
+ * @return The extra weight.
+ */
+int RuleSoldier::getExtraWeight() const
+{
+	return _extraWeight;
 }
 
 }

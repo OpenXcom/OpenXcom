@@ -49,6 +49,7 @@ private:
 	int _standHeight, _kneelHeight, _floatHeight;
 	int _value, _deathSound, _aggroSound, _moveSound;
 	int _intelligence, _aggression;
+	int _extraWeight;
 	SpecialAbility _specab;
 	std::string _zombieUnit, _spawnUnit;
 	bool _livingWeapon;
@@ -95,6 +96,8 @@ public:
 	int getAggroSound() const;
 	/// Checks if this unit has a built in weapon.
 	bool isLivingWeapon() const;
+	/// Gets the unit's extra weight.
+	int getExtraWeight() const;
 };
 
 }
