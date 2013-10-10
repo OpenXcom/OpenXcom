@@ -575,6 +575,9 @@
     <ClCompile Include="Basescape\ManufactureStartState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\ManageAlienContainment.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
     <ClCompile Include="Basescape\ManufactureInfoState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
@@ -794,6 +797,9 @@
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="Basescape\ManufactureState.h">
+      <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Basescape\ManageAlienContainment.h">
       <Filter>Basescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\MiniBaseView.h">

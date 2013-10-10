@@ -78,6 +78,8 @@ set ( basescape_src
   Basescape/PlaceStartFacilityState.cpp
   Basescape/SelectStartFacilityState.h
   Basescape/SelectStartFacilityState.cpp
+  Basescape/ManageAlienContainment.h
+  Basescape/ManageAlienContainment.cpp
 )
 
 set ( battlescape_src
